@@ -20,7 +20,6 @@ import org.apache.juneau.uon.UonSerializer;
  *	Sample class which shows the simple usage of UONSerializer.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class UonExample {

@@ -25,7 +25,6 @@ import org.apache.juneau.internal.*;
  * Lightweight utility class for introspecting information about a constructor.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @FluentSetters

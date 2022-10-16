@@ -19,7 +19,6 @@ import org.apache.juneau.microservice.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-microservice-jetty}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class BasicJettyMicroserviceListener extends BasicMicroserviceListener implements JettyMicroserviceListener {

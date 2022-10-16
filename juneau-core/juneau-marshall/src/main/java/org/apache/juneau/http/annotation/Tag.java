@@ -45,8 +45,7 @@ import org.apache.juneau.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Swagger}
- * 	<li class='extlink'>{@doc ext.SwaggerTagObject}
- * 	<li class='extlink'>{@source}
+ * 	<li class='extlink'>{@doc ext.SwaggerTagObject}
  * </ul>
  */
 @Documented

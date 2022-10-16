@@ -39,8 +39,7 @@ import org.apache.juneau.parser.*;
  * This is a specialized subtype of <c><ja>{@link RestOp @RestOp}(method=<jsf>POST</jsf>)</c>.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.RestOpAnnotatedMethods}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jrs.RestOpAnnotatedMethods}
  * </ul>
  */
 @Target(METHOD)

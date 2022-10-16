@@ -35,7 +35,6 @@ import org.apache.juneau.xml.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.SerializersAndParsers}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Target({TYPE,METHOD})

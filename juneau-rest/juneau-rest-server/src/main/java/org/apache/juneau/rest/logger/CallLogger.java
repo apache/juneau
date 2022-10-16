@@ -87,7 +87,6 @@ import org.apache.juneau.rest.util.*;
  * 	<li class='ja'>{@link Rest#debug}
  * 	<li class='ja'>{@link RestOp#debug}
  * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class CallLogger {

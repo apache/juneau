@@ -31,8 +31,7 @@ import org.apache.juneau.rest.servlet.*;
  * Shows contents of the microservice configuration file.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-microservice-core}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc juneau-microservice-core}
  * </ul>
  *
  * @serial exclude

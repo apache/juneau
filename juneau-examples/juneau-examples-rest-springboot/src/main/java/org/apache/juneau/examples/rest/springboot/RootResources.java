@@ -25,8 +25,7 @@ import org.apache.juneau.serializer.annotation.*;
  * Sample REST resource showing how to implement a "router" resource page.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrss.Overview}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jrss.Overview}
  * </ul>
  *
  * @serial exclude

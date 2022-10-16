@@ -23,7 +23,6 @@ import java.util.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@doc ext.RFC2616}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class HttpMethod {

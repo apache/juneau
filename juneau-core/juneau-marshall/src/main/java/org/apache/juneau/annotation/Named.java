@@ -26,8 +26,7 @@ import java.lang.annotation.*;
  * 	<li>On <ja>@RestX</ja> annotated method parameters to identify injected parameters by name.
  * </ul>
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 @Documented

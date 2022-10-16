@@ -24,8 +24,7 @@ import org.apache.juneau.parser.*;
  * on the bean property.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.JsonSchemaDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.JsonSchemaDetails}
  * </ul>
  */
 public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {

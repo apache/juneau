@@ -27,7 +27,6 @@ import org.apache.juneau.http.resource.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-common}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class HttpResources {

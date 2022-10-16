@@ -28,7 +28,6 @@ import org.apache.juneau.annotation.*;
  * Lightweight utility class for introspecting information about a method parameter.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public final class ParamInfo {

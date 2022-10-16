@@ -19,7 +19,6 @@ import org.apache.juneau.config.event.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-microservice-core}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class BasicMicroserviceListener implements MicroserviceListener {

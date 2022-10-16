@@ -19,8 +19,7 @@ import java.util.function.*;
 /**
  * Utility methods for collections.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 public final class CollectionUtils {

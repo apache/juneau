@@ -34,8 +34,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.MsgPackDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.MsgPackDetails}
  * </ul>
  */
 public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvider {

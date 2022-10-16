@@ -28,8 +28,7 @@ import org.apache.juneau.internal.*;
  * Copies the contents of a {@link Manifest} into an {@link JsonMap} so that the various convenience methods on that
  * class can be used to retrieve values.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  *
  * @serial exclude

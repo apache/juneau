@@ -33,7 +33,6 @@ import org.apache.juneau.cp.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HttpPartSerializersParsers}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface HttpPartParser {

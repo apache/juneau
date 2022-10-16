@@ -33,7 +33,6 @@ import org.apache.juneau.reflect.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HttpPartSerializersParsers}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ResponseBeanMeta {

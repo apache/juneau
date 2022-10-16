@@ -24,8 +24,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * Loads the entire result set into an in-memory data structure, and then closes the result set object.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  *
  * @serial exclude

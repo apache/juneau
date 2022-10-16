@@ -91,8 +91,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-microservice-core}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc juneau-microservice-core}
  * </ul>
  */
 public class Microservice implements ConfigEventListener {

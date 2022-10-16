@@ -150,7 +150,6 @@ import org.apache.juneau.swap.*;
  * </table>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public final class ConverterUtils {

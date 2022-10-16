@@ -19,7 +19,6 @@ import java.util.*;
  * A simple list of {@link Method} objects.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

@@ -110,8 +110,7 @@ import org.apache.juneau.oapi.*;
  *	will not try to recompile it.
  * </div>
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 @Documented

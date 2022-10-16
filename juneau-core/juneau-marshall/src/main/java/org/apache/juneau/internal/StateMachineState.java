@@ -16,7 +16,6 @@ package org.apache.juneau.internal;
  * Enums for state-machine states.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @SuppressWarnings("javadoc")

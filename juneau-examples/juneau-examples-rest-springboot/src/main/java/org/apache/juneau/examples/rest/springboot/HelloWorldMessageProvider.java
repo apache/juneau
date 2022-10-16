@@ -19,7 +19,6 @@ import java.util.function.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrss.Overview}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class HelloWorldMessageProvider implements Supplier<String> {

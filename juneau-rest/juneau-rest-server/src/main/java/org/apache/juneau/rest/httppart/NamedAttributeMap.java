@@ -19,7 +19,6 @@ import java.util.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.HttpParts}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class NamedAttributeMap extends LinkedHashMap<String,NamedAttribute> {

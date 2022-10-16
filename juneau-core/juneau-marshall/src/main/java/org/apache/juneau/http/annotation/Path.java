@@ -73,8 +73,7 @@ import org.apache.juneau.oapi.*;
  * 	<li class='link'>{@doc jrc.Request}
  * </ul>
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 @Documented

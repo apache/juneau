@@ -49,7 +49,6 @@ import org.apache.juneau.annotation.*;
  * Subclasses must implement a public no-arg constructor so that it can be instantiated by the bean context code.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

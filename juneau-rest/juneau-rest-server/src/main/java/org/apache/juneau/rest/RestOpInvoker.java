@@ -24,7 +24,6 @@ import org.apache.juneau.rest.stats.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.RestContext}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RestOpInvoker extends MethodInvoker {

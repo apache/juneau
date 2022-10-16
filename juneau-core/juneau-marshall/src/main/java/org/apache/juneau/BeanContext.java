@@ -153,7 +153,6 @@ import org.apache.juneau.utils.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.BeanContexts}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})

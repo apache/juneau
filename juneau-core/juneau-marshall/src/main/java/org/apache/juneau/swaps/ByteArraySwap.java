@@ -21,8 +21,7 @@ import org.apache.juneau.swap.*;
  * Transforms <code><jk>byte</jk>[]</code> arrays to Strings.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.Swaps}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.Swaps}
  * </ul>
  */
 public abstract class ByteArraySwap extends StringSwap<byte[]> {

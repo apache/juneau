@@ -27,7 +27,6 @@ import org.apache.juneau.swap.*;
  * Utility classes and methods for the {@link Bean @Bean} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class BeanAnnotation {

@@ -20,8 +20,7 @@ import org.apache.juneau.oapi.annotation.*;
  * the class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.OpenApiDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.OpenApiDetails}
  * </ul>
  */
 public class OpenApiClassMeta extends ExtendedClassMeta {

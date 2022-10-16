@@ -28,7 +28,6 @@ import org.apache.juneau.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class VersionRange {

@@ -19,7 +19,6 @@ package org.apache.juneau.rest.client;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public abstract class BasicRestCallInterceptor implements RestCallInterceptor {

@@ -26,7 +26,6 @@ import java.io.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.SerializersAndParsers}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ParserInputStream extends InputStream implements Positionable {

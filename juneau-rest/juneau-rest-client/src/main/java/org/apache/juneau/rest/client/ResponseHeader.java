@@ -41,7 +41,6 @@ import org.apache.juneau.rest.client.assertion.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ResponseHeader extends BasicHeader {

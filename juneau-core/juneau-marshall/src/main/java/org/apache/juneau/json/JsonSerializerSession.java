@@ -35,8 +35,7 @@ import org.apache.juneau.swap.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.JsonDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.JsonDetails}
  * </ul>
  */
 public class JsonSerializerSession extends WriterSerializerSession {

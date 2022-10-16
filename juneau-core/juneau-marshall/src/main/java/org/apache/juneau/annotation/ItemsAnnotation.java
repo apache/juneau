@@ -20,7 +20,6 @@ import java.lang.annotation.*;
  * Utility classes and methods for the {@link Items @Items} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ItemsAnnotation {

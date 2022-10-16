@@ -16,7 +16,6 @@ package org.apache.juneau;
  * Possible values for encoding of byte arrays as strings.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public enum BinaryFormat {

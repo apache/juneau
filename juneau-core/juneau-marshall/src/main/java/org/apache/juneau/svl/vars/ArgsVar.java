@@ -51,7 +51,6 @@ import org.apache.juneau.svl.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ArgsVar extends DefaultingVar {

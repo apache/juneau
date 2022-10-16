@@ -35,7 +35,6 @@ import org.apache.juneau.rest.util.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RestSession extends ContextSession {

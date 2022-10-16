@@ -100,8 +100,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.JsonDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.JsonDetails}
  * </ul>
  */
 public class JsonSerializer extends WriterSerializer implements JsonMetaProvider {

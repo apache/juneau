@@ -23,8 +23,7 @@ import org.apache.juneau.swap.*;
  * Transforms <code>Readers</code> to {@link String Strings}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.Swaps}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.Swaps}
  * </ul>
  */
 public class ReaderSwap extends StringSwap<Reader> {

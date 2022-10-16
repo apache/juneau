@@ -37,8 +37,7 @@ import org.apache.juneau.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.JsonDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.JsonDetails}
  * </ul>
  */
 @Documented

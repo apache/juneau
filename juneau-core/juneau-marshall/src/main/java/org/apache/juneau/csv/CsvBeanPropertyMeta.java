@@ -19,8 +19,7 @@ import org.apache.juneau.csv.annotation.*;
  * Metadata on bean properties specific to the CSV serializers and parsers pulled from the {@link Csv @Csv}
  * annotation on the bean property.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 public final class CsvBeanPropertyMeta extends ExtendedBeanPropertyMeta {

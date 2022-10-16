@@ -19,7 +19,6 @@ import java.text.MessageFormat;
  * General exception that occurs when trying to execute a constructor, method, or field using reflection.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

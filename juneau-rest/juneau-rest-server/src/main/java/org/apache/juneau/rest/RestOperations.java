@@ -27,7 +27,6 @@ import org.apache.juneau.rest.annotation.*;
  * Encapsulates the set of {@link RestOp}-annotated methods within a single {@link Rest}-annotated object.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RestOperations {

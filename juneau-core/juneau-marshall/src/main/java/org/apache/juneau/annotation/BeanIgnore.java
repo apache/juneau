@@ -30,8 +30,7 @@ import java.lang.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.BeanIgnoreAnnotation}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.BeanIgnoreAnnotation}
  * </ul>
  */
 @Documented

@@ -26,7 +26,6 @@ import org.apache.juneau.internal.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.RestOpAnnotatedMethods}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RestOpArgList {

@@ -28,7 +28,6 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link PlainText @PlainText} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class PlainTextAnnotation {

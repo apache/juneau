@@ -44,7 +44,6 @@ import org.apache.juneau.rest.util.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.JavaMethodParameters}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class PathArg implements RestOpArg {

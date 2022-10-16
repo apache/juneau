@@ -21,7 +21,6 @@ import org.apache.juneau.reflect.*;
  * Defines an invalid usage of an annotation.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

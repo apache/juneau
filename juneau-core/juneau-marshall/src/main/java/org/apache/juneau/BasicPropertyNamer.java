@@ -28,8 +28,7 @@ import java.beans.*;
  * <p>
  * See {@link Introspector#decapitalize(String)} for exact rules.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 public class BasicPropertyNamer implements PropertyNamer {

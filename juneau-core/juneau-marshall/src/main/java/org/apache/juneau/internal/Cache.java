@@ -24,7 +24,6 @@ import java.util.function.*;
  * Essentially just a wrapper around a ConcurrentHashMap.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @param <K> The key type.

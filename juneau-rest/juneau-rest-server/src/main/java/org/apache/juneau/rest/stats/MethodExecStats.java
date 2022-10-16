@@ -28,7 +28,6 @@ import org.apache.juneau.marshaller.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.ExecutionStatistics}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class MethodExecStats {

@@ -21,7 +21,6 @@ import org.apache.juneau.http.response.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.UtilityBeans}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Response @Schema(description="Redirect to servlet root")

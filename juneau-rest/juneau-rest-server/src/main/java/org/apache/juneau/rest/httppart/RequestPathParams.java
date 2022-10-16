@@ -98,7 +98,6 @@ import org.apache.juneau.http.part.*;
  * 	<li class='jc'>{@link RequestPathParam}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
  * 	<li class='link'>{@doc jrs.HttpParts}
- * 	<li class='extlink'>{@source}
  * </ul>
 */
 public class RequestPathParams extends ArrayList<RequestPathParam> {

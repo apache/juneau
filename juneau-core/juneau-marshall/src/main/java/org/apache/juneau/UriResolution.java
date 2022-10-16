@@ -16,7 +16,6 @@ package org.apache.juneau;
  * Identifies the possible types of URL resolution.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public enum UriResolution {

@@ -31,7 +31,6 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jmr.RdfDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Target({TYPE,METHOD})

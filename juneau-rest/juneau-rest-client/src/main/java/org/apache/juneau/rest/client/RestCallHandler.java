@@ -58,7 +58,6 @@ import org.apache.http.protocol.*;
  * <ul class='seealso'>
  * 	<li class='jm'>{@link RestClient.Builder#callHandler()}
  * 	<li class='link'>{@doc juneau-rest-client}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface RestCallHandler {

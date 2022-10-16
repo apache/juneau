@@ -32,7 +32,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class PlainTextSerializerSession extends WriterSerializerSession {

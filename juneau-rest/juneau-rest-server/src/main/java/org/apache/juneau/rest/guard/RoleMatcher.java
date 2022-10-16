@@ -45,7 +45,6 @@ import static org.apache.juneau.internal.StateMachineState.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Guards}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RoleMatcher {

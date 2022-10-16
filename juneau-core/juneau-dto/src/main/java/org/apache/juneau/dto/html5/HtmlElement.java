@@ -32,8 +32,7 @@ import org.apache.juneau.xml.annotation.*;
  * These are beans that when serialized using {@link HtmlSerializer} generate valid HTML5 elements.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @org.apache.juneau.html.annotation.Html(format=XML)

@@ -35,10 +35,6 @@ import javax.xml.bind.*;
 
 /**
  * Reusable string utility methods.
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
- * </ul>
  */
 public final class StringUtils {
 

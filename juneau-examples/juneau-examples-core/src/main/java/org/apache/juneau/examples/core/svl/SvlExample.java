@@ -18,7 +18,6 @@ import org.apache.juneau.svl.*;
  * Simple Variable Language examples.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class SvlExample {

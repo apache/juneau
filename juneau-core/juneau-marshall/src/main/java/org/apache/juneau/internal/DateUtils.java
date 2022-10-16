@@ -34,7 +34,6 @@ import org.apache.juneau.reflect.*;
  * This class was copied from HttpClient 4.3.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public final class DateUtils {

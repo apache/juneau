@@ -24,7 +24,6 @@ import org.eclipse.jetty.xml.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-microservice-jetty}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class BasicJettyServerFactory implements JettyServerFactory {

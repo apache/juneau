@@ -29,7 +29,6 @@ import org.apache.juneau.svl.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.UrlEncodingDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class UrlEncodingAnnotation {

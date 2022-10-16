@@ -24,7 +24,6 @@ import org.apache.juneau.serializer.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HttpPartSerializersParsers}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public abstract class BaseHttpPartSerializer extends BeanContextable implements HttpPartSerializer {

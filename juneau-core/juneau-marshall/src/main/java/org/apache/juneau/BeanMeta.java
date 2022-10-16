@@ -54,8 +54,7 @@ import org.apache.juneau.reflect.*;
  * 		</ul>
  * </ul>
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  *
  * @param <T> The class type that this metadata applies to.

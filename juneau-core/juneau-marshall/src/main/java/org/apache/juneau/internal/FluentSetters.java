@@ -22,7 +22,6 @@ import java.lang.annotation.*;
  * parent classes to child classes.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Target(TYPE)

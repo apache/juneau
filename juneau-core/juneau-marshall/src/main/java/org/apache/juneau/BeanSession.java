@@ -46,8 +46,7 @@ import org.apache.juneau.swap.*;
  * 		thus can be safely cached and reused.
  * </ul>
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})

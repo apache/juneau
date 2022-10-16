@@ -1043,8 +1043,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-client}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
  */
 public class RestClient extends BeanContextable implements HttpClient, Closeable {

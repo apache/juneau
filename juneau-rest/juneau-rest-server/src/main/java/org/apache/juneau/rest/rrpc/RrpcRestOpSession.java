@@ -30,7 +30,6 @@ import org.apache.juneau.rest.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.RestRpc}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RrpcRestOpSession extends RestOpSession {

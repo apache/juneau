@@ -19,10 +19,6 @@ import java.util.*;
 /**
  * Represents a list of {@link ConfigEvent} objects.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
- * </ul>
- *
  * @serial exclude
  */
 public class ConfigEvents extends ArrayList<ConfigEvent> {

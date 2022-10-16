@@ -19,7 +19,6 @@ import java.io.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.Encoders}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface Finishable {

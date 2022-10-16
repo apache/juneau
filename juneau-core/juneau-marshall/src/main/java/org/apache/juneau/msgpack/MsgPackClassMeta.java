@@ -20,8 +20,7 @@ import org.apache.juneau.msgpack.annotation.*;
  * the class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.MsgPackDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.MsgPackDetails}
  * </ul>
  */
 public class MsgPackClassMeta extends ExtendedClassMeta {

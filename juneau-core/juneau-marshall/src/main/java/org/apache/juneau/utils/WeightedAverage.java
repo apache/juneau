@@ -16,7 +16,6 @@ package org.apache.juneau.utils;
  * A simple weighted average of numbers.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class WeightedAverage {

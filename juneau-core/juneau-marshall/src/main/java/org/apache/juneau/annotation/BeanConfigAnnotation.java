@@ -24,7 +24,6 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link BeanConfig @BeanConfig} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class BeanConfigAnnotation {

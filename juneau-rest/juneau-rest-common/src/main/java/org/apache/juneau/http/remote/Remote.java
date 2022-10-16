@@ -23,8 +23,7 @@ import org.apache.juneau.http.header.*;
  * Identifies a proxy against a REST interface.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrc.Proxies}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jrc.Proxies}
  * </ul>
  */
 @Documented

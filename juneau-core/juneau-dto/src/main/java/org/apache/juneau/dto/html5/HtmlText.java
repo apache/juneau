@@ -29,7 +29,6 @@ import org.apache.juneau.xml.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Xml(format=XMLTEXT)

@@ -33,7 +33,6 @@ import org.apache.juneau.parser.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class PlainTextParserSession extends ReaderParserSession {

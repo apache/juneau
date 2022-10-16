@@ -17,10 +17,6 @@ import org.apache.juneau.utils.*;
 
 /**
  * Various utility methods for creating and working with throwables.
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
- * </ul>
  */
 public class ThrowableUtils {
 

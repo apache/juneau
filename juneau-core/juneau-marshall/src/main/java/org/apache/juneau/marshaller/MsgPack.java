@@ -41,7 +41,6 @@ import org.apache.juneau.serializer.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.Marshallers}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class MsgPack extends StreamMarshaller {

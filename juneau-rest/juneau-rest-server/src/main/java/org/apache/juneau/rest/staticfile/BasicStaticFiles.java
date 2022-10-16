@@ -40,7 +40,6 @@ import org.apache.juneau.rest.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.StaticFiles}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class BasicStaticFiles implements StaticFiles {

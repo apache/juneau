@@ -56,8 +56,7 @@ import java.lang.annotation.*;
  * 	<jk>public class</jk> C {...}
  * </p>
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 @Documented

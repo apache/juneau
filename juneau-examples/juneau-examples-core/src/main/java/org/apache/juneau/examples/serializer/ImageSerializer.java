@@ -25,7 +25,6 @@ import org.apache.juneau.serializer.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Marshalling REST Marshalling}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @SuppressWarnings("javadoc")

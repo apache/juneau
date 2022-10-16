@@ -36,8 +36,7 @@ import org.apache.juneau.rest.servlet.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server-springboot}
- * 	<li class='link'>{@doc jrs.AnnotatedClasses}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jrs.AnnotatedClasses}
  * </ul>
  *
  * @serial exclude

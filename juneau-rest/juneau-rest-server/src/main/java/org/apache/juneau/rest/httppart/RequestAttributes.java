@@ -87,7 +87,6 @@ import org.apache.juneau.svl.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.HttpParts}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RequestAttributes {

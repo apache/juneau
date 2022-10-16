@@ -18,7 +18,6 @@ import org.apache.juneau.*;
  * Interface for providing access to {@link PlainTextClassMeta} and {@link PlainTextBeanPropertyMeta} objects.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface PlainTextMetaProvider extends AnnotationProvider {

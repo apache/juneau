@@ -42,8 +42,7 @@ package org.apache.juneau.rest.client;
  *
  * <ul class='seealso'>
  * 	<li class='jm'>{@link RestClient.Builder#interceptors(Object...)}
- * 	<li class='link'>{@doc juneau-rest-client}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
  */
 public interface RestCallInterceptor {

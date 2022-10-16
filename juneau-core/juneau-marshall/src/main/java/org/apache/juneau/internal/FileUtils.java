@@ -24,8 +24,7 @@ import org.apache.juneau.*;
 /**
  * File utilities.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 public class FileUtils {

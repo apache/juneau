@@ -27,7 +27,6 @@ import org.springframework.stereotype.Controller;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrss.Overview}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @SpringBootApplication

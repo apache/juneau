@@ -18,7 +18,6 @@ import javax.activation.*;
  * An extension of {@link javax.activation.MimetypesFileTypeMap} that includes many more media types.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ExtendedMimetypesFileTypeMap extends MimetypesFileTypeMap {

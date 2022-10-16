@@ -20,7 +20,6 @@ import org.apache.juneau.swap.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.Swaps}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ClassSwap extends StringSwap<Class<?>> {

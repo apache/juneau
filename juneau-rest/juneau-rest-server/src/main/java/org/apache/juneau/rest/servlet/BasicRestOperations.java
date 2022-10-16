@@ -63,7 +63,6 @@ import org.apache.juneau.rest.stats.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.AnnotatedClasses}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @HtmlDocConfig(

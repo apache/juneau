@@ -25,7 +25,6 @@ import org.apache.juneau.rest.widget.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Marshalling REST Marshalling}
  * 	<li class='link'>{@doc jrs.UtilityBeans Utility Beans}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Rest(

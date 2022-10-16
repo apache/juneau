@@ -22,8 +22,7 @@ import org.apache.juneau.xml.annotation.*;
  * on the bean property.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.XmlDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.XmlDetails}
  * </ul>
  */
 public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {

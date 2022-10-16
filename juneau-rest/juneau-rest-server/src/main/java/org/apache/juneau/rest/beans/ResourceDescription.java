@@ -30,8 +30,7 @@ import org.apache.juneau.http.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.UtilityBeans}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jrs.UtilityBeans}
  * </ul>
  */
 @Bean(properties="name,description", findFluentSetters=true)

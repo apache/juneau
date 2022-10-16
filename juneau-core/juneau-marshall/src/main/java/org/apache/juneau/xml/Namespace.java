@@ -28,8 +28,7 @@ import org.apache.juneau.internal.*;
  * in the serializer.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.XmlDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.XmlDetails}
  * </ul>
  */
 @Bean(sort=true)

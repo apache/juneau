@@ -44,7 +44,6 @@ import org.apache.juneau.serializer.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @FluentSetters(ignore="uriScheme")

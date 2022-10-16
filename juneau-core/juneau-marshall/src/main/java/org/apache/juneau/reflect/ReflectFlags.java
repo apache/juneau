@@ -16,7 +16,6 @@ package org.apache.juneau.reflect;
  * Identifies possible modifiers on classes, methods, fields, and constructors.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public enum ReflectFlags {

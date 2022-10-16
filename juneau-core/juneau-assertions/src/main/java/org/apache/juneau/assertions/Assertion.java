@@ -51,7 +51,6 @@ import org.apache.juneau.internal.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc ja.Overview}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @FluentSetters

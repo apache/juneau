@@ -16,7 +16,6 @@ package org.apache.juneau;
  * Identifies what relative URIs are relative to.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public enum UriRelativity {

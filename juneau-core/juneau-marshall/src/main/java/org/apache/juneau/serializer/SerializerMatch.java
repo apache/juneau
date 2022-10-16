@@ -19,7 +19,6 @@ import org.apache.juneau.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.SerializersAndParsers}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public final class SerializerMatch {

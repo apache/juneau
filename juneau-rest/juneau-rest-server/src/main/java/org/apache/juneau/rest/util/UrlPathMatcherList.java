@@ -20,7 +20,6 @@ import org.apache.juneau.internal.*;
  * A list of {@link UrlPathMatcher} objects.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

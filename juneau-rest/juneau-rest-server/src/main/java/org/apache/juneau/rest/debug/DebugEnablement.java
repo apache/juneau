@@ -32,7 +32,6 @@ import org.apache.juneau.utils.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public abstract class DebugEnablement {

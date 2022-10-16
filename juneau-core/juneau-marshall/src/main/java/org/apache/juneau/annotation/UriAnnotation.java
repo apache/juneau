@@ -27,7 +27,6 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link Uri @Uri} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class UriAnnotation {

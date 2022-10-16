@@ -58,7 +58,6 @@ import org.apache.juneau.marshaller.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jd.Swagger}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Bean(properties="type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,*")

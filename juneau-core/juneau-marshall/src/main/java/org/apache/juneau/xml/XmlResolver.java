@@ -19,7 +19,6 @@ import javax.xml.stream.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.XmlDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public abstract class XmlResolver implements XMLResolver {

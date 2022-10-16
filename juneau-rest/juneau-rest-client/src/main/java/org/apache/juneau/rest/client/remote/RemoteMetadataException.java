@@ -23,7 +23,6 @@ import org.apache.juneau.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrc.Proxies}
  * 	<li class='link'>{@doc juneau-rest-client}
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

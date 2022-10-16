@@ -33,7 +33,6 @@ import org.apache.juneau.internal.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-common}
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

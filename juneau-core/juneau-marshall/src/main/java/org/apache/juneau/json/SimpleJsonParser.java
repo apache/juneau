@@ -29,7 +29,6 @@ package org.apache.juneau.json;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.JsonDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class SimpleJsonParser extends JsonParser {

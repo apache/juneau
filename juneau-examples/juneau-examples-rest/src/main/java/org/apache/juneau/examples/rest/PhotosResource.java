@@ -33,7 +33,6 @@ import java.net.*;
  * 	<li class='link'>{@doc jrs.Marshalling REST Marshalling}
  * 	<li class='jc'>{@link ImageSerializer}
  * 	<li class='jc'>{@link ImageParser}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Rest(

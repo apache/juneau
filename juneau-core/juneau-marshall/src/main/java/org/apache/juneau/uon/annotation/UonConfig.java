@@ -30,7 +30,6 @@ import org.apache.juneau.urlencoding.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.UonDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Target({TYPE,METHOD})

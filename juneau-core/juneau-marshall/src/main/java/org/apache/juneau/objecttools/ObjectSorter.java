@@ -47,8 +47,7 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.ObjectTools}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.ObjectTools}
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})

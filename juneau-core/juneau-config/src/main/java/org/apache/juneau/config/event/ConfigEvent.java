@@ -21,10 +21,6 @@ import org.apache.juneau.internal.*;
 
 /**
  * Represents a change to a config.
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
- * </ul>
  */
 public class ConfigEvent {
 

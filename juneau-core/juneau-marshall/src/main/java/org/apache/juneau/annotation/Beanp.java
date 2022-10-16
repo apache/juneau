@@ -33,8 +33,7 @@ import org.apache.juneau.*;
  * This annotation is applied to public fields and public getter/setter methods of beans.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.BeanpAnnotation}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.BeanpAnnotation}
  * </ul>
  */
 @Documented

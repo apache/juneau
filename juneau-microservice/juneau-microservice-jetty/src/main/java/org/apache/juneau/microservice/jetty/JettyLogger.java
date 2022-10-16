@@ -41,7 +41,6 @@ import java.util.logging.Logger;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-microservice-jetty}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class JettyLogger implements org.eclipse.jetty.util.log.Logger {

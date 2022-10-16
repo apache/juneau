@@ -22,8 +22,7 @@ import org.apache.juneau.json.annotation.*;
  * the class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.JsonDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.JsonDetails}
  * </ul>
  */
 public class JsonClassMeta extends ExtendedClassMeta {

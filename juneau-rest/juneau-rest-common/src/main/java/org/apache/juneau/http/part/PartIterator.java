@@ -21,7 +21,6 @@ import org.apache.http.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-common}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface PartIterator extends Iterator<NameValuePair> {}

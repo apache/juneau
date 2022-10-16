@@ -20,7 +20,6 @@ import java.util.*;
  * Represents a list of objects used to compare objects for equality.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class HashKey {

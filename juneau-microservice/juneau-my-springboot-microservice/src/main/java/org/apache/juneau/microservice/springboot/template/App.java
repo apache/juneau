@@ -28,7 +28,6 @@ import org.springframework.web.filter.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc my-springboot-microservice}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @SpringBootApplication

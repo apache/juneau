@@ -23,7 +23,6 @@ import java.util.List;
  * Xml configuration example.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class XmlConfigurationExample {

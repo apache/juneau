@@ -24,7 +24,6 @@ import org.apache.juneau.*;
  * Utility methods for accessing system properties and environment variables.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class SystemEnv {

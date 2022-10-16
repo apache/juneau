@@ -24,7 +24,6 @@ import org.apache.juneau.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.LifecycleHooks}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RestPreCallAnnotation {

@@ -74,7 +74,6 @@ import java.util.Objects;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ReaderInputStream extends InputStream {

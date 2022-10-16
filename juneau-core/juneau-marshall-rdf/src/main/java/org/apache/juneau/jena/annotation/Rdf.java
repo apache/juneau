@@ -37,8 +37,7 @@ import org.apache.juneau.jena.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jmr.RdfDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jmr.RdfDetails}
  * </ul>
  */
 @Documented

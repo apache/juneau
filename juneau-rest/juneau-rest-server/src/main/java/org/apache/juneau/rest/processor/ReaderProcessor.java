@@ -25,8 +25,7 @@ import org.apache.juneau.rest.*;
  * Simply pipes the contents of the {@link Reader} to {@link RestResponse#getNegotiatedWriter()}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.ResponseProcessors}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jrs.ResponseProcessors}
  * </ul>
  */
 public final class ReaderProcessor implements ResponseProcessor {

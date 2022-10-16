@@ -36,7 +36,6 @@ import org.apache.juneau.parser.*;
  * (e.g. <js>"/foo/bar"</js>) URLs.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Bean

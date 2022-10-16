@@ -65,8 +65,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.Encoders}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.Encoders}
  * </ul>
  */
 public final class EncoderSet {

@@ -23,7 +23,6 @@ import org.apache.juneau.svl.vars.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

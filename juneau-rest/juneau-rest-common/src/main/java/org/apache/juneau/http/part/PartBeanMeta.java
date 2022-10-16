@@ -57,7 +57,6 @@ import org.apache.juneau.reflect.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-common}
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @param <T> The HTTP part bean type.

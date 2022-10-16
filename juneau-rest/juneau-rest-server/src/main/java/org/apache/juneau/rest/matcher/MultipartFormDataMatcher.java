@@ -18,8 +18,7 @@ import javax.servlet.http.*;
  * Predefined matcher for matching requests with content type <js>"multipart/form-data"</js>.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.RestOpAnnotatedMethods}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jrs.RestOpAnnotatedMethods}
  * </ul>
  */
 public class MultipartFormDataMatcher extends RestMatcher {

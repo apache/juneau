@@ -58,7 +58,6 @@ package org.apache.juneau.swap;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.Swaps}
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @param <T> The bean type.

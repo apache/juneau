@@ -31,7 +31,6 @@ import org.apache.juneau.collections.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @SuppressWarnings({"serial"})

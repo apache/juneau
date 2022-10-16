@@ -53,7 +53,6 @@ import org.apache.juneau.svl.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.SvlVariables}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class FileVar extends DefaultingVar {

@@ -38,7 +38,6 @@ import org.apache.juneau.swap.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.JsonSchemaDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class JsonSchemaGeneratorSession extends BeanTraverseSession {

@@ -22,7 +22,6 @@ import org.apache.juneau.rest.client.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock}
- * 	<li class='extlink'>{@source}
  * </ul>
 */
 @FluentSetters

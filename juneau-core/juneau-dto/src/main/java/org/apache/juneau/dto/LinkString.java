@@ -39,8 +39,7 @@ import org.apache.juneau.serializer.*;
  * When encountered by the {@link HtmlSerializer} class, this object gets converted to a hyperlink.
  * All other serializers simply convert it to a simple bean.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 @HtmlLink

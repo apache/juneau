@@ -21,7 +21,6 @@ import javax.servlet.http.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc TODO}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 class OverrideableHttpServletRequest extends HttpServletRequestWrapper {

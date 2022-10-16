@@ -37,8 +37,7 @@ import org.apache.juneau.uon.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.UrlEncodingDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.UrlEncodingDetails}
  * </ul>
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })

@@ -38,7 +38,6 @@ import java.lang.annotation.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Swagger}
  * 	<li class='extlink'>{@doc ext.SwaggerExternalDocumentationObject}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

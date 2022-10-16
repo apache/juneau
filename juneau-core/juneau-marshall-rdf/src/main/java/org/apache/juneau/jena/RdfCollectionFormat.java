@@ -19,8 +19,7 @@ import org.apache.juneau.jena.annotation.*;
  * classes, beans, and bean properties are serialized, particularly collections.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jmr.RdfDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jmr.RdfDetails}
  * </ul>
  */
 public enum RdfCollectionFormat {

@@ -27,7 +27,6 @@ import org.apache.juneau.serializer.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HtmlRenderAnnotation}
  * 	<li class='link'>{@doc jm.HtmlDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @param <T> The bean property type.

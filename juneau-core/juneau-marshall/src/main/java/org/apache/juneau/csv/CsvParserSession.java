@@ -30,8 +30,7 @@ import org.apache.juneau.parser.*;
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 public final class CsvParserSession extends ReaderParserSession {

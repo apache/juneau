@@ -26,7 +26,6 @@ import org.apache.juneau.rest.util.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 class MockPathResolver {

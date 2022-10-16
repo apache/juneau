@@ -26,7 +26,6 @@ import org.apache.juneau.*;
  * If it's a builder, then annotations can be applied to it.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @param <T> The bean type.

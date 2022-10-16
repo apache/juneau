@@ -35,7 +35,6 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class SoapXmlSerializerSession extends XmlSerializerSession {

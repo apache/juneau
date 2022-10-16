@@ -27,7 +27,6 @@ import java.util.function.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @param <A> Object 1 type.

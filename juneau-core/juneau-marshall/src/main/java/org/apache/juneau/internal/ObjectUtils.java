@@ -25,7 +25,6 @@ import org.apache.juneau.reflect.*;
  * Various generic object utility methods.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ObjectUtils {

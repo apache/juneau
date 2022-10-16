@@ -26,8 +26,7 @@ import org.apache.juneau.parser.*;
  * the class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.JsonSchemaDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.JsonSchemaDetails}
  * </ul>
  */
 public class JsonSchemaClassMeta extends ExtendedClassMeta {

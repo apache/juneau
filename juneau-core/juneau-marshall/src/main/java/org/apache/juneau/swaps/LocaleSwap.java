@@ -22,7 +22,6 @@ import org.apache.juneau.swap.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.Swaps}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class LocaleSwap extends StringSwap<Locale> {

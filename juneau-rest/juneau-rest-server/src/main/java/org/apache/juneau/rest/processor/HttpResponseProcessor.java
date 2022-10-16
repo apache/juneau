@@ -23,8 +23,7 @@ import org.apache.http.*;
  * Response handler for {@link HttpResponse} objects.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.ResponseProcessors}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jrs.ResponseProcessors}
  * </ul>
  */
 public final class HttpResponseProcessor implements ResponseProcessor {

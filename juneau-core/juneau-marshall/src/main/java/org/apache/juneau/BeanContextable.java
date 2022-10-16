@@ -38,7 +38,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public abstract class BeanContextable extends Context {

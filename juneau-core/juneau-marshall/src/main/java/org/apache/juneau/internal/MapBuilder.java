@@ -28,7 +28,6 @@ import org.apache.juneau.parser.*;
  * Builder for maps.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @param <K> Key type.

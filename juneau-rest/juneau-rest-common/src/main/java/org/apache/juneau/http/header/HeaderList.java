@@ -55,7 +55,6 @@ import org.apache.juneau.svl.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-common}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @FluentSetters

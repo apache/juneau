@@ -40,8 +40,7 @@ import org.apache.juneau.internal.*;
  * Instances of this class are created by calling the {@link RestRequest#run()} method.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-client}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
  */
 @FluentSetters

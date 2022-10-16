@@ -24,7 +24,6 @@ import org.apache.juneau.swaps.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.ExecutionStatistics}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Bean(properties="startTime,upTime,methodStats")

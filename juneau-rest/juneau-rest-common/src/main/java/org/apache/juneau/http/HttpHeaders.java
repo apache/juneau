@@ -34,7 +34,6 @@ import org.apache.juneau.reflect.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-common}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class HttpHeaders {

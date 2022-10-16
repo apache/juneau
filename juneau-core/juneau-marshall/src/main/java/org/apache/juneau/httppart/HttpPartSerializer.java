@@ -45,7 +45,6 @@ import org.apache.juneau.http.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HttpPartSerializersParsers}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface HttpPartSerializer {

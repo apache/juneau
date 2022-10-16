@@ -34,8 +34,7 @@ import org.apache.juneau.utils.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.OpenApiParsers}
- * 	<li class='link'>{@doc jm.OpenApiDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.OpenApiDetails}
  * </ul>
  */
 public class OpenApiParser extends UonParser implements OpenApiMetaProvider {

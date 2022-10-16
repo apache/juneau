@@ -27,7 +27,6 @@ import org.apache.juneau.http.part.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.HttpParts}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @BeanIgnore

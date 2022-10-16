@@ -34,7 +34,6 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.ResponseBeans}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ResponseBeanArg implements RestOpArg {

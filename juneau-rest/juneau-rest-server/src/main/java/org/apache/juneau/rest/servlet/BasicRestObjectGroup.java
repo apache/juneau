@@ -36,8 +36,7 @@ import org.apache.juneau.rest.config.*;
  * Children are attached to this resource using the {@link Rest#children() @Rest(children)} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.AnnotatedClasses}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jrs.AnnotatedClasses}
  * </ul>
  */
 @Rest

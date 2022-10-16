@@ -23,7 +23,6 @@ import org.apache.juneau.svl.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.OpenApiDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class OpenApiConfigAnnotation {

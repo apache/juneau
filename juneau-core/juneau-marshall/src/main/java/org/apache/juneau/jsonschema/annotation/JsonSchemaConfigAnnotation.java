@@ -22,7 +22,6 @@ import org.apache.juneau.svl.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.JsonSchemaDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class JsonSchemaConfigAnnotation {

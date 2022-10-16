@@ -42,7 +42,6 @@ import org.apache.juneau.oapi.*;
  * 	<li class='link'>{@doc jrc.Response}
  * 	<li class='link'>{@doc jrs.Swagger}
  * 	<li class='extlink'>{@doc ext.SwaggerResponseObject}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

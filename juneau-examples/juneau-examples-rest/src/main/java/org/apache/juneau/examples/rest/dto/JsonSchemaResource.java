@@ -23,8 +23,7 @@ import org.apache.juneau.rest.widget.*;
 /**
  * Sample resource that shows how to serialize JSON-Schema documents.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  *
  * @serial exclude

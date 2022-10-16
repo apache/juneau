@@ -25,7 +25,6 @@ import org.springframework.context.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server-springboot}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class SpringBeanStore extends BeanStore {

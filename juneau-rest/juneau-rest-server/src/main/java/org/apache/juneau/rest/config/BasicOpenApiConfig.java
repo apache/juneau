@@ -74,7 +74,6 @@ import org.apache.juneau.serializer.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.AnnotatedClasses}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Rest(

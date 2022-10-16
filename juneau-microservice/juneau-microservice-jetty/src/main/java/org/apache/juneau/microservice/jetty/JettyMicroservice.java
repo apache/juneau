@@ -58,7 +58,6 @@ import org.eclipse.jetty.servlet.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-microservice-jetty}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class JettyMicroservice extends Microservice {

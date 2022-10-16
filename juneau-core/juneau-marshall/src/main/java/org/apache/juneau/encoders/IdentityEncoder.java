@@ -25,8 +25,7 @@ import java.io.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.Encoders}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.Encoders}
  * </ul>
  */
 public class IdentityEncoder extends Encoder {

@@ -73,7 +73,6 @@ import org.apache.juneau.ExecutableException;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ObjectMerger {

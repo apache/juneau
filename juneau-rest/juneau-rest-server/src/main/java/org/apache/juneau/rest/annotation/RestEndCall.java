@@ -81,7 +81,6 @@ import javax.servlet.http.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.LifecycleHooks}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Target({METHOD,TYPE})

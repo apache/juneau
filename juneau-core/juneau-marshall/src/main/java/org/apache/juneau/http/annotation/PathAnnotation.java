@@ -29,7 +29,6 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link Path @Path} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class PathAnnotation {

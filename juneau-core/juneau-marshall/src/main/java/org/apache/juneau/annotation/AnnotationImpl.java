@@ -35,7 +35,6 @@ import org.apache.juneau.internal.*;
  * Constructors must call the {@link #postConstruct()} method after all fields have been set to trigger this calculation.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class AnnotationImpl implements Annotation {

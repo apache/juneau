@@ -42,7 +42,6 @@ import org.apache.juneau.rest.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Guards}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RoleBasedRestGuard extends RestGuard {

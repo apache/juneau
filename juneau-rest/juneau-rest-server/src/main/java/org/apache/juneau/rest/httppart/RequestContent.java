@@ -87,7 +87,6 @@ import org.apache.juneau.rest.util.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.HttpParts}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @SuppressWarnings("unchecked")

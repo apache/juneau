@@ -20,7 +20,6 @@ import java.util.function.*;
  * A subclass of {@link Consumer} that allows for thrown exceptions.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @param <T> the type of the input to the consumer.

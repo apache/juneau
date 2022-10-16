@@ -27,7 +27,6 @@ import org.apache.juneau.parser.*;
  * Builder for sets.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @param <E> Element type.

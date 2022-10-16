@@ -44,7 +44,6 @@ import org.apache.juneau.marshaller.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Bean(properties="v1,v2")

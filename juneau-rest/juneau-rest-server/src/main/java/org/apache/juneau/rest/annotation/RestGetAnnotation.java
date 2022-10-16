@@ -36,7 +36,6 @@ import org.apache.juneau.svl.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.RestOpAnnotatedMethods}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RestGetAnnotation {

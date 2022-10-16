@@ -17,7 +17,6 @@ package org.apache.juneau.encoders;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.Encoders}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public final class EncoderMatch {

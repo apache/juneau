@@ -19,7 +19,6 @@ import org.apache.juneau.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.UonDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface UonMetaProvider extends AnnotationProvider {

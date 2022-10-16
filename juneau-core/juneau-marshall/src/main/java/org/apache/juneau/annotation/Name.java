@@ -36,8 +36,7 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 @Documented

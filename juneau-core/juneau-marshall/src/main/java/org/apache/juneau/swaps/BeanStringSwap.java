@@ -29,8 +29,7 @@ import org.apache.juneau.swap.*;
  * {@doc jm.PojoCategories parsable POJO}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.Swaps}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.Swaps}
  * </ul>
  *
  * @param <T> The class type of the bean.

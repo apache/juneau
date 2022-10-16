@@ -27,7 +27,6 @@ import org.apache.juneau.assertions.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-common}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class BasicCsvArrayPart extends BasicPart {

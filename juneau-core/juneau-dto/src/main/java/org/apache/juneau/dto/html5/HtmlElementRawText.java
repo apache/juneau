@@ -22,7 +22,6 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jd.Html5}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @FluentSetters

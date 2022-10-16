@@ -18,7 +18,6 @@ import java.lang.reflect.*;
  * HTTP utilities.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class HttpUtils {

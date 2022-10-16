@@ -55,7 +55,6 @@ package org.apache.juneau.html;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HtmlDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface HtmlDocTemplate {

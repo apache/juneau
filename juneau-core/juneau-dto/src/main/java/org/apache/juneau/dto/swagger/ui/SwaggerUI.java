@@ -32,7 +32,6 @@ import org.apache.juneau.swap.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jd.SwaggerUi}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class SwaggerUI extends ObjectSwap<Swagger,Div> {

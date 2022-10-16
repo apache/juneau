@@ -24,8 +24,7 @@ import org.apache.juneau.swap.*;
  * This is a one-way transform, since {@code Enumerations} cannot be reconstituted.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.Swaps}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.Swaps}
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})

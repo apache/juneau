@@ -34,7 +34,6 @@ import org.apache.juneau.*;
  * functionality for bean classes.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

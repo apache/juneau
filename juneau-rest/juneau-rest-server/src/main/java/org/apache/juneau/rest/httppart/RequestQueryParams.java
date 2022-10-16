@@ -114,7 +114,6 @@ import org.apache.juneau.http.part.*;
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
  * 	<li class='link'>{@doc jrs.HttpParts}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RequestQueryParams extends ArrayList<RequestQueryParam> {

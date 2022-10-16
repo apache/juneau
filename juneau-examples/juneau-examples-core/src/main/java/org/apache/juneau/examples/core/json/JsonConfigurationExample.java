@@ -26,7 +26,6 @@ import org.apache.juneau.json.*;
  * Json configuration example.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class JsonConfigurationExample {

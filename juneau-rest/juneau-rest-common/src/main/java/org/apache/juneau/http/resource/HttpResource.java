@@ -36,7 +36,6 @@ import org.apache.juneau.http.header.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-common}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface HttpResource extends HttpEntity {

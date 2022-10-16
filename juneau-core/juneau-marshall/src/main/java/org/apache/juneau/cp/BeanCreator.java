@@ -107,7 +107,6 @@ import org.apache.juneau.reflect.*;
  *
  * <ul class='seealso'>
  * 	<li class='jc'>{@link BeanStore}
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @param <T> The bean type being created.

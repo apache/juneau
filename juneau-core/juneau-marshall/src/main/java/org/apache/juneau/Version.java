@@ -24,7 +24,6 @@ import java.util.*;
  * Used to compare version numbers.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class Version implements Comparable<Version> {

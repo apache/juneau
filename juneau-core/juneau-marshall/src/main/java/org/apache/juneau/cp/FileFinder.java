@@ -82,7 +82,6 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface FileFinder {

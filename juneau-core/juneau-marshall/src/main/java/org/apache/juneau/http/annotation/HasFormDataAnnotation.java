@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * Utility classes and methods for the {@link HasFormData @HasFormData} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class HasFormDataAnnotation {

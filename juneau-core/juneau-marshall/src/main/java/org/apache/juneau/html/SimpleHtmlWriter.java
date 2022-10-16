@@ -24,8 +24,7 @@ import java.io.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HtmlDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.HtmlDetails}
  * </ul>
  */
 public class SimpleHtmlWriter extends HtmlWriter {

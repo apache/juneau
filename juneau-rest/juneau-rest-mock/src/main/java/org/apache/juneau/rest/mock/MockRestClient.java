@@ -240,7 +240,6 @@ import org.apache.juneau.utils.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class MockRestClient extends RestClient implements HttpClientConnection {

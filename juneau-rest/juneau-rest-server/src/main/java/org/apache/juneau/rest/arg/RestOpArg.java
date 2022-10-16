@@ -46,7 +46,6 @@ import org.apache.juneau.rest.annotation.*;
  * <ul class='seealso'>
  * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restOpArgs(Class...)}
  * 	<li class='link'>{@doc jrs.RestOpAnnotatedMethods}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface RestOpArg {

@@ -20,7 +20,6 @@ import org.apache.juneau.*;
  * Encapsulate a bean setter method that may be a method or field.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface Setter {

@@ -27,8 +27,7 @@ import org.apache.juneau.swap.*;
  * Entries in the list represent matched groups in a regular expression.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.Swaps}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.Swaps}
  * </ul>
  */
 public class MatchResultSwap extends ObjectSwap<MatchResult,List<String>> {

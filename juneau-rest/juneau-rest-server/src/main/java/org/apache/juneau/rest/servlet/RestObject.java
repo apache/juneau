@@ -35,7 +35,6 @@ import org.apache.juneau.rest.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.AnnotatedClasses}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public abstract class RestObject {

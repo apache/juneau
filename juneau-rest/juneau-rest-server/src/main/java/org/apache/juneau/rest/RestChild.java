@@ -34,7 +34,6 @@ import org.apache.juneau.cp.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.AnnotatedClasses}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RestChild {

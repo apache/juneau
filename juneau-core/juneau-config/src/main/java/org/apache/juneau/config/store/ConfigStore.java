@@ -38,10 +38,6 @@ import org.apache.juneau.utils.*;
  * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
- * </ul>
 */
 public abstract class ConfigStore extends Context implements Closeable {
 

@@ -21,7 +21,6 @@ import org.apache.juneau.internal.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.UonDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public final class UonUtils {

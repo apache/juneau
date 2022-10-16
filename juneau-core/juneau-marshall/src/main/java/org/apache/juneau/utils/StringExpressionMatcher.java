@@ -44,7 +44,6 @@ import static org.apache.juneau.internal.StateMachineState.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class StringExpressionMatcher {

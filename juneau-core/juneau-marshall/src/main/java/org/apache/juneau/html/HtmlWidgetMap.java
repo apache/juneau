@@ -20,7 +20,6 @@ import java.util.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.HtmlWidgets}
  * 	<li class='link'>{@doc jm.HtmlDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

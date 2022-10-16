@@ -19,7 +19,6 @@ import static java.util.Optional.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.ObjectTools}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class PageArgs {

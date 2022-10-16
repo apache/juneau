@@ -29,8 +29,7 @@ import org.apache.juneau.annotation.*;
  * Marshalled filters are created by {@link Builder} which is the programmatic equivalent to the {@link Marshalled @Marshalled}
  * annotation.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 public final class MarshalledFilter {

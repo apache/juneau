@@ -121,7 +121,6 @@ import org.apache.juneau.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @param <V> The type of object in this map.

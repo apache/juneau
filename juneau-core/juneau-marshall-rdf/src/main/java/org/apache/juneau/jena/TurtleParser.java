@@ -21,7 +21,6 @@ package org.apache.juneau.jena;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jmr.RdfDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class TurtleParser extends RdfParser {

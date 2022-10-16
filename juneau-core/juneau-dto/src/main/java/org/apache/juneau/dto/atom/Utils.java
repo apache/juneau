@@ -22,7 +22,6 @@ import javax.xml.bind.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jd.Atom}
  * 	<li class='jp'>{@doc package-summary.html#TOC}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 class Utils {

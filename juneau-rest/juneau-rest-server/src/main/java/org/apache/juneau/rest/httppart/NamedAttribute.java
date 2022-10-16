@@ -17,7 +17,6 @@ package org.apache.juneau.rest.httppart;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.HttpParts}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface NamedAttribute {

@@ -45,7 +45,6 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class BasicFileFinder implements FileFinder {

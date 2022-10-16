@@ -22,7 +22,6 @@ import org.apache.juneau.reflect.*;
  * Utility methods.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 class Utils {

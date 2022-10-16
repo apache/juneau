@@ -27,7 +27,6 @@ import org.apache.juneau.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.JsonSchemaDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class BasicBeanDefMapper implements BeanDefMapper {

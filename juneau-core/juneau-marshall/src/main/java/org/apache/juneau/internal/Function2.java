@@ -19,7 +19,6 @@ import java.util.function.*;
  * A function that takes in 2 arguments.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @param <A> The first argument.

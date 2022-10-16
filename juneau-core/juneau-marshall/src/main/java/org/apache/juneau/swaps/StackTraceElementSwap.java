@@ -25,8 +25,7 @@ import org.apache.juneau.swap.*;
  * parse the resulting string back into a bean.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.Swaps}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.Swaps}
  * </ul>
  */
 public class StackTraceElementSwap extends ObjectSwap<StackTraceElement,String> {

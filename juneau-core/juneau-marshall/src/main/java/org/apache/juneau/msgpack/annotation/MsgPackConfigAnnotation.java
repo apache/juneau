@@ -22,7 +22,6 @@ import org.apache.juneau.svl.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.MsgPackDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class MsgPackConfigAnnotation {

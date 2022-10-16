@@ -33,7 +33,6 @@ import org.apache.juneau.rest.logger.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RestOpSession extends ContextSession {

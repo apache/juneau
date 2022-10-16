@@ -20,8 +20,7 @@ import java.util.*;
 /**
  * Quick and dirty utilities for working with arrays.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 public final class ArrayUtils {

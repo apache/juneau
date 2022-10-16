@@ -20,7 +20,6 @@ import org.apache.juneau.annotation.*;
  * Utility classes and methods for the {@link Contact @Contact} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ContactAnnotation {

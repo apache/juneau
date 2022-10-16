@@ -25,7 +25,6 @@ import java.util.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class DefaultClassList {

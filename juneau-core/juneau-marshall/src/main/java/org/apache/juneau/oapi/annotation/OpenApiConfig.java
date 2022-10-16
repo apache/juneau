@@ -29,7 +29,6 @@ import org.apache.juneau.msgpack.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.OpenApiDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Target({TYPE,METHOD})

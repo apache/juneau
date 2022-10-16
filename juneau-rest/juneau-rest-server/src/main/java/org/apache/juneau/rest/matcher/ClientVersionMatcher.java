@@ -26,7 +26,6 @@ import org.apache.juneau.reflect.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.ClientVersioning}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ClientVersionMatcher extends RestMatcher {

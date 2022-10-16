@@ -106,8 +106,7 @@ import org.apache.juneau.*;
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  *
  * @serial exclude

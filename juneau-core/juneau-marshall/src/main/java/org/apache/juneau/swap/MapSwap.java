@@ -41,7 +41,6 @@ import org.apache.juneau.collections.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.Swaps}
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @param <T> The normal form of the class.

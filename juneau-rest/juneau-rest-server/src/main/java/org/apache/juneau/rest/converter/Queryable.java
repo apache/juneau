@@ -70,8 +70,7 @@ import org.apache.juneau.rest.httppart.*;
  * 	<li class='jc'>{@link ObjectSorter} - Additional information on sorting POJO models.
  * 	<li class='jc'>{@link ObjectPaginator} - Additional information on paginating POJO models.
  * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()} - Registering converters with REST resources.
- * 	<li class='link'>{@doc jrs.Converters}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jrs.Converters}
  * </ul>
  */
 public final class Queryable implements RestConverter {

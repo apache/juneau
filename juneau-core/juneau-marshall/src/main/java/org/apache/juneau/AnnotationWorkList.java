@@ -22,7 +22,6 @@ import org.apache.juneau.svl.*;
  * A list of {@link AnnotationWork} objects.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

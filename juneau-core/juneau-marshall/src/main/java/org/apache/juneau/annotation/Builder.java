@@ -52,8 +52,7 @@ import java.lang.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PojoBuilders}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.PojoBuilders}
  * </ul>
  */
 @Documented

@@ -32,7 +32,6 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.JavaMethodParameters}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class MethodArg implements RestOpArg {

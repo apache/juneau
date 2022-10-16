@@ -30,8 +30,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.MsgPackDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.MsgPackDetails}
  * </ul>
  */
 public final class MsgPackOutputStream extends OutputStream {

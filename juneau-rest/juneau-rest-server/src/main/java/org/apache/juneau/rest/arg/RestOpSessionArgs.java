@@ -28,7 +28,6 @@ import org.apache.juneau.utils.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.JavaMethodParameters}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RestOpSessionArgs extends SimpleRestOperationArg {

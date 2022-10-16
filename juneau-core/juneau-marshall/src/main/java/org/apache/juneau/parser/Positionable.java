@@ -17,7 +17,6 @@ package org.apache.juneau.parser;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.SerializersAndParsers}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface Positionable {

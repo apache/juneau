@@ -30,7 +30,6 @@ import org.apache.juneau.swap.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Target({TYPE,METHOD})

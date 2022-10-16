@@ -25,8 +25,7 @@ import org.apache.juneau.rest.servlet.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.UtilityBeans}
- * 	<li class='jic'>{@link BasicGroupOperations}
- * 	<li class='extlink'>{@source}
+ * 	<li class='jic'>{@link BasicGroupOperations}
  * </ul>
  *
  * @serial exclude

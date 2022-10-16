@@ -23,8 +23,7 @@ import org.apache.juneau.internal.*;
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jd.Html5}
  * </ul>
  */
 @Bean(typeName="img")

@@ -27,7 +27,6 @@ import org.apache.juneau.parser.*;
  * Utility classes and methods for the {@link SubItems @SubItems} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class SubItemsAnnotation {

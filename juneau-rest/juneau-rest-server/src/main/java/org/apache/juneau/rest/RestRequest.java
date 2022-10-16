@@ -194,8 +194,7 @@ import org.apache.juneau.utils.*;
  * 	</ul>
  * </ul>
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 @SuppressWarnings({ "unchecked", "unused" })

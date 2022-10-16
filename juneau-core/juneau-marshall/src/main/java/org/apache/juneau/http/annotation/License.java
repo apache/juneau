@@ -37,8 +37,7 @@ import java.lang.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Swagger}
- * 	<li class='extlink'>{@doc ext.SwaggerLicenseObject}
- * 	<li class='extlink'>{@source}
+ * 	<li class='extlink'>{@doc ext.SwaggerLicenseObject}
  * </ul>
  */
 @Documented

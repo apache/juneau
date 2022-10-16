@@ -30,7 +30,6 @@ import java.net.*;
  * Sub module of the core.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class DtoExample {

@@ -34,7 +34,6 @@ package org.apache.juneau.rest.annotation;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public final class None {}

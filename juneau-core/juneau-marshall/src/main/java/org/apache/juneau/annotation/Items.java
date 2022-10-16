@@ -65,8 +65,7 @@ import org.apache.juneau.oapi.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Swagger}
- * 	<li class='extlink'>{@doc ext.SwaggerItemsObject}
- * 	<li class='extlink'>{@source}
+ * 	<li class='extlink'>{@doc ext.SwaggerItemsObject}
  * </ul>
  */
 @Documented

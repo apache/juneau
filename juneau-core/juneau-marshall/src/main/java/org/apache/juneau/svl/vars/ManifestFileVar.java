@@ -45,7 +45,6 @@ import org.apache.juneau.utils.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ManifestFileVar extends DefaultingVar {

@@ -46,8 +46,7 @@ import org.apache.juneau.oapi.*;
  * </p>
   *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.JavaMethodParameters}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jrs.JavaMethodParameters}
  * </ul>
  */
 @Target({PARAMETER,TYPE})

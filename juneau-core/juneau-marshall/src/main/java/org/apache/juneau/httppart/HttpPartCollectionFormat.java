@@ -17,7 +17,6 @@ package org.apache.juneau.httppart;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HttpPartSerializersParsers}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public enum HttpPartCollectionFormat {

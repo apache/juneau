@@ -25,7 +25,6 @@ import org.apache.juneau.microservice.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-microservice-core}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ConfigCommand extends ConsoleCommand {

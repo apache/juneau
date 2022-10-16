@@ -24,8 +24,7 @@ import org.apache.juneau.html.annotation.*;
  * the class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HtmlDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.HtmlDetails}
  * </ul>
  */
 public class HtmlClassMeta extends ExtendedClassMeta {

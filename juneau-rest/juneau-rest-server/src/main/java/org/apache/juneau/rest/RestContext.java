@@ -110,8 +110,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.RestContext}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jrs.RestContext}
  * </ul>
  */
 public class RestContext extends Context {

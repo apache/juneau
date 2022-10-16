@@ -17,7 +17,6 @@ package org.apache.juneau.objecttools;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.ObjectTools}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @SuppressWarnings("javadoc")

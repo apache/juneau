@@ -121,7 +121,6 @@ import org.apache.juneau.xml.*;
  * 		<li class='jc'>{@link BasicRestObjectGroup}
  *	</ul>
  * 	<li class='link'>{@doc jrs.AnnotatedClasses}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Rest(

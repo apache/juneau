@@ -27,8 +27,7 @@ package org.apache.juneau.dto.jsonschema;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='jp'>{@doc package-summary.html#TOC org.apache.juneau.dto.jsonschema}
- * 	<li class='extlink'>{@source}
+ * 	<li class='jp'>{@doc package-summary.html#TOC org.apache.juneau.dto.jsonschema}
  * </ul>
  */
 public class JsonSchemaPropertySimpleArray extends JsonSchemaProperty {

@@ -126,8 +126,7 @@ import org.apache.juneau.parser.*;
  * 	Map <jv>map</jv> = <jv>objectRest</jv>.getMap(<js>"/items/@name=foo"</js>);
  * </p>
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})

@@ -18,7 +18,6 @@ import java.text.*;
  * An exception that typically occurs when trying to perform an invalid operation on a configuration property.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

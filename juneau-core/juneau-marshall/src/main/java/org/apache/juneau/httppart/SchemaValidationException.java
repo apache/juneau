@@ -21,7 +21,6 @@ import org.apache.juneau.parser.ParseException;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HttpPartSerializersParsers}
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

@@ -20,7 +20,6 @@ import org.apache.juneau.internal.*;
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @FluentSetters

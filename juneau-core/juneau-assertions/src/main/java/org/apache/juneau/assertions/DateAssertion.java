@@ -105,7 +105,6 @@ import org.apache.juneau.serializer.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc ja.Overview}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @FluentSetters(returns="DateAssertion")

@@ -43,7 +43,7 @@
 	</script>
 </head>
 <body>
-<h1 class='title'>Apache Juneau {@property juneauVersion} Documentation</h1>
+<h1 class='title'>Apache Juneau <juneauVersion>9.0.0</juneauVersion> Documentation</h1>
 
 <script type='text/javascript'>
 	function toggle(x) {
@@ -639,18 +639,18 @@
 	</table>
 	
 	<p>
-		The current version of Juneau is <c>{@property juneauVersion}</c>.
+		The current version of Juneau is <c><juneauVersion>9.0.0</juneauVersion></c>.
 		The easiest way to pull in the library is through the following maven dependency:
 	</p>
 	<p class='bxml'>
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-all<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	<p>
-		If you would like to work with the bleeding-edge code, you can access the <c>{@property juneauVersionNext}-SNAPSHOT</c>
+		If you would like to work with the bleeding-edge code, you can access the <c><juneauVersionNext>9.0.1</juneauVersionNext>-SNAPSHOT</c>
 		version through the following repository:
 	</p>
 	<p class='bxml'>
@@ -2200,18 +2200,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-marshall<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-marshall-{@property juneauVersion}.jar 
+	juneau-marshall-<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.marshall_{@property juneauVersion}.jar 
+	org.apache.juneau.marshall_<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -9006,7 +9006,7 @@
 	<xt>&lt;/per:person&gt;</xt>
 	</p>
 	<p>
-		Enabling the <del>XmlSerializer#XML_addNamespaceUrisToRoot</del> setting results
+		Enabling the <del>XmlSerializer.XML_addNamespaceUrisToRoot</del>setting results
 		in the namespace URLs being added to the root node:
 	</p>
 	<p class='bxml'>
@@ -11942,16 +11942,16 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-marshall-rdf<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-marshall-rdf-{@property juneauVersion}.jar 
+	juneau-marshall-rdf-<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.marshaller.rdf_{@property juneauVersion}.jar 
+	org.apache.juneau.marshaller.rdf_<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	<p>
 		The <c>juneau-marshall-rdf</c> library provides additional serializers and parsers for RDF.
@@ -12429,7 +12429,7 @@
 		locate the root at all.
 	</p>
 	<p>
-		To resolve this issue, the property <del>RdfSerializer#RDF_addRootProperty</del> 
+		To resolve this issue, the property <del>RdfSerializer.RDF_addRootProperty</del>
 		was introduced.
 		When enabled, this adds a special <c>root</c> attribute to the root node to make it easy to locate 
 		by the parser.
@@ -12489,7 +12489,7 @@
 <div class='topic'>
 	<p>
 		XML-Schema data-types can be added to non-<c>String</c> literals through the 
-		<del>RdfSerializer#RDF_addLiteralTypes</del> setting.
+		<del>RdfSerializer.RDF_addLiteralTypes</del>setting.
 	</p>
 	<p>
 		To enable, set the <jsf>RDF_addLiteralTypes</jsf> property to <jk>true</jk> on the serializer:
@@ -12550,16 +12550,16 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-dto<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-dto-{@property juneauVersion}.jar 
+	juneau-dto-<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.dto_{@property juneauVersion}.jar 
+	org.apache.juneau.dto_<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	<p>
 		The <c>juneau-dto</c> library contains several predefined POJOs for generating commonly-used document types.
@@ -13087,18 +13087,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-config<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-config-{@property juneauVersion}.jar 
+	juneau-config-<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.config_{@property juneauVersion}.jar 
+	org.apache.juneau.config_<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 </div>
 
@@ -14815,18 +14815,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-assertions<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-assertions-{@property juneauVersion}.jar 
+	juneau-assertions-<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.assertions_{@property juneauVersion}.jar 
+	org.apache.juneau.assertions_<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -15040,18 +15040,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-rest-common<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-rest-common-{@property juneauVersion}.jar 
+	juneau-rest-common-<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.rest.common_{@property juneauVersion}.jar 
+	org.apache.juneau.rest.common_<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -15997,18 +15997,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-rest-server<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-rest-server-{@property juneauVersion}.jar 
+	juneau-rest-server-<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.rest.server_{@property juneauVersion}.jar 
+	org.apache.juneau.rest.server_<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -22559,18 +22559,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-rest-server-springboot<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-rest-server-springboot-{@property juneauVersion}.jar 
+	juneau-rest-server-springboot-<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.rest.server.springboot_{@property juneauVersion}.jar 
+	org.apache.juneau.rest.server.springboot_<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -22744,18 +22744,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-rest-client<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-rest-client-{@property juneauVersion}.jar 
+	juneau-rest-client-<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.rest.client_{@property juneauVersion}.jar 
+	org.apache.juneau.rest.client_<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -25227,18 +25227,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-rest-mock<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-rest-mock-{@property juneauVersion}.jar 
+	juneau-rest-mock-<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.rest.mock_{@property juneauVersion}.jar 
+	org.apache.juneau.rest.mock_<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -25470,18 +25470,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-microservice-core<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-microservice-core-{@property juneauVersion}.jar 
+	juneau-microservice-core-<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.microservice.core_{@property juneauVersion}.jar 
+	org.apache.juneau.microservice.core_<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -26180,18 +26180,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-microservice-jetty<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-microservice-jetty-{@property juneauVersion}.jar 
+	juneau-microservice-jetty-<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.microservice.jetty_{@property juneauVersion}.jar 
+	org.apache.juneau.microservice.jetty_<juneauVersion>9.0.0</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -27023,7 +27023,7 @@
 <div class='topic'>
 	<h5 class='figure'>Starter Project Zip</h5>
 	<p class='bcode w500'>
-	my-jetty-microservice-{@property juneauVersion}.zip 
+	my-jetty-microservice-<juneauVersion>9.0.0</juneauVersion>.zip 
 	</p>	
 	
 	<p>
@@ -27045,7 +27045,7 @@
 	</p>		
 	<ol class='spaced-list'>
 		<li>
-			Download the <c>my-jetty-microservice-{@property juneauVersion}.zip</c> file from the downloads page
+			Download the <c>my-jetty-microservice-<juneauVersion>9.0.0</juneauVersion>.zip</c> file from the downloads page
 			(located in the binaries) and import it into your workspace as an existing project:
 			<br><br>
 			<img class='bordered' src='doc-files/mjm.Installing.1.png' style='width:524px'>
@@ -27395,7 +27395,7 @@
 <div class='topic'>
 	<h5 class='figure'>Starter Project Zip</h5>
 	<p class='bcode w500'>
-	my-springboot-microservice-{@property juneauVersion}.zip 
+	my-springboot-microservice-<juneauVersion>9.0.0</juneauVersion>.zip 
 	</p>	
 	
 	<p>
@@ -27421,7 +27421,7 @@
 	</p>		
 	<ol class='spaced-list'>
 		<li>
-			Download the <c>my-springboot-microservice-{@property juneauVersion}.zip</c> file from the downloads page
+			Download the <c>my-springboot-microservice-<juneauVersion>9.0.0</juneauVersion>.zip</c> file from the downloads page
 			(located in the binaries) and import it into your workspace as an existing project:
 			<br><br>
 			<img class='bordered' src='doc-files/msm.Installing.1.png' style='width:524px'>
@@ -29328,7 +29328,7 @@
 			See <del>RestServlet</del> for more information.
 		</li>
 		<li>
-			Enhancements to <del>BeanContext#convertToType(Object,Class)</del> to be able to convert <c>Strings</c> to classes with 
+			Enhancements to <del>BeanContext.convertToType(Object,Class)</del>to be able to convert <c>Strings</c> to classes with 
 			<c>fromString(String)</c>/<c>valueOf(String)</c> static methods or <c>T(String)</c> constructors.
 		</li>	
 	</ul>
@@ -29448,7 +29448,7 @@
 					Combined 4 classes into a single class.
 				</li>
 				<li>
-					New <del>@Bean#filter</del> and <del>@BeanProperty#filter</del> annotations.<br>
+					New <del>@Bean.filter</del>and <del>@BeanProperty.filter</del>annotations.<br>
 					Used for defining filters on bean classes and bean properties instead of just globally through <c>BeanContext.addTransforms(Class[])</c>.
 				</li>
 				<li>
@@ -29456,13 +29456,13 @@
 					Used for customizing bean property names.
 				</li>
 				<li>
-					New <del>@BeanProperty#beanUri</del> and <del>@BeanProperty#id</del> annotations.<br>
+					New <del>@BeanProperty.beanUri</del>and <del>@BeanProperty.id</del>annotations.<br>
 					Used for associating beans with URLs and IDs.<br>
 					Used by XML serializer to add a url attribute on a bean element.<br>
 					Used by RDF/XML serializer to construct <c>rdf:resource</c> attributes.
 				</li>
 				<li>
-					New <del>BeanProperty#properties()</del> annotation.
+					New <del>BeanProperty.properties()</del>annotation.
 					Used for limiting properties on child elements.
 				</li>	
 			</ul>
@@ -29490,23 +29490,23 @@
 	<h5 class='topic w800'>REST server updates</h5>
 	<ul class='spaced-list'>
 			<li>
-			Support for overriding bean context and serializer properties in a REST method call through new <del>RestResponse#setProperty(String,Object)</del> method.<br>
+			Support for overriding bean context and serializer properties in a REST method call through new <del>RestResponse.setProperty(String,Object)</del>method.<br>
 			For example, allows you to control whitespace options on a per-request basis.
 		</li>
 		<li>
 			Several new annotations on REST servlets:
 			<ul>
-				<li><del>@RestResource#filters</del> - Associate post-formatting filters on a resource level.</li>
-				<li><del>@RestResource#guards</del> - Associate resource-level guards.</li>
-				<li><del>@RestResource#messages</del> - Associate a resource bundle with a REST servlet.  Comes with several convenience methods for looking up messages for the client locale.</li>
-				<li><del>@RestResource#properties</del> - Override default bean context, serializer, and parser properties though an annotation.</li>
+				<li><del>@RestResource.filters</del>- Associate post-formatting filters on a resource level.</li>
+				<li><del>@RestResource.guards</del>- Associate resource-level guards.</li>
+				<li><del>@RestResource.messages</del>- Associate a resource bundle with a REST servlet.  Comes with several convenience methods for looking up messages for the client locale.</li>
+				<li><del>@RestResource.properties</del>- Override default bean context, serializer, and parser properties though an annotation.</li>
 			</ul> 
 		</li>
 		<li>
 			Several new annotations on REST methods:
 			<ul>
 				<li><c>@RestMethod(filters)</c> - Associate post-formatting filters on a method level.</li>
-				<li><del>RestMethod#guards() @RestMethod(guards)</del> - Associate method-level guards.</li>
+				<li><del>RestMethod.guards() @RestMethod(guards)</del> - Associate method-level guards.</li>
 			</ul>
 		</li>
 		<li>				
@@ -29516,7 +29516,7 @@
 				<li><del>@Param</del> - A query parameter value as a parsed POJO.</li>
 				<li><del>@PathRemainder</del>- The remainder after a URL pattern match as a String.</li>
 				<li><del>@Header</del> - An HTTP header value as a parsed POJO.</li>
-				<li><del>@Content</del> - The HTTP content as a parsed POJO.</li>
+				<li><del>@Content</del>- The HTTP content as a parsed POJO.</li>
 				<li>{@link org.apache.juneau.rest.annotation.Method @Method} - The HTTP method name as a String.</li>
 			</ul>
 		</li>
@@ -29569,18 +29569,18 @@
 		</li>
 		<li>Support for fluent-style bean setters (setters that return the bean itself).</li>
 		<li>Ability to use {@link org.apache.juneau.annotation.Bean @Bean} annotation to override bean identification settings.</li>
-		<li>New <del>ObjectMap#cast(Class)</del> method to convert <c>ObjectMaps</c> directly to beans.</li>
+		<li>New <del>ObjectMap.cast(Class)</del>method to convert <c>ObjectMaps</c> directly to beans.</li>
 	</ul>
 	<h5 class='topic w800'>REST server API changes</h5>
 	<ul class='spaced-list'>
 		<li>Build-in default <c>OPTIONS</c> pages.</li>
-		<li>New <del>@RestResource#defaultRequestHeaders</del> and <del>@RestResource#defaultResponseHeaders</del> annotations.</li>
-		<li>New <del>RestMethod#serializers() @RestMethod(serializers)</del> and <del>RestMethod#parsers() @RestMethod(parsers)</del> annotations.</li>
-		<li>New <del>RestMethod#properties() @RestMethod(properties)</del> annotation.</li>
-		<li>New <del>@RestMethod(defaultRequestHeaders)</del> annotation.</li>
-		<li>New <del>RestMethod#matchers() @RestMethod(matchers)</del> annotation and {@link org.apache.juneau.rest.RestMatcher} class.</li>
+		<li>New <del>@RestResource.defaultRequestHeaders</del>and <del>@RestResource.defaultResponseHeaders</del>annotations.</li>
+		<li>New <del>RestMethod.serializers() @RestMethod(serializers)</del>and <del>RestMethod.parsers() @RestMethod(parsers)</del>annotations.</li>
+		<li>New <del>RestMethod.properties() @RestMethod(properties)</del> annotation.</li>
+		<li>New <del>@RestMethod(defaultRequestHeaders)</del>annotation.</li>
+		<li>New <del>RestMethod.matchers() @RestMethod(matchers)</del> annotation and {@link org.apache.juneau.rest.RestMatcher} class.</li>
 		<li><c>Readers</c> and <c>InputStreams</c> can be specified on <del>@Content</del> annotated parameters.</li>
-		<li>New <del>@HasParam</del> annotation.</li>
+		<li>New <del>@HasParam</del>annotation.</li>
 		<li>Full RFC2616 support for matching <c>Accept</c> headers to serializers.</li>		
 	</ul>
 	<h5 class='topic w800'>Other notes</h5>
@@ -29600,17 +29600,17 @@
 	</p>
 	<h5 class='topic w800'>Core API changes</h5>
 	<ul class='spaced-list'>
-		<li>New <del>ObjectMap#findKeyIgnoreCase(String)</del> method.
+		<li>New <del>ObjectMap.findKeyIgnoreCase(String)</del>method.
 		<li>HtmlSerializer will now create 2-dimensional tables for collections of mixed beans/maps if all object have the same set of property names/keys.</li>
 	</ul>
 	<h5 class='topic w800'>REST server API changes</h5>
 	<ul class='spaced-list'>
 		<li>New <c>RestServletProperties</c> class that defines all the class-level properties that can be set on the servlet.</li>
-		<li>Properties can be set through <del>@RestResource#properties</del> annotation, or new <del>RestServlet#setProperty(String,Object)</del> method.</li>
+		<li>Properties can be set through <del>@RestResource.properties</del>annotation, or new <del>RestServlet.setProperty(String,Object)</del>method.</li>
 		<li>New <js>"?noTrace"</js> URL parameter to prevent stack traces from being logged (for JUnit testing of error conditions).</li>
 		<li>New <c>RestServletProperties.REST_useStackTraceHashes</c> property to prevent the same stack trace from being logged multiple times.</li>
 		<li>New <c>RestServletProperties.REST_renderResponseStackTraces</c> property for preventing stack traces in responses for security reasons.</li>
-		<li>New overridable <c>RestServlet.onError(HttpServletRequest,HttpServletResponse,RestException,boolean)</c> and <del>RestServlet#onSuccess(RestRequest,RestResponse,long)</del> methods for plugging in your own logging and peformance monitoring.</li>
+		<li>New overridable <c>RestServlet.onError(HttpServletRequest,HttpServletResponse,RestException,boolean)</c> and <del>RestServlet.onSuccess(RestRequest,RestResponse,long)</del>methods for plugging in your own logging and peformance monitoring.</li>
 		<li>Eliminated <c>RestServlet.getInitParams()</c> method, since it's now redundant with <del>RestServlet#getProperties()</del>.</li>
 		<li>Header parameters passed as URL parameters are now case-insensitive.</li>			
 	</ul>
@@ -29635,7 +29635,7 @@
 			Support for <c>Accept</c> and <c>Content-Type</c> <js>"application/x-www-form-urlencoded"</js> added by default on <del>BasicRestServlet</del>.
 		</li>
 		<li>
-			New <del>RestServlet#renderError(HttpServletRequest,HttpServletResponse,RestException)</del> method to allow customized handling of response errors.
+			New <del>RestServlet.renderError(HttpServletRequest,HttpServletResponse,RestException)</del>method to allow customized handling of response errors.
 		</li>
 	</ul>
 </div>
@@ -29703,7 +29703,7 @@
 			New <del>URI @URI</del> annotation that allows you to specify classes and bean properties as URLs that aren't <c>java.net.URI</c> or <c>java.net.URL</c>.
 		</li>
 		<li>
-			New <del>HtmlSerializer#HTML_uriAnchorText</del> HTML serializer property for tailoring how anchor text is rendered.
+			New <del>HtmlSerializer.HTML_uriAnchorText</del>HTML serializer property for tailoring how anchor text is rendered.
 		</li>
 		<li>
 			Renamed <c>BeanProperty#uri</c> annotation to <c>BeanProperty#beanUri</c> to make it clear that this property represents the URI of the bean itself instead of an arbitrary property containing a URI.
@@ -29967,8 +29967,8 @@
 			New Jena-based {@link org.apache.juneau.jena.RdfParser} for parsing RDF/XML, RDF/XML-ABBREV, N3, Turtle, and N-Triple back into POJOs.
 		</li>
 		<li>
-			<del>XmlSerializerContext#XML_autoDetectNamespaces</del> default changed to <jk>true</jk>.<br>
-			The old default value would cause XML with unmapped namespaces if you didn't manually specify them via the <del>XmlSerializerContext#XML_namespaces</del> annotation.<br>
+			<del>XmlSerializerContext.XML_autoDetectNamespaces</del>default changed to <jk>true</jk>.<br>
+			The old default value would cause XML with unmapped namespaces if you didn't manually specify them via the <del>XmlSerializerContext.XML_namespaces</del> annotation.<br>
 			While setting the default to <jk>true</jk> is somewhat slower (since the serializer must crawl the POJO tree to find namespaces), the benefits of having it work out-of-the-box outweighs the performance concerns.<br>
 			For developers concerned about performance, they can always change it back to false and specify the namespaces themselves.	
 		</li>
@@ -29980,13 +29980,13 @@
 			Serializers, parsers, filters, properties , guards, and converters definitions are automatically inherited from parent classes and interfaces.
 		</li>
 		<li>
-			Enhancements to <del>RestMethod @RestMethod</del> annotation:
+			Enhancements to <del>RestMethod @RestMethod</del>annotation:
 			<ul>
 				<li>
 					New <c>RestMethod.filters()</c> annotation for defining POJO filters at the method level.
 				</li>
 				<li>
-					New <del>RestMethod#serializersInherit()</del> and <del>RestMethod#parsersInherit()</del> annotations for controlling how serializers and parsers (and associated filters and properties) are inherited from the class.<br>
+					New <del>RestMethod.serializersInherit()</del>and <del>RestMethod.parsersInherit()</del> annotations for controlling how serializers and parsers (and associated filters and properties) are inherited from the class.<br>
 					This replaces the previous <c>addSerializers</c> and <c>addParsers</c> annotations.
 			</ul>
 		</li>
@@ -29994,7 +29994,7 @@
 			New <del>RestServletJenaDefault</del> servlet that includes serialization/parsing support for all Jena-based serializers and parsers.
 		</li>
 		<li>
-			New <del>DefaultJenaProvider</del> JAX-RS provider that includes serialization/parsing support for all Jena-based serializers and parsers.
+			New <del>DefaultJenaProvider</del>JAX-RS provider that includes serialization/parsing support for all Jena-based serializers and parsers.
 		</li>
 		<li>
 			Eliminated <c>RestServletChild</c> class.<br>  
@@ -30030,7 +30030,7 @@
 	<h5 class='topic w800'>Core API changes</h5>
 	<ul class='spaced-list'>
 		<li>
-			New <del>HtmlDocSerializerContext#HTMLDOC_navlinks</del> annotation for addint links to HTML page views.
+			New <del>HtmlDocSerializerContext.HTMLDOC_navlinks</del> annotation for addint links to HTML page views.
 		</li>
 		<li>
 			Renamed the properties in <del>HtmlDocSerializerContext</del> for clarity.
@@ -30051,7 +30051,7 @@
 			</ul>
 		</li>
 		<li>
-			Path variables annotated with <del>@Attr</del> are now automatically URL-decoded.
+			Path variables annotated with <del>@Attr</del>are now automatically URL-decoded.
 		</li>
 	</ul>		
 </div>
@@ -30119,11 +30119,11 @@
 			</ul>
 		</li>
 		<li>
-			New <del>XmlFormat#CONTENT</del> enum value.<br>
+			New <del>XmlFormat.CONTENT</del> enum value.<br>
 			Allows bean properties to be persisted as XML element text.
 		</li>
 		<li>
-			New <del>XmlContentHandler</del> class and <del>@Xml#contentHandler</del> annotation.<br>
+			New <del>XmlContentHandler</del>class and <del>@Xml.contentHandler</del>annotation.<br>
 			Allows customized serialization and parsing of beans to XML element text.<br>
 			Added for support of ATOM text content that must support both plain text and embedded XHTML.
 		</li>
@@ -30140,7 +30140,7 @@
 			Simplified <c>Serializer.serialize(Object,Object,SerializerContext)</c> method.
 		</li>
 		<li>
-			Fixed bug where lists returned by <del>ObjectMap#getObjectList(String)</del> were not updatable.
+			Fixed bug where lists returned by <del>ObjectMap.getObjectList(String)</del>were not updatable.
 		</li>
 		<li>
 			Eliminated old RDF/XML serializer.
@@ -30209,7 +30209,7 @@
 			New <del>ChildResourceDescriptions</del> bean for automatically generating the contents of router resource pages.
 		</li>
 		<li>
-			Changed <c><ja>@RestMethod</ja>.pattern()</c> to <del>RestMethod#path() @RestMethod(path)</del> for naming consistency.
+			Changed <c><ja>@RestMethod</ja>.pattern()</c> to <del>RestMethod.path() @RestMethod(path)</del>for naming consistency.
 		</li>
 	</ul>
 </div>
@@ -30277,8 +30277,8 @@
 			Revamped the API for filter support:
 			<ul>
 				<li>Updated <del>BeanFilter</del> class to mirror the {@link org.apache.juneau.annotation.Bean @Bean} annotation.</li>
-				<li>Introduced support for bean <del>Bean#subTypeProperty() subtypes</del>. </li>
-				<li>Replaced <c><ja>@Bean</ja>(filter=xxx)</c> with new <del>@Transform</del> annotation.</li>
+				<li>Introduced support for bean <del>Bean.subTypeProperty() subtypes</del>. </li>
+				<li>Replaced <c><ja>@Bean</ja>(filter=xxx)</c> with new <del>@Transform</del>annotation.</li>
 			</ul>
 		</li>
 		<li>
@@ -30314,7 +30314,7 @@
 	</p>
 	<ul class='spaced-list'>
 		<li> 
-			Fixed bug involving beans using <del>Bean#subTypes()</del> annotation in addition to <c>subTypes</c> property.
+			Fixed bug involving beans using <del>Bean.subTypes()</del>annotation in addition to <c>subTypes</c> property.
 		</li>
 		<li>
 			Modified the JSON parser to handle non-existent JSON values to get around an issue where Cognos was generating invalid JSON.
@@ -30506,7 +30506,7 @@
 			<ul>
 				<li><del>RestRequest#getVarResolver()</del></li>
 				<li><del>RestRequest#getServletURI()</del></li>
-				<li><del>RestRequest#getRequestParentURI()</del></li>
+				<li><del>RestRequest.getRequestParentURI()</del></li>
 			</ul>
 		</li>
 		<li>
@@ -30516,7 +30516,7 @@
 			</ul>
 		</li>
 		<li>
-			New methods on <del>RestServlet</del> that allow easier customization by subclasses:
+			New methods on <del>RestServlet</del>that allow easier customization by subclasses:
 			<ul>
 				<li><del>RestServlet#createConfigFactory()</del></li>
 				<li><del>RestServlet#createConverters()</del></li>
@@ -30549,7 +30549,7 @@
 			New {@link org.apache.juneau.annotation.Bean#stopClass @Bean.stopClass} annotation for specifying stop classes for bean properties.
 		</li>
 		<li>
-			New <del>BeanFilter#setStopClass(Class)</del> which is the program equivalent to the annotation above.
+			New <del>BeanFilter.setStopClass(Class)</del>which is the program equivalent to the annotation above.
 		</li>
 		<li>
 			New methods on {@link org.apache.juneau.dto.ResultSetList}:
@@ -30570,7 +30570,7 @@
 		Juno 5.0.0.35 is a minor update.
 	</p>
 	<ul class='spaced-list'>
-		<li><del>RestGuard#guard(RestRequest,RestResponse)</del> now returns a boolean to allow redirects to login pages.
+		<li><del>RestGuard.guard(RestRequest,RestResponse)</del>now returns a boolean to allow redirects to login pages.
 		<li>Fixed bug in RestServlet where occasional false positive "duplicate method with same name and path" errors were occurring.
 	</ul>	
 </div>
@@ -30635,9 +30635,9 @@
 	<h5 class='topic w800'>Other changes</h5>
 	<ul class='spaced-list'>
 		<li>Various new methods added to {@link org.apache.juneau.internal.StringUtils} and {@link org.apache.juneau.internal.ClassUtils}.
-		<li>Improved support on <del>BeanContext#getClassMetaFromString(String)</del>.<br>
+		<li>Improved support on <del>BeanContext.getClassMetaFromString(String)</del>.<br>
 			Now supports resolving <c>"long[]"</c>, and so forth.
-		<li><del>ResourceDescription</del> name parameter is now automatically URL-encoded in links.
+		<li><del>ResourceDescription</del>name parameter is now automatically URL-encoded in links.
 		<li>{@link org.apache.juneau.rest.RestRequest} now correctly handles cases involving URL-encoded characters in the 
 			path info portion of URLs (e.g. <c>http://host/contextRoot/foo%2Fbar</c>).
 		<li>Removed lazy-initialization that required locking in {@link org.apache.juneau.ClassMeta}.  
@@ -30710,10 +30710,10 @@
 	<ul class='spaced-list'>
 		<li>Ability to detect and use non-public bean classes, getters/setters, and fields using the following new properties:
 			<ul>
-				<li><del>BeanContext#BEAN_beanConstructorVisibility</del> - Control which bean constructors are visible to Juno.
-				<li><del>BeanContext#BEAN_beanClassVisibility</del> - Control which bean classes are interpreted as beans to Juno.
-				<li><del>BeanContext#BEAN_beanFieldVisibility</del> - Control which fields are visible to Juno as bean properties.
-				<li><del>BeanContext#BEAN_beanMethodVisibility</del> - Control which getters/setters are visible to Juno as bean properties.
+				<li><del>BeanContext.BEAN_beanConstructorVisibility</del>- Control which bean constructors are visible to Juno.
+				<li><del>BeanContext.BEAN_beanClassVisibility</del>- Control which bean classes are interpreted as beans to Juno.
+				<li><del>BeanContext.BEAN_beanFieldVisibility</del>- Control which fields are visible to Juno as bean properties.
+				<li><del>BeanContext.BEAN_beanMethodVisibility</del>- Control which getters/setters are visible to Juno as bean properties.
 			</ul>
 			Removed <c>BeanContext.<jsf>INCLUDE_BEAN_FIELD_PROPERTIES</jsf></c> and <c>BeanContext.<jsf>INCLUDE_BEAN_METHOD_PROPERTIES</jsf></c> properties, since ignoring fields and methods
 			can be accomplished by setting the appropriate properties above to {@link org.apache.juneau.Visibility#NONE NONE}.
@@ -30721,18 +30721,18 @@
 			the default behavior defined by the <c>VISIBILITY</c> properties identified above.  This is a convenient way of identifying protected or
 			private fields or methods as bean properties.  Previously, you could only identify public fields/getters/setters using this annotation.
 		</li>
-		<li>New <del>BeanContext#BEAN_useJavaBeanIntrospector</del> property that lets Juno use the Java bean <c>Introspector</c>
+		<li>New <del>BeanContext.BEAN_useJavaBeanIntrospector</del> property that lets Juno use the Java bean <c>Introspector</c>
 			class to determine bean properties.  In the previous release, the method for determining bean properties was a mixture of Juno-based and Introspector-based.
 			Now it's either pure Juno-based or pure Introspector-based.  The result is considerably cleaner code and consistent behavior.
-		<li>New {@link org.apache.juneau.annotation.BeanIgnore @BeanIgnore} annotation.  Replaces the previous <del>@BeanProperty(hidden=true)</del> annotation
+		<li>New {@link org.apache.juneau.annotation.BeanIgnore @BeanIgnore} annotation.  Replaces the previous <del>@BeanProperty(hidden=true)</del>annotation
 			for ignoring bean properties.  Can also be used on classes that look like beans so that they're not treated as beans.
 		<li>Support for parsing into non-static member classes.  This applies to all parsers.
 		<li>New {@link org.apache.juneau.json.annotation.Json#wrapperAttr() @Json(wrapperAttr)}	annotation that automatically wraps beans and objects in a wrapper
 			attribute when serializing to or parsing from JSON.
 		<li>Changed the default ordering of bean properties to be in parent-to-child class order.
-		<li>New <del>BeanFilter#readProperty(Object,String,Object) readProperty()</del> and <del>BeanFilter#writeProperty(Object,String,Object) writeProperty()</del>
-			methods added to <del>BeanFilter</del> class to allow individualized serialization and parsing behavior on a class-by-class basis.
-		<li>Eliminated previous restriction where bean subtype attributes had to be listed first in JSON objects when using the <del>Bean#subTypeProperty()</del> annotation.
+		<li>New <del>BeanFilter.readProperty(Object,String,Object) readProperty()</del>and <del>BeanFilter.writeProperty(Object,String,Object) writeProperty()</del>
+			methods added to <del>BeanFilter</del>class to allow individualized serialization and parsing behavior on a class-by-class basis.
+		<li>Eliminated previous restriction where bean subtype attributes had to be listed first in JSON objects when using the <del>Bean.subTypeProperty()</del>annotation.
 			The previous behavior was not strictly JSON-compliant since JSON objects are supposed to consist of unordered lists of key/value pairs.
 			While targeted for JSON, the restriction is also lifted for all other parsers.  	
 		<li>New fluent-style {@link org.apache.juneau.BeanMap#load(String) BeanMap.load()} methods for initializing bean maps.
@@ -30741,7 +30741,7 @@
 	
 	<h5 class='topic w800'>REST Server API updates</h5>
 	<ul class='spaced-list'>
-		<li>New <del>RestRequest#getJavaMethod()</del> method for getting access to the method used to handle a request.
+		<li>New <del>RestRequest.getJavaMethod()</del>method for getting access to the method used to handle a request.
 			Useful for accessing the method name or annotations during requests, such as in calls to <del>RestGuard#guard(RestRequest,RestResponse)</del>.
 		<li>Fixed bug when using Jetty where you tried to read text input after a header was written.
 		<li>Added new string variables <dc>$A{...}</dc> (request attributes) and <dc>$P{...}</dc> (request parameters) to <c>RestServlet.createRequestVarResolver(RestRequest)</c>.
@@ -30759,7 +30759,7 @@
 	</p>
 	
 	<ul class='spaced-list'>
-		<li>New <del>RestServlet#getPath()</del> method.
+		<li>New <del>RestServlet.getPath()</del> method.
 		<li>New <c>SerializerContext.getJavaMethod()</c> and <c>ParserContext.getJavaMethod()</c>
 				to allow access to REST methods that invoked the serializers or parsers.
 			For example, can be used to access additional annotations on REST methods to perform special handing
@@ -30767,7 +30767,7 @@
 		<li>Better behavior on overriding of filters in <c>BeanContext.addTransforms(Class[])</c>.
 			Previously, adding multiple conflicting filters resulted in random behavior.  
 			Now filters are overridden when multiple matching filters are applied.
-		<li>Allow <del>HtmlDocSerializerContext</del> properties to be set via <del>Serializer#setProperty(String,Object)</del>.
+		<li>Allow <del>HtmlDocSerializerContext</del>properties to be set via <del>Serializer#setProperty(String,Object)</del>.
 			Previously, these could only be defined through override properties (e.g. through REST class and method annotations).
 		<li>Fixed memory leak in XML parser.	
 	</ul>
@@ -30786,8 +30786,8 @@
 		<li>New <del>Redirect</del> class that simplifies performing redirections in REST methods.
 		<li>New pluggable {@link org.apache.juneau.rest.ResponseHandler} class and <del>@RestResource(responseHandlers)</del> annotation
 			for defining customer response handlers for special kinds of POJOs.
-		<li>New method <del>UrlEncodingSerializer#serializeUrlPart(Object)</del> method.
-		<li>New method <del>RestRequest#getServletURIBuilder()</del> for construcing servlet-based URLs more efficiently.
+		<li>New method <del>UrlEncodingSerializer.serializeUrlPart(Object)</del>method.
+		<li>New method <del>RestRequest.getServletURIBuilder()</del>for construcing servlet-based URLs more efficiently.
 		<li>New method {@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()} that uses encoders if a match is found, 
 			and {@link org.apache.juneau.rest.RestResponse#getOutputStream()} that just return the underlying output stream without any modifications.
 		<li>Fixed bug where some properties were not being propagated correctly when using <del>CoreObject#setProperties(ObjectMap)</del>
@@ -30811,13 +30811,13 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>Simplified API for <del>PojoSwap</del>.  
-			Since it's rarely used, the <c>beanContext</c> parameter was replaced with a <del>PojoSwap#getBeanContext()</del> method on
+			Since it's rarely used, the <c>beanContext</c> parameter was replaced with a <del>PojoSwap.getBeanContext()</del> method on
 			the class.
 		<li>New simplified way of defining POJO filters without needing to extend <del>PojoSwap</del>.
 			See <del>SurrogateSwap</del> for details.
 		<li>New {@link org.apache.juneau.html.annotation.Html @Html} annotation.
 			Will allow the definition of standard XHTML DTOs in future releases.  
-			For now, <del>Img</del> is an example of defining an XHTML element using Juno DTOs.
+			For now, <del>Img</del>is an example of defining an XHTML element using Juno DTOs.
 		<li>{@link org.apache.juneau.json.JsonParser} now ignores trailing <c>';'</c> characters in input so that it can 
 			parse strings of the form <js>"var x = {'foo':'bar'};"</js>.
 		<li>New <c>TumblrParserResource</c> in the samples war file showing how to combine the REST client and server APIs into a single
@@ -30836,7 +30836,7 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>Improved error handling.  
-		<li>New <del>ParserContext#PARSER_debug</del> and <del>SerializerContext#SERIALIZER_debug</del>.
+		<li>New <del>ParserContext.PARSER_debug</del>and <del>SerializerContext.SERIALIZER_debug</del>.
 			settings for logging additional information for debugging problems.
 		<li>New <del>SERIALIZER_ignoreRecursions</del> setting for explicitly ignoring recursions when 
 			serializing models.  Previously, the <jsf>SERIALIZER_detectRecursions</jsf> setting did this but now it simply looks for recursions 
@@ -30852,7 +30852,7 @@
 		<li>Improved handling of bean property serialization when multiple matching pojo filters for the bean property class exist.
 		<li>Improved concurrency on BeanContext class.
 		<li>Fixed bug in <del>Traversable</del> that was causing it to be executed even if the servlet extra path info was empty.
-		<li>Fixed bug in <del>Traversable</del> where it was not picking up filters and properties defined on REST Java methods. 
+		<li>Fixed bug in <del>Traversable</del>where it was not picking up filters and properties defined on REST Java methods. 
 	</ul>
 </div>
 </div><!-- END: 5.1.0.7 -->
@@ -30885,7 +30885,7 @@
 		</li>
 		<li>Modifications to the <del>client</del> APIs to make it easier to work with custom Apache HTTP clients.
 			<ul>
-				<li>Added overridable <del>RestClient#createHttpClient()</del> to allow customized subclasses to construct customized HTTP clients.
+				<li>Added overridable <del>RestClient.createHttpClient()</del>to allow customized subclasses to construct customized HTTP clients.
 				<li>Removed the <c>DefaultRestClient</c> class since it's now fully redundant with <c>RestClient</c>.
 				<li>Added <c>RestClient.shutdown()</c> method for cleaning up the internal HTTP client when you're done using a REST client.
 			</ul>
@@ -30919,7 +30919,7 @@
 				<li>References to <c>org.apache.juneau.rest.RestException</c> in {@link org.apache.juneau.encoders.Encoder} class changed to <c>IOException</c>.
 			</ul>
 		<li>Changed configuration names for consistency with Jazz Framework.
-		<li><del>RestClient#execute(HttpUriRequest)</del> method that allows subclasses to handle their own HTTP request execution.
+		<li><del>RestClient.execute(HttpUriRequest)</del>method that allows subclasses to handle their own HTTP request execution.
 		<li>Changes in <c>JazzRestClient</c> to handle introduction of SSO support in v6.
 		<li><c>&amp;plainText</c> debug feature was broken.
 		<li>Removed double-buffering in <c>RestRequest</c>.
@@ -30947,7 +30947,7 @@
 		</li>
 		<li>Fix bug where <c>BeanRuntimeExceptions</c> weren't being thrown on subsequent calls to {@link org.apache.juneau.BeanContext#getClassMeta(Class)}.
 		<li>Moved logic for <c>BeanContext.getPrimitiveDefault(Class)</c> to new {@link org.apache.juneau.ClassMeta#getPrimitiveDefault()} method for performance reasons.
-		<li>Fixed bug in <del>BeanContext#addTransforms(Class[])</del> that would cause filter order to get messed up.
+		<li>Fixed bug in <del>BeanContext.addTransforms(Class[])</del>that would cause filter order to get messed up.
 		<li>{@link org.apache.juneau.ClassMeta#newInstance()} can now create array instances.
 		<li>Fixed indentation bugs in {@link org.apache.juneau.html.HtmlSerializer}.
 		<li>Fixed issue in {@link org.apache.juneau.html.HtmlSerializer} where newlines were not being converted into line breaks.
@@ -30957,16 +30957,16 @@
 	<h5 class='topic w800'>Server</h5>		
 	<ul class='spaced-list'>
 		<li>Fixed major issue that prevented parsing URL-Encoded form posts into POJOs.
-			Calling <del>HttpServlet#getParameter(String)</del> was forcing the underlying servlet code to process the HTTP body itself, preventing the <c>UrlEncodingSerializer</c>
+			Calling <del>HttpServlet.getParameter(String)</del>was forcing the underlying servlet code to process the HTTP body itself, preventing the <c>UrlEncodingSerializer</c>
 			class from being able to parse the content.  Updated code no longer inadvertantly calls this method.
-		<li>New <del>RestRequest#getQueryParameter(String)</del>, <del>RestRequest#hasQueryParameter(String)</del>, and <del>RestRequest#hasAnyQueryParameters(String[])</del>
+		<li>New <del>RestRequest#getQueryParameter(String)</del>, <del>RestRequest#hasQueryParameter(String)</del>, and <del>RestRequest.hasAnyQueryParameters(String[])</del>
 			methods that only look for parameters in the URL query string to prevent loading and parsing of URL-Encoded form posts.
-		<li>New <del>@QParam</del> and <del>@HasQParam</del> annotations for accessing query parameters from the URL query string.
+		<li>New <del>@QParam</del> and <del>@HasQParam</del>annotations for accessing query parameters from the URL query string.
 		<li><c>&amp;plainText</c> parameter can now specify a false value.
-		<li>Removed properties parameters from <del>RestServlet#onPreCall(RestRequest)</del> and <del>RestServlet#onPostCall(RestRequest,RestResponse)</del> methods
+		<li>Removed properties parameters from <del>RestServlet.onPreCall(RestRequest)</del>and <del>RestServlet.onPostCall(RestRequest,RestResponse)</del> methods
 			since the properties are already accessible through <c>RestRequest.getProperties()</c>.
 		<li>Added {@link org.apache.juneau.uon.UonSerializer} and {@link org.apache.juneau.uon.UonParser} to serializer and parser lists on 
-			<del>BasicRestServlet</del> and <del>RestServletJenaDefault</del>.
+			<del>BasicRestServlet</del>and <del>RestServletJenaDefault</del>.
 	</ul>
 	
 	<h5 class='topic w800'>Client</h5>		
@@ -31015,19 +31015,19 @@
 		<li>Several improvements to URL-Encoding support.
 			<ul>
 				<li>Improved whitespace handling in {@link org.apache.juneau.uon.UonParser}.
-				<li>New <del>UonParserContext#UON_whitespaceAware</del> property for controlling whether whitespace is ignored.
-				<li>New <del>UrlEncodingContext#URLENC_expandedParams</del> property for controlling whether arrays/Collections 
+				<li>New <del>UonParserContext.UON_whitespaceAware</del>property for controlling whether whitespace is ignored.
+				<li>New <del>UrlEncodingContext.URLENC_expandedParams</del>property for controlling whether arrays/Collections 
 					should be serialized/parsed as multi-part parameters.
 				<li>New {@link org.apache.juneau.urlencoding.annotation.UrlEncoding#expandedParams() @UrlEncoding(expandedParams)}
 					annotation that specifies that bean properties of type array/Collection be serialized as multi-part parameters (e.g. <c>&amp;key=val1&amp;key=val2</c>).
 			</ul>
 		</li>
-		<li>New <del>JsonSerializerContext#JSON_escapeSolidus</del> property for controlling whether slash characters should be escaped.
-		<li>New <del>TeeOutputStream</del> and <del>TeeWriter</del> classes.
+		<li>New <del>JsonSerializerContext.JSON_escapeSolidus</del> property for controlling whether slash characters should be escaped.
+		<li>New <del>TeeOutputStream</del> and <del>TeeWriter</del>classes.
 		<li>New {@link org.apache.juneau.ClassMeta#isInstance(Object)} method.
 		<li>Performance improvements when using the {@link org.apache.juneau.BeanMap#add(String,Object)} method.  
 			Array properties are stored in a temporary list cache until {@link org.apache.juneau.BeanMap#getBean()} is called.
-		<li>New <del>BeanPropertyMeta#add(BeanMap,Object)</del> method for adding values to Collection and array properties.
+		<li>New <del>BeanPropertyMeta.add(BeanMap,Object)</del> method for adding values to Collection and array properties.
 		<li>Config INI files now support keys with name <js>"*"</js>.
 	</ul>
 	
@@ -31036,7 +31036,7 @@
 		<li>REST method parameters can now be generic types (e.g. <dc><ja>@Param</ja>(<js>"foo"</js>) Map&lt;String,Integer&gt; foo</dc>).
 			This applies to headers, attributes, and parameters.
 		<li>New <del>@Param(multipart)</del>
-			and <del>@Query(multipart)</del> annotations
+			and <del>@Query(multipart)</del>annotations
 			for handling multi-part GET and POST parameters.	
 		<li>GET parameters are now CASE-SENSITIVE per W3C standards.
 			<ul>
@@ -31067,11 +31067,11 @@
 	<ul class='spaced-list'>
 		<li>New method <del>RestCall#allowRedirectsOnPosts(boolean)</del>.
 		<li>New method <c>RestCall.peekInputStream()</c> allows you to read response bodies without interrupting execution flow.
-		<li>New method <del>RestCall#toString()</del> now useful for debugging purposes.  
+		<li>New method <del>RestCall.toString()</del> now useful for debugging purposes.  
 			Shows all request/response headers and bodies.
-		<li><del>RestCallException</del> now includes <c>HttpResponse</c> object for easier debugging.
+		<li><del>RestCallException</del>now includes <c>HttpResponse</c> object for easier debugging.
 		<li>New method <c>RestClient.addListener(RestClientListener)</c> for registering request/response listeners.
-		<li>New <del>RestClient#setClassLoader(ClassLoader)</del> method.
+		<li>New <del>RestClient.setClassLoader(ClassLoader)</del>method.
 		<li>TLS support in <c>JazzRestClient</c>.
 	</ul>
 	
@@ -31094,7 +31094,7 @@
 	
 	<h5 class='topic w800'>Core</h5>		
 	<ul class='spaced-list'>
-		<li>Fixed <del>ConfigFile#isEmpty()</del> method.
+		<li>Fixed <del>ConfigFile.isEmpty()</del>method.
 		<li>Changed behavior on {@link org.apache.juneau.uon.UonParser} to not treat <js>'~'</js> characters as escapes
 			unless followed by one of the following characters:  <c>( ) , $ = ~</c>.
 	</ul>
@@ -31123,26 +31123,26 @@
 		<li>{@link org.apache.juneau.ClassMeta#newInstance()} method can now create new instances of arrays.
 		<li>Arguments passed to <del>Link</del> are now serialized using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer}, so arbitrary POJOs can now be passed as arguments.
 		<li>New date filters:  <c>org.apache.juneau.swaps.Datefilter.ISO8601DTZP</c> and <c>org.apache.juneau.swaps.Datefilter.SimpleP</c>.
-		<li>New <del>HtmlDocSerializerContext#HTMLDOC_nowrap</del> setting for {@link org.apache.juneau.html.HtmlDocSerializer} class.  
+		<li>New <del>HtmlDocSerializerContext.HTMLDOC_nowrap</del>setting for {@link org.apache.juneau.html.HtmlDocSerializer} class.  
 			Adds <js>"* {white-space:nowrap}"</js> to the style header to prevent word wrapping.
 		<li>Fixed bug in {@link org.apache.juneau.uon.UonParser} where passing in a blank value on an array or collection type in a form post would cause a <c>ClassCastException</c>.  
 			New behavior creates an empty array or <c>Collection</c>.
-		<li>Improved implementation of <del>UrlEncodingSerializer#serializeUrlPart(Object)</del> method.
+		<li>Improved implementation of <del>UrlEncodingSerializer.serializeUrlPart(Object)</del> method.
 	</ul>
 	
 	<h5 class='topic w800'>Server</h5>		
 	<ul class='spaced-list'>
 		<li>{@link org.apache.juneau.rest.RestConverter} API fixed to handle the existence of POJO filters.
 			<del>Introspectable</del>/<del>Queryable</del>/<del>Traversable</del> classes can now work with filtered POJOs.  
-		<li><del>@RestResource(messages)</del> annotation can now be defined on super and subclasses so that NLS messages can be defined in multiple resource bundles.
+		<li><del>@RestResource(messages)</del>annotation can now be defined on super and subclasses so that NLS messages can be defined in multiple resource bundles.
 		<li>Performance improvements in <c>RestServletNls</c> class. 
 		<li>Fixed bug where two REST java methods mapped to the same path pattern wasn't triggering an exception when it was supposed to.
 	</ul>
 	
 	<h5 class='topic w800'>Client</h5>		
 	<ul class='spaced-list'>	
-		<li>New <del>RestCall#setRedirectMaxAttempts(int)</del> method to prevent endless redirection loops.
-		<li>New <del>RestCall#setRetryable(int,long,RetryOn)</del> method to automatically retry on failed connection attempts.
+		<li>New <del>RestCall.setRedirectMaxAttempts(int)</del>method to prevent endless redirection loops.
+		<li>New <del>RestCall.setRetryable(int,long,RetryOn)</del>method to automatically retry on failed connection attempts.
 		<li>New <c>RestCallInterceptor.onRetry(RestCall,int,HttpRequest,HttpResponse)</c> method for listening in on retry attempts.		
 	</ul>
 </div>
@@ -31164,7 +31164,7 @@
 	<h5 class='topic w800'>Core</h5>		
 	<ul class='spaced-list'>
 		<li>Simplified <del>PojoIntrospector</del> class.
-		<li>New <del>ClassUtils#getMethodSignature(Method)</del> method.
+		<li>New <del>ClassUtils.getMethodSignature(Method)</del>method.
 	</ul>
 	
 	<h5 class='topic w800'>Client</h5>		
@@ -31172,13 +31172,13 @@
 		<li>New methods in {@link org.apache.juneau.rest.client.RestClient} for working with remoteable services:
 		<ul>
 			<li><del>RestClient#setRemoteableServletUri(String)</del>
-			<li><del>RestClient#getRemoteableProxy(Class)</del>
+			<li><del>RestClient.getRemoteableProxy(Class)</del>
 		</ul>
 	</ul>
 	
 	<h5 class='topic w800'>Server</h5>		
 	<ul class='spaced-list'>
-		<li>Added a default OPTIONS page to <del>BasicRestServlet</del> and <del>RestServletJenaDefault</del>.
+		<li>Added a default OPTIONS page to <del>BasicRestServlet</del>and <del>RestServletJenaDefault</del>.
 		<li><c>RestServletProperties.REST_allowMethodParam</c> has been enhanced to allow you to
 			explicitly specify which HTTP methods can be used in the <c>&amp;method</c> parameter.
 		<li>New methods added to {@link org.apache.juneau.rest.RestRequest}:
@@ -31272,7 +31272,7 @@
 			</ul>
 		<li>New {@link org.apache.juneau.dto.jsonschema.JsonType#ANY} enum.
 		<li>New <del>@Html(asPlainText)</del> annotation.
-		<li>New <del>HtmlDocSerializerContext#HTMLDOC_cssImports</del> property.
+		<li>New <del>HtmlDocSerializerContext.HTMLDOC_cssImports</del>property.
 		<li>Significant changes to RDF support.
 			<ul>
 				<li>New {@link org.apache.juneau.jena.annotation.Rdf @Rdf} and {@link org.apache.juneau.jena.annotation.RdfSchema @RdfSchema}
@@ -31281,14 +31281,14 @@
 				<li>Support for serializing arrays/collections as RDF bags, RDF lists, and multi-valued properties.   
 				<li>Fixed warning message about <js>"tab"</js> setting when using the N3/Turtle serializers.
 			</ul>
-		<li>New <del>SerializerContext#SERIALIZER_sortCollections</del> and 
-			<del>SerializerContext#SERIALIZER_sortMaps</del> properties.
+		<li>New <del>SerializerContext.SERIALIZER_sortCollections</del>and 
+			<del>SerializerContext.SERIALIZER_sortMaps</del>properties.
 		<li>FindBug fixes.
 	</ul>
 	
 	<h5 class='topic w800'>Server</h5>
 	<ul class='spaced-list'>
-		<li>New <del>RestRequest#getServletParentURI()</del> method.
+		<li>New <del>RestRequest.getServletParentURI()</del>method.
 		<li>New <c>$R{servletParentURI}</c> variable.
 		<li>Removed final modifier from <del>ChildResourceDescriptions</del>.
 	</ul>
@@ -31330,19 +31330,19 @@
 		<li><del>StringVarResolver</del> now has support for chained resolvers.
 		<li><del>StringVarResolver</del>  now resolves variables inside resolved values.
 			i.e. if a resolved variable value itself contains a variable, it now resolves that variable too.
-		<li>Fixed bug where inner interface classes being used in <del>RestResource#filters()</del> were being
+		<li>Fixed bug where inner interface classes being used in <del>RestResource.filters()</del> were being
 			interpreted as surrogate classes because they have hidden 1-arg constructors due to being inner classes.
 		<li>Fixed bug in {@link org.apache.juneau.internal.MultiSet} where exception was being thrown if last set was empty.
-		<li>New <del>ZipFileList</del> class for providing efficiently zipped directories through the REST interface.
+		<li>New <del>ZipFileList</del>class for providing efficiently zipped directories through the REST interface.
 		<li>New <c>RdfProperties.RDF_useXmlNamespaces</c> property.			
-		<li>New <del>XmlParserContext#XML_preserveRootElement</del> property.
+		<li>New <del>XmlParserContext.XML_preserveRootElement</del> property.
 		<li>Worked around bug in Sun VM on OS/X where XML parser was throwing an exception when trying to set a reporter.			
 	</ul>
 	
 	
 	<h5 class='topic w800'>Server</h5>
 	<ul class='spaced-list'>
-		<li>New <del>ZipFileListResponseHandler</del> class.
+		<li>New <del>ZipFileListResponseHandler</del>class.
 		<li>Simplified labels in servlet resource bundles:
 			<ul>
 				<li><c>"[ClassName].ResourceDescription"</c> is now <c>"[ClassName].label"</c>.
@@ -31364,10 +31364,10 @@
 					</ul>
 				<li>Behavior changes to {@link org.apache.juneau.rest.RestRequest#getPathInfo()} to follow Servlet specs.
 					Returns <jk>null</jk> instead of blank for no path info.
-				<li><del>RestRequest#getPathRemainder()</del> now automatically decodes the path remainder. 
-					Use <del>RestRequest#getPathRemainderUndecoded()</del> to get the unencoded path remainder.
-				<li>Bug fixes in <del>RestRequest#getRequestParentURI()</del> when servlet is mapped to <js>"/*"</js>.
-				<li>Bug fixes in <del>RestRequest#getServletURI()</del> when servlet is mapped to <js>"/*"</js>.
+				<li><del>RestRequest.getPathRemainder()</del>now automatically decodes the path remainder. 
+					Use <del>RestRequest.getPathRemainderUndecoded()</del>to get the unencoded path remainder.
+				<li>Bug fixes in <del>RestRequest.getRequestParentURI()</del>when servlet is mapped to <js>"/*"</js>.
+				<li>Bug fixes in <del>RestRequest.getServletURI()</del>when servlet is mapped to <js>"/*"</js>.
 			</ul>
 		<li>New string replacement variables:
 			<ul>
@@ -31378,7 +31378,7 @@
 				<li><c>$R{trimmedRequestURI}</c> - Returns value from <del>RestRequest#getTrimmedRequestURI()</del>
 				<li><c>$E{var}</c> - Environment variables.
 			</ul>
-		<li>Added methods <del>RestServlet#getDescription(RestRequest)</del> and <del>RestServlet#getLabel(RestRequest)</del>.
+		<li>Added methods <del>RestServlet.getDescription(RestRequest)</del>and <del>RestServlet.getLabel(RestRequest)</del>.
 		<li><del>BasicRestServlet</del> and <del>RestServletJenaDefault</del> now provide default HTML titles
 			and descriptions:
 			<p class='bcode'>
@@ -31391,7 +31391,7 @@
 		<ja>@Property</ja>(name=<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{back:'$R{servletURI}"</js>),
 		<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"Resource options"</js>)
 			</p>
-		<li>New <del>BasicRestServletGroup</del> class.
+		<li>New <del>BasicRestServletGroup</del>class.
 		<li>Removed <c>RestServletProperties.REST_trimTrailingUriSlashes</c> and <c>RestServletProperties.REST_pathInfoBlankForNull</c>. 
 		<li>New annotations for providing labels and descriptions.  Useful if you don't plan on having to support other languages, so you don't 
 			want to provide labels in resource bundles.
@@ -31431,19 +31431,19 @@
 	<ul class='spaced-list'>
 		<li>Fixed bug where localized strings weren't resolving when using chained resource bundles.
 		<li>Servlet and method labels and descriptions can now contain embedded string variables.
-		<li>New <del>RestMethod#input()</del> and <del>RestMethod#responses()</del>
+		<li>New <del>RestMethod.input()</del>and <del>RestMethod#responses()</del>
 			annotations.
 			These replace the various <c>description</c> annotations added 2 days ago with a simpler design.
 		<li>New methods on <del>RestServlet</del>:
 			<ul>
-				<li><del>RestServlet#getMethodDescription(String,RestRequest)</del> so that subclasses
+				<li><del>RestServlet.getMethodDescription(String,RestRequest)</del>so that subclasses
 					can override the method description in the OPTIONS page.
-				<li><del>RestServlet#createRequestVarResolver(RestRequest)</del> so that subclasses
+				<li><del>RestServlet.createRequestVarResolver(RestRequest)</del>so that subclasses
 					can override and augment the variable resolver.
-				<li><del>RestServlet#resolveChild(Class)</del> and <del>RestServlet#replaceChild(RestServlet)</del>
+				<li><del>RestServlet.resolveChild(Class)</del>and <del>RestServlet.replaceChild(RestServlet)</del>
 					classes that allows customized resolution of servlet instances (e.g. if services are defined in OSGi).
 			</ul> 
-		<li>Reverted the <del>MethodDescription</del> back to 5.1.0.16 since it was being used by someone.
+		<li>Reverted the <del>MethodDescription</del>back to 5.1.0.16 since it was being used by someone.
 	</ul>
 </div>
 </div><!-- END: 5.1.0.18 -->
@@ -31462,7 +31462,7 @@
 	<ul class='spaced-list'>
 		<li>Beans can now be serialized to and parsed from <del>ObjectMap ObjectMaps</del>.
 			See <dc>Serializing to ObjectMaps</dc> for details.
-		<li>New <del>ObjectMap#include(String[])</del> and <del>ObjectMap#exclude(String[])</del> methods.
+		<li>New <del>ObjectMap.include(String[])</del>and <del>ObjectMap.exclude(String[])</del>methods.
 		<li>{@link org.apache.juneau.html.annotation.Html @Html} annotations can now be applied to bean properties.
 		<li>New {@link org.apache.juneau.utils.IOPipe} utility class.
 		<li>Behavior change on <del>StringVarResolver</del>.  <jk>null</jk> input now results in blank strings instead of <jk>null</jk>.
@@ -31470,7 +31470,7 @@
 	
 	<h5 class='topic w800'>Client</h5>
 	<ul class='spaced-list'>
-		<li>New <del>RestClient#doCallback(String)</del> method.
+		<li>New <del>RestClient.doCallback(String)</del>method.
 	</ul>
 	
 	<h5 class='topic w800'>Server</h5>
@@ -31483,7 +31483,7 @@
 			on all JVMs.  On IBM JVMs this is unnecessary because the order of the properties as defined in the class
 			are stored in the bytecode.  Other JVMs such as OpenJRE do not implement this feature causing the bean
 			properties to be in random order.
-		<li>New <del>ResourceDescription#ResourceDescription(RestRequest,String,String)</del> constructor.
+		<li>New <del>ResourceDescription.ResourceDescription(RestRequest,String,String)</del>constructor.
 	</ul>
 </div>
 </div><!-- END: 5.1.0.19 -->
@@ -31511,9 +31511,9 @@
 		<li>New {@link org.apache.juneau.html.SimpleHtmlWriter} class.  
 			Can be used for simple HTML DOM construction.
 		<li>New <del>ProcBuilder</del> class for calling external processes.
-		<li>New <del>ObjectMap#remove(Class,String,Object)</del> method.
+		<li>New <del>ObjectMap.remove(Class,String,Object)</del>method.
 		<li><js>"class='link'"</js> added to links generated by {@link org.apache.juneau.html.HtmlDocSerializer}.
-		<li>New <del>EncoderGroup#append(EncoderGroup)</del> method.
+		<li>New <del>EncoderGroup.append(EncoderGroup)</del>method.
 		<li>New <c>HtmlDocSerializerContext.HTMLDOC_addLinks</c> configuration property.
 		<li>Modified the <c>Parser.createContext(ObjectMap,Method,Object)</c> method.  
 			Outer context objects can be passed in to create instances of non-static inner classes.
@@ -31522,7 +31522,7 @@
 		<li>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer} and {@link org.apache.juneau.urlencoding.UrlEncodingParser} now 
 			represent arrays and collections as key-value pairs where the keys are numbers (e.g. <js>"?0=foo&amp;1=bar"</js>).
 		<li>Various internal improvements to {@link org.apache.juneau.utils.IOPipe}.
-		<li>New <del>ReflectionUtils#getResource(Class,String)</del> method.
+		<li>New <del>ReflectionUtils.getResource(Class,String)</del>method.
 		<li>{@link org.apache.juneau.internal.StringUtils#parseNumber(String,Class)} now returns zero for empty strings. 
 			This affects the way most parsers handle blank values.
 	</ul>
@@ -31543,11 +31543,11 @@
 					<del>RestServlet#getResourceAsString(String)</del><br>
 					<del>RestServlet#getResource(Class,String,String)</del>.
 						Useful if you want to load predefined POJOs from JSON files in your classpath.
-				<li>New <del>RestServlet#handleNotFound(int,RestRequest,RestResponse)</del> method for customized handling
+				<li>New <del>RestServlet.handleNotFound(int,RestRequest,RestResponse)</del> method for customized handling
 					of when a resource or method was not found.  
 			</ul>
-		<li><del>BasicRestServlet</del>  now automatically processes <js>"/favicon.ico"</js> requests by 
-			overriding the new <del>RestServlet#handleNotFound(int,RestRequest,RestResponse)</del> method.
+		<li><del>BasicRestServlet</del> now automatically processes <js>"/favicon.ico"</js> requests by 
+			overriding the new <del>RestServlet.handleNotFound(int,RestRequest,RestResponse)</del>method.
 		<li>New {@link org.apache.juneau.rest.RestRequest} methods: 
 			<ul>
 				<li><del>RestRequest#resolveVars(String)</del>
@@ -31561,10 +31561,10 @@
 					<c>getWriter()</c> now returns an unnegotiated writer.  
 					<c>getUnbufferedWriter()</c> has been removed.
 			</ul>
-		<li>New <del>RestMethod#encoders() @RestMethod(encoders)</del> and 
-			<del>RestMethod#inheritEncoders()</del> annotations.  
+		<li>New <del>RestMethod.encoders() @RestMethod(encoders)</del>and 
+			<del>RestMethod.inheritEncoders()</del> annotations.  
 			Allows encoders to be fine-tuned at the method level.
-		<li>New <del>@RestResource(config)</del> annotation for associating external <del>ConfigFile</del> config files with servlets.
+		<li>New <del>@RestResource(config)</del> annotation for associating external <del>ConfigFile</del>config files with servlets.
 		<li><del>ResourceLink</del>.
 		<li>New <c>org.apache.juneau.rest.matcher</c> package for commonly-used {@link org.apache.juneau.rest.RestMatcher RestMatchers}:
 			<ul>
@@ -31605,17 +31605,17 @@
 				<li>New methods in <del>ConfigFile</del>:
 					<ul>
 						<li><del>ConfigFile#getStringArray(String)</del>,<del>ConfigFile#getStringArray(String,String[])</del>
-						<li><del>ConfigFile#getSectionAsBean(String,Class)</del> - Instantiate a new bean with property values in the specified section..
-						<li><del>ConfigFile#writeProperties(String,Object,boolean,Class[])</del> - Copy the properties in a config file section into properties on an existing bean or POJO.
-						<li><del>ConfigFile#getSectionMap(String)</del> - Get all the resolved values in a section.
-						<li><del>ConfigFile#containsNonEmptyValue(String)</del> 
-						<li><del>ConfigFile#isEncoded(String)</del> 
-						<li><del>ConfigFile#addListener(ConfigFileListener)</del> - Listen for modification events on the config file.
-						<li><del>ConfigFile#merge(ConfigFile)</del> - Merge the contents of another config file into this config file.
-						<li><del>ConfigFile#getResolving()</del>, <del>ConfigFile#getResolving(StringVarResolver)</del> - Return an instance of the config file that resolves string variables.
+						<li><del>ConfigFile.getSectionAsBean(String,Class)</del>- Instantiate a new bean with property values in the specified section..
+						<li><del>ConfigFile.writeProperties(String,Object,boolean,Class[])</del>- Copy the properties in a config file section into properties on an existing bean or POJO.
+						<li><del>ConfigFile.getSectionMap(String)</del>- Get all the resolved values in a section.
+						<li><del>ConfigFile.containsNonEmptyValue(String)</del>
+						<li><del>ConfigFile.isEncoded(String)</del>
+						<li><del>ConfigFile.addListener(ConfigFileListener)</del>- Listen for modification events on the config file.
+						<li><del>ConfigFile.merge(ConfigFile)</del>- Merge the contents of another config file into this config file.
+						<li><del>ConfigFile#getResolving()</del>, <del>ConfigFile.getResolving(StringVarResolver)</del>- Return an instance of the config file that resolves string variables.
 							Much more efficient than the previous design since the same underlying config file object is shared.
-						<li><del>ConfigFile#toWritable()</del> - Wraps the config file in a <del>Writable</del> interface so that it can be serialized by the REST interface as a plain-text INI file instead of as a serialized POJO.
-						<li><del>ConfigFile#getInt(String)</del> - Now supports <js>"M"</js> and <js>"K"</js> to identify millions and thousands.
+						<li><del>ConfigFile.toWritable()</del> - Wraps the config file in a <del>Writable</del>interface so that it can be serialized by the REST interface as a plain-text INI file instead of as a serialized POJO.
+						<li><del>ConfigFile.getInt(String)</del>- Now supports <js>"M"</js> and <js>"K"</js> to identify millions and thousands.
 					</ul>
 				<li>New methods in <del>ConfigMgr</del>:
 					<ul>
@@ -31624,8 +31624,8 @@
 					</ul>
 				<li>New methods in <del>Section</del>:
 					<ul>
-						<li><del>Section#setParent(ConfigFileImpl)</del> - Used by parsers to set the config file for this section.
-						<li><del>Section#setName(String)</del> - Used by parsers to set the name for this section.
+						<li><del>Section.setParent(ConfigFileImpl)</del>- Used by parsers to set the config file for this section.
+						<li><del>Section.setName(String)</del> - Used by parsers to set the name for this section.
 					</ul>
 				<li>New interfaces:
 					<ul>
@@ -31668,7 +31668,7 @@
 				<li><del>Writable</del> interface for identifying objects that can be serialized directly to a writer.
 				<li><del>StringObject</del> class that can be used for delayed object serialization.
 				<li><del>ByteArrayCache</del>
-				<li><del>ByteArrayInOutStream</del> 
+				<li><del>ByteArrayInOutStream</del>
 				<li>{@link org.apache.juneau.internal.FileUtils}
 				<li>{@link org.apache.juneau.internal.ThrowableUtils}
 				<li><del>StringVarMultipart</del>
@@ -31743,8 +31743,8 @@
 				<li><del>StringUtils#pathStartsWith(String,String)</del>
 				<li><del>StringUtils#pathStartsWith(String,String[])</del>
 			</ul>
-		<li>New <del>StringVar#doResolve(String)</del> method.
-		<li>New <del>StringVarResolver#DEFAULT</del> field.
+		<li>New <del>StringVar.doResolve(String)</del>method.
+		<li>New <del>StringVarResolver.DEFAULT</del>field.
 		<li>Eliminated dependency on <c>javax.mail.internet.MimeUtility</c> by implementing our own {@link org.apache.juneau.internal.StringUtils#base64Encode(byte[])} method.
 		<li><del>CalendarSwap</del> and <del>DateSwap</del> classes now handle blank input better.  Returns <jk>null</jk> instead of throwing an exception.
 		<li>{@link org.apache.juneau.html.HtmlDocSerializer} specifies the default CSS location as <c>/servletPath/style.css</c> instead of <c>/servletPath/htdocs/juneau.css</c>.  
@@ -31759,13 +31759,13 @@
 		<li>{@link org.apache.juneau.parser.Parser} methods now check for <jk>null</jk> input.
 		<li><del>SerializerGroup</del> and <del>ParserGroup</del> ignores serializers and parsers if they throw <c>NoClassDefFoundErrors</c>.
 		<li>{@link org.apache.juneau.urlencoding.UrlEncodingParser} creates lists if the same attribute name is encountered more than once.  Before it would just replace the previous value with the new value.
-		<li>New <del>UrlEncodingSerializer#DEFAULT_SIMPLE_EXPANDED</del> serializer.
+		<li>New <del>UrlEncodingSerializer.DEFAULT_SIMPLE_EXPANDED</del>serializer.
 		<li>Changes to <del>Args</del>:
 			<ul>
 				<li><c>getMainArg(int)</c> changed to <del>Args#getArg(int)</del>.  
 					Non-existent arguments are returned as <jk>null</jk> instead of blank strings.  
 					This is more inline with the behavior of the rest of the library.
-				<li>New <del>Args#hasArg(int)</del> method.
+				<li>New <del>Args.hasArg(int)</del> method.
 			</ul> 
 		<li>Removed <c>org.apache.juneau.utils.CharsetUtils</c> class.
 		<li>Removed <c>org.apache.juneau.utils.ConcurrentIdentityList</c> class.
@@ -31778,7 +31778,7 @@
 		<li>Several bug fixes and performance improvements in <del>StringVarResolver</del>.
 		<li>Various enhancements to <del>TeeWriter</del> and <del>TeeOutputStream</del>.
 		<li>Renamed <del>CharSet</del> to {@link org.apache.juneau.internal.AsciiSet}.
-		<li><del>SerializerGroup</del> and <del>ParserGroup</del> now ignores <c>NoClassDefFoundErrors</c>
+		<li><del>SerializerGroup</del> and <del>ParserGroup</del>now ignores <c>NoClassDefFoundErrors</c>
 			so that resources that include Jena support can continue to operate even if the Jena libraries are not present.
 		<li>New {@link org.apache.juneau.internal.FileUtils#createTempFile(String)} method.
 		<li>New {@link org.apache.juneau.utils.PojoQuery} modified to handle bean getters that throw exceptions.
@@ -31812,7 +31812,7 @@
 				<li><del>RestCall#successPattern(String)</del>
 				<li><del>RestCall#failurePattern(String)</del>
 				<li><del>RestCall#addResponsePattern(ResponsePattern)</del>
-				<li><del>RestCall#run()</del> - Renamed from <c>execute()</c>.
+				<li><del>RestCall.run()</del>- Renamed from <c>execute()</c>.
 				<li><del>RestCall#getCapturedResponse()</del>
 				<li><del>RestCall#getResponsePojoRest(Class)</del>
 				<li><del>RestCall#getResponsePojoRest()</del>
@@ -31882,7 +31882,7 @@
 				<li><del>RestClient#setDefaultRequestConfig(RequestConfig)</del>
 				<li><del>RestClient#useSystemProperties()</del>
 				<li><del>RestClient#evictExpiredConnections()</del>
-				<li><del>RestClient#evictIdleConnections(long,TimeUnit)</del>
+				<li><del>RestClient.evictIdleConnections(long,TimeUnit)</del>
 			</ul>
 		<li><c>JazzRestClient</c> now supports OIDC authentication.
 		<li>These classes are now deprecated and will be removed in a future release:
@@ -31903,13 +31903,13 @@
 			<del>StringVar</del> variables and adding HTTP response headers.	
 			REST Java methods can return instances of these to serialize <c>Readers</c>
 				containing text with <del>StringVarResolver</del> variables in them.
-		<li>New <del>StreamResource</del> class.   
+		<li>New <del>StreamResource</del>class.   
 			REST Java methods can return instances of these to serialize <c>OutputStreams</c>.
 		<li>Fixed a bug in the stack trace hash algorithm in <del>RestException</del>.
 		<li>New methods in {@link org.apache.juneau.rest.RestRequest}:
 			<ul>
-				<li><del>RestRequest#getReaderResource(String)</del> - Replaces <c>getVarResource(String)</c>.
-				<li><del>RestRequest#getReaderResource(String,boolean)</del> 
+				<li><del>RestRequest.getReaderResource(String)</del>- Replaces <c>getVarResource(String)</c>.
+				<li><del>RestRequest.getReaderResource(String,boolean)</del>
 				<li><del>RestRequest#getReaderResource(String,boolean,String)</del>
 			</ul>
 		<li>Changes in {@link org.apache.juneau.rest.RestResponse}:
@@ -31918,18 +31918,18 @@
 			</ul>
 		<li>New methods in <del>RestServlet</del>:
 			<ul>
-				<li><del>RestServlet#getChildClasses()</del>  - Programmatic equivalent to <del>@RestResource(children)</del> annotation.
-				<li><del>RestServlet#shouldLog(HttpServletRequest,HttpServletResponse,RestException)</del> 
-				<li><del>RestServlet#shouldLogStackTrace(HttpServletRequest,HttpServletResponse,RestException)</del> 
-				<li><del>RestServlet#logObjects(Level,String,Object[])</del> 
-				<li><del>RestServlet#resolveStaticFile(String)</del> 
-				<li><del>RestServlet#createStyleSheet()</del> 
-				<li><del>RestServlet#createFavIcon()</del> 
-				<li><del>RestServlet#createStaticFilesMap()</del> 
-				<li><del>RestServlet#getConfigMgr()</del>
+				<li><del>RestServlet.getChildClasses()</del>  - Programmatic equivalent to <del>@RestResource(children)</del>annotation.
+				<li><del>RestServlet.shouldLog(HttpServletRequest,HttpServletResponse,RestException)</del>
+				<li><del>RestServlet.shouldLogStackTrace(HttpServletRequest,HttpServletResponse,RestException)</del>
+				<li><del>RestServlet.logObjects(Level,String,Object[])</del>
+				<li><del>RestServlet.resolveStaticFile(String)</del>
+				<li><del>RestServlet.createStyleSheet()</del>
+				<li><del>RestServlet.createFavIcon()</del>
+				<li><del>RestServlet.createStaticFilesMap()</del>
+				<li><del>RestServlet.getConfigMgr()</del>
 			</ul>
 		<li>Removed <del>JsoParser</del>
-			from <del>BasicRestServlet</del> and <del>RestServletJenaDefault</del>.  
+			from <del>BasicRestServlet</del>and <del>RestServletJenaDefault</del>.  
 			These may represent a security risk if not handled correctly, so removed
 			them as a precaution.
 		<li>Removed <c>RestServletProperties.REST_htDocsFolder</c>.  Replaced with <del>@RestResource(staticFiles)</del>}.
@@ -31944,16 +31944,16 @@
 			pick up <c>JsonProvider</c> as well.  It's easy enough to create your own implementation if needed.
 		<li>OPTIONS pages now specify <c>consumes</c> and <c>produces</c> fields instead of <c>accept</c> and <c>contentType</c> which was confusing.  
 		<li>Eliminated <c>properties</c> from OPTIONS pages. 
-		<li>New <del>ResourceLink#ResourceLink(String,RestRequest,String,Object[])</del> constructor.
+		<li>New <del>ResourceLink.ResourceLink(String,RestRequest,String,Object[])</del> constructor.
 		<li>New response handlers:
 			<ul>
 				<li><del>StreamableHandler</del> - Allows REST Java methods to return instances of <del>Streamable</del>.
-				<li><del>WritableHandler</del> - Allows REST Java methods to return instances of <del>Writable</del>.
+				<li><del>WritableHandler</del>- Allows REST Java methods to return instances of <del>Writable</del>.
 			</ul>
 		<li>New DevOps stylesheet.
 		<li>Servlet initialization and HTTP requests are now logged at <JSF>FINE</JSF> level.
 		<li>Added <jk>abstract</jk> modifier on various <l>RestServlet</l> subclasses to indicate that they're meant to be subclassed.
-		<li>New <del>RestUtils#trimPathInfo(StringBuffer,String,String)</del> method.
+		<li>New <del>RestUtils.trimPathInfo(StringBuffer,String,String)</del> method.
 	</ul>
 	
 	<h5 class='topic w800'>Microservice</h5>
@@ -32009,7 +32009,7 @@
 		<li><del>client</del> - New package-level javadoc.
 		<li><dc>Overview / Samples</dc> - New section.
 		<li><dc>org.apache.juneau.swap / Stop Classes</dc> - New section.
-		<li><del>rest</del> - Extensive updates.
+		<li><del>rest</del>- Extensive updates.
 	</ul>
 </div>
 </div><!-- END: 5.2.0.0 -->
@@ -32041,21 +32041,21 @@
 				<li><del>ObjectMap#getAt(Class,String)</del>
 				<li><del>ObjectMap#putAt(String,Object)</del>
 				<li><del>ObjectMap#postAt(String,Object)</del>
-				<li><del>ObjectMap#deleteAt(String)</del>
+				<li><del>ObjectMap.deleteAt(String)</del>
 			</ul>
-		<li><del>@ThreadSafe</del> annotation.
+		<li><del>@ThreadSafe</del>annotation.
 		<li>New <c>ClassFilter</c> class.
-		<li><del>ConfigFile#getResolving(StringVarResolver,boolean)</del> method.
-		<li><del>ConfigFile#getStringVar()</del> method.
-		<li>New <del>ParserContext#PARSER_trimStrings</del> property.
-		<li>New <del>SerializerContext#SERIALIZER_trimStrings</del> property.
-		<li><del>Args#getStringVar()</del> method.
+		<li><del>ConfigFile.getResolving(StringVarResolver,boolean)</del>method.
+		<li><del>ConfigFile.getStringVar()</del>method.
+		<li>New <del>ParserContext.PARSER_trimStrings</del>property.
+		<li>New <del>SerializerContext.SERIALIZER_trimStrings</del>property.
+		<li><del>Args.getStringVar()</del> method.
 		<li>New {@link org.apache.juneau.utils.ManifestFile} class
 		<li>New <del>MessageBundle</del> class.  Replaces <l>SafeResourceBundle</l>/<l>SafeResourceMultiBundle</l>/<l>RestNls</l>.
 		<li>New <del>StringMapVar</del> class.
 		<li>New <del>StringVars</del> class with reusable common <del>StringVar</del> instances.
-		<li>New <del>JuneauLogger</del> class.
-		<li>Default value for <del>XmlParserContext#XML_trimWhitespace</del> changed to <jk>true</jk>.			
+		<li>New <del>JuneauLogger</del>class.
+		<li>Default value for <del>XmlParserContext.XML_trimWhitespace</del>changed to <jk>true</jk>.			
 	</ul>
 	
 	<h5 class='topic w800'>Server</h5>
@@ -32118,13 +32118,13 @@
 			The following features were added to enable this support:
 			<ul>
 				<li>{@link org.apache.juneau.annotation.Bean#typeName() @Bean(typeName)} - Annotation that defines an identifying name for a bean class.
-				<li><del>BeanFilterBuilder#typeName(String)</del> - Programmatic equivalent to annotation above.
-				<li><del>BeanContext#BEAN_beanDictionary</del> - List of bean classes that make up the bean dictionary for lookup
+				<li><del>BeanFilterBuilder.typeName(String)</del>- Programmatic equivalent to annotation above.
+				<li><del>BeanContext.BEAN_beanDictionary</del> - List of bean classes that make up the bean dictionary for lookup
 					during parsing. 
 				<li><del>BEAN_beanTypePropertyName</del> - The overridable type property name.  Default is <js>"_type"</js>.
-				<li><del>@BeanProperty(beanDictionary)</del> - Define a type dictionary
+				<li><del>@BeanProperty(beanDictionary)</del>- Define a type dictionary
 					for a particular bean property value.  This overrides the value specified using <del>BeanContext#BEAN_beanDictionary</del>.
-				<li><del>SerializerContext#SERIALIZER_addBeanTypeProperties</del> - Controls whether type properties are serialized.
+				<li><del>SerializerContext.SERIALIZER_addBeanTypeProperties</del>- Controls whether type properties are serialized.
 			</ul>
 			In addition, the {@link org.apache.juneau.annotation.Bean#typeName() @Bean(typeName)} value replaces the <c>@Xml(name)</c> annotation, and the 
 			<js>"type"</js> and <js>"_class"</js> attributes in the XML and HTML serializers have been standardized on a single <js>"_type"</js> attribute.
@@ -32155,24 +32155,24 @@
 		<li>Added <ja>@Bean.properties</ja> annotations on various DTO beans to make the ordering consistent
 			between IBM and Oracle JVMs.<br>
 			IBM JVMs maintain the order of methods in a class, whereas Oracle JVMs do not.
-		<li>Serializers and parsers now automatically convert {@link java.lang.Class} objects to readable names via <del>ClassUtils#getReadableClassName(Class)</del>.
+		<li>Serializers and parsers now automatically convert {@link java.lang.Class} objects to readable names via <del>ClassUtils.getReadableClassName(Class)</del>.
 		<li>Eliminated the <c>ClassFilter</c> class since it's no longer needed.
-		<li>Code and concurrency improvements to <del>SerializerGroup</del> and <del>ParserGroup</del>.
+		<li>Code and concurrency improvements to <del>SerializerGroup</del>and <del>ParserGroup</del>.
 		<li>Various enhancements to <del>BeanContext#convertToType(Object,Class)</del>.
 		<li>New properties on {@link org.apache.juneau.html.HtmlSerializer}:
 			<ul>
-				<li><del>HtmlSerializerContext#HTML_detectLinksInStrings</del> - Automatically detect hyperlinks in strings.
-				<li><del>HtmlSerializerContext#HTML_lookForLabelParameters</del> - Specify anchor text by appending <c>&amp;label=MyLabel</c> to URL.
-				<li><del>HtmlSerializerContext#HTML_labelParameter</del> - Specify what URL parameter to use as the anchor text label.
-				<li><del>HtmlSerializerContext#URI_ANCHOR</del> option for <del>HtmlSerializerContext#HTML_uriAnchorText</del>.				
+				<li><del>HtmlSerializerContext.HTML_detectLinksInStrings</del>- Automatically detect hyperlinks in strings.
+				<li><del>HtmlSerializerContext.HTML_lookForLabelParameters</del>- Specify anchor text by appending <c>&amp;label=MyLabel</c> to URL.
+				<li><del>HtmlSerializerContext.HTML_labelParameter</del>- Specify what URL parameter to use as the anchor text label.
+				<li><del>HtmlSerializerContext.URI_ANCHOR</del>option for <del>HtmlSerializerContext.HTML_uriAnchorText</del>.				
 			</ul>
 		</li>
 		<li>Removed generics from {@link org.apache.juneau.BeanPropertyMeta}.
 		<li>Introduced new classes to eliminate the references to language-specific metadata in the core metadata classes:
 			<ul>
-				<li><del>ClassMetaExtended</del> / <del>ClassMeta#getExtendedMeta(Class)</del> 
-				<li><del>BeanMetaExtended</del> /<del>BeanMeta#getExtendedMeta(Class)</del> 
-				<li><del>BeanPropertyMetaExtended</del> / <del>BeanPropertyMeta#getExtendedMeta(Class)</del> 
+				<li><del>ClassMetaExtended</del>/ <del>ClassMeta.getExtendedMeta(Class)</del> 
+				<li><del>BeanMetaExtended</del>/<del>BeanMeta.getExtendedMeta(Class)</del> 
+				<li><del>BeanPropertyMetaExtended</del>/ <del>BeanPropertyMeta.getExtendedMeta(Class)</del> 
 			</ul>
 		</li>
 		<li>Renamed <c>@Transform</c> annotation to <del>@Pojo</del> so that it can be used for various POJO-related behavior, not just associating transforms.  
@@ -32188,25 +32188,25 @@
 				<li>Eliminated <c>ResourceOptions</c> and related code.
 				<li>New annotations and related methods:
 					<ul>
-						<li><del>@RestResource(title)</del> / <del>RestInfoProvider#getTitle(RestRequest)</del>
-						<li><del>@RestResource(description)</del> / <del>RestInfoProvider#getDescription(RestRequest)</del>
-						<li><del>@RestResource(termsOfService)</del> / <del>RestInfoProvider#getTermsOfService(RestRequest)</del>
-						<li><del>@RestResource(contact)</del> / <del>RestInfoProvider#getContact(RestRequest)</del>
-						<li><del>@RestResource(license)</del> / <del>RestInfoProvider#getLicense(RestRequest)</del>
-						<li><del>@RestResource(version)</del> / <del>RestInfoProvider#getVersion(RestRequest)</del>
-						<li><del>@RestResource(tags)</del> / <del>RestInfoProvider#getTags(RestRequest)</del>
-						<li><del>@RestResource(externalDocs)</del> / <del>RestInfoProvidergetExternalDocs(RestRequest)</del>
-						<li><del>RestMethod#summary() @RestMethod(summary)</del> / <del>RestInfoProvider#getMethodSummary(String,RestRequest)</del>
-						<li><del>RestMethod#description() @RestMethod(description)</del> /<del>RestInfoProvider#getMethodDescription(String,RestRequest)</del>
+						<li><del>@RestResource(title)</del>/ <del>RestInfoProvider.getTitle(RestRequest)</del>
+						<li><del>@RestResource(description)</del>/ <del>RestInfoProvider.getDescription(RestRequest)</del>
+						<li><del>@RestResource(termsOfService)</del>/ <del>RestInfoProvider.getTermsOfService(RestRequest)</del>
+						<li><del>@RestResource(contact)</del>/ <del>RestInfoProvider.getContact(RestRequest)</del>
+						<li><del>@RestResource(license)</del>/ <del>RestInfoProvider.getLicense(RestRequest)</del>
+						<li><del>@RestResource(version)</del>/ <del>RestInfoProvider.getVersion(RestRequest)</del>
+						<li><del>@RestResource(tags)</del>/ <del>RestInfoProvider.getTags(RestRequest)</del>
+						<li><del>@RestResource(externalDocs)</del>/ <del>RestInfoProvidergetExternalDocs(RestRequest)</del>
+						<li><del>RestMethod.summary() @RestMethod(summary)</del>/ <del>RestInfoProvider#getMethodSummary(String,RestRequest)</del>
+						<li><del>RestMethod.description() @RestMethod(description)</del>/<del>RestInfoProvider.getMethodDescription(String,RestRequest)</del>
 						<li><del>@RestMethod(externalDocs)</del>
 						<li><del>@RestMethod(tags)</del>
 						<li><del>@RestMethod(deprecated)</del> 
-						<li><del>@RestMethod(parameters)</del> 
+						<li><del>@RestMethod(parameters)</del>
 						<li><del>@RestMethod(responses)</del>
 					</ul>
 				</li>					
 			</ul>
-		<li>New <del>RestServletContext#paramFormat</del> context property.
+		<li>New <del>RestServletContext.paramFormat</del>context property.
 		<li>New/updated methods on <del>RestServlet</del>:
 			<ul>
 				<li><del>RestServlet#createProperties()</del>
@@ -32227,8 +32227,8 @@
 		</li>
 		<li>New client-version annotations:
 			<ul>
-				<li><del>RestResource#clientVersionHeader</del>  - The name of the header used to identify the client version.
-				<li><del>RestMethod#clientVersion</del>  - The client version range applied to a Java method.
+				<li><del>RestResource.clientVersionHeader</del> - The name of the header used to identify the client version.
+				<li><del>RestMethod.clientVersion</del> - The client version range applied to a Java method.
 			</ul>
 		</li>
 	</ul>
@@ -32409,22 +32409,22 @@
 			<li><del>DateTimeSimple</del>,<del>DateTimeSimple</del> - To simple <js>"yyyy/MM/dd HH:mm:ss"</js> date-time strings.
 			<li><del>DateSimple</del>,<del>DateSimple</del> - To simple <js>"yyyy/MM/dd"</js> date strings.
 			<li><del>TimeSimple</del>,<del>TimeSimple</del> - To simple <js>"HH:mm:ss"</js> time strings.
-			<li><del>DateFull</del>,<del>DateFull</del> - To {@link java.text.DateFormat#FULL} date strings.
-			<li><del>DateLong</del>,<del>DateLong</del> - To {@link java.text.DateFormat#LONG} date strings.
-			<li><del>DateMedium</del>,<del>DateMedium</del> - To {@link java.text.DateFormat#MEDIUM} date strings.
-			<li><del>DateShort</del>,<del>DateShort</del> - To {@link java.text.DateFormat#SHORT} date strings.
-			<li><del>TimeFull</del>,<del>TimeFull</del> - To {@link java.text.DateFormat#FULL} time strings.
-			<li><del>TimeLong</del>,<del>TimeLong</del> - To {@link java.text.DateFormat#LONG} time strings.
-			<li><del>TimeMedium</del>,<del>TimeMedium</del> - To {@link java.text.DateFormat#MEDIUM} time strings.
-			<li><del>TimeShort</del>,<del>TimeShort</del> - To {@link java.text.DateFormat#SHORT} time strings.
-			<li><del>DateTimeFull</del>,<del>DateTimeFull</del> - To {@link java.text.DateFormat#FULL} date-time strings.
-			<li><del>DateTimeLong</del>,<del>DateTimeLong</del> - To {@link java.text.DateFormat#LONG} date-time strings.
-			<li><del>DateTimeMedium</del>,<del>DateTimeMedium</del> - To {@link java.text.DateFormat#MEDIUM} date-time strings.
-			<li><del>DateTimeShort</del>,<del>DateTimeShort</del> - To {@link java.text.DateFormat#SHORT} date-time strings.
+			<li><del>DateFull</del>,<del>DateFull</del> - To {@link java.text.DateFormat.FULL} date strings.
+			<li><del>DateLong</del>,<del>DateLong</del>- To {@link java.text.DateFormat#LONG} date strings.
+			<li><del>DateMedium</del>,<del>DateMedium</del> - To {@link java.text.DateFormat.MEDIUM} date strings.
+			<li><del>DateShort</del>,<del>DateShort</del>- To {@link java.text.DateFormat#SHORT} date strings.
+			<li><del>TimeFull</del>,<del>TimeFull</del> - To {@link java.text.DateFormat.FULL} time strings.
+			<li><del>TimeLong</del>,<del>TimeLong</del>- To {@link java.text.DateFormat#LONG} time strings.
+			<li><del>TimeMedium</del>,<del>TimeMedium</del> - To {@link java.text.DateFormat.MEDIUM} time strings.
+			<li><del>TimeShort</del>,<del>TimeShort</del>- To {@link java.text.DateFormat#SHORT} time strings.
+			<li><del>DateTimeFull</del>,<del>DateTimeFull</del> - To {@link java.text.DateFormat.FULL} date-time strings.
+			<li><del>DateTimeLong</del>,<del>DateTimeLong</del>- To {@link java.text.DateFormat#LONG} date-time strings.
+			<li><del>DateTimeMedium</del>,<del>DateTimeMedium</del> - To {@link java.text.DateFormat.MEDIUM} date-time strings.
+			<li><del>DateTimeShort</del>,<del>DateTimeShort</del>- To {@link java.text.DateFormat#SHORT} date-time strings.
 		</ul>  
-		<li>New method <del>SerializerGroup#getSerializerMatch(String)</del> that returns the matched serializer and media type.
-		<li>New method <del>ParserGroup#getParserMatch(String)</del> that returns the matched parser and media type.
-		<li>New method <del>EncoderGroup#getEncoderMatch(String)</del> that returns the matched encoder and encoding.
+		<li>New method <del>SerializerGroup.getSerializerMatch(String)</del>that returns the matched serializer and media type.
+		<li>New method <del>ParserGroup.getParserMatch(String)</del>that returns the matched parser and media type.
+		<li>New method <del>EncoderGroup.getEncoderMatch(String)</del>that returns the matched encoder and encoding.
 		<li>General improvements to Bean Dictionary support.
 			<ul>
 				<li>New {@link org.apache.juneau.BeanDictionaryList} class can be used for defining reusable sets of bean dictionaries consisting
@@ -32458,7 +32458,7 @@
 				serializers since there is no separate simple mode anymore.
 			<li>Eliminated the <c>UonParserContext.<jsf>UON_simpleMode</jsf></c> configuration setting.
 		</ul>
-		<li>Added new <del>OutputStreamSerializer#serializeToHex(Object)</del> method. 
+		<li>Added new <del>OutputStreamSerializer.serializeToHex(Object)</del>method. 
 			<br>Useful mostly for testing purposes.
 			<br>Equivalently, the {@link org.apache.juneau.parser.InputStreamParser#parse(Object,Class)} method can now 
 				read the output from this method.
@@ -32466,15 +32466,15 @@
 			and replaced them with the ability to define subtypes using the existing <del>@Bean(beanDictionary)</del>
 			annotation on parent classes and interfaces.
 			<br>This has the added benefit of simplifying the overall code.
-		<li>The <del>SerializerContext#SERIALIZER_addBeanTypeProperties</del> setting is now enabled by default.
+		<li>The <del>SerializerContext.SERIALIZER_addBeanTypeProperties</del>setting is now enabled by default.
 		<li>Combined the <c>SERIALIZER_addIndentation</c>/<c>JSON_addWhitespace</c>/<c>UON_addWhitespace</c>
-			properties into a single <del>SerializerContext#SERIALIZER_useWhitespace</del> setting.
+			properties into a single <del>SerializerContext.SERIALIZER_useWhitespace</del>setting.
 	</ul>
 	
 	<h5 class='topic w800'>org.apache.juneau.rest</h5>
 	<ul class='spaced-list'>
 		<li>{@link org.apache.juneau.rest.RestRequest} now passes locale and timezone to serializers/parsers/transforms.
-		<li><del>RestRequest#getTimeZone()</del> method.
+		<li><del>RestRequest.getTimeZone()</del>method.
 		<li>Standardized the following methods in {@link org.apache.juneau.rest.RestRequest} to remove dependency on <c>ClassMeta</c>
 			objects and eliminate the need for casts:
 			<ul>
@@ -32546,7 +32546,7 @@
 		<li>Revamped the config file API to use a build:  <del>ConfigFileBuilder</del>.
 		<li>Removed the <del>Lockable</del> interface.
 		<li>New <c>addBeanTypeProperties</c> setting added to serializers to override the 
-			<del>SerializerContext#SERIALIZER_addBeanTypeProperties</del> setting
+			<del>SerializerContext.SERIALIZER_addBeanTypeProperties</del>setting
 			for individual serializers in a serializer group:
 			<ul>
 				<li><del>HtmlSerializerContext#HTML_addBeanTypeProperties</del>
@@ -32590,9 +32590,9 @@
 				<li>{@link org.apache.juneau.dto.html5.HtmlElementContainer#getChild(int...)}
 				<li>{@link org.apache.juneau.dto.html5.HtmlElementMixed#getChild(int...)}
 			</ul>
-		<li>New common serializer setting: <del>SerializerContext#SERIALIZER_abridged</del>.
+		<li>New common serializer setting: <del>SerializerContext.SERIALIZER_abridged</del>.
 		<li>Support for defining interface proxies against 3rd-party REST interfaces.
-			<br>New package <del>remoteable</del> for all remoteable proxy interface annotations.
+			<br>New package <del>remoteable</del>for all remoteable proxy interface annotations.
 			<br><ja>@Remoteable</ja> annotation has been moved to this package.
 		<li>Updated doc: <dc>6 - Remoteable Services</dc>
 		<li>New doc: <dc>6.1 -  Interface proxies against 3rd-party REST interfaces</dc>
@@ -32600,7 +32600,7 @@
 		<li>New methods on {@link org.apache.juneau.urlencoding.UrlEncodingSerializer.Builder}:
 		<ul>
 			<li><del>Builder#paramFormat(String)</del>	
-			<li><del>Builder#plainTextParams()</del>	
+			<li><del>Builder.plainTextParams()</del>	
 		</ul> 		
 	</ul>
 	
@@ -32619,10 +32619,10 @@
 				<li>{@link org.apache.juneau.rest.RestContext} - A read-only configuration that's the result of a snapshot of the config.
 			</ul>
 			<br><br>
-			The <del>RestServlet</del> class now has the following initialization method that allows you to override
+			The <del>RestServlet</del>class now has the following initialization method that allows you to override
 			the config settings define via annotations:
 			<ul>
-				<li><del>RestServlet#init(RestConfig)</del> - A modifiable configuration of a resource.
+				<li><del>RestServlet.init(RestConfig)</del> - A modifiable configuration of a resource.
 			</ul>
 			Non-<c>RestServlet</c> classes must have one of the following to allow it to be instantiated:
 			<ul>
@@ -32636,16 +32636,16 @@
 				<li><dc><jk>public</jk> init(RestConfig)</dc>
 				<li><dc><jk>public</jk> init(RestContext)</dc>
 			</ul>
-		<li>New annotations added to <del>@RestResource</del> to allow non-<c>RestServlet</c>
+		<li>New annotations added to <del>@RestResource</del>to allow non-<c>RestServlet</c>
 			resources to do the same as subclassing directly from <c>RestServlet</c>:
 			<ul>
-				<li><del>RestResource#resourceResolver()</del> 
-					- Specify a <del>RestResourceResolver</del> class for resolving child resources.
-				<li><del>RestResource#callHandler()</del> 
-					- Specify a <del>RestCallHandler</del> class for handling the lifecycle of a REST call.
-				<li><del>RestResource#infoProvider()</del> 
-					- Specify a <del>RestInfoProvider</del> class for customizing title/description/Swagger information on a REST resource.
-				<li><del>RestResource#logger()</del> 
+				<li><del>RestResource.resourceResolver()</del> 
+					- Specify a <del>RestResourceResolver</del>class for resolving child resources.
+				<li><del>RestResource.callHandler()</del> 
+					- Specify a <del>RestCallHandler</del>class for handling the lifecycle of a REST call.
+				<li><del>RestResource.infoProvider()</del> 
+					- Specify a <del>RestInfoProvider</del>class for customizing title/description/Swagger information on a REST resource.
+				<li><del>RestResource.logger()</del> 
 					- Specify a <del>RestLogger</del> class for handling logging.
 			</ul>
 		<li>New annotations added to <del>@RestResource</del> and <del>RestMethod @RestMethod</del>
@@ -32656,7 +32656,7 @@
 				<li><del>@RestResource(pageText)</del> 
 				<li><del>@RestMethod(pageText)</del> 
 				<li><del>@RestResource(pageLinks)</del> 
-				<li><del>@RestMethod(pageLinks)</del> 
+				<li><del>@RestMethod(pageLinks)</del>
 			</ul>				
 			<p class='bcode'>
 		<jc>// Old method</jc>
@@ -32686,9 +32686,9 @@
 			pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>
 		)
 			</p>
-		<li><del>RestResource#stylesheet()</del> can now take in a comma-delimited list of stylesheet paths.
+		<li><del>RestResource.stylesheet()</del> can now take in a comma-delimited list of stylesheet paths.
 		<li><del>StreamResource</del> can now contain multiple sources from a variety of source types (e.g. <c><jk>byte</jk>[]</c> arrays, <c>InputStreams</c>, <c>Files</c>, etc...)
-			and is now immutable.  It also includes a new <del>StreamResourceBuilder</del> class.
+			and is now immutable.  It also includes a new <del>StreamResourceBuilder</del>class.
 		<li>Simplified remoteable proxies using the <c><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</c> annotation on REST methods.
 			Used to expose interface proxies without the need for <del>RemoteableServlet</del>.
 		<p class='bcode'>
@@ -32702,10 +32702,10 @@
 		RestClient client = RestClient.<jsm>create</jsm>().rootUrl(<jf>samplesUrl</jf>).build();			
 		IAddressBook ab = client.getRemoteableProxy(IAddressBook.<jk>class</jk>, <js>"/addressBook/myproxy"</js>);
 		</p>
-			See <del>RestMethod#name() @RestMethod(name)</del> for more information.
+			See <del>RestMethod.name() @RestMethod(name)</del>for more information.
 		<li>{@link org.apache.juneau.rest.RestRequest#toString()} can be called at any time to view the headers and content of the request
 			without affecting functionality.  Very useful for debugging.
-		<li><del>RestMethod#name() @RestMethod(name)</del> annotation is now optional.  Defaults to <js>"GET"</js>.
+		<li><del>RestMethod.name() @RestMethod(name)</del>annotation is now optional.  Defaults to <js>"GET"</js>.
 	</ul>
 	
 	<h5 class='topic w800'>org.apache.juneau.rest.client</h5>
@@ -32715,10 +32715,10 @@
 		<li>The <c>RestClient</c> class <c>doX(Object url)</c> methods now handle HttpClient <c>URIBuilder</c> instances.
 		<li>New methods added/updated to {@link org.apache.juneau.rest.client.RestClient}:
 		<ul>
-			<li><del>RestClient#getRemoteableProxy(Class,Object)</del> - For interface proxies defined using <c><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</c>.
-			<li><del>RestClient#getRemoteableProxy(Class,Object,Serializer,Parser)</del> - Same as above but overrides the serializer and parser defined on the client.
+			<li><del>RestClient.getRemoteableProxy(Class,Object)</del>- For interface proxies defined using <c><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</c>.
+			<li><del>RestClient.getRemoteableProxy(Class,Object,Serializer,Parser)</del>- Same as above but overrides the serializer and parser defined on the client.
 			<li><del>RestClient#doPost(Object)</del>
-			<li><del>RestClient#doCall(HttpMethod,Object,Object)</del> - Can now pass in instances of <del>NameValuePairs</del> for easy form posts.
+			<li><del>RestClient.doCall(HttpMethod,Object,Object)</del> - Can now pass in instances of <del>NameValuePairs</del>for easy form posts.
 				<br>This extends to all methods that take in the input.
 		</ul>
 		<li>New methods on <del>RestCall</del>:
@@ -32762,10 +32762,10 @@
 				<li><del>RestCall#getResponseFuture(Class) getResponseFuture(Class)</del>
 				<li>{@del org.apache.juneau.rest.client.RestCall#getResponseFuture(Type,Type...) getResponseFuture(Type,Type...)}
 				<li><del>RestCall#getResponseAsStringFuture() getResponseAsStringFuture()</del>
-				<li><del>RestCall#serializer(Serializer) serializer(Serializer)</del> - Override the serializer defined on the client for a single call.
-				<li><del>RestCall#parser(Parser) parser(Parser)</del> - Override the parser defined on the client for a single call.
-				<li><del>input(Object)</del> - Now accepts instances of <del>NameValuePairs</del>.
-				<li><del>RestCall#getResponse(Class) getResponse(Class)</del> - Can now pass in any of the following:
+				<li><del>RestCall.serializer(Serializer) serializer(Serializer)</del>- Override the serializer defined on the client for a single call.
+				<li><del>RestCall.parser(Parser) parser(Parser)</del> - Override the parser defined on the client for a single call.
+				<li><del>input(Object)</del>- Now accepts instances of <del>NameValuePairs</del>.
+				<li><del>RestCall.getResponse(Class) getResponse(Class)</del>- Can now pass in any of the following:
 					<ul>
 						<li>{@link org.apache.http.HttpResponse} - Returns the raw <c>HttpResponse</c> returned by the inner <c>HttpClient</c>.
 						<li>{@link java.io.Reader} - Returns access to the raw reader of the response.
@@ -32774,12 +32774,12 @@
 			</ul>
 		<li>New methods added to <del>NameValuePairs</del>:
 			<ul>
-				<li><del>NameValuePairs#append(String,Object) append(String,Object)</del>
+				<li><del>NameValuePairs.append(String,Object) append(String,Object)</del>
 				<li><del>append(String,Object,PartSerializer)</del>
 			</ul>
-		<li><del>RetryOn</del> is now an abstract class with an additional method:
+		<li><del>RetryOn</del>is now an abstract class with an additional method:
 			<ul>
-				<li><del>RetryOn#onResponse(HttpResponse) onResponse(HttpResponse)</del>
+				<li><del>RetryOn.onResponse(HttpResponse) onResponse(HttpResponse)</del>
 			</ul>			
 	</ul>
 	
@@ -32787,7 +32787,7 @@
 	<ul class='spaced-list'>
 		<li><js>"REST/port"</js> configuration setting can now be a comma-limited list of port numbers to try.
 			<br>You can also specify one or more <c>0</c>s to try a random port.
-		<li>Methods added to <del>RestMicroservice</del> class:
+		<li>Methods added to <del>RestMicroservice</del>class:
 		<ul>
 			<li><del>getPort()</del>
 			<li><del>getURI()</del>
@@ -32839,10 +32839,10 @@
 				<li>{@del ConfigFile#getObjectWithDefault(String,Object,Type,Type...)}
 				<li>{@del ConfigFile#getObjectWithDefault(String,Parser,Object,Type,Type...)}
 				<li><del>ConfigFile#getObjectWithDefault(String,Object,Class)</del>
-				<li><del>ConfigFile#getObjectWithDefault(String,Parser,Object,Class)</del> 
+				<li><del>ConfigFile.getObjectWithDefault(String,Parser,Object,Class)</del>
 			</ul>
-		<li>New ability to interact with config file sections with proxy interfaces with new method <del>ConfigFile#getSectionAsInterface(String,Class)</del>.
-		<li><del>@BeanProperty</del> annotation can now be applied to getters
+		<li>New ability to interact with config file sections with proxy interfaces with new method <del>ConfigFile.getSectionAsInterface(String,Class)</del>.
+		<li><del>@BeanProperty</del>annotation can now be applied to getters
 			and setters defined on interfaces.
 		<li>New methods on {@link org.apache.juneau.serializer.SerializerSession} and {@link org.apache.juneau.parser.ParserSession}
 			for retrieving context and runtime-override properties:
@@ -32850,9 +32850,9 @@
 				<li><del>Session#getProperty(String)</del>
 				<li><del>Session#getProperty(String,String)</del>
 				<li><del>Session#getProperty(Class,String)</del>
-				<li><del>Session#getProperty(Class,String,Object)</del>
+				<li><del>Session.getProperty(Class,String,Object)</del>
 			</ul>	
-		<li>New <del>PartSerializer</del> interface particularly tailored to HTTP
+		<li>New <del>PartSerializer</del>interface particularly tailored to HTTP
 			headers, query parameters, form-data parameters, and path variables.  
 			<br>Allows easy user-defined serialization of these objects.
 			<br>The interface can be used in the following locations:
@@ -32921,10 +32921,10 @@
 				<li>{@link org.apache.juneau.parser.Parser.Builder#listener(Class)}
 				<li><del>@RestResource(parserListener)</del>
 				<li><del>RestConfig#parserListener(Class)</del>
-				<li><del>Builder#listeners(Class,Class)</del>
+				<li><del>Builder.listeners(Class,Class)</del>
 			</ul>juneau-examples-core.import1.pngjuneau-examples-core.import1.png
-		<li>The <del>BEAN_debug</del> flag will now capture parser input and make it
-			available through the <del>ParserSession#getInputAsString()</del> method so that it can be used
+		<li>The <del>BEAN_debug</del>flag will now capture parser input and make it
+			available through the <del>ParserSession.getInputAsString()</del>method so that it can be used
 			in the listeners.
 		<li>Significant new functionality introduced to the HTML serializer.  
 			<br>Lots of new options for customizing the HTML output.
@@ -32969,11 +32969,11 @@
 			The {@link org.apache.juneau.rest.RestRequest} class functionality has been broken up into the following
 			functional pieces to reduce its complexity:
 			<ul>
-				<li><del>RestRequest#getBody()</del> - The request body.
+				<li><del>RestRequest.getBody()</del>- The request body.
 				<li>{@link org.apache.juneau.rest.RestRequest#getHeaders()} - The request headers.
-				<li><del>RestRequest#getQuery()</del> - The request query parameters.
-				<li><del>RestRequest#getFormData()</del> - The request form data parameters.
-				<li><del>RestRequest#getPathMatch()</del> - The path variables and remainder.
+				<li><del>RestRequest.getQuery()</del>- The request query parameters.
+				<li><del>RestRequest.getFormData()</del>- The request form data parameters.
+				<li><del>RestRequest.getPathMatch()</del> - The path variables and remainder.
 			</ul>	
 			The following classes have been introduced:
 			<ul>
@@ -33043,7 +33043,7 @@
 				<li>{@link org.apache.juneau.rest.RestContext} - The resource read-only context.
 				<li>{@link org.apache.juneau.parser.Parser} - The parser matching the request content type.
 				<li>{@link org.apache.juneau.dto.swagger.Swagger} - The auto-generated Swagger doc.
-				<li><del>ConfigFile</del> - The external config file for the resource.
+				<li><del>ConfigFile</del>- The external config file for the resource.
 			</ul>
 			So, for example...
 			<p class='bcode'>
@@ -33081,7 +33081,7 @@
 			New annotations added to <del>RestMethod @RestMethod</del>:
 			<ul>
 				<li><del>RestMethod#defaultQuery() defaultQuery()</del>
-				<li><del>RestMethod#defaultFormData() defaultFormData()</del>
+				<li><del>RestMethod.defaultFormData() defaultFormData()</del>
 				<li><del>bpIncludes()</del>
 				<li><del>bpExcludes()</del>
 			</ul>
@@ -33090,7 +33090,7 @@
 			<ul>
 				<li><del>@Header(def)</del> - Default header value.
 				<li><del>@Query(def)</del> - Default query parameter value.
-				<li><del>@FormData(def)</del> - Default form data parameter value.
+				<li><del>@FormData(def)</del>- Default form data parameter value.
 			</ul>
 		<li>
 			New attributes on <del>@RestResource</del>:
@@ -33106,13 +33106,13 @@
 			<ul>
 				<li><del>widgets()</del>
 				<li><del>RestMethod#swagger() swagger()</del>
-				<li><del>RestMethod#htmldoc() htmldoc()</del>
+				<li><del>RestMethod.htmldoc() htmldoc()</del>
 			</ul>
 		<li>
 			New string vars:
 			<ul>
 				<li>{@link org.apache.juneau.rest.vars.UrlVar} - Resolve <js>"$U{...}"</js> variables to URLs.
-				<li><del>WidgetVar</del> - Resolve <js>"$W{...}"</js> variables to widget contents.
+				<li><del>WidgetVar</del>- Resolve <js>"$W{...}"</js> variables to widget contents.
 			</ul>
 		<li>
 			New methods on <del>RestConfig</del>:
@@ -33225,7 +33225,7 @@
 		<li>
 			{@link org.apache.juneau.utils.PojoQuery} improvements.
 		<li>
-			New <del>RemoteMethod#returns()</del> annotation.
+			New <del>RemoteMethod.returns()</del> annotation.
 			<br>Allows you to specify whether the remote method returns the HTTP body or status code.
 		<li>
 			Fixed bugs with <del>BEAN_includeProperties</del> and <del>BEAN_excludeProperties</del> settings.
@@ -33237,7 +33237,7 @@
 				<li><del>HTMLDOC_stylesheet</del> - Was <jsf>HTMLDOC_cssUrl</jsf>.  Now an array.
 			</ul>
 		<li>
-			New <del>ResourceFinder</del> utility class.
+			New <del>ResourceFinder</del>utility class.
 			Allows you to search for resources up the parent hierarchy chain.
 			Also allows you to search for localized resources.
 		<li>
@@ -33265,7 +33265,7 @@
 		<li>
 			Modifications to the following <ja>@HtmlDoc</ja> annotations:
 			<ul>
-				<li><del>HtmlDoc#navlinks() navlinks()</del> - Now an array of strings instead of a JSON object.  Simplified syntax.
+				<li><del>HtmlDoc.navlinks() navlinks()</del>- Now an array of strings instead of a JSON object.  Simplified syntax.
 					<br>For example:
 					<p class='bcode'>
 		<jc>// Old syntax</jc>
@@ -33317,8 +33317,8 @@
 					</ul>
 				</li>
 				<li>
-					Declaration of widgets moved to <del>HtmlDoc#widgets() @HtmlDoc(widgets)</del> 
-					instead of separately on <del>@RestResource</del> and <ja>@RestMethod</ja> annotations.
+					Declaration of widgets moved to <del>HtmlDoc.widgets() @HtmlDoc(widgets)</del> 
+					instead of separately on <del>@RestResource</del>and <ja>@RestMethod</ja> annotations.
 				<li>
 					{@link org.apache.juneau.rest.widget.Widget#getName()} now defaults to the simple class name.
 					<br>So now you can just refer to the class name: <js>"$W{ContentTypeMenuItem}"</js>.
@@ -33347,14 +33347,14 @@
 		<li>
 			New/modified annotations on <del>HtmlDoc @HtmlDoc</del>:
 			<ul>
-				<li><del>HtmlDoc#style() style()</del> - Renamed from <c>css()</c>.
-				<li><del>HtmlDoc#stylesheet() stylesheet()</del> - Renamed from <c>cssUrl()</c>.
+				<li><del>HtmlDoc.style() style()</del>- Renamed from <c>css()</c>.
+				<li><del>HtmlDoc.stylesheet() stylesheet()</del>- Renamed from <c>cssUrl()</c>.
 					<br>Can now be a comma-delimited list of URLs.
-				<li><del>HtmlDoc#script() script()</del> - Add arbitrary Javascript to page header.
+				<li><del>HtmlDoc.script() script()</del>- Add arbitrary Javascript to page header.
 			</ul>
 	
 		<li>
-			Bug fix with <del>HtmlDoc#nowrap() @HtmlDoc(nowrap)</del> so that the setting only applies
+			Bug fix with <del>HtmlDoc.nowrap() @HtmlDoc(nowrap)</del>so that the setting only applies
 			to the data contents, not the whole page.
 		<li>
 			Two convenience methods added to {@link org.apache.juneau.rest.RestRequest}:
@@ -33368,20 +33368,20 @@
 			<ul>
 				<li><del>@RestResource(siteName)</del>
 				<li><del>@RestResource(flags)</del>
-				<li><del>RestMethod#flags() @RestMethod(flags)</del>
+				<li><del>RestMethod.flags() @RestMethod(flags)</del>
 			</ul>
 		</li>
 		<li>
-			Eliminated the <del>@RestResource(stylesheet)</del> annotation.  
+			Eliminated the <del>@RestResource(stylesheet)</del>annotation.  
 			It's no longer needed now that you can easily specify styles via <ja>@Htmldoc</ja>.
 		<li>
-			Eliminated the following annotations since they are now redundant with <del>HtmlDoc#header() @HtmlDoc(header)</del>:
+			Eliminated the following annotations since they are now redundant with <del>HtmlDoc.header() @HtmlDoc(header)</del>:
 			<ul>
 				<li><c>title()</c>
 				<li><c>description()</c>
 				<li><c>branding()</c>
 			</ul>
-			Instead, the <del>BasicRestServlet</del> class defines the following default header
+			Instead, the <del>BasicRestServlet</del>class defines the following default header
 			that can be easily overridden: 
 			<p class='bcode'>
 		htmldoc=<ja>@HtmlDoc</ja>(
@@ -33405,13 +33405,13 @@
 		)
 			</p>
 		<li>
-			New <del>ReaderResource#toCommentStrippedString()</del> method.
+			New <del>ReaderResource.toCommentStrippedString()</del>method.
 		<li>
 			The <c>bpIncludes()</c> and <c>bpExcludes()</c> annotations on <ja>@RestMethod</ja>
 			has been replaced with the following:
 			<ul>
-				<li><del>RestMethod#bpi() bpi()</del> - Now an array of simplified values instead of LAX JSON.
-				<li><del>RestMethod#bpx() bpx()</del> - Now an array of simplified values instead of LAX JSON.
+				<li><del>RestMethod.bpi() bpi()</del>- Now an array of simplified values instead of LAX JSON.
+				<li><del>RestMethod.bpx() bpx()</del>- Now an array of simplified values instead of LAX JSON.
 			</ul>
 		<li>
 			Two new variables added to <c>$R</c> variable: <js>"$R{servletClass}"</js>, <js>"$R{servletClassSimple}"</js>
@@ -33727,10 +33727,10 @@
 			</p>
 			This is mostly an internal change and doesn't affect the existing APIs.
 		<li>
-			<del>PojoSwap#swap(BeanSession,Object)</del> and <del>PojoSwap#unswap(BeanSession,Object,ClassMeta)</del> 
+			<del>PojoSwap.swap(BeanSession,Object)</del>and <del>PojoSwap.unswap(BeanSession,Object,ClassMeta)</del> 
 			can now throw arbitrary exceptions instead of having to wrap them in <c>SerializeException</c>/<c>ParseException</c>.
 		<li>
-			New <del>CalendarUtils</del> class that encapsulates serialization/parsing logic from <del>CalendarSwap</del> and 
+			New <del>CalendarUtils</del> class that encapsulates serialization/parsing logic from <del>CalendarSwap</del>and 
 			<del>DateSwap</del>.
 		<li>
 			New annotation {@link org.apache.juneau.html.annotation.Html#anchorText}.
@@ -33784,7 +33784,7 @@
 	<h5 class='topic w800'>juneau-dto</h5>
 	<ul class='spaced-list'>
 		<li>
-			{@link org.apache.juneau.dto.html5.HtmlElementMixed#children(Object...)} can now take in collections
+			{@link org.apache.juneau.dto.html5.HtmlElementMixed.children(Object...)} can now take in collections
 			of objects.
 		<li>
 			The DTO beans can now be serialized to strings of their typical language by calling the <c>toString()</c> method.
@@ -33797,9 +33797,9 @@
 	<ul class='spaced-list'>
 		<li>
 			Revamped and simplified servlet and REST-call lifecycle handling through new
-			<del>@RestHook</del> annotation.
+			<del>@RestHook</del>annotation.
 			<ul>
-				<li>The <del>RestServlet#init(ServletConfig)</del> method is now final and can
+				<li>The <del>RestServlet.init(ServletConfig)</del>method is now final and can
 					no longer be extended.
 					<br>Instead, use {@link org.apache.juneau.rest.annotation.HookEvent#INIT} or 
 					{@link org.apache.juneau.rest.annotation.HookEvent#POST_INIT} for initialization.
@@ -33819,7 +33819,7 @@
 			Simplified {@link org.apache.juneau.rest.widget.MenuItemWidget}.
 			<br>Exposes an abstract method <del>getContent(RestRequest)</del> that
 			can return raw HTML via readers or char-sequences, or any other object (such as HTML5 beans) that will
-			get converted to HTML using {@link org.apache.juneau.html.HtmlSerializer#DEFAULT}.
+			get converted to HTML using {@link org.apache.juneau.html.HtmlSerializer.DEFAULT}.
 		<li>
 			<del>RestResourceResolver</del> instances are now inherited from parent resources to child resources
 			unless explicitly overridden at the child level.
@@ -33843,14 +33843,14 @@
 					<br>Replaces the <c>RestContext.REST_useStackTraceHashes</c> setting.
 				<li><del>defaultCharset()</del> - 
 					<br>Replaces the <c>RestContext.REST_defaultCharset</c> setting.
-				<li><del>paramFormat()</del> - 
+				<li><del>paramFormat()</del>- 
 					<br>Replaces the <c>RestContext.REST_paramFormat</c> setting.
 			</ul>
 		<li>New annotations on <del>RestMethod @RestMethod</del>:
 			<ul>
-				<li><del>RestMethod#defaultCharset() defaultCharset()</del> - 
+				<li><del>RestMethod.defaultCharset() defaultCharset()</del>- 
 					<br>Replaces the <c>RestContext.REST_defaultCharset</c> setting.
-				<li><del>RestMethod#paramFormat()</del> - 
+				<li><del>RestMethod.paramFormat()</del>- 
 					<br>Replaces the <c>RestContext.REST_paramFormat</c> setting.
 			</ul>
 		<li>
@@ -33903,13 +33903,13 @@
 		<li>
 			New methods on {@link org.apache.juneau.microservice.Microservice}:
 			<ul>
-				<li>{@link org.apache.juneau.microservice.Microservice#getInstance() getInstance()}
+				<li>{@link org.apache.juneau.microservice.Microservice.getInstance() getInstance()}
 			</ul>
 		<li>
 			New class <del>JettyLogger</del> for directing Jetty logging to the
 			java.util.logging framework.
 		<li>
-			New class <del>DebugResource</del> for viewing and generating
+			New class <del>DebugResource</del>for viewing and generating
 			Jetty thread dumps through REST calls.
 	</ul>
 	
@@ -33949,7 +33949,7 @@
 		<li>
 			Annotation <c><ja>@HtmlDoc</ja>(links)</c> renamed to <del>HtmlDoc#navlinks() navlinks</del>.
 		<li>
-			New annotation <del>HtmlDoc#head() @HtmlDoc(head)</del>.
+			New annotation <del>HtmlDoc.head() @HtmlDoc(head)</del>.
 			<br>Allows you to specify arbitrary HTML content in the <xt>&lt;head&gt;</xt> section of the page.
 		<li>
 			Removed annotation <c><ja>@HtmlDoc</ja>(favIcon)</c>.
@@ -33962,7 +33962,7 @@
 			</p>
 		<li>
 			Removed several of the HTMLDOC-related methods from the <c>RestResponse/RestConfig/RestContext</c>
-			classes and moved it into the new <del>HtmlDocBuilder</del> class.
+			classes and moved it into the new <del>HtmlDocBuilder</del>class.
 	</ul>
 </div>
 </div><!-- END: 7.0.0 -->
@@ -34021,7 +34021,7 @@
 	<ul class='spaced-list'>
 		<li>
 			New <del>@RestResource(maxInput)</del> and 
-			<del>RestMethod#maxInput() @RestMethod(maxInput)</del> for alleviating
+			<del>RestMethod.maxInput() @RestMethod(maxInput)</del>for alleviating
 			potential DoS attacks.
 	</ul>
 	
@@ -34234,20 +34234,20 @@
 				<li>{@link org.apache.juneau.parser.ParserSession#getListener(Class) getListener(Class)}
 			</ul>
 		<li>
-			New <del>Parser#PARSER_unbuffered</del> setting allows you to disable internal
+			New <del>Parser.PARSER_unbuffered</del>setting allows you to disable internal
 			buffering on the JSON and UON parsers so that they can be used to read continous streams of objects.
 		<li>
-			New <del>JsonParser#JSON_validateEnd</del> and <del>UonParser#UON_validateEnd</del> 
+			New <del>JsonParser.JSON_validateEnd</del>and <del>UonParser.UON_validateEnd</del>
 			settings allow you to control whether we validate that there is no garbage at the end of the parsed input.
 		<li>
-			New <del>Parser#PARSER_autoCloseStreams</del> setting allows input streams and
+			New <del>Parser.PARSER_autoCloseStreams</del> setting allows input streams and
 			readers passed into parsers to be automatically closed after parsing.
 		<li>
 			Syntax changed on unswap method on <del>Surrogate</del> classes.
 			<br>It's now a regular method instead of a static method.
 		<li>
 			{@link org.apache.juneau.annotation.Swap @Swap} annotation can now be used with 
-			<del>Surrogate</del> classes.
+			<del>Surrogate</del>classes.
 		<li>
 			New support for <del>PojoBuilders POJO Builders</del>.	
 	</ul>
@@ -34383,12 +34383,12 @@
 				<li><del>RestContext#REST_classpathResourceFinder</del>
 				<li><del>RestContext#REST_useClasspathResourceCaching</del>
 				<li><del>RestContext#REST_widgets</del>
-				<li><del>RestContext#REST_mimeTypes</del>
+				<li><del>RestContext.REST_mimeTypes</del>
 			</ul>
 		<li>
 			Support for static files has been simplified and improved.
 			<ul>
-				<li>Syntax on <del>@RestResource(staticFiles)</del> has been simplified, and
+				<li>Syntax on <del>@RestResource(staticFiles)</del>has been simplified, and
 					now allows you to specify response headers in the strings.
 				<li>Response headers for static files can also be configured through 
 					<del>RestContext#REST_staticFileResponseHeaders</del>
@@ -34402,26 +34402,26 @@
 			<br>You can now simply create a {@link org.apache.juneau.rest.RestMatcher} that has a public constructor that 
 			takes in the server and method arguments.
 		<li>
-			<del>@RestResource#allowMethodParam</del> renamed to <del>RestResource#allowedMethodParams</del>.
+			<del>@RestResource.allowMethodParam</del>renamed to <del>RestResource#allowedMethodParams</del>.
 		<li>
 			<c>@RestMethod.serializersInherit</c> and <c>@RestMethod.parsersInherit</c> replaced with
 			simplified <del>@RestMethod(inherit)</del>. 
 		<li>
 			Changes to <del>RequestFormData</del>:
 			<ul>
-				<li><del>RequestFormData#addDefault(Map) addDefault(Map)</del> takes in a 
+				<li><del>RequestFormData.addDefault(Map) addDefault(Map)</del>takes in a 
 					<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
 			</ul>
 		<li>
 			Changes to <del>RequestHeaders</del>:
 			<ul>
-				<li><del>RequestHeaders#addDefault(Map) addDefault(Map)</del> takes in a 
+				<li><del>RequestHeaders.addDefault(Map) addDefault(Map)</del>takes in a 
 					<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
 			</ul>
 		<li>
 			Changes to <del>RequestQuery</del>:
 			<ul>
-				<li><del>RequestQuery#addDefault(Map) addDefault(Map)</del> takes in a 
+				<li><del>RequestQuery.addDefault(Map) addDefault(Map)</del>takes in a 
 					<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
 			</ul>
 		<li>
@@ -34433,17 +34433,17 @@
 				<li>New method <del>getClasspathResource(Class,String,Locale)</del>.
 				<li>New method <del>getClasspathResourceAsString(Class,String,Locale)</del>.
 				<li>New method <del>getClasspathResource(Class,Class,MediaType,String,Locale)</del>.
-				<li><del>RestContext#getDefaultRequestHeaders()</del> returns a 
+				<li><del>RestContext.getDefaultRequestHeaders()</del>returns a 
 					<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
-				<li><del>RestContext#getDefaultResponseHeaders()</del> returns a 
+				<li><del>RestContext.getDefaultResponseHeaders()</del>returns a 
 					<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
 			</ul>
 		<li>
 			Changes to {@link org.apache.juneau.rest.RestRequest}:
 			<ul>	
 				<li><c>getSupportedMediaTypes()</c> replaced with
-					<del>RestRequest#getConsumes() getConsumes()</del> and
-					<del>RestRequest#getProduces() getProduces()</del>.
+					<del>RestRequest.getConsumes() getConsumes()</del>and
+					<del>RestRequest.getProduces() getProduces()</del>.
 				<li><c>getReaderResource(String,boolean,MediaType)</c> renamed to 
 					<del>getClasspathReaderResource(String,boolean,MediaType)</del>
 				<li><c>getReaderResource(String,boolean)</c> renamed to 
@@ -34454,13 +34454,13 @@
 		<li>
 			Changes to <del>@RestResource</del>
 			<ul>
-				<li>New <del>mimeTypes()</del> annotation.
+				<li>New <del>mimeTypes()</del>annotation.
 			</ul>
 		<li>
 			Changes to <del>RestMethod @RestMethod</del>:
 			<ul>
-				<li>New <del>RestMethod#consumes() consumes()</del> and
-					<del>RestMethod#produces() produces()</del>
+				<li>New <del>RestMethod.consumes() consumes()</del>and
+					<del>RestMethod.produces() produces()</del>
 					for overriding the supported media types inferred from the serializers and parsers.
 			</ul>
 		<li>
@@ -34487,7 +34487,7 @@
 			<br>These aren't needed anymore since you can just pass in <c>MessageBundle</c> and
 			<c>RestRequestProperties</c> as unannotated parameters.
 		<li>
-			Revamped the <del>RestInfoProvider</del> class.
+			Revamped the <del>RestInfoProvider</del>class.
 		<li>
 			New builder classes:
 			<ul>
@@ -34495,8 +34495,8 @@
 				<li><del>StreamResourceBuilder</del>
 			</ul>
 		<li>
-			{@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()} now returns a 
-			<del>FinishableServletOutputStream</del> and {@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}
+			{@link org.apache.juneau.rest.RestResponse.getNegotiatedOutputStream()} now returns a 
+			<del>FinishableServletOutputStream</del>and {@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}
 			now returns a <del>FinishablePrintWriter</del> that allows you to finish the output
 			without closing the stream.
 			<br>The <del>DefaultHandler</del> class now calls <c>finish()</c>
@@ -34523,18 +34523,18 @@
 	<h5 class='topic w800'>juneau-rest-client</h5>
 	<ul class='spaced-list'>
 		<li>
-			New configuration property <del>RestClient#RESTCLIENT_query</del> and
-			builder method <del>Builder#query(String,Object)</del>.
+			New configuration property <del>RestClient.RESTCLIENT_query</del>and
+			builder method <del>Builder.query(String,Object)</del>.
 		<li>
 			API changes to replace <c>PartSerializer</c> with {@link org.apache.juneau.httppart.HttpPartSerializer}.
 			<br>The default value is now <del>SimpleUonPartSerializer</del> which will
 			serialize strings as plain-text and collections/arrays as comma-delimited lists.
 			<br>We decided to change the default behavior in favor of practicality over purity.
 		<li>
-			New methods on <del>RestCall</del> class:
+			New methods on <del>RestCall</del>class:
 			<ul>
 				<li><del>RestCall#getResponseHeader(String) getResponseHeader(String)</del>
-				<li><del>RestCall#getResponseCode() getResponseCode()</del>
+				<li><del>RestCall.getResponseCode() getResponseCode()</del>
 			</ul>
 		<li>
 			<del>RestCall</del> and {@link org.apache.juneau.rest.client.RestClient}
@@ -34548,7 +34548,7 @@
 			<br><del>BasicRestServlet</del> and <del>BasicRestServletGroup</del> can be used instead.
 		<li>
 			<c>ResourceJena</c> and <c>ResourceJenaGroup</c> classes renamed to
-			<del>BasicRestServletJena</del> and <del>BasicRestServletJenaGroup</del>.
+			<del>BasicRestServletJena</del>and <del>BasicRestServletJenaGroup</del>.
 	</ul>
 </div>
 </div><!-- END: 7.1.0 -->
@@ -34621,13 +34621,13 @@
 		<li>
 			Support for POJO examples:
 			<ul class='doctree'>
-				<li class='jf'><del>BeanContext#BEAN_examples</del>
+				<li class='jf'><del>BeanContext.BEAN_examples</del>
 				<li class='ja'>{@link org.apache.juneau.annotation.Example}
 			</ul>
 		<li>
 			Fixed bug where parsers could report the wrong line number when an error occurred.
 		<li>
-			A runtime exception is now thrown if you define a <del>@BeanProperty(name)</del> but forget to
+			A runtime exception is now thrown if you define a <del>@BeanProperty(name)</del>but forget to
 			add it to your <c><ja>@Bean</ja>(properties)</c> annotation.
 		<li>
 			<c><ja>@Html</ja>(asXml)</c> and <c><ja>@Html</ja>(asPlainText)</c> replaced with
@@ -34676,12 +34676,12 @@
 		---end---
 			</p>
 		<li>
-			New property <del>Parser#PARSER_debugOutputLines</del> for controlling how many input lines are added to the exception message above.
+			New property <del>Parser.PARSER_debugOutputLines</del>for controlling how many input lines are added to the exception message above.
 		<li>
-			New property <del>BeanContext#BEAN_useEnumNames</del> for controlling whether enums are serialized
+			New property <del>BeanContext.BEAN_useEnumNames</del>for controlling whether enums are serialized
 			using their name or the <c>toString()</c> method.
 		<li>
-			New property <del>BeanContext#BEAN_examples</del> for defining examples of POJOs.
+			New property <del>BeanContext.BEAN_examples</del> for defining examples of POJOs.
 		<li>
 			New {@link org.apache.juneau.annotation.Example @Example} annotation for defining examples of POJOs.
 			<br>Used heavily in JSON-Schema support.
@@ -34691,7 +34691,7 @@
 		<li>
 			Significant improvements to JSON-Schema serialization support.
 			<ul>
-				<li>New <del>@JsonSchema</del> annotation.
+				<li>New <del>@JsonSchema</del>annotation.
 			</ul>
 		<li>
 			Fixed <c>NullPointerException</c> when serializing beans with a dyna-property (i.e. <c><ja>@Bean</ja>(<js>"*"</js>)</c>)
@@ -34702,15 +34702,15 @@
 		<li>
 			New formats for the {@link org.apache.juneau.html.annotation.Html#format() @Html(format)} annotation:
 			<ul class='doctree'>
-				<li class='jf'><del>HtmlFormat#HTML_CDC</del> - Format collections as comma-delimited lists.
-				<li class='jf'><del>HtmlFormat#HTML_SDC</del> - Format collections as space-delimited lists.
+				<li class='jf'><del>HtmlFormat.HTML_CDC</del>- Format collections as comma-delimited lists.
+				<li class='jf'><del>HtmlFormat.HTML_SDC</del> - Format collections as space-delimited lists.
 			</ul> 
 		<li>
 			Serializers now allow for q-values on the media types they handle.
 			<br>For example, the accept media type on <c>JsonSerializer.Simple</c> is <js>"application/json+simple,application/json;q=0.9"</js>.
 			<br>This means the serializer CAN handle requests for <js>"application/json"</js> if no other serializers provide a better match.
 		<li>
-			New methods for creating unmodifiable <del>ObjectMap ObjectMaps</del> and <del>ObjectList ObjectLists</del>.
+			New methods for creating unmodifiable <del>ObjectMap ObjectMaps</del>and <del>ObjectList ObjectLists</del>.
 			<ul class='doctree'>
 				<li class='jc'><del>ObjectMap</del>
 				<ul>
@@ -34802,7 +34802,7 @@
 			Auto-generated <del>RestSwagger Swagger UI</del>.
 		<li>
 			Simplified <del>@RestResource(swagger)</del>
-			and <del>RestMethod#swagger() @RestMethod(swagger)</del> annotations.
+			and <del>RestMethod.swagger() @RestMethod(swagger)</del> annotations.
 		<li>
 			Fixed bug in <c>UriResolver</c> when request path info had special characters.
 		<li>
@@ -34810,7 +34810,7 @@
 		<li>
 			The <c>RemoteableServlet</c> class has been moved and renamed to <del>RemoteInterfaceServlet</del>.
 		<li>
-			<del>RemoteInterfaceServlet</del> now provides a form page for invoking remote interface methods in a browser.
+			<del>RemoteInterfaceServlet</del>now provides a form page for invoking remote interface methods in a browser.
 		<li>
 			Newlines were being stripped from <c><ja>@HtmlDoc</ja>(script)</c> when serialized which could cause script lines to become commented out.
 		<li>
@@ -34914,7 +34914,7 @@
 				</ul>
 			</ul>	
 		<li>
-			The <del>HtmlDoc#nav() @HtmlDoc(nav)</del> and <del>HtmlDoc#navlinks() @HtmlDoc(navlinks)</del>
+			The <del>HtmlDoc.nav() @HtmlDoc(nav)</del>and <del>HtmlDoc#navlinks() @HtmlDoc(navlinks)</del>
 			can now both be used on the same annotation.
 			<br>The contents of <c>nav()</c> are free-form HTML that gets rendered immediately after the navigation links.
 		<li>
@@ -34939,7 +34939,7 @@
 			<br>It should be noted that you cannot use the <c>$F</c> variable to retrieve localized versions of files (since you're not within
 			the scope of a client request.
 		<li>
-			The <del>RestResource#nowrap()</del> annotation has been changed to a string with a default value of <js>"true"</js>.
+			The <del>RestResource.nowrap()</del>annotation has been changed to a string with a default value of <js>"true"</js>.
 			<br>Having it as a string allows us to differentiate between a set and unset value so that it can be overridden in subclasses.
 		<li>
 			The {@link org.apache.juneau.http.annotation.Path#name()} annotation parameter is now required.
@@ -34998,7 +34998,7 @@
 			New/updated documentation: 
 			<br><dc>juneau-rest-server.UnitTesting</dc>
 		<li>
-			The behavior of the default values for <del>RestMethod#name()</del> and <del>RestMethod#path()</del>
+			The behavior of the default values for <del>RestMethod.name()</del>and <del>RestMethod#path()</del>
 			have changed.
 			<br>If not specified, the values are inferred from the Java method name.
 			<br>See Also: <del>RestMethod</del>
@@ -35080,7 +35080,7 @@
 			Removed the deprecated <c>RestCall.execute()</c> method.
 			<br>Use <del>RestCall#run()</del>.
 		<li>
-			<c>RestCall.input(Object)</c> method renamed to <del>RestCall#body(Object)</del> to match OpenAPI terminology.
+			<c>RestCall.input(Object)</c> method renamed to <del>RestCall.body(Object)</del>to match OpenAPI terminology.
 		<li>
 			Made constructors on <c>RestClient</c> and <c>RestClient.Builder</c> protected so that they can be subclassed.
 		<li>
@@ -35489,14 +35489,14 @@
 		<li>
 			Support for import statements:
 			<p class='bcode'>
-		<cc># Import values from another configuration:</cc>
+		<cc>. Import values from another configuration:</cc>
 		<ci>&lt;ParentConfig1&gt;</ci>
 		
 		<cs>[Foo]</cs>
 		<ck>bar</ck> = <cv>baz</cv>
 			</p>
 		<li>
-			The <del>ConfigFileStore</del> now automatically resolves file extensions.
+			The <del>ConfigFileStore</del>now automatically resolves file extensions.
 			<br>New configuration property for specifying search paths for file extensions:
 			<ul class='javatree'>
 				<li class='jf'><del>ConfigFileStore#FILESTORE_extensions</del>
@@ -35609,7 +35609,7 @@
 				<li class='jc'>{@link org.apache.juneau.rest.RestRequest}
 				<ul>
 					<li class='jm'><del>RestRequest#getProperties() getProperties()</del>
-					<li class='jm'><del>RestRequest#prop(String,Object) prop(String,Object)</del>
+					<li class='jm'><del>RestRequest.prop(String,Object) prop(String,Object)</del>
 				</ul>
 			</ul>
 		<li>
@@ -35632,10 +35632,10 @@
 					<li class='jm'><del>roleGuard()</del>
 					<li class='jm'><del>rolesDeclared()</del>
 				</ul>
-				<li class='ja'><del>RestMethod</del> 
+				<li class='ja'><del>RestMethod</del>
 				<ul>
 					<li class='jm'><del>RestMethod#roleGuard roleGuard()</del>
-					<li class='jm'><del>RestMethod#rolesDeclared rolesDeclared()</del>
+					<li class='jm'><del>RestMethod.rolesDeclared rolesDeclared()</del>
 				</ul>
 			</ul>
 		<li>
@@ -35649,7 +35649,7 @@
 				</ul>
 			</ul>
 		<li>
-			The <del>@RestResource(path)</del> annotation can now use variables:
+			The <del>@RestResource(path)</del>annotation can now use variables:
 			<p class='bcode'>
 		<ja>@RestResource</ja>(
 			path=<js>"/myResource/{foo}/{bar}"</js>
@@ -35673,7 +35673,7 @@
 			<ul class='javatree'>
 				<li class='jc'><del>RestCallHandler</del>
 				<ul>
-					<li class='jm'><del>RestCallHandler#convertThrowable(Throwable) convertThrowable(Throwable)</del>
+					<li class='jm'><del>RestCallHandler.convertThrowable(Throwable) convertThrowable(Throwable)</del>
 				</ul>
 				<li class='jc'><del>BasicRestCallHandler</del>
 				<ul>
@@ -35708,7 +35708,7 @@
 			)
 			<jk>public</jk> String myMethod() <jk>throws</jk> Exception {...}
 			</p>		
-			See <del>RestLoggingAndDebugging</del> for details.
+			See <del>RestLoggingAndDebugging</del>for details.
 		<li>
 			Fixed a bug where the HTTP response was returning 405 (method not found) but should really be 404 (not found)
 			when no path patterns match on any of the Java methods.
@@ -35761,7 +35761,7 @@
 			Support for {@link java.util.Optional} on method parameters annotated with {@link org.apache.juneau.http.annotation.Header}, {@link org.apache.juneau.http.annotation.FormData},  
 			{@link org.apache.juneau.http.annotation.Query}, {@link org.apache.juneau.http.annotation.Path}.
 		<li>
-			Fixed issue where {@del org.apache.juneau.rest.annotation.RestMethod#debug() RestMethod.debug()} annotation wasn't resulting
+			Fixed issue where {@del org.apache.juneau.rest.annotation.RestMethod.debug() RestMethod.debug()} annotation wasn't resulting
 			in the HTTP request being logged.
 		<li>
 			<del>RestException</del> has been deprecated and replaced by <del>HttpException</del>.
@@ -35778,7 +35778,7 @@
 			The fix involves resolving the original bean class for resolving parameterized type while leaving
 			method invocation on the proxy method so as not to bypass Spring features.
 		<li>
-			New methods on <del>BasicRest</del> to provide feature-parity with <del>RestServlet</del>:
+			New methods on <del>BasicRest</del>to provide feature-parity with <del>RestServlet</del>:
 			<ul class='javatree'>
 				<li class='jc'><del>BasicRest</del>
 					<ul class='javatreec'>
@@ -35789,7 +35789,7 @@
 						<li class='jm'><del>BasicRest#log(String,Throwable) log(String,Throwable)</del>
 						<li class='jm'><del>BasicRest#log(Level,String,Object[]) log(Level,String,Object[])</del>
 						<li class='jm'><del>BasicRest#logObjects(Level,String,Object[])</del>
-						<li class='jm'><del>BasicRest#log(Level,Throwable,String,Object[]) log(Level,Throwable,String,Object[])</del>
+						<li class='jm'><del>BasicRest.log(Level,Throwable,String,Object[]) log(Level,Throwable,String,Object[])</del>
 					</ul>
 				</li>
 			</ul>
@@ -35800,7 +35800,7 @@
 		<ja>@RestResource</ja>(staticFiles=<js>"htdocs:/htdocsfolder,htdocs:htdocs.package"</js>)
 			</p>
 		<li>
-			Fixed a bug in <del>@RestResource(staticFiles)</del> where the order of lookup between parent and child resources
+			Fixed a bug in <del>@RestResource(staticFiles)</del>where the order of lookup between parent and child resources
 			was wrong.
 	</ul>
 	
@@ -35850,10 +35850,10 @@
 			New convenience methods:
 			<ul>	
 				<li class='jm'><del>ObjectMap#parse(CharSequence)</del>
-				<li class='jm'><del>ObjectList#parse(CharSequence)</del>
+				<li class='jm'><del>ObjectList.parse(CharSequence)</del>
 			</ul>
 		<li>
-			<del>CharMarshall</del> and {@link org.apache.juneau.marshall.StreamMarshall} now have public constructors.
+			<del>CharMarshall</del>and {@link org.apache.juneau.marshall.StreamMarshall} now have public constructors.
 		<li>
 			{@link org.apache.juneau.annotation.Beanp @Beanp} replaces <del>BeanProperty @BeanProperty</del>.
 		<li>
@@ -35869,7 +35869,7 @@
 		<li>
 			{@link org.apache.juneau.rest.annotation.Rest @Rest} replaces <del>RestResource @RestResource</del> with shorter syntax.
 		<li>
-			New method <del>RestResponse#setHeaderSafe(String,String)</del> to strip invalid characters from header values.
+			New method <del>RestResponse.setHeaderSafe(String,String)</del>to strip invalid characters from header values.
 		<li>
 			Fixed issues related to invalid characters being set on HTTP header values.
 	</ul>
@@ -35905,7 +35905,7 @@
 			<br>Old:  <js>"&lt;myBean&gt;&lt;null&gt;&lt;/myBean&gt;"</js>
 			<br>New:  <js>"&lt;myBean nil='true'&gt;&lt;/myBean&gt;"</js>
 		<li>
-			Configurable properties such as <del>Context#CONTEXT_debug</del> can now be set globally by either
+			Configurable properties such as <del>Context.CONTEXT_debug</del> can now be set globally by either
 			system properties or environment variables.
 			<br>For <jsf>CONTEXT_debug</jsf> you can use either the system
 			property <js>"Context.debug"</js> or environment variables <js>"CONTEXT_DEBUG"</js>.
@@ -35930,7 +35930,7 @@
 			Fixed an issue involving using Juneau REST with Spring Security.  When Spring Security cannot authenticate a 
 			request, it sets the URL on the request to <js>"/error"</js> with a 401 status.  When Juneau then processes
 			this request, it cannot find that mapping and changes the status to 404 which messes with HTTP clients.
-			<br>Solution was to add a default no-op error method to the <del>BasicRestConfig</del> (and implementers):
+			<br>Solution was to add a default no-op error method to the <del>BasicRestConfig</del>(and implementers):
 			<p class='bcode'>
 		<ja>@RestMethod</ja>(name=<js>"*"</js>, path=<js>"/error"</js>)
 		<jk>public void</jk> error() {}
@@ -36076,7 +36076,7 @@
 			</p>
 		<li>
 			Bean maps now have the concept of "hidden" properties (properties that aren't serialized but otherwise accessible).
-			<br>For example, the {@link org.apache.juneau.html.annotation.Html#link()} can now reference hidden properties:
+			<br>For example, the {@link org.apache.juneau.html.annotation.Html.link()} can now reference hidden properties:
 			<p class='bcode'>
 		<ja>@Bean</ja>(bpi=<js>"a"</js>) <jc>// Will be overridden</jc>
 		<jk>public class</jk> MyBean {
@@ -36098,7 +36098,7 @@
 			New swaps auto-added to all serializers/parsers:
 			<ul>
 				<li class='jc'><del>MatchResultSwap</del> 
-				<li class='jc'><del>StackTraceElementSwap</del> 
+				<li class='jc'><del>StackTraceElementSwap</del>
 			</ul>		
 		<li>
 			{@link org.apache.juneau.html.annotation.Html#noTableHeaders} now can be applied to collections of beans.
@@ -36148,7 +36148,7 @@
 				<li class='jm'><del>FormData#multi()</del>
 			</ul>
 		<li>
-			<del>BeanTraverseContext#BEANTRAVERSE_ignoreRecursions</del> setting no longer requires <del>BeanTraverseContext#BEANTRAVERSE_detectRecursions</del> 
+			<del>BeanTraverseContext.BEANTRAVERSE_ignoreRecursions</del>setting no longer requires <del>BeanTraverseContext.BEANTRAVERSE_detectRecursions</del>
 			to be enabled.
 		<li>
 			Fixed bug in JSON/UON/URL-Encoding serializers where indentation was not correct of first line when <del>BeanTraverseContext#BEANTRAVERSE_initialDepth</del>
@@ -36164,7 +36164,7 @@
 			Improvements to OpenAPI serializer and parser:
 			<ul>
 				<li>Collection format can now be specified on OBJECTs to allow key/value pairs to be delimited with the same support as ARRAYs.
-				<li>New <del>OpenApiCommon#OAPI_format OAPI_format</del> and <del>OpenApiCommon#OAPI_collectionFormat OAPI_collectionFormat</del> properties.
+				<li>New <del>OpenApiCommon.OAPI_format OAPI_format</del>and <del>OpenApiCommon.OAPI_collectionFormat OAPI_collectionFormat</del>properties.
 			</ul>
 		<li>
 			Convenience methods added to {@link org.apache.juneau.httppart.HttpPartSchema} and related classes to simplify schema definitions:
@@ -36201,7 +36201,7 @@
 			.build();
 			</p>
 		<li>
-			<c>BeanContext.REST_pojoSwaps</c> replaced with <del>BeanContext#BEAN_swaps</del> (and builder methods as well).
+			<c>BeanContext.REST_pojoSwaps</c> replaced with <del>BeanContext.BEAN_swaps</del>(and builder methods as well).
 		<li>
 			New Bean Property Interceptor API for intercepting calls to bean getters/setters.
 			<ul>
@@ -36226,16 +36226,16 @@
 	<h5 class='topic w800'>juneau-rest-server</h5>
 	<ul class='spaced-list'>
 		<li>
-			New <del>RestContext#REST_context REST_context</del>/<del>Rest#context() @Rest(context)</del> setting to allow you to extend the {@link org.apache.juneau.rest.RestContext}
+			New <del>RestContext#REST_context REST_context</del>/<del>Rest.context() @Rest(context)</del> setting to allow you to extend the {@link org.apache.juneau.rest.RestContext}
 			class.
 		<li>
 			{@link org.apache.juneau.rest.annotation.Rest}-annotated classes can now implement the following interfaces directly instead of having
 			to define secondary classes and hook them up through annotations:
 			<ul>
-				<li class='jic'><del>RestCallHandler</del> - Normally defined through {@del org.apache.juneau.rest.annotation.Rest#callHandler() @Rest.callHandler()}.
-				<li class='jic'><del>RestInfoProvider</del> - Normally defined through {@del org.apache.juneau.rest.annotation.Rest#infoProvider() @Rest.infoProvider()}.
-				<li class='jic'><del>RestCallLogger</del> - Normally defined through {@del org.apache.juneau.rest.annotation.Rest#callLogger() @Rest.callLogger()}.
-				<li class='jic'><del>ClasspathResourceFinder</del> - Normally defined through {@del org.apache.juneau.rest.annotation.Rest#classpathResourceFinder() @Rest.classpathResourceFinder()}.
+				<li class='jic'><del>RestCallHandler</del>- Normally defined through {@del org.apache.juneau.rest.annotation.Rest#callHandler() @Rest.callHandler()}.
+				<li class='jic'><del>RestInfoProvider</del> - Normally defined through {@del org.apache.juneau.rest.annotation.Rest.infoProvider() @Rest.infoProvider()}.
+				<li class='jic'><del>RestCallLogger</del>- Normally defined through {@del org.apache.juneau.rest.annotation.Rest#callLogger() @Rest.callLogger()}.
+				<li class='jic'><del>ClasspathResourceFinder</del> - Normally defined through {@del org.apache.juneau.rest.annotation.Rest.classpathResourceFinder() @Rest.classpathResourceFinder()}.
 			</ul>
 			<br>The methods added for <del>RestInfoProvider</del> are:
 			<ul>
@@ -36258,7 +36258,7 @@
 					<li class='jm'><del>getMethodDescription(Method,RestRequest)</del>
 				</ul>
 			</ul>
-			<br>The methods added for <del>RestCallLogger</del> are:
+			<br>The methods added for <del>RestCallLogger</del>are:
 			<ul>
 				<li class='jac'><del>RestServlet</del>
 				<ul>
@@ -36266,10 +36266,10 @@
 				</ul>
 				<li class='jac'><del>BasicRest</del>
 				<ul>
-					<li class='jm'><del>BasicRest#log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)</del>
+					<li class='jm'><del>BasicRest.log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)</del>
 				</ul>
 			</ul>
-			<br>The methods added for <del>ClasspathResourceFinder</del> are:
+			<br>The methods added for <del>ClasspathResourceFinder</del>are:
 			<ul>
 				<li class='jac'><del>RestServlet</del>
 				<ul>
@@ -36277,10 +36277,10 @@
 				</ul>
 				<li class='jac'><del>BasicRest</del>
 				<ul>
-					<li class='jm'><del>BasicRest#findResource(Class,String,Locale) findResource(Class,String,Locale)</del>
+					<li class='jm'><del>BasicRest.findResource(Class,String,Locale) findResource(Class,String,Locale)</del>
 				</ul>
 			</ul>
-			<br>The methods added for <del>RestResourceResolver</del> are:
+			<br>The methods added for <del>RestResourceResolver</del>are:
 			<ul>
 				<li class='jac'><del>RestServlet</del>
 				<ul>
@@ -36288,11 +36288,11 @@
 				</ul>
 				<li class='jac'><del>BasicRest</del>
 				<ul>
-					<li class='jm'>{@del org.apache.juneau.rest.BasicRest#resolve(Object,Class,RestContext.Builder,Object...) resolve(Object,Class&lt;T&gt;,RestContext.Builder,Object...)}
+					<li class='jm'>{@del org.apache.juneau.rest.BasicRest.resolve(Object,Class,RestContext.Builder,Object...) resolve(Object,Class&lt;T&gt;,RestContext.Builder,Object...)}
 				</ul>
 			</ul>
 		<li>
-			Added the following convenience hook methods on the <del>RestServlet</del> and <del>BasicRest</del> classes:
+			Added the following convenience hook methods on the <del>RestServlet</del> and <del>BasicRest</del>classes:
 			<ul>
 				<li class='jac'><del>RestServlet</del>
 				<ul>
@@ -36349,7 +36349,7 @@
 				<li class='jc'>{@link org.apache.juneau.rest.ResponseHandler}
 			</ul>
 		<li>
-			New <del>Path#required() @Path(required)</del> annotation support.
+			New <del>Path.required() @Path(required)</del>annotation support.
 			<br>A path can be marked as not-required when the path variable is resolved by a parent resource like so:
 			<p class='bcode'>
 		<ja>@Rest</ja>(path=<js>"/parent/{p1}"</js>,children=Child.<jk>class</jk>)
@@ -36370,7 +36370,7 @@
 			</p>
 			<br>This allows the child resource to be mapped to multiple parents that may resolve various different path variables.
 		<li>
-			New <del>RestMethod#paths() @RestMethod(paths)</del> annotation that allows you to map multiple
+			New <del>RestMethod.paths() @RestMethod(paths)</del> annotation that allows you to map multiple
 			paths to the same Java method.
 			<br>Example:
 			<p class='bcode'>
@@ -36381,7 +36381,7 @@
 		<jk>public</jk> String doGet(<ja>@Path</ja>(name=<js>"foo"</js>,required=<jk>false</jk>) String foo) {...}
 			</p>
 		<li>
-			The <del>RestMethod @RestMethod</del> annotation is now implied on all unannotated methods of a {@link org.apache.juneau.rest.annotation.Rest @Rest}-annotated
+			The <del>RestMethod @RestMethod</del>annotation is now implied on all unannotated methods of a {@link org.apache.juneau.rest.annotation.Rest @Rest}-annotated
 			interface.
 			<p class='bcode'>
 		<ja>@Rest
@@ -36390,19 +36390,19 @@
 		}
 			</p>
 		<li>
-			Improved <del>RestContext#REST_messages REST_messages</del> support (mostly bug fixes).
+			Improved <del>RestContext.REST_messages REST_messages</del> support (mostly bug fixes).
 	</ul>
 	
 	<h5 class='topic w800'>juneau-rest-server-springboot</h5>
 	<ul class='spaced-list'>
 		<li>
-			<del>JuneauRestInitializer</del> now provides a no-arg constructor so that it can be used in
+			<del>JuneauRestInitializer</del>now provides a no-arg constructor so that it can be used in
 			the <c><ja>@ConfigurationContext</ja>(initializers=JuneauRestInitializer.<jk>class</jk>)</c> when unit testing
 			using <ja>@SpringBootTest</ja>.
 		<li>
-			New <del>ResourceDescription#ResourceDescription(String,String,String)</del> constructor and <del>ResourceDescriptions#append(String,String,String)</del> method.
+			New <del>ResourceDescription.ResourceDescription(String,String,String)</del>constructor and <del>ResourceDescriptions.append(String,String,String)</del> method.
 		<li>
-			New <del>Hyperlink</del> class.
+			New <del>Hyperlink</del>class.
 	</ul>
 	
 	<h5 class='topic w800'>juneau-rest-client</h5>

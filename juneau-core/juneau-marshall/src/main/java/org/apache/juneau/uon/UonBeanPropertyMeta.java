@@ -20,8 +20,7 @@ import org.apache.juneau.uon.annotation.*;
  * annotation on the bean property.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.UonDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.UonDetails}
  * </ul>
  */
 public final class UonBeanPropertyMeta extends ExtendedBeanPropertyMeta {

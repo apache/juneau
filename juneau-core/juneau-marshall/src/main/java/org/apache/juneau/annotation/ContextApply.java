@@ -24,7 +24,6 @@ import org.apache.juneau.*;
  *
  * <ul class='seealso'>
  * 	<li class='jc'>{@link AnnotationApplier}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

@@ -24,7 +24,6 @@ import org.apache.juneau.internal.*;
  * Interface that provides the ability to look up annotations on classes/methods/constructors/fields.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface AnnotationProvider {

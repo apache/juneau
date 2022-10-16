@@ -50,8 +50,7 @@ import org.apache.juneau.*;
  * Multiple calls to {@link BeanMap#getBean()} will return the same bean instance.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.BeancAnnotation}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.BeancAnnotation}
  * </ul>
  */
 @Documented

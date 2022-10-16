@@ -21,8 +21,7 @@ import org.apache.juneau.serializer.annotation.*;
 /**
  * Sample REST resource showing how to implement a nested "router" resource page.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  *
  * @serial exclude

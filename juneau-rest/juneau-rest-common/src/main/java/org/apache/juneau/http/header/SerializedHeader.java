@@ -25,8 +25,7 @@ import org.apache.juneau.serializer.*;
  * TODO
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * </ul>
  *
  * @serial exclude

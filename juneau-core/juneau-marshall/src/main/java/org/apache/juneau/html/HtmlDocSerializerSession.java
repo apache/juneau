@@ -38,8 +38,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HtmlDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.HtmlDetails}
  * </ul>
  */
 public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {

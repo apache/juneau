@@ -42,8 +42,7 @@ import java.io.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
  * </ul>
  */
 public abstract class Var {

@@ -24,7 +24,6 @@ import java.nio.file.*;
  * Used to encapsulate basic resolution and retrieval of files regardless of where they are located.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class LocalFile {

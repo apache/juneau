@@ -31,8 +31,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SerializersAndParsers}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.SerializersAndParsers}
  * </ul>
  */
 public class ParserReader extends Reader implements Positionable {

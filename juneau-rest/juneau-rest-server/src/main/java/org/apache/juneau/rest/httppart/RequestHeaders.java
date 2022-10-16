@@ -103,7 +103,6 @@ import org.apache.juneau.http.header.*;
  * 	<li class='jc'>{@link RequestHeader}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
  * 	<li class='link'>{@doc jrs.HttpParts}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RequestHeaders extends ArrayList<RequestHeader> {

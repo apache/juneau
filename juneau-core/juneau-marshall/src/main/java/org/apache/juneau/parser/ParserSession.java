@@ -39,8 +39,7 @@ import org.apache.juneau.swap.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SerializersAndParsers}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.SerializersAndParsers}
  * </ul>
  */
 public class ParserSession extends BeanSession {

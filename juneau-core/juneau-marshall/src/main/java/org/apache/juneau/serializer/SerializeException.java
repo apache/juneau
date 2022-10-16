@@ -25,8 +25,7 @@ import org.apache.juneau.json.*;
  * General exception thrown whenever an error occurs during serialization.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SerializersAndParsers}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.SerializersAndParsers}
  * </ul>
  *
  * @serial exclude

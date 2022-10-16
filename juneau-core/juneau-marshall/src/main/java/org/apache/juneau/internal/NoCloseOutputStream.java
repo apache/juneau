@@ -21,7 +21,6 @@ import java.io.*;
  * Useful in cases where you're working with streams that should not be implicitly closed.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public final class NoCloseOutputStream extends OutputStream {

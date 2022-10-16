@@ -41,8 +41,7 @@ import org.apache.juneau.html.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HtmlDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.HtmlDetails}
  * </ul>
  */
 @Documented

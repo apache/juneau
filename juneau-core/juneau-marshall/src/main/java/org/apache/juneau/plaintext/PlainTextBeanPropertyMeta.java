@@ -19,8 +19,7 @@ import org.apache.juneau.plaintext.annotation.*;
  * Metadata on bean properties specific to the PlainText serializers and parsers pulled from the {@link PlainText @PlainText}
  * annotation on the bean property.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 public final class PlainTextBeanPropertyMeta extends ExtendedBeanPropertyMeta {

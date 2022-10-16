@@ -106,7 +106,6 @@ import org.apache.juneau.utils.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class Messages extends ResourceBundle {

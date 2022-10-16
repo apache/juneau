@@ -102,8 +102,7 @@ import org.apache.juneau.serializer.*;
  * 	</ul>
  * </ul>
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 public final class RestResponse extends HttpServletResponseWrapper {

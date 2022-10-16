@@ -28,7 +28,6 @@ import org.apache.juneau.svl.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HtmlDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class HtmlLinkAnnotation {

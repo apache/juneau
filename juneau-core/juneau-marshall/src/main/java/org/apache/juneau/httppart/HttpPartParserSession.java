@@ -24,7 +24,6 @@ import org.apache.juneau.parser.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HttpPartSerializersParsers}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface HttpPartParserSession {

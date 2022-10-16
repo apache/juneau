@@ -53,8 +53,7 @@ import org.apache.juneau.http.response.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.AnnotatedClasses}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jrs.AnnotatedClasses}
  * </ul>
  *
  * @serial exclude

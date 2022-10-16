@@ -53,7 +53,6 @@ import org.apache.juneau.serializer.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.HtmlPredefinedWidgets}
  * 	<li class='link'>{@doc jrs.HtmlWidgets}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ContentTypeMenuItem extends MenuItemWidget {

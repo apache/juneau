@@ -24,7 +24,6 @@ import org.apache.http.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HttpPartSerializersParsers}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class HttpPart implements NameValuePair {

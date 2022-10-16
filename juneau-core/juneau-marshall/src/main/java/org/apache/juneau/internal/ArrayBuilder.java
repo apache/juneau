@@ -26,7 +26,6 @@ import java.util.function.*;
  * Initial capacity cannot be exceeded without throwing a {@link ArrayIndexOutOfBoundsException}.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @param <E> The array element type.

@@ -45,8 +45,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpPartSerializersParsers}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.HttpPartSerializersParsers}
  * </ul>
  */
 public class SimplePartParser extends BaseHttpPartParser {

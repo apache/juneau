@@ -68,7 +68,6 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public abstract class Context implements AnnotationProvider {

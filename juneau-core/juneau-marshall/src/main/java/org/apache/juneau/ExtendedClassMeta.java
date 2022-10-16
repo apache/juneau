@@ -16,7 +16,6 @@ package org.apache.juneau;
  * Defines extended language-specific metadata associated with a class.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ExtendedClassMeta extends ExtendedMeta {

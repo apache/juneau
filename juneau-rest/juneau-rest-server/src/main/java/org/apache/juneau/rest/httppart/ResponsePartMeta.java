@@ -19,7 +19,6 @@ import org.apache.juneau.httppart.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.HttpParts}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class ResponsePartMeta {

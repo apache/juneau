@@ -41,7 +41,6 @@ import org.apache.juneau.utils.*;
  * <p>
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.JsonSchemaDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSchemaMetaProvider {

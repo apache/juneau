@@ -18,10 +18,6 @@ import java.util.function.*;
 
 /**
  * System utilities.
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
- * </ul>
  */
 public class SystemUtils {
 

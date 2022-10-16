@@ -27,8 +27,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.JsonDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.JsonDetails}
  * </ul>
  */
 public final class JsonWriter extends SerializerWriter {

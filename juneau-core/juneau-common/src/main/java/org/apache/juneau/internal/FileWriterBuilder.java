@@ -17,10 +17,6 @@ import java.nio.charset.*;
 
 /**
  * Utility class for creating {@link FileWriter} objects.
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
- * </ul>
  */
 public final class FileWriterBuilder {
 

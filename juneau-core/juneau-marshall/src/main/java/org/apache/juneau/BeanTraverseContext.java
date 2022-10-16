@@ -33,8 +33,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 public abstract class BeanTraverseContext extends BeanContextable {

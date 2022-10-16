@@ -68,7 +68,6 @@ import org.apache.juneau.internal.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jd.Swagger}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Bean(properties="siteName,title,description,version,contact,license,termsOfService,*")

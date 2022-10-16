@@ -39,8 +39,7 @@ import org.apache.juneau.http.response.*;
  * Implements the basic REST endpoints defined in {@link BasicRestOperations}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.AnnotatedClasses}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jrs.AnnotatedClasses}
  * </ul>
  */
 @Rest

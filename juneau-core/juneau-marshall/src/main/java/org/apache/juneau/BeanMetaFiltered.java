@@ -19,8 +19,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Same as {@link BeanMeta}, except the list of bean properties are limited by a  {@link Beanp#properties() @Beanp(properties)} annotation.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  *
  * @param <T> The class type that this metadata applies to.

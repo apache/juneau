@@ -32,7 +32,6 @@ import org.springframework.context.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server-springboot}
  * 	<li class='link'>{@doc jrs.AnnotatedClasses}
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

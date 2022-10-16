@@ -20,7 +20,6 @@ import org.apache.juneau.internal.*;
  * Builder for {@link AnnotationImpl} objects.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @FluentSetters

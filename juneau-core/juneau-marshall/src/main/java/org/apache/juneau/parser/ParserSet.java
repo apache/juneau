@@ -77,8 +77,7 @@ import org.apache.juneau.reflect.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SerializersAndParsers}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.SerializersAndParsers}
  * </ul>
  */
 public final class ParserSet {

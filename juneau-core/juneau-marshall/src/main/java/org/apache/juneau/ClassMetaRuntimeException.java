@@ -17,8 +17,7 @@ import java.text.*;
 /**
  * General class metadata runtime operation exception.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  *
  * @serial exclude

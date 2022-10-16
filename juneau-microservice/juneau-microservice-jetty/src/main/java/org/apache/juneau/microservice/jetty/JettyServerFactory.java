@@ -19,7 +19,6 @@ import org.eclipse.jetty.server.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-microservice-jetty}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface JettyServerFactory {

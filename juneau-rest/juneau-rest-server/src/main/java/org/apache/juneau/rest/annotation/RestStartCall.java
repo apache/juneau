@@ -74,7 +74,6 @@ import org.apache.juneau.http.response.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.LifecycleHooks}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Target({METHOD,TYPE})

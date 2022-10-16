@@ -20,7 +20,6 @@ import org.apache.juneau.annotation.*;
  * Complex Pojo class.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class PojoComplex {

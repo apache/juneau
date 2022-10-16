@@ -26,8 +26,7 @@ import org.apache.juneau.reflect.*;
  * Exception that gets thrown if you try to perform an invalid conversion, such as when calling
  * {@code JsonMap.getInt(...)} on a non-numeric <c>String</c>.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  *
  * @serial exclude

@@ -36,8 +36,7 @@ import org.apache.juneau.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-common}
- * 	<li class='extlink'>{@doc ext.RFC2616}
- * 	<li class='extlink'>{@source}
+ * 	<li class='extlink'>{@doc ext.RFC2616}
  * </ul>
  */
 @BeanIgnore

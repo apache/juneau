@@ -30,8 +30,7 @@ import org.apache.juneau.parser.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.UonDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.UonDetails}
  * </ul>
  */
 public final class UonReader extends ParserReader {

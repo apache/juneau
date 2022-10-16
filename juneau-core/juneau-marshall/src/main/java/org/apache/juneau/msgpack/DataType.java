@@ -17,7 +17,6 @@ package org.apache.juneau.msgpack;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.MsgPackDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 enum DataType {

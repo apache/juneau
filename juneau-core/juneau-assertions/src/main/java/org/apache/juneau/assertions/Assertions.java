@@ -66,7 +66,6 @@ import org.apache.juneau.utils.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc ja.Overview}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class Assertions {

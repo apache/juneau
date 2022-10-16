@@ -43,8 +43,7 @@ import java.lang.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.RestOpAnnotatedMethods}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jrs.RestOpAnnotatedMethods}
  * </ul>
  */
 @Target(PARAMETER)

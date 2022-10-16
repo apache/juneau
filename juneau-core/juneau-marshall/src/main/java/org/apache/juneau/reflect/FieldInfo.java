@@ -24,7 +24,6 @@ import org.apache.juneau.*;
  * Lightweight utility class for introspecting information about a field.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public final class FieldInfo implements Comparable<FieldInfo> {

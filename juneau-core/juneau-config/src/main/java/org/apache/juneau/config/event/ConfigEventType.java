@@ -14,10 +14,6 @@ package org.apache.juneau.config.event;
 
 /**
  * Possible event types for the {@link ConfigEvent} class.
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
- * </ul>
  */
 public enum ConfigEventType {
 

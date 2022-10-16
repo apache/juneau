@@ -74,7 +74,6 @@ import org.apache.juneau.utils.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.RestOpContext}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class RestOpContext extends Context implements Comparable<RestOpContext>  {

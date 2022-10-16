@@ -26,7 +26,6 @@ import org.apache.juneau.internal.*;
  * you a map containing <js>"{bar:123}"</js> and a remainder string containing <js>"baz/qux"</js>.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class UrlPathMatch {

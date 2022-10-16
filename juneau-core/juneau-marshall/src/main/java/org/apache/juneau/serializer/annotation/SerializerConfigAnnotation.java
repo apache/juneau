@@ -22,7 +22,6 @@ import org.apache.juneau.svl.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.SerializersAndParsers}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class SerializerConfigAnnotation {

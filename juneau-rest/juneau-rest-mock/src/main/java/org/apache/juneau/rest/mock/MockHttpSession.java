@@ -28,7 +28,6 @@ import javax.servlet.http.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class MockHttpSession implements HttpSession {

@@ -14,10 +14,6 @@ package org.apache.juneau.config.event;
 
 /**
  * Listener that can be used to listen for change events in config maps.
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
- * </ul>
  */
 public interface ConfigEventListener {
 

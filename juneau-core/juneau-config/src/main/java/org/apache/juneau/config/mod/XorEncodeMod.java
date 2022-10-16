@@ -24,7 +24,6 @@ import static org.apache.juneau.internal.IOUtils.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jc.ModdedEntries}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class XorEncodeMod extends Mod {

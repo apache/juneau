@@ -94,8 +94,7 @@ import org.apache.juneau.json.*;
  *		will not try to recompile it.
  * </ul>
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 @Documented

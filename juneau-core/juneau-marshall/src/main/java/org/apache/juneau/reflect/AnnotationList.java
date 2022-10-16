@@ -22,7 +22,6 @@ import java.util.function.*;
  * An ordered list of annotations and the classes/methods/packages they were found on.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

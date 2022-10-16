@@ -126,8 +126,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.XmlDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.XmlDetails}
  * </ul>
  */
 public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {

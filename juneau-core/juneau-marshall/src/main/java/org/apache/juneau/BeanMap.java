@@ -58,8 +58,7 @@ import org.apache.juneau.swap.*;
  * themselves, the {@link #get(Object)} and {@link #put(String, Object)} methods will automatically transform the
  * property value to and from the serialized form.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  *
  * @param <T> Specifies the type of object that this map encapsulates.

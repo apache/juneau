@@ -19,7 +19,6 @@ import org.apache.juneau.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.OpenApiDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface OpenApiMetaProvider extends AnnotationProvider {

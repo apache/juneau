@@ -23,7 +23,6 @@ import javax.servlet.http.*;
  * Wraps an {@link HttpServletResponse} and caches the output stream in a separate buffer for debugging purposes.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class CachingHttpServletResponse extends HttpServletResponseWrapper {

@@ -32,8 +32,7 @@ import org.apache.juneau.urlencoding.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.UrlEncodingDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.UrlEncodingDetails}
  * </ul>
  */
 @Documented

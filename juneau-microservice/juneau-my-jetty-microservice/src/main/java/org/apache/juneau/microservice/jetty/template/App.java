@@ -23,7 +23,6 @@ import org.apache.juneau.microservice.jetty.JettyMicroservice;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc my-jetty-microservice}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class App {

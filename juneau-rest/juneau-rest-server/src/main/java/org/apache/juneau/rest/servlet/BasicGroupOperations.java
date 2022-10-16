@@ -38,7 +38,6 @@ import org.apache.juneau.rest.beans.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.AnnotatedClasses}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface BasicGroupOperations {

@@ -24,8 +24,7 @@ import org.apache.juneau.xml.annotation.*;
  * class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.XmlDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.XmlDetails}
  * </ul>
  */
 public class XmlClassMeta extends ExtendedClassMeta {

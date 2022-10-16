@@ -19,7 +19,6 @@ import org.apache.juneau.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.JsonDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface JsonMetaProvider extends AnnotationProvider {

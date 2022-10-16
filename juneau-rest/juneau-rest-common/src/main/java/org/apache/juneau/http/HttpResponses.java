@@ -19,7 +19,6 @@ import org.apache.juneau.http.response.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-common}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class HttpResponses {

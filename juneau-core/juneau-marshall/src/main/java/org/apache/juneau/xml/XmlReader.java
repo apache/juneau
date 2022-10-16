@@ -31,7 +31,6 @@ import org.apache.juneau.parser.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.XmlDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public final class XmlReader implements XMLStreamReader, Positionable {

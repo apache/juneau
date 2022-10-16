@@ -39,7 +39,6 @@ import org.apache.juneau.internal.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.ObjectTools}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class StringMatcherFactory extends MatcherFactory {

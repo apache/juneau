@@ -25,7 +25,6 @@ import org.apache.juneau.reflect.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @SuppressWarnings("rawtypes")

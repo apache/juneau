@@ -31,8 +31,7 @@ import org.apache.juneau.swap.*;
  * </ul>
 
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SwapAnnotation}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.SwapAnnotation}
  * </ul>
  */
 @Documented

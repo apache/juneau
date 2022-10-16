@@ -28,7 +28,6 @@ import org.apache.juneau.swaps.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.Swaps}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class DefaultSwaps {

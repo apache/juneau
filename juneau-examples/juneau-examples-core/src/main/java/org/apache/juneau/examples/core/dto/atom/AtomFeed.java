@@ -22,7 +22,6 @@ import java.net.*;
  * Atom feed example.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class AtomFeed {

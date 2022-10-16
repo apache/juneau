@@ -24,8 +24,7 @@ import org.apache.juneau.serializer.*;
  * Exception that indicates invalid syntax encountered during parsing.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SerializersAndParsers}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.SerializersAndParsers}
  * </ul>
  *
  * @serial exclude

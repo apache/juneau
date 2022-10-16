@@ -14,10 +14,6 @@ package org.apache.juneau.internal;
 
 /**
  * Stores a Map of ASCII characters to Strings in a quick-lookup array.
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
- * </ul>
  */
 public final class AsciiMap {
 	final String[] store = new String[128];

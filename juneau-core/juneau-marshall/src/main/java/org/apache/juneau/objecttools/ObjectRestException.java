@@ -37,8 +37,7 @@ import org.apache.juneau.*;
  * 		- Attempting to overwrite the root object.
  * </ul>
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  *
  * @serial exclude

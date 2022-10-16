@@ -125,7 +125,6 @@ import org.apache.juneau.internal.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jd.Swagger}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Bean(properties="operationId,summary,description,tags,externalDocs,consumes,produces,parameters,responses,schemes,deprecated,security,*")

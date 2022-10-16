@@ -21,8 +21,7 @@ import org.apache.juneau.html.annotation.*;
  * annotation on the bean property.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HtmlDetails}
- * 	<li class='extlink'>{@source}
+ * 	<li class='link'>{@doc jm.HtmlDetails}
  * </ul>
  */
 @SuppressWarnings("rawtypes")

@@ -23,7 +23,6 @@ import org.apache.juneau.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Swagger}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Retention(RUNTIME)

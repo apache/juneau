@@ -20,7 +20,6 @@ import java.text.*;
  * An extension of {@link AssertionError} with helper constructors for messages with message-style arguments.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

@@ -19,7 +19,6 @@ import java.util.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.UtilityBeans}
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

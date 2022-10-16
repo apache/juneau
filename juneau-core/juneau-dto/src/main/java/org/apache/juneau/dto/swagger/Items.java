@@ -50,7 +50,6 @@ import org.apache.juneau.marshaller.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jd.Swagger}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Bean(properties="type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref,*")

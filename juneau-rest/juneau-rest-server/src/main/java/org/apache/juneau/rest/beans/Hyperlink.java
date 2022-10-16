@@ -44,7 +44,6 @@ import org.apache.juneau.dto.html5.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.UtilityBeans}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class Hyperlink extends A {

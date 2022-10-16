@@ -19,7 +19,6 @@ import org.apache.juneau.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jd.Html5}
- * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude

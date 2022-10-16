@@ -19,7 +19,6 @@ import org.apache.juneau.xml.XmlSerializer;
  * Atom feed XML example.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class AtomXmlExample {

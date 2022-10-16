@@ -31,7 +31,6 @@ import org.apache.juneau.utils.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.StaticFiles}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public interface StaticFiles extends FileFinder {

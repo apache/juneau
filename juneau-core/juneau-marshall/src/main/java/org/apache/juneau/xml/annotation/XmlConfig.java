@@ -33,7 +33,6 @@ import org.apache.juneau.xml.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.XmlDetails}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Target({TYPE,METHOD})

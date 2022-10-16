@@ -17,8 +17,7 @@ import java.util.*;
 /**
  * Class-related utility methods.
  *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
+ * <ul class='seealso'>
  * </ul>
  */
 public final class ResourceBundleUtils {

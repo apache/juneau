@@ -21,7 +21,6 @@ import java.lang.annotation.*;
  * Applied to annotations that belong to a similar group (e.g. <c>RestOp</c> and <c>RestGet</c>).
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Documented

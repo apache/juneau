@@ -19,7 +19,6 @@ import org.apache.juneau.cp.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
- * 	<li class='extlink'>{@source}
  * </ul>
  */
 public class BasicDisabledCallLogger extends CallLogger {
