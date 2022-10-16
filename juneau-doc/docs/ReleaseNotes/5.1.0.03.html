@@ -24,29 +24,29 @@
 	<ul class='spaced-list'>
 		<li>Ability to detect and use non-public bean classes, getters/setters, and fields using the following new properties:
 			<ul>
-				<li>{@del oaj.BeanContext#BEAN_beanConstructorVisibility} - Control which bean constructors are visible to Juno.
-				<li>{@del oaj.BeanContext#BEAN_beanClassVisibility} - Control which bean classes are interpreted as beans to Juno.
-				<li>{@del oaj.BeanContext#BEAN_beanFieldVisibility} - Control which fields are visible to Juno as bean properties.
-				<li>{@del oaj.BeanContext#BEAN_beanMethodVisibility} - Control which getters/setters are visible to Juno as bean properties.
+				<li><del>BeanContext.BEAN_beanConstructorVisibility</del>- Control which bean constructors are visible to Juno.
+				<li><del>BeanContext.BEAN_beanClassVisibility</del>- Control which bean classes are interpreted as beans to Juno.
+				<li><del>BeanContext.BEAN_beanFieldVisibility</del>- Control which fields are visible to Juno as bean properties.
+				<li><del>BeanContext.BEAN_beanMethodVisibility</del>- Control which getters/setters are visible to Juno as bean properties.
 			</ul>
 			Removed <c>BeanContext.<jsf>INCLUDE_BEAN_FIELD_PROPERTIES</jsf></c> and <c>BeanContext.<jsf>INCLUDE_BEAN_METHOD_PROPERTIES</jsf></c> properties, since ignoring fields and methods
 			can be accomplished by setting the appropriate properties above to {@link oaj.Visibility#NONE NONE}.
-			Also, the {@del @BeanProperty} annotation can now be used on non-public fields/getters/setters to override
+			Also, the <del>@BeanProperty</del> annotation can now be used on non-public fields/getters/setters to override
 			the default behavior defined by the <c>VISIBILITY</c> properties identified above.  This is a convenient way of identifying protected or
 			private fields or methods as bean properties.  Previously, you could only identify public fields/getters/setters using this annotation.
 		</li>
-		<li>New {@del oaj.BeanContext#BEAN_useJavaBeanIntrospector} property that lets Juno use the Java bean <c>Introspector</c>
+		<li>New <del>BeanContext.BEAN_useJavaBeanIntrospector</del> property that lets Juno use the Java bean <c>Introspector</c>
 			class to determine bean properties.  In the previous release, the method for determining bean properties was a mixture of Juno-based and Introspector-based.
 			Now it's either pure Juno-based or pure Introspector-based.  The result is considerably cleaner code and consistent behavior.
-		<li>New {@link oaj.annotation.BeanIgnore @BeanIgnore} annotation.  Replaces the previous {@del @BeanProperty(hidden=true)} annotation
+		<li>New {@link oaj.annotation.BeanIgnore @BeanIgnore} annotation.  Replaces the previous <del>@BeanProperty(hidden=true)</del>annotation
 			for ignoring bean properties.  Can also be used on classes that look like beans so that they're not treated as beans.
 		<li>Support for parsing into non-static member classes.  This applies to all parsers.
 		<li>New {@link oaj.json.annotation.Json#wrapperAttr() @Json(wrapperAttr)}	annotation that automatically wraps beans and objects in a wrapper
 			attribute when serializing to or parsing from JSON.
 		<li>Changed the default ordering of bean properties to be in parent-to-child class order.
-		<li>New {@del oaj.transform.BeanFilter#readProperty(Object,String,Object) readProperty()} and {@del oaj.transform.BeanFilter#writeProperty(Object,String,Object) writeProperty()}
-			methods added to {@del oaj.transform.BeanFilter} class to allow individualized serialization and parsing behavior on a class-by-class basis.
-		<li>Eliminated previous restriction where bean subtype attributes had to be listed first in JSON objects when using the {@del Bean#subTypeProperty()} annotation.
+		<li>New <del>BeanFilter.readProperty(Object,String,Object) readProperty()</del>and <del>BeanFilter.writeProperty(Object,String,Object) writeProperty()</del>
+			methods added to <del>BeanFilter</del>class to allow individualized serialization and parsing behavior on a class-by-class basis.
+		<li>Eliminated previous restriction where bean subtype attributes had to be listed first in JSON objects when using the <del>Bean.subTypeProperty()</del>annotation.
 			The previous behavior was not strictly JSON-compliant since JSON objects are supposed to consist of unordered lists of key/value pairs.
 			While targeted for JSON, the restriction is also lifted for all other parsers.  	
 		<li>New fluent-style {@link oaj.BeanMap#load(String) BeanMap.load()} methods for initializing bean maps.
@@ -55,8 +55,8 @@
 	
 	<h5 class='topic w800'>REST Server API updates</h5>
 	<ul class='spaced-list'>
-		<li>New {@del RestRequest#getJavaMethod()} method for getting access to the method used to handle a request.
-			Useful for accessing the method name or annotations during requests, such as in calls to {@del oajr.RestGuard#guard(RestRequest,RestResponse)}.
+		<li>New <del>RestRequest.getJavaMethod()</del>method for getting access to the method used to handle a request.
+			Useful for accessing the method name or annotations during requests, such as in calls to <del>RestGuard#guard(RestRequest,RestResponse)</del>.
 		<li>Fixed bug when using Jetty where you tried to read text input after a header was written.
 		<li>Added new string variables <dc>$A{...}</dc> (request attributes) and <dc>$P{...}</dc> (request parameters) to <c>RestServlet.createRequestVarResolver(RestRequest)</c>.
 	</ul>

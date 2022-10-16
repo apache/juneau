@@ -248,9 +248,6 @@
 						<javadocExecutable>${javadoc.executable}</javadocExecutable>
 						<taglets>
 							<taglet>
-								<tagletClass>org.apache.juneau.doc.internal.DelTag</tagletClass>
-							</taglet>
-							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.DocTag</tagletClass>
 							</taglet>
 							<taglet>

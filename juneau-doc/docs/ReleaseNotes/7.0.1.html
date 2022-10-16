@@ -38,11 +38,11 @@
 			</p>
 			<br>The same static create methods have also been added to the following classes:
 			<ul>
-				<li>{@del oaj.serializer.SerializerGroup#create()}
-				<li>{@del oaj.parser.ParserGroup#create()}
-				<li>{@del oaj.encoders.EncoderGroup#create()}
+				<li><del>SerializerGroup#create()</del>
+				<li><del>ParserGroup#create()</del>
+				<li><del>EncoderGroup#create()</del>
 				<li>{@link oajrc.RestClient#create()}
-				<li>{@del ConfigFile#create()}
+				<li><del>ConfigFile#create()</del>
 			</ul>
 		<li>
 			The order of the parameters in {@link oaj.serializer.SerializerSession#serialize(Object,Object)}
@@ -64,8 +64,8 @@
 	<h5 class='topic w800'>juneau-rest-server</h5>
 	<ul class='spaced-list'>
 		<li>
-			New {@del @RestResource(maxInput)} and 
-			{@del oajr.annotation.RestMethod#maxInput() @RestMethod(maxInput)} for alleviating
+			New <del>@RestResource(maxInput)</del> and 
+			<del>RestMethod.maxInput() @RestMethod(maxInput)</del>for alleviating
 			potential DoS attacks.
 	</ul>
 	
@@ -135,7 +135,7 @@
 				<li>New methods on {@link oaj.microservice.Microservice}
 					<ul>
 						<li>{@link oaj.microservice.Microservice#startConsole() startConsole()}
-						<li>{@del createConsoleCommands()}
+						<li><del>createConsoleCommands()</del>
 						<li>{@link oaj.microservice.Microservice#getConsoleReader() getConsoleReader()}
 						<li>{@link oaj.microservice.Microservice#getConsoleWriter() getConsoleWriter()}
 					</ul>	

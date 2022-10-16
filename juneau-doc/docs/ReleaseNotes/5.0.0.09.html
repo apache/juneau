@@ -32,18 +32,18 @@
 		</li>
 		<li>Support for fluent-style bean setters (setters that return the bean itself).</li>
 		<li>Ability to use {@link oaj.annotation.Bean @Bean} annotation to override bean identification settings.</li>
-		<li>New {@del oaj.ObjectMap#cast(Class)} method to convert <c>ObjectMaps</c> directly to beans.</li>
+		<li>New <del>ObjectMap.cast(Class)</del>method to convert <c>ObjectMaps</c> directly to beans.</li>
 	</ul>
 	<h5 class='topic w800'>REST server API changes</h5>
 	<ul class='spaced-list'>
 		<li>Build-in default <c>OPTIONS</c> pages.</li>
-		<li>New {@del @RestResource#defaultRequestHeaders} and {@del @RestResource#defaultResponseHeaders} annotations.</li>
-		<li>New {@del oajr.annotation.RestMethod#serializers() @RestMethod(serializers)} and {@del oajr.annotation.RestMethod#parsers() @RestMethod(parsers)} annotations.</li>
-		<li>New {@del oajr.annotation.RestMethod#properties() @RestMethod(properties)} annotation.</li>
-		<li>New {@del @RestMethod(defaultRequestHeaders)} annotation.</li>
-		<li>New {@del oajr.annotation.RestMethod#matchers() @RestMethod(matchers)} annotation and {@link oajr.RestMatcher} class.</li>
-		<li><c>Readers</c> and <c>InputStreams</c> can be specified on {@del @Content} annotated parameters.</li>
-		<li>New {@del @HasParam} annotation.</li>
+		<li>New <del>@RestResource.defaultRequestHeaders</del>and <del>@RestResource.defaultResponseHeaders</del>annotations.</li>
+		<li>New <del>RestMethod.serializers() @RestMethod(serializers)</del>and <del>RestMethod.parsers() @RestMethod(parsers)</del>annotations.</li>
+		<li>New <del>RestMethod.properties() @RestMethod(properties)</del> annotation.</li>
+		<li>New <del>@RestMethod(defaultRequestHeaders)</del>annotation.</li>
+		<li>New <del>RestMethod.matchers() @RestMethod(matchers)</del> annotation and {@link oajr.RestMatcher} class.</li>
+		<li><c>Readers</c> and <c>InputStreams</c> can be specified on <del>@Content</del> annotated parameters.</li>
+		<li>New <del>@HasParam</del>annotation.</li>
 		<li>Full RFC2616 support for matching <c>Accept</c> headers to serializers.</li>		
 	</ul>
 	<h5 class='topic w800'>Other notes</h5>

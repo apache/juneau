@@ -39,11 +39,11 @@
 		</li>
 		<li>
 			Simplified Filter API for handling non-standard POJOs.<br>
-			The API for handling non-standard POJOs has been simplified by introducing the concept of a {@del Transform} class, which is associated with the <c>BeanContext</c> class (and thus the Serializer and Parser classes too) through the <c>BeanContext.addTransforms(Class[])</c> method.<br>
-			Two new subclasses of {@del Transform}:
+			The API for handling non-standard POJOs has been simplified by introducing the concept of a <del>Transform</del> class, which is associated with the <c>BeanContext</c> class (and thus the Serializer and Parser classes too) through the <c>BeanContext.addTransforms(Class[])</c> method.<br>
+			Two new subclasses of <del>Transform</del>:
 			<ul>
-				<li>{@del oaj.transform.BeanFilter} - Filter POJO beans.</li>
-				<li>{@del oaj.transform.PojoSwap} - Filter POJOs that aren't beans.</li>
+				<li><del>BeanFilter</del> - Filter POJO beans.</li>
+				<li><del>PojoSwap</del> - Filter POJOs that aren't beans.</li>
 			</ul>
 			This new API replaces the previous separate <c>Cast</c> and <c>BeanFilter</c> APIs which were considerably more complicated and puts them under a common API. 
 		</li>
@@ -85,7 +85,7 @@
 			JSON-schema support.
 		</li>
 		<li>
-			New {@del oaj.utils.PojoIntrospector} class.
+			New <del>PojoIntrospector</del> class.
 		</li>
 		<li>
 			Significant REST servlet API improvements.

@@ -32,10 +32,10 @@
 			New <c>SerializerContext.SERIALIZER_uriContext</c> and <c>SerializerContext.SERIALIZER_uriAuthority</c> serializer properties for specifying values for relative URIs.
 		</li>
 		<li>
-			New {@del oaj.annotation.URI @URI} annotation that allows you to specify classes and bean properties as URLs that aren't <c>java.net.URI</c> or <c>java.net.URL</c>.
+			New <del>URI @URI</del> annotation that allows you to specify classes and bean properties as URLs that aren't <c>java.net.URI</c> or <c>java.net.URL</c>.
 		</li>
 		<li>
-			New {@del oaj.html.HtmlSerializer#HTML_uriAnchorText} HTML serializer property for tailoring how anchor text is rendered.
+			New <del>HtmlSerializer.HTML_uriAnchorText</del>HTML serializer property for tailoring how anchor text is rendered.
 		</li>
 		<li>
 			Renamed <c>BeanProperty#uri</c> annotation to <c>BeanProperty#beanUri</c> to make it clear that this property represents the URI of the bean itself instead of an arbitrary property containing a URI.
@@ -47,7 +47,7 @@
 	<h5 class='topic w800'>REST server API changes</h5>
 	<ul class='spaced-list'>
 		<li>
-			Improvements to {@del oajr.RestServlet} to automatically handle relative URIs in POJOs.
+			Improvements to <del>RestServlet</del> to automatically handle relative URIs in POJOs.
 			<ul>
 				<li><c>SerializerContext.SERIALIZER_uriContext</c> property set by default to web app context root.</li>
 				<li><c>SerializerContext.SERIALIZER_uriAuthority</c> property set by default to the request scheme+hostname+port.</li>

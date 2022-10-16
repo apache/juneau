@@ -204,7 +204,7 @@
 			Improvements to swap support.
 			<ul>
 				<li>New {@link oaj.annotation.Swap @Swap} annotation.
-					<br>Replaces the <c>@Pojo</c> and {@del @BeanProperty(swap)} annotations.
+					<br>Replaces the <c>@Pojo</c> and <del>@BeanProperty(swap)</del> annotations.
 				<li>Support for per-media-type swaps.
 					<br>Programmatic example:
 					<p class='bcode'>
@@ -251,7 +251,7 @@
 			<ja>@Swap</ja>(impl=FreeMarkerSwap.<jk>class</jk>, template=<js>"MyPojo.div.ftl"</js>)
 			<jk>public class</jk> MyPojo {}
 					</p>
-				<li>New {@del oaj.annotation.Swaps @Swaps} annotation for defining multiple swaps
+				<li>New <del>Swaps @Swaps</del> annotation for defining multiple swaps
 					against the same POJO when they're differentiated by media types:
 					<p class='bcode'>
 		<ja>@Swaps</ja>(
@@ -265,7 +265,7 @@
 					</p>
 			</ul>
 		<li>
-			New {@del oaj.transform.Surrogate} interface for identifying surrogate classes.
+			New <del>Surrogate</del> interface for identifying surrogate classes.
 		<li>
 			Serializers can now serialize to {@link java.util.StringBuilder StringBuilders}.
 		<li>
@@ -311,42 +311,42 @@
 			</p>
 			This is mostly an internal change and doesn't affect the existing APIs.
 		<li>
-			{@del oaj.transform.PojoSwap#swap(BeanSession,Object)} and {@del oaj.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)} 
+			<del>PojoSwap.swap(BeanSession,Object)</del>and <del>PojoSwap.unswap(BeanSession,Object,ClassMeta)</del> 
 			can now throw arbitrary exceptions instead of having to wrap them in <c>SerializeException</c>/<c>ParseException</c>.
 		<li>
-			New {@del oaj.utils.CalendarUtils} class that encapsulates serialization/parsing logic from {@del oaj.transforms.CalendarSwap} and 
-			{@del oaj.transforms.DateSwap}.
+			New <del>CalendarUtils</del> class that encapsulates serialization/parsing logic from <del>CalendarSwap</del>and 
+			<del>DateSwap</del>.
 		<li>
 			New annotation {@link oaj.html.annotation.Html#anchorText}.
 		<li>
-			New methods on {@del oaj.ObjectList}:
+			New methods on <del>ObjectList</del>:
 			<ul>
-				<li>{@del oaj.ObjectList#get(int,Class) get(int,Class)}
+				<li><del>ObjectList#get(int,Class) get(int,Class)</del>
 				<li>{@del oaj.ObjectList#get(int,Type,Type...) get(int,Type,Type...)}
-				<li>{@del oaj.ObjectList#getMap(int,Class,Class) getMap(int,Class,Class)}
-				<li>{@del oaj.ObjectList#getList(int,Class) getList(int,Class)}
+				<li><del>ObjectList#getMap(int,Class,Class) getMap(int,Class,Class)</del>
+				<li><del>ObjectList#getList(int,Class) getList(int,Class)</del>
 			</ul>
 		<li>
-			New methods on {@del oaj.ObjectMap}:
+			New methods on <del>ObjectMap</del>:
 			<ul>
-				<li>{@del oaj.ObjectMap#get(String,Class) get(String,Class)}
+				<li><del>ObjectMap#get(String,Class) get(String,Class)</del>
 				<li>{@del oaj.ObjectMap#get(String,Type,Type...) get(String,Type,Type...)}
-				<li>{@del oaj.ObjectMap#getWithDefault(String,Object) getWithDefault(String,Object)}
-				<li>{@del oaj.ObjectMap#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)}
+				<li><del>ObjectMap#getWithDefault(String,Object) getWithDefault(String,Object)</del>
+				<li><del>ObjectMap#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)</del>
 				<li>{@del oaj.ObjectMap#getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)}
-				<li>{@del oaj.ObjectMap#getSwapped(String,PojoSwap) getSwapped(String,PojoSwap)}
-				<li>{@del oaj.ObjectMap#getAt(String,Class) getAt(String,Class)}
+				<li><del>ObjectMap#getSwapped(String,PojoSwap) getSwapped(String,PojoSwap)</del>
+				<li><del>ObjectMap#getAt(String,Class) getAt(String,Class)</del>
 				<li>{@del oaj.ObjectMap#getAt(String,Type,Type...) getAt(String,Type,Type...)}
-				<li>{@del oaj.ObjectMap#getMap(String,Class,Class,Map) getMap(String,Class,Class,Map)}
-				<li>{@del oaj.ObjectMap#getList(String,Class,List) getList(String,Class,List)}
+				<li><del>ObjectMap#getMap(String,Class,Class,Map) getMap(String,Class,Class,Map)</del>
+				<li><del>ObjectMap#getList(String,Class,List) getList(String,Class,List)</del>
 			</ul>
 		<li>
-			New methods on {@del oaj.utils.PojoRest}:
+			New methods on <del>PojoRest</del>:
 			<ul>
-				<li>{@del oaj.utils.PojoRest#get(String,Class) get(String,Class)}
+				<li><del>PojoRest#get(String,Class) get(String,Class)</del>
 				<li>{@del oaj.utils.PojoRest#get(String,Type,Type...) get(String,Type,Type...)}
-				<li>{@del oaj.utils.PojoRest#getWithDefault(String,Object) getWithDefault(String,Object)}
-				<li>{@del oaj.utils.PojoRest#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)}
+				<li><del>PojoRest#getWithDefault(String,Object) getWithDefault(String,Object)</del>
+				<li><del>PojoRest#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)</del>
 				<li>{@del oaj.utils.PojoRest#getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)}
 			</ul>
 		<li>
@@ -358,7 +358,7 @@
 			the call to <c>getClass()</c> to retrieve the annotation value could not be called before calling
 			the <c><jk>super</jk>()</c> method.
 		<li>
-			New class: {@del oaj.utils.PojoMerge}
+			New class: <del>PojoMerge</del>
 		<li>
 			New doc: <dc>2.6.2 - @Pojo annotation</dc>
 		<li>
@@ -368,7 +368,7 @@
 	<h5 class='topic w800'>juneau-dto</h5>
 	<ul class='spaced-list'>
 		<li>
-			{@link oaj.dto.html5.HtmlElementMixed#children(Object...)} can now take in collections
+			{@link oaj.dto.html5.HtmlElementMixed.children(Object...)} can now take in collections
 			of objects.
 		<li>
 			The DTO beans can now be serialized to strings of their typical language by calling the <c>toString()</c> method.
@@ -381,13 +381,13 @@
 	<ul class='spaced-list'>
 		<li>
 			Revamped and simplified servlet and REST-call lifecycle handling through new
-			{@del @RestHook} annotation.
+			<del>@RestHook</del>annotation.
 			<ul>
-				<li>The {@del oajr.RestServlet#init(ServletConfig)} method is now final and can
+				<li>The <del>RestServlet.init(ServletConfig)</del>method is now final and can
 					no longer be extended.
 					<br>Instead, use {@link oajr.annotation.HookEvent#INIT} or 
 					{@link oajr.annotation.HookEvent#POST_INIT} for initialization.
-				<li>The following methods on {@del oajr.RestServlet} have been removed:
+				<li>The following methods on <del>RestServlet</del> have been removed:
 					<ul>
 						<li><c>init(RestConfig)</c> 
 							- Use {@link oajr.annotation.HookEvent#INIT} instead.
@@ -401,40 +401,40 @@
 			</ul>
 		<li>
 			Simplified {@link oajr.widget.MenuItemWidget}.
-			<br>Exposes an abstract method {@del getContent(RestRequest)} that
+			<br>Exposes an abstract method <del>getContent(RestRequest)</del> that
 			can return raw HTML via readers or char-sequences, or any other object (such as HTML5 beans) that will
-			get converted to HTML using {@link oaj.html.HtmlSerializer#DEFAULT}.
+			get converted to HTML using {@link oaj.html.HtmlSerializer.DEFAULT}.
 		<li>
-			{@del oajr.RestResourceResolver} instances are now inherited from parent resources to child resources
+			<del>RestResourceResolver</del> instances are now inherited from parent resources to child resources
 			unless explicitly overridden at the child level.
 			<br>It's also been changed to an interface.
-		<li>New annotations on {@del @RestResource}:
+		<li>New annotations on <del>@RestResource</del>:
 			<ul>
-				<li>{@del resourceResolver()}
+				<li><del>resourceResolver()</del>
 					<br>Allows you to specify a resource resolver on the servlet context to make it easier to work with
 					dependency injection frameworks.
-				<li>{@del contextPath()} - 
+				<li><del>contextPath()</del> - 
 					<br>Allows you to override the context path value inherited from the servlet container.
-				<li>{@del allowHeaderParams()} - 
+				<li><del>allowHeaderParams()</del> - 
 					<br>Replaces the <c>RestContext.REST_allowHeaderParams</c> setting.
-				<li>{@del allowMethodParam()} - 
+				<li><del>allowMethodParam()</del> - 
 					<br>Replaces the <c>RestContext.REST_allowMethodParam</c> setting.
-				<li>{@del allowBodyParam()} - 
+				<li><del>allowBodyParam()</del> - 
 					<br>Replaces the <c>RestContext.REST_allowBodyParam</c> setting.
-				<li>{@del renderResponseStackTraces()} - 
+				<li><del>renderResponseStackTraces()</del> - 
 					<br>Replaces the <c>RestContext.REST_xxx</c> setting.
-				<li>{@del useStackTraceHashes()} - 
+				<li><del>useStackTraceHashes()</del> - 
 					<br>Replaces the <c>RestContext.REST_useStackTraceHashes</c> setting.
-				<li>{@del defaultCharset()} - 
+				<li><del>defaultCharset()</del> - 
 					<br>Replaces the <c>RestContext.REST_defaultCharset</c> setting.
-				<li>{@del paramFormat()} - 
+				<li><del>paramFormat()</del>- 
 					<br>Replaces the <c>RestContext.REST_paramFormat</c> setting.
 			</ul>
-		<li>New annotations on {@del oajr.annotation.RestMethod @RestMethod}:
+		<li>New annotations on <del>RestMethod @RestMethod</del>:
 			<ul>
-				<li>{@del oajr.annotation.RestMethod#defaultCharset() defaultCharset()} - 
+				<li><del>RestMethod.defaultCharset() defaultCharset()</del>- 
 					<br>Replaces the <c>RestContext.REST_defaultCharset</c> setting.
-				<li>{@del RestMethod#paramFormat()} - 
+				<li><del>RestMethod.paramFormat()</del>- 
 					<br>Replaces the <c>RestContext.REST_paramFormat</c> setting.
 			</ul>
 		<li>
@@ -442,12 +442,12 @@
 			<ul>
 				<li>{@link oajr.widget.Widget}
 				<li>{@link oajr.RestConverter}
-				<li>{@del oajr.RestGuard}
+				<li><del>RestGuard</del>
 				<li>{@link oajr.ResponseHandler}
-				<li>{@del oajr.RestCallHandler}
-				<li>{@del oajr.RestInfoProvider}
-				<li>{@del oajr.RestResourceResolver}
-				<li>{@del oajr.RestLogger}
+				<li><del>RestCallHandler</del>
+				<li><del>RestInfoProvider</del>
+				<li><del>RestResourceResolver</del>
+				<li><del>RestLogger</del>
 				<li>{@link oaj.html.HtmlDocTemplate}
 			</ul>
 		<li>
@@ -473,27 +473,27 @@
 			for maximum flexibility instead of the hodge-podge of support in the config file.
 			<br>Top-level servlets should now be defined in the provided <c>jetty.xml</c> file.
 		<li>
-			New methods on {@del RestMicroservice}:
+			New methods on <del>RestMicroservice</del>:
 			<ul>
-				<li>{@del addServlet(Servlet,String)}
-				<li>{@del addServletAttribute(String,Object)}
-				<li>{@del getServer()}
-				<li>{@del getInstance()}
-				<li>{@del getPort()}
-				<li>{@del getContextPath()}
-				<li>{@del getProtocol()}
-				<li>{@del getHostName()}
+				<li><del>addServlet(Servlet,String)</del>
+				<li><del>addServletAttribute(String,Object)</del>
+				<li><del>getServer()</del>
+				<li><del>getInstance()</del>
+				<li><del>getPort()</del>
+				<li><del>getContextPath()</del>
+				<li><del>getProtocol()</del>
+				<li><del>getHostName()</del>
 			</ul>
 		<li>
 			New methods on {@link oaj.microservice.Microservice}:
 			<ul>
-				<li>{@link oaj.microservice.Microservice#getInstance() getInstance()}
+				<li>{@link oaj.microservice.Microservice.getInstance() getInstance()}
 			</ul>
 		<li>
-			New class {@del JettyLogger} for directing Jetty logging to the
+			New class <del>JettyLogger</del> for directing Jetty logging to the
 			java.util.logging framework.
 		<li>
-			New class {@del DebugResource} for viewing and generating
+			New class <del>DebugResource</del>for viewing and generating
 			Jetty thread dumps through REST calls.
 	</ul>
 	

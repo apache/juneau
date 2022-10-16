@@ -21,21 +21,21 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>
-			{@del ConfigurableAnnotations Configurable Annotations}
+			<del>ConfigurableAnnotations Configurable Annotations</del>
 		<li>
-			{@del DefaultPojoSwaps Default PojoSwaps}
+			<del>DefaultPojoSwaps Default PojoSwaps</del>
 		<li>
-			{@del ConfigImports Config Imports}
+			<del>ConfigImports Config Imports</del>
 		<li>
-			{@del BasicRest BasicRest}, {@del BasicRestGroup BasicRestGroup} classes
+			<del>BasicRest BasicRest</del>, <del>BasicRestGroup BasicRestGroup</del> classes
 		<li>
-			{@del RestPathAnnotation Path variables on resource paths}
+			<del>RestPathAnnotation Path variables on resource paths</del>
 		<li>
-			{@del RestmRequestAttributes Request Attributes API}
+			<del>RestmRequestAttributes Request Attributes API</del>
 		<li>
-			{@del RestRoleGuards Role Guards}
+			<del>RestRoleGuards Role Guards</del>
 		<li>
-			{@del RestLoggingAndDebugging Improved REST logging/debugging}
+			<del>RestLoggingAndDebugging Improved REST logging/debugging</del>
 		<li>
 			<a href='#juneau-rest-mock'>New MockRest API</a>
 	</ul>
@@ -57,8 +57,8 @@
 			<ul class='javatree'>
 				<li class='jc'>{@link oaj.serializer.WriterSerializer}
 				<ul>
-					<li class='jf'>{@del oaj.serializer.WriterSerializer#WSERIALIZER_fileCharset WSERIALIZER_fileCharset}
-					<li class='jf'>{@del oaj.serializer.WriterSerializer#WSERIALIZER_streamCharset WSERIALIZER_streamCharset}
+					<li class='jf'><del>WriterSerializer#WSERIALIZER_fileCharset WSERIALIZER_fileCharset</del>
+					<li class='jf'><del>WriterSerializer#WSERIALIZER_streamCharset WSERIALIZER_streamCharset</del>
 				</ul>
 			</ul>
 		<li>
@@ -77,7 +77,7 @@
 		<li>
 			New convenience debugging methods on Marshall API:
 			<ul class='javatree'>
-				<li class='jc'>{@del oaj.marshall.Marshall}
+				<li class='jc'><del>Marshall</del>
 				<ul>
 					<li class='jm'>{@del oaj.marshall.Marshall#format(String,Object...) format(String,Object...)} - <c>MessageFormat</c>-style formatter.
 					<li class='jm'>{@del oaj.marshall.Marshall#out(String,Object...) out(String,Object...)} - Prints <c>MessageFormat</c>-style messages to STDOUT.
@@ -90,9 +90,9 @@
 		<li>
 			New Java 8 date-time transforms:
 			<ul class='javatree'>
-				<li class='jc'>{@del oaj.transforms.TemporalSwap} - For all Java 8 temporal types (e.g. {@link java.time.ZonedDateTime})
-				<li class='jc'>{@del oaj.transforms.TemporalDateSwap} - For {@link java.util.Date}
-				<li class='jc'>{@del oaj.transforms.TemporalCalendarSwap} - For {@link java.util.Calendar}
+				<li class='jc'><del>TemporalSwap</del> - For all Java 8 temporal types (e.g. {@link java.time.ZonedDateTime})
+				<li class='jc'><del>TemporalDateSwap</del> - For {@link java.util.Date}
+				<li class='jc'><del>TemporalCalendarSwap</del> - For {@link java.util.Calendar}
 			</ul>
 		<li>
 			All serializers and parsers now have built-in default swaps for common class types:
@@ -123,17 +123,17 @@
 		<li>
 			Support for import statements:
 			<p class='bcode'>
-		<cc># Import values from another configuration:</cc>
+		<cc>. Import values from another configuration:</cc>
 		<ci>&lt;ParentConfig1&gt;</ci>
 		
 		<cs>[Foo]</cs>
 		<ck>bar</ck> = <cv>baz</cv>
 			</p>
 		<li>
-			The {@del oaj.config.store.ConfigFileStore} now automatically resolves file extensions.
+			The <del>ConfigFileStore</del>now automatically resolves file extensions.
 			<br>New configuration property for specifying search paths for file extensions:
 			<ul class='javatree'>
-				<li class='jf'>{@del oaj.config.store.ConfigFileStore#FILESTORE_extensions}
+				<li class='jf'><del>ConfigFileStore#FILESTORE_extensions</del>
 			</ul>
 		<li>
 			Fixed a bug where instances of {@link oaj.config.store.ConfigMemoryStore} ended up resolving to the same object.
@@ -192,7 +192,7 @@
 				<li class='ja'>{@link oaj.csv.annotation.CsvConfig CsvConfig}
 				<li class='ja'>{@link oaj.html.annotation.HtmlConfig HtmlConfig}
 				<li class='ja'>{@link oaj.html.annotation.HtmlDocConfig HtmlDocConfig}
-				<li class='ja'>{@del oaj.jso.annotation.JsoConfig JsoConfig}
+				<li class='ja'><del>JsoConfig JsoConfig</del>
 				<li class='ja'>{@link oaj.json.annotation.JsonConfig JsonConfig}
 				<li class='ja'>{@link oaj.jsonschema.annotation.JsonSchemaConfig JsonSchemaConfig}
 				<li class='ja'>{@link oaj.msgpack.annotation.MsgPackConfig MsgPackConfig}
@@ -209,19 +209,19 @@
 		<li>
 			New support for using Servlet request attributes.  
 			<ul class='javatree'>
-				<li class='jc'>{@del oajr.RequestAttributes}
+				<li class='jc'><del>RequestAttributes</del>
 				<li class='jc'>{@link oajr.RestContext}
 				<ul>
-					<li class='jf'>{@del REST_attrs}
+					<li class='jf'><del>REST_attrs</del>
 				</ul>
 				<li class='jc'>{@link oajr.RestContext.Builder}
 				<ul>
 					<li class='jm'>{@del attrs(String...)}
-					<li class='jm'>{@del attr(String,Object)}
+					<li class='jm'><del>attr(String,Object)</del>
 				</ul>
-				<li class='jc'>{@del oajr.RestMethodContext}
+				<li class='jc'><del>RestMethodContext</del>
 				<ul>
-					<li class='jf'>{@del oajr.RestMethodContext#RESTMETHOD_attrs RESTMETHOD_attrs}
+					<li class='jf'><del>RestMethodContext#RESTMETHOD_attrs RESTMETHOD_attrs</del>
 				</ul>
 				<li class='jc'>{@link oajr.RestRequest}
 				<ul>
@@ -230,60 +230,60 @@
 				<li class='jc'>{@link oajr.RestResponse}
 				<ul>
 					<li class='jm'>{@link oajr.RestResponse#getAttributes() getAttributes()}
-					<li class='jm'>{@del oajr.RestResponse#attr(String,Object) attr(String,Object)}
+					<li class='jm'><del>RestResponse#attr(String,Object) attr(String,Object)</del>
 				</ul>
 				<li class='ja'>{@link oajr.annotation.Attr}
-				<li class='ja'>{@del RestMethod#attrs()}
-				<li class='ja'>{@del RestResource#attrs()}
+				<li class='ja'><del>RestMethod#attrs()</del>
+				<li class='ja'><del>RestResource#attrs()</del>
 			</ul>
 			<br>This deprecates the following APIs:
 			<ul class='javatree'>
-				<li class='jc'>{@del oajr.RequestProperties}
-				<li class='jc'>{@del oajr.RestMethodProperties}
+				<li class='jc'><del>RequestProperties</del>
+				<li class='jc'><del>RestMethodProperties</del>
 				<li class='jc'>{@link oajr.RestRequest}
 				<ul>
-					<li class='jm'>{@del oajr.RestRequest#getProperties() getProperties()}
-					<li class='jm'>{@del oajr.RestRequest#prop(String,Object) prop(String,Object)}
+					<li class='jm'><del>RestRequest#getProperties() getProperties()</del>
+					<li class='jm'><del>RestRequest.prop(String,Object) prop(String,Object)</del>
 				</ul>
 			</ul>
 		<li>
 			Added the following classes that provide the same support as the servlet classes but doesn't extend from <c>HttpServlet</c>.
-			<br>This fixes an issue where instances of {@del oajr.BasicRestServlet} are registered as top-level servlets even though
+			<br>This fixes an issue where instances of <del>BasicRestServlet</del> are registered as top-level servlets even though
 			you don't want them to be.  
 			<ul class='javatree'>
-				<li class='jac'>{@del oajr.BasicRest} - Non-servlet equivalent to {@del oajr.BasicRestServlet}
-				<li class='jac'>{@del oajr.BasicRestGroup} - Non-servlet equivalent to {@del oajr.BasicRestServletGroup}
-				<li class='jac'>{@del oajr.BasicRestJena} - Non-servlet equivalent to {@del oajr.BasicRestServletJena}
-				<li class='jac'>{@del oajr.BasicRestJenaGroup} - Non-servlet equivalent to {@del oajr.BasicRestServletJenaGroup}
+				<li class='jac'><del>BasicRest</del> - Non-servlet equivalent to <del>BasicRestServlet</del>
+				<li class='jac'><del>BasicRestGroup</del> - Non-servlet equivalent to <del>BasicRestServletGroup</del>
+				<li class='jac'><del>BasicRestJena</del> - Non-servlet equivalent to <del>BasicRestServletJena</del>
+				<li class='jac'><del>BasicRestJenaGroup</del> - Non-servlet equivalent to <del>BasicRestServletJenaGroup</del>
 			</ul>
 		<li>
 			HTML widgets now have access to the <c>RestResponse</c> object if they need access to the output bean.
 		<li>
 			New annotations for simplified role-based guards on classes and methods:
 			<ul class='javatree'>
-				<li class='ja'>{@del RestResource} 
+				<li class='ja'><del>RestResource</del> 
 				<ul>
-					<li class='jm'>{@del roleGuard()}
-					<li class='jm'>{@del rolesDeclared()}
+					<li class='jm'><del>roleGuard()</del>
+					<li class='jm'><del>rolesDeclared()</del>
 				</ul>
-				<li class='ja'>{@del oajr.annotation.RestMethod} 
+				<li class='ja'><del>RestMethod</del>
 				<ul>
-					<li class='jm'>{@del oajr.annotation.RestMethod#roleGuard roleGuard()}
-					<li class='jm'>{@del oajr.annotation.RestMethod#rolesDeclared rolesDeclared()}
+					<li class='jm'><del>RestMethod#roleGuard roleGuard()</del>
+					<li class='jm'><del>RestMethod.rolesDeclared rolesDeclared()</del>
 				</ul>
 			</ul>
 		<li>
 			New annotations for fine-tuned handling of http-methods/http-headers as query parameters and others:
 			<ul class='javatree'>
-				<li class='ja'>{@del RestResource} 
+				<li class='ja'><del>RestResource</del> 
 				<ul>
-					<li class='jm'>{@del allowedHeaderParams()}
-					<li class='jm'>{@del allowedMethodHeaders()}
-					<li class='jm'>{@del allowedMethodParams()}
+					<li class='jm'><del>allowedHeaderParams()</del>
+					<li class='jm'><del>allowedMethodHeaders()</del>
+					<li class='jm'><del>allowedMethodParams()</del>
 				</ul>
 			</ul>
 		<li>
-			The {@del @RestResource(path)} annotation can now use variables:
+			The <del>@RestResource(path)</del>annotation can now use variables:
 			<p class='bcode'>
 		<ja>@RestResource</ja>(
 			path=<js>"/myResource/{foo}/{bar}"</js>
@@ -305,13 +305,13 @@
 		<li>
 			New interface method for catching arbitrary thrown objects and converting them to other throwables.
 			<ul class='javatree'>
-				<li class='jc'>{@del oajr.RestCallHandler}
+				<li class='jc'><del>RestCallHandler</del>
 				<ul>
-					<li class='jm'>{@del oajr.RestCallHandler#convertThrowable(Throwable) convertThrowable(Throwable)}
+					<li class='jm'><del>RestCallHandler.convertThrowable(Throwable) convertThrowable(Throwable)</del>
 				</ul>
-				<li class='jc'>{@del BasicRestCallHandler}
+				<li class='jc'><del>BasicRestCallHandler</del>
 				<ul>
-					<li class='jm'>{@del convertThrowable(Throwable)}
+					<li class='jm'><del>convertThrowable(Throwable)</del>
 				</ul>
 			</ul>
 		<li>
@@ -342,7 +342,7 @@
 			)
 			<jk>public</jk> String myMethod() <jk>throws</jk> Exception {...}
 			</p>		
-			See {@del RestLoggingAndDebugging} for details.
+			See <del>RestLoggingAndDebugging</del>for details.
 		<li>
 			Fixed a bug where the HTTP response was returning 405 (method not found) but should really be 404 (not found)
 			when no path patterns match on any of the Java methods.

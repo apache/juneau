@@ -33,14 +33,14 @@
 		<li>
 			New settings in BeanContext.  These can be applied to all serializers/parsers.
 			<ul>
-				<li>{@del BEAN_ignoreInvocationExceptionsOnGetters}
-				<li>{@del BEAN_ignoreInvocationExceptionsOnSetters}
-				<li>{@del BEAN_notBeanPackages_add}
-				<li>{@del BEAN_notBeanPackages_remove}
+				<li><del>BEAN_ignoreInvocationExceptionsOnGetters</del>
+				<li><del>BEAN_ignoreInvocationExceptionsOnSetters</del>
+				<li><del>BEAN_notBeanPackages_add</del>
+				<li><del>BEAN_notBeanPackages_remove</del>
 			</ul>
 		</li>
 		<li>
-			Eliminated <c>addNotBeanClassPatterns(String...)</c> methods throughout API since these are now controlled by {@del BEAN_notBeanPackages_add} / {@del BEAN_notBeanPackages_remove} properties.
+			Eliminated <c>addNotBeanClassPatterns(String...)</c> methods throughout API since these are now controlled by <del>BEAN_notBeanPackages_add</del> / <del>BEAN_notBeanPackages_remove</del> properties.
 		</li>
 		<li>
 			New settings in <c>RestServletProperties</c>.
@@ -59,7 +59,7 @@
 			While the old behavior was as-designed, the new behavior is more in-line with expected behavior.
 		</li>
 		<li>
-			Added support for HTTP header <js>"X-Response-Headers"</js> to {@del oajr.RestServlet}. <br>
+			Added support for HTTP header <js>"X-Response-Headers"</js> to <del>RestServlet</del>. <br>
 			Allows you to specify one or more headers that should be returned on the response from the servlet.<br>
 			For example, to get a page to automatically refresh every 1 second, you can append the following to a URL:  <c>?x-response-headers={Refresh=1}</c>
 		</li>

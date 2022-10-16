@@ -66,22 +66,22 @@
 			New configurable property classes for everything are now structured better and easier to locate and identify through the following new classes:
 			<ul>
 				<li>{@link oaj.BeanContext}</li>
-				<li>{@del SerializerContext}</li>
-				<li>{@del ParserContext}</li>
+				<li><del>SerializerContext</del></li>
+				<li><del>ParserContext</del></li>
 			</ul>		
 		</li>
 		<li>
 			Enhancements to {@link oaj.BeanContext}:
 			<ul>
 				<li>
-					Ability to mark bean properties as hidden using {@del @BeanProperty(hidden)} so that they don't get serialized.
+					Ability to mark bean properties as hidden using <del>@BeanProperty(hidden)</del> so that they don't get serialized.
 				</li>
 				<li>
 					Simplified <c>ClassType</c> {@link oaj.ClassMeta} API.<br>
 					Combined 4 classes into a single class.
 				</li>
 				<li>
-					New {@del @Bean#filter} and {@del @BeanProperty#filter} annotations.<br>
+					New <del>@Bean.filter</del>and <del>@BeanProperty.filter</del>annotations.<br>
 					Used for defining filters on bean classes and bean properties instead of just globally through <c>BeanContext.addTransforms(Class[])</c>.
 				</li>
 				<li>
@@ -89,13 +89,13 @@
 					Used for customizing bean property names.
 				</li>
 				<li>
-					New {@del @BeanProperty#beanUri} and {@del @BeanProperty#id} annotations.<br>
+					New <del>@BeanProperty.beanUri</del>and <del>@BeanProperty.id</del>annotations.<br>
 					Used for associating beans with URLs and IDs.<br>
 					Used by XML serializer to add a url attribute on a bean element.<br>
 					Used by RDF/XML serializer to construct <c>rdf:resource</c> attributes.
 				</li>
 				<li>
-					New {@del BeanProperty#properties()} annotation.
+					New <del>BeanProperty.properties()</del>annotation.
 					Used for limiting properties on child elements.
 				</li>	
 			</ul>
@@ -123,38 +123,38 @@
 	<h5 class='topic w800'>REST server updates</h5>
 	<ul class='spaced-list'>
 			<li>
-			Support for overriding bean context and serializer properties in a REST method call through new {@del RestResponse#setProperty(String,Object)} method.<br>
+			Support for overriding bean context and serializer properties in a REST method call through new <del>RestResponse.setProperty(String,Object)</del>method.<br>
 			For example, allows you to control whitespace options on a per-request basis.
 		</li>
 		<li>
 			Several new annotations on REST servlets:
 			<ul>
-				<li>{@del @RestResource#filters} - Associate post-formatting filters on a resource level.</li>
-				<li>{@del @RestResource#guards} - Associate resource-level guards.</li>
-				<li>{@del @RestResource#messages} - Associate a resource bundle with a REST servlet.  Comes with several convenience methods for looking up messages for the client locale.</li>
-				<li>{@del @RestResource#properties} - Override default bean context, serializer, and parser properties though an annotation.</li>
+				<li><del>@RestResource.filters</del>- Associate post-formatting filters on a resource level.</li>
+				<li><del>@RestResource.guards</del>- Associate resource-level guards.</li>
+				<li><del>@RestResource.messages</del>- Associate a resource bundle with a REST servlet.  Comes with several convenience methods for looking up messages for the client locale.</li>
+				<li><del>@RestResource.properties</del>- Override default bean context, serializer, and parser properties though an annotation.</li>
 			</ul> 
 		</li>
 		<li>
 			Several new annotations on REST methods:
 			<ul>
 				<li><c>@RestMethod(filters)</c> - Associate post-formatting filters on a method level.</li>
-				<li>{@del oajr.annotation.RestMethod#guards() @RestMethod(guards)} - Associate method-level guards.</li>
+				<li><del>RestMethod.guards() @RestMethod(guards)</del> - Associate method-level guards.</li>
 			</ul>
 		</li>
 		<li>				
 			New annotations on REST method parameters with automatic conversion:
 			<ul>
-				<li>{@del @Attr} - A parameter or URL variable value as a parsed POJO.</li>
-				<li>{@del @Param} - A query parameter value as a parsed POJO.</li>
-				<li>{@del @PathRemainder}- The remainder after a URL pattern match as a String.</li>
-				<li>{@del @Header} - An HTTP header value as a parsed POJO.</li>
-				<li>{@del @Content} - The HTTP content as a parsed POJO.</li>
+				<li><del>@Attr</del> - A parameter or URL variable value as a parsed POJO.</li>
+				<li><del>@Param</del> - A query parameter value as a parsed POJO.</li>
+				<li><del>@PathRemainder</del>- The remainder after a URL pattern match as a String.</li>
+				<li><del>@Header</del> - An HTTP header value as a parsed POJO.</li>
+				<li><del>@Content</del>- The HTTP content as a parsed POJO.</li>
 				<li>{@link oajr.annotation.Method @Method} - The HTTP method name as a String.</li>
 			</ul>
 		</li>
 		<li>
-			HTTP response content POJOs can now simply be returned from methods instead of calling {@del oajr.RestResponse#setOutput(Object)}.		
+			HTTP response content POJOs can now simply be returned from methods instead of calling <del>RestResponse#setOutput(Object)</del>.		
 		</li>	
 	</ul>
 </div>

@@ -21,7 +21,7 @@
 	</p>
 	<p>
 		The biggest change is that the <c>RestSerializer</c>, <c>RestParser</c>, <c>RestSerializerGroup</c>, and <c>RestParserGroup</c> classes have been eliminated entirely.<br>  
-		Instead, the existing {@link oaj.serializer.Serializer}, {@link oaj.parser.Parser}, {@del oaj.serializer.SerializerGroup}, and {@del oaj.parser.ParserGroup} classes of the core API have been augmented to replace them.
+		Instead, the existing {@link oaj.serializer.Serializer}, {@link oaj.parser.Parser}, <del>SerializerGroup</del>, and <del>ParserGroup</del> classes of the core API have been augmented to replace them.
 	</p>
 	<p>
 		Adoptions will be required if you have previously used these classes.
@@ -34,7 +34,7 @@
 				<li>Entirely reworked class hierarchy to make it easier to define new serializers.</li>
 				<li>New {@link oaj.serializer.WriterSerializer} base class for defining character-based serializers.</li>
 				<li>New {@link oaj.serializer.OutputStreamSerializer} base class for defining byte-based serializers.</li>
-				<li>Updated {@del oaj.serializer.SerializerGroup} class with full support for RFC2616 <c>Accept-Content</c> headers.</li>
+				<li>Updated <del>SerializerGroup</del> class with full support for RFC2616 <c>Accept-Content</c> headers.</li>
 				<li>Improved cloning support on serializers and serializer groups.</li>
 			</ul>
 	       	</li>
@@ -51,7 +51,7 @@
 			New <c>org.apache.juneau.swap</c> package.
 			<ul>
 				<li>Cleaner class structure.</li>
-				<li>Improved {@del oaj.transform.BeanFilter} class for defining property filters on beans.</li>
+				<li>Improved <del>BeanFilter</del> class for defining property filters on beans.</li>
 				<li>Improved {@link oaj.utils.PojoQuery} class for defining filters on objects (previously called <c>ObjectFilter</c>).</li>
 	       		</ul>
 	       	</li>
@@ -61,7 +61,7 @@
 				<li>Defines API for {@link oaj.encoders.Encoder Encoders} for enabling compression in REST servlets and clients.</li>
 				<li>Previously, gzip compression was enabled by default.  This new API allows you to plug in your own compression algorithms.</li>
 				<li>New {@link oaj.encoders.GzipEncoder} class for enabling gzip compression.</li>
-				<li>New {@del oaj.encoders.EncoderGroup} class for managing multiple encoders and finding them based on RFC2616 <c>Accept-Encoding</c> header values.</li>
+				<li>New <del>EncoderGroup</del> class for managing multiple encoders and finding them based on RFC2616 <c>Accept-Encoding</c> header values.</li>
 			</ul>
 		</li>
 		<li>
@@ -73,7 +73,7 @@
 		<li>
 			New <c>org.apache.juneau.jso</c> package.
 			<ul>
-				<li>New {@del oaj.jso.JsoSerializer} class for serializing <c>application/x-java-serialized-object</c> content.</li>
+				<li>New <del>JsoSerializer</del> class for serializing <c>application/x-java-serialized-object</c> content.</li>
 			</ul>
 		</li>
 		<li>
@@ -89,7 +89,7 @@
 			</ul>
 		</li>
 	       	<li>
-			<c>JsonMap</c> and <c>JsonList</c> changed to {@del oaj.ObjectMap} and {@del oaj.ObjectList} to better reflect that they're not limited to just JSON support.
+			<c>JsonMap</c> and <c>JsonList</c> changed to <del>ObjectMap</del> and <del>ObjectList</del> to better reflect that they're not limited to just JSON support.
 	   		</li>
 	   		<li>
 			Renamed <c>PojoSwap</c> to {@link oaj.utils.PojoQuery} to not confuse it with the new Filter API.

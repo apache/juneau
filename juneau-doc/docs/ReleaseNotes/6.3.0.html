@@ -26,7 +26,7 @@
 		<li>
 			New package:  {@link oaj.http}.
 		<li>
-			Support for dynamic beans.  See {@del @BeanProperty(name)}.
+			Support for dynamic beans.  See <del>@BeanProperty(name)</del>.
 		<li>
 			New doc: <dc>2.8 - Virtual Beans</dc>
 		<li>
@@ -38,47 +38,47 @@
 		<jc>// Example</jc>
 		<jk>int</jk> i = JsonParser.<jsf>DEFAULT</jsf>.parse(<js>"123M"</js>);  <jc>// 123MB</jc>
 			</p>
-		<li>New/modified methods on {@del ConfigFile}:
+		<li>New/modified methods on <del>ConfigFile</del>:
 			<ul>
-				<li>{@del ConfigFile#put(String,String,String,boolean)}
-				<li>{@del ConfigFile#put(String,String,Object,Serializer,boolean,boolean)}
+				<li><del>ConfigFile#put(String,String,String,boolean)</del>
+				<li><del>ConfigFile#put(String,String,Object,Serializer,boolean,boolean)</del>
 				<li>{@del ConfigFile#getObject(String,Type,Type...)}
 				<li>{@del ConfigFile#getObject(String,Parser,Type,Type...)}
-				<li>{@del ConfigFile#getObject(String,Class)}
-				<li>{@del ConfigFile#getObject(String,Parser,Class)}
+				<li><del>ConfigFile#getObject(String,Class)</del>
+				<li><del>ConfigFile#getObject(String,Parser,Class)</del>
 				<li>{@del ConfigFile#getObject(String,String,Type,Type...)}
 				<li>{@del ConfigFile#getObject(String,String,Parser,Type,Type...)}
-				<li>{@del ConfigFile#getObject(String,String,Class)}
-				<li>{@del ConfigFile#getObject(String,String,Parser,Class)}
+				<li><del>ConfigFile#getObject(String,String,Class)</del>
+				<li><del>ConfigFile#getObject(String,String,Parser,Class)</del>
 				<li>{@del ConfigFile#getObjectWithDefault(String,Object,Type,Type...)}
 				<li>{@del ConfigFile#getObjectWithDefault(String,Parser,Object,Type,Type...)}
-				<li>{@del ConfigFile#getObjectWithDefault(String,Object,Class)}
-				<li>{@del ConfigFile#getObjectWithDefault(String,Parser,Object,Class)} 
+				<li><del>ConfigFile#getObjectWithDefault(String,Object,Class)</del>
+				<li><del>ConfigFile.getObjectWithDefault(String,Parser,Object,Class)</del>
 			</ul>
-		<li>New ability to interact with config file sections with proxy interfaces with new method {@del ConfigFile#getSectionAsInterface(String,Class)}.
-		<li>{@del @BeanProperty} annotation can now be applied to getters
+		<li>New ability to interact with config file sections with proxy interfaces with new method <del>ConfigFile.getSectionAsInterface(String,Class)</del>.
+		<li><del>@BeanProperty</del>annotation can now be applied to getters
 			and setters defined on interfaces.
 		<li>New methods on {@link oaj.serializer.SerializerSession} and {@link oaj.parser.ParserSession}
 			for retrieving context and runtime-override properties:
 			<ul>
-				<li>{@del Session#getProperty(String)}
-				<li>{@del Session#getProperty(String,String)}
-				<li>{@del Session#getProperty(Class,String)}
-				<li>{@del Session#getProperty(Class,String,Object)}
+				<li><del>Session#getProperty(String)</del>
+				<li><del>Session#getProperty(String,String)</del>
+				<li><del>Session#getProperty(Class,String)</del>
+				<li><del>Session.getProperty(Class,String,Object)</del>
 			</ul>	
-		<li>New {@del org.apache.juneau.serializer.PartSerializer} interface particularly tailored to HTTP
+		<li>New <del>PartSerializer</del>interface particularly tailored to HTTP
 			headers, query parameters, form-data parameters, and path variables.  
 			<br>Allows easy user-defined serialization of these objects.
 			<br>The interface can be used in the following locations:
 			<ul>
-				<li>{@del org.apache.juneau.rest.client.RestClient.Builder#partSerializer(Class)}
-				<li>{@del org.apache.juneau.remoteable.Path#serializer}
-				<li>{@del org.apache.juneau.remoteable.Query#serializer}
-				<li>{@del org.apache.juneau.remoteable.QueryIfNE#serializer}
-				<li>{@del org.apache.juneau.remoteable.FormData#serializer}
-				<li>{@del org.apache.juneau.remoteable.FormDataIfNE#serializer}
-				<li>{@del org.apache.juneau.remoteable.Header#serializer}
-				<li>{@del org.apache.juneau.remoteable.HeaderIfNE#serializer}
+				<li><del>Builder#partSerializer(Class)</del>
+				<li><del>Path#serializer</del>
+				<li><del>Query#serializer</del>
+				<li><del>QueryIfNE#serializer</del>
+				<li><del>FormData#serializer</del>
+				<li><del>FormDataIfNE#serializer</del>
+				<li><del>Header#serializer</del>
+				<li><del>HeaderIfNE#serializer</del>
 			</ul>
 		<li>Across-the-board improvements to the URI-resolution support (i.e. how URIs get serialized).
 			<ul>
@@ -100,7 +100,7 @@
 					these new protocols should (hopefully) be easier to understand.
 					<br>
 					These protocols work on all serialized URL and URI objects, as well as classes and properties 
-					annotated with {@del oaj.annotation.URI @URI}.
+					annotated with <del>URI @URI</del>.
 				<li>New classes:
 					<ul>
 						<li>{@link oaj.UriContext}
@@ -109,12 +109,12 @@
 						<li>{@link oaj.UriResolver}
 					</ul>
 				<li>New configuration properties:
-					<li>{@del SerializerContext#SERIALIZER_uriContext}
-					<li>{@del SerializerContext#SERIALIZER_uriRelativity}
-					<li>{@del SerializerContext#SERIALIZER_uriResolution}
-					<li>{@del SerializerContext#SERIALIZER_maxIndent}
+					<li><del>SerializerContext#SERIALIZER_uriContext</del>
+					<li><del>SerializerContext#SERIALIZER_uriRelativity</del>
+					<li><del>SerializerContext#SERIALIZER_uriResolution</del>
+					<li><del>SerializerContext#SERIALIZER_maxIndent</del>
 			</ul>
-		<li>New annotation property: {@del @BeanProperty(value)}.
+		<li>New annotation property: <del>@BeanProperty(value)</del>.
 			<br>The following two annotations are considered equivalent:
 			<p class='bcode'>
 		<ja>@BeanProperty</ja>(name=<js>"foo"</js>)
@@ -122,23 +122,23 @@
 		<ja>@BeanProperty</ja>(<js>"foo"</js>)
 			</p>
 		<li>Fixed a race condition in ClassMeta.
-		<li><jsf>URLENC_paramFormat</jsf> has been moved to {@del UonSerializer#UON_paramFormat}, 
+		<li><jsf>URLENC_paramFormat</jsf> has been moved to <del>UonSerializer#UON_paramFormat</del>, 
 			and the UON/URL-Encoding serializers will now always serialize all values as plain text.
 			<br>This means that arrays and maps are converted to simple comma-delimited lists.
 		<li>Listener APIs added to serializers and parsers:
 			<ul>
 				<li>{@link oaj.serializer.SerializerListener}
 				<li>{@link oaj.serializer.Serializer.Builder#listener(Class)}
-				<li>{@del @RestResource(serializerListener)}
-				<li>{@del RestConfig#serializerListener(Class)}
+				<li><del>@RestResource(serializerListener)</del>
+				<li><del>RestConfig#serializerListener(Class)</del>
 				<li>{@link oaj.parser.ParserListener}
 				<li>{@link oaj.parser.Parser.Builder#listener(Class)}
-				<li>{@del @RestResource(parserListener)}
-				<li>{@del RestConfig#parserListener(Class)}
-				<li>{@del RestClient.Builder#listeners(Class,Class)}
+				<li><del>@RestResource(parserListener)</del>
+				<li><del>RestConfig#parserListener(Class)</del>
+				<li><del>Builder.listeners(Class,Class)</del>
 			</ul>juneau-examples-core.import1.pngjuneau-examples-core.import1.png
-		<li>The {@del BEAN_debug} flag will now capture parser input and make it
-			available through the {@del ParserSession#getInputAsString()} method so that it can be used
+		<li>The <del>BEAN_debug</del>flag will now capture parser input and make it
+			available through the <del>ParserSession.getInputAsString()</del>method so that it can be used
 			in the listeners.
 		<li>Significant new functionality introduced to the HTML serializer.  
 			<br>Lots of new options for customizing the HTML output.
@@ -149,17 +149,17 @@
 					<br>Annotation can be applied to POJO classes and bean properties.
 				<li>Several new properties for customizing parts of the HTML page:
 					<ul>
-						<li>{@del HtmlDocSerializerContext#HTMLDOC_title}
-						<li>{@del HtmlDocSerializerContext#HTMLDOC_description}
-						<li>{@del HtmlDocSerializerContext#HTMLDOC_branding}
-						<li>{@del HtmlDocSerializerContext#HTMLDOC_header}
-						<li>{@del HtmlDocSerializerContext#HTMLDOC_nav}
-						<li>{@del HtmlDocSerializerContext#HTMLDOC_aside}
-						<li>{@del HtmlDocSerializerContext#HTMLDOC_footer}
-						<li>{@del HtmlDocSerializerContext#HTMLDOC_noResultsMessage}
-						<li>{@del HtmlDocSerializerContext#HTMLDOC_cssUrl}
-						<li>{@del HtmlDocSerializerContext#HTMLDOC_css}
-						<li>{@del HtmlDocSerializerContext#HTMLDOC_template}
+						<li><del>HtmlDocSerializerContext#HTMLDOC_title</del>
+						<li><del>HtmlDocSerializerContext#HTMLDOC_description</del>
+						<li><del>HtmlDocSerializerContext#HTMLDOC_branding</del>
+						<li><del>HtmlDocSerializerContext#HTMLDOC_header</del>
+						<li><del>HtmlDocSerializerContext#HTMLDOC_nav</del>
+						<li><del>HtmlDocSerializerContext#HTMLDOC_aside</del>
+						<li><del>HtmlDocSerializerContext#HTMLDOC_footer</del>
+						<li><del>HtmlDocSerializerContext#HTMLDOC_noResultsMessage</del>
+						<li><del>HtmlDocSerializerContext#HTMLDOC_cssUrl</del>
+						<li><del>HtmlDocSerializerContext#HTMLDOC_css</del>
+						<li><del>HtmlDocSerializerContext#HTMLDOC_template</del>
 					</ul>
 				<li>New interface {@link oaj.html.HtmlDocTemplate} that allows full control over rendering
 					of HTML produced by {@link oaj.html.HtmlDocSerializer}.
@@ -169,10 +169,10 @@
 			can now be applied to fields.  
 		<li>New properties on {@link oaj.BeanContext}:
 			<ul>
-				<li>{@del BEAN_includeProperties}
-				<li>{@del BEAN_excludeProperties}
+				<li><del>BEAN_includeProperties</del>
+				<li><del>BEAN_excludeProperties</del>
 			</ul>
-		<li>New annotation property: {@del @BeanProperty(format)}.
+		<li>New annotation property: <del>@BeanProperty(format)</del>.
 	</ul>
 	
 	<h5 class='topic w800'>org.apache.juneau.rest</h5>
@@ -183,19 +183,19 @@
 			The {@link oajr.RestRequest} class functionality has been broken up into the following
 			functional pieces to reduce its complexity:
 			<ul>
-				<li>{@del oajr.RestRequest#getBody()} - The request body.
+				<li><del>RestRequest.getBody()</del>- The request body.
 				<li>{@link oajr.RestRequest#getHeaders()} - The request headers.
-				<li>{@del RestRequest#getQuery()} - The request query parameters.
-				<li>{@del RestRequest#getFormData()} - The request form data parameters.
-				<li>{@del RestRequest#getPathMatch()} - The path variables and remainder.
+				<li><del>RestRequest.getQuery()</del>- The request query parameters.
+				<li><del>RestRequest.getFormData()</del>- The request form data parameters.
+				<li><del>RestRequest.getPathMatch()</del> - The path variables and remainder.
 			</ul>	
 			The following classes have been introduced:
 			<ul>
-				<li>{@del oajr.RequestBody}
-				<li>{@del oajr.RequestHeaders}
-				<li>{@del oajr.RequestQuery}
-				<li>{@del oajr.RequestFormData}
-				<li>{@del oajr.RequestPath}
+				<li><del>RequestBody</del>
+				<li><del>RequestHeaders</del>
+				<li><del>RequestQuery</del>
+				<li><del>RequestFormData</del>
+				<li><del>RequestPath</del>
 			</ul>						
 		<li>
 			The un-annotated parameter types that can be passed in through REST Java methods has been significantly expanded.
@@ -208,34 +208,34 @@
 			</ul>
 			The new supported types are:
 			<ul>
-				<li>{@del Accept}
-				<li>{@del AcceptCharset}
-				<li>{@del AcceptEncoding}
-				<li>{@del AcceptLanguage}
-				<li>{@del Authorization}
-				<li>{@del CacheControl}
-				<li>{@del Connection}
-				<li>{@del ContentLength}
-				<li>{@del ContentType}
-				<li>{@del Date}
-				<li>{@del Expect}
-				<li>{@del From}
-				<li>{@del Host}
-				<li>{@del IfMatch}
-				<li>{@del IfModifiedSince}
-				<li>{@del IfNoneMatch}
-				<li>{@del IfRange}
-				<li>{@del IfUnmodifiedSince}
-				<li>{@del MaxForwards}
-				<li>{@del Pragma}
-				<li>{@del ProxyAuthorization}
-				<li>{@del Range}
-				<li>{@del Referer}
-				<li>{@del TE}
-				<li>{@del UserAgent}
-				<li>{@del Upgrade}
-				<li>{@del Via}
-				<li>{@del Warning}
+				<li><del>Accept</del>
+				<li><del>AcceptCharset</del>
+				<li><del>AcceptEncoding</del>
+				<li><del>AcceptLanguage</del>
+				<li><del>Authorization</del>
+				<li><del>CacheControl</del>
+				<li><del>Connection</del>
+				<li><del>ContentLength</del>
+				<li><del>ContentType</del>
+				<li><del>Date</del>
+				<li><del>Expect</del>
+				<li><del>From</del>
+				<li><del>Host</del>
+				<li><del>IfMatch</del>
+				<li><del>IfModifiedSince</del>
+				<li><del>IfNoneMatch</del>
+				<li><del>IfRange</del>
+				<li><del>IfUnmodifiedSince</del>
+				<li><del>MaxForwards</del>
+				<li><del>Pragma</del>
+				<li><del>ProxyAuthorization</del>
+				<li><del>Range</del>
+				<li><del>Referer</del>
+				<li><del>TE</del>
+				<li><del>UserAgent</del>
+				<li><del>Upgrade</del>
+				<li><del>Via</del>
+				<li><del>Warning</del>
 				<li>{@link java.util.TimeZone}
 				<li>{@link java.io.InputStream}
 				<li>{@link javax.servlet.ServletInputStream}
@@ -244,20 +244,20 @@
 				<li>{@link javax.servlet.ServletOutputStream}
 				<li>{@link java.io.Writer}
 				<li>{@link java.util.ResourceBundle} - Client-localized resource bundle.
-				<li>{@del oaj.utils.MessageBundle} - A resource bundle with additional features.
+				<li><del>MessageBundle</del> - A resource bundle with additional features.
 				<li>{@link java.util.Locale} - Client locale.
-				<li>{@del oajr.RequestHeaders} - API for accessing request headers.
-				<li>{@del oajr.RequestQuery} - API for accessing request query parameters.
-				<li>{@del oajr.RequestFormData} - API for accessing request form data.
-				<li>{@del oajr.RequestPath} - API for accessing path variables.
-				<li>{@del oajr.RequestBody} - API for accessing request body.
+				<li><del>RequestHeaders</del> - API for accessing request headers.
+				<li><del>RequestQuery</del> - API for accessing request query parameters.
+				<li><del>RequestFormData</del> - API for accessing request form data.
+				<li><del>RequestPath</del> - API for accessing path variables.
+				<li><del>RequestBody</del> - API for accessing request body.
 				<li>{@link oaj.http.HttpMethod} - The method name matched (when using <c><ja>@RestMethod</ja>(name=<js>"*"</js>)</c>)
 				<li>{@link java.util.logging.Logger} - The logger to use for logging.
-				<li>{@del oaj.internal.JuneauLogger} - Logger with additional features.
+				<li><del>JuneauLogger</del> - Logger with additional features.
 				<li>{@link oajr.RestContext} - The resource read-only context.
 				<li>{@link oaj.parser.Parser} - The parser matching the request content type.
 				<li>{@link oaj.dto.swagger.Swagger} - The auto-generated Swagger doc.
-				<li>{@del ConfigFile} - The external config file for the resource.
+				<li><del>ConfigFile</del>- The external config file for the resource.
 			</ul>
 			So, for example...
 			<p class='bcode'>
@@ -286,84 +286,84 @@
 		)
 			</p>
 		<li>
-			A new annotation {@del @RestResource(paramResolvers)}}
+			A new annotation <del>@RestResource(paramResolvers)</del>}
 			that allows you to define your own custom Java method parameter resolvers.
 		<li>
 			Fixed bug where Writer returned by {@link oajr.RestResponse#getWriter()} was not being flushed automatically
 			at the end of the HTTP call.
 		<li>
-			New annotations added to {@del oajr.annotation.RestMethod @RestMethod}:
+			New annotations added to <del>RestMethod @RestMethod</del>:
 			<ul>
-				<li>{@del oajr.annotation.RestMethod#defaultQuery() defaultQuery()}
-				<li>{@del oajr.annotation.RestMethod#defaultFormData() defaultFormData()}
-				<li>{@del bpIncludes()}
-				<li>{@del bpExcludes()}
+				<li><del>RestMethod#defaultQuery() defaultQuery()</del>
+				<li><del>RestMethod.defaultFormData() defaultFormData()</del>
+				<li><del>bpIncludes()</del>
+				<li><del>bpExcludes()</del>
 			</ul>
 		<li>
 			Default values on header, query, and form-data annotations:
 			<ul>
-				<li>{@del @Header(def)} - Default header value.
-				<li>{@del @Query(def)} - Default query parameter value.
-				<li>{@del @FormData(def)} - Default form data parameter value.
+				<li><del>@Header(def)</del> - Default header value.
+				<li><del>@Query(def)</del> - Default query parameter value.
+				<li><del>@FormData(def)</del>- Default form data parameter value.
 			</ul>
 		<li>
-			New attributes on {@del @RestResource}:
+			New attributes on <del>@RestResource</del>:
 			<ul>
-				<li>{@del serializerListener()}
-				<li>{@del parserListener()}
-				<li>{@del widgets()}
-				<li>{@del swagger()}
-				<li>{@del htmldoc()}
+				<li><del>serializerListener()</del>
+				<li><del>parserListener()</del>
+				<li><del>widgets()</del>
+				<li><del>swagger()</del>
+				<li><del>htmldoc()</del>
 			</ul>
 		<li>
-			New attributes on {@del oajr.annotation.RestMethod @RestMethod}:
+			New attributes on <del>RestMethod @RestMethod</del>:
 			<ul>
-				<li>{@del widgets()}
-				<li>{@del oajr.annotation.RestMethod#swagger() swagger()}
-				<li>{@del oajr.annotation.RestMethod#htmldoc() htmldoc()}
+				<li><del>widgets()</del>
+				<li><del>RestMethod#swagger() swagger()</del>
+				<li><del>RestMethod.htmldoc() htmldoc()</del>
 			</ul>
 		<li>
 			New string vars:
 			<ul>
 				<li>{@link oajr.vars.UrlVar} - Resolve <js>"$U{...}"</js> variables to URLs.
-				<li>{@del oajr.vars.WidgetVar} - Resolve <js>"$W{...}"</js> variables to widget contents.
+				<li><del>WidgetVar</del>- Resolve <js>"$W{...}"</js> variables to widget contents.
 			</ul>
 		<li>
-			New methods on {@del RestConfig}:
+			New methods on <del>RestConfig</del>:
 			<ul>
-				<li>{@del setHtmlTitle(String)}
-				<li>{@del setHtmlDescription(String)}
-				<li>{@del setHtmlBranding(String)}
-				<li>{@del setHtmlHeader(String)}
-				<li>{@del setHtmlLinks(String)}
-				<li>{@del setHtmlNav(String)}
-				<li>{@del setHtmlAside(String)}
-				<li>{@del setHtmlFooter(String)}
-				<li>{@del setHtmlCss(String)}
-				<li>{@del setHtmlCssUrl(String)}
-				<li>{@del setHtmlNoWrap(boolean)}
-				<li>{@del setHtmlNoResultsMessage(String)}
-				<li>{@del setHtmlTemplate(Class)}
-				<li>{@del setHtmlTemplate(HtmlDocTemplate)}
-				<li>{@del addWidget(Class)}
+				<li><del>setHtmlTitle(String)</del>
+				<li><del>setHtmlDescription(String)</del>
+				<li><del>setHtmlBranding(String)</del>
+				<li><del>setHtmlHeader(String)</del>
+				<li><del>setHtmlLinks(String)</del>
+				<li><del>setHtmlNav(String)</del>
+				<li><del>setHtmlAside(String)</del>
+				<li><del>setHtmlFooter(String)</del>
+				<li><del>setHtmlCss(String)</del>
+				<li><del>setHtmlCssUrl(String)</del>
+				<li><del>setHtmlNoWrap(boolean)</del>
+				<li><del>setHtmlNoResultsMessage(String)</del>
+				<li><del>setHtmlTemplate(Class)</del>
+				<li><del>setHtmlTemplate(HtmlDocTemplate)</del>
+				<li><del>addWidget(Class)</del>
 			</ul>
 		<li>
 			New methods on {@link oajr.RestResponse}:
 			<ul>
-				<li>{@del setHtmlTitle(Object)}
-				<li>{@del setHtmlDescription(Object)}
-				<li>{@del setHtmlBranding(Object)}
-				<li>{@del setHtmlHeader(Object)}
-				<li>{@del setHtmlLinks(Object)}
-				<li>{@del setHtmlNav(Object)}
-				<li>{@del setHtmlAside(Object)}
-				<li>{@del setHtmlFooter(Object)}
-				<li>{@del setHtmlCss(Object)}
-				<li>{@del setHtmlCssUrl(Object)}
-				<li>{@del setHtmlNoWrap(boolean)}
-				<li>{@del setHtmlNoResultsMessage(Object)}
-				<li>{@del setHtmlTemplate(Class)}
-				<li>{@del setHtmlTemplate(HtmlDocTemplate)}
+				<li><del>setHtmlTitle(Object)</del>
+				<li><del>setHtmlDescription(Object)</del>
+				<li><del>setHtmlBranding(Object)</del>
+				<li><del>setHtmlHeader(Object)</del>
+				<li><del>setHtmlLinks(Object)</del>
+				<li><del>setHtmlNav(Object)</del>
+				<li><del>setHtmlAside(Object)</del>
+				<li><del>setHtmlFooter(Object)</del>
+				<li><del>setHtmlCss(Object)</del>
+				<li><del>setHtmlCssUrl(Object)</del>
+				<li><del>setHtmlNoWrap(boolean)</del>
+				<li><del>setHtmlNoResultsMessage(Object)</del>
+				<li><del>setHtmlTemplate(Class)</del>
+				<li><del>setHtmlTemplate(HtmlDocTemplate)</del>
 			</ul>
 		<li>
 			<c>&amp;plainText=true</c> parameter now works on byte-based serializers by converting the output to hex.
@@ -371,10 +371,10 @@
 			New classes for widget support:
 			<ul>
 				<li>{@link oajr.widget.Widget}
-				<li>{@del PoweredByJuneauWidget}
-				<li>{@del ContentTypeLinksColumnWidget}
-				<li>{@del ContentTypeLinksRowWidget}
-				<li>{@del QueryWidget}
+				<li><del>PoweredByJuneauWidget</del>
+				<li><del>ContentTypeLinksColumnWidget</del>
+				<li><del>ContentTypeLinksRowWidget</del>
+				<li><del>QueryWidget</del>
 			</ul>
 		<li>
 			<c>devops.css</c> cleaned up.
@@ -397,16 +397,16 @@
 	<h5 class='topic w800'>org.apache.juneau.rest.client</h5>
 	<ul class='spaced-list'>
 		<li>
-			New {@del org.apache.juneau.remoteable.Path} annotation for specifying path variables on remoteable interfaces.
+			New <del>Path</del> annotation for specifying path variables on remoteable interfaces.
 		<li>
-			New {@del @RequestBean} annotation for specifying beans with remoteable annotations
+			New <del>@RequestBean</del> annotation for specifying beans with remoteable annotations
 			defined on properties.
 		<li>
 			The following annotations (and related methods on RestCall) can now take <c>NameValuePairs</c> and beans as input 
 			when using <js>"*"</js> as the name.
-			<br>{@del org.apache.juneau.remoteable.FormData},{@del org.apache.juneau.remoteable.FormDataIfNE},
-			{@del org.apache.juneau.remoteable.Query},{@del org.apache.juneau.remoteable.QueryIfNE},
-			{@del org.apache.juneau.remoteable.Header},{@del org.apache.juneau.remoteable.HeaderIfNE} 
+			<br><del>FormData</del>,<del>FormDataIfNE</del>,
+			<del>Query</del>,<del>QueryIfNE</del>,
+			<del>Header</del>,<del>HeaderIfNE</del> 
 	</ul>
 	
 	<h5 class='topic w800'>org.apache.juneau.microservice</h5>
