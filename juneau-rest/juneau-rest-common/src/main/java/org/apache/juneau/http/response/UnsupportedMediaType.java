@@ -33,7 +33,7 @@ import org.apache.juneau.internal.*;
  * <br>For example, the client uploads an image as image/svg+xml, but the server requires that images use a different format.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *
  * @serial exclude

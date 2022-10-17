@@ -37,7 +37,7 @@ import org.apache.juneau.jena.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
 @Documented
@@ -162,7 +162,7 @@ public @interface Rdf {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -176,7 +176,7 @@ public @interface Rdf {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 *
 	 * @return The annotation value.

@@ -19,11 +19,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.forms#the-button-element <button>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-button-element">&lt;button&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="button")
@@ -56,7 +56,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-autofocus autofocus} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
 	 *
 	 * <p>
 	 * Automatically focus the form control when the page is loaded.
@@ -72,7 +72,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-disabled disabled} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-disabled">disabled</a> attribute.
 	 *
 	 * <p>
 	 * Whether the form control is disabled.
@@ -88,7 +88,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fae-form form} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 *
 	 * <p>
 	 * Associates the control with a form element.
@@ -102,7 +102,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fs-formaction formaction} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formaction">formaction</a> attribute.
 	 *
 	 * <p>
 	 * URL to use for form submission.
@@ -123,7 +123,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fs-formenctype formenctype} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formenctype">formenctype</a> attribute.
 	 *
 	 * <p>
 	 * Form data set encoding type to use for form submission.
@@ -137,7 +137,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fs-formmethod formmethod} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formmethod">formmethod</a> attribute.
 	 *
 	 * <p>
 	 * HTTP method to use for form submission.
@@ -151,7 +151,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fs-formnovalidate formnovalidate}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formnovalidate">formnovalidate</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -166,7 +166,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fs-formtarget formtarget} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formtarget">formtarget</a> attribute.
 	 *
 	 * <p>
 	 * Browsing context for form submission.
@@ -180,7 +180,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fs-menu menu} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-menu">menu</a> attribute.
 	 *
 	 * <p>
 	 * Specifies the element's designated pop-up menu.
@@ -194,7 +194,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-name name} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 *
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.
@@ -208,7 +208,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-button-type type} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-button-type">type</a> attribute.
 	 *
 	 * <p>
 	 * Type of button.
@@ -222,7 +222,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-button-value value} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-button-value">value</a> attribute.
 	 *
 	 * <p>
 	 * Value to be used for form submission.

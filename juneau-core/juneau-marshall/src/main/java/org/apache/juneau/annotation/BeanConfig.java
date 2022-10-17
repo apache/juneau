@@ -72,7 +72,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -103,7 +103,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -134,7 +134,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -160,7 +160,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -191,7 +191,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -216,7 +216,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li class='note'>
 	 * 		The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
 	 * </ul>
@@ -243,7 +243,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li class='note'>
 	 * 		The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
 	 * </ul>
@@ -270,7 +270,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -295,7 +295,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -317,7 +317,7 @@ public @interface BeanConfig {
 	 * 	<li class='note'>
 	 * 		Default value: <js>"_type"</js>.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 
 	 * <ul class='seealso'>
@@ -357,7 +357,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -389,7 +389,7 @@ public @interface BeanConfig {
 	 * 	<li class='ja'>{@link Beanp#dictionary()}
 	 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
-	 * 	<li class='link'>{@doc jm.BeanDictionaries}
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.BeanDictionaries">Bean Names and Dictionaries</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -435,7 +435,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -461,7 +461,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -486,7 +486,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -511,7 +511,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -535,7 +535,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -560,7 +560,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -584,7 +584,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -609,7 +609,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -666,7 +666,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -686,7 +686,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -707,7 +707,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -759,7 +759,7 @@ public @interface BeanConfig {
 	 * 			<li class='jp'><c>java.util.*</c>
 	 * 		</ul>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -827,7 +827,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -855,12 +855,12 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#swaps(Class...)}
-	 * 	<li class='link'>{@doc jm.Swaps}
-	 * 	<li class='link'>{@doc jm.PerMediaTypeSwaps}
-	 * 	<li class='link'>{@doc jm.OneWaySwaps}
-	 * 	<li class='link'>{@doc jm.SwapAnnotation}
-	 * 	<li class='link'>{@doc jm.AutoSwaps}
-	 * 	<li class='link'>{@doc jm.SurrogateClasses}
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Swaps">Swaps</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Swaps.jm.PerMediaTypeSwaps">Per-media-type Swaps</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Swaps.jm.OneWaySwaps">One-way Swaps</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Swaps.jm.SwapAnnotation">@Swap Annotation</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Swaps.jm.AutoSwaps">Auto-detected swaps</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Swaps.jm.SurrogateClasses">Surrogate Classes</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -889,7 +889,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -914,7 +914,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -940,7 +940,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -965,7 +965,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

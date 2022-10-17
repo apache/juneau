@@ -30,7 +30,7 @@ import org.apache.juneau.xml.annotation.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
 @Target({TYPE,METHOD})
@@ -89,7 +89,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -106,7 +106,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -123,7 +123,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -150,13 +150,13 @@ public @interface RdfConfig {
 	 * 		in IRIs.
 	 * 	<li>
 	 * 		<js>"iri"</js> - Sets the IRI engine to IRI
-	 * 		({@doc http://www.ietf.org/rfc/rfc3986.txt RFC 3986},
-	 * 		{@doc http://www.ietf.org/rfc/rfc3987.txt RFC 3987}).
+	 * 		({doc http://www.ietf.org/rfc/rfc3986.txt RFC 3986},
+	 * 		{doc http://www.ietf.org/rfc/rfc3987.txt RFC 3987}).
 	 * </ul>
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -181,18 +181,18 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li>
-	 * 		{@doc ext.ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
+	 * 		{doc ext.ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
 	 * 	<li>
-	 * 		{@doc ext.ARP/ARPOptions.html#setLaxErrorMode() ARPOptions.setLaxErrorMode()}
+	 * 		{doc ext.ARP/ARPOptions.html#setLaxErrorMode() ARPOptions.setLaxErrorMode()}
 	 * 	<li>
-	 * 		{@doc ext.ARP/ARPOptions.html#setStrictErrorMode() ARPOptions.setStrictErrorMode()}
+	 * 		{doc ext.ARP/ARPOptions.html#setStrictErrorMode() ARPOptions.setStrictErrorMode()}
 	 * 	<li>
-	 * 		{@doc ext.ARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
+	 * 		{doc ext.ARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -207,12 +207,12 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li>
-	 * 		{@doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
+	 * 		{doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -227,7 +227,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -248,7 +248,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -268,7 +268,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -310,7 +310,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -338,7 +338,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -361,7 +361,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -381,7 +381,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -401,7 +401,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -418,12 +418,12 @@ public @interface RdfConfig {
 	 *
 	 * <p>
 	 * A list of <c>Resource</c> or a <c>String</c> being a comma separated list of fragment IDs from
-	 * {@doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
+	 * {doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
 	 * rules that will not be used.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -443,7 +443,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -463,7 +463,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -483,7 +483,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -503,7 +503,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -523,7 +523,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -544,7 +544,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -564,7 +564,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -584,7 +584,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -604,7 +604,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -624,7 +624,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -657,7 +657,7 @@ public @interface RdfConfig {
 	 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
 	 * 		lost.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -687,7 +687,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -711,7 +711,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -738,7 +738,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -754,7 +754,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -779,7 +779,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -802,7 +802,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -821,7 +821,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -846,7 +846,7 @@ public @interface RdfConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

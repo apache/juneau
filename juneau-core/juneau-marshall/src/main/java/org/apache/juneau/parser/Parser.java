@@ -40,7 +40,7 @@ import org.apache.juneau.xml.*;
  *
  * <h5 class='topic'>Valid data conversions</h5>
  * <p>
- * Parsers can parse any parsable POJO types, as specified in the {@doc jm.PojoCategories}.
+ * Parsers can parse any parsable POJO types, as specified in the <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.PojoCategories">POJO Categories</a>.
  *
  * <p>
  * Some examples of conversions are shown below...
@@ -128,7 +128,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SerializersAndParsers}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
 public class Parser extends BeanContextable {

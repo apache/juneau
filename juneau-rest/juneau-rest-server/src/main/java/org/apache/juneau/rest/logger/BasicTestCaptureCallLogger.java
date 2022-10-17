@@ -67,7 +67,7 @@ import org.apache.juneau.cp.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.LoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  */
 public class BasicTestCaptureCallLogger extends CallLogger {

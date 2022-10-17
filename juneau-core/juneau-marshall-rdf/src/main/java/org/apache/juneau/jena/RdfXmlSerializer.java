@@ -20,7 +20,7 @@ package org.apache.juneau.jena;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
 public class RdfXmlSerializer extends RdfSerializer {

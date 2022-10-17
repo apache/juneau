@@ -16,11 +16,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.edits#the-del-element <del>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#the-del-element">&lt;del&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="del")
@@ -42,7 +42,7 @@ public class Del extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.edits#attr-mod-cite cite} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#attr-mod-cite">cite</a> attribute.
 	 *
 	 * <p>
 	 * Link to the source of the quotation or more information about the edit.
@@ -56,7 +56,7 @@ public class Del extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.edits#attr-mod-datetime datetime} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#attr-mod-datetime">datetime</a> attribute.
 	 *
 	 * <p>
 	 * Date and (optionally) time of the change.

@@ -16,11 +16,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.grouping-content#the-blockquote-element <blockquote>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-blockquote-element">&lt;blockquote&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="blockquote")
@@ -42,7 +42,7 @@ public class Blockquote extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.grouping-content#attr-blockquote-cite cite}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-blockquote-cite">cite</a>
 	 * attribute.
 	 *
 	 * <p>

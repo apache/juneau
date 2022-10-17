@@ -73,7 +73,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.RestOpContext}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.RestOpContext">RestOpContext</a>
  * </ul>
  */
 public class RestOpContext extends Context implements Comparable<RestOpContext>  {
@@ -953,7 +953,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	<li class='jc'>{@link Queryable} - Allows query/view/sort functions to be performed on POJOs.
 		 * 	<li class='jc'>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
 		 * 	<li class='ja'>{@link Rest#converters()}
-		 * 	<li class='link'>{@doc jrs.Converters}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Converters">Converters</a>
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -1058,7 +1058,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 			<li>{@link Method} - The Java method this context belongs to.
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
+		 * 			<li>Any <a class="doclink" href="../../../../overview-summary.html#juneau-rest-server-springboot">injected beans</a>.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a <c>RestGuard[0]</c>.
@@ -1207,7 +1207,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 			<li>{@link java.lang.reflect.Method} - The Java method this context belongs to.
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
+		 * 			<li>Any <a class="doclink" href="../../../../overview-summary.html#juneau-rest-server-springboot">injected beans</a>.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a <c>RestMatcher[0]</c>.
@@ -2069,7 +2069,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	<li class='note'>
 		 * 		If patterns are used, you must specify the list of declared roles using {@link Rest#rolesDeclared()} or {@link RestOpContext.Builder#rolesDeclared(String...)}.
 		 * 	<li class='note'>
-		 * 		Supports {@doc jrs.SvlVariables}
+		 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 		 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 		 * </ul>
 		 *

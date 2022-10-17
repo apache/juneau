@@ -19,11 +19,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.embedded-content-0#the-audio-element <audio>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-audio-element">&lt;audio&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="audio")
@@ -45,7 +45,7 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-media-autoplay autoplay}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-autoplay">autoplay</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -62,7 +62,7 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-media-controls controls}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-controls">controls</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -79,7 +79,7 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-media-crossorigin crossorigin}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-crossorigin">crossorigin</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -94,7 +94,7 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-media-loop loop} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-loop">loop</a> attribute.
 	 *
 	 * <p>
 	 * Whether to loop the media resource.
@@ -110,7 +110,7 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-media-mediagroup mediagroup}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-mediagroup">mediagroup</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -125,7 +125,7 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-media-muted muted}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-muted">muted</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -142,7 +142,7 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-media-preload preload}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">preload</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -157,7 +157,7 @@ public class Audio extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-media-src src} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-src">src</a> attribute.
 	 *
 	 * <p>
 	 * Address of the resource.

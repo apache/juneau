@@ -21,7 +21,7 @@ import org.apache.juneau.xml.annotation.*;
  * only.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @FluentSetters

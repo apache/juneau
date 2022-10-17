@@ -19,11 +19,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.text-level-semantics#the-a-element <a>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-a-element">&lt;a&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="a")
@@ -47,7 +47,7 @@ public class A extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.links#attr-hyperlink-download download} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-download">download</a> attribute.
 	 *
 	 * <p>
 	 * Whether to download the resource instead of navigating to it, and its file name if so.
@@ -63,7 +63,7 @@ public class A extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.links#attr-hyperlink-href href} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-href">href</a> attribute.
 	 *
 	 * <p>
 	 * Address of the hyperlink.
@@ -86,7 +86,7 @@ public class A extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.links#attr-hyperlink-hreflang hreflang} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-hreflang">hreflang</a> attribute.
 	 *
 	 * <p>
 	 * Language of the linked resource.
@@ -100,7 +100,7 @@ public class A extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.links#attr-hyperlink-rel rel} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-rel">rel</a> attribute.
 	 *
 	 * <p>
 	 * Relationship between the document containing the hyperlink and the destination resource.
@@ -114,7 +114,7 @@ public class A extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.links#attr-hyperlink-target target} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-target">target</a> attribute.
 	 *
 	 * <p>
 	 * Default browsing context for hyperlink navigation and form submission.
@@ -128,7 +128,7 @@ public class A extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.links#attr-hyperlink-type type} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-type">type</a> attribute.
 	 *
 	 * <p>
 	 * Hint for the type of the referenced resource.

@@ -31,8 +31,7 @@ import org.apache.juneau.uon.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.UonDetails}
- * </ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.UonDetails">UON Details</a> * </ul>
  */
 @Documented
 @Target({TYPE,FIELD,METHOD})
@@ -122,7 +121,7 @@ public @interface Uon {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -136,7 +135,7 @@ public @interface Uon {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.

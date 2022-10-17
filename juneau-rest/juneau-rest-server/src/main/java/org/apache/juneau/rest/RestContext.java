@@ -110,7 +110,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.RestContext}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.RestContext">RestContext</a>
  * </ul>
  */
 public class RestContext extends Context {
@@ -729,7 +729,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.SvlVariables}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 		 * </ul>
 		 *
 		 * @return The variable resolver sub-builder.
@@ -748,7 +748,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.SvlVariables}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 		 * 	<li class='jm'>{@link #varResolver()}
 		 * </ul>
 		 *
@@ -771,7 +771,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.SvlVariables}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 		 * 	<li class='jm'>{@link #varResolver()}
 		 * </ul>
 		 *
@@ -787,7 +787,7 @@ public class RestContext extends Context {
 		 * Creates the variable resolver sub-builder.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.SvlVariables}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -875,7 +875,7 @@ public class RestContext extends Context {
 		 * on a {@link RestOp}-annotated method.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.ConfigurationFiles}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.ConfigurationFiles">Configuration Files</a>
 		 * </ul>
 		 *
 		 * @return The external configuration file for this resource.
@@ -893,7 +893,7 @@ public class RestContext extends Context {
 		 * This method allows you to programmatically override it with your own custom config file.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.ConfigurationFiles}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.ConfigurationFiles">Configuration Files</a>
 		 * 	<li class='jm'>{@link #config()}
 		 * </ul>
 		 *
@@ -910,7 +910,7 @@ public class RestContext extends Context {
 		 * Creates the config for this builder.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.ConfigurationFiles}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.ConfigurationFiles">Configuration Files</a>
 		 * 	<li class='jm'>{@link #config()}
 		 * </ul>
 		 *
@@ -988,7 +988,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.LoggingAndDebugging">Logging / Debugging</a>
 		 * </ul>
 		 *
 		 * @return The logger for this resource.
@@ -1003,7 +1003,7 @@ public class RestContext extends Context {
 		 * Sets the logger for this resource.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.LoggingAndDebugging">Logging / Debugging</a>
 		 * 	<li class='jm'>{@link #logger()}
 		 * </ul>
 		 *
@@ -1019,7 +1019,7 @@ public class RestContext extends Context {
 		 * Instantiates the logger for this resource.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.LoggingAndDebugging">Logging / Debugging</a>
 		 * 	<li class='jm'>{@link #logger()}
 		 * </ul>
 		 *
@@ -1078,7 +1078,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.ExecutionStatistics}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.ExecutionStatistics">REST method execution statistics</a>
 		 * </ul>
 		 *
 		 * @return The builder for the {@link ThrownStore} object in the REST context.
@@ -1099,7 +1099,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.ExecutionStatistics}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.ExecutionStatistics">REST method execution statistics</a>
 		 * 	<li class='jm'>{@link #thrownStore()}
 		 * </ul>
 		 *
@@ -1121,7 +1121,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.ExecutionStatistics}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.ExecutionStatistics">REST method execution statistics</a>
 		 * 	<li class='jm'>{@link #thrownStore()}
 		 * </ul>
 		 *
@@ -1137,7 +1137,7 @@ public class RestContext extends Context {
 		 * Instantiates the thrown-store sub-builder.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.ExecutionStatistics}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.ExecutionStatistics">REST method execution statistics</a>
 		 * </ul>
 		 *
 		 * @param resource
@@ -1204,7 +1204,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Encoders}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Encoders">Encoders</a>
 		 * </ul>
 		 *
 		 * @return The builder for the {@link EncoderSet} object in the REST context.
@@ -1225,7 +1225,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Encoders}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Encoders">Encoders</a>
 		 * 	<li class='jm'>{@link #encoders()}
 		 * </ul>
 		 *
@@ -1248,7 +1248,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Encoders}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Encoders">Encoders</a>
 		 * 	<li class='jm'>{@link #encoders()}
 		 * </ul>
 		 *
@@ -1264,7 +1264,7 @@ public class RestContext extends Context {
 		 * Instantiates the encoder group sub-builder.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Encoders}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Encoders">Encoders</a>
 		 * 	<li class='jm'>{@link #encoders()}
 		 * </ul>
 		 *
@@ -1328,7 +1328,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Marshalling">Marshalling</a>
 		 * </ul>
 		 *
 		 * @return The serializer group sub-builder.
@@ -1349,7 +1349,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Marshalling">Marshalling</a>
 		 * 	<li class='jm'>{@link #serializers()}
 		 * </ul>
 		 *
@@ -1372,7 +1372,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Marshalling">Marshalling</a>
 		 * 	<li class='jm'>{@link #serializers()}
 		 * </ul>
 		 *
@@ -1388,7 +1388,7 @@ public class RestContext extends Context {
 		 * Instantiates the serializer group sub-builder.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Marshalling">Marshalling</a>
 		 * </ul>
 		 *
 		 * @param resource
@@ -1450,7 +1450,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Marshalling">Marshalling</a>
 		 * </ul>
 		 *
 		 * @return The parser group sub-builder.
@@ -1471,7 +1471,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Marshalling">Marshalling</a>
 		 * 	<li class='jm'>{@link #parsers()}
 		 * </ul>
 		 *
@@ -1494,7 +1494,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Marshalling">Marshalling</a>
 		 * 	<li class='jm'>{@link #parsers()}
 		 * </ul>
 		 *
@@ -1510,7 +1510,7 @@ public class RestContext extends Context {
 		 * Instantiates the parser group sub-builder.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Marshalling">Marshalling</a>
 		 * </ul>
 		 *
 		 * @param resource
@@ -1572,7 +1572,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.ExecutionStatistics}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.ExecutionStatistics">REST method execution statistics</a>
 		 * </ul>
 		 *
 		 * @return The method execution statistics store sub-builder.
@@ -1593,7 +1593,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.ExecutionStatistics}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.ExecutionStatistics">REST method execution statistics</a>
 		 * 	<li class='jm'>{@link #methodExecStore()}
 		 * </ul>
 		 *
@@ -1615,7 +1615,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.ExecutionStatistics}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.ExecutionStatistics">REST method execution statistics</a>
 		 * 	<li class='jm'>{@link #methodExecStore()}
 		 * </ul>
 		 *
@@ -1631,7 +1631,7 @@ public class RestContext extends Context {
 		 * Instantiates the method execution statistics store sub-builder.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.ExecutionStatistics}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.ExecutionStatistics">REST method execution statistics</a>
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -1760,7 +1760,7 @@ public class RestContext extends Context {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='jc'>{@link Messages}
-		 * 	<li class='link'>{@doc jrs.LocalizedMessages}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.LocalizedMessages">Localized Messages</a>
 		 * </ul>
 		 *
 		 * @return The messages sub-builder.
@@ -1781,7 +1781,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.LocalizedMessages}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.LocalizedMessages">Localized Messages</a>
 		 * 	<li class='jm'>{@link #messages()}
 		 * </ul>
 		 *
@@ -1803,7 +1803,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.LocalizedMessages}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.LocalizedMessages">Localized Messages</a>
 		 * 	<li class='jm'>{@link #messages()}
 		 * </ul>
 		 *
@@ -1819,7 +1819,7 @@ public class RestContext extends Context {
 		 * Instantiates the messages sub-builder.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.LocalizedMessages}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.LocalizedMessages">Localized Messages</a>
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -1945,7 +1945,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.ResponseProcessors}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.ResponseProcessors">Response Processors</a>
 		 * </ul>
 		 *
 		 * @return The response processor list sub-builder.
@@ -1966,7 +1966,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.ResponseProcessors}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.ResponseProcessors">Response Processors</a>
 		 * 	<li class='jm'>{@link #responseProcessors()}
 		 * </ul>
 		 *
@@ -1989,7 +1989,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.ResponseProcessors}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.ResponseProcessors">Response Processors</a>
 		 * 	<li class='jm'>{@link #responseProcessors()}
 		 * </ul>
 		 *
@@ -2005,7 +2005,7 @@ public class RestContext extends Context {
 		 * Instantiates the response processor list sub-builder.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.ResponseProcessors}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.ResponseProcessors">Response Processors</a>
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -2113,7 +2113,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.LoggingAndDebugging">Logging / Debugging</a>
 		 * </ul>
 		 *
 		 * @return The call logger sub-builder.
@@ -2135,7 +2135,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.LoggingAndDebugging">Logging / Debugging</a>
 		 * 	<li class='jm'>{@link #callLogger()}
 		 * </ul>
 		 *
@@ -2157,7 +2157,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.LoggingAndDebugging">Logging / Debugging</a>
 		 * 	<li class='jm'>{@link #callLogger()}
 		 * </ul>
 		 *
@@ -2173,7 +2173,7 @@ public class RestContext extends Context {
 		 * Instantiates the call logger sub-builder.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.LoggingAndDebugging">Logging / Debugging</a>
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -2281,7 +2281,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.HttpParts}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.HttpParts">HTTP Parts</a>
 		 * </ul>
 		 *
 		 * @return The part serializer sub-builder.
@@ -2302,7 +2302,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.HttpParts}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.HttpParts">HTTP Parts</a>
 		 * 	<li class='jm'>{@link #partSerializer()}
 		 * </ul>
 		 *
@@ -2324,7 +2324,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.HttpParts}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.HttpParts">HTTP Parts</a>
 		 * 	<li class='jm'>{@link #partSerializer()}
 		 * </ul>
 		 *
@@ -2340,7 +2340,7 @@ public class RestContext extends Context {
 		 * Instantiates the part serializer sub-builder.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.HttpParts}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.HttpParts">HTTP Parts</a>
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -2411,7 +2411,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.HttpParts}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.HttpParts">HTTP Parts</a>
 		 * </ul>
 		 *
 		 * @return The part parser sub-builder.
@@ -2432,7 +2432,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.HttpParts}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.HttpParts">HTTP Parts</a>
 		 * 	<li class='jm'>{@link #partParser()}
 		 * </ul>
 		 *
@@ -2454,7 +2454,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.HttpParts}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.HttpParts">HTTP Parts</a>
 		 * 	<li class='jm'>{@link #partParser()}
 		 * </ul>
 		 *
@@ -2470,7 +2470,7 @@ public class RestContext extends Context {
 		 * Instantiates the part parser sub-builder.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.HttpParts}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.HttpParts">HTTP Parts</a>
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -2541,7 +2541,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Swagger}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Swagger</a>
 		 * </ul>
 		 *
 		 * @return The JSON schema generator sub-builder.
@@ -2562,7 +2562,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Swagger}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Swagger</a>
 		 * 	<li class='jm'>{@link #jsonSchemaGenerator()}
 		 * </ul>
 		 *
@@ -2585,7 +2585,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Swagger}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Swagger</a>
 		 * </ul>
 		 *
 		 * @param value The new value.
@@ -2600,7 +2600,7 @@ public class RestContext extends Context {
 		 * Instantiates the JSON schema generator sub-builder.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Swagger}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Swagger</a>
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -2695,7 +2695,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.StaticFiles}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.StaticFiles">Static files</a>
 		 * </ul>
 		 *
 		 * @return The static files bean creator.
@@ -2716,7 +2716,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.StaticFiles}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.StaticFiles">Static files</a>
 		 * </ul>
 		 *
 		 * @param value The new value.
@@ -2737,7 +2737,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.StaticFiles}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.StaticFiles">Static files</a>
 		 * </ul>
 		 *
 		 * @param value The new value.
@@ -2752,7 +2752,7 @@ public class RestContext extends Context {
 		 * Instantiates the static files bean creator.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.StaticFiles}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.StaticFiles">Static files</a>
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -3892,7 +3892,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
+		 * 			<li>Any <a class="doclink" href="../../../../overview-summary.html#juneau-rest-server-springboot">injected beans</a>.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a default {@link BasicSwaggerProvider}.
@@ -4060,7 +4060,7 @@ public class RestContext extends Context {
 		 * pages.
 		 *
 		 * <p>
-		 * Note that per the {@doc ext.RFC2616.section9 HTTP specification}, special care should
+		 * Note that per the <a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">HTTP specification</a>, special care should
 		 * be taken when allowing non-safe (<c>POST</c>, <c>PUT</c>, <c>DELETE</c>) methods to be invoked through GET requests.
 		 *
 		 * <h5 class='section'>Example:</h5>
@@ -4668,7 +4668,7 @@ public class RestContext extends Context {
 		 * from parent-to-child order with child entries given priority over parent entries.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Marshalling">Marshalling</a>
 		 * </ul>
 		 *
 		 * @return The serializer group builder for this context builder.
@@ -4694,7 +4694,7 @@ public class RestContext extends Context {
 		 * from parent-to-child order with child entries given priority over parent entries.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Marshalling">Marshalling</a>
 		 * </ul>
 		 *
 		 * @return The parser group builder for this context builder.
@@ -4714,7 +4714,7 @@ public class RestContext extends Context {
 		 * from parent-to-child order with child entries given priority over parent entries.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.Encoders}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.Encoders">Encoders</a>
 		 * </ul>
 		 *
 		 * @return The encoder group builder for this context builder.
@@ -5681,7 +5681,7 @@ public class RestContext extends Context {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jrs.SvlVariables}
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * </ul>
 	 *
 	 * @return The var resolver in use by this resource.

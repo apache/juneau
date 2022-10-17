@@ -36,7 +36,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Swagger}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
  * </ul>
  *
  * @serial exclude

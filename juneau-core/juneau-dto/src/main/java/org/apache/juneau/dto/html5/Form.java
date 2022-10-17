@@ -19,11 +19,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.forms#the-form-element <form>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-form-element">&lt;form&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="form")
@@ -55,7 +55,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-form-accept-charset accept-charset}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-form-accept-charset">accept-charset</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -70,7 +70,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fs-action action} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-action">action</a> attribute.
 	 *
 	 * <p>
 	 * URL to use for form submission.
@@ -91,7 +91,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-form-autocomplete autocomplete}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-form-autocomplete">autocomplete</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -106,7 +106,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fs-enctype enctype} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-enctype">enctype</a> attribute.
 	 *
 	 * <p>
 	 * Form data set encoding type to use for form submission.
@@ -120,7 +120,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fs-method method} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-method">method</a> attribute.
 	 *
 	 * <p>
 	 * HTTP method to use for form submission.
@@ -134,7 +134,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-form-name name} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-form-name">name</a> attribute.
 	 *
 	 * <p>
 	 * Name of form to use in the document.forms API.
@@ -148,7 +148,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fs-novalidate novalidate} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-novalidate">novalidate</a> attribute.
 	 *
 	 * <p>
 	 * Bypass form control validation for form submission.
@@ -163,7 +163,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fs-target target} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-target">target</a> attribute.
 	 *
 	 * <p>
 	 * Browsing context for form submission.

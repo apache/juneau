@@ -21,37 +21,37 @@ import java.util.*;
  * Represents valid HTTP 1.1 method name static strings per the RFC 2616 spec.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
- * 	<li class='extlink'>{@doc ext.RFC2616}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
+ * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
 public class HttpMethod {
 
-	/** {@doc ext.RFC2616.section9#sec9.2 OPTIONS} */
+	/** <a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.2">OPTIONS</a> */
 	public static final String OPTIONS = "OPTIONS";
 
-	/** {@doc ext.RFC2616.section9#sec9.3 GET} */
+	/** <a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.3">GET</a> */
 	public static final String GET = "GET";
 
-	/** {@doc ext.RFC2616.section9#sec9.4 HEAD} */
+	/** <a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.4">HEAD</a> */
 	public static final String HEAD = "HEAD";
 
-	/** {@doc ext.RFC2616.section9#sec9.5 POST} */
+	/** <a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5">POST</a> */
 	public static final String POST = "POST";
 
-	/** {@doc ext.RFC2616.section9#sec9.6 PUT} */
+	/** <a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6">PUT</a> */
 	public static final String PUT = "PUT";
 
-	/** {@doc ext.RFC2616.section9#sec9.7 DELETE} */
+	/** <a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.7">DELETE</a> */
 	public static final String DELETE = "DELETE";
 
-	/** {@doc ext.RFC2616.section9#sec9.8 TRACE} */
+	/** <a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.8">TRACE</a> */
 	public static final String TRACE = "TRACE";
 
-	/** {@doc ext.RFC2616.section9#sec9.9 CONNECT} */
+	/** <a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.9">CONNECT</a> */
 	public static final String CONNECT = "CONNECT";
 
-	/** {@doc https://tools.ietf.org/html/rfc5789 PATCH} */
+	/** <a class="doclink" href="https://tools.ietf.org/html/rfc5789">PATCH</a> */
 	public static final String PATCH = "PATCH";
 
 	/** Special case for a REST method that implements a REST-RPC interface. */

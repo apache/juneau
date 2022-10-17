@@ -30,7 +30,7 @@ import java.lang.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.BeanIgnoreAnnotation}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.JavaBeansSupport.jm.BeanIgnoreAnnotation">@BeanIgnore Annotation</a>
  * </ul>
  */
 @Documented
@@ -141,7 +141,7 @@ public @interface BeanIgnore {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -155,7 +155,7 @@ public @interface BeanIgnore {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.

@@ -18,7 +18,7 @@ import org.apache.juneau.cp.*;
  * Default implementation of a {@link CallLogger} that never logs REST calls.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.LoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  */
 public class BasicDisabledCallLogger extends CallLogger {

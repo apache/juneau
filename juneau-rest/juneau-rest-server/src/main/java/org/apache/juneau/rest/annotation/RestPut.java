@@ -39,7 +39,7 @@ import org.apache.juneau.parser.*;
  * This is a specialized subtype of <c><ja>{@link RestOp @RestOp}(method=<jsf>PUT</jsf>)</c>.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.RestOpAnnotatedMethods}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.RestOpAnnotatedMethods">@RestOp-Annotated Methods</a>
  * </ul>
  */
 @Target(METHOD)
@@ -122,7 +122,7 @@ public @interface RestPut {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -169,7 +169,7 @@ public @interface RestPut {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -202,7 +202,7 @@ public @interface RestPut {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -251,7 +251,7 @@ public @interface RestPut {
 	 * 	<li class='note'>
 	 * 		Key and value is trimmed of whitespace.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -280,7 +280,7 @@ public @interface RestPut {
 	 * 	<li class='note'>
 	 * 		Key and value is trimmed of whitespace.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -316,7 +316,7 @@ public @interface RestPut {
 	 * </ul>
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -344,7 +344,7 @@ public @interface RestPut {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -371,7 +371,7 @@ public @interface RestPut {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -401,7 +401,7 @@ public @interface RestPut {
 	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/description</c>.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -449,7 +449,7 @@ public @interface RestPut {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jrs.Encoders}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Encoders">Encoders</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -504,7 +504,7 @@ public @interface RestPut {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -522,7 +522,7 @@ public @interface RestPut {
 	 * Dynamically apply this annotation to the specified methods.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -576,7 +576,7 @@ public @interface RestPut {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jrs.Marshalling}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Marshalling">Marshalling</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -631,7 +631,7 @@ public @interface RestPut {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -684,7 +684,7 @@ public @interface RestPut {
 	 * 	<li class='note'>
 	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		When defined on parent/child classes and methods, ALL guards within the hierarchy must pass.
@@ -776,7 +776,7 @@ public @interface RestPut {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jrs.Marshalling}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Marshalling">Marshalling</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -801,7 +801,7 @@ public @interface RestPut {
 	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/summary</c>.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -840,14 +840,14 @@ public @interface RestPut {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is {@doc jd.Swagger}.
+	 * 		The format is <a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a>.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li class='note'>
 	 * 		The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.
 	 * 	<li class='note'>
 	 * 		These values are superimposed on top of any Swagger JSON file present for the resource in the classpath.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *

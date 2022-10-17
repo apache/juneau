@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The server cannot or will not process the request due to an apparent client error (e.g., malformed request syntax, size too large, invalid request message framing, or deceptive request routing).
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *
  * @serial exclude

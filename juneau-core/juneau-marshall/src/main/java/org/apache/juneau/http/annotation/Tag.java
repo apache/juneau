@@ -22,7 +22,7 @@ import org.apache.juneau.annotation.*;
  * Swagger tag annotation.
  *
  * <p>
- * Allows adding meta data to a single tag that is used by the {@doc ext.SwaggerOperationObject}.
+ * Allows adding meta data to a single tag that is used by the <a class="doclink" href="https://swagger.io/specification/v2#operationObject">Swagger Operation Object</a>.
  * It is not mandatory to have a Tag Object per tag used there.
  *
  * <p>
@@ -44,8 +44,8 @@ import org.apache.juneau.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Swagger}
- * 	<li class='extlink'>{@doc ext.SwaggerTagObject}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Swagger</a>
+ * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#tagObject">Swagger Tag Object</a>
  * </ul>
  */
 @Documented
@@ -53,14 +53,14 @@ import org.apache.juneau.annotation.*;
 public @interface Tag {
 
 	/**
-	 * <mk>description</mk> field of the {@doc ext.SwaggerTagObject}.
+	 * <mk>description</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#tagObject">Swagger Tag Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a {@doc jd.Swagger} object.
+	 * 		The format is a <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -68,11 +68,11 @@ public @interface Tag {
 	String[] description() default {};
 
 	/**
-	 * <mk>externalDocs</mk> field of the {@doc ext.SwaggerTagObject}.
+	 * <mk>externalDocs</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#tagObject">Swagger Tag Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a {@doc jd.Swagger} object.
+	 * 		The format is a <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -81,7 +81,7 @@ public @interface Tag {
 	ExternalDocs externalDocs() default @ExternalDocs;
 
 	/**
-	 * <mk>name</mk> field of the {@doc ext.SwaggerTagObject}.
+	 * <mk>name</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#tagObject">Swagger Tag Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>

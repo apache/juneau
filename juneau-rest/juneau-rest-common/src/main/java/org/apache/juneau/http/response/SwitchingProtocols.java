@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The requester has asked the server to switch protocols and the server has agreed to do so.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
 @Response

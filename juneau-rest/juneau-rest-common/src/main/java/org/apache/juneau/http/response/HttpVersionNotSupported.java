@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The server does not support the HTTP protocol version used in the request.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *
  * @serial exclude

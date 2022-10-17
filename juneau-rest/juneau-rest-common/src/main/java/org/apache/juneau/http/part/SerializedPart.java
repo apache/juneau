@@ -37,7 +37,7 @@ import org.apache.juneau.urlencoding.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
 public class SerializedPart extends BasicPart implements Headerable {

@@ -152,7 +152,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.BeanContexts}
+ * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.jm.BeanContexts">Bean Contexts</a>
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})

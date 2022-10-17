@@ -16,11 +16,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.forms#the-option-element <option>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-option-element">&lt;option&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="option")
@@ -53,7 +53,7 @@ public class Option extends HtmlElementText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-option-disabled disabled} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-disabled">disabled</a> attribute.
 	 *
 	 * <p>
 	 * Whether the form control is disabled.
@@ -69,7 +69,7 @@ public class Option extends HtmlElementText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-option-label label} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-label">label</a> attribute.
 	 *
 	 * <p>
 	 * User-visible label.
@@ -83,7 +83,7 @@ public class Option extends HtmlElementText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-option-selected selected} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-selected">selected</a> attribute.
 	 *
 	 * <p>
 	 * Whether the option is selected by default.
@@ -99,7 +99,7 @@ public class Option extends HtmlElementText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-option-value value} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-value">value</a> attribute.
 	 *
 	 * <p>
 	 * Value to be used for form submission.

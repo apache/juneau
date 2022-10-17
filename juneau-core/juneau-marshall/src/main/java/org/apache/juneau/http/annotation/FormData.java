@@ -62,8 +62,8 @@ import org.apache.juneau.oapi.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Swagger}
- * 	<li class='extlink'>{@doc ext.SwaggerParameterObject}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Swagger</a>
+ * 	<li class='extlink'><a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>
  * </ul>
  *
  * <h5 class='topic'>Important note concerning FORM posts</h5>
@@ -82,14 +82,14 @@ import org.apache.juneau.oapi.*;
  * request.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrc.FormData}
- * 	<li class='link'>{@doc jrc.Request}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.jrc.Proxies.jrc.FormData">@FormData</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.jrc.Proxies.jrc.Request">@Request</a>
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  * <p>
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrc.Request}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.jrc.Proxies.jrc.Request">@Request</a>
  * </ul>
  *
  * <div class='warn'>
@@ -198,7 +198,7 @@ public @interface FormData {
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -212,7 +212,7 @@ public @interface FormData {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -230,7 +230,7 @@ public @interface FormData {
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Void.class;
 
 	/**
-	 * <mk>schema</mk> field of the {@doc ext.SwaggerParameterObject}.
+	 * <mk>schema</mk> field of the <a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>.
 	 *
 	 * <p>
 	 * The schema defining the type used for parameter.

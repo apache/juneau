@@ -82,7 +82,7 @@ import org.apache.juneau.serializer.*;
  * 	</ul>
  * </ul>
  * <ul class='seealso'>
- * 	<li class='link'>{@doc ja.Overview}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-assertions.ja.Overview">juneau-assertions</a>
  * </ul>
  *
  * @param <R> The return type.

@@ -18,11 +18,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.forms#the-select-element <select>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-select-element">&lt;select&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="select")
@@ -45,7 +45,7 @@ public class Select extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-autofocus autofocus} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
 	 *
 	 * <p>
 	 * Automatically focus the form control when the page is loaded.
@@ -61,7 +61,7 @@ public class Select extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-disabled disabled} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-disabled">disabled</a> attribute.
 	 *
 	 * <p>
 	 * Whether the form control is disabled.
@@ -77,7 +77,7 @@ public class Select extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fae-form form} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 *
 	 * <p>
 	 * Associates the control with a form element.
@@ -91,7 +91,7 @@ public class Select extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-select-multiple multiple} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-select-multiple">multiple</a> attribute.
 	 *
 	 * <p>
 	 * Whether to allow multiple values.
@@ -107,7 +107,7 @@ public class Select extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-name name} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 *
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.
@@ -121,7 +121,7 @@ public class Select extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-select-required required} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-select-required">required</a> attribute.
 	 *
 	 * <p>
 	 * Whether the control is required for form submission.
@@ -137,7 +137,7 @@ public class Select extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-select-size size} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-select-size">size</a> attribute.
 	 *
 	 * <p>
 	 * Size of the control.

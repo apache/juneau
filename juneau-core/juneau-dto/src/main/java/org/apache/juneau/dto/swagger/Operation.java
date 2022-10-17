@@ -124,7 +124,7 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Swagger}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
  * </ul>
  */
 @Bean(properties="operationId,summary,description,tags,externalDocs,consumes,produces,parameters,responses,schemes,deprecated,security,*")
@@ -229,7 +229,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Values MUST be as described under {@doc ext.SwaggerMimeTypes}.
+	 * 	<br>Values MUST be as described under <a class="doclink" href="https://swagger.io/specification#mimeTypes">Swagger Mime Types</a>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
@@ -246,7 +246,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Values MUST be as described under {@doc ext.SwaggerMimeTypes}.
+	 * 	<br>Values MUST be as described under <a class="doclink" href="https://swagger.io/specification#mimeTypes">Swagger Mime Types</a>.
 	 * @return This object.
 	 */
 	public Operation setConsumes(MediaType...value) {
@@ -326,7 +326,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
+	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
@@ -402,15 +402,15 @@ public class Operation extends SwaggerElement {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		If a parameter is already defined at the {@doc ext.SwaggerPathItemObject Path Item},
+	 * 		If a parameter is already defined at the <a class="doclink" href="https://swagger.io/specification#pathItemObject">Path Item</a>,
 	 * 		the new definition will override it, but can never remove it.
 	 * 	<li class='note'>
 	 * 		The list MUST NOT include duplicated parameters.
 	 * 	<li class='note'>
 	 * 		A unique parameter is defined by a combination of a <c>name</c> and <c>location</c>.
 	 * 	<li class='note'>
-	 * 		The list can use the {@doc ext.SwaggerReferenceObject}
-	 * 		to link to parameters that are defined at the {@doc ext.SwaggerParameterObject Swagger Object's parameters}.
+	 * 		The list can use the <a class="doclink" href="https://swagger.io/specification#referenceObject">Swagger Reference Object</a>
+	 * 		to link to parameters that are defined at the <a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Object's parameters</a>.
 	 * 	<li class='note'>
 	 * 		There can be one <js>"body"</js> parameter at most.
 	 * </ul>
@@ -506,7 +506,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Value MUST be as described under {@doc ext.SwaggerMimeTypes}.
+	 * 	<br>Value MUST be as described under <a class="doclink" href="https://swagger.io/specification#mimeTypes">Swagger Mime Types</a>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
@@ -523,7 +523,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Value MUST be as described under {@doc ext.SwaggerMimeTypes}.
+	 * 	<br>Value MUST be as described under <a class="doclink" href="https://swagger.io/specification#mimeTypes">Swagger Mime Types</a>.
 	 * @return This object.
 	 */
 	public Operation setProduces(MediaType...value) {

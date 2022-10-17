@@ -28,8 +28,8 @@ import org.apache.juneau.reflect.*;
  * Represents the metadata about the returned object of a method on a remote proxy interface.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrc.Proxies}
- * 	<li class='link'>{@doc juneau-rest-client}
+ * 	<li class='link'><a class="doclink" href="../../../../../../overview-summary.html#juneau-rest-client.jrc.Proxies">REST Proxies</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../../overview-summary.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */
 public final class RemoteOperationReturn {

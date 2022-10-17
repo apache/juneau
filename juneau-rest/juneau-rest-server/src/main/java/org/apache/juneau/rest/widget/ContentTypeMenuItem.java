@@ -51,8 +51,8 @@ import org.apache.juneau.serializer.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.HtmlPredefinedWidgets}
- * 	<li class='link'>{@doc jrs.HtmlWidgets}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets">Predefined Widgets</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets">Widgets</a>
  * </ul>
  */
 public class ContentTypeMenuItem extends MenuItemWidget {

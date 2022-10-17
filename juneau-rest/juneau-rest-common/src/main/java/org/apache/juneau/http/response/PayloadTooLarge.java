@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The request is larger than the server is willing or able to process.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *
  * @serial exclude

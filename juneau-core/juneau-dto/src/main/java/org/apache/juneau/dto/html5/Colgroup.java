@@ -16,11 +16,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.tabular-data#the-colgroup-element <colgroup>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-colgroup-element">&lt;colgroup&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="colgroup")
@@ -42,7 +42,7 @@ public class Colgroup extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.tabular-data#attr-colgroup-span span} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-colgroup-span">span</a> attribute.
 	 *
 	 * <p>
 	 * Number of columns spanned by the element.

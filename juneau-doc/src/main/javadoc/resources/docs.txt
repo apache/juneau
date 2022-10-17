@@ -1,4 +1,3 @@
-Glossaries = #Glossaries, Overview > Glossaries
 HttpEntitiesAndResources = #juneau-rest-common.HttpEntitiesAndResources, Overview > juneau-rest-common > HTTP Entities and Resources
 Overview = #Overview, Overview > Overview
 Security = #Security, Overview > Security Best-Practices
@@ -53,8 +52,6 @@ ext.SwaggerResponsesObject = https://swagger.io/specification/v2#responsesObject
 ext.SwaggerSchemaObject = https://swagger.io/specification/v2#schemaObject, Swagger Schema Object
 ext.SwaggerSecuritySchemeObject = https://swagger.io/specification/v2#securitySchemeObject, Swagger SecurityScheme Object
 ext.SwaggerTagObject = https://swagger.io/specification/v2#tagObject, Swagger Tag Object
-g.Annotations = #Glossaries.g.Annotations, Overview > Glossaries > Annotations
-g.LanguageSupport = #Glossaries.g.LanguageSupport, Overview > Glossaries > Language Support
 ja.Overview = #juneau-assertions.ja.Overview, Overview > juneau-assertions > Overview
 jc.Arrays = #juneau-config.jc.ReadingEntries.jc.Arrays, Overview > juneau-config > Reading Entries > Arrays
 jc.BinaryData = #juneau-config.jc.ReadingEntries.jc.BinaryData, Overview > juneau-config > Reading Entries > Binary Data

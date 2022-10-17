@@ -16,11 +16,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.document-metadata#the-meta-element <meta>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-meta-element">&lt;meta&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="meta")
@@ -33,7 +33,7 @@ public class Meta extends HtmlElementVoid {
 	public Meta() {}
 
 	/**
-	 * {@doc ext.HTML5.document-metadata#attr-meta-charset charset}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-charset">charset</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -48,7 +48,7 @@ public class Meta extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.document-metadata#attr-meta-content content}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-content">content</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -63,7 +63,7 @@ public class Meta extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.document-metadata#attr-meta-http-equiv http-equiv}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-http-equiv">http-equiv</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -78,7 +78,7 @@ public class Meta extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.document-metadata#attr-meta-name name} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-name">name</a> attribute.
 	 *
 	 * <p>
 	 * Metadata name.

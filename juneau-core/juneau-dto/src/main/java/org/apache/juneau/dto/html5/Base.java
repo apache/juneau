@@ -19,11 +19,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.document-metadata#the-base-element <base>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-base-element">&lt;base&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="base")
@@ -45,7 +45,7 @@ public class Base extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.document-metadata#attr-base-href href} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-base-href">href</a> attribute.
 	 *
 	 * <p>
 	 * Document base URL.
@@ -68,7 +68,7 @@ public class Base extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.document-metadata#attr-base-target target}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-base-target">target</a>
 	 * attribute.
 	 *
 	 * <p>

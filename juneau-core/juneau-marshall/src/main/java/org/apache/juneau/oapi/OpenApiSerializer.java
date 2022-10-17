@@ -33,8 +33,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.OpenApiSerializers}
- * 	<li class='link'>{@doc jm.OpenApiDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.OpenApiDetails">OpenAPI Details</a>
  * </ul>
  */
 public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvider {

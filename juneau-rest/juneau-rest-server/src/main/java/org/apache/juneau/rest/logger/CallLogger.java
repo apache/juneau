@@ -86,7 +86,7 @@ import org.apache.juneau.rest.util.*;
  * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
  * 	<li class='ja'>{@link Rest#debug}
  * 	<li class='ja'>{@link RestOp#debug}
- * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.LoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  */
 public class CallLogger {

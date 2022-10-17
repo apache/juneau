@@ -23,7 +23,7 @@ import org.apache.juneau.rest.stats.*;
  * A specialized invoker for methods that are called during a servlet request.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.RestContext}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.RestContext">RestContext</a>
  * </ul>
  */
 public class RestOpInvoker extends MethodInvoker {

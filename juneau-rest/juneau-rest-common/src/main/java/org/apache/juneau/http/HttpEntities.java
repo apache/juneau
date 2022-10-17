@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.*;
  * Standard predefined HTTP entities.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
 public class HttpEntities {

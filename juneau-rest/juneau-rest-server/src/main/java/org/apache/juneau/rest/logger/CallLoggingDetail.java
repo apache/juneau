@@ -18,7 +18,7 @@ import org.apache.juneau.internal.*;
  * Represents the amount of detail to include in a log entry for HTTP requests and responses.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.LoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  */
 public enum CallLoggingDetail {

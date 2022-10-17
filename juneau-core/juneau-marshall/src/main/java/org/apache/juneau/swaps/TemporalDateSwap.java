@@ -28,7 +28,7 @@ import org.apache.juneau.swap.*;
  * Uses the {@link DateTimeFormatter} class for converting {@link Date} objects.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Swaps">Swaps</a>
  * </ul>
  */
 public class TemporalDateSwap extends StringSwap<Date> {

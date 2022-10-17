@@ -36,8 +36,8 @@ import java.lang.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Swagger}
- * 	<li class='extlink'>{@doc ext.SwaggerExternalDocumentationObject}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a>
+ * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#externalDocumentationObject">Swagger ExternalDocumentation Object</a>
  * </ul>
  */
 @Documented
@@ -45,7 +45,7 @@ import java.lang.annotation.*;
 public @interface ExternalDocs {
 
 	/**
-	 * <mk>description</mk> field of the {@doc ext.SwaggerExternalDocumentationObject}.
+	 * <mk>description</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#externalDocumentationObject">Swagger ExternalDocumentation Object</a>.
 	 *
 	 * <p>
 	 * A short description of the target documentation.
@@ -55,7 +55,7 @@ public @interface ExternalDocs {
 	 * 		The format is a plain-text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -63,7 +63,7 @@ public @interface ExternalDocs {
 	String[] description() default {};
 
 	/**
-	 * <mk>url</mk> field of the {@doc ext.SwaggerExternalDocumentationObject}.
+	 * <mk>url</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#externalDocumentationObject">Swagger ExternalDocumentation Object</a>.
 	 *
 	 * <p>
 	 * The URL for the target documentation. Value MUST be in the format of a URL.
@@ -74,7 +74,7 @@ public @interface ExternalDocs {
 	 * 	<li class='note'>
 	 * 		The format is a URL string.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
 	 * @return The annotation value.

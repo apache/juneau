@@ -16,7 +16,7 @@ package org.apache.juneau.rest.httppart;
  * A simple named object.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.HttpParts}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.HttpParts">HTTP Parts</a>
  * </ul>
  */
 public interface NamedAttribute {

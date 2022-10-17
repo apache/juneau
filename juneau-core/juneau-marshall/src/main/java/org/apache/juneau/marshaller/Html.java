@@ -41,7 +41,7 @@ import org.apache.juneau.serializer.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.Marshallers}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Marshallers">Marshallers</a>
  * </ul>
  */
 public class Html extends CharMarshaller {

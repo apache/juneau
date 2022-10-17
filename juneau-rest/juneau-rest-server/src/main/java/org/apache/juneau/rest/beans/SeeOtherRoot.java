@@ -20,7 +20,7 @@ import org.apache.juneau.http.response.*;
  * Convenience subclass of {@link SeeOther} for redirecting a response to the servlet root.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.UtilityBeans}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.UtilityBeans">Utility Beans</a>
  * </ul>
  */
 @Response @Schema(description="Redirect to servlet root")

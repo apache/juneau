@@ -32,7 +32,7 @@ import org.apache.juneau.urlencoding.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.UrlEncodingDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.UrlEncodingDetails">URL-Encoding Details</a>
  * </ul>
  */
 @Documented
@@ -134,7 +134,7 @@ public @interface UrlEncoding {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -148,7 +148,7 @@ public @interface UrlEncoding {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.

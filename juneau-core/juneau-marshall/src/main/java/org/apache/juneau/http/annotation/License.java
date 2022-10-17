@@ -36,8 +36,8 @@ import java.lang.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Swagger}
- * 	<li class='extlink'>{@doc ext.SwaggerLicenseObject}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Swagger</a>
+ * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#licenseObject">Swagger License Object</a>
  * </ul>
  */
 @Documented
@@ -45,13 +45,13 @@ import java.lang.annotation.*;
 public @interface License {
 
 	/**
-	 * <mk>name</mk> field of the {@doc ext.SwaggerLicenseObject}.
+	 * <mk>name</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#licenseObject">Swagger License Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -59,13 +59,13 @@ public @interface License {
 	String name() default "";
 
 	/**
-	 * <mk>url</mk> field of the {@doc ext.SwaggerLicenseObject}.
+	 * <mk>url</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#licenseObject">Swagger License Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
 	 * @return The annotation value.

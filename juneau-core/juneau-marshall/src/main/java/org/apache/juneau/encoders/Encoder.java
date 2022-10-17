@@ -29,7 +29,7 @@ import java.io.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.Encoders}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Encoders">Encoders</a>
  * </ul>
  */
 public abstract class Encoder {

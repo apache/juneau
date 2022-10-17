@@ -49,7 +49,7 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
 public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
@@ -236,8 +236,8 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * 		in IRIs.
 		 * 	<li>
 		 * 		<js>"iri"</js> - Sets the IRI engine to IRI
-		 * 		({@doc http://www.ietf.org/rfc/rfc3986.txt RFC 3986},
-		 * 		{@doc http://www.ietf.org/rfc/rfc3987.txt RFC 3987}).
+		 * 		({doc http://www.ietf.org/rfc/rfc3986.txt RFC 3986},
+		 * 		{doc http://www.ietf.org/rfc/rfc3987.txt RFC 3987}).
 		 * </ul>
 		 *
 		 * @param value
@@ -267,13 +267,13 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li>
-		 * 		{@doc ext.ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
+		 * 		{doc ext.ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
 		 * 	<li>
-		 * 		{@doc ext.ARP/ARPOptions.html#setLaxErrorMode() ARPOptions.setLaxErrorMode()}
+		 * 		{doc ext.ARP/ARPOptions.html#setLaxErrorMode() ARPOptions.setLaxErrorMode()}
 		 * 	<li>
-		 * 		{@doc ext.ARP/ARPOptions.html#setStrictErrorMode() ARPOptions.setStrictErrorMode()}
+		 * 		{doc ext.ARP/ARPOptions.html#setStrictErrorMode() ARPOptions.setStrictErrorMode()}
 		 * 	<li>
-		 * 		{@doc ext.ARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
+		 * 		{doc ext.ARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
 		 * </ul>
 		 *
 		 * @param value
@@ -293,7 +293,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li>
-		 * 		{@doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
+		 * 		{doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -311,7 +311,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li>
-		 * 		{@doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
+		 * 		{doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 		 * </ul>
 		 *
 		 * @param value
@@ -525,7 +525,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 *
 		 * <p>
 		 * A list of <c>Resource</c> or a <c>String</c> being a comma separated list of fragment IDs from
-		 * {@doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
+		 * {doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
 		 * rules that will not be used.
 		 *
 		 * @param value

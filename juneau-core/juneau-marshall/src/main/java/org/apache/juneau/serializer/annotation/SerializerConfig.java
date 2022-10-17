@@ -30,7 +30,7 @@ import org.apache.juneau.serializer.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SerializersAndParsers}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
 @Target({TYPE,METHOD})
@@ -68,7 +68,7 @@ public @interface SerializerConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -109,7 +109,7 @@ public @interface SerializerConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -145,7 +145,7 @@ public @interface SerializerConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -176,7 +176,7 @@ public @interface SerializerConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -217,7 +217,7 @@ public @interface SerializerConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -244,7 +244,7 @@ public @interface SerializerConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -277,7 +277,7 @@ public @interface SerializerConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -308,7 +308,7 @@ public @interface SerializerConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -332,7 +332,7 @@ public @interface SerializerConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -354,7 +354,7 @@ public @interface SerializerConfig {
 	 * 	<li class='note'>
 	 * 		Format: JSON object representing a {@link UriContext}
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -383,12 +383,12 @@ public @interface SerializerConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriRelativity(UriRelativity)}
-	 * 	<li class='link'>{@doc jm.MarshallingUris}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.MarshallingUris">URIs</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -414,12 +414,12 @@ public @interface SerializerConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriResolution(UriResolution)}
-	 * 	<li class='link'>{@doc jm.MarshallingUris}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.MarshallingUris">URIs</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -447,7 +447,7 @@ public @interface SerializerConfig {
 	 * 	<li class='note'>
 	 * 		Default: JVM system default.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li class='note'>
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
@@ -472,7 +472,7 @@ public @interface SerializerConfig {
 	 * 	<li class='note'>
 	 * 		Default: 100
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li class='note'>
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
@@ -495,7 +495,7 @@ public @interface SerializerConfig {
 	 * 	<li class='note'>
 	 * 		Default: <c>"</c>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li class='note'>
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
@@ -523,7 +523,7 @@ public @interface SerializerConfig {
 	 * 	<li class='note'>
 	 * 		Default: <js>"utf-8"</js>.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li class='note'>
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
@@ -549,7 +549,7 @@ public @interface SerializerConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -595,7 +595,7 @@ public @interface SerializerConfig {
 	 * 	<li class='warn'>
 	 * 		Checking for recursion can cause a small performance penalty.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -624,7 +624,7 @@ public @interface SerializerConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -648,7 +648,7 @@ public @interface SerializerConfig {
 	 *	<li class='note'>
 	 * 		Default value: <js>"0"</js>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -672,7 +672,7 @@ public @interface SerializerConfig {
 	 * 	<li class='note'>
 	 * 		Default value: <js>"100"</js>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

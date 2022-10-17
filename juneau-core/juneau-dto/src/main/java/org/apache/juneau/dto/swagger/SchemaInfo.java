@@ -55,7 +55,7 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Swagger}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
  * </ul>
  */
 @Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,requiredProperties,enum,type,items,allOf,properties,additionalProperties,discriminator,readOnly,xml,externalDocs,example,$ref,*")
@@ -279,7 +279,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
+	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */

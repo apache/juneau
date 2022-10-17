@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * Note that this annotation is optional if you do not need to override any of the values.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrc.Proxies}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.jrc.Proxies">REST Proxies</a>
  * </ul>
  */
 @Documented

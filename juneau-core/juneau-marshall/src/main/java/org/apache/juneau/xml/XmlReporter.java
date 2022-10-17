@@ -18,7 +18,7 @@ import javax.xml.stream.*;
  * {@link XMLReporter} base class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.XmlDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.XmlDetails">XML Details</a>
  * </ul>
  */
 public abstract class XmlReporter implements XMLReporter {

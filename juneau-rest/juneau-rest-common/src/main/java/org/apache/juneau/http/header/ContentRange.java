@@ -125,8 +125,8 @@ import org.apache.juneau.http.annotation.*;
  * an unsatisfiable Range request-header, since not all servers implement this request-header.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
- * 	<li class='extlink'>{@doc ext.RFC2616}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
+ * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  *
  * @serial exclude

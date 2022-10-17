@@ -31,7 +31,7 @@ import org.apache.juneau.parser.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.JsonSchemaDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */
 @Target({TYPE,METHOD})
@@ -78,7 +78,7 @@ public @interface JsonSchemaConfig {
 	 * 			<li><js>"OTHER"</js>
 	 * 		</ul>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -117,7 +117,7 @@ public @interface JsonSchemaConfig {
 	 * 			<li><js>"OTHER"</js>
 	 * 		</ul>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -141,7 +141,7 @@ public @interface JsonSchemaConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -165,7 +165,7 @@ public @interface JsonSchemaConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -209,7 +209,7 @@ public @interface JsonSchemaConfig {
 	 * 	<li class='note'>
 	 * 		Format: Comma-delimited list of patterns
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -245,7 +245,7 @@ public @interface JsonSchemaConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -291,7 +291,7 @@ public @interface JsonSchemaConfig {
 	 * 	<li class='warn'>
 	 * 		Checking for recursion can cause a small performance penalty.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -320,7 +320,7 @@ public @interface JsonSchemaConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -344,7 +344,7 @@ public @interface JsonSchemaConfig {
 	 *	<li class='note'>
 	 * 		Default value: <js>"0"</js>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -368,7 +368,7 @@ public @interface JsonSchemaConfig {
 	 * 	<li class='note'>
 	 * 		Default value: <js>"100"</js>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

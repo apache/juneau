@@ -18,10 +18,6 @@ import javax.servlet.http.*;
 
 /**
  * A wrapper class that allows you to override basic fields.
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc TODO}
- * </ul>
  */
 class OverrideableHttpServletRequest extends HttpServletRequestWrapper {
 

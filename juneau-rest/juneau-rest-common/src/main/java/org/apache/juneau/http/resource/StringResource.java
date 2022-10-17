@@ -23,7 +23,7 @@ import org.apache.juneau.internal.*;
  * A self contained, repeatable resource that obtains its content from a {@link String}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
 @FluentSetters

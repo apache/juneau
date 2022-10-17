@@ -18,8 +18,8 @@ import java.util.*;
  * A collection of {@link HtmlWidget} objects keyed by their names.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.HtmlWidgets}
- * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets">Widgets</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.HtmlDetails">HTML Details</a>
  * </ul>
  *
  * @serial exclude

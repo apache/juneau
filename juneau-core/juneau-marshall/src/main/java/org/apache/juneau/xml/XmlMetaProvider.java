@@ -18,7 +18,7 @@ import org.apache.juneau.*;
  * Interface for providing access to {@link XmlClassMeta}, {@link XmlBeanMeta}, and {@link XmlBeanPropertyMeta} objects.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.XmlDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.XmlDetails">XML Details</a>
  * </ul>
  */
 public interface XmlMetaProvider extends AnnotationProvider  {

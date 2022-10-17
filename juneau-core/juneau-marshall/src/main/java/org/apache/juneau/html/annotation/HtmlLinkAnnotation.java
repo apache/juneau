@@ -27,7 +27,7 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link HtmlLink @HtmlLink} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.HtmlDetails">HTML Details</a>
  * </ul>
  */
 public class HtmlLinkAnnotation {

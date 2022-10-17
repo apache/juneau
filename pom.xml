@@ -246,12 +246,6 @@
 						<docfilessubdirs>true</docfilessubdirs>
 						<javadocDirectory>${basedir}/juneau-doc/src/main/javadoc</javadocDirectory>
 						<javadocExecutable>${javadoc.executable}</javadocExecutable>
-						<taglets>
-							<taglet>
-								<tagletClass>org.apache.juneau.doc.internal.DocTag</tagletClass>
-							</taglet>
-						</taglets>
-						<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
 					</configuration>
 					<executions>
 						<execution>

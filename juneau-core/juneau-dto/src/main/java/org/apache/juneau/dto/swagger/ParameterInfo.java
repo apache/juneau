@@ -87,7 +87,7 @@ import org.apache.juneau.marshaller.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Swagger}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
  * </ul>
  */
 @Bean(properties="in,name,type,description,required,schema,format,allowEmptyValue,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,*")
@@ -381,7 +381,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
+	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
@@ -730,7 +730,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		Parameter names are case sensitive.
 	 * 	<li class='note'>
 	 * 		If <c>in</c> is <js>"path"</js>, the <c>name</c> field MUST correspond to the associated path segment
-	 * 		from the <c>path</c> field in the {@doc ext.SwaggerPathsObject Paths Object}.
+	 * 		from the <c>path</c> field in the <a class="doclink" href="https://swagger.io/specification/v2#pathsObject">Paths Object</a>.
 	 * 	<li class='note'>
 	 * 		For all other cases, the name corresponds to the parameter name used based on the <c>in</c> property.
 	 * </ul>

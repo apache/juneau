@@ -28,7 +28,7 @@ import static org.apache.juneau.internal.StringUtils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SimpleVariableLanguage}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage">Simple Variable Language</a>
  * </ul>
  */
 public abstract class MultipartResolvingVar extends SimpleVar {

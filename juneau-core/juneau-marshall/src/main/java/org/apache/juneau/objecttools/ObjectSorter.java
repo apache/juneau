@@ -47,7 +47,7 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.ObjectTools}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.ObjectTools">Overview &gt; juneau-marshall &gt; Object Tools</a>
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})

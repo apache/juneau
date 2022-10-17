@@ -55,8 +55,8 @@ import org.apache.juneau.oapi.*;
  * The special name <js>"/*"</js> is used to retrieve the path remainder after the path match (i.e. the part that matches <js>"/*"</js>).
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Swagger}
- * 	<li class='extlink'>{@doc ext.SwaggerParameterObject}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Swagger</a>
+ * 	<li class='extlink'><a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
@@ -64,13 +64,13 @@ import org.apache.juneau.oapi.*;
  * Annotation applied to Java method arguments of interface proxies to denote that they are path variables on the request.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrc.Path}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.jrc.Proxies.jrc.Path">@Path</a>
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  * <p>
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrc.Request}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.jrc.Proxies.jrc.Request">@Request</a>
  * </ul>
  *
  * <ul class='seealso'>
@@ -148,8 +148,8 @@ public @interface Path {
 	 * </ul>
 	 *
 	 * <p>
-	 * The name field MUST correspond to the associated {@doc ext.SwaggerPathsPath path} segment from the path field in the {@doc ext.SwaggerPathsObject Paths Object}.
-	 * See {@doc ext.SwaggerPathTemplating Path Templating} for further information.
+	 * The name field MUST correspond to the associated <a class="doclink" href="https://swagger.io/specification/v2#pathsPath">path</a> segment from the path field in the <a class="doclink" href="https://swagger.io/specification/v2#pathsObject">Paths Object</a>.
+	 * See <a class="doclink" href="https://swagger.io/specification/v2#pathTemplating">Path Templating</a> for further information.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -164,7 +164,7 @@ public @interface Path {
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -178,7 +178,7 @@ public @interface Path {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -196,7 +196,7 @@ public @interface Path {
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Void.class;
 
 	/**
-	 * <mk>schema</mk> field of the {@doc ext.SwaggerParameterObject}.
+	 * <mk>schema</mk> field of the <a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>.
 	 *
 	 * <p>
 	 * The schema defining the type used for parameter.

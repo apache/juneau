@@ -47,7 +47,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.UrlEncodingDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.UrlEncodingDetails">URL-Encoding Details</a>
  * </ul>
  */
 public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvider {

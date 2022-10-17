@@ -26,7 +26,7 @@ import org.apache.juneau.internal.*;
  * A basic implementation of the {@link StatusLine} interface.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
 @FluentSetters

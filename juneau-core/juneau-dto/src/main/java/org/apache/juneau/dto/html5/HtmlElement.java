@@ -32,7 +32,7 @@ import org.apache.juneau.xml.annotation.*;
  * These are beans that when serialized using {@link HtmlSerializer} generate valid HTML5 elements.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @org.apache.juneau.html.annotation.Html(format=XML)
@@ -141,7 +141,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.editing#the-accesskey-attribute accesskey}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#the-accesskey-attribute">accesskey</a>
 	 * attribute.
 	 *
 	 * @param accesskey The new value for this attribute.
@@ -154,7 +154,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.dom#classes class} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#classes">class</a> attribute.
 	 *
 	 * @param _class The new value for this attribute.
 	 * @return This object.
@@ -166,7 +166,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.editing#attr-contenteditable contenteditable}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-contenteditable">contenteditable</a>
 	 * attribute.
 	 *
 	 * @param contenteditable The new value for this attribute.
@@ -180,7 +180,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.dom#the-dir-attribute dir} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#the-dir-attribute">dir</a> attribute.
 	 *
 	 * @param dir The new value for this attribute.
 	 * @return This object.
@@ -192,7 +192,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.editing#the-hidden-attribute hidden} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#the-hidden-attribute">hidden</a> attribute.
 	 *
 	 * @param hidden
 	 * 	The new value for this attribute.
@@ -206,7 +206,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.dom#the-id-attribute id} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#the-id-attribute">id</a> attribute.
 	 *
 	 * @param id The new value for this attribute.
 	 * @return This object.
@@ -218,7 +218,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.dom#attr-lang lang} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#attr-lang">lang</a> attribute.
 	 *
 	 * @param lang The new value for this attribute.
 	 * @return This object.
@@ -230,7 +230,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onabort onabort} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onabort">onabort</a> attribute.
 	 *
 	 * @param onabort The new value for this attribute.
 	 * @return This object.
@@ -242,7 +242,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onblur onblur} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onblur">onblur</a> attribute.
 	 *
 	 * @param onblur The new value for this attribute.
 	 * @return This object.
@@ -254,7 +254,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-oncancel oncancel} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncancel">oncancel</a> attribute.
 	 *
 	 * @param oncancel The new value for this attribute.
 	 * @return This object.
@@ -266,7 +266,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-oncanplay oncanplay} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncanplay">oncanplay</a> attribute.
 	 *
 	 * @param oncanplay The new value for this attribute.
 	 * @return This object.
@@ -278,7 +278,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-oncanplaythrough oncanplaythrough}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncanplaythrough">oncanplaythrough</a>
 	 * attribute.
 	 *
 	 * @param oncanplaythrough The new value for this attribute.
@@ -291,7 +291,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onchange onchange} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onchange">onchange</a> attribute.
 	 *
 	 * @param onchange The new value for this attribute.
 	 * @return This object.
@@ -303,7 +303,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onclick onclick} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onclick">onclick</a> attribute.
 	 *
 	 * @param onclick The new value for this attribute.
 	 * @return This object.
@@ -315,7 +315,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-oncuechange oncuechange}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncuechange">oncuechange</a>
 	 * attribute.
 	 *
 	 * @param oncuechange The new value for this attribute.
@@ -328,7 +328,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-ondblclick ondblclick} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ondblclick">ondblclick</a> attribute.
 	 *
 	 * @param ondblclick The new value for this attribute.
 	 * @return This object.
@@ -340,7 +340,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-ondurationchange ondurationchange}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ondurationchange">ondurationchange</a>
 	 * attribute.
 	 *
 	 * @param ondurationchange The new value for this attribute.
@@ -353,7 +353,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onemptied onemptied} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onemptied">onemptied</a> attribute.
 	 *
 	 * @param onemptied The new value for this attribute.
 	 * @return This object.
@@ -365,7 +365,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onended onended} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onended">onended</a> attribute.
 	 *
 	 * @param onended The new value for this attribute.
 	 * @return This object.
@@ -377,7 +377,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onerror onerror} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onerror">onerror</a> attribute.
 	 *
 	 * @param onerror The new value for this attribute.
 	 * @return This object.
@@ -389,7 +389,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onfocus onfocus} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onfocus">onfocus</a> attribute.
 	 *
 	 * @param onfocus The new value for this attribute.
 	 * @return This object.
@@ -401,7 +401,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-oninput oninput} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oninput">oninput</a> attribute.
 	 *
 	 * @param oninput The new value for this attribute.
 	 * @return This object.
@@ -413,7 +413,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-oninvalid oninvalid} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oninvalid">oninvalid</a> attribute.
 	 *
 	 * @param oninvalid The new value for this attribute.
 	 * @return This object.
@@ -425,7 +425,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onkeydown onkeydown} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onkeydown">onkeydown</a> attribute.
 	 *
 	 * @param onkeydown The new value for this attribute.
 	 * @return This object.
@@ -437,7 +437,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onkeypress onkeypress} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onkeypress">onkeypress</a> attribute.
 	 *
 	 * @param onkeypress The new value for this attribute.
 	 * @return This object.
@@ -449,7 +449,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onkeyup onkeyup} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onkeyup">onkeyup</a> attribute.
 	 *
 	 * @param onkeyup The new value for this attribute.
 	 * @return This object.
@@ -461,7 +461,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onload onload} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onload">onload</a> attribute.
 	 *
 	 * @param onload The new value for this attribute.
 	 * @return This object.
@@ -473,7 +473,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onloadeddata onloadeddata}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onloadeddata">onloadeddata</a>
 	 * attribute.
 	 *
 	 * @param onloadeddata The new value for this attribute.
@@ -486,7 +486,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onloadedmetadata onloadedmetadata}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onloadedmetadata">onloadedmetadata</a>
 	 * attribute.
 	 *
 	 * @param onloadedmetadata The new value for this attribute.
@@ -499,7 +499,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onloadstart onloadstart}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onloadstart">onloadstart</a>
 	 * attribute.
 	 *
 	 * @param onloadstart The new value for this attribute.
@@ -512,7 +512,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onmousedown onmousedown}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmousedown">onmousedown</a>
 	 * attribute.
 	 *
 	 * @param onmousedown The new value for this attribute.
@@ -525,7 +525,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onmouseenter onmouseenter} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseenter">onmouseenter</a> attribute.
 	 *
 	 * @param onmouseenter The new value for this attribute.
 	 * @return This object.
@@ -537,7 +537,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onmouseleave onmouseleave}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseleave">onmouseleave</a>
 	 * attribute.
 	 *
 	 * @param onmouseleave The new value for this attribute.
@@ -550,7 +550,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onmousemove onmousemove}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmousemove">onmousemove</a>
 	 * attribute.
 	 *
 	 * @param onmousemove The new value for this attribute.
@@ -563,7 +563,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onmouseout onmouseout} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseout">onmouseout</a> attribute.
 	 *
 	 * @param onmouseout The new value for this attribute.
 	 * @return This object.
@@ -575,7 +575,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onmouseover onmouseover}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseover">onmouseover</a>
 	 * attribute.
 	 *
 	 * @param onmouseover The new value for this attribute.
@@ -588,7 +588,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onmouseup onmouseup} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseup">onmouseup</a> attribute.
 	 *
 	 * @param onmouseup The new value for this attribute.
 	 * @return This object.
@@ -600,7 +600,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onmousewheel onmousewheel}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmousewheel">onmousewheel</a>
 	 * attribute.
 	 *
 	 * @param onmousewheel The new value for this attribute.
@@ -613,7 +613,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onpause onpause} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onpause">onpause</a> attribute.
 	 *
 	 * @param onpause The new value for this attribute.
 	 * @return This object.
@@ -625,7 +625,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onplay onplay} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onplay">onplay</a> attribute.
 	 *
 	 * @param onplay The new value for this attribute.
 	 * @return This object.
@@ -637,7 +637,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onplaying onplaying} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onplaying">onplaying</a> attribute.
 	 *
 	 * @param onplaying The new value for this attribute.
 	 * @return This object.
@@ -649,7 +649,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onprogress onprogress} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onprogress">onprogress</a> attribute.
 	 *
 	 * @param onprogress The new value for this attribute.
 	 * @return This object.
@@ -661,7 +661,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onratechange onratechange}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onratechange">onratechange</a>
 	 * attribute.
 	 *
 	 * @param onratechange The new value for this attribute.
@@ -674,7 +674,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onreset onreset} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onreset">onreset</a> attribute.
 	 *
 	 * @param onreset The new value for this attribute.
 	 * @return This object.
@@ -686,7 +686,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onresize onresize} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onresize">onresize</a> attribute.
 	 *
 	 * @param onresize The new value for this attribute.
 	 * @return This object.
@@ -698,7 +698,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onscroll onscroll} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onscroll">onscroll</a> attribute.
 	 *
 	 * @param onscroll The new value for this attribute.
 	 * @return This object.
@@ -710,7 +710,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onseeked onseeked} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onseeked">onseeked</a> attribute.
 	 *
 	 * @param onseeked The new value for this attribute.
 	 * @return This object.
@@ -722,7 +722,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onseeking onseeking} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onseeking">onseeking</a> attribute.
 	 *
 	 * @param onseeking The new value for this attribute.
 	 * @return This object.
@@ -734,7 +734,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onselect onselect} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onselect">onselect</a> attribute.
 	 *
 	 * @param onselect The new value for this attribute.
 	 * @return This object.
@@ -746,7 +746,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onshow onshow} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onshow">onshow</a> attribute.
 	 *
 	 * @param onshow The new value for this attribute.
 	 * @return This object.
@@ -758,7 +758,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onstalled onstalled} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onstalled">onstalled</a> attribute.
 	 *
 	 * @param onstalled The new value for this attribute.
 	 * @return This object.
@@ -770,7 +770,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onsubmit onsubmit} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onsubmit">onsubmit</a> attribute.
 	 *
 	 * @param onsubmit The new value for this attribute.
 	 * @return This object.
@@ -782,7 +782,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onsuspend onsuspend} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onsuspend">onsuspend</a> attribute.
 	 *
 	 * @param onsuspend The new value for this attribute.
 	 * @return This object.
@@ -794,7 +794,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-ontimeupdate ontimeupdate}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ontimeupdate">ontimeupdate</a>
 	 * attribute.
 	 *
 	 * @param ontimeupdate The new value for this attribute.
@@ -807,7 +807,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-ontoggle ontoggle} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ontoggle">ontoggle</a> attribute.
 	 *
 	 * @param ontoggle The new value for this attribute.
 	 * @return This object.
@@ -819,7 +819,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onvolumechange onvolumechange}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onvolumechange">onvolumechange</a>
 	 * attribute.
 	 *
 	 * @param onvolumechange The new value for this attribute.
@@ -832,7 +832,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.webappapis#handler-onwaiting onwaiting} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onwaiting">onwaiting</a> attribute.
 	 *
 	 * @param onwaiting The new value for this attribute.
 	 * @return This object.
@@ -844,7 +844,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.editing#attr-spellcheck spellcheck} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-spellcheck">spellcheck</a> attribute.
 	 *
 	 * @param spellcheck
 	 * 	The new value for this attribute.
@@ -858,7 +858,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.dom#the-style-attribute style} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#the-style-attribute">style</a> attribute.
 	 *
 	 * @param style The new value for this attribute.
 	 * @return This object.
@@ -870,7 +870,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.editing#attr-tabindex tabindex} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-tabindex">tabindex</a> attribute.
 	 *
 	 * @param tabindex
 	 * 	The new value for this attribute.
@@ -884,7 +884,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.dom#attr-title title} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#attr-title">title</a> attribute.
 	 *
 	 * @param title The new value for this attribute.
 	 * @return This object.
@@ -896,7 +896,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc ext.HTML5.dom#attr-translate translate} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#attr-translate">translate</a> attribute.
 	 *
 	 * @param translate
 	 * 	The new value for this attribute.

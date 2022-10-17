@@ -32,7 +32,7 @@ import org.apache.juneau.xml.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.XmlDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.XmlDetails">XML Details</a>
  * </ul>
  */
 @Target({TYPE,METHOD})
@@ -87,7 +87,7 @@ public @interface XmlConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -147,7 +147,7 @@ public @interface XmlConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -180,7 +180,7 @@ public @interface XmlConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -206,12 +206,12 @@ public @interface XmlConfig {
 	 * 	<li class='note'>
 	 * 		This setting is ignored if {@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()} is not enabled.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#addNamespaceUrisToRoot()}
-	 * 	<li class='link'>{@doc jm.XmlNamespaces}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.XmlDetails.jm.XmlNamespaces">Namespaces</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -246,12 +246,12 @@ public @interface XmlConfig {
 	 * 		<br>In high-performance environments, it's recommended that namespace detection be
 	 * 		disabled, and that namespaces be manually defined through the {@link org.apache.juneau.xml.XmlSerializer.Builder#namespaces(Namespace...)} property.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#disableAutoDetectNamespaces()}
-	 * 	<li class='link'>{@doc jm.XmlNamespaces}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.XmlDetails.jm.XmlNamespaces">Namespaces</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -266,12 +266,12 @@ public @interface XmlConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#defaultNamespace(Namespace)}
-	 * 	<li class='link'>{@doc jm.XmlNamespaces}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.XmlDetails.jm.XmlNamespaces">Namespaces</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -291,12 +291,12 @@ public @interface XmlConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()}
-	 * 	<li class='link'>{@doc jm.XmlNamespaces}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.XmlDetails.jm.XmlNamespaces">Namespaces</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -311,12 +311,12 @@ public @interface XmlConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#namespaces(Namespace...)}
-	 * 	<li class='link'>{@doc jm.XmlNamespaces}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.XmlDetails.jm.XmlNamespaces">Namespaces</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.

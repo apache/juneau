@@ -25,7 +25,7 @@ import java.util.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.JsonSchemaDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */
 public enum TypeCategory {

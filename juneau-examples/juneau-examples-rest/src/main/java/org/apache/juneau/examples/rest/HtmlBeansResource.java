@@ -25,8 +25,8 @@ import org.apache.juneau.rest.widget.*;
  * Sample resource that allows images to be uploaded and retrieved.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Marshalling REST Marshalling}
- * 	<li class='link'>{@doc jrs.HtmlBeans HtmlBeans}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Marshalling">REST Marshalling</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.HtmlBeans">HtmlBeans</a>
  * </ul>
  */
 @Rest(

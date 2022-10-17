@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link OpenApi @OpenApi} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.OpenApiDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.OpenApiDetails">OpenAPI Details</a>
  * </ul>
  */
 public class OpenApiAnnotation {

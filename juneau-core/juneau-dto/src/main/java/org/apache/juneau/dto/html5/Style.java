@@ -18,11 +18,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.document-metadata#the-style-element <style>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-style-element">&lt;style&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="style")
@@ -55,7 +55,7 @@ public class Style extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.document-metadata#attr-style-media media} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-style-media">media</a> attribute.
 	 *
 	 * <p>
 	 * Applicable media.
@@ -69,7 +69,7 @@ public class Style extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.document-metadata#attr-style-type type} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-style-type">type</a> attribute.
 	 *
 	 * <p>
 	 * Type of embedded resource.

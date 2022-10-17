@@ -43,7 +43,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SerializersAndParsers}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
 public class WriterSerializerSession extends SerializerSession {

@@ -33,8 +33,8 @@ import org.apache.juneau.svl.*;
  * caching and reuse.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrc.Proxies}
- * 	<li class='link'>{@doc juneau-rest-client}
+ * 	<li class='link'><a class="doclink" href="../../../../../../overview-summary.html#juneau-rest-client.jrc.Proxies">REST Proxies</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../../overview-summary.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */
 public class RemoteMeta {

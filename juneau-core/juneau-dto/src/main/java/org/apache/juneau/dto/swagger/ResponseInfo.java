@@ -57,7 +57,7 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Swagger}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
  * </ul>
  */
 @Bean(properties="description,schema,headers,examples,*")
@@ -151,7 +151,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
+	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 * 	<br>Property value is required.
 	 * @return This object.
 	 */

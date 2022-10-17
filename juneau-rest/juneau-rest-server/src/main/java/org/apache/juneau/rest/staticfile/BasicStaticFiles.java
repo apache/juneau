@@ -39,7 +39,7 @@ import org.apache.juneau.rest.*;
  * objects with arbitrary headers.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.StaticFiles}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.StaticFiles">Static files</a>
  * </ul>
  */
 public class BasicStaticFiles implements StaticFiles {

@@ -16,11 +16,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.tabular-data#the-th-element <th>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-th-element">&lt;th&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="th")
@@ -42,7 +42,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.tabular-data#attr-th-abbr abbr} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-th-abbr">abbr</a> attribute.
 	 *
 	 * <p>
 	 * Alternative label to use for the header cell when referencing the cell in other contexts.
@@ -56,7 +56,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.tabular-data#attr-tdth-colspan colspan} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-colspan">colspan</a> attribute.
 	 *
 	 * <p>
 	 * Number of columns that the cell is to span.
@@ -72,7 +72,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.tabular-data#attr-tdth-headers headers} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-headers">headers</a> attribute.
 	 *
 	 * <p>
 	 * The headers for this cell.
@@ -86,7 +86,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.tabular-data#attr-tdth-rowspan rowspan} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-rowspan">rowspan</a> attribute.
 	 *
 	 * <p>
 	 * Number of rows that the cell is to span.
@@ -102,7 +102,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.tabular-data#attr-th-scope scope} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-th-scope">scope</a> attribute.
 	 *
 	 * <p>
 	 * Specifies which cells the header cell applies to.
@@ -116,7 +116,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.tabular-data#attr-th-sorted sorted}  attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-th-sorted">sorted</a> attribute.
 	 *
 	 * <p>
 	 * Column sort direction and ordinality.

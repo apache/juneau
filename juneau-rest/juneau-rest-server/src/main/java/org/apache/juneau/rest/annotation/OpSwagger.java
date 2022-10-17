@@ -22,7 +22,7 @@ import org.apache.juneau.annotation.*;
  * Extended annotation for {@link RestOp#swagger() RestOp.swagger()}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Swagger}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Swagger</a>
  * </ul>
  */
 @Retention(RUNTIME)
@@ -36,9 +36,9 @@ public @interface OpSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is either a comma-delimited list of simple strings or a {@doc jd.Swagger} array.
+	 * 		The format is either a comma-delimited list of simple strings or a <a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> array.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * </ul>
@@ -63,7 +63,7 @@ public @interface OpSwagger {
 	 * 	<li class='note'>
 	 * 		The format is boolean.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * 	<li class='note'>
@@ -82,7 +82,7 @@ public @interface OpSwagger {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * 	<li class='note'>
@@ -107,7 +107,7 @@ public @interface OpSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * </ul>
@@ -123,7 +123,7 @@ public @interface OpSwagger {
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * 	<li class='note'>
@@ -159,10 +159,10 @@ public @interface OpSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a {@doc jd.Swagger} array consisting of the concatenated individual strings.
+	 * 		The format is a <a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> array consisting of the concatenated individual strings.
 	 * 		<br>The leading and trailing <js>'['</js> and <js>']'</js> characters are optional.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * </ul>
 	 *
@@ -178,9 +178,9 @@ public @interface OpSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is either a comma-delimited list of simple strings or a {@doc jd.Swagger} array.
+	 * 		The format is either a comma-delimited list of simple strings or a <a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> array.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * </ul>
@@ -211,10 +211,10 @@ public @interface OpSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a {@doc jd.Swagger} objc consisting of the concatenated individual strings.
+	 * 		The format is a <a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> objc consisting of the concatenated individual strings.
 	 * 		<br>The leading and trailing <js>'{'</js> and <js>'}'</js> characters are optional.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -226,9 +226,9 @@ public @interface OpSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is either a comma-delimited list of simple strings or a {@doc jd.Swagger} array.
+	 * 		The format is either a comma-delimited list of simple strings or a <a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> array.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * </ul>
@@ -245,7 +245,7 @@ public @interface OpSwagger {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * 	<li class='note'>
@@ -277,7 +277,7 @@ public @interface OpSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/tags</c>.
 	 * </ul>
@@ -290,7 +290,7 @@ public @interface OpSwagger {
 	 * Free-form value for the swagger of a resource method.
 	 *
 	 * <p>
-	 * This is a {@doc jd.Swagger} object that makes up the swagger information for this resource method.
+	 * This is a <a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> object that makes up the swagger information for this resource method.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of a resource method:
@@ -345,7 +345,7 @@ public @interface OpSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a {@doc jd.Swagger} object.
+	 * 		The format is a <a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> object.
 	 * 	<li class='note'>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
@@ -358,7 +358,7 @@ public @interface OpSwagger {
 	 * 	<li class='note'>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
 	 * </ul>

@@ -47,7 +47,7 @@ import org.apache.juneau.serializer.*;
  * a REST resource.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.AnnotatedClasses}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.AnnotatedClasses">@Rest-Annotated Classes</a>
  * </ul>
  */
 @Target(TYPE)
@@ -71,7 +71,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -97,7 +97,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Use <js>"*"</js> to represent all methods.
@@ -127,7 +127,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Method names are case-insensitive.
@@ -155,7 +155,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Use <js>"*"</js> to represent all methods.
@@ -194,7 +194,7 @@ public @interface Rest {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#callLogger()}
-	 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.LoggingAndDebugging">Logging / Debugging</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -246,7 +246,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -271,7 +271,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Use the keyword <c>SYSTEM_DEFAULT</c> to refer to the system default configuration
@@ -294,7 +294,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -347,7 +347,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		These debug settings can be overridden by the {@link Rest#debugOn()} annotation or at runtime by directly
@@ -478,7 +478,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		These debug settings override the settings define via {@link Rest#debug()} and {@link RestOp#debug()}.
@@ -501,7 +501,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -517,7 +517,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -546,7 +546,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -581,7 +581,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -606,7 +606,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -626,7 +626,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -651,7 +651,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		The format is plain-text.
@@ -702,7 +702,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jrs.Encoders}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Encoders">Encoders</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -739,7 +739,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -782,7 +782,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -794,7 +794,7 @@ public @interface Rest {
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -808,7 +808,7 @@ public @interface Rest {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -865,7 +865,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jrs.Marshalling}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Marshalling">Marshalling</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -999,7 +999,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1019,7 +1019,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1128,7 +1128,7 @@ public @interface Rest {
 	 * 	<li>
 	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}.
 	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1221,7 +1221,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jrs.Marshalling}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Marshalling">Marshalling</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -1248,7 +1248,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1339,7 +1339,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/info/title</c>.
@@ -1357,7 +1357,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1377,7 +1377,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1400,7 +1400,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1423,7 +1423,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables}
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *

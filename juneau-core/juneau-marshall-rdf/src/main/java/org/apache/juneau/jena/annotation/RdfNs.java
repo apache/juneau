@@ -23,7 +23,7 @@ import java.lang.annotation.*;
  * Used to identify a namespace/URI pair on a {@link RdfSchema#rdfNs() @RdfSchema(rdfNs)} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
 @Documented

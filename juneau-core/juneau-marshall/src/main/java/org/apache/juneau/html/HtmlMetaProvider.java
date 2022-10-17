@@ -18,7 +18,7 @@ import org.apache.juneau.*;
  * Interface for providing access to {@link HtmlClassMeta} and {@link HtmlBeanPropertyMeta} objects.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.HtmlDetails">HTML Details</a>
  * </ul>
  */
 public interface HtmlMetaProvider extends AnnotationProvider {

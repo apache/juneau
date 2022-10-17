@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * Indicates that the request could not be processed because of conflict in the request, such as an edit conflict between multiple simultaneous updates.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *
  * @serial exclude

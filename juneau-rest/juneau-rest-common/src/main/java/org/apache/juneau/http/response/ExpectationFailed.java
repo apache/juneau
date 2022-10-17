@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The server cannot meet the requirements of the Expect request-header field.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *
  * @serial exclude

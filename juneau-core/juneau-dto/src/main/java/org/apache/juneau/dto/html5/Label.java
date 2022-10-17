@@ -16,11 +16,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.forms#the-label-element <label>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-label-element">&lt;label&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="label")
@@ -42,7 +42,7 @@ public class Label extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-label-for for} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-label-for">for</a> attribute.
 	 *
 	 * <p>
 	 * Associate the label with form control.
@@ -56,7 +56,7 @@ public class Label extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fae-form form} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 *
 	 * <p>
 	 * Associates the control with a form element.

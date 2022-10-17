@@ -35,8 +35,8 @@ import org.apache.juneau.rest.servlet.*;
  * Children are attached to this resource using the {@link Rest#children() @Rest(children)} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server-springboot}
- * 	<li class='link'>{@doc jrs.AnnotatedClasses}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server-springboot">juneau-rest-server-springboot</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.AnnotatedClasses">@Rest-Annotated Classes</a>
  * </ul>
  *
  * @serial exclude

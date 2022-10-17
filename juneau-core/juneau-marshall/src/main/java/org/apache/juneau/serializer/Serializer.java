@@ -60,7 +60,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SerializersAndParsers}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
 public class Serializer extends BeanTraverseContext {
@@ -246,7 +246,7 @@ public class Serializer extends BeanTraverseContext {
 		 * 	Specifies the accept media types that the serializer can handle.
 		 *
 		 * 	<p>
-		 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ext.RFC2616.section14.1}
+		 * 	Can contain meta-characters per the <c>media-type</c> specification of <a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">RFC2616/14.1</a>
 		 * 	<p>
 		 * 	If empty, then assumes the only media type supported is <c>produces</c>.
 		 * 	<p>
@@ -749,7 +749,7 @@ public class Serializer extends BeanTraverseContext {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jm.MarshallingUris}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.MarshallingUris">URIs</a>
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -783,7 +783,7 @@ public class Serializer extends BeanTraverseContext {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jm.MarshallingUris}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.MarshallingUris">URIs</a>
 		 * </ul>
 		 *
 		 * @param value
@@ -821,7 +821,7 @@ public class Serializer extends BeanTraverseContext {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jm.MarshallingUris}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.MarshallingUris">URIs</a>
 		 * </ul>
 		 *
 		 * @param value

@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
  * Interface for retrieving Swagger on a REST resource.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Swagger}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Swagger</a>
  * </ul>
  */
 public interface SwaggerProvider {

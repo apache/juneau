@@ -26,7 +26,7 @@ import org.apache.juneau.internal.*;
  * A streamed, non-repeatable entity that obtains its content from an {@link InputStream}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
 @FluentSetters

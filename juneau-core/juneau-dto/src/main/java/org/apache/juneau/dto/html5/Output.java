@@ -16,11 +16,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.forms#the-output-element <output>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-output-element">&lt;output&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="output")
@@ -42,7 +42,7 @@ public class Output extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-output-for for} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-output-for">for</a> attribute.
 	 *
 	 * <p>
 	 * Specifies controls from which the output was calculated.
@@ -56,7 +56,7 @@ public class Output extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fae-form form} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 *
 	 * <p>
 	 * Associates the control with a form element.
@@ -70,7 +70,7 @@ public class Output extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-name name} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 *
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.

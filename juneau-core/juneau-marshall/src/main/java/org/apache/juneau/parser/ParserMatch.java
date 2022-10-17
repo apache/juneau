@@ -18,7 +18,7 @@ import org.apache.juneau.*;
  * Represents a parser and media type that matches an HTTP <c>Content-Type</c> header value.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SerializersAndParsers}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
 public final class ParserMatch {

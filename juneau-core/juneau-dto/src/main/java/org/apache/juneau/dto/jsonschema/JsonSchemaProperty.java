@@ -16,7 +16,7 @@ package org.apache.juneau.dto.jsonschema;
  * Represents a JSON property in the JSON-Schema core specification.
  *
  * <ul class='seealso'>
- * 	<li class='jp'>{@doc package-summary.html#TOC org.apache.juneau.dto.jsonschema}
+ * 	<li class='jp'><a class="doclink" href="package-summary.html#TOC">org.apache.juneau.dto.jsonschema</a>
  * </ul>
  */
 public class JsonSchemaProperty extends JsonSchema {

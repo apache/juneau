@@ -21,7 +21,7 @@ import org.apache.juneau.xml.*;
  * Utility classes and methods for the {@link XmlConfig @XmlConfig} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.XmlDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.XmlDetails">XML Details</a>
  * </ul>
  */
 public class XmlConfigAnnotation {

@@ -18,7 +18,7 @@ import org.apache.http.client.methods.*;
  * Inner request class of {@link RestRequest} for requests without bodies.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-client}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */
 class BasicHttpRequestBase extends HttpRequestBase implements RestRequestCreated {

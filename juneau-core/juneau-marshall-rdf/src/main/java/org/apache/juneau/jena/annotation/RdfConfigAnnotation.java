@@ -22,7 +22,7 @@ import org.apache.juneau.xml.*;
  * Utility classes and methods for the {@link RdfConfig @RdfConfig} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
 public class RdfConfigAnnotation {

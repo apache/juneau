@@ -16,11 +16,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.semantics#the-html-element <html>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/semantics.html#the-html-element">&lt;html&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="html")
@@ -42,7 +42,7 @@ public class Html extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.semantics#attr-html-manifest manifest} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/semantics.html#attr-html-manifest">manifest</a> attribute.
 	 *
 	 * <p>
 	 * Application cache manifest.

@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The request did not specify the length of its content, which is required by the requested resource.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *
  * @serial exclude

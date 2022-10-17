@@ -19,11 +19,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.embedded-content-0#the-track-element <track>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-track-element">&lt;track&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="track")
@@ -47,7 +47,7 @@ public class Track extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-track-default default}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-default">default</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -62,7 +62,7 @@ public class Track extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-track-kind kind} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-kind">kind</a> attribute.
 	 *
 	 * <p>
 	 * The type of text track.
@@ -76,7 +76,7 @@ public class Track extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-track-label label} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-label">label</a> attribute.
 	 *
 	 * <p>
 	 * User-visible label.
@@ -90,7 +90,7 @@ public class Track extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-track-src src} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-src">src</a> attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -113,7 +113,7 @@ public class Track extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-track-srclang srclang}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-srclang">srclang</a>
 	 * attribute.
 	 *
 	 * <p>

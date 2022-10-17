@@ -26,7 +26,7 @@ import org.apache.juneau.http.resource.*;
  * Resources are simply {@link HttpEntity} objects with arbitrary additional headers.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
 public class HttpResources {

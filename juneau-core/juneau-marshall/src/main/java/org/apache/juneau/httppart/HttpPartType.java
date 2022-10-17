@@ -16,7 +16,7 @@ package org.apache.juneau.httppart;
  * Represents possible enum values that can be passed to the {@link HttpPartSerializerSession#serialize(HttpPartType, HttpPartSchema, Object)}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpPartSerializersParsers}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
  * </ul>
  */
 public enum HttpPartType {

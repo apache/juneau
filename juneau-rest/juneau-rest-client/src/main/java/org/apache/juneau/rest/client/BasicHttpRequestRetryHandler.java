@@ -21,7 +21,7 @@ import org.apache.http.protocol.*;
  * An extension of {@link StandardHttpRequestRetryHandler} that adds support for a retry interval.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-client}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */
 public class BasicHttpRequestRetryHandler extends StandardHttpRequestRetryHandler {

@@ -28,7 +28,7 @@ import org.apache.juneau.parser.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.MsgPackDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.MsgPackDetails">MessagePack Details</a>
  * </ul>
  */
 public final class MsgPackInputStream extends ParserInputStream {

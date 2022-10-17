@@ -43,7 +43,7 @@ import org.apache.juneau.uon.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.OpenApiDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.OpenApiDetails">OpenAPI Details</a>
  * </ul>
  */
 public class OpenApiSerializerSession extends UonSerializerSession {

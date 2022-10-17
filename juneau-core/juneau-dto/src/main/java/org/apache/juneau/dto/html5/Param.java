@@ -16,11 +16,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.embedded-content-0#the-param-element <param>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-param-element">&lt;param&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="param")
@@ -44,7 +44,7 @@ public class Param extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-param-name name} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-param-name">name</a> attribute.
 	 *
 	 * <p>
 	 * Name of parameter.
@@ -58,7 +58,7 @@ public class Param extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-param-value value}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-param-value">value</a>
 	 * attribute.
 	 *
 	 * <p>

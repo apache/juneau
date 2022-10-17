@@ -33,7 +33,7 @@ import org.apache.juneau.internal.*;
  * So, for example, submitting a form to a permanently redirected resource may continue smoothly.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
 @Response

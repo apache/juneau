@@ -18,11 +18,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.forms#the-input-element <input>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-input-element">&lt;input&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="input")
@@ -44,7 +44,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-accept accept} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-accept">accept</a> attribute.
 	 *
 	 * <p>
 	 * Hint for expected file type in file upload controls.
@@ -58,7 +58,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-alt alt} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-alt">alt</a> attribute.
 	 *
 	 * <p>
 	 * Replacement text for use when images are not available.
@@ -72,7 +72,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-autocomplete autocomplete} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a> attribute.
 	 *
 	 * <p>
 	 * Hint for form auto-fill feature.
@@ -86,7 +86,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-autofocus autofocus} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
 	 *
 	 * <p>
 	 * Automatically focus the form control when the page is loaded.
@@ -100,7 +100,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-checked checked} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-checked">checked</a> attribute.
 	 *
 	 * <p>
 	 * Whether the command or control is checked.
@@ -116,7 +116,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-dirname dirname} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-dirname">dirname</a> attribute.
 	 *
 	 * <p>
 	 * Name of form field to use for sending the element's directionality in form submission.
@@ -130,7 +130,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-disabled disabled} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-disabled">disabled</a> attribute.
 	 *
 	 * <p>
 	 * Whether the form control is disabled.
@@ -146,7 +146,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fae-form form} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 *
 	 * <p>
 	 * Associates the control with a form element.
@@ -160,7 +160,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fs-formaction formaction} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formaction">formaction</a> attribute.
 	 *
 	 * <p>
 	 * URL to use for form submission.
@@ -174,7 +174,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fs-formenctype formenctype} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formenctype">formenctype</a> attribute.
 	 *
 	 * <p>
 	 * Form data set encoding type to use for form submission.
@@ -188,7 +188,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fs-formmethod formmethod} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formmethod">formmethod</a> attribute.
 	 *
 	 * <p>
 	 * HTTP method to use for form submission.
@@ -202,7 +202,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fs-formnovalidate formnovalidate}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formnovalidate">formnovalidate</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -217,7 +217,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fs-formtarget formtarget} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formtarget">formtarget</a> attribute.
 	 *
 	 * <p>
 	 * Browsing context for form submission.
@@ -231,7 +231,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-dim-height height}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -248,7 +248,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-input-inputmode inputmode}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-input-inputmode">inputmode</a>
 	 * attribute.
 	 * Hint for selecting an input modality.
 	 *
@@ -261,7 +261,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-list list} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-list">list</a> attribute.
 	 *
 	 * <p>
 	 * List of auto-complete options.
@@ -275,7 +275,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-max max} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-max">max</a> attribute.
 	 *
 	 * <p>
 	 * Maximum value.
@@ -291,7 +291,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-maxlength maxlength} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-maxlength">maxlength</a> attribute.
 	 * Maximum length of value.
 	 *
 	 * @param maxlength The new value for this attribute.
@@ -304,7 +304,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-min min} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-min">min</a> attribute.
 	 *
 	 * <p>
 	 * Minimum value.
@@ -320,7 +320,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-minlength minlength} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-minlength">minlength</a> attribute.
 	 *
 	 * <p>
 	 * Minimum length of value.
@@ -336,7 +336,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-multiple multiple} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-multiple">multiple</a> attribute.
 	 *
 	 * <p>
 	 * Whether to allow multiple values.
@@ -352,7 +352,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-name name} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 *
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.
@@ -366,7 +366,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-pattern pattern} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-pattern">pattern</a> attribute.
 	 *
 	 * <p>
 	 * Pattern to be matched by the form control's value.
@@ -380,7 +380,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-placeholder placeholder} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-placeholder">placeholder</a> attribute.
 	 *
 	 * <p>
 	 * User-visible label to be placed within the form control.
@@ -394,7 +394,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-readonly readonly} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">readonly</a> attribute.
 	 *
 	 * <p>
 	 * Whether to allow the value to be edited by the user.
@@ -411,7 +411,7 @@ public class Input extends HtmlElementVoid {
 
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-readonly readonly} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">readonly</a> attribute.
 	 *
 	 * <p>
 	 * Whether to allow the value to be edited by the user.
@@ -426,7 +426,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-readonly required} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">required</a> attribute.
 	 *
 	 * <p>
 	 * Whether the control is required for form submission.
@@ -442,7 +442,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-size size} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-size">size</a> attribute.
 	 *
 	 * <p>
 	 * Size of the control.
@@ -458,7 +458,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-src src} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-src">src</a> attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -474,7 +474,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-step step} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-step">step</a> attribute.
 	 *
 	 * <p>
 	 * Granularity to be matched by the form control's value.
@@ -488,7 +488,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-type type} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-type">type</a> attribute.
 	 *
 	 * <p>
 	 * Type of form control.
@@ -502,7 +502,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-input-value value} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-value">value</a> attribute.
 	 *
 	 * <p>
 	 * Value of the form control.
@@ -518,7 +518,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.embedded-content-0#attr-dim-width width} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
 	 *
 	 * <p>
 	 * Horizontal dimension.

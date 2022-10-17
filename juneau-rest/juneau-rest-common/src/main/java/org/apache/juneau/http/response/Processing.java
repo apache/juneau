@@ -34,7 +34,7 @@ import org.apache.juneau.internal.*;
  * This prevents the client from timing out and assuming the request was lost.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
 @Response

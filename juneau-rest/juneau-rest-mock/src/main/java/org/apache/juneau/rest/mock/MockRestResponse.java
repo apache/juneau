@@ -21,7 +21,7 @@ import org.apache.juneau.rest.client.*;
  * A subclass of {@link RestResponse} with additional features for mocked testing.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-mock}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-mock">juneau-rest-mock</a>
  * </ul>
 */
 @FluentSetters

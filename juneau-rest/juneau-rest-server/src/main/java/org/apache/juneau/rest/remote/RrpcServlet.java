@@ -48,8 +48,7 @@ import org.apache.juneau.http.response.*;
  * {@link #getServiceMap()} method that maps java interfaces to POJO instances.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.RestRpc}
- * </ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.RestRpc">REST/RPC</a> * </ul>
  */
 @SuppressWarnings({"serial","javadoc"})
 public abstract class RrpcServlet extends BasicRestServlet {

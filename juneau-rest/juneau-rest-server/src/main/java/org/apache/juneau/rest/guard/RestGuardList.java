@@ -24,7 +24,7 @@ import org.apache.juneau.internal.*;
  * A list of {@link RestGuard} objects.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Guards}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Guards">Guards</a>
  * </ul>
  */
 public class RestGuardList {

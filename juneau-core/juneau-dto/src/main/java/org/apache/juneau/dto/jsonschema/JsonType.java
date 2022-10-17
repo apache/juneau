@@ -27,7 +27,7 @@ package org.apache.juneau.dto.jsonschema;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='jp'>{@doc package-summary.html#TOC org.apache.juneau.dto.jsonschema}
+ * 	<li class='jp'><a class="doclink" href="package-summary.html#TOC">org.apache.juneau.dto.jsonschema</a>
  * </ul>
  */
 public enum JsonType {

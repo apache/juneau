@@ -16,11 +16,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.forms#the-meter-element <meter>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-meter-element">&lt;meter&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="meter")
@@ -42,7 +42,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-meter-high high} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-high">high</a> attribute.
 	 *
 	 * <p>
 	 * Low limit of high range.
@@ -58,7 +58,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-meter-low low} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-low">low</a> attribute.
 	 *
 	 * <p>
 	 * High limit of low range.
@@ -74,7 +74,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-meter-max max} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-max">max</a> attribute.
 	 *
 	 * <p>
 	 * Upper bound of range.
@@ -90,7 +90,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-meter-min min} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-min">min</a> attribute.
 	 *
 	 * <p>
 	 * Lower bound of range.
@@ -106,7 +106,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-meter-optimum optimum} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-optimum">optimum</a> attribute.
 	 *
 	 * <p>
 	 * Optimum value in gauge.
@@ -122,7 +122,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-meter-value value} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-value">value</a> attribute.
 	 *
 	 * <p>
 	 * Current value of the element.

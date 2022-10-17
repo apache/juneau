@@ -64,8 +64,8 @@ import org.apache.juneau.oapi.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Swagger}
- * 	<li class='extlink'>{@doc ext.SwaggerSchemaObject}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a>
+ * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>
  * </ul>
  */
 @Documented
@@ -76,7 +76,7 @@ import org.apache.juneau.oapi.*;
 public @interface Schema {
 
 	/**
-	 * <mk>default</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>default</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * Declares the value of the parameter that the server will use if none is provided, for example a "count" to control the number of results per page might default to 100 if not supplied by the client in the request.
@@ -122,7 +122,7 @@ public @interface Schema {
 	String[] _default() default {};
 
 	/**
-	 * <mk>enum</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>enum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * If specified, the input validates successfully if it is equal to one of the elements in this array.
@@ -161,7 +161,7 @@ public @interface Schema {
 	String[] _enum() default {};
 
 	/**
-	 * <mk>$ref</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>$ref</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * 	A JSON reference to the schema definition.
@@ -176,11 +176,11 @@ public @interface Schema {
 	String $ref() default "";
 
 	/**
-	 * <mk>additionalProperties</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>additionalProperties</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a {@doc jd.Swagger} object.
+	 * 		The format is a <a class="doclink" href="../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -189,11 +189,11 @@ public @interface Schema {
 	String[] additionalProperties() default {};
 
 	/**
-	 * <mk>allOf</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>allOf</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a {@doc jd.Swagger} object.
+	 * 		The format is a <a class="doclink" href="../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -209,7 +209,7 @@ public @interface Schema {
 	boolean aev() default false;
 
 	/**
-	 * <mk>allowEmptyValue</mk> field of the {@doc ext.SwaggerParameterObject}.
+	 * <mk>allowEmptyValue</mk> field of the <a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>.
 	 *
 	 * <p>
 	 * Sets the ability to pass empty-valued heaver values.
@@ -289,7 +289,7 @@ public @interface Schema {
 	String[] d() default {};
 
 	/**
-	 * <mk>description</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>description</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * A brief description of the body. This could contain examples of use.
@@ -316,7 +316,7 @@ public @interface Schema {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -331,11 +331,11 @@ public @interface Schema {
 	String[] df() default {};
 
 	/**
-	 * <mk>discriminator</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>discriminator</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a {@doc jd.Swagger} object.
+	 * 		The format is a <a class="doclink" href="../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -365,7 +365,7 @@ public @interface Schema {
 	boolean emin() default false;
 
 	/**
-	 * <mk>exclusiveMaximum</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>exclusiveMaximum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * Defines whether the maximum is matched exclusively.
@@ -394,7 +394,7 @@ public @interface Schema {
 	boolean exclusiveMaximum() default false;
 
 	/**
-	 * <mk>exclusiveMinimum</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>exclusiveMinimum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * Defines whether the minimum is matched exclusively.
@@ -423,11 +423,11 @@ public @interface Schema {
 	boolean exclusiveMinimum() default false;
 
 	/**
-	 * <mk>externalDocs</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>externalDocs</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a {@doc jd.Swagger} object.
+	 * 		The format is a <a class="doclink" href="../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -443,10 +443,10 @@ public @interface Schema {
 	String f() default "";
 
 	/**
-	 * <mk>format</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>format</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
-	 * The extending format for the previously mentioned {@doc ext.SwaggerParameterTypes parameter type}.
+	 * The extending format for the previously mentioned <a class="doclink" href="https://swagger.io/specification/v2#parameterType">parameter type</a>.
 	 *
 	 * <p>
 	 * Static strings are defined in {@link FormatType}.
@@ -512,7 +512,7 @@ public @interface Schema {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ext.SwaggerDataTypeFormats}
+	 * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -527,7 +527,7 @@ public @interface Schema {
 	boolean ignore() default false;
 
 	/**
-	 * <mk>items</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>items</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * Describes the type of items in the array.
@@ -565,7 +565,7 @@ public @interface Schema {
 	long maxi() default -1;
 
 	/**
-	 * <mk>maximum</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>maximum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * Defines the maximum value for a parameter of numeric types.
@@ -594,7 +594,7 @@ public @interface Schema {
 	String maximum() default "";
 
 	/**
-	 * <mk>maxItems</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>maxItems</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * An array or collection is valid if its size is less than, or equal to, the value of this keyword.
@@ -629,7 +629,7 @@ public @interface Schema {
 	long maxl() default -1;
 
 	/**
-	 * <mk>maxLength</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>maxLength</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword.
@@ -666,11 +666,11 @@ public @interface Schema {
 	long maxp() default -1;
 
 	/**
-	 * <mk>maxProperties</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>maxProperties</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a {@doc jd.Swagger} object.
+	 * 		The format is a <a class="doclink" href="../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -693,7 +693,7 @@ public @interface Schema {
 	long mini() default -1;
 
 	/**
-	 * <mk>minimum</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>minimum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * Defines the minimum value for a parameter of numeric types.
@@ -722,7 +722,7 @@ public @interface Schema {
 	String minimum() default "";
 
 	/**
-	 * <mk>minItems</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>minItems</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * An array or collection is valid if its size is greater than, or equal to, the value of this keyword.
@@ -757,7 +757,7 @@ public @interface Schema {
 	long minl() default -1;
 
 	/**
-	 * <mk>minLength</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>minLength</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
@@ -794,11 +794,11 @@ public @interface Schema {
 	long minp() default -1;
 
 	/**
-	 * <mk>minProperties</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>minProperties</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a {@doc jd.Swagger} object.
+	 * 		The format is a <a class="doclink" href="../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -814,7 +814,7 @@ public @interface Schema {
 	String mo() default "";
 
 	/**
-	 * <mk>multipleOf</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>multipleOf</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * A numeric instance is valid if the result of the division of the instance by this keyword's value is an integer.
@@ -922,7 +922,7 @@ public @interface Schema {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -936,7 +936,7 @@ public @interface Schema {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -951,7 +951,7 @@ public @interface Schema {
 	String p() default "";
 
 	/**
-	 * <mk>pattern</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>pattern</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * A string input is valid if it matches the specified regular expression pattern.
@@ -985,11 +985,11 @@ public @interface Schema {
 	String pattern() default "";
 
 	/**
-	 * <mk>properties</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>properties</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a {@doc jd.Swagger} object.
+	 * 		The format is a <a class="doclink" href="../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -1005,11 +1005,11 @@ public @interface Schema {
 	boolean r() default false;
 
 	/**
-	 * <mk>readOnly</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>readOnly</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a {@doc jd.Swagger} object.
+	 * 		The format is a <a class="doclink" href="../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -1018,7 +1018,7 @@ public @interface Schema {
 	boolean readOnly() default false;
 
 	/**
-	 * <mk>required</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>required</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * Determines whether the parameter is mandatory.
@@ -1097,7 +1097,7 @@ public @interface Schema {
 	String t() default "";
 
 	/**
-	 * <mk>title</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>title</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -1109,7 +1109,7 @@ public @interface Schema {
 	String title() default "";
 
 	/**
-	 * <mk>type</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>type</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * The type of the parameter.
@@ -1176,7 +1176,7 @@ public @interface Schema {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ext.SwaggerDataTypes}
+	 * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification#dataTypes">Swagger Data Types</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -1191,7 +1191,7 @@ public @interface Schema {
 	boolean ui() default false;
 
 	/**
-	 * <mk>uniqueItems</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>uniqueItems</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <p>
 	 * If <jk>true</jk> the input validates successfully if all of its elements are unique.
@@ -1223,11 +1223,11 @@ public @interface Schema {
 	boolean uniqueItems() default false;
 
 	/**
-	 * <mk>xml</mk> field of the {@doc ext.SwaggerSchemaObject}.
+	 * <mk>xml</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a {@doc jd.Swagger} object.
+	 * 		The format is a <a class="doclink" href="../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *

@@ -39,7 +39,7 @@ import org.apache.juneau.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Swaps">Swaps</a>
  * </ul>
  *
  * @param <T> The normal form of the class.

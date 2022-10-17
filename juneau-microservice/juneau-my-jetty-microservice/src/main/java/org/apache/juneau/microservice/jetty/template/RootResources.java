@@ -24,8 +24,7 @@ import org.apache.juneau.rest.widget.ThemeMenuItem;
  * Root microservice page.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc my-jetty-microservice}
- * </ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../../overview-summary.html#my-jetty-microservice">my-jetty-microservice</a> * </ul>
  *
  * @serial exclude
  */

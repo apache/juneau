@@ -23,7 +23,7 @@ import org.apache.juneau.microservice.*;
  * Implements the 'restart' console command to gracefully shut down and restart the microservice.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-microservice-core}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-microservice-core">juneau-microservice-core</a>
  * </ul>
  */
 public class HelpCommand extends ConsoleCommand {

@@ -20,7 +20,7 @@ import org.apache.juneau.jena.annotation.*;
  * class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
 public class RdfBeanMeta extends ExtendedBeanMeta {

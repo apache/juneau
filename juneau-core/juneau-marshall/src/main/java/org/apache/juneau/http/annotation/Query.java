@@ -68,24 +68,22 @@ import org.apache.juneau.oapi.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Swagger}
- * 	<li class='extlink'>{@doc ext.SwaggerParameterObject}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Swagger</a>
+ * 	<li class='extlink'><a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
  * <p>
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrc.Query}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.jrc.Proxies.jrc.Query">@Query</a>
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  * <p>
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrc.Request}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.jrc.Proxies.jrc.Request">@Request</a>
  * </ul>
  * <p>
- * <ul class='seealso'>
- * </ul>
  */
 @Documented
 @Target({PARAMETER,METHOD,TYPE,FIELD})
@@ -170,7 +168,7 @@ public @interface Query {
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -184,7 +182,7 @@ public @interface Query {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -202,7 +200,7 @@ public @interface Query {
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Void.class;
 
 	/**
-	 * <mk>schema</mk> field of the {@doc ext.SwaggerParameterObject}.
+	 * <mk>schema</mk> field of the <a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>.
 	 *
 	 * <p>
 	 * The {@link Schema @Schema} annotation can also be used standalone on the parameter or type.

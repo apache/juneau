@@ -16,11 +16,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.grouping-content#the-ol-element <ol>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-ol-element">&lt;ol&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="ol")
@@ -42,7 +42,7 @@ public class Ol extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.grouping-content#attr-ol-reversed reversed}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-ol-reversed">reversed</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -59,7 +59,7 @@ public class Ol extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.grouping-content#attr-ol-start start} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-ol-start">start</a> attribute.
 	 *
 	 * <p>
 	 * Ordinal value of the first item.
@@ -75,7 +75,7 @@ public class Ol extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc ext.HTML5.grouping-content#attr-ol-type type} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-ol-type">type</a> attribute.
 	 *
 	 * <p>
 	 * Kind of list marker.

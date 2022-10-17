@@ -23,7 +23,7 @@ import org.apache.juneau.xml.*;
  * on the bean property.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jmr.RdfDetails}
+ * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
 public class RdfBeanPropertyMeta extends ExtendedBeanPropertyMeta {

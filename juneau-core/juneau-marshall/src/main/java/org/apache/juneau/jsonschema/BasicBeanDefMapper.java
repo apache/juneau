@@ -26,7 +26,7 @@ import org.apache.juneau.*;
  * URIs are constructed using the pattern <js>"#/definitions/{id}"</js>.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.JsonSchemaDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */
 public class BasicBeanDefMapper implements BeanDefMapper {

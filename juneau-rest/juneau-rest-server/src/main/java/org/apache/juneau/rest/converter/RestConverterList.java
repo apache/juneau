@@ -24,7 +24,7 @@ import org.apache.juneau.internal.*;
  * A list of {@link RestConverter} objects.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Converters}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Converters">Converters</a>
  * </ul>
  */
 public class RestConverterList {

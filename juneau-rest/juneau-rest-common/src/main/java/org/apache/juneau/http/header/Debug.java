@@ -32,7 +32,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>It's up to the server to decide whether to honor this header.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *
  * @serial exclude

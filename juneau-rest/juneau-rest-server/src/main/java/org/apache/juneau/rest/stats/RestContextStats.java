@@ -23,7 +23,7 @@ import org.apache.juneau.swaps.*;
  * A snapshot of execution statistics for REST resource classes.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.ExecutionStatistics}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.ExecutionStatistics">REST method execution statistics</a>
  * </ul>
  */
 @Bean(properties="startTime,upTime,methodStats")

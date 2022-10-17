@@ -54,7 +54,7 @@ import org.apache.juneau.rest.servlet.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-microservice-core}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-microservice-core">juneau-microservice-core</a>
  * </ul>
  *
  * @serial exclude

@@ -22,8 +22,8 @@ import org.apache.juneau.reflect.*;
  * Specialized transform for builder classes.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PojoBuilders}
- * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.JavaBeansSupport.jm.PojoBuilders">POJO Builders</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Swaps">Swaps</a>
  * </ul>
  *
  * @param <T> The bean class.

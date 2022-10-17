@@ -27,7 +27,7 @@ import org.apache.juneau.urlencoding.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.UrlEncodingDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.UrlEncodingDetails">URL-Encoding Details</a>
  * </ul>
  */
 @Target({TYPE,METHOD})
@@ -77,7 +77,7 @@ public @interface UrlEncodingConfig {
 	 * 	<li class='note'>
 	 * 		This option only applies to beans.
 	 * 	<li class='note'>
-	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

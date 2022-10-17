@@ -16,7 +16,7 @@ package org.apache.juneau.http.remote;
  * Possible values for the {@link RemoteOp#returns() @RemoteOp(returns)} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrc.Proxies}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.jrc.Proxies">REST Proxies</a>
  * </ul>
  */
 public enum RemoteReturn {

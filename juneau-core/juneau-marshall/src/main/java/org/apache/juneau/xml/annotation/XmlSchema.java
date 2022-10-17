@@ -21,7 +21,7 @@ import java.lang.annotation.*;
  * Identifies the default XML namespaces at the package level.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.XmlDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.XmlDetails">XML Details</a>
  * </ul>
  */
 @Documented

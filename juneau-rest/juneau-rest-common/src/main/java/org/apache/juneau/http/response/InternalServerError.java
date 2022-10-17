@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *
  * @serial exclude

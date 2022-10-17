@@ -16,11 +16,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.forms#the-textarea-element <textarea>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-textarea-element">&lt;textarea&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="textarea")
@@ -44,7 +44,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-autocomplete autocomplete} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a> attribute.
 	 *
 	 * <p>
 	 * Hint for form auto-fill feature.
@@ -58,7 +58,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-autofocus autofocus} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
 	 *
 	 * <p>
 	 * Automatically focus the form control when the page is loaded.
@@ -74,7 +74,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-textarea-cols cols} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-cols">cols</a> attribute.
 	 *
 	 * <p>
 	 * Maximum number of characters per line.
@@ -90,7 +90,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-dirname dirname} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-dirname">dirname</a> attribute.
 	 *
 	 * <p>
 	 * Name of form field to use for sending the element's directionality in form submission.
@@ -104,7 +104,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-disabled disabled} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-disabled">disabled</a> attribute.
 	 *
 	 * <p>
 	 * Whether the form control is disabled.
@@ -120,7 +120,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fae-form form} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 *
 	 * <p>
 	 * Associates the control with a form element.
@@ -134,7 +134,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#inputmode inputmode} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#inputmode">inputmode</a> attribute.
 	 *
 	 * <p>
 	 * Hint for selecting an input modality.
@@ -148,7 +148,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-textarea-maxlength maxlength} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-maxlength">maxlength</a> attribute.
 	 *
 	 * <p>
 	 * Maximum length of value.
@@ -164,7 +164,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-textarea-minlength minlength} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-minlength">minlength</a> attribute.
 	 *
 	 * <p>
 	 * Minimum length of value.
@@ -180,7 +180,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-name name} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 *
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.
@@ -194,7 +194,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-textarea-placeholder placeholder}
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-placeholder">placeholder</a>
 	 * attribute.
 	 *
 	 * <p>
@@ -209,7 +209,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-textarea-readonly readonly} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-readonly">readonly</a> attribute.
 	 *
 	 * <p>
 	 * Whether to allow the value to be edited by the user.
@@ -225,7 +225,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-textarea-required required} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-required">required</a> attribute.
 	 *
 	 * <p>
 	 * Whether the control is required for form submission.
@@ -241,7 +241,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-textarea-rows rows} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-rows">rows</a> attribute.
 	 *
 	 * <p>
 	 * Number of lines to show.
@@ -257,7 +257,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-textarea-wrap wrap} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-wrap">wrap</a> attribute.
 	 *
 	 * <p>
 	 * How the value of the form control is to be wrapped for form submission.

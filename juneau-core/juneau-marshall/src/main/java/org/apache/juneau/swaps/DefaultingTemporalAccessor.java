@@ -27,7 +27,7 @@ import java.time.temporal.*;
  * should be able to be passed to any <code>Temporal.from(TemporalAccessor)</code> static method (such as {@link ZonedDateTime#from(TemporalAccessor)}).
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.Swaps}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Swaps">Swaps</a>
  * </ul>
  */
 public class DefaultingTemporalAccessor implements TemporalAccessor {

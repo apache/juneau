@@ -25,7 +25,7 @@ import org.apache.juneau.assertions.*;
  * A {@link NameValuePair} that consists of a single string value.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
 public class BasicStringPart extends BasicPart {

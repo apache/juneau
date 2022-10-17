@@ -25,7 +25,7 @@ import org.apache.http.*;
  * A {@link NameValuePair} that consists of a single URL value.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
 public class BasicUriPart extends BasicPart {

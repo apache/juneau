@@ -30,8 +30,8 @@ import org.apache.juneau.xml.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Atom}
- * 	<li class='jp'>{@doc package-summary.html#TOC}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Atom">Overview &gt; juneau-dto &gt; Atom</a>
+ * 	<li class='jp'><a class="doclink" href="package-summary.html#TOC">package-summary.html</a>
  * </ul>
  */
 @Bean(typeName="id")

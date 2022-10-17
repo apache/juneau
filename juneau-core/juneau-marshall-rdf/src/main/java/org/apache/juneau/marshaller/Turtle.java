@@ -41,8 +41,8 @@ import org.apache.juneau.serializer.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jmr.RdfDetails}
- * 	<li class='link'>{@doc jm.Marshallers}
+ * 	<li class='link'>{doc jmr.RdfDetails}
+ * 	<li class='link'>{doc jm.Marshallers}
  * </ul>
  */
 public class Turtle extends CharMarshaller {

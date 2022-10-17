@@ -40,7 +40,7 @@ import java.util.logging.Logger;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-microservice-jetty}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-microservice-jetty">juneau-microservice-jetty</a>
  * </ul>
  */
 public class JettyLogger implements org.eclipse.jetty.util.log.Logger {

@@ -64,8 +64,8 @@ import org.apache.juneau.oapi.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Swagger}
- * 	<li class='extlink'>{@doc ext.SwaggerItemsObject}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>
  * </ul>
  */
 @Documented
@@ -73,7 +73,7 @@ import org.apache.juneau.oapi.*;
 public @interface Items {
 
 	/**
-	 * <mk>default</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>default</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -85,7 +85,7 @@ public @interface Items {
 	String[] _default() default {};
 
 	/**
-	 * <mk>enum</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>enum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -97,7 +97,7 @@ public @interface Items {
 	String[] _enum() default {};
 
 	/**
-	 * <mk>$ref</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>$ref</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -116,7 +116,7 @@ public @interface Items {
 	String cf() default "";
 
 	/**
-	 * <mk>collectionFormat</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>collectionFormat</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -156,7 +156,7 @@ public @interface Items {
 	boolean emin() default false;
 
 	/**
-	 * <mk>exclusiveMaximum</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>exclusiveMaximum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -168,7 +168,7 @@ public @interface Items {
 	boolean exclusiveMaximum() default false;
 
 	/**
-	 * <mk>exclusiveMinimum</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>exclusiveMinimum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -187,7 +187,7 @@ public @interface Items {
 	String f() default "";
 
 	/**
-	 * <mk>format</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>format</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -199,7 +199,7 @@ public @interface Items {
 	String format() default "";
 
 	/**
-	 * <mk>items</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>items</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <p>
 	 * Describes the type of items in the array.
@@ -223,7 +223,7 @@ public @interface Items {
 	long maxi() default -1;
 
 	/**
-	 * <mk>maximum</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>maximum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -235,7 +235,7 @@ public @interface Items {
 	String maximum() default "";
 
 	/**
-	 * <mk>maxItems</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>maxItems</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -254,7 +254,7 @@ public @interface Items {
 	long maxl() default -1;
 
 	/**
-	 * <mk>maxLength</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>maxLength</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -280,7 +280,7 @@ public @interface Items {
 	long mini() default -1;
 
 	/**
-	 * <mk>minimum</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>minimum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -292,7 +292,7 @@ public @interface Items {
 	String minimum() default "";
 
 	/**
-	 * <mk>minItems</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>minItems</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -311,7 +311,7 @@ public @interface Items {
 	long minl() default -1;
 
 	/**
-	 * <mk>minLength</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>minLength</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -330,7 +330,7 @@ public @interface Items {
 	String mo() default "";
 
 	/**
-	 * <mk>multipleOf</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>multipleOf</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -349,7 +349,7 @@ public @interface Items {
 	String p() default "";
 
 	/**
-	 * <mk>pattern</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>pattern</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -368,7 +368,7 @@ public @interface Items {
 	String t() default "";
 
 	/**
-	 * <mk>type</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>type</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
@@ -387,7 +387,7 @@ public @interface Items {
 	boolean ui() default false;
 
 	/**
-	 * <mk>uniqueItems</mk> field of the {@doc ext.SwaggerItemsObject}.
+	 * <mk>uniqueItems</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>

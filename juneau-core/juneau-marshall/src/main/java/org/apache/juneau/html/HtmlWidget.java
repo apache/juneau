@@ -27,8 +27,8 @@ import org.apache.juneau.svl.*;
  * Widgets can be defined as inner classes of REST resource classes.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.HtmlWidgets}
- * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets">Widgets</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.HtmlDetails">HTML Details</a>
  * </ul>
  */
 public interface HtmlWidget {

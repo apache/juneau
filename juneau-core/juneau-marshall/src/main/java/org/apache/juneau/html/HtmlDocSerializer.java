@@ -73,7 +73,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HtmlDetails}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.HtmlDetails">HTML Details</a>
  * </ul>
  */
 public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
@@ -237,7 +237,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 	<li class='note'>
 		 * 		Format: HTML
 		 * 	<li class='note'>
-		 * 		Supports {@doc jrs.SvlVariables}
+		 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
 		 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 		 * 	<li class='note'>
 		 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -776,7 +776,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='link'>{@doc jrs.HtmlWidgets}
+		 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets">Widgets</a>
 		 * </ul>
 		 *
 		 * @param values The values to add to this setting.

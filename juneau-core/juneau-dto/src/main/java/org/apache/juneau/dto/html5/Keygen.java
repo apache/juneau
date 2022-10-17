@@ -16,11 +16,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * DTO for an HTML {@doc ext.HTML5.forms#the-keygen-element <keygen>}
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-keygen-element">&lt;keygen&gt;</a>
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jd.Html5}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Bean(typeName="keygen")
@@ -33,7 +33,7 @@ public class Keygen extends HtmlElementVoid {
 	public Keygen() {}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-autofocus autofocus} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
 	 *
 	 * <p>
 	 * Automatically focus the form control when the page is loaded.
@@ -49,7 +49,7 @@ public class Keygen extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-keygen-challenge challenge} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-keygen-challenge">challenge</a> attribute.
 	 *
 	 * <p>
 	 * String to package with the generated and signed public key.
@@ -63,7 +63,7 @@ public class Keygen extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-disabled disabled} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-disabled">disabled</a> attribute.
 	 *
 	 * <p>
 	 * Whether the form control is disabled.
@@ -79,7 +79,7 @@ public class Keygen extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fae-form form} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 *
 	 * <p>
 	 * Associates the control with a form element.
@@ -93,7 +93,7 @@ public class Keygen extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-keygen-keytype keytype} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-keygen-keytype">keytype</a> attribute.
 	 *
 	 * <p>
 	 * The type of cryptographic key to generate.
@@ -107,7 +107,7 @@ public class Keygen extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc ext.HTML5.forms#attr-fe-name name} attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 *
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.

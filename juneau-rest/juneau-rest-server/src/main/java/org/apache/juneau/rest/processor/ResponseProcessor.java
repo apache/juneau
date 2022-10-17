@@ -74,7 +74,7 @@ import org.apache.juneau.rest.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.ResponseProcessors}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.ResponseProcessors">Response Processors</a>
  * </ul>
  */
 public interface ResponseProcessor {

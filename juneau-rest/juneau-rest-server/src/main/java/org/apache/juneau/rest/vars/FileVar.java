@@ -52,7 +52,7 @@ import org.apache.juneau.svl.*;
  * This variable resolver requires that a {@link RestRequest} bean be available in the session bean store.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SvlVariables}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.SvlVariables">SVL Variables</a>
  * </ul>
  */
 public class FileVar extends DefaultingVar {

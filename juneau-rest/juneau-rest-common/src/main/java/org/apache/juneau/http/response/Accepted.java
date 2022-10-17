@@ -33,7 +33,7 @@ import org.apache.juneau.internal.*;
  * The request might or might not be eventually acted upon, and may be disallowed when processing occurs.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
 @Response

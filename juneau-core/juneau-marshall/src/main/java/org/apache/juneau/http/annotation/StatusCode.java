@@ -85,13 +85,13 @@ import org.apache.juneau.annotation.*;
  *
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Swagger}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Swagger</a>
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrc.Response}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.jrc.Proxies.jrc.Response">@Response</a>
  * </ul>
  *
  * <p>
@@ -110,7 +110,7 @@ public @interface StatusCode {
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -124,7 +124,7 @@ public @interface StatusCode {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.

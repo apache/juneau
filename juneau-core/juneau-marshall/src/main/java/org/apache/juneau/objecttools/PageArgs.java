@@ -18,7 +18,7 @@ import static java.util.Optional.*;
  * Arguments passed to {@link ObjectPaginator}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.ObjectTools}
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.ObjectTools">Overview &gt; juneau-marshall &gt; Object Tools</a>
  * </ul>
  */
 public class PageArgs {
