@@ -40,19 +40,19 @@
 			</p>
 		<li>New/modified methods on <del>ConfigFile</del>:
 			<ul>
-				<li><del>ConfigFile#put(String,String,String,boolean)</del>
-				<li><del>ConfigFile#put(String,String,Object,Serializer,boolean,boolean)</del>
-				<li>{@del ConfigFile#getObject(String,Type,Type...)}
-				<li>{@del ConfigFile#getObject(String,Parser,Type,Type...)}
-				<li><del>ConfigFile#getObject(String,Class)</del>
-				<li><del>ConfigFile#getObject(String,Parser,Class)</del>
-				<li>{@del ConfigFile#getObject(String,String,Type,Type...)}
-				<li>{@del ConfigFile#getObject(String,String,Parser,Type,Type...)}
-				<li><del>ConfigFile#getObject(String,String,Class)</del>
-				<li><del>ConfigFile#getObject(String,String,Parser,Class)</del>
-				<li>{@del ConfigFile#getObjectWithDefault(String,Object,Type,Type...)}
-				<li>{@del ConfigFile#getObjectWithDefault(String,Parser,Object,Type,Type...)}
-				<li><del>ConfigFile#getObjectWithDefault(String,Object,Class)</del>
+				<li><del>ConfigFile.put(String,String,String,boolean)</del>
+				<li><del>ConfigFile.put(String,String,Object,Serializer,boolean,boolean)</del>
+				<li><del> ConfigFile.getObject(String,Type,Type...)</del>
+				<li><del> ConfigFile.getObject(String,Parser,Type,Type...)</del>
+				<li><del>ConfigFile.getObject(String,Class)</del>
+				<li><del>ConfigFile.getObject(String,Parser,Class)</del>
+				<li><del> ConfigFile.getObject(String,String,Type,Type...)</del>
+				<li><del> ConfigFile.getObject(String,String,Parser,Type,Type...)</del>
+				<li><del>ConfigFile.getObject(String,String,Class)</del>
+				<li><del>ConfigFile.getObject(String,String,Parser,Class)</del>
+				<li><del> ConfigFile.getObjectWithDefault(String,Object,Type,Type...)</del>
+				<li><del> ConfigFile.getObjectWithDefault(String,Parser,Object,Type,Type...)</del>
+				<li><del>ConfigFile.getObjectWithDefault(String,Object,Class)</del>
 				<li><del>ConfigFile.getObjectWithDefault(String,Parser,Object,Class)</del>
 			</ul>
 		<li>New ability to interact with config file sections with proxy interfaces with new method <del>ConfigFile.getSectionAsInterface(String,Class)</del>.
@@ -61,9 +61,9 @@
 		<li>New methods on {@link oaj.serializer.SerializerSession} and {@link oaj.parser.ParserSession}
 			for retrieving context and runtime-override properties:
 			<ul>
-				<li><del>Session#getProperty(String)</del>
-				<li><del>Session#getProperty(String,String)</del>
-				<li><del>Session#getProperty(Class,String)</del>
+				<li><del>Session.getProperty(String)</del>
+				<li><del>Session.getProperty(String,String)</del>
+				<li><del>Session.getProperty(Class,String)</del>
 				<li><del>Session.getProperty(Class,String,Object)</del>
 			</ul>	
 		<li>New <del>PartSerializer</del>interface particularly tailored to HTTP
@@ -71,14 +71,14 @@
 			<br>Allows easy user-defined serialization of these objects.
 			<br>The interface can be used in the following locations:
 			<ul>
-				<li><del>Builder#partSerializer(Class)</del>
-				<li><del>Path#serializer</del>
-				<li><del>Query#serializer</del>
-				<li><del>QueryIfNE#serializer</del>
-				<li><del>FormData#serializer</del>
-				<li><del>FormDataIfNE#serializer</del>
-				<li><del>Header#serializer</del>
-				<li><del>HeaderIfNE#serializer</del>
+				<li><del>Builder.partSerializer(Class)</del>
+				<li><del>Path.serializer</del>
+				<li><del>Query.serializer</del>
+				<li><del>QueryIfNE.serializer</del>
+				<li><del>FormData.serializer</del>
+				<li><del>FormDataIfNE.serializer</del>
+				<li><del>Header.serializer</del>
+				<li><del>HeaderIfNE.serializer</del>
 			</ul>
 		<li>Across-the-board improvements to the URI-resolution support (i.e. how URIs get serialized).
 			<ul>
@@ -109,10 +109,10 @@
 						<li>{@link oaj.UriResolver}
 					</ul>
 				<li>New configuration properties:
-					<li><del>SerializerContext#SERIALIZER_uriContext</del>
-					<li><del>SerializerContext#SERIALIZER_uriRelativity</del>
-					<li><del>SerializerContext#SERIALIZER_uriResolution</del>
-					<li><del>SerializerContext#SERIALIZER_maxIndent</del>
+					<li><del>SerializerContext.SERIALIZER_uriContext</del>
+					<li><del>SerializerContext.SERIALIZER_uriRelativity</del>
+					<li><del>SerializerContext.SERIALIZER_uriResolution</del>
+					<li><del>SerializerContext.SERIALIZER_maxIndent</del>
 			</ul>
 		<li>New annotation property: <del>@BeanProperty(value)</del>.
 			<br>The following two annotations are considered equivalent:
@@ -122,7 +122,7 @@
 		<ja>@BeanProperty</ja>(<js>"foo"</js>)
 			</p>
 		<li>Fixed a race condition in ClassMeta.
-		<li><jsf>URLENC_paramFormat</jsf> has been moved to <del>UonSerializer#UON_paramFormat</del>, 
+		<li><jsf>URLENC_paramFormat</jsf> has been moved to <del>UonSerializer.UON_paramFormat</del>, 
 			and the UON/URL-Encoding serializers will now always serialize all values as plain text.
 			<br>This means that arrays and maps are converted to simple comma-delimited lists.
 		<li>Listener APIs added to serializers and parsers:
@@ -130,11 +130,11 @@
 				<li>{@link oaj.serializer.SerializerListener}
 				<li>{@link oaj.serializer.Serializer.Builder#listener(Class)}
 				<li><del>@RestResource(serializerListener)</del>
-				<li><del>RestConfig#serializerListener(Class)</del>
+				<li><del>RestConfig.serializerListener(Class)</del>
 				<li>{@link oaj.parser.ParserListener}
 				<li>{@link oaj.parser.Parser.Builder#listener(Class)}
 				<li><del>@RestResource(parserListener)</del>
-				<li><del>RestConfig#parserListener(Class)</del>
+				<li><del>RestConfig.parserListener(Class)</del>
 				<li><del>Builder.listeners(Class,Class)</del>
 			</ul>juneau-examples-core.import1.pngjuneau-examples-core.import1.png
 		<li>The <del>BEAN_debug</del>flag will now capture parser input and make it
@@ -149,17 +149,17 @@
 					<br>Annotation can be applied to POJO classes and bean properties.
 				<li>Several new properties for customizing parts of the HTML page:
 					<ul>
-						<li><del>HtmlDocSerializerContext#HTMLDOC_title</del>
-						<li><del>HtmlDocSerializerContext#HTMLDOC_description</del>
-						<li><del>HtmlDocSerializerContext#HTMLDOC_branding</del>
-						<li><del>HtmlDocSerializerContext#HTMLDOC_header</del>
-						<li><del>HtmlDocSerializerContext#HTMLDOC_nav</del>
-						<li><del>HtmlDocSerializerContext#HTMLDOC_aside</del>
-						<li><del>HtmlDocSerializerContext#HTMLDOC_footer</del>
-						<li><del>HtmlDocSerializerContext#HTMLDOC_noResultsMessage</del>
-						<li><del>HtmlDocSerializerContext#HTMLDOC_cssUrl</del>
-						<li><del>HtmlDocSerializerContext#HTMLDOC_css</del>
-						<li><del>HtmlDocSerializerContext#HTMLDOC_template</del>
+						<li><del>HtmlDocSerializerContext.HTMLDOC_title</del>
+						<li><del>HtmlDocSerializerContext.HTMLDOC_description</del>
+						<li><del>HtmlDocSerializerContext.HTMLDOC_branding</del>
+						<li><del>HtmlDocSerializerContext.HTMLDOC_header</del>
+						<li><del>HtmlDocSerializerContext.HTMLDOC_nav</del>
+						<li><del>HtmlDocSerializerContext.HTMLDOC_aside</del>
+						<li><del>HtmlDocSerializerContext.HTMLDOC_footer</del>
+						<li><del>HtmlDocSerializerContext.HTMLDOC_noResultsMessage</del>
+						<li><del>HtmlDocSerializerContext.HTMLDOC_cssUrl</del>
+						<li><del>HtmlDocSerializerContext.HTMLDOC_css</del>
+						<li><del>HtmlDocSerializerContext.HTMLDOC_template</del>
 					</ul>
 				<li>New interface {@link oaj.html.HtmlDocTemplate} that allows full control over rendering
 					of HTML produced by {@link oaj.html.HtmlDocSerializer}.
@@ -294,7 +294,7 @@
 		<li>
 			New annotations added to <del>RestMethod @RestMethod</del>:
 			<ul>
-				<li><del>RestMethod#defaultQuery() defaultQuery()</del>
+				<li><del>RestMethod.defaultQuery() defaultQuery()</del>
 				<li><del>RestMethod.defaultFormData() defaultFormData()</del>
 				<li><del>bpIncludes()</del>
 				<li><del>bpExcludes()</del>
@@ -319,7 +319,7 @@
 			New attributes on <del>RestMethod @RestMethod</del>:
 			<ul>
 				<li><del>widgets()</del>
-				<li><del>RestMethod#swagger() swagger()</del>
+				<li><del>RestMethod.swagger() swagger()</del>
 				<li><del>RestMethod.htmldoc() htmldoc()</del>
 			</ul>
 		<li>

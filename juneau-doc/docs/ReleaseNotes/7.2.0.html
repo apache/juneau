@@ -37,7 +37,7 @@
 			<br>This fixes a long-standing problem where it was easy to mix up using client-side annotations in server-side code, and vis-versa.
 			<br>Additionally, much work has been done on these annotations to add support for Swagger-style validations and documentation.
 			<ul class='doctree'>
-				<li class='ja'>{@link oaj.http.annotation.Body}
+				<li class='ja'><del>Body</del>
 				<li class='ja'>{@link oaj.http.annotation.FormData}
 				<li class='ja'>{@link oaj.http.annotation.Header}
 				<li class='ja'>{@link oaj.http.annotation.Path}
@@ -97,19 +97,19 @@
 		<li>
 			New settings for binary-based serializers and parsers:
 			<ul class='doctree'>
-				<li class='jf'><del>OutputStreamSerializer#OSSERIALIZER_binaryFormat</del>
-				<li class='jf'><del>InputStreamParser#ISPARSER_binaryFormat</del>
+				<li class='jf'><del>OutputStreamSerializer.OSSERIALIZER_binaryFormat</del>
+				<li class='jf'><del>InputStreamParser.ISPARSER_binaryFormat</del>
 			</ul>
 		<li>
 			Added support for auto-detection of fluent-style setters:
 			<ul class='doctree'>
-				<li class='jf'><del>BeanContext#BEAN_fluentSetters</del>
-				<li class='ja'><del>Bean#fluentSetters()</del>
+				<li class='jf'><del>BeanContext.BEAN_fluentSetters</del>
+				<li class='ja'><del>Bean.fluentSetters()</del>
 			</ul>
 		<li>
-			The <jsf>SERIALIZER_abridged</jsf> setting has been replaced with <del>Serializer#SERIALIZER_addRootType SERIALIZER_addRootType</del>
+			The <jsf>SERIALIZER_abridged</jsf> setting has been replaced with <del>Serializer.SERIALIZER_addRootType SERIALIZER_addRootType</del>
 		<li>
-			The <jsf>SERIALIZER_addBeanTypeProperties</jsf> setting has been replaced with <del>Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes</del>
+			The <jsf>SERIALIZER_addBeanTypeProperties</jsf> setting has been replaced with <del>Serializer.SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes</del>
 			and is disabled by default.
 		<li>
 			Parse exception messages are now clearer and include code snippets of where a parse exception occurred:
@@ -156,7 +156,7 @@
 			which returns a <jk>null</jk> value.
 		<li>
 			New option for dyna-property (i.e. <c><ja>@Bean</ja>(<js>"*"</js>)</c>) using a method that returns a collection of extra keys.
-			<br>See new options #4 on <del>BeanProperty#name()</del>
+			<br>See new options #4 on <del>BeanProperty.name()</del>
 		<li>
 			New formats for the {@link oaj.html.annotation.Html#format() @Html(format)} annotation:
 			<ul class='doctree'>
@@ -172,15 +172,15 @@
 			<ul class='doctree'>
 				<li class='jc'><del>ObjectMap</del>
 				<ul>
-					<li class='jm'><del>ObjectMap#isUnmodifiable() isUnmodifable()</del>
-					<li class='jm'><del>ObjectMap#unmodifiable() unmodifiable()</del>
-					<li class='jm'><del>ObjectMap#modifiable() modifiable()</del>
+					<li class='jm'><del>ObjectMap.isUnmodifiable() isUnmodifable()</del>
+					<li class='jm'><del>ObjectMap.unmodifiable() unmodifiable()</del>
+					<li class='jm'><del>ObjectMap.modifiable() modifiable()</del>
 				</ul>
 				<li class='jp'><del>ObjectList</del>
 				<ul>
-					<li class='jm'><del>ObjectList#isUnmodifiable() isUnmodifable()</del>
-					<li class='jm'><del>ObjectList#unmodifiable() unmodifiable()</del>
-					<li class='jm'><del>ObjectList#modifiable() modifiable()</del>
+					<li class='jm'><del>ObjectList.isUnmodifiable() isUnmodifable()</del>
+					<li class='jm'><del>ObjectList.unmodifiable() unmodifiable()</del>
+					<li class='jm'><del>ObjectList.modifiable() modifiable()</del>
 				</ul>
 			</ul>
 		<li>
@@ -188,15 +188,15 @@
 		<li>
 			RDF serializer subclasses have been moved into top-level classes:
 			<ul>
-				<li><c>RdfSerializer.Xml</c> -> {@link oaj.jena.RdfXmlSerializer}
-				<li><c>RdfSerializer.XmlAbbrev</c> -> {@link oaj.jena.RdfXmlAbbrevSerializer}
-				<li><c>RdfSerializer.N3</c> -> {@link oaj.jena.N3Serializer}
-				<li><c>RdfSerializer.NTriple</c> -> {@link oaj.jena.NTripleSerializer}
-				<li><c>RdfSerializer.Turtle</c> -> {@link oaj.jena.TurtleSerializer}
-				<li><c>RdfParser.Xml</c> -> {@link oaj.jena.RdfXmlParser}
-				<li><c>RdfParser.N3</c> -> {@link oaj.jena.N3Parser}
-				<li><c>RdfParser.NTriple</c> -> {@link oaj.jena.NTripleParser}
-				<li><c>RdfParser.Turtle</c> -> {@link oaj.jena.TurtleParser}
+				<li><c>RdfSerializer.Xml</c> -&gt; <del>RdfXmlSerializer</del>
+				<li><c>RdfSerializer.XmlAbbrev</c> -&gt; <del>RdfXmlAbbrevSerializer</del>
+				<li><c>RdfSerializer.N3</c> -&gt; <del>N3Serializer</del>
+				<li><c>RdfSerializer.NTriple</c> -&gt; <del>NTripleSerializer</del>
+				<li><c>RdfSerializer.Turtle</c> -&gt; <del>TurtleSerializer</del>
+				<li><c>RdfParser.Xml</c> -&gt; <del>RdfXmlParser</del>
+				<li><c>RdfParser.N3</c> -&gt; <del>N3Parser</del>
+				<li><c>RdfParser.NTriple</c> -&gt; <del>NTripleParser</del>
+				<li><c>RdfParser.Turtle</c> -&gt; <del>TurtleParser</del>
 			</ul>
 		<li>
 			New API for pairing serializers and parsers for simplified syntax:
@@ -247,7 +247,7 @@
 	<h5 class='topic w800'>juneau-dto</h5>
 	<ul class='spaced-list'>
 		<li>
-			Fixed bug where Swagger {@del oaj.dto.swagger.SchemaInfo#required(Object...)} was defined as a boolean
+			Fixed bug where Swagger <del> oaj.dto.swagger.SchemaInfo.required(Object...)</del> was defined as a boolean
 			instead of a list of strings.
 		<li>
 			Boolean attributes are now handled correctly for HTML5.
@@ -277,7 +277,7 @@
 		<li>
 			Swagger fields added to the following annotations:
 			<ul class='doctree'>
-				<li class='ja'>{@link oaj.http.annotation.Body}
+				<li class='ja'><del>Body</del>
 				<li class='ja'>{@link oaj.http.annotation.FormData}
 				<li class='ja'>{@link oaj.http.annotation.Header}
 				<li class='ja'>{@link oaj.http.annotation.Path}
@@ -372,7 +372,7 @@
 				</ul>
 			</ul>	
 		<li>
-			The <del>HtmlDoc.nav() @HtmlDoc(nav)</del>and <del>HtmlDoc#navlinks() @HtmlDoc(navlinks)</del>
+			The <del>HtmlDoc.nav() @HtmlDoc(nav)</del>and <del>HtmlDoc.navlinks() @HtmlDoc(navlinks)</del>
 			can now both be used on the same annotation.
 			<br>The contents of <c>nav()</c> are free-form HTML that gets rendered immediately after the navigation links.
 		<li>
@@ -414,14 +414,14 @@
 			</ul>
 			<br>These can be used in the following locations:
 			<ul class='doctree'>
-				<li class='ja'><del>RestResource#serializers()</del>
-				<li class='ja'><del>RestResource#parsers()</del>
-				<li class='ja'><del>RestResource#beanFilters()</del>
-				<li class='ja'><del>RestResource#pojoSwaps()</del>
-				<li class='ja'><del>RestMethod#serializers()</del>
-				<li class='ja'><del>RestMethod#parsers()</del>
-				<li class='ja'><del>RestMethod#beanFilters()</del>
-				<li class='ja'><del>RestMethod#pojoSwaps()</del>
+				<li class='ja'><del>RestResource.serializers()</del>
+				<li class='ja'><del>RestResource.parsers()</del>
+				<li class='ja'><del>RestResource.beanFilters()</del>
+				<li class='ja'><del>RestResource.pojoSwaps()</del>
+				<li class='ja'><del>RestMethod.serializers()</del>
+				<li class='ja'><del>RestMethod.parsers()</del>
+				<li class='ja'><del>RestMethod.beanFilters()</del>
+				<li class='ja'><del>RestMethod.pojoSwaps()</del>
 			</ul>
 			<br>One advantage is that you now have control over the precedence of serializers and parsers by where you insert the <c>Inherit</c> class. 
 		<li>
@@ -456,7 +456,7 @@
 			New/updated documentation: 
 			<br><dc>juneau-rest-server.UnitTesting</dc>
 		<li>
-			The behavior of the default values for <del>RestMethod.name()</del>and <del>RestMethod#path()</del>
+			The behavior of the default values for <del>RestMethod.name()</del>and <del>RestMethod.path()</del>
 			have changed.
 			<br>If not specified, the values are inferred from the Java method name.
 			<br>See Also: <del>RestMethod</del>
@@ -467,10 +467,10 @@
 			<ul class='doctree'>
 				<li class='jc'>{@link oajr.RestContext}
 				<ul>
-					<li class='jf'><del>RestContext#REST_uriAuthority REST_uriAuthority</del>
-					<li class='jf'><del>RestContext#REST_uriContext REST_uriContext</del>
-					<li class='jf'><del>RestContext#REST_uriRelativity REST_uriRelativity</del>
-					<li class='jf'><del>RestContext#REST_uriResolution REST_uriResolution</del>
+					<li class='jf'><del>RestContext.REST_uriAuthority REST_uriAuthority</del>
+					<li class='jf'><del>RestContext.REST_uriContext REST_uriContext</del>
+					<li class='jf'><del>RestContext.REST_uriRelativity REST_uriRelativity</del>
+					<li class='jf'><del>RestContext.REST_uriResolution REST_uriResolution</del>
 				</ul>
 			</ul>
 		<li>
@@ -483,8 +483,8 @@
 				</ul>	
 				<li class='jc'><del>RestMethod</del>
 				<ul>
-					<li class='jf'><del>RestMethod#defaultAccept defaultAccept</del>
-					<li class='jf'><del>RestMethod#defaultContentType defaultContentType</del>
+					<li class='jf'><del>RestMethod.defaultAccept defaultAccept</del>
+					<li class='jf'><del>RestMethod.defaultContentType defaultContentType</del>
 				</ul>	
 			</ul>
 	</ul>
@@ -499,13 +499,13 @@
 			<ul class='doctree'>
 				<li class='jc'>{@link oajrc.RestClient.Builder}
 				<ul>
-					<li class='jf'>{@del oajrc.RestClient.Builder#sslProtocols(String...) sslProtocols(String...)}
-					<li class='jf'>{@del oajrc.RestClient.Builder#cipherSuites(String...) cipherSuites(String...)}
-					<li class='jf'><del>Builder#hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)</del>
-					<li class='jf'>{@del oajrc.RestClient.Builder#keyManagers(KeyManager...) keyManagers(KeyManager...)}
-					<li class='jf'>{@del oajrc.RestClient.Builder#trustManagers(TrustManager...)}
-					<li class='jf'><del>Builder#secureRandom(SecureRandom)</del>
-					<li class='jf'><del>Builder#httpClientConnectionManager(HttpClientConnectionManager)</del>
+					<li class='jf'><del> oajrc.RestClient.Builder.sslProtocols(String...) sslProtocols(String...)</del>
+					<li class='jf'><del> oajrc.RestClient.Builder.cipherSuites(String...) cipherSuites(String...)</del>
+					<li class='jf'><del>Builder.hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)</del>
+					<li class='jf'><del> oajrc.RestClient.Builder.keyManagers(KeyManager...) keyManagers(KeyManager...)</del>
+					<li class='jf'><del> oajrc.RestClient.Builder.trustManagers(TrustManager...)</del>
+					<li class='jf'><del>Builder.secureRandom(SecureRandom)</del>
+					<li class='jf'><del>Builder.httpClientConnectionManager(HttpClientConnectionManager)</del>
 				</ul>
 			</ul>
 		<li>
@@ -536,7 +536,7 @@
 			</ul>
 		<li>
 			Removed the deprecated <c>RestCall.execute()</c> method.
-			<br>Use <del>RestCall#run()</del>.
+			<br>Use <del>RestCall.run()</del>.
 		<li>
 			<c>RestCall.input(Object)</c> method renamed to <del>RestCall.body(Object)</del>to match OpenAPI terminology.
 		<li>
@@ -546,12 +546,12 @@
 			<ul class='doctree'>
 				<li class='jc'>{@link oajrc.RestClient}
 				<ul>
-					<li class='jm'><del>RestClient#getRemoteInterface(Class)</del>
-					<li class='jm'><del>RestClient#getRemoteInterface(Class,Object)</del>
-					<li class='jm'><del>RestClient#getRemoteInterface(Class,Object,Serializer,Parser)</del>
-					<li class='jm'><del>RestClient#getRemoteResource(Class)</del>
-					<li class='jm'><del>RestClient#getRemoteResource(Class,Object)</del>
-					<li class='jm'><del>RestClient#getRemoteResource(Class,Object,Serializer,Parser)</del>
+					<li class='jm'><del>RestClient.getRemoteInterface(Class)</del>
+					<li class='jm'><del>RestClient.getRemoteInterface(Class,Object)</del>
+					<li class='jm'><del>RestClient.getRemoteInterface(Class,Object,Serializer,Parser)</del>
+					<li class='jm'><del>RestClient.getRemoteResource(Class)</del>
+					<li class='jm'><del>RestClient.getRemoteResource(Class,Object)</del>
+					<li class='jm'><del>RestClient.getRemoteResource(Class,Object,Serializer,Parser)</del>
 				</ul>
 			</ul>
 	</ul>

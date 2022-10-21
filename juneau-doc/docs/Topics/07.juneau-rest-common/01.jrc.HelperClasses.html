@@ -117,7 +117,7 @@
 		|	PartList <jv>formData</jv> = 
 		|		<jsm>partList</jsm>(  <jc>// Arbitrary list of parts</jc>
 		|			<jsm>stringPart</jsm>(<js>"Name"</js>, <js>"Bill"</js>)   <jc>// Freeform part</jc>
-		|			<jsm>integerPart</jsm>(<js>"Age"</js>, () -> <jsm>calculateAge</jsm>())   <jc>// Freeform part with supplied value</jc>
+		|			<jsm>integerPart</jsm>(<js>"Age"</js>, () -&gt; <jsm>calculateAge</jsm>())   <jc>// Freeform part with supplied value</jc>
 		|		);
 	</p>
 	<p>
@@ -195,7 +195,7 @@
 	<h5 class='topic'>HttpResources</h5>
 	<p>
 		The {@link oaj.http.HttpResources} class contains convenience static methods for generating HTTP message resources.
-		Returned objects extend from {@link oaj.http.resource.HttpResource} which extends from {@link oaj.http.HttpEntity} but with
+		Returned objects extend from {@link oaj.http.resource.HttpResource} which extends from {@link org.apache.http.HttpEntity} but with
 		additional arbitrary headers.
 	</p>
 	<p>

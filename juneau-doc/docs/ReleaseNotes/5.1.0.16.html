@@ -25,18 +25,18 @@
 		<li>New methods on {@link oaj.ClassMeta} that eliminates language-specific code in 
 			the general class metadata.
 			<ul>
-				<li><del>ClassMeta#getXmlMeta()</del>
-				<li><del>ClassMeta#getJsonMeta()</del>
-				<li><del>ClassMeta#getHtmlMeta()</del>
-				<li><del>ClassMeta#getUrlEncodingMeta()</del>
-				<li><del>ClassMeta#getRdfMeta()</del>
+				<li><del>ClassMeta.getXmlMeta()</del>
+				<li><del>ClassMeta.getJsonMeta()</del>
+				<li><del>ClassMeta.getHtmlMeta()</del>
+				<li><del>ClassMeta.getUrlEncodingMeta()</del>
+				<li><del>ClassMeta.getRdfMeta()</del>
 			</ul>
 		<li>New {@link oaj.dto.jsonschema.JsonType#ANY} enum.
 		<li>New <del>@Html(asPlainText)</del> annotation.
 		<li>New <del>HtmlDocSerializerContext.HTMLDOC_cssImports</del>property.
 		<li>Significant changes to RDF support.
 			<ul>
-				<li>New {@link oaj.jena.annotation.Rdf @Rdf} and {@link oaj.jena.annotation.RdfSchema @RdfSchema}
+				<li>New <del>@Rdf</del> and <del>@RdfSchema</del>
 					annotations.  These replace the use of defining namespaced through the XML annotations, and allows XML and RDF to be
 					serialized using different namespaces.
 				<li>Support for serializing arrays/collections as RDF bags, RDF lists, and multi-valued properties.   

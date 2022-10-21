@@ -23,7 +23,7 @@
 	<h5 class='topic w800'>org.apache.juneau</h5>
 	<ul class='spaced-list'>
 		<li>
-			{@link oaj.utils.PojoQuery} improvements.
+			<del>PojoQuery</del> improvements.
 		<li>
 			New <del>RemoteMethod.returns()</del> annotation.
 			<br>Allows you to specify whether the remote method returns the HTTP body or status code.
@@ -94,12 +94,12 @@
 				<li>Several annotations are now arrays of strings instead of simple strings.
 					Values are simply concatenated with newlines which makes multi-line values cleaner.
 					<ul>
-						<li><del>HtmlDoc#header() header()</del>
-						<li><del>HtmlDoc#nav() nav()</del>
-						<li><del>HtmlDoc#aside() aside()</del>
-						<li><del>HtmlDoc#footer() footer()</del>
-						<li><del>HtmlDoc#script() script()</del>
-						<li><del>HtmlDoc#style() style()</del>
+						<li><del>HtmlDoc.header() header()</del>
+						<li><del>HtmlDoc.nav() nav()</del>
+						<li><del>HtmlDoc.aside() aside()</del>
+						<li><del>HtmlDoc.footer() footer()</del>
+						<li><del>HtmlDoc.script() script()</del>
+						<li><del>HtmlDoc.style() style()</del>
 					</ul>
 					Additionally, the <js>"INHERIT"</js> string literal can be used to combine the value with
 					the value defined on the servlet or parent class.  Links can also be inserted at specific
@@ -111,9 +111,9 @@
 				<li>
 					You can now add arbitrary CSS and Javascript along with your widgets through new methods:
 					<ul>
-						<li><del>Widget#getHtml(RestRequest)</del>
-						<li><del>Widget#getScript(RestRequest)</del>
-						<li><del>Widget#getStyle(RestRequest)</del>
+						<li><del>Widget.getHtml(RestRequest)</del>
+						<li><del>Widget.getScript(RestRequest)</del>
+						<li><del>Widget.getStyle(RestRequest)</del>
 					</ul>
 				</li>
 				<li>
@@ -125,8 +125,8 @@
 				<li>
 					Renamed widgets:
 					<ul>
-						<li><c>PoweredByApacheWidget</c> -> <c>PoweredByApache</c>  
-						<li><c>PoweredByJuneauWidget</c> -> <c>PoweredByJuneau</c>  
+						<li><c>PoweredByApacheWidget</c> -&gt; <c>PoweredByApache</c>  
+						<li><c>PoweredByJuneauWidget</c> -&gt; <c>PoweredByJuneau</c>  
 					</ul>
 				<li>
 					New {@link oajr.widget.MenuItemWidget} can be used as a starting point for creatint pull-down menu items.
@@ -159,8 +159,8 @@
 		<li>
 			Two convenience methods added to {@link oajr.RestRequest}:
 			<ul>
-				<li><del>RestRequest#attr(String,Object)</del>
-				<li><del>RestRequest#prop(String,Object)</del>
+				<li><del>RestRequest.attr(String,Object)</del>
+				<li><del>RestRequest.prop(String,Object)</del>
 			</ul>
 		</li>
 		<li>

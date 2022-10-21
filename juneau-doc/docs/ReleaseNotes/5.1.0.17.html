@@ -63,15 +63,15 @@
 			<ul>
 				<li>Added new methods:
 					<ul>
-						<li><del>RestRequest#getQueryParameterMap()</del>
-						<li><del>RestRequest#getQueryParameterNames()</del>
-						<li><del>RestRequest#getPathInfoUndecoded()</del>
-						<li><del>RestRequest#getPathRemainderUndecoded()</del>
-						<li><del>RestRequest#getTrimmedRequestURI()</del>
-						<li><del>RestRequest#getTrimmedRequestURL()</del>
-						<li><del>RestRequest#getServletTitle()</del>
-						<li><del>RestRequest#getServletDescription()</del>
-						<li><del>RestRequest#getMethodDescription()</del>
+						<li><del>RestRequest.getQueryParameterMap()</del>
+						<li><del>RestRequest.getQueryParameterNames()</del>
+						<li><del>RestRequest.getPathInfoUndecoded()</del>
+						<li><del>RestRequest.getPathRemainderUndecoded()</del>
+						<li><del>RestRequest.getTrimmedRequestURI()</del>
+						<li><del>RestRequest.getTrimmedRequestURL()</del>
+						<li><del>RestRequest.getServletTitle()</del>
+						<li><del>RestRequest.getServletDescription()</del>
+						<li><del>RestRequest.getMethodDescription()</del>
 					</ul>
 				<li>Behavior changes to {@link oajr.RestRequest#getPathInfo()} to follow Servlet specs.
 					Returns <jk>null</jk> instead of blank for no path info.
@@ -83,10 +83,10 @@
 		<li>New string replacement variables:
 			<ul>
 				<li><c>$R{contextPath}</c> - Returns value from {@link oajr.RestRequest#getContextPath()}
-				<li><c>$R{methodDescription}</c> - Returns value from <del>RestRequest#getMethodDescription()</del>
-				<li><c>$R{resourceTitle}</c> - Returns value from <del>RestRequest#getServletTitle()</del>
-				<li><c>$R{resourceDescription}</c> - Returns value from <del>RestRequest#getServletDescription()</del>
-				<li><c>$R{trimmedRequestURI}</c> - Returns value from <del>RestRequest#getTrimmedRequestURI()</del>
+				<li><c>$R{methodDescription}</c> - Returns value from <del>RestRequest.getMethodDescription()</del>
+				<li><c>$R{resourceTitle}</c> - Returns value from <del>RestRequest.getServletTitle()</del>
+				<li><c>$R{resourceDescription}</c> - Returns value from <del>RestRequest.getServletDescription()</del>
+				<li><c>$R{trimmedRequestURI}</c> - Returns value from <del>RestRequest.getTrimmedRequestURI()</del>
 				<li><c>$E{var}</c> - Environment variables.
 			</ul>
 		<li>Added methods <del>RestServlet.getDescription(RestRequest)</del>and <del>RestServlet.getLabel(RestRequest)</del>.
@@ -107,17 +107,17 @@
 		<li>New annotations for providing labels and descriptions.  Useful if you don't plan on having to support other languages, so you don't 
 			want to provide labels in resource bundles.
 			<ul>
-				<li><del>RestResource#label()</del>
+				<li><del>RestResource.label()</del>
 				<li><del>@RestResource(description)</del>
-				<li><del>RestMethod#description() @RestMethod(description)</del>
-				<li><del>RestMethod#responses()</del>
-				<li><del>Attr#description()</del>
-				<li><del>Content#description()</del>
-				<li><del>HasParam#description()</del>
-				<li><del>HasQParam#description()</del>
-				<li><del>Header#description()</del>
-				<li><del>Param#description()</del>
-				<li><del>QParam#description()</del>
+				<li><del>RestMethod.description() @RestMethod(description)</del>
+				<li><del>RestMethod.responses()</del>
+				<li><del>Attr.description()</del>
+				<li><del>Content.description()</del>
+				<li><del>HasParam.description()</del>
+				<li><del>HasQParam.description()</del>
+				<li><del>Header.description()</del>
+				<li><del>Param.description()</del>
+				<li><del>QParam.description()</del>
 			</ul>
 		<li>Support for sorting resources by name in <del>ChildResourceDescriptions</del>.
 	</ul>

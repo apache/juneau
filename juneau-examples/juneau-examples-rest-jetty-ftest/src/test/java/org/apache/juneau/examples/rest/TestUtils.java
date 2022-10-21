@@ -12,25 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.junit.Assert.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.util.regex.*;
 
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.*;
-import javax.xml.transform.stream.*;
-
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swaps.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
 
 public class TestUtils {
 
@@ -199,65 +191,6 @@ public class TestUtils {
 			System.err.println(decodeHex(SimpleJsonSerializer.DEFAULT.serialize(o)));  // NOT DEBUG
 		} catch (SerializeException e) {
 			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Sort an XML document by element and attribute names.
-	 * This method is primarily meant for debugging purposes.
-	 */
-	private static final String sortXml(String xml) throws Exception {
-
-		xml = xml.replaceAll("\\w+\\:", "");  // Strip out all namespaces.
-
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		dbf.setIgnoringElementContentWhitespace(true);
-		dbf.setNamespaceAware(false);
-		DocumentBuilder db = dbf.newDocumentBuilder();
-		Document doc = db.parse(new InputSource(new StringReader(xml)));
-
-		DOMSource s = new DOMSource(doc);
-
-		StringWriter sw = new StringWriter();
-		StreamResult sr = new StreamResult(sw);
-		XML_SORT_TRANSFORMER.transform(s, sr);
-		return sw.toString().replace('"', '\'').replace("\r", "");
-	}
-
-	/**
-	 * Compares two XML documents for equality.
-	 * Namespaces are stripped from each and elements/servletAttributes are ordered in alphabetical order,
-	 * 	then a simple string comparison is performed.
-	 */
-	public static final void assertXmlEquals(String expected, String actual) throws Exception {
-		assertEquals(sortXml(expected), sortXml(actual));
-	}
-
-	private static Transformer XML_SORT_TRANSFORMER;
-	static {
-		try {
-			String xsl = ""
-				+ "	<xsl:stylesheet version='1.0'"
-				+ "	 xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>"
-				+ "	 <xsl:output omit-xml-declaration='yes' indent='yes'/>"
-				+ "	 <xsl:strip-space elements='*'/>"
-				+ "	 <xsl:template match='node()|@*'>"
-				+ "	  <xsl:copy>"
-				+ "	   <xsl:apply-templates select='@*'>"
-				+ "	    <xsl:sort select='name()'/>"
-				+ "	   </xsl:apply-templates>"
-				+ "	   <xsl:apply-templates select='node()'>"
-				+ "	    <xsl:sort select='name()'/>"
-				+ "	    <xsl:sort select='text()'/>"
-				+ "	   </xsl:apply-templates>"
-				+ "	  </xsl:copy>"
-				+ "	 </xsl:template>"
-				+ "	</xsl:stylesheet>";
-			TransformerFactory tf = TransformerFactory.newInstance();
-			StreamSource ss = new StreamSource(new StringReader(xsl));
-			XML_SORT_TRANSFORMER = tf.newTransformer(ss);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
 		}
 	}
 

@@ -42,7 +42,7 @@
 		<li>Fixed major issue that prevented parsing URL-Encoded form posts into POJOs.
 			Calling <del>HttpServlet.getParameter(String)</del>was forcing the underlying servlet code to process the HTTP body itself, preventing the <c>UrlEncodingSerializer</c>
 			class from being able to parse the content.  Updated code no longer inadvertantly calls this method.
-		<li>New <del>RestRequest#getQueryParameter(String)</del>, <del>RestRequest#hasQueryParameter(String)</del>, and <del>RestRequest.hasAnyQueryParameters(String[])</del>
+		<li>New <del>RestRequest.getQueryParameter(String)</del>, <del>RestRequest.hasQueryParameter(String)</del>, and <del>RestRequest.hasAnyQueryParameters(String[])</del>
 			methods that only look for parameters in the URL query string to prevent loading and parsing of URL-Encoded form posts.
 		<li>New <del>@QParam</del> and <del>@HasQParam</del>annotations for accessing query parameters from the URL query string.
 		<li><c>&amp;plainText</c> parameter can now specify a false value.
@@ -59,11 +59,11 @@
 		<li>Improved performance on URL-Encoded form posts by serializing directly to output stream instead of serialized to string first.
 		<li>New methods on {@link oajrc.RestClient} class that makes it easier to associate serializer and parser attributes with registered serializer and parser:
 			<ul>
-				<li><del>RestClient#setProperty(String,Object)</del>			
-				<li><del>RestClient#setProperties(ObjectMap)</del>	
-				<li><del>RestClient#addNotBeanClasses(Class[])</del>		
-				<li><del>RestClient#addTransforms(Class[])</del>		
-				<li><del>RestClient#addImplClass(Class,Class)</del>	
+				<li><del>RestClient.setProperty(String,Object)</del>			
+				<li><del>RestClient.setProperties(ObjectMap)</del>	
+				<li><del>RestClient.addNotBeanClasses(Class[])</del>		
+				<li><del>RestClient.addTransforms(Class[])</del>		
+				<li><del>RestClient.addImplClass(Class,Class)</del>	
 			</ul>
 		<li>Renamed <c>RestClient.shutdown()</c> to {@link oajrc.RestClient#close()} to mirror change in Apache API.		
 	</ul>

@@ -57,8 +57,8 @@
 			<ul class='javatree'>
 				<li class='jc'>{@link oaj.serializer.WriterSerializer}
 				<ul>
-					<li class='jf'><del>WriterSerializer#WSERIALIZER_fileCharset WSERIALIZER_fileCharset</del>
-					<li class='jf'><del>WriterSerializer#WSERIALIZER_streamCharset WSERIALIZER_streamCharset</del>
+					<li class='jf'><del>WriterSerializer.WSERIALIZER_fileCharset WSERIALIZER_fileCharset</del>
+					<li class='jf'><del>WriterSerializer.WSERIALIZER_streamCharset WSERIALIZER_streamCharset</del>
 				</ul>
 			</ul>
 		<li>
@@ -79,9 +79,9 @@
 			<ul class='javatree'>
 				<li class='jc'><del>Marshall</del>
 				<ul>
-					<li class='jm'>{@del oaj.marshall.Marshall#format(String,Object...) format(String,Object...)} - <c>MessageFormat</c>-style formatter.
-					<li class='jm'>{@del oaj.marshall.Marshall#out(String,Object...) out(String,Object...)} - Prints <c>MessageFormat</c>-style messages to STDOUT.
-					<li class='jm'>{@del oaj.marshall.Marshall#err(String,Object...) err(String,Object...)} - Prints <c>MessageFormat</c>-style messages to STDERR.
+					<li class='jm'><del> oaj.marshall.Marshall.format(String,Object...) format(String,Object...)</del> - <c>MessageFormat</c>-style formatter.
+					<li class='jm'><del> oaj.marshall.Marshall.out(String,Object...) out(String,Object...)</del> - Prints <c>MessageFormat</c>-style messages to STDOUT.
+					<li class='jm'><del> oaj.marshall.Marshall.err(String,Object...) err(String,Object...)</del> - Prints <c>MessageFormat</c>-style messages to STDERR.
 				</ul>
 			</ul>
 		<li>
@@ -111,7 +111,7 @@
 				<li class='jc'>{@link java.time.OffsetTime} - ISO offset time.
 				<li class='jc'>{@link java.time.Year} - ISO year.
 				<li class='jc'>{@link java.time.YearMonth} - ISO year-month.
-				<li class='jc'>{@link java.time.Temporal} - ISO instant.
+				<li class='jc'>{@link java.time.temporal.Temporal} - ISO instant.
 				<li class='jc'>{@link java.util.TimeZone}
 				<li class='jc'>{@link javax.xml.datatype.XMLGregorianCalendar}
 				<li class='jc'>{@link java.time.ZoneId}
@@ -133,10 +133,10 @@
 			The <del>ConfigFileStore</del>now automatically resolves file extensions.
 			<br>New configuration property for specifying search paths for file extensions:
 			<ul class='javatree'>
-				<li class='jf'><del>ConfigFileStore#FILESTORE_extensions</del>
+				<li class='jf'><del>ConfigFileStore.FILESTORE_extensions</del>
 			</ul>
 		<li>
-			Fixed a bug where instances of {@link oaj.config.store.ConfigMemoryStore} ended up resolving to the same object.
+			Fixed a bug where instances of <del>ConfigMemoryStore</del> ended up resolving to the same object.
 		<li>
 			Uses <js>"application.properties"</js> file as a system default if present.
 			<br>Useful when being used in a Spring Boot application.
@@ -199,7 +199,7 @@
 				<li class='ja'>{@link oaj.oapi.annotation.OpenApiConfig OpenApiConfig}
 				<li class='ja'>{@link oaj.parser.annotation.ParserConfig ParserConfig}
 				<li class='ja'>{@link oaj.plaintext.annotation.PlainTextConfig PlainTextConfig}
-				<li class='ja'>{@link oaj.jena.annotation.RdfConfig RdfConfig}
+				<li class='ja'><del>RdfConfig</del>
 				<li class='ja'>{@link oaj.serializer.annotation.SerializerConfig SerializerConfig}
 				<li class='ja'>{@link oaj.soap.annotation.SoapXmlConfig SoapXmlConfig}
 				<li class='ja'>{@link oaj.uon.annotation.UonConfig UonConfig}
@@ -216,12 +216,12 @@
 				</ul>
 				<li class='jc'>{@link oajr.RestContext.Builder}
 				<ul>
-					<li class='jm'>{@del attrs(String...)}
+					<li class='jm'><del> attrs(String...)</del>
 					<li class='jm'><del>attr(String,Object)</del>
 				</ul>
 				<li class='jc'><del>RestMethodContext</del>
 				<ul>
-					<li class='jf'><del>RestMethodContext#RESTMETHOD_attrs RESTMETHOD_attrs</del>
+					<li class='jf'><del>RestMethodContext.RESTMETHOD_attrs RESTMETHOD_attrs</del>
 				</ul>
 				<li class='jc'>{@link oajr.RestRequest}
 				<ul>
@@ -230,11 +230,11 @@
 				<li class='jc'>{@link oajr.RestResponse}
 				<ul>
 					<li class='jm'>{@link oajr.RestResponse#getAttributes() getAttributes()}
-					<li class='jm'><del>RestResponse#attr(String,Object) attr(String,Object)</del>
+					<li class='jm'><del>RestResponse.attr(String,Object) attr(String,Object)</del>
 				</ul>
 				<li class='ja'>{@link oajr.annotation.Attr}
-				<li class='ja'><del>RestMethod#attrs()</del>
-				<li class='ja'><del>RestResource#attrs()</del>
+				<li class='ja'><del>RestMethod.attrs()</del>
+				<li class='ja'><del>RestResource.attrs()</del>
 			</ul>
 			<br>This deprecates the following APIs:
 			<ul class='javatree'>
@@ -242,7 +242,7 @@
 				<li class='jc'><del>RestMethodProperties</del>
 				<li class='jc'>{@link oajr.RestRequest}
 				<ul>
-					<li class='jm'><del>RestRequest#getProperties() getProperties()</del>
+					<li class='jm'><del>RestRequest.getProperties() getProperties()</del>
 					<li class='jm'><del>RestRequest.prop(String,Object) prop(String,Object)</del>
 				</ul>
 			</ul>
@@ -268,7 +268,7 @@
 				</ul>
 				<li class='ja'><del>RestMethod</del>
 				<ul>
-					<li class='jm'><del>RestMethod#roleGuard roleGuard()</del>
+					<li class='jm'><del>RestMethod.roleGuard roleGuard()</del>
 					<li class='jm'><del>RestMethod.rolesDeclared rolesDeclared()</del>
 				</ul>
 			</ul>

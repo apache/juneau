@@ -47,8 +47,8 @@
 		|		}
 		|	
 		|		<jc>// Our root REST bean.
-		|		// Note that this must extend from {@link SpringRestServlet} to allow use of injection.
-		|		// All REST objects are attached to this bean using the {@link Rest#children()} annotation.</jc>
+		|		// Note that this must extend from {@link oajr.springboot.SpringRestServlet} to allow use of injection.
+		|		// All REST objects are attached to this bean using the {@link oajr.annotation.Rest#children()} annotation.</jc>
 		|		<ja>@Bean</ja>
 		|		<jk>public</jk> RootResources getRootResources() {
 		|			<jk>return new</jk> RootResources();

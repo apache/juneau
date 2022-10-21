@@ -56,12 +56,12 @@
 		<li>Removed lazy-initialization that required locking in {@link oaj.ClassMeta}.  
 		<li>New <c>BeanContext.setDefaultParser(ReaderParser)</c> method added for specifying 
 			a default parser to use in a bean context (used when converting beans to <c>Strings</c> using 
-			<del>BeanContext#convertToType(Object,Class)</del>.
+			<del>BeanContext.convertToType(Object,Class)</del>.
 			Old behavior simply used the default JSON serializer in these cases.
 		<li>More consistent handling of exceptions across all parsers.
 		<li>Minor changes to {@link oajr.RestRequest} class.
 		<ul>
-			<li>Changed the order of parameters on <del>RestRequest#getParameter(String,Class)</del>.
+			<li>Changed the order of parameters on <del>RestRequest.getParameter(String,Class)</del>.
 			<li>Added <c>RestRequest.getMapParameter(String,Class,Class,Class)</c> and 
 				<c>RestRequest.getCollectionParameter(String,Class,Class)}</c> methods.
 		</ul>

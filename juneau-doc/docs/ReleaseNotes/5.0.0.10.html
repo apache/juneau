@@ -32,7 +32,7 @@
 		<li>New <c>RestServletProperties.REST_useStackTraceHashes</c> property to prevent the same stack trace from being logged multiple times.</li>
 		<li>New <c>RestServletProperties.REST_renderResponseStackTraces</c> property for preventing stack traces in responses for security reasons.</li>
 		<li>New overridable <c>RestServlet.onError(HttpServletRequest,HttpServletResponse,RestException,boolean)</c> and <del>RestServlet.onSuccess(RestRequest,RestResponse,long)</del>methods for plugging in your own logging and peformance monitoring.</li>
-		<li>Eliminated <c>RestServlet.getInitParams()</c> method, since it's now redundant with <del>RestServlet#getProperties()</del>.</li>
+		<li>Eliminated <c>RestServlet.getInitParams()</c> method, since it's now redundant with <del>RestServlet.getProperties()</del>.</li>
 		<li>Header parameters passed as URL parameters are now case-insensitive.</li>			
 	</ul>
 </div>

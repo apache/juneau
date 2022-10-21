@@ -56,7 +56,7 @@
 	<h5 class='topic w800'>REST Server API updates</h5>
 	<ul class='spaced-list'>
 		<li>New <del>RestRequest.getJavaMethod()</del>method for getting access to the method used to handle a request.
-			Useful for accessing the method name or annotations during requests, such as in calls to <del>RestGuard#guard(RestRequest,RestResponse)</del>.
+			Useful for accessing the method name or annotations during requests, such as in calls to <del>RestGuard.guard(RestRequest,RestResponse)</del>.
 		<li>Fixed bug when using Jetty where you tried to read text input after a header was written.
 		<li>Added new string variables <dc>$A{...}</dc> (request attributes) and <dc>$P{...}</dc> (request parameters) to <c>RestServlet.createRequestVarResolver(RestRequest)</c>.
 	</ul>

@@ -44,7 +44,7 @@
 		<li>{@link oaj.json.JsonParser} now handles parsing JSON boolean/numeric values as strings to bean properties of type boolean or number. 
 		<li>{@link oaj.urlencoding.UrlEncodingSerializer} and {@link oaj.urlencoding.UrlEncodingParser} now 
 			represent arrays and collections as key-value pairs where the keys are numbers (e.g. <js>"?0=foo&amp;1=bar"</js>).
-		<li>Various internal improvements to {@link oaj.utils.IOPipe}.
+		<li>Various internal improvements to <del>IOPipe</del>.
 		<li>New <del>ReflectionUtils.getResource(Class,String)</del>method.
 		<li>{@link oaj.internal.StringUtils#parseNumber(String,Class)} now returns zero for empty strings. 
 			This affects the way most parsers handle blank values.
@@ -57,14 +57,14 @@
 		<li>Changes to <del>RestServlet</del>:
 			<ul>
 				<li>New methods for accessing external INI config files:<br>  
-					<del>RestServlet#getConfig()</del><br>
-					<del>RestServlet#createConfigFile()</del>
+					<del>RestServlet.getConfig()</del><br>
+					<del>RestServlet.createConfigFile()</del>
 				<li>New <js>"$C{...}"</js> variable that resolve to INI config file values.
 				<li>New <js>"$UE{...}"</js> variable that  URL-encodes the value inside the variable.
 				<li>New convenience methods for retrieving classpath resource files:<br>  
-					<del>RestServlet#getResource(String)</del><br>
-					<del>RestServlet#getResourceAsString(String)</del><br>
-					<del>RestServlet#getResource(Class,String,String)</del>.
+					<del>RestServlet.getResource(String)</del><br>
+					<del>RestServlet.getResourceAsString(String)</del><br>
+					<del>RestServlet.getResource(Class,String,String)</del>.
 						Useful if you want to load predefined POJOs from JSON files in your classpath.
 				<li>New <del>RestServlet.handleNotFound(int,RestRequest,RestResponse)</del> method for customized handling
 					of when a resource or method was not found.  
@@ -73,9 +73,9 @@
 			overriding the new <del>RestServlet.handleNotFound(int,RestRequest,RestResponse)</del>method.
 		<li>New {@link oajr.RestRequest} methods: 
 			<ul>
-				<li><del>RestRequest#resolveVars(String)</del>
+				<li><del>RestRequest.resolveVars(String)</del>
 				<li><c>RestRequest.getVarResource(String)</c>
-				<li><del>RestRequest#getConfig()</del>
+				<li><del>RestRequest.getConfig()</del>
 			</ul>
 		<li>New {@link oajr.RestResponse} methods: 
 			<ul>
@@ -89,10 +89,10 @@
 			Allows encoders to be fine-tuned at the method level.
 		<li>New <del>@RestResource(config)</del> annotation for associating external <del>ConfigFile</del>config files with servlets.
 		<li><del>ResourceLink</del>.
-		<li>New <c>org.apache.juneau.rest.matcher</c> package for commonly-used {@link oajr.RestMatcher RestMatchers}:
+		<li>New <c>org.apache.juneau.rest.matcher</c> package for commonly-used <del>RestMatchers</del>:
 			<ul>
-				<li><del>matchers#MultipartFormDataMatcher</del>
-				<li><del>matchers#UrlEncodedFormMatcher</del>
+				<li><del>MultipartFormDataMatcher</del>
+				<li><del>UrlEncodedFormMatcher</del>
 			</ul>
 	</ul>
 			

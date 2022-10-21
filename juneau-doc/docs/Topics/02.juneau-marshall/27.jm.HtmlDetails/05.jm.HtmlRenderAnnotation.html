@@ -89,7 +89,7 @@
 		|
 		|		<ja>@Override</ja>
 		|		<jk>public</jk> Object getContent(SerializerSession <jv>session</jv>, Float <jv>value</jv>) {
-		|			<jk>if</jk> (<jv>value</jv> >= 90)
+		|			<jk>if</jk> (<jv>value</jv> &gt;= 90)
 		|				<jk>return</jk> <jsm>div</jsm>(
 		|					String.<jsm>format</jsm>(<js>"%.0f%%"</js>, <jv>value</jv>),
 		|					<jsm>style</jsm>(<js>"@keyframes color_change { from { background-color: red; } to { background-color: yellow; }"</js>)

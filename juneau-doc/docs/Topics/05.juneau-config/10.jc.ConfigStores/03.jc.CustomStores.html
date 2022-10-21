@@ -31,7 +31,7 @@
 		|		<jk>private final</jk> String <jf>jdbcUrl</jf>;
 		|		<jk>private final</jk> String <jf>tableName</jf>, <jf>nameColumn</jf>, <jf>valueColumn</jf>;
 		|		<jk>private final</jk> Timer <jf>watcher</jf>;
-		|		<jk>private final</jk> ConcurrentHashMap&låt;String,String> <jf>cache</jf> = <jk>new</jk> ConcurrentHashMap<>();
+		|		<jk>private final</jk> ConcurrentHashMap&lt;String,String&gt; <jf>cache</jf> = <jk>new</jk> ConcurrentHashMap&lt;&gt;();
 		|	
 		|		<jk>protected</jk> SqlStore(ConfigStore.Builder <jv>builder</jv>) {
 		|			<jk>super</jk>(<jv>builder</jv>);
@@ -55,7 +55,7 @@
 		|	
 		|		<jk>synchronized void</jk> poll() {
 		|			<jc>// Loop through all our entries and find the latest values.</jc>
-		|			<jk>for</jk> (Map.Entry&lt;String,String> <jv>e</jv> : <jf>cache</jf>.entrySet()) {
+		|			<jk>for</jk> (Map.Entry&lt;String,String&gt; <jv>e</jv> : <jf>cache</jf>.entrySet()) {
 		|				String <jv>name</jv> = <jv>e</jv>.getKey();
 		|				String <jv>cacheContents</jv> = <jv>e</jv>.getValue();
 		|				String <jv>newContents</jv> = getDatabaseValue(<jv>name</jv>);
@@ -97,7 +97,7 @@
 		|	
 		|			String <jv>currentContents</jv> = read(<jv>name</jv>);
 		|	
-		|			<jk>if</jk> (<jv>expectedContents</jv> != <jk>null</jk> && StringUtils.<jsm>ne</jsm>(<jv>currentContents</jv>, <jv>expectedContents</jv>))
+		|			<jk>if</jk> (<jv>expectedContents</jv> != <jk>null</jk> &amp;&amp; StringUtils.<jsm>ne</jsm>(<jv>currentContents</jv>, <jv>expectedContents</jv>))
 		|				<jk>return</jk> <jv>currentContents</jv>;
 		|	
 		|			update(<jv>name</jv>, <jv>newContents</jv>);

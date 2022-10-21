@@ -382,8 +382,8 @@
 		|	SerializerSet <jv>serializerSet</jv> = SerializerSet
 		|		.<jsm>create</jsm>()
 		|		.add(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);
-		|		.forEach(<jv>x</jv> -> <jv>x</jv>.swaps(CalendarSwap.ISO8601DT.<jk>class</jk>))
-		|		.forEachWS(<jv>x</jv> -> <jv>x</jv>.useWhitespace())
+		|		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(CalendarSwap.ISO8601DT.<jk>class</jk>))
+		|		.forEachWS(<jv>x</jv> -&gt; <jv>x</jv>.useWhitespace())
 		|		.build();
 		|
 		|	<jc>// Find the appropriate serializer by Accept type and serialize our POJO to the specified writer.</jc>
@@ -396,7 +396,7 @@
 		|	ParserSet <jv>parserSet</jv> = ParserSet
 		|		.<jsm>create</jsm>()
 		|		.add(JsonParser.<jk>class</jk>, UrlEncodingParser.<jk>class</jk>);
-		|		.forEach(<jv>x</jv> -> <jv>x</jv>.swaps(CalendarSwap.ISO8601DT.<jk>class</jk>))
+		|		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(CalendarSwap.ISO8601DT.<jk>class</jk>))
 		|		.build();
 		|
 		|	Person <jv>person</jv> = <jv>parserSet</jv>

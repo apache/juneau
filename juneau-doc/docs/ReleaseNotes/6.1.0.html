@@ -21,7 +21,7 @@
 	</p>
 	<p>
 		In particular, this release cleans up the {@link oaj.BeanContext} API to match
-		the {@link oaj.PropertyStore}/{@link oaj.Context}/{@link oaj.Session} paradigm
+		the <del>PropertyStore</del>/{@link oaj.Context}/<del>Session</del> paradigm
 		previously used in the serializer and parser APIs.
 		It also makes several improvements to the HTML and XML serialization support and introduces HTML5 DTO beans.
 	</p>
@@ -127,8 +127,8 @@
 		</ul>
 		<li>Simplified <del>PojoSwap</del> class.  Now just two methods:
 		<ul>
-			<li><del>PojoSwap#swap(BeanSession,Object)</del>
-			<li><del>PojoSwap#unswap(BeanSession,Object,ClassMeta)</del>
+			<li><del>PojoSwap.swap(BeanSession,Object)</del>
+			<li><del>PojoSwap.unswap(BeanSession,Object,ClassMeta)</del>
 		</ul>
 		<li>General code improvements made to {@link oaj.ClassMeta} class.
 		<ul>
@@ -152,17 +152,17 @@
 			<li><del>DateTimeSimple</del>,<del>DateTimeSimple</del> - To simple <js>"yyyy/MM/dd HH:mm:ss"</js> date-time strings.
 			<li><del>DateSimple</del>,<del>DateSimple</del> - To simple <js>"yyyy/MM/dd"</js> date strings.
 			<li><del>TimeSimple</del>,<del>TimeSimple</del> - To simple <js>"HH:mm:ss"</js> time strings.
-			<li><del>DateFull</del>,<del>DateFull</del> - To {@link java.text.DateFormat.FULL} date strings.
+			<li><del>DateFull</del>,<del>DateFull</del> - To {@link java.text.DateFormat#FULL} date strings.
 			<li><del>DateLong</del>,<del>DateLong</del>- To {@link java.text.DateFormat#LONG} date strings.
-			<li><del>DateMedium</del>,<del>DateMedium</del> - To {@link java.text.DateFormat.MEDIUM} date strings.
+			<li><del>DateMedium</del>,<del>DateMedium</del> - To {@link java.text.DateFormat#MEDIUM} date strings.
 			<li><del>DateShort</del>,<del>DateShort</del>- To {@link java.text.DateFormat#SHORT} date strings.
-			<li><del>TimeFull</del>,<del>TimeFull</del> - To {@link java.text.DateFormat.FULL} time strings.
+			<li><del>TimeFull</del>,<del>TimeFull</del> - To {@link java.text.DateFormat#FULL} time strings.
 			<li><del>TimeLong</del>,<del>TimeLong</del>- To {@link java.text.DateFormat#LONG} time strings.
-			<li><del>TimeMedium</del>,<del>TimeMedium</del> - To {@link java.text.DateFormat.MEDIUM} time strings.
+			<li><del>TimeMedium</del>,<del>TimeMedium</del> - To {@link java.text.DateFormat#MEDIUM} time strings.
 			<li><del>TimeShort</del>,<del>TimeShort</del>- To {@link java.text.DateFormat#SHORT} time strings.
-			<li><del>DateTimeFull</del>,<del>DateTimeFull</del> - To {@link java.text.DateFormat.FULL} date-time strings.
+			<li><del>DateTimeFull</del>,<del>DateTimeFull</del> - To {@link java.text.DateFormat#FULL} date-time strings.
 			<li><del>DateTimeLong</del>,<del>DateTimeLong</del>- To {@link java.text.DateFormat#LONG} date-time strings.
-			<li><del>DateTimeMedium</del>,<del>DateTimeMedium</del> - To {@link java.text.DateFormat.MEDIUM} date-time strings.
+			<li><del>DateTimeMedium</del>,<del>DateTimeMedium</del> - To {@link java.text.DateFormat#MEDIUM} date-time strings.
 			<li><del>DateTimeShort</del>,<del>DateTimeShort</del>- To {@link java.text.DateFormat#SHORT} date-time strings.
 		</ul>  
 		<li>New method <del>SerializerGroup.getSerializerMatch(String)</del>that returns the matched serializer and media type.
@@ -221,24 +221,24 @@
 		<li>Standardized the following methods in {@link oajr.RestRequest} to remove dependency on <c>ClassMeta</c>
 			objects and eliminate the need for casts:
 			<ul>
-				<li><del>RestRequest#getHeader(String,Class)</del>
-				<li><del>RestRequest#getHeader(String,Object,Class)</del>
-				<li>{@del RestRequest#getHeader(String,Type,Type...)}
-				<li><del>RestRequest#getQueryParameter(String,Class)</del>
-				<li><del>RestRequest#getQueryParameter(String,Object,Class)</del>
-				<li>{@del RestRequest#getQueryParameter(String,Type,Type...)}
-				<li>{@del RestRequest#getQueryParameter(String,Object,Type,Type...)}
-				<li><del>RestRequest#getQueryParameters(String,Class)</del>
-				<li>{@del RestRequest#getQueryParameters(String,Type,Type...)}
-				<li><del>RestRequest#getFormDataParameter(String,Class)</del>
-				<li><del>RestRequest#getFormDataParameter(String,Object,Class)</del>
-				<li><del>RestRequest#getFormDataParameters(String,Class)</del>
-				<li>{@del RestRequest#getFormDataParameter(String,Type,Type...)}
-				<li>{@del RestRequest#getFormDataParameters(String,Type,Type...)}
-				<li><del>RestRequest#getPathParameter(String,Class)</del>
-				<li>{@del RestRequest#getPathParameter(String,Type,Type...)}
-				<li><del>RestRequest#getBody(Class)</del>
-				<li>{@del RestRequest#getBody(Type,Type...)}
+				<li><del>RestRequest.getHeader(String,Class)</del>
+				<li><del>RestRequest.getHeader(String,Object,Class)</del>
+				<li><del> RestRequest.getHeader(String,Type,Type...)</del>
+				<li><del>RestRequest.getQueryParameter(String,Class)</del>
+				<li><del>RestRequest.getQueryParameter(String,Object,Class)</del>
+				<li><del> RestRequest.getQueryParameter(String,Type,Type...)</del>
+				<li><del> RestRequest.getQueryParameter(String,Object,Type,Type...)</del>
+				<li><del>RestRequest.getQueryParameters(String,Class)</del>
+				<li><del> RestRequest.getQueryParameters(String,Type,Type...)</del>
+				<li><del>RestRequest.getFormDataParameter(String,Class)</del>
+				<li><del>RestRequest.getFormDataParameter(String,Object,Class)</del>
+				<li><del>RestRequest.getFormDataParameters(String,Class)</del>
+				<li><del> RestRequest.getFormDataParameter(String,Type,Type...)</del>
+				<li><del> RestRequest.getFormDataParameters(String,Type,Type...)</del>
+				<li><del>RestRequest.getPathParameter(String,Class)</del>
+				<li><del> RestRequest.getPathParameter(String,Type,Type...)</del>
+				<li><del>RestRequest.getBody(Class)</del>
+				<li><del> RestRequest.getBody(Type,Type...)</del>
 			</ul>
 		<li>New methods on <del>NameValuePairs</del>
 		<li>Fixed issue where whitespace was not added to UON/URL-Encoding output when <c>&amp;plainText=true</c> specified.

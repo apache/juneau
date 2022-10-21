@@ -219,11 +219,11 @@
 				|	
 				|		<xt>&lt;New</xt> <xa>id</xa>=<xs>"context"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.servlet.ServletContextHandler"</xs><xt>&gt;</xt>
 				|			<xt>&lt;Set</xt> <xa>name</xa>=<xs>"contextPath"</xs><xt>&gt;/&lt;/Set&gt;</xt>
-				|			<xc>&lt;!-- Optionally specify your servlets here -->
+				|			<xc>&lt;!-- Optionally specify your servlets here --&gt;
 				|			&lt;!--Call name="addServlet"&gt;
 				|				&lt;Arg&gt;org.apache.juneau.microservice.sample.RootResources&lt;/Arg&gt;
 				|				&lt;Arg&gt;/*&lt;/Arg&gt;
-				|			&lt;/Call--></xc>
+				|			&lt;/Call--&gt;</xc>
 				|			<xt>&lt;Set</xt> <xa>name</xa>=<xs>"sessionHandler"</xs><xt>&gt;</xt>
 				|				<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.session.SessionHandler"</xs><xt>/&gt;</xt>
 				|			<xt>&lt;/Set&gt;</xt>
@@ -248,8 +248,8 @@
 				|			<xc>&lt;!-- Param 0: org.eclipse.jetty.server.RequestLogWriter --&gt;</xc>
 				|			<xt>&lt;Arg&gt;</xt>
 				|				<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.RequestLogWriter"</xs><xt>&gt;</xt>
-				|					<xt>&lt;Set</xt> <xa>name</xa>=<xs>"append"</xs><xt>&gt;</xt>false<xt>&lt;/Set&gt</xt>;
-				|					<xt>&lt;Set</xt> <xa>name</xa>=<xs>"filename"</xs><xt>&gt;&lt;Property</xt> <xa>name</xa>=<xs>"jetty.logs"</xs> <xa>default</xa>=<xs>"$C{Logging/logDir,logs}"</xs> <xt>/&gt;</xt>/jetty-requests.log<xt>&lt;/Set&gt</xt>;
+				|					<xt>&lt;Set</xt> <xa>name</xa>=<xs>"append"</xs><xt>&gt;</xt>false<xt>&lt;/Set&gt;</xt>;
+				|					<xt>&lt;Set</xt> <xa>name</xa>=<xs>"filename"</xs><xt>&gt;&lt;Property</xt> <xa>name</xa>=<xs>"jetty.logs"</xs> <xa>default</xa>=<xs>"$C{Logging/logDir,logs}"</xs> <xt>/&gt;</xt>/jetty-requests.log<xt>&lt;/Set&gt;</xt>;
 				|					<xt>&lt;Set</xt> <xa>name</xa>=<xs>"filenameDateFormat"</xs><xt>&gt;</xt>yyyy_MM_dd<xt>&lt;/Set&gt;</xt>
 				|					<xt>&lt;Set</xt> <xa>name</xa>=<xs>"retainDays"</xs><xt>&gt;</xt>90<xt>&lt;/Set&gt;</xt>
 				|					<xt>&lt;Set</xt> <xa>name</xa>=<xs>"timeZone"</xs><xt>&gt;</xt>GMT<xt>&lt;/Set&gt;</xt>

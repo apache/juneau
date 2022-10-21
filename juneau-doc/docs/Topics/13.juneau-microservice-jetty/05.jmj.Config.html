@@ -24,7 +24,7 @@
 	</p>	
 	<p>
 		The most common usage for the configuration file is to reference values using the {@link oaj.config.vars.ConfigVar $C} variable in annotations.
-		For example, the {@link oajr.config.BasicRestConfig} interface that defines the annotations that control the look-and-feel of
+		For example, the {@link oajr.config.DefaultConfig} interface that defines the annotations that control the look-and-feel of
 		classes that extend from {@link oajr.servlet.BasicRestServlet} use several <c>$C</c> variables to externalize values:
 	</p>
 	<p class='bjava'>
@@ -132,8 +132,8 @@
 			</p>
 			<p>
 				Additional user-defined variables at the servlet level can be defined by adding a  
-				{@link oajr.annotation.HookEvent#INIT} hook method
-				and using the {@del oajr.RestContext.Builder#vars(Class...)} method.
+				{@link oajr.annotation.RestInit} hook method
+				and using the <del> oajr.RestContext.Builder.vars(Class...)</del> method.
 			</p>
 		</li>
 		<li class='jm'>
@@ -182,7 +182,7 @@
 			</p>
 			<p>
 				Additional user-defined variables can be defined at this level by overriding the 
-				{@del oajr.RestContext.Builder#vars(Class...)} method.
+				<del> oajr.RestContext.Builder.vars(Class...)</del> method.
 			</p>
 		</li>
 	</ul>

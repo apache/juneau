@@ -69,8 +69,8 @@
 		<li>Performance improvements around query parameters.
 		<li>New methods on {@link oajr.RestRequest} for handling multi-part parameters:
 			<ul>
-				<li><del>RestRequest#getParameters(String,Class)</del>
-				<li><del>RestRequest#getQueryParameters(String,Class)</del>
+				<li><del>RestRequest.getParameters(String,Class)</del>
+				<li><del>RestRequest.getQueryParameters(String,Class)</del>
 			</ul>
 		</li>
 		<li>Fixed Jetty issue in {@link oajr.RestResponse#setHeader(String,String)} where setting 
@@ -83,7 +83,7 @@
 			
 	<h5 class='topic w800'>Client</h5>		
 	<ul class='spaced-list'>
-		<li>New method <del>RestCall#allowRedirectsOnPosts(boolean)</del>.
+		<li>New method <del>RestCall.allowRedirectsOnPosts(boolean)</del>.
 		<li>New method <c>RestCall.peekInputStream()</c> allows you to read response bodies without interrupting execution flow.
 		<li>New method <del>RestCall.toString()</del> now useful for debugging purposes.  
 			Shows all request/response headers and bodies.

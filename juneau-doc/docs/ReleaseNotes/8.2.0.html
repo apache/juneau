@@ -60,14 +60,14 @@
 			<ul class='javatree'>
 				<li class='jc'>{@link oaj.BeanContext.Builder}
 					<ul class='javatreec'>
-						<li class='jm'><del>Builder#bpi(Class,String) bpi(Class,String)</del>
-						<li class='jm'><del>Builder#bpi(String,String) bpi(String,String)</del>
-						<li class='jm'><del>Builder#bpx(Class,String) bpx(Class,String)</del>
-						<li class='jm'><del>Builder#bpx(String,String) bpx(String,String)</del>
-						<li class='jm'><del>Builder#bpro(Class,String) bpro(Class,String)</del>
-						<li class='jm'><del>Builder#bpro(String,String) bpro(String,String)</del>
-						<li class='jm'><del>Builder#bpwo(Class,String) bpwo(Class,String</del>
-						<li class='jm'><del>Builder#bpwo(String,String) bpwo(String,String</del>
+						<li class='jm'><del>Builder.bpi(Class,String) bpi(Class,String)</del>
+						<li class='jm'><del>Builder.bpi(String,String) bpi(String,String)</del>
+						<li class='jm'><del>Builder.bpx(Class,String) bpx(Class,String)</del>
+						<li class='jm'><del>Builder.bpx(String,String) bpx(String,String)</del>
+						<li class='jm'><del>Builder.bpro(Class,String) bpro(Class,String)</del>
+						<li class='jm'><del>Builder.bpro(String,String) bpro(String,String)</del>
+						<li class='jm'><del>Builder.bpwo(Class,String) bpwo(Class,String</del>
+						<li class='jm'><del>Builder.bpwo(String,String) bpwo(String,String</del>
 					</ul>
 				</li>
 			</ul>
@@ -101,7 +101,7 @@
 				<li class='jc'>{@link oaj.html.annotation.HtmlAnnotation} <jk>implements</jk> {@link oaj.html.annotation.Html}
 				<li class='jc'><del>JsoAnnotation</del> <jk>implements</jk> <del>Jso</del>
 				<li class='jc'>{@link oaj.json.annotation.JsonAnnotation} <jk>implements</jk> {@link oaj.json.annotation.Json}
-				<li class='jc'>{@link oaj.jsonschema.annotation.SchemaAnnotation} <jk>implements</jk> {@link oaj.jsonschema.annotation.Schema}
+				<li class='jc'><del>SchemaAnnotation</del> <jk>implements</jk> <del>Schema</del>
 				<li class='jc'>{@link oaj.msgpack.annotation.MsgPackAnnotation} <jk>implements</jk> {@link oaj.msgpack.annotation.MsgPack}
 				<li class='jc'>{@link oaj.oapi.annotation.OpenApiAnnotation} <jk>implements</jk> {@link oaj.oapi.annotation.OpenApi}
 				<li class='jc'>{@link oaj.plaintext.annotation.PlainTextAnnotation} <jk>implements</jk> {@link oaj.plaintext.annotation.PlainText}
@@ -121,7 +121,7 @@
 			</p>
 		<li>
 			Bean maps now have the concept of "hidden" properties (properties that aren't serialized but otherwise accessible).
-			<br>For example, the {@link oaj.html.annotation.Html.link()} can now reference hidden properties:
+			<br>For example, the {@link oaj.html.annotation.Html#link()} can now reference hidden properties:
 			<p class='bcode'>
 		<ja>@Bean</ja>(bpi=<js>"a"</js>) <jc>// Will be overridden</jc>
 		<jk>public class</jk> MyBean {
@@ -188,15 +188,15 @@
 		<li>
 			New annotations for multi-part support:
 			<ul>
-				<li class='jm'><del>Header#multi()</del>
-				<li class='jm'><del>Query#multi()</del>
-				<li class='jm'><del>FormData#multi()</del>
+				<li class='jm'><del>Header.multi()</del>
+				<li class='jm'><del>Query.multi()</del>
+				<li class='jm'><del>FormData.multi()</del>
 			</ul>
 		<li>
 			<del>BeanTraverseContext.BEANTRAVERSE_ignoreRecursions</del>setting no longer requires <del>BeanTraverseContext.BEANTRAVERSE_detectRecursions</del>
 			to be enabled.
 		<li>
-			Fixed bug in JSON/UON/URL-Encoding serializers where indentation was not correct of first line when <del>BeanTraverseContext#BEANTRAVERSE_initialDepth</del>
+			Fixed bug in JSON/UON/URL-Encoding serializers where indentation was not correct of first line when <del>BeanTraverseContext.BEANTRAVERSE_initialDepth</del>
 			used.
 		<li>
 			Fixed bug in JSON/UON/URL-Encoding serializers where properties past the max depth were being serialized as null instead
@@ -204,7 +204,7 @@
 		<li>
 			Fixed bug in HTML serializer where tables of maps were not sorted if <jsf>SERIALIZER_sortMaps</jsf> was specified.
 		<li>
-			<jsf>SERIALIZER_trimNullProperties</jsf> has been replaced with <del>Serializer#SERIALIZER_keepNullProperties SERIALIZER_keepNullProperties</del>.
+			<jsf>SERIALIZER_trimNullProperties</jsf> has been replaced with <del>Serializer.SERIALIZER_keepNullProperties SERIALIZER_keepNullProperties</del>.
 		<li>
 			Improvements to OpenAPI serializer and parser:
 			<ul>
@@ -271,16 +271,16 @@
 	<h5 class='topic w800'>juneau-rest-server</h5>
 	<ul class='spaced-list'>
 		<li>
-			New <del>RestContext#REST_context REST_context</del>/<del>Rest.context() @Rest(context)</del> setting to allow you to extend the {@link oajr.RestContext}
+			New <del>RestContext.REST_context REST_context</del>/<del>Rest.context() @Rest(context)</del> setting to allow you to extend the {@link oajr.RestContext}
 			class.
 		<li>
 			{@link oajr.annotation.Rest}-annotated classes can now implement the following interfaces directly instead of having
 			to define secondary classes and hook them up through annotations:
 			<ul>
-				<li class='jic'><del>RestCallHandler</del>- Normally defined through {@del oajr.annotation.Rest#callHandler() @Rest.callHandler()}.
-				<li class='jic'><del>RestInfoProvider</del> - Normally defined through {@del oajr.annotation.Rest.infoProvider() @Rest.infoProvider()}.
-				<li class='jic'><del>RestCallLogger</del>- Normally defined through {@del oajr.annotation.Rest#callLogger() @Rest.callLogger()}.
-				<li class='jic'><del>ClasspathResourceFinder</del> - Normally defined through {@del oajr.annotation.Rest.classpathResourceFinder() @Rest.classpathResourceFinder()}.
+				<li class='jic'><del>RestCallHandler</del>- Normally defined through <del> oajr.annotation.Rest.callHandler() @Rest.callHandler()</del>.
+				<li class='jic'><del>RestInfoProvider</del> - Normally defined through <del> oajr.annotation.Rest.infoProvider() @Rest.infoProvider()</del>.
+				<li class='jic'><del>RestCallLogger</del>- Normally defined through <del> oajr.annotation.Rest.callLogger() @Rest.callLogger()</del>.
+				<li class='jic'><del>ClasspathResourceFinder</del> - Normally defined through <del> oajr.annotation.Rest.classpathResourceFinder() @Rest.classpathResourceFinder()</del>.
 			</ul>
 			<br>The methods added for <del>RestInfoProvider</del> are:
 			<ul>
@@ -307,7 +307,7 @@
 			<ul>
 				<li class='jac'><del>RestServlet</del>
 				<ul>
-					<li class='jm'><del>RestServlet#log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)</del>
+					<li class='jm'><del>RestServlet.log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)</del>
 				</ul>
 				<li class='jac'><del>BasicRest</del>
 				<ul>
@@ -318,7 +318,7 @@
 			<ul>
 				<li class='jac'><del>RestServlet</del>
 				<ul>
-					<li class='jm'><del>RestServlet#findResource(Class,String,Locale) findResource(Class,String,Locale)</del>
+					<li class='jm'><del>RestServlet.findResource(Class,String,Locale) findResource(Class,String,Locale)</del>
 				</ul>
 				<li class='jac'><del>BasicRest</del>
 				<ul>
@@ -329,11 +329,11 @@
 			<ul>
 				<li class='jac'><del>RestServlet</del>
 				<ul>
-					<li class='jm'>{@del oajr.RestServlet#resolve(Object,Class,RestContext.Builder,Object...) resolve(Object,Class&lt;T&gt;,RestContext.Builder,Object...)}
+					<li class='jm'><del> oajr.RestServlet.resolve(Object,Class,RestContext.Builder,Object...) resolve(Object,Class&lt;T&gt;,RestContext.Builder,Object...)</del>
 				</ul>
 				<li class='jac'><del>BasicRest</del>
 				<ul>
-					<li class='jm'>{@del oajr.BasicRest.resolve(Object,Class,RestContext.Builder,Object...) resolve(Object,Class&lt;T&gt;,RestContext.Builder,Object...)}
+					<li class='jm'><del> oajr.BasicRest.resolve(Object,Class,RestContext.Builder,Object...) resolve(Object,Class&lt;T&gt;,RestContext.Builder,Object...)</del>
 				</ul>
 			</ul>
 		<li>
@@ -341,25 +341,25 @@
 			<ul>
 				<li class='jac'><del>RestServlet</del>
 				<ul>
-					<li class='jm'>{@del oajr.RestServlet#onInit(RestContext.Builder) onInit(RestContext.Builder)}
-					<li class='jm'><del>RestServlet#onPostInit(RestContext) onPostInit(RestContext)</del>
-					<li class='jm'><del>RestServlet#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)</del>
-					<li class='jm'><del>RestServlet#onDestroy(RestContext) onDestroy(RestContext)</del>
-					<li class='jm'><del>RestServlet#onStartCall(HttpServletRequest,HttpServletResponse) onStartCall(HttpServletRequest,HttpServletResponse)</del>
-					<li class='jm'><del>RestServlet#onPreCall(RestRequest,RestResponse) onPreCall(RestRequest,RestResponse)</del>
-					<li class='jm'><del>RestServlet#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)</del>
-					<li class='jm'><del>RestServlet#onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)</del>
+					<li class='jm'><del> oajr.RestServlet.onInit(RestContext.Builder) onInit(RestContext.Builder)</del>
+					<li class='jm'><del>RestServlet.onPostInit(RestContext) onPostInit(RestContext)</del>
+					<li class='jm'><del>RestServlet.onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)</del>
+					<li class='jm'><del>RestServlet.onDestroy(RestContext) onDestroy(RestContext)</del>
+					<li class='jm'><del>RestServlet.onStartCall(HttpServletRequest,HttpServletResponse) onStartCall(HttpServletRequest,HttpServletResponse)</del>
+					<li class='jm'><del>RestServlet.onPreCall(RestRequest,RestResponse) onPreCall(RestRequest,RestResponse)</del>
+					<li class='jm'><del>RestServlet.onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)</del>
+					<li class='jm'><del>RestServlet.onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)</del>
 				</ul>
 				<li class='jac'><del>BasicRest</del>
 				<ul>
-					<li class='jm'>{@del oajr.BasicRest#onInit(RestContext.Builder) onInit(RestContext.Builder)}
-					<li class='jm'><del>BasicRest#onPostInit(RestContext) onPostInit(RestContext)</del>
-					<li class='jm'><del>BasicRest#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)</del>
-					<li class='jm'><del>BasicRest#onDestroy(RestContext) onDestroy(RestContext)</del>
-					<li class='jm'><del>BasicRest#onStartCall(HttpServletRequest,HttpServletResponse) onStartCall(HttpServletRequest,HttpServletResponse)</del>
-					<li class='jm'><del>BasicRest#onPreCall(RestRequest,RestResponse) onPreCall(RestRequest,RestResponse)</del>
-					<li class='jm'><del>BasicRest#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)</del>
-					<li class='jm'><del>BasicRest#onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)</del>
+					<li class='jm'><del> oajr.BasicRest.onInit(RestContext.Builder) onInit(RestContext.Builder)</del>
+					<li class='jm'><del>BasicRest.onPostInit(RestContext) onPostInit(RestContext)</del>
+					<li class='jm'><del>BasicRest.onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)</del>
+					<li class='jm'><del>BasicRest.onDestroy(RestContext) onDestroy(RestContext)</del>
+					<li class='jm'><del>BasicRest.onStartCall(HttpServletRequest,HttpServletResponse) onStartCall(HttpServletRequest,HttpServletResponse)</del>
+					<li class='jm'><del>BasicRest.onPreCall(RestRequest,RestResponse) onPreCall(RestRequest,RestResponse)</del>
+					<li class='jm'><del>BasicRest.onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)</del>
+					<li class='jm'><del>BasicRest.onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)</del>
 				</ul>
 			</ul>
 		<li>
@@ -391,7 +391,7 @@
 				<li class='jc'><del>ClasspathResourceFinder</del>
 				<li class='jc'><del>RestResourceResolver</del>
 				<li class='jc'><del>RestGuard</del>
-				<li class='jc'>{@link oajr.ResponseHandler}
+				<li class='jc'><del>ResponseHandler</del>
 			</ul>
 		<li>
 			New <del>Path.required() @Path(required)</del>annotation support.

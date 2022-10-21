@@ -29,7 +29,7 @@
 		<li>Better behavior on overriding of filters in <c>BeanContext.addTransforms(Class[])</c>.
 			Previously, adding multiple conflicting filters resulted in random behavior.  
 			Now filters are overridden when multiple matching filters are applied.
-		<li>Allow <del>HtmlDocSerializerContext</del>properties to be set via <del>Serializer#setProperty(String,Object)</del>.
+		<li>Allow <del>HtmlDocSerializerContext</del>properties to be set via <del>Serializer.setProperty(String,Object)</del>.
 			Previously, these could only be defined through override properties (e.g. through REST class and method annotations).
 		<li>Fixed memory leak in XML parser.	
 	</ul>

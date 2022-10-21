@@ -28,9 +28,9 @@
 		<li>Major changes around how serializer and parser class properties are defined to improve performance
 			and concurrency.
 			<ul>
-				<li>New {@link oaj.PropertyStore} class - Used for creating context objects.
+				<li>New <del>PropertyStore</del> class - Used for creating context objects.
 				<li>New {@link oaj.Context} class - Read-only configurations for serializers and parsers.
-				<li>New {@link oaj.Session} class - One-time use objects used by serializers and parsers.
+				<li>New <del>Session</del> class - One-time use objects used by serializers and parsers.
 				<li>All context context properties can now also be specified via system properties.
 			</ul>
 		</li>
@@ -58,7 +58,7 @@
 					during parsing. 
 				<li><del>BEAN_beanTypePropertyName</del> - The overridable type property name.  Default is <js>"_type"</js>.
 				<li><del>@BeanProperty(beanDictionary)</del>- Define a type dictionary
-					for a particular bean property value.  This overrides the value specified using <del>BeanContext#BEAN_beanDictionary</del>.
+					for a particular bean property value.  This overrides the value specified using <del>BeanContext.BEAN_beanDictionary</del>.
 				<li><del>SerializerContext.SERIALIZER_addBeanTypeProperties</del>- Controls whether type properties are serialized.
 			</ul>
 			In addition, the {@link oaj.annotation.Bean#typeName() @Bean(typeName)} value replaces the <c>@Xml(name)</c> annotation, and the 
@@ -77,13 +77,13 @@
 		<li>New methods on {@link oaj.parser.Parser}:
 			<ul>
 				<li><c>org.apache.juneau.parser.Parser.createSession(ObjectMap,Method,Object)</c>
-				<li><del>Parser#getMediaRanges()</del>
+				<li><del>Parser.getMediaRanges()</del>
 			</ul>
 		</li>
 		<li>New methods on {@link oaj.serializer.Serializer}:
 			<ul>
 				<li><c>org.apache.juneau.serializer.Serializer.createSession(ObjectMap,Method)</c>
-				<li><del>Serializer#getMediaRanges()</del>
+				<li><del>Serializer.getMediaRanges()</del>
 			</ul>
 		</li>
 		<li>New {@link oaj.annotation.Bean#sort() @Bean(sort)} annotation.
@@ -93,7 +93,7 @@
 		<li>Serializers and parsers now automatically convert {@link java.lang.Class} objects to readable names via <del>ClassUtils.getReadableClassName(Class)</del>.
 		<li>Eliminated the <c>ClassFilter</c> class since it's no longer needed.
 		<li>Code and concurrency improvements to <del>SerializerGroup</del>and <del>ParserGroup</del>.
-		<li>Various enhancements to <del>BeanContext#convertToType(Object,Class)</del>.
+		<li>Various enhancements to <del>BeanContext.convertToType(Object,Class)</del>.
 		<li>New properties on {@link oaj.html.HtmlSerializer}:
 			<ul>
 				<li><del>HtmlSerializerContext.HTML_detectLinksInStrings</del>- Automatically detect hyperlinks in strings.
@@ -119,7 +119,7 @@
 		<li>OPTIONS pages replaced with Swagger documents.
 			Lots of changes related to supporting Swagger.
 			<ul>
-				<li>Annotation name changes to conform to Swagger specs:  <ja>@Attr</ja>-><ja>@Path</ja>, <ja>@QParam</ja>-><ja>@Query</ja>, <ja>@Param</ja>-><ja>@FormData</ja>, <ja>@Content</ja>-><ja>@Body</ja>
+				<li>Annotation name changes to conform to Swagger specs:  <ja>@Attr</ja>-&gt;<ja>@Path</ja>, <ja>@QParam</ja>-&gt;<ja>@Query</ja>, <ja>@Param</ja>-&gt;<ja>@FormData</ja>, <ja>@Content</ja>-&gt;<ja>@Body</ja>
 				<li>Eliminated <c>ResourceOptions</c> and related code.
 				<li>New annotations and related methods:
 					<ul>
@@ -131,7 +131,7 @@
 						<li><del>@RestResource(version)</del>/ <del>RestInfoProvider.getVersion(RestRequest)</del>
 						<li><del>@RestResource(tags)</del>/ <del>RestInfoProvider.getTags(RestRequest)</del>
 						<li><del>@RestResource(externalDocs)</del>/ <del>RestInfoProvidergetExternalDocs(RestRequest)</del>
-						<li><del>RestMethod.summary() @RestMethod(summary)</del>/ <del>RestInfoProvider#getMethodSummary(String,RestRequest)</del>
+						<li><del>RestMethod.summary() @RestMethod(summary)</del>/ <del>RestInfoProvider.getMethodSummary(String,RestRequest)</del>
 						<li><del>RestMethod.description() @RestMethod(description)</del>/<del>RestInfoProvider.getMethodDescription(String,RestRequest)</del>
 						<li><del>@RestMethod(externalDocs)</del>
 						<li><del>@RestMethod(tags)</del>
@@ -144,20 +144,20 @@
 		<li>New <del>RestServletContext.paramFormat</del>context property.
 		<li>New/updated methods on <del>RestServlet</del>:
 			<ul>
-				<li><del>RestServlet#createProperties()</del>
-				<li><del>RestServlet#createBeanContext(ObjectMap,Class[],Class[])</del>
-				<li><del>RestServlet#createBeanFilters()</del>
-				<li><del>RestServlet#createPojoSwaps()</del>
-				<li><del>RestServlet#createParsers(ObjectMap,Class[],Class[])</del>
-				<li><del>RestServlet#createUrlEncodingSerializer(ObjectMap,Class[],Class[])</del>
-				<li><del>RestServlet#createUrlEncodingParser(ObjectMap,Class[],Class[])</del>
-				<li><del>RestServlet#createConverters(ObjectMap)</del>
-				<li><del>RestServlet#createDefaultRequestHeaders(ObjectMap)</del>
-				<li><del>RestServlet#createDefaultResponseHeaders(ObjectMap)</del>
-				<li><del>RestServlet#createEncoders(ObjectMap)</del>
-				<li><del>RestServlet#createGuards(ObjectMap)</del>
-				<li><del>RestServlet#createMimetypesFileTypeMap(ObjectMap)</del>
-				<li><del>RestServlet#createResponseHandlers(ObjectMap)</del>
+				<li><del>RestServlet.createProperties()</del>
+				<li><del>RestServlet.createBeanContext(ObjectMap,Class[],Class[])</del>
+				<li><del>RestServlet.createBeanFilters()</del>
+				<li><del>RestServlet.createPojoSwaps()</del>
+				<li><del>RestServlet.createParsers(ObjectMap,Class[],Class[])</del>
+				<li><del>RestServlet.createUrlEncodingSerializer(ObjectMap,Class[],Class[])</del>
+				<li><del>RestServlet.createUrlEncodingParser(ObjectMap,Class[],Class[])</del>
+				<li><del>RestServlet.createConverters(ObjectMap)</del>
+				<li><del>RestServlet.createDefaultRequestHeaders(ObjectMap)</del>
+				<li><del>RestServlet.createDefaultResponseHeaders(ObjectMap)</del>
+				<li><del>RestServlet.createEncoders(ObjectMap)</del>
+				<li><del>RestServlet.createGuards(ObjectMap)</del>
+				<li><del>RestServlet.createMimetypesFileTypeMap(ObjectMap)</del>
+				<li><del>RestServlet.createResponseHandlers(ObjectMap)</del>
 			</ul>
 		</li>
 		<li>New client-version annotations:
@@ -171,6 +171,6 @@
 	<h5 class='topic w800'>org.apache.juneau.rest.client</h5>
 	<ul class='spaced-list'>
 		<li>Removed the <c>JazzRestClient</c> class.
-		<li>New method <del>RestClient#setClientVersion(String)</del>.
+		<li>New method <del>RestClient.setClientVersion(String)</del>.
 	</ul>		
 </div>

@@ -116,7 +116,7 @@
 		|	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		|		.<jsm>create</jsm>()
 		|		.simple()
-		|		.swap(MyBean.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -> <jsm>myBeanStringifier</jsm>(<jv>x</jv>))
+		|		.swap(MyBean.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>myBeanStringifier</jsm>(<jv>x</jv>))
 		|		.build();
 	</p>
 </div>

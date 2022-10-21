@@ -267,7 +267,7 @@
 		<li>
 			New <del>Surrogate</del> interface for identifying surrogate classes.
 		<li>
-			Serializers can now serialize to {@link java.util.StringBuilder StringBuilders}.
+			Serializers can now serialize to {@link java.lang.StringBuilder StringBuilders}.
 		<li>
 			Serializers now serialize the contents of {@link java.io.Reader Readers} and {@link java.io.InputStream InputStreams}
 			directly to the output stream or writer.
@@ -321,33 +321,33 @@
 		<li>
 			New methods on <del>ObjectList</del>:
 			<ul>
-				<li><del>ObjectList#get(int,Class) get(int,Class)</del>
-				<li>{@del oaj.ObjectList#get(int,Type,Type...) get(int,Type,Type...)}
-				<li><del>ObjectList#getMap(int,Class,Class) getMap(int,Class,Class)</del>
-				<li><del>ObjectList#getList(int,Class) getList(int,Class)</del>
+				<li><del>ObjectList.get(int,Class) get(int,Class)</del>
+				<li><del> oaj.ObjectList.get(int,Type,Type...) get(int,Type,Type...)</del>
+				<li><del>ObjectList.getMap(int,Class,Class) getMap(int,Class,Class)</del>
+				<li><del>ObjectList.getList(int,Class) getList(int,Class)</del>
 			</ul>
 		<li>
 			New methods on <del>ObjectMap</del>:
 			<ul>
-				<li><del>ObjectMap#get(String,Class) get(String,Class)</del>
-				<li>{@del oaj.ObjectMap#get(String,Type,Type...) get(String,Type,Type...)}
-				<li><del>ObjectMap#getWithDefault(String,Object) getWithDefault(String,Object)</del>
-				<li><del>ObjectMap#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)</del>
-				<li>{@del oaj.ObjectMap#getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)}
-				<li><del>ObjectMap#getSwapped(String,PojoSwap) getSwapped(String,PojoSwap)</del>
-				<li><del>ObjectMap#getAt(String,Class) getAt(String,Class)</del>
-				<li>{@del oaj.ObjectMap#getAt(String,Type,Type...) getAt(String,Type,Type...)}
-				<li><del>ObjectMap#getMap(String,Class,Class,Map) getMap(String,Class,Class,Map)</del>
-				<li><del>ObjectMap#getList(String,Class,List) getList(String,Class,List)</del>
+				<li><del>ObjectMap.get(String,Class) get(String,Class)</del>
+				<li><del> oaj.ObjectMap.get(String,Type,Type...) get(String,Type,Type...)</del>
+				<li><del>ObjectMap.getWithDefault(String,Object) getWithDefault(String,Object)</del>
+				<li><del>ObjectMap.getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)</del>
+				<li><del> oaj.ObjectMap.getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)</del>
+				<li><del>ObjectMap.getSwapped(String,PojoSwap) getSwapped(String,PojoSwap)</del>
+				<li><del>ObjectMap.getAt(String,Class) getAt(String,Class)</del>
+				<li><del> oaj.ObjectMap.getAt(String,Type,Type...) getAt(String,Type,Type...)</del>
+				<li><del>ObjectMap.getMap(String,Class,Class,Map) getMap(String,Class,Class,Map)</del>
+				<li><del>ObjectMap.getList(String,Class,List) getList(String,Class,List)</del>
 			</ul>
 		<li>
 			New methods on <del>PojoRest</del>:
 			<ul>
-				<li><del>PojoRest#get(String,Class) get(String,Class)</del>
-				<li>{@del oaj.utils.PojoRest#get(String,Type,Type...) get(String,Type,Type...)}
-				<li><del>PojoRest#getWithDefault(String,Object) getWithDefault(String,Object)</del>
-				<li><del>PojoRest#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)</del>
-				<li>{@del oaj.utils.PojoRest#getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)}
+				<li><del>PojoRest.get(String,Class) get(String,Class)</del>
+				<li><del> oaj.utils.PojoRest.get(String,Type,Type...) get(String,Type,Type...)</del>
+				<li><del>PojoRest.getWithDefault(String,Object) getWithDefault(String,Object)</del>
+				<li><del>PojoRest.getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)</del>
+				<li><del> oaj.utils.PojoRest.getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)</del>
 			</ul>
 		<li>
 			Fixed bug where {@link oaj.BeanSession#getMediaType()} wasn't returning a value.
@@ -368,7 +368,7 @@
 	<h5 class='topic w800'>juneau-dto</h5>
 	<ul class='spaced-list'>
 		<li>
-			{@link oaj.dto.html5.HtmlElementMixed.children(Object...)} can now take in collections
+			{@link oaj.dto.html5.HtmlElementMixed#children(Object...)} can now take in collections
 			of objects.
 		<li>
 			The DTO beans can now be serialized to strings of their typical language by calling the <c>toString()</c> method.
@@ -385,25 +385,25 @@
 			<ul>
 				<li>The <del>RestServlet.init(ServletConfig)</del>method is now final and can
 					no longer be extended.
-					<br>Instead, use {@link oajr.annotation.HookEvent#INIT} or 
-					{@link oajr.annotation.HookEvent#POST_INIT} for initialization.
+					<br>Instead, use <del>HookEvent.INIT</del> or 
+					<del>HookEvent.POST_INIT</del> for initialization.
 				<li>The following methods on <del>RestServlet</del> have been removed:
 					<ul>
 						<li><c>init(RestConfig)</c> 
-							- Use {@link oajr.annotation.HookEvent#INIT} instead.
+							- Use <del>HookEvent.INIT</del> instead.
 						<li><c>onSuccess(RestRequest, RestResponse, long)</c>
-							- Use {@link oajr.annotation.HookEvent#END_CALL} instead.
+							- Use <del>HookEvent.END_CALL</del> instead.
 						<li><c>onPreCall(RestRequest)</c>
-							- Use {@link oajr.annotation.HookEvent#PRE_CALL} instead.
+							- Use <del>HookEvent.PRE_CALL</del> instead.
 						<li><c>onPostCall(RestRequest, RestResponse)</c>
-							- Use {@link oajr.annotation.HookEvent#POST_CALL} instead.
+							- Use <del>HookEvent.POST_CALL</del> instead.
 					</ul> 	
 			</ul>
 		<li>
 			Simplified {@link oajr.widget.MenuItemWidget}.
 			<br>Exposes an abstract method <del>getContent(RestRequest)</del> that
 			can return raw HTML via readers or char-sequences, or any other object (such as HTML5 beans) that will
-			get converted to HTML using {@link oaj.html.HtmlSerializer.DEFAULT}.
+			get converted to HTML using {@link oaj.html.HtmlSerializer#DEFAULT}.
 		<li>
 			<del>RestResourceResolver</del> instances are now inherited from parent resources to child resources
 			unless explicitly overridden at the child level.
@@ -441,9 +441,9 @@
 			The following implementation classes can now be defined as non-static inner classes of servlets/resources:
 			<ul>
 				<li>{@link oajr.widget.Widget}
-				<li>{@link oajr.RestConverter}
+				<li><del>RestConverter</del>
 				<li><del>RestGuard</del>
-				<li>{@link oajr.ResponseHandler}
+				<li><del>ResponseHandler</del>
 				<li><del>RestCallHandler</del>
 				<li><del>RestInfoProvider</del>
 				<li><del>RestResourceResolver</del>
@@ -487,7 +487,7 @@
 		<li>
 			New methods on {@link oaj.microservice.Microservice}:
 			<ul>
-				<li>{@link oaj.microservice.Microservice.getInstance() getInstance()}
+				<li>{@link oaj.microservice.Microservice#getInstance() getInstance()}
 			</ul>
 		<li>
 			New class <del>JettyLogger</del> for directing Jetty logging to the

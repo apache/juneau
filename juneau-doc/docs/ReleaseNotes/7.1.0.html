@@ -55,7 +55,7 @@
 					Session objects also now have a consistent class hierarchy.
 					<br>For example, the class hierarchy of <c>JsonSerializerSession</c> is now:
 					<ul class='doctree'>
-						<li class='jac'>{@link oaj.Session}
+						<li class='jac'><del>Session</del>
 						<ul>
 							<li class='jc'>{@link oaj.BeanSession}
 							<ul>
@@ -87,8 +87,8 @@
 					</ul>
 					Builder objects are used for building up and creating <c>Context</c> objects.
 				<li>
-					The {@link oaj.PropertyStore} class has been completely rewritten.
-					It is now a read-only configuration store build using the {@link oaj.PropertyStoreBuilder}
+					The <del>PropertyStore</del> class has been completely rewritten.
+					It is now a read-only configuration store build using the <del>PropertyStoreBuilder</del>
 					class.
 					<br>The previous <c>PropertyStore</c> class was overly-complicated with many read/write
 					locks to ensure thread-safety. 
@@ -118,7 +118,7 @@
 			</ul>
 			Code for marshalling of parts have been removed from the URL-Encoding serializers and parsers.
 		<li>	
-			<c>Context.Builder.property(String,Object)</c> renamed to <del>Builder#set(String,Object)</del>.
+			<c>Context.Builder.property(String,Object)</c> renamed to <del>Builder.set(String,Object)</del>.
 		<li>
 			<c>ResourceFinder</c> class has been replaced with the following:
 			<ul>
@@ -221,41 +221,41 @@
 			The <js>"$R{...}"</js> variable has been split into the following:
 			<ul>
 				<li><js>"$RA{key1[,key2...]}"</js> - {@link oajr.vars.RequestAttributeVar}, first non-null value returned by <c>HttpServletRequest.getAttribute(String)</c>.
-				<li><js>"$RF{key1[,key2...]}"</js> - {@link oajr.vars.RequestFormDataVar}, first non-null value returned by <del>RestRequest#getFormData(String)</del>.
+				<li><js>"$RF{key1[,key2...]}"</js> - {@link oajr.vars.RequestFormDataVar}, first non-null value returned by <del>RestRequest.getFormData(String)</del>.
 				<li><js>"$RH{key1[,key2...]}"</js> - {@link oajr.vars.RequestHeaderVar}, first non-null value returned by {@link oajr.RestRequest#getHeader(String)}.
-				<li><js>"$RI{key1[,key2...]}"</js> - <del>RestInfoVar</del>, first non-null value returned by <del>RestRequest#getInfoProvider()</del>.
+				<li><js>"$RI{key1[,key2...]}"</js> - <del>RestInfoVar</del>, first non-null value returned by <del>RestRequest.getInfoProvider()</del>.
 					<br>The possible values are:
 					<ul>
 						<li><js>"contact"</js> - Value returned by {@link oaj.dto.swagger.Info#getContact()}
-						<li><js>"description"</js> - Value returned by <del>RestInfoProvider#getDescription(RestRequest)</del>
+						<li><js>"description"</js> - Value returned by <del>RestInfoProvider.getDescription(RestRequest)</del>
 						<li><js>"externalDocs"</js> - Value returned by {@link oaj.dto.swagger.Swagger#getExternalDocs()}
 						<li><js>"license"</js> - Value returned by {@link oaj.dto.swagger.Info#getLicense()}
-						<li><js>"methodDescription"</js> - Value returned by <del>RestInfoProvider#getMethodDescription(Method,RestRequest)</del>
-						<li><js>"methodSummary"</js> - Value returned by <del>RestInfoProvider#getMethodSummary(Method,RestRequest)</del>
-						<li><js>"siteName"</js> - Value returned by <del>RestInfoProvider#getSiteName(RestRequest)</del>
+						<li><js>"methodDescription"</js> - Value returned by <del>RestInfoProvider.getMethodDescription(Method,RestRequest)</del>
+						<li><js>"methodSummary"</js> - Value returned by <del>RestInfoProvider.getMethodSummary(Method,RestRequest)</del>
+						<li><js>"siteName"</js> - Value returned by <del>RestInfoProvider.getSiteName(RestRequest)</del>
 						<li><js>"tags"</js> - Value returned by {@link oaj.dto.swagger.Swagger#getTags()}
 						<li><js>"termsOfService"</js> - Value returned by {@link oaj.dto.swagger.Info#getTermsOfService()}
-						<li><js>"title"</js> - See <del>RestInfoProvider#getTitle(RestRequest)</del>
+						<li><js>"title"</js> - See <del>RestInfoProvider.getTitle(RestRequest)</del>
 						<li><js>"version"</js> - See {@link oaj.dto.swagger.Info#getVersion()}
 					</ul>					
-				<li><js>"$RP{key1[,key2...]}"</js> - {@link oajr.vars.RequestPathVar}, first non-null value returned by <del>RestRequest#getPath(String)</del>.
-				<li><js>"$RQ{key1[,key2...]}"</js> - {@link oajr.vars.RequestQueryVar}, first non-null value returned by <del>RestRequest#getQuery(String)</del>.
+				<li><js>"$RP{key1[,key2...]}"</js> - {@link oajr.vars.RequestPathVar}, first non-null value returned by <del>RestRequest.getPath(String)</del>.
+				<li><js>"$RQ{key1[,key2...]}"</js> - {@link oajr.vars.RequestQueryVar}, first non-null value returned by <del>RestRequest.getQuery(String)</del>.
 				<li><js>"$R{key1[,key2...]}"</js> - {@link oajr.vars.RequestVar}, first non-null other request variable.
 					<br>The possible values are:
 					<ul>
 						<li><js>"contextPath"</js> - Value returned by {@link oajr.RestRequest#getContextPath()}
 						<li><js>"method"</js> - Value returned by {@link oajr.RestRequest#getMethod()}
-						<li><js>"methodDescription"</js> - Value returned by <del>RestRequest#getMethodDescription()</del>
-						<li><js>"methodSummary"</js> - Value returned by <del>RestRequest#getMethodSummary()</del>
+						<li><js>"methodDescription"</js> - Value returned by <del>RestRequest.getMethodDescription()</del>
+						<li><js>"methodSummary"</js> - Value returned by <del>RestRequest.getMethodSummary()</del>
 						<li><js>"pathInfo"</js> - Value returned by {@link oajr.RestRequest#getPathInfo()}
 						<li><js>"requestParentURI"</js> - Value returned by {@link oaj.UriContext#getRootRelativePathInfoParent()}
 						<li><js>"requestURI"</js> - Value returned by {@link oajr.RestRequest#getRequestURI()}
-						<li><js>"resourceDescription"</js> - Value returned by <del>RestRequest#getResourceDescription()</del>
-						<li><js>"resourceTitle"</js> - See <del>RestRequest#getResourceTitle()</del>
+						<li><js>"resourceDescription"</js> - Value returned by <del>RestRequest.getResourceDescription()</del>
+						<li><js>"resourceTitle"</js> - See <del>RestRequest.getResourceTitle()</del>
 						<li><js>"servletParentURI"</js> - Value returned by {@link oaj.UriContext#getRootRelativeServletPathParent()}
 						<li><js>"servletPath"</js> - See {@link oajr.RestRequest#getServletPath()}
 						<li><js>"servletURI"</js> - See {@link oaj.UriContext#getRootRelativeServletPath()}
-						<li><js>"siteName"</js> - See <del>RestRequest#getSiteName()</del>
+						<li><js>"siteName"</js> - See <del>RestRequest.getSiteName()</del>
 					</ul>
 			</ul>
 		<li>
@@ -263,33 +263,33 @@
 			<br>Settings on {@link oajr.RestContext} objects can now be set declaratively through the 
 				following new properties:
 			<ul>
-				<li><del>RestContext#REST_allowHeaderParams</del>
-				<li><del>RestContext#REST_allowBodyParam</del>
-				<li><del>RestContext#REST_allowedMethodParams REST_allowedMethodParams</del>
-				<li><del>RestContext#REST_renderResponseStackTraces REST_renderResponseStackTraces</del>
-				<li><del>RestContext#REST_useStackTraceHashes</del>
-				<li><del>RestContext#REST_defaultCharset REST_defaultCharset</del>
-				<li><del>RestContext#REST_maxInput REST_maxInput</del>
-				<li><del>RestContext#REST_paramResolvers</del>
-				<li><del>RestContext#REST_converters REST_converters</del>
-				<li><del>RestContext#REST_guards REST_guards</del>
-				<li><del>RestContext#REST_responseHandlers</del>
-				<li><del>RestContext#REST_defaultRequestHeaders</del>
-				<li><del>RestContext#REST_defaultResponseHeaders</del>
-				<li><del>RestContext#REST_produces REST_produces</del>
-				<li><del>RestContext#REST_consumes REST_consumes</del>
-				<li><del>RestContext#REST_clientVersionHeader REST_clientVersionHeader</del>
-				<li><del>RestContext#REST_resourceResolver</del>
-				<li><del>RestContext#REST_logger</del>
-				<li><del>RestContext#REST_callHandler</del>
-				<li><del>RestContext#REST_infoProvider</del>
-				<li><del>RestContext#REST_path REST_path</del>
-				<li><del>RestContext#REST_contextPath</del>
-				<li><del>RestContext#REST_staticFiles REST_staticFiles</del>
-				<li><del>RestContext#REST_staticFileResponseHeaders</del>
-				<li><del>RestContext#REST_classpathResourceFinder</del>
-				<li><del>RestContext#REST_useClasspathResourceCaching</del>
-				<li><del>RestContext#REST_widgets</del>
+				<li><del>RestContext.REST_allowHeaderParams</del>
+				<li><del>RestContext.REST_allowBodyParam</del>
+				<li><del>RestContext.REST_allowedMethodParams REST_allowedMethodParams</del>
+				<li><del>RestContext.REST_renderResponseStackTraces REST_renderResponseStackTraces</del>
+				<li><del>RestContext.REST_useStackTraceHashes</del>
+				<li><del>RestContext.REST_defaultCharset REST_defaultCharset</del>
+				<li><del>RestContext.REST_maxInput REST_maxInput</del>
+				<li><del>RestContext.REST_paramResolvers</del>
+				<li><del>RestContext.REST_converters REST_converters</del>
+				<li><del>RestContext.REST_guards REST_guards</del>
+				<li><del>RestContext.REST_responseHandlers</del>
+				<li><del>RestContext.REST_defaultRequestHeaders</del>
+				<li><del>RestContext.REST_defaultResponseHeaders</del>
+				<li><del>RestContext.REST_produces REST_produces</del>
+				<li><del>RestContext.REST_consumes REST_consumes</del>
+				<li><del>RestContext.REST_clientVersionHeader REST_clientVersionHeader</del>
+				<li><del>RestContext.REST_resourceResolver</del>
+				<li><del>RestContext.REST_logger</del>
+				<li><del>RestContext.REST_callHandler</del>
+				<li><del>RestContext.REST_infoProvider</del>
+				<li><del>RestContext.REST_path REST_path</del>
+				<li><del>RestContext.REST_contextPath</del>
+				<li><del>RestContext.REST_staticFiles REST_staticFiles</del>
+				<li><del>RestContext.REST_staticFileResponseHeaders</del>
+				<li><del>RestContext.REST_classpathResourceFinder</del>
+				<li><del>RestContext.REST_useClasspathResourceCaching</del>
+				<li><del>RestContext.REST_widgets</del>
 				<li><del>RestContext.REST_mimeTypes</del>
 			</ul>
 		<li>
@@ -298,18 +298,18 @@
 				<li>Syntax on <del>@RestResource(staticFiles)</del>has been simplified, and
 					now allows you to specify response headers in the strings.
 				<li>Response headers for static files can also be configured through 
-					<del>RestContext#REST_staticFileResponseHeaders</del>
+					<del>RestContext.REST_staticFileResponseHeaders</del>
 				<li>Static file in-memory caching now configurable through 
-					<del>RestContext#REST_useClasspathResourceCaching</del>
+					<del>RestContext.REST_useClasspathResourceCaching</del>
 				<li>Static file retrieval can be customized through 
-					<del>RestContext#REST_classpathResourceFinder</del>
+					<del>RestContext.REST_classpathResourceFinder</del>
 			</ul>
 		<li>
 			Eliminated the <c>RestMatcherReflecting</c> class.
-			<br>You can now simply create a {@link oajr.RestMatcher} that has a public constructor that 
+			<br>You can now simply create a <del>RestMatcher</del> that has a public constructor that 
 			takes in the server and method arguments.
 		<li>
-			<del>@RestResource.allowMethodParam</del>renamed to <del>RestResource#allowedMethodParams</del>.
+			<del>@RestResource.allowMethodParam</del>renamed to <del>RestResource.allowedMethodParams</del>.
 		<li>
 			<c>@RestMethod.serializersInherit</c> and <c>@RestMethod.parsersInherit</c> replaced with
 			simplified <del>@RestMethod(inherit)</del>. 
@@ -402,7 +402,7 @@
 				<li><del>StreamResourceBuilder</del>
 			</ul>
 		<li>
-			{@link oajr.RestResponse.getNegotiatedOutputStream()} now returns a 
+			{@link oajr.RestResponse#getNegotiatedOutputStream()} now returns a 
 			<del>FinishableServletOutputStream</del>and {@link oajr.RestResponse#getNegotiatedWriter()}
 			now returns a <del>FinishablePrintWriter</del> that allows you to finish the output
 			without closing the stream.
@@ -440,7 +440,7 @@
 		<li>
 			New methods on <del>RestCall</del>class:
 			<ul>
-				<li><del>RestCall#getResponseHeader(String) getResponseHeader(String)</del>
+				<li><del>RestCall.getResponseHeader(String) getResponseHeader(String)</del>
 				<li><del>RestCall.getResponseCode() getResponseCode()</del>
 			</ul>
 		<li>

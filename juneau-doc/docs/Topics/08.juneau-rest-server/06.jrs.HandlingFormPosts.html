@@ -84,8 +84,8 @@
 			|	<jk>public class</jk> SpringBootAppConfig {
 			|			
 			|		<ja>@Bean</ja>
-			|		<jk>public</jk> FilterRegistrationBean&lt;HiddenHttpMethodFilter> registration(HiddenHttpMethodFilter <jv>filter</jv>) {
-			|			FilterRegistrationBean&lt;HiddenHttpMethodFilter> <jv>reg</jv> = <jk>new</jk> FilterRegistrationBean&gt;>(<jv>filter</jv>);
+			|		<jk>public</jk> FilterRegistrationBean&lt;HiddenHttpMethodFilter&gt; registration(HiddenHttpMethodFilter <jv>filter</jv>) {
+			|			FilterRegistrationBean&lt;HiddenHttpMethodFilter&gt; <jv>reg</jv> = <jk>new</jk> FilterRegistrationBean&lt;&gt;(<jv>filter</jv>);
 			|			<jv>reg</jv>.setEnabled(<jk>false</jk>);
 			|			<jk>return</jk> <jv>reg</jv>;
 			|		}

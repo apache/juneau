@@ -57,12 +57,12 @@
 			<del>SerializerContext.SERIALIZER_addBeanTypeProperties</del>setting
 			for individual serializers in a serializer group:
 			<ul>
-				<li><del>HtmlSerializerContext#HTML_addBeanTypeProperties</del>
-				<li><del>JsonSerializerContext#JSON_addBeanTypeProperties</del>
-				<li><del>MsgPackSerializerContext#MSGPACK_addBeanTypeProperties</del>
-				<li><del>UonSerializerContext#UON_addBeanTypeProperties</del>
-				<li><del>XmlSerializerContext#XML_addBeanTypeProperties</del>
-				<li><del>RdfSerializerContext#RDF_addBeanTypeProperties</del>
+				<li><del>HtmlSerializerContext.HTML_addBeanTypeProperties</del>
+				<li><del>JsonSerializerContext.JSON_addBeanTypeProperties</del>
+				<li><del>MsgPackSerializerContext.MSGPACK_addBeanTypeProperties</del>
+				<li><del>UonSerializerContext.UON_addBeanTypeProperties</del>
+				<li><del>XmlSerializerContext.XML_addBeanTypeProperties</del>
+				<li><del>RdfSerializerContext.RDF_addBeanTypeProperties</del>
 			</ul>
 		<li>UON notation serializers and parsers moved into the new <c>org.apache.juneau.uon</c> package.
 		<li>New {@link oaj.xml.annotation.XmlFormat#VOID} format to identify HTML void elements.
@@ -104,10 +104,10 @@
 			<br><ja>@Remoteable</ja> annotation has been moved to this package.
 		<li>Updated doc: <dc>6 - Remoteable Services</dc>
 		<li>New doc: <dc>6.1 -  Interface proxies against 3rd-party REST interfaces</dc>
-		<li>New URL-encoding serializer setting: <del>UrlEncodingSerializerContext#URLENC_paramFormat</del>.
+		<li>New URL-encoding serializer setting: <del>UrlEncodingSerializerContext.URLENC_paramFormat</del>.
 		<li>New methods on {@link oaj.urlencoding.UrlEncodingSerializer.Builder}:
 		<ul>
-			<li><del>Builder#paramFormat(String)</del>	
+			<li><del>Builder.paramFormat(String)</del>	
 			<li><del>Builder.plainTextParams()</del>	
 		</ul> 		
 	</ul>
@@ -225,40 +225,40 @@
 		<ul>
 			<li><del>RestClient.getRemoteableProxy(Class,Object)</del>- For interface proxies defined using <c><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</c>.
 			<li><del>RestClient.getRemoteableProxy(Class,Object,Serializer,Parser)</del>- Same as above but overrides the serializer and parser defined on the client.
-			<li><del>RestClient#doPost(Object)</del>
+			<li><del>RestClient.doPost(Object)</del>
 			<li><del>RestClient.doCall(HttpMethod,Object,Object)</del> - Can now pass in instances of <del>NameValuePairs</del>for easy form posts.
 				<br>This extends to all methods that take in the input.
 		</ul>
 		<li>New methods on <del>RestCall</del>:
 			<ul>
-				<li><del>RestCall#uri(Object) uri(Object)</del>
+				<li><del>RestCall.uri(Object) uri(Object)</del>
 				<li><del>query(String,Object,boolean,PartSerializer)</del>
-				<li><del>RestCall#query(String,Object) query(String,Object)</del>
-				<li><del>RestCall#queryIfNE(String,Object) queryIfNE(String,Object)</del>
-				<li><del>RestCall#query(Map) query(Map)</del>
-				<li><del>RestCall#queryIfNE(Map) queryIfNE(Map)</del>
-				<li><del>RestCall#query(String) query(String)</del>
+				<li><del>RestCall.query(String,Object) query(String,Object)</del>
+				<li><del>RestCall.queryIfNE(String,Object) queryIfNE(String,Object)</del>
+				<li><del>RestCall.query(Map) query(Map)</del>
+				<li><del>RestCall.queryIfNE(Map) queryIfNE(Map)</del>
+				<li><del>RestCall.query(String) query(String)</del>
 				<li><del>formData(String,Object,boolean,PartSerializer)</del>
-				<li><del>RestCall#formData(String,Object) formData(String,Object)</del>
-				<li><del>RestCall#formDataIfNE(String,Object) formDataIfNE(String,Object)</del>
-				<li><del>RestCall#formData(Map) formData(Map)</del>
-				<li><del>RestCall#formDataIfNE(Map) formDataIfNE(Map)</del>
+				<li><del>RestCall.formData(String,Object) formData(String,Object)</del>
+				<li><del>RestCall.formDataIfNE(String,Object) formDataIfNE(String,Object)</del>
+				<li><del>RestCall.formData(Map) formData(Map)</del>
+				<li><del>RestCall.formDataIfNE(Map) formDataIfNE(Map)</del>
 				<li><del>header(String,Object,boolean,PartSerializer)</del>
-				<li><del>RestCall#header(String,Object) header(String,Object)</del>
-				<li><del>RestCall#headerIfNE(String,Object) headerIfNE(String,Object)</del>
-				<li><del>RestCall#headers(Map) headers(Map)</del>
-				<li><del>RestCall#headersIfNE(Map) headersIfNE(Map)</del>
-				<li><del>RestCall#host(String) host(String)</del>
-				<li><del>RestCall#port(int) port(int)</del>
-				<li><del>RestCall#userInfo(String,String) userInfo(String,String)</del>
-				<li><del>RestCall#userInfo(String) userInfo(String)</del>
-				<li><del>RestCall#scheme(String) scheme(String)</del>
+				<li><del>RestCall.header(String,Object) header(String,Object)</del>
+				<li><del>RestCall.headerIfNE(String,Object) headerIfNE(String,Object)</del>
+				<li><del>RestCall.headers(Map) headers(Map)</del>
+				<li><del>RestCall.headersIfNE(Map) headersIfNE(Map)</del>
+				<li><del>RestCall.host(String) host(String)</del>
+				<li><del>RestCall.port(int) port(int)</del>
+				<li><del>RestCall.userInfo(String,String) userInfo(String,String)</del>
+				<li><del>RestCall.userInfo(String) userInfo(String)</del>
+				<li><del>RestCall.scheme(String) scheme(String)</del>
 			</ul>
 		<li>New methods added to {@link oajrc.RestClient.Builder}:
 			<ul>
 				<li>{@link oajrc.RestClient.Builder#executorService(ExecutorService,boolean) executorService(ExecutorService,boolean)}
-				<li><del>Builder#paramFormat(String)</del>
-				<li><del>Builder#plainTextParams()</del>
+				<li><del>Builder.paramFormat(String)</del>
+				<li><del>Builder.plainTextParams()</del>
 				<li>{@link oajrc.RestClient.Builder#noTrace() noTrace()} - Adds a <c>No-Trace: true</c> header on all requests to prevent
 					the servlet from logging errors.
 					<br>Useful for testing scenarios when you don't want the console to end up showing errors done on purpose.
@@ -266,10 +266,10 @@
 			</ul>
 		<li>New methods added/updated to <del>RestCall</del>:
 			<ul>
-				<li><del>RestCall#runFuture() runFuture()</del>
-				<li><del>RestCall#getResponseFuture(Class) getResponseFuture(Class)</del>
-				<li>{@del oajrc.RestCall#getResponseFuture(Type,Type...) getResponseFuture(Type,Type...)}
-				<li><del>RestCall#getResponseAsStringFuture() getResponseAsStringFuture()</del>
+				<li><del>RestCall.runFuture() runFuture()</del>
+				<li><del>RestCall.getResponseFuture(Class) getResponseFuture(Class)</del>
+				<li><del> oajrc.RestCall.getResponseFuture(Type,Type...) getResponseFuture(Type,Type...)</del>
+				<li><del>RestCall.getResponseAsStringFuture() getResponseAsStringFuture()</del>
 				<li><del>RestCall.serializer(Serializer) serializer(Serializer)</del>- Override the serializer defined on the client for a single call.
 				<li><del>RestCall.parser(Parser) parser(Parser)</del> - Override the parser defined on the client for a single call.
 				<li><del>input(Object)</del>- Now accepts instances of <del>NameValuePairs</del>.

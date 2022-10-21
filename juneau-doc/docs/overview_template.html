@@ -24,44 +24,15 @@
 	<link rel='icon' type='image/png' href='http://www.apache.org/favicons/favicon-16x16.png' sizes='16x16'>
 	<link rel='shortcut icon' href='http://www.apache.org/favicons/favicon.ico'>
 	<style type='text/css'>
-		/* For viewing in file system and page designer */
-		@IMPORT url('../../../../juneau-core/java/src/main/javadoc/javadoc.css');
-		@IMPORT url('../../../../juneau-core/java/src/main/javadoc/resources/juneau-doc.css');
-		@IMPORT url('../../../../juneau-core/java/src/main/javadoc/resources/juneau-code.css');
 		body { 
 			margin: 20px; 
 		}	
 		.spaced-list li { padding:5px; }
 		.footer .spaced-list ul { margin:0 }
 	</style>
-	<script type='text/javascript'>
-		/* Replace all @code and @link tags. */	
-		window.onload = function() {
-			document.body.innerHTML = document.body.innerHTML.replace(/\{\@code ([^\}]+)\}/g, '<code>$1<\/code>');
-			document.body.innerHTML = document.body.innerHTML.replace(/\{\@link (([^\}]+)\.)?([^\.\}]+)\}/g, '<code>$3<\/code>');
-		}
-	</script>
 </head>
 <body>
 <h1 class='title'>Apache Juneau <juneauVersion>9.0.0</juneauVersion> Documentation</h1>
-
-<script type='text/javascript'>
-	function toggle(x) {
-		var div = x.nextSibling;
-		while (div != null && div.nodeType != 1)
-			div = div.nextSibling;
-		if (div != null) {
-			var d = div.style.display;
-			if (d == 'block' || d == '') {
-				div.style.display = 'none';
-				x.className += " closed";
-			} else {
-				div.style.display = 'block';
-				x.className = x.className.replace(/(?:^|\s)closed(?!\S)/g , '' );
-			}
-		}
-	}
-</script>
 
 <a href='#TOC' id='TOC'></a><h5 class='toc'>Table of Contents</h5>
 {TOC-CONTENTS}

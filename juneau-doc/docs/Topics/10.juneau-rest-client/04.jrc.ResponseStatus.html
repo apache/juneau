@@ -26,7 +26,7 @@
 			<li class='jm'><c>{@link oajrc.RestResponse#getStatusLine() getStatusLine()} <jk>returns</jk> {@link org.apache.http.StatusLine}</c>
 			<li class='jm'><c>{@link oajrc.RestResponse#getStatusCode() getStatusCode()} <jk>returns</jk> <jk>int</jk></c>
 			<li class='jm'><c>{@link oajrc.RestResponse#getReasonPhrase() getReasonPhrase()} <jk>returns</jk> String</c>
-			<li class='jm'><c>{@link oajrc.RestResponse#assertStatus() assertStatus()} <jk>returns</jk> {@link oajrc.RestResponseStatusLineAssertion}</c>
+			<li class='jm'><c>{@link oajrc.RestResponse#assertStatus() assertStatus()} <jk>returns</jk> {@link oajrc.assertion.FluentResponseStatusLineAssertion}</c>
 		</ul>
 	</ul>
 	
@@ -71,7 +71,7 @@
 		|	<jc>// Status assertion using a predicate.</jc>
 		|	String <jv>content2</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
 		|		.run()
-		|		.assertStatus().asCode().is(<jv>x</jv> -> <jv>x</jv>&lt;400)
+		|		.assertStatus().asCode().is(<jv>x</jv> -&gt; <jv>x</jv>&lt;400)
 		|		.getContent().asString();
 	</p>
 </div>

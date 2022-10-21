@@ -21,12 +21,12 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>Implemented <c>org.apache.juneau.urlencoding.UrlEncodingParser.parseArgs(Reader,int,ClassMeta[])</c>.
-		<li><c>name</c> parameter of <del>ResourceDescription#ResourceDescription(String,String,String)</del>. 
+		<li><c>name</c> parameter of <del>ResourceDescription.ResourceDescription(String,String,String)</del>. 
 			is now automatically URL-encoded so that the name can contain special characters (e.g. <js>"foo/bar(baz)"</js>).
 		<li>Support for URL-matching and path info containing encoded characters (e.g. <js>'/'</js>) now supported.	
 		<li>Removed some lazy-initialization of bean information in {@link oaj.ClassMeta} that allowed the removal of
 			some synchronized blocks.
-		<li>Improved support of <del>BeanContext#getClassMetaFromString(String)</del>.
+		<li>Improved support of <del>BeanContext.getClassMetaFromString(String)</del>.
 			Now supports primitive arrays such as <js>"long[]"</js> in addition to the previous support for the equivalent <js>"[J"</js>.
 		<li>Various new convenience methods added to {@link oaj.internal.StringUtils} and {@link oaj.internal.ClassUtils}.
 	</ul>	

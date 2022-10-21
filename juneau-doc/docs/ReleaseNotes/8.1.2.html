@@ -25,23 +25,23 @@
 		<li>
 			Support for read-only and write-only properties.
 			<ul>
-				<li class='ja'><del>Bean#bpro()</del>
-				<li class='ja'><del>Bean#bpwo()</del>
+				<li class='ja'><del>Bean.bpro()</del>
+				<li class='ja'><del>Bean.bpwo()</del>
 				<li class='ja'>{@link oaj.annotation.Beanp#ro()}
 				<li class='ja'>{@link oaj.annotation.Beanp#wo()}
 				<li class='jf'><del>BEAN_bpro</del>
 				<li class='jf'><del>BEAN_bpwo</del>
-				<li class='jm'><del>Builder#bpro(Map)</del>
-				<li class='jm'><del>Builder#bpwo(Map)</del>
+				<li class='jm'><del>Builder.bpro(Map)</del>
+				<li class='jm'><del>Builder.bpwo(Map)</del>
 			</ul>
 		<li>
 			New convenience methods:
 			<ul>	
-				<li class='jm'><del>ObjectMap#parse(CharSequence)</del>
+				<li class='jm'><del>ObjectMap.parse(CharSequence)</del>
 				<li class='jm'><del>ObjectList.parse(CharSequence)</del>
 			</ul>
 		<li>
-			<del>CharMarshall</del>and {@link oaj.marshall.StreamMarshall} now have public constructors.
+			<del>CharMarshall</del>and <del>StreamMarshall</del> now have public constructors.
 		<li>
 			{@link oaj.annotation.Beanp @Beanp} replaces <del>BeanProperty @BeanProperty</del>.
 		<li>
@@ -66,7 +66,7 @@
 	<ul class='spaced-list'>
 		<li>
 			{@link oajrc.RestClient} is now extendible.  The constructor has been made public and simplified to:
-			{@del oajrc.RestClient#RestClient(RestClient.Builder)}.
+			<del> oajrc.RestClient.RestClient(RestClient.Builder)</del>.
 		<li>
 			Duplicate methods between {@link oajrc.RestClient.Builder} and {@link org.apache.http.impl.client.HttpClientBuilder}
 			have been made deprecated on the former.  This eliminates the need to try to keep the two builder classes in

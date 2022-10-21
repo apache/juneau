@@ -28,7 +28,7 @@
 				<li>More consistent handling of comma-delimited lists of objects.
 				<li>New methods in <del>ConfigFile</del>:
 					<ul>
-						<li><del>ConfigFile#getStringArray(String)</del>,<del>ConfigFile#getStringArray(String,String[])</del>
+						<li><del>ConfigFile.getStringArray(String)</del>,<del>ConfigFile.getStringArray(String,String[])</del>
 						<li><del>ConfigFile.getSectionAsBean(String,Class)</del>- Instantiate a new bean with property values in the specified section..
 						<li><del>ConfigFile.writeProperties(String,Object,boolean,Class[])</del>- Copy the properties in a config file section into properties on an existing bean or POJO.
 						<li><del>ConfigFile.getSectionMap(String)</del>- Get all the resolved values in a section.
@@ -36,15 +36,15 @@
 						<li><del>ConfigFile.isEncoded(String)</del>
 						<li><del>ConfigFile.addListener(ConfigFileListener)</del>- Listen for modification events on the config file.
 						<li><del>ConfigFile.merge(ConfigFile)</del>- Merge the contents of another config file into this config file.
-						<li><del>ConfigFile#getResolving()</del>, <del>ConfigFile.getResolving(StringVarResolver)</del>- Return an instance of the config file that resolves string variables.
+						<li><del>ConfigFile.getResolving()</del>, <del>ConfigFile.getResolving(StringVarResolver)</del>- Return an instance of the config file that resolves string variables.
 							Much more efficient than the previous design since the same underlying config file object is shared.
 						<li><del>ConfigFile.toWritable()</del> - Wraps the config file in a <del>Writable</del>interface so that it can be serialized by the REST interface as a plain-text INI file instead of as a serialized POJO.
 						<li><del>ConfigFile.getInt(String)</del>- Now supports <js>"M"</js> and <js>"K"</js> to identify millions and thousands.
 					</ul>
 				<li>New methods in <del>ConfigMgr</del>:
 					<ul>
-						<li><del>ConfigMgr#create()</del>, <del>ConfigMgr#create(Reader)</del>, <del>ConfigMgr#create(File)</del>
-						<li><del>ConfigMgr#deleteAll()</del>	
+						<li><del>ConfigMgr.create()</del>, <del>ConfigMgr.create(Reader)</del>, <del>ConfigMgr.create(File)</del>
+						<li><del>ConfigMgr.deleteAll()</del>	
 					</ul>
 				<li>New methods in <del>Section</del>:
 					<ul>
@@ -100,44 +100,44 @@
 			</ul> 
 		<li>New fields on <del>ObjectList</del>:
 			<ul>
-				<li><del>ObjectList#EMPTY_LIST</del>
+				<li><del>ObjectList.EMPTY_LIST</del>
 			</ul>
 		<li>New fields and methods on <del>ObjectMap</del>:
 			<ul>
-				<li><del>ObjectMap#EMPTY_MAP</del>
-				<li><del>ObjectMap#getStringArray(String)</del>
-				<li><del>ObjectMap#getStringArray(String,String[])</del>
-				<li><del>ObjectMap#putIfNull(String,Object)</del>
-				<li><del>ObjectMap#putIfEmpty(String,Object)</del>
+				<li><del>ObjectMap.EMPTY_MAP</del>
+				<li><del>ObjectMap.getStringArray(String)</del>
+				<li><del>ObjectMap.getStringArray(String,String[])</del>
+				<li><del>ObjectMap.putIfNull(String,Object)</del>
+				<li><del>ObjectMap.putIfEmpty(String,Object)</del>
 			</ul>
 		<li>New methods in {@link oaj.internal.ArrayUtils}:
 			<ul>
-				<li><del>ArrayUtils#contains(Object,Object[])</del>
-				<li><del>ArrayUtils#indexOf(Object,Object[])</del>
-				<li><del>ArrayUtils#toPrimitiveArray(Object)</del>
+				<li><del>ArrayUtils.contains(Object,Object[])</del>
+				<li><del>ArrayUtils.indexOf(Object,Object[])</del>
+				<li><del>ArrayUtils.toPrimitiveArray(Object)</del>
 			</ul>	
 		<li>New methods in {@link oaj.internal.IOUtils}:
 			<ul>
-				<li><del>IOUtils#pipe(Reader,Writer)</del>
+				<li><del>IOUtils.pipe(Reader,Writer)</del>
 				<li>{@link oaj.internal.IOUtils#read(File)}
-				<li><del>IOUtils#readFile(String)</del>
-				<li><del>IOUtils#write(File,Reader)</del>
+				<li><del>IOUtils.readFile(String)</del>
+				<li><del>IOUtils.write(File,Reader)</del>
 			</ul>
 		<li>New methods on <del>PojoRest</del>:
 			<ul>
-				<li><del>PojoRest#get(Class,String,Object)</del>
-				<li><del>PojoRest#getString(String)</del>
-				<li><del>PojoRest#getString(String,String)</del>
-				<li><del>PojoRest#getInt(String)</del>
-				<li><del>PojoRest#getInt(String,Integer)</del>
-				<li><del>PojoRest#getLong(String)</del>
-				<li><del>PojoRest#getLong(String,Long)</del>
-				<li><del>PojoRest#getBoolean(String)</del>
-				<li><del>PojoRest#getBoolean(String,Boolean)</del>
-				<li><del>PojoRest#getMap(String)</del>
-				<li><del>PojoRest#getMap(String,Map)</del>
-				<li><del>PojoRest#getList(String)</del>
-				<li><del>PojoRest#getList(String,List)</del>
+				<li><del>PojoRest.get(Class,String,Object)</del>
+				<li><del>PojoRest.getString(String)</del>
+				<li><del>PojoRest.getString(String,String)</del>
+				<li><del>PojoRest.getInt(String)</del>
+				<li><del>PojoRest.getInt(String,Integer)</del>
+				<li><del>PojoRest.getLong(String)</del>
+				<li><del>PojoRest.getLong(String,Long)</del>
+				<li><del>PojoRest.getBoolean(String)</del>
+				<li><del>PojoRest.getBoolean(String,Boolean)</del>
+				<li><del>PojoRest.getMap(String)</del>
+				<li><del>PojoRest.getMap(String,Map)</del>
+				<li><del>PojoRest.getList(String)</del>
+				<li><del>PojoRest.getList(String,List)</del>
 				<li><del>getObjectMap(String)</del>
 				<li><del>getObjectMap(String,ObjectMap)</del>
 				<li><del>getObjectList(String)</del>
@@ -145,27 +145,27 @@
 			</ul>
 		<li>New methods on <del>ProcBuilder</del>:
 			<ul>
-				<li><del>ProcBuilder#pipeTo(Writer,boolean)</del>
-				<li><del>ProcBuilder#pipeTo(Writer)</del>
-				<li><del>ProcBuilder#logTo(Writer,boolean)</del>
-				<li><del>ProcBuilder#logTo(Writer)</del>
-				<li><del>ProcBuilder#logTo(Level,Logger)</del>
-				<li><del>ProcBuilder#maxExitStatus(int)</del>
+				<li><del>ProcBuilder.pipeTo(Writer,boolean)</del>
+				<li><del>ProcBuilder.pipeTo(Writer)</del>
+				<li><del>ProcBuilder.logTo(Writer,boolean)</del>
+				<li><del>ProcBuilder.logTo(Writer)</del>
+				<li><del>ProcBuilder.logTo(Level,Logger)</del>
+				<li><del>ProcBuilder.maxExitStatus(int)</del>
 			</ul>
 		<li>New methods on {@link oaj.internal.StringUtils}:
 			<ul>
-				<li><del>StringUtils#isEmpty(Object)</del>
+				<li><del>StringUtils.isEmpty(Object)</del>
 				<li>{@link oaj.internal.StringUtils#nullIfEmpty(String)}
 				<li>{@link oaj.internal.StringUtils#base64EncodeToString(String)}
 				<li>{@link oaj.internal.StringUtils#base64Encode(byte[])}
 				<li>{@link oaj.internal.StringUtils#base64DecodeToString(String)}
 				<li>{@link oaj.internal.StringUtils#base64Decode(String)}
-				<li><del>StringUtils#generateUUID(int)</del>
+				<li><del>StringUtils.generateUUID(int)</del>
 				<li>{@link oaj.internal.StringUtils#trim(String)}
-				<li><del>StringUtils#parseISO8601Date(String)</del>
+				<li><del>StringUtils.parseISO8601Date(String)</del>
 				<li>{@link oaj.internal.StringUtils#replaceVars(String,Map)}
-				<li><del>StringUtils#pathStartsWith(String,String)</del>
-				<li><del>StringUtils#pathStartsWith(String,String[])</del>
+				<li><del>StringUtils.pathStartsWith(String,String)</del>
+				<li><del>StringUtils.pathStartsWith(String,String[])</del>
 			</ul>
 		<li>New <del>StringVar.doResolve(String)</del>method.
 		<li>New <del>StringVarResolver.DEFAULT</del>field.
@@ -186,14 +186,14 @@
 		<li>New <del>UrlEncodingSerializer.DEFAULT_SIMPLE_EXPANDED</del>serializer.
 		<li>Changes to <del>Args</del>:
 			<ul>
-				<li><c>getMainArg(int)</c> changed to <del>Args#getArg(int)</del>.  
+				<li><c>getMainArg(int)</c> changed to <del>Args.getArg(int)</del>.  
 					Non-existent arguments are returned as <jk>null</jk> instead of blank strings.  
 					This is more inline with the behavior of the rest of the library.
 				<li>New <del>Args.hasArg(int)</del> method.
 			</ul> 
 		<li>Removed <c>org.apache.juneau.utils.CharsetUtils</c> class.
 		<li>Removed <c>org.apache.juneau.utils.ConcurrentIdentityList</c> class.
-		<li>Fixed bug in {@link oaj.internal.MultiIterable} class.
+		<li>Fixed bug in <del>MultiIterable</del> class.
 		<li><del>PojoIntrospector</del> must now be instantiated with a <c>ReaderParser</c>.
 			Simplifies the API on the class.
 		<li><del>PojoRest</del> must now be instantiated with a <c>ReaderParser</c>.
@@ -205,7 +205,7 @@
 		<li><del>SerializerGroup</del> and <del>ParserGroup</del>now ignores <c>NoClassDefFoundErrors</c>
 			so that resources that include Jena support can continue to operate even if the Jena libraries are not present.
 		<li>New {@link oaj.internal.FileUtils#createTempFile(String)} method.
-		<li>New {@link oaj.utils.PojoQuery} modified to handle bean getters that throw exceptions.
+		<li>New <del>PojoQuery</del> modified to handle bean getters that throw exceptions.
 	</ul>
 	
 	<h5 class='topic w800'>Client</h5>
@@ -222,90 +222,90 @@
 		<li>Removed <c>org.apache.juneau.rest.client.LaxRedirectStrategy</c>.  Use HTTP Client equivalent.
 		<li>New methods on <del>RestCall</del>:
 			<ul>
-				<li><del>RestCall#addInterceptor(RestCallInterceptor)</del>
-				<li><del>RestCall#pipeTo(Writer)</del>
-				<li><del>RestCall#pipeTo(Writer,boolean)</del>
-				<li><del>RestCall#pipeTo(String,Writer,boolean)</del>
-				<li><del>RestCall#getWriter(String)</del>
-				<li><del>RestCall#pipeTo(OutputStream)</del>
-				<li><del>RestCall#pipeTo(OutputStream,boolean)</del>
-				<li><del>RestCall#pipeTo(String,OutputStream,boolean)</del>
-				<li><del>RestCall#getOutputStream(String)</del>
-				<li><del>RestCall#byLines()</del>
-				<li><del>RestCall#captureResponse()</del>
-				<li><del>RestCall#successPattern(String)</del>
-				<li><del>RestCall#failurePattern(String)</del>
-				<li><del>RestCall#addResponsePattern(ResponsePattern)</del>
+				<li><del>RestCall.addInterceptor(RestCallInterceptor)</del>
+				<li><del>RestCall.pipeTo(Writer)</del>
+				<li><del>RestCall.pipeTo(Writer,boolean)</del>
+				<li><del>RestCall.pipeTo(String,Writer,boolean)</del>
+				<li><del>RestCall.getWriter(String)</del>
+				<li><del>RestCall.pipeTo(OutputStream)</del>
+				<li><del>RestCall.pipeTo(OutputStream,boolean)</del>
+				<li><del>RestCall.pipeTo(String,OutputStream,boolean)</del>
+				<li><del>RestCall.getOutputStream(String)</del>
+				<li><del>RestCall.byLines()</del>
+				<li><del>RestCall.captureResponse()</del>
+				<li><del>RestCall.successPattern(String)</del>
+				<li><del>RestCall.failurePattern(String)</del>
+				<li><del>RestCall.addResponsePattern(ResponsePattern)</del>
 				<li><del>RestCall.run()</del>- Renamed from <c>execute()</c>.
-				<li><del>RestCall#getCapturedResponse()</del>
-				<li><del>RestCall#getResponsePojoRest(Class)</del>
-				<li><del>RestCall#getResponsePojoRest()</del>
-				<li><del>RestCall#logTo(Level,Logger)</del>
-				<li><del>RestCall#setConfig(RequestConfig)</del>
+				<li><del>RestCall.getCapturedResponse()</del>
+				<li><del>RestCall.getResponsePojoRest(Class)</del>
+				<li><del>RestCall.getResponsePojoRest()</del>
+				<li><del>RestCall.logTo(Level,Logger)</del>
+				<li><del>RestCall.setConfig(RequestConfig)</del>
 			</ul>
 		<li>New lifecycle listener methods on <del>RestCallInterceptor</del>:
 			<ul>
-				<li><del>RestCallInterceptor#onInit(RestCall)</del>
-				<li><del>RestCallInterceptor#onClose(RestCall)</del>
+				<li><del>RestCallInterceptor.onInit(RestCall)</del>
+				<li><del>RestCallInterceptor.onClose(RestCall)</del>
 			</ul>
 		<li>New methods on {@link oajrc.RestClient}:
 			<ul>
-				<li><del>RestClient#setBasicAuth(String,int,String,String)</del>
-				<li><del>RestClient#logTo(Level,Logger)</del>
-				<li><del>RestClient#setRootUrl(String)</del>
-				<li><del>RestClient#enableSSL(SSLOpts)</del>
-				<li><del>RestClient#enableLaxSSL()</del>
-				<li><del>RestClient#doCall(HttpMethod,Object,Object)</del>
-				<li><del>RestClient#createHttpClientBuilder()</del>
+				<li><del>RestClient.setBasicAuth(String,int,String,String)</del>
+				<li><del>RestClient.logTo(Level,Logger)</del>
+				<li><del>RestClient.setRootUrl(String)</del>
+				<li><del>RestClient.enableSSL(SSLOpts)</del>
+				<li><del>RestClient.enableLaxSSL()</del>
+				<li><del>RestClient.doCall(HttpMethod,Object,Object)</del>
+				<li><del>RestClient.createHttpClientBuilder()</del>
 			</ul>
 		<li>New passthrough methods on {@link oajrc.RestClient} defined on <c>HttpClientBuilder</c>:
 			<ul>
-				<li><del>RestClient#setRedirectStrategy(RedirectStrategy)</del>
-				<li><del>RestClient#setDefaultCookieSpecRegistry(Lookup)</del>
-				<li><del>RestClient#setRequestExecutor(HttpRequestExecutor)</del>
-				<li><del>RestClient#setSSLHostnameVerifier(HostnameVerifier)</del>
-				<li><del>RestClient#setPublicSuffixMatcher(PublicSuffixMatcher)</del>
-				<li><del>RestClient#setSSLContext(SSLContext)</del>
-				<li><del>RestClient#setSSLSocketFactory(LayeredConnectionSocketFactory)</del>
-				<li><del>RestClient#setMaxConnTotal(int)</del>
-				<li><del>RestClient#setMaxConnPerRoute(int)</del>
-				<li><del>RestClient#setDefaultSocketConfig(SocketConfig)</del>
-				<li><del>RestClient#setDefaultConnectionConfig(ConnectionConfig)</del>
-				<li><del>RestClient#setConnectionTimeToLive(long,TimeUnit)</del>
-				<li><del>RestClient#setConnectionManager(HttpClientConnectionManager)</del>
-				<li><del>RestClient#setConnectionManagerShared(boolean)</del>
-				<li><del>RestClient#setConnectionReuseStrategy(ConnectionReuseStrategy)</del>
-				<li><del>RestClient#setKeepAliveStrategy(ConnectionKeepAliveStrategy)</del>
-				<li><del>RestClient#setTargetAuthenticationStrategy(AuthenticationStrategy)</del>
-				<li><del>RestClient#setProxyAuthenticationStrategy(AuthenticationStrategy)</del>
-				<li><del>RestClient#setUserTokenHandler(UserTokenHandler)</del>
-				<li><del>RestClient#disableConnectionState()</del>
-				<li><del>RestClient#setSchemePortResolver(SchemePortResolver)</del>
+				<li><del>RestClient.setRedirectStrategy(RedirectStrategy)</del>
+				<li><del>RestClient.setDefaultCookieSpecRegistry(Lookup)</del>
+				<li><del>RestClient.setRequestExecutor(HttpRequestExecutor)</del>
+				<li><del>RestClient.setSSLHostnameVerifier(HostnameVerifier)</del>
+				<li><del>RestClient.setPublicSuffixMatcher(PublicSuffixMatcher)</del>
+				<li><del>RestClient.setSSLContext(SSLContext)</del>
+				<li><del>RestClient.setSSLSocketFactory(LayeredConnectionSocketFactory)</del>
+				<li><del>RestClient.setMaxConnTotal(int)</del>
+				<li><del>RestClient.setMaxConnPerRoute(int)</del>
+				<li><del>RestClient.setDefaultSocketConfig(SocketConfig)</del>
+				<li><del>RestClient.setDefaultConnectionConfig(ConnectionConfig)</del>
+				<li><del>RestClient.setConnectionTimeToLive(long,TimeUnit)</del>
+				<li><del>RestClient.setConnectionManager(HttpClientConnectionManager)</del>
+				<li><del>RestClient.setConnectionManagerShared(boolean)</del>
+				<li><del>RestClient.setConnectionReuseStrategy(ConnectionReuseStrategy)</del>
+				<li><del>RestClient.setKeepAliveStrategy(ConnectionKeepAliveStrategy)</del>
+				<li><del>RestClient.setTargetAuthenticationStrategy(AuthenticationStrategy)</del>
+				<li><del>RestClient.setProxyAuthenticationStrategy(AuthenticationStrategy)</del>
+				<li><del>RestClient.setUserTokenHandler(UserTokenHandler)</del>
+				<li><del>RestClient.disableConnectionState()</del>
+				<li><del>RestClient.setSchemePortResolver(SchemePortResolver)</del>
 				<li><del>setUserAgent(String)</del>
-				<li><del>RestClient#setDefaultHeaders(Collection)</del>
-				<li><del>RestClient#addInterceptorFirst(HttpResponseInterceptor)</del>
-				<li><del>RestClient#addInterceptorLast(HttpResponseInterceptor)</del>
-				<li><del>RestClient#addInterceptorFirst(HttpRequestInterceptor)</del>
-				<li><del>RestClient#addInterceptorLast(HttpRequestInterceptor)</del>
-				<li><del>RestClient#disableCookieManagement()</del>
-				<li><del>RestClient#disableContentCompression()</del>
-				<li><del>RestClient#disableAuthCaching()</del>
-				<li><del>RestClient#setHttpProcessor(HttpProcessor)</del>
-				<li><del>RestClient#setRetryHandler(HttpRequestRetryHandler)</del>
-				<li><del>RestClient#disableAutomaticRetries()</del>
-				<li><del>RestClient#setProxy(HttpHost)</del>
-				<li><del>RestClient#setRoutePlanner(HttpRoutePlanner)</del>
-				<li><del>RestClient#disableRedirectHandling()</del>
-				<li><del>RestClient#setConnectionBackoffStrategy(ConnectionBackoffStrategy)</del>
-				<li><del>RestClient#setBackoffManager(BackoffManager)</del>
-				<li><del>RestClient#setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)</del>
-				<li><del>RestClient#setDefaultCookieStore(CookieStore)</del>
-				<li><del>RestClient#setDefaultCredentialsProvider(CredentialsProvider)</del>
-				<li><del>RestClient#setDefaultAuthSchemeRegistry(Lookup)</del>
-				<li><del>RestClient#setContentDecoderRegistry(Map)</del>
-				<li><del>RestClient#setDefaultRequestConfig(RequestConfig)</del>
-				<li><del>RestClient#useSystemProperties()</del>
-				<li><del>RestClient#evictExpiredConnections()</del>
+				<li><del>RestClient.setDefaultHeaders(Collection)</del>
+				<li><del>RestClient.addInterceptorFirst(HttpResponseInterceptor)</del>
+				<li><del>RestClient.addInterceptorLast(HttpResponseInterceptor)</del>
+				<li><del>RestClient.addInterceptorFirst(HttpRequestInterceptor)</del>
+				<li><del>RestClient.addInterceptorLast(HttpRequestInterceptor)</del>
+				<li><del>RestClient.disableCookieManagement()</del>
+				<li><del>RestClient.disableContentCompression()</del>
+				<li><del>RestClient.disableAuthCaching()</del>
+				<li><del>RestClient.setHttpProcessor(HttpProcessor)</del>
+				<li><del>RestClient.setRetryHandler(HttpRequestRetryHandler)</del>
+				<li><del>RestClient.disableAutomaticRetries()</del>
+				<li><del>RestClient.setProxy(HttpHost)</del>
+				<li><del>RestClient.setRoutePlanner(HttpRoutePlanner)</del>
+				<li><del>RestClient.disableRedirectHandling()</del>
+				<li><del>RestClient.setConnectionBackoffStrategy(ConnectionBackoffStrategy)</del>
+				<li><del>RestClient.setBackoffManager(BackoffManager)</del>
+				<li><del>RestClient.setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)</del>
+				<li><del>RestClient.setDefaultCookieStore(CookieStore)</del>
+				<li><del>RestClient.setDefaultCredentialsProvider(CredentialsProvider)</del>
+				<li><del>RestClient.setDefaultAuthSchemeRegistry(Lookup)</del>
+				<li><del>RestClient.setContentDecoderRegistry(Map)</del>
+				<li><del>RestClient.setDefaultRequestConfig(RequestConfig)</del>
+				<li><del>RestClient.useSystemProperties()</del>
+				<li><del>RestClient.evictExpiredConnections()</del>
 				<li><del>RestClient.evictIdleConnections(long,TimeUnit)</del>
 			</ul>
 		<li><c>JazzRestClient</c> now supports OIDC authentication.
@@ -334,7 +334,7 @@
 			<ul>
 				<li><del>RestRequest.getReaderResource(String)</del>- Replaces <c>getVarResource(String)</c>.
 				<li><del>RestRequest.getReaderResource(String,boolean)</del>
-				<li><del>RestRequest#getReaderResource(String,boolean,String)</del>
+				<li><del>RestRequest.getReaderResource(String,boolean,String)</del>
 			</ul>
 		<li>Changes in {@link oajr.RestResponse}:
 			<ul>
@@ -359,8 +359,8 @@
 		<li>Removed <c>RestServletProperties.REST_htDocsFolder</c>.  Replaced with <del>@RestResource(staticFiles)</del>}.
 		<li>New annotations on <del>@RestResource</del>.
 			<ul>
-				<li><del>RestResource#stylesheet()</del>
-				<li><del>RestResource#favicon()</del>
+				<li><del>RestResource.stylesheet()</del>
+				<li><del>RestResource.favicon()</del>
 				<li><del>@RestResource(staticFiles)</del>
 			</ul>
 		<li>Eliminated <c>org.apache.juneau.rest.jaxrs.JsonProvider</c> class.  

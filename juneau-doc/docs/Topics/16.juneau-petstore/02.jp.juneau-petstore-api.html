@@ -64,7 +64,7 @@
 		|		 * Adds a pet to the database.
 		|		 *
 		|		 * @param pet The pet data to add to the database.
-		|		 * @return {@link Ok} if successful.
+		|		 * @return Ok if successful.
 		|		 * @throws IdConflict ID already in use.
 		|		 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
 		|		 * @throws UnsupportedMediaType Unsupported <c>Content-Type</c> header specified.
@@ -81,7 +81,7 @@
 		|		 * Updates a pet in the database.
 		|		 *
 		|		 * @param pet The pet data to add to the database.
-		|		 * @return {@link Ok} if successful.
+		|		 * @return Ok if successful.
 		|		 * @throws IdNotFound ID not found.
 		|		 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
 		|		 * @throws UnsupportedMediaType Unsupported <c>Content-Type</c> header specified.
@@ -125,7 +125,7 @@
 		|		 *
 		|		 * @param apiKey Security key.
 		|		 * @param petId ID of pet to delete.
-		|		 * @return {@link Ok} if successful.
+		|		 * @return Ok if successful.
 		|		 * @throws IdNotFound Pet not found.
 		|		 * @throws NotAcceptable Unsupported <c>Accept</c> header specified.
 		|		 */</jd>
@@ -149,7 +149,7 @@
 		|		<jd>/**
 		|		 * Deletes all pets in the database.
 		|		 *
-		|		 * @return {@link Ok} if successful.
+		|		 * @return Ok if successful.
 		|		 */</jd>
 		|		<ja>@RemoteDelete</ja>(<js>"/pet"</js>)
 		|		<jk>public</jk> Ok deleteAllPets();
