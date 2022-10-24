@@ -115,8 +115,8 @@ public class Rest_Debug_Test {
 
 	@Test
 	public void a01_restOp_debugDefault() throws Exception {
-		RestClient a1 = MockRestClient.buildSimpleJson(A1_RestOp.class);
-		RestClient a1d = MockRestClient.create(A1_RestOp.class).simpleJson().debug().suppressLogging().build();
+		RestClient a1 = MockRestClient.buildJson5(A1_RestOp.class);
+		RestClient a1d = MockRestClient.create(A1_RestOp.class).json5().debug().suppressLogging().build();
 
 		a1.get("/aa").run().assertContent("false");
 		assertNotLogged();
@@ -259,8 +259,8 @@ public class Rest_Debug_Test {
 
 	@Test
 	public void a01a_debugDefault() throws Exception {
-		RestClient a1a = MockRestClient.buildSimpleJson(A1a.class);
-		RestClient a1ad = MockRestClient.create(A1a.class).simpleJson().debug().suppressLogging().build();
+		RestClient a1a = MockRestClient.buildJson5(A1a.class);
+		RestClient a1ad = MockRestClient.create(A1a.class).json5().debug().suppressLogging().build();
 
 		a1a.get("/a").run().assertContent("false");
 		assertNotLogged();
@@ -338,8 +338,8 @@ public class Rest_Debug_Test {
 
 	@Test
 	public void a02_debugTrue() throws Exception {
-		RestClient a2 = MockRestClient.buildSimpleJson(A2.class);
-		RestClient a2d = MockRestClient.create(A2.class).simpleJson().debug().suppressLogging().build();
+		RestClient a2 = MockRestClient.buildJson5(A2.class);
+		RestClient a2d = MockRestClient.create(A2.class).json5().debug().suppressLogging().build();
 
 		a2.get("/a").run().assertContent("true");
 		assertLogged();
@@ -417,8 +417,8 @@ public class Rest_Debug_Test {
 
 	@Test
 	public void a03_restDebugFalse() throws Exception {
-		RestClient a3 = MockRestClient.buildSimpleJson(A3.class);
-		RestClient a3d = MockRestClient.create(A3.class).simpleJson().debug().suppressLogging().build();
+		RestClient a3 = MockRestClient.buildJson5(A3.class);
+		RestClient a3d = MockRestClient.create(A3.class).json5().debug().suppressLogging().build();
 
 		a3.get("/a").run().assertContent("false");
 		assertNotLogged();
@@ -496,8 +496,8 @@ public class Rest_Debug_Test {
 
 	@Test
 	public void a04_debugPerRequest() throws Exception {
-		RestClient a4 = MockRestClient.buildSimpleJson(A4.class);
-		RestClient a4d = MockRestClient.create(A4.class).simpleJson().debug().suppressLogging().build();
+		RestClient a4 = MockRestClient.buildJson5(A4.class);
+		RestClient a4d = MockRestClient.create(A4.class).json5().debug().suppressLogging().build();
 
 		a4.get("/a").run().assertContent("false");
 		assertNotLogged();
@@ -715,8 +715,8 @@ public class Rest_Debug_Test {
 
 	@Test
 	public void c01_debugDefault() throws Exception {
-		RestClient c1 = MockRestClient.buildSimpleJson(C1.class);
-		RestClient c1d = MockRestClient.create(C1.class).simpleJson().debug().suppressLogging().build();
+		RestClient c1 = MockRestClient.buildJson5(C1.class);
+		RestClient c1d = MockRestClient.create(C1.class).json5().debug().suppressLogging().build();
 
 		c1.get("/a1").run().assertContent("false");
 		assertNotLogged();
@@ -1049,8 +1049,8 @@ public class Rest_Debug_Test {
 
 	@Test
 	public void c02_debugTrue() throws Exception {
-		RestClient c2 = MockRestClient.buildSimpleJson(C2.class);
-		RestClient c2d = MockRestClient.create(C2.class).simpleJson().debug().suppressLogging().build();
+		RestClient c2 = MockRestClient.buildJson5(C2.class);
+		RestClient c2d = MockRestClient.create(C2.class).json5().debug().suppressLogging().build();
 
 		c2.get("/a1").run().assertContent("true");
 		assertLogged();

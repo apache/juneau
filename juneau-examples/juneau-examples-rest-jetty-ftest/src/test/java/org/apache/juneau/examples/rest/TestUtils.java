@@ -27,12 +27,12 @@ import org.junit.*;
 public class TestUtils {
 
 	private static JsonSerializer js = JsonSerializer.create()
-		.ssq()
+		.json5()
 		.keepNullProperties()
 		.build();
 
 	private static JsonSerializer jsSorted = JsonSerializer.create()
-		.ssq()
+		.json5()
 		.sortCollections()
 		.sortMaps()
 		.keepNullProperties()
@@ -40,12 +40,12 @@ public class TestUtils {
 
 
 	private static JsonSerializer js2 = JsonSerializer.create()
-		.ssq()
+		.json5()
 		.swaps(IteratorSwap.class, EnumerationSwap.class)
 		.build();
 
 	private static JsonSerializer js3 = JsonSerializer.create()
-		.ssq()
+		.json5()
 		.swaps(IteratorSwap.class, EnumerationSwap.class)
 		.sortProperties()
 		.build();
@@ -188,21 +188,21 @@ public class TestUtils {
 
 	public static void debugOut(Object o) {
 		try {
-			System.err.println(decodeHex(SimpleJsonSerializer.DEFAULT.serialize(o)));  // NOT DEBUG
+			System.err.println(decodeHex(Json5Serializer.DEFAULT.serialize(o)));  // NOT DEBUG
 		} catch (SerializeException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * Assert that the object equals the specified string after running it through SimpleJsonSerializer.DEFAULT.toString().
+	 * Assert that the object equals the specified string after running it through Json5Serializer.DEFAULT.toString().
 	 */
 	public static void assertObjectEquals(String s, Object o) {
 		assertObjectEquals(s, o, js2);
 	}
 
 	/**
-	 * Assert that the object equals the specified string after running it through SimpleJsonSerializer.DEFAULT.toString()
+	 * Assert that the object equals the specified string after running it through Json5Serializer.DEFAULT.toString()
 	 * with BEAN_sortProperties set to true.
 	 */
 	public static void assertSortedObjectEquals(String s, Object o) {

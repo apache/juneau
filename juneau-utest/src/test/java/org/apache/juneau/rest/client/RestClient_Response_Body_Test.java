@@ -323,7 +323,7 @@ public class RestClient_Response_Body_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static RestClient.Builder client() {
-		return MockRestClient.create(A.class).simpleJson();
+		return MockRestClient.create(A.class).json5();
 	}
 
 	private static TestClient plainTestClient() {
@@ -331,7 +331,7 @@ public class RestClient_Response_Body_Test {
 	}
 
 	private static TestClient testClient() {
-		return MockRestClient.create(A.class).simpleJson().noTrace().build(TestClient.class);
+		return MockRestClient.create(A.class).json5().noTrace().build(TestClient.class);
 	}
 
 	private static StringEntity stringEntity(String in) {

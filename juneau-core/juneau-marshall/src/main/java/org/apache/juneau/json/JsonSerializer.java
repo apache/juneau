@@ -75,9 +75,9 @@ import org.apache.juneau.utils.*;
  * The following direct subclasses are provided for convenience:
  * <ul class='spaced-list'>
  * 	<li>
- * 		{@link SimpleJsonSerializer} - Default serializer, single quotes, simple mode.
+ * 		{@link Json5Serializer} - Default serializer, single quotes, simple mode.
  * 	<li>
- * 		{@link SimpleJsonSerializer.Readable} - Default serializer, single quotes, simple mode, with whitespace.
+ * 		{@link Json5Serializer.Readable} - Default serializer, single quotes, simple mode, with whitespace.
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
@@ -153,7 +153,8 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * @param builder The builder for this object.
 		 */
 		public ReadableSafe(Builder builder) {
-			super(builder.simpleMode().quoteChar('\'').useWhitespace().detectRecursions());
+			super(builder.simpleAttrs().quoteChar('\'').useWhitespace().detectRecursions());
+			String todo = "Shouldn't be using single-quote";
 		}
 	}
 
@@ -169,7 +170,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 
 		private static final Cache<HashKey,JsonSerializer> CACHE = Cache.of(HashKey.class, JsonSerializer.class).build();
 
-		boolean addBeanTypesJson, escapeSolidus, simpleMode;
+		boolean addBeanTypesJson, escapeSolidus, simpleAttrs;
 
 		/**
 		 * Constructor, default settings.
@@ -180,7 +181,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 			accept("application/json,text/json");
 			addBeanTypesJson = env("JsonSerializer.addBeanTypes", false);
 			escapeSolidus = env("JsonSerializer.escapeSolidus", false);
-			simpleMode = env("JsonSerializer.simpleMode", false);
+			simpleAttrs = env("JsonSerializer.simpleAttrs", false);
 		}
 
 		/**
@@ -192,7 +193,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 			super(copyFrom);
 			addBeanTypesJson = copyFrom.addBeanTypesJson;
 			escapeSolidus = copyFrom.escapeSolidus;
-			simpleMode = copyFrom.simpleMode;
+			simpleAttrs = copyFrom.simpleAttrs;
 		}
 
 		/**
@@ -204,7 +205,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 			super(copyFrom);
 			addBeanTypesJson = copyFrom.addBeanTypesJson;
 			escapeSolidus = copyFrom.escapeSolidus;
-			simpleMode = copyFrom.simpleMode;
+			simpleAttrs = copyFrom.simpleAttrs;
 		}
 
 		@Override /* Context.Builder */
@@ -223,7 +224,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 				super.hashKey(),
 				addBeanTypesJson,
 				escapeSolidus,
-				simpleMode
+				simpleAttrs
 			);
 		}
 
@@ -305,7 +306,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		}
 
 		/**
-		 * Simple JSON mode.
+		 * Simple JSON attributes mode.
 		 *
 		 * <p>
 		 * If enabled, JSON attribute names will only be quoted when necessary.
@@ -336,7 +337,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * 	<jc>// Create a JSON serializer in simple mode.</jc>
 		 * 	WriterSerializer <jv>serializer2</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
-		 * 		.simple()
+		 * 		.simpleAttrs()
 		 * 		.build();
 		 *
 		 * 	JsonMap <jv>myMap</jv> = JsonMap.<jsm>of</jsm>(
@@ -374,19 +375,19 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * @return This object.
 		 */
 		@FluentSetter
-		public Builder simpleMode() {
-			return simpleMode(true);
+		public Builder simpleAttrs() {
+			return simpleAttrs(true);
 		}
 
 		/**
-		 * Same as {@link #simpleMode()} but allows you to explicitly specify the value.
+		 * Same as {@link #simpleAttrs()} but allows you to explicitly specify the value.
 		 *
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
 		@FluentSetter
-		public Builder simpleMode(boolean value) {
-			simpleMode = value;
+		public Builder simpleAttrs(boolean value) {
+			simpleAttrs = value;
 			return this;
 		}
 
@@ -403,8 +404,8 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * @return This object.
 		 */
 		@FluentSetter
-		public Builder ssq() {
-			return simpleMode().sq();
+		public Builder json5() {
+			return simpleAttrs().sq();
 		}
 
 		// <FluentSetters>
@@ -1052,7 +1053,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final boolean addBeanTypesJson, escapeSolidus, simpleMode;
+	final boolean addBeanTypesJson, escapeSolidus, simpleAttrs;
 
 	private final boolean addBeanTypes;
 	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
@@ -1068,7 +1069,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	public JsonSerializer(Builder builder) {
 		super(builder);
 		addBeanTypesJson = builder.addBeanTypesJson;
-		simpleMode = builder.simpleMode;
+		simpleAttrs = builder.simpleAttrs;
 		escapeSolidus = builder.escapeSolidus;
 
 		addBeanTypes = addBeanTypesJson || super.isAddBeanTypes();
@@ -1161,13 +1162,13 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	/**
 	 * Simple JSON mode.
 	 *
-	 * @see Builder#simpleMode()
+	 * @see Builder#simpleAttrs()
 	 * @return
 	 * 	<jk>true</jk> if JSON attribute names will only be quoted when necessary.
 	 * 	<br>Otherwise, they are always quoted.
 	 */
-	protected final boolean isSimpleMode() {
-		return simpleMode;
+	protected final boolean isSimpleAttrs() {
+		return simpleAttrs;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1176,6 +1177,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 
 	@Override /* Context */
 	protected JsonMap properties() {
-		return filteredMap("simpleMode", simpleMode, "escapeSolidus", escapeSolidus, "addBeanTypesJson", addBeanTypesJson);
+		return filteredMap("simpleAttrs", simpleAttrs, "escapeSolidus", escapeSolidus, "addBeanTypesJson", addBeanTypesJson);
 	}
 }

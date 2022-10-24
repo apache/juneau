@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.SimpleJsonSerializer;
+import org.apache.juneau.json.Json5Serializer;
 
 import java.util.*;
 
@@ -166,7 +166,7 @@ public class Items extends OpenApiElement {
 		if (isStrict() && ! contains(value, VALID_TYPES))
 			throw new RuntimeException(
 				"Invalid value passed in to setType(String).  Value='"+value+"', valid values="
-				+ SimpleJsonSerializer.DEFAULT.toString(VALID_TYPES));
+				+ Json5Serializer.DEFAULT.toString(VALID_TYPES));
 		type = value;
 		return this;
 	}

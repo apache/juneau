@@ -22,7 +22,7 @@ package org.apache.juneau.examples.core.json;
 import org.apache.juneau.examples.core.pojo.Pojo;
 import org.apache.juneau.json.JsonParser;
 import org.apache.juneau.json.JsonSerializer;
-import org.apache.juneau.json.SimpleJsonSerializer;
+import org.apache.juneau.json.Json5Serializer;
 
 import java.util.Map;
 
@@ -63,8 +63,8 @@ public class JsonSimpleExample {
 
 		// Produces
 		// {name:'name',id:'id'}
-		String simpleJson = SimpleJsonSerializer.DEFAULT.serialize(pojo);
-		System.out.println(simpleJson);
+		String json5 = Json5Serializer.DEFAULT.serialize(pojo);
+		System.out.println(json5);
 
 		// Parse a JSON object (creates a generic JsonMap).
 		String json = "{name:'John Smith',age:21}";

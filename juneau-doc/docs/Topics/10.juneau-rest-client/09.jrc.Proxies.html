@@ -71,8 +71,8 @@
 	</p>
 	
 	<p class='bjava'>	
-		|	<jc>// Use a RestClient with default Simple JSON support.</jc>
-		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+		|	<jc>// Use a RestClient with default JSON 5 support.</jc>
+		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json5().build();
 		|	
 		|	<jc>// Instantiate our proxy interface.</jc>
 		|	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);

@@ -400,6 +400,6 @@ public class UriContext {
 
 	@Override /* Object */
 	public String toString() {
-		return SimpleJsonSerializer.DEFAULT.toString(this);
+		return Json5Serializer.DEFAULT.toString(this);
 	}
 }

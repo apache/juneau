@@ -54,7 +54,7 @@ public class RestClient_Headers_Test {
 		}
 		@Override
 		public String toString() {
-			return SimpleJson.of(this);
+			return Json5.of(this);
 		}
 	}
 
@@ -233,10 +233,10 @@ public class RestClient_Headers_Test {
 	}
 
 	private static RestClient.Builder checkFooClient() {
-		return MockRestClient.create(A.class).simpleJson().header("Check","Foo");
+		return MockRestClient.create(A.class).json5().header("Check","Foo");
 	}
 
 	private static RestClient.Builder checkClient(String headerToCheck) {
-		return MockRestClient.create(A.class).simpleJson().header("Check",headerToCheck).noTrace();
+		return MockRestClient.create(A.class).json5().header("Check",headerToCheck).noTrace();
 	}
 }

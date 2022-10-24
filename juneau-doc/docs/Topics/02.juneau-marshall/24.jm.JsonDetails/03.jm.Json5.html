@@ -13,14 +13,14 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Simplified JSON', updated:'9.0.0'}
+{title:'JSON 5', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
-		The {@link oaj.json.SimpleJsonSerializer} class can be used to serialized POJOs into Simplified JSON notation.
+		The {@link oaj.json.Json5Serializer} class can be used to serialized POJOs into JSON 5 notation.
 	</p>
 	<p>
-		Simplified JSON is identical to JSON except for the following:
+		JSON 5 is similar to JSON except for the following:
 	</p>
 	<ul class='spaced-list'>
 		<li>JSON attributes are only quoted when necessary.
@@ -61,18 +61,18 @@
 		|	}
 	</p>
 	<p>
-		The advantage to simplified JSON is you can represent it in a Java String in minimal form with minimal escaping.
-		This is particularly useful in cases such as unit testing where you can easily validate POJOs by simplifying them to Simplified JSON and do a simple string comparison.
+		The advantage to JSON 5 is you can represent it in a Java String in minimal form with minimal escaping.
+		This is particularly useful in cases such as unit testing where you can easily validate POJOs by simplifying them to JSON 5 and do a simple string comparison.
 	</p>
 	<p class='bjava'>
-		|	WriterSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>;
+		|	WriterSerializer <jv>serializer</jv> = Json5Serializer.<jsf>DEFAULT</jsf>;
 		|	<jsm>assertEquals</jsm>(<js>"{foo:'bar',baz:123}"</js>, <jv>serializer</jv>.toString(<jv>myPojo</jv>));
 	</p>			
 	
 	<ul class='seealso'>
 		<li class='jc'>{@link oaj.json.JsonSerializer.Builder}
 			<ul class='javatreec'>
-				<li class='jm'>{@link oaj.json.JsonSerializer.Builder#simpleMode() simpleMode()}
+				<li class='jm'>{@link oaj.json.JsonSerializer.Builder#json5() json5()}
 			</ul>
 		</li>
 	</ul>

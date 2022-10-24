@@ -40,7 +40,7 @@ public class Remote_ResponseAnnotation_Test {
 		}
 		@Override
 		public String toString() {
-			return SimpleJson.of(this);
+			return Json5.of(this);
 		}
 	}
 

@@ -35,8 +35,8 @@ public class JsonTest {
 		Map<String,Object> m = new LinkedHashMap<>();
 		List<Object> l = new LinkedList<>();
 
-		WriterSerializer s1 = JsonSerializer.create().ssq().keepNullProperties().build();
-		WriterSerializer s2 = JsonSerializer.create().simpleMode().keepNullProperties().build();
+		WriterSerializer s1 = JsonSerializer.create().json5().keepNullProperties().build();
+		WriterSerializer s2 = JsonSerializer.create().simpleAttrs().keepNullProperties().build();
 		String r;
 
 		// Null keys and values
@@ -111,7 +111,7 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testBackslashesInStrings() throws Exception {
-		JsonSerializer s = JsonSerializer.create().simpleMode().keepNullProperties().build();
+		JsonSerializer s = JsonSerializer.create().simpleAttrs().keepNullProperties().build();
 		String r, r2;
 
 		// [\\]
@@ -164,7 +164,7 @@ public class JsonTest {
 			+ "\n	},"
 			+ "\n	I: 'j'"
 			+ "\n}";
-		assertEquals(e, SimpleJsonSerializer.DEFAULT_READABLE.serialize(m));
+		assertEquals(e, Json5Serializer.DEFAULT_READABLE.serialize(m));
 	}
 
 	//====================================================================================================
@@ -184,7 +184,7 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testEscapingSingleQuotes() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
+		JsonSerializer s = Json5Serializer.DEFAULT;
 		String r = s.serialize(JsonMap.of("f1", "x'x\"x"));
 		assertEquals("{f1:'x\\'x\"x'}", r);
 		JsonParser p = JsonParser.DEFAULT;
@@ -196,7 +196,7 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testWrapperAttrAnnotationOnBean() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
+		JsonSerializer s = Json5Serializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 
@@ -228,7 +228,7 @@ public class JsonTest {
 
 	@Test
 	public void testWrapperAttrAnnotationOnBean_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(A2Config.class).build();
+		JsonSerializer s = Json5Serializer.DEFAULT.copy().applyAnnotations(A2Config.class).build();
 		JsonParser p = JsonParser.DEFAULT.copy().applyAnnotations(A2Config.class).build();
 		String r;
 
@@ -267,7 +267,7 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testWrapperAttrAnnotationOnNonBean() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
+		JsonSerializer s = Json5Serializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 
@@ -310,7 +310,7 @@ public class JsonTest {
 
 	@Test
 	public void testWrapperAttrAnnotationOnNonBean_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(B2Config.class).build();
+		JsonSerializer s = Json5Serializer.DEFAULT.copy().applyAnnotations(B2Config.class).build();
 		JsonParser p = JsonParser.DEFAULT.copy().applyAnnotations(B2Config.class).build();;
 		String r;
 

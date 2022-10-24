@@ -125,7 +125,7 @@ public class Query_Test {
 	// Multipart parameters (e.g. &key=val1,&key=val2).
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=Json5Serializer.class)
 	public static class C {
 		public static class C1 {
 			public String a;
@@ -229,7 +229,7 @@ public class Query_Test {
 	// Optional query parameter.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=Json5Serializer.class)
 	public static class E {
 		@RestGet
 		public Object a(@Query("f1") Optional<Integer> f1) throws Exception {
@@ -293,7 +293,7 @@ public class Query_Test {
 	// Default parameters
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=Json5Serializer.class)
 	public static class F {
 		@RestGet
 		public Object a1(@Query(name="f1", def="1") Integer f1) throws Exception {

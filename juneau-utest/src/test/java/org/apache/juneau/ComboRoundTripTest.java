@@ -224,7 +224,7 @@ public abstract class ComboRoundTripTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// JSON
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sJson = SimpleJsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
+	WriterSerializer sJson = Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 	ReaderParser pJson = JsonParser.DEFAULT;
 
 	@Test
@@ -245,7 +245,7 @@ public abstract class ComboRoundTripTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// JSON - 't' property
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sJsonT = JsonSerializer.create().ssq().typePropertyName("t").addBeanTypes().addRootType().build();
+	WriterSerializer sJsonT = JsonSerializer.create().json5().typePropertyName("t").addBeanTypes().addRootType().build();
 	ReaderParser pJsonT = JsonParser.create().typePropertyName("t").build();
 
 	@Test
@@ -266,7 +266,7 @@ public abstract class ComboRoundTripTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// JSON - Readable
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sJsonR = SimpleJsonSerializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType().build();
+	WriterSerializer sJsonR = Json5Serializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType().build();
 	ReaderParser pJsonR = JsonParser.DEFAULT;
 
 	@Test

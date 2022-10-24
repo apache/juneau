@@ -75,7 +75,7 @@ public class ObjectRest_Test {
 		model.put("/person1", p);
 
 		// Make sure it got stored correctly.
-		JsonSerializer serializer = JsonSerializer.create().ssq().addRootType().build();
+		JsonSerializer serializer = JsonSerializer.create().json5().addRootType().build();
 		assertEquals("{person1:{name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}}", serializer.serialize(model.getRootObject()));
 
 		// Get the original Person object back.
@@ -86,7 +86,7 @@ public class ObjectRest_Test {
 		Address a3 = (Address)model.get("/person1/addresses/1");
 		assertEquals("city B", a3.city);
 
-		serializer = SimpleJsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
+		serializer = Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 		p = new Person("some name", 123,
 			new Address("street A", "city A", "state A", 12345, true),
 			new Address("street B", "city B", "state B", 12345, false)
@@ -119,7 +119,7 @@ public class ObjectRest_Test {
 		model.put("addresses/0", new Address("street D", "city D", "state D", 12345, false));
 		model.put("addresses/1", new Address("street E", "city E", "state E", 12345, false));
 		model.put("addresses/2", new Address("street F", "city F", "state F", 12345, false));
-		serializer = JsonSerializer.create().ssq().build();
+		serializer = JsonSerializer.create().json5().build();
 		s = serializer.serialize(p);
 		expectedValue = "{name:'some name',age:123,addresses:[{street:'street D',city:'city D',state:'state D',zip:12345,isCurrent:false},{street:'street E',city:'city E',state:'state E',zip:12345,isCurrent:false},{street:'street F',city:'city F',state:'state F',zip:12345,isCurrent:false}]}";
 		assertEquals(expectedValue, s);
@@ -824,8 +824,8 @@ public class ObjectRest_Test {
 	@Test
 	public void f03_getPublicMethods() throws Exception {
 		ObjectRest model = ObjectRest.create(new AddressBook().init());
-		assertTrue(SimpleJsonSerializer.DEFAULT.toString(model.getPublicMethods("0")).contains("'toString'"));
-		assertTrue(SimpleJsonSerializer.DEFAULT.toString(model.getPublicMethods("0/addresses/0/state")).contains("'toString'"));
+		assertTrue(Json5Serializer.DEFAULT.toString(model.getPublicMethods("0")).contains("'toString'"));
+		assertTrue(Json5Serializer.DEFAULT.toString(model.getPublicMethods("0/addresses/0/state")).contains("'toString'"));
 		assertNull(model.getPublicMethods("1"));
 	}
 

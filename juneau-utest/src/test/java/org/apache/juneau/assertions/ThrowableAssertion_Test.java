@@ -73,7 +73,7 @@ public class ThrowableAssertion_Test {
 	@Test
 	public void ba01b_asString_wSerializer() throws Exception {
 		Throwable x = throwable("1"), nil = null;
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("'java.lang.RuntimeException: 1'");
 		test(nil).asString(s).is("null");
 	}
@@ -278,7 +278,7 @@ public class ThrowableAssertion_Test {
 	@Test
 	public void ca11_isSameSerializedAs() throws Exception {
 		Throwable x1 = throwable("1"), x1a = throwable("1"), x2 = throwable("2"), nil = null;
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
 		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''java.lang.RuntimeException: 2''.  Actual=''java.lang.RuntimeException: 1''.");

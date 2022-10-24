@@ -49,7 +49,7 @@ public class JsonConfigAnnotationTest {
 	@JsonConfig(
 		addBeanTypes="$X{true}",
 		escapeSolidus="$X{true}",
-		simpleMode="$X{true}",
+		simpleAttrs="$X{true}",
 		validateEnd="$X{true}"
 	)
 	static class A {}
@@ -61,7 +61,7 @@ public class JsonConfigAnnotationTest {
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isEscapeSolidus());
-		check("true", x.isSimpleMode());
+		check("true", x.isSimpleAttrs());
 	}
 
 	@Test
@@ -85,7 +85,7 @@ public class JsonConfigAnnotationTest {
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEscapeSolidus());
-		check("false", x.isSimpleMode());
+		check("false", x.isSimpleAttrs());
 	}
 
 	@Test
@@ -108,7 +108,7 @@ public class JsonConfigAnnotationTest {
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEscapeSolidus());
-		check("false", x.isSimpleMode());
+		check("false", x.isSimpleAttrs());
 	}
 
 	@Test

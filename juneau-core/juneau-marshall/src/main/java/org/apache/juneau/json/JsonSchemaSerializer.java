@@ -101,7 +101,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * @param builder The builder for this object.
 		 */
 		public Simple(Builder builder) {
-			super(builder.simpleMode().quoteChar('\''));
+			super(builder.simpleAttrs().quoteChar('\''));
 		}
 	}
 
@@ -114,7 +114,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * @param builder The builder for this object.
 		 */
 		public SimpleReadable(Builder builder) {
-			super(builder.simpleMode().quoteChar('\'').useWhitespace());
+			super(builder.simpleAttrs().quoteChar('\'').useWhitespace());
 		}
 	}
 
@@ -979,20 +979,20 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		}
 
 		@Override /* GENERATED - org.apache.juneau.json.JsonSerializer.Builder */
-		public Builder simpleMode() {
-			super.simpleMode();
+		public Builder simpleAttrs() {
+			super.simpleAttrs();
 			return this;
 		}
 
 		@Override /* GENERATED - org.apache.juneau.json.JsonSerializer.Builder */
-		public Builder simpleMode(boolean value) {
-			super.simpleMode(value);
+		public Builder simpleAttrs(boolean value) {
+			super.simpleAttrs(value);
 			return this;
 		}
 
 		@Override /* GENERATED - org.apache.juneau.json.JsonSerializer.Builder */
-		public Builder ssq() {
-			super.ssq();
+		public Builder json5() {
+			super.json5();
 			return this;
 		}
 

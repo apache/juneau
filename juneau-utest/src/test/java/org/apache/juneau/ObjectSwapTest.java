@@ -31,7 +31,7 @@ public class ObjectSwapTest {
 	//====================================================================================================
 	@Test
 	public void testSameType() throws Exception {
-		JsonSerializer s = JsonSerializer.create().ssq().swaps(ASwap.class).build();
+		JsonSerializer s = JsonSerializer.create().json5().swaps(ASwap.class).build();
 		JsonParser p = JsonParser.create().swaps(ASwap.class).build();
 		String r;
 

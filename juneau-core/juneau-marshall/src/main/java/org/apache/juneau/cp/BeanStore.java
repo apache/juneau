@@ -655,7 +655,7 @@ public class BeanStore {
 
 	@Override /* Object */
 	public String toString() {
-		return SimpleJson.of(properties());
+		return Json5.of(properties());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

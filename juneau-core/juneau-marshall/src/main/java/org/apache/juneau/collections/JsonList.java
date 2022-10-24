@@ -936,7 +936,7 @@ public class JsonList extends LinkedList<Object> {
 	 * @return This object as a serialized string.
 	 */
 	public String asString() {
-		return SimpleJsonSerializer.DEFAULT.toString(this);
+		return Json5Serializer.DEFAULT.toString(this);
 	}
 
 	/**
@@ -995,7 +995,7 @@ public class JsonList extends LinkedList<Object> {
 	 */
 	public Object cast(ClassMeta<?> cm) {
 		try {
-			return JsonParser.DEFAULT.parse(SimpleJsonSerializer.DEFAULT.serialize(this), cm);
+			return JsonParser.DEFAULT.parse(Json5Serializer.DEFAULT.serialize(this), cm);
 		} catch (ParseException | SerializeException e) {
 			throw asRuntimeException(e);
 		}
@@ -1068,6 +1068,6 @@ public class JsonList extends LinkedList<Object> {
 
 	@Override /* Object */
 	public String toString() {
-		return SimpleJson.of(this);
+		return Json5.of(this);
 	}
 }

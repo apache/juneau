@@ -56,14 +56,14 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 				0
 			},
 			{ /* 1 */
-				"SimpleJson DEFAULT",
-				JsonSerializer.create().ssq().keepNullProperties(),
-				JsonParser.create(),
+				"Json5 DEFAULT",
+				Json5Serializer.create().keepNullProperties(),
+				Json5Parser.create(),
 				0
 			},
 			{ /* 2 */
 				"Json DEFAULT_SQ",
-				JsonSerializer.create().ssq().keepNullProperties(),
+				JsonSerializer.create().json5().keepNullProperties(),
 				JsonParser.create(),
 				0
 			},

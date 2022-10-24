@@ -40,7 +40,7 @@
 		|	
 		|	<jv>bean</jv> = RestClient
 		|		.<jsm>create</jsm>()
-		|		.simpleJson()
+		|		.json5()
 		|		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (<jv>req</jv>,<jv>res</jv>)-&gt;<jv>req</jv>.getUri().endsWith(<js>"/bean"</js>))
 		|		.logToConsole()
 		|		.build()
@@ -58,9 +58,9 @@
 		|	=== REQUEST ===
 		|	POST http://localhost/bean
 		|	---request headers---
-		|		Accept: application/json+simple
+		|		Accept: application/json5
 		|	---request entity---
-		|	Content-Type: application/json+simple
+		|	Content-Type: application/json5
 		|	---request content---
 		|	{f:1}
 		|	=== RESPONSE ===

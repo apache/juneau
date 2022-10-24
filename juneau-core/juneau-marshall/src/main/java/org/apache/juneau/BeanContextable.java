@@ -1502,7 +1502,7 @@ public abstract class BeanContextable extends Context {
 		 * <p>
 		 * This is a shorthand method for the following code:
 		 * <p class='bjava'>
-		 * 		<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(SimpleJson.<jsf>DEFAULT</jsf>.toString(<jv>object</jv>)).build())
+		 * 		<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(Json5.<jsf>DEFAULT</jsf>.toString(<jv>object</jv>)).build())
 		 * </p>
 		 *
 		 * <ul class='notes'>
@@ -1572,7 +1572,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @param <T> The POJO class type.
 		 * @param pojoClass The POJO class.
-		 * @param json The simple JSON representation of the example.
+		 * @param json The JSON 5 representation of the example.
 		 * @return This object.
 		 */
 		@FluentSetter

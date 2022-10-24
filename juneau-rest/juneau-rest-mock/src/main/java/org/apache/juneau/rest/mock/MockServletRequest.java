@@ -82,7 +82,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 *
 	 * Initialized with the following:
 	 * <ul>
-	 * 	<li><c>"Accept: text/json+simple"</c>
+	 * 	<li><c>"Accept: text/json5"</c>
 	 * 	<li><c>"Content-Type: text/json"</c>
 	 * </ul>
 	 *
@@ -98,7 +98,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 *
 	 * Initialized with the following:
 	 * <ul>
-	 * 	<li><c>"Accept: text/json+simple"</c>
+	 * 	<li><c>"Accept: text/json5"</c>
 	 * 	<li><c>"Content-Type: text/json"</c>
 	 * </ul>
 	 *

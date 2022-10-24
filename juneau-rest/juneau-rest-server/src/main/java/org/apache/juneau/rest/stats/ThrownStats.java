@@ -292,7 +292,7 @@ public class ThrownStats implements Cloneable {
 
 	@Override /* Object */
 	public String toString() {
-		return SimpleJson.of(this);
+		return Json5.of(this);
 	}
 
 	@Override /* Object */

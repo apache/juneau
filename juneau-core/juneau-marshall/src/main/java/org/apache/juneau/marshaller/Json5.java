@@ -22,7 +22,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * A pairing of a {@link SimpleJsonSerializer} and {@link JsonParser} into a single class with convenience read/write methods.
+ * A pairing of a {@link Json5Serializer} and {@link JsonParser} into a single class with convenience read/write methods.
  *
  * <p>
  * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
@@ -30,21 +30,21 @@ import org.apache.juneau.serializer.*;
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
- * 	SimpleJson <jv>json</jv> = <jk>new</jk> SimpleJson();
+ * 	Json5 <jv>json</jv> = <jk>new</jk> Json5();
  * 	MyPojo <jv>myPojo</jv> = <jv>json</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
  * 	String <jv>string</jv> = <jv>json</jv>.write(<jv>myPojo</jv>);
  * </p>
  * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>
- * 	MyPojo <jv>myPojo</jv> = SimpleJson.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = SimpleJson.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = Json5.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = Json5.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
  * <ul class='seealso'>
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Marshallers">Marshallers</a>
  * </ul>
  */
-public class SimpleJson extends CharMarshaller {
+public class Json5 extends CharMarshaller {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -53,12 +53,12 @@ public class SimpleJson extends CharMarshaller {
 	/**
 	 * Default reusable instance.
 	 */
-	public static final SimpleJson DEFAULT = new SimpleJson();
+	public static final Json5 DEFAULT = new Json5();
 
 	/**
 	 * Default reusable instance, readable format.
 	 */
-	public static final SimpleJson DEFAULT_READABLE = new SimpleJson(SimpleJsonSerializer.DEFAULT_READABLE, SimpleJsonParser.DEFAULT);
+	public static final Json5 DEFAULT_READABLE = new Json5(Json5Serializer.DEFAULT_READABLE, Json5Parser.DEFAULT);
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -74,7 +74,7 @@ public class SimpleJson extends CharMarshaller {
 	 * 	The parser to use for parsing input.
 	 * 	<br>Must not be <jk>null</jk>.
 	 */
-	public SimpleJson(SimpleJsonSerializer s, SimpleJsonParser p) {
+	public Json5(Json5Serializer s, Json5Parser p) {
 		super(s, p);
 	}
 
@@ -82,14 +82,14 @@ public class SimpleJson extends CharMarshaller {
 	 * Constructor.
 	 *
 	 * <p>
-	 * Uses {@link SimpleJsonSerializer#DEFAULT} and {@link SimpleJsonParser#DEFAULT}.
+	 * Uses {@link Json5Serializer#DEFAULT} and {@link Json5Parser#DEFAULT}.
 	 */
-	public SimpleJson() {
-		this(SimpleJsonSerializer.DEFAULT, SimpleJsonParser.DEFAULT);
+	public Json5() {
+		this(Json5Serializer.DEFAULT, Json5Parser.DEFAULT);
 	}
 
 	/**
-	 * Parses a Simple JSON input string to the specified type.
+	 * Parses a JSON 5 input string to the specified type.
 	 *
 	 * <p>
 	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
@@ -105,7 +105,7 @@ public class SimpleJson extends CharMarshaller {
 	}
 
 	/**
-	 * Parses a Simple JSON input object to the specified Java type.
+	 * Parses a JSON 5 input object to the specified Java type.
 	 *
 	 * <p>
 	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
@@ -135,7 +135,7 @@ public class SimpleJson extends CharMarshaller {
 	}
 
 	/**
-	 * Parses a Simple JSON input string to the specified Java type.
+	 * Parses a JSON 5 input string to the specified Java type.
 	 *
 	 * <p>
 	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
@@ -158,7 +158,7 @@ public class SimpleJson extends CharMarshaller {
 	}
 
 	/**
-	 * Parses a Simple JSON input object to the specified Java type.
+	 * Parses a JSON 5 input object to the specified Java type.
 	 *
 	 * <p>
 	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
@@ -195,7 +195,7 @@ public class SimpleJson extends CharMarshaller {
 	}
 
 	/**
-	 * Serializes a Java object to a Simple JSON string.
+	 * Serializes a Java object to a JSON 5 string.
 	 *
 	 * <p>
 	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>object</jv>)</c>.
@@ -210,7 +210,7 @@ public class SimpleJson extends CharMarshaller {
 	}
 
 	/**
-	 * Serializes a Java object to a Simple JSON output.
+	 * Serializes a Java object to a JSON 5 output.
 	 *
 	 * <p>
 	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>output</jv>)</c>.

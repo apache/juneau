@@ -147,7 +147,7 @@ public class RestClient_Test {
 
 	@Test
 	public void b04_restClient_overrideCreateRequest() throws Exception {
-		RestClient.create().simpleJson().build(B4.class).get("foo").run();
+		RestClient.create().json5().build(B4.class).get("foo").run();
 		assertTrue(B4.CREATE_REQUEST_CALLED);
 		assertTrue(B4.CREATE_RESPONSE_CALLED);
 	}
@@ -246,7 +246,7 @@ public class RestClient_Test {
 	@Test
 	public void c07_httpClient_executeHttpUriRequest() throws Exception {
 		HttpGet x = new HttpGet("http://localhost/bean");
-		x.addHeader("Accept","text/json+simple");
+		x.addHeader("Accept","text/json5");
 		HttpResponse res = MockRestClient.create(A.class).build().execute(x);
 		assertEquals("{f:1}",IOUtils.read(res.getEntity().getContent()));
 	}
@@ -255,7 +255,7 @@ public class RestClient_Test {
 	public void c08_httpClient_executeHttpHostHttpRequest() throws Exception {
 		HttpGet x = new HttpGet("http://localhost/bean");
 		HttpHost target = new HttpHost("localhost");
-		x.addHeader("Accept","text/json+simple");
+		x.addHeader("Accept","text/json5");
 		HttpResponse res = MockRestClient.create(A.class).build().execute(target,x);
 		assertEquals("{f:1}",IOUtils.read(res.getEntity().getContent()));
 	}
@@ -265,7 +265,7 @@ public class RestClient_Test {
 		HttpGet x = new HttpGet("http://localhost/bean");
 		HttpHost target = new HttpHost("localhost");
 		HttpContext context = new BasicHttpContext();
-		x.addHeader("Accept","text/json+simple");
+		x.addHeader("Accept","text/json5");
 		HttpResponse res = MockRestClient.create(A.class).build().execute(target,x,context);
 		assertEquals("{f:1}",IOUtils.read(res.getEntity().getContent()));
 	}
@@ -273,7 +273,7 @@ public class RestClient_Test {
 	@Test
 	public void c10_httpClient_executeResponseHandler() throws Exception {
 		HttpGet x = new HttpGet("http://localhost/bean");
-		x.addHeader("Accept","text/json+simple");
+		x.addHeader("Accept","text/json5");
 		String res = MockRestClient.create(A.class).build().execute(x,new BasicResponseHandler());
 		assertEquals("{f:1}",res);
 	}
@@ -281,7 +281,7 @@ public class RestClient_Test {
 	@Test
 	public void c11_httpClient_executeHttpUriRequestResponseHandlerHttpContext() throws Exception {
 		HttpGet x = new HttpGet("http://localhost/bean");
-		x.addHeader("Accept","text/json+simple");
+		x.addHeader("Accept","text/json5");
 		String res = MockRestClient.create(A.class).build().execute(x,new BasicResponseHandler(),new BasicHttpContext());
 		assertEquals("{f:1}",res);
 	}
@@ -289,7 +289,7 @@ public class RestClient_Test {
 	@Test
 	public void c12_httpClient_executeHttpHostHttpRequestResponseHandlerHttpContext() throws Exception {
 		HttpGet x = new HttpGet("http://localhost/bean");
-		x.addHeader("Accept","text/json+simple");
+		x.addHeader("Accept","text/json5");
 		String res = MockRestClient.create(A.class).build().execute(new HttpHost("localhost"),x,new BasicResponseHandler(),new BasicHttpContext());
 		assertEquals("{f:1}",res);
 	}
@@ -297,7 +297,7 @@ public class RestClient_Test {
 	@Test
 	public void c13_httpClient_executeHttpHostHttpRequestResponseHandler() throws Exception {
 		HttpGet x = new HttpGet("http://localhost/bean");
-		x.addHeader("Accept","text/json+simple");
+		x.addHeader("Accept","text/json5");
 		String res = MockRestClient.create(A.class).build().execute(new HttpHost("localhost"),x,new BasicResponseHandler());
 		assertEquals("{f:1}",res);
 	}
@@ -311,8 +311,8 @@ public class RestClient_Test {
 
 	@Test
 	public void c15_httpClient_pooled() throws Exception {
-		RestClient x1 = RestClient.create().simpleJson().pooled().build();
-		RestClient x2 = RestClient.create().simpleJson().build();
+		RestClient x1 = RestClient.create().json5().pooled().build();
+		RestClient x2 = RestClient.create().json5().build();
 		RestClient x3 = client().pooled().build();
 		assertEquals("PoolingHttpClientConnectionManager",ClassInfo.of(x1.httpClient).getDeclaredField(x -> x.hasName("connManager")).accessible().get(x1.httpClient).getClass().getSimpleName());
 		assertEquals("BasicHttpClientConnectionManager",ClassInfo.of(x2.httpClient).getDeclaredField(x -> x.hasName("connManager")).accessible().get(x2.httpClient).getClass().getSimpleName());
@@ -473,11 +473,11 @@ public class RestClient_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static RestClient.Builder client() {
-		return MockRestClient.create(A.class).simpleJson();
+		return MockRestClient.create(A.class).json5();
 	}
 
 	private static RestClient.Builder client(Class<?> c) {
-		return MockRestClient.create(c).noTrace().simpleJson();
+		return MockRestClient.create(c).noTrace().json5();
 	}
 
 	private static Header header(String name, Object val) {

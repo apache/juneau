@@ -83,7 +83,7 @@ public class BeanConfig_Swaps_Test {
 		}
 	}
 
-	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
+	@Rest(serializers=Json5Serializer.class, parsers=JsonParser.class)
 	@BeanConfig(swaps={SwapA1.class})
 	public static class A2 {}
 

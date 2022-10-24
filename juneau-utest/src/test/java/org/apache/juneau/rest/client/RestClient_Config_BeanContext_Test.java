@@ -1046,10 +1046,10 @@ public class RestClient_Config_BeanContext_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static RestClient.Builder client() {
-		return MockRestClient.create(A.class).simpleJson();
+		return MockRestClient.create(A.class).json5();
 	}
 
 	private static RestClient.Builder client(Class<?> c) {
-		return MockRestClient.create(c).simpleJson();
+		return MockRestClient.create(c).json5();
 	}
 }

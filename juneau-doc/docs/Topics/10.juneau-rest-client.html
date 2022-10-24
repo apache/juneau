@@ -44,7 +44,7 @@ specific language governing permissions and limitations under the License.
 	<p class='bjava'>
 		|	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
 		|	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
-		|		.simpleJson()
+		|		.json5()
 		|		.build()
 		|		.get(<jsf>URI</jsf>)
 		|		.run()
@@ -58,7 +58,7 @@ specific language governing permissions and limitations under the License.
 	</p>
 	
 	<p class='bjava'>
-		|	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>().simpleJson();
+		|	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>().json5();
 		|	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 		|	RestRequest <jv>req</jv> = <jv>client</jv>.get(<jsf>URI</jsf>);
 		|	RestResponse <jv>res</jv> = <jv>req</jv>.run();
@@ -91,7 +91,7 @@ specific language governing permissions and limitations under the License.
 		|
 		|	PetStore <jv>store</jv> = RestClient
 		|		.<jsm>create</jsm>()
-		|		.simpleJson()
+		|		.json5()
 		|		.build()
 		|		.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
 		|	CreatePet <jv>createPet</jv> = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);

@@ -72,7 +72,7 @@ public class BeanAssertion_Test {
 	@Test
 	public void ba01b_asString_wSerializer() throws Exception {
 		A x = A1, nil = null;
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("{a:1,b:2}");
 		test(nil).asString(s).is("null");
 	}
@@ -233,7 +233,7 @@ public class BeanAssertion_Test {
 	@Test
 	public void ca11_isSameSerializedAs() throws Exception {
 		A x1 = A1, x1a = A1a, x2 = A2, nil = null;
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
 		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{a:2,b:3}'.  Actual='{a:1,b:2}'.");

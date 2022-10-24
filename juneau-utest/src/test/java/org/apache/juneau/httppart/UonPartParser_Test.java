@@ -282,7 +282,7 @@ public class UonPartParser_Test {
 
 		JsonMap r =  parse(in, BeanContext.DEFAULT.getClassMeta(JsonMap.class));
 
-		assertEquals("{name:'foo bar'}", SimpleJsonSerializer.DEFAULT.toString(r));
+		assertEquals("{name:'foo bar'}", Json5Serializer.DEFAULT.toString(r));
 	}
 
 }

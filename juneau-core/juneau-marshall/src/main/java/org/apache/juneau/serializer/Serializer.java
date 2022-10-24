@@ -476,7 +476,7 @@ public class Serializer extends BeanTraverseContext {
 		 * 		MySerializerListener <jv>listener</jv> = <jv>session</jv>.getListener(MySerializerListener.<jk>class</jk>);
 		 *
 		 * 		<jc>// Dump the results to the console.</jc>
-		 * 		SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>listener</jv>.<jf>events</jf>);
+		 * 		Json5.<jsf>DEFAULT</jsf>.println(<jv>listener</jv>.<jf>events</jf>);
 		 * 	}
 		 * </p>
 		 *
@@ -1509,8 +1509,8 @@ public class Serializer extends BeanTraverseContext {
 	 *
 	 * <p>
 	 * This method is specified to override the content type for this serializer.
-	 * For example, the {@link org.apache.juneau.json.SimpleJsonSerializer} class returns that it handles media type
-	 * <js>"text/json+simple"</js>, but returns <js>"text/json"</js> as the actual content type.
+	 * For example, the {@link org.apache.juneau.json.Json5Serializer} class returns that it handles media type
+	 * <js>"text/json5"</js>, but returns <js>"text/json"</js> as the actual content type.
 	 * This allows clients to request specific 'flavors' of content using specialized <c>Accept</c> header values.
 	 *
 	 * <p>

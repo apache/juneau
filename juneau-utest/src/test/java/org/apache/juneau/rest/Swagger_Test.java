@@ -2120,6 +2120,6 @@ public class Swagger_Test {
 		Operation o = s.getOperation("/", "get");
 
 		ResponseInfo ri = o.getResponse("200");
-		assertEquals("{\n\tf1: 1,\n\tf2: 2\n}", ri.getExamples().get("application/json+simple"));
+		assertEquals("{\n\tf1: 1,\n\tf2: 2\n}", ri.getExamples().get("application/json5"));
 	}
 }

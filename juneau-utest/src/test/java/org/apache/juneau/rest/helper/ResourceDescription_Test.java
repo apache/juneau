@@ -26,6 +26,6 @@ public class ResourceDescription_Test {
 	public void a01_basic() throws Exception {
 		ResourceDescription rd = new ResourceDescription("a","b?c=d&e=f","g");
 		assertEquals("<table><tr><td>name</td><td><a href=\"/b?c=d&amp;e=f\">a</a></td></tr><tr><td>description</td><td>g</td></tr></table>", Html.of(rd));
-		assertEquals("{name:'a',description:'g'}", SimpleJson.of(rd));
+		assertEquals("{name:'a',description:'g'}", Json5.of(rd));
 	}
 }

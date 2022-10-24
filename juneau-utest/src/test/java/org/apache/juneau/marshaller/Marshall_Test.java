@@ -20,7 +20,7 @@ public class Marshall_Test {
 
 	@Test
 	public void basic() {
-		Marshaller m = SimpleJson.DEFAULT;
+		Marshaller m = Json5.DEFAULT;
 		assertObject(m.getParser()).isNotNull();
 		assertObject(m.getSerializer()).isNotNull();
 	}

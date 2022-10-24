@@ -51,13 +51,13 @@ public class BasicBeanTests {
 
 	@Test
 	public void a02_testTransientFieldsIgnored_overrideSetting() {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().disableIgnoreTransientFields().build();
+		JsonSerializer s = Json5Serializer.DEFAULT.copy().disableIgnoreTransientFields().build();
 		assertObject(A1.create()).asString(s).is("{f1:1,f2:2}");
 	}
 
 	@Test
 	public void a03_testTransientFieldsIgnored_overrideAnnotation() {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(A.class).build();
+		JsonSerializer s = Json5Serializer.DEFAULT.copy().applyAnnotations(A.class).build();
 		assertObject(A1.create()).asString(s).is("{f1:1,f2:2}");
 	}
 

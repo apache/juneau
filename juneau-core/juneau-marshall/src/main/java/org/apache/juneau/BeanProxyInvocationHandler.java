@@ -71,7 +71,7 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 			return Integer.valueOf(this.beanProps.hashCode());
 
 		if (mi.hasName("toString") && mi.hasNoParams())
-			return SimpleJsonSerializer.DEFAULT.toString(this.beanProps);
+			return Json5Serializer.DEFAULT.toString(this.beanProps);
 
 		String prop = this.meta.getterProps.get(method);
 		if (prop != null)

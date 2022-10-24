@@ -38,7 +38,7 @@ public class RestCallException_Test {
 		}
 		@Override
 		public String toString() {
-			return SimpleJson.of(this);
+			return Json5.of(this);
 		}
 	}
 
@@ -78,6 +78,6 @@ public class RestCallException_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static RestClient.Builder client() {
-		return MockRestClient.create(A.class).simpleJson().noTrace();
+		return MockRestClient.create(A.class).json5().noTrace();
 	}
 }

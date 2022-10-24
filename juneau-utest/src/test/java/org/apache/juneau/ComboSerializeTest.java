@@ -100,7 +100,7 @@ public abstract class ComboSerializeTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// JSON
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sJson = SimpleJsonSerializer.DEFAULT;
+	WriterSerializer sJson = Json5Serializer.DEFAULT;
 
 	@Test
 	public void a11_serializeJson() throws Exception {
@@ -110,7 +110,7 @@ public abstract class ComboSerializeTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// JSON - 't' property
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sJsonT = JsonSerializer.create().ssq().typePropertyName("t").build();
+	WriterSerializer sJsonT = Json5Serializer.create().json5().typePropertyName("t").build();
 
 	@Test
 	public void a21_serializeJsonT() throws Exception {
@@ -120,7 +120,7 @@ public abstract class ComboSerializeTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// JSON - Readable
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sJsonR = SimpleJsonSerializer.DEFAULT_READABLE;
+	WriterSerializer sJsonR = Json5Serializer.DEFAULT_READABLE;
 
 	@Test
 	public void a31_serializeJsonR() throws Exception {

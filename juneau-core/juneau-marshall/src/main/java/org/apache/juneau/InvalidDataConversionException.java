@@ -67,7 +67,7 @@ public final class InvalidDataConversionException extends BasicRuntimeException 
 	private static String value(Object o) {
 		if (o instanceof Class)
 			return "'" + name(o) + "'";
-		return SimpleJsonSerializer.DEFAULT == null ? "'" + o.toString() + "'" : SimpleJsonSerializer.DEFAULT.toString(o);
+		return Json5Serializer.DEFAULT == null ? "'" + o.toString() + "'" : Json5Serializer.DEFAULT.toString(o);
 	}
 
 	private static String name(Class<?> c) {

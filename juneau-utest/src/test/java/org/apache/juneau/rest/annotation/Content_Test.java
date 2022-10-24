@@ -42,7 +42,7 @@ public class Content_Test {
 	// @Body on parameter
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	@Rest(serializers=Json5Serializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static class A {
 		@RestPut(path="/String")
 		public String a(@Content String b) {
@@ -418,7 +418,7 @@ public class Content_Test {
 	// @Body on POJO
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
+	@Rest(serializers=Json5Serializer.class, parsers=JsonParser.class, defaultAccept="application/json")
 	public static class B {
 		@RestPut(path="/StringTransform")
 		public B1 a(B1 b) {
@@ -646,7 +646,7 @@ public class Content_Test {
 	// Complex POJOs
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
+	@Rest(serializers=Json5Serializer.class, parsers=JsonParser.class, defaultAccept="application/json")
 	public static class E {
 		@RestPut(path="/B")
 		public XBeans.XB a(@Content XBeans.XB b) {
@@ -664,7 +664,7 @@ public class Content_Test {
 		String expected;
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.put("/B", SimpleJsonSerializer.DEFAULT.toString(XBeans.XB.INSTANCE), APPLICATION_JSON)
+		e.put("/B", Json5Serializer.DEFAULT.toString(XBeans.XB.INSTANCE), APPLICATION_JSON)
 			.run()
 			.assertContent(expected);
 
@@ -674,7 +674,7 @@ public class Content_Test {
 			.assertContent(expected);
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.put("/C", SimpleJsonSerializer.DEFAULT.toString(XBeans.XB.INSTANCE), APPLICATION_JSON)
+		e.put("/C", Json5Serializer.DEFAULT.toString(XBeans.XB.INSTANCE), APPLICATION_JSON)
 			.run()
 			.assertContent(expected);
 
@@ -684,7 +684,7 @@ public class Content_Test {
 			.assertContent(expected);
 	}
 
-	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
+	@Rest(serializers=Json5Serializer.class, parsers=JsonParser.class, defaultAccept="application/json")
 	@Bean(on="A,B,C",sort=true)
 	@UrlEncoding(on="C",expandedParams=true)
 	public static class E2 {
@@ -704,7 +704,7 @@ public class Content_Test {
 		String expected;
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e2.put("/B", SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().toString(XBeans.XE.INSTANCE), APPLICATION_JSON)
+		e2.put("/B", Json5Serializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().toString(XBeans.XE.INSTANCE), APPLICATION_JSON)
 			.run()
 			.assertContent(expected);
 
@@ -714,7 +714,7 @@ public class Content_Test {
 			.assertContent(expected);
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e2.put("/C", SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().toString(XBeans.XE.INSTANCE), APPLICATION_JSON)
+		e2.put("/C", Json5Serializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().toString(XBeans.XE.INSTANCE), APPLICATION_JSON)
 			.run()
 			.assertContent(expected);
 
@@ -735,7 +735,7 @@ public class Content_Test {
 				@Content F1 bean,
 				@HasQuery("p1") boolean hqp1, @HasQuery("p2") boolean hqp2,
 				@Query("p1") String qp1, @Query("p2") int qp2) throws Exception {
-			return reader("bean=["+SimpleJsonSerializer.DEFAULT.toString(bean)+"],qp1=["+qp1+"],qp2=["+qp2+"],hqp1=["+hqp1+"],hqp2=["+hqp2+"]");
+			return reader("bean=["+Json5Serializer.DEFAULT.toString(bean)+"],qp1=["+qp1+"],qp2=["+qp2+"],hqp1=["+hqp1+"],hqp2=["+hqp2+"]");
 		}
 		public static class F1 {
 			public String p1;
@@ -930,7 +930,7 @@ public class Content_Test {
 	// Optional body parameter.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=SimpleJsonSerializer.class,parsers=JsonParser.class)
+	@Rest(serializers=Json5Serializer.class,parsers=JsonParser.class)
 	public static class J {
 		@RestPost
 		public Object a(@Content Optional<Integer> body) throws Exception {
@@ -974,7 +974,7 @@ public class Content_Test {
 			.assertStatus(200)
 			.assertContent("null");
 
-		String body1 = SimpleJson.of(list(ABean.get()));
+		String body1 = Json5.of(list(ABean.get()));
 		j.post("/c", body1, APPLICATION_JSON)
 			.run()
 			.assertStatus(200)
@@ -984,7 +984,7 @@ public class Content_Test {
 			.assertStatus(200)
 			.assertContent("null");
 
-		String body2 = SimpleJson.of(list(optional(ABean.get())));
+		String body2 = Json5.of(list(optional(ABean.get())));
 		j.post("/d", body2, APPLICATION_JSON)
 			.run()
 			.assertStatus(200)

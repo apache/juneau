@@ -237,7 +237,7 @@ public class Remote_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest(path="/C1")
-	public static class C implements BasicSimpleJsonConfig {
+	public static class C implements BasicJson5Config {
 		@RestOp
 		public String x1() {
 			return "foo";
@@ -280,7 +280,7 @@ public class Remote_Test {
 	}
 
 	@Rest(path="/C3")
-	public static class C3a implements BasicSimpleJsonConfig {
+	public static class C3a implements BasicJson5Config {
 		@RestOp
 		public String x1() {
 			return "bar";
@@ -317,7 +317,7 @@ public class Remote_Test {
 	}
 
 	@Rest(path="/C4")
-	public static class C4a implements BasicSimpleJsonConfig {
+	public static class C4a implements BasicJson5Config {
 		@RestOp
 		public String x1() throws C4c {
 			throw new C4c("foo");
@@ -385,7 +385,7 @@ public class Remote_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class D1 implements BasicSimpleJsonConfig {
+	public static class D1 implements BasicJson5Config {
 		@RestGet
 		public void r202(org.apache.juneau.rest.RestResponse res) {
 			res.setStatus(202);
@@ -426,7 +426,7 @@ public class Remote_Test {
 	}
 
 	@Rest
-	public static class D2 implements BasicSimpleJsonConfig {
+	public static class D2 implements BasicJson5Config {
 		@RestGet
 		public Integer x1() {
 			return null;
@@ -457,7 +457,7 @@ public class Remote_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class E implements BasicSimpleJsonConfig {
+	public static class E implements BasicJson5Config {
 		@RestOp(method=HttpMethod.RRPC)
 		public E1 proxy() {
 			return new E1() {
@@ -503,7 +503,7 @@ public class Remote_Test {
 	}
 
 	@Rest
-	public static class E5 implements BasicSimpleJsonConfig {
+	public static class E5 implements BasicJson5Config {
 		@RestOp(method=HttpMethod.RRPC)
 		public E5b proxy() {
 			return new E5b() {
@@ -533,7 +533,7 @@ public class Remote_Test {
 	}
 
 	@Rest
-	public static class E6 implements BasicSimpleJsonConfig {
+	public static class E6 implements BasicJson5Config {
 		@RestOp(method=HttpMethod.RRPC)
 		public E5b proxy() {
 			return new E5b() {
@@ -582,9 +582,9 @@ public class Remote_Test {
 	@Test
 	public void f01_headers() throws Exception {
 		F1a x = client(F.class).header("Check","Foo").build().getRemote(F1a.class);
-		assertEquals("['bar','baz','qux']",SimpleJson.of(x.getHeaders()));
+		assertEquals("['bar','baz','qux']",Json5.of(x.getHeaders()));
 		x = client(F.class).header("Check","Client-Version").build().getRemote(F1a.class);
-		assertEquals("['1.2.3']",SimpleJson.of(x.getHeaders()));
+		assertEquals("['1.2.3']",Json5.of(x.getHeaders()));
 	}
 
 	@Remote(headerList=F2b.class)
@@ -730,11 +730,11 @@ public class Remote_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static RestClient.Builder client(Class<?> c) {
-		return MockRestClient.create(c).noTrace().simpleJson();
+		return MockRestClient.create(c).noTrace().json5();
 	}
 
 	private static <T> T remote(Class<?> c, Class<T> r) {
-		return MockRestClient.create(c).noTrace().simpleJson().build().getRemote(r);
+		return MockRestClient.create(c).noTrace().json5().build().getRemote(r);
 	}
 
 	private static <T> T plainRemote(Class<?> c, Class<T> r) {

@@ -195,7 +195,7 @@ public class Messages extends ResourceBundle {
 					if (isJsonObject(value, true)) {
 						MessagesString ms;
 						try {
-							ms = SimpleJson.DEFAULT.read(value, MessagesString.class);
+							ms = Json5.DEFAULT.read(value, MessagesString.class);
 						} catch (ParseException e) {
 							throw asRuntimeException(e);
 						}
@@ -508,6 +508,6 @@ public class Messages extends ResourceBundle {
 		JsonMap m = new JsonMap();
 		for (String k : new TreeSet<>(keySet()))
 			m.put(k, getString(k));
-		return SimpleJson.of(m);
+		return Json5.of(m);
 	}
 }

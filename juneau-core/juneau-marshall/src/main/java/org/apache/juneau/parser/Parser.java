@@ -397,7 +397,7 @@ public class Parser extends BeanContextable {
 		 * 		MyParserListener <jv>listener</jv> = <jv>session</jv>.getListener(MyParserListener.<jk>class</jk>);
 		 *
 		 * 		<jc>// Dump the results to the console.</jc>
-		 * 		SimpleJson.<jsf>DEFAULT</jsf>.println(<jv>listener</jv>.<jf>events</jf>);
+		 * 		Json5.<jsf>DEFAULT</jsf>.println(<jv>listener</jv>.<jf>events</jf>);
 		 * 	}
 		 * </p>
 		 *

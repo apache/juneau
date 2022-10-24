@@ -60,7 +60,7 @@ public class RestClient_Config_OpenApi_Test {
 		RestClient x = client().oapiCollectionFormat(PIPES).build();
 		x.get("/checkQuery").queryData("Foo",a).run().assertContent().asString().asUrlDecode().is("Foo=bar|baz");
 		x.post("/checkFormData").formData("Foo",a).run().assertContent().asString().asUrlDecode().is("Foo=bar|baz");
-		x.get("/checkHeader").header("Check","Foo").header("Foo",a).accept("text/json+simple").run().assertContent("['bar|baz']");
+		x.get("/checkHeader").header("Check","Foo").header("Foo",a).accept("text/json5").run().assertContent("['bar|baz']");
 	}
 
 	@Test

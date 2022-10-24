@@ -76,15 +76,15 @@ public class RestClient_Logging_Test {
 			"=== REQUEST ===",
 			"POST http://localhost/bean",
 			"---request headers---",
-			"	Accept: application/json+simple",
+			"	Accept: application/json5",
 			"---request entity---",
-			"	Content-Type: application/json+simple",
+			"	Content-Type: application/json5",
 			"---request content---",
 			"{f:1}",
 			"=== RESPONSE ===",
 			"HTTP/1.1 200 ",
 			"---response headers---",
-			"	Content-Type: application/json",
+			"	Content-Type: application/json5",
 			"---response content---",
 			"{f:1}",
 			"=== END ======================================================================="
@@ -97,11 +97,11 @@ public class RestClient_Logging_Test {
 			"=== REQUEST ===",
 			"GET http://localhost/bean",
 			"---request headers---",
-			"	Accept: application/json+simple",
+			"	Accept: application/json5",
 			"=== RESPONSE ===",
 			"HTTP/1.1 200 ",
 			"---response headers---",
-			"	Content-Type: application/json",
+			"	Content-Type: application/json5",
 			"---response content---",
 			"{f:1}",
 			"=== END ======================================================================="
@@ -152,15 +152,15 @@ public class RestClient_Logging_Test {
 			"=== REQUEST ===",
 			"POST http://localhost/bean",
 			"---request headers---",
-			"	Accept: application/json+simple",
+			"	Accept: application/json5",
 			"---request entity---",
-			"	Content-Type: application/json+simple",
+			"	Content-Type: application/json5",
 			"---request content---",
 			"{f:1}",
 			"=== RESPONSE ===",
 			"HTTP/1.1 200 ",
 			"---response headers---",
-			"	Content-Type: application/json",
+			"	Content-Type: application/json5",
 			"---response content---",
 			"{f:1}",
 			"=== END ======================================================================="
@@ -171,15 +171,15 @@ public class RestClient_Logging_Test {
 			"=== REQUEST ===",
 			"POST http://localhost/bean",
 			"---request headers---",
-			"	Accept: application/json+simple",
+			"	Accept: application/json5",
 			"---request entity---",
-			"	Content-Type: application/json+simple",
+			"	Content-Type: application/json5",
 			"---request content---",
 			"{f:1}",
 			"=== RESPONSE ===",
 			"HTTP/1.1 200 ",
 			"---response headers---",
-			"	Content-Type: application/json",
+			"	Content-Type: application/json5",
 			"---response content---",
 			"{f:1}",
 			"=== END ======================================================================="
@@ -222,7 +222,7 @@ public class RestClient_Logging_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static RestClient.Builder client() {
-		return MockRestClient.create(A.class).simpleJson();
+		return MockRestClient.create(A.class).json5();
 	}
 
 	private static RestClient.Builder clientPlain() {

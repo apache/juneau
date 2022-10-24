@@ -507,7 +507,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 			).build();
 	}
 
-	@Swap(value=SwapJson.class, mediaTypes={"application/json"})
+	@Swap(value=SwapJson.class, mediaTypes={"application/json5"})
 	@Swap(value=SwapXml.class, mediaTypes={"text/xml"})
 	@Swap(value=SwapHtml.class, mediaTypes={"text/html"})
 	@Swap(value=SwapUon.class, mediaTypes={"text/uon"})
@@ -516,7 +516,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	@Swap(value=SwapRdfXml.class, mediaTypes={"text/xml+rdf"})
 	public static class TestMediaTypeLiterals {}
 
-	@Swap(value=SwapJson.class, mediaTypes={"*/json"})
+	@Swap(value=SwapJson.class, mediaTypes={"*/json5"})
 	@Swap(value=SwapXml.class, mediaTypes={"*/xml"})
 	@Swap(value=SwapHtml.class, mediaTypes={"*/html"})
 	@Swap(value=SwapUon.class, mediaTypes={"*/uon"})
@@ -531,10 +531,10 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	@Swap(value=SwapUon.class, mediaTypes={"*/uon"})
 	@Swap(value=SwapHtml.class, mediaTypes={"*/html"})
 	@Swap(value=SwapXml.class, mediaTypes={"*/xml"})
-	@Swap(value=SwapJson.class, mediaTypes={"*/json"})
+	@Swap(value=SwapJson.class, mediaTypes={"*/json5"})
 	public static class TestMediaTypePatternsReversed {}
 
-	@Swap(value=SwapJson.class, mediaTypes={"*/foo","*/json","*/bar"})
+	@Swap(value=SwapJson.class, mediaTypes={"*/foo","*/json5","*/bar"})
 	@Swap(value=SwapXml.class, mediaTypes={"*/foo","*/xml","*/bar"})
 	@Swap(value=SwapHtml.class, mediaTypes={"*/foo","*/html","*/bar"})
 	@Swap(value=SwapUon.class, mediaTypes={"*/foo","*/uon","*/bar"})
@@ -543,7 +543,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	@Swap(value=SwapRdfXml.class, mediaTypes={"*/foo","*/xml+rdf","*/bar"})
 	public static class TestMediaTypePatternsMulti {}
 
-	@Swap(value=SwapJson.class, mediaTypes={"*/foo","*/json","*/bar"})
+	@Swap(value=SwapJson.class, mediaTypes={"*/foo","*/json5","*/bar"})
 	@Swap(value=SwapXml.class, mediaTypes={"*/foo","*/xml","*/bar"})
 	@Swap(value=SwapHtml.class, mediaTypes={"*/foo","*/html","*/bar"})
 	public static class TestMediaTypePatternsPartial1 {
@@ -634,7 +634,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	@Swap(impl=TemplateSwap.class,template="foo")
 	public static class TestTemplate {}
 
-	@Swap(value=TemplateSwap.class, mediaTypes={"*/json"}, template="JSON")
+	@Swap(value=TemplateSwap.class, mediaTypes={"*/json5"}, template="JSON")
 	@Swap(value=TemplateSwap.class, mediaTypes={"*/xml"}, template="XML")
 	@Swap(value=TemplateSwap.class, mediaTypes={"*/html"}, template="HTML")
 	@Swap(value=TemplateSwap.class, mediaTypes={"*/uon"}, template="UON")
@@ -663,7 +663,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	public static class TemplateSwapJson extends TemplateSwap {
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.ofAll("*/json");
+			return MediaType.ofAll("*/json5");
 		}
 		@Override
 		public String withTemplate() {
@@ -754,7 +754,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.ofAll("*/json");
+			return MediaType.ofAll("*/json5");
 		}
 		@Override
 		public String withTemplate() {
@@ -846,7 +846,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 	}
 
-	@Swap(value=BeanSwap.class, mediaTypes={"*/json"})
+	@Swap(value=BeanSwap.class, mediaTypes={"*/json5"})
 	@Swap(value=BeanSwap.class, mediaTypes={"*/xml"})
 	@Swap(value=BeanSwap.class, mediaTypes={"*/html"})
 	public static class BeanA {

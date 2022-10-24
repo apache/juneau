@@ -200,7 +200,7 @@ public final class Config extends Context implements ConfigEventListener {
 			super();
 			name = env("Config.name", "Configuration.cfg");
 			store = FileStore.DEFAULT;
-			serializer = SimpleJsonSerializer.DEFAULT;
+			serializer = Json5Serializer.DEFAULT;
 			parser = JsonParser.DEFAULT;
 			mods = map();
 			mods(XorEncodeMod.INSTANCE);
@@ -323,7 +323,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>The default is {@link SimpleJsonSerializer#DEFAULT}
+		 * 	<br>The default is {@link Json5Serializer#DEFAULT}
 		 * @return This object.
 		 */
 		public Builder serializer(WriterSerializer value) {

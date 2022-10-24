@@ -264,7 +264,7 @@ public class MaxIndentTest {
 
 	@Test
 	public void a1_serializeJson() throws Exception {
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT_READABLE.copy().maxIndent(input.maxDepth).build();
+		WriterSerializer s = Json5Serializer.DEFAULT_READABLE.copy().maxIndent(input.maxDepth).build();
 		testSerialize("json", s, input.json);
 	}
 

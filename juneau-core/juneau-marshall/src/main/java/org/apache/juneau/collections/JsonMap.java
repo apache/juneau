@@ -1596,25 +1596,25 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Serialize this object to Simplified JSON using {@link SimpleJsonSerializer#DEFAULT}.
+	 * Serialize this object to Simplified JSON using {@link Json5Serializer#DEFAULT}.
 	 *
 	 * @return This object serialized as a string.
 	 */
 	public String asString() {
-		if (SimpleJsonSerializer.DEFAULT == null)
+		if (Json5Serializer.DEFAULT == null)
 			return stringify(this);
-		return SimpleJsonSerializer.DEFAULT.toString(this);
+		return Json5Serializer.DEFAULT.toString(this);
 	}
 
 	/**
-	 * Serialize this object to Simplified JSON using {@link SimpleJsonSerializer#DEFAULT_READABLE}.
+	 * Serialize this object to Simplified JSON using {@link Json5Serializer#DEFAULT_READABLE}.
 	 *
 	 * @return This object serialized as a string.
 	 */
 	public String asReadableString() {
-		if (SimpleJsonSerializer.DEFAULT_READABLE == null)
+		if (Json5Serializer.DEFAULT_READABLE == null)
 			return stringify(this);
-		return SimpleJsonSerializer.DEFAULT_READABLE.toString(this);
+		return Json5Serializer.DEFAULT_READABLE.toString(this);
 	}
 
 	/**
@@ -1902,6 +1902,6 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 	@Override /* Object */
 	public String toString() {
-		return SimpleJson.of(this);
+		return Json5.of(this);
 	}
 }

@@ -76,7 +76,7 @@ public class DateAssertion_Test {
 	@Test
 	public void ba01b_asString_wSerializer() throws Exception {
 		Date x = MID1, nil = null;
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).isMatches("'2000-*'");
 		test(nil).asString(s).is("null");
 	}
@@ -227,7 +227,7 @@ public class DateAssertion_Test {
 	@Test
 	public void ca11_isSameSerializedAs() throws Exception {
 		Date x1 = MID1, x1a = MID1a, x2 = MID2, nil = null;
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
 		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().isMatches("Unexpected comparison.  Expect=''2010*''.  Actual=''2000*''.");

@@ -349,7 +349,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	public void testSurrogates() throws Exception {
 		swaps(D2.class);
 
-		JsonSerializer s = JsonSerializer.create().ssq().swaps(D2.class).build();
+		JsonSerializer s = JsonSerializer.create().json5().swaps(D2.class).build();
 		JsonParser p = JsonParser.create().swaps(D2.class).build();
 		Object r;
 		D1 x = D1.create();
@@ -391,7 +391,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	@Test
 	public void testSurrogatesThroughAnnotation() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
+		JsonSerializer s = Json5Serializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 		Object r;
 		E1 x = E1.create();
@@ -434,7 +434,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	@Test
 	public void testSurrogatesThroughAnnotation_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(E1cConfig.class).build();
+		JsonSerializer s = Json5Serializer.DEFAULT.copy().applyAnnotations(E1cConfig.class).build();
 		JsonParser p = JsonParser.DEFAULT.copy().applyAnnotations(E1cConfig.class).build();
 		Object r;
 		E1c x = E1c.create();
@@ -505,7 +505,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	@Test
 	public void testSwapOnPrivateField() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
+		JsonSerializer s = Json5Serializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 
 		F1 x = F1.create();
@@ -546,7 +546,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	@Test
 	public void testSwapOnPrivateField_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(F1cConfig.class).build();
+		JsonSerializer s = Json5Serializer.DEFAULT.copy().applyAnnotations(F1cConfig.class).build();
 		JsonParser p = JsonParser.DEFAULT.copy().applyAnnotations(F1cConfig.class).build();
 
 		F1c x = F1c.create();
@@ -587,7 +587,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	@Test
 	public void testSwapOnPrivateField_Inherited() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
+		JsonSerializer s = Json5Serializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 
 		F2 x = F2.create();
@@ -630,7 +630,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	@Test
 	public void testSwapOnPrivateField_Inherited_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(F2ac.class).build();
+		JsonSerializer s = Json5Serializer.DEFAULT.copy().applyAnnotations(F2ac.class).build();
 		JsonParser p = JsonParser.DEFAULT.copy().applyAnnotations(F2ac.class).build();
 
 		F2 x = F2.create();

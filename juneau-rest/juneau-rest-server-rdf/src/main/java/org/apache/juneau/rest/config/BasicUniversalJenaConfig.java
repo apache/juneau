@@ -43,7 +43,7 @@ import org.apache.juneau.xml.*;
  * 					<li class='jc'>{@link HtmlStrippedDocSerializer}
  * 					<li class='jc'>{@link HtmlSchemaDocSerializer}
  * 					<li class='jc'>{@link JsonSerializer}
- * 					<li class='jc'>{@link SimpleJsonSerializer}
+ * 					<li class='jc'>{@link Json5Serializer}
  * 					<li class='jc'>{@link JsonSchemaSerializer}
  * 					<li class='jc'>{@link XmlDocSerializer}
  * 					<li class='jc'>{@link UonSerializer}
@@ -62,7 +62,7 @@ import org.apache.juneau.xml.*;
  * 			<li class='jma'>{@link Rest#parsers() parsers}:
  * 				<ul class='javatree'>
  * 					<li class='jc'>{@link JsonParser}
- * 					<li class='jc'>{@link SimpleJsonParser}
+ * 					<li class='jc'>{@link Json5Parser}
  * 					<li class='jc'>{@link XmlParser}
  * 					<li class='jc'>{@link HtmlParser}
  * 					<li class='jc'>{@link UonParser}

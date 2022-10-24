@@ -187,7 +187,7 @@ public class OpenApiPartParser_Test {
 	public static class C3 {
 		private String f;
 		public C3(String[] in) {
-			f = "C3-" + SimpleJsonSerializer.DEFAULT.toString(in);
+			f = "C3-" + Json5Serializer.DEFAULT.toString(in);
 		}
 		@Override
 		public String toString() {
@@ -521,7 +521,7 @@ public class OpenApiPartParser_Test {
 	public static class E2 {
 		private String f;
 		public E2(Boolean[] in) {
-			this.f = "E2-" + SimpleJsonSerializer.DEFAULT.toString(in);
+			this.f = "E2-" + Json5Serializer.DEFAULT.toString(in);
 		}
 		@Override
 		public String toString() {
@@ -605,7 +605,7 @@ public class OpenApiPartParser_Test {
 	public static class F2 {
 		private String f;
 		public F2(Integer[] in) {
-			this.f = "F2-" + SimpleJsonSerializer.DEFAULT.toString(in);
+			this.f = "F2-" + Json5Serializer.DEFAULT.toString(in);
 		}
 		@Override
 		public String toString() {
@@ -626,7 +626,7 @@ public class OpenApiPartParser_Test {
 	public static class F4 {
 		private String f;
 		public F4(Long[] in) {
-			this.f = "F4-" + SimpleJsonSerializer.DEFAULT.toString(in);
+			this.f = "F4-" + Json5Serializer.DEFAULT.toString(in);
 		}
 		@Override
 		public String toString() {
@@ -788,7 +788,7 @@ public class OpenApiPartParser_Test {
 	public static class G2 {
 		private String f;
 		public G2(Float[] in) {
-			this.f = "G2-" + SimpleJsonSerializer.DEFAULT.toString(in);
+			this.f = "G2-" + Json5Serializer.DEFAULT.toString(in);
 		}
 		@Override
 		public String toString() {
@@ -809,7 +809,7 @@ public class OpenApiPartParser_Test {
 	public static class G4 {
 		private String f;
 		public G4(Double[] in) {
-			this.f = "G4-" + SimpleJsonSerializer.DEFAULT.toString(in);
+			this.f = "G4-" + Json5Serializer.DEFAULT.toString(in);
 		}
 		@Override
 		public String toString() {

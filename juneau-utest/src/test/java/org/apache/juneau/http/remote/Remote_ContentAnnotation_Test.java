@@ -55,7 +55,7 @@ public class Remote_ContentAnnotation_Test {
 
 		@Override
 		public String toString() {
-			return SimpleJson.of(this);
+			return Json5.of(this);
 		}
 	}
 
@@ -80,25 +80,25 @@ public class Remote_ContentAnnotation_Test {
 		@RestPost
 		public String x3(@Content Bean b, @Header("Content-Type") String ct) {
 			assertEquals("application/json",ct);
-			return SimpleJsonSerializer.DEFAULT.toString(b);
+			return Json5Serializer.DEFAULT.toString(b);
 		}
 
 		@RestPost
 		public String x4(@Content Bean[] b, @Header("Content-Type") String ct) {
 			assertEquals("application/json",ct);
-			return SimpleJsonSerializer.DEFAULT.toString(b);
+			return Json5Serializer.DEFAULT.toString(b);
 		}
 
 		@RestPost
 		public String x5(@Content List<Bean> b, @Header("Content-Type") String ct) {
 			assertEquals("application/json",ct);
-			return SimpleJsonSerializer.DEFAULT.toString(b);
+			return Json5Serializer.DEFAULT.toString(b);
 		}
 
 		@RestPost
 		public String x6(@Content Map<String,Bean> b, @Header("Content-Type") String ct) {
 			assertEquals("application/json",ct);
-			return SimpleJsonSerializer.DEFAULT.toString(b);
+			return Json5Serializer.DEFAULT.toString(b);
 		}
 
 		@RestPost
@@ -176,25 +176,25 @@ public class Remote_ContentAnnotation_Test {
 		@RestPost
 		public String x3(@Content Bean b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
-			return SimpleJson.of(b);
+			return Json5.of(b);
 		}
 
 		@RestPost
 		public Object x4(@Content Bean[] b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
-			return SimpleJson.of(b);
+			return Json5.of(b);
 		}
 
 		@RestPost
 		public Object x5(@Content List<Bean> b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
-			return SimpleJson.of(b);
+			return Json5.of(b);
 		}
 
 		@RestPost
 		public Object x6(@Content Map<String,Bean> b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
-			return SimpleJson.of(b);
+			return Json5.of(b);
 		}
 
 		@RestPost

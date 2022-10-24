@@ -53,7 +53,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void a02_beanpOnPrimitiveFields_parser() throws Exception {
-		A x = SimpleJson.DEFAULT.read("{f1:1,f2:2}", A.class);
+		A x = Json5.DEFAULT.read("{f1:1,f2:2}", A.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
 	}
@@ -116,7 +116,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void b02_beanAnnotationParser_usingConfig() throws Exception {
-		B x = SimpleJson.DEFAULT.read("{f1:1,f2:2}", B.class);
+		B x = Json5.DEFAULT.read("{f1:1,f2:2}", B.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
 	}
@@ -141,31 +141,31 @@ public class ReadWriteOnlyPropertiesTest {
 	public void c01_beanContext_serializer() throws Exception {
 		WriterSerializer sw;
 
-		sw = SimpleJsonSerializer.DEFAULT.copy()
+		sw = Json5Serializer.DEFAULT.copy()
 			.beanPropertiesReadOnly(C.class.getName(), "f1")
 			.beanPropertiesWriteOnly(C.class.getName(), "f2")
 			.build();
 		assertEquals("{f1:1}", sw.toString(C.create()));
 
-		sw = SimpleJsonSerializer.DEFAULT.copy()
+		sw = Json5Serializer.DEFAULT.copy()
 			.beanPropertiesReadOnly("ReadWriteOnlyPropertiesTest$C", "f1")
 			.beanPropertiesWriteOnly("ReadWriteOnlyPropertiesTest$C", "f2")
 			.build();
 		assertEquals("{f1:1}", sw.toString(C.create()));
 
-		sw = SimpleJsonSerializer.DEFAULT.copy()
+		sw = Json5Serializer.DEFAULT.copy()
 			.beanPropertiesReadOnly(C.class, "f1")
 			.beanPropertiesWriteOnly(C.class, "f2")
 			.build();
 		assertEquals("{f1:1}", sw.toString(C.create()));
 
-		sw = SimpleJsonSerializer.DEFAULT.copy()
+		sw = Json5Serializer.DEFAULT.copy()
 			.beanPropertiesReadOnly(map(C.class.getName(), "f1"))
 			.beanPropertiesWriteOnly(map(C.class.getName(), "f2"))
 			.build();
 		assertEquals("{f1:1}", sw.toString(C.create()));
 
-		sw = SimpleJsonSerializer.DEFAULT.copy()
+		sw = Json5Serializer.DEFAULT.copy()
 			.beanPropertiesReadOnly(map("ReadWriteOnlyPropertiesTest$C", "f1"))
 			.beanPropertiesWriteOnly(map("ReadWriteOnlyPropertiesTest$C", "f2"))
 			.build();
@@ -242,7 +242,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void d02_beanAnnotation_bproAll_Parser() throws Exception {
-		D x = SimpleJson.DEFAULT.read("{f1:1,f2:2}", D.class);
+		D x = Json5.DEFAULT.read("{f1:1,f2:2}", D.class);
 		assertEquals(0, x.f1);
 		assertEquals(0, x.f2);
 	}
@@ -264,7 +264,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void d03_beanAnnotation_bproAll_serializer_usingConfig() throws Exception {
-		assertObject(Dc.create()).asString(SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(DcConfig.class).build()).is("{f1:1,f2:2}");
+		assertObject(Dc.create()).asString(Json5Serializer.DEFAULT.copy().applyAnnotations(DcConfig.class).build()).is("{f1:1,f2:2}");
 	}
 
 	@Test
@@ -298,7 +298,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void e02_beanAnnotation_bpwoAll_Parser() throws Exception {
-		E x = SimpleJson.DEFAULT.read("{f1:1,f2:2}", E.class);
+		E x = Json5.DEFAULT.read("{f1:1,f2:2}", E.class);
 		assertEquals(1, x.f1);
 		assertEquals(2, x.f2);
 	}
@@ -320,7 +320,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void e03_beanAnnotation_bpwoAll_serializer_usingConfig() throws Exception {
-		assertObject(E.create()).asString(SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(EcConfig.class).build()).is("{}");
+		assertObject(E.create()).asString(Json5Serializer.DEFAULT.copy().applyAnnotations(EcConfig.class).build()).is("{}");
 	}
 
 	@Test

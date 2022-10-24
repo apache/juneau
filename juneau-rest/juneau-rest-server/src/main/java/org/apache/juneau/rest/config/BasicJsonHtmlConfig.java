@@ -31,14 +31,14 @@ import org.apache.juneau.serializer.annotation.*;
  * 			<li class='jma'>{@link Rest#serializers() serializers}:
  * 				<ul class='javatree'>
  * 					<li class='jc'>{@link JsonSerializer}
- * 					<li class='jc'>{@link SimpleJsonSerializer}
+ * 					<li class='jc'>{@link Json5Serializer}
  * 					<li class='jc'>{@link HtmlDocSerializer}
  * 				</ul>
  * 			</li>
  * 			<li class='jma'>{@link Rest#parsers() parsers}:
  * 				<ul class='javatree'>
  * 					<li class='jc'>{@link JsonParser}
- * 					<li class='jc'>{@link SimpleJsonParser}
+ * 					<li class='jc'>{@link Json5Parser}
  * 					<li class='jc'>{@link HtmlParser}
  * 				</ul>
  * 			</li>
@@ -98,14 +98,14 @@ import org.apache.juneau.serializer.annotation.*;
 	serializers={
 		HtmlDocSerializer.class,
 		JsonSerializer.class,
-		SimpleJsonSerializer.class
+		Json5Serializer.class
 	},
 
 	// Default parsers for all Java methods in the class.
 	parsers={
 		HtmlParser.class,
 		JsonParser.class,
-		SimpleJsonParser.class
+		Json5Parser.class
 	},
 
 	defaultAccept="text/json"

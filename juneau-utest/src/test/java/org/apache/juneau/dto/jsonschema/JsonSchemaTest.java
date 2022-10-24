@@ -25,7 +25,7 @@ public class JsonSchemaTest {
 
 	@Test
 	public void testSchema1() throws Exception {
-		JsonSerializer s = JsonSerializer.create().ssq().ws().build();
+		JsonSerializer s = JsonSerializer.create().json5().ws().build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 		JsonSchema t, t2;
@@ -119,7 +119,7 @@ public class JsonSchemaTest {
 
 	@Test
 	public void testSchema2() throws Exception {
-		JsonSerializer s = JsonSerializer.create().ssq().ws().build();
+		JsonSerializer s = JsonSerializer.create().json5().ws().build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 		JsonSchema t, t2;
@@ -156,7 +156,7 @@ public class JsonSchemaTest {
 
 	@Test
 	public void testToString() throws Exception {
-		JsonSerializer s = JsonSerializer.create().ssq().ws().build();
+		JsonSerializer s = JsonSerializer.create().json5().ws().build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 		JsonSchema t, t2;

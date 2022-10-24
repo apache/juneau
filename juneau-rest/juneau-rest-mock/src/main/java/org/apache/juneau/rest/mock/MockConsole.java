@@ -43,7 +43,7 @@ import org.apache.juneau.assertions.*;
  *	<jc>// Make a call against our REST API and log the call.</jc>
  * 	MockRestClient
  * 		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
- * 		.simpleJson()
+ * 		.json5()
  * 		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>)
  * 		.logToConsole()
  * 		.console(<jv>console</jv>)
@@ -57,9 +57,9 @@ import org.apache.juneau.assertions.*;
  * 		<js>"=== REQUEST ==="</js>,
  * 		<js>"POST http://localhost/bean"</js>,
  * 		<js>"---request headers---"</js>,
- * 		<js>"	Accept: application/json+simple"</js>,
+ * 		<js>"	Accept: application/json5"</js>,
  * 		<js>"---request entity---"</js>,
- * 		<js>"	Content-Type: application/json+simple"</js>,
+ * 		<js>"	Content-Type: application/json5"</js>,
  * 		<js>"---request content---"</js>,
  * 		<js>"{f:1}"</js>,
  * 		<js>"=== RESPONSE ==="</js>,
@@ -118,7 +118,7 @@ public class MockConsole extends PrintStream {
 	 * 		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
 	 * 		.console(<jv>console</jv>)
 	 * 		.debug()
-	 * 		.simpleJson()
+	 * 		.json5()
 	 * 		.build()
 	 * 		.get(<js>"/url"</js>)
 	 * 		.run();
@@ -143,7 +143,7 @@ public class MockConsole extends PrintStream {
 	 * 		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
 	 * 		.console(<jv>console</jv>)
 	 * 		.debug()
-	 * 		.simpleJson()
+	 * 		.json5()
 	 * 		.build()
 	 * 		.get(<js>"/url"</js>)
 	 * 		.run();

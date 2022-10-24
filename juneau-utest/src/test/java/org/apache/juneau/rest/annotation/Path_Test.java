@@ -745,7 +745,7 @@ public class Path_Test {
 	// Optional path parameter.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=Json5Serializer.class)
 	public static class J {
 		@RestGet(path="/a/{f1}")
 		public Object a(@Path("f1") Optional<Integer> f1) throws Exception {

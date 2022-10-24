@@ -29,7 +29,7 @@ public class BeanFilterTest {
 	//====================================================================================================
 	@Test
 	public void testSubTypes() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
+		JsonSerializer s = Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 		JsonParser p = JsonParser.DEFAULT;
 
 		A1 a1 = new A1();
@@ -87,7 +87,7 @@ public class BeanFilterTest {
 
 	@Test
 	public void testSubTypes_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().applyAnnotations(EConfig.class).build();
+		JsonSerializer s = Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().applyAnnotations(EConfig.class).build();
 		JsonParser p = JsonParser.create().applyAnnotations(EConfig2.class).build();
 
 		E1 e1 = new E1();
@@ -154,7 +154,7 @@ public class BeanFilterTest {
 	//====================================================================================================
 	@Test
 	public void testParentClassFilter() throws Exception {
-		JsonSerializer s = JsonSerializer.create().ssq().interfaces(C1.class).build();
+		JsonSerializer s = JsonSerializer.create().json5().interfaces(C1.class).build();
 
 		C1 c1 = new C2();
 		String r = s.serialize(c1);
@@ -179,7 +179,7 @@ public class BeanFilterTest {
 	//====================================================================================================
 	@Test
 	public void testParentClassFilter2() throws Exception {
-		JsonSerializer s = JsonSerializer.create().ssq().interfaces(D1.class).build();
+		JsonSerializer s = JsonSerializer.create().json5().interfaces(D1.class).build();
 
 		D1 d1 = new D2();
 		String r = s.serialize(d1);

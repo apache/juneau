@@ -49,7 +49,7 @@ public class Remote_CommonInterfaces_Test {
 	}
 
 	@Rest
-	public static class A1 implements A, BasicSimpleJsonConfig {
+	public static class A1 implements A, BasicJson5Config {
 		@Override
 		@RestOp
 		public String putX1(String b) {
@@ -81,7 +81,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Remote
 	@Rest
-	public static interface B extends BasicSimpleJsonConfig {
+	public static interface B extends BasicJson5Config {
 		String putX1(@Content String b);
 		String getX2(@Query("foo") String b);
 		String getX3(@Header("foo") String b);
@@ -116,7 +116,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Remote
 	@Rest
-	public static interface C extends BasicSimpleJsonConfig {
+	public static interface C extends BasicJson5Config {
 		Ok ok();
 		Accepted accepted();
 		AlreadyReported alreadyReported();
@@ -198,7 +198,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Remote
 	@Rest
-	public static interface D extends BasicSimpleJsonConfig {
+	public static interface D extends BasicJson5Config {
 		BasicResource httpResource() throws IOException ;
 	}
 
@@ -225,7 +225,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Remote
 	@Rest
-	public static interface E extends BasicSimpleJsonConfig {
+	public static interface E extends BasicJson5Config {
 		void badRequest() throws BadRequest;
 		void conflict() throws Conflict;
 		void expectationFailed() throws ExpectationFailed;
@@ -613,7 +613,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Remote
 	@Rest
-	public static interface F extends BasicSimpleJsonConfig {
+	public static interface F extends BasicJson5Config {
 		BadRequest badRequest();
 		Conflict conflict();
 		ExpectationFailed expectationFailed();
@@ -828,7 +828,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Remote
 	@Rest
-	public static interface G extends BasicSimpleJsonConfig {
+	public static interface G extends BasicJson5Config {
 		Reader reader();
 		InputStream inputStream();
 	}
@@ -857,7 +857,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Remote
 	@Rest
-	public static interface IH extends BasicSimpleJsonConfig {
+	public static interface IH extends BasicJson5Config {
 		SeeOtherRoot seeOtherRoot();
 	}
 

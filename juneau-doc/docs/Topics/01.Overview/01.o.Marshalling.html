@@ -209,13 +209,13 @@
 	</ul>
 </div>
 
-<h5 class='topic'>Simplified JSON Marshalling</h5>
+<h5 class='topic'>JSON 5 Marshalling</h5>
 <div class='topic'>
 	<p>
-		The {@link oaj.json.SimpleJsonSerializer} class can be used to serialized POJOs into Simplified JSON notation.
+		The {@link oaj.json.Json5Serializer} class can be used to serialized POJOs into JSON 5 notation.
 	</p>
 	<p>
-		Simplified JSON is identical to JSON except for the following:
+		JSON 5 is similar to JSON except for the following:
 	</p>
 	<ul class='spaced-list'>
 		<li>JSON attributes are only quoted when necessary.
@@ -245,7 +245,7 @@
 		|	}
 	</p>	 		
 	<p class='bjson'>
-	<joc>// Serialized to simplified JSON</joc>
+	<joc>// Serialized to JSON 5</joc>
 		|	{
 		|		<jok>foo</jok>: <jov>'x1'</jov>,
 		|		<jok>_bar</jok>: <jov>'x2'</jov>,
@@ -256,16 +256,16 @@
 		|	}
 	</p>
 	<p>
-		Simplified JSON is still valid Javascript.
+		JSON 5 is still valid Javascript.
 		The advantage to simplified JSON is you can represent it in a Java String in minimal form with minimal escaping.
-		This is particularly useful in cases such as unit testing where you can easily validate POJOs by simplifying them to Simplified JSON and do a simple string comparison.
+		This is particularly useful in cases such as unit testing where you can easily validate POJOs by simplifying them to JSON 5 and do a simple string comparison.
 	</p>
 	<p class='bjava'>
-		|	WriterSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>;
+		|	WriterSerializer <jv>serializer</jv> = Json5Serializer.<jsf>DEFAULT</jsf>;
 		|	<jsm>assertString</jsm>(<jv>serializer</jv>.toString(<jv>myPojo</jv>)).is(<js>"{foo:'bar',baz:123}"</js>);
 	</p>			
 	<ul class='seealso'>
-		<li class='link'><a class="doclink" href="#jm.SimplifiedJson">Simplified JSON</a> for more information.
+		<li class='link'><a class="doclink" href="#jm.Json5">JSON 5</a> for more information.
 	</ul>
 </div>
 

@@ -206,7 +206,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testSubTypesUsingAnnotation() throws Exception {
-		JsonSerializer js = JsonSerializer.create().ssq().addBeanTypes().addRootType().build();
+		JsonSerializer js = JsonSerializer.create().json5().addBeanTypes().addRootType().build();
 
 		// Skip validation-only tests
 		if (isValidationOnly())
@@ -279,7 +279,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testSubTypesUsingBeanFilter() throws Exception {
-		JsonSerializer js = JsonSerializer.create().ssq().build();
+		JsonSerializer js = JsonSerializer.create().json5().build();
 
 		// Skip validation-only tests
 		if (isValidationOnly())
@@ -471,7 +471,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testPropertiesUsingBeanFilter() throws Exception {
-		JsonSerializer js = JsonSerializer.create().ssq().beanProperties(D2.class, "f3,f2").build();
+		JsonSerializer js = JsonSerializer.create().json5().beanProperties(D2.class, "f3,f2").build();
 
 		// Skip validation-only tests
 		if (isValidationOnly())

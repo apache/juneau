@@ -148,7 +148,7 @@ public class FormData_Test {
 	// Optional form data parameter.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=Json5Serializer.class)
 	public static class D {
 		@RestPost
 		public Object a(@FormData("f1") Optional<Integer> f1) throws Exception {
@@ -216,7 +216,7 @@ public class FormData_Test {
 	// Default form data parameter.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=Json5Serializer.class)
 	public static class F {
 		@RestPost
 		public Object a1(@FormData(name="f1",def="1") Integer f1) throws Exception {

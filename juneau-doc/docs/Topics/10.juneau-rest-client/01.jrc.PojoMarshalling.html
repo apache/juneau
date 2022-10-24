@@ -24,7 +24,7 @@
 		<li class='jc'>{@link oajrc.RestClient.Builder}
 		<ul class='javatreec'>
 			<li class='jm'>{@link oajrc.RestClient.Builder#json() json()}
-			<li class='jm'>{@link oajrc.RestClient.Builder#simpleJson() simpleJson()}
+			<li class='jm'>{@link oajrc.RestClient.Builder#json5() json5()}
 			<li class='jm'>{@link oajrc.RestClient.Builder#xml() xml()}
 			<li class='jm'>{@link oajrc.RestClient.Builder#html() html()}
 			<li class='jm'>{@link oajrc.RestClient.Builder#plainText() plainText()}
@@ -37,9 +37,9 @@
 	
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
-		|	<jc>// Create a basic REST client with Simplified-JSON support.</jc>
+		|	<jc>// Create a basic REST client with JSON 5 support.</jc>
 		|	<jc>// Typically easier to use when performing unit tests.</jc>
-		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json5().build();
 	</p>
 	
 	<p>

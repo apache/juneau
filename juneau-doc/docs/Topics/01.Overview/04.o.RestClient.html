@@ -25,7 +25,7 @@
 	<p class='bjava'>
 		|	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
 		|	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
-		|		.simpleJson()
+		|		.json5()
 		|		.build()
 		|		.get(<jsf>URI</jsf>)
 		|		.run()
@@ -71,7 +71,7 @@
 		|			<jc>// Do a round-trip on the bean through the REST interface</jc>
 		|			<jv>myBean</jv> = MockRestClient
 		|				.<jsm>create</jsm>(EchoRest.<jk>class</jk>)
-		|				.simpleJson()
+		|				.json5()
 		|				.build()
 		|				.put(<js>"/echo"</js>, <jv>myBean</jv>)
 		|				.run()

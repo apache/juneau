@@ -96,7 +96,7 @@ import org.apache.juneau.utils.*;
  * 		<jc>// Our REST resource to test.</jc>
  * 		<jc>// Simply echos the response.</jc>
  * 		<ja>@Rest</ja>(
- * 			serializers=SimpleJsonSerializer.<jk>class</jk>,
+ * 			serializers=Json5Serializer.<jk>class</jk>,
  * 			parsers=JsonParser.<jk>class</jk>
  * 		)
  * 		<jk>public static class</jk> EchoRest {
@@ -118,7 +118,7 @@ import org.apache.juneau.utils.*;
  * 			<jc>// Do a round-trip on the bean through the REST interface</jc>
  * 			<jv>myBean</jv> = MockRestClient
  * 				.<jsm>create</jsm>(EchoRest.<jk>class</jk>)
- * 				.simpleJson()
+ * 				.json5()
  * 				.build()
  * 				.put(<js>"/echo"</js>, <jv>myBean</jv>)
  * 				.run()
@@ -140,7 +140,7 @@ import org.apache.juneau.utils.*;
  * 		<jc>// Instantiate our mock client.</jc>
  * 		MockRestClient <jv>client</jv> = MockRestClient
  * 			.<jsm>create</jsm>(EchoRest.<jk>class</jk>)
- * 			.simpleJson()
+ * 			.json5()
  * 			.build();
  *
  * 		<jc>// Create a request.</jc>
@@ -195,7 +195,7 @@ import org.apache.juneau.utils.*;
  * 	MockRestClient <jv>client</jv> = MockRestClient
  * 		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
  * 		.debug()
- * 		.simpleJson()
+ * 		.json5()
  * 		.build();
  * </p>
  *
@@ -369,15 +369,15 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @return A new builder.
 	 */
-	public static MockRestClient buildSimpleJson(Object impl) {
-		return create(impl).simpleJson().build();
+	public static MockRestClient buildJson5(Object impl) {
+		return create(impl).json5().build();
 	}
 
 	/**
 	 * Creates a new {@link RestClient} with Simplified-JSON marshalling support.
 	 *
 	 * <p>
-	 * Same as {@link #buildSimpleJson(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.
+	 * Same as {@link #buildJson5(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.
 	 *
 	 * <p>
 	 * Equivalent to calling:
@@ -390,8 +390,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * 	<br>If a class, it must have a no-arg constructor.
 	 * @return A new builder.
 	 */
-	public static MockRestClient buildSimpleJsonLax(Object impl) {
-		return create(impl).simpleJson().ignoreErrors().noTrace().build();
+	public static MockRestClient buildJson5Lax(Object impl) {
+		return create(impl).json5().ignoreErrors().noTrace().build();
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -530,7 +530,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * 	<jc>// Test the method that uses the parent path variable.</jc>
 		 * 	MockRestClient
 		 * 		.<jsm>create</jsm>(Child.<jk>class</jk>)
-		 * 		.simpleJson()
+		 * 		.json5()
 		 * 		.pathVars(<js>"foo"</js>,<js>"bar"</js>)
 		 * 		.build()
 		 * 		.get(<js>"/"</js>)
@@ -1645,8 +1645,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder simpleJson() {
-			super.simpleJson();
+		public Builder json5() {
+			super.json5();
 			return this;
 		}
 

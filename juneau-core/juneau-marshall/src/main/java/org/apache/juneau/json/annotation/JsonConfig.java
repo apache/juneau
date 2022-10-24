@@ -141,7 +141,7 @@ public @interface JsonConfig {
 	String escapeSolidus() default "";
 
 	/**
-	 * Simple JSON mode.
+	 * Simple JSON attribute mode.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, JSON attribute names will only be quoted when necessary.
@@ -173,10 +173,10 @@ public @interface JsonConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder#simpleMode()}
+	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder#simpleAttrs()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
-	String simpleMode() default "";
+	String simpleAttrs() default "";
 }

@@ -72,7 +72,7 @@ public class PrimitiveArrayAssertion_Test {
 	@Test
 	public void ba01b_asString_wSerializer() throws Exception {
 		byte[] x = {1}, nil = null;
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+		WriterSerializer s = Json5Serializer.DEFAULT;
 		byteArray(x).asString(s).is("[1]");
 		byteArray(nil).asString(s).is("null");
 	}
@@ -225,7 +225,7 @@ public class PrimitiveArrayAssertion_Test {
 	@Test
 	public void ca11_isSameSerializedAs() throws Exception {
 		byte[] x1 = {1,2}, x1a = {1,2}, x2 = {2,3}, nil = null;
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+		WriterSerializer s = Json5Serializer.DEFAULT;
 		byteArray(x1).isSameSerializedAs(x1a, s);
 		byteArray(nil).isSameSerializedAs(nil, s);
 		assertThrown(()->byteArray(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='[2,3]'.  Actual='[1,2]'.");

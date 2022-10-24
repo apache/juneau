@@ -98,7 +98,7 @@ public class SerializeException extends BasicRuntimeException {
 		if (session != null) {
 			Map<String,Object> m = session.getLastLocation();
 			if (m != null && ! m.isEmpty())
-				msg = "Serialize exception occurred at " + SimpleJsonSerializer.DEFAULT.toString(m) + ".  " + msg;
+				msg = "Serialize exception occurred at " + Json5Serializer.DEFAULT.toString(m) + ".  " + msg;
 		}
 		return msg;
 	}

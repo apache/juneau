@@ -237,18 +237,18 @@ public class RestClient_Response_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static RestClient.Builder client() {
-		return MockRestClient.create(A.class).simpleJson();
+		return MockRestClient.create(A.class).json5();
 	}
 
 	private static RestClient.Builder client(Class<?> c) {
-		return MockRestClient.create(c).simpleJson();
+		return MockRestClient.create(c).json5();
 	}
 
 	private static RestClient.Builder checkFooClient(Class<?> c) {
-		return MockRestClient.create(c).simpleJson().header("Check","Foo");
+		return MockRestClient.create(c).json5().header("Check","Foo");
 	}
 
 	private static RestClient.Builder checkClient(Class<?> c, String headerToCheck) {
-		return MockRestClient.create(c).simpleJson().header("Check",headerToCheck);
+		return MockRestClient.create(c).json5().header("Check",headerToCheck);
 	}
 }

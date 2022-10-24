@@ -36,7 +36,7 @@ public class ReaderFilterTest {
 	//====================================================================================================
 	@Test
 	public void testJson() throws Exception {
-		JsonSerializer s = JsonSerializer.create().ssq().swaps(ParsedReaderSwap.Json.class).build();
+		JsonSerializer s = JsonSerializer.create().json5().swaps(ParsedReaderSwap.Json.class).build();
 
 		Reader r;
 		Map<String,Object> m;

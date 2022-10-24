@@ -265,7 +265,7 @@ public class DocGenerator {
 				i = s.indexOf("\n");
 				title = s.substring(0, i);
 				if (title.startsWith("{")) {
-					titleMap = SimpleJson.DEFAULT.read(title, TitleMap.class);
+					titleMap = Json5.DEFAULT.read(title, TitleMap.class);
 					List<String> tags = list();
 					if (titleMap.created != null)
 						tags.add("created: " + highlightCurrentVersion(titleMap.created));

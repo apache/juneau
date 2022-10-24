@@ -54,7 +54,7 @@
 		|			<jc>// Do a round-trip on the bean through the REST interface</jc>
 		|			<jv>myBean</jv> = MockRestClient
 		|				.<jsm>create</jsm>(EchoRest.<jk>class</jk>)
-		|				.simpleJson()
+		|				.json5()
 		|				.build()
 		|				.put(<js>"/echo"</js>, <jv>myBean</jv>)
 		|				.run()
@@ -76,7 +76,7 @@
 		|		<jc>// Instantiate our mock client.</jc>
 		|		MockRestClient <jv>client</jv> = MockRestClient
 		|			.<jsm>create</jsm>(EchoRest.<jk>class</jk>)
-		|			.simpleJson()
+		|			.json5()
 		|			.build();
 		|
 		|		<jc>// Create a request.</jc>
@@ -121,7 +121,7 @@
 		|			<jc>// Instantiate our mock client.</jc>
 		|			<jf>client</jf> = MockRestClient
 		|				.<jsm>create</jsm>(<jf>echoRest</jf>)
-		|				.simpleJson()
+		|				.json5()
 		|				.build();
 		|		}
 		|
@@ -178,7 +178,7 @@
 		|	MockRestClient <jv>client</jv> = MockRestClient
 		|		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
 		|		.debug()
-		|		.simpleJson()
+		|		.json5()
 		|		.build();
 	</p>
 	<hr>

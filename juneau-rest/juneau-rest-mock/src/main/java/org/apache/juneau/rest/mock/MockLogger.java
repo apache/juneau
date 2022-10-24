@@ -33,7 +33,7 @@ import org.apache.juneau.assertions.*;
  * 	<jc>// Associate it with a MockRestClient.</jc>
  * 	MockRestClient
  * 		.<jsm>create</jsm>(MyRestResource.<jk>class</jk>)
- * 		.simpleJson()
+ * 		.json5()
  * 		.logger(<jv>logger</jv>)
  * 		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>)
  * 		.build()
@@ -47,9 +47,9 @@ import org.apache.juneau.assertions.*;
  * 		<js>"=== REQUEST ==="</js>,
  * 		<js>"POST http://localhost/bean"</js>,
  * 		<js>"---request headers---"</js>,
- * 		<js>"	Accept: application/json+simple"</js>,
+ * 		<js>"	Accept: application/json5"</js>,
  * 		<js>"---request entity---"</js>,
- * 		<js>"	Content-Type: application/json+simple"</js>,
+ * 		<js>"	Content-Type: application/json5"</js>,
  * 		<js>"---request content---"</js>,
  * 		<js>"{f:1}"</js>,
  * 		<js>"=== RESPONSE ==="</js>,

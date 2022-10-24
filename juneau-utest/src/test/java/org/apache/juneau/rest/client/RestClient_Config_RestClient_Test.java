@@ -57,7 +57,7 @@ public class RestClient_Config_RestClient_Test {
 		}
 		@Override
 		public String toString() {
-			return SimpleJson.of(this);
+			return Json5.of(this);
 		}
 	}
 
@@ -440,7 +440,7 @@ public class RestClient_Config_RestClient_Test {
 
 	public static class A12a extends MockWriterSerializer {
 		public A12a(Builder builder) {
-			super(builder.partFunction((t,s,o)->"x" + SimpleJson.of(o)));
+			super(builder.partFunction((t,s,o)->"x" + Json5.of(o)));
 		}
 	}
 
@@ -452,7 +452,7 @@ public class RestClient_Config_RestClient_Test {
 		private static Object in(HttpPartType type, HttpPartSchema schema, String in, ClassMeta<?> c) {
 			try {
 				if (c.isInstanceOf(ABean.class))
-					return SimpleJson.DEFAULT.read(in.substring(1),c);
+					return Json5.DEFAULT.read(in.substring(1),c);
 				return SimplePartParser.DEFAULT.parse(type,schema,in,c);
 			} catch (Exception e) {
 				throw asRuntimeException(e);
@@ -510,10 +510,10 @@ public class RestClient_Config_RestClient_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static RestClient.Builder client() {
-		return MockRestClient.create(A.class).simpleJson();
+		return MockRestClient.create(A.class).json5();
 	}
 
 	private static RestClient.Builder client(Class<?> c) {
-		return MockRestClient.create(c).simpleJson();
+		return MockRestClient.create(c).json5();
 	}
 }

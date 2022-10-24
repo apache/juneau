@@ -314,7 +314,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 					if (ae.matches(".*(identity|\\*)\\s*;\\s*q\\s*=\\s*(0(?!\\.)|0\\.0).*")) {
 						throw new NotAcceptable(
 							"Unsupported encoding in request header ''Accept-Encoding'': ''{0}''\n\tSupported codings: {1}",
-							ae, SimpleJson.of(encoders.getSupportedEncodings())
+							ae, Json5.of(encoders.getSupportedEncodings())
 						);
 					}
 				} else {

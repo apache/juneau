@@ -103,7 +103,7 @@ import org.apache.juneau.xml.*;
  * <p class='bjava'>
  * 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
  * 	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
- * 		.simpleJson()
+ * 		.json5()
  * 		.build()
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
@@ -115,7 +115,7 @@ import org.apache.juneau.xml.*;
  * <p>
  * Breaking apart the fluent call, we can see the classes being used:
  * <p class='bjava'>
- * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>().simpleJson();
+ * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>().json5();
  * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
  * 	RestRequest <jv>req</jv> = <jv>client</jv>.get(<jsf>URI</jsf>);
  * 	RestResponse <jv>res</jv> = <jv>req</jv>.run();
@@ -145,8 +145,8 @@ import org.apache.juneau.xml.*;
  * 		);
  * 	}
  *
- * 	<jc>// Use a RestClient with default Simple JSON support.</jc>
- * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+ * 	<jc>// Use a RestClient with default JSON 5 support.</jc>
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json5().build();
  *
  * 	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
  * 	CreatePet <jv>createPet</jv> = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
@@ -238,7 +238,7 @@ import org.apache.juneau.xml.*;
  * 	<li class='jc'>{@link Builder}
  * 	<ul>
  * 		<li class='jm'>{@link Builder#json() json()}
- * 		<li class='jm'>{@link Builder#simpleJson() simpleJson()}
+ * 		<li class='jm'>{@link Builder#json5() json5()}
  * 		<li class='jm'>{@link Builder#xml() xml()}
  * 		<li class='jm'>{@link Builder#html() html()}
  * 		<li class='jm'>{@link Builder#plainText() plainText()}
@@ -251,9 +251,9 @@ import org.apache.juneau.xml.*;
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bjava'>
- * 	<jc>// Create a basic REST client with Simplified-JSON support.</jc>
+ * 	<jc>// Create a basic REST client with JSON 5 support.</jc>
  * 	<jc>// Typically easier to use when performing unit tests.</jc>
- * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json5().build();
  * </p>
  *
  * <p>
@@ -838,7 +838,7 @@ import org.apache.juneau.xml.*;
  * <p class='bjava'>
  * 	MyBean <jv>bean</jv> = RestClient
  * 		.<jsm>create</jsm>()
- * 		.simpleJson()
+ * 		.json5()
  * 		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (<jv>req</jv>,<jv>res</jv>)-&gt;<jv>req</jv>.getUri().endsWith(<js>"/bean"</js>))
  * 		.logToConsole()
  * 		.build()
@@ -855,9 +855,9 @@ import org.apache.juneau.xml.*;
  * 	=== REQUEST ===
  * 	POST http://localhost/bean
  * 	---request headers---
- * 		Accept: application/json+simple
+ * 		Accept: application/json5
  * 	---request entity---
- * 	Content-Type: application/json+simple
+ * 	Content-Type: application/json5
  * 	---request content---
  * 	{f:1}
  * 	=== RESPONSE ===
@@ -913,8 +913,8 @@ import org.apache.juneau.xml.*;
  * 		);
  * 	}
  *
- * 	<jc>// Use a RestClient with default Simple JSON support.</jc>
- * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build())
+ * 	<jc>// Use a RestClient with default JSON 5 support.</jc>
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json5().build())
  *
  * 	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
  * 	CreatePet <jv>createPet</jv> = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
@@ -1173,13 +1173,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * without having to escape lots of quotes.
 		 *
 		 * <p>
-		 * 	{@link SimpleJsonSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+		 * 	{@link Json5Serializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 		 * 	<ul>
 		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
 		 * <p>
-		 * 	{@link JsonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+		 * 	{@link Json5Parser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 		 * 	<ul>
 		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
@@ -1188,7 +1188,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
 		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
-		 * 	<c>Content-Type</c> request header will be set to <js>"application/json+simple"</js> unless overridden
+		 * 	<c>Content-Type</c> request header will be set to <js>"application/json5"</js> unless overridden
 		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
@@ -1197,19 +1197,19 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 		last-enabled language if the headers are not set.
 		 * 	</ul>
 		 * <p>
-		 * 	Identical to calling <c>serializer(SimpleJsonSerializer.<jk>class</jk>).parser(JsonParser.<jk>class</jk>)</c>.
+		 * 	Identical to calling <c>serializer(Json5Serializer.<jk>class</jk>).parser(Json5Parser.<jk>class</jk>)</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses Simplified JSON marshalling.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json5().build();
 		 * </p>
 		 *
 		 * @return This object.
 		 */
 		@FluentSetter
-		public Builder simpleJson() {
-			return serializer(SimpleJsonSerializer.class).parser(SimpleJsonParser.class);
+		public Builder json5() {
+			return serializer(Json5Serializer.class).parser(Json5Parser.class);
 		}
 
 		/**
@@ -1649,7 +1649,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<c>Content-Type</c> request header must be set via {@link #headers()},
 		 * 		or per-request via {@link RestRequest#header(Header)} in order for the correct serializer to be selected.
 		 * <p>
-		 * 	Similar to calling <c>json().simpleJson().html().xml().uon().urlEnc().openApi().msgPack().plainText()</c>.
+		 * 	Similar to calling <c>json().json5().html().xml().uon().urlEnc().openApi().msgPack().plainText()</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
@@ -1664,7 +1664,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			return
 				serializers(
 					JsonSerializer.class,
-					SimpleJsonSerializer.class,
+					Json5Serializer.class,
 					HtmlSerializer.class,
 					XmlSerializer.class,
 					UonSerializer.class,
@@ -1675,7 +1675,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				)
 				.parsers(
 					JsonParser.class,
-					SimpleJsonParser.class,
+					Json5Parser.class,
 					XmlParser.class,
 					HtmlParser.class,
 					UonParser.class,
@@ -3799,7 +3799,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<jc>// Create a client that uses Simplified-JSON transport using an existing marshaller.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.marshaller(SimpleJson.<jsf>DEFAULT_READABLE</jsf>)
+		 * 		.marshaller(Json5.<jsf>DEFAULT_READABLE</jsf>)
 		 * 		.build();
 		 * </p>
 		 *

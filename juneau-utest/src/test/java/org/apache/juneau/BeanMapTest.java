@@ -35,7 +35,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class BeanMapTest {
 
-	JsonSerializer serializer = SimpleJsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
+	JsonSerializer serializer = Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 
 	BeanContext bc = BeanContext.create()
 			.beanDictionary(MyBeanDictionaryMap.class)
@@ -584,10 +584,10 @@ public class BeanMapTest {
 		m.put("s2", JsonList.ofJson("[['foo']]"));
 		m.put("i", JsonList.ofJson("[1,2,3]"));
 		m.put("i2", JsonList.ofJson("[[1,2,3],[4,5,6]]"));
-		assertEquals("{s:['foo'],s2:[['foo']],i:[1,2,3],i2:[[1,2,3],[4,5,6]]}", SimpleJsonSerializer.DEFAULT.serialize(t));
+		assertEquals("{s:['foo'],s2:[['foo']],i:[1,2,3],i2:[[1,2,3],[4,5,6]]}", Json5Serializer.DEFAULT.serialize(t));
 		m.put("i", JsonList.ofJson("[null,null,null]"));
 		m.put("i2", JsonList.ofJson("[[null,null,null],[null,null,null]]"));
-		assertEquals("{s:['foo'],s2:[['foo']],i:[0,0,0],i2:[[0,0,0],[0,0,0]]}", SimpleJsonSerializer.DEFAULT.serialize(t));
+		assertEquals("{s:['foo'],s2:[['foo']],i:[0,0,0],i2:[[0,0,0],[0,0,0]]}", Json5Serializer.DEFAULT.serialize(t));
 	}
 
 	@Bean(p="s,s2,i,i2")
@@ -1778,7 +1778,7 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testHiddenProperties() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
+		JsonSerializer s = Json5Serializer.DEFAULT;
 		BeanMeta bm = s.getBeanContext().getBeanMeta(U.class);
 		assertNotNull(bm.getPropertyMeta("a"));
 		assertNotNull(bm.getPropertyMeta("b"));
@@ -1831,7 +1831,7 @@ public class BeanMapTest {
 
 	@Test
 	public void testHiddenProperties_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(UcConfig.class).build();
+		JsonSerializer s = Json5Serializer.DEFAULT.copy().applyAnnotations(UcConfig.class).build();
 		BeanMeta bm = s.getBeanContext().getBeanMeta(U.class);
 		assertNotNull(bm.getPropertyMeta("a"));
 		assertNotNull(bm.getPropertyMeta("b"));
@@ -1911,7 +1911,7 @@ public class BeanMapTest {
 
 	@Test
 	public void testBeanPropertyOrder_usingConfig() throws Exception {
-		WriterSerializer ws = SimpleJsonSerializer.create().applyAnnotations(VcConfig.class).build();
+		WriterSerializer ws = Json5Serializer.create().applyAnnotations(VcConfig.class).build();
 		assertEquals("{a1:'1',a2:'2',a3:'3',a4:'4'}", ws.toString(new V2c()));
 		assertEquals("{a3:'3',a4:'4',a5:'5',a6:'6'}", ws.toString(new V3c()));
 	}
@@ -1964,7 +1964,7 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testOverriddenPropertyTypes() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
+		JsonSerializer s = Json5Serializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 

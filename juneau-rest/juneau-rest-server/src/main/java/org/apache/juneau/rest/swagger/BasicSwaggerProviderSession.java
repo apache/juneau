@@ -101,7 +101,7 @@ public class BasicSwaggerProviderSession {
 		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
 
 		// Load swagger JSON from classpath.
-		JsonMap omSwagger = SimpleJson.DEFAULT.read(is, JsonMap.class);
+		JsonMap omSwagger = Json5.DEFAULT.read(is, JsonMap.class);
 		if (omSwagger == null)
 			omSwagger = new JsonMap();
 
@@ -553,12 +553,12 @@ public class BasicSwaggerProviderSession {
 //			if (! omSwagger.isEmpty())
 //				assertNoEmpties(omSwagger);
 //		} catch (SwaggerException e1) {
-//			System.err.println(omSwagger.toString(SimpleJsonSerializer.DEFAULT_READABLE));
+//			System.err.println(omSwagger.toString(Json5Serializer.DEFAULT_READABLE));
 //			throw e1;
 //		}
 
 		try {
-			String swaggerJson = SimpleJsonSerializer.DEFAULT_READABLE.toString(omSwagger);
+			String swaggerJson = Json5Serializer.DEFAULT_READABLE.toString(omSwagger);
 //			System.err.println(swaggerJson);
 			return jp.parse(swaggerJson, Swagger.class);
 		} catch (Exception e) {

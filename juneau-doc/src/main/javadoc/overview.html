@@ -104,7 +104,7 @@
 		<ol>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.JsonDetails.jm.JsonMethodology'>JSON Methodology</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.JsonDetails.jm.JsonSerializers'>JSON Serializers</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#juneau-marshall.jm.JsonDetails.jm.SimplifiedJson'>Simplified JSON</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.jm.JsonDetails.jm.Json5'>JSON 5</a><span class='update'>updated: <b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.JsonDetails.jm.JsonParsers'>JSON Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.JsonDetails.jm.JsonAnnotation'>@Json Annotation</a></p>
 		</ol>
@@ -849,13 +849,13 @@
 	</ul>
 </div>
 
-<h5 class='topic'>Simplified JSON Marshalling</h5>
+<h5 class='topic'>JSON 5 Marshalling</h5>
 <div class='topic'>
 	<p>
-		The {@link org.apache.juneau.json.SimpleJsonSerializer} class can be used to serialized POJOs into Simplified JSON notation.
+		The {@link org.apache.juneau.json.Json5Serializer} class can be used to serialized POJOs into JSON 5 notation.
 	</p>
 	<p>
-		Simplified JSON is identical to JSON except for the following:
+		JSON 5 is similar to JSON except for the following:
 	</p>
 	<ul class='spaced-list'>
 		<li>JSON attributes are only quoted when necessary.
@@ -885,7 +885,7 @@
 	}
 	</p>	 		
 	<p class='bjson'>
-	<joc>// Serialized to simplified JSON</joc>
+	<joc>// Serialized to JSON 5</joc>
 	{
 		<jok>foo</jok>: <jov>'x1'</jov>,
 		<jok>_bar</jok>: <jov>'x2'</jov>,
@@ -896,16 +896,16 @@
 	}
 	</p>
 	<p>
-		Simplified JSON is still valid Javascript.
+		JSON 5 is still valid Javascript.
 		The advantage to simplified JSON is you can represent it in a Java String in minimal form with minimal escaping.
-		This is particularly useful in cases such as unit testing where you can easily validate POJOs by simplifying them to Simplified JSON and do a simple string comparison.
+		This is particularly useful in cases such as unit testing where you can easily validate POJOs by simplifying them to JSON 5 and do a simple string comparison.
 	</p>
 	<p class='bjava'>
-	WriterSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>;
+	WriterSerializer <jv>serializer</jv> = Json5Serializer.<jsf>DEFAULT</jsf>;
 	<jsm>assertString</jsm>(<jv>serializer</jv>.toString(<jv>myPojo</jv>)).is(<js>"{foo:'bar',baz:123}"</js>);
 	</p>			
 	<ul class='seealso'>
-		<li class='link'><a class="doclink" href="#jm.SimplifiedJson">Simplified JSON</a> for more information.
+		<li class='link'><a class="doclink" href="#jm.Json5">JSON 5</a> for more information.
 	</ul>
 </div>
 
@@ -1127,8 +1127,8 @@
 	<p>
 		Finally, the {@link org.apache.juneau.rest.client.RestClient} class is used to construct a remote proxy to our REST service:
 	<p class='bjava'>	
-	<jc>// Use a RestClient with default Simple JSON support and BASIC auth.</jc>
-	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().basicAuth(...).build();
+	<jc>// Use a RestClient with default JSON 5 support and BASIC auth.</jc>
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json5().basicAuth(...).build();
 	
 	<jc>// Instantiate our proxy interface.</jc>
 	PetStoreClient <jv>store</jv> = <jv>client</jv>.getRemote(PetStoreClient.<jk>class</jk>, <js>"http://localhost:10000"</js>);
@@ -1275,7 +1275,7 @@
 			HtmlStrippedDocSerializer.<jk>class</jk>,
 			HtmlSchemaDocSerializer.<jk>class</jk>,
 			JsonSerializer.<jk>class</jk>,
-			SimpleJsonSerializer.<jk>class</jk>,
+			Json5Serializer.<jk>class</jk>,
 			JsonSchemaSerializer.<jk>class</jk>,
 			XmlDocSerializer.<jk>class</jk>,
 			UonSerializer.<jk>class</jk>,
@@ -1290,7 +1290,7 @@
 		<jc>// Default parsers for all Java methods in the class.</jc>
 		parsers={
 			JsonParser.<jk>class</jk>,
-			SimpleJsonParser.<jk>class</jk>,
+			Json5Parser.<jk>class</jk>,
 			XmlParser.<jk>class</jk>,
 			HtmlParser.<jk>class</jk>,
 			UonParser.<jk>class</jk>,
@@ -1678,7 +1678,7 @@
 	<p class='bjava'>
 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
 	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
-		.simpleJson()
+		.json5()
 		.build()
 		.get(<jsf>URI</jsf>)
 		.run()
@@ -1724,7 +1724,7 @@
 			<jc>// Do a round-trip on the bean through the REST interface</jc>
 			<jv>myBean</jv> = MockRestClient
 				.<jsm>create</jsm>(EchoRest.<jk>class</jk>)
-				.simpleJson()
+				.json5()
 				.build()
 				.put(<js>"/echo"</js>, <jv>myBean</jv>)
 				.run()
@@ -2052,7 +2052,7 @@
 	<p class='bjava'>
 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
 	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
-		.simpleJson()
+		.json5()
 		.build()
 		.get(<jsf>URI</jsf>)
 		.run()
@@ -2204,7 +2204,7 @@
 							<li class='jc'>{@link org.apache.juneau.marshaller.Json}
 							<li class='jc'>{@link org.apache.juneau.marshaller.OpenApi}
 							<li class='jc'>{@link org.apache.juneau.marshaller.PlainText}
-							<li class='jc'>{@link org.apache.juneau.marshaller.SimpleJson}
+							<li class='jc'>{@link org.apache.juneau.marshaller.Json5}
 							<li class='jc'>{@link org.apache.juneau.marshaller.Uon}
 							<li class='jc'>{@link org.apache.juneau.marshaller.UrlEncoding}
 							<li class='jc'>{@link org.apache.juneau.marshaller.Xml}
@@ -2243,7 +2243,7 @@
 		<li class='jc'>{@link org.apache.juneau.marshaller.MsgPack}
 		<li class='jc'>{@link org.apache.juneau.marshaller.OpenApi}
 		<li class='jc'>{@link org.apache.juneau.marshaller.PlainText}
-		<li class='jc'>{@link org.apache.juneau.marshaller.SimpleJson}
+		<li class='jc'>{@link org.apache.juneau.marshaller.Json5}
 		<li class='jc'>{@link org.apache.juneau.marshaller.Uon}
 		<li class='jc'>{@link org.apache.juneau.marshaller.UrlEncoding}
 		<li class='jc'>{@link org.apache.juneau.marshaller.Xml}
@@ -2304,7 +2304,7 @@
 
 	<jc>// Produces:
 	//	"{name:'John Smith',age:21}"</jc>
-	String <jv>json</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
+	String <jv>json</jv> = Json5Serializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
 
 	<jc>// Produces:
 	//	&lt;object&gt;
@@ -2647,7 +2647,7 @@
 	}
 
 	A1 <jv>a1</jv> = <jk>new</jk> A1();
-	String <jv>result</jv> = SimpleJson.<jsm>of</jsm>(<jv>a1</jv>);
+	String <jv>result</jv> = Json5.<jsm>of</jsm>(<jv>a1</jv>);
 	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, <jv>result</jv>);  <jc>// Note f1 is not serialized.</jc> 
 	</p>
 	<p>
@@ -3224,7 +3224,7 @@
 	}	
 	
 	<jc>// Produces "{f1:{'foo':'bar'}}"</jc>
-	String <jv>json</jv> = SimpleJson.<jsm>of</jsm>(<jk>new</jk> MyBean());
+	String <jv>json</jv> = Json5.<jsm>of</jsm>(<jk>new</jk> MyBean());
 	</p>			
 	<p>
 		Note that if you're serializing Readers and InputStreams, it's up to you to make sure you're producing
@@ -3361,10 +3361,10 @@
 				<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
 			</ul>
 		</li>
-		<li class='jc'>{@link org.apache.juneau.json.SimpleJsonSerializer}
+		<li class='jc'>{@link org.apache.juneau.json.Json5Serializer}
 			<ul class='javatreec'>
-				<li class='jf'>{@link org.apache.juneau.json.SimpleJsonSerializer#DEFAULT DEFAULT}
-				<li class='jf'>{@link org.apache.juneau.json.SimpleJsonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
+				<li class='jf'>{@link org.apache.juneau.json.Json5Serializer#DEFAULT DEFAULT}
+				<li class='jf'>{@link org.apache.juneau.json.Json5Serializer#DEFAULT_READABLE DEFAULT_READABLE}
 			</ul>
 		</li>
 		<li class='jc'>{@link org.apache.juneau.json.JsonParser} 
@@ -3379,7 +3379,7 @@
 	</p>
 	<p class='bjava'>
 	<jc>// Serialize a POJO to LAX JSON.</jc>
-	String <jv>json</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myPojo</jv>);
+	String <jv>json</jv> = Json5Serializer.<jsf>DEFAULT</jsf>.serialize(<jv>myPojo</jv>);
 	</p>
 	<p>
 		For performance reasons, serializers and parsers are immutable.
@@ -3387,7 +3387,7 @@
 	</p>
 	<p class='bjava'>
 	<jc>// Clone and customize an existing serializer.</jc>
-	WriterSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
+	WriterSerializer <jv>serializer</jv> = Json5Serializer.<jsf>DEFAULT</jsf>
 		.copy()          <jc>// Create a new builder with copied settings.</jc>
 		.quoteChar(<js>'"'</js>)  <jc>// Use a different quote character.</jc>
 		.build();
@@ -4720,7 +4720,7 @@
 	MyInterface[] <jv>x</jv> = <jk>new</jk> MyInterface[]{ <jk>new</jk> MyClass1(), <jk>new</jk> MyClass2() };
 
 	<jc>// Produces "[{mytype:'C1',...},{mytype:'C2',...}]"</jc>
-	String <jv>json</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>x</jv>);
+	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>x</jv>);
 	</p>
 	<div class='info'>
 		Type names do not need to be universally unique.  
@@ -4784,7 +4784,7 @@
 	<p class='bjava'>
 	A1 <jv>object</jv> = <jk>new</jk> A1();
 	<jv>object</jv>.<jf>f1</jf> = <js>"f1"</js>;
-	String <jv>json</jv> = SimpleJson.<jsm>of</jsm>(<jv>object</jv>);
+	String <jv>json</jv> = Json5.<jsm>of</jsm>(<jv>object</jv>);
 	<jsm>assertEquals</jsm>(<js>"{_type:'A1',f1:'f1',f0:'f0'}"</js>, <jv>json</jv>);
 	</p>
 	<p>
@@ -4892,7 +4892,7 @@
 	</p>
 	<p class='bjava'>
 	<jc>// Clone an existing serializer and set property for detecting recursions.</jc>
-	JsonSerializer <jv>serializer</jv> = SimpleJsonSerializer
+	WriterSerializer <jv>serializer</jv> = Json5Serializer
 		.<jsf>DEFAULT_READABLE</jsf>
 		.copy()
 		.detectRecursions()
@@ -4984,7 +4984,7 @@
 	JsonMap <jv>map</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, JsonMap.<jk>class</jk>);
 
 	<jc>// Convert it back to JSON.</jc>
-	String <jv>json</jv> = SimpleJson.<jsm>of</jsm>(<jv>map</jv>);
+	String <jv>json</jv> = Json5.<jsm>of</jsm>(<jv>map</jv>);
 	</p>
 	<p>
 		What we end up with is the exact same output.
@@ -6677,10 +6677,10 @@
 				<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
 			</ul>
 		</li>
-		<li class='jc'>{@link org.apache.juneau.json.SimpleJsonSerializer}
+		<li class='jc'>{@link org.apache.juneau.json.Json5Serializer}
 			<ul class='javatreec'>
-				<li class='jf'>{@link org.apache.juneau.json.SimpleJsonSerializer#DEFAULT DEFAULT}
-				<li class='jf'>{@link org.apache.juneau.json.SimpleJsonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
+				<li class='jf'>{@link org.apache.juneau.json.Json5Serializer#DEFAULT DEFAULT}
+				<li class='jf'>{@link org.apache.juneau.json.Json5Serializer#DEFAULT_READABLE DEFAULT_READABLE}
 			</ul>
 		</li>
 	</ul>
@@ -6689,14 +6689,14 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.JsonDetails.jm.SimplifiedJson' id='juneau-marshall.jm.JsonDetails.jm.SimplifiedJson'>2.24.3 - Simplified JSON</a><span class='update'>updated: <b>9.0.0</b></span></h4>
-<div class='topic'><!-- START: 2.24.3 - juneau-marshall.jm.JsonDetails.jm.SimplifiedJson -->
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.JsonDetails.jm.Json5' id='juneau-marshall.jm.JsonDetails.jm.Json5'>2.24.3 - JSON 5</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<div class='topic'><!-- START: 2.24.3 - juneau-marshall.jm.JsonDetails.jm.Json5 -->
 <div class='topic'>
 	<p>
-		The {@link org.apache.juneau.json.SimpleJsonSerializer} class can be used to serialized POJOs into Simplified JSON notation.
+		The {@link org.apache.juneau.json.Json5Serializer} class can be used to serialized POJOs into JSON 5 notation.
 	</p>
 	<p>
-		Simplified JSON is identical to JSON except for the following:
+		JSON 5 is similar to JSON except for the following:
 	</p>
 	<ul class='spaced-list'>
 		<li>JSON attributes are only quoted when necessary.
@@ -6737,23 +6737,23 @@
 	}
 	</p>
 	<p>
-		The advantage to simplified JSON is you can represent it in a Java String in minimal form with minimal escaping.
-		This is particularly useful in cases such as unit testing where you can easily validate POJOs by simplifying them to Simplified JSON and do a simple string comparison.
+		The advantage to JSON 5 is you can represent it in a Java String in minimal form with minimal escaping.
+		This is particularly useful in cases such as unit testing where you can easily validate POJOs by simplifying them to JSON 5 and do a simple string comparison.
 	</p>
 	<p class='bjava'>
-	WriterSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>;
+	WriterSerializer <jv>serializer</jv> = Json5Serializer.<jsf>DEFAULT</jsf>;
 	<jsm>assertEquals</jsm>(<js>"{foo:'bar',baz:123}"</js>, <jv>serializer</jv>.toString(<jv>myPojo</jv>));
 	</p>			
 	
 	<ul class='seealso'>
 		<li class='jc'>{@link org.apache.juneau.json.JsonSerializer.Builder}
 			<ul class='javatreec'>
-				<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder#simpleMode() simpleMode()}
+				<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder#json5() json5()}
 			</ul>
 		</li>
 	</ul>
 </div>
-</div><!-- END: 2.24.3 - juneau-marshall.jm.JsonDetails.jm.SimplifiedJson -->
+</div><!-- END: 2.24.3 - juneau-marshall.jm.JsonDetails.jm.Json5 -->
 
 <!-- ==================================================================================================== -->
 
@@ -14217,7 +14217,7 @@
 	<p class='bjava'>
 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
 	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
-		.simpleJson()
+		.json5()
 		.build()
 		.get(<jsf>URI</jsf>)
 		.run()
@@ -15817,7 +15817,7 @@
 	<ul class='javatreec'>
 		<li class='jic'>{@link org.apache.juneau.rest.config.BasicJsonConfig}
 		<li class='jic'>{@link org.apache.juneau.rest.config.BasicJsonHtmlConfig}
-		<li class='jic'>{@link org.apache.juneau.rest.config.BasicSimpleJsonConfig}
+		<li class='jic'>{@link org.apache.juneau.rest.config.BasicJson5Config}
 		<li class='jic'>{@link org.apache.juneau.rest.config.BasicOpenApiConfig}
 		<li class='jic'>{@link org.apache.juneau.rest.config.BasicUniversalConfig}
 	</ul>
@@ -17883,7 +17883,7 @@
 			<ul class='javatreec'>
 				<li class='jic'>{@link org.apache.juneau.rest.config.BasicJsonConfig}
 				<li class='jic'>{@link org.apache.juneau.rest.config.BasicJsonHtmlConfig}
-				<li class='jic'>{@link org.apache.juneau.rest.config.BasicSimpleJsonConfig}
+				<li class='jic'>{@link org.apache.juneau.rest.config.BasicJson5Config}
 				<li class='jic'>{@link org.apache.juneau.rest.config.BasicOpenApiConfig}
 				<li class='jic'>{@link org.apache.juneau.rest.config.BasicUniversalConfig}
 			</ul>
@@ -19469,7 +19469,7 @@
 			The examples will be explained in the next section.
 	</ul>
 	<p>
-		Another option is to specify your parameter information in the <c>parameters</c> annotation as free-form Simple JSON.
+		Another option is to specify your parameter information in the <c>parameters</c> annotation as free-form JSON 5.
 		In the case of the <c>PetStoreResource.getPets()</c> method, we pull this information from a static field
 		defined in the {@link org.apache.juneau.rest.converter.Queryable} class:
 	</p>
@@ -21471,7 +21471,7 @@
 			AddressBook.<jsm>toCalendar</jsm>(<js>"Aug 1, 1999"</js>),
 			<jk>new</jk> CreateAddress(<js>"Test street"</js>, <js>"Test city"</js>, <js>"Test state"</js>, 12345, <jk>true</jk>))
 	};
-	String <jv>asJson</jv> = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.toString(<jv>args</jv>);
+	String <jv>asJson</jv> = Json5Serializer.<jsf>DEFAULT_READABLE</jsf>.toString(<jv>args</jv>);
 	System.<jsf>err</jsf>.println(<jv>asJson</jv>);
 	</p>
 	<p>
@@ -22132,7 +22132,7 @@
 	<p class='bjava'>
 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
 	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
-		.simpleJson()
+		.json5()
 		.build()
 		.get(<jsf>URI</jsf>)
 		.run()
@@ -22146,7 +22146,7 @@
 	</p>
 	
 	<p class='bjava'>
-	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>().simpleJson();
+	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>().json5();
 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 	RestRequest <jv>req</jv> = <jv>client</jv>.get(<jsf>URI</jsf>);
 	RestResponse <jv>res</jv> = <jv>req</jv>.run();
@@ -22179,7 +22179,7 @@
 
 	PetStore <jv>store</jv> = RestClient
 		.<jsm>create</jsm>()
-		.simpleJson()
+		.json5()
 		.build()
 		.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
 	CreatePet <jv>createPet</jv> = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
@@ -22281,7 +22281,7 @@
 		<li class='jc'>{@link org.apache.juneau.rest.client.RestClient.Builder}
 		<ul class='javatreec'>
 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClient.Builder#json() json()}
-			<li class='jm'>{@link org.apache.juneau.rest.client.RestClient.Builder#simpleJson() simpleJson()}
+			<li class='jm'>{@link org.apache.juneau.rest.client.RestClient.Builder#json5() json5()}
 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClient.Builder#xml() xml()}
 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClient.Builder#html() html()}
 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClient.Builder#plainText() plainText()}
@@ -22294,9 +22294,9 @@
 	
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
-	<jc>// Create a basic REST client with Simplified-JSON support.</jc>
+	<jc>// Create a basic REST client with JSON 5 support.</jc>
 	<jc>// Typically easier to use when performing unit tests.</jc>
-	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json5().build();
 	</p>
 	
 	<p>
@@ -22511,8 +22511,8 @@
 	
 	<h5 class='figure'>Examples:</h5>
 	<p class='bjava'>
-	<jc>// Create a client with Simple-JSON support.</jc>
-	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+	<jc>// Create a client with JSON 5 support.</jc>
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json5().build();
 	
 	<jc>// Post a JSON-serialized bean.</jc>
 	<jv>client</jv>
@@ -23034,8 +23034,8 @@
 	</p>
 	
 	<p class='bjava'>	
-	<jc>// Use a RestClient with default Simple JSON support.</jc>
-	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+	<jc>// Use a RestClient with default JSON 5 support.</jc>
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json5().build();
 	
 	<jc>// Instantiate our proxy interface.</jc>
 	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
@@ -24179,7 +24179,7 @@
 	
 	<jv>bean</jv> = RestClient
 		.<jsm>create</jsm>()
-		.simpleJson()
+		.json5()
 		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (<jv>req</jv>,<jv>res</jv>)-&gt;<jv>req</jv>.getUri().endsWith(<js>"/bean"</js>))
 		.logToConsole()
 		.build()
@@ -24197,9 +24197,9 @@
 	=== REQUEST ===
 	POST http://localhost/bean
 	---request headers---
-		Accept: application/json+simple
+		Accept: application/json5
 	---request entity---
-	Content-Type: application/json+simple
+	Content-Type: application/json5
 	---request content---
 	{f:1}
 	=== RESPONSE ===
@@ -24657,7 +24657,7 @@
 			<jc>// Do a round-trip on the bean through the REST interface</jc>
 			<jv>myBean</jv> = MockRestClient
 				.<jsm>create</jsm>(EchoRest.<jk>class</jk>)
-				.simpleJson()
+				.json5()
 				.build()
 				.put(<js>"/echo"</js>, <jv>myBean</jv>)
 				.run()
@@ -24679,7 +24679,7 @@
 		<jc>// Instantiate our mock client.</jc>
 		MockRestClient <jv>client</jv> = MockRestClient
 			.<jsm>create</jsm>(EchoRest.<jk>class</jk>)
-			.simpleJson()
+			.json5()
 			.build();
 
 		<jc>// Create a request.</jc>
@@ -24724,7 +24724,7 @@
 			<jc>// Instantiate our mock client.</jc>
 			<jf>client</jf> = MockRestClient
 				.<jsm>create</jsm>(<jf>echoRest</jf>)
-				.simpleJson()
+				.json5()
 				.build();
 		}
 
@@ -24781,7 +24781,7 @@
 	MockRestClient <jv>client</jv> = MockRestClient
 		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
 		.debug()
-		.simpleJson()
+		.json5()
 		.build();
 	</p>
 	<hr>
@@ -27281,7 +27281,7 @@
 		<jk>public static void</jk> main(String[] <jv>args</jv>) {
 	
 			<jc>// Create a RestClient with JSON serialization support.</jc>
-			RestClient <jv>restClient</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+			RestClient <jv>restClient</jv> = RestClient.<jsm>create</jsm>().json5().build();
 	
 			<jc>// Instantiate our proxy.</jc>
 			PetStore <jv>petStore</jv> = <jv>restClient</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:5000"</js>);
@@ -27290,7 +27290,7 @@
 			Collection&lt;Pet&gt; <jv>pets</jv> = <jv>petStore</jv>.getPets();
 	
 			<jc>// Pretty-print them to STDOUT.</jc>
-			SimpleJson.<jsf>DEFAULT_READABLE</jsf>.println(<jv>pets</jv>);
+			Json5.<jsf>DEFAULT_READABLE</jsf>.println(<jv>pets</jv>);
 		}
 	}
 	</p>
@@ -27621,7 +27621,7 @@
 	</p>
 	<img class='bordered w900' src='doc-files/9d.png'>
 	<p>
-		For example, <l>application/json+simple</l>:
+		For example, <l>application/json5</l>:
 	</p>
 	<img class='bordered w900' src='doc-files/9e.png'>
 	<p>
@@ -33617,7 +33617,7 @@
 				</ul>
 			</ul>
 		<li>
-			The <c>JsonSerializer.Simple</c> class has been moved into the top-level {@link org.apache.juneau.json.SimpleJsonSerializer} class.
+			The <c>JsonSerializer.Simple</c> class has been moved into the top-level <del>SimpleJsonSerializer</del> class.
 		<li>
 			RDF serializer subclasses have been moved into top-level classes:
 			<ul>
@@ -35379,6 +35379,8 @@
 	}
 			</p>
 		<li>
+			{@link org.apache.juneau.marshaller.Json5 JSON 5} support.
+		<li>
 			New {@link org.apache.juneau.annotation.Marshalled @Marshalled} annotation for non-bean classes.
 		<li>
 			New {@link org.apache.juneau.annotation.BeanConfig#ignoreUnknownEnumValues() @BeanConfig(ignoreUnknownEnumValues)} annotation and support for ignoring
@@ -35468,7 +35470,7 @@
 			<p class='bjava'>
 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
 	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
-		.simpleJson()
+		.json5()
 		.build()
 		.get(<jsf>URI</jsf>)
 		.run()

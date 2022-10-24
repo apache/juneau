@@ -70,9 +70,9 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					PojoToDynamicReader.class,
 					new PojoToDynamicReader("foo")
 				)
-				.json("foo-json")
-				.jsonT("foo-json")
-				.jsonR("foo-json")
+				.json("foo-json5")
+				.jsonT("foo-json5")
+				.jsonR("foo-json5")
 				.xml("foo-xml")
 				.xmlT("foo-xml")
 				.xmlR("foo-xml\n")
@@ -98,9 +98,9 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					SometimesSwappedBean1.class,
 					new SometimesSwappedBean1("foo")
 				)
-				.json("foo-application/json")
-				.jsonT("foo-application/json")
-				.jsonR("foo-application/json")
+				.json("foo-application/json5")
+				.jsonT("foo-application/json5")
+				.jsonR("foo-application/json5")
 				.xml("foo-text/xml")
 				.xmlT("foo-text/xml")
 				.xmlR("foo-text/xml\n")
@@ -154,9 +154,9 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					BeanWithSwappedField.class,
 					new BeanWithSwappedField("x")
 				)
-				.json("{f:x-json}")
-				.jsonT("{f:x-json}")
-				.jsonR("{\n\tf: x-json\n}")
+				.json("{f:x-json5}")
+				.jsonT("{f:x-json5}")
+				.jsonR("{\n\tf: x-json5\n}")
 				.xml("<object><f>x-xml</f></object>")
 				.xmlT("<object><f>x-xml</f></object>")
 				.xmlR("<object>\n\t<f>x-xml</f>\n</object>\n")
@@ -182,9 +182,9 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					BeanWithSwapped1dField.class,
 					new BeanWithSwapped1dField("x")
 				)
-				.json("{f:[x1-json,x2-json,null]}")
-				.jsonT("{f:[x1-json,x2-json,null]}")
-				.jsonR("{\n\tf: [\n\t\tx1-json,\n\t\tx2-json,\n\t\tnull\n\t]\n}")
+				.json("{f:[x1-json5,x2-json5,null]}")
+				.jsonT("{f:[x1-json5,x2-json5,null]}")
+				.jsonR("{\n\tf: [\n\t\tx1-json5,\n\t\tx2-json5,\n\t\tnull\n\t]\n}")
 				.xml("<object><f>x1-xmlx2-xml<null/></f></object>")
 				.xmlT("<object><f>x1-xmlx2-xml<null/></f></object>")
 				.xmlR("<object>\n\t<f>\n\t\tx1-xml\n\t\tx2-xml\n\t\t<null/>\n\t</f>\n</object>\n")
@@ -238,9 +238,9 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					BeanWithSwappedListField.class,
 					new BeanWithSwappedListField("x")
 				)
-				.json("{f:[x1-json,x2-json,null]}")
-				.jsonT("{f:[x1-json,x2-json,null]}")
-				.jsonR("{\n\tf: [\n\t\tx1-json,\n\t\tx2-json,\n\t\tnull\n\t]\n}")
+				.json("{f:[x1-json5,x2-json5,null]}")
+				.jsonT("{f:[x1-json5,x2-json5,null]}")
+				.jsonR("{\n\tf: [\n\t\tx1-json5,\n\t\tx2-json5,\n\t\tnull\n\t]\n}")
 				.xml("<object><f>x1-xmlx2-xml<null/></f></object>")
 				.xmlT("<object><f>x1-xmlx2-xml<null/></f></object>")
 				.xmlR("<object>\n\t<f>\n\t\tx1-xml\n\t\tx2-xml\n\t\t<null/>\n\t</f>\n</object>\n")
@@ -266,9 +266,9 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					BeanWithSwappedMapField.class,
 					new BeanWithSwappedMapField("x")
 				)
-				.json("{f:{foo:x1-json,bar:null,null:x2-json}}")
-				.jsonT("{f:{foo:x1-json,bar:null,null:x2-json}}")
-				.jsonR("{\n\tf: {\n\t\tfoo: x1-json,\n\t\tbar: null,\n\t\tnull: x2-json\n\t}\n}")
+				.json("{f:{foo:x1-json5,bar:null,null:x2-json5}}")
+				.jsonT("{f:{foo:x1-json5,bar:null,null:x2-json5}}")
+				.jsonR("{\n\tf: {\n\t\tfoo: x1-json5,\n\t\tbar: null,\n\t\tnull: x2-json5\n\t}\n}")
 				.xml("<object><f><foo>x1-xml</foo><bar _type='null'/><_x0000_>x2-xml</_x0000_></f></object>")
 				.xmlT("<object><f><foo>x1-xml</foo><bar t='null'/><_x0000_>x2-xml</_x0000_></f></object>")
 				.xmlR("<object>\n\t<f>\n\t\t<foo>x1-xml</foo>\n\t\t<bar _type='null'/>\n\t\t<_x0000_>x2-xml</_x0000_>\n\t</f>\n</object>\n")
@@ -294,9 +294,9 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					BeanWithListBeanSwappedField.class,
 					new BeanWithListBeanSwappedField("x")
 				)
-				.json("{f:[{f1:x1a-json,f2:[x2a-json,x2b-json,null],f4:[x4a-json,x4b-json,null],f5:{foo:x5a-json,bar:null,null:x5c-json}},null]}")
-				.jsonT("{f:[{f1:x1a-json,f2:[x2a-json,x2b-json,null],f4:[x4a-json,x4b-json,null],f5:{foo:x5a-json,bar:null,null:x5c-json}},null]}")
-				.jsonR("{\n\tf: [\n\t\t{\n\t\t\tf1: x1a-json,\n\t\t\tf2: [\n\t\t\t\tx2a-json,\n\t\t\t\tx2b-json,\n\t\t\t\tnull\n\t\t\t],\n\t\t\tf4: [\n\t\t\t\tx4a-json,\n\t\t\t\tx4b-json,\n\t\t\t\tnull\n\t\t\t],\n\t\t\tf5: {\n\t\t\t\tfoo: x5a-json,\n\t\t\t\tbar: null,\n\t\t\t\tnull: x5c-json\n\t\t\t}\n\t\t},\n\t\tnull\n\t]\n}")
+				.json("{f:[{f1:x1a-json5,f2:[x2a-json5,x2b-json5,null],f4:[x4a-json5,x4b-json5,null],f5:{foo:x5a-json5,bar:null,null:x5c-json5}},null]}")
+				.jsonT("{f:[{f1:x1a-json5,f2:[x2a-json5,x2b-json5,null],f4:[x4a-json5,x4b-json5,null],f5:{foo:x5a-json5,bar:null,null:x5c-json5}},null]}")
+				.jsonR("{\n\tf: [\n\t\t{\n\t\t\tf1: x1a-json5,\n\t\t\tf2: [\n\t\t\t\tx2a-json5,\n\t\t\t\tx2b-json5,\n\t\t\t\tnull\n\t\t\t],\n\t\t\tf4: [\n\t\t\t\tx4a-json5,\n\t\t\t\tx4b-json5,\n\t\t\t\tnull\n\t\t\t],\n\t\t\tf5: {\n\t\t\t\tfoo: x5a-json5,\n\t\t\t\tbar: null,\n\t\t\t\tnull: x5c-json5\n\t\t\t}\n\t\t},\n\t\tnull\n\t]\n}")
 				.xml("<object><f><object><f1>x1a-xml</f1><f2>x2a-xmlx2b-xml<null/></f2><f4>x4a-xmlx4b-xml<null/></f4><f5><foo>x5a-xml</foo><bar _type='null'/><_x0000_>x5c-xml</_x0000_></f5></object><null/></f></object>")
 				.xmlT("<object><f><object><f1>x1a-xml</f1><f2>x2a-xmlx2b-xml<null/></f2><f4>x4a-xmlx4b-xml<null/></f4><f5><foo>x5a-xml</foo><bar t='null'/><_x0000_>x5c-xml</_x0000_></f5></object><null/></f></object>")
 				.xmlR("<object>\n\t<f>\n\t\t<object>\n\t\t\t<f1>x1a-xml</f1>\n\t\t\t<f2>\n\t\t\t\tx2a-xml\n\t\t\t\tx2b-xml\n\t\t\t\t<null/>\n\t\t\t</f2>\n\t\t\t<f4>\n\t\t\t\tx4a-xml\n\t\t\t\tx4b-xml\n\t\t\t\t<null/>\n\t\t\t</f4>\n\t\t\t<f5>\n\t\t\t\t<foo>x5a-xml</foo>\n\t\t\t\t<bar _type='null'/>\n\t\t\t\t<_x0000_>x5c-xml</_x0000_>\n\t\t\t</f5>\n\t\t</object>\n\t\t<null/>\n\t</f>\n</object>\n")
@@ -322,9 +322,9 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 					BeanWithMapBeanSwappedField.class,
 					new BeanWithMapBeanSwappedField("x")
 				)
-				.json("{f:{foo:{f1:x1a-json,f2:[x2a-json,x2b-json,null],f4:[x4a-json,x4b-json,null],f5:{foo:x5a-json,bar:null,null:x5c-json}},bar:null,null:{f1:x1a-json,f2:[x2a-json,x2b-json,null],f4:[x4a-json,x4b-json,null],f5:{foo:x5a-json,bar:null,null:x5c-json}}}}")
-				.jsonT("{f:{foo:{f1:x1a-json,f2:[x2a-json,x2b-json,null],f4:[x4a-json,x4b-json,null],f5:{foo:x5a-json,bar:null,null:x5c-json}},bar:null,null:{f1:x1a-json,f2:[x2a-json,x2b-json,null],f4:[x4a-json,x4b-json,null],f5:{foo:x5a-json,bar:null,null:x5c-json}}}}")
-				.jsonR("{\n\tf: {\n\t\tfoo: {\n\t\t\tf1: x1a-json,\n\t\t\tf2: [\n\t\t\t\tx2a-json,\n\t\t\t\tx2b-json,\n\t\t\t\tnull\n\t\t\t],\n\t\t\tf4: [\n\t\t\t\tx4a-json,\n\t\t\t\tx4b-json,\n\t\t\t\tnull\n\t\t\t],\n\t\t\tf5: {\n\t\t\t\tfoo: x5a-json,\n\t\t\t\tbar: null,\n\t\t\t\tnull: x5c-json\n\t\t\t}\n\t\t},\n\t\tbar: null,\n\t\tnull: {\n\t\t\tf1: x1a-json,\n\t\t\tf2: [\n\t\t\t\tx2a-json,\n\t\t\t\tx2b-json,\n\t\t\t\tnull\n\t\t\t],\n\t\t\tf4: [\n\t\t\t\tx4a-json,\n\t\t\t\tx4b-json,\n\t\t\t\tnull\n\t\t\t],\n\t\t\tf5: {\n\t\t\t\tfoo: x5a-json,\n\t\t\t\tbar: null,\n\t\t\t\tnull: x5c-json\n\t\t\t}\n\t\t}\n\t}\n}")
+				.json("{f:{foo:{f1:x1a-json5,f2:[x2a-json5,x2b-json5,null],f4:[x4a-json5,x4b-json5,null],f5:{foo:x5a-json5,bar:null,null:x5c-json5}},bar:null,null:{f1:x1a-json5,f2:[x2a-json5,x2b-json5,null],f4:[x4a-json5,x4b-json5,null],f5:{foo:x5a-json5,bar:null,null:x5c-json5}}}}")
+				.jsonT("{f:{foo:{f1:x1a-json5,f2:[x2a-json5,x2b-json5,null],f4:[x4a-json5,x4b-json5,null],f5:{foo:x5a-json5,bar:null,null:x5c-json5}},bar:null,null:{f1:x1a-json5,f2:[x2a-json5,x2b-json5,null],f4:[x4a-json5,x4b-json5,null],f5:{foo:x5a-json5,bar:null,null:x5c-json5}}}}")
+				.jsonR("{\n\tf: {\n\t\tfoo: {\n\t\t\tf1: x1a-json5,\n\t\t\tf2: [\n\t\t\t\tx2a-json5,\n\t\t\t\tx2b-json5,\n\t\t\t\tnull\n\t\t\t],\n\t\t\tf4: [\n\t\t\t\tx4a-json5,\n\t\t\t\tx4b-json5,\n\t\t\t\tnull\n\t\t\t],\n\t\t\tf5: {\n\t\t\t\tfoo: x5a-json5,\n\t\t\t\tbar: null,\n\t\t\t\tnull: x5c-json5\n\t\t\t}\n\t\t},\n\t\tbar: null,\n\t\tnull: {\n\t\t\tf1: x1a-json5,\n\t\t\tf2: [\n\t\t\t\tx2a-json5,\n\t\t\t\tx2b-json5,\n\t\t\t\tnull\n\t\t\t],\n\t\t\tf4: [\n\t\t\t\tx4a-json5,\n\t\t\t\tx4b-json5,\n\t\t\t\tnull\n\t\t\t],\n\t\t\tf5: {\n\t\t\t\tfoo: x5a-json5,\n\t\t\t\tbar: null,\n\t\t\t\tnull: x5c-json5\n\t\t\t}\n\t\t}\n\t}\n}")
 				.xml("<object><f><foo><f1>x1a-xml</f1><f2>x2a-xmlx2b-xml<null/></f2><f4>x4a-xmlx4b-xml<null/></f4><f5><foo>x5a-xml</foo><bar _type='null'/><_x0000_>x5c-xml</_x0000_></f5></foo><bar _type='null'/><_x0000_><f1>x1a-xml</f1><f2>x2a-xmlx2b-xml<null/></f2><f4>x4a-xmlx4b-xml<null/></f4><f5><foo>x5a-xml</foo><bar _type='null'/><_x0000_>x5c-xml</_x0000_></f5></_x0000_></f></object>")
 				.xmlT("<object><f><foo><f1>x1a-xml</f1><f2>x2a-xmlx2b-xml<null/></f2><f4>x4a-xmlx4b-xml<null/></f4><f5><foo>x5a-xml</foo><bar t='null'/><_x0000_>x5c-xml</_x0000_></f5></foo><bar t='null'/><_x0000_><f1>x1a-xml</f1><f2>x2a-xmlx2b-xml<null/></f2><f4>x4a-xmlx4b-xml<null/></f4><f5><foo>x5a-xml</foo><bar t='null'/><_x0000_>x5c-xml</_x0000_></f5></_x0000_></f></object>")
 				.xmlR("<object>\n\t<f>\n\t\t<foo>\n\t\t\t<f1>x1a-xml</f1>\n\t\t\t<f2>\n\t\t\t\tx2a-xml\n\t\t\t\tx2b-xml\n\t\t\t\t<null/>\n\t\t\t</f2>\n\t\t\t<f4>\n\t\t\t\tx4a-xml\n\t\t\t\tx4b-xml\n\t\t\t\t<null/>\n\t\t\t</f4>\n\t\t\t<f5>\n\t\t\t\t<foo>x5a-xml</foo>\n\t\t\t\t<bar _type='null'/>\n\t\t\t\t<_x0000_>x5c-xml</_x0000_>\n\t\t\t</f5>\n\t\t</foo>\n\t\t<bar _type='null'/>\n\t\t<_x0000_>\n\t\t\t<f1>x1a-xml</f1>\n\t\t\t<f2>\n\t\t\t\tx2a-xml\n\t\t\t\tx2b-xml\n\t\t\t\t<null/>\n\t\t\t</f2>\n\t\t\t<f4>\n\t\t\t\tx4a-xml\n\t\t\t\tx4b-xml\n\t\t\t\t<null/>\n\t\t\t</f4>\n\t\t\t<f5>\n\t\t\t\t<foo>x5a-xml</foo>\n\t\t\t\t<bar _type='null'/>\n\t\t\t\t<_x0000_>x5c-xml</_x0000_>\n\t\t\t</f5>\n\t\t</_x0000_>\n\t</f>\n</object>\n")
@@ -393,7 +393,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 		@Override
 		public Object swap(BeanSession session, SometimesSwappedBean1 o) throws Exception {
 			MediaType mt = session.getMediaType();
-			if (mt.hasSubType("json") || mt.hasSubType("xml"))
+			if (mt.hasSubType("json5") || mt.hasSubType("xml"))
 				return reader(o.f + "-" + mt);
 			return o;
 		}
@@ -411,7 +411,7 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 		@Override
 		public Object swap(BeanSession session, SometimesSwappedBean2 o) throws Exception {
 			MediaType mt = session.getMediaType();
-			if (mt.hasSubType("json") || mt.hasSubType("xml"))
+			if (mt.hasSubType("json5") || mt.hasSubType("xml"))
 				return o;
 			return reader(o.f + "-" + mt);
 		}

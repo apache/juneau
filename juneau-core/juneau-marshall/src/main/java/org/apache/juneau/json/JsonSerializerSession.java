@@ -418,7 +418,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		if (output instanceof JsonWriter)
 			return (JsonWriter)output;
 		JsonWriter w = new JsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(),
-			isSimpleMode(), isTrimStrings(), getUriResolver());
+			isSimpleAttrs(), isTrimStrings(), getUriResolver());
 		out.setWriter(w);
 		return w;
 	}
@@ -452,15 +452,15 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Simple JSON mode.
+	 * Simple JSON attributes.
 	 *
-	 * @see JsonSerializer.Builder#simpleMode()
+	 * @see JsonSerializer.Builder#simpleAttrs()
 	 * @return
 	 * 	<jk>true</jk> if JSON attribute names will only be quoted when necessary.
 	 * 	<br>Otherwise, they are always quoted.
 	 */
-	protected final boolean isSimpleMode() {
-		return ctx.isSimpleMode();
+	protected final boolean isSimpleAttrs() {
+		return ctx.isSimpleAttrs();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

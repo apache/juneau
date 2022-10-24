@@ -296,7 +296,7 @@ public class Response_Test {
 	// JSON Accept
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=Json5Serializer.class)
 	public static class G {
 		@RestGet
 		public void a(@Response Value<List<Integer>> body) {

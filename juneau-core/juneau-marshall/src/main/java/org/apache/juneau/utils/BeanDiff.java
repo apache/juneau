@@ -245,6 +245,6 @@ public class BeanDiff {
 
 	@Override
 	public String toString() {
-		return SimpleJson.of(this);
+		return Json5.of(this);
 	}
 }

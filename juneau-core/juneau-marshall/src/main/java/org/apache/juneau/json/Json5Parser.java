@@ -17,11 +17,11 @@ package org.apache.juneau.json;
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <c>Content-Type</c> types:  <bc>application/json+simple, text/json+simple</bc>
+ * Handles <c>Content-Type</c> types:  <bc>application/json5, text/json5</bc>
  *
  * <h5 class='topic'>Description</h5>
  *
- * Identical to {@link JsonParser} but with the media type <bc>application/json+simple</bc>.
+ * Identical to {@link JsonParser} but with the media type <bc>application/json5</bc>.
  *
  * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
@@ -31,14 +31,14 @@ package org.apache.juneau.json;
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.JsonDetails">JSON Details</a>
  * </ul>
  */
-public class SimpleJsonParser extends JsonParser {
+public class Json5Parser extends JsonParser {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/** Default parser, Accept=application/json+simple. */
-	public static final SimpleJsonParser DEFAULT = new SimpleJsonParser(create());
+	/** Default parser, Accept=application/json5. */
+	public static final Json5Parser DEFAULT = new Json5Parser(create());
 
 	/**
 	 * Creates a new builder for this object.
@@ -46,7 +46,7 @@ public class SimpleJsonParser extends JsonParser {
 	 * @return A new builder.
 	 */
 	public static JsonParser.Builder create() {
-		return JsonParser.create().consumes("application/json+simple,text/json+simple,application/json,text/json");
+		return JsonParser.create().consumes("application/json5,text/json5,application/json,text/json");
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ public class SimpleJsonParser extends JsonParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public SimpleJsonParser(JsonParser.Builder builder) {
+	public Json5Parser(JsonParser.Builder builder) {
 		super(builder);
 	}
 

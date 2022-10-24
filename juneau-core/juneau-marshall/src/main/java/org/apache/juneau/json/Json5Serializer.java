@@ -19,7 +19,7 @@ package org.apache.juneau.json;
  *
  * Handles <c>Accept</c> types:  <bc>application/json, text/json</bc>
  * <p>
- * Produces <c>Content-Type</c> types:  <bc>application/json+simple</bc>
+ * Produces <c>Content-Type</c> types:  <bc>application/json5</bc>
  *
  * <h5 class='topic'>Description</h5>
  * <p>
@@ -37,17 +37,17 @@ package org.apache.juneau.json;
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.JsonDetails">JSON Details</a>
  * </ul>
  */
-public class SimpleJsonSerializer extends JsonSerializer {
+public class Json5Serializer extends JsonSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/** Default serializer, single quotes, {@link JsonSerializer.Builder#simpleMode() simple mode}. */
-	public static final SimpleJsonSerializer DEFAULT = new SimpleJsonSerializer(create());
+	/** Default serializer, single quotes, {@link JsonSerializer.Builder#simpleAttrs() simple mode}. */
+	public static final Json5Serializer DEFAULT = new Json5Serializer(create());
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static final SimpleJsonSerializer DEFAULT_READABLE = new Readable(create());
+	public static final Json5Serializer DEFAULT_READABLE = new Readable(create());
 
 	/**
 	 * Creates a new builder for this object.
@@ -55,7 +55,7 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	 * @return A new builder.
 	 */
 	public static JsonSerializer.Builder create() {
-		return JsonSerializer.create().simpleMode().quoteChar('\'').produces("application/json").accept("application/json+simple,text/json+simple,application/json;q=0.9,text/json;q=0.9").type(SimpleJsonSerializer.class);
+		return JsonSerializer.create().simpleAttrs().quoteChar('\'').produces("application/json5").accept("application/json5,text/json5,application/json;q=0.9,text/json;q=0.9").type(Json5Serializer.class);
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -63,7 +63,7 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static class Readable extends SimpleJsonSerializer {
+	public static class Readable extends Json5Serializer {
 
 		/**
 		 * Constructor.
@@ -71,7 +71,7 @@ public class SimpleJsonSerializer extends JsonSerializer {
 		 * @param builder The builder for this object.
 		 */
 		public Readable(JsonSerializer.Builder builder) {
-			super(builder.simpleMode().quoteChar('\'').useWhitespace());
+			super(builder.simpleAttrs().quoteChar('\'').useWhitespace());
 		}
 	}
 
@@ -84,8 +84,8 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public SimpleJsonSerializer(JsonSerializer.Builder builder) {
-		super(builder.simpleMode().quoteChar('\''));
+	public Json5Serializer(JsonSerializer.Builder builder) {
+		super(builder.simpleAttrs().quoteChar('\''));
 	}
 
 	@Override /* Context */

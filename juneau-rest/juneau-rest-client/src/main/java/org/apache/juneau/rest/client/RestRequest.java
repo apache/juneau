@@ -189,13 +189,13 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * without having to escape lots of quotes.
 	 *
 	 * <p>
-	 * 	{@link SimpleJsonSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+	 * 	{@link Json5Serializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 	 * 	<ul>
 	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link RestClient.Builder#sortCollections()}) or
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
-	 * 	{@link JsonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+	 * 	{@link Json5Parser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
 	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#strict()}) or
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
@@ -213,13 +213,13 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		last-enabled language if the headers are not set.
 	 * 	</ul>
 	 * <p>
-	 * 	Identical to calling <c>serializer(SimpleJsonSerializer.<jk>class</jk>).parser(JsonParser.<jk>class</jk>)</c>.
+	 * 	Identical to calling <c>serializer(Json5Serializer.<jk>class</jk>).parser(Json5Parser.<jk>class</jk>)</c>.
 	 *
 	 * @return This object.
 	 */
 	@FluentSetter
-	public RestRequest simpleJson() {
-		return serializer(SimpleJsonSerializer.class).parser(SimpleJsonParser.class);
+	public RestRequest json5() {
+		return serializer(Json5Serializer.class).parser(Json5Parser.class);
 	}
 
 	/**

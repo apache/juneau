@@ -34,7 +34,7 @@ public class ConfigTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		RestClient c = TestMicroservice.client().accept("text/json+simple").build();
+		RestClient c = TestMicroservice.client().accept("text/json5").build();
 
 		Map<String,Map<String,Object>> m = c.get(URL).run().getContent().as(Map.class, String.class, JsonMap.class);
 

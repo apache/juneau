@@ -25,11 +25,11 @@ import org.junit.*;
 public class StackTraceElementSwapTest {
 
 	private String write(StackTraceElement ste) {
-		return SimpleJson.of(ste);
+		return Json5.of(ste);
 	}
 
 	private StackTraceElement read(String in) throws Exception {
-		return SimpleJson.DEFAULT.read(in, StackTraceElement.class);
+		return Json5.DEFAULT.read(in, StackTraceElement.class);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

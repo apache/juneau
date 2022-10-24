@@ -167,7 +167,7 @@ public class Remote_RemoteOpAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class C implements BasicSimpleJsonConfig {
+	public static class C implements BasicJson5Config {
 		@RestOp(path="/*")
 		public String post(@Content String body) {
 			return body;

@@ -1822,7 +1822,7 @@ public class BeanContext extends Context {
 		 * <p>
 		 * This is a shorthand method for the following code:
 		 * <p class='bjava'>
-		 * 		<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(SimpleJson.<jsf>DEFAULT</jsf>.toString(<jv>object</jv>)).build())
+		 * 		<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(Json5.<jsf>DEFAULT</jsf>.toString(<jv>object</jv>)).build())
 		 * </p>
 		 *
 		 * <ul class='notes'>
@@ -1847,7 +1847,7 @@ public class BeanContext extends Context {
 		 */
 		@FluentSetter
 		public <T> Builder example(Class<T> pojoClass, T o) {
-			return annotations(MarshalledAnnotation.create(pojoClass).example(SimpleJson.of(o)).build());
+			return annotations(MarshalledAnnotation.create(pojoClass).example(Json5.of(o)).build());
 		}
 
 		/**
@@ -1891,7 +1891,7 @@ public class BeanContext extends Context {
 		 *
 		 * @param <T> The POJO class type.
 		 * @param pojoClass The POJO class.
-		 * @param json The simple JSON representation of the example.
+		 * @param json The JSON 5 representation of the example.
 		 * @return This object.
 		 */
 		@FluentSetter
@@ -4630,7 +4630,7 @@ public class BeanContext extends Context {
 		if (beanToStringSerializer == null) {
 			if (JsonSerializer.DEFAULT == null)
 				return null;
-			this.beanToStringSerializer = JsonSerializer.create().beanContext(this).sq().simpleMode().build();
+			this.beanToStringSerializer = JsonSerializer.create().beanContext(this).sq().simpleAttrs().build();
 		}
 		return beanToStringSerializer;
 	}

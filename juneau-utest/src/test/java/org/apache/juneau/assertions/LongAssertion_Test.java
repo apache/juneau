@@ -60,7 +60,7 @@ public class LongAssertion_Test {
 	@Test
 	public void ba01b_asString_wSerializer() throws Exception {
 		Long x = 1l, nil = null;
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("1");
 		test(nil).asString(s).is("null");
 	}
@@ -204,7 +204,7 @@ public class LongAssertion_Test {
 	@Test
 	public void ca11_isSameSerializedAs() throws Exception {
 		Long x1 = 1l, x1a = 1l, x2 = 2l, nil = null;
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
 		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='2'.  Actual='1'.");

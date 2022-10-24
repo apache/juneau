@@ -1186,8 +1186,8 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	}
 
 	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
-	public MockRestRequest simpleJson() {
-		super.simpleJson();
+	public MockRestRequest json5() {
+		super.json5();
 		return this;
 	}
 

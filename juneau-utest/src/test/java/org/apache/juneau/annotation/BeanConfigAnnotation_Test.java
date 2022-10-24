@@ -88,7 +88,7 @@ public class BeanConfigAnnotation_Test {
 	public static class A1 {
 		public int foo;
 		@Override
-		public String toString() {return SimpleJson.of(this);}
+		public String toString() {return Json5.of(this);}
 	}
 	@Bean(typeName="A2")
 	public static class A2 {

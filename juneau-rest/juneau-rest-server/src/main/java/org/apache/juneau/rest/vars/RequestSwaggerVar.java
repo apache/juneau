@@ -92,7 +92,7 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 		try {
 			RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 			Optional<Swagger> swagger = req.getSwagger();
-			WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+			WriterSerializer s = Json5Serializer.DEFAULT;
 			Optional<Operation> methodSwagger = req.getOperationSwagger();
 			char c = StringUtils.charAt(key, 0);
 			if (c == 'c') {

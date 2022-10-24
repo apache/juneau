@@ -322,7 +322,7 @@ public class ParameterInfo extends SwaggerElement {
 		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
 			throw new BasicRuntimeException(
 				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
-				value, SimpleJson.of(VALID_COLLECTION_FORMATS)
+				value, Json5.of(VALID_COLLECTION_FORMATS)
 			);
 		collectionFormat = value;
 		return this;
@@ -539,7 +539,7 @@ public class ParameterInfo extends SwaggerElement {
 		if (isStrict() && ! contains(value, VALID_IN))
 			throw new BasicRuntimeException(
 				"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}",
-				value, SimpleJson.of(VALID_IN)
+				value, Json5.of(VALID_IN)
 			);
 		in = value;
 		if ("path".equals(value))
@@ -876,7 +876,7 @@ public class ParameterInfo extends SwaggerElement {
 		if (isStrict() && ! contains(value, VALID_TYPES))
 			throw new BasicRuntimeException(
 				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
-				value, SimpleJson.of(VALID_TYPES)
+				value, Json5.of(VALID_TYPES)
 			);
 		type = value;
 		return this;

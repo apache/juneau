@@ -241,7 +241,7 @@
 		|			AddressBook.<jsm>toCalendar</jsm>(<js>"Aug 1, 1999"</js>),
 		|			<jk>new</jk> CreateAddress(<js>"Test street"</js>, <js>"Test city"</js>, <js>"Test state"</js>, 12345, <jk>true</jk>))
 		|	};
-		|	String <jv>asJson</jv> = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.toString(<jv>args</jv>);
+		|	String <jv>asJson</jv> = Json5Serializer.<jsf>DEFAULT_READABLE</jsf>.toString(<jv>args</jv>);
 		|	System.<jsf>err</jsf>.println(<jv>asJson</jv>);
 	</p>
 	<p>

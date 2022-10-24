@@ -245,7 +245,7 @@ public class WriterSerializer extends Serializer {
 		 * Similar to {@link #quoteChar(char)} but takes precedence over that setting.
 		 *
 		 * <p>
-		 * Allows you to override the quote character even if it's set by a subclass such as {@link SimpleJsonSerializer}.
+		 * Allows you to override the quote character even if it's set by a subclass such as {@link Json5Serializer}.
 		 *
 		 *
 		 * @param value

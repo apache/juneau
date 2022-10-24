@@ -28,7 +28,7 @@
 		|		<jk>public static void</jk> main(String[] <jv>args</jv>) {
 		|	
 		|			<jc>// Create a RestClient with JSON serialization support.</jc>
-		|			RestClient <jv>restClient</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+		|			RestClient <jv>restClient</jv> = RestClient.<jsm>create</jsm>().json5().build();
 		|	
 		|			<jc>// Instantiate our proxy.</jc>
 		|			PetStore <jv>petStore</jv> = <jv>restClient</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:5000"</js>);
@@ -37,7 +37,7 @@
 		|			Collection&lt;Pet&gt; <jv>pets</jv> = <jv>petStore</jv>.getPets();
 		|	
 		|			<jc>// Pretty-print them to STDOUT.</jc>
-		|			SimpleJson.<jsf>DEFAULT_READABLE</jsf>.println(<jv>pets</jv>);
+		|			Json5.<jsf>DEFAULT_READABLE</jsf>.println(<jv>pets</jv>);
 		|		}
 		|	}
 	</p>

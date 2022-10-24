@@ -89,7 +89,7 @@ public class PathRemainder_Test {
 	// Optional path remainder parameter.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=Json5Serializer.class)
 	public static class B {
 		@RestGet(path="/a/*")
 		public Object a(@Path("/*") Optional<Integer> f1) throws Exception {

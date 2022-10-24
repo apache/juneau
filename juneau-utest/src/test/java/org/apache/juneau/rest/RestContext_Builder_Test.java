@@ -124,7 +124,7 @@ public class RestContext_Builder_Test {
 		@RestGet("/a8") public B a8() { return b4; }
 	}
 
-	static RestClient b1b = MockRestClient.createLax(B1b.class).simpleJson().build();
+	static RestClient b1b = MockRestClient.createLax(B1b.class).json5().build();
 
 	@Test
 	public void b01_RestBean_fields() throws Exception {

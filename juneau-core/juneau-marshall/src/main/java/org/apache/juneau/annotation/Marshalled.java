@@ -64,7 +64,7 @@ public @interface Marshalled {
 	 * 		Setting applies to specified class and all subclasses.
 	 * 	<li class='note'>
 	 * 		Keys are the class of the example.
-	 * 		<br>Values are Simple-JSON representation of that class.
+	 * 		<br>Values are JSON 5 representation of that class.
 	 * 	<li class='note'>
 	 * 		POJO examples can also be defined on classes via the following:
 	 * 		<ul class='spaced-list'>

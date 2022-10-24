@@ -292,7 +292,7 @@ public final class AnnotationInfo<T extends Annotation> {
 
 	@Override /* Object */
 	public String toString() {
-		return SimpleJson.DEFAULT_READABLE.write(toJsonMap());
+		return Json5.DEFAULT_READABLE.write(toJsonMap());
 	}
 
 	/**

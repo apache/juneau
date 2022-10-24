@@ -33,7 +33,7 @@ public class ObjectSearcher_Test {
 
 	private static BeanSession bs = BeanContext.DEFAULT_SESSION;
 	private static ObjectSearcher os = ObjectSearcher.DEFAULT;
-	private static WriterSerializer ws = JsonSerializer.create().ssq().swaps(TemporalCalendarSwap.IsoLocalDateTime.class).build();
+	private static WriterSerializer ws = JsonSerializer.create().json5().swaps(TemporalCalendarSwap.IsoLocalDateTime.class).build();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Utility

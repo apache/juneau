@@ -22,17 +22,17 @@ import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class SimpleJson_Test {
+public class Json5_Test {
 
 	@Test
 	public void a01_to() throws Exception {
 		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
 		String expected1 = "'foo'", expected2 = "{foo:'bar'}";
 
-		assertString(SimpleJson.of(in1)).is(expected1);
-		assertString(SimpleJson.of(in1,stringWriter())).is(expected1);
-		assertString(SimpleJson.of(in2)).is(expected2);
-		assertString(SimpleJson.of(in2,stringWriter())).is(expected2);
+		assertString(Json5.of(in1)).is(expected1);
+		assertString(Json5.of(in1,stringWriter())).is(expected1);
+		assertString(Json5.of(in2)).is(expected2);
+		assertString(Json5.of(in2,stringWriter())).is(expected2);
 	}
 
 	@Test
@@ -40,10 +40,10 @@ public class SimpleJson_Test {
 		String in1 = "'foo'", in2 = "{foo:'bar'}";
 		String expected1 = "foo", expected2 = "{foo:'bar'}";
 
-		assertString(SimpleJson.to(in1, String.class)).is(expected1);
-		assertString(SimpleJson.to(stringReader(in1), String.class)).is(expected1);
-		assertObject(SimpleJson.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
-		assertObject(SimpleJson.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
+		assertString(Json5.to(in1, String.class)).is(expected1);
+		assertString(Json5.to(stringReader(in1), String.class)).is(expected1);
+		assertObject(Json5.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
+		assertObject(Json5.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

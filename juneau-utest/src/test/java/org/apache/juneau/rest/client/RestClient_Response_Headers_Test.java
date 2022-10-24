@@ -193,6 +193,6 @@ public class RestClient_Response_Headers_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static RestClient.Builder checkFooClient() {
-		return MockRestClient.create(A.class).simpleJson().header("Check","Foo");
+		return MockRestClient.create(A.class).json5().header("Check","Foo");
 	}
 }

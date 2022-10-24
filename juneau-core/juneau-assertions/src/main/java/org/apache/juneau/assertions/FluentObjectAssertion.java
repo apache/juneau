@@ -110,11 +110,11 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		MSG_unexpectedValue2 = MESSAGES.getString("unexpectedValue2");
 
 	private static JsonSerializer JSON = JsonSerializer.create()
-		.ssq()
+		.json5()
 		.build();
 
 	private static JsonSerializer JSON_SORTED = JsonSerializer.create()
-		.ssq()
+		.json5()
 		.sortProperties()
 		.sortCollections()
 		.sortMaps()

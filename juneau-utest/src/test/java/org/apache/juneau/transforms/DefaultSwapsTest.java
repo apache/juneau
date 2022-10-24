@@ -49,7 +49,7 @@ public class DefaultSwapsTest {
 		TestUtils.unsetTimeZone();
 	}
 
-	private static final WriterSerializer SERIALIZER = SimpleJsonSerializer.DEFAULT;
+	private static final WriterSerializer SERIALIZER = Json5Serializer.DEFAULT;
 
 	private void test1(String expected, Object o) throws Exception {
 		assertEquals(expected, SERIALIZER.serialize(o));

@@ -29,7 +29,7 @@ public class Rest_AnnotationInheritance_Test {
 	// @Body on parameter
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	@Rest(serializers=Json5Serializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface IA {
 		@RestPut
 		public String a(@Content String b);

@@ -283,6 +283,6 @@ public class MethodExecStats {
 
 	@Override /* Object */
 	public String toString() {
-		return SimpleJson.of(this);
+		return Json5.of(this);
 	}
 }

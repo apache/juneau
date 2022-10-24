@@ -569,7 +569,7 @@ public class UriResolutionTest {
 
 			TreeMap<String,String> m = p.parse(r, TreeMap.class, String.class, String.class);
 
-			String r2 = SimpleJsonSerializer.DEFAULT.toString(m);
+			String r2 = Json5Serializer.DEFAULT.toString(m);
 			assertString(results.json).setMsg("{0}/{1} parse failed", label, s.getClass().getSimpleName()).is(r2);
 
 		} catch (AssertionError e) {
@@ -582,25 +582,25 @@ public class UriResolutionTest {
 
 	@Test
 	public void a1_testJsonSerialize() throws Exception {
-		Serializer s = JsonSerializer.create().ssq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = JsonSerializer.create().json5().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testSerialize(s, results.json, new TestURI());
 	}
 
 	@Test
 	public void a1c_testJsonSerialize_usingConfig() throws Exception {
-		Serializer s = JsonSerializer.create().ssq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
+		Serializer s = JsonSerializer.create().json5().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
 		testSerialize(s, results.json, new TestURIc());
 	}
 
 	@Test
 	public void a2_testJsonParse() throws Exception {
-		Serializer s = JsonSerializer.create().ssq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = JsonSerializer.create().json5().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testParse(s, JsonParser.DEFAULT, new TestURI());
 	}
 
 	@Test
 	public void a2c_testJsonParse_usingConfig() throws Exception {
-		Serializer s = JsonSerializer.create().ssq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
+		Serializer s = JsonSerializer.create().json5().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
 		testParse(s, JsonParser.DEFAULT.copy().applyAnnotations(TestURIc.class).build(), new TestURIc());
 	}
 

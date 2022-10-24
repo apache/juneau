@@ -44,7 +44,7 @@ import org.apache.juneau.xml.*;
  * 					<li class='jc'>{@link HtmlStrippedDocSerializer}
  * 					<li class='jc'>{@link HtmlSchemaDocSerializer}
  * 					<li class='jc'>{@link JsonSerializer}
- * 					<li class='jc'>{@link SimpleJsonSerializer}
+ * 					<li class='jc'>{@link Json5Serializer}
  * 					<li class='jc'>{@link JsonSchemaSerializer}
  * 					<li class='jc'>{@link XmlDocSerializer}
  * 					<li class='jc'>{@link UonSerializer}
@@ -58,7 +58,7 @@ import org.apache.juneau.xml.*;
  * 			<li class='jma'>{@link Rest#parsers() parsers}:
  * 				<ul class='javatree'>
  * 					<li class='jc'>{@link JsonParser}
- * 					<li class='jc'>{@link SimpleJsonParser}
+ * 					<li class='jc'>{@link Json5Parser}
  * 					<li class='jc'>{@link XmlParser}
  * 					<li class='jc'>{@link HtmlParser}
  * 					<li class='jc'>{@link UonParser}
@@ -131,7 +131,7 @@ import org.apache.juneau.xml.*;
 		HtmlStrippedDocSerializer.class,
 		HtmlSchemaDocSerializer.class,
 		JsonSerializer.class,
-		SimpleJsonSerializer.class,
+		Json5Serializer.class,
 		JsonSchemaSerializer.class,
 		XmlDocSerializer.class,
 		UonSerializer.class,
@@ -146,7 +146,7 @@ import org.apache.juneau.xml.*;
 	// Default parsers for all Java methods in the class.
 	parsers={
 		JsonParser.class,
-		SimpleJsonParser.class,
+		Json5Parser.class,
 		XmlParser.class,
 		HtmlParser.class,
 		UonParser.class,

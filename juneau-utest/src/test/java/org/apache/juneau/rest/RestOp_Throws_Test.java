@@ -750,7 +750,7 @@ public class RestOp_Throws_Test {
 	// Should use Accept language for serialization.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=Json5Serializer.class)
 	public static class E {
 		@RestGet public void badRequest() { throw new BadRequest(t, "foo {0}", "bar"); }
 	}

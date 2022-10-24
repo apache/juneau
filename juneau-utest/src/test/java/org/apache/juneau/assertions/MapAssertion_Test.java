@@ -68,7 +68,7 @@ public class MapAssertion_Test {
 	@Test
 	public void ba01b_asString_wSerializer() throws Exception {
 		Map<String,Integer> x = map("a",1), nil = null;
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("{a:1}");
 		test(nil).asString(s).is("null");
 	}
@@ -238,7 +238,7 @@ public class MapAssertion_Test {
 	@Test
 	public void ca11_isSameSerializedAs() throws Exception {
 		Map<Integer,Integer> x1 = map(1,2), x1a = map(1,2), x2 = map(3,4), nil = null;
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
 		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{'3':4}'.  Actual='{'1':2}'.");

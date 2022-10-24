@@ -660,7 +660,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testParseISO8601Date() throws Exception {
-		WriterSerializer s = JsonSerializer.create().ssq().build();
+		WriterSerializer s = JsonSerializer.create().json5().build();
 
 		assertNull(parseIsoDate(null));
 		assertNull(parseIsoDate(""));

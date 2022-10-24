@@ -34,7 +34,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
-		JsonSerializer.Builder s = JsonSerializer.create().ssq();
+		JsonSerializer.Builder s = JsonSerializer.create().json5();
 		JsonParser p = JsonParser.DEFAULT;
 		A t1 = A.create(), t2;
 
@@ -65,7 +65,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		JsonSerializer.Builder s = JsonSerializer.create().ssq();
+		JsonSerializer.Builder s = JsonSerializer.create().json5();
 		JsonParser p = JsonParser.DEFAULT;
 		B t1 = B.create(), t2;
 		String r;
@@ -98,7 +98,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyLists() throws Exception {
-		JsonSerializer.Builder s = JsonSerializer.create().ssq();
+		JsonSerializer.Builder s = JsonSerializer.create().json5();
 		JsonParser p = JsonParser.DEFAULT;
 		C t1 = C.create(), t2;
 		String r;
@@ -131,7 +131,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
-		JsonSerializer.Builder s = JsonSerializer.create().ssq();
+		JsonSerializer.Builder s = JsonSerializer.create().json5();
 		JsonParser p = JsonParser.DEFAULT;
 		D t1 = D.create(), t2;
 		String r;
@@ -164,7 +164,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyProperies() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
+		JsonSerializer s = Json5Serializer.DEFAULT;
 		E1 t = new E1();
 		String r;
 
@@ -193,7 +193,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyProperiesOnListOfBeans() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
+		JsonSerializer s = Json5Serializer.DEFAULT;
 		List<F> l = new LinkedList<>();
 		F t = new F();
 		t.x1.add(new F());
@@ -212,7 +212,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testURIAttr() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
+		JsonSerializer s = Json5Serializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 
 		G t = new G();
@@ -239,7 +239,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		JsonSerializer.Builder s = JsonSerializer.create().ssq().maxDepth(Integer.MAX_VALUE);
+		JsonSerializer.Builder s = JsonSerializer.create().json5().maxDepth(Integer.MAX_VALUE);
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();
@@ -280,7 +280,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBasicBean() throws Exception {
-		JsonSerializer s = JsonSerializer.create().ssq().keepNullProperties().sortProperties().build();
+		JsonSerializer s = JsonSerializer.create().json5().keepNullProperties().sortProperties().build();
 
 		J a = new J();
 		a.setF1("J");

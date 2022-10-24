@@ -50,7 +50,7 @@
 	</p>
 	<p class='bjava'>
 		|	<jc>// Clone an existing serializer and set property for detecting recursions.</jc>
-		|	JsonSerializer <jv>serializer</jv> = SimpleJsonSerializer
+		|	WriterSerializer <jv>serializer</jv> = Json5Serializer
 		|		.<jsf>DEFAULT_READABLE</jsf>
 		|		.copy()
 		|		.detectRecursions()

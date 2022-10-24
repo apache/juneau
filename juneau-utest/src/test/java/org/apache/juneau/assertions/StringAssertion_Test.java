@@ -67,7 +67,7 @@ public class StringAssertion_Test {
 	@Test
 	public void ba01b_asString_wSerializer() throws Exception {
 		String x = "1", nil = null;
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("'1'");
 		test(nil).asString(s).is("null");
 	}
@@ -257,7 +257,7 @@ public class StringAssertion_Test {
 	@Test
 	public void ca11_isSameSerializedAs() throws Exception {
 		String x1 = "1", x1a = "1", x2 = "2", nil = null;
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
 		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''2''.  Actual=''1''.");

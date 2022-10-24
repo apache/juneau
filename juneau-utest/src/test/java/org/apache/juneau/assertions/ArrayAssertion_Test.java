@@ -69,7 +69,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void ba01b_asString_wSerializer() throws Exception {
 		Integer[] x = {1,2}, nil = null;
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("[1,2]");
 		test(nil).asString(s).is("null");
 	}
@@ -247,7 +247,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void ca11_isSameSerializedAs() throws Exception {
 		Integer[] x1 = {null,1,2}, x1a = {null,1,2}, x2 = {null,1,3}, nil = null;
-		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
+		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
 		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='[null,1,3]'.  Actual='[null,1,2]'.");

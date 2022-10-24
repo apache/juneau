@@ -157,7 +157,7 @@
 		|	MyInterface[] <jv>x</jv> = <jk>new</jk> MyInterface[]{ <jk>new</jk> MyClass1(), <jk>new</jk> MyClass2() };
 		|
 		|	<jc>// Produces "[{mytype:'C1',...},{mytype:'C2',...}]"</jc>
-		|	String <jv>json</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>x</jv>);
+		|	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>x</jv>);
 	</p>
 	<div class='info'>
 		Type names do not need to be universally unique.  

@@ -157,7 +157,7 @@ public class RestClient_Body_Test {
 		client().build().post("/",x1).run()
 			.assertHeader("X-Content-Length").isNull()
 			.assertHeader("X-Content-Encoding").isNull()
-			.assertHeader("X-Content-Type").is("application/json+simple")
+			.assertHeader("X-Content-Type").is("application/json5")
 			.assertHeader("X-Transfer-Encoding").is("chunked")  // Because content length is -1.
 		;
 
@@ -181,7 +181,7 @@ public class RestClient_Body_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static RestClient.Builder client() {
-		return MockRestClient.create(A.class).simpleJson();
+		return MockRestClient.create(A.class).json5();
 	}
 
 	private static Header header(String name, Object val) {

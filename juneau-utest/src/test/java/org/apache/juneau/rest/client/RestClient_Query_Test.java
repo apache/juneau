@@ -137,6 +137,6 @@ public class RestClient_Query_Test {
 	}
 
 	private static RestClient.Builder client() {
-		return MockRestClient.create(A.class).simpleJson();
+		return MockRestClient.create(A.class).json5();
 	}
 }

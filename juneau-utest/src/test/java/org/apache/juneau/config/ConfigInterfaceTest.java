@@ -30,7 +30,7 @@ public class ConfigInterfaceTest {
 	ConfigInterface proxy;
 
 	public ConfigInterfaceTest() throws Exception {
-		cf = Config.create().serializer(SimpleJsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build()).build();
+		cf = Config.create().serializer(Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().build()).build();
 		proxy = cf.getSection("A").asInterface(ConfigInterface.class).orElse(null);
 	}
 

@@ -33,7 +33,7 @@ public class Header_Test {
 	// Optional header parameter.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=Json5Serializer.class)
 	public static class A {
 		@RestGet
 		public Object a(@Header("f1") Optional<Integer> f1) throws Exception {
@@ -215,7 +215,7 @@ public class Header_Test {
 	// Default parameters
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=SimpleJsonSerializer.class)
+	@Rest(serializers=Json5Serializer.class)
 	public static class F {
 		@RestGet
 		public Object a1(@Header(name="f1", def="1") Integer f1) throws Exception {

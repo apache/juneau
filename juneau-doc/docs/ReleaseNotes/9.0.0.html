@@ -51,6 +51,8 @@
 				|	}
 			</p>
 		<li>
+			{@link oaj.marshaller.Json5 JSON 5} support.
+		<li>
 			New {@link oaj.annotation.Marshalled @Marshalled} annotation for non-bean classes.
 		<li>
 			New {@link oaj.annotation.BeanConfig#ignoreUnknownEnumValues() @BeanConfig(ignoreUnknownEnumValues)} annotation and support for ignoring
@@ -140,7 +142,7 @@
 			<p class='bjava'>
 				|	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
 				|	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
-				|		.simpleJson()
+				|		.json5()
 				|		.build()
 				|		.get(<jsf>URI</jsf>)
 				|		.run()

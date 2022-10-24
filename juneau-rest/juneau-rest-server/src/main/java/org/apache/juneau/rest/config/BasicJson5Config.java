@@ -18,7 +18,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.annotation.*;
 
 /**
- * Basic configuration for a REST resource that supports simplified JSON transport.
+ * Basic configuration for a REST resource that supports JSON 5 transport.
  *
  * <p>
  * 	Default settings defined:
@@ -28,15 +28,15 @@ import org.apache.juneau.serializer.annotation.*;
  * 		<ul>
  * 			<li class='jma'>{@link Rest#serializers() serializers}:
  * 				<ul class='javatree'>
- * 					<li class='jc'>{@link SimpleJsonSerializer}
+ * 					<li class='jc'>{@link Json5Serializer}
  * 				</ul>
  * 			</li>
  * 			<li class='jma'>{@link Rest#parsers() parsers}:
  * 				<ul class='javatree'>
- * 					<li class='jc'>{@link SimpleJsonParser}
+ * 					<li class='jc'>{@link Json5Parser}
  * 				</ul>
  * 			</li>
- * 			<li class='jma'>{@link Rest#defaultAccept() defaultAccept}:  <js>"text/json"</js>
+ * 			<li class='jma'>{@link Rest#defaultAccept() defaultAccept}:  <js>"text/json5"</js>
  * 			<li class='jma'>{@link Rest#config() config}:  <js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>
  *		</ul>
  *	</li>
@@ -58,12 +58,12 @@ import org.apache.juneau.serializer.annotation.*;
  * <p class='bjava'>
  * 	<jc>// Used on a top-level resource.</jc>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet <jk>implements</jk> BasicSimpleJsonConfig { ... }
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet <jk>implements</jk> BasicJson5Config { ... }
  * </p>
  * <p class='bjava'>
  * 	<jc>// Used on a child resource.</jc>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicSimpleJsonConfig { ... }
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicJson5Config { ... }
  * </p>
  *
  * <p>
@@ -80,15 +80,15 @@ import org.apache.juneau.serializer.annotation.*;
 
 	// Default serializers for all Java methods in the class.
 	serializers={
-		SimpleJsonSerializer.class,
+		Json5Serializer.class,
 	},
 
 	// Default parsers for all Java methods in the class.
 	parsers={
-		SimpleJsonParser.class,
+		Json5Parser.class,
 	},
 
 	// Optional external configuration file.
 	config="$S{juneau.configFile,SYSTEM_DEFAULT}"
 )
-public interface BasicSimpleJsonConfig extends DefaultConfig {}
+public interface BasicJson5Config extends DefaultConfig {}

@@ -192,7 +192,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				propertyCache.forEach((k,v) -> put(k, v));
 				propertyCache = null;
 			} catch (IllegalArgumentException e) {
-				throw new BeanRuntimeException(e, meta.classMeta.innerClass, "IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getSimpleName(), SimpleJsonSerializer.DEFAULT.toString(ClassUtils.getClasses(args)));
+				throw new BeanRuntimeException(e, meta.classMeta.innerClass, "IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getSimpleName(), Json5Serializer.DEFAULT.toString(ClassUtils.getClasses(args)));
 			} catch (Exception e) {
 				throw new BeanRuntimeException(e);
 			}

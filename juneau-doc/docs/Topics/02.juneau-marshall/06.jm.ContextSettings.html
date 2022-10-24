@@ -41,10 +41,10 @@
 				<li class='jf'>{@link oaj.json.JsonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
 			</ul>
 		</li>
-		<li class='jc'>{@link oaj.json.SimpleJsonSerializer}
+		<li class='jc'>{@link oaj.json.Json5Serializer}
 			<ul class='javatreec'>
-				<li class='jf'>{@link oaj.json.SimpleJsonSerializer#DEFAULT DEFAULT}
-				<li class='jf'>{@link oaj.json.SimpleJsonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
+				<li class='jf'>{@link oaj.json.Json5Serializer#DEFAULT DEFAULT}
+				<li class='jf'>{@link oaj.json.Json5Serializer#DEFAULT_READABLE DEFAULT_READABLE}
 			</ul>
 		</li>
 		<li class='jc'>{@link oaj.json.JsonParser} 
@@ -59,7 +59,7 @@
 	</p>
 	<p class='bjava'>
 		|	<jc>// Serialize a POJO to LAX JSON.</jc>
-		|	String <jv>json</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myPojo</jv>);
+		|	String <jv>json</jv> = Json5Serializer.<jsf>DEFAULT</jsf>.serialize(<jv>myPojo</jv>);
 	</p>
 	<p>
 		For performance reasons, serializers and parsers are immutable.
@@ -67,7 +67,7 @@
 	</p>
 	<p class='bjava'>
 		|	<jc>// Clone and customize an existing serializer.</jc>
-		|	WriterSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
+		|	WriterSerializer <jv>serializer</jv> = Json5Serializer.<jsf>DEFAULT</jsf>
 		|		.copy()          <jc>// Create a new builder with copied settings.</jc>
 		|		.quoteChar(<js>'"'</js>)  <jc>// Use a different quote character.</jc>
 		|		.build();

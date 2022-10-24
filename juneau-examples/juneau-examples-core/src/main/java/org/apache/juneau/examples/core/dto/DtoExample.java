@@ -103,7 +103,7 @@ public class DtoExample {
 		 *    ]
 		 * }
 		 */
-		html =  SimpleJsonSerializer.DEFAULT.serialize(mainJsp);
+		html =  Json5Serializer.DEFAULT.serialize(mainJsp);
 
 		Feed feed =
 			feed("tag:foo.org", "Title", "2016-12-31T05:02:03Z")

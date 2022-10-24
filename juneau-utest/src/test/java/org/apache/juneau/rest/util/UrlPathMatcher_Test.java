@@ -59,7 +59,7 @@ public class UrlPathMatcher_Test {
 		l.add(of("foo.*"));
 
 		Collections.sort(l);
-		assertEquals("['foo.txt','foo.*','*.txt','/foo/bar','/foo/bar/*','/foo/{id}/bar','/foo/{id}/bar/*','/foo/{id}','/foo/{id}/*','/foo','/foo/*','/','/*','','*']", SimpleJsonSerializer.DEFAULT.toString(l));
+		assertEquals("['foo.txt','foo.*','*.txt','/foo/bar','/foo/bar/*','/foo/{id}/bar','/foo/{id}/bar/*','/foo/{id}','/foo/{id}/*','/foo','/foo/*','/','/*','','*']", Json5Serializer.DEFAULT.toString(l));
 	}
 
 	@Test
@@ -83,7 +83,7 @@ public class UrlPathMatcher_Test {
 		l.add(of(""));
 
 		Collections.sort(l);
-		assertEquals("['foo.txt','foo.*','*.txt','/foo/bar','/foo/bar/*','/foo/{id}/bar','/foo/{id}/bar/*','/foo/{id}','/foo/{id}/*','/foo','/foo/*','/','/*','','*']", SimpleJsonSerializer.DEFAULT.toString(l));
+		assertEquals("['foo.txt','foo.*','*.txt','/foo/bar','/foo/bar/*','/foo/{id}/bar','/foo/{id}/bar/*','/foo/{id}','/foo/{id}/*','/foo','/foo/*','/','/*','','*']", Json5Serializer.DEFAULT.toString(l));
 	}
 
 	@Test
@@ -94,7 +94,7 @@ public class UrlPathMatcher_Test {
 		l.add(of("/foo"));
 
 		Collections.sort(l);
-		assertEquals("['/foo','/foo']", SimpleJsonSerializer.DEFAULT.toString(l));
+		assertEquals("['/foo','/foo']", Json5Serializer.DEFAULT.toString(l));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

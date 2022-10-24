@@ -63,8 +63,8 @@
 	<p>
 		Finally, the {@link oajrc.RestClient} class is used to construct a remote proxy to our REST service:
 	<p class='bjava'>	
-		|	<jc>// Use a RestClient with default Simple JSON support and BASIC auth.</jc>
-		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().basicAuth(...).build();
+		|	<jc>// Use a RestClient with default JSON 5 support and BASIC auth.</jc>
+		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json5().basicAuth(...).build();
 		|	
 		|	<jc>// Instantiate our proxy interface.</jc>
 		|	PetStoreClient <jv>store</jv> = <jv>client</jv>.getRemote(PetStoreClient.<jk>class</jk>, <js>"http://localhost:10000"</js>);

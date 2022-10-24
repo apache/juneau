@@ -46,7 +46,7 @@ public class JsonConfigAnnotation {
 
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesJson(x));
 			bool(a.escapeSolidus()).ifPresent(x -> b.escapeSolidus(x));
-			bool(a.simpleMode()).ifPresent(x -> b.simpleMode(x));
+			bool(a.simpleAttrs()).ifPresent(x -> b.simpleAttrs(x));
 		}
 	}
 
