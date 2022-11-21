@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.resource;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.function.*;

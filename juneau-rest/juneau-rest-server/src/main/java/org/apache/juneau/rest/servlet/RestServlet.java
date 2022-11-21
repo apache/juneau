@@ -14,8 +14,9 @@ package org.apache.juneau.rest.servlet;
 
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.text.*;
 import java.util.concurrent.atomic.*;
@@ -25,11 +26,11 @@ import java.util.logging.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.response.*;
 
 /**

@@ -12,14 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.internal.ArgUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.ArgUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.ThrowableUtils.*;
 
 import java.io.*;
 import java.nio.file.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * File utilities.

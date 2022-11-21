@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;

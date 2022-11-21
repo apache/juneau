@@ -12,15 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.guards;
 
+import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.text.*;
 import java.util.*;
 
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.rest.guard.*;
 import org.junit.*;
 

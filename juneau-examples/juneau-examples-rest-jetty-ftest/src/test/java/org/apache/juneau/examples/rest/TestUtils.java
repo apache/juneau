@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.regex.*;

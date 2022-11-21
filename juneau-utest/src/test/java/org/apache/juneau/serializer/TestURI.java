@@ -15,7 +15,7 @@ package org.apache.juneau.serializer;
 import java.net.URI;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 @Bean(sort=true)

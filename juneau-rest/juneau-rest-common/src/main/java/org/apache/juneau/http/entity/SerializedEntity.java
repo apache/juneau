@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.entity;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.io.*;

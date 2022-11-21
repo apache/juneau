@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Map meant for method-name/operation mappings.

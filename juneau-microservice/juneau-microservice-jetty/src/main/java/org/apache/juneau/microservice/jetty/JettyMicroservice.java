@@ -14,10 +14,10 @@ package org.apache.juneau.microservice.jetty;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.internal.IOUtils.read;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.ThrowableUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -28,6 +28,7 @@ import javax.servlet.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.ConfigStore;
 import org.apache.juneau.cp.Messages;

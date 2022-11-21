@@ -14,10 +14,10 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;

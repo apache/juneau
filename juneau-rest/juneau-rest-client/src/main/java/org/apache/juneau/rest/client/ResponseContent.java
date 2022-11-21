@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.internal.IOUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.ThrowableUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -28,6 +28,7 @@ import org.apache.http.conn.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;

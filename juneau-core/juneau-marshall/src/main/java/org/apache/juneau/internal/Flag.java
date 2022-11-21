@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.internal.ThrowableUtils.*;
 
-import org.apache.juneau.utils.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * A simple settable boolean value.

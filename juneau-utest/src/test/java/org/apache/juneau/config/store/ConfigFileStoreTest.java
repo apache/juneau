@@ -14,12 +14,13 @@ package org.apache.juneau.config.store;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.junit.*;
 

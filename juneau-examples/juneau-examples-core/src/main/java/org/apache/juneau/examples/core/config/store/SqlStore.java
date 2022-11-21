@@ -15,8 +15,8 @@ package org.apache.juneau.examples.core.config.store;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.config.store.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Example of a {@link ConfigStore} that uses a relational database as a backend.

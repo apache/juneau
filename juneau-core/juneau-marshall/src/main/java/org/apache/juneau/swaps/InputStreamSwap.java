@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.swaps;
 
-import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 
 import java.io.*;
 

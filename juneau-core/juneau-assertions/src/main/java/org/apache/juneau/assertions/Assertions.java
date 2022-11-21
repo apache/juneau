@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.IOUtils.*;
 
 import java.io.*;
 import java.time.*;
@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Main class for creation of assertions for stand-alone testing.

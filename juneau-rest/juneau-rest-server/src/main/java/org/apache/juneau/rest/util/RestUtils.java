@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.*;

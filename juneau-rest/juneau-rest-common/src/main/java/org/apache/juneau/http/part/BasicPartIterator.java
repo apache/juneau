@@ -12,11 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.internal.ArgUtils.*;
+import static org.apache.juneau.common.internal.ArgUtils.*;
+
 import java.util.NoSuchElementException;
 
 import org.apache.http.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Basic implementation of a {@link PartIterator}.

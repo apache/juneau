@@ -33,7 +33,7 @@ import org.apache.http.impl.client.*;
 import org.apache.http.message.*;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;

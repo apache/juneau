@@ -13,8 +13,8 @@
 package org.apache.juneau.http.response;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.http.HttpEntities.*;
-import static org.apache.juneau.internal.ArgUtils.*;
 
 import java.net.*;
 import java.util.*;

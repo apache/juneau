@@ -13,9 +13,9 @@
 package org.apache.juneau.http.part;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;

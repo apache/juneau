@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext;
 
-import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.IOUtils.*;
 
 import java.io.IOException;
 import java.lang.reflect.*;

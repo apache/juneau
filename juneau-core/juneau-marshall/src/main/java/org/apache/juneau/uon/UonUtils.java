@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Utility methods for the UON and UrlEncoding serializers and parsers.

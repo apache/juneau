@@ -15,7 +15,7 @@ package org.apache.juneau.testutils;
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.parser.*;
 
 /**

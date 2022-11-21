@@ -10,11 +10,11 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.internal;
+package org.apache.juneau.common.internal;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.internal.ArgUtils.*;
-import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.ArgUtils.*;
+import static org.apache.juneau.common.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.ThrowableUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;

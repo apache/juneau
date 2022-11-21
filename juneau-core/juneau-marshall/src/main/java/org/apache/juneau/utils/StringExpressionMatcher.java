@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.util.*;
 import java.util.regex.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 import static org.apache.juneau.internal.CollectionUtils.*;

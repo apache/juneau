@@ -14,7 +14,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;

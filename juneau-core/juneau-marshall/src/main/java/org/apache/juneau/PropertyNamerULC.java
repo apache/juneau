@@ -13,7 +13,7 @@
 package org.apache.juneau;
 
 import static java.lang.Character.*;
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 
 /**
  * Converts property names to underscore-lower-case format.

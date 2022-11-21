@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.collections;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.io.*;
@@ -21,7 +21,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.objecttools.*;

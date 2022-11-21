@@ -12,16 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.internal.ArgUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.assertions.AssertionPredicate.*;
+import static org.apache.juneau.common.internal.ArgUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
+
 import java.text.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Predefined {@link AssertionPredicate} objects.

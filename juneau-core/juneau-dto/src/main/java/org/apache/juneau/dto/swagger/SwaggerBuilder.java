@@ -15,7 +15,7 @@ package org.apache.juneau.dto.swagger;
 import java.net.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Various useful static methods for creating Swagger elements.

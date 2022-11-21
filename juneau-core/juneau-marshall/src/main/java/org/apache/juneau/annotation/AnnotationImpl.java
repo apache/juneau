@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static java.util.Arrays.*;
 
 import java.lang.annotation.*;

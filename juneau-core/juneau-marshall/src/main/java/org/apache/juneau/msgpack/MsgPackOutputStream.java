@@ -18,7 +18,7 @@ import java.io.*;
 import java.math.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.serializer.*;
 
 /**

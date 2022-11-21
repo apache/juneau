@@ -10,35 +10,27 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.internal;
-
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.*;
+package org.apache.juneau.common.utils;
 
 /**
- * System utilities.
+ * Identical to {@link Runnable} but the run method can throw stuff.
+ *
+ * <p>
+ * Allows you to pass in arbitrary snippets of code in fluent interfaces.
+ *
+ * <p>
+ * See <c>Assertions.<jsm>assertThrown</jsm>(Snippet)</c> for an example.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-assertions.ja.Overview">Fluent Assertions</a>
+ * </ul>
  */
-public class SystemUtils {
-
-	static final List<Supplier<String>> SHUTDOWN_MESSAGES = new CopyOnWriteArrayList<>();
-	static {
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			@Override
-			public void run() {
-				if (! Boolean.getBoolean("SystemUtils.quiet"))
-				SHUTDOWN_MESSAGES.forEach(x -> System.out.println(x.get()));
-			}
-		});
-	}
+public interface Snippet {
 
 	/**
-	 * Adds a console message to display when the JVM shuts down.
+	 * Run arbitrary code and optionally throw an exception.
 	 *
-	 * @param message The message to display.
+	 * @throws Throwable Any throwable.
 	 */
-	public static void shutdownMessage(Supplier<String> message) {
-		SHUTDOWN_MESSAGES.add(message);
-	}
-
+	void run() throws Throwable;
 }

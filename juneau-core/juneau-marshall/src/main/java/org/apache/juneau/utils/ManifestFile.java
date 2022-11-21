@@ -12,14 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.IOUtils.*;
 
 import java.io.*;
 import java.net.*;
 import java.util.jar.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Utility class for working with Jar manifest files.

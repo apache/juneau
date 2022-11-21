@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.objecttools;
 
+import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 

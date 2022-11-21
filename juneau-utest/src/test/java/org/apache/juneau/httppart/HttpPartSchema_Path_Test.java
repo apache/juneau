@@ -19,8 +19,8 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;

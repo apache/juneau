@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.httppart;
 
+import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -22,8 +22,8 @@ import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 
 /**

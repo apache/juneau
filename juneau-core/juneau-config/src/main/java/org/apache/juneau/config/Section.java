@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
-import static org.apache.juneau.internal.ArgUtils.*;
+import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import java.beans.*;
 import java.lang.reflect.*;

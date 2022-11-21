@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.internal.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

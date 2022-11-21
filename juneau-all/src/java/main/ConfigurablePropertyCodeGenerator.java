@@ -11,8 +11,8 @@
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
 
+import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;

@@ -19,7 +19,7 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.marshaller.*;
 
 /**

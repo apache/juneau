@@ -14,6 +14,7 @@ package org.apache.juneau.microservice.jetty;
 
 import java.io.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.util.resource.*;

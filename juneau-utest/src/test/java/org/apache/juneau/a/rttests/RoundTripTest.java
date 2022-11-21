@@ -19,8 +19,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.Map.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;

@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.swagger;
 
+import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.rest.httppart.RestPartType.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
 import java.io.*;
@@ -29,6 +29,7 @@ import javax.servlet.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.http.annotation.*;

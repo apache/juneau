@@ -18,8 +18,8 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.serializer.*;

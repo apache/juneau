@@ -13,8 +13,8 @@
 package org.apache.juneau.xml;
 
 import static javax.xml.stream.XMLStreamConstants.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.io.IOException;

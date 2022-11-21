@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.http.HttpMethod.*;
-import static org.apache.juneau.internal.IOUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;

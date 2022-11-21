@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 
 import java.text.*;
 
 import org.apache.http.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Exception representing a <c>400+</c> HTTP response code against a remote resource or other exception.

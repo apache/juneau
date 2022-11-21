@@ -17,6 +17,8 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.internal.*;
+
 /**
  * Simple in-memory cache of objects.
  *

@@ -15,8 +15,8 @@ package org.apache.juneau;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.internal.ThrowableUtils.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;

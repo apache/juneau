@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.logger;
 
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
 import static org.apache.juneau.Enablement.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 import static java.util.logging.Level.*;
 
 import javax.servlet.http.*;

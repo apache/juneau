@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.encoders;
 
+import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.stream.Collectors.*;
 import java.util.*;
 import java.util.concurrent.*;

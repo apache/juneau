@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.testutils;
 
+import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.DateUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.text.*;

@@ -14,8 +14,8 @@ package org.apache.juneau.assertions;
 
 import java.util.function.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Utility class for performing simple validations on objects.

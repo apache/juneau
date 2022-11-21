@@ -21,10 +21,10 @@ import java.util.Map;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.swap.*;
 
 /**

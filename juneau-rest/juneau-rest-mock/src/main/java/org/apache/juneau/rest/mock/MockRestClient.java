@@ -13,9 +13,9 @@
 package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.Enablement.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 import static java.util.Collections.*;
 
 import java.io.*;

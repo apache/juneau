@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.rrpc;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 

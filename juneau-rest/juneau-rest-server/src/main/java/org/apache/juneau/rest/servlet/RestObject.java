@@ -22,8 +22,8 @@ import java.util.logging.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 
 /**
