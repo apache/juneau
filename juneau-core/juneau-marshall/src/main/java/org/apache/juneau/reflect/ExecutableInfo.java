@@ -832,7 +832,7 @@ public abstract class ExecutableInfo {
 	 */
 	public final boolean setAccessible() {
 		try {
-			if (! (e.isAccessible()))
+			if (e != null)
 				e.setAccessible(true);
 			return true;
 		} catch (SecurityException e) {

@@ -1872,7 +1872,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	private <T> T newInstance(Class<T> c) {
 		try {
-			return c.newInstance();
+			return c.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
 			throw asRuntimeException(e);
 		}

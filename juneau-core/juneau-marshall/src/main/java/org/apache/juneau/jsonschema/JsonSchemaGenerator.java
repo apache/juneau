@@ -883,7 +883,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		this.ignoreTypePatterns = ignoreTypePatterns.toArray(new Pattern[ignoreTypePatterns.size()]);
 
 		try {
-			beanDefMapperBean = beanDefMapper.newInstance();
+			beanDefMapperBean = beanDefMapper.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
 			throw asRuntimeException(e);
 		}

@@ -5562,7 +5562,7 @@ public class RestContext extends Context {
 	}
 
 	private Set<String> newCaseInsensitiveSet(String value) {
-		Set<String> s = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER) {
+		Set<String> s = new TreeSet<>(String.CASE_INSENSITIVE_ORDER) {
 			private static final long serialVersionUID = 1L;
 			@Override
 			public boolean contains(Object v) {

@@ -57,14 +57,14 @@ public class JsonMapTest {
 		checkStep(13, in, getDeepString(JsonMap.ofJson(in), "A/G"), "asdf\"asdf");
 
 		in = "{A:123, B: 123}";
-		checkStep(16, in, new Integer(JsonMap.ofJson(in).getInt("A")).toString(), "123");
-		checkStep(17, in, new Integer(JsonMap.ofJson(in).getInt("B")).toString(), "123");
+		checkStep(16, in, Integer.valueOf(JsonMap.ofJson(in).getInt("A")).toString(), "123");
+		checkStep(17, in, Integer.valueOf(JsonMap.ofJson(in).getInt("B")).toString(), "123");
 
 		in = "{A:true, B: true, C:false, D: false}";
-		checkStep(18, in, new Boolean(JsonMap.ofJson(in).getBoolean("A")).toString(), "true");
-		checkStep(19, in, new Boolean(JsonMap.ofJson(in).getBoolean("B")).toString(), "true");
-		checkStep(20, in, new Boolean(JsonMap.ofJson(in).getBoolean("C")).toString(), "false");
-		checkStep(21, in, new Boolean(JsonMap.ofJson(in).getBoolean("D")).toString(), "false");
+		checkStep(18, in, Boolean.valueOf(JsonMap.ofJson(in).getBoolean("A")).toString(), "true");
+		checkStep(19, in, Boolean.valueOf(JsonMap.ofJson(in).getBoolean("B")).toString(), "true");
+		checkStep(20, in, Boolean.valueOf(JsonMap.ofJson(in).getBoolean("C")).toString(), "false");
+		checkStep(21, in, Boolean.valueOf(JsonMap.ofJson(in).getBoolean("D")).toString(), "false");
 
 		in = "{'AAA':{\"BBB\":\"CCC\",'DDD':false}}";
 		checkStep(31, in, getDeepString(JsonMap.ofJson(in), "AAA/BBB"), "CCC");
@@ -273,7 +273,7 @@ public class JsonMapTest {
 		JsonMap m1 = JsonMap.ofJson("{a:1}");
 		JsonMap m2 = JsonMap.ofJson("{b:2}").inner(m1);
 
-		assertEquals(new Integer(1), m2.getInt("a"));
+		assertEquals(Integer.valueOf(1), m2.getInt("a"));
 	}
 
 	//====================================================================================================

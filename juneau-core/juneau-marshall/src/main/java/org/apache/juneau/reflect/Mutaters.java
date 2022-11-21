@@ -32,7 +32,7 @@ public class Mutaters {
 	/**
 	 * Represents a non-existent transform.
 	 */
-	public static final Mutater<Object,Object> NULL = new Mutater<Object,Object>() {
+	public static final Mutater<Object,Object> NULL = new Mutater<>() {
 		@Override
 		public Object mutate(Object outer, Object in) {
 			return null;

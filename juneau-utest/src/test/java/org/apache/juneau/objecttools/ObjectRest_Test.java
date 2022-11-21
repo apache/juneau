@@ -147,7 +147,7 @@ public class ObjectRest_Test {
 		m.put("street","street D");
 		m.put("city","city D");
 		m.put("state","state D");
-		m.put("zip",new Integer(12345));
+		m.put("zip",Integer.valueOf(12345));
 
 		// Try the same for an address in an array.
 		model.put("addresses/1", m);
@@ -156,7 +156,7 @@ public class ObjectRest_Test {
 		assertEquals(expectedValue, s);
 
 		// Try setting some fields.
-		model.put("addresses/1/zip", new Integer(99999));
+		model.put("addresses/1/zip", Integer.valueOf(99999));
 		s = model.get("addresses/1/zip").toString();
 		expectedValue = "99999";
 		assertEquals(expectedValue, s);
@@ -185,8 +185,8 @@ public class ObjectRest_Test {
 
 		// Make sure doing a POST against "" or "/" adds to the root object.
 		model = ObjectRest.create(new JsonList());
-		model.post("", new Integer(1));
-		model.post("/", new Integer(2));
+		model.post("", Integer.valueOf(1));
+		model.post("/", Integer.valueOf(2));
 		s = model.get("").toString();
 		assertEquals("[1,2]", s);
 	}

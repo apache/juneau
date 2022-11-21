@@ -1844,12 +1844,12 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		final Set<String> keySet = keySet();
 		final Iterator<String> keys = keySet.iterator();
 
-		return new AbstractSet<Map.Entry<String,Object>>() {
+		return new AbstractSet<>() {
 
 			@Override /* Iterable */
 			public Iterator<Map.Entry<String,Object>> iterator() {
 
-				return new Iterator<Map.Entry<String,Object>>() {
+				return new Iterator<>() {
 
 					@Override /* Iterator */
 					public boolean hasNext() {
@@ -1858,7 +1858,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 					@Override /* Iterator */
 					public Map.Entry<String,Object> next() {
-						return new Map.Entry<String,Object>() {
+						return new Map.Entry<>() {
 							String key = keys.next();
 
 							@Override /* Map.Entry */

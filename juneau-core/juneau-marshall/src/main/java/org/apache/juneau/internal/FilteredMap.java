@@ -54,7 +54,7 @@ public final class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate
 		}
 
 	private Map.Entry<K,V> createEntry(final K key) {
-		return new Map.Entry<K,V>() {
+		return new Map.Entry<>() {
 
 			@Override /* Map.Entry */
 			public K getKey() {

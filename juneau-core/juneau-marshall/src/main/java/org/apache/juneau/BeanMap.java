@@ -611,7 +611,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		}
 
 		// Construct our own anonymous set to implement this function.
-		Set<Entry<String,Object>> s = new AbstractSet<Entry<String,Object>>() {
+		Set<Entry<String,Object>> s = new AbstractSet<>() {
 
 			// Get the list of properties from the meta object.
 			// Note that the HashMap.values() method caches results, so this collection
@@ -625,7 +625,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				// Construct our own anonymous iterator that uses iterators against the meta.properties
 				// map to maintain position.  This prevents us from having to construct any of our own
 				// collection objects.
-				return new Iterator<Entry<String,Object>>() {
+				return new Iterator<>() {
 
 					final Iterator<BeanPropertyMeta> pIterator = pSet.iterator();
 

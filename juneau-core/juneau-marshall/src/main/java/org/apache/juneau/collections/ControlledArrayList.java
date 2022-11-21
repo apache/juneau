@@ -309,7 +309,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 		if (! unmodifiable)
 			return overrideListIterator(index);
 
-		return new ListIterator<E>() {
+		return new ListIterator<>() {
 			private final ListIterator<? extends E> i = overrideListIterator(index);
 
 			@Override
@@ -379,7 +379,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 		if (! unmodifiable)
 			return overrideIterator();
 
-		return new Iterator<E>() {
+		return new Iterator<>() {
 			private final Iterator<? extends E> i = overrideIterator();
 
 			@Override

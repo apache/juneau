@@ -139,7 +139,7 @@ public class StringRanges {
 	 * Should those values be equal, the <c>type</c> is then lexicographically compared (case-insensitive) in
 	 * ascending order, with the <js>"*"</js> type demoted last in that order.
 	 */
-	private static final Comparator<StringRange> RANGE_COMPARATOR = new Comparator<StringRange>() {
+	private static final Comparator<StringRange> RANGE_COMPARATOR = new Comparator<>() {
 		@Override
 		public int compare(StringRange o1, StringRange o2) {
 			// Compare q-values.

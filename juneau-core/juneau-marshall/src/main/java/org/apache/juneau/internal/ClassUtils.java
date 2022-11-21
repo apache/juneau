@@ -87,7 +87,7 @@ public final class ClassUtils {
 	 */
 	public static boolean setAccessible(Constructor<?> x) {
 		try {
-			if (! (x == null || x.isAccessible()))
+			if (x != null)
 				x.setAccessible(true);
 			return true;
 		} catch (SecurityException e) {
@@ -103,7 +103,7 @@ public final class ClassUtils {
 	 */
 	public static boolean setAccessible(Method x) {
 		try {
-			if (! (x == null || x.isAccessible()))
+			if (x != null)
 				x.setAccessible(true);
 			return true;
 		} catch (SecurityException e) {
@@ -119,7 +119,7 @@ public final class ClassUtils {
 	 */
 	public static boolean setAccessible(Field x) {
 		try {
-			if (! (x == null || x.isAccessible()))
+			if (x != null)
 				x.setAccessible(true);
 			return true;
 		} catch (SecurityException e) {

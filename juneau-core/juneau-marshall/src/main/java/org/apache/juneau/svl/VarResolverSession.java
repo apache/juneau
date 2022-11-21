@@ -148,7 +148,7 @@ public class VarResolverSession {
 				Collection c = (Collection)o;
 				if (! containsVars(c))
 					return o;
-				Collection c2 = c.getClass().newInstance();
+				Collection c2 = c.getClass().getDeclaredConstructor().newInstance();
 				c.forEach(x -> c2.add(resolve(x)));
 				return (T)c2;
 			} catch (VarResolverException e) {
@@ -162,7 +162,7 @@ public class VarResolverSession {
 				Map m = (Map)o;
 				if (! containsVars(m))
 					return o;
-				Map m2 = m.getClass().newInstance();
+				Map m2 = m.getClass().getDeclaredConstructor().newInstance();
 				m.forEach((k,v) -> m2.put(k, resolve(v)));
 				return (T)m2;
 			} catch (VarResolverException e) {

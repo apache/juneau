@@ -414,8 +414,8 @@ public class Microservice implements ConfigEventListener {
 		public Builder consoleCommands(Class<? extends ConsoleCommand>...consoleCommands) throws ExecutableException {
 			try {
 				for (Class<? extends ConsoleCommand> cc : consoleCommands)
-					this.consoleCommands.add(cc.newInstance());
-			} catch (InstantiationException | IllegalAccessException e) {
+					this.consoleCommands.add(cc.getDeclaredConstructor().newInstance());
+			} catch (Exception e) {
 				throw new ExecutableException(e);
 			}
 			return this;
@@ -662,7 +662,7 @@ public class Microservice implements ConfigEventListener {
 			for (String s : config.get("Console/commands").asStringArray().orElse(new String[0])) {
 				ConsoleCommand cc;
 				try {
-					cc = (ConsoleCommand)Class.forName(s).newInstance();
+					cc = (ConsoleCommand)Class.forName(s).getDeclaredConstructor().newInstance();
 					consoleCommandMap.put(cc.getName(), cc);
 				} catch (Exception e) {
 					getConsoleWriter().println("Could not create console command '"+s+"', " + e.getLocalizedMessage());

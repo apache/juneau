@@ -53,7 +53,7 @@ public class BeanConfigTest {
 		// setup the reference results
 		Map m1 = new LinkedHashMap();
 		m1.put("name", p1.getName());
-		m1.put("age", new Integer(p1.getAge()));
+		m1.put("age", Integer.valueOf(p1.getAge()));
 
 		Map m2 = new LinkedHashMap();
 		m2.put("street", a.getStreet());
@@ -63,7 +63,7 @@ public class BeanConfigTest {
 
 		Map m3 = new LinkedHashMap();
 		m3.put("name", p2.getName());
-		m3.put("age", new Integer(p2.getAge()));
+		m3.put("age", Integer.valueOf(p2.getAge()));
 		m3.put("address", p2.getAddress());
 
 		Map pm1 = bc.toBeanMap(p1);
@@ -286,47 +286,47 @@ public class BeanConfigTest {
 
 		// Primitive nulls.
 		o = null;
-		assertEquals(new Integer(0), bc.convertToType(o, Integer.TYPE));
-		assertEquals(new Short((short) 0), bc.convertToType(o, Short.TYPE));
-		assertEquals(new Long(0), bc.convertToType(o, Long.TYPE));
-		assertEquals(new Float(0), bc.convertToType(o, Float.TYPE));
-		assertEquals(new Double(0), bc.convertToType(o, Double.TYPE));
-		assertEquals(new Byte((byte) 0), bc.convertToType(o, Byte.TYPE));
-		assertEquals(new Character((char) 0), bc.convertToType(o, Character.TYPE));
+		assertEquals(Integer.valueOf(0), bc.convertToType(o, Integer.TYPE));
+		assertEquals(Short.valueOf((short) 0), bc.convertToType(o, Short.TYPE));
+		assertEquals(Long.valueOf(0), bc.convertToType(o, Long.TYPE));
+		assertEquals(Float.valueOf(0), bc.convertToType(o, Float.TYPE));
+		assertEquals(Double.valueOf(0), bc.convertToType(o, Double.TYPE));
+		assertEquals(Byte.valueOf((byte) 0), bc.convertToType(o, Byte.TYPE));
+		assertEquals(Character.valueOf((char) 0), bc.convertToType(o, Character.TYPE));
 		assertEquals(Boolean.FALSE, bc.convertToType(o, Boolean.TYPE));
 
 		o = "1";
 
-		assertEquals(new Integer(1), bc.convertToType(o, Integer.class));
-		assertEquals(new Short((short) 1), bc.convertToType(o, Short.class));
-		assertEquals(new Long(1), bc.convertToType(o, Long.class));
-		assertEquals(new Float(1), bc.convertToType(o, Float.class));
-		assertEquals(new Double(1), bc.convertToType(o, Double.class));
-		assertEquals(new Byte((byte) 1), bc.convertToType(o, Byte.class));
-		assertEquals(new Character('1'), bc.convertToType(o, Character.class));
+		assertEquals(Integer.valueOf(1), bc.convertToType(o, Integer.class));
+		assertEquals(Short.valueOf((short) 1), bc.convertToType(o, Short.class));
+		assertEquals(Long.valueOf(1), bc.convertToType(o, Long.class));
+		assertEquals(Float.valueOf(1), bc.convertToType(o, Float.class));
+		assertEquals(Double.valueOf(1), bc.convertToType(o, Double.class));
+		assertEquals(Byte.valueOf((byte) 1), bc.convertToType(o, Byte.class));
+		assertEquals(Character.valueOf('1'), bc.convertToType(o, Character.class));
 		assertEquals(Boolean.FALSE, bc.convertToType(o, Boolean.class));
 
-		assertEquals(new Integer(1), bc.convertToType(o, Integer.TYPE));
-		assertEquals(new Short((short) 1), bc.convertToType(o, Short.TYPE));
-		assertEquals(new Long(1), bc.convertToType(o, Long.TYPE));
-		assertEquals(new Float(1), bc.convertToType(o, Float.TYPE));
-		assertEquals(new Double(1), bc.convertToType(o, Double.TYPE));
-		assertEquals(new Byte((byte) 1), bc.convertToType(o, Byte.TYPE));
-		assertEquals(new Character('1'), bc.convertToType(o, Character.TYPE));
+		assertEquals(Integer.valueOf(1), bc.convertToType(o, Integer.TYPE));
+		assertEquals(Short.valueOf((short) 1), bc.convertToType(o, Short.TYPE));
+		assertEquals(Long.valueOf(1), bc.convertToType(o, Long.TYPE));
+		assertEquals(Float.valueOf(1), bc.convertToType(o, Float.TYPE));
+		assertEquals(Double.valueOf(1), bc.convertToType(o, Double.TYPE));
+		assertEquals(Byte.valueOf((byte) 1), bc.convertToType(o, Byte.TYPE));
+		assertEquals(Character.valueOf('1'), bc.convertToType(o, Character.TYPE));
 		assertEquals(Boolean.FALSE, bc.convertToType(o, Boolean.TYPE));
 
-		o = new Integer(1);
+		o = Integer.valueOf(1);
 
-		assertEquals(new Integer(1), bc.convertToType(o, Integer.TYPE));
-		assertEquals(new Short((short) 1), bc.convertToType(o, Short.TYPE));
-		assertEquals(new Long(1), bc.convertToType(o, Long.TYPE));
-		assertEquals(new Float(1), bc.convertToType(o, Float.TYPE));
-		assertEquals(new Double(1), bc.convertToType(o, Double.TYPE));
-		assertEquals(new Byte((byte) 1), bc.convertToType(o, Byte.TYPE));
-		assertEquals(new Character('1'), bc.convertToType(o, Character.TYPE));
+		assertEquals(Integer.valueOf(1), bc.convertToType(o, Integer.TYPE));
+		assertEquals(Short.valueOf((short) 1), bc.convertToType(o, Short.TYPE));
+		assertEquals(Long.valueOf(1), bc.convertToType(o, Long.TYPE));
+		assertEquals(Float.valueOf(1), bc.convertToType(o, Float.TYPE));
+		assertEquals(Double.valueOf(1), bc.convertToType(o, Double.TYPE));
+		assertEquals(Byte.valueOf((byte) 1), bc.convertToType(o, Byte.TYPE));
+		assertEquals(Character.valueOf('1'), bc.convertToType(o, Character.TYPE));
 		assertEquals(Boolean.TRUE, bc.convertToType(o, Boolean.TYPE));
 
-		o = new Integer(0);
+		o = Integer.valueOf(0);
 		assertEquals(Boolean.FALSE, bc.convertToType(o, Boolean.TYPE));
 
 		// Bean
@@ -362,12 +362,12 @@ public class BeanConfigTest {
 
 		// Array of strings to array of ints
 		o = new String[] { "1", "2", "3" };
-		assertEquals(new Integer(1), bc.convertToType(o, Integer[].class)[0]);
+		assertEquals(Integer.valueOf(1), bc.convertToType(o, Integer[].class)[0]);
 		assertEquals(1, bc.convertToType(o, int[].class)[0]);
 
 		// Array to list
 		o = new Integer[] { 1, 2, 3 };
-		assertEquals(new Integer(1), bc.convertToType(o, LinkedList.class).get(0));
+		assertEquals(Integer.valueOf(1), bc.convertToType(o, LinkedList.class).get(0));
 
 		// HashMap to TreeMap
 		o = map(1, "foo");
@@ -523,14 +523,14 @@ public class BeanConfigTest {
 			return;
 		}
 		bm2.put("a", "Hello");
-		bm2.put("b", new Integer(50));
+		bm2.put("b", Integer.valueOf(50));
 		f1.setA("Hello");
 		f1.setB(50);
 
 		if (!bm2.get("a").equals("Hello"))
 			fail("Failed to set string property 'a' on dynamic proxy bean.  " + bm2);
 
-		if (!bm2.get("b").equals(new Integer(50)))
+		if (!bm2.get("b").equals(Integer.valueOf(50)))
 			fail("Failed to set string property 'b' on dynamic proxy bean.  " + bm2);
 
 		if (!bm1.equals(bm2))
@@ -556,7 +556,7 @@ public class BeanConfigTest {
 		public AHandler() {
 			this.map = new HashMap();
 			this.map.put("a", "");
-			this.map.put("b", new Integer(0));
+			this.map.put("b", Integer.valueOf(0));
 		}
 
 		@Override /* InvocationHandler */
@@ -862,8 +862,8 @@ public class BeanConfigTest {
 		assertEquals(0, (int)bc.convertToType("", int.class));
 		assertNull(bc.convertToType("", Integer.class));
 
-		// Booleans are handled different since 'new Boolean("")' is valid and resolves to false
-		// while 'new Integer("")' produces an exception.
+		// Booleans are handled different since 'Boolean.valueOf("")' is valid and resolves to false
+		// while 'Integer.valueOf("")' produces an exception.
 		assertEquals(false, (boolean)bc.convertToType("", boolean.class));
 		assertEquals(null, bc.convertToType("", Boolean.class));
 	}

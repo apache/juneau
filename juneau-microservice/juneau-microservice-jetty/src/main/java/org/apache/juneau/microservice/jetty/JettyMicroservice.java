@@ -248,8 +248,8 @@ public class JettyMicroservice extends Microservice {
 		public Builder servlet(Class<? extends RestServlet> c) throws ExecutableException {
 			RestServlet rs;
 			try {
-				rs = c.newInstance();
-			} catch (InstantiationException | IllegalAccessException e) {
+				rs = c.getDeclaredConstructor().newInstance();
+			} catch (Exception e) {
 				throw new ExecutableException(e);
 			}
 			return servlet(rs, '/' + rs.getPath());
@@ -268,8 +268,8 @@ public class JettyMicroservice extends Microservice {
 		 */
 		public Builder servlet(Class<? extends Servlet> c, String path) throws ExecutableException {
 			try {
-				return servlet(c.newInstance(), path);
-			} catch (InstantiationException | IllegalAccessException e) {
+				return servlet(c.getDeclaredConstructor().newInstance(), path);
+			} catch (Exception e) {
 				throw new ExecutableException(e);
 			}
 		}

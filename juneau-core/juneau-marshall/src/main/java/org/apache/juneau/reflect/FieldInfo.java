@@ -382,7 +382,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 */
 	public boolean setAccessible() {
 		try {
-			if (! (f.isAccessible()))
+			if (f != null)
 				f.setAccessible(true);
 			return true;
 		} catch (SecurityException e) {

@@ -359,7 +359,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testInteger() throws Exception {
 		Integer t = 123;
 		t = roundTrip(t, Integer.class);
-		assertEquals(new Integer(123), t);
+		assertEquals(Integer.valueOf(123), t);
 	}
 
 	//====================================================================================================
@@ -369,7 +369,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testIntegerArray() throws Exception {
 		Integer[] t = {123, null};
 		t = roundTrip(t, Integer[].class);
-		assertEquals(new Integer(123), t[0]);
+		assertEquals(Integer.valueOf(123), t[0]);
 		assertNull(t[1]);
 	}
 
@@ -380,7 +380,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testInteger2dArray() throws Exception {
 		Integer[][] t = {{123,null},null};
 		t = roundTrip(t, Integer[][].class);
-		assertEquals(new Integer(123), t[0][0]);
+		assertEquals(Integer.valueOf(123), t[0][0]);
 		assertNull(t[0][1]);
 		assertNull(t[1]);
 	}
@@ -392,7 +392,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testInteger3dArray() throws Exception {
 		Integer[][][] t = {{{123,null},null},null};
 		t = roundTrip(t, Integer[][][].class);
-		assertEquals(new Integer(123), t[0][0][0]);
+		assertEquals(Integer.valueOf(123), t[0][0][0]);
 		assertNull(t[0][0][1]);
 		assertNull(t[0][1]);
 		assertNull(t[1]);
@@ -443,7 +443,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testCharacter() throws Exception {
 		Character t = 'a';
 		t = roundTrip(t, Character.class);
-		assertEquals(new Character('a'), t);
+		assertEquals(Character.valueOf('a'), t);
 	}
 
 	//====================================================================================================
@@ -453,7 +453,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testCharacterArray() throws Exception {
 		Character[] t = {'a',null};
 		t = roundTrip(t, Character[].class);
-		assertEquals(new Character('a'), t[0]);
+		assertEquals(Character.valueOf('a'), t[0]);
 		assertNull(t[1]);
 	}
 
@@ -464,7 +464,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testCharacter2dArray() throws Exception {
 		Character[][] t = {{'a',null},null};
 		t = roundTrip(t, Character[][].class);
-		assertEquals(new Character('a'), t[0][0]);
+		assertEquals(Character.valueOf('a'), t[0][0]);
 		assertNull(t[0][1]);
 		assertNull(t[1]);
 	}
@@ -476,7 +476,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testFloatObject() throws Exception {
 		Float t = 1f;
 		t = roundTrip(t, Float.class);
-		assertEquals(new Float(1f), t);
+		assertEquals(Float.valueOf(1f), t);
 	}
 
 	//====================================================================================================
@@ -486,7 +486,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testFloatObjectArray() throws Exception {
 		Float[] t = {1f, null};
 		t = roundTrip(t, Float[].class);
-		assertEquals(new Float(1f), t[0]);
+		assertEquals(Float.valueOf(1f), t[0]);
 		assertNull(t[1]);
 	}
 
@@ -497,7 +497,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testFloatObject2dArray() throws Exception {
 		Float[][] t = {{1f,null},null};
 		t = roundTrip(t, Float[][].class);
-		assertEquals(new Float(1f), t[0][0]);
+		assertEquals(Float.valueOf(1f), t[0][0]);
 		assertNull(t[0][1]);
 		assertNull(t[1]);
 	}
@@ -509,7 +509,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testDoubleObject() throws Exception {
 		Double t = 1d;
 		t = roundTrip(t, Double.class);
-		assertEquals(new Double(1d), t);
+		assertEquals(Double.valueOf(1d), t);
 	}
 
 	//====================================================================================================
@@ -519,7 +519,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testDoubleObjectArray() throws Exception {
 		Double[] t = {1d,null};
 		t = roundTrip(t, Double[].class);
-		assertEquals(new Double(1d), t[0]);
+		assertEquals(Double.valueOf(1d), t[0]);
 		assertNull(t[1]);
 	}
 
@@ -530,7 +530,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testDoubleObject2dArray() throws Exception {
 		Double[][] t = {{1d,null},null};
 		t = roundTrip(t, Double[][].class);
-		assertEquals(new Double(1d), t[0][0]);
+		assertEquals(Double.valueOf(1d), t[0][0]);
 		assertNull(t[0][1]);
 		assertNull(t[1]);
 	}
@@ -542,7 +542,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testLongObject() throws Exception {
 		Long t = 1l;
 		t = roundTrip(t, Long.class);
-		assertEquals(new Long(1l), t);
+		assertEquals(Long.valueOf(1l), t);
 	}
 
 	//====================================================================================================
@@ -552,7 +552,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testLongObjectArray() throws Exception {
 		Long[] t = {1l, null};
 		t = roundTrip(t, Long[].class);
-		assertEquals(new Long(1l), t[0]);
+		assertEquals(Long.valueOf(1l), t[0]);
 		assertNull(t[1]);
 	}
 
@@ -563,7 +563,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testLongObject2dArray() throws Exception {
 		Long[][] t = {{1l,null},null};
 		t = roundTrip(t, Long[][].class);
-		assertEquals(new Long(1l), t[0][0]);
+		assertEquals(Long.valueOf(1l), t[0][0]);
 		assertNull(t[0][1]);
 		assertNull(t[1]);
 	}
@@ -575,7 +575,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testShortObject() throws Exception {
 		Short t = (short)1;
 		t = roundTrip(t, Short.class);
-		assertEquals(new Short((short)1), t);
+		assertEquals(Short.valueOf((short)1), t);
 	}
 
 	//====================================================================================================
@@ -585,7 +585,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testShortObjectArray() throws Exception {
 		Short[] t = {(short)1,null};
 		t = roundTrip(t, Short[].class);
-		assertEquals(new Short((short)1), t[0]);
+		assertEquals(Short.valueOf((short)1), t[0]);
 		assertNull(t[1]);
 	}
 
@@ -596,7 +596,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	public void testShortObject2dArray() throws Exception {
 		Short[][] t = {{(short)1,null},null};
 		t = roundTrip(t, Short[][].class);
-		assertEquals(new Short((short)1), t[0][0]);
+		assertEquals(Short.valueOf((short)1), t[0][0]);
 		assertNull(t[0][1]);
 		assertNull(t[1]);
 	}

@@ -164,6 +164,7 @@ public class BooleanAssertion_Test {
 		assertThrown(()->test(nil).isNotAny(nil)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void ca08_isSame() throws Exception {
 		Boolean x1 = new Boolean(true), x1a = new Boolean(true), nil = null;

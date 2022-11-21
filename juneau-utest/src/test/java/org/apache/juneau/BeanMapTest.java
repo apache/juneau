@@ -74,12 +74,12 @@ public class BeanMapTest {
 		m.put("d1", null);
 		m.put("f1", null);
 		m.put("b1", null);
-		assertEquals(new Integer(0), m.get("i1"));
-		assertEquals(new Short((short)0), m.get("s1"));
-		assertEquals(new Long(0l), m.get("l1"));
-		assertEquals(new Double(0d), m.get("d1"));
-		assertEquals(new Float(0f), m.get("f1"));
-		assertEquals(new Boolean(false), m.get("b1"));
+		assertEquals(Integer.valueOf(0), m.get("i1"));
+		assertEquals(Short.valueOf((short)0), m.get("s1"));
+		assertEquals(Long.valueOf(0l), m.get("l1"));
+		assertEquals(Double.valueOf(0d), m.get("d1"));
+		assertEquals(Float.valueOf(0f), m.get("f1"));
+		assertEquals(Boolean.valueOf(false), m.get("b1"));
 
 		// Make sure setting non-primitive values to null causes them to set to null.
 		m.put("i2", null);
@@ -106,21 +106,21 @@ public class BeanMapTest {
 		m.put("l2", 1);
 		m.put("d2", 1);
 		m.put("f2", 1);
-		assertEquals(new Integer(1), m.get("i1"));
-		assertEquals(new Integer(1), m.get("i2"));
-		assertEquals(new Short((short)1), m.get("s1"));
-		assertEquals(new Short((short)1), m.get("s2"));
-		assertEquals(new Long(1), m.get("l1"));
-		assertEquals(new Long(1), m.get("l2"));
-		assertEquals(new Double(1), m.get("d1"));
-		assertEquals(new Double(1), m.get("d2"));
-		assertEquals(new Float(1), m.get("f1"));
-		assertEquals(new Float(1), m.get("f2"));
+		assertEquals(Integer.valueOf(1), m.get("i1"));
+		assertEquals(Integer.valueOf(1), m.get("i2"));
+		assertEquals(Short.valueOf((short)1), m.get("s1"));
+		assertEquals(Short.valueOf((short)1), m.get("s2"));
+		assertEquals(Long.valueOf(1), m.get("l1"));
+		assertEquals(Long.valueOf(1), m.get("l2"));
+		assertEquals(Double.valueOf(1), m.get("d1"));
+		assertEquals(Double.valueOf(1), m.get("d2"));
+		assertEquals(Float.valueOf(1), m.get("f1"));
+		assertEquals(Float.valueOf(1), m.get("f2"));
 
 		m.put("b1", true);
-		m.put("b2", new Boolean(true));
-		assertEquals(new Boolean(true), m.get("b1"));
-		assertEquals(new Boolean(true), m.get("b2"));
+		m.put("b2", Boolean.valueOf(true));
+		assertEquals(Boolean.valueOf(true), m.get("b1"));
+		assertEquals(Boolean.valueOf(true), m.get("b2"));
 	}
 
 	public static class A {
@@ -153,12 +153,12 @@ public class BeanMapTest {
 		m.put("d1", null);
 		m.put("f1", null);
 		m.put("b1", null);
-		assertEquals(new Integer(0), m.get("i1"));
-		assertEquals(new Short((short)0), m.get("s1"));
-		assertEquals(new Long(0l), m.get("l1"));
-		assertEquals(new Double(0d), m.get("d1"));
-		assertEquals(new Float(0f), m.get("f1"));
-		assertEquals(new Boolean(false), m.get("b1"));
+		assertEquals(Integer.valueOf(0), m.get("i1"));
+		assertEquals(Short.valueOf((short)0), m.get("s1"));
+		assertEquals(Long.valueOf(0l), m.get("l1"));
+		assertEquals(Double.valueOf(0d), m.get("d1"));
+		assertEquals(Float.valueOf(0f), m.get("f1"));
+		assertEquals(Boolean.valueOf(false), m.get("b1"));
 
 		// Make sure setting non-primitive values to null causes them to set to null.
 		m.put("i2", null);
@@ -185,21 +185,21 @@ public class BeanMapTest {
 		m.put("l2", 1);
 		m.put("d2", 1);
 		m.put("f2", 1);
-		assertEquals(new Integer(1), m.get("i1"));
-		assertEquals(new Integer(1), m.get("i2"));
-		assertEquals(new Short((short)1), m.get("s1"));
-		assertEquals(new Short((short)1), m.get("s2"));
-		assertEquals(new Long(1), m.get("l1"));
-		assertEquals(new Long(1), m.get("l2"));
-		assertEquals(new Double(1), m.get("d1"));
-		assertEquals(new Double(1), m.get("d2"));
-		assertEquals(new Float(1), m.get("f1"));
-		assertEquals(new Float(1), m.get("f2"));
+		assertEquals(Integer.valueOf(1), m.get("i1"));
+		assertEquals(Integer.valueOf(1), m.get("i2"));
+		assertEquals(Short.valueOf((short)1), m.get("s1"));
+		assertEquals(Short.valueOf((short)1), m.get("s2"));
+		assertEquals(Long.valueOf(1), m.get("l1"));
+		assertEquals(Long.valueOf(1), m.get("l2"));
+		assertEquals(Double.valueOf(1), m.get("d1"));
+		assertEquals(Double.valueOf(1), m.get("d2"));
+		assertEquals(Float.valueOf(1), m.get("f1"));
+		assertEquals(Float.valueOf(1), m.get("f2"));
 
 		m.put("b1", true);
 		m.put("b2", true);
-		assertEquals(new Boolean(true), m.get("b1"));
-		assertEquals(new Boolean(true), m.get("b2"));
+		assertEquals(Boolean.valueOf(true), m.get("b1"));
+		assertEquals(Boolean.valueOf(true), m.get("b2"));
 	}
 
 	public static class B {
@@ -943,13 +943,13 @@ public class BeanMapTest {
 
 	public static class M4<T extends Number> extends M1<T> {
 		public M4() {
-			this.x = (T)new Integer(3);
+			this.x = (T)Integer.valueOf(3);
 		}
 	}
 
 	public static class M5 extends M4<Integer> {
 		public M5() {
-			this.x = new Integer(4);
+			this.x = Integer.valueOf(4);
 		}
 	}
 
@@ -1000,7 +1000,7 @@ public class BeanMapTest {
 
 	public static class N4<T extends Number> extends N1<T> {
 		public N4() {
-			setX((T)new Integer(3));
+			setX((T)Integer.valueOf(3));
 		}
 	}
 

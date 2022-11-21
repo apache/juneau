@@ -29,7 +29,7 @@ import java.util.function.*;
 public final class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	private static final long serialVersionUID = 1L;
 
-	private static final Comparator<AnnotationInfo<?>> RANK_COMPARATOR = new Comparator<AnnotationInfo<?>>() {
+	private static final Comparator<AnnotationInfo<?>> RANK_COMPARATOR = new Comparator<>() {
 		@Override
 		public int compare(AnnotationInfo<?> o1, AnnotationInfo<?> o2) {
 			return o1.rank - o2.rank;

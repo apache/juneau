@@ -90,7 +90,7 @@ public class JsonTest {
 		l.add("2");
 		l.add("3");
 		Object o = new Object[] { m, l };
-		Object o2 = new Object[] { o, "foo", "bar", new Integer(1), new Boolean(false), new Float(1.2), null };
+		Object o2 = new Object[] { o, "foo", "bar", Integer.valueOf(1), Boolean.valueOf(false), Float.valueOf(1.2f), null };
 		assertEquals("K1", "[[{J:'f1',B:'b',C:'c'},['1','2','3']],'foo','bar',1,false,1.2,null]", s1.serialize(o2));
 	}
 

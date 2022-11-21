@@ -884,11 +884,11 @@ public class JsonList extends LinkedList<Object> {
 	 */
 	public <E> Iterable<E> elements(final Class<E> childType) {
 		final Iterator<?> i = iterator();
-		return new Iterable<E>() {
+		return new Iterable<>() {
 
 			@Override /* Iterable */
 			public Iterator<E> iterator() {
-				return new Iterator<E>() {
+				return new Iterator<>() {
 
 					@Override /* Iterator */
 					public boolean hasNext() {

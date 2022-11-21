@@ -90,11 +90,11 @@ public final class ArrayUtils {
 	 */
 	public static <T> Set<T> asSet(final T[] array) {
 		assertArgNotNull("array", array);
-		return new AbstractSet<T>() {
+		return new AbstractSet<>() {
 
 			@Override /* Set */
 			public Iterator<T> iterator() {
-				return new Iterator<T>() {
+				return new Iterator<>() {
 					int i = 0;
 
 					@Override /* Iterator */

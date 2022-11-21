@@ -164,6 +164,7 @@ public class ComparableAssertion_Test {
 		assertThrown(()->test(nil).isNotAny(nil)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void ca08_isSame() throws Exception {
 		Integer x1 = new Integer(1), x1a = new Integer(1), nil = null;
@@ -257,7 +258,7 @@ public class ComparableAssertion_Test {
 
 	@Test
 	public void cb02_isGte() throws Exception {
-		Integer x1 = 1, x1a = new Integer(1), x2 = 2, nil = null;
+		Integer x1 = 1, x1a = Integer.valueOf(1), x2 = 2, nil = null;
 		test(x2).isGte(x1);
 		test(x1).isGte(x1);
 		test(x1).isGte(x1a);
@@ -278,7 +279,7 @@ public class ComparableAssertion_Test {
 
 	@Test
 	public void cb04_isLte() throws Exception {
-		Integer x1 = 1, x1a = new Integer(1), x2 = 2, nil = null;
+		Integer x1 = 1, x1a = Integer.valueOf(1), x2 = 2, nil = null;
 		test(x1).isLte(x2);
 		test(x1).isLte(x1);
 		test(x1).isLte(x1a);

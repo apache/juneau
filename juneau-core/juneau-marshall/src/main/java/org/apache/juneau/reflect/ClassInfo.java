@@ -2325,7 +2325,7 @@ public final class ClassInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Shortcut for calling {@link Class#newInstance()} on the underlying class.
+	 * Shortcut for calling <c>Class.getDeclaredConstructor().newInstance()</c> on the underlying class.
 	 *
 	 * @return A new instance of the underlying class
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
@@ -2334,8 +2334,8 @@ public final class ClassInfo {
 		if (c == null)
 			throw new ExecutableException("Type ''{0}'' cannot be instantiated", getFullName());
 		try {
-			return c.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
+			return c.getDeclaredConstructor().newInstance();
+		} catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
 			throw new ExecutableException(e);
 		}
 	}

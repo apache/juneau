@@ -3617,7 +3617,7 @@ public class BeanContext extends Context {
 		notBeanPackagePrefixes = Stream.of(_notBeanPackages).filter(x -> x.endsWith(".*")).map(x -> x.substring(0, x.length()-2)).toArray(String[]::new);
 
 		try {
-			propertyNamerBean = propertyNamer.newInstance();
+			propertyNamerBean = propertyNamer.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
 			throw asRuntimeException(e);
 		}

@@ -588,9 +588,9 @@ public class BeanSession extends ContextSession {
 							if (tc == Long.TYPE)
 								return (T)Long.valueOf(s);
 							if (tc == Float.TYPE)
-								return (T)new Float(s);
+								return (T)Float.valueOf(s);
 							if (tc == Double.TYPE)
-								return (T)new Double(s);
+								return (T)Double.valueOf(s);
 							if (tc == Byte.TYPE)
 								return (T)Byte.valueOf(s);
 						}
@@ -671,9 +671,9 @@ public class BeanSession extends ContextSession {
 						if (tc == Long.class)
 							return (T)Long.valueOf(s);
 						if (tc == Float.class)
-							return (T)new Float(s);
+							return (T)Float.valueOf(s);
 						if (tc == Double.class)
-							return (T)new Double(s);
+							return (T)Double.valueOf(s);
 						if (tc == Byte.class)
 							return (T)Byte.valueOf(s);
 						if (tc == AtomicInteger.class)

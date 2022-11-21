@@ -47,7 +47,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 */
 	@Override /* Set */
 	public Iterator<E> iterator() {
-		return new Iterator<E>() {
+		return new Iterator<>() {
 			int i = 0;
 			Iterator<E> i2 = (l.length > 0 ? l[i++].iterator() : null);
 

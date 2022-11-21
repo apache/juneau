@@ -526,11 +526,11 @@ public class OpenApiPartSerializer_Test {
 	public void f01_integerType_int32() throws Exception {
 		HttpPartSchema ps = T_INT32;
 		assertEquals("1", serialize(ps, 1));
-		assertEquals("1", serialize(ps, new Integer(1)));
+		assertEquals("1", serialize(ps, Integer.valueOf(1)));
 		assertEquals("1", serialize(ps, (short)1));
-		assertEquals("1", serialize(ps, new Short((short)1)));
+		assertEquals("1", serialize(ps, Short.valueOf((short)1)));
 		assertEquals("1", serialize(ps, 1l));
-		assertEquals("1", serialize(ps, new Long(1)));
+		assertEquals("1", serialize(ps, Long.valueOf(1)));
 		assertEquals("1", serialize(ps, "1"));
 		assertEquals("1", serialize(ps, new F1(1)));
 		assertEquals("null", serialize(ps, null));
@@ -545,7 +545,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1,2,null", serialize(ps, list(1,2,null)));
 		assertEquals("1,2", serialize(ps, new short[]{1,2}));
 		assertEquals("1,2,null", serialize(ps, new Short[]{1,2,null}));
-		assertEquals("1,2,null", serialize(ps, list(new Short((short)1),new Short((short)2),null)));
+		assertEquals("1,2,null", serialize(ps, list(Short.valueOf((short)1),Short.valueOf((short)2),null)));
 		assertEquals("1,2", serialize(ps, new long[]{1l,2l}));
 		assertEquals("1,2,null", serialize(ps, new Long[]{1l,2l,null}));
 		assertEquals("1,2,null", serialize(ps, list(1l,2l,null)));
@@ -570,12 +570,12 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1,2|3|null", serialize(ps, list(new short[]{1,2},new short[]{3},null)));
 		assertEquals("1,2|3,null|null", serialize(ps, new Short[][]{{1,2},{3,null},null}));
 		assertEquals("1,2|3,null|null", serialize(ps, list(new Short[]{1,2},new Short[]{3,null},null)));
-		assertEquals("1,2|3,null|null", serialize(ps, list(list(new Short((short)1),new Short((short)2)),list(new Short((short)3),null),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, list(list(Short.valueOf((short)1),Short.valueOf((short)2)),list(Short.valueOf((short)3),null),null)));
 		assertEquals("1,2|3|null", serialize(ps, new long[][]{{1l,2l},{3l},null}));
 		assertEquals("1,2|3|null", serialize(ps, list(new long[]{1l,2l},new long[]{3l},null)));
 		assertEquals("1,2|3,null|null", serialize(ps, new Long[][]{{1l,2l},{3l,null},null}));
 		assertEquals("1,2|3,null|null", serialize(ps, list(new Long[]{1l,2l},new Long[]{3l,null},null)));
-		assertEquals("1,2|3,null|null", serialize(ps, list(list(new Long(1),new Long(2)),list(new Long(3),null),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, list(list(Long.valueOf(1),Long.valueOf(2)),list(Long.valueOf(3),null),null)));
 		assertEquals("1,2|3,null,null|null", serialize(ps, new String[][]{{"1","2"},{"3","null",null},null}));
 		assertEquals("1,2|3,null,null|null", serialize(ps, list(new String[]{"1","2"},new String[]{"3","null",null},null)));
 		assertEquals("1,2|3,null,null|null", serialize(ps, list(list("1","2"),list("3","null",null),null)));
@@ -593,11 +593,11 @@ public class OpenApiPartSerializer_Test {
 	public void f04_integerType_int64() throws Exception {
 		HttpPartSchema ps = T_INT64;
 		assertEquals("1", serialize(ps, 1));
-		assertEquals("1", serialize(ps, new Integer(1)));
+		assertEquals("1", serialize(ps, Integer.valueOf(1)));
 		assertEquals("1", serialize(ps, (short)1));
-		assertEquals("1", serialize(ps, new Short((short)1)));
+		assertEquals("1", serialize(ps, Short.valueOf((short)1)));
 		assertEquals("1", serialize(ps, 1l));
-		assertEquals("1", serialize(ps, new Long(1l)));
+		assertEquals("1", serialize(ps, Long.valueOf(1l)));
 		assertEquals("1", serialize(ps, "1"));
 		assertEquals("1", serialize(ps,  new F3(1l)));
 		assertEquals("null", serialize(ps, null));
@@ -705,9 +705,9 @@ public class OpenApiPartSerializer_Test {
 	public void g01_numberType_float() throws Exception {
 		HttpPartSchema ps = T_FLOAT;
 		assertEquals("1.0", serialize(ps, 1f));
-		assertEquals("1.0", serialize(ps, new Float(1f)));
+		assertEquals("1.0", serialize(ps, Float.valueOf(1f)));
 		assertEquals("1.0", serialize(ps, 1d));
-		assertEquals("1.0", serialize(ps, new Double(1d)));
+		assertEquals("1.0", serialize(ps, Double.valueOf(1d)));
 		assertEquals("1.0", serialize(ps, "1"));
 		assertEquals("1.0", serialize(ps, new G1(1f)));
 		assertEquals("null", serialize(ps, null));
@@ -763,9 +763,9 @@ public class OpenApiPartSerializer_Test {
 	public void g04_numberType_double() throws Exception {
 		HttpPartSchema ps = T_DOUBLE;
 		assertEquals("1.0", serialize(ps, 1f));
-		assertEquals("1.0", serialize(ps, new Float(1f)));
+		assertEquals("1.0", serialize(ps, Float.valueOf(1f)));
 		assertEquals("1.0", serialize(ps, 1d));
-		assertEquals("1.0", serialize(ps, new Double(1d)));
+		assertEquals("1.0", serialize(ps, Double.valueOf(1d)));
 		assertEquals("1.0", serialize(ps, "1"));
 		assertEquals("1.0", serialize(ps, new G3(1d)));
 		assertEquals("null", serialize(ps, null));
@@ -1011,56 +1011,56 @@ public class OpenApiPartSerializer_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
 	public void i01a_noSchemaTests_Integer() throws Exception {
-		for (Integer v : list(new Integer(1), Integer.MAX_VALUE, Integer.MIN_VALUE))
+		for (Integer v : list(Integer.valueOf(1), Integer.MAX_VALUE, Integer.MIN_VALUE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 	@Test
 	public void i01b_noSchemaTests_IntegerArray() throws Exception {
-		assertEquals("1,2147483647,-2147483648", serialize((HttpPartSchema)null, new Integer[]{new Integer(1), Integer.MAX_VALUE, Integer.MIN_VALUE}));
+		assertEquals("1,2147483647,-2147483648", serialize((HttpPartSchema)null, new Integer[]{Integer.valueOf(1), Integer.MAX_VALUE, Integer.MIN_VALUE}));
 	}
 
 	@Test
 	public void i02a_noSchemaTests_Short() throws Exception {
-		for (Short v : list(new Short((short)1), Short.MAX_VALUE, Short.MIN_VALUE))
+		for (Short v : list(Short.valueOf((short)1), Short.MAX_VALUE, Short.MIN_VALUE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 
 	@Test
 	public void i02b_noSchemaTests_ShortArray() throws Exception {
-		assertEquals("1,32767,-32768,null", serialize((HttpPartSchema)null, new Short[]{new Short((short)1), Short.MAX_VALUE, Short.MIN_VALUE, null}));
+		assertEquals("1,32767,-32768,null", serialize((HttpPartSchema)null, new Short[]{Short.valueOf((short)1), Short.MAX_VALUE, Short.MIN_VALUE, null}));
 	}
 
 	@Test
 	public void i03a_noSchemaTests_Long() throws Exception {
-		for (Long v : list(new Long(1), Long.MAX_VALUE, Long.MIN_VALUE))
+		for (Long v : list(Long.valueOf(1), Long.MAX_VALUE, Long.MIN_VALUE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 
 	@Test
 	public void i03b_noSchemaTests_LongArray() throws Exception {
-		assertEquals("1,9223372036854775807,-9223372036854775808,null", serialize((HttpPartSchema)null, new Long[]{new Long(1), Long.MAX_VALUE, Long.MIN_VALUE, null}));
+		assertEquals("1,9223372036854775807,-9223372036854775808,null", serialize((HttpPartSchema)null, new Long[]{Long.valueOf(1), Long.MAX_VALUE, Long.MIN_VALUE, null}));
 	}
 
 	@Test
 	public void i04a_noSchemaTests_Float() throws Exception {
-		for (Float v : list(new Float(1f), Float.MAX_VALUE, Float.MIN_VALUE))
+		for (Float v : list(Float.valueOf(1f), Float.MAX_VALUE, Float.MIN_VALUE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 
 	@Test
 	public void i04b_noSchemaTests_FloatArray() throws Exception {
-		assertEquals("1.0,3.4028235E38,1.4E-45", serialize((HttpPartSchema)null, new Float[]{new Float(1f), Float.MAX_VALUE, Float.MIN_VALUE}));
+		assertEquals("1.0,3.4028235E38,1.4E-45", serialize((HttpPartSchema)null, new Float[]{Float.valueOf(1f), Float.MAX_VALUE, Float.MIN_VALUE}));
 	}
 
 	@Test
 	public void i05a_noSchemaTests_Double() throws Exception {
-		for (Double v : list(new Double(1d), Double.MAX_VALUE, Double.MIN_VALUE))
+		for (Double v : list(Double.valueOf(1d), Double.MAX_VALUE, Double.MIN_VALUE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 
 	@Test
 	public void i05b_noSchemaTests_DoubleArray() throws Exception {
-		assertEquals("1.0,1.7976931348623157E308,4.9E-324", serialize((HttpPartSchema)null, new Double[]{new Double(1), Double.MAX_VALUE, Double.MIN_VALUE}));
+		assertEquals("1.0,1.7976931348623157E308,4.9E-324", serialize((HttpPartSchema)null, new Double[]{Double.valueOf(1), Double.MAX_VALUE, Double.MIN_VALUE}));
 	}
 
 	@Test

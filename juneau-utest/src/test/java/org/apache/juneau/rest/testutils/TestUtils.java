@@ -27,7 +27,7 @@ public class TestUtils extends org.apache.juneau.testutils.TestUtils {
 	 */
 	public static Swagger getSwagger(Class<?> c) {
 		try {
-			Object r = c.newInstance();
+			Object r = c.getDeclaredConstructor().newInstance();
 			RestContext rc = RestContext.create(r.getClass(),null,null).init(()->r).build();
 			RestOpContext ctx = RestOpContext.create(TestUtils.class.getMethod("getSwagger", Class.class), rc).build();
 			RestSession session = RestSession.create(rc).resource(r).req(new MockServletRequest()).res(new MockServletResponse()).build();

@@ -116,7 +116,7 @@ public class MediaRanges {
 	 * <c>MediaRanges</c> with the same types but with extensions are promoted over those same types with no
 	 * extensions.
 	 */
-	private static final Comparator<MediaRange> RANGE_COMPARATOR = new Comparator<MediaRange>() {
+	private static final Comparator<MediaRange> RANGE_COMPARATOR = new Comparator<>() {
 		@Override
 		public int compare(MediaRange o1, MediaRange o2) {
 			// Compare q-values.
