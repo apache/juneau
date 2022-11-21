@@ -153,8 +153,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * @param builder The builder for this object.
 		 */
 		public ReadableSafe(Builder builder) {
-			super(builder.simpleAttrs().quoteChar('\'').useWhitespace().detectRecursions());
-			String todo = "Shouldn't be using single-quote";
+			super(builder.simpleAttrs().useWhitespace().detectRecursions());
 		}
 	}
 
