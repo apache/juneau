@@ -29484,7 +29484,7 @@
 			some synchronized blocks.
 		<li>Improved support of <del>BeanContext.getClassMetaFromString(String)</del>.
 			Now supports primitive arrays such as <js>"long[]"</js> in addition to the previous support for the equivalent <js>"[J"</js>.
-		<li>Various new convenience methods added to {@link org.apache.juneau.internal.StringUtils} and {@link org.apache.juneau.internal.ClassUtils}.
+		<li>Various new convenience methods added to <del>StringUtils</del> and <del>ClassUtils</del>.
 	</ul>	
 </div>
 </div><!-- END: 5.0.0.36 -->
@@ -29525,7 +29525,7 @@
 	</ul>	
 	<h5 class='topic w800'>Other changes</h5>
 	<ul class='spaced-list'>
-		<li>Various new methods added to {@link org.apache.juneau.internal.StringUtils} and {@link org.apache.juneau.internal.ClassUtils}.
+		<li>Various new methods added to <del>StringUtils</del> and <del>ClassUtils</del>.
 		<li>Improved support on <del>BeanContext.getClassMetaFromString(String)</del>.<br>
 			Now supports resolving <c>"long[]"</c>, and so forth.
 		<li><del>ResourceDescription</del>name parameter is now automatically URL-encoded in links.
@@ -30414,7 +30414,7 @@
 			represent arrays and collections as key-value pairs where the keys are numbers (e.g. <js>"?0=foo&amp;1=bar"</js>).
 		<li>Various internal improvements to <del>IOPipe</del>.
 		<li>New <del>ReflectionUtils.getResource(Class,String)</del>method.
-		<li>{@link org.apache.juneau.internal.StringUtils#parseNumber(String,Class)} now returns zero for empty strings. 
+		<li><del>StringUtils.parseNumber(String,Class)</del> now returns zero for empty strings. 
 			This affects the way most parsers handle blank values.
 	</ul>
 	
@@ -30560,8 +30560,8 @@
 				<li><del>StringObject</del> class that can be used for delayed object serialization.
 				<li><del>ByteArrayCache</del>
 				<li><del>ByteArrayInOutStream</del>
-				<li>{@link org.apache.juneau.internal.FileUtils}
-				<li>{@link org.apache.juneau.internal.ThrowableUtils}
+				<li><del>FileUtils</del>
+				<li><del>ThrowableUtils</del>
 				<li><del>StringVarMultipart</del>
 				<li><del>StringVarWithDefault</del>
 			</ul> 
@@ -30583,10 +30583,10 @@
 				<li><del>ArrayUtils.indexOf(Object,Object[])</del>
 				<li><del>ArrayUtils.toPrimitiveArray(Object)</del>
 			</ul>	
-		<li>New methods in {@link org.apache.juneau.internal.IOUtils}:
+		<li>New methods in <del>IOUtils</del>:
 			<ul>
 				<li><del>IOUtils.pipe(Reader,Writer)</del>
-				<li>{@link org.apache.juneau.internal.IOUtils#read(File)}
+				<li><del>IOUtils.read(File)</del>
 				<li><del>IOUtils.readFile(String)</del>
 				<li><del>IOUtils.write(File,Reader)</del>
 			</ul>
@@ -30619,24 +30619,24 @@
 				<li><del>ProcBuilder.logTo(Level,Logger)</del>
 				<li><del>ProcBuilder.maxExitStatus(int)</del>
 			</ul>
-		<li>New methods on {@link org.apache.juneau.internal.StringUtils}:
+		<li>New methods on <del>StringUtils</del>:
 			<ul>
 				<li><del>StringUtils.isEmpty(Object)</del>
-				<li>{@link org.apache.juneau.internal.StringUtils#nullIfEmpty(String)}
-				<li>{@link org.apache.juneau.internal.StringUtils#base64EncodeToString(String)}
-				<li>{@link org.apache.juneau.internal.StringUtils#base64Encode(byte[])}
-				<li>{@link org.apache.juneau.internal.StringUtils#base64DecodeToString(String)}
-				<li>{@link org.apache.juneau.internal.StringUtils#base64Decode(String)}
+				<li><del>StringUtils.nullIfEmpty(String)</del>
+				<li><del>StringUtils.base64EncodeToString(String)</del>
+				<li><del>StringUtils.base64Encode(byte[])</del>
+				<li><del>StringUtils.base64DecodeToString(String)</del>
+				<li><del>StringUtils.base64Decode(String)</del>
 				<li><del>StringUtils.generateUUID(int)</del>
-				<li>{@link org.apache.juneau.internal.StringUtils#trim(String)}
+				<li><del>StringUtils.trim(String)</del>
 				<li><del>StringUtils.parseISO8601Date(String)</del>
-				<li>{@link org.apache.juneau.internal.StringUtils#replaceVars(String,Map)}
+				<li><del>StringUtils.replaceVars(String,Map)</del>
 				<li><del>StringUtils.pathStartsWith(String,String)</del>
 				<li><del>StringUtils.pathStartsWith(String,String[])</del>
 			</ul>
 		<li>New <del>StringVar.doResolve(String)</del>method.
 		<li>New <del>StringVarResolver.DEFAULT</del>field.
-		<li>Eliminated dependency on <c>javax.mail.internet.MimeUtility</c> by implementing our own {@link org.apache.juneau.internal.StringUtils#base64Encode(byte[])} method.
+		<li>Eliminated dependency on <c>javax.mail.internet.MimeUtility</c> by implementing our own <del>StringUtils.base64Encode(byte[])</del> method.
 		<li><del>CalendarSwap</del> and <del>DateSwap</del> classes now handle blank input better.  Returns <jk>null</jk> instead of throwing an exception.
 		<li>{@link org.apache.juneau.html.HtmlDocSerializer} specifies the default CSS location as <c>/servletPath/style.css</c> instead of <c>/servletPath/htdocs/juneau.css</c>.  
 			This coincides with enhancements made in the server code for specifying styles.
@@ -30668,7 +30668,7 @@
 		<li><del>MessageBundle</del> and <c>SafeResourceMultiBundle</c> moved from server component.
 		<li>Several bug fixes and performance improvements in <del>StringVarResolver</del>.
 		<li>Various enhancements to <del>TeeWriter</del> and <del>TeeOutputStream</del>.
-		<li>Renamed <del>CharSet</del> to {@link org.apache.juneau.internal.AsciiSet}.
+		<li>Renamed <del>CharSet</del> to <del>AsciiSet</del>.
 		<li><del>SerializerGroup</del> and <del>ParserGroup</del>now ignores <c>NoClassDefFoundErrors</c>
 			so that resources that include Jena support can continue to operate even if the Jena libraries are not present.
 		<li>New {@link org.apache.juneau.internal.FileUtils#createTempFile(String)} method.

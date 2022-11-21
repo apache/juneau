@@ -52,7 +52,7 @@ public class DocLinkTester {
 			if (errors == 0)
 				info("No link errors");
 			else {
-				Console.error(null, errors + " errors");  // NOT DEBUG
+				Console.error(errors + " errors");  // NOT DEBUG
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -125,6 +125,6 @@ public class DocLinkTester {
 
 	private static void error(File f, String msg) {
 		errors++;
-		Console.error(null, "{0}: {1}", f.getAbsolutePath(), msg);
+		Console.error("{0}: {1}", f.getAbsolutePath(), msg);
 	}
 }

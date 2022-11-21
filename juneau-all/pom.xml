@@ -72,6 +72,7 @@
 					<createDependencyReducedPom>false</createDependencyReducedPom>
 					<artifactSet>
 						<includes>
+							<include>org.apache.juneau:juneau-common</include>
 							<include>org.apache.juneau:juneau-marshall</include>
 							<include>org.apache.juneau:juneau-svl</include>
 							<include>org.apache.juneau:juneau-config</include>
