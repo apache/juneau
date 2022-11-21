@@ -20,6 +20,7 @@ import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
+import java.nio.file.Files;
 
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.header.*;
@@ -29,7 +30,7 @@ import org.junit.*;
 public class BasicHttpResource_Test {
 	@Test
 	public void a01_basic() throws Exception {
-		File f = File.createTempFile("test", "txt");
+		File f = Files.createTempFile("test","txt").toFile();
 
 		HttpResource x = stringResource((String)null);
 
