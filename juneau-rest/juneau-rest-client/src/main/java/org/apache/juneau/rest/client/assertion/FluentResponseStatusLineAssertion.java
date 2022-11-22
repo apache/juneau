@@ -95,8 +95,8 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../../overview-summary.html#juneau-assertions.ja.Overview">juneau-assertions</a>
- * 	<li class='link'><a class="doclink" href="../../../../../../overview-summary.html#juneau-rest-client">juneau-rest-client</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../../index.html#juneau-assertions.ja.Overview">juneau-assertions</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  *
  * @param <R> The return type.

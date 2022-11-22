@@ -20,7 +20,7 @@ import org.apache.juneau.swap.*;
  * Built-in object swap implementation class for the {@link Beanp#format() @Beanp(format)} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Swaps">Swaps</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.Swaps">Swaps</a>
  * </ul>
  */
 public class StringFormatSwap extends StringSwap<Object> {

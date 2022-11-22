@@ -27,8 +27,8 @@ import org.apache.juneau.dto.html5.*;
  * Tooltips depend on the existence of the <c>tooltip</c> and <c>tooltiptext</c> styles that should be present in the stylesheet for the document.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets">Predefined Widgets</a>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets">Widgets</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets">Predefined Widgets</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets">Widgets</a>
  * </ul>
  */
 public class Tooltip {

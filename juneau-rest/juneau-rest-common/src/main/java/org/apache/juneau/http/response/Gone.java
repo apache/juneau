@@ -36,7 +36,7 @@ import org.apache.juneau.internal.*;
  * <br>Most use cases do not require clients and search engines to purge the resource, and a <js>"404 Not Found"</js> may be used instead.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *
  * @serial exclude

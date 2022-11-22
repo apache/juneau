@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The client should switch to a different protocol such as TLS/1.0, given in the Upgrade header field.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *
  * @serial exclude

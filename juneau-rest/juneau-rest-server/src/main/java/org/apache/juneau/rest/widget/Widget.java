@@ -36,8 +36,8 @@ import org.apache.juneau.http.response.*;
  * Widgets can be defined as inner classes of REST resource classes.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets">Predefined Widgets</a>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets">Widgets</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets">Predefined Widgets</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets">Widgets</a>
  * </ul>
  */
 public abstract class Widget implements HtmlWidget {
@@ -162,7 +162,7 @@ public abstract class Widget implements HtmlWidget {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.SvlVariables">SVL Variables</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.SimpleVariableLanguage.jm.SvlVariables">SVL Variables</a>
 	 * </ul>
 	 *
 	 * @param req The current HTTP request.
@@ -201,7 +201,7 @@ public abstract class Widget implements HtmlWidget {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.SvlVariables">SVL Variables</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.SimpleVariableLanguage.jm.SvlVariables">SVL Variables</a>
 	 * </ul>
 	 *
 	 * @param req The current HTTP request.
@@ -240,7 +240,7 @@ public abstract class Widget implements HtmlWidget {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage.jm.SvlVariables">SVL Variables</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.SimpleVariableLanguage.jm.SvlVariables">SVL Variables</a>
 	 * </ul>
 	 *
 	 * @param req The current HTTP request.

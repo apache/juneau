@@ -33,7 +33,7 @@ import org.apache.juneau.internal.*;
  * Unlike a 204 response, this response requires that the requester reset the document view.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
 @Response

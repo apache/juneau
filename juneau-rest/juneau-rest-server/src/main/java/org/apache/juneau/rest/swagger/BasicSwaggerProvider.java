@@ -25,7 +25,7 @@ import org.apache.juneau.svl.*;
  * Basic implementation of a {@link SwaggerProvider}.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Swagger</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.Swagger">Swagger</a>
  * </ul>
  */
 public class BasicSwaggerProvider implements SwaggerProvider {

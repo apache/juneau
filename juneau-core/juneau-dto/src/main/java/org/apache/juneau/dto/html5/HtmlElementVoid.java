@@ -24,7 +24,7 @@ import org.apache.juneau.xml.annotation.*;
  * See <a href="https://www.w3.org/TR/html51/syntax.html#void-elements">void elements</a>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @Xml(format=VOID)

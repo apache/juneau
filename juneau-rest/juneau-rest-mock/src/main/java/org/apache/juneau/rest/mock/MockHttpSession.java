@@ -27,7 +27,7 @@ import javax.servlet.http.*;
  * that can be passed to the {@link MockRestRequest#httpSession(HttpSession)} method.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-mock">juneau-rest-mock</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-mock">juneau-rest-mock</a>
  * </ul>
  */
 public class MockHttpSession implements HttpSession {

@@ -33,7 +33,7 @@ import java.lang.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.JavaBeansSupport.jm.NamePropertyAnnotation">@NameProperty Annotation</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.JavaBeansSupport.jm.NamePropertyAnnotation">@NameProperty Annotation</a>
  * </ul>
  */
 @Target({METHOD,FIELD,TYPE})
@@ -102,7 +102,7 @@ public @interface NameProperty {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.

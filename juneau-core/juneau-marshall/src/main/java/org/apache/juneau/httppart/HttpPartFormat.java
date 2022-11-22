@@ -16,7 +16,7 @@ package org.apache.juneau.httppart;
  * Valid values for the <c>format</c> field.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
  * </ul>
  */
 public enum HttpPartFormat {

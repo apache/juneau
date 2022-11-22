@@ -21,7 +21,7 @@ import java.util.*;
  * A subclass of {@link DefaultingVar} that simply pulls values from a {@link Map}.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage">Simple Variable Language</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.SimpleVariableLanguage">Simple Variable Language</a>
  * </ul>
  */
 @SuppressWarnings("rawtypes")

@@ -24,7 +24,7 @@ import org.apache.juneau.http.header.*;
  * Exception representing a <c>400+</c> HTTP response code against a remote resource or other exception.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client">juneau-rest-client</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  *
  * @serial exclude

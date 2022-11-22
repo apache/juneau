@@ -64,7 +64,7 @@ import org.apache.juneau.oapi.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-dto.jd.Swagger">Swagger</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>
  * </ul>
  */

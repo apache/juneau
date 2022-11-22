@@ -22,7 +22,7 @@ import org.apache.juneau.svl.vars.*;
  * Simple list of variables that can consist of either variable classes or instances.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SimpleVariableLanguage">Simple Variable Language</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.SimpleVariableLanguage">Simple Variable Language</a>
  * </ul>
  *
  * @serial exclude

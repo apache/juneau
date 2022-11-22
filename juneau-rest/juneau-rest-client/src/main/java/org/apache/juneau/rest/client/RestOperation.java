@@ -22,7 +22,7 @@ import org.apache.juneau.http.*;
  * Aggregates the HTTP method, URL, and optional body into a single bean.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client">juneau-rest-client</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */
 public class RestOperation {

@@ -218,7 +218,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link RestContext.Builder#responseProcessors()}
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.RestOpAnnotatedMethods">@RestOp-Annotated Methods</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-rest-server.jrs.RestOpAnnotatedMethods">@RestOp-Annotated Methods</a>
 	 * </ul>
 	 *
 	 * @param output The output to serialize to the connection.

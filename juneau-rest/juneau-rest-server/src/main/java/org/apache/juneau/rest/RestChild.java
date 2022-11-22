@@ -33,7 +33,7 @@ import org.apache.juneau.cp.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.AnnotatedClasses">@Rest-Annotated Classes</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-rest-server.jrs.AnnotatedClasses">@Rest-Annotated Classes</a>
  * </ul>
  */
 public class RestChild {

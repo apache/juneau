@@ -120,7 +120,7 @@ import org.apache.juneau.xml.*;
  * 		<li class='jc'>{@link BasicRestObject}
  * 		<li class='jc'>{@link BasicRestObjectGroup}
  *	</ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.AnnotatedClasses">@Rest-Annotated Classes</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.AnnotatedClasses">@Rest-Annotated Classes</a>
  * </ul>
  */
 @Rest(

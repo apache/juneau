@@ -48,7 +48,7 @@ import org.apache.juneau.rest.client.assertion.*;
  * other convenience methods.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client">juneau-rest-client</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */
 public class ResponseContent implements HttpEntity {

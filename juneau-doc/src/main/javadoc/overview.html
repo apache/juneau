@@ -14,23 +14,6 @@
  * specific language governing permissions and limitations under the License.
  ***************************************************************************************************************************/
  -->
-<html>
-<head>
-	<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-	<link rel='icon' type='image/png' href='http://www.apache.org/favicons/favicon-32x32.png' sizes='32x32'>
-	<link rel='icon' type='image/png' href='http://www.apache.org/favicons/favicon-194x194.png' sizes='194x194'>
-	<link rel='icon' type='image/png' href='http://www.apache.org/favicons/favicon-96x96.png' sizes='96x96'>
-	<link rel='icon' type='image/png' href='http://www.apache.org/favicons/android-chrome-192x192.png' sizes='192x192'>
-	<link rel='icon' type='image/png' href='http://www.apache.org/favicons/favicon-16x16.png' sizes='16x16'>
-	<link rel='shortcut icon' href='http://www.apache.org/favicons/favicon.ico'>
-	<style type='text/css'>
-		body { 
-			margin: 20px; 
-		}	
-		.spaced-list li { padding:5px; }
-		.footer .spaced-list ul { margin:0 }
-	</style>
-</head>
 <body>
 <h1 class='title'>Apache Juneau <juneauVersion>9.0.0</juneauVersion> Documentation</h1>
 
@@ -35489,4 +35472,13 @@
 </div><!-- END: 9.0.0 -->
 
 </div>
+<script>
+	// Overrides the javadoc javascript behavior that forces the page to show the search element.
+	function scrollToHash() {
+		if (location.hash) {
+			document.getElementById(location.hash.substring(1)).scrollIntoView();
+		}
+	}
+	window.setTimeout(scrollToHash, 1000);
+</script>
 </body>								

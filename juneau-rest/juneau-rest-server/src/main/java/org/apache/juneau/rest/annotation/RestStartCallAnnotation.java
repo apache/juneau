@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
  * Utility classes and methods for the {@link RestStartCall @RestStartCall} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.AnnotatedClasses.jrs.LifecycleHooks">Lifecycle Hooks</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.AnnotatedClasses.jrs.LifecycleHooks">Lifecycle Hooks</a>
  * </ul>
  */
 public class RestStartCallAnnotation {

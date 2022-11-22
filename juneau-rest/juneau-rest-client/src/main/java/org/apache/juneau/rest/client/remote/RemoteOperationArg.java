@@ -25,8 +25,8 @@ import org.apache.juneau.reflect.*;
  * Represents the metadata about an annotated argument of a method on a REST proxy class.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../../overview-summary.html#juneau-rest-client.jrc.Proxies">REST Proxies</a>
- * 	<li class='link'><a class="doclink" href="../../../../../../overview-summary.html#juneau-rest-client">juneau-rest-client</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../../index.html#juneau-rest-client.jrc.Proxies">REST Proxies</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */
 public final class RemoteOperationArg {

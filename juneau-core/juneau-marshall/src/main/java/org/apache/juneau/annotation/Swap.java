@@ -31,7 +31,7 @@ import org.apache.juneau.swap.*;
  * </ul>
 
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Swaps.jm.SwapAnnotation">@Swap Annotation</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.Swaps.jm.SwapAnnotation">@Swap Annotation</a>
  * </ul>
  */
 @Documented
@@ -70,7 +70,7 @@ public @interface Swap {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Swaps.jm.PerMediaTypeSwaps">Per-media-type Swaps</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.Swaps.jm.PerMediaTypeSwaps">Per-media-type Swaps</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -157,7 +157,7 @@ public @interface Swap {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -171,7 +171,7 @@ public @interface Swap {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -209,7 +209,7 @@ public @interface Swap {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Swaps.jm.TemplatedSwaps">Templated Swaps</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.Swaps.jm.TemplatedSwaps">Templated Swaps</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.

@@ -29,7 +29,7 @@ import org.apache.juneau.marshaller.*;
  * Response handler for plain-old Java objects.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.ResponseProcessors">Response Processors</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.ResponseProcessors">Response Processors</a>
  * </ul>
  */
 public final class SerializedPojoProcessor implements ResponseProcessor {

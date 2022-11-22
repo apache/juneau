@@ -124,7 +124,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.UrlEncodingDetails">URL-Encoding Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.UrlEncodingDetails">URL-Encoding Details</a>
  * </ul>
  */
 public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingMetaProvider {

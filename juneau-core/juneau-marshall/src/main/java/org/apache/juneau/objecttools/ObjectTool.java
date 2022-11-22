@@ -18,7 +18,7 @@ import org.apache.juneau.*;
  * Interface for classes that convert POJOs in some way using some predefined arguments object.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.ObjectTools">Overview &gt; juneau-marshall &gt; Object Tools</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.ObjectTools">Overview &gt; juneau-marshall &gt; Object Tools</a>
  * </ul>
  *
  * @param <T> The argument object type.

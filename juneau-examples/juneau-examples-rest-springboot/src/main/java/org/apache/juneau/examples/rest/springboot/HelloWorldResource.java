@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.*;
  * Sample REST resource that prints out a simple "Hello world!" message.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../../overview-summary.html#juneau-rest-server-springboot.jrss.Overview">juneau-rest-server-springboot &gt; Overview</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../../index.html#juneau-rest-server-springboot.jrss.Overview">juneau-rest-server-springboot &gt; Overview</a>
  * </ul>
  */
 @Rest(

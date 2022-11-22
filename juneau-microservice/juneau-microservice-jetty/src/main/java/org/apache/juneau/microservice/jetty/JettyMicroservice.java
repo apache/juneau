@@ -58,7 +58,7 @@ import org.eclipse.jetty.servlet.*;
  * Top-level REST resources are defined in the <c>jetty.xml</c> file as normal servlets.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-microservice-jetty">juneau-microservice-jetty</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-microservice-jetty">juneau-microservice-jetty</a>
  * </ul>
  */
 public class JettyMicroservice extends Microservice {

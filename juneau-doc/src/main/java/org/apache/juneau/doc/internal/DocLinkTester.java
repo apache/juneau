@@ -15,6 +15,7 @@ package org.apache.juneau.doc.internal;
 import static org.apache.juneau.doc.internal.Console.*;
 
 import java.io.*;
+import java.net.URLDecoder;
 import java.util.*;
 import java.util.regex.*;
 
@@ -110,6 +111,7 @@ public class DocLinkTester {
 			if (! f2.exists()) {
 				error(f, "missingLink=["+link+"]");
 			} else if (anchor != null) {
+				anchor = URLDecoder.decode(anchor, "UTF-8");
 				if (f2.isFile()) {
 					boolean foundAnchor = hasAnchor(f2, anchor);
 					if (! foundAnchor)

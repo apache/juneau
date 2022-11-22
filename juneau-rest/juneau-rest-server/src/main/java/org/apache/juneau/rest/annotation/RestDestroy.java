@@ -67,7 +67,7 @@ import org.apache.juneau.rest.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.AnnotatedClasses.jrs.LifecycleHooks">Lifecycle Hooks</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.AnnotatedClasses.jrs.LifecycleHooks">Lifecycle Hooks</a>
  * </ul>
  */
 @Target({METHOD,TYPE})
@@ -80,7 +80,7 @@ public @interface RestDestroy {
 	 * Dynamically apply this annotation to the specified methods.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.

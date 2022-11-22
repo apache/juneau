@@ -20,7 +20,7 @@ import org.apache.juneau.json.annotation.*;
  * annotation on the bean property.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.JsonDetails">JSON Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.JsonDetails">JSON Details</a>
  * </ul>
  */
 public final class JsonBeanPropertyMeta extends ExtendedBeanPropertyMeta {

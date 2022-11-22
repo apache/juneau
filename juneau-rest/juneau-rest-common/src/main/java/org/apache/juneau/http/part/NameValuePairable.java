@@ -18,7 +18,7 @@ import org.apache.http.*;
  * Identifies a class that can be converted to a {@link NameValuePair} object.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
 public interface NameValuePairable {

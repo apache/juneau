@@ -30,7 +30,7 @@ import java.net.*;
  * Sample resource that allows images to be uploaded and retrieved.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Marshalling">REST Marshalling</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.Marshalling">REST Marshalling</a>
  * 	<li class='jc'>{@link ImageSerializer}
  * 	<li class='jc'>{@link ImageParser}
  * </ul>

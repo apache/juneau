@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The server is unable to store the representation needed to complete the request.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *
  * @serial exclude

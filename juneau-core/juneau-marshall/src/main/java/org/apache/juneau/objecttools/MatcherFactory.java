@@ -18,7 +18,7 @@ import org.apache.juneau.*;
  * Common interface for matchers used by the {@link ObjectSearcher} class.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.ObjectTools">Overview &gt; juneau-marshall &gt; Object Tools</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.ObjectTools">Overview &gt; juneau-marshall &gt; Object Tools</a>
  * </ul>
  */
 public abstract class MatcherFactory {

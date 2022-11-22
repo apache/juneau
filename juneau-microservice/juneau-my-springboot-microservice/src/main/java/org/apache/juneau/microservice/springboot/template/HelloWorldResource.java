@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Sample REST resource that prints out a simple "Hello world!" message.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../../overview-summary.html#my-springboot-microservice">my-springboot-microservice</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../../index.html#my-springboot-microservice">my-springboot-microservice</a>
  * </ul>
  */
 @Rest(

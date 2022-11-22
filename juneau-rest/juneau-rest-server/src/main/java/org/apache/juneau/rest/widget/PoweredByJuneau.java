@@ -22,8 +22,8 @@ import org.apache.juneau.rest.*;
  * The variable it resolves is <js>"$W{PoweredByJuneau}"</js>.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets">Predefined Widgets</a>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets">Widgets</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets">Predefined Widgets</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets">Widgets</a>
  * </ul>
  */
 public class PoweredByJuneau extends Widget {

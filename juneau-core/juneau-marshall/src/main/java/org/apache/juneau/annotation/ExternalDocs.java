@@ -36,7 +36,7 @@ import java.lang.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-dto.jd.Swagger">Swagger</a>
  * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#externalDocumentationObject">Swagger ExternalDocumentation Object</a>
  * </ul>
  */
@@ -55,7 +55,7 @@ public @interface ExternalDocs {
 	 * 		The format is a plain-text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports <a class="doclink" href="../../../../index.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -74,7 +74,7 @@ public @interface ExternalDocs {
 	 * 	<li class='note'>
 	 * 		The format is a URL string.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports <a class="doclink" href="../../../../index.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
 	 * @return The annotation value.

@@ -26,7 +26,7 @@ import org.apache.juneau.parser.*;
  * the class.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.JsonSchemaDetails">JSON-Schema Support</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */
 public class JsonSchemaClassMeta extends ExtendedClassMeta {

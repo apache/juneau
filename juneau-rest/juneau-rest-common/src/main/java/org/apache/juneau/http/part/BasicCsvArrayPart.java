@@ -26,7 +26,7 @@ import org.apache.juneau.assertions.*;
  * A {@link NameValuePair} that consists of a comma-delimited list of string values.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
 public class BasicCsvArrayPart extends BasicPart {

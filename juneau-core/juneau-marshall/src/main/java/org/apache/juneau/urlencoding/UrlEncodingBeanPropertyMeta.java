@@ -20,7 +20,7 @@ import org.apache.juneau.urlencoding.annotation.*;
  * annotation on the bean property.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.UrlEncodingDetails">URL-Encoding Details</a> * </ul>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.UrlEncodingDetails">URL-Encoding Details</a> * </ul>
  */
 public final class UrlEncodingBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 

@@ -20,7 +20,7 @@ import org.apache.juneau.*;
  * Interface used to retrieve identifiers and URIs for bean classes.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.JsonSchemaDetails">JSON-Schema Support</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */
 public interface BeanDefMapper {

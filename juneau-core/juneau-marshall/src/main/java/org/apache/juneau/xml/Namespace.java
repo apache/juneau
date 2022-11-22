@@ -28,7 +28,7 @@ import org.apache.juneau.common.internal.*;
  * in the serializer.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.XmlDetails">XML Details</a> * </ul>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.XmlDetails">XML Details</a> * </ul>
  */
 @Bean(sort=true)
 public final class Namespace {

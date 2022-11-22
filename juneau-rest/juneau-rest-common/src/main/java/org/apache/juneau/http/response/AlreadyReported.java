@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The members of a DAV binding have already been enumerated in a preceding part of the (multistatus) response, and are not being included again.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-common">juneau-rest-common</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
 @Response

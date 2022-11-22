@@ -27,7 +27,7 @@ import org.apache.juneau.internal.*;
  * Represents a logging rule used by {@link CallLogger}.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.LoggingAndDebugging">Logging / Debugging</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.LoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  */
 public class CallLoggerRule {

@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link MsgPack @MsgPack} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.MsgPackDetails">Overview &gt; juneau-marshall &gt; MessagePack Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.MsgPackDetails">Overview &gt; juneau-marshall &gt; MessagePack Details</a>
  * </ul>
  */
 public class MsgPackAnnotation {

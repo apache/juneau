@@ -45,7 +45,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-config">Overview &gt; juneau-config</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-config">Overview &gt; juneau-config</a>
  * </ul>
  */
 public final class Config extends Context implements ConfigEventListener {

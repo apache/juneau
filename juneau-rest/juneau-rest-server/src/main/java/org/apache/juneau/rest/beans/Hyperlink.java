@@ -43,7 +43,7 @@ import org.apache.juneau.dto.html5.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.UtilityBeans">Utility Beans</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.UtilityBeans">Utility Beans</a>
  * </ul>
  */
 public class Hyperlink extends A {

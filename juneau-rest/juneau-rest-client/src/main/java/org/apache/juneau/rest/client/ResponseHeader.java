@@ -40,7 +40,7 @@ import org.apache.juneau.rest.client.assertion.*;
  * other convenience methods.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client">juneau-rest-client</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */
 public class ResponseHeader extends BasicHeader {
@@ -300,7 +300,7 @@ public class ResponseHeader extends BasicHeader {
 	 * Converts this header to the specified type.
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.ComplexDataTypes">Complex Data Types</a> for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
+	 * See <a class="doclink" href="../../../../../index.html#juneau-marshall.jm.ComplexDataTypes">Complex Data Types</a> for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
 	 *
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
@@ -315,7 +315,7 @@ public class ResponseHeader extends BasicHeader {
 	 * Same as {@link #as(Type,Type...)} but sets the value in a mutable for fluent calls.
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.ComplexDataTypes">Complex Data Types</a> for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
+	 * See <a class="doclink" href="../../../../../index.html#juneau-marshall.jm.ComplexDataTypes">Complex Data Types</a> for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
 	 *
 	 * @param value The mutable to set the parsed header value in.
 	 * @param <T> The type to convert to.

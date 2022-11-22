@@ -23,7 +23,7 @@ import java.lang.annotation.*;
  * Used to identify a namespace/URI pair on a {@link XmlSchema#xmlNs() @XmlSchema(xmlNs)} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.XmlDetails">XML Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.XmlDetails">XML Details</a>
  * </ul>
  */
 @Documented

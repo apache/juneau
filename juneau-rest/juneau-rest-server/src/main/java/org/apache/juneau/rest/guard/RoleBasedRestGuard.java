@@ -41,7 +41,7 @@ import org.apache.juneau.rest.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Guards">Guards</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.Guards">Guards</a>
  * </ul>
  */
 public class RoleBasedRestGuard extends RestGuard {

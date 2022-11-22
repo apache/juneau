@@ -18,7 +18,7 @@ import java.io.*;
  * Interface that identifies an output stream has having a <c>finish()</c> method.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.Encoders">Encoders</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.Encoders">Encoders</a>
  * </ul>
  */
 public interface Finishable {

@@ -39,8 +39,8 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.jrc.Proxies.jrc.Response">@Response</a>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Swagger">Swagger</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client.jrc.Proxies.jrc.Response">@Response</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.Swagger">Swagger</a>
  * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#responseObject">Swagger Response Object</a>
  * </ul>
  */
@@ -56,7 +56,7 @@ public @interface Response {
 	 * Serialized examples of the body of a response.
 	 *
 	 * <p>
-	 * This is a <a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> object whose keys are media types and values are string representations of that value.
+	 * This is a <a class="doclink" href="../../../../../index.html#juneau-dto.jd.Swagger">Swagger</a> object whose keys are media types and values are string representations of that value.
 	 *
 	 * <p class='bjava'>
 	 * 	<jc>// A JSON representation of a PetCreate object.</jc>
@@ -76,13 +76,13 @@ public @interface Response {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="../../../../../overview-summary.html#juneau-dto.jd.Swagger">Swagger</a> object with string keys (media type) and string values (example for that media type) .
+	 * 		The format is a <a class="doclink" href="../../../../../index.html#juneau-dto.jd.Swagger">Swagger</a> object with string keys (media type) and string values (example for that media type) .
 	 * 	<li class='note'>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 	<li class='note'>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable:
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports <a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * 	<li class='note'>
 	 * 		Resolution of variables is delayed until request time and occurs before parsing.
 	 * 		<br>This allows you to, for example, pull in a JSON construct from a properties file based on the locale of the HTTP request.
@@ -109,7 +109,7 @@ public @interface Response {
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -123,7 +123,7 @@ public @interface Response {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.

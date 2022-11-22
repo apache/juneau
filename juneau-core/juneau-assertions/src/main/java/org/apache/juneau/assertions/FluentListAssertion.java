@@ -112,7 +112,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-assertions.ja.Overview">Overview &gt; juneau-assertions &gt; Overview</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Overview &gt; juneau-assertions &gt; Overview</a>
  * </ul>
  *
  * @param <E> The element type.

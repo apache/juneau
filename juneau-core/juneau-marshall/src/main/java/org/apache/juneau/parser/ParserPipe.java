@@ -51,7 +51,7 @@ import org.apache.juneau.common.internal.*;
  * streams and readers created from other types (e.g. Files) WILL be automatically closed.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.jm.SerializersAndParsers">Serializers and Parsers</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
 public final class ParserPipe implements Closeable {

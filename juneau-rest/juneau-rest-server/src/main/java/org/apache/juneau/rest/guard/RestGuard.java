@@ -67,7 +67,7 @@ import org.apache.juneau.http.response.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.Guards">Guards</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.Guards">Guards</a>
  * </ul>
  */
 public abstract class RestGuard {

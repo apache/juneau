@@ -27,7 +27,7 @@ import org.apache.juneau.marshaller.*;
  * Keeps track of number of starts/finishes on tasks and keeps an average run time.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.jrs.ExecutionStatistics">REST method execution statistics</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.ExecutionStatistics">REST method execution statistics</a>
  * </ul>
  */
 public class MethodExecStats {

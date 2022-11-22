@@ -24,7 +24,7 @@ import org.springframework.context.*;
  * A bean store that uses Spring bean resolution to find beans if they're not already in this store.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server-springboot">juneau-rest-server-springboot</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server-springboot">juneau-rest-server-springboot</a>
  * </ul>
  */
 public class SpringBeanStore extends BeanStore {

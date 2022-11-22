@@ -93,7 +93,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-assertions.ja.Overview">juneau-assertions</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-assertions.ja.Overview">juneau-assertions</a>
  * </ul>
  *
  * @param <R> The return type.
@@ -193,7 +193,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	 * </ul>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.ComplexDataTypes">Complex Data Types</a> for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
+	 * See <a class="doclink" href="../../../../../index.html#juneau-marshall.jm.ComplexDataTypes">Complex Data Types</a> for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
 	 *
 	 * @param <T> The object type to create.
 	 * @param type The object type to create.
@@ -225,7 +225,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	 * </ul>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.jm.ComplexDataTypes">Complex Data Types</a> for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
+	 * See <a class="doclink" href="../../../../../index.html#juneau-marshall.jm.ComplexDataTypes">Complex Data Types</a> for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
 	 *
 	 * @param <T> The type to create.
 	 * @param type The object type to create.

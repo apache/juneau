@@ -44,8 +44,6 @@
  *	<review> - Identifies code that needs review.
  ***************************************************************************************************************************/
 
-body { -webkit-font-smoothing:antialiased; }
-
 /*--- Override formatting on <table class='styled'> ---*/
 table.styled,.contentContainer .description table.styled,.contentContainer ul li table.styled,ul.blockList ul.blockList li.blockList table.styled {
 	padding:0px; position:relative; width:auto; border:1px solid #9eadc0; margin-left:20px; margin-right:20px; border-collapse:collapse;
