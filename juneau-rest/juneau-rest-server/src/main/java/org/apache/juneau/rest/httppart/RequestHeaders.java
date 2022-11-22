@@ -99,7 +99,7 @@ import org.apache.juneau.http.header.*;
  * <p>
  * Entries are stored in a case-insensitive map unless overridden via the constructor.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link RequestHeader}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HttpParts">HTTP Parts</a>

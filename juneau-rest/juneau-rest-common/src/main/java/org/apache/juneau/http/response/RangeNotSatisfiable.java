@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The client has asked for a portion of the file (byte serving), but the server cannot supply that portion.
  * <br>For example, if the client asked for a part of the file that lies beyond the end of the file.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

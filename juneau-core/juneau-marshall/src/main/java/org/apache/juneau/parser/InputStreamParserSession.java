@@ -24,11 +24,11 @@ import org.apache.juneau.internal.*;
 /**
  * Subclass of parser session objects for byte-based parsers.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */

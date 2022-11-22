@@ -27,7 +27,7 @@ package org.apache.juneau.svl;
  * 	<li class='jm'>{@link #resolveTo(VarResolverSession, java.io.Writer, String)}
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SimpleVariableLanguage">Simple Variable Language</a>
  * </ul>
  */

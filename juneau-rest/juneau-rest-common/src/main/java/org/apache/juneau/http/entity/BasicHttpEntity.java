@@ -40,7 +40,7 @@ import org.apache.juneau.internal.*;
  * 		Externally-supplied/dynamic content.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
@@ -245,7 +245,7 @@ public class BasicHttpEntity implements HttpEntity {
 	/**
 	 * Sets the 'chunked' flag value to <jk>true</jk>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>If the {@link HttpEntity#getContentLength()} method returns a negative value, the HttpClient code will always
 	 * 		use chunked encoding.
 	 * </ul>
@@ -260,7 +260,7 @@ public class BasicHttpEntity implements HttpEntity {
 	/**
 	 * Sets the 'chunked' flag value.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>If the {@link HttpEntity#getContentLength()} method returns a negative value, the HttpClient code will always
 	 * 		use chunked encoding.
 	 * </ul>

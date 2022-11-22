@@ -28,7 +28,7 @@ import org.apache.juneau.urlencoding.*;
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.UonDetails">UON Details</a>
  * </ul>
  */
@@ -68,12 +68,12 @@ public @interface UonConfig {
 	 * 	<li><js>"false"</js> (default for {@link UonParser})
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonParser.Builder#decoding()}
 	 * </ul>
 	 *
@@ -93,12 +93,12 @@ public @interface UonConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonParser.Builder#validateEnd()}
 	 * </ul>
 	 *
@@ -126,12 +126,12 @@ public @interface UonConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#addBeanTypesUon()}
 	 * </ul>
 	 *
@@ -155,12 +155,12 @@ public @interface UonConfig {
 	 * 	<li><js>"false"</js> (default for {@link UonSerializer})
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#encoding()}
 	 * </ul>
 	 *
@@ -179,12 +179,12 @@ public @interface UonConfig {
 	 * 	<li><js>"PLAINTEXT"</js> - Use plain text for parameters.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#paramFormat(ParamFormat)}
 	 * </ul>
 	 *

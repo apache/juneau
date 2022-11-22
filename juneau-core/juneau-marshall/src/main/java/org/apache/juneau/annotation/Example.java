@@ -56,7 +56,7 @@ import java.lang.annotation.*;
  * 	<jk>public class</jk> C {...}
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @Documented
@@ -146,7 +146,7 @@ public @interface Example {
 	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -160,7 +160,7 @@ public @interface Example {
 	 * <p>
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *

@@ -29,7 +29,7 @@ import org.apache.juneau.swaps.*;
 /**
  * Sample REST resource for echoing HttpServletRequests back to the browser.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @Rest(

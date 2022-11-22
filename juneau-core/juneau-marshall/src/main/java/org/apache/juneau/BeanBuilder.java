@@ -21,7 +21,7 @@ import org.apache.juneau.internal.*;
 /**
  * Base class for bean builders.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <T> The bean type that the builder creates.

@@ -36,7 +36,7 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @Documented

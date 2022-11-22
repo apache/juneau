@@ -34,7 +34,7 @@ import org.apache.juneau.encoders.*;
  * <p>
  * This is a specialized subtype of <c><ja>{@link RestOp @RestOp}(method=<jsf>DELETE</jsf>)</c>.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.RestOpAnnotatedMethods">@RestOp-Annotated Methods</a>
  * </ul>
  */
@@ -100,7 +100,7 @@ public @interface RestDelete {
 	 * 	<li><js>"1.0"</js> = At least 1.0.  1.0 and 2.0 will match.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#clientVersionHeader(String)}
 	 * </ul>
 	 *
@@ -127,13 +127,13 @@ public @interface RestDelete {
 	 * 	<li><js>""</js> (or anything else) - Debug mode is inherited from class.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
 	 * </ul>
 	 *
@@ -160,13 +160,13 @@ public @interface RestDelete {
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultCharset(Charset)}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultCharset(Charset)}
 	 * 	<li class='ja'>{@link Rest#defaultCharset}
@@ -191,7 +191,7 @@ public @interface RestDelete {
 	 * 	<jk>public</jk> String doDelete(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
 	 * 	<li class='note'>
@@ -231,13 +231,13 @@ public @interface RestDelete {
 	 * </p>
 	 *
 	 * </ul>
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestAttributes(NamedAttribute...)}
 	 * 	<li class='ja'>{@link Rest#defaultRequestAttributes()}
 	 * </ul>
@@ -259,13 +259,13 @@ public @interface RestDelete {
 	 * 	<jk>public</jk> String doDelete()  {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestHeaders(org.apache.http.Header...)}
 	 * </ul>
 	 *
@@ -286,13 +286,13 @@ public @interface RestDelete {
 	 * 	<jk>public</jk> String doDelete()  {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultResponseHeaders(org.apache.http.Header...)}
 	 * </ul>
 	 *
@@ -314,7 +314,7 @@ public @interface RestDelete {
 	 * 		The description of the method in the Swagger page.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/description</c>.
 	 * 	<li class='note'>
@@ -365,7 +365,7 @@ public @interface RestDelete {
 	 * 	<jv>builder</jv>.getEncoders().set(<jv>classes</jv>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Encoders">Encoders</a>
 	 * </ul>
 	 *
@@ -379,7 +379,7 @@ public @interface RestDelete {
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with this method.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#guards()}
 	 * </ul>
 	 *
@@ -397,7 +397,7 @@ public @interface RestDelete {
 	 * Matchers are used to allow multiple Java methods to handle requests assigned to the same URL path pattern, but
 	 * differing based on some request attribute, such as a specific header value.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jac'>{@link RestMatcher}
 	 * </ul>
 	 *
@@ -408,7 +408,7 @@ public @interface RestDelete {
 	/**
 	 * Dynamically apply this annotation to the specified methods.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -438,7 +438,7 @@ public @interface RestDelete {
 	 * <p>
 	 * Note that you can also use {@link #value()} to specify the path.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 	 * </ul>
 	 *
@@ -465,7 +465,7 @@ public @interface RestDelete {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports any of the following expression constructs:
 	 * 		<ul>
@@ -493,7 +493,7 @@ public @interface RestDelete {
 	 * 		When defined on parent/child classes and methods, ALL guards within the hierarchy must pass.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#roleGuard(String)}
 	 * </ul>
 	 *
@@ -524,7 +524,7 @@ public @interface RestDelete {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}
 	 * </ul>
 	 *
@@ -546,7 +546,7 @@ public @interface RestDelete {
 	 * 		The summary of the method in the Swagger page.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/summary</c>.
 	 * 	<li class='note'>
@@ -587,7 +587,7 @@ public @interface RestDelete {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is <a class="doclink" href="../../../../../index.html#jd.Swagger">Swagger</a>.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -600,7 +600,7 @@ public @interface RestDelete {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link OpSwagger}
 	 * 	<li class='jc'>{@link SwaggerProvider}
 	 * </ul>

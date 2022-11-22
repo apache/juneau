@@ -17,7 +17,7 @@ import org.apache.http.client.methods.*;
 /**
  * Inner request class of {@link RestRequest} for requests without bodies.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */

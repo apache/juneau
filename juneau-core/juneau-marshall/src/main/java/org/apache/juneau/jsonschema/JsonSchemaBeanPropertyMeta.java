@@ -23,7 +23,7 @@ import org.apache.juneau.parser.*;
  * Metadata on bean properties specific to the JSON-Schema pulled from the {@link Schema @Schema} annotation
  * on the bean property.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */

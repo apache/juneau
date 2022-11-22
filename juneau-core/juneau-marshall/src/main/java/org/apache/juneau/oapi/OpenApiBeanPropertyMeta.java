@@ -19,7 +19,7 @@ import org.apache.juneau.oapi.annotation.*;
  * Metadata on bean properties specific to the OpenAPI serializers and parsers pulled from the {@link OpenApi @OpenApi}
  * annotation on the bean property.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.OpenApiDetails">OpenAPI Details</a>
  * </ul>
  */

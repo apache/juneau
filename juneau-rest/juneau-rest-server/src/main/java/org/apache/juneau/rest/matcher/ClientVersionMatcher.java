@@ -24,7 +24,7 @@ import org.apache.juneau.reflect.*;
 /**
  * Specialized matcher for matching client versions.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.ClientVersioning">Client Versioning</a>
  * </ul>
  */

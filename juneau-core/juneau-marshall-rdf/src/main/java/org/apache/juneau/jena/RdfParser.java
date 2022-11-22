@@ -45,11 +45,11 @@ import org.apache.juneau.xml.*;
  * 		{@link N3Parser} - N3.
  * </ul>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
@@ -214,7 +214,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	<li><js>"strict-fatal"</js>
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li>
 		 * 		{doc ext.ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
 		 * 	<li>
@@ -240,7 +240,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * <p>
 		 * Sets ARP to look for RDF embedded within an enclosing XML document.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li>
 		 * 		{doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 		 * </ul>
@@ -258,7 +258,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * <p>
 		 * Sets ARP to look for RDF embedded within an enclosing XML document.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li>
 		 * 		{doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 		 * </ul>
@@ -788,7 +788,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 		http://www.dajobe.org/2004/01/turtle/
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3()}
 		 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#ntriple()}
 		 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#turtle()}

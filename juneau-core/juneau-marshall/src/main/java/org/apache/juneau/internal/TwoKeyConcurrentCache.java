@@ -19,7 +19,7 @@ import java.util.function.*;
 /**
  * A hashmap that allows for two-part keys.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <K1> Key part 1 type.

@@ -37,11 +37,11 @@ import org.apache.juneau.xml.*;
  * description.
  * Used primarily for JUnit testing the {@link HtmlDocSerializer} class.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlDetails">HTML Details</a>
  * </ul>
  */

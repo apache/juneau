@@ -30,7 +30,7 @@ import org.apache.juneau.uon.*;
  * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.UonDetails">UON Details</a> * </ul>
  */
 @Documented
@@ -120,7 +120,7 @@ public @interface Uon {
 	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -134,7 +134,7 @@ public @interface Uon {
 	 * <p>
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *

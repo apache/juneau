@@ -19,7 +19,7 @@ import org.apache.juneau.msgpack.annotation.*;
  * Metadata on bean properties specific to the MessagePack serializers and parsers pulled from the {@link MsgPack @MsgPack}
  * annotation on the bean property.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.MsgPackDetails">MessagePack Details</a>
  * </ul>
  */

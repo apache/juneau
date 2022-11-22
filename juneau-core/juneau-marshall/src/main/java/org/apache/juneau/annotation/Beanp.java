@@ -32,7 +32,7 @@ import org.apache.juneau.*;
  * <p>
  * This annotation is applied to public fields and public getter/setter methods of beans.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.BeanpAnnotation">@Beanp Annotation</a>
  * </ul>
  */
@@ -50,7 +50,7 @@ public @interface Beanp {
 	 * <p>
 	 * The list of classes that make up the bean dictionary this bean property.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
@@ -273,7 +273,7 @@ public @interface Beanp {
 	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -379,7 +379,7 @@ public @interface Beanp {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Class, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(String, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Map)}
@@ -461,7 +461,7 @@ public @interface Beanp {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Class, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(String, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Map)}

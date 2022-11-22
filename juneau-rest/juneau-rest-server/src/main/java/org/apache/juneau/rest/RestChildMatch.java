@@ -18,7 +18,7 @@ import org.apache.juneau.rest.util.*;
 /**
  * Represents a matched {@link Rest}-annotated child on an HTTP request.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.AnnotatedClasses">@Rest-Annotated Classes</a>
  * </ul>
  */

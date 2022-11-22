@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Using this class, you can alter the CSS style and HTML content of the bean property.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlRenderAnnotation">@Html(render) Annotation</a>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlDetails">HTML Details</a>
  * </ul>

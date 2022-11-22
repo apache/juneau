@@ -33,7 +33,7 @@ import org.apache.juneau.*;
  * This annotation is typically only applied to non-bean classes.  The {@link Bean @Bean} annotation contains equivalent
  * functionality for bean classes.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @Documented
@@ -59,7 +59,7 @@ public @interface Marshalled {
 	 * 	<jk>public class</jk> MyClass {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Setting applies to specified class and all subclasses.
 	 * 	<li class='note'>
@@ -76,7 +76,7 @@ public @interface Marshalled {
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Example}
 	 * </ul>
 	 *
@@ -151,7 +151,7 @@ public @interface Marshalled {
 	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -165,7 +165,7 @@ public @interface Marshalled {
 	 * <p>
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *

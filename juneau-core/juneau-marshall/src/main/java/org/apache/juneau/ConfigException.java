@@ -17,7 +17,7 @@ import java.text.*;
 /**
  * An exception that typically occurs when trying to perform an invalid operation on a configuration property.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @serial exclude

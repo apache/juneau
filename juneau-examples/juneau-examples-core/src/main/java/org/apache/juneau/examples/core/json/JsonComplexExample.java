@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Sample class which shows the complex usage of JsonSerializer and JsonParser.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class JsonComplexExample {

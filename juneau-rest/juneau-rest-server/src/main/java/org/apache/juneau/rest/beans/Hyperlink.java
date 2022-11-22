@@ -42,7 +42,7 @@ import org.apache.juneau.dto.html5.*;
  * 	}
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.UtilityBeans">Utility Beans</a>
  * </ul>
  */

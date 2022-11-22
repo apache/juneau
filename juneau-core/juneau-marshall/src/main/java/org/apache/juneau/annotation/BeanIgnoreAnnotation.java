@@ -26,7 +26,7 @@ import org.apache.juneau.svl.*;
 /**
  * Utility classes and methods for the {@link BeanIgnore @BeanIgnore} annotation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class BeanIgnoreAnnotation {
@@ -89,7 +89,7 @@ public class BeanIgnoreAnnotation {
 	/**
 	 * Builder class.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */

@@ -21,7 +21,7 @@ package org.apache.juneau;
  * <p>
  * For example, {@link BeanMap} is a map representation of a bean.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <T> The represented class type.

@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The server is delivering only part of the resource (byte serving) due to a range header sent by the client.
  * The range header is used by HTTP clients to enable resuming of interrupted downloads, or split a download into multiple simultaneous streams.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */

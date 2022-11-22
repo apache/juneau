@@ -47,7 +47,7 @@ import org.apache.juneau.http.response.*;
  * To implement a remote interface service, developers must simply subclass from this class and implement the
  * {@link #getServiceMap()} method that maps java interfaces to POJO instances.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.RestRpc">REST/RPC</a> * </ul>
  */
 @SuppressWarnings({"serial","javadoc"})

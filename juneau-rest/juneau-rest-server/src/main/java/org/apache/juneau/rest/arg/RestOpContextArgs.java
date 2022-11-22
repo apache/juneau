@@ -30,7 +30,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='jc'>{@link SerializerSet}
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.JavaMethodParameters">Java Method Parameters</a>
  * </ul>
  */

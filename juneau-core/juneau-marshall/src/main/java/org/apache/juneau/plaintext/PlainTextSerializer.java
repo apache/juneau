@@ -41,11 +41,11 @@ import org.apache.juneau.utils.*;
  * Also serializes objects using a transform if the object class has an {@link ObjectSwap ObjectSwap&lt;?,String&gt;}
  * transform defined on it.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class PlainTextSerializer extends WriterSerializer implements PlainTextMetaProvider {

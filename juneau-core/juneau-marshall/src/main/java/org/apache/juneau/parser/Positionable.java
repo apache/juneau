@@ -15,7 +15,7 @@ package org.apache.juneau.parser;
 /**
  * Interface for objects with positions (lines/columns/byte-positions for example).
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */

@@ -35,7 +35,7 @@ import org.apache.juneau.http.response.*;
  * <p>
  * Widgets can be defined as inner classes of REST resource classes.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HtmlPredefinedWidgets">Predefined Widgets</a>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HtmlWidgets">Widgets</a>
  * </ul>
@@ -160,7 +160,7 @@ public abstract class Widget implements HtmlWidget {
 	/**
 	 * Same as {@link #loadScript(RestRequest,String)} but replaces request-time SVL variables.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.SvlVariables">SVL Variables</a>
 	 * </ul>
@@ -199,7 +199,7 @@ public abstract class Widget implements HtmlWidget {
 	/**
 	 * Same as {@link #loadStyle(RestRequest,String)} but replaces request-time SVL variables.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.SvlVariables">SVL Variables</a>
 	 * </ul>
@@ -238,7 +238,7 @@ public abstract class Widget implements HtmlWidget {
 	/**
 	 * Same as {@link #loadHtml(RestRequest,String)} but replaces request-time SVL variables.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.SvlVariables">SVL Variables</a>
 	 * </ul>

@@ -20,7 +20,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Specialized writer for serializing CSV.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>
  * 		This class is not intended for external use.
  * </ul>

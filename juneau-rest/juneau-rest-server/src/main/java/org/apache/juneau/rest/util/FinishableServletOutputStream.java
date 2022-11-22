@@ -21,7 +21,7 @@ import org.apache.juneau.encoders.*;
 /**
  * A wrapped {@link ServletOutputStream} with an added <c>finish()</c> method.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class FinishableServletOutputStream extends ServletOutputStream implements Finishable {

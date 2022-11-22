@@ -121,11 +121,11 @@ import org.apache.juneau.utils.*;
  * 	<li>{@link SqReadable} - Default serializer, single quotes, whitespace added.
  * </ul>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlDetails">XML Details</a>
  * </ul>
  */
@@ -365,7 +365,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * <p>
 		 * This setting is ignored if {@link #enableNamespaces()} is not enabled.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlNamespaces">Namespaces</a>
 		 * </ul>
 		 *
@@ -405,14 +405,14 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * <p>
 		 * This setting is ignored if {@link Builder#enableNamespaces()} is not enabled.
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		Auto-detection of namespaces can be costly performance-wise.
 		 * 		<br>In high-performance environments, it's recommended that namespace detection be
 		 * 		disabled, and that namespaces be manually defined through the {@link Builder#namespaces(Namespace...)} property.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlNamespaces">Namespaces</a>
 		 * </ul>
 		 *
@@ -441,7 +441,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * <p>
 		 * Specifies the default namespace URI for this document.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlNamespaces">Namespaces</a>
 		 * </ul>
 		 *
@@ -462,7 +462,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * <p>
 		 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlNamespaces">Namespaces</a>
 		 * </ul>
 		 *

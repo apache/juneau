@@ -32,7 +32,7 @@ import org.apache.juneau.swap.*;
  * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.BeanAnnotation">@Bean Annotation</a> * </ul>
  */
 @Documented
@@ -49,7 +49,7 @@ public @interface Bean {
 	 * <p>
 	 * The list of classes that make up the bean dictionary for all properties in this class and all subclasses.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Beanp#dictionary()}
 	 * 	<li class='ja'>{@link BeanConfig#dictionary()}
 	 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
@@ -75,7 +75,7 @@ public @interface Bean {
 	 * 	<jk>public class</jk> MyClass {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Setting applies to specified class and all subclasses.
 	 * 	<li class='note'>
@@ -92,7 +92,7 @@ public @interface Bean {
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Example}
 	 * </ul>
 	 *
@@ -113,12 +113,12 @@ public @interface Bean {
 	 * 	<jk>public class</jk> Address {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		{@link #xp()} is a shortened synonym for this value.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesExcludes(Class, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesExcludes(String, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesExcludes(Map)}
@@ -152,7 +152,7 @@ public @interface Bean {
 	 * 	<li>Return the bean itself.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link BeanConfig#findFluentSetters()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#findFluentSetters()}
 	 * </ul>
@@ -185,7 +185,7 @@ public @interface Bean {
 	 * <p>
 	 * Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jc'>{@link BeanInterceptor}
 	 * </ul>
 	 *
@@ -257,7 +257,7 @@ public @interface Bean {
 	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -271,7 +271,7 @@ public @interface Bean {
 	 * <p>
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -311,12 +311,12 @@ public @interface Bean {
 	 * 	<jk>public class</jk> Address {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		{@link #p()} is a shortened synonym for this value.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanProperties(Class, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanProperties(String, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanProperties(Map)}
@@ -339,7 +339,7 @@ public @interface Bean {
 	 * 	<jk>public class</jk> MyBean {...}
 	 * </p>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#propertyNamer(Class)}
 	 * </ul>
 	 *
@@ -361,12 +361,12 @@ public @interface Bean {
 	 * 	<jk>public class</jk> Address {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		{@link #ro()} is a shortened synonym for this value.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Class, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(String, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Map)}
@@ -397,7 +397,7 @@ public @interface Bean {
 	 * 	<jk>public class</jk> MyBean {...}
 	 * </p>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#sortProperties()}
 	 * </ul>
 	 *
@@ -452,7 +452,7 @@ public @interface Bean {
 	 * 	<jk>public class</jk> MyBean {...}
 	 * </p>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 *
@@ -476,7 +476,7 @@ public @interface Bean {
 	 * 	<jk>public class</jk> MyBean {...}
 	 * </p>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link BeanConfig#typePropertyName()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#typePropertyName(String)}
 	 * </ul>
@@ -506,12 +506,12 @@ public @interface Bean {
 	 * 	<jk>public class</jk> Address {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		{@link #wo()} is a shortened synonym for this value.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Class, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(String, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Map)}

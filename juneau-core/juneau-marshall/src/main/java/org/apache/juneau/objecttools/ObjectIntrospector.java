@@ -41,7 +41,7 @@ import org.apache.juneau.reflect.*;
  * 	<li class='warn'>This is an extremely powerful but potentially dangerous tool.  Use wisely.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public final class ObjectIntrospector {

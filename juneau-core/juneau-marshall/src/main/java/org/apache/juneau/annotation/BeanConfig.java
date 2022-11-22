@@ -29,7 +29,7 @@ import org.apache.juneau.swap.*;
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @Target({TYPE,METHOD})
@@ -70,12 +70,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"PRIVATE"</js>
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanClassVisibility(Visibility)}
 	 * </ul>
 	 *
@@ -101,12 +101,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"PRIVATE"</js>
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanConstructorVisibility(Visibility)}
 	 * </ul>
 	 *
@@ -132,12 +132,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"PRIVATE"</js>
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanFieldVisibility(Visibility)}
 	 * </ul>
 	 *
@@ -158,12 +158,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default because it introduces a slight performance penalty during serialization)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanMapPutReturnsOldValue()}
 	 * </ul>
 	 *
@@ -189,12 +189,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"PRIVATE"</js>
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanMethodVisibility(Visibility)}
 	 * </ul>
 	 *
@@ -214,14 +214,14 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li class='note'>
 	 * 		The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beansRequireDefaultConstructor()}
 	 * </ul>
 	 *
@@ -241,14 +241,14 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li class='note'>
 	 * 		The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beansRequireSerializable()}
 	 * </ul>
 	 *
@@ -268,12 +268,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beansRequireSettersForGetters()}
 	 * </ul>
 	 *
@@ -293,12 +293,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableBeansRequireSomeProperties()}
 	 * </ul>
 	 *
@@ -313,14 +313,14 @@ public @interface BeanConfig {
 	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
 	 * parser knows the data type to reconstruct.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Default value: <js>"_type"</js>.
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Bean#typePropertyName()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#typePropertyName(String)}
 	 * </ul>
@@ -355,12 +355,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.Context.Builder#debug()}
 	 * </ul>
 	 *
@@ -384,7 +384,7 @@ public @interface BeanConfig {
 	 * <p>
 	 * This setting tells the parsers which classes to look for when resolving <js>"_type"</js> attributes.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Bean#dictionary()}
 	 * 	<li class='ja'>{@link Beanp#dictionary()}
 	 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
@@ -402,7 +402,7 @@ public @interface BeanConfig {
 	 * <p>
 	 * Same as {@link #dictionary()} but replaces any existing value.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Bean#dictionary()}
 	 * 	<li class='ja'>{@link Beanp#dictionary()}
 	 * 	<li class='ja'>{@link BeanConfig#dictionary()}
@@ -433,12 +433,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Bean#findFluentSetters()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#findFluentSetters()}
 	 * </ul>
@@ -459,12 +459,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#ignoreInvocationExceptionsOnGetters()}
 	 * </ul>
 	 *
@@ -484,12 +484,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#ignoreInvocationExceptionsOnSetters()}
 	 * </ul>
 	 *
@@ -509,12 +509,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableIgnoreMissingSetters()}
 	 * </ul>
 	 *
@@ -533,12 +533,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableIgnoreTransientFields()}
 	 * </ul>
 	 *
@@ -558,12 +558,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#ignoreUnknownBeanProperties()}
 	 * </ul>
 	 *
@@ -582,12 +582,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#ignoreUnknownEnumValues()}
 	 * </ul>
 	 *
@@ -607,12 +607,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()}
 	 * </ul>
 	 *
@@ -650,7 +650,7 @@ public @interface BeanConfig {
 	 * This annotation can be used on the parent class so that it filters to all child classes, or can be set
 	 * individually on the child classes.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
 	 * </ul>
 	 *
@@ -664,12 +664,12 @@ public @interface BeanConfig {
 	 * <p>
 	 * Specifies the default locale for serializer and parser sessions.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#locale(Locale)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#locale(Locale)}
 	 * </ul>
@@ -684,12 +684,12 @@ public @interface BeanConfig {
 	 * <p>
 	 * Specifies the default media type value for serializer and parser sessions.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#mediaType(MediaType)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#mediaType(MediaType)}
 	 * </ul>
@@ -705,12 +705,12 @@ public @interface BeanConfig {
 	 * List of classes that should not be treated as beans even if they appear to be bean-like.
 	 * <br>Not-bean classes are converted to <c>Strings</c> during serialization.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link BeanIgnore}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#notBeanClasses(Class...)}
 	 * </ul>
@@ -725,7 +725,7 @@ public @interface BeanConfig {
 	 * <p>
 	 * Same as {@link #notBeanClasses()} but replaces any existing value.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#notBeanClasses(Class...)}
 	 * </ul>
 	 *
@@ -745,7 +745,7 @@ public @interface BeanConfig {
 	 * <p>
 	 * Note that you can specify suffix patterns to include all subpackages.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The default value excludes the following packages:
 	 * 		<ul class='compact'>
@@ -762,7 +762,7 @@ public @interface BeanConfig {
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#notBeanPackages(String...)}
 	 * </ul>
 	 *
@@ -776,7 +776,7 @@ public @interface BeanConfig {
 	 * <p>
 	 * Same as {@link #notBeanPackages()} but replaces any existing value.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#notBeanPackages(String...)}
 	 * </ul>
 	 *
@@ -798,7 +798,7 @@ public @interface BeanConfig {
 	 * 	<li>{@link PropertyNamerULC} - Dashed-upper-case names.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#propertyNamer(Class)}
 	 * </ul>
 	 *
@@ -825,12 +825,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#sortProperties()}
 	 * </ul>
 	 *
@@ -853,7 +853,7 @@ public @interface BeanConfig {
 	 * <br>When multiple swaps are applicable to the same class, the media type pattern defined by
 	 * {@link ObjectSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#swaps(Class...)}
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.PerMediaTypeSwaps">Per-media-type Swaps</a>
@@ -873,7 +873,7 @@ public @interface BeanConfig {
 	 * <p>
 	 * Same as {@link #swaps()} but replaces any existing value.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#swaps(Class...)}
 	 * </ul>
 	 *
@@ -887,12 +887,12 @@ public @interface BeanConfig {
 	 * <p>
 	 * Specifies the default timezone for serializer and parser sessions.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#timeZone(TimeZone)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#timeZone(TimeZone)}
 	 * </ul>
@@ -912,12 +912,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#useEnumNames()}
 	 * </ul>
 	 *
@@ -938,12 +938,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableInterfaceProxies()}
 	 * </ul>
 	 *
@@ -963,12 +963,12 @@ public @interface BeanConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#useJavaBeanIntrospector()}
 	 * </ul>
 	 *

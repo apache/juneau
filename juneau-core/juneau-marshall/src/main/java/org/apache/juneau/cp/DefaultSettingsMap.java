@@ -22,11 +22,11 @@ import java.util.*;
  * <p>
  * Consists of a simple string-keyed map of arbitrary objects.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class DefaultSettingsMap {

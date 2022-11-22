@@ -17,7 +17,7 @@ import javax.activation.*;
 /**
  * An extension of {@link javax.activation.MimetypesFileTypeMap} that includes many more media types.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class ExtendedMimetypesFileTypeMap extends MimetypesFileTypeMap {

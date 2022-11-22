@@ -63,11 +63,11 @@ import org.apache.juneau.xml.annotation.*;
  * 		<li>This bean is non-thread-safe and meant for one-time use.
  * 	</ul>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public abstract class Context implements AnnotationProvider {
@@ -683,7 +683,7 @@ public abstract class Context implements AnnotationProvider {
 		 * 	<li>A comma-delimited list of anything on this list.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig}
 		 * </ul>
 		 *
@@ -737,7 +737,7 @@ public abstract class Context implements AnnotationProvider {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>bean</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#debug()}
 		 * 	<li class='jm'>{@link org.apache.juneau.ContextSession.Builder#debug(Boolean)}
 		 * </ul>

@@ -26,7 +26,7 @@ import org.apache.juneau.urlencoding.*;
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.UrlEncodingDetails">URL-Encoding Details</a>
  * </ul>
  */
@@ -69,7 +69,7 @@ public @interface UrlEncodingConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='warn'>
 	 * 		If parsing multi-part parameters, it's highly recommended to use Collections or Lists
 	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
@@ -80,7 +80,7 @@ public @interface UrlEncodingConfig {
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer.Builder#expandedParams()}
 	 * </ul>
 	 *

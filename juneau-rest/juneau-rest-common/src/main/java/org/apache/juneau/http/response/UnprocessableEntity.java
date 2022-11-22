@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * The request was well-formed but was unable to be followed due to semantic errors.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

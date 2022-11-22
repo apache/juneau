@@ -19,7 +19,7 @@ import javax.servlet.*;
 /**
  * ServletInputStream wrapper around a normal input stream with support for limiting input.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public final class BoundedServletInputStream extends ServletInputStream {

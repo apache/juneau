@@ -40,11 +40,11 @@ import org.apache.juneau.utils.*;
  *
  * Produces the JSON-schema for the JSON produced by the {@link JsonSerializer} class with the same properties.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.JsonDetails">JSON Details</a>
  * </ul>
  */
@@ -192,7 +192,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * <p>
 		 * The description is the result of calling {@link ClassMeta#getFullName()}.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
 		 * </ul>
 		 *
@@ -220,7 +220,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * 	<li class='ja'>{@link Marshalled#example() Marshalled(example)}
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...)}
 		 * </ul>
 		 *
@@ -241,7 +241,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * <p>
 		 * Identifies whether nested descriptions are allowed in schema definitions.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#allowNestedDescriptions()}
 		 * </ul>
 		 *
@@ -259,7 +259,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * <p>
 		 * Identifies whether nested examples are allowed in schema definitions.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples()}
 		 * </ul>
 		 *
@@ -281,7 +281,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * <p>
 		 * This setting is ignored if {@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#beanDefMapper(Class)}
 		 * </ul>
 		 *

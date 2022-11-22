@@ -23,7 +23,7 @@ import java.util.*;
  * <p>
  * Used to compare version numbers.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class Version implements Comparable<Version> {

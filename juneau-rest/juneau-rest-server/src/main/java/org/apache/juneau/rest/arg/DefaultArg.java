@@ -35,7 +35,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * This is the default parameter resolver if no other applicable parameter resolvers could be found.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.JavaMethodParameters">Java Method Parameters</a>
  * </ul>
  */

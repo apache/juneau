@@ -17,11 +17,11 @@ import java.io.*;
 /**
  * Similar to {@link StringWriter}, but uses a {@link StringBuilder} instead to avoid synchronization overhead.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public final class StringBuilderWriter extends Writer {

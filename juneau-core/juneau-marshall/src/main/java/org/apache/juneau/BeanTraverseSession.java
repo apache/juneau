@@ -37,11 +37,11 @@ import org.apache.juneau.internal.*;
  * 		Ensuring infinite loops don't occur from loops in the model (when detectRecursions is enabled.
  * </ul>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class BeanTraverseSession extends BeanSession {

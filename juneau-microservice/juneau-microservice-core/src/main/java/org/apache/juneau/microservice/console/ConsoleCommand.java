@@ -92,7 +92,7 @@ import org.apache.juneau.collections.*;
  * 	<jv>args</jv>.get(<js>"optArg2"</js>, String[].<jk>class</jk>);  <jc>// ["baz qux"]</jc>
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-microservice-core">juneau-microservice-core</a>
  * </ul>
  */

@@ -39,7 +39,7 @@ import org.apache.juneau.collections.*;
  * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean(<js>"bar"</js>));  <jc>// Produces "{foo:'bar'}"</jc>
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
  * </ul>
  *

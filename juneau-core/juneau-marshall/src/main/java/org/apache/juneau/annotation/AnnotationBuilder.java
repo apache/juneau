@@ -19,7 +19,7 @@ import org.apache.juneau.internal.*;
 /**
  * Builder for {@link AnnotationImpl} objects.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @FluentSetters

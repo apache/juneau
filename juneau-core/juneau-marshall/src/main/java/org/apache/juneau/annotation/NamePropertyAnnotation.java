@@ -26,7 +26,7 @@ import org.apache.juneau.svl.*;
 /**
  * Utility classes and methods for the {@link NameProperty @NameProperty} annotation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class NamePropertyAnnotation {
@@ -78,7 +78,7 @@ public class NamePropertyAnnotation {
 	/**
 	 * Builder class.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */

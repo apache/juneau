@@ -21,7 +21,7 @@ import java.util.*;
 /**
  * Represents a parsed URL path-info string.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class UrlPath {

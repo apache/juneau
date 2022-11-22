@@ -22,7 +22,7 @@ import org.apache.juneau.collections.*;
 /**
  * Represents a wrapped {@link Map} where entries in the map can be removed without affecting the underlying map.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <T> The class type of the wrapped bean.

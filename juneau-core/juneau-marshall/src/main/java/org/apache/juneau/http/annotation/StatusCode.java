@@ -84,18 +84,18 @@ import org.apache.juneau.annotation.*;
  * The method being annotated must be public and return a numeric value.
  *
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Swagger</a>
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h5>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrc.Response">@Response</a>
  * </ul>
  *
  * <p>
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @Documented
@@ -109,7 +109,7 @@ public @interface StatusCode {
 	/**
 	 * Dynamically apply this annotation to the specified classes.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -123,7 +123,7 @@ public @interface StatusCode {
 	 * <p>
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *

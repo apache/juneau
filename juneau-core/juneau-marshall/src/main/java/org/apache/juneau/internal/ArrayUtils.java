@@ -23,7 +23,7 @@ import org.apache.juneau.common.internal.*;
 /**
  * Quick and dirty utilities for working with arrays.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public final class ArrayUtils {

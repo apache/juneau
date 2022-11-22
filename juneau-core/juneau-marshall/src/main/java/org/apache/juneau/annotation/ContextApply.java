@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 /**
  * Applied to Config annotations to identify the class used to push the values into a property store.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link AnnotationApplier}
  * </ul>
  */

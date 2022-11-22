@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.HtmlDetails">HTML Details</a>
  * </ul>
  */
@@ -73,7 +73,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Format: HTML
 	 * 	<li class='note'>
@@ -91,7 +91,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#aside(String...)}
 	 * </ul>
 	 *
@@ -130,7 +130,7 @@ public @interface HtmlDocConfig {
 	 * 	<li><js>"DEFAULT"</js> (defaults to <js>"RIGHT"</js>)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
@@ -139,7 +139,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#asideFloat(AsideFloat)}
 	 * </ul>
 	 *
@@ -162,7 +162,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Format: HTML
 	 * 	<li class='note'>
@@ -180,7 +180,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#footer(String...)}
 	 * </ul>
 	 *
@@ -203,7 +203,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Format: HTML
 	 * 	<li class='note'>
@@ -219,7 +219,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#head(String...)}
 	 * </ul>
 	 *
@@ -243,7 +243,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Format: HTML
 	 * 	<li class='note'>
@@ -261,7 +261,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class if not overridden.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#header(String...)}
 	 * </ul>
 	 *
@@ -285,7 +285,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Format: HTML
 	 * 	<li class='note'>
@@ -305,7 +305,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#nav(String...)}
 	 * </ul>
 	 *
@@ -350,7 +350,7 @@ public @interface HtmlDocConfig {
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServlet {
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
@@ -368,7 +368,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#navlinks(String...)}
 	 * </ul>
 	 *
@@ -389,7 +389,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Format: HTML
 	 * 	<li class='note'>
@@ -398,7 +398,7 @@ public @interface HtmlDocConfig {
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#noResultsMessage(String)}
 	 * </ul>
 	 *
@@ -417,12 +417,12 @@ public @interface HtmlDocConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#nowrap()}
 	 * </ul>
 	 *
@@ -445,7 +445,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Format: Javascript
 	 * 	<li class='note'>
@@ -463,7 +463,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#script(String...)}
 	 * </ul>
 	 *
@@ -487,7 +487,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Format: CSS
 	 * 	<li class='note'>
@@ -505,7 +505,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#style(String...)}
 	 * </ul>
 	 *
@@ -522,7 +522,7 @@ public @interface HtmlDocConfig {
 	 * <p>
 	 * Note that this stylesheet is controlled by the <code><ja>@Rest</ja>.stylesheet()</code> annotation.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Format: URL
 	 * 	<li class='note'>
@@ -534,7 +534,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#stylesheet(String...)}
 	 * </ul>
 	 *
@@ -559,7 +559,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
 	 * 	<li class='note'>
@@ -567,7 +567,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#template(Class)}
 	 * </ul>
 	 *
@@ -608,14 +608,14 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
 	 * 	<li class='note'>
 	 * 		Values are appended to the existing list.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HtmlWidgets">Widgets</a>
 	 * </ul>
 	 *

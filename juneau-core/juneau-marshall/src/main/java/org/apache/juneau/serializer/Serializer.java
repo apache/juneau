@@ -55,11 +55,11 @@ import org.apache.juneau.utils.*;
  * </ul>
  * <br>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
@@ -398,7 +398,7 @@ public class Serializer extends BeanTraverseContext {
 		 * <p>
 		 * When enabled, null bean values will be serialized to the output.
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>Not enabling this setting will cause <c>Map</c>s with <jk>null</jk> values to be lost during parsing.
 		 * </ul>
 		 *
@@ -748,7 +748,7 @@ public class Serializer extends BeanTraverseContext {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.toString(<jv>myUrl</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.MarshallingUris">URIs</a>
 		 * </ul>
 		 *
@@ -782,7 +782,7 @@ public class Serializer extends BeanTraverseContext {
 		 * 		- Relative URIs should be considered relative to the request URI.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.MarshallingUris">URIs</a>
 		 * </ul>
 		 *
@@ -820,7 +820,7 @@ public class Serializer extends BeanTraverseContext {
 		 * 		- Don't do any URL resolution.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.MarshallingUris">URIs</a>
 		 * </ul>
 		 *

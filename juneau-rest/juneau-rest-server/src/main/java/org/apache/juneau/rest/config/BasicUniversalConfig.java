@@ -113,7 +113,7 @@ import org.apache.juneau.xml.*;
  * 	on this interface to be overridden by annotations defined on the implemented class.
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<ul class='javatreec'>
  * 		<li class='jc'>{@link BasicRestServlet}
  * 		<li class='jc'>{@link BasicRestServletGroup}

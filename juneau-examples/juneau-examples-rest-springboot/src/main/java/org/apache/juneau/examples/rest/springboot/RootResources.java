@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.annotation.*;
 /**
  * Sample REST resource showing how to implement a "router" resource page.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../../index.html#jrss.Overview">juneau-rest-server-springboot &gt; Overview</a>
  * </ul>
  *

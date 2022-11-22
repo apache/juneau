@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * Note that this annotation is optional if you do not need to override any of the values.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrc.Proxies">REST Proxies</a>
  * </ul>
  */
@@ -137,7 +137,7 @@ public @interface RemoteOp {
 	 * 	<ja>@RemoteOp</ja>(<js>"PUT /{propertyName}"</js>)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The path portion is optional.
 	 * </ul>

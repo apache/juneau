@@ -18,7 +18,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Utility classes and methods for the {@link HasFormData @HasFormData} annotation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class HasFormDataAnnotation {
@@ -46,7 +46,7 @@ public class HasFormDataAnnotation {
 	/**
 	 * Builder class.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */

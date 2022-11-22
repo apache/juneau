@@ -29,11 +29,11 @@ import org.apache.juneau.utils.*;
  * <p>
  * Base class that serves as the parent class for all serializers and other classes that traverse POJOs.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public abstract class BeanTraverseContext extends BeanContextable {
@@ -117,7 +117,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * <br>In general, unchecked recursions cause stack-overflow-errors.
 		 * <br>These show up as {@link BeanRecursionException BeanRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		Checking for recursion can cause a small performance penalty.
 		 * </ul>
@@ -174,7 +174,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * 	{A:{B:{C:<jk>null</jk>}}}
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		Checking for recursion can cause a small performance penalty.
 		 * </ul>
@@ -271,7 +271,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * 		.build();
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link Builder#maxDepth(int)}
 		 * </ul>
 		 *

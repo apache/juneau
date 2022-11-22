@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Lightweight utility class for introspecting information about a method parameter.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public final class ParamInfo {

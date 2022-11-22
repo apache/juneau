@@ -44,11 +44,11 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li>{@link N3Serializer} - N3.
  * </ul>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
@@ -265,7 +265,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * 	<li><js>"strict-fatal"</js>
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li>
 		 * 		{doc ext.ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
 		 * 	<li>
@@ -291,7 +291,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * Sets ARP to look for RDF embedded within an enclosing XML document.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li>
 		 * 		{doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 		 * </ul>
@@ -309,7 +309,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * Sets ARP to look for RDF embedded within an enclosing XML document.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li>
 		 * 		{doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 		 * </ul>
@@ -871,7 +871,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * 	<li><js>"MULTI_VALUED"</js> - Multi-valued properties.
 		 * </ul>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
 		 * 		lost.
@@ -948,7 +948,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * 		http://www.dajobe.org/2004/01/turtle/
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link #n3()}
 		 * 	<li class='jm'>{@link #ntriple()}
 		 * 	<li class='jm'>{@link #turtle()}

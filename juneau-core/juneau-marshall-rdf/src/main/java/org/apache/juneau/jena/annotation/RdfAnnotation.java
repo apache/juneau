@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
 /**
  * Utility classes and methods for the {@link Rdf @Rdf} annotation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
@@ -96,7 +96,7 @@ public class RdfAnnotation {
 	/**
 	 * Builder class.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */

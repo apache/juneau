@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * Indicates that the request could not be processed because of conflict in the request, such as an edit conflict between multiple simultaneous updates.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

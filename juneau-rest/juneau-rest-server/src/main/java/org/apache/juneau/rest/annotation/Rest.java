@@ -46,7 +46,7 @@ import org.apache.juneau.serializer.*;
  * Usually used on a subclass of {@link RestServlet}, but can be used to annotate any class that you want to expose as
  * a REST resource.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.AnnotatedClasses">@Rest-Annotated Classes</a>
  * </ul>
  */
@@ -69,13 +69,13 @@ public @interface Rest {
 	 *  ?content=(name='John%20Smith',age=45)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#disableContentParam()}
 	 * </ul>
 	 *
@@ -95,7 +95,7 @@ public @interface Rest {
 	 *  ?Accept=text/json&amp;Content-Type=text/json
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -105,7 +105,7 @@ public @interface Rest {
 	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#allowedHeaderParams(String)}
 	 * </ul>
 	 *
@@ -125,7 +125,7 @@ public @interface Rest {
 	 * <c>PATCH</c> is not part of the original HTTP spec), you can add a <c>X-Method: PATCH</c> header on a normal
 	 * <c>HTTP POST /foo</c> request call which will make the HTTP call look like a <c>PATCH</c> request in any of the REST APIs.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -153,7 +153,7 @@ public @interface Rest {
 	 *  ?method=OPTIONS
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -163,7 +163,7 @@ public @interface Rest {
 	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#allowedMethodParams(String)}
 	 * </ul>
 	 *
@@ -174,7 +174,7 @@ public @interface Rest {
 	/**
 	 * Specifies the logger to use for logging of HTTP requests and responses.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The default call logger if not specified is {@link CallLogger}.
 	 * 	<li class='note'>
@@ -192,7 +192,7 @@ public @interface Rest {
 	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#callLogger()}
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.LoggingAndDebugging">Logging / Debugging</a>
 	 * </ul>
@@ -230,7 +230,7 @@ public @interface Rest {
 	 * 	<li>Children are list parent-to-child in the order they appear in the annotation.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#children(Object...)}
 	 * </ul>
 	 *
@@ -244,13 +244,13 @@ public @interface Rest {
 	 * <p>
 	 * Specifies the name of the header used to denote the client version on HTTP requests.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#clientVersionHeader(String)}
 	 * </ul>
 	 *
@@ -269,7 +269,7 @@ public @interface Rest {
 	 * 	<li>Config file is searched for in child-to-parent order.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -278,7 +278,7 @@ public @interface Rest {
 	 * 		returned by the {@link Config#getSystemDefault()}.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#config(Config)}
 	 * </ul>
 	 *
@@ -292,13 +292,13 @@ public @interface Rest {
 	 * <p>
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#consumes(MediaType...)}
 	 * </ul>
 	 *
@@ -319,7 +319,7 @@ public @interface Rest {
 	 * 	<li>Converters on methods are executed before those on classes.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()} - Registering converters with REST resources.
 	 * </ul>
 	 *
@@ -345,7 +345,7 @@ public @interface Rest {
 	 * 	<li><js>"conditional"</js> - Debug is enabled only for requests that have a <c class='snippet'>Debug: true</c> header.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -354,7 +354,7 @@ public @interface Rest {
 	 * 		calling {@link RestRequest#setDebug()}.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
 	 * </ul>
 	 *
@@ -367,7 +367,7 @@ public @interface Rest {
 	 *
 	 * TODO
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
 	 * </ul>
 	 *
@@ -476,7 +476,7 @@ public @interface Rest {
 	 * 	<jk>public class</jk> MyResource {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -499,7 +499,7 @@ public @interface Rest {
 	 * <p>
 	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -515,13 +515,13 @@ public @interface Rest {
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultCharset(Charset)}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultCharset(Charset)}
 	 * 	<li class='ja'>{@link RestOp#defaultCharset}
@@ -544,7 +544,7 @@ public @interface Rest {
 	 * <p>
 	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -579,13 +579,13 @@ public @interface Rest {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestAttributes(NamedAttribute...)}
 	 * 	<li class='ja'>{@link RestOp#defaultRequestAttributes()}
 	 * 	<li class='ja'>{@link RestGet#defaultRequestAttributes()}
@@ -604,13 +604,13 @@ public @interface Rest {
 	 * <p>
 	 * Specifies default values for request headers if they're not passed in through the request.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestHeaders(org.apache.http.Header...)}
 	 * </ul>
 	 *
@@ -624,13 +624,13 @@ public @interface Rest {
 	 * <p>
 	 * Specifies default values for response headers if they're not set after the Java REST method is called.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultResponseHeaders(org.apache.http.Header...)}
 	 * </ul>
 	 *
@@ -649,7 +649,7 @@ public @interface Rest {
 	 * 	<li>Description is searched for in child-to-parent order.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -701,7 +701,7 @@ public @interface Rest {
 	 * 	<li>Encoders on child are combined with those on parent class.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Encoders">Encoders</a>
 	 * </ul>
 	 *
@@ -722,7 +722,7 @@ public @interface Rest {
 	 * 	<li>Guards on methods are executed before those on classes.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#guards()}
 	 * </ul>
 	 *
@@ -737,13 +737,13 @@ public @interface Rest {
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
 	 * in out-of-memory errors which could affect system stability.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#maxInput(String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#maxInput(String)}
 	 * 	<li class='ja'>{@link RestOp#maxInput}
@@ -780,7 +780,7 @@ public @interface Rest {
 	 * <p>
 	 * If the bundle name is not specified, the class name of the resource object is used.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -793,7 +793,7 @@ public @interface Rest {
 	/**
 	 * Dynamically apply this annotation to the specified classes.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -807,7 +807,7 @@ public @interface Rest {
 	 * <p>
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -864,7 +864,7 @@ public @interface Rest {
 	 * 	<li>Parsers on methods take precedence over those on classes.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Marshalling">Marshalling</a>
 	 * </ul>
 	 *
@@ -969,7 +969,7 @@ public @interface Rest {
 	 * When variables are used on a path of a top-level resource deployed as a Spring bean in a Spring Boot application,
 	 * the first part of the URL must be a literal which will be used as the servlet path of the registered servlet.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The leading slash is optional.  <js>"/myResource"</js> and <js>"myResource"</js> is equivalent.
 	 * 	<li class='note'>
@@ -983,7 +983,7 @@ public @interface Rest {
 	 * 	<li>Path is searched for in child-to-parent order.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#path(String)}
 	 * </ul>
 	 *
@@ -997,13 +997,13 @@ public @interface Rest {
 	 * <p>
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#produces(MediaType...)}
 	 * </ul>
 	 *
@@ -1017,7 +1017,7 @@ public @interface Rest {
 	 * <p>
 	 * Render stack traces in HTTP response bodies when errors occur.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -1034,7 +1034,7 @@ public @interface Rest {
 	 * Specifies a list of {@link ResponseProcessor} classes that know how to convert POJOs returned by REST methods or
 	 * set via {@link RestResponse#setContent(Object)} into appropriate HTTP responses.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#responseProcessors()}
 	 * </ul>
 	 *
@@ -1048,7 +1048,7 @@ public @interface Rest {
 	 * <p>
 	 * Allows you to extend the {@link RestChildren} class to modify how any of the methods are implemented.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restChildrenClass(Class)}
 	 * </ul>
 	 *
@@ -1062,7 +1062,7 @@ public @interface Rest {
 	 * <p>
 	 * Allows you to extend the {@link RestOperations} class to modify how any of the methods are implemented.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restOperationsClass(Class)}
 	 * </ul>
 	 *
@@ -1078,7 +1078,7 @@ public @interface Rest {
 	 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
 	 * <br>This setting allows you to provide your own resolvers for your own class types that you want resolved.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restOpArgs(Class...)}
 	 * </ul>
 	 *
@@ -1106,7 +1106,7 @@ public @interface Rest {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports any of the following expression constructs:
 	 * 		<ul>
@@ -1132,7 +1132,7 @@ public @interface Rest {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#roleGuard(String)}
 	 * </ul>
 	 *
@@ -1163,7 +1163,7 @@ public @interface Rest {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}
 	 * </ul>
 	 *
@@ -1220,7 +1220,7 @@ public @interface Rest {
 	 * 	<li>Serializers on methods take precedence over those on classes.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Marshalling">Marshalling</a>
 	 * </ul>
 	 *
@@ -1246,7 +1246,7 @@ public @interface Rest {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -1307,7 +1307,7 @@ public @interface Rest {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Swagger}
 	 * </ul>
 	 *
@@ -1318,7 +1318,7 @@ public @interface Rest {
 	/**
 	 * Swagger provider.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#swaggerProvider(Class)}
 	 * </ul>
 	 *
@@ -1337,7 +1337,7 @@ public @interface Rest {
 	 * 	<li>Label is searched for in child-to-parent order.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -1355,13 +1355,13 @@ public @interface Rest {
 	 * <p>
 	 * Overrides the authority path value for this resource and any child resources.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#uriAuthority(String)}
 	 * </ul>
 	 *
@@ -1375,13 +1375,13 @@ public @interface Rest {
 	 * <p>
 	 * Overrides the context path value for this resource and any child resources.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#uriContext(String)}
 	 * </ul>
 	 *
@@ -1398,13 +1398,13 @@ public @interface Rest {
 	 * <p>
 	 * See {@link UriResolution} for possible values.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#uriRelativity(UriRelativity)}
 	 * </ul>
 	 *
@@ -1421,13 +1421,13 @@ public @interface Rest {
 	 * <p>
 	 * See {@link UriResolution} for possible values.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#uriResolution(UriResolution)}
 	 * </ul>
 	 *

@@ -50,7 +50,7 @@ import org.apache.juneau.common.internal.*;
  * Note that Readers and InputStreams will NOT be automatically closed when {@link #close()} is called, but
  * streams and readers created from other types (e.g. Files) WILL be automatically closed.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */

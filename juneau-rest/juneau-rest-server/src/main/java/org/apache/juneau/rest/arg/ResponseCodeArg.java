@@ -23,7 +23,7 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * Resolves method parameters annotated with {@link StatusCode} on {@link RestOp}-annotated Java methods.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.JavaMethodParameters">Java Method Parameters</a>
  * </ul>
  */

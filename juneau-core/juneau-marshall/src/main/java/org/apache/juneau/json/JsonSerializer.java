@@ -95,11 +95,11 @@ import org.apache.juneau.utils.*;
  * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>someObject</jv>);
  * </p>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.JsonDetails">JSON Details</a>
  * </ul>
  */
@@ -396,7 +396,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * <p>
 		 * Shortcut for calling <c>simple().sq()</c>.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#quoteChar(char)}
 		 * </ul>
 		 *

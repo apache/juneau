@@ -29,7 +29,7 @@ import org.apache.juneau.swap.*;
  * <p>
  * Strings are converted to objects using {@link DatatypeFactory#newXMLGregorianCalendar(String)}.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
  * </ul>
  */

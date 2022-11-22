@@ -35,7 +35,7 @@ import java.lang.annotation.*;
  * 	)
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Swagger</a>
  * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#licenseObject">Swagger License Object</a>
  * </ul>
@@ -47,7 +47,7 @@ public @interface License {
 	/**
 	 * <mk>name</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#licenseObject">Swagger License Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * 	<li class='note'>
@@ -61,7 +61,7 @@ public @interface License {
 	/**
 	 * <mk>url</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#licenseObject">Swagger License Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * 	<li class='note'>

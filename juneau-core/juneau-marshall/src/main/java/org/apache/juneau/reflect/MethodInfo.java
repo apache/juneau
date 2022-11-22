@@ -27,7 +27,7 @@ import org.apache.juneau.internal.*;
 /**
  * Lightweight utility class for introspecting information about a method.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @FluentSetters

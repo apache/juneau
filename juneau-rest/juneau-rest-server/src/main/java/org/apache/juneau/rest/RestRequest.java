@@ -194,7 +194,7 @@ import org.apache.juneau.uon.*;
  * 	</ul>
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @SuppressWarnings({ "unchecked", "unused" })
@@ -422,7 +422,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		This object is modifiable.
 	 * 	<li class='note'>
@@ -433,7 +433,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		The {@link Header @Header} annotation can be used to access individual header values.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
 	 * </ul>
 	 *
@@ -651,7 +651,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		This object is modifiable.
 	 * 	<li class='note'>
@@ -662,7 +662,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		The {@link Attr @Attr} annotation can be used to access individual attribute values.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
 	 * </ul>
 	 *
@@ -724,12 +724,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		This object is modifiable.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
 	 * </ul>
 	 *
@@ -805,7 +805,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		This object is modifiable.
 	 * 	<li class='note'>
@@ -816,7 +816,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		The {@link FormData @FormDAta} annotation can be used to access individual form data parameter values.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
 	 * </ul>
 	 *
@@ -899,7 +899,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		This object is modifiable.
 	 * </ul>
@@ -967,14 +967,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The {@link RequestContent} object can also be passed as a parameter on the method.
 	 * 	<li class='note'>
 	 * 		The {@link Content @Content} annotation can be used to access the content as well.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
 	 * </ul>
 	 *
@@ -1167,12 +1167,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The {@link Swagger} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(Class)}
 	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Swagger">Swagger</a>
@@ -1256,12 +1256,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The {@link Messages} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessage(String,Object...)}
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.LocalizedMessages">Localized Messages</a>
 	 * </ul>
@@ -1410,12 +1410,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The {@link VarResolverSession} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * </ul>
@@ -1472,12 +1472,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The {@link Config} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ConfigurationFiles">Configuration Files</a>
 	 * </ul>
 	 *

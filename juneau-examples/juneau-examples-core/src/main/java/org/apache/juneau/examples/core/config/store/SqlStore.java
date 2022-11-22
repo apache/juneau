@@ -28,7 +28,7 @@ import org.apache.juneau.config.store.*;
  * 	<li class='jm'>{@link #exists(String)}
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @SuppressWarnings({"resource","unused","javadoc"})

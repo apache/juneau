@@ -27,7 +27,7 @@ import org.apache.juneau.parser.*;
 /**
  * Utility classes and methods for the {@link SubItems @SubItems} annotation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class SubItemsAnnotation {
@@ -103,7 +103,7 @@ public class SubItemsAnnotation {
 	/**
 	 * Builder class.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */

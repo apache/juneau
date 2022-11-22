@@ -88,7 +88,7 @@ import org.apache.juneau.serializer.*;
  * <p>
  * The normal object representation of an object.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
  * </ul>
  *
@@ -150,7 +150,7 @@ public abstract class ObjectSwap<T,S> {
 	 * <p>
 	 * This method is the programmatic equivalent to the {@link Swap#mediaTypes() @Swap(mediaTypes)} annotation.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.PerMediaTypeSwaps">Per-media-type Swaps</a>
 	 * </ul>
 	 * @return The media types that this swap is applicable to, or <jk>null</jk> if it's applicable for all media types.
@@ -171,7 +171,7 @@ public abstract class ObjectSwap<T,S> {
 	 * <p>
 	 * This method is the programmatic equivalent to the {@link Swap#template() @Swap(template)} annotation.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.TemplatedSwaps">Templated Swaps</a>
 	 * </ul>
 	 *
@@ -184,7 +184,7 @@ public abstract class ObjectSwap<T,S> {
 	/**
 	 * Sets the media types that this swap is associated with.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.PerMediaTypeSwaps">Per-media-type Swaps</a>
 	 * </ul>
 	 *
@@ -199,7 +199,7 @@ public abstract class ObjectSwap<T,S> {
 	/**
 	 * Sets the template string on this swap.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.TemplatedSwaps">Templated Swaps</a>
 	 * </ul>
 	 *

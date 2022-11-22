@@ -25,7 +25,7 @@ import java.util.function.*;
  * Designed to create arrays without array copying.
  * Initial capacity cannot be exceeded without throwing a {@link ArrayIndexOutOfBoundsException}.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <E> The array element type.

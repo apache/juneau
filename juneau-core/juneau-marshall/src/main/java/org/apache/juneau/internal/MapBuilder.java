@@ -27,7 +27,7 @@ import org.apache.juneau.parser.*;
 /**
  * Builder for maps.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <K> Key type.

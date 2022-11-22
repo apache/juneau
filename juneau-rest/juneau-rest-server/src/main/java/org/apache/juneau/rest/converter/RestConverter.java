@@ -71,7 +71,7 @@ import org.apache.juneau.serializer.*;
  * 	<li class='jc'>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()}
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Converters">Converters</a>
  * </ul>

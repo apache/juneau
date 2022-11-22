@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * The requester has asked the server to switch protocols and the server has agreed to do so.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */

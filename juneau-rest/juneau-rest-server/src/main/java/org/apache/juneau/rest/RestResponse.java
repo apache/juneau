@@ -102,7 +102,7 @@ import org.apache.juneau.serializer.*;
  * 	</ul>
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public final class RestResponse extends HttpServletResponseWrapper {
@@ -209,14 +209,14 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Calling this method with a <jk>null</jk> value is NOT the same as not calling this method at all.
 	 * 		<br>A <jk>null</jk> output value means we want to serialize <jk>null</jk> as a response (e.g. as a JSON <c>null</c>).
 	 * 		<br>Not calling this method or returning a value means you're handing the response yourself via the underlying stream or writer.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#responseProcessors()}
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.RestOpAnnotatedMethods">@RestOp-Annotated Methods</a>
 	 * </ul>

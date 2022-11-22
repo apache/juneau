@@ -22,7 +22,7 @@ import org.apache.juneau.http.header.*;
 /**
  * Identifies a proxy against a REST interface.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrc.Proxies">REST Proxies</a> * </ul>
  */
 @Documented
@@ -40,7 +40,7 @@ public @interface Remote {
 	 * 	<li>No path interpreted as the class name (e.g. <js>"http://localhost/root-url/org.foo.MyInterface"</js>)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
@@ -56,7 +56,7 @@ public @interface Remote {
 	 * <p>
 	 * Specifies headers to set on all requests.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
@@ -72,7 +72,7 @@ public @interface Remote {
 	 * <p>
 	 * Specifies a supplier of headers to set on all requests.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supplier class must provide a public no-arg constructor.
 	 * </ul>
@@ -108,7 +108,7 @@ public @interface Remote {
 	 * 	<jk>public</jk> Object method3()  {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
@@ -124,7 +124,7 @@ public @interface Remote {
 	 * <p>
 	 * The default value is <js>"Client-Version"</js>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).

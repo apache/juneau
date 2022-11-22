@@ -38,7 +38,7 @@ import org.apache.juneau.oapi.*;
  * 	<li>Return type interfaces of client-side <ja>@RemoteOp</ja>-annotated methods.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrc.Response">@Response</a>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Swagger</a>
  * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#responseObject">Swagger Response Object</a>
@@ -74,7 +74,7 @@ public @interface Response {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="../../../../../index.html#jd.Swagger">Swagger</a> object with string keys (media type) and string values (example for that media type) .
 	 * 	<li class='note'>
@@ -108,7 +108,7 @@ public @interface Response {
 	/**
 	 * Dynamically apply this annotation to the specified classes.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -122,7 +122,7 @@ public @interface Response {
 	 * <p>
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *

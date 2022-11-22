@@ -36,7 +36,7 @@ import org.apache.juneau.jena.*;
  * 	<li>Override the default behavior of how collections and arrays are serialized.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
@@ -161,7 +161,7 @@ public @interface Rdf {
 	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'>{doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 *
@@ -175,7 +175,7 @@ public @interface Rdf {
 	 * <p>
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'>{doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
 	 *

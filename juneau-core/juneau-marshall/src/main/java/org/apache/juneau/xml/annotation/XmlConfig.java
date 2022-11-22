@@ -31,7 +31,7 @@ import org.apache.juneau.xml.*;
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.XmlDetails">XML Details</a>
  * </ul>
  */
@@ -65,7 +65,7 @@ public @interface XmlConfig {
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#eventAllocator(Class)}
 	 * </ul>
 	 *
@@ -85,12 +85,12 @@ public @interface XmlConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#preserveRootElement()}
 	 * </ul>
 	 *
@@ -104,12 +104,12 @@ public @interface XmlConfig {
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Reporters are not copied to new parsers during a clone.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#reporter(Class)}
 	 * </ul>
 	 *
@@ -123,7 +123,7 @@ public @interface XmlConfig {
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#resolver(Class)}
 	 * </ul>
 	 *
@@ -145,12 +145,12 @@ public @interface XmlConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#validating()}
 	 * </ul>
 	 *
@@ -178,12 +178,12 @@ public @interface XmlConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#addBeanTypesXml()}
 	 * </ul>
 	 *
@@ -202,14 +202,14 @@ public @interface XmlConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		This setting is ignored if {@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()} is not enabled.
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#addNamespaceUrisToRoot()}
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.XmlNamespaces">Namespaces</a>
 	 * </ul>
@@ -240,7 +240,7 @@ public @interface XmlConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='warn'>
 	 * 		Auto-detection of namespaces can be costly performance-wise.
 	 * 		<br>In high-performance environments, it's recommended that namespace detection be
@@ -249,7 +249,7 @@ public @interface XmlConfig {
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#disableAutoDetectNamespaces()}
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.XmlNamespaces">Namespaces</a>
 	 * </ul>
@@ -264,12 +264,12 @@ public @interface XmlConfig {
 	 * <p>
 	 * Specifies the default namespace URI for this document.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#defaultNamespace(Namespace)}
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.XmlNamespaces">Namespaces</a>
 	 * </ul>
@@ -289,12 +289,12 @@ public @interface XmlConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()}
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.XmlNamespaces">Namespaces</a>
 	 * </ul>
@@ -309,12 +309,12 @@ public @interface XmlConfig {
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#namespaces(Namespace...)}
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.XmlNamespaces">Namespaces</a>
 	 * </ul>

@@ -38,7 +38,7 @@ import org.apache.juneau.internal.*;
  * Not part of the RFC2616 specification, but provided to allow for HTTP responses to be tailored to specified
  * known client versions.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

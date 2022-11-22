@@ -24,7 +24,7 @@ import org.apache.juneau.swap.*;
  * The swap is identical to just calling {@link StackTraceElement#toString()}, but provides the ability to
  * parse the resulting string back into a bean.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
  * </ul>
  */

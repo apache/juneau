@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * The request was directed at a server that is not able to produce a response (for example because of connection reuse).
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

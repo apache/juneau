@@ -26,11 +26,11 @@ import org.apache.juneau.internal.*;
 /**
  * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>This class is not typically thread safe.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public abstract class ContextSession {
@@ -78,7 +78,7 @@ public abstract class ContextSession {
 		 * <p>
 		 * If not specified, defaults to {@link Context.Builder#debug()}.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#debug()}
 		 * 	<li class='jm'>{@link org.apache.juneau.Context.Builder#debug()}
 		 *

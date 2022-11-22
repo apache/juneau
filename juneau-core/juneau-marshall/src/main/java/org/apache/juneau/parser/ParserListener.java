@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 /**
  * Class for listening for certain parse events during a document parse.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */

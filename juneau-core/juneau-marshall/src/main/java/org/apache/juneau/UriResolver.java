@@ -49,7 +49,7 @@ import java.net.*;
  * 	<li><js>""</js> - Path-info URI.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class UriResolver {

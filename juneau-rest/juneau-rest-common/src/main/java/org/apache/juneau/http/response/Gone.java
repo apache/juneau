@@ -35,7 +35,7 @@ import org.apache.juneau.internal.*;
  * <br>Clients such as search engines should remove the resource from their indices.
  * <br>Most use cases do not require clients and search engines to purge the resource, and a <js>"404 Not Found"</js> may be used instead.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

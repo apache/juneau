@@ -17,7 +17,7 @@ import org.apache.juneau.*;
 /**
  * Interface for providing access to {@link SoapXmlClassMeta} and {@link SoapXmlBeanPropertyMeta} objects.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public interface SoapXmlMetaProvider extends AnnotationProvider {

@@ -24,19 +24,19 @@ import org.apache.juneau.internal.*;
 /**
  * Base class for all assertion objects.
  *
- * <h5 class='topic'>Test Methods</h5>
+ * <h5 class='section'>Test Methods:</h5><ul>
  * <p>
  * <ul class='javatree'>
  * 	<li>None
  * </ul>
  *
- * <h5 class='topic'>Transform Methods</h5>
+ * <h5 class='section'>Transform Methods:</h5><ul>
  * <p>
  * <ul class='javatree'>
  * 	<li>None
  * </ul>
  *
- * <h5 class='topic'>Configuration Methods</h5>
+ * <h5 class='section'>Configuration Methods:</h5><ul>
  * <p>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}

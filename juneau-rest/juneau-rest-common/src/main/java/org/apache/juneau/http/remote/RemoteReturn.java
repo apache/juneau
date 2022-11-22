@@ -15,7 +15,7 @@ package org.apache.juneau.http.remote;
 /**
  * Possible values for the {@link RemoteOp#returns() @RemoteOp(returns)} annotation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrc.Proxies">REST Proxies</a>
  * </ul>
  */

@@ -18,7 +18,7 @@ import java.util.function.*;
 /**
  * A function that takes in 2 arguments.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <A> The first argument.

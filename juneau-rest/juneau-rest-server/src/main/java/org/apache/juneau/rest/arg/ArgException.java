@@ -20,7 +20,7 @@ import org.apache.juneau.reflect.*;
 /**
  * General exception due to a malformed Java parameter.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.JavaMethodParameters">Java Method Parameters</a>
  * </ul>
  *

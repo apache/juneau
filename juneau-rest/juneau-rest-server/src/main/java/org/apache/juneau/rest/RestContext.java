@@ -106,11 +106,11 @@ import org.apache.juneau.utils.*;
  * 	}
  * </p>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.RestContext">RestContext</a>
  * </ul>
  */
@@ -588,7 +588,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.beanStore().add(<jv>beanType</jv>, <jv>bean</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link #beanStore()}
 		 * </ul>
 		 *
@@ -611,7 +611,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.beanStore().add(<jv>beanType</jv>, <jv>bean</jv>, <jv>name</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link #beanStore()}
 		 * </ul>
 		 *
@@ -729,7 +729,7 @@ public class RestContext extends Context {
 		 * 		Args can be any injected bean including {@link org.apache.juneau.svl.VarResolver.Builder}, the default builder.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 		 * </ul>
 		 *
@@ -748,7 +748,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.vars().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 		 * 	<li class='jm'>{@link #varResolver()}
 		 * </ul>
@@ -771,7 +771,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.vars().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 		 * 	<li class='jm'>{@link #varResolver()}
 		 * </ul>
@@ -787,7 +787,7 @@ public class RestContext extends Context {
 		/**
 		 * Creates the variable resolver sub-builder.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 		 * </ul>
 		 *
@@ -875,7 +875,7 @@ public class RestContext extends Context {
 		 * This bean can be accessed directly via {@link RestContext#getConfig()} or passed in as a parameter
 		 * on a {@link RestOp}-annotated method.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ConfigurationFiles">Configuration Files</a>
 		 * </ul>
 		 *
@@ -893,7 +893,7 @@ public class RestContext extends Context {
 		 * annotation.
 		 * This method allows you to programmatically override it with your own custom config file.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ConfigurationFiles">Configuration Files</a>
 		 * 	<li class='jm'>{@link #config()}
 		 * </ul>
@@ -910,7 +910,7 @@ public class RestContext extends Context {
 		/**
 		 * Creates the config for this builder.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ConfigurationFiles">Configuration Files</a>
 		 * 	<li class='jm'>{@link #config()}
 		 * </ul>
@@ -988,7 +988,7 @@ public class RestContext extends Context {
 		 * 		Args can be any injected bean.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.LoggingAndDebugging">Logging / Debugging</a>
 		 * </ul>
 		 *
@@ -1003,7 +1003,7 @@ public class RestContext extends Context {
 		/**
 		 * Sets the logger for this resource.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.LoggingAndDebugging">Logging / Debugging</a>
 		 * 	<li class='jm'>{@link #logger()}
 		 * </ul>
@@ -1019,7 +1019,7 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the logger for this resource.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.LoggingAndDebugging">Logging / Debugging</a>
 		 * 	<li class='jm'>{@link #logger()}
 		 * </ul>
@@ -1078,7 +1078,7 @@ public class RestContext extends Context {
 		 * 		Args can be any injected bean including ThrownStore.Builder, the default builder.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ExecutionStatistics">REST method execution statistics</a>
 		 * </ul>
 		 *
@@ -1099,7 +1099,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.thrownStore().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ExecutionStatistics">REST method execution statistics</a>
 		 * 	<li class='jm'>{@link #thrownStore()}
 		 * </ul>
@@ -1121,7 +1121,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.thrownStore().impl(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ExecutionStatistics">REST method execution statistics</a>
 		 * 	<li class='jm'>{@link #thrownStore()}
 		 * </ul>
@@ -1137,7 +1137,7 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the thrown-store sub-builder.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ExecutionStatistics">REST method execution statistics</a>
 		 * </ul>
 		 *
@@ -1204,7 +1204,7 @@ public class RestContext extends Context {
 		 * 		Args can be any injected bean including EncoderSet.Builder, the default builder.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Encoders">Encoders</a>
 		 * </ul>
 		 *
@@ -1225,7 +1225,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.encoders().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Encoders">Encoders</a>
 		 * 	<li class='jm'>{@link #encoders()}
 		 * </ul>
@@ -1248,7 +1248,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.encoders().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Encoders">Encoders</a>
 		 * 	<li class='jm'>{@link #encoders()}
 		 * </ul>
@@ -1264,7 +1264,7 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the encoder group sub-builder.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Encoders">Encoders</a>
 		 * 	<li class='jm'>{@link #encoders()}
 		 * </ul>
@@ -1328,7 +1328,7 @@ public class RestContext extends Context {
 		 * 		Args can be any injected bean including SerializerSet.Builder, the default builder.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Marshalling">Marshalling</a>
 		 * </ul>
 		 *
@@ -1349,7 +1349,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.serializers().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Marshalling">Marshalling</a>
 		 * 	<li class='jm'>{@link #serializers()}
 		 * </ul>
@@ -1372,7 +1372,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.serializers().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Marshalling">Marshalling</a>
 		 * 	<li class='jm'>{@link #serializers()}
 		 * </ul>
@@ -1388,7 +1388,7 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the serializer group sub-builder.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Marshalling">Marshalling</a>
 		 * </ul>
 		 *
@@ -1450,7 +1450,7 @@ public class RestContext extends Context {
 		 * 		Args can be any injected bean including ParserSet.Builder, the default builder.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Marshalling">Marshalling</a>
 		 * </ul>
 		 *
@@ -1471,7 +1471,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.parsers().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Marshalling">Marshalling</a>
 		 * 	<li class='jm'>{@link #parsers()}
 		 * </ul>
@@ -1494,7 +1494,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.parsers().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Marshalling">Marshalling</a>
 		 * 	<li class='jm'>{@link #parsers()}
 		 * </ul>
@@ -1510,7 +1510,7 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the parser group sub-builder.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Marshalling">Marshalling</a>
 		 * </ul>
 		 *
@@ -1572,7 +1572,7 @@ public class RestContext extends Context {
 		 * 		Args can be any injected bean including MethodExecStore.Builder, the default builder.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ExecutionStatistics">REST method execution statistics</a>
 		 * </ul>
 		 *
@@ -1593,7 +1593,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.methodExecStore().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ExecutionStatistics">REST method execution statistics</a>
 		 * 	<li class='jm'>{@link #methodExecStore()}
 		 * </ul>
@@ -1615,7 +1615,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.methodExecStore().impl(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ExecutionStatistics">REST method execution statistics</a>
 		 * 	<li class='jm'>{@link #methodExecStore()}
 		 * </ul>
@@ -1631,7 +1631,7 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the method execution statistics store sub-builder.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ExecutionStatistics">REST method execution statistics</a>
 		 * </ul>
 		 *
@@ -1754,12 +1754,12 @@ public class RestContext extends Context {
 		 * 		Args can be any injected bean including Messages.Builder, the default builder.
 		 * </ul>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>Mappings are cumulative from super classes.
 		 * 		<br>Therefore, you can find and retrieve messages up the class-hierarchy chain.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jc'>{@link Messages}
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.LocalizedMessages">Localized Messages</a>
 		 * </ul>
@@ -1781,7 +1781,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.messages().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.LocalizedMessages">Localized Messages</a>
 		 * 	<li class='jm'>{@link #messages()}
 		 * </ul>
@@ -1803,7 +1803,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.messages().impl(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.LocalizedMessages">Localized Messages</a>
 		 * 	<li class='jm'>{@link #messages()}
 		 * </ul>
@@ -1819,7 +1819,7 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the messages sub-builder.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.LocalizedMessages">Localized Messages</a>
 		 * </ul>
 		 *
@@ -1930,7 +1930,7 @@ public class RestContext extends Context {
 		 * 		Args can be any injected bean including ResponseProcessorList.Builder, the default builder.
 		 * </ul>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		Response processors are always inherited from ascendant resources.
 		 * 	<li class='note'>
@@ -1945,7 +1945,7 @@ public class RestContext extends Context {
 		 * 		Inner classes of the REST resource class are allowed.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ResponseProcessors">Response Processors</a>
 		 * </ul>
 		 *
@@ -1966,7 +1966,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.responseProcessors().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ResponseProcessors">Response Processors</a>
 		 * 	<li class='jm'>{@link #responseProcessors()}
 		 * </ul>
@@ -1989,7 +1989,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.responseProcessors().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ResponseProcessors">Response Processors</a>
 		 * 	<li class='jm'>{@link #responseProcessors()}
 		 * </ul>
@@ -2005,7 +2005,7 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the response processor list sub-builder.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.ResponseProcessors">Response Processors</a>
 		 * </ul>
 		 *
@@ -2098,7 +2098,7 @@ public class RestContext extends Context {
 		 * 		Args can be any injected bean.
 		 * </ul>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		The default call logger if not specified is {@link BasicCallLogger}.
 		 * 	<li class='note'>
@@ -2113,7 +2113,7 @@ public class RestContext extends Context {
 		 * 		Inner classes of the REST resource class are allowed.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.LoggingAndDebugging">Logging / Debugging</a>
 		 * </ul>
 		 *
@@ -2135,7 +2135,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.callLogger().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.LoggingAndDebugging">Logging / Debugging</a>
 		 * 	<li class='jm'>{@link #callLogger()}
 		 * </ul>
@@ -2157,7 +2157,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.callLogger().impl(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.LoggingAndDebugging">Logging / Debugging</a>
 		 * 	<li class='jm'>{@link #callLogger()}
 		 * </ul>
@@ -2173,7 +2173,7 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the call logger sub-builder.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.LoggingAndDebugging">Logging / Debugging</a>
 		 * </ul>
 		 *
@@ -2281,7 +2281,7 @@ public class RestContext extends Context {
 		 * 		Args can be any injected bean including HttpPartSerializer.Builder, the default builder.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
 		 * </ul>
 		 *
@@ -2302,7 +2302,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.partSerializer().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
 		 * 	<li class='jm'>{@link #partSerializer()}
 		 * </ul>
@@ -2324,7 +2324,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.partSerializer().impl(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
 		 * 	<li class='jm'>{@link #partSerializer()}
 		 * </ul>
@@ -2340,7 +2340,7 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the part serializer sub-builder.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
 		 * </ul>
 		 *
@@ -2411,7 +2411,7 @@ public class RestContext extends Context {
 		 * 		Args can be any injected bean including HttpPartParser.Builder, the default builder.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
 		 * </ul>
 		 *
@@ -2432,7 +2432,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.partParser().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
 		 * 	<li class='jm'>{@link #partParser()}
 		 * </ul>
@@ -2454,7 +2454,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.partParser().impl(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
 		 * 	<li class='jm'>{@link #partParser()}
 		 * </ul>
@@ -2470,7 +2470,7 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the part parser sub-builder.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HttpParts">HTTP Parts</a>
 		 * </ul>
 		 *
@@ -2541,7 +2541,7 @@ public class RestContext extends Context {
 		 * 		Args can be any injected bean including JsonSchemaGenerator.Builder, the default builder.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Swagger">Swagger</a>
 		 * </ul>
 		 *
@@ -2562,7 +2562,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.jsonSchemaGenerator().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Swagger">Swagger</a>
 		 * 	<li class='jm'>{@link #jsonSchemaGenerator()}
 		 * </ul>
@@ -2585,7 +2585,7 @@ public class RestContext extends Context {
 		 * 	<li class='jm'>{@link #jsonSchemaGenerator()}
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Swagger">Swagger</a>
 		 * </ul>
 		 *
@@ -2600,7 +2600,7 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the JSON schema generator sub-builder.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Swagger">Swagger</a>
 		 * </ul>
 		 *
@@ -2695,7 +2695,7 @@ public class RestContext extends Context {
 		 * 	<jk>public class</jk> MyResource {...}
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.StaticFiles">Static files</a>
 		 * </ul>
 		 *
@@ -2716,7 +2716,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.staticFiles().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.StaticFiles">Static files</a>
 		 * </ul>
 		 *
@@ -2737,7 +2737,7 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.staticFiles().impl(<jv>value</jv>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.StaticFiles">Static files</a>
 		 * </ul>
 		 *
@@ -2752,7 +2752,7 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the static files bean creator.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.StaticFiles">Static files</a>
 		 * </ul>
 		 *
@@ -2805,7 +2805,7 @@ public class RestContext extends Context {
 		 * <p>
 		 * Specifies default values for request headers if they're not passed in through the request.
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
 		 * 	<li class='note'>
@@ -2842,7 +2842,7 @@ public class RestContext extends Context {
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#defaultRequestHeaders}
 		 * 	<li class='ja'>{@link RestOp#defaultRequestHeaders}
 		 * 	<li class='ja'>{@link RestGet#defaultRequestHeaders}
@@ -2942,7 +2942,7 @@ public class RestContext extends Context {
 		 * <p>
 		 * Specifies default values for response headers if they're not set after the Java REST method is called.
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of
 		 * 		the Java methods.
@@ -2975,7 +2975,7 @@ public class RestContext extends Context {
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#defaultResponseHeaders}
 		 * 	<li class='ja'>{@link RestOp#defaultResponseHeaders}
 		 * 	<li class='ja'>{@link RestGet#defaultResponseHeaders}
@@ -3080,7 +3080,7 @@ public class RestContext extends Context {
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>Use {@link BasicNamedAttribute#of(String, Supplier)} to provide a dynamically changeable attribute value.
 		 * </ul>
 		 *
@@ -3899,7 +3899,7 @@ public class RestContext extends Context {
 		 * 	<li>Instantiates a default {@link BasicSwaggerProvider}.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(Class)}
 		 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
 		 * </ul>
@@ -3948,7 +3948,7 @@ public class RestContext extends Context {
 		 *  ?Accept=text/json&amp;Content-Type=text/json
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		Useful for debugging REST interface using only a browser so that you can quickly simulate header values
 		 * 		in the URL bar.
@@ -3960,7 +3960,7 @@ public class RestContext extends Context {
 		 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 		 * </ul>
 
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#allowedHeaderParams}
 		 * </ul>
 		 *
@@ -4014,7 +4014,7 @@ public class RestContext extends Context {
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		Method names are case-insensitive.
 		 * 	<li class='note'>
@@ -4023,7 +4023,7 @@ public class RestContext extends Context {
 		 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#allowedMethodHeaders}
 		 * </ul>
 		 *
@@ -4085,7 +4085,7 @@ public class RestContext extends Context {
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
 		 * 	<li class='note'>
@@ -4096,7 +4096,7 @@ public class RestContext extends Context {
 		 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#allowedMethodParams}
 		 * </ul>
 		 *
@@ -4168,7 +4168,7 @@ public class RestContext extends Context {
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#clientVersionHeader}
 		 * </ul>
 		 *
@@ -4219,7 +4219,7 @@ public class RestContext extends Context {
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#defaultCharset}
 		 * 	<li class='ja'>{@link RestOp#defaultCharset}
 		 * </ul>
@@ -4273,7 +4273,7 @@ public class RestContext extends Context {
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		<js>'content'</js> parameter name is case-insensitive.
 		 * 	<li class='note'>
@@ -4334,7 +4334,7 @@ public class RestContext extends Context {
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		String value that gets resolved to a <jk>long</jk>.
 		 * 	<li class='note'>
@@ -4344,7 +4344,7 @@ public class RestContext extends Context {
 		 * 		A value of <js>"-1"</js> can be used to represent no limit.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#maxInput}
 		 * 	<li class='ja'>{@link RestOp#maxInput}
 		 * 	<li class='jm'>{@link RestOpContext.Builder#maxInput(String)}
@@ -4449,7 +4449,7 @@ public class RestContext extends Context {
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#uriAuthority}
 		 * </ul>
 		 *
@@ -4510,7 +4510,7 @@ public class RestContext extends Context {
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#uriContext}
 		 * </ul>
 		 *
@@ -4569,7 +4569,7 @@ public class RestContext extends Context {
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#uriRelativity}
 		 * </ul>
 		 *
@@ -4628,7 +4628,7 @@ public class RestContext extends Context {
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#uriResolution}
 		 * </ul>
 		 *
@@ -4668,7 +4668,7 @@ public class RestContext extends Context {
 		 * The builder is initialized with serializers defined via the {@link Rest#serializers()} annotation.  That annotation is applied
 		 * from parent-to-child order with child entries given priority over parent entries.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Marshalling">Marshalling</a>
 		 * </ul>
 		 *
@@ -4694,7 +4694,7 @@ public class RestContext extends Context {
 		 * The builder is initialized with parsers defined via the {@link Rest#parsers()} annotation.  That annotation is applied
 		 * from parent-to-child order with child entries given priority over parent entries.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Marshalling">Marshalling</a>
 		 * </ul>
 		 *
@@ -4714,7 +4714,7 @@ public class RestContext extends Context {
 		 * The builder is initialized with encoders defined via the {@link Rest#encoders()} annotation.  That annotation is applied
 		 * from parent-to-child order with child entries given priority over parent entries.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Encoders">Encoders</a>
 		 * </ul>
 		 *
@@ -4801,7 +4801,7 @@ public class RestContext extends Context {
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		When defined as classes, instances are resolved using the registered bean store which
 		 * 		by default is {@link BeanStore} which requires the class have one of the following
@@ -4812,7 +4812,7 @@ public class RestContext extends Context {
 		 * 		</ul>
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#children()}
 		 * </ul>
 		 *
@@ -4857,7 +4857,7 @@ public class RestContext extends Context {
 		 * <p>
 		 * Specifies the parser listener class to use for listening to non-fatal parsing errors.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#listener(Class)}
 		 * </ul>
 		 *
@@ -4902,7 +4902,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <p>
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		This annotation is ignored on top-level servlets (i.e. servlets defined in <c>web.xml</c> files).
 		 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
@@ -4920,7 +4920,7 @@ public class RestContext extends Context {
 		 * 		</ul>
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#path}
 		 * </ul>
 		 *
@@ -5120,7 +5120,7 @@ public class RestContext extends Context {
 		 * <p>
 		 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#listener(Class)}
 		 * </ul>
 		 *
@@ -5170,7 +5170,7 @@ public class RestContext extends Context {
 		 * 	<li class='jm'>{@link SwaggerProvider#getSwagger(RestContext,Locale)} - Affects produces field.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#produces}
 		 * 	<li class='ja'>{@link RestOp#produces}
 		 * 	<li class='ja'>{@link RestGet#produces}
@@ -5231,7 +5231,7 @@ public class RestContext extends Context {
 		 * 	<li class='jm'>{@link RestContext#getConsumes() RestContext.getConsumes()}
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#consumes}
 		 * 	<li class='ja'>{@link RestOp#consumes}
 		 * 	<li class='ja'>{@link RestPut#consumes}
@@ -5681,7 +5681,7 @@ public class RestContext extends Context {
 	 * 	<jk>public</jk> LoggerEntry getLogger(RestRequest <jv>req</jv>, <ja>@Path</ja> String <jv>name</jv>) <jk>throws</jk> Exception {
 	 * </p>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * </ul>
 	 *
@@ -5717,7 +5717,7 @@ public class RestContext extends Context {
 	 * <p>
 	 * If path is not specified, returns <js>""</js>.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#path(String)}
 	 * </ul>
 	 *
@@ -5734,7 +5734,7 @@ public class RestContext extends Context {
 	 * <p>
 	 * If path is not specified, returns <js>""</js>.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#path(String)}
 	 * </ul>
 	 *
@@ -5747,7 +5747,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the call logger to use for this resource.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#callLogger()}
 	 * </ul>
 	 *
@@ -5773,7 +5773,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the Swagger provider used by this resource.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(Class)}
 	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
 	 * </ul>
@@ -5834,7 +5834,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns whether it's safe to pass the HTTP content as a <js>"content"</js> GET parameter.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#disableContentParam()}
 	 * </ul>
 	 *
@@ -5847,7 +5847,7 @@ public class RestContext extends Context {
 	/**
 	 * Allowed header URL parameters.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Rest#allowedHeaderParams}
 	 * 	<li class='jm'>{@link RestContext.Builder#allowedHeaderParams(String)}
 	 * </ul>
@@ -5863,7 +5863,7 @@ public class RestContext extends Context {
 	/**
 	 * Allowed method headers.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Rest#allowedMethodHeaders}
 	 * 	<li class='jm'>{@link RestContext.Builder#allowedMethodHeaders(String)}
 	 * </ul>
@@ -5879,7 +5879,7 @@ public class RestContext extends Context {
 	/**
 	 * Allowed method URL parameters.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Rest#allowedMethodParams}
 	 * 	<li class='jm'>{@link RestContext.Builder#allowedMethodParams(String)}
 	 * </ul>
@@ -5895,7 +5895,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the name of the client version header name used by this resource.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Rest#clientVersionHeader}
 	 * 	<li class='jm'>{@link RestContext.Builder#clientVersionHeader(String)}
 	 * </ul>
@@ -6011,7 +6011,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the default request headers for this resource.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#defaultRequestHeaders(org.apache.http.Header...)}
 	 * </ul>
 	 *
@@ -6026,7 +6026,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the default request attributes for this resource.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#defaultRequestAttributes(NamedAttribute...)}
 	 * </ul>
 	 *
@@ -6041,7 +6041,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the default response headers for this resource.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#defaultResponseHeaders(org.apache.http.Header...)}
 	 * </ul>
 	 *
@@ -6056,7 +6056,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the authority path of the resource.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#uriAuthority(String)}
 	 * </ul>
 	 *
@@ -6075,7 +6075,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the context path of the resource.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#uriContext(String)}
 	 * </ul>
 	 *
@@ -6094,7 +6094,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the setting on how relative URIs should be interpreted as relative to.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#uriRelativity(UriRelativity)}
 	 * </ul>
 	 *
@@ -6109,7 +6109,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the setting on how relative URIs should be resolved.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#uriResolution(UriResolution)}
 	 * </ul>
 	 *

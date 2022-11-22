@@ -15,7 +15,7 @@ package org.apache.juneau.rest.httppart;
 /**
  * Represents the possible parameter types as defined by the Swagger 2.0 specification.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Swagger</a>
  * </ul>
  */

@@ -35,7 +35,7 @@ import org.apache.juneau.internal.*;
  * Therefore, HTTP/1.1 added status codes 303 and 307 to distinguish between the two behaviours.
  * However, some Web applications and frameworks use the 302 status code as if it were the 303.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */

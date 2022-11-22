@@ -54,7 +54,7 @@ import org.apache.juneau.oapi.*;
  * <p>
  * The special name <js>"/*"</js> is used to retrieve the path remainder after the path match (i.e. the part that matches <js>"/*"</js>).
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Swagger</a>
  * 	<li class='extlink'><a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>
  * </ul>
@@ -63,17 +63,17 @@ import org.apache.juneau.oapi.*;
  * <p>
  * Annotation applied to Java method arguments of interface proxies to denote that they are path variables on the request.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrc.Path">@Path</a>
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  * <p>
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrc.Request">@Request</a>
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @Documented
@@ -151,7 +151,7 @@ public @interface Path {
 	 * The name field MUST correspond to the associated <a class="doclink" href="https://swagger.io/specification/v2#pathsPath">path</a> segment from the path field in the <a class="doclink" href="https://swagger.io/specification/v2#pathsObject">Paths Object</a>.
 	 * See <a class="doclink" href="https://swagger.io/specification/v2#pathTemplating">Path Templating</a> for further information.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain-text.
 	 * </ul>
@@ -163,7 +163,7 @@ public @interface Path {
 	/**
 	 * Dynamically apply this annotation to the specified classes.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -177,7 +177,7 @@ public @interface Path {
 	 * <p>
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *

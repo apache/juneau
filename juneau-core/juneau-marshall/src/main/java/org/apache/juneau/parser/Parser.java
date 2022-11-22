@@ -123,11 +123,11 @@ import org.apache.juneau.xml.*;
  * 	<tr><td>string</td><td>{@link String}</td></tr>
  * </table>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
@@ -551,7 +551,7 @@ public class Parser extends BeanContextable {
 		 * 	MyBean <jv>myBean2</jv> = <jv>session</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		This only allows for multi-input streams for the following parsers:
 		 * 		<ul>
@@ -1095,7 +1095,7 @@ public class Parser extends BeanContextable {
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Use the {@link #parse(Object, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>

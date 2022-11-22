@@ -24,7 +24,7 @@ import java.util.*;
  * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */

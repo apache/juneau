@@ -21,7 +21,7 @@ import org.apache.juneau.collections.*;
  * Represents a wrapped {@link Collection} where entries in the list can be removed or reordered without affecting the
  * underlying list.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <T> The class type of the wrapped bean.

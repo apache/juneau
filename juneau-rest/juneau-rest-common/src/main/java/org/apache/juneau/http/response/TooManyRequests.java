@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The user has sent too many requests in a given amount of time.
  * <br>Intended for use with rate-limiting schemes.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

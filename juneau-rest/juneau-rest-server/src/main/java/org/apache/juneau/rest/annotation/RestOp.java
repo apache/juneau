@@ -36,7 +36,7 @@ import org.apache.juneau.encoders.*;
 /**
  * Identifies a REST operation Java method on a {@link RestServlet} implementation class.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.RestOpAnnotatedMethods">@RestOp-Annotated Methods</a>
  * </ul>
  */
@@ -104,7 +104,7 @@ public @interface RestOp {
 	 * 	<li><js>"1.0"</js> = At least 1.0.  1.0 and 2.0 will match.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#clientVersionHeader(String)}
 	 * </ul>
 	 *
@@ -118,13 +118,13 @@ public @interface RestOp {
 	 * <p>
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#consumes(MediaType...)}
 	 * </ul>
 	 *
@@ -138,7 +138,7 @@ public @interface RestOp {
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with this method.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()} - Registering converters with REST resources.
 	 * </ul>
 	 *
@@ -165,13 +165,13 @@ public @interface RestOp {
 	 * 	<li><js>""</js> (or anything else) - Debug mode is inherited from class.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
 	 * </ul>
 	 *
@@ -198,13 +198,13 @@ public @interface RestOp {
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultCharset(Charset)}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultCharset(Charset)}
 	 * 	<li class='ja'>{@link Rest#defaultCharset}
@@ -243,7 +243,7 @@ public @interface RestOp {
 	 * 	<jk>public</jk> String doPost(<ja>@FormData</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
 	 * 	<li class='note'>
@@ -272,7 +272,7 @@ public @interface RestOp {
 	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
 	 * 	<li class='note'>
@@ -312,13 +312,13 @@ public @interface RestOp {
 	 * </p>
 	 *
 	 * </ul>
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestAttributes(NamedAttribute...)}
 	 * 	<li class='ja'>{@link Rest#defaultRequestAttributes()}
 	 * </ul>
@@ -340,13 +340,13 @@ public @interface RestOp {
 	 * 	<jk>public</jk> String doGet()  {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestHeaders(org.apache.http.Header...)}
 	 * </ul>
 	 *
@@ -367,13 +367,13 @@ public @interface RestOp {
 	 * 	<jk>public</jk> String doGet()  {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultResponseHeaders(org.apache.http.Header...)}
 	 * </ul>
 	 *
@@ -395,7 +395,7 @@ public @interface RestOp {
 	 * 		The description of the method in the Swagger page.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/description</c>.
 	 * 	<li class='note'>
@@ -447,7 +447,7 @@ public @interface RestOp {
 	 * 	<jv>builder</jv>.getEncoders().set(<jv>classes</jv>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Encoders">Encoders</a>
 	 * </ul>
 	 *
@@ -461,7 +461,7 @@ public @interface RestOp {
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with this method.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#guards()}
 	 * </ul>
 	 *
@@ -479,7 +479,7 @@ public @interface RestOp {
 	 * Matchers are used to allow multiple Java methods to handle requests assigned to the same URL path pattern, but
 	 * differing based on some request attribute, such as a specific header value.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jac'>{@link RestMatcher}
 	 * </ul>
 	 *
@@ -501,13 +501,13 @@ public @interface RestOp {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#maxInput(String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#maxInput(String)}
 	 * 	<li class='ja'>{@link Rest#maxInput}
@@ -571,7 +571,7 @@ public @interface RestOp {
 	/**
 	 * Dynamically apply this annotation to the specified methods.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -626,7 +626,7 @@ public @interface RestOp {
 	 * 	<jv>builder</jv>.getParsers().set(<jv>classes</jv>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Marshalling">Marshalling</a>
 	 * </ul>
 	 *
@@ -692,7 +692,7 @@ public @interface RestOp {
 	 * <p>
 	 * Note that you can also use {@link #value()} to specify the method name and path in shortened form.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 	 * </ul>
 	 *
@@ -706,13 +706,13 @@ public @interface RestOp {
 	 * <p>
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#produces(MediaType...)}
 	 * </ul>
 	 *
@@ -740,7 +740,7 @@ public @interface RestOp {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports any of the following expression constructs:
 	 * 		<ul>
@@ -768,7 +768,7 @@ public @interface RestOp {
 	 * 		When defined on parent/child classes and methods, ALL guards within the hierarchy must pass.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#roleGuard(String)}
 	 * </ul>
 	 *
@@ -800,7 +800,7 @@ public @interface RestOp {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}
 	 * </ul>
 	 *
@@ -855,7 +855,7 @@ public @interface RestOp {
 	 * 	<jv>builder</jv>.getSerializers().set(<jv>classes</jv>);
 	 * </p>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Marshalling">Marshalling</a>
 	 * </ul>
 	 *
@@ -877,7 +877,7 @@ public @interface RestOp {
 	 * 		The summary of the method in the Swagger page.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/summary</c>.
 	 * 	<li class='note'>
@@ -919,7 +919,7 @@ public @interface RestOp {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is <a class="doclink" href="../../../../../index.html#jd.Swagger">Swagger</a>.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -932,7 +932,7 @@ public @interface RestOp {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link OpSwagger}
 	 * 	<li class='jc'>{@link SwaggerProvider}
 	 * </ul>
@@ -957,7 +957,7 @@ public @interface RestOp {
 	 * 	<ja>@RestOp</ja>(<js>"PUT /{propertyName}"</js>)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The path portion is optional.
 	 * </ul>

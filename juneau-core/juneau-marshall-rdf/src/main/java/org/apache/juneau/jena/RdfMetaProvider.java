@@ -18,7 +18,7 @@ import org.apache.juneau.xml.*;
 /**
  * Interface for providing access to {@link RdfClassMeta}, {@link RdfBeanMeta}, and {@link RdfBeanPropertyMeta} objects.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */

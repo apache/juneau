@@ -36,7 +36,7 @@ import org.apache.juneau.internal.*;
  * 	<li><js>"property=!1"</js>,<js>"property=!1-2"</js> - Negation
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.ObjectTools">Overview &gt; juneau-marshall &gt; Object Tools</a>
  * </ul>
  */

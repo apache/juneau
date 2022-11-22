@@ -18,7 +18,7 @@ import java.util.*;
 /**
  * A simple list of {@link Method} objects.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @serial exclude

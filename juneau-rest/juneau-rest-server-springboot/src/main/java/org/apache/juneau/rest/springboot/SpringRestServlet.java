@@ -23,13 +23,13 @@ import org.springframework.context.*;
 /**
  * Subclass of a {@link RestServlet} that hooks into Spring Boot for using Spring Beans.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>
  * 		Users will typically extend from {@link BasicSpringRestServlet} or {@link BasicSpringRestServletGroup}
  * 		instead of this class directly.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server-springboot">juneau-rest-server-springboot</a>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.AnnotatedClasses">@Rest-Annotated Classes</a>
  * </ul>

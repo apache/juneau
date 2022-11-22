@@ -65,7 +65,7 @@ import org.apache.juneau.rest.annotation.*;
  * 		<br>This gives access to the servlet/resource and Java method it's applied to.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.RestOpAnnotatedMethods">@RestOp-Annotated Methods</a>
  * </ul>
  */

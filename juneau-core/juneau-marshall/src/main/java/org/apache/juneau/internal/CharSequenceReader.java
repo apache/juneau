@@ -17,7 +17,7 @@ import java.io.*;
 /**
  * Similar to {@link StringReader} except reads from a generic {@link CharSequenceReader}.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public final class CharSequenceReader extends BufferedReader {

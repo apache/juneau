@@ -24,7 +24,7 @@ import org.apache.juneau.reflect.*;
  * <p>
  * Captures the information in {@link Remote @Remote} annotations for caching and reuse.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.RestRpc">REST/RPC</a>
  * </ul>
  */

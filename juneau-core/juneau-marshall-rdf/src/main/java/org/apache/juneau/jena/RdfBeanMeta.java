@@ -19,7 +19,7 @@ import org.apache.juneau.jena.annotation.*;
  * Metadata on beans specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation on the
  * class.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */

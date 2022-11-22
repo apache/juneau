@@ -17,7 +17,7 @@ import org.apache.juneau.*;
 /**
  * Common interface for matchers used by the {@link ObjectSearcher} class.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.ObjectTools">Overview &gt; juneau-marshall &gt; Object Tools</a>
  * </ul>
  */

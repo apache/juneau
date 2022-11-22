@@ -15,7 +15,7 @@ package org.apache.juneau.msgpack;
 /**
  * Constants for the MessagePack format.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.MsgPackDetails">MessagePack Details</a>
  * </ul>
  */

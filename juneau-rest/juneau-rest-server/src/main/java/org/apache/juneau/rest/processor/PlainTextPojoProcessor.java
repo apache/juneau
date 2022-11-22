@@ -24,7 +24,7 @@ import org.apache.juneau.http.response.*;
 /**
  * Response handler for plain-old Java objects when a serializer match is not found and they're asking for plain/text or anything.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.ResponseProcessors">Response Processors</a>
  * </ul>
  */

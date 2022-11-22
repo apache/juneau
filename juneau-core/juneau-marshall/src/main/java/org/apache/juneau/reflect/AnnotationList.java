@@ -21,7 +21,7 @@ import java.util.function.*;
 /**
  * An ordered list of annotations and the classes/methods/packages they were found on.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @serial exclude

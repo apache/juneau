@@ -20,7 +20,7 @@ import org.apache.juneau.reflect.*;
 /**
  * Defines an invalid usage of an annotation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @serial exclude

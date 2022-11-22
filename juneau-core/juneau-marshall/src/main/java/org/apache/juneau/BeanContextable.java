@@ -33,11 +33,8 @@ import org.apache.juneau.utils.*;
  * This abstraction exists to allow different kinds of subclasses (e.g. JsonSerilalizer, XmlParser...) to share bean context objects since
  * bean context objects are heavyweight objects that cache metadata about encountered beans.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
- * </ul>
- *
- * <ul class='seealso'>
  * </ul>
  */
 public abstract class BeanContextable extends Context {
@@ -185,12 +182,14 @@ public abstract class BeanContextable extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5>
+		 * <ul>
 		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a non-public bean class to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean class to ignore it as a bean.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5>
+		 * <ul>
 		 * 	<li class='ja'>{@link BeanConfig#beanClassVisibility()}
 		 * </ul>
 		 *
@@ -234,12 +233,12 @@ public abstract class BeanContextable extends Context {
 		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Beanc @Beanc} annotation can also be used to expose a non-public constructor.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean constructor to ignore it.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#beanConstructorVisibility()}
 		 * </ul>
 		 *
@@ -292,12 +291,12 @@ public abstract class BeanContextable extends Context {
 		 * 		.build();
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used to expose a non-public field.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean field to ignore it as a bean property.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#beanFieldVisibility()}
 		 * </ul>
 		 *
@@ -352,7 +351,7 @@ public abstract class BeanContextable extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> Address());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jc'>{@link BeanInterceptor}
 		 * 	<li class='ja'>{@link Bean#interceptor() Bean(interceptor)}
 		 * </ul>
@@ -391,7 +390,7 @@ public abstract class BeanContextable extends Context {
 		 * 	Object <jv>oldValue</jv> = <jv>beanMap</jv>.put(<js>"foo"</js>, <js>"baz"</js>);  <jc>// oldValue == "bar"</jc>
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#beanMapPutReturnsOldValue()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#beanMapPutReturnsOldValue()}
 		 * </ul>
@@ -432,12 +431,12 @@ public abstract class BeanContextable extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used to expose a non-public method.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean getter/setter to ignore it as a bean property.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#beanMethodVisibility()}
 		 * </ul>
 		 *
@@ -488,12 +487,12 @@ public abstract class BeanContextable extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#beansRequireDefaultConstructor()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#beansRequireDefaultConstructor()}
 		 * </ul>
@@ -537,12 +536,12 @@ public abstract class BeanContextable extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#beansRequireSerializable()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#beansRequireSerializable()}
 		 * </ul>
@@ -584,12 +583,12 @@ public abstract class BeanContextable extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can be used on the getter to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters to ignore them as bean properties.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#beansRequireSettersForGetters()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#beansRequireSettersForGetters()}
 		 * </ul>
@@ -628,12 +627,12 @@ public abstract class BeanContextable extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on the class to force it to be recognized as a bean class
 		 * 		even if it has no properties.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#disableBeansRequireSomeProperties()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#disableBeansRequireSomeProperties()}
 		 * </ul>
@@ -693,7 +692,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).properties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link Bean#properties()}/{@link Bean#p()} - On an annotation on the bean class itself.
 		 * </ul>
 		 *
@@ -754,7 +753,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).properties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#properties()} / {@link Bean#p()}- On an annotation on the bean class itself.
 		 * </ul>
 		 *
@@ -817,7 +816,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).properties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#properties()} / {@link Bean#p()} - On an annotation on the bean class itself.
 		 * </ul>
 		 *
@@ -872,7 +871,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).excludeProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
 		 * </ul>
 		 *
@@ -925,7 +924,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).excludeProperties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
 		 * </ul>
 		 *
@@ -980,7 +979,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).excludeProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
 		 * </ul>
 		 *
@@ -1038,7 +1037,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).readOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
 		 * </ul>
 		 *
@@ -1094,7 +1093,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).readOnlyProperties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
 		 * </ul>
 		 *
@@ -1152,7 +1151,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).readOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
 		 * </ul>
 		 *
@@ -1209,7 +1208,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).writeOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
 		 * </ul>
 		 *
@@ -1264,7 +1263,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).writeOnlyProperties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
 		 * </ul>
 		 *
@@ -1321,7 +1320,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).writeOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
 		 * </ul>
 		 *
@@ -1415,7 +1414,7 @@ public abstract class BeanContextable extends Context {
 		 * 	Body <jv>body</jv> = <jv>parser</jv>.parse(<js>"&lt;body&gt;&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;"</js>, Body.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#dictionary()}
 		 * 	<li class='ja'>{@link Beanp#dictionary()}
 		 * 	<li class='ja'>{@link BeanConfig#dictionary()}
@@ -1465,7 +1464,7 @@ public abstract class BeanContextable extends Context {
 		 * <p>
 		 * This is functionally equivalent to the {@link Bean#dictionary()} annotation.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#dictionary()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#beanDictionary(Class...)}
 		 * </ul>
@@ -1505,7 +1504,7 @@ public abstract class BeanContextable extends Context {
 		 * 		<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(Json5.<jsf>DEFAULT</jsf>.toString(<jv>object</jv>)).build())
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>Using this method assumes the serialized form of the object is the same as that produced
 		 * 		by the default serializer.  This may not be true based on settings or swaps on the constructed serializer.
 		 * </ul>
@@ -1566,7 +1565,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Marshalled#example()}
 		 * </ul>
 		 *
@@ -1613,12 +1612,12 @@ public abstract class BeanContextable extends Context {
 		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used on methods to individually identify them as fluent setters.
 		 * 	<li class='note'>The {@link Bean#findFluentSetters() @Bean.fluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#findFluentSetters()}
 		 * 	<li class='ja'>{@link BeanConfig#findFluentSetters()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#findFluentSetters()}
@@ -1655,11 +1654,11 @@ public abstract class BeanContextable extends Context {
 		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>This method is functionally equivalent to using the {@link Bean#findFluentSetters()} annotation.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#findFluentSetters()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#findFluentSetters()}
 		 * </ul>
@@ -1699,7 +1698,7 @@ public abstract class BeanContextable extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#ignoreInvocationExceptionsOnGetters()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#ignoreInvocationExceptionsOnGetters()}
 		 * </ul>
@@ -1738,7 +1737,7 @@ public abstract class BeanContextable extends Context {
 		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#ignoreInvocationExceptionsOnSetters()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#ignoreInvocationExceptionsOnSetters()}
 		 * </ul>
@@ -1777,11 +1776,11 @@ public abstract class BeanContextable extends Context {
 		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters and fields to ignore them.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreMissingSetters()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#disableIgnoreMissingSetters()}
 		 * </ul>
@@ -1817,11 +1816,11 @@ public abstract class BeanContextable extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used on transient fields to keep them from being ignored.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreTransientFields()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#disableIgnoreTransientFields()}
 		 * </ul>
@@ -1858,7 +1857,7 @@ public abstract class BeanContextable extends Context {
 		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#ignoreUnknownBeanProperties()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#ignoreUnknownBeanProperties()}
 		 * </ul>
@@ -1877,7 +1876,7 @@ public abstract class BeanContextable extends Context {
 		 * <p>
 		 * When enabled, unknown enum values are set to <jk>null</jk> instead of throwing a parse exception.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#ignoreUnknownEnumValues()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#ignoreUnknownEnumValues()}
 		 * </ul>
@@ -1914,7 +1913,7 @@ public abstract class BeanContextable extends Context {
 		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:null}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreUnknownNullBeanProperties()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()}
 		 * </ul>
@@ -2039,7 +2038,7 @@ public abstract class BeanContextable extends Context {
 		 * This annotation can be used on the parent class so that it filters to all child classes, or can be set
 		 * individually on the child classes.
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
 		 * </ul>
 		 *
@@ -2086,7 +2085,7 @@ public abstract class BeanContextable extends Context {
 		 * This annotation can be used on the parent class so that it filters to all child classes, or can be set
 		 * individually on the child classes.
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
 		 * </ul>
 		 *
@@ -2129,7 +2128,7 @@ public abstract class BeanContextable extends Context {
 		 * 		.build();
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#locale()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#locale(Locale)}
 		 * 	<li class='jm'>{@link BeanSession.Builder#locale(Locale)}
@@ -2173,7 +2172,7 @@ public abstract class BeanContextable extends Context {
 		 * 		.build();
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#mediaType()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#mediaType(MediaType)}
 		 * 	<li class='jm'>{@link BeanSession.Builder#mediaType(MediaType)}
@@ -2223,11 +2222,11 @@ public abstract class BeanContextable extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on classes to prevent them from being recognized as beans.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanIgnore}
 		 * 	<li class='ja'>{@link BeanConfig#notBeanClasses()}
 		 * 	<li class='jf'>{@link BeanContext.Builder#notBeanClasses()}
@@ -2274,7 +2273,7 @@ public abstract class BeanContextable extends Context {
 		 * 		.build();
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link BeanContext.Builder#notBeanPackages(String...)}
 		 * </ul>
 		 *
@@ -2326,7 +2325,7 @@ public abstract class BeanContextable extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link BeanContext.Builder#propertyNamer(Class)}
 		 * </ul>
 		 *
@@ -2365,7 +2364,7 @@ public abstract class BeanContextable extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#propertyNamer() Bean(propertyNamer)}
 		 * 	<li class='jm'>{@link BeanContext.Builder#propertyNamer(Class)}
 		 * </ul>
@@ -2415,11 +2414,11 @@ public abstract class BeanContextable extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean#sort() @Bean.sort()} annotation can also be used to sort properties on just a single class.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link BeanContext.Builder#sortProperties()}
 		 * </ul>
 		 *
@@ -2456,7 +2455,7 @@ public abstract class BeanContextable extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#sort() Bean(sort)}
 		 * 	<li class='jm'>{@link BeanContext.Builder#sortProperties()}
 		 * </ul>
@@ -2582,12 +2581,12 @@ public abstract class BeanContextable extends Context {
 		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Swap @Swap} annotation can also be used on classes to identify swaps for the class.
 		 * 	<li class='note'>The {@link Swap @Swap} annotation can also be used on bean methods and fields to identify swaps for values of those bean properties.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jf'>{@link BeanContext.Builder#swaps(Class...)}
 		 * </ul>
 		 *
@@ -2686,7 +2685,7 @@ public abstract class BeanContextable extends Context {
 		 * 		.build();
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#timeZone()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#timeZone(TimeZone)}
 		 * 	<li class='jm'>{@link BeanSession.Builder#timeZone(TimeZone)}
@@ -2727,11 +2726,11 @@ public abstract class BeanContextable extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>Equivalent to the {@link Bean#typeName() Bean(typeName)} annotation.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jc'>{@link Bean#typeName() Bean(typeName)}
 		 * 	<li class='jm'>{@link BeanContext.Builder#beanDictionary(Class...)}
 		 * </ul>
@@ -2789,7 +2788,7 @@ public abstract class BeanContextable extends Context {
 		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#typePropertyName()}
 		 * 	<li class='ja'>{@link BeanConfig#typePropertyName()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#typePropertyName(String)}
@@ -2836,7 +2835,7 @@ public abstract class BeanContextable extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#typePropertyName() Bean(typePropertyName)}
 		 * 	<li class='jm'>{@link BeanContext.Builder#typePropertyName(String)}
 		 * </ul>
@@ -2887,7 +2886,7 @@ public abstract class BeanContextable extends Context {
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link BeanContext.Builder#useEnumNames()}
 		 * </ul>
 		 *
@@ -2907,7 +2906,7 @@ public abstract class BeanContextable extends Context {
 		 * {@link InvocationHandler} if there is no other way of instantiating them.
 		 * Otherwise, throws a {@link BeanRuntimeException}.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#disableInterfaceProxies()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#disableInterfaceProxies()}
 		 * </ul>
@@ -2936,7 +2935,7 @@ public abstract class BeanContextable extends Context {
 		 * 		.build();
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jmf'>{@link BeanContext.Builder#useJavaBeanIntrospector()}
 		 * </ul>
 		 *

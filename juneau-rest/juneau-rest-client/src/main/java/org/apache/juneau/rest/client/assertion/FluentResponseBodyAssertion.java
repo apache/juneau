@@ -92,7 +92,7 @@ import org.apache.juneau.serializer.*;
  * 	</ul>
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../../index.html#ja.Overview">juneau-assertions</a>
  * 	<li class='link'><a class="doclink" href="../../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
@@ -202,7 +202,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 		.getContent().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
@@ -230,7 +230,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 		.assertContent().asBytes().asHex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>

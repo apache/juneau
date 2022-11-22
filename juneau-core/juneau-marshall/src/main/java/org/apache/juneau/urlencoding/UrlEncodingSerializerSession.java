@@ -32,11 +32,11 @@ import org.apache.juneau.uon.*;
 /**
  * Session object that lives for the duration of a single use of {@link UrlEncodingSerializer}.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.UrlEncodingDetails">URL-Encoding Details</a>
  * </ul>
  */

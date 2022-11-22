@@ -29,7 +29,7 @@ import org.apache.juneau.http.annotation.*;
  * 	<jk>new</jk> ResourceDescription(<js>"httpTool"</js>, <js>"HTTP request test client"</js>);
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.UtilityBeans">Utility Beans</a>
  * </ul>
  */

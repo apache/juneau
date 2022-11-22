@@ -25,7 +25,7 @@ import org.apache.juneau.parser.*;
 /**
  * Utility classes and methods for the {@link ExternalDocs @ExternalDocs} annotation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class ExternalDocsAnnotation {
@@ -81,7 +81,7 @@ public class ExternalDocsAnnotation {
 	/**
 	 * Builder class.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */

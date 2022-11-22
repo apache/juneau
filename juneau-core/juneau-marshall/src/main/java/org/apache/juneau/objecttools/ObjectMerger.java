@@ -62,7 +62,7 @@ import org.apache.juneau.ExecutableException;
  * 	<jsm>assertEquals</jsm>(<jk>null</jk>, <jv>merge</jv>.getX());
  * </p>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>
  * 		Null POJOs are ignored.
  * 	<li class='note'>
@@ -72,7 +72,7 @@ import org.apache.juneau.ExecutableException;
  * 		For purposes of this interface, a getter is any method with zero arguments and a non-<c>void</c> return type.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class ObjectMerger {

@@ -21,7 +21,7 @@ import org.apache.juneau.oapi.*;
 /**
  * Sample class which shows the simple usage of OpenApiSerializer.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class OapiExample {

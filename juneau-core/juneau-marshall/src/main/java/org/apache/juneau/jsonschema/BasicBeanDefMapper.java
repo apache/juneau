@@ -25,7 +25,7 @@ import org.apache.juneau.*;
  * <p>
  * URIs are constructed using the pattern <js>"#/definitions/{id}"</js>.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */

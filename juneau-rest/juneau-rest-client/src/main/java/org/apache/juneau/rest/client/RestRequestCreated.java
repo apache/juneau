@@ -20,7 +20,7 @@ import org.apache.http.*;
  * <p>
  * Allows HTTP client code to get access to the underlying {@link RestRequest} if needed.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */

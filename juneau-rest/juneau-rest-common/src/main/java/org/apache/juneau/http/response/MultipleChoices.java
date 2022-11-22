@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * Indicates multiple options for the resource from which the client may choose (via agent-driven content negotiation).
  * For example, this code could be used to present multiple video format options, to list files with different filename extensions, or to suggest word-sense disambiguation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */

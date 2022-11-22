@@ -85,7 +85,7 @@ import org.apache.juneau.rest.util.*;
  * 	</ul>
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HttpParts">HTTP Parts</a>
  * </ul>
  */
@@ -263,7 +263,7 @@ public class RequestContent {
 	 * 	Map <jv>content5</jv> = <jv>req</jv>.getContent().as(TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
 	 * </ul>
@@ -300,7 +300,7 @@ public class RequestContent {
 	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>content4</jv> = <jv>req</jv>.getContent().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		<c>Collections</c> must be followed by zero or one parameter representing the value type.
 	 * 	<li class='note'>
@@ -329,7 +329,7 @@ public class RequestContent {
 	/**
 	 * Returns the HTTP content content as a plain string.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
 	 * </ul>
@@ -345,7 +345,7 @@ public class RequestContent {
 	/**
 	 * Returns the HTTP content content as a plain string.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
 	 * </ul>
@@ -393,7 +393,7 @@ public class RequestContent {
 	/**
 	 * Returns the HTTP content content as a {@link Reader}.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
 	 * 	<li class='note'>

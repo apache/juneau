@@ -100,12 +100,12 @@ import org.apache.juneau.reflect.*;
  *		</ul>
  * </ol>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>The {@link #builder(Class,Object)} method can be used to set an existing initialized builder object to pass to a constructor.
  * 	<li class='note'>An existing initialized builder can be set using the {@link #builder(Class,Object)} method.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link BeanStore}
  * </ul>
  *
@@ -208,7 +208,7 @@ public class BeanCreator<T> {
 	/**
 	 * Specifies a builder object for the bean type.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>When specified, we don't look for a static creator method.
 	 * </ul>
 	 *

@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
 /**
  * Utility classes and methods for the {@link Query @Query} annotation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class QueryAnnotation {
@@ -111,7 +111,7 @@ public class QueryAnnotation {
 	/**
 	 * Builder class.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */

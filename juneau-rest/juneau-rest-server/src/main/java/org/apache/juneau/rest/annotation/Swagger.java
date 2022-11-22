@@ -22,7 +22,7 @@ import org.apache.juneau.http.annotation.*;
 /**
  * Extended annotation for {@link Rest#swagger() @Rest(swagger)}.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Swagger</a>
  * </ul>
  */
@@ -56,7 +56,7 @@ public @interface Swagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="../../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -83,7 +83,7 @@ public @interface Swagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -156,7 +156,7 @@ public @interface Swagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="../../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -206,7 +206,7 @@ public @interface Swagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="../../../../../index.html#jd.Swagger">Swagger</a> array.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -231,7 +231,7 @@ public @interface Swagger {
 	 * The default value pulls the description from the <c>termsOfService</c> entry in the servlet resource bundle.
 	 * (e.g. <js>"termsOfService = foo"</js> or <js>"MyServlet.termsOfService = foo"</js>).
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -255,7 +255,7 @@ public @interface Swagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain-text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -366,7 +366,7 @@ public @interface Swagger {
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="../../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 	<li class='note'>
@@ -404,7 +404,7 @@ public @interface Swagger {
 	 * The default value pulls the description from the <c>version</c> entry in the servlet resource bundle.
 	 * (e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 	<li class='note'>

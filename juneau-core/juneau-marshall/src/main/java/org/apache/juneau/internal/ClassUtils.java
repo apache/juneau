@@ -21,7 +21,7 @@ import org.apache.juneau.reflect.*;
 /**
  * Class-related utility methods.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public final class ClassUtils {

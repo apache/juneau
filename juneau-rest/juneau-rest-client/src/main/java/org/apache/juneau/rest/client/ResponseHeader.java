@@ -39,7 +39,7 @@ import org.apache.juneau.rest.client.assertion.*;
  * An extension of an HttpClient {@link Header} that provides various support for converting the header to POJOs and
  * other convenience methods.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */

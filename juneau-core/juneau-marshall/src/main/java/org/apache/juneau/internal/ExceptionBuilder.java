@@ -18,7 +18,7 @@ import static org.apache.juneau.common.internal.ThrowableUtils.*;
 /**
  * Builder class for {@link Exception} objects.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <T> The exception class.

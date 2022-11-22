@@ -55,7 +55,7 @@ import org.apache.http.protocol.*;
  * 	}
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jm'>{@link RestClient.Builder#callHandler()}
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>

@@ -25,7 +25,7 @@ import org.apache.juneau.assertions.*;
 /**
  * A {@link NameValuePair} that consists of a comma-delimited list of string values.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */

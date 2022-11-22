@@ -19,7 +19,7 @@ import org.apache.juneau.internal.*;
 /**
  * A list of {@link UrlPathMatcher} objects.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @serial exclude

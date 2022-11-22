@@ -22,7 +22,7 @@ import org.apache.juneau.xml.*;
 /**
  * Specialized writer for serializing HTML.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlDetails">HTML Details</a>
  * </ul>
  */

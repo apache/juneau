@@ -22,12 +22,12 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Specialized writer for serializing XML.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>
  * 		This class is not intended for external use.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlDetails">XML Details</a>
  * </ul>
  */

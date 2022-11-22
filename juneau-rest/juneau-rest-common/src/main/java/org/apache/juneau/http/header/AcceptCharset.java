@@ -67,7 +67,7 @@ import org.apache.juneau.internal.*;
  * the Accept-Charset header, then the server SHOULD send an error response with the 406 (not acceptable) status code,
  * though the sending of an unacceptable response is also allowed.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

@@ -38,7 +38,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * Points to a file system directory containing configuration files.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  */
@@ -202,7 +202,7 @@ public class FileStore extends ConfigStore {
 		 * <p>
 		 * Use a file system watcher for file system changes.
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>Calling {@link FileStore#close()} closes the watcher.
 		 * </ul>
 		 *
@@ -227,7 +227,7 @@ public class FileStore extends ConfigStore {
 		 * <p>
 		 * Determines how frequently the file system is polled for updates.
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>This relies on internal Sun packages and may not work on all JVMs.
 		 * </ul>
 		 *

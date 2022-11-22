@@ -17,7 +17,7 @@ import java.util.*;
 /**
  * A list of {@link ResourceDescription} objects.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.UtilityBeans">Utility Beans</a>
  * </ul>
  *

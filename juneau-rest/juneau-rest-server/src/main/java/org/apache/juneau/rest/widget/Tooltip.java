@@ -26,7 +26,7 @@ import org.apache.juneau.dto.html5.*;
  * <p>
  * Tooltips depend on the existence of the <c>tooltip</c> and <c>tooltiptext</c> styles that should be present in the stylesheet for the document.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HtmlPredefinedWidgets">Predefined Widgets</a>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HtmlWidgets">Widgets</a>
  * </ul>

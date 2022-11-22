@@ -63,7 +63,7 @@ import org.apache.juneau.oapi.*;
  * 	)
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a>
  * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>
  * </ul>
@@ -166,7 +166,7 @@ public @interface Schema {
 	 * <p>
 	 * 	A JSON reference to the schema definition.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a href='https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03'>JSON Reference</a>.
 	 * </ul>
@@ -178,7 +178,7 @@ public @interface Schema {
 	/**
 	 * <mk>additionalProperties</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -191,7 +191,7 @@ public @interface Schema {
 	/**
 	 * <mk>allOf</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -311,7 +311,7 @@ public @interface Schema {
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -333,7 +333,7 @@ public @interface Schema {
 	/**
 	 * <mk>discriminator</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -425,7 +425,7 @@ public @interface Schema {
 	/**
 	 * <mk>externalDocs</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -506,12 +506,12 @@ public @interface Schema {
 	 * 		<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>
 	 * </ul>
 	 *
@@ -668,7 +668,7 @@ public @interface Schema {
 	/**
 	 * <mk>maxProperties</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -796,7 +796,7 @@ public @interface Schema {
 	/**
 	 * <mk>minProperties</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -921,7 +921,7 @@ public @interface Schema {
 	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -935,7 +935,7 @@ public @interface Schema {
 	 * <p>
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -987,7 +987,7 @@ public @interface Schema {
 	/**
 	 * <mk>properties</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -1007,7 +1007,7 @@ public @interface Schema {
 	/**
 	 * <mk>readOnly</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -1099,7 +1099,7 @@ public @interface Schema {
 	/**
 	 * <mk>title</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * </ul>
@@ -1171,11 +1171,11 @@ public @interface Schema {
 	 * 		<br>This type is currently not supported.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>Static strings are defined in {@link ParameterType}.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification#dataTypes">Swagger Data Types</a>
 	 * </ul>
 	 *
@@ -1225,7 +1225,7 @@ public @interface Schema {
 	/**
 	 * <mk>xml</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.

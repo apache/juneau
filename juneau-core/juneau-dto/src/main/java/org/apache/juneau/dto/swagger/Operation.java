@@ -123,7 +123,7 @@ import org.apache.juneau.internal.*;
  * 	}
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
  * </ul>
  */
@@ -400,7 +400,7 @@ public class Operation extends SwaggerElement {
 	 * <p>
 	 * A list of parameters that are applicable for this operation.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If a parameter is already defined at the <a class="doclink" href="https://swagger.io/specification#pathItemObject">Path Item</a>,
 	 * 		the new definition will override it, but can never remove it.

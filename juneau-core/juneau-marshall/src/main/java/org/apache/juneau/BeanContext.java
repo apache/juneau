@@ -148,11 +148,11 @@ import org.apache.juneau.utils.*;
  * 	Person <jv>person</jv> = <jv>map2</jv>.getBean();  <jc>// Get the bean instance that was created.</jc>
  * </p>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../index.html#jm.BeanContexts">Bean Contexts</a>
  * </ul>
  */
@@ -441,12 +441,12 @@ public class BeanContext extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a non-public bean class to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean class to ignore it as a bean.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanClassVisibility()}
 		 * </ul>
 		 *
@@ -490,12 +490,12 @@ public class BeanContext extends Context {
 		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Beanc @Beanc} annotation can also be used to expose a non-public constructor.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean constructor to ignore it.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanConstructorVisibility()}
 		 * </ul>
 		 *
@@ -548,12 +548,12 @@ public class BeanContext extends Context {
 		 * 		.build();
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used to expose a non-public field.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean field to ignore it as a bean property.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanFieldVisibility()}
 		 * </ul>
 		 *
@@ -608,7 +608,7 @@ public class BeanContext extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> Address());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jc'>{@link BeanInterceptor}
 		 * 	<li class='ja'>{@link Bean#interceptor() Bean(interceptor)}
 		 * </ul>
@@ -646,7 +646,7 @@ public class BeanContext extends Context {
 		 * 	Object <jv>oldValue</jv> = <jv>myBeanMap</jv>.put(<js>"foo"</js>, <js>"baz"</js>);  <jc>// oldValue == "bar"</jc>
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanMapPutReturnsOldValue()}
 		 * </ul>
 		 *
@@ -697,12 +697,12 @@ public class BeanContext extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used to expose a non-public method.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean getter/setter to ignore it as a bean property.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanMethodVisibility()}
 		 * </ul>
 		 *
@@ -753,12 +753,12 @@ public class BeanContext extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireDefaultConstructor()}
 		 * </ul>
 		 *
@@ -812,12 +812,12 @@ public class BeanContext extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSerializable()}
 		 * </ul>
 		 *
@@ -869,7 +869,7 @@ public class BeanContext extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can be used on the getter to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters to ignore them as bean properties.
 		 * </ul>
@@ -919,12 +919,12 @@ public class BeanContext extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on the class to force it to be recognized as a bean class
 		 * 		even if it has no properties.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableBeansRequireSomeProperties()}
 		 * </ul>
 		 *
@@ -994,7 +994,7 @@ public class BeanContext extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).properties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#properties()}/{@link Bean#p()} - On an annotation on the bean class itself.
 		 * </ul>
 		 *
@@ -1054,7 +1054,7 @@ public class BeanContext extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).properties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#properties()} / {@link Bean#p()}- On an annotation on the bean class itself.
 		 * </ul>
 		 *
@@ -1117,7 +1117,7 @@ public class BeanContext extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).properties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#properties()} / {@link Bean#p()} - On an annotation on the bean class itself.
 		 * </ul>
 		 *
@@ -1171,7 +1171,7 @@ public class BeanContext extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).excludeProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
 		 * </ul>
 		 *
@@ -1223,7 +1223,7 @@ public class BeanContext extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).excludeProperties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
 		 * </ul>
 		 *
@@ -1278,7 +1278,7 @@ public class BeanContext extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).excludeProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
 		 * </ul>
 		 *
@@ -1335,7 +1335,7 @@ public class BeanContext extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).readOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
 		 * </ul>
 		 *
@@ -1390,7 +1390,7 @@ public class BeanContext extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).readOnlyProperties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
 		 * </ul>
 		 *
@@ -1448,7 +1448,7 @@ public class BeanContext extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).readOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
 		 * </ul>
 		 *
@@ -1504,7 +1504,7 @@ public class BeanContext extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).writeOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
 		 * </ul>
 		 *
@@ -1558,7 +1558,7 @@ public class BeanContext extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).writeOnlyProperties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
 		 * </ul>
 		 *
@@ -1615,7 +1615,7 @@ public class BeanContext extends Context {
 		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).writeOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
 		 * </ul>
 		 *
@@ -1708,7 +1708,7 @@ public class BeanContext extends Context {
 		 * 	Body <jv>body</jv> = <jv>parser</jv>.parse(<js>"&lt;body&gt;&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;"</js>, Body.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
@@ -1787,7 +1787,7 @@ public class BeanContext extends Context {
 		 * <p>
 		 * This is functionally equivalent to the {@link Bean#dictionary()} annotation.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jma'>{@link Bean#dictionary()}
 		 * 	<li class='jm'>{@link #beanDictionary(Class...)}
 		 * </ul>
@@ -1826,7 +1826,7 @@ public class BeanContext extends Context {
 		 * 		<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(Json5.<jsf>DEFAULT</jsf>.toString(<jv>object</jv>)).build())
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>Using this method assumes the serialized form of the object is the same as that produced
 		 * 		by the default serializer.  This may not be true based on settings or swaps on the constructed serializer.
 		 * </ul>
@@ -1886,7 +1886,7 @@ public class BeanContext extends Context {
 		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Marshalled#example()}
 		 * </ul>
 		 *
@@ -1932,12 +1932,12 @@ public class BeanContext extends Context {
 		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>);
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used on methods to individually identify them as fluent setters.
 		 * 	<li class='note'>The {@link Bean#findFluentSetters() @Bean.fluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#findFluentSetters()}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#findFluentSetters()}
 		 * </ul>
@@ -1984,11 +1984,11 @@ public class BeanContext extends Context {
 		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>);
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>This method is functionally equivalent to using the {@link Bean#findFluentSetters()} annotation.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#findFluentSetters()}
 		 * 	<li class='jm'>{@link #findFluentSetters()}
 		 * </ul>
@@ -2027,7 +2027,7 @@ public class BeanContext extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnGetters()}
 		 * </ul>
 		 *
@@ -2076,7 +2076,7 @@ public class BeanContext extends Context {
 		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnSetters()}
 		 * </ul>
 		 *
@@ -2125,11 +2125,11 @@ public class BeanContext extends Context {
 		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters and fields to ignore them.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreMissingSetters()}
 		 * </ul>
 		 *
@@ -2175,11 +2175,11 @@ public class BeanContext extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used on transient fields to keep them from being ignored.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreTransientFields()}
 		 * </ul>
 		 *
@@ -2226,7 +2226,7 @@ public class BeanContext extends Context {
 		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreUnknownBeanProperties()}
 		 * </ul>
 		 *
@@ -2255,7 +2255,7 @@ public class BeanContext extends Context {
 		 * <p>
 		 * When enabled, unknown enum values will be set to <jk>null</jk> instead of throwing an exception.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreUnknownEnumValues()}
 		 * </ul>
 		 *
@@ -2302,7 +2302,7 @@ public class BeanContext extends Context {
 		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:null}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreUnknownNullBeanProperties()}
 		 * </ul>
 		 *
@@ -2436,7 +2436,7 @@ public class BeanContext extends Context {
 		 * This annotation can be used on the parent class so that it filters to all child classes, or can be set
 		 * individually on the child classes.
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
 		 * </ul>
 		 *
@@ -2482,7 +2482,7 @@ public class BeanContext extends Context {
 		 * This annotation can be used on the parent class so that it filters to all child classes, or can be set
 		 * individually on the child classes.
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
 		 * </ul>
 		 *
@@ -2526,7 +2526,7 @@ public class BeanContext extends Context {
 		 * 		.build();
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#locale()}
 		 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#locale(Locale)}
 		 * </ul>
@@ -2569,7 +2569,7 @@ public class BeanContext extends Context {
 		 * 		.build();
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#mediaType()}
 		 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#mediaType(MediaType)}
 		 * </ul>
@@ -2618,11 +2618,11 @@ public class BeanContext extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on classes to prevent them from being recognized as beans.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnore}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#notBeanClasses()}
 		 * </ul>
@@ -2807,7 +2807,7 @@ public class BeanContext extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#propertyNamer() Bean(propertyNamer)}
 		 * 	<li class='jm'>{@link #propertyNamer(Class)}
 		 * </ul>
@@ -2856,7 +2856,7 @@ public class BeanContext extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean#sort() @Bean.sort()} annotation can also be used to sort properties on just a single class.
 		 * </ul>
 		 *
@@ -2905,7 +2905,7 @@ public class BeanContext extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#sort() Bean(sort)}
 		 * 	<li class='jm'>{@link #sortProperties()}
 		 * </ul>
@@ -3031,7 +3031,7 @@ public class BeanContext extends Context {
 		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Swap @Swap} annotation can also be used on classes to identify swaps for the class.
 		 * 	<li class='note'>The {@link Swap @Swap} annotation can also be used on bean methods and fields to identify swaps for values of those bean properties.
 		 * </ul>
@@ -3158,7 +3158,7 @@ public class BeanContext extends Context {
 		 * 		.build();
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#timeZone()}
 		 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#timeZone(TimeZone)}
 		 * </ul>
@@ -3198,11 +3198,11 @@ public class BeanContext extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>Equivalent to the {@link Bean#typeName() Bean(typeName)} annotation.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jc'>{@link Bean#typeName() Bean(typeName)}
 		 * 	<li class='jm'>{@link #beanDictionary(Class...)}
 		 * </ul>
@@ -3259,7 +3259,7 @@ public class BeanContext extends Context {
 		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#typePropertyName()}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#typePropertyName()}
 		 * </ul>
@@ -3305,7 +3305,7 @@ public class BeanContext extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#typePropertyName() Bean(typePropertyName)}
 		 * </ul>
 		 *
@@ -3381,7 +3381,7 @@ public class BeanContext extends Context {
 		 * {@link InvocationHandler} if there is no other way of instantiating them.
 		 * Otherwise, throws a {@link BeanRuntimeException}.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableInterfaceProxies()}
 		 * </ul>
 		 *

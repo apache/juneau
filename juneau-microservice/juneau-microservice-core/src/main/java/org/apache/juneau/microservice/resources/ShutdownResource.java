@@ -18,7 +18,7 @@ import org.apache.juneau.rest.servlet.*;
 /**
  * Provides the capability to shut down this REST microservice through a REST call.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-microservice-core">juneau-microservice-core</a>
  * </ul>
  *

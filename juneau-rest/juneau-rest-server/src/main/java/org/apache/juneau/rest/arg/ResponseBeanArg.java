@@ -32,7 +32,7 @@ import org.apache.juneau.rest.annotation.*;
  * 		.{@link RestResponse#setContent(Object) setOutput}(<jv>value</jv>);
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.ResponseBeans">@Response Beans</a>
  * </ul>
  */

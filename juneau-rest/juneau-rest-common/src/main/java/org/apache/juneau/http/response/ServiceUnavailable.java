@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The server is currently unavailable (because it is overloaded or down for maintenance).
  * <br>Generally, this is a temporary state.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

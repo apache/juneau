@@ -69,11 +69,11 @@ import org.apache.juneau.xml.*;
  * <br>These variables are replaced at runtime based on the HTTP request locale.
  * <br>Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlDetails">HTML Details</a>
  * </ul>
  */
@@ -234,7 +234,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 		.build();
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		Format: HTML
 		 * 	<li class='note'>
@@ -771,12 +771,12 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 		.build();
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		Widgets are inherited from super classes, but can be overridden by reusing the widget name.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HtmlWidgets">Widgets</a>
 		 * </ul>
 		 *

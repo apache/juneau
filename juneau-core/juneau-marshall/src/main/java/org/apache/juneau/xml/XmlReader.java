@@ -29,7 +29,7 @@ import org.apache.juneau.parser.*;
  * The purpose is to encapsulate the reader with the {@link ParserPipe} object so that it can be retrieved for
  * debugging purposes.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlDetails">XML Details</a>
  * </ul>
  */

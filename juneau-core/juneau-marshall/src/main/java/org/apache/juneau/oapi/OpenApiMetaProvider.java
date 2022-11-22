@@ -17,7 +17,7 @@ import org.apache.juneau.*;
 /**
  * Interface for providing access to {@link OpenApiClassMeta} and {@link OpenApiBeanPropertyMeta} objects.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.OpenApiDetails">OpenAPI Details</a>
  * </ul>
  */

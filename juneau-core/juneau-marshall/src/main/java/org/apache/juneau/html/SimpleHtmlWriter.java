@@ -23,7 +23,7 @@ import java.io.*;
  * 	.append(<js>"hello"</js>).eTag(<js>"td"</js>).eTag(<js>"tr"</js>).eTag(<js>"table"</js>).toString();
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlDetails">HTML Details</a>
  * </ul>
  */

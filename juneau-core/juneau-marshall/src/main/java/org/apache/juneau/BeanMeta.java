@@ -54,7 +54,7 @@ import org.apache.juneau.reflect.*;
  * 		</ul>
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <T> The class type that this metadata applies to.

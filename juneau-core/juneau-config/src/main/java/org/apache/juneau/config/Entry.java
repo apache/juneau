@@ -163,7 +163,7 @@ public class Entry {
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Use the {@link #as(Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>

@@ -26,11 +26,11 @@ import org.apache.http.protocol.*;
  * <p>
  * This class is instantiated by the {@link MockRestClient.Builder} class.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>This implementation is not thread safe.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-mock">juneau-rest-mock</a>
  * </ul>
  */

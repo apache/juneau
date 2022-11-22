@@ -84,7 +84,7 @@ import org.apache.juneau.internal.*;
  * If the TE field-value is empty or if no TE field is present, the only transfer-coding is "chunked".
  * A message with no transfer-coding is always acceptable.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

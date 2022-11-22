@@ -19,7 +19,7 @@ import java.util.*;
 /**
  * Represents the enablement settings of a feature.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public enum Enablement {

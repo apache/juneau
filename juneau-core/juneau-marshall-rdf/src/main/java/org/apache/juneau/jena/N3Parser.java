@@ -15,11 +15,11 @@ package org.apache.juneau.jena;
 /**
  * Subclass of {@link RdfParser} for parsing RDF in N3 notation.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */

@@ -26,7 +26,7 @@ import javax.servlet.http.*;
  * Session-based tests can use this API to create customized instances of {@link HttpSession} objects
  * that can be passed to the {@link MockRestRequest#httpSession(HttpSession)} method.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-mock">juneau-rest-mock</a>
  * </ul>
  */

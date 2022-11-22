@@ -195,7 +195,7 @@ public class Section {
 	 * 	<jv>ci</jv>.save();
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>Calls to setters when the configuration is read-only will cause {@link UnsupportedOperationException} to be thrown.
 	 * </ul>
 	 *

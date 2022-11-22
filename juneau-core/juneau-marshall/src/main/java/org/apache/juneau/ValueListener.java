@@ -15,7 +15,7 @@ package org.apache.juneau;
 /**
  * Simple listener for the {@link Value} class.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <T> Value type.

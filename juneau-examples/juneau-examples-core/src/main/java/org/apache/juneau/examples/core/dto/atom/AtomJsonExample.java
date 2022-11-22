@@ -19,7 +19,7 @@ import org.apache.juneau.json.Json5Serializer;
 /**
  * Atom feed JSON example.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class AtomJsonExample {

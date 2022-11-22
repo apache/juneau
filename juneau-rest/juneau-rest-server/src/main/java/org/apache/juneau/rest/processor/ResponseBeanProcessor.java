@@ -32,7 +32,7 @@ import org.apache.juneau.httppart.bean.*;
 /**
  * Response handler for {@link Response @Response}-annotated objects.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.ResponseProcessors">Response Processors</a>
  * </ul>
  */

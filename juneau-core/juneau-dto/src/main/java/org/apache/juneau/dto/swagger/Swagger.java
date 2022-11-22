@@ -29,7 +29,7 @@ import org.apache.juneau.objecttools.*;
 /**
  * This is the root document object for the API specification.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
  * </ul>
  */

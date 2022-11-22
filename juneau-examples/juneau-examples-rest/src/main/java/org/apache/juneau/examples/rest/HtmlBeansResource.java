@@ -24,7 +24,7 @@ import org.apache.juneau.rest.widget.*;
 /**
  * Sample resource that allows images to be uploaded and retrieved.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Marshalling">REST Marshalling</a>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HtmlBeans">HtmlBeans</a>
  * </ul>

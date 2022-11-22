@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported).
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

@@ -107,11 +107,11 @@ import org.apache.juneau.utils.*;
  * JsonList(CharSequence)} constructors instead of using this class.
  * The end result should be the same.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.JsonDetails">JSON Details</a>
  * </ul>
  */

@@ -19,7 +19,7 @@ import java.util.*;
 /**
  * Encapsulates multiple collections so they can be iterated over as if they were all part of the same collection.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <E> The object type of this set.

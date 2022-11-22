@@ -38,7 +38,7 @@ import org.apache.juneau.*;
  * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new byte</jk>[] {1,2,3});  <jc>// Produces "'AQID'"</jc>
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
  * </ul>
  *

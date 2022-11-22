@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * The request did not specify the length of its content, which is required by the requested resource.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

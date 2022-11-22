@@ -36,7 +36,7 @@ import org.apache.juneau.rest.stats.*;
  * <p>
  * Implements the basic REST endpoints defined in {@link BasicRestOperations}.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.AnnotatedClasses">@Rest-Annotated Classes</a>
  * </ul>
  *

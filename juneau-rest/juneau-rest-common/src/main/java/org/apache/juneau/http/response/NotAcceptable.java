@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
  * <br>
  * The requested resource is capable of generating only content not acceptable according to the Accept headers sent in the request.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

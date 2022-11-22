@@ -29,7 +29,7 @@ import org.apache.juneau.xml.annotation.*;
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
@@ -87,12 +87,12 @@ public @interface RdfConfig {
 	 * 		http://www.dajobe.org/2004/01/turtle/
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#language(String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#language(String)}
 	 * </ul>
@@ -104,12 +104,12 @@ public @interface RdfConfig {
 	/**
 	 * XML namespace for Juneau properties.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#juneauNs(Namespace)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#juneauNs(Namespace)}
 	 * </ul>
@@ -121,12 +121,12 @@ public @interface RdfConfig {
 	/**
 	 * Default XML namespace for bean properties.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#juneauBpNs(Namespace)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#juneauBpNs(Namespace)}
 	 * </ul>
@@ -154,7 +154,7 @@ public @interface RdfConfig {
 	 * 		{doc http://www.ietf.org/rfc/rfc3987.txt RFC 3987}).
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
@@ -179,12 +179,12 @@ public @interface RdfConfig {
 	 * 	<li><js>"strict-fatal"</js>
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li>
 	 * 		{doc ext.ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
 	 * 	<li>
@@ -205,12 +205,12 @@ public @interface RdfConfig {
 	 * <p>
 	 * Sets ARP to look for RDF embedded within an enclosing XML document.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li>
 	 * 		{doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 	 * </ul>
@@ -225,12 +225,12 @@ public @interface RdfConfig {
 	 * <p>
 	 * The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_xmlbase(String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_xmlbase(String)}
 	 * </ul>
@@ -246,12 +246,12 @@ public @interface RdfConfig {
 	 * Whether to use long ID's for anon resources.
 	 * <br>Short ID's are easier to read, but can run out of memory on very large models.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_longId()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_longId()}
 	 * </ul>
@@ -266,12 +266,12 @@ public @interface RdfConfig {
 	 * <p>
 	 * URIs in the graph are, by default, checked prior to serialization.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_allowBadUris()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_allowBadUris()}
 	 * </ul>
@@ -308,12 +308,12 @@ public @interface RdfConfig {
 	 * To switch off relative URIs use the value <js>""</js>.
 	 * Relative URIs of any of these types are output where possible if and only if the option has been specified.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_relativeUris(String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_relativeUris(String)}
 	 * </ul>
@@ -336,12 +336,12 @@ public @interface RdfConfig {
 	 * 		In this case the encoding is shown in the XML declaration.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_showXmlDeclaration(String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_showXmlDeclaration(String)}
 	 * </ul>
@@ -359,12 +359,12 @@ public @interface RdfConfig {
 	 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
 	 * invocation.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_disableShowDoctypeDeclaration()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_disableShowDoctypeDeclaration()}
 	 * </ul>
@@ -379,12 +379,12 @@ public @interface RdfConfig {
 	 * <p>
 	 * The number of spaces with which to indent XML child elements.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_tab(int)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_tab(int)}
 	 * </ul>
@@ -399,12 +399,12 @@ public @interface RdfConfig {
 	 * <p>
 	 * The XML attribute quote character.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_attributeQuoteChar(char)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_attributeQuoteChar(char)}
 	 * </ul>
@@ -421,12 +421,12 @@ public @interface RdfConfig {
 	 * {doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
 	 * rules that will not be used.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_blockRules(String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_blockRules(String)}
 	 * </ul>
@@ -441,12 +441,12 @@ public @interface RdfConfig {
 	 * <p>
 	 * Minimum gap between items on a line.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_minGap(int)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_minGap(int)}
 	 * </ul>
@@ -461,12 +461,12 @@ public @interface RdfConfig {
 	 * <p>
 	 * Don't print object lists as comma separated lists.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableObjectLists()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableObjectLists()}
 	 * </ul>
@@ -481,12 +481,12 @@ public @interface RdfConfig {
 	 * <p>
 	 * If the subject is shorter than this value, the first property may go on the same line.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_subjectColumn(int)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_subjectColumn(int)}
 	 * </ul>
@@ -501,12 +501,12 @@ public @interface RdfConfig {
 	 * <p>
 	 * Width of the property column.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_propertyColumn(int)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_propertyColumn(int)}
 	 * </ul>
@@ -521,12 +521,12 @@ public @interface RdfConfig {
 	 * <p>
 	 * Width to indent properties.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_indentProperty(int)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_indentProperty(int)}
 	 * </ul>
@@ -542,12 +542,12 @@ public @interface RdfConfig {
 	 * Width of the property column.
 	 * <br>Must be longer than <c>propertyColumn</c>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_widePropertyLen(int)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_widePropertyLen(int)}
 	 * </ul>
@@ -562,12 +562,12 @@ public @interface RdfConfig {
 	 * <p>
 	 * Controls whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableAbbrevBaseUri()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableAbbrevBaseUri()}
 	 * </ul>
@@ -582,12 +582,12 @@ public @interface RdfConfig {
 	 * <p>
 	 * Controls whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableUsePropertySymbols()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableUsePropertySymbols()}
 	 * </ul>
@@ -602,12 +602,12 @@ public @interface RdfConfig {
 	 * <p>
 	 * Disallow the use of <c>"""</c> to delimit long strings.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableUseTripleQuotedStrings()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableUseTripleQuotedStrings()}
 	 * </ul>
@@ -622,12 +622,12 @@ public @interface RdfConfig {
 	 * <p>
 	 * Disallow the use doubles as <c>123.456</c>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableUseDoubles()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableUseDoubles()}
 	 * </ul>
@@ -652,7 +652,7 @@ public @interface RdfConfig {
 	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
 	 * 		lost.
@@ -660,7 +660,7 @@ public @interface RdfConfig {
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#collectionFormat(RdfCollectionFormat)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#collectionFormat(RdfCollectionFormat)}
 	 * </ul>
@@ -685,12 +685,12 @@ public @interface RdfConfig {
 	 * This setting is typically only useful if the beans being parsed into do not have a bean property
 	 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#looseCollections()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#looseCollections()}
 	 * </ul>
@@ -709,12 +709,12 @@ public @interface RdfConfig {
 	 * <p>
 	 * If <js>"true"</js>, whitespace in text elements will be automatically trimmed.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#trimWhitespace()}
 	 * </ul>
 	 *
@@ -736,12 +736,12 @@ public @interface RdfConfig {
 	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#addBeanTypes()}
 	 * </ul>
 	 *
@@ -752,12 +752,12 @@ public @interface RdfConfig {
 	/**
 	 * Add XSI data types to non-<c>String</c> literals.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#addLiteralTypes()}
 	 * </ul>
 	 *
@@ -777,12 +777,12 @@ public @interface RdfConfig {
 	 * If disabled, the parser has to search through the model to find any resources without incoming predicates to
 	 * identify root notes, which can introduce a considerable performance degradation.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#addRootProperty()}
 	 * </ul>
 	 *
@@ -800,12 +800,12 @@ public @interface RdfConfig {
 	 * If disabled, then the data structure will first be crawled looking for namespaces that will be encountered before
 	 * the root element is serialized.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#disableAutoDetectNamespaces()}
 	 * </ul>
 	 *
@@ -819,12 +819,12 @@ public @interface RdfConfig {
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#namespaces(Namespace...)}
 	 * </ul>
 	 *
@@ -844,12 +844,12 @@ public @interface RdfConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#disableUseXmlNamespaces()}
 	 * </ul>
 	 *

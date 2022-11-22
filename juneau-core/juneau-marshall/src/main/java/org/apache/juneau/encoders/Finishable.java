@@ -17,7 +17,7 @@ import java.io.*;
 /**
  * Interface that identifies an output stream has having a <c>finish()</c> method.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Encoders">Encoders</a>
  * </ul>
  */

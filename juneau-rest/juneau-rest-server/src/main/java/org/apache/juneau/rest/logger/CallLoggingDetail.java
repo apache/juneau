@@ -17,7 +17,7 @@ import org.apache.juneau.common.internal.*;
 /**
  * Represents the amount of detail to include in a log entry for HTTP requests and responses.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.LoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  */

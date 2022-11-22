@@ -19,7 +19,7 @@ import java.util.function.*;
 /**
  * A subclass of {@link Function} that allows for thrown exceptions.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <T> the type of the input to the function.

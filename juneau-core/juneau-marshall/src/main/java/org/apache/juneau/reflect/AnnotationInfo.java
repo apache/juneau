@@ -32,7 +32,7 @@ import org.apache.juneau.svl.*;
 /**
  * Represents an annotation instance on a class and the class it was found on.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <T> The annotation type.

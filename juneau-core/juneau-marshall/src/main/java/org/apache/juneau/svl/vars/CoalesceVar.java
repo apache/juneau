@@ -20,7 +20,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * The format for this var is <js>"$CO{arg1[,arg2...]}"</js>.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.SimpleVariableLanguage">Simple Variable Language</a>
  * </ul>
  */

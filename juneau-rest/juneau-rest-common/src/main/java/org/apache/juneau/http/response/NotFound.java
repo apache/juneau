@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The requested resource could not be found but may be available in the future.
  * <br>Subsequent requests by the client are permissible.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

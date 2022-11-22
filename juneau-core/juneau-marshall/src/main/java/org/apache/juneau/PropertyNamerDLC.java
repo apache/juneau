@@ -25,7 +25,7 @@ import static org.apache.juneau.common.internal.StringUtils.*;
  * 	<li><js>"FooBarURL"</js> -&gt; <js>"foo-bar-url"</js>
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public final class PropertyNamerDLC implements PropertyNamer {

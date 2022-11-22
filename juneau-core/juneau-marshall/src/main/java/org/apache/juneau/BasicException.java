@@ -21,7 +21,7 @@ import org.apache.juneau.common.internal.*;
 /**
  * Subclass of non-runtime exceptions that take in a message and zero or more arguments.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @serial exclude

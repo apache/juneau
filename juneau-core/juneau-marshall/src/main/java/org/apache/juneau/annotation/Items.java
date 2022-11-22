@@ -63,7 +63,7 @@ import org.apache.juneau.oapi.*;
  * 	)
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>
  * </ul>
@@ -75,7 +75,7 @@ public @interface Items {
 	/**
 	 * <mk>default</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -87,7 +87,7 @@ public @interface Items {
 	/**
 	 * <mk>enum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Each entry is a possible value.  Can also contain comma-delimited lists of values.
 	 * </ul>
@@ -99,7 +99,7 @@ public @interface Items {
 	/**
 	 * <mk>$ref</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -118,7 +118,7 @@ public @interface Items {
 	/**
 	 * <mk>collectionFormat</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -158,7 +158,7 @@ public @interface Items {
 	/**
 	 * <mk>exclusiveMaximum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -170,7 +170,7 @@ public @interface Items {
 	/**
 	 * <mk>exclusiveMinimum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -189,7 +189,7 @@ public @interface Items {
 	/**
 	 * <mk>format</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -225,7 +225,7 @@ public @interface Items {
 	/**
 	 * <mk>maximum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -237,7 +237,7 @@ public @interface Items {
 	/**
 	 * <mk>maxItems</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -256,7 +256,7 @@ public @interface Items {
 	/**
 	 * <mk>maxLength</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -282,7 +282,7 @@ public @interface Items {
 	/**
 	 * <mk>minimum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -294,7 +294,7 @@ public @interface Items {
 	/**
 	 * <mk>minItems</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -313,7 +313,7 @@ public @interface Items {
 	/**
 	 * <mk>minLength</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -332,7 +332,7 @@ public @interface Items {
 	/**
 	 * <mk>multipleOf</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -351,7 +351,7 @@ public @interface Items {
 	/**
 	 * <mk>pattern</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -370,7 +370,7 @@ public @interface Items {
 	/**
 	 * <mk>type</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -389,7 +389,7 @@ public @interface Items {
 	/**
 	 * <mk>uniqueItems</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>

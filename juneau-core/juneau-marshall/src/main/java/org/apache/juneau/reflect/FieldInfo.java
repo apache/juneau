@@ -23,7 +23,7 @@ import org.apache.juneau.*;
 /**
  * Lightweight utility class for introspecting information about a field.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public final class FieldInfo implements Comparable<FieldInfo> {

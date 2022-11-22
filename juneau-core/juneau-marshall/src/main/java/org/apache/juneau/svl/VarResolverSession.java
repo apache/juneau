@@ -36,11 +36,11 @@ import org.apache.juneau.internal.*;
  * Instances of this class are created through the {@link VarResolver#createSession()} and
  * {@link VarResolver#createSession(BeanStore)} methods.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>This class is not guaranteed to be thread safe.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SimpleVariableLanguage">Simple Variable Language</a>
  * </ul>
  */

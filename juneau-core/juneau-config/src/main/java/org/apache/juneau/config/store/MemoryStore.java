@@ -29,7 +29,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * Points to a file system directory containing configuration files.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  */

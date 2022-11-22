@@ -24,11 +24,11 @@ import java.io.*;
  * <p>
  * Encoders are registered with <c>RestServlets</c> through the <ja>@Rest(encoders)</ja> annotation.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Encoders">Encoders</a>
  * </ul>
  */

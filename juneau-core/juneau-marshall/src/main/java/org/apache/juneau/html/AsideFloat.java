@@ -15,7 +15,7 @@ package org.apache.juneau.html;
 /**
  * Identifies possible float values for {@link HtmlDocSerializer.Builder#asideFloat(AsideFloat)}.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlDetails">HTML Details</a>
  * </ul>
  */

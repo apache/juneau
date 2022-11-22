@@ -23,7 +23,7 @@ import org.apache.juneau.internal.*;
 /**
  * A list of {@link RestGuard} objects.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Guards">Guards</a>
  * </ul>
  */

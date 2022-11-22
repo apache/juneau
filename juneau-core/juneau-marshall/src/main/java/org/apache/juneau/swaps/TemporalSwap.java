@@ -49,7 +49,7 @@ import org.apache.juneau.swap.*;
  * 	<li class='jc'>{@link ZonedDateTime}
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
  * </ul>
  */

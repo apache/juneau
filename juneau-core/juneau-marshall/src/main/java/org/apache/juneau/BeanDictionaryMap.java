@@ -56,7 +56,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  * Subclasses must implement a public no-arg constructor so that it can be instantiated by the bean context code.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @serial exclude

@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Used for fluent assertion calls against comparable objects.
  *
- * <h5 class='topic'>Test Methods</h5>
+ * <h5 class='section'>Test Methods:</h5><ul>
  * <p>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentComparableAssertion}
@@ -56,7 +56,7 @@ import org.apache.juneau.serializer.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='topic'>Transform Methods</h5>
+ * <h5 class='section'>Transform Methods:</h5><ul>
  * <p>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentObjectAssertion}
@@ -71,7 +71,7 @@ import org.apache.juneau.serializer.*;
  *	</ul>
  * </ul>
  *
- * <h5 class='topic'>Configuration Methods</h5>
+ * <h5 class='section'>Configuration Methods:</h5><ul>
  * <p>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}
@@ -84,7 +84,7 @@ import org.apache.juneau.serializer.*;
  * 	</ul>
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#ja.Overview">Overview &gt; juneau-assertions &gt; Overview</a>
  * </ul>
  *

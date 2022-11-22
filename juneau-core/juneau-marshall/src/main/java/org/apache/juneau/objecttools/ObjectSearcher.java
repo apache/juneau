@@ -92,7 +92,7 @@ import org.apache.juneau.*;
  * 	<li><js>"property=2011 - 2013-06-30"</js> - Closed ranges
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.ObjectTools">Overview &gt; juneau-marshall &gt; Object Tools</a>
  * </ul>
  */

@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The URI provided was too long for the server to process.
  * <br>Often the result of too much data being encoded as a query-string of a GET request, in which case it should be converted to a POST request.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

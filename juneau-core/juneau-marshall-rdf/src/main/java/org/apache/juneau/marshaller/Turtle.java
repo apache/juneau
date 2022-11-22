@@ -40,7 +40,7 @@ import org.apache.juneau.serializer.*;
  * 	String <jv>string</jv> = Turtle.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * 	<li class='link'>{doc jm.Marshallers}
  * </ul>

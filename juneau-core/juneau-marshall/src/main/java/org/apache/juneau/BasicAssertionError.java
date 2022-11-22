@@ -19,7 +19,7 @@ import java.text.*;
 /**
  * An extension of {@link AssertionError} with helper constructors for messages with message-style arguments.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @serial exclude

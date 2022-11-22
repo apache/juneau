@@ -25,7 +25,7 @@ import static org.apache.juneau.common.internal.StringUtils.*;
  * 	<li><js>"FooBarURL"</js> -&gt; <js>"Foo-Bar-Url"</js>
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public final class PropertyNamerDUCS implements PropertyNamer {

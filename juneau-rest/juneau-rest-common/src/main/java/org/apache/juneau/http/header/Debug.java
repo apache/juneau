@@ -31,7 +31,7 @@ import org.apache.juneau.http.annotation.*;
  * Not part of the RFC2616 specification, but provided to allow for debugging of HTTP requests.
  * <br>It's up to the server to decide whether to honor this header.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

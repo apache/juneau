@@ -33,7 +33,7 @@ import org.apache.juneau.rest.*;
  * This is particularly useful in Spring Boot environments that auto-detect servlets to deploy in servlet containers,
  * but you want this resource to be deployed as a child instead.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.AnnotatedClasses">@Rest-Annotated Classes</a>
  * </ul>
  */

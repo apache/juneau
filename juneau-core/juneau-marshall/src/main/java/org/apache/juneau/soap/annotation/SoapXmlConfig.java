@@ -26,7 +26,7 @@ import org.apache.juneau.soap.*;
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @Target({TYPE,METHOD})
@@ -56,7 +56,7 @@ public @interface SoapXmlConfig {
 	/**
 	 * The <c>SOAPAction</c> HTTP header value to set on responses.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.soap.SoapXmlSerializer.Builder#soapAction(String)}
 	 * </ul>
 	 *

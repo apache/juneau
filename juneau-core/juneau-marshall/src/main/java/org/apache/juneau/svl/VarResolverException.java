@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 /**
  * Exception that occurs during a var resolver session.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SimpleVariableLanguage">Simple Variable Language</a>
  * </ul>
  *

@@ -54,7 +54,7 @@ import org.apache.juneau.http.annotation.*;
  * The Max-Forwards header field MAY be ignored for all other methods defined by this specification and for any
  * extension methods for which it is not explicitly referred to as part of that method definition.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

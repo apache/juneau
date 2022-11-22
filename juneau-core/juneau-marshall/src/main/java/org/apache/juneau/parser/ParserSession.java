@@ -34,11 +34,11 @@ import org.apache.juneau.swap.*;
 /**
  * Session object that lives for the duration of a single use of {@link Parser}.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
@@ -555,7 +555,7 @@ public class ParserSession extends BeanSession {
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Use the {@link #parse(Object, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>

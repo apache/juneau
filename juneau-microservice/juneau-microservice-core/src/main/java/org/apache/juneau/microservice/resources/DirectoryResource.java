@@ -53,7 +53,7 @@ import org.apache.juneau.rest.servlet.*;
  * 		<l>DirectoryResource.allowDeletes</l> - If <jk>true</jk>, allows files to be deleted.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-microservice-core">juneau-microservice-core</a>
  * </ul>
  *

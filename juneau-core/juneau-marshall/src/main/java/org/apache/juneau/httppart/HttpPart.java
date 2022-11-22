@@ -22,7 +22,7 @@ import org.apache.http.*;
  * <p>
  * Can be used to represent both request and response parts.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
  * </ul>
  */

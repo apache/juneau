@@ -26,7 +26,7 @@ import java.lang.annotation.*;
  * Since annotations cannot be nested, we're forced to create a separate annotation for it.
  * <br>If you want to nest items further, you have to define them free-form using {@link #items()} as free-form JSON.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a>
  * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>
  * </ul>
@@ -38,7 +38,7 @@ public @interface SubItems {
 	/**
 	 * <mk>default</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -50,7 +50,7 @@ public @interface SubItems {
 	/**
 	 * <mk>enum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -62,7 +62,7 @@ public @interface SubItems {
 	/**
 	 * <mk>$ref</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -81,7 +81,7 @@ public @interface SubItems {
 	/**
 	 * <mk>collectionFormat</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -121,7 +121,7 @@ public @interface SubItems {
 	/**
 	 * <mk>exclusiveMaximum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -133,7 +133,7 @@ public @interface SubItems {
 	/**
 	 * <mk>exclusiveMinimum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -152,7 +152,7 @@ public @interface SubItems {
 	/**
 	 * <mk>format</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -192,7 +192,7 @@ public @interface SubItems {
 	/**
 	 * <mk>maximum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -204,7 +204,7 @@ public @interface SubItems {
 	/**
 	 * <mk>maxItems</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -223,7 +223,7 @@ public @interface SubItems {
 	/**
 	 * <mk>maxLength</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -249,7 +249,7 @@ public @interface SubItems {
 	/**
 	 * <mk>minimum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -261,7 +261,7 @@ public @interface SubItems {
 	/**
 	 * <mk>minItems</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -280,7 +280,7 @@ public @interface SubItems {
 	/**
 	 * <mk>minLength</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -299,7 +299,7 @@ public @interface SubItems {
 	/**
 	 * <mk>multipleOf</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -318,7 +318,7 @@ public @interface SubItems {
 	/**
 	 * <mk>pattern</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -337,7 +337,7 @@ public @interface SubItems {
 	/**
 	 * <mk>type</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
@@ -356,7 +356,7 @@ public @interface SubItems {
 	/**
 	 * <mk>uniqueItems</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>

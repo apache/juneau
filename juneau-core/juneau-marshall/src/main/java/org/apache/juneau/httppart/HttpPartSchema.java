@@ -47,11 +47,11 @@ import org.apache.juneau.reflect.*;
  * <p>
  * Schema objects are created via builders instantiated through the {@link #create()} method.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.OpenApiDetails">OpenAPI Details</a>
  * </ul>
  */
@@ -1113,7 +1113,7 @@ public class HttpPartSchema {
 		 * 		<br>This type is currently not supported.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification#dataTypes">Swagger Data Types</a>
 		 * </ul>
 		 *
@@ -1274,7 +1274,7 @@ public class HttpPartSchema {
 		 * 	</ul>
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification#dataTypes">Swagger Data Types</a>
 		 * </ul>
 		 *
@@ -1353,7 +1353,7 @@ public class HttpPartSchema {
 		 * 		<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>
 		 * </ul>
 		 *
@@ -1441,7 +1441,7 @@ public class HttpPartSchema {
 		 * 	</ul>
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>
 		 * </ul>
 		 *

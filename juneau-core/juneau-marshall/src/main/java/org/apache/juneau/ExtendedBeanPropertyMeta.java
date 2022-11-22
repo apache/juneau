@@ -15,7 +15,7 @@ package org.apache.juneau;
 /**
  * Defines extended language-specific metadata associated with a bean property.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class ExtendedBeanPropertyMeta extends ExtendedMeta {

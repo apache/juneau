@@ -21,7 +21,7 @@ import org.apache.juneau.svl.vars.*;
 /**
  * Simple list of variables that can consist of either variable classes or instances.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SimpleVariableLanguage">Simple Variable Language</a>
  * </ul>
  *

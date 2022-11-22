@@ -26,7 +26,7 @@ import org.apache.juneau.internal.*;
 /**
  * Represents a logging rule used by {@link CallLogger}.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.LoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  */

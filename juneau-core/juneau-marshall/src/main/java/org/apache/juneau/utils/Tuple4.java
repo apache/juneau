@@ -19,7 +19,7 @@ import org.apache.juneau.internal.*;
 /**
  * Represents a simple tuple of 4 objects.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <A> Object 1 type.

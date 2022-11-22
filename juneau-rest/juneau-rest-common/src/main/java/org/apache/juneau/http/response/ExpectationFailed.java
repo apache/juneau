@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * The server cannot meet the requirements of the Expect request-header field.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

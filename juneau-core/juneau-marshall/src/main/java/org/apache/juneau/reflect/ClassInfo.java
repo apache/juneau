@@ -54,7 +54,7 @@ import org.apache.juneau.internal.*;
  * 	}
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public final class ClassInfo {

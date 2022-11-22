@@ -25,7 +25,7 @@ import org.apache.juneau.reflect.*;
 /**
  * Various generic object utility methods.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class ObjectUtils {

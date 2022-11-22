@@ -15,7 +15,7 @@ package org.apache.juneau;
 /**
  * Identifies the possible types of URL resolution.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public enum UriResolution {

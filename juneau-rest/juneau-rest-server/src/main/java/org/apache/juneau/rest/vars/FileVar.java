@@ -51,7 +51,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * This variable resolver requires that a {@link RestRequest} bean be available in the session bean store.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.SvlVariables">SVL Variables</a>
  * </ul>
  */

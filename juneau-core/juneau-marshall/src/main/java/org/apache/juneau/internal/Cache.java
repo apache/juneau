@@ -25,7 +25,7 @@ import org.apache.juneau.common.internal.*;
  * <p>
  * Essentially just a wrapper around a ConcurrentHashMap.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <K> The key type.

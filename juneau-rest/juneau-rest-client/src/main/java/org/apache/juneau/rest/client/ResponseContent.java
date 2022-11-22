@@ -47,7 +47,7 @@ import org.apache.juneau.rest.client.assertion.*;
  * An extension of an HttpClient {@link HttpEntity} that provides various support for converting the body to POJOs and
  * other convenience methods.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */
@@ -162,7 +162,7 @@ public class ResponseContent implements HttpEntity {
 	 * <p>
 	 * Calling this method allows methods that read the response body to be called multiple times.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Multiple calls to this method are ignored.
 	 * </ul>
@@ -181,7 +181,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Returns the HTTP response message body as an input stream.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Once this input stream is exhausted, it will automatically be closed.
 	 *  <li class='note'>
@@ -249,7 +249,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Returns the HTTP response message body as a reader based on the charset on the <code>Content-Type</code> response header.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 * 	<li class='note'>
@@ -283,7 +283,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Returns the HTTP response message body as a reader using the specified charset.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Once this input stream is exhausted, it will automatically be closed.
 	 *  <li class='note'>
@@ -335,7 +335,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Pipes the contents of the response to the specified output stream.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 *	<li class='note'>
 	 *		The output stream is not automatically closed.
 	 * 	<li class='note'>
@@ -359,7 +359,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Pipes the contents of the response to the specified writer.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 *	<li class='note'>
 	 *		The writer is not automatically closed.
 	 * 	<li class='note'>
@@ -384,7 +384,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Pipes the contents of the response to the specified writer.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 *	<li class='note'>
 	 *		The writer is not automatically closed.
 	 * 	<li class='note'>
@@ -410,7 +410,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Pipes the contents of the response to the specified writer.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 *	<li class='note'>
 	 *		The writer is not automatically closed.
 	 * 	<li class='note'>
@@ -436,7 +436,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Pipes the contents of the response to the specified writer.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 *	<li class='note'>
 	 *		The writer is not automatically closed.
 	 * 	<li class='note'>
@@ -516,7 +516,7 @@ public class ResponseContent implements HttpEntity {
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Use the {@link #as(Class)} method instead if you don't need a parameterized map/collection.
 	 * 	<li class='note'>
@@ -580,7 +580,7 @@ public class ResponseContent implements HttpEntity {
 	 * 	Map <jv>map</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		You can also specify any of the following types:
 	 * 		<ul class='compact'>
@@ -639,7 +639,7 @@ public class ResponseContent implements HttpEntity {
 	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map5</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(<jv>cm5</jv>);
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 *		If {@link #cache()} or {@link RestResponse#cacheContent()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
@@ -747,7 +747,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Same as {@link #as(Class)} but allows you to run the call asynchronously.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 *		If {@link #cache()} or {@link RestResponse#cacheContent()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
@@ -778,7 +778,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Same as {@link #as(ClassMeta)} but allows you to run the call asynchronously.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 *		If {@link #cache()} or {@link RestResponse#cacheContent()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
@@ -811,7 +811,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Same as {@link #as(Type,Type...)} but allows you to run the call asynchronously.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 *		If {@link #cache()} or {@link RestResponse#cacheContent()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
@@ -850,7 +850,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Returns the contents of this body as a string.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
@@ -879,7 +879,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Same as {@link #asString()} but allows you to run the call asynchronously.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
@@ -1000,7 +1000,7 @@ public class ResponseContent implements HttpEntity {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
@@ -1034,7 +1034,7 @@ public class ResponseContent implements HttpEntity {
 	 * </p>
 	 *
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
@@ -1070,7 +1070,7 @@ public class ResponseContent implements HttpEntity {
 	 * </p>
 	 *
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
@@ -1152,7 +1152,7 @@ public class ResponseContent implements HttpEntity {
 	 * 		.getContent().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
@@ -1228,7 +1228,7 @@ public class ResponseContent implements HttpEntity {
 	 * A repeatable entity's {@link #getContent()} and {@link #writeTo(OutputStream)} methods can be called more than
 	 * once whereas a non-repeatable entity's can not.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 *	<li class='note'>This method always returns <jk>true</jk> if the response body is cached (see {@link #cache()}).
 	 * </ul>
 	 *
@@ -1299,7 +1299,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Returns a content stream of the entity.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>This method is equivalent to {@link #asInputStream()} which is the preferred method for fluent-style coding.
 	 * 	<li class='note'>This input stream will auto-close once the end of stream has been reached.
 	 * 	<li class='note'>It is up to the caller to properly close this stream if not fully consumed.
@@ -1318,7 +1318,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Writes the entity content out to the output stream.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>This method is equivalent to {@link #pipeTo(OutputStream)} which is the preferred method for fluent-style coding.
 	 * </ul>
 	 *
@@ -1332,7 +1332,7 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Tells whether this entity depends on an underlying stream.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 *	<li class='note'>This method always returns <jk>false</jk> if the response body is cached (see {@link #cache()}.
 	 * </ul>
 	 *

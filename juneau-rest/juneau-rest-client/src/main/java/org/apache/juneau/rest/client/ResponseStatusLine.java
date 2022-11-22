@@ -18,7 +18,7 @@ import org.apache.juneau.rest.client.assertion.*;
 /**
  * An implementation of {@link StatusLine} that adds assertions methods.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */

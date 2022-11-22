@@ -94,7 +94,7 @@ import org.apache.juneau.http.part.*;
  * 	</ul>
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link RequestPathParam}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HttpParts">HTTP Parts</a>

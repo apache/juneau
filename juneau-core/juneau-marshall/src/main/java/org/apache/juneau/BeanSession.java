@@ -47,7 +47,7 @@ import org.apache.juneau.swap.*;
  * 		thus can be safely cached and reused.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
@@ -116,7 +116,7 @@ public class BeanSession extends ContextSession {
 		 * <p>
 		 * If not specified, defaults to {@link BeanContext.Builder#locale(Locale)}.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#locale()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#locale(Locale)}
 		 * </ul>
@@ -157,7 +157,7 @@ public class BeanSession extends ContextSession {
 		 * <p>
 		 * If not specified, defaults to {@link BeanContext.Builder#mediaType(MediaType)}.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#mediaType()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#mediaType(MediaType)}
 		 * </ul>
@@ -198,7 +198,7 @@ public class BeanSession extends ContextSession {
 		 * <p>
 		 * If not specified, defaults to {@link BeanContext.Builder#timeZone(TimeZone)}.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanConfig#timeZone()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#timeZone(TimeZone)}
 		 * </ul>

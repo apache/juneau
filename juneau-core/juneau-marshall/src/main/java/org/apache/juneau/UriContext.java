@@ -35,7 +35,7 @@ import org.apache.juneau.parser.*;
  * This class allows you to convert URL strings to absolute (e.g. <js>"http://host:port/foo/bar"</js>) or root-relative
  * (e.g. <js>"/foo/bar"</js>) URLs.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @Bean

@@ -15,7 +15,7 @@ package org.apache.juneau.internal;
 /**
  * Enums for state-machine states.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @SuppressWarnings("javadoc")

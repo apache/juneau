@@ -20,7 +20,7 @@ import org.apache.juneau.rest.*;
  * <p>
  * The variable it resolves is <js>"$W{QueryMenuItem}"</js>.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HtmlPredefinedWidgets">Predefined Widgets</a>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HtmlWidgets">Widgets</a>
  * </ul>

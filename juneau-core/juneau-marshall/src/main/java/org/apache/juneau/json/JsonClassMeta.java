@@ -21,7 +21,7 @@ import org.apache.juneau.json.annotation.*;
  * Metadata on classes specific to the JSON serializers and parsers pulled from the {@link Json @Json} annotation on
  * the class.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.JsonDetails">JSON Details</a>
  * </ul>
  */

@@ -20,7 +20,7 @@ import org.apache.juneau.html.annotation.*;
  * Metadata on bean properties specific to the HTML serializers and parsers pulled from the {@link Html @Html}
  * annotation on the bean property.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlDetails">HTML Details</a>
  * </ul>
  */

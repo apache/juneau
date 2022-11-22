@@ -27,7 +27,7 @@ import org.apache.juneau.common.internal.*;
  * In general, the simple name will be used as the XML prefix mapping unless there are conflicts or prefix re-mappings
  * in the serializer.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlDetails">XML Details</a> * </ul>
  */
 @Bean(sort=true)

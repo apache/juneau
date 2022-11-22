@@ -19,7 +19,7 @@ import org.apache.juneau.uon.annotation.*;
  * Metadata on bean properties specific to the UON serializers and parsers pulled from the {@link Uon @Uon}
  * annotation on the bean property.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.UonDetails">UON Details</a>
  * </ul>
  */

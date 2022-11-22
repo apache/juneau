@@ -27,7 +27,7 @@ import org.apache.juneau.svl.*;
 /**
  * Utility classes and methods for the {@link Uon @Uon} annotation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.UonDetails">UON Details</a>
  * </ul>
  */
@@ -91,7 +91,7 @@ public class UonAnnotation {
 	/**
 	 * Builder class.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */

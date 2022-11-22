@@ -26,7 +26,7 @@ import org.apache.juneau.swap.*;
 /**
  * Utility classes and methods for the {@link Bean @Bean} annotation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class BeanAnnotation {
@@ -108,7 +108,7 @@ public class BeanAnnotation {
 	/**
 	 * Builder class.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */

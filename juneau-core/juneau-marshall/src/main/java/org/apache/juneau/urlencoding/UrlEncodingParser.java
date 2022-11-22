@@ -42,11 +42,11 @@ import org.apache.juneau.utils.*;
  * <p>
  * This parser uses a state machine, which makes it very fast and efficient.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.UrlEncodingDetails">URL-Encoding Details</a>
  * </ul>
  */
@@ -162,7 +162,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 		 * <p>
 		 * This option only applies to beans.
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		If parsing multi-part parameters, it's highly recommended to use Collections or Lists
 		 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value

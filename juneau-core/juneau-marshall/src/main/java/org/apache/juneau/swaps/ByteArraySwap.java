@@ -20,7 +20,7 @@ import org.apache.juneau.swap.*;
 /**
  * Transforms <code><jk>byte</jk>[]</code> arrays to Strings.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
  * </ul>
  */

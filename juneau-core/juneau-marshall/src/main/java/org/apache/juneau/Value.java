@@ -24,11 +24,11 @@ import org.apache.juneau.reflect.*;
  * <p>
  * Similar to an {@link Optional} but mutable.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <T> The value type.

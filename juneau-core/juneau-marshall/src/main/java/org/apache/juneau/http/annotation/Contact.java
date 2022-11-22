@@ -36,7 +36,7 @@ import java.lang.annotation.*;
  * 	)
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Swagger</a>
  * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#contactObject">Swagger Contact Object</a>
  * </ul>
@@ -51,7 +51,7 @@ public @interface Contact {
 	 * <p>
 	 * The email address of the contact person/organization. MUST be in the format of an email address.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is an email string.
 	 * 	<li class='note'>
@@ -68,7 +68,7 @@ public @interface Contact {
 	 * <p>
 	 * The identifying name of the contact person/organization.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * 	<li class='note'>
@@ -85,7 +85,7 @@ public @interface Contact {
 	 * <p>
 	 * The URL pointing to the contact information. MUST be in the format of a URL.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a URL string.
 	 * 	<li class='note'>

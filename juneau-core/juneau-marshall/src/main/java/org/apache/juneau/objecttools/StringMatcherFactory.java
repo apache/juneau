@@ -37,7 +37,7 @@ import org.apache.juneau.common.internal.*;
  * 	<li><js>"property=/foo\\s+bar"</js> - Regular expression match
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.ObjectTools">Overview &gt; juneau-marshall &gt; Object Tools</a>
  * </ul>
  */

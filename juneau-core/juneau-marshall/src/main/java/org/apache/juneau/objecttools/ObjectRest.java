@@ -126,7 +126,7 @@ import org.apache.juneau.parser.*;
  * 	Map <jv>map</jv> = <jv>objectRest</jv>.getMap(<js>"/items/@name=foo"</js>);
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
@@ -321,7 +321,7 @@ public final class ObjectRest {
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Use the {@link #get(String, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
@@ -698,7 +698,7 @@ public final class ObjectRest {
 	 * <p>
 	 * This method expands the POJO model as necessary to create the new element.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		You can only post to three types of nodes:
 	 * 		<ul>

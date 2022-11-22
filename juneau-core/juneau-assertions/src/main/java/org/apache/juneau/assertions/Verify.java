@@ -32,7 +32,7 @@ import org.apache.juneau.cp.*;
  * 		<jk>throw new</jk> RuntimeException(<jv>errorMessage</jv>);
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#ja.Overview">Overview &gt; juneau-assertions &gt; Overview</a>
  * </ul>
  */

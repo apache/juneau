@@ -125,7 +125,7 @@ import org.apache.juneau.svl.*;
  * 	<ja>@RestInject</ja> BeanStore <jf>beanStore</jf>;  <jc>// Note that BeanStore itself can be accessed this way.</jc>
  * </p>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>Methods and fields can be static or non-static.
  * 	<li class='note'>Any injectable beans (including spring beans) can be passed as arguments into methods.
  * 	<li class='note'>Bean names are required when multiple beans of the same type exist in the bean store.

@@ -92,7 +92,7 @@ import org.apache.juneau.serializer.*;
  * 	</ul>
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#ja.Overview">juneau-assertions</a>
  * </ul>
  *
@@ -156,7 +156,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	 * 		.assertContent().asBytes().asHex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> request header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
@@ -183,7 +183,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	 * 			.asJson().is(<js>"{foo:'bar'}"</js>);
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> request header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
@@ -215,7 +215,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	 * 			.asJson().is(<js>"{foo:123}"</js>);
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> request header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>

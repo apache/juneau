@@ -22,7 +22,7 @@ import org.apache.juneau.microservice.*;
 /**
  * Implements the 'exit' console command to gracefully shut down the microservice and JVM.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-microservice-core">juneau-microservice-core</a>
  * </ul>
  */

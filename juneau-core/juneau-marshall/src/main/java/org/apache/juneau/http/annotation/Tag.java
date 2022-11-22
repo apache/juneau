@@ -43,7 +43,7 @@ import org.apache.juneau.annotation.*;
  * 	)
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Swagger</a>
  * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#tagObject">Swagger Tag Object</a>
  * </ul>
@@ -55,7 +55,7 @@ public @interface Tag {
 	/**
 	 * <mk>description</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#tagObject">Swagger Tag Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="../../../../../index.html#jrs.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -70,7 +70,7 @@ public @interface Tag {
 	/**
 	 * <mk>externalDocs</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#tagObject">Swagger Tag Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="../../../../../index.html#jrs.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -83,7 +83,7 @@ public @interface Tag {
 	/**
 	 * <mk>name</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#tagObject">Swagger Tag Object</a>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * </ul>

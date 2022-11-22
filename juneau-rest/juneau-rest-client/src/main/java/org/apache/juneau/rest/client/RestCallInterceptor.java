@@ -40,7 +40,7 @@ package org.apache.juneau.rest.client;
  *		.build(MyRestClient.<jk>class</jk>);
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jm'>{@link RestClient.Builder#interceptors(Object...)}
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>

@@ -40,7 +40,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * Instances of this class are created by calling the {@link RestRequest#run()} method.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */
@@ -362,7 +362,7 @@ public class RestResponse implements HttpResponse {
 	 * 		.getContent().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
@@ -563,7 +563,7 @@ public class RestResponse implements HttpResponse {
 	 * <p>
 	 * The entity is provided by calling setEntity.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>Unlike the {@link HttpResponse#getEntity()} method, this method never returns a <jk>null</jk> response.
 	 * 		Instead, <c>getContent().isPresent()</c> can be used to determine whether the response has a body.
 	 * </ul>
@@ -578,7 +578,7 @@ public class RestResponse implements HttpResponse {
 	/**
 	 * Associates a response entity with this response.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>If an entity has already been set for this response and it depends on an input stream
 	 * 		({@link HttpEntity#isStreaming()} returns <jk>true</jk>), it must be fully consumed in order to ensure
 	 * 		release of resources.

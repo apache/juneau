@@ -20,7 +20,7 @@ import java.io.*;
  * <p>
  * Useful in cases where you're working with streams that should not be implicitly closed.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public final class NoCloseWriter extends Writer {

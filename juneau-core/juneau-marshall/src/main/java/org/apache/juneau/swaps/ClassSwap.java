@@ -18,7 +18,7 @@ import org.apache.juneau.swap.*;
 /**
  * Transforms {@link Class} objects to and from {@link String Strings}.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
  * </ul>
  */

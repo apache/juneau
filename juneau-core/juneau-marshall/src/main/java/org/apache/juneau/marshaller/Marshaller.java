@@ -40,7 +40,7 @@ import org.apache.juneau.serializer.*;
  * 	String <jv>string</jv> = Json.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Marshallers">Marshallers</a>
  * </ul>
  */
@@ -149,7 +149,7 @@ public abstract class Marshaller {
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Use the {@link #read(Object, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>

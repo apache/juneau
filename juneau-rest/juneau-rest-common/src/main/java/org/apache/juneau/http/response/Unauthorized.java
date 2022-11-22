@@ -34,7 +34,7 @@ import org.apache.juneau.internal.*;
  * <br>401 semantically means "unauthenticated",i.e. the user does not have the necessary credentials.
  * <br>Note: Some sites issue HTTP 401 when an IP address is banned from the website (usually the website domain) and that specific address is refused permission to access a website.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

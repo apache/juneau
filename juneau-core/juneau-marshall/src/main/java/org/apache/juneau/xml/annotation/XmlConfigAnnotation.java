@@ -20,7 +20,7 @@ import org.apache.juneau.xml.*;
 /**
  * Utility classes and methods for the {@link XmlConfig @XmlConfig} annotation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.XmlDetails">XML Details</a>
  * </ul>
  */

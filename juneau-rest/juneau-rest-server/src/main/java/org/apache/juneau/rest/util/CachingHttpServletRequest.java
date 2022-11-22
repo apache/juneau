@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 /**
  * Wraps an {@link HttpServletRequest} and preloads the content into memory for debugging purposes.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class CachingHttpServletRequest extends HttpServletRequestWrapper {

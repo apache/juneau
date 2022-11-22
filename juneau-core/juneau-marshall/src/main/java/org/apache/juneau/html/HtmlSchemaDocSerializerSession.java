@@ -28,11 +28,11 @@ import org.apache.juneau.svl.*;
 /**
  * Context object that lives for the duration of a single serialization of {@link HtmlSchemaDocSerializer} and its subclasses.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlDetails">HTML Details</a>
  * </ul>
  */

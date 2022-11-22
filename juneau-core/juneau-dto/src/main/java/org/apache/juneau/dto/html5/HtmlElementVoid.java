@@ -23,7 +23,7 @@ import org.apache.juneau.xml.annotation.*;
  * <p>
  * See <a href="https://www.w3.org/TR/html51/syntax.html#void-elements">void elements</a>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */

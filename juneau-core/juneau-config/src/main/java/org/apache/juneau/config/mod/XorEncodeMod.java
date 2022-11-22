@@ -21,7 +21,7 @@ import static org.apache.juneau.common.internal.StringUtils.*;
  * <p>
  * This is not intended to be used as strong encryption.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jc.ModdedEntries">Overview &gt; juneau-config &gt; Modded/Encoded Entries</a>
  * </ul>
  */

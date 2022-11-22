@@ -17,7 +17,7 @@ package org.apache.juneau.rest.client;
  *
  * All default methods are no-ops.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */

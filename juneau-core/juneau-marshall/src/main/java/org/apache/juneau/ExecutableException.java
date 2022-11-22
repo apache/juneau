@@ -18,7 +18,7 @@ import java.text.MessageFormat;
 /**
  * General exception that occurs when trying to execute a constructor, method, or field using reflection.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @serial exclude

@@ -60,7 +60,7 @@ import javax.servlet.http.*;
  * 	}
  * </p>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>
  * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
  * 	<li class='note'>
@@ -79,7 +79,7 @@ import javax.servlet.http.*;
  * 		overridden by the child class.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.LifecycleHooks">Lifecycle Hooks</a>
  * </ul>
  */
@@ -92,7 +92,7 @@ public @interface RestEndCall {
 	/**
 	 * Dynamically apply this annotation to the specified methods.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *

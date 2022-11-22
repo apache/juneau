@@ -32,7 +32,7 @@ import org.apache.juneau.uon.*;
 /**
  * Various reusable utility methods.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public final class RestUtils {

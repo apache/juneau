@@ -15,7 +15,7 @@ package org.apache.juneau.config.store;
 /**
  * Determines how often the file system is polled by the watcher in {@link FileStore}.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This relies on internal Sun packages and may not work on all JVMs.
  * </ul>
  */

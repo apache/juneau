@@ -40,11 +40,11 @@ import org.apache.juneau.utils.*;
 /**
  * Main configuration API class.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-config">Overview &gt; juneau-config</a>
  * </ul>
  */
@@ -874,7 +874,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * <p>
 	 * If entry does not exist, returns <jk>null</jk>.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>This method is equivalent to calling <c>get(<jv>key</jv>).orElse(<jk>null</jk>);</c>.
 	 * </ul>
 	 *

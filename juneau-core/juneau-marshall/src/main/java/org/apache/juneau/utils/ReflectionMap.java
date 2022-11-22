@@ -120,7 +120,7 @@ import org.apache.juneau.*;
  * 	<li>A comma-delimited list of anything on this list.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <V> The type of object in this map.

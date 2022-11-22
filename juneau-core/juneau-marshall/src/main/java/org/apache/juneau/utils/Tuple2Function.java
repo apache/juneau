@@ -26,7 +26,7 @@ import java.util.function.*;
  * 	R <jv>result</jv> = <jv>x</jv>.apply(<jv>xa</jv>,<jv>xb</jv>);
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <A> Object 1 type.

@@ -82,7 +82,7 @@ import org.apache.juneau.rest.util.*;
  * 		;
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#callLogger()}
  * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
  * 	<li class='ja'>{@link Rest#debug}

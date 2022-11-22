@@ -25,7 +25,7 @@ import org.apache.juneau.parser.*;
  * Metadata on classes specific to the JSON-Schema serializer and pulled from the {@link Schema @Schema} annotation on
  * the class.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */

@@ -35,7 +35,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='jm'>{@link #write(String,String,String)} - ConfigStore a config file.
  * </ul>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
 */

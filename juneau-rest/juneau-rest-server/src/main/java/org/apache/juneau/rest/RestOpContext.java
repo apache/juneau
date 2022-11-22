@@ -68,11 +68,11 @@ import org.apache.juneau.utils.*;
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestOp @RestOp}.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.RestOpContext">RestOpContext</a>
  * </ul>
  */
@@ -935,7 +935,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		When defined as a class, the implementation must have one of the following constructors:
 		 * 		<ul>
@@ -948,7 +948,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 		Inner classes of the REST resource class are allowed.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jc'>{@link Traversable} - Allows URL additional path info to address individual elements in a POJO tree.
 		 * 	<li class='jc'>{@link Queryable} - Allows query/view/sort functions to be performed on POJOs.
 		 * 	<li class='jc'>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
@@ -1173,7 +1173,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * If multiple matchers are specified, <b>ONE</b> matcher must pass.
 		 * <br>Note that this is different than guards where <b>ALL</b> guards needs to pass.
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		When defined as a class, the implementation must have one of the following constructors:
 		 * 		<ul>
@@ -1186,7 +1186,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 		Inner classes of the REST resource class are allowed.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link RestOp#matchers()}
 		 * 	<li class='ja'>{@link RestGet#matchers()}
 		 * 	<li class='ja'>{@link RestPut#matchers()}
@@ -1744,7 +1744,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	<li><js>"1.0"</js> = At least 1.0.  1.0 and 2.0 will match.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link RestOp#clientVersion}
 		 * 	<li class='ja'>{@link RestGet#clientVersion}
 		 * 	<li class='ja'>{@link RestPut#clientVersion}
@@ -1793,7 +1793,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p>
 		 * This overrides the value defined on the {@link RestContext}.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link RestContext.Builder#defaultCharset(Charset)}
 		 * 	<li class='ja'>{@link Rest#defaultCharset}
 		 * 	<li class='ja'>{@link RestOp#defaultCharset}
@@ -1859,7 +1859,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 		parameter.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link RestOp#method()}
 		 * 	<li class='ja'>{@link RestGet}
 		 * 	<li class='ja'>{@link RestPut}
@@ -1908,7 +1908,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		String value that gets resolved to a <jk>long</jk>.
 		 * 	<li class='note'>
@@ -1918,7 +1918,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 		A value of <js>"-1"</js> can be used to represent no limit.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#maxInput}
 		 * 	<li class='ja'>{@link RestOp#maxInput}
 		 * 	<li class='jm'>{@link RestOpContext.Builder#maxInput(String)}
@@ -1948,7 +1948,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Identifies the URL subpath relative to the servlet class.
 		 *
 		 * <p>
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		This method is only applicable for Java methods.
 		 * 	<li class='note'>
@@ -1980,7 +1980,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	<li class='jm'>{@link SwaggerProvider#getSwagger(RestContext,Locale)} - Affects produces field.
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#produces}
 		 * 	<li class='ja'>{@link RestOp#produces}
 		 * 	<li class='ja'>{@link RestGet#produces}
@@ -2017,7 +2017,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#rolesDeclared}
 		 * </ul>
 		 *
@@ -2047,7 +2047,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	}
 		 * </p>
 		 *
-		 * <ul class='notes'>
+		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		Supports any of the following expression constructs:
 		 * 		<ul>
@@ -2099,7 +2099,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	<li class='jm'>{@link RestContext#getConsumes() RestContext.getConsumes()}
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#consumes}
 		 * 	<li class='ja'>{@link RestOp#consumes}
 		 * 	<li class='ja'>{@link RestPut#consumes}

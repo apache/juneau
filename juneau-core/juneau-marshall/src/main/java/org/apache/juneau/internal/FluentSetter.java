@@ -23,7 +23,7 @@ import java.lang.annotation.*;
  * Used in conjunction with the ConfigurablePropertyCodeGenerator class to synchronize and copy fluent setters from
  * parent classes to child classes.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @Target(METHOD)

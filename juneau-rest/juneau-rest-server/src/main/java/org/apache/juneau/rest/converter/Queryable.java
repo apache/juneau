@@ -64,7 +64,7 @@ import org.apache.juneau.rest.httppart.*;
  * 		<br>Default is {@code 0} (meaning return all rows).
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link ObjectSearcher} - Additional information on searching POJO models.
  * 	<li class='jc'>{@link ObjectViewer} - Additional information on filtering POJO models.
  * 	<li class='jc'>{@link ObjectSorter} - Additional information on sorting POJO models.

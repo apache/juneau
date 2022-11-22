@@ -27,7 +27,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * Handles aspects of matching and precedence ordering.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {

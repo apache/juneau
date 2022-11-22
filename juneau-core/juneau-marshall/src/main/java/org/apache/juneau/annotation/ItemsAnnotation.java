@@ -19,7 +19,7 @@ import java.lang.annotation.*;
 /**
  * Utility classes and methods for the {@link Items @Items} annotation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class ItemsAnnotation {
@@ -57,7 +57,7 @@ public class ItemsAnnotation {
 	/**
 	 * Builder class.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */

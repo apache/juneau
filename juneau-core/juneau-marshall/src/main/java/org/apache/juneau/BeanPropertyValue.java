@@ -17,7 +17,7 @@ import org.apache.juneau.collections.*;
 /**
  * Represents a simple bean property value and the meta-data associated with it.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class BeanPropertyValue implements Comparable<BeanPropertyValue> {

@@ -21,7 +21,7 @@ import javax.servlet.http.*;
 /**
  * A simple list of {@link Cookie} objects.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HttpParts">HTTP Parts</a>
  * </ul>
  *

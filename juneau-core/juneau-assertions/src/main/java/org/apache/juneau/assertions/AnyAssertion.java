@@ -39,31 +39,32 @@ import org.apache.juneau.serializer.*;
  * </p>
  *
  *
- * <h5 class='topic'>Test Methods</h5>
+ * <h5 class='section'>Test Methods:</h5><ul>
  * <p>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentObjectAssertion}
- * 	<ul class='javatreec'>
- * 		<li class='jm'>{@link FluentObjectAssertion#isExists() isExists()}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Object) is(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate) is(Predicate)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object) isNot(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...) isAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...) isNotAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNull() isNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull() isNotNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isString(String) isString(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String) isJson(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object) isSame(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object) isSameJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object) isSameSortedJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer) isSameSerializedAs(Object, WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class) isType(Class)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class) isExactType(Class)}
- * 	</ul>
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link FluentObjectAssertion#isExists() isExists()}</li>
+ * 			<li class='jm'>{@link FluentObjectAssertion#is(Object) is(Object)}</li>
+ * 			<li class='jm'>{@link FluentObjectAssertion#is(Predicate) is(Predicate)}</li>
+ * 			<li class='jm'>{@link FluentObjectAssertion#isNot(Object) isNot(Object)}</li>
+ * 			<li class='jm'>{@link FluentObjectAssertion#isAny(Object...) isAny(Object...)}</li>
+ * 			<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...) isNotAny(Object...)}</li>
+ * 			<li class='jm'>{@link FluentObjectAssertion#isNull() isNull()}</li>
+ * 			<li class='jm'>{@link FluentObjectAssertion#isNotNull() isNotNull()}</li>
+ * 			<li class='jm'>{@link FluentObjectAssertion#isString(String) isString(String)}</li>
+ * 			<li class='jm'>{@link FluentObjectAssertion#isJson(String) isJson(String)}</li>
+ * 			<li class='jm'>{@link FluentObjectAssertion#isSame(Object) isSame(Object)}</li>
+ * 			<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object) isSameJsonAs(Object)}</li>
+ * 			<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object) isSameSortedJsonAs(Object)}</li>
+ * 			<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer) isSameSerializedAs(Object, WriterSerializer)}</li>
+ * 			<li class='jm'>{@link FluentObjectAssertion#isType(Class) isType(Class)}</li>
+ * 			<li class='jm'>{@link FluentObjectAssertion#isExactType(Class) isExactType(Class)}</li>
+ * 		</ul>
+ * 	</li>
  * </ul>
  *
- * <h5 class='topic'>Transform Methods</h5>
+ * <h5 class='section'>Transform Methods:</h5><ul>
  * <p>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentAnyAssertion}
@@ -107,7 +108,7 @@ import org.apache.juneau.serializer.*;
  *	</ul>
  * </ul>
  *
- * <h5 class='topic'>Configuration Methods</h5>
+ * <h5 class='section'>Configuration Methods:</h5><ul>
  * <p>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}
@@ -120,7 +121,8 @@ import org.apache.juneau.serializer.*;
  * 	</ul>
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#ja.Overview">Overview &gt; juneau-assertions &gt; Overview</a>
  * </ul>
  *

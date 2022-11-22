@@ -43,7 +43,7 @@ import org.apache.juneau.rest.*;
  * It renders the following image:
  * <img class='bordered' src='doc-files/PoweredByApacheWidget.png'>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HtmlPredefinedWidgets">Predefined Widgets</a>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HtmlWidgets">Widgets</a>
  * </ul>

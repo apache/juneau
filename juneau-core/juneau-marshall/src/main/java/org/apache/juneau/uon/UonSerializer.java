@@ -123,11 +123,11 @@ import org.apache.juneau.utils.*;
  * 	String <jv>uon</jv> = UonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
  * </p>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.UonDetails">UON Details</a>
  * </ul>
  */

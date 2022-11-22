@@ -30,12 +30,12 @@ import java.lang.annotation.*;
  * <p>
  * Used by the parsers to add references to parent objects in child objects.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>
  * 		The annotated field or method does not need to be public.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.ParentPropertyAnnotation">@ParentProperty Annotation</a>
  * </ul>
  */
@@ -104,7 +104,7 @@ public @interface ParentProperty {
 	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *

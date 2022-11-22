@@ -19,7 +19,7 @@ package org.apache.juneau.swap;
  * This interface has no methods to implement.
  * <br>It's purpose is to identify a class as a builder when it's used on a constructor of the built class.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.PojoBuilders">POJO Builders</a>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
  * </ul>

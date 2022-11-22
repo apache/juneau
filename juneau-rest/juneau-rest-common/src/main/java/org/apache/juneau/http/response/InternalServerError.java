@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

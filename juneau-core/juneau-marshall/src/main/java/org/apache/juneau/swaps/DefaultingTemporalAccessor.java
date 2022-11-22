@@ -26,7 +26,7 @@ import java.time.temporal.*;
  * If working correctly, any <c>TemporalAccessor</c> returned by the {@link DateTimeFormatter#parse(CharSequence)} method
  * should be able to be passed to any <code>Temporal.from(TemporalAccessor)</code> static method (such as {@link ZonedDateTime#from(TemporalAccessor)}).
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
  * </ul>
  */

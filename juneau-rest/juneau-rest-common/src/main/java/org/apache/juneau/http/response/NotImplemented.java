@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The server either does not recognize the request method, or it lacks the ability to fulfill the request.
  * <br>Usually this implies future availability (e.g., a new feature of a web-service API).
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

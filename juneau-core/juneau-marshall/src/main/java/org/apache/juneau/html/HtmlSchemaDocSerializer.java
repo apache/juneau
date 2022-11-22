@@ -45,11 +45,11 @@ import org.apache.juneau.xml.*;
  * The easiest way to create instances of this class is through the {@link HtmlSerializer#getSchemaSerializer()},
  * which will create a schema serializer with the same settings as the originating serializer.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlDetails">HTML Details</a>
  * </ul>
  */
@@ -132,7 +132,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * <p>
 		 * The description is the result of calling {@link ClassMeta#getFullName()}.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
 		 * </ul>
 		 *
@@ -160,7 +160,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * 	<li class='ja'>{@link Marshalled#example() Marshalled(example)}
 		 * </ul>
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...)}
 		 * </ul>
 		 *
@@ -181,7 +181,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * <p>
 		 * Identifies whether nested descriptions are allowed in schema definitions.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#allowNestedDescriptions()}
 		 * </ul>
 		 *
@@ -199,7 +199,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * <p>
 		 * Identifies whether nested examples are allowed in schema definitions.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples()}
 		 * </ul>
 		 *
@@ -221,7 +221,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * <p>
 		 * This setting is ignored if {@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
 		 *
-		 * <ul class='seealso'>
+		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#beanDefMapper(Class)}
 		 * </ul>
 		 *

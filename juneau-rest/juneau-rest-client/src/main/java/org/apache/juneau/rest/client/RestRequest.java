@@ -70,11 +70,11 @@ import org.apache.juneau.xml.*;
  * <p>
  * Instances of this class are created by the various creator methods on the {@link RestClient} class.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */
@@ -1833,7 +1833,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>Calling this method multiple times will return the same original response object.
 	 * 	<li class='note'>You must close the returned object if you do not consume the response or execute a method that consumes
 	 * 		the response.
@@ -2017,7 +2017,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>Use the {@link RestClient.Builder#executorService(ExecutorService, boolean)} method to customize the
 	 * 		executor service used for creating {@link Future Futures}.
 	 * </ul>
@@ -2044,7 +2044,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Attempts to call any of the methods on the response object that retrieve the body (e.g. {@link ResponseContent#asReader()}
 	 * will cause a {@link RestCallException} to be thrown.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>You do not need to execute {@link InputStream#close()} on the response body to consume the response.
 	 * </ul>
 	 *
@@ -2074,7 +2074,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<jk>int</jk> <jv>rc</jv> = <jv>future</jv>.get().getResponseStatus();
 	 * </p>
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>Use the {@link RestClient.Builder#executorService(ExecutorService, boolean)} method to customize the
 	 * 		executor service used for creating {@link Future Futures}.
 	 * 	<li class='note'>You do not need to execute {@link InputStream#close()} on the response body to consume the response.
@@ -2250,7 +2250,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	/**
 	 * Returns the original request URI.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>URI remains unchanged in the course of request execution and is not updated if the request is redirected to another location.
 	 * </ul>
 	 *
@@ -2371,7 +2371,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * The header will be appended to the end of the list.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>{@link #header(Header)} is an equivalent method and the preferred method for fluent-style coding.
 	 * </ul>
 	 *
@@ -2387,7 +2387,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * The header will be appended to the end of the list.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>{@link #header(String,Object)} is an equivalent method and the preferred method for fluent-style coding.
 	 * </ul>
 	 *

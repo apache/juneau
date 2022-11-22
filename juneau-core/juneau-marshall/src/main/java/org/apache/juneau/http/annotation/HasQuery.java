@@ -87,7 +87,7 @@ import java.lang.annotation.*;
  * 	</tr>
  * </table>
  * <p>
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @Documented
@@ -101,7 +101,7 @@ public @interface HasQuery {
 	 *
 	 * Required. The name of the parameter. Parameter names are case sensitive.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain-text.
 	 * </ul>

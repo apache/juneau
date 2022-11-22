@@ -15,7 +15,7 @@ package org.apache.juneau.uon;
 /**
  * Identifies the possible values for the {@link UonSerializer.Builder#paramFormat(ParamFormat)} setting.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.UonDetails">UON Details</a>
  * </ul>
  */

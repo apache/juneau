@@ -90,7 +90,7 @@ import org.apache.juneau.utils.*;
  * 		{@link #kill()} - Can be used to forcibly shut down the service.  Doesn't get called during normal operation.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-microservice-core">juneau-microservice-core</a>
  * </ul>
  */

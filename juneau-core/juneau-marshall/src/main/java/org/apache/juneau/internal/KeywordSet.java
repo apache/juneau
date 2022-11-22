@@ -17,7 +17,7 @@ import java.util.*;
 /**
  * Stores a set of language keywords for quick lookup.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public final class KeywordSet {

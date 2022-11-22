@@ -23,7 +23,7 @@ import java.nio.file.*;
  *
  * Used to encapsulate basic resolution and retrieval of files regardless of where they are located.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class LocalFile {

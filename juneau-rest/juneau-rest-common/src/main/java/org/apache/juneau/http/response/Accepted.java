@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The request has been accepted for processing, but the processing has not been completed.
  * The request might or might not be eventually acted upon, and may be disallowed when processing occurs.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */

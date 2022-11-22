@@ -28,7 +28,7 @@ import org.apache.juneau.common.internal.*;
  * Copies the contents of a {@link Manifest} into an {@link JsonMap} so that the various convenience methods on that
  * class can be used to retrieve values.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @serial exclude

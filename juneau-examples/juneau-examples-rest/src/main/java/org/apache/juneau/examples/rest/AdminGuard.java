@@ -18,7 +18,7 @@ import org.apache.juneau.rest.guard.*;
 /**
  * Sample guard that only lets administrators through.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class AdminGuard extends RestGuard {

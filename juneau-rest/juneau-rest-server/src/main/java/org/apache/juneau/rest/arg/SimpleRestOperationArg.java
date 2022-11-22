@@ -20,7 +20,7 @@ import org.apache.juneau.utils.*;
 /**
  * An implementation of a {@link RestOpArg} that takes in a {@link ThrowingFunction} for resolving a parameter value.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.JavaMethodParameters">Java Method Parameters</a>
  * </ul>
  */

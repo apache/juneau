@@ -25,7 +25,7 @@ import org.apache.juneau.reflect.*;
  * If the {@code useInterfaceProxies} setting is enabled in {@link BeanContext}, this is the class that creates
  * instances of beans from interfaces.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <T> The interface class

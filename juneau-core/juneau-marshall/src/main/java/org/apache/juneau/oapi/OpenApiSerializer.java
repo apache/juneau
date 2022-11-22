@@ -28,11 +28,11 @@ import org.apache.juneau.utils.*;
 /**
  * Serializes POJOs to values suitable for transmission as HTTP headers, query/form-data parameters, and path variables.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.OpenApiDetails">OpenAPI Details</a>
  * </ul>
  */

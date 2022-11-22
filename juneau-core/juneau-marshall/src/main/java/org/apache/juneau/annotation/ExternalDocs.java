@@ -35,7 +35,7 @@ import java.lang.annotation.*;
  * 	)
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a>
  * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#externalDocumentationObject">Swagger ExternalDocumentation Object</a>
  * </ul>
@@ -50,7 +50,7 @@ public @interface ExternalDocs {
 	 * <p>
 	 * A short description of the target documentation.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -68,7 +68,7 @@ public @interface ExternalDocs {
 	 * <p>
 	 * The URL for the target documentation. Value MUST be in the format of a URL.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		The value is required.
 	 * 	<li class='note'>

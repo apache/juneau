@@ -18,7 +18,7 @@ import org.apache.juneau.rest.servlet.*;
 /**
  * Sample root REST resource.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-microservice-core">juneau-microservice-core</a>
  * </ul>
  *

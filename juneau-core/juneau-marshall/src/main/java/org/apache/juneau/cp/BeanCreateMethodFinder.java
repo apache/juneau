@@ -69,7 +69,7 @@ import org.apache.juneau.reflect.*;
  * 		.run();                                  <jc>// Execute.</jc>
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link BeanStore}
  * </ul>
  *

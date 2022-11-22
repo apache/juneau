@@ -24,7 +24,7 @@ import org.apache.juneau.reflect.*;
  * 	<li>{@link AnnotationApplier} - The applier for that annotation.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @SuppressWarnings("rawtypes")

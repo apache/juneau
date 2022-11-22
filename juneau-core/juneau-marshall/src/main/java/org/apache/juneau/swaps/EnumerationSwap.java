@@ -23,7 +23,7 @@ import org.apache.juneau.swap.*;
  * <p>
  * This is a one-way transform, since {@code Enumerations} cannot be reconstituted.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Swaps">Swaps</a>
  * </ul>
  */

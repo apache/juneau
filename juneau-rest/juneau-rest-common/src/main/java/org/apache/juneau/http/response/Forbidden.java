@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The request was valid, but the server is refusing action.
  * <br>The user might not have the necessary permissions for a resource, or may need an account of some sort.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

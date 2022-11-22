@@ -17,7 +17,7 @@ import org.apache.juneau.*;
 /**
  * Interface for providing access to {@link JsonClassMeta} and {@link JsonBeanPropertyMeta} objects.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.JsonDetails">JSON Details</a>
  * </ul>
  */

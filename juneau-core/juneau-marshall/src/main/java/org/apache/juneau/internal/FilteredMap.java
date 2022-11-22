@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 /**
  * Wrapper around a map where the key names are overridden.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <K> The key class type.

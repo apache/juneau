@@ -30,7 +30,7 @@ import org.apache.juneau.reflect.*;
 /**
  * Standard predefined HTTP parts.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */

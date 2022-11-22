@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * The request entity has a media type which the server or resource does not support.
  * <br>For example, the client uploads an image as image/svg+xml, but the server requires that images use a different format.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  *

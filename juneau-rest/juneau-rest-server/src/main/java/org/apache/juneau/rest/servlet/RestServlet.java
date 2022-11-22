@@ -47,13 +47,13 @@ import org.apache.juneau.http.response.*;
  * 	information about your resource in a read-only object.
  * </p>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>
  * 		Users will typically extend from {@link BasicRestServlet} or {@link BasicRestServletGroup}
  * 		instead of this class directly.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.AnnotatedClasses">@Rest-Annotated Classes</a>
  * </ul>
  *

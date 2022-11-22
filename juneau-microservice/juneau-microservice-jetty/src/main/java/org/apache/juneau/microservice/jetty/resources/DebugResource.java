@@ -25,7 +25,7 @@ import org.apache.juneau.rest.servlet.BasicRestServlet;
 /**
  * Microservice debug utilities.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../../index.html#juneau-microservice-jetty">juneau-microservice-jetty</a>
  * </ul>
  *

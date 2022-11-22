@@ -32,7 +32,7 @@ import org.apache.juneau.rest.*;
  * The only valid parameter type for this method is {@link RestContext} which can be used to retrieve information
  * about the servlet.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>
  * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
  * 	<li class='note'>
@@ -74,7 +74,7 @@ public @interface RestPostInit {
 	/**
 	 * Dynamically apply this annotation to the specified methods.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *

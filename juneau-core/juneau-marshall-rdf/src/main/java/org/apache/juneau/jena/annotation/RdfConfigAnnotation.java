@@ -21,7 +21,7 @@ import org.apache.juneau.xml.*;
 /**
  * Utility classes and methods for the {@link RdfConfig @RdfConfig} annotation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */

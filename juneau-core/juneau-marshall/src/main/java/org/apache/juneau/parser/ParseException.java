@@ -23,7 +23,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Exception that indicates invalid syntax encountered during parsing.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  *

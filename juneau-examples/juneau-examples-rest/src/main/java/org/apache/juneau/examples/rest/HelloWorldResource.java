@@ -19,7 +19,7 @@ import org.apache.juneau.rest.servlet.*;
 /**
  * Sample REST resource that prints out a simple "Hello world!" message.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 @Rest(

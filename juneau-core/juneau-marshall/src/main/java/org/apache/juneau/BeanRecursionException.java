@@ -17,7 +17,7 @@ import java.text.*;
 /**
  * Exception that indicates that a recursion was detected while traversing a POJO model.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @serial exclude

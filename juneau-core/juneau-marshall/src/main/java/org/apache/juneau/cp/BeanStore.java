@@ -69,13 +69,13 @@ import org.apache.juneau.reflect.*;
  * 	<li class='jm'>{@link #createMethodFinder(Class,Object) createMethodFinder(Class,Object)}
  * </ul>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>Bean stores can be nested using {@link Builder#parent(BeanStore)}.
  * 	<li class='note'>Bean stores can be made read-only using {@link Builder#readOnly()}.
  * 	<li class='note'>Bean stores can be made thread-safe using {@link Builder#threadSafe()}.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class BeanStore {
@@ -513,7 +513,7 @@ public class BeanStore {
 	/**
 	 * Instantiates a bean creator.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jc'>{@link BeanCreator} for usage.
 	 * </ul>
 	 *
@@ -528,7 +528,7 @@ public class BeanStore {
 	/**
 	 * Create a method finder for finding bean creation methods.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jc'>{@link BeanCreateMethodFinder} for usage.
 	 * </ul>
 	 *
@@ -548,7 +548,7 @@ public class BeanStore {
 	 * Same as {@link #createMethodFinder(Class,Class)} but looks for only static methods on the specified resource class
 	 * and not also instance methods within the context of a bean.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jc'>{@link BeanCreateMethodFinder} for usage.
 	 * </ul>
 	 *
@@ -567,7 +567,7 @@ public class BeanStore {
 	 * <p>
 	 * Same as {@link #createMethodFinder(Class,Object)} but uses {@link Builder#outer(Object)} as the resource bean.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jc'>{@link BeanCreateMethodFinder} for usage.
 	 * </ul>
 	 *

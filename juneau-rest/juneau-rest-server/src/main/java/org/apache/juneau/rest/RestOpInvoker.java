@@ -22,7 +22,7 @@ import org.apache.juneau.rest.stats.*;
 /**
  * A specialized invoker for methods that are called during a servlet request.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.RestContext">RestContext</a>
  * </ul>
  */

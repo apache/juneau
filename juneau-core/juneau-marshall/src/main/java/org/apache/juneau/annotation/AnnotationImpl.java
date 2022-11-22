@@ -34,7 +34,7 @@ import org.apache.juneau.internal.*;
  * For performance reasons, the hashcode is calculated one time and cached at the end of object creation.
  * Constructors must call the {@link #postConstruct()} method after all fields have been set to trigger this calculation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class AnnotationImpl implements Annotation {

@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Xml configuration example.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class XmlConfigurationExample {

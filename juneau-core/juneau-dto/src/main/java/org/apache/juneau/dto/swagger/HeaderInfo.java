@@ -45,7 +45,7 @@ import org.apache.juneau.marshaller.*;
  * 	}
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Overview &gt; juneau-rest-server &gt; Swagger</a>
  * </ul>
  */
@@ -182,7 +182,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * <p>
 	 * Declares the value of the header that the server will use if none is provided.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		<js>"default"</js> has no meaning for required items.
 	 * 	<li class='note'>
@@ -201,7 +201,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * <p>
 	 * Declares the value of the header that the server will use if none is provided.
 	 *
-	 * <ul class='notes'>
+	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		<js>"default"</js> has no meaning for required items.
 	 * 	<li class='note'>

@@ -33,14 +33,14 @@ import org.apache.juneau.svl.*;
  * 	String <jv>fooOrBar</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RF{foo,bar}"</js>);
  * </p>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>
  * 		This variable resolver requires that a {@link RestRequest} bean be available in the session bean store.
  * 	<li class='note'>
  * 		For security reasons, nested and recursive variables are not resolved.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.SvlVariables">SVL Variables</a>
  * </ul>
  */

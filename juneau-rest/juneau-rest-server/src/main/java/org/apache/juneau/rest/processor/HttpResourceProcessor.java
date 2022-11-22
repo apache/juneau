@@ -22,7 +22,7 @@ import org.apache.juneau.http.resource.*;
 /**
  * Response handler for {@link HttpResource} objects.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.ResponseProcessors">Response Processors</a>
  * </ul>
  */

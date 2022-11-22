@@ -25,7 +25,7 @@ import org.apache.juneau.json.*;
 /**
  * Json configuration example.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class JsonConfigurationExample {

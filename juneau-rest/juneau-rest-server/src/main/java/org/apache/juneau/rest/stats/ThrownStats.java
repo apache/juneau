@@ -23,7 +23,7 @@ import org.apache.juneau.marshaller.*;
 /**
  * Represents an entry in {@link ThrownStore}.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.ExecutionStatistics">REST method execution statistics</a>
  * </ul>
  */

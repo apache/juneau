@@ -25,7 +25,7 @@ import org.apache.juneau.rest.util.*;
 /**
  * Used to resolve incoming URLS to the various URL artifacts of <l>HttpServletRequest</l>.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-mock">juneau-rest-mock</a>
  * </ul>
  */

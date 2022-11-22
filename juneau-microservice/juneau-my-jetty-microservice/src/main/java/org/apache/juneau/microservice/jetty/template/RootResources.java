@@ -23,7 +23,7 @@ import org.apache.juneau.rest.widget.ThemeMenuItem;
 /**
  * Root microservice page.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../../index.html#my-jetty-microservice">my-jetty-microservice</a> * </ul>
  *
  * @serial exclude

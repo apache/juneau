@@ -19,7 +19,7 @@ import org.apache.juneau.uon.UonSerializer;
 /**
  *	Sample class which shows the simple usage of UONSerializer.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class UonExample {

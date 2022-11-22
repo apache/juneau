@@ -30,7 +30,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * Used for preventing duplication of stack traces in log files and replacing them with small hashes.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.ExecutionStatistics">REST method execution statistics</a>
  * </ul>
  */

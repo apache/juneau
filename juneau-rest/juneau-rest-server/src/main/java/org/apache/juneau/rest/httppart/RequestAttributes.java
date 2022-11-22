@@ -85,7 +85,7 @@ import org.apache.juneau.svl.*;
  * 	the underlying servlet request attributes making it possible to mix the usage of both APIs.
  * </p>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HttpParts">HTTP Parts</a>
  * </ul>
  */

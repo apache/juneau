@@ -72,11 +72,11 @@ import org.apache.juneau.reflect.*;
  * 	AddressBook <jv>addressBook</jv> = <jv>parser</jv>.parse(<jv>json</jv>, AddressBook.<jk>class</jk>);
  * </p>
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */

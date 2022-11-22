@@ -27,11 +27,11 @@ import org.apache.juneau.internal.*;
  * Additionally keeps track of current line and column number, and provides the ability to set mark points and capture
  * characters from the previous mark point.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */

@@ -49,7 +49,7 @@ import org.apache.juneau.*;
  * will result in a {@link BeanRuntimeException} being thrown.
  * Multiple calls to {@link BeanMap#getBean()} will return the same bean instance.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.BeancAnnotation">@Beanc Annotation</a> * </ul>
  */
 @Documented
@@ -130,7 +130,7 @@ public @interface Beanc {
 	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *

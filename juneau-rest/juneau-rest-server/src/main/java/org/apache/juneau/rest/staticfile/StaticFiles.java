@@ -29,7 +29,7 @@ import org.apache.juneau.utils.*;
 /**
  * API for retrieving localized static files from either the classpath or file system.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.StaticFiles">Static files</a>
  * </ul>
  */

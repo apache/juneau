@@ -26,7 +26,7 @@ import org.apache.juneau.svl.*;
 /**
  * Utility classes and methods for the {@link Example @Example} annotation.
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class ExampleAnnotation {
@@ -90,7 +90,7 @@ public class ExampleAnnotation {
 	/**
 	 * Builder class.
 	 *
-	 * <ul class='seealso'>
+	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */

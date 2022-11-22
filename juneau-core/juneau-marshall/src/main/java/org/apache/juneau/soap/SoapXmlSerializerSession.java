@@ -30,11 +30,11 @@ import org.apache.juneau.xml.*;
 /**
  * Session object that lives for the duration of a single use of {@link SoapXmlSerializer}.
  *
- * <ul class='notes'>
+ * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *
- * <ul class='seealso'>
+ * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
 public class SoapXmlSerializerSession extends XmlSerializerSession {
