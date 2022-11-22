@@ -21,7 +21,7 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link HtmlConfig @HtmlConfig} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.HtmlDetails">HTML Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.HtmlDetails">HTML Details</a>
  * </ul>
  */
 public class HtmlConfigAnnotation {

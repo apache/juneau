@@ -18,7 +18,7 @@ import javax.xml.stream.*;
  * {@link XMLResolver} base class.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.XmlDetails">XML Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlDetails">XML Details</a>
  * </ul>
  */
 public abstract class XmlResolver implements XMLResolver {

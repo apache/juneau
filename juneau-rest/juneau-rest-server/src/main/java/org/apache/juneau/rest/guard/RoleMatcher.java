@@ -45,7 +45,7 @@ import static org.apache.juneau.internal.StateMachineState.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.Guards">Guards</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Guards">Guards</a>
  * </ul>
  */
 public class RoleMatcher {

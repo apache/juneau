@@ -21,7 +21,7 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link JsonSchemaConfig @JsonSchemaConfig} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.JsonSchemaDetails">JSON-Schema Support</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */
 public class JsonSchemaConfigAnnotation {

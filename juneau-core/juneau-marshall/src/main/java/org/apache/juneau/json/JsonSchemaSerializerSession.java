@@ -33,7 +33,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.JsonDetails">JSON Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.JsonDetails">JSON Details</a>
  * </ul>
  */
 public class JsonSchemaSerializerSession extends JsonSerializerSession {

@@ -55,7 +55,7 @@ import org.apache.juneau.oapi.*;
  * The special name <js>"/*"</js> is used to retrieve the path remainder after the path match (i.e. the part that matches <js>"/*"</js>).
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.Swagger">Swagger</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Swagger">Swagger</a>
  * 	<li class='extlink'><a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>
  * </ul>
  *
@@ -64,13 +64,13 @@ import org.apache.juneau.oapi.*;
  * Annotation applied to Java method arguments of interface proxies to denote that they are path variables on the request.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client.jrc.Proxies.jrc.Path">@Path</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrc.Path">@Path</a>
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  * <p>
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client.jrc.Proxies.jrc.Request">@Request</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrc.Request">@Request</a>
  * </ul>
  *
  * <ul class='seealso'>
@@ -164,7 +164,7 @@ public @interface Path {
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -178,7 +178,7 @@ public @interface Path {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.

@@ -26,7 +26,7 @@ import org.springframework.stereotype.Controller;
  * Entry point for Examples REST application when deployed as a Spring Boot application.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../../index.html#juneau-rest-server-springboot.jrss.Overview">juneau-rest-server-springboot &gt; Overview</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../../index.html#jrss.Overview">juneau-rest-server-springboot &gt; Overview</a>
  * </ul>
  */
 @SpringBootApplication

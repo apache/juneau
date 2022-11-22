@@ -17,10 +17,6 @@ import java.util.*;
 /**
  * Represents a list of {@link JsonSchema} objects.
  *
- * <ul class='seealso'>
- * 	<li class='jp'><a class="doclink" href="package-summary.html#TOC">org.apache.juneau.dto.jsonschema</a>
- * </ul>
- *
  * @serial exclude
  */
 public class JsonSchemaArray extends LinkedList<JsonSchema> {

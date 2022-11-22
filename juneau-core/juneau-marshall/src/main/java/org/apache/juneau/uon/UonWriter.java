@@ -27,7 +27,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.UonDetails">UON Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.UonDetails">UON Details</a>
  * </ul>
  */
 public final class UonWriter extends SerializerWriter {

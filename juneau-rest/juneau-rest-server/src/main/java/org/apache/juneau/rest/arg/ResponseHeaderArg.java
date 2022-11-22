@@ -37,7 +37,7 @@ import org.apache.juneau.rest.httppart.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.RestOpAnnotatedMethods.jrs.JavaMethodParameters">Java Method Parameters</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.JavaMethodParameters">Java Method Parameters</a>
  * </ul>
  */
 public class ResponseHeaderArg implements RestOpArg {

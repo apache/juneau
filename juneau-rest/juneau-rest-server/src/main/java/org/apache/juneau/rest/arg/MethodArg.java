@@ -31,7 +31,7 @@ import org.apache.juneau.rest.annotation.*;
  * The parameter type must be {@link String}.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.RestOpAnnotatedMethods.jrs.JavaMethodParameters">Java Method Parameters</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.JavaMethodParameters">Java Method Parameters</a>
  * </ul>
  */
 public class MethodArg implements RestOpArg {

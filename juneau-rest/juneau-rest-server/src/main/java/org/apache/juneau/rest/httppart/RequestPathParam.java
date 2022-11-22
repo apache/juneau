@@ -83,7 +83,7 @@ import org.apache.juneau.rest.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.HttpParts">HTTP Parts</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HttpParts">HTTP Parts</a>
  * </ul>
  */
 public class RequestPathParam extends RequestHttpPart implements NameValuePair {

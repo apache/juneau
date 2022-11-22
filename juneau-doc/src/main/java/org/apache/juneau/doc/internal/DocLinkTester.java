@@ -111,7 +111,7 @@ public class DocLinkTester {
 			if (! f2.exists()) {
 				error(f, "missingLink=["+link+"]");
 			} else if (anchor != null) {
-				anchor = URLDecoder.decode(anchor, "UTF-8");
+				anchor = URLDecoder.decode(anchor, "UTF-8").replace("<","&lt;").replace(">","&gt;");
 				if (f2.isFile()) {
 					boolean foundAnchor = hasAnchor(f2, anchor);
 					if (! foundAnchor)

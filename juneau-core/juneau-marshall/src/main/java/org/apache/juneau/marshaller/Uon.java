@@ -41,7 +41,7 @@ import org.apache.juneau.uon.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.Marshallers">Marshallers</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Marshallers">Marshallers</a>
  * </ul>
  */
 public class Uon extends CharMarshaller {

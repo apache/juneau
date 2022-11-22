@@ -34,10 +34,6 @@ import org.apache.juneau.json.*;
  * 		{@link #load(URI)} - If you want control over construction of {@link JsonSchema} objects.
  * </ul>
  *
- * <ul class='seealso'>
- * 	<li class='jp'><a class="doclink" href="package-summary.html#TOC">org.apache.juneau.dto.jsonschema</a>
- * </ul>
- *
  * @serial exclude
  */
 public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {

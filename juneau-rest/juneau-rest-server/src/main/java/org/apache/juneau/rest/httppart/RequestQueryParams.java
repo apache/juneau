@@ -113,7 +113,7 @@ import org.apache.juneau.http.part.*;
  * 	<li class='jc'>{@link RequestQueryParam}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
  * 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.HttpParts">HTTP Parts</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HttpParts">HTTP Parts</a>
  * </ul>
  */
 public class RequestQueryParams extends ArrayList<RequestQueryParam> {

@@ -52,7 +52,7 @@ import org.apache.juneau.reflect.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.OpenApiDetails">OpenAPI Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.OpenApiDetails">OpenAPI Details</a>
  * </ul>
  */
 public class HttpPartSchema {

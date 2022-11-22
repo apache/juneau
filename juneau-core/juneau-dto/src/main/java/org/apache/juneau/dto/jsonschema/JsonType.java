@@ -25,10 +25,6 @@ package org.apache.juneau.dto.jsonschema;
  * 	<jc>// Produces 'number', not 'NUMBER'.</jc>
  * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(JsonType.<jsf>NUMBER</jsf>);
  * </p>
- *
- * <ul class='seealso'>
- * 	<li class='jp'><a class="doclink" href="package-summary.html#TOC">org.apache.juneau.dto.jsonschema</a>
- * </ul>
  */
 public enum JsonType {
 

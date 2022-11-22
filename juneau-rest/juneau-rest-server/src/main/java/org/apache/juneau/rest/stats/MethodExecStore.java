@@ -27,7 +27,7 @@ import org.apache.juneau.internal.*;
  * Used for tracking basic call statistics on Java methods.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.ExecutionStatistics">REST method execution statistics</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.ExecutionStatistics">REST method execution statistics</a>
  * </ul>
  */
 public class MethodExecStore {

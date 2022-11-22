@@ -24,8 +24,7 @@ import org.apache.juneau.xml.annotation.*;
  * Parent class of {@link Entry}, {@link Feed}, and {@link Source}.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-dto.jd.Atom">Overview &gt; juneau-dto &gt; Atom</a>
- * 	<li class='jp'><a class="doclink" href="package-summary.html#TOC">package-summary.html</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jd.Atom">Overview &gt; juneau-dto &gt; Atom</a>
  * </ul>
  */
 @FluentSetters

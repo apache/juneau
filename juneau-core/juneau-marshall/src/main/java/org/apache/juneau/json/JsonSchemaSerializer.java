@@ -45,7 +45,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.JsonDetails">JSON Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.JsonDetails">JSON Details</a>
  * </ul>
  */
 public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMetaProvider {

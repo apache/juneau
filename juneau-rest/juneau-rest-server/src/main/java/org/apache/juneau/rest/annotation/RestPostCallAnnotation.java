@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
  * Utility classes and methods for the {@link RestPostCall @RestPostCall} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.AnnotatedClasses.jrs.LifecycleHooks">Lifecycle Hooks</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.LifecycleHooks">Lifecycle Hooks</a>
  * </ul>
  */
 public class RestPostCallAnnotation {

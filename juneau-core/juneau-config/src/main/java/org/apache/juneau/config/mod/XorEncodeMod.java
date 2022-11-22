@@ -22,7 +22,7 @@ import static org.apache.juneau.common.internal.StringUtils.*;
  * This is not intended to be used as strong encryption.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-config.jc.ModdedEntries">Overview &gt; juneau-config &gt; Modded/Encoded Entries</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jc.ModdedEntries">Overview &gt; juneau-config &gt; Modded/Encoded Entries</a>
  * </ul>
  */
 public class XorEncodeMod extends Mod {

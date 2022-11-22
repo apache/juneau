@@ -40,7 +40,7 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.JsonSchemaDetails">JSON-Schema Support</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */
 public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSchemaMetaProvider {

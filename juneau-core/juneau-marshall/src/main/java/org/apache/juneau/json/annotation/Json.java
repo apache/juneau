@@ -37,7 +37,7 @@ import org.apache.juneau.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.JsonDetails">JSON Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.JsonDetails">JSON Details</a>
  * </ul>
  */
 @Documented
@@ -128,7 +128,7 @@ public @interface Json {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -142,7 +142,7 @@ public @interface Json {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.

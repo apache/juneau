@@ -22,7 +22,7 @@ import org.apache.juneau.common.internal.*;
  * Identifies a position in a reader or input stream.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.SerializersAndParsers">Serializers and Parsers</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
 public class Position {

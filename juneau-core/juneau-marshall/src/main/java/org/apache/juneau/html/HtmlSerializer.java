@@ -136,7 +136,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.HtmlDetails">HTML Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlDetails">HTML Details</a>
  * </ul>
  */
 public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {

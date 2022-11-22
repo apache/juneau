@@ -25,7 +25,7 @@ import org.apache.juneau.internal.*;
  * A list of {@link RestMatcher} objects.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.RestOpAnnotatedMethods">@RestOp-Annotated Methods</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.RestOpAnnotatedMethods">@RestOp-Annotated Methods</a>
  * </ul>
  */
 public class RestMatcherList {

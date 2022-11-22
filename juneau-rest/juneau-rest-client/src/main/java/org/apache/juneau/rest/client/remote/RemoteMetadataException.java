@@ -21,7 +21,7 @@ import org.apache.juneau.*;
  * Exceptions caused by invalid REST proxy classes.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../../index.html#juneau-rest-client.jrc.Proxies">REST Proxies</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../../index.html#jrc.Proxies">REST Proxies</a>
  * 	<li class='link'><a class="doclink" href="../../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  *

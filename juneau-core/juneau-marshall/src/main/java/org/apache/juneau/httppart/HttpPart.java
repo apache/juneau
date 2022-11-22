@@ -23,7 +23,7 @@ import org.apache.http.*;
  * Can be used to represent both request and response parts.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
  * </ul>
  */
 public class HttpPart implements NameValuePair {

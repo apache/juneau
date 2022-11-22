@@ -39,7 +39,7 @@ import org.apache.juneau.rest.stats.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server-springboot">juneau-rest-server-springboot</a>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.AnnotatedClasses">@Rest-Annotated Classes</a> * </ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.AnnotatedClasses">@Rest-Annotated Classes</a> * </ul>
  *
  * @serial exclude
  */

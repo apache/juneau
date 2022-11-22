@@ -28,7 +28,7 @@ import org.apache.juneau.reflect.*;
  * Represents the metadata gathered from a getter method of a class annotated with {@link Request}.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
  * </ul>
  */
 public class RequestBeanPropertyMeta {

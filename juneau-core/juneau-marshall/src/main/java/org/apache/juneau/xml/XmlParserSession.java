@@ -42,7 +42,7 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.XmlDetails">XML Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlDetails">XML Details</a>
  * </ul>
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })

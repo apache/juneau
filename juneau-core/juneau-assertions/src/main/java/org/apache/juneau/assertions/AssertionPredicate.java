@@ -47,7 +47,7 @@ import org.apache.juneau.cp.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Overview &gt; juneau-assertions &gt; Overview</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#ja.Overview">Overview &gt; juneau-assertions &gt; Overview</a>
  * </ul>
  *
  * @param <T> the type of input being tested.

@@ -21,7 +21,7 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link ParserConfig @ParserConfig} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.SerializersAndParsers">Serializers and Parsers</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
 public class ParserConfigAnnotation {

@@ -23,7 +23,7 @@ import java.util.zip.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.Encoders">Encoders</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Encoders">Encoders</a>
  * </ul>
  */
 public class GzipEncoder extends Encoder {

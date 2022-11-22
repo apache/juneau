@@ -33,7 +33,7 @@ import org.apache.juneau.rest.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.HttpParts.jrs.ResponseBeans">@Response Beans</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.ResponseBeans">@Response Beans</a>
  * </ul>
  */
 public class ResponseBeanArg implements RestOpArg {

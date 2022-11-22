@@ -23,7 +23,7 @@ import org.apache.juneau.http.header.*;
  * Identifies a proxy against a REST interface.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client.jrc.Proxies">REST Proxies</a> * </ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrc.Proxies">REST Proxies</a> * </ul>
  */
 @Documented
 @Target({TYPE})
@@ -42,7 +42,7 @@ public @interface Remote {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a>
+	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -58,7 +58,7 @@ public @interface Remote {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a>
+	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -110,7 +110,7 @@ public @interface Remote {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a>
+	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -126,7 +126,7 @@ public @interface Remote {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a>
+	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
 	 *

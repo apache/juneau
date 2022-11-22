@@ -25,10 +25,6 @@ import org.apache.juneau.*;
  * <p class='bjava'>
  * 	JsonSchema <jv>schema</jv> = <jk>new</jk> JsonSchema().setRef(<jv>uri</jv>);
  * </p>
- *
- * <ul class='seealso'>
- * 	<li class='jp'><a class="doclink" href="package-summary.html#TOC">org.apache.juneau.dto.jsonschema</a>
- * </ul>
  */
 public class JsonSchemaRef extends JsonSchema {
 

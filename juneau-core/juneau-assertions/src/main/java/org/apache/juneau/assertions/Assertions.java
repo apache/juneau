@@ -65,7 +65,7 @@ import org.apache.juneau.common.utils.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a>
  * </ul>
  */
 public class Assertions {
@@ -96,7 +96,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link AnyAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link AnyAssertion} for supported operations on this type.
 	 *
 	 * @param <T> The value type.
 	 * @param value
@@ -124,7 +124,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ArrayAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ArrayAssertion} for supported operations on this type.
 	 *
 	 * @param <E> The value element type.
 	 * @param value
@@ -153,7 +153,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link BeanAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link BeanAssertion} for supported operations on this type.
 	 *
 	 * @param <T> The value type.
 	 * @param value
@@ -182,7 +182,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link BeanListAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link BeanListAssertion} for supported operations on this type.
 	 *
 	 * @param <E> The element type.
 	 * @param value
@@ -209,7 +209,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link BooleanAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link BooleanAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -236,7 +236,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -268,7 +268,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -299,7 +299,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ByteArrayAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ByteArrayAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -325,7 +325,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ByteArrayAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ByteArrayAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -353,7 +353,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -384,7 +384,7 @@ public class Assertions {
 	 * provides more functionality than {@link CollectionAssertion}.
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link CollectionAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link CollectionAssertion} for supported operations on this type.
 	 *
 	 * @param <E> The element type.
 	 * @param value
@@ -411,7 +411,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ComparableAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ComparableAssertion} for supported operations on this type.
 	 *
 	 * @param <T> The value type.
 	 * @param value
@@ -438,7 +438,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link DateAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link DateAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -465,7 +465,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -492,7 +492,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -519,7 +519,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -545,7 +545,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link IntegerAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link IntegerAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -572,7 +572,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ListAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ListAssertion} for supported operations on this type.
 	 *
 	 * @param <E> The element type.
 	 * @param value
@@ -600,7 +600,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ListAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ListAssertion} for supported operations on this type.
 	 *
 	 * @param <E> The element type.
 	 * @param value
@@ -629,7 +629,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link LongAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link LongAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -656,7 +656,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -683,7 +683,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link MapAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link MapAssertion} for supported operations on this type.
 	 *
 	 * @param <K> The key type.
 	 * @param <V> The value type.
@@ -713,7 +713,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ObjectAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ObjectAssertion} for supported operations on this type.
 	 *
 	 * @param <T> The value type.
 	 * @param value
@@ -742,7 +742,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link AnyAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link AnyAssertion} for supported operations on this type.
 	 *
 	 * @param <T> The value type.
 	 * @param value
@@ -769,7 +769,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link StringAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link StringAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -798,7 +798,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link PrimitiveArrayAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -825,7 +825,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link StringAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link StringAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -856,7 +856,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link StringListAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link StringListAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -883,7 +883,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ThrowableAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ThrowableAssertion} for supported operations on this type.
 	 *
 	 * @param <T> The value type.
 	 * @param value
@@ -910,7 +910,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link VersionAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link VersionAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.
@@ -936,7 +936,7 @@ public class Assertions {
 	 * </p>
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../index.html#juneau-assertions.ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ZonedDateTimeAssertion} for supported operations on this type.
+	 * See <a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a> for general assertion usage and {@link ZonedDateTimeAssertion} for supported operations on this type.
 	 *
 	 * @param value
 	 * 	The object being tested.

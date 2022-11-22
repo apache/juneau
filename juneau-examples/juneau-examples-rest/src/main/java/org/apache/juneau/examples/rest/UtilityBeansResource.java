@@ -23,8 +23,8 @@ import org.apache.juneau.rest.widget.*;
  * Sample resource that allows images to be uploaded and retrieved.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.Marshalling">REST Marshalling</a>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.UtilityBeans">Utility Beans</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.Marshalling">REST Marshalling</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.UtilityBeans">Utility Beans</a>
  * </ul>
  */
 @Rest(

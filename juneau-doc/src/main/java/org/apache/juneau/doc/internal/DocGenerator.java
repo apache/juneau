@@ -81,14 +81,14 @@ public class DocGenerator {
 
 			for (PageFile pf1 : topics.pageFiles) {
 				toc
-					.append("\t<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#").append(pf1.fullId).append("'>").append(pf1.title).append("</a>").append(pf1.tags.isEmpty() ? "" : ("<span class='update'>"+pf1.tags+"</span>")).append("</p>\n");
+					.append("\t<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#").append(pf1.id).append("'>").append(pf1.title).append("</a>").append(pf1.tags.isEmpty() ? "" : ("<span class='update'>"+pf1.tags+"</span>")).append("</p>\n");
 				ds
-					.addLink(pf1.id, "#" + pf1.fullId, "Overview > " + pf1.title);
+					.addLink(pf1.id, "#" + pf1.id, "Overview > " + pf1.title);
 				contents
 					.append("\n")
 					.append("<!-- ==================================================================================================== -->\n\n")
-					.append("<h2 class='topic' onclick='toggle(this)'><a href='#").append(pf1.fullId).append("' id='").append(pf1.fullId).append("'>").append(pf1.fullNumber).append(" - ").append(pf1.title).append("</a>").append(pf1.tags.isEmpty() ? "" : ("<span class='update'>"+pf1.tags+"</span>")).append("</h2>\n")
-					.append("<div class='topic'>").append("<!-- START: ").append(pf1.fullNumber).append(" - " ).append(pf1.fullId).append(" -->\n")
+					.append("<h2 class='topic' onclick='toggle(this)'><a href='#").append(pf1.id).append("' id='").append(pf1.id).append("'>").append(pf1.fullNumber).append(" - ").append(pf1.title).append("</a>").append(pf1.tags.isEmpty() ? "" : ("<span class='update'>"+pf1.tags+"</span>")).append("</h2>\n")
+					.append("<div class='topic'>").append("<!-- START: ").append(pf1.fullNumber).append(" - " ).append(pf1.id).append(" -->\n")
 					.append(pf1.contents).append("\n");
 
 				if (! pf1.pageFiles.isEmpty()) {
@@ -98,14 +98,14 @@ public class DocGenerator {
 					for (PageFile pf2 : pf1.pageFiles) {
 
 						toc
-							.append("\t\t<li><p><a class='doclink' href='{OVERVIEW_URL}#").append(pf2.fullId).append("'>").append(pf2.title).append("</a>").append(pf2.tags.isEmpty() ? "" : ("<span class='update'>"+pf2.tags+"</span>")).append("</p>\n");
+							.append("\t\t<li><p><a class='doclink' href='{OVERVIEW_URL}#").append(pf2.id).append("'>").append(pf2.title).append("</a>").append(pf2.tags.isEmpty() ? "" : ("<span class='update'>"+pf2.tags+"</span>")).append("</p>\n");
 						ds
-							.addLink(pf2.id, "#" + pf2.fullId, "Overview > " + pf1.title + " > " + pf2.title);
+							.addLink(pf2.id, "#" + pf2.id, "Overview > " + pf1.title + " > " + pf2.title);
 						contents
 							.append("\n")
 							.append("<!-- ==================================================================================================== -->\n\n")
-							.append("<h3 class='topic' onclick='toggle(this)'><a href='#").append(pf2.fullId).append("' id='").append(pf2.fullId).append("'>").append(pf2.fullNumber).append(" - ").append(pf2.title).append("</a>").append(pf2.tags.isEmpty() ? "" : ("<span class='update'>"+pf2.tags+"</span>")).append("</h3>\n")
-							.append("<div class='topic'>").append("<!-- START: ").append(pf2.fullNumber).append(" - " ).append(pf2.fullId).append(" -->\n")
+							.append("<h3 class='topic' onclick='toggle(this)'><a href='#").append(pf2.id).append("' id='").append(pf2.id).append("'>").append(pf2.fullNumber).append(" - ").append(pf2.title).append("</a>").append(pf2.tags.isEmpty() ? "" : ("<span class='update'>"+pf2.tags+"</span>")).append("</h3>\n")
+							.append("<div class='topic'>").append("<!-- START: ").append(pf2.fullNumber).append(" - " ).append(pf2.id).append(" -->\n")
 							.append(pf2.contents).append("\n");
 
 						if (! pf2.pageFiles.isEmpty()) {
@@ -114,30 +114,30 @@ public class DocGenerator {
 							for (PageFile pf3 : pf2.pageFiles) {
 
 								toc
-									.append("\t\t\t<li><p><a class='doclink' href='{OVERVIEW_URL}#").append(pf3.fullId).append("'>").append(pf3.title).append("</a>").append(pf3.tags.isEmpty() ? "" : ("<span class='update'>"+pf3.tags+"</span>")).append("</p>\n");
+									.append("\t\t\t<li><p><a class='doclink' href='{OVERVIEW_URL}#").append(pf3.id).append("'>").append(pf3.title).append("</a>").append(pf3.tags.isEmpty() ? "" : ("<span class='update'>"+pf3.tags+"</span>")).append("</p>\n");
 								ds
-									.addLink(pf3.id, "#" + pf3.fullId, "Overview > " + pf1.title + " > " + pf2.title + " > " + pf3.title);
+									.addLink(pf3.id, "#" + pf3.id, "Overview > " + pf1.title + " > " + pf2.title + " > " + pf3.title);
 								contents
 									.append("\n")
 									.append("<!-- ==================================================================================================== -->\n\n")
-									.append("<h5 class='topic' onclick='toggle(this)'><a href='#").append(pf3.fullId).append("' id='").append(pf3.fullId).append("'>").append(pf3.fullNumber).append(" - ").append(pf3.title).append("</a>").append(pf3.tags.isEmpty() ? "" : ("<span class='update'>"+pf3.tags+"</span>")).append("</h4>\n")
-									.append("<div class='topic'>").append("<!-- START: ").append(pf3.fullNumber).append(" - " ).append(pf3.fullId).append(" -->\n")
+									.append("<h5 class='topic' onclick='toggle(this)'><a href='#").append(pf3.id).append("' id='").append(pf3.id).append("'>").append(pf3.fullNumber).append(" - ").append(pf3.title).append("</a>").append(pf3.tags.isEmpty() ? "" : ("<span class='update'>"+pf3.tags+"</span>")).append("</h4>\n")
+									.append("<div class='topic'>").append("<!-- START: ").append(pf3.fullNumber).append(" - " ).append(pf3.id).append(" -->\n")
 									.append(pf3.contents).append("\n")
-									.append("</div>").append("<!-- END: ").append(pf3.fullNumber).append(" - ").append(pf3.fullId).append(" -->\n");
+									.append("</div>").append("<!-- END: ").append(pf3.fullNumber).append(" - ").append(pf3.id).append(" -->\n");
 							}
 
 							toc.append("\t\t</ol>\n");
 						}
 
 						contents
-							.append("</div>").append("<!-- END: ").append(pf2.fullNumber).append(" - ").append(pf2.fullId).append(" -->\n");
+							.append("</div>").append("<!-- END: ").append(pf2.fullNumber).append(" - ").append(pf2.id).append(" -->\n");
 					}
 
 					toc.append("\t</ol>\n");
 				}
 
 				contents
-					.append("</div>").append("<!-- END: ").append(pf1.fullNumber).append(" - ").append(pf1.fullId).append(" -->\n");
+					.append("</div>").append("<!-- END: ").append(pf1.fullNumber).append(" - ").append(pf1.id).append(" -->\n");
 			}
 
 			StringBuilder tocRn = new StringBuilder("<ul class='toc'>\n"), rn = new StringBuilder();
@@ -240,7 +240,7 @@ public class DocGenerator {
 	}
 
 	static class PageFile implements Comparable<PageFile> {
-		String idWithNum, id, num, fullId, title, contents;
+		String idWithNum, id, num, title, contents;
 		String fullNumber;
 		int pageNumber, dirNumber;
 		String tags = "";
@@ -256,7 +256,6 @@ public class DocGenerator {
 				idWithNum = n.substring(0, n.lastIndexOf('.'));
 				num = n.substring(0, n.indexOf('.'));
 				id = idWithNum.substring(n.indexOf('.') + 1);
-				fullId = (parent == null ? "" : parent.fullId + ".") + id;
 				pageNumber = Integer.parseInt(n.substring(0, n.indexOf('.')));
 				fullNumber = (parent == null ? "" : parent.fullNumber + ".") + pageNumber;
 				String s = IOUtils.read(f);

@@ -31,8 +31,8 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets">Widgets</a>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.HtmlDetails">HTML Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.HtmlWidgets">Widgets</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.HtmlDetails">HTML Details</a>
  * </ul>
  */
 public class HtmlWidgetVar extends SimpleVar {

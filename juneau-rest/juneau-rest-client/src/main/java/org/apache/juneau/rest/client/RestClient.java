@@ -948,8 +948,8 @@ import org.apache.juneau.xml.*;
  * Refer to the following documentation on both flavors:
  *
  * <ul class='doctree'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client.jrc.Proxies">REST Proxies</a>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.RestRpc">REST/RPC</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrc.Proxies">REST Proxies</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.RestRpc">REST/RPC</a>
  * </ul>
  *
  * <br>
@@ -4603,7 +4603,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriContext(UriContext)}
-		 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.MarshallingUris">URIs</a>
+		 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.MarshallingUris">URIs</a>
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -4638,7 +4638,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriRelativity(UriRelativity)}
-		 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.MarshallingUris">URIs</a>
+		 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.MarshallingUris">URIs</a>
 		 * </ul>
 		 *
 		 * @param value
@@ -4677,7 +4677,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriResolution(UriResolution)}
-		 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.MarshallingUris">URIs</a>
+		 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.MarshallingUris">URIs</a>
 		 * </ul>
 		 *
 		 * @param value
@@ -7286,7 +7286,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client.jrc.Proxies">REST Proxies</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrc.Proxies">REST Proxies</a>
 	 * </ul>
 	 *
 	 * @param <T> The interface to create a proxy for.
@@ -7302,7 +7302,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Same as {@link #getRemote(Class)} except explicitly specifies the URI of the REST interface.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client.jrc.Proxies">REST Proxies</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrc.Proxies">REST Proxies</a>
 	 * </ul>
 	 *
 	 * @param <T> The interface to create a proxy for.
@@ -7318,7 +7318,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Same as {@link #getRemote(Class, Object)} but allows you to override the serializer and parser used.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client.jrc.Proxies">REST Proxies</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrc.Proxies">REST Proxies</a>
 	 * </ul>
 
 	 * @param <T> The interface to create a proxy for.
@@ -7508,7 +7508,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.RestRpc">REST/RPC</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.RestRpc">REST/RPC</a>
 	 * </ul>
 	 *
 	 * @param <T> The interface to create a proxy for.
@@ -7524,7 +7524,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Same as {@link #getRrpcInterface(Class)} except explicitly specifies the URI of the REST interface.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.RestRpc">REST/RPC</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.RestRpc">REST/RPC</a>
 	 * </ul>
 	 *
 	 * @param <T> The interface to create a proxy for.
@@ -7540,7 +7540,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Same as {@link #getRrpcInterface(Class, Object)} but allows you to override the serializer and parser used.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.RestRpc">REST/RPC</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.RestRpc">REST/RPC</a>
 	 * </ul>
 	 *
 	 * @param <T> The interface to create a proxy for.

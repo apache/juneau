@@ -20,8 +20,7 @@ import javax.xml.bind.*;
  * Static utility methods for ATOM marshalling code.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-dto.jd.Atom">Overview &gt; juneau-dto &gt; Atom</a>
- * 	<li class='jp'><a class="doclink" href="package-summary.html#TOC">package-summary.html</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jd.Atom">Overview &gt; juneau-dto &gt; Atom</a>
  * </ul>
  */
 class Utils {

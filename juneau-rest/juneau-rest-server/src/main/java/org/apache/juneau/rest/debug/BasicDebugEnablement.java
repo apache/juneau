@@ -36,7 +36,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.LoggingAndDebugging">Logging / Debugging</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.LoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  */
 public class BasicDebugEnablement extends DebugEnablement {

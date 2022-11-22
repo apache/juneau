@@ -21,7 +21,7 @@ import org.apache.juneau.urlencoding.*;
  * Utility classes and methods for the {@link UrlEncodingConfig @UrlEncodingConfig} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.UrlEncodingDetails">URL-Encoding Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.UrlEncodingDetails">URL-Encoding Details</a>
  * </ul>
  */
 public class UrlEncodingConfigAnnotation {

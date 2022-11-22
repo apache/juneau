@@ -18,7 +18,7 @@ import org.apache.juneau.*;
  * Defines the Java classes that make up the HTML DTO type dictionary.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  *
  * @serial exclude

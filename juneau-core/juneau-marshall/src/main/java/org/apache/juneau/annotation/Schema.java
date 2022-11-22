@@ -64,7 +64,7 @@ import org.apache.juneau.oapi.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-dto.jd.Swagger">Swagger</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a>
  * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>
  * </ul>
  */
@@ -180,7 +180,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="../../../../index.html#juneau-dto.jd.Swagger">Swagger</a> object.
+	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -193,7 +193,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="../../../../index.html#juneau-dto.jd.Swagger">Swagger</a> object.
+	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -316,7 +316,7 @@ public @interface Schema {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../index.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * 		Supports <a class="doclink" href="../../../../index.html#jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -335,7 +335,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="../../../../index.html#juneau-dto.jd.Swagger">Swagger</a> object.
+	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -427,7 +427,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="../../../../index.html#juneau-dto.jd.Swagger">Swagger</a> object.
+	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -670,7 +670,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="../../../../index.html#juneau-dto.jd.Swagger">Swagger</a> object.
+	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -798,7 +798,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="../../../../index.html#juneau-dto.jd.Swagger">Swagger</a> object.
+	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -922,7 +922,7 @@ public @interface Schema {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -936,7 +936,7 @@ public @interface Schema {
 	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -989,7 +989,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="../../../../index.html#juneau-dto.jd.Swagger">Swagger</a> object.
+	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -1009,7 +1009,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="../../../../index.html#juneau-dto.jd.Swagger">Swagger</a> object.
+	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
@@ -1227,7 +1227,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="../../../../index.html#juneau-dto.jd.Swagger">Swagger</a> object.
+	 * 		The format is a <a class="doclink" href="../../../../index.html#jd.Swagger">Swagger</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *

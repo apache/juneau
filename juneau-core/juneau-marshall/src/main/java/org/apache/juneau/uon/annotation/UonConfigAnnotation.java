@@ -21,7 +21,7 @@ import org.apache.juneau.uon.*;
  * Utility classes and methods for the {@link UonConfig @UonConfig} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.UonDetails">UON Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.UonDetails">UON Details</a>
  * </ul>
  */
 public class UonConfigAnnotation {

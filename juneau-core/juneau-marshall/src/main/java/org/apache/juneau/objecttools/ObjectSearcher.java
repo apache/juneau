@@ -93,7 +93,7 @@ import org.apache.juneau.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.ObjectTools">Overview &gt; juneau-marshall &gt; Object Tools</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.ObjectTools">Overview &gt; juneau-marshall &gt; Object Tools</a>
  * </ul>
  */
 @SuppressWarnings({"rawtypes"})

@@ -25,10 +25,6 @@ package org.apache.juneau.dto.jsonschema;
  * 			<jk>new</jk> JsonSchema().setType(<jv>elementType</jv>)
  * 		);
  * </p>
- *
- * <ul class='seealso'>
- * 	<li class='jp'><a class="doclink" href="package-summary.html#TOC">org.apache.juneau.dto.jsonschema</a>
- * </ul>
  */
 public class JsonSchemaPropertySimpleArray extends JsonSchemaProperty {
 

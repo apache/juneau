@@ -28,10 +28,6 @@ import org.apache.juneau.swap.*;
 
 /**
  * Represents a top-level schema object bean in the JSON-Schema core specification.
- *
- * <ul class='seealso'>
- * 	<li class='jp'><a class="doclink" href="package-summary.html#TOC">org.apache.juneau.dto.jsonschema</a>
- * </ul>
  */
 @Bean(typeName="schema",
 	properties="id,$schema,$ref, title,description,type,definitions,properties,"

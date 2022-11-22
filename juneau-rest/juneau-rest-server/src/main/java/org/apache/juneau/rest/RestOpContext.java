@@ -73,7 +73,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-rest-server.jrs.RestOpContext">RestOpContext</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.RestOpContext">RestOpContext</a>
  * </ul>
  */
 public class RestOpContext extends Context implements Comparable<RestOpContext>  {
@@ -953,7 +953,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	<li class='jc'>{@link Queryable} - Allows query/view/sort functions to be performed on POJOs.
 		 * 	<li class='jc'>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
 		 * 	<li class='ja'>{@link Rest#converters()}
-		 * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-rest-server.jrs.Converters">Converters</a>
+		 * 	<li class='link'><a class="doclink" href="../../../../index.html#jrs.Converters">Converters</a>
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -2069,7 +2069,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	<li class='note'>
 		 * 		If patterns are used, you must specify the list of declared roles using {@link Rest#rolesDeclared()} or {@link RestOpContext.Builder#rolesDeclared(String...)}.
 		 * 	<li class='note'>
-		 * 		Supports <a class="doclink" href="../../../../index.html#juneau-rest-server.jrs.SvlVariables">SVL Variables</a>
+		 * 		Supports <a class="doclink" href="../../../../index.html#jrs.SvlVariables">SVL Variables</a>
 		 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 		 * </ul>
 		 *

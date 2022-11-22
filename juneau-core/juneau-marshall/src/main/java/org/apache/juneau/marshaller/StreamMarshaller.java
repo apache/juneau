@@ -23,7 +23,7 @@ import org.apache.juneau.serializer.*;
  * A subclass of {@link Marshaller} for stream-based serializers and parsers.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.Marshallers">Marshallers</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.Marshallers">Marshallers</a>
  * </ul>
  */
 public class StreamMarshaller extends Marshaller {

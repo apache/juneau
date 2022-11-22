@@ -24,7 +24,7 @@ import org.apache.juneau.marshaller.*;
  * Represents an entry in {@link ThrownStore}.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.ExecutionStatistics">REST method execution statistics</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.ExecutionStatistics">REST method execution statistics</a>
  * </ul>
  */
 public class ThrownStats implements Cloneable {

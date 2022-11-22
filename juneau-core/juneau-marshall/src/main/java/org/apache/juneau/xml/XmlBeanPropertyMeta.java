@@ -22,7 +22,7 @@ import org.apache.juneau.xml.annotation.*;
  * on the bean property.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.XmlDetails">XML Details</a> * </ul>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.XmlDetails">XML Details</a> * </ul>
  */
 public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 

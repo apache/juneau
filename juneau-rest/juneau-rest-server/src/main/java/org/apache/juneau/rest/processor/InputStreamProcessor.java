@@ -25,7 +25,7 @@ import org.apache.juneau.rest.*;
  * Simply pipes the contents of the {@link InputStream} to {@link RestResponse#getNegotiatedOutputStream()}.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.ResponseProcessors">Response Processors</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.ResponseProcessors">Response Processors</a>
  * </ul>
  */
 public final class InputStreamProcessor implements ResponseProcessor {

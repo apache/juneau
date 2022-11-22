@@ -128,7 +128,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.UonDetails">UON Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.UonDetails">UON Details</a>
  * </ul>
  */
 public class UonSerializer extends WriterSerializer implements HttpPartSerializer, UonMetaProvider {

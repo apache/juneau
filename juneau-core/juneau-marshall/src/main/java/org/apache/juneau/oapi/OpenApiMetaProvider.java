@@ -18,7 +18,7 @@ import org.apache.juneau.*;
  * Interface for providing access to {@link OpenApiClassMeta} and {@link OpenApiBeanPropertyMeta} objects.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.OpenApiDetails">OpenAPI Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.OpenApiDetails">OpenAPI Details</a>
  * </ul>
  */
 public interface OpenApiMetaProvider extends AnnotationProvider {

@@ -21,8 +21,8 @@ import org.apache.juneau.rest.*;
  * The variable it resolves is <js>"$W{QueryMenuItem}"</js>.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets">Predefined Widgets</a>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets">Widgets</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HtmlPredefinedWidgets">Predefined Widgets</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.HtmlWidgets">Widgets</a>
  * </ul>
  */
 public class QueryMenuItem extends MenuItemWidget {

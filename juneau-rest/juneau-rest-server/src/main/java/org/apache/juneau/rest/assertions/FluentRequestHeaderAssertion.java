@@ -120,7 +120,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-assertions.ja.Overview">juneau-assertions</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#ja.Overview">juneau-assertions</a>
  * </ul>
  *
  * @param <R> The return type.
@@ -231,7 +231,7 @@ public class FluentRequestHeaderAssertion <R> extends FluentStringAssertion<R> {
 	 * Converts the parameter value to a type using {@link RequestHeader#as(Type,Type...)} and then returns the value as an any-object assertion.
 	 *
 	 * <p>
-	 * See <a class="doclink" href="../../../../../index.html#juneau-marshall.jm.ComplexDataTypes">Complex Data Types</a> for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
+	 * See <a class="doclink" href="../../../../../index.html#jm.ComplexDataTypes">Complex Data Types</a> for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
 	 *
 	 * @param type The object type to create.
 	 * @param args Optional type arguments.

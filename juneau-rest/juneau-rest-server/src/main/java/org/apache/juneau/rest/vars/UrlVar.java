@@ -37,7 +37,7 @@ import org.apache.juneau.svl.*;
  * Uses the URI resolver returned by {@link RestRequest#getUriResolver()}.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.SimpleVariableLanguage.jm.SvlVariables">SVL Variables</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.SvlVariables">SVL Variables</a>
  * </ul>
  */
 public class UrlVar extends SimpleVar {

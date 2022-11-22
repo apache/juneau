@@ -44,7 +44,7 @@ import org.apache.juneau.utils.*;
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.SimpleVariableLanguage">Simple Variable Language</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.SimpleVariableLanguage">Simple Variable Language</a>
  * </ul>
  */
 public class ManifestFileVar extends DefaultingVar {

@@ -20,7 +20,7 @@ import org.apache.juneau.common.internal.*;
  * Utility methods for the UON and UrlEncoding serializers and parsers.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.UonDetails">UON Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.UonDetails">UON Details</a>
  * </ul>
  */
 public final class UonUtils {

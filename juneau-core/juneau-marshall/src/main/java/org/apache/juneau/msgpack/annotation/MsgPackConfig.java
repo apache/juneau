@@ -28,7 +28,7 @@ import org.apache.juneau.serializer.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.MsgPackDetails">Overview &gt; juneau-marshall &gt; MessagePack Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.MsgPackDetails">Overview &gt; juneau-marshall &gt; MessagePack Details</a>
  * </ul>
  */
 @Target({TYPE,METHOD})
@@ -73,7 +73,7 @@ public @interface MsgPackConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="../../../../../index.html#juneau-marshall.jm.SimpleVariableLanguage.jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="../../../../../index.html#jm.DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

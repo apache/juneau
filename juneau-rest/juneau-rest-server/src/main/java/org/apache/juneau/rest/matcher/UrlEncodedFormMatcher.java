@@ -18,7 +18,7 @@ import javax.servlet.http.*;
  * Predefined matcher for matching requests with content type <js>"application/x-www-form-urlencoded"</js>.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-server.jrs.RestOpAnnotatedMethods">@RestOp-Annotated Methods</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.RestOpAnnotatedMethods">@RestOp-Annotated Methods</a>
  * </ul>
  */
 public class UrlEncodedFormMatcher extends RestMatcher {

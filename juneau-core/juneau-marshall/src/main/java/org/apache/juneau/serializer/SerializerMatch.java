@@ -18,7 +18,7 @@ import org.apache.juneau.*;
  * Represents a serializer and media type that matches an HTTP <c>Accept</c> header value.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.SerializersAndParsers">Serializers and Parsers</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
 public final class SerializerMatch {

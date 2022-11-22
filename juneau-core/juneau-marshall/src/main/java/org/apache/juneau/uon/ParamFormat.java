@@ -16,7 +16,7 @@ package org.apache.juneau.uon;
  * Identifies the possible values for the {@link UonSerializer.Builder#paramFormat(ParamFormat)} setting.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../index.html#juneau-marshall.jm.UonDetails">UON Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../index.html#jm.UonDetails">UON Details</a>
  * </ul>
  */
 public enum ParamFormat {

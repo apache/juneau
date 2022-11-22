@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link Xml @Xml} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-marshall.jm.XmlDetails">XML Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jm.XmlDetails">XML Details</a>
  * </ul>
  */
 public class XmlAnnotation {

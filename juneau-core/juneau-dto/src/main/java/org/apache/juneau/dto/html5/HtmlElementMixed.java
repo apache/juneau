@@ -25,7 +25,7 @@ import org.apache.juneau.xml.annotation.*;
  * A subclass of HTML elements that contain mixed content (elements and text).
  *
  * <ul class='seealso'>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-dto.jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jd.Html5">Overview &gt; juneau-dto &gt; HTML5</a>
  * </ul>
  */
 @FluentSetters
