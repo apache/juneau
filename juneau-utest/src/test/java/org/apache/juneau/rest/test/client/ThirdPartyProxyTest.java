@@ -22,7 +22,6 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
-import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
@@ -68,43 +67,6 @@ public class ThirdPartyProxyTest {
 	public ThirdPartyProxyTest(String label, Serializer serializer, Parser parser) {
 		proxy = MockRestClient.create(ThirdPartyProxyResource.class).ignoreErrors().serializer(serializer).parser(parser).partSerializer(UonSerializer.create().addBeanTypes().addRootType().build()).build().getRemote(ThirdPartyProxy.class, null, serializer, parser);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Temporary exhaustive test.
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	@Ignore
-	public void a00_lotsOfSetInt3dArray() {
-		final AtomicLong time = new AtomicLong(System.currentTimeMillis());
-		final AtomicInteger iteration = new AtomicInteger(0);
-		TimerTask timerTask = new TimerTask() {
-			@Override
-			public void run() {
-				if (System.currentTimeMillis() - time.get() > 10000) {
-					try {
-						System.err.println("Failed at iteration " + iteration.get());  // NOT DEBUG
-						System.exit(2);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		};
-		// running timer task as daemon thread
-		Timer timer = new Timer(true);
-		timer.scheduleAtFixedRate(timerTask, 0, 10 * 1000);
-		for (int i = 0; i < 100000; i++) {
-			iteration.set(i);
-			String s = proxy.setInt3dArray(new int[][][]{{{i},null},null}, i);
-			if (i % 1000 == 0)
-				System.err.println("response="+s);  // NOT DEBUG
-			time.set(System.currentTimeMillis());
-		}
-		timer.cancel();
-	}
-
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Header tests
