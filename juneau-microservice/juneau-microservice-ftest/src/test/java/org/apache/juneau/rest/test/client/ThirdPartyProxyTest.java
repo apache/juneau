@@ -35,6 +35,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.test.*;
 import org.apache.juneau.rest.test.client.ThirdPartyProxyTest.ThirdPartyProxy.*;
 import org.apache.juneau.serializer.*;
@@ -48,7 +49,7 @@ import org.junit.runners.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 @RunWith(Parameterized.class)
-public class ThirdPartyProxyTest extends RestTestcase {
+public class ThirdPartyProxyTest {
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
@@ -66,11 +67,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	private ThirdPartyProxy proxy;
 
 	public ThirdPartyProxyTest(String label, Serializer serializer, Parser parser) {
-		proxy = getCached(label, ThirdPartyProxy.class);
-		if (proxy == null) {
-			proxy = TestMicroservice.client(serializer, parser).ignoreErrors().partSerializer(UonSerializer.create().addBeanTypes().addRootType().build()).build().getRemote(ThirdPartyProxy.class, null, serializer, parser);
-			cache(label, proxy);
-		}
+		proxy = MockRestClient.create(ThirdPartyProxyResource.class).ignoreErrors().serializer(serializer).parser(parser).partSerializer(UonSerializer.create().addBeanTypes().addRootType().build()).build().getRemote(ThirdPartyProxy.class, null, serializer, parser);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1522,7 +1519,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	// Proxy class
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Remote(path="/testThirdPartyProxy")
+	@Remote
 	public static interface ThirdPartyProxy {
 
 		//-------------------------------------------------------------------------------------------------------------
