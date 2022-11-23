@@ -20,7 +20,6 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.rest.test.client.*;
 
 @Rest(
 	path="/*",
@@ -28,7 +27,6 @@ import org.apache.juneau.rest.test.client.*;
 		DebugResource.class,
 		ConfigResource.class,
 		LargePojosResource.class,
-		ThirdPartyProxyResource.class,
 		ShutdownResource.class,
 	}
 )

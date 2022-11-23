@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import org.apache.juneau.rest.test.client.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
@@ -25,8 +24,7 @@ import org.junit.runners.Suite.*;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-	ConfigTest.class,
-	ThirdPartyProxyTest.class,
+	ConfigTest.class
 })
 public class _TestSuite {
 

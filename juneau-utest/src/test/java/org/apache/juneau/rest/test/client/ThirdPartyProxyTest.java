@@ -36,7 +36,6 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.rest.test.*;
 import org.apache.juneau.rest.test.client.ThirdPartyProxyTest.ThirdPartyProxy.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.pojos.*;
@@ -85,7 +84,6 @@ public class ThirdPartyProxyTest {
 				if (System.currentTimeMillis() - time.get() > 10000) {
 					try {
 						System.err.println("Failed at iteration " + iteration.get());  // NOT DEBUG
-						TestMicroservice.jettyDump(null, null);
 						System.exit(2);
 					} catch (Exception e) {
 						e.printStackTrace();
