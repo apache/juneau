@@ -23,7 +23,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Used for fluent assertion calls against booleans.
  *
- * <h5 class='section'>Test Methods:</h5><ul>
+ * <h5 class='section'>Test Methods:</h5>
  * <p>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentBooleanAssertion}
@@ -60,7 +60,7 @@ import org.apache.juneau.serializer.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>Transform Methods:</h5><ul>
+ * <h5 class='section'>Transform Methods:</h5>
  * <p>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentObjectAssertion}
@@ -75,7 +75,7 @@ import org.apache.juneau.serializer.*;
  *	</ul>
  * </ul>
  *
- * <h5 class='section'>Configuration Methods:</h5><ul>
+ * <h5 class='section'>Configuration Methods:</h5>
  * <p>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}
