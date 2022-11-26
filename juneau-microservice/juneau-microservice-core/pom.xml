@@ -28,8 +28,6 @@
 	<description>Apache Juneau Microservice Core API</description>
 
 	<properties>
-		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
-		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 
 	<dependencies>
@@ -44,8 +42,8 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
 		</dependency>
 	</dependencies>
 

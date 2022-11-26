@@ -29,7 +29,6 @@
 
 	<properties>
 		<encoding>UTF-8</encoding>
-		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 
 

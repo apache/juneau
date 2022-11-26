@@ -30,9 +30,6 @@
 	<properties>
 		<encoding>UTF-8</encoding>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
-
-		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
-		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 
 	<dependencies>

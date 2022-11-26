@@ -29,10 +29,6 @@
 
 	<properties>
 		<encoding>UTF-8</encoding>
-
-		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
-		<maven.javadoc.skip>true</maven.javadoc.skip>
-
 	</properties>
 
 

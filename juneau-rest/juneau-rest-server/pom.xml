@@ -45,8 +45,8 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
@@ -67,8 +67,6 @@
 	</dependencies>
 
 	<properties>
-		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
-		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 
 	<build>

@@ -34,6 +34,10 @@
 			<artifactId>juneau-rest-server</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+		</dependency>
 
 		<!-- Spring Boot dependencies-->
 		<dependency>
@@ -50,8 +54,6 @@
 	</dependencies>
 
 	<properties>
-		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
-		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 
 	<build>

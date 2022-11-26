@@ -29,9 +29,6 @@
 	<packaging>bundle</packaging>
 
 	<properties>
-		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
-		<maven.javadoc.skip>true</maven.javadoc.skip>
-
 		<!-- Note:  If you want to build the docs, you have to update the following location for tools.jar -->
 		<toolsjar>/Library/Java/JavaVirtualMachines/jdk1.8.0_162.jdk/Contents/Home/lib/tools.jar</toolsjar>
 	</properties>

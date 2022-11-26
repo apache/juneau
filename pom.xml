@@ -38,7 +38,7 @@
 		<jaxb.version>2.3.1</jaxb.version>
 		<junit.version>4.13.2</junit.version>
 		<jaxrs.version>1.1.1</jaxrs.version>
-		<servlet.version>4.0.1</servlet.version>
+		<servlet.version>4.0.4</servlet.version>
 		<httpcore.version>4.4.15</httpcore.version>
 		<httpclient.version>4.5.13</httpclient.version>
 		<jetty.version>10.0.12</jetty.version>
@@ -51,7 +51,7 @@
 		<springboot.version>2.7.5</springboot.version>
 		<xml.apis.version>1.4.01</xml.apis.version>
 		<javadoc.executable />
-		<javadoc.plugin.version>3.0.1</javadoc.plugin.version>
+		<javadoc.plugin.version>3.4.1</javadoc.plugin.version>
 		<jacoco.plugin.version>0.8.8</jacoco.plugin.version>
 	</properties>
 
@@ -69,8 +69,8 @@
 				<version>${jaxrs.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>javax.servlet-api</artifactId>
+				<groupId>jakarta.servlet</groupId>
+				<artifactId>jakarta.servlet-api</artifactId>
 				<version>${servlet.version}</version>
 				<scope>provided</scope>
 			</dependency>
@@ -229,7 +229,6 @@
 						<windowtitle>Apache Juneau ${project.version}</windowtitle>
 						<author>true</author>
 						<linksource>true</linksource>
-						<source>1.8</source>
 						<bootclasspath>${sun.boot.class.path}</bootclasspath>
 						<classpath>${basedir}/juneau-doc/tools.jar</classpath>
 						<overview>${basedir}/juneau-doc/src/main/javadoc/overview.html</overview>
@@ -240,13 +239,15 @@
 						<linksource>true</linksource>
  						<links>
 							<link>https://docs.oracle.com/javase/8/docs/api/</link>
-							<link>https://docs.oracle.com/javaee/5/api/</link>
+							<link>https://jakarta.ee/specifications/platform/8/apidocs/</link>
 							<link>https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/</link>
 							<link>https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/</link>
 						</links>
 						<docfilessubdirs>true</docfilessubdirs>
 						<javadocDirectory>${basedir}/juneau-doc/src/main/javadoc</javadocDirectory>
 						<javadocExecutable>${javadoc.executable}</javadocExecutable>
+						<source>8</source>
+						<detectJavaApiLink>false</detectJavaApiLink>
 					</configuration>
 					<executions>
 						<execution>
@@ -271,8 +272,8 @@
 					<configuration>
 						<source>${maven.compiler.source}</source>
 						<target>${maven.compiler.target}</target>
-						<compilerArgument>-parameters</compilerArgument>
-						<testCompilerArgument>-parameters</testCompilerArgument>
+						<!--compilerArgument>-parameters</compilerArgument>
+						<testCompilerArgument>-parameters</testCompilerArgument-->
 					</configuration>
 				</plugin>
 
