@@ -1151,7 +1151,7 @@
 	<p>
 		A REST resource is simply a Java class annotated with {@link org.apache.juneau.rest.annotation.Rest}.
 		The most common case is a class that extends {@link org.apache.juneau.rest.servlet.BasicRestServlet}, which itself is simply an 
-		extension of {@link javax.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
+		extension of {@link jakarta.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
 	</p>
 	<p class='bjava'>
 	<jc>// Sample REST resource that prints out a simple "Hello world!" message.</jc>
@@ -1535,7 +1535,7 @@
 		</ul>
 		<li>A wide range of possible argument types including:
 		<ul>
-			<li>Standard {@link javax.servlet.http.HttpServletRequest} / {@link javax.servlet.http.HttpServletResponse} objects.
+			<li>Standard {@link jakarta.servlet.http.HttpServletRequest} / {@link jakarta.servlet.http.HttpServletResponse} objects.
 			<li>Extended {@link org.apache.juneau.rest.RestRequest} / {@link org.apache.juneau.rest.RestResponse} objects.
 			<li>Parsed HTTP parts with either the arguments or beans annotated with {@link org.apache.juneau.http.annotation.Path @Path} / {@link org.apache.juneau.http.annotation.Header @Header} / {@link org.apache.juneau.http.annotation.Query @Query} / {@link org.apache.juneau.http.annotation.FormData @FormData}.
 			<li>Parsed HTTP body with either the argument or bean annotated with {@link org.apache.juneau.http.annotation.Content @Content}.
@@ -1545,7 +1545,7 @@
 			<li>Response beans annotated with {@link org.apache.juneau.http.annotation.Response @Response}.
 			<li>Standard HTTP headers such as {@link org.apache.juneau.http.header.Accept} and {@link org.apache.juneau.http.header.ContentType}  provided in {@link org.apache.juneau.http.header} package.
 			<li>Auto-generated {@link org.apache.juneau.dto.swagger.Swagger}.
-			<li>Various other standard objects such as {@link java.security.Principal}, {@link javax.servlet.http.Cookie}, {@link javax.servlet.http.HttpSession}, and {@link java.util.ResourceBundle}.
+			<li>Various other standard objects such as {@link java.security.Principal}, {@link jakarta.servlet.http.Cookie}, {@link jakarta.servlet.http.HttpSession}, and {@link java.util.ResourceBundle}.
 			<li>Spring beans or other injectable beans.
 			<li>Extensible API for defining custom argument types.
 		</ul>
@@ -15350,9 +15350,9 @@
 	<p> 
 		The API builds upon the existing JEE Servlet API.  
 		The root class, {@link org.apache.juneau.rest.servlet.RestServlet} is nothing but a specialized 
-		{@link javax.servlet.http.HttpServlet}, and the {@link org.apache.juneau.rest.RestRequest} and 
+		{@link jakarta.servlet.http.HttpServlet}, and the {@link org.apache.juneau.rest.RestRequest} and 
 		{@link org.apache.juneau.rest.RestResponse} classes are nothing more than specialized 
-		{@link javax.servlet.http.HttpServletRequest} and {@link javax.servlet.http.HttpServletResponse} objects.  
+		{@link jakarta.servlet.http.HttpServletRequest} and {@link jakarta.servlet.http.HttpServletResponse} objects.  
 		This allows maximum flexibility for the developer since you can let Juneau handle operations such as 
 		serialization, or you can revert to the existing servlet APIs to do low-level processing of requests yourself.	
 		It also means you need nothing more than a Servlet container such as Jetty to use the REST framework.
@@ -15438,7 +15438,7 @@
 	<p>
 		A REST resource is simply a Java class annotated with {@link org.apache.juneau.rest.annotation.Rest @Rest}.
 		The most common case is a class that extends {@link org.apache.juneau.rest.servlet.BasicRestServlet}, which itself is simply an 
-		extension of {@link javax.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
+		extension of {@link jakarta.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
 	</p>
 	<p>
 		Juneau has two sample applications for demonstrating how to use the REST API, one using Jetty and one using
@@ -15679,7 +15679,7 @@
 		functionality and to handle different use-cases.  Users will typically extend from one of these <c>Basic*</c> classes:
 	</p>
 	<ul class='javatree'>
-		<li class='jac'>{@link javax.servlet.http.HttpServlet} 
+		<li class='jac'>{@link jakarta.servlet.http.HttpServlet} 
 			<ul>
 				<li class='jac'>{@link org.apache.juneau.rest.servlet.RestServlet}
 					<ul>
@@ -15802,7 +15802,7 @@
 	</p>
 	<p>
 		The <c>*Object*</c> classes provide the same functionality as the servlet
-		classes but do not extend from {@link javax.servlet.http.HttpServlet}.  
+		classes but do not extend from {@link jakarta.servlet.http.HttpServlet}.  
 		This becomes important in Spring Boot environments where you may want to 
 		define child resources as Spring Beans but don't want Spring Boot to auto-detect
 		them as servlets to be deployed as top-level resources.  This is less important
@@ -17991,7 +17991,7 @@
 	</p>
 	<div class='warn'>
 		If you're using form input beans, DO NOT use the <l>@FormData</l> attribute or 
-		{@link javax.servlet.http.HttpServletRequest#getParameter(String)} method since this will cause the 
+		{@link jakarta.servlet.http.HttpServletRequest#getParameter(String)} method since this will cause the 
 		underlying JEE servlet to parse the HTTP body as a form post.
 		<br>Your input bean will end up being null since there won't be any content left after the servlet 
 		has parsed the body of the request.
@@ -20702,7 +20702,7 @@
 	</p>
 	<p>
 		Other status codes can be generated by throwing a {@link org.apache.juneau.http.response.BasicHttpException} with a 
-		specific HTTP status code, or calling {@link javax.servlet.http.HttpServletResponse#setStatus(int)}.
+		specific HTTP status code, or calling {@link jakarta.servlet.http.HttpServletResponse#setStatus(int)}.
 	</p>
 	<p>
 		Non-OK (200) status codes are automatically triggered by the following conditions:
@@ -20914,7 +20914,7 @@
 	<p>
 		The {@link org.apache.juneau.rest.RestContext.Builder} class extends {@link org.apache.juneau.BeanContext.Builder}
 		allowing you to programmatically set any properties defined on that builder class.
-		It also implements {@link javax.servlet.ServletConfig}
+		It also implements {@link jakarta.servlet.ServletConfig}
 	</p>
 	<p>
 		To access this object, simply pass it in as a constructor argument or in an INIT hook:
@@ -21856,8 +21856,8 @@
 <div class='topic'>
 	<ul class='notes'>
 		<li class='note'>
-			Subclasses can use either {@link javax.servlet.http.HttpServlet#init(ServletConfig)} 
-			or {@link javax.servlet.http.HttpServlet#init()} for initialization just like any other servlet.
+			Subclasses can use either {@link jakarta.servlet.http.HttpServlet#init(ServletConfig)} 
+			or {@link jakarta.servlet.http.HttpServlet#init()} for initialization just like any other servlet.
 		<li class='note'>
 			The <l>X-Response-Headers</l> header can be used to pass through header values into the response.
 			The value should be a URL-encoded map of key-value pairs.
@@ -24704,7 +24704,7 @@
 	<hr>
 	<p>
 		The {@link org.apache.juneau.rest.mock.MockRestRequest} object has convenience methods provided to allow you to set properties
-		directly on the underlying {@link javax.servlet.http.HttpServletRequest} object.  The following example shows how
+		directly on the underlying {@link jakarta.servlet.http.HttpServletRequest} object.  The following example shows how
 		this can be used to directly set roles on the request object to perform security testing.
 	</p>
 	<h5 class='figure'>Example:</h5>
@@ -31460,7 +31460,7 @@
 			<br><br>
 			The majority of code has been split up into two separate classes:
 			<ul>
-				<li><del>RestConfig</del> - A modifiable configuration of a resource.  Subclasses from {@link javax.servlet.ServletConfig}.
+				<li><del>RestConfig</del> - A modifiable configuration of a resource.  Subclasses from <del>javax.servlet.ServletConfig</del>.
 				<li>{@link org.apache.juneau.rest.RestContext} - A read-only configuration that's the result of a snapshot of the config.
 			</ul>
 			<br><br>
@@ -31833,9 +31833,9 @@
 			<br>For reference, the previous supported types were:
 			<ul>
 				<li>{@link org.apache.juneau.rest.RestRequest} - The request object.
-				<li>{@link javax.servlet.http.HttpServletRequest} - The superclass of <c>RestRequest</c>.
+				<li><del>javax.servlet.http.HttpServletRequest</del> - The superclass of <c>RestRequest</c>.
 				<li>{@link org.apache.juneau.rest.RestResponse} - The response object.
-				<li>{@link javax.servlet.http.HttpServletResponse} - The superclass of <c>RestResponse</c>.
+				<li><del>javax.servlet.http.HttpServletResponse</del> - The superclass of <c>RestResponse</c>.
 			</ul>
 			The new supported types are:
 			<ul>
@@ -31869,10 +31869,10 @@
 				<li><del>Warning</del>
 				<li>{@link java.util.TimeZone}
 				<li>{@link java.io.InputStream}
-				<li>{@link javax.servlet.ServletInputStream}
+				<li><del>javax.servlet.ServletInputStream</del>
 				<li>{@link java.io.Reader}
 				<li>{@link java.io.OutputStream}
-				<li>{@link javax.servlet.ServletOutputStream}
+				<li><del>javax.servlet.ServletOutputStream</del>
 				<li>{@link java.io.Writer}
 				<li>{@link java.util.ResourceBundle} - Client-localized resource bundle.
 				<li><del>MessageBundle</del> - A resource bundle with additional features.
