@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.springboot;
 
-import javax.servlet.*;
-
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.springboot.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -95,7 +93,7 @@ public class App {
 	 * @return The servlet registration mapped to "/*".
 	 */
 	@Bean
-	public ServletRegistrationBean<Servlet> getRootServlet(RootResources rootResources) {
+	public ServletRegistrationBean<jakarta.servlet.Servlet> getRootServlet(RootResources rootResources) {
 		return new ServletRegistrationBean<>(rootResources, "/*");
 	}
 }

@@ -14,7 +14,7 @@ package org.apache.juneau.rest.processor;
 
 import java.io.*;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;

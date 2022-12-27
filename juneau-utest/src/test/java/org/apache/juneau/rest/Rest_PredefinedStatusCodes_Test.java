@@ -18,7 +18,7 @@ import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.annotation.Header;

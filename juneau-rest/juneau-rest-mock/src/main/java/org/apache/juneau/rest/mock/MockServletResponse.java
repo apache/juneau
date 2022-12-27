@@ -17,8 +17,8 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.io.*;
 import java.util.*;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
@@ -169,16 +169,6 @@ public class MockServletResponse implements HttpServletResponse {
 	}
 
 	@Override /* HttpServletResponse */
-	public String encodeUrl(String url) {
-		return null;
-	}
-
-	@Override /* HttpServletResponse */
-	public String encodeRedirectUrl(String url) {
-		return null;
-	}
-
-	@Override /* HttpServletResponse */
 	public void sendError(int sc, String msg) throws IOException {
 		this.sc = sc;
 		this.msg = msg;
@@ -251,12 +241,6 @@ public class MockServletResponse implements HttpServletResponse {
 	public MockServletResponse status(int value) {
 		setStatus(value);
 		return this;
-	}
-
-	@Override /* HttpServletResponse */
-	public void setStatus(int sc, String sm) {
-		this.sc = sc;
-		this.msg = sm;
 	}
 
 	@Override /* HttpServletResponse */

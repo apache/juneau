@@ -17,7 +17,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.io.*;
 import java.util.*;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
@@ -284,10 +284,9 @@ public class RestSession extends ContextSession {
 	 * @param value The status code.
 	 * @return This object.
 	 */
-	@SuppressWarnings("deprecation")
 	public RestSession status(StatusLine value) {
 		if (value != null)
-			res.setStatus(value.getStatusCode(), value.getReasonPhrase());
+			res.setStatus(value.getStatusCode());
 		return this;
 	}
 

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.rrpc;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.remote.*;

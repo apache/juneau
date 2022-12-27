@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;

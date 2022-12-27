@@ -14,7 +14,7 @@ package org.apache.juneau.rest.util;
 
 import java.io.*;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 
 /**
  * ServletInputStream wrapper around a normal input stream with support for limiting input.

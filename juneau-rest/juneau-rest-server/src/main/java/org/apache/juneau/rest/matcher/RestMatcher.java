@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.matcher;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.rest.annotation.*;
 

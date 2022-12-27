@@ -17,7 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 
 import org.apache.juneau.rest.*;
 

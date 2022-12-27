@@ -14,8 +14,8 @@ package org.apache.juneau.rest.arg;
 
 import java.security.*;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;

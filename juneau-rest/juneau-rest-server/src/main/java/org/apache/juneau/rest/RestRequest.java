@@ -37,8 +37,8 @@ import java.util.*;
 import java.util.logging.*;
 import java.util.stream.*;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;

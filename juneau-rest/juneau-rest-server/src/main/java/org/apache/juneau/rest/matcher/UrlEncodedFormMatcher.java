@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.matcher;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 /**
  * Predefined matcher for matching requests with content type <js>"application/x-www-form-urlencoded"</js>.

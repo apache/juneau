@@ -24,7 +24,7 @@ import java.net.*;
 import java.util.*;
 import java.util.logging.*;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;

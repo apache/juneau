@@ -20,8 +20,8 @@ import java.lang.annotation.*;
 import java.util.*;
 import java.util.logging.*;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;

@@ -32,7 +32,6 @@
 		<module>juneau-microservice-core</module>
 		<module>juneau-microservice-jetty</module>
 		<module>juneau-my-jetty-microservice</module>
-		<module>juneau-microservice-ftest</module>
 		<module>juneau-my-springboot-microservice</module>
 	</modules>
 

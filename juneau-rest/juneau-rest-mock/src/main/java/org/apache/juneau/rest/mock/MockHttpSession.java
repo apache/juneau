@@ -16,8 +16,8 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  * An implementation of {@link HttpSession} for mocking purposes.
@@ -32,7 +32,7 @@ import javax.servlet.http.*;
  */
 public class MockHttpSession implements HttpSession {
 
-	private Map<String,Object> attributes = map(), values = map();
+	private Map<String,Object> attributes = map();
 
 	private long creationTime, lastAccessedTime;
 	private int maxInactiveInterval;
@@ -171,20 +171,9 @@ public class MockHttpSession implements HttpSession {
 		return maxInactiveInterval;
 	}
 
-	@SuppressWarnings("deprecation")
-	@Override /* HttpSession */
-	public HttpSessionContext getSessionContext() {
-		return null;
-	}
-
 	@Override /* HttpSession */
 	public Object getAttribute(String name) {
 		return attributes.get(name);
-	}
-
-	@Override /* HttpSession */
-	public Object getValue(String name) {
-		return values.get(name);
 	}
 
 	@Override /* HttpSession */
@@ -193,28 +182,12 @@ public class MockHttpSession implements HttpSession {
 	}
 
 	@Override /* HttpSession */
-	public String[] getValueNames() {
-		return values.keySet().toArray(new String[0]);
-	}
-
-	@Override /* HttpSession */
 	public void setAttribute(String name, Object value) {
 		attributes.put(name, value);
 	}
-
-	@Override /* HttpSession */
-	public void putValue(String name, Object value) {
-		values.put(name, value);
-	}
-
 	@Override /* HttpSession */
 	public void removeAttribute(String name) {
 		attributes.remove(name);
-	}
-
-	@Override /* HttpSession */
-	public void removeValue(String name) {
-		values.remove(name);
 	}
 
 	@Override /* HttpSession */

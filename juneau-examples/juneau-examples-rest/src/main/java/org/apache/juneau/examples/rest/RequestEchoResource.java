@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.annotation.*;

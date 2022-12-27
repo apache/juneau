@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.servlet;
 
 import static java.util.logging.Level.*;
-import static javax.servlet.http.HttpServletResponse.*;
+import static jakarta.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
@@ -23,8 +23,8 @@ import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;

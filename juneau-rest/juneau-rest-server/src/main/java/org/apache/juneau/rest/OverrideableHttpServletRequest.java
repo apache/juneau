@@ -14,7 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.rest.util.RestUtils.*;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 /**
  * A wrapper class that allows you to override basic fields.

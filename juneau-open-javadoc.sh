@@ -11,7 +11,7 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 
-. juneau-env.sh
+. ./juneau-env.sh
 
 open target/site/apidocs/overview-summary.html
 

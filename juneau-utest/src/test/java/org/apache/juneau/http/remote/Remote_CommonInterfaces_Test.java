@@ -172,24 +172,24 @@ public class Remote_CommonInterfaces_Test {
 		// HttpClient goes into loop if status code is less than 200 so we can't test those.
 
 		C x = MockRestClient.create(C1.class).json().disableRedirectHandling().build().getRemote(C.class);
-		assertObject(x.ok()).asString().isContains("HTTP/1.1 200 OK");
-		assertObject(x.accepted()).asString().isContains("HTTP/1.1 202 Accepted");
-		assertObject(x.alreadyReported()).asString().isContains("HTTP/1.1 208 Already Reported");
-		assertObject(x.created()).asString().isContains("HTTP/1.1 201 Created");
-		assertObject(x.found()).asString().isContains("HTTP/1.1 302 Found");
-		assertObject(x.iMUsed()).asString().isContains("HTTP/1.1 226 IM Used");
-		assertObject(x.movedPermanently()).asString().isContains("HTTP/1.1 301 Moved Permanently");
-		assertObject(x.multipleChoices()).asString().isContains("HTTP/1.1 300 Multiple Choices");
-		assertObject(x.multiStatus()).asString().isContains("HTTP/1.1 207 Multi-Status");
-		assertObject(x.noContent()).asString().isContains("HTTP/1.1 204 No Content");
-		assertObject(x.nonAuthoritiveInformation()).asString().isContains("HTTP/1.1 203 Non-Authoritative Information");
-		assertObject(x.notModified()).asString().isContains("HTTP/1.1 304 Not Modified");
-		assertObject(x.partialContent()).asString().isContains("HTTP/1.1 206 Partial Content");
-		assertObject(x.permanentRedirect()).asString().isContains("HTTP/1.1 308 Permanent Redirect");
-		assertObject(x.resetContent()).asString().isContains("HTTP/1.1 205 Reset Content");
-		assertObject(x.seeOther()).asString().isContains("HTTP/1.1 303 See Other");
-		assertObject(x.temporaryRedirect()).asString().isContains("HTTP/1.1 307 Temporary Redirect");
-		assertObject(x.useProxy()).asString().isContains("HTTP/1.1 305 Use Proxy");
+		assertObject(x.ok()).asString().isContains("HTTP/1.1 200");
+		assertObject(x.accepted()).asString().isContains("HTTP/1.1 202");
+		assertObject(x.alreadyReported()).asString().isContains("HTTP/1.1 208");
+		assertObject(x.created()).asString().isContains("HTTP/1.1 201");
+		assertObject(x.found()).asString().isContains("HTTP/1.1 302");
+		assertObject(x.iMUsed()).asString().isContains("HTTP/1.1 226");
+		assertObject(x.movedPermanently()).asString().isContains("HTTP/1.1 301");
+		assertObject(x.multipleChoices()).asString().isContains("HTTP/1.1 300");
+		assertObject(x.multiStatus()).asString().isContains("HTTP/1.1 207");
+		assertObject(x.noContent()).asString().isContains("HTTP/1.1 204");
+		assertObject(x.nonAuthoritiveInformation()).asString().isContains("HTTP/1.1 203");
+		assertObject(x.notModified()).asString().isContains("HTTP/1.1 304");
+		assertObject(x.partialContent()).asString().isContains("HTTP/1.1 206");
+		assertObject(x.permanentRedirect()).asString().isContains("HTTP/1.1 308");
+		assertObject(x.resetContent()).asString().isContains("HTTP/1.1 205");
+		assertObject(x.seeOther()).asString().isContains("HTTP/1.1 303");
+		assertObject(x.temporaryRedirect()).asString().isContains("HTTP/1.1 307");
+		assertObject(x.useProxy()).asString().isContains("HTTP/1.1 305");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

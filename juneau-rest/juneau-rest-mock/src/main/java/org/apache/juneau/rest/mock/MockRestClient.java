@@ -29,7 +29,7 @@ import java.util.logging.*;
 import java.util.zip.*;
 
 import javax.net.ssl.*;
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.http.auth.*;

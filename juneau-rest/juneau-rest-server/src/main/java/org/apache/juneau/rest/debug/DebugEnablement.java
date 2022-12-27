@@ -18,7 +18,7 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 import java.lang.reflect.Method;
 import java.util.function.*;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
