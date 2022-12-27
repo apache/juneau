@@ -52,9 +52,9 @@
 	<p> 
 		The API builds upon the existing JEE Servlet API.  
 		The root class, {@link oajr.servlet.RestServlet} is nothing but a specialized 
-		{@link javax.servlet.http.HttpServlet}, and the {@link oajr.RestRequest} and 
+		{@link jakarta.servlet.http.HttpServlet}, and the {@link oajr.RestRequest} and 
 		{@link oajr.RestResponse} classes are nothing more than specialized 
-		{@link javax.servlet.http.HttpServletRequest} and {@link javax.servlet.http.HttpServletResponse} objects.  
+		{@link jakarta.servlet.http.HttpServletRequest} and {@link jakarta.servlet.http.HttpServletResponse} objects.  
 		This allows maximum flexibility for the developer since you can let Juneau handle operations such as 
 		serialization, or you can revert to the existing servlet APIs to do low-level processing of requests yourself.	
 		It also means you need nothing more than a Servlet container such as Jetty to use the REST framework.
