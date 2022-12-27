@@ -45,7 +45,7 @@
 		functionality and to handle different use-cases.  Users will typically extend from one of these <c>Basic*</c> classes:
 	</p>
 	<ul class='javatree'>
-		<li class='jac'>{@link javax.servlet.http.HttpServlet} 
+		<li class='jac'>{@link jakarta.servlet.http.HttpServlet} 
 			<ul>
 				<li class='jac'>{@link oajr.servlet.RestServlet}
 					<ul>
@@ -168,7 +168,7 @@
 	</p>
 	<p>
 		The <c>*Object*</c> classes provide the same functionality as the servlet
-		classes but do not extend from {@link javax.servlet.http.HttpServlet}.  
+		classes but do not extend from {@link jakarta.servlet.http.HttpServlet}.  
 		This becomes important in Spring Boot environments where you may want to 
 		define child resources as Spring Beans but don't want Spring Boot to auto-detect
 		them as servlets to be deployed as top-level resources.  This is less important

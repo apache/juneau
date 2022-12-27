@@ -20,7 +20,7 @@
 	<p>
 		A REST resource is simply a Java class annotated with {@link oajr.annotation.Rest}.
 		The most common case is a class that extends {@link oajr.servlet.BasicRestServlet}, which itself is simply an 
-		extension of {@link javax.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
+		extension of {@link jakarta.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
 	</p>
 	<p class='bjava'>
 		|	<jc>// Sample REST resource that prints out a simple "Hello world!" message.</jc>
@@ -404,7 +404,7 @@
 		</ul>
 		<li>A wide range of possible argument types including:
 		<ul>
-			<li>Standard {@link javax.servlet.http.HttpServletRequest} / {@link javax.servlet.http.HttpServletResponse} objects.
+			<li>Standard {@link jakarta.servlet.http.HttpServletRequest} / {@link jakarta.servlet.http.HttpServletResponse} objects.
 			<li>Extended {@link oajr.RestRequest} / {@link oajr.RestResponse} objects.
 			<li>Parsed HTTP parts with either the arguments or beans annotated with {@link oaj.http.annotation.Path @Path} / {@link oaj.http.annotation.Header @Header} / {@link oaj.http.annotation.Query @Query} / {@link oaj.http.annotation.FormData @FormData}.
 			<li>Parsed HTTP body with either the argument or bean annotated with {@link oaj.http.annotation.Content @Content}.
@@ -414,7 +414,7 @@
 			<li>Response beans annotated with {@link oaj.http.annotation.Response @Response}.
 			<li>Standard HTTP headers such as {@link oaj.http.header.Accept} and {@link oaj.http.header.ContentType}  provided in {@link oaj.http.header} package.
 			<li>Auto-generated {@link oaj.dto.swagger.Swagger}.
-			<li>Various other standard objects such as {@link java.security.Principal}, {@link javax.servlet.http.Cookie}, {@link javax.servlet.http.HttpSession}, and {@link java.util.ResourceBundle}.
+			<li>Various other standard objects such as {@link java.security.Principal}, {@link jakarta.servlet.http.Cookie}, {@link jakarta.servlet.http.HttpSession}, and {@link java.util.ResourceBundle}.
 			<li>Spring beans or other injectable beans.
 			<li>Extensible API for defining custom argument types.
 		</ul>
