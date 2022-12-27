@@ -11,7 +11,7 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 
-. juneau-env.sh
+. ./juneau-env.sh
 
 function fail_with_message {
 	X_DATE=$(date +'%H:%M:%S') 

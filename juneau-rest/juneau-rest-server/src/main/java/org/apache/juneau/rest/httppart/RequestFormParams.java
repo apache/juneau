@@ -22,7 +22,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
 import java.util.stream.*;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;

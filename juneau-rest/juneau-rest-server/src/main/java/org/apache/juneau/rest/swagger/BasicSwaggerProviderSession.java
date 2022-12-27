@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.*;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;

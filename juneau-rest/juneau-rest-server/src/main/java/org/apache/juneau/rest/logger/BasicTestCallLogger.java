@@ -17,7 +17,7 @@ import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static java.util.logging.Level.*;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.*;

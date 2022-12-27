@@ -17,7 +17,7 @@ import static org.apache.juneau.collections.JsonMap.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
@@ -332,7 +332,6 @@ public class CallLoggerRule {
 	private final Enablement enabled;
 	private final Predicate<HttpServletRequest> enabledTest;
 	private final CallLoggingDetail requestDetail, responseDetail;
-	private final boolean logStackTrace;
 
 	/**
 	 * Constructor.
@@ -349,7 +348,6 @@ public class CallLoggerRule {
 		this.enabledTest = b.enabledTest;
 		this.requestDetail = b.requestDetail;
 		this.responseDetail = b.responseDetail;
-		this.logStackTrace = b.logStackTrace;
 	}
 
 	/**
@@ -417,15 +415,6 @@ public class CallLoggerRule {
 	 */
 	public Predicate<HttpServletRequest> getEnabledTest() {
 		return enabledTest;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if a stack trace should be logged.
-	 *
-	 * @return <jk>true</jk> if a stack trace should be logged.
-	 */
-	public boolean isLogStackTrace() {
-		return logStackTrace;
 	}
 
 	@Override /* Object */

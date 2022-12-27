@@ -14,7 +14,7 @@ package org.apache.juneau.rest.annotation;
 
 import static org.junit.runners.MethodSorters.*;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.*;

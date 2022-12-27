@@ -25,7 +25,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
@@ -684,9 +684,6 @@ public class CallLogger {
 			}
 			sb.append("\n=== END ======================================================================");
 		}
-
-		if (rule.isLogStackTrace() && e == null)
-			e = new Throwable("Stacktrace");
 
 		log(level, sb.toString(), e);
 

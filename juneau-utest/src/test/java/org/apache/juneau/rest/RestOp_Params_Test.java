@@ -19,7 +19,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.io.*;
 import java.util.*;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.Messages;

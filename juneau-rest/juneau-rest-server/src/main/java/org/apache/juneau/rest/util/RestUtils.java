@@ -21,7 +21,7 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;

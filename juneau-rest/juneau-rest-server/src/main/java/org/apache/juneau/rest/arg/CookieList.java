@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 /**
  * A simple list of {@link Cookie} objects.

@@ -14,7 +14,7 @@ package org.apache.juneau.rest.util;
 
 import java.io.*;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 
 import org.apache.juneau.encoders.*;
 

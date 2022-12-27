@@ -15,9 +15,9 @@ package org.apache.juneau.rest.util;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.WriteListener;
-import javax.servlet.http.*;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.WriteListener;
+import jakarta.servlet.http.*;
 
 /**
  * Wraps an {@link HttpServletResponse} and caches the output stream in a separate buffer for debugging purposes.

@@ -92,7 +92,7 @@ import org.apache.juneau.rest.*;
  */
 public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 
-	private final javax.servlet.http.Part part;
+	private final jakarta.servlet.http.Part part;
 
 	/**
 	 * Constructor.
@@ -100,7 +100,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 * @param request The request object.
 	 * @param part The HTTP part.
 	 */
-	public RequestFormParam(RestRequest request, javax.servlet.http.Part part) {
+	public RequestFormParam(RestRequest request, jakarta.servlet.http.Part part) {
 		super(FORMDATA, request, part.getName(), null);
 		this.part = part;
 	}

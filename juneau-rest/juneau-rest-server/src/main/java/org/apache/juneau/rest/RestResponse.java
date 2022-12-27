@@ -21,8 +21,8 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;

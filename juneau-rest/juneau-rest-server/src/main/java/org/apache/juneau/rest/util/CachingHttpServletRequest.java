@@ -16,9 +16,9 @@ import static org.apache.juneau.common.internal.IOUtils.*;
 
 import java.io.IOException;
 
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 
 /**
  * Wraps an {@link HttpServletRequest} and preloads the content into memory for debugging purposes.

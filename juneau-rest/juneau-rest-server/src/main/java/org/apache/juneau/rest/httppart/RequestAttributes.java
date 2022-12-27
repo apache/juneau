@@ -17,7 +17,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.*;
@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
  *
  * <p>
  * 	The {@link RequestAttributes} object is the API for accessing the standard servlet attributes on an HTTP request
- * 	(i.e. {@link javax.servlet.ServletRequest#getAttribute(String)}).
+ * 	(i.e. {@link jakarta.servlet.ServletRequest#getAttribute(String)}).
  * </p>
  *
  * <p class='bjava'>

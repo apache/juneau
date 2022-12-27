@@ -19,8 +19,8 @@ import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.response.*;

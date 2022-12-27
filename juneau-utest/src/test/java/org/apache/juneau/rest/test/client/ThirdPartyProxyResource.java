@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.util.*;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;

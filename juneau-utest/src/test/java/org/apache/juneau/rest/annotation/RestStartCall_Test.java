@@ -14,7 +14,7 @@ package org.apache.juneau.rest.annotation;
 
 import static org.junit.runners.MethodSorters.*;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.RestRequest;

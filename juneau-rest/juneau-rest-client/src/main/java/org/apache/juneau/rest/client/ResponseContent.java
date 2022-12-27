@@ -1375,4 +1375,13 @@ public class ResponseContent implements HttpEntity {
 	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
 		return getBeanContext().getClassMeta(type, args);
 	}
+
+	@Override
+	public String toString() {
+		try {
+			return asString();
+		} catch (RestCallException e) {
+			return e.getLocalizedMessage();
+		}
+	}
 }

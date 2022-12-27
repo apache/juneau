@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.arg;
 
 import java.io.*;
-import javax.servlet.*;
+import jakarta.servlet.*;
 
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;

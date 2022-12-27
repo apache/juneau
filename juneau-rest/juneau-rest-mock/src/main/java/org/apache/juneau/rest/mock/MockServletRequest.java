@@ -23,8 +23,8 @@ import java.io.*;
 import java.security.*;
 import java.util.*;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.juneau.common.internal.*;
@@ -630,11 +630,6 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* HttpServletRequest */
-	public String getRealPath(String path) {
-		return path;
-	}
-
-	@Override /* HttpServletRequest */
 	public int getRemotePort() {
 		return remotePort;
 	}
@@ -846,11 +841,6 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* HttpServletRequest */
-	public boolean isRequestedSessionIdFromUrl() {
-		return false;
-	}
-
-	@Override /* HttpServletRequest */
 	public boolean authenticate(HttpServletResponse response) throws IOException, ServletException {
 		return false;
 	}
@@ -1049,5 +1039,20 @@ public class MockServletRequest implements HttpServletRequest {
 		}
 
 		return this;
+	}
+
+	@Override
+	public String getRequestId() {
+		return null;
+	}
+
+	@Override
+	public String getProtocolRequestId() {
+		return null;
+	}
+
+	@Override
+	public ServletConnection getServletConnection() {
+		return null;
 	}
 }

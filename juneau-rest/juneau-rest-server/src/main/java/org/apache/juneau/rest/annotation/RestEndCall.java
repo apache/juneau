@@ -17,7 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 /**
  * Identifies a method that gets called right before we exit the servlet service method.

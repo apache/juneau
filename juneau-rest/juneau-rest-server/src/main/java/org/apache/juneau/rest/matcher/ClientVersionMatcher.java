@@ -15,7 +15,7 @@ package org.apache.juneau.rest.matcher;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static javax.servlet.http.HttpServletResponse.*;
+import static jakarta.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
@@ -36,8 +36,8 @@ import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 import org.apache.http.Header;
 import org.apache.juneau.*;

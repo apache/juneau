@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.springboot.template;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.springboot.*;
