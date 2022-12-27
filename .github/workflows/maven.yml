@@ -27,7 +27,7 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        java: [ 11 ]
+        java: [ 17 ]
 # Fails on 17 tests
 #        java: [ 11, 17 ]
         experimental: [false]
