@@ -51,3 +51,8 @@ Juneau is packed with features that may not be obvious at first. Users are encou
    * juneau-rest-server - Any Servlet 3.1.0+ container.
    * juneau-rest-client - Apache HttpClient 4.5+.
 * Built on top of Servlet and Apache HttpClient APIs that allow you to use the newest HTTP/2 features such as request/response multiplexing and server push.
+
+## Building
+Building requires:
+* [Apache Maven](https://maven.apache.org/)
+* Java 17 is required to build, but Java 11 is sufficient to run unless you need Spring.
