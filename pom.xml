@@ -41,7 +41,7 @@
 		<servlet.version>6.0.0</servlet.version>
 		<httpclient.version>4.5.14</httpclient.version>
 		<httpcore.version>4.4.16</httpcore.version>
-		<jetty.version>11.0.13</jetty.version>
+		<jetty.version>11.0.15</jetty.version>
 		<juneau.compare.version>8.0.0</juneau.compare.version>
 		<javadoc.juneau.version>9.0.0</javadoc.juneau.version>
 		<juneauVersion>9.0.0</juneauVersion>
