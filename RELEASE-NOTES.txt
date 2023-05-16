@@ -19,6 +19,7 @@ Release Notes - Juneau - Version 9.0.1
     * [JUNEAU-243] Bump jetty.version from 11.0.13 to 11.0.15.
     * [JUNEAU-244] Bump springboot.version from 3.0.1 to 3.0.6 #97, #102.
     * [JUNEAU-245] Bump hibernate.version from 5.6.14.Final to 5.6.15.Final #95.
+    * [JUNEAU-246] Bump org.eclipse.jgit from 6.4.0.202211300538-r to 6.5.0.202303070854-r #101.
 
 Release Notes - Juneau - Version 9.0.0
 
