@@ -17,6 +17,7 @@ Release Notes - Juneau - Version 9.0.1
 ** Improvement
 
     * [JUNEAU-243] Bump jetty.version from 11.0.13 to 11.0.15.
+    * [JUNEAU-244] Bump springboot.version from 3.0.1 to 3.0.3 #97.
 
 Release Notes - Juneau - Version 9.0.0
 
