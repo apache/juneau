@@ -12,6 +12,16 @@
 ***************************************************************************************************************************
 
 
+Release Notes - Juneau - Version 9.0.1
+
+** Improvement
+
+    * [JUNEAU-243] Bump jetty.version from 11.0.13 to 11.0.15.
+
+Release Notes - Juneau - Version 9.0.0
+
+** Placeholder
+
 Release Notes - Juneau - Version 8.2.0
 
 ** Bug
