@@ -1674,8 +1674,8 @@ public final class StringUtils {
 	 */
 	public static String toHex(byte[] bytes) {
 		StringBuilder sb = new StringBuilder(bytes.length * 2);
-		for (int j = 0; j < bytes.length; j++) {
-			int v = bytes[j] & 0xFF;
+		for (byte element : bytes) {
+			int v = element & 0xFF;
 			sb.append(HEX[v >>> 4]).append(HEX[v & 0x0F]);
 		}
 		return sb.toString();
@@ -1778,8 +1778,8 @@ public final class StringUtils {
 	 * @return <jk>true</jk> if the specified string is one of the specified values.
 	 */
 	public static boolean isOneOf(String s, String...values) {
-		for (int i = 0; i < values.length; i++)
-			if (StringUtils.eq(s, values[i]))
+		for (String value : values)
+            if (StringUtils.eq(s, value))
 				return true;
 		return false;
 	}
@@ -1897,14 +1897,14 @@ public final class StringUtils {
 					caw.flush();
 					String s2 = new String(caw.toCharArray());
 					byte[] ba = s2.getBytes(IOUtils.UTF8);
-					for (int j = 0; j < ba.length; j++) {
+					for (byte element : ba) {
 						sb.append('%');
-						char ch = Character.forDigit((ba[j] >> 4) & 0xF, 16);
+						char ch = Character.forDigit((element >> 4) & 0xF, 16);
 						if (Character.isLetter(ch)) {
 							ch -= caseDiff;
 						}
 						sb.append(ch);
-						ch = Character.forDigit(ba[j] & 0xF, 16);
+						ch = Character.forDigit(element & 0xF, 16);
 						if (Character.isLetter(ch)) {
 							ch -= caseDiff;
 						}
