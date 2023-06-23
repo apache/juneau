@@ -103,7 +103,7 @@ public class AtomFeedResource extends BasicRestServlet {
 					)
 				);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new IllegalStateException(e);
 		}
 	}
 

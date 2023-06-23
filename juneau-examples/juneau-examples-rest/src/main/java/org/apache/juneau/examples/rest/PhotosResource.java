@@ -84,7 +84,7 @@ public class PhotosResource extends BasicRestServlet {
 			try {
 				return new URI("photos/"+id);
 			} catch (URISyntaxException e) {
-				throw new RuntimeException(e); // Shouldn't happen.
+				throw new IllegalStateException(e); // Shouldn't happen.
 			}
 		}
 

@@ -82,7 +82,7 @@ public class JsonSchemaResource extends BasicRestServlet {
 				)
 				.addRequired("firstName", "lastName");
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new IllegalStateException(e);
 		}
 	}
 
