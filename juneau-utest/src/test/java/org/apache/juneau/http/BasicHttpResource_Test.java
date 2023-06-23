@@ -153,7 +153,7 @@ public class BasicHttpResource_Test {
 
 	@Test
 	public void a06_chunked() throws Exception {
-		StringResource x1 = (StringResource) stringResource("foo").setChunked();
+		StringResource x1 = stringResource("foo").setChunked();
 		assertBoolean(x1.isChunked()).isTrue();
 		StringResource x2 = stringResource("foo");
 		assertBoolean(x2.isChunked()).isFalse();
@@ -161,25 +161,25 @@ public class BasicHttpResource_Test {
 
 	@Test
 	public void a07_chunked_boolean() throws Exception {
-		StringResource x1 = (StringResource) stringResource("foo").setChunked(true);
+		StringResource x1 = stringResource("foo").setChunked(true);
 		assertBoolean(x1.isChunked()).isTrue();
-		StringResource x2 = (StringResource) stringResource("foo").setChunked(false);
+		StringResource x2 = stringResource("foo").setChunked(false);
 		assertBoolean(x2.isChunked()).isFalse();
 	}
 
 	@Test
 	public void a08_contentType_String() throws Exception {
-		StringResource x1 = (StringResource) stringResource("foo").setContentType("text/plain");
+		StringResource x1 = stringResource("foo").setContentType("text/plain");
 		assertString(x1.getContentType().getValue()).is("text/plain");
-		StringResource x2 = (StringResource) stringResource("foo").setContentType((String)null);
+		StringResource x2 = stringResource("foo").setContentType((String)null);
 		assertObject(x2.getContentType()).isNull();
 	}
 
 	@Test
 	public void a09_contentEncoding_String() throws Exception {
-		StringResource x1 = (StringResource) stringResource("foo").setContentEncoding("identity");
+		StringResource x1 = stringResource("foo").setContentEncoding("identity");
 		assertString(x1.getContentEncoding().getValue()).is("identity");
-		StringResource x2 = (StringResource) stringResource("foo").setContentEncoding((String)null);
+		StringResource x2 = stringResource("foo").setContentEncoding((String)null);
 		assertObject(x2.getContentEncoding()).isNull();
 	}
 
