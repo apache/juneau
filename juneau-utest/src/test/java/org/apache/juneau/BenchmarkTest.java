@@ -56,14 +56,16 @@ public class BenchmarkTest {
 	}
 
 	private static final Consumer<List<Integer>> list_iterator = x -> {for (Integer i : x) result += i;};
-	private static final Consumer<List<Integer>> list_for = x -> {for (int i = 0; i < x.size(); i++) result += x.get(i);};
+	private static final Consumer<List<Integer>> list_for = x -> {for (Integer element : x)
+        result += element;};
 	private static final Consumer<List<Integer>> list_foreach = x -> x.forEach(y -> result += y);
 	private static final Consumer<Map<String,Integer>> map_iterator1 = x -> {for (Integer i : x.values()) result += i;};
 	private static final Consumer<Map<String,Integer>> map_iterator2 = x -> {for (Entry<String,Integer> i : x.entrySet()) result += i.getValue();};
 	private static final Consumer<Map<String,Integer>> map_forEach1 = x -> x.values().forEach(y -> result += y);
 	private static final Consumer<Map<String,Integer>> map_forEach2 = x -> x.forEach((k,v) -> result += v);
 	private static final ThrowingConsumer<List<Integer>> slist_iterator = x -> {for (Integer i : x) result += i;};
-	private static final ThrowingConsumer<List<Integer>> slist_for = x -> {for (int i = 0; i < x.size(); i++) result += x.get(i);};
+	private static final ThrowingConsumer<List<Integer>> slist_for = x -> {for (Integer element : x)
+        result += element;};
 	private static final ThrowingConsumer<List<Integer>> slist_foreach = x -> x.forEach(y -> result += y);
 	private static final ThrowingConsumer<Map<String,Integer>> smap_iterator1 = x -> {for (Integer i : x.values()) result += i;};
 	private static final ThrowingConsumer<Map<String,Integer>> smap_iterator2 = x -> {for (Entry<String,Integer> i : x.entrySet()) result += i.getValue();};
