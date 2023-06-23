@@ -1,7 +1,7 @@
-/target/
+**/target/
 **/.DS_Store
-.classpath
-.project
-/.settings/
+**/.classpath
+**/.project
+**/.settings/
 /bin/
 derby.log
