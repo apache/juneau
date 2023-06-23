@@ -392,7 +392,7 @@ public final class RestUtils {
 	public static String trimContextPath(String contextPath, String path) {
 		if (path == null)
 			return null;
-		if (path.length() == 0 || path.equals("/") || contextPath.length() == 0 || contextPath.equals("/"))
+		if (path.isEmpty() || path.equals("/") || contextPath.isEmpty() || contextPath.equals("/"))
 			return path;
 		String op = path;
 		if (path.charAt(0) == '/')
