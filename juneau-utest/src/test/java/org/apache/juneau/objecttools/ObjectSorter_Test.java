@@ -86,7 +86,7 @@ public class ObjectSorter_Test {
 
 	@Test
 	public void b03_beanArrayContainingNulls() {
-		Object in = new A[]{A.create("c"),A.create("a"),null,null,A.create("b")};;
+		Object in = new A[]{A.create("c"),A.create("a"),null,null,A.create("b")};
 		SortArgs sa = SortArgs.create("f");
 		assertObject(os.run(bs, in, sa)).asJson().is("[null,null,{f:'a'},{f:'b'},{f:'c'}]");
 		assertObject(os.run(in, "f")).asJson().is("[null,null,{f:'a'},{f:'b'},{f:'c'}]");

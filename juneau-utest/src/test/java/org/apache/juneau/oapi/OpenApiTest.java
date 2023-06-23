@@ -874,7 +874,7 @@ public class OpenApiTest {
 
 	@Test
 	public void f10_tArray_complexTypes() throws Exception {
-		int[][][] in =  {{{1,2},{3,4}},{{5,6},{7,8}}};;
+		int[][][] in =  {{{1,2},{3,4}},{{5,6},{7,8}}};
 		HttpPartSchema ps = tArrayCsv().items(
 			tArrayPipes().items(
 				tArraySsv()
