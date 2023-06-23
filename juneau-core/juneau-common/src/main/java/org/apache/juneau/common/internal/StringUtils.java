@@ -186,7 +186,7 @@ public final class StringUtils {
 			return null;
 		if (s.length() == 1)
 			return s.charAt(0);
-		throw new RuntimeException("Invalid character: '"+s+"'");
+		throw new IllegalArgumentException("Invalid character: '" + s + "'");
 	}
 
 	/**
@@ -838,7 +838,7 @@ public final class StringUtils {
 		if (state == S4)
 			l.add(s.substring(mark));
 		else if (state == S2 || state == S3)
-			throw new RuntimeException("Unmatched string quotes: "+s);
+			throw new IllegalArgumentException("Unmatched string quotes: " + s);
 		return l.toArray(new String[l.size()]);
 	}
 

@@ -431,7 +431,7 @@ public final class IOUtils {
 			return read((File)in);
 		if (in instanceof byte[])
 			return read((byte[])in);
-		throw new RuntimeException("Invalid type passed to read:  " + in.getClass().getName());
+		throw new IllegalArgumentException("Invalid type passed to read:  " + in.getClass().getName());
 	}
 
 	/**
