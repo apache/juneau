@@ -12,17 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static java.util.Collections.*;
-import static java.util.logging.Level.*;
-import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
-import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.serializer.Serializer.*;
 import static java.lang.Integer.*;
-import static java.util.Collections.*;
 import static java.util.Optional.*;
 
 import java.io.*;
@@ -31,60 +25,37 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.*;
 import java.nio.charset.*;
-import java.security.*;
 import java.text.*;
 import java.util.*;
-import java.util.logging.*;
-import java.util.stream.*;
-
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
-import org.apache.http.params.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.config.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.cp.Messages;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.dto.swagger.Swagger;
-import org.apache.juneau.http.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.annotation.FormData;
 import org.apache.juneau.http.annotation.Header;
-import org.apache.juneau.http.annotation.Path;
-import org.apache.juneau.http.annotation.Query;
-import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
-import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.marshaller.*;
-import org.apache.juneau.oapi.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.assertions.*;
-import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.header.BasicHeader;
 import org.apache.juneau.http.header.Date;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.http.response.BasicHttpException;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.rest.util.*;
-import org.apache.juneau.rest.vars.*;
-import org.apache.juneau.rest.widget.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
 
