@@ -202,7 +202,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 		name = resolveName(name);
 		Set<ConfigStoreListener> s = listeners.get(name);
 		if (s == null) {
-			s = synced(Collections.newSetFromMap(new IdentityHashMap<ConfigStoreListener,Boolean>()));
+			s = synced(Collections.newSetFromMap(new IdentityHashMap<>()));
 			listeners.put(name, s);
 		}
 		s.add(l);
