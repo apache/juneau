@@ -75,7 +75,7 @@ public final class AsciiSet {
 		public AsciiSet.Builder ranges(String...s) {
 			for (String ss : s) {
 				if (ss.length() != 3 || ss.charAt(1) != '-')
-					throw new RuntimeException("Value passed to ranges() must be 3 characters");
+					throw new IllegalArgumentException("Value passed to ranges() must be 3 characters");
 				range(ss.charAt(0), ss.charAt(2));
 			}
 			return this;

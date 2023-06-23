@@ -43,7 +43,7 @@ public class ThrowableUtils {
 		try {
 			return type.isInstance(t) ? type.cast(t) : type.getConstructor(Throwable.class).newInstance(t);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new IllegalArgumentException(e);
 		}
 	}
 
