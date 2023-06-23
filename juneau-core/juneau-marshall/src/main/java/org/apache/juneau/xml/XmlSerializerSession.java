@@ -816,14 +816,12 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			if (contentType == null) {
 			} else if (contentType.isCollection()) {
 				Collection c = (Collection)content;
-				for (Iterator i = c.iterator(); i.hasNext();) {
-					Object value = i.next();
+				for (Object value : c) {
 					serializeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
 				}
 			} else if (contentType.isArray()) {
 				Collection c = toList(Object[].class, content);
-				for (Iterator i = c.iterator(); i.hasNext();) {
-					Object value = i.next();
+				for (Object value : c) {
 					serializeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
 				}
 			} else {
