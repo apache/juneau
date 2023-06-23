@@ -44,7 +44,7 @@ public interface SwaggerProvider {
 	 * Used on annotation to indicate that the value should be inherited from the parent class, and
 	 * ultimately {@link BasicSwaggerProvider} if not specified at any level.
 	 */
-	public abstract class Void implements SwaggerProvider {};
+	public abstract class Void implements SwaggerProvider {}
 
 	/**
 	 * Static creator.
