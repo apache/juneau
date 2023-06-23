@@ -89,7 +89,7 @@ public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogP
 				}
 			}
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new UncheckedIOException(e);
 		}
 		return current;
 	}
