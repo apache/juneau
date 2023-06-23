@@ -714,31 +714,31 @@ public class ConfigTest {
 			"\t}"
 		);
 
-		Map<String,Integer> a1 = (Map<String,Integer>) c.get("a1").as(Map.class, String.class, Integer.class).orElse(new HashMap<String,Integer>());
+		Map<String,Integer> a1 = (Map<String,Integer>) c.get("a1").as(Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertObject(a1).asJson().is("{foo:123}");
 		assertObject(a1.keySet().iterator().next()).isType(String.class);
 		assertObject(a1.values().iterator().next()).isType(Integer.class);
 
-		Map<String,Integer> a1b = (Map<String,Integer>) c.get("a1b").as(Map.class, String.class, Integer.class).orElse(new HashMap<String,Integer>());
+		Map<String,Integer> a1b = (Map<String,Integer>) c.get("a1b").as(Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertObject(a1b).asJson().is("{}");
 
-		List<Map<String,Integer>> a2a = (List<Map<String,Integer>>) c.get("a2").as(List.class, Map.class, String.class, Integer.class).orElse(new ArrayList<Map<String,Integer>>());
+		List<Map<String,Integer>> a2a = (List<Map<String,Integer>>) c.get("a2").as(List.class, Map.class, String.class, Integer.class).orElse(new ArrayList<>());
 		assertObject(a2a).asJson().is("[{foo:123}]");
 		assertObject(a2a.get(0).keySet().iterator().next()).isType(String.class);
 		assertObject(a2a.get(0).values().iterator().next()).isType(Integer.class);
 
-		List<ABean> a2b = (List<ABean>) c.get("a2b").as(List.class, ABean.class).orElse(new ArrayList<ABean>());
+		List<ABean> a2b = (List<ABean>) c.get("a2b").as(List.class, ABean.class).orElse(new ArrayList<>());
 		assertObject(a2b).asJson().is("[]");
 
 		Map<String,Object> a3 = (Map<String,Object>) c.get("a3").as(Map.class, String.class, Object.class).orElse(new JsonMap());
 		assertObject(a3).asJson().is("{}");
 
-		Map<String,Integer> a4a = (Map<String,Integer>) c.get("a4").as(Map.class, String.class, Integer.class).orElse(new HashMap<String,Integer>());
+		Map<String,Integer> a4a = (Map<String,Integer>) c.get("a4").as(Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertObject(a4a).asJson().is("{foo:123}");
 		assertObject(a4a.keySet().iterator().next()).isType(String.class);
 		assertObject(a4a.values().iterator().next()).isType(Integer.class);
 
-		Map<String,Integer> a4b = (Map<String,Integer>) c.get("a4b").as(Map.class, String.class, Integer.class).orElse(new HashMap<String,Integer>());
+		Map<String,Integer> a4b = (Map<String,Integer>) c.get("a4b").as(Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertObject(a4b).asJson().is("{}");
 
 		ABean a4c = c.get("a4c").as(ABean.class).orElse(new ABean().init());
@@ -761,31 +761,31 @@ public class ConfigTest {
 			"\t)"
 		);
 
-		Map<String,Integer> a1 = (Map<String,Integer>) c.get("a1").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(new HashMap<String,Integer>());
+		Map<String,Integer> a1 = (Map<String,Integer>) c.get("a1").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertObject(a1).asJson().is("{foo:123}");
 		assertObject(a1.keySet().iterator().next()).isType(String.class);
 		assertObject(a1.values().iterator().next()).isType(Integer.class);
 
-		Map<String,Integer> a1b = (Map<String,Integer>) c.get("a1b").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(new HashMap<String,Integer>());
+		Map<String,Integer> a1b = (Map<String,Integer>) c.get("a1b").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertObject(a1b).asJson().is("{}");
 
-		List<Map<String,Integer>> a2a = (List<Map<String,Integer>>) c.get("a2").as(UonParser.DEFAULT, List.class, Map.class, String.class, Integer.class).orElse(new ArrayList<Map<String,Integer>>());
+		List<Map<String,Integer>> a2a = (List<Map<String,Integer>>) c.get("a2").as(UonParser.DEFAULT, List.class, Map.class, String.class, Integer.class).orElse(new ArrayList<>());
 		assertObject(a2a).asJson().is("[{foo:123}]");
 		assertObject(a2a.get(0).keySet().iterator().next()).isType(String.class);
 		assertObject(a2a.get(0).values().iterator().next()).isType(Integer.class);
 
-		List<ABean> a2b = (List<ABean>) c.get("a2b").as(UonParser.DEFAULT, List.class, ABean.class).orElse(new ArrayList<ABean>());
+		List<ABean> a2b = (List<ABean>) c.get("a2b").as(UonParser.DEFAULT, List.class, ABean.class).orElse(new ArrayList<>());
 		assertObject(a2b).asJson().is("[]");
 
 		Map<String,Object> a3 = (Map<String,Object>) c.get("a3").as(UonParser.DEFAULT,Map.class, String.class, Object.class).orElse( new JsonMap());
 		assertObject(a3).asJson().is("{}");
 
-		Map<String,Integer> a4a = (Map<String,Integer>) c.get("a4").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(new HashMap<String,Integer>());
+		Map<String,Integer> a4a = (Map<String,Integer>) c.get("a4").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertObject(a4a).asJson().is("{foo:123}");
 		assertObject(a4a.keySet().iterator().next()).isType(String.class);
 		assertObject(a4a.values().iterator().next()).isType(Integer.class);
 
-		Map<String,Integer> a4b = (Map<String,Integer>) c.get("a4b").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(new HashMap<String,Integer>());
+		Map<String,Integer> a4b = (Map<String,Integer>) c.get("a4b").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertObject(a4b).asJson().is("{}");
 
 		ABean a4c = c.get("a4c").as(UonParser.DEFAULT, ABean.class).orElse(new ABean().init());
