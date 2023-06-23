@@ -256,8 +256,8 @@ public class NumberMatcherFactory extends MatcherFactory {
 			Number n = (Number)o;
 			if (numberRanges.length == 0)
 				return true;
-			for (int i = 0; i < numberRanges.length; i++)
-				if (numberRanges[i].matches(n))
+			for (NumberRange numberRange : numberRanges)
+                if (numberRange.matches(n))
 					return true;
 			return false;
 		}
