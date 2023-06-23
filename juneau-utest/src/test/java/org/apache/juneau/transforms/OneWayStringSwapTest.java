@@ -42,7 +42,7 @@ public abstract class OneWayStringSwapTest<T> {
 
 	@Test
 	public void testSwap() throws Exception {
-		String s = (String)ss.swap(bs, o);
+		String s = ss.swap(bs, o);
 		if (ne(expected, s)) {
 			if (expected.isEmpty()) {
 				if (! label.startsWith("[]"))

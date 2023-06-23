@@ -42,7 +42,7 @@ public abstract class RoundTripStringSwapTest<T> {
 
 	@Test
 	public void testSwap() throws Exception {
-		String s = (String)ss.swap(bs, o);
+		String s = ss.swap(bs, o);
 		if (ne(expected, s)) {
 			if (expected.isEmpty()) {
 				if (! label.startsWith("[]"))
@@ -56,9 +56,9 @@ public abstract class RoundTripStringSwapTest<T> {
 
 	@Test
 	public void testUnswap() throws Exception {
-		String s = (String)ss.swap(bs, o);
+		String s = ss.swap(bs, o);
 		T o2 = ss.unswap(bs, s, bs.getClassMetaForObject(o));
-		String s2 = (String)ss.swap(bs, o2);
+		String s2 = ss.swap(bs, o2);
 		if (ne(s, s2)) {
 			if (expected.isEmpty())
 				Assert.fail();
