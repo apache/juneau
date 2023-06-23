@@ -88,7 +88,7 @@ public class Common_UonTest {
 		public static B create() {
 			B t = new B();
 			t.f1 = new TreeMap<>();
-			t.f2 = new TreeMap<String,A>(){{put("f2a",null);put("f2b",A.create());}};
+			t.f2 = new TreeMap<>(){{put("f2a",null);put("f2b",A.create());}};
 			return t;
 		}
 	}
