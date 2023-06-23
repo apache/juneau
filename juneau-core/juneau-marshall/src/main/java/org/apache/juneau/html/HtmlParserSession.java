@@ -586,7 +586,7 @@ public final class HtmlParserSession extends XmlParserSession {
 					? toBeanMap(builder.create(this, elementType))
 					: newBeanMap(l, elementType.getInnerClass())
 				;
-				for (int i = 0; i < keys.size(); i++) {
+				for (String key : keys) {
 					tag = nextTag(r, xTD, TD, NULL);
 					if (tag == xTD)
 						tag = nextTag(r, TD, NULL);
@@ -595,7 +595,6 @@ public final class HtmlParserSession extends XmlParserSession {
 						nextTag(r, xNULL);
 						break;
 					}
-					String key = keys.get(i);
 					BeanMapEntry e = m.getProperty(key);
 					if (e == null) {
 						//onUnknownProperty(key, m, -1, -1);
@@ -619,14 +618,13 @@ public final class HtmlParserSession extends XmlParserSession {
 				String c = getAttributes(r).get(getBeanTypePropertyName(type.getElementType()));
 				Map m = (Map)(elementType.isMap() && elementType.canCreateNewInstance(l) ? elementType.newInstance(l)
 					: newGenericMap(elementType));
-				for (int i = 0; i < keys.size(); i++) {
+				for (String key : keys) {
 					tag = nextTag(r, TD, NULL);
 					if (tag == NULL) {
 						m = null;
 						nextTag(r, xNULL);
 						break;
 					}
-					String key = keys.get(i);
 					if (m != null) {
 						ClassMeta<?> kt = elementType.getKeyType(), vt = elementType.getValueType();
 						Object value = parseAnything(vt, r, l, false, pMeta);
