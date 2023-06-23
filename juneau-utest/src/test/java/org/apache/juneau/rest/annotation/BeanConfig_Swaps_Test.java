@@ -46,7 +46,7 @@ public class BeanConfig_Swaps_Test {
 		@Override /* ObjectSwap */
 		public A unswap(BeanSession session, String in, ClassMeta<?> hint) throws ParseException {
 			if (! in.startsWith("A1"))
-				throw new RuntimeException("Invalid input for SwapA1!");
+				throw new IllegalArgumentException("Invalid input for SwapA1!");
 			A a = new A();
 			a.f1 = Integer.parseInt(in.substring(3));
 			return a;
@@ -61,7 +61,7 @@ public class BeanConfig_Swaps_Test {
 		@Override /* ObjectSwap */
 		public A unswap(BeanSession session, String in, ClassMeta<?> hint) throws ParseException {
 			if (! in.startsWith("A2"))
-				throw new RuntimeException("Invalid input for SwapA2!");
+				throw new IllegalArgumentException("Invalid input for SwapA2!");
 			A a = new A();
 			a.f1 = Integer.parseInt(in.substring(3));
 			return a;
@@ -76,7 +76,7 @@ public class BeanConfig_Swaps_Test {
 		@Override /* ObjectSwap */
 		public A unswap(BeanSession session, String in, ClassMeta<?> hint) throws ParseException {
 			if (! in.startsWith("A3"))
-				throw new RuntimeException("Invalid input for SwapA3!");
+				throw new IllegalArgumentException("Invalid input for SwapA3!");
 			A a = new A();
 			a.f1 = Integer.parseInt(in.substring(3));
 			return a;

@@ -43,7 +43,7 @@ public class RestPreCall_Test {
 			res.setHeader("pre3-called", ""+pre3Called);
 			pre3Called = false;
 			if (res.getHeader("pre4-called") != null)
-				throw new RuntimeException("pre4 called multiple times.");
+				throw new IllegalArgumentException("pre4 called multiple times.");
 			res.setHeader("pre4-called", "true");
 		}
 		@RestGet(path="/")
@@ -67,7 +67,7 @@ public class RestPreCall_Test {
 			res.setHeader("pre1-called", ""+pre1Called);
 			pre1Called = false;
 			if (res.getHeader("pre2-called") != null)
-				throw new RuntimeException("pre2 called multiple times.");
+				throw new IllegalArgumentException("pre2 called multiple times.");
 			res.setHeader("pre2-called", "true");
 		}
 	}

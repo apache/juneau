@@ -24,22 +24,25 @@ public class CloseableStringReader extends StringReader {
 		super(in);
 	}
 
+	private void checkOpen() {
+        if (isClosed)
+			throw new IllegalStateException("Reader is closed");
+    }
+
+    @Override
+	public void close() {
+		isClosed = true;
+	}
+
 	@Override
 	public int read() throws IOException {
-		if (isClosed)
-			throw new RuntimeException("Reader is closed");
+		checkOpen();
 		return super.read();
 	}
 
 	@Override
 	public int read(char[] cbuf, int off, int len) throws IOException {
-		if (isClosed)
-			throw new RuntimeException("Reader is closed");
+		checkOpen();
 		return super.read(cbuf, off, len);
-	}
-
-	@Override
-	public void close() {
-		isClosed = true;
 	}
 }

@@ -42,7 +42,7 @@ public class RestPostCall_Test {
 			res.setHeader("post3-called", ""+post3Called);
 			post3Called = false;
 			if (res.getHeader("post4-called") != null)
-				throw new RuntimeException("post4 called multiple times.");
+				throw new IllegalArgumentException("post4 called multiple times.");
 			res.setHeader("post4-called", "true");
 		}
 		@RestGet(path="/")
@@ -62,7 +62,7 @@ public class RestPostCall_Test {
 			res.setHeader("post1-called", ""+post1Called);
 			post1Called = false;
 			if (res.getHeader("post2-called") != null)
-				throw new RuntimeException("post2 called multiple times.");
+				throw new IllegalArgumentException("post2 called multiple times.");
 			res.setHeader("post2-called", "true");
 		}
 	}
