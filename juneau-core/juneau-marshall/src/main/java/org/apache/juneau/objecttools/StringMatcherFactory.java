@@ -149,14 +149,14 @@ public class StringMatcherFactory extends MatcherFactory {
 		@Override
 		public boolean matches(ClassMeta<?> cm, Object o) {
 			String s = (String)o;
-			for (int i = 0; i < andPatterns.length; i++)
-				if (! andPatterns[i].matcher(s).matches())
+			for (Pattern andPattern : andPatterns)
+                if (! andPattern.matcher(s).matches())
 					return false;
-			for (int i = 0; i < notPatterns.length; i++)
-				if (notPatterns[i].matcher(s).matches())
+			for (Pattern notPattern : notPatterns)
+                if (notPattern.matcher(s).matches())
 					return false;
-			for (int i = 0; i < orPatterns.length; i++)
-				if (orPatterns[i].matcher(s).matches())
+			for (Pattern orPattern : orPatterns)
+                if (orPattern.matcher(s).matches())
 					return true;
 			return orPatterns.length == 0;
 		}

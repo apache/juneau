@@ -359,8 +359,8 @@ public class TimeMatcherFactory extends MatcherFactory {
 				c = Calendar.getInstance();
 				c.setTime((Date)o);
 			}
-			for (int i = 0; i < ranges.length; i++)
-				if (ranges[i].matches(c))
+			for (TimestampRange range : ranges)
+                if (range.matches(c))
 					return true;
 			return false;
 		}
@@ -434,8 +434,7 @@ public class TimeMatcherFactory extends MatcherFactory {
 	 */
 	static CalendarP parseDate(SimpleDateFormat[] formats, String seg) {
 		ParsePosition pp = new ParsePosition(0);
-		for (int i = 0; i < formats.length; i++) {
-			SimpleDateFormat f = formats[i];
+		for (SimpleDateFormat f : formats) {
 			Date d = f.parse(seg, pp);
 			int idx = pp.getIndex();
 			if (idx != 0) {
