@@ -545,7 +545,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				if (valueFilter.test(v.getValue()))
 					action.apply(v.getMeta(), v.getName(), v.getValue(), v.getThrown());
 			});
-		};
+		}
 
 		return this;
 	}
