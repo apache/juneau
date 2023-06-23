@@ -516,7 +516,7 @@ public class RequestContent {
 				.debug(req.isDebug() ? true : null)
 				.outer(req.getContext().getResource())
 				.build();
-			;
+			
 			try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
 				T o = session.parse(in, cm);
 				if (schema != null)
