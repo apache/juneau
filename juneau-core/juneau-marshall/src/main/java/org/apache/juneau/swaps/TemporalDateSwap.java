@@ -47,7 +47,7 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		public BasicIsoDate() {
 			super("BASIC_ISO_DATE");
 		}
-	};
+	}
 
 	/**
 	 * Default swap to {@link DateTimeFormatter#ISO_DATE}.
@@ -63,7 +63,7 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		public IsoDate() {
 			super("ISO_DATE");
 		}
-	};
+	}
 
 	/**
 	 * Default swap to {@link DateTimeFormatter#ISO_DATE_TIME}.
@@ -79,7 +79,7 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		public IsoDateTime() {
 			super("ISO_DATE_TIME");
 		}
-	};
+	}
 
 	/**
 	 * Default swap to {@link DateTimeFormatter#ISO_INSTANT}.
@@ -95,7 +95,7 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		public IsoInstant() {
 			super("ISO_INSTANT");
 		}
-	};
+	}
 
 	/**
 	 * Default swap to {@link DateTimeFormatter#ISO_LOCAL_DATE}.
@@ -111,7 +111,7 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		public IsoLocalDate() {
 			super("ISO_LOCAL_DATE");
 		}
-	};
+	}
 
 	/**
 	 * Default swap to {@link DateTimeFormatter#ISO_LOCAL_DATE_TIME}.
@@ -127,7 +127,7 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		public IsoLocalDateTime() {
 			super("ISO_LOCAL_DATE_TIME");
 		}
-	};
+	}
 
 	/**
 	 * Default swap to {@link DateTimeFormatter#ISO_LOCAL_TIME}.
@@ -143,7 +143,7 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		public IsoLocalTime() {
 			super("ISO_LOCAL_TIME");
 		}
-	};
+	}
 
 	/**
 	 * Default swap to {@link DateTimeFormatter#ISO_OFFSET_DATE}.
@@ -159,7 +159,7 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		public IsoOffsetDate() {
 			super("ISO_OFFSET_DATE");
 		}
-	};
+	}
 
 	/**
 	 * Default swap to {@link DateTimeFormatter#ISO_OFFSET_DATE_TIME}.
@@ -175,7 +175,7 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		public IsoOffsetDateTime() {
 			super("ISO_OFFSET_DATE_TIME");
 		}
-	};
+	}
 
 	/**
 	 * Default swap to {@link DateTimeFormatter#ISO_OFFSET_TIME}.
@@ -191,7 +191,7 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		public IsoOffsetTime() {
 			super("ISO_OFFSET_TIME");
 		}
-	};
+	}
 
 	/**
 	 * Default swap to {@link DateTimeFormatter#ISO_ORDINAL_DATE}.
@@ -207,7 +207,7 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		public IsoOrdinalDate() {
 			super("ISO_ORDINAL_DATE");
 		}
-	};
+	}
 
 	/**
 	 * Default swap to {@link DateTimeFormatter#ISO_TIME}.
@@ -223,7 +223,7 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		public IsoTime() {
 			super("ISO_TIME");
 		}
-	};
+	}
 
 	/**
 	 * Default swap to {@link DateTimeFormatter#ISO_WEEK_DATE}.
@@ -239,7 +239,7 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		public IsoWeekDate() {
 			super("ISO_WEEK_DATE");
 		}
-	};
+	}
 
 	/**
 	 * Default swap to {@link DateTimeFormatter#ISO_ZONED_DATE_TIME}.
@@ -255,7 +255,7 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		public IsoZonedDateTime() {
 			super("ISO_ZONED_DATE_TIME");
 		}
-	};
+	}
 
 	/**
 	 * Default swap to {@link DateTimeFormatter#RFC_1123_DATE_TIME}.
@@ -271,7 +271,7 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		public Rfc1123DateTime() {
 			super("RFC_1123_DATE_TIME");
 		}
-	};
+	}
 
 
 	private final DateTimeFormatter formatter;
