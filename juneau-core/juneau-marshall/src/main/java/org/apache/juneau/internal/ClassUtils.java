@@ -69,9 +69,9 @@ public final class ClassUtils {
 		Object[] params = new Object[paramTypes.length];
 		for (int i = 0; i < paramTypes.length; i++) {
 			ClassInfo pt = ClassInfo.of(paramTypes[i]).getWrapperInfoIfPrimitive();
-			for (int j = 0; j < args.length; j++) {
-				if (args[j] != null && pt.isParentOf(args[j].getClass())) {
-					params[i] = args[j];
+			for (Object arg : args) {
+				if (arg != null && pt.isParentOf(arg.getClass())) {
+					params[i] = arg;
 					break;
 				}
 			}
