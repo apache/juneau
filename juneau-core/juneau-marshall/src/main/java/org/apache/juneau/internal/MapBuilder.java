@@ -204,7 +204,7 @@ public final class MapBuilder<K,V> {
 	@SuppressWarnings("unchecked")
 	public MapBuilder<K,V> addAny(Object...values) {
 		if (keyType == null || valueType == null)
-			throw new RuntimeException("Unknown key and value types.  Cannot use this method.");
+			throw new IllegalStateException("Unknown key and value types. Cannot use this method.");
 		try {
 			for (Object o : values) {
 				if (o != null) {
@@ -232,7 +232,7 @@ public final class MapBuilder<K,V> {
 	@SuppressWarnings("unchecked")
 	public MapBuilder<K,V> addPairs(Object...pairs) {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into AMap.ofPairs()");
+			throw new IllegalArgumentException("Odd number of parameters passed into AMap.ofPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
 			add((K)pairs[i], (V)pairs[i+1]);
 		return this;

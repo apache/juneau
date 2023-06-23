@@ -87,7 +87,7 @@ public class BeanBuilder<T> {
 	 */
 	protected BeanCreator<? extends T> creator() {
 		return beanStore
-			.createBean(type().orElseThrow(()->new RuntimeException("Type not specified.")))
+			.createBean(type().orElseThrow(() -> new IllegalStateException("Type not specified.")))
 			.builder(BeanBuilder.class, this);
 	}
 
@@ -98,7 +98,7 @@ public class BeanBuilder<T> {
 	 */
 	protected T buildDefault() {
 		return beanStore
-			.createBean(type().orElseThrow(()->new RuntimeException("Type not specified.")))
+			.createBean(type().orElseThrow(() -> new IllegalStateException("Type not specified.")))
 			.builder(BeanBuilder.class, this)
 			.run();
 	}

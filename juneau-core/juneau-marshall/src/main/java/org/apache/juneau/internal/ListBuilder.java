@@ -226,9 +226,9 @@ public final class ListBuilder<E> {
 	 * @param values The values to add.
 	 * @return This object.
 	 */
-	public ListBuilder<E> addAny(Object...values) {
+	public ListBuilder<E> addAny(Object... values) {
 		if (elementType == null)
-			throw new RuntimeException("Unknown element type.  Cannot use this method.");
+			throw new IllegalStateException("Unknown element type. Cannot use this method.");
 		try {
 			if (values != null) {
 				for (Object o : values) {

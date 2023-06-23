@@ -71,7 +71,7 @@ public class AnnotationImpl implements Annotation {
 	@Override /* Object */
 	public int hashCode() {
 		if (hashCode == -1)
-			throw new RuntimeException("Programming error.  postConstruct() was never called on annotation.");
+			throw new IllegalArgumentException("Programming error. postConstruct() was never called on annotation.");
 		return hashCode;
 	}
 

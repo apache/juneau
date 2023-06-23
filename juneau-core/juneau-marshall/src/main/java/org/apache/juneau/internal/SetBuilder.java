@@ -211,7 +211,7 @@ public final class SetBuilder<E> {
 	 */
 	public SetBuilder<E> addAny(Object...values) {
 		if (elementType == null)
-			throw new RuntimeException("Unknown element type.  Cannot use this method.");
+			throw new IllegalStateException("Unknown element type. Cannot use this method.");
 		try {
 			if (values != null) {
 				for (Object o : values) {

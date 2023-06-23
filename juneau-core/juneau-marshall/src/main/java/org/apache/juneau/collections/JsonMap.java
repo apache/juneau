@@ -371,7 +371,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 */
 	public JsonMap(Object... keyValuePairs) {
 		if (keyValuePairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into JsonMap(Object...)");
+			throw new IllegalArgumentException("Odd number of parameters passed into JsonMap(Object...)");
 		for (int i = 0; i < keyValuePairs.length; i+=2)
 			put(stringify(keyValuePairs[i]), keyValuePairs[i+1]);
 	}

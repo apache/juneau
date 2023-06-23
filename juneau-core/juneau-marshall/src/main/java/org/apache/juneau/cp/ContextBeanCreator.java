@@ -92,7 +92,7 @@ public class ContextBeanCreator<T> {
 	public ContextBeanCreator<T> type(Class<? extends T> value) {
 		builder = Context.createBuilder((Class<? extends Context>) value);
 		if (builder == null)
-			throw new RuntimeException("Creator for class {0} not found." + value.getName());
+			throw new IllegalArgumentException("Creator for class {0} not found." + value.getName());
 		return this;
 	}
 

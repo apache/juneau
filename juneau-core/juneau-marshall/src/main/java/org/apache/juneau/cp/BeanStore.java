@@ -576,7 +576,7 @@ public class BeanStore {
 	 * @return The method finder.  Never <jk>null</jk>.
 	 */
 	public <T> BeanCreateMethodFinder<T> createMethodFinder(Class<T> beanType) {
-		return new BeanCreateMethodFinder<>(beanType, outer.orElseThrow(()->new RuntimeException("Method cannot be used without outer bean definition.")), this);
+		return new BeanCreateMethodFinder<>(beanType, outer.orElseThrow(() -> new IllegalArgumentException("Method cannot be used without outer bean definition.")), this);
 	}
 
 	/**
@@ -694,7 +694,7 @@ public class BeanStore {
 
 	private void assertCanWrite() {
 		if (readOnly)
-			throw new RuntimeException("Method cannot be used because BeanStore is read-only.");
+			throw new IllegalStateException("Method cannot be used because BeanStore is read-only.");
 	}
 
 	private JsonMap properties() {
