@@ -311,7 +311,7 @@ public class JsonTest {
 	@Test
 	public void testWrapperAttrAnnotationOnNonBean_usingConfig() throws Exception {
 		JsonSerializer s = Json5Serializer.DEFAULT.copy().applyAnnotations(B2Config.class).build();
-		JsonParser p = JsonParser.DEFAULT.copy().applyAnnotations(B2Config.class).build();;
+		JsonParser p = JsonParser.DEFAULT.copy().applyAnnotations(B2Config.class).build();
 		String r;
 
 		B2 t = B2.create();
