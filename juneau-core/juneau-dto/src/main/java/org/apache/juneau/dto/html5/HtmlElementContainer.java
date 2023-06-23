@@ -84,11 +84,11 @@ public class HtmlElementContainer extends HtmlElement {
 		if (index.length == 1)
 			return getChild(index[0]);
 		Object c = this;
-		for (int i = 0; i < index.length; i++) {
+		for (int element : index) {
 			if (c instanceof HtmlElementMixed)
-				c = ((HtmlElementMixed)c).getChild(index[i]);
+				c = ((HtmlElementMixed)c).getChild(element);
 			else if (c instanceof HtmlElementContainer)
-				c = ((HtmlElementContainer)c).getChild(index[i]);
+				c = ((HtmlElementContainer)c).getChild(element);
 			else
 				return null;
 		}
