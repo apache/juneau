@@ -26,7 +26,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Default implementation of the {@link DebugEnablement} interface.
- * 
+ *
  * <p>
  * Enables debug mode based on the following annotations:
  * <ul>
