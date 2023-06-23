@@ -283,7 +283,7 @@ public class LogsResource extends BasicRestServlet {
 			}
 		};
 
-		static final Comparator<FileResource> FILE_COMPARATOR = new Comparator<FileResource>() {
+		static final Comparator<FileResource> FILE_COMPARATOR = new Comparator<>() {
 			@Override /* Comparator */
 			public int compare(FileResource o1, FileResource o2) {
 				int c = o1.getType().compareTo(o2.getType());
