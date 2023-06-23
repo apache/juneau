@@ -1046,7 +1046,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@FluentSetter
 	public RestRequest headerPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into headerPairs(String...)");
+			throw new IllegalArgumentException("Odd number of parameters passed into headerPairs(String...)");
 		HeaderList b = headerData;
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
@@ -1076,7 +1076,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@FluentSetter
 	public RestRequest queryDataPairs(String...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into queryDataPairs(String...)");
+			throw new IllegalArgumentException("Odd number of parameters passed into queryDataPairs(String...)");
 		PartList b = queryData;
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
@@ -1106,7 +1106,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@FluentSetter
 	public RestRequest formDataPairs(String...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into formDataPairs(String...)");
+			throw new IllegalArgumentException("Odd number of parameters passed into formDataPairs(String...)");
 		PartList b = formData;
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
@@ -1138,7 +1138,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@FluentSetter
 	public RestRequest pathDataPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into pathDataPairs(String...)");
+			throw new IllegalArgumentException("Odd number of parameters passed into pathDataPairs(String...)");
 		PartList b = pathData;
 		for (int i = 0; i < pairs.length; i+=2)
 			b.set(pairs[i], pairs[i+1]);
@@ -1172,7 +1172,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@FluentSetter
 	public RestRequest headersBean(Object value) {
 		if (! isBean(value))
-			throw new RuntimeException("Object passed into headersBean(Object) is not a bean.");
+			throw new IllegalArgumentException("Object passed into headersBean(Object) is not a bean.");
 		HeaderList b = headerData;
 		toBeanMap(value, PropertyNamerDUCS.INSTANCE).forEach((k,v) -> b.append(createHeader(k, v)));
 		return this;
@@ -1201,7 +1201,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@FluentSetter
 	public RestRequest queryDataBean(Object value) {
 		if (! isBean(value))
-			throw new RuntimeException("Object passed into queryDataBean(Object) is not a bean.");
+			throw new IllegalArgumentException("Object passed into queryDataBean(Object) is not a bean.");
 		PartList b = queryData;
 		toBeanMap(value).forEach((k,v) -> b.append(createPart(QUERY, k, v)));
 		return this;
@@ -1230,7 +1230,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@FluentSetter
 	public RestRequest formDataBean(Object value) {
 		if (! isBean(value))
-			throw new RuntimeException("Object passed into formDataBean(Object) is not a bean.");
+			throw new IllegalArgumentException("Object passed into formDataBean(Object) is not a bean.");
 		PartList b = formData;
 		toBeanMap(value).forEach((k,v) -> b.append(createPart(FORMDATA, k, v)));
 		return this;
@@ -1259,7 +1259,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@FluentSetter
 	public RestRequest pathDataBean(Object value) {
 		if (! isBean(value))
-			throw new RuntimeException("Object passed into pathDataBean(Object) is not a bean.");
+			throw new IllegalArgumentException("Object passed into pathDataBean(Object) is not a bean.");
 		PartList b = pathData;
 		toBeanMap(value).forEach((k,v) -> b.set(createPart(PATH, k, v)));
 		return this;
@@ -1860,7 +1860,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					String name = x.name, value = x.value;
 					String var = "{" + name + "}";
 					if (path.indexOf(var) == -1 && ! name.equals("/*"))
-						throw new RuntimeException("Path variable {"+name+"} was not found in path.");
+						throw new IllegalStateException("Path variable {" + name + "} was not found in path.");
 					if (name.equals("/*"))
 						path = path.replaceAll("\\/\\*$", "/" + value);
 					else
