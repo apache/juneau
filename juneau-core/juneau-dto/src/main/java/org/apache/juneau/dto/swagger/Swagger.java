@@ -40,7 +40,7 @@ public class Swagger extends SwaggerElement {
 	/** Represents a null swagger */
 	public static final Swagger NULL = new Swagger();
 
-	private static final Comparator<String> PATH_COMPARATOR = new Comparator<String>() {
+	private static final Comparator<String> PATH_COMPARATOR = new Comparator<>() {
 		@Override /* Comparator */
 		public int compare(String o1, String o2) {
 			return o1.replace('{', '@').compareTo(o2.replace('{', '@'));
