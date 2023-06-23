@@ -335,9 +335,9 @@ public class HeaderList extends ControlledArrayList<Header> {
 	@FluentSetter
 	public HeaderList append(Header...values) {
 		if (values != null)
-			for (int i = 0; i < values.length; i++)
-				if (values[i] != null)
-					append(values[i]);
+            for (Header value : values)
+                if (value != null)
+					append(value);
 		return this;
 	}
 
@@ -445,8 +445,8 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	@FluentSetter
 	public HeaderList remove(Header...values) {
-		for (int i = 0; i < values.length; i++)
-			remove(values[i]);
+		for (Header value : values)
+            remove(value);
 		return this;
 	}
 
@@ -484,8 +484,8 @@ public class HeaderList extends ControlledArrayList<Header> {
 	@FluentSetter
 	public HeaderList remove(String...names) {
 		if (names != null)
-			for (int i = 0; i < names.length; i++)
-				remove(names[i]);
+            for (String name : names)
+                remove(name);
 		return this;
 	}
 
@@ -583,8 +583,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	public HeaderList set(List<Header> values) {
 
 		if (values != null) {
-			for (int i1 = 0, j1 = values.size(); i1 < j1; i1++) {
-				Header h = values.get(i1);
+			for (Header h : values) {
 				if (h != null) {
 					for (int i2 = 0, j2 = size(); i2 < j2; i2++) {
 						Header x = get(i2);
@@ -596,8 +595,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 				}
 			}
 
-			for (int i = 0, j = values.size(); i < j; i++) {
-				Header x = values.get(i);
+			for (Header x : values) {
 				if (x != null) {
 					add(x);
 				}
@@ -677,9 +675,9 @@ public class HeaderList extends ControlledArrayList<Header> {
 
 		CharArrayBuffer sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
-		for (int i = 0; i < rest.size(); i++) {
+		for (Header element : rest) {
 			sb.append(", ");
-			sb.append(rest.get(i).getValue());
+			sb.append(element.getValue());
 		}
 
 		return optional(new BasicHeader(name, sb.toString()));
@@ -735,9 +733,9 @@ public class HeaderList extends ControlledArrayList<Header> {
 
 		CharArrayBuffer sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
-		for (int i = 0; i < rest.size(); i++) {
+		for (Header element : rest) {
 			sb.append(", ");
-			sb.append(rest.get(i).getValue());
+			sb.append(element.getValue());
 		}
 
 		return optional(HeaderBeanMeta.of(type).construct(name, sb.toString()));
