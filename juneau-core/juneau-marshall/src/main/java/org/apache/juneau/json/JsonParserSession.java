@@ -407,7 +407,7 @@ public final class JsonParserSession extends ReaderParserSession {
 
 			// Lax allows blank strings to represent 0.
 			// Strict does not allow blank strings.
-			if (s.length() == 0)
+			if (s.isEmpty())
 				throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
 
 			// Need to weed out octal and hexadecimal formats:  0123,-0123,0x123,-0x123.

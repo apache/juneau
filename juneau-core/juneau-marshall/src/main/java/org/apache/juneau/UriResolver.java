@@ -263,7 +263,7 @@ public class UriResolver {
 	}
 
 	private static boolean isSpecialUri(String s) {
-		if (s == null || s.length() == 0)
+		if (s == null || s.isEmpty())
 			return false;
 		char c = s.charAt(0);
 		if (c != 's' && c != 'c' && c != 'r')

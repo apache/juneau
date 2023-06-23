@@ -771,7 +771,7 @@ public final class ObjectRest {
 		String childKey = (i == -1 ? url : url.substring(i + 1));
 
 		if (method == PUT) {
-			if (url.length() == 0) {
+			if (url.isEmpty()) {
 				if (rootLocked)
 					throw new ObjectRestException(HTTP_FORBIDDEN, "Cannot overwrite root object");
 				Object o = root.o;
@@ -809,7 +809,7 @@ public final class ObjectRest {
 
 		if (method == POST) {
 			// Handle POST to root special
-			if (url.length() == 0) {
+			if (url.isEmpty()) {
 				ClassMeta cm = root.cm;
 				Object o = root.o;
 				if (cm.isCollection()) {
@@ -853,7 +853,7 @@ public final class ObjectRest {
 		}
 
 		if (method == DELETE) {
-			if (url.length() == 0) {
+			if (url.isEmpty()) {
 				if (rootLocked)
 					throw new ObjectRestException(HTTP_FORBIDDEN, "Cannot overwrite root object");
 				Object o = root.o;

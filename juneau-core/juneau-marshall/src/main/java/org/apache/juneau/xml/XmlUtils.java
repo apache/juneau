@@ -388,7 +388,7 @@ public final class XmlUtils {
 	public static final String decode(String value, StringBuilder sb) {
 		if (value == null)
 			return null;
-		if (value.length() == 0 || value.indexOf('_') == -1)
+		if (value.isEmpty() || value.indexOf('_') == -1)
 			return value;
 		if (sb == null)
 			sb = new StringBuilder(value.length());
