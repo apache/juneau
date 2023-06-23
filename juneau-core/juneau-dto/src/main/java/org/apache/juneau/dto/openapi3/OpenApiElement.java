@@ -92,7 +92,7 @@ public abstract class OpenApiElement {
 			case "strict": return toType(isStrict(), type);
 			default: return toType(get(property), type);
 		}
-	};
+	}
 
 	/**
 	 * Generic property getter.
@@ -108,7 +108,7 @@ public abstract class OpenApiElement {
 		if (property == null || extra == null)
 			return null;
 		return extra.get(property);
-	};
+	}
 
 	/**
 	 * Generic property setter.
