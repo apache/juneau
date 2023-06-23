@@ -187,8 +187,7 @@ public class JettyLogger implements org.eclipse.jetty.util.log.Logger {
 		r.setLoggerName(logger.getName());
 		if (SHOW_SOURCE) {
 			StackTraceElement[] stack = new Throwable().getStackTrace();
-			for (int i = 0; i < stack.length; i++) {
-				StackTraceElement e = stack[i];
+			for (StackTraceElement e : stack) {
 				if (!e.getClassName().equals(getClass().getName())) {
 					r.setSourceClassName(e.getClassName());
 					r.setSourceMethodName(e.getMethodName());
