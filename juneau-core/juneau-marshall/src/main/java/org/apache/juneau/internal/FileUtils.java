@@ -169,7 +169,7 @@ public class FileUtils {
 			w.flush();
 		}
 		return f;
-	};
+	}
 
 	/**
 	 * Strips the extension from a file name.
