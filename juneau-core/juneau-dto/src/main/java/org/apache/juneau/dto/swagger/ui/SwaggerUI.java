@@ -284,11 +284,11 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			if (isBody) {
 				SchemaInfo si = pi.getSchema();
 				if (si != null)
-					m.put("model", si.copy().resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth));
+					m.put("model", si.copy().resolveRefs(s.swagger, new ArrayDeque<>(), s.resolveRefsMaxDepth));
 			} else {
 				JsonMap m2 = pi
 					.copy()
-					.resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth)
+					.resolveRefs(s.swagger, new ArrayDeque<>(), s.resolveRefsMaxDepth)
 					.asMap()
 					.keepAll("format","pattern","collectionFormat","maximum","minimum","multipleOf","maxLength","minLength","maxItems","minItems","allowEmptyValue","exclusiveMaximum","exclusiveMinimum","uniqueItems","items","default","enum");
 				m.put("model", m2.isEmpty() ? i("none") : m2);
@@ -310,7 +310,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		JsonMap m = new JsonMap();
 		try {
 			if (si != null) {
-				si = si.copy().resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth);
+				si = si.copy().resolveRefs(s.swagger, new ArrayDeque<>(), s.resolveRefsMaxDepth);
 				m.put("model", si);
 			}
 
@@ -333,7 +333,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 		Select select = null;
 		if (m.size() > 1) {
-			select = (Select)select().onchange("selectExample(this)")._class("example-select");
+			select = select().onchange("selectExample(this)")._class("example-select");
 		}
 
 		Div div = div(select)._class("examples");
