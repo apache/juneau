@@ -74,7 +74,7 @@ public class SystemEnv {
 		if (f == null)
 			throw new BasicRuntimeException("Invalid env type: {0}", c);
 		return f.apply(s);
-	};
+	}
 
 	private static final Map<Class<?>,Function<String,?>> ENV_FUNCTIONS = new IdentityHashMap<>();
 	static {
