@@ -8153,7 +8153,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		if (executorService != null)
 			return executorService;
 		synchronized(this) {
-			executorService = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(10));
+			executorService = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<>(10));
 			return executorService;
 		}
 	}
