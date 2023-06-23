@@ -608,7 +608,7 @@ public class FileStore extends ConfigStore {
 			} catch (Exception e) {
 				throw asRuntimeException(e);
 			}
-		};
+		}
 
 		@Override /* Thread */
 		public void interrupt() {
