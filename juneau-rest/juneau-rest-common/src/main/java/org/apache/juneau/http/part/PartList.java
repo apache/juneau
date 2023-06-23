@@ -321,8 +321,8 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	@FluentSetter
 	public PartList append(NameValuePair...values) {
 		if (values != null)
-			for (int i = 0; i < values.length; i++)
-				append(values[i]);
+            for (NameValuePair value : values)
+                append(value);
 		return this;
 	}
 
@@ -430,8 +430,8 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	@FluentSetter
 	public PartList remove(NameValuePair...values) {
-		for (int i = 0; i < values.length; i++)
-			remove(values[i]);
+		for (NameValuePair value : values)
+            remove(value);
 		return this;
 	}
 
@@ -469,8 +469,8 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	@FluentSetter
 	public PartList remove(String...names) {
 		if (names != null)
-			for (int i = 0; i < names.length; i++)
-				remove(names[i]);
+            for (String name : names)
+                remove(name);
 		return this;
 	}
 
@@ -558,8 +558,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	public PartList set(List<NameValuePair> values) {
 
 		if (values != null) {
-			for (int i1 = 0, j1 = values.size(); i1 < j1; i1++) {
-				NameValuePair h = values.get(i1);
+			for (NameValuePair h : values) {
 				if (h != null) {
 					for (int i2 = 0, j2 = size(); i2 < j2; i2++) {
 						NameValuePair x = get(i2);
@@ -571,8 +570,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 				}
 			}
 
-			for (int i = 0, j = values.size(); i < j; i++) {
-				NameValuePair x = values.get(i);
+			for (NameValuePair x : values) {
 				if (x != null) {
 					add(x);
 				}
@@ -652,9 +650,9 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 
 		CharArrayBuffer sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
-		for (int i = 0; i < rest.size(); i++) {
+		for (NameValuePair element : rest) {
 			sb.append(',');
-			sb.append(rest.get(i).getValue());
+			sb.append(element.getValue());
 		}
 
 		return optional(new BasicStringPart(name, sb.toString()));
@@ -710,9 +708,9 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 
 		CharArrayBuffer sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
-		for (int i = 0; i < rest.size(); i++) {
+		for (NameValuePair element : rest) {
 			sb.append(',');
-			sb.append(rest.get(i).getValue());
+			sb.append(element.getValue());
 		}
 
 		return optional(PartBeanMeta.of(type).construct(name, sb.toString()));
