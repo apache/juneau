@@ -51,7 +51,7 @@ public class BeanMapErrorsTest {
 		@Beanp("f2")
 		public int f2() {
 			return f2;
-		};
+		}
 
 		public void setF2(int f2) {
 			this.f2 = f2;
@@ -84,7 +84,7 @@ public class BeanMapErrorsTest {
 		@Beanp("f2")
 		public int f2() {
 			return f2;
-		};
+		}
 
 		public void setF2(int f2) {
 			this.f2 = f2;
