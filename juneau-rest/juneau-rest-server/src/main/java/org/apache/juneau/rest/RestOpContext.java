@@ -2181,9 +2181,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			RestInject a = annotated.getAnnotation(RestInject.class);
 			if (a != null) {
 				for (String n : a.methodScope()) {
-					if ("*".equals(n))
-						return true;
-					if (restMethod.getName().equals(n))
+					if ("*".equals(n) || restMethod.getName().equals(n))
 						return true;
 				}
 			}
@@ -2196,9 +2194,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				if (! a.name().equals(beanName))
 					return false;
 				for (String n : a.methodScope()) {
-					if ("*".equals(n))
-						return true;
-					if (restMethod.getName().equals(n))
+					if ("*".equals(n) || restMethod.getName().equals(n))
 						return true;
 				}
 			}
