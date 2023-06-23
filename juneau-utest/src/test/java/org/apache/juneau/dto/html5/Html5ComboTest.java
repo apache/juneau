@@ -35,7 +35,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
 			{	/* 0 */
-				new ComboInput<A>(
+				new ComboInput<>(
 					"A",
 					A.class,
 					a("http://foo", "bar")
@@ -64,7 +64,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(A.class))
 			},
 			{	/* 1 */
-				new ComboInput<A[]>(
+				new ComboInput<>(
 					"A[]",
 					A[].class,
 					new A[]{a("http://foo", "bar"),a("http://baz", "qux")}
@@ -94,7 +94,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.length).is(2))
 			},
 			{	/* 2 */
-				new ComboInput<List<A>>(
+				new ComboInput<>(
 					"List<A>",
 					getType(List.class, A.class),
 					alist(a("http://foo", "bar"),a("http://baz", "qux"))
@@ -125,7 +125,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.get(1)).isType(A.class))
 			},
 			{	/* 3 */
-				new ComboInput<A[][]>(
+				new ComboInput<>(
 					"A[][]",
 					A[][].class,
 					new A[][]{{a("http://a", "b"),a("http://c", "d")},{},{a("http://e", "f")}}
@@ -158,7 +158,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x[2].length).is(1))
 			},
 			{	/* 4 */
-				new ComboInput<List<List<A>>>(
+				new ComboInput<>(
 					"List<List<A>>",
 					getType(List.class, List.class, A.class),
 					alist(alist(a("http://a", "b"),a("http://c", "d")),alist(a("http://e", "f")))
@@ -247,7 +247,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.get("f")[0][0]).isType(A.class))
 			},
 			{	/* 7 */
-				new ComboInput<BeanWithAField>(
+				new ComboInput<>(
 					"BeanWithAField",
 					BeanWithAField.class,
 					BeanWithAField.create(a("http://b", "c"))
@@ -276,7 +276,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(BeanWithAField.class))
 			},
 			{	/* 8 */
-				new ComboInput<BeanWithAField[]>(
+				new ComboInput<>(
 					"BeanWithAField[]",
 					BeanWithAField[].class,
 					new BeanWithAField[]{BeanWithAField.create(a("http://b", "c"))}
@@ -305,7 +305,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(BeanWithAField[].class))
 			},
 			{	/* 9 */
-				new ComboInput<List<BeanWithAField>>(
+				new ComboInput<>(
 					"List<BeanWithAField>",
 					getType(List.class, BeanWithAField.class),
 					alist(BeanWithAField.create(a("http://b", "c")))
@@ -334,7 +334,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.get(0)).isType(BeanWithAField.class))
 			},
 			{	/* 10 */
-				new ComboInput<A>(
+				new ComboInput<>(
 					"A-2",
 					A.class,
 					a("http://foo", "bar", btag, "baz")
@@ -363,7 +363,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(A.class))
 			},
 			{	/* 11 */
-				new ComboInput<A[][]>(
+				new ComboInput<>(
 					"A[][]-2",
 					A[][].class,
 					new A[][]{{a("http://a", "b", btag, "c"),a("http://d", "e", btag, "f")},{},{a("http://g", "h", btag, "i")}}
@@ -392,7 +392,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(A[][].class))
 			},
 			{	/* 12 */
-				new ComboInput<A>(
+				new ComboInput<>(
 					"A-3",
 					A.class,
 					a("http://foo", "")
@@ -421,7 +421,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(A.class))
 			},
 			{	/* 13 */
-				new ComboInput<A>(
+				new ComboInput<>(
 					"A-4",
 					A.class,
 					a("http://foo", " ")
@@ -450,7 +450,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(A.class))
 			},
 			{	/* 14 */
-				new ComboInput<A>(
+				new ComboInput<>(
 					"A-5",
 					A.class,
 					a("http://foo")
@@ -479,7 +479,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(A.class))
 			},
 			{	/* 15 */
-				new ComboInput<Abbr>(
+				new ComboInput<>(
 					"Abbr-1",
 					Abbr.class,
 					abbr().children("foo")
@@ -508,7 +508,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Abbr.class))
 			},
 			{	/* 16 */
-				new ComboInput<Abbr>(
+				new ComboInput<>(
 					"Abbr-2",
 					Abbr.class,
 					abbr("foo", "bar", btag, "baz")
@@ -537,7 +537,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Abbr.class))
 			},
 			{	/* 17 */
-				new ComboInput<Address>(
+				new ComboInput<>(
 					"Address-1",
 					Address.class,
 					address()
@@ -566,7 +566,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Address.class))
 			},
 			{	/* 18 */
-				new ComboInput<Address>(
+				new ComboInput<>(
 					"Address-2",
 					Address.class,
 					address("")
@@ -595,7 +595,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Address.class))
 			},
 			{	/* 19 */
-				new ComboInput<Address>(
+				new ComboInput<>(
 					"Address-3",
 					Address.class,
 					address("foo", a("bar", "baz"), a("qux", "quux"))
@@ -626,7 +626,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(2)).isType(A.class))
 			},
 			{	/* 20 */
-				new ComboInput<Aside>(
+				new ComboInput<>(
 					"Aside-1",
 					Aside.class,
 					aside(
@@ -659,7 +659,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(P.class))
 			},
 			{	/* 21 */
-				new ComboInput<Audio>(
+				new ComboInput<>(
 					"Audio/Source-1",
 					Audio.class,
 					audio().controls(true).children(
@@ -693,7 +693,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(Source.class))
 			},
 			{	/* 22 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Bdi-1",
 					P.class,
 					p("foo", bdi("إيان"), "bar")
@@ -723,7 +723,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(Bdi.class))
 			},
 			{	/* 23 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Bdo-1",
 					P.class,
 					p("foo", bdo("rtl", "baz"), "bar")
@@ -753,7 +753,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(Bdo.class))
 			},
 			{	/* 24 */
-				new ComboInput<Blockquote>(
+				new ComboInput<>(
 					"Blockquote-1",
 					Blockquote.class,
 					blockquote("foo")
@@ -782,7 +782,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Blockquote.class))
 			},
 			{	/* 25 */
-				new ComboInput<Br>(
+				new ComboInput<>(
 					"Br-1",
 					Br.class,
 					br()
@@ -811,7 +811,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Br.class))
 			},
 			{	/* 26 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Br-2",
 					P.class,
 					p(br())
@@ -841,7 +841,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Br.class))
 			},
 			{	/* 27 */
-				new ComboInput<Button>(
+				new ComboInput<>(
 					"Button-1",
 					Button.class,
 					button("button", "foo")
@@ -870,7 +870,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Button.class))
 			},
 			{	/* 28 */
-				new ComboInput<Canvas>(
+				new ComboInput<>(
 					"Canvas-1",
 					Canvas.class,
 					canvas(100, 200)
@@ -899,7 +899,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Canvas.class))
 			},
 			{	/* 29 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Cite-1",
 					P.class,
 					p(cite("foo"))
@@ -929,7 +929,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Cite.class))
 			},
 			{	/* 30 */
-				new ComboInput<Code>(
+				new ComboInput<>(
 					"Code-1",
 					Code.class,
 					code("foo\n\tbar")
@@ -958,7 +958,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Code.class))
 			},
 			{	/* 31 */
-				new ComboInput<Datalist>(
+				new ComboInput<>(
 					"Datalist-1",
 					Datalist.class,
 					datalist("foo",
@@ -992,7 +992,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(Option.class))
 			},
 			{	/* 32 */
-				new ComboInput<Dl>(
+				new ComboInput<>(
 					"Dl/Dt/Dd",
 					Dl.class,
 					dl(
@@ -1026,7 +1026,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(Dd.class))
 			},
 			{	/* 33 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Del/Ins",
 					P.class,
 					p(del("foo",btag,"bar"),ins("baz"))
@@ -1058,7 +1058,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(Ins.class))
 			},
 			{	/* 34 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Dfn",
 					P.class,
 					p(dfn("foo"))
@@ -1088,7 +1088,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Dfn.class))
 			},
 			{	/* 35 */
-				new ComboInput<Div>(
+				new ComboInput<>(
 					"Div",
 					Div.class,
 					div("foo",btag,"bar")
@@ -1118,7 +1118,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(B.class))
 			},
 			{	/* 36 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Em",
 					P.class,
 					p("foo",em("bar"),"baz")
@@ -1148,7 +1148,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(Em.class))
 			},
 			{	/* 37 */
-				new ComboInput<Embed>(
+				new ComboInput<>(
 					"Embed",
 					Embed.class,
 					embed("foo.swf")
@@ -1177,7 +1177,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Embed.class))
 			},
 			{	/* 38 */
-				new ComboInput<Form>(
+				new ComboInput<>(
 					"Form/Fieldset/Legend/Input/Keygen/Label",
 					Form.class,
 					form("bar",
@@ -1222,7 +1222,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0,9)).isType(Label.class))
 			},
 			{	/* 39 */
-				new ComboInput<Figure>(
+				new ComboInput<>(
 					"Figure/Figcaption/Img",
 					Figure.class,
 					figure(
@@ -1256,7 +1256,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(Figcaption.class))
 			},
 			{	/* 40 */
-				new ComboInput<Div>(
+				new ComboInput<>(
 					"H1/H2/H3/H4/H5/H6",
 					Div.class,
 					div(
@@ -1293,7 +1293,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(5)).isType(H6.class))
 			},
 			{	/* 41 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Hr",
 					P.class,
 					p(hr())
@@ -1323,7 +1323,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Hr.class))
 			},
 			{	/* 42 */
-				new ComboInput<Html>(
+				new ComboInput<>(
 					"Html/Head/Body/Title/Base/Link/Meta",
 					Html.class,
 					html(
@@ -1386,7 +1386,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(Body.class))
 			},
 			{	/* 43 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"I",
 					P.class,
 					p(i("foo"))
@@ -1416,7 +1416,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(I.class))
 			},
 			{	/* 44 */
-				new ComboInput<Iframe>(
+				new ComboInput<>(
 					"Iframe",
 					Iframe.class,
 					iframe("foo")
@@ -1445,7 +1445,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Iframe.class))
 			},
 			{	/* 45 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Kbd",
 					P.class,
 					p(kbd("foo"))
@@ -1475,7 +1475,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Kbd.class))
 			},
 			{	/* 46 */
-				new ComboInput<Main>(
+				new ComboInput<>(
 					"Main/Article/Header/Footer-1",
 					Main.class,
 					main(
@@ -1518,7 +1518,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0,2,1)).isType(P.class))
 			},
 			{	/* 47 */
-				new ComboInput<Map>(
+				new ComboInput<>(
 					"Map/Area-1",
 					Map.class,
 					map(area("rect", "0,1,2,3", "foo").alt("bar")).name("baz")
@@ -1548,7 +1548,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Area.class))
 			},
 			{	/* 48 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Mark",
 					P.class,
 					p(mark("foo"))
@@ -1578,7 +1578,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Mark.class))
 			},
 			{	/* 49 */
-				new ComboInput<Meter>(
+				new ComboInput<>(
 					"Meter",
 					Meter.class,
 					meter("foo").value(1).min(0).max(2)
@@ -1607,7 +1607,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Meter.class))
 			},
 			{	/* 50 */
-				new ComboInput<Nav>(
+				new ComboInput<>(
 					"Nav",
 					Nav.class,
 					nav(a("foo","bar"))
@@ -1637,7 +1637,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(A.class))
 			},
 			{	/* 51 */
-				new ComboInput<Noscript>(
+				new ComboInput<>(
 					"Noscript",
 					Noscript.class,
 					noscript("No script!")
@@ -1666,7 +1666,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Noscript.class))
 			},
 			{	/* 52 */
-				new ComboInput<Object_>(
+				new ComboInput<>(
 					"Object/Param",
 					Object_.class,
 					object().width(1).height(2).data("foo.swf").child(param("autoplay",true))
@@ -1696,7 +1696,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Param.class))
 			},
 			{	/* 53 */
-				new ComboInput<Ol>(
+				new ComboInput<>(
 					"Ol/Li",
 					Ol.class,
 					ol(li("foo"))
@@ -1726,10 +1726,10 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Li.class))
 			},
 			{	/* 54 */
-				new ComboInput<Form>(
+				new ComboInput<>(
 					"Output",
 					Form.class,
-					(Form)form("testform",
+					form("testform",
 						0,input("range").id("a").value(50),
 						"+",input("number").id("b").value(50),
 						"=",output().name("x")._for("a b")
@@ -1762,7 +1762,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(5)).isType(Output.class))
 			},
 			{	/* 55 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"p",
 					P.class,
 					p("foo")
@@ -1791,7 +1791,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(P.class))
 			},
 			{	/* 56 */
-				new ComboInput<P[][]>(
+				new ComboInput<>(
 					"P[][]",
 					P[][].class,
 					new P[][]{{p("a"),p("b")},{},{p("c")}}
@@ -1820,7 +1820,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(P[][].class))
 			},
 			{	/* 57 */
-				new ComboInput<Pre>(
+				new ComboInput<>(
 					"Pre",
 					Pre.class,
 					pre("foo   \n   bar")
@@ -1849,7 +1849,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Pre.class))
 			},
 			{	/* 58 */
-				new ComboInput<Progress>(
+				new ComboInput<>(
 					"Progress",
 					Progress.class,
 					progress().value(1)
@@ -1878,7 +1878,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Progress.class))
 			},
 			{	/* 59 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Q",
 					P.class,
 					p("foo",q("bar"),"baz")
@@ -1908,7 +1908,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(Q.class))
 			},
 			{	/* 60 */
-				new ComboInput<Ruby>(
+				new ComboInput<>(
 					"Ruby/Rb/Rtc/Rp/Rt",
 					Ruby.class,
 					ruby(
@@ -1942,7 +1942,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(3,1)).isType(Rp.class))
 			},
 			{	/* 61 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"S",
 					P.class,
 					p("foo",s("bar"),"baz")
@@ -1972,7 +1972,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(S.class))
 			},
 			{	/* 62 */
-				new ComboInput<Samp>(
+				new ComboInput<>(
 					"Samp",
 					Samp.class,
 					samp("foo")
@@ -2001,7 +2001,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Samp.class))
 			},
 			{	/* 63 */
-				new ComboInput<Script>(
+				new ComboInput<>(
 					"Script",
 					Script.class,
 					script("text/javascript", new String[]{"\n\talert('hello world!');\n"})
@@ -2030,7 +2030,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Script.class))
 			},
 			{	/* 64 */
-				new ComboInput<Section>(
+				new ComboInput<>(
 					"Section",
 					Section.class,
 					section(h1("foo"),p("bar"))
@@ -2061,7 +2061,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(P.class))
 			},
 			{	/* 65 */
-				new ComboInput<Select>(
+				new ComboInput<>(
 					"Select/Optgroup/Option",
 					Select.class,
 					select("foo", optgroup(option("o1","v1")).label("bar"))
@@ -2092,7 +2092,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0,0)).isType(Option.class))
 			},
 			{	/* 66 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Small",
 					P.class,
 					p(small("foo"))
@@ -2122,7 +2122,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Small.class))
 			},
 			{	/* 67 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Span",
 					P.class,
 					p("My mother has ",span().style("color:blue").child("blue"), " eyes.")
@@ -2152,7 +2152,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(Span.class))
 			},
 			{	/* 68 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Strong",
 					P.class,
 					p(strong("foo"))
@@ -2182,7 +2182,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Strong.class))
 			},
 			{	/* 69 */
-				new ComboInput<Head>(
+				new ComboInput<>(
 					"Style",
 					Head.class,
 					head(style("\n\th1 {color:red;}\n\tp: {color:blue;}\n"))
@@ -2212,7 +2212,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Style.class))
 			},
 			{	/* 70 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Sub",
 					P.class,
 					p(sub("foo"))
@@ -2242,7 +2242,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Sub.class))
 			},
 			{	/* 71 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Sup",
 					P.class,
 					p(sup("foo"))
@@ -2272,7 +2272,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Sup.class))
 			},
 			{	/* 72 */
-				new ComboInput<Table>(
+				new ComboInput<>(
 					"Table/Colgroup/Col/Caption/THead/TBody/TFoot/Tr/Th/Td-1",
 					Table.class,
 					table(
@@ -2501,7 +2501,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(4,0,1)).isType(Td.class))
 			},
 			{	/* 73 */
-				new ComboInput<Template>(
+				new ComboInput<>(
 					"Template",
 					Template.class,
 					template("foo",div("bar"))
@@ -2531,7 +2531,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Div.class))
 			},
 			{	/* 74 */
-				new ComboInput<Textarea>(
+				new ComboInput<>(
 					"Textarea",
 					Textarea.class,
 					textarea("foo", "bar")
@@ -2560,7 +2560,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(Textarea.class))
 			},
 			{	/* 75 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Time",
 					P.class,
 					p("I have a date on ",time("Valentines day").datetime("2016-02-14 18:00"), ".")
@@ -2590,7 +2590,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(Time.class))
 			},
 			{	/* 76 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"U",
 					P.class,
 					p(u("foo"))
@@ -2620,7 +2620,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(U.class))
 			},
 			{	/* 77 */
-				new ComboInput<Ul>(
+				new ComboInput<>(
 					"Ul/Li",
 					Ul.class,
 					ul(li("foo"))
@@ -2650,7 +2650,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Li.class))
 			},
 			{	/* 78 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Var",
 					P.class,
 					p(var("foo"))
@@ -2680,7 +2680,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(0)).isType(Var.class))
 			},
 			{	/* 79 */
-				new ComboInput<Video>(
+				new ComboInput<>(
 					"Video/Source/Track",
 					Video.class,
 					video().width(100).height(200).controls(true).children(
@@ -2714,7 +2714,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.getChild(1)).isType(Track.class))
 			},
 			{	/* 80 */
-				new ComboInput<P>(
+				new ComboInput<>(
 					"Wbr",
 					P.class,
 					p("foo",wbr(),"bar")
