@@ -93,7 +93,7 @@ public abstract class SwaggerElement {
 			case "strict": return toType(isStrict(), type);
 			default: return toType(get(property), type);
 		}
-	};
+	}
 
 	/**
 	 * Generic property getter.
@@ -109,7 +109,7 @@ public abstract class SwaggerElement {
 		if (property == null || extra == null)
 			return null;
 		return extra.get(property);
-	};
+	}
 
 	/**
 	 * Generic property setter.
