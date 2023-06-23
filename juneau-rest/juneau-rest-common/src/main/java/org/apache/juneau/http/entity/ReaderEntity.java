@@ -17,6 +17,7 @@ import static org.apache.juneau.common.internal.IOUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
+import java.util.Objects;
 import java.util.function.*;
 
 import org.apache.juneau.http.header.*;
@@ -74,11 +75,9 @@ public class ReaderEntity extends BasicHttpEntity {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private Reader content() {
-		Reader r = contentOrElse((Reader)null);
-		if (r == null)
-			throw new RuntimeException("Reader is null.");
-		return r;
+	@SuppressWarnings("resource") // Caller closes
+    private Reader content() {
+		return Objects.requireNonNull(contentOrElse((Reader) null), "Reader is null.");
 	}
 
 	@Override /* AbstractHttpEntity */

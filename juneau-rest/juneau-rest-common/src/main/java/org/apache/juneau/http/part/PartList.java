@@ -106,12 +106,12 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @throws RuntimeException If odd number of parameters were specified.
 	 * @return A new instance.
 	 */
-	public static PartList ofPairs(String...pairs) {
+	public static PartList ofPairs(String... pairs) {
 		PartList x = new PartList();
 		if (pairs == null)
 			pairs = new String[0];
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into PartList.ofPairs()");
+			throw new IllegalArgumentException("Odd number of parameters passed into PartList.ofPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
 			x.add(BasicPart.of(pairs[i], pairs[i+1]));
 		return x;

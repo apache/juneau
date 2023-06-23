@@ -17,6 +17,7 @@ import static org.apache.juneau.common.internal.IOUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
+import java.util.Objects;
 import java.util.function.*;
 
 import org.apache.juneau.http.header.*;
@@ -74,11 +75,9 @@ public class StreamEntity extends BasicHttpEntity {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private InputStream content() {
-		InputStream is = contentOrElse((InputStream)null);
-		if (is == null)
-			throw new RuntimeException("Input stream is null.");
-		return is;
+	@SuppressWarnings("resource") // Caller closes
+    private InputStream content() {
+		return Objects.requireNonNull(contentOrElse((InputStream) null), "Input stream is null.");
 	}
 
 	@Override /* AbstractHttpEntity */

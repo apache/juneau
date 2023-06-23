@@ -120,12 +120,12 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @throws RuntimeException If odd number of parameters were specified.
 	 * @return A new instance.
 	 */
-	public static HeaderList ofPairs(String...pairs) {
+	public static HeaderList ofPairs(String... pairs) {
 		HeaderList x = new HeaderList();
 		if (pairs == null)
 			pairs = new String[0];
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into HeaderList.ofPairs()");
+			throw new IllegalArgumentException("Odd number of parameters passed into HeaderList.ofPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
 			x.add(BasicHeader.of(pairs[i], pairs[i+1]));
 		return x;

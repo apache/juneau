@@ -17,6 +17,7 @@ import static org.apache.juneau.common.internal.IOUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
+import java.util.Objects;
 import java.util.function.*;
 
 import org.apache.juneau.common.internal.*;
@@ -77,12 +78,11 @@ public class FileEntity extends BasicHttpEntity {
 
 	private File content() {
 		File f = contentOrElse((File)null);
-		if (f == null)
-			throw new RuntimeException("File is null.");
+		Objects.requireNonNull(f, "File");
 		if (! f.exists())
-			throw new RuntimeException("File "+f.getAbsolutePath()+" does not exist.");
+			throw new IllegalStateException("File " + f.getAbsolutePath() + " does not exist.");
 		if (! f.canRead())
-			throw new RuntimeException("File "+f.getAbsolutePath()+" is not readable.");
+			throw new IllegalStateException("File " + f.getAbsolutePath() + " is not readable.");
 		return f;
 	}
 
