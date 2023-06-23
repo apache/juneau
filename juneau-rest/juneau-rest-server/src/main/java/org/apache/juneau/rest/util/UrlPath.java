@@ -37,7 +37,7 @@ public class UrlPath {
 	 */
 	public static UrlPath of(String path) {
 		if (path != null && ! path.startsWith("/"))
-			throw new RuntimeException("Invalid path specified.  Must be null or start with '/' per HttpServletRequest.getPathInfo().");
+			throw new IllegalArgumentException("Invalid path specified. Must be null or start with '/' per HttpServletRequest.getPathInfo().");
 		return new UrlPath(path);
 	}
 

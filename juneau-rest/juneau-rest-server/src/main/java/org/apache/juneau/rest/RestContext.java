@@ -447,9 +447,7 @@ public class RestContext extends Context {
 		 * @return The REST servlet/bean instance that this context is defined against.
 		 */
 		public Supplier<?> resource() {
-			if (resource == null)
-				throw new RuntimeException("Resource not available.  init(Object) has not been called.");
-			return resource;
+			return Objects.requireNonNull(resource, "Resource not available. init(Object) has not been called.");
 		}
 
 		/**
@@ -928,7 +926,7 @@ public class RestContext extends Context {
 			Value<Config> v = Value.empty();
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
-			VarResolver vr = beanStore.getBean(VarResolver.class).orElseThrow(()->new RuntimeException("VarResolver not found."));
+			VarResolver vr = beanStore.getBean(VarResolver.class).orElseThrow(() -> new IllegalArgumentException("VarResolver not found."));
 			Value<String> cfv = Value.empty();
 			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> isNotEmpty(x.config()), x -> cfv.set(vr.resolve(x.config())));
 			String cf = cfv.orElse("");

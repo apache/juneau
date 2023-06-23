@@ -153,7 +153,7 @@ public abstract class Widget implements HtmlWidget {
 				s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
 			return s;
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new UncheckedIOException(e);
 		}
 	}
 

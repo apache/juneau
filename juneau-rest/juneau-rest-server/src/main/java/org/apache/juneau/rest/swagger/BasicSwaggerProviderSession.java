@@ -970,7 +970,7 @@ public class BasicSwaggerProviderSession {
 				.appendIf(ne, "$ref", a.$ref())
 			;
 		} catch (ParseException e) {
-			throw new RuntimeException(e);
+			throw new IllegalArgumentException(e);
 		}
 	}
 
@@ -1068,7 +1068,7 @@ public class BasicSwaggerProviderSession {
 		for (Header aa : a) {
 			String name = StringUtils.firstNonEmpty(aa.name(), aa.value());
 			if (isEmpty(name))
-				throw new RuntimeException("@Header used without name or value.");
+				throw new IllegalArgumentException("@Header used without name or value.");
 			merge(om.getMap(name, true), aa.schema());
 		}
 		return om;
