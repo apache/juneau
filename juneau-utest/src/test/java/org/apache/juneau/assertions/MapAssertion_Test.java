@@ -34,7 +34,8 @@ public class MapAssertion_Test {
 		return assertMap(value).setSilent();
 	}
 
-	@SafeVarargs
+	@SuppressWarnings("unused") // Parameters required for LinkedHashMap<K,V>
+    @SafeVarargs
 	private static <K,V> Map<K,V> map(Object...objects) {
 		return mapBuilder(new LinkedHashMap<K,V>()).addPairs(objects).build();
 	}
