@@ -541,7 +541,7 @@ public class UriResolutionTest {
 				)
 			},
 		});
-	};
+	}
 
 	private void testSerialize(Serializer s, String expected, Object testBean) throws Exception {
 		try {

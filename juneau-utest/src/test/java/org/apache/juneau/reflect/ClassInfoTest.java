@@ -90,7 +90,7 @@ public class ClassInfoTest {
 		}
 	}
 
-	private static final Function<Object,String> TO_STRING = new Function<Object,String>() {
+	private static final Function<Object,String> TO_STRING = new Function<>() {
 		@Override
 		public String apply(Object t) {
 			if (t == null)
@@ -128,9 +128,9 @@ public class ClassInfoTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	public class A1 {}
-	public class A2 extends Value<A1>{};
-	public class A3 extends Value<Map<String,List<String>>>{};
-	public class A4 extends Value<Map<String,String[][]>>{};
+	public class A2 extends Value<A1>{}
+	public class A3 extends Value<Map<String,List<String>>>{}
+	public class A4 extends Value<Map<String,String[][]>>{}
 	public static Type aType, pType, pTypeDimensional, pTypeGeneric, pTypeGenericArg;
 	static {
 		aType = ((ParameterizedType)A2.class.getGenericSuperclass()).getActualTypeArguments()[0];
@@ -1391,7 +1391,7 @@ public class ClassInfoTest {
 	@Test
 	public void getFullName_localClass() {
 		@SuppressWarnings("serial")
-		class LocalClass implements Serializable {};
+		class LocalClass implements Serializable {}
 		assertEquals("org.apache.juneau.reflect.ClassInfoTest$1LocalClass", of(LocalClass.class).getFullName());
 	}
 
@@ -1461,7 +1461,7 @@ public class ClassInfoTest {
 	@Test
 	public void getShortName_localClass() {
 		@SuppressWarnings("serial")
-		class LocalClass implements Serializable {};
+		class LocalClass implements Serializable {}
 		assertEquals("ClassInfoTest$LocalClass", of(LocalClass.class).getShortName());
 	}
 
@@ -1532,7 +1532,7 @@ public class ClassInfoTest {
 	@Test
 	public void getSimpleName_localClass() {
 		@SuppressWarnings("serial")
-		class LocalClass implements Serializable {};
+		class LocalClass implements Serializable {}
 		assertEquals("LocalClass", of(LocalClass.class).getSimpleName());
 	}
 

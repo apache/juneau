@@ -90,7 +90,7 @@ public class RestClient_Test {
 		RestClient.create().keepHttpClientOpen().build().closeQuietly();
 		RestClient.create().httpClient(null).keepHttpClientOpen().build().close();
 
-		ExecutorService es = new ThreadPoolExecutor(1,1,30,TimeUnit.SECONDS,new ArrayBlockingQueue<Runnable>(10));
+		ExecutorService es = new ThreadPoolExecutor(1,1,30,TimeUnit.SECONDS,new ArrayBlockingQueue<>(10));
 		RestClient.create().executorService(es,true).build().close();
 		RestClient.create().executorService(es,true).build().closeQuietly();
 		RestClient.create().executorService(es,false).build().close();

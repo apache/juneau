@@ -1844,7 +1844,7 @@ public class ThirdPartyProxyTest {
 			@Path
 			public int getA() {
 				return 1;
-			};
+			}
 
 			@Path
 			public String getB() {
@@ -1923,7 +1923,7 @@ public class ThirdPartyProxyTest {
 			@Query
 			public int getA() {
 				return 1;
-			};
+			}
 
 			@Query
 			public String getB() {
@@ -2002,7 +2002,7 @@ public class ThirdPartyProxyTest {
 			@FormData
 			public int getA() {
 				return 1;
-			};
+			}
 
 			@FormData
 			public String getB() {
@@ -2081,7 +2081,7 @@ public class ThirdPartyProxyTest {
 			@Header
 			public int getA() {
 				return 1;
-			};
+			}
 
 			@Header
 			public String getB() {

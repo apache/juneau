@@ -118,7 +118,7 @@ public class RestClient_Config_RestClient_Test {
 
 	@Test
 	public void a03_executorService() throws Exception {
-		ExecutorService es = new ThreadPoolExecutor(1,1,30,TimeUnit.SECONDS,new ArrayBlockingQueue<Runnable>(10));
+		ExecutorService es = new ThreadPoolExecutor(1,1,30,TimeUnit.SECONDS,new ArrayBlockingQueue<>(10));
 		RestClient x1 = client().executorService(es,true).build();
 
 		assertEquals(es,x1.getExecutorService());

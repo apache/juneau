@@ -49,7 +49,7 @@ public class FieldInfoTest {
 		assertEquals(expected, TO_STRING.apply(o));
 	}
 
-	private static final Function<Object,String> TO_STRING = new Function<Object,String>() {
+	private static final Function<Object,String> TO_STRING = new Function<>() {
 		@Override
 		public String apply(Object t) {
 			if (t == null)
