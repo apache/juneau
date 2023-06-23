@@ -164,7 +164,7 @@ public class Items extends OpenApiElement {
 	 */
 	public Items setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw new RuntimeException(
+			throw new IllegalArgumentException(
 				"Invalid value passed in to setType(String).  Value='"+value+"', valid values="
 				+ Json5Serializer.DEFAULT.toString(VALID_TYPES));
 		type = value;
