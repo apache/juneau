@@ -182,7 +182,7 @@ public final class StringUtils {
 		if (o == null)
 			return null;
 		String s = o.toString();
-		if (s.length() == 0)
+		if (s.isEmpty())
 			return null;
 		if (s.length() == 1)
 			return s.charAt(0);
@@ -940,7 +940,7 @@ public final class StringUtils {
 	 * @return A new string if characters were removed, or the same string if not or if the input was <jk>null</jk>.
 	 */
 	public static String unEscapeChars(String s, AsciiSet escaped) {
-		if (s == null || s.length() == 0)
+		if (s == null || s.isEmpty())
 			return s;
 		int count = 0;
 		for (int i = 0; i < s.length(); i++)
@@ -1793,7 +1793,7 @@ public final class StringUtils {
 	public static String trimSlashes(String s) {
 		if (s == null)
 			return null;
-		if (s.length() == 0)
+		if (s.isEmpty())
 			return s;
 		while (endsWith(s, '/'))
 			s = s.substring(0, s.length()-1);
@@ -2313,7 +2313,7 @@ public final class StringUtils {
 	}
 
 	private static int multiplier(String s) {
-		char c = s.length() == 0 ? null : s.charAt(s.length()-1);
+		char c = s.isEmpty() ? null : s.charAt(s.length()-1);
 		if (c == 'G') return 1024*1024*1024;
 		if (c == 'M') return 1024*1024;
 		if (c == 'K') return 1024;
@@ -2353,7 +2353,7 @@ public final class StringUtils {
 	}
 
 	private static long multiplier2(String s) {
-		char c = s.length() == 0 ? null : s.charAt(s.length()-1);
+		char c = s.isEmpty() ? null : s.charAt(s.length()-1);
 		if (c == 'P') return 1024*1024*1024*1024*1024;
 		if (c == 'T') return 1024*1024*1024*1024;
 		if (c == 'G') return 1024*1024*1024;
@@ -2546,7 +2546,7 @@ public final class StringUtils {
 	 * @return The first character in the string, or <c>0</c> if the string is <jk>null</jk> or empty.
 	 */
 	public static char firstChar(String s) {
-		if (s == null || s.length() == 0)
+		if (s == null || s.isEmpty())
 			return 0;
 		return s.charAt(0);
 	}
