@@ -81,6 +81,6 @@ public class MockStreamSerializer extends OutputStreamSerializer {
 
 	@Override /* SerializerSession */
 	protected void doSerialize(SerializerSession session, SerializerPipe out, Object o) throws IOException, SerializeException {
-		out.getOutputStream().write(function.apply((OutputStreamSerializerSession)session, o));
+		out.getOutputStream().write(function.apply(session, o));
 	}
 }
