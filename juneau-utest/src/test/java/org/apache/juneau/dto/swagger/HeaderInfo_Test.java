@@ -262,6 +262,6 @@ public class HeaderInfo_Test {
 	public void c02_resolveRefs() throws Exception {
 		Swagger s = new Swagger();
 		HeaderInfo t = new HeaderInfo();
-		t.resolveRefs(s, new ArrayDeque<String>(), 10);
+		t.resolveRefs(s, new ArrayDeque<>(), 10);
 	}
 }
