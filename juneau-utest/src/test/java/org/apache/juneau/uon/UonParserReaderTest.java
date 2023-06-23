@@ -187,8 +187,8 @@ public class UonParserReaderTest {
 	private String escape(String s) throws UnsupportedEncodingException {
 		StringBuilder sb = new StringBuilder();
 		byte[] b = s.getBytes("UTF-8");
-		for (int i = 0; i < b.length; i++)
-			sb.append('%').append(StringUtils.toHex(b[i]));
+		for (byte element : b)
+            sb.append('%').append(StringUtils.toHex(element));
 		return sb.toString();
 	}
 
