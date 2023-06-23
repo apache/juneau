@@ -126,15 +126,15 @@ public class RoundTripBeanInheritanceTest extends RoundTripTest {
 		}
 
 		public String isX() {
-			throw new RuntimeException("Should not be called!");
+			throw new IllegalCallerException("Should not be called!");
 		}
 
 		public String isY() {
-			throw new RuntimeException("Should not be called!");
+			throw new IllegalCallerException("Should not be called!");
 		}
 
 		public String isZ() {
-			throw new RuntimeException("Should not be called!");
+			throw new IllegalCallerException("Should not be called!");
 		}
 	}
 

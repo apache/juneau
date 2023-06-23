@@ -828,7 +828,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		// This method should not be interpreted as the setter for this
 		// property because it doesn't match the getter return type above.
 		public void setA(KEnum a) {
-			throw new RuntimeException("Should not be called!");
+			throw new IllegalCallerException("Should not be called!");
 		}
 
 		public void setA(String a) {
@@ -840,11 +840,11 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		}
 
 		public void setB(String b) {
-			throw new RuntimeException("Should not be called!");
+			throw new IllegalCallerException("Should not be called!");
 		}
 
 		public void setB(Object b) {
-			throw new RuntimeException("Should not be called!");
+			throw new IllegalCallerException("Should not be called!");
 		}
 
 		public void setB(KEnum b) {
@@ -860,11 +860,11 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		}
 
 		public void setC(String c) {
-			throw new RuntimeException("Should not be called!");
+			throw new IllegalCallerException("Should not be called!");
 		}
 
 		public void setC(Object c) {
-			throw new RuntimeException("Should not be called!");
+			throw new IllegalCallerException("Should not be called!");
 		}
 	}
 

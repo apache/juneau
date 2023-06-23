@@ -209,13 +209,13 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 	public static class C1 {
 		public String f;
 		public static C2 valueOf(String s) {
-			throw new RuntimeException("Shouldn't be called!");
+			throw new IllegalCallerException("Shouldn't be called!");
 		}
 		public static C2 parse(String s) {
-			throw new RuntimeException("Shouldn't be called!");
+			throw new IllegalCallerException("Shouldn't be called!");
 		}
 		public static C2 parseString(String s) {
-			throw new RuntimeException("Shouldn't be called!");
+			throw new IllegalCallerException("Shouldn't be called!");
 		}
 		public static C1 fromString(String s) {
 			C1 x = new C1();
@@ -232,10 +232,10 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 	public static class C2 {
 		public String f;
 		public static C2 parse(String s) {
-			throw new RuntimeException("Shouldn't be called!");
+			throw new IllegalCallerException("Shouldn't be called!");
 		}
 		public static C2 parseString(String s) {
-			throw new RuntimeException("Shouldn't be called!");
+			throw new IllegalCallerException("Shouldn't be called!");
 		}
 		public static C2 valueOf(String s) {
 			C2 x = new C2();
@@ -251,7 +251,7 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 	public static class C3 {
 		public String f;
 		public static C2 parseString(String s) {
-			throw new RuntimeException("Shouldn't be called!");
+			throw new IllegalCallerException("Shouldn't be called!");
 		}
 		public static C3 parse(String s) {
 			C3 x = new C3();

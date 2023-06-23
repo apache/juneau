@@ -590,6 +590,6 @@ public class ConfigMapListenerTest {
 
 	private static void wait(CountDownLatch latch) throws InterruptedException {
 		if (! latch.await(10, TimeUnit.SECONDS))
-			throw new RuntimeException("Latch failed.");
+			fail("Latch failed.");
 	}
 }
