@@ -47,7 +47,7 @@ public abstract class DebugEnablement {
 		Void(BeanStore beanStore) {
 			super(beanStore);
 		}
-	};
+	}
 
 	/**
 	 * Static creator.
