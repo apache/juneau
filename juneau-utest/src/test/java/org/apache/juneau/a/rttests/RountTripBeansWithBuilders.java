@@ -171,7 +171,7 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 		A3 a = A3.create()
 			.f1(new A[]{A.create().f1(1).build()})
 			.f2(singletonList(A.create().f1(2).build()))
-			.f3(singletonList((List<A>)singletonList(A.create().f1(3).build())))
+			.f3(singletonList(singletonList(A.create().f1(3).build())))
 			.f4(singletonList(new A[]{A.create().f1(4).build()}))
 			.f5(singletonList(singletonList(new A[]{A.create().f1(5).build()})))
 			.f6(singletonMap("foo", A.create().f1(6).build()))
