@@ -85,7 +85,7 @@ public class SamplesMicroservice {
 		try {
 			return RestClient.create().rootUrl(microserviceURI);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new IllegalStateException(e);
 		}
 	}
 
