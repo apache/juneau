@@ -13,6 +13,7 @@
 package org.apache.juneau.microservice.jetty;
 
 import java.io.*;
+import java.util.Objects;
 
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
@@ -31,8 +32,7 @@ public class BasicJettyServerFactory implements JettyServerFactory {
 
 	@Override
 	public Server create(String jettyXml) throws Exception {
-		if (jettyXml == null)
-			throw new RuntimeException("jetty.xml file location was not specified in the configuration file (Jetty/config) or manifest file (Jetty-Config) or found on the file system or classpath.");
+	    Objects.requireNonNull(jettyXml, "jetty.xml file location was not specified in the configuration file (Jetty/config) or manifest file (Jetty-Config) or found on the file system or classpath.");
 		File f = FileUtils.createTempFile("jetty.xml");
 		try (Reader r = new StringReader(jettyXml); Writer w = new FileWriter(f)) {
 			IOUtils.pipe(r, w);

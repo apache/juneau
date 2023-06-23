@@ -556,7 +556,7 @@ public class JettyMicroservice extends Microservice {
 		for (Connector c : getServer().getConnectors())
 			if (c instanceof ServerConnector)
 				return ((ServerConnector)c).getPort();
-		throw new RuntimeException("Could not locate ServerConnector in Jetty server.");
+		throw new IllegalStateException("Could not locate ServerConnector in Jetty server.");
 	}
 
 	/**
@@ -576,7 +576,7 @@ public class JettyMicroservice extends Microservice {
 			if (h instanceof ServletContextHandler)
 				return ((ServletContextHandler)h).getContextPath();
 		}
-		throw new RuntimeException("Could not locate ServletContextHandler in Jetty server.");
+		throw new IllegalStateException("Could not locate ServletContextHandler in Jetty server.");
 	}
 
 	/**
@@ -771,7 +771,7 @@ public class JettyMicroservice extends Microservice {
 			if (sch != null)
 				return sch;
 		}
-		throw new RuntimeException("Servlet context handler not found in jetty server.");
+		throw new IllegalStateException("Servlet context handler not found in jetty server.");
 	}
 
 	/**
@@ -793,9 +793,7 @@ public class JettyMicroservice extends Microservice {
 	 * @return The underlying Jetty server, or <jk>null</jk> if {@link #createServer()} has not yet been called.
 	 */
 	public Server getServer() {
-		if (server == null)
-			throw new RuntimeException("Server not found.  createServer() must be called first.");
-		return server;
+		return Objects.requireNonNull(server, "Server not found.  createServer() must be called first.");
 	}
 
 	/**
