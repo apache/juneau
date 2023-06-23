@@ -211,8 +211,8 @@ public final class AnnotationInfo<T extends Annotation> {
 						applyConstructors[i] = (Constructor<? extends AnnotationApplier<?,?>>) cpa.value()[i].getConstructor(VarResolverSession.class);
 				}
 			}
-			for (int i = 0; i < applyConstructors.length; i++)
-				consumer.accept((AnnotationApplier<Annotation,Object>) applyConstructors[i].newInstance(vrs));
+			for (Constructor<? extends AnnotationApplier<?, ?>> applyConstructor : applyConstructors)
+                consumer.accept((AnnotationApplier<Annotation,Object>) applyConstructor.newInstance(vrs));
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new ExecutableException(e);
 		}

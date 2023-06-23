@@ -1104,14 +1104,14 @@ public final class ClassInfo {
 			annotationProvider = AnnotationProvider.DEFAULT;
 		A x = null;
 		ClassInfo[] parents = _getParents();
-		for (int i = 0; i < parents.length; i++) {
-			x = annotationProvider.lastAnnotation(type, parents[i].inner(), filter);
+		for (ClassInfo parent : parents) {
+			x = annotationProvider.lastAnnotation(type, parent.inner(), filter);
 			if (x != null)
 				return x;
 		}
 		ClassInfo[] interfaces = _getInterfaces();
-		for (int i = 0; i < interfaces.length; i++) {
-			x = annotationProvider.lastAnnotation(type, interfaces[i].inner(), filter);
+		for (ClassInfo element : interfaces) {
+			x = annotationProvider.lastAnnotation(type, element.inner(), filter);
 			if (x != null)
 				return x;
 		}

@@ -594,10 +594,10 @@ public abstract class ExecutableInfo {
 		ClassInfo[] pt = _getParameterTypes();
 		if (pt.length != args.length)
 			return false;
-		for (int i = 0; i < pt.length; i++) {
+		for (ClassInfo element : pt) {
 			boolean matched = false;
-			for (int j = 0; j < args.length; j++)
-				if (pt[i].isParentOfFuzzyPrimitives(args[j]))
+			for (Class<?> arg : args)
+                if (element.isParentOfFuzzyPrimitives(arg))
 					matched = true;
 			if (! matched)
 				return false;
@@ -615,10 +615,10 @@ public abstract class ExecutableInfo {
 		ClassInfo[] pt = _getParameterTypes();
 		if (pt.length != args.length)
 			return false;
-		for (int i = 0; i < pt.length; i++) {
+		for (ClassInfo element : pt) {
 			boolean matched = false;
-			for (int j = 0; j < args.length; j++)
-				if (pt[i].isParentOfFuzzyPrimitives(args[j].inner()))
+			for (ClassInfo arg : args)
+                if (element.isParentOfFuzzyPrimitives(arg.inner()))
 					matched = true;
 			if (! matched)
 				return false;
