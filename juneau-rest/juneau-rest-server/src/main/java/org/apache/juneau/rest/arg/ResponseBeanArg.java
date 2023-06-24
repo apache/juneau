@@ -71,18 +71,15 @@ public class ResponseBeanArg implements RestOpArg {
 	@Override /* RestOpArg */
 	public Object resolve(final RestOpSession opSession) throws Exception {
 		Value<Object> v = new Value();
-		v.listener(new ValueListener() {
-			@Override
-			public void onSet(Object o) {
-				RestRequest req = opSession.getRequest();
-				RestResponse res = opSession.getResponse();
-				ResponseBeanMeta meta = req.getOpContext().getResponseBeanMeta(o);
-				if (meta == null)
-					meta = ResponseBeanArg.this.meta;
-				res.setResponseBeanMeta(meta);
-				res.setContent(o);
-			}
-		});
+		v.listener(o -> {
+        	RestRequest req = opSession.getRequest();
+        	RestResponse res = opSession.getResponse();
+        	ResponseBeanMeta meta = req.getOpContext().getResponseBeanMeta(o);
+        	if (meta == null)
+        		meta = ResponseBeanArg.this.meta;
+        	res.setResponseBeanMeta(meta);
+        	res.setContent(o);
+        });
 		return v;
 	}
 }

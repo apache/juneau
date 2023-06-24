@@ -59,12 +59,7 @@ public class ResponseCodeArg implements RestOpArg {
 	@Override /* RestOpArg */
 	public Object resolve(final RestOpSession opSession) throws Exception {
 		Value<Object> v = new Value();
-		v.listener(new ValueListener() {
-			@Override
-			public void onSet(Object o) {
-				opSession.getResponse().setStatus(Integer.parseInt(o.toString()));
-			}
-		});
+		v.listener(o -> opSession.getResponse().setStatus(Integer.parseInt(o.toString())));
 		return v;
 	}
 }

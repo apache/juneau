@@ -21,7 +21,6 @@ import static java.util.Optional.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.*;
 import java.nio.charset.*;
@@ -1523,31 +1522,27 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			return (T)Proxy.newProxyInstance(
 				c.getClassLoader(),
 				new Class[] { c },
-				new InvocationHandler() {
-					@Override /* InvocationHandler */
-					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-						RequestBeanPropertyMeta pm = rbm.getProperty(method.getName());
-						if (pm != null) {
-							HttpPartParserSession pp = pm.getParser(getPartParserSession());
-							HttpPartSchema schema = pm.getSchema();
-							String name = pm.getPartName();
-							ClassMeta<?> type = bs.getClassMeta(method.getGenericReturnType());
-							HttpPartType pt = pm.getPartType();
-							if (pt == HttpPartType.BODY)
-								return getContent().setSchema(schema).as(type);
-							if (pt == QUERY)
-								return getQueryParam(name).parser(pp).schema(schema).as(type).orElse(null);
-							if (pt == FORMDATA)
-								return getFormParam(name).parser(pp).schema(schema).as(type).orElse(null);
-							if (pt == HEADER)
-								return getHeaderParam(name).parser(pp).schema(schema).as(type).orElse(null);
-							if (pt == PATH)
-								return getPathParam(name).parser(pp).schema(schema).as(type).orElse(null);
-						}
-						return null;
-					}
-
-			});
+				(InvocationHandler) (proxy, method, args) -> {
+                	RequestBeanPropertyMeta pm = rbm.getProperty(method.getName());
+                	if (pm != null) {
+                		HttpPartParserSession pp = pm.getParser(getPartParserSession());
+                		HttpPartSchema schema = pm.getSchema();
+                		String name = pm.getPartName();
+                		ClassMeta<?> type = bs.getClassMeta(method.getGenericReturnType());
+                		HttpPartType pt = pm.getPartType();
+                		if (pt == HttpPartType.BODY)
+                			return getContent().setSchema(schema).as(type);
+                		if (pt == QUERY)
+                			return getQueryParam(name).parser(pp).schema(schema).as(type).orElse(null);
+                		if (pt == FORMDATA)
+                			return getFormParam(name).parser(pp).schema(schema).as(type).orElse(null);
+                		if (pt == HEADER)
+                			return getHeaderParam(name).parser(pp).schema(schema).as(type).orElse(null);
+                		if (pt == PATH)
+                			return getPathParam(name).parser(pp).schema(schema).as(type).orElse(null);
+                	}
+                	return null;
+                });
 		} catch (Exception e) {
 			throw asRuntimeException(e);
 		}
