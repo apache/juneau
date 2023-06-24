@@ -139,20 +139,16 @@ public class StringRanges {
 	 * Should those values be equal, the <c>type</c> is then lexicographically compared (case-insensitive) in
 	 * ascending order, with the <js>"*"</js> type demoted last in that order.
 	 */
-	private static final Comparator<StringRange> RANGE_COMPARATOR = new Comparator<>() {
-		@Override
-		public int compare(StringRange o1, StringRange o2) {
-			// Compare q-values.
-			int qCompare = Float.compare(o2.getQValue(), o1.getQValue());
-			if (qCompare != 0)
-				return qCompare;
+	private static final Comparator<StringRange> RANGE_COMPARATOR = (o1, o2) -> {
+    	// Compare q-values.
+    	int qCompare = Float.compare(o2.getQValue(), o1.getQValue());
+    	if (qCompare != 0)
+    		return qCompare;
 
-			// Compare media-types.
-			// Note that '*' comes alphabetically before letters, so just do a reverse-alphabetical comparison.
-			int i = o2.toString().compareTo(o1.toString());
-			return i;
-		}
-	};
+    	// Compare media-types.
+    	// Note that '*' comes alphabetically before letters, so just do a reverse-alphabetical comparison.
+    	return o2.toString().compareTo(o1.toString());
+    };
 
 	/**
 	 * Given a list of media types, returns the best match for this string range header.

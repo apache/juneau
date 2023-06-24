@@ -882,33 +882,27 @@ public class JsonList extends LinkedList<Object> {
 	 * @param childType The child object type.
 	 * @return A new <c>Iterable</c> object over this list.
 	 */
-	public <E> Iterable<E> elements(final Class<E> childType) {
-		final Iterator<?> i = iterator();
-		return new Iterable<>() {
+    public <E> Iterable<E> elements(final Class<E> childType) {
+        final Iterator<?> iterator = iterator();
+        return () -> new Iterator<>() {
 
-			@Override /* Iterable */
-			public Iterator<E> iterator() {
-				return new Iterator<>() {
+            @Override /* Iterator */
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
 
-					@Override /* Iterator */
-					public boolean hasNext() {
-						return i.hasNext();
-					}
+            @Override /* Iterator */
+            public E next() {
+                return bs().convertToType(iterator.next(), childType);
+            }
 
-					@Override /* Iterator */
-					public E next() {
-						return bs().convertToType(i.next(), childType);
-					}
+            @Override /* Iterator */
+            public void remove() {
+                iterator.remove();
+            }
 
-					@Override /* Iterator */
-					public void remove() {
-						i.remove();
-					}
-
-				};
-			}
-		};
-	}
+        };
+    }
 
 	/**
 	 * Returns the {@link ClassMeta} of the class of the object at the specified index.

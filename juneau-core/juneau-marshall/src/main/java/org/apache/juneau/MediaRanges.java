@@ -116,20 +116,16 @@ public class MediaRanges {
 	 * <c>MediaRanges</c> with the same types but with extensions are promoted over those same types with no
 	 * extensions.
 	 */
-	private static final Comparator<MediaRange> RANGE_COMPARATOR = new Comparator<>() {
-		@Override
-		public int compare(MediaRange o1, MediaRange o2) {
-			// Compare q-values.
-			int qCompare = Float.compare(o2.getQValue(), o1.getQValue());
-			if (qCompare != 0)
-				return qCompare;
+	private static final Comparator<MediaRange> RANGE_COMPARATOR = (o1, o2) -> {
+    	// Compare q-values.
+    	int qCompare = Float.compare(o2.getQValue(), o1.getQValue());
+    	if (qCompare != 0)
+    		return qCompare;
 
-			// Compare media-types.
-			// Note that '*' comes alphabetically before letters, so just do a reverse-alphabetical comparison.
-			int i = o2.toString().compareTo(o1.toString());
-			return i;
-		}
-	};
+    	// Compare media-types.
+    	// Note that '*' comes alphabetically before letters, so just do a reverse-alphabetical comparison.
+    	return o2.toString().compareTo(o1.toString());
+    };
 
 	/**
 	 * Given a list of media types, returns the best match for this <c>Accept</c> header.
