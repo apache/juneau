@@ -276,20 +276,12 @@ public class LogsResource extends BasicRestServlet {
 			return s;
 		}
 
-		static final FileFilter FILE_FILTER = new FileFilter() {
-			@Override /* FileFilter */
-			public boolean accept(File f) {
-				return f.isDirectory() || f.getName().endsWith(".log");
-			}
-		};
+		static final FileFilter FILE_FILTER = f -> f.isDirectory() || f.getName().endsWith(".log");
 
-		static final Comparator<FileResource> FILE_COMPARATOR = new Comparator<>() {
-			@Override /* Comparator */
-			public int compare(FileResource o1, FileResource o2) {
-				int c = o1.getType().compareTo(o2.getType());
-				return c != 0 ? c : o1.getName().compareTo(o2.getName());
-			}
-		};
+		static final Comparator<FileResource> FILE_COMPARATOR = (o1, o2) -> {
+        	int c = o1.getType().compareTo(o2.getType());
+        	return c != 0 ? c : o1.getName().compareTo(o2.getName());
+        };
 	}
 
 

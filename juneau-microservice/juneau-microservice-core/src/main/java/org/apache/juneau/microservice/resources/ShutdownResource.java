@@ -40,17 +40,14 @@ public class ShutdownResource extends BasicRestServlet {
 	@RestGet(path="/", description="Show contents of config file.")
 	public String shutdown() {
 		new Thread(
-			new Runnable() {
-				@Override /* Runnable */
-				public void run() {
-					try {
-						Thread.sleep(1000);
-						System.exit(0);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
+			() -> {
+            	try {
+            		Thread.sleep(1000);
+            		System.exit(0);
+            	} catch (InterruptedException e) {
+            		e.printStackTrace();
+            	}
+            }
 		).start();
 		return "OK";
 	}
