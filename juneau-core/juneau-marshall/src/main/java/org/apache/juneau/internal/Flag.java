@@ -87,9 +87,7 @@ public final class Flag {
 	private void runSnippet(Snippet snippet) {
 		try {
 			snippet.run();
-		} catch (Error e) {
-			throw e;
-		} catch (RuntimeException e) {
+		} catch (Error | RuntimeException e) {
 			throw e;
 		} catch (Throwable e) {
 			throw asRuntimeException(e);

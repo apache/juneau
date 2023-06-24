@@ -674,9 +674,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					out.i(i+2);
 				if (link != null)
 					out.eTag("a");
-			} catch (SerializeException e) {
-				throw e;
-			} catch (Error e) {
+			} catch (SerializeException | Error e) {
 				throw e;
 			} catch (Throwable e) {
 				onBeanGetterException(pMeta, e);
