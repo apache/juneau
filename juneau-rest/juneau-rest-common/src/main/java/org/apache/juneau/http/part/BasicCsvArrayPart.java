@@ -35,7 +35,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static final String[] EMPTY = new String[0];
+	private static final String[] EMPTY = {};
 
 	/**
 	 * Static creator.

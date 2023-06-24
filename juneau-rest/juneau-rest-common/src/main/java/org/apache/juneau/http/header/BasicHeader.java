@@ -60,7 +60,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final long serialVersionUID = 1L;
-	private static final HeaderElement[] EMPTY_HEADER_ELEMENTS = new HeaderElement[] {};
+	private static final HeaderElement[] EMPTY_HEADER_ELEMENTS = {};
 
 	/**
 	 * Static creator.

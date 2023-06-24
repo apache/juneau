@@ -2184,7 +2184,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 	@Override /* HttpClientConnection */
 	public void sendRequestEntity(HttpEntityEnclosingRequest request) throws HttpException, IOException {
-		byte[] body = new byte[0];
+		byte[] body = {};
 		HttpEntity entity = request.getEntity();
 		if (entity != null) {
 			long length = entity.getContentLength();

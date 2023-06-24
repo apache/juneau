@@ -1051,7 +1051,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final RestCallInterceptor[] EMPTY_REST_CALL_INTERCEPTORS = new RestCallInterceptor[0];
+	private static final RestCallInterceptor[] EMPTY_REST_CALL_INTERCEPTORS = {};
 
 	/**
 	 * Instantiates a new clean-slate {@link Builder} object.

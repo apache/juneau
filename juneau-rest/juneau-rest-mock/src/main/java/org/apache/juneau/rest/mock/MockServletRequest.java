@@ -48,7 +48,7 @@ public class MockServletRequest implements HttpServletRequest {
 	private Map<String,String[]> headerMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 	private Map<String,Object> attributeMap = map();
 	private String characterEncoding = "UTF-8";
-	private byte[] content = new byte[0];
+	private byte[] content = {};
 	private String protocol = "HTTP/1.1";
 	private String scheme = "http";
 	private String serverName = "localhost";

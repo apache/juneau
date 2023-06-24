@@ -35,7 +35,7 @@ public class ByteArrayEntity extends BasicHttpEntity {
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static final byte[] EMPTY = new byte[0];
+	private static final byte[] EMPTY = {};
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instance
