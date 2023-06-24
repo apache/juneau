@@ -109,7 +109,7 @@ public class RoundTripPrimitiveObjectBeansTest extends RoundTripTest {
 		assertEquals(Character.valueOf('a'), t.poalChar.get(0)[0]);
 		assertEquals(Short.valueOf((short)1), t.poalShort.get(0)[0]);
 		assertEquals(Integer.valueOf(1), t.poalInt.get(0)[0]);
-		assertEquals(Long.valueOf(1l), t.poalLong.get(0)[0]);
+		assertEquals(Long.valueOf(1L), t.poalLong.get(0)[0]);
 		assertEquals(Float.valueOf(1f), t.poalFloat.get(0)[0]);
 		assertEquals(Double.valueOf(1d), t.poalDouble.get(0)[0]);
 		assertEquals(1, t.poalBigInteger.get(0)[0].intValue());
@@ -132,7 +132,7 @@ public class RoundTripPrimitiveObjectBeansTest extends RoundTripTest {
 		assertEquals(Character.valueOf('a'), t.polChar.get(0)[0]);
 		assertEquals(Short.valueOf((short)1), t.polShort.get(0)[0]);
 		assertEquals(Integer.valueOf(1), t.polInt.get(0)[0]);
-		assertEquals(Long.valueOf(1l), t.polLong.get(0)[0]);
+		assertEquals(Long.valueOf(1L), t.polLong.get(0)[0]);
 		assertEquals(Float.valueOf(1f), t.polFloat.get(0)[0]);
 		assertEquals(Double.valueOf(1d), t.polDouble.get(0)[0]);
 		assertEquals(1, t.polBigInteger.get(0)[0].intValue());

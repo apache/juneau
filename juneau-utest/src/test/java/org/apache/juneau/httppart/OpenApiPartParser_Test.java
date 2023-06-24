@@ -100,7 +100,7 @@ public class OpenApiPartParser_Test {
 
 	@Test
 	public void a05_inputValidations_minMaxLength() throws Exception {
-		HttpPartSchema s = tNone().minLength(1l).maxLength(2l).allowEmptyValue().build();
+		HttpPartSchema s = tNone().minLength(1L).maxLength(2L).allowEmptyValue().build();
 
 		assertEquals(null, parse(s, null, String.class));
 		assertEquals("1", parse(s, "1", String.class));
@@ -108,9 +108,9 @@ public class OpenApiPartParser_Test {
 
 		assertThrown(()->parse(s, "", String.class)).asMessage().is("Minimum length of value not met.");
 		assertThrown(()->parse(s, "123", String.class)).asMessage().is("Maximum length of value exceeded.");
-		assertThrown(()->tNone().minLength(2l).maxLength(1l).build()).asMessage().isContains("maxLength cannot be less than minLength.");
-		assertThrown(()->tNone().minLength(-2l).build()).asMessage().isContains("minLength cannot be less than zero.");
-		assertThrown(()->tNone().maxLength(-2l).build()).asMessage().isContains("maxLength cannot be less than zero.");
+		assertThrown(()->tNone().minLength(2L).maxLength(1L).build()).asMessage().isContains("maxLength cannot be less than minLength.");
+		assertThrown(()->tNone().minLength(-2L).build()).asMessage().isContains("minLength cannot be less than zero.");
+		assertThrown(()->tNone().maxLength(-2L).build()).asMessage().isContains("maxLength cannot be less than zero.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

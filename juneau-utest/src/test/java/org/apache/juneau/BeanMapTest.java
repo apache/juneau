@@ -76,7 +76,7 @@ public class BeanMapTest {
 		m.put("b1", null);
 		assertEquals(Integer.valueOf(0), m.get("i1"));
 		assertEquals(Short.valueOf((short)0), m.get("s1"));
-		assertEquals(Long.valueOf(0l), m.get("l1"));
+		assertEquals(Long.valueOf(0L), m.get("l1"));
 		assertEquals(Double.valueOf(0d), m.get("d1"));
 		assertEquals(Float.valueOf(0f), m.get("f1"));
 		assertEquals(Boolean.valueOf(false), m.get("b1"));
@@ -155,7 +155,7 @@ public class BeanMapTest {
 		m.put("b1", null);
 		assertEquals(Integer.valueOf(0), m.get("i1"));
 		assertEquals(Short.valueOf((short)0), m.get("s1"));
-		assertEquals(Long.valueOf(0l), m.get("l1"));
+		assertEquals(Long.valueOf(0L), m.get("l1"));
 		assertEquals(Double.valueOf(0d), m.get("d1"));
 		assertEquals(Float.valueOf(0f), m.get("f1"));
 		assertEquals(Boolean.valueOf(false), m.get("b1"));

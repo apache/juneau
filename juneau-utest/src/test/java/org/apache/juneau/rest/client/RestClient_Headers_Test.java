@@ -167,7 +167,7 @@ public class RestClient_Headers_Test {
 		checkClient("Cache-Control").headers(new CacheControl("none")).header("X-Expect","none").build().get("/headers").run().assertContent("['none']");
 		checkClient("Client-Version").headers(new ClientVersion("1")).build().get("/headers").run().assertContent("['1']");
 		checkClient("Connection").headers(new Connection("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("Content-Length").headers(new ContentLength(123l)).build().get("/headers").run().assertContent("['123']");
+		checkClient("Content-Length").headers(new ContentLength(123L)).build().get("/headers").run().assertContent("['123']");
 		checkClient("Content-Type").headers(new ContentType("foo")).build().get("/headers").run().assertContent("['foo']");
 		checkClient("Date").headers(new org.apache.juneau.http.header.Date(PARSEDZONEDDATETIME)).build().get("/headers").run().assertContent("['"+PARSEDZONEDDATETIME+"']");
 		checkClient("Date").headers(new org.apache.juneau.http.header.Date(ZONEDDATETIME)).build().get("/headers").run().assertContent("['"+PARSEDZONEDDATETIME+"']");

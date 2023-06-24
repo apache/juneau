@@ -285,28 +285,28 @@ public class ThrownStore_Test {
 		ThrownStore store = ThrownStore.create().build();
 
 		ThrownStats stats = store.add(t2);
-		assertLong(stats.getHash()).isNot(0l);
-		assertLong(stats.getGuid()).isNot(0l);
-		assertLong(stats.getFirstOccurrence()).isNot(0l);
-		assertLong(stats.getLastOccurrence()).isNot(0l);
+		assertLong(stats.getHash()).isNot(0L);
+		assertLong(stats.getGuid()).isNot(0L);
+		assertLong(stats.getFirstOccurrence()).isNot(0L);
+		assertLong(stats.getLastOccurrence()).isNot(0L);
 		assertString(stats.getFirstMessage()).is("bar");
 		assertObject(stats.getStackTrace()).asJson().isContains("org.apache.juneau");
 		assertObject(stats).asString().isContains("bar");
 
 		stats = stats.clone();
-		assertLong(stats.getHash()).isNot(0l);
-		assertLong(stats.getGuid()).isNot(0l);
-		assertLong(stats.getFirstOccurrence()).isNot(0l);
-		assertLong(stats.getLastOccurrence()).isNot(0l);
+		assertLong(stats.getHash()).isNot(0L);
+		assertLong(stats.getGuid()).isNot(0L);
+		assertLong(stats.getFirstOccurrence()).isNot(0L);
+		assertLong(stats.getLastOccurrence()).isNot(0L);
 		assertString(stats.getFirstMessage()).is("bar");
 		assertObject(stats.getStackTrace()).asJson().isContains("org.apache.juneau");
 		assertObject(stats).asString().isContains("bar");
 
 		stats = stats.getCausedBy().get();
-		assertLong(stats.getHash()).isNot(0l);
-		assertLong(stats.getGuid()).isNot(0l);
-		assertLong(stats.getFirstOccurrence()).isNot(0l);
-		assertLong(stats.getLastOccurrence()).isNot(0l);
+		assertLong(stats.getHash()).isNot(0L);
+		assertLong(stats.getGuid()).isNot(0L);
+		assertLong(stats.getFirstOccurrence()).isNot(0L);
+		assertLong(stats.getLastOccurrence()).isNot(0L);
 		assertString(stats.getFirstMessage()).is("foo");
 		assertObject(stats.getStackTrace()).asJson().isContains("org.apache.juneau");
 		assertObject(stats).asString().isContains("foo");

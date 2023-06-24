@@ -49,7 +49,7 @@ public class Assertions_Test {
 
 	@Test
 	public void a03_assertLong() throws Exception {
-		assertLong(2l).isGt(1l);
+		assertLong(2L).isGt(1L);
 	}
 
 	@Test
@@ -145,7 +145,7 @@ public class Assertions_Test {
 
 	@Test
 	public void a20b_assertLongArray() throws Exception {
-		assertLongArray(new long[]{1l}).asLength().is(1);
+		assertLongArray(new long[]{1L}).asLength().is(1);
 	}
 
 	@Test

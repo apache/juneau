@@ -36,7 +36,7 @@ public class HtmlSchemaSerializerTest {
 
 		assertEquals("<table><tr><td>type</td><td>integer</td></tr><tr><td>format</td><td>int16</td></tr></table>", s.serialize((short)1));
 		assertEquals("<table><tr><td>type</td><td>integer</td></tr><tr><td>format</td><td>int32</td></tr></table>", s.serialize(1));
-		assertEquals("<table><tr><td>type</td><td>integer</td></tr><tr><td>format</td><td>int64</td></tr></table>", s.serialize(1l));
+		assertEquals("<table><tr><td>type</td><td>integer</td></tr><tr><td>format</td><td>int64</td></tr></table>", s.serialize(1L));
 		assertEquals("<table><tr><td>type</td><td>number</td></tr><tr><td>format</td><td>float</td></tr></table>", s.serialize(1f));
 		assertEquals("<table><tr><td>type</td><td>number</td></tr><tr><td>format</td><td>double</td></tr></table>", s.serialize(1d));
 		assertEquals("<table><tr><td>type</td><td>boolean</td></tr></table>", s.serialize(true));

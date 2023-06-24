@@ -275,10 +275,10 @@ public class RestClient_Response_Body_Test {
 
 		ResponseContent x2 = testClient().entity(inputStreamEntity("foo")).get().run().getContent();
 		assertFalse(x2.isRepeatable());
-		assertLong(x2.getContentLength()).is(-1l);
+		assertLong(x2.getContentLength()).is(-1L);
 		x2.cache().asString();
 		assertTrue(x2.isRepeatable());
-		assertLong(x2.getContentLength()).is(3l);
+		assertLong(x2.getContentLength()).is(3L);
 
 		assertFalse(x2.isChunked());
 
@@ -310,7 +310,7 @@ public class RestClient_Response_Body_Test {
 	public void b02_head() throws Exception {
 		assertFalse(client().build().head("").run().getContent().isRepeatable());
 		assertFalse(client().build().head("").run().getContent().isChunked());
-		assertLong(client().build().head("").run().getContent().getContentLength()).is(-1l);
+		assertLong(client().build().head("").run().getContent().getContentLength()).is(-1L);
 		client().build().head("").run().getContent().getContentType().assertValue().isNull();
 		client().build().head("").run().getContent().getContentEncoding().assertValue().isNull();
 		client().build().head("").run().getContent().writeTo(new ByteArrayOutputStream());

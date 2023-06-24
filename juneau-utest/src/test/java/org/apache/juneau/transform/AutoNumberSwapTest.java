@@ -63,12 +63,12 @@ public class AutoNumberSwapTest {
 	}
 	public static class A04 {
 		public Long toLong() {
-			return 1l;
+			return 1L;
 		}
 	}
 	public static class A05 {
 		public long toLong() {
-			return 1l;
+			return 1L;
 		}
 	}
 	public static class A06 {
@@ -222,7 +222,7 @@ public class AutoNumberSwapTest {
 	}
 	public static class B03 {
 		public Long toLong() {
-			return 1l;
+			return 1L;
 		}
 		public static B03 fromLong(Long o) {
 			assertObject(o).asJson().is("1");
@@ -437,7 +437,7 @@ public class AutoNumberSwapTest {
 			assertObject(o).asJson().is("1");
 		}
 		public Long toLong() {
-			return 1l;
+			return 1L;
 		}
 	}
 	public static class C04 {
@@ -446,7 +446,7 @@ public class AutoNumberSwapTest {
 			assertObject((Object) o).asJson().is("1");
 		}
 		public long toLong() {
-			return 1l;
+			return 1L;
 		}
 	}
 	public static class C05 {

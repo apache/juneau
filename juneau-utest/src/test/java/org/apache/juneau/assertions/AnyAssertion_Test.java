@@ -264,7 +264,7 @@ public class AnyAssertion_Test {
 
 	@Test
 	public void bb17_asLong() throws Exception {
-		Long x1 = 1l, nil = null;
+		Long x1 = 1L, nil = null;
 		Object x2 = "";
 		test(x1).asLong().isString("1");
 		test(nil).asLong().isNull();

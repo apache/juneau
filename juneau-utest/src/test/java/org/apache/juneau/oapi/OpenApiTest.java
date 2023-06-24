@@ -519,7 +519,7 @@ public class OpenApiTest {
 
 	@Test
 	public void d06_typeInteger_formatInt64_Long() throws Exception {
-		Long in = 123l;
+		Long in = 123L;
 		HttpPartSchema ps = T_INT64;
 		String s = serialize(ps, in);
 		assertEquals("123", s);

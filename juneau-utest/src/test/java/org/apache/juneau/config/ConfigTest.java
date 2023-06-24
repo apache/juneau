@@ -376,13 +376,13 @@ public class ConfigTest {
 	@Test
 	public void getLong1() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-		assertLong(c.get("a1").asLong().orElse(0l)).is(1l);
-		assertLong(c.get("a2").asLong().orElse(0l)).is(2l);
-		assertLong(c.get("a3").asLong().orElse(0l)).is(0l);
-		assertLong(c.get("S/b1").asLong().orElse(0l)).is(1l);
-		assertLong(c.get("S/b2").asLong().orElse(0l)).is(0l);
-		assertLong(c.get("S/b3").asLong().orElse(0l)).is(0l);
-		assertLong(c.get("T/c1").asLong().orElse(0l)).is(0l);
+		assertLong(c.get("a1").asLong().orElse(0L)).is(1L);
+		assertLong(c.get("a2").asLong().orElse(0L)).is(2L);
+		assertLong(c.get("a3").asLong().orElse(0L)).is(0L);
+		assertLong(c.get("S/b1").asLong().orElse(0L)).is(1L);
+		assertLong(c.get("S/b2").asLong().orElse(0L)).is(0L);
+		assertLong(c.get("S/b3").asLong().orElse(0L)).is(0L);
+		assertLong(c.get("T/c1").asLong().orElse(0L)).is(0L);
 	}
 
 	@Test
@@ -400,10 +400,10 @@ public class ConfigTest {
 	@Test
 	public void getLong2() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-		assertLong(c.get("a1").asLong().orElse(Long.MAX_VALUE)).is(1l);
-		assertLong(c.get("a2").asLong().orElse(Long.MAX_VALUE)).is(2l);
+		assertLong(c.get("a1").asLong().orElse(Long.MAX_VALUE)).is(1L);
+		assertLong(c.get("a2").asLong().orElse(Long.MAX_VALUE)).is(2L);
 		assertLong(c.get("a3").asLong().orElse(Long.MAX_VALUE)).is(Long.MAX_VALUE);
-		assertLong(c.get("S/b1").asLong().orElse(Long.MAX_VALUE)).is(1l);
+		assertLong(c.get("S/b1").asLong().orElse(Long.MAX_VALUE)).is(1L);
 		assertLong(c.get("S/b2").asLong().orElse(Long.MAX_VALUE)).is(Long.MAX_VALUE);
 		assertLong(c.get("S/b3").asLong().orElse(Long.MAX_VALUE)).is(Long.MAX_VALUE);
 		assertLong(c.get("T/c1").asLong().orElse(Long.MAX_VALUE)).is(Long.MAX_VALUE);
@@ -413,10 +413,10 @@ public class ConfigTest {
 	public void getLong2BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
 
-		assertThrown(()->c.get("a1").asLong().orElse(-1l)).isType(NumberFormatException.class);
-		assertThrown(()->c.get("a2").asLong().orElse(-1l)).isType(NumberFormatException.class);
-		assertThrown(()->c.get("a3").asLong().orElse(-1l)).isType(NumberFormatException.class);
-		assertThrown(()->c.get("a4").asLong().orElse(-1l)).isType(NumberFormatException.class);
+		assertThrown(()->c.get("a1").asLong().orElse(-1L)).isType(NumberFormatException.class);
+		assertThrown(()->c.get("a2").asLong().orElse(-1L)).isType(NumberFormatException.class);
+		assertThrown(()->c.get("a3").asLong().orElse(-1L)).isType(NumberFormatException.class);
+		assertThrown(()->c.get("a4").asLong().orElse(-1L)).isType(NumberFormatException.class);
 	}
 
 	//====================================================================================================

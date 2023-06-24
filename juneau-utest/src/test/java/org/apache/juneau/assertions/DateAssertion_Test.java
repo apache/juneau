@@ -110,14 +110,14 @@ public class DateAssertion_Test {
 	@Test
 	public void bc04a_asEpochMillis() throws Exception {
 		Date x = MID1, nil = null;
-		test(x).asEpochMillis().is(959862896000l);
+		test(x).asEpochMillis().is(959862896000L);
 		test(nil).asEpochMillis().isNull();
 	}
 
 	@Test
 	public void bc04b_asEpochSeconds() throws Exception {
 		Date x = MID1, nil = null;
-		test(x).asEpochSeconds().is(959862896l);
+		test(x).asEpochSeconds().is(959862896L);
 		test(nil).asEpochSeconds().isNull();
 	}
 

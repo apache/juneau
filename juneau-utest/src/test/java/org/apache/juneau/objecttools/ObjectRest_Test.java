@@ -337,7 +337,7 @@ public class ObjectRest_Test {
 
 		assertNull(model.get("f1"));
 		assertEquals(0, model.get("f2"));
-		assertEquals(0l, model.get("f3"));
+		assertEquals(0L, model.get("f3"));
 		assertFalse((Boolean)model.get("f4"));
 		assertNull(model.get("f2a"));
 		assertNull(model.get("f3a"));
@@ -349,7 +349,7 @@ public class ObjectRest_Test {
 
 		assertEquals("foo", model.getWithDefault("f1", "foo"));
 		assertEquals(0, model.getWithDefault("f2", "foo"));
-		assertEquals(0l, model.getWithDefault("f3", "foo"));
+		assertEquals(0L, model.getWithDefault("f3", "foo"));
 		assertEquals(false, model.getWithDefault("f4", "foo"));
 		assertEquals("foo", model.getWithDefault("f2a", "foo"));
 		assertEquals("foo", model.getWithDefault("f3a", "foo"));
@@ -419,17 +419,17 @@ public class ObjectRest_Test {
 		assertNull(model.getLong("f7"));
 		assertNull(model.getLong("f8"));
 
-		assertEquals(1, (long)model.getLong("f1", 1l));
-		assertEquals(0, (long)model.getLong("f2", 1l));
-		assertEquals(0, (long)model.getLong("f3", 1l));
-		assertEquals(0, (long)model.getLong("f4", 1l));
-		assertEquals(1, (long)model.getLong("f2a", 1l));
-		assertEquals(1, (long)model.getLong("f3a", 1l));
-		assertEquals(1, (long)model.getLong("f4a", 1l));
-		assertEquals(1, (long)model.getLong("f5", 1l));
-		assertEquals(1, (long)model.getLong("f6", 1l));
-		assertEquals(1, (long)model.getLong("f7", 1l));
-		assertEquals(1, (long)model.getLong("f8", 1l));
+		assertEquals(1, (long)model.getLong("f1", 1L));
+		assertEquals(0, (long)model.getLong("f2", 1L));
+		assertEquals(0, (long)model.getLong("f3", 1L));
+		assertEquals(0, (long)model.getLong("f4", 1L));
+		assertEquals(1, (long)model.getLong("f2a", 1L));
+		assertEquals(1, (long)model.getLong("f3a", 1L));
+		assertEquals(1, (long)model.getLong("f4a", 1L));
+		assertEquals(1, (long)model.getLong("f5", 1L));
+		assertEquals(1, (long)model.getLong("f6", 1L));
+		assertEquals(1, (long)model.getLong("f7", 1L));
+		assertEquals(1, (long)model.getLong("f8", 1L));
 
 		assertNull(model.getBoolean("f1"));
 		assertEquals(false, model.getBoolean("f2"));
@@ -637,17 +637,17 @@ public class ObjectRest_Test {
 		assertThrown(()->model.getLong("f7")).isType(InvalidDataConversionException.class);
 		assertThrown(()->model.getInt("f8")).isType(InvalidDataConversionException.class);
 
-		assertEquals(1, (long)model.getLong("f1", 9l));
-		assertEquals(2, (long)model.getLong("f2", 9l));
-		assertEquals(3, (long)model.getLong("f3", 9l));
-		assertEquals(1, (long)model.getLong("f4", 9l));
-		assertEquals(2, (long)model.getLong("f2a", 9l));
-		assertEquals(3, (long)model.getLong("f3a", 9l));
-		assertEquals(1, (long)model.getLong("f4a", 9l));
-		assertThrown(()->model.getLong("f5", 9l)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getLong("f6", 9l)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getLong("f7", 9l)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getLong("f8", 9l)).isType(InvalidDataConversionException.class);
+		assertEquals(1, (long)model.getLong("f1", 9L));
+		assertEquals(2, (long)model.getLong("f2", 9L));
+		assertEquals(3, (long)model.getLong("f3", 9L));
+		assertEquals(1, (long)model.getLong("f4", 9L));
+		assertEquals(2, (long)model.getLong("f2a", 9L));
+		assertEquals(3, (long)model.getLong("f3a", 9L));
+		assertEquals(1, (long)model.getLong("f4a", 9L));
+		assertThrown(()->model.getLong("f5", 9L)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getLong("f6", 9L)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getLong("f7", 9L)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getLong("f8", 9L)).isType(InvalidDataConversionException.class);
 
 		assertEquals(false, model.getBoolean("f1"));  // String "1" equates to false.
 		assertEquals(true, model.getBoolean("f2"));
@@ -786,10 +786,10 @@ public class ObjectRest_Test {
 		public A init() {
 			f1 = "1";
 			f2 = 2;
-			f3 = 3l;
+			f3 = 3L;
 			f4 = true;
 			f2a = 2;
-			f3a = 3l;
+			f3a = 3L;
 			f4a = true;
 			try {
 				f5 = JsonMap.ofJson("{f5a:'a'}");

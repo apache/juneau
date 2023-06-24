@@ -165,7 +165,7 @@ public class MethodExecStore_Test {
 		MethodExecStore store = MethodExecStore.create().thrownStore(s).build();
 		MethodExecStats stats = store.getStats(m);
 
-		assertLong(stats.getGuid()).isNot(0l);
+		assertLong(stats.getGuid()).isNot(0L);
 		assertObject(stats.getMethod()).isSame(m);
 
 		assertInteger(stats.getRuns()).is(0);
@@ -174,7 +174,7 @@ public class MethodExecStore_Test {
 		assertInteger(stats.getMinTime()).is(0);
 		assertInteger(stats.getMaxTime()).is(0);
 		assertInteger(stats.getAvgTime()).is(0);
-		assertLong(stats.getTotalTime()).is(0l);
+		assertLong(stats.getTotalTime()).is(0L);
 
 		stats.started().finished(100*1000000).started().finished(200*1000000).started().error(new Throwable());
 
@@ -184,7 +184,7 @@ public class MethodExecStore_Test {
 		assertInteger(stats.getMinTime()).is(100);
 		assertInteger(stats.getMaxTime()).is(200);
 		assertInteger(stats.getAvgTime()).is(150);
-		assertLong(stats.getTotalTime()).is(300l);
+		assertLong(stats.getTotalTime()).is(300L);
 
 		assertObject(stats).asString().isContains("300");
 	}

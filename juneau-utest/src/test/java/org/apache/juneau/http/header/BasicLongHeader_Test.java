@@ -35,7 +35,7 @@ public class BasicLongHeader_Test {
 
 	private static final String HEADER = "Foo";
 	private static final String VALUE = "123";
-	private static final Long PARSED = 123l;
+	private static final Long PARSED = 123L;
 
 	@Rest
 	public static class A {
@@ -72,7 +72,7 @@ public class BasicLongHeader_Test {
 
 	@Test
 	public void a02_assertLong() throws Exception {
-		longHeader(HEADER,1l).assertLong().is(1l);
+		longHeader(HEADER,1L).assertLong().is(1L);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

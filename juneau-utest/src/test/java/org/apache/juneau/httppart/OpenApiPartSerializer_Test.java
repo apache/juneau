@@ -90,7 +90,7 @@ public class OpenApiPartSerializer_Test {
 
 	@Test
 	public void a05_outputValidations_minMaxLength() throws Exception {
-		HttpPartSchema ps = tNone().minLength(1l).maxLength(2l).allowEmptyValue().build();
+		HttpPartSchema ps = tNone().minLength(1L).maxLength(2L).allowEmptyValue().build();
 
 		assertEquals("null", serialize(ps, null));
 		assertEquals("1", serialize(ps, "1"));
@@ -529,7 +529,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1", serialize(ps, Integer.valueOf(1)));
 		assertEquals("1", serialize(ps, (short)1));
 		assertEquals("1", serialize(ps, Short.valueOf((short)1)));
-		assertEquals("1", serialize(ps, 1l));
+		assertEquals("1", serialize(ps, 1L));
 		assertEquals("1", serialize(ps, Long.valueOf(1)));
 		assertEquals("1", serialize(ps, "1"));
 		assertEquals("1", serialize(ps, new F1(1)));
@@ -546,9 +546,9 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1,2", serialize(ps, new short[]{1,2}));
 		assertEquals("1,2,null", serialize(ps, new Short[]{1,2,null}));
 		assertEquals("1,2,null", serialize(ps, list(Short.valueOf((short)1),Short.valueOf((short)2),null)));
-		assertEquals("1,2", serialize(ps, new long[]{1l,2l}));
-		assertEquals("1,2,null", serialize(ps, new Long[]{1l,2l,null}));
-		assertEquals("1,2,null", serialize(ps, list(1l,2l,null)));
+		assertEquals("1,2", serialize(ps, new long[]{1L,2L}));
+		assertEquals("1,2,null", serialize(ps, new Long[]{1L,2L,null}));
+		assertEquals("1,2,null", serialize(ps, list(1L,2L,null)));
 		assertEquals("1,2,null,null", serialize(ps, new String[]{"1","2","null",null}));
 		assertEquals("1,2,null,null", serialize(ps, list("1","2","null",null)));
 		assertEquals("1,2,null", serialize(ps, new Object[]{1,2,null}));
@@ -571,10 +571,10 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1,2|3,null|null", serialize(ps, new Short[][]{{1,2},{3,null},null}));
 		assertEquals("1,2|3,null|null", serialize(ps, list(new Short[]{1,2},new Short[]{3,null},null)));
 		assertEquals("1,2|3,null|null", serialize(ps, list(list(Short.valueOf((short)1),Short.valueOf((short)2)),list(Short.valueOf((short)3),null),null)));
-		assertEquals("1,2|3|null", serialize(ps, new long[][]{{1l,2l},{3l},null}));
-		assertEquals("1,2|3|null", serialize(ps, list(new long[]{1l,2l},new long[]{3l},null)));
-		assertEquals("1,2|3,null|null", serialize(ps, new Long[][]{{1l,2l},{3l,null},null}));
-		assertEquals("1,2|3,null|null", serialize(ps, list(new Long[]{1l,2l},new Long[]{3l,null},null)));
+		assertEquals("1,2|3|null", serialize(ps, new long[][]{{1L,2L},{3L},null}));
+		assertEquals("1,2|3|null", serialize(ps, list(new long[]{1L,2L},new long[]{3L},null)));
+		assertEquals("1,2|3,null|null", serialize(ps, new Long[][]{{1L,2L},{3L,null},null}));
+		assertEquals("1,2|3,null|null", serialize(ps, list(new Long[]{1L,2L},new Long[]{3L,null},null)));
 		assertEquals("1,2|3,null|null", serialize(ps, list(list(Long.valueOf(1),Long.valueOf(2)),list(Long.valueOf(3),null),null)));
 		assertEquals("1,2|3,null,null|null", serialize(ps, new String[][]{{"1","2"},{"3","null",null},null}));
 		assertEquals("1,2|3,null,null|null", serialize(ps, list(new String[]{"1","2"},new String[]{"3","null",null},null)));
@@ -596,10 +596,10 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1", serialize(ps, Integer.valueOf(1)));
 		assertEquals("1", serialize(ps, (short)1));
 		assertEquals("1", serialize(ps, Short.valueOf((short)1)));
-		assertEquals("1", serialize(ps, 1l));
-		assertEquals("1", serialize(ps, Long.valueOf(1l)));
+		assertEquals("1", serialize(ps, 1L));
+		assertEquals("1", serialize(ps, Long.valueOf(1L)));
 		assertEquals("1", serialize(ps, "1"));
-		assertEquals("1", serialize(ps,  new F3(1l)));
+		assertEquals("1", serialize(ps,  new F3(1L)));
 		assertEquals("null", serialize(ps, null));
 		assertEquals("null", serialize(ps, "null"));
 	}
@@ -613,16 +613,16 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1,2", serialize(ps, new short[]{1,2}));
 		assertEquals("1,2,null", serialize(ps, new Short[]{1,2,null}));
 		assertEquals("1,2,null", serialize(ps, list((short)1,(short)2,null)));
-		assertEquals("1,2", serialize(ps, new long[]{1l,2l}));
-		assertEquals("1,2,null", serialize(ps, new Long[]{1l,2l,null}));
-		assertEquals("1,2,null", serialize(ps, list(1l,2l,null)));
+		assertEquals("1,2", serialize(ps, new long[]{1L,2L}));
+		assertEquals("1,2,null", serialize(ps, new Long[]{1L,2L,null}));
+		assertEquals("1,2,null", serialize(ps, list(1L,2L,null)));
 		assertEquals("1,2,null,null", serialize(ps, new String[]{"1","2","null",null}));
 		assertEquals("1,2,null,null", serialize(ps, list("1","2","null",null)));
 		assertEquals("1,2,null", serialize(ps, new Object[]{1,2,null}));
 		assertEquals("1,2,null", serialize(ps, list((Object)1,(Object)2,null)));
-		assertEquals("1,2,null,null", serialize(ps, new F3[]{new F3(1l),new F3(2l),new F3(null),null}));
-		assertEquals("1,2,null,null", serialize(ps, list(new F3(1l),new F3(2l),new F3(null),null)));
-		assertEquals("1,2,null", serialize(ps, new F4(1l,2l,null)));
+		assertEquals("1,2,null,null", serialize(ps, new F3[]{new F3(1L),new F3(2L),new F3(null),null}));
+		assertEquals("1,2,null,null", serialize(ps, list(new F3(1L),new F3(2L),new F3(null),null)));
+		assertEquals("1,2,null", serialize(ps, new F4(1L,2L,null)));
 	}
 
 	@Test
@@ -638,22 +638,22 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1,2|3,null|null", serialize(ps, new Short[][]{{1,2},{3,null},null}));
 		assertEquals("1,2|3,null|null", serialize(ps, list(new Short[]{1,2},new Short[]{3,null},null)));
 		assertEquals("1,2|3,null|null", serialize(ps, list(list((short)1,(short)2),list((short)3,null),null)));
-		assertEquals("1,2|3|null", serialize(ps, new long[][]{{1l,2l},{3l},null}));
-		assertEquals("1,2|3|null", serialize(ps, list(new long[]{1l,2l},new long[]{3l},null)));
-		assertEquals("1,2|3,null|null", serialize(ps, new Long[][]{{1l,2l},{3l,null},null}));
-		assertEquals("1,2|3,null|null", serialize(ps, list(new Long[]{1l,2l},new Long[]{3l,null},null)));
-		assertEquals("1,2|3,null|null", serialize(ps, list(list(1l,2l),list(3l,null),null)));
+		assertEquals("1,2|3|null", serialize(ps, new long[][]{{1L,2L},{3L},null}));
+		assertEquals("1,2|3|null", serialize(ps, list(new long[]{1L,2L},new long[]{3L},null)));
+		assertEquals("1,2|3,null|null", serialize(ps, new Long[][]{{1L,2L},{3L,null},null}));
+		assertEquals("1,2|3,null|null", serialize(ps, list(new Long[]{1L,2L},new Long[]{3L,null},null)));
+		assertEquals("1,2|3,null|null", serialize(ps, list(list(1L,2L),list(3L,null),null)));
 		assertEquals("1,2|3,null,null|null", serialize(ps, new String[][]{{"1","2"},{"3","null",null},null}));
 		assertEquals("1,2|3,null,null|null", serialize(ps, list(new String[]{"1","2"},new String[]{"3","null",null},null)));
 		assertEquals("1,2|3,null,null|null", serialize(ps, list(list("1","2"),list("3","null",null),null)));
 		assertEquals("1,2|3,null|null", serialize(ps, new Object[][]{{1,2},{3,null},null}));
 		assertEquals("1,2|3,null|null", serialize(ps, list(new Object[]{1,2},new Object[]{3,null},null)));
 		assertEquals("1,2|3,null|null", serialize(ps, list(list((Object)1,(Object)2),list((Object)3,null),null)));
-		assertEquals("1,2|3,null,null|null", serialize(ps, new F3[][]{{new F3(1l),new F3(2l)},{new F3(3l),new F3(null),null},null}));
-		assertEquals("1,2|3,null,null|null", serialize(ps, list(new F3[]{new F3(1l),new F3(2l)},new F3[]{new F3(3l),new F3(null),null},null)));
-		assertEquals("1,2|3,null,null|null", serialize(ps, list(list(new F3(1l),new F3(2l)),list(new F3(3l),new F3(null),null),null)));
-		assertEquals("1,2|3,null|null", serialize(ps, new F4[]{new F4(1l,2l),new F4(3l,null),null}));
-		assertEquals("1,2|3,null|null", serialize(ps, list(new F4(1l,2l),new F4(3l,null),null)));
+		assertEquals("1,2|3,null,null|null", serialize(ps, new F3[][]{{new F3(1L),new F3(2L)},{new F3(3L),new F3(null),null},null}));
+		assertEquals("1,2|3,null,null|null", serialize(ps, list(new F3[]{new F3(1L),new F3(2L)},new F3[]{new F3(3L),new F3(null),null},null)));
+		assertEquals("1,2|3,null,null|null", serialize(ps, list(list(new F3(1L),new F3(2L)),list(new F3(3L),new F3(null),null),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, new F4[]{new F4(1L,2L),new F4(3L,null),null}));
+		assertEquals("1,2|3,null|null", serialize(ps, list(new F4(1L,2L),new F4(3L,null),null)));
 	}
 
 

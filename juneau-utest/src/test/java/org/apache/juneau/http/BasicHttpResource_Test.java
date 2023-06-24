@@ -94,12 +94,12 @@ public class BasicHttpResource_Test {
 		assertTrue(x.isRepeatable());
 		x.writeTo(new ByteArrayOutputStream());
 
-		assertLong(stringResource("foo").getContentLength()).is(3l);
-		assertLong(byteArrayResource("foo".getBytes()).getContentLength()).is(3l);
-		assertLong(fileResource(f).getContentLength()).is(0l);
+		assertLong(stringResource("foo").getContentLength()).is(3L);
+		assertLong(byteArrayResource("foo".getBytes()).getContentLength()).is(3L);
+		assertLong(fileResource(f).getContentLength()).is(0L);
 
-		assertLong(readerResource(reader("foo")).getContentLength()).is(-1l);
-		assertLong(readerResource(reader("foo")).setContentLength(3).getContentLength()).is(3l);
+		assertLong(readerResource(reader("foo")).getContentLength()).is(-1L);
+		assertLong(readerResource(reader("foo")).setContentLength(3).getContentLength()).is(3L);
 
 		x = stringResource("foo", contentType("text/plain")).setContentEncoding("identity");
 		assertString(x.getContentType().getValue()).is("text/plain");

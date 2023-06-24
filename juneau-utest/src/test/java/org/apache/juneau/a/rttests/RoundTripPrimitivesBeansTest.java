@@ -47,7 +47,7 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 		assertEquals('a', t.pChar);
 		assertEquals(2, t.pShort);
 		assertEquals(3, t.pInt);
-		assertEquals(4l, t.pLong);
+		assertEquals(4L, t.pLong);
 		assertEquals(5f, t.pFloat, 0.1f);
 		assertEquals(6d, t.pDouble, 0.1f);
 
@@ -57,7 +57,7 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 		assertEquals((char)0, t.puChar);
 		assertEquals(0, t.puShort);
 		assertEquals(0, t.puInt);
-		assertEquals(0l, t.puLong);
+		assertEquals(0L, t.puLong);
 		assertEquals(0f, t.puFloat, 0.1f);
 		assertEquals(0d, t.puDouble, 0.1f);
 
@@ -67,7 +67,7 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 		assertEquals('b', t.paChar[1][0]);
 		assertEquals(2, t.paShort[1][0]);
 		assertEquals(2, t.paInt[1][0]);
-		assertEquals(2l, t.paLong[1][0]);
+		assertEquals(2L, t.paLong[1][0]);
 		assertEquals(2f, t.paFloat[1][0], 0.1f);
 		assertEquals(2d, t.paDouble[1][0], 0.1f);
 		assertNull(t.paBoolean[2]);
@@ -95,7 +95,7 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 		assertEquals('a', t.palChar.get(0)[0]);
 		assertEquals(1, t.palShort.get(0)[0]);
 		assertEquals(1, t.palInt.get(0)[0]);
-		assertEquals(1l, t.palLong.get(0)[0]);
+		assertEquals(1L, t.palLong.get(0)[0]);
 		assertEquals(1f, t.palFloat.get(0)[0], 0.1f);
 		assertEquals(1d, t.palDouble.get(0)[0], 0.1f);
 		assertNull(t.palBoolean.get(1));
@@ -113,7 +113,7 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 		assertEquals('a', t.plChar.get(0)[0]);
 		assertEquals(1, t.plShort.get(0)[0]);
 		assertEquals(1, t.plInt.get(0)[0]);
-		assertEquals(1l, t.plLong.get(0)[0]);
+		assertEquals(1L, t.plLong.get(0)[0]);
 		assertEquals(1f, t.plFloat.get(0)[0], 0.1f);
 		assertEquals(1d, t.plDouble.get(0)[0], 0.1f);
 		assertNull(t.plBoolean.get(1));
@@ -195,7 +195,7 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 			pChar = 'a';
 			pShort = 2;
 			pInt = 3;
-			pLong = 4l;
+			pLong = 4L;
 			pFloat = 5f;
 			pDouble = 6d;
 
@@ -266,7 +266,7 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 		assertEquals('a', t2.pChar);
 		assertEquals(2, t2.pShort);
 		assertEquals(3, t2.pInt);
-		assertEquals(4l, t2.pLong);
+		assertEquals(4L, t2.pLong);
 		assertEquals(5f, t2.pFloat, 0.1f);
 		assertEquals(6d, t2.pDouble, 0.1f);
 
@@ -276,7 +276,7 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 		assertEquals((char)0, t2.puChar);
 		assertEquals(0, t2.puShort);
 		assertEquals(0, t2.puInt);
-		assertEquals(0l, t2.puLong);
+		assertEquals(0L, t2.puLong);
 		assertEquals(0f, t2.puFloat, 0.1f);
 		assertEquals(0d, t2.puDouble, 0.1f);
 
@@ -286,7 +286,7 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 		assertEquals('b', t2.paChar[1][0]);
 		assertEquals(2, t2.paShort[1][0]);
 		assertEquals(2, t2.paInt[1][0]);
-		assertEquals(2l, t2.paLong[1][0]);
+		assertEquals(2L, t2.paLong[1][0]);
 		assertEquals(2f, t2.paFloat[1][0], 0.1f);
 		assertEquals(2d, t2.paDouble[1][0], 0.1f);
 		assertNull(t2.paBoolean[2]);
@@ -314,7 +314,7 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 		assertEquals('a', t2.palChar.get(0)[0]);
 		assertEquals(1, t2.palShort.get(0)[0]);
 		assertEquals(1, t2.palInt.get(0)[0]);
-		assertEquals(1l, t2.palLong.get(0)[0]);
+		assertEquals(1L, t2.palLong.get(0)[0]);
 		assertEquals(1f, t2.palFloat.get(0)[0], 0.1f);
 		assertEquals(1d, t2.palDouble.get(0)[0], 0.1f);
 		assertNull(t2.palBoolean.get(1));
@@ -332,7 +332,7 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 		assertEquals('a', t2.plChar.get(0)[0]);
 		assertEquals(1, t2.plShort.get(0)[0]);
 		assertEquals(1, t2.plInt.get(0)[0]);
-		assertEquals(1l, t2.plLong.get(0)[0]);
+		assertEquals(1L, t2.plLong.get(0)[0]);
 		assertEquals(1f, t2.plFloat.get(0)[0], 0.1f);
 		assertEquals(1d, t2.plDouble.get(0)[0], 0.1f);
 		assertNull(t2.plBoolean.get(1));

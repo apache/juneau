@@ -34,7 +34,7 @@ public class JsonSchemaSerializerTest {
 
 		assertEquals("{type:'integer',format:'int16'}", s.serialize((short)1));
 		assertEquals("{type:'integer',format:'int32'}", s.serialize(1));
-		assertEquals("{type:'integer',format:'int64'}", s.serialize(1l));
+		assertEquals("{type:'integer',format:'int64'}", s.serialize(1L));
 		assertEquals("{type:'number',format:'float'}", s.serialize(1f));
 		assertEquals("{type:'number',format:'double'}", s.serialize(1d));
 		assertEquals("{type:'boolean'}", s.serialize(true));
