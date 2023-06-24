@@ -55,7 +55,7 @@ public class Remote_RemoteOpAnnotation_Test {
 	}
 
 	@Remote
-	public static interface A1 {
+	public interface A1 {
 		String doGet();
 		String doGET();
 		String doFoo();
@@ -74,7 +74,7 @@ public class Remote_RemoteOpAnnotation_Test {
 	}
 
 	@Remote
-	public static interface A2 {
+	public interface A2 {
 		Future<String> doGet();
 		Future<String> doGET();
 		Future<String> doFoo();
@@ -93,7 +93,7 @@ public class Remote_RemoteOpAnnotation_Test {
 	}
 
 	@Remote
-	public static interface A3 {
+	public interface A3 {
 		CompletableFuture<String> doGet();
 		CompletableFuture<String> doGET();
 		CompletableFuture<String> doFoo();
@@ -124,7 +124,7 @@ public class Remote_RemoteOpAnnotation_Test {
 	}
 
 	@Remote
-	public static interface B1 {
+	public interface B1 {
 		void x1();
 		String x2();
 		HttpResponse x3();
@@ -175,7 +175,7 @@ public class Remote_RemoteOpAnnotation_Test {
 	}
 
 	@Remote
-	public static interface C1 {
+	public interface C1 {
 		String postX1(@Content String foo);
 		HttpResponse postX2(@Content String foo);
 		Reader postX3(@Content String foo);
@@ -220,7 +220,7 @@ public class Remote_RemoteOpAnnotation_Test {
 	}
 
 	@Remote
-	public static interface D1 {
+	public interface D1 {
 		String postX1(@Content String foo);
 		HttpResponse postX2(@Content String foo);
 		Reader postX3(@Content String foo);

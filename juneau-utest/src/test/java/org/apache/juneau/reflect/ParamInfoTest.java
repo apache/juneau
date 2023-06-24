@@ -154,12 +154,12 @@ public class ParamInfoTest {
 	}
 	@CA("1") public static class C1 extends C2 {}
 	@CA("2") public static class C2 implements C3, C4 {}
-	@CA("3") public static interface C3 {}
-	@CA("4") public static interface C4 {}
+	@CA("3") public interface C3 {}
+	@CA("4") public interface C4 {}
 
-	public static interface CB {
-		public void a1(@CA("5") C1 x);
-		public void a2(@CA("5") C1 x);
+	public interface CB {
+		void a1(@CA("5") C1 x);
+		void a2(@CA("5") C1 x);
 	}
 	public static class CC implements CB {
 		public CC(@CA("9") C1 x) {}
@@ -311,11 +311,11 @@ public class ParamInfoTest {
 	}
 	@DA("1") public static class D1 extends D2 {}
 	@DA("2") public static class D2 implements D3, D4 {}
-	@DA("3") public static interface D3 {}
-	@DA("4") public static interface D4 {}
+	@DA("3") public interface D3 {}
+	@DA("4") public interface D4 {}
 
-	public static interface DB {
-		public void a1(@DA("0") D1 x);
+	public interface DB {
+		void a1(@DA("0") D1 x);
 	}
 	public static class DC implements DB {
 		@Override

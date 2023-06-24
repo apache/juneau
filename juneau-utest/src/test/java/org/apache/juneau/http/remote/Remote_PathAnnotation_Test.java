@@ -63,7 +63,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Remote
-	public static interface A1 {
+	public interface A1 {
 		@RemoteOp(path="a/{x}") String getX1(@Path("x") int b);
 		@RemoteOp(path="a/{x}") String getX2(@Path("x") float b);
 		@RemoteOp(path="a/{x}") String getX3(@Path("x") Bean b);
@@ -129,7 +129,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Remote
-	public static interface B1 {
+	public interface B1 {
 		@RemoteOp(path="/a/{x}") String getX1(@Path("x") String...b);
 		@RemoteOp(path="/a/{x}") String getX2(@Path("x") @Schema(cf="csv") String...b);
 		@RemoteOp(path="/a/{x}") String getX3(@Path("x") @Schema(cf="ssv") String...b);
@@ -165,7 +165,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Remote
-	public static interface C1 {
+	public interface C1 {
 		@RemoteOp(path="/a/{x}") String getX1(@Path("x") @Schema(min="1",max="10") int b);
 		@RemoteOp(path="/a/{x}") String getX2(@Path("x") @Schema(min="1",max="10",emin=false,emax=false) int b);
 		@RemoteOp(path="/a/{x}") String getX3(@Path("x") @Schema(min="1",max="10",emin=true,emax=true) int b);
@@ -397,7 +397,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Remote
-	public static interface D1 {
+	public interface D1 {
 		@RemoteOp(path="/{x}") String getX1(@Path("x") @Schema(cf="pipes",mini=1,maxi=2) String...b);
 		@RemoteOp(path="/{x}") String getX2(@Path("x") @Schema(items=@Items(cf="pipes",mini=1,maxi=2)) String[]...b);
 		@RemoteOp(path="/{x}") String getX3(@Path("x") @Schema(cf="pipes",ui=false) String...b);
@@ -441,7 +441,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Remote
-	public static interface E1 {
+	public interface E1 {
 		@RemoteOp(path="/{x}") String getX1(@Path("x") @Schema(minl=2,maxl=3) String b);
 		@RemoteOp(path="/{x}") String getX2(@Path("x") @Schema(cf="pipes",items=@Items(minl=2,maxl=3)) String...b);
 		@RemoteOp(path="/{x}") String getX3(@Path("x") @Schema(e={"foo"}) String b);
@@ -488,7 +488,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Remote
-	public static interface F1 {
+	public interface F1 {
 		@RemoteOp(path="/{x}") String getX1(@Path("x") @Schema(mo="2") int b);
 		@RemoteOp(path="/{x}") String getX2(@Path("x") @Schema(mo="2") short b);
 		@RemoteOp(path="/{x}") String getX3(@Path("x") @Schema(mo="2") long b);
@@ -547,7 +547,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Remote
-	public static interface G1 {
+	public interface G1 {
 		@RemoteOp(path="/{x}") String getX1(@Path("x") String b);
 	}
 
@@ -571,7 +571,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Remote
-	public static interface H1 {
+	public interface H1 {
 		@RemoteOp(path="/{x}") String getX1(@Path(name="x",serializer=MockWriterSerializer.X.class) String b);
 	}
 
@@ -598,7 +598,7 @@ public class Remote_PathAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote(path="/")
-	public static interface K1 {
+	public interface K1 {
 		@RemoteOp(path="/{a}/{b}/{c}/{e}/{g}/{h}") String getX1(@Request K1a rb);
 		@RemoteOp(path="/{a}/{b}/{c}/{e}/{g}/{h}") String getX2(@Request(serializer=MockWriterSerializer.X.class) K1a rb);
 	}
@@ -644,7 +644,7 @@ public class Remote_PathAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote(path="/")
-	public static interface K2 {
+	public interface K2 {
 		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}") String getX1(@Request K2a rb);
 		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}") String getX2(@Request(serializer=MockWriterSerializer.X.class) K2a rb);
 	}
@@ -682,7 +682,7 @@ public class Remote_PathAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote(path="/")
-	public static interface K3 {
+	public interface K3 {
 		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}/{e1}/{e2}/{e3}/{e4}") String getX1(@Request K3a rb);
 		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}/{e1}/{e2}/{e3}/{e4}") String getX2(@Request(serializer=MockWriterSerializer.X.class) K3a rb);
 	}
@@ -724,7 +724,7 @@ public class Remote_PathAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote(path="/")
-	public static interface K4 {
+	public interface K4 {
 		@RemoteOp(path="/{a}/{b}/{c}/{d}/{f}/{g}/{h}") String getX1(@Request K4a rb);
 		@RemoteOp(path="/{a}/{b}/{c}/{d}/{f}/{g}/{h}") String getX2(@Request(serializer=MockWriterSerializer.X.class) K4a rb);
 	}

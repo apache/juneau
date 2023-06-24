@@ -44,12 +44,12 @@ public class BeanFilterTest {
 		assertNull(bm.get("f3"));
 	}
 
-	public static interface A1 {
-		public String getF1();
+	public interface A1 {
+		String getF1();
 	}
 
-	public static interface A2 extends A1 {
-		public String getF2();
+	public interface A2 extends A1 {
+		String getF2();
 	}
 
 	public static class A3 implements A2 {

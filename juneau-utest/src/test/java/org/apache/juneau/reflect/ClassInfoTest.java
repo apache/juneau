@@ -198,10 +198,10 @@ public class ClassInfoTest {
 	// Parent classes and interfaces.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	static interface BI1 {}
-	static interface BI2 extends BI1 {}
-	static interface BI3 {}
-	static interface BI4 {}
+	interface BI1 {}
+	interface BI2 extends BI1 {}
+	interface BI3 {}
+	interface BI4 {}
 	static class BC1 implements BI1, BI2 {}
 	static class BC2 extends BC1 implements BI3 {}
 	static class BC3 extends BC2 {}
@@ -288,16 +288,16 @@ public class ClassInfoTest {
 	// Methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	static interface CI1 {
+	interface CI1 {
 		void i1a();
 		void i1b();
 	}
-	static interface CI2 extends CI1 {
+	interface CI2 extends CI1 {
 		void i2b();
 		void i2a();
 	}
-	static interface CI3 {}
-	static interface CI4 {}
+	interface CI3 {}
+	interface CI4 {}
 	static abstract class CC1 implements CI1, CI2 {
 		@Override
 		public void i1a() {}
@@ -575,10 +575,10 @@ public class ClassInfoTest {
 	// Annotations
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@A(1) static interface GI1 {}
-	@A(2) static interface GI2 extends GI1 {}
-	@A(3) static interface GI3 {}
-	@A(4) static interface GI4 {}
+	@A(1) interface GI1 {}
+	@A(2) interface GI2 extends GI1 {}
+	@A(3) interface GI3 {}
+	@A(4) interface GI4 {}
 	@A(5) static class G1 implements GI1, GI2 {}
 	@A(6) static class G2 extends G1 implements GI3 {}
 	@A(7) static class G3 extends G2 {}
@@ -683,10 +683,10 @@ public class ClassInfoTest {
 		check("@PA(10),@A(3)", g5.getAnnotationList());
 	}
 
-	@A(1) @AConfig(1) static interface GBI1 {}
-	@A(2) @AConfig(2) static interface GBI2 extends GBI1 {}
-	@A(3) @AConfig(3) static interface GBI3 {}
-	@A(4) @AConfig(4) static interface GBI4 {}
+	@A(1) @AConfig(1) interface GBI1 {}
+	@A(2) @AConfig(2) interface GBI2 extends GBI1 {}
+	@A(3) @AConfig(3) interface GBI3 {}
+	@A(4) @AConfig(4) interface GBI4 {}
 	@A(5) @AConfig(5) static class GB1 implements GBI1, GBI2 {}
 	@A(6) @AConfig(6) static class GB2 extends GB1 implements GBI3 {}
 	@A(7) @AConfig(7) static class GB3 extends GB2 {}

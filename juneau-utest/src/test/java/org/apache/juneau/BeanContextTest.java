@@ -27,9 +27,9 @@ public class BeanContextTest {
 	BeanContext bc = BeanContext.DEFAULT;
 	BeanSession bs = BeanContext.DEFAULT_SESSION;
 
-	public static interface A1 {
-		public int getF1();
-		public void setF1(int f1);
+	public interface A1 {
+		int getF1();
+		void setF1(int f1);
 	}
 
 	@Test

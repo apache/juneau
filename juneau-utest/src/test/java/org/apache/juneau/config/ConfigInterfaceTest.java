@@ -426,159 +426,159 @@ public class ConfigInterfaceTest {
 		assertObject(proxy.getEnum1d3dListMap().values().iterator().next().get(0)[0][0][0]).isType(TestEnum.class);
 	}
 
-	public static interface ConfigInterface {
+	public interface ConfigInterface {
 
 		// Various primitives
 
-		public String getString();
-		public void setString(String x);
+		String getString();
+		void setString(String x);
 
-		public int getInt();
-		public void setInt(int x);
+		int getInt();
+		void setInt(int x);
 
-		public Integer getInteger();
-		public void setInteger(Integer x);
+		Integer getInteger();
+		void setInteger(Integer x);
 
-		public boolean isBoolean();
-		public void setBoolean(boolean x);
+		boolean isBoolean();
+		void setBoolean(boolean x);
 
-		public Boolean getBooleanObject();
-		public void setBooleanObject(Boolean x);
+		Boolean getBooleanObject();
+		void setBooleanObject(Boolean x);
 
-		public float getFloat();
-		public void setFloat(float x);
+		float getFloat();
+		void setFloat(float x);
 
-		public Float getFloatObject();
-		public void setFloatObject(Float x);
+		Float getFloatObject();
+		void setFloatObject(Float x);
 
-		public int[][][] getInt3dArray();
-		public void setInt3dArray(int[][][] x);
+		int[][][] getInt3dArray();
+		void setInt3dArray(int[][][] x);
 
-		public Integer[][][] getInteger3dArray();
-		public void setInteger3dArray(Integer[][][] x);
+		Integer[][][] getInteger3dArray();
+		void setInteger3dArray(Integer[][][] x);
 
-		public String[][][] getString3dArray();
-		public void setString3dArray(String[][][] x);
+		String[][][] getString3dArray();
+		void setString3dArray(String[][][] x);
 
-		public List<Integer> getIntegerList();
-		public void setIntegerList(List<Integer> x);
+		List<Integer> getIntegerList();
+		void setIntegerList(List<Integer> x);
 
-		public List<List<List<Integer>>> getInteger3dList();
-		public void setInteger3dList(List<List<List<Integer>>> x);
+		List<List<List<Integer>>> getInteger3dList();
+		void setInteger3dList(List<List<List<Integer>>> x);
 
-		public List<Integer[][][]> getInteger1d3dList();
-		public void setInteger1d3dList(List<Integer[][][]> x);
+		List<Integer[][][]> getInteger1d3dList();
+		void setInteger1d3dList(List<Integer[][][]> x);
 
-		public List<int[][][]> getInt1d3dList();
-		public void setInt1d3dList(List<int[][][]> x);
+		List<int[][][]> getInt1d3dList();
+		void setInt1d3dList(List<int[][][]> x);
 
-		public List<String> getStringList();
-		public void setStringList(List<String> x);
+		List<String> getStringList();
+		void setStringList(List<String> x);
 
 		// Beans
 
-		public ABean getBean();
-		public void setBean(ABean x);
+		ABean getBean();
+		void setBean(ABean x);
 
-		public ABean[][][] getBean3dArray();
-		public void setBean3dArray(ABean[][][] x);
+		ABean[][][] getBean3dArray();
+		void setBean3dArray(ABean[][][] x);
 
-		public List<ABean> getBeanList();
-		public void setBeanList(List<ABean> x);
+		List<ABean> getBeanList();
+		void setBeanList(List<ABean> x);
 
-		public List<ABean[][][]> getBean1d3dList();
-		public void setBean1d3dList(List<ABean[][][]> x);
+		List<ABean[][][]> getBean1d3dList();
+		void setBean1d3dList(List<ABean[][][]> x);
 
-		public Map<String,ABean> getBeanMap();
-		public void setBeanMap(Map<String,ABean> x);
+		Map<String,ABean> getBeanMap();
+		void setBeanMap(Map<String,ABean> x);
 
-		public Map<String,List<ABean>> getBeanListMap();
-		public void setBeanListMap(Map<String,List<ABean>> x);
+		Map<String,List<ABean>> getBeanListMap();
+		void setBeanListMap(Map<String,List<ABean>> x);
 
-		public Map<String,List<ABean[][][]>> getBean1d3dListMap();
-		public void setBean1d3dListMap(Map<String,List<ABean[][][]>> x);
+		Map<String,List<ABean[][][]>> getBean1d3dListMap();
+		void setBean1d3dListMap(Map<String,List<ABean[][][]>> x);
 
-		public Map<Integer,List<ABean>> getBeanListMapIntegerKeys();
-		public void setBeanListMapIntegerKeys(Map<Integer,List<ABean>> x);
+		Map<Integer,List<ABean>> getBeanListMapIntegerKeys();
+		void setBeanListMapIntegerKeys(Map<Integer,List<ABean>> x);
 
 		// Typed beans
 
-		public TypedBean getTypedBean();
-		public void setTypedBean(TypedBean x);
+		TypedBean getTypedBean();
+		void setTypedBean(TypedBean x);
 
-		public TypedBean[][][] getTypedBean3dArray();
-		public void setTypedBean3dArray(TypedBean[][][] x);
+		TypedBean[][][] getTypedBean3dArray();
+		void setTypedBean3dArray(TypedBean[][][] x);
 
-		public List<TypedBean> getTypedBeanList();
-		public void setTypedBeanList(List<TypedBean> x);
+		List<TypedBean> getTypedBeanList();
+		void setTypedBeanList(List<TypedBean> x);
 
-		public List<TypedBean[][][]> getTypedBean1d3dList();
-		public void setTypedBean1d3dList(List<TypedBean[][][]> x);
+		List<TypedBean[][][]> getTypedBean1d3dList();
+		void setTypedBean1d3dList(List<TypedBean[][][]> x);
 
-		public Map<String,TypedBean> getTypedBeanMap();
-		public void setTypedBeanMap(Map<String,TypedBean> x);
+		Map<String,TypedBean> getTypedBeanMap();
+		void setTypedBeanMap(Map<String,TypedBean> x);
 
-		public Map<String,List<TypedBean>> getTypedBeanListMap();
-		public void setTypedBeanListMap(Map<String,List<TypedBean>> x);
+		Map<String,List<TypedBean>> getTypedBeanListMap();
+		void setTypedBeanListMap(Map<String,List<TypedBean>> x);
 
-		public Map<String,List<TypedBean[][][]>> getTypedBean1d3dListMap();
-		public void setTypedBean1d3dListMap(Map<String,List<TypedBean[][][]>> x);
+		Map<String,List<TypedBean[][][]>> getTypedBean1d3dListMap();
+		void setTypedBean1d3dListMap(Map<String,List<TypedBean[][][]>> x);
 
-		public Map<Integer,List<TypedBean>> getTypedBeanListMapIntegerKeys();
-		public void setTypedBeanListMapIntegerKeys(Map<Integer,List<TypedBean>> x);
+		Map<Integer,List<TypedBean>> getTypedBeanListMapIntegerKeys();
+		void setTypedBeanListMapIntegerKeys(Map<Integer,List<TypedBean>> x);
 
 		// Swapped POJOs
 
-		public SwappedObject getSwappedObject();
-		public void setSwappedObject(SwappedObject x);
+		SwappedObject getSwappedObject();
+		void setSwappedObject(SwappedObject x);
 
-		public SwappedObject[][][] getSwappedObject3dArray();
-		public void setSwappedObject3dArray(SwappedObject[][][] x);
+		SwappedObject[][][] getSwappedObject3dArray();
+		void setSwappedObject3dArray(SwappedObject[][][] x);
 
-		public Map<SwappedObject,SwappedObject> getSwappedObjectMap();
-		public void setSwappedObjectMap(Map<SwappedObject,SwappedObject> x);
+		Map<SwappedObject,SwappedObject> getSwappedObjectMap();
+		void setSwappedObjectMap(Map<SwappedObject,SwappedObject> x);
 
-		public Map<SwappedObject,SwappedObject[][][]> getSwappedObject3dMap();
-		public void setSwappedObject3dMap(Map<SwappedObject,SwappedObject[][][]> x);
+		Map<SwappedObject,SwappedObject[][][]> getSwappedObject3dMap();
+		void setSwappedObject3dMap(Map<SwappedObject,SwappedObject[][][]> x);
 
 		// Implicit swapped POJOs
 
-		public ImplicitSwappedObject getImplicitSwappedObject();
-		public void setImplicitSwappedObject(ImplicitSwappedObject x);
+		ImplicitSwappedObject getImplicitSwappedObject();
+		void setImplicitSwappedObject(ImplicitSwappedObject x);
 
-		public ImplicitSwappedObject[][][] getImplicitSwappedObject3dArray();
-		public void setImplicitSwappedObject3dArray(ImplicitSwappedObject[][][] x);
+		ImplicitSwappedObject[][][] getImplicitSwappedObject3dArray();
+		void setImplicitSwappedObject3dArray(ImplicitSwappedObject[][][] x);
 
-		public Map<ImplicitSwappedObject,ImplicitSwappedObject> getImplicitSwappedObjectMap();
-		public void setImplicitSwappedObjectMap(Map<ImplicitSwappedObject,ImplicitSwappedObject> x);
+		Map<ImplicitSwappedObject,ImplicitSwappedObject> getImplicitSwappedObjectMap();
+		void setImplicitSwappedObjectMap(Map<ImplicitSwappedObject,ImplicitSwappedObject> x);
 
-		public Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> getImplicitSwappedObject3dMap();
-		public void setImplicitSwappedObject3dMap(Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> x);
+		Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> getImplicitSwappedObject3dMap();
+		void setImplicitSwappedObject3dMap(Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> x);
 
 		// Enums
 
-		public TestEnum getEnum();
-		public void setEnum(TestEnum x);
+		TestEnum getEnum();
+		void setEnum(TestEnum x);
 
-		public TestEnum[][][] getEnum3d();
-		public void setEnum3d(TestEnum[][][] x);
+		TestEnum[][][] getEnum3d();
+		void setEnum3d(TestEnum[][][] x);
 
-		public List<TestEnum> getEnumList();
-		public void setEnumList(List<TestEnum> x);
+		List<TestEnum> getEnumList();
+		void setEnumList(List<TestEnum> x);
 
-		public List<List<List<TestEnum>>> getEnum3dList();
-		public void setEnum3dList(List<List<List<TestEnum>>> x);
+		List<List<List<TestEnum>>> getEnum3dList();
+		void setEnum3dList(List<List<List<TestEnum>>> x);
 
-		public List<TestEnum[][][]> getEnum1d3dList();
-		public void setEnum1d3dList(List<TestEnum[][][]> x);
+		List<TestEnum[][][]> getEnum1d3dList();
+		void setEnum1d3dList(List<TestEnum[][][]> x);
 
-		public Map<TestEnum,TestEnum> getEnumMap();
-		public void setEnumMap(Map<TestEnum,TestEnum> x);
+		Map<TestEnum,TestEnum> getEnumMap();
+		void setEnumMap(Map<TestEnum,TestEnum> x);
 
-		public Map<TestEnum,TestEnum[][][]> getEnum3dArrayMap();
-		public void setEnum3dArrayMap(Map<TestEnum,TestEnum[][][]> x);
+		Map<TestEnum,TestEnum[][][]> getEnum3dArrayMap();
+		void setEnum3dArrayMap(Map<TestEnum,TestEnum[][][]> x);
 
-		public Map<TestEnum,List<TestEnum[][][]>> getEnum1d3dListMap();
-		public void setEnum1d3dListMap(Map<TestEnum,List<TestEnum[][][]>> x);
+		Map<TestEnum,List<TestEnum[][][]>> getEnum1d3dListMap();
+		void setEnum1d3dListMap(Map<TestEnum,List<TestEnum[][][]>> x);
 	}
 }

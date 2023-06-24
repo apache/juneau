@@ -63,7 +63,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Remote
-	public static interface A1 {
+	public interface A1 {
 		@RemoteOp(path="a") String getX1(@Header("x") int b);
 		@RemoteOp(path="a") String getX2(@Header("x") float b);
 		@RemoteOp(path="a") String getX3(@Header("x") Bean b);
@@ -126,7 +126,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Remote
-	public static interface B1 {
+	public interface B1 {
 		@RemoteOp(path="/") String getX1(@Header("x") @Schema(df="foo") String b);
 		@RemoteOp(path="/") String getX2(@Header("x") @Schema(df="foo",aev=true) String b);
 		@RemoteOp(path="/") String getX3(@Header("x") @Schema(df="") String b);
@@ -160,7 +160,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Remote
-	public static interface C1 {
+	public interface C1 {
 		@RemoteOp(path="/a") String getX1(@Header("x") String...b);
 		@RemoteOp(path="/a") String getX2(@Header("x") @Schema(cf="csv") String...b);
 		@RemoteOp(path="/a") String getX3(@Header("x") @Schema(cf="ssv") String...b);
@@ -196,7 +196,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Remote
-	public static interface D1 {
+	public interface D1 {
 		@RemoteOp(path="/") String getX1(@Header("x") @Schema(min="1",max="10") int b);
 		@RemoteOp(path="/") String getX2(@Header("x") @Schema(min="1",max="10",emin=false,emax=false) int b);
 		@RemoteOp(path="/") String getX3(@Header("x") @Schema(min="1",max="10",emin=true,emax=true) int b);
@@ -446,7 +446,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Remote
-	public static interface E1 {
+	public interface E1 {
 		@RemoteOp(path="/") String getX1(@Header("x") @Schema(cf="pipes",mini=1,maxi=2) String...b);
 		@RemoteOp(path="/") String getX2(@Header("x") @Schema(items=@Items(cf="pipes",mini=1,maxi=2)) String[]...b);
 		@RemoteOp(path="/") String getX3(@Header("x") @Schema(cf="pipes",ui=false) String...b);
@@ -490,7 +490,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Remote
-	public static interface F1 {
+	public interface F1 {
 		@RemoteOp(path="/") String getX1(@Header("x") @Schema(minl=2,maxl=3) String b);
 		@RemoteOp(path="/") String getX2(@Header("x") @Schema(cf="pipes",items=@Items(minl=2,maxl=3)) String...b);
 		@RemoteOp(path="/") String getX3(@Header("x") @Schema(e={"foo"}) String b);
@@ -540,7 +540,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Remote
-	public static interface G1 {
+	public interface G1 {
 		@RemoteOp(path="/") String getX1(@Header("x") @Schema(mo="2") int b);
 		@RemoteOp(path="/") String getX2(@Header("x") @Schema(mo="2") short b);
 		@RemoteOp(path="/") String getX3(@Header("x") @Schema(mo="2") long b);
@@ -604,7 +604,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Remote
-	public static interface H1 {
+	public interface H1 {
 		@RemoteOp(path="/") String getX1(@Header("x") String b);
 		@RemoteOp(path="/") String getX2(@Header("x") @Schema(r=false) String b);
 		@RemoteOp(path="/") String getX3(@Header("x") @Schema(r=true) String b);
@@ -633,7 +633,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Remote
-	public static interface I1 {
+	public interface I1 {
 		@RemoteOp(path="/") String getX1(@Header("x") @Schema(aev=true) String b);
 		@RemoteOp(path="/") String getX2(@Header("x") @Schema(aev=true,sie=false) String b);
 		@RemoteOp(path="/") String getX3(@Header("x") @Schema(sie=true) String b);
@@ -661,7 +661,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Remote
-	public static interface J1 {
+	public interface J1 {
 		@RemoteOp(path="/") String getX1(@Header(name="x",serializer=MockWriterSerializer.X.class) String b);
 	}
 
@@ -688,7 +688,7 @@ public class Remote_HeaderAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote(path="/")
-	public static interface K1 {
+	public interface K1 {
 		@RemoteOp(path="/") String getX1(@Request K1a rb);
 		@RemoteOp(path="/") String getX2(@Request(serializer=MockWriterSerializer.X.class) K1a rb);
 	}
@@ -750,7 +750,7 @@ public class Remote_HeaderAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote(path="/")
-	public static interface K2 {
+	public interface K2 {
 		@RemoteOp(path="/") String getX1(@Request K2a rb);
 		@RemoteOp(path="/") String getX2(@Request(serializer=MockWriterSerializer.X.class) K2a rb);
 	}
@@ -788,7 +788,7 @@ public class Remote_HeaderAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote(path="/")
-	public static interface K3 {
+	public interface K3 {
 		@RemoteOp(path="/") String getX1(@Request K3a rb);
 		@RemoteOp(path="/") String getX2(@Request(serializer=MockWriterSerializer.X.class) K3a rb);
 	}
@@ -834,7 +834,7 @@ public class Remote_HeaderAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote(path="/")
-	public static interface K4 {
+	public interface K4 {
 		@RemoteOp(path="/") String getX1(@Request K4a rb);
 		@RemoteOp(path="/") String getX2(@Request(serializer=MockWriterSerializer.X.class) K4a rb);
 	}

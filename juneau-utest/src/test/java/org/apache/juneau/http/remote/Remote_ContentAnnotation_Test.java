@@ -127,7 +127,7 @@ public class Remote_ContentAnnotation_Test {
 	}
 
 	@Remote
-	public static interface A1 {
+	public interface A1 {
 		String postX1(@Content int b);
 		String postX2(@Content float b);
 		String postX3(@Content Bean b);
@@ -222,7 +222,7 @@ public class Remote_ContentAnnotation_Test {
 		}
 	}
 	@Remote
-	public static interface B1 {
+	public interface B1 {
 		String postX1(@Content int b);
 		String postX2(@Content float b);
 		String postX3(@Content Bean b);
@@ -303,7 +303,7 @@ public class Remote_ContentAnnotation_Test {
 		}
 	}
 	@Remote
-	public static interface C1 {
+	public interface C1 {
 		String postX1(@Content int b);
 		String postX2(@Content float b);
 		String postX3(@Content Bean b);

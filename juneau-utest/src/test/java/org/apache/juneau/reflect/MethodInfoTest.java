@@ -141,10 +141,10 @@ public class MethodInfoTest {
 	// Matching methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	public static interface B1 {
-		public int foo(int x);
-		public int foo(String x);
-		public int foo();
+	public interface B1 {
+		int foo(int x);
+		int foo(String x);
+		int foo();
 	}
 	public static class B2 {
 		public int foo(int x) { return 0; }
@@ -174,7 +174,7 @@ public class MethodInfoTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@A("C1")
-	public static interface C1 {
+	public interface C1 {
 		@A("a1") void a1();
 		@A("a2a") void a2();
 		@A("a3") void a3(CharSequence foo);
@@ -259,7 +259,7 @@ public class MethodInfoTest {
 	}
 
 	@A("C1") @AConfig("C1")
-	public static interface CB1 {
+	public interface CB1 {
 		@A("a1") @AConfig("a1") void a1();
 		@A("a2a") @AConfig("a2a") void a2();
 		@A("a3") @AConfig("a3") void a3(CharSequence foo);

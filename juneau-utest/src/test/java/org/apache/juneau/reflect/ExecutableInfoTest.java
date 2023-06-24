@@ -188,7 +188,7 @@ public class ExecutableInfoTest {
 		check("", b_c1.getParamTypes());
 	}
 
-	static enum B1 {
+	enum B1 {
 		FOO;
 	}
 

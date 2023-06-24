@@ -735,7 +735,7 @@ public class BeanMapTest {
 		assertEquals(HEnum.ONE, t7.getEnum2());
 	}
 
-	public static enum HEnum {
+	public enum HEnum {
 		ONE, TWO, THREE
 	}
 
@@ -1356,7 +1356,7 @@ public class BeanMapTest {
 		assertEquals("ONE", m2.get("1"));
 	}
 
-	public static enum TEnum {
+	public enum TEnum {
 		ONE, TWO, THREE;
 	}
 

@@ -57,7 +57,7 @@ public class Remote_Test {
 	}
 
 	@Remote
-	public static interface A1 {
+	public interface A1 {
 		String x1();
 		@RemoteOp(path="x1") String x1a();
 		@RemoteOp(path="/x1/") String x1b();
@@ -72,7 +72,7 @@ public class Remote_Test {
 	}
 
 	@Remote(path="A")
-	public static interface A2 {
+	public interface A2 {
 		String x2();
 		@RemoteOp(path="x2") String x2a();
 		@RemoteOp(path="/x2/") String x2b();
@@ -87,7 +87,7 @@ public class Remote_Test {
 	}
 
 	@Remote(path="/A/")
-	public static interface A3 {
+	public interface A3 {
 		String x2();
 		@RemoteOp(path="x2") String x2a();
 		@RemoteOp(path="/x2/") String x2b();
@@ -102,7 +102,7 @@ public class Remote_Test {
 	}
 
 	@Remote
-	public static interface A4 {
+	public interface A4 {
 		String x2();
 		@RemoteOp(path="x2") String x2a();
 		@RemoteOp(path="/x2/") String x2b();
@@ -117,7 +117,7 @@ public class Remote_Test {
 	}
 
 	@Remote(path="A/A")
-	public static interface A5 {
+	public interface A5 {
 		String x3();
 		@RemoteOp(path="x3") String x3a();
 		@RemoteOp(path="/x3/") String x3b();
@@ -132,7 +132,7 @@ public class Remote_Test {
 	}
 
 	@Remote(path="/A/A/")
-	public static interface A6 {
+	public interface A6 {
 		String x3();
 		@RemoteOp(path="x3") String x3a();
 		@RemoteOp(path="/x3/") String x3b();
@@ -147,7 +147,7 @@ public class Remote_Test {
 	}
 
 	@Remote(path="A")
-	public static interface A7 {
+	public interface A7 {
 		String x3();
 		@RemoteOp(path="x3") String x3a();
 		@RemoteOp(path="/x3/") String x3b();
@@ -162,7 +162,7 @@ public class Remote_Test {
 	}
 
 	@Remote(path="/A/")
-	public static interface A8 {
+	public interface A8 {
 		String x3();
 		@RemoteOp(path="x3") String x3a();
 		@RemoteOp(path="/x3/") String x3b();
@@ -189,7 +189,7 @@ public class Remote_Test {
 	}
 
 	@Remote
-	public static interface B1 {
+	public interface B1 {
 		String x1();
 		@RemoteOp(path="x1") String x1a();
 		@RemoteOp(path="/x1/") String x1b();
@@ -204,7 +204,7 @@ public class Remote_Test {
 	}
 
 	@Remote(path="http://localhost/B")
-	public static interface B2 {
+	public interface B2 {
 		String x1();
 		@RemoteOp(path="x1") String x1a();
 		@RemoteOp(path="/x1/") String x1b();
@@ -219,7 +219,7 @@ public class Remote_Test {
 	}
 
 	@Remote
-	public static interface B3 {
+	public interface B3 {
 		String x1();
 		@RemoteOp(path="http://localhost/B/x1") String x1a();
 		@RemoteOp(path="http://localhost/B/x1/") String x1b();
@@ -262,7 +262,7 @@ public class Remote_Test {
 	}
 
 	@Remote(path="/")
-	public static interface C1 {
+	public interface C1 {
 		String x1();
 		@RemoteOp("GET") String x2();
 		@RemoteOp("GET /x3") String x3x();
@@ -301,7 +301,7 @@ public class Remote_Test {
 	}
 
 	@Remote(path="/")
-	public static interface C3b {
+	public interface C3b {
 		String x1();
 		String getX2();
 		String x3();
@@ -346,7 +346,7 @@ public class Remote_Test {
 	}
 
 	@Remote
-	public static interface C4b {
+	public interface C4b {
 		String x1() throws C4c;
 		@RemoteOp(path="x1") Future<String> x1a() throws C4c;
 		@RemoteOp(path="x1") CompletableFuture<String> x1b() throws C4c;
@@ -398,17 +398,17 @@ public class Remote_Test {
 	}
 
 	@Remote
-	public static interface D1a {
+	public interface D1a {
 		@RemoteOp(path="/r202",returns=RemoteReturn.STATUS) int x1() throws AssertionError;
 		@RemoteOp(path="/r202",returns=RemoteReturn.STATUS) Integer x2() throws AssertionError;
 		@RemoteOp(path="/r202",returns=RemoteReturn.STATUS) boolean x3() throws AssertionError;
 		@RemoteOp(path="/r202",returns=RemoteReturn.STATUS) Boolean x4() throws AssertionError;
 		@RemoteOp(path="/r202",returns=RemoteReturn.STATUS) String x5() throws AssertionError;
-		@RemoteOp(path="/r400",returns=RemoteReturn.STATUS) public int x6() throws AssertionError;
-		@RemoteOp(path="/r400",returns=RemoteReturn.STATUS) public Integer x7() throws AssertionError;
-		@RemoteOp(path="/r400",returns=RemoteReturn.STATUS) public boolean x8() throws AssertionError;
-		@RemoteOp(path="/r400",returns=RemoteReturn.STATUS) public Boolean x9() throws AssertionError;
-		@RemoteOp(path="/r400",returns=RemoteReturn.STATUS) public String x10() throws AssertionError;
+		@RemoteOp(path="/r400",returns=RemoteReturn.STATUS) int x6() throws AssertionError;
+		@RemoteOp(path="/r400",returns=RemoteReturn.STATUS) Integer x7() throws AssertionError;
+		@RemoteOp(path="/r400",returns=RemoteReturn.STATUS) boolean x8() throws AssertionError;
+		@RemoteOp(path="/r400",returns=RemoteReturn.STATUS) Boolean x9() throws AssertionError;
+		@RemoteOp(path="/r400",returns=RemoteReturn.STATUS) String x10() throws AssertionError;
 	}
 
 	@Test
@@ -439,7 +439,7 @@ public class Remote_Test {
 	}
 
 	@Remote
-	public static interface D2a {
+	public interface D2a {
 		int x1() throws AssertionError;
 		int x2() throws AssertionError;
 		@RemoteOp(path="x1") Integer x1a() throws AssertionError;
@@ -554,7 +554,7 @@ public class Remote_Test {
 	}
 
 	@Remote(headers="Foo:bar",headerList=F1b.class,version="1.2.3")
-	public static interface F1a {
+	public interface F1a {
 		String[] getHeaders();
 	}
 
@@ -578,7 +578,7 @@ public class Remote_Test {
 	}
 
 	@Remote(headerList=F2b.class)
-	public static interface F2a {
+	public interface F2a {
 		String[] getHeaders();
 	}
 
@@ -602,7 +602,7 @@ public class Remote_Test {
 	public static class G extends BasicRestObject {}
 
 	@Remote
-	public static interface G1 {
+	public interface G1 {
 		@RemoteOp(method="FOO")
 		String[] getHeaders();
 	}
@@ -626,7 +626,7 @@ public class Remote_Test {
 	}
 
 	@Remote
-	public static interface H1 {
+	public interface H1 {
 		@RemoteOp(method="get") String a1();
 		@RemoteOp(method="put") String a2();
 		@RemoteOp(method="post") String a3();

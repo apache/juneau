@@ -143,7 +143,7 @@ public class RestClient_Config_BeanContext_Test {
 		assertEquals(2,x.getHeader("X").as(A3.class).get().f2);
 	}
 
-	public static interface A4a {
+	public interface A4a {
 		int getF3();
 		void setF3(int f3);
 	}
@@ -631,9 +631,9 @@ public class RestClient_Config_BeanContext_Test {
 		assertThrown(()->client().disableIgnoreUnknownNullBeanProperties().build().post("/echoBody",reader("{foo:'1',bar:null}")).run().cacheContent().assertContent().isContains("{foo:'1',bar:null}").getContent().as(A18.class)).asMessages().isAny(contains("Unknown property 'bar'"));
 	}
 
-	public static interface A19 {
-		public String getFoo();
-		public void setFoo(String foo);
+	public interface A19 {
+		String getFoo();
+		void setFoo(String foo);
 	}
 
 	@Test
@@ -730,7 +730,7 @@ public class RestClient_Config_BeanContext_Test {
 		assertEquals("1",x.foo);
 	}
 
-	public static interface A24a {
+	public interface A24a {
 		void setFoo(int foo);
 		int getFoo();
 	}
@@ -758,7 +758,7 @@ public class RestClient_Config_BeanContext_Test {
 		assertTrue(x instanceof A24b);
 	}
 
-	public static interface A25a {
+	public interface A25a {
 		void setFoo(int foo);
 		int getFoo();
 	}
@@ -991,7 +991,7 @@ public class RestClient_Config_BeanContext_Test {
 		assertEquals(1,x.foo);
 	}
 
-	public static enum A38a {
+	public enum A38a {
 		ONE(1),TWO(2);
 		private int value;
 		A38a(int value) {

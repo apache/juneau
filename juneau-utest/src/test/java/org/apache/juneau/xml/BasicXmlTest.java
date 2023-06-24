@@ -1635,9 +1635,9 @@ public class BasicXmlTest {
 		}
 	}
 
-	public static interface IA {
-		public String getA();
-		public void setA(String a);
+	public interface IA {
+		String getA();
+		void setA(String a);
 	}
 
 	public static abstract class AA implements IA {}

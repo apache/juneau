@@ -92,7 +92,7 @@ public class ResolvingJsonMapTest {
 		assertObject(m.get("foo")).asJson().is("{ONE:'ONE'}");
 	}
 
-	public static enum FooEnum {
+	public enum FooEnum {
 		ONE
 	}
 

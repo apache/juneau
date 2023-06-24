@@ -70,7 +70,7 @@ public class HtmlSchemaSerializerTest {
 		public boolean isCurrent;
 	}
 
-	public static enum StateEnum {
+	public enum StateEnum {
 		AL,PA,NC
 	}
 

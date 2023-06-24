@@ -70,7 +70,7 @@ public class Remote_RequestAnnotation_Test {
 	}
 
 	@Remote
-	public static interface A2 {
+	public interface A2 {
 		@RemoteOp(path="/{x}") String post(A1 req);
 	}
 
@@ -126,7 +126,7 @@ public class Remote_RequestAnnotation_Test {
 	}
 
 	@Remote
-	public static interface B3 {
+	public interface B3 {
 		@RemoteOp(path="/{x}") String post(B1 req);
 	}
 
@@ -182,7 +182,7 @@ public class Remote_RequestAnnotation_Test {
 	}
 
 	@Remote
-	public static interface C3 {
+	public interface C3 {
 		@RemoteOp(path="/{x}") String post(C1 req);
 	}
 
@@ -230,7 +230,7 @@ public class Remote_RequestAnnotation_Test {
 	}
 
 	@Remote
-	public static interface D2 {
+	public interface D2 {
 		@RemoteOp(path="/{x}") String post(@Request D1 req);
 	}
 
@@ -279,7 +279,7 @@ public class Remote_RequestAnnotation_Test {
 	}
 
 	@Remote
-	public static interface E2 {
+	public interface E2 {
 		@RemoteOp(path="/{x}") String post(E1 req);
 	}
 

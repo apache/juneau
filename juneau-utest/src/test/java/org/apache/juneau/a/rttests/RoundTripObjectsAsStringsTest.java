@@ -141,7 +141,7 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 
 	}
 
-	public static enum B1 {
+	public enum B1 {
 		X1(1),
 		X2(2),
 		X3(3);
@@ -152,7 +152,7 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 		}
 	}
 
-	public static enum B2 {
+	public enum B2 {
 		X1(1),
 		X2(2),
 		X3(3);

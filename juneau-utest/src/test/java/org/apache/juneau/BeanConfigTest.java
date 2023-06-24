@@ -540,7 +540,7 @@ public class BeanConfigTest {
 			fail("Failed reverse equality test of dynamic proxies beans: " + bm1 + " / " + bm2);
 	}
 
-	public static interface A {
+	public interface A {
 		String getA();
 
 		void setA(String a);

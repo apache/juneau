@@ -60,7 +60,7 @@ public class RrpcInterfaceTest {
 
 	public interface InterfaceProxy {
 
-		public static final String SWAP = "swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/";
+		String SWAP = "swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/";
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Test return types.

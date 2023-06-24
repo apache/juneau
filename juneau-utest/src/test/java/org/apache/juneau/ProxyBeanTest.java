@@ -31,7 +31,7 @@ public class ProxyBeanTest {
 	// testBasic
 	//====================================================================================================
 
-	public static interface A {
+	public interface A {
 		void setFoo(int foo);
 		int getFoo();
 	}

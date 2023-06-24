@@ -63,7 +63,7 @@ public class ObjectMerger_Test {
 		assertEquals("2", am.getA());
 	}
 
-	public static interface IA {
+	public interface IA {
 		String getA();
 		void setA(String a);
 	}

@@ -30,13 +30,10 @@ public class Rest_AnnotationInheritance_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(serializers=Json5Serializer.class, parsers=JsonParser.class, defaultAccept="text/json")
-	public static interface IA {
-		@RestPut
-		public String a(@Content String b);
-		@RestGet
-		public String b(@Query("foo") String b);
-		@RestGet
-		public String c(@Header("foo") String b);
+	public interface IA {
+		@RestPut String a(@Content String b);
+		@RestGet String b(@Query("foo") String b);
+		@RestGet String c(@Header("foo") String b);
 	}
 
 	public static class A implements IA {

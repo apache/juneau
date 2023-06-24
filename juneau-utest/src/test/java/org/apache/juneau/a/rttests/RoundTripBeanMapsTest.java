@@ -146,9 +146,9 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		assertEquals(1, b.getF6());
 	}
 
-	public static interface IBean {
-		public String getF1();
-		public void setF1(String f1);
+	public interface IBean {
+		String getF1();
+		void setF1(String f1);
 	}
 
 	public static abstract class ABean implements IBean {
@@ -802,7 +802,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		K t = K.create();
 		t = roundTrip(t, K.class);
 	}
-	public static enum KEnum { FOO, BAR, BAZ }
+	public enum KEnum { FOO, BAR, BAZ }
 
 	public static class K {
 		private KEnum a, b, c;

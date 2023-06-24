@@ -921,7 +921,7 @@ public class ConfigTest {
 		assertThrown(()->c.getSection("T").asInterface(ABean.class).get()).asMessage().is("Class 'org.apache.juneau.config.ConfigTest$ABean' passed to toInterface() is not an interface.");
 	}
 
-	public static interface AInterface {
+	public interface AInterface {
 		String getFoo();
 	}
 

@@ -78,7 +78,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Remote
-	public static interface A1 {
+	public interface A1 {
 		@RemotePost(path="a") String x1(@FormData("x") int b);
 		@RemotePost(path="a") String x2(@FormData("x") float b);
 		@RemotePost(path="a") String x3(@FormData("x") Bean b);
@@ -152,7 +152,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Remote
-	public static interface B1 {
+	public interface B1 {
 		@RemoteOp(path="/") String postX1(@FormData("x") @Schema(df="foo") String b);
 		@RemoteOp(path="/") String postX2(@FormData("x") @Schema(df="foo",aev=true) String b);
 		@RemoteOp(path="/") String postX3(@FormData("x") @Schema(df="") String b);
@@ -189,7 +189,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Remote
-	public static interface C1 {
+	public interface C1 {
 		@RemoteOp(path="/a") String postX1(@FormData("x") String...b);
 		@RemoteOp(path="/b") String postX2(@FormData("x") String...b);
 		@RemoteOp(path="/a") String postX3(@FormData("x") @Schema(cf="csv") String...b);
@@ -238,7 +238,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Remote
-	public static interface D1 {
+	public interface D1 {
 		@RemoteOp(path="/") String postX1(@FormData("x") @Schema(min="1",max="10") int b);
 		@RemoteOp(path="/") String postX2(@FormData("x") @Schema(min="1",max="10",emin=false,emax=false) int b);
 		@RemoteOp(path="/") String postX3(@FormData("x") @Schema(min="1",max="10",emin=true,emax=true) int b);
@@ -488,7 +488,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Remote
-	public static interface E1 {
+	public interface E1 {
 		@RemoteOp(path="/") String postX1(@FormData("x") @Schema(cf="pipes", mini=1,maxi=2) String...b);
 		@RemoteOp(path="/") String postX2(@FormData("x") @Schema(items=@Items(cf="pipes", mini=1,maxi=2)) String[]...b);
 		@RemoteOp(path="/") String postX3(@FormData("x") @Schema(cf="pipes",ui=false) String...b);
@@ -531,7 +531,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Remote
-	public static interface F1 {
+	public interface F1 {
 		@RemoteOp(path="/") String postX1(@FormData("x") @Schema(minl=2,maxl=3) String b);
 		@RemoteOp(path="/") String postX2(@FormData("x") @Schema(cf="pipes",items=@Items(minl=2,maxl=3)) String...b);
 		@RemoteOp(path="/") String postX3(@FormData("x") @Schema(e={"foo"}) String b);
@@ -580,7 +580,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Remote
-	public static interface G1 {
+	public interface G1 {
 		@RemoteOp(path="/") String postX1(@FormData("x") @Schema(mo="2") int b);
 		@RemoteOp(path="/") String postX2(@FormData("x") @Schema(mo="2") short b);
 		@RemoteOp(path="/") String postX3(@FormData("x") @Schema(mo="2") long b);
@@ -643,7 +643,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Remote
-	public static interface H1 {
+	public interface H1 {
 		@RemoteOp(path="/") String postX1(@FormData("x") String b);
 		@RemoteOp(path="/") String postX2(@FormData("x") @Schema(r=false) String b);
 		@RemoteOp(path="/") String postX3(@FormData("x") @Schema(r=true) String b);
@@ -671,7 +671,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Remote
-	public static interface I1 {
+	public interface I1 {
 		@RemoteOp(path="/") String postX1(@FormData("x") @Schema(aev=true) String b);
 		@RemoteOp(path="/") String postX2(@FormData("x") @Schema(aev=true,sie=false) String b);
 		@RemoteOp(path="/") String postX3(@FormData("x") @Schema(sie=true) String b);
@@ -698,7 +698,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Remote
-	public static interface J1 {
+	public interface J1 {
 		@RemoteOp(path="/") String postX1(@FormData(name="x",serializer=MockWriterSerializer.X.class) String b);
 	}
 
@@ -725,7 +725,7 @@ public class Remote_FormDataAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote(path="/")
-	public static interface K1 {
+	public interface K1 {
 		@RemoteOp(path="/") String postX1(@Request K1a rb);
 		@RemoteOp(path="/") String postX2(@Request(serializer=MockWriterSerializer.X.class) K1a rb);
 	}
@@ -787,7 +787,7 @@ public class Remote_FormDataAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote(path="/")
-	public static interface K2 {
+	public interface K2 {
 		@RemoteOp(path="/") String postX1(@Request K2a rb);
 		@RemoteOp(path="/") String postX2(@Request(serializer=MockWriterSerializer.X.class) K2a rb);
 	}
@@ -825,7 +825,7 @@ public class Remote_FormDataAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote(path="/")
-	public static interface K3 {
+	public interface K3 {
 		@RemoteOp(path="/") String postX1(@Request K3a rb);
 		@RemoteOp(path="/") String postX2(@Request(serializer=MockWriterSerializer.X.class) K3a rb);
 	}
@@ -867,7 +867,7 @@ public class Remote_FormDataAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote(path="/")
-	public static interface K4 {
+	public interface K4 {
 		String post(@Request C04_Bean rb);
 	}
 
@@ -889,7 +889,7 @@ public class Remote_FormDataAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote(path="/")
-	public static interface K5 {
+	public interface K5 {
 		String post(@Request K5a rb);
 	}
 
@@ -911,7 +911,7 @@ public class Remote_FormDataAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote(path="/")
-	public static interface K6 {
+	public interface K6 {
 		@RemoteOp(path="/") String postX1(@Request K6a rb);
 		@RemoteOp(path="/") String postX2(@Request(serializer=MockWriterSerializer.X.class) K6a rb);
 	}

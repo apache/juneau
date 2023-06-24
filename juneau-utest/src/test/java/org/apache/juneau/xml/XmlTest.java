@@ -234,7 +234,7 @@ public class XmlTest {
 	}
 
 	@Bean(typeName="foo")
-	public static interface C1 {}
+	public interface C1 {}
 	public static class C2 implements C1 {}
 	public static class C3 extends C2 {
 		public int f1 = 1;

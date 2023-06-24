@@ -1432,7 +1432,7 @@ public class ThirdPartyProxyTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote
-	public static interface ThirdPartyProxy {
+	public interface ThirdPartyProxy {
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Header tests
@@ -1767,7 +1767,7 @@ public class ThirdPartyProxyTest {
 			@Request ReqBeanPath1 rb
 		);
 
-		public static interface ReqBeanPath1 {
+		public interface ReqBeanPath1 {
 			@Path
 			int getA();
 
@@ -1809,7 +1809,7 @@ public class ThirdPartyProxyTest {
 			@Request ReqBeanPath3 rb
 		);
 
-		public static interface ReqBeanPath3 {
+		public interface ReqBeanPath3 {
 			@Path("a")
 			int getX();
 
@@ -1822,7 +1822,7 @@ public class ThirdPartyProxyTest {
 			@Request ReqBeanPath6 rb
 		);
 
-		public static interface ReqBeanPath6 {
+		public interface ReqBeanPath6 {
 			@Path("*")
 			Map<String,Object> getX();
 		}
@@ -1832,7 +1832,7 @@ public class ThirdPartyProxyTest {
 			@Request ReqBeanPath7 rb
 		);
 
-		public static interface ReqBeanPath7 {
+		public interface ReqBeanPath7 {
 			@Path("*")
 			ABean getX();
 		}
@@ -1846,7 +1846,7 @@ public class ThirdPartyProxyTest {
 			@Request ReqBeanQuery1 rb
 		);
 
-		public static interface ReqBeanQuery1 {
+		public interface ReqBeanQuery1 {
 			@Query
 			int getA();
 
@@ -1888,7 +1888,7 @@ public class ThirdPartyProxyTest {
 			@Request ReqBeanQuery3 rb
 		);
 
-		public static interface ReqBeanQuery3 {
+		public interface ReqBeanQuery3 {
 			@Query("a")
 			int getX();
 
@@ -1901,7 +1901,7 @@ public class ThirdPartyProxyTest {
 			@Request ReqBeanQuery6 rb
 		);
 
-		public static interface ReqBeanQuery6 {
+		public interface ReqBeanQuery6 {
 			@Query("*")
 			Map<String,Object> getX();
 		}
@@ -1911,7 +1911,7 @@ public class ThirdPartyProxyTest {
 			@Request ReqBeanQuery7 rb
 		);
 
-		public static interface ReqBeanQuery7 {
+		public interface ReqBeanQuery7 {
 			@Query("*")
 			ABean getX();
 		}
@@ -1925,7 +1925,7 @@ public class ThirdPartyProxyTest {
 			@Request ReqBeanFormData1 rb
 		);
 
-		public static interface ReqBeanFormData1 {
+		public interface ReqBeanFormData1 {
 			@FormData
 			int getA();
 
@@ -1967,7 +1967,7 @@ public class ThirdPartyProxyTest {
 			@Request ReqBeanFormData3 rb
 		);
 
-		public static interface ReqBeanFormData3 {
+		public interface ReqBeanFormData3 {
 			@FormData("a")
 			int getX();
 
@@ -1980,7 +1980,7 @@ public class ThirdPartyProxyTest {
 			@Request ReqBeanFormData6 rb
 		);
 
-		public static interface ReqBeanFormData6 {
+		public interface ReqBeanFormData6 {
 			@FormData("*")
 			Map<String,Object> getX();
 		}
@@ -1990,7 +1990,7 @@ public class ThirdPartyProxyTest {
 			@Request ReqBeanFormData7 rb
 		);
 
-		public static interface ReqBeanFormData7 {
+		public interface ReqBeanFormData7 {
 			@FormData("*")
 			ABean getX();
 		}
@@ -2004,7 +2004,7 @@ public class ThirdPartyProxyTest {
 			@Request ReqBeanHeader1 rb
 		);
 
-		public static interface ReqBeanHeader1 {
+		public interface ReqBeanHeader1 {
 			@Header
 			int getA();
 
@@ -2046,7 +2046,7 @@ public class ThirdPartyProxyTest {
 			@Request ReqBeanHeader3 rb
 		);
 
-		public static interface ReqBeanHeader3 {
+		public interface ReqBeanHeader3 {
 			@Header("a")
 			int getX();
 
@@ -2059,7 +2059,7 @@ public class ThirdPartyProxyTest {
 			@Request ReqBeanHeader6 rb
 		);
 
-		public static interface ReqBeanHeader6 {
+		public interface ReqBeanHeader6 {
 			@Header("*")
 			Map<String,Object> getX();
 		}
@@ -2069,7 +2069,7 @@ public class ThirdPartyProxyTest {
 			@Request ReqBeanHeader7 rb
 		);
 
-		public static interface ReqBeanHeader7 {
+		public interface ReqBeanHeader7 {
 			@Header("*")
 			ABean getX();
 		}

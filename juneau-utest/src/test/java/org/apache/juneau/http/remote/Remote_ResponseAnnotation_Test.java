@@ -68,7 +68,7 @@ public class Remote_ResponseAnnotation_Test {
 	}
 
 	@Remote
-	public static interface A1b {
+	public interface A1b {
 		@RemoteOp A1a get();
 	}
 
@@ -86,7 +86,7 @@ public class Remote_ResponseAnnotation_Test {
 	}
 
 	@Remote
-	public static interface A2b {
+	public interface A2b {
 		@RemoteOp A2a get();
 	}
 
@@ -110,7 +110,7 @@ public class Remote_ResponseAnnotation_Test {
 	}
 
 	@Remote
-	public static interface A3b {
+	public interface A3b {
 		@RemoteOp A3a get();
 	}
 

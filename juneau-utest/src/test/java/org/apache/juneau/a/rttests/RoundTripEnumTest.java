@@ -142,7 +142,7 @@ public class RoundTripEnumTest extends RoundTripTest {
 
 		private String val;
 
-		private BEnum(String val) {
+		BEnum(String val) {
 			this.val = val;
 		}
 

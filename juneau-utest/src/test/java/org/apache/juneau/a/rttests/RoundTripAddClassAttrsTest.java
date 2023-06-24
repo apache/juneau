@@ -128,9 +128,9 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		assertEquals("foo", t.getF1());
 	}
 
-	public static interface IA {
-		public String getF1();
-		public void setF1(String f1);
+	public interface IA {
+		String getF1();
+		void setF1(String f1);
 	}
 
 	public static abstract class AA implements IA {

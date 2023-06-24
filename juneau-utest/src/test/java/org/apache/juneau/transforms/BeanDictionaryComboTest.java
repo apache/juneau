@@ -746,7 +746,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 	}
 
 	@Bean(dictionary={A.class})
-	public static interface IA {}
+	public interface IA {}
 
 	@Bean(typeName="A")
 	public static class A implements IA {
@@ -759,7 +759,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 	}
 
 	@Bean(dictionary={B.class}, typePropertyName="z")
-	public static interface IB {}
+	public interface IB {}
 
 	@Bean(typeName="B")
 	public static class B implements IB {
