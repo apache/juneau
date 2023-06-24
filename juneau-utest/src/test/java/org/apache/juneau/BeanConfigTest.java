@@ -97,8 +97,8 @@ public class BeanConfigTest {
 			fail("java.lang.Class incorrectly desingated as bean type.");
 
 		Map m4 = bm1;
-		if (m4.keySet().size() != m2.size())
-			fail("Bean Adapter map's key set has wrong size: " + a + " / " + m4.keySet().size() + " / " + m2.size());
+		if (m4.size() != m2.size())
+			fail("Bean Adapter map's key set has wrong size: " + a + " / " + m4.size() + " / " + m2.size());
 
 		Iterator iter = m4.keySet().iterator();
 		Set temp = new HashSet();
