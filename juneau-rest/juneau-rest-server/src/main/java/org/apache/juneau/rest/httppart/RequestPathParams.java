@@ -394,7 +394,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	public Stream<RequestPathParam> getSorted() {
 		Comparator<RequestPathParam> x;
 		if (caseSensitive)
-			x = (x1,x2) -> x1.getName().compareTo(x2.getName());
+			x = Comparator.comparing(RequestPathParam::getName);
 		else
 			x = (x1,x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
 		return stream().sorted(x);

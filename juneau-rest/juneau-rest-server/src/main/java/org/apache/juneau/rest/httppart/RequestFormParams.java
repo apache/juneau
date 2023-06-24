@@ -436,7 +436,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	public Stream<RequestFormParam> getSorted() {
 		Comparator<RequestFormParam> x;
 		if (caseSensitive)
-			x = (x1,x2) -> x1.getName().compareTo(x2.getName());
+			x = Comparator.comparing(RequestFormParam::getName);
 		else
 			x = (x1,x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
 		return stream().sorted(x);

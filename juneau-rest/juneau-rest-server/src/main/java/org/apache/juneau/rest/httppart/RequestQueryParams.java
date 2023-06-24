@@ -410,7 +410,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	public Stream<RequestQueryParam> getSorted() {
 		Comparator<RequestQueryParam> x;
 		if (caseSensitive)
-			x = (x1,x2) -> x1.getName().compareTo(x2.getName());
+			x = Comparator.comparing(RequestQueryParam::getName);
 		else
 			x = (x1,x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
 		return stream().sorted(x);
