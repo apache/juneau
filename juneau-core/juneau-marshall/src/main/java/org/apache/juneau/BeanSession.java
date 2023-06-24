@@ -559,7 +559,7 @@ public class BeanSession extends ContextSession {
 						if (tc == Short.TYPE)
 							return (T)(Short.valueOf(b ? (short)1 : 0));
 						if (tc == Long.TYPE)
-							return (T)(Long.valueOf(b ? 1l : 0));
+							return (T)(Long.valueOf(b ? 1L : 0));
 						if (tc == Float.TYPE)
 							return (T)(Float.valueOf(b ? 1f : 0));
 						if (tc == Double.TYPE)
