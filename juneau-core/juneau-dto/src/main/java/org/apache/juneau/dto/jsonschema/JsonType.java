@@ -54,7 +54,7 @@ public enum JsonType {
 
 	private final String value;	// The serialized format of the enum.
 
-	private JsonType(String value) {
+	JsonType(String value) {
 		this.value = value;
 	}
 
