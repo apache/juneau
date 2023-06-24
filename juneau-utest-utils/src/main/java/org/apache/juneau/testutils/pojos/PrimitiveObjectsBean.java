@@ -105,7 +105,7 @@ public class PrimitiveObjectsBean {
 		poChar = 'a';
 		poShort = 2;
 		poInt = 3;
-		poLong = 4l;
+		poLong = 4L;
 		poFloat = 5f;
 		poDouble = 6d;
 		poNumber = 7;
@@ -118,7 +118,7 @@ public class PrimitiveObjectsBean {
 		poaChar = new Character[][]{{'a'},{'b'},null};
 		poaShort = new Short[][]{{1},{2},null};
 		poaInt = new Integer[][]{{1},{2},null};
-		poaLong = new Long[][]{{1l},{2l},null};
+		poaLong = new Long[][]{{1L},{2L},null};
 		poaFloat = new Float[][]{{1f},{2f},null};
 		poaDouble = new Double[][]{{1d},{2d},null};
 		poaNumber = new Number[][]{{1},{2},null};
@@ -131,7 +131,7 @@ public class PrimitiveObjectsBean {
 		poalChar = alist(new Character[]{'a'},null);
 		poalShort = alist(new Short[]{1},null);
 		poalInt = alist(new Integer[]{1},null);
-		poalLong = alist(new Long[]{1l},null);
+		poalLong = alist(new Long[]{1L},null);
 		poalFloat = alist(new Float[]{1f},null);
 		poalDouble = alist(new Double[]{1d},null);
 		poalNumber = alist(new Integer[]{1},null);
@@ -155,7 +155,7 @@ public class PrimitiveObjectsBean {
 		polInt.add(new Integer[]{1});
 		polInt.add(null);
 		polLong = new ArrayList<>();
-		polLong.add(new Long[]{1l});
+		polLong.add(new Long[]{1L});
 		polLong.add(null);
 		polFloat = new ArrayList<>();
 		polFloat.add(new Float[]{1f});
