@@ -32,7 +32,7 @@ public class CalendarUtils {
 	/**
 	 * Valid conversion formats.
 	 */
-	public static enum Format {
+	public enum Format {
 
 		/**
 		 * Transform to ISO8601 date-time-local strings.

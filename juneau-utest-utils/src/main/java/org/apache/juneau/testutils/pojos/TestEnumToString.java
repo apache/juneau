@@ -18,7 +18,7 @@ public enum TestEnumToString {
 
 	private String val;
 
-	private TestEnumToString(String val) {
+	TestEnumToString(String val) {
 		this.val = val;
 	}
 
