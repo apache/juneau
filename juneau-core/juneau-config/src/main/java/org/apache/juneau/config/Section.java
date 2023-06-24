@@ -204,30 +204,24 @@ public class Section {
 	 * @return The proxy interface.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> Optional<T> asInterface(final Class<T> c) {
-		assertArgNotNull("c", c);
+    public <T> Optional<T> asInterface(final Class<T> c) {
+        assertArgNotNull("c", c);
 
-		if (! c.isInterface())
-			throw new IllegalArgumentException("Class '"+c.getName()+"' passed to toInterface() is not an interface.");
+        if (!c.isInterface())
+            throw new IllegalArgumentException("Class '" + c.getName() + "' passed to toInterface() is not an interface.");
 
-		InvocationHandler h = new InvocationHandler() {
-
-			@Override
-			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-				BeanInfo bi = Introspector.getBeanInfo(c, null);
-				for (PropertyDescriptor pd : bi.getPropertyDescriptors()) {
-					Method rm = pd.getReadMethod(), wm = pd.getWriteMethod();
-					if (method.equals(rm))
-						return config.get(name + '/' + pd.getName()).as(rm.getGenericReturnType()).orElse(null);
-					if (method.equals(wm))
-						return config.set(name + '/' + pd.getName(), args[0]);
-				}
-				throw new UnsupportedOperationException("Unsupported interface method.  method='"+method+"'");
-			}
-		};
-
-		return optional((T)Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, h));
-	}
+        return optional((T) Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, (InvocationHandler) (proxy, method, args) -> {
+            BeanInfo bi = Introspector.getBeanInfo(c, null);
+            for (PropertyDescriptor pd : bi.getPropertyDescriptors()) {
+                Method rm = pd.getReadMethod(), wm = pd.getWriteMethod();
+                if (method.equals(rm))
+                    return config.get(name + '/' + pd.getName()).as(rm.getGenericReturnType()).orElse(null);
+                if (method.equals(wm))
+                    return config.set(name + '/' + pd.getName(), args[0]);
+            }
+            throw new UnsupportedOperationException("Unsupported interface method.  method='" + method + "'");
+        }));
+    }
 
 	/**
 	 * Copies the entries in this section to the specified bean by calling the public setters on that bean.

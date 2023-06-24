@@ -477,16 +477,11 @@ public class ConfigMap implements ConfigStoreListener {
 
 		if (synchronous) {
 			final CountDownLatch latch = new CountDownLatch(1);
-			ConfigStoreListener l = new ConfigStoreListener() {
-				@Override
-				public void onChange(String contents) {
-					latch.countDown();
-				}
-			};
-			store.register(name, l);
+			ConfigStoreListener listener = contents1 -> latch.countDown();
+			store.register(name, listener);
 			store.write(name, null, contents);
 			latch.await(30, TimeUnit.SECONDS);
-			store.unregister(name, l);
+			store.unregister(name, listener);
 		} else {
 			store.write(name, null, contents);
 		}
@@ -914,15 +909,12 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 
 		synchronized Import register(final ConfigEventListener listener) {
-			ConfigEventListener l2 = new ConfigEventListener() {
-				@Override
-				public void onConfigChange(ConfigEvents events) {
-					ConfigEvents events2 = new ConfigEvents();
-					events.stream().filter(x -> ! hasEntry(x.getSection(), x.getKey())).forEach(x -> events2.add(x));
-					if (events2.size() > 0)
-						listener.onConfigChange(events2);
-				}
-			};
+			ConfigEventListener l2 = events -> {
+            	ConfigEvents events2 = new ConfigEvents();
+            	events.stream().filter(x -> ! hasEntry(x.getSection(), x.getKey())).forEach(x -> events2.add(x));
+            	if (events2.size() > 0)
+            		listener.onConfigChange(events2);
+            };
 			listenerMap.put(listener, l2);
 			configMap.register(l2);
 			return this;
