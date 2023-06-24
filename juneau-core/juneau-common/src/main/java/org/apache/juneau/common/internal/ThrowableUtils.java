@@ -88,7 +88,7 @@ public class ThrowableUtils {
 	@SuppressWarnings("javadoc")
 	@FunctionalInterface
 	public interface SupplierWithThrowable<T> {
-		public T get() throws Throwable;
+		T get() throws Throwable;
 	}
 
 	/**

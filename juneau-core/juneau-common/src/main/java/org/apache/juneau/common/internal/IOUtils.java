@@ -393,7 +393,7 @@ public final class IOUtils {
 	 * @return The number of bytes written.
 	 * @throws IOException If thrown from output stream.
 	 */
-	public static final long pipe(byte[] in, OutputStream out, int maxBytes) throws IOException {
+	public static long pipe(byte[] in, OutputStream out, int maxBytes) throws IOException {
 		if (in == null || out == null)
 			return 0;
 		int length = (maxBytes < 0 || maxBytes > in.length ) ? in.length : maxBytes;
@@ -938,7 +938,7 @@ public final class IOUtils {
 		return null;
 	}
 
-	private static final byte[] byteBuffer(int maxBytes) {
+	private static byte[] byteBuffer(int maxBytes) {
 		if (BYTE_BUFFER_CACHE != null) {
 			byte[] x = BYTE_BUFFER_CACHE.get();
 			if (x == null) {
@@ -953,7 +953,7 @@ public final class IOUtils {
 		return new byte[buffSize(maxBytes)];
 	}
 
-	private static final char[] charBuffer(int maxChars) {
+	private static char[] charBuffer(int maxChars) {
 		if (CHAR_BUFFER_CACHE != null) {
 			char[] x = CHAR_BUFFER_CACHE.get();
 			if (x == null) {
@@ -968,7 +968,7 @@ public final class IOUtils {
 		return new char[buffSize(maxChars)];
 	}
 
-	private static final int buffSize(long max) {
+	private static int buffSize(long max) {
 		return (max > 0 && max < BUFF_SIZE) ? (int)max : BUFF_SIZE;
 	}
 }

@@ -1073,7 +1073,7 @@ public final class StringUtils {
 	 * @param num The number to convert to hex.
 	 * @return A <code><jk>char</jk>[2]</code> containing the specified characters.
 	 */
-	public static final char[] toHex2(int num) {
+	public static char[] toHex2(int num) {
 		if (num < 0 || num > 255)
 			throw new NumberFormatException("toHex2 can only be used on numbers between 0 and 255");
 		char[] n = new char[2];
@@ -1092,7 +1092,7 @@ public final class StringUtils {
 	 * @param b The number to convert to hex.
 	 * @return A <code><jk>char</jk>[2]</code> containing the specified characters.
 	 */
-	public static final String toHex(byte b) {
+	public static String toHex(byte b) {
 		char[] c = new char[2];
 		int v = b & 0xFF;
 		c[0] = hexArray[v >>> 4];
@@ -1106,7 +1106,7 @@ public final class StringUtils {
 	 * @param b The number to convert to hex.
 	 * @return A <code><jk>char</jk>[2]</code> containing the specified characters.
 	 */
-	public static final String toReadableBytes(byte[] b) {
+	public static String toReadableBytes(byte[] b) {
 		StringBuilder sb = new StringBuilder();
 		for (byte b2 : b)
 			sb.append((b2 < ' ' || b2 > 'z') ? String.format("[%02X]", b2) : (char)b2 + "   ");
@@ -1122,7 +1122,7 @@ public final class StringUtils {
 	 * @param num The number to convert to hex.
 	 * @return A <code><jk>char</jk>[4]</code> containing the specified characters.
 	 */
-	public static final char[] toHex4(int num) {
+	public static char[] toHex4(int num) {
 		char[] n = new char[4];
 		int a = num%16;
 		n[3] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
@@ -1141,7 +1141,7 @@ public final class StringUtils {
 	 * @param num The number to convert to hex.
 	 * @return A <code><jk>char</jk>[8]</code> containing the specified characters.
 	 */
-	public static final char[] toHex8(long num) {
+	public static char[] toHex8(long num) {
 		char[] n = new char[8];
 		long a = num%16;
 		n[7] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
@@ -2789,7 +2789,7 @@ public final class StringUtils {
 	 * @return The input stream converted to GZip.
 	 * @throws Exception Exception occurred.
 	 */
-	public static final byte[] compress(String contents) throws Exception {
+	public static byte[] compress(String contents) throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream(contents.length()>>1);
 		try (GZIPOutputStream gos = new GZIPOutputStream(baos)) {
 			gos.write(contents.getBytes());
@@ -2806,7 +2806,7 @@ public final class StringUtils {
 	 * @return The string.
 	 * @throws Exception Exception occurred.
 	 */
-	public static final String decompress(byte[] is) throws Exception {
+	public static String decompress(byte[] is) throws Exception {
 		return read(new GZIPInputStream(new ByteArrayInputStream(is)));
 	}
 
@@ -2816,7 +2816,7 @@ public final class StringUtils {
 	 * @param o The object to convert.
 	 * @return The specified object as a comma-delimited list.
 	 */
-	public static final String cdl(Object o) {
+	public static String cdl(Object o) {
 		if (o == null)
 			return null;
 		if (o.getClass().isArray()) {
