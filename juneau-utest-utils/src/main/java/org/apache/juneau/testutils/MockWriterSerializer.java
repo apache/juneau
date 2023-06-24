@@ -127,11 +127,6 @@ public class MockWriterSerializer extends WriterSerializer implements HttpPartSe
 
 	@Override
 	public HttpPartSerializerSession getPartSession() {
-		return new HttpPartSerializerSession() {
-			@Override
-			public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-				return partFunction.apply(type, schema, value);
-			}
-		};
+		return (type, schema, value) -> partFunction.apply(type, schema, value);
 	}
 }
