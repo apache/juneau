@@ -764,16 +764,9 @@ public class ResponseContent implements HttpEntity {
 	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
 	 * 	{@link Future Futures}.
 	 */
-	public <T> Future<T> asFuture(final Class<T> type) throws RestCallException {
-		return client.getExecutorService().submit(
-			new Callable<T>() {
-				@Override /* Callable */
-				public T call() throws Exception {
-					return as(type);
-				}
-			}
-		);
-	}
+    public <T> Future<T> asFuture(final Class<T> type) throws RestCallException {
+        return client.getExecutorService().submit(() -> as(type));
+    }
 
 	/**
 	 * Same as {@link #as(ClassMeta)} but allows you to run the call asynchronously.
@@ -797,16 +790,9 @@ public class ResponseContent implements HttpEntity {
 	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
 	 * 	{@link Future Futures}.
 	 */
-	public <T> Future<T> asFuture(final ClassMeta<T> type) throws RestCallException {
-		return client.getExecutorService().submit(
-			new Callable<T>() {
-				@Override /* Callable */
-				public T call() throws Exception {
-					return as(type);
-				}
-			}
-		);
-	}
+    public <T> Future<T> asFuture(final ClassMeta<T> type) throws RestCallException {
+        return client.getExecutorService().submit(() -> as(type));
+    }
 
 	/**
 	 * Same as {@link #as(Type,Type...)} but allows you to run the call asynchronously.
@@ -836,16 +822,9 @@ public class ResponseContent implements HttpEntity {
 	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
 	 * 	{@link Future Futures}.
 	 */
-	public <T> Future<T> asFuture(final Type type, final Type...args) throws RestCallException {
-		return client.getExecutorService().submit(
-			new Callable<T>() {
-				@Override /* Callable */
-				public T call() throws Exception {
-					return as(type, args);
-				}
-			}
-		);
-	}
+    public <T> Future<T> asFuture(final Type type, final Type... args) throws RestCallException {
+        return client.getExecutorService().submit(() -> as(type, args));
+    }
 
 	/**
 	 * Returns the contents of this body as a string.
@@ -894,16 +873,9 @@ public class ResponseContent implements HttpEntity {
 	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
 	 * 	{@link Future Futures}.
 	 */
-	public Future<String> asStringFuture() throws RestCallException {
-		return client.getExecutorService().submit(
-			new Callable<String>() {
-				@Override /* Callable */
-				public String call() throws Exception {
-					return asString();
-				}
-			}
-		);
-	}
+    public Future<String> asStringFuture() throws RestCallException {
+        return client.getExecutorService().submit(() -> asString());
+    }
 
 	/**
 	 * Same as {@link #asString()} but truncates the string to the specified length.

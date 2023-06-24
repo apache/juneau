@@ -7396,31 +7396,25 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 					RemoteOperationReturn ror = rom.getReturns();
 					if (ror.isFuture()) {
-						return getExecutorService().submit(new Callable<Object>() {
-							@Override
-							public Object call() throws Exception {
-								try {
-									return executeRemote(interfaceClass, rc, method, rom);
-								} catch (Exception e) {
-									throw e;
-								} catch (Throwable e) {
-									throw asRuntimeException(e);
-								}
-							}
-						});
+						return getExecutorService().submit(() -> {
+                        	try {
+                        		return executeRemote(interfaceClass, rc, method, rom);
+                        	} catch (Exception e) {
+                        		throw e;
+                        	} catch (Throwable e) {
+                        		throw asRuntimeException(e);
+                        	}
+                        });
 					} else if (ror.isCompletableFuture()) {
 						CompletableFuture<Object> cf = new CompletableFuture<>();
-						getExecutorService().submit(new Callable<Object>() {
-							@Override
-							public Object call() throws Exception {
-								try {
-									cf.complete(executeRemote(interfaceClass, rc, method, rom));
-								} catch (Throwable e) {
-									cf.completeExceptionally(e);
-								}
-								return null;
-							}
-						});
+						getExecutorService().submit(() -> {
+                        	try {
+                        		cf.complete(executeRemote(interfaceClass, rc, method, rom));
+                        	} catch (Throwable e) {
+                        		cf.completeExceptionally(e);
+                        	}
+                        	return null;
+                        });
 						return cf;
 					}
 

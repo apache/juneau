@@ -2025,16 +2025,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return The HTTP status code.
 	 * @throws RestCallException If the executor service was not defined.
 	 */
-	public Future<RestResponse> runFuture() throws RestCallException {
-		return client.getExecutorService().submit(
-			new Callable<RestResponse>() {
-				@Override /* Callable */
-				public RestResponse call() throws Exception {
-					return run();
-				}
-			}
-		);
-	}
+    public Future<RestResponse> runFuture() throws RestCallException {
+        return client.getExecutorService().submit(() -> run());
+    }
 
 	/**
 	 * Same as {@link #run()} but immediately calls {@link RestResponse#consume()} to clean up the response.
@@ -2085,12 +2078,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public Future<RestResponse> completeFuture() throws RestCallException {
 		return client.getExecutorService().submit(
-			new Callable<RestResponse>() {
-				@Override /* Callable */
-				public RestResponse call() throws Exception {
-					return complete();
-				}
-			}
+			() -> complete()
 		);
 	}
 

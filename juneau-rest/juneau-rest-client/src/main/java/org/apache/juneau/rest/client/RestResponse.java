@@ -438,22 +438,19 @@ public class RestResponse implements HttpResponse {
 		return (T)Proxy.newProxyInstance(
 			c.getClassLoader(),
 			new Class[] { c },
-			new InvocationHandler() {
-				@Override /* InvocationHandler */
-				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-					ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
-					HttpPartParserSession pp = getPartParserSession(pm.getParser().orElse(rc.getPartParser()));
-					HttpPartSchema schema = pm.getSchema();
-					HttpPartType pt = pm.getPartType();
-					String name = pm.getPartName().orElse(null);
-					ClassMeta<?> type = rc.getBeanContext().getClassMeta(method.getGenericReturnType());
-					if (pt == RESPONSE_HEADER)
-						return getHeader(name).parser(pp).schema(schema).as(type).orElse(null);
-					if (pt == RESPONSE_STATUS)
-						return getStatusCode();
-					return getContent().schema(schema).as(type);
-				}
-		});
+			(InvocationHandler) (proxy, method, args) -> {
+            	ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
+            	HttpPartParserSession pp = getPartParserSession(pm.getParser().orElse(rc.getPartParser()));
+            	HttpPartSchema schema = pm.getSchema();
+            	HttpPartType pt = pm.getPartType();
+            	String name = pm.getPartName().orElse(null);
+            	ClassMeta<?> type = rc.getBeanContext().getClassMeta(method.getGenericReturnType());
+            	if (pt == RESPONSE_HEADER)
+            		return getHeader(name).parser(pp).schema(schema).as(type).orElse(null);
+            	if (pt == RESPONSE_STATUS)
+            		return getStatusCode();
+            	return getContent().schema(schema).as(type);
+            });
 	}
 
 	/**
