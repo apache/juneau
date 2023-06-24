@@ -77,7 +77,7 @@ public class RestClient_Query_Test {
 
 	@Test
 	public void a07_query_String_Supplier_Schema() throws Exception {
-		String[] l1 = new String[]{"foo","bar"},l2 = new String[]{"bar","baz"};
+		String[] l1 = {"foo","bar"},l2 = {"bar","baz"};
 		TestSupplier s = TestSupplier.of(l1);
 		RestClient x = client().queryData(part("foo",s,T_ARRAY_PIPES)).build();
 		x.get("/query").queryData(part("bar",s,T_ARRAY_PIPES)).run().assertContent().asString().asUrlDecode().is("foo=foo|bar&bar=foo|bar");

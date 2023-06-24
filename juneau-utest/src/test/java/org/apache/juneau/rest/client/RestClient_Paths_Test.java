@@ -76,7 +76,7 @@ public class RestClient_Paths_Test {
 
 	@Test
 	public void a05_path_String_Object_Schema() throws Exception {
-		String[] a = new String[]{"foo","bar"};
+		String[] a = {"foo","bar"};
 		client().build().get("/echo/{x}").pathData(part("x",a,T_ARRAY_PIPES)).run().assertContent().isContains("GET /echo/foo%7Cbar HTTP/1.1");
 	}
 

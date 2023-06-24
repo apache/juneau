@@ -432,7 +432,7 @@ public class Html_Test {
 
 	@Test
 	public void e01_collectionOfBeansWithBpi() throws Exception {
-		E[] ee = new E[]{
+		E[] ee = {
 			new E(null, 2, 3),
 			new E(4, 5, 6)
 		};

@@ -69,7 +69,7 @@ public class ArrayUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testCombine() throws Exception {
-		String[] s1 = new String[]{"a"}, s2 = new String[]{"b"};
+		String[] s1 = {"a"}, s2 = {"b"};
 
 		assertObject(combine(s1, s2)).asJson().is("['a','b']");
 		assertObject(combine(s1)).asJson().is("['a']");

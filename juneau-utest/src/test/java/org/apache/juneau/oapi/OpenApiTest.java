@@ -642,7 +642,7 @@ public class OpenApiTest {
 
 	@Test
 	public void f03a_tArray_IntArray() throws Exception {
-		int[] in = new int[]{123};
+		int[] in = {123};
 		HttpPartSchema ps = T_ARRAY;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
@@ -708,7 +708,7 @@ public class OpenApiTest {
 
 	@Test
 	public void f05a_tArrayUon_IntArray() throws Exception {
-		int[] in = new int[]{123};
+		int[] in = {123};
 		HttpPartSchema ps = T_ARRAY_UON;
 		String s = serialize(ps, in);
 		assertEquals("@(123)", s);
@@ -741,7 +741,7 @@ public class OpenApiTest {
 
 	@Test
 	public void f06a_tArrayPipes_IntArray() throws Exception {
-		int[] in = new int[]{123};
+		int[] in = {123};
 		HttpPartSchema ps = T_ARRAY_PIPES;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
@@ -774,7 +774,7 @@ public class OpenApiTest {
 
 	@Test
 	public void f07a_tArraySsv_IntArray() throws Exception {
-		int[] in = new int[]{123};
+		int[] in = {123};
 		HttpPartSchema ps = T_ARRAY_SSV;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
@@ -807,7 +807,7 @@ public class OpenApiTest {
 
 	@Test
 	public void f08a_tArrayTsv_IntArray() throws Exception {
-		int[] in = new int[]{123};
+		int[] in = {123};
 		HttpPartSchema ps = T_ARRAY_TSV;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
@@ -840,7 +840,7 @@ public class OpenApiTest {
 
 	@Test
 	public void f09a_tArrayCsv_IntArray() throws Exception {
-		int[] in = new int[]{123};
+		int[] in = {123};
 		HttpPartSchema ps = T_ARRAY_CSV;
 		String s = serialize(ps, in);
 		assertEquals("123", s);

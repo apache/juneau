@@ -120,7 +120,7 @@ public class RestClient_Config_Serializer_Test {
 
 	@Test
 	public void a07_sortCollections() throws Exception {
-		String[] x = new String[]{"c","a","b"};
+		String[] x = {"c","a","b"};
 		client().sortCollections().build().post("/echoBody",x).run().assertContent("['a','b','c']");
 	}
 

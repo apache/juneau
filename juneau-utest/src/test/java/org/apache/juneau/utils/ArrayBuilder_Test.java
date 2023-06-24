@@ -23,7 +23,7 @@ public class ArrayBuilder_Test {
 
 	@Test
 	public void a01_basic() {
-		String[] empty = new String[0];
+		String[] empty = {};
 		ArrayBuilder<String> x = ArrayBuilder.of(String.class).filter(y -> y != null).size(2);
 		assertObject(x.orElse(empty)).asJson().is("[]");
 		x.add(null);

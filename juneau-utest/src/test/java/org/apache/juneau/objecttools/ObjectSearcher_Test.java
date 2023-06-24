@@ -78,7 +78,7 @@ public class ObjectSearcher_Test {
 
 	public static List<A> A_LIST = list(A.create("foo"), A.create("bar"), A.create("baz"), A.create("q ux"), A.create("qu'ux"), null, A.create(null));
 	public static Set<A> A_SET = set(A.create("foo"), A.create("bar"), A.create("baz"), A.create("q ux"), A.create("qu'ux"), null, A.create(null));
-	public static A[] A_ARRAY = new A[]{A.create("foo"), A.create("bar"), A.create("baz"), A.create("q ux"), A.create("qu'ux"), null, A.create(null)};
+	public static A[] A_ARRAY = {A.create("foo"), A.create("bar"), A.create("baz"), A.create("q ux"), A.create("qu'ux"), null, A.create(null)};
 
 	@Test
 	public void a01_stringSearch_singleWord() throws Exception {
@@ -259,7 +259,7 @@ public class ObjectSearcher_Test {
 		}
 	}
 
-	C[] INT_BEAN_ARRAY = new C[]{C.create(-2), C.create(-1), C.create(0), C.create(1), C.create(2), C.create(3)};
+	C[] INT_BEAN_ARRAY = {C.create(-2), C.create(-1), C.create(0), C.create(1), C.create(2), C.create(3)};
 
 	@Test
 	public void b01_intSearch_oneNumber() throws Exception {
@@ -398,7 +398,7 @@ public class ObjectSearcher_Test {
 
 	@Test
 	public void b25_intSearch_badSearches() throws Exception {
-		String[] ss = new String[] {
+		String[] ss = {
 			"f=x","(S01)",
 			"f=>x","(S02)",
 			"f=<x","(S03)",
@@ -687,7 +687,7 @@ public class ObjectSearcher_Test {
 	@Ignore /* TODO - Fix me */
 	public void c15_dateSearch_badSearches() throws Exception {
 		B[] in = B.create("2000-12-31");
-		String[] ss = new String[] {
+		String[] ss = {
 			"f=X","(S01)",
 			"f=>X","(S02)",
 			"f=<X","(S03)",
@@ -787,7 +787,7 @@ public class ObjectSearcher_Test {
 
 	@Test
 	public void d06_d2ArrayOfObjects() throws Exception {
-		Object[] in = new Object[]{
+		Object[] in = {
 			map("f","foo"),
 			map("f","bar"),
 			null,
@@ -927,7 +927,7 @@ public class ObjectSearcher_Test {
 
 	@Test
 	public void d16_d3ArrayOfArrayOfObjects() throws Exception {
-		Object[][] in = new Object[][]{
+		Object[][] in = {
 			new Object[]{map("f","foo")},
 			new Object[]{map("f","bar")},
 			new Object[]{null},
@@ -985,7 +985,7 @@ public class ObjectSearcher_Test {
 
 	@Test
 	public void d20_d3ArrayOfArrayOfBeans() throws Exception {
-		A[][] in = new A[][]{
+		A[][] in = {
 			new A[]{A.create("foo")},
 			new A[]{A.create("bar")},
 			new A[]{null},

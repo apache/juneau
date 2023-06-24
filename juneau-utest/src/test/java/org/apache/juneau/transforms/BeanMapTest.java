@@ -41,7 +41,7 @@ public class BeanMapTest {
 	}
 
 	public static class A {
-		public byte[] f1 = new byte[]{1,2,3};
+		public byte[] f1 = {1,2,3};
 		public byte[] f3 = null;
 	}
 

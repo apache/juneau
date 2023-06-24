@@ -45,7 +45,7 @@ public class RoundTripToJsonMapsTest extends RoundTripTest {
 		assertEquals("a", a.f1);
 		assertEquals(2, a.f2);
 
-		A[] aa = new A[]{a};
+		A[] aa = {a};
 		aa = roundTrip(aa, A[].class);
 		assertEquals(1, aa.length);
 		assertEquals("a", aa[0].f1);

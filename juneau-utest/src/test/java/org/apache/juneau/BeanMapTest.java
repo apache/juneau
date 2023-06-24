@@ -509,7 +509,7 @@ public class BeanMapTest {
 		public List<D2> lb1;
 		public List<D2> lb2 = new ArrayList<>();
 		public D2[] ab1;
-		public D2[] ab2 = new D2[0];
+		public D2[] ab2 = {};
 	}
 
 	@Bean(typeName="D2")
@@ -566,7 +566,7 @@ public class BeanMapTest {
 		public List<D2c> lb1;
 		public List<D2c> lb2 = new ArrayList<>();
 		public D2c[] ab1;
-		public D2c[] ab2 = new D2c[0];
+		public D2c[] ab2 = {};
 	}
 
 	public static class D2c {

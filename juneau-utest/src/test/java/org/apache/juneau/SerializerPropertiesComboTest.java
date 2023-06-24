@@ -447,11 +447,11 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 
 	@Bean(typeName="T11")
 	public static class T11 {
-		public T11a[] f = new T11a[]{new T11a()};
+		public T11a[] f = {new T11a()};
 	}
 
 	@Bean(typeName="T11a")
 	public static class T11a {
-		public String[] f = new String[]{" foo "};
+		public String[] f = {" foo "};
 	}
 }

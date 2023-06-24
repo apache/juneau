@@ -1566,7 +1566,7 @@ public class RrpcInterfaceTest {
 	@Test
 	public void m01_setMultiParamsInts() {
 		int x1 = 1;
-		int[][][] x2 = new int[][][]{{{1,2},null},null};
+		int[][][] x2 = {{{1,2},null},null};
 		int[][][] x2n = null;
 		List<int[][][]> x3 = alist(x2,null);
 		List<int[][][]> x3n = null;
@@ -1577,7 +1577,7 @@ public class RrpcInterfaceTest {
 	public void m02_setMultiParamsInteger() {
 		Integer x1 = 1;
 		Integer x1n = null;
-		Integer[][][] x2 = new Integer[][][]{{{1,null},null},null};
+		Integer[][][] x2 = {{{1,null},null},null};
 		Integer[][][] x2n = null;
 		List<Integer[][][]> x3 = alist(x2,null);
 		List<Integer[][][]> x3n = null;
@@ -1587,7 +1587,7 @@ public class RrpcInterfaceTest {
 	@Test
 	public void m03_setMultiParamsFloat() {
 		float x1 = 1;
-		float[][][] x2 = new float[][][]{{{1,2},null},null};
+		float[][][] x2 = {{{1,2},null},null};
 		float[][][] x2n = null;
 		List<float[][][]> x3 = alist(x2,null);
 		List<float[][][]> x3n = null;
@@ -1598,7 +1598,7 @@ public class RrpcInterfaceTest {
 	public void m04_setMultiParamsFloatObject() {
 		Float x1 = 1f;
 		Float x1n = null;
-		Float[][][] x2 = new Float[][][]{{{1f,null},null},null};
+		Float[][][] x2 = {{{1f,null},null},null};
 		Float[][][] x2n = null;
 		List<Float[][][]> x3 = alist(x2,null);
 		List<Float[][][]> x3n = null;
@@ -1608,7 +1608,7 @@ public class RrpcInterfaceTest {
 	@Test
 	public void m05_setMultiParamsString() {
 		String x1 = "foo";
-		String[][][] x2 = new String[][][]{{{"foo",null},null},null};
+		String[][][] x2 = {{{"foo",null},null},null};
 		String[][][] x2n = null;
 		List<String[][][]> x3 = alist(x2,null);
 		List<String[][][]> x3n = null;
@@ -1618,7 +1618,7 @@ public class RrpcInterfaceTest {
 	@Test
 	public void m06_setMultiParamsBean() {
 		ABean x1 = ABean.get();
-		ABean[][][] x2 = new ABean[][][]{{{ABean.get(),null},null},null};
+		ABean[][][] x2 = {{{ABean.get(),null},null},null};
 		ABean[][][] x2n = null;
 		List<ABean[][][]> x3 = alist(x2,null);
 		List<ABean[][][]> x3n = null;
@@ -1632,7 +1632,7 @@ public class RrpcInterfaceTest {
 	@Test
 	public void m07_setMultiParamsSwappedObject() {
 		SwappedObject x1 = new SwappedObject();
-		SwappedObject[][][] x2 = new SwappedObject[][][]{{{new SwappedObject(),null},null},null};
+		SwappedObject[][][] x2 = {{{new SwappedObject(),null},null},null};
 		SwappedObject[][][] x2n = null;
 		List<SwappedObject[][][]> x3 = alist(x2,null);
 		List<SwappedObject[][][]> x3n = null;
@@ -1646,7 +1646,7 @@ public class RrpcInterfaceTest {
 	@Test
 	public void m08_setMultiParamsImplicitSwappedObject() {
 		ImplicitSwappedObject x1 = new ImplicitSwappedObject();
-		ImplicitSwappedObject[][][] x2 = new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null};
+		ImplicitSwappedObject[][][] x2 = {{{new ImplicitSwappedObject(),null},null},null};
 		ImplicitSwappedObject[][][] x2n = null;
 		List<ImplicitSwappedObject[][][]> x3 = alist(x2,null);
 		List<ImplicitSwappedObject[][][]> x3n = null;
@@ -1660,7 +1660,7 @@ public class RrpcInterfaceTest {
 	@Test
 	public void m09_setMultiParamsEnum() {
 		TestEnum x1 = TestEnum.TWO;
-		TestEnum[][][] x2 = new TestEnum[][][]{{{TestEnum.TWO,null},null},null};
+		TestEnum[][][] x2 = {{{TestEnum.TWO,null},null},null};
 		TestEnum[][][] x2n = null;
 		List<TestEnum[][][]> x3 = alist(x2,null);
 		List<TestEnum[][][]> x3n = null;

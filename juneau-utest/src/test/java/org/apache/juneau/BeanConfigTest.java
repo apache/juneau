@@ -830,8 +830,8 @@ public class BeanConfigTest {
 	public class D {
 		public int[] f1;
 		private int[] f2;
-		public int[] f3 = new int[]{1,2,3};
-		private int[] f4 = new int[]{1,2,3};
+		public int[] f3 = {1,2,3};
+		private int[] f4 = {1,2,3};
 		public int[] getF2() {return f2;}
 		public void setF2(int[] f2) {this.f2 = f2;}
 		public int[] getF4() {return f4;}
