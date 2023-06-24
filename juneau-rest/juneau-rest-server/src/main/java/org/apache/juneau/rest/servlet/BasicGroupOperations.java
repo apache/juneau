@@ -51,6 +51,5 @@ public interface BasicGroupOperations {
 	 * @param req The HTTP request.
 	 * @return The bean containing links to the child resources.
 	 */
-	@RestGet(path="/", summary="Navigation page")
-	public ChildResourceDescriptions getChildren(RestRequest req);
+	@RestGet(path="/", summary="Navigation page") ChildResourceDescriptions getChildren(RestRequest req);
 }

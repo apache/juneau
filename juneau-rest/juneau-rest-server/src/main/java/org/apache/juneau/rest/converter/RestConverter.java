@@ -88,5 +88,5 @@ public interface RestConverter {
 	 * @throws BasicHttpException Thrown if any errors occur during conversion.
 	 * @throws SerializeException Generic serialization error occurred.
 	 */
-	public Object convert(RestRequest req, Object res) throws BasicHttpException, SerializeException;
+	Object convert(RestRequest req, Object res) throws BasicHttpException, SerializeException;
 }

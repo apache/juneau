@@ -82,17 +82,17 @@ public interface ResponseProcessor {
 	/**
 	 * Return code indicating to proceed to the next response processor in the chain.
 	 */
-	public static final int NEXT = 0;
+	int NEXT = 0;
 
 	/**
 	 * Return code indicating that processing is complete and to exit the chain.
 	 */
-	public static final int FINISHED = 1;
+	int FINISHED = 1;
 
 	/**
 	 * Return code indicating to restart processing the chain from the beginning.
 	 */
-	public static final int RESTART = 2;
+	int RESTART = 2;
 
 	/**
 	 * Process this response if possible.

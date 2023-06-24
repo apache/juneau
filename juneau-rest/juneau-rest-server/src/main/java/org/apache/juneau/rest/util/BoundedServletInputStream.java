@@ -62,7 +62,7 @@ public final class BoundedServletInputStream extends ServletInputStream {
 	}
 
 	@Override /* InputStream */
-	public final int read() throws IOException {
+	public int read() throws IOException {
 		decrement();
 		return is.read();
 	}
@@ -113,7 +113,7 @@ public final class BoundedServletInputStream extends ServletInputStream {
 	}
 
 	@Override /* InputStream */
-	public final void close() throws IOException {
+	public void close() throws IOException {
 		is.close();
 	}
 

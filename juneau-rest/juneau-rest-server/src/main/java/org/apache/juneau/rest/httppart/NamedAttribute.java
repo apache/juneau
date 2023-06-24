@@ -26,12 +26,12 @@ public interface NamedAttribute {
 	 *
 	 * @return The attribute name.
 	 */
-	public String getName();
+	String getName();
 
 	/**
 	 * Returns the attribute value.
 	 *
 	 * @return The attribute value.
 	 */
-	public Object getValue();
+	Object getValue();
 }

@@ -52,7 +52,7 @@ public interface SwaggerProvider {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BeanStore beanStore) {
+	static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 
@@ -224,6 +224,6 @@ public interface SwaggerProvider {
 	 * @return A new {@link Swagger} DTO object.
 	 * @throws Exception If an error occurred producing the Swagger.
 	 */
-	public Swagger getSwagger(RestContext context, Locale locale) throws Exception;
+	Swagger getSwagger(RestContext context, Locale locale) throws Exception;
 
 }

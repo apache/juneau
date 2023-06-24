@@ -114,8 +114,7 @@ public interface BasicRestOperations {
 			// This is a per-media-type swap that only applies to text/html requests.
 			SwaggerUI.class
 		}
-	)
-	public Swagger getSwagger(RestRequest req);
+	) Swagger getSwagger(RestRequest req);
 
 	/**
 	 * [GET /htdocs/*] - Retrieve static file.
@@ -128,8 +127,7 @@ public interface BasicRestOperations {
 		path="/htdocs/*",
 		summary="Static files",
 		description="Static file retrieval."
-	)
-	public HttpResource getHtdoc(@Path String path, Locale locale);
+	) HttpResource getHtdoc(@Path String path, Locale locale);
 
 	/**
 	 * [GET favicon.ico] - Retrieve favorites icon image.
@@ -140,8 +138,7 @@ public interface BasicRestOperations {
 		path="favicon.ico",
 		summary="Favorites icon.",
 		description="Favorites icon."
-	)
-	public HttpResource getFavIcon();
+	) HttpResource getFavIcon();
 
 	/**
 	 * [* /error] - Error occurred.
@@ -156,8 +153,7 @@ public interface BasicRestOperations {
 			"(such as failed authentication) and will set appropriate response parameters ",
 			"(such as an WWW-Authenticate response header)."
 		}
-	)
-	public void error();
+	) void error();
 
 	/**
 	 * [GET /stats] - Timing statistics.
@@ -183,6 +179,5 @@ public interface BasicRestOperations {
 		},
 		// Never show aside contents of page inherited from class.
 		aside="NONE"
-	)
-	public RestContextStats getStats(RestRequest req);
+	) RestContextStats getStats(RestRequest req);
 }

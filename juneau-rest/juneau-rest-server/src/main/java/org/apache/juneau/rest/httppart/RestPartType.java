@@ -57,7 +57,7 @@ public enum RestPartType {
 
 	private final String value;
 
-	private RestPartType(String value) {
+	RestPartType(String value) {
 		this.value = value;
 	}
 

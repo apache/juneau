@@ -48,7 +48,7 @@ public interface StaticFiles extends FileFinder {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BeanStore beanStore) {
+	static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 
@@ -232,5 +232,5 @@ public interface StaticFiles extends FileFinder {
 	 * @param locale Optional locale.
 	 * @return The resource, or <jk>null</jk> if not found.
 	 */
-	public Optional<HttpResource> resolve(String path, Locale locale);
+	Optional<HttpResource> resolve(String path, Locale locale);
 }

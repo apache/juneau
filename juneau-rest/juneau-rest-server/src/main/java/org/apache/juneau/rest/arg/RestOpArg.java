@@ -57,5 +57,5 @@ public interface RestOpArg {
 	 * @return The resolved object.
 	 * @throws Exception Generic error occurred.
 	 */
-	public Object resolve(RestOpSession opSession) throws Exception;
+	Object resolve(RestOpSession opSession) throws Exception;
 }
