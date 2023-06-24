@@ -36,21 +36,18 @@ public class HtmlDocConfigAnnotation_Test {
 		assertEquals(expected, TO_STRING.apply(o));
 	}
 
-	private static final Function<Object,String> TO_STRING = new Function<>() {
-		@Override
-		public String apply(Object t) {
-			if (t.getClass().isArray())
-				return apply(ArrayUtils.toList(t, Object.class));
-			if (t instanceof Collection)
-				return ((Collection<?>)t)
-					.stream()
-					.map(TO_STRING)
-					.collect(Collectors.joining(","));
-			if (t instanceof HtmlDocTemplate)
-				return ((HtmlDocTemplate)t).getClass().getSimpleName();
-			return t.toString();
-		}
-	};
+	private static final Function<Object,String> TO_STRING = t -> {
+    	if (t.getClass().isArray())
+    		return HtmlDocConfigAnnotation_Test.TO_STRING.apply(ArrayUtils.toList(t, Object.class));
+    	if (t instanceof Collection)
+    		return ((Collection<?>)t)
+    			.stream()
+    			.map(HtmlDocConfigAnnotation_Test.TO_STRING)
+    			.collect(Collectors.joining(","));
+    	if (t instanceof HtmlDocTemplate)
+    		return ((HtmlDocTemplate)t).getClass().getSimpleName();
+    	return t.toString();
+    };
 
 	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 

@@ -169,26 +169,10 @@ public class RestClient_Test {
 
 	@Test
 	public void c01_httpClient_interceptors() throws Exception {
-		HttpRequestInterceptor x1 = new HttpRequestInterceptor() {
-			@Override public void process(HttpRequest request, HttpContext context) throws HttpException,IOException {
-				request.setHeader("A1","1");
-			}
-		};
-		HttpResponseInterceptor x2 = new HttpResponseInterceptor() {
-			@Override public void process(HttpResponse response, HttpContext context) throws HttpException,IOException {
-				response.setHeader("B1","1");
-			}
-		};
-		HttpRequestInterceptor x3 = new HttpRequestInterceptor() {
-			@Override public void process(HttpRequest request, HttpContext context) throws HttpException,IOException {
-				request.setHeader("A2","2");
-			}
-		};
-		HttpResponseInterceptor x4 = new HttpResponseInterceptor() {
-			@Override public void process(HttpResponse response, HttpContext context) throws HttpException,IOException {
-				response.setHeader("B2","2");
-			}
-		};
+		HttpRequestInterceptor x1 = (request, context) -> request.setHeader("A1","1");
+		HttpResponseInterceptor x2 = (response, context) -> response.setHeader("B1","1");
+		HttpRequestInterceptor x3 = (request, context) -> request.setHeader("A2","2");
+		HttpResponseInterceptor x4 = (response, context) -> response.setHeader("B2","2");
 
 		client().addInterceptorFirst(x1).addInterceptorLast(x2).addInterceptorFirst(x3).addInterceptorLast(x4)
 			.build().get("/echo").run().assertContent().isContains("A1: 1","A2: 2").assertHeader("B1").is("1").assertHeader("B2").is("2");

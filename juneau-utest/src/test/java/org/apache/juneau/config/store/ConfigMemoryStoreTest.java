@@ -53,20 +53,14 @@ public class ConfigMemoryStoreTest {
 		MemoryStore fs = MemoryStore.create().build();
 
 		final CountDownLatch latch = new CountDownLatch(2);
-		fs.register("X", new ConfigStoreListener() {
-			@Override
-			public void onChange(String contents) {
-				if ("xxx".equals(contents))
-					latch.countDown();
-			}
-		});
-		fs.register("Y", new ConfigStoreListener() {
-			@Override
-			public void onChange(String contents) {
-				if ("yyy".equals(contents))
-					latch.countDown();
-			}
-		});
+		fs.register("X", contents -> {
+        	if ("xxx".equals(contents))
+        		latch.countDown();
+        });
+		fs.register("Y", contents -> {
+        	if ("yyy".equals(contents))
+        		latch.countDown();
+        });
 
 		fs.update("X", "xxx");
 		fs.update("Y", "yyy");

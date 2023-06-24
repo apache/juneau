@@ -460,12 +460,7 @@ public class Remote_Test {
 	public static class E implements BasicJson5Config {
 		@RestOp(method=HttpMethod.RRPC)
 		public E1 proxy() {
-			return new E1() {
-				@Override
-				public String echo(String body) {
-					return body;
-				}
-			};
+			return body -> body;
 		}
 	}
 
@@ -506,12 +501,9 @@ public class Remote_Test {
 	public static class E5 implements BasicJson5Config {
 		@RestOp(method=HttpMethod.RRPC)
 		public E5b proxy() {
-			return new E5b() {
-				@Override
-				public String echo(String body) throws E5a {
-					throw new E5a("foobar");
-				}
-			};
+			return body -> {
+            	throw new E5a("foobar");
+            };
 		}
 	}
 
@@ -536,12 +528,9 @@ public class Remote_Test {
 	public static class E6 implements BasicJson5Config {
 		@RestOp(method=HttpMethod.RRPC)
 		public E5b proxy() {
-			return new E5b() {
-				@Override
-				public String echo(String body) throws E5a {
-					throw new AssertionError("foobar");
-				}
-			};
+			return body -> {
+            	throw new AssertionError("foobar");
+            };
 		}
 	}
 

@@ -1256,25 +1256,20 @@ public class ConfigTest {
 
 		final Set<String> changes = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
 
-		cf.addListener(
-			new ConfigEventListener() {
-				@Override
-				public void onConfigChange(ConfigEvents events) {
-					for (ConfigEvent ce : events) {
-						String key = (ce.getSection().equals("") ? "" : (ce.getSection() + '/')) + ce.getKey();
-						if (ce.getType() == ConfigEventType.REMOVE_ENTRY) {
-							changes.add("REMOVE_ENTRY("+key+")");
-						} else if (ce.getType() == ConfigEventType.REMOVE_SECTION) {
-							changes.add("REMOVE_SECTION("+ce.getSection()+")");
-						} else if (ce.getType() == ConfigEventType.SET_SECTION) {
-							changes.add("SET_SECTION("+ce.getSection()+")");
-						} else {
-							changes.add(key + '=' + ce.getValue());
-						}
-					}
-				}
-			}
-		);
+        cf.addListener(events -> {
+            for (ConfigEvent ce : events) {
+                String key = (ce.getSection().equals("") ? "" : (ce.getSection() + '/')) + ce.getKey();
+                if (ce.getType() == ConfigEventType.REMOVE_ENTRY) {
+                    changes.add("REMOVE_ENTRY(" + key + ")");
+                } else if (ce.getType() == ConfigEventType.REMOVE_SECTION) {
+                    changes.add("REMOVE_SECTION(" + ce.getSection() + ")");
+                } else if (ce.getType() == ConfigEventType.SET_SECTION) {
+                    changes.add("SET_SECTION(" + ce.getSection() + ")");
+                } else {
+                    changes.add(key + '=' + ce.getValue());
+                }
+            }
+        });
 
 		// No changes until save.
 		changes.clear();

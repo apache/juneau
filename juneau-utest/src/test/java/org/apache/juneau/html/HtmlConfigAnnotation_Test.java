@@ -15,6 +15,7 @@ package org.apache.juneau.html;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.Objects;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -33,14 +34,8 @@ public class HtmlConfigAnnotation_Test {
 		assertEquals(expected, TO_STRING.apply(o));
 	}
 
-	private static final Function<Object,String> TO_STRING = new Function<>() {
-		@Override
-		public String apply(Object t) {
-			if (t == null)
-				return null;
-			return t.toString();
-		}
-	};
+	private static final Function<Object,String> TO_STRING = t -> Objects.toString(t, null);
+    
 
 	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 

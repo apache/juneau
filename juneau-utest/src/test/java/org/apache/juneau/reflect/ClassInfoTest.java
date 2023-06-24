@@ -90,38 +90,35 @@ public class ClassInfoTest {
 		}
 	}
 
-	private static final Function<Object,String> TO_STRING = new Function<>() {
-		@Override
-		public String apply(Object t) {
-			if (t == null)
-				return null;
-			if (t instanceof Class)
-				return ((Class<?>)t).getSimpleName();
-			if (t instanceof Package)
-				return ((Package)t).getName();
-			if (t instanceof ClassInfo)
-				return ((ClassInfo)t).getSimpleName();
-			if (t instanceof MethodInfo)
-				return ((MethodInfo)t).getDeclaringClass().getSimpleName() + '.' + ((MethodInfo)t).getShortName();
-			if (t instanceof ConstructorInfo)
-				return ((ConstructorInfo)t).getShortName();
-			if (t instanceof FieldInfo)
-				return ((FieldInfo)t).getDeclaringClass().getSimpleName() + '.' + ((FieldInfo)t).getName();
-			if (t instanceof A)
-				return "@A(" + ((A)t).value() + ")";
-			if (t instanceof PA)
-				return "@PA(" + ((PA)t).value() + ")";
-			if (t instanceof AConfig)
-				return "@AConfig(" + ((AConfig)t).value() + ")";
-			if (t instanceof AnnotationInfo)
-				return apply(((AnnotationInfo<?>)t).inner());
-			if (t instanceof AnnotationList) {
-				AnnotationList al = (AnnotationList)t;
-				return al.toString();
-			}
-			return t.toString();
-		}
-	};
+	private static final Function<Object,String> TO_STRING = t -> {
+    	if (t == null)
+    		return null;
+    	if (t instanceof Class)
+    		return ((Class<?>)t).getSimpleName();
+    	if (t instanceof Package)
+    		return ((Package)t).getName();
+    	if (t instanceof ClassInfo)
+    		return ((ClassInfo)t).getSimpleName();
+    	if (t instanceof MethodInfo)
+    		return ((MethodInfo)t).getDeclaringClass().getSimpleName() + '.' + ((MethodInfo)t).getShortName();
+    	if (t instanceof ConstructorInfo)
+    		return ((ConstructorInfo)t).getShortName();
+    	if (t instanceof FieldInfo)
+    		return ((FieldInfo)t).getDeclaringClass().getSimpleName() + '.' + ((FieldInfo)t).getName();
+    	if (t instanceof A)
+    		return "@A(" + ((A)t).value() + ")";
+    	if (t instanceof PA)
+    		return "@PA(" + ((PA)t).value() + ")";
+    	if (t instanceof AConfig)
+    		return "@AConfig(" + ((AConfig)t).value() + ")";
+    	if (t instanceof AnnotationInfo)
+    		return ClassInfoTest.TO_STRING.apply(((AnnotationInfo<?>)t).inner());
+    	if (t instanceof AnnotationList) {
+    		AnnotationList al = (AnnotationList)t;
+    		return al.toString();
+    	}
+    	return t.toString();
+    };
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Initialization

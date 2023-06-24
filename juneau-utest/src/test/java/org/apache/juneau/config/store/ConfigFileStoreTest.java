@@ -145,34 +145,22 @@ public class ConfigFileStoreTest {
 		FileStore fs = FileStore.create().directory(DIR).enableWatcher().watcherSensitivity(WatcherSensitivity.HIGH).build();
 
 		final CountDownLatch latch = new CountDownLatch(4);
-		fs.register("X.cfg", new ConfigStoreListener() {
-			@Override
-			public void onChange(String contents) {
-				if ("xxx".equals(contents))
-					latch.countDown();
-			}
-		});
-		fs.register("X", new ConfigStoreListener() {
-			@Override
-			public void onChange(String contents) {
-				if ("xxx".equals(contents))
-					latch.countDown();
-			}
-		});
-		fs.register("Y.cfg", new ConfigStoreListener() {
-			@Override
-			public void onChange(String contents) {
-				if ("yyy".equals(contents))
-					latch.countDown();
-			}
-		});
-		fs.register("Y", new ConfigStoreListener() {
-			@Override
-			public void onChange(String contents) {
-				if ("yyy".equals(contents))
-					latch.countDown();
-			}
-		});
+		fs.register("X.cfg", contents -> {
+        	if ("xxx".equals(contents))
+        		latch.countDown();
+        });
+		fs.register("X", contents -> {
+        	if ("xxx".equals(contents))
+        		latch.countDown();
+        });
+		fs.register("Y.cfg", contents -> {
+        	if ("yyy".equals(contents))
+        		latch.countDown();
+        });
+		fs.register("Y", contents -> {
+        	if ("yyy".equals(contents))
+        		latch.countDown();
+        });
 		pipe(reader("zzz"), new File(DIR, "Z.ini"));
 		pipe(reader("xxx"), new File(DIR, "X.cfg"));
 		pipe(reader("yyy"), new File(DIR, "Y.cfg"));
@@ -185,34 +173,22 @@ public class ConfigFileStoreTest {
 		FileStore fs = FileStore.create().directory(DIR).build();
 
 		final CountDownLatch latch = new CountDownLatch(4);
-		fs.register("X.cfg", new ConfigStoreListener() {
-			@Override
-			public void onChange(String contents) {
-				if ("xxx".equals(contents))
-					latch.countDown();
-			}
-		});
-		fs.register("X", new ConfigStoreListener() {
-			@Override
-			public void onChange(String contents) {
-				if ("xxx".equals(contents))
-					latch.countDown();
-			}
-		});
-		fs.register("Y.cfg", new ConfigStoreListener() {
-			@Override
-			public void onChange(String contents) {
-				if ("yyy".equals(contents))
-					latch.countDown();
-			}
-		});
-		fs.register("Y", new ConfigStoreListener() {
-			@Override
-			public void onChange(String contents) {
-				if ("yyy".equals(contents))
-					latch.countDown();
-			}
-		});
+		fs.register("X.cfg", contents -> {
+        	if ("xxx".equals(contents))
+        		latch.countDown();
+        });
+		fs.register("X", contents -> {
+        	if ("xxx".equals(contents))
+        		latch.countDown();
+        });
+		fs.register("Y.cfg", contents -> {
+        	if ("yyy".equals(contents))
+        		latch.countDown();
+        });
+		fs.register("Y", contents -> {
+        	if ("yyy".equals(contents))
+        		latch.countDown();
+        });
 
 		fs.update("X.cfg", "xxx");
 		fs.update("Y.cfg", "yyy");

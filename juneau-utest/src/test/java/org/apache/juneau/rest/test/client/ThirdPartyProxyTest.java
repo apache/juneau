@@ -1147,31 +1147,16 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void ga06_reqBeanPath6() throws Exception {
-		String r = proxy.reqBeanPath6(
-			new ReqBeanPath6() {
-				@Override
-				public Map<String,Object> getX() {
-					return map("a",1,"b","foo");
-				}
-
-			}
-		);
-		assertEquals("OK", r);
-	}
+    public void ga06_reqBeanPath6() throws Exception {
+        String r = proxy.reqBeanPath6(() -> map("a", 1, "b", "foo"));
+        assertEquals("OK", r);
+    }
 
 	@Test
-	public void ga07_reqBeanPath7() throws Exception {
-		String r = proxy.reqBeanPath7(
-			new ReqBeanPath7() {
-				@Override
-				public ABean getX() {
-					return ABean.get();
-				}
-			}
-		);
-		assertEquals("OK", r);
-	}
+    public void ga07_reqBeanPath7() throws Exception {
+        String r = proxy.reqBeanPath7(() -> ABean.get());
+        assertEquals("OK", r);
+    }
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Request tests - Query
@@ -1230,13 +1215,7 @@ public class ThirdPartyProxyTest {
 	@Test
 	public void gb06_reqBeanQuery6() throws Exception {
 		String r = proxy.reqBeanQuery6(
-			new ReqBeanQuery6() {
-				@Override
-				public Map<String,Object> getX() {
-					return map("a",1,"b","foo");
-				}
-
-			}
+			() -> map("a",1,"b","foo")
 		);
 		assertEquals("OK", r);
 	}
@@ -1244,12 +1223,7 @@ public class ThirdPartyProxyTest {
 	@Test
 	public void gb07_reqBeanQuery7() throws Exception {
 		String r = proxy.reqBeanQuery7(
-			new ReqBeanQuery7() {
-				@Override
-				public ABean getX() {
-					return ABean.get();
-				}
-			}
+			() -> ABean.get()
 		);
 		assertEquals("OK", r);
 	}
@@ -1311,13 +1285,7 @@ public class ThirdPartyProxyTest {
 	@Test
 	public void gd06_reqBeanFormData6() throws Exception {
 		String r = proxy.reqBeanFormData6(
-			new ReqBeanFormData6() {
-				@Override
-				public Map<String,Object> getX() {
-					return map("a",1,"b","foo");
-				}
-
-			}
+			() -> map("a",1,"b","foo")
 		);
 		assertEquals("OK", r);
 	}
@@ -1325,12 +1293,7 @@ public class ThirdPartyProxyTest {
 	@Test
 	public void gd07_reqBeanFormData7() throws Exception {
 		String r = proxy.reqBeanFormData7(
-			new ReqBeanFormData7() {
-				@Override
-				public ABean getX() {
-					return ABean.get();
-				}
-			}
+			() -> ABean.get()
 		);
 		assertEquals("OK", r);
 	}
@@ -1392,13 +1355,7 @@ public class ThirdPartyProxyTest {
 	@Test
 	public void gf06_reqBeanHeader6() throws Exception {
 		String r = proxy.reqBeanHeader6(
-			new ReqBeanHeader6() {
-				@Override
-				public Map<String,Object> getX() {
-					return map("a",1,"b","foo");
-				}
-
-			}
+			() -> map("a",1,"b","foo")
 		);
 		assertEquals("OK", r);
 	}
@@ -1406,12 +1363,7 @@ public class ThirdPartyProxyTest {
 	@Test
 	public void gf07_reqBeanHeader7() throws Exception {
 		String r = proxy.reqBeanHeader7(
-			new ReqBeanHeader7() {
-				@Override
-				public ABean getX() {
-					return ABean.get();
-				}
-			}
+			() -> ABean.get()
 		);
 		assertEquals("OK", r);
 	}

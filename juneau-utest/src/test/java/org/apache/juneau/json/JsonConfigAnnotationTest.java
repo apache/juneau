@@ -33,12 +33,7 @@ public class JsonConfigAnnotationTest {
 		assertEquals(expected, TO_STRING.apply(o));
 	}
 
-	private static final Function<Object,String> TO_STRING = new Function<>() {
-		@Override
-		public String apply(Object t) {
-			return t.toString();
-		}
-	};
+	private static final Function<Object,String> TO_STRING = t -> t.toString();
 
 	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 

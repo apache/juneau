@@ -49,22 +49,19 @@ public class FieldInfoTest {
 		assertEquals(expected, TO_STRING.apply(o));
 	}
 
-	private static final Function<Object,String> TO_STRING = new Function<>() {
-		@Override
-		public String apply(Object t) {
-			if (t == null)
-				return null;
-			if (t instanceof A)
-				return "@A(" + ((A)t).value() + ")";
-			if (t instanceof ClassInfo)
-				return ((ClassInfo)t).getSimpleName();
-			if (t instanceof FieldInfo)
-				return ((FieldInfo)t).getName();
-			if (t instanceof Field)
-				return ((Field)t).getName();
-			return t.toString();
-		}
-	};
+	private static final Function<Object,String> TO_STRING = t -> {
+    	if (t == null)
+    		return null;
+    	if (t instanceof A)
+    		return "@A(" + ((A)t).value() + ")";
+    	if (t instanceof ClassInfo)
+    		return ((ClassInfo)t).getSimpleName();
+    	if (t instanceof FieldInfo)
+    		return ((FieldInfo)t).getName();
+    	if (t instanceof Field)
+    		return ((Field)t).getName();
+    	return t.toString();
+    };
 
 	private static FieldInfo off(Class<?> c, String name) {
 		try {

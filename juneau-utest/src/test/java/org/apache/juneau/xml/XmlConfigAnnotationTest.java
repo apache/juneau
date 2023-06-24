@@ -38,22 +38,19 @@ public class XmlConfigAnnotationTest {
 		assertEquals(expected, TO_STRING.apply(o));
 	}
 
-	private static final Function<Object,String> TO_STRING = new Function<>() {
-		@Override
-		public String apply(Object t) {
-			if (t == null)
-				return null;
-			if (t.getClass().isArray())
-				return apply(ArrayUtils.toList(t, Object.class));
-			if (t instanceof AA)
-				return "AA";
-			if (t instanceof AB)
-				return "AB";
-			if (t instanceof AC)
-				return "AC";
-			return t.toString();
-		}
-	};
+	private static final Function<Object,String> TO_STRING = t -> {
+    	if (t == null)
+    		return null;
+    	if (t.getClass().isArray())
+    		return XmlConfigAnnotationTest.TO_STRING.apply(ArrayUtils.toList(t, Object.class));
+    	if (t instanceof AA)
+    		return "AA";
+    	if (t instanceof AB)
+    		return "AB";
+    	if (t instanceof AC)
+    		return "AC";
+    	return t.toString();
+    };
 
 	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 

@@ -128,12 +128,9 @@ public class RestClient_Headers_Test {
 	public static class A12 implements HttpPartSerializer {
 		@Override
 		public HttpPartSerializerSession getPartSession() {
-			return new HttpPartSerializerSession() {
-				@Override
-				public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-					throw new SerializeException("bad");
-				}
-			};
+			return (type, schema, value) -> {
+            	throw new SerializeException("bad");
+            };
 		}
 	}
 

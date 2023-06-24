@@ -70,20 +70,14 @@ public class ConfigClasspathStoreTest {
 		ClasspathStore fs = ClasspathStore.create().build();
 
 		final CountDownLatch latch = new CountDownLatch(2);
-		fs.register("X.cfg", new ConfigStoreListener() {
-			@Override
-			public void onChange(String contents) {
-				if ("xxx".equals(contents))
-					latch.countDown();
-			}
-		});
-		fs.register("Y.cfg", new ConfigStoreListener() {
-			@Override
-			public void onChange(String contents) {
-				if ("yyy".equals(contents))
-					latch.countDown();
-			}
-		});
+		fs.register("X.cfg", contents -> {
+        	if ("xxx".equals(contents))
+        		latch.countDown();
+        });
+		fs.register("Y.cfg", contents -> {
+        	if ("yyy".equals(contents))
+        		latch.countDown();
+        });
 
 		fs.update("X.cfg", "xxx");
 		fs.update("Y.cfg", "yyy");

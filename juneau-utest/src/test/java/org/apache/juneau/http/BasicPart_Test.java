@@ -68,18 +68,8 @@ public class BasicPart_Test {
 		SerializedHeader x4 = serializedHeader("X4","4");
 		Map.Entry<String,Object> x5 = map("X5",(Object)"5").entrySet().iterator().next();
 		org.apache.http.message.BasicNameValuePair x6 = new org.apache.http.message.BasicNameValuePair("X6","6");
-		NameValuePairable x7 = new NameValuePairable() {
-			@Override
-			public NameValuePair asNameValuePair() {
-				return part("X7","7");
-			}
-		};
-		Headerable x8 = new Headerable() {
-			@Override
-			public Header asHeader() {
-				return header("X8","8");
-			}
-		};
+		NameValuePairable x7 = () -> part("X7","7");
+		Headerable x8 = () -> header("X8","8");
 
 		assertObject(BasicPart.cast(x1)).isType(NameValuePair.class).asJson().is("'X1=1'");
 		assertObject(BasicPart.cast(x2)).isType(NameValuePair.class).asJson().is("'X2=2'");
