@@ -83,7 +83,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final String[] EMPTY_ARRAY = new String[0];
+	private static final String[] EMPTY_ARRAY = {};
 
 	/** Default serializer, all default settings. */
 	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer(create());

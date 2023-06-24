@@ -214,7 +214,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	private final XmlSerializer ctx;
 	private Namespace
 		defaultNamespace;
-	private Namespace[] namespaces = new Namespace[0];
+	private Namespace[] namespaces = {};
 
 	/**
 	 * Constructor.

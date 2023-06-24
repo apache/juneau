@@ -135,7 +135,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final Namespace[] EMPTY_NAMESPACE_ARRAY = new Namespace[0];
+	private static final Namespace[] EMPTY_NAMESPACE_ARRAY = {};
 
 	/** Default serializer without namespaces. */
 	public static final XmlSerializer DEFAULT = new XmlSerializer(create());

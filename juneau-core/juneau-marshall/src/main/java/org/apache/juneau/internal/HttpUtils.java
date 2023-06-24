@@ -23,8 +23,8 @@ import java.lang.reflect.*;
 public class HttpUtils {
 
 	private static final String[]
-		LC_METHODS = new String[]{"get","put","post","delete","options","head","connect","trace","patch"},
-		UC_METHODS = new String[]{"GET","PUT","POST","DELETE","OPTIONS","HEAD","CONNECT","TRACE","PATCH"};
+		LC_METHODS = {"get","put","post","delete","options","head","connect","trace","patch"},
+		UC_METHODS = {"GET","PUT","POST","DELETE","OPTIONS","HEAD","CONNECT","TRACE","PATCH"};
 
 	/**
 	 * Given a method name, infers the REST method name.

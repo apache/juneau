@@ -40,7 +40,7 @@ public final class MsgPackInputStream extends ParserInputStream {
 	int pos = 0;
 
 	// Data type quick-lookup table.
-	private static final DataType[] TYPES = new DataType[] {
+	private static final DataType[] TYPES = {
 		/*0x0?*/ INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,
 		/*0x1?*/ INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,
 		/*0x2?*/ INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,

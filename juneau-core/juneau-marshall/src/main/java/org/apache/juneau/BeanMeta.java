@@ -61,7 +61,7 @@ import org.apache.juneau.reflect.*;
  */
 public class BeanMeta<T> {
 
-	private static final BeanPropertyMeta[] EMPTY_PROPERTIES = new BeanPropertyMeta[0];
+	private static final BeanPropertyMeta[] EMPTY_PROPERTIES = {};
 
 	/** The target class type that this meta object describes. */
 	protected final ClassMeta<T> classMeta;
