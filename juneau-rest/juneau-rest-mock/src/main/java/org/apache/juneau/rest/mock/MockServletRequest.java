@@ -980,8 +980,8 @@ public class MockServletRequest implements HttpServletRequest {
 
 		if (req instanceof MockRestRequest) {
 			MockRestRequest mreq = (MockRestRequest)req;
-			mreq.getAttributeMap().forEach((k,v) -> attribute(k, v));
-			mreq.getRequestDispatcherMap().forEach((k,v) -> requestDispatcher(k, v));
+			mreq.getAttributeMap().forEach(this::attribute);
+			mreq.getRequestDispatcherMap().forEach(this::requestDispatcher);
 			if (mreq.getCharacterEncoding() != null)
 				characterEncoding(mreq.getCharacterEncoding());
 			if (mreq.getProtocol() != null)

@@ -1666,7 +1666,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 		templateBean = newInstance(template);
 		widgetMap = new HtmlWidgetMap();
-		widgets.stream().map(x -> newInstance(x)).forEach(x -> widgetMap.append(x));
+		widgets.stream().map(this::newInstance).forEach(x -> widgetMap.append(x));
 		widgetArray = array(widgetMap.values(), HtmlWidget.class);
 	}
 

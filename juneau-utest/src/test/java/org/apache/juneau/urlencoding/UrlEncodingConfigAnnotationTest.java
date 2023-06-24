@@ -33,7 +33,7 @@ public class UrlEncodingConfigAnnotationTest {
 		assertEquals(expected, TO_STRING.apply(o));
 	}
 
-	private static final Function<Object,String> TO_STRING = t -> t.toString();
+	private static final Function<Object,String> TO_STRING = Object::toString;
 
 	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 

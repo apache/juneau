@@ -711,7 +711,7 @@ public class ResponseContent implements HttpEntity {
 
 					// Some HTTP responses have no body, so try to create these beans if they've got no-arg constructors.
 					if (t == null && ! type.is(String.class)) {
-						ConstructorInfo c = type.getInfo().getPublicConstructor(x -> x.hasNoParams());
+						ConstructorInfo c = type.getInfo().getPublicConstructor(ConstructorInfo::hasNoParams);
 						if (c != null) {
 							try {
 								return c.<T>invoke();
@@ -874,7 +874,7 @@ public class ResponseContent implements HttpEntity {
 	 * 	{@link Future Futures}.
 	 */
     public Future<String> asStringFuture() throws RestCallException {
-        return client.getExecutorService().submit(() -> asString());
+        return client.getExecutorService().submit(this::asString);
     }
 
 	/**

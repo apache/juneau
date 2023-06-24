@@ -29,7 +29,7 @@ public final class ClassUtils {
 	/**
 	 * Predicate check to filter out void classes.
 	 */
-	public static final Predicate<Class<?>> NOT_VOID = x -> isNotVoid(x);
+	public static final Predicate<Class<?>> NOT_VOID = ClassUtils::isNotVoid;
 
 	/**
 	 * Returns the class types for the specified arguments.

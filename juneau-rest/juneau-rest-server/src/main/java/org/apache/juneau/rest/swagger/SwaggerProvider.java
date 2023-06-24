@@ -106,7 +106,7 @@ public interface SwaggerProvider {
 		 * @return The var resolver.
 		 */
 		public Optional<VarResolver> varResolver() {
-			return optional(varResolver).map(x -> x.get());
+			return optional(varResolver).map(Supplier::get);
 		}
 
 		/**
@@ -115,7 +115,7 @@ public interface SwaggerProvider {
 		 * @return The JSON schema generator.
 		 */
 		public Optional<JsonSchemaGenerator> jsonSchemaGenerator() {
-			return optional(jsonSchemaGenerator).map(x -> x.get());
+			return optional(jsonSchemaGenerator).map(Supplier::get);
 		}
 
 		/**
@@ -124,7 +124,7 @@ public interface SwaggerProvider {
 		 * @return The messages.
 		 */
 		public Optional<Messages> messages() {
-			return optional(messages).map(x -> x.get());
+			return optional(messages).map(Supplier::get);
 		}
 
 		/**
@@ -133,7 +133,7 @@ public interface SwaggerProvider {
 		 * @return The file finder.
 		 */
 		public Optional<FileFinder> fileFinder() {
-			return optional(fileFinder).map(x -> x.get());
+			return optional(fileFinder).map(Supplier::get);
 		}
 
 		/**

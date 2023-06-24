@@ -447,7 +447,7 @@ public final class ClassMeta<T> implements Type {
 					&& x.hasReturnType(c)
 					&& x.hasParamTypes(String.class)
 					&& ArrayUtils.contains(x.getName(), fromStringMethodNames))
-				).map(x -> x.inner())
+				).map(MethodInfo::inner)
 				.orElse(null);
 
 			// Find example() method if present.
@@ -457,7 +457,7 @@ public final class ClassMeta<T> implements Type {
 					&& x.isNotDeprecated()
 					&& x.hasName("example")
 					&& x.hasFuzzyParamTypes(BeanSession.class))
-				).map(x -> x.inner())
+				).map(MethodInfo::inner)
 				.orElse(null);
 
 			ci.forEachAllField(x -> x.hasAnnotation(bc, ParentProperty.class), x -> {
@@ -521,7 +521,7 @@ public final class ClassMeta<T> implements Type {
 			primitiveDefault = ci.getPrimitiveDefault();
 
 			ci.forEachPublicMethod(
-				x -> x.isNotDeprecated(),
+				MethodInfo::isNotDeprecated,
 				x -> publicMethods.put(x.getSignature(), x.inner())
 			);
 
@@ -549,7 +549,7 @@ public final class ClassMeta<T> implements Type {
 
 			if (innerClass != Object.class) {
 				ClassInfo x = implClass == null ? ci : ClassInfo.of(implClass);
-				noArgConstructor = x.getPublicConstructor(y -> y.hasNoParams());
+				noArgConstructor = x.getPublicConstructor(ConstructorInfo::hasNoParams);
 			}
 
 			try {

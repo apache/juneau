@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import java.util.*;
 
+import org.apache.juneau.BeanTraverseContext.Builder;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
@@ -106,7 +107,7 @@ public class BeanTraversePropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("x")
 				.rdfXmlT("x")
 				.rdfXmlR("x")
-				.apply(BeanTraverseContext.Builder.class, x -> x.detectRecursions())
+				.apply(BeanTraverseContext.Builder.class, Builder::detectRecursions)
 				.exceptionMsg("Recursion occurred")
 			},
 			{ 	/* 2 */
@@ -136,7 +137,7 @@ public class BeanTraversePropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n</rdf:RDF>\n")
-				.apply(BeanTraverseContext.Builder.class, x -> x.ignoreRecursions())
+				.apply(BeanTraverseContext.Builder.class, Builder::ignoreRecursions)
 			},
 			{ 	/* 3 */
 				new ComboInput<>(

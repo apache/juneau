@@ -28,6 +28,7 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.httppart.RequestHeader;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.*;
@@ -40,7 +41,7 @@ public class RestClient_Response_Headers_Test {
 		@RestGet
 		public String echo(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
 			String c = req.getHeaderParam("Check").orElse(null);
-			String[] h = req.getHeaders().getAll(c).stream().map(x -> x.getValue()).toArray(String[]::new);
+			String[] h = req.getHeaders().getAll(c).stream().map(RequestHeader::getValue).toArray(String[]::new);
 			if (h != null)
 				for (String hh : h)
 					res.addHeader(c, hh);

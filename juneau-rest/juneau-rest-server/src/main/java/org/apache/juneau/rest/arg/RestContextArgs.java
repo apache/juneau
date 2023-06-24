@@ -61,31 +61,31 @@ public class RestContextArgs extends SimpleRestOperationArg {
 	 */
 	public static RestContextArgs create(ParamInfo paramInfo) {
 		if (paramInfo.isType(BeanContext.class))
-			return new RestContextArgs(x->x.getBeanContext());
+			return new RestContextArgs(RestContext::getBeanContext);
 		if (paramInfo.isType(Config.class))
-			return new RestContextArgs(x->x.getConfig());
+			return new RestContextArgs(RestContext::getConfig);
 		if (paramInfo.isType(DebugEnablement.class))
-			return new RestContextArgs(x->x.getDebugEnablement());
+			return new RestContextArgs(RestContext::getDebugEnablement);
 		if (paramInfo.isType(EncoderSet.class))
-			return new RestContextArgs(x->x.getEncoders());
+			return new RestContextArgs(RestContext::getEncoders);
 		if (paramInfo.isType(Logger.class))
-			return new RestContextArgs(x->x.getLogger());
+			return new RestContextArgs(RestContext::getLogger);
 		if (paramInfo.isType(MethodExecStore.class))
-			return new RestContextArgs(x->x.getMethodExecStore());
+			return new RestContextArgs(RestContext::getMethodExecStore);
 		if (paramInfo.isType(RestChildren.class))
-			return new RestContextArgs(x->x.getRestChildren());
+			return new RestContextArgs(RestContext::getRestChildren);
 		if (paramInfo.isType(RestContext.class))
 			return new RestContextArgs(x->x);
 		if (paramInfo.isType(RestContextStats.class))
-			return new RestContextArgs(x->x.getStats());
+			return new RestContextArgs(RestContext::getStats);
 		if (paramInfo.isType(CallLogger.class))
-			return new RestContextArgs(x->x.getCallLogger());
+			return new RestContextArgs(RestContext::getCallLogger);
 		if (paramInfo.isType(RestOperations.class))
-			return new RestContextArgs(x->x.getRestOperations());
+			return new RestContextArgs(RestContext::getRestOperations);
 		if (paramInfo.isType(StaticFiles.class))
-			return new RestContextArgs(x->x.getStaticFiles());
+			return new RestContextArgs(RestContext::getStaticFiles);
 		if (paramInfo.isType(ThrownStore.class))
-			return new RestContextArgs(x->x.getThrownStore());
+			return new RestContextArgs(RestContext::getThrownStore);
 		return null;
 	}
 
@@ -96,6 +96,6 @@ public class RestContextArgs extends SimpleRestOperationArg {
 	 * @param function The function for finding the arg.
 	 */
 	protected <T> RestContextArgs(ThrowingFunction<RestContext,T> function) {
-		super((session)->function.apply(session.getRestContext()));
+		super(session -> function.apply(session.getRestContext()));
 	}
 }

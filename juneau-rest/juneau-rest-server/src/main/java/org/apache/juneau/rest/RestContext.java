@@ -51,6 +51,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.HttpPartSerializer.Creator;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.oapi.*;
@@ -2246,7 +2247,7 @@ public class RestContext extends Context {
 			// Replace with builder from bean store.
 			beanStore
 				.getBean(BeanContext.Builder.class)
-				.map(x -> x.copy())
+				.map(BeanContext.Builder::copy)
 				.ifPresent(x -> v.set(x));
 
 			// Replace with bean from bean store.
@@ -2360,7 +2361,7 @@ public class RestContext extends Context {
 			// Replace with builder from bean store.
 			beanStore
 				.getBean(HttpPartSerializer.Creator.class)
-				.map(x -> x.copy())
+				.map(Creator::copy)
 				.ifPresent(x -> v.set(x));
 
 			// Replace with bean from bean store.
@@ -2490,7 +2491,7 @@ public class RestContext extends Context {
 			// Replace with builder from bean store.
 			beanStore
 				.getBean(HttpPartParser.Creator.class)
-				.map(x -> x.copy())
+				.map(HttpPartParser.Creator::copy)
 				.ifPresent(x -> v.set(x));
 
 			// Replace with bean from bean store.
@@ -2618,7 +2619,7 @@ public class RestContext extends Context {
 			// Replace with builder from bean store.
 			beanStore
 				.getBean(JsonSchemaGenerator.Builder.class)
-				.map(x -> x.copy())
+				.map(JsonSchemaGenerator.Builder::copy)
 				.ifPresent(x -> v.set(x));
 
 			// Replace with bean from bean store.
@@ -3471,7 +3472,7 @@ public class RestContext extends Context {
 
 			// Default value.
 			Value<MethodList> v = Value.of(
-				getAnnotatedMethods(resource, RestPostInit.class, x -> x.childFirst())
+				getAnnotatedMethods(resource, RestPostInit.class, RestPostInit::childFirst)
 			);
 
 			// Replace with bean from:  @RestInject(name="postInitChildFirstMethods") public [static] MethodList xxx(<args>)

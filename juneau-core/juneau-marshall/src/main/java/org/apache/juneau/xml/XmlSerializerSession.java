@@ -345,7 +345,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				}
 
 				if (innerType.isBean()) {
-					innerType.getBeanMeta().forEachProperty(x -> x.canRead(), x -> {
+					innerType.getBeanMeta().forEachProperty(BeanPropertyMeta::canRead, x -> {
 						ns.set(getXmlBeanPropertyMeta(x).getNamespace());
 						if (ns.isPresent() && ns.get().uri != null)
 							addNamespace(ns.get());
@@ -353,13 +353,13 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				} else if (innerType.isMap()) {
 					((Map<?,?>)o).forEach((k,v) -> findNsfMappings(v));
 				} else if (innerType.isCollection()) {
-					((Collection<?>)o).forEach(x -> findNsfMappings(x));
+					((Collection<?>)o).forEach(this::findNsfMappings);
 				}
 
 			} else if (aType.isMap()) {
 				((Map<?,?>)o).forEach((k,v) -> findNsfMappings(v));
 			} else if (aType.isCollection()) {
-				((Collection<?>)o).forEach(x -> findNsfMappings(x));
+				((Collection<?>)o).forEach(this::findNsfMappings);
 			} else if (aType.isArray() && ! aType.getElementType().isPrimitive()) {
 				for (Object o2 : ((Object[])o))
 					findNsfMappings(o2);

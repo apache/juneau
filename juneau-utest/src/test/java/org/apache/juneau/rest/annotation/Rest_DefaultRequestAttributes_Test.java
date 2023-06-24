@@ -151,7 +151,7 @@ public class Rest_DefaultRequestAttributes_Test {
 
 	public static class B1 extends MockWriterSerializer {
 		public B1(MockWriterSerializer.Builder b) {
-			super(b.produces("test/s1").accept("text/s1,text/s2,text/s3").function((s,o) -> out(s)).headers(s->headers(s)));
+			super(b.produces("test/s1").accept("text/s1,text/s2,text/s3").function((s,o) -> out(s)).headers(B1::headers));
 		}
 		public static String out(SerializerSession s) {
 			JsonMap sp = s.getSessionProperties();

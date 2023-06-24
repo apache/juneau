@@ -191,7 +191,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @return A new fluent string assertion.
 	 */
 	public FluentStringListAssertion<R> asStrings() {
-		return new FluentStringListAssertion<>(this, valueIsNull() ? null : stream(value()).map(x -> stringify(x)).collect(Collectors.toList()), returns());
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : stream(value()).map(StringUtils::stringify).collect(Collectors.toList()), returns());
 	}
 
 	/**

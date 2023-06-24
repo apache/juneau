@@ -78,8 +78,8 @@ public class SystemEnv {
 
 	private static final Map<Class<?>,Function<String,?>> ENV_FUNCTIONS = new IdentityHashMap<>();
 	static {
-		ENV_FUNCTIONS.put(Boolean.class, x -> Boolean.valueOf(x));
-		ENV_FUNCTIONS.put(Charset.class, x -> Charset.forName(x));
+		ENV_FUNCTIONS.put(Boolean.class, Boolean::valueOf);
+		ENV_FUNCTIONS.put(Charset.class, Charset::forName);
 	}
 
 	private static final ConcurrentHashMap<String,String> PROPERTY_TO_ENV = new ConcurrentHashMap<>();

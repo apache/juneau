@@ -53,6 +53,6 @@ public class ParserArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected ParserArg() {
-		super((opSession)->opSession.getRequest().getContent().getParserMatch().map(ParserMatch::getParser).orElse(null));
+		super(opSession -> opSession.getRequest().getContent().getParserMatch().map(ParserMatch::getParser).orElse(null));
 	}
 }

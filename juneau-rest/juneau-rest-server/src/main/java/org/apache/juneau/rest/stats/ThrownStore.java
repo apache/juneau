@@ -181,7 +181,7 @@ public class ThrownStore {
 
 		Set<String> s = null;
 		if (builder.ignoreClasses != null)
-			s = builder.ignoreClasses.stream().map(x->x.getName()).collect(toSet());
+			s = builder.ignoreClasses.stream().map(Class::getName).collect(toSet());
 		if (s == null && parent.isPresent())
 			s = parent.get().ignoreClasses;
 		if (s == null)
@@ -230,7 +230,7 @@ public class ThrownStore {
 	 * @return The list of all stack traces in this database, cloned and sorted by count descending.
 	 */
 	public List<ThrownStats> getStats() {
-		return db.values().stream().map(x -> x.clone()).sorted(comparingInt(ThrownStats::getCount).reversed()).collect(toList());
+		return db.values().stream().map(ThrownStats::clone).sorted(comparingInt(ThrownStats::getCount).reversed()).collect(toList());
 	}
 
 	/**
@@ -271,7 +271,7 @@ public class ThrownStore {
 	 * @return A modifiable list of strings.
 	 */
 	protected List<String> createStackTrace(Throwable t) {
-		return alist(t.getStackTrace()).stream().filter(x -> include(x)).map(x -> normalize(x)).collect(toList());
+		return alist(t.getStackTrace()).stream().filter(this::include).map(this::normalize).collect(toList());
 	}
 
 	/**

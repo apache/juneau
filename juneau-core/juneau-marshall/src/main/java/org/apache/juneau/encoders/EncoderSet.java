@@ -283,7 +283,7 @@ public final class EncoderSet {
 
 		@Override /* Object */
 		public String toString() {
-			return entries.stream().map(x -> toString(x)).collect(joining(",","[","]"));
+			return entries.stream().map(Builder::toString).collect(joining(",","[","]"));
 		}
 
 		private static String toString(Object o) {

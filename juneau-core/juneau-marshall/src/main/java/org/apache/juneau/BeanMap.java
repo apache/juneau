@@ -498,7 +498,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 		// Normal bean.
 		if (meta.dynaProperty == null) {
-			forEachProperty(x -> x.canRead(), bpm -> {
+			forEachProperty(BeanPropertyMeta::canRead, bpm -> {
 				try {
 					Object val = bpm.get(this, null);
 					if (valueFilter.test(val))
@@ -526,7 +526,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				}
 			});
 
-			forEachProperty(x -> x.isDyna(), bpm -> {
+			forEachProperty(BeanPropertyMeta::isDyna, bpm -> {
 				try {
 					// TODO - This is kind of inefficient.
 					Map<String,Object> dynaMap = bpm.getDynaMap(bean);

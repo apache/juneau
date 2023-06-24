@@ -1154,7 +1154,7 @@ public class ThirdPartyProxyTest {
 
 	@Test
     public void ga07_reqBeanPath7() throws Exception {
-        String r = proxy.reqBeanPath7(() -> ABean.get());
+        String r = proxy.reqBeanPath7(ABean::get);
         assertEquals("OK", r);
     }
 
@@ -1223,7 +1223,7 @@ public class ThirdPartyProxyTest {
 	@Test
 	public void gb07_reqBeanQuery7() throws Exception {
 		String r = proxy.reqBeanQuery7(
-			() -> ABean.get()
+			ABean::get
 		);
 		assertEquals("OK", r);
 	}
@@ -1293,7 +1293,7 @@ public class ThirdPartyProxyTest {
 	@Test
 	public void gd07_reqBeanFormData7() throws Exception {
 		String r = proxy.reqBeanFormData7(
-			() -> ABean.get()
+			ABean::get
 		);
 		assertEquals("OK", r);
 	}
@@ -1363,7 +1363,7 @@ public class ThirdPartyProxyTest {
 	@Test
 	public void gf07_reqBeanHeader7() throws Exception {
 		String r = proxy.reqBeanHeader7(
-			() -> ABean.get()
+			ABean::get
 		);
 		assertEquals("OK", r);
 	}

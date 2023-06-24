@@ -44,13 +44,13 @@ public class RestResponseArgs extends SimpleRestOperationArg {
 	 */
 	public static RestResponseArgs create(ParamInfo paramInfo) {
 		if (paramInfo.isType(OutputStream.class))
-			return new RestResponseArgs(x->x.getOutputStream());
+			return new RestResponseArgs(RestResponse::getOutputStream);
 		if (paramInfo.isType(RestResponse.class))
 			return new RestResponseArgs(x->x);
 		if (paramInfo.isType(ServletOutputStream.class))
-			return new RestResponseArgs(x->x.getOutputStream());
+			return new RestResponseArgs(RestResponse::getOutputStream);
 		if (paramInfo.isType(Writer.class))
-			return new RestResponseArgs(x->x.getWriter());
+			return new RestResponseArgs(RestResponse::getWriter);
 		return null;
 	}
 
@@ -61,6 +61,6 @@ public class RestResponseArgs extends SimpleRestOperationArg {
 	 * @param function The function for finding the arg.
 	 */
 	protected <T> RestResponseArgs(ThrowingFunction<RestResponse,T> function) {
-		super((session)->function.apply(session.getResponse()));
+		super(session -> function.apply(session.getResponse()));
 	}
 }

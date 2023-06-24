@@ -19,6 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.serializer.WriterSerializer.Builder;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
@@ -75,7 +76,7 @@ public class ObjectSwapTest {
 
 		SerializerSet s = SerializerSet.create()
 			.add(JsonSerializer.class, XmlSerializer.class, HtmlSerializer.class)
-			.forEach(WriterSerializer.Builder.class, x -> x.sq())
+			.forEach(WriterSerializer.Builder.class, Builder::sq)
 			.forEach(Serializer.Builder.class, x -> x.swaps(MyJsonSwap.class, MyXmlSwap.class, MyOtherSwap.class))
 			.build();
 

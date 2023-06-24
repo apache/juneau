@@ -87,7 +87,7 @@ public class RestClient_Config_RestClient_Test {
 		}
 		@RestOp(path="/checkHeader")
 		public String[] getHeader(org.apache.juneau.rest.RestRequest req) {
-			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(x -> x.getValue()).toArray(String[]::new);
+			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new);
 		}
 	}
 
@@ -446,7 +446,7 @@ public class RestClient_Config_RestClient_Test {
 
 	public static class A12b extends MockReaderParser {
 		public A12b(Builder builder) {
-			super(builder.partFunction((t,s,in,c)->in(t,s,in,c)));
+			super(builder.partFunction(A12b::in));
 		}
 
 		private static Object in(HttpPartType type, HttpPartSchema schema, String in, ClassMeta<?> c) {

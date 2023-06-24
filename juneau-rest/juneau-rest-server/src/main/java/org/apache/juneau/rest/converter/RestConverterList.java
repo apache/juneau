@@ -132,7 +132,7 @@ public class RestConverterList {
 			builder
 				.entries
 				.stream()
-				.map(x -> x.run())
+				.map(BeanCreator::run)
 				.toArray(RestConverter[]::new);
 	}
 

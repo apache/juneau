@@ -44,13 +44,13 @@ public class RestOpContextArgs extends SimpleRestOperationArg {
 	 */
 	public static RestOpContextArgs create(ParamInfo paramInfo) {
 		if (paramInfo.isType(JsonSchemaGenerator.class))
-			return new RestOpContextArgs(x->x.getJsonSchemaGenerator());
+			return new RestOpContextArgs(RestOpContext::getJsonSchemaGenerator);
 		if (paramInfo.isType(ParserSet.class))
-			return new RestOpContextArgs(x->x.getParsers());
+			return new RestOpContextArgs(RestOpContext::getParsers);
 		if (paramInfo.isType(RestOpContext.class))
 			return new RestOpContextArgs(x->x);
 		if (paramInfo.isType(SerializerSet.class))
-			return new RestOpContextArgs(x->x.getSerializers());
+			return new RestOpContextArgs(RestOpContext::getSerializers);
 		return null;
 	}
 
@@ -61,6 +61,6 @@ public class RestOpContextArgs extends SimpleRestOperationArg {
 	 * @param function The function for finding the arg.
 	 */
 	protected <T> RestOpContextArgs(ThrowingFunction<RestOpContext,T> function) {
-		super((session)->function.apply(session.getContext()));
+		super(session -> function.apply(session.getContext()));
 	}
 }

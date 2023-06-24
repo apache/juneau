@@ -330,7 +330,7 @@ public class BeanCreator<T> {
 
 		// Look for protected constructor.
 		if (! constructorMatch.isPresent()) {
-			type.forEachDeclaredConstructor(x -> x.isProtected(), x -> {
+			type.forEachDeclaredConstructor(ConstructorInfo::isProtected, x -> {
 				found.setIfEmpty("PROTECTED_CONSTRUCTOR");
 				if (hasAllParams(x))
 					constructorMatch.add(x);
@@ -367,7 +367,7 @@ public class BeanCreator<T> {
 		} else if (found.get().equals("PUBLIC_CONSTRUCTOR")) {
 			msg = "Public constructor found but could not find prerequisites: " + type.getPublicConstructors().stream().map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
 		} else {
-			msg = "Protected constructor found but could not find prerequisites: " + type.getDeclaredConstructors().stream().filter(x -> x.isProtected()).map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
+			msg = "Protected constructor found but could not find prerequisites: " + type.getDeclaredConstructors().stream().filter(ConstructorInfo::isProtected).map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
 		}
 		throw new ExecutableException("Could not instantiate class {0}: {1}.", type.getName(), msg);
 	}

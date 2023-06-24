@@ -50,6 +50,6 @@ public class HttpServletResponseArgs extends SimpleRestOperationArg {
 	 * @param function The function for finding the arg.
 	 */
 	protected <T> HttpServletResponseArgs(ThrowingFunction<HttpServletResponse,T> function) {
-		super((session)->function.apply(session.getRestSession().getResponse()));
+		super(session -> function.apply(session.getRestSession().getResponse()));
 	}
 }

@@ -162,7 +162,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 					add(new RequestFormParam(req, name, value));
 			}
 		} else if (c != null) {
-			c.stream().forEach(x->add(x));
+			c.stream().forEach(this::add);
 		}
 	}
 
@@ -187,7 +187,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		parser = copyFrom.parser;
 		vs = copyFrom.vs;
 		for (String n : names)
-			copyFrom.stream().filter(x -> eq(x.getName(), n)).forEach(x -> add(x));
+			copyFrom.stream().filter(x -> eq(x.getName(), n)).forEach(this::add);
 	}
 
 	/**
@@ -447,7 +447,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return The list of all unique header names in this list.
 	 */
 	public List<String> getNames() {
-		return stream().map(x -> x.getName()).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
+		return stream().map(RequestFormParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
 	}
 
 	/**

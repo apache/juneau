@@ -17,6 +17,7 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import java.text.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.internal.StringUtils;
 import org.apache.juneau.cp.*;
 
 /**
@@ -62,7 +63,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	/**
 	 * Argument placeholder for tested value.
 	 */
-	public static final Function<Object,String> VALUE = x -> stringifyDeep(x);
+	public static final Function<Object,String> VALUE = StringUtils::stringifyDeep;
 
 	private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
 	private static final String

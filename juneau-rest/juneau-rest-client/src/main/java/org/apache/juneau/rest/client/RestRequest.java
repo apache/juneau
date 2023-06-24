@@ -1975,7 +1975,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 						c = ci.getPublicConstructor(x -> x.hasParamTypes(String.class,Throwable.class));
 						if (c != null)
 							throw c.<Throwable>invoke(message != null ? message : response.getContent().asString(), null);
-						c = ci.getPublicConstructor(x -> x.hasNoParams());
+						c = ci.getPublicConstructor(ConstructorInfo::hasNoParams);
 						if (c != null)
 							throw c.<Throwable>invoke();
 					}
@@ -2026,7 +2026,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException If the executor service was not defined.
 	 */
     public Future<RestResponse> runFuture() throws RestCallException {
-        return client.getExecutorService().submit(() -> run());
+        return client.getExecutorService().submit(this::run);
     }
 
 	/**
@@ -2078,7 +2078,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public Future<RestResponse> completeFuture() throws RestCallException {
 		return client.getExecutorService().submit(
-			() -> complete()
+			this::complete
 		);
 	}
 

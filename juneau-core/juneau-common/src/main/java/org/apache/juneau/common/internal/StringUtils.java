@@ -41,7 +41,7 @@ public final class StringUtils {
 	/**
 	 * Predicate check to filter out null and empty strings.
 	 */
-	public static final Predicate<String> NOT_EMPTY = x -> isNotEmpty(x);
+	public static final Predicate<String> NOT_EMPTY = StringUtils::isNotEmpty;
 
 	private static final AsciiSet numberChars = AsciiSet.create("-xX.+-#pP0123456789abcdefABCDEF");
 	private static final AsciiSet firstNumberChars =AsciiSet.create("+-.#0123456789");
@@ -2273,7 +2273,7 @@ public final class StringUtils {
 		if (o instanceof Method)
 			return Method.class.cast(o).getName();
 		if (o.getClass().isArray())
-			return arrayAsList(o).stream().map(x -> convertToReadable(x)).collect(Collectors.joining(", ", "[", "]"));
+			return arrayAsList(o).stream().map(StringUtils::convertToReadable).collect(Collectors.joining(", ", "[", "]"));
 		return o.toString();
 	}
 

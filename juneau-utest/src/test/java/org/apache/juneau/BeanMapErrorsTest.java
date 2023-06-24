@@ -15,6 +15,7 @@ package org.apache.juneau;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.Map.Entry;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
@@ -40,7 +41,7 @@ public class BeanMapErrorsTest {
 		bm.put("f2", -2);
 		assertEquals(-2, bm.get("f2"));
 		assertFalse(bm.keySet().contains("f2"));
-		assertFalse(bm.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList()).contains("f2"));
+		assertFalse(bm.entrySet().stream().map(Entry::getKey).collect(Collectors.toList()).contains("f2"));
 	}
 
 	@Bean(p="f1")
@@ -68,7 +69,7 @@ public class BeanMapErrorsTest {
 		bm.put("f2", -2);
 		assertEquals(-2, bm.get("f2"));
 		assertFalse(bm.keySet().contains("f2"));
-		assertFalse(bm.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList()).contains("f2"));
+		assertFalse(bm.entrySet().stream().map(Entry::getKey).collect(Collectors.toList()).contains("f2"));
 	}
 
 	@Bean(on="Dummy",p="dummy")
@@ -104,7 +105,7 @@ public class BeanMapErrorsTest {
 		bm.put("f2", -2);
 		assertEquals(-2, bm.get("f2"));
 		assertFalse(bm.keySet().contains("f2"));
-		assertFalse(bm.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList()).contains("f2"));
+		assertFalse(bm.entrySet().stream().map(Entry::getKey).collect(Collectors.toList()).contains("f2"));
 	}
 
 	@Bean(p="f1")
@@ -125,7 +126,7 @@ public class BeanMapErrorsTest {
 		bm.put("f2", -2);
 		assertEquals(-2, bm.get("f2"));
 		assertFalse(bm.keySet().contains("f2"));
-		assertFalse(bm.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList()).contains("f2"));
+		assertFalse(bm.entrySet().stream().map(Entry::getKey).collect(Collectors.toList()).contains("f2"));
 	}
 
 	@Bean(on="Dummy",p="dummy")

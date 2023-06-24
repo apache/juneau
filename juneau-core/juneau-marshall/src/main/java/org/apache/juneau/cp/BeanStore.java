@@ -701,9 +701,9 @@ public class BeanStore {
 		Predicate<Boolean> nf = ObjectUtils::isTrue;
 		return filteredMap()
 			.append("identity", ObjectUtils.identity(this))
-			.append("entries", entries.stream().map(x -> x.properties()).collect(toList()))
+			.append("entries", entries.stream().map(BeanStoreEntry::properties).collect(toList()))
 			.append("outer", ObjectUtils.identity(outer.orElse(null)))
-			.append("parent", parent.map(x->x.properties()).orElse(null))
+			.append("parent", parent.map(BeanStore::properties).orElse(null))
 			.appendIf(nf, "readOnly", readOnly)
 			.appendIf(nf, "threadSafe", threadSafe)
 		;

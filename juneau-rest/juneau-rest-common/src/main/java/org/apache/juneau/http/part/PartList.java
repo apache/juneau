@@ -161,7 +161,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public PartList setDefault(List<NameValuePair> parts) {
 		if (parts != null)
-			parts.stream().filter(x -> x != null && ! contains(x.getName())).forEach(x -> set(x));
+			parts.stream().filter(x -> x != null && ! contains(x.getName())).forEach(this::set);
 		return this;
 	}
 
@@ -335,7 +335,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	@FluentSetter
 	public PartList append(List<NameValuePair> values) {
 		if (values != null)
-			values.forEach(x -> append(x));
+			values.forEach(this::append);
 		return this;
 	}
 
@@ -444,7 +444,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	@FluentSetter
 	public PartList remove(List<NameValuePair> values) {
 		if (values != null)
-			values.forEach(x -> remove(x));
+			values.forEach(this::remove);
 		return this;
 	}
 
@@ -807,7 +807,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return An array containing all values.  Never <jk>null</jk>.
 	 */
 	public String[] getValues(String name) {
-		return stream().filter(x -> eq(x.getName(), name)).map(x -> x.getValue()).toArray(String[]::new);
+		return stream().filter(x -> eq(x.getName(), name)).map(NameValuePair::getValue).toArray(String[]::new);
 	}
 
 	/**

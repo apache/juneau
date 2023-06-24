@@ -26,6 +26,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.httppart.RequestHeader;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
@@ -64,7 +65,7 @@ public class RestClient_Headers_Test {
 	public static class A extends BasicRestObject {
 		@RestGet
 		public String[] headers(org.apache.juneau.rest.RestRequest req) {
-			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(x -> x.getValue()).toArray(String[]::new);
+			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new);
 		}
 	}
 

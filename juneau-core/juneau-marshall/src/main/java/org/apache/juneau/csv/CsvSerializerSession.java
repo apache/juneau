@@ -231,7 +231,7 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 				if (entryType.isBean()) {
 					BeanMeta<?> bm = entryType.getBeanMeta();
 					Flag addComma = Flag.create();
-					bm.forEachProperty(x -> x.canRead(), x -> {
+					bm.forEachProperty(BeanPropertyMeta::canRead, x -> {
 						addComma.ifSet(() -> w.w(',')).set();
 						w.writeEntry(x.getName());
 					});
@@ -239,7 +239,7 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 					l.forEach(x -> {
 						Flag addComma2 = Flag.create();
 						BeanMap<?> bean = toBeanMap(x);
-						bm.forEachProperty(y -> y.canRead(), y -> {
+						bm.forEachProperty(BeanPropertyMeta::canRead, y -> {
 							addComma2.ifSet(() -> w.w(',')).set();
 							w.writeEntry(y.get(bean, y.getName()));
 						});

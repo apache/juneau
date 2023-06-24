@@ -638,8 +638,8 @@ public class BeanStore_Test {
 			assertObject(b3c.createMethodFinder(C.class).find(m).run()).isNull();
 		}
 
-		b1p.clear().addSupplier(A1.class, ()->new A1());
-		b2p.clear().addSupplier(A1.class, ()->new A1());
+		b1p.clear().addSupplier(A1.class, A1::new);
+		b2p.clear().addSupplier(A1.class, A1::new);
 		for (BeanStore b : array(b1c, b2c)) {
 			assertObject(b.createMethodFinder(C.class, x).find("createC1").run()).isNotNull();
 			assertObject(b.createMethodFinder(C.class, x).find("createC2").run()).isNotNull();

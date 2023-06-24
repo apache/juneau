@@ -45,7 +45,7 @@ public class BeanContextTest {
 	@Test
 	public void a02_lambdaExpressionsNotCached() throws ExecutableException {
 		BeanContext bc = BeanContext.DEFAULT;
-		A2 fi = (x) -> System.out.println(x);
+		A2 fi = x -> System.out.println(x);
 		ClassMeta cm1 = bc.getClassMeta(fi.getClass()), cm2 = bc.getClassMeta(fi.getClass());
 		assertTrue(cm1 != cm2);
 	}

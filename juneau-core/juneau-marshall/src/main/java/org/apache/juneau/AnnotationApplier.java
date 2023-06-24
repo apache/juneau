@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.StringUtils;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -169,7 +170,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return The array wrapped in an {@link Optional}.
 	 */
 	protected Optional<String[]> strings(String[] in) {
-		return optional(in.length == 0 ? null : Arrays.stream(in).map(x -> vr.resolve(x)).filter(x -> isNotEmpty(x)).toArray(String[]::new));
+		return optional(in.length == 0 ? null : Arrays.stream(in).map(x -> vr.resolve(x)).filter(StringUtils::isNotEmpty).toArray(String[]::new));
 	}
 
 	/**
@@ -179,7 +180,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return An array with resolved strings.
 	 */
 	protected Stream<String> stream(String[] in) {
-		return Arrays.stream(in).map(x -> vr.resolve(x)).filter(x -> isNotEmpty(x));
+		return Arrays.stream(in).map(x -> vr.resolve(x)).filter(StringUtils::isNotEmpty);
 	}
 
 	/**
@@ -189,7 +190,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return An array with resolved strings.
 	 */
 	protected Stream<String> cdl(String in) {
-		return Arrays.stream(split(vr.resolve(in))).filter(x -> isNotEmpty(x));
+		return Arrays.stream(split(vr.resolve(in))).filter(StringUtils::isNotEmpty);
 	}
 
 	/**

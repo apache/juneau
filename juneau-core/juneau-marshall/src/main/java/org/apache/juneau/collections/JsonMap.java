@@ -1258,7 +1258,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @param keys The list of keys to remove.
 	 */
 	public void removeAll(Collection<String> keys) {
-		keys.forEach(x -> remove(x));
+		keys.forEach(this::remove);
 	}
 
 	/**
@@ -1783,7 +1783,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		UnmodifiableJsonMap(JsonMap contents) {
 			super();
 			if (contents != null)
-				contents.forEach((k,v) -> super.put(k, v));
+				contents.forEach(super::put);
 		}
 
 		@Override

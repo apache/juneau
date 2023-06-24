@@ -94,7 +94,7 @@ public class BenchmarkTest {
 		int cap = 100000;
 		long startTime = 0;
 		List<Integer> arrayList = new ArrayList<>();
-		arrayList.forEach(x -> Objects.hash(x));
+		arrayList.forEach(Objects::hash);
 		IntStream.of(null).forEach(null);
 
 		startTime = System.currentTimeMillis();

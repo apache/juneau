@@ -2636,7 +2636,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		@FluentSetter
 		public Builder debug() {
 			super.debug();
-			serializers().forEach(x -> x.debug());
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::debug);
 			return headers(Debug.TRUE);
 		}
 
@@ -4068,7 +4068,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder detectRecursions() {
-			serializers().forEach(x -> x.detectRecursions());
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::detectRecursions);
 			return this;
 		}
 
@@ -4121,7 +4121,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder ignoreRecursions() {
-			serializers().forEach(x -> x.ignoreRecursions());
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::ignoreRecursions);
 			return this;
 		}
 
@@ -4261,7 +4261,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder addBeanTypes() {
-			serializers().forEach(x -> x.addBeanTypes());
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::addBeanTypes);
 			return this;
 		}
 
@@ -4315,7 +4315,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder addRootType() {
-			serializers().forEach(x -> x.addRootType());
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::addRootType);
 			return this;
 		}
 
@@ -4357,7 +4357,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder keepNullProperties() {
-			serializers().forEach(x -> x.keepNullProperties());
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::keepNullProperties);
 			return this;
 		}
 
@@ -4396,7 +4396,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder sortCollections() {
-			serializers().forEach(x -> x.sortCollections());
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::sortCollections);
 			return this;
 		}
 
@@ -4435,7 +4435,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder sortMaps() {
-			serializers().forEach(x -> x.sortMaps());
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::sortMaps);
 			return this;
 		}
 
@@ -4481,7 +4481,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder trimEmptyCollections() {
-			serializers().forEach(x -> x.trimEmptyCollections());
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::trimEmptyCollections);
 			return this;
 		}
 
@@ -4526,7 +4526,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder trimEmptyMaps() {
-			serializers().forEach(x -> x.trimEmptyMaps());
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::trimEmptyMaps);
 			return this;
 		}
 
@@ -4562,7 +4562,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder trimStringsOnWrite() {
-			serializers().forEach(x -> x.trimStrings());
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::trimStrings);
 			return this;
 		}
 
@@ -4814,7 +4814,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder sq() {
-			serializers().forEachWS(x -> x.sq());
+			serializers().forEachWS(org.apache.juneau.serializer.WriterSerializer.Builder::sq);
 			return this;
 		}
 
@@ -4851,7 +4851,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder useWhitespace() {
-			serializers().forEachWS(x -> x.useWhitespace());
+			serializers().forEachWS(org.apache.juneau.serializer.WriterSerializer.Builder::useWhitespace);
 			return this;
 		}
 
@@ -4889,7 +4889,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder ws() {
-			serializers().forEachWS(x -> x.ws());
+			serializers().forEachWS(org.apache.juneau.serializer.WriterSerializer.Builder::ws);
 			return this;
 		}
 
@@ -5006,7 +5006,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder strict() {
-			parsers().forEach(x -> x.strict());
+			parsers().forEach(org.apache.juneau.parser.Parser.Builder::strict);
 			return this;
 		}
 
@@ -5044,7 +5044,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder trimStringsOnRead() {
-			parsers().forEach(x -> x.trimStrings());
+			parsers().forEach(org.apache.juneau.parser.Parser.Builder::trimStrings);
 			return this;
 		}
 
@@ -5270,7 +5270,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder paramFormatPlain() {
-			serializers().forEach(UonSerializer.Builder.class, x -> x.paramFormatPlain());
+			serializers().forEach(UonSerializer.Builder.class, org.apache.juneau.uon.UonSerializer.Builder::paramFormatPlain);
 			return this;
 		}
 

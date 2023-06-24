@@ -842,7 +842,7 @@ public abstract class Context implements AnnotationProvider {
 	protected Context(Builder builder) {
 		init(builder);
 		debug = builder.debug;
-		annotations = optional(builder.annotations).orElseGet(()->emptyList());
+		annotations = optional(builder.annotations).orElseGet(CollectionUtils::emptyList);
 
 		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
 

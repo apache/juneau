@@ -19,6 +19,7 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.serializer.Serializer.Builder;
 import org.apache.juneau.xml.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
@@ -61,7 +62,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a rdf:parseType='Resource'>\n<jp:t>BwT</jp:t>\n<jp:f>1</jp:f>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a rdf:parseType='Resource'>\n      <jp:_type>BwT</jp:_type>\n      <jp:f>1</jp:f>\n    </jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
 				.beanContext(x -> x.beanDictionary(T0.class))
-				.apply(Serializer.Builder.class, x -> x.addBeanTypes())
+				.apply(Serializer.Builder.class, Builder::addBeanTypes)
 			},
 			{ 	/* 1 */
 				new ComboInput<>(
@@ -91,7 +92,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>BwT</jp:t>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>BwT</jp:_type>\n    <jp:f>1</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 				.beanContext(x -> x.beanDictionary(T0.class))
-				.apply(Serializer.Builder.class, x -> x.addRootType())
+				.apply(Serializer.Builder.class, Builder::addRootType)
 			},
 			{ 	/* 2 */
 				new ComboInput<>(
@@ -120,7 +121,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>a</rdf:li>\n<rdf:li>b</rdf:li>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>a</rdf:li>\n<rdf:li>b</rdf:li>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>a</rdf:li>\n    <rdf:li>b</rdf:li>\n    <rdf:li>c</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.apply(Serializer.Builder.class, x -> x.sortCollections())
+				.apply(Serializer.Builder.class, Builder::sortCollections)
 			},
 			{ 	/* 3 */
 				new ComboInput<>(
@@ -149,7 +150,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>a</rdf:li>\n<rdf:li>b</rdf:li>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>a</rdf:li>\n<rdf:li>b</rdf:li>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>a</rdf:li>\n    <rdf:li>b</rdf:li>\n    <rdf:li>c</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.apply(Serializer.Builder.class, x -> x.sortCollections())
+				.apply(Serializer.Builder.class, Builder::sortCollections)
 			},
 			{ 	/* 4 */
 				new ComboInput<>(
@@ -178,7 +179,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n<jp:b>2</jp:b>\n<jp:c>3</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n<jp:b>2</jp:b>\n<jp:c>3</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n    <jp:b>2</jp:b>\n    <jp:c>3</jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.apply(Serializer.Builder.class, x -> x.sortMaps())
+				.apply(Serializer.Builder.class, Builder::sortMaps)
 			},
 			{ 	/* 5 */
 				new ComboInput<>(
@@ -207,7 +208,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n</rdf:RDF>\n")
-				.apply(Serializer.Builder.class, x -> x.trimEmptyCollections())
+				.apply(Serializer.Builder.class, Builder::trimEmptyCollections)
 			},
 			{ 	/* 6 */
 				new ComboInput<>(
@@ -236,7 +237,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n</rdf:RDF>\n")
-				.apply(Serializer.Builder.class, x -> x.trimEmptyMaps())
+				.apply(Serializer.Builder.class, Builder::trimEmptyMaps)
 			},
 			{ 	/* 7 */
 				new ComboInput<>(
@@ -265,7 +266,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.apply(Serializer.Builder.class, x -> x.keepNullProperties())
+				.apply(Serializer.Builder.class, Builder::keepNullProperties)
 			},
 			{ 	/* 8 */
 				new ComboInput<>(
@@ -294,7 +295,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f>foo</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f>foo</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f>foo</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.apply(Serializer.Builder.class, x -> x.trimStrings())
+				.apply(Serializer.Builder.class, Builder::trimStrings)
 			},
 			{ 	/* 9 */
 				new ComboInput<>(
@@ -383,7 +384,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>T11</jp:_type>\n<jp:f>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f>\n<rdf:Seq>\n<rdf:li>_x0020_foo_x0020_</rdf:li>\n</rdf:Seq>\n</jp:f>\n</rdf:li>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>T11</jp:t>\n<jp:f>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f>\n<rdf:Seq>\n<rdf:li>_x0020_foo_x0020_</rdf:li>\n</rdf:Seq>\n</jp:f>\n</rdf:li>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>T11</jp:_type>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:f>\n            <rdf:Seq>\n              <rdf:li>_x0020_foo_x0020_</rdf:li>\n            </rdf:Seq>\n          </jp:f>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.apply(XmlSerializer.Builder.class, x -> x.addNamespaceUrisToRoot())
+				.apply(XmlSerializer.Builder.class, org.apache.juneau.xml.XmlSerializer.Builder::addNamespaceUrisToRoot)
 				.apply(WriterSerializer.Builder.class, x -> x.quoteCharOverride('|'))
 				.apply(Serializer.Builder.class, x -> x.addBeanTypes().addRootType())
 				.skipTest(x -> x.startsWith("parse") || x.startsWith("verify"))

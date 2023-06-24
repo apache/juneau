@@ -69,7 +69,7 @@ public class MockWriterSerializer extends WriterSerializer implements HttpPartSe
 	public static class Builder extends WriterSerializer.Builder {
 		MockWriterSerializerFunction function = (s,o) -> StringUtils.stringify(o);
 		MockWriterSerializerPartFunction partFunction = (t,s,o) -> StringUtils.stringify(o);
-		Function<WriterSerializerSession,Map<String,String>> headers = (s) -> Collections.emptyMap();
+		Function<WriterSerializerSession,Map<String,String>> headers = s -> Collections.emptyMap();
 
 		public Builder function(MockWriterSerializerFunction value) {
 			function = value;

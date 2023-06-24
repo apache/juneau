@@ -27,6 +27,7 @@ import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.httppart.RequestHeader;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.testutils.pojos.*;
@@ -41,7 +42,7 @@ public class SerializedHttpEntity_Test {
 	public static class A extends BasicRestObject {
 		@RestPost
 		public String[] checkHeader(org.apache.juneau.rest.RestRequest req) {
-			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(x -> x.getValue()).toArray(String[]::new);
+			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new);
 		}
 		@RestPost
 		public Reader checkBody(org.apache.juneau.rest.RestRequest req) throws IOException {
@@ -52,7 +53,7 @@ public class SerializedHttpEntity_Test {
 	@Test
 	public void a01_basic() throws Exception {
 		serializedEntity(ABean.get(),JsonSerializer.DEFAULT).assertString().is("{\"a\":1,\"b\":\"foo\"}");
-		serializedEntity(()->ABean.get(),JsonSerializer.DEFAULT).assertString().is("{\"a\":1,\"b\":\"foo\"}");
+		serializedEntity(ABean::get,JsonSerializer.DEFAULT).assertString().is("{\"a\":1,\"b\":\"foo\"}");
 		serializedEntity(ABean.get(),null).assertString().is("{a:1,b:'foo'}");
 		serializedEntity(null,JsonSerializer.DEFAULT).assertString().is("null");
 	}

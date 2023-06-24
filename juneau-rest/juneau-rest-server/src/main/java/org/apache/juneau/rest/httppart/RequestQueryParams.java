@@ -178,7 +178,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 		parser = copyFrom.parser;
 		vs = copyFrom.vs;
 		for (String n : names)
-			copyFrom.stream().filter(x -> eq(x.getName(), n)).forEach(x -> add(x));
+			copyFrom.stream().filter(x -> eq(x.getName(), n)).forEach(this::add);
 	}
 
 	/**
@@ -421,7 +421,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return The list of all unique header names in this list.
 	 */
 	public List<String> getNames() {
-		return stream().map(x -> x.getName()).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
+		return stream().map(RequestQueryParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
 	}
 
 	/**

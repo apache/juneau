@@ -475,7 +475,7 @@ public class ClassInfoTest {
 
 	@Test
 	public void getPublicNoArgConstructor() {
-		check("E1()", e1.getPublicConstructor(x -> x.hasNoParams()));
+		check("E1()", e1.getPublicConstructor(ConstructorInfo::hasNoParams));
 	}
 
 	@Test

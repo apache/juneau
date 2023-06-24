@@ -134,10 +134,10 @@ public class RestMatcherList {
 			builder
 				.entries
 				.stream()
-				.map(x -> x.run())
+				.map(BeanCreator::run)
 				.collect(toList());
 		optionalEntries = l.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
-		requiredEntries = l.stream().filter(x -> x.required()).toArray(RestMatcher[]::new);
+		requiredEntries = l.stream().filter(RestMatcher::required).toArray(RestMatcher[]::new);
 	}
 
 	/**

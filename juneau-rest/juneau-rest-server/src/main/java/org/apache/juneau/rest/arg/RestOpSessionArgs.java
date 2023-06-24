@@ -40,7 +40,7 @@ public class RestOpSessionArgs extends SimpleRestOperationArg {
 	 */
 	public static RestOpSessionArgs create(ParamInfo paramInfo) {
 		if (paramInfo.isType(BeanStore.class))
-			return new RestOpSessionArgs(x->x.getBeanStore());
+			return new RestOpSessionArgs(RestOpSession::getBeanStore);
 		if (paramInfo.isType(RestOpSession.class))
 			return new RestOpSessionArgs(x->x);
 		return null;
@@ -53,6 +53,6 @@ public class RestOpSessionArgs extends SimpleRestOperationArg {
 	 * @param function The function for finding the arg.
 	 */
 	protected <T> RestOpSessionArgs(ThrowingFunction<RestOpSession,T> function) {
-		super((session)->function.apply(session));
+		super(session -> function.apply(session));
 	}
 }

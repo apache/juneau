@@ -70,45 +70,45 @@ public class RestRequestArgs extends SimpleRestOperationArg {
 	 */
 	public static RestRequestArgs create(ParamInfo paramInfo) {
 		if (paramInfo.isType(HttpPartParserSession.class))
-			return new RestRequestArgs(x->x.getPartParserSession());
+			return new RestRequestArgs(RestRequest::getPartParserSession);
 		if (paramInfo.isType(HttpPartSerializerSession.class))
-			return new RestRequestArgs(x->x.getPartSerializerSession());
+			return new RestRequestArgs(RestRequest::getPartSerializerSession);
 		if (paramInfo.isType(InputStream.class))
-			return new RestRequestArgs(x->x.getInputStream());
+			return new RestRequestArgs(RestRequest::getInputStream);
 		if (paramInfo.isType(Locale.class))
-			return new RestRequestArgs(x->x.getLocale());
+			return new RestRequestArgs(RestRequest::getLocale);
 		if (paramInfo.isType(Messages.class))
-			return new RestRequestArgs(x->x.getMessages());
+			return new RestRequestArgs(RestRequest::getMessages);
 		if (paramInfo.isType(Reader.class))
-			return new RestRequestArgs(x->x.getReader());
+			return new RestRequestArgs(RestRequest::getReader);
 		if (paramInfo.isType(RequestAttributes.class))
-			return new RestRequestArgs(x->x.getAttributes());
+			return new RestRequestArgs(RestRequest::getAttributes);
 		if (paramInfo.isType(RequestContent.class))
-			return new RestRequestArgs(x->x.getContent());
+			return new RestRequestArgs(RestRequest::getContent);
 		if (paramInfo.isType(RequestFormParams.class))
-			return new RestRequestArgs(x->x.getFormParams());
+			return new RestRequestArgs(RestRequest::getFormParams);
 		if (paramInfo.isType(RequestHeaders.class))
-			return new RestRequestArgs(x->x.getHeaders());
+			return new RestRequestArgs(RestRequest::getHeaders);
 		if (paramInfo.isType(RequestPathParams.class))
-			return new RestRequestArgs(x->x.getPathParams());
+			return new RestRequestArgs(RestRequest::getPathParams);
 		if (paramInfo.isType(RequestQueryParams.class))
-			return new RestRequestArgs(x->x.getQueryParams());
+			return new RestRequestArgs(RestRequest::getQueryParams);
 		if (paramInfo.isType(ResourceBundle.class))
-			return new RestRequestArgs(x->x.getMessages());
+			return new RestRequestArgs(RestRequest::getMessages);
 		if (paramInfo.isType(RestRequest.class))
 			return new RestRequestArgs(x->x);
 		if (paramInfo.isType(ServletInputStream.class))
-			return new RestRequestArgs(x->x.getInputStream());
+			return new RestRequestArgs(RestRequest::getInputStream);
 		if (paramInfo.isType(Swagger.class))
 			return new RestRequestArgs(x->x.getSwagger().orElse(null));
 		if (paramInfo.isType(TimeZone.class))
 			return new RestRequestArgs(x->x.getTimeZone().orElse(null));
 		if (paramInfo.isType(UriContext.class))
-			return new RestRequestArgs(x->x.getUriContext());
+			return new RestRequestArgs(RestRequest::getUriContext);
 		if (paramInfo.isType(UriResolver.class))
-			return new RestRequestArgs(x->x.getUriResolver());
+			return new RestRequestArgs(RestRequest::getUriResolver);
 		if (paramInfo.isType(VarResolverSession.class))
-			return new RestRequestArgs(x->x.getVarResolverSession());
+			return new RestRequestArgs(RestRequest::getVarResolverSession);
 		return null;
 	}
 
@@ -119,6 +119,6 @@ public class RestRequestArgs extends SimpleRestOperationArg {
 	 * @param function The function for finding the arg.
 	 */
 	protected <T> RestRequestArgs(ThrowingFunction<RestRequest,T> function) {
-		super((session)->function.apply(session.getRequest()));
+		super(session -> function.apply(session.getRequest()));
 	}
 }

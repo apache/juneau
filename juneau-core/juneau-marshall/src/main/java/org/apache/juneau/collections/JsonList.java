@@ -1023,7 +1023,7 @@ public class JsonList extends LinkedList<Object> {
 		UnmodifiableJsonList(JsonList contents) {
 			super();
 			if (contents != null)
-				this.forEach(x -> super.add(x));
+				this.forEach(super::add);
 		}
 
 		@Override /* List */

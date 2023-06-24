@@ -132,7 +132,7 @@ public class RestGuardList {
 			builder
 				.entries
 				.stream()
-				.map(x -> x.run())
+				.map(BeanCreator::run)
 				.toArray(RestGuard[]::new);
 	}
 

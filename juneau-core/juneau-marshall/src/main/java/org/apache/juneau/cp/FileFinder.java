@@ -212,7 +212,7 @@ public interface FileFinder {
 		 */
 		@FluentSetter
 		public Builder include(String...patterns) {
-			this.include = alist(patterns).stream().map(x->Pattern.compile(x)).toArray(Pattern[]::new);
+			this.include = alist(patterns).stream().map(Pattern::compile).toArray(Pattern[]::new);
 			return this;
 		}
 
@@ -226,7 +226,7 @@ public interface FileFinder {
 		 */
 		@FluentSetter
 		public Builder exclude(String...patterns) {
-			this.exclude = alist(patterns).stream().map(x->Pattern.compile(x)).toArray(Pattern[]::new);
+			this.exclude = alist(patterns).stream().map(Pattern::compile).toArray(Pattern[]::new);
 			return this;
 		}
 

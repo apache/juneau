@@ -1375,12 +1375,12 @@ public class JsonSchema {
 
 	private void setMasterOn(Collection<JsonSchema> ss) {
 		if (ss != null)
-			ss.forEach(x -> setMasterOn(x));
+			ss.forEach(this::setMasterOn);
 	}
 
 	private void setMasterOn(JsonSchemaArray ss) {
 		if (ss != null)
-			ss.forEach(x -> setMasterOn(x));
+			ss.forEach(this::setMasterOn);
 	}
 
 	/**

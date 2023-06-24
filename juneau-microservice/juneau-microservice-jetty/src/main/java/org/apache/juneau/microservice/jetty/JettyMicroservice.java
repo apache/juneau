@@ -720,11 +720,11 @@ public class JettyMicroservice extends Microservice {
 			}
 		});
 
-		cf.get("Jetty/servletAttributes").asMap().orElse(EMPTY_MAP).forEach((k,v) -> addServletAttribute(k, v));
+		cf.get("Jetty/servletAttributes").asMap().orElse(EMPTY_MAP).forEach(this::addServletAttribute);
 
 		builder.servlets.forEach((k,v) -> addServlet(v, k));
 
-		builder.servletAttributes.forEach((k,v) -> addServletAttribute(k, v));
+		builder.servletAttributes.forEach(this::addServletAttribute);
 
 		if (System.getProperty("juneau.serverPort") == null)
 			System.setProperty("juneau.serverPort", String.valueOf(availablePort));

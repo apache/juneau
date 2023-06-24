@@ -80,7 +80,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 		entries.clear();
 		oentries.clear();
-		imports.forEach(x -> x.unregisterAll());
+		imports.forEach(Import::unregisterAll);
 		imports.clear();
 
 		Map<String,ConfigMap> imports = map();
@@ -904,7 +904,7 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 
 		synchronized Import register(Collection<ConfigEventListener> listeners) {
-			listeners.forEach(x -> register(x));
+			listeners.forEach(this::register);
 			return this;
 		}
 

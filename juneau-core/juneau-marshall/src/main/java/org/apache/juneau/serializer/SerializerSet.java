@@ -173,7 +173,7 @@ public final class SerializerSet {
 			super(copyFrom);
 			bcBuilder = copyFrom.bcBuilder == null ? null : copyFrom.bcBuilder.copy();
 			entries = list();
-			copyFrom.entries.stream().map(x -> copyBuilder(x)).forEach(x -> entries.add(x));
+			copyFrom.entries.stream().map(this::copyBuilder).forEach(x -> entries.add(x));
 		}
 
 		private Object copyBuilder(Object o) {
@@ -312,7 +312,7 @@ public final class SerializerSet {
 			if (o instanceof Class) {
 
 				// Check for no-arg constructor.
-				ConstructorInfo ci = ClassInfo.of((Class<?>)o).getPublicConstructor(x -> x.hasNoParams());
+				ConstructorInfo ci = ClassInfo.of((Class<?>)o).getPublicConstructor(ConstructorInfo::hasNoParams);
 				if (ci != null)
 					return ci.invoke();
 
@@ -461,7 +461,7 @@ public final class SerializerSet {
 
 		@Override /* Object */
 		public String toString() {
-			return entries.stream().map(x -> toString(x)).collect(joining(",","[","]"));
+			return entries.stream().map(this::toString).collect(joining(",","[","]"));
 		}
 
 		private String toString(Object o) {
@@ -496,7 +496,7 @@ public final class SerializerSet {
 	 */
 	protected SerializerSet(Builder builder) {
 
-		this.entries = builder.entries.stream().map(x -> build(x)).toArray(Serializer[]::new);
+		this.entries = builder.entries.stream().map(this::build).toArray(Serializer[]::new);
 		this.entriesList = ulist(entries);
 
 		List<MediaRange> lmtr = list();

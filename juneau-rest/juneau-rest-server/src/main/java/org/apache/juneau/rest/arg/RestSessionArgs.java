@@ -43,9 +43,9 @@ public class RestSessionArgs extends SimpleRestOperationArg {
 		if (paramInfo.isType(RestSession.class))
 			return new RestSessionArgs(x->x);
 		if (paramInfo.isType(UrlPath.class))
-			return new RestSessionArgs(x->x.getUrlPath());
+			return new RestSessionArgs(RestSession::getUrlPath);
 		if (paramInfo.isType(UrlPathMatch.class))
-			return new RestSessionArgs(x->x.getUrlPathMatch());
+			return new RestSessionArgs(RestSession::getUrlPathMatch);
 		return null;
 	}
 
@@ -56,6 +56,6 @@ public class RestSessionArgs extends SimpleRestOperationArg {
 	 * @param function The function for finding the arg.
 	 */
 	protected <T> RestSessionArgs(ThrowingFunction<RestSession,T> function) {
-		super((session)->function.apply(session.getRestSession()));
+		super(session -> function.apply(session.getRestSession()));
 	}
 }

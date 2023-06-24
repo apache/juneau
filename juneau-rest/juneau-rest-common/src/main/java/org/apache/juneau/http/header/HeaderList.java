@@ -175,7 +175,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public HeaderList setDefault(List<Header> headers) {
 		if (headers != null)
-			headers.stream().filter(x -> x != null && ! contains(x.getName())).forEach(x -> set(x));
+			headers.stream().filter(x -> x != null && ! contains(x.getName())).forEach(this::set);
 		return this;
 	}
 
@@ -350,7 +350,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	@FluentSetter
 	public HeaderList append(List<Header> values) {
 		if (values != null)
-			values.forEach(x -> append(x));
+			values.forEach(this::append);
 		return this;
 	}
 
@@ -459,7 +459,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	@FluentSetter
 	public HeaderList remove(List<Header> values) {
 		if (values != null)
-			values.forEach(x -> remove(x));
+			values.forEach(this::remove);
 		return this;
 	}
 
@@ -833,7 +833,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return An array containing all values.  Never <jk>null</jk>.
 	 */
 	public String[] getValues(String name) {
-		return stream().filter(x -> eq(x.getName(), name)).map(x -> x.getValue()).toArray(String[]::new);
+		return stream().filter(x -> eq(x.getName(), name)).map(Header::getValue).toArray(String[]::new);
 	}
 
 	/**

@@ -115,14 +115,14 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 
 	private static final Map<Class<?>,Function<Object,String>> STRINGIFIERS = new HashMap<>();
 	static {
-		STRINGIFIERS.put(boolean.class, (x) -> Arrays.toString((boolean[])x));
-		STRINGIFIERS.put(byte.class, (x) -> Arrays.toString((byte[])x));
-		STRINGIFIERS.put(char.class, (x) -> Arrays.toString((char[])x));
-		STRINGIFIERS.put(double.class, (x) -> Arrays.toString((double[])x));
-		STRINGIFIERS.put(float.class, (x) -> Arrays.toString((float[])x));
-		STRINGIFIERS.put(int.class, (x) -> Arrays.toString((int[])x));
-		STRINGIFIERS.put(long.class, (x) -> Arrays.toString((long[])x));
-		STRINGIFIERS.put(short.class, (x) -> Arrays.toString((short[])x));
+		STRINGIFIERS.put(boolean.class, x -> Arrays.toString((boolean[])x));
+		STRINGIFIERS.put(byte.class, x -> Arrays.toString((byte[])x));
+		STRINGIFIERS.put(char.class, x -> Arrays.toString((char[])x));
+		STRINGIFIERS.put(double.class, x -> Arrays.toString((double[])x));
+		STRINGIFIERS.put(float.class, x -> Arrays.toString((float[])x));
+		STRINGIFIERS.put(int.class, x -> Arrays.toString((int[])x));
+		STRINGIFIERS.put(long.class, x -> Arrays.toString((long[])x));
+		STRINGIFIERS.put(short.class, x -> Arrays.toString((short[])x));
 	}
 
 	private static final Messages MESSAGES = Messages.of(FluentPrimitiveArrayAssertion.class, "Messages");

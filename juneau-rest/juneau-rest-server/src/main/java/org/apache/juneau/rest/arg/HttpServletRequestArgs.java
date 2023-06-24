@@ -46,15 +46,15 @@ public class HttpServletRequestArgs extends SimpleRestOperationArg {
 	 */
 	public static HttpServletRequestArgs create(ParamInfo paramInfo) {
 		if (paramInfo.isType(AsyncContext.class))
-			return new HttpServletRequestArgs(x->x.getAsyncContext());
+			return new HttpServletRequestArgs(HttpServletRequest::getAsyncContext);
 		if (paramInfo.isType(CookieList.class))
 			return new HttpServletRequestArgs(x->CookieList.of(x.getCookies()));
 		if (paramInfo.isType(DispatcherType.class))
-			return new HttpServletRequestArgs(x->x.getDispatcherType());
+			return new HttpServletRequestArgs(HttpServletRequest::getDispatcherType);
 		if (paramInfo.isType(HttpServletRequest.class))
 			return new HttpServletRequestArgs(x->x);
 		if (paramInfo.isType(Principal.class))
-			return new HttpServletRequestArgs(x->x.getUserPrincipal());
+			return new HttpServletRequestArgs(HttpServletRequest::getUserPrincipal);
 		return null;
 	}
 
@@ -65,6 +65,6 @@ public class HttpServletRequestArgs extends SimpleRestOperationArg {
 	 * @param function The function for finding the arg.
 	 */
 	protected <T> HttpServletRequestArgs(ThrowingFunction<HttpServletRequest,T> function) {
-		super((session)->function.apply(session.getRequest().getHttpServletRequest()));
+		super(session -> function.apply(session.getRequest().getHttpServletRequest()));
 	}
 }

@@ -204,7 +204,7 @@ public class FluentStringListAssertion<R> extends FluentListAssertion<String,R> 
 	 * @return A new assertion.
 	 */
 	public FluentStringListAssertion<R> asTrimmed() {
-		return new FluentStringListAssertion<>(this, valueIsNull() ? null : value().stream().map(x -> StringUtils.trim(x)).collect(toList()), returns());
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : value().stream().map(StringUtils::trim).collect(toList()), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

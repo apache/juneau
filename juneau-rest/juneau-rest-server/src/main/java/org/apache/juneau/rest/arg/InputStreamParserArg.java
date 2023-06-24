@@ -53,6 +53,6 @@ public class InputStreamParserArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected InputStreamParserArg() {
-		super((opSession)->opSession.getRequest().getContent().getParserMatch().map(ParserMatch::getParser).filter(InputStreamParser.class::isInstance).orElse(null));
+		super(opSession -> opSession.getRequest().getContent().getParserMatch().map(ParserMatch::getParser).filter(InputStreamParser.class::isInstance).orElse(null));
 	}
 }

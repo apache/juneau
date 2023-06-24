@@ -44,9 +44,9 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.HttpPartSerializer.Creator;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.internal.HttpUtils;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
@@ -330,14 +330,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				.of(beanStore, resource)
 				.addBean(BeanContext.Builder.class, v.get())
 				.createMethodFinder(BeanContext.class, resource)
-				.find(x -> matches(x))
+				.find(this::matches)
 				.run(x -> v.get().impl(x));
 
 			return v.get();
 		}
 
 		Optional<BeanContext> getBeanContext() {
-			return optional(beanContext).map(x -> x.build());
+			return optional(beanContext).map(BeanContext.Builder::build);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -413,14 +413,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				.of(beanStore, resource)
 				.addBean(EncoderSet.Builder.class, v.get())
 				.createMethodFinder(EncoderSet.class, resource)
-				.find(x -> matches(x))
+				.find(this::matches)
 				.run(x -> v.get().impl(x));
 
 			return v.get();
 		}
 
 		Optional<EncoderSet> getEncoders() {
-			return optional(encoders).map(x -> x.build());
+			return optional(encoders).map(EncoderSet.Builder::build);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -496,14 +496,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				.of(beanStore, resource)
 				.addBean(SerializerSet.Builder.class, v.get())
 				.createMethodFinder(SerializerSet.class, resource)
-				.find(x -> matches(x))
+				.find(this::matches)
 				.run(x -> v.get().impl(x));
 
 			return v.get();
 		}
 
 		Optional<SerializerSet> getSerializers() {
-			return optional(serializers).map(x -> x.build());
+			return optional(serializers).map(SerializerSet.Builder::build);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -579,14 +579,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				.of(beanStore, resource)
 				.addBean(ParserSet.Builder.class, v.get())
 				.createMethodFinder(ParserSet.class, resource)
-				.find(x -> matches(x))
+				.find(this::matches)
 				.run(x -> v.get().impl(x));
 
 			return v.get();
 		}
 
 		Optional<ParserSet> getParsers() {
-			return optional(parsers).map(x -> x.build());
+			return optional(parsers).map(ParserSet.Builder::build);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -661,14 +661,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				.of(beanStore, resource)
 				.addBean(HttpPartSerializer.Creator.class, v.get())
 				.createMethodFinder(HttpPartSerializer.class, resource)
-				.find(x -> matches(x))
+				.find(this::matches)
 				.run(x -> v.get().impl(x));
 
 			return v.get();
 		}
 
 		Optional<HttpPartSerializer> getPartSerializer() {
-			return optional(partSerializer).map(x -> x.create());
+			return optional(partSerializer).map(Creator::create);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -743,14 +743,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				.of(beanStore, resource)
 				.addBean(HttpPartParser.Creator.class, v.get())
 				.createMethodFinder(HttpPartParser.class, resource)
-				.find(x -> matches(x))
+				.find(this::matches)
 				.run(x -> v.get().impl(x));
 
 			return v.get();
 		}
 
 		Optional<HttpPartParser> getPartParser() {
-			return optional(partParser).map(x -> x.create());
+			return optional(partParser).map(org.apache.juneau.httppart.HttpPartParser.Creator::create);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -825,14 +825,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				.of(beanStore, resource)
 				.addBean(JsonSchemaGenerator.Builder.class, v.get())
 				.createMethodFinder(JsonSchemaGenerator.class, resource)
-				.find(x -> matches(x))
+				.find(this::matches)
 				.run(x -> v.get().impl(x));
 
 			return v.get();
 		}
 
 		Optional<JsonSchemaGenerator> getJsonSchemaGenerator() {
-			return optional(jsonSchemaGenerator).map(x -> x.build());
+			return optional(jsonSchemaGenerator).map(JsonSchemaGenerator.Builder::build);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -984,7 +984,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			beanStore
 				.createMethodFinder(RestConverterList.class)
 				.addBean(RestConverterList.Builder.class, v.get())
-				.find(x -> matches(x))
+				.find(this::matches)
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -1092,7 +1092,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			beanStore
 				.createMethodFinder(RestGuardList.class)
 				.addBean(RestGuardList.Builder.class, v.get())
-				.find(x -> matches(x))
+				.find(this::matches)
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -1100,7 +1100,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 		RestGuardList getGuards() {
 			RestGuardList.Builder b = guards();
-			Set<String> roleGuard = optional(this.roleGuard).orElseGet(()->set());
+			Set<String> roleGuard = optional(this.roleGuard).orElseGet(CollectionUtils::set);
 
 			for (String rg : roleGuard) {
 				try {
@@ -1241,7 +1241,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			beanStore
 				.createMethodFinder(RestMatcherList.class)
 				.addBean(RestMatcherList.Builder.class, v.get())
-				.find(x -> matches(x))
+				.find(this::matches)
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -1308,7 +1308,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			beanStore
 				.createMethodFinder(UrlPathMatcherList.class, resource().get())
 				.addBean(UrlPathMatcherList.class, v.get())
-				.find(x -> matches(x))
+				.find(this::matches)
 				.run(x -> v.set(x));
 
 			return v.get();

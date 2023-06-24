@@ -24,6 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.httppart.RequestHeader;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.http.*;
@@ -548,7 +549,7 @@ public class Remote_Test {
 	public static class F extends BasicRestObject {
 		@RestGet
 		public String[] headers(org.apache.juneau.rest.RestRequest req) {
-			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(x -> x.getValue()).toArray(String[]::new);
+			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new);
 		}
 	}
 

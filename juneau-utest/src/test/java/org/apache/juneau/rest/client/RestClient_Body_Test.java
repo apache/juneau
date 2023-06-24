@@ -168,7 +168,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Content-Type").is("application/json")
 			.assertContent().as(ABean.class).asJson().is("{a:1,b:'foo'}");
 
-		SerializedEntity x3 = serializedEntity(()->ABean.get(),js,null);
+		SerializedEntity x3 = serializedEntity(ABean::get,js,null);
 		client().build().post("/",x3).run()
 			.assertHeader("X-Content-Length").isNull()
 			.assertHeader("X-Content-Encoding").isNull()
