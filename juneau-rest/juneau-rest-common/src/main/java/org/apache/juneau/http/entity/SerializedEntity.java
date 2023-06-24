@@ -48,7 +48,6 @@ public class SerializedEntity extends BasicHttpEntity {
 	 * Constructor.
 	 */
 	public SerializedEntity() {
-		super();
 	}
 
 	/**

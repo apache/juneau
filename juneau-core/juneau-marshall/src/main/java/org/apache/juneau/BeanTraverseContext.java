@@ -55,7 +55,6 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			detectRecursions = env("BeanTraverseContext.detectRecursions", false);
 			ignoreRecursions = env("BeanTraverseContext.ignoreRecursions", false);
 			initialDepth = env("BeanTraverseContext.initialDepth", 0);

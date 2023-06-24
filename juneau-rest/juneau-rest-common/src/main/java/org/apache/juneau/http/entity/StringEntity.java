@@ -48,7 +48,6 @@ public class StringEntity extends BasicHttpEntity {
 	 * Constructor.
 	 */
 	public StringEntity() {
-		super();
 	}
 
 	/**

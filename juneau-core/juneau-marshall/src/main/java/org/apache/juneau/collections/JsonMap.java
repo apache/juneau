@@ -1781,7 +1781,6 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		private static final long serialVersionUID = 1L;
 
 		UnmodifiableJsonMap(JsonMap contents) {
-			super();
 			if (contents != null)
 				contents.forEach(super::put);
 		}

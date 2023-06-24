@@ -95,7 +95,6 @@ public class RoundTripBeanInheritanceTest extends RoundTripTest {
 
 	public static class A2 extends A1 {
 		public A2() {
-			super();
 		}
 
 		public A2(String x, String y, String z) {
@@ -118,7 +117,6 @@ public class RoundTripBeanInheritanceTest extends RoundTripTest {
 	// This is not supposed to be a valid bean since it has no getters defined.
 	public static class A3 extends A1 {
 		public A3() {
-			super();
 		}
 
 		public A3(String x, String y, String z) {

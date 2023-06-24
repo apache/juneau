@@ -230,7 +230,6 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			produces("text/uon");
 			addBeanTypesUon = env("UonSerializer.addBeanTypesUon", false);
 			encoding = env("UonSerializer.encoding", false);

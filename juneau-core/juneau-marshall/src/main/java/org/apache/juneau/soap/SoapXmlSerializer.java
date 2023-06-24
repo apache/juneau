@@ -79,7 +79,6 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			produces("text/xml");
 			accept("text/xml+soap");
 			soapAction = "http://www.w3.org/2003/05/soap-envelope";

@@ -35,7 +35,6 @@ public class SeeOtherRoot extends SeeOther {
 	 * Constructor.
 	 */
 	public SeeOtherRoot() {
-		super();
 		setLocation("servlet:/");
 	}
 
@@ -47,7 +46,6 @@ public class SeeOtherRoot extends SeeOther {
 	 * @param content Message to send as the response.
 	 */
 	public SeeOtherRoot(String content) {
-		super();
 		setLocation("servlet:/");
 		setContent(content);
 	}

@@ -58,7 +58,6 @@ public abstract class BeanContextable extends Context {
 		 * All default settings.
 		 */
 		protected Builder() {
-			super();
 			this.bcBuilder = BeanContext.create();
 			registerBuilders(bcBuilder);
 		}

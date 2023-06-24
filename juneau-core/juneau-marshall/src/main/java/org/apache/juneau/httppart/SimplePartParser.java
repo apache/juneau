@@ -84,7 +84,6 @@ public class SimplePartParser extends BaseHttpPartParser {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super();
 		}
 
 		/**

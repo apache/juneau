@@ -123,7 +123,6 @@ public class Serializer extends BeanTraverseContext {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			produces = null;
 			accept = null;
 			addBeanTypes = env("Serializer.addBeanTypes", false);

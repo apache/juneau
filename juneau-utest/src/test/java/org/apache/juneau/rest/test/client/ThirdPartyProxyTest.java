@@ -2454,7 +2454,6 @@ public class ThirdPartyProxyTest {
 		public static class Builder extends BaseHttpPartSerializer.Builder {
 
 			Builder() {
-				super();
 			}
 
 			Builder(Builder builder) {

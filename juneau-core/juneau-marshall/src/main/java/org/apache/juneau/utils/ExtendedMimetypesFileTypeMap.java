@@ -31,7 +31,6 @@ public class ExtendedMimetypesFileTypeMap extends MimetypesFileTypeMap {
 	 * Constructor.
 	 */
 	public ExtendedMimetypesFileTypeMap() {
-		super();
 		addMimeTypes("application/epub+zip epub");
 		addMimeTypes("application/java-archive jar");
 		addMimeTypes("application/javascript js");

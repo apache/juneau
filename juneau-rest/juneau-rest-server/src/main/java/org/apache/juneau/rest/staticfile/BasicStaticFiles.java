@@ -97,7 +97,6 @@ public class BasicStaticFiles implements StaticFiles {
 	 * Can be used when subclassing and overriding the {@link #resolve(String, Locale)} method.
 	 */
 	protected BasicStaticFiles() {
-		super();
 		this.headers = new Header[0];
 		this.mimeTypes = null;
 		this.hashCode = HashCode.of(hashCode(), headers);

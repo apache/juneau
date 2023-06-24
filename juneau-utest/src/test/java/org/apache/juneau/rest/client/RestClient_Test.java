@@ -73,7 +73,6 @@ public class RestClient_Test {
 
 	public static class A2 extends RestClient.Builder {
 		public A2() {
-			super();
 		}
 	}
 

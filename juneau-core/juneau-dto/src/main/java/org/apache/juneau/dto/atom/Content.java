@@ -83,7 +83,6 @@ public class Content extends Text {
 	 * Normal content.
 	 */
 	public Content() {
-		super();
 	}
 
 

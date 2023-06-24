@@ -65,7 +65,6 @@ public class VarList extends ArrayList<Object> {
 	 * Constructor.
 	 */
 	protected VarList() {
-		super();
 	}
 
 	/**

@@ -82,7 +82,6 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			produces("text/plain");
 		}
 

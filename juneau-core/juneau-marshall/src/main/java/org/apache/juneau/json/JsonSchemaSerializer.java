@@ -136,7 +136,6 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			produces("application/json");
 			accept("application/json+schema,text/json+schema");
 			generatorBuilder = JsonSchemaGenerator.create().beanContext(beanContext());

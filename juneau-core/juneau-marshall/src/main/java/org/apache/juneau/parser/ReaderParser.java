@@ -74,7 +74,6 @@ public class ReaderParser extends Parser {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			fileCharset = env("ReaderParser.fileCharset", Charset.defaultCharset());
 			streamCharset = env("ReaderParser.streamCharset", IOUtils.UTF8);
 		}

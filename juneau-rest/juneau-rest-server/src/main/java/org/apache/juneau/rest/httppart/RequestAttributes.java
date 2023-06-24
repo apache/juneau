@@ -101,7 +101,6 @@ public class RequestAttributes {
 	 * @param req The request creating this bean.
 	 */
 	public RequestAttributes(RestRequest req) {
-		super();
 		this.req = req;
 		this.sreq = req.getHttpServletRequest();
 		this.vs = req.getVarResolverSession();

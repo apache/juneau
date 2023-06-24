@@ -111,7 +111,6 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			consumes("octal/msgpack");
 		}
 

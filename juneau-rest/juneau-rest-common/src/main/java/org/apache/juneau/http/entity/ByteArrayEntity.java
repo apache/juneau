@@ -45,7 +45,6 @@ public class ByteArrayEntity extends BasicHttpEntity {
 	 * Constructor.
 	 */
 	public ByteArrayEntity() {
-		super();
 	}
 
 	/**

@@ -88,7 +88,6 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			consumes("text/xml,application/xml");
 			preserveRootElement = env("XmlParser.preserveRootElement", false);
 			validating = env("XmlParser.validating", false);

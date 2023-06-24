@@ -73,7 +73,6 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			produces("text/openapi");
 			format = HttpPartFormat.NO_FORMAT;
 			collectionFormat = HttpPartCollectionFormat.NO_COLLECTION_FORMAT;

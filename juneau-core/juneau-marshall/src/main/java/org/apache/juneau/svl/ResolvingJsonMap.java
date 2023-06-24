@@ -44,7 +44,6 @@ public class ResolvingJsonMap extends JsonMap {
 	 * @param varResolver The var resolver session to use for resolving SVL variables.
 	 */
 	public ResolvingJsonMap(VarResolverSession varResolver) {
-		super();
 		this.varResolver = varResolver;
 	}
 

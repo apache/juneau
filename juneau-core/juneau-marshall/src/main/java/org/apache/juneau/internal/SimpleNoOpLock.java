@@ -25,7 +25,6 @@ public class SimpleNoOpLock extends ReentrantReadWriteLock {
 	 * Constructor.
 	 */
 	public SimpleNoOpLock() {
-		super();
 	}
 
 	/**

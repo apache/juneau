@@ -72,7 +72,6 @@ public class InputStreamParser extends Parser {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			binaryFormat = env("InputStreamParser.binaryFormat", BinaryFormat.HEX);
 		}
 

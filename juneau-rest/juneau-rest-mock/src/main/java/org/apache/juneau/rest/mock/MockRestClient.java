@@ -416,7 +416,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * Provided so that this class can be easily subclassed.
 		 */
 		protected Builder() {
-			super();
 			connectionManager(new MockHttpClientConnectionManager());
 		}
 

@@ -114,7 +114,6 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			produces("octal/msgpack");
 			addBeanTypesMsgPack = env("MsgPackSerializer.addBeanTypesMsgPack", false);
 		}

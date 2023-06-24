@@ -84,7 +84,6 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			produces("text/html");
 			accept("text/html+schema");
 			generatorBuilder = JsonSchemaGenerator.create().beanContext(beanContext());

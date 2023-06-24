@@ -73,7 +73,6 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			consumes("text/openapi");
 			format = HttpPartFormat.NO_FORMAT;
 			collectionFormat = HttpPartCollectionFormat.NO_COLLECTION_FORMAT;

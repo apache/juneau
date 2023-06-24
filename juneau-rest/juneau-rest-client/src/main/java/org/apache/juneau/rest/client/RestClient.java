@@ -1105,7 +1105,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Constructor.
 		 */
 		protected Builder() {
-			super();
 		}
 
 		@Override /* Context.Builder */

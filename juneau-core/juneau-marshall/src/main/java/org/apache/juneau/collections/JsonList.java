@@ -188,7 +188,6 @@ public class JsonList extends LinkedList<Object> {
 	 * @param session The bean session to use for creating beans.
 	 */
 	public JsonList(BeanSession session) {
-		super();
 		this.session = session;
 	}
 
@@ -268,7 +267,6 @@ public class JsonList extends LinkedList<Object> {
 	 * @param entries The entries to add to this list.
 	 */
 	public JsonList(Object... entries) {
-		super();
 		Collections.addAll(this, entries);
 	}
 
@@ -1021,7 +1019,6 @@ public class JsonList extends LinkedList<Object> {
 		private static final long serialVersionUID = 1L;
 
 		UnmodifiableJsonList(JsonList contents) {
-			super();
 			if (contents != null)
 				this.forEach(super::add);
 		}

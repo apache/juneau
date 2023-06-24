@@ -171,7 +171,6 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			consumes("application/json,text/json");
 			validateEnd = env("JsonParser.validateEnd", false);
 		}

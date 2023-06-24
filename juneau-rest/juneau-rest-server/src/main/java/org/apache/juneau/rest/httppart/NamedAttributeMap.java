@@ -64,7 +64,6 @@ public class NamedAttributeMap extends LinkedHashMap<String,NamedAttribute> {
 	 * @param copyFrom The list to copy from.
 	 */
 	public NamedAttributeMap(NamedAttributeMap copyFrom) {
-		super();
 		putAll(copyFrom);
 	}
 

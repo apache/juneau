@@ -258,7 +258,6 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			produces("text/xml");
 			addBeanTypesXml = env("XmlSerializer.addBeanTypes", false);
 			addNamespaceUrisToRoot = env("XmlSerializer.addNamespaceUrisToRoot", false);

@@ -43,7 +43,6 @@ public abstract class BaseHttpPartParser extends BeanContextable implements Http
 		 * Constructor.
 		 */
 		protected Builder() {
-			super();
 		}
 
 		/**

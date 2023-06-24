@@ -49,7 +49,6 @@ public class SimpleReadWriteLock extends ReentrantReadWriteLock {
 	 * Constructor.
 	 */
 	public SimpleReadWriteLock() {
-		super();
 	}
 
 	/**

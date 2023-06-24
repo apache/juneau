@@ -72,7 +72,6 @@ public class WriterSerializer extends Serializer {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			fileCharset = Charset.defaultCharset();
 			streamCharset = IOUtils.UTF8;
 			maxIndent = env("WriterSerializer.maxIndent", 100);

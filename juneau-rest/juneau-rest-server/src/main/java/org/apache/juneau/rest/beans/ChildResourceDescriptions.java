@@ -98,6 +98,5 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	 * Bean constructor.
 	 */
 	public ChildResourceDescriptions() {
-		super();
 	}
 }

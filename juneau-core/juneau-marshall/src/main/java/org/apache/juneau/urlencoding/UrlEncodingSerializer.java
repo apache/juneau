@@ -221,7 +221,6 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			produces("application/x-www-form-urlencoded");
 			expandedParams = env("UrlEncoding.expandedParams", false);
 		}

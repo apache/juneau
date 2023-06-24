@@ -67,7 +67,6 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			produces("text/csv");
 		}
 

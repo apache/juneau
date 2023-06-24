@@ -213,7 +213,6 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			produces("text/html");
 			addBeanTypesHtml = env("HtmlSerializer.addBeanTypesHtml", false);
 			addKeyValueTableHeaders = env("HtmlSerializer.addKeyValueTableHeaders", false);

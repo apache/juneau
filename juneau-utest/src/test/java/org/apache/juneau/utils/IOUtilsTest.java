@@ -71,7 +71,6 @@ public class IOUtilsTest {
 		boolean closed;
 
 		public TestWriter() {
-			super();
 		}
 
 		@Override /* Writer */
@@ -98,7 +97,6 @@ public class IOUtilsTest {
 		boolean closed;
 
 		public TestOutputStream() {
-			super();
 		}
 
 		@Override /* OutputStream */

@@ -65,7 +65,6 @@ public class MemoryStore extends ConfigStore {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 		}
 
 		/**

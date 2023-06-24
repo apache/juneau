@@ -64,7 +64,6 @@ public class OutputStreamSerializer extends Serializer {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			binaryFormat = env("OutputStreamSerializer.binaryFormat", BinaryFormat.HEX);
 		}
 

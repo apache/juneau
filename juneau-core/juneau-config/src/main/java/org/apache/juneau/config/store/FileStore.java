@@ -79,7 +79,6 @@ public class FileStore extends ConfigStore {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			directory = env("ConfigFileStore.directory", ".");
 			charset = env("ConfigFileStore.charset", Charset.defaultCharset());
 			enableWatcher = env("ConfigFileStore.enableWatcher", false);

@@ -64,7 +64,6 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super();
 		}
 
 		/**

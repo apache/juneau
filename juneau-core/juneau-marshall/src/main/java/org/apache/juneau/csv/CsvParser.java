@@ -67,7 +67,6 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			consumes("text/csv");
 		}
 

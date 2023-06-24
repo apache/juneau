@@ -69,7 +69,6 @@ public class ClasspathStore extends ConfigStore {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 		}
 
 		/**

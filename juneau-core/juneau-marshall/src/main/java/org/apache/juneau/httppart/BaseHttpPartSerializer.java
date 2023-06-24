@@ -41,7 +41,6 @@ public abstract class BaseHttpPartSerializer extends BeanContextable implements 
 		 * Constructor.
 		 */
 		protected Builder() {
-			super();
 		}
 
 		/**

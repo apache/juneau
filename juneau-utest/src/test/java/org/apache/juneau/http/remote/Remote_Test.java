@@ -585,7 +585,6 @@ public class Remote_Test {
 	@SuppressWarnings("serial")
 	public static class F2b extends HeaderList {
 		public F2b() {
-			super();
 			throw new NullPointerException("foo");
 		}
 	}

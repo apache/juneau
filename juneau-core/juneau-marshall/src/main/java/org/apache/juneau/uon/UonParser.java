@@ -101,7 +101,6 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			consumes("text/uon");
 			decoding = env("UonParser.decoding", false);
 			validateEnd = env("UonParser.validateEnd", false);

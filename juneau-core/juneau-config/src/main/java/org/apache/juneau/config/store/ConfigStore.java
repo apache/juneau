@@ -55,7 +55,6 @@ public abstract class ConfigStore extends Context implements Closeable {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 		}
 
 		/**

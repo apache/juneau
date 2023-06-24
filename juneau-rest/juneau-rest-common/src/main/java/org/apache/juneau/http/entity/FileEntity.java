@@ -45,7 +45,6 @@ public class FileEntity extends BasicHttpEntity {
 	 * Constructor.
 	 */
 	public FileEntity() {
-		super();
 	}
 
 	/**

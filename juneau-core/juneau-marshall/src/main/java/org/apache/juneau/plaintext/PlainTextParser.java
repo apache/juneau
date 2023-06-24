@@ -86,7 +86,6 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			consumes("text/plain");
 		}
 

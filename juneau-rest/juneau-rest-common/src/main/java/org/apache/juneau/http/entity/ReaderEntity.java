@@ -44,7 +44,6 @@ public class ReaderEntity extends BasicHttpEntity {
 	 * Constructor.
 	 */
 	public ReaderEntity() {
-		super();
 	}
 
 	/**

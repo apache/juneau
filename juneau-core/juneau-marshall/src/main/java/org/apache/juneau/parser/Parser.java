@@ -192,7 +192,6 @@ public class Parser extends BeanContextable {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			autoCloseStreams = env("Parser.autoCloseStreams", false);
 			strict = env("Parser.strict", false);
 			trimStrings = env("Parser.trimStrings", false);

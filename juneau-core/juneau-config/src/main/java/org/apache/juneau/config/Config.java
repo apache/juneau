@@ -197,7 +197,6 @@ public final class Config extends Context implements ConfigEventListener {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			name = env("Config.name", "Configuration.cfg");
 			store = FileStore.DEFAULT;
 			serializer = Json5Serializer.DEFAULT;

@@ -175,7 +175,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			produces("application/json");
 			accept("application/json,text/json");
 			addBeanTypesJson = env("JsonSerializer.addBeanTypes", false);

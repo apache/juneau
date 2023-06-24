@@ -120,7 +120,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			produces("text/html");
 			accept("text/html");
 			asideFloat = AsideFloat.RIGHT;

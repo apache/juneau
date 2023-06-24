@@ -86,7 +86,6 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			decoding();
 			consumes("application/x-www-form-urlencoded");
 			expandedParams = env("UrlEncoding.expandedParams", false);

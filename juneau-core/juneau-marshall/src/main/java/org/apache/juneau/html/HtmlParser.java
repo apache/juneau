@@ -78,7 +78,6 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			consumes("text/html,text/html+stripped");
 		}
 

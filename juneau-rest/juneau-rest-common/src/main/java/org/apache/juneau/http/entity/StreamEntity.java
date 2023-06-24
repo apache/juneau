@@ -44,7 +44,6 @@ public class StreamEntity extends BasicHttpEntity {
 	 * Constructor.
 	 */
 	public StreamEntity() {
-		super();
 	}
 
 	/**

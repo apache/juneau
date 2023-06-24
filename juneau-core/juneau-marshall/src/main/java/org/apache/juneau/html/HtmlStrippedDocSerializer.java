@@ -79,7 +79,6 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			super();
 			produces("text/html");
 			accept("text/html+stripped");
 		}

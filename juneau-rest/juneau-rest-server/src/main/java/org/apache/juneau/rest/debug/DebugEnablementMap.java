@@ -50,7 +50,6 @@ public class DebugEnablementMap extends ReflectionMap<Enablement> {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super();
 		}
 
 		@Override /* ReflectionMapBuilder */

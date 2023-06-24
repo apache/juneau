@@ -50,7 +50,6 @@ public abstract class StringSwap<T> extends ObjectSwap<T,String> {
 	 * Constructor.
 	 */
 	protected StringSwap() {
-		super();
 	}
 
 	/**

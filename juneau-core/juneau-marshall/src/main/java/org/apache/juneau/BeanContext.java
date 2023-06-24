@@ -244,7 +244,6 @@ public class BeanContext extends Context {
 		 * All default settings.
 		 */
 		protected Builder() {
-			super();
 			beanClassVisibility = env("BeanContext.beanClassVisibility", PUBLIC);
 			beanConstructorVisibility = env("BeanContext.beanConstructorVisibility", PUBLIC);
 			beanMethodVisibility = env("BeanContext.beanMethodVisibility", PUBLIC);
