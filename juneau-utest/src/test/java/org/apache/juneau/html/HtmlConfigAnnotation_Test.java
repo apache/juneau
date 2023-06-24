@@ -35,7 +35,7 @@ public class HtmlConfigAnnotation_Test {
 	}
 
 	private static final Function<Object,String> TO_STRING = t -> Objects.toString(t, null);
-    
+
 
 	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 
