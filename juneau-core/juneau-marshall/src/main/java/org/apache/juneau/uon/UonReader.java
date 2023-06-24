@@ -61,7 +61,7 @@ public final class UonReader extends ParserReader {
 	}
 
 	@Override /* Reader */
-	public final int read(char[] cbuf, int off, int len) throws IOException {
+	public int read(char[] cbuf, int off, int len) throws IOException {
 
 		if (! decodeChars)
 			return super.read(cbuf, off, len);
@@ -194,7 +194,7 @@ public final class UonReader extends ParserReader {
 	}
 
 	@Override /* ParserReader */
-	public final UonReader unread() throws IOException {
+	public UonReader unread() throws IOException {
 		super.unread();
 		return this;
 	}

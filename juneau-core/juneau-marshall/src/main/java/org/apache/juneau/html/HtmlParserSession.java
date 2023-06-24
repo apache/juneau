@@ -780,7 +780,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * @throws XMLStreamException Thrown by underlying XML stream.
 	 */
 	@Override /* XmlParserSession */
-	protected final String parseText(XmlReader r) throws IOException, ParseException, XMLStreamException {
+	protected String parseText(XmlReader r) throws IOException, ParseException, XMLStreamException {
 
 		StringBuilder sb = getStringBuilder();
 
@@ -872,19 +872,19 @@ public final class HtmlParserSession extends XmlParserSession {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	@Override /* XmlParserSession */
-	protected final String getElementText(XmlReader r) throws IOException, XMLStreamException, ParseException {
+	protected String getElementText(XmlReader r) throws IOException, XMLStreamException, ParseException {
 		r.next();
 		return parseText(r);
 	}
 
 	@Override /* XmlParserSession */
-	protected final boolean isWhitespaceElement(XmlReader r) {
+	protected boolean isWhitespaceElement(XmlReader r) {
 		String s = r.getLocalName();
 		return whitespaceElements.contains(s);
 	}
 
 	@Override /* XmlParserSession */
-	protected final String parseWhitespaceElement(XmlReader r) throws IOException, ParseException, XMLStreamException {
+	protected String parseWhitespaceElement(XmlReader r) throws IOException, ParseException, XMLStreamException {
 
 		HtmlTag tag = HtmlTag.forEvent(this, r);
 		int et = r.next();

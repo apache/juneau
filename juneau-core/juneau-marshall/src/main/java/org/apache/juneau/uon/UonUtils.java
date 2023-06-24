@@ -37,7 +37,7 @@ public final class UonUtils {
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if the specified string needs to be quoted per UON notation.
 	 */
-	public static final boolean needsQuotes(String s) {
+	public static boolean needsQuotes(String s) {
 		char c0 = s.isEmpty() ? 0 : s.charAt(0);
 		return (
 			s.isEmpty()

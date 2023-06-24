@@ -47,13 +47,13 @@ public interface HttpPartParser {
 	 * <p>
 	 * Used to represent the absence of a part parser in annotations.
 	 */
-	public static interface Void extends HttpPartParser {}
+	public interface Void extends HttpPartParser {}
 
 	/**
 	 * Instantiates a creator for a part parser.
 	 * @return A new creator.
 	 */
-	public static Creator creator() {
+	static Creator creator() {
 		return new Creator();
 	}
 
@@ -111,7 +111,7 @@ public interface HttpPartParser {
 	 *
 	 * @return A new parser session.
 	 */
-	public HttpPartParserSession getPartSession();
+	HttpPartParserSession getPartSession();
 
 	/**
 	 * Returns metadata about the specified class.
@@ -120,7 +120,7 @@ public interface HttpPartParser {
 	 * @param c The class type.
 	 * @return Metadata about the specified class.
 	 */
-	public <T> ClassMeta<T> getClassMeta(Class<T> c);
+	<T> ClassMeta<T> getClassMeta(Class<T> c);
 
 	/**
 	 * Returns metadata about the specified class.
@@ -130,5 +130,5 @@ public interface HttpPartParser {
 	 * @param args The class type args.
 	 * @return Metadata about the specified class.
 	 */
-	public <T> ClassMeta<T> getClassMeta(Type t, Type...args);
+	<T> ClassMeta<T> getClassMeta(Type t, Type...args);
 }

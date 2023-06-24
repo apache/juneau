@@ -40,5 +40,5 @@ public interface PropertyNamer {
 	 * @param name The original bean property name.
 	 * @return The converted property name.
 	 */
-	public String getPropertyName(String name);
+	String getPropertyName(String name);
 }

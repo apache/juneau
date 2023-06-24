@@ -221,7 +221,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @param type The annotation to look for.
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
-	public final <A extends Annotation> A getAnnotation(Class<A> type) {
+	public <A extends Annotation> A getAnnotation(Class<A> type) {
 		return getAnnotation(AnnotationProvider.DEFAULT, type);
 	}
 
@@ -237,7 +237,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @param type The annotation to look for.
 	 * @return The first annotation found, or <jk>null</jk> if it doesn't exist.
 	 */
-	public final <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+	public <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		if (type == null)
 			return null;
 		Value<A> t = Value.empty();
@@ -256,7 +256,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present on this method.
 	 */
-	public final <A extends Annotation> boolean hasAnnotation(Class<A> type) {
+	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
 		return hasAnnotation(AnnotationProvider.DEFAULT, type);
 	}
 
@@ -268,7 +268,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present on this method.
 	 */
-	public final <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		for (MethodInfo m2 : _getMatching())
 			if (annotationProvider.firstAnnotation(type, m2.inner(), x -> true) != null)
 				return true;
@@ -283,7 +283,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present on this method.
 	 */
-	public final <A extends Annotation> boolean hasNoAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+	public <A extends Annotation> boolean hasNoAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		return ! hasAnnotation(annotationProvider, type);
 	}
 
@@ -294,7 +294,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present on this method.
 	 */
-	public final <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
+	public <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
 		return getAnnotation(type) == null;
 	}
 

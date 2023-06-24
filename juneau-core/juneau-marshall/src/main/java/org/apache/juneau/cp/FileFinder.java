@@ -99,7 +99,7 @@ public interface FileFinder {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BeanStore beanStore) {
+	static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 
@@ -108,7 +108,7 @@ public interface FileFinder {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static Builder create() {
+	static Builder create() {
 		return new Builder(BeanStore.INSTANCE);
 	}
 
@@ -262,7 +262,7 @@ public interface FileFinder {
 	 * @return The resolved resource contents, or <jk>null</jk> if the resource was not found.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public Optional<InputStream> getStream(String name, Locale locale) throws IOException;
+	Optional<InputStream> getStream(String name, Locale locale) throws IOException;
 
 	/**
 	 * Returns the file with the specified name as a string.
@@ -274,5 +274,5 @@ public interface FileFinder {
 	 * @return The contents of the file as a string.  Assumes UTF-8 encoding.
 	 * @throws IOException If file could not be read.
 	 */
-	public Optional<String> getString(String name, Locale locale) throws IOException;
+	Optional<String> getString(String name, Locale locale) throws IOException;
 }

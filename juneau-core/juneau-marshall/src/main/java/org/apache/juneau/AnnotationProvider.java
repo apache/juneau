@@ -31,13 +31,12 @@ public interface AnnotationProvider {
 	/**
 	 * Disable annotation caching.
 	 */
-	static final boolean DISABLE_ANNOTATION_CACHING = Boolean.getBoolean("juneau.disableAnnotationCaching");
+	boolean DISABLE_ANNOTATION_CACHING = Boolean.getBoolean("juneau.disableAnnotationCaching");
 
 	/**
 	 * Default metadata provider.
 	 */
-	@SuppressWarnings("unchecked")
-	public static final AnnotationProvider DEFAULT = new AnnotationProvider() {
+	@SuppressWarnings("unchecked") AnnotationProvider DEFAULT = new AnnotationProvider() {
 
 		private final TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> classAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, Class::getAnnotationsByType);
 		private final TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, Class::getDeclaredAnnotationsByType);

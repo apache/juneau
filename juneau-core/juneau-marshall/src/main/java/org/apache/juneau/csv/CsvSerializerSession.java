@@ -212,7 +212,7 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 
 	@SuppressWarnings("rawtypes")
 	@Override /* SerializerSession */
-	protected final void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
+	protected void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
 
 		try (CsvWriter w = getCsvWriter(pipe)) {
 			ClassMeta<?> cm = getClassMetaForObject(o);
@@ -274,7 +274,7 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 		}
 	}
 
-	final CsvWriter getCsvWriter(SerializerPipe out) {
+	CsvWriter getCsvWriter(SerializerPipe out) {
 		Object output = out.getRawOutput();
 		if (output instanceof CsvWriter)
 			return (CsvWriter)output;

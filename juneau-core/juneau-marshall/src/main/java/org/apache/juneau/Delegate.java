@@ -33,5 +33,5 @@ public interface Delegate<T> {
 	 *
 	 * @return The class type of the represented object.
 	 */
-	public ClassMeta<T> getClassMeta();
+	ClassMeta<T> getClassMeta();
 }

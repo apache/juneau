@@ -293,7 +293,7 @@ public final class ArrayUtils {
 	 * @param array The array to check.
 	 * @return <jk>true</jk> if the specified array is not null and has a length greater than zero.
 	 */
-	public static final boolean isNotEmptyArray(Object[] array) {
+	public static boolean isNotEmptyArray(Object[] array) {
 		return array != null && array.length > 0;
 	}
 
@@ -303,7 +303,7 @@ public final class ArrayUtils {
 	 * @param array The array to check.
 	 * @return <jk>true</jk> if the specified array is null or has a length of zero.
 	 */
-	public static final boolean isEmptyArray(Object[] array) {
+	public static boolean isEmptyArray(Object[] array) {
 		return array == null || array.length == 0;
 	}
 
@@ -314,7 +314,7 @@ public final class ArrayUtils {
 	 * @param array2 The array to check.
 	 * @return <jk>true</jk> if the specified array is null or has a length of zero.
 	 */
-	public static final boolean isEmptyArray(Object[] array1, Object[] array2) {
+	public static boolean isEmptyArray(Object[] array1, Object[] array2) {
 		return isEmptyArray(array1) && isEmptyArray(array2);
 	}
 
@@ -325,7 +325,7 @@ public final class ArrayUtils {
 	 * @param array The array to reverse.
 	 * @return The same array.
 	 */
-	public static final <E> E[] reverse(E[] array) {
+	public static <E> E[] reverse(E[] array) {
 		for (int i = 0; i < array.length / 2; i++) {
 			E temp = array[i];
 			array[i] = array[array.length - i - 1];

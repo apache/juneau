@@ -1039,7 +1039,7 @@ public class JsonList extends LinkedList<Object> {
 		}
 
 		@Override
-		public final boolean isUnmodifiable() {
+		public boolean isUnmodifiable() {
 			return true;
 		}
 	}

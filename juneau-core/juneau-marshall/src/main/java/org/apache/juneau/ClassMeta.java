@@ -213,7 +213,7 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Causes thread to wait until constructor has exited.
 	 */
-	final void waitForInit() {
+	void waitForInit() {
 		try (SimpleLock x = lock.read()) {}
 	}
 

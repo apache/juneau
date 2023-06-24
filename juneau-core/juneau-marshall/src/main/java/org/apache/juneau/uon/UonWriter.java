@@ -79,7 +79,7 @@ public final class UonWriter extends SerializerWriter {
 	 * @param isTopAttrName If this is a top-level attribute name we're serializing.
 	 * @return This object.
 	 */
-	public final UonWriter appendObject(Object o, boolean isTopAttrName) {
+	public UonWriter appendObject(Object o, boolean isTopAttrName) {
 
 		if (o instanceof Boolean)
 			return appendBoolean(o);

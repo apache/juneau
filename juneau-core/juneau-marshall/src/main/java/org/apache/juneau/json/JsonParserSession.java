@@ -220,7 +220,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	 * @param cp The codepoint.
 	 * @return <jk>true</jk> if the specified character is whitespace.
 	 */
-	protected final boolean isWhitespace(int cp) {
+	protected boolean isWhitespace(int cp) {
 		if (isStrict())
 				return cp <= 0x20 && (cp == 0x09 || cp == 0x0A || cp == 0x0D || cp == 0x20);
 		return Character.isWhitespace(cp);
@@ -232,7 +232,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	 * @param cp The codepoint.
 	 * @return <jk>true</jk> if the specified character is whitespace or '/'.
 	 */
-	protected final boolean isCommentOrWhitespace(int cp) {
+	protected boolean isCommentOrWhitespace(int cp) {
 		if (cp == '/')
 			return true;
 		if (isStrict())
@@ -960,7 +960,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.
 	 */
-	protected final boolean isValidateEnd() {
+	protected boolean isValidateEnd() {
 		return ctx.isValidateEnd();
 	}
 

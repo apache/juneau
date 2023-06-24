@@ -162,7 +162,7 @@ public final class DateUtils {
 	 * @param in The string to pad.
 	 * @return The padded string.
 	 */
-	public static final String toValidISO8601DT(String in) {
+	public static String toValidISO8601DT(String in) {
 
 		// "2001-07-04T15:30:45Z"
 		final int

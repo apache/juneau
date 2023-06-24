@@ -72,5 +72,5 @@ public interface HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	public void writeTo(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
+	void writeTo(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
 }

@@ -449,7 +449,7 @@ public final class ClassInfo {
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public final ClassInfo forEachPublicMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
+	public ClassInfo forEachPublicMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		for (MethodInfo mi : _getPublicMethods())
 			consume(filter, action, mi);
 		return this;
@@ -461,7 +461,7 @@ public final class ClassInfo {
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The first matching method, or <jk>null</jk> if no methods matched.
 	 */
-	public final MethodInfo getPublicMethod(Predicate<MethodInfo> filter) {
+	public MethodInfo getPublicMethod(Predicate<MethodInfo> filter) {
 		for (MethodInfo mi : _getPublicMethods())
 			if (test(filter, mi))
 				return mi;
@@ -487,7 +487,7 @@ public final class ClassInfo {
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public final ClassInfo forEachDeclaredMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
+	public ClassInfo forEachDeclaredMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		for (MethodInfo mi : _getDeclaredMethods())
 			consume(filter, action, mi);
 		return this;
@@ -525,7 +525,7 @@ public final class ClassInfo {
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public final ClassInfo forEachMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
+	public ClassInfo forEachMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		for (MethodInfo mi : _getAllMethods())
 			consume(filter, action, mi);
 		return this;
@@ -563,7 +563,7 @@ public final class ClassInfo {
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public final ClassInfo forEachAllMethodParentFirst(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
+	public ClassInfo forEachAllMethodParentFirst(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		for (MethodInfo mi : _getAllMethodsParentFirst())
 			consume(filter, action, mi);
 		return this;
@@ -650,7 +650,7 @@ public final class ClassInfo {
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public final ClassInfo forEachPublicConstructor(Predicate<ConstructorInfo> filter, Consumer<ConstructorInfo> action) {
+	public ClassInfo forEachPublicConstructor(Predicate<ConstructorInfo> filter, Consumer<ConstructorInfo> action) {
 		for (ConstructorInfo mi : _getPublicConstructors())
 			consume(filter, action, mi);
 		return this;
@@ -687,7 +687,7 @@ public final class ClassInfo {
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public final ClassInfo forEachDeclaredConstructor(Predicate<ConstructorInfo> filter, Consumer<ConstructorInfo> action) {
+	public ClassInfo forEachDeclaredConstructor(Predicate<ConstructorInfo> filter, Consumer<ConstructorInfo> action) {
 		for (ConstructorInfo mi : _getDeclaredConstructors())
 			consume(filter, action, mi);
 		return this;
@@ -785,7 +785,7 @@ public final class ClassInfo {
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public final ClassInfo forEachPublicField(Predicate<FieldInfo> filter, Consumer<FieldInfo> action) {
+	public ClassInfo forEachPublicField(Predicate<FieldInfo> filter, Consumer<FieldInfo> action) {
 		for (FieldInfo mi : _getPublicFields())
 			consume(filter, action, mi);
 		return this;

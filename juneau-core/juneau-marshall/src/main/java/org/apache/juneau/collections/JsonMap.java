@@ -1786,17 +1786,17 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		}
 
 		@Override
-		public final Object put(String key, Object val) {
+		public Object put(String key, Object val) {
 			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override
-		public final Object remove(Object key) {
+		public Object remove(Object key) {
 			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override
-		public final boolean isUnmodifiable() {
+		public boolean isUnmodifiable() {
 			return true;
 		}
 	}

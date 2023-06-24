@@ -59,13 +59,13 @@ public interface HttpPartSerializer {
 	 * <p>
 	 * Used to represent the absence of a part serializer in annotations.
 	 */
-	public static interface Void extends HttpPartSerializer {}
+	public interface Void extends HttpPartSerializer {}
 
 	/**
 	 * Instantiates a creator for a part serializer.
 	 * @return A new creator.
 	 */
-	public static Creator creator() {
+	static Creator creator() {
 		return new Creator();
 	}
 
@@ -124,5 +124,5 @@ public interface HttpPartSerializer {
 	 *
 	 * @return A new serializer session.
 	 */
-	public HttpPartSerializerSession getPartSession();
+	HttpPartSerializerSession getPartSession();
 }

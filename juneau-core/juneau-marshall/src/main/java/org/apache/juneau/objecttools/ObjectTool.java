@@ -33,5 +33,5 @@ public interface ObjectTool<T> {
 	 * @param args The arguments.
 	 * @return The output POJO.
 	 */
-	public Object run(BeanSession session, Object input, T args);
+	Object run(BeanSession session, Object input, T args);
 }

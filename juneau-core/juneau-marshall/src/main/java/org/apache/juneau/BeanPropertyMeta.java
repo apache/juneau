@@ -612,7 +612,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * Converts a raw bean property value to serialized form.
 	 * Applies transforms and child property filters.
 	 */
-	final Object toSerializedForm(BeanSession session, Object o) {
+	Object toSerializedForm(BeanSession session, Object o) {
 		try {
 			o = transform(session, o);
 			if (o == null)

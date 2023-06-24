@@ -45,7 +45,7 @@ public final class XmlUtils {
 	 * @param value The object being encoded.
 	 * @return The same writer passed in.
 	 */
-	public static final Writer encodeElementName(Writer w, Object value) {
+	public static Writer encodeElementName(Writer w, Object value) {
 		try {
 			if (value == null)
 				return w.append("_x0000_");
@@ -65,7 +65,7 @@ public final class XmlUtils {
 	 * @param value The object being encoded.
 	 * @return The encoded element name string.
 	 */
-	public static final String encodeElementName(Object value) {
+	public static String encodeElementName(Object value) {
 		if (value == null)
 			return "_x0000_";
 		String s = value.toString();
@@ -84,7 +84,7 @@ public final class XmlUtils {
 		return s;
 	}
 
-	private static final Writer encodeElementNameInner(Writer w, String s) throws IOException {
+	private static Writer encodeElementNameInner(Writer w, String s) throws IOException {
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
 			if ((c >= 'A' && c <= 'Z')
@@ -117,7 +117,7 @@ public final class XmlUtils {
 		return w;
 	}
 
-	private static final boolean needsElementNameEncoding(String value) {
+	private static boolean needsElementNameEncoding(String value) {
 		// Note that this doesn't need to be perfect, just fast.
 		for (int i = 0; i < value.length(); i++) {
 			char c = value.charAt(i);
@@ -137,7 +137,7 @@ public final class XmlUtils {
 	 * @param value The object being encoded.
 	 * @return The encoded string.
 	 */
-	public static final String escapeText(Object value) {
+	public static String escapeText(Object value) {
 		if (value == null)
 			return "_x0000_";
 		String s = value.toString();
@@ -182,7 +182,7 @@ public final class XmlUtils {
 	 * 	If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
 	 * @return The same writer passed in.
 	 */
-	public static final Writer encodeText(Writer w, Object value, boolean trim, boolean preserveWhitespace) {
+	public static Writer encodeText(Writer w, Object value, boolean trim, boolean preserveWhitespace) {
 
 		try {
 			if (value == null)
@@ -218,7 +218,7 @@ public final class XmlUtils {
 		return w;
 	}
 
-	private static final boolean needsTextEncoding(String value) {
+	private static boolean needsTextEncoding(String value) {
 		// See if we need to convert the string.
 		// Conversion is somewhat expensive, so make sure we need to do so before hand.
 		final int len = value.length();
@@ -253,7 +253,7 @@ public final class XmlUtils {
 	 * @return This object.
 	 * @throws IOException If a problem occurred.
 	 */
-	public static final Writer encodeAttrName(Writer w, Object value) throws IOException {
+	public static Writer encodeAttrName(Writer w, Object value) throws IOException {
 		if (value == null)
 			return w.append("_x0000_");
 		String s = value.toString();
@@ -284,7 +284,7 @@ public final class XmlUtils {
 		return w;
 	}
 
-	private static final boolean needsAttrNameEncoding(String value) {
+	private static boolean needsAttrNameEncoding(String value) {
 		// Note that this doesn't need to be perfect, just fast.
 		for (int i = 0; i < value.length(); i++) {
 			char c = value.charAt(i);
@@ -314,7 +314,7 @@ public final class XmlUtils {
 	 * 	If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
 	 * @return The same writer passed in.
 	 */
-	public static final Writer encodeAttrValue(Writer w, Object value, boolean trim) {
+	public static Writer encodeAttrValue(Writer w, Object value, boolean trim) {
 		try {
 			if (value == null)
 				return w.append("_x0000_");
@@ -349,7 +349,7 @@ public final class XmlUtils {
 		return w;
 	}
 
-	private static final boolean needsAttrValueEncoding(String value) {
+	private static boolean needsAttrValueEncoding(String value) {
 		// See if we need to convert the string.
 		// Conversion is somewhat expensive, so make sure we need to do so before hand.
 		final int len = value.length();
@@ -385,7 +385,7 @@ public final class XmlUtils {
 	 * @param sb The string builder to use as a scratch pad.
 	 * @return The decoded string.
 	 */
-	public static final String decode(String value, StringBuilder sb) {
+	public static String decode(String value, StringBuilder sb) {
 		if (value == null)
 			return null;
 		if (value.isEmpty() || value.indexOf('_') == -1)
@@ -448,13 +448,13 @@ public final class XmlUtils {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// Returns true if the specified character can safely be used in XML text or an attribute.
-	private static final boolean isValidXmlCharacter(char c) {
+	private static boolean isValidXmlCharacter(char c) {
 		return (c >= 0x20 && c <= 0xD7FF) /*|| c == 0xA || c == 0xD*/ || (c >= 0xE000 && c <= 0xFFFD);
 	}
 
 	// Returns true if the string at the specified position is of the form "_x####_"
 	// where '#' are hexadecimal characters.
-	private static final boolean isEscapeSequence(String s, int i) {
+	private static boolean isEscapeSequence(String s, int i) {
 		return s.length() > i+6
 			&& s.charAt(i) == '_'
 			&& s.charAt(i+1) == 'x'
@@ -466,12 +466,12 @@ public final class XmlUtils {
 	}
 
 	// Returns true if the character is a hexadecimal character
-	private static final boolean isHexCharacter(char c) {
+	private static boolean isHexCharacter(char c) {
 		return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F');
 	}
 
 	// Converts an integer to a hexadecimal string padded to 4 places.
-	private static final Writer appendPaddedHexChar(Writer out, int num) throws IOException {
+	private static Writer appendPaddedHexChar(Writer out, int num) throws IOException {
 		out.append("_x");
 		for (char c : toHex4(num))
 			out.append(c);
@@ -553,7 +553,7 @@ public final class XmlUtils {
 	 * @param r The XML stream reader whose current event is to be converted to a readable string.
 	 * @return The event in human-readable form.
 	 */
-	public static final String toReadableEvent(XMLStreamReader r) {
+	public static String toReadableEvent(XMLStreamReader r) {
 		int t = r.getEventType();
 		if (t == 1)
 			return "<"+r.getLocalName()+">";

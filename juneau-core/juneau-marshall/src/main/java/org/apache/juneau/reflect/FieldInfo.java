@@ -141,7 +141,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present on this field.
 	 */
-	public final <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
+	public <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
 		return ! hasAnnotation(type);
 	}
 

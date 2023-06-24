@@ -206,7 +206,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	/*
 	 * Converts the specified output target object to an {@link MsgPackOutputStream}.
 	 */
-	private static final MsgPackOutputStream getMsgPackOutputStream(SerializerPipe out) throws IOException {
+	private static MsgPackOutputStream getMsgPackOutputStream(SerializerPipe out) throws IOException {
 		Object output = out.getRawOutput();
 		if (output instanceof MsgPackOutputStream)
 			return (MsgPackOutputStream)output;
@@ -393,7 +393,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override
-	protected final boolean isAddBeanTypes() {
+	protected boolean isAddBeanTypes() {
 		return ctx.isAddBeanTypes();
 	}
 }

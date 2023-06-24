@@ -856,11 +856,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		return out;
 	}
 
-	static enum JsonType {
+	enum JsonType {
 		STRING("string"),BOOLEAN("boolean"),NUMBER("number"),ARRAY("array"),OBJECT("object"),NULL("null");
 
 		private final String value;
-		private JsonType(String value) {
+		JsonType(String value) {
 			this.value = value;
 		}
 
@@ -881,7 +881,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * Identifies what the contents were of a serialized bean.
 	 */
 	@SuppressWarnings("javadoc")
-	public static enum ContentResult {
+	public enum ContentResult {
 		CR_VOID,      // No content...append "/>" to the start tag.
 		CR_EMPTY,     // No content...append "/>" to the start tag if XML, "/></end>" if HTML.
 		CR_MIXED,     // Mixed content...don't add whitespace.

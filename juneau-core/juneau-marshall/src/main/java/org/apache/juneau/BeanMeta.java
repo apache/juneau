@@ -574,7 +574,7 @@ public class BeanMeta<T> {
 	/**
 	 * Possible property method types.
 	 */
-	static enum MethodType {
+	enum MethodType {
 		UNKNOWN,
 		GETTER,
 		SETTER,
