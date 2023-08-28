@@ -47,7 +47,8 @@ import org.apache.juneau.rest.servlet.*;
 		"api: servlet:/api",
 		"stats: servlet:/stats",
 		"edit: servlet:/edit"
-	}
+	},
+	resolveBodyVars="true"
 )
 @SuppressWarnings("javadoc")
 public class ConfigResource extends BasicRestServlet {
