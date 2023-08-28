@@ -368,6 +368,17 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
+	 * Resolve $ variables in serialized POJO.
+	 *
+	 * @see HtmlDocSerializer.Builder#resolveBodyVars()
+	 * @return
+	 * 	<jk>true</jk> if $ variables in serialized POJO should be resolved.
+	 */
+	protected final boolean isResolveBodyVars() {
+		return ctx.resolveBodyVars;
+	}
+
+	/**
 	 * Javascript code.
 	 *
 	 * @see HtmlDocSerializer.Builder#script(String...)

@@ -13,6 +13,7 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.html.AsideFloat.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 
 import org.apache.juneau.internal.*;
 
@@ -262,6 +263,14 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 		} else {
 			session.indent = 6;
 			w.flush();
+			if (session.isResolveBodyVars()) {
+				w = new HtmlWriter(w) {
+					@Override
+					public HtmlWriter text(Object value, boolean preserveWhitespace) {
+						return super.text(session.resolve(stringify(value)), preserveWhitespace);
+					}
+				};
+			}
 			session.parentSerialize(w, o);
 		}
 

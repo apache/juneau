@@ -56,6 +56,17 @@ public class XmlWriter extends SerializerWriter {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param w Writer being copied.
+	 */
+	public XmlWriter(XmlWriter w) {
+		super(w);
+		this.enableNs = w.enableNs;
+		this.defaultNsPrefix = w.defaultNsPrefix;
+	}
+
+	/**
 	 * Writes an opening tag to the output:  <code><xt>&lt;ns:name</xt></code>
 	 *
 	 * @param ns The namespace.  Can be <jk>null</jk>.

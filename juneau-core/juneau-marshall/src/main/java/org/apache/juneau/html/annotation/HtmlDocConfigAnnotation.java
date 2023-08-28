@@ -57,6 +57,7 @@ public class HtmlDocConfigAnnotation {
 			string(a.asideFloat()).filter(x -> ! "DEFAULT".equalsIgnoreCase(x)).map(AsideFloat::valueOf).ifPresent(x -> b.asideFloat(x));
 			string(a.noResultsMessage()).ifPresent(x -> b.noResultsMessage(x));
 			bool(a.nowrap()).ifPresent(x -> b.nowrap(x));
+			bool(a.resolveBodyVars()).ifPresent(x -> b.resolveBodyVars(x));
 			type(a.template()).ifPresent(x -> b.template(x));
 			classes(a.widgets()).ifPresent(x -> b.widgets((Class<? extends HtmlWidget>[]) x));
 		}

@@ -431,6 +431,27 @@ public @interface HtmlDocConfig {
 	String nowrap() default "";
 
 	/**
+	 * Resolve $ variables in serialized pojo.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="../../../../../index.html#jrs.SvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#resolveBodyVars()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String resolveBodyVars() default "";
+
+	/**
 	 * Javascript code.
 	 *
 	 * <p>

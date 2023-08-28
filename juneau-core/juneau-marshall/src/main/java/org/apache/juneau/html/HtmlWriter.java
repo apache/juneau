@@ -43,6 +43,14 @@ public class HtmlWriter extends XmlWriter {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver, false, null);
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param w Writer being copied.
+	 */
+	public HtmlWriter(HtmlWriter w) {
+		super(w);
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods

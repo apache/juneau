@@ -75,6 +75,20 @@ public class SerializerWriter extends Writer {
 	}
 
 	/**
+	 * Copy Constructor
+	 *
+	 * @param w Writer being copied.
+	 */
+	public SerializerWriter(SerializerWriter w) {
+		this.out = w.out;
+		this.useWhitespace = w.useWhitespace;
+		this.maxIndent = w.maxIndent;
+		this.trimStrings = w.trimStrings;
+		this.quoteChar = w.quoteChar;
+		this.uriResolver = w.uriResolver;
+	}
+
+	/**
 	 * Performs a carriage return.
 	 *
 	 * <p>

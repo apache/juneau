@@ -37,7 +37,7 @@ import org.junit.runners.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class RoundTripAddClassAttrsTest extends RoundTripTest {
 
-	@Parameterized.Parameters
+	@Parameterized.Parameters(name="{0}")
 	public static Collection<Object[]> getPairs() {
 		return Arrays.asList(new Object[][] {
 			{ /* 0 */

@@ -112,7 +112,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		List<String> aside, footer, head, header, nav, navlinks, script, style, stylesheet;
 		AsideFloat asideFloat;
 		String noResultsMessage;
-		boolean nowrap;
+		boolean nowrap, resolveBodyVars;
 		Class<? extends HtmlDocTemplate> template;
 		List<Class<? extends HtmlWidget>> widgets;
 
@@ -146,6 +146,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			asideFloat = copyFrom.asideFloat;
 			noResultsMessage = copyFrom.noResultsMessage;
 			nowrap = copyFrom.nowrap;
+			resolveBodyVars = copyFrom.resolveBodyVars;
 			template = copyFrom.template;
 			widgets = copy(copyFrom.widgets);
 		}
@@ -169,6 +170,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			asideFloat = copyFrom.asideFloat;
 			noResultsMessage = copyFrom.noResultsMessage;
 			nowrap = copyFrom.nowrap;
+			resolveBodyVars = copyFrom.resolveBodyVars;
 			template = copyFrom.template;
 			widgets = copy(copyFrom.widgets);
 		}
@@ -199,6 +201,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 				asideFloat,
 				noResultsMessage,
 				nowrap,
+				resolveBodyVars,
 				template,
 				widgets
 			);
@@ -596,6 +599,30 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		@FluentSetter
 		public Builder nowrap(boolean value) {
 			nowrap = value;
+			return this;
+		}
+
+		/**
+		 * Resolve $ variables in serialized POJO.
+		 *
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder resolveBodyVars() {
+			return resolveBodyVars(true);
+		}
+
+		/**
+		 * Same as {@link #resolveBodyVars()} but allows you to explicitly specify the boolean value.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object.
+		 * @see #nowrap()
+		 */
+		@FluentSetter
+		public Builder resolveBodyVars(boolean value) {
+			resolveBodyVars = value;
 			return this;
 		}
 
@@ -1631,7 +1658,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	final String[] style, stylesheet, script, navlinks, head, header, nav, aside, footer;
 	final AsideFloat asideFloat;
 	final String noResultsMessage;
-	final boolean nowrap;
+	final boolean nowrap, resolveBodyVars;
 	final Class<? extends HtmlDocTemplate> template;
 	final List<Class<? extends HtmlWidget>> widgets;
 
@@ -1660,6 +1687,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		asideFloat = builder.asideFloat;
 		noResultsMessage = builder.noResultsMessage;
 		nowrap = builder.nowrap;
+		resolveBodyVars = builder.resolveBodyVars;
 		template = builder.template;
 		widgets = builder.widgets == null ? emptyList() : copyOf(builder.widgets);
 
