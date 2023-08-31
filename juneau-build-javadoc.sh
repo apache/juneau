@@ -32,6 +32,7 @@ export cp=target/juneau-doc-${JUNEAU_VERSION}-SNAPSHOT.jar:../juneau-all/target/
 java -DjuneauVersion=$JUNEAU_VERSION -cp $cp org.apache.juneau.doc.internal.DocGenerator 
 cd .. 
 
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-18.jdk/Contents/Home
 mvn javadoc:aggregate
 tput bel
 

@@ -77,7 +77,7 @@ export GPG_TTY=$(tty)
 
 message "Checking Java version"
 java -version
-yprompt "Are you using at least Java 8?";
+yprompt "Are you using at least Java 17?";
 
 message "Checking Maven version"
 mvn -version

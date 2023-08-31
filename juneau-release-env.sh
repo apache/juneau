@@ -13,12 +13,12 @@
 # ***************************************************************************************************************************
 
 # DO NOT CHECK IN CHANGES TO THIS FILE!
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_162.jdk/Contents/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-18.jdk/Contents/Home
 export PATH=$JAVA_HOME/bin:$PATH
 
 export X_VERSION=9.0.0
 export X_NEXT_VERSION=9.0.1-SNAPSHOT
-export X_RELEASE=juneau-9.0.0-RC2
+export X_RELEASE=juneau-9.0.0-RC3
 export X_STAGING=~/tmp/dist-release-juneau
 export X_USERNAME=jamesbognar
 export X_EMAIL=jamesbognar@apache.org
