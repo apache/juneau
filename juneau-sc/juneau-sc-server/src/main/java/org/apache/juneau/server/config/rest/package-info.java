@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 
 /**
- * Server Config REST
+ * Server Configuration REST
  */
 package org.apache.juneau.server.config.rest;
 

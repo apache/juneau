@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 
 /**
- * Config Encoding Support
+ * Configuration Encoding Support
  */
 package org.apache.juneau.config.mod;
 

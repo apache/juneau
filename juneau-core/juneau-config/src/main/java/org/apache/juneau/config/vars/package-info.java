@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 
 /**
- * Config Predefined SVL Variables
+ * Configuration Predefined SVL Variables
  */
 package org.apache.juneau.config.vars;
 
