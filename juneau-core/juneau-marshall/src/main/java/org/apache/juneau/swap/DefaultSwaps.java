@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.swap;
 
+import java.net.*;
 import java.time.*;
 import java.time.temporal.*;
 import java.util.*;
@@ -55,6 +56,7 @@ public class DefaultSwaps {
 		SWAPS.put(XMLGregorianCalendar.class, new XMLGregorianCalendarSwap());
 		SWAPS.put(ZoneId.class, new ZoneIdSwap());
 		SWAPS.put(MatchResult.class, new MatchResultSwap());
+		SWAPS.put(URL.class, new UrlSwap());
 	}
 
 	/**

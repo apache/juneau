@@ -352,7 +352,7 @@ public final class HtmlParserSession extends XmlParserSession {
 			skipTag(r, xNULL);
 
 		} else if (tag == A) {
-			o = parseAnchor(r, eType);
+			o = parseAnchor(r, swap == null ? eType : null);
 			skipTag(r, xA);
 
 		} else if (tag == TABLE) {
@@ -473,7 +473,7 @@ public final class HtmlParserSession extends XmlParserSession {
 			throws IOException, ParseException, XMLStreamException {
 		String href = r.getAttributeValue(null, "href");
 		String name = getElementText(r);
-		if (beanType.hasAnnotation(HtmlLink.class)) {
+		if (beanType != null && beanType.hasAnnotation(HtmlLink.class)) {
 			Value<String> uriProperty = Value.empty(), nameProperty = Value.empty();
 			beanType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
 			beanType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
