@@ -40,7 +40,7 @@ import org.apache.juneau.urlencoding.*;
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-common">juneau-rest-common</a>
  * </ul>
  */
-public class SerializedPart extends BasicPart implements Headerable {
+public class SerializedPart extends BasicPart {
 	private final Object value;
 	private HttpPartType type;
 	private HttpPartSerializerSession serializer;

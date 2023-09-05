@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 
 /**
- * Config Event Support
+ * Configuration Event Support
  */
 package org.apache.juneau.config.event;
 

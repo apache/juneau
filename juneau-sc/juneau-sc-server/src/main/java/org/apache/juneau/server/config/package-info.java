@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 
 /**
- * Server Config Repository
+ * Server Configuration Repository
  */
 package org.apache.juneau.server.config;
 
