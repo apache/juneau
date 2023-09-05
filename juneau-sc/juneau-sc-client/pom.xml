@@ -24,7 +24,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-sc</artifactId>
-		<version>9.0.1-SNAPSHOT</version>
+		<version>9.0.1</version>
 	</parent>
 
 	<properties>
