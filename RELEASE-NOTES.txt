@@ -12,6 +12,10 @@
 ***************************************************************************************************************************
 
 
+Release Notes - Juneau - Version 9.0.2
+
+    * [JUNEAU-252] Bump org.eclipse.jgit:org.eclipse.jgit from 6.6.1.202309021850-r to 6.7.0.202309050840-r #112.
+
 Release Notes - Juneau - Version 9.0.1
 
 ** Improvement
