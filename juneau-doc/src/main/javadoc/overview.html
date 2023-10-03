@@ -15,88 +15,88 @@
  ***************************************************************************************************************************/
  -->
 <body>
-<h1 class='title'>Apache Juneau <juneauVersion>9.0.0</juneauVersion> Documentation</h1>
+<h1 class='title'>Apache Juneau <juneauVersion>9.0.1</juneauVersion> Documentation</h1>
 
 <a href='#TOC' id='TOC'></a><h5 class='toc'>Table of Contents</h5>
 <ol class='toc'>
 	<li><p class='toc2'><a class='doclink' href='#Overview'>Overview</a></p>
 	<ol>
-		<li><p><a class='doclink' href='#o.Marshalling'>Marshalling</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#o.EndToEndRest'>End-to-End REST</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#o.Marshalling'>Marshalling</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#o.EndToEndRest'>End-to-End REST</a><span class='update'>created: 9.0.0</span></p>
 		<li><p><a class='doclink' href='#o.RestServer'>REST Server</a></p>
-		<li><p><a class='doclink' href='#o.RestClient'>REST Client</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#o.Dtos'>DTOs</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#o.ConfigFiles'>Config Files</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#o.FluentAssertions'>Fluent Assertions</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#o.GeneralDesign'>General Design</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#o.RestClient'>REST Client</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#o.Dtos'>DTOs</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#o.ConfigFiles'>Config Files</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#o.FluentAssertions'>Fluent Assertions</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#o.GeneralDesign'>General Design</a><span class='update'>created: 9.0.0</span></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-marshall'>juneau-marshall</a></p>
 	<ol>
 		<li><p><a class='doclink' href='#jm.Marshallers'>Marshallers</a></p>
-		<li><p><a class='doclink' href='#jm.SerializersAndParsers'>Serializers and Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jm.BeanContexts'>Bean Contexts</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jm.JavaBeansSupport'>Java Beans Support</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jm.SerializersAndParsers'>Serializers and Parsers</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jm.BeanContexts'>Bean Contexts</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jm.JavaBeansSupport'>Java Beans Support</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></p>
 		<ol>
-			<li><p><a class='doclink' href='#jm.BeanAnnotation'>@Bean Annotation</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jm.BeanpAnnotation'>@Beanp Annotation</a><span class='update'>updated: 8.1.0,8.1.2,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jm.BeanAnnotation'>@Bean Annotation</a><span class='update'>updated: 8.2.0,9.0.0</span></p>
+			<li><p><a class='doclink' href='#jm.BeanpAnnotation'>@Beanp Annotation</a><span class='update'>updated: 8.1.0,8.1.2,9.0.0</span></p>
 			<li><p><a class='doclink' href='#jm.BeancAnnotation'>@Beanc Annotation</a><span class='update'>updated: 8.1.0,8.1.2</span></p>
 			<li><p><a class='doclink' href='#jm.BeanIgnoreAnnotation'>@BeanIgnore Annotation</a></p>
 			<li><p><a class='doclink' href='#jm.NamePropertyAnnotation'>@NameProperty Annotation</a></p>
 			<li><p><a class='doclink' href='#jm.ParentPropertyAnnotation'>@ParentProperty Annotation</a></p>
-			<li><p><a class='doclink' href='#jm.PojoBuilders'>POJO Builders</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jm.PojoBuilders'>POJO Builders</a><span class='update'>updated: 9.0.0</span></p>
 			<li><p><a class='doclink' href='#jm.BypassSerialization'>Bypass Serialization using Readers and InputStreams</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#jm.HttpPartSerializersParsers'>HTTP Part Serializers and Parsers</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jm.ContextSettings'>Context Settings</a><span class='update'>updated: 8.1.3,<b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jm.ContextAnnotations'>Context Annotations</a><span class='update'>created: 8.1.0, updated: 8.1.3,8.2.0,<b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jm.HttpPartSerializersParsers'>HTTP Part Serializers and Parsers</a><span class='update'>updated: 8.2.0,9.0.0</span></p>
+		<li><p><a class='doclink' href='#jm.ContextSettings'>Context Settings</a><span class='update'>updated: 8.1.3,9.0.0</span></p>
+		<li><p><a class='doclink' href='#jm.ContextAnnotations'>Context Annotations</a><span class='update'>created: 8.1.0, updated: 8.1.3,8.2.0,9.0.0</span></p>
 		<li><p><a class='doclink' href='#jm.JsonMap'>JsonMap and JsonList</a><span class='update'>updated: 8.2.0</span></p>
-		<li><p><a class='doclink' href='#jm.ComplexDataTypes'>Complex Data Types</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jm.SerializerSetsParserSets'>SerializerSets and ParserSets</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jm.Swaps'>Swaps</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jm.ComplexDataTypes'>Complex Data Types</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jm.SerializerSetsParserSets'>SerializerSets and ParserSets</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jm.Swaps'>Swaps</a><span class='update'>updated: 9.0.0</span></p>
 		<ol>
 			<li><p><a class='doclink' href='#jm.DefaultSwaps'>Default Swaps</a></p>
 			<li><p><a class='doclink' href='#jm.AutoSwaps'>Auto-detected swaps</a><span class='update'>created: 8.1.0</span></p>
 			<li><p><a class='doclink' href='#jm.PerMediaTypeSwaps'>Per-media-type Swaps</a><span class='update'>updated: 8.1.0,8.2.0</span></p>
 			<li><p><a class='doclink' href='#jm.OneWaySwaps'>One-way Swaps</a></p>
-			<li><p><a class='doclink' href='#jm.SwapAnnotation'>@Swap Annotation</a><span class='update'>updated: 8.0.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jm.SwapAnnotation'>@Swap Annotation</a><span class='update'>updated: 8.0.0,9.0.0</span></p>
 			<li><p><a class='doclink' href='#jm.TemplatedSwaps'>Templated Swaps</a></p>
 			<li><p><a class='doclink' href='#jm.SurrogateClasses'>Surrogate Classes</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#jm.DynamicallyAppliedAnnotations'>Dynamically Applied Annotations</a><span class='update'>created: 8.1.3, updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jm.BeanDictionaries'>Bean Names and Dictionaries</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jm.DynamicallyAppliedAnnotations'>Dynamically Applied Annotations</a><span class='update'>created: 8.1.3, updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jm.BeanDictionaries'>Bean Names and Dictionaries</a><span class='update'>updated: 9.0.0</span></p>
 		<ol>
 			<li><p><a class='doclink' href='#jm.BeanSubTypes'>Bean Subtypes</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#jm.VirtualBeans'>Virtual Beans</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jm.Recursion'>Non-Tree Models and Recursion Detection</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jm.VirtualBeans'>Virtual Beans</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jm.Recursion'>Non-Tree Models and Recursion Detection</a><span class='update'>updated: 9.0.0</span></p>
 		<li><p><a class='doclink' href='#jm.ParsingIntoGenericModels'>Parsing into Generic Models</a><span class='update'>updated: 8.2.0</span></p>
-		<li><p><a class='doclink' href='#jm.ReadingContinuousStreams'>Reading Continuous Streams</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jm.MarshallingUris'>URIs</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jm.JacksonComparison'>Comparison with Jackson</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jm.ReadingContinuousStreams'>Reading Continuous Streams</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jm.MarshallingUris'>URIs</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jm.JacksonComparison'>Comparison with Jackson</a><span class='update'>updated: 9.0.0</span></p>
 		<li><p><a class='doclink' href='#jm.PojoCategories'>POJO Categories</a></p>
 		<li><p><a class='doclink' href='#jm.SimpleVariableLanguage'>Simple Variable Language</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#jm.SvlVariables'>SVL Variables</a><span class='update'>updated: 8.0.0,8.1.0</span></p>
-			<li><p><a class='doclink' href='#jm.VarResolvers'>VarResolvers and VarResolverSessions</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jm.VarResolvers'>VarResolvers and VarResolverSessions</a><span class='update'>updated: 9.0.0</span></p>
 			<li><p><a class='doclink' href='#jm.DefaultVarResolver'>VarResolver.DEFAULT</a><span class='update'>created: 8.1.0</span></p>
 			<li><p><a class='doclink' href='#jm.SvlOtherNotes'>Other Notes</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#jm.Encoders'>Encoders</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jm.ObjectTools'>Object Tools</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jm.Encoders'>Encoders</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jm.ObjectTools'>Object Tools</a><span class='update'>created: 9.0.0</span></p>
 		<li><p><a class='doclink' href='#jm.JsonDetails'>JSON Details</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#jm.JsonMethodology'>JSON Methodology</a></p>
-			<li><p><a class='doclink' href='#jm.JsonSerializers'>JSON Serializers</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jm.Json5'>JSON 5</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jm.JsonParsers'>JSON Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jm.JsonSerializers'>JSON Serializers</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jm.Json5'>JSON 5</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jm.JsonParsers'>JSON Parsers</a><span class='update'>updated: 9.0.0</span></p>
 			<li><p><a class='doclink' href='#jm.JsonAnnotation'>@Json Annotation</a></p>
 		</ol>
 		<li><p><a class='doclink' href='#jm.JsonSchemaDetails'>JSON-Schema Support</a></p>
 		<li><p><a class='doclink' href='#jm.XmlDetails'>XML Details</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#jm.XmlMethodology'>XML Methodology</a></p>
-			<li><p><a class='doclink' href='#jm.XmlSerializers'>XML Serializers</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jm.XmlParsers'>XML Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jm.XmlSerializers'>XML Serializers</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jm.XmlParsers'>XML Parsers</a><span class='update'>updated: 9.0.0</span></p>
 			<li><p><a class='doclink' href='#jm.XmlBeanTypeNameAnnotation'>@Bean(typeName) Annotation</a></p>
 			<li><p><a class='doclink' href='#jm.XmlChildNameAnnotation'>@Xml(childName) Annotation</a></p>
 			<li><p><a class='doclink' href='#jm.XmlFormatAnnotation'>@Xml(format) Annotation</a></p>
@@ -105,11 +105,11 @@
 		<li><p><a class='doclink' href='#jm.HtmlDetails'>HTML Details</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#jm.HtmlMethodology'>HTML Methodology</a></p>
-			<li><p><a class='doclink' href='#jm.HtmlSerializers'>HTML Serializers</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jm.HtmlParsers'>HTML Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jm.HtmlSerializers'>HTML Serializers</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jm.HtmlParsers'>HTML Parsers</a><span class='update'>updated: 9.0.0</span></p>
 			<li><p><a class='doclink' href='#jm.HtmlAnnotation'>@Html Annotation</a></p>
 			<li><p><a class='doclink' href='#jm.HtmlRenderAnnotation'>@Html(render) Annotation</a></p>
-			<li><p><a class='doclink' href='#jm.HtmlDocSerializer'>HtmlDocSerializer</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jm.HtmlDocSerializer'>HtmlDocSerializer</a><span class='update'>updated: 9.0.0</span></p>
 			<li><p><a class='doclink' href='#jm.BasicHtmlDocTemplate'>BasicHtmlDocTemplate</a></p>
 			<li><p><a class='doclink' href='#jm.HtmlCustomTemplates'>Custom Templates</a></p>
 		</ol>
@@ -117,26 +117,26 @@
 		<li><p><a class='doclink' href='#jm.UonDetails'>UON Details</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#jm.UonMethodology'>UON Methodology</a></p>
-			<li><p><a class='doclink' href='#jm.UonSerializers'>UON Serializers</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jm.UonParsers'>UON Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jm.UonSerializers'>UON Serializers</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jm.UonParsers'>UON Parsers</a><span class='update'>updated: 9.0.0</span></p>
 		</ol>
 		<li><p><a class='doclink' href='#jm.UrlEncodingDetails'>URL-Encoding Details</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#jm.UrlEncMethodology'>URL-Encoding Methodology</a></p>
-			<li><p><a class='doclink' href='#jm.UrlEncSerializers'>URL-Encoding Serializers</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jm.UrlEncParsers'>URL-Encoding Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jm.UrlEncSerializers'>URL-Encoding Serializers</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jm.UrlEncParsers'>URL-Encoding Parsers</a><span class='update'>updated: 9.0.0</span></p>
 			<li><p><a class='doclink' href='#jm.UrlEncodingAnnotation'>@UrlEncoding Annotation</a></p>
 		</ol>
 		<li><p><a class='doclink' href='#jm.MsgPackDetails'>MessagePack Details</a></p>
 		<ol>
-			<li><p><a class='doclink' href='#jm.MsgPackSerializers'>MessagePack Serializers</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jm.MsgPackParsers'>MessagePack Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jm.MsgPackSerializers'>MessagePack Serializers</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jm.MsgPackParsers'>MessagePack Parsers</a><span class='update'>updated: 9.0.0</span></p>
 		</ol>
 		<li><p><a class='doclink' href='#jm.OpenApiDetails'>OpenAPI Details</a><span class='update'>updated: 8.2.0</span></p>
 		<ol>
 			<li><p><a class='doclink' href='#jm.OpenApiMethodology'>OpenAPI Methodology</a><span class='update'>updated: 8.2.0</span></p>
-			<li><p><a class='doclink' href='#jm.OpenApiSerializers'>OpenAPI Serializers</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jm.OpenApiParsers'>OpenAPI Parsers</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jm.OpenApiSerializers'>OpenAPI Serializers</a><span class='update'>updated: 8.2.0,9.0.0</span></p>
+			<li><p><a class='doclink' href='#jm.OpenApiParsers'>OpenAPI Parsers</a><span class='update'>updated: 8.2.0,9.0.0</span></p>
 		</ol>
 		<li><p><a class='doclink' href='#jm.BestPractices'>Best Practices</a></p>
 	</ol>
@@ -150,23 +150,23 @@
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-config'>juneau-config</a></p>
 	<ol>
-		<li><p><a class='doclink' href='#jc.Overview'>Overview</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jc.Overview'>Overview</a><span class='update'>updated: 9.0.0</span></p>
 		<ol>
 			<li><p><a class='doclink' href='#jc.SyntaxRules'>Syntax Rules</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#jc.ReadingEntries'>Reading Entries</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jc.ReadingEntries'>Reading Entries</a><span class='update'>updated: 9.0.0</span></p>
 		<ol>
-			<li><p><a class='doclink' href='#jc.Pojos'>POJOs</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jc.Pojos'>POJOs</a><span class='update'>updated: 9.0.0</span></p>
 			<li><p><a class='doclink' href='#jc.Arrays'>Arrays</a></p>
-			<li><p><a class='doclink' href='#jc.JCFObjects'>Java Collection Framework Objects</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jc.BinaryData'>Binary Data</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jc.JCFObjects'>Java Collection Framework Objects</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jc.BinaryData'>Binary Data</a><span class='update'>updated: 9.0.0</span></p>
 		</ol>
-		<li><p><a class='doclink' href='#jc.Variables'>Variables</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jc.Variables'>Variables</a><span class='update'>updated: 9.0.0</span></p>
 		<ol>
 			<li><p><a class='doclink' href='#jc.LogicVariables'>Logic Variables</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#jc.ModdedEntries'>Modded/Encoded Entries</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jc.Sections'>Sections</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jc.ModdedEntries'>Modded/Encoded Entries</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jc.Sections'>Sections</a><span class='update'>updated: 9.0.0</span></p>
 		<li><p><a class='doclink' href='#jc.SettingValues'>Setting Values</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#jc.FileSystemChanges'>File System Changes</a></p>
@@ -174,136 +174,136 @@
 			<li><p><a class='doclink' href='#jc.BulkSettingValues'>Setting Values in Bulk</a></p>
 		</ol>
 		<li><p><a class='doclink' href='#jc.Listeners'>Listeners</a></p>
-		<li><p><a class='doclink' href='#jc.SerializingConfigs'>Serializing</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jc.SerializingConfigs'>Serializing</a><span class='update'>updated: 9.0.0</span></p>
 		<li><p><a class='doclink' href='#jc.ConfigImports'>Imports</a><span class='update'>updated: 8.1.0</span></p>
-		<li><p><a class='doclink' href='#jc.ConfigStores'>Config Stores</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jc.ConfigStores'>Config Stores</a><span class='update'>updated: 9.0.0</span></p>
 		<ol>
 			<li><p><a class='doclink' href='#jc.MemoryStore'>MemoryStore</a></p>
-			<li><p><a class='doclink' href='#jc.FileStore'>FileStore</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jc.CustomStores'>Custom ConfigStores</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jc.FileStore'>FileStore</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jc.CustomStores'>Custom ConfigStores</a><span class='update'>updated: 9.0.0</span></p>
 			<li><p><a class='doclink' href='#jc.StoreListeners'>ConfigStore Listeners</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#jc.ReadOnlyConfigs'>Read-only Configs</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jc.ReadOnlyConfigs'>Read-only Configs</a><span class='update'>updated: 9.0.0</span></p>
 		<li><p><a class='doclink' href='#jc.ClosingConfigs'>Closing Configs</a></p>
 		<li><p><a class='doclink' href='#jc.SystemDefaultConfig'>System Default Config</a><span class='update'>created: 8.0.0, updated: 8.1.0</span></p>
 	</ol>
-	<li><p class='toc2'><a class='doclink' href='#juneau-assertions'>juneau-assertions</a><span class='update'>created: <b>9.0.0</b></span></p>
+	<li><p class='toc2'><a class='doclink' href='#juneau-assertions'>juneau-assertions</a><span class='update'>created: 9.0.0</span></p>
 	<ol>
-		<li><p><a class='doclink' href='#ja.Overview'>Overview</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#ja.Overview'>Overview</a><span class='update'>created: 9.0.0</span></p>
 	</ol>
-	<li><p class='toc2'><a class='doclink' href='#juneau-rest-common'>juneau-rest-common</a><span class='update'>created: <b>9.0.0</b></span></p>
+	<li><p class='toc2'><a class='doclink' href='#juneau-rest-common'>juneau-rest-common</a><span class='update'>created: 9.0.0</span></p>
 	<ol>
-		<li><p><a class='doclink' href='#jrc.HelperClasses'>Helper Classes</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrc.Annotations'>Annotations</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrc.HttpHeaders'>HTTP Headers</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrc.HttpParts'>HTTP Parts</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#HttpEntitiesAndResources'>HTTP Entities and Resources</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrc.HttpResponses'>HTTP Responses</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrc.RemoteProxyInterfaces'>Remote Proxy Interfaces</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jrc.HelperClasses'>Helper Classes</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrc.Annotations'>Annotations</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrc.HttpHeaders'>HTTP Headers</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrc.HttpParts'>HTTP Parts</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#HttpEntitiesAndResources'>HTTP Entities and Resources</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrc.HttpResponses'>HTTP Responses</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrc.RemoteProxyInterfaces'>Remote Proxy Interfaces</a><span class='update'>created: 9.0.0</span></p>
 	</ol>
-	<li><p class='toc2'><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a><span class='update'>updated: <b>9.0.0</b></span></p>
+	<li><p class='toc2'><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a><span class='update'>updated: 9.0.0</span></p>
 	<ol>
-		<li><p><a class='doclink' href='#jrs.Overview'>Overview</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.AnnotatedClasses'>@Rest-Annotated Classes</a><span class='update'>updated: 8.1.2,<b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jrs.Overview'>Overview</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.AnnotatedClasses'>@Rest-Annotated Classes</a><span class='update'>updated: 8.1.2,9.0.0</span></p>
 		<ol>
-			<li><p><a class='doclink' href='#jrs.PredefinedClasses'>Predefined Classes</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.ChildResources'>Child Resources</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.PathVariables'>Path Variables</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.Deployment'>Deployment</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.LifecycleHooks'>Lifecycle Hooks</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jrs.PredefinedClasses'>Predefined Classes</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.ChildResources'>Child Resources</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.PathVariables'>Path Variables</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.Deployment'>Deployment</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.LifecycleHooks'>Lifecycle Hooks</a><span class='update'>updated: 9.0.0</span></p>
 		</ol>
-		<li><p><a class='doclink' href='#jrs.RestOpAnnotatedMethods'>@RestOp-Annotated Methods</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jrs.RestOpAnnotatedMethods'>@RestOp-Annotated Methods</a><span class='update'>updated: 9.0.0</span></p>
 		<ol>
-			<li><p><a class='doclink' href='#jrs.InferredHttpMethodsAndPaths'>Inferred HTTP Methods and Paths</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.JavaMethodParameters'>Java Method Parameters</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.JavaMethodReturnTypes'>Java Method Return Types</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.JavaMethodThrowableTypes'>Java Method Throwable Types</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.PathPatterns'>Path Patterns</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.Matchers'>Matchers</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jrs.InferredHttpMethodsAndPaths'>Inferred HTTP Methods and Paths</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.JavaMethodParameters'>Java Method Parameters</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.JavaMethodReturnTypes'>Java Method Return Types</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.JavaMethodThrowableTypes'>Java Method Throwable Types</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.PathPatterns'>Path Patterns</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.Matchers'>Matchers</a><span class='update'>updated: 9.0.0</span></p>
 			<li><p><a class='doclink' href='#jrs.OverloadingHttpMethods'>Overloading HTTP Methods</a></p>
-			<li><p><a class='doclink' href='#jrs.AdditionalInformation'>Additional Information</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jrs.AdditionalInformation'>Additional Information</a><span class='update'>updated: 9.0.0</span></p>
 		</ol>
-		<li><p><a class='doclink' href='#jrs.HttpParts'>HTTP Parts</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jrs.HttpParts'>HTTP Parts</a><span class='update'>updated: 9.0.0</span></p>
 		<ol>
-			<li><p><a class='doclink' href='#jrs.PartMarshallers'>Part Marshallers</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.HttpPartAnnotations'>HTTP Part Annotations</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.DefaultParts'>Default Parts</a><span class='update'>created: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.RequestBeans'>@Request Beans</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.ResponseBeans'>@Response Beans</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.HttpPartApis'>HTTP Part APIs</a><span class='update'>created: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jrs.PartMarshallers'>Part Marshallers</a><span class='update'>updated: 8.1.0,9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.HttpPartAnnotations'>HTTP Part Annotations</a><span class='update'>updated: 8.1.0,9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.DefaultParts'>Default Parts</a><span class='update'>created: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.RequestBeans'>@Request Beans</a><span class='update'>updated: 8.1.0,9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.ResponseBeans'>@Response Beans</a><span class='update'>updated: 8.1.0,9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.HttpPartApis'>HTTP Part APIs</a><span class='update'>created: 9.0.0</span></p>
 		</ol>
-		<li><p><a class='doclink' href='#jrs.Marshalling'>Marshalling</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.HandlingFormPosts'>Form Posts</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.Guards'>Guards</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.Converters'>Converters</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.LocalizedMessages'>Localized Messages</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.Encoders'>Encoders</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.ConfigurationFiles'>Configuration Files</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.SvlVariables'>SVL Variables</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.StaticFiles'>Static files</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.ClientVersioning'>Client Versioning</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jrs.Marshalling'>Marshalling</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.HandlingFormPosts'>Form Posts</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.Guards'>Guards</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.Converters'>Converters</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.LocalizedMessages'>Localized Messages</a><span class='update'>updated: 8.2.0,9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.Encoders'>Encoders</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.ConfigurationFiles'>Configuration Files</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.SvlVariables'>SVL Variables</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.StaticFiles'>Static files</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.ClientVersioning'>Client Versioning</a><span class='update'>updated: 9.0.0</span></p>
 		<li><p><a class='doclink' href='#jrs.Swagger'>Swagger</a></p>
 		<ol>
-			<li><p><a class='doclink' href='#jrs.BasicRestServletSwagger'>BasicRestServlet/BasicRestObject</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.BasicSwaggerInfo'>Basic Swagger Info</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jrs.BasicRestServletSwagger'>BasicRestServlet/BasicRestObject</a><span class='update'>updated: 8.1.0,9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.BasicSwaggerInfo'>Basic Swagger Info</a><span class='update'>updated: 9.0.0</span></p>
 			<li><p><a class='doclink' href='#jrs.SwaggerTags'>Tags</a></p>
 			<li><p><a class='doclink' href='#jrs.SwaggerOperations'>Operations</a></p>
-			<li><p><a class='doclink' href='#jrs.SwaggerParameters'>Parameters</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jrs.SwaggerParameters'>Parameters</a><span class='update'>updated: 9.0.0</span></p>
 			<li><p><a class='doclink' href='#jrs.SwaggerResponses'>Responses</a></p>
-			<li><p><a class='doclink' href='#jrs.SwaggerModels'>Models</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jrs.SwaggerModels'>Models</a><span class='update'>updated: 9.0.0</span></p>
 			<li><p><a class='doclink' href='#jrs.SwaggerStylesheet'>SwaggerUI.css</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#jrs.ExecutionStatistics'>REST method execution statistics</a><span class='update'>created: 8.1.3, updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.HtmlDocAnnotation'>@HtmlDocConfig</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jrs.ExecutionStatistics'>REST method execution statistics</a><span class='update'>created: 8.1.3, updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.HtmlDocAnnotation'>@HtmlDocConfig</a><span class='update'>updated: 8.1.0,9.0.0</span></p>
 		<ol>
 			<li><p><a class='doclink' href='#jrs.HtmlUIvsDI'>User Interfaces (UI) vs. Developer Interfaces (DI)</a></p>
-			<li><p><a class='doclink' href='#jrs.HtmlWidgets'>Widgets</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.HtmlPredefinedWidgets'>Predefined Widgets</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.HtmlUiCustomization'>UI Customization</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrs.HtmlStylesheets'>Stylesheets</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jrs.HtmlWidgets'>Widgets</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.HtmlPredefinedWidgets'>Predefined Widgets</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.HtmlUiCustomization'>UI Customization</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrs.HtmlStylesheets'>Stylesheets</a><span class='update'>updated: 8.1.0,9.0.0</span></p>
 		</ol>
-		<li><p><a class='doclink' href='#jrs.LoggingAndDebugging'>Logging / Debugging</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.HttpStatusCodes'>HTTP Status Codes</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.BuiltInParameters'>Built-in Parameters</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jrs.LoggingAndDebugging'>Logging / Debugging</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.HttpStatusCodes'>HTTP Status Codes</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.BuiltInParameters'>Built-in Parameters</a><span class='update'>updated: 9.0.0</span></p>
 		<li><p><a class='doclink' href='#jrs.UsingWithOsgi'>Using with OSGi</a></p>
-		<li><p><a class='doclink' href='#jrs.RestContext'>RestContext</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.RestOpContext'>RestOpContext</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.ResponseProcessors'>Response Processors</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.RestRpc'>REST/RPC</a><span class='update'>updated: 8.0.0,<b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.SerializingUris'>Serializing URIs</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.UtilityBeans'>Utility Beans</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrs.HtmlBeans'>Using with HTML Beans</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jrs.RestContext'>RestContext</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.RestOpContext'>RestOpContext</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.ResponseProcessors'>Response Processors</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.RestRpc'>REST/RPC</a><span class='update'>updated: 8.0.0,9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.SerializingUris'>Serializing URIs</a><span class='update'>updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.UtilityBeans'>Utility Beans</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrs.HtmlBeans'>Using with HTML Beans</a><span class='update'>created: 9.0.0</span></p>
 		<li><p><a class='doclink' href='#jrs.OtherNotes'>Other Notes</a></p>
 	</ol>
-	<li><p class='toc2'><a class='doclink' href='#juneau-rest-server-springboot'>juneau-rest-server-springboot</a><span class='update'>created: 8.0.0, updated: <b>9.0.0</b></span></p>
+	<li><p class='toc2'><a class='doclink' href='#juneau-rest-server-springboot'>juneau-rest-server-springboot</a><span class='update'>created: 8.0.0, updated: 9.0.0</span></p>
 	<ol>
-		<li><p><a class='doclink' href='#jrss.Overview'>Overview</a><span class='update'>created: 8.0.0, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jrss.Overview'>Overview</a><span class='update'>created: 8.0.0, updated: 9.0.0</span></p>
 	</ol>
-	<li><p class='toc2'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a><span class='update'>updated: <b>9.0.0</b></span></p>
+	<li><p class='toc2'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a><span class='update'>updated: 9.0.0</span></p>
 	<ol>
-		<li><p><a class='doclink' href='#jrc.PojoMarshalling'>POJO Marshalling</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrc.RequestParts'>Request Parts</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrc.RequestContent'>Request Content</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrc.ResponseStatus'>Response Status</a><span class='update'>created: 8.1.0, updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrc.ResponseHeaders'>Response Headers</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrc.ResponseContent'>Response Content</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrc.CustomCallHandlers'>Custom Call Handlers</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jrc.PojoMarshalling'>POJO Marshalling</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrc.RequestParts'>Request Parts</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrc.RequestContent'>Request Content</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrc.ResponseStatus'>Response Status</a><span class='update'>created: 8.1.0, updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrc.ResponseHeaders'>Response Headers</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrc.ResponseContent'>Response Content</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrc.CustomCallHandlers'>Custom Call Handlers</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></p>
 		<li><p><a class='doclink' href='#jrc.Interceptors'>Interceptors</a><span class='update'>created: 8.2.0</span></p>
-		<li><p><a class='doclink' href='#jrc.Proxies'>REST Proxies</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jrc.Proxies'>REST Proxies</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></p>
 		<ol>
-			<li><p><a class='doclink' href='#jrc.Remote'>@Remote</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrc.RemoteMethod'>@RemoteOp</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrc.Content'>@Content</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrc.FormData'>@FormData</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrc.Query'>@Query</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrc.Header'>@Header</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrc.Path'>@Path</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrc.Request'>@Request</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#jrc.Response'>@Response</a><span class='update'>updated: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#jrc.Remote'>@Remote</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrc.RemoteMethod'>@RemoteOp</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrc.Content'>@Content</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrc.FormData'>@FormData</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrc.Query'>@Query</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrc.Header'>@Header</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrc.Path'>@Path</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrc.Request'>@Request</a><span class='update'>updated: 9.0.0</span></p>
+			<li><p><a class='doclink' href='#jrc.Response'>@Response</a><span class='update'>updated: 9.0.0</span></p>
 			<li><p><a class='doclink' href='#jrc.DualPurposeInterfaces'>Dual-purpose (end-to-end) interfaces</a><span class='update'>created: 8.0.0</span></p>
 		</ol>
-		<li><p><a class='doclink' href='#jrc.LoggingAndDebugging'>Logging and Debugging</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jrc.CustomizingHttpClient'>Customizing HttpClient</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jrc.LoggingAndDebugging'>Logging and Debugging</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jrc.CustomizingHttpClient'>Customizing HttpClient</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></p>
 		<li><p><a class='doclink' href='#jrc.ExtendingRestClient'>Extending RestClient</a><span class='update'>created: 8.2.0</span></p>
 		<li><p><a class='doclink' href='#jrc.Authentication'>Authentication</a><span class='update'>updated: 8.2.0</span></p>
 		<ol>
@@ -314,7 +314,7 @@
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-rest-mock'>juneau-rest-mock</a><span class='update'>created: 8.1.0, updated: 8.2.0</span></p>
 	<ol>
-		<li><p><a class='doclink' href='#jrm.MockRestClient'>MockRestClient</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jrm.MockRestClient'>MockRestClient</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-microservice-core'>juneau-microservice-core</a><span class='update'>created: 8.1.0</span></p>
 	<ol>
@@ -351,12 +351,12 @@
 		<li><p><a class='doclink' href='#msm.Running'>Running in Eclipse</a><span class='update'>created: 8.0.0</span></p>
 		<li><p><a class='doclink' href='#msm.Building'>Building and Running from Command-Line</a><span class='update'>created: 8.0.0</span></p>
 	</ol>
-	<li><p class='toc2'><a class='doclink' href='#juneau-petstore'>juneau-petstore</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
+	<li><p class='toc2'><a class='doclink' href='#juneau-petstore'>juneau-petstore</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></p>
 	<ol>
-		<li><p><a class='doclink' href='#jp.RunningTheApp'>Running the Pet Store App</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jp.juneau-petstore-api'>juneau-petstore-api</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jp.juneau-petstore-client'>juneau-petstore-client</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#jp.juneau-petstore-server'>juneau-petstore-server</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#jp.RunningTheApp'>Running the Pet Store App</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jp.juneau-petstore-api'>juneau-petstore-api</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jp.juneau-petstore-client'>juneau-petstore-client</a><span class='update'>created: 9.0.0</span></p>
+		<li><p><a class='doclink' href='#jp.juneau-petstore-server'>juneau-petstore-server</a><span class='update'>created: 9.0.0</span></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#Security'>Security Best-Practices</a></p>
 	<ol>
@@ -576,18 +576,18 @@
 	</table>
 	
 	<p>
-		The current version of Juneau is <c><juneauVersion>9.0.0</juneauVersion></c>.
+		The current version of Juneau is <c><juneauVersion>9.0.1</juneauVersion></c>.
 		The easiest way to pull in the library is through the following maven dependency:
 	</p>
 	<p class='bxml'>
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-all<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.1</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	<p>
-		If you would like to work with the bleeding-edge code, you can access the <c><juneauVersionNext>9.0.1</juneauVersionNext>-SNAPSHOT</c>
+		If you would like to work with the bleeding-edge code, you can access the <c><juneauVersionNext>9.0.2</juneauVersionNext>-SNAPSHOT</c>
 		version through the following repository:
 	</p>
 	<p class='bxml'>
@@ -636,7 +636,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#o.Marshalling' id='o.Marshalling'>1.1 - Marshalling</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#o.Marshalling' id='o.Marshalling'>1.1 - Marshalling</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 1.1 - o.Marshalling -->
 <div class='topic'>
 	<p>
@@ -1060,7 +1060,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#o.EndToEndRest' id='o.EndToEndRest'>1.2 - End-to-End REST</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#o.EndToEndRest' id='o.EndToEndRest'>1.2 - End-to-End REST</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 1.2 - o.EndToEndRest -->
 <div class='topic'>
 	<p>
@@ -1649,7 +1649,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#o.RestClient' id='o.RestClient'>1.4 - REST Client</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#o.RestClient' id='o.RestClient'>1.4 - REST Client</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 1.4 - o.RestClient -->
 <div class='topic'>
 	<p>
@@ -1732,7 +1732,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#o.Dtos' id='o.Dtos'>1.5 - DTOs</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#o.Dtos' id='o.Dtos'>1.5 - DTOs</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 1.5 - o.Dtos -->
 <div class='topic'>
 	<p>
@@ -1926,7 +1926,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#o.ConfigFiles' id='o.ConfigFiles'>1.6 - Config Files</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#o.ConfigFiles' id='o.ConfigFiles'>1.6 - Config Files</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 1.6 - o.ConfigFiles -->
 <div class='topic'>
 	<p>
@@ -1975,7 +1975,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#o.FluentAssertions' id='o.FluentAssertions'>1.7 - Fluent Assertions</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#o.FluentAssertions' id='o.FluentAssertions'>1.7 - Fluent Assertions</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 1.7 - o.FluentAssertions -->
 <div class='topic'>
 	<p>
@@ -2052,7 +2052,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#o.GeneralDesign' id='o.GeneralDesign'>1.8 - General Design</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#o.GeneralDesign' id='o.GeneralDesign'>1.8 - General Design</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 1.8 - o.GeneralDesign -->
 <div class='topic'>
 	<p>
@@ -2137,18 +2137,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-marshall<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.1</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-marshall-<juneauVersion>9.0.0</juneauVersion>.jar 
+	juneau-marshall-<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.marshall_<juneauVersion>9.0.0</juneauVersion>.jar 
+	org.apache.juneau.marshall_<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -2254,7 +2254,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.SerializersAndParsers' id='jm.SerializersAndParsers'>2.2 - Serializers and Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.SerializersAndParsers' id='jm.SerializersAndParsers'>2.2 - Serializers and Parsers</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 2.2 - jm.SerializersAndParsers -->
 <div class='topic'>
 	<p>
@@ -2424,7 +2424,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.BeanContexts' id='jm.BeanContexts'>2.3 - Bean Contexts</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.BeanContexts' id='jm.BeanContexts'>2.3 - Bean Contexts</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 2.3 - jm.BeanContexts -->
 <div class='topic'>
 	<p>
@@ -2455,7 +2455,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.JavaBeansSupport' id='jm.JavaBeansSupport'>2.4 - Java Beans Support</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.JavaBeansSupport' id='jm.JavaBeansSupport'>2.4 - Java Beans Support</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 2.4 - jm.JavaBeansSupport -->
 <div class='topic'>
 	<p>
@@ -2559,7 +2559,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.BeanAnnotation' id='jm.BeanAnnotation'>2.4.1 - @Bean Annotation</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.BeanAnnotation' id='jm.BeanAnnotation'>2.4.1 - @Bean Annotation</a><span class='update'>updated: 8.2.0,9.0.0</span></h4>
 <div class='topic'><!-- START: 2.4.1 - jm.BeanAnnotation -->
 <div class='topic'>
 	<p>
@@ -2709,7 +2709,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.BeanpAnnotation' id='jm.BeanpAnnotation'>2.4.2 - @Beanp Annotation</a><span class='update'>updated: 8.1.0,8.1.2,<b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.BeanpAnnotation' id='jm.BeanpAnnotation'>2.4.2 - @Beanp Annotation</a><span class='update'>updated: 8.1.0,8.1.2,9.0.0</span></h4>
 <div class='topic'><!-- START: 2.4.2 - jm.BeanpAnnotation -->
 <div class='topic'>
 	<p>
@@ -3075,7 +3075,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.PojoBuilders' id='jm.PojoBuilders'>2.4.7 - POJO Builders</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.PojoBuilders' id='jm.PojoBuilders'>2.4.7 - POJO Builders</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 2.4.7 - jm.PojoBuilders -->
 <div class='topic'>
 	<p>
@@ -3245,7 +3245,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.HttpPartSerializersParsers' id='jm.HttpPartSerializersParsers'>2.5 - HTTP Part Serializers and Parsers</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.HttpPartSerializersParsers' id='jm.HttpPartSerializersParsers'>2.5 - HTTP Part Serializers and Parsers</a><span class='update'>updated: 8.2.0,9.0.0</span></h3>
 <div class='topic'><!-- START: 2.5 - jm.HttpPartSerializersParsers -->
 <div class='topic'>
 	<p>
@@ -3315,7 +3315,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.ContextSettings' id='jm.ContextSettings'>2.6 - Context Settings</a><span class='update'>updated: 8.1.3,<b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.ContextSettings' id='jm.ContextSettings'>2.6 - Context Settings</a><span class='update'>updated: 8.1.3,9.0.0</span></h3>
 <div class='topic'><!-- START: 2.6 - jm.ContextSettings -->
 <div class='topic'>
 	<p>
@@ -3385,7 +3385,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.ContextAnnotations' id='jm.ContextAnnotations'>2.7 - Context Annotations</a><span class='update'>created: 8.1.0, updated: 8.1.3,8.2.0,<b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.ContextAnnotations' id='jm.ContextAnnotations'>2.7 - Context Annotations</a><span class='update'>created: 8.1.0, updated: 8.1.3,8.2.0,9.0.0</span></h3>
 <div class='topic'><!-- START: 2.7 - jm.ContextAnnotations -->
 <div class='topic'>
 	<p>
@@ -3614,7 +3614,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.ComplexDataTypes' id='jm.ComplexDataTypes'>2.9 - Complex Data Types</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.ComplexDataTypes' id='jm.ComplexDataTypes'>2.9 - Complex Data Types</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 2.9 - jm.ComplexDataTypes -->
 <div class='topic'>
 	<p>
@@ -3665,7 +3665,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.SerializerSetsParserSets' id='jm.SerializerSetsParserSets'>2.10 - SerializerSets and ParserSets</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.SerializerSetsParserSets' id='jm.SerializerSetsParserSets'>2.10 - SerializerSets and ParserSets</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 2.10 - jm.SerializerSetsParserSets -->
 <div class='topic'>
 	<p>
@@ -3709,7 +3709,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.Swaps' id='jm.Swaps'>2.11 - Swaps</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.Swaps' id='jm.Swaps'>2.11 - Swaps</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 2.11 - jm.Swaps -->
 <div class='topic'>
 	<p>
@@ -4177,7 +4177,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.SwapAnnotation' id='jm.SwapAnnotation'>2.11.5 - @Swap Annotation</a><span class='update'>updated: 8.0.0,<b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.SwapAnnotation' id='jm.SwapAnnotation'>2.11.5 - @Swap Annotation</a><span class='update'>updated: 8.0.0,9.0.0</span></h4>
 <div class='topic'><!-- START: 2.11.5 - jm.SwapAnnotation -->
 <div class='topic'>
 	<p>
@@ -4384,7 +4384,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.DynamicallyAppliedAnnotations' id='jm.DynamicallyAppliedAnnotations'>2.12 - Dynamically Applied Annotations</a><span class='update'>created: 8.1.3, updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.DynamicallyAppliedAnnotations' id='jm.DynamicallyAppliedAnnotations'>2.12 - Dynamically Applied Annotations</a><span class='update'>created: 8.1.3, updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 2.12 - jm.DynamicallyAppliedAnnotations -->
 <div class='topic'>
 	<p>
@@ -4554,7 +4554,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.BeanDictionaries' id='jm.BeanDictionaries'>2.13 - Bean Names and Dictionaries</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.BeanDictionaries' id='jm.BeanDictionaries'>2.13 - Bean Names and Dictionaries</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 2.13 - jm.BeanDictionaries -->
 <div class='topic'>
 	<p>
@@ -4778,7 +4778,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.VirtualBeans' id='jm.VirtualBeans'>2.14 - Virtual Beans</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.VirtualBeans' id='jm.VirtualBeans'>2.14 - Virtual Beans</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 2.14 - jm.VirtualBeans -->
 <div class='topic'>
 	<p>
@@ -4833,7 +4833,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.Recursion' id='jm.Recursion'>2.15 - Non-Tree Models and Recursion Detection</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.Recursion' id='jm.Recursion'>2.15 - Non-Tree Models and Recursion Detection</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 2.15 - jm.Recursion -->
 <div class='topic'>
 	<p>
@@ -5025,7 +5025,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.ReadingContinuousStreams' id='jm.ReadingContinuousStreams'>2.17 - Reading Continuous Streams</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.ReadingContinuousStreams' id='jm.ReadingContinuousStreams'>2.17 - Reading Continuous Streams</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 2.17 - jm.ReadingContinuousStreams -->
 <div class='topic'>
 	<p>
@@ -5091,7 +5091,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.MarshallingUris' id='jm.MarshallingUris'>2.18 - URIs</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.MarshallingUris' id='jm.MarshallingUris'>2.18 - URIs</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 2.18 - jm.MarshallingUris -->
 <div class='topic'>
 	<p>
@@ -5231,7 +5231,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.JacksonComparison' id='jm.JacksonComparison'>2.19 - Comparison with Jackson</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.JacksonComparison' id='jm.JacksonComparison'>2.19 - Comparison with Jackson</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 2.19 - jm.JacksonComparison -->
 <div class='topic'>
 	<p>
@@ -5936,7 +5936,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.VarResolvers' id='jm.VarResolvers'>2.21.2 - VarResolvers and VarResolverSessions</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.VarResolvers' id='jm.VarResolvers'>2.21.2 - VarResolvers and VarResolverSessions</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 2.21.2 - jm.VarResolvers -->
 <div class='topic'>
 	<p>
@@ -6047,7 +6047,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.Encoders' id='jm.Encoders'>2.22 - Encoders</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.Encoders' id='jm.Encoders'>2.22 - Encoders</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 2.22 - jm.Encoders -->
 <div class='topic'>
 	<p>
@@ -6116,7 +6116,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jm.ObjectTools' id='jm.ObjectTools'>2.23 - Object Tools</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jm.ObjectTools' id='jm.ObjectTools'>2.23 - Object Tools</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 2.23 - jm.ObjectTools -->
 <div class='topic'>
 	<p>
@@ -6610,7 +6610,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.JsonSerializers' id='jm.JsonSerializers'>2.24.2 - JSON Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.JsonSerializers' id='jm.JsonSerializers'>2.24.2 - JSON Serializers</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 2.24.2 - jm.JsonSerializers -->
 <div class='topic'>
 	<p>
@@ -6667,7 +6667,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.Json5' id='jm.Json5'>2.24.3 - JSON 5</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.Json5' id='jm.Json5'>2.24.3 - JSON 5</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 2.24.3 - jm.Json5 -->
 <div class='topic'>
 	<p>
@@ -6735,7 +6735,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.JsonParsers' id='jm.JsonParsers'>2.24.4 - JSON Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.JsonParsers' id='jm.JsonParsers'>2.24.4 - JSON Parsers</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 2.24.4 - jm.JsonParsers -->
 <div class='topic'>
 	<p>
@@ -7441,7 +7441,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.XmlSerializers' id='jm.XmlSerializers'>2.26.2 - XML Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.XmlSerializers' id='jm.XmlSerializers'>2.26.2 - XML Serializers</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 2.26.2 - jm.XmlSerializers -->
 <div class='topic'>
 	<p>
@@ -7502,7 +7502,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.XmlParsers' id='jm.XmlParsers'>2.26.3 - XML Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.XmlParsers' id='jm.XmlParsers'>2.26.3 - XML Parsers</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 2.26.3 - jm.XmlParsers -->
 <div class='topic'>
 	<p>
@@ -9538,7 +9538,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.HtmlSerializers' id='jm.HtmlSerializers'>2.27.2 - HTML Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.HtmlSerializers' id='jm.HtmlSerializers'>2.27.2 - HTML Serializers</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 2.27.2 - jm.HtmlSerializers -->
 <div class='topic'>
 	<p>
@@ -9603,7 +9603,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.HtmlParsers' id='jm.HtmlParsers'>2.27.3 - HTML Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.HtmlParsers' id='jm.HtmlParsers'>2.27.3 - HTML Parsers</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 2.27.3 - jm.HtmlParsers -->
 <div class='topic'>
 	<p>
@@ -9823,7 +9823,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.HtmlDocSerializer' id='jm.HtmlDocSerializer'>2.27.6 - HtmlDocSerializer</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.HtmlDocSerializer' id='jm.HtmlDocSerializer'>2.27.6 - HtmlDocSerializer</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 2.27.6 - jm.HtmlDocSerializer -->
 <div class='topic'>
 	<p>
@@ -10295,7 +10295,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.UonSerializers' id='jm.UonSerializers'>2.29.2 - UON Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.UonSerializers' id='jm.UonSerializers'>2.29.2 - UON Serializers</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 2.29.2 - jm.UonSerializers -->
 <div class='topic'>
 	<p>
@@ -10347,7 +10347,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.UonParsers' id='jm.UonParsers'>2.29.3 - UON Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.UonParsers' id='jm.UonParsers'>2.29.3 - UON Parsers</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 2.29.3 - jm.UonParsers -->
 <div class='topic'>
 	<p>
@@ -10533,7 +10533,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.UrlEncSerializers' id='jm.UrlEncSerializers'>2.30.2 - URL-Encoding Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.UrlEncSerializers' id='jm.UrlEncSerializers'>2.30.2 - URL-Encoding Serializers</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 2.30.2 - jm.UrlEncSerializers -->
 <div class='topic'>
 	<p>
@@ -10590,7 +10590,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.UrlEncParsers' id='jm.UrlEncParsers'>2.30.3 - URL-Encoding Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.UrlEncParsers' id='jm.UrlEncParsers'>2.30.3 - URL-Encoding Parsers</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 2.30.3 - jm.UrlEncParsers -->
 <div class='topic'>
 	<p>
@@ -10679,7 +10679,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.MsgPackSerializers' id='jm.MsgPackSerializers'>2.31.1 - MessagePack Serializers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.MsgPackSerializers' id='jm.MsgPackSerializers'>2.31.1 - MessagePack Serializers</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 2.31.1 - jm.MsgPackSerializers -->
 <div class='topic'>
 	<p>
@@ -10729,7 +10729,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.MsgPackParsers' id='jm.MsgPackParsers'>2.31.2 - MessagePack Parsers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.MsgPackParsers' id='jm.MsgPackParsers'>2.31.2 - MessagePack Parsers</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 2.31.2 - jm.MsgPackParsers -->
 <div class='topic'>
 	<p>
@@ -10960,7 +10960,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.OpenApiSerializers' id='jm.OpenApiSerializers'>2.32.2 - OpenAPI Serializers</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.OpenApiSerializers' id='jm.OpenApiSerializers'>2.32.2 - OpenAPI Serializers</a><span class='update'>updated: 8.2.0,9.0.0</span></h4>
 <div class='topic'><!-- START: 2.32.2 - jm.OpenApiSerializers -->
 <div class='topic'>
 	<p>
@@ -11471,7 +11471,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jm.OpenApiParsers' id='jm.OpenApiParsers'>2.32.3 - OpenAPI Parsers</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jm.OpenApiParsers' id='jm.OpenApiParsers'>2.32.3 - OpenAPI Parsers</a><span class='update'>updated: 8.2.0,9.0.0</span></h4>
 <div class='topic'><!-- START: 2.32.3 - jm.OpenApiParsers -->
 <div class='topic'>
 	<p>
@@ -11861,16 +11861,16 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-marshall-rdf<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.1</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-marshall-rdf-<juneauVersion>9.0.0</juneauVersion>.jar 
+	juneau-marshall-rdf-<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.marshaller.rdf_<juneauVersion>9.0.0</juneauVersion>.jar 
+	org.apache.juneau.marshaller.rdf_<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	<p>
 		The <c>juneau-marshall-rdf</c> library provides additional serializers and parsers for RDF.
@@ -11896,16 +11896,16 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-dto<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.1</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-dto-<juneauVersion>9.0.0</juneauVersion>.jar 
+	juneau-dto-<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.dto_<juneauVersion>9.0.0</juneauVersion>.jar 
+	org.apache.juneau.dto_<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	<p>
 		The <c>juneau-dto</c> library contains several predefined POJOs for generating commonly-used document types.
@@ -12409,24 +12409,24 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-config<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.1</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-config-<juneauVersion>9.0.0</juneauVersion>.jar 
+	juneau-config-<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.config_<juneauVersion>9.0.0</juneauVersion>.jar 
+	org.apache.juneau.config_<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 </div>
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jc.Overview' id='jc.Overview'>5.1 - Overview</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jc.Overview' id='jc.Overview'>5.1 - Overview</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 5.1 - jc.Overview -->
 <div class='topic'>
 	<p>
@@ -12600,7 +12600,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jc.ReadingEntries' id='jc.ReadingEntries'>5.2 - Reading Entries</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jc.ReadingEntries' id='jc.ReadingEntries'>5.2 - Reading Entries</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 5.2 - jc.ReadingEntries -->
 <div class='topic'>
 	<p>
@@ -12707,7 +12707,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jc.Pojos' id='jc.Pojos'>5.2.1 - POJOs</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jc.Pojos' id='jc.Pojos'>5.2.1 - POJOs</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 5.2.1 - jc.Pojos -->
 <div class='topic'>
 	<p>
@@ -12830,7 +12830,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jc.JCFObjects' id='jc.JCFObjects'>5.2.3 - Java Collection Framework Objects</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jc.JCFObjects' id='jc.JCFObjects'>5.2.3 - Java Collection Framework Objects</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 5.2.3 - jc.JCFObjects -->
 <div class='topic'>
 	<p>
@@ -12893,7 +12893,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jc.BinaryData' id='jc.BinaryData'>5.2.4 - Binary Data</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jc.BinaryData' id='jc.BinaryData'>5.2.4 - Binary Data</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 5.2.4 - jc.BinaryData -->
 <div class='topic'>
 	<p>
@@ -12951,7 +12951,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jc.Variables' id='jc.Variables'>5.3 - Variables</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jc.Variables' id='jc.Variables'>5.3 - Variables</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 5.3 - jc.Variables -->
 <div class='topic'>
 	<p>
@@ -13104,7 +13104,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jc.ModdedEntries' id='jc.ModdedEntries'>5.4 - Modded/Encoded Entries</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jc.ModdedEntries' id='jc.ModdedEntries'>5.4 - Modded/Encoded Entries</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 5.4 - jc.ModdedEntries -->
 <div class='topic'>
 	<p>
@@ -13156,7 +13156,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jc.Sections' id='jc.Sections'>5.5 - Sections</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jc.Sections' id='jc.Sections'>5.5 - Sections</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 5.5 - jc.Sections -->
 <div class='topic'>
 	<p>
@@ -13547,7 +13547,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jc.SerializingConfigs' id='jc.SerializingConfigs'>5.8 - Serializing</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jc.SerializingConfigs' id='jc.SerializingConfigs'>5.8 - Serializing</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 5.8 - jc.SerializingConfigs -->
 <div class='topic'>
 	<p>
@@ -13695,7 +13695,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jc.ConfigStores' id='jc.ConfigStores'>5.10 - Config Stores</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jc.ConfigStores' id='jc.ConfigStores'>5.10 - Config Stores</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 5.10 - jc.ConfigStores -->
 <div class='topic'>
 	<p>
@@ -13830,7 +13830,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jc.FileStore' id='jc.FileStore'>5.10.2 - FileStore</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jc.FileStore' id='jc.FileStore'>5.10.2 - FileStore</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 5.10.2 - jc.FileStore -->
 <div class='topic'>
 	<p>
@@ -13870,7 +13870,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jc.CustomStores' id='jc.CustomStores'>5.10.3 - Custom ConfigStores</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jc.CustomStores' id='jc.CustomStores'>5.10.3 - Custom ConfigStores</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 5.10.3 - jc.CustomStores -->
 <div class='topic'>
 	<p>
@@ -14017,7 +14017,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jc.ReadOnlyConfigs' id='jc.ReadOnlyConfigs'>5.11 - Read-only Configs</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jc.ReadOnlyConfigs' id='jc.ReadOnlyConfigs'>5.11 - Read-only Configs</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 5.11 - jc.ReadOnlyConfigs -->
 <div class='topic'>
 	<p>
@@ -14129,7 +14129,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-assertions' id='juneau-assertions'>6 - juneau-assertions</a><span class='update'>created: <b>9.0.0</b></span></h2>
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-assertions' id='juneau-assertions'>6 - juneau-assertions</a><span class='update'>created: 9.0.0</span></h2>
 <div class='topic'><!-- START: 6 - juneau-assertions -->
 <div class='topic'>
 	<h5 class='figure'>Maven Dependency</h5>
@@ -14137,18 +14137,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-assertions<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.1</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-assertions-<juneauVersion>9.0.0</juneauVersion>.jar 
+	juneau-assertions-<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.assertions_<juneauVersion>9.0.0</juneauVersion>.jar 
+	org.apache.juneau.assertions_<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -14160,7 +14160,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#ja.Overview' id='ja.Overview'>6.1 - Overview</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#ja.Overview' id='ja.Overview'>6.1 - Overview</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 6.1 - ja.Overview -->
 <div class='topic'>
 	<p>
@@ -14354,7 +14354,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-common' id='juneau-rest-common'>7 - juneau-rest-common</a><span class='update'>created: <b>9.0.0</b></span></h2>
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-common' id='juneau-rest-common'>7 - juneau-rest-common</a><span class='update'>created: 9.0.0</span></h2>
 <div class='topic'><!-- START: 7 - juneau-rest-common -->
 <div class='topic'>
 	<h5 class='figure'>Maven Dependency</h5>
@@ -14362,18 +14362,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-rest-common<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.1</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-rest-common-<juneauVersion>9.0.0</juneauVersion>.jar 
+	juneau-rest-common-<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.rest.common_<juneauVersion>9.0.0</juneauVersion>.jar 
+	org.apache.juneau.rest.common_<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -14401,7 +14401,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrc.HelperClasses' id='jrc.HelperClasses'>7.1 - Helper Classes</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrc.HelperClasses' id='jrc.HelperClasses'>7.1 - Helper Classes</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 7.1 - jrc.HelperClasses -->
 <div class='topic'>
 	<p>
@@ -14696,7 +14696,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrc.Annotations' id='jrc.Annotations'>7.2 - Annotations</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrc.Annotations' id='jrc.Annotations'>7.2 - Annotations</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 7.2 - jrc.Annotations -->
 <div class='topic'>
 	<p>
@@ -14728,7 +14728,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrc.HttpHeaders' id='jrc.HttpHeaders'>7.3 - HTTP Headers</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrc.HttpHeaders' id='jrc.HttpHeaders'>7.3 - HTTP Headers</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 7.3 - jrc.HttpHeaders -->
 <div class='topic'>
 	<p>
@@ -14954,7 +14954,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrc.HttpParts' id='jrc.HttpParts'>7.4 - HTTP Parts</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrc.HttpParts' id='jrc.HttpParts'>7.4 - HTTP Parts</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 7.4 - jrc.HttpParts -->
 <div class='topic'>
 	<p>
@@ -15093,7 +15093,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#HttpEntitiesAndResources' id='HttpEntitiesAndResources'>7.5 - HTTP Entities and Resources</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#HttpEntitiesAndResources' id='HttpEntitiesAndResources'>7.5 - HTTP Entities and Resources</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 7.5 - HttpEntitiesAndResources -->
 <div class='topic'>
 	<p>
@@ -15185,7 +15185,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrc.HttpResponses' id='jrc.HttpResponses'>7.6 - HTTP Responses</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrc.HttpResponses' id='jrc.HttpResponses'>7.6 - HTTP Responses</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 7.6 - jrc.HttpResponses -->
 <div class='topic'>
 	<p>
@@ -15288,7 +15288,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrc.RemoteProxyInterfaces' id='jrc.RemoteProxyInterfaces'>7.7 - Remote Proxy Interfaces</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrc.RemoteProxyInterfaces' id='jrc.RemoteProxyInterfaces'>7.7 - Remote Proxy Interfaces</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 7.7 - jrc.RemoteProxyInterfaces -->
 <div class='topic'>
 	<p>
@@ -15311,7 +15311,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server' id='juneau-rest-server'>8 - juneau-rest-server</a><span class='update'>updated: <b>9.0.0</b></span></h2>
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server' id='juneau-rest-server'>8 - juneau-rest-server</a><span class='update'>updated: 9.0.0</span></h2>
 <div class='topic'><!-- START: 8 - juneau-rest-server -->
 <div class='topic'>
 	<h5 class='figure'>Maven Dependency</h5>
@@ -15319,18 +15319,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-rest-server<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.1</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-rest-server-<juneauVersion>9.0.0</juneauVersion>.jar 
+	juneau-rest-server-<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.rest.server_<juneauVersion>9.0.0</juneauVersion>.jar 
+	org.apache.juneau.rest.server_<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -15432,7 +15432,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.Overview' id='jrs.Overview'>8.1 - Overview</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.Overview' id='jrs.Overview'>8.1 - Overview</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.1 - jrs.Overview -->
 <div class='topic'>
 	<p>
@@ -15573,7 +15573,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.AnnotatedClasses' id='jrs.AnnotatedClasses'>8.2 - @Rest-Annotated Classes</a><span class='update'>updated: 8.1.2,<b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.AnnotatedClasses' id='jrs.AnnotatedClasses'>8.2 - @Rest-Annotated Classes</a><span class='update'>updated: 8.1.2,9.0.0</span></h3>
 <div class='topic'><!-- START: 8.2 - jrs.AnnotatedClasses -->
 <div class='topic'>
 	<p>
@@ -15647,7 +15647,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.PredefinedClasses' id='jrs.PredefinedClasses'>8.2.1 - Predefined Classes</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.PredefinedClasses' id='jrs.PredefinedClasses'>8.2.1 - Predefined Classes</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.2.1 - jrs.PredefinedClasses -->
 <div class='topic'>
 	<p>
@@ -15837,7 +15837,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.ChildResources' id='jrs.ChildResources'>8.2.2 - Child Resources</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.ChildResources' id='jrs.ChildResources'>8.2.2 - Child Resources</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.2.2 - jrs.ChildResources -->
 <div class='topic'>
 	<p>
@@ -15882,7 +15882,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.PathVariables' id='jrs.PathVariables'>8.2.3 - Path Variables</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.PathVariables' id='jrs.PathVariables'>8.2.3 - Path Variables</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.2.3 - jrs.PathVariables -->
 <div class='topic'>
 	<p>
@@ -15914,7 +15914,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.Deployment' id='jrs.Deployment'>8.2.4 - Deployment</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.Deployment' id='jrs.Deployment'>8.2.4 - Deployment</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.2.4 - jrs.Deployment -->
 <div class='topic'>
 	<p>
@@ -15976,7 +15976,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.LifecycleHooks' id='jrs.LifecycleHooks'>8.2.5 - Lifecycle Hooks</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.LifecycleHooks' id='jrs.LifecycleHooks'>8.2.5 - Lifecycle Hooks</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.2.5 - jrs.LifecycleHooks -->
 <div class='topic'>
 	<p>
@@ -16038,7 +16038,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.RestOpAnnotatedMethods' id='jrs.RestOpAnnotatedMethods'>8.3 - @RestOp-Annotated Methods</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.RestOpAnnotatedMethods' id='jrs.RestOpAnnotatedMethods'>8.3 - @RestOp-Annotated Methods</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.3 - jrs.RestOpAnnotatedMethods -->
 <div class='topic'>
 	<p>
@@ -16110,7 +16110,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.InferredHttpMethodsAndPaths' id='jrs.InferredHttpMethodsAndPaths'>8.3.1 - Inferred HTTP Methods and Paths</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.InferredHttpMethodsAndPaths' id='jrs.InferredHttpMethodsAndPaths'>8.3.1 - Inferred HTTP Methods and Paths</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.3.1 - jrs.InferredHttpMethodsAndPaths -->
 <div class='topic'>
 	<p>
@@ -16175,7 +16175,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.JavaMethodParameters' id='jrs.JavaMethodParameters'>8.3.2 - Java Method Parameters</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.JavaMethodParameters' id='jrs.JavaMethodParameters'>8.3.2 - Java Method Parameters</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.3.2 - jrs.JavaMethodParameters -->
 <div class='topic'>
 	<p>
@@ -16365,7 +16365,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.JavaMethodReturnTypes' id='jrs.JavaMethodReturnTypes'>8.3.3 - Java Method Return Types</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.JavaMethodReturnTypes' id='jrs.JavaMethodReturnTypes'>8.3.3 - Java Method Return Types</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.3.3 - jrs.JavaMethodReturnTypes -->
 <div class='topic'>
 	<p>
@@ -16523,7 +16523,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.JavaMethodThrowableTypes' id='jrs.JavaMethodThrowableTypes'>8.3.4 - Java Method Throwable Types</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.JavaMethodThrowableTypes' id='jrs.JavaMethodThrowableTypes'>8.3.4 - Java Method Throwable Types</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.3.4 - jrs.JavaMethodThrowableTypes -->
 <div class='topic'>
 	<p>
@@ -16615,7 +16615,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.PathPatterns' id='jrs.PathPatterns'>8.3.5 - Path Patterns</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.PathPatterns' id='jrs.PathPatterns'>8.3.5 - Path Patterns</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.3.5 - jrs.PathPatterns -->
 <div class='topic'>
 	<p>
@@ -16709,7 +16709,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.Matchers' id='jrs.Matchers'>8.3.6 - Matchers</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.Matchers' id='jrs.Matchers'>8.3.6 - Matchers</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.3.6 - jrs.Matchers -->
 <div class='topic'>
 	<p>
@@ -16801,7 +16801,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.AdditionalInformation' id='jrs.AdditionalInformation'>8.3.8 - Additional Information</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.AdditionalInformation' id='jrs.AdditionalInformation'>8.3.8 - Additional Information</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.3.8 - jrs.AdditionalInformation -->
 <div class='topic'>
 	<p>
@@ -16823,7 +16823,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.HttpParts' id='jrs.HttpParts'>8.4 - HTTP Parts</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.HttpParts' id='jrs.HttpParts'>8.4 - HTTP Parts</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.4 - jrs.HttpParts -->
 <div class='topic'>
 	<p>
@@ -16884,7 +16884,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.PartMarshallers' id='jrs.PartMarshallers'>8.4.1 - Part Marshallers</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.PartMarshallers' id='jrs.PartMarshallers'>8.4.1 - Part Marshallers</a><span class='update'>updated: 8.1.0,9.0.0</span></h4>
 <div class='topic'><!-- START: 8.4.1 - jrs.PartMarshallers -->
 <div class='topic'>
 	<p>
@@ -16944,7 +16944,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.HttpPartAnnotations' id='jrs.HttpPartAnnotations'>8.4.2 - HTTP Part Annotations</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.HttpPartAnnotations' id='jrs.HttpPartAnnotations'>8.4.2 - HTTP Part Annotations</a><span class='update'>updated: 8.1.0,9.0.0</span></h4>
 <div class='topic'><!-- START: 8.4.2 - jrs.HttpPartAnnotations -->
 <div class='topic'>
 	<p>
@@ -17398,7 +17398,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.DefaultParts' id='jrs.DefaultParts'>8.4.3 - Default Parts</a><span class='update'>created: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.DefaultParts' id='jrs.DefaultParts'>8.4.3 - Default Parts</a><span class='update'>created: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.4.3 - jrs.DefaultParts -->
 <div class='topic'>
 	<p>
@@ -17527,7 +17527,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.RequestBeans' id='jrs.RequestBeans'>8.4.4 - @Request Beans</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.RequestBeans' id='jrs.RequestBeans'>8.4.4 - @Request Beans</a><span class='update'>updated: 8.1.0,9.0.0</span></h4>
 <div class='topic'><!-- START: 8.4.4 - jrs.RequestBeans -->
 <div class='topic'>
 	<p>
@@ -17623,7 +17623,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.ResponseBeans' id='jrs.ResponseBeans'>8.4.5 - @Response Beans</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.ResponseBeans' id='jrs.ResponseBeans'>8.4.5 - @Response Beans</a><span class='update'>updated: 8.1.0,9.0.0</span></h4>
 <div class='topic'><!-- START: 8.4.5 - jrs.ResponseBeans -->
 <div class='topic'>
 	<p>
@@ -17727,7 +17727,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.HttpPartApis' id='jrs.HttpPartApis'>8.4.6 - HTTP Part APIs</a><span class='update'>created: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.HttpPartApis' id='jrs.HttpPartApis'>8.4.6 - HTTP Part APIs</a><span class='update'>created: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.4.6 - jrs.HttpPartApis -->
 <div class='topic'>
 	<p>
@@ -17773,7 +17773,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.Marshalling' id='jrs.Marshalling'>8.5 - Marshalling</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.Marshalling' id='jrs.Marshalling'>8.5 - Marshalling</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.5 - jrs.Marshalling -->
 <div class='topic'>
 	<p>
@@ -17936,7 +17936,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.HandlingFormPosts' id='jrs.HandlingFormPosts'>8.6 - Form Posts</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.HandlingFormPosts' id='jrs.HandlingFormPosts'>8.6 - Form Posts</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.6 - jrs.HandlingFormPosts -->
 <div class='topic'>
 	<p>
@@ -18087,7 +18087,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.Guards' id='jrs.Guards'>8.7 - Guards</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.Guards' id='jrs.Guards'>8.7 - Guards</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.7 - jrs.Guards -->
 <div class='topic'>
 	<p>
@@ -18197,7 +18197,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.Converters' id='jrs.Converters'>8.8 - Converters</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.Converters' id='jrs.Converters'>8.8 - Converters</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.8 - jrs.Converters -->
 <div class='topic'>
 	<p>
@@ -18257,7 +18257,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.LocalizedMessages' id='jrs.LocalizedMessages'>8.9 - Localized Messages</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.LocalizedMessages' id='jrs.LocalizedMessages'>8.9 - Localized Messages</a><span class='update'>updated: 8.2.0,9.0.0</span></h3>
 <div class='topic'><!-- START: 8.9 - jrs.LocalizedMessages -->
 <div class='topic'>
 	<p>
@@ -18353,7 +18353,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.Encoders' id='jrs.Encoders'>8.10 - Encoders</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.Encoders' id='jrs.Encoders'>8.10 - Encoders</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.10 - jrs.Encoders -->
 <div class='topic'>
 	<p>
@@ -18385,7 +18385,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.ConfigurationFiles' id='jrs.ConfigurationFiles'>8.11 - Configuration Files</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.ConfigurationFiles' id='jrs.ConfigurationFiles'>8.11 - Configuration Files</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.11 - jrs.ConfigurationFiles -->
 <div class='topic'>
 	<p>
@@ -18576,7 +18576,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.SvlVariables' id='jrs.SvlVariables'>8.12 - SVL Variables</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.SvlVariables' id='jrs.SvlVariables'>8.12 - SVL Variables</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.12 - jrs.SvlVariables -->
 <div class='topic'>
 	<p>	
@@ -18866,7 +18866,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.StaticFiles' id='jrs.StaticFiles'>8.13 - Static files</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.StaticFiles' id='jrs.StaticFiles'>8.13 - Static files</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.13 - jrs.StaticFiles -->
 <div class='topic'>
 	<p>
@@ -18926,7 +18926,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.ClientVersioning' id='jrs.ClientVersioning'>8.14 - Client Versioning</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.ClientVersioning' id='jrs.ClientVersioning'>8.14 - Client Versioning</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.14 - jrs.ClientVersioning -->
 <div class='topic'>
 	<p>
@@ -19002,7 +19002,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.BasicRestServletSwagger' id='jrs.BasicRestServletSwagger'>8.15.1 - BasicRestServlet/BasicRestObject</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.BasicRestServletSwagger' id='jrs.BasicRestServletSwagger'>8.15.1 - BasicRestServlet/BasicRestObject</a><span class='update'>updated: 8.1.0,9.0.0</span></h4>
 <div class='topic'><!-- START: 8.15.1 - jrs.BasicRestServletSwagger -->
 <div class='topic'>
 	<p>
@@ -19054,7 +19054,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.BasicSwaggerInfo' id='jrs.BasicSwaggerInfo'>8.15.2 - Basic Swagger Info</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.BasicSwaggerInfo' id='jrs.BasicSwaggerInfo'>8.15.2 - Basic Swagger Info</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.15.2 - jrs.BasicSwaggerInfo -->
 <div class='topic'>
 	<p>
@@ -19369,7 +19369,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.SwaggerParameters' id='jrs.SwaggerParameters'>8.15.5 - Parameters</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.SwaggerParameters' id='jrs.SwaggerParameters'>8.15.5 - Parameters</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.15.5 - jrs.SwaggerParameters -->
 <div class='topic'>
 	<p>
@@ -19560,7 +19560,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.SwaggerModels' id='jrs.SwaggerModels'>8.15.7 - Models</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.SwaggerModels' id='jrs.SwaggerModels'>8.15.7 - Models</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.15.7 - jrs.SwaggerModels -->
 <div class='topic'>
 	<p>
@@ -19671,7 +19671,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.ExecutionStatistics' id='jrs.ExecutionStatistics'>8.16 - REST method execution statistics</a><span class='update'>created: 8.1.3, updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.ExecutionStatistics' id='jrs.ExecutionStatistics'>8.16 - REST method execution statistics</a><span class='update'>created: 8.1.3, updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.16 - jrs.ExecutionStatistics -->
 <div class='topic'>
 	<p>
@@ -19720,7 +19720,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.HtmlDocAnnotation' id='jrs.HtmlDocAnnotation'>8.17 - @HtmlDocConfig</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.HtmlDocAnnotation' id='jrs.HtmlDocAnnotation'>8.17 - @HtmlDocConfig</a><span class='update'>updated: 8.1.0,9.0.0</span></h3>
 <div class='topic'><!-- START: 8.17 - jrs.HtmlDocAnnotation -->
 <div class='topic'>
 	<p>
@@ -19900,7 +19900,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.HtmlWidgets' id='jrs.HtmlWidgets'>8.17.2 - Widgets</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.HtmlWidgets' id='jrs.HtmlWidgets'>8.17.2 - Widgets</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.17.2 - jrs.HtmlWidgets -->
 <div class='topic'>
 	<p>
@@ -19990,7 +19990,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.HtmlPredefinedWidgets' id='jrs.HtmlPredefinedWidgets'>8.17.3 - Predefined Widgets</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.HtmlPredefinedWidgets' id='jrs.HtmlPredefinedWidgets'>8.17.3 - Predefined Widgets</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.17.3 - jrs.HtmlPredefinedWidgets -->
 <div class='topic'>
 	<p>
@@ -20231,7 +20231,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.HtmlUiCustomization' id='jrs.HtmlUiCustomization'>8.17.4 - UI Customization</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.HtmlUiCustomization' id='jrs.HtmlUiCustomization'>8.17.4 - UI Customization</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 8.17.4 - jrs.HtmlUiCustomization -->
 <div class='topic'>
 	<p>
@@ -20359,7 +20359,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrs.HtmlStylesheets' id='jrs.HtmlStylesheets'>8.17.5 - Stylesheets</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrs.HtmlStylesheets' id='jrs.HtmlStylesheets'>8.17.5 - Stylesheets</a><span class='update'>updated: 8.1.0,9.0.0</span></h4>
 <div class='topic'><!-- START: 8.17.5 - jrs.HtmlStylesheets -->
 <div class='topic'>
 	<p>
@@ -20470,7 +20470,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.LoggingAndDebugging' id='jrs.LoggingAndDebugging'>8.18 - Logging / Debugging</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.LoggingAndDebugging' id='jrs.LoggingAndDebugging'>8.18 - Logging / Debugging</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.18 - jrs.LoggingAndDebugging -->
 <div class='topic'>
 	<p>
@@ -20693,7 +20693,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.HttpStatusCodes' id='jrs.HttpStatusCodes'>8.19 - HTTP Status Codes</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.HttpStatusCodes' id='jrs.HttpStatusCodes'>8.19 - HTTP Status Codes</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.19 - jrs.HttpStatusCodes -->
 <div class='topic'>
 	<p>
@@ -20763,7 +20763,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.BuiltInParameters' id='jrs.BuiltInParameters'>8.20 - Built-in Parameters</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.BuiltInParameters' id='jrs.BuiltInParameters'>8.20 - Built-in Parameters</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.20 - jrs.BuiltInParameters -->
 <div class='topic'>
 	<p>
@@ -20899,7 +20899,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.RestContext' id='jrs.RestContext'>8.22 - RestContext</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.RestContext' id='jrs.RestContext'>8.22 - RestContext</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.22 - jrs.RestContext -->
 <div class='topic'>
 	<p>
@@ -21044,7 +21044,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.RestOpContext' id='jrs.RestOpContext'>8.23 - RestOpContext</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.RestOpContext' id='jrs.RestOpContext'>8.23 - RestOpContext</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.23 - jrs.RestOpContext -->
 <div class='topic'>
 	<p>
@@ -21124,7 +21124,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.ResponseProcessors' id='jrs.ResponseProcessors'>8.24 - Response Processors</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.ResponseProcessors' id='jrs.ResponseProcessors'>8.24 - Response Processors</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.24 - jrs.ResponseProcessors -->
 <div class='topic'>
 	<p>
@@ -21197,7 +21197,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.RestRpc' id='jrs.RestRpc'>8.25 - REST/RPC</a><span class='update'>updated: 8.0.0,<b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.RestRpc' id='jrs.RestRpc'>8.25 - REST/RPC</a><span class='update'>updated: 8.0.0,9.0.0</span></h3>
 <div class='topic'><!-- START: 8.25 - jrs.RestRpc -->
 <div class='topic'>
 	<p>
@@ -21529,7 +21529,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.SerializingUris' id='jrs.SerializingUris'>8.26 - Serializing URIs</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.SerializingUris' id='jrs.SerializingUris'>8.26 - Serializing URIs</a><span class='update'>updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.26 - jrs.SerializingUris -->
 <div class='topic'>
 	<p>
@@ -21617,7 +21617,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.UtilityBeans' id='jrs.UtilityBeans'>8.27 - Utility Beans</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.UtilityBeans' id='jrs.UtilityBeans'>8.27 - Utility Beans</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.27 - jrs.UtilityBeans -->
 <div class='topic'>
 	<p>
@@ -21736,7 +21736,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrs.HtmlBeans' id='jrs.HtmlBeans'>8.28 - Using with HTML Beans</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrs.HtmlBeans' id='jrs.HtmlBeans'>8.28 - Using with HTML Beans</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 8.28 - jrs.HtmlBeans -->
 <div class='topic'>
 	<p>
@@ -21870,7 +21870,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server-springboot' id='juneau-rest-server-springboot'>9 - juneau-rest-server-springboot</a><span class='update'>created: 8.0.0, updated: <b>9.0.0</b></span></h2>
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server-springboot' id='juneau-rest-server-springboot'>9 - juneau-rest-server-springboot</a><span class='update'>created: 8.0.0, updated: 9.0.0</span></h2>
 <div class='topic'><!-- START: 9 - juneau-rest-server-springboot -->
 <div class='topic'>
 	<h5 class='figure'>Maven Dependency</h5>
@@ -21878,18 +21878,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-rest-server-springboot<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.1</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-rest-server-springboot-<juneauVersion>9.0.0</juneauVersion>.jar 
+	juneau-rest-server-springboot-<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.rest.server.springboot_<juneauVersion>9.0.0</juneauVersion>.jar 
+	org.apache.juneau.rest.server.springboot_<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -21900,7 +21900,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrss.Overview' id='jrss.Overview'>9.1 - Overview</a><span class='update'>created: 8.0.0, updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrss.Overview' id='jrss.Overview'>9.1 - Overview</a><span class='update'>created: 8.0.0, updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 9.1 - jrss.Overview -->
 <div class='topic'>
 	<p>
@@ -22055,7 +22055,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client' id='juneau-rest-client'>10 - juneau-rest-client</a><span class='update'>updated: <b>9.0.0</b></span></h2>
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client' id='juneau-rest-client'>10 - juneau-rest-client</a><span class='update'>updated: 9.0.0</span></h2>
 <div class='topic'><!-- START: 10 - juneau-rest-client -->
 <div class='topic'>
 	<h5 class='figure'>Maven Dependency</h5>
@@ -22063,18 +22063,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-rest-client<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.1</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-rest-client-<juneauVersion>9.0.0</juneauVersion>.jar 
+	juneau-rest-client-<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.rest.client_<juneauVersion>9.0.0</juneauVersion>.jar 
+	org.apache.juneau.rest.client_<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -22224,7 +22224,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrc.PojoMarshalling' id='jrc.PojoMarshalling'>10.1 - POJO Marshalling</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrc.PojoMarshalling' id='jrc.PojoMarshalling'>10.1 - POJO Marshalling</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 10.1 - jrc.PojoMarshalling -->
 <div class='topic'>
 	<p>
@@ -22333,7 +22333,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrc.RequestParts' id='jrc.RequestParts'>10.2 - Request Parts</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrc.RequestParts' id='jrc.RequestParts'>10.2 - Request Parts</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 10.2 - jrc.RequestParts -->
 <div class='topic'>
 	<p>
@@ -22430,7 +22430,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrc.RequestContent' id='jrc.RequestContent'>10.3 - Request Content</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrc.RequestContent' id='jrc.RequestContent'>10.3 - Request Content</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 10.3 - jrc.RequestContent -->
 <div class='topic'>
 	<p>
@@ -22500,7 +22500,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrc.ResponseStatus' id='jrc.ResponseStatus'>10.4 - Response Status</a><span class='update'>created: 8.1.0, updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrc.ResponseStatus' id='jrc.ResponseStatus'>10.4 - Response Status</a><span class='update'>created: 8.1.0, updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 10.4 - jrc.ResponseStatus -->
 <div class='topic'>
 	<p>
@@ -22566,7 +22566,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrc.ResponseHeaders' id='jrc.ResponseHeaders'>10.5 - Response Headers</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrc.ResponseHeaders' id='jrc.ResponseHeaders'>10.5 - Response Headers</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 10.5 - jrc.ResponseHeaders -->
 <div class='topic'>
 	<p>
@@ -22678,7 +22678,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrc.ResponseContent' id='jrc.ResponseContent'>10.6 - Response Content</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrc.ResponseContent' id='jrc.ResponseContent'>10.6 - Response Content</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 10.6 - jrc.ResponseContent -->
 <div class='topic'>
 	<p>
@@ -22816,7 +22816,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrc.CustomCallHandlers' id='jrc.CustomCallHandlers'>10.7 - Custom Call Handlers</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrc.CustomCallHandlers' id='jrc.CustomCallHandlers'>10.7 - Custom Call Handlers</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 10.7 - jrc.CustomCallHandlers -->
 <div class='topic'>
 	<p>
@@ -22930,7 +22930,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrc.Proxies' id='jrc.Proxies'>10.9 - REST Proxies</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrc.Proxies' id='jrc.Proxies'>10.9 - REST Proxies</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 10.9 - jrc.Proxies -->
 <div class='topic'>
 	<p>
@@ -23033,7 +23033,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrc.Remote' id='jrc.Remote'>10.9.1 - @Remote</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrc.Remote' id='jrc.Remote'>10.9.1 - @Remote</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 10.9.1 - jrc.Remote -->
 <div class='topic'>
 	<p>
@@ -23192,7 +23192,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrc.RemoteMethod' id='jrc.RemoteMethod'>10.9.2 - @RemoteOp</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrc.RemoteMethod' id='jrc.RemoteMethod'>10.9.2 - @RemoteOp</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 10.9.2 - jrc.RemoteMethod -->
 <div class='topic'>
 	<p>
@@ -23364,7 +23364,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrc.Content' id='jrc.Content'>10.9.3 - @Content</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrc.Content' id='jrc.Content'>10.9.3 - @Content</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 10.9.3 - jrc.Content -->
 <div class='topic'>
 	<p>
@@ -23475,7 +23475,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrc.FormData' id='jrc.FormData'>10.9.4 - @FormData</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrc.FormData' id='jrc.FormData'>10.9.4 - @FormData</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 10.9.4 - jrc.FormData -->
 <div class='topic'>
 	<p>
@@ -23564,7 +23564,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrc.Query' id='jrc.Query'>10.9.5 - @Query</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrc.Query' id='jrc.Query'>10.9.5 - @Query</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 10.9.5 - jrc.Query -->
 <div class='topic'>
 	<p>
@@ -23656,7 +23656,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrc.Header' id='jrc.Header'>10.9.6 - @Header</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrc.Header' id='jrc.Header'>10.9.6 - @Header</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 10.9.6 - jrc.Header -->
 <div class='topic'>
 	<p>
@@ -23734,7 +23734,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrc.Path' id='jrc.Path'>10.9.7 - @Path</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrc.Path' id='jrc.Path'>10.9.7 - @Path</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 10.9.7 - jrc.Path -->
 <div class='topic'>
 	<p>
@@ -23811,7 +23811,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrc.Request' id='jrc.Request'>10.9.8 - @Request</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrc.Request' id='jrc.Request'>10.9.8 - @Request</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 10.9.8 - jrc.Request -->
 <div class='topic'>
 	<p>
@@ -23933,7 +23933,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#jrc.Response' id='jrc.Response'>10.9.9 - @Response</a><span class='update'>updated: <b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#jrc.Response' id='jrc.Response'>10.9.9 - @Response</a><span class='update'>updated: 9.0.0</span></h4>
 <div class='topic'><!-- START: 10.9.9 - jrc.Response -->
 <div class='topic'>
 	<p>
@@ -24106,7 +24106,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrc.LoggingAndDebugging' id='jrc.LoggingAndDebugging'>10.10 - Logging and Debugging</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrc.LoggingAndDebugging' id='jrc.LoggingAndDebugging'>10.10 - Logging and Debugging</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 10.10 - jrc.LoggingAndDebugging -->
 <div class='topic'>
 	<p>
@@ -24193,7 +24193,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrc.CustomizingHttpClient' id='jrc.CustomizingHttpClient'>10.11 - Customizing HttpClient</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrc.CustomizingHttpClient' id='jrc.CustomizingHttpClient'>10.11 - Customizing HttpClient</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 10.11 - jrc.CustomizingHttpClient -->
 <div class='topic'>
 	<p>
@@ -24546,18 +24546,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-rest-mock<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.1</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-rest-mock-<juneauVersion>9.0.0</juneauVersion>.jar 
+	juneau-rest-mock-<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.rest.mock_<juneauVersion>9.0.0</juneauVersion>.jar 
+	org.apache.juneau.rest.mock_<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -24570,7 +24570,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jrm.MockRestClient' id='jrm.MockRestClient'>11.1 - MockRestClient</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jrm.MockRestClient' id='jrm.MockRestClient'>11.1 - MockRestClient</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></h3>
 <div class='topic'><!-- START: 11.1 - jrm.MockRestClient -->
 <div class='topic'>
 	<p>
@@ -24789,18 +24789,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-microservice-core<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.1</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-microservice-core-<juneauVersion>9.0.0</juneauVersion>.jar 
+	juneau-microservice-core-<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.microservice.core_<juneauVersion>9.0.0</juneauVersion>.jar 
+	org.apache.juneau.microservice.core_<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -25499,18 +25499,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-microservice-jetty<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt><juneauVersion>9.0.0</juneauVersion><xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt><juneauVersion>9.0.1</juneauVersion><xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 	</p>	
 	
 	<h5 class='figure'>Java Library</h5>
 	<p class='bcode w500'>
-	juneau-microservice-jetty-<juneauVersion>9.0.0</juneauVersion>.jar 
+	juneau-microservice-jetty-<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.microservice.jetty_<juneauVersion>9.0.0</juneauVersion>.jar 
+	org.apache.juneau.microservice.jetty_<juneauVersion>9.0.1</juneauVersion>.jar 
 	</p>	
 	
 	<p>
@@ -26342,7 +26342,7 @@
 <div class='topic'>
 	<h5 class='figure'>Starter Project Zip</h5>
 	<p class='bcode w500'>
-	my-jetty-microservice-<juneauVersion>9.0.0</juneauVersion>.zip 
+	my-jetty-microservice-<juneauVersion>9.0.1</juneauVersion>.zip 
 	</p>	
 	
 	<p>
@@ -26364,7 +26364,7 @@
 	</p>		
 	<ol class='spaced-list'>
 		<li>
-			Download the <c>my-jetty-microservice-<juneauVersion>9.0.0</juneauVersion>.zip</c> file from the downloads page
+			Download the <c>my-jetty-microservice-<juneauVersion>9.0.1</juneauVersion>.zip</c> file from the downloads page
 			(located in the binaries) and import it into your workspace as an existing project:
 			<br><br>
 			<img class='bordered' src='doc-files/mjm.Installing.1.png' style='width:524px'>
@@ -26714,7 +26714,7 @@
 <div class='topic'>
 	<h5 class='figure'>Starter Project Zip</h5>
 	<p class='bcode w500'>
-	my-springboot-microservice-<juneauVersion>9.0.0</juneauVersion>.zip 
+	my-springboot-microservice-<juneauVersion>9.0.1</juneauVersion>.zip 
 	</p>	
 	
 	<p>
@@ -26740,7 +26740,7 @@
 	</p>		
 	<ol class='spaced-list'>
 		<li>
-			Download the <c>my-springboot-microservice-<juneauVersion>9.0.0</juneauVersion>.zip</c> file from the downloads page
+			Download the <c>my-springboot-microservice-<juneauVersion>9.0.1</juneauVersion>.zip</c> file from the downloads page
 			(located in the binaries) and import it into your workspace as an existing project:
 			<br><br>
 			<img class='bordered' src='doc-files/msm.Installing.1.png' style='width:524px'>
@@ -26951,7 +26951,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic' onclick='toggle(this)'><a href='#juneau-petstore' id='juneau-petstore'>16 - juneau-petstore</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></h2>
+<h2 class='topic' onclick='toggle(this)'><a href='#juneau-petstore' id='juneau-petstore'>16 - juneau-petstore</a><span class='update'>created: 8.2.0, updated: 9.0.0</span></h2>
 <div class='topic'><!-- START: 16 - juneau-petstore -->
 <div class='topic'>
 	<p>
@@ -26978,7 +26978,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jp.RunningTheApp' id='jp.RunningTheApp'>16.1 - Running the Pet Store App</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jp.RunningTheApp' id='jp.RunningTheApp'>16.1 - Running the Pet Store App</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 16.1 - jp.RunningTheApp -->
 <div class='topic'>
 	<p>
@@ -27012,7 +27012,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jp.juneau-petstore-api' id='jp.juneau-petstore-api'>16.2 - juneau-petstore-api</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jp.juneau-petstore-api' id='jp.juneau-petstore-api'>16.2 - juneau-petstore-api</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 16.2 - jp.juneau-petstore-api -->
 <div class='topic'>
 	<p>
@@ -27220,7 +27220,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jp.juneau-petstore-client' id='jp.juneau-petstore-client'>16.3 - juneau-petstore-client</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jp.juneau-petstore-client' id='jp.juneau-petstore-client'>16.3 - juneau-petstore-client</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 16.3 - jp.juneau-petstore-client -->
 <div class='topic'>
 	<p>
@@ -27256,7 +27256,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#jp.juneau-petstore-server' id='jp.juneau-petstore-server'>16.4 - juneau-petstore-server</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#jp.juneau-petstore-server' id='jp.juneau-petstore-server'>16.4 - juneau-petstore-server</a><span class='update'>created: 9.0.0</span></h3>
 <div class='topic'><!-- START: 16.4 - jp.juneau-petstore-server -->
 <div class='topic'>
 	<p>
@@ -27938,8 +27938,7 @@
 <li><p><a class='doclink' href='#8.1.2'>8.1.2 (Dec 01, 2019)</a></p>
 <li><p><a class='doclink' href='#8.1.3'>8.1.3 (Jan 20, 2020)</a></p>
 <li><p><a class='doclink' href='#8.2.0'>8.2.0 (Oct 14, 2020)</a></p>
-<li><p><a class='doclink' href='#9.0.0'>9.0.0 (Jan 07, 2023)</a></p>
-<li><p><a class='doclink' href='#9.0.1'>9.0.1 (Aug 30, 2023)</a></p>
+<li><p><a class='doclink' href='#9.0.0'>9.0.0 (TBD)</a></p>
 </ul>
 
 	
@@ -35296,7 +35295,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#9.0.0' id='9.0.0'>9.0.0 (Jan 07, 2023)</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#9.0.0' id='9.0.0'>9.0.0 (TBD)</a></h3>
 <div class='topic'><!-- START: 9.0.0 -->
 <div class='topic'>
 	<p>
@@ -35442,26 +35441,6 @@
 	</ul>
 </div>
 </div><!-- END: 9.0.0 -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic' onclick='toggle(this)'><a href='#9.0.1' id='9.0.1'>9.0.1 (TBD)</a></h3>
-<div class='topic'><!-- START: 9.0.1 -->
-<div class='topic'>
-	<p>
-		Juneau 9.0.1 is a minor release to fix <a href="https://issues.apache.org/jira/browse/JUNEAU-249">
-			[JUNEAU-249] UI does not resolve variables anymore</a>.
-	</p>
-	<p>In addition, the following dependencies have been updated:</p>
-	<ul class='spaced-list'>
-		<li>Jetty from 11.0.13 to 11.0.15</li>
-		<li>Spring Boot from 3.0.1 to 3.1.1</li>
-		<li>Hibernate from 5.6.14.Final to 5.6.15.Final</li>
-		<li>org.eclipse.jgit from 6.4.0.202211300538-r to 6.6.0.202305301015-r</li>
-		<li>org.codehaus.groovy:groovy from 3.0.18 to 3.0.19</li>
-	</ul>
-</div>
-</div><!-- END: 9.0.1 -->
 
 </div>
 <script>
