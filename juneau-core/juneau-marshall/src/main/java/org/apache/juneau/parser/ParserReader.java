@@ -43,9 +43,9 @@ public class ParserReader extends Reader implements Positionable {
 	private char[] buff;       // Internal character buffer
 	private int line = 1;      // Current line number
 	private int column;        // Current column number
-	private int iCurrent = 0;  // Current pointer into character buffer
+	private int iCurrent;      // Current pointer into character buffer
 	private int iMark = -1;    // Mark position in buffer
-	private int iEnd = 0;      // The last good character position in the buffer
+	private int iEnd;          // The last good character position in the buffer
 	private boolean endReached, holesExist;
 	private final boolean unbuffered;
 

@@ -20,7 +20,7 @@ package org.apache.juneau.utils;
  */
 public class WeightedAverage {
 	private Double value = 0d;
-	private int weight = 0;
+	private int weight;
 
 	/**
 	 * Add a number with a weight to this average.

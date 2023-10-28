@@ -52,9 +52,9 @@ public class RoundTripBeanInheritanceTest extends RoundTripTest {
 
 
 	public static abstract class A1 {
-		protected String x = null;
-		protected String y = null;
-		protected String z = null;
+		protected String x;
+		protected String y;
+		protected String z;
 
 		public A1() {
 			this.x = null;
@@ -172,9 +172,9 @@ public class RoundTripBeanInheritanceTest extends RoundTripTest {
 	}
 
 	public static class B2 {
-		private String f1 = null;
+		private String f1;
 		private int f2 = -1;
-		private boolean f3 = false;
+		private boolean f3;
 
 		public String getF1() {
 			return this.f1;

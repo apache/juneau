@@ -27,7 +27,7 @@ public final class CharSequenceReader extends BufferedReader {
 	private StringBuffer sb;
 	private StringBuilder sb2;
 	private int length;
-	private int next = 0;
+	private int next;
 
 	/**
 	 * Constructor.

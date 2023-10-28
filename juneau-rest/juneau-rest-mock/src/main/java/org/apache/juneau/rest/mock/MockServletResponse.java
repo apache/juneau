@@ -34,7 +34,7 @@ public class MockServletResponse implements HttpServletResponse {
 
 	private String characterEncoding = "UTF-8";
 	private ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	private int bufferSize = 0;
+	private int bufferSize;
 	private Locale locale;
 	private int sc;
 	private String msg;

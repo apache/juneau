@@ -357,7 +357,7 @@ public class JsonParserEdgeCasesTest {
 	private final String name, errorText, jsonReadable;
 	private final Object json;
 	private final char expected;
-	public boolean debug = false;
+	public boolean debug;
 
 	public JsonParserEdgeCasesTest(Integer testNum, String name, String json, String errorText) throws Exception {
 		this.name = name;

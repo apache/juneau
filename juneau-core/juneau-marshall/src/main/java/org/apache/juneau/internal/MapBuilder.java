@@ -37,7 +37,7 @@ public final class MapBuilder<K,V> {
 
 	private Map<K,V> map;
 	private boolean unmodifiable = false, sparse = false;
-	private Comparator<K> comparator = null;
+	private Comparator<K> comparator;
 
 	private Class<K> keyType;
 	private Class<V> valueType;

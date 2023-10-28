@@ -98,7 +98,7 @@ public class RequestContent {
 	private Encoder encoder;
 	private ParserSet parsers;
 	private long maxInput;
-	private int contentLength = 0;
+	private int contentLength;
 	private MediaType mediaType;
 	private Parser parser;
 	private HttpPartSchema schema;

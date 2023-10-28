@@ -63,7 +63,7 @@ public class BasicStatusLine implements StatusLine {
 	private ProtocolVersion DEFAULT_PROTOCOL_VERSION = new ProtocolVersion("HTTP", 1, 1);
 
 	private ProtocolVersion protocolVersion = DEFAULT_PROTOCOL_VERSION;
-	private int statusCode = 0;
+	private int statusCode;
 	private String reasonPhrase;
 	private ReasonPhraseCatalog reasonPhraseCatalog;
 	private Locale locale = Locale.getDefault();

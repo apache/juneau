@@ -155,7 +155,7 @@ public abstract class RoundTripTest {
 	protected boolean returnOriginalObject;
 	private boolean validateXml;
 	protected String label;
-	public boolean debug = false;
+	public boolean debug;
 
 	public RoundTripTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
 		this.label = label;

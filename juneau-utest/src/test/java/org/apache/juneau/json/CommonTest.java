@@ -290,9 +290,9 @@ public class CommonTest {
 	}
 
 	public static class J {
-		private String f1 = null;
+		private String f1;
 		private int f2 = -1;
-		private boolean f3 = false;
+		private boolean f3;
 
 		public String getF1() {
 			return this.f1;

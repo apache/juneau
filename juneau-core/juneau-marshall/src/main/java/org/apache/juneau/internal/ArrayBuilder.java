@@ -54,7 +54,7 @@ public final class ArrayBuilder<E> {
 	private Predicate<E> filter;
 	private final Class<E> elementType;
 	private int size = -1;
-	private int i = 0;
+	private int i;
 	private List<E> list;
 
 	/**

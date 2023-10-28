@@ -38,7 +38,7 @@ public class MockHttpSession implements HttpSession {
 	private int maxInactiveInterval;
 	private String id;
 	private ServletContext servletContext;
-	private boolean isNew = false;
+	private boolean isNew;
 
 	/**
 	 * Creates a new HTTP session.

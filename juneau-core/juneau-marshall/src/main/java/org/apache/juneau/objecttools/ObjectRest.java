@@ -166,7 +166,7 @@ public final class ObjectRest {
 	final BeanSession session;
 
 	/** If true, the root cannot be overwritten */
-	private boolean rootLocked = false;
+	private boolean rootLocked;
 
 	/** The root of the model. */
 	private JsonNode root;

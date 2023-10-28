@@ -26,7 +26,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class RootResourcesTest extends RestTestcase {
 
-	private static boolean debug = false;
+	private static boolean debug;
 
 	private RestClient jsonClient = SamplesMicroservice.DEFAULT_CLIENT;
 

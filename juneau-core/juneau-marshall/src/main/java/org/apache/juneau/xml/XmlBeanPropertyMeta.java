@@ -31,7 +31,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 */
 	public static final XmlBeanPropertyMeta DEFAULT = new XmlBeanPropertyMeta();
 
-	private Namespace namespace = null;
+	private Namespace namespace;
 	private XmlFormat xmlFormat = XmlFormat.DEFAULT;
 	private String childName;
 	private final XmlMetaProvider xmlMetaProvider;

@@ -35,7 +35,7 @@ public class RdfBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 
 	private RdfCollectionFormat collectionFormat = RdfCollectionFormat.DEFAULT;
-	private Namespace namespace = null;
+	private Namespace namespace;
 	private boolean isBeanUri;
 
 	/**

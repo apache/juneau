@@ -248,7 +248,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 
 		private int f1, f3;
 		private Map<String,Object> f2 = new LinkedHashMap<>();
-		private boolean setterCalled = false;
+		private boolean setterCalled;
 
 		public int getF1() {
 			return f1;
@@ -287,7 +287,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 
 		private int f1, f3;
 		private Map<String,Object> f2 = new LinkedHashMap<>();
-		private boolean setterCalled = false;
+		private boolean setterCalled;
 
 		public int getF1() {
 			return f1;
