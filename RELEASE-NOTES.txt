@@ -22,7 +22,8 @@ Release Notes - Juneau - Version 9.0.2
     * [JUNEAU-257] Bump maven-bundle-plugin from 5.1.8 to 5.1.9.
     * [JUNEAU-258] Bump maven-jxr-plugin from 3.3.0 to 3.3.1.
     * [JUNEAU-259] Bump from Junit 4.13.2 to JUnit 5.10.1 Vintage Engine.
-
+    * [JUNEAU-260] Bump maven-surefire-report-plugin from 2.22.2 to 3.1.2.
+    
 Release Notes - Juneau - Version 9.0.1
 
 ** Improvement
