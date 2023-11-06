@@ -247,7 +247,7 @@
 						<docfilessubdirs>true</docfilessubdirs>
 						<javadocDirectory>${basedir}/juneau-doc/src/main/javadoc</javadocDirectory>
 						<javadocExecutable>${javadoc.executable}</javadocExecutable>
-						<source>8</source>
+						<source>${maven.compiler.source}</source>
 						<detectJavaApiLink>false</detectJavaApiLink>
 					</configuration>
 					<executions>
