@@ -23,7 +23,7 @@ import javax.xml.bind.*;
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#jd.Atom">Overview &gt; juneau-dto &gt; Atom</a>
  * </ul>
  */
-class Utils {
+final class Utils {
 
 	/**
 	 * Converts an ISO8601 date-time string to a {@link Calendar}.

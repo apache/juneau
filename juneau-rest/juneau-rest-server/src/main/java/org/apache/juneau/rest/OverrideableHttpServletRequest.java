@@ -19,7 +19,7 @@ import jakarta.servlet.http.*;
 /**
  * A wrapper class that allows you to override basic fields.
  */
-class OverrideableHttpServletRequest extends HttpServletRequestWrapper {
+final class OverrideableHttpServletRequest extends HttpServletRequestWrapper {
 
 	private String pathInfo, servletPath;
 

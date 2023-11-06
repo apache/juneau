@@ -16,7 +16,7 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 
 import org.apache.juneau.parser.*;
 
-class SwaggerException extends ParseException {
+final class SwaggerException extends ParseException {
 	private static final long serialVersionUID = 1L;
 
 	SwaggerException(Exception e, String location, Object...locationArgs) {

@@ -21,7 +21,7 @@ import org.apache.http.client.methods.*;
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-rest-client">juneau-rest-client</a>
  * </ul>
  */
-class BasicHttpRequestBase extends HttpRequestBase implements RestRequestCreated {
+final class BasicHttpRequestBase extends HttpRequestBase implements RestRequestCreated {
 
 	final String method;
 	final RestRequest restRequest;
