@@ -1258,7 +1258,7 @@ public class ConfigTest {
 
         cf.addListener(events -> {
             for (ConfigEvent ce : events) {
-                String key = (ce.getSection().equals("") ? "" : (ce.getSection() + '/')) + ce.getKey();
+                String key = (ce.getSection().isEmpty() ? "" : (ce.getSection() + '/')) + ce.getKey();
                 if (ce.getType() == ConfigEventType.REMOVE_ENTRY) {
                     changes.add("REMOVE_ENTRY(" + key + ")");
                 } else if (ce.getType() == ConfigEventType.REMOVE_SECTION) {

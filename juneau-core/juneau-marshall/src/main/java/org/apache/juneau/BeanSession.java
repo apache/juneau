@@ -920,7 +920,7 @@ public class BeanSession extends ContextSession {
 	}
 
 	private static final boolean isNullOrEmpty(Object o) {
-		return o == null || o.toString().equals("") || o.toString().equals("null");
+		return o == null || o.toString().isEmpty() || o.toString().equals("null");
 	}
 
 	private static int getMultiplier(String s) {

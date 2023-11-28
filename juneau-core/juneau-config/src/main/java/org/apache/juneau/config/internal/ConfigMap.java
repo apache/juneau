@@ -874,7 +874,7 @@ public class ConfigMap implements ConfigStoreListener {
 			for (String s : preLines)
 				w.append(s).append('\n');
 
-			if (! name.equals(""))
+			if (! name.isEmpty())
 				w.append(rawLine).append('\n');
 			else {
 				// Need separation between default prelines and first-entry prelines.
