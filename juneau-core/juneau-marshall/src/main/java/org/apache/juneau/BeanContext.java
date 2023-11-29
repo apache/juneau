@@ -4182,7 +4182,7 @@ public class BeanContext extends Context {
 			for (ObjectSwap f : swapArray)
 				if (f.getNormalClass().isParentOf(c))
 					l.add(f);
-			return l.size() == 0 ? null : l.toArray(new ObjectSwap[l.size()]);
+			return l.isEmpty() ? null : l.toArray(new ObjectSwap[l.size()]);
 		}
 		return null;
 	}

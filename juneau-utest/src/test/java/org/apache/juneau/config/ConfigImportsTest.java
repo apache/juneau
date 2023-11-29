@@ -173,7 +173,7 @@ public class ConfigImportsTest {
 		}
 
 		public String getNewValue(String section, String key) {
-			if (events.size() == 0)
+			if (events.isEmpty())
 				return null;
 			for (ConfigEvent ce : events)
 				if (eq(section, ce.getSection()) && eq(key, ce.getKey()))

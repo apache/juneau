@@ -877,7 +877,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Object[] getTableHeaders(Collection c, HtmlBeanPropertyMeta bpHtml) throws SerializeException  {
 
-		if (c.size() == 0)
+		if (c.isEmpty())
 			return null;
 
 		c = sort(c);

@@ -222,7 +222,7 @@ public final class Args extends JsonMap {
 	 */
 	public String getArg(String name) {
 		JsonList l = (JsonList)get(name);
-		if (l == null || l.size() == 0)
+		if (l == null || l.isEmpty())
 			return null;
 		if (l.size() == 1)
 			return l.get(0).toString();
@@ -249,7 +249,7 @@ public final class Args extends JsonMap {
 	 */
 	public <T> T getArg(Class<T> c, String name) {
 		JsonList l = (JsonList)get(name);
-		if (l == null || l.size() == 0)
+		if (l == null || l.isEmpty())
 			return null;
 		return l.get(0, c);
 	}

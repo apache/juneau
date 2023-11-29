@@ -432,7 +432,7 @@ public class BeanMeta<T> {
 				}
 
 				// Make sure at least one property was found.
-				if (beanFilter == null && ctx.isBeansRequireSomeProperties() && normalProps.size() == 0)
+				if (beanFilter == null && ctx.isBeansRequireSomeProperties() && normalProps.isEmpty())
 					return "No properties detected on bean class";
 
 				sortProperties = (ctx.isSortProperties() || (beanFilter != null && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
@@ -675,7 +675,7 @@ public class BeanMeta<T> {
 				MethodType methodType = UNKNOWN;
 				String bpName = bpName(lp, ln);
 
-				if (pt.size() == 0) {
+				if (pt.isEmpty()) {
 					if ("*".equals(bpName)) {
 						if (rt.isChildOf(Collection.class)) {
 							methodType = EXTRAKEYS;
