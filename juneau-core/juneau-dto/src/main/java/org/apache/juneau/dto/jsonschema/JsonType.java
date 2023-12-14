@@ -28,28 +28,28 @@ package org.apache.juneau.dto.jsonschema;
  */
 public enum JsonType {
 
-	/** array */
+	/** JSON type {@code array}. */
 	ARRAY("array"),
 
-	/** boolean */
+	/** JSON type {@code boolean}. */
 	BOOLEAN("boolean"),
 
-	/** integer */
+	/** JSON type {@code integer}. */
 	INTEGER("integer"),
 
-	/** null */
+	/** JSON type {@code null}. */
 	NULL("null"),
 
-	/** number */
+	/** JSON type {@code number}. */
 	NUMBER("number"),
 
-	/** object */
+	/** JSON type {@code object}. */
 	OBJECT("object"),
 
-	/** string */
+	/** JSON type {@code string}. */
 	STRING("string"),
 
-	/** any */
+	/** JSON type {@code any}. */
 	ANY("any");
 
 	private final String value;	// The serialized format of the enum.
