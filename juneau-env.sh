@@ -14,7 +14,7 @@
 . ~/.profile
 set -e
 export JUNEAU_VERSION=9.0.1
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-18.jdk/Contents/Home
+export JAVA_HOME=${JAVA_HOME:-/Library/Java/JavaVirtualMachines/jdk-18.jdk/Contents/Home}
 export PATH=$JAVA_HOME/bin:$PATH
 export PATH=/opt/homebrew/bin:$PATH
 export GPG_TTY=$(tty)
