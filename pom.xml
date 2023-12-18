@@ -43,9 +43,9 @@
 		<httpcore.version>4.4.16</httpcore.version>
 		<jetty.version>11.0.18</jetty.version>
 		<juneau.compare.version>8.0.0</juneau.compare.version>
-		<javadoc.juneau.version>9.0.0</javadoc.juneau.version>
-		<juneauVersion>9.0.0</juneauVersion>
-		<juneauVersionNext>9.0.1</juneauVersionNext>
+		<javadoc.juneau.version>9.0.2</javadoc.juneau.version>
+		<juneauVersion>9.0.2</juneauVersion>
+		<juneauVersionNext>9.0.3</juneauVersionNext>
 		<derby.version>10.17.1.0</derby.version>
 		<hibernate.version>5.6.15.Final</hibernate.version>
 		<springboot.version>3.2.0</springboot.version>
