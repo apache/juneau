@@ -24,6 +24,7 @@ Release Notes - Juneau - Version 9.0.2
     * [JUNEAU-259] Bump from Junit 4.13.2 to JUnit 5.10.1 Vintage Engine.
     * [JUNEAU-260] Bump maven-surefire-report-plugin from 2.22.2 to 3.1.2.
     * [JUNEAU-261] Bump org.apache.derby:derby from 10.16.1.1 to 10.17.1.0 #118.
+    * Project requires minimum Maven version for build of 3.6.3.
     
 Release Notes - Juneau - Version 9.0.1
 
@@ -111,7 +112,7 @@ Release Notes - Juneau - Version 8.1.2
     * [JUNEAU-158] - The KEYS link should have KEYS as the text
     * [JUNEAU-160] - Setting bean properties of type list don't use setters.
     * [JUNEAU-161] - Exeption-Message header can contain CR/LF characters.
-    * [JUNEAU-162] - RestClient class should be subclassible.
+    * [JUNEAU-162] - RestClient class should be extensible.
     * [JUNEAU-163] - Request Exception-Message response header should be truncated to some reasonable value.
     * [JUNEAU-164] - Stacktrace hashing should take proxies and lamba expressions into account.
 
@@ -174,7 +175,7 @@ Release Notes - Juneau - Version 8.1.0
     * [JUNEAU-97] - Path Parameter in Parent RestResource
     * [JUNEAU-106] - Improved REST debugging.
     * [JUNEAU-108] - AccessDeniedException should cause HTTP 401 response.
-    * [JUNEAU-109] - BasicRestLogger should take in servlet class so that logging can be based on that class.
+    * [JUNEAU-109] - BasicRestLogger should take in Servlet class so that logging can be based on that class.
 
 ** Task
     * [JUNEAU-126] - Serializers should serialize Iterators and Enumerations by default.
@@ -211,7 +212,7 @@ Release Notes - Juneau - Version 7.2.0
     * [JUNEAU-82] - Config and Logs resource pages should have configurable look-and-feel.
 
 ** New Feature
-    * [JUNEAU-60] - @RestMethod paramater annotation to populate a pojo using RequestBean format
+    * [JUNEAU-60] - @RestMethod parameter annotation to populate a POJO using RequestBean format
 
 ** Improvement
     * [JUNEAU-81] - Update Jetty to 9.4.9
@@ -277,7 +278,7 @@ Release Notes - Juneau - Version 6.3.0
     * [JUNEAU-38] - Testcase failure in UK
     * [JUNEAU-45] - Rebrand web pages with new incubator logo.
     * [JUNEAU-47] - Fix RAT check failure with logs generated during build
-    * [JUNEAU-51] - properties added to rest client, serializer, and parser are not available during pojo swap and unswap methods
+    * [JUNEAU-51] - properties added to rest client, serializer, and parser are not available during POJO swap and unswap methods
 
 ** Improvement
     * [JUNEAU-57] - seamless serialization and parsing of string fields to/from enum
@@ -291,7 +292,7 @@ Release Notes - Juneau - Version 6.2.0
 
 ** Improvement
     * [JUNEAU-32] - Improvements to BeanMeta class
-    * [JUNEAU-41] - Prerequisites usage is deprecated for non maven-plugin projects
+    * [JUNEAU-41] - Prerequisites usage is deprecated for non Maven-plugin projects
     * [JUNEAU-42] - More powerful RetryOn interface
     * [JUNEAU-43] - Removed superfluous property encoding
     * [JUNEAU-44] - Simplify the configuration for apache-rat-plugin
@@ -322,7 +323,7 @@ Release Notes - Juneau - Version 6.0.1
     * [JUNEAU-19] - Fix various JSON parser edge cases
     * [JUNEAU-21] - Scrub references to IBM from code.
     * [JUNEAU-22] - Localization bugs in CalendarSwap JUnits
-    * [JUNEAU-23] - Fix various maven build warnings.
+    * [JUNEAU-23] - Fix various Maven build warnings.
     * [JUNEAU-24] - Fix release issues discovered by Stian
 
 ** Improvement
@@ -337,7 +338,7 @@ Release Notes - Juneau - Version 6.0.0
 ** Bug
     * [JUNEAU-1] - Cannot run org.apache.juneau.samples unit tests.
     * [JUNEAU-2] - org.apache.juneau.jena.CT_Rdf.testLooseCollectionsOfBeans()
-    * [JUNEAU-4] - Testcase failure: CT_Visibility.testClassDefault
+    * [JUNEAU-4] - Test case failure: CT_Visibility.testClassDefault
 
 ** Improvement
     * [JUNEAU-13] - Rename PojoTransform to PojoSwap
