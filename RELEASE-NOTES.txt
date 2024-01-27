@@ -14,19 +14,19 @@
 
 Release Notes - Juneau - Version 9.0.2
 
-    * [JUNEAU-252] Bump org.eclipse.jgit:org.eclipse.jgit from 6.6.1.202309021850-r to 6.8.0.202311291450-r #112, #123.
-    * [JUNEAU-253] Bump springboot.version from 3.1.3 to 3.2.1 #113, #119, #223, #127.
-    * [JUNEAU-254] Bump jetty.version from 11.0.16 to 11.0.19 #114, #117, #128.
+    * [JUNEAU-252] Bump org.eclipse.jgit:org.eclipse.jgit from 6.6.1.202309021850-r to 6.8.0.202311291450-r.
+    * [JUNEAU-253] Bump springboot.version from 3.1.3 to 3.2.2.
+    * [JUNEAU-254] Bump jetty.version from 11.0.16 to 11.0.19.
     * [JUNEAU-255] Bump org.apache:apache from 29 to 31.
-    * [JUNEAU-256] Bump maven-javadoc-plugin from 3.5.0 to 3.6.3 #121.
+    * [JUNEAU-256] Bump maven-javadoc-plugin from 3.5.0 to 3.6.3.
     * [JUNEAU-257] Bump maven-bundle-plugin from 5.1.8 to 5.1.9.
     * [JUNEAU-258] Bump maven-jxr-plugin from 3.3.0 to 3.3.1.
     * [JUNEAU-259] Bump from Junit 4.13.2 to JUnit 5.10.1 Vintage Engine.
     * [JUNEAU-260] Bump maven-surefire-report-plugin from 2.22.2 to 3.1.2.
-    * [JUNEAU-261] Bump org.apache.derby:derby from 10.16.1.1 to 10.17.1.0 #118.
+    * [JUNEAU-261] Bump org.apache.derby:derby from 10.16.1.1 to 10.17.1.0.
     * Project requires minimum Maven version for build of 3.6.3.
-    * Bump org.apache.maven.plugins:maven-compiler-plugin from 3.11.0 to 3.12.1 #129.
-    * Bump org.apache.maven.plugins:maven-jxr-plugin from 3.3.1 to 3.3.2 #130.
+    * Bump org.apache.maven.plugins:maven-compiler-plugin from 3.11.0 to 3.12.1.
+    * Bump org.apache.maven.plugins:maven-jxr-plugin from 3.3.1 to 3.3.2.
     
 Release Notes - Juneau - Version 9.0.1
 
