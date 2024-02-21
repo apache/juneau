@@ -27,6 +27,7 @@ Release Notes - Juneau - Version 9.0.2
     * Project requires minimum Maven version for build of 3.6.3.
     * Bump org.apache.maven.plugins:maven-compiler-plugin from 3.11.0 to 3.12.1.
     * Bump org.apache.maven.plugins:maven-jxr-plugin from 3.3.1 to 3.3.2.
+    *  Bump org.apache.maven.plugins:maven-shade-plugin from 3.4.1 to 3.5.2 #135.
     
 Release Notes - Juneau - Version 9.0.1
 
