@@ -48,7 +48,7 @@
 		<juneauVersionNext>9.0.3</juneauVersionNext>
 		<derby.version>10.17.1.0</derby.version>
 		<hibernate.version>5.6.15.Final</hibernate.version>
-		<springboot.version>3.2.3</springboot.version>
+		<springboot.version>3.2.4</springboot.version>
 		<xml.apis.version>2.0.2</xml.apis.version>
 		<javadoc.executable />
 		<javadoc.plugin.version>3.6.3</javadoc.plugin.version>
