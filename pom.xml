@@ -52,7 +52,7 @@
 		<xml.apis.version>2.0.2</xml.apis.version>
 		<javadoc.executable />
 		<javadoc.plugin.version>3.6.3</javadoc.plugin.version>
-		<jacoco.plugin.version>0.8.11</jacoco.plugin.version>
+		<jacoco.plugin.version>0.8.12</jacoco.plugin.version>
 	</properties>
 
 	<dependencyManagement>
