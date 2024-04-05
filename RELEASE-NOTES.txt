@@ -25,10 +25,10 @@ Release Notes - Juneau - Version 9.0.2
     * [JUNEAU-260] Bump maven-surefire-report-plugin from 2.22.2 to 3.1.2.
     * [JUNEAU-261] Bump org.apache.derby:derby from 10.16.1.1 to 10.17.1.0.
     * Project requires minimum Maven version for build of 3.6.3.
-    * Bump org.apache.maven.plugins:maven-compiler-plugin from 3.11.0 to 3.13.0 #139.
-
+    * Bump org.apache.maven.plugins:maven-compiler-plugin from 3.11.0 to 3.13.0 #139.   
     * Bump org.apache.maven.plugins:maven-jxr-plugin from 3.3.1 to 3.3.2.
     * Bump org.apache.maven.plugins:maven-shade-plugin from 3.4.1 to 3.5.2 #135.
+    * Bump org.jacoco:jacoco-maven-plugin from 0.8.11 to 0.8.12 #140.
     
 Release Notes - Juneau - Version 9.0.1
 
