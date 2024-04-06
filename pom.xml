@@ -230,15 +230,13 @@
 						<author>true</author>
 						<linksource>true</linksource>
 						<bootclasspath>${sun.boot.class.path}</bootclasspath>
-						<classpath>${basedir}/juneau-doc/tools.jar</classpath>
 						<overview>${basedir}/juneau-doc/src/main/javadoc/overview.html</overview>
 						<stylesheetfile>${basedir}/juneau-doc/src/main/javadoc/javadoc.css</stylesheetfile>
 						<use>false</use>
-						<additionalparams>-sourcetab 3 -notimestamp --allow-script-in-comments</additionalparams>
 						<excludePackageNames>*proto*:*test*:org.apache.juneau.doc.internal</excludePackageNames>
 						<linksource>true</linksource>
  						<links>
-							<link>https://docs.oracle.com/javase/8/docs/api/</link>
+							<link>https://docs.oracle.com/javase/${maven.compiler.target}/docs/api/</link>
 							<link>https://jakarta.ee/specifications/platform/8/apidocs/</link>
 							<link>https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/</link>
 							<link>https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/</link>
