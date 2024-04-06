@@ -24,9 +24,10 @@
 	</parent>
 
 	<artifactId>juneau-rest-server-springboot</artifactId>
+	<packaging>bundle</packaging>
+
 	<name>juneau/rest/rest-server-springboot</name>
 	<description>Apache Juneau REST Server Spring Boot Integration</description>
-	<packaging>bundle</packaging>
 
 	<dependencies>
 		<dependency>

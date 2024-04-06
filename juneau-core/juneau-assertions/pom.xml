@@ -47,7 +47,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Automatic-Module-Name>org.apache.juneau.config</Automatic-Module-Name>
+						<Automatic-Module-Name>org.apache.juneau.assertions</Automatic-Module-Name>
 					</instructions>
 				</configuration>
 			</plugin>

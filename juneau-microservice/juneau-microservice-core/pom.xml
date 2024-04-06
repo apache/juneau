@@ -24,6 +24,8 @@
 	</parent>
 
 	<artifactId>juneau-microservice-core</artifactId>
+	<packaging>bundle</packaging>
+
 	<name>juneau/microservice/microservice-core</name>
 	<description>Apache Juneau Microservice Core API</description>
 
@@ -49,6 +51,16 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Automatic-Module-Name>org.apache.juneau.microservice.core</Automatic-Module-Name>
+					</instructions>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
