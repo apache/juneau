@@ -28,11 +28,10 @@ jobs:
     strategy:
       matrix:
         java: [ 17 ]
-# Fails on 17 tests
-#        java: [ 11, 17 ]
+#        java: [ 17, 21 ]
         experimental: [false]
 #        include:
-#          - java: 20-ea
+#          - java: 22
 #            experimental: true
 
     steps:
