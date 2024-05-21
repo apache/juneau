@@ -12,38 +12,58 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.jetty;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.collections.JsonMap.EMPTY_MAP;
+import static org.apache.juneau.common.internal.IOUtils.read;
+import static org.apache.juneau.common.internal.StringUtils.trimTrailingSlashes;
+import static org.apache.juneau.common.internal.ThrowableUtils.asRuntimeException;
+import static org.apache.juneau.internal.ClassUtils.className;
+import static org.apache.juneau.internal.CollectionUtils.copyOf;
+import static org.apache.juneau.internal.CollectionUtils.map;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.logging.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import jakarta.servlet.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
-import org.apache.juneau.config.*;
+import org.apache.juneau.BasicRuntimeException;
+import org.apache.juneau.ExecutableException;
+import org.apache.juneau.collections.Args;
+import org.apache.juneau.collections.JsonMap;
+import org.apache.juneau.common.internal.IOUtils;
+import org.apache.juneau.config.Config;
 import org.apache.juneau.config.store.ConfigStore;
 import org.apache.juneau.cp.Messages;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.microservice.*;
+import org.apache.juneau.internal.ObjectUtils;
+import org.apache.juneau.microservice.Microservice;
 import org.apache.juneau.microservice.console.ConsoleCommand;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.ClassInfo;
 import org.apache.juneau.rest.annotation.Rest;
 import org.apache.juneau.rest.servlet.RestServlet;
-import org.apache.juneau.svl.*;
-import org.eclipse.jetty.server.*;
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.handler.*;
-import org.eclipse.jetty.servlet.*;
+import org.apache.juneau.svl.Var;
+import org.apache.juneau.svl.VarResolver;
+import org.eclipse.jetty.ee9.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee9.servlet.ServletHolder;
+import org.eclipse.jetty.server.ConnectionFactory;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SslConnectionFactory;
+
+import jakarta.servlet.Servlet;
+
 
 /**
  * Entry point for Juneau microservice that implements a REST interface using Jetty on a single port.
@@ -67,7 +87,9 @@ public class JettyMicroservice extends Microservice {
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static volatile JettyMicroservice INSTANCE;
+	private static final String KEY_SERVLET_CONTEXT_HANDLER = "ServletContextHandler";
+
+    private static volatile JettyMicroservice INSTANCE;
 
 	private static void setInstance(JettyMicroservice m) {
 		synchronized(JettyMicroservice.class) {
@@ -567,17 +589,18 @@ public class JettyMicroservice extends Microservice {
 	 *
 	 * @return The context path that this microservice is using.
 	 */
-	public String getContextPath() {
-		for (Handler h : getServer().getHandlers()) {
-			if (h instanceof HandlerCollection)
-				for (Handler h2 : ((HandlerCollection)h).getChildHandlers())
-					if (h2 instanceof ServletContextHandler)
-						return ((ServletContextHandler)h2).getContextPath();
-			if (h instanceof ServletContextHandler)
-				return ((ServletContextHandler)h).getContextPath();
-		}
-		throw new IllegalStateException("Could not locate ServletContextHandler in Jetty server.");
-	}
+    public String getContextPath() {
+        return getServletContextHandler().getContextPath();
+//        for (Handler h : getServer().getHandlers()) {
+//            if (h instanceof HandlerCollection)
+//                for (org.eclipse.jetty.ee9.nested.Handler h2 : ((HandlerCollection) h).getChildHandlers())
+//                    if (h2 instanceof ServletContextHandler)
+//                        return ((ServletContextHandler) h2).getContextPath();
+//            if (h instanceof ServletContextHandler)
+//                return ((ServletContextHandler) h).getContextPath();
+//        }
+//        throw new IllegalStateException("Could not locate ServletContextHandler in Jetty server.");
+    }
 
 	/**
 	 * Returns whether this microservice is using <js>"http"</js> or <js>"https"</js>.
@@ -760,18 +783,17 @@ public class JettyMicroservice extends Microservice {
 	}
 
 	/**
-	 * Finds and returns the servlet context handler define in the Jetty container.
+	 * Finds and returns the servlet context handler defined in the Jetty container.
 	 *
 	 * @return The servlet context handler.
 	 * @throws RuntimeException if context handler is not defined.
 	 */
-	protected ServletContextHandler getServletContextHandler() {
-		for (Handler h : getServer().getHandlers()) {
-			ServletContextHandler sch = getServletContextHandler(h);
-			if (sch != null)
-				return sch;
-		}
-		throw new IllegalStateException("Servlet context handler not found in jetty server.");
+	public ServletContextHandler getServletContextHandler() {
+	    final var obj = getServer().getAttribute(KEY_SERVLET_CONTEXT_HANDLER);
+	    if (obj instanceof ServletContextHandler servletContextHandler) {
+	        return servletContextHandler;
+	    }
+		throw new IllegalStateException("Servlet context handler not found in jetty server or at attribute '" + KEY_SERVLET_CONTEXT_HANDLER + "'");
 	}
 
 	/**
@@ -816,19 +838,6 @@ public class JettyMicroservice extends Microservice {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	private static ServletContextHandler getServletContextHandler(Handler h) {
-		if (h instanceof ServletContextHandler)
-			return (ServletContextHandler)h;
-		if (h instanceof HandlerCollection) {
-			for (Handler h2 : ((HandlerCollection)h).getHandlers()) {
-				ServletContextHandler sch = getServletContextHandler(h2);
-				if (sch != null)
-					return sch;
-			}
-		}
-		return null;
-	}
 
 	private static int findOpenPort(int[] ports) {
 		for (int port : ports) {

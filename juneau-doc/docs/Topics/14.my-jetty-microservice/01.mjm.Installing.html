@@ -217,7 +217,7 @@
 				|			<xt>&lt;/Array&gt;</xt>
 				|		<xt>&lt;/Set&gt;</xt>
 				|	
-				|		<xt>&lt;New</xt> <xa>id</xa>=<xs>"context"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.servlet.ServletContextHandler"</xs><xt>&gt;</xt>
+				|		<xt>&lt;New</xt> <xa>id</xa>=<xs>"context"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.ee9.servlet.ServletContextHandler"</xs><xt>&gt;</xt>
 				|			<xt>&lt;Set</xt> <xa>name</xa>=<xs>"contextPath"</xs><xt>&gt;/&lt;/Set&gt;</xt>
 				|			<xc>&lt;!-- Optionally specify your servlets here --&gt;
 				|			&lt;!--Call name="addServlet"&gt;
@@ -225,14 +225,14 @@
 				|				&lt;Arg&gt;/*&lt;/Arg&gt;
 				|			&lt;/Call--&gt;</xc>
 				|			<xt>&lt;Set</xt> <xa>name</xa>=<xs>"sessionHandler"</xs><xt>&gt;</xt>
-				|				<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.session.SessionHandler"</xs><xt>/&gt;</xt>
+				|				<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.ee9.nested.SessionHandler"</xs><xt>/&gt;</xt>
 				|			<xt>&lt;/Set&gt;</xt>
 				|		<xt>&lt;/New&gt;</xt>
 				|	
 				|		<xt>&lt;Set</xt> <xa>name</xa>=<xs>"handler"</xs><xt>&gt;</xt>
-				|			<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.handler.HandlerCollection"</xs><xt>&gt;</xt>
+				|			<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.ee9.nested.HandlerCollection"</xs><xt>&gt;</xt>
 				|				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"handlers"</xs><xt>&gt;</xt>
-				|					<xt>&lt;Array</xt> <xa>type</xa>=<xs>"org.eclipse.jetty.server.Handler"</xs><xt>&gt;</xt>
+				|					<xt>&lt;Array</xt> <xa>type</xa>=<xs>"org.eclipse.jetty.ee9.nested.Handler"</xs><xt>&gt;</xt>
 				|						<xt>&lt;Item&gt;</xt>
 				|							<xt>&lt;Ref</xt> <xa>refid</xa>=<xs>"context"</xs><xt>/&gt;</xt>
 				|						<xt>&lt;/Item&gt;</xt>

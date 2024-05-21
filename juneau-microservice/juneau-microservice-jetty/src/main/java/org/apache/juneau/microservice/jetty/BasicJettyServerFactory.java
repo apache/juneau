@@ -38,7 +38,7 @@ public class BasicJettyServerFactory implements JettyServerFactory {
 			IOUtils.pipe(r, w);
 			w.flush();
 		}
-		XmlConfiguration xmlConfiguration = new XmlConfiguration(Resource.newResource(f));
+		XmlConfiguration xmlConfiguration = new XmlConfiguration(new PathResourceFactory().newResource(f.toPath()));
 		return (Server)xmlConfiguration.configure();
 	}
 }

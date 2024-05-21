@@ -55,4 +55,4 @@ Juneau is packed with features that may not be obvious at first. Users are encou
 ## Building
 Building requires:
 * [Apache Maven](https://maven.apache.org/)
-* Java 17 is required to build, but Java 11 is sufficient to run unless you need Spring.
+* Java 17 is required to build and run.
