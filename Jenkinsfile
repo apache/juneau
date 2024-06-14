@@ -15,15 +15,15 @@ timestamps {
 
 	node ('ubuntu') { 
 	
-		stage ('Juneau-Java-1.8 - Checkout') {
+		stage ('Juneau-Java-17 - Checkout') {
 			checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/apache/juneau']]]) 
 		}
 		
-		stage ('Juneau-Java-1.8 - Build') {
+		stage ('Juneau-Java-17 - Build') {
 	
-			withEnv(["JAVA_HOME=${ tool 'JDK 1.8 (latest)' }", "PATH=$PATH:${env.JAVA_HOME}/bin"]) { 
+			withEnv(["JAVA_HOME=${ tool 'JDK 17 (latest)' }", "PATH=$PATH:${env.JAVA_HOME}/bin"]) { 
 	
-				withMaven(jdk: 'JDK 1.8 (latest)', maven: 'Maven 3.2.5') { 
+				withMaven(jdk: 'JDK 17 (latest)', maven: 'Maven 3.6.3') { 
 					sh "echo hello"
 					sh "mvn clean install deploy"
 				}
@@ -35,7 +35,7 @@ timestamps {
 			}
 		}
 		
-		stage ('Juneau-Java-1.8 - Post build actions') {
+		stage ('Juneau-Java-17 - Post build actions') {
 			step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'dev@juneau.apache.org', sendToIndividuals: true])
 		}
 	}
