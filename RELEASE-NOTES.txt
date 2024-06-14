@@ -31,7 +31,9 @@ Release Notes - Juneau - Version 9.1.0
     * Bump org.apache.maven.plugins:maven-jxr-plugin from 3.3.1 to 3.4.0 #150.
     * Bump org.apache.maven.plugins:maven-shade-plugin from 3.4.1 to 3.6.0 #135, #144, #147.
     * Bump org.jacoco:jacoco-maven-plugin from 0.8.11 to 0.8.12 #140.
-    * Bump org.apache.maven.plugins:maven-source-plugin from 3.2.1 to 3.3.1 #141
+    * Bump org.apache.maven.plugins:maven-source-plugin from 3.2.1 to 3.3.1 #141.
+    * Bump jakarta.servlet:jakarta.servlet-api 6.1.0 from 6.0.0 to 6.1.0.
+    * Add org.apache.juneau.rest.mock.MockServletResponse.sendRedirect(String, int, boolean) for jakarta.servlet:jakarta.servlet-api 6.1.0.
     
 Release Notes - Juneau - Version 9.0.1
 

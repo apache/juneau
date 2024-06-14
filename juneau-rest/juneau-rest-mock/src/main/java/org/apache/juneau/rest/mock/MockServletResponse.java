@@ -185,6 +185,12 @@ public class MockServletResponse implements HttpServletResponse {
 		headerMap.put("Location", new String[] {location});
 	}
 
+    // @Override /* HttpServletResponse */
+    public void sendRedirect(String location, int sc, boolean clearBuffer) throws IOException {
+        this.sc = sc;
+        headerMap.put("Location", new String[] {location});
+    }
+
 	@Override /* HttpServletResponse */
 	public void setDateHeader(String name, long date) {
 		headerMap.put(name, new String[] {DateUtils.formatDate(new Date(date), DateUtils.PATTERN_RFC1123)});
@@ -273,4 +279,5 @@ public class MockServletResponse implements HttpServletResponse {
 	Map<String,String[]> getHeaders() {
 		return headerMap;
 	}
+
 }
