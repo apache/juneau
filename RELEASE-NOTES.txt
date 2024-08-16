@@ -23,7 +23,7 @@ Release Notes - Juneau - Version 9.1.0
     * [JUNEAU-256] Bump maven-javadoc-plugin from 3.5.0 to 3.8.0 #149, #159.
     * [JUNEAU-257] Bump maven-bundle-plugin from 5.1.8 to 5.1.9.
     * [JUNEAU-258] Bump maven-jxr-plugin from 3.3.0 to 3.3.1.
-    * [JUNEAU-259] Bump from Junit 4.13.2 to JUnit 5.10.3 Vintage Engine.
+    * [JUNEAU-259] Bump from Junit 4.13.2 to JUnit 5.11.0 Vintage Engine.
     * [JUNEAU-260] Bump maven-surefire-report-plugin from 2.22.2 to 3.1.2.
     * [JUNEAU-261] Bump org.apache.derby:derby from 10.16.1.1 to 10.17.1.0.
     * Project requires minimum Maven version for build of 3.6.3.
@@ -35,6 +35,7 @@ Release Notes - Juneau - Version 9.1.0
     * Bump jakarta.servlet:jakarta.servlet-api 6.1.0 from 6.0.0 to 6.1.0.
     * Bump org.apache:apache from 32 to 33 #157.
     * Add org.apache.juneau.rest.mock.MockServletResponse.sendRedirect(String, int, boolean) for jakarta.servlet:jakarta.servlet-api 6.1.0.
+    * Bump org.junit:junit-bom from 5.10.3 to 5.11.0 #161.
     
 Release Notes - Juneau - Version 9.0.1
 
