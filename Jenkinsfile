@@ -25,7 +25,7 @@ timestamps {
 	
 				withMaven(jdk: 'JDK 17 (latest)', maven: 'Maven 3.6.3') { 
 					sh "echo hello"
-					sh "mvn clean install deploy"
+					sh "mvn -ntp clean install deploy"
 				}
 				
 				junit '**/target/surefire-reports/*.xml' 
