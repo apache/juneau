@@ -22,13 +22,12 @@ Release Notes - Juneau - Version 9.1.0
     * [JUNEAU-255] Bump org.apache:apache from 29 to 32 #143.
     * [JUNEAU-256] Bump maven-javadoc-plugin from 3.5.0 to 3.8.0 #149, #159.
     * [JUNEAU-257] Bump maven-bundle-plugin from 5.1.8 to 5.1.9.
-    * [JUNEAU-258] Bump maven-jxr-plugin from 3.3.0 to 3.3.1.
+    * [JUNEAU-258] Bump maven-jxr-plugin from 3.3.0 to 3.5.0 #150, #163.
     * [JUNEAU-259] Bump from Junit 4.13.2 to JUnit 5.11.0 Vintage Engine.
     * [JUNEAU-260] Bump maven-surefire-report-plugin from 2.22.2 to 3.1.2.
     * [JUNEAU-261] Bump org.apache.derby:derby from 10.16.1.1 to 10.17.1.0.
     * Project requires minimum Maven version for build of 3.6.3.
     * Bump org.apache.maven.plugins:maven-compiler-plugin from 3.11.0 to 3.13.0 #139.   
-    * Bump org.apache.maven.plugins:maven-jxr-plugin from 3.3.1 to 3.4.0 #150.
     * Bump org.apache.maven.plugins:maven-shade-plugin from 3.4.1 to 3.6.0 #135, #144, #147.
     * Bump org.jacoco:jacoco-maven-plugin from 0.8.11 to 0.8.12 #140.
     * Bump org.apache.maven.plugins:maven-source-plugin from 3.2.1 to 3.3.1 #141.
