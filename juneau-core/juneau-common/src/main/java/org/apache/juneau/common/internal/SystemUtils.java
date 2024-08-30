@@ -26,7 +26,7 @@ public class SystemUtils {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
-				if (! Boolean.getBoolean("SystemUtils.quiet"))
+				if (Boolean.getBoolean("SystemUtils.verbose"))
 				SHUTDOWN_MESSAGES.forEach(x -> System.out.println(x.get()));
 			}
 		});
