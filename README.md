@@ -15,6 +15,8 @@
 
 # Apache Juneau
 
+[![Java CI](https://github.com/apache/juneau/actions/workflows/maven.yml/badge.svg)](https://github.com/apache/juneau/actions/workflows/maven.yml)
+
 * [Homepage](https://juneau.apache.org/)
 * [Wiki](https://github.com/apache/juneau/wiki)
 * [Javadocs](https://juneau.apache.org/site/apidocs-9.0.0/index.html)
