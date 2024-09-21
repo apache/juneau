@@ -16,6 +16,7 @@
 # Apache Juneau
 
 [![Java CI](https://github.com/apache/juneau/actions/workflows/maven.yml/badge.svg)](https://github.com/apache/juneau/actions/workflows/maven.yml)
+[![CodeQL](https://github.com/apache/juneau/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/apache/juneau/actions/workflows/codeql-analysis.yml)
 
 * [Homepage](https://juneau.apache.org/)
 * [Wiki](https://github.com/apache/juneau/wiki)
