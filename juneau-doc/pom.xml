@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau</artifactId>
-		<version>8.1.3</version>
+		<version>8.1.4</version>
 	</parent>
 
 	<artifactId>juneau-doc</artifactId>
@@ -32,8 +32,8 @@
 		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<toolsjar>${basedir}/tools.jar</toolsjar>
 	</properties>
 

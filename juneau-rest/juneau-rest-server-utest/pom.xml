@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-rest</artifactId>
-		<version>8.1.3</version>
+		<version>8.1.4</version>
 	</parent>
 
 	<artifactId>juneau-rest-server-utest</artifactId>
@@ -41,6 +41,12 @@
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
+			<version>${jaxb.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.parsers</groupId>
+			<artifactId>jaxp-api</artifactId>
+			<version>1.4.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
