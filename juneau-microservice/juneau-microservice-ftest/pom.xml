@@ -29,10 +29,10 @@
 
 	<properties>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
-		
+
 		<!-- Java 8 required because Jetty requires it. -->
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 	</properties>
 
 	<dependencies>
@@ -75,14 +75,6 @@
 			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>javax.activation</groupId>
-			<artifactId>javax.activation-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.activation</groupId>
-			<artifactId>javax.activation</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-core-utest</artifactId>
 			<version>${project.version}</version>
@@ -95,7 +87,7 @@
 			<type>test-jar</type>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
