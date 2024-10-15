@@ -16,26 +16,26 @@
 
 . juneau-release-env.sh
 
-function fail { 
+function fail {
 	echo ' '
 	echo '*******************************************************************************'
 	echo '***** FAILED ******************************************************************'
 	echo '*******************************************************************************'
 	echo ' '
-	exit 1; 
+	exit 1;
 }
 
-function success { 
+function success {
 	echo ' '
 	echo '*******************************************************************************'
 	echo '***** SUCCESS *****************************************************************'
 	echo '*******************************************************************************'
 	echo ' '
-	exit 0; 
+	exit 0;
 }
 
 function message {
-	X_DATE=$(date +'%H:%M:%S') 
+	X_DATE=$(date +'%H:%M:%S')
 	echo ' '
 	echo "-------------------------------------------------------------------------------"
 	echo "[$X_DATE] $1"
@@ -43,20 +43,20 @@ function message {
 }
 
 function fail_with_message {
-	X_DATE=$(date +'%H:%M:%S') 
+	X_DATE=$(date +'%H:%M:%S')
 	echo ' '
 	echo "-------------------------------------------------------------------------------"
 	echo "[$X_DATE] $1"
 	echo '-------------------------------------------------------------------------------'
-	fail; 
+	fail;
 }
 
 function yprompt {
 	echo ' '
 	echo -n "$1 (Y/n): "
 	read prompt
-	if [ "$prompt" != "Y" ] && [ "$prompt" != "y" ] && [ "$prompt" != "" ] 
-	then 
+	if [ "$prompt" != "Y" ] && [ "$prompt" != "y" ] && [ "$prompt" != "" ]
+	then
 		fail;
 	fi
 }
@@ -66,7 +66,7 @@ function st {
 }
 
 function et {
-	echo "Execution time: ${SECONDS}s" 
+	echo "Execution time: ${SECONDS}s"
 }
 
 command -v wget || fail_with_message "wget not found"
@@ -84,10 +84,10 @@ cd ~/.m2
 
 message "Cleaning existing Git repository"
 st
-if [ "$X_CLEANM2" != "N" ] && [ "$X_CLEANM2" != "n" ] 
+if [ "$X_CLEANM2" != "N" ] && [ "$X_CLEANM2" != "n" ]
 then
 	mv repository repository-old
-	rm -rf repository-old & 
+	rm -rf repository-old &
 fi
 et
 
@@ -101,7 +101,7 @@ et
 
 message "Cloning juneau.git"
 st
-git clone https://gitbox.apache.org/repos/asf/juneau.git
+git clone https://gitbox.apache.org/repos/asf/juneau.git -branch $X_GIT_BRANCH
 et
 
 message "Cloning juneau-website.git"
@@ -177,7 +177,7 @@ mvn release:perform
 open "https://repository.apache.org/#stagingRepositories"
 et
 
-echo "On Apache's Nexus instance, locate the staging repository for the code you just released.  It should be called something like orgapachejuneau-1000." 
+echo "On Apache's Nexus instance, locate the staging repository for the code you just released.  It should be called something like orgapachejuneau-1000."
 echo "Check the Updated time stamp and click to verify its Content."
 echo "IMPORTANT - When all artifacts to be deployed are in the staging repository, tick the box next to it and click Close."
 echo "DO NOT CLICK RELEASE YET - the release candidate must pass [VOTE] emails on dev@juneau before we release."
@@ -193,12 +193,12 @@ yprompt "X_REPO = $X_REPO.  Is this correct?"
 message "Creating binary artifacts"
 st
 cd $X_STAGING
-rm -rf dist 
+rm -rf dist
 svn co https://dist.apache.org/repos/dist/dev/juneau dist
 svn rm dist/source/*
 svn rm dist/binaries/*
 mkdir dist/source/$X_RELEASE
-mkdir dist/binaries/$X_RELEASE 
+mkdir dist/binaries/$X_RELEASE
 cd $X_STAGING/dist/source/$X_RELEASE
 wget -e robots=off --recursive --no-parent --no-directories -A "*-source-release*" https://repository.apache.org/content/repositories/$X_REPO/org/apache/juneau/
 mv juneau-${X_VERSION}-source-release.zip apache-juneau-${X_VERSION}-src.zip

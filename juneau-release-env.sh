@@ -14,13 +14,14 @@
 
 # DO NOT CHECK IN CHANGES TO THIS FILE!
 
-export X_VERSION=7.0.0
-export X_NEXT_VERSION=7.0.1-SNAPSHOT
-export X_RELEASE=juneau-7.0.0-RC1
+export X_VERSION=8.1.4
+export X_NEXT_VERSION=8.1.5-SNAPSHOT
+export X_RELEASE=juneau-8.1.4-RC1
 export X_STAGING=~/tmp/dist-release-juneau
-export X_USERNAME=your apache username
-export X_EMAIL=you@apache.org
+export X_USERNAME=jamesbognar
+export X_EMAIL=jamesbognar@apache.org
 export X_CLEANM2=Y
+export X_GIT_BRANCH=juneau-8.1.4-branch
 
 echo ' '
 echo --- Settings ------------------------------------------------------------------
@@ -31,4 +32,5 @@ echo X_STAGING = $X_STAGING
 echo X_USERNAME = $X_USERNAME
 echo X_EMAIL = $X_EMAIL
 echo X_CLEANM2 = $X_CLEANM2
+echo X_GIT_BRANCH = $X_GIT_BRANCH
 echo -------------------------------------------------------------------------------
