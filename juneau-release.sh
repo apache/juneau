@@ -101,7 +101,8 @@ et
 
 message "Cloning juneau.git"
 st
-git clone https://gitbox.apache.org/repos/asf/juneau.git -branch $X_GIT_BRANCH
+echo git clone --branch "${X_GIT_BRANCH}" https://gitbox.apache.org/repos/asf/juneau.git
+git clone --branch "${X_GIT_BRANCH}" https://gitbox.apache.org/repos/asf/juneau.git
 et
 
 message "Cloning juneau-website.git"

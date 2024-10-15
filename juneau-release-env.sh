@@ -20,7 +20,7 @@ export X_RELEASE=juneau-8.1.4-RC1
 export X_STAGING=~/tmp/dist-release-juneau
 export X_USERNAME=jamesbognar
 export X_EMAIL=jamesbognar@apache.org
-export X_CLEANM2=Y
+export X_CLEANM2=N
 export X_GIT_BRANCH=juneau-8.1.4-branch
 
 echo ' '
