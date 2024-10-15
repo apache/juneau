@@ -24,7 +24,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-microservice</artifactId>
@@ -34,12 +34,12 @@
 	<artifactId>juneau-my-jetty-microservice</artifactId>
 	<name>juneau/microservice/my-jetty-microservice</name>
 	<description>Apache Juneau Jetty Microservice Template</description>
-	
+
 	<properties>
-		<juneau.version>8.1.4</juneau.version>
+		<juneau.version>8.1.4-SNAPSHOT</juneau.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
@@ -47,7 +47,7 @@
 			<version>${juneau.version}</version>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
