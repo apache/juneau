@@ -82,8 +82,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
+			<groupId>jakarta.inject</groupId>
+			<artifactId>jakarta.inject-api</artifactId>
 			<scope>compile</scope>
 			<version>${javax.inject.version}</version>
 		</dependency>
