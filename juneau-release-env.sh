@@ -23,6 +23,8 @@ export X_STAGING=~/tmp/dist-release-juneau
 export X_USERNAME=jamesbognar
 export X_EMAIL=jamesbognar@apache.org
 export X_CLEANM2=N
+export X_GIT_BRANCH=master
+export X_JAVA_HOME=/Users/james.bognar/blt/tools/Darwin/jdk/openjdk_11.0.21.0.102_11.69.52_x64
 
 echo ' '
 echo --- Settings ------------------------------------------------------------------
@@ -33,4 +35,6 @@ echo X_STAGING = $X_STAGING
 echo X_USERNAME = $X_USERNAME
 echo X_EMAIL = $X_EMAIL
 echo X_CLEANM2 = $X_CLEANM2
+echo X_GIT_BRANCH = $X_GIT_BRANCH
+echo X_JAVA_HOME = $X_JAVA_HOME
 echo -------------------------------------------------------------------------------
