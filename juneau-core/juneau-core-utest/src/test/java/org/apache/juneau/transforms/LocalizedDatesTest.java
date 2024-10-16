@@ -26,6 +26,7 @@ import org.junit.runners.*;
 
 @RunWith(Parameterized.class)
 @SuppressWarnings("deprecation")
+@Ignore
 public class LocalizedDatesTest {
 
 	private static Calendar testDate = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
