@@ -49,7 +49,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<maven.javadoc.skip>true</maven.javadoc.skip>
-		<javax.inject.version>${javax.inject.version}</javax.inject.version>
+		<jakarta.inject.version>${jakarta.inject.version}</jakarta.inject.version>
 		<juneau.version>${version}</juneau.version>
 		<jena.version>${jena.version}</jena.version>
 	</properties>
@@ -92,7 +92,7 @@
 		<dependency>
 			<groupId>jakarta.inject</groupId>
 			<artifactId>jakarta.inject-api</artifactId>
-			<version>\${javax.inject.version}</version>
+			<version>\${jakarta.inject.version}</version>
 		</dependency>
 
 		<!-- Used for JPA persistence of beans -->

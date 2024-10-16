@@ -85,7 +85,7 @@
 			<groupId>jakarta.inject</groupId>
 			<artifactId>jakarta.inject-api</artifactId>
 			<scope>compile</scope>
-			<version>${javax.inject.version}</version>
+			<version>${jakarta.inject.version}</version>
 		</dependency>
 
 	</dependencies>

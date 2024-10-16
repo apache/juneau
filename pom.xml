@@ -48,7 +48,7 @@
 		<juneauVersionNext>8.1.5</juneauVersionNext>
 		<derby.version>10.10.2.0</derby.version>
 		<hibernate.version>5.0.9.Final</hibernate.version>
-		<javax.inject.version>1.0</javax.inject.version>
+		<jakarta.inject.version>1.0</jakarta.inject.version>
 		<springframework.version>2.0.1.RELEASE</springframework.version>
 		<xml.apis.version>1.4.01</xml.apis.version>
 	</properties>
