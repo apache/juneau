@@ -17,15 +17,15 @@
 	This project is meant to be used as a starting point for developers to use in creating their own REST microservices.
 	It creates a Spring Boot application on port 5000 populated with the Juneau REST examples.
 	This POM is likewise meant to be used as a starting point for developers. It creates an uber-jar
-	to run the microservice from the command line. 
-	
-	Copy the jar as well as the my-microservice.cfg and jetty.xml file and start it with: 
+	to run the microservice from the command line.
+
+	Copy the jar as well as the my-microservice.cfg and jetty.xml file and start it with:
 		java -jar juneau-examples-rest-springboot-1.0.jar
-		
+
 	The group/artifact/version information is meant to be overwritten by developers to match their own needs.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	
+
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.apache.juneau.examples</groupId>
@@ -56,7 +56,7 @@
 
 	<dependencies>
 
-		<!-- Juneau artifacts -->	
+		<!-- Juneau artifacts -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-all</artifactId>
@@ -77,7 +77,7 @@
 			<artifactId>juneau-rest-server-springboot</artifactId>
 			<version>\${juneau.version}</version>
 		</dependency>
-				
+
 		<!-- Spring Boot dependencies-->
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
@@ -112,14 +112,14 @@
 		    <groupId>xml-apis</groupId>
 		    <artifactId>xml-apis</artifactId>
 		</dependency>
-		
+
 		<!-- Optional RDF support -->
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-core</artifactId>
 			<version>\${jena.version}</version>
 		</dependency>
-			
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -131,7 +131,7 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.5</version>
 		</dependency>
-		
+
 	</dependencies>
 
 	<build>
@@ -140,6 +140,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${springframework.version}</version>
 				<executions>
 					<execution>
 						<goals>
@@ -156,7 +157,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -169,8 +170,8 @@
 					</archive>
 				</configuration>
 			</plugin>
-			
+
 		</plugins>
 	</build>
-	
+
 </project>
