@@ -15,6 +15,8 @@
 . ~/.profile
 
 . juneau-release-env.sh
+export PATH=${X_JAVA_HOME}/bin:$PATH
+echo PATH=$PATH
 
 function fail { 
 	echo ' '
@@ -208,12 +210,14 @@ mv juneau-${X_VERSION}-source-release.zip apache-juneau-${X_VERSION}-src.zip
 mv juneau-${X_VERSION}-source-release.zip.asc apache-juneau-${X_VERSION}-src.zip.asc
 gpg --print-md SHA512 apache-juneau-${X_VERSION}-src.zip > apache-juneau-${X_VERSION}-src.zip.sha512
 rm *.sha1
+rm *.md5
 cd $X_STAGING/dist/binaries/$X_RELEASE
 wget -e robots=off --recursive --no-parent --no-directories -A "juneau-distrib*-bin.zip*" https://repository.apache.org/content/repositories/$X_REPO/org/apache/juneau/
 mv juneau-distrib-${X_VERSION}-bin.zip apache-juneau-${X_VERSION}-bin.zip
 mv juneau-distrib-${X_VERSION}-bin.zip.asc apache-juneau-${X_VERSION}-bin.zip.asc
 gpg --print-md SHA512 apache-juneau-${X_VERSION}-bin.zip > apache-juneau-${X_VERSION}-bin.zip.sha512
 rm *.sha1
+rm *.md5
 cd $X_STAGING/dist
 svn add source/$X_RELEASE
 svn add binaries/$X_RELEASE
