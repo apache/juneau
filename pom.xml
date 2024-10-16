@@ -39,7 +39,7 @@
 		<jena.version>3.10.0</jena.version>
 		<junit.version>4.11</junit.version>
 		<jaxrs.version>1.1.1</jaxrs.version>
-		<servlet.version>3.1.0</servlet.version>
+		<servlet.version>4.0.2</servlet.version>
 		<httpclient.version>4.5.6</httpclient.version>
 		<jetty.version>9.4.13.v20181111</jetty.version>
 		<juneau.compare.version>8.0.0</juneau.compare.version>
@@ -72,8 +72,8 @@
 				<version>${jaxrs.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>javax.servlet-api</artifactId>
+				<groupId>jakarta.servlet</groupId>
+				<artifactId>jakarta.servlet-api</artifactId>
 				<version>${servlet.version}</version>
 				<scope>provided</scope>
 			</dependency>
