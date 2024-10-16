@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-rest</artifactId>
-		<version>8.1.4</version>
+		<version>8.1.5-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>juneau-rest-mock</artifactId>
