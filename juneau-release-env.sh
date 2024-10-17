@@ -22,6 +22,7 @@ export X_USERNAME=jamesbognar
 export X_EMAIL=jamesbognar@apache.org
 export X_CLEANM2=N
 export X_GIT_BRANCH=juneau-8.1.4-branch
+export X_JAVA_HOME=/Users/james.bognar/blt/tools/Darwin/jdk/openjdk_11.0.21.0.102_11.69.52_x64
 
 echo ' '
 echo --- Settings ------------------------------------------------------------------
