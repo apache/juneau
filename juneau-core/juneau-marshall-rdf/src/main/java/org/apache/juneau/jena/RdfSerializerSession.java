@@ -13,7 +13,7 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.jena.Constants.*;
 
 import java.io.*;
@@ -22,8 +22,9 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.jena.rdf.model.*;
+import com.hp.hpl.jena.rdf.model.*;
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.StringUtils;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;

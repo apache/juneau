@@ -35,9 +35,14 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-core</artifactId>
-			<optional>true</optional>
+			<version>${jena.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.vintage</groupId>

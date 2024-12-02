@@ -789,10 +789,10 @@ public class JettyMicroservice extends Microservice {
 	 * @throws RuntimeException if context handler is not defined.
 	 */
 	public ServletContextHandler getServletContextHandler() {
-	    final var obj = getServer().getAttribute(KEY_SERVLET_CONTEXT_HANDLER);
-	    if (obj instanceof ServletContextHandler servletContextHandler) {
-	        return servletContextHandler;
-	    }
+		Object obj = getServer().getAttribute(KEY_SERVLET_CONTEXT_HANDLER);
+		if (obj instanceof ServletContextHandler) {
+			return (ServletContextHandler)obj;
+		}
 		throw new IllegalStateException("Servlet context handler not found in jetty server or at attribute '" + KEY_SERVLET_CONTEXT_HANDLER + "'");
 	}
 
