@@ -20,7 +20,7 @@ Release Notes - Juneau - Version 9.1.0
     * [JUNEAU-253] Bump springboot.version from 3.1.3 to 3.4.0 #136, #138, #142, #146, #153, #158, #162, #167, #172, #177.
     * [JUNEAU-254] Bump jetty.version from 11.0.16 to 11.0.20.
     * [JUNEAU-255] Bump org.apache:apache from 29 to 32 #143.
-    * [JUNEAU-256] Bump maven-javadoc-plugin from 3.5.0 to 3.10.1 #149, #159, #164, #170.
+    * [JUNEAU-256] Bump maven-javadoc-plugin from 3.5.0 to 3.11.2 #149, #159, #164, #170, #181.
     * [JUNEAU-257] Bump maven-bundle-plugin from 5.1.8 to 5.1.9.
     * [JUNEAU-258] Bump maven-jxr-plugin from 3.3.0 to 3.5.0 #150, #163.
     * [JUNEAU-259] Bump from Junit 4.13.2 to JUnit 5.11.0 Vintage Engine.
