@@ -34,7 +34,7 @@ Release Notes - Juneau - Version 9.1.0
     * Bump jakarta.servlet:jakarta.servlet-api 6.1.0 from 6.0.0 to 6.1.0.
     * Bump org.apache:apache from 32 to 33 #157.
     * Add org.apache.juneau.rest.mock.MockServletResponse.sendRedirect(String, int, boolean) for jakarta.servlet:jakarta.servlet-api 6.1.0.
-    * Bump org.junit:junit-bom from 5.10.3 to 5.11.3 #161, #168, #171, #173.
+    * Bump org.junit:junit-bom from 5.10.3 to 5.11.4 #161, #168, #171, #173, #185.
     * Flip console output logic on shutdown from a system property called 'SystemUtils.quiet' to 'SystemUtils.verbose'.
     
 Release Notes - Juneau - Version 9.0.1
