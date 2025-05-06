@@ -41,7 +41,7 @@
 		<servlet.version>6.1.0</servlet.version>
 		<httpclient.version>4.5.14</httpclient.version>
 		<httpcore.version>4.4.16</httpcore.version>
-		<jetty.version>12.0.19</jetty.version>
+		<jetty.version>12.0.20</jetty.version>
 		<!-- First step in migration to Jetty 12: EE 8 -->
 		<jetty.ee.version>9</jetty.ee.version>
 		<juneau.compare.version>9.0.1</juneau.compare.version>
