@@ -54,7 +54,7 @@
 		<xml.apis.version>2.0.2</xml.apis.version>
 		<javadoc.executable />
 		<javadoc.plugin.version>3.11.2</javadoc.plugin.version>
-		<jacoco.plugin.version>0.8.12</jacoco.plugin.version>
+		<jacoco.plugin.version>0.8.13</jacoco.plugin.version>
 		<jena.version>2.7.4</jena.version>
 	</properties>
 
