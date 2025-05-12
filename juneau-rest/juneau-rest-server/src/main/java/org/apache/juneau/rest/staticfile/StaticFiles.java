@@ -17,7 +17,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.nio.file.*;
 import java.util.*;
 
-import javax.activation.*;
+import jakarta.activation.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;

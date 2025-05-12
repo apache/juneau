@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;

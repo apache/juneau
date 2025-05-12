@@ -20,7 +20,7 @@ import java.text.*;
 import java.time.format.*;
 import java.util.*;
 
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 
 import org.apache.juneau.reflect.*;
 

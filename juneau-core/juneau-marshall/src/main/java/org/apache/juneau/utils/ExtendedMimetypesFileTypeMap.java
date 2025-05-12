@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import javax.activation.*;
+import jakarta.activation.*;
 
 /**
- * An extension of {@link javax.activation.MimetypesFileTypeMap} that includes many more media types.
+ * An extension of {@link jakarta.activation.MimetypesFileTypeMap} that includes many more media types.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>

@@ -22,7 +22,7 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 import java.io.*;
 import java.util.*;
 
-import javax.activation.*;
+import jakarta.activation.*;
 
 import org.apache.http.*;
 import org.apache.juneau.cp.*;

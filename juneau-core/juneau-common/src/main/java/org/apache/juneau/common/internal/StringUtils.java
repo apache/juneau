@@ -31,7 +31,7 @@ import java.util.regex.*;
 import java.util.stream.*;
 import java.util.zip.*;
 
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 
 /**
  * Reusable string utility methods.
