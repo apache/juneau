@@ -220,7 +220,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 * @return A new assertion.
 	 */
 	public FluentIntegerAssertion<R> asLength() {
-		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : Array.getLength(value()), returns());
+		return new FluentIntegerAssertion<R>(this, valueIsNull() ? null : Array.getLength(value()), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

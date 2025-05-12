@@ -313,7 +313,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Integer> asInteger() {
-		return optional(isEmpty() ? null : parseIntWithSuffix(toString()));
+		return optional(isEmpty() ? null : (Integer)parseIntWithSuffix(toString()));
 	}
 
 
@@ -326,7 +326,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Boolean> asBoolean() {
-		return optional(isEmpty() ? null : Boolean.parseBoolean(toString()));
+		return optional(isEmpty() ? null : (Boolean)Boolean.parseBoolean(toString()));
 	}
 
 	/**
@@ -360,7 +360,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Long> asLong() {
-		return optional(isEmpty() ? null : parseLongWithSuffix(toString()));
+		return optional(isEmpty() ? null : (Long)parseLongWithSuffix(toString()));
 	}
 
 

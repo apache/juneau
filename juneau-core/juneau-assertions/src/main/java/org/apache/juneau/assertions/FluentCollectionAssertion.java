@@ -186,7 +186,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @return A new assertion.
 	 */
 	public FluentIntegerAssertion<R> asSize() {
-		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().size(), returns());
+		return new FluentIntegerAssertion<R>(this, valueIsNull() ? null : value().size(), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

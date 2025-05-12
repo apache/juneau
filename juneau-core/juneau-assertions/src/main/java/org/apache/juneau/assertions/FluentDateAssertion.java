@@ -184,7 +184,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @return A new assertion.
 	 */
 	public FluentLongAssertion<R> asEpochMillis() {
-		return new FluentLongAssertion<>(this, valueIsNull() ? null : value().getTime(), returns());
+		return new FluentLongAssertion<R>(this, valueIsNull() ? null : value().getTime(), returns());
 	}
 
 	/**
@@ -197,7 +197,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @return A new assertion.
 	 */
 	public FluentLongAssertion<R> asEpochSeconds() {
-		return new FluentLongAssertion<>(this, valueIsNull() ? null : value().getTime() / 1000, returns());
+		return new FluentLongAssertion<R>(this, valueIsNull() ? null : value().getTime() / 1000, returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

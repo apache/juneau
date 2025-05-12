@@ -220,7 +220,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * @return A new assertion.
 	 */
 	public FluentIntegerAssertion<R> asSize() {
-		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().size(), returns());
+		return new FluentIntegerAssertion<R>(this, valueIsNull() ? null : value().size(), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -299,7 +299,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return This object.
 	 */
 	public FluentIntegerAssertion<R> asLength() {
-		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().length(), returns());
+		return new FluentIntegerAssertion<R>(this, valueIsNull() ? null : value().length(), returns());
 	}
 
 	/**
