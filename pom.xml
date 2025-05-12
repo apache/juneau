@@ -242,6 +242,7 @@
 						<javadocExecutable>${javadoc.executable}</javadocExecutable>
 						<source>${maven.compiler.source}</source>
 						<detectJavaApiLink>false</detectJavaApiLink>
+						<sourcepath>src/main/java</sourcepath>
 					</configuration>
 					<executions>
 						<execution>
