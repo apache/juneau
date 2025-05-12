@@ -35,10 +35,6 @@
 			<artifactId>juneau-rest-server</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>jakarta.servlet</groupId>
-			<artifactId>jakarta.servlet-api</artifactId>
-		</dependency>
 
 		<!-- Spring Boot dependencies-->
 		<dependency>
