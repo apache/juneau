@@ -229,7 +229,7 @@
 						<overview>${basedir}/juneau-doc/src/main/javadoc/overview.html</overview>
 						<stylesheetfile>${basedir}/juneau-doc/src/main/javadoc/javadoc.css</stylesheetfile>
 						<use>false</use>
-						<excludePackageNames>*proto*:*test*:org.apache.juneau.doc.internal</excludePackageNames>
+						<excludePackageNames>*proto*:*test*:*internal*:org.apache.juneau.doc.internal</excludePackageNames>
 						<linksource>true</linksource>
  						<links>
 							<link>https://docs.oracle.com/javase/${maven.compiler.target}/docs/api/</link>
