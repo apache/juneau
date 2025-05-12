@@ -13,18 +13,18 @@
 # ***************************************************************************************************************************
 
 # DO NOT CHECK IN CHANGES TO THIS FILE!
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-18.jdk/Contents/Home
+export JAVA_HOME=/Users/james.bognar/jdk/openjdk_17.0.14.0.101_17.57.18_aarch64
 export PATH=$JAVA_HOME/bin:$PATH
 
-export X_VERSION=9.0.0
-export X_NEXT_VERSION=9.0.1-SNAPSHOT
-export X_RELEASE=juneau-9.0.0-RC3
+export X_VERSION=9.1.0
+export X_NEXT_VERSION=9.1.1-SNAPSHOT
+export X_RELEASE=juneau-9.1.0-RC1
 export X_STAGING=~/tmp/dist-release-juneau
 export X_USERNAME=jamesbognar
 export X_EMAIL=jamesbognar@apache.org
 export X_CLEANM2=N
 export X_GIT_BRANCH=master
-export X_JAVA_HOME=/Users/james.bognar/blt/tools/Darwin/jdk/openjdk_11.0.21.0.102_11.69.52_x64
+export X_JAVA_HOME=/Users/james.bognar/jdk/openjdk_17.0.14.0.101_17.57.18_aarch64
 
 echo ' '
 echo --- Settings ------------------------------------------------------------------
