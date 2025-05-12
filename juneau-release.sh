@@ -73,7 +73,6 @@ function et {
 
 command -v wget || fail_with_message "wget not found"
 command -v gpg || fail_with_message "gpg not found"
-command -v /usr/local/bin/gpg || fail_with_message "gpg not found in /usr/local/bin"
 command -v svn || fail_with_message "svn not found"
 export GPG_TTY=$(tty)
 
