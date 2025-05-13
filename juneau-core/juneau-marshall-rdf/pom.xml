@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-core</artifactId>
-		<version>8.1.5-SNAPSHOT</version>
+		<version>8.1.5</version>
 	</parent>
 
 	<artifactId>juneau-marshall-rdf</artifactId>
