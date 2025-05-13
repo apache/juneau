@@ -14,7 +14,7 @@ package org.apache.juneau.dto.atom;
 
 import java.util.*;
 
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 
 /**
  * Static utility methods for ATOM marshalling code.

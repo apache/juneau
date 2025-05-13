@@ -27,7 +27,7 @@ package org.apache.juneau.rest;
 import java.io.*;
 import java.util.*;
 
-import javax.activation.*;
+import jakarta.activation.*;
 
 import org.apache.juneau.http.*;
 import org.apache.juneau.utils.*;

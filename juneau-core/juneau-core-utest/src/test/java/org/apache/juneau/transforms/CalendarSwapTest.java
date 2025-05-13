@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 import java.net.*;
 import java.util.*;
 
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;

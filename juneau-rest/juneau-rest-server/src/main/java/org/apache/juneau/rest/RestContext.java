@@ -29,7 +29,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.stream.*;
 
-import javax.activation.*;
+import jakarta.activation.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 

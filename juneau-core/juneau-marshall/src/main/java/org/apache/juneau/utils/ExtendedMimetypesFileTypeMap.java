@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import javax.activation.*;
+import jakarta.activation.*;
 
 /**
  * An extension of {@link javax.activation.MimetypesFileTypeMap} that includes many more media types.

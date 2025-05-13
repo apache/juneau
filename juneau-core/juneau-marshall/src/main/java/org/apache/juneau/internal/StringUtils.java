@@ -26,7 +26,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.regex.*;
 
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;

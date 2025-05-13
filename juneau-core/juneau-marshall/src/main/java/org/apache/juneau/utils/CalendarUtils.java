@@ -19,7 +19,7 @@ import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 
 /**
  * Utility class for converting {@link Calendar} and {@link Date} objects to common serialized forms.
