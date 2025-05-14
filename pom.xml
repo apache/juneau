@@ -36,7 +36,6 @@
 		<maven.compiler.target>17</maven.compiler.target>
 
 		<junit.version>4.13.2</junit.version>
-		<jaxrs.version>1.1.1</jaxrs.version>
 		<servlet.version>6.1.0</servlet.version>
 		<httpclient.version>4.5.14</httpclient.version>
 		<httpcore.version>4.4.16</httpcore.version>
@@ -65,11 +64,6 @@
 				<version>5.12.2</version>
 				<type>pom</type>
 				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>javax.ws.rs</groupId>
-				<artifactId>jsr311-api</artifactId>
-				<version>${jaxrs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>jakarta.servlet</groupId>
