@@ -35,23 +35,13 @@
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 
-		<junit.version>4.13.2</junit.version>
-		<servlet.version>6.1.0</servlet.version>
-		<jetty.version>12.0.20</jetty.version>
 		<!-- First step in migration to Jetty 12: EE 8 -->
-		<jetty.ee.version>9</jetty.ee.version>
 		<juneau.compare.version>9.0.1</juneau.compare.version>
 		<javadoc.juneau.version>9.1.0</javadoc.juneau.version>
 		<juneauVersion>9.1.0</juneauVersion>
 		<juneauVersionNext>9.1.1</juneauVersionNext>
-		<derby.version>10.17.1.0</derby.version>
-		<hibernate.version>5.6.15.Final</hibernate.version>
-		<springboot.version>3.4.5</springboot.version>
-		<xml.apis.version>2.0.2</xml.apis.version>
-		<javadoc.executable />
 		<javadoc.plugin.version>3.11.2</javadoc.plugin.version>
 		<jacoco.plugin.version>0.8.13</jacoco.plugin.version>
-		<jena.version>2.7.4</jena.version>
 	</properties>
 
 	<modules>
@@ -67,11 +57,10 @@
 	</modules>
 
 	<distributionManagement>
-		<!-- Uncomment to generate Maven site in /tmp/site -->
-		<!--site>
+		<site>
 			<id>${project.artifactId}-site</id>
 			<url>file:///tmp/site</url>
-		</site-->
+		</site>
 	</distributionManagement>
 
 	<build>
