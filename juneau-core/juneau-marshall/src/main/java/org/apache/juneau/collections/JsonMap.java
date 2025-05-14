@@ -1780,6 +1780,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	private static final class UnmodifiableJsonMap extends JsonMap {
 		private static final long serialVersionUID = 1L;
 
+		@SuppressWarnings("synthetic-access")
 		UnmodifiableJsonMap(JsonMap contents) {
 			if (contents != null)
 				contents.forEach(super::put);

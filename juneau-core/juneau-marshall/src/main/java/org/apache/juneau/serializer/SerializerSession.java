@@ -614,7 +614,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @param m The map being consumed.
 	 * @param consumer The map entry consumer.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes", "cast" })
 	public final <K,V> void forEachEntry(Map<K,V> m, Consumer<Map.Entry<K,V>> consumer) {
 		if (m == null || m.isEmpty())
 			return;

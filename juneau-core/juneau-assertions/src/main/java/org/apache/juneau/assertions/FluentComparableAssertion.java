@@ -166,6 +166,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
+	@SuppressWarnings("unchecked")
 	public R isGt(Comparable value) throws AssertionError {
 		assertArgNotNull("value", value);
 		if (value().compareTo(value) <= 0)
@@ -180,6 +181,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
+	@SuppressWarnings("unchecked")
 	public R isGte(Comparable value) throws AssertionError {
 		assertArgNotNull("value", value);
 		if (value().compareTo(value) < 0)
@@ -194,6 +196,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
+	@SuppressWarnings("unchecked")
 	public R isLt(Comparable value) throws AssertionError {
 		assertArgNotNull("value", value);
 		if (value().compareTo(value) >= 0)
@@ -208,6 +211,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
+	@SuppressWarnings("unchecked")
 	public R isLte(Comparable value) throws AssertionError {
 		assertArgNotNull("value", value);
 		if (value().compareTo(value) > 0)

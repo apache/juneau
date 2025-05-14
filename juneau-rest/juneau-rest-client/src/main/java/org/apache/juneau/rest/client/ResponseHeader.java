@@ -189,7 +189,7 @@ public class ResponseHeader extends BasicHeader {
 				return cc.invoke(getName(), getValue());
 		} catch (Throwable e) {
 			if (e instanceof ExecutableException)
-				e = ((ExecutableException)e).getCause();
+				e = e.getCause();
 			throw asRuntimeException(e);
 		}
 		throw new BasicRuntimeException("Could not determine a method to construct type {0}", className(c));

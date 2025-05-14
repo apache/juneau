@@ -420,8 +420,8 @@ public class FileStore extends ConfigStore {
 				ByteBuffer buf = ByteBuffer.allocate(1024);
 				StringBuilder sb = new StringBuilder();
 				while (fc.read(buf) != -1) {
-					sb.append(charset.decode((ByteBuffer)(((Buffer)buf).flip()))); // Fixes Java 11 issue involving overridden flip method.
-					((Buffer)buf).clear();
+					sb.append(charset.decode((buf.flip()))); // Fixes Java 11 issue involving overridden flip method.
+					buf.clear();
 				}
 				s = sb.toString();
 				cache.put(name, s);
@@ -461,8 +461,8 @@ public class FileStore extends ConfigStore {
 							ByteBuffer buf = ByteBuffer.allocate(1024);
 							StringBuilder sb = new StringBuilder();
 							while (fc.read(buf) != -1) {
-								sb.append(charset.decode((ByteBuffer)((Buffer)buf).flip()));
-								((Buffer)buf).clear();
+								sb.append(charset.decode(buf.flip()));
+								buf.clear();
 							}
 							currentContents = sb.toString();
 						}

@@ -185,7 +185,7 @@ public class MockServletResponse implements HttpServletResponse {
 		headerMap.put("Location", new String[] {location});
 	}
 
-    // @Override /* HttpServletResponse */
+    @Override /* HttpServletResponse */
     public void sendRedirect(String location, int sc, boolean clearBuffer) throws IOException {
         this.sc = sc;
         headerMap.put("Location", new String[] {location});

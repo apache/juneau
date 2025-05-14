@@ -1018,6 +1018,7 @@ public class JsonList extends LinkedList<Object> {
 	private static final class UnmodifiableJsonList extends JsonList {
 		private static final long serialVersionUID = 1L;
 
+		@SuppressWarnings("synthetic-access")
 		UnmodifiableJsonList(JsonList contents) {
 			if (contents != null)
 				this.forEach(super::add);
