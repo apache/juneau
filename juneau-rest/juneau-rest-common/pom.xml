@@ -20,13 +20,19 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-rest</artifactId>
-		<version>9.1.1-SNAPSHOT</version>
+		<version>9.1.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>juneau-rest-common</artifactId>
 	<name>juneau/rest/rest-common</name>
 	<description>Apache Juneau REST Common API</description>
 	<packaging>bundle</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -44,9 +50,6 @@
 			<artifactId>httpcore</artifactId>
 		</dependency>
 	</dependencies>
-
-	<properties>
-	</properties>
 
 	<build>
 		<plugins>

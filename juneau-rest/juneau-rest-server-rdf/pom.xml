@@ -28,6 +28,12 @@
 	<description>Apache Juneau REST Servlet RDF support</description>
 	<packaging>bundle</packaging>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
@@ -45,9 +51,6 @@
 			<version>${servlet.version}</version>
 		</dependency>
 	</dependencies>
-
-	<properties>
-	</properties>
 
 	<build>
 		<plugins>

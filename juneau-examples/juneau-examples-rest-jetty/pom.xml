@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-examples</artifactId>
-		<version>9.1.1-SNAPSHOT</version>
+		<version>9.1.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>juneau-examples-rest-jetty</artifactId>
@@ -31,8 +31,10 @@
 
 	<properties>
 		<encoding>UTF-8</encoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
 	</properties>
-
 
 	<dependencies>
 		<!-- Juneau dependencies -->
@@ -52,6 +54,7 @@
 		<dependency>
 			<groupId>jakarta.xml.bind</groupId>
 			<artifactId>jakarta.xml.bind-api</artifactId>
+			<version>3.0.1</version>
 		</dependency>
 
 	</dependencies>

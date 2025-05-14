@@ -20,7 +20,7 @@
 	<parent>
 		<artifactId>juneau-examples</artifactId>
 		<groupId>org.apache.juneau</groupId>
-		<version>9.1.1-SNAPSHOT</version>
+		<version>9.1.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>juneau-examples-core</artifactId>
@@ -30,6 +30,9 @@
 	<description>Apache Juneau Core Examples</description>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 	</properties>
 
 	<dependencies>
