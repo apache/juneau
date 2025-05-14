@@ -31,40 +31,27 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
-		<encoding>UTF-8</encoding>
-
-		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
-		<maven.javadoc.skip>true</maven.javadoc.skip>
+		<maven.javadoc.skip>true</maven.javadoc.skip> <!-- Skip javadoc generation since we generate them in the aggregate pom -->
 	</properties>
 
 
 	<dependencies>
-		<!-- Juneau dependencies -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-examples-rest-jetty</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 		</dependency>
- 
-		<!-- Other -->
-		<dependency>
-			<groupId>jakarta.xml.bind</groupId>
-			<artifactId>jakarta.xml.bind-api</artifactId>
-			<version>3.0.1</version>
-		</dependency>
 		<dependency>
 			<groupId>org.junit.vintage</groupId>
 			<artifactId>junit-vintage-engine</artifactId>
 			<version>5.12.2</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>

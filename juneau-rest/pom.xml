@@ -24,9 +24,9 @@
 	</parent>
 
 	<artifactId>juneau-rest</artifactId>
-	<packaging>pom</packaging>
 	<name>juneau/rest</name>
 	<description>Apache Juneau REST APIs</description>
+	<packaging>pom</packaging>
 
 	<modules>
 		<module>juneau-rest-common</module>

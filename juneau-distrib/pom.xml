@@ -242,7 +242,7 @@
 									<version>${project.version}</version>
 									<destFileName>org.apache.juneau.microservice.core_${project.version}.jar</destFileName>
 								</artifactItem>
-								
+
 								<!-- juneau-sc-server -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
@@ -265,7 +265,7 @@
 									<version>${project.version}</version>
 									<destFileName>org.apache.juneau.sc.server_${project.version}.jar</destFileName>
 								</artifactItem>
-								
+
 								<!-- juneau-sc-client -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
@@ -288,7 +288,7 @@
 									<version>${project.version}</version>
 									<destFileName>org.apache.juneau.sc.client_${project.version}.jar</destFileName>
 								</artifactItem>
-								
+
 								<!-- juneau-microservice-jetty -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
@@ -322,7 +322,7 @@
 									<version>${project.version}</version>
 									<destFileName>juneau-examples-core-${project.version}.zip</destFileName>
 								</artifactItem>
-								
+
 								<!-- juneau-examples-rest-jetty -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/projects</outputDirectory>
@@ -333,7 +333,7 @@
 									<version>${project.version}</version>
 									<destFileName>juneau-examples-rest-jetty-${project.version}.zip</destFileName>
 								</artifactItem>
-								
+
 								<!-- juneau-examples-springboot -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/projects</outputDirectory>
@@ -344,7 +344,7 @@
 									<version>${project.version}</version>
 									<destFileName>juneau-examples-rest-springboot-${project.version}.zip</destFileName>
 								</artifactItem>
-								
+
 								<!-- juneau-my-jetty-microservice -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/projects</outputDirectory>
@@ -355,7 +355,7 @@
 									<version>${project.version}</version>
 									<destFileName>my-jetty-microservice-${project.version}.zip</destFileName>
 								</artifactItem>
-								
+
 								<!-- juneau-my-springboot-microservice -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/projects</outputDirectory>
