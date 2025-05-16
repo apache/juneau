@@ -14,24 +14,18 @@
 
 Release Notes - Juneau - Version 9.1.0
 
-** Bug
+** Changes
+
+    * [JUNEAU-253] - Bump springboot.version from 3.2.2 to 3.4.4.
     * [JUNEAU-254] - Bump jetty.version from 11.0.16 to 11.0.21, #207, #208.
-
-** Improvement
-    * [JUNEAU-253] - Bump springboot.version from 3.2.2 to 3.4.4
-
-** Task
-    * [JUNEAU-255] - Bump org.apache:apache from 29 to 31
+    * [JUNEAU-255] - Bump org.apache:apache from 29 to 31.
     * [JUNEAU-256] - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.5.0 to 3.10.1
-    * [JUNEAU-257] - Bump maven-bundle-plugin from 5.1.8 to 5.1.9
-    * [JUNEAU-258] - Bump maven-jxr-plugin from 3.3.0 to 3.5.0
-    * [JUNEAU-259] - Bump from Junit 4.13.2 to JUnit 5.12.0 Vintage Engine
-    * [JUNEAU-260] - Bump maven-surefire-report-plugin from 2.22.2 to 3.1.2
-    * [JUNEAU-261] - Bump org.apache.derby:derby from 10.16.1.1 to 10.17.1.0 #118
-    * [JUNEAU-263] - Remove Google Analytics from the Juneau Website
-
-Release Notes - Juneau - Version 9.1.0
-
+    * [JUNEAU-257] - Bump maven-bundle-plugin from 5.1.8 to 5.1.9.
+    * [JUNEAU-258] - Bump maven-jxr-plugin from 3.3.0 to 3.5.0.
+    * [JUNEAU-259] - Bump from Junit 4.13.2 to JUnit 5.12.0 Vintage Engine.
+    * [JUNEAU-260] - Bump maven-surefire-report-plugin from 2.22.2 to 3.1.2.
+    * [JUNEAU-261] - Bump org.apache.derby:derby from 10.16.1.1 to 10.17.1.0 #118.
+    * [JUNEAU-263] - Remove Google Analytics from the Juneau Website.
     * Bump Java platform requirement from Java 11 to 17.
     * [JUNEAU-262] Port Jetty from 11.0.20 to 12.0.20 #148, #156, #160, #165, #169, #175, #183, #201.
     * [JUNEAU-252] Bump org.eclipse.jgit:org.eclipse.jgit from 6.6.1.202309021850-r to 7.2.1.202505142326-r #112, #123, #137, #152, #166, #184, #191, #209.
