@@ -15,10 +15,10 @@
 Release Notes - Juneau - Version 9.1.0
 
 ** Bug
-    * [JUNEAU-254] -  Bump jetty.version from 11.0.16 to 11.0.20
+    * [JUNEAU-254] - Bump jetty.version from 11.0.16 to 11.0.21, #207, #208.
 
 ** Improvement
-    * [JUNEAU-253] -  Bump springboot.version from 3.2.2 to 3.4.4
+    * [JUNEAU-253] - Bump springboot.version from 3.2.2 to 3.4.4
 
 ** Task
     * [JUNEAU-255] - Bump org.apache:apache from 29 to 31
