@@ -16,6 +16,7 @@ Release Notes - Juneau - Version 9.1.0
 
 ** Changes
 
+    * Bump Java platform requirement from Java 11 to 17.
     * [JUNEAU-253] - Bump springboot.version from 3.2.2 to 3.4.4.
     * [JUNEAU-254] - Bump jetty.version from 11.0.16 to 11.0.21, #207, #208.
     * [JUNEAU-255] - Bump org.apache:apache from 29 to 31.
@@ -26,7 +27,6 @@ Release Notes - Juneau - Version 9.1.0
     * [JUNEAU-260] - Bump maven-surefire-report-plugin from 2.22.2 to 3.1.2.
     * [JUNEAU-261] - Bump org.apache.derby:derby from 10.16.1.1 to 10.17.1.0 #118.
     * [JUNEAU-263] - Remove Google Analytics from the Juneau Website.
-    * Bump Java platform requirement from Java 11 to 17.
     * [JUNEAU-262] Port Jetty from 11.0.20 to 12.0.20 #148, #156, #160, #165, #169, #175, #183, #201.
     * [JUNEAU-252] Bump org.eclipse.jgit:org.eclipse.jgit from 6.6.1.202309021850-r to 7.2.1.202505142326-r #112, #123, #137, #152, #166, #184, #191, #209.
     * [JUNEAU-253] Bump springboot.version from 3.1.3 to 3.4.5 #136, #138, #142, #146, #153, #158, #162, #167, #172, #177, #186, #187, #188, #193, #198.
@@ -51,6 +51,7 @@ Release Notes - Juneau - Version 9.1.0
     * org.apache.juneau.microservice.jetty.JettyMicroservice.Builder.jettyXml(Object, boolean) now handles java.nio.file.Path.
     * Add org.apache.juneau.common.internal.PathReaderBuilder
     * Add org.apache.juneau.common.internal.IOUtils.read(Path)
+    * org.apache.juneau.microservice.Microservice.Builder.manifest(Object) now handles java.nio.file.Path.
     
 Release Notes - Juneau - Version 9.0.1
 
