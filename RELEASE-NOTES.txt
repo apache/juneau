@@ -48,6 +48,9 @@ Release Notes - Juneau - Version 9.1.0
     * Add org.apache.juneau.rest.mock.MockServletResponse.sendRedirect(String, int, boolean) for jakarta.servlet:jakarta.servlet-api 6.1.0.
     * Bump org.junit:junit-bom from 5.10.3 to 5.11.4 #161, #168, #171, #173, #185.
     * Flip console output logic on shutdown from a system property called 'SystemUtils.quiet' to 'SystemUtils.verbose'.
+    * org.apache.juneau.microservice.jetty.JettyMicroservice.Builder.jettyXml(Object, boolean) now handles java.nio.file.Path.
+    * Add org.apache.juneau.common.internal.PathReaderBuilder
+    * Add org.apache.juneau.common.internal.IOUtils.read(Path)
     
 Release Notes - Juneau - Version 9.0.1
 

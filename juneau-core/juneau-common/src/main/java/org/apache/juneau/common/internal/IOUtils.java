@@ -12,11 +12,24 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.common.internal;
 
-import java.io.*;
-import java.nio.charset.*;
-import java.util.*;
-import java.util.concurrent.atomic.*;
-import java.util.function.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 /**
  * Various I/O related utility methods.
@@ -461,26 +474,49 @@ public final class IOUtils {
 		return new String(in, charset);
 	}
 
-	/**
-	 * Reads the contents of a file into a string.
-	 *
-	 * <p>
-	 * Assumes default character encoding.
-	 *
-	 * @param in
-	 * 	The file to read.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return
-	 * 	The contents of the reader as a string, or <jk>null</jk> if file does not exist.
-	 * @throws IOException If a problem occurred trying to read from the reader.
-	 */
-	public static String read(File in) throws IOException {
-		if (in == null || ! in.exists())
-			return null;
-		try (Reader r = FileReaderBuilder.create(in).build()) {
-			return read(r, in.length());
-		}
-	}
+    /**
+     * Reads the contents of a file into a string.
+     *
+     * <p>
+     * Assumes default character encoding.
+     *
+     * @param in
+     *  The file to read.
+     *  <br>Can be <jk>null</jk>.
+     * @return
+     *  The contents of the reader as a string, or <jk>null</jk> if file does not exist.
+     * @throws IOException If a problem occurred trying to read from the reader.
+     */
+    public static String read(File in) throws IOException {
+        if (in == null || ! in.exists())
+            return null;
+        try (Reader r = FileReaderBuilder.create(in).build()) {
+            return read(r, in.length());
+        }
+    }
+
+    /**
+     * Reads the contents of a path into a string.
+     *
+     * <p>
+     * Assumes default character encoding.
+     *
+     * @param in
+     *  The path to read.
+     *  <br>Can be <jk>null</jk>.
+     * @return
+     *  The contents of the reader as a string, or <jk>null</jk> if path does not exist.
+     * @throws IOException If a problem occurred trying to read from the reader.
+     * @since 9.1.0
+     */
+    public static String read(Path in) throws IOException {
+        if (in == null || !Files.exists(in)) {
+            return null;
+        }
+        try (Reader r = PathReaderBuilder.create(in).build()) {
+            return read(r, Files.size(in));
+        }
+    }
 
 	/**
 	 * Reads the contents of a reader into a string.

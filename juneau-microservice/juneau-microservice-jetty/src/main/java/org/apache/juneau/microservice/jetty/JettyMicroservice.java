@@ -30,6 +30,7 @@ import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
@@ -203,7 +204,8 @@ public class JettyMicroservice extends Microservice {
 		 * 	<br>Can be any of the following:
 		 * 	<ul>
 		 * 		<li>{@link String} - Relative path to file on file system or classpath.
-		 * 		<li>{@link File} - File on file system.
+         *      <li>{@link File} - File on file system.
+         *      <li>{@link Path} - Path on file system.
 		 * 		<li>{@link InputStream} - Raw contents as <c>UTF-8</c> encoded stream.
 		 * 		<li>{@link Reader} - Raw contents.
 		 * 	</ul>
@@ -216,12 +218,14 @@ public class JettyMicroservice extends Microservice {
 		public Builder jettyXml(Object jettyXml, boolean resolveVars) throws IOException {
 			if (jettyXml instanceof String)
 				this.jettyXml = read(resolveFile(jettyXml.toString()));
-			else if (jettyXml instanceof File)
-				this.jettyXml = read((File)jettyXml);
-			else if (jettyXml instanceof InputStream)
-				this.jettyXml = read((InputStream)jettyXml);
-			else if (jettyXml instanceof Reader)
-				this.jettyXml = read((Reader)jettyXml);
+            else if (jettyXml instanceof File file)
+                this.jettyXml = read(file);
+            else if (jettyXml instanceof Path path)
+                this.jettyXml = read(path);
+			else if (jettyXml instanceof InputStream inputStream)
+				this.jettyXml = read(inputStream);
+			else if (jettyXml instanceof Reader reader)
+				this.jettyXml = read(reader);
 			else
 				throw new BasicRuntimeException("Invalid object type passed to jettyXml(Object): {0}", className(jettyXml));
 			this.jettyXmlResolveVars = resolveVars;
