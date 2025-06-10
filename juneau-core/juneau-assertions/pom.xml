@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-core</artifactId>
-		<version>9.1.0</version>
+		<version>9.1.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>juneau-assertions</artifactId>
