@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-rest</artifactId>
-		<version>9.1.1-SNAPSHOT</version>
+		<version>9.1.0</version>
 	</parent>
 
 	<artifactId>juneau-rest-client</artifactId>
