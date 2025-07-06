@@ -45,4 +45,4 @@ jobs:
         java-version: ${{ matrix.java }}
         cache: 'maven'
     - name: Build with Maven
-      run: mvn -V -B --no-transfer-progress
+      run: mvn --no-transfer-progress --batch-mode --show-version
