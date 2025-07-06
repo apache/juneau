@@ -76,7 +76,7 @@ jobs:
     #    uses a compiled language
 
     - run: |
-        mvn clean test
+        mvn --no-transfer-progress --batch-mode --show-version clean test
     #   make bootstrap
     #   make release
 
