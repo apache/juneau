@@ -16,6 +16,7 @@ Release Notes - Juneau - Version 9.1.1
 ** Changes
 
     * Bump org.springframework.boot:spring-boot-maven-plugin from 3.4.5 to 3.5.3 #218.
+    * Bump org.springframework.boot:spring-boot-starter-web from 3.4.5 to 3.5.3 #217.
 
 Release Notes - Juneau - Version 9.1.0
 
