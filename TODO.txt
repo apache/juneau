@@ -11,7 +11,6 @@ JsonSchema should have fluent getters and setters.
 
 @ResponseBody and @ResponseHeaders shouldn't be required on HttpResponse objects.
 
-
 This has to be easier:
 	@Enumerated(STRING)
 	@Schema(description="Routing types that this directive applies to.")
