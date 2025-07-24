@@ -33,6 +33,7 @@ public class HtmlAnnotation_Test {
 
 	Html a1 = HtmlAnnotation.create()
 		.anchorText("a")
+        .description("description")
 		.format(HtmlFormat.XML)
 		.link("c")
 		.noTableHeaders(true)
@@ -43,6 +44,7 @@ public class HtmlAnnotation_Test {
 
 	Html a2 = HtmlAnnotation.create()
 		.anchorText("a")
+        .description("description")
 		.format(HtmlFormat.XML)
 		.link("c")
 		.noTableHeaders(true)
@@ -56,6 +58,7 @@ public class HtmlAnnotation_Test {
 		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "anchorText:'a',"
+                + "description:['description'],"
 				+ "format:'XML',"
 				+ "link:'c',"
 				+ "noTableHeaders:true,"
@@ -116,6 +119,7 @@ public class HtmlAnnotation_Test {
 
 	@Html(
 		anchorText="a",
+        description={ "description" },
 		format=HtmlFormat.XML,
 		link="c",
 		noTableHeaders=true,
@@ -128,6 +132,7 @@ public class HtmlAnnotation_Test {
 
 	@Html(
 		anchorText="a",
+        description={ "description" },
 		format=HtmlFormat.XML,
 		link="c",
 		noTableHeaders=true,

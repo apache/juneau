@@ -29,10 +29,12 @@ public class RestEndCallAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestEndCall a1 = RestEndCallAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
 	RestEndCall a2 = RestEndCallAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
@@ -40,6 +42,7 @@ public class RestEndCallAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['a']"
 			+ "}"
 		);
@@ -87,12 +90,14 @@ public class RestEndCallAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@RestEndCall(
+        description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
 	RestEndCall d1 = D1.class.getAnnotationsByType(RestEndCall.class)[0];
 
 	@RestEndCall(
+        description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

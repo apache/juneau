@@ -17,8 +17,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -91,7 +89,7 @@ public class BeanpAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationMFBuilder {
+	public static class Builder extends TargetedAnnotationMFBuilder<Builder> {
 
 		Class<?> type=void.class;
 		Class<?>[] dictionary=new Class[0], params=new Class[0];
@@ -214,23 +212,6 @@ public class BeanpAnnotation {
 
 		// <FluentSetters>
 
-		@Override /* GENERATED - TargetedAnnotationBuilder */
-		public Builder on(String...values) {
-			super.on(values);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationMFBuilder */
-		public Builder on(Field...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationMFBuilder */
-		public Builder on(Method...value) {
-			super.on(value);
-			return this;
-		}
 
 		// </FluentSetters>
 	}

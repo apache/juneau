@@ -29,10 +29,12 @@ public class RestDestroyAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestDestroy a1 = RestDestroyAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
 	RestDestroy a2 = RestDestroyAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
@@ -40,6 +42,7 @@ public class RestDestroyAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['a']"
 			+ "}"
 		);
@@ -87,12 +90,14 @@ public class RestDestroyAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@RestDestroy(
+        description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
 	RestDestroy d1 = D1.class.getAnnotationsByType(RestDestroy.class)[0];
 
 	@RestDestroy(
+        description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

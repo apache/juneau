@@ -32,6 +32,7 @@ public class RequestAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Request a1 = RequestAnnotation.create()
+        .description("description")
 		.on("on")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
@@ -39,6 +40,7 @@ public class RequestAnnotation_Test {
 		.build();
 
 	Request a2 = RequestAnnotation.create()
+        .description("description")
 		.on("on")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
@@ -49,6 +51,7 @@ public class RequestAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
 				+ "parser:'org.apache.juneau.oapi.OpenApiParser',"
@@ -101,6 +104,7 @@ public class RequestAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Request(
+        description={ "description" },
 		on="on",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
@@ -110,6 +114,7 @@ public class RequestAnnotation_Test {
 	Request d1 = D1.class.getAnnotationsByType(Request.class)[0];
 
 	@Request(
+        description={ "description" },
 		on="on",
 		onClass=X1.class,
 		parser=OpenApiParser.class,

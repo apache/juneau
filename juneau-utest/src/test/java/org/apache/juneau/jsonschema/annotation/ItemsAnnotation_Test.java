@@ -33,6 +33,7 @@ public class ItemsAnnotation_Test {
 		._enum("enum")
 		.cf("cf")
 		.collectionFormat("collectionFormat")
+        .description("description")
 		.df("df")
 		.e("e")
 		.emax(true)
@@ -69,6 +70,7 @@ public class ItemsAnnotation_Test {
 		._enum("enum")
 		.cf("cf")
 		.collectionFormat("collectionFormat")
+        .description("description")
 		.df("df")
 		.e("e")
 		.emax(true)
@@ -108,6 +110,7 @@ public class ItemsAnnotation_Test {
 				+ "_enum:['enum'],"
 				+ "cf:'cf',"
 				+ "collectionFormat:'collectionFormat',"
+                + "description:['description'],"
 				+ "df:['df'],"
 				+ "e:['e'],"
 				+ "emax:true,"
@@ -116,7 +119,7 @@ public class ItemsAnnotation_Test {
 				+ "exclusiveMinimum:true,"
 				+ "f:'f',"
 				+ "format:'format',"
-				+ "items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:[],max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false},"
+				+ "items:{'$ref':'',_default:[],_enum:[],cf:'',collectionFormat:'',description:[],df:[],e:[],emax:false,emin:false,exclusiveMaximum:false,exclusiveMinimum:false,f:'',format:'',items:[],max:'',maxItems:-1,maxLength:-1,maxi:-1,maximum:'',maxl:-1,min:'',minItems:-1,minLength:-1,mini:-1,minimum:'',minl:-1,mo:'',multipleOf:'',p:'',pattern:'',t:'',type:'',ui:false,uniqueItems:false},"
 				+ "max:'max',"
 				+ "maxItems:2,"
 				+ "maxLength:4,"
@@ -172,6 +175,7 @@ public class ItemsAnnotation_Test {
 		_enum="enum",
 		cf="cf",
 		collectionFormat="collectionFormat",
+        description={ "description" },
 		df="df",
 		e="e",
 		emax=true,
@@ -210,6 +214,7 @@ public class ItemsAnnotation_Test {
 		_enum="enum",
 		cf="cf",
 		collectionFormat="collectionFormat",
+        description={ "description" },
 		df="df",
 		e="e",
 		emax=true,

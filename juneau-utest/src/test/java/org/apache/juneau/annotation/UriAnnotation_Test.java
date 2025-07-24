@@ -29,10 +29,12 @@ public class UriAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Uri a1 = UriAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
 	Uri a2 = UriAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
@@ -40,6 +42,7 @@ public class UriAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['a'],"
 				+ "onClass:[]"
 			+ "}"
@@ -94,12 +97,14 @@ public class UriAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Uri(
+        description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
 	Uri d1 = D1.class.getAnnotationsByType(Uri.class)[0];
 
 	@Uri(
+        description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

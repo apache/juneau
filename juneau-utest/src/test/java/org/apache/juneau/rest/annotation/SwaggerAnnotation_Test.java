@@ -56,10 +56,10 @@ public class SwaggerAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
-				+ "contact:{email:'',name:'',url:''},"
+				+ "contact:{description:[],email:'',name:'',url:''},"
 				+ "description:['description'],"
 				+ "externalDocs:{description:[],url:''},"
-				+ "license:{name:'',url:''},"
+				+ "license:{description:[],name:'',url:''},"
 				+ "tags:[{description:[],externalDocs:{description:[],url:''},name:''}],"
 				+ "termsOfService:['termsOfService'],"
 				+ "title:['title'],"

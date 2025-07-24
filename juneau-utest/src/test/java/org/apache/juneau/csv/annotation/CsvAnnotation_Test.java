@@ -29,10 +29,12 @@ public class CsvAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Csv a1 = CsvAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
 	Csv a2 = CsvAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
@@ -40,6 +42,7 @@ public class CsvAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['a'],"
 				+ "onClass:[]"
 			+ "}"
@@ -94,12 +97,14 @@ public class CsvAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Csv(
+        description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
 	Csv d1 = D1.class.getAnnotationsByType(Csv.class)[0];
 
 	@Csv(
+        description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

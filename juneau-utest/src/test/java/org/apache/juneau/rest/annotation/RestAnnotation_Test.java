@@ -193,7 +193,7 @@ public class RestAnnotation_Test {
 				+ "serializers:['org.apache.juneau.serializer.Serializer'],"
 				+ "siteName:'siteName',"
 				+ "staticFiles:'org.apache.juneau.rest.staticfile.StaticFiles',"
-				+ "swagger:{contact:{email:'',name:'',url:''},description:[],externalDocs:{description:[],url:''},license:{name:'',url:''},tags:[],termsOfService:[],title:[],value:[],version:''},"
+				+ "swagger:{contact:{description:[],email:'',name:'',url:''},description:[],externalDocs:{description:[],url:''},license:{description:[],name:'',url:''},tags:[],termsOfService:[],title:[],value:[],version:''},"
 				+ "swaggerProvider:'org.apache.juneau.rest.swagger.BasicSwaggerProvider',"
 				+ "title:['title'],"
 				+ "uriAuthority:'uriAuthority',"

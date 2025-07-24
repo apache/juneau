@@ -44,6 +44,14 @@ import org.apache.juneau.*;
 @ContextApply(BeanpAnnotation.Applier.class)
 public @interface Beanp {
 
+    /**
+     * Optional description for the exposed API.
+     *
+     * @return The annotation value.
+     * @since 9.2.0
+     */
+    String[] description() default {};
+
 	/**
 	 * Bean dictionary.
 	 *

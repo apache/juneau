@@ -67,7 +67,15 @@ import java.lang.annotation.*;
 @ContextApply(ExampleAnnotation.Applier.class)
 public @interface Example {
 
-	/**
+    /**
+     * Optional description for the exposed API.
+     *
+     * @return The annotation value.
+     * @since 9.2.0
+     */
+    String[] description() default {};
+
+    /**
 	 * Dynamically apply this annotation to the specified classes/methods/fields.
 	 *
 	 * <p>

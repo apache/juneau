@@ -33,6 +33,7 @@ public class SubItemsAnnotation_Test {
 		._enum("enum")
 		.cf("cf")
 		.collectionFormat("collectionFormat")
+        .description("description")
 		.df("df")
 		.e("e")
 		.emax(true)
@@ -69,6 +70,7 @@ public class SubItemsAnnotation_Test {
 		._enum("enum")
 		.cf("cf")
 		.collectionFormat("collectionFormat")
+        .description("description")
 		.df("df")
 		.e("e")
 		.emax(true)
@@ -108,6 +110,7 @@ public class SubItemsAnnotation_Test {
 				+ "_enum:['enum'],"
 				+ "cf:'cf',"
 				+ "collectionFormat:'collectionFormat',"
+                + "description:['description'],"
 				+ "df:['df'],"
 				+ "e:['e'],"
 				+ "emax:true,"
@@ -172,6 +175,7 @@ public class SubItemsAnnotation_Test {
 		_enum="enum",
 		cf="cf",
 		collectionFormat="collectionFormat",
+        description={ "description" },
 		df="df",
 		e="e",
 		emax=true,
@@ -210,6 +214,7 @@ public class SubItemsAnnotation_Test {
 		_enum="enum",
 		cf="cf",
 		collectionFormat="collectionFormat",
+        description={ "description" },
 		df="df",
 		e="e",
 		emax=true,

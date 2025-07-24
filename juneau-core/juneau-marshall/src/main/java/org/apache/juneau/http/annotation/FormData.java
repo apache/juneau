@@ -128,7 +128,15 @@ public @interface FormData {
 	 */
 	String def() default "";
 
-	/**
+    /**
+     * Optional description for the exposed API.
+     *
+     * @return The annotation value.
+     * @since 9.2.0
+     */
+    String[] description() default {};
+
+    /**
 	 * FORM parameter name.
 	 *
 	 * <p>

@@ -82,7 +82,7 @@ public class BeancAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationCBuilder {
+	public static class Builder extends TargetedAnnotationCBuilder<Builder> {
 
 		String properties="";
 
@@ -114,18 +114,6 @@ public class BeancAnnotation {
 		}
 
 		// <FluentSetters>
-
-		@Override /* GENERATED - TargetedAnnotationBuilder */
-		public Builder on(String...values) {
-			super.on(values);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationCBuilder */
-		public Builder on(java.lang.reflect.Constructor<?>...value) {
-			super.on(value);
-			return this;
-		}
 
 		// </FluentSetters>
 	}

@@ -29,10 +29,12 @@ public class PlainTextAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	PlainText a1 = PlainTextAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
 	PlainText a2 = PlainTextAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
@@ -40,6 +42,7 @@ public class PlainTextAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['a'],"
 				+ "onClass:[]"
 			+ "}"
@@ -94,12 +97,14 @@ public class PlainTextAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@PlainText(
+        description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
 	PlainText d1 = D1.class.getAnnotationsByType(PlainText.class)[0];
 
 	@PlainText(
+        description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

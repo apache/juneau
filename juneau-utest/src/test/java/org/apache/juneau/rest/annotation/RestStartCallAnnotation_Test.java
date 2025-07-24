@@ -29,10 +29,12 @@ public class RestStartCallAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestStartCall a1 = RestStartCallAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
 	RestStartCall a2 = RestStartCallAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
@@ -40,6 +42,7 @@ public class RestStartCallAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['a']"
 			+ "}"
 		);
@@ -87,12 +90,14 @@ public class RestStartCallAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@RestStartCall(
+        description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
 	RestStartCall d1 = D1.class.getAnnotationsByType(RestStartCall.class)[0];
 
 	@RestStartCall(
+        description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

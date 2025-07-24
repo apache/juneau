@@ -176,7 +176,15 @@ import org.apache.juneau.svl.*;
 @Inherited
 public @interface RestInject {
 
-	/**
+    /**
+     * Optional description for the exposed API.
+     *
+     * @return The annotation value.
+     * @since 9.2.0
+     */
+    String[] description() default {};
+
+    /**
 	 * The bean name to use to distinguish beans of the same type for different purposes.
 	 *
 	 * <p>

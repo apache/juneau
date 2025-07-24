@@ -101,7 +101,15 @@ import java.lang.annotation.*;
 @Inherited
 public @interface HasFormData {
 
-	/**
+    /**
+     * Optional description for the exposed API.
+     *
+     * @return The annotation value.
+     * @since 9.2.0
+     */
+    String[] description() default {};
+
+    /**
 	 * FORM parameter name.
 	 *
 	 * Required. The name of the parameter. Parameter names are case sensitive.

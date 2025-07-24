@@ -23,9 +23,11 @@ import org.apache.juneau.reflect.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
+ *
+ * @param <B> The actual builder class.
  */
 @FluentSetters
-public class TargetedAnnotationCBuilder extends TargetedAnnotationBuilder {
+public class TargetedAnnotationCBuilder<B extends TargetedAnnotationCBuilder<B>> extends TargetedAnnotationBuilder<B> {
 
 	/**
 	 * Constructor.
@@ -43,18 +45,10 @@ public class TargetedAnnotationCBuilder extends TargetedAnnotationBuilder {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public TargetedAnnotationCBuilder on(Constructor<?>...value) {
+	public B on(Constructor<?>...value) {
 		for (Constructor<?> v : value)
 			on(ConstructorInfo.of(v).getFullName());
-		return this;
-	}
-
-	// <FluentSetters>
-
-	@Override /* GENERATED - org.apache.juneau.annotation.TargetedAnnotationBuilder */
-	public TargetedAnnotationCBuilder on(String...values) {
-		super.on(values);
-		return this;
+		return asThis();
 	}
 
 	// </FluentSetters>

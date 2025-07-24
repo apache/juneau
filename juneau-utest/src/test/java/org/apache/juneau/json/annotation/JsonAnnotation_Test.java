@@ -29,11 +29,13 @@ public class JsonAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Json a1 = JsonAnnotation.create()
+        .description("description")
 		.on("a")
 		.wrapperAttr("b")
 		.build();
 
 	Json a2 = JsonAnnotation.create()
+        .description("description")
 		.on("a")
 		.wrapperAttr("b")
 		.build();
@@ -42,6 +44,7 @@ public class JsonAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['a'],"
 				+ "onClass:[],"
 				+ "wrapperAttr:'b'"
@@ -97,6 +100,7 @@ public class JsonAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Json(
+        description={ "description" },
 		on="a",
 		wrapperAttr="b"
 	)
@@ -104,6 +108,7 @@ public class JsonAnnotation_Test {
 	Json d1 = D1.class.getAnnotationsByType(Json.class)[0];
 
 	@Json(
+        description={ "description" },
 		on="a",
 		wrapperAttr="b"
 	)

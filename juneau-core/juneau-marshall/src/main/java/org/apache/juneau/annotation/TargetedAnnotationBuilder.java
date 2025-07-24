@@ -21,9 +21,11 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
+ *
+ * @param <B> The actual builder class.
  */
 @FluentSetters
-public class TargetedAnnotationBuilder extends AnnotationBuilder {
+public class TargetedAnnotationBuilder<B extends TargetedAnnotationBuilder<B>> extends AnnotationBuilder<B> {
 
 	String[] on = {};
 
@@ -43,10 +45,10 @@ public class TargetedAnnotationBuilder extends AnnotationBuilder {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public TargetedAnnotationBuilder on(String...values) {
+	public B on(String...values) {
 		for (String v : values)
 			on = ArrayUtils.append(on, v);
-		return this;
+		return asThis();
 	}
 
 	// <FluentSetters>

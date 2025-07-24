@@ -52,7 +52,15 @@ import org.apache.juneau.html.*;
 @ContextApply(HtmlLinkAnnotation.Apply.class)
 public @interface HtmlLink {
 
-	/**
+    /**
+     * Optional description for the exposed API.
+     *
+     * @return The annotation value.
+     * @since 9.2.0
+     */
+    String[] description() default {};
+
+    /**
 	 * The bean property whose value becomes the name in the hyperlink.
 	 *
 	 * @return The annotation value.

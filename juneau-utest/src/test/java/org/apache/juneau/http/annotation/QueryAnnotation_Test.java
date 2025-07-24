@@ -33,6 +33,7 @@ public class QueryAnnotation_Test {
 
 	Query a1 = QueryAnnotation.create()
 		.def("def")
+        .description("description")
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -43,6 +44,7 @@ public class QueryAnnotation_Test {
 
 	Query a2 = QueryAnnotation.create()
 		.def("def")
+        .description("description")
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -56,6 +58,7 @@ public class QueryAnnotation_Test {
 		assertObject(a1).asJson().isMatches(""
 			+ "{"
 				+ "def:'def',"
+                + "description:['description'],"
 				+ "name:'name',"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
@@ -116,6 +119,7 @@ public class QueryAnnotation_Test {
 
 	@Query(
 		def="def",
+        description={ "description" },
 		name="name",
 		on="on",
 		onClass=X1.class,
@@ -128,6 +132,7 @@ public class QueryAnnotation_Test {
 
 	@Query(
 		def="def",
+        description={ "description" },
 		name="name",
 		on="on",
 		onClass=X1.class,

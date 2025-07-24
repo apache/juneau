@@ -74,11 +74,11 @@ public class OpSwaggerAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AnnotationBuilder {
+	public static class Builder extends AnnotationBuilder<Builder> {
 
 		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
 		String deprecated="", operationId="";
-		String[] consumes={}, description={}, parameters={}, produces={}, responses={}, schemes={}, summary={}, tags={}, value={};
+		String[] consumes={}, parameters={}, produces={}, responses={}, schemes={}, summary={}, tags={}, value={};
 
 		/**
 		 * Constructor.
@@ -115,17 +115,6 @@ public class OpSwaggerAnnotation {
 		 */
 		public Builder deprecated(String value) {
 			this.deprecated = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link OpSwagger#description()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder description(String...value) {
-			this.description = value;
 			return this;
 		}
 
@@ -241,13 +230,12 @@ public class OpSwaggerAnnotation {
 
 		private final ExternalDocs externalDocs;
 		private final String deprecated, operationId;
-		private final String[] consumes, description, parameters, produces, responses, schemes, summary, tags, value;
+		private final String[] consumes, parameters, produces, responses, schemes, summary, tags, value;
 
 		Impl(Builder b) {
 			super(b);
 			this.consumes = copyOf(b.consumes);
 			this.deprecated = b.deprecated;
-			this.description = copyOf(b.description);
 			this.externalDocs = b.externalDocs;
 			this.operationId = b.operationId;
 			this.parameters = copyOf(b.parameters);
@@ -268,11 +256,6 @@ public class OpSwaggerAnnotation {
 		@Override /* OpSwagger */
 		public String deprecated() {
 			return deprecated;
-		}
-
-		@Override /* OpSwagger */
-		public String[] description() {
-			return description;
 		}
 
 		@Override /* OpSwagger */

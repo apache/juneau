@@ -29,10 +29,12 @@ public class RestPostCallAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestPostCall a1 = RestPostCallAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
 	RestPostCall a2 = RestPostCallAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
@@ -40,6 +42,7 @@ public class RestPostCallAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['a']"
 			+ "}"
 		);
@@ -87,12 +90,14 @@ public class RestPostCallAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@RestPostCall(
+        description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
 	RestPostCall d1 = D1.class.getAnnotationsByType(RestPostCall.class)[0];
 
 	@RestPostCall(
+        description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

@@ -31,12 +31,14 @@ public class ExampleAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Example a1 = ExampleAnnotation.create()
+        .description("description")
 		.on("on")
 		.onClass(X1.class)
 		.value("value")
 		.build();
 
 	Example a2 = ExampleAnnotation.create()
+        .description("description")
 		.on("on")
 		.onClass(X1.class)
 		.value("value")
@@ -46,6 +48,7 @@ public class ExampleAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
 				+ "value:'value'"
@@ -101,6 +104,7 @@ public class ExampleAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Example(
+        description={ "description" },
 		on="on",
 		onClass=X1.class,
 		value="value"
@@ -109,6 +113,7 @@ public class ExampleAnnotation_Test {
 	Example d1 = D1.class.getAnnotationsByType(Example.class)[0];
 
 	@Example(
+        description={ "description" },
 		on="on",
 		onClass=X1.class,
 		value="value"

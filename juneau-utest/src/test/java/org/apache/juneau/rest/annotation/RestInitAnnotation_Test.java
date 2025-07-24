@@ -29,10 +29,12 @@ public class RestInitAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestInit a1 = RestInitAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
 	RestInit a2 = RestInitAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
@@ -40,6 +42,7 @@ public class RestInitAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['a']"
 			+ "}"
 		);
@@ -87,12 +90,14 @@ public class RestInitAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@RestInit(
+        description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
 	RestInit d1 = D1.class.getAnnotationsByType(RestInit.class)[0];
 
 	@RestInit(
+        description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

@@ -23,9 +23,11 @@ import org.apache.juneau.reflect.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
+ *
+ * @param <B> The actual builder class.
  */
 @FluentSetters
-public class TargetedAnnotationTMFCBuilder extends TargetedAnnotationTMFBuilder {
+public class TargetedAnnotationTMFCBuilder<B extends TargetedAnnotationTMFCBuilder<B>> extends TargetedAnnotationTMFBuilder<B> {
 
 	/**
 	 * Constructor.
@@ -43,43 +45,14 @@ public class TargetedAnnotationTMFCBuilder extends TargetedAnnotationTMFBuilder 
 	 * @return This object.
 	 */
 	@FluentSetter
-	public TargetedAnnotationTMFCBuilder on(Constructor<?>...value) {
+	public B on(Constructor<?>...value) {
 		for (Constructor<?> v : value)
 			on(ConstructorInfo.of(v).getFullName());
-		return this;
+		return asThis();
 	}
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - org.apache.juneau.annotation.TargetedAnnotationBuilder */
-	public TargetedAnnotationTMFCBuilder on(String...values) {
-		super.on(values);
-		return this;
-	}
-
-	@Override /* GENERATED - org.apache.juneau.annotation.TargetedAnnotationTBuilder */
-	public TargetedAnnotationTMFCBuilder on(java.lang.Class<?>...value) {
-		super.on(value);
-		return this;
-	}
-
-	@Override /* GENERATED - org.apache.juneau.annotation.TargetedAnnotationTBuilder */
-	public TargetedAnnotationTMFCBuilder onClass(java.lang.Class<?>...value) {
-		super.onClass(value);
-		return this;
-	}
-
-	@Override /* GENERATED - org.apache.juneau.annotation.TargetedAnnotationTMFBuilder */
-	public TargetedAnnotationTMFCBuilder on(Field...value) {
-		super.on(value);
-		return this;
-	}
-
-	@Override /* GENERATED - org.apache.juneau.annotation.TargetedAnnotationTMFBuilder */
-	public TargetedAnnotationTMFCBuilder on(Method...value) {
-		super.on(value);
-		return this;
-	}
 
 	// </FluentSetters>
 }

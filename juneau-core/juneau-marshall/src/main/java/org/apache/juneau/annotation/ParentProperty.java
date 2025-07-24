@@ -46,6 +46,14 @@ import java.lang.annotation.*;
 @ContextApply(ParentPropertyAnnotation.Applier.class)
 public @interface ParentProperty {
 
+    /**
+     * Optional description for the exposed API.
+     *
+     * @return The annotation value.
+     * @since 9.2.0
+     */
+    String[] description() default {};
+
 	/**
 	 * Dynamically apply this annotation to the specified methods/fields.
 	 *

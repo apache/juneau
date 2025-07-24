@@ -55,7 +55,7 @@ public class RestPostInitAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationMBuilder {
+	public static class Builder extends TargetedAnnotationMBuilder<Builder> {
 
 		boolean childFirst;
 
@@ -87,17 +87,6 @@ public class RestPostInitAnnotation {
 
 		// <FluentSetters>
 
-		@Override /* GENERATED - TargetedAnnotationBuilder */
-		public Builder on(String...values) {
-			super.on(values);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTMBuilder */
-		public Builder on(java.lang.reflect.Method...value) {
-			super.on(value);
-			return this;
-		}
 
 		// </FluentSetters>
 	}

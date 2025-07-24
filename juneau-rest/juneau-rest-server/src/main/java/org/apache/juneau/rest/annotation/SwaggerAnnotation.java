@@ -65,13 +65,13 @@ public class SwaggerAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AnnotationBuilder {
+	public static class Builder extends AnnotationBuilder<Builder> {
 
 		Contact contact = ContactAnnotation.DEFAULT;
 		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
 		License license = LicenseAnnotation.DEFAULT;
 		String version="";
-		String[] description={}, termsOfService={}, title={}, value={};
+		String[] termsOfService={}, title={}, value={};
 		Tag[] tags={};
 
 		/**
@@ -98,17 +98,6 @@ public class SwaggerAnnotation {
 		 */
 		public Builder contact(Contact value) {
 			this.contact = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Swagger#description()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder description(String...value) {
-			this.description = value;
 			return this;
 		}
 
@@ -204,13 +193,12 @@ public class SwaggerAnnotation {
 		private final ExternalDocs externalDocs;
 		private final License license;
 		private final String version;
-		private final String[] description, termsOfService, title, value;
+		private final String[] termsOfService, title, value;
 		private final Tag[] tags;
 
 		Impl(Builder b) {
 			super(b);
 			this.contact = b.contact;
-			this.description = copyOf(b.description);
 			this.externalDocs = b.externalDocs;
 			this.license = b.license;
 			this.tags = copyOf(b.tags);
@@ -224,11 +212,6 @@ public class SwaggerAnnotation {
 		@Override /* Swagger */
 		public Contact contact() {
 			return contact;
-		}
-
-		@Override /* Swagger */
-		public String[] description() {
-			return description;
 		}
 
 		@Override /* Swagger */

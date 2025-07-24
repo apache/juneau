@@ -29,10 +29,12 @@ public class SoapXmlAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	SoapXml a1 = SoapXmlAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
 	SoapXml a2 = SoapXmlAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
@@ -40,6 +42,7 @@ public class SoapXmlAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['a'],"
 				+ "onClass:[]"
 			+ "}"
@@ -94,12 +97,14 @@ public class SoapXmlAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@SoapXml(
+        description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
 	SoapXml d1 = D1.class.getAnnotationsByType(SoapXml.class)[0];
 
 	@SoapXml(
+        description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

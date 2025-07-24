@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
-import static org.apache.juneau.internal.ArrayUtils.*;
-
 import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
@@ -53,11 +51,10 @@ public class TagAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AnnotationBuilder {
+	public static class Builder extends AnnotationBuilder<Builder> {
 
 		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
 		String name="";
-		String[] description={};
 
 		/**
 		 * Constructor.
@@ -73,17 +70,6 @@ public class TagAnnotation {
 		 */
 		public Tag build() {
 			return new Impl(this);
-		}
-
-		/**
-		 * Sets the {@link Tag#description} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder description(String...value) {
-			this.description = value;
-			return this;
 		}
 
 		/**
@@ -121,19 +107,12 @@ public class TagAnnotation {
 
 		private final ExternalDocs externalDocs;
 		private final String name;
-		private final String[] description;
 
 		Impl(Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
 			this.externalDocs = b.externalDocs;
 			this.name = b.name;
 			postConstruct();
-		}
-
-		@Override /* Tag */
-		public String[] description() {
-			return description;
 		}
 
 		@Override /* Tag */

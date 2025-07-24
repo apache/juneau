@@ -61,7 +61,7 @@ public class ContactAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AnnotationBuilder {
+	public static class Builder extends AnnotationBuilder<Builder> {
 
 		String email="", name="", url="";
 

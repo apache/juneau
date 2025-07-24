@@ -29,10 +29,12 @@ public class OpenApiAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	OpenApi a1 = OpenApiAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
 	OpenApi a2 = OpenApiAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
@@ -40,6 +42,7 @@ public class OpenApiAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['a'],"
 				+ "onClass:[]"
 			+ "}"
@@ -94,12 +97,14 @@ public class OpenApiAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@OpenApi(
+        description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
 	OpenApi d1 = D1.class.getAnnotationsByType(OpenApi.class)[0];
 
 	@OpenApi(
+        description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

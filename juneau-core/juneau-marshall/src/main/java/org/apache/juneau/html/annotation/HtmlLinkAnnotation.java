@@ -96,7 +96,7 @@ public class HtmlLinkAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTBuilder {
+	public static class Builder extends TargetedAnnotationTBuilder<Builder> {
 
 		String nameProperty="", uriProperty="";
 
@@ -140,23 +140,6 @@ public class HtmlLinkAnnotation {
 
 		// <FluentSetters>
 
-		@Override /* GENERATED - TargetedAnnotationBuilder */
-		public Builder on(String...values) {
-			super.on(values);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTBuilder */
-		public Builder on(java.lang.Class<?>...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTBuilder */
-		public Builder onClass(java.lang.Class<?>...value) {
-			super.onClass(value);
-			return this;
-		}
 
 		// </FluentSetters>
 	}

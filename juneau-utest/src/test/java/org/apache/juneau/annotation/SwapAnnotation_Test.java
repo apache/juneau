@@ -31,6 +31,7 @@ public class SwapAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Swap a1 = SwapAnnotation.create()
+        .description("description")
 		.impl(X1.class)
 		.mediaTypes("mediaTypes")
 		.on("on")
@@ -40,6 +41,7 @@ public class SwapAnnotation_Test {
 		.build();
 
 	Swap a2 = SwapAnnotation.create()
+        .description("description")
 		.impl(X1.class)
 		.mediaTypes("mediaTypes")
 		.on("on")
@@ -52,6 +54,7 @@ public class SwapAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "impl:'"+CNAME+"$X1',"
 				+ "mediaTypes:['mediaTypes'],"
 				+ "on:['on'],"
@@ -109,6 +112,7 @@ public class SwapAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Swap(
+        description={ "description" },
 		impl=X1.class,
 		mediaTypes="mediaTypes",
 		on="on",
@@ -120,6 +124,7 @@ public class SwapAnnotation_Test {
 	Swap d1 = D1.class.getAnnotationsByType(Swap.class)[0];
 
 	@Swap(
+        description={ "description" },
 		impl=X1.class,
 		mediaTypes="mediaTypes",
 		on="on",

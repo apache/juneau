@@ -21,9 +21,11 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
+ *
+ * @param <B> The actual builder class.
  */
 @FluentSetters
-public class TargetedAnnotationTBuilder extends TargetedAnnotationBuilder {
+public class TargetedAnnotationTBuilder<B extends TargetedAnnotationTBuilder<B>> extends TargetedAnnotationBuilder<B> {
 
 	Class<?>[] onClass = {};
 
@@ -43,10 +45,10 @@ public class TargetedAnnotationTBuilder extends TargetedAnnotationBuilder {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public TargetedAnnotationTBuilder on(Class<?>...value) {
+	public B on(Class<?>... value) {
 		for (Class<?> v : value)
 			on = ArrayUtils.append(on, v.getName());
-		return this;
+		return asThis();
 	}
 
 	/**
@@ -57,19 +59,14 @@ public class TargetedAnnotationTBuilder extends TargetedAnnotationBuilder {
 	 */
 	@SuppressWarnings("unchecked")
 	@FluentSetter
-	public TargetedAnnotationTBuilder onClass(Class<?>...value) {
+	public B onClass(Class<?>... value) {
 		for (Class<?> v : value)
 			onClass = ArrayUtils.append(onClass, v);
-		return this;
+		return asThis();
 	}
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - org.apache.juneau.annotation.TargetedAnnotationBuilder */
-	public TargetedAnnotationTBuilder on(String...values) {
-		super.on(values);
-		return this;
-	}
 
 	// </FluentSetters>
 }

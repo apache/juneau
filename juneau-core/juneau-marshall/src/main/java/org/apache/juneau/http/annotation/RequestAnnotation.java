@@ -79,7 +79,7 @@ public class RequestAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTBuilder {
+	public static class Builder extends TargetedAnnotationTBuilder<Builder> {
 
 		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
@@ -124,23 +124,6 @@ public class RequestAnnotation {
 
 		// <FluentSetters>
 
-		@Override /* GENERATED - TargetedAnnotationBuilder */
-		public Builder on(String...values) {
-			super.on(values);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTBuilder */
-		public Builder on(java.lang.Class<?>...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTBuilder */
-		public Builder onClass(java.lang.Class<?>...value) {
-			super.onClass(value);
-			return this;
-		}
 
 		// </FluentSetters>
 	}

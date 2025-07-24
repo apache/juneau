@@ -18,7 +18,6 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
@@ -115,7 +114,7 @@ public class QueryAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder {
+	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
 
 		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
@@ -206,35 +205,6 @@ public class QueryAnnotation {
 
 		// <FluentSetters>
 
-		@Override /* GENERATED - TargetedAnnotationBuilder */
-		public Builder on(String...values) {
-			super.on(values);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTBuilder */
-		public Builder on(java.lang.Class<?>...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTBuilder */
-		public Builder onClass(java.lang.Class<?>...value) {
-			super.onClass(value);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTMFBuilder */
-		public Builder on(Field...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTMFBuilder */
-		public Builder on(Method...value) {
-			super.on(value);
-			return this;
-		}
 
 		// </FluentSetters>
 	}

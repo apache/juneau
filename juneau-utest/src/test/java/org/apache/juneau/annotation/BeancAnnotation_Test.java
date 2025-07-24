@@ -29,11 +29,13 @@ public class BeancAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Beanc a1 = BeancAnnotation.create()
+        .description("description")
 		.on("on")
 		.properties("properties")
 		.build();
 
 	Beanc a2 = BeancAnnotation.create()
+        .description("description")
 		.on("on")
 		.properties("properties")
 		.build();
@@ -42,6 +44,7 @@ public class BeancAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['on'],"
 				+ "properties:'properties'"
 			+ "}"
@@ -86,6 +89,7 @@ public class BeancAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Beanc(
+        description={ "description" },
 		on="on",
 		properties="properties"
 	)
@@ -93,6 +97,7 @@ public class BeancAnnotation_Test {
 	Beanc d1 = D1.class.getAnnotationsByType(Beanc.class)[0];
 
 	@Beanc(
+        description={ "description" },
 		on="on",
 		properties="properties"
 	)

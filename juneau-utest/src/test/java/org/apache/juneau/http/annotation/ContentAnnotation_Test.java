@@ -31,11 +31,13 @@ public class ContentAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Content a1 = ContentAnnotation.create()
+        .description("description")
 		.on("on")
 		.onClass(X1.class)
 		.build();
 
 	Content a2 = ContentAnnotation.create()
+        .description("description")
 		.on("on")
 		.onClass(X1.class)
 		.build();
@@ -44,6 +46,7 @@ public class ContentAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().isMatches(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
 				+ "schema:{*}"
@@ -97,6 +100,7 @@ public class ContentAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Content(
+        description={ "description" },
 		on="on",
 		onClass=X1.class
 	)
@@ -104,6 +108,7 @@ public class ContentAnnotation_Test {
 	Content d1 = D1.class.getAnnotationsByType(Content.class)[0];
 
 	@Content(
+        description={ "description" },
 		on="on",
 		onClass=X1.class
 	)

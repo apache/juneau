@@ -94,7 +94,7 @@ public class MarshalledAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTBuilder {
+	public static class Builder extends TargetedAnnotationTBuilder<Builder> {
 
 		Class<?> implClass=void.class;
 		String example="";
@@ -139,23 +139,6 @@ public class MarshalledAnnotation {
 
 		// <FluentSetters>
 
-		@Override /* GENERATED - TargetedAnnotationBuilder */
-		public Builder on(String...values) {
-			super.on(values);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTBuilder */
-		public Builder on(java.lang.Class<?>...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTBuilder */
-		public Builder onClass(java.lang.Class<?>...value) {
-			super.onClass(value);
-			return this;
-		}
 
 		// </FluentSetters>
 	}

@@ -31,6 +31,7 @@ public class BeanpAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Beanp a1 = BeanpAnnotation.create()
+        .description("description")
 		.dictionary(X1.class)
 		.format("format")
 		.name("name")
@@ -44,6 +45,7 @@ public class BeanpAnnotation_Test {
 		.build();
 
 	Beanp a2 = BeanpAnnotation.create()
+        .description("description")
 		.dictionary(X1.class)
 		.format("format")
 		.name("name")
@@ -60,6 +62,7 @@ public class BeanpAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "dictionary:['"+CNAME+"$X1'],"
 				+ "format:'format',"
 				+ "name:'name',"
@@ -120,6 +123,7 @@ public class BeanpAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Beanp(
+        description={ "description" },
 		dictionary=X1.class,
 		format="format",
 		name="name",
@@ -135,6 +139,7 @@ public class BeanpAnnotation_Test {
 	Beanp d1 = D1.class.getAnnotationsByType(Beanp.class)[0];
 
 	@Beanp(
+        description={ "description" },
 		dictionary=X1.class,
 		format="format",
 		name="name",

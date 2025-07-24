@@ -33,6 +33,7 @@ public class BeanAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Bean a1 = BeanAnnotation.create()
+        .description("description")
 		.dictionary(X1.class)
 		.example("example")
 		.excludeProperties("excludeProperties")
@@ -57,6 +58,7 @@ public class BeanAnnotation_Test {
 		.build();
 
 	Bean a2 = BeanAnnotation.create()
+        .description("description")
 		.dictionary(X1.class)
 		.example("example")
 		.excludeProperties("excludeProperties")
@@ -84,6 +86,7 @@ public class BeanAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "dictionary:['"+CNAME+"$X1'],"
 				+ "example:'example',"
 				+ "excludeProperties:'excludeProperties',"
@@ -147,6 +150,7 @@ public class BeanAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Bean(
+        description={ "description" },
 		dictionary=X1.class,
 		example="example",
 		excludeProperties="excludeProperties",
@@ -173,6 +177,7 @@ public class BeanAnnotation_Test {
 	Bean d1 = D1.class.getAnnotationsByType(Bean.class)[0];
 
 	@Bean(
+        description={ "description" },
 		dictionary=X1.class,
 		example="example",
 		excludeProperties="excludeProperties",

@@ -27,12 +27,14 @@ public class ContactAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Contact a1 = ContactAnnotation.create()
+        .description("description")
 		.email("email")
 		.name("name")
 		.url("url")
 		.build();
 
 	Contact a2 = ContactAnnotation.create()
+        .description("description")
 		.email("email")
 		.name("name")
 		.url("url")
@@ -42,6 +44,7 @@ public class ContactAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "email:'email',"
 				+ "name:'name',"
 				+ "url:'url'"
@@ -71,6 +74,7 @@ public class ContactAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Contact(
+        description={ "description" },
 		email="email",
 		name="name",
 		url="url"
@@ -79,6 +83,7 @@ public class ContactAnnotation_Test {
 	Contact d1 = D1.class.getAnnotationsByType(Contact.class)[0];
 
 	@Contact(
+        description={ "description" },
 		email="email",
 		name="name",
 		url="url"

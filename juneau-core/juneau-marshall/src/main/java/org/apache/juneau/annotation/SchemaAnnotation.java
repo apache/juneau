@@ -18,7 +18,6 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.jsonschema.SchemaUtils.*;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -178,7 +177,7 @@ public class SchemaAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder {
+	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
 
 		boolean aev, allowEmptyValue, emax, emin, exclusiveMaximum, exclusiveMinimum, ignore, r, readOnly, required, ro, sie, skipIfEmpty, ui, uniqueItems;
 		ExternalDocs externalDocs=ExternalDocsAnnotation.DEFAULT;
@@ -310,17 +309,6 @@ public class SchemaAnnotation {
 		 */
 		public Builder d(String...value) {
 			this.d = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#description} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder description(String...value) {
-			this.description = value;
 			return this;
 		}
 
@@ -821,35 +809,6 @@ public class SchemaAnnotation {
 
 		// <FluentSetters>
 
-		@Override /* GENERATED - TargetedAnnotationBuilder */
-		public Builder on(String...values) {
-			super.on(values);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTBuilder */
-		public Builder on(java.lang.Class<?>...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTBuilder */
-		public Builder onClass(java.lang.Class<?>...value) {
-			super.onClass(value);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTMFBuilder */
-		public Builder on(Field...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTMFBuilder */
-		public Builder on(Method...value) {
-			super.on(value);
-			return this;
-		}
 
 		// </FluentSetters>
 	}
@@ -865,7 +824,7 @@ public class SchemaAnnotation {
 		private final Items items;
 		private final long maxLength, maxl, minLength, minl, maxItems, maxi, minItems, mini, maxProperties, maxp, minProperties, minp;
 		private final String $ref, format, f, title, multipleOf, mo, maximum, max, minimum, min, pattern, p, type, t, collectionFormat, cf, discriminator;
-		private final String[] description, d, _default, df, _enum, e, allOf, properties, additionalProperties, xml;
+		private final String[] d, _default, df, _enum, e, allOf, properties, additionalProperties, xml;
 
 		Impl(Builder b) {
 			super(b);
@@ -879,7 +838,6 @@ public class SchemaAnnotation {
 			this.cf = b.cf;
 			this.collectionFormat = b.collectionFormat;
 			this.d = copyOf(b.d);
-			this.description = copyOf(b.description);
 			this.df = copyOf(b.df);
 			this.discriminator = b.discriminator;
 			this.e = copyOf(b.e);
@@ -976,11 +934,6 @@ public class SchemaAnnotation {
 		@Override /* Schema */
 		public String[] d() {
 			return d;
-		}
-
-		@Override /* Schema */
-		public String[] description() {
-			return description;
 		}
 
 		@Override /* Schema */

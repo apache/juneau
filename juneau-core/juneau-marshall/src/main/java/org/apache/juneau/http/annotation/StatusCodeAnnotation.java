@@ -17,7 +17,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -80,7 +79,7 @@ public class StatusCodeAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMBuilder {
+	public static class Builder extends TargetedAnnotationTMBuilder<Builder> {
 
 		int value[] = {};
 
@@ -113,29 +112,6 @@ public class StatusCodeAnnotation {
 
 		// <FluentSetters>
 
-		@Override /* GENERATED - TargetedAnnotationBuilder */
-		public Builder on(String...values) {
-			super.on(values);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTBuilder */
-		public Builder on(java.lang.Class<?>...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTBuilder */
-		public Builder onClass(java.lang.Class<?>...value) {
-			super.onClass(value);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTMBuilder */
-		public Builder on(Method...value) {
-			super.on(value);
-			return this;
-		}
 
 		// </FluentSetters>
 	}

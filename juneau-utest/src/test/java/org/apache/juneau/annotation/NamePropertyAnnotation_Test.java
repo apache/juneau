@@ -29,10 +29,12 @@ public class NamePropertyAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	NameProperty a1 = NamePropertyAnnotation.create()
+        .description("description")
 		.on("on")
 		.build();
 
 	NameProperty a2 = NamePropertyAnnotation.create()
+        .description("description")
 		.on("on")
 		.build();
 
@@ -40,6 +42,7 @@ public class NamePropertyAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['on']"
 			+ "}"
 		);
@@ -91,12 +94,14 @@ public class NamePropertyAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@NameProperty(
+        description={ "description" },
 		on="on"
 	)
 	public static class D1 {}
 	NameProperty d1 = D1.class.getAnnotationsByType(NameProperty.class)[0];
 
 	@NameProperty(
+        description={ "description" },
 		on="on"
 	)
 	public static class D2 {}

@@ -29,10 +29,12 @@ public class UonAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Uon a1 = UonAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
 	Uon a2 = UonAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
@@ -40,6 +42,7 @@ public class UonAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['a'],"
 				+ "onClass:[]"
 			+ "}"
@@ -94,12 +97,14 @@ public class UonAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Uon(
+        description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
 	Uon d1 = D1.class.getAnnotationsByType(Uon.class)[0];
 
 	@Uon(
+        description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

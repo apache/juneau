@@ -63,7 +63,15 @@ public @interface Html {
 	 */
 	String anchorText() default "";
 
-	/**
+    /**
+     * Optional description for the exposed API.
+     *
+     * @return The annotation value.
+     * @since 9.2.0
+     */
+    String[] description() default {};
+
+    /**
 	 * Specifies what format to use for the HTML element.
 	 *
 	 * @return The annotation value.

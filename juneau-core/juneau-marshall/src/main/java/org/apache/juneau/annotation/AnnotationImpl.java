@@ -14,6 +14,7 @@ package org.apache.juneau.annotation;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.ArrayUtils.copyOf;
 import static java.util.Arrays.*;
 
 import java.lang.annotation.*;
@@ -40,6 +41,7 @@ import org.apache.juneau.internal.*;
 public class AnnotationImpl implements Annotation {
 
 	private final Class<? extends Annotation> annotationType;
+	private final String[] description;
 	private int hashCode = -1;
 
 	/**
@@ -47,8 +49,9 @@ public class AnnotationImpl implements Annotation {
 	 *
 	 * @param b The builder used to instantiate the fields of this class.
 	 */
-	public AnnotationImpl(AnnotationBuilder b) {
+	public AnnotationImpl(AnnotationBuilder<?> b) {
 		this.annotationType = b.annotationType;
+		this.description = copyOf(b.description);
 	}
 
 	/**
@@ -68,6 +71,16 @@ public class AnnotationImpl implements Annotation {
 		return annotationType;
 	}
 
+	/**
+	 * Returns the annotation description.
+	 *
+	 * @return the annotation description.
+	 * @since 9.2.0
+	 */
+	public String[] description() {
+	    return description;
+	}
+
 	@Override /* Object */
 	public int hashCode() {
 		if (hashCode == -1)
@@ -77,7 +90,7 @@ public class AnnotationImpl implements Annotation {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		if (! annotationType.isInstance(o))
+		if (!annotationType.isInstance(o))
 			return false;
 		return AnnotationUtils.equals(this, (Annotation)o);
 	}

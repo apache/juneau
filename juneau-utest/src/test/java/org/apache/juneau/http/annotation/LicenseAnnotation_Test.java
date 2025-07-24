@@ -27,11 +27,13 @@ public class LicenseAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	License a1 = LicenseAnnotation.create()
+        .description("description")
 		.name("name")
 		.url("url")
 		.build();
 
 	License a2 = LicenseAnnotation.create()
+	    .description("description")	        
 		.name("name")
 		.url("url")
 		.build();
@@ -40,6 +42,7 @@ public class LicenseAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "name:'name',"
 				+ "url:'url'"
 			+ "}"
@@ -72,6 +75,7 @@ public class LicenseAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@License(
+        description={ "description" },
 		name="name",
 		url="url"
 	)
@@ -79,6 +83,7 @@ public class LicenseAnnotation_Test {
 	License d1 = D1.class.getAnnotationsByType(License.class)[0];
 
 	@License(
+        description={ "description" },
 		name="name",
 		url="url"
 	)

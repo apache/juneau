@@ -29,12 +29,14 @@ public class HtmlLinkAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	HtmlLink a1 = HtmlLinkAnnotation.create()
+	    .description("description")
 		.nameProperty("a")
 		.on("b")
 		.uriProperty("c")
 		.build();
 
 	HtmlLink a2 = HtmlLinkAnnotation.create()
+        .description("description")
 		.nameProperty("a")
 		.on("b")
 		.uriProperty("c")
@@ -44,6 +46,7 @@ public class HtmlLinkAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "nameProperty:'a',"
 				+ "on:['b'],"
 				+ "onClass:[],"
@@ -96,6 +99,7 @@ public class HtmlLinkAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@HtmlLink(
+        description={ "description" },
 		nameProperty="a",
 		on="b",
 		uriProperty="c"
@@ -104,6 +108,7 @@ public class HtmlLinkAnnotation_Test {
 	HtmlLink d1 = D1.class.getAnnotationsByType(HtmlLink.class)[0];
 
 	@HtmlLink(
+        description={ "description" },
 		nameProperty="a",
 		on="b",
 		uriProperty="c"

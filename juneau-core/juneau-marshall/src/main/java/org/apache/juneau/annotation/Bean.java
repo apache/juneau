@@ -43,7 +43,15 @@ import org.apache.juneau.swap.*;
 @ContextApply(BeanAnnotation.Applier.class)
 public @interface Bean {
 
-	/**
+    /**
+     * Optional description for the exposed API.
+     *
+     * @return The annotation value.
+     * @since 9.2.0
+     */
+    String[] description() default {};
+
+    /**
 	 * Bean dictionary.
 	 *
 	 * <p>

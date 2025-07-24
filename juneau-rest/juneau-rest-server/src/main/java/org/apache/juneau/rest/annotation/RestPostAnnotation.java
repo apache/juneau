@@ -67,7 +67,7 @@ public class RestPostAnnotation {
 	 * </ul>
 	 */
 	@SuppressWarnings("unchecked")
-	public static class Builder extends TargetedAnnotationMBuilder {
+	public static class Builder extends TargetedAnnotationMBuilder<Builder> {
 
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
@@ -77,7 +77,7 @@ public class RestPostAnnotation {
 		Class<?>[] parsers={};
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		String clientVersion="", debug="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", rolesDeclared="", roleGuard="", summary="", value="";
-		String[] consumes={}, defaultRequestFormData={}, defaultRequestQueryData={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, path={}, produces={};
+		String[] consumes={}, defaultRequestFormData={}, defaultRequestQueryData={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, path={}, produces={};
 
 		/**
 		 * Constructor.
@@ -228,17 +228,6 @@ public class RestPostAnnotation {
 		}
 
 		/**
-		 * Sets the {@link RestPost#description()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder description(String...value) {
-			this.description = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link RestPost#encoders()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -383,17 +372,6 @@ public class RestPostAnnotation {
 
 		// <FluentSetters>
 
-		@Override /* GENERATED - TargetedAnnotationBuilder */
-		public Builder on(String...values) {
-			super.on(values);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTMBuilder */
-		public Builder on(java.lang.reflect.Method...value) {
-			super.on(value);
-			return this;
-		}
 
 		// </FluentSetters>
 	}
@@ -412,7 +390,7 @@ public class RestPostAnnotation {
 		private final Class<?>[] parsers;
 		private final OpSwagger swagger;
 		private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, rolesDeclared, roleGuard, summary, value;
-		private final String[] consumes, defaultRequestFormData, defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, description, path, produces;
+		private final String[] consumes, defaultRequestFormData, defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, path, produces;
 
 		Impl(Builder b) {
 			super(b);
@@ -428,7 +406,6 @@ public class RestPostAnnotation {
 			this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
 			this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
 			this.defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
-			this.description = copyOf(b.description);
 			this.encoders = copyOf(b.encoders);
 			this.guards = copyOf(b.guards);
 			this.matchers = copyOf(b.matchers);
@@ -503,11 +480,6 @@ public class RestPostAnnotation {
 		@Override /* RestPost */
 		public String[] defaultResponseHeaders() {
 			return defaultResponseHeaders;
-		}
-
-		@Override /* RestPost */
-		public String[] description() {
-			return description;
 		}
 
 		@Override /* RestPost */

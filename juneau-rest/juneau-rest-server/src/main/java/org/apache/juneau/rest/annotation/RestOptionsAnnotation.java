@@ -67,7 +67,7 @@ public class RestOptionsAnnotation {
 	 * </ul>
 	 */
 	@SuppressWarnings("unchecked")
-	public static class Builder extends TargetedAnnotationMBuilder {
+	public static class Builder extends TargetedAnnotationMBuilder<Builder> {
 
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
@@ -76,7 +76,7 @@ public class RestOptionsAnnotation {
 		Class<? extends Serializer>[] serializers = new Class[0];
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		String clientVersion="", debug="", defaultAccept="", defaultCharset="", rolesDeclared="", roleGuard="", summary="", value="";
-		String[] defaultRequestQueryData={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, path={}, produces={};
+		String[] defaultRequestQueryData={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, path={}, produces={};
 
 		/**
 		 * Constructor.
@@ -190,17 +190,6 @@ public class RestOptionsAnnotation {
 		 */
 		public Builder defaultResponseHeaders(String...value) {
 			this.defaultResponseHeaders = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link RestOptions#description()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder description(String...value) {
-			this.description = value;
 			return this;
 		}
 
@@ -327,17 +316,6 @@ public class RestOptionsAnnotation {
 
 		// <FluentSetters>
 
-		@Override /* GENERATED - TargetedAnnotationBuilder */
-		public Builder on(String...values) {
-			super.on(values);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTMBuilder */
-		public Builder on(java.lang.reflect.Method...value) {
-			super.on(value);
-			return this;
-		}
 
 		// </FluentSetters>
 	}
@@ -355,7 +333,7 @@ public class RestOptionsAnnotation {
 		private final Class<? extends Serializer>[] serializers;
 		private final OpSwagger swagger;
 		private final String clientVersion, debug, defaultAccept, defaultCharset, rolesDeclared, roleGuard, summary, value;
-		private final String[] defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, description, path, produces;
+		private final String[] defaultRequestQueryData, defaultRequestAttributes, defaultRequestHeaders, defaultResponseHeaders, path, produces;
 
 		Impl(Builder b) {
 			super(b);
@@ -368,7 +346,6 @@ public class RestOptionsAnnotation {
 			this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
 			this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
 			this.defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
-			this.description = copyOf(b.description);
 			this.encoders = copyOf(b.encoders);
 			this.guards = copyOf(b.guards);
 			this.matchers = copyOf(b.matchers);
@@ -426,11 +403,6 @@ public class RestOptionsAnnotation {
 		@Override /* RestOptions */
 		public String[] defaultResponseHeaders() {
 			return defaultResponseHeaders;
-		}
-
-		@Override /* RestOptions */
-		public String[] description() {
-			return description;
 		}
 
 		@Override /* RestOptions */

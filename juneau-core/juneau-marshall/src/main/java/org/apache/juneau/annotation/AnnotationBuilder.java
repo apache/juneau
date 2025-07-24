@@ -21,11 +21,14 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
+ *
+ * @param <B> The actual builder class.
  */
 @FluentSetters
-public class AnnotationBuilder {
+public class AnnotationBuilder<B extends AnnotationBuilder<B>> {
 
 	Class<? extends Annotation> annotationType;
+	String[] description = {};
 
 	/**
 	 * Constructor.
@@ -36,7 +39,30 @@ public class AnnotationBuilder {
 		this.annotationType = annotationType;
 	}
 
-	// <FluentSetters>
+	/**
+	 * Returns this instance typed as {@code B}.
+	 *
+	 * @return this instance typed as {@code B}.
+	 * @since 9.2.0
+	 */
+    @SuppressWarnings("unchecked")
+    protected B asThis() {
+        return (B) this;
+    }
+
+    // <FluentSetters>
+
+	/**
+     * Sets the {@link AnnotationImpl#description()} property on the target annotation.
+     *
+     * @param value The new value for this property.
+     * @return This object.
+     * @since 9.2.0
+     */
+    public B description(final String...value) {
+        this.description = value;
+        return asThis();
+    }
 
 	// </FluentSetters>
 }

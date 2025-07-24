@@ -93,7 +93,7 @@ public class RestAnnotation {
 	 * </ul>
 	 */
 	@SuppressWarnings("unchecked")
-	public static class Builder extends TargetedAnnotationTBuilder {
+	public static class Builder extends TargetedAnnotationTBuilder<Builder> {
 
 		Class<? extends Encoder>[] encoders = new Class[0];
 		Class<? extends HttpPartParser> partParser = HttpPartParser.Void.class;
@@ -113,7 +113,7 @@ public class RestAnnotation {
 		Class<?>[] children={}, parsers={};
 		Swagger swagger = SwaggerAnnotation.DEFAULT;
 		String disableContentParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="";
-		String[] consumes={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, produces={}, title={};
+		String[] consumes={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, produces={}, title={};
 
 		/**
 		 * Constructor.
@@ -348,17 +348,6 @@ public class RestAnnotation {
 		 */
 		public Builder defaultResponseHeaders(String...value) {
 			this.defaultResponseHeaders = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Rest#description()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder description(String...value) {
-			this.description = value;
 			return this;
 		}
 
@@ -650,23 +639,6 @@ public class RestAnnotation {
 
 		// <FluentSetters>
 
-		@Override /* GENERATED - TargetedAnnotationBuilder */
-		public Builder on(String...values) {
-			super.on(values);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTBuilder */
-		public Builder on(java.lang.Class<?>...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* GENERATED - TargetedAnnotationTBuilder */
-		public Builder onClass(java.lang.Class<?>...value) {
-			super.onClass(value);
-			return this;
-		}
 
 		// </FluentSetters>
 	}
@@ -695,7 +667,7 @@ public class RestAnnotation {
 		private final Class<?>[] children, parsers;
 		private final Swagger swagger;
 		private final String disableContentParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution;
-		private final String[] consumes, description, produces, defaultRequestAttributes, defaultRequestHeaders, defaultResponserHeaders, title;
+		private final String[] consumes, produces, defaultRequestAttributes, defaultRequestHeaders, defaultResponserHeaders, title;
 
 		Impl(Builder b) {
 			super(b);
@@ -719,7 +691,6 @@ public class RestAnnotation {
 			this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
 			this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
 			this.defaultResponserHeaders = copyOf(b.defaultResponseHeaders);
-			this.description = copyOf(b.description);
 			this.encoders = copyOf(b.encoders);
 			this.guards = copyOf(b.guards);
 			this.maxInput = b.maxInput;
@@ -847,11 +818,6 @@ public class RestAnnotation {
 		@Override /* Rest */
 		public String[] defaultResponseHeaders() {
 			return defaultResponserHeaders;
-		}
-
-		@Override /* Rest */
-		public String[] description() {
-			return description;
 		}
 
 		@Override /* Rest */

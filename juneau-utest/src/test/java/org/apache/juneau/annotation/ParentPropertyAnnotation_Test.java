@@ -29,10 +29,12 @@ public class ParentPropertyAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	ParentProperty a1 = ParentPropertyAnnotation.create()
+        .description("description")
 		.on("on")
 		.build();
 
 	ParentProperty a2 = ParentPropertyAnnotation.create()
+        .description("description")
 		.on("on")
 		.build();
 
@@ -40,6 +42,7 @@ public class ParentPropertyAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['on']"
 			+ "}"
 		);
@@ -91,12 +94,14 @@ public class ParentPropertyAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@ParentProperty(
+        description={ "description" },
 		on="on"
 	)
 	public static class D1 {}
 	ParentProperty d1 = D1.class.getAnnotationsByType(ParentProperty.class)[0];
 
 	@ParentProperty(
+        description={ "description" },
 		on="on"
 	)
 	public static class D2 {}

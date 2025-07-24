@@ -91,7 +91,15 @@ public @interface Path {
 	 */
 	String def() default "";
 
-	/**
+    /**
+     * Optional description for the exposed API.
+     *
+     * @return The annotation value.
+     * @since 9.2.0
+     */
+    String[] description() default {};
+
+    /**
 	 * URL path variable name.
 	 *
 	 * <p>

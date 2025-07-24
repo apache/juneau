@@ -31,12 +31,14 @@ public class ResponseStatusAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	StatusCode a1 = StatusCodeAnnotation.create()
+        .description("description")
 		.on("on")
 		.onClass(X1.class)
 		.value(1)
 		.build();
 
 	StatusCode a2 = StatusCodeAnnotation.create()
+        .description("description")
 		.on("on")
 		.onClass(X1.class)
 		.value(1)
@@ -46,6 +48,7 @@ public class ResponseStatusAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
 				+ "value:[1]"
@@ -99,6 +102,7 @@ public class ResponseStatusAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@StatusCode(
+        description={ "description" },
 		on="on",
 		onClass=X1.class,
 		value=1
@@ -107,6 +111,7 @@ public class ResponseStatusAnnotation_Test {
 	StatusCode d1 = D1.class.getAnnotationsByType(StatusCode.class)[0];
 
 	@StatusCode(
+        description={ "description" },
 		on="on",
 		onClass=X1.class,
 		value=1

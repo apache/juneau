@@ -31,6 +31,7 @@ public class MarshalledAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Marshalled a1 = MarshalledAnnotation.create()
+        .description("description")
 		.example("example")
 		.implClass(X1.class)
 		.on("on")
@@ -38,6 +39,7 @@ public class MarshalledAnnotation_Test {
 		.build();
 
 	Marshalled a2 = MarshalledAnnotation.create()
+        .description("description")
 		.example("example")
 		.implClass(X1.class)
 		.on("on")
@@ -48,6 +50,7 @@ public class MarshalledAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "example:'example',"
 				+ "implClass:'"+CNAME+"$X1',"
 				+ "on:['on'],"
@@ -100,6 +103,7 @@ public class MarshalledAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Marshalled(
+        description={ "description" },
 		example="example",
 		implClass=X1.class,
 		on="on",
@@ -109,6 +113,7 @@ public class MarshalledAnnotation_Test {
 	Marshalled d1 = D1.class.getAnnotationsByType(Marshalled.class)[0];
 
 	@Marshalled(
+        description={ "description" },
 		example="example",
 		implClass=X1.class,
 		on="on",

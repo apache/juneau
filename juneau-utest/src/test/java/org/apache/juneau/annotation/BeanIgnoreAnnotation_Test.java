@@ -31,11 +31,13 @@ public class BeanIgnoreAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	BeanIgnore a1 = BeanIgnoreAnnotation.create()
+        .description("description")
 		.on("a")
 		.onClass(X1.class)
 		.build();
 
 	BeanIgnore a2 = BeanIgnoreAnnotation.create()
+        .description("description")
 		.on("a")
 		.onClass(X1.class)
 		.build();
@@ -44,6 +46,7 @@ public class BeanIgnoreAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['a'],"
 				+ "onClass:['"+CNAME+"$X1']"
 			+ "}"
@@ -100,6 +103,7 @@ public class BeanIgnoreAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@BeanIgnore(
+        description={ "description" },
 		on="a",
 		onClass=X1.class
 	)
@@ -107,6 +111,7 @@ public class BeanIgnoreAnnotation_Test {
 	BeanIgnore d1 = D1.class.getAnnotationsByType(BeanIgnore.class)[0];
 
 	@BeanIgnore(
+        description={ "description" },
 		on="a",
 		onClass=X1.class
 	)

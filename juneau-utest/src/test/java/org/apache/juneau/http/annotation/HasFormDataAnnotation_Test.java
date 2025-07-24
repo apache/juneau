@@ -27,11 +27,13 @@ public class HasFormDataAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	HasFormData a1 = HasFormDataAnnotation.create()
+        .description("description")
 		.name("name")
 		.value("value")
 		.build();
 
 	HasFormData a2 = HasFormDataAnnotation.create()
+        .description("description")
 		.name("name")
 		.value("value")
 		.build();
@@ -40,6 +42,7 @@ public class HasFormDataAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "name:'name',"
 				+ "value:'value'"
 			+ "}"

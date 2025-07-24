@@ -42,7 +42,15 @@ import org.apache.juneau.swap.*;
 @ContextApply(SwapAnnotation.Applier.class)
 public @interface Swap {
 
-	/**
+    /**
+     * Optional description for the exposed API.
+     *
+     * @return The annotation value.
+     * @since 9.2.0
+     */
+    String[] description() default {};
+
+    /**
 	 * The {@link ObjectSwap} and {@link Surrogate} class.
 	 *
 	 * <p>

@@ -29,7 +29,7 @@ public class TargetedAnnotationTImpl extends TargetedAnnotationImpl {
 	 *
 	 * @param b The builder used to instantiate the fields of this class.
 	 */
-	public TargetedAnnotationTImpl(TargetedAnnotationTBuilder b) {
+	public TargetedAnnotationTImpl(TargetedAnnotationTBuilder<?> b) {
 		super(b);
 		this.onClass = copyOf(b.onClass);
 	}

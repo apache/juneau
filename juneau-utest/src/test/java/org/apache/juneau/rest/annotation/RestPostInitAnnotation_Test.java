@@ -29,11 +29,13 @@ public class RestPostInitAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestPostInit a1 = RestPostInitAnnotation.create()
+        .description("description")
 		.on("a")
 		.childFirst()
 		.build();
 
 	RestPostInit a2 = RestPostInitAnnotation.create()
+        .description("description")
 		.on("a")
 		.childFirst()
 		.build();
@@ -43,6 +45,7 @@ public class RestPostInitAnnotation_Test {
 		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "childFirst:true,"
+                + "description:['description'],"
 				+ "on:['a']"
 			+ "}"
 		);
@@ -91,6 +94,7 @@ public class RestPostInitAnnotation_Test {
 
 	@RestPostInit(
 		childFirst=true,
+        description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
@@ -98,6 +102,7 @@ public class RestPostInitAnnotation_Test {
 
 	@RestPostInit(
 		childFirst=true,
+        description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

@@ -29,6 +29,7 @@ public class XmlAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Xml a1 = XmlAnnotation.create()
+        .description("description")
 		.childName("a")
 		.format(XmlFormat.ATTR)
 		.namespace("c")
@@ -37,6 +38,7 @@ public class XmlAnnotation_Test {
 		.build();
 
 	Xml a2 = XmlAnnotation.create()
+        .description("description")
 		.childName("a")
 		.format(XmlFormat.ATTR)
 		.namespace("c")
@@ -49,6 +51,7 @@ public class XmlAnnotation_Test {
 		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "childName:'a',"
+                + "description:['description'],"
 				+ "format:'ATTR',"
 				+ "namespace:'c',"
 				+ "on:['d'],"
@@ -107,6 +110,7 @@ public class XmlAnnotation_Test {
 
 	@Xml(
 		childName="a",
+        description={ "description" },
 		format=XmlFormat.ATTR,
 		namespace="c",
 		on="d",
@@ -117,6 +121,7 @@ public class XmlAnnotation_Test {
 
 	@Xml(
 		childName="a",
+        description={ "description" },
 		format=XmlFormat.ATTR,
 		namespace="c",
 		on="d",
