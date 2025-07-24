@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<version>3.5.3</version>
+			<version>3.5.4</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
