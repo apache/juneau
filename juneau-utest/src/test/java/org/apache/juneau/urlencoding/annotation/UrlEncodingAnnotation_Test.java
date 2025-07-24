@@ -29,11 +29,13 @@ public class UrlEncodingAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	UrlEncoding a1 = UrlEncodingAnnotation.create()
+        .description("description")
 		.expandedParams(true)
 		.on("a")
 		.build();
 
 	UrlEncoding a2 = UrlEncodingAnnotation.create()
+        .description("description")
 		.expandedParams(true)
 		.on("a")
 		.build();
@@ -42,6 +44,7 @@ public class UrlEncodingAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "expandedParams:true,"
 				+ "on:['a'],"
 				+ "onClass:[]"
@@ -97,6 +100,7 @@ public class UrlEncodingAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@UrlEncoding(
+        description="description",
 		expandedParams=true,
 		on="a"
 	)
@@ -104,6 +108,7 @@ public class UrlEncodingAnnotation_Test {
 	UrlEncoding d1 = D1.class.getAnnotationsByType(UrlEncoding.class)[0];
 
 	@UrlEncoding(
+        description="description",
 		expandedParams=true,
 		on="a"
 	)

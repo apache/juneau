@@ -29,10 +29,12 @@ public class MsgPackAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	MsgPack a1 = MsgPackAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
 	MsgPack a2 = MsgPackAnnotation.create()
+        .description("description")
 		.on("a")
 		.build();
 
@@ -40,6 +42,7 @@ public class MsgPackAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
+                + "description:['description'],"
 				+ "on:['a'],"
 				+ "onClass:[]"
 			+ "}"
@@ -94,12 +97,14 @@ public class MsgPackAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@MsgPack(
+        description="description",
 		on="a"
 	)
 	public static class D1 {}
 	MsgPack d1 = D1.class.getAnnotationsByType(MsgPack.class)[0];
 
 	@MsgPack(
+        description="description",
 		on="a"
 	)
 	public static class D2 {}

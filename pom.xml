@@ -19,7 +19,7 @@
 
 	<groupId>org.apache.juneau</groupId>
 	<artifactId>juneau</artifactId>
-	<version>9.1.1-SNAPSHOT</version>
+	<version>9.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>juneau</name>
 	<description>Apache Juneau</description>
@@ -39,7 +39,7 @@
 		<juneau.compare.version>9.0.1</juneau.compare.version>
 		<javadoc.juneau.version>9.1.0</javadoc.juneau.version>
 		<juneauVersion>9.1.0</juneauVersion>
-		<juneauVersionNext>9.1.1</juneauVersionNext>
+		<juneauVersionNext>9.2.0</juneauVersionNext>
 
 		<javadoc.plugin.version>3.11.2</javadoc.plugin.version>
 		<jacoco.plugin.version>0.8.13</jacoco.plugin.version>
