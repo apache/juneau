@@ -99,7 +99,7 @@ public final class IOUtils {
 	public static long pipe(Reader in, File out) throws IOException {
 		if (out == null || in == null)
 			return 0;
-		try (Writer w = FileWriterBuilder.create(out).buffered().build()) {
+		try (var w = FileWriterBuilder.create(out).buffered().build()) {
 			return pipe(in, w);
 		}
 	}
@@ -123,8 +123,8 @@ public final class IOUtils {
 		if (out == null || in == null)
 			return 0;
 		long total = 0;
-		try (Reader in2 = in) {
-			char[] buffer = charBuffer(-1);
+		try (var in2 = in) {
+			var buffer = charBuffer(-1);
 			int readLen;
 			while ((readLen = in.read(buffer)) != -1) {
 				out.write(buffer, 0, readLen);
@@ -180,11 +180,11 @@ public final class IOUtils {
 	public static long pipeLines(Reader in, Writer out) throws IOException {
 		if (in == null || out == null)
 			return 0;
-		long total = 0;
-		try (Reader in2 = in) {
-			try (Scanner s = new Scanner(in2)) {
+		var total = 0l;
+		try (var in2 = in) {
+			try (var s = new Scanner(in2)) {
 				while (s.hasNextLine()) {
-					String l = s.nextLine();
+					var l = s.nextLine();
 					if (l != null) {
 						out.write(l);
 						out.write("\n");
@@ -262,7 +262,7 @@ public final class IOUtils {
 	 * @throws IOException If thrown from either stream.
 	 */
 	public static long pipe(InputStream in, OutputStream out) throws IOException {
-		try (InputStream in2 = in) {
+		try (var in2 = in) {
 			return pipe(in, out, -1);
 		}
 	}
@@ -286,7 +286,7 @@ public final class IOUtils {
 	 */
 	public static long pipe(InputStream in, OutputStream out, Consumer<IOException> onException) {
 		try {
-			try (InputStream in2 = in) {
+			try (var in2 = in) {
 				return pipe(in, out, -1);
 			}
 		} catch (IOException e) {
@@ -317,16 +317,16 @@ public final class IOUtils {
 	public static long pipe(InputStream in, OutputStream out, long maxBytes) throws IOException {
 		if (in == null || out == null)
 			return 0;
-		byte[] buffer = byteBuffer((int)maxBytes);
+		var buffer = byteBuffer((int)maxBytes);
 		int readLen;
-		long total = 0;
+		var total = 0l;
 		if (maxBytes < 0) {
 			while ((readLen = in.read(buffer)) != -1) {
 				out.write(buffer, 0, readLen);
 				total += readLen;
 			}
 		} else {
-			long remaining = maxBytes;
+			var remaining = maxBytes;
 			while (remaining > 0) {
 				readLen = in.read(buffer, 0, buffSize(remaining));
 				if (readLen == -1)
@@ -357,11 +357,11 @@ public final class IOUtils {
 	public static long pipe(Reader in, OutputStream out) throws IOException {
 		if (in == null || out == null)
 			return 0;
-		long total = 0;
-		try (Reader in2 = in) {
-			OutputStreamWriter osw = new OutputStreamWriter(out, UTF8);
-			int i;
-			char[] b = charBuffer(-1);
+		var total = 0l;
+		try (var in2 = in) {
+			var osw = new OutputStreamWriter(out, UTF8);
+			var i = 0;
+			var b = charBuffer(-1);
 			while ((i = in.read(b)) > 0) {
 				total += i;
 				osw.write(b, 0, i);
@@ -493,7 +493,7 @@ public final class IOUtils {
 	public static String read(File in) throws IOException {
 		if (in == null || ! in.exists())
 			return null;
-		try (Reader r = FileReaderBuilder.create(in).build()) {
+		try (var r = FileReaderBuilder.create(in).build()) {
 			return read(r, in.length());
 		}
 	}
@@ -516,7 +516,7 @@ public final class IOUtils {
 		if (in == null || !Files.exists(in)) {
 			return null;
 		}
-		try (Reader r = PathReaderBuilder.create(in).build()) {
+		try (var r = PathReaderBuilder.create(in).build()) {
 			return read(r, Files.size(in));
 		}
 	}
@@ -533,7 +533,7 @@ public final class IOUtils {
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public static String read(Reader in) throws IOException {
-		try (Reader in2 = in) {
+		try (var in2 = in) {
 			return read(in, -1);
 		}
 	}
@@ -550,7 +550,7 @@ public final class IOUtils {
 	 * 	The contents of the reader as a string, or <jk>null</jk> if the reader was <jk>null</jk>.
 	 */
 	public static String read(Reader in, Consumer<IOException> onException) {
-		try (Reader in2 = in) {
+		try (var in2 = in) {
 			return read(in, -1);
 		} catch (IOException e) {
 			onException.accept(e);
@@ -574,10 +574,10 @@ public final class IOUtils {
 	public static String read(Reader in, long expectedLength) throws IOException {
 		if (in == null)
 			return null;
-		try (Reader in2 = in) {
-			StringBuilder sb = new StringBuilder(buffSize(expectedLength)); // Assume they're ASCII characters.
-			char[] buf = charBuffer((int)expectedLength);
-			int i = 0;
+		try (var in2 = in) {
+			var sb = new StringBuilder(buffSize(expectedLength)); // Assume they're ASCII characters.
+			var buf = charBuffer((int)expectedLength);
+			var i = 0;
 			while ((i = in2.read(buf)) != -1)
 				sb.append(buf, 0, i);
 			return sb.toString();
@@ -636,7 +636,7 @@ public final class IOUtils {
 	public static String read(InputStream in, Charset cs) throws IOException {
 		if (in == null)
 			return null;
-		try (InputStreamReader isr = new InputStreamReader(in, cs)) {
+		try (var isr = new InputStreamReader(in, cs)) {
 			return read(isr);
 		}
 	}
@@ -657,7 +657,7 @@ public final class IOUtils {
 	public static String read(InputStream in, Charset cs, Consumer<IOException> onException) {
 		if (in == null)
 			return null;
-		try (InputStreamReader isr = new InputStreamReader(in, cs)) {
+		try (var isr = new InputStreamReader(in, cs)) {
 			return read(isr);
 		} catch (IOException e) {
 			onException.accept(e);
@@ -676,7 +676,7 @@ public final class IOUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static byte[] readBytes(InputStream in) throws IOException {
-		try (InputStream in2 = in) {
+		try (var in2 = in) {
 			return readBytes(in2, -1);
 		}
 	}
@@ -696,9 +696,9 @@ public final class IOUtils {
 	public static byte[] readBytes(InputStream in, int maxBytes) throws IOException {
 		if (in == null)
 			return new byte[0];
-		ByteArrayOutputStream buff = new ByteArrayOutputStream(buffSize(maxBytes));
+		var buff = new ByteArrayOutputStream(buffSize(maxBytes));
 		int nRead;
-		byte[] b = byteBuffer(maxBytes);
+		var b = byteBuffer(maxBytes);
 		while ((nRead = in.read(b, 0, b.length)) != -1)
 			buff.write(b, 0, nRead);
 		buff.flush();
@@ -730,7 +730,7 @@ public final class IOUtils {
 	public static byte[] readBytes(File in, int maxBytes) throws IOException {
 		if (in == null || ! (in.exists() && in.canRead()))
 			return new byte[0];
-		try (FileInputStream is = new FileInputStream(in)) {
+		try (var is = new FileInputStream(in)) {
 			return readBytes(is, maxBytes);
 		}
 	}
@@ -748,7 +748,7 @@ public final class IOUtils {
 	public static byte[] readBytes(Reader in) throws IOException {
 		if (in == null)
 			return new byte[0];
-		try (Reader in2 = in) {
+		try (var in2 = in) {
 			return read(in2, -1).getBytes();
 		}
 	}
@@ -781,7 +781,7 @@ public final class IOUtils {
 	public static long count(InputStream is) throws IOException {
 		if (is == null)
 			return 0;
-		long c = 0;
+		var c = 0l;
 		long i;
 		try {
 			while ((i = is.skip(1024)) != 0)
@@ -802,7 +802,7 @@ public final class IOUtils {
 	public static long count(Reader r) throws IOException {
 		if (r == null)
 			return 0;
-		long c = 0;
+		var c = 0l;
 		long i;
 		try {
 			while ((i = r.skip(1024)) != 0)
@@ -879,7 +879,7 @@ public final class IOUtils {
 	 * @param o The list of all objects to quietly close.
 	 */
 	public static void closeQuietly(Object...o) {
-		for (Object o2 : o) {
+		for (var o2 : o) {
 			if (o2 instanceof InputStream o3)
 				closeQuietly(o3);
 			if (o2 instanceof OutputStream o3)
@@ -901,7 +901,7 @@ public final class IOUtils {
 	 */
 	public static void flush(Object...o) throws IOException {
 		IOException ex = null;
-		for (Object o2 : o) {
+		for (var o2 : o) {
 			try {
 				if (o2 instanceof OutputStream o3)
 					o3.flush();
@@ -925,7 +925,7 @@ public final class IOUtils {
 	 */
 	public static void close(Object...o) throws IOException {
 		IOException ex = null;
-		for (Object o2 : o) {
+		for (var o2 : o) {
 			try {
 				if (o2 instanceof InputStream o3)
 					o3.close();
@@ -952,24 +952,24 @@ public final class IOUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static String loadSystemResourceAsString(String name, String...paths) throws IOException {
-		for (String path : paths) {
-			File p = new File(path);
+		for (var path : paths) {
+			var p = new File(path);
 			if (p.exists()) {
-	 			File f = new File(p, name);
+				var f = new File(p, name);
 	 			if (f.exists() && f.canRead())
 	 				return read(f);
 			}
 		}
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		var cl = Thread.currentThread().getContextClassLoader();
 		if (cl == null)
 			cl = ClassLoader.getSystemClassLoader();
-		for (String path : paths) {
-			String n = ".".equals(path) ? name : path + '/' + name;
-			try (InputStream is = cl.getResourceAsStream(n)) {
+		for (var path : paths) {
+			var n = ".".equals(path) ? name : path + '/' + name;
+			try (var is = cl.getResourceAsStream(n)) {
 				if (is != null)
 					return read(is);
 			}
-			try (InputStream is = ClassLoader.getSystemResourceAsStream(n)) {
+			try (var is = ClassLoader.getSystemResourceAsStream(n)) {
 				if (is != null)
 					return read(is);
 			}
@@ -979,7 +979,7 @@ public final class IOUtils {
 
 	private static byte[] byteBuffer(int maxBytes) {
 		if (BYTE_BUFFER_CACHE != null) {
-			byte[] x = BYTE_BUFFER_CACHE.get();
+			var x = BYTE_BUFFER_CACHE.get();
 			if (x == null) {
 				x = new byte[BUFF_SIZE];
 				BYTE_BUFFER_CACHE.set(x);
@@ -994,7 +994,7 @@ public final class IOUtils {
 
 	private static char[] charBuffer(int maxChars) {
 		if (CHAR_BUFFER_CACHE != null) {
-			char[] x = CHAR_BUFFER_CACHE.get();
+			var x = CHAR_BUFFER_CACHE.get();
 			if (x == null) {
 				x = new char[BUFF_SIZE];
 				CHAR_BUFFER_CACHE.set(x);

@@ -16,6 +16,7 @@ import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static java.nio.charset.StandardCharsets.*;
+import static java.lang.Character.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -73,7 +74,7 @@ public final class StringUtils {
 	// Maps BASE64 characters to 6-bit nibbles.
 	private static final byte[] base64m2 = new byte[128];
 	static {
-		for (int i = 0; i < 64; i++)
+		for (var i = 0; i < 64; i++)
 			base64m2[base64m1[i]] = (byte)i;
 	}
 
@@ -108,8 +109,8 @@ public final class StringUtils {
 			type = Number.class;
 
 		// Determine the data type if it wasn't specified.
-		boolean isAutoDetect = (type == Number.class);
-		boolean isDecimal = false;
+		var isAutoDetect = (type == Number.class);
+		var isDecimal = false;
 		if (isAutoDetect) {
 			// If we're auto-detecting, then we use either an Integer, Long, or Double depending on how
 			// long the string is.
@@ -131,8 +132,8 @@ public final class StringUtils {
 		}
 
 		if (type == Double.class || type == Double.TYPE) {
-			Double d = Double.valueOf(s);
-			Float f = Float.valueOf(s);
+			var d = Double.valueOf(s);
+			var f = Float.valueOf(s);
 			if (isAutoDetect && (!isDecimal) && d.toString().equals(f.toString()))
 				return f;
 			return d;
@@ -143,7 +144,7 @@ public final class StringUtils {
 			return new BigDecimal(s);
 		if (type == Long.class || type == Long.TYPE || type == AtomicLong.class) {
 			try {
-				Long l = Long.decode(s);
+				var l = Long.decode(s);
 				if (type == AtomicLong.class)
 					return new AtomicLong(l);
 				if (isAutoDetect && l >= Integer.MIN_VALUE && l <= Integer.MAX_VALUE) {
@@ -185,7 +186,7 @@ public final class StringUtils {
 	public static Character parseCharacter(Object o) {
 		if (o == null)
 			return null;
-		String s = o.toString();
+		var s = o.toString();
 		if (s.isEmpty())
 			return null;
 		if (s.length() == 1)
@@ -226,9 +227,9 @@ public final class StringUtils {
 			return false;
 		if (! firstNumberChars.contains(s.charAt(0)))
 			return (s.equals("NaN") || s.equals("Infinity"));
-		int i = 0;
-		int length = s.length();
-		char c = s.charAt(0);
+		var i = 0;
+		var length = s.length();
+		var c = s.charAt(0);
 		if (c == '+' || c == '-')
 			i++;
 		if (i == length)
@@ -249,10 +250,10 @@ public final class StringUtils {
 	public static boolean isDecimal(String s) {
 		if (s == null || s.isEmpty() || ! firstNumberChars.contains(s.charAt(0)))
 			return false;
-		int i = 0;
-		int length = s.length();
-		char c = s.charAt(0);
-		boolean isPrefixed = false;
+		var i = 0;
+		var length = s.length();
+		var c = s.charAt(0);
+		var isPrefixed = false;
 		if (c == '+' || c == '-') {
 			isPrefixed = true;
 			i++;
@@ -299,8 +300,8 @@ public final class StringUtils {
 	public static String join(Object[] tokens, String separator) {
 		if (tokens == null)
 			return null;
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < tokens.length; i++) {
+		var sb = new StringBuilder();
+		for (var i = 0; i < tokens.length; i++) {
 			if (i > 0)
 				sb.append(separator);
 			sb.append(tokens[i]);
@@ -345,7 +346,7 @@ public final class StringUtils {
 	public static StringBuilder join(Collection<?> tokens, String d, StringBuilder sb) {
 		if (tokens == null)
 			return sb;
-		for (Iterator<?> iter = tokens.iterator(); iter.hasNext();) {
+		for (var iter = tokens.iterator(); iter.hasNext();) {
 			sb.append(iter.next());
 			if (iter.hasNext())
 				sb.append(d);
@@ -403,7 +404,7 @@ public final class StringUtils {
 	public static StringBuilder join(Object[] tokens, char d, StringBuilder sb) {
 		if (tokens == null)
 			return sb;
-		for (int i = 0; i < tokens.length; i++) {
+		for (var i = 0; i < tokens.length; i++) {
 			if (i > 0)
 				sb.append(d);
 			sb.append(tokens[i]);
@@ -421,8 +422,8 @@ public final class StringUtils {
 	public static String join(int[] tokens, char d) {
 		if (tokens == null)
 			return null;
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < tokens.length; i++) {
+		var sb = new StringBuilder();
+		for (var i = 0; i < tokens.length; i++) {
 			if (i > 0)
 				sb.append(d);
 			sb.append(tokens[i]);
@@ -440,8 +441,8 @@ public final class StringUtils {
 	public static String join(Collection<?> tokens, char d) {
 		if (tokens == null)
 			return null;
-		StringBuilder sb = new StringBuilder();
-		for (Iterator<?> iter = tokens.iterator(); iter.hasNext();) {
+		var sb = new StringBuilder();
+		for (var iter = tokens.iterator(); iter.hasNext();) {
 			sb.append(iter.next());
 			if (iter.hasNext())
 				sb.append(d);
@@ -459,7 +460,7 @@ public final class StringUtils {
 	public static String join(List<?> tokens, char d) {
 		if (tokens == null)
 			return null;
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 		for (int i = 0, j = tokens.size(); i < j; i++) {
 			if (i > 0)
 				sb.append(d);
@@ -478,8 +479,8 @@ public final class StringUtils {
 	public static String joine(List<?> tokens, char d) {
 		if (tokens == null)
 			return null;
-		AsciiSet as = getEscapeSet(d);
-		StringBuilder sb = new StringBuilder();
+		var as = getEscapeSet(d);
+		var sb = new StringBuilder();
 		for (int i = 0, j = tokens.size(); i < j; i++) {
 			if (i > 0)
 				sb.append(d);
@@ -553,7 +554,7 @@ public final class StringUtils {
 	 * @param consumer The consumer of the tokens.
 	 */
 	public static void split(String s, char c, Consumer<String> consumer) {
-		AsciiSet escapeChars = getEscapeSet(c);
+		var escapeChars = getEscapeSet(c);
 
 		if (isEmpty(s))
 			return;
@@ -562,21 +563,23 @@ public final class StringUtils {
 			return;
 		}
 
-		int x1 = 0, escapeCount = 0;
-		for (int i = 0; i < s.length(); i++) {
+		var x1 = 0;
+		var escapeCount = 0;
+
+		for (var i = 0; i < s.length(); i++) {
 			if (s.charAt(i) == '\\')
 				escapeCount++;
 			else if (s.charAt(i)==c && escapeCount % 2 == 0) {
-				String s2 = s.substring(x1, i);
-				String s3 = unEscapeChars(s2, escapeChars);
+				var s2 = s.substring(x1, i);
+				var s3 = unEscapeChars(s2, escapeChars);
 				consumer.accept(s3.trim());  // NOSONAR - NPE not possible.
 				x1 = i+1;
 			}
 			if (s.charAt(i) != '\\')
 				escapeCount = 0;
 		}
-		String s2 = s.substring(x1);
-		String s3 = unEscapeChars(s2, escapeChars);
+		var s2 = s.substring(x1);
+		var s3 = unEscapeChars(s2, escapeChars);
 		consumer.accept(s3.trim());  // NOSONAR - NPE not possible.
 	}
 
@@ -590,7 +593,7 @@ public final class StringUtils {
 	 */
 	public static String[] split(String s, char c, int limit) {
 
-		AsciiSet escapeChars = getEscapeSet(c);
+		var escapeChars = getEscapeSet(c);
 
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
@@ -599,16 +602,17 @@ public final class StringUtils {
 		if (s.indexOf(c) == -1)
 			return new String[]{s};
 
-		List<String> l = new LinkedList<>();
-		char[] sArray = s.toCharArray();
-		int x1 = 0, escapeCount = 0;
+		var l = new LinkedList<String>();
+		var sArray = s.toCharArray();
+		var x1 = 0;
+		var escapeCount = 0;
 		limit--;
-		for (int i = 0; i < sArray.length && limit > 0; i++) {
+		for (var i = 0; i < sArray.length && limit > 0; i++) {
 			if (sArray[i] == '\\')
 				escapeCount++;
 			else if (sArray[i]==c && escapeCount % 2 == 0) {
-				String s2 = new String(sArray, x1, i-x1);
-				String s3 = unEscapeChars(s2, escapeChars);
+				var s2 = new String(sArray, x1, i-x1);
+				var s3 = unEscapeChars(s2, escapeChars);
 				l.add(s3.trim());
 				limit--;
 				x1 = i+1;
@@ -616,8 +620,8 @@ public final class StringUtils {
 			if (sArray[i] != '\\')
 				escapeCount = 0;
 		}
-		String s2 = new String(sArray, x1, sArray.length-x1);
-		String s3 = unEscapeChars(s2, escapeChars);
+		var s2 = new String(sArray, x1, sArray.length-x1);
+		var s3 = unEscapeChars(s2, escapeChars);
 		l.add(s3.trim());
 
 		return l.toArray(new String[l.size()]);
@@ -633,8 +637,8 @@ public final class StringUtils {
 	public static String[] split(String[] s, char c) {
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
-		List<String> l = new LinkedList<>();
-		for (String ss : s) {
+		var l = new LinkedList<String>();
+		for (var ss : s) {
 			if (ss == null || ss.indexOf(c) == -1)
 				l.add(ss);
 			else
@@ -664,19 +668,20 @@ public final class StringUtils {
 		if (isEmpty(s))
 			return Collections.emptyMap();
 
-		Map<String,String> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<String,String>();
 
 		final int
 			S1 = 1,  // Found start of key, looking for equals.
 			S2 = 2;  // Found equals, looking for delimiter (or end).
 
-		int state = S1;
+		var state = S1;
 
-		char[] sArray = s.toCharArray();
-		int x1 = 0, escapeCount = 0;
+		var sArray = s.toCharArray();
+		var x1 = 0;
+		var escapeCount = 0;
 		String key = null;
-		for (int i = 0; i < sArray.length + 1; i++) {
-			char c = i == sArray.length ? ',' : sArray[i];
+		for (var i = 0; i < sArray.length + 1; i++) {
+			var c = i == sArray.length ? ',' : sArray[i];
 			if (c == '\\')
 				escapeCount++;
 			if (escapeCount % 2 == 0) {
@@ -699,7 +704,7 @@ public final class StringUtils {
 					}
 				} else if (state == S2) {
 					if (c == ',') {  // NOSONAR - Intentional.
-						String val = s.substring(x1, i);
+						var val = s.substring(x1, i);
 						if (trim)
 							val = trim(val);
 						val = unEscapeChars(val, MAP_ESCAPE_SET);
@@ -732,8 +737,8 @@ public final class StringUtils {
 		if (s == null)
 			return false;
 		for (int i = 0, j = s.length(); i < j; i++) {
-			char c = s.charAt(i);
-			for (char c2 : chars)
+			var c = s.charAt(i);
+			for (var c2 : chars)
 				if (c == c2)
 					return true;
 		}
@@ -791,14 +796,15 @@ public final class StringUtils {
 			S3 = 3,  // Found ", looking for end "
 			S4 = 4;  // Found non-whitespace, looking for end whitespace.
 
-		int state = S1;
+		var state = S1;
 
-		boolean isInEscape = false, needsUnescape = false;
-		int mark = 0;
+		var isInEscape = false;
+		var needsUnescape = false;
+		var mark = 0;
 
-		List<String> l = new ArrayList<>();
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
+		var l = new ArrayList<String>();
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
 
 			if (state == S1) {
 				if (c == '\'') {
@@ -817,7 +823,7 @@ public final class StringUtils {
 					needsUnescape = ! keepQuotes;
 				} else if (! isInEscape) {
 					if (c == (state == S2 ? '\'' : '"')) {
-						String s2 = s.substring(mark, keepQuotes ? i+1 : i);
+						var s2 = s.substring(mark, keepQuotes ? i+1 : i);
 						if (needsUnescape)  // NOSONAR - False positive check.
 							s2 = unEscapeChars(s2, QUOTE_ESCAPE_SET);
 						l.add(s2);
@@ -930,7 +936,6 @@ public final class StringUtils {
 		return o.toString();
 	}
 
-
 	/**
 	 * Removes escape characters from the specified characters.
 	 *
@@ -941,19 +946,19 @@ public final class StringUtils {
 	public static String unEscapeChars(String s, AsciiSet escaped) {
 		if (s == null || s.isEmpty())
 			return s;
-		int count = 0;
-		for (int i = 0; i < s.length(); i++)
+		var count = 0;
+		for (var i = 0; i < s.length(); i++)
 			if (escaped.contains(s.charAt(i)))
 				count++;
 		if (count == 0)
 			return s;
-		StringBuffer sb = new StringBuffer(s.length()-count);
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
+		var sb = new StringBuffer(s.length()-count);
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
 
 			if (c == '\\') {
 				if (i+1 != s.length()) {  // NOSONAR - Intentional.
-					char c2 = s.charAt(i+1);
+					var c2 = s.charAt(i+1);
 					if (escaped.contains(c2)) {
 						i++;  // NOSONAR - Intentional.
 					} else if (c2 == '\\') {
@@ -978,16 +983,16 @@ public final class StringUtils {
 		if (s == null || s.isEmpty())
 			return s;
 
-		int count = 0;
-		for (int i = 0; i < s.length(); i++)
+		var count = 0;
+		for (var i = 0; i < s.length(); i++)
 			if (escaped.contains(s.charAt(i)))
 				count++;
 		if (count == 0)
 			return s;
 
-		StringBuffer sb = new StringBuffer(s.length() + count);
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
+		var sb = new StringBuffer(s.length() + count);
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
 			if (escaped.contains(c))
 				sb.append('\\');
 			sb.append(c);
@@ -1004,8 +1009,8 @@ public final class StringUtils {
 	public static String decodeHex(String s) {
 		if (s == null)
 			return null;
-		StringBuilder sb = new StringBuilder();
-		for (char c : s.toCharArray()) {
+		var sb = new StringBuilder();
+		for (var c : s.toCharArray()) {
 			if (c < ' ' || c > '~')
 				sb.append("[").append(Integer.toHexString(c)).append("]");
 			else
@@ -1023,7 +1028,7 @@ public final class StringUtils {
 	 */
 	public static boolean startsWith(String s, char c) {
 		if (s != null) {
-			int i = s.length();
+			var i = s.length();
 			if (i > 0)
 				return s.charAt(0) == c;
 		}
@@ -1039,7 +1044,7 @@ public final class StringUtils {
 	 */
 	public static boolean endsWith(String s, char c) {
 		if (s != null) {
-			int i = s.length();
+			var i = s.length();
 			if (i > 0)
 				return s.charAt(i-1) == c;
 		}
@@ -1055,10 +1060,10 @@ public final class StringUtils {
 	 */
 	public static boolean endsWith(String s, char...c) {
 		if (s != null) {
-			int i = s.length();
+			var i = s.length();
 			if (i > 0) {
-				char c2 = s.charAt(i-1);
-				for (char cc : c)
+				var c2 = s.charAt(i-1);
+				for (var cc : c)
 					if (c2 == cc)
 						return true;
 			}
@@ -1075,8 +1080,8 @@ public final class StringUtils {
 	public static char[] toHex2(int num) {
 		if (num < 0 || num > 255)
 			throw new NumberFormatException("toHex2 can only be used on numbers between 0 and 255");
-		char[] n = new char[2];
-		int a = num%16;
+		var n = new char[2];
+		var a = num%16;
 		n[1] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
 		a = (num/16)%16;
 		n[0] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
@@ -1092,8 +1097,8 @@ public final class StringUtils {
 	 * @return A <code><jk>char</jk>[2]</code> containing the specified characters.
 	 */
 	public static String toHex(byte b) {
-		char[] c = new char[2];
-		int v = b & 0xFF;
+		var c = new char[2];
+		var v = b & 0xFF;
 		c[0] = hexArray[v >>> 4];
 		c[1] = hexArray[v & 0x0F];
 		return new String(c);
@@ -1106,11 +1111,11 @@ public final class StringUtils {
 	 * @return A <code><jk>char</jk>[2]</code> containing the specified characters.
 	 */
 	public static String toReadableBytes(byte[] b) {
-		StringBuilder sb = new StringBuilder();
-		for (byte b2 : b)
+		var sb = new StringBuilder();
+		for (var b2 : b)
 			sb.append((b2 < ' ' || b2 > 'z') ? String.format("[%02X]", b2) : (char)b2 + "   ");
 		sb.append("\n");
-		for (byte b2 : b)
+		for (var b2 : b)
 			sb.append(String.format("[%02X]", b2));
 		return sb.toString();
 	}
@@ -1122,11 +1127,11 @@ public final class StringUtils {
 	 * @return A <code><jk>char</jk>[4]</code> containing the specified characters.
 	 */
 	public static char[] toHex4(int num) {
-		char[] n = new char[4];
-		int a = num%16;
+		var n = new char[4];
+		var a = num%16;
 		n[3] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
-		int base = 16;
-		for (int i = 1; i < 4; i++) {
+		var base = 16;
+		for (var i = 1; i < 4; i++) {
 			a = (num/base)%16;
 			base <<= 4;
 			n[3-i] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
@@ -1141,11 +1146,11 @@ public final class StringUtils {
 	 * @return A <code><jk>char</jk>[8]</code> containing the specified characters.
 	 */
 	public static char[] toHex8(long num) {
-		char[] n = new char[8];
-		long a = num%16;
+		var n = new char[8];
+		var a = num%16;
 		n[7] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
-		int base = 16;
-		for (int i = 1; i < 8; i++) {
+		var base = 16;
+		for (var i = 1; i < 8; i++) {
 			a = (num/base)%16;
 			base <<= 4;
 			n[7-i] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
@@ -1190,10 +1195,10 @@ public final class StringUtils {
 	public static int diffPosition(String s1, String s2) {
 		s1 = emptyIfNull(s1);
 		s2 = emptyIfNull(s2);
-		int i = 0;
-		int len = Math.min(s1.length(), s2.length());
+		var i = 0;
+		var len = Math.min(s1.length(), s2.length());
 		while (i < len) {
-			int j = s1.charAt(i) - s2.charAt(i);
+			var j = s1.charAt(i) - s2.charAt(i);
 			if (j != 0)
 				return i;
 			i++;
@@ -1213,10 +1218,10 @@ public final class StringUtils {
 	public static int diffPositionIc(String s1, String s2) {
 		s1 = emptyIfNull(s1);
 		s2 = emptyIfNull(s2);
-		int i = 0;
-		int len = Math.min(s1.length(), s2.length());
+		var i = 0;
+		var len = Math.min(s1.length(), s2.length());
 		while (i < len) {
-			int j = Character.toLowerCase(s1.charAt(i)) - Character.toLowerCase(s2.charAt(i));
+			var j = toLowerCase(s1.charAt(i)) - toLowerCase(s2.charAt(i));
 			if (j != 0)
 				return i;
 			i++;
@@ -1284,18 +1289,18 @@ public final class StringUtils {
 	public static String base64Encode(byte[] in) {
 		if (in == null)
 			return null;
-		int outLength = (in.length * 4 + 2) / 3;   // Output length without padding
-		char[] out = new char[((in.length + 2) / 3) * 4];  // Length includes padding.
-		int iIn = 0;
-		int iOut = 0;
+		var outLength = (in.length * 4 + 2) / 3;   // Output length without padding
+		var out = new char[((in.length + 2) / 3) * 4];  // Length includes padding.
+		var iIn = 0;
+		var iOut = 0;
 		while (iIn < in.length) {
-			int i0 = in[iIn++] & 0xff;
-			int i1 = iIn < in.length ? in[iIn++] & 0xff : 0;
-			int i2 = iIn < in.length ? in[iIn++] & 0xff : 0;
-			int o0 = i0 >>> 2;
-			int o1 = ((i0 & 3) << 4) | (i1 >>> 4);
-			int o2 = ((i1 & 0xf) << 2) | (i2 >>> 6);
-			int o3 = i2 & 0x3F;
+			var i0 = in[iIn++] & 0xff;
+			var i1 = iIn < in.length ? in[iIn++] & 0xff : 0;
+			var i2 = iIn < in.length ? in[iIn++] & 0xff : 0;
+			var o0 = i0 >>> 2;
+			var o1 = ((i0 & 3) << 4) | (i1 >>> 4);
+			var o2 = ((i1 & 0xf) << 2) | (i2 >>> 6);
+			var o3 = i2 & 0x3F;
 			out[iOut++] = base64m1[o0];
 			out[iOut++] = base64m1[o1];
 			out[iOut] = iOut < outLength ? base64m1[o2] : '=';
@@ -1313,7 +1318,7 @@ public final class StringUtils {
 	 * @return The decoded string.
 	 */
 	public static String base64DecodeToString(String in) {
-		byte[] b = base64Decode(in);
+		var b = base64Decode(in);
 		if (b == null)
 			return null;
 		return new String(b, IOUtils.UTF8);
@@ -1329,31 +1334,31 @@ public final class StringUtils {
 		if (in == null)
 			return null;  // NOSONAR - Intentional.
 
-		byte[] bIn = in.getBytes(IOUtils.UTF8);
+		var bIn = in.getBytes(IOUtils.UTF8);
 
 		assertArg(bIn.length % 4 == 0, "Invalid BASE64 string length.  Must be multiple of 4.");
 
 		// Strip out any trailing '=' filler characters.
-		int inLength = bIn.length;
+		var inLength = bIn.length;
 		while (inLength > 0 && bIn[inLength - 1] == '=')
 			inLength--;
 
-		int outLength = (inLength * 3) / 4;
-		byte[] out = new byte[outLength];
-		int iIn = 0;
-		int iOut = 0;
+		var outLength = (inLength * 3) / 4;
+		var out = new byte[outLength];
+		var iIn = 0;
+		var iOut = 0;
 		while (iIn < inLength) {
-			int i0 = bIn[iIn++];
-			int i1 = bIn[iIn++];
-			int i2 = iIn < inLength ? bIn[iIn++] : 'A';
-			int i3 = iIn < inLength ? bIn[iIn++] : 'A';
-			int b0 = base64m2[i0];
-			int b1 = base64m2[i1];
-			int b2 = base64m2[i2];
+			var i0 = bIn[iIn++];
+			var i1 = bIn[iIn++];
+			var i2 = iIn < inLength ? bIn[iIn++] : 'A';
+			var i3 = iIn < inLength ? bIn[iIn++] : 'A';
+			var b0 = base64m2[i0];
+			var b1 = base64m2[i1];
+			var b2 = base64m2[i2];
 			int b3 = base64m2[i3];
-			int o0 = (b0 << 2) | (b1 >>> 4);
-			int o1 = ((b1 & 0xf) << 4) | (b2 >>> 2);
-			int o2 = ((b2 & 3) << 6) | b3;
+			var o0 = (b0 << 2) | (b1 >>> 4);
+			var o1 = ((b1 & 0xf) << 4) | (b2 >>> 2);
+			var o2 = ((b2 & 3) << 6) | b3;
 			out[iOut++] = (byte)o0;
 			if (iOut < outLength)
 				out[iOut++] = (byte)o1;
@@ -1386,9 +1391,9 @@ public final class StringUtils {
 	 * @return A new random UUID.
 	 */
 	public static String random(int numchars) {
-		StringBuilder sb = new StringBuilder(numchars);
-		for (int i = 0; i < numchars; i++) {
-			int c = RANDOM.nextInt(36) + 97;
+		var sb = new StringBuilder(numchars);
+		for (var i = 0; i < numchars; i++) {
+			var c = RANDOM.nextInt(36) + 97;
 			if (c > 'z')
 				c -= ('z'-'0'+1);
 			sb.append((char)c);
@@ -1515,14 +1520,15 @@ public final class StringUtils {
 			S1 = 1,	   // Not in variable, looking for '{'
 			S2 = 2;    // Found '{', Looking for '}'
 
-		int state = S1;
-		boolean hasInternalVar = false;
-		int x = 0;
-		int depth = 0;
-		int length = s.length();
-		StringBuilder out = new StringBuilder();
-		for (int i = 0; i < length; i++) {
-			char c = s.charAt(i);
+		var state = S1;
+		var hasInternalVar = false;
+		var x = 0;
+		var depth = 0;
+		var length = s.length();
+		var out = new StringBuilder();
+
+		for (var i = 0; i < length; i++) {
+			var c = s.charAt(i);
 			if (state == S1) {
 				if (c == '{') {
 					state = S2;
@@ -1538,16 +1544,16 @@ public final class StringUtils {
 					if (depth > 0) {
 						depth--;
 					} else {
-						String key = s.substring(x+1, i);
+						var key = s.substring(x+1, i);
 						key = (hasInternalVar ? replaceVars(key, m) : key);
 						hasInternalVar = false;
 						if (! m.containsKey(key))
 							out.append('{').append(key).append('}');
 						else {
-							Object val = m.get(key);
+							var val = m.get(key);
 							if (val == null)
 								val = "";
-							String v = val.toString();
+							var v = val.toString();
 							// If the replacement also contains variables, replace them now.
 							if (v.indexOf('{') != -1)
 								v = replaceVars(v, m);
@@ -1568,15 +1574,19 @@ public final class StringUtils {
 	 * @return A string with unicode sequences replaced.
 	 */
 	public static String replaceUnicodeSequences(String s) {
+
 		if (s.indexOf('\\') == -1)
 			return s;
-		Pattern p = Pattern.compile("\\\\u(\\p{XDigit}{4})");
-		Matcher m = p.matcher(s);
-		StringBuffer sb = new StringBuffer(s.length());
+
+		var p = Pattern.compile("\\\\u(\\p{XDigit}{4})");
+		var m = p.matcher(s);
+		var sb = new StringBuffer(s.length());
+
 		while (m.find()) {
-			String ch = String.valueOf((char) Integer.parseInt(m.group(1), 16));
+			var ch = String.valueOf((char) Integer.parseInt(m.group(1), 16));
 			m.appendReplacement(sb, Matcher.quoteReplacement(ch));
 		}
+
 		m.appendTail(sb);
 		return sb.toString();
 	}
@@ -1588,9 +1598,9 @@ public final class StringUtils {
 	 * @return An escaped-unicode sequence.
 	 */
 	public static String unicodeSequence(char c) {
-		StringBuilder sb = new StringBuilder(6);
+		var sb = new StringBuilder(6);
 		sb.append('\\').append('u');
-		for (char cc : toHex4(c))
+		for (var cc : toHex4(c))
 			sb.append(cc);
 		return sb.toString();
 	}
@@ -1640,8 +1650,8 @@ public final class StringUtils {
 	 * @return The UTF-8 string.
 	 */
 	public static String fromHexToUTF8(String hex) {
-		ByteBuffer buff = ByteBuffer.allocate(hex.length()/2);
-		for (int i = 0; i < hex.length(); i+=2)
+		var buff = ByteBuffer.allocate(hex.length()/2);
+		for (var i = 0; i < hex.length(); i+=2)
 			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
 		buff.rewind();  // Fixes Java 11 issue.
 		return UTF_8.decode(buff).toString();
@@ -1654,8 +1664,8 @@ public final class StringUtils {
 	 * @return The UTF-8 string.
 	 */
 	public static String fromSpacedHexToUTF8(String hex) {
-		ByteBuffer buff = ByteBuffer.allocate((hex.length()+1)/3);
-		for (int i = 0; i < hex.length(); i+=3)
+		var buff = ByteBuffer.allocate((hex.length()+1)/3);
+		for (var i = 0; i < hex.length(); i+=3)
 			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
 		buff.rewind();  // Fixes Java 11 issue.
 		return UTF_8.decode(buff).toString();
@@ -1670,9 +1680,9 @@ public final class StringUtils {
 	 * @return A new string consisting of hexadecimal characters.
 	 */
 	public static String toHex(byte[] bytes) {
-		StringBuilder sb = new StringBuilder(bytes.length * 2);
-		for (byte element : bytes) {
-			int v = element & 0xFF;
+		var sb = new StringBuilder(bytes.length * 2);
+		for (var element : bytes) {
+			var v = element & 0xFF;
 			sb.append(HEX[v >>> 4]).append(HEX[v & 0x0F]);
 		}
 		return sb.toString();
@@ -1685,11 +1695,11 @@ public final class StringUtils {
 	 * @return A new string consisting of hexadecimal characters.
 	 */
 	public static String toSpacedHex(byte[] bytes) {
-		StringBuilder sb = new StringBuilder(bytes.length * 3);
-		for (int j = 0; j < bytes.length; j++) {
+		var sb = new StringBuilder(bytes.length * 3);
+		for (var j = 0; j < bytes.length; j++) {
 			if (j > 0)
 				sb.append(' ');
-			int v = bytes[j] & 0xFF;
+			var v = bytes[j] & 0xFF;
 			sb.append(HEX[v >>> 4]).append(HEX[v & 0x0F]);
 		}
 		return sb.toString();
@@ -1702,8 +1712,8 @@ public final class StringUtils {
 	 * @return A new byte array.
 	 */
 	public static byte[] fromHex(String hex) {
-		ByteBuffer buff = ByteBuffer.allocate(hex.length()/2);
-		for (int i = 0; i < hex.length(); i+=2)
+		var buff = ByteBuffer.allocate(hex.length()/2);
+		for (var i = 0; i < hex.length(); i+=2)
 			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
 		buff.rewind();
 		return buff.array();
@@ -1716,8 +1726,8 @@ public final class StringUtils {
 	 * @return A new byte array.
 	 */
 	public static byte[] fromSpacedHex(String hex) {
-		ByteBuffer buff = ByteBuffer.allocate((hex.length()+1)/3);
-		for (int i = 0; i < hex.length(); i+=3)
+		var buff = ByteBuffer.allocate((hex.length()+1)/3);
+		for (var i = 0; i < hex.length(); i+=3)
 			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
 		buff.rewind();
 		return buff.array();
@@ -1731,8 +1741,8 @@ public final class StringUtils {
 	 * @return A new string consisting of the repeated pattern.
 	 */
 	public static String repeat(int count, String pattern) {
-		StringBuilder sb = new StringBuilder(pattern.length() * count);
-		for (int i = 0; i < count; i++)
+		var sb = new StringBuilder(pattern.length() * count);
+		for (var i = 0; i < count; i++)
 			sb.append(pattern);
 		return sb.toString();
 	}
@@ -1745,7 +1755,7 @@ public final class StringUtils {
 	 */
 	public static String trimStart(String s) {
 		if (s != null)
-			while (isNotEmpty(s) && Character.isWhitespace(s.charAt(0)))
+			while (isNotEmpty(s) && isWhitespace(s.charAt(0)))
 				s = s.substring(1);
 		return s;
 	}
@@ -1758,7 +1768,7 @@ public final class StringUtils {
 	 */
 	public static String trimEnd(String s) {
 		if (s != null)
-			while (!s.isEmpty() && Character.isWhitespace(s.charAt(s.length()-1)))
+			while (isNotEmpty(s) && isWhitespace(s.charAt(s.length()-1)))
 				s = s.substring(0, s.length()-1);
 		return s;
 	}
@@ -1775,7 +1785,7 @@ public final class StringUtils {
 	 * @return <jk>true</jk> if the specified string is one of the specified values.
 	 */
 	public static boolean isOneOf(String s, String...values) {
-		for (String value : values)
+		for (var value : values)
 			if (eq(s, value))
 				return true;
 		return false;
@@ -1808,9 +1818,9 @@ public final class StringUtils {
 	public static String trimSlashesAndSpaces(String s) {
 		if (s == null)
 			return null;
-		while (isNotEmpty(s) && (s.charAt(s.length()-1) == '/' || Character.isWhitespace(s.charAt(s.length()-1))))
+		while (isNotEmpty(s) && (s.charAt(s.length()-1) == '/' || isWhitespace(s.charAt(s.length()-1))))
 			s = s.substring(0, s.length()-1);
-		while (isNotEmpty(s) && (s.charAt(0) == '/' || Character.isWhitespace(s.charAt(0))))
+		while (isNotEmpty(s) && (s.charAt(0) == '/' || isWhitespace(s.charAt(0))))
 			s = s.substring(1);
 		return s;
 	}
@@ -1853,22 +1863,24 @@ public final class StringUtils {
 	 * @return The URL encoded string, or <jk>null</jk> if the object was null.
 	 */
 	public static String urlEncodePath(Object o) {
+
 		if (o == null)
 			return null;
-		String s = stringify(o);
 
-		boolean needsEncode = false;
-		for (int i = 0; i < s.length() && ! needsEncode; i++)
+		var s = stringify(o);
+
+		var needsEncode = false;
+		for (var i = 0; i < s.length() && ! needsEncode; i++)
 			needsEncode = URL_ENCODE_PATHINFO_VALIDCHARS.contains(s.charAt(i));
 		if (! needsEncode)
 			return s;
 
-		StringBuilder sb = new StringBuilder();
-		CharArrayWriter caw = new CharArrayWriter();
-		int caseDiff = ('a' - 'A');
+		var sb = new StringBuilder();
+		var caw = new CharArrayWriter();
+		var caseDiff = ('a' - 'A');
 
-		for (int i = 0; i < s.length();) {
-			char c = s.charAt(i);
+		for (var i = 0; i < s.length();) {
+			var c = s.charAt(i);
 			if (URL_ENCODE_PATHINFO_VALIDCHARS.contains(c)) {
 				sb.append(c);
 				i++;  // NOSONAR - Intentional.
@@ -1892,17 +1904,17 @@ public final class StringUtils {
 					} while (i < s.length() && !URL_ENCODE_PATHINFO_VALIDCHARS.contains((c = s.charAt(i))));   // NOSONAR - Intentional.
 
 					caw.flush();
-					String s2 = new String(caw.toCharArray());
-					byte[] ba = s2.getBytes(IOUtils.UTF8);
-					for (byte element : ba) {
+					var s2 = new String(caw.toCharArray());
+					var ba = s2.getBytes(IOUtils.UTF8);
+					for (var element : ba) {
 						sb.append('%');
-						char ch = Character.forDigit((element >> 4) & 0xF, 16);
-						if (Character.isLetter(ch)) {
+						var ch = forDigit((element >> 4) & 0xF, 16);
+						if (isLetter(ch)) {
 							ch -= caseDiff;
 						}
 						sb.append(ch);
-						ch = Character.forDigit(element & 0xF, 16);
-						if (Character.isLetter(ch)) {
+						ch = forDigit(element & 0xF, 16);
+						if (isLetter(ch)) {
 							ch -= caseDiff;
 						}
 						sb.append(ch);
@@ -1921,14 +1933,17 @@ public final class StringUtils {
 	 * @return The decoded string, or <jk>null</jk> if input is <jk>null</jk>.
 	 */
 	public static String urlDecode(String s) {
+
 		if (s == null)
 			return s;
-		boolean needsDecode = false;
-		for (int i = 0; i < s.length() && ! needsDecode; i++) {
-			char c = s.charAt(i);
+
+		var needsDecode = false;
+		for (var i = 0; i < s.length() && ! needsDecode; i++) {
+			var c = s.charAt(i);
 			if (c == '+' || c == '%')
 				needsDecode = true;
 		}
+
 		if (needsDecode) {
 			try {
 				return URLDecoder.decode(s, "UTF-8");
@@ -1944,16 +1959,21 @@ public final class StringUtils {
 	 * @return The encoded string, or <jk>null</jk> if input is <jk>null</jk>.
 	 */
 	public static String urlEncode(String s) {
+
 		if (s == null)
 			return null;
-		boolean needsEncode = false;
-		for (int i = 0; i < s.length() && ! needsEncode; i++)
+
+		var needsEncode = false;
+
+		for (var i = 0; i < s.length() && ! needsEncode; i++)
 			needsEncode |= (! unencodedChars.contains(s.charAt(i)));
+
 		if (needsEncode) {
 			try {
 				return URLEncoder.encode(s, "UTF-8");
 			} catch (UnsupportedEncodingException e) {/* Won't happen */}
 		}
+
 		return s;
 	}
 
@@ -1966,13 +1986,13 @@ public final class StringUtils {
 	public static String urlEncodeLax(String s) {
 		if (s == null)
 			return null;
-		boolean needsEncode = false;
-		for (int i = 0; i < s.length() && ! needsEncode; i++)
+		var needsEncode = false;
+		for (var i = 0; i < s.length() && ! needsEncode; i++)
 			needsEncode |= (! unencodedCharsLax.contains(s.charAt(i)));
 		if (needsEncode) {
-			StringBuilder sb = new StringBuilder(s.length()*2);
-			for (int i = 0; i < s.length(); i++) {
-				char c = s.charAt(i);
+			var sb = new StringBuilder(s.length()*2);
+			for (var i = 0; i < s.length(); i++) {
+				var c = s.charAt(i);
 				if (unencodedCharsLax.contains(c))
 					sb.append(c);
 				else if (c == ' ')
@@ -2001,8 +2021,8 @@ public final class StringUtils {
 	 */
 	public static char firstNonWhitespaceChar(String s) {
 		if (s != null)
-			for (int i = 0; i < s.length(); i++)
-				if (! Character.isWhitespace(s.charAt(i)))
+			for (var i = 0; i < s.length(); i++)
+				if (! isWhitespace(s.charAt(i)))
 					return s.charAt(i);
 		return 0;
 	}
@@ -2017,8 +2037,8 @@ public final class StringUtils {
 	 */
 	public static char lastNonWhitespaceChar(String s) {
 		if (s != null)
-			for (int i = s.length()-1; i >= 0; i--)
-				if (! Character.isWhitespace(s.charAt(i)))
+			for (var i = s.length()-1; i >= 0; i--)
+				if (! isWhitespace(s.charAt(i)))
 					return s.charAt(i);
 		return 0;
 	}
@@ -2058,9 +2078,10 @@ public final class StringUtils {
 			S4 = 4,  // Found /, looking for /
 			S5 = 5;  // Found /, looking for x
 
-		int state = S1;
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
+		var state = S1;
+
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
 			if (state == S1) {
 				if (c >= 'a' && c <= 'z')
 					state = S2;
@@ -2113,9 +2134,10 @@ public final class StringUtils {
 			S3 = 3,  // Found protocol char 2, looking for :
 			S4 = 4;  // Found :, looking for /
 
-		int state = S1;
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
+		var state = S1;
+
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
 			if (state == S1) {
 				if (c >= 'a' && c <= 'z')
 					state = S2;
@@ -2156,9 +2178,10 @@ public final class StringUtils {
 			S5 = 5,  // Found /, looking for x
 			S6 = 6;  // Found x, looking for /
 
-		int state = S1;
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
+		var state = S1;
+
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
 			if (state == S1) {
 				if (c >= 'a' && c <= 'z')
 					state = S2;
@@ -2189,6 +2212,7 @@ public final class StringUtils {
 					return s.substring(0, i);
 			}
 		}
+
 		return s;
 	}
 
@@ -2215,7 +2239,7 @@ public final class StringUtils {
 	 * @return The first non-empty string in the list, or <jk>null</jk> if they were all <jk>null</jk> or empty.
 	 */
 	public static String firstNonEmpty(String...s) {
-		for (String ss : s)
+		for (var ss : s)
 			if (isNotEmpty(ss))
 				return ss;
 		return null;
@@ -2231,9 +2255,9 @@ public final class StringUtils {
 	public static int indexOf(String s, char...c) {
 		if (s == null)
 			return -1;
-		for (int i = 0; i < s.length(); i++) {
-			char c2 = s.charAt(i);
-			for (char cc : c)
+		for (var i = 0; i < s.length(); i++) {
+			var c2 = s.charAt(i);
+			for (var cc : c)
 				if (c2 == cc)
 					return i;
 		}
@@ -2250,11 +2274,11 @@ public final class StringUtils {
 	public static String format(String pattern, Object...args) {
 		if (args == null || args.length == 0)
 			return pattern;
-		Object[] args2 = new Object[args.length];
-		for (int i = 0; i < args.length; i++)
+		var args2 = new Object[args.length];
+		for (var i = 0; i < args.length; i++)
 			args2[i] = convertToReadable(args[i]);
 
-		int c = countChars(pattern, '\'');
+		var c = countChars(pattern, '\'');
 		if (c % 2 != 0)
 			throw new AssertionError("Dangling single quote found in pattern: " + pattern);
 
@@ -2275,8 +2299,8 @@ public final class StringUtils {
 
 	private static List<Object> arrayAsList(Object array) {
 		if (array.getClass().getComponentType().isPrimitive()) {
-			List<Object> l = new ArrayList<>(Array.getLength(array));
-			for (int i = 0; i < Array.getLength(array); i++)
+			var l = new ArrayList<>(Array.getLength(array));
+			for (var i = 0; i < Array.getLength(array); i++)
 				l.add(Array.get(array, i));
 			return l;
 		}
@@ -2302,7 +2326,7 @@ public final class StringUtils {
 	 */
 	public static int parseIntWithSuffix(String s) {
 		assertArgNotNull("s", s);
-		int m = multiplier(s);
+		var m = multiplier(s);
 		if (m == 1)
 			return Integer.decode(s);
 		return Integer.decode(s.substring(0, s.length()-1).trim()) * m;  // NOSONAR - NPE not possible here.
@@ -2342,7 +2366,7 @@ public final class StringUtils {
 	 */
 	public static long parseLongWithSuffix(String s) {
 		assertArgNotNull("s", s);
-		long m = multiplier2(s);
+		var m = multiplier2(s);
 		if (m == 1)
 			return Long.decode(s);
 		return Long.decode(s.substring(0, s.length()-1).trim()) * m;  // NOSONAR - NPE not possible here.
@@ -2383,12 +2407,12 @@ public final class StringUtils {
 	 */
 	public static boolean isJsonArray(Object o, boolean ignoreWhitespaceAndComments) {
 		if (o instanceof CharSequence) {
-			String s = o.toString();
+			var s = o.toString();
 			if (! ignoreWhitespaceAndComments)
 				return (s.startsWith("[") && s.endsWith("]"));
 			if (firstRealCharacter(s) != '[')
 				return false;
-			int i = s.lastIndexOf(']');
+			var i = s.lastIndexOf(']');
 			if (i == -1)
 				return false;
 			s = s.substring(i+1);
@@ -2410,7 +2434,8 @@ public final class StringUtils {
 	public static boolean isJson(String s) {
 		if (s == null)
 			return false;
-		char c1 = firstNonWhitespaceChar(s), c2 = lastNonWhitespaceChar(s);
+		var c1 = firstNonWhitespaceChar(s);
+		var c2 = lastNonWhitespaceChar(s);
 		if (c1 == '{' && c2 == '}' || c1 == '[' && c2 == ']' || c1 == '\'' && c2 == '\'')
 			return true;
 		return (isOneOf(s, "true","false","null") || isNumeric(s));
@@ -2425,12 +2450,12 @@ public final class StringUtils {
 	 */
 	public static boolean isJsonObject(Object o, boolean ignoreWhitespaceAndComments) {
 		if (o instanceof CharSequence) {
-			String s = o.toString();
+			var s = o.toString();
 			if (! ignoreWhitespaceAndComments)
 				return (s.startsWith("{") && s.endsWith("}"));
 			if (firstRealCharacter(s) != '{')
 				return false;
-			int i = s.lastIndexOf('}');
+			var i = s.lastIndexOf('}');
 			if (i == -1)
 				return false;
 			s = s.substring(i+1);
@@ -2440,10 +2465,10 @@ public final class StringUtils {
 	}
 
 	private static int firstRealCharacter(String s) {
-		try (StringReader r = new StringReader(s)) {
-			int c = 0;
+		try (var r = new StringReader(s)) {
+			var c = 0;
 			while ((c = r.read()) != -1) {
-				if (! Character.isWhitespace(c)) {
+				if (! isWhitespace(c)) {
 					if (c == '/') {
 						skipComments(r);
 					} else {
@@ -2457,7 +2482,7 @@ public final class StringUtils {
 		}
 	}
 	private static void skipComments(StringReader r) throws IOException {
-		int c = r.read();
+		var c = r.read();
 		//  "/* */" style comments
 		if (c == '*') {
 			while (c != -1)
@@ -2498,16 +2523,16 @@ public final class StringUtils {
 	public static String getNumberedLines(String s, int start, int end) {
 		if (s == null)
 			return null;
-		String[] lines = s.split("[\r\n]+");
-		final int digits = String.valueOf(lines.length).length();
+		var lines = s.split("[\r\n]+");
+		var digits = String.valueOf(lines.length).length();
 		if (start < 1)
 			start = 1;
 		if (end < 0)
 			end = Integer.MAX_VALUE;
 		if (end > lines.length)
 			end = lines.length;
-		StringBuilder sb = new StringBuilder();
-		for (String l :  Arrays.asList(lines).subList(start-1, end))
+		var sb = new StringBuilder();
+		for (var l :  Arrays.asList(lines).subList(start-1, end))
 			sb.append(String.format("%0"+digits+"d", start++)).append(": ").append(l).append("\n");  // NOSONAR - Intentional.
 		return sb.toString();
 	}
@@ -2561,10 +2586,10 @@ public final class StringUtils {
 	public static Pattern getMatchPattern(String s, int flags) {
 		if (s == null)
 			return null;
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 		sb.append("\\Q");
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
 			if (c == '*')
 				sb.append("\\E").append(".*").append("\\Q");
 			else if (c == '?')
@@ -2613,7 +2638,7 @@ public final class StringUtils {
 			return -1;
 		int i;
 		for (i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
+			var c = s.charAt(i);
 			if (c < '0' || c > '9')
 				break;
 		}
@@ -2622,7 +2647,7 @@ public final class StringUtils {
 			l = Long.parseLong(s);
 		else {
 			l = Long.parseLong(s.substring(0, i).trim());
-			String r = s.substring(i).trim().toLowerCase();
+			var r = s.substring(i).trim().toLowerCase();
 			if (r.startsWith("s"))
 				l *= 1000;
 			else if (r.startsWith("m"))
@@ -2645,19 +2670,20 @@ public final class StringUtils {
 	 * @return The string with invalid characters removed.
 	 */
 	public static String stripInvalidHttpHeaderChars(String s) {
+
 		if (s == null)
 			return null;
 
-		boolean needsReplace = false;
-		for (int i = 0; i < s.length() && ! needsReplace; i++)
+		var needsReplace = false;
+		for (var i = 0; i < s.length() && ! needsReplace; i++)
 			needsReplace |= httpHeaderChars.contains(s.charAt(i));
 
 		if (! needsReplace)
 			return s;
 
-		StringBuilder sb = new StringBuilder(s.length());
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
+		var sb = new StringBuilder(s.length());
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
 			if (httpHeaderChars.contains(c))
 				sb.append(c);
 		}
@@ -2685,6 +2711,7 @@ public final class StringUtils {
 	 * @return The split arguments, or null if the input string is null.
 	 */
 	public static String[] splitMethodArgs(String s) {
+
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
 		if (isEmpty(s))
@@ -2692,22 +2719,25 @@ public final class StringUtils {
 		if (s.indexOf(',') == -1)
 			return new String[]{s};
 
-		List<String> l = new LinkedList<>();
-		char[] sArray = s.toCharArray();
-		int x1 = 0, paramDepth = 0;
-		for (int i = 0; i < sArray.length; i++) {
-			char c = s.charAt(i);
+		var l = new LinkedList<String>();
+		var sArray = s.toCharArray();
+		var x1 = 0;
+		var paramDepth = 0;
+
+		for (var i = 0; i < sArray.length; i++) {
+			var c = s.charAt(i);
 			if (c == '>')
 				paramDepth++;
 			else if (c == '<')
 				paramDepth--;
 			else if (c == ',' && paramDepth == 0) {
-				String s2 = new String(sArray, x1, i-x1);
+				var s2 = new String(sArray, x1, i-x1);
 				l.add(s2.trim());
 				x1 = i+1;
 			}
 		}
-		String s2 = new String(sArray, x1, sArray.length-x1);
+
+		var s2 = new String(sArray, x1, sArray.length-x1);
 		l.add(s2.trim());
 
 		return l.toArray(new String[l.size()]);
@@ -2728,9 +2758,10 @@ public final class StringUtils {
 
 		StringBuilder sb = null;
 
-		int m = 0;
-		for (int i = 0; i < in.length(); i++) {
-			char c = in.charAt(i);
+		var m = 0;
+
+		for (var i = 0; i < in.length(); i++) {
+			var c = in.charAt(i);
 			if (c <= 127 && ! URI_CHARS.contains(c)) {
 				sb = append(sb, in.substring(m, i));
 				if (c == ' ')
@@ -2763,10 +2794,10 @@ public final class StringUtils {
 	 * @return The number of those characters or zero if the string was <jk>null</jk>.
 	 */
 	public static int countChars(String s, char c) {
-		int count = 0;
+		var count = 0;
 		if (s == null)
 			return count;
-		for (int i = 0; i < s.length(); i++)
+		for (var i = 0; i < s.length(); i++)
 			if (s.charAt(i) == c)
 				count++;
 		return count;
@@ -2780,8 +2811,8 @@ public final class StringUtils {
 	 * @throws Exception Exception occurred.
 	 */
 	public static byte[] compress(String contents) throws Exception {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream(contents.length()>>1);
-		try (GZIPOutputStream gos = new GZIPOutputStream(baos)) {
+		var baos = new ByteArrayOutputStream(contents.length()>>1);
+		try (var gos = new GZIPOutputStream(baos)) {
 			gos.write(contents.getBytes());
 			gos.finish();
 			gos.flush();
@@ -2810,7 +2841,7 @@ public final class StringUtils {
 		if (o == null)
 			return null;
 		if (o.getClass().isArray()) {
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			for (int i = 0, j = Array.getLength(o); i < j; i++) {
 				if (i > 0)
 					sb.append(", ");

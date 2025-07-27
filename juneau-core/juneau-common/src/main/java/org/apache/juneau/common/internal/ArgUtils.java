@@ -79,7 +79,7 @@ public class ArgUtils {
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
 	public static final <E> Class<E>[] assertClassArrayArgIsType(String name, Class<E> type, Class<?>[] value) throws IllegalArgumentException {
-		for (int i = 0; i < value.length; i++)
+		for (var i = 0; i < value.length; i++)
 			if (! type.isAssignableFrom(value[i]))
 				throw new IllegalArgumentException("Arg "+name+" did not have arg of type "+type.getName()+" at index "+i+": "+value[i].getName());
 		return (Class<E>[])value;

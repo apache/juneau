@@ -74,7 +74,7 @@ public final class AsciiMap {
 	public boolean contains(CharSequence s) {
 		if (s == null)
 			return false;
-		for (int i = 0; i < s.length(); i++)
+		for (var i = 0; i < s.length(); i++)
 			if (contains(s.charAt(i)))
 				return true;
 		return false;

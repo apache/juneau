@@ -119,8 +119,8 @@ public class ThrowableUtils {
 	 * @return The same content that would normally be rendered via <c>t.printStackTrace()</c>
 	 */
 	public static String getStackTrace(Throwable t) {
-		StringWriter sw = new StringWriter();
-		try (PrintWriter pw = new PrintWriter(sw)) {
+		var sw = new StringWriter();
+		try (var pw = new PrintWriter(sw)) {
 			t.printStackTrace(pw);
 		}
 		return sw.toString();
@@ -134,9 +134,9 @@ public class ThrowableUtils {
 	 * @return A calculated hash.
 	 */
 	public static int hash(Throwable t, String stopClass) {
-		int i = 0;
+		var i = 0;
 		while (t != null) {
-			for (StackTraceElement e : t.getStackTrace()) {
+			for (var e : t.getStackTrace()) {
 				if (e.getClassName().equals(stopClass))
 					break;
 				if (e.getClassName().indexOf('$') == -1)

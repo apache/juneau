@@ -60,7 +60,7 @@ public final class AsciiSet {
 		 * @return This object.
 		 */
 		public AsciiSet.Builder range(char start, char end) {
-			for (char c = start; c <= end; c++)
+			for (var c = start; c <= end; c++)
 				if (c < 128)
 					store[c] = true;
 			return this;
@@ -73,7 +73,7 @@ public final class AsciiSet {
 		 * @return This object.
 		 */
 		public AsciiSet.Builder ranges(String...s) {
-			for (String ss : s) {
+			for (var ss : s) {
 				if (ss.length() != 3 || ss.charAt(1) != '-')
 					throw new IllegalArgumentException("Value passed to ranges() must be 3 characters");
 				range(ss.charAt(0), ss.charAt(2));
@@ -88,8 +88,8 @@ public final class AsciiSet {
 		 * @return This object.
 		 */
 		public AsciiSet.Builder chars(String chars) {
-			for (int i = 0; i < chars.length(); i++) {
-				char c = chars.charAt(i);
+			for (var i = 0; i < chars.length(); i++) {
+				var c = chars.charAt(i);
 				if (c < 128)
 					store[c] = true;
 			}
@@ -103,7 +103,7 @@ public final class AsciiSet {
 		 * @return This object.
 		 */
 		public Builder chars(char...chars) {
-			for (int i = 0; i < chars.length; i++)
+			for (var i = 0; i < chars.length; i++)
 				if (chars[i] < 128)
 					store[chars[i]] = true;
 			return this;
@@ -135,7 +135,7 @@ public final class AsciiSet {
 	 * @return A builder initialized to the same characters in the copied set.
 	 */
 	public AsciiSet.Builder copy() {
-		Builder b = new Builder();
+		var b = new Builder();
 		System.arraycopy(store, 0, b.store, 0, 128);
 		return b;
 	}
@@ -174,7 +174,7 @@ public final class AsciiSet {
 	public boolean contains(CharSequence s) {
 		if (s == null)
 			return false;
-		for (int i = 0; i < s.length(); i++)
+		for (var i = 0; i < s.length(); i++)
 			if (contains(s.charAt(i)))
 				return true;
 		return false;
@@ -192,7 +192,7 @@ public final class AsciiSet {
 	public boolean containsOnly(String s) {
 		if (s == null)
 			return false;
-		for (int i = 0; i < s.length(); i++)
+		for (var i = 0; i < s.length(); i++)
 			if (! contains(s.charAt(i)))
 				return false;
 		return true;
