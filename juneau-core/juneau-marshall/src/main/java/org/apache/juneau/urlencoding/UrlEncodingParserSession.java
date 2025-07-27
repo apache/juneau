@@ -238,7 +238,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		try (UonReader r = getUonReader(pipe, true)) {
 			if (r.peekSkipWs() == '?')
-				r.read();
+				r.read();  // NOSONAR - skip leading '?'.
 			m = parseIntoMap2(r, m, getClassMeta(Map.class, keyType, valueType), null);
 			return m;
 		}
@@ -263,7 +263,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 		int c = r.peekSkipWs();
 		if (c == '?')
-			r.read();
+			r.read();  // NOSONAR - skip leading '?'.
 
 		Object o;
 

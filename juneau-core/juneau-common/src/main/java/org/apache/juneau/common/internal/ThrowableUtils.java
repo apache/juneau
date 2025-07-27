@@ -85,16 +85,15 @@ public class ThrowableUtils {
 	/**
 	 * Interface used with {@link #safeSupplier(SupplierWithThrowable)}.
 	 */
-	@SuppressWarnings("javadoc")
 	@FunctionalInterface
 	public interface SupplierWithThrowable<T> {
 
-	    /**
-	     * Gets a result.
-	     *
-	     * @return a result
-	     * @throws Throwable if supplier threw an exception.
-	     */
+		/**
+		 * Gets a result.
+		 *
+		 * @return a result
+		 * @throws Throwable if supplier threw an exception.
+		 */
 		T get() throws Throwable;
 	}
 

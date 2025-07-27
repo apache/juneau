@@ -665,7 +665,7 @@ public class BeanMeta<T> {
 				List<Name> ln = list();
 				ctx.forEachAnnotation(Beanp.class, m.inner(), x -> true, x -> lp.add(x));
 				ctx.forEachAnnotation(Name.class, m.inner(), x -> true, x -> ln.add(x));
-				if (! (m.isVisible(v) || lp.size() > 0 || ln.size() > 0))
+				if (! (m.isVisible(v) || isNotEmpty(lp) || isNotEmpty(ln)))
 					continue;
 
 				String n = m.getSimpleName();

@@ -579,7 +579,7 @@ public class BeanSession extends ContextSession {
 							if (tc == Short.TYPE)
 								return (T)Short.valueOf(l.shortValue());
 							if (tc == Long.TYPE)
-								return (T)Long.valueOf(l.longValue());
+								return (T)l;
 						} else {
 							if (tc == Integer.TYPE)
 								return (T)Integer.valueOf(s);

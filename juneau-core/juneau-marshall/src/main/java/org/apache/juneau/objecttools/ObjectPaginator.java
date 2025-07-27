@@ -101,7 +101,7 @@ public final class ObjectPaginator implements ObjectTool<PageArgs> {
 			int end = (limit+pos >= size) ? size : limit + pos;
 			pos = Math.min(pos, size);
 			ClassMeta<?> et = type.getElementType();
- 			if (! et.isPrimitive())
+			if (! et.isPrimitive())
 				return copyOfRange((Object[])input, pos, end);
 			if (et.is(boolean.class))
 				return copyOfRange((boolean[])input, pos, end);

@@ -25,6 +25,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Scanner;
@@ -36,8 +37,10 @@ import java.util.function.Consumer;
  */
 public final class IOUtils {
 
+	private IOUtils() {}
+
 	/** UTF-8 charset */
-	public static final Charset UTF8 = Charset.forName("UTF-8");
+	public static final Charset UTF8 = StandardCharsets.UTF_8;
 
 	/** Reusable empty input stream. */
 	public static final InputStream EMPTY_INPUT_STREAM = new InputStream() {
@@ -48,8 +51,8 @@ public final class IOUtils {
 	};
 
 	private static final int BUFF_SIZE = 1024;
-	private static final ThreadLocal<byte[]> BYTE_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());
-	private static final ThreadLocal<char[]> CHAR_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());
+	private static final ThreadLocal<byte[]> BYTE_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());  // NOSONAR
+	private static final ThreadLocal<char[]> CHAR_BUFFER_CACHE = (Boolean.getBoolean("juneau.disableIoBufferReuse") ? null : new ThreadLocal<>());  // NOSONAR
 
 	static final AtomicInteger BYTE_BUFFER_CACHE_HITS = new AtomicInteger();
 	static final AtomicInteger BYTE_BUFFER_CACHE_MISSES = new AtomicInteger();
@@ -72,7 +75,7 @@ public final class IOUtils {
 			return -1;  // end of stream
 		}
 		@Override
-		public void close() throws IOException {}
+		public void close() throws IOException { /* no-op */ }
 	};
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -436,14 +439,14 @@ public final class IOUtils {
 	public static String read(Object in) throws IOException {
 		if (in == null)
 			return null;
-		if (in instanceof Reader)
-			return read((Reader)in);
-		if (in instanceof InputStream)
-			return read((InputStream)in);
-		if (in instanceof File)
-			return read((File)in);
-		if (in instanceof byte[])
-			return read((byte[])in);
+		if (in instanceof Reader in2)
+			return read(in2);
+		if (in instanceof InputStream in2)
+			return read(in2);
+		if (in instanceof File in2)
+			return read(in2);
+		if (in instanceof byte[] in2)
+			return read(in2);
 		throw new IllegalArgumentException("Invalid type passed to read:  " + in.getClass().getName());
 	}
 
@@ -474,49 +477,49 @@ public final class IOUtils {
 		return new String(in, charset);
 	}
 
-    /**
-     * Reads the contents of a file into a string.
-     *
-     * <p>
-     * Assumes default character encoding.
-     *
-     * @param in
-     *  The file to read.
-     *  <br>Can be <jk>null</jk>.
-     * @return
-     *  The contents of the reader as a string, or <jk>null</jk> if file does not exist.
-     * @throws IOException If a problem occurred trying to read from the reader.
-     */
-    public static String read(File in) throws IOException {
-        if (in == null || ! in.exists())
-            return null;
-        try (Reader r = FileReaderBuilder.create(in).build()) {
-            return read(r, in.length());
-        }
-    }
+	/**
+	 * Reads the contents of a file into a string.
+	 *
+	 * <p>
+	 * Assumes default character encoding.
+	 *
+	 * @param in
+	 *  The file to read.
+	 *  <br>Can be <jk>null</jk>.
+	 * @return
+	 *  The contents of the reader as a string, or <jk>null</jk> if file does not exist.
+	 * @throws IOException If a problem occurred trying to read from the reader.
+	 */
+	public static String read(File in) throws IOException {
+		if (in == null || ! in.exists())
+			return null;
+		try (Reader r = FileReaderBuilder.create(in).build()) {
+			return read(r, in.length());
+		}
+	}
 
-    /**
-     * Reads the contents of a path into a string.
-     *
-     * <p>
-     * Assumes default character encoding.
-     *
-     * @param in
-     *  The path to read.
-     *  <br>Can be <jk>null</jk>.
-     * @return
-     *  The contents of the reader as a string, or <jk>null</jk> if path does not exist.
-     * @throws IOException If a problem occurred trying to read from the reader.
-     * @since 9.1.0
-     */
-    public static String read(Path in) throws IOException {
-        if (in == null || !Files.exists(in)) {
-            return null;
-        }
-        try (Reader r = PathReaderBuilder.create(in).build()) {
-            return read(r, Files.size(in));
-        }
-    }
+	/**
+	 * Reads the contents of a path into a string.
+	 *
+	 * <p>
+	 * Assumes default character encoding.
+	 *
+	 * @param in
+	 *  The path to read.
+	 *  <br>Can be <jk>null</jk>.
+	 * @return
+	 *  The contents of the reader as a string, or <jk>null</jk> if path does not exist.
+	 * @throws IOException If a problem occurred trying to read from the reader.
+	 * @since 9.1.0
+	 */
+	public static String read(Path in) throws IOException {
+		if (in == null || !Files.exists(in)) {
+			return null;
+		}
+		try (Reader r = PathReaderBuilder.create(in).build()) {
+			return read(r, Files.size(in));
+		}
+	}
 
 	/**
 	 * Reads the contents of a reader into a string.
@@ -822,7 +825,7 @@ public final class IOUtils {
 		try {
 			if (is != null)
 				is.close();
-		} catch (IOException e) {}
+		} catch (IOException e) { /* ignore */ }
 	}
 
 	/**
@@ -837,7 +840,7 @@ public final class IOUtils {
 		try {
 			if (os != null)
 				os.close();
-		} catch (IOException e) {}
+		} catch (IOException e) { /* ignore */ }
 	}
 
 	/**
@@ -852,7 +855,7 @@ public final class IOUtils {
 		try {
 			if (r != null)
 				r.close();
-		} catch (IOException e) {}
+		} catch (IOException e) { /* ignore */ }
 	}
 
 	/**
@@ -867,7 +870,7 @@ public final class IOUtils {
 		try {
 			if (w != null)
 				w.close();
-		} catch (IOException e) {}
+		} catch (IOException e) { /* ignore */ }
 	}
 
 	/**
@@ -877,14 +880,14 @@ public final class IOUtils {
 	 */
 	public static void closeQuietly(Object...o) {
 		for (Object o2 : o) {
-			if (o2 instanceof InputStream)
-				closeQuietly((InputStream)o2);
-			if (o2 instanceof OutputStream)
-				closeQuietly((OutputStream)o2);
-			if (o2 instanceof Reader)
-				closeQuietly((Reader)o2);
-			if (o2 instanceof Writer)
-				closeQuietly((Writer)o2);
+			if (o2 instanceof InputStream o3)
+				closeQuietly(o3);
+			if (o2 instanceof OutputStream o3)
+				closeQuietly(o3);
+			if (o2 instanceof Reader o3)
+				closeQuietly(o3);
+			if (o2 instanceof Writer o3)
+				closeQuietly(o3);
 		}
 	}
 
@@ -900,10 +903,10 @@ public final class IOUtils {
 		IOException ex = null;
 		for (Object o2 : o) {
 			try {
-				if (o2 instanceof OutputStream)
-					((OutputStream)o2).flush();
-				if (o2 instanceof Writer)
-					((Writer)o2).flush();
+				if (o2 instanceof OutputStream o3)
+					o3.flush();
+				if (o2 instanceof Writer o3)
+					o3.flush();
 			} catch (IOException e) {
 				ex = e;
 			}
@@ -924,14 +927,14 @@ public final class IOUtils {
 		IOException ex = null;
 		for (Object o2 : o) {
 			try {
-				if (o2 instanceof InputStream)
-					((InputStream)o2).close();
-				if (o2 instanceof OutputStream)
-					((OutputStream)o2).close();
-				if (o2 instanceof Reader)
-					((Reader)o2).close();
-				if (o2 instanceof Writer)
-					((Writer)o2).close();
+				if (o2 instanceof InputStream o3)
+					o3.close();
+				if (o2 instanceof OutputStream o3)
+					o3.close();
+				if (o2 instanceof Reader o3)
+					o3.close();
+				if (o2 instanceof Writer o3)
+					o3.close();
 			} catch (IOException e) {
 				ex = e;
 			}

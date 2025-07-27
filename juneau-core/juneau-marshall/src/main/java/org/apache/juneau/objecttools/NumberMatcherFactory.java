@@ -257,7 +257,7 @@ public class NumberMatcherFactory extends MatcherFactory {
 			if (numberRanges.length == 0)
 				return true;
 			for (NumberRange numberRange : numberRanges)
-                if (numberRange.matches(n))
+				if (numberRange.matches(n))
 					return true;
 			return false;
 		}

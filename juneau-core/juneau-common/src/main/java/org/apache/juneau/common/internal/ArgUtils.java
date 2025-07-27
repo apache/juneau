@@ -19,6 +19,8 @@ import java.text.*;
  */
 public class ArgUtils {
 
+	private ArgUtils() {}
+
 	/**
 	 * Throws an {@link IllegalArgumentException} if the specified argument is <jk>null</jk>.
 	 *
@@ -76,12 +78,10 @@ public class ArgUtils {
 	 * @return The value cast to the specified array type.
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
-	@SuppressWarnings("unchecked")
 	public static final <E> Class<E>[] assertClassArrayArgIsType(String name, Class<E> type, Class<?>[] value) throws IllegalArgumentException {
 		for (int i = 0; i < value.length; i++)
 			if (! type.isAssignableFrom(value[i]))
 				throw new IllegalArgumentException("Arg "+name+" did not have arg of type "+type.getName()+" at index "+i+": "+value[i].getName());
 		return (Class<E>[])value;
 	}
-
 }

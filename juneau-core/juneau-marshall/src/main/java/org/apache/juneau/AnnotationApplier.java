@@ -170,7 +170,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return The array wrapped in an {@link Optional}.
 	 */
 	protected Optional<String[]> strings(String[] in) {
-		return optional(in.length == 0 ? null : Arrays.stream(in).map(x -> vr.resolve(x)).filter(StringUtils::isNotEmpty).toArray(String[]::new));
+		return optional(in.length == 0 ? null : Arrays.stream(in).map(vr::resolve).filter(StringUtils::isNotEmpty).toArray(String[]::new));
 	}
 
 	/**
@@ -180,7 +180,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return An array with resolved strings.
 	 */
 	protected Stream<String> stream(String[] in) {
-		return Arrays.stream(in).map(x -> vr.resolve(x)).filter(StringUtils::isNotEmpty);
+		return Arrays.stream(in).map(vr::resolve).filter(StringUtils::isNotEmpty);
 	}
 
 	/**
@@ -273,6 +273,6 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 		}
 
 		@Override /* ConfigApply */
-		public void apply(AnnotationInfo<Annotation> ai, Object b) {}
+		public void apply(AnnotationInfo<Annotation> ai, Object b) { /* no-op */ }
 	}
 }

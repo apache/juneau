@@ -21,13 +21,15 @@ import java.util.function.*;
  */
 public class SystemUtils {
 
+	private SystemUtils() {}
+
 	static final List<Supplier<String>> SHUTDOWN_MESSAGES = new CopyOnWriteArrayList<>();
 	static {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
 				if (Boolean.getBoolean("SystemUtils.verbose"))
-				SHUTDOWN_MESSAGES.forEach(x -> System.out.println(x.get()));
+					SHUTDOWN_MESSAGES.forEach(x -> System.out.println(x.get()));  // NOSONAR - System.out.println is acceptable here for shutdown messages.
 			}
 		});
 	}

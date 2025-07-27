@@ -740,7 +740,7 @@ public final class HtmlParserSession extends XmlParserSession {
 			if (et == START_ELEMENT) {
 				String n2 = r.getLocalName();
 					if (n.equals(n2))
-				depth++;
+						depth++;
 			} else if (et == END_ELEMENT) {
 				String n2 = r.getLocalName();
 				if (n.equals(n2))
@@ -811,7 +811,7 @@ public final class HtmlParserSession extends XmlParserSession {
 					et = r.next();
 					if (et == CHARACTERS) {
 						String s = r.getText();
-						if (s.length() > 0) {
+						if (isNotEmpty(s)) {
 							char c = r.getText().charAt(0);
 							if (c == '\u2003')
 								c = '\t';

@@ -136,8 +136,7 @@ public final class AsciiSet {
 	 */
 	public AsciiSet.Builder copy() {
 		Builder b = new Builder();
-		for (int i = 0; i < 128; i++)
-			b.store[i] = store[i];
+		System.arraycopy(store, 0, b.store, 0, 128);
 		return b;
 	}
 

@@ -15,13 +15,13 @@ package org.apache.juneau.common.internal;
 import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static java.nio.charset.StandardCharsets.*;
 
 import java.io.*;
 import java.lang.reflect.*;
 import java.math.*;
 import java.net.*;
 import java.nio.*;
-import java.nio.charset.*;
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -37,6 +37,8 @@ import jakarta.xml.bind.*;
  * Reusable string utility methods.
  */
 public final class StringUtils {
+
+	private StringUtils() {}
 
 	/**
 	 * Predicate check to filter out null and empty strings.
@@ -74,6 +76,8 @@ public final class StringUtils {
 		for (int i = 0; i < 64; i++)
 			base64m2[base64m1[i]] = (byte)i;
 	}
+
+	private static final Random RANDOM = new Random();
 
 	/**
 	 * Parses a number from the specified string.
@@ -169,7 +173,7 @@ public final class StringUtils {
 	}
 
 	private static final Pattern fpRegex = Pattern.compile(
-		"[+-]?(NaN|Infinity|((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*"
+		"[+-]?(NaN|Infinity|((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*"  // NOSONAR
 	);
 
 	/**
@@ -229,7 +233,7 @@ public final class StringUtils {
 			i++;
 		if (i == length)
 			return false;
-		c = s.charAt(i++);
+		c = s.charAt(i);
 		if (c == '.' || decChars.contains(c)) {
 			return fpRegex.matcher(s).matches();
 		}
@@ -384,14 +388,9 @@ public final class StringUtils {
 	}
 
 	private static AsciiSet getEscapeSet(char c) {
-		AsciiSet s = ESCAPE_SETS.get(c);
-		if (s == null) {
-			s = AsciiSet.create().chars(c, '\\').build();
-			ESCAPE_SETS.put(c, s);
-		}
-		return s;
+		return ESCAPE_SETS.computeIfAbsent(c, key -> AsciiSet.create().chars(key, '\\').build());
 	}
-	static Map<Character,AsciiSet> ESCAPE_SETS = new ConcurrentHashMap<>();
+	static final Map<Character,AsciiSet> ESCAPE_SETS = new ConcurrentHashMap<>();
 
 	/**
 	 * Join the specified tokens into a delimited string and writes the output to the specified string builder.
@@ -570,7 +569,7 @@ public final class StringUtils {
 			else if (s.charAt(i)==c && escapeCount % 2 == 0) {
 				String s2 = s.substring(x1, i);
 				String s3 = unEscapeChars(s2, escapeChars);
-				consumer.accept(s3.trim());
+				consumer.accept(s3.trim());  // NOSONAR - NPE not possible.
 				x1 = i+1;
 			}
 			if (s.charAt(i) != '\\')
@@ -578,7 +577,7 @@ public final class StringUtils {
 		}
 		String s2 = s.substring(x1);
 		String s3 = unEscapeChars(s2, escapeChars);
-		consumer.accept(s3.trim());
+		consumer.accept(s3.trim());  // NOSONAR - NPE not possible.
 	}
 
 	/**
@@ -594,7 +593,7 @@ public final class StringUtils {
 		AsciiSet escapeChars = getEscapeSet(c);
 
 		if (s == null)
-			return null;
+			return null;  // NOSONAR - Intentional.
 		if (isEmpty(s))
 			return new String[0];
 		if (s.indexOf(c) == -1)
@@ -629,11 +628,11 @@ public final class StringUtils {
 	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @param c The character to split on.
-	 * @return The tokens.
+	 * @return The tokens, or null if the input array was null
 	 */
 	public static String[] split(String[] s, char c) {
 		if (s == null)
-			return null;
+			return null;  // NOSONAR - Intentional.
 		List<String> l = new LinkedList<>();
 		for (String ss : s) {
 			if (ss == null || ss.indexOf(c) == -1)
@@ -656,18 +655,18 @@ public final class StringUtils {
 	 *
 	 * @param s The string to split.
 	 * @param trim Trim strings after parsing.
-	 * @return The parsed map.  Never <jk>null</jk>.
+	 * @return The parsed map, or null if the string was null.
 	 */
 	public static Map<String,String> splitMap(String s, boolean trim) {
 
 		if (s == null)
-			return null;
+			return null;  // NOSONAR - Intentional.
 		if (isEmpty(s))
 			return Collections.emptyMap();
 
 		Map<String,String> m = new LinkedHashMap<>();
 
-		int
+		final int
 			S1 = 1,  // Found start of key, looking for equals.
 			S2 = 2;  // Found equals, looking for delimiter (or end).
 
@@ -699,7 +698,7 @@ public final class StringUtils {
 						x1 = i+1;
 					}
 				} else if (state == S2) {
-					if (c == ',') {
+					if (c == ',') {  // NOSONAR - Intentional.
 						String val = s.substring(x1, i);
 						if (trim)
 							val = trim(val);
@@ -776,7 +775,7 @@ public final class StringUtils {
 	public static String[] splitQuoted(String s, boolean keepQuotes) {
 
 		if (s == null)
-			return null;
+			return null;  // NOSONAR - Intentional.
 
 		s = s.trim();
 
@@ -786,7 +785,7 @@ public final class StringUtils {
 		if (! containsAny(s, ' ', '\t', '\'', '"'))
 			return new String[]{s};
 
-		int
+		final int
 			S1 = 1,  // Looking for start of token.
 			S2 = 2,  // Found ', looking for end '
 			S3 = 3,  // Found ", looking for end "
@@ -819,7 +818,7 @@ public final class StringUtils {
 				} else if (! isInEscape) {
 					if (c == (state == S2 ? '\'' : '"')) {
 						String s2 = s.substring(mark, keepQuotes ? i+1 : i);
-						if (needsUnescape)
+						if (needsUnescape)  // NOSONAR - False positive check.
 							s2 = unEscapeChars(s2, QUOTE_ESCAPE_SET);
 						l.add(s2);
 						state = S1;
@@ -828,7 +827,7 @@ public final class StringUtils {
 				} else {
 					isInEscape = false;
 				}
-			} else if (state == S4) {
+			} else /* state == S4 */ {
 				if (c == ' ' || c == '\t') {
 					l.add(s.substring(mark, i));
 					state = S1;
@@ -861,7 +860,7 @@ public final class StringUtils {
 	 * @return <jk>true</jk> if specified charsequence is <jk>null</jk> or empty.
 	 */
 	public static boolean isEmpty(CharSequence s) {
-		return s == null || s.length() == 0;
+		return s == null || s.isEmpty();
 	}
 
 	/**
@@ -953,13 +952,13 @@ public final class StringUtils {
 			char c = s.charAt(i);
 
 			if (c == '\\') {
-				if (i+1 != s.length()) {
+				if (i+1 != s.length()) {  // NOSONAR - Intentional.
 					char c2 = s.charAt(i+1);
 					if (escaped.contains(c2)) {
-						i++;
+						i++;  // NOSONAR - Intentional.
 					} else if (c2 == '\\') {
 						sb.append('\\');
-						i++;
+						i++;  // NOSONAR - Intentional.
 					}
 				}
 			}
@@ -976,7 +975,7 @@ public final class StringUtils {
 	 * @return The string with characters escaped, or the same string if no escapable characters were found.
 	 */
 	public static String escapeChars(String s, AsciiSet escaped) {
-		if (s == null || s.length() == 0)
+		if (s == null || s.isEmpty())
 			return s;
 
 		int count = 0;
@@ -1008,7 +1007,7 @@ public final class StringUtils {
 		StringBuilder sb = new StringBuilder();
 		for (char c : s.toCharArray()) {
 			if (c < ' ' || c > '~')
-				sb.append("["+Integer.toHexString(c)+"]");
+				sb.append("[").append(Integer.toHexString(c)).append("]");
 			else
 				sb.append(c);
 		}
@@ -1084,7 +1083,7 @@ public final class StringUtils {
 		return n;
 	}
 
-	private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+	private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
 
 	/**
 	 * Converts the specified byte into a 2 hexadecimal characters.
@@ -1324,13 +1323,13 @@ public final class StringUtils {
 	 * BASE64-decodes the specified string.
 	 *
 	 * @param in The BASE-64 encoded string.
-	 * @return The decoded byte array.
+	 * @return The decoded byte array, or null if the input was <jk>null</jk>.
 	 */
 	public static byte[] base64Decode(String in) {
 		if (in == null)
-			return null;
+			return null;  // NOSONAR - Intentional.
 
-		byte bIn[] = in.getBytes(IOUtils.UTF8);
+		byte[] bIn = in.getBytes(IOUtils.UTF8);
 
 		assertArg(bIn.length % 4 == 0, "Invalid BASE64 string length.  Must be multiple of 4.");
 
@@ -1387,10 +1386,9 @@ public final class StringUtils {
 	 * @return A new random UUID.
 	 */
 	public static String random(int numchars) {
-		Random r = new Random();
 		StringBuilder sb = new StringBuilder(numchars);
 		for (int i = 0; i < numchars; i++) {
-			int c = r.nextInt(36) + 97;
+			int c = RANDOM.nextInt(36) + 97;
 			if (c > 'z')
 				c -= ('z'-'0'+1);
 			sb.append((char)c);
@@ -1436,7 +1434,7 @@ public final class StringUtils {
 	public static Date parseIsoDate(String date) throws IllegalArgumentException {
 		if (isEmpty(date))
 			return null;
-		return parseIsoCalendar(date).getTime();
+		return parseIsoCalendar(date).getTime();  // NOSONAR - NPE not possible.
 	}
 
 	/**
@@ -1513,8 +1511,9 @@ public final class StringUtils {
 		if (m == null || m.isEmpty() || s.indexOf('{') == -1)
 			return s;
 
-		int S1 = 1;	   // Not in variable, looking for {
-		int S2 = 2;    // Found {, Looking for }
+		final int
+			S1 = 1,	   // Not in variable, looking for '{'
+			S2 = 2;    // Found '{', Looking for '}'
 
 		int state = S1;
 		boolean hasInternalVar = false;
@@ -1644,9 +1643,8 @@ public final class StringUtils {
 		ByteBuffer buff = ByteBuffer.allocate(hex.length()/2);
 		for (int i = 0; i < hex.length(); i+=2)
 			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
-		((Buffer)buff).rewind();  // Fixes Java 11 issue.
-		Charset cs = Charset.forName("UTF-8");
-		return cs.decode(buff).toString();
+		buff.rewind();  // Fixes Java 11 issue.
+		return UTF_8.decode(buff).toString();
 	}
 
 	/**
@@ -1659,9 +1657,8 @@ public final class StringUtils {
 		ByteBuffer buff = ByteBuffer.allocate((hex.length()+1)/3);
 		for (int i = 0; i < hex.length(); i+=3)
 			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
-		((Buffer)buff).rewind();  // Fixes Java 11 issue.
-		Charset cs = Charset.forName("UTF-8");
-		return cs.decode(buff).toString();
+		buff.rewind();  // Fixes Java 11 issue.
+		return UTF_8.decode(buff).toString();
 	}
 
 	private static final char[] HEX = "0123456789ABCDEF".toCharArray();
@@ -1708,7 +1705,7 @@ public final class StringUtils {
 		ByteBuffer buff = ByteBuffer.allocate(hex.length()/2);
 		for (int i = 0; i < hex.length(); i+=2)
 			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
-		((Buffer)buff).rewind();  // Fixes Java 11 issue.
+		buff.rewind();
 		return buff.array();
 	}
 
@@ -1722,7 +1719,7 @@ public final class StringUtils {
 		ByteBuffer buff = ByteBuffer.allocate((hex.length()+1)/3);
 		for (int i = 0; i < hex.length(); i+=3)
 			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
-		((Buffer)buff).rewind();  // Fixes Java 11 issue.
+		buff.rewind();
 		return buff.array();
 	}
 
@@ -1748,7 +1745,7 @@ public final class StringUtils {
 	 */
 	public static String trimStart(String s) {
 		if (s != null)
-			while (s.length() > 0 && Character.isWhitespace(s.charAt(0)))
+			while (isNotEmpty(s) && Character.isWhitespace(s.charAt(0)))
 				s = s.substring(1);
 		return s;
 	}
@@ -1761,7 +1758,7 @@ public final class StringUtils {
 	 */
 	public static String trimEnd(String s) {
 		if (s != null)
-			while (s.length() > 0 && Character.isWhitespace(s.charAt(s.length()-1)))
+			while (!s.isEmpty() && Character.isWhitespace(s.charAt(s.length()-1)))
 				s = s.substring(0, s.length()-1);
 		return s;
 	}
@@ -1779,7 +1776,7 @@ public final class StringUtils {
 	 */
 	public static boolean isOneOf(String s, String...values) {
 		for (String value : values)
-            if (StringUtils.eq(s, value))
+			if (eq(s, value))
 				return true;
 		return false;
 	}
@@ -1797,7 +1794,7 @@ public final class StringUtils {
 			return s;
 		while (endsWith(s, '/'))
 			s = s.substring(0, s.length()-1);
-		while (s.length() > 0 && s.charAt(0) == '/')
+		while (isNotEmpty(s) && s.charAt(0) == '/')  // NOSONAR - NPE not possible here.
 			s = s.substring(1);
 		return s;
 	}
@@ -1811,9 +1808,9 @@ public final class StringUtils {
 	public static String trimSlashesAndSpaces(String s) {
 		if (s == null)
 			return null;
-		while (s.length() > 0 && (s.charAt(s.length()-1) == '/' || Character.isWhitespace(s.charAt(s.length()-1))))
+		while (isNotEmpty(s) && (s.charAt(s.length()-1) == '/' || Character.isWhitespace(s.charAt(s.length()-1))))
 			s = s.substring(0, s.length()-1);
-		while (s.length() > 0 && (s.charAt(0) == '/' || Character.isWhitespace(s.charAt(0))))
+		while (isNotEmpty(s) && (s.charAt(0) == '/' || Character.isWhitespace(s.charAt(0))))
 			s = s.substring(1);
 		return s;
 	}
@@ -1841,7 +1838,7 @@ public final class StringUtils {
 	public static String trimLeadingSlashes(String s) {
 		if (s == null)
 			return null;
-		while (s.length() > 0 && s.charAt(0) == '/')
+		while (isNotEmpty(s) && s.charAt(0) == '/')
 			s = s.substring(1);
 		return s;
 	}
@@ -1874,25 +1871,25 @@ public final class StringUtils {
 			char c = s.charAt(i);
 			if (URL_ENCODE_PATHINFO_VALIDCHARS.contains(c)) {
 				sb.append(c);
-				i++;
+				i++;  // NOSONAR - Intentional.
 			} else {
 				if (c == ' ') {
 					sb.append('+');
-					i++;
+					i++;  // NOSONAR - Intentional.
 				} else {
 					do {
 						caw.write(c);
 						if (c >= 0xD800 && c <= 0xDBFF) {
-							if ( (i+1) < s.length()) {
+							if ((i+1) < s.length()) {  // NOSONAR - Intentional.
 								int d = s.charAt(i+1);
 								if (d >= 0xDC00 && d <= 0xDFFF) {
 									caw.write(d);
-									i++;
+									i++;  // NOSONAR - Intentional.
 								}
 							}
 						}
-						i++;
-					} while (i < s.length() && !URL_ENCODE_PATHINFO_VALIDCHARS.contains((c = s.charAt(i))));
+						i++;  // NOSONAR - Intentional.
+					} while (i < s.length() && !URL_ENCODE_PATHINFO_VALIDCHARS.contains((c = s.charAt(i))));   // NOSONAR - Intentional.
 
 					caw.flush();
 					String s2 = new String(caw.toCharArray());
@@ -2047,18 +2044,19 @@ public final class StringUtils {
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if it's an absolute path.
 	 */
-	public static boolean isAbsoluteUri(String s) {
+	public static boolean isAbsoluteUri(String s) {  // NOSONAR - False positive.
 
 		if (isEmpty(s))
 			return false;
 
 		// Use a state machine for maximum performance.
 
-		int S1 = 1;  // Looking for http
-		int S2 = 2;  // Found http, looking for :
-		int S3 = 3;  // Found :, looking for /
-		int S4 = 4;  // Found /, looking for /
-		int S5 = 5;  // Found /, looking for x
+		final int
+			S1 = 1,  // Looking for http
+			S2 = 2,  // Found http, looking for :
+			S3 = 3,  // Found :, looking for /
+			S4 = 4,  // Found /, looking for /
+			S5 = 5;  // Found /, looking for x
 
 		int state = S1;
 		for (int i = 0; i < s.length(); i++) {
@@ -2073,7 +2071,7 @@ public final class StringUtils {
 					state = S3;
 				else if (c < 'a' || c > 'z')
 					return false;
-			} else if (state == S3) {
+			} else if (state == S3) {  // NOSONAR - False positive.
 				if (c == '/')
 					state = S4;
 				else
@@ -2102,18 +2100,18 @@ public final class StringUtils {
 	 * @param s The string to test.
 	 * @return <jk>true</jk> if it's an absolute path.
 	 */
-	public static boolean isUri(String s) {
+	public static boolean isUri(String s) {  // NOSONAR - False positive.
 
 		if (isEmpty(s))
 			return false;
 
 		// Use a state machine for maximum performance.
 
-		int S1 = 1;  // Looking for protocol char 1
-		int S2 = 2;  // Found protocol char 1, looking for protocol char 2
-		int S3 = 3;  // Found protocol char 2, looking for :
-		int S4 = 4;  // Found :, looking for /
-
+		final int
+			S1 = 1,  // Looking for protocol char 1
+			S2 = 2,  // Found protocol char 1, looking for protocol char 2
+			S3 = 3,  // Found protocol char 2, looking for :
+			S4 = 4;  // Found :, looking for /
 
 		int state = S1;
 		for (int i = 0; i < s.length(); i++) {
@@ -2128,15 +2126,13 @@ public final class StringUtils {
 					state = S3;
 				else
 					return false;
-			} else if (state == S3) {
+			} else if (state == S3) {  // NOSONAR - False positive.
 				if (c == ':')
 					state = S4;
 				else if (c < 'a' || c > 'z')
 					return false;
 			} else if (state == S4) {
-				if (c == '/')
-					return true;
-				return false;
+				return c == '/';
 			}
 		}
 		return false;
@@ -2148,16 +2144,17 @@ public final class StringUtils {
 	 * @param s The URI string.
 	 * @return Just the authority portion of the URI.
 	 */
-	public static String getAuthorityUri(String s) {
+	public static String getAuthorityUri(String s) {  // NOSONAR - False positive.
 
 		// Use a state machine for maximum performance.
 
-		int S1 = 1;  // Looking for http
-		int S2 = 2;  // Found http, looking for :
-		int S3 = 3;  // Found :, looking for /
-		int S4 = 4;  // Found /, looking for /
-		int S5 = 5;  // Found /, looking for x
-		int S6 = 6;  // Found x, looking for /
+		final int
+			S1 = 1,  // Looking for http
+			S2 = 2,  // Found http, looking for :
+			S3 = 3,  // Found :, looking for /
+			S4 = 4,  // Found /, looking for /
+			S5 = 5,  // Found /, looking for x
+			S6 = 6;  // Found x, looking for /
 
 		int state = S1;
 		for (int i = 0; i < s.length(); i++) {
@@ -2172,7 +2169,7 @@ public final class StringUtils {
 					state = S3;
 				else if (c < 'a' || c > 'z')
 					return s;
-			} else if (state == S3) {
+			} else if (state == S3) {  // NOSONAR - False positive.
 				if (c == '/')
 					state = S4;
 				else
@@ -2188,7 +2185,7 @@ public final class StringUtils {
 				else
 					return s;
 			} else if (state == S6) {
-				if (c == '/')
+				if (c == '/')  // NOSONAR - Intentional.
 					return s.substring(0, i);
 			}
 		}
@@ -2261,8 +2258,7 @@ public final class StringUtils {
 		if (c % 2 != 0)
 			throw new AssertionError("Dangling single quote found in pattern: " + pattern);
 
-		String msg = MessageFormat.format(pattern, args2);
-		return msg;
+		return MessageFormat.format(pattern, args2);
 	}
 
 	private static String convertToReadable(Object o) {
@@ -2309,11 +2305,11 @@ public final class StringUtils {
 		int m = multiplier(s);
 		if (m == 1)
 			return Integer.decode(s);
-		return Integer.decode(s.substring(0, s.length()-1).trim()) * m;
+		return Integer.decode(s.substring(0, s.length()-1).trim()) * m;  // NOSONAR - NPE not possible here.
 	}
 
 	private static int multiplier(String s) {
-		char c = s.isEmpty() ? null : s.charAt(s.length()-1);
+		char c = isEmpty(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
 		if (c == 'G') return 1024*1024*1024;
 		if (c == 'M') return 1024*1024;
 		if (c == 'K') return 1024;
@@ -2349,21 +2345,21 @@ public final class StringUtils {
 		long m = multiplier2(s);
 		if (m == 1)
 			return Long.decode(s);
-		return Long.decode(s.substring(0, s.length()-1).trim()) * m;
+		return Long.decode(s.substring(0, s.length()-1).trim()) * m;  // NOSONAR - NPE not possible here.
 	}
 
 	private static long multiplier2(String s) {
-		char c = s.isEmpty() ? null : s.charAt(s.length()-1);
-		if (c == 'P') return 1024*1024*1024*1024*1024;
-		if (c == 'T') return 1024*1024*1024*1024;
-		if (c == 'G') return 1024*1024*1024;
-		if (c == 'M') return 1024*1024;
-		if (c == 'K') return 1024;
-		if (c == 'p') return 1000*1000*1000*1000*1000;
-		if (c == 't') return 1000*1000*1000*1000;
-		if (c == 'g') return 1000*1000*1000;
-		if (c == 'm') return 1000*1000;
-		if (c == 'k') return 1000;
+		char c = isEmpty(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
+		if (c == 'P') return 1024*1024*1024*1024*1024l;
+		if (c == 'T') return 1024*1024*1024*1024l;
+		if (c == 'G') return 1024*1024*1024l;
+		if (c == 'M') return 1024*1024l;
+		if (c == 'K') return 1024l;
+		if (c == 'p') return 1000*1000*1000*1000*1000l;
+		if (c == 't') return 1000*1000*1000*1000l;
+		if (c == 'g') return 1000*1000*1000l;
+		if (c == 'm') return 1000*1000l;
+		if (c == 'k') return 1000l;
 		return 1;
 	}
 
@@ -2375,7 +2371,7 @@ public final class StringUtils {
 	 * @return <jk>true</jk> if the value contains the specified substring.
 	 */
 	public static boolean contains(String value, CharSequence substring) {
-		return value == null ? false : value.contains(substring);
+		return value != null && value.contains(substring);
 	}
 
 	/**
@@ -2396,9 +2392,7 @@ public final class StringUtils {
 			if (i == -1)
 				return false;
 			s = s.substring(i+1);
-			if (firstRealCharacter(s) != -1)
-				return false;
-			return true;
+			return firstRealCharacter(s) == -1;
 		}
 		return false;
 	}
@@ -2419,9 +2413,7 @@ public final class StringUtils {
 		char c1 = firstNonWhitespaceChar(s), c2 = lastNonWhitespaceChar(s);
 		if (c1 == '{' && c2 == '}' || c1 == '[' && c2 == ']' || c1 == '\'' && c2 == '\'')
 			return true;
-		if (isOneOf(s, "true","false","null") || isNumeric(s))
-			return true;
-		return false;
+		return (isOneOf(s, "true","false","null") || isNumeric(s));
 	}
 
 	/**
@@ -2442,9 +2434,7 @@ public final class StringUtils {
 			if (i == -1)
 				return false;
 			s = s.substring(i+1);
-			if (firstRealCharacter(s) != -1)
-				return false;
-			return true;
+			return firstRealCharacter(s) == -1;
 		}
 		return false;
 	}
@@ -2472,7 +2462,7 @@ public final class StringUtils {
 		if (c == '*') {
 			while (c != -1)
 				if ((c = r.read()) == '*')
-					if ((c = r.read()) == '/')
+					if ((c = r.read()) == '/')  // NOSONAR - Intentional.
 						return;
 		//  "//" style comments
 		} else if (c == '/') {
@@ -2518,7 +2508,7 @@ public final class StringUtils {
 			end = lines.length;
 		StringBuilder sb = new StringBuilder();
 		for (String l :  Arrays.asList(lines).subList(start-1, end))
-			sb.append(String.format("%0"+digits+"d", start++)).append(": ").append(l).append("\n");
+			sb.append(String.format("%0"+digits+"d", start++)).append(": ").append(l).append("\n");  // NOSONAR - Intentional.
 		return sb.toString();
 	}
 
@@ -2692,11 +2682,11 @@ public final class StringUtils {
 	 * Splits the method arguments in the signature of a method.
 	 *
 	 * @param s The arguments to split.
-	 * @return The split arguments.
+	 * @return The split arguments, or null if the input string is null.
 	 */
 	public static String[] splitMethodArgs(String s) {
 		if (s == null)
-			return null;
+			return null;  // NOSONAR - Intentional.
 		if (isEmpty(s))
 			return new String[0];
 		if (s.indexOf(',') == -1)

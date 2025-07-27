@@ -40,7 +40,7 @@ public interface Consumer3<A,B,C> {
 	 * @param after The operation to perform after this operation.
 	 * @return A composed {@link Consumer} that performs in sequence this operation followed by the after operation.
 	 */
-	default <V> Consumer3<A,B,C> andThen(Consumer3<? super A,? super B,? super C> after) {
+	default <V> Consumer3<A,B,C> andThen(Consumer3<? super A,? super B,? super C> after) {  // NOSONAR - false positive on generics
 		return (A a, B b, C c) -> {
 			apply(a, b, c);
 			after.apply(a, b, c);

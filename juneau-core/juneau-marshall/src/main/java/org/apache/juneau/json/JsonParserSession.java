@@ -567,10 +567,11 @@ public final class JsonParserSession extends ReaderParserSession {
 	private <E> Collection<E> parseIntoCollection2(ParserReader r, Collection<E> l,
 			ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
-		int S0=0; // Looking for outermost [
-		int S1=1; // Looking for starting [ or { or " or ' or LITERAL or ]
-		int S2=2; // Looking for , or ]
-		int S3=3; // Looking for starting [ or { or " or ' or LITERAL
+		final int
+			S0=0, // Looking for outermost [
+			S1=1, // Looking for starting [ or { or " or ' or LITERAL or ]
+			S2=2, // Looking for , or ]
+			S3=3; // Looking for starting [ or { or " or ' or LITERAL
 
 		int argIndex = 0;
 
@@ -796,7 +797,7 @@ public final class JsonParserSession extends ReaderParserSession {
 		if (r.peek() == '+') {
 			if (isStrict())
 				throw new ParseException(this, "String concatenation detected.");
-			r.read();	// Skip past '+'
+			r.read();  // Skip past '+', NOSONAR - Intentional.
 			skipCommentsAndSpace(r);
 			s += parseString(r);
 		}
@@ -846,10 +847,11 @@ public final class JsonParserSession extends ReaderParserSession {
 	 */
 	private void skipWrapperAttrStart(ParserReader r, String wrapperAttr) throws IOException, ParseException {
 
-		int S0=0; // Looking for outer {
-		int S1=1; // Looking for attrName start.
-		int S3=3; // Found attrName end, looking for :.
-		int S4=4; // Found :, looking for valStart: { [ " ' LITERAL.
+		final int 
+			S0=0, // Looking for outer '{'
+			S1=1, // Looking for attrName start.
+			S3=3, // Found attrName end, looking for :.
+			S4=4; // Found :, looking for valStart: { [ " ' LITERAL.
 
 		int state = S0;
 		String currAttr = null;
