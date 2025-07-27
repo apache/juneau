@@ -204,11 +204,11 @@ public class Entry {
 			return empty();
 
 		try {
-			String v = toString();
+			var v = toString();
 			if (type == String.class) return (Optional<T>)asString();
 			if (type == String[].class) return (Optional<T>)asStringArray();
 			if (type == byte[].class) return (Optional<T>)asBytes();
-			if (type == int.class || type == int.class || type == Integer.class) return (Optional<T>)asInteger();
+			if (type == int.class || type == Integer.class) return (Optional<T>)asInteger();
 			if (type == long.class || type == Long.class) return (Optional<T>)asLong();
 			if (type == JsonMap.class) return (Optional<T>)asMap();
 			if (type == JsonList.class) return (Optional<T>)asList();
@@ -216,7 +216,7 @@ public class Entry {
 			if (isSimpleType(type)) return optional((T)config.beanSession.convertToType(v, (Class<?>)type));
 
 			if (parser instanceof JsonParser) {
-				char s1 = firstNonWhitespaceChar(v);
+				var s1 = firstNonWhitespaceChar(v);
 				if (isArray(type) && s1 != '[')
 					v = '[' + v + ']';
 				else if (s1 != '[' && s1 != '{' && ! "null".equals(v))
@@ -270,8 +270,9 @@ public class Entry {
 	public Optional<String[]> asStringArray() {
 		if (! isPresent())
 			return empty();
-		String v = toString();
-		char s1 = firstNonWhitespaceChar(v), s2 = lastNonWhitespaceChar(v);
+		var v = toString();
+		var s1 = firstNonWhitespaceChar(v);
+		var s2 = lastNonWhitespaceChar(v);
 		if (s1 == '[' && s2 == ']' && config.parser instanceof JsonParser) {
 			try {
 				return optional(config.parser.parse(v, String[].class));
@@ -363,7 +364,6 @@ public class Entry {
 		return optional(isEmpty() ? null : (Long)parseLongWithSuffix(toString()));
 	}
 
-
 	/**
 	 * Returns this entry as a double.
 	 *
@@ -381,7 +381,6 @@ public class Entry {
 	public Optional<Double> asDouble() {
 		return optional(isEmpty() ? null : Double.valueOf(toString()));
 	}
-
 
 	/**
 	 * Returns this entry as a float.
@@ -401,7 +400,6 @@ public class Entry {
 		return optional(isEmpty() ? null : Float.valueOf(toString()));
 	}
 
-
 	/**
 	 * Returns this entry as a byte array.
 	 *
@@ -413,9 +411,9 @@ public class Entry {
 	public Optional<byte[]> asBytes() {
 		if (isNull())
 			return empty();
-		String s = toString();
+		var s = toString();
 		if (s.indexOf('\n') != -1)
-			s = s.replaceAll("\n", "");
+			s = s.replace("\n", "");
 		try {
 			if (config.binaryFormat == HEX)
 				return optional(fromHex(s));
@@ -458,9 +456,9 @@ public class Entry {
 			return empty();
 		if (parser == null)
 			parser = config.parser;
-		String s = toString();
+		var s = toString();
 		if (parser instanceof JsonParser) {
-			char s1 = firstNonWhitespaceChar(s);
+			var s1 = firstNonWhitespaceChar(s);
 			if (s1 != '{' && ! "null".equals(s))
 				s = '{' + s + '}';
 		}
@@ -483,7 +481,6 @@ public class Entry {
 		return asList(config.parser);
 	}
 
-
 	/**
 	 * Returns this entry as a parsed list.
 	 *
@@ -499,9 +496,9 @@ public class Entry {
 			return empty();
 		if (parser == null)
 			parser = config.parser;
-		String s = toString();
+		var s = toString();
 		if (parser instanceof JsonParser) {
-			char s1 = firstNonWhitespaceChar(s);
+			var s1 = firstNonWhitespaceChar(s);
 			if (s1 != '[' && ! "null".equals(s))
 				s = '[' + s + ']';
 		}
@@ -572,14 +569,14 @@ public class Entry {
 	private boolean isArray(Type t) {
 		if (! (t instanceof Class))
 			return false;
-		Class<?> c = (Class<?>)t;
+		var c = (Class<?>)t;
 		return (c.isArray());
 	}
 
 	private boolean isSimpleType(Type t) {
 		if (! (t instanceof Class))
 			return false;
-		Class<?> c = (Class<?>)t;
+		var c = (Class<?>)t;
 		return (c == String.class || c.isPrimitive() || c.isAssignableFrom(Number.class) || c == Boolean.class || c.isEnum());
 	}
 }

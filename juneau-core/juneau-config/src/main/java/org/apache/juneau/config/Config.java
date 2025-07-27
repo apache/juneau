@@ -22,6 +22,7 @@ import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
@@ -54,16 +55,16 @@ public final class Config extends Context implements ConfigEventListener {
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static boolean DISABLE_AUTO_SYSTEM_PROPS = Boolean.getBoolean("juneau.disableAutoSystemProps");
-	private static volatile Config SYSTEM_DEFAULT = findSystemDefault();
+	private static final boolean DISABLE_AUTO_SYSTEM_PROPS = Boolean.getBoolean("juneau.disableAutoSystemProps");
+	private static final AtomicReference<Config> SYSTEM_DEFAULT = new AtomicReference<>(findSystemDefault());
 
 	/**
 	 * Sets a system default configuration.
 	 *
 	 * @param systemDefault The new system default configuration.
 	 */
-	public synchronized static void setSystemDefault(Config systemDefault) {
-		SYSTEM_DEFAULT = systemDefault;
+	public static synchronized void setSystemDefault(Config systemDefault) {
+		SYSTEM_DEFAULT.set(systemDefault);
 	}
 
 	/**
@@ -71,14 +72,14 @@ public final class Config extends Context implements ConfigEventListener {
 	 *
 	 * @return The system default configuration, or <jk>null</jk> if it doesn't exist.
 	 */
-	public synchronized static Config getSystemDefault() {
-		return SYSTEM_DEFAULT;
+	public static synchronized Config getSystemDefault() {
+		return SYSTEM_DEFAULT.get();
 	}
 
-	private synchronized static Config findSystemDefault() {
+	private static synchronized Config findSystemDefault() {
 
-		for (String n : getCandidateSystemDefaultConfigNames()) {
-			Config config = find(n);
+		for (var n : getCandidateSystemDefaultConfigNames()) {
+			var config = find(n);
 			if (config != null) {
 				if (! DISABLE_AUTO_SYSTEM_PROPS)
 					config.setSystemProperties();
@@ -112,16 +113,16 @@ public final class Config extends Context implements ConfigEventListener {
 	 * 	<br>The returned list is modifiable.
 	 * 	<br>Each call constructs a new list.
 	 */
-	public synchronized static List<String> getCandidateSystemDefaultConfigNames() {
-		List<String> l = list();
+	public static synchronized List<String> getCandidateSystemDefaultConfigNames() {
+		var l = listOf(String.class);
 
-		String s = System.getProperty("juneau.configFile");
+		var s = System.getProperty("juneau.configFile");
 		if (s != null) {
 			l.add(s);
 			return l;
 		}
 
-		String cmd = System.getProperty("sun.java.command", "not_found").split("\\s+")[0];
+		var cmd = System.getProperty("sun.java.command", "not_found").split("\\s+")[0];
 		if (cmd.endsWith(".jar") && ! cmd.contains("surefirebooter")) {
 			cmd = cmd.replaceAll(".*?([^\\\\\\/]+)\\.jar$", "$1");
 			l.add(cmd + ".cfg");
@@ -129,8 +130,8 @@ public final class Config extends Context implements ConfigEventListener {
 			l.add(cmd + ".cfg");
 		}
 
-		Set<File> files = sortedSet(new File(".").listFiles());
-		for (File f : files)
+		var files = sortedSet(new File(".").listFiles());
+		for (var f : files)
 			if (f.getName().endsWith(".cfg"))
 				l.add(f.getName());
 
@@ -144,7 +145,7 @@ public final class Config extends Context implements ConfigEventListener {
 		return l;
 	}
 
-	private synchronized static Config find(String name) {
+	private static synchronized Config find(String name) {
 		if (name == null)
 			return null;
 		if (FileStore.DEFAULT.exists(name))
@@ -357,7 +358,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder mods(Mod...values) {
-			for (Mod value : values)
+			for (var value : values)
 				mods.put(value.getId(), value);
 			return this;
 		}
@@ -638,10 +639,10 @@ public final class Config extends Context implements ConfigEventListener {
 	 */
 	private String getRaw(String key) {
 
-		String sname = sname(key);
-		String skey = skey(key);
+		var sname = sname(key);
+		var skey = skey(key);
 
-		ConfigMapEntry ce = configMap.getEntry(sname, skey);
+		var ce = configMap.getEntry(sname, skey);
 
 		if (ce == null)
 			return null;
@@ -651,7 +652,7 @@ public final class Config extends Context implements ConfigEventListener {
 
 	String applyMods(String mods, String x) {
 		if (mods != null && x != null)
-			for (int i = 0; i < mods.length(); i++)
+			for (var i = 0; i < mods.length(); i++)
 				x = getMod(mods.charAt(i)).doApply(x);
 		return x;
 	}
@@ -664,7 +665,7 @@ public final class Config extends Context implements ConfigEventListener {
 	}
 
 	Mod getMod(char id) {
-		Mod x = mods.get(id);
+		var x = mods.get(id);
 		return x == null ? Mod.NO_OP : x;
 	}
 
@@ -678,9 +679,9 @@ public final class Config extends Context implements ConfigEventListener {
 	 * @return This object.
 	 */
 	public Config setSystemProperties() {
-		for (String section : getSectionNames()) {
-			for (String key : getKeys(section)) {
-				String k = (section.isEmpty() ? key : section + '/' + key);
+		for (var section : getSectionNames()) {
+			for (var key : getKeys(section)) {
+				var k = (section.isEmpty() ? key : section + '/' + key);
 				System.setProperty(k, getRaw(k));
 			}
 		}
@@ -702,14 +703,14 @@ public final class Config extends Context implements ConfigEventListener {
 	public Config set(String key, String value) {
 		checkWrite();
 		assertArgNotNull("key", key);
-		String sname = sname(key);
-		String skey = skey(key);
+		var sname = sname(key);
+		var skey = skey(key);
 
-		ConfigMapEntry ce = configMap.getEntry(sname, skey);
+		var ce = configMap.getEntry(sname, skey);
 		if (ce == null && value == null)
 			return this;
 
-		String s = applyMods(ce == null ? null : ce.getModifiers(), stringify(value));
+		var s = applyMods(ce == null ? null : ce.getModifiers(), stringify(value));
 
 		configMap.setEntry(sname, skey, s, null, null, null);
 		return this;
@@ -776,11 +777,11 @@ public final class Config extends Context implements ConfigEventListener {
 	public Config set(String key, Object value, Serializer serializer, String modifiers, String comment, List<String> preLines) throws SerializeException {
 		checkWrite();
 		assertArgNotNull("key", key);
-		String sname = sname(key);
-		String skey = skey(key);
+		var sname = sname(key);
+		var skey = skey(key);
 		modifiers = nullIfEmpty(modifiers);
 
-		String s = applyMods(modifiers, serialize(value, serializer));
+		var s = applyMods(modifiers, serialize(value, serializer));
 
 		configMap.setEntry(sname, skey, s, modifiers, comment, preLines);
 		return this;
@@ -795,8 +796,8 @@ public final class Config extends Context implements ConfigEventListener {
 	 */
 	public Config remove(String key) {
 		checkWrite();
-		String sname = sname(key);
-		String skey = skey(key);
+		var sname = sname(key);
+		var skey = skey(key);
 		configMap.removeEntry(sname, skey);
 		return this;
 	}
@@ -813,14 +814,14 @@ public final class Config extends Context implements ConfigEventListener {
 	 */
 	public Config applyMods() {
 		checkWrite();
-		for (String section : configMap.getSections()) {
-			for (String key : configMap.getKeys(section)) {
-				ConfigMapEntry ce = configMap.getEntry(section, key);
+		for (var section : configMap.getSections()) {
+			for (var key : configMap.getKeys(section)) {
+				var ce = configMap.getEntry(section, key);
 				if (ce.getModifiers() != null) {
-					String mods = ce.getModifiers();
-					String value = ce.getValue();
-					for (int i = 0; i < mods.length(); i++) {
-						Mod mod = getMod(mods.charAt(i));
+					var mods2 = ce.getModifiers();
+					var value = ce.getValue();
+					for (var i = 0; i < mods2.length(); i++) {
+						var mod = getMod(mods2.charAt(i));
 						if (! mod.isApplied(value)) {
 							configMap.setEntry(section, key, mod.apply(value), null, null, null);
 						}
@@ -976,7 +977,7 @@ public final class Config extends Context implements ConfigEventListener {
 		configMap.setSection(section(name), preLines);
 
 		if (contents != null)
-			for (Map.Entry<String,Object> e : contents.entrySet())
+			for (var e : contents.entrySet())
 				set(section(name) + '/' + e.getKey(), e.getValue());
 
 		return this;
@@ -1045,7 +1046,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 */
 	public Config load(Map<String,Map<String,Object>> m) throws SerializeException {
 		if (m != null)
-			for (Map.Entry<String,Map<String,Object>> e : m.entrySet()) {
+			for (var e : m.entrySet()) {
 				setSection(e.getKey(), null, e.getValue());
 			}
 		return this;
@@ -1105,10 +1106,8 @@ public final class Config extends Context implements ConfigEventListener {
 
 	/**
 	 * Closes this configuration object by unregistering it from the underlying config map.
-	 *
-	 * @throws IOException Thrown by underlying stream.
 	 */
-	public void close() throws IOException {
+	public void close() {
 		configMap.unregister(this);
 	}
 
@@ -1184,8 +1183,7 @@ public final class Config extends Context implements ConfigEventListener {
 
 	@Override /* ConfigEventListener */
 	public synchronized void onConfigChange(ConfigEvents events) {
-		for (ConfigEventListener l : listeners)
-			l.onConfigChange(events);
+		listeners.forEach(x -> x.onConfigChange(events));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1197,26 +1195,25 @@ public final class Config extends Context implements ConfigEventListener {
 			return "";
 		if (serializer == null)
 			serializer = this.serializer;
-		Class<?> c = value.getClass();
-		if (value instanceof CharSequence)
-			return nlIfMl((CharSequence)value);
+		var c = value.getClass();
+		if (value instanceof CharSequence cs)
+			return nlIfMl(cs);
 		if (isSimpleType(c))
 			return value.toString();
 
-		if (value instanceof byte[]) {
+		if (value instanceof byte[] b) {
 			String s = null;
-			byte[] b = (byte[])value;
 			if (binaryFormat == BinaryFormat.HEX)
 				s = toHex(b);
 			else if (binaryFormat == BinaryFormat.SPACED_HEX)
 				s = toSpacedHex(b);
 			else
 				s = base64Encode(b);
-			int l = binaryLineLength;
+			var l = binaryLineLength;
 			if (l <= 0 || s.length() <= l)
 				return s;
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < s.length(); i += l)
+			var sb = new StringBuilder();
+			for (var i = 0; i < s.length(); i += l)
 				sb.append(binaryLineLength > 0 ? "\n" : "").append(s.substring(i, Math.min(s.length(), i + l)));
 			return sb.toString();
 		}
@@ -1233,7 +1230,7 @@ public final class Config extends Context implements ConfigEventListener {
 	}
 
 	private String nlIfMl(CharSequence cs) {
-		String s = cs.toString();
+		var s = cs.toString();
 		if (s.indexOf('\n') != -1 && multiLineValuesOnSeparateLines)
 			return "\n" + s;
 		return s;
@@ -1242,20 +1239,20 @@ public final class Config extends Context implements ConfigEventListener {
 	private boolean isSimpleType(Type t) {
 		if (! (t instanceof Class))
 			return false;
-		Class<?> c = (Class<?>)t;
+		var c = (Class<?>)t;
 		return (c == String.class || c.isPrimitive() || c.isAssignableFrom(Number.class) || c == Boolean.class || c.isEnum());
 	}
 
 	private String sname(String key) {
 		assertArgNotNull("key", key);
-		int i = key.indexOf('/');
+		var i = key.indexOf('/');
 		if (i == -1)
 			return "";
 		return key.substring(0, i);
 	}
 
 	private String skey(String key) {
-		int i = key.indexOf('/');
+		var i = key.indexOf('/');
 		if (i == -1)
 			return key;
 		return key.substring(i+1);
@@ -1273,7 +1270,6 @@ public final class Config extends Context implements ConfigEventListener {
 			throw new UnsupportedOperationException("Cannot call this method on a read-only configuration.");
 	}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1281,10 +1277,5 @@ public final class Config extends Context implements ConfigEventListener {
 	@Override /* Object */
 	public String toString() {
 		return configMap.toString();
-	}
-
-	@Override /* Object */
-	protected void finalize() throws Throwable {
-		close();
 	}
 }

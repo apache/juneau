@@ -18,7 +18,6 @@ import java.beans.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.parser.*;
@@ -107,14 +106,15 @@ public class Section {
 	 */
 	public <T> Optional<T> asBean(Class<T> c, boolean ignoreUnknownProperties) throws ParseException {
 		assertArgNotNull("c", c);
+
 		if (! isPresent())
 			return empty();
 
-		Set<String> keys = configMap.getKeys(name);
+		var keys = configMap.getKeys(name);
 
-		BeanMap<T> bm = config.beanSession.newBeanMap(c);
-		for (String k : keys) {
-			BeanPropertyMeta bpm = bm.getPropertyMeta(k);
+		var bm = config.beanSession.newBeanMap(c);
+		for (var k : keys) {
+			var bpm = bm.getPropertyMeta(k);
 			if (bpm == null) {
 				if (! ignoreUnknownProperties)
 					throw new ParseException("Unknown property ''{0}'' encountered in configuration section ''{1}''.", k, name);
@@ -135,10 +135,10 @@ public class Section {
 		if (! isPresent())
 			return empty();
 
-		Set<String> keys = configMap.getKeys(name);
+		var keys = configMap.getKeys(name);
 
-		JsonMap m = new JsonMap();
-		for (String k : keys)
+		var m = new JsonMap();
+		for (var k : keys)
 			m.put(k, config.get(name + '/' + k).as(Object.class).orElse(null));
 		return optional(m);
 	}
@@ -204,24 +204,25 @@ public class Section {
 	 * @return The proxy interface.
 	 */
 	@SuppressWarnings("unchecked")
-    public <T> Optional<T> asInterface(final Class<T> c) {
-        assertArgNotNull("c", c);
+	public <T> Optional<T> asInterface(final Class<T> c) {
+		assertArgNotNull("c", c);
 
-        if (!c.isInterface())
-            throw new IllegalArgumentException("Class '" + c.getName() + "' passed to toInterface() is not an interface.");
+		if (!c.isInterface())
+			throw new IllegalArgumentException("Class '" + c.getName() + "' passed to toInterface() is not an interface.");
 
-        return optional((T) Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, (InvocationHandler) (proxy, method, args) -> {
-            BeanInfo bi = Introspector.getBeanInfo(c, null);
-            for (PropertyDescriptor pd : bi.getPropertyDescriptors()) {
-                Method rm = pd.getReadMethod(), wm = pd.getWriteMethod();
-                if (method.equals(rm))
-                    return config.get(name + '/' + pd.getName()).as(rm.getGenericReturnType()).orElse(null);
-                if (method.equals(wm))
-                    return config.set(name + '/' + pd.getName(), args[0]);
-            }
-            throw new UnsupportedOperationException("Unsupported interface method.  method='" + method + "'");
-        }));
-    }
+		return optional((T) Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, (InvocationHandler) (proxy, method, args) -> {
+			var bi = Introspector.getBeanInfo(c, null);
+			for (var pd : bi.getPropertyDescriptors()) {
+				var rm = pd.getReadMethod();
+				var wm = pd.getWriteMethod();
+				if (method.equals(rm))
+					return config.get(name + '/' + pd.getName()).as(rm.getGenericReturnType()).orElse(null);
+				if (method.equals(wm))
+					return config.set(name + '/' + pd.getName(), args[0]);
+			}
+			throw new UnsupportedOperationException("Unsupported interface method.  method='" + method + "'");
+		}));
+	}
 
 	/**
 	 * Copies the entries in this section to the specified bean by calling the public setters on that bean.
@@ -238,11 +239,11 @@ public class Section {
 		assertArgNotNull("bean", bean);
 		if (! isPresent()) throw new IllegalArgumentException("Section '"+name+"' not found in configuration.");
 
-		Set<String> keys = configMap.getKeys(name);
+		var keys = configMap.getKeys(name);
 
-		BeanMap<?> bm = config.beanSession.toBeanMap(bean);
-		for (String k : keys) {
-			BeanPropertyMeta bpm = bm.getPropertyMeta(k);
+		var bm = config.beanSession.toBeanMap(bean);
+		for (var k : keys) {
+			var bpm = bm.getPropertyMeta(k);
 			if (bpm == null) {
 				if (! ignoreUnknownProperties)
 					throw new ParseException("Unknown property ''{0}'' encountered in configuration section ''{1}''.", k, name);

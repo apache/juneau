@@ -48,7 +48,7 @@ public class Mod {
 	 * 	The function to apply to detect whether the modification has been made.
 	 * 	Can be <jk>null</jk> if you override the {@link #isApplied(String)} method.
 	 */
-	public Mod(char id, Function<String,String> applyFunction, Function<String,String> removeFunction, Function<String,Boolean> detectFunction) {
+	public Mod(char id, Function<String,String> applyFunction, Function<String,String> removeFunction, Function<String,Boolean> detectFunction) {  // NOSONAR - Intentional.
 		this.id = id;
 		this.applyFunction = applyFunction;
 		this.removeFunction = removeFunction;

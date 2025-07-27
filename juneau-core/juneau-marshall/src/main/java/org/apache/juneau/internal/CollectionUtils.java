@@ -24,6 +24,8 @@ import java.util.function.*;
  */
 public final class CollectionUtils {
 
+	private CollectionUtils() {}
+
 	/**
 	 * Creates a new set from the specified collection.
 	 *
@@ -167,6 +169,19 @@ public final class CollectionUtils {
 	}
 
 	/**
+	 * Convenience method for creating an {@link ArrayList}.
+	 *
+	 * @param <E> The element type.
+	 * @param elementType The element type.
+	 * @param values The values to initialize the list with.
+	 * @return A new modifiable list.
+	 */
+	@SafeVarargs
+	public static <E> ArrayList<E> listOf(Class<E> elementType, E...values) {
+		return list(values);
+	}
+
+	/**
 	 * Convenience method for creating an {@link ArrayList} of the specified size.
 	 *
 	 * @param <E> The element type.
@@ -263,6 +278,19 @@ public final class CollectionUtils {
 	}
 
 	/**
+	 * Convenience method for creating a {@link LinkedHashSet}.
+	 *
+	 * @param <E> The element type.
+	 * @param elementType The element type.
+	 * @param values The values to initialize the set with.
+	 * @return A new modifiable set.
+	 */
+	@SafeVarargs
+	public static <E> LinkedHashSet<E> setOf(Class<E> elementType, E...values) {
+		return set(values);
+	}
+
+	/**
 	 * Convenience method for creating an unmodifiable {@link LinkedHashSet}.
 	 *
 	 * @param <E> The element type.
@@ -344,6 +372,19 @@ public final class CollectionUtils {
 	public static <K,V> LinkedHashMap<K,V> map() {
 		LinkedHashMap<K,V> m = new LinkedHashMap<>();
 		return m;
+	}
+
+	/**
+	 * Convenience method for creating a {@link LinkedHashMap}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param keyType The key type.
+	 * @param valueType The value type.
+	 * @return A new modifiable map.
+	 */
+	public static <K,V> LinkedHashMap<K,V> mapOf(Class<K> keyType, Class<V> valueType) {
+		return map();
 	}
 
 	/**

@@ -42,9 +42,9 @@ public class XorEncodeMod extends Mod {
 
 	@Override
 	public String apply(String value) {
-		byte[] b = value.getBytes(UTF8);
-		for (int i = 0; i < b.length; i++) {
-				int j = i % KEY.length();
+		var b = value.getBytes(UTF8);
+		for (var i = 0; i < b.length; i++) {
+			var j = i % KEY.length();
 			b[i] = (byte)(b[i] ^ KEY.charAt(j));
 		}
 		return "{" + base64Encode(b) + "}";
@@ -54,9 +54,9 @@ public class XorEncodeMod extends Mod {
 	public String remove(String value) {
 		value = value.trim();
 		value = value.substring(1, value.length()-1);
-		byte[] b = base64Decode(value);
-		for (int i = 0; i < b.length; i++) {
-			int j = i % KEY.length();
+		var b = base64Decode(value);
+		for (var i = 0; i < b.length; i++) {
+			var j = i % KEY.length();
 			b[i] = (byte)(b[i] ^ KEY.charAt(j));
 		}
 		return new String(b, UTF8);

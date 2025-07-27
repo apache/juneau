@@ -202,7 +202,7 @@ public class ConfigEvent {
 
 	@Override /* Object */
 	public String toString() {
-		switch(type) {
+		switch (type) {
 			case REMOVE_SECTION:
 				return "REMOVE_SECTION("+section+")";
 			case REMOVE_ENTRY:
@@ -210,23 +210,23 @@ public class ConfigEvent {
 			case SET_SECTION:
 				return "SET_SECTION("+section+", preLines="+StringUtils.join(preLines, '|')+")";
 			case SET_ENTRY:
-				StringBuilder out = new StringBuilder("SET(");
+				var out = new StringBuilder("SET(");
 				out.append(section+(section.isEmpty() ? "" : "/") + key);
 				if (modifiers != null)
 					out.append(modifiers);
 				out.append(" = ");
-				String val = value == null ? "null" : value;
+				var val = value == null ? "null" : value;
 				if (val.indexOf('\n') != -1)
 					val = val.replaceAll("(\\r?\\n)", "$1\t");
 				if (val.indexOf('#') != -1)
-					val = val.replaceAll("#", "\\\\#");
+					val = val.replace("#", "\\#");
 				out.append(val);
 				if (isNotEmpty(comment))
 					out.append(" # ").append(comment);
 				out.append(')');
 				return out.toString();
 			default:
-				return null;
+				return null;  // NOSONAR - Intentional.
 		}
 	}
 }

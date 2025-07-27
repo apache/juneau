@@ -185,12 +185,12 @@ public class ClasspathStore extends ConfigStore {
 
 	@Override /* ConfigStore */
 	public synchronized String read(String name) throws IOException {
-		String s = cache.get(name);
+		var s = cache.get(name);
 		if (s != null)
 			return s;
 
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		try (InputStream in = cl.getResourceAsStream(name)) {
+		var cl = Thread.currentThread().getContextClassLoader();
+		try (var in = cl.getResourceAsStream(name)) {
 			if (in != null)
 				cache.put(name, IOUtils.read(in));
 		}
@@ -204,7 +204,7 @@ public class ClasspathStore extends ConfigStore {
 		if (eq(expectedContents, newContents))
 			return null;
 
-		String currentContents = read(name);
+		var currentContents = read(name);
 
 		if (expectedContents != null && ! eq(currentContents, expectedContents))
 			return currentContents;

@@ -191,7 +191,7 @@ public class MemoryStore extends ConfigStore {
 		if (eq(expectedContents, newContents))
 			return null;
 
-		String currentContents = read(name);
+		var currentContents = read(name);
 
 		if (expectedContents != null && ! eq(currentContents, expectedContents))
 			return currentContents;

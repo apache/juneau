@@ -399,10 +399,10 @@ public class FileStore extends ConfigStore {
 	public synchronized String read(String name) throws IOException {
 		name = resolveName(name);
 
-		Path p = resolveFile(name);
+		var p = resolveFile(name);
 		name = p.getFileName().toString();
 
-		String s = cache.get(name);
+		var s = cache.get(name);
 		if (s != null)
 			return s;
 
@@ -412,13 +412,13 @@ public class FileStore extends ConfigStore {
 		if (! Files.exists(p))
 			return "";
 
-		boolean isWritable = isWritable(p);
-		OpenOption[] oo = isWritable ? new OpenOption[]{READ,WRITE,CREATE} : new OpenOption[]{READ};
+		var isWritable = isWritable(p);
+		var oo = isWritable ? new OpenOption[]{READ,WRITE,CREATE} : new OpenOption[]{READ};
 
-		try (FileChannel fc = FileChannel.open(p, oo)) {
-			try (FileLock lock = isWritable ? fc.lock() : null) {
-				ByteBuffer buf = ByteBuffer.allocate(1024);
-				StringBuilder sb = new StringBuilder();
+		try (var fc = FileChannel.open(p, oo)) {
+			try (var lock = isWritable ? fc.lock() : null) {
+				var buf = ByteBuffer.allocate(1024);
+				var sb = new StringBuilder();
 				while (fc.read(buf) != -1) {
 					sb.append(charset.decode((buf.flip()))); // Fixes Java 11 issue involving overridden flip method.
 					buf.clear();
@@ -441,10 +441,10 @@ public class FileStore extends ConfigStore {
 
 		dir.mkdirs();
 
-		Path p = resolveFile(name);
+		var p = resolveFile(name);
 		name = p.getFileName().toString();
 
-		boolean exists = Files.exists(p);
+		var exists = Files.exists(p);
 
 		// Don't create the file if we're not going to match.
 		if ((!exists) && isNotEmpty(expectedContents))
@@ -454,12 +454,12 @@ public class FileStore extends ConfigStore {
 			if (newContents == null)
 				Files.delete(p);
 			else {
-				try (FileChannel fc = FileChannel.open(p, READ, WRITE, CREATE)) {
-					try (FileLock lock = fc.lock()) {
-						String currentContents = "";
+				try (var fc = FileChannel.open(p, READ, WRITE, CREATE)) {
+					try (var lock = fc.lock()) {
+						var currentContents = "";
 						if (exists) {
-							ByteBuffer buf = ByteBuffer.allocate(1024);
-							StringBuilder sb = new StringBuilder();
+							var buf = ByteBuffer.allocate(1024);
+							var sb = new StringBuilder();
 							while (fc.read(buf) != -1) {
 								sb.append(charset.decode(buf.flip()));
 								buf.clear();
@@ -508,7 +508,7 @@ public class FileStore extends ConfigStore {
 
 			// Does name already have an extension?
 			if (n == null) {
-				for (String ext : exts) {
+				for (var ext : exts) {
 					if (FileUtils.hasExtension(name, ext)) {
 						n = name;
 						break;
@@ -518,7 +518,7 @@ public class FileStore extends ConfigStore {
 
 			// Find file with the correct extension.
 			if (n == null) {
-				for (String ext : exts) {
+				for (var ext : exts) {
 					if (FileUtils.exists(dir, name + '.' + ext)) {
 						n = name + '.' + ext;
 						break;
@@ -539,8 +539,9 @@ public class FileStore extends ConfigStore {
 		try {
 			if (! Files.exists(p)) {
 				Files.createDirectories(p.getParent());
-				if (! Files.exists(p))
-					p.toFile().createNewFile();
+				if (! Files.exists(p) && ! p.toFile().createNewFile()) {
+					throw new IOException("Could not create file: " + p);
+				}
 			}
 		} catch (IOException e) {
 			return false;
@@ -571,8 +572,8 @@ public class FileStore extends ConfigStore {
 
 		WatcherThread(File dir, WatcherSensitivity s) throws Exception {
 			watchService = FileSystems.getDefault().newWatchService();
-			WatchEvent.Kind<?>[] kinds = new WatchEvent.Kind[]{ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY};
-			WatchEvent.Modifier modifier = lookupModifier(s);
+			var kinds = new WatchEvent.Kind[]{ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY};
+			var modifier = lookupModifier(s);
 			dir.toPath().register(watchService, kinds, modifier);
 		}
 
@@ -596,8 +597,8 @@ public class FileStore extends ConfigStore {
 			try {
 				WatchKey key;
 				while ((key = watchService.take()) != null) {
-					for (WatchEvent<?> event : key.pollEvents()) {
-						WatchEvent.Kind<?> kind = event.kind();
+					for (var event : key.pollEvents()) {
+						var kind = event.kind();
 						if (kind != OVERFLOW)
 							FileStore.this.onFileEvent(((WatchEvent<Path>)event));
 					}
@@ -628,11 +629,12 @@ public class FileStore extends ConfigStore {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected synchronized void onFileEvent(WatchEvent<Path> e) throws IOException {
-		String fn = e.context().getFileName().toString();
+		var fn = e.context().getFileName().toString();
 
-		String oldContents = cache.get(fn);
+		var oldContents = cache.get(fn);
 		cache.remove(fn);
-		String newContents = read(fn);
+		var newContents = read(fn);
+
 		if (! eq(oldContents, newContents)) {
 			update(fn, newContents);
 		}

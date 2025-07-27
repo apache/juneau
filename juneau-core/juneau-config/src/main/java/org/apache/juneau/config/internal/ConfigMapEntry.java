@@ -33,23 +33,23 @@ public class ConfigMapEntry {
 
 	static final ConfigMapEntry NULL = new ConfigMapEntry(null, null, null, null, null);
 
-//	private final static AsciiSet MOD_CHARS = AsciiSet.create("#$%&*+^@~");
-
 	ConfigMapEntry(String line, List<String> preLines) {
 		this.rawLine = line;
-		int i = line.indexOf('=');
-		String key = line.substring(0, i).trim();
+		var i = line.indexOf('=');
+		var key2 = line.substring(0, i).trim();
 
-		int m1 = key.indexOf('<'), m2 = key.indexOf('>');
-		modifiers = nullIfEmpty((m1 > -1 && m2 > m1) ? key.substring(m1+1, m2) : null);
+		var m1 = key2.indexOf('<');
+		var m2 = key2.indexOf('>');
 
-		this.key = m1 == -1 ? key : key.substring(0, m1);
+		modifiers = nullIfEmpty((m1 > -1 && m2 > m1) ? key2.substring(m1+1, m2) : null);
+
+		this.key = m1 == -1 ? key2 : key2.substring(0, m1);
 
 		line = line.substring(i+1);
 
 		i = line.indexOf('#');
 		if (i != -1) {
-			String[] l2 = split(line, '#', 2);
+			var l2 = split(line, '#', 2);
 			line = l2[0];
 			if (l2.length == 2)
 				this.comment = l2[1].trim();
@@ -121,11 +121,11 @@ public class ConfigMapEntry {
 	Writer writeTo(Writer w) throws IOException {
 		if (value == null)
 			return w;
-		for (String pl : preLines)
+		for (var pl : preLines)
 			w.append(pl).append('\n');
 		if (rawLine != null) {
-			for (int i = 0; i < rawLine.length(); i++) {
-				char c = rawLine.charAt(i);
+			for (var i = 0; i < rawLine.length(); i++) {
+				var c = rawLine.charAt(i);
 				if (c == '\n')
 					w.append('\n').append('\t');
 				else if (c != '\r')
@@ -135,12 +135,12 @@ public class ConfigMapEntry {
 		} else {
 			w.append(key);
 			if (modifiers != null)
-				w.append('<').append(new String(modifiers)).append('>');
+				w.append('<').append(modifiers).append('>');
 			w.append(" = ");
 
-			String val = value;
-			for (int i = 0; i < val.length(); i++) {
-				char c = val.charAt(i);
+			var val = value;
+			for (var i = 0; i < val.length(); i++) {
+				var c = val.charAt(i);
 				if (c == '\n')
 					w.append('\n').append('\t');
 				else if (c != '\r') {

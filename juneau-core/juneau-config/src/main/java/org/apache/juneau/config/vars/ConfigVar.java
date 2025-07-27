@@ -64,7 +64,7 @@ public class ConfigVar extends DefaultingVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		return session.getBean(Config.class).get().get(key).orElse(null);
+		return session.getBean(Config.class).map(x -> x.get(key).orElse(null)).orElse(null);
 	}
 
 	@Override /* Var */
