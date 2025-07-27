@@ -319,7 +319,6 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a collection.
 	 */
-	@SuppressWarnings("unchecked")
 	public <E> FluentCollectionAssertion<E,R> asCollection(Class<E> elementType) {
 		assertArgNotNull("elementType", elementType);
 		return new FluentCollectionAssertion<>(this, cast(Collection.class), returns());
@@ -331,7 +330,6 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a collection.
 	 */
-	@SuppressWarnings("unchecked")
 	public FluentStringListAssertion<R> asStringList() {
 		return new FluentStringListAssertion<>(this, cast(List.class), returns());
 	}
@@ -343,7 +341,6 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not an instance of {@link Comparable}.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T2 extends Comparable<T2>> FluentComparableAssertion<T2,R> asComparable() {
 		return new FluentComparableAssertion<>(this, (T2)cast(Comparable.class), returns());
 	}
@@ -396,7 +393,6 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a list.
 	 */
-	@SuppressWarnings("unchecked")
 	public <E> FluentListAssertion<E,R> asList(Class<E> elementType) {
 		assertArgNotNull("elementType", elementType);
 		return new FluentListAssertion<>(this, cast(List.class), returns());
@@ -422,7 +418,6 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a map.
 	 */
-	@SuppressWarnings("unchecked")
 	public <K,V> FluentMapAssertion<K,V,R> asMap(Class<K> keyType, Class<V> valueType) {
 		assertArgNotNull("keyType", keyType);
 		assertArgNotNull("valueType", valueType);
@@ -460,7 +455,6 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a bean.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T2> FluentBeanListAssertion<T2,R> asBeanList(Class<T2> beanType) {
 		assertArgNotNull("beanType", beanType);
 		return new FluentBeanListAssertion<>(this, cast(List.class), returns());

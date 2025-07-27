@@ -148,7 +148,7 @@ public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 	 * @return A new assertion object.
 	 */
 	public static <E> ListAssertion<E> create(Stream<E> value) {
-		return new ListAssertion<>(value == null ? null : value.collect(Collectors.toList()));
+		return new ListAssertion<>(value == null ? null : value.toList());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

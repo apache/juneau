@@ -21,7 +21,6 @@ import static java.util.Arrays.*;
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
-import java.util.stream.*;
 
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
@@ -176,7 +175,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* FluentObjectAssertion */
-	public FluentArrayAssertion<E,R> asTransformed(Function<E[],E[]> function) {
+	public FluentArrayAssertion<E,R> asTransformed(Function<E[],E[]> function) {  // NOSONAR - Intentional.
 		return new FluentArrayAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -191,7 +190,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @return A new fluent string assertion.
 	 */
 	public FluentStringListAssertion<R> asStrings() {
-		return new FluentStringListAssertion<>(this, valueIsNull() ? null : stream(value()).map(StringUtils::stringify).collect(Collectors.toList()), returns());
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : stream(value()).map(StringUtils::stringify).toList(), returns());
 	}
 
 	/**
@@ -201,7 +200,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @return A new fluent string list assertion.  Never <jk>null</jk>.
 	 */
 	public FluentStringListAssertion<R> asStrings(Function<E,String> function) {
-		List<String> l = valueIsNull() ? null : stream(value()).map(x -> function.apply(x)).collect(Collectors.toList());
+		List<String> l = valueIsNull() ? null : stream(value()).map(function::apply).toList();
 		return new FluentStringListAssertion<>(this, l, returns());
 	}
 
@@ -221,7 +220,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @return A fluent string assertion.  Never <jk>null</jk>.
 	 */
 	public FluentStringAssertion<R> asCdl(Function<E,String> function) {
-		List<String> l = valueIsNull() ? null : stream(value()).map(x -> function.apply(x)).collect(Collectors.toList());
+		List<String> l = valueIsNull() ? null : stream(value()).map(function::apply).toList();
 		return new FluentStringAssertion<>(this, join(l, ','), returns());
 	}
 
@@ -288,7 +287,6 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	@SuppressWarnings("unchecked")
 	public R isHas(E...entries) throws AssertionError {
 		assertArgNotNull("entries", entries);
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
@@ -306,10 +304,9 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	public final R is(Predicate<E>...tests) throws AssertionError {
 		isSize(tests.length);
 		for (int i = 0, j = length(); i < j; i++) {
-			Predicate<E> t = tests[i];
-			if (t != null)
-				if (! t.test(at(i)))
-					throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
+			var t = tests[i];
+			if (t != null && ! t.test(at(i)))
+				throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}
 		return returns();
 	}
@@ -323,7 +320,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	public R isAny(Predicate<E> test) throws AssertionError {
 		assertArgNotNull("test", test);
-		for (E v : value())
+		for (var v : value())
 			if (test.test(v))
 				return returns();
 		throw error(MSG_arrayDidntContainAnyMatchingValue, (Object)value());

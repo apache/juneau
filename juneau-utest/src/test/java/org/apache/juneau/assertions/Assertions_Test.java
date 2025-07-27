@@ -33,11 +33,6 @@ public class Assertions_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void a00_basic() {
-		new Assertions();
-	}
-
-	@Test
 	public void a01_assertDate() throws Exception {
 		assertDate(new Date()).isAfter(new Date(0));
 	}

@@ -156,7 +156,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* FluentObjectAssertion */
-	public FluentThrowableAssertion<T,R> asTransformed(Function<T,T> function) {
+	public FluentThrowableAssertion<T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
 		return new FluentThrowableAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -313,7 +313,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * @return An assertion against the caused-by.  Never <jk>null</jk>.
 	 */
 	public <X extends Throwable> FluentThrowableAssertion<X,R> asCausedBy(Class<X> type) {
-		Throwable t = map(Throwable::getCause).orElse(null);
+		var t = map(Throwable::getCause).orElse(null);
 		if (t == null || type.isInstance(t))
 			return new FluentThrowableAssertion<>(this, type.cast(t), returns());
 		throw error(MSG_causedByExceptionNotExpectedType, type, t.getClass());
@@ -455,8 +455,8 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 
 	@Override
 	protected boolean equals(Object o1, Object o2) {
-		if (o1 instanceof Throwable && o2 instanceof Throwable)
-			return ObjectUtils.eq((Throwable)o1, (Throwable)o2, (x,y)->ObjectUtils.eq(x.getClass(),y.getClass()) && ObjectUtils.eq(x.getMessage(),y.getMessage()));
+		if (o1 instanceof Throwable o1t && o2 instanceof Throwable o2t)
+			return ObjectUtils.eq(o1t, o2t, (x,y)->ObjectUtils.eq(x.getClass(),y.getClass()) && ObjectUtils.eq(x.getMessage(),y.getMessage()));
 		return super.equals(o1, o2);
 	}
 }

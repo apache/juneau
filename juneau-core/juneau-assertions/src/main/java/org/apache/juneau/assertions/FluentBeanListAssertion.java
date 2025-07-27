@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static java.util.stream.Collectors.*;
-
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
@@ -176,7 +174,7 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 	 */
 	public FluentListAssertion<Map<String,Object>,R> asPropertyMaps(String...names) {
 		String[] n = StringUtils.split(names, ',');
-		return new FluentListAssertion<>(this, value().stream().map(x -> beanMap(x).getProperties(n)).collect(toList()), returns());
+		return new FluentListAssertion<>(this, value().stream().map(x -> beanMap(x).getProperties(n)).toList(), returns());
 	}
 
 	/**
@@ -186,7 +184,7 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 	 * @return This object.
 	 */
 	public FluentListAssertion<Object,R> asProperty(String name) {
-		return new FluentListAssertion<>(this, value().stream().map(x -> beanMap(x).get(name)).collect(toList()), returns());
+		return new FluentListAssertion<>(this, value().stream().map(x -> beanMap(x).get(name)).toList(), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -176,7 +176,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	public FluentPrimitiveArrayAssertion(Assertion creator, T value, R returns) {
 		super(creator, value, returns);
 		if (value != null) {
-			Class<?> c = value.getClass();
+			var c = value.getClass();
 			if (! (c.isArray() && c.getComponentType().isPrimitive()))
 				throw new BasicAssertionError(MSG_objectWasNotAnArray, value.getClass());
 		}
@@ -187,7 +187,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* FluentObjectAssertion */
-	public FluentPrimitiveArrayAssertion<E,T,R> asTransformed(Function<T,T> function) {
+	public FluentPrimitiveArrayAssertion<E,T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
 		return new FluentPrimitiveArrayAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -220,7 +220,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 * @return A new assertion.
 	 */
 	public FluentIntegerAssertion<R> asLength() {
-		return new FluentIntegerAssertion<R>(this, valueIsNull() ? null : Array.getLength(value()), returns());
+		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : Array.getLength(value()), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -234,7 +234,6 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	@SuppressWarnings("unchecked")
 	public R isHas(E...entries) throws AssertionError {
 		assertArgNotNull("entries", entries);
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
@@ -252,10 +251,9 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	public final R is(Predicate<E>...tests) throws AssertionError {
 		isSize(tests.length);
 		for (int i = 0, j = length2(); i < j; i++) {
-			Predicate<E> t = tests[i];
-			if (t != null)
-				if (! t.test(at(i)))
-					throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
+			var t = tests[i];
+			if (t != null && ! t.test(at(i)))
+				throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}
 		return returns();
 	}
@@ -349,7 +347,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNotContains(E entry) throws AssertionError {
-		for (int i = 0; i < length2(); i++)
+		for (var i = 0; i < length2(); i++)
 			if (eq(at(i), entry))
 				throw error(MSG_arrayContainedUnexpectedValue, entry, value());
 		return returns();
@@ -397,7 +395,6 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("unchecked")
 	private E at(int index) {
 		return valueIsNull() || index < 0 || index >= length2() ? null : (E)Array.get(value(), index);
 	}
@@ -409,7 +406,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	@Override
 	public String toString() {
 		if (valueIsNull())
-			return null;
+			return null;  // NOSONAR - Intentional.
 		return STRINGIFIERS.get(value().getClass().getComponentType()).apply(value());
 	}
 }

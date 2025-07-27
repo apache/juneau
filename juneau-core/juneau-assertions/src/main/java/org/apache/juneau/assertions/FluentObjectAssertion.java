@@ -109,11 +109,11 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		MSG_unexpectedValueFound = MESSAGES.getString("unexpectedValueFound"),
 		MSG_unexpectedValue2 = MESSAGES.getString("unexpectedValue2");
 
-	private static JsonSerializer JSON = JsonSerializer.create()
+	private static final JsonSerializer JSON = JsonSerializer.create()
 		.json5()
 		.build();
 
-	private static JsonSerializer JSON_SORTED = JsonSerializer.create()
+	private static final JsonSerializer JSON_SORTED = JsonSerializer.create()
 		.json5()
 		.sortProperties()
 		.sortCollections()
@@ -264,7 +264,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @param function The function to apply.
 	 * @return This object.
 	 */
-	public FluentObjectAssertion<T,R> asTransformed(Function<T,T> function) {
+	public FluentObjectAssertion<T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
 		return new FluentObjectAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -381,9 +381,8 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	@SuppressWarnings("unchecked")
 	public R isAny(T...values) throws AssertionError {
-		for (T v : values)
+		for (var v : values)
 			if (equals(orElse(null), v))
 				return returns();
 		throw error(MSG_expectedValueNotFound, values, value);
@@ -396,9 +395,8 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	@SuppressWarnings("unchecked")
 	public R isNotAny(T...values) throws AssertionError {
-		for (T v : values)
+		for (var v : values)
 			if (equals(orElse(null), v))
 				throw error(MSG_unexpectedValueFound, v, value);
 		return returns();
@@ -451,8 +449,8 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isSameSerializedAs(Object o, WriterSerializer serializer) {
-		String s1 = serializer.toString(value);
-		String s2 = serializer.toString(o);
+		var s1 = serializer.toString(value);
+		var s2 = serializer.toString(o);
 		if (ne(s1, s2))
 			throw error(MSG_unexpectedComparison, s2, s1);
 		return returns();

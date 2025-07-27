@@ -116,23 +116,22 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Predicate */
-	@SuppressWarnings({"unchecked","rawtypes"})
 	public boolean test(T t) {
 		failedMessage.remove();
-		boolean b = inner.test(t);
+		var b = inner.test(t);
 		if (! b) {
-			String m = message;
-			Object[] args = new Object[this.args.length];
-			for (int i = 0; i < args.length; i++) {
-				Object a = this.args[i];
-				if (a instanceof Function)
-					args[i] = ((Function)a).apply(t);
+			var m = message;
+			var oargs = new Object[this.args.length];
+			for (var i = 0; i < oargs.length; i++) {
+				var a = this.args[i];
+				if (a instanceof Function af)  // NOSONAR - Intentional.
+					oargs[i] = af.apply(t);
 				else
-					args[i] = a;
+					oargs[i] = a;
 			}
-			m = format(m, args);
-			if (inner instanceof AssertionPredicate)
-				m += "\n\t" + ((AssertionPredicate<?>)inner).getFailureMessage();
+			m = format(m, oargs);
+			if (inner instanceof AssertionPredicate inner2)  // NOSONAR - Intentional.
+				m += "\n\t" + inner2.getFailureMessage();
 			failedMessage.set(m);
 		}
 		return inner.test(t);
@@ -185,14 +184,14 @@ public class AssertionPredicate<T> implements Predicate<T> {
 		@Override /* Predicate */
 		public boolean test(T t) {
 			failedMessage.remove();
-			for (int i = 0; i < inner.length; i++) {
-				Predicate<T> p = inner[i];
+			for (var i = 0; i < inner.length; i++) {
+				var p = inner[i];
 				if (p != null) {
-					boolean b = p.test(t);
+					var b = p.test(t);
 					if (! b) {
-						String m = format(MSG_predicateTestFailed, i+1);
-						if (p instanceof AssertionPredicate)
-							m += "\n\t" + ((AssertionPredicate<?>)p).getFailureMessage();
+						var m = format(MSG_predicateTestFailed, i+1);
+						if (p instanceof AssertionPredicate p2)  // NOSONAR - Intentional.
+							m += "\n\t" + p2.getFailureMessage();
 						failedMessage.set(m);
 						return false;
 					}
@@ -232,11 +231,10 @@ public class AssertionPredicate<T> implements Predicate<T> {
 		@Override /* Predicate */
 		public boolean test(T t) {
 			failedMessage.remove();
-			for (Predicate<T> p : inner)
-				if (p != null)
-					if (p.test(t))
-						return true;
-			String m = format(MSG_noPredicateTestsPassed);
+			for (var p : inner)
+				if (p != null && p.test(t))
+					return true;
+			var m = format(MSG_noPredicateTestsPassed);
 			failedMessage.set(m);
 			return false;
 		}
@@ -270,9 +268,9 @@ public class AssertionPredicate<T> implements Predicate<T> {
 		@Override /* Predicate */
 		public boolean test(T t) {
 			failedMessage.remove();
-			Predicate<T> p = inner;
+			var p = inner;
 			if (p != null) {
-				boolean b = p.test(t);
+				var b = p.test(t);
 				if (b) {
 					failedMessage.set(format(MSG_predicateTestsUnexpectedlyPassed));
 					return false;

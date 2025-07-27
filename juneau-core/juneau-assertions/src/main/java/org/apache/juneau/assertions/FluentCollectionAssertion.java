@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
-import java.util.stream.*;
 
 import org.apache.juneau.common.internal.StringUtils;
 import org.apache.juneau.cp.*;
@@ -162,7 +161,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* FluentObjectAssertion */
-	public FluentCollectionAssertion<E,R> asTransformed(Function<Collection<E>,Collection<E>> function) {
+	public FluentCollectionAssertion<E,R> asTransformed(Function<Collection<E>,Collection<E>> function) {  // NOSONAR - Intentional.
 		return new FluentCollectionAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -172,7 +171,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @return A new fluent string assertion.
 	 */
 	public FluentStringListAssertion<R> asStrings() {
-		return new FluentStringListAssertion<>(this, valueIsNull() ? null : value().stream().map(StringUtils::stringify).collect(Collectors.toList()), returns());
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : value().stream().map(StringUtils::stringify).toList(), returns());
 	}
 
 
@@ -186,7 +185,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @return A new assertion.
 	 */
 	public FluentIntegerAssertion<R> asSize() {
-		return new FluentIntegerAssertion<R>(this, valueIsNull() ? null : value().size(), returns());
+		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().size(), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -225,7 +224,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isContains(E entry) throws AssertionError {
-		for (Object v : value())
+		for (var v : value())
 			if (eq(v, entry))
 				return returns();
 		throw error(MSG_collectionDidNotContainExpectedValue, entry, value());
@@ -256,7 +255,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	public R isAny(Predicate<E> test) throws AssertionError {
 		if (test == null)
 			return returns();
-		for (E v : value())
+		for (var v : value())
 			if (test.test(v))
 				return returns();
 		throw error(MSG_collectionDidNotContainTestedValue, value());

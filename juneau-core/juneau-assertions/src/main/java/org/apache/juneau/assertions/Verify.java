@@ -102,7 +102,8 @@ public class Verify {
 	public String isType(Class<?> type) {
 		if ((type == null && o == null) || (type != null && type.isInstance(o)))
 			return null;
-		return msg != null ? msg.get() : StringUtils.format(MSG_unexpectedType, type, (o == null ? null : o.getClass()));
+		var c = o == null ? null : o.getClass();
+		return msg != null ? msg.get() : StringUtils.format(MSG_unexpectedType, type, c);
 	}
 
 	/**

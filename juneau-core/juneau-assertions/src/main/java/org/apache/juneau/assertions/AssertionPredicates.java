@@ -51,7 +51,9 @@ import org.apache.juneau.cp.*;
  */
 public class AssertionPredicates {
 
-	private static Function<Object,String> TYPENAME = x -> x == null ? null : x.getClass().getName();
+	private AssertionPredicates() {}
+
+	private static final Function<Object,String> TYPENAME = x -> x == null ? null : x.getClass().getName();
 
 	private static final Messages MESSAGES = Messages.of(AssertionPredicates.class, "Messages");
 	private static final String
@@ -234,7 +236,7 @@ public class AssertionPredicates {
 	 */
 	public static final <T> AssertionPredicate<T> match(String value) {
 		assertArgNotNull("value", value);
-		Pattern p = StringUtils.getMatchPattern(value);
+		var p = StringUtils.getMatchPattern(value);
 		return test(x -> x != null && p.matcher(stringify(x)).matches(), MSG_valueDidNotMatchPattern, value, VALUE);
 	}
 
@@ -250,7 +252,7 @@ public class AssertionPredicates {
 	 */
 	public static final <T> AssertionPredicate<T> regex(String expression) {
 		assertArgNotNull("expression", expression);
-		Pattern p = Pattern.compile(expression);
+		var p = Pattern.compile(expression);
 		return test(x -> x != null && p.matcher(stringify(x)).matches(), MSG_valueDidNotMatchPattern, expression, VALUE);
 	}
 
@@ -277,7 +279,7 @@ public class AssertionPredicates {
 	 */
 	public static final <T> AssertionPredicate<T> regex(String expression, int flags) {
 		assertArgNotNull("expression", expression);
-		Pattern p = Pattern.compile(expression, flags);
+		var p = Pattern.compile(expression, flags);
 		return test(x -> x != null && p.matcher(stringify(x)).matches(), MSG_valueDidNotMatchPattern, expression, VALUE);
 	}
 

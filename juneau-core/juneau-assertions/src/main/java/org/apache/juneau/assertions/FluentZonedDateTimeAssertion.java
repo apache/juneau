@@ -178,11 +178,11 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 */
 	public R is(ZonedDateTime value, ChronoUnit precision) throws AssertionError {
 		assertArgNotNull("precision", precision);
-		ZonedDateTime v = orElse(null);
+		var v = orElse(null);
 		if (valueIsNull() && value == null)
 			return returns();
 		if (valueIsNotNull() && value != null) {
-			Duration d = Duration.between(value(), value);
+			var d = Duration.between(value(), value);
 			if (d.compareTo(precision.getDuration()) <= 0)
 				return returns();
 		}

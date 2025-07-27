@@ -32,11 +32,6 @@ public class AssertionPredicates_Test {
 	private static StringAssertion A1 = assertString("foo").setSilent(), A2 = assertString(empty()).setSilent();
 
 	@Test
-	public void a00_dummyConstructor() {
-		new AssertionPredicates();
-	}
-
-	@Test
 	public void a01_any() {
 		A1.is(any());
 		A2.is(any());

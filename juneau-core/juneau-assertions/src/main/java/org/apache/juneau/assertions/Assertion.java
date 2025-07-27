@@ -72,7 +72,7 @@ public class Assertion {
 
 	private String msg;
 	private Object[] msgArgs;
-	private PrintStream out = System.err;
+	private PrintStream out = System.err;  // NOSONAR - Intentional.
 	private Class<? extends RuntimeException> throwable;
 
 	/**
@@ -127,7 +127,7 @@ public class Assertion {
 	 */
 	@FluentSetter
 	public Assertion setStdOut() {
-		return setOut(System.out);
+		return setOut(System.out);  // NOSONAR - Intentional.
 	}
 
 	/**
@@ -262,7 +262,6 @@ public class Assertion {
 	 * @param c The object to get the class name for.
 	 * @return The class name for an object.
 	 */
-	@SuppressWarnings("unchecked")
 	protected static <E> Class<E[]> arrayClass(Class<E> c) {
 		return (Class<E[]>)Array.newInstance(c,0).getClass();
 	}

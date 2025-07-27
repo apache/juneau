@@ -13,7 +13,6 @@
 package org.apache.juneau.assertions;
 
 import static java.util.Arrays.*;
-import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
@@ -179,7 +178,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * @param function The transform to apply.
 	 * @return A new assertion.
 	 */
-	public FluentListAssertion<E,R> asApplied2(Function<List<E>,List<E>> function) {
+	public FluentListAssertion<E,R> asApplied2(Function<List<E>,List<E>> function) {  // NOSONAR - Intentional.
 		return new FluentListAssertion<>(this, function.apply((List<E>)orElse(null)), returns());
 	}
 
@@ -272,7 +271,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * @return A new fluent string list assertion.  Never <jk>null</jk>.
 	 */
 	public FluentStringListAssertion<R> asStrings(Function<E,String> function) {
-		List<String> l = valueIsNull() ? null : value().stream().map(x -> function.apply(x)).collect(toList());
+		List<String> l = valueIsNull() ? null : value().stream().map(function::apply).toList();
 		return new FluentStringListAssertion<>(this, l, returns());
 	}
 
@@ -292,7 +291,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * @return A fluent string assertion.  Never <jk>null</jk>.
 	 */
 	public FluentStringAssertion<R> asCdl(Function<E,String> function) {
-		List<String> l = valueIsNull() ? null : value().stream().map(x -> function.apply(x)).collect(toList());
+		List<String> l = valueIsNull() ? null : value().stream().map(function::apply).toList();
 		return new FluentStringAssertion<>(this, join(l, ','), returns());
 	}
 
@@ -307,7 +306,6 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	@SuppressWarnings("unchecked")
 	public R isHas(E...entries) throws AssertionError {
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
  		return isEach(p);
@@ -326,7 +324,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	public final R isEach(Predicate<E>...tests) throws AssertionError {
 		isSize(tests.length);
 		for (int i = 0, j = getSize(); i < j; i++) {
-			Predicate<E> t = tests[i];
+			var t = tests[i];
 			if (t != null && ! t.test(at(i)))
 				throw error(MSG_listDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}

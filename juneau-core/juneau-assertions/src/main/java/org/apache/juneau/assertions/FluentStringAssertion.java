@@ -216,7 +216,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* FluentObjectAssertion */
-	public FluentStringAssertion<R> asTransformed(Function<String,String> function) {
+	public FluentStringAssertion<R> asTransformed(Function<String,String> function) {  // NOSONAR - Intentional.
 		return new FluentStringAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -299,7 +299,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return This object.
 	 */
 	public FluentIntegerAssertion<R> asLength() {
-		return new FluentIntegerAssertion<R>(this, valueIsNull() ? null : value().length(), returns());
+		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().length(), returns());
 	}
 
 	/**
@@ -347,7 +347,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	@Override
 	public R is(String value) throws AssertionError {
-		String s = orElse(null);
+		var s = orElse(null);
 		if (ne(value, s))
 			throw error(MSG_stringDifferedAtPosition, diffPosition(value, s), fix(value), fix(s));
 		return returns();
@@ -362,7 +362,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	@Override
 	public R isNot(String value) throws AssertionError {
-		String s = orElse(null);
+		var s = orElse(null);
 		if (eq(value, s))
 			throw error(MSG_stringEqualedUnexpected, fix(s));
 		return returns();
@@ -392,8 +392,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isLines(String...lines) throws AssertionError {
 		assertArgNotNull("lines", lines);
-		String v = join(lines, '\n');
-		String s = value();
+		var v = join(lines, '\n');
+		var s = value();
 		if (ne(v, s))
 			throw error(MSG_stringDifferedAtPosition, diffPosition(v, s), fix(v), fix(s));
 		return returns();
@@ -425,7 +425,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		assertArgNotNull("lines", lines);
 
 		// Must work for windows too.
-		String[] e = StringUtils.join(lines, '\n').trim().split("[\r\n]+"), a = value().trim().split("[\r\n]+");
+		var e = StringUtils.join(lines, '\n').trim().split("[\r\n]+");
+		var a = value().trim().split("[\r\n]+");
 
 		if (e.length != a.length)
 			throw error(MSG_expectedStringHadDifferentNumbersOfLines, e.length, a.length);
@@ -433,7 +434,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		Arrays.sort(e);
 		Arrays.sort(a);
 
-		for (int i = 0; i < e.length; i++)
+		for (var i = 0; i < e.length; i++)
 			if (! e[i].equals(a[i]))
 				throw error(MSG_expectedStringHadDifferentValuesAtLine, i+1, e[i], a[i]);
 
@@ -448,7 +449,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isIc(String value) throws AssertionError {
-		String s = orElse(null);
+		var s = orElse(null);
 		if (neic(value, s))
 			throw error(MSG_stringDifferedAtPosition, diffPositionIc(value, s), fix(value), fix(s));
 		return returns();
@@ -462,7 +463,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNotIc(String value) throws AssertionError {
-		String s = orElse(null);
+		var s = orElse(null);
 		if (eqic(value, s))
 			throw error(MSG_stringEqualedUnexpected, fix(s));
 		return returns();
@@ -477,8 +478,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isContains(String...values) throws AssertionError {
 		assertArgNotNull("values", values);
-		String s = orElse(null);
-		for (String substring : values)
+		var s = orElse(null);
+		for (var substring : values)
 			if (substring != null && ! StringUtils.contains(s, substring))
 				throw error(MSG_stringDidNotContainExpectedSubstring, fix(substring), fix(s));
 		return returns();
@@ -493,8 +494,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isNotContains(String...values) throws AssertionError {
 		assertArgNotNull("values", values);
-		String s = orElse(null);
-		for (String substring : values)
+		var s = orElse(null);
+		for (var substring : values)
 			if (substring != null && StringUtils.contains(s, substring))
 				throw error(MSG_stringContainedUnexpectedSubstring, fix(substring), fix(s));
 		return returns();
@@ -507,7 +508,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isEmpty() throws AssertionError {
-		String s = orElse(null);
+		var s = orElse(null);
 		if (s != null && ! s.isEmpty())
 			throw error(MSG_stringWasNotEmpty, fix(s));
 		return returns();
@@ -520,7 +521,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNotEmpty() throws AssertionError {
-		String s = orElse(null);
+		var s = orElse(null);
 		if (s == null)
 			throw error(MSG_stringWasNull);
 		if (s.isEmpty())
@@ -564,8 +565,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isPattern(String regex, int flags) throws AssertionError {
 		assertArgNotNull("regex", regex);
-		Pattern p = Pattern.compile(regex, flags);
-		String s = value();
+		var p = Pattern.compile(regex, flags);
+		var s = value();
 		if (! p.matcher(s).matches())
 			throw error(MSG_stringDidNotMatchExpectedPattern, fix(regex), fix(s));
 		return returns();
@@ -580,7 +581,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isPattern(Pattern pattern) throws AssertionError {
 		assertArgNotNull("pattern", pattern);
-		String s = value();
+		var s = value();
 		if (! pattern.matcher(s).matches())
 			throw error(MSG_stringDidNotMatchExpectedPattern, fix(pattern.pattern()), fix(s));
 		return returns();
@@ -595,7 +596,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isStartsWith(String string) {
 		assertArgNotNull("string", string);
-		String s = value();
+		var s = value();
 		if (! s.startsWith(string))
 			throw error(MSG_stringDidNotStartWithExpected, fix(string), fix(s));
 		return returns();
@@ -610,7 +611,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isEndsWith(String string) {
 		assertArgNotNull("string", string);
-		String s = value();
+		var s = value();
 		if (! s.endsWith(string))
 			throw error(MSG_stringDidNotEndWithExpected, fix(string), fix(s));
 		return returns();
@@ -670,7 +671,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 
 	private String fix(String text) {
 		if (javaStrings)
-			text = text.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t");
+			text = text.replace("\\", "\\\\").replace("\n", "\\n").replace("\t", "\\t");
 		return text;
 	}
 }

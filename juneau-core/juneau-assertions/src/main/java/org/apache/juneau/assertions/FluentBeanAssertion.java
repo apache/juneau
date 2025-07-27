@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static java.util.Arrays.*;
 
@@ -139,7 +138,7 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* FluentObjectAssertion */
-	public FluentBeanAssertion<T,R> asTransformed(Function<T,T> function) {
+	public FluentBeanAssertion<T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
 		return new FluentBeanAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -172,7 +171,7 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 */
 	public FluentListAssertion<Object,R> asProperties(String...names) {
 		BeanMap<T> bm = toBeanMap();
-		return new FluentListAssertion<>(this, stream(names).map(x -> bm.get(x)).collect(toList()), returns());
+		return new FluentListAssertion<>(this, stream(names).map(bm::get).toList(), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

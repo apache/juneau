@@ -162,7 +162,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* FluentObjectAssertion */
-	public FluentMapAssertion<K,V,R> asTransformed(Function<Map<K,V>,Map<K,V>> function) {
+	public FluentMapAssertion<K,V,R> asTransformed(Function<Map<K,V>,Map<K,V>> function) {  // NOSONAR - Intentional.
 		return new FluentMapAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -189,8 +189,8 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * @param keys The keys of the values to retrieve from the map.
 	 * @return A new assertion.
 	 */
-	public FluentListAssertion<Object,R> asValues(@SuppressWarnings("unchecked") K...keys) {
-		return new FluentListAssertion<>(this, valueIsNull() ? null : stream(keys).map(x -> get(x)).collect(toList()), returns());
+	public FluentListAssertion<Object,R> asValues(K...keys) {
+		return new FluentListAssertion<>(this, valueIsNull() ? null : stream(keys).map(this::get).collect(toList()), returns());
 	}
 
 	/**
@@ -199,13 +199,12 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * @param keys The entries to extract.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
 	public FluentMapAssertion<K,V,R> asValueMap(K...keys) {
 		if (valueIsNull())
 			return new FluentMapAssertion<>(this, null, returns());
 		Map<K,V> m1 = value(), m2 = CollectionUtils.map();
 		if (m1 != null)
-			for (K k : keys)
+			for (var k : keys)
 				m2.put(k, m1.get(k));
 		return new FluentMapAssertion<>(this, m2, returns());
 	}
@@ -220,7 +219,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * @return A new assertion.
 	 */
 	public FluentIntegerAssertion<R> asSize() {
-		return new FluentIntegerAssertion<R>(this, valueIsNull() ? null : value().size(), returns());
+		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().size(), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
