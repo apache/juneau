@@ -49,7 +49,7 @@ public class Noscript extends HtmlElementMixed {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
-	public Noscript _class(String _class) {
+	public Noscript _class(String _class) {  // NOSONAR - Intentional naming.
 		super._class(_class);
 		return this;
 	}

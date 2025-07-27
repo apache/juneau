@@ -56,7 +56,7 @@ public class Track extends HtmlElementVoid {
 	 * @param _default The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Track _default(String _default) {
+	public final Track _default(String _default) {  // NOSONAR - Intentional naming.
 		attr("default", _default);
 		return this;
 	}
@@ -135,7 +135,7 @@ public class Track extends HtmlElementVoid {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
-	public Track _class(String _class) {
+	public Track _class(String _class) {  // NOSONAR - Intentional naming.
 		super._class(_class);
 		return this;
 	}

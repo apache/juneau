@@ -79,8 +79,8 @@ public class Items extends OpenApiElement {
 		exclusiveMinimum,
 		uniqueItems;
 	private Items items;
-	private Object _default;
-	private List<Object> _enum;
+	private Object _default;  // NOSONAR - Intentional naming.
+	private List<Object> _enum;  // NOSONAR - Intentional naming.
 
 	/**
 	 * Default constructor.
@@ -777,24 +777,23 @@ public class Items extends OpenApiElement {
 
 	/* Resolve references in extra attributes */
 	private Object resolveRefs(Object o, Swagger swagger, Deque<String> refStack, int maxDepth) {
-		if (o instanceof JsonMap) {
-			JsonMap om = (JsonMap)o;
-			Object ref = om.get("$ref");
-			if (ref instanceof CharSequence) {
-				String sref = ref.toString();
+		if (o instanceof JsonMap om) {
+			var ref2 = om.get("$ref");
+			if (ref2 instanceof CharSequence) {
+				var sref = ref2.toString();
 				if (refStack.contains(sref) || refStack.size() >= maxDepth)
 					return o;
 				refStack.addLast(sref);
-				Object o2 = swagger.findRef(sref, Object.class);
+				var o2 = swagger.findRef(sref, Object.class);
 				o2 = resolveRefs(o2, swagger, refStack, maxDepth);
 				refStack.removeLast();
 				return o2;
 			}
-			for (Map.Entry<String,Object> e : om.entrySet())
+			for (var e : om.entrySet())
 				e.setValue(resolveRefs(e.getValue(), swagger, refStack, maxDepth));
 		}
-		if (o instanceof JsonList)
-			for (ListIterator<Object> li = ((JsonList)o).listIterator(); li.hasNext();)
+		if (o instanceof JsonList x)
+			for (var li = x.listIterator(); li.hasNext();)
 				li.set(resolveRefs(li.next(), swagger, refStack, maxDepth));
 		return o;
 	}

@@ -62,7 +62,7 @@ public class Table extends HtmlElementContainer {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
-	public Table _class(String _class) {
+	public Table _class(String _class) {  // NOSONAR - Intentional naming.
 		super._class(_class);
 		return this;
 	}

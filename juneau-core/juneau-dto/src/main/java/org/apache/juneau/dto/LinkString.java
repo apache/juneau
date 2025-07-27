@@ -182,7 +182,7 @@ public class LinkString implements Comparable<LinkString> {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return (o instanceof LinkString) && eq(this, (LinkString)o, (x,y)->x.name.equals(y.name));
+		return (o instanceof LinkString o2) && eq(this, o2, (x,y)->x.name.equals(y.name));
 	}
 
 	@Override /* Object */

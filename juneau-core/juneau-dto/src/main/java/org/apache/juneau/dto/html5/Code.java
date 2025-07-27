@@ -48,7 +48,7 @@ public class Code extends HtmlElementMixed {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
-	public Code _class(String _class) {
+	public Code _class(String _class) {  // NOSONAR - Intentional naming.
 		super._class(_class);
 		return this;
 	}

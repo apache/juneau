@@ -161,11 +161,8 @@ public class Select extends HtmlElementContainer {
 	public Select choose(Object optionValue) {
 		if (optionValue != null) {
 			getChildren().forEach(x -> {
-				if (x instanceof Option) {
-					Option o = (Option)x;
-					if (eq(optionValue.toString(), o.getAttr(String.class, "value")))
-						o.selected(true);
-				}
+				if (x instanceof Option o && eq(optionValue.toString(), o.getAttr(String.class, "value")))
+					o.selected(true);
 			});
 		}
 		return this;
@@ -178,7 +175,7 @@ public class Select extends HtmlElementContainer {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
-	public Select _class(String _class) {
+	public Select _class(String _class) {  // NOSONAR - Intentional naming.
 		super._class(_class);
 		return this;
 	}

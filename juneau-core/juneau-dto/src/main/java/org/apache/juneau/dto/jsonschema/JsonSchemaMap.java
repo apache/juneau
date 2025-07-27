@@ -58,8 +58,8 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	 */
 	@Override /* Map */
 	public JsonSchema get(Object uri) {
-		URI u = toURI(uri);
-		JsonSchema s = super.get(u);
+		var u = toURI(uri);
+		var s = super.get(u);
 		if (s != null)
 			return s;
 		synchronized(this) {
@@ -84,7 +84,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	 * @throws RuntimeException If one or more schema objects did not have their ID property set.
 	 */
 	public JsonSchemaMap add(JsonSchema...schemas) {
-		for (JsonSchema schema : schemas) {
+		for (var schema : schemas) {
 			if (schema.getId() == null)
 				throw new IllegalArgumentException("Schema with no ID passed to JsonSchemaMap.add(Schema...)");
 			put(schema.getId(), schema);
@@ -108,7 +108,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	 * @return The parsed schema.
 	 */
 	public JsonSchema load(URI uri) {
-		try (Reader r = getReader(uri)) {
+		try (var r = getReader(uri)) {
 			if (r == null)
 				return null;
 			return JsonParser.DEFAULT.parse(r, JsonSchema.class);

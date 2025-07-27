@@ -161,7 +161,7 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement _class(String _class) {
+	public HtmlElement _class(String _class) {  // NOSONAR - Intentional naming.
 		attr("class", _class);
 		return this;
 	}
@@ -918,8 +918,8 @@ public abstract class HtmlElement {
 	 * @return The deminimized value, or the same value if the value wasn't a boolean.
 	 */
 	protected Object deminimize(Object value, String attr) {
-		if (value instanceof Boolean) {
-			if ((Boolean)value)
+		if (value instanceof Boolean b) {
+			if (Boolean.TRUE.equals(b))
 				return attr;
 			return null;
 		}

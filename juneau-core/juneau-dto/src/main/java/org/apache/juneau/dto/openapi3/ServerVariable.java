@@ -30,8 +30,8 @@ import java.util.Set;
 @FluentSetters
 public class ServerVariable extends OpenApiElement {
 
-	private List<Object> _enum;
-	private String _default;
+	private List<Object> _enum;  // NOSONAR - Intentional naming.
+	private String _default;  // NOSONAR - Intentional naming.
 	private String description;
 
 	/**

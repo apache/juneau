@@ -50,7 +50,7 @@ public class Output extends HtmlElementMixed {
 	 * @param _for The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Output _for(String _for) {
+	public final Output _for(String _for) {  // NOSONAR - Intentional naming.
 		attr("for", _for);
 		return this;
 	}
@@ -91,7 +91,7 @@ public class Output extends HtmlElementMixed {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
-	public Output _class(String _class) {
+	public Output _class(String _class) {  // NOSONAR - Intentional naming.
 		super._class(_class);
 		return this;
 	}

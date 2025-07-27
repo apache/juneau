@@ -50,7 +50,7 @@ public class Label extends HtmlElementMixed {
 	 * @param _for The new value for this attribute.
 	 * @return This object.
 	 */
-	public final Label _for(String _for) {
+	public final Label _for(String _for) {  // NOSONAR - Intentional naming.
 		attr("for", _for);
 		return this;
 	}
@@ -77,7 +77,7 @@ public class Label extends HtmlElementMixed {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
-	public Label _class(String _class) {
+	public Label _class(String _class) {  // NOSONAR - Intentional naming.
 		super._class(_class);
 		return this;
 	}

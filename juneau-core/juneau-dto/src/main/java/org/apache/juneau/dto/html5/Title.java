@@ -48,7 +48,7 @@ public class Title extends HtmlElementRawText {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
-	public Title _class(String _class) {
+	public Title _class(String _class) {  // NOSONAR - Intentional naming.
 		super._class(_class);
 		return this;
 	}

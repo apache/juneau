@@ -68,7 +68,7 @@ public class JsonSchema {
 	private List<String> required;
 	private Boolean additionalPropertiesBoolean;           // Boolean representation of additionalProperties
 	private JsonSchema additionalPropertiesSchema;             // JsonSchema representation of additionalProperties
-	private List<String> _enum;
+	private List<String> _enum;  // NOSONAR - Intentional naming.
 	private List<JsonSchema> allOf;
 	private List<JsonSchema> anyOf;
 	private List<JsonSchema> oneOf;
@@ -255,10 +255,10 @@ public class JsonSchema {
 		this.typeJsonType = null;
 		this.typeJsonTypeArray = null;
 		if (type != null) {
-			if (type instanceof JsonType)
-				this.typeJsonType = (JsonType)type;
-			else if (type instanceof JsonTypeArray)
-				this.typeJsonTypeArray = (JsonTypeArray)type;
+			if (type instanceof JsonType x)
+				this.typeJsonType = x;
+			else if (type instanceof JsonTypeArray x)
+				this.typeJsonTypeArray = x;
 			else
 				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  SimpleType, SimpleTypeArray", className(type));
 		}
@@ -607,11 +607,11 @@ public class JsonSchema {
 		this.itemsSchema = null;
 		this.itemsSchemaArray = null;
 		if (items != null) {
-			if (items instanceof JsonSchema) {
-				this.itemsSchema = (JsonSchema)items;
+			if (items instanceof JsonSchema x) {
+				this.itemsSchema = x;
 				setMasterOn(this.itemsSchema);
-			} else if (items instanceof JsonSchemaArray) {
-				this.itemsSchemaArray = (JsonSchemaArray)items;
+			} else if (items instanceof JsonSchemaArray x) {
+				this.itemsSchemaArray = x;
 				setMasterOn(this.itemsSchemaArray);
 			} else {
 				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  JsonSchema, JsonSchemaArray", className(items));
@@ -852,10 +852,10 @@ public class JsonSchema {
 		this.additionalItemsBoolean = null;
 		this.additionalItemsSchemaArray = null;
 		if (additionalItems != null) {
-			if (additionalItems instanceof Boolean)
-				this.additionalItemsBoolean = (Boolean)additionalItems;
-			else if (additionalItems instanceof JsonSchemaArray) {
-				this.additionalItemsSchemaArray = (JsonSchemaArray)additionalItems;
+			if (additionalItems instanceof Boolean x)
+				this.additionalItemsBoolean = x;
+			else if (additionalItems instanceof JsonSchemaArray x) {
+				this.additionalItemsSchemaArray = x;
 				setMasterOn(this.additionalItemsSchemaArray);
 			} else {
 				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchemaArray", className(additionalItems));
@@ -1129,10 +1129,10 @@ public class JsonSchema {
 		this.additionalPropertiesBoolean = null;
 		this.additionalPropertiesSchema = null;
 		if (additionalProperties != null) {
-			if (additionalProperties instanceof Boolean)
-				this.additionalPropertiesBoolean = (Boolean)additionalProperties;
-			else if (additionalProperties instanceof JsonSchema) {
-				this.additionalPropertiesSchema = (JsonSchema)additionalProperties;
+			if (additionalProperties instanceof Boolean x)
+				this.additionalPropertiesBoolean = x;
+			else if (additionalProperties instanceof JsonSchema x) {
+				this.additionalPropertiesSchema = x;
 				setMasterOn(this.additionalPropertiesSchema);
 			} else
 				throw new BeanRuntimeException(JsonSchemaProperty.class,
@@ -1188,7 +1188,7 @@ public class JsonSchema {
 	 * @param _enum The new value for the <property>enum</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setEnum(List<String> _enum) {
+	public JsonSchema setEnum(List<String> _enum) {  // NOSONAR - Intentional naming.
 		this._enum = _enum;
 		return this;
 	}
@@ -1199,7 +1199,7 @@ public class JsonSchema {
 	 * @param _enum The list of items to append to the <property>enum</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema addEnum(String..._enum) {
+	public JsonSchema addEnum(String..._enum) {  // NOSONAR - Intentional naming.
 		if (this._enum == null)
 			this._enum = new LinkedList<>();
 		for (String e : _enum)

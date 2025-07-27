@@ -124,8 +124,8 @@ public class ParameterInfo extends SwaggerElement {
 		uniqueItems;
 	private SchemaInfo schema;
 	private Items items;
-	private Object _default;
-	private Set<Object> _enum;
+	private Object _default;  // NOSONAR - Intentional naming.
+	private Set<Object> _enum;  // NOSONAR - Intentional naming.
 	private Object example;
 	private Map<String,String> examples;
 

@@ -462,12 +462,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addPath(String path, String methodName, Operation operation) {
 		if (paths == null)
 			paths = new TreeMap<>(PATH_COMPARATOR);
-		OperationMap p = paths.get(path);
-		if (p == null) {
-			p = new OperationMap();
-			paths.put(path, p);
-		}
-		p.put(methodName, operation);
+		getPaths().computeIfAbsent(path, k -> new OperationMap()).put(methodName, operation);
 		return this;
 	}
 

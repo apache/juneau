@@ -88,10 +88,9 @@ public abstract class OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "strict": return toType(isStrict(), type);
-			default: return toType(get(property), type);
-		}
+		if ("strict".equals(property))
+			return toType(isStrict(), type);
+		return toType(get(property), type);
 	}
 
 	/**
@@ -124,14 +123,13 @@ public abstract class OpenApiElement {
 	public OpenApiElement set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "strict": return strict(value);
-			default:
-				if (extra == null)
-					extra = new LinkedHashMap<>();
-				extra.put(property, value);
-				return this;
+		if ("strict".equals(property)) {
+			return strict(value);
 		}
+		if (extra == null)
+			extra = new LinkedHashMap<>();
+		extra.put(property, value);
+		return this;
 	}
 
 	/**

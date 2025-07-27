@@ -85,10 +85,10 @@ public class HtmlElementContainer extends HtmlElement {
 			return getChild(index[0]);
 		Object c = this;
 		for (int element : index) {
-			if (c instanceof HtmlElementMixed)
-				c = ((HtmlElementMixed)c).getChild(element);
-			else if (c instanceof HtmlElementContainer)
-				c = ((HtmlElementContainer)c).getChild(element);
+			if (c instanceof HtmlElementMixed x)
+				c = x.getChild(element);
+			else if (c instanceof HtmlElementContainer x)
+				c = x.getChild(element);
 			else
 				return null;
 		}
@@ -145,7 +145,7 @@ public class HtmlElementContainer extends HtmlElement {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
-	public HtmlElementContainer _class(String _class) {
+	public HtmlElementContainer _class(String _class) {  // NOSONAR - Intentional naming.
 		super._class(_class);
 		return this;
 	}

@@ -88,7 +88,7 @@ public class SchemaInfo extends OpenApiElement {
 		readOnly,
 		deprecated;
 	private Object
-		_default,
+		_default,  // NOSONAR - Intentional naming.
 		example;
 	private Items items;
 	private Xml xml;
@@ -97,7 +97,7 @@ public class SchemaInfo extends OpenApiElement {
 			allOf,
 			oneOf,
 			anyOf,
-			_enum;
+			_enum;  // NOSONAR - Intentional naming.
 	private List<String>
 		required;
 	private Discriminator discriminator;
@@ -1155,7 +1155,7 @@ public class SchemaInfo extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
+		switch (property) {  // NOSONAR
 			case "format": return toType(getFormat(), type);
 			case "title": return toType(getTitle(), type);
 			case "description": return toType(getDescription(), type);
@@ -1200,7 +1200,7 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
+		switch (property) {  // NOSONAR
 			case "format": return setFormat(stringify(value));
 			case "title": return setTitle(stringify(value));
 			case "description": return setDescription(stringify(value));

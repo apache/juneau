@@ -48,7 +48,7 @@ public class Bdi extends HtmlElementText {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
-	public Bdi _class(String _class) {
+	public Bdi _class(String _class) {  // NOSONAR - Intentional naming.
 		super._class(_class);
 		return this;
 	}

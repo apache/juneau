@@ -74,7 +74,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 		Div outer = div(
 			style(css),
-			script("text/javascript", new String[]{RESOURCES.getString("SwaggerUI.js", null).orElse(null)}),
+			script("text/javascript", RESOURCES.getString("SwaggerUI.js", null).orElse(null)),
 			header(s)
 		)._class("swagger-ui");
 
@@ -166,12 +166,12 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	private Div tagBlockContents(Session s, Tag t) {
 		Div tagBlockContents = div()._class("tag-block-contents");
 
-		s.swagger.getPaths().forEach((path,v) -> {
+		s.swagger.getPaths().forEach((path,v) ->
 			v.forEach((opName,op) -> {
 				if ((t == null && op.getTags() == null) || (t != null && op.getTags() != null && op.getTags() != null && op.getTags().contains(t.getName())))
 					tagBlockContents.child(opBlock(s, path, opName, op));
-			});
-		});
+			})
+		);
 
 		return tagBlockContents;
 	}
@@ -262,15 +262,15 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			sectionTable
 		)._class("headers");
 
-		ri.getHeaders().forEach((k,v) -> {
+		ri.getHeaders().forEach((k,v) ->
 			sectionTable.child(
 				tr(
 					td(k)._class("name"),
 					td(toBRL(v.getDescription()))._class("description"),
 					td(v.asMap().keepAll("type","format","items","collectionFormat","default","maximum","exclusiveMaximum","minimum","exclusiveMinimum","maxLength","minLength","pattern","maxItems","minItems","uniqueItems","enum","multipleOf"))
 				)
-			);
-		});
+			)
+		);
 
 		return headers;
 	}
@@ -316,7 +316,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 			Map<String,?> examples = ri.getExamples();
 			if (examples != null)
-				examples.forEach((k,v) -> m.put(k,v));
+				examples.forEach(m::put);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

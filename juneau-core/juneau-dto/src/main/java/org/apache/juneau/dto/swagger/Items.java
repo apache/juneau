@@ -80,8 +80,8 @@ public class Items extends SwaggerElement {
 		exclusiveMinimum,
 		uniqueItems;
 	private Items items;
-	private Object _default;
-	private Set<Object> _enum;
+	private Object _default;  // NOSONAR - Intentional naming.
+	private Set<Object> _enum;  // NOSONAR - Intentional naming.
 
 	/**
 	 * Default constructor.
@@ -751,23 +751,22 @@ public class Items extends SwaggerElement {
 
 	/* Resolve references in extra attributes */
 	private Object resolveRefs(Object o, Swagger swagger, Deque<String> refStack, int maxDepth) {
-		if (o instanceof JsonMap) {
-			JsonMap om = (JsonMap)o;
-			Object ref = om.get("$ref");
-			if (ref instanceof CharSequence) {
-				String sref = ref.toString();
+		if (o instanceof JsonMap om) {
+			var ref2 = om.get("$ref");
+			if (ref2 instanceof CharSequence) {
+				var sref = ref2.toString();
 				if (refStack.contains(sref) || refStack.size() >= maxDepth)
 					return o;
 				refStack.addLast(sref);
-				Object o2 = swagger.findRef(sref, Object.class);
+				var o2 = swagger.findRef(sref, Object.class);
 				o2 = resolveRefs(o2, swagger, refStack, maxDepth);
 				refStack.removeLast();
 				return o2;
 			}
 			om.entrySet().forEach(x -> x.setValue(resolveRefs(x.getValue(), swagger, refStack, maxDepth)));
 		}
-		if (o instanceof JsonList)
-			for (ListIterator<Object> li = ((JsonList)o).listIterator(); li.hasNext();)
+		if (o instanceof JsonList x)
+			for (ListIterator<Object> li = x.listIterator(); li.hasNext();)
 				li.set(resolveRefs(li.next(), swagger, refStack, maxDepth));
 		return o;
 	}

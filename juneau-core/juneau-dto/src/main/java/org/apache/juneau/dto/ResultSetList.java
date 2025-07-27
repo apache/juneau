@@ -60,7 +60,7 @@ public final class ResultSetList extends LinkedList<Map<String,Object>> {
 				colTypes[i] = rsmd.getColumnType(i+1);
 			}
 
-			while (--pos > 0 && rs.next()) {}
+			while (--pos > 0 && rs.next()) { /* Skip to the specified position. */ }
 
 			// Get the rows.
 			while (limit-- > 0 && rs.next()) {

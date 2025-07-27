@@ -78,7 +78,7 @@ public enum JsonType {
 		char c = value.charAt(0);
 		if (c == 'a') {
 			if (value.equals("array"))
-			return ARRAY;
+				return ARRAY;
 			if (value.equals("any"))
 				return ANY;
 		}

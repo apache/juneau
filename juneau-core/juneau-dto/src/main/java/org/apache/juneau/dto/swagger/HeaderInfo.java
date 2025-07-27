@@ -78,8 +78,8 @@ public class HeaderInfo extends SwaggerElement {
 		exclusiveMinimum,
 		uniqueItems;
 	private Items items;
-	private Object _default;
-	private Set<Object> _enum;
+	private Object _default;  // NOSONAR - Intentional naming.
+	private Set<Object> _enum;  // NOSONAR - Intentional naming.
 	private Object example;
 
 	/**

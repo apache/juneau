@@ -88,13 +88,13 @@ public class SchemaInfo extends SwaggerElement {
 		readOnly,
 		required;
 	private Object
-		_default,
+		_default,  // NOSONAR - Intentional naming.
 		example;
 	private Items items;
 	private Xml xml;
 	private ExternalDocumentation externalDocs;
 	private Set<Object>
-		_enum,
+		_enum,  // NOSONAR - Intentional naming.
 		allOf;
 	private Set<String>
 		requiredProperties;
@@ -994,7 +994,7 @@ public class SchemaInfo extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
+		switch (property) {  // NOSONAR
 			case "additionalProperties": return toType(getAdditionalProperties(), type);
 			case "allOf": return toType(getAllOf(), type);
 			case "default": return toType(getDefault(), type);
@@ -1034,7 +1034,7 @@ public class SchemaInfo extends SwaggerElement {
 	public SchemaInfo set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
+		switch (property) {  // NOSONAR
 			case "additionalProperties": return setAdditionalProperties(toType(value, SchemaInfo.class));
 			case "allOf": return setAllOf(value);
 			case "default": return setDefault(value);

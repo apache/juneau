@@ -87,10 +87,11 @@ public class HeaderInfo extends OpenApiElement {
 		this.deprecated = copyFrom.deprecated;
 		if (copyFrom.examples == null)
 			this.examples = null;
-		else
+		else {
 			this.examples = new LinkedHashMap<>();
 			for (Map.Entry<String,Example> e : copyFrom.examples.entrySet())
-				this.examples.put(e.getKey(),	e.getValue().copy());
+				this.examples.put(e.getKey(), e.getValue().copy());
+		}
 	}
 
 	/**
