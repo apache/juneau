@@ -204,7 +204,7 @@ public abstract class MenuItemWidget extends Widget {
 	 * 		<li>{@link Reader} - Serialized directly to the output.
 	 * 		<li>{@link CharSequence} - Serialized directly to the output.
 	 * 		<li>Other - Serialized as HTML using {@link HtmlSerializer#DEFAULT}.
-	 * 			<br>Note that this includes any of the {@link org.apache.juneau.dto.html5} beans.
+	 * 			<br>Note that this includes any of the {@link org.apache.juneau.bean.html5} beans.
 	 * 	</ul>
 	 */
 	public abstract Object getContent(RestRequest req, RestResponse res);

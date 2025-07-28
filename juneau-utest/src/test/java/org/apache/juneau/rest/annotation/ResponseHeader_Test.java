@@ -18,7 +18,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
@@ -132,7 +132,7 @@ public class ResponseHeader_Test {
 	@Test
 	public void b01_swagger_onPojo() throws Exception {
 		HeaderInfo x;
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(B.class);
+		org.apache.juneau.bean.swagger.Swagger s = getSwagger(B.class);
 
 		x = s.getResponseInfo("/a","get",200).getHeader("H");
 		assertEquals("a", x.getDescription());
@@ -221,7 +221,7 @@ public class ResponseHeader_Test {
 	@Test
 	public void c01_swagger_onMethodParameters() throws Exception {
 		HeaderInfo x;
-		org.apache.juneau.dto.swagger.Swagger sc = getSwagger(C.class);
+		org.apache.juneau.bean.swagger.Swagger sc = getSwagger(C.class);
 
 		x = sc.getResponseInfo("/a","get",200).getHeader("H");
 		assertEquals("a", x.getDescription());

@@ -19,8 +19,8 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.bean.*;
 import org.apache.juneau.config.*;
-import org.apache.juneau.dto.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.annotation.Query;

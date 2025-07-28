@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.testutils;
 
-import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.swagger.*;

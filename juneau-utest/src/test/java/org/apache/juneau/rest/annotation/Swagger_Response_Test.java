@@ -21,7 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.*;
 
@@ -99,7 +99,7 @@ public class Swagger_Response_Test {
 
 	@Test
 	public void a01_fromPojo() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(A.class);
+		org.apache.juneau.bean.swagger.Swagger s = getSwagger(A.class);
 		ResponseInfo x;
 
 		x = s.getResponseInfo("/a","get",200);
@@ -195,7 +195,7 @@ public class Swagger_Response_Test {
 
 	@Test
 	public void b01_schemaFromPojo() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(B.class);
+		org.apache.juneau.bean.swagger.Swagger s = getSwagger(B.class);
 		ResponseInfo x;
 
 		x = s.getResponseInfo("/a","get",200);
@@ -246,7 +246,7 @@ public class Swagger_Response_Test {
 
 	@Test
 	public void c01_exampleFromPojo() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger sc = getSwagger(C.class);
+		org.apache.juneau.bean.swagger.Swagger sc = getSwagger(C.class);
 		ResponseInfo x;
 
 		x = sc.getResponseInfo("/a","get",200);
@@ -308,7 +308,7 @@ public class Swagger_Response_Test {
 
 	@Test
 	public void d01_fromThrowable() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(D.class);
+		org.apache.juneau.bean.swagger.Swagger s = getSwagger(D.class);
 		ResponseInfo x;
 
 		x = s.getResponseInfo("/a","get",500);
@@ -350,7 +350,7 @@ public class Swagger_Response_Test {
 
 	@Test
 	public void e01_schemaFromThrowable() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(E.class);
+		org.apache.juneau.bean.swagger.Swagger s = getSwagger(E.class);
 
 		ResponseInfo x = s.getResponseInfo("/a","get",500);
 		assertObject(x.getSchema()).asJson().is("{type:'number'}");
@@ -371,7 +371,7 @@ public class Swagger_Response_Test {
 
 	@Test
 	public void f01_exampeFromThrowable() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(F.class);
+		org.apache.juneau.bean.swagger.Swagger s = getSwagger(F.class);
 		ResponseInfo x;
 
 		x = s.getResponseInfo("/b","put",500);

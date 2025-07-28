@@ -12,14 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
-import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 
 import java.io.*;
 import java.util.Map;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Content;

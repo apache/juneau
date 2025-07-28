@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.beans;
 
-import org.apache.juneau.dto.html5.*;
+import org.apache.juneau.bean.html5.*;
 
 /**
  * Defines a simple hyperlink class.

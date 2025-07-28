@@ -20,7 +20,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.*;
 
@@ -73,7 +73,7 @@ public class Swagger_FormData_Test {
 
 	@Test
 	public void a01_fromPojo() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(A.class);
+		org.apache.juneau.bean.swagger.Swagger s = getSwagger(A.class);
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","formData","F");
@@ -125,7 +125,7 @@ public class Swagger_FormData_Test {
 
 	@Test
 	public void b01_schemaFromPojo() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(B.class);
+		org.apache.juneau.bean.swagger.Swagger s = getSwagger(B.class);
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","formData","F");
@@ -174,7 +174,7 @@ public class Swagger_FormData_Test {
 
 	@Test
 	public void d01_fromParameter() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(D.class);
+		org.apache.juneau.bean.swagger.Swagger s = getSwagger(D.class);
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","formData","F");
@@ -227,7 +227,7 @@ public class Swagger_FormData_Test {
 
 	@Test
 	public void e01_schemaFromParameter() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(E.class);
+		org.apache.juneau.bean.swagger.Swagger s = getSwagger(E.class);
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","formData","F");

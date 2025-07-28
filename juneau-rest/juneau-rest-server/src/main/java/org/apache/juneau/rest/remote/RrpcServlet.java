@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.remote;
 
+import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
@@ -24,8 +24,8 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.dto.*;
-import org.apache.juneau.dto.html5.*;
+import org.apache.juneau.bean.*;
+import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;

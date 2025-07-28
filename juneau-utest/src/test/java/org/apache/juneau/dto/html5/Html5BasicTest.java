@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
-import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
+import org.apache.juneau.bean.html5.Form;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

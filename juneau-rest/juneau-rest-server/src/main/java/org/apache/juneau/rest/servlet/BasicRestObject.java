@@ -16,7 +16,7 @@ import java.util.*;
 
 import jakarta.servlet.http.*;
 
-import org.apache.juneau.dto.swagger.Swagger;
+import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;

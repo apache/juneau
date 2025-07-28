@@ -12,13 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
-import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.assertions.Verify.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.bean.html5.*;
+import org.apache.juneau.bean.html5.Map;
 import org.junit.runner.*;
 import org.junit.runners.*;
 

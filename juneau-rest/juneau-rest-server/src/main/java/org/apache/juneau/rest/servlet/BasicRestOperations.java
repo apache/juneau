@@ -17,8 +17,8 @@ import static org.apache.juneau.http.HttpMethod.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.dto.swagger.Swagger;
-import org.apache.juneau.dto.swagger.ui.*;
+import org.apache.juneau.bean.swagger.Swagger;
+import org.apache.juneau.bean.swagger.ui.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.resource.*;

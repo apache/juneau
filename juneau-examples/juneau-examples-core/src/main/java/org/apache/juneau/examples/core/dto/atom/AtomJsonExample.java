@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.core.dto.atom;
 
-import org.apache.juneau.dto.atom.Feed;
 import org.apache.juneau.json.JsonSerializer;
+import org.apache.juneau.bean.atom.*;
 import org.apache.juneau.json.Json5Serializer;
 
 /**

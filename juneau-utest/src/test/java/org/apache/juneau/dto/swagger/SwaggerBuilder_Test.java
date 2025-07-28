@@ -13,9 +13,24 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
+import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.junit.runners.MethodSorters.*;
 
+import org.apache.juneau.bean.swagger.Contact;
+import org.apache.juneau.bean.swagger.ExternalDocumentation;
+import org.apache.juneau.bean.swagger.HeaderInfo;
+import org.apache.juneau.bean.swagger.Info;
+import org.apache.juneau.bean.swagger.Items;
+import org.apache.juneau.bean.swagger.License;
+import org.apache.juneau.bean.swagger.Operation;
+import org.apache.juneau.bean.swagger.ParameterInfo;
+import org.apache.juneau.bean.swagger.ResponseInfo;
+import org.apache.juneau.bean.swagger.SchemaInfo;
+import org.apache.juneau.bean.swagger.SecurityScheme;
+import org.apache.juneau.bean.swagger.Swagger;
+import org.apache.juneau.bean.swagger.SwaggerBuilder;
+import org.apache.juneau.bean.swagger.Tag;
+import org.apache.juneau.bean.swagger.Xml;
 import org.junit.*;
 
 /**

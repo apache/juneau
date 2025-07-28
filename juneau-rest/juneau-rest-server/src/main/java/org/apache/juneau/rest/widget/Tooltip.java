@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.widget;
 
-import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.dto.html5.*;
+import org.apache.juneau.bean.html5.*;
 
 /**
  * Simple template for adding tooltips to HTML5 bean constructs, typically in menu item widgets.

@@ -46,7 +46,7 @@ import org.apache.juneau.common.internal.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.dto.swagger.Swagger;
+import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;

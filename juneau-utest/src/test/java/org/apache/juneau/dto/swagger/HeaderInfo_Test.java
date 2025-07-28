@@ -13,12 +13,15 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
+import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
+import org.apache.juneau.bean.swagger.HeaderInfo;
+import org.apache.juneau.bean.swagger.Items;
+import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.json.*;
 import org.junit.*;
 

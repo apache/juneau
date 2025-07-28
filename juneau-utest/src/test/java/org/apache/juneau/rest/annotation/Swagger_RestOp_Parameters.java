@@ -16,7 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.header.*;
 import org.junit.*;
 
@@ -142,7 +142,7 @@ public class Swagger_RestOp_Parameters {
 
 	@Test
 	public void a01_headerParameters() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger s = getSwagger(A.class);
+		org.apache.juneau.bean.swagger.Swagger s = getSwagger(A.class);
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/accept","get","header","Accept");

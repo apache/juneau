@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.core.dto.atom;
 
-import org.apache.juneau.dto.atom.Feed;
-
-import static org.apache.juneau.dto.atom.AtomBuilder.*;
+import static org.apache.juneau.bean.atom.AtomBuilder.*;
 
 import java.net.*;
+
+import org.apache.juneau.bean.atom.*;
 
 /**
  * Atom feed example.

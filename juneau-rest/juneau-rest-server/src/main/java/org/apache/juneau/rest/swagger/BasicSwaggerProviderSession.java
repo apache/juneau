@@ -28,10 +28,10 @@ import jakarta.servlet.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;

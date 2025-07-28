@@ -106,7 +106,7 @@ public class RestOp_Params_Test {
 			return t.toString();
 		}
 		@RestGet
-		public boolean q(org.apache.juneau.dto.swagger.Swagger t) {
+		public boolean q(org.apache.juneau.bean.swagger.Swagger t) {
 			return t != null;
 		}
 		@RestGet

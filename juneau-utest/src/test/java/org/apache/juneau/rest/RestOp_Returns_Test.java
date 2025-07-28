@@ -22,10 +22,10 @@ import static org.apache.juneau.testutils.StreamUtils.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
 import org.junit.*;

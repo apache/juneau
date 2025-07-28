@@ -13,15 +13,14 @@
 package org.apache.juneau.examples.core.dto;
 
 import org.apache.juneau.*;
-import org.apache.juneau.dto.atom.Feed;
-import org.apache.juneau.dto.swagger.Swagger;
+import org.apache.juneau.bean.atom.*;
+import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.html.HtmlSerializer;
 import org.apache.juneau.json.*;
 
-import static org.apache.juneau.dto.atom.AtomBuilder.*;
-import static org.apache.juneau.dto.atom.AtomBuilder.link;
-import static org.apache.juneau.dto.html5.HtmlBuilder.*;
-import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
+import static org.apache.juneau.bean.atom.AtomBuilder.*;
+import static org.apache.juneau.bean.html5.HtmlBuilder.*;
+import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 
 import java.net.*;
 

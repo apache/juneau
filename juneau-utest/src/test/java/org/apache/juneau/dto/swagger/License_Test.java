@@ -18,6 +18,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
 
+import org.apache.juneau.bean.swagger.License;
 import org.apache.juneau.json.*;
 import org.junit.*;
 

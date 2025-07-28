@@ -14,7 +14,7 @@ package org.apache.juneau.rest.servlet;
 
 import java.util.*;
 
-import org.apache.juneau.dto.swagger.Swagger;
+import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;

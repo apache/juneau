@@ -13,12 +13,13 @@
 package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.dto.atom.AtomBuilder.*;
+import static org.apache.juneau.bean.atom.AtomBuilder.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
 
+import org.apache.juneau.bean.atom.Feed;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 

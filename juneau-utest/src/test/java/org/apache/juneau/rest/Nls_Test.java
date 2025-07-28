@@ -14,7 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.dto.swagger.Swagger;
+import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;

@@ -15,8 +15,8 @@ package org.apache.juneau.examples.rest;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
+import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.beans.*;

@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.dto;
 
-import static org.apache.juneau.dto.atom.AtomBuilder.*;
+import static org.apache.juneau.bean.atom.AtomBuilder.*;
 
 import java.net.URI;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.dto.atom.*;
+import org.apache.juneau.bean.atom.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;

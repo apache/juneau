@@ -25,8 +25,8 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Contact;
 import org.apache.juneau.http.annotation.License;
@@ -48,7 +48,7 @@ public class Swagger_Test {
 
 	public void testMethod() {}
 
-	private org.apache.juneau.dto.swagger.Swagger getSwaggerWithFile(Object resource) throws Exception {
+	private org.apache.juneau.bean.swagger.Swagger getSwaggerWithFile(Object resource) throws Exception {
 		RestContext rc = RestContext.create(resource.getClass(),null,null).init(()->resource).defaultClasses(TestClasspathFileFinder.class).build();
 		RestOpContext roc = RestOpContext.create(Swagger_Test.class.getMethod("testMethod"), rc).build();
 		RestSession call = RestSession.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
@@ -57,7 +57,7 @@ public class Swagger_Test {
 		return ip.getSwagger(rc, req.getLocale());
 	}
 
-	private static org.apache.juneau.dto.swagger.Swagger getSwagger(Object resource) throws Exception {
+	private static org.apache.juneau.bean.swagger.Swagger getSwagger(Object resource) throws Exception {
 		RestContext rc = RestContext.create(resource.getClass(),null,null).init(()->resource).build();
 		RestOpContext roc = RestOpContext.create(Swagger_Test.class.getMethod("testMethod"), rc).build();
 		RestSession call = RestSession.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
@@ -89,7 +89,7 @@ public class Swagger_Test {
 
 	@Test
 	public void a01_swagger_default() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwagger(new A1());
+		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new A1());
 		assertEquals("2.0", x.getSwagger());
 		assertEquals(null, x.getHost());
 		assertEquals(null, x.getBasePath());
@@ -97,7 +97,7 @@ public class Swagger_Test {
 	}
 	@Test
 	public void a01_swagger_default_withFile() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwaggerWithFile(new A1());
+		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new A1());
 		assertEquals("0.0", x.getSwagger());
 		assertEquals("s-host", x.getHost());
 		assertEquals("s-basePath", x.getBasePath());
@@ -110,7 +110,7 @@ public class Swagger_Test {
 
 	@Test
 	public void a02_swagger_Swagger_value() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwagger(new A2());
+		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new A2());
 		assertEquals("3.0", x.getSwagger());
 		assertEquals("a-host", x.getHost());
 		assertEquals("a-basePath", x.getBasePath());
@@ -118,7 +118,7 @@ public class Swagger_Test {
 	}
 	@Test
 	public void a02_swagger_Swagger_value_withFile() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwaggerWithFile(new A2());
+		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new A2());
 		assertEquals("3.0", x.getSwagger());
 		assertEquals("a-host", x.getHost());
 		assertEquals("a-basePath", x.getBasePath());
@@ -352,12 +352,12 @@ public class Swagger_Test {
 
 	@Test
 	public void c01a_tags_default() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwagger(new C1());
+		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C1());
 		assertEquals(null, x.getTags());
 	}
 	@Test
 	public void c01b_tags_default_withFile() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwaggerWithFile(new C1());
+		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C1());
 		assertObject(x.getTags()).asJson().is("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}}]");
 	}
 
@@ -371,12 +371,12 @@ public class Swagger_Test {
 
 	@Test
 	public void c02a_tags_Swagger_value() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwagger(new C2());
+		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C2());
 		assertObject(x.getTags()).asJson().is("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]");
 	}
 	@Test
 	public void c02b_tags_Swagger_value_withFile() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwaggerWithFile(new C2());
+		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C2());
 		assertObject(x.getTags()).asJson().is("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]");
 	}
 
@@ -391,12 +391,12 @@ public class Swagger_Test {
 
 	@Test
 	public void c03a_tags_Swagger_tags() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwagger(new C3());
+		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C3());
 		assertObject(x.getTags()).asJson().is("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
 	}
 	@Test
 	public void c03b_tags_Swagger_tags_withFile() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwaggerWithFile(new C3());
+		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C3());
 		assertObject(x.getTags()).asJson().is("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
 	}
 
@@ -411,12 +411,12 @@ public class Swagger_Test {
 
 	@Test
 	public void c04a_tags_Swagger_tags() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwagger(new C4());
+		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C4());
 		assertObject(x.getTags()).asJson().is("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
 	}
 	@Test
 	public void c04b_tags_Swagger_tags_withFile() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwaggerWithFile(new C4());
+		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C4());
 		assertObject(x.getTags()).asJson().is("[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
 	}
 
@@ -430,12 +430,12 @@ public class Swagger_Test {
 
 	@Test
 	public void c05a_tags_Swagger_tags_only() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwagger(new C5());
+		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C5());
 		assertObject(x.getTags()).asJson().is("[{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
 	}
 	@Test
 	public void c05b_tags_Swagger_tags_only_witFile() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwaggerWithFile(new C5());
+		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C5());
 		assertObject(x.getTags()).asJson().is("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
 	}
 
@@ -452,12 +452,12 @@ public class Swagger_Test {
 
 	@Test
 	public void c06a_tags_Swagger_tags_dups() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwagger(new C6());
+		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C6());
 		assertObject(x.getTags()).asJson().is("[{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}]");
 	}
 	@Test
 	public void c06b_tags_Swagger_tags_dups_withFile() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwaggerWithFile(new C6());
+		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C6());
 		assertObject(x.getTags()).asJson().is("[{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}]");
 	}
 
@@ -472,12 +472,12 @@ public class Swagger_Test {
 
 	@Test
 	public void c07a_tags_Swagger_tags_localised() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwagger(new C7());
+		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C7());
 		assertObject(x.getTags()).asJson().is("[{name:'l-foo',description:'l-foo',externalDocs:{description:'l-foo',url:'l-foo'}}]");
 	}
 	@Test
 	public void c07b_tags_Swagger_tags_localised_withFile() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwaggerWithFile(new C7());
+		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C7());
 		assertObject(x.getTags()).asJson().is("[{name:'l-foo',description:'l-foo',externalDocs:{description:'l-foo',url:'l-foo'}}]");
 	}
 
@@ -490,12 +490,12 @@ public class Swagger_Test {
 
 	@Test
 	public void c08a_tags_Swagger_tags_loose() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwagger(new C8());
+		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C8());
 		assertObject(x.getTags()).asJson().is("[{name:'foo'}]");
 	}
 	@Test
 	public void c08b_tags_Swagger_tags_loose_withFile() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwaggerWithFile(new C8());
+		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C8());
 		assertObject(x.getTags()).asJson().is("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'}]");
 	}
 
@@ -508,12 +508,12 @@ public class Swagger_Test {
 
 	@Test
 	public void c09a_tags_Swagger_tags_loose_cdl() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwagger(new C9());
+		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C9());
 		assertObject(x.getTags()).asJson().is("[{name:'foo'},{name:'bar'}]");
 	}
 	@Test
 	public void c09b_tags_Swagger_tags_loose_cdl_withFile() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwaggerWithFile(new C9());
+		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C9());
 		assertObject(x.getTags()).asJson().is("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'},{name:'bar'}]");
 	}
 
@@ -526,12 +526,12 @@ public class Swagger_Test {
 
 	@Test
 	public void c10a_tags_Swagger_tags_loose_olist() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwagger(new C10());
+		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C10());
 		assertObject(x.getTags()).asJson().is("[{name:'foo'},{name:'bar'}]");
 	}
 	@Test
 	public void c10b_tags_Swagger_tags_loose_olist_withFile() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwaggerWithFile(new C10());
+		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C10());
 		assertObject(x.getTags()).asJson().is("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'},{name:'bar'}]");
 	}
 
@@ -544,12 +544,12 @@ public class Swagger_Test {
 
 	@Test
 	public void c11a_tags_Swagger_tags_loose_olist_localized() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwagger(new C11());
+		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C11());
 		assertObject(x.getTags()).asJson().is("[{name:'l-foo'},{name:'l-bar'}]");
 	}
 	@Test
 	public void c11b_tags_Swagger_tags_loose_olist_localized_withFile() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwaggerWithFile(new C11());
+		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C11());
 		assertObject(x.getTags()).asJson().is("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'l-foo'},{name:'l-bar'}]");
 	}
 
@@ -562,12 +562,12 @@ public class Swagger_Test {
 
 	@Test
 	public void c12a_tags_Swagger_tags_loose_cdl_localized() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwagger(new C12());
+		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C12());
 		assertObject(x.getTags()).asJson().is("[{name:'l-foo'},{name:'l-bar'}]");
 	}
 	@Test
 	public void c12b_tags_Swagger_tags_loose_cdl_localized_withFile() throws Exception {
-		org.apache.juneau.dto.swagger.Swagger x = getSwaggerWithFile(new C12());
+		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C12());
 		assertObject(x.getTags()).asJson().is("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'l-foo'},{name:'l-bar'}]");
 	}
 
@@ -2116,7 +2116,7 @@ public class Swagger_Test {
 	@Test
 	public void t01_bodyWithReadOnlyProperty() throws Exception {
 		MockRestClient p = MockRestClient.build(T1.class);
-		org.apache.juneau.dto.swagger.Swagger s = JsonParser.DEFAULT.parse(p.get("/api").accept("application/json").run().getContent().asString(), org.apache.juneau.dto.swagger.Swagger.class);
+		org.apache.juneau.bean.swagger.Swagger s = JsonParser.DEFAULT.parse(p.get("/api").accept("application/json").run().getContent().asString(), org.apache.juneau.bean.swagger.Swagger.class);
 		Operation o = s.getOperation("/", "get");
 
 		ResponseInfo ri = o.getResponse("200");
