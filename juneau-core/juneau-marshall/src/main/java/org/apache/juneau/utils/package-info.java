@@ -14,5 +14,4 @@
 /**
  * URL-Encoding Annotations
  */
-package org.apache.juneau.utils;
-
+package org.apache.juneau.utils;

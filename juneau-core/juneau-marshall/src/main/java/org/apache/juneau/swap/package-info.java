@@ -14,5 +14,4 @@
 /**
  * Swap API
  */
-package org.apache.juneau.swap;
-
+package org.apache.juneau.swap;

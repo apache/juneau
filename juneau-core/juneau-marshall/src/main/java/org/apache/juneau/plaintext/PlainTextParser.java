@@ -679,4 +679,4 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 		}
 		return m;
 	}
-}
+}

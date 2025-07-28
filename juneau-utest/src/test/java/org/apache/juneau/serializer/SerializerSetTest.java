@@ -151,4 +151,4 @@ public class SerializerSetTest {
 			super(builder.accept("*/*"));
 		}
 	}
-}
+}

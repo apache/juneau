@@ -396,4 +396,4 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	protected boolean isAddBeanTypes() {
 		return ctx.isAddBeanTypes();
 	}
-}
+}

@@ -53,4 +53,4 @@ public class ObjectIntrospector_Test {
 		r = new ObjectIntrospector("foobar").invokeMethod(String.class.getMethod("toString"), null);
 		assertEquals("foobar", r);
 	}
-}
+}

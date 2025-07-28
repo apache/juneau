@@ -1241,4 +1241,4 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	protected JsonMap properties() {
 		return filteredMap("encoding", encoding, "addBeanTypes", addBeanTypes, "paramFormat", paramFormat);
 	}
-}
+}

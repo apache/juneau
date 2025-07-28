@@ -797,4 +797,4 @@ public class OutputStreamSerializer extends Serializer {
 	protected JsonMap properties() {
 		return filteredMap("binaryFormat", binaryFormat);
 	}
-}
+}

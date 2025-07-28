@@ -99,4 +99,4 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	 */
 	public ChildResourceDescriptions() {
 	}
-}
+}

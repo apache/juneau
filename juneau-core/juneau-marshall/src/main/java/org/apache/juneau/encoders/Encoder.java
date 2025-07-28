@@ -59,4 +59,4 @@ public abstract class Encoder {
 	 * @return The codings that this encoder handles.
 	 */
 	public abstract String[] getCodings();
-}
+}

@@ -359,4 +359,4 @@ public class HtmlWriter extends XmlWriter {
 	}
 
 	// </FluentSetters>
-}
+}

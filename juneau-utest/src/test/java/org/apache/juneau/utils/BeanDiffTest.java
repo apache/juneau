@@ -110,4 +110,4 @@ public class BeanDiffTest {
 		assertTrue(bd.hasDiffs());
 		assertEquals("{v1:{f1:1},v2:{f1:2,f2:'b'}}", bd.toString());
 	}
-}
+}

@@ -51,4 +51,4 @@ public class JsonClassMeta extends ExtendedClassMeta {
 	protected String getWrapperAttr() {
 		return wrapperAttr;
 	}
-}
+}

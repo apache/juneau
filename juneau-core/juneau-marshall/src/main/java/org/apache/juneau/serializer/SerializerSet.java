@@ -674,4 +674,4 @@ public final class SerializerSet {
 	public boolean isEmpty() {
 		return entries.length == 0;
 	}
-}
+}

@@ -14,5 +14,4 @@
 /**
  * OpenAPI Marshalling Annotations
  */
-package org.apache.juneau.oapi.annotation;
-
+package org.apache.juneau.oapi.annotation;

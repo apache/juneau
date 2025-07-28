@@ -14,5 +14,4 @@
 /**
  * Classpath Utilities
  */
-package org.apache.juneau.cp;
-
+package org.apache.juneau.cp;

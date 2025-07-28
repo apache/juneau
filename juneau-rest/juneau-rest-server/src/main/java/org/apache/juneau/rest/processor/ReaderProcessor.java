@@ -44,5 +44,4 @@ public final class ReaderProcessor implements ResponseProcessor {
 		}
 		return FINISHED;
 	}
-}
-
+}

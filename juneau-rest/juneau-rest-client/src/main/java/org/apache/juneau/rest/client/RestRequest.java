@@ -2698,4 +2698,4 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			.append("response", response)
 			.append("serializer", serializer);
 	}
-}
+}

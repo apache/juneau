@@ -95,4 +95,4 @@ public class RoundTripTrimStringsTest extends RoundTripTest {
 			return this;
 		}
 	}
-}
+}

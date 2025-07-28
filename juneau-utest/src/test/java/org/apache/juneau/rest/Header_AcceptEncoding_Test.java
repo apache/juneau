@@ -252,4 +252,4 @@ public class Header_AcceptEncoding_Test {
 			return new String[]{"mycoding"};
 		}
 	}
-}
+}

@@ -14,5 +14,4 @@
 /**
  * Configuration Storage Support
  */
-package org.apache.juneau.config.store;
-
+package org.apache.juneau.config.store;

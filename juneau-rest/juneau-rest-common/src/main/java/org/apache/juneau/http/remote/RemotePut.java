@@ -120,4 +120,4 @@ public @interface RemotePut {
 	 * @return The annotation value.
 	 */
 	String value() default "";
-}
+}

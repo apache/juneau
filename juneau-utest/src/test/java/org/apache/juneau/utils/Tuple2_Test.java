@@ -41,4 +41,4 @@ public class Tuple2_Test {
 		assertFalse(x1.equals(x4));
 		assertNotEquals(x1.hashCode(), x4.hashCode());
 	}
-}
+}

@@ -125,4 +125,4 @@ public class Rest_AllowedMethodHeaders_Test {
 		a8.put("/", "").header("X-Method", "GET").run().assertContent("PUT");
 		a8.request("get","/").header("X-Method","FOO").run().assertContent("GET");
 	}
-}
+}

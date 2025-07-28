@@ -42,4 +42,4 @@ public final class SoapXmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	private SoapXmlBeanPropertyMeta() {
 		super(null);
 	}
-}
+}

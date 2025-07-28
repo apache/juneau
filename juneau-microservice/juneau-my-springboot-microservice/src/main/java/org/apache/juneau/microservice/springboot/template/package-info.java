@@ -14,5 +14,4 @@
 /**
  * Microservice Samples
  */
-package org.apache.juneau.microservice.springboot.template;
-
+package org.apache.juneau.microservice.springboot.template;

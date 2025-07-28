@@ -222,4 +222,3 @@ public class StringEntity extends BasicHttpEntity {
 
 	// </FluentSetters>
 }
-

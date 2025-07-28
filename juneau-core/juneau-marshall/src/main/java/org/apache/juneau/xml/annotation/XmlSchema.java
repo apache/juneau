@@ -100,4 +100,4 @@ public @interface XmlSchema {
 	 * @return The annotation value.
 	 */
 	public XmlNs[] xmlNs() default {};
-}
+}

@@ -73,4 +73,4 @@ public abstract class BasicRestServlet extends RestServlet implements BasicRestO
 	public RestContextStats getStats(RestRequest req) {
 		return req.getContext().getStats();
 	}
-}
+}

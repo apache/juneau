@@ -40,4 +40,4 @@ public class IteratorSwap extends ObjectSwap<Iterator,List> {
 			l.add(o.next());
 		return l;
 	}
-}
+}

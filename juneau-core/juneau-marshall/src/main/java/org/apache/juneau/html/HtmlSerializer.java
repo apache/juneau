@@ -1590,4 +1590,4 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 			.append("addKeyValueTableHeaders", addKeyValueTableHeaders)
 			.append("addBeanTypesHtml", addBeanTypesHtml);
 	}
-}
+}

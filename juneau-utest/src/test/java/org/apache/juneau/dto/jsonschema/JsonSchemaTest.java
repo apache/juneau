@@ -296,4 +296,4 @@ public class JsonSchemaTest {
 			.setAdditionalItems(Boolean.TRUE)
 			.setAdditionalProperties(Boolean.TRUE);
 	}
-}
+}

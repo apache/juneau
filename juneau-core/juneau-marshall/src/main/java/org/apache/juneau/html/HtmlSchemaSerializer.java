@@ -1134,4 +1134,4 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	protected JsonMap properties() {
 		return filteredMap("generator", generator);
 	}
-}
+}

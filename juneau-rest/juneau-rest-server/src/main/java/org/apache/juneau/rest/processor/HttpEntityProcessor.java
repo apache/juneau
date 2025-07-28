@@ -50,5 +50,4 @@ public final class HttpEntityProcessor implements ResponseProcessor {
 
 		return FINISHED;
 	}
-}
-
+}

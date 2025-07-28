@@ -248,4 +248,4 @@ public class TestUtils {
 				throw new ComparisonFailure("Text did not contain expected substring.", toString(substring), toString(value));  // NOT DEBUG
 			}
 	}
-}
+}

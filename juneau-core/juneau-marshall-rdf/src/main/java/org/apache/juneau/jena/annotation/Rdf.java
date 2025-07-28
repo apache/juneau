@@ -193,4 +193,4 @@ public @interface Rdf {
 	 * @return The annotation value.
 	 */
 	String prefix() default "";
-}
+}

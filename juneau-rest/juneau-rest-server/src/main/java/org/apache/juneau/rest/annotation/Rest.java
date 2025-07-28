@@ -1434,4 +1434,4 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	String uriResolution() default "";
-}
+}

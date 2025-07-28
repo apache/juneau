@@ -385,4 +385,4 @@ public final class EncoderSet {
 	public List<String> getSupportedEncodings() {
 		return encodings;
 	}
-}
+}

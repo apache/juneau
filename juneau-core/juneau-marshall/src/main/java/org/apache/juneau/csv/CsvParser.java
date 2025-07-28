@@ -660,4 +660,4 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 		}
 		return m;
 	}
-}
+}

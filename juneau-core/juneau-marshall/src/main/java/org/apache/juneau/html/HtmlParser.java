@@ -713,4 +713,4 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 		}
 		return m;
 	}
-}
+}

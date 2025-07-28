@@ -33,4 +33,4 @@ public class NotEmptyVarTest {
 		assertEquals("false", vr.resolve("$NE{ $S{xxx} }"));
 		assertEquals("true", vr.resolve("$NE{ foo }"));
 	}
-}
+}

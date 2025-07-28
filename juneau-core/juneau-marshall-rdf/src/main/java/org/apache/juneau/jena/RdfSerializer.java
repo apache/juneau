@@ -2160,4 +2160,4 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			.append("namespaces", namespaces)
 			.append("addBeanTypes", addBeanTypes);
 	}
-}
+}

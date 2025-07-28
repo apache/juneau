@@ -66,4 +66,4 @@ public class XorEncodeMod extends Mod {
 	public boolean isApplied(String value) {
 		return startsWith(value, '{') && endsWith(value, '}');
 	}
-}
+}

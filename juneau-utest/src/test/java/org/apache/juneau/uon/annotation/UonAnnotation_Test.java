@@ -115,5 +115,4 @@ public class UonAnnotation_Test {
 		assertObject(d1).is(d2).is(a1);
 		assertInteger(d1.hashCode()).is(d2.hashCode()).is(a1.hashCode()).isNotAny(0,-1);
 	}
-}
-
+}

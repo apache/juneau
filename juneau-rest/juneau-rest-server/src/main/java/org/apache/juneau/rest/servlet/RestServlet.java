@@ -253,4 +253,4 @@ public abstract class RestServlet extends HttpServlet {
 	public synchronized RestResponse getResponse() {
 		return getContext().getLocalSession().getOpSession().getResponse();
 	}
-}
+}

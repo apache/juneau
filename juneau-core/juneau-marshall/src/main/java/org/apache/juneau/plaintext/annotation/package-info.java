@@ -14,5 +14,4 @@
 /**
  * Plaintext Marshalling Annotations
  */
-package org.apache.juneau.plaintext.annotation;
-
+package org.apache.juneau.plaintext.annotation;

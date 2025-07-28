@@ -47,4 +47,4 @@ public class FilteredMapTest {
 		assertThrown(()->new FilteredMap<>(cm2, null, new String[0])).isType(IllegalArgumentException.class);
 		assertThrown(()->new FilteredMap<>(cm, m, null)).isType(IllegalArgumentException.class);
 	}
-}
+}

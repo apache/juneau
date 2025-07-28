@@ -252,4 +252,4 @@ public class Header_Accept_Test {
 		f.put("/", null).accept("text/s2").run().assertContent("s2");
 		f.put("/", null).accept("text/s3").run().assertContent("s3");
 	}
-}
+}

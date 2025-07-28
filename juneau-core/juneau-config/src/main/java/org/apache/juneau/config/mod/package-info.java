@@ -14,5 +14,4 @@
 /**
  * Configuration Encoding Support
  */
-package org.apache.juneau.config.mod;
-
+package org.apache.juneau.config.mod;

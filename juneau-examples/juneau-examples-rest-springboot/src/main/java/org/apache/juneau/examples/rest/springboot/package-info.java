@@ -14,5 +14,4 @@
 /**
  * Examples
  */
-package org.apache.juneau.examples.rest.springboot;
-
+package org.apache.juneau.examples.rest.springboot;

@@ -1757,4 +1757,4 @@ public class BeanSession extends ContextSession {
 	public final boolean isUseJavaBeanIntrospector() {
 		return ctx.isUseJavaBeanIntrospector();
 	}
-}
+}

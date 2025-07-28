@@ -34,4 +34,4 @@ public class UonClassMeta extends ExtendedClassMeta {
 	public UonClassMeta(ClassMeta<?> cm, UonMetaProvider mp) {
 		super(cm);
 	}
-}
+}

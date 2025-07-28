@@ -14,5 +14,4 @@
 /**
  * JSON Marshalling Support
  */
-package org.apache.juneau.json;
-
+package org.apache.juneau.json;

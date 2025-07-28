@@ -1234,4 +1234,4 @@ public @interface Schema {
 	 * @return The annotation value.
 	 */
 	String[] xml() default {};
-}
+}

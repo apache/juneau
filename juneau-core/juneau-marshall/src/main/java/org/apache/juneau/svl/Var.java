@@ -173,4 +173,4 @@ public abstract class Var {
 	 * @throws Exception Any exception can be thrown.
 	 */
 	public abstract void resolveTo(VarResolverSession session, Writer w, String arg) throws Exception;
-}
+}

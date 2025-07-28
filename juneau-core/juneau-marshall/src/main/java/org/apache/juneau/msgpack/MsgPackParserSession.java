@@ -357,4 +357,4 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 
 		return (T)o;
 	}
-}
+}

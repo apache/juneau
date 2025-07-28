@@ -1062,4 +1062,4 @@ public class JsonList extends LinkedList<Object> {
 	public String toString() {
 		return Json5.of(this);
 	}
-}
+}

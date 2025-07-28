@@ -59,4 +59,4 @@ import org.apache.juneau.serializer.annotation.*;
 )
 public class DtoExamples extends BasicRestServletGroup {
 	private static final long serialVersionUID = 1L;
-}
+}

@@ -262,4 +262,4 @@ public class XBeans {
 
 		public static XF INSTANCE = get();
 	}
-}
+}

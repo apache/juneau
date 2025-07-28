@@ -925,4 +925,4 @@ public class RestResponse implements HttpResponse {
 	// <FluentSetters>
 
 	// </FluentSetters>
-}
+}

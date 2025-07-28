@@ -42,4 +42,4 @@ public final class CsvBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	private CsvBeanPropertyMeta() {
 		super(null);
 	}
-}
+}

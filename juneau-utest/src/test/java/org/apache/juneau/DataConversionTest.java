@@ -131,4 +131,4 @@ public class DataConversionTest {
 		s = bc.convertToType(c, String.class);
 		assertEquals("2001-12-21T12:34:56Z", s);
 	}
-}
+}

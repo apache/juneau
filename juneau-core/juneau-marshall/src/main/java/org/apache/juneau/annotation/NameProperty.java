@@ -116,4 +116,4 @@ public @interface NameProperty {
 	 * @return The annotation value.
 	 */
 	String[] on() default {};
-}
+}

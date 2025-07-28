@@ -515,4 +515,4 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	protected final char getQuoteChar() {
 		return ctx.getQuoteChar();
 	}
-}
+}

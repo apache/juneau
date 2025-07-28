@@ -14,5 +14,4 @@
 /**
  * Swagger UI Generator
  */
-package org.apache.juneau.dto.swagger.ui;
-
+package org.apache.juneau.dto.swagger.ui;

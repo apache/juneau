@@ -42,4 +42,4 @@ public class MatchResultSwap extends ObjectSwap<MatchResult,List<String>> {
 			l.add(o.group(i));
 		return l;
 	}
-}
+}

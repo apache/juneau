@@ -575,4 +575,4 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			throw new SerializeException(e);
 		}
 	}
-}
+}

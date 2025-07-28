@@ -109,4 +109,4 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 	public SimplePartSerializerSession getPartSession() {
 		return new SimplePartSerializerSession();
 	}
-}
+}

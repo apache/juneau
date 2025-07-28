@@ -93,4 +93,4 @@ public class XmlDocSerializer extends XmlSerializer {
 	public XmlDocSerializerSession getSession() {
 		return createSession().build();
 	}
-}
+}

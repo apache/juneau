@@ -14,5 +14,4 @@
 /**
  * Marshallers
  */
-package org.apache.juneau.marshaller;
-
+package org.apache.juneau.marshaller;

@@ -79,4 +79,4 @@ public class ArrayUtilsTest {
 		assertNull(combine(null,null));
 		assertNull(combine());
 	}
-}
+}

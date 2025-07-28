@@ -821,4 +821,4 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 		}
 		return m;
 	}
-}
+}

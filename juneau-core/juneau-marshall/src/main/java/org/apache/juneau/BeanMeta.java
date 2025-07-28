@@ -1004,4 +1004,4 @@ public class BeanMeta<T> {
 	public boolean equals(Object o) {
 		return (o instanceof BeanMeta) && eq(this, (BeanMeta<?>)o, (x,y)->eq(x.classMeta, y.classMeta));
 	}
-}
+}

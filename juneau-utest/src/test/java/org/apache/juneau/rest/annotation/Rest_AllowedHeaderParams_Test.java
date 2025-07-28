@@ -103,4 +103,4 @@ public class Rest_AllowedHeaderParams_Test {
 		a8.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent("Accept=text/plain+foo1; Content-Type=text/plain+foo2; Custom=foo3");
 		a8.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent("Accept=text/plain+foo1; Content-Type=text/plain+foo2; Custom=foo3");
 	}
-}
+}

@@ -94,4 +94,4 @@ public final class BeanDescription {
 			this.type = type.getSerializedClassMeta(null).toString();
 		}
 	}
-}
+}

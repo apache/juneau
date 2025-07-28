@@ -33,4 +33,4 @@ public class PlainTextClassMeta extends ExtendedClassMeta {
 	public PlainTextClassMeta(ClassMeta<?> cm, PlainTextMetaProvider mp) {
 		super(cm);
 	}
-}
+}

@@ -253,4 +253,4 @@ public class CommonTest {
 		public String name = "baz";
 		public R1 r1;
 	}
-}
+}

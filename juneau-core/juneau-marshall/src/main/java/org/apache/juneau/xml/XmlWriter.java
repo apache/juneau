@@ -669,4 +669,4 @@ public class XmlWriter extends SerializerWriter {
 	public String toString() {
 		return out.toString();
 	}
-}
+}

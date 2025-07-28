@@ -608,4 +608,4 @@ public final class ParserSet {
 	public boolean isEmpty() {
 		return entries.length == 0;
 	}
-}
+}

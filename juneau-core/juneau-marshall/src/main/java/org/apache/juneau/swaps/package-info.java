@@ -14,5 +14,4 @@
 /**
  * Predefined Swaps
  */
-package org.apache.juneau.swaps;
-
+package org.apache.juneau.swaps;

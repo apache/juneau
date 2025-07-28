@@ -165,4 +165,4 @@ public class Rest_AllowedMethodParams_Test {
 		a8.get("/?method=OPTIONS").run().assertContent("GET");
 		a8.request("get","/?method=FOO").run().assertContent("GET");
 	}
-}
+}

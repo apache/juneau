@@ -14,5 +14,4 @@
 /**
  * CSV Marshalling Annotations
  */
-package org.apache.juneau.csv.annotation;
-
+package org.apache.juneau.csv.annotation;

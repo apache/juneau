@@ -433,4 +433,4 @@ public class XmlCollapsedTest {
 			return t;
 		}
 	}
-}
+}

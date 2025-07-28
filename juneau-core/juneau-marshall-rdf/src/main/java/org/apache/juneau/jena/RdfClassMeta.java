@@ -79,4 +79,4 @@ public class RdfClassMeta extends ExtendedClassMeta {
 	protected Namespace getNamespace() {
 		return namespace;
 	}
-}
+}

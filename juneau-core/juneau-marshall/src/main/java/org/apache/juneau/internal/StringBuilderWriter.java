@@ -110,4 +110,4 @@ public final class StringBuilderWriter extends Writer {
 
 	@Override /* Writer */
 	public void close() throws IOException {}
-}
+}

@@ -41,4 +41,4 @@ public interface PropertyNamer {
 	 * @return The converted property name.
 	 */
 	String getPropertyName(String name);
-}
+}

@@ -51,4 +51,4 @@ public class ShutdownResource extends BasicRestServlet {
 		).start();
 		return "OK";
 	}
-}
+}

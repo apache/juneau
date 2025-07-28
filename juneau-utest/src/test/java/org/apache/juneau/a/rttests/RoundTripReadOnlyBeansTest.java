@@ -99,4 +99,4 @@ public class RoundTripReadOnlyBeansTest extends RoundTripTest {
 			return f2;
 		}
 	}
-}
+}

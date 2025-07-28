@@ -14,5 +14,4 @@
 /**
  * Predefined Microservice Resources
  */
-package org.apache.juneau.microservice.resources;
-
+package org.apache.juneau.microservice.resources;

@@ -931,4 +931,4 @@ public final class HtmlParserSession extends XmlParserSession {
 	protected HtmlBeanPropertyMeta getHtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		return ctx.getHtmlBeanPropertyMeta(bpm);
 	}
-}
+}

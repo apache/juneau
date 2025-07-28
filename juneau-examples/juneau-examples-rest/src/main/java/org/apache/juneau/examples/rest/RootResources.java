@@ -75,4 +75,4 @@ public class RootResources extends BasicRestServletGroup {
 	// It allows you to remove the Jena prerequisite.
 
 	private static final long serialVersionUID = 1L;
-}
+}

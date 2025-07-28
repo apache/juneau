@@ -14,5 +14,4 @@
 /**
  * Configuration Event Support
  */
-package org.apache.juneau.config.event;
-
+package org.apache.juneau.config.event;

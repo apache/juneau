@@ -220,5 +220,4 @@ public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogP
 			return s.replaceAll("<", "&lt;");//$NON-NLS-2$
 		return s;
 	}
-}
-
+}

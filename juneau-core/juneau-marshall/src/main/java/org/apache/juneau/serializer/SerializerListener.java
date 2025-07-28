@@ -52,4 +52,4 @@ public class SerializerListener {
 	public void onError(SerializerSession session, Throwable t, String msg) {
 		// Do something with this information.
 	}
-}
+}

@@ -210,4 +210,4 @@ public class RoundTripMapsTest extends RoundTripTest {
 	public enum TestEnum {
 		FOO,BAR,BAZ
 	}
-}
+}

@@ -135,4 +135,4 @@ public class AtomFeedResource extends BasicRestServlet {
 		this.feed = feed;
 		return feed;
 	}
-}
+}

@@ -410,4 +410,4 @@ public abstract class ObjectSwap<T,S> {
 	public String toString() {
 		return getClass().getSimpleName() + '<' + getNormalClass().getSimpleName() + "," + getSwapClass().getSimpleName() + '>';
 	}
-}
+}

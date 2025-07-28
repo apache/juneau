@@ -51,4 +51,4 @@ public abstract class MultipartVar extends SimpleVar {
 		String[] s2 = s.indexOf(',') == -1 ? new String[]{s.trim()} : split(s);
 		return resolve(session, s2);
 	}
-}
+}

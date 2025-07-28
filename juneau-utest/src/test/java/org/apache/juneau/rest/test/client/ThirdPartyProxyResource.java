@@ -1765,4 +1765,4 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	public void httpStatusReturn404(RestResponse res) {
 		res.setStatus(404);
 	}
-}
+}

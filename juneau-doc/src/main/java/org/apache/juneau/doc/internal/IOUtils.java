@@ -46,4 +46,4 @@ public final class IOUtils {
 	public static void writeFile(String path, String contents) throws IOException {
 		Files.write(Paths.get(path), contents.getBytes("UTF-8"));
 	}
-}
+}

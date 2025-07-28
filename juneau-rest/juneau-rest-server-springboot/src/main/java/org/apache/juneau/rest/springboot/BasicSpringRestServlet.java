@@ -74,4 +74,4 @@ public abstract class BasicSpringRestServlet extends SpringRestServlet implement
 	public RestContextStats getStats(RestRequest req) {
 		return req.getContext().getStats();
 	}
-}
+}

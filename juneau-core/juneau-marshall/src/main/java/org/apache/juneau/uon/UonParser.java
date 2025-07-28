@@ -895,4 +895,4 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	protected JsonMap properties() {
 		return filteredMap("decoding", decoding, "validateEnd", validateEnd);
 	}
-}
+}

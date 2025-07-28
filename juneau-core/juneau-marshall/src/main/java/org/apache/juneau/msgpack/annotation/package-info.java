@@ -14,5 +14,4 @@
 /**
  * MessagePack Marshalling Annotations
  */
-package org.apache.juneau.msgpack.annotation;
-
+package org.apache.juneau.msgpack.annotation;

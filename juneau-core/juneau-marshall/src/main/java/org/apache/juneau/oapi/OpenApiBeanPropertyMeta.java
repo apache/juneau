@@ -43,4 +43,4 @@ public final class OpenApiBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	private OpenApiBeanPropertyMeta() {
 		super(null);
 	}
-}
+}

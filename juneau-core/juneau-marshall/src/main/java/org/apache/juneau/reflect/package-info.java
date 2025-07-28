@@ -14,5 +14,4 @@
 /**
  * Reflection API
  */
-package org.apache.juneau.reflect;
-
+package org.apache.juneau.reflect;

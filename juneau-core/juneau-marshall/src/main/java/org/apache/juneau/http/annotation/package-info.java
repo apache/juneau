@@ -14,5 +14,4 @@
 /**
  * HTTP Part Annotations
  */
-package org.apache.juneau.http.annotation;
-
+package org.apache.juneau.http.annotation;

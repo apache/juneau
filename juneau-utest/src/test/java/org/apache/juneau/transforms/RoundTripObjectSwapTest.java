@@ -66,4 +66,4 @@ public abstract class RoundTripObjectSwapTest<T,S> {
 		System.err.println(s);  // NOT DEBUG
 		Assert.fail(s);
 	}
-}
+}

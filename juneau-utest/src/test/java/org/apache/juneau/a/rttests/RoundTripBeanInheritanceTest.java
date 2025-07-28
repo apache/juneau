@@ -205,4 +205,4 @@ public class RoundTripBeanInheritanceTest extends RoundTripTest {
 			return ("B2(f1: " + this.getF1() + ", f2: " + this.getF2() + ")");
 		}
 	}
-}
+}

@@ -208,4 +208,4 @@ public final class CsvParserSession extends ReaderParserSession {
 	private <T> T parseAnything(ClassMeta<T> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws ParseException {
 		throw new ParseException("Not implemented.");
 	}
-}
+}

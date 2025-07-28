@@ -14,5 +14,4 @@
 /**
  * Serializer Annotations
  */
-package org.apache.juneau.serializer.annotation;
-
+package org.apache.juneau.serializer.annotation;

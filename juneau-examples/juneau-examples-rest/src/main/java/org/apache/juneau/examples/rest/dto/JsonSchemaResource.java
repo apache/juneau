@@ -114,4 +114,4 @@ public class JsonSchemaResource extends BasicRestServlet {
 		this.schema = schema;
 		return schema;
 	}
-}
+}

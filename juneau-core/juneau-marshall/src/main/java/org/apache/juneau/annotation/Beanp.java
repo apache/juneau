@@ -478,4 +478,4 @@ public @interface Beanp {
 	 * @return The annotation value.
 	 */
 	String wo() default "";
-}
+}

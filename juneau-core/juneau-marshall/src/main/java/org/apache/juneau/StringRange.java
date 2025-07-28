@@ -196,4 +196,4 @@ public class StringRange {
 	public String toString() {
 		return string;
 	}
-}
+}

@@ -332,4 +332,4 @@ public class StringVarResolverTest {
 			super("|");
 		}
 	}
-}
+}

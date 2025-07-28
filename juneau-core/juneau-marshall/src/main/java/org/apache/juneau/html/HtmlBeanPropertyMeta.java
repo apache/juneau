@@ -206,4 +206,4 @@ public final class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	public String getAnchorText() {
 		return anchorText;
 	}
-}
+}

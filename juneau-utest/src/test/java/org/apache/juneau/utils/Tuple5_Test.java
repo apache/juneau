@@ -50,4 +50,4 @@ public class Tuple5_Test {
 		assertFalse(x1.equals(x7));
 		assertNotEquals(x1.hashCode(), x7.hashCode());
 	}
-}
+}

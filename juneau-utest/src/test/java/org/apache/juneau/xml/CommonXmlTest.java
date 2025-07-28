@@ -80,4 +80,4 @@ public class CommonXmlTest {
 			this.url2 = new URL(url+"/2");
 		}
 	}
-}
+}

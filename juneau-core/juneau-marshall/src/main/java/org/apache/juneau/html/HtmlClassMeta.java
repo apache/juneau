@@ -149,4 +149,4 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 	public HtmlRender<?> getRender() {
 		return render;
 	}
-}
+}

@@ -50,5 +50,4 @@ public abstract class BasicSpringRestServletGroup extends BasicSpringRestServlet
 	public ChildResourceDescriptions getChildren(RestRequest req) {
 		return ChildResourceDescriptions.of(req);
 	}
-}
-
+}

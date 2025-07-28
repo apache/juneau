@@ -14,5 +14,4 @@
 /**
  * MessagePack Marshalling Support
  */
-package org.apache.juneau.msgpack;
-
+package org.apache.juneau.msgpack;

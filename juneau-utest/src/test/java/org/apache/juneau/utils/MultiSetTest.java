@@ -120,4 +120,4 @@ public class MultiSetTest {
 		assertThrown(()->new MultiSet<String>().iterator().remove()).isType(NoSuchElementException.class);
 
 	}
-}
+}

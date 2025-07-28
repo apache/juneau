@@ -14,5 +14,4 @@
 /**
  * Server Configuration Repository
  */
-package org.apache.juneau.server.config;
-
+package org.apache.juneau.server.config;

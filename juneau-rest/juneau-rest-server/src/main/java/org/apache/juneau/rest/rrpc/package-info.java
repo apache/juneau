@@ -14,5 +14,4 @@
 /**
  * REST Remote Procedure Call API
  */
-package org.apache.juneau.rest.rrpc;
-
+package org.apache.juneau.rest.rrpc;

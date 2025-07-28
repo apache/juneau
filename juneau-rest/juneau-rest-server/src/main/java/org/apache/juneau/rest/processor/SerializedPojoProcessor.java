@@ -110,5 +110,4 @@ public final class SerializedPojoProcessor implements ResponseProcessor {
 			req.getHeaderParam("Accept").orElse(""), Json5.of(res.getOpContext().getSerializers().getSupportedMediaTypes())
 		);
 	}
-}
-
+}

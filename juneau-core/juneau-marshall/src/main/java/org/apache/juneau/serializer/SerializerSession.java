@@ -1126,4 +1126,4 @@ public class SerializerSession extends BeanTraverseSession {
 	protected JsonMap properties() {
 		return filteredMap("uriResolver", uriResolver);
 	}
-}
+}

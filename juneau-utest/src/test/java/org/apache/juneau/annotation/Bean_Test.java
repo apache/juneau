@@ -393,5 +393,4 @@ public class Bean_Test {
 		json = js.serialize(e);
 		assertEquals("{b:2,d:4}", json);
 	}
-}
-
+}

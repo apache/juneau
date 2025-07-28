@@ -89,4 +89,4 @@ public interface RestConverter {
 	 * @throws SerializeException Generic serialization error occurred.
 	 */
 	Object convert(RestRequest req, Object res) throws BasicHttpException, SerializeException;
-}
+}

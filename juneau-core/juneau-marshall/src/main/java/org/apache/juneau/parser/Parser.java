@@ -1485,4 +1485,4 @@ public class Parser extends BeanContextable {
 			.append("trimStrings", trimStrings)
 			.append("unbuffered", unbuffered);
 	}
-}
+}

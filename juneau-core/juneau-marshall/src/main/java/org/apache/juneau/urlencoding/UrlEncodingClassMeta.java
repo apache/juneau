@@ -48,4 +48,4 @@ public class UrlEncodingClassMeta extends ExtendedClassMeta {
 	protected boolean isExpandedParams() {
 		return expandedParams;
 	}
-}
+}

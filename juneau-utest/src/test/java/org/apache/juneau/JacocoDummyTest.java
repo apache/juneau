@@ -43,4 +43,4 @@ public class JacocoDummyTest {
 		XmlFormat.valueOf(XmlFormat.DEFAULT.toString());
 		Visibility.valueOf(Visibility.DEFAULT.toString());
 	}
-}
+}

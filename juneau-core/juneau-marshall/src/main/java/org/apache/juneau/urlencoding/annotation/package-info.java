@@ -14,5 +14,4 @@
 /**
  * URL-Encoding Marshalling Annotations
  */
-package org.apache.juneau.urlencoding.annotation;
-
+package org.apache.juneau.urlencoding.annotation;

@@ -336,4 +336,4 @@ public class ClassMetaTest {
 		assertInteger(c5.lastAnnotation(A.class, null).get().value()).is(3);
 		assertInteger(c3.lastAnnotation(A.class, x -> x.value() == 5).get().value()).is(5);
 	}
-}
+}

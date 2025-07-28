@@ -113,4 +113,4 @@ public interface ResponseProcessor {
 	 * 	<br>Can be used to provide an appropriate HTTP response code and message.
 	 */
 	int process(RestOpSession opSession) throws IOException, BasicHttpException;
-}
+}

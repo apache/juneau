@@ -98,4 +98,4 @@ public final class Constants {
 	 * RDF resource that identifies a <c>Bag</c> value.
 	 */
 	public static final String RDF_BAG = "http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag";
-}
+}

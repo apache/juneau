@@ -84,4 +84,4 @@ public class XmlValidatorParser extends XmlParser {
 		parser.nextTag();
 		return parser;
 	}
-}
+}

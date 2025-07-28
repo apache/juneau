@@ -150,4 +150,4 @@ public @interface MsgPack {
 	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
-}
+}

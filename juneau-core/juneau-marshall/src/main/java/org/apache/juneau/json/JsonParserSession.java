@@ -979,4 +979,4 @@ public final class JsonParserSession extends ReaderParserSession {
 	protected JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
 		return ctx.getJsonClassMeta(cm);
 	}
-}
+}

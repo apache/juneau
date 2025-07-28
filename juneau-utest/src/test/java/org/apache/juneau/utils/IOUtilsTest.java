@@ -110,4 +110,4 @@ public class IOUtilsTest {
 			return new String(this.toByteArray(), UTF8);
 		}
 	}
-}
+}

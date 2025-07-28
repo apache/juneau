@@ -174,4 +174,4 @@ public class Restx_Serializers_Test {
 		b.get("/b").run().assertContent("['text/s5']");
 		b.get("/c").run().assertContent("['text/s5','text/s3','text/s4','text/s1','text/s2']");
 	}
-}
+}

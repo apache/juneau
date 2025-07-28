@@ -993,4 +993,4 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		return bpm == null ? XmlBeanPropertyMeta.DEFAULT : ctx.getXmlBeanPropertyMeta(bpm);
 	}
-}
+}

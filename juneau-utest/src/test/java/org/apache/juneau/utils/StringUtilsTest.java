@@ -1002,4 +1002,4 @@ public class StringUtilsTest {
 		assertEquals(0, diffPositionIc("a", null));
 		assertEquals(0, diffPositionIc(null, "b"));
 	}
-}
+}

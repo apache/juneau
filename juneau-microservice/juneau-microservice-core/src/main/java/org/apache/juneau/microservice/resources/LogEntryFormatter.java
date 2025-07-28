@@ -265,4 +265,4 @@ public class LogEntryFormatter extends Formatter {
 		}
 		return Integer.toHexString(i);
 	}
-}
+}

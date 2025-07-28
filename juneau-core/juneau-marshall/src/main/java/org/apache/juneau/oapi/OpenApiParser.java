@@ -833,4 +833,4 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 	protected final HttpPartCollectionFormat getCollectionFormat() {
 		return collectionFormat;
 	}
-}
+}

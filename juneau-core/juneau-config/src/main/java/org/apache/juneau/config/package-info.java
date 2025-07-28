@@ -14,5 +14,4 @@
 /**
  * Configuration Support
  */
-package org.apache.juneau.config;
-
+package org.apache.juneau.config;

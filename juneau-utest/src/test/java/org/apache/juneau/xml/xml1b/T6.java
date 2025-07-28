@@ -34,4 +34,4 @@ public class T6 {
 	public boolean equals(T6 x) {
 		return x.f1 == f1 && x.f2 == f2 && x.f3 == f3 && x.f4 == f4;
 	}
-}
+}

@@ -70,4 +70,4 @@ public class DelegateMap<T extends Map> extends JsonMap implements Delegate<T> {
 		this.putAll(m);
 		return this;
 	}
-}
+}

@@ -25,5 +25,4 @@
 	}
 )
 package org.apache.juneau.xml.xml1c;
-import org.apache.juneau.xml.annotation.*;
-
+import org.apache.juneau.xml.annotation.*;

@@ -195,4 +195,4 @@ public @interface Json {
 	 * @return The annotation value.
 	 */
 	String wrapperAttr() default "";
-}
+}

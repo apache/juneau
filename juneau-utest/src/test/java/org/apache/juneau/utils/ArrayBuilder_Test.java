@@ -36,4 +36,4 @@ public class ArrayBuilder_Test {
 		x.add("c");
 		assertObject(x.orElse(empty)).asJson().is("['a','b','c']");
 	}
-}
+}

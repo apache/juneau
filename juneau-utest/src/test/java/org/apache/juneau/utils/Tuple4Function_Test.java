@@ -28,4 +28,4 @@ public class Tuple4Function_Test {
 		Tuple4Function<Integer,Integer,Integer,Integer,Integer> x = (a,b,c,d)->a+b+c+d;
 		assertInteger(x.apply(1,2,3,4)).is(10);
 	}
-}
+}

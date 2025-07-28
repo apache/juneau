@@ -971,4 +971,4 @@ public class XmlParserSession extends ReaderParserSession {
 	protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		return ctx.getXmlBeanPropertyMeta(bpm);
 	}
-}
+}

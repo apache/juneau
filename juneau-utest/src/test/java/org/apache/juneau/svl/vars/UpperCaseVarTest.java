@@ -32,4 +32,4 @@ public class UpperCaseVarTest {
 
 		assertEquals("FOOBAR", vr.resolve("$UC{$S{UpperCaseVar.test}}"));
 	}
-}
+}

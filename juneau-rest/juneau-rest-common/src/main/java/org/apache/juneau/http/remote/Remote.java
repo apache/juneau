@@ -133,4 +133,4 @@ public @interface Remote {
 	 * @return The annotation value.
 	 */
 	String versionHeader() default "";
-}
+}

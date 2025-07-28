@@ -41,4 +41,4 @@ public @interface Named {
 	 * @return The annotation value.
 	 */
 	String value();
-}
+}

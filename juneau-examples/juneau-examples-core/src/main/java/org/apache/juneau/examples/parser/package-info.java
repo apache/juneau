@@ -14,5 +14,4 @@
 /**
  * Examples
  */
-package org.apache.juneau.examples.parser;
-
+package org.apache.juneau.examples.parser;

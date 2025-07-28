@@ -40,4 +40,4 @@ public class EnumerationSwap extends ObjectSwap<Enumeration,List> {
 			l.add(o.nextElement());
 		return l;
 	}
-}
+}

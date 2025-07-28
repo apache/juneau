@@ -80,4 +80,4 @@ public interface RestCallInterceptor {
 	 * 	<br>If not a {@link RestCallException} or {@link RuntimeException}, will be wrapped in a {@link RestCallException}.
 	 */
 	void onClose(RestRequest req, RestResponse res) throws Exception;
-}
+}

@@ -59,4 +59,4 @@ public class JsonSchemaClassMeta extends ExtendedClassMeta {
 	protected JsonMap getSchema() {
 		return schema;
 	}
-}
+}

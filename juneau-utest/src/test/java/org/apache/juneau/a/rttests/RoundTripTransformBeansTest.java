@@ -690,4 +690,4 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 			return new String((byte[])o, UTF8);
 		return o.toString();
 	}
-}
+}

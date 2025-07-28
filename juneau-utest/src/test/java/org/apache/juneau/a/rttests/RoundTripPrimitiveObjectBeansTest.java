@@ -191,4 +191,4 @@ public class RoundTripPrimitiveObjectBeansTest extends RoundTripTest {
 		assertNull(t.polAtomicLong.get(1));
 	}
 
-}
+}

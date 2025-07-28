@@ -69,4 +69,4 @@ public class StackTraceElementSwap extends ObjectSwap<StackTraceElement,String> 
 
 		return new StackTraceElement(in, methodName, fileName, lineNumber);
 	}
-}
+}

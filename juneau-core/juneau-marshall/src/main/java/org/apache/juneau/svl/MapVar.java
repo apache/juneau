@@ -45,4 +45,4 @@ public abstract class MapVar extends DefaultingVar {
 	public String resolve(VarResolverSession session, String varVal) {
 		return stringify(m.get(varVal));
 	}
-}
+}

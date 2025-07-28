@@ -43,4 +43,4 @@ public final class MsgPackBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	private MsgPackBeanPropertyMeta() {
 		super(null);
 	}
-}
+}

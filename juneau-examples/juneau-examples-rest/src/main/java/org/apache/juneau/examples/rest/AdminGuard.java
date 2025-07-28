@@ -27,4 +27,4 @@ public class AdminGuard extends RestGuard {
 	public boolean isRequestAllowed(RestRequest req) {
 		return true;
 	}
-}
+}

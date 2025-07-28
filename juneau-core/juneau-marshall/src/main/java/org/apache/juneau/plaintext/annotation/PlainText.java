@@ -149,4 +149,4 @@ public @interface PlainText {
 	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
-}
+}

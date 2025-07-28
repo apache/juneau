@@ -587,4 +587,4 @@ public final class XmlUtils {
 			return "ENTITY_DECLARATION";
 		return "UNKNOWN";
 	}
-}
+}

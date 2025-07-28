@@ -14,5 +14,4 @@
 /**
  * UON Marshalling Support
  */
-package org.apache.juneau.uon;
-
+package org.apache.juneau.uon;

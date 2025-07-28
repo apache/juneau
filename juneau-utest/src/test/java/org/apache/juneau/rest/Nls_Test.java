@@ -100,4 +100,4 @@ public class Nls_Test {
 		MockRestClient c = MockRestClient.build(C.class);
 		c.get("/a").run().assertContent("{!bad}");
 	}
-}
+}

@@ -14,5 +14,4 @@
 /**
  * Internal Utilities
  */
-package org.apache.juneau.internal;
-
+package org.apache.juneau.internal;

@@ -14,5 +14,4 @@
 /**
  * Examples
  */
-package org.apache.juneau.examples.serializer;
-
+package org.apache.juneau.examples.serializer;

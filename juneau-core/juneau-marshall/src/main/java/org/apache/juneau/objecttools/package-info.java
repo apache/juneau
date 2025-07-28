@@ -14,5 +14,4 @@
 /**
  * Java Object Tools
  */
-package org.apache.juneau.objecttools;
-
+package org.apache.juneau.objecttools;

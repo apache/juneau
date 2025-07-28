@@ -38,5 +38,3 @@ public class PoweredByJuneau extends Widget {
 		return "<a href='http://juneau.apache.org'><img style='float:right;padding-right:20px;height:32px' src='"+r.resolve("servlet:/htdocs/images/juneau.png")+"'>";
 	}
 }
-
-

@@ -14,5 +14,4 @@
 /**
  * SOAP/XML Marshalling Support
  */
-package org.apache.juneau.soap;
-
+package org.apache.juneau.soap;

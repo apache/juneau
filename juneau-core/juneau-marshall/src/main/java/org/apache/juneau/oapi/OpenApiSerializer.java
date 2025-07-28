@@ -1001,4 +1001,4 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	protected final HttpPartCollectionFormat getCollectionFormat() {
 		return collectionFormat;
 	}
-}
+}

@@ -305,4 +305,4 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 			return f9;
 		}
 	}
-}
+}

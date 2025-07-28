@@ -100,4 +100,4 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 			throw new ParseException(e);
 		}
 	}
-}
+}

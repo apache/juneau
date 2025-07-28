@@ -100,4 +100,4 @@ public @interface RdfSchema {
 	 * @return The annotation value.
 	 */
 	public RdfNs[] rdfNs() default {};
-}
+}

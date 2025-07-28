@@ -1149,4 +1149,4 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	JsonSchemaGenerator getGenerator() {
 		return generator;
 	}
-}
+}

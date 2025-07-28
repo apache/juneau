@@ -14,5 +14,4 @@
 /**
  * RFC2616 HTTP Headers
  */
-package org.apache.juneau.http;
-
+package org.apache.juneau.http;

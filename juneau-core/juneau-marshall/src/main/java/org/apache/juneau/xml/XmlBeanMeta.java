@@ -274,4 +274,4 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 		}
 		return getBeanMeta().getPropertyMeta(fieldName);
 	}
-}
+}

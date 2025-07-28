@@ -697,4 +697,4 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		}
 		return m;
 	}
-}
+}

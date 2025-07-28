@@ -1152,4 +1152,4 @@ public class WriterSerializer extends Serializer {
 	protected JsonMap properties() {
 		return filteredMap("fileCharset", fileCharset, "maxIndent", maxIndent, "quoteChar", quoteChar, "streamCharset", streamCharset, "useWhitespace", useWhitespace);
 	}
-}
+}

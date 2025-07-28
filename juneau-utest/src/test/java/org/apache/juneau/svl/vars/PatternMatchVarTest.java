@@ -45,4 +45,4 @@ public class PatternMatchVarTest {
 		assertEquals("false", vr.resolve("$PM{$S{PatternMatchVarTest.test},?????}"));
 		assertEquals("false", vr.resolve("$PM{$S{PatternMatchVarTest.test},???????}"));
 	}
-}
+}

@@ -392,4 +392,4 @@ public class UrlPathMatcher_Test {
 		check(p, "/*.*", "{}");
 		shouldNotMatch(p, "/foo", "/foo", "/*", null);
 	}
-}
+}

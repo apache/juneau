@@ -14,5 +14,4 @@
 /**
  * Configuration Predefined SVL Variables
  */
-package org.apache.juneau.config.vars;
-
+package org.apache.juneau.config.vars;

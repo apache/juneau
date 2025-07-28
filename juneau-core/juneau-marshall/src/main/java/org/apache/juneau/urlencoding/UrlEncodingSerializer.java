@@ -1086,4 +1086,4 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	protected JsonMap properties() {
 		return filteredMap("expandedParams", expandedParams);
 	}
-}
+}

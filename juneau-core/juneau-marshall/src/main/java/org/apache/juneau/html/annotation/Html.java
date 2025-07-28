@@ -241,4 +241,4 @@ public @interface Html {
 	 */
 	@SuppressWarnings("rawtypes")
 	Class<? extends HtmlRender> render() default HtmlRender.class;
-}
+}

@@ -73,4 +73,4 @@ import org.apache.juneau.serializer.annotation.*;
 )
 public class RootResources extends BasicSpringRestServletGroup {
 	private static final long serialVersionUID = 1L;
-}
+}

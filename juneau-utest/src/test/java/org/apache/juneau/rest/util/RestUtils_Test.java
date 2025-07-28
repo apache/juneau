@@ -274,4 +274,4 @@ public class RestUtils_Test {
 		assertTrue(isValidPathInfo(null));
 		assertFalse(isValidPathInfo("foo"));
 	}
-}
+}

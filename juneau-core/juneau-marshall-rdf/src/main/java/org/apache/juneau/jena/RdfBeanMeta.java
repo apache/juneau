@@ -57,4 +57,4 @@ public class RdfBeanMeta extends ExtendedBeanMeta {
 	public BeanPropertyMeta getBeanUriProperty() {
 		return beanUriProperty;
 	}
-}
+}

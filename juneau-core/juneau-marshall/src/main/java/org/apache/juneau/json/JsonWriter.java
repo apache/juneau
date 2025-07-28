@@ -318,4 +318,4 @@ public final class JsonWriter extends SerializerWriter {
 	}
 
 	// </FluentSetters>
-}
+}

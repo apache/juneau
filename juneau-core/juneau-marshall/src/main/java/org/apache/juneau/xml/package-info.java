@@ -14,5 +14,4 @@
 /**
  * XML Marshalling Support
  */
-package org.apache.juneau.xml;
-
+package org.apache.juneau.xml;

@@ -773,4 +773,4 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 		t = roundTrip(t);
 		assertEquals("𤭢𤭢", t);
 	}
-}
+}

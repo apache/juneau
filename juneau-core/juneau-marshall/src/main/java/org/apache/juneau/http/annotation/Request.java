@@ -200,4 +200,4 @@ public @interface Request {
 	 * @return The annotation value.
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Void.class;
-}
+}

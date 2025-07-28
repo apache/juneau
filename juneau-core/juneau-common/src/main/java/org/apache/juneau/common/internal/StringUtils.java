@@ -2866,4 +2866,4 @@ public final class StringUtils {
 	public static boolean isNumberChar(char c) {
 		return numberChars.contains(c);
 	}
-}
+}

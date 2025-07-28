@@ -14,5 +14,4 @@
 /**
  * Marshalling API
  */
-package org.apache.juneau;
-
+package org.apache.juneau;

@@ -98,4 +98,4 @@ public class XmlClassMeta extends ExtendedClassMeta {
 	public Namespace getNamespace() {
 		return namespace;
 	}
-}
+}

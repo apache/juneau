@@ -1240,4 +1240,4 @@ public class ParserSession extends BeanSession {
 	protected JsonMap properties() {
 		return filteredMap("javaMethod", javaMethod, "listener", listener, "outer", outer);
 	}
-}
+}

@@ -322,4 +322,4 @@ public class DirectoryResource extends BasicRestServlet {
 		if (! f.delete())
 			throw new Forbidden("Could not delete file {0}", f.getAbsolutePath()) ;
 	}
-}
+}

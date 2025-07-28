@@ -45,4 +45,4 @@ public @interface RdfNs {
 	 * @return The annotation value.
 	 */
 	String prefix();
-}
+}

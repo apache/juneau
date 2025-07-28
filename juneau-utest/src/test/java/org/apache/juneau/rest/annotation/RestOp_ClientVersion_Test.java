@@ -192,4 +192,4 @@ public class RestOp_ClientVersion_Test {
 			b.get("/").header("Custom-Client-Version", s).run().assertContent("2");
 		}
 	}
-}
+}

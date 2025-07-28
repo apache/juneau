@@ -84,4 +84,4 @@ public final class BeanRuntimeException extends BasicRuntimeException {
 			return (c == null ? "" : c.getName() + ": ") + cause.getMessage();
 		return null;
 	}
-}
+}

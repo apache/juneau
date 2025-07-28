@@ -122,4 +122,4 @@ public class ParsedReaderSwap extends ObjectSwap<Reader,Object> {
 			return read(o);
 		return parser.parse(o, Object.class);
 	}
-}
+}

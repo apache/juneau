@@ -14,5 +14,4 @@
 /**
  * JSON-Schema Marshalling Annotations
  */
-package org.apache.juneau.jsonschema.annotation;
-
+package org.apache.juneau.jsonschema.annotation;

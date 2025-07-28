@@ -14,5 +14,4 @@
 /**
  * REST HTTP Parts
  */
-package org.apache.juneau.rest.httppart;
-
+package org.apache.juneau.rest.httppart;

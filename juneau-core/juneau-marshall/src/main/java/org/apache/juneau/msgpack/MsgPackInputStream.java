@@ -476,4 +476,4 @@ public final class MsgPackInputStream extends ParserInputStream {
 		long l = read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read();
 		return l;
 	}
-}
+}

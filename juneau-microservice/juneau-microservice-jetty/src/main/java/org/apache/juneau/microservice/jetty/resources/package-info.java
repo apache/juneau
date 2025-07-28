@@ -14,5 +14,4 @@
 /**
  * Predefined Jetty Microservice Resources
  */
-package org.apache.juneau.microservice.jetty.resources;
-
+package org.apache.juneau.microservice.jetty.resources;

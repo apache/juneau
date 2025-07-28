@@ -265,4 +265,4 @@ public class Common_UrlEncodingTest {
 		public String name = "baz";
 		public R1 r1;
 	}
-}
+}

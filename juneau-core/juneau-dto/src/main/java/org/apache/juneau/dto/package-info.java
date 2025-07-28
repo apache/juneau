@@ -14,5 +14,4 @@
 /**
  * Data Transfer Objects
  */
-package org.apache.juneau.dto;
-
+package org.apache.juneau.dto;

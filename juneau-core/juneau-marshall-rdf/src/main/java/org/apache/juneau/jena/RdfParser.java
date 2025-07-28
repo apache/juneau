@@ -1692,4 +1692,4 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			.append("juneauBpNs", juneauBpNs)
 			.append("collectionFormat", collectionFormat);
 	}
-}
+}

@@ -804,4 +804,4 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 		}
 		return m;
 	}
-}
+}

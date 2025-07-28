@@ -155,4 +155,4 @@ public class CommonParser_Test {
 			events.add(propertyName + ", " + session.getPosition());
 		}
 	}
-}
+}

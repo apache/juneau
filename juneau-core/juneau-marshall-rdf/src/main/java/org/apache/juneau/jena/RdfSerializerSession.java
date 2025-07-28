@@ -752,4 +752,4 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		return bpm == null ? XmlBeanPropertyMeta.DEFAULT : ctx.getXmlBeanPropertyMeta(bpm);
 	}
-}
+}

@@ -792,4 +792,4 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	protected JsonMap properties() {
 		return filteredMap("detectRecursions", detectRecursions, "maxDepth", maxDepth, "ignoreRecursions", ignoreRecursions, "initialDepth", initialDepth);
 	}
-}
+}

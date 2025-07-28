@@ -432,4 +432,4 @@ public class ParserReader extends Reader implements Positionable {
 	public Position getPosition() {
 		return new Position(line, column);
 	}
-}
+}

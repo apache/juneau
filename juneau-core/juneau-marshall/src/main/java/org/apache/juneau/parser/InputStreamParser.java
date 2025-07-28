@@ -687,4 +687,4 @@ public class InputStreamParser extends Parser {
 	protected JsonMap properties() {
 		return filteredMap("binaryFormat", binaryFormat);
 	}
-}
+}

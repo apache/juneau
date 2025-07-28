@@ -348,4 +348,4 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 			f6d.add(b);
 		}
 	}
-}
+}

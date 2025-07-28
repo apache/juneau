@@ -90,4 +90,4 @@ public abstract class RestMatcher {
 	public boolean required() {
 		return false;
 	}
-}
+}

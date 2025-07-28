@@ -44,4 +44,4 @@ public final class KeywordSet {
 			return false;
 		return Arrays.binarySearch(store, s) >= 0;
 	}
-}
+}

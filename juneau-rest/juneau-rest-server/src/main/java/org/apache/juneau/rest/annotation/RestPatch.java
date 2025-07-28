@@ -879,4 +879,4 @@ public @interface RestPatch {
 	 * @return The annotation value.
 	 */
 	String value() default "";
-}
+}

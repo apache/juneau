@@ -14,5 +14,4 @@
 /**
  * RDF Marshalling Annotations
  */
-package org.apache.juneau.jena.annotation;
-
+package org.apache.juneau.jena.annotation;

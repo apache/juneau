@@ -166,4 +166,4 @@ public final class MarshalledFilter {
 	public String getExample() {
 		return example;
 	}
-}
+}

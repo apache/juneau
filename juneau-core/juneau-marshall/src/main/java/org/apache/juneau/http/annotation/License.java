@@ -79,4 +79,4 @@ public @interface License {
 	 * @return The annotation value.
 	 */
 	String url() default "";
-}
+}

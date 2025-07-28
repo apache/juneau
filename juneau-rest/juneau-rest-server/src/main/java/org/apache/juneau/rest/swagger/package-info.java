@@ -14,5 +14,4 @@
 /**
  * REST Swagger Support
  */
-package org.apache.juneau.rest.swagger;
-
+package org.apache.juneau.rest.swagger;

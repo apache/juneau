@@ -14,5 +14,4 @@
 /**
  * Plaintext Marshalling Support
  */
-package org.apache.juneau.plaintext;
-
+package org.apache.juneau.plaintext;

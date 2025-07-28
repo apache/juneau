@@ -14,5 +14,4 @@
 /**
  * REST Debug APIs
  */
-package org.apache.juneau.rest.debug;
-
+package org.apache.juneau.rest.debug;

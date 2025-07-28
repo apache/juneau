@@ -14,5 +14,4 @@
 /**
  * SOAP/XML Marshalling Annotations
  */
-package org.apache.juneau.soap.annotation;
-
+package org.apache.juneau.soap.annotation;

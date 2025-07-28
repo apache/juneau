@@ -43,4 +43,4 @@ public final class JsonBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	private JsonBeanPropertyMeta() {
 		super(null);
 	}
-}
+}

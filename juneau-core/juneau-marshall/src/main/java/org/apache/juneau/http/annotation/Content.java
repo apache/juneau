@@ -166,4 +166,4 @@ public @interface Content {
 	 * @return The annotation value.
 	 */
 	Schema schema() default @Schema;
-}
+}

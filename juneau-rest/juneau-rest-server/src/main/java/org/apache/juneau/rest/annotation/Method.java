@@ -50,4 +50,4 @@ import java.lang.annotation.*;
 @Retention(RUNTIME)
 @Inherited
 public @interface Method {
-}
+}

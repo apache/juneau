@@ -591,4 +591,4 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	}
 
 	// </FluentSetters>
-}
+}

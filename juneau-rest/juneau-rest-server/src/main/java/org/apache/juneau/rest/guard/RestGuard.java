@@ -102,4 +102,4 @@ public abstract class RestGuard {
 	 * @return <jk>true</jk> if the specified request can pass through this guard.
 	 */
 	public abstract boolean isRequestAllowed(RestRequest req);
-}
+}

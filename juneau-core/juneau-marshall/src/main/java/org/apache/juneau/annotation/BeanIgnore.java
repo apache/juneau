@@ -170,5 +170,4 @@ public @interface BeanIgnore {
 	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
-}
-
+}

@@ -139,4 +139,4 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		if (! cen.isEmpty())
 			childName = cen;
 	}
-}
+}

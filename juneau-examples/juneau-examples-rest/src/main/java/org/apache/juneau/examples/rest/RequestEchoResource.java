@@ -90,4 +90,4 @@ public class RequestEchoResource extends BasicRestObject {
 		// Just echo the request back as the response.
 		return req.getHttpServletRequest();
 	}
-}
+}

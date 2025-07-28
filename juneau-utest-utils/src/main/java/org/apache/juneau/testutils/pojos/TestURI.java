@@ -63,5 +63,4 @@ public class TestURI {
 			return "f8/x8";
 		}
 	}
-}
-
+}

@@ -56,4 +56,4 @@ public final class ResourceBundleUtils {
 	public static ResourceBundle empty() {
 		return EMPTY;
 	}
-}
+}

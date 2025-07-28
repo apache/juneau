@@ -2205,4 +2205,4 @@ public final class ClassMeta<T> implements Type {
 	public boolean equals(Object o) {
 		return (o instanceof ClassMeta) && eq(this, (ClassMeta<?>)o, (x,y)->eq(x.innerClass, y.innerClass));
 	}
-}
+}

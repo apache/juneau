@@ -14,5 +14,4 @@
 /**
  * Microservice API
  */
-package org.apache.juneau.microservice;
-
+package org.apache.juneau.microservice;

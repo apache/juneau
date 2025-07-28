@@ -35,4 +35,4 @@ public class SimplePartSerializerSession extends BaseHttpPartSerializerSession {
 	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
 		return Mutaters.toString(value);
 	}
-}
+}

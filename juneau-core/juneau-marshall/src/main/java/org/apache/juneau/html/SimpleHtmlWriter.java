@@ -40,4 +40,4 @@ public class SimpleHtmlWriter extends HtmlWriter {
 	public String toString() {
 		return out.toString();
 	}
-}
+}

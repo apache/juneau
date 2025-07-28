@@ -14,5 +14,4 @@
 /**
  * Bean and POJO Annotations
  */
-package org.apache.juneau.annotation;
-
+package org.apache.juneau.annotation;

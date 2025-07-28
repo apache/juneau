@@ -35,4 +35,4 @@ public class ReaderSwap extends StringSwap<Reader> {
 	public String swap(BeanSession session, Reader r) throws Exception {
 		return read(r);
 	}
-}
+}

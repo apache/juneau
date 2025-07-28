@@ -69,4 +69,4 @@ public final class PropertyNamerULC implements PropertyNamer {
 
 		return new String(name2);
 	}
-}
+}

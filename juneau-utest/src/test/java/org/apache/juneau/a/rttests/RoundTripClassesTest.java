@@ -50,4 +50,4 @@ public class RoundTripClassesTest extends RoundTripTest {
 		o = roundTrip(o);
 		assertObject(o).asJson().is("{'java.lang.String':'java.lang.String'}");
 	}
-}
+}

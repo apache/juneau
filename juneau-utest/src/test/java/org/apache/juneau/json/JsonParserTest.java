@@ -257,4 +257,4 @@ public class JsonParserTest {
 	private Reader reader(String in) {
 		return new CloseableStringReader(in);
 	}
-}
+}

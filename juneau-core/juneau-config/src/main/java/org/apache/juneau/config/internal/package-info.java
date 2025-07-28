@@ -14,5 +14,4 @@
 /**
  * Internal classes
  */
-package org.apache.juneau.config.internal;
-
+package org.apache.juneau.config.internal;

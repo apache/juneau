@@ -14,5 +14,4 @@
 /**
  * RDF Marshalling Support
  */
-package org.apache.juneau.jena;
-
+package org.apache.juneau.jena;

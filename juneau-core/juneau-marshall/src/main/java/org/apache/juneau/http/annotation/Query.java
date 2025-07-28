@@ -260,4 +260,4 @@ public @interface Query {
 	 * @return The annotation value.
 	 */
 	String value() default "";
-}
+}

@@ -45,4 +45,4 @@ public final class BeanMetaFiltered<T> extends BeanMeta<T> {
 	public BeanMetaFiltered(BeanMeta<T> innerMeta, Collection<String> pNames) {
 		this(innerMeta, pNames.toArray(new String[pNames.size()]));
 	}
-}
+}

@@ -70,4 +70,4 @@ public class ParserGenericsTest {
 
 	public static class TestCollection1 extends LinkedList<TestMap1> {}
 	public static class TestCollection2 extends LinkedList<TestMap2> {}
-}
+}

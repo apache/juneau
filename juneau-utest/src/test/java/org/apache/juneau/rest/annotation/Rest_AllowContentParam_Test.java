@@ -66,4 +66,4 @@ public class Rest_AllowContentParam_Test {
 		a4.put("/", "{a:'b'}").run().assertContent("{a:'b'}");
 		a4.put("/?content=(c=d)", "{a:'b'}").run().assertContent("{c:'d'}");
 	}
-}
+}

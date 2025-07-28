@@ -14,5 +14,4 @@
 /**
  * Parser API
  */
-package org.apache.juneau.parser;
-
+package org.apache.juneau.parser;

@@ -914,4 +914,4 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	public HtmlStrippedDocSerializerSession getSession() {
 		return createSession().build();
 	}
-}
+}

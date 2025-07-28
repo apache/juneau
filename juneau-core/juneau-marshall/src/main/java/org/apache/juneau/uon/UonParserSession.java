@@ -1009,4 +1009,4 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	protected JsonMap properties() {
 		return filteredMap("decoding", decoding);
 	}
-}
+}

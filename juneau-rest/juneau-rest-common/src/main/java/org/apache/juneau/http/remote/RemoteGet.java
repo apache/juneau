@@ -121,4 +121,4 @@ public @interface RemoteGet {
 	 * @return The annotation value.
 	 */
 	String value() default "";
-}
+}

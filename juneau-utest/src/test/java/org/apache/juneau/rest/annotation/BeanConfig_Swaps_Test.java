@@ -130,4 +130,4 @@ public class BeanConfig_Swaps_Test {
 		a.put("/e", "'A3-1'", APPLICATION_JSON).run().assertContent("'A3-1'");
 		a.put("/f/A3-2", null, APPLICATION_JSON).run().assertContent("'A3-2'");
 	}
-}
+}

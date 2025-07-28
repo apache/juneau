@@ -38,4 +38,4 @@ public class BasicPropertyNamer implements PropertyNamer {
 		return Introspector.decapitalize(name);
 	}
 
-}
+}

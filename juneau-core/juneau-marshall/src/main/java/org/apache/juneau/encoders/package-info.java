@@ -14,5 +14,4 @@
 /**
  * Encoders
  */
-package org.apache.juneau.encoders;
-
+package org.apache.juneau.encoders;

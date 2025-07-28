@@ -144,4 +144,4 @@ public class Restx_Path_Test {
 		RestClient c2 = MockRestClient.build(C2.class);
 		c2.get("/foo").run().assertContent("b");
 	}
-}
+}

@@ -23,4 +23,4 @@ public interface ConfigEventListener {
 	 * @param events The change events.
 	 */
 	void onConfigChange(ConfigEvents events);
-}
+}

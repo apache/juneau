@@ -15,4 +15,3 @@
  * Swagger Data Transfer Objects
  */
 package org.apache.juneau.dto.openapi3;
-

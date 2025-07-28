@@ -282,4 +282,4 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 		out.setWriter(w);
 		return w;
 	}
-}
+}

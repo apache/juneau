@@ -285,4 +285,4 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 			return new String((byte[])o, UTF8);
 		return o.toString();
 	}
-}
+}

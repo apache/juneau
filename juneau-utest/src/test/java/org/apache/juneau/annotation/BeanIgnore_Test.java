@@ -121,5 +121,4 @@ public class BeanIgnore_Test {
 	public void testBeanIgnoreOnBean_usingConfig() throws Exception {
 		assertObject(new Bc()).asString(Json5Serializer.DEFAULT.copy().applyAnnotations(B1cConfig.class).build()).is("{f2:2,f3:'xxx',f4:'xxx'}");
 	}
-}
-
+}

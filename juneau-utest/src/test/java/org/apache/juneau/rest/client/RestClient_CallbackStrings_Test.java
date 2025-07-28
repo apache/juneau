@@ -66,4 +66,4 @@ public class RestClient_CallbackStrings_Test {
 			assertThrown(()->x.callback(s).run().getContent().asString()).asMessage().isContains("Invalid format for call string");
 		}
 	}
-}
+}

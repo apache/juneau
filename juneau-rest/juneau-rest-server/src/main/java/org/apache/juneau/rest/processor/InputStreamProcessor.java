@@ -45,4 +45,4 @@ public final class InputStreamProcessor implements ResponseProcessor {
 
 		return FINISHED;
 	}
-}
+}

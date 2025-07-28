@@ -54,5 +54,4 @@ public final class PlainTextPojoProcessor implements ResponseProcessor {
 
 		return FINISHED;
 	}
-}
-
+}

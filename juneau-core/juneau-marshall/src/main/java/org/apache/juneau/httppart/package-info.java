@@ -14,5 +14,4 @@
 /**
  * HTTP Part Marshalling Support
  */
-package org.apache.juneau.httppart;
-
+package org.apache.juneau.httppart;

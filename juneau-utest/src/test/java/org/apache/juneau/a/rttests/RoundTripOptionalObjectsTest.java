@@ -376,4 +376,4 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 		x = roundTrip(x);
 		assertNull(x.f1);
 	}
-}
+}

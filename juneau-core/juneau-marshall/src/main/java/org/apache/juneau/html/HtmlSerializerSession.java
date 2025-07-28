@@ -1033,4 +1033,4 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	protected HtmlBeanPropertyMeta getHtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		return ctx.getHtmlBeanPropertyMeta(bpm);
 	}
-}
+}

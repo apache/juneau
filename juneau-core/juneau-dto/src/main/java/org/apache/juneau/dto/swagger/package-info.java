@@ -14,5 +14,4 @@
 /**
  * Swagger Data Transfer Objects
  */
-package org.apache.juneau.dto.swagger;
-
+package org.apache.juneau.dto.swagger;

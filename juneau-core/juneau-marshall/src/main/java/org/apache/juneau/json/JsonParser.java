@@ -828,4 +828,4 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	protected final boolean isValidateEnd() {
 		return validateEnd;
 	}
-}
+}

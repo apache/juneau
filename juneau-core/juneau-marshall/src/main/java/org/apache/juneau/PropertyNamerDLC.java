@@ -69,4 +69,4 @@ public final class PropertyNamerDLC implements PropertyNamer {
 
 		return new String(name2);
 	}
-}
+}

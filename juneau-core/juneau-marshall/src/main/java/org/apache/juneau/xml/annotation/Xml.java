@@ -279,4 +279,4 @@ public @interface Xml {
 	 * @return The annotation value.
 	 */
 	String prefix() default "";
-}
+}

@@ -723,4 +723,4 @@ public @interface RestGet {
 	 * @return The annotation value.
 	 */
 	String value() default "";
-}
+}

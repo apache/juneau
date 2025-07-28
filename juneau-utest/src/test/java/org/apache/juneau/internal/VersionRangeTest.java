@@ -68,4 +68,4 @@ public class VersionRangeTest {
 	public void test() throws Exception {
 		assertEquals(shouldMatch, range.matches(version));
 	}
-}
+}

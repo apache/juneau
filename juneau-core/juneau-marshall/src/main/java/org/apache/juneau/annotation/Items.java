@@ -405,4 +405,4 @@ public @interface Items {
 	 * @return The annotation value.
 	 */
 	boolean uniqueItems() default false;
-}
+}

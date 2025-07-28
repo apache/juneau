@@ -69,4 +69,4 @@ public class IgnoredClassesTest {
 			return "isNotBean";
 		}
 	}
-}
+}

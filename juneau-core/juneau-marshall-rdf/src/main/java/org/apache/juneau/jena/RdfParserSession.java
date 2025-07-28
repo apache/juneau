@@ -726,4 +726,4 @@ public class RdfParserSession extends ReaderParserSession {
 	protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		return ctx.getXmlBeanPropertyMeta(bpm);
 	}
-}
+}

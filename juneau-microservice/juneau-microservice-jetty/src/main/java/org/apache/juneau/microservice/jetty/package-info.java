@@ -14,5 +14,4 @@
 /**
  * Microservice API
  */
-package org.apache.juneau.microservice.jetty;
-
+package org.apache.juneau.microservice.jetty;

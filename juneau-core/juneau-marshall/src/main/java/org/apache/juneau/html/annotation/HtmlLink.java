@@ -114,4 +114,4 @@ public @interface HtmlLink {
 	 * @return The annotation value.
 	 */
 	String uriProperty() default "uri";
-}
+}

@@ -69,4 +69,4 @@ public class Args_Test {
 		assertEquals("bar bar", a.getArgs("foo").get(0));
 		assertTrue(a.containsKey("foo"));
 	}
-}
+}

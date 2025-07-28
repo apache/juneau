@@ -1224,4 +1224,4 @@ public class Microservice implements ConfigEventListener {
 	public void onConfigChange(ConfigEvents events) {
 		listener.onConfigChange(this, events);
 	}
-}
+}

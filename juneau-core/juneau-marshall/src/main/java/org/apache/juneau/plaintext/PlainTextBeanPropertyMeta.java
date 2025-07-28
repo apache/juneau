@@ -42,4 +42,4 @@ public final class PlainTextBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	private PlainTextBeanPropertyMeta() {
 		super(null);
 	}
-}
+}

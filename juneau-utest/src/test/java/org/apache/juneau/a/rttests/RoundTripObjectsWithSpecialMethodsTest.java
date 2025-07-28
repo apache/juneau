@@ -112,4 +112,4 @@ public class RoundTripObjectsWithSpecialMethodsTest extends RoundTripTest {
 			return this;
 		}
 	}
-}
+}

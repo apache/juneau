@@ -840,4 +840,4 @@ public class ObjectRest_Test {
 		assertNull(model.getClassMeta("1"));
 		assertNull(model.getClassMeta("0/addresses/1/state"));
 	}
-}
+}

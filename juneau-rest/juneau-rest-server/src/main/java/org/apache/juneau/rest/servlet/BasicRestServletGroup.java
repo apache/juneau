@@ -48,5 +48,4 @@ public abstract class BasicRestServletGroup extends BasicRestServlet implements 
 	public ChildResourceDescriptions getChildren(RestRequest req) {
 		return ChildResourceDescriptions.of(req);
 	}
-}
-
+}

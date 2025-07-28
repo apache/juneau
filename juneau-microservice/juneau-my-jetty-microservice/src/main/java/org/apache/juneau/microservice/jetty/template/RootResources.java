@@ -50,4 +50,4 @@ import org.apache.juneau.rest.widget.ThemeMenuItem;
 )
 public class RootResources extends BasicRestServletGroup {
 	private static final long serialVersionUID = 1L;
-}
+}

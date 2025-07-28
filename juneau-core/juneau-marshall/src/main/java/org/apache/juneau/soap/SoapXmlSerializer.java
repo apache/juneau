@@ -930,4 +930,4 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 	protected JsonMap properties() {
 		return filteredMap("soapAction", soapAction);
 	}
-}
+}

@@ -531,4 +531,4 @@ public final class RestUtils {
 		if (! isValidPathInfo(value))
 			throw new BasicRuntimeException("Value is not a valid path-info path: [{0}]", value);
 	}
-}
+}

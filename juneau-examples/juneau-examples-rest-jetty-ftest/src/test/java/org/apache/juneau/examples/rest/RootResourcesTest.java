@@ -105,4 +105,4 @@ public class RootResourcesTest extends RestTestcase {
 		if (debug) System.err.println(o);
 		assertEquals("Example of a router resource page.", o.getInfo().getDescription());
 	}
-}
+}

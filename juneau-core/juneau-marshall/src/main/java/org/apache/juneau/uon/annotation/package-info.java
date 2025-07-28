@@ -14,5 +14,4 @@
 /**
  * UON Marshalling Annotations
  */
-package org.apache.juneau.uon.annotation;
-
+package org.apache.juneau.uon.annotation;

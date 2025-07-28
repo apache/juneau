@@ -83,4 +83,4 @@ public final class ObjectRestException extends BasicRuntimeException {
 	public int getStatus() {
 		return status;
 	}
-}
+}

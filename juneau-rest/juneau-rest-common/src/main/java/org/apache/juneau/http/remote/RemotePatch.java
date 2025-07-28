@@ -121,4 +121,4 @@ public @interface RemotePatch {
 	 * @return The annotation value.
 	 */
 	String value() default "";
-}
+}

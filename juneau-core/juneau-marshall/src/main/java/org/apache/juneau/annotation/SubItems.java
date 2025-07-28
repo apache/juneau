@@ -372,4 +372,4 @@ public @interface SubItems {
 	 * @return The annotation value.
 	 */
 	boolean uniqueItems() default false;
-}
+}

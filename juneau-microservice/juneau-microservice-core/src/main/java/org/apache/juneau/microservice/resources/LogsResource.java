@@ -325,4 +325,4 @@ public class LogsResource extends BasicRestServlet {
 	private LogParser getLogParser(File f, final Date start, final Date end, final String thread, final String[] loggers, final String[] severity) throws IOException {
 		return new LogParser(leFormatter, f, start, end, thread, loggers, severity);
 	}
-}
+}

@@ -146,4 +146,4 @@ public class ManifestFile extends JsonMap {
 		forEach((k,v) -> sb.append(k).append(": ").append(v));
 		return sb.toString();
 	}
-}
+}

@@ -14,5 +14,4 @@
 /**
  * TODO
  */
-package org.apache.juneau.csv;
-
+package org.apache.juneau.csv;

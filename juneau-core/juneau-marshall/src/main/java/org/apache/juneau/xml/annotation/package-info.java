@@ -14,5 +14,4 @@
 /**
  * XML Marshalling Annotations
  */
-package org.apache.juneau.xml.annotation;
-
+package org.apache.juneau.xml.annotation;

@@ -272,4 +272,4 @@ public class SerializedEntity extends BasicHttpEntity {
 	}
 
 	// </FluentSetters>
-}
+}

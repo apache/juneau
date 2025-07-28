@@ -32,4 +32,4 @@ public class LowerCaseVarTest {
 
 		assertEquals("foobar", vr.resolve("$LC{$S{LowerCaseVar.test}}"));
 	}
-}
+}

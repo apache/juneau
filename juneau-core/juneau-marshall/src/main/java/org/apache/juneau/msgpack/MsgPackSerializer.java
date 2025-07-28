@@ -859,4 +859,4 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	protected JsonMap properties() {
 		return filteredMap("addBeanTypesMsgPack", addBeanTypesMsgPack);
 	}
-}
+}

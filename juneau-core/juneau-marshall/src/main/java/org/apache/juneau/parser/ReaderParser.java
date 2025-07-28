@@ -738,4 +738,4 @@ public class ReaderParser extends Parser {
 	protected JsonMap properties() {
 		return filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset);
 	}
-}
+}

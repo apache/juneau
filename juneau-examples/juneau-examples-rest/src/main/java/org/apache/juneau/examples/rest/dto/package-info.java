@@ -14,5 +14,4 @@
 /**
  * Examples
  */
-package org.apache.juneau.examples.rest.dto;
-
+package org.apache.juneau.examples.rest.dto;

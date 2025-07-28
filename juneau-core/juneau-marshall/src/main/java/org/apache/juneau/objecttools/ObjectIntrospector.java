@@ -250,4 +250,4 @@ public final class ObjectIntrospector {
 	public <T> T invokeMethod(Class<T> returnType, String method, String args) throws NoSuchMethodException, IllegalArgumentException, InvocationTargetException, IllegalAccessException, ParseException, IOException {
 		return returnType.cast(invokeMethod(method, args));
 	}
-}
+}

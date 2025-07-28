@@ -1670,4 +1670,4 @@ public class RrpcInterfaceTest {
 		Map<TestEnum,List<TestEnum[][][]>> x5n = null;
 		proxy.setMultiParamsEnum(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n);
 	}
-}
+}

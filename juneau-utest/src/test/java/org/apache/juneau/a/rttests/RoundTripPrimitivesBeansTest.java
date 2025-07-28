@@ -346,4 +346,4 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 
 		assertNull(t.get(1));
 	}
-}
+}

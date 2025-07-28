@@ -14,5 +14,4 @@
 /**
  * Microservice Console
  */
-package org.apache.juneau.microservice.console;
-
+package org.apache.juneau.microservice.console;

@@ -298,4 +298,4 @@ public class SerializedHeader extends BasicHeader {
 			throw new BasicRuntimeException(e, "Serialization error on request {0} parameter ''{1}''", HttpPartType.HEADER, getName());
 		}
 	}
-}
+}

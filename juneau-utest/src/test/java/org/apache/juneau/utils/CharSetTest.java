@@ -33,4 +33,4 @@ public class CharSetTest {
 		assertFalse(cs.contains((char)-1));
 		assertFalse(cs.contains((char)128));
 	}
-}
+}

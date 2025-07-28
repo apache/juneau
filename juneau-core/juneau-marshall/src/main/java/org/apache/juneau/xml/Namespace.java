@@ -189,4 +189,4 @@ public final class Namespace {
 	public String toString() {
 		return key;
 	}
-}
+}

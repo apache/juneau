@@ -14,5 +14,4 @@
 /**
  * Assertions API
  */
-package org.apache.juneau.assertions;
-
+package org.apache.juneau.assertions;

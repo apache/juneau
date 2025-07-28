@@ -936,4 +936,4 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 			.append("resolver", resolver)
 			.append("eventAllocator", eventAllocator);
 	}
-}
+}

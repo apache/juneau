@@ -28,4 +28,4 @@ public class Tuple5Function_Test {
 		Tuple5Function<Integer,Integer,Integer,Integer,Integer,Integer> x = (a,b,c,d,e)->a+b+c+d+e;
 		assertInteger(x.apply(1,2,3,4,5)).is(15);
 	}
-}
+}

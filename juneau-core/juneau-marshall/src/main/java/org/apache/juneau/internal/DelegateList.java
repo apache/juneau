@@ -47,4 +47,4 @@ public class DelegateList<T extends Collection<?>> extends JsonList implements D
 	public ClassMeta<T> getClassMeta() {
 		return classMeta;
 	}
-}
+}

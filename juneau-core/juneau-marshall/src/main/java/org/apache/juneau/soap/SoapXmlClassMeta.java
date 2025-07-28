@@ -33,4 +33,4 @@ public class SoapXmlClassMeta extends ExtendedClassMeta {
 	public SoapXmlClassMeta(ClassMeta<?> cm, SoapXmlMetaProvider mp) {
 		super(cm);
 	}
-}
+}

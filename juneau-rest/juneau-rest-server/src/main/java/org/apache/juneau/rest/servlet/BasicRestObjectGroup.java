@@ -46,5 +46,4 @@ public abstract class BasicRestObjectGroup extends BasicRestObject implements Ba
 	public ChildResourceDescriptions getChildren(RestRequest req) {
 		return ChildResourceDescriptions.of(req);
 	}
-}
-
+}

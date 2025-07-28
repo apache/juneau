@@ -23,5 +23,4 @@
 )
 package org.apache.juneau.dto.atom;
 
-import org.apache.juneau.xml.annotation.*;
-
+import org.apache.juneau.xml.annotation.*;

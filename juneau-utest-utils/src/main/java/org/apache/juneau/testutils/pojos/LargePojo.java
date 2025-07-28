@@ -42,4 +42,4 @@ public class LargePojo {
 	public static class A1Map extends LinkedHashMap<String,A1> {}
 
 	public static class A1List extends LinkedList<A1> {}
-}
+}

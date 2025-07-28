@@ -14,5 +14,4 @@
 /**
  * Serializer API
  */
-package org.apache.juneau.serializer;
-
+package org.apache.juneau.serializer;

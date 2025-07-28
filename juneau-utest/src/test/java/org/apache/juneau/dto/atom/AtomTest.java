@@ -203,4 +203,4 @@ public class AtomTest {
 		f2 = p.parse(r, Feed.class);
 		assertObject(f).isSameJsonAs(f2);
 	}
-}
+}

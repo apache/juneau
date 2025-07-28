@@ -47,4 +47,4 @@ public class HelloWorldResource extends BasicRestObject {
 	public String sayHello() {
 		return "Hello world!";
 	}
-}
+}

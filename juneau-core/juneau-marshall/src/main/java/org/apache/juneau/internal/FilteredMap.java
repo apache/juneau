@@ -105,4 +105,4 @@ public final class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate
 	public ClassMeta<Map<K,V>> getClassMeta() {
 		return classMeta;
 	}
-}
+}

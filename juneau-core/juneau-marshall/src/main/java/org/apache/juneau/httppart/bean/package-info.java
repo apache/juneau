@@ -14,5 +14,4 @@
 /**
  * HTTP Part Beans
  */
-package org.apache.juneau.httppart.bean;
-
+package org.apache.juneau.httppart.bean;

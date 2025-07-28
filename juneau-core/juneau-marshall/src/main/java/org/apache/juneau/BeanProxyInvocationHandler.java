@@ -85,4 +85,4 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 
 		throw new UnsupportedOperationException("Unsupported bean method.  method='"+method+"'");
 	}
-}
+}

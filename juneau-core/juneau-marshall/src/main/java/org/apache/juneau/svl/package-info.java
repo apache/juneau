@@ -14,5 +14,4 @@
 /**
  * Simple Variable Language
  */
-package org.apache.juneau.svl;
-
+package org.apache.juneau.svl;

@@ -95,4 +95,4 @@ public class Html5TemplateComboTest extends ComboRoundTripTest {
 	public Html5TemplateComboTest(ComboInput<?> comboInput) {
 		super(comboInput);
 	}
-}
+}

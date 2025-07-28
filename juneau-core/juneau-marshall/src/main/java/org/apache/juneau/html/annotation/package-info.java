@@ -14,5 +14,4 @@
 /**
  * HTML Marshalling Annotations
  */
-package org.apache.juneau.html.annotation;
-
+package org.apache.juneau.html.annotation;

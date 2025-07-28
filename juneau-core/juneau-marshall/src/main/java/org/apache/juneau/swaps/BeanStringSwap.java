@@ -43,4 +43,4 @@ public class BeanStringSwap<T> extends StringSwap<T> {
 	public String swap(BeanSession session, T o) {
 		return o.toString();
 	}
-}
+}

@@ -136,4 +136,4 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 			return (Collection<?>)o;
 		throw new InternalServerError("Could not iterate over Headers of type ''{0}''", className(o));
 	}
-}
+}

@@ -47,4 +47,4 @@ public class SimpleMapTest {
 		keys[0] = null;
 		assertThrown(()->new SimpleMap<>(keys, vals)).isType(IllegalArgumentException.class);
 	}
-}
+}

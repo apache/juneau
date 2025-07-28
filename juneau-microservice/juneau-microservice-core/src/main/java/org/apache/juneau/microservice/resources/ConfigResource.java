@@ -217,4 +217,4 @@ public class ConfigResource extends BasicRestServlet {
 	private JsonMap getSection(String name) throws SectionNotFound {
 		return getContext().getConfig().getSection(name).asMap().orElseThrow(SectionNotFound::new);
 	}
-}
+}

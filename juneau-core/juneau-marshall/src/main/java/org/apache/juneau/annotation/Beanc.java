@@ -197,4 +197,4 @@ public @interface Beanc {
 	 * @return The annotation value.
 	 */
 	String properties() default "";
-}
+}

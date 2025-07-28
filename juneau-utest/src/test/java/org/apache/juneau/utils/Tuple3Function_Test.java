@@ -28,4 +28,4 @@ public class Tuple3Function_Test {
 		Tuple3Function<Integer,Integer,Integer,Integer> x = (a,b,c)->a+b+c;
 		assertInteger(x.apply(1,2,3)).is(6);
 	}
-}
+}

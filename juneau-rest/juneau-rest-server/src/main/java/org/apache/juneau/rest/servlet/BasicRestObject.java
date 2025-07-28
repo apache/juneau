@@ -72,4 +72,4 @@ public abstract class BasicRestObject extends RestObject implements BasicRestOpe
 	public RestContextStats getStats(RestRequest req) {
 		return req.getContext().getStats();
 	}
-}
+}

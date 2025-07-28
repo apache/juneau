@@ -890,4 +890,4 @@ public final class BeanFilter {
 	public Object writeProperty(Object bean, String name, Object value) {
 		return interceptor.writeProperty(bean, name, value);
 	}
-}
+}

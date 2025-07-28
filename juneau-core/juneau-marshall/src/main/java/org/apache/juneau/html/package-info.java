@@ -14,5 +14,4 @@
 /**
  * HTML Marshalling Support
  */
-package org.apache.juneau.html;
-
+package org.apache.juneau.html;

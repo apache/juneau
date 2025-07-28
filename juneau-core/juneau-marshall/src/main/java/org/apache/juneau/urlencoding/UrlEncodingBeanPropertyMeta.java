@@ -42,4 +42,4 @@ public final class UrlEncodingBeanPropertyMeta extends ExtendedBeanPropertyMeta 
 	private UrlEncodingBeanPropertyMeta() {
 		super(null);
 	}
-}
+}

@@ -76,4 +76,4 @@ public class RoundTripToJsonMapsTest extends RoundTripTest {
 		}
 	}
 
-}
+}

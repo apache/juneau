@@ -14,5 +14,4 @@
 /**
  * REST Servlets
  */
-package org.apache.juneau.rest.servlet;
-
+package org.apache.juneau.rest.servlet;

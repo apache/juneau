@@ -32,4 +32,4 @@ import org.apache.juneau.rest.servlet.*;
 )
 public class SampleRootResource extends BasicRestServletGroup {
 	private static final long serialVersionUID = 1L;
-}
+}

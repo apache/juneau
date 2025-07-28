@@ -14,5 +14,4 @@
 /**
  * Examples
  */
-package org.apache.juneau.examples.core.config.store;
-
+package org.apache.juneau.examples.core.config.store;

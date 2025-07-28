@@ -8229,4 +8229,4 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			.append("queryData", queryData)
 			.append("rootUrl", rootUrl);
 	}
-}
+}

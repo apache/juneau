@@ -92,4 +92,4 @@ public class RoundTripBeanPropertiesTest extends RoundTripTest {
 		assertEquals(123, o.f1.get(0)[0][0].intValue());
 		assertTrue(o.f1.get(0)[0][0] instanceof Long);
 	}
-}
+}

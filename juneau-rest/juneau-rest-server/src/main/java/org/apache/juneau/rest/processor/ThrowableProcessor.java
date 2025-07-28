@@ -42,5 +42,4 @@ public final class ThrowableProcessor implements ResponseProcessor {
 
 		return NEXT; // Continue processing as bean.
 	}
-}
-
+}

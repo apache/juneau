@@ -38,4 +38,4 @@ public class SystemPropertiesVarTest {
 		assertEquals(" bar,bar ", vr.resolve("$S{ SystemPropertiesVar.y , bar,bar }"));
 		assertEquals("", vr.resolve("$S{SystemPropertiesVar.y,}"));
 	}
-}
+}

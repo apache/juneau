@@ -52,4 +52,4 @@ public abstract class DefaultingVar extends SimpleVar {
 			v = s2;
 		return v;
 	}
-}
+}

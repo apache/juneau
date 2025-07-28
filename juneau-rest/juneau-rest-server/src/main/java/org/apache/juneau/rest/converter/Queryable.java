@@ -156,4 +156,4 @@ public final class Queryable implements RestConverter {
 		params.getPageArgs().ifPresent(x -> v.set(ObjectPaginator.create().run(bs, v.get(), x)));
 		return v.get();
 	}
-}
+}

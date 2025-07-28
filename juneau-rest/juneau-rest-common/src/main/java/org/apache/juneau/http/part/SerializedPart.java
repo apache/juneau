@@ -235,4 +235,4 @@ public class SerializedPart extends BasicPart {
 			return ((Supplier<?>)o).get();
 		return o;
 	}
-}
+}

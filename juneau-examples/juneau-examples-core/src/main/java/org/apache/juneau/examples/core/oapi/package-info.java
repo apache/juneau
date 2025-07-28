@@ -15,4 +15,3 @@
  * Examples
  */
 package org.apache.juneau.examples.core.oapi;
-

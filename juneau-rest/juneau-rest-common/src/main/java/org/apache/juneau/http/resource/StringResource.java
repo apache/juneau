@@ -140,4 +140,3 @@ public class StringResource extends BasicResource {
 
 	// </FluentSetters>
 }
-

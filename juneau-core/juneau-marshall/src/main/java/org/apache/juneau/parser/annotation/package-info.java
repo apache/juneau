@@ -14,5 +14,4 @@
 /**
  * Parser Annotations
  */
-package org.apache.juneau.parser.annotation;
-
+package org.apache.juneau.parser.annotation;

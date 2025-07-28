@@ -120,4 +120,4 @@ public abstract class InputStreamSwap extends StringSwap<InputStream> {
 			return new ByteArrayInputStream(b);
 		return null;
 	}
-}
+}

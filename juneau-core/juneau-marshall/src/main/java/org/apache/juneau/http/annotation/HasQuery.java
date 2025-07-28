@@ -136,4 +136,4 @@ public @interface HasQuery {
 	 * @return The annotation value.
 	 */
 	String value() default "";
-}
+}

@@ -14,5 +14,4 @@
 /**
  * OpenAPI Marshalling Support
  */
-package org.apache.juneau.oapi;
-
+package org.apache.juneau.oapi;

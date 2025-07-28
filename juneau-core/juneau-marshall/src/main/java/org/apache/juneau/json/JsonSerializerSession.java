@@ -476,4 +476,4 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	protected JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
 		return ctx.getJsonClassMeta(cm);
 	}
-}
+}

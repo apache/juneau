@@ -47,4 +47,4 @@ public class RoundTripDTOsTest extends RoundTripTest {
 		JsonSchema s2 = roundTrip(s, JsonSchema.class);
 		assertObject(s).isSameJsonAs(s2);
 	}
-}
+}

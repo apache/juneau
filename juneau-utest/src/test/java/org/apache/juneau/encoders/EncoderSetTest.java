@@ -114,4 +114,4 @@ public class EncoderSetTest {
 			return new String[]{"E5"};
 		}
 	}
-}
+}

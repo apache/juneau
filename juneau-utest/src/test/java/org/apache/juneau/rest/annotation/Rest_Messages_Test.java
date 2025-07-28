@@ -128,4 +128,4 @@ public class Rest_Messages_Test {
 			m.put(k, rb.getString(k));
 		return m;
 	}
-}
+}

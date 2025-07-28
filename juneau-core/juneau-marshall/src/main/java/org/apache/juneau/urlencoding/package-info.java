@@ -14,5 +14,4 @@
 /**
  * URL-Encoding Marshalling Support
  */
-package org.apache.juneau.urlencoding;
-
+package org.apache.juneau.urlencoding;

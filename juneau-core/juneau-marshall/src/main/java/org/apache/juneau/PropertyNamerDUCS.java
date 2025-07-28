@@ -76,4 +76,4 @@ public final class PropertyNamerDUCS implements PropertyNamer {
 
 		return new String(name2);
 	}
-}
+}

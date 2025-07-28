@@ -19,4 +19,4 @@ public class T9 {
 	public boolean equals(T9 x) {
 		return x.f1 == f1;
 	}
-}
+}

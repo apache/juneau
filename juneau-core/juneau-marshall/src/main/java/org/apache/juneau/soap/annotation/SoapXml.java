@@ -149,4 +149,4 @@ public @interface SoapXml {
 	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
-}
+}

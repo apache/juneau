@@ -44,4 +44,4 @@ public class IfVarTest {
 			assertEquals("x YES x", vr.resolve("x $IF{ $S{ IfVarTest.test } , YES } x"));
 		}
 	}
-}
+}

@@ -197,4 +197,4 @@ public final class ClassUtils {
 	public static boolean isNotVoid(Class c) {
 		return ! isVoid(c);
 	}
-}
+}

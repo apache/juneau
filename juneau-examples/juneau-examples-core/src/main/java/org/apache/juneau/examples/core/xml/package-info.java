@@ -14,5 +14,4 @@
 /**
  * Examples
  */
-package org.apache.juneau.examples.core.xml;
-
+package org.apache.juneau.examples.core.xml;

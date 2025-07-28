@@ -39,4 +39,4 @@ public class HelloWorldResource extends BasicRestServlet {
 	public String sayHello() {
 		return "Hello world!";
 	}
-}
+}

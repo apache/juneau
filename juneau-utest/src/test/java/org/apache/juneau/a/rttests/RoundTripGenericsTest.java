@@ -96,4 +96,4 @@ public class RoundTripGenericsTest extends RoundTripTest {
 			return this;
 		}
 	}
-}
+}

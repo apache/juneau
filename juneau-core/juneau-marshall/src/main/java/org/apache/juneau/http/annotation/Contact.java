@@ -104,4 +104,4 @@ public @interface Contact {
 	 * @return The annotation value.
 	 */
 	String url() default "";
-}
+}

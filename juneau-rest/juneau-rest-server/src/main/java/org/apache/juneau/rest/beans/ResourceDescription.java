@@ -142,4 +142,4 @@ public final class ResourceDescription implements Comparable<ResourceDescription
 	public int hashCode() {
 		return getName().hashCode();
 	}
-}
+}

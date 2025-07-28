@@ -67,4 +67,4 @@ public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	protected JsonMap getSchema() {
 		return schema;
 	}
-}
+}

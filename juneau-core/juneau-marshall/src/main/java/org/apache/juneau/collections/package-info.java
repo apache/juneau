@@ -14,5 +14,4 @@
 /**
  * Collections classes
  */
-package org.apache.juneau.collections;
-
+package org.apache.juneau.collections;

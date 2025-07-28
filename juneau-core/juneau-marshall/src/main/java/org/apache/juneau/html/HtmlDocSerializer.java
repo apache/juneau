@@ -1922,4 +1922,4 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			.append("noResultsMessage", noResultsMessage)
 			.append("widgets", widgets);
 	}
-}
+}

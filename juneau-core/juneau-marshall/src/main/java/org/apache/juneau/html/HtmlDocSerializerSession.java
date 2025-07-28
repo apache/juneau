@@ -442,4 +442,4 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	protected JsonMap properties() {
 		return filteredMap("ctx", ctx, "varResolver", getVarResolver());
 	}
-}
+}

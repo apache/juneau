@@ -33,4 +33,4 @@ public class CsvClassMeta extends ExtendedClassMeta {
 	public CsvClassMeta(ClassMeta<?> cm, CsvMetaProvider mp) {
 		super(cm);
 	}
-}
+}

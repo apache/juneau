@@ -1323,4 +1323,4 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			.append("namespaces", namespaces)
 			.append("addBeanTypes", addBeanTypes);
 	}
-}
+}

@@ -53,4 +53,4 @@ public class IdentityEncoder extends Encoder {
 	public String[] getCodings() {
 		return new String[]{"identity"};
 	}
-}
+}

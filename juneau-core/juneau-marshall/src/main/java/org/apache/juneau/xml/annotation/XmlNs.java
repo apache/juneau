@@ -45,4 +45,4 @@ public @interface XmlNs {
 	 * @return The annotation value.
 	 */
 	String prefix();
-}
+}

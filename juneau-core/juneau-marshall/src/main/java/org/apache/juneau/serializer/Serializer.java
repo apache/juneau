@@ -1679,4 +1679,4 @@ public class Serializer extends BeanTraverseContext {
 			.append("uriRelativity", uriRelativity)
 			.append("listener", listener);
 	}
-}
+}

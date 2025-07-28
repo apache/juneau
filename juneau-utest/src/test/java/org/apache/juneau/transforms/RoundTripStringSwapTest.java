@@ -72,4 +72,4 @@ public abstract class RoundTripStringSwapTest<T> {
 		System.err.println(s);  // NOT DEBUG
 		Assert.fail(s);
 	}
-}
+}

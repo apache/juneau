@@ -34,4 +34,4 @@ public class OpenApiClassMeta extends ExtendedClassMeta {
 	public OpenApiClassMeta(ClassMeta<?> cm, OpenApiMetaProvider mp) {
 		super(cm);
 	}
-}
+}

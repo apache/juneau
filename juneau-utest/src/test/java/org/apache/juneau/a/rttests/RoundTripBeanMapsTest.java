@@ -1012,4 +1012,4 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			return n;
 		}
 	}
-}
+}

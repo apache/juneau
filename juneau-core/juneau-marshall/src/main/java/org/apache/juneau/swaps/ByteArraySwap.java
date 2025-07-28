@@ -88,4 +88,4 @@ public abstract class ByteArraySwap extends StringSwap<byte[]> {
 			return fromSpacedHex(s);
 		}
 	}
-}
+}

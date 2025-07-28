@@ -105,4 +105,4 @@ public class RdfBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	public boolean isBeanUri() {
 		return isBeanUri;
 	}
-}
+}

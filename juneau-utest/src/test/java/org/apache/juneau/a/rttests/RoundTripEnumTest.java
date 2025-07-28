@@ -245,4 +245,4 @@ public class RoundTripEnumTest extends RoundTripTest {
 			return this;
 		}
 	}
-}
+}

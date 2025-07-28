@@ -79,4 +79,4 @@ public final class AsciiMap {
 				return true;
 		return false;
 	}
-}
+}

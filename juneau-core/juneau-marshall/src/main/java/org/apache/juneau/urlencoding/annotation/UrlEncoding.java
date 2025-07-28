@@ -162,4 +162,4 @@ public @interface UrlEncoding {
 	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
-}
+}

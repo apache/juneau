@@ -34,4 +34,4 @@ public class MsgPackClassMeta extends ExtendedClassMeta {
 	public MsgPackClassMeta(ClassMeta<?> cm, MsgPackMetaProvider mp) {
 		super(cm);
 	}
-}
+}

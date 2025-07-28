@@ -14,5 +14,4 @@
 /**
  * Spring Boot Integration
  */
-package org.apache.juneau.rest.springboot;
-
+package org.apache.juneau.rest.springboot;

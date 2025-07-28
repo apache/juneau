@@ -40,4 +40,4 @@ public class KeywordStoreTest {
 		assertFalse(ks.contains("Aa"));
 		assertFalse(ks.contains("aA"));
 	}
-}
+}

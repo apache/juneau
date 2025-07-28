@@ -79,4 +79,4 @@ public class HelloWorldResource extends BasicRestObject {
 			message = messageProvider.get().get();
 		return message;
 	}
-}
+}

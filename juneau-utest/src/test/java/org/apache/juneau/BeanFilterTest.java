@@ -199,4 +199,4 @@ public class BeanFilterTest {
 		public String f1 = "f1";
 	}
 
-}
+}

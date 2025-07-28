@@ -51,4 +51,4 @@ public class SwitchVarTest {
 
 		assertEquals("NO", vr.resolve("$SW{$S{SwitchVarTest.test},foox*:YES1,fooy*:YES2,*:NO}"));
 	}
-}
+}
