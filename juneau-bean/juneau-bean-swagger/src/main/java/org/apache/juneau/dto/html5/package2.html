@@ -1,0 +1,311 @@
+<!DOCTYPE HTML>
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ *
+ ***************************************************************************************************************************/
+ -->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<style type="text/css">
+		/* For viewing in Page Designer */
+		@IMPORT url("../../../../../../../javadoc.css");
+
+		/* For viewing in REST interface */
+		@IMPORT url("../htdocs/javadoc.css");
+		body { 
+			margin: 20px; 
+		}	
+	</style>
+</head>
+<body>
+<p>HTML5 Data Transfer Objects</p>
+
+<!-- ======================================================================================================== -->
+<a id="Overview"></a>
+<h2 class='topic'>1 - Overview</h2>
+<div class='topic'>
+	<p>
+		Juneau supports generation and consumption of HTML5 documents and fragments through the use of DTOs (Data 
+		Transfer Objects).
+		<br>It uses existing support for serializing and parsing POJOs to and from HTML to define these HTML objects. 
+	</p>
+	
+	
+	<!-- ======================================================================================================== -->
+	<a id="Serialize"></a>
+	<h3 class='topic'>1.1 - Generating HTML5</h3>
+	<div class='topic'>
+		<p>
+			The Juneau HTML5 DTOs are simply beans with fluent-style setters that allow you to quickly construct HTML
+			fragments as Java objects.  These object can then be serialized to HTML using one of the existing HTML 
+			serializers, or to other languages such as JSON using the JSON serializers.
+		</p>
+		<p>
+			The {@link org.apache.juneau.dto.html5.HtmlBuilder} class is a utility class with predefined static methods
+			that allow you to easily construct DTO instances in a minimal amount of code. 
+		</p>
+		<p>
+			The following examples show how to create HTML fragments:
+		</p>
+		<table class='styled' style='width:auto'>
+			<tr>
+				<th>Java code</th>
+				<th>HTML</th>
+			</tr>
+			<tr>
+				<td class='code'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+	
+	Object mytable = 	
+		<jsm>table</jsm>(
+			<jsm>tr</jsm>(<jsm>th</jsm>(<js>"c1"</js>),<jsm>th</jsm>(<js>"c2"</js>)),
+			<jsm>tr</jsm>(<jsm>td</jsm>(<js>"v1"</js>),<jsm>td</jsm>(<js>"v2"</js>))
+		);
+
+	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(mytable);
+				</td>
+				<td class='code'><xt>
+	&lt;table&gt;
+		&lt;tr&gt;
+			&lt;th&gt;<xv>c1</xv>&lt;/th&gt;
+			&lt;th&gt;<xv>c2</xv>&lt;/th&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>v1</xv>&lt;/td&gt;
+			&lt;td&gt;<xv>v2</xv>&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+				</xt></td>
+			</tr>
+			<tr>
+				<td class='code'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+	
+	Object mytable = 	
+		<jsm>table</jsm>(
+			<jsm>caption</jsm>(<js>"mytable"</js>),
+			<jsm>colgroup</jsm>(
+				<jsm>col</jsm>()._class(<js>"foo"</js>),
+				<jsm>col</jsm>()._class(<js>"bar"</js>)
+			),
+			<jsm>thead</jsm>(<jsm>tr</jsm>(<jsm>th</jsm>(<js>"c1"</js>),<jsm>th</jsm>(<js>"c2"</js>))),
+			<jsm>tbody</jsm>(<jsm>tr</jsm>(<jsm>td</jsm>(<js>"v1"</js>),<jsm>td</jsm>(<js>"v2"</js>))),
+			<jsm>tfoot</jsm>(<jsm>tr</jsm>(<jsm>td</jsm>(<js>"f1"</js>),<jsm>td</jsm>(<js>"f2"</js>)))
+		);
+
+	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(mytable);
+				</td>
+				<td class='code'><xt>
+	&lt;table&gt;
+		&lt;caption&gt;<xv>mytable</xv>&lt;/caption&gt;
+		&lt;colgroup&gt;
+			&lt;col <xa>class</xa>=<xs>'foo'</xs>/&gt;
+			&lt;col <xa>class</xa>=<xs>'bar'</xs>/&gt;
+		&lt;/colgroup&gt;
+		&lt;thead&gt;
+			&lt;tr&gt;
+				&lt;th&gt;<xv>c1</xv>&lt;/th&gt;
+				&lt;th&gt;<xv>c2</xv>&lt;/th&gt;
+			&lt;/tr&gt;
+		&lt;/thead&gt;
+		&lt;tbody&gt;
+			&lt;tr&gt;
+				&lt;td&gt;<xv>v1</xv>&lt;/td&gt;
+				&lt;td&gt;<xv>v2</xv>&lt;/td&gt;
+			&lt;/tr&gt;
+		&lt;/tbody&gt;
+		&lt;tfoot&gt;
+			&lt;tr&gt;
+				&lt;td&gt;<xv>f1</xv>&lt;/td&gt;
+				&lt;td&gt;<xv>f2</xv>&lt;/td&gt;
+			&lt;/tr&gt;
+		&lt;/tfoot&gt;
+	&lt;/table&gt;
+				</xt></td>
+			</tr>
+			<tr>
+				<td class='code'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+		
+	Object mydiv = 	
+		<jsm>div</jsm>().align(<js>"center"</js>).onmouseover(<js>"alert(\"boo!\");"</js>)
+		.children(
+			<jsm>p</jsm>(<js>"Juneau supports "</js>, <jsm>b</jsm>(<jsm>i</jsm>(<js>"mixed"</js>)), <js>" content!"</js>)
+		);
+
+	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(mydiv);
+				</td>
+				<td class='code'><xt>
+	&lt;div <xa>align</xa>=<xs>'center'</xs> <xa>onmouseover</xa>=<xs>'alert("boo!");'</xs>&gt;
+		&lt;p&gt;<xv>Juneau supports </xv>&lt;b&gt;&lt;i&gt;<xv>mixed</xv>&lt;/i&gt;&lt;/b&gt; <xv>content!</xv>&lt;/p&gt;
+	&lt;/table&gt;
+				</xt></td>
+			</tr>
+			<tr>
+				<td class='code'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+		
+	Object myform =
+		<jsm>form</jsm>().action(<js>"/submit"</js>).method(<js>"POST"</js>)
+		.children(
+			<js>"Position (1-10000): "</js>, 
+				<jsm>input</jsm>(<js>"number"</js>).name(<js>"pos"</js>).value(1), <jsm>br</jsm>(),
+			<js>"Limit (1-10000): "</js>, 
+				<jsm>input</jsm>(<js>"number"</js>).name(<js>"limit"</js>).value(100), <jsm>br</jsm>(),
+			<jsm>button</jsm>(<js>"submit"</js>, <js>"Submit"</js>),
+			<jsm>button</jsm>(<js>"reset"</js>, <js>"Reset"</js>)
+		); 	
+
+	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(myform);
+				</td>
+				<td class='code'><xt>
+		&lt;form <xa>action</xa>=<xs>'/submit'</xs> <xa>method</xa>=<xs>'POST'</xs>&gt;
+			<xv>Position (1-10000):</xv> &lt;input <xa>name</xa>=<xs>'pos'</xs> 
+				<xa>type</xa>=<xs>'number'</xs> <xa>value</xa>=<xs>'1'</xs>/&gt;&lt;br/&gt;
+			<xv>Limit (1-10000):</xv> &lt;input <xa>name</xa>=<xs>'pos'</xs> 
+				<xa>type</xa>=<xs>'number'</xs> <xa>value</xa>=<xs>'100'</xs>/&gt;&lt;br/&gt;
+			&lt;button <xa>type</xa>=<xs>'submit'</xs>&gt;<xv>Submit</xv>&lt;/button&gt;
+			&lt;button <xa>type</xa>=<xs>'reset'</xs>&gt;<xv>Reset</xv>&lt;/button&gt;			 
+		&lt;/form&gt;
+				</xt></td>
+			</tr>
+		</table>
+	</div>		
+
+	<!-- ======================================================================================================== -->
+	<a id="Parse"></a>
+	<h3 class='topic'>1.2 - Parsing HTML5</h3>
+	<div class='topic'>
+		<p>
+			Use the {@link org.apache.juneau.html.HtmlParser} to convert HTML5 documents back into their original POJOs:
+		</p>
+		<p class='bjava'>
+	<jc>// Get an HTML parser to convert our generated HTML5 documents back into POJOs.</jc>
+	HtmlParser <jv>parser</jv> = HtmlParser.<jsf>DEFAULT</jsf>;
+	
+	<jc>// Convert an HTML table back into a Table object.</jc>
+	Table <jv>table</jv> = <jv>parser</jv>.parse(<jv>tableHtml</jv>, Table.<jk>class</jk>);
+		</p>
+		<p>
+			HTML5 objects can also be constructed from the other media types using the appropriate parsers.
+		</p>
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="Templates"></a>
+	<h3 class='topic'>1.3 - HTML5 templates</h3>
+	<div class='topic'>
+		<p>
+			If you're finding yourself reusing the same HTML5 DTO objects over and over that only differ slightly, 
+			you may want to consider using HTML5 templates.
+			Broadly speaking, a template is simply a bean that gets swapped out with another more complex bean during
+			serialization.
+			Juneau doesn't have a built-in concept of a "template", but rather has features that allow them to be 
+			defined using existing swap support.
+		</p>
+		<p>
+			The following example shows how an HTML5 form template object can be created that gets serialized as a 
+			populated HTML5 {@link org.apache.juneau.dto.html5.Form} bean.
+			It takes advantage of the special <code>swap(BeanSession)</code> method that serializers will use to 
+			convert the object to a serialized form before serialization.
+			The return type of this method can be any serializable type.
+			In this case, we are defining a template for a reusable HTML form with two simple fields.  
+			This gets serialized as an HTML form. 
+		</p>
+		<p class='bjava'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+	
+	<jd>/**
+	 * A simple HTML form template whose serialized form is an HTML5 Form object.
+	 */</jd>
+	<jk>public class</jk> FormTemplate {
+		
+		<jk>private</jk> String <jf>action</jf>;
+		<jk>private int</jk> <jf>value1</jf>;
+		<jk>private boolean</jk> <jf>value2</jf>;
+		
+		<jc>// Some constructor that initializes our fields. </jc>
+		<jk>public</jk> FormTemplate(String <jv>action</jv>, <jk>int</jk> <jv>value1</jv>, <jk>boolean</jk> <jv>value2</jv>) {
+			<jk>this</jk>.<jf>action</jf> = <jv>action</jv>;
+			<jk>this</jk>.<jf>value1</jf> = <jv>value1</jv>;
+			<jk>this</jk>.<jf>value2</jf> = <jv>value2</jv>;
+		}
+		
+		<jc>// Special swap method that converts this template to a serializable bean,
+		// in this case an HTML5 Form bean. </jc>
+		<jk>public</jk> Form swap(BeanSession <jv>session</jv>) {
+			<jk>return</jk> <jsm>form</jsm>(<jf>action</jf>,
+				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v1"</js>).value(<jf>value1</jf>),
+				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v2"</js>).value(<jf>value2</jf>)
+			);
+		}
+	}
+		</p>
+		<p>
+			When serialized using the HTML or XML serializer, it produces the following:
+		</p>	
+		<p class='bxml'><xt>
+	&lt;form <xa>action</xa>='myaction'&gt;
+		&lt;input <xa>type</xa>=<xs>'text'</xs> <xa>name</xa>=<xs>'v1'</xs> <xa>value</xa>=<xs>'123'</xs>/&gt;
+		&lt;input <xa>type</xa>=<xs>'text'</xs> <xa>name</xa>=<xs>'v2'</xs> <xa>value</xa>=<xs>'true'</xs>/&gt;
+	&lt;/form&gt;		
+		</xt></p>		
+		<p>
+			Support for parsing back into the template class can be accomplished by adding an unswap method or 
+			constructor.
+		</p>
+		<p class='bjava'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+	
+	<jd>/**
+	 * A simple HTML form template whose serialized form is an HTML5 Form object.
+	 * This time with parsing support.
+	 */</jd>
+	<ja>@Bean</ja>(dictionary=HtmlBeanDictionary.<jk>class</jk>)
+	<jk>public class</jk> FormTemplate {
+		
+		<jk>private</jk> String <jf>action</jf>;
+		<jk>private int</jk> <jf>value1</jf>;
+		<jk>private boolean</jk> <jf>value2</jf>;
+		
+		<jc>// Our 'unswap' constructor</jc>
+		<jk>public</jk> FormTemplate(Form <jv>form</jv>) {
+			<jk>this</jk>.<jf>action</jf> = <jv>form</jv>.getAttr(<js>"action"</js>);
+			<jk>this</jk>.<jf>value1</jf> = <jv>form</jv>.getChild(Input.<jk>class</jk>, 0)
+				.getAttr(<jk>int</jk>.<jk>class</jk>, <js>"value"</js>);
+			<jk>this</jk>.<jf>value2</jf> = <jv>form</jv>.getChild(Input.<jk>class</jk>, 1)
+				.getAttr(<jk>boolean</jk>.<jk>class</jk>, <js>"value"</js>);
+		}
+		
+		<jk>public</jk> FormTemplate(String <jv>action</jv>, <jk>int</jk> <jv>value1</jv>, <jk>boolean</jk> <jv>value2</jv>) {
+			<jk>this</jk>.<jf>action</jf> = <jv>action</jv>;
+			<jk>this</jk>.<jf>value1</jf> = <jv>value1</jv>;
+			<jk>this</jk>.<jf>value2</jf> = <jv>value2</jv>;
+		}
+		
+		<jk>public</jk> Form swap(BeanSession <jv>session</jv>) {
+			<jk>return</jk> <jsm>form</jsm>(<jf>action</jf>,
+				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v1"</js>).value(<jf>value1</jf>),
+				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v2"</js>).value(<jf>value2</jf>)
+			);
+		}
+	}
+		</p>
+	</div>
+
+</div>
+<p align="center"><i><b>*** fín ***</b></i></p>
+
+</body>
+</html>

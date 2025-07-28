@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau</artifactId>
-		<version>9.1.0-SNAPSHOT</version>
+		<version>9.2.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>juneau-doc</artifactId>
@@ -46,7 +46,27 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-dto</artifactId>
+			<artifactId>juneau-bean-atom</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-html5</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-jsonschema</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-openapi3</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

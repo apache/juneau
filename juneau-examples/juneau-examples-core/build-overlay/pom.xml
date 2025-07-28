@@ -36,7 +36,27 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-dto</artifactId>
+			<artifactId>juneau-bean-atom</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-html5</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-jsonschema</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-openapi3</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

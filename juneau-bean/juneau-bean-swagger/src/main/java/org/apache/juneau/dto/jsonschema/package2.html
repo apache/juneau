@@ -1,0 +1,504 @@
+<!DOCTYPE HTML>
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ *
+ ***************************************************************************************************************************/
+-->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<style type="text/css">
+		/* For viewing in Page Designer */
+		@IMPORT url("../../../../../../../javadoc.css");
+
+		/* For viewing in REST interface */
+		@IMPORT url("../htdocs/javadoc.css");
+		body { 
+			margin: 20px; 
+		}	
+	</style>
+</head>
+<body>
+<p>JSON-Schema Data Transfer Objects</p>
+
+<!-- ======================================================================================================== -->
+<a id="Overview"></a>
+<h2 class='topic'>1 - Overview</h2>
+<div class='topic'>
+	<p>
+		Juneau supports serializing and parsing of JSON-Schema documents through the use of beans defined in the 
+		<code>org.apache.juneau.dto.jsonschema</code> package.
+		<br>These beans are used with the existing {@link org.apache.juneau.json.JsonSerializer} and 
+		{@link org.apache.juneau.json.JsonParser} classes to produce and consume JSON-Schema documents. 
+	</p>
+	<p>
+		<b>NOTE:</b>  JSON-Schema is currently in draft form.  
+		This API may change as the JSON-Schema specification changes.
+	</p>
+	
+	<!-- ======================================================================================================== -->
+	<a id="SchemaDefinition"></a>
+	<h3 class='topic'>1.1 - JSON-Schema schema definition</h3>
+	<div class='topic'>
+		<p>
+			The draft JSON-Schema specification that the JSON-Schema beans are modeled after is as follows:
+		</p>
+		<p class='bjson'>
+	{
+		<js>"id"</js>: <js>"http://json-schema.org/draft-04/schema#"</js>,
+		<js>"$schema"</js>: <js>"http://json-schema.org/draft-04/schema#"</js>,
+		<js>"description"</js>: <js>"Core schema meta-schema"</js>,
+		<js>"definitions"</js>: {
+			<js>"schemaArray"</js>: {
+				<js>"type"</js>: <js>"array"</js>,
+				<js>"minItems"</js>: 1,
+				<js>"items"</js>: { <js>"$ref"</js>: <js>"#"</js> }
+			},
+			<js>"positiveInteger"</js>: {
+				<js>"type"</js>: <js>"integer"</js>,
+				<js>"minimum"</js>: 0
+			},
+			<js>"positiveIntegerDefault0"</js>: {
+				<js>"allOf"</js>: [ { <js>"$ref"</js>: <js>"#/definitions/positiveInteger"</js> }, 
+					{ <js>"default"</js>: 0 } ]
+			},
+			<js>"simpleTypes"</js>: {
+				<js>"enum"</js>: [ <js>"array"</js>, <js>"boolean"</js>, <js>"integer"</js>, <js>"null"</js>, 
+					<js>"number"</js>, <js>"object"</js>, <js>"string"</js> ]
+			},
+			<js>"stringArray"</js>: {
+				<js>"type"</js>: <js>"array"</js>,
+				<js>"items"</js>: { <js>"type"</js>: <js>"string"</js> },
+				<js>"minItems"</js>: 1,
+				<js>"uniqueItems"</js>: <jk>true</jk>
+			}
+		},
+		<js>"type"</js>: <js>"object"</js>,
+		<js>"properties"</js>: {
+			<js>"id"</js>: {
+				<js>"type"</js>: <js>"string"</js>,
+				<js>"format"</js>: <js>"uri"</js>
+			},
+			<js>"$schema"</js>: {
+				<js>"type"</js>: <js>"string"</js>,
+				<js>"format"</js>: <js>"uri"</js>
+			},
+			<js>"title"</js>: {
+				<js>"type"</js>: <js>"string"</js>
+			},
+			<js>"description"</js>: {
+				<js>"type"</js>: <js>"string"</js>
+			},
+			<js>"default"</js>: {},
+			<js>"multipleOf"</js>: {
+				<js>"type"</js>: <js>"number"</js>,
+				<js>"minimum"</js>: 0,
+				<js>"exclusiveMinimum"</js>: <jk>true</jk>
+			},
+			<js>"maximum"</js>: {
+				<js>"type"</js>: <js>"number"</js>
+			},
+			<js>"exclusiveMaximum"</js>: {
+				<js>"type"</js>: <js>"boolean"</js>,
+				<js>"default"</js>: <jk>false</jk>
+			},
+			<js>"minimum"</js>: {
+				<js>"type"</js>: <js>"number"</js>
+			},
+			<js>"exclusiveMinimum"</js>: {
+				<js>"type"</js>: <js>"boolean"</js>,
+				<js>"default"</js>: <jk>false</jk>
+			},
+			<js>"maxLength"</js>: { <js>"$ref"</js>: <js>"#/definitions/positiveInteger"</js> },
+			<js>"minLength"</js>: { <js>"$ref"</js>: <js>"#/definitions/positiveIntegerDefault0"</js> },
+			<js>"pattern"</js>: {
+				<js>"type"</js>: <js>"string"</js>,
+				<js>"format"</js>: <js>"regex"</js>
+			},
+			<js>"additionalItems"</js>: {
+				<js>"anyOf"</js>: [
+					{ <js>"type"</js>: <js>"boolean"</js> },
+					{ <js>"$ref"</js>: <js>"#"</js> }
+				],
+				<js>"default"</js>: {}
+			},
+			<js>"items"</js>: {
+				<js>"anyOf"</js>: [
+					{ <js>"$ref"</js>: <js>"#"</js> },
+					{ <js>"$ref"</js>: <js>"#/definitions/schemaArray"</js> }
+				],
+				<js>"default"</js>: {}
+			},
+			<js>"maxItems"</js>: { <js>"$ref"</js>: <js>"#/definitions/positiveInteger"</js> },
+			<js>"minItems"</js>: { <js>"$ref"</js>: <js>"#/definitions/positiveIntegerDefault0"</js> },
+			<js>"uniqueItems"</js>: {
+				<js>"type"</js>: <js>"boolean"</js>,
+				<js>"default"</js>: <jk>false</jk>
+			},
+			<js>"maxProperties"</js>: { <js>"$ref"</js>: <js>"#/definitions/positiveInteger"</js> },
+			<js>"minProperties"</js>: { <js>"$ref"</js>: <js>"#/definitions/positiveIntegerDefault0"</js> },
+			<js>"required"</js>: { <js>"$ref"</js>: <js>"#/definitions/stringArray"</js> },
+			<js>"additionalProperties"</js>: {
+				<js>"anyOf"</js>: [
+					{ <js>"type"</js>: <js>"boolean"</js> },
+					{ <js>"$ref"</js>: <js>"#"</js> }
+				],
+				<js>"default"</js>: {}
+			},
+			<js>"definitions"</js>: {
+				<js>"type"</js>: <js>"object"</js>,
+				<js>"additionalProperties"</js>: { <js>"$ref"</js>: <js>"#"</js> },
+				<js>"default"</js>: {}
+			},
+			<js>"properties"</js>: {
+				<js>"type"</js>: <js>"object"</js>,
+				<js>"additionalProperties"</js>: { <js>"$ref"</js>: <js>"#"</js> },
+				<js>"default"</js>: {}
+			},
+			<js>"patternProperties"</js>: {
+				<js>"type"</js>: <js>"object"</js>,
+				<js>"additionalProperties"</js>: { <js>"$ref"</js>: <js>"#"</js> },
+				<js>"default"</js>: {}
+			},
+			<js>"dependencies"</js>: {
+				<js>"type"</js>: <js>"object"</js>,
+				<js>"additionalProperties"</js>: {
+					<js>"anyOf"</js>: [
+						{ <js>"$ref"</js>: <js>"#"</js> },
+						{ <js>"$ref"</js>: <js>"#/definitions/stringArray"</js> }
+					]
+				}
+			},
+			<js>"enum"</js>: {
+				<js>"type"</js>: <js>"array"</js>,
+				<js>"minItems"</js>: 1,
+				<js>"uniqueItems"</js>: <jk>true</jk>
+			},
+			<js>"type"</js>: {
+				<js>"anyOf"</js>: [
+					{ <js>"$ref"</js>: <js>"#/definitions/simpleTypes"</js> },
+					{
+						<js>"type"</js>: <js>"array"</js>,
+						<js>"items"</js>: { <js>"$ref"</js>: <js>"#/definitions/simpleTypes"</js> },
+						<js>"minItems"</js>: 1,
+						<js>"uniqueItems"</js>: <jk>true</jk>
+					}
+				]
+			},
+			<js>"allOf"</js>: { <js>"$ref"</js>: <js>"#/definitions/schemaArray"</js> },
+			<js>"anyOf"</js>: { <js>"$ref"</js>: <js>"#/definitions/schemaArray"</js> },
+			<js>"oneOf"</js>: { <js>"$ref"</js>: <js>"#/definitions/schemaArray"</js> },
+			<js>"not"</js>: { <js>"$ref"</js>: <js>"#"</js> }
+		},
+		<js>"dependencies"</js>: {
+			<js>"exclusiveMaximum"</js>: [ <js>"maximum"</js> ],
+			<js>"exclusiveMinimum"</js>: [ <js>"minimum"</js> ]
+		},
+		<js>"default"</js>: {}
+	}
+		</p>
+		<p>
+			The bean classes that make up the model are as follows:
+		</p>
+		<ul class='spaced-list'>
+			<li>
+				{@link org.apache.juneau.dto.jsonschema.JsonSchema} - Top level schema object.
+			<li>
+				{@link org.apache.juneau.dto.jsonschema.JsonSchemaProperty} - A subclass of <code>Schema</code> for 
+				representing properties.
+			<li>
+				{@link org.apache.juneau.dto.jsonschema.JsonSchemaPropertySimpleArray} - A convenience subclass of 
+				<code>SchemaProperty</code> for representing properties of simple array types.
+			<li>
+				{@link org.apache.juneau.dto.jsonschema.JsonSchemaRef} - Represents a URI reference to another schema.
+			<li>
+				{@link org.apache.juneau.dto.jsonschema.JsonSchemaArray} - An array of <code>Schema</code> objects.
+			<li>
+				{@link org.apache.juneau.dto.jsonschema.JsonType} - An enum of possible JSON data types.
+			<li>
+				{@link org.apache.juneau.dto.jsonschema.JsonTypeArray} - An array of <code>JsonType</code> objects.
+		</ul>
+	</div>	
+
+
+	<!-- ======================================================================================================== -->
+	<a id="Serialize"></a>
+	<h3 class='topic'>1.2 - Creating JSON-Schema documents</h3>
+	<div class='topic'>
+		<p>
+			JSON-Schema documents can be constructed using the Juneau JSON-Schema beans as a document model object.
+			These beans are defined with fluent-style setters to make constructing documents as easy as possible.
+		</p>
+		<p>
+			The following is an example JSON-Schema document:
+		</p>
+		<p class='bjson'>
+	{
+		<js>"title"</js>: <js>"Example Schema"</js>,
+		<js>"type"</js>: <js>"object"</js>,
+		<js>"properties"</js>: {
+			<js>"firstName"</js>: {
+				<js>"type"</js>: <js>"string"</js>
+			},
+			<js>"lastName"</js>: {
+				<js>"type"</js>: <js>"string"</js>
+			},
+			<js>"age"</js>: {
+				<js>"description"</js>: <js>"Age in years"</js>,
+				<js>"type"</js>: <js>"integer"</js>,
+				<js>"minimum"</js>: 0
+			}
+		},
+		<js>"required"</js>: [<js>"firstName"</js>, <js>"lastName"</js>]
+	}		
+		</p>
+		<p>
+			This document can be constructing using the following code:
+		</p>
+		<p class='bjava'>
+	<jc>// Create the document object model</jc>
+	JsonSchema <jv>schema</jv> = <jk>new</jk> JsonSchema()
+		.setTitle(<js>"Example Schema"</js>)
+		.setType(JsonType.<jsf>OBJECT</jsf>)
+		.addProperties(
+			<jk>new</jk> JsonSchemaProperty(<js>"firstName"</js>, JsonType.<jsf>STRING</jsf>),
+			<jk>new</jk> JsonSchemaProperty(<js>"lastName"</js>, JsonType.<jsf>STRING</jsf>),
+			<jk>new</jk> JsonSchemaProperty(<js>"age"</js>, JsonType.<jsf>INTEGER</jsf>)
+				.setDescription(<js>"Age in years"</js>)
+				.setMinimum(0)
+		)
+		.addRequired(<js>"firstName"</js>, <js>"lastName"</js>);
+		
+	<jc>// Serialize to JSON</jc>
+	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(<jv>schema</jv>);
+		</p>	
+		<p>
+			The following is a more-complex example showing various kinds of constraints.
+		</p>		
+		<p class='bjson'>
+	{
+		<js>"id"</js>: <js>"http://some.site.somewhere/entry-schema#"</js>,
+		<js>"$schema"</js>: <js>"http://json-schema.org/draft-04/schema#"</js>,
+		<js>"description"</js>: <js>"schema for an fstab entry"</js>,
+		<js>"type"</js>: <js>"object"</js>,
+		<js>"required"</js>: [ <js>"storage"</js> ],
+		<js>"properties"</js>: {
+			<js>"storage"</js>: {
+				<js>"type"</js>: <js>"object"</js>,
+				<js>"oneOf"</js>: [
+					{ <js>"$ref"</js>: <js>"#/definitions/diskDevice"</js> },
+					{ <js>"$ref"</js>: <js>"#/definitions/diskUUID"</js> },
+					{ <js>"$ref"</js>: <js>"#/definitions/nfs"</js> },
+					{ <js>"$ref"</js>: <js>"#/definitions/tmpfs"</js> }
+				]
+			},
+			<js>"fstype"</js>: {
+				<js>"enum"</js>: [ <js>"ext3"</js>, <js>"ext4"</js>, <js>"btrfs"</js> ]
+			},
+			<js>"options"</js>: {
+				<js>"type"</js>: <js>"array"</js>,
+				<js>"minItems"</js>: 1,
+				<js>"items"</js>: { <js>"type"</js>: <js>"string"</js> },
+				<js>"uniqueItems"</js>: <jk>true</jk>
+			},
+			<js>"readonly"</js>: { <js>"type"</js>: <js>"boolean"</js> }
+		},
+		<js>"definitions"</js>: {
+			<js>"diskDevice"</js>: {},
+			<js>"diskUUID"</js>: {},
+			<js>"nfs"</js>: {},
+			<js>"tmpfs"</js>: {}
+		}
+	}
+		</p>
+		<p>
+			This document can be constructing using the following code:
+		</p>
+		<p class='bjava'>
+	JsonSchema <jv>schema</jv> = <jk>new</jk> JsonSchema()
+		.setId(<js>"http://some.site.somewhere/entry-schema#"</js>)
+		.setSchemaVersionId(<js>"http://json-schema.org/draft-04/schema#"</js>)
+		.setDescription(<js>"schema for an fstab entry"</js>)
+		.setType(JsonType.<jsf>OBJECT</jsf>)
+		.addRequired(<js>"storage"</js>)
+		.addProperties(
+			<jk>new</jk> JsonSchemaProperty(<js>"storage"</js>)
+				.setType(JsonType.<jsf>OBJECT</jsf>)
+				.addOneOf(
+					<jk>new</jk> JsonSchemaRef(<js>"#/definitions/diskDevice"</js>),
+					<jk>new</jk> JsonSchemaRef(<js>"#/definitions/diskUUID"</js>),
+					<jk>new</jk> JsonSchemaRef(<js>"#/definitions/nsf"</js>),
+					<jk>new</jk> JsonSchemaRef(<js>"#/definitions/tmpfs"</js>)
+				),
+			<jk>new</jk> JsonSchemaProperty(<js>"fstype"</js>)
+				.addEnum(<js>"ext3"</js>, <js>"ext4"</js>, <js>"btrfs"</js>),
+			<jk>new</jk> JsonSchemaPropertySimpleArray(<js>"options"</js>, JsonType.<jsf>STRING</jsf>)
+				.setMinItems(1)
+				.setUniqueItems(<jk>true</jk>),
+			<jk>new</jk> JsonSchemaProperty(<js>"readonly"</js>)
+				.setType(JsonType.<jsf>BOOLEAN</jsf>)
+		)
+		.addDefinition(<js>"diskDevice"</js>,
+			<jk>new</jk> JsonSchema()
+		)
+		.addDefinition(<js>"diskUUID"</js>,
+			<jk>new</jk> JsonSchema()
+		)
+		.addDefinition(<js>"nfs"</js>,
+			<jk>new</jk> JsonSchema()
+		)
+		.addDefinition(<js>"tmpfs"</js>,
+			<jk>new</jk> JsonSchema()
+		);
+
+	<jc>// Serialize to JSON</jc>
+	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(<jv>schema</jv>);
+		</p>
+	
+	
+		<!-- ======================================================================================================== -->
+		<a id="SerializeToOther"></a>
+		<h4 class='topic'>1.2.1 - Serializing to other data types</h4>
+		<div class='topic'>
+			<p>
+				Since the JSON-Schema DTOs are simple beans, they can be used to serialize to a variety of other 
+				language types as well as JSON.
+				This also allows JSON-Schema documents to be easily served up using the Juneau REST API.
+			</p>
+			<p>
+				The sample web application includes a REST resource that generates a JSON-Schema document.  
+				We'll use this resource to show what the JSON-Schema document looks like in other languages.
+			</p>
+			<p class='bjava'>
+	<jd>/**
+	 * Sample resource that shows how to serialize JSON-Schema documents.
+	 */</jd>
+	<ja>@Rest</ja>(
+		path=<js>"/jsonSchema"</js>,
+		messages=<js>"nls/JsonSchemaResource"</js>,
+		title=<js>"Sample JSON-Schema document"</js>
+	)
+	<ja>@HtmlDocConfig</ja>(
+		navlinks={
+			<js>"options: ?method=OPTIONS"</js>
+		}
+	)
+	<jk>public class</jk> JsonSchemaResource <jk>extends</jk> BasicRestServlet {
+	
+		<jk>private</jk> JsonSchema <jf>schema</jf>;	 <jc>// The schema document</jc>
+		
+		<jd>/** Servlet initialization */</jd> 
+		<ja>@Override</ja>
+		<jk>public void</jk> init() {
+	
+			<jk>try</jk> {
+				<jf>schema</jf> = <jk>new</jk> JsonSchema()
+					.setId(<js>"http://example.com/sample-schema#"</js>)
+					.setSchemaVersionUri(<js>"http://json-schema.org/draft-04/schema#"</js>)
+					.setTitle(<js>"Example Schema"</js>)
+					.setType(JsonType.<jsf>OBJECT</jsf>)
+					.addProperties(
+						<jk>new</jk> JsonSchemaProperty(<js>"firstName"</js>, JsonType.<jsf>STRING</jsf>),
+						<jk>new</jk> JsonSchemaProperty(<js>"lastName"</js>, JsonType.<jsf>STRING</jsf>),
+						<jk>new</jk> JsonSchemaProperty(<js>"age"</js>, JsonType.<jsf>INTEGER</jsf>)
+							.setDescription(<js>"Age in years"</js>)
+							.setMinimum(0)
+					)
+					.addRequired(<js>"firstName"</js>, <js>"lastName"</js>);
+			} <jk>catch</jk> (Exception <jv>e</jv>) {
+				<jk>throw new</jk> RuntimeException(<jv>e</jv>);
+			}
+		}
+		
+		<jd>/** GET request handler */</jd>
+		<ja>@RestGet</ja>(<js>"/"</js>)
+		<jk>public</jk> JsonSchema getSchema() <jk>throws</jk> Exception {
+			<jk>return</jk> <jf>schema</jf>;
+		}
+		
+		<jd>/** 
+		 * PUT request handler.
+		 * Replaces the schema document with the specified content, and then mirrors it as the response. 
+		 */</jd>
+		<ja>@RestPut</ja>(<js>"/"</js>)
+		<jk>public</jk> JsonSchema setSchema(<ja>@Content</ja> JsonSchema <jv>schema</jv>) <jk>throws</jk> Exception {
+			<jk>this</jk>.<jf>schema</jf> = <jv>schema</jv>;
+			<jk>return</jk> <jk>this</jk>.<jf>schema</jf>;
+		}
+	
+		<jd>/** OPTIONS request handler */</jd>
+	 	<ja>@RestOp</ja>(method=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>)
+		<jk>public</jk> Swagger doOptions(RestRequest <jv>req</jv>) {
+			<jk>return new</jk> Swagger(<jk>this</jk>, <jv>req</jv>);
+		}
+	}
+			</p>
+			<p>
+				When you point your browser to this resource, the default content type is HTML (since that's what the 
+				browser asks for by default).
+			</p>
+			
+			<h5 class='figure'>HTML</h5>
+			<img class='bordered' src="doc-files/Example_Html.png">
+			<p>
+				The REST API allows you to specify the <code>Accept</code> header as a GET parameter, and the 
+				<code>plainText=true</code> parameter forces the returned <code>Content-Type</code> to be 
+				<code>text/plain</code>.
+				We'll use this to view the JSON-Schema document in other languages.
+			</p>			
+			
+			<h5 class='figure'>Normal JSON</h5>
+			<img class='bordered' src="doc-files/Example_Json.png">
+			
+			<h5 class='figure'>XML</h5>
+			<img class='bordered' src="doc-files/Example_Xml.png">
+
+			<h5 class='figure'>URL-Encoded</h5>
+			<img class='bordered' src="doc-files/Example_UrlEncoded.png">
+
+			<h5 class='figure'>Abbreviated RDF/XML</h5>
+			<img class='bordered' src="doc-files/Example_XmlRdfAbbrev.png">
+
+			<h5 class='figure'>Turtle</h5>
+			<img class='bordered' src="doc-files/Example_Turtle.png">
+			
+			<p>
+				The full list of options for this resource can be accessed by the <code>options</code> link on the HTML 
+				page.
+			</p>
+			
+			<h5 class='figure'>Resource Options</h5>
+			<img class='bordered' src="doc-files/Example_Options.png">
+		</div>	
+	</div>
+		
+	<!-- ======================================================================================================== -->
+	<a id="Parse"></a>
+	<h3 class='topic'>1.3 - Parsing JSON-Schema documents</h3>
+	<div class='topic'>
+		<p>
+			Use the {@link org.apache.juneau.json.JsonParser} to parse JSON-Schema documents into DTOs:
+		</p>
+		<p class='bjava'>		
+	<jc>// Use parser to load JSON-Schema document into JSON-Schema DTOs</jc>
+	Schema <jv>schema</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>, JsonSchema.<jk>class</jk>);
+		</p>
+		<p>
+			Schema objects can also be constructed from the other media types using the appropriate parsers.
+		</p>
+	</div>
+
+</div>
+<p align="center"><i><b>*** fín ***</b></i></p>
+</body>
+</html>

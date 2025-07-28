@@ -105,11 +105,11 @@
 									<destFileName>org.apache.juneau.config_${project.version}.jar</destFileName>
 								</artifactItem>
 
-								<!-- juneau-dto -->
+								<!-- juneau-bean-atom -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-dto</artifactId>
+									<artifactId>juneau-bean-atom</artifactId>
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
@@ -117,15 +117,107 @@
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-dto</artifactId>
+									<artifactId>juneau-bean-atom</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-dto</artifactId>
+									<artifactId>juneau-bean-atom</artifactId>
 									<version>${project.version}</version>
-									<destFileName>org.apache.juneau.dto_${project.version}.jar</destFileName>
+									<destFileName>org.apache.juneau.bean.atom_${project.version}.jar</destFileName>
+								</artifactItem>
+
+								<!-- juneau-bean-common -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-common</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-common</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-common</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.bean.common_${project.version}.jar</destFileName>
+								</artifactItem>
+
+								<!-- juneau-bean-html5 -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-html5</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-html5</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-html5</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.bean.html5_${project.version}.jar</destFileName>
+								</artifactItem>
+
+								<!-- juneau-bean-jsonschema -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-jsonschema</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-jsonschema</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-jsonschema</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.bean.jsonschema_${project.version}.jar</destFileName>
+								</artifactItem>
+
+								<!-- juneau-bean-openapi3 -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-openapi3</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-openapi3</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-openapi3</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.bean.openapi3_${project.version}.jar</destFileName>
 								</artifactItem>
 
 								<!-- juneau-rest-server -->

@@ -13,8 +13,12 @@
 # ***************************************************************************************************************************
 
 projects=( 
+"juneau-bean/juneau-bean-atom"
+"juneau-bean/juneau-bean-common"
+"juneau-bean/juneau-bean-html5"
+"juneau-bean/juneau-bean-jsonschema"
+"juneau-bean/juneau-bean-openapi3"
 "juneau-core/juneau-config"
-"juneau-core/juneau-dto"
 "juneau-core/juneau-marshall"
 "juneau-core/juneau-marshall-rdf"
 "juneau-core/juneau-svl"

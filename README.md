@@ -30,7 +30,7 @@ Apache Juneau™ is a single cohesive Java ecosystem consisting of the following
 
 * **juneau-marshall**	- A universal toolkit for marshalling POJOs to a variety of content types using a common framework with no external library dependencies.
 * **juneau-marshall-rdf**	- Additional support for various RDF languages.
-* **juneau-dto**	- A variety of predefined DTOs for serializing and parsing languages such as HTML5, Swagger and ATOM.
+* **juneau-bean-atom, juneau-bean-common, juneau-bean-html5, juneau-bean-jsonschema, juneau-bean-openapi3**	- A variety of predefined serializable beans such as HTML5, Swagger and ATOM.
 * **juneau-config**	- A sophisticated configuration file API.
 * **juneau-rest-server**	- A universal REST server API for creating Swagger-based self-documenting REST interfaces using POJOs, simply deployed as one or more top-level servlets in any Servlet 3.1.0+ container. Includes Spring Boot and JAX-RS integration support.
 * **juneau-rest-client** - A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces.
@@ -49,7 +49,7 @@ Juneau is packed with features that may not be obvious at first. Users are encou
 * Exhaustively tested
 * Lots of up-to-date documentation and examples
 * Minimal library dependencies:
-   * juneau-marshall, juneau-dto, juneau-svl, juneau-config - No external dependencies. Entirely self-contained.
+   * juneau-marshall, juneau-bean-atom, juneau-bean-common, juneau-bean-html5, juneau-bean-jsonschema, juneau-bean-openapi3, juneau-svl, juneau-config - No external dependencies. Entirely self-contained.
    * juneau-marshall-rdf - Optional RDF support. Requires Apache Jena 2.7.1+.
    * juneau-rest-server - Any Servlet 3.1.0+ container.
    * juneau-rest-client - Apache HttpClient 4.5+.

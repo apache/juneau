@@ -41,7 +41,7 @@ public class ConfigurablePropertyCodeGenerator {
 		"juneau-core/juneau-assertions",
 		"juneau-core/juneau-common",
 		"juneau-core/juneau-config",
-		"juneau-core/juneau-dto",
+		"juneau-core/juneau-bean",
 		"juneau-core/juneau-marshall",
 		"juneau-core/juneau-marshall-rdf",
 		"juneau-rest/juneau-rest-common",

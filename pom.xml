@@ -40,7 +40,7 @@
 		<javadoc.juneau.version>9.1.0</javadoc.juneau.version>
 		<juneauVersion>9.1.0</juneauVersion>
 		<juneauVersionNext>9.2.0</juneauVersionNext>
-        <junit.version>5.13.4</junit.version>
+		<junit.version>5.13.4</junit.version>
 		<javadoc.plugin.version>3.11.2</javadoc.plugin.version>
 		<jacoco.plugin.version>0.8.13</jacoco.plugin.version>
 	</properties>
@@ -53,6 +53,7 @@
 		<module>juneau-examples</module>
 		<module>juneau-utest</module>
 		<module>juneau-utest-utils</module>
+		<module>juneau-bean</module>
 		<module>juneau-all</module>
 		<module>juneau-distrib</module>
 	</modules>

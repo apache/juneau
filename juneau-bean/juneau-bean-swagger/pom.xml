@@ -19,13 +19,13 @@
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau-core</artifactId>
+		<artifactId>juneau-bean</artifactId>
 		<version>9.2.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-dto</artifactId>
-	<name>juneau/core/dto</name>
-	<description>Apache Juneau Data Transfer Objects</description>
+	<artifactId>juneau-bean-swagger</artifactId>
+	<name>juneau/bean/swagger</name>
+	<description>Apache Juneau Serializable Beans - Swagger</description>
 	<packaging>bundle</packaging>
 
 	<properties>
