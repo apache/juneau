@@ -15,10 +15,10 @@ package org.apache.juneau.dto.openapi3;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
+import java.util.*;
+
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
-
-import java.util.*;
 
 /**
  * TODO
@@ -46,19 +46,8 @@ public class MediaType extends OpenApiElement{
 
 		this.schema = copyFrom.schema;
 		this.example = copyFrom.example;
-		if (copyFrom.examples == null)
-			this.examples = null;
-		else
-			this.examples = new LinkedHashMap<>();
-		for (Map.Entry<String,Example> e : copyFrom.examples.entrySet())
-			this.examples.put(e.getKey(),	e.getValue().copy());
-
-		if (copyFrom.encoding == null)
-			this.encoding = null;
-		else
-			this.encoding = new LinkedHashMap<>();
-		for (Map.Entry<String,Encoding> e : copyFrom.encoding.entrySet())
-			this.encoding.put(e.getKey(),	e.getValue().copy());
+		this.examples = copyOf(copyFrom.examples, Example::copy);
+		this.encoding = copyOf(copyFrom.encoding, Encoding::copy);
 	}
 
 	/**
@@ -205,38 +194,39 @@ public class MediaType extends OpenApiElement{
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "schema": return toType(getSchema(), type);
-			case "example": return toType(getExample(), type);
-			case "examples": return toType(getExamples(), type);
-			case "encoding": return toType(getEncoding(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "schema" -> toType(getSchema(), type);
+			case "example" -> toType(getExample(), type);
+			case "examples" -> toType(getExamples(), type);
+			case "encoding" -> toType(getEncoding(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public MediaType set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "schema": return setSchema(toType(value, SchemaInfo.class));
-			case "example": return setExample(value);
-			case "examples": return setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
-			case "encoding": return setEncoding(mapBuilder(String.class,Encoding.class).sparse().addAny(value).build());
-			default:
+		return switch (property) {
+			case "schema" -> setSchema(toType(value, SchemaInfo.class));
+			case "example" -> setExample(value);
+			case "examples" -> setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
+			case "encoding" -> setEncoding(mapBuilder(String.class,Encoding.class).sparse().addAny(value).build());
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
-				.addIf(schema != null, "schema")
-				.addIf(example != null, "example")
-				.addIf(encoding != null, "encoding")
-				.addIf(examples != null, "examples")
-				.build();
+		var s = setBuilder(String.class)
+			.addIf(schema != null, "schema")
+			.addIf(example != null, "example")
+			.addIf(encoding != null, "encoding")
+			.addIf(examples != null, "examples")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

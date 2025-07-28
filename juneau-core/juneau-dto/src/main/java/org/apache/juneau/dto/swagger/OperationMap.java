@@ -51,8 +51,8 @@ public class OperationMap extends TreeMap<String,Operation> {
 
 		@Override
 		public int compare(String o1, String o2) {
-			String s1 = methods.get(o1);
-			String s2 = methods.get(o2);
+			var s1 = methods.get(o1);
+			var s2 = methods.get(o2);
 			if (s1 == null)
 				s1 = o1;
 			if (s2 == null)

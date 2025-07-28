@@ -31,7 +31,7 @@ import org.apache.juneau.xml.annotation.*;
 @FluentSetters
 public class HtmlElementContainer extends HtmlElement {
 
-	private LinkedList<Object> children;
+	private List<Object> children;
 
 	/**
 	 * The children of this element.
@@ -40,7 +40,7 @@ public class HtmlElementContainer extends HtmlElement {
 	 */
 	@Xml(format=ELEMENTS)
 	@Beanp(dictionary=HtmlBeanDictionary.class, name="c")
-	public LinkedList<Object> getChildren() {
+	public List<Object> getChildren() {
 		return children;
 	}
 
@@ -51,7 +51,7 @@ public class HtmlElementContainer extends HtmlElement {
 	 * @return This object.
 	 */
 	@Beanp("c")
-	public HtmlElementContainer setChildren(LinkedList<Object> children) {
+	public HtmlElementContainer setChildren(List<Object> children) {
 		this.children = children;
 		return this;
 	}
@@ -84,7 +84,7 @@ public class HtmlElementContainer extends HtmlElement {
 		if (index.length == 1)
 			return getChild(index[0]);
 		Object c = this;
-		for (int element : index) {
+		for (var element : index) {
 			if (c instanceof HtmlElementMixed x)
 				c = x.getChild(element);
 			else if (c instanceof HtmlElementContainer x)
@@ -122,7 +122,7 @@ public class HtmlElementContainer extends HtmlElement {
 		if (children.length > 0) {
 			if (this.children == null)
 				this.children = new LinkedList<>();
-			for (Object c : children)
+			for (var c : children)
 				this.children.add(c);
 		}
 		return this;

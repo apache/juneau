@@ -80,7 +80,7 @@ public class JsonSchema {
 	/**
 	 * Default constructor.
 	 */
-	public JsonSchema() {}
+	public JsonSchema() { /* Empty constructor. */ }
 
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -300,7 +300,7 @@ public class JsonSchema {
 
 		@Override /* ObjectSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
-			ClassMeta<?> cm = (
+			var cm = (
 				o instanceof Collection
 				? session.getClassMeta(JsonTypeArray.class)
 				: session.getClassMeta(JsonType.class)
@@ -386,7 +386,7 @@ public class JsonSchema {
 	public JsonSchema getProperty(String name, boolean resolve) {
 		if (properties == null)
 			return null;
-		JsonSchema s = properties.get(name);
+		var s = properties.get(name);
 		if (s == null)
 			return null;
 		if (resolve)
@@ -404,7 +404,7 @@ public class JsonSchema {
 		this.properties = properties;
 		if (properties != null) {
 			properties.entrySet().forEach(x -> {
-				JsonSchema value = x.getValue();
+				var value = x.getValue();
 				setMasterOn(value);
 				value.setName(x.getKey());
 			});
@@ -425,7 +425,7 @@ public class JsonSchema {
 	public JsonSchema addProperties(JsonSchema...properties) {
 		if (this.properties == null)
 			this.properties = map();
-		for (JsonSchema p : properties) {
+		for (var p : properties) {
 			if (p.getName() == null)
 				throw new BeanRuntimeException(JsonSchema.class,
 					"Invalid property passed to JsonSchema.addProperties().  Property name was null.");
@@ -456,7 +456,7 @@ public class JsonSchema {
 		this.patternProperties = patternProperties;
 		if (patternProperties != null) {
 			patternProperties.entrySet().forEach(x -> {
-				JsonSchema s = x.getValue();
+				var s = x.getValue();
 				setMasterOn(s);
 				s.setName(x.getKey());
 			});
@@ -477,7 +477,7 @@ public class JsonSchema {
 	public JsonSchema addPatternProperties(JsonSchemaProperty...properties) {
 		if (this.patternProperties == null)
 			this.patternProperties = map();
-		for (JsonSchema p : properties) {
+		for (var p : properties) {
 			if (p.getName() == null)
 				throw new BeanRuntimeException(JsonSchema.class,
 					"Invalid property passed to JsonSchema.addProperties().  Property name was null.");
@@ -585,7 +585,7 @@ public class JsonSchema {
 
 		@Override /* ObjectSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
-			ClassMeta<?> cm = (
+			var cm = (
 				o instanceof Collection
 				? session.getClassMeta(JsonSchemaArray.class)
 				: session.getClassMeta(JsonSchema.class)
@@ -901,7 +901,7 @@ public class JsonSchema {
 
 		@Override /* ObjectSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
-			ClassMeta<?> cm = (
+			var cm = (
 				o instanceof Collection
 				? session.getClassMeta(JsonSchemaArray.class)
 				: session.getClassMeta(Boolean.class)
@@ -1055,7 +1055,7 @@ public class JsonSchema {
 	public JsonSchema addRequired(String...required) {
 		if (this.required == null)
 			this.required = new LinkedList<>();
-		for (String r : required)
+		for (var r : required)
 			this.required.add(r);
 		return this;
 	}
@@ -1069,7 +1069,7 @@ public class JsonSchema {
 	public JsonSchema addRequired(JsonSchemaProperty...properties) {
 		if (this.required == null)
 			this.required = new LinkedList<>();
-		for (JsonSchemaProperty p : properties)
+		for (var p : properties)
 			this.required.add(p.getName());
 		return this;
 	}
@@ -1164,7 +1164,7 @@ public class JsonSchema {
 
 		@Override /* ObjectSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
-			ClassMeta<?> cm = (
+			var cm = (
 				o instanceof Boolean
 				? session.getClassMeta(Boolean.class)
 				: session.getClassMeta(JsonSchema.class)
@@ -1202,7 +1202,7 @@ public class JsonSchema {
 	public JsonSchema addEnum(String..._enum) {  // NOSONAR - Intentional naming.
 		if (this._enum == null)
 			this._enum = new LinkedList<>();
-		for (String e : _enum)
+		for (var e : _enum)
 			this._enum.add(e);
 		return this;
 	}
@@ -1271,7 +1271,7 @@ public class JsonSchema {
 		if (this.anyOf == null)
 			this.anyOf = new LinkedList<>();
 		setMasterOn(anyOf);
-		for (JsonSchema s : anyOf)
+		for (var s : anyOf)
 			this.anyOf.add(s);
 		return this;
 	}
@@ -1307,7 +1307,7 @@ public class JsonSchema {
 		if (this.oneOf == null)
 			this.oneOf = new LinkedList<>();
 		setMasterOn(oneOf);
-		for (JsonSchema s : oneOf)
+		for (var s : oneOf)
 			this.oneOf.add(s);
 		return this;
 	}
@@ -1369,7 +1369,7 @@ public class JsonSchema {
 
 	private void setMasterOn(JsonSchema[] ss) {
 		if (ss != null)
-			for (JsonSchema s : ss)
+			for (var s : ss)
 				setMasterOn(s);
 	}
 

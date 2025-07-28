@@ -51,7 +51,10 @@ import org.apache.juneau.cp.*;
  */
 public class AssertionPredicates {
 
-	private AssertionPredicates() {}
+	/**
+	 * Constructor.
+	 */
+	protected AssertionPredicates() {}
 
 	private static final Function<Object,String> TYPENAME = x -> x == null ? null : x.getClass().getName();
 

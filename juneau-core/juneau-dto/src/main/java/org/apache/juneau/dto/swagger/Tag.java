@@ -185,31 +185,32 @@ public class Tag extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "description": return toType(getDescription(), type);
-			case "externalDocs": return toType(getExternalDocs(), type);
-			case "name": return toType(getName(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "description" -> toType(getDescription(), type);
+			case "externalDocs" -> toType(getExternalDocs(), type);
+			case "name" -> toType(getName(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Tag set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "description": return setDescription(stringify(value));
-			case "externalDocs": return setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "name": return setName(stringify(value));
-			default:
+		return switch (property) {
+			case "description" -> setDescription(stringify(value));
+			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "name" -> setName(stringify(value));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(description != null, "description")
 			.addIf(externalDocs != null, "externalDocs")
 			.addIf(name != null, "name")

@@ -16,11 +16,11 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.dto.swagger.Swagger;
-import org.apache.juneau.internal.*;
-
 import java.util.*;
+
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Describes a single HTTP header.
@@ -45,7 +45,6 @@ import java.util.*;
  * </p>
  */
 @Bean(properties="description,explode,deprecated,allowEmptyValue,allowReserved,schema,example,examples,$ref,*")
-@SuppressWarnings({"unchecked"})
 @FluentSetters
 public class HeaderInfo extends OpenApiElement {
 
@@ -85,13 +84,7 @@ public class HeaderInfo extends OpenApiElement {
 		this.ref = copyFrom.ref;
 		this.explode = copyFrom.explode;
 		this.deprecated = copyFrom.deprecated;
-		if (copyFrom.examples == null)
-			this.examples = null;
-		else {
-			this.examples = new LinkedHashMap<>();
-			for (Map.Entry<String,Example> e : copyFrom.examples.entrySet())
-				this.examples.put(e.getKey(), e.getValue().copy());
-		}
+		this.examples = copyOf(copyFrom.examples, Example::copy);
 	}
 
 	/**
@@ -399,44 +392,45 @@ public class HeaderInfo extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "description": return (T)getDescription();
-			case "required": return toType(getRequired(), type);
-			case "explode": return toType(getExplode(), type);
-			case "deprecated": return toType(getDeprecated(), type);
-			case "allowEmptyValue": return toType(getAllowEmptyValue(), type);
-			case "allowReserved": return toType(getAllowReserved(), type);
-			case "$ref": return toType(getRef(), type);
-			case "schema": return toType(getSchema(), type);
-			case "x-example": return toType(getExample(), type);
-			case "examples": return toType(getExamples(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "description" -> (T)getDescription();
+			case "required" -> toType(getRequired(), type);
+			case "explode" -> toType(getExplode(), type);
+			case "deprecated" -> toType(getDeprecated(), type);
+			case "allowEmptyValue" -> toType(getAllowEmptyValue(), type);
+			case "allowReserved" -> toType(getAllowReserved(), type);
+			case "$ref" -> toType(getRef(), type);
+			case "schema" -> toType(getSchema(), type);
+			case "x-example" -> toType(getExample(), type);
+			case "examples" -> toType(getExamples(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public HeaderInfo set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "description": return setDescription(stringify(value));
-			case "required": return setRequired(toBoolean(value));
-			case "explode": return setExplode(toBoolean(value));
-			case "deprecated": return setDeprecated(toBoolean(value));
-			case "allowEmptyValue": return setAllowEmptyValue(toBoolean(value));
-			case "$ref": return setRef(stringify(value));
-			case "schema": return setSchema(toType(value, SchemaInfo.class));
-			case "x-example": return setExample(stringify(value));
-			case "examples": return setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
-			default:
+		return switch (property) {
+			case "description" -> setDescription(stringify(value));
+			case "required" -> setRequired(toBoolean(value));
+			case "explode" -> setExplode(toBoolean(value));
+			case "deprecated" -> setDeprecated(toBoolean(value));
+			case "allowEmptyValue" -> setAllowEmptyValue(toBoolean(value));
+			case "$ref" -> setRef(stringify(value));
+			case "schema" -> setSchema(toType(value, SchemaInfo.class));
+			case "x-example" -> setExample(stringify(value));
+			case "examples" -> setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(description != null, "description")
 			.addIf(required != null, "required")
 			.addIf(explode != null, "explode")
@@ -471,7 +465,7 @@ public class HeaderInfo extends OpenApiElement {
 			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
 			refStack.addLast(ref);
-			HeaderInfo r = swagger.findRef(ref, HeaderInfo.class).resolveRefs(swagger, refStack, maxDepth);
+			var r = swagger.findRef(ref, HeaderInfo.class).resolveRefs(swagger, refStack, maxDepth);
 			refStack.removeLast();
 			return r;
 		}

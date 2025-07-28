@@ -49,7 +49,7 @@ import org.apache.juneau.xml.annotation.*;
 public class Text extends Common {
 
 	private String type;
-	private String text;
+	private String text;  // NOSONAR - Intentional naming.
 
 	/**
 	 * Normal content.
@@ -134,7 +134,6 @@ public class Text extends Common {
 		this.text = value;
 		return this;
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden setters (to simplify method chaining)

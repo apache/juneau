@@ -19,7 +19,10 @@ import java.text.*;
  */
 public class ArgUtils {
 
-	private ArgUtils() {}
+	/**
+	 * Constructor.
+	 */
+	protected ArgUtils() {}
 
 	/**
 	 * Throws an {@link IllegalArgumentException} if the specified argument is <jk>null</jk>.

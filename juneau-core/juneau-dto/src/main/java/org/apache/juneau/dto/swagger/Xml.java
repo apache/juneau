@@ -256,35 +256,36 @@ public class Xml extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "attribute": return toType(getAttribute(), type);
-			case "name": return toType(getName(), type);
-			case "namespace": return toType(getNamespace(), type);
-			case "prefix": return toType(getPrefix(), type);
-			case "wrapped": return toType(getWrapped(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "attribute" -> toType(getAttribute(), type);
+			case "name" -> toType(getName(), type);
+			case "namespace" -> toType(getNamespace(), type);
+			case "prefix" -> toType(getPrefix(), type);
+			case "wrapped" -> toType(getWrapped(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Xml set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "attribute": return setAttribute(toBoolean(value));
-			case "name": return setName(stringify(value));
-			case "namespace": return setNamespace(stringify(value));
-			case "prefix": return setPrefix(stringify(value));
-			case "wrapped": return setWrapped(toBoolean(value));
-			default:
+		return switch (property) {
+			case "attribute" -> setAttribute(toBoolean(value));
+			case "name" -> setName(stringify(value));
+			case "namespace" -> setNamespace(stringify(value));
+			case "prefix" -> setPrefix(stringify(value));
+			case "wrapped" -> setWrapped(toBoolean(value));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(attribute != null, "attribute")
 			.addIf(name != null, "name")
 			.addIf(namespace != null, "namespace")

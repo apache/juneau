@@ -22,6 +22,11 @@ package org.apache.juneau.dto.html5;
 public class HtmlBuilder {
 
 	/**
+	 * Constructor.
+	 */
+	protected HtmlBuilder() {}
+
+	/**
 	 * Creates an empty {@link A} element.
 	 *
 	 * @return The new element.

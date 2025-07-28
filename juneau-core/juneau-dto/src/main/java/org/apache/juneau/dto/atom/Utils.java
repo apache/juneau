@@ -25,6 +25,8 @@ import jakarta.xml.bind.*;
  */
 final class Utils {
 
+	private Utils() {}
+
 	/**
 	 * Converts an ISO8601 date-time string to a {@link Calendar}.
 	 *
@@ -34,5 +36,4 @@ final class Utils {
 	static final Calendar parseDateTime(String lexicalXSDDateTime) {
 		return DatatypeConverter.parseDateTime(lexicalXSDDateTime);
 	}
-
 }

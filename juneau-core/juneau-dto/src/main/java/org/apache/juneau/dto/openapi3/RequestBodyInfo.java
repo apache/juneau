@@ -16,13 +16,12 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import org.apache.juneau.UriResolver;
-import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.*;
-
-import java.net.URI;
-import java.net.URL;
+import java.net.*;
 import java.util.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * TODO
@@ -50,13 +49,7 @@ public class RequestBodyInfo extends OpenApiElement{
 
 		this.description = copyFrom.description;
 		this.required = copyFrom.required;
-		if (copyFrom.content == null) {
-			this.content = null;
-		} else {
-			this.content = new LinkedHashMap<>();
-			for (Map.Entry<String,MediaType> e : copyFrom.content.entrySet())
-				this.content.put(e.getKey(),	e.getValue().copy());
-		}
+		this.content = copyOf(copyFrom.content, MediaType::copy);
 	}
 
 	/**
@@ -178,35 +171,36 @@ public class RequestBodyInfo extends OpenApiElement{
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "description": return toType(getDescription(), type);
-			case "content": return toType(getContent(), type);
-			case "required": return toType(getRequired(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "description" -> toType(getDescription(), type);
+			case "content" -> toType(getContent(), type);
+			case "required" -> toType(getRequired(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public RequestBodyInfo set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "description": return setDescription(stringify(value));
-			case "content": return setContent(mapBuilder(String.class,MediaType.class).sparse().addAny(value).build());
-			case "required": return setRequired(toBoolean(value));
-			default:
+		return switch (property) {
+			case "description" -> setDescription(stringify(value));
+			case "content" -> setContent(mapBuilder(String.class,MediaType.class).sparse().addAny(value).build());
+			case "required" -> setRequired(toBoolean(value));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
-				.addIf(description != null, "description")
-				.addIf(content != null, "content")
-				.addIf(required != null, "required")
-				.build();
+		var s = setBuilder(String.class)
+			.addIf(description != null, "description")
+			.addIf(content != null, "content")
+			.addIf(required != null, "required")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

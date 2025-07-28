@@ -16,12 +16,12 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import org.apache.juneau.UriResolver;
-import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.*;
+import java.net.*;
+import java.util.*;
 
-import java.net.URI;
-import java.util.Set;
+import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * License information for the exposed API.
@@ -143,29 +143,30 @@ public class License extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "name": return toType(getName(), type);
-			case "url": return toType(getUrl(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "name" -> toType(getName(), type);
+			case "url" -> toType(getUrl(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public License set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "name": return setName(stringify(value));
-			case "url": return setUrl(toURI(value));
-			default:
+		return switch (property) {
+			case "name" -> setName(stringify(value));
+			case "url" -> setUrl(toURI(value));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(name != null, "name")
 			.addIf(url != null, "url")
 			.build();

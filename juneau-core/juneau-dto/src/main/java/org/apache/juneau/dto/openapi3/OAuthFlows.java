@@ -12,14 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi3;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import org.apache.juneau.annotation.Bean;
+import java.util.*;
+
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
-
-import java.util.Set;
-
-import static org.apache.juneau.internal.CollectionUtils.*;
 
 /**
  * Describes a single operation parameter.
@@ -251,33 +250,34 @@ public class OAuthFlows extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "implicit": return toType(getImplicit(), type);
-			case "password": return toType(getPassword(), type);
-			case "clientCredentials": return toType(getClientCredentials(), type);
-			case "authorizationCode": return toType(getAuthorizationCode(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "implicit" -> toType(getImplicit(), type);
+			case "password" -> toType(getPassword(), type);
+			case "clientCredentials" -> toType(getClientCredentials(), type);
+			case "authorizationCode" -> toType(getAuthorizationCode(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public OAuthFlows set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "implicit": return setImplicit(toType(value, OAuthFlow.class));
-			case "password": return setPassword(toType(value, OAuthFlow.class));
-			case "clientCredentials": return setClientCredentials(toType(value, OAuthFlow.class));
-			case "authorizationCode": return setAuthorizationCode(toType(value, OAuthFlow.class));
-			default:
+		return switch (property) {
+			case "implicit" -> setImplicit(toType(value, OAuthFlow.class));
+			case "password" -> setPassword(toType(value, OAuthFlow.class));
+			case "clientCredentials" -> setClientCredentials(toType(value, OAuthFlow.class));
+			case "authorizationCode" -> setAuthorizationCode(toType(value, OAuthFlow.class));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(implicit != null, "implicit")
 			.addIf(password != null, "password")
 			.addIf(clientCredentials != null, "clientCredentials")
@@ -285,5 +285,4 @@ public class OAuthFlows extends OpenApiElement {
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
-
 }

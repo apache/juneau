@@ -75,7 +75,7 @@ public enum JsonType {
 	public static JsonType fromString(String value) {
 		if (value == null || value.length() < 4)
 			return null;
-		char c = value.charAt(0);
+		var c = value.charAt(0);
 		if (c == 'a') {
 			if (value.equals("array"))
 				return ARRAY;

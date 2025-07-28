@@ -152,29 +152,30 @@ public class License extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "name": return toType(getName(), type);
-			case "url": return toType(getUrl(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "name" -> toType(getName(), type);
+			case "url" -> toType(getUrl(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public License set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "name": return setName(stringify(value));
-			case "url": return setUrl(StringUtils.toURI(value));
-			default:
+		return switch (property) {
+			case "name" -> setName(stringify(value));
+			case "url" -> setUrl(StringUtils.toURI(value));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(name != null, "name")
 			.addIf(url != null, "url")
 			.build();

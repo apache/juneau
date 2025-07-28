@@ -16,12 +16,10 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.*;
+import java.util.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * information for Link object.
@@ -72,11 +70,7 @@ public class OAuthFlow extends OpenApiElement {
 		this.authorizationUrl = copyFrom.authorizationUrl;
 		this.tokenUrl = copyFrom.tokenUrl;
 		this.refreshUrl = copyFrom.refreshUrl;
-
-		if (copyFrom.scopes == null)
-			this.scopes = null;
-		else
-			this.scopes = new LinkedHashMap<>(copyFrom.scopes);
+		this.scopes = copyOf(copyFrom.scopes);
 	}
 
 	/**
@@ -218,33 +212,34 @@ public class OAuthFlow extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "refreshUrl": return toType(getRefreshUrl(), type);
-			case "tokenUrl": return toType(getTokenUrl(), type);
-			case "authorizationUrl": return toType(getAuthorizationUrl(), type);
-			case "scopes": return toType(getScopes(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "refreshUrl" -> toType(getRefreshUrl(), type);
+			case "tokenUrl" -> toType(getTokenUrl(), type);
+			case "authorizationUrl" -> toType(getAuthorizationUrl(), type);
+			case "scopes" -> toType(getScopes(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public OAuthFlow set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "authorizationUrl": return setAuthorizationUrl(stringify(value));
-			case "tokenUrl": return setTokenUrl(stringify(value));
-			case "refreshUrl": return setRefreshUrl(stringify(value));
-			case "scopes": return setScopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
-			default:
+		return switch (property) {
+			case "authorizationUrl" -> setAuthorizationUrl(stringify(value));
+			case "tokenUrl" -> setTokenUrl(stringify(value));
+			case "refreshUrl" -> setRefreshUrl(stringify(value));
+			case "scopes" -> setScopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(authorizationUrl != null, "authorizationUrl")
 			.addIf(tokenUrl != null, "tokenUrl")
 			.addIf(refreshUrl != null, "refreshUrl")

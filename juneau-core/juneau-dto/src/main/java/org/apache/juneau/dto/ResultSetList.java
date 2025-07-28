@@ -44,18 +44,18 @@ public final class ResultSetList extends LinkedList<Map<String,Object>> {
 	 */
 	public ResultSetList(ResultSet rs, int pos, int limit, boolean includeRowNums) throws SQLException {
 		try {
-			int rowNum = pos;
+			var rowNum = pos;
 
 			// Get the column names.
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int offset = (includeRowNums ? 1 : 0);
-			int cc = rsmd.getColumnCount();
-			String[] columns = new String[cc + offset];
+			var rsmd = rs.getMetaData();
+			var offset = (includeRowNums ? 1 : 0);
+			var cc = rsmd.getColumnCount();
+			var columns = new String[cc + offset];
 			if (includeRowNums)
 				columns[0] = "ROW";
-			int[] colTypes = new int[cc];
+			var colTypes = new int[cc];
 
-			for (int i = 0; i < cc; i++) {
+			for (var i = 0; i < cc; i++) {
 				columns[i+offset] = rsmd.getColumnName(i+1);
 				colTypes[i] = rsmd.getColumnType(i+1);
 			}
@@ -64,11 +64,11 @@ public final class ResultSetList extends LinkedList<Map<String,Object>> {
 
 			// Get the rows.
 			while (limit-- > 0 && rs.next()) {
-				Object[] row = new Object[cc + offset];
+				var row = new Object[cc + offset];
 				if (includeRowNums)
 					row[0] = rowNum++;
-				for (int i = 0; i < cc; i++) {
-					Object o = readEntry(rs, i+1, colTypes[i]);
+				for (var i = 0; i < cc; i++) {
+					var o = readEntry(rs, i+1, colTypes[i]);
 					row[i+offset] = o;
 				}
 				add(new SimpleMap<>(columns, row));
@@ -89,26 +89,22 @@ public final class ResultSetList extends LinkedList<Map<String,Object>> {
 	 * @param dataType The {@link Types type} of the entry.
 	 * @return The entry as an Object.
 	 */
-	protected static Object readEntry(ResultSet rs, int col, int dataType) {
+	static Object readEntry(ResultSet rs, int col, int dataType) {
 		try {
-			switch (dataType) {
-				case Types.BLOB:
-					Blob b = rs.getBlob(col);
-					return "blob["+b.length()+"]";
-				case Types.CLOB:
-					Clob c = rs.getClob(col);
-					return "clob["+c.length()+"]";
-				case Types.LONGVARBINARY:
-					return "longvarbinary["+count(rs.getBinaryStream(col))+"]";
-				case Types.LONGVARCHAR:
-					return "longvarchar["+count(rs.getAsciiStream(col))+"]";
-				case Types.LONGNVARCHAR:
-					return "longnvarchar["+count(rs.getCharacterStream(col))+"]";
-				case Types.TIMESTAMP:
-					return rs.getTimestamp(col);  // Oracle returns com.oracle.TIMESTAMP objects from getObject() which isn't a Timestamp.
-				default:
-					return rs.getObject(col);
-			}
+			return switch (dataType) {
+				case Types.BLOB -> {
+					var b = rs.getBlob(col);
+					yield "blob[" + b.length() + "]";
+				}
+				case Types.CLOB -> {
+					var c = rs.getClob(col);
+					yield "clob[" + c.length() + "]";
+				}
+				case Types.LONGVARBINARY -> "longvarbinary[" + count(rs.getBinaryStream(col)) + "]";
+				case Types.LONGVARCHAR -> "longvarchar[" + count(rs.getAsciiStream(col)) + "]";
+				case Types.LONGNVARCHAR -> "longnvarchar[" + count(rs.getCharacterStream(col)) + "]";
+				case Types.TIMESTAMP -> rs.getTimestamp(col); // Oracle returns com.oracle.TIMESTAMP objects from getObject()
+				default -> rs.getObject(col); };
 		} catch (Exception e) {
 			return e.getLocalizedMessage();
 		}

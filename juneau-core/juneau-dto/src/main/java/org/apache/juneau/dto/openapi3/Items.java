@@ -12,20 +12,20 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi3;
 
+import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.internal.ArrayUtils.contains;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.copyOf;
 import static org.apache.juneau.internal.ConverterUtils.*;
+
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.dto.swagger.Swagger;
+import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.Json5Serializer;
-
-import java.util.*;
-
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.internal.ArrayUtils.contains;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import org.apache.juneau.json.*;
 
 /**
  * A limited subset of JSON-Schema's items object.
@@ -78,7 +78,7 @@ public class Items extends OpenApiElement {
 		exclusiveMaximum,
 		exclusiveMinimum,
 		uniqueItems;
-	private Items items;
+	private Items items;  // NOSONAR - Intentional naming.
 	private Object _default;  // NOSONAR - Intentional naming.
 	private List<Object> _enum;  // NOSONAR - Intentional naming.
 
@@ -593,7 +593,7 @@ public class Items extends OpenApiElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object
 	 */
-	public Items setEnum(Object...values) {
+	public Items setEnum(Object...values) {  // NOSONAR - Intentional naming.
 		_enum = listBuilder(_enum).sparse().addAny(values).build();
 		return this;
 	}
@@ -664,61 +664,62 @@ public class Items extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "type": return toType(getType(), type);
-			case "format": return toType(getFormat(), type);
-			case "items": return toType(getItems(), type);
-			case "collectionFormat": return toType(getCollectionFormat(), type);
-			case "default": return toType(getDefault(), type);
-			case "maximum": return toType(getMaximum(), type);
-			case "exclusiveMaximum": return toType(getExclusiveMaximum(), type);
-			case "minimum": return toType(getMinimum(), type);
-			case "exclusiveMinimum": return toType(getExclusiveMinimum(), type);
-			case "maxLength": return toType(getMaxLength(), type);
-			case "minLength": return toType(getMinLength(), type);
-			case "pattern": return toType(getPattern(), type);
-			case "maxItems": return toType(getMaxItems(), type);
-			case "minItems": return toType(getMinItems(), type);
-			case "uniqueItems": return toType(getUniqueItems(), type);
-			case "enum": return toType(getEnum(), type);
-			case "multipleOf": return toType(getMultipleOf(), type);
-			case "$ref": return toType(getRef(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "type" -> toType(getType(), type);
+			case "format" -> toType(getFormat(), type);
+			case "items" -> toType(getItems(), type);
+			case "collectionFormat" -> toType(getCollectionFormat(), type);
+			case "default" -> toType(getDefault(), type);
+			case "maximum" -> toType(getMaximum(), type);
+			case "exclusiveMaximum" -> toType(getExclusiveMaximum(), type);
+			case "minimum" -> toType(getMinimum(), type);
+			case "exclusiveMinimum" -> toType(getExclusiveMinimum(), type);
+			case "maxLength" -> toType(getMaxLength(), type);
+			case "minLength" -> toType(getMinLength(), type);
+			case "pattern" -> toType(getPattern(), type);
+			case "maxItems" -> toType(getMaxItems(), type);
+			case "minItems" -> toType(getMinItems(), type);
+			case "uniqueItems" -> toType(getUniqueItems(), type);
+			case "enum" -> toType(getEnum(), type);
+			case "multipleOf" -> toType(getMultipleOf(), type);
+			case "$ref" -> toType(getRef(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Items set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "type": return setType(stringify(value));
-			case "format": return setFormat(stringify(value));
-			case "items": return setItems(toType(value,Items.class));
-			case "collectionFormat": return setCollectionFormat(stringify(value));
-			case "default": return setDefault(value);
-			case "maximum": return setMaximum(toNumber(value));
-			case "exclusiveMaximum": return setExclusiveMaximum(toBoolean(value));
-			case "minimum": return setMinimum(toNumber(value));
-			case "exclusiveMinimum": return setExclusiveMinimum(toBoolean(value));
-			case "maxLength": return setMaxLength(toInteger(value));
-			case "minLength": return setMinLength(toInteger(value));
-			case "pattern": return setPattern(stringify(value));
-			case "maxItems": return setMaxItems(toInteger(value));
-			case "minItems": return setMinItems(toInteger(value));
-			case "uniqueItems": return setUniqueItems(toBoolean(value));
-			case "enum": return setEnum(value);
-			case "multipleOf": return setMultipleOf(toNumber(value));
-			case "$ref": return ref(value);
-			default:
+		return switch (property) {
+			case "type" -> setType(stringify(value));
+			case "format" -> setFormat(stringify(value));
+			case "items" -> setItems(toType(value,Items.class));
+			case "collectionFormat" -> setCollectionFormat(stringify(value));
+			case "default" -> setDefault(value);
+			case "maximum" -> setMaximum(toNumber(value));
+			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
+			case "minimum" -> setMinimum(toNumber(value));
+			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
+			case "maxLength" -> setMaxLength(toInteger(value));
+			case "minLength" -> setMinLength(toInteger(value));
+			case "pattern" -> setPattern(stringify(value));
+			case "maxItems" -> setMaxItems(toInteger(value));
+			case "minItems" -> setMinItems(toInteger(value));
+			case "uniqueItems" -> setUniqueItems(toBoolean(value));
+			case "enum" -> setEnum(value);
+			case "multipleOf" -> setMultipleOf(toNumber(value));
+			case "$ref" -> ref(value);
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(type != null, "type")
 			.addIf(format != null, "format")
 			.addIf(items != null, "items")
@@ -760,7 +761,7 @@ public class Items extends OpenApiElement {
 			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
 			refStack.addLast(ref);
-			Items r = swagger.findRef(ref, Items.class).resolveRefs(swagger, refStack, maxDepth);
+			var r = swagger.findRef(ref, Items.class).resolveRefs(swagger, refStack, maxDepth);
 			refStack.removeLast();
 			return r;
 		}

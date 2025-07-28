@@ -27,6 +27,11 @@ import org.apache.juneau.common.internal.*;
 public class SwaggerBuilder {
 
 	/**
+	 * Constructor.
+	 */
+	protected SwaggerBuilder() {}
+
+	/**
 	 * Creates an empty {@link Contact} element.
 	 *
 	 * @return The new element.

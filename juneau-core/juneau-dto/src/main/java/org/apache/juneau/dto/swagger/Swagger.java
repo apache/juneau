@@ -43,7 +43,7 @@ public class Swagger extends SwaggerElement {
 	private static final Comparator<String> PATH_COMPARATOR = (o1, o2) -> o1.replace('{', '@').compareTo(o2.replace('{', '@'));
 
 	private String
-		swagger = "2.0",
+		swagger = "2.0",  // NOSONAR - Intentional naming.
 		host,
 		basePath;
 	private Info info;
@@ -83,62 +83,25 @@ public class Swagger extends SwaggerElement {
 		this.swagger = copyFrom.swagger;
 
 		// TODO - Definitions are not deep copied, so they should not contain references.
-		if (copyFrom.definitions == null) {
-			this.definitions = null;
-		} else {
-			this.definitions = map();
-			copyFrom.definitions.forEach((k,v) -> this.definitions.put(k, new JsonMap(v)));
-		}
+		this.definitions = copyOf(copyFrom.definitions, JsonMap::new);
 
-		if (copyFrom.paths == null) {
-			this.paths = null;
-		} else {
-			this.paths = map();
-			copyFrom.paths.forEach((k,v) -> {
-				OperationMap m = new OperationMap();
-				v.forEach((k2,v2) -> m.put(k2, v2.copy()));
-				this.paths.put(k, m);
-			});
-		}
+		this.paths = copyOf(copyFrom.paths, v -> {
+			var m = new OperationMap();
+			v.forEach((k2,v2) -> m.put(k2, v2.copy()));
+			return m;
+		});
 
-		if (copyFrom.parameters == null) {
-			this.parameters = null;
-		} else {
-			this.parameters = map();
-			copyFrom.parameters.forEach((k,v) -> this.parameters.put(k, v.copy()));
-		}
+		this.parameters = copyOf(copyFrom.parameters, ParameterInfo::copy);
+		this.responses = copyOf(copyFrom.responses, ResponseInfo::copy);
+		this.securityDefinitions = copyOf(copyFrom.securityDefinitions, SecurityScheme::copy);
 
-		if (copyFrom.responses == null) {
-			this.responses = null;
-		} else {
-			this.responses = map();
-			copyFrom.responses.forEach((k,v) -> this.responses.put(k, v.copy()));
-		}
+		this.security = copyOf(copyFrom.security, x -> {
+			Map<String,List<String>> m2 = map();
+			x.forEach((k,v) -> m2.put(k, copyOf(v)));
+			return m2;
+		});
 
-		if (copyFrom.security == null) {
-			this.security = null;
-		} else {
-			this.security = list();
-			copyFrom.security.forEach(x -> {
-				Map<String,List<String>> m2 = map();
-				x.forEach((k,v) -> m2.put(k, copyOf(v)));
-				this.security.add(m2);
-			});
-		}
-
-		if (copyFrom.securityDefinitions == null) {
-			this.securityDefinitions = null;
-		} else {
-			this.securityDefinitions = map();
-			copyFrom.securityDefinitions.forEach((k,v) -> this.securityDefinitions.put(k, v.copy()));
-		}
-
-		if (copyFrom.tags == null) {
-			this.tags = null;
-		} else {
-			this.tags = CollectionUtils.set();
-			copyFrom.tags.forEach(x -> this.tags.add(x.copy()));
-		}
+		this.tags = copyOf(copyFrom.tags, x -> x.copy());
 	}
 
 	/**
@@ -835,7 +798,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The operation for the specified path and operation id, or <jk>null</jk> if it doesn't exist.
 	 */
 	public Operation getOperation(String path, String operation) {
-		OperationMap om = getPath(path);
+		var om = getPath(path);
 		if (om == null)
 			return null;
 		return om.get(operation);
@@ -850,10 +813,10 @@ public class Swagger extends SwaggerElement {
 	 * @return The operation for the specified path and operation id, or <jk>null</jk> if it doesn't exist.
 	 */
 	public ResponseInfo getResponseInfo(String path, String operation, String status) {
-		OperationMap om = getPath(path);
+		var om = getPath(path);
 		if (om == null)
 			return null;
-		Operation op = om.get(operation);
+		var op = om.get(operation);
 		if (op == null)
 			return null;
 		return op.getResponse(status);
@@ -881,9 +844,9 @@ public class Swagger extends SwaggerElement {
 	 * @return The parameter information or <jk>null</jk> if not found.
 	 */
 	public ParameterInfo getParameterInfo(String path, String method, String in, String name) {
-		OperationMap om = getPath(path);
+		var om = getPath(path);
 		if (om != null) {
-			Operation o = om.get(method);
+			var o = om.get(method);
 			if (o != null) {
 				return o.getParameter(in, name);
 			}
@@ -899,56 +862,57 @@ public class Swagger extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "basePath": return toType(getBasePath(), type);
-			case "consumes": return toType(getConsumes(), type);
-			case "definitions": return toType(getDefinitions(), type);
-			case "externalDocs": return toType(getExternalDocs(), type);
-			case "host": return toType(getHost(), type);
-			case "info": return toType(getInfo(), type);
-			case "parameters": return toType(getParameters(), type);
-			case "paths": return toType(getPaths(), type);
-			case "produces": return toType(getProduces(), type);
-			case "responses": return toType(getResponses(), type);
-			case "schemes": return toType(getSchemes(), type);
-			case "security": return toType(getSecurity(), type);
-			case "securityDefinitions": return toType(getSecurityDefinitions(), type);
-			case "swagger": return toType(getSwagger(), type);
-			case "tags": return toType(getTags(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "basePath" -> toType(getBasePath(), type);
+			case "consumes" -> toType(getConsumes(), type);
+			case "definitions" -> toType(getDefinitions(), type);
+			case "externalDocs" -> toType(getExternalDocs(), type);
+			case "host" -> toType(getHost(), type);
+			case "info" -> toType(getInfo(), type);
+			case "parameters" -> toType(getParameters(), type);
+			case "paths" -> toType(getPaths(), type);
+			case "produces" -> toType(getProduces(), type);
+			case "responses" -> toType(getResponses(), type);
+			case "schemes" -> toType(getSchemes(), type);
+			case "security" -> toType(getSecurity(), type);
+			case "securityDefinitions" -> toType(getSecurityDefinitions(), type);
+			case "swagger" -> toType(getSwagger(), type);
+			case "tags" -> toType(getTags(), type);
+			default -> super.get(property, type);
+		};
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings("rawtypes")
 	@Override /* SwaggerElement */
 	public Swagger set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "basePath": return setBasePath(stringify(value));
-			case "consumes": return setConsumes(listBuilder(MediaType.class).sparse().addAny(value).build());
-			case "definitions": return setDefinitions(mapBuilder(String.class,JsonMap.class).sparse().addAny(value).build());
-			case "externalDocs": return setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "host": return setHost(stringify(value));
-			case "info": return setInfo(toType(value, Info.class));
-			case "parameters": return setParameters(mapBuilder(String.class,ParameterInfo.class).sparse().addAny(value).build());
-			case "paths": return setPaths(mapBuilder(String.class,OperationMap.class).sparse().addAny(value).build());
-			case "produces": return setProduces(listBuilder(MediaType.class).sparse().addAny(value).build());
-			case "responses": return setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addAny(value).build());
-			case "schemes": return setSchemes(listBuilder(String.class).sparse().addAny(value).build());
-			case "security": return setSecurity((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addAny(value).build());
-			case "securityDefinitions": return setSecurityDefinitions(mapBuilder(String.class,SecurityScheme.class).sparse().addAny(value).build());
-			case "swagger": return setSwagger(stringify(value));
-			case "tags": return setTags(listBuilder(Tag.class).sparse().addAny(value).build());
-			default:
+		return switch (property) {
+			case "basePath" -> setBasePath(stringify(value));
+			case "consumes" -> setConsumes(listBuilder(MediaType.class).sparse().addAny(value).build());
+			case "definitions" -> setDefinitions(mapBuilder(String.class,JsonMap.class).sparse().addAny(value).build());
+			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "host" -> setHost(stringify(value));
+			case "info" -> setInfo(toType(value, Info.class));
+			case "parameters" -> setParameters(mapBuilder(String.class,ParameterInfo.class).sparse().addAny(value).build());
+			case "paths" -> setPaths(mapBuilder(String.class,OperationMap.class).sparse().addAny(value).build());
+			case "produces" -> setProduces(listBuilder(MediaType.class).sparse().addAny(value).build());
+			case "responses" -> setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addAny(value).build());
+			case "schemes" -> setSchemes(listBuilder(String.class).sparse().addAny(value).build());
+			case "security" -> setSecurity((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addAny(value).build());
+			case "securityDefinitions" -> setSecurityDefinitions(mapBuilder(String.class,SecurityScheme.class).sparse().addAny(value).build());
+			case "swagger" -> setSwagger(stringify(value));
+			case "tags" -> setTags(listBuilder(Tag.class).sparse().addAny(value).build());
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(basePath != null, "basePath")
 			.addIf(consumes != null, "consumes")
 			.addIf(definitions != null, "definitions")

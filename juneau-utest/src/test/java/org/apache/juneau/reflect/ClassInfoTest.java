@@ -1540,7 +1540,6 @@ public class ClassInfoTest {
 		assertEquals("V", pTypeGenericArgInfo.getName());
 	}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Hierarchy
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1920,7 +1919,6 @@ public class ClassInfoTest {
 	public void getParameterType_nestedType() {
 		check("MM", mn.getParameterType(1, HashMap.class));
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// ClassInfo.isParentOfFuzzyPrimitives(Class)

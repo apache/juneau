@@ -30,7 +30,7 @@ public class Meta extends HtmlElementVoid {
 	/**
 	 * Creates an empty {@link Meta} element.
 	 */
-	public Meta() {}
+	public Meta() { /* Empty constructor. */ }
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-charset">charset</a>
@@ -90,7 +90,6 @@ public class Meta extends HtmlElementVoid {
 		attr("name", name);
 		return this;
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods

@@ -15,6 +15,7 @@ package org.apache.juneau.dto.swagger;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.contains;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.copyOf;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -911,71 +912,72 @@ public class ParameterInfo extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "allowEmptyValue": return toType(getAllowEmptyValue(), type);
-			case "collectionFormat": return toType(getCollectionFormat(), type);
-			case "default": return toType(getDefault(), type);
-			case "description": return toType(getDescription(), type);
-			case "enum": return toType(getEnum(), type);
-			case "exclusiveMaximum": return toType(getExclusiveMaximum(), type);
-			case "exclusiveMinimum": return toType(getExclusiveMinimum(), type);
-			case "format": return toType(getFormat(), type);
-			case "in": return toType(getIn(), type);
-			case "items": return toType(getItems(), type);
-			case "maximum": return toType(getMaximum(), type);
-			case "maxItems": return toType(getMaxItems(), type);
-			case "maxLength": return toType(getMaxLength(), type);
-			case "minimum": return toType(getMinimum(), type);
-			case "minItems": return toType(getMinItems(), type);
-			case "minLength": return toType(getMinLength(), type);
-			case "multipleOf": return toType(getMultipleOf(), type);
-			case "name": return toType(getName(), type);
-			case "pattern": return toType(getPattern(), type);
-			case "required": return toType(getRequired(), type);
-			case "schema": return toType(getSchema(), type);
-			case "type": return toType(getType(), type);
-			case "uniqueItems": return toType(getUniqueItems(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "allowEmptyValue" -> toType(getAllowEmptyValue(), type);
+			case "collectionFormat" -> toType(getCollectionFormat(), type);
+			case "default" -> toType(getDefault(), type);
+			case "description" -> toType(getDescription(), type);
+			case "enum" -> toType(getEnum(), type);
+			case "exclusiveMaximum" -> toType(getExclusiveMaximum(), type);
+			case "exclusiveMinimum" -> toType(getExclusiveMinimum(), type);
+			case "format" -> toType(getFormat(), type);
+			case "in" -> toType(getIn(), type);
+			case "items" -> toType(getItems(), type);
+			case "maximum" -> toType(getMaximum(), type);
+			case "maxItems" -> toType(getMaxItems(), type);
+			case "maxLength" -> toType(getMaxLength(), type);
+			case "minimum" -> toType(getMinimum(), type);
+			case "minItems" -> toType(getMinItems(), type);
+			case "minLength" -> toType(getMinLength(), type);
+			case "multipleOf" -> toType(getMultipleOf(), type);
+			case "name" -> toType(getName(), type);
+			case "pattern" -> toType(getPattern(), type);
+			case "required" -> toType(getRequired(), type);
+			case "schema" -> toType(getSchema(), type);
+			case "type" -> toType(getType(), type);
+			case "uniqueItems" -> toType(getUniqueItems(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public ParameterInfo set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "allowEmptyValue": return setAllowEmptyValue(toBoolean(value));
-			case "collectionFormat": return setCollectionFormat(stringify(value));
-			case "default": return setDefault(value);
-			case "description": return setDescription(stringify(value));
-			case "enum": return setEnum(value);
-			case "exclusiveMaximum": return setExclusiveMaximum(toBoolean(value));
-			case "exclusiveMinimum": return setExclusiveMinimum(toBoolean(value));
-			case "format": return setFormat(stringify(value));
-			case "in": return setIn(stringify(value));
-			case "items": return setItems(toType(value, Items.class));
-			case "maximum": return setMaximum(toNumber(value));
-			case "maxItems": return setMaxItems(toInteger(value));
-			case "maxLength": return setMaxLength(toInteger(value));
-			case "minimum": return setMinimum(toNumber(value));
-			case "minItems": return setMinItems(toInteger(value));
-			case "minLength": return setMinLength(toInteger(value));
-			case "multipleOf": return setMultipleOf(toNumber(value));
-			case "name": return setName(stringify(value));
-			case "pattern": return setPattern(stringify(value));
-			case "required": return setRequired(toBoolean(value));
-			case "schema": return setSchema(toType(value, SchemaInfo.class));
-			case "type": return setType(stringify(value));
-			case "uniqueItems": return setUniqueItems(toBoolean(value));
-			default:
+		return switch (property) {
+			case "allowEmptyValue" -> setAllowEmptyValue(toBoolean(value));
+			case "collectionFormat" -> setCollectionFormat(stringify(value));
+			case "default" -> setDefault(value);
+			case "description" -> setDescription(stringify(value));
+			case "enum" -> setEnum(value);
+			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
+			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
+			case "format" -> setFormat(stringify(value));
+			case "in" -> setIn(stringify(value));
+			case "items" -> setItems(toType(value, Items.class));
+			case "maximum" -> setMaximum(toNumber(value));
+			case "maxItems" -> setMaxItems(toInteger(value));
+			case "maxLength" -> setMaxLength(toInteger(value));
+			case "minimum" -> setMinimum(toNumber(value));
+			case "minItems" -> setMinItems(toInteger(value));
+			case "minLength" -> setMinLength(toInteger(value));
+			case "multipleOf" -> setMultipleOf(toNumber(value));
+			case "name" -> setName(stringify(value));
+			case "pattern" -> setPattern(stringify(value));
+			case "required" -> setRequired(toBoolean(value));
+			case "schema" -> setSchema(toType(value, SchemaInfo.class));
+			case "type" -> setType(stringify(value));
+			case "uniqueItems" -> setUniqueItems(toBoolean(value));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(allowEmptyValue != null, "allowEmptyValue")
 			.addIf(collectionFormat != null, "collectionFormat")
 			.addIf(_default != null, "default")

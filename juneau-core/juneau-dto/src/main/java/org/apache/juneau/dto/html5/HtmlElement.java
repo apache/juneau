@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -40,7 +39,7 @@ import org.apache.juneau.xml.annotation.*;
 @FluentSetters
 public abstract class HtmlElement {
 
-	private LinkedHashMap<String,Object> attrs;
+	private java.util.Map<String,Object> attrs;
 
 	/**
 	 * The attributes of this element.
@@ -49,7 +48,7 @@ public abstract class HtmlElement {
 	 */
 	@Xml(format=ATTRS)
 	@Beanp("a")
-	public LinkedHashMap<String,Object> getAttrs() {
+	public java.util.Map<String,Object> getAttrs() {
 		return attrs;
 	}
 
@@ -60,10 +59,10 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	@Beanp("a")
-	public HtmlElement setAttrs(LinkedHashMap<String,Object> attrs) {
+	public HtmlElement setAttrs(java.util.Map<String,Object> attrs) {
 		if (attrs != null) {
 			attrs.entrySet().forEach(x -> {
-				String key = x.getKey();
+				var key = x.getKey();
 				if ("url".equals(key) || "href".equals(key) || key.endsWith("action"))
 					x.setValue(StringUtils.toURI(x.getValue()));
 			});

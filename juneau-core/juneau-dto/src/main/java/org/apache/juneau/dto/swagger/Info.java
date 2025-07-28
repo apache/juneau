@@ -321,39 +321,40 @@ public class Info extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "contact": return toType(getContact(), type);
-			case "description": return toType(getDescription(), type);
-			case "license": return toType(getLicense(), type);
-			case "siteName": return toType(getSiteName(), type);
-			case "termsOfService": return toType(getTermsOfService(), type);
-			case "title": return toType(getTitle(), type);
-			case "version": return toType(getVersion(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "contact" -> toType(getContact(), type);
+			case "description" -> toType(getDescription(), type);
+			case "license" -> toType(getLicense(), type);
+			case "siteName" -> toType(getSiteName(), type);
+			case "termsOfService" -> toType(getTermsOfService(), type);
+			case "title" -> toType(getTitle(), type);
+			case "version" -> toType(getVersion(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Info set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "contact": return setContact(toType(value, Contact.class));
-			case "description": return setDescription(stringify(value));
-			case "license": return setLicense(toType(value, License.class));
-			case "siteName": return setSiteName(stringify(value));
-			case "termsOfService": return setTermsOfService(stringify(value));
-			case "title": return setTitle(stringify(value));
-			case "version": return setVersion(stringify(value));
-			default:
+		return switch (property) {
+			case "contact" -> setContact(toType(value, Contact.class));
+			case "description" -> setDescription(stringify(value));
+			case "license" -> setLicense(toType(value, License.class));
+			case "siteName" -> setSiteName(stringify(value));
+			case "termsOfService" -> setTermsOfService(stringify(value));
+			case "title" -> setTitle(stringify(value));
+			case "version" -> setVersion(stringify(value));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(contact != null, "contact")
 			.addIf(description != null, "description")
 			.addIf(license != null, "license")

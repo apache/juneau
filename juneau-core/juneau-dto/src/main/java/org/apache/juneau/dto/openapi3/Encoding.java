@@ -16,13 +16,12 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import org.apache.juneau.UriResolver;
-import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.*;
-
-import java.net.URI;
-import java.net.URL;
+import java.net.*;
 import java.util.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * TODO
@@ -54,13 +53,7 @@ public class Encoding extends OpenApiElement{
 		this.style = copyFrom.style;
 		this.explode = copyFrom.explode;
 		this.allowReserved = copyFrom.allowReserved;
-		if (copyFrom.headers == null) {
-			this.headers = null;
-		} else {
-			this.headers = new LinkedHashMap<>();
-			for (Map.Entry<String,HeaderInfo> e : copyFrom.headers.entrySet())
-				this.headers.put(e.getKey(),	e.getValue().copy());
-		}
+		this.headers = copyOf(copyFrom.headers, HeaderInfo::copy);
 	}
 
 	/**
@@ -232,41 +225,42 @@ public class Encoding extends OpenApiElement{
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "contentType": return toType(getContentType(), type);
-			case "style": return toType(getStyle(), type);
-			case "headers": return toType(getHeaders(), type);
-			case "explode": return toType(getExplode(), type);
-			case "allowReserved": return toType(getAllowReserved(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "contentType" -> toType(getContentType(), type);
+			case "style" -> toType(getStyle(), type);
+			case "headers" -> toType(getHeaders(), type);
+			case "explode" -> toType(getExplode(), type);
+			case "allowReserved" -> toType(getAllowReserved(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Encoding set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "contentType": return setContentType(stringify(value));
-			case "style": return setStyle(stringify(value));
-			case "headers": return setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
-			case "explode": return setExplode(toBoolean(value));
-			case "allowReserved": return setAllowReserved(toBoolean(value));
-			default:
+		return switch (property) {
+			case "contentType" -> setContentType(stringify(value));
+			case "style" -> setStyle(stringify(value));
+			case "headers" -> setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
+			case "explode" -> setExplode(toBoolean(value));
+			case "allowReserved" -> setAllowReserved(toBoolean(value));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
-				.addIf(contentType != null, "contentType")
-				.addIf(style != null, "style")
-				.addIf(headers != null, "headers")
-				.addIf(explode != null, "explode")
-				.addIf(allowReserved != null, "allowReserved")
-				.build();
+		var s = setBuilder(String.class)
+			.addIf(contentType != null, "contentType")
+			.addIf(style != null, "style")
+			.addIf(headers != null, "headers")
+			.addIf(explode != null, "explode")
+			.addIf(allowReserved != null, "allowReserved")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

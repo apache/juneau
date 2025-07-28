@@ -30,7 +30,7 @@ public class Br extends HtmlElementVoid {
 	/**
 	 * Creates an empty {@link Br} element.
 	 */
-	public Br() {}
+	public Br() { /* Empty constructor. */ }
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods

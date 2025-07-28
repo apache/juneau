@@ -139,7 +139,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * @return This object.
 	 */
 	public LinkString setUri(String value) {
-		setUri(value, new Object[0]);
+		setUri(value, new Object[0]);  // NOSONAR - Not fixable.
 		return this;
 	}
 
@@ -156,7 +156,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * @return This object.
 	 */
 	public LinkString setUri(String value, Object...args) {
-		for (int i = 0; i < args.length; i++)
+		for (var i = 0; i < args.length; i++)
 			try {
 				args[i] = OpenApiSerializer.DEFAULT.getSession().serialize(HttpPartType.PATH, null, args[i]);
 			} catch (SchemaValidationException | SerializeException e) {

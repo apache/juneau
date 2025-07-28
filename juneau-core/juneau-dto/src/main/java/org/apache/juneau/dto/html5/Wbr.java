@@ -30,7 +30,7 @@ public class Wbr extends HtmlElementVoid {
 	/**
 	 * Creates an empty {@link Wbr} element.
 	 */
-	public Wbr() {}
+	public Wbr() { /* Empty constructor. */ }
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods

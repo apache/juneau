@@ -30,7 +30,7 @@ public class Keygen extends HtmlElementVoid {
 	/**
 	 * Creates an empty {@link Keygen} element.
 	 */
-	public Keygen() {}
+	public Keygen() { /* Empty constructor. */ }
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
@@ -119,7 +119,6 @@ public class Keygen extends HtmlElementVoid {
 		attr("name", name);
 		return this;
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods

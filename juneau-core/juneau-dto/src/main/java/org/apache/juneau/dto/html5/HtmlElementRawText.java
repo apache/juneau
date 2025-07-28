@@ -59,7 +59,7 @@ public class HtmlElementRawText extends HtmlElement {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HtmlElement text(Object text) {
+	public HtmlElement text(Object text) {  // NOSONAR - Intentional naming.
 		this.text = text;
 		return this;
 	}

@@ -16,13 +16,12 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import org.apache.juneau.UriResolver;
-import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.*;
-
-import java.net.URI;
-import java.net.URL;
+import java.net.*;
 import java.util.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * TODO
@@ -50,29 +49,9 @@ public class Response extends OpenApiElement{
 		super(copyFrom);
 
 		this.description = copyFrom.description;
-		if (copyFrom.headers == null) {
-			this.headers = null;
-		} else {
-			this.headers = new LinkedHashMap<>();
-			for (Map.Entry<String,HeaderInfo> e : copyFrom.headers.entrySet())
-				this.headers.put(e.getKey(),	e.getValue().copy());
-		}
-
-		if (copyFrom.content == null) {
-			this.content = null;
-		} else {
-			this.content = new LinkedHashMap<>();
-			for (Map.Entry<String,MediaType> e : copyFrom.content.entrySet())
-				this.content.put(e.getKey(),	e.getValue().copy());
-		}
-
-		if (copyFrom.links == null) {
-			this.links = null;
-		} else {
-			this.links = new LinkedHashMap<>();
-			for (Map.Entry<String,Link> e : copyFrom.links.entrySet())
-				this.links.put(e.getKey(),	e.getValue().copy());
-		}
+		this.headers = copyOf(copyFrom.headers, HeaderInfo::copy);
+		this.content = copyOf(copyFrom.content, MediaType::copy);
+		this.links = copyOf(copyFrom.links, Link::copy);
 	}
 
 	/**
@@ -235,38 +214,39 @@ public class Response extends OpenApiElement{
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "description": return toType(getDescription(), type);
-			case "content": return toType(getContent(), type);
-			case "headers": return toType(getHeaders(), type);
-			case "links": return toType(getLinks(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "description" -> toType(getDescription(), type);
+			case "content" -> toType(getContent(), type);
+			case "headers" -> toType(getHeaders(), type);
+			case "links" -> toType(getLinks(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Response set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "description": return setDescription(stringify(value));
-			case "headers": return setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
-			case "content": return setContent(mapBuilder(String.class,MediaType.class).sparse().addAny(value).build());
-			case "links": return setLinks(mapBuilder(String.class,Link.class).sparse().addAny(value).build());
-			default:
+		return switch (property) {
+			case "description" -> setDescription(stringify(value));
+			case "headers" -> setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
+			case "content" -> setContent(mapBuilder(String.class,MediaType.class).sparse().addAny(value).build());
+			case "links" -> setLinks(mapBuilder(String.class,Link.class).sparse().addAny(value).build());
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
-				.addIf(description != null, "description")
-				.addIf(headers != null, "headers")
-				.addIf(content != null, "content")
-				.addIf(links != null, "links")
-				.build();
+		var s = setBuilder(String.class)
+			.addIf(description != null, "description")
+			.addIf(headers != null, "headers")
+			.addIf(content != null, "content")
+			.addIf(links != null, "links")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

@@ -12,17 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi3;
 
-import static org.apache.juneau.internal.ConverterUtils.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.*;
-
-import java.util.*;
-
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.contains;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
+import java.util.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Describes a single operation parameter.
@@ -142,7 +141,6 @@ public class SecuritySchemeInfo extends OpenApiElement {
 		super.strict();
 		return this;
 	}
-
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -426,41 +424,42 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "name": return toType(getName(), type);
-			case "in": return toType(getIn(), type);
-			case "description": return toType(getDescription(), type);
-			case "scheme": return toType(getScheme(), type);
-			case "flows": return toType(getFlows(), type);
-			case "bearerFormat": return toType(getBearerFormat(), type);
-			case "openIdConnectUrl": return toType(getOpenIdConnectUrl(), type);
-			case "type": return toType(getType(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "name" -> toType(getName(), type);
+			case "in" -> toType(getIn(), type);
+			case "description" -> toType(getDescription(), type);
+			case "scheme" -> toType(getScheme(), type);
+			case "flows" -> toType(getFlows(), type);
+			case "bearerFormat" -> toType(getBearerFormat(), type);
+			case "openIdConnectUrl" -> toType(getOpenIdConnectUrl(), type);
+			case "type" -> toType(getType(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public SecuritySchemeInfo set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "name": return setName(stringify(value));
-			case "in": return setIn(stringify(value));
-			case "description": return setDescription(stringify(value));
-			case "scheme": return setScheme(stringify(value));
-			case "bearerFormat": return setBearerFormat(stringify(value));
-			case "type": return setType(stringify(value));
-			case "flows": return setFlows(toType(value, OAuthFlow.class));
-			case "openIdConnectUrl": return setOpenIdConnectUrl(stringify(value));
-			default:
+		return switch (property) {
+			case "name" -> setName(stringify(value));
+			case "in" -> setIn(stringify(value));
+			case "description" -> setDescription(stringify(value));
+			case "scheme" -> setScheme(stringify(value));
+			case "bearerFormat" -> setBearerFormat(stringify(value));
+			case "type" -> setType(stringify(value));
+			case "flows" -> setFlows(toType(value, OAuthFlow.class));
+			case "openIdConnectUrl" -> setOpenIdConnectUrl(stringify(value));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(name != null, "name")
 			.addIf(in != null, "in")
 			.addIf(description != null, "description")
@@ -472,5 +471,4 @@ public class SecuritySchemeInfo extends OpenApiElement {
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
-
 }

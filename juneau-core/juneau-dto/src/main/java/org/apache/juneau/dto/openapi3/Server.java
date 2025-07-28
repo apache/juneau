@@ -16,13 +16,12 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import org.apache.juneau.UriResolver;
-import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.*;
-
-import java.net.URI;
-import java.net.URL;
+import java.net.*;
 import java.util.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * TODO
@@ -49,13 +48,7 @@ public class Server extends OpenApiElement{
 
 		this.url = copyFrom.url;
 		this.description = copyFrom.description;
-		if (copyFrom.variables == null) {
-			this.variables = null;
-		} else {
-			this.variables = new LinkedHashMap<>();
-			for (Map.Entry<String,ServerVariable> e : copyFrom.variables.entrySet())
-				this.variables.put(e.getKey(),	e.getValue().copy());
-		}
+		this.variables = copyOf(copyFrom.variables, ServerVariable::copy);
 	}
 
 	/**
@@ -169,35 +162,36 @@ public class Server extends OpenApiElement{
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "url": return toType(getUrl(), type);
-			case "description": return toType(getDescription(), type);
-			case "variables": return toType(getVariables(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "url" -> toType(getUrl(), type);
+			case "description" -> toType(getDescription(), type);
+			case "variables" -> toType(getVariables(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Server set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "url": return setUrl(toURI(value));
-			case "description": return setDescription(stringify(value));
-			case "variables": return setVariables(mapBuilder(String.class,ServerVariable.class).sparse().addAny(value).build());
-			default:
+		return switch (property) {
+			case "url" -> setUrl(toURI(value));
+			case "description" -> setDescription(stringify(value));
+			case "variables" -> setVariables(mapBuilder(String.class,ServerVariable.class).sparse().addAny(value).build());
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
-				.addIf(url != null, "url")
-				.addIf(description != null, "description")
-				.addIf(variables != null, "variables")
-				.build();
+		var s = setBuilder(String.class)
+			.addIf(url != null, "url")
+			.addIf(description != null, "description")
+			.addIf(variables != null, "variables")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

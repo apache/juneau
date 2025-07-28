@@ -29,7 +29,18 @@ public class ConfigEvent {
 	private final List<String> preLines;
 	private final String modifiers;
 
-	private ConfigEvent(ConfigEventType type, String config, String section, String key, String value, String modifiers, String comment, List<String> preLines) {
+	/**
+	 * Constructor.
+	 * @param type - The event type.
+	 * @param config - The configuration name.
+	 * @param section - The section name.
+	 * @param key - The entry name.
+	 * @param value - The entry value.
+	 * @param modifiers - The entry modifiers.
+	 * @param comment - Optional comment string to add on the same line as the entry.
+	 * @param preLines - Optional comment lines that occur before this entry.
+	 */
+	protected ConfigEvent(ConfigEventType type, String config, String section, String key, String value, String modifiers, String comment, List<String> preLines) {
 		this.type = type;
 		this.config = config;
 		this.section = section;
@@ -121,7 +132,6 @@ public class ConfigEvent {
 		return new ConfigEvent(REMOVE_SECTION, config, section, null, null, null, null, null);
 	}
 
-
 	//---------------------------------------------------------------------------------------------
 	// Instance
 	//---------------------------------------------------------------------------------------------
@@ -202,16 +212,13 @@ public class ConfigEvent {
 
 	@Override /* Object */
 	public String toString() {
-		switch (type) {
-			case REMOVE_SECTION:
-				return "REMOVE_SECTION("+section+")";
-			case REMOVE_ENTRY:
-				return "REMOVE_ENTRY("+section+(section.isEmpty() ? "" : "/")+key+")";
-			case SET_SECTION:
-				return "SET_SECTION("+section+", preLines="+StringUtils.join(preLines, '|')+")";
-			case SET_ENTRY:
+		return switch (type) {
+			case REMOVE_SECTION -> "REMOVE_SECTION(" + section + ")";
+			case REMOVE_ENTRY -> "REMOVE_ENTRY(" + section + (section.isEmpty() ? "" : "/") + key + ")";
+			case SET_SECTION -> "SET_SECTION(" + section + ", preLines=" + StringUtils.join(preLines, '|') + ")";
+			case SET_ENTRY -> {
 				var out = new StringBuilder("SET(");
-				out.append(section+(section.isEmpty() ? "" : "/") + key);
+				out.append(section + (section.isEmpty() ? "" : "/") + key);
 				if (modifiers != null)
 					out.append(modifiers);
 				out.append(" = ");
@@ -224,9 +231,9 @@ public class ConfigEvent {
 				if (isNotEmpty(comment))
 					out.append(" # ").append(comment);
 				out.append(')');
-				return out.toString();
-			default:
-				return null;  // NOSONAR - Intentional.
-		}
+				yield out.toString();
+			}
+			default -> null; // NOSONAR - Intentional.
+		};
 	}
 }

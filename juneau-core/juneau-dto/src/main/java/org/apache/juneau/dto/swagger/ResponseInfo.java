@@ -84,16 +84,8 @@ public class ResponseInfo extends SwaggerElement {
 
 		this.description = copyFrom.description;
 		this.schema = copyFrom.schema == null ? null : copyFrom.schema.copy();
-
 		this.examples = copyOf(copyFrom.examples);
-
-		if (copyFrom.headers == null) {
-			this.headers = null;
-		} else {
-			this.headers = map();
-			copyFrom.headers.forEach((k,v) -> this.headers.put(k, v.copy()));
-		}
-
+		this.headers = copyOf(copyFrom.headers, HeaderInfo::copy);
 	}
 
 	/**
@@ -291,33 +283,34 @@ public class ResponseInfo extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "description": return toType(getDescription(), type);
-			case "examples": return toType(getExamples(), type);
-			case "headers": return toType(getHeaders(), type);
-			case "schema": return toType(getSchema(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "description" -> toType(getDescription(), type);
+			case "examples" -> toType(getExamples(), type);
+			case "headers" -> toType(getHeaders(), type);
+			case "schema" -> toType(getSchema(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public ResponseInfo set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "description": return setDescription(stringify(value));
-			case "examples": return setExamples(mapBuilder(String.class,Object.class).sparse().addAny(value).build());
-			case "headers": return setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
-			case "schema": return setSchema(toType(value, SchemaInfo.class));
-			default:
+		return switch (property) {
+			case "description" -> setDescription(stringify(value));
+			case "examples" -> setExamples(mapBuilder(String.class,Object.class).sparse().addAny(value).build());
+			case "headers" -> setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
+			case "schema" -> setSchema(toType(value, SchemaInfo.class));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(description != null, "description")
 			.addIf(examples != null, "examples")
 			.addIf(headers != null, "headers")

@@ -37,7 +37,10 @@ import java.util.function.Consumer;
  */
 public final class IOUtils {
 
-	private IOUtils() {}
+	/**
+	 * Constructor.
+	 */
+	protected IOUtils() {}
 
 	/** UTF-8 charset */
 	public static final Charset UTF8 = StandardCharsets.UTF_8;
@@ -122,7 +125,7 @@ public final class IOUtils {
 	public static long pipe(Reader in, Writer out) throws IOException {
 		if (out == null || in == null)
 			return 0;
-		long total = 0;
+		var total = 0l;
 		try (var in2 = in) {
 			var buffer = charBuffer(-1);
 			int readLen;
@@ -412,7 +415,7 @@ public final class IOUtils {
 	public static long pipe(byte[] in, OutputStream out, int maxBytes) throws IOException {
 		if (in == null || out == null)
 			return 0;
-		int length = (maxBytes < 0 || maxBytes > in.length ) ? in.length : maxBytes;
+		var length = (maxBytes < 0 || maxBytes > in.length ) ? in.length : maxBytes;
 		out.write(in, 0, length);
 		return length;
 	}
@@ -697,7 +700,7 @@ public final class IOUtils {
 		if (in == null)
 			return new byte[0];
 		var buff = new ByteArrayOutputStream(buffSize(maxBytes));
-		int nRead;
+		var nRead = 0;
 		var b = byteBuffer(maxBytes);
 		while ((nRead = in.read(b, 0, b.length)) != -1)
 			buff.write(b, 0, nRead);
@@ -782,7 +785,7 @@ public final class IOUtils {
 		if (is == null)
 			return 0;
 		var c = 0l;
-		long i;
+		var i = 0l;
 		try {
 			while ((i = is.skip(1024)) != 0)
 				c += i;
@@ -803,7 +806,7 @@ public final class IOUtils {
 		if (r == null)
 			return 0;
 		var c = 0l;
-		long i;
+		var i = 0l;
 		try {
 			while ((i = r.skip(1024)) != 0)
 				c += i;

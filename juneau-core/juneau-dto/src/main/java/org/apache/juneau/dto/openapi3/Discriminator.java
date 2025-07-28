@@ -16,13 +16,11 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import org.apache.juneau.UriResolver;
-import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.*;
+import java.util.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Used to aid in serialization, deserialization, and validation.
@@ -48,10 +46,7 @@ public class Discriminator extends OpenApiElement {
 		super(copyFrom);
 
 		this.propertyName = copyFrom.propertyName;
-		if (copyFrom.mapping == null)
-			this.mapping = null;
-		else
-			this.mapping = new LinkedHashMap<>(copyFrom.mapping);
+		this.mapping = copyOf(copyFrom.mapping);
 	}
 
 	/**
@@ -140,29 +135,30 @@ public class Discriminator extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "propertyName": return toType(getPropertyName(), type);
-			case "mapping": return toType(getMapping(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "propertyName" -> toType(getPropertyName(), type);
+			case "mapping" -> toType(getMapping(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Discriminator set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "propertyName": return setPropertyName(stringify(value));
-			case "mapping": return setMapping(mapBuilder(String.class,String.class).sparse().addAny(value).build());
-			default:
+		return switch (property) {
+			case "propertyName" -> setPropertyName(stringify(value));
+			case "mapping" -> setMapping(mapBuilder(String.class,String.class).sparse().addAny(value).build());
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(propertyName != null, "propertyName")
 			.addIf(mapping != null, "mapping")
 			.build();

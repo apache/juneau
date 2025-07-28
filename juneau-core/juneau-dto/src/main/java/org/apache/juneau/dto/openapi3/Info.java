@@ -16,12 +16,12 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import org.apache.juneau.annotation.Bean;
+import java.util.*;
+
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.swagger.Contact;
 import org.apache.juneau.dto.swagger.License;
 import org.apache.juneau.internal.*;
-
-import java.util.Set;
 
 /**
  * The object provides metadata about the API.
@@ -286,37 +286,38 @@ public class Info extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "title": return toType(getTitle(), type);
-			case "description": return toType(getDescription(), type);
-			case "termsOfService": return toType(getTermsOfService(), type);
-			case "contact": return toType(getContact(), type);
-			case "license": return toType(getLicense(), type);
-			case "version": return toType(getVersion(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "title" -> toType(getTitle(), type);
+			case "description" -> toType(getDescription(), type);
+			case "termsOfService" -> toType(getTermsOfService(), type);
+			case "contact" -> toType(getContact(), type);
+			case "license" -> toType(getLicense(), type);
+			case "version" -> toType(getVersion(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Info set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "title": return setTitle(stringify(value));
-			case "description": return setDescription(stringify(value));
-			case "termsOfService": return setTermsOfService(stringify(value));
-			case "contact": return setContact(toType(value, Contact.class));
-			case "license": return setLicense(toType(value, License.class));
-			case "version": return setVersion(stringify(value));
-			default:
+		return switch (property) {
+			case "title" -> setTitle(stringify(value));
+			case "description" -> setDescription(stringify(value));
+			case "termsOfService" -> setTermsOfService(stringify(value));
+			case "contact" -> setContact(toType(value, Contact.class));
+			case "license" -> setLicense(toType(value, License.class));
+			case "version" -> setVersion(stringify(value));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(title != null, "title")
 			.addIf(description != null, "description")
 			.addIf(termsOfService != null, "termsOfService")

@@ -612,7 +612,6 @@ public class Remote_Test {
 		assertThrown(()->client(G.class).header("Check","Foo").build().getRemote(G1.class)).isType(RemoteMetadataException.class).asMessage().isContains("Invalid value");
 	}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Method detection
 	//-----------------------------------------------------------------------------------------------------------------

@@ -21,7 +21,10 @@ import java.util.function.*;
  */
 public class SystemUtils {
 
-	private SystemUtils() {}
+	/**
+	 * Constructor.
+	 */
+	protected SystemUtils() {}
 
 	static final List<Supplier<String>> SHUTDOWN_MESSAGES = new CopyOnWriteArrayList<>();
 	static {

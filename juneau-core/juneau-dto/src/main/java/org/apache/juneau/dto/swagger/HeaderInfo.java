@@ -50,7 +50,6 @@ import org.apache.juneau.marshaller.*;
  * </ul>
  */
 @Bean(properties="description,type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref,example,*")
-@SuppressWarnings({"unchecked"})
 @FluentSetters
 public class HeaderInfo extends SwaggerElement {
 
@@ -130,7 +129,6 @@ public class HeaderInfo extends SwaggerElement {
 		super.strict();
 		return this;
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
@@ -687,65 +685,66 @@ public class HeaderInfo extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "collectionFormat": return toType(getCollectionFormat(), type);
-			case "default": return toType(getDefault(), type);
-			case "description": return (T)getDescription();
-			case "enum": return toType(getEnum(), type);
-			case "example": return toType(getExample(), type);
-			case "exclusiveMaximum": return toType(getExclusiveMaximum(), type);
-			case "exclusiveMinimum": return toType(getExclusiveMinimum(), type);
-			case "format": return toType(getFormat(), type);
-			case "items": return toType(getItems(), type);
-			case "maximum": return toType(getMaximum(), type);
-			case "maxItems": return toType(getMaxItems(), type);
-			case "maxLength": return toType(getMaxLength(), type);
-			case "minimum": return toType(getMinimum(), type);
-			case "minItems": return toType(getMinItems(), type);
-			case "minLength": return toType(getMinLength(), type);
-			case "multipleOf": return toType(getMultipleOf(), type);
-			case "pattern": return toType(getPattern(), type);
-			case "$ref": return toType(getRef(), type);
-			case "type": return toType(getType(), type);
-			case "uniqueItems": return toType(getUniqueItems(), type);
-		default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "collectionFormat" -> toType(getCollectionFormat(), type);
+			case "default" -> toType(getDefault(), type);
+			case "description" -> (T)getDescription();
+			case "enum" -> toType(getEnum(), type);
+			case "example" -> toType(getExample(), type);
+			case "exclusiveMaximum" -> toType(getExclusiveMaximum(), type);
+			case "exclusiveMinimum" -> toType(getExclusiveMinimum(), type);
+			case "format" -> toType(getFormat(), type);
+			case "items" -> toType(getItems(), type);
+			case "maximum" -> toType(getMaximum(), type);
+			case "maxItems" -> toType(getMaxItems(), type);
+			case "maxLength" -> toType(getMaxLength(), type);
+			case "minimum" -> toType(getMinimum(), type);
+			case "minItems" -> toType(getMinItems(), type);
+			case "minLength" -> toType(getMinLength(), type);
+			case "multipleOf" -> toType(getMultipleOf(), type);
+			case "pattern" -> toType(getPattern(), type);
+			case "$ref" -> toType(getRef(), type);
+			case "type" -> toType(getType(), type);
+			case "uniqueItems" -> toType(getUniqueItems(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public HeaderInfo set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "collectionFormat": return setCollectionFormat(stringify(value));
-			case "default": return setDefault(value);
-			case "description": return setDescription(stringify(value));
-			case "enum": return setEnum(setBuilder(Object.class).sparse().addAny(value).build());
-			case "example": return setExample(value);
-			case "exclusiveMaximum": return setExclusiveMaximum(toBoolean(value));
-			case "exclusiveMinimum": return setExclusiveMinimum(toBoolean(value));
-			case "format": return setFormat(stringify(value));
-			case "items": return setItems(toType(value, Items.class));
-			case "maximum": return setMaximum(toNumber(value));
-			case "maxItems": return setMaxItems(toInteger(value));
-			case "maxLength": return setMaxLength(toInteger(value));
-			case "minimum": return setMinimum(toNumber(value));
-			case "minItems": return setMinItems(toInteger(value));
-			case "minLength": return setMinLength(toInteger(value));
-			case "multipleOf": return setMultipleOf(toNumber(value));
-			case "pattern": return setPattern(stringify(value));
-			case "$ref": return setRef(stringify(value));
-			case "type": return setType(stringify(value));
-			case "uniqueItems": return setUniqueItems(toBoolean(value));
-			default:
+		return switch (property) {
+			case "collectionFormat" -> setCollectionFormat(stringify(value));
+			case "default" -> setDefault(value);
+			case "description" -> setDescription(stringify(value));
+			case "enum" -> setEnum(setBuilder(Object.class).sparse().addAny(value).build());
+			case "example" -> setExample(value);
+			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
+			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
+			case "format" -> setFormat(stringify(value));
+			case "items" -> setItems(toType(value, Items.class));
+			case "maximum" -> setMaximum(toNumber(value));
+			case "maxItems" -> setMaxItems(toInteger(value));
+			case "maxLength" -> setMaxLength(toInteger(value));
+			case "minimum" -> setMinimum(toNumber(value));
+			case "minItems" -> setMinItems(toInteger(value));
+			case "minLength" -> setMinLength(toInteger(value));
+			case "multipleOf" -> setMultipleOf(toNumber(value));
+			case "pattern" -> setPattern(stringify(value));
+			case "$ref" -> setRef(stringify(value));
+			case "type" -> setType(stringify(value));
+			case "uniqueItems" -> setUniqueItems(toBoolean(value));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(collectionFormat != null, "collectionFormat")
 			.addIf(_default != null, "default")
 			.addIf(description != null, "description")
@@ -768,7 +767,6 @@ public class HeaderInfo extends SwaggerElement {
 			.addIf(uniqueItems != null, "uniqueItems")
 			.build();
 		return new MultiSet<>(s, super.keySet());
-
 	}
 
 	/**
@@ -790,7 +788,7 @@ public class HeaderInfo extends SwaggerElement {
 			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
 			refStack.addLast(ref);
-			HeaderInfo r = swagger.findRef(ref, HeaderInfo.class).resolveRefs(swagger, refStack, maxDepth);
+			var r = swagger.findRef(ref, HeaderInfo.class).resolveRefs(swagger, refStack, maxDepth);
 			refStack.removeLast();
 			return r;
 		}

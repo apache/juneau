@@ -39,7 +39,10 @@ import jakarta.xml.bind.*;
  */
 public final class StringUtils {
 
-	private StringUtils() {}
+	/**
+	 * Constructor.
+	 */
+	protected StringUtils() {}
 
 	/**
 	 * Predicate check to filter out null and empty strings.

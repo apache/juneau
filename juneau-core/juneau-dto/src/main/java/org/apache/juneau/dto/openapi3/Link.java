@@ -16,12 +16,10 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.*;
+import java.util.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * information for Link object.
@@ -76,11 +74,7 @@ public class Link extends OpenApiElement {
 		this.operationId = copyFrom.operationId;
 		this.requestBody = copyFrom.requestBody;
 		this.server = copyFrom.server == null ? null : copyFrom.server.copy();
-
-		if (copyFrom.parameters == null)
-			this.parameters = null;
-		else
-			this.parameters = new LinkedHashMap<>(copyFrom.parameters);
+		this.parameters = copyOf(copyFrom.parameters);
 	}
 
 	/**
@@ -277,37 +271,38 @@ public class Link extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "description": return toType(getDescription(), type);
-			case "operationRef": return toType(getOperationRef(), type);
-			case "operationId": return toType(getOperationId(), type);
-			case "requestBody": return toType(getRequestBody(), type);
-			case "parameters": return toType(getParameters(), type);
-			case "server": return toType(getServer(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "description" -> toType(getDescription(), type);
+			case "operationRef" -> toType(getOperationRef(), type);
+			case "operationId" -> toType(getOperationId(), type);
+			case "requestBody" -> toType(getRequestBody(), type);
+			case "parameters" -> toType(getParameters(), type);
+			case "server" -> toType(getServer(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Link set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "description": return setDescription(stringify(value));
-			case "operationId": return setOperationId(stringify(value));
-			case "operationRef": return setOperationRef(stringify(value));
-			case "requestBody": return setRequestBody(value);
-			case "server": return setServer(toType(value, Server.class));
-			case "parameters": return setParameters(mapBuilder(String.class,Object.class).sparse().addAny(value).build());
-			default:
+		return switch (property) {
+			case "description" -> setDescription(stringify(value));
+			case "operationId" -> setOperationId(stringify(value));
+			case "operationRef" -> setOperationRef(stringify(value));
+			case "requestBody" -> setRequestBody(value);
+			case "server" -> setServer(toType(value, Server.class));
+			case "parameters" -> setParameters(mapBuilder(String.class,Object.class).sparse().addAny(value).build());
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(description != null, "description")
 			.addIf(operationId != null, "operationId")
 			.addIf(operationRef != null, "operationRef")

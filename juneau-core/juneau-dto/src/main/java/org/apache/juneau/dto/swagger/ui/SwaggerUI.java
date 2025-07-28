@@ -15,9 +15,9 @@ package org.apache.juneau.dto.swagger.ui;
 import static java.util.Collections.*;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.list;
 
 import java.util.*;
-import java.util.Map;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
@@ -57,7 +57,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		final int resolveRefsMaxDepth;
 		final Swagger swagger;
 
-		Session(BeanSession bs, Swagger swagger) {
+		Session(Swagger swagger) {
 			this.swagger = swagger.copy();
 			this.resolveRefsMaxDepth = 1;
 		}
@@ -66,13 +66,13 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	@Override
 	public Div swap(BeanSession beanSession, Swagger swagger) throws Exception {
 
-		Session s = new Session(beanSession, swagger);
+		var s = new Session(swagger);
 
-		String css = RESOURCES.getString("files/htdocs/styles/SwaggerUI.css", null).orElse(null);
+		var css = RESOURCES.getString("files/htdocs/styles/SwaggerUI.css", null).orElse(null);
 		if (css == null)
 			css = RESOURCES.getString("SwaggerUI.css", null).orElse(null);
 
-		Div outer = div(
+		var outer = div(
 			style(css),
 			script("text/javascript", RESOURCES.getString("SwaggerUI.js", null).orElse(null)),
 			header(s)
@@ -83,7 +83,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 		if (s.swagger.getTags() != null) {
 			s.swagger.getTags().forEach(x -> {
-				Div tagBlock = div()._class("tag-block tag-block-open").children(
+				var tagBlock = div()._class("tag-block tag-block-open").children(
 					tagBlockSummary(x),
 					tagBlockContents(s, x)
 				);
@@ -92,7 +92,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		}
 
 		if (s.swagger.getDefinitions() != null) {
-			Div modelBlock = div()._class("tag-block").children(
+			var modelBlock = div()._class("tag-block").children(
 				modelsBlockSummary(),
 				modelsBlockContents(s)
 			);
@@ -104,9 +104,9 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 	// Creates the informational summary before the ops.
 	private Table header(Session s) {
-		Table table = table()._class("header");
+		var table = table()._class("header");
 
-		Info info = s.swagger.getInfo();
+		var info = s.swagger.getInfo();
 		if (info != null) {
 
 			if (info.getDescription() != null)
@@ -115,9 +115,9 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			if (info.getVersion() != null)
 				table.child(tr(th("Version:"),td(info.getVersion())));
 
-			Contact c = info.getContact();
+			var c = info.getContact();
 			if (c != null) {
-				Table t2 = table();
+				var t2 = table();
 
 				if (c.getName() != null)
 					t2.child(tr(th("Name:"),td(c.getName())));
@@ -129,21 +129,23 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 				table.child(tr(th("Contact:"),td(t2)));
 			}
 
-			License l = info.getLicense();
+			var l = info.getLicense();
 			if (l != null) {
-				Object child = l.getUrl() != null ? a(l.getUrl(), l.getName() != null ? l.getName() : l.getUrl()) : l.getName();
+				var content = l.getName() != null ? l.getName() : l.getUrl();
+				var child = l.getUrl() != null ? a(l.getUrl(), content) : l.getName();
 				table.child(tr(th("License:"),td(child)));
 			}
 
 			ExternalDocumentation ed = s.swagger.getExternalDocs();
 			if (ed != null) {
-				Object child = ed.getUrl() != null ? a(ed.getUrl(), ed.getDescription() != null ? ed.getDescription() : ed.getUrl()) : ed.getDescription();
+				var content = ed.getDescription() != null ? ed.getDescription() : ed.getUrl();
+				var child = ed.getUrl() != null ? a(ed.getUrl(), content) : ed.getDescription();
 				table.child(tr(th("Docs:"),td(child)));
 			}
 
 			if (info.getTermsOfService() != null) {
-				String tos = info.getTermsOfService();
-				Object child = StringUtils.isUri(tos) ? a(tos, tos) : tos;
+				var tos = info.getTermsOfService();
+				var child = StringUtils.isUri(tos) ? a(tos, tos) : tos;
 				table.child(tr(th("Terms of Service:"),td(child)));
 			}
 		}
@@ -153,18 +155,19 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 	// Creates the "pet  Everything about your Pets  ext-link" header.
 	private HtmlElement tagBlockSummary(Tag t) {
-		ExternalDocumentation ed = t.getExternalDocs();
+		var ed = t.getExternalDocs();
 
+		var content = ed.getDescription() != null ? ed.getDescription() : ed.getUrl();
 		return div()._class("tag-block-summary").children(
 			span(t.getName())._class("name"),
 			span(toBRL(t.getDescription()))._class("description"),
-			ed == null ? null : span(a(ed.getUrl(), ed.getDescription() != null ? ed.getDescription() : ed.getUrl()))._class("extdocs")
+			span(a(ed.getUrl(), content))._class("extdocs")
 		).onclick("toggleTagBlock(this)");
 	}
 
 	// Creates the contents under the "pet  Everything about your Pets  ext-link" header.
 	private Div tagBlockContents(Session s, Tag t) {
-		Div tagBlockContents = div()._class("tag-block-contents");
+		var tagBlockContents = div()._class("tag-block-contents");
 
 		s.swagger.getPaths().forEach((path,v) ->
 			v.forEach((opName,op) -> {
@@ -178,7 +181,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 	private Div opBlock(Session s, String path, String opName, Operation op) {
 
-		String opClass = op.isDeprecated() ? "deprecated" : opName.toLowerCase();
+		var opClass = op.isDeprecated() ? "deprecated" : opName.toLowerCase();
 		if (! op.isDeprecated() && ! STANDARD_METHODS.contains(opClass))
 			opClass = "other";
 
@@ -197,7 +200,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	}
 
 	private Div tableContainer(Session s, Operation op) {
-		Div tableContainer = div()._class("table-container");
+		var tableContainer = div()._class("table-container");
 
 		if (op.getDescription() != null)
 			tableContainer.child(div(toBRL(op.getDescription()))._class("op-block-description"));
@@ -205,20 +208,20 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		if (op.getParameters() != null) {
 			tableContainer.child(div(h4("Parameters")._class("title"))._class("op-block-section-header"));
 
-			Table parameters = table(tr(th("Name")._class("parameter-key"), th("Description")._class("parameter-key")))._class("parameters");
+			var parameters = table(tr(th("Name")._class("parameter-key"), th("Description")._class("parameter-key")))._class("parameters");
 
 			op.getParameters().forEach(x -> {
-				String piName = "body".equals(x.getIn()) ? "body" : x.getName();
-				boolean required = x.getRequired() == null ? false : x.getRequired();
+				var piName = "body".equals(x.getIn()) ? "body" : x.getName();
+				var required = x.getRequired() != null && x.getRequired();
 
-				Td parameterKey = td(
+				var parameterKey = td(
 					div(piName)._class("name" + (required ? " required" : "")),
 					required ? div("required")._class("requiredlabel") : null,
 					div(x.getType())._class("type"),
 					div('(' + x.getIn() + ')')._class("in")
 				)._class("parameter-key");
 
-				Td parameterValue = td(
+				var parameterValue = td(
 					div(toBRL(x.getDescription()))._class("description"),
 					examples(s, x)
 				)._class("parameter-value");
@@ -232,16 +235,16 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		if (op.getResponses() != null) {
 			tableContainer.child(div(h4("Responses")._class("title"))._class("op-block-section-header"));
 
-			Table responses = table(tr(th("Code")._class("response-key"), th("Description")._class("response-key")))._class("responses");
+			var responses = table(tr(th("Code")._class("response-key"), th("Description")._class("response-key")))._class("responses");
 			tableContainer.child(responses);
 
 			op.getResponses().forEach((k,v) -> {
-				Td code = td(k)._class("response-key");
+				var code = td(k)._class("response-key");
 
-				Td codeValue = td(
+				var codeValue = td(
 					div(toBRL(v.getDescription()))._class("description"),
 					examples(s, v),
-					headers(s, v)
+					headers(v)
 				)._class("response-value");
 
 				responses.child(tr(code, codeValue));
@@ -251,13 +254,13 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		return tableContainer;
 	}
 
-	private Div headers(Session s, ResponseInfo ri) {
+	private Div headers(ResponseInfo ri) {
 		if (ri.getHeaders() == null)
 			return null;
 
-		Table sectionTable = table(tr(th("Name"),th("Description"),th("Schema")))._class("section-table");
+		var sectionTable = table(tr(th("Name"),th("Description"),th("Schema")))._class("section-table");
 
-		Div headers = div(
+		var headers = div(
 			div("Headers:")._class("section-name"),
 			sectionTable
 		)._class("headers");
@@ -276,17 +279,17 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	}
 
 	private Div examples(Session s, ParameterInfo pi) {
-		boolean isBody = "body".equals(pi.getIn());
+		var isBody = "body".equals(pi.getIn());
 
-		JsonMap m = new JsonMap();
+		var m = new JsonMap();
 
 		try {
 			if (isBody) {
-				SchemaInfo si = pi.getSchema();
+				var si = pi.getSchema();
 				if (si != null)
 					m.put("model", si.copy().resolveRefs(s.swagger, new ArrayDeque<>(), s.resolveRefsMaxDepth));
 			} else {
-				JsonMap m2 = pi
+				var m2 = pi
 					.copy()
 					.resolveRefs(s.swagger, new ArrayDeque<>(), s.resolveRefsMaxDepth)
 					.asMap()
@@ -305,16 +308,16 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	}
 
 	private Div examples(Session s, ResponseInfo ri) {
-		SchemaInfo si = ri.getSchema();
+		var si = ri.getSchema();
 
-		JsonMap m = new JsonMap();
+		var m = new JsonMap();
 		try {
 			if (si != null) {
 				si = si.copy().resolveRefs(s.swagger, new ArrayDeque<>(), s.resolveRefsMaxDepth);
 				m.put("model", si);
 			}
 
-			Map<String,?> examples = ri.getExamples();
+			var examples = ri.getExamples();
 			if (examples != null)
 				examples.forEach(m::put);
 		} catch (Exception e) {
@@ -336,17 +339,17 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			select = select().onchange("selectExample(this)")._class("example-select");
 		}
 
-		Div div = div(select)._class("examples");
+		var div = div(select)._class("examples");
 
 		if (select != null)
 			select.child(option("model","model"));
 		div.child(div(m.remove("model"))._class("model active").attr("data-name", "model"));
 
-		Select select2 = select;
+		var select2 = select;
 		m.forEach((k,v) -> {
 			if (select2 != null)
 				select2.child(option(k, k));
-			div.child(div(v.toString().replaceAll("\\n", "\n"))._class("example").attr("data-name", k));
+			div.child(div(v.toString().replace("\\n", "\n"))._class("example").attr("data-name", k));
 		});
 
 		return div;
@@ -359,7 +362,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 	// Creates the contents under the "Model" header.
 	private Div modelsBlockContents(Session s) {
-		Div modelBlockContents = div()._class("tag-block-contents");
+		var modelBlockContents = div()._class("tag-block-contents");
 		s.swagger.getDefinitions().forEach((k,v) -> modelBlockContents.child(modelBlock(k,v)));
 		return modelBlockContents;
 	}
@@ -383,12 +386,12 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	 */
 	private static List<Object> toBRL(String s) {
 		if (s == null)
-			return null;
+			return null;  // NOSONAR - Intentionally returning null.
 		if (s.indexOf(',') == -1)
 			return singletonList(s);
-		List<Object> l = list();
-		String[] sa = s.split("\n");
-		for (int i = 0; i < sa.length; i++) {
+		var l = list();
+		var sa = s.split("\n");
+		for (var i = 0; i < sa.length; i++) {
 			if (i > 0)
 				l.add(br());
 			l.add(sa[i]);
@@ -396,4 +399,3 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		return l;
 	}
 }
-

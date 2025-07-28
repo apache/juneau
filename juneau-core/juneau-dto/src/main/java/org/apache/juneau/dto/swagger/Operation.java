@@ -289,7 +289,7 @@ public class Operation extends SwaggerElement {
 	 * @return The property value, or <jk>false</jk> if it is not set.
 	 */
 	public boolean isDeprecated() {
-		return deprecated != null && deprecated == true;
+		return deprecated != null && deprecated;
 	}
 
 	/**
@@ -430,10 +430,9 @@ public class Operation extends SwaggerElement {
 	 */
 	public ParameterInfo getParameter(String in, String name) {
 		if (parameters != null)
-			for (ParameterInfo pi : parameters)
-				if (eq(pi.getIn(), in))
-					if (eq(pi.getName(), name) || "body".equals(pi.getIn()))
-						return pi;
+			for (var pi : parameters)
+				if (eq(pi.getIn(), in) && (eq(pi.getName(), name) || "body".equals(pi.getIn())))
+					return pi;
 		return null;
 	}
 
@@ -801,50 +800,51 @@ public class Operation extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "consumes": return toType(getConsumes(), type);
-			case "deprecated": return toType(getDeprecated(), type);
-			case "description": return toType(getDescription(), type);
-			case "externalDocs": return toType(getExternalDocs(), type);
-			case "operationId": return toType(getOperationId(), type);
-			case "parameters": return toType(getParameters(), type);
-			case "produces": return toType(getProduces(), type);
-			case "responses": return toType(getResponses(), type);
-			case "schemes": return toType(getSchemes(), type);
-			case "security": return toType(getSecurity(), type);
-			case "summary": return toType(getSummary(), type);
-			case "tags": return toType(getTags(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "consumes" -> toType(getConsumes(), type);
+			case "deprecated" -> toType(getDeprecated(), type);
+			case "description" -> toType(getDescription(), type);
+			case "externalDocs" -> toType(getExternalDocs(), type);
+			case "operationId" -> toType(getOperationId(), type);
+			case "parameters" -> toType(getParameters(), type);
+			case "produces" -> toType(getProduces(), type);
+			case "responses" -> toType(getResponses(), type);
+			case "schemes" -> toType(getSchemes(), type);
+			case "security" -> toType(getSecurity(), type);
+			case "summary" -> toType(getSummary(), type);
+			case "tags" -> toType(getTags(), type);
+			default -> super.get(property, type);
+		};
 	}
 
-	@SuppressWarnings({"unchecked","rawtypes"})
+	@SuppressWarnings("rawtypes")
 	@Override /* SwaggerElement */
 	public Operation set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "consumes": return setConsumes(listBuilder(MediaType.class).sparse().addAny(value).build());
-			case "deprecated": return setDeprecated(toBoolean(value));
-			case "description": return setDescription(stringify(value));
-			case "externalDocs": return setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "operationId": return setOperationId(stringify(value));
-			case "parameters": return setParameters(listBuilder(ParameterInfo.class).sparse().addAny(value).build());
-			case "produces": return setProduces(listBuilder(MediaType.class).sparse().addAny(value).build());
-			case "responses": return setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addAny(value).build());
-			case "schemes": return setSchemes(listBuilder(String.class).sparse().addAny(value).build());
-			case "security": return setSecurity((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addAny(value).build());
-			case "summary": return setSummary(stringify(value));
-			case "tags": return setTags(listBuilder(String.class).sparse().addAny(value).build());
-			default:
+		return switch (property) {
+			case "consumes" -> setConsumes(listBuilder(MediaType.class).sparse().addAny(value).build());
+			case "deprecated" -> setDeprecated(toBoolean(value));
+			case "description" -> setDescription(stringify(value));
+			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "operationId" -> setOperationId(stringify(value));
+			case "parameters" -> setParameters(listBuilder(ParameterInfo.class).sparse().addAny(value).build());
+			case "produces" -> setProduces(listBuilder(MediaType.class).sparse().addAny(value).build());
+			case "responses" -> setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addAny(value).build());
+			case "schemes" -> setSchemes(listBuilder(String.class).sparse().addAny(value).build());
+			case "security" -> setSecurity((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addAny(value).build());
+			case "summary" -> setSummary(stringify(value));
+			case "tags" -> setTags(listBuilder(String.class).sparse().addAny(value).build());
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(consumes != null, "consumes")
 			.addIf(deprecated != null, "deprecated")
 			.addIf(description != null, "description")

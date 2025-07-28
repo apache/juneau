@@ -71,7 +71,7 @@ public abstract class SwaggerElement {
 	 * @return This object.
 	 */
 	protected SwaggerElement strict(Object value) {
-		strict = value == null ? false : toBoolean(value);
+		strict = value != null && toBoolean(value);
 		return this;
 	}
 
@@ -152,7 +152,7 @@ public abstract class SwaggerElement {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(strict, "strict")
 			.build();
 		s.addAll(extraKeys());
@@ -168,7 +168,7 @@ public abstract class SwaggerElement {
 	 * @return A map containing all the values in this swagger element.
 	 */
 	public JsonMap asMap() {
-		JsonMap m = new JsonMap();
+		var m = new JsonMap();
 		keySet().forEach(x -> m.put(x, get(x, Object.class)));
 		return m;
 	}

@@ -79,7 +79,7 @@ public class Items extends SwaggerElement {
 		exclusiveMaximum,
 		exclusiveMinimum,
 		uniqueItems;
-	private Items items;
+	private Items items;  // NOSONAR - Intentional naming.
 	private Object _default;  // NOSONAR - Intentional naming.
 	private Set<Object> _enum;  // NOSONAR - Intentional naming.
 
@@ -638,61 +638,62 @@ public class Items extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "collectionFormat": return toType(getCollectionFormat(), type);
-			case "default": return toType(getDefault(), type);
-			case "enum": return toType(getEnum(), type);
-			case "exclusiveMaximum": return toType(getExclusiveMaximum(), type);
-			case "exclusiveMinimum": return toType(getExclusiveMinimum(), type);
-			case "format": return toType(getFormat(), type);
-			case "items": return toType(getItems(), type);
-			case "maximum": return toType(getMaximum(), type);
-			case "maxItems": return toType(getMaxItems(), type);
-			case "maxLength": return toType(getMaxLength(), type);
-			case "minimum": return toType(getMinimum(), type);
-			case "minItems": return toType(getMinItems(), type);
-			case "minLength": return toType(getMinLength(), type);
-			case "multipleOf": return toType(getMultipleOf(), type);
-			case "pattern": return toType(getPattern(), type);
-			case "$ref": return toType(getRef(), type);
-			case "type": return toType(getType(), type);
-			case "uniqueItems": return toType(getUniqueItems(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "collectionFormat" -> toType(getCollectionFormat(), type);
+			case "default" -> toType(getDefault(), type);
+			case "enum" -> toType(getEnum(), type);
+			case "exclusiveMaximum" -> toType(getExclusiveMaximum(), type);
+			case "exclusiveMinimum" -> toType(getExclusiveMinimum(), type);
+			case "format" -> toType(getFormat(), type);
+			case "items" -> toType(getItems(), type);
+			case "maximum" -> toType(getMaximum(), type);
+			case "maxItems" -> toType(getMaxItems(), type);
+			case "maxLength" -> toType(getMaxLength(), type);
+			case "minimum" -> toType(getMinimum(), type);
+			case "minItems" -> toType(getMinItems(), type);
+			case "minLength" -> toType(getMinLength(), type);
+			case "multipleOf" -> toType(getMultipleOf(), type);
+			case "pattern" -> toType(getPattern(), type);
+			case "$ref" -> toType(getRef(), type);
+			case "type" -> toType(getType(), type);
+			case "uniqueItems" -> toType(getUniqueItems(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Items set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "collectionFormat": return setCollectionFormat(stringify(value));
-			case "default": return setDefault(value);
-			case "enum": return setEnum(listBuilder(Object.class).sparse().addAny(value).build());
-			case "exclusiveMaximum": return setExclusiveMaximum(toBoolean(value));
-			case "exclusiveMinimum": return setExclusiveMinimum(toBoolean(value));
-			case "format": return setFormat(stringify(value));
-			case "items": return setItems(toType(value,Items.class));
-			case "maximum": return setMaximum(toNumber(value));
-			case "maxItems": return setMaxItems(toInteger(value));
-			case "maxLength": return setMaxLength(toInteger(value));
-			case "minimum": return setMinimum(toNumber(value));
-			case "minItems": return setMinItems(toInteger(value));
-			case "minLength": return setMinLength(toInteger(value));
-			case "multipleOf": return setMultipleOf(toNumber(value));
-			case "pattern": return setPattern(stringify(value));
-			case "$ref": return setRef(stringify(value));
-			case "type": return setType(stringify(value));
-			case "uniqueItems": return setUniqueItems(toBoolean(value));
-			default:
+		return switch (property) {
+			case "collectionFormat" -> setCollectionFormat(stringify(value));
+			case "default" -> setDefault(value);
+			case "enum" -> setEnum(listBuilder(Object.class).sparse().addAny(value).build());
+			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
+			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
+			case "format" -> setFormat(stringify(value));
+			case "items" -> setItems(toType(value,Items.class));
+			case "maximum" -> setMaximum(toNumber(value));
+			case "maxItems" -> setMaxItems(toInteger(value));
+			case "maxLength" -> setMaxLength(toInteger(value));
+			case "minimum" -> setMinimum(toNumber(value));
+			case "minItems" -> setMinItems(toInteger(value));
+			case "minLength" -> setMinLength(toInteger(value));
+			case "multipleOf" -> setMultipleOf(toNumber(value));
+			case "pattern" -> setPattern(stringify(value));
+			case "$ref" -> setRef(stringify(value));
+			case "type" -> setType(stringify(value));
+			case "uniqueItems" -> setUniqueItems(toBoolean(value));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(collectionFormat != null, "collectionFormat")
 			.addIf(_default != null, "default")
 			.addIf(_enum != null, "enum")
@@ -766,7 +767,7 @@ public class Items extends SwaggerElement {
 			om.entrySet().forEach(x -> x.setValue(resolveRefs(x.getValue(), swagger, refStack, maxDepth)));
 		}
 		if (o instanceof JsonList x)
-			for (ListIterator<Object> li = x.listIterator(); li.hasNext();)
+			for (var li = x.listIterator(); li.hasNext();)
 				li.set(resolveRefs(li.next(), swagger, refStack, maxDepth));
 		return o;
 	}

@@ -44,6 +44,11 @@ import org.apache.juneau.*;
 public class AtomBuilder {
 
 	/**
+	 * Constructor.
+	 */
+	protected AtomBuilder() {}
+
+	/**
 	 * Creates a {@link Category} element with the specified {@link Category#setTerm(String)} attribute.
 	 *
 	 * @param term The {@link Category#setTerm(String)} attribute.

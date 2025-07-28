@@ -16,11 +16,11 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import org.apache.juneau.annotation.Bean;
+import java.util.*;
+
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.swagger.ExternalDocumentation;
 import org.apache.juneau.internal.*;
-
-import java.util.Set;
 
 /**
  * Allows adding meta data to a single tag that is used by the operation object.
@@ -177,31 +177,32 @@ public class Tag extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "name": return toType(getName(), type);
-			case "description": return toType(getDescription(), type);
-			case "externalDocs": return toType(getExternalDocs(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "name" -> toType(getName(), type);
+			case "description" -> toType(getDescription(), type);
+			case "externalDocs" -> toType(getExternalDocs(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Tag set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "name": return setName(stringify(value));
-			case "description": return setDescription(stringify(value));
-			case "externalDocs": return setExternalDocs(toType(value, ExternalDocumentation.class));
-			default:
+		return switch (property) {
+			case "name" -> setName(stringify(value));
+			case "description" -> setDescription(stringify(value));
+			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(name != null, "name")
 			.addIf(description != null, "description")
 			.addIf(externalDocs != null, "externalDocs")

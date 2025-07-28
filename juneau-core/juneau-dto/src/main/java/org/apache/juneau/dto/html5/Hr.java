@@ -30,7 +30,7 @@ public class Hr extends HtmlElementVoid {
 	/**
 	 * Creates an empty {@link Hr} element.
 	 */
-	public Hr() {}
+	public Hr() { /* Empty constructor. */ }
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods

@@ -181,31 +181,32 @@ public class Contact extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "email": return toType(getEmail(), type);
-			case "name": return toType(getName(), type);
-			case "url": return toType(getUrl(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "email" -> toType(getEmail(), type);
+			case "name" -> toType(getName(), type);
+			case "url" -> toType(getUrl(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Contact set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "email": return setEmail(stringify(value));
-			case "name": return setName(stringify(value));
-			case "url": return setUrl(toURI(value));
-			default:
+		return switch (property) {
+			case "email" -> setEmail(stringify(value));
+			case "name" -> setName(stringify(value));
+			case "url" -> setUrl(toURI(value));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(email != null, "email")
 			.addIf(name != null, "name")
 			.addIf(url != null, "url")

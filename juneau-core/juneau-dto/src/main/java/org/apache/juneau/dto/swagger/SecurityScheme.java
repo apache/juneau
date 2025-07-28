@@ -15,6 +15,7 @@ package org.apache.juneau.dto.swagger;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.contains;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.copyOf;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -392,41 +393,42 @@ public class SecurityScheme extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "authorizationUrl": return toType(getAuthorizationUrl(), type);
-			case "description": return toType(getDescription(), type);
-			case "flow": return toType(getFlow(), type);
-			case "in": return toType(getIn(), type);
-			case "name": return toType(getName(), type);
-			case "scopes": return toType(getScopes(), type);
-			case "tokenUrl": return toType(getTokenUrl(), type);
-			case "type": return toType(getType(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "authorizationUrl" -> toType(getAuthorizationUrl(), type);
+			case "description" -> toType(getDescription(), type);
+			case "flow" -> toType(getFlow(), type);
+			case "in" -> toType(getIn(), type);
+			case "name" -> toType(getName(), type);
+			case "scopes" -> toType(getScopes(), type);
+			case "tokenUrl" -> toType(getTokenUrl(), type);
+			case "type" -> toType(getType(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public SecurityScheme set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "authorizationUrl": return setAuthorizationUrl(stringify(value));
-			case "description": return setDescription(stringify(value));
-			case "flow": return setFlow(stringify(value));
-			case "in": return setIn(stringify(value));
-			case "name": return setName(stringify(value));
-			case "scopes": return setScopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
-			case "tokenUrl": return setTokenUrl(stringify(value));
-			case "type": return setType(stringify(value));
-			default:
+		return switch (property) {
+			case "authorizationUrl" -> setAuthorizationUrl(stringify(value));
+			case "description" -> setDescription(stringify(value));
+			case "flow" -> setFlow(stringify(value));
+			case "in" -> setIn(stringify(value));
+			case "name" -> setName(stringify(value));
+			case "scopes" -> setScopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
+			case "tokenUrl" -> setTokenUrl(stringify(value));
+			case "type" -> setType(stringify(value));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(authorizationUrl != null, "authorizationUrl")
 			.addIf(description != null, "description")
 			.addIf(flow != null, "flow")

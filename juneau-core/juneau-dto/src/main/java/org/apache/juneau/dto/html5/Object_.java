@@ -25,7 +25,7 @@ import org.apache.juneau.internal.*;
  */
 @Bean(typeName="object")
 @FluentSetters
-public class Object_ extends HtmlElementMixed {
+public class Object_ extends HtmlElementMixed {  // NOSONAR - Intentional naming.
 
 	/**
 	 * Creates an empty {@link Object_} element.
@@ -161,7 +161,6 @@ public class Object_ extends HtmlElementMixed {
 		attr("width", width);
 		return this;
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods

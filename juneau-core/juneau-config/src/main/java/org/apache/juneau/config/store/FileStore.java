@@ -562,7 +562,6 @@ public class FileStore extends ConfigStore {
 			watcher.interrupt();
 	}
 
-
 	//---------------------------------------------------------------------------------------------
 	// WatcherThread
 	//---------------------------------------------------------------------------------------------
@@ -579,16 +578,15 @@ public class FileStore extends ConfigStore {
 
 		private WatchEvent.Modifier lookupModifier(WatcherSensitivity s) {
 			try {
-				switch(s) {
-					case LOW: return com.sun.nio.file.SensitivityWatchEventModifier.LOW;
-					case MEDIUM: return com.sun.nio.file.SensitivityWatchEventModifier.MEDIUM;
-					case HIGH: return com.sun.nio.file.SensitivityWatchEventModifier.HIGH;
-				}
+				return switch (s) {
+					case LOW    -> com.sun.nio.file.SensitivityWatchEventModifier.LOW;
+					case MEDIUM -> com.sun.nio.file.SensitivityWatchEventModifier.MEDIUM;
+					case HIGH   -> com.sun.nio.file.SensitivityWatchEventModifier.HIGH;
+				};
 			} catch (Exception e) {
 				/* Ignore */
 			}
 			return null;
-
 		}
 
 		@SuppressWarnings("unchecked")

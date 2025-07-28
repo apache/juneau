@@ -15,15 +15,12 @@ package org.apache.juneau.dto.openapi3;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
+import java.util.*;
+
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.JsonSerializer;
-
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import org.apache.juneau.json.*;
 
 /**
  * Root class for all Swagger beans.
@@ -38,7 +35,7 @@ public abstract class OpenApiElement {
 
 	OpenApiElement(OpenApiElement copyFrom) {
 		this.strict = copyFrom.strict;
-		this.extra = copyFrom.extra == null ? null : new LinkedHashMap<>(copyFrom.extra);
+		this.extra = copyOf(copyFrom.extra);
 	}
 
 	/**
@@ -70,7 +67,7 @@ public abstract class OpenApiElement {
 	 * @return This object
 	 */
 	protected OpenApiElement strict(Object value) {
-		strict = value == null ? false : toBoolean(value);
+		strict = value != null && toBoolean(value);
 		return this;
 	}
 
@@ -152,7 +149,7 @@ public abstract class OpenApiElement {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(strict, "strict")
 			.build();
 		s.addAll(extraKeys());
@@ -168,8 +165,8 @@ public abstract class OpenApiElement {
 	 * @return A map containing all the values in this swagger element.
 	 */
 	public JsonMap asMap() {
-		JsonMap m = new JsonMap();
-		for (String s : keySet())
+		var m = new JsonMap();
+		for (var s : keySet())
 			m.put(s, get(s, Object.class));
 		return m;
 	}

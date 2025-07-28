@@ -16,12 +16,10 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.*;
+import java.util.*;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * TODO
@@ -211,37 +209,36 @@ public class ServerVariable extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "enum": return toType(getEnum(), type);
-			case "default": return toType(getDefault(), type);
-			case "description": return toType(getDescription(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "enum" -> toType(getEnum(), type);
+			case "default" -> toType(getDefault(), type);
+			case "description" -> toType(getDescription(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public ServerVariable set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "default": return setDefault(stringify(value));
-			case "enum": return setEnum(listBuilder(Object.class).sparse().addAny(value).build());
-			case "description": return setDescription(stringify(value));
-			default:
+		return switch (property) {
+			case "default" -> setDefault(stringify(value));
+			case "enum" -> setEnum(listBuilder(Object.class).sparse().addAny(value).build());
+			case "description" -> setDescription(stringify(value));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
-				.addIf(_enum != null, "enum")
-				.addIf(_default != null,"default" )
-				.addIf(description != null, "description")
-				.build();
+		var s = setBuilder(String.class)
+			.addIf(_enum != null, "enum")
+			.addIf(_default != null,"default" )
+			.addIf(description != null, "description")
+			.build();
 		return new MultiSet<>(s, super.keySet());
-
-
 	}
 }

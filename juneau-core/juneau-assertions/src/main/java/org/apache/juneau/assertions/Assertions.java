@@ -71,7 +71,10 @@ import org.apache.juneau.common.utils.*;
  */
 public class Assertions {
 
-	private Assertions() {}
+	/**
+	 * Constructor.
+	 */
+	protected Assertions() {}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fluent assertions

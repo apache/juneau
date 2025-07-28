@@ -16,10 +16,10 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.*;
+import java.util.*;
 
-import java.util.Set;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * information for Examples object.
@@ -203,36 +203,37 @@ public class Example extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {
-			case "description": return toType(getDescription(), type);
-			case "externalValue": return toType(getExternalValue(), type);
-			case "summary": return toType(getSummary(), type);
-			case "value": return toType(getValue(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {
+			case "description" -> toType(getDescription(), type);
+			case "externalValue" -> toType(getExternalValue(), type);
+			case "summary" -> toType(getSummary(), type);
+			case "value" -> toType(getValue(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Example set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {
-			case "description": return setDescription(stringify(value));
-			case "externalValue": return setExternalValue(stringify(value));
-			case "summary": return setSummary(stringify(value));
-			case "value": return setValue(value);
-			default:
+		return switch (property) {
+			case "description" -> setDescription(stringify(value));
+			case "externalValue" -> setExternalValue(stringify(value));
+			case "summary" -> setSummary(stringify(value));
+			case "value" -> setValue(value);
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(description != null, "description")
-				.addIf(summary != null, "summary")
-				.addIf(externalValue != null, "externalValue")
+			.addIf(summary != null, "summary")
+			.addIf(externalValue != null, "externalValue")
 			.addIf(value != null, "value")
 			.build();
 		return new MultiSet<>(s, super.keySet());

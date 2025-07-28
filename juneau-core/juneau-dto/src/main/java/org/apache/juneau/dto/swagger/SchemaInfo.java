@@ -144,13 +144,7 @@ public class SchemaInfo extends SwaggerElement {
 		this.type = copyFrom.type;
 		this.uniqueItems = copyFrom.uniqueItems;
 		this.xml = copyFrom.xml == null ? null : copyFrom.xml.copy();
-
-		if (copyFrom.properties == null) {
-			this.properties = null;
-		} else {
-			this.properties = map();
-			copyFrom.properties.forEach((k,v) -> this.properties.put(k, v.copy()));
-		}
+		this.properties = copyOf(copyFrom.properties, SchemaInfo::copy);
 	}
 
 	/**
@@ -994,87 +988,88 @@ public class SchemaInfo extends SwaggerElement {
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
 			return null;
-		switch (property) {  // NOSONAR
-			case "additionalProperties": return toType(getAdditionalProperties(), type);
-			case "allOf": return toType(getAllOf(), type);
-			case "default": return toType(getDefault(), type);
-			case "description": return toType(getDescription(), type);
-			case "discriminator": return toType(getDiscriminator(), type);
-			case "enum": return toType(getEnum(), type);
-			case "example": return toType(getExample(), type);
-			case "exclusiveMaximum": return toType(getExclusiveMaximum(), type);
-			case "exclusiveMinimum": return toType(getExclusiveMinimum(), type);
-			case "externalDocs": return toType(getExternalDocs(), type);
-			case "format": return toType(getFormat(), type);
-			case "items": return toType(getItems(), type);
-			case "maximum": return toType(getMaximum(), type);
-			case "maxItems": return toType(getMaxItems(), type);
-			case "maxLength": return toType(getMaxLength(), type);
-			case "maxProperties": return toType(getMaxProperties(), type);
-			case "minimum": return toType(getMinimum(), type);
-			case "minItems": return toType(getMinItems(), type);
-			case "minLength": return toType(getMinLength(), type);
-			case "minProperties": return toType(getMinProperties(), type);
-			case "multipleOf": return toType(getMultipleOf(), type);
-			case "pattern": return toType(getPattern(), type);
-			case "properties": return toType(getProperties(), type);
-			case "readOnly": return toType(getReadOnly(), type);
-			case "$ref": return toType(getRef(), type);
-			case "rquired": return toType(getRequired(), type);
-			case "requiredProperties": return toType(getRequiredProperties(), type);
-			case "title": return toType(getTitle(), type);
-			case "type": return toType(getType(), type);
-			case "uniqueItems": return toType(getUniqueItems(), type);
-			case "xml": return toType(getXml(), type);
-			default: return super.get(property, type);
-		}
+		return switch (property) {  // NOSONAR
+			case "additionalProperties" -> toType(getAdditionalProperties(), type);
+			case "allOf" -> toType(getAllOf(), type);
+			case "default" -> toType(getDefault(), type);
+			case "description" -> toType(getDescription(), type);
+			case "discriminator" -> toType(getDiscriminator(), type);
+			case "enum" -> toType(getEnum(), type);
+			case "example" -> toType(getExample(), type);
+			case "exclusiveMaximum" -> toType(getExclusiveMaximum(), type);
+			case "exclusiveMinimum" -> toType(getExclusiveMinimum(), type);
+			case "externalDocs" -> toType(getExternalDocs(), type);
+			case "format" -> toType(getFormat(), type);
+			case "items" -> toType(getItems(), type);
+			case "maximum" -> toType(getMaximum(), type);
+			case "maxItems" -> toType(getMaxItems(), type);
+			case "maxLength" -> toType(getMaxLength(), type);
+			case "maxProperties" -> toType(getMaxProperties(), type);
+			case "minimum" -> toType(getMinimum(), type);
+			case "minItems" -> toType(getMinItems(), type);
+			case "minLength" -> toType(getMinLength(), type);
+			case "minProperties" -> toType(getMinProperties(), type);
+			case "multipleOf" -> toType(getMultipleOf(), type);
+			case "pattern" -> toType(getPattern(), type);
+			case "properties" -> toType(getProperties(), type);
+			case "readOnly" -> toType(getReadOnly(), type);
+			case "$ref" -> toType(getRef(), type);
+			case "rquired" -> toType(getRequired(), type);
+			case "requiredProperties" -> toType(getRequiredProperties(), type);
+			case "title" -> toType(getTitle(), type);
+			case "type" -> toType(getType(), type);
+			case "uniqueItems" -> toType(getUniqueItems(), type);
+			case "xml" -> toType(getXml(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public SchemaInfo set(String property, Object value) {
 		if (property == null)
 			return this;
-		switch (property) {  // NOSONAR
-			case "additionalProperties": return setAdditionalProperties(toType(value, SchemaInfo.class));
-			case "allOf": return setAllOf(value);
-			case "default": return setDefault(value);
-			case "description": return setDescription(stringify(value));
-			case "discriminator": return setDiscriminator(stringify(value));
-			case "enum": return setEnum(value);
-			case "example": return setExample(value);
-			case "exclusiveMaximum": return setExclusiveMaximum(toBoolean(value));
-			case "exclusiveMinimum": return setExclusiveMinimum(toBoolean(value));
-			case "externalDocs": return setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "format": return setFormat(stringify(value));
-			case "items": return setItems(toType(value, Items.class));
-			case "maximum": return setMaximum(toNumber(value));
-			case "maxItems": return setMaxItems(toInteger(value));
-			case "maxLength": return setMaxLength(toInteger(value));
-			case "maxProperties": return setMaxProperties(toInteger(value));
-			case "minimum": return setMinimum(toNumber(value));
-			case "minItems": return setMinItems(toInteger(value));
-			case "minLength": return setMinLength(toInteger(value));
-			case "minProperties": return setMinProperties(toInteger(value));
-			case "multipleOf": return setMultipleOf(toNumber(value));
-			case "pattern": return setPattern(stringify(value));
-			case "properties": return setProperties(mapBuilder(String.class,SchemaInfo.class).sparse().addAny(value).build());
-			case "readOnly": return setReadOnly(toBoolean(value));
-			case "$ref": return setRef(stringify(value));
-			case "required": return setRequired(toBoolean(value));
-			case "requiredProperties": return setRequiredProperties(listBuilder(String.class).sparse().addAny(value).build());
-			case "title": return setTitle(stringify(value));
-			case "type": return setType(stringify(value));
-			case "uniqueItems": return setUniqueItems(toBoolean(value));
-			case "xml": return setXml(toType(value, Xml.class));
-			default:
+		return switch (property) {  // NOSONAR
+			case "additionalProperties" -> setAdditionalProperties(toType(value, SchemaInfo.class));
+			case "allOf" -> setAllOf(value);
+			case "default" -> setDefault(value);
+			case "description" -> setDescription(stringify(value));
+			case "discriminator" -> setDiscriminator(stringify(value));
+			case "enum" -> setEnum(value);
+			case "example" -> setExample(value);
+			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
+			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
+			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "format" -> setFormat(stringify(value));
+			case "items" -> setItems(toType(value, Items.class));
+			case "maximum" -> setMaximum(toNumber(value));
+			case "maxItems" -> setMaxItems(toInteger(value));
+			case "maxLength" -> setMaxLength(toInteger(value));
+			case "maxProperties" -> setMaxProperties(toInteger(value));
+			case "minimum" -> setMinimum(toNumber(value));
+			case "minItems" -> setMinItems(toInteger(value));
+			case "minLength" -> setMinLength(toInteger(value));
+			case "minProperties" -> setMinProperties(toInteger(value));
+			case "multipleOf" -> setMultipleOf(toNumber(value));
+			case "pattern" -> setPattern(stringify(value));
+			case "properties" -> setProperties(mapBuilder(String.class,SchemaInfo.class).sparse().addAny(value).build());
+			case "readOnly" -> setReadOnly(toBoolean(value));
+			case "$ref" -> setRef(stringify(value));
+			case "required" -> setRequired(toBoolean(value));
+			case "requiredProperties" -> setRequiredProperties(listBuilder(String.class).sparse().addAny(value).build());
+			case "title" -> setTitle(stringify(value));
+			case "type" -> setType(stringify(value));
+			case "uniqueItems" -> setUniqueItems(toBoolean(value));
+			case "xml" -> setXml(toType(value, Xml.class));
+			default -> {
 				super.set(property, value);
-				return this;
-		}
+				yield this;
+			}
+		};
 	}
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		Set<String> s = setBuilder(String.class)
+		var s = setBuilder(String.class)
 			.addIf(additionalProperties != null, "additionalProperties")
 			.addIf(allOf != null, "allOf")
 			.addIf(_default != null, "default")
@@ -1129,7 +1124,7 @@ public class SchemaInfo extends SwaggerElement {
 			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
 			refStack.addLast(ref);
-			SchemaInfo r = swagger.findRef(ref, SchemaInfo.class).resolveRefs(swagger, refStack, maxDepth);
+			var r = swagger.findRef(ref, SchemaInfo.class).resolveRefs(swagger, refStack, maxDepth);
 			refStack.removeLast();
 			return r;
 		}
