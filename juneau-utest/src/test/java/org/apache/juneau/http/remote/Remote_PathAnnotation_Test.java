@@ -13,11 +13,10 @@
 package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.math.*;
 import java.util.*;
@@ -33,8 +32,8 @@ import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.testutils.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -572,7 +571,7 @@ public class Remote_PathAnnotation_Test {
 
 	@Remote
 	public interface H1 {
-		@RemoteOp(path="/{x}") String getX1(@Path(name="x",serializer=MockWriterSerializer.X.class) String b);
+		@RemoteOp(path="/{x}") String getX1(@Path(name="x",serializer=FakeWriterSerializer.X.class) String b);
 	}
 
 	@Test
@@ -600,7 +599,7 @@ public class Remote_PathAnnotation_Test {
 	@Remote(path="/")
 	public interface K1 {
 		@RemoteOp(path="/{a}/{b}/{c}/{e}/{g}/{h}") String getX1(@Request K1a rb);
-		@RemoteOp(path="/{a}/{b}/{c}/{e}/{g}/{h}") String getX2(@Request(serializer=MockWriterSerializer.X.class) K1a rb);
+		@RemoteOp(path="/{a}/{b}/{c}/{e}/{g}/{h}") String getX2(@Request(serializer=FakeWriterSerializer.X.class) K1a rb);
 	}
 
 	public static class K1a {
@@ -646,7 +645,7 @@ public class Remote_PathAnnotation_Test {
 	@Remote(path="/")
 	public interface K2 {
 		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}") String getX1(@Request K2a rb);
-		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}") String getX2(@Request(serializer=MockWriterSerializer.X.class) K2a rb);
+		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}") String getX2(@Request(serializer=FakeWriterSerializer.X.class) K2a rb);
 	}
 
 	public static class K2a {
@@ -684,7 +683,7 @@ public class Remote_PathAnnotation_Test {
 	@Remote(path="/")
 	public interface K3 {
 		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}/{e1}/{e2}/{e3}/{e4}") String getX1(@Request K3a rb);
-		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}/{e1}/{e2}/{e3}/{e4}") String getX2(@Request(serializer=MockWriterSerializer.X.class) K3a rb);
+		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}/{e1}/{e2}/{e3}/{e4}") String getX2(@Request(serializer=FakeWriterSerializer.X.class) K3a rb);
 	}
 
 	public static class K3a {
@@ -726,7 +725,7 @@ public class Remote_PathAnnotation_Test {
 	@Remote(path="/")
 	public interface K4 {
 		@RemoteOp(path="/{a}/{b}/{c}/{d}/{f}/{g}/{h}") String getX1(@Request K4a rb);
-		@RemoteOp(path="/{a}/{b}/{c}/{d}/{f}/{g}/{h}") String getX2(@Request(serializer=MockWriterSerializer.X.class) K4a rb);
+		@RemoteOp(path="/{a}/{b}/{c}/{d}/{f}/{g}/{h}") String getX2(@Request(serializer=FakeWriterSerializer.X.class) K4a rb);
 	}
 
 	public static class K4a {
@@ -738,7 +737,7 @@ public class Remote_PathAnnotation_Test {
 		public List<Object> getX1() {
 			return alist("foo","","true","123","null",true,123,null);
 		}
-		@Path(name="c",serializer=MockWriterSerializer.X.class)
+		@Path(name="c",serializer=FakeWriterSerializer.X.class)
 		public List<Object> getX2() {
 			return alist("foo","","true","123","null",true,123,null);
 		}
@@ -750,7 +749,7 @@ public class Remote_PathAnnotation_Test {
 		public Object[] getX5() {
 			return new Object[]{"foo","","true","123","null",true,123,null};
 		}
-		@Path(name="g",serializer=MockWriterSerializer.X.class)
+		@Path(name="g",serializer=FakeWriterSerializer.X.class)
 		public Object[] getX6() {
 			return new Object[]{"foo","","true","123","null",true,123,null};
 		}

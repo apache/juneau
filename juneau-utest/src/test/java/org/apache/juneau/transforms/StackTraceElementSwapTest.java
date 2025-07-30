@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.marshaller.*;
+import org.apache.juneau.swaps.*;
 import org.junit.*;
 
 /**

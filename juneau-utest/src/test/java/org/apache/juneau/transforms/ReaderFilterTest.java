@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import static org.apache.juneau.utest.utils.Utils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.util.*;

@@ -13,11 +13,11 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.utest.utils.Utils.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.http.HttpParts.*;
-import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -27,8 +27,8 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.testutils.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -68,7 +68,7 @@ public class RestClient_Query_Test {
 	@Test
 	public void a06_query_String_Supplier() throws Exception {
 		List<String> l1 = list("foo","bar"), l2 = list("bar","baz");
-		TestSupplier s = TestSupplier.of(l1);
+		MutableSupplier s = MutableSupplier.of(l1);
 		RestClient x = client().queryData(part("foo",s,null)).build();
 		x.get("/query").run().assertContent().asString().asUrlDecode().is("foo=foo,bar");
 		s.set(l2);
@@ -78,7 +78,7 @@ public class RestClient_Query_Test {
 	@Test
 	public void a07_query_String_Supplier_Schema() throws Exception {
 		String[] l1 = {"foo","bar"},l2 = {"bar","baz"};
-		TestSupplier s = TestSupplier.of(l1);
+		MutableSupplier s = MutableSupplier.of(l1);
 		RestClient x = client().queryData(part("foo",s,T_ARRAY_PIPES)).build();
 		x.get("/query").queryData(part("bar",s,T_ARRAY_PIPES)).run().assertContent().asString().asUrlDecode().is("foo=foo|bar&bar=foo|bar");
 		s.set(l2);
@@ -88,8 +88,8 @@ public class RestClient_Query_Test {
 	@Test
 	public void a08_query_String_Supplier_Schema_Serializer() throws Exception {
 		List<String> l1 = list("foo","bar"), l2 = list("bar","baz");
-		TestSupplier s = TestSupplier.of(l1);
-		RestClient x = client().queryData(part("foo",s,T_ARRAY_PIPES).serializer(MockWriterSerializer.X)).build();
+		MutableSupplier s = MutableSupplier.of(l1);
+		RestClient x = client().queryData(part("foo",s,T_ARRAY_PIPES).serializer(FakeWriterSerializer.X)).build();
 		x.get("/query").run().assertContent().asString().asUrlDecode().is("foo=xfoo|barx");
 		s.set(l2);
 		x.get("/query").run().assertContent().asString().asUrlDecode().is("foo=xbar|bazx");

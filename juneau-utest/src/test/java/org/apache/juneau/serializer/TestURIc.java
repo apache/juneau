@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import java.net.URI;
+import java.net.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;

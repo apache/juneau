@@ -14,7 +14,7 @@ package org.apache.juneau;
 
 import java.util.*;
 
-import org.apache.juneau.BeanTraverseContext.Builder;
+import org.apache.juneau.BeanTraverseContext.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 

@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static java.time.format.DateTimeFormatter.*;
+import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
-import static java.time.format.DateTimeFormatter.*;
-import static java.time.temporal.ChronoUnit.*;
+
 import java.time.*;
 import java.util.*;
 
@@ -26,13 +27,13 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.httppart.RequestHeader;
+import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.testutils.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -99,7 +100,7 @@ public class RestClient_Headers_Test {
 
 	@Test
 	public void a08_header_String_Supplier() throws Exception {
-		TestSupplier s = TestSupplier.of("foo");
+		MutableSupplier s = MutableSupplier.of("foo");
 		RestClient x = checkFooClient().headers(header("Foo",s,null)).build();
 		x.get("/headers").header("Foo",s).run().assertContent("['foo','foo']");
 		s.set("bar");
@@ -108,12 +109,12 @@ public class RestClient_Headers_Test {
 
 	@Test
 	public void a09_headers_String_Object_Schema_Serializer() throws Exception {
-		checkFooClient().headers(header("Foo",bean,null).serializer(MockWriterSerializer.X)).build().get("/headers").run().assertContent("['x{f:1}x']");
+		checkFooClient().headers(header("Foo",bean,null).serializer(FakeWriterSerializer.X)).build().get("/headers").run().assertContent("['x{f:1}x']");
 	}
 
 	@Test
 	public void a10_headers_String_Supplier_Schema() throws Exception {
-		TestSupplier s = TestSupplier.of(new String[]{"foo","bar"});
+		MutableSupplier s = MutableSupplier.of(new String[]{"foo","bar"});
 		RestClient x = checkFooClient().headers(header("Foo",s,T_ARRAY_PIPES)).build();
 		x.get("/headers").header(header("Foo",s,T_ARRAY_PIPES)).run().assertContent("['foo|bar','foo|bar']");
 		s.set(new String[]{"bar","baz"});
@@ -122,7 +123,7 @@ public class RestClient_Headers_Test {
 
 	@Test
 	public void a11_headers_String_Supplier_Schema_Serializer() throws Exception {
-		TestSupplier s = TestSupplier.of(new String[]{"foo","bar"});
+		MutableSupplier s = MutableSupplier.of(new String[]{"foo","bar"});
 		checkFooClient().headers(header("Foo",s,T_ARRAY_PIPES).serializer(UonSerializer.DEFAULT)).build().get("/headers").run().assertContent("['@(foo,bar)']");
 	}
 

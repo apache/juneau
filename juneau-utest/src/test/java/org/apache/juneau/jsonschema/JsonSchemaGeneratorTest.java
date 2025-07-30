@@ -13,8 +13,8 @@
 package org.apache.juneau.jsonschema;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.jsonschema.TypeCategory.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 

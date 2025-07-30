@@ -20,7 +20,7 @@ import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -60,8 +60,8 @@ public class Rest_RVars_Test {
 			res.setContent(null);
 		}
 
-		public static class A1 extends MockWriterSerializer {
-			public A1(MockWriterSerializer.Builder b) {
+		public static class A1 extends FakeWriterSerializer {
+			public A1(FakeWriterSerializer.Builder b) {
 				super(b.produces("text/plain").accept("*/*").function((s,o) -> out(s)));
 			}
 			public static String out(SerializerSession s) {

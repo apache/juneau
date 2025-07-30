@@ -17,12 +17,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
 
-import org.apache.juneau.bean.jsonschema.JsonSchema;
-import org.apache.juneau.bean.jsonschema.JsonSchemaArray;
-import org.apache.juneau.bean.jsonschema.JsonSchemaProperty;
-import org.apache.juneau.bean.jsonschema.JsonSchemaRef;
-import org.apache.juneau.bean.jsonschema.JsonType;
-import org.apache.juneau.bean.jsonschema.JsonTypeArray;
+import org.apache.juneau.bean.jsonschema.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 

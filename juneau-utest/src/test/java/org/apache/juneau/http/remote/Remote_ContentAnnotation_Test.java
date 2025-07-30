@@ -12,19 +12,19 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.remote;
 
-import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.testutils.StreamUtils.*;
+import static org.apache.juneau.utest.utils.Utils.*;
+import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.entity.*;
-import org.apache.juneau.http.annotation.Content;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.json.*;

@@ -19,10 +19,8 @@ import static org.junit.runners.MethodSorters.*;
 import java.io.*;
 import java.util.*;
 
-import jakarta.servlet.*;
-
 import org.apache.juneau.config.*;
-import org.apache.juneau.cp.Messages;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.json.*;
@@ -35,6 +33,8 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
+
+import jakarta.servlet.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class RestOp_Params_Test {

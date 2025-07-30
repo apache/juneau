@@ -12,9 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
-import static org.apache.juneau.bean.html5.HtmlBuilder.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.assertions.Verify.*;
+import static org.apache.juneau.bean.html5.HtmlBuilder.*;
+import static org.apache.juneau.bean.html5.HtmlBuilder.map;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.map;
 
 import java.util.*;
 

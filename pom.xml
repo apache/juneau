@@ -52,7 +52,6 @@
 		<module>juneau-sc</module>
 		<module>juneau-examples</module>
 		<module>juneau-utest</module>
-		<module>juneau-utest-utils</module>
 		<module>juneau-bean</module>
 		<module>juneau-all</module>
 		<module>juneau-distrib</module>

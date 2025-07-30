@@ -20,8 +20,7 @@ import java.io.*;
 import java.util.concurrent.*;
 
 import org.apache.http.*;
-import org.apache.juneau.http.annotation.Content;
-import org.apache.juneau.http.annotation.Response;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;

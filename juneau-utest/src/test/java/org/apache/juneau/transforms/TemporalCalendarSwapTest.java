@@ -19,7 +19,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.swaps.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
@@ -33,12 +33,12 @@ public class TemporalCalendarSwapTest extends RoundTripStringSwapTest<Calendar> 
 
 	@BeforeClass
 	public static void beforeClass() {
-		TestUtils.setTimeZone("GMT-5");
+		Utils.setTimeZone("GMT-5");
 	}
 
 	@AfterClass
 	public static void afterClass() {
-		TestUtils.unsetTimeZone();
+		Utils.unsetTimeZone();
 	}
 
 	private static BeanSession

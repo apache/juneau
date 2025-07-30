@@ -14,12 +14,12 @@ package org.apache.juneau.rest;
 
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.http.annotation.Content;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -29,18 +29,18 @@ public class Header_Accept_Test {
 	// Setup classes
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class S1 extends MockWriterSerializer {
-		public S1(MockWriterSerializer.Builder b) {
+	public static class S1 extends FakeWriterSerializer {
+		public S1(FakeWriterSerializer.Builder b) {
 			super(b.produces("text/s1").function((s,o) -> "s1"));
 		}
 	}
-	public static class S2 extends MockWriterSerializer {
-		public S2(MockWriterSerializer.Builder b) {
+	public static class S2 extends FakeWriterSerializer {
+		public S2(FakeWriterSerializer.Builder b) {
 			super(b.produces("text/s2").function((s,o) -> "s2"));
 		}
 	}
-	public static class S3 extends MockWriterSerializer {
-		public S3(MockWriterSerializer.Builder b) {
+	public static class S3 extends FakeWriterSerializer {
+		public S3(FakeWriterSerializer.Builder b) {
 			super(b.produces("text/s3").function((s,o) -> "s3"));
 		}
 	}

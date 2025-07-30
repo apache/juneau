@@ -16,7 +16,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import org.apache.http.client.config.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.annotation.Path;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;

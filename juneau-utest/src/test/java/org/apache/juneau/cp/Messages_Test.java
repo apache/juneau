@@ -12,12 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
+import static java.util.Locale.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
-
-import static java.util.Locale.*;
 
 import org.apache.juneau.cp.test3.*;
 import org.apache.juneau.cp.test4.*;

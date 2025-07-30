@@ -12,13 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.header.ContentType.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.http.annotation.Content;
-import org.apache.juneau.http.annotation.Path;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client.*;

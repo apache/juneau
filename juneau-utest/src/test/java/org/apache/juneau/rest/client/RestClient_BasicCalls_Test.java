@@ -13,13 +13,13 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.http.HttpEntities.*;
+import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.http.header.ContentType.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.testutils.StreamUtils.*;
+import static org.apache.juneau.utest.utils.Utils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.net.*;
@@ -29,15 +29,15 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.http.client.utils.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.httppart.RequestHeader;
+import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
-import org.apache.juneau.http.header.ContentType;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class RestClient_BasicCalls_Test {
@@ -135,8 +135,8 @@ public class RestClient_BasicCalls_Test {
 	public void a04_put() throws Exception {
 		client().build().put("/bean",bean).run().assertContent("{f:1}");
 		client().build().put("/bean").content(bean).run().assertContent("{f:1}");
-		client().build().put("/bean",TestSupplier.of(bean)).run().assertContent("{f:1}");
-		client().build().put("/bean").content(TestSupplier.of(bean)).run().assertContent("{f:1}");
+		client().build().put("/bean",MutableSupplier.of(bean)).run().assertContent("{f:1}");
+		client().build().put("/bean").content(MutableSupplier.of(bean)).run().assertContent("{f:1}");
 	}
 
 	@Test

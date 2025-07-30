@@ -14,12 +14,12 @@ package org.apache.juneau.rest;
 
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.http.annotation.Content;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -211,7 +211,7 @@ public class Header_ContentType_Test {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class P1 extends MockReaderParser { public P1(MockReaderParser.Builder b) {super(b.consumes("text/p1").function((session,in,type)->"p1"));}}
-	public static class P2 extends MockReaderParser { public P2(MockReaderParser.Builder b) {super(b.consumes("text/p2").function((session,in,type)->"p2"));}}
-	public static class P3 extends MockReaderParser { public P3(MockReaderParser.Builder b) {super(b.consumes("text/p3").function((session,in,type)->"p3"));}}
+	public static class P1 extends FakeReaderParser { public P1(FakeReaderParser.Builder b) {super(b.consumes("text/p1").function((session,in,type)->"p1"));}}
+	public static class P2 extends FakeReaderParser { public P2(FakeReaderParser.Builder b) {super(b.consumes("text/p2").function((session,in,type)->"p2"));}}
+	public static class P3 extends FakeReaderParser { public P3(FakeReaderParser.Builder b) {super(b.consumes("text/p3").function((session,in,type)->"p3"));}}
 }

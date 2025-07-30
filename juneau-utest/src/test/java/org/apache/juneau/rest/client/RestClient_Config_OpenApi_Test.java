@@ -14,15 +14,15 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.httppart.HttpPartCollectionFormat.*;
 import static org.apache.juneau.uon.ParamFormat.*;
+import static org.apache.juneau.utest.utils.Utils.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.httppart.RequestHeader;
+import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.*;

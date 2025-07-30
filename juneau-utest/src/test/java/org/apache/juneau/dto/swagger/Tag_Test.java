@@ -17,8 +17,7 @@ import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.bean.swagger.ExternalDocumentation;
-import org.apache.juneau.bean.swagger.Tag;
+import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 

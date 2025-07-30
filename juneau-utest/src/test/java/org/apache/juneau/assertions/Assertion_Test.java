@@ -13,12 +13,12 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.testutils.StreamUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -81,7 +81,7 @@ public class Assertion_Test {
 
 	@Test
 	public void a02_out() throws Exception {
-		PrintStream out = printStream();
+		PrintStream out = new CapturingPrintStream();
 
 		try {
 			assertString("x").setOut(out).isNull();

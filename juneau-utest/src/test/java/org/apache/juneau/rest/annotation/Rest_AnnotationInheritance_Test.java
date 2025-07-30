@@ -14,9 +14,7 @@ package org.apache.juneau.rest.annotation;
 
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.http.annotation.Content;
-import org.apache.juneau.http.annotation.Header;
-import org.apache.juneau.http.annotation.Query;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;

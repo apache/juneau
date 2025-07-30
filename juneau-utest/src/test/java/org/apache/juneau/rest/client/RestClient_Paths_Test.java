@@ -13,9 +13,9 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.http.HttpParts.*;
 
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;

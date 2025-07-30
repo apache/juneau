@@ -15,7 +15,7 @@ package org.apache.juneau.html;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.util.Objects;
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;

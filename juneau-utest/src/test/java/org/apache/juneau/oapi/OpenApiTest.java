@@ -12,19 +12,22 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
-import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.DateUtils.*;
+import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
+
+import jakarta.xml.bind.*;
 
 /**
  * Tests the OpenApiSerializer and OpenApiParser classes.
@@ -45,12 +48,12 @@ public class OpenApiTest {
 
 	@Before
 	public void before() {
-		TestUtils.setTimeZone("GMT");
+		Utils.setTimeZone("GMT");
 	}
 
 	@After
 	public void after() {
-		TestUtils.unsetTimeZone();
+		Utils.unsetTimeZone();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -145,7 +148,7 @@ public class OpenApiTest {
 
 	@Test
 	public void a06_noType_formatDate_Calendar() throws Exception {
-		Calendar in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null);
+		Calendar in = cal("2012-12-21");
 		HttpPartSchema ps = tNone().fDate().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21Z", s);
@@ -156,7 +159,7 @@ public class OpenApiTest {
 
 	@Test
 	public void a07_noType_formatDate_Date() throws Exception {
-		Date in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null).getTime();
+		Date in = cal("2012-12-21").getTime();
 		HttpPartSchema ps = tNone().fDate().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21Z", s);
@@ -167,7 +170,7 @@ public class OpenApiTest {
 
 	@Test
 	public void a08_noType_formatDate_Temporal() throws Exception {
-		Instant in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null).toInstant();
+		Instant in = cal("2012-12-21").toInstant();
 		HttpPartSchema ps = tNone().fDate().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21Z", s);
@@ -208,7 +211,7 @@ public class OpenApiTest {
 
 	@Test
 	public void a12_noType_formatDateTime_Calendar() throws Exception {
-		Calendar in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null);
+		Calendar in = cal("2012-12-21");
 		HttpPartSchema ps = tNone().fDateTime().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00Z", s);
@@ -219,7 +222,7 @@ public class OpenApiTest {
 
 	@Test
 	public void a13_noType_formatDateTime_Date() throws Exception {
-		Date in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null).getTime();
+		Date in = cal("2012-12-21").getTime();
 		HttpPartSchema ps = tNone().fDateTime().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00Z", s);
@@ -230,7 +233,7 @@ public class OpenApiTest {
 
 	@Test
 	public void a14_noType_formatDateTime_Temporal() throws Exception {
-		Instant in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null).toInstant();
+		Instant in = cal("2012-12-21").toInstant();
 		HttpPartSchema ps = tNone().fDateTime().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00Z", s);
@@ -325,7 +328,7 @@ public class OpenApiTest {
 
 	@Test
 	public void b06_typeString_formatDate_Calendar() throws Exception {
-		Calendar in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null);
+		Calendar in = cal("2012-12-21");
 		HttpPartSchema ps = T_DATE;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21Z", s);
@@ -336,7 +339,7 @@ public class OpenApiTest {
 
 	@Test
 	public void b07_typeString_formatDate_Date() throws Exception {
-		Date in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null).getTime();
+		Date in = cal("2012-12-21").getTime();
 		HttpPartSchema ps = T_DATE;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21Z", s);
@@ -347,7 +350,7 @@ public class OpenApiTest {
 
 	@Test
 	public void b08_typeString_formatDate_Temporal() throws Exception {
-		Instant in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null).toInstant();
+		Instant in = cal("2012-12-21").toInstant();
 		HttpPartSchema ps = T_DATE;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21Z", s);
@@ -388,7 +391,7 @@ public class OpenApiTest {
 
 	@Test
 	public void b12_typeString_formatDateTime_Calendar() throws Exception {
-		Calendar in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null);
+		Calendar in = cal("2012-12-21");
 		HttpPartSchema ps = T_DATETIME;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00Z", s);
@@ -399,7 +402,7 @@ public class OpenApiTest {
 
 	@Test
 	public void b13_typeString_formatDateTime_Date() throws Exception {
-		Date in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null).getTime();
+		Date in = cal("2012-12-21").getTime();
 		HttpPartSchema ps = T_DATETIME;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00Z", s);
@@ -410,7 +413,7 @@ public class OpenApiTest {
 
 	@Test
 	public void b14_typeString_formatDateTime_Temporal() throws Exception {
-		Instant in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null).toInstant();
+		Instant in = cal("2012-12-21").toInstant();
 		HttpPartSchema ps = T_DATETIME;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00Z", s);
@@ -925,5 +928,13 @@ public class OpenApiTest {
 		assertEquals("a=b\\=c\\\\\\=d\\,e\\=f\\\\\\=g", s);
 		r = parse(ps, s, JsonMap.class);
 		assertObject(in).isSameJsonAs(r);
+	}
+
+	//---------------------------------------------------------------------------------------------
+	// Helpers
+	//---------------------------------------------------------------------------------------------
+
+	private Calendar cal(String in) {
+		return DatatypeConverter.parseDateTime(toValidISO8601DT(in));
 	}
 }

@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
+import static java.util.Collections.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
-import static java.util.Collections.*;
 
 import java.util.*;
 

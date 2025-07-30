@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;

@@ -12,17 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.json.*;
-import org.apache.juneau.xml.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
@@ -31,12 +28,14 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Contact;
 import org.apache.juneau.http.annotation.License;
 import org.apache.juneau.http.annotation.Tag;
+import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Swagger;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.swagger.*;
+import org.apache.juneau.xml.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

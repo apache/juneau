@@ -16,9 +16,9 @@ import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.utest.utils.Utils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -28,7 +28,6 @@ import java.util.regex.*;
 import org.apache.http.*;
 import org.apache.http.conn.*;
 import org.apache.http.entity.*;
-import org.apache.http.entity.ContentType;
 import org.apache.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;

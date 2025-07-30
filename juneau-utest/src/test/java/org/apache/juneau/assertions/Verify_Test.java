@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.assertions.Verify.*;
-
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.assertions.Verify.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;

@@ -21,10 +21,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.bean.swagger.ExternalDocumentation;
-import org.apache.juneau.bean.swagger.Operation;
-import org.apache.juneau.bean.swagger.ParameterInfo;
-import org.apache.juneau.bean.swagger.ResponseInfo;
+import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 

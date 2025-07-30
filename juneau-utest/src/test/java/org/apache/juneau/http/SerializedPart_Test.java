@@ -12,20 +12,18 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.httppart.HttpPartDataType.*;
+import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
-
-import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.httppart.HttpPartDataType.*;
-
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

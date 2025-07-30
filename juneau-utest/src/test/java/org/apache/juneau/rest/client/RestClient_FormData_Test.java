@@ -13,11 +13,11 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.utest.utils.Utils.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.http.HttpParts.*;
-import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -30,9 +30,9 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.testutils.*;
-import org.apache.juneau.testutils.pojos.ABean;
+import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -102,7 +102,7 @@ public class RestClient_FormData_Test {
 
 	@Test
 	public void a09_formData_String_Supplier() throws Exception {
-		TestSupplier s = TestSupplier.of(null);
+		MutableSupplier s = MutableSupplier.of(null);
 
 		RestClient x1 = client().formData(part("foo",s,null)).build();
 		s.set(JsonList.of("foo","bar"));
@@ -119,8 +119,8 @@ public class RestClient_FormData_Test {
 
 	@Test
 	public void a10_formData_String_Supplier_Schema_Serializer() throws Exception {
-		TestSupplier s = TestSupplier.of(JsonList.of("foo","bar"));
-		RestClient x = client().formData(part("foo",s,T_ARRAY_PIPES).serializer(MockWriterSerializer.X)).build();
+		MutableSupplier s = MutableSupplier.of(JsonList.of("foo","bar"));
+		RestClient x = client().formData(part("foo",s,T_ARRAY_PIPES).serializer(FakeWriterSerializer.X)).build();
 		x.post("/formData").run().assertContent().asString().asUrlDecode().is("foo=xfoo|barx");
 		s.set(JsonList.of("bar","baz"));
 		x.post("/formData").run().assertContent().asString().asUrlDecode().is("foo=xbar|bazx");
@@ -129,7 +129,7 @@ public class RestClient_FormData_Test {
 	@Test
 	public void a11_formData_String_Supplier_Schema() throws Exception {
 		List<String> l1 = list("foo","bar"), l2 = list("bar","baz");
-		TestSupplier s = TestSupplier.of(null);
+		MutableSupplier s = MutableSupplier.of(null);
 
 		RestClient x1 = client().formData(part("foo",s,T_ARRAY_PIPES)).build();
 		s.set(l1);

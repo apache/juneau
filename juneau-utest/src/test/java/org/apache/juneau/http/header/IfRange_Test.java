@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.junit.runners.MethodSorters.*;
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.testutils.StreamUtils.*;
+import static org.apache.juneau.utest.utils.Utils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.time.*;

@@ -20,13 +20,9 @@ import java.io.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Content;
-import org.apache.juneau.http.annotation.Header;
-import org.apache.juneau.http.annotation.Path;
-import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -258,7 +254,7 @@ public class Remote_RequestAnnotation_Test {
 		}
 	}
 
-	@Request(serializer=MockWriterSerializer.X.class)
+	@Request(serializer=FakeWriterSerializer.X.class)
 	public static class E1 {
 		@Content
 		public String getBody() {

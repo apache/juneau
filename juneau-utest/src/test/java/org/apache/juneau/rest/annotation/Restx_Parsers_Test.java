@@ -15,11 +15,11 @@ package org.apache.juneau.rest.annotation;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.annotation.Content;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -29,26 +29,26 @@ public class Restx_Parsers_Test {
 	// Setup
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class PA extends MockReaderParser {
-		public PA(MockReaderParser.Builder b) {
+	public static class PA extends FakeReaderParser {
+		public PA(FakeReaderParser.Builder b) {
 			super(b.consumes("text/a").function((session,in,type)->"text/a - " + in));
 		}
 	}
 
-	public static class PB extends MockReaderParser {
-		public PB(MockReaderParser.Builder b) {
+	public static class PB extends FakeReaderParser {
+		public PB(FakeReaderParser.Builder b) {
 			super(b.consumes("text/b").function((session,in,type)->"text/b - " + in));
 		}
 	}
 
-	public static class PC extends MockReaderParser {
-		public PC(MockReaderParser.Builder b) {
+	public static class PC extends FakeReaderParser {
+		public PC(FakeReaderParser.Builder b) {
 			super(b.consumes("text/c").function((session,in,type)->"text/c - " + in));
 		}
 	}
 
-	public static class PD extends MockReaderParser {
-		public PD(MockReaderParser.Builder b) {
+	public static class PD extends FakeReaderParser {
+		public PD(FakeReaderParser.Builder b) {
 			super(b.consumes("text/d").function((session,in,type)->"text/d - " + in));
 		}
 	}
@@ -143,11 +143,11 @@ public class Restx_Parsers_Test {
 	// Test parser inheritance.
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class P1 extends MockReaderParser{ public P1(MockReaderParser.Builder b) {super(b.consumes("text/p1"));} }
-	public static class P2 extends MockReaderParser{ public P2(MockReaderParser.Builder b) {super(b.consumes("text/p2"));} }
-	public static class P3 extends MockReaderParser{ public P3(MockReaderParser.Builder b) {super(b.consumes("text/p3"));} }
-	public static class P4 extends MockReaderParser{ public P4(MockReaderParser.Builder b) {super(b.consumes("text/p4"));} }
-	public static class P5 extends MockReaderParser{ public P5(MockReaderParser.Builder b) {super(b.consumes("text/p5"));} }
+	public static class P1 extends FakeReaderParser{ public P1(FakeReaderParser.Builder b) {super(b.consumes("text/p1"));} }
+	public static class P2 extends FakeReaderParser{ public P2(FakeReaderParser.Builder b) {super(b.consumes("text/p2"));} }
+	public static class P3 extends FakeReaderParser{ public P3(FakeReaderParser.Builder b) {super(b.consumes("text/p3"));} }
+	public static class P4 extends FakeReaderParser{ public P4(FakeReaderParser.Builder b) {super(b.consumes("text/p4"));} }
+	public static class P5 extends FakeReaderParser{ public P5(FakeReaderParser.Builder b) {super(b.consumes("text/p5"));} }
 
 	@Rest(parsers={P1.class,P2.class})
 	public static class B {}

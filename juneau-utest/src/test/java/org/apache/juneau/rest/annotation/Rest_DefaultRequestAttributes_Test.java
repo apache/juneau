@@ -19,7 +19,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.annotation.Content;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.RestResponse;
@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -77,8 +77,8 @@ public class Rest_DefaultRequestAttributes_Test {
 		}
 	}
 
-	public static class A1 extends MockReaderParser {
-		public A1(MockReaderParser.Builder b) {
+	public static class A1 extends FakeReaderParser {
+		public A1(FakeReaderParser.Builder b) {
 			super(b.consumes("text/a1,text/a2,text/a3").function((session,in,type)->in(session)));
 		}
 
@@ -149,8 +149,8 @@ public class Rest_DefaultRequestAttributes_Test {
 		}
 	}
 
-	public static class B1 extends MockWriterSerializer {
-		public B1(MockWriterSerializer.Builder b) {
+	public static class B1 extends FakeWriterSerializer {
+		public B1(FakeWriterSerializer.Builder b) {
 			super(b.produces("test/s1").accept("text/s1,text/s2,text/s3").function((s,o) -> out(s)).headers(B1::headers));
 		}
 		public static String out(SerializerSession s) {

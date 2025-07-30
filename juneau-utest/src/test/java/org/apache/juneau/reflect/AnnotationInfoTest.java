@@ -14,12 +14,12 @@ package org.apache.juneau.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.annotation.*;
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

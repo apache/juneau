@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.store;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.assertions.Assertions.*;
+
 import java.util.concurrent.*;
 
 import org.junit.*;

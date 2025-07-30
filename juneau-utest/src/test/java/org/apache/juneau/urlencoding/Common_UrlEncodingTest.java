@@ -18,7 +18,6 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
-import java.net.URI;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;

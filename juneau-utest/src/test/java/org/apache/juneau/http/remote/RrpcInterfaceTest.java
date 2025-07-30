@@ -16,9 +16,8 @@ import static java.util.Arrays.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.testutils.Constants.*;
+import static org.apache.juneau.utest.utils.Constants.*;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;

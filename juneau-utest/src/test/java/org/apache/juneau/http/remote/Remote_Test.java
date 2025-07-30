@@ -12,25 +12,25 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.remote;
 
-import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.concurrent.*;
 
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.client.remote.*;
-import org.apache.juneau.rest.config.*;
-import org.apache.juneau.rest.httppart.RequestHeader;
-import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.marshaller.*;
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.remote.*;
+import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.httppart.*;
+import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.servlet.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

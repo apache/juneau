@@ -13,8 +13,8 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.cp.DefaultClassList.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.junit.*;
 

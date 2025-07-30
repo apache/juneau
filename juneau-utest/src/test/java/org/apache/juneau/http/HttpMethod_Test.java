@@ -14,7 +14,6 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpMethod.*;
-
 import static org.junit.runners.MethodSorters.*;
 
 import org.junit.*;

@@ -19,7 +19,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
 @SuppressWarnings({"unchecked","rawtypes"})
@@ -28,12 +28,12 @@ public class DataConversionTest {
 
 	@Before
 	public void beforeTest() {
-		TestUtils.setLocale(Locale.US);
+		Utils.setLocale(Locale.US);
 	}
 
 	@After
 	public void afterTest() {
-		TestUtils.unsetLocale();
+		Utils.unsetLocale();
 	}
 
 	//====================================================================================================

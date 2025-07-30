@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
+import static java.util.Locale.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
@@ -21,8 +22,6 @@ import java.nio.file.*;
 import java.util.*;
 
 import org.apache.juneau.cp.sub.*;
-import static java.util.Locale.*;
-
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

@@ -14,13 +14,13 @@ package org.apache.juneau.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.Context.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.reflect.ClassInfo.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.Context.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -29,9 +29,8 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.MethodInfoTest.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.svl.*;
 import org.junit.*;
 

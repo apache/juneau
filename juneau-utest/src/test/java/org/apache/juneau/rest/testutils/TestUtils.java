@@ -18,7 +18,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.swagger.*;
 
 @SuppressWarnings({})
-public class TestUtils extends org.apache.juneau.testutils.TestUtils {
+public class TestUtils extends org.apache.juneau.utest.utils.Utils {
 
 	/**
 	 * Gets the swagger for the specified @Resource-annotated object.

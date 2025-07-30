@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.assertions.Assertions.*;
+
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;

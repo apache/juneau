@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.http.annotation.*;
 import org.junit.*;

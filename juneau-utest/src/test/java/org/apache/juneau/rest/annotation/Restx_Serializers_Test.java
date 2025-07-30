@@ -19,7 +19,7 @@ import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -29,26 +29,26 @@ public class Restx_Serializers_Test {
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class SA extends MockWriterSerializer {
-		public SA(MockWriterSerializer.Builder b) {
+	public static class SA extends FakeWriterSerializer {
+		public SA(FakeWriterSerializer.Builder b) {
 			super(b.produces("text/a").function((s,o)->"text/a - "+o));
 		}
 	}
 
-	public static class SB extends MockWriterSerializer {
-		public SB(MockWriterSerializer.Builder b) {
+	public static class SB extends FakeWriterSerializer {
+		public SB(FakeWriterSerializer.Builder b) {
 			super(b.produces("text/b").function((s,o)->"text/b - "+o));
 		}
 	}
 
-	public static class SC extends MockWriterSerializer {
-		public SC(MockWriterSerializer.Builder b) {
+	public static class SC extends FakeWriterSerializer {
+		public SC(FakeWriterSerializer.Builder b) {
 			super(b.produces("text/a").function((s,o)->"text/c - "+o));
 		}
 	}
 
-	public static class SD extends MockWriterSerializer {
-		public SD(MockWriterSerializer.Builder b) {
+	public static class SD extends FakeWriterSerializer {
+		public SD(FakeWriterSerializer.Builder b) {
 			super(b.produces("text/d").accept("text/a,text/d").function((s,o)->"text/d - "+o));
 		}
 	}
@@ -130,17 +130,17 @@ public class Restx_Serializers_Test {
 	// Test serializer inheritance.
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class DummySerializer extends MockWriterSerializer {
-		public DummySerializer(MockWriterSerializer.Builder b, String produces) {
+	public static class DummySerializer extends FakeWriterSerializer {
+		public DummySerializer(FakeWriterSerializer.Builder b, String produces) {
 			super(b.produces(produces));
 		}
 	}
 
-	public static class S1 extends DummySerializer{ public S1(MockWriterSerializer.Builder b) {super(b, "text/s1");} }
-	public static class S2 extends DummySerializer{ public S2(MockWriterSerializer.Builder b) {super(b, "text/s2");} }
-	public static class S3 extends DummySerializer{ public S3(MockWriterSerializer.Builder b) {super(b, "text/s3");} }
-	public static class S4 extends DummySerializer{ public S4(MockWriterSerializer.Builder b) {super(b, "text/s4");} }
-	public static class S5 extends DummySerializer{ public S5(MockWriterSerializer.Builder b) {super(b, "text/s5");} }
+	public static class S1 extends DummySerializer{ public S1(FakeWriterSerializer.Builder b) {super(b, "text/s1");} }
+	public static class S2 extends DummySerializer{ public S2(FakeWriterSerializer.Builder b) {super(b, "text/s2");} }
+	public static class S3 extends DummySerializer{ public S3(FakeWriterSerializer.Builder b) {super(b, "text/s3");} }
+	public static class S4 extends DummySerializer{ public S4(FakeWriterSerializer.Builder b) {super(b, "text/s4");} }
+	public static class S5 extends DummySerializer{ public S5(FakeWriterSerializer.Builder b) {super(b, "text/s5");} }
 
 	@Rest(serializers={S1.class,S2.class})
 	public static class B {}

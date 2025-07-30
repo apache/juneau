@@ -16,8 +16,8 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
 
 @SuppressWarnings({"rawtypes"})

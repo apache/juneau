@@ -13,7 +13,7 @@
 package org.apache.juneau.transforms;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.time.*;
@@ -29,7 +29,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -41,12 +41,12 @@ public class DefaultSwapsTest {
 
 	@BeforeClass
 	public static void beforeClass() {
-		TestUtils.setTimeZone("GMT-5");
+		Utils.setTimeZone("GMT-5");
 	}
 
 	@AfterClass
 	public static void afterClass() {
-		TestUtils.unsetTimeZone();
+		Utils.unsetTimeZone();
 	}
 
 	private static final WriterSerializer SERIALIZER = Json5Serializer.DEFAULT;

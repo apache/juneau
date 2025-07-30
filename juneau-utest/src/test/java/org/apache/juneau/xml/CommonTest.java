@@ -14,6 +14,7 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.utest.utils.Utils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -22,7 +23,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.testutils.XmlUtils;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
@@ -178,7 +178,7 @@ public class CommonTest {
 				+"<x6><object><f1 _type='number'>1</f1></object></x6>"
 			+"</object>",
 			r);
-		XmlUtils.validateXml(t);
+		validateXml(t);
 	}
 
 	public static class E1 {

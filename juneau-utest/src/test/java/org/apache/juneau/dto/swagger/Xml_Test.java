@@ -16,7 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.bean.swagger.Xml;
+import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 

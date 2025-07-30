@@ -13,9 +13,9 @@
 package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.rest.util.UrlPathMatcher.*;
+import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 

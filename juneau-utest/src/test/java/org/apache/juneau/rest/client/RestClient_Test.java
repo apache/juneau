@@ -12,18 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResponses.*;
+import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+
 import org.apache.http.*;
-import org.apache.http.HttpException;
-import org.apache.http.HttpResponse;
 import org.apache.http.auth.*;
 import org.apache.http.client.*;
 import org.apache.http.client.config.*;

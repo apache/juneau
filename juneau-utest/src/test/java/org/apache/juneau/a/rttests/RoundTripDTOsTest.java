@@ -16,7 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.bean.jsonschema.*;
-import org.apache.juneau.dto.jsonschema.JsonSchemaTest;
+import org.apache.juneau.dto.jsonschema.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;

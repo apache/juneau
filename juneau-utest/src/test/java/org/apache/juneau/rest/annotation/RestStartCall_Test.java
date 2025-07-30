@@ -14,14 +14,14 @@ package org.apache.juneau.rest.annotation;
 
 import static org.junit.runners.MethodSorters.*;
 
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
+
+import jakarta.servlet.http.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class RestStartCall_Test {

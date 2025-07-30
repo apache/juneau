@@ -13,8 +13,8 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.utest.utils.Utils.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 import java.net.*;

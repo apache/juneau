@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.assertions.AssertionPredicates.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;

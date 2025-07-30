@@ -16,8 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.http.annotation.Content;
-import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.annotation.*;

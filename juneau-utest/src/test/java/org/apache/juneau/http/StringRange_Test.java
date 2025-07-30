@@ -12,11 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
-import static org.apache.juneau.assertions.Assertions.*;
-
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

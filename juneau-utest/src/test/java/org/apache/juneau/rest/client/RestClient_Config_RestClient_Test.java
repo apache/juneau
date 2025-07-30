@@ -14,8 +14,8 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
-import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.http.HttpResponses.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -25,7 +25,6 @@ import java.util.logging.*;
 import java.util.stream.*;
 
 import org.apache.http.*;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.protocol.*;
@@ -41,7 +40,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.utest.utils.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
@@ -438,13 +437,13 @@ public class RestClient_Config_RestClient_Test {
 		}
 	}
 
-	public static class A12a extends MockWriterSerializer {
+	public static class A12a extends FakeWriterSerializer {
 		public A12a(Builder builder) {
 			super(builder.partFunction((t,s,o)->"x" + Json5.of(o)));
 		}
 	}
 
-	public static class A12b extends MockReaderParser {
+	public static class A12b extends FakeReaderParser {
 		public A12b(Builder builder) {
 			super(builder.partFunction(A12b::in));
 		}
@@ -468,7 +467,7 @@ public class RestClient_Config_RestClient_Test {
 		b = x.get().header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
 
-		x = client(A12.class).headers(serializedHeader("Foo", bean)).partSerializer(new A12a(MockWriterSerializer.create())).partParser(new A12b(MockReaderParser.create())).build();
+		x = client(A12.class).headers(serializedHeader("Foo", bean)).partSerializer(new A12a(FakeWriterSerializer.create())).partParser(new A12b(FakeReaderParser.create())).build();
 		b = x.get("/").header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
 	}

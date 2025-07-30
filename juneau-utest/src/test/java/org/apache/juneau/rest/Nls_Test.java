@@ -19,7 +19,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -46,8 +46,8 @@ public class Nls_Test {
 			return null;
 		}
 	}
-	public static class A1 extends MockWriterSerializer {
-		public A1(MockWriterSerializer.Builder builder) {
+	public static class A1 extends FakeWriterSerializer {
+		public A1(FakeWriterSerializer.Builder builder) {
 			super(builder.accept("*/*").function((s,o)->out(s)));
 		}
 

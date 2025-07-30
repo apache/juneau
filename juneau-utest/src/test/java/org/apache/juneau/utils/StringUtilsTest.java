@@ -19,11 +19,12 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
+
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.utest.utils.Utils;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -665,7 +666,7 @@ public class StringUtilsTest {
 		assertNull(parseIsoDate(null));
 		assertNull(parseIsoDate(""));
 
-		TestUtils.setTimeZone("GMT");
+		Utils.setTimeZone("GMT");
 		try {
 			assertEquals("'2000-01-01T00:00:00'", s.serialize(parseIsoDate("2000")));
 			assertEquals("'2000-02-01T00:00:00'", s.serialize(parseIsoDate("2000-02")));
@@ -680,7 +681,7 @@ public class StringUtilsTest {
 			// ISO8601 doesn't support milliseconds, so it gets trimmed.
 			assertEquals("'2000-02-03T04:05:06'", s.serialize(parseIsoDate("2000-02-03 04:05:06,789")));
 		} finally {
-			TestUtils.unsetTimeZone();
+			Utils.unsetTimeZone();
 		}
 	}
 

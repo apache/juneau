@@ -14,6 +14,7 @@ package org.apache.juneau.json;
 
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.format;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 

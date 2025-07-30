@@ -14,6 +14,7 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.utest.utils.Utils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -21,7 +22,6 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.testutils.XmlUtils;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
@@ -51,7 +51,7 @@ public class XmlCollapsedTest {
 		assertEquals("f3a", t.f3.get(0));
 		assertEquals("f4a", t.f4[0]);
 
-		XmlUtils.validateXml(t, s);
+		validateXml(t, s);
 	}
 
 	public static class A {
@@ -91,7 +91,7 @@ public class XmlCollapsedTest {
 		assertEquals("f3a", t.f3.get(0));
 		assertEquals("f4a", t.f4[0]);
 
-		XmlUtils.validateXml(t, s);
+		validateXml(t, s);
 	}
 
 	public static class B {
@@ -137,7 +137,7 @@ public class XmlCollapsedTest {
 		assertEquals("f4a", t.f4[0]);
 		assertEquals("f4b", t.f4[1]);
 
-		XmlUtils.validateXml(t, s);
+		validateXml(t, s);
 	}
 
 	public static class C {
@@ -179,7 +179,7 @@ public class XmlCollapsedTest {
 		assertEquals("f3a", t.f3.get(0));
 		assertEquals("f4a", t.f4[0]);
 
-		XmlUtils.validateXml(t, s);
+		validateXml(t, s);
 	}
 
 	@Bean(properties="f1,f2,f3,f4")
@@ -235,7 +235,7 @@ public class XmlCollapsedTest {
 		assertEquals("f1a", t.f1.get(0));
 		assertEquals("f2a", t.f2.get(0));
 
-		XmlUtils.validateXml(t, s);
+		validateXml(t, s);
 	}
 
 	@Bean(properties="f1,f2")
@@ -275,14 +275,14 @@ public class XmlCollapsedTest {
 		assertEquals("<object><xf1>x1</xf1><xf1>x2</xf1></object>", r);
 		t2 = p.parse(r, FA.class);
 		assertObject(t1).isSameJsonAs(t2);
-		XmlUtils.validateXml(t1, s);
+		validateXml(t1, s);
 
 		t1 = FB.newInstance();
 		r = s.serialize(t1);
 		assertEquals("<object><xf1>x1</xf1><xf1>x2</xf1></object>", r);
 		t2 = p.parse(r, FB.class);
 		assertObject(t1).isSameJsonAs(t2);
-		XmlUtils.validateXml(t1, s);
+		validateXml(t1, s);
 	}
 
 	public static class FA {
@@ -344,7 +344,7 @@ public class XmlCollapsedTest {
 		t2 = p.parse(xml, G.class);
 		assertObject(t).isSameJsonAs(t2);
 
-		XmlUtils.validateXml(t, s);
+		validateXml(t, s);
 	}
 
 	public static class G {
@@ -378,7 +378,7 @@ public class XmlCollapsedTest {
 		t2 = p.parse(xml, H.class);
 		assertObject(t).isSameJsonAs(t2);
 
-		XmlUtils.validateXml(t, s);
+		validateXml(t, s);
 	}
 
 	public static class H {
@@ -417,7 +417,7 @@ public class XmlCollapsedTest {
 		t2 = p.parse(xml, G.class);
 		assertObject(t).isSameJsonAs(t2);
 
-		XmlUtils.validateXml(t, s);
+		validateXml(t, s);
 	}
 
 	public static class I {
@@ -433,4 +433,4 @@ public class XmlCollapsedTest {
 			return t;
 		}
 	}
-}
+}

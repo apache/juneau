@@ -19,9 +19,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.bean.html5.Form;
-import org.apache.juneau.bean.html5.HtmlBeanDictionary;
-import org.apache.juneau.bean.html5.Input;
+import org.apache.juneau.bean.html5.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 

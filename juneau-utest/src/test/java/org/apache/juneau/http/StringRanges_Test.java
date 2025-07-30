@@ -12,15 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.StringRanges.*;
+import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import static org.apache.juneau.StringRanges.*;
-import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

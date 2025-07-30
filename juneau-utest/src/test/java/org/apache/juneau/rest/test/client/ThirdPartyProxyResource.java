@@ -14,13 +14,11 @@ package org.apache.juneau.rest.test.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.testutils.Constants.*;
+import static org.apache.juneau.utest.utils.Constants.*;
 import static org.junit.Assert.*;
 
 import java.io.*;
 import java.util.*;
-
-import jakarta.servlet.http.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
@@ -30,6 +28,8 @@ import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.testutils.pojos.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * JUnit automated testcase resource.

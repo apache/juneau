@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshaller;
 
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.runners.MethodSorters.*;
+
 import java.io.*;
 import java.util.*;
 

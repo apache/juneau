@@ -13,20 +13,19 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.rest.testutils.TestUtils.*;
-
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.beans.*;
-import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.beans.*;
+import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

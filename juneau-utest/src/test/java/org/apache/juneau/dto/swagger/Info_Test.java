@@ -16,9 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.bean.swagger.Contact;
-import org.apache.juneau.bean.swagger.Info;
-import org.apache.juneau.bean.swagger.License;
+import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 

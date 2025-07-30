@@ -20,10 +20,8 @@ import java.io.*;
 import java.net.*;
 
 import org.apache.http.*;
-import org.apache.http.HttpResponse;
 import org.apache.http.protocol.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.http.response.BasicHttpException;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.core.config.store;
 
+import static org.apache.juneau.internal.ObjectUtils.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -132,9 +134,9 @@ public class SqlStore extends ConfigStore {
 		this.nameColumn = builder.nameColumn;
 		this.valueColumn = builder.valueColumn;
 
-		int pollInterval = builder.pollInterval;
+		var pollInterval = builder.pollInterval;
 
-		TimerTask timerTask = new TimerTask() {
+		var timerTask = new TimerTask() {
 			@Override
 			public void run() {
 				SqlStore.this.poll();
@@ -149,7 +151,7 @@ public class SqlStore extends ConfigStore {
 
 		// Loop through all our entries and find the latest values.
 		cache.forEach((name,cacheContents) -> {
-			String newContents = getDatabaseValue(name);
+			var newContents = getDatabaseValue(name);
 
 			// Change detected!
 			if (! cacheContents.equals(newContents))
@@ -171,7 +173,7 @@ public class SqlStore extends ConfigStore {
 
 	@Override /* ConfigStore */
 	public synchronized String read(String name) {
-		String contents = cache.get(name);
+		var contents = cache.get(name);
 		if (contents == null) {
 			contents = getDatabaseValue(name);
 			update(name, contents);
@@ -183,10 +185,10 @@ public class SqlStore extends ConfigStore {
 	public synchronized String write(String name, String expectedContents, String newContents) {
 
 		// This is a no-op.
-		if (StringUtils.eq(expectedContents, newContents))
+		if (eq(expectedContents, newContents))
 			return null;
 
-		String currentContents = read(name);
+		var currentContents = read(name);
 
 		if (expectedContents != null && StringUtils.ne(currentContents, expectedContents))
 			return currentContents;

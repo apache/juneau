@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
-import static java.time.temporal.ChronoUnit.*;
 
 import java.time.*;
 

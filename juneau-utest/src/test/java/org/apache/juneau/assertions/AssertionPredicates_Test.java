@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static java.util.regex.Pattern.*;
+import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.junit.runners.MethodSorters.*;
-import static java.util.regex.Pattern.*;
 
 import java.util.regex.*;
 

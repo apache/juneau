@@ -12,24 +12,21 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.header.ContentType.*;
-import static org.apache.juneau.testutils.StreamUtils.*;
+import static org.apache.juneau.utest.utils.Utils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
-import jakarta.servlet.http.*;
-
-import org.apache.juneau.http.annotation.Content;
-import org.apache.juneau.http.annotation.Header;
-import org.apache.juneau.http.annotation.Path;
-import org.apache.juneau.http.annotation.Query;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
+
+import jakarta.servlet.http.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class Rest_PredefinedStatusCodes_Test {

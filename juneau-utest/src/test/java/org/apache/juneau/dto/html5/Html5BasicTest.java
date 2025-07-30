@@ -16,7 +16,7 @@ import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.bean.html5.Form;
+import org.apache.juneau.bean.html5.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

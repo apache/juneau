@@ -19,7 +19,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
 
-import org.apache.juneau.bean.atom.Feed;
+import org.apache.juneau.bean.atom.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 

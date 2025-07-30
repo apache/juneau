@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.a.rttests.RoundTripTest.Flags.*;
 import static java.util.Collections.*;
+import static org.apache.juneau.a.rttests.RoundTripTest.Flags.*;
+import static org.apache.juneau.utest.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -25,7 +26,6 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.testutils.XmlUtils;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
@@ -268,10 +268,10 @@ public abstract class RoundTripTest {
 			System.err.println("Serialized contents from ["+label+"]...\n---START---\n" + (out instanceof byte[] ? StringUtils.toReadableBytes((byte[])out) : out) + "\n---END---\n"); // NOT DEBUG
 
 		if (validateXmlWhitespace)
-			XmlUtils.checkXmlWhitespace(out.toString());
+			checkXmlWhitespace(out.toString());
 
 		if (validateXml)
-			XmlUtils.validateXml(object, (XmlSerializer)s);
+			validateXml(object, (XmlSerializer)s);
 
 		return out;
 	}

@@ -13,7 +13,7 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.testutils.StreamUtils.*;
+import static org.apache.juneau.utest.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;

@@ -13,14 +13,13 @@
 
 package org.apache.juneau.common.internal;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.nio.file.Paths;
-import java.util.Properties;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
 
-import org.junit.Test;
+import org.junit.*;
 
 /**
  * Tests {@link IOUtils}.

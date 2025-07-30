@@ -20,9 +20,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.bean.swagger.HeaderInfo;
-import org.apache.juneau.bean.swagger.ResponseInfo;
-import org.apache.juneau.bean.swagger.SchemaInfo;
+import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 

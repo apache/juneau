@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.internal.HttpUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.internal.HttpUtils.*;
 
 import org.junit.*;
 

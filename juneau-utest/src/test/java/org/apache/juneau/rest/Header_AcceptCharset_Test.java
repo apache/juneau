@@ -14,12 +14,12 @@ package org.apache.juneau.rest;
 
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.http.annotation.Content;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -65,14 +65,14 @@ public class Header_AcceptCharset_Test {
 			return in;
 		}
 
-		public static class TestParser extends MockReaderParser {
-			public TestParser(MockReaderParser.Builder builder) {
+		public static class TestParser extends FakeReaderParser {
+			public TestParser(FakeReaderParser.Builder builder) {
 				super(builder.consumes("text/plain").function((session,in,type) -> session.getStreamCharset().toString()));
 			}
 		}
 
-		public static class TestSerializer extends MockWriterSerializer {
-			public TestSerializer(MockWriterSerializer.Builder builder) {
+		public static class TestSerializer extends FakeWriterSerializer {
+			public TestSerializer(FakeWriterSerializer.Builder builder) {
 				super(builder.produces("text/plain").function((session,o) -> (o.toString() + "/" + session.getStreamCharset())));
 			}
 		}

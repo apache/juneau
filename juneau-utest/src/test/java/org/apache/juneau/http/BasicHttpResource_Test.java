@@ -15,15 +15,15 @@ package org.apache.juneau.http;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
+import static org.apache.juneau.utest.utils.Utils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
-import java.nio.file.Files;
+import java.nio.file.*;
 
-import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.resource.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
