@@ -14,22 +14,18 @@ package org.apache.juneau;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.annotation.*;
-import org.junit.*;
-
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"rawtypes"})
-@FixMethodOrder(NAME_ASCENDING)
-public class AnnotationsTest {
+class AnnotationsTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// Bean with explicitly specified properties.
 	//====================================================================================================
-	@Test
-	public void testBeanWithExplicitProperties() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
+	@Test void testBeanWithExplicitProperties() throws Exception {
+		var bc = BeanContext.DEFAULT;
 		BeanMap bm = null;
 
 		// Basic test
@@ -58,8 +54,7 @@ public class AnnotationsTest {
 		}
 	}
 
-	@Test
-	public void testBeanWithExplicitProperties2() throws Exception {
+	@Test void testBeanWithExplicitProperties2() throws Exception {
 		BeanContext bc = BeanContext.DEFAULT;
 		BeanMap bm = null;
 
@@ -89,8 +84,7 @@ public class AnnotationsTest {
 		}
 	}
 
-	@Test
-	public void testBeanWithExplicitProperties3() throws Exception {
+	@Test void testBeanWithExplicitProperties3() throws Exception {
 		BeanContext bc = BeanContext.DEFAULT;
 		BeanMap bm = null;
 
@@ -120,8 +114,7 @@ public class AnnotationsTest {
 		}
 	}
 
-	@Test
-	public void testBeanWithExplicitProperties_usingConfig() throws Exception {
+	@Test void testBeanWithExplicitProperties_usingConfig() throws Exception {
 		BeanContext bc = BeanContext.DEFAULT.copy().applyAnnotations(PersonConfig.class).build();
 		BeanMap bm = null;
 
@@ -156,8 +149,7 @@ public class AnnotationsTest {
 	//====================================================================================================
 	// Private/protected/default fields should be ignored.
 	//====================================================================================================
-	@Test
-	public void testForOnlyPublicFields() throws Exception {
+	@Test void testForOnlyPublicFields() throws Exception {
 		BeanContext bc = BeanContext.DEFAULT;
 		BeanMap bm = null;
 

@@ -13,6 +13,7 @@
 package org.apache.juneau.transforms;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.list;
 import static org.apache.juneau.utest.utils.Utils.*;
 
 import java.io.*;
