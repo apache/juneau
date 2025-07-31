@@ -261,7 +261,6 @@ public class StringVarResolverTest {
 		assertEquals("baz$S{foobar", vr.resolve(in));
 
 		System.clearProperty("foobar");
-		in = "$S{foobar}";
 
 		// Test nulls returned by StringVar.
 		// Should be converted to blanks.

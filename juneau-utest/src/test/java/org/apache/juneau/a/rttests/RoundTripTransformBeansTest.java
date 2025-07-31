@@ -353,7 +353,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		r = getSerializer().serialize(x);
 		assertTrue(toString(r).contains("f2"));
 
-		x = roundTrip(x, D1.class);
+		roundTrip(x, D1.class);
 	}
 
 	public static class D1 {
@@ -395,7 +395,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		r = getSerializer().serialize(x);
 		assertTrue(toString(r).contains("f2"));
 
-		x = roundTrip(x, E1.class);
+		roundTrip(x, E1.class);
 	}
 
 	@Swap(E2.class)
@@ -438,7 +438,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		r = getSerializer().serialize(x);
 		assertTrue(toString(r).contains("f2"));
 
-		x = roundTrip(x, E1c.class);
+		roundTrip(x, E1c.class);
 	}
 
 	@Swap(on="Dummy1",value=E2c.class)
@@ -507,7 +507,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		x = p.parse(r, F1.class);
 		assertObject(x).asJson().is("{c:'2018-12-12T05:12:00'}");
 
-		x = roundTrip(x, F1.class);
+		roundTrip(x, F1.class);
 	}
 
 	@Swap(on="Dummy1.c", value=TemporalCalendarSwap.IsoLocalDateTime.class)
@@ -548,7 +548,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		x = p.parse(r, F1c.class);
 		assertObject(x).asString(s).is("{c:'2018-12-12T05:12:00'}");
 
-		x = roundTrip(x, F1c.class);
+		roundTrip(x, F1c.class);
 	}
 
 	public static class F2a {
@@ -589,7 +589,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		x = p.parse(r, F2.class);
 		assertObject(x).asJson().is("{c:'2018-12-12T05:12:00'}");
 
-		x = roundTrip(x, F2.class);
+		roundTrip(x, F2.class);
 	}
 
 	@Swap(on="Dummy1.c", value=TemporalCalendarSwap.IsoLocalDateTime.class)
@@ -632,7 +632,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		x = p.parse(r, F2.class);
 		assertObject(x).asString(s).is("{c:'2018-12-12T05:12:00'}");
 
-		x = roundTrip(x, F2.class);
+		roundTrip(x, F2.class);
 	}
 
 	//==================================================================================================================

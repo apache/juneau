@@ -1640,7 +1640,7 @@ public class BeanMapTest {
 		assertEquals("1", l2[0].toString());
 
 		l3 = m.cast(bc.getClassMeta(int[].class));
-		assertEquals("1", l2[0].toString());
+		assertEquals(1, l3[0]);
 
 		// Without _type
 		m = new JsonMap();
@@ -1653,7 +1653,7 @@ public class BeanMapTest {
 		assertEquals("1", l[0]);
 
 		l2 = m.cast(bc.getClassMeta(StringBuffer[].class));
-		assertEquals("1", l[0]);
+		assertEquals("1", l2[0].toString());
 	}
 
 	//====================================================================================================

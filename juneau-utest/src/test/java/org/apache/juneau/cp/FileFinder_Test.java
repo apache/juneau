@@ -541,7 +541,7 @@ public class FileFinder_Test {
 		assertBytes(stream(x,"/dir/dir/a.txt/", JAPANESE)).asString().isContains("[cp:/org/apache/juneau/cp/files/test2/ja/dir/dir/a.txt]");
 		assertBytes(stream(x,"/dir/dir/a.txt/", JAPAN)).asString().isContains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/dir/a.txt]");
 
-		x = FileFinder
+		FileFinder
 			.create()
 			.cp(FileFinder_Test2.class, "files/test2", true)
 			.exclude("(?i).*\\.(class|properties)")

@@ -161,7 +161,7 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 		System.err.println(format("Average serialize time: {0,number}ms", (System.currentTimeMillis()-startTime)/numRuns)); // NOT DEBUG
 		startTime = System.currentTimeMillis();
 		for (int i = 0; i < numRuns; i++)
-			a = p.parse(r, A.class);
+			p.parse(r, A.class);
 		System.err.println(format("Average parsed time: {0,number}ms", (System.currentTimeMillis()-startTime)/numRuns)); // NOT DEBUG
 	}
 

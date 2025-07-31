@@ -448,7 +448,7 @@ public class XmlTest {
 		public int id;
 		public String name;
 		public N() {}
-		public N(String url, int id, String name) throws Exception {
+		public N(String url, int id, String name) {
 			this.url = url(url);
 			this.id = id;
 			this.name = name;
@@ -481,7 +481,7 @@ public class XmlTest {
 		@Beanp(name="id2") public int id;
 		public String name;
 		public O() {}
-		public O(String url, int id, String name) throws Exception {
+		public O(String url, int id, String name) {
 			this.url = url(url);
 			this.id = id;
 			this.name = name;
@@ -514,7 +514,7 @@ public class XmlTest {
 		@Beanp(name="id2") @Xml(format=ATTR) public int id;
 		public String name;
 		public P() {}
-		public P(String url, int id, String name) throws Exception {
+		public P(String url, int id, String name) {
 			this.url = url(url);
 			this.id = id;
 			this.name = name;

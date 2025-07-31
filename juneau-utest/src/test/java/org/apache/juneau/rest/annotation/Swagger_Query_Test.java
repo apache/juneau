@@ -169,7 +169,7 @@ public class Swagger_Query_Test {
 		) { /* no-op */ }
 
 		@RestDelete
-		public void d(@Query("Q") String q) {}
+		public void d(@Query("Q") String q) {/* no-op */}
 	}
 
 	@Test

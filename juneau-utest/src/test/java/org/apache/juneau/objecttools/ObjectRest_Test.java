@@ -208,7 +208,7 @@ public class ObjectRest_Test {
 		model.post("/", billClinton);
 
 		// Make sure we get the original person back.
-		billClinton = (Person)model.get("/0");
+		assertSame(billClinton, model.get("/0"));
 	}
 
 
@@ -282,7 +282,7 @@ public class ObjectRest_Test {
 		model.post("/", billClinton);
 
 		// Make sure we get the original person back.
-		billClinton = (Person)model.get("/0");
+		assertSame(billClinton, model.get("/0"));
 	}
 
 	//====================================================================================================

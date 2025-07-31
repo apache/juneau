@@ -478,13 +478,12 @@ public class ConfigMapListenerTest {
 		contents.add("[S1]\nk1 = v1c");
 		contents.add("[S1]\nk1 = v1c");
 
-		MemoryStore s = new MemoryStore(MemoryStore.create()) {
+		try (var s = new MemoryStore(MemoryStore.create()) {
 			@Override
 			public synchronized String read(String name) {
 				return contents.poll();
 			}
-		};
-		try {
+		}) {
 			final CountDownLatch latch = new CountDownLatch(2);
 			final Queue<String> eventList = new ConcurrentLinkedQueue<>();
 			eventList.add("[SET(S1/k1 = v1b)]");
@@ -506,23 +505,19 @@ public class ConfigMapListenerTest {
 			cm.unregister(l);
 
 			assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1c|");
-
-		} finally {
-			s.close();
 		}
 	}
 
 	@Test
 	public void testMergeWithConstantlyUpdatingFile() throws Exception {
 
-		MemoryStore s = new MemoryStore(MemoryStore.create()) {
+		try (var s = new MemoryStore(MemoryStore.create()) {
 			char c = 'a';
 			@Override
 			public synchronized String read(String name) {
 				return "[S1]\nk1 = v1" + (c++);
 			}
-		};
-		try {
+		}) {
 			final CountDownLatch latch = new CountDownLatch(10);
 			final Queue<String> eventList = new ConcurrentLinkedQueue<>();
 			eventList.add("[SET(S1/k1 = v1b)]");
@@ -552,9 +547,6 @@ public class ConfigMapListenerTest {
 			cm.unregister(l);
 
 			assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1c|");
-
-		} finally {
-			s.close();
 		}
 	}
 

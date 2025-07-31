@@ -50,7 +50,7 @@ public class ConfigMapTest {
 		assertEquals("", cm.toString());
 
 		s.update("A.cfg", "   \n   \n   ");
-		cm = s.getMap("A.cfg");
+		s.getMap("A.cfg");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

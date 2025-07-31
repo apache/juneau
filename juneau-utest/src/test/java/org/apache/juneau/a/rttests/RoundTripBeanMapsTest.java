@@ -647,7 +647,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	@Test
 	public void testMemberClass() throws Exception {
 		G t = G.create();
-		t = roundTrip(t, G.class);
+		roundTrip(t, G.class);
 	}
 
 	public static class G {
@@ -686,7 +686,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	@Test
 	public void testMemberClassWithMapClass() throws Exception {
 		H t = H.create();
-		t = roundTrip(t, H.class);
+		roundTrip(t, H.class);
 	}
 
 	public static class H extends LinkedHashMap<String,H.H1> {
@@ -725,7 +725,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	@Test
 	public void testMemberClassWithListClass() throws Exception {
 		I t = I.create();
-		t = roundTrip(t, I.class);
+		roundTrip(t, I.class);
 	}
 
 	public static class I extends LinkedList<I.I1> {
@@ -764,7 +764,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	@Test
 	public void testMemberClassWithStringConstructor() throws Exception {
 		J t = J.create();
-		t = roundTrip(t, J.class);
+		roundTrip(t, J.class);
 	}
 
 	public static class J {
@@ -800,7 +800,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	@Test
 	public void testBeanPropertyPrecedence() throws Exception {
 		K t = K.create();
-		t = roundTrip(t, K.class);
+		roundTrip(t, K.class);
 	}
 	public enum KEnum { FOO, BAR, BAZ }
 
@@ -874,7 +874,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	@Test
 	public void testWrapperAttrAnnotationOnBean() throws Exception {
 		L t = L.create();
-		t = roundTrip(t, L.class);
+		roundTrip(t, L.class);
 
 		Map<String,L> m = new LinkedHashMap<>();
 		m.put("bar", L.create());
@@ -895,7 +895,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	@Test
 	public void testWrapperAttrAnnotationOnBean_usingConfig() throws Exception {
 		L2 t = L2.create();
-		t = roundTrip(t, L2.class);
+		roundTrip(t, L2.class);
 
 		Map<String,L2> m = new LinkedHashMap<>();
 		m.put("bar", L2.create());
@@ -921,7 +921,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	@Test
 	public void testWrapperAttrAnnotationOnNonBean() throws Exception {
 		M t = M.create();
-		t = roundTrip(t, M.class);
+		roundTrip(t, M.class);
 
 		Map<String,M> m = new LinkedHashMap<>();
 		m.put("bar", M.create());
@@ -953,7 +953,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	@Test
 	public void testWrapperAttrAnnotationOnNonBean_usingConfig() throws Exception {
 		M2 t = M2.create();
-		t = roundTrip(t, M2.class);
+		roundTrip(t, M2.class);
 
 		Map<String,M2> m = new LinkedHashMap<>();
 		m.put("bar", M2.create());
@@ -997,10 +997,10 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		t = roundTrip(t, N.class);
 
 		t.f1.attr("foo", "bar").attrUri("href", "http://foo");
-		t = roundTrip(t, N.class);
+		roundTrip(t, N.class);
 
 		Head h = new Head().child(new Style());
-		h = roundTrip(h, Head.class);
+		roundTrip(h, Head.class);
 	}
 
 	public static class N {

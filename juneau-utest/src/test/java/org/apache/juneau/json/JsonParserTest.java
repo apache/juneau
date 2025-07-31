@@ -76,7 +76,6 @@ public class JsonParserTest {
 		a = p.parse(json, A.class);
 		assertEquals("123", a.fa);
 
-		json = "'123'";
 		assertThrown(()->sp.parse("'123'", String.class)).asMessage().isContains("Invalid quote character");
 	}
 

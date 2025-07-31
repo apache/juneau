@@ -131,8 +131,7 @@ public class ClassInfoTest {
 		aType = ((ParameterizedType)A2.class.getGenericSuperclass()).getActualTypeArguments()[0];
 		pType = ((ParameterizedType)A3.class.getGenericSuperclass()).getActualTypeArguments()[0];
 		pTypeDimensional = ((ParameterizedType)A4.class.getGenericSuperclass()).getActualTypeArguments()[0];
-		Map<String,String> m = new HashMap<>();
-		pTypeGeneric = m.getClass().getGenericSuperclass();
+		pTypeGeneric = HashMap.class.getGenericSuperclass();
 		pTypeGenericArg = ((ParameterizedType)pTypeGeneric).getActualTypeArguments()[1];
 	}
 

@@ -135,7 +135,6 @@ public class UonPartParser_Test {
 
 		// Boolean
 		// Top level
-		t = "_value=false";
 		Boolean b = false;
 		t = "false";
 		b = (Boolean)parse(t, bs.object());

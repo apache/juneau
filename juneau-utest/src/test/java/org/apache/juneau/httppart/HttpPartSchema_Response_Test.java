@@ -118,7 +118,7 @@ public class HttpPartSchema_Response_Test {
 	public static class A05 {}
 
 	@Test
-	public void a05_basic_nestedItems_onClass() throws Exception {
+	public void a05_basic_nestedItems_onClass() {
 		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, A05.class).noValidate().build();
 
 		assertEquals(HttpPartDataType.NUMBER, s.getType());
