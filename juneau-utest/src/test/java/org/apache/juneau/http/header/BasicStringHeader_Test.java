@@ -66,7 +66,7 @@ public class BasicStringHeader_Test {
 	}
 
 	@Test
-	public void a02_assertString() throws Exception {
+	public void a02_assertString() {
 		stringHeader(HEADER,"1").assertString().is("1");
 	}
 

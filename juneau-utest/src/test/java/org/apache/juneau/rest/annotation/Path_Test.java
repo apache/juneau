@@ -748,22 +748,22 @@ public class Path_Test {
 	@Rest(serializers=Json5Serializer.class)
 	public static class J {
 		@RestGet(path="/a/{f1}")
-		public Object a(@Path("f1") Optional<Integer> f1) throws Exception {
+		public Object a(@Path("f1") Optional<Integer> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestGet(path="/b/{f1}")
-		public Object b(@Path("f1") Optional<ABean> f1) throws Exception {
+		public Object b(@Path("f1") Optional<ABean> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestGet(path="/c/{f1}")
-		public Object c(@Path("f1") Optional<List<ABean>> f1) throws Exception {
+		public Object c(@Path("f1") Optional<List<ABean>> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestGet(path="/d/{f1}")
-		public Object d(@Path("f1") List<Optional<ABean>> f1) throws Exception {
+		public Object d(@Path("f1") List<Optional<ABean>> f1) {
 			return f1;
 		}
 	}

@@ -91,7 +91,7 @@ public class RequestAnnotation_Test {
 	}
 
 	@Test
-	public void c01_otherMethods() throws Exception {
+	public void c01_otherMethods() {
 		Request c1 = RequestAnnotation.create(C1.class).on(C2.class).build();
 		Request c2 = RequestAnnotation.create("a").on("b").build();
 

@@ -48,13 +48,13 @@ public class BeanAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void a01_msg() throws Exception {
+	public void a01_msg() {
 		assertThrown(()->test(null).setMsg("Foo {0}", 1).isExists()).asMessage().is("Foo 1");
 		assertThrown(()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("Foo 1");
 	}
 
 	@Test
-	public void a02_stdout() throws Exception {
+	public void a02_stdout() {
 		test(null).setStdOut();
 	}
 
@@ -63,14 +63,14 @@ public class BeanAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void ba01a_asString() throws Exception {
+	public void ba01a_asString() {
 		A x = A1, nil = null;
 		test(x).asString().is("a=1,b=2");
 		test(nil).asString().isNull();
 	}
 
 	@Test
-	public void ba01b_asString_wSerializer() throws Exception {
+	public void ba01b_asString_wSerializer() {
 		A x = A1, nil = null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("{a:1,b:2}");
@@ -78,33 +78,33 @@ public class BeanAssertion_Test {
 	}
 
 	@Test
-	public void ba01c_asString_wPredicate() throws Exception {
+	public void ba01c_asString_wPredicate() {
 		A x1 = A1;
 		test(x1).asString(x -> "foo").is("foo");
 	}
 
 	@Test
-	public void ba02_asJson() throws Exception {
+	public void ba02_asJson() {
 		A x = A1, nil = null;
 		test(x).asJson().is("{a:1,b:2}");
 		test(nil).asJson().is("null");
 	}
 
 	@Test
-	public void ba03_asJsonSorted() throws Exception {
+	public void ba03_asJsonSorted() {
 		A[] x1 = {A2,A1}, nil = null;
 		test(x1).asJsonSorted().is("[{a:1,b:2},{a:2,b:3}]");
 		test(nil).asJsonSorted().is("null");
 	}
 
 	@Test
-	public void ba04_apply() throws Exception {
+	public void ba04_apply() {
 		A x1 = A1, x2 = A2;
 		test(x1).asTransformed(x -> x2).is(x2);
 	}
 
 	@Test
-	public void bb01_extract() throws Exception {
+	public void bb01_extract() {
 		A x = A1, nil = null;
 		test(x).asPropertyMap("b,a").asJson().is("{b:2,a:1}");
 		test(x).asPropertyMap("x").asJson().is("{}");
@@ -112,7 +112,7 @@ public class BeanAssertion_Test {
 	}
 
 	@Test
-	public void bb02_property() throws Exception {
+	public void bb02_property() {
 		A x = A1, nil = null;
 		test(x).asProperty("a").asInteger().is(1);
 		test(x).asProperty("x").asInteger().isNull();
@@ -120,7 +120,7 @@ public class BeanAssertion_Test {
 	}
 
 	@Test
-	public void bb03_properties() throws Exception {
+	public void bb03_properties() {
 		A x = A1, nil = null;
 		test(x).asProperties("a").asJson().is("[1]");
 		test(x).asProperties("x").asJson().is("[null]");
@@ -132,28 +132,28 @@ public class BeanAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void ca01_exists() throws Exception {
+	public void ca01_exists() {
 		A x = A1, nil = null;
 		test(x).isExists().isExists();
 		assertThrown(()->test(nil).isExists()).asMessage().is("Value was null.");
 	}
 
 	@Test
-	public void ca02_isNull() throws Exception {
+	public void ca02_isNull() {
 		A x = A1, nil = null;
 		test(nil).isNull();
 		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
 	}
 
 	@Test
-	public void ca03_isNotNull() throws Exception {
+	public void ca03_isNotNull() {
 		A x = A1, nil = null;
 		test(x).isNotNull();
 		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
 	}
 
 	@Test
-	public void ca04a_is_T() throws Exception {
+	public void ca04a_is_T() {
 		A x1 = A1, x1a = A1a, x2 = A2, nil = null;
 		test(x1).is(x1);
 		test(x1).is(x1a);
@@ -164,7 +164,7 @@ public class BeanAssertion_Test {
 	}
 
 	@Test
-	public void ca04b_is_predicate() throws Exception {
+	public void ca04b_is_predicate() {
 		A x1 = A1;
 		test(x1).is(x->x.a==1);
 		assertThrown(()->test(x1).is(x->x.a==2)).asMessage().asOneLine().is("Unexpected value: 'a=1,b=2'.");
@@ -172,7 +172,7 @@ public class BeanAssertion_Test {
 	}
 
 	@Test
-	public void ca05_isNot() throws Exception {
+	public void ca05_isNot() {
 		A x1 = A1, x1a = A1a, x2 = A2, nil = null;
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
@@ -182,7 +182,7 @@ public class BeanAssertion_Test {
 	}
 
 	@Test
-	public void ca06_isAny() throws Exception {
+	public void ca06_isAny() {
 		A x1 = A1, x1a = A1a, x2 = A2, nil = null;
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[a=2,b=3]'.  Actual='a=1,b=2'.");
@@ -191,7 +191,7 @@ public class BeanAssertion_Test {
 	}
 
 	@Test
-	public void ca07_isNotAny() throws Exception {
+	public void ca07_isNotAny() {
 		A x1 = A1, x1a = A1a, x2 = A2, nil = null;
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
@@ -201,7 +201,7 @@ public class BeanAssertion_Test {
 	}
 
 	@Test
-	public void ca08_isSame() throws Exception {
+	public void ca08_isSame() {
 		A x1 = A1, x1a = A1a, nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
@@ -211,7 +211,7 @@ public class BeanAssertion_Test {
 	}
 
 	@Test
-	public void ca09_isSameJsonAs() throws Exception {
+	public void ca09_isSameJsonAs() {
 		A x1 = A1, x1a = A1a, x2 = A2, nil = null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
@@ -221,7 +221,7 @@ public class BeanAssertion_Test {
 	}
 
 	@Test
-	public void ca10_isSameSortedJsonAs() throws Exception {
+	public void ca10_isSameSortedJsonAs() {
 		A x1 = A1, x1a = A1a, x2 = A2, nil = null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
@@ -231,7 +231,7 @@ public class BeanAssertion_Test {
 	}
 
 	@Test
-	public void ca11_isSameSerializedAs() throws Exception {
+	public void ca11_isSameSerializedAs() {
 		A x1 = A1, x1a = A1a, x2 = A2, nil = null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
@@ -242,7 +242,7 @@ public class BeanAssertion_Test {
 	}
 
 	@Test
-	public void ca12_isType() throws Exception {
+	public void ca12_isType() {
 		A x = A1, nil = null;
 		test(x).isType(A.class);
 		test(x).isType(Object.class);
@@ -252,7 +252,7 @@ public class BeanAssertion_Test {
 	}
 
 	@Test
-	public void ca13_isExactType() throws Exception {
+	public void ca13_isExactType() {
 		A x = A1, nil = null;
 		test(x).isExactType(A.class);
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.assertions.BeanAssertion_Test$A'.");
@@ -261,7 +261,7 @@ public class BeanAssertion_Test {
 	}
 
 	@Test
-	public void ca14_isString() throws Exception {
+	public void ca14_isString() {
 		A x = A1, nil = null;
 		test(x).isString("a=1,b=2");
 		test(nil).isString(null);
@@ -271,7 +271,7 @@ public class BeanAssertion_Test {
 	}
 
 	@Test
-	public void ca15_isJson() throws Exception {
+	public void ca15_isJson() {
 		A x = A1, nil = null;
 		test(x).isJson("{a:1,b:2}");
 		test(nil).isJson("null");

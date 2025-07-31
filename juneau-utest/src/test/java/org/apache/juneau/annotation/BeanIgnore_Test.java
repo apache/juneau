@@ -41,7 +41,7 @@ public class BeanIgnore_Test {
 	}
 
 	@Test
-	public void testBeanIgnoreOnProperties() throws Exception {
+	public void testBeanIgnoreOnProperties() {
 		assertObject(new A()).asJson().is("{c:'c',a:'a'}");
 	}
 
@@ -64,7 +64,7 @@ public class BeanIgnore_Test {
 	}
 
 	@Test
-	public void testBeanIgnoreOnProperties_usingConfig() throws Exception {
+	public void testBeanIgnoreOnProperties_usingConfig() {
 		assertObject(new Ac()).asString(Json5Serializer.DEFAULT.copy().applyAnnotations(AcConfig.class).build()).is("{c:'c',a:'a'}");
 	}
 
@@ -92,7 +92,7 @@ public class BeanIgnore_Test {
 	}
 
 	@Test
-	public void testBeanIgnoreOnBean() throws Exception {
+	public void testBeanIgnoreOnBean() {
 		assertObject(new B()).asJson().is("{f2:2,f3:'xxx',f4:'xxx'}");
 	}
 
@@ -118,7 +118,7 @@ public class BeanIgnore_Test {
 	}
 
 	@Test
-	public void testBeanIgnoreOnBean_usingConfig() throws Exception {
+	public void testBeanIgnoreOnBean_usingConfig() {
 		assertObject(new Bc()).asString(Json5Serializer.DEFAULT.copy().applyAnnotations(B1cConfig.class).build()).is("{f2:2,f3:'xxx',f4:'xxx'}");
 	}
 }

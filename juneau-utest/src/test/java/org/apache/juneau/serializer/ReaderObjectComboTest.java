@@ -294,7 +294,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 	}
 
 	@Override
-	protected Serializer applySettings(Serializer s) throws Exception {
+	protected Serializer applySettings(Serializer s) {
 		return s.copy().keepNullProperties().build();
 	}
 

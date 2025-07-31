@@ -33,49 +33,49 @@ public class Assertions_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void a01_assertDate() throws Exception {
+	public void a01_assertDate() {
 		assertDate(new Date()).isAfter(new Date(0));
 	}
 
 	@Test
-	public void a02_assertInteger() throws Exception {
+	public void a02_assertInteger() {
 		assertInteger(2).isGt(1);
 	}
 
 	@Test
-	public void a03_assertLong() throws Exception {
+	public void a03_assertLong() {
 		assertLong(2L).isGt(1L);
 	}
 
 	@Test
-	public void a04_assertObject() throws Exception {
+	public void a04_assertObject() {
 		assertObject("foo").asJson().is("'foo'");
 	}
 
 	@Test
-	public void a05_assertString() throws Exception {
+	public void a05_assertString() {
 		assertString("foo").is("foo");
 		assertString(optional("foo")).is("foo");
 		assertString(empty()).isNull();
 	}
 
 	@Test
-	public void a06_assertThrowable() throws Exception {
+	public void a06_assertThrowable() {
 		assertThrowable(null).isNull();
 	}
 
 	@Test
-	public void a07_assertArray() throws Exception {
+	public void a07_assertArray() {
 		assertArray(new String[0]).isEmpty();
 	}
 
 	@Test
-	public void a08_assertCollection() throws Exception {
+	public void a08_assertCollection() {
 		assertCollection(alist()).isEmpty();
 	}
 
 	@Test
-	public void a09_assertList() throws Exception {
+	public void a09_assertList() {
 		assertList(alist()).isEmpty();
 	}
 
@@ -86,7 +86,7 @@ public class Assertions_Test {
 	}
 
 	@Test
-	public void a11_assertBytes() throws Exception {
+	public void a11_assertBytes() {
 		assertBytes("foo".getBytes()).asString().is("foo");
 		assertBytes((byte[])null).asString().isNull();
 	}
@@ -98,94 +98,94 @@ public class Assertions_Test {
 	}
 
 	@Test
-	public void a13_assertThrown() throws Exception {
+	public void a13_assertThrown() {
 		assertThrown(()->{throw new RuntimeException("foo");}).asMessage().is("foo");
 		assertThrown(()->{}).isNull();
 	}
 
 	@Test
-	public void a14_assertZonedDateTime() throws Exception {
+	public void a14_assertZonedDateTime() {
 		assertZonedDateTime(ZonedDateTime.now()).isExists();
 	}
 
 	@Test
-	public void a15_assertBean() throws Exception {
+	public void a15_assertBean() {
 		assertBean("123").isExists();
 	}
 
 	@Test
-	public void a16_assertBoolean() throws Exception {
+	public void a16_assertBoolean() {
 		assertBoolean(true).isTrue();
 	}
 
 	@Test
-	public void a17_assertVersion() throws Exception {
+	public void a17_assertVersion() {
 		assertVersion(Version.of("2")).isGt(Version.of("1"));
 	}
 
 	@Test
-	public void a18_assertComparable() throws Exception {
+	public void a18_assertComparable() {
 		assertComparable(2).isGt(1);
 	}
 
 	@Test
-	public void a19_assertBeanList() throws Exception {
+	public void a19_assertBeanList() {
 		assertBeanList(alist(ABean.get())).asJson().is("[{a:1,b:'foo'}]");
 	}
 
 	@Test
-	public void a20a_assertIntArray() throws Exception {
+	public void a20a_assertIntArray() {
 		assertIntArray(new int[]{1}).asLength().is(1);
 	}
 
 	@Test
-	public void a20b_assertLongArray() throws Exception {
+	public void a20b_assertLongArray() {
 		assertLongArray(new long[]{1L}).asLength().is(1);
 	}
 
 	@Test
-	public void a20c_assertShortArray() throws Exception {
+	public void a20c_assertShortArray() {
 		assertShortArray(new short[]{1}).asLength().is(1);
 	}
 
 	@Test
-	public void a20d_assertFloatArray() throws Exception {
+	public void a20d_assertFloatArray() {
 		assertFloatArray(new float[]{1}).asLength().is(1);
 	}
 
 	@Test
-	public void a20e_assertDoubleArray() throws Exception {
+	public void a20e_assertDoubleArray() {
 		assertDoubleArray(new double[]{1}).asLength().is(1);
 	}
 
 	@Test
-	public void a20f_assertBooleanArray() throws Exception {
+	public void a20f_assertBooleanArray() {
 		assertBooleanArray(new boolean[]{true}).asLength().is(1);
 	}
 
 	@Test
-	public void a20g_assertCharArray() throws Exception {
+	public void a20g_assertCharArray() {
 		assertCharArray(new char[]{'a'}).asLength().is(1);
 	}
 
 	@Test
-	public void a20h_assertByteArray() throws Exception {
+	public void a20h_assertByteArray() {
 		assertByteArray(new byte[]{1}).asLength().is(1);
 	}
 
 	@Test
-	public void a21_assertMap() throws Exception {
+	public void a21_assertMap() {
 		assertMap(map(1,2)).asSize().is(1);
 	}
 
 	@Test
-	public void a24_assertOptional() throws Exception {
+	public void a24_assertOptional() {
 		assertOptional(empty()).isNull();
 		assertOptional(optional(1)).isNotNull();
 	}
 
 	@Test
-	public void a25_assertStringList() throws Exception {
+	public void a25_assertStringList() {
 		assertStringList(alist()).isNotNull();
 		assertStringList(null).isNull();
 	}

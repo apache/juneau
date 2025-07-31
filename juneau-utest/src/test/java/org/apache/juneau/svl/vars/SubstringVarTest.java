@@ -25,7 +25,7 @@ public class SubstringVarTest {
 	// test - Basic tests
 	//====================================================================================================
 	@Test
-	public void test() throws Exception {
+	public void test() {
 		VarResolver vr = VarResolver.create().vars(SubstringVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("SubstringVarTest.test", "foo bar");

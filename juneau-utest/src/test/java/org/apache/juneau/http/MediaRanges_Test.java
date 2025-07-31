@@ -28,7 +28,7 @@ public class MediaRanges_Test {
 	// Verifies that media type parameters are distinguished from media range extensions.
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
-	public void a01_extensions() throws Exception {
+	public void a01_extensions() {
 		MediaRanges x1;
 		MediaRange x2;
 

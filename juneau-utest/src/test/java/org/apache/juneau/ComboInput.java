@@ -231,7 +231,7 @@ public class ComboInput<T> {
 	/**
 	 * Checks to see if the test should be skipped.
 	 */
-	public boolean isTestSkipped(String testName) throws Exception {
+	public boolean isTestSkipped(String testName) {
 		return skipTest != null && skipTest.test(testName);
 	}
 

@@ -223,7 +223,7 @@ public class UriContextUriComboTest {
 	private Input in;
 	private Results r;
 
-	public UriContextUriComboTest(String label, Input in, Results r) throws Exception {
+	public UriContextUriComboTest(String label, Input in, Results r) {
 		this.label = label;
 		this.in = in;
 		this.r = r;

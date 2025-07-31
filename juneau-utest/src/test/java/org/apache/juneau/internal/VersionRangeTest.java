@@ -65,7 +65,7 @@ public class VersionRangeTest {
 	}
 
 	@Test
-	public void test() throws Exception {
+	public void test() {
 		assertEquals(shouldMatch, range.matches(version));
 	}
 }

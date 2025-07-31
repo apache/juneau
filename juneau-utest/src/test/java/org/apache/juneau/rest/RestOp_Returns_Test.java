@@ -90,7 +90,7 @@ public class RestOp_Returns_Test {
 	}
 
 	@Test
-	public void a02_responseBeans_swagger() throws Exception {
+	public void a02_responseBeans_swagger() {
 		Map<String,OperationMap> paths = getSwagger(A.class).getPaths();
 		assertEquals(Accepted.REASON_PHRASE, paths.get("/accepted").get("get").getResponse(Accepted.STATUS_CODE).getDescription());
 		assertEquals(AlreadyReported.REASON_PHRASE, paths.get("/alreadyReported").get("get").getResponse(AlreadyReported.STATUS_CODE).getDescription());
@@ -123,27 +123,27 @@ public class RestOp_Returns_Test {
 	@Rest
 	public static class B {
 		@RestGet
-		public HttpResource a() throws Exception {
+		public HttpResource a() {
 			return stringResource("foo");
 		}
 		@RestGet
-		public HttpResource b() throws Exception {
+		public HttpResource b() {
 			return readerResource(new StringReader("foo")).setHeader("Foo", "Bar");
 		}
 		@RestGet
-		public HttpResource c() throws Exception {
+		public HttpResource c() {
 			return readerResource(new StringReader("foo")).setContentType("application/json");
 		}
 		@RestGet
-		public HttpResource d(RestRequest req) throws Exception {
+		public HttpResource d(RestRequest req) {
 			return stringResource(()->req.getVarResolverSession().resolve("$RQ{foo}"));
 		}
 		@RestGet
-		public HttpResource e() throws Exception {
+		public HttpResource e() {
 			return streamResource(inputStream("foo"));
 		}
 		@RestGet
-		public HttpResource f() throws Exception {
+		public HttpResource f() {
 			return readerResource(reader("foo"));
 		}
 	}

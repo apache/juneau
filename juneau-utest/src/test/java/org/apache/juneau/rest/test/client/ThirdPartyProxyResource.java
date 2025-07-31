@@ -108,7 +108,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Header("d") Boolean d,
 			@Header("e") float e,
 			@Header("f") Float f
-		) throws Exception {
+		) {
 
 		assertEquals("foo", a);
 		assertNull(an);
@@ -131,7 +131,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Header("f") List<Integer[][][]> f,
 			@Header("g") List<int[][][]> g,
 			@Header("h") List<String> h
-		) throws Exception {
+		) {
 
 		assertObject(a).asJson().is("[[[1,2],null],null]");
 		assertObject(b).asJson().is("[[[1,null],null],null]");
@@ -161,7 +161,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Header(name="f") @Schema(cf="uon") Map<String,List<ABean>> f,
 			@Header(name="g") @Schema(cf="uon") Map<String,List<ABean[][][]>> g,
 			@Header(name="h") @Schema(cf="uon") Map<Integer,List<ABean>> h
-		) throws Exception {
+		) {
 
 		assertObject(a).asJson().is("{a:1,b:'foo'}");
 		assertNull(an);
@@ -194,7 +194,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Header("f") @Schema(cf="uon") Map<String,List<TypedBean>> f,
 			@Header("g") @Schema(cf="uon") Map<String,List<TypedBean[][][]>> g,
 			@Header("h") @Schema(cf="uon") Map<Integer,List<TypedBean>> h
-		) throws Exception {
+		) {
 
 		assertObject(a).asJson().is("{a:1,b:'foo'}");
 		assertNull(an);
@@ -225,7 +225,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Header("b") @Schema(cf="uon") SwappedObject[][][] b,
 			@Header("c") @Schema(cf="uon") Map<SwappedObject,SwappedObject> c,
 			@Header("d") @Schema(cf="uon") Map<SwappedObject,SwappedObject[][][]> d
-		) throws Exception {
+		) {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
 		assertObject(b).asJson().is("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]");
@@ -248,7 +248,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Header("b") @Schema(cf="uon") ImplicitSwappedObject[][][] b,
 			@Header("c") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject> c,
 			@Header("d") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> d
-		) throws Exception {
+		) {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
 		assertObject(b).asJson().is("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]");
@@ -276,7 +276,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Header("f") @Schema(cf="uon") Map<TestEnum,TestEnum> f,
 			@Header("g") @Schema(cf="uon") Map<TestEnum,TestEnum[][][]> g,
 			@Header("h") @Schema(cf="uon") Map<TestEnum,List<TestEnum[][][]>> h
-		) throws Exception {
+		) {
 
 		assertEquals(TestEnum.TWO, a);
 		assertNull(an);
@@ -306,7 +306,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@Header("a") String a,
 		@Header(name="b") @Schema(allowEmptyValue=true) String b,
 		@Header("c") String c
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 		assertEquals("", b);
@@ -320,7 +320,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@Header("a") String a,
 		@Header(name="b") @Schema(allowEmptyValue=true) String b,
 		@Header("c") String c
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 		assertEquals("", b);
@@ -334,7 +334,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@Header("a") String a,
 		@Header(name="b") @Schema(allowEmptyValue=true) String b,
 		@Header("c") String c
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 		assertEquals("", b);
@@ -346,7 +346,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	@RestGet(path="/headerIfNE1")
 	public String headerIfNE1(
 		@Header("a") String a
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 
@@ -356,7 +356,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	@RestGet(path="/headerIfNE2")
 	public String headerIfNE2(
 		@Header("a") String a
-	) throws Exception {
+	) {
 
 		assertEquals(null, a);
 
@@ -368,7 +368,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@Header("a") String a,
 		@Header("b") String b,
 		@Header("c") String c
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 		assertEquals(null, b);
@@ -382,7 +382,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@Header("a") String a,
 		@Header("b") String b,
 		@Header("c") String c
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 		assertEquals(null, b);
@@ -396,7 +396,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@Header("a") String a,
 		@Header("b") String b,
 		@Header("c") String c
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 		assertEquals(null, b);
@@ -420,7 +420,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Query("d") Boolean d,
 			@Query("e") float e,
 			@Query("f") Float f
-		) throws Exception {
+		) {
 
 		assertEquals("foo", a);
 		assertNull(an);
@@ -443,7 +443,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Query("f") List<Integer[][][]> f,
 			@Query("g") List<int[][][]> g,
 			@Query("h") List<String> h
-		) throws Exception {
+		) {
 
 		assertObject(a).asJson().is("[[[1,2],null],null]");
 		assertObject(b).asJson().is("[[[1,null],null],null]");
@@ -473,7 +473,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Query("f") @Schema(cf="uon") Map<String,List<ABean>> f,
 			@Query("g") @Schema(cf="uon") Map<String,List<ABean[][][]>> g,
 			@Query("h") @Schema(cf="uon") Map<Integer,List<ABean>> h
-		) throws Exception {
+		) {
 
 		assertObject(a).asJson().is("{a:1,b:'foo'}");
 		assertNull(an);
@@ -506,7 +506,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Query("f") @Schema(cf="uon") Map<String,List<TypedBean>> f,
 			@Query("g") @Schema(cf="uon") Map<String,List<TypedBean[][][]>> g,
 			@Query("h") @Schema(cf="uon") Map<Integer,List<TypedBean>> h
-		) throws Exception {
+		) {
 
 		assertObject(a).asJson().is("{a:1,b:'foo'}");
 		assertNull(an);
@@ -537,7 +537,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Query("b") @Schema(cf="uon") SwappedObject[][][] b,
 			@Query("c") @Schema(cf="uon") Map<SwappedObject,SwappedObject> c,
 			@Query("d") @Schema(cf="uon") Map<SwappedObject,SwappedObject[][][]> d
-		) throws Exception {
+		) {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
 		assertObject(b).asJson().is("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]");
@@ -560,7 +560,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Query("b") @Schema(cf="uon") ImplicitSwappedObject[][][] b,
 			@Query("c") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject> c,
 			@Query("d") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> d
-		) throws Exception {
+		) {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
 		assertObject(b).asJson().is("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]");
@@ -588,7 +588,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Query("f") @Schema(cf="uon") Map<TestEnum,TestEnum> f,
 			@Query("g") @Schema(cf="uon") Map<TestEnum,TestEnum[][][]> g,
 			@Query("h") @Schema(cf="uon") Map<TestEnum,List<TestEnum[][][]>> h
-		) throws Exception {
+		) {
 
 		assertEquals(TestEnum.TWO, a);
 		assertNull(an);
@@ -617,7 +617,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	public String stringQuery1(
 			@Query("a") int a,
 			@Query("b") String b
-		) throws Exception {
+		) {
 
 		assertEquals(1, a);
 		assertEquals("foo", b);
@@ -629,7 +629,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	public String stringQuery2(
 			@Query("a") int a,
 			@Query("b") String b
-		) throws Exception {
+		) {
 
 		assertEquals(1, a);
 		assertEquals("foo", b);
@@ -641,7 +641,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	public String mapQuery(
 			@Query("a") int a,
 			@Query("b") String b
-		) throws Exception {
+		) {
 
 		assertEquals(1, a);
 		assertEquals("foo", b);
@@ -654,7 +654,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Query("a") String a,
 			@Query("b") @Schema(allowEmptyValue=true) String b,
 			@Query("c") String c
-		) throws Exception {
+		) {
 
 		assertEquals("foo", a);
 		assertEquals("", b);
@@ -668,7 +668,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@Query("a") String a,
 		@Query("b") @Schema(allowEmptyValue=true) String b,
 		@Query("c") String c
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 		assertEquals("", b);
@@ -680,7 +680,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	@RestGet(path="/queryIfNE1")
 	public String queryIfNE1(
 		@Query("a") String a
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 
@@ -690,7 +690,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	@RestGet(path="/queryIfNE2")
 	public String queryIfNE2(
 		@Query("q") String a
-	) throws Exception {
+	) {
 
 		assertEquals(null, a);
 
@@ -702,7 +702,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@Query("a") String a,
 		@Query("b") String b,
 		@Query("c") String c
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 		assertEquals(null, b);
@@ -716,7 +716,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@Query("a") String a,
 		@Query("b") String b,
 		@Query("c") String c
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 		assertEquals(null, b);
@@ -730,7 +730,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@Query("a") String a,
 		@Query("b") String b,
 		@Query("c") String c
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 		assertEquals(null, b);
@@ -754,7 +754,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@FormData("d") Boolean d,
 			@FormData("e") float e,
 			@FormData("f") Float f
-		) throws Exception {
+		) {
 
 		assertEquals("foo", a);
 		assertNull(an);
@@ -777,7 +777,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@FormData("f") List<Integer[][][]> f,
 			@FormData("g") List<int[][][]> g,
 			@FormData("h") List<String> h
-		) throws Exception {
+		) {
 
 		assertObject(a).asJson().is("[[[1,2],null],null]");
 		assertObject(b).asJson().is("[[[1,null],null],null]");
@@ -807,7 +807,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@FormData("f") @Schema(cf="uon") Map<String,List<ABean>> f,
 			@FormData("g") @Schema(cf="uon") Map<String,List<ABean[][][]>> g,
 			@FormData("h") @Schema(cf="uon") Map<Integer,List<ABean>> h
-		) throws Exception {
+		) {
 
 		assertObject(a).asJson().is("{a:1,b:'foo'}");
 		assertNull(an);
@@ -840,7 +840,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@FormData("f") @Schema(cf="uon") Map<String,List<TypedBean>> f,
 			@FormData("g") @Schema(cf="uon") Map<String,List<TypedBean[][][]>> g,
 			@FormData("h") @Schema(cf="uon") Map<Integer,List<TypedBean>> h
-		) throws Exception {
+		) {
 
 		assertObject(a).asJson().is("{a:1,b:'foo'}");
 		assertNull(an);
@@ -871,7 +871,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@FormData("b") @Schema(cf="uon") SwappedObject[][][] b,
 			@FormData("c") @Schema(cf="uon") Map<SwappedObject,SwappedObject> c,
 			@FormData("d") @Schema(cf="uon") Map<SwappedObject,SwappedObject[][][]> d
-		) throws Exception {
+		) {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
 		assertObject(b).asJson().is("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]");
@@ -894,7 +894,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@FormData("b") @Schema(cf="uon") ImplicitSwappedObject[][][] b,
 			@FormData("c") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject> c,
 			@FormData("d") @Schema(cf="uon") Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> d
-		) throws Exception {
+		) {
 
 		assertObject(a).asJson().is("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
 		assertObject(b).asJson().is("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]");
@@ -922,7 +922,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@FormData("f") @Schema(cf="uon") Map<TestEnum,TestEnum> f,
 			@FormData("g") @Schema(cf="uon") Map<TestEnum,TestEnum[][][]> g,
 			@FormData("h") @Schema(cf="uon") Map<TestEnum,List<TestEnum[][][]>> h
-		) throws Exception {
+		) {
 
 		assertEquals(TestEnum.TWO, a);
 		assertNull(an);
@@ -952,7 +952,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@FormData("a") String a,
 		@FormData("b") @Schema(aev=true) String b,
 		@FormData("c") String c
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 		assertEquals("", b);
@@ -966,7 +966,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@FormData("a") String a,
 		@FormData("b") @Schema(aev=true) String b,
 		@FormData("c") String c
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 		assertEquals("", b);
@@ -980,7 +980,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@FormData("a") String a,
 		@FormData("b") @Schema(aev=true) String b,
 		@FormData("c") String c
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 		assertEquals("", b);
@@ -992,7 +992,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	@RestPost(path="/formDataIfNE1")
 	public String formDataIfNE1(
 		@FormData("a") String a
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 
@@ -1002,7 +1002,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	@RestPost(path="/formDataIfNE2")
 	public String formDataIfNE2(
 		@FormData("a") String a
-	) throws Exception {
+	) {
 
 		assertEquals(null, a);
 
@@ -1014,7 +1014,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@FormData("a") String a,
 		@FormData("b") String b,
 		@FormData("c") String c
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 		assertEquals(null, b);
@@ -1028,7 +1028,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@FormData("a") String a,
 		@FormData("b") String b,
 		@FormData("c") String c
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 		assertEquals(null, b);
@@ -1042,7 +1042,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@FormData("a") String a,
 		@FormData("b") String b,
 		@FormData("c") String c
-	) throws Exception {
+	) {
 
 		assertEquals("foo", a);
 		assertEquals(null, b);
@@ -1060,7 +1060,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	public String pathVars1(
 		@Path("a") int a,
 		@Path("b") String b
-		) throws Exception {
+		) {
 
 		assertEquals(1, a);
 		assertEquals("foo", b);
@@ -1073,7 +1073,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	public String pathVars2(
 		@Path("a") int a,
 		@Path("b") String b
-		) throws Exception {
+		) {
 
 		assertEquals(1, a);
 		assertEquals("foo", b);
@@ -1085,7 +1085,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	public String pathVars3(
 		@Path("a") int a,
 		@Path("b") String b
-		) throws Exception {
+		) {
 
 		assertEquals(1, a);
 		assertEquals("foo", b);
@@ -1101,7 +1101,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	public String reqBeanPath(
 		@Path("a") int a,
 		@Path("b") String b
-		) throws Exception {
+		) {
 
 		assertEquals(1, a);
 		assertEquals("foo", b);
@@ -1113,7 +1113,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	public String reqBeanQuery(
 		@Query("a") int a,
 		@Query("b") String b
-		) throws Exception {
+		) {
 
 		assertEquals(1, a);
 		assertEquals("foo", b);
@@ -1126,7 +1126,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@Query("a") String a,
 		@Query("b") String b,
 		@Query("c") String c
-		) throws Exception {
+		) {
 
 		assertEquals("foo", a);
 		assertNull(b);
@@ -1139,7 +1139,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	public String reqBeanFormData(
 		@FormData("a") int a,
 		@FormData("b") String b
-		) throws Exception {
+		) {
 
 		assertEquals(1, a);
 		assertEquals("foo", b);
@@ -1152,7 +1152,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@FormData("a") String a,
 		@FormData("b") String b,
 		@FormData("c") String c
-		) throws Exception {
+		) {
 
 		assertEquals("foo", a);
 		assertNull(b);
@@ -1165,7 +1165,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	public String reqBeanHeader(
 		@Header("a") int a,
 		@Header("b") String b
-		) throws Exception {
+		) {
 
 		assertEquals(1, a);
 		assertEquals("foo", b);
@@ -1178,7 +1178,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@Header("a") String a,
 		@Header("b") String b,
 		@Header("c") String c
-		) throws Exception {
+		) {
 
 		assertEquals("foo", a);
 		assertNull(b);
@@ -1741,7 +1741,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@Header("h1") String h1,
 		@Query("q1") String q1,
 		@FormData("f1") String f1
-	) throws Exception {
+	) {
 
 		assertEquals("dummy-1", p1);
 		assertEquals("dummy-2", h1);

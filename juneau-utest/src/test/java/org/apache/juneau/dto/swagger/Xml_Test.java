@@ -103,7 +103,7 @@ public class Xml_Test {
 	}
 
 	@Test
-	public void b02_copy() throws Exception {
+	public void b02_copy() {
 		Xml t = new Xml();
 
 		t = t.copy();
@@ -123,7 +123,7 @@ public class Xml_Test {
 	}
 
 	@Test
-	public void b03_keySet() throws Exception {
+	public void b03_keySet() {
 		Xml t = new Xml();
 
 		assertObject(t.keySet()).asJson().is("[]");

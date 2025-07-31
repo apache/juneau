@@ -25,7 +25,7 @@ public class PatternMatchVarTest {
 	// test - Basic tests
 	//====================================================================================================
 	@Test
-	public void test() throws Exception {
+	public void test() {
 		VarResolver vr = VarResolver.create().vars(PatternMatchVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("PatternMatchVarTest.test", "foobar");

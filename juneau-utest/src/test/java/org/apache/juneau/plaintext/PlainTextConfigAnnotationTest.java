@@ -37,13 +37,13 @@ public class PlainTextConfigAnnotationTest {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test
-	public void noValuesSerializer() throws Exception {
+	public void noValuesSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		PlainTextSerializer.create().apply(al).build().createSession();
 	}
 
 	@Test
-	public void noValuesParser() throws Exception {
+	public void noValuesParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		PlainTextParser.create().apply(al).build().createSession();
 	}
@@ -56,13 +56,13 @@ public class PlainTextConfigAnnotationTest {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test
-	public void noAnnotationSerializer() throws Exception {
+	public void noAnnotationSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		PlainTextSerializer.create().apply(al).build().createSession();
 	}
 
 	@Test
-	public void noAnnotationParser() throws Exception {
+	public void noAnnotationParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		PlainTextParser.create().apply(al).build().createSession();
 	}

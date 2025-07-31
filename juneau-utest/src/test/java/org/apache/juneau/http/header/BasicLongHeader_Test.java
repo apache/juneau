@@ -69,7 +69,7 @@ public class BasicLongHeader_Test {
 	}
 
 	@Test
-	public void a02_assertLong() throws Exception {
+	public void a02_assertLong() {
 		longHeader(HEADER,1L).assertLong().is(1L);
 	}
 

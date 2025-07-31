@@ -987,7 +987,7 @@ public class UriContextResolutionComboTest {
 	private Input in;
 	private Results r;
 
-	public UriContextResolutionComboTest(String label, Input in, Results r) throws Exception {
+	public UriContextResolutionComboTest(String label, Input in, Results r) {
 		this.label = label;
 		this.in = in;
 		this.r = r;

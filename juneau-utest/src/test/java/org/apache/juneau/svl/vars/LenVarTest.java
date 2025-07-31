@@ -25,7 +25,7 @@ public class LenVarTest {
 	// test - Basic tests
 	//====================================================================================================
 	@Test
-	public void test() throws Exception {
+	public void test() {
 		VarResolver vr = VarResolver.create().vars(LenVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("LenVarTest.test", "foo bar");
@@ -37,7 +37,5 @@ public class LenVarTest {
 
 		// $LN{stringArg, delimiter} examples
 		assertEquals("5", vr.resolve("$LN{$S{LenVarTest.test2},.}"));
-
-
 	}
 }

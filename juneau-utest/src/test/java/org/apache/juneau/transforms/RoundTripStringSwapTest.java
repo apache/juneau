@@ -32,7 +32,7 @@ public abstract class RoundTripStringSwapTest<T> {
 	private final String expected;
 	private final BeanSession bs;
 
-	public RoundTripStringSwapTest(String label, T o, StringSwap<T> ss, String expected, BeanSession bs) throws Exception {
+	public RoundTripStringSwapTest(String label, T o, StringSwap<T> ss, String expected, BeanSession bs) {
 		this.label = label;
 		this.o = o;
 		this.ss = ss;

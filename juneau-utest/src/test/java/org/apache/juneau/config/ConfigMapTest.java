@@ -26,8 +26,8 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class ConfigMapTest {
 
-	final static String ENCODED = "*";
-	final static String BASE64 = "^";
+	static final String ENCODED = "*";
+	static final String BASE64 = "^";
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Should be able to read non-existent files without errors.
@@ -259,7 +259,7 @@ public class ConfigMapTest {
 	// Error conditions.
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
-	public void testMalformedSectionHeaders() throws Exception {
+	public void testMalformedSectionHeaders() {
 
 		String[] test = {
 			"[]", "[  ]",
@@ -275,13 +275,13 @@ public class ConfigMapTest {
 	}
 
 	@Test
-	public void testDuplicateSectionNames() throws Exception {
+	public void testDuplicateSectionNames() {
 		ConfigStore s = initStore("A.cfg", "[S1]", "[S1]");
 		assertThrown(()->s.getMap("A.cfg")).asMessage().is("Duplicate section found in configuration:  [S1]");
 	}
 
 	@Test
-	public void testDuplicateEntryNames() throws Exception {
+	public void testDuplicateEntryNames() {
 		ConfigStore s = initStore("A.cfg", "[S1]", "foo=v1", "foo=v2");
 		assertThrown(()->s.getMap("A.cfg")).asMessage().is("Duplicate entry found in section [S1] of configuration:  foo");
 	}

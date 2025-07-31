@@ -151,22 +151,22 @@ public class FormData_Test {
 	@Rest(serializers=Json5Serializer.class)
 	public static class D {
 		@RestPost
-		public Object a(@FormData("f1") Optional<Integer> f1) throws Exception {
+		public Object a(@FormData("f1") Optional<Integer> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestPost
-		public Object b(@FormData("f1") Optional<ABean> f1) throws Exception {
+		public Object b(@FormData("f1") Optional<ABean> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestPost
-		public Object c(@FormData("f1") Optional<List<ABean>> f1) throws Exception {
+		public Object c(@FormData("f1") Optional<List<ABean>> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestPost
-		public Object d(@FormData("f1") List<Optional<ABean>> f1) throws Exception {
+		public Object d(@FormData("f1") List<Optional<ABean>> f1) {
 			return f1;
 		}
 	}
@@ -219,37 +219,37 @@ public class FormData_Test {
 	@Rest(serializers=Json5Serializer.class)
 	public static class F {
 		@RestPost
-		public Object a1(@FormData(name="f1",def="1") Integer f1) throws Exception {
+		public Object a1(@FormData(name="f1",def="1") Integer f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestPost
-		public Object a2(@FormData(name="f1",def="1") Optional<Integer> f1) throws Exception {
+		public Object a2(@FormData(name="f1",def="1") Optional<Integer> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestPost
-		public Object b1(@FormData(name="f1",def="a=2,b=bar") ABean f1) throws Exception {
+		public Object b1(@FormData(name="f1",def="a=2,b=bar") ABean f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestPost
-		public Object b2(@FormData(name="f1",def="a=2,b=bar") Optional<ABean> f1) throws Exception {
+		public Object b2(@FormData(name="f1",def="a=2,b=bar") Optional<ABean> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestPost
-		public Object c1(@FormData(name="f1",def="@((a=2,b=bar))") List<ABean> f1) throws Exception {
+		public Object c1(@FormData(name="f1",def="@((a=2,b=bar))") List<ABean> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestPost
-		public Object c2(@FormData(name="f1",def="@((a=2,b=bar))") Optional<List<ABean>> f1) throws Exception {
+		public Object c2(@FormData(name="f1",def="@((a=2,b=bar))") Optional<List<ABean>> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestPost
-		public Object d(@FormData(name="f1",def="@((a=2,b=bar))") List<Optional<ABean>> f1) throws Exception {
+		public Object d(@FormData(name="f1",def="@((a=2,b=bar))") List<Optional<ABean>> f1) {
 			return f1;
 		}
 	}

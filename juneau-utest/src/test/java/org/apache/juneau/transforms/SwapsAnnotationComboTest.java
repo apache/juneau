@@ -494,7 +494,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	}
 
 	@Override
-	protected Serializer applySettings(Serializer s) throws Exception {
+	protected Serializer applySettings(Serializer s) {
 		return s.copy().swaps(
 				ContextSwap.class,
 				ContextSwapJson.class,

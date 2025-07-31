@@ -27,81 +27,80 @@ import org.junit.*;
  */
 public class PathReaderBuilderTest {
 
-    private static final Path PATH = Paths.get("src/test/resources/files/Test3.properties");
+	private static final Path PATH = Paths.get("src/test/resources/files/Test3.properties");
 
-    @Test
-    public void testAllowNoFile() throws IOException {
-        final var p = new Properties();
-        try (Reader r = PathReaderBuilder.create().allowNoFile().build()) {
-            p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
-        }
-        assertNull(p.get("file"));
-        p.clear();
-        try (Reader r = PathReaderBuilder.create().allowNoFile().path("this file does not exist, at all.").build()) {
-            p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
-        }
-        assertNull(p.get("file"));
-    }
+	@Test
+	public void testAllowNoFile() throws IOException {
+		final var p = new Properties();
+		try (Reader r = PathReaderBuilder.create().allowNoFile().build()) {
+			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
+		}
+		assertNull(p.get("file"));
+		p.clear();
+		try (Reader r = PathReaderBuilder.create().allowNoFile().path("this file does not exist, at all.").build()) {
+			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
+		}
+		assertNull(p.get("file"));
+	}
 
-    @Test
-    public void testAllowNoFileException() throws IOException {
-        assertThrows(IllegalStateException.class, () -> PathReaderBuilder.create().build());
-        assertThrows(NoSuchFileException.class, () -> PathReaderBuilder.create().path("this file does not exist, at all.").build());
-    }
+	@Test
+	public void testAllowNoFileException() {
+		assertThrows(IllegalStateException.class, () -> PathReaderBuilder.create().build());
+		assertThrows(NoSuchFileException.class, () -> PathReaderBuilder.create().path("this file does not exist, at all.").build());
+	}
 
-    @Test
-    public void testCharsetCharset() throws IOException {
-        final var p = new Properties();
-        try (Reader r = PathReaderBuilder.create().path(PATH).charset(StandardCharsets.UTF_8).build()) {
-            p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
-        }
-        assertEquals("files/Test3.properties", p.get("file"));
-        p.clear();
-        try (Reader r = PathReaderBuilder.create().path(PATH).charset((Charset) null).build()) {
-            p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
-        }
-        assertEquals("files/Test3.properties", p.get("file"));
-    }
+	@Test
+	public void testCharsetCharset() throws IOException {
+		final var p = new Properties();
+		try (Reader r = PathReaderBuilder.create().path(PATH).charset(StandardCharsets.UTF_8).build()) {
+			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
+		}
+		assertEquals("files/Test3.properties", p.get("file"));
+		p.clear();
+		try (Reader r = PathReaderBuilder.create().path(PATH).charset((Charset) null).build()) {
+			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
+		}
+		assertEquals("files/Test3.properties", p.get("file"));
+	}
 
-    @Test
-    public void testCharsetString() throws IOException {
-        final var p = new Properties();
-        try (Reader r = PathReaderBuilder.create().path(PATH).charset(StandardCharsets.UTF_8.name()).build()) {
-            p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
-        }
-        assertEquals("files/Test3.properties", p.get("file"));
-        p.clear();
-        try (Reader r = PathReaderBuilder.create().path(PATH).charset((String) null).build()) {
-            p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
-        }
-        assertEquals("files/Test3.properties", p.get("file"));
-    }
+	@Test
+	public void testCharsetString() throws IOException {
+		final var p = new Properties();
+		try (Reader r = PathReaderBuilder.create().path(PATH).charset(StandardCharsets.UTF_8.name()).build()) {
+			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
+		}
+		assertEquals("files/Test3.properties", p.get("file"));
+		p.clear();
+		try (Reader r = PathReaderBuilder.create().path(PATH).charset((String) null).build()) {
+			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
+		}
+		assertEquals("files/Test3.properties", p.get("file"));
+	}
 
-    @Test
-    public void testCreate() throws IOException {
-        final var p = new Properties();
-        try (Reader r = PathReaderBuilder.create(PATH).build()) {
-            p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
-        }
-        assertEquals("files/Test3.properties", p.get("file"));
-    }
+	@Test
+	public void testCreate() throws IOException {
+		final var p = new Properties();
+		try (Reader r = PathReaderBuilder.create(PATH).build()) {
+			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
+		}
+		assertEquals("files/Test3.properties", p.get("file"));
+	}
 
-    @Test
-    public void testPathPath() throws IOException {
-        final var p = new Properties();
-        try (Reader r = PathReaderBuilder.create().path(PATH).build()) {
-            p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
-        }
-        assertEquals("files/Test3.properties", p.get("file"));
-    }
+	@Test
+	public void testPathPath() throws IOException {
+		final var p = new Properties();
+		try (Reader r = PathReaderBuilder.create().path(PATH).build()) {
+			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
+		}
+		assertEquals("files/Test3.properties", p.get("file"));
+	}
 
-    @Test
-    public void testPathString() throws IOException {
-        final var p = new Properties();
-        try (Reader r = PathReaderBuilder.create().path(PATH.toString()).build()) {
-            p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
-        }
-        assertEquals("files/Test3.properties", p.get("file"));
-    }
-
+	@Test
+	public void testPathString() throws IOException {
+		final var p = new Properties();
+		try (Reader r = PathReaderBuilder.create().path(PATH.toString()).build()) {
+			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
+		}
+		assertEquals("files/Test3.properties", p.get("file"));
+	}
 }

@@ -85,7 +85,7 @@ public class ConfigImportsTest {
 	}
 
 	@Test
-	public void nestedImportsLoop() throws Exception {
+	public void nestedImportsLoop() {
 		// This shouldn't blow up.
 		MemoryStore ms = MemoryStore.create().build();
 		ms.write("A1", "", "<A2>\nx=1");
@@ -95,7 +95,7 @@ public class ConfigImportsTest {
 	}
 
 	@Test
-	public void importNotFound() throws Exception {
+	public void importNotFound() {
 		MemoryStore ms = MemoryStore.create().build();
 		ms.write("B", "", "<A>\nx=1");
 		Config c = Config.create("B").store(ms).build();
@@ -103,7 +103,7 @@ public class ConfigImportsTest {
 	}
 
 	@Test
-	public void noOverwriteOnImports() throws Exception {
+	public void noOverwriteOnImports() {
 		MemoryStore ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1");
 		ms.write("B", "", "<A>");
@@ -115,7 +115,7 @@ public class ConfigImportsTest {
 	}
 
 	@Test
-	public void overlappingSections() throws Exception {
+	public void overlappingSections() {
 		MemoryStore ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[A]\na2=2");
@@ -125,7 +125,7 @@ public class ConfigImportsTest {
 	}
 
 	@Test
-	public void overlappingSectionsImportAtEnd() throws Exception {
+	public void overlappingSectionsImportAtEnd() {
 		MemoryStore ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "[A]\na2=2\n<A>");
@@ -135,7 +135,7 @@ public class ConfigImportsTest {
 	}
 
 	@Test
-	public void overlappingSectionsAndValues() throws Exception {
+	public void overlappingSectionsAndValues() {
 		MemoryStore ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[A]\na1=2");
@@ -183,7 +183,7 @@ public class ConfigImportsTest {
 	}
 
 	@Test
-	public void testUpdateOnParent() throws Exception {
+	public void testUpdateOnParent() {
 		MemoryStore ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
@@ -224,7 +224,7 @@ public class ConfigImportsTest {
 	}
 
 	@Test
-	public void testUpdateOnGrandParent() throws Exception {
+	public void testUpdateOnGrandParent() {
 		MemoryStore ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
@@ -272,7 +272,7 @@ public class ConfigImportsTest {
 	}
 
 	@Test
-	public void testUpdateOnParentSameSection() throws Exception {
+	public void testUpdateOnParentSameSection() {
 		MemoryStore ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
@@ -310,7 +310,7 @@ public class ConfigImportsTest {
 	}
 
 	@Test
-	public void testUpdateOnParentSameSectionSameKey() throws Exception {
+	public void testUpdateOnParentSameSectionSameKey() {
 		MemoryStore ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
@@ -332,7 +332,7 @@ public class ConfigImportsTest {
 	}
 
 	@Test
-	public void testUpdateOnGrandParentSameSection() throws Exception {
+	public void testUpdateOnGrandParentSameSection() {
 		MemoryStore ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
@@ -361,7 +361,7 @@ public class ConfigImportsTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void testUpdateOnParentDynamic() throws Exception {
+	public void testUpdateOnParentDynamic() {
 		MemoryStore ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\ny=1\n[A]\na1=1");

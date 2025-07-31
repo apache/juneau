@@ -151,7 +151,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		void setF1(String f1);
 	}
 
-	public static abstract class ABean implements IBean {
+	public abstract static class ABean implements IBean {
 		@Override /* IBean */
 		public abstract String getF1();
 		@Override /* IBean */

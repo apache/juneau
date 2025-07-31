@@ -228,7 +228,7 @@ public class ParameterInfo_Test {
 	}
 
 	@Test
-	public void b02_copy() throws Exception {
+	public void b02_copy() {
 		ParameterInfo t = new ParameterInfo();
 
 		t = t.copy();
@@ -266,7 +266,7 @@ public class ParameterInfo_Test {
 	}
 
 	@Test
-	public void b03_keySet() throws Exception {
+	public void b03_keySet() {
 		ParameterInfo t = new ParameterInfo();
 
 		assertObject(t.keySet()).asJson().is("[]");

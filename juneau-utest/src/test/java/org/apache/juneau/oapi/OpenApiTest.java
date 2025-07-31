@@ -599,7 +599,7 @@ public class OpenApiTest {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void f01_tArray_String() throws Exception {
+	public void f01_tArray_String() {
 		String in = "123";
 		HttpPartSchema ps = T_ARRAY;
 		assertThrown(()->serialize(ps, in)).asMessage().is("Input is not a valid array type: java.lang.String");

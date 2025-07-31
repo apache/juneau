@@ -48,14 +48,14 @@ public class MsgPackConfigAnnotationTest {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test
-	public void basicSerializer() throws Exception {
+	public void basicSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 	}
 
 	@Test
-	public void basicParser() throws Exception {
+	public void basicParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		MsgPackParser.create().apply(al).build().createSession();
 	}
@@ -69,14 +69,14 @@ public class MsgPackConfigAnnotationTest {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test
-	public void noValuesSerializer() throws Exception {
+	public void noValuesSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 	}
 
 	@Test
-	public void noValuesParser() throws Exception {
+	public void noValuesParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		MsgPackParser.create().apply(al).build().createSession();
 	}
@@ -89,14 +89,14 @@ public class MsgPackConfigAnnotationTest {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test
-	public void noAnnotationSerializer() throws Exception {
+	public void noAnnotationSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 	}
 
 	@Test
-	public void noAnnotationParser() throws Exception {
+	public void noAnnotationParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		MsgPackParser.create().apply(al).build().createSession();
 	}

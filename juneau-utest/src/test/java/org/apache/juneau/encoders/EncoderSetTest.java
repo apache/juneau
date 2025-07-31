@@ -24,7 +24,7 @@ public class EncoderSetTest {
 	// Test matching
 	//====================================================================================================
 	@Test
-	public void testEncoderGroupMatching() throws Exception {
+	public void testEncoderGroupMatching() {
 
 		EncoderSet s = EncoderSet.create().add(Encoder1.class, Encoder2.class, Encoder3.class).build();
 		assertObject(s.getEncoder("gzip1")).isType(Encoder1.class);
@@ -63,7 +63,7 @@ public class EncoderSetTest {
 	// Test inheritence
 	//====================================================================================================
 	@Test
-	public void testInheritence() throws Exception {
+	public void testInheritence() {
 		EncoderSet.Builder sb = null;
 		EncoderSet s = null;
 

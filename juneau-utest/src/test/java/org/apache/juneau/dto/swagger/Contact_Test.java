@@ -77,7 +77,7 @@ public class Contact_Test {
 	}
 
 	@Test
-	public void b02_copy() throws Exception {
+	public void b02_copy() {
 		Contact t = new Contact();
 
 		t = t.copy();
@@ -95,7 +95,7 @@ public class Contact_Test {
 	}
 
 	@Test
-	public void b03_keySet() throws Exception {
+	public void b03_keySet() {
 		Contact t = new Contact();
 
 		assertObject(t.keySet()).asJson().is("[]");

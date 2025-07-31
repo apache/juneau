@@ -112,7 +112,7 @@ public class ClassMetaTest {
 	public static class BI2Swap extends ObjectSwap<BI2,Map> {}
 
 	@Test
-	public void b01_swaps() throws Exception {
+	public void b01_swaps() {
 		BeanContext bc;
 		ClassMeta<?> ooo, hi1, hc1, hi2, hc2;
 		BeanSession bs;

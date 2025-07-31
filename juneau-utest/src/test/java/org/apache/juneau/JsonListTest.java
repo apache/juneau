@@ -29,7 +29,7 @@ public class JsonListTest {
 	// testBasic
 	//====================================================================================================
 	@Test
-	public void testBasic() throws Exception {
+	public void testBasic() {
 
 		assertEquals(
 			"['A','B','C']",

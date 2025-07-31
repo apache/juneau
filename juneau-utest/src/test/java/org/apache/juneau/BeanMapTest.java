@@ -251,7 +251,7 @@ public class BeanMapTest {
 	// testCollectionFieldProperties
 	//====================================================================================================
 	@Test
-	public void testCollectionFieldProperties() throws Exception {
+	public void testCollectionFieldProperties() {
 		C t = new C();
 		Map m = bc.toBeanMap(t);
 
@@ -332,7 +332,7 @@ public class BeanMapTest {
 	// testCollectionMethodProperties
 	//====================================================================================================
 	@Test
-	public void testCollectionMethodProperties() throws Exception {
+	public void testCollectionMethodProperties() {
 		D t = new D();
 		Map m = bc.toBeanMap(t);
 
@@ -466,7 +466,7 @@ public class BeanMapTest {
 	// testArrayProperties
 	//====================================================================================================
 	@Test
-	public void testArrayProperties() throws Exception {
+	public void testArrayProperties() {
 		D1 t = new D1();
 		Map m = bc.toBeanMap(t);
 		m.put("b", JsonMap.ofJson("{s:'foo'}"));
@@ -518,7 +518,7 @@ public class BeanMapTest {
 	}
 
 	@Test
-	public void testArrayProperties_usingConfig() throws Exception {
+	public void testArrayProperties_usingConfig() {
 		D1c t = new D1c();
 		Map m = bc.toBeanMap(t);
 		m.put("b", JsonMap.ofJson("{s:'foo'}"));
@@ -577,7 +577,7 @@ public class BeanMapTest {
 	// testArrayPropertiesInJsonList
 	//====================================================================================================
 	@Test
-	public void testArrayPropertiesInJsonList() throws Exception {
+	public void testArrayPropertiesInJsonList() {
 		E t = new E();
 		Map m = bc.toBeanMap(t);
 		m.put("s", JsonList.ofJson("['foo']"));
@@ -623,7 +623,7 @@ public class BeanMapTest {
 	// @Beanp tests
 	//====================================================================================================
 	@Test
-	public void testBeanPropertyAnnotation() throws Exception {
+	public void testBeanPropertyAnnotation() {
 		G1 t6 = new G1();
 		BeanMap m = bc.toBeanMap(t6);
 
@@ -701,7 +701,7 @@ public class BeanMapTest {
 	// Enum tests
 	//====================================================================================================
 	@Test
-	public void testEnum() throws Exception {
+	public void testEnum() {
 
 		// Initialize existing bean.
 		H t7 = new H();
@@ -751,7 +751,7 @@ public class BeanMapTest {
 	// Automatic detection of generic types
 	//====================================================================================================
 	@Test
-	public void testAutomaticDetectionOfGenericTypes() throws Exception {
+	public void testAutomaticDetectionOfGenericTypes() {
 		BeanMap bm = BeanContext.DEFAULT.newBeanMap(I.class);
 		assertEquals(String.class, bm.getProperty("p1").getMeta().getClassMeta().getElementType().getInnerClass());
 		assertEquals(Integer.class, bm.getProperty("p2").getMeta().getClassMeta().getElementType().getInnerClass());
@@ -787,7 +787,7 @@ public class BeanMapTest {
 	// Overriding detection of generic types.
 	//====================================================================================================
 	@Test
-	public void testOverridingDetectionOfGenericTypes() throws Exception {
+	public void testOverridingDetectionOfGenericTypes() {
 		BeanMap bm = BeanContext.DEFAULT.newBeanMap(J.class);
 		assertEquals(Float.class, bm.getProperty("p1").getMeta().getClassMeta().getElementType().getInnerClass());
 		assertEquals(Float.class, bm.getProperty("p2").getMeta().getClassMeta().getElementType().getInnerClass());
@@ -829,7 +829,7 @@ public class BeanMapTest {
 	// Overriding detection of generic types.
 	//====================================================================================================
 	@Test
-	public void testOverridingDetectionOfGenericTypes2() throws Exception {
+	public void testOverridingDetectionOfGenericTypes2() {
 		BeanMap bm = bc.newBeanMap(K.class);
 		assertEquals(Float.class, bm.getProperty("p1").getMeta().getClassMeta().getElementType().getInnerClass());
 		assertEquals(Float.class, bm.getProperty("p2").getMeta().getClassMeta().getElementType().getInnerClass());
@@ -871,7 +871,7 @@ public class BeanMapTest {
 	// List<E> subclass properties
 	//====================================================================================================
 	@Test
-	public void testGenericListSubclass() throws Exception {
+	public void testGenericListSubclass() {
 		BeanMap<L> bm = bc.newBeanMap(L.class);
 		bm.put("list", "[{name:'1',value:'1'},{name:'2',value:'2'}]");
 		L b = bm.getBean();
@@ -898,7 +898,7 @@ public class BeanMapTest {
 	// Generic fields.
 	//====================================================================================================
 	@Test
-	public void testGenericFields() throws Exception {
+	public void testGenericFields() {
 
 		M2 t1 = new M2();
 		BeanMap<M2> bm = bc.toBeanMap(t1);
@@ -949,7 +949,7 @@ public class BeanMapTest {
 	// Generic methods
 	//====================================================================================================
 	@Test
-	public void testGenericMethods() throws Exception {
+	public void testGenericMethods() {
 
 		N2 t1 = new N2();
 		BeanMap<N2> bm = bc.toBeanMap(t1);
@@ -1006,7 +1006,7 @@ public class BeanMapTest {
 	// Test ignoreUnknownBeanProperties setting
 	//====================================================================================================
 	@Test
-	public void testIgnoreUnknownBeanPropertiesSetting() throws Exception {
+	public void testIgnoreUnknownBeanPropertiesSetting() {
 		ReaderParser p = null;
 		O t;
 
@@ -1059,7 +1059,7 @@ public class BeanMapTest {
 	// testPropertyNameFactoryDashedLC1
 	//====================================================================================================
 	@Test
-	public void testPropertyNameFactoryDashedLC1() throws Exception {
+	public void testPropertyNameFactoryDashedLC1() {
 		BeanMap<P1> m = bc.newBeanMap(P1.class).load("{'foo':1,'bar-baz':2,'bing-boo-url':3}");
 		assertEquals(1, m.get("foo"));
 		assertEquals(2, m.get("bar-baz"));
@@ -1082,7 +1082,7 @@ public class BeanMapTest {
 	}
 
 	@Test
-	public void testPropertyNameFactoryDashedLC1_usingConfig() throws Exception {
+	public void testPropertyNameFactoryDashedLC1_usingConfig() {
 		BeanMap<P1c> m = bc.copy().applyAnnotations(P1cConfig.class).build().newBeanMap(P1c.class).load("{'foo':1,'bar-baz':2,'bing-boo-url':3}");
 		assertEquals(1, m.get("foo"));
 		assertEquals(2, m.get("bar-baz"));
@@ -1113,7 +1113,7 @@ public class BeanMapTest {
 	// testPropertyNameFactoryDashedLC2
 	//====================================================================================================
 	@Test
-	public void testPropertyNameFactoryDashedLC2() throws Exception {
+	public void testPropertyNameFactoryDashedLC2() {
 		BeanContext bc = BeanContext.DEFAULT_SORTED;
 		BeanMap<P2> m = bc.newBeanMap(P2.class).load("{'foo-bar':1,'baz-bing':2}");
 		assertEquals(1, m.get("foo-bar"));
@@ -1148,7 +1148,7 @@ public class BeanMapTest {
 	// testBeanWithFluentStyleSetters
 	//====================================================================================================
 	@Test
-	public void testBeanWithFluentStyleSetters() throws Exception {
+	public void testBeanWithFluentStyleSetters() {
 		Q2 t = new Q2();
 		BeanMap m = BeanContext.DEFAULT_SORTED.toBeanMap(t);
 		m.put("f1", 1);
@@ -1188,7 +1188,7 @@ public class BeanMapTest {
 	// testCastWithNormalBean
 	//====================================================================================================
 	@Test
-	public void testCastWithNormalBean() throws Exception {
+	public void testCastWithNormalBean() {
 
 		// With _type
 		JsonMap m = new JsonMap(session);
@@ -1238,7 +1238,7 @@ public class BeanMapTest {
 	// testCastWithNestedBean
 	//====================================================================================================
 	@Test
-	public void testCastWithNestedBean() throws Exception {
+	public void testCastWithNestedBean() {
 
 		// With _type
 		JsonMap m = new JsonMap(session);
@@ -1276,7 +1276,7 @@ public class BeanMapTest {
 	// testCastToAnotherMapType
 	//====================================================================================================
 	@Test
-	public void testCastToAnotherMapType() throws Exception {
+	public void testCastToAnotherMapType() {
 		Map m2;
 
 		// With _type
@@ -1356,7 +1356,7 @@ public class BeanMapTest {
 	// testCastToLinkedList
 	//====================================================================================================
 	@Test
-	public void testCastToLinkedList() throws Exception {
+	public void testCastToLinkedList() {
 
 		// With _type
 		JsonMap m = new JsonMap(session);
@@ -1409,7 +1409,7 @@ public class BeanMapTest {
 	// testToLinkedListInteger - cast() to LinkedList<Integer>
 	//====================================================================================================
 	@Test
-	public void testToLinkedListInteger() throws Exception {
+	public void testToLinkedListInteger() {
 
 		// With _type
 		JsonMap m = new JsonMap(session);
@@ -1471,7 +1471,7 @@ public class BeanMapTest {
 	// testCastToLinkedListBean - cast() to LinkedList<R1>
 	//====================================================================================================
 	@Test
-	public void testCastToLinkedListBean() throws Exception {
+	public void testCastToLinkedListBean() {
 
 		// With _type
 		JsonMap m = new JsonMap(session);
@@ -1552,7 +1552,7 @@ public class BeanMapTest {
 	// testCastToLinkedListUsingSwap - cast() to LinkedList<Calendar> using CalendarSwap
 	//====================================================================================================
 	@Test
-	public void testCastToLinkedListUsingSwap() throws Exception {
+	public void testCastToLinkedListUsingSwap() {
 
 		// With _type
 		JsonMap m = new JsonMap(session);
@@ -1614,7 +1614,7 @@ public class BeanMapTest {
 	// testCastToStringArray - cast() to String[]
 	//====================================================================================================
 	@Test
-	public void testCastToStringArray() throws Exception {
+	public void testCastToStringArray() {
 
 		// With _type
 		JsonMap m = new JsonMap(session);
@@ -1660,7 +1660,7 @@ public class BeanMapTest {
 	// testCastToIntArray - cast() to int[]
 	//====================================================================================================
 	@Test
-	public void testCastToIntArray() throws Exception {
+	public void testCastToIntArray() {
 
 		// With _type
 		JsonMap m = new JsonMap(session);
@@ -1705,7 +1705,7 @@ public class BeanMapTest {
 	// testCastToString2dArray - cast() to String[][]
 	//====================================================================================================
 	@Test
-	public void testCastToString2dArray() throws Exception {
+	public void testCastToString2dArray() {
 
 		// With _type
 		JsonMap m = new JsonMap(session);
@@ -1737,7 +1737,7 @@ public class BeanMapTest {
 	// testCastToInt2dArray - cast() to int[][]
 	//====================================================================================================
 	@Test
-	public void testCastToInt2dArray() throws Exception {
+	public void testCastToInt2dArray() {
 
 		// With _type
 		JsonMap m = new JsonMap(session);
@@ -1769,7 +1769,7 @@ public class BeanMapTest {
 	// testHiddenProperties
 	//====================================================================================================
 	@Test
-	public void testHiddenProperties() throws Exception {
+	public void testHiddenProperties() {
 		JsonSerializer s = Json5Serializer.DEFAULT;
 		BeanMeta bm = s.getBeanContext().getBeanMeta(U.class);
 		assertNotNull(bm.getPropertyMeta("a"));
@@ -1821,7 +1821,7 @@ public class BeanMapTest {
 	}
 
 	@Test
-	public void testHiddenProperties_usingConfig() throws Exception {
+	public void testHiddenProperties_usingConfig() {
 		JsonSerializer s = Json5Serializer.DEFAULT.copy().applyAnnotations(UcConfig.class).build();
 		BeanMeta bm = s.getBeanContext().getBeanMeta(U.class);
 		assertNotNull(bm.getPropertyMeta("a"));
@@ -1881,7 +1881,7 @@ public class BeanMapTest {
 	// testBeanPropertyOrder
 	//====================================================================================================
 	@Test
-	public void testBeanPropertyOrder() throws Exception {
+	public void testBeanPropertyOrder() {
 		assertObject(new V2()).asJson().is("{a1:'1',a2:'2',a3:'3',a4:'4'}");
 		assertObject(new V3()).asJson().is("{a3:'3',a4:'4',a5:'5',a6:'6'}");
 	}
@@ -1900,7 +1900,7 @@ public class BeanMapTest {
 	}
 
 	@Test
-	public void testBeanPropertyOrder_usingConfig() throws Exception {
+	public void testBeanPropertyOrder_usingConfig() {
 		WriterSerializer ws = Json5Serializer.create().applyAnnotations(VcConfig.class).build();
 		assertEquals("{a1:'1',a2:'2',a3:'3',a4:'4'}", ws.toString(new V2c()));
 		assertEquals("{a3:'3',a4:'4',a5:'5',a6:'6'}", ws.toString(new V3c()));
@@ -1928,7 +1928,7 @@ public class BeanMapTest {
 	// testBeanMethodOrder
 	//====================================================================================================
 	@Test
-	public void testBeanMethodOrder() throws Exception {
+	public void testBeanMethodOrder() {
 		assertObject(new W2()).asJsonSorted().is("{a1:'1',a2:'2',a3:'3',a4:'4'}");
 		assertObject(new W3()).asJsonSorted().is("{a3:'3',a4:'4',a5:'5',a6:'6'}");
 	}
@@ -1953,7 +1953,7 @@ public class BeanMapTest {
 	// testResourceDescription
 	//====================================================================================================
 	@Test
-	public void testOverriddenPropertyTypes() throws Exception {
+	public void testOverriddenPropertyTypes() {
 		JsonSerializer s = Json5Serializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
@@ -2015,7 +2015,7 @@ public class BeanMapTest {
 	}
 
 	@Test
-	public void testSettingCollectionPropertyMultipleTimes() throws Exception {
+	public void testSettingCollectionPropertyMultipleTimes() {
 
 		BeanMap m = BeanContext.DEFAULT.newBeanMap(Y.class);
 		m.put("f1", JsonList.ofJsonOrCdl("a"));
@@ -2031,7 +2031,7 @@ public class BeanMapTest {
 	// testCollectionSetters_preferSetter
 	//====================================================================================================
 	@Test
-	public void testCollectionSetters_preferSetter() throws Exception {
+	public void testCollectionSetters_preferSetter() {
 		AA aa = new AA();
 		BeanMap<AA> bm = BeanContext.DEFAULT.toBeanMap(aa);
 

@@ -25,7 +25,7 @@ public class KeywordStoreTest {
 	// test - Basic tests
 	//====================================================================================================
 	@Test
-	public void test() throws Exception {
+	public void test() {
 		KeywordSet ks = new KeywordSet("aaa", "zzz");
 		assertTrue(ks.contains("aaa"));
 		assertTrue(ks.contains("zzz"));

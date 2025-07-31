@@ -36,22 +36,22 @@ public class Header_Test {
 	@Rest(serializers=Json5Serializer.class)
 	public static class A {
 		@RestGet
-		public Object a(@Header("f1") Optional<Integer> f1) throws Exception {
+		public Object a(@Header("f1") Optional<Integer> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestGet
-		public Object b(@Header("f1") Optional<ABean> f1) throws Exception {
+		public Object b(@Header("f1") Optional<ABean> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestGet
-		public Object c(@Header("f1") Optional<List<ABean>> f1) throws Exception {
+		public Object c(@Header("f1") Optional<List<ABean>> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestGet
-		public Object d(@Header("f1") List<Optional<ABean>> f1) throws Exception {
+		public Object d(@Header("f1") List<Optional<ABean>> f1) {
 			return f1;
 		}
 	}
@@ -218,37 +218,37 @@ public class Header_Test {
 	@Rest(serializers=Json5Serializer.class)
 	public static class F {
 		@RestGet
-		public Object a1(@Header(name="f1", def="1") Integer f1) throws Exception {
+		public Object a1(@Header(name="f1", def="1") Integer f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestGet
-		public Object a2(@Header(name="f1", def="1") Optional<Integer> f1) throws Exception {
+		public Object a2(@Header(name="f1", def="1") Optional<Integer> f1) {
 			assertNotNull(f1);
 			return f1.get();
 		}
 		@RestGet
-		public Object b1(@Header(name="f1", def="a=1,b=foo") ABean f1) throws Exception {
+		public Object b1(@Header(name="f1", def="a=1,b=foo") ABean f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestGet
-		public Object b2(@Header(name="f1", def="a=1,b=foo") Optional<ABean> f1) throws Exception {
+		public Object b2(@Header(name="f1", def="a=1,b=foo") Optional<ABean> f1) {
 			assertNotNull(f1);
 			return f1.get();
 		}
 		@RestGet
-		public Object c1(@Header(name="f1", def="@((a=1,b=foo))") List<ABean> f1) throws Exception {
+		public Object c1(@Header(name="f1", def="@((a=1,b=foo))") List<ABean> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestGet
-		public Object c2(@Header(name="f1", def="@((a=1,b=foo))") Optional<List<ABean>> f1) throws Exception {
+		public Object c2(@Header(name="f1", def="@((a=1,b=foo))") Optional<List<ABean>> f1) {
 			assertNotNull(f1);
 			return f1.get();
 		}
 		@RestGet
-		public Object d(@Header(name="f1", def="@((a=1,b=foo))") List<Optional<ABean>> f1) throws Exception {
+		public Object d(@Header(name="f1", def="@((a=1,b=foo))") List<Optional<ABean>> f1) {
 			return f1;
 		}
 	}

@@ -72,7 +72,7 @@ public class ExternalDocumentation_Test {
 	}
 
 	@Test
-	public void b02_copy() throws Exception {
+	public void b02_copy() {
 		ExternalDocumentation t = new ExternalDocumentation();
 
 		t = t.copy();
@@ -89,7 +89,7 @@ public class ExternalDocumentation_Test {
 	}
 
 	@Test
-	public void b03_keySet() throws Exception {
+	public void b03_keySet() {
 		ExternalDocumentation t = new ExternalDocumentation();
 
 		assertObject(t.keySet()).asJson().is("[]");

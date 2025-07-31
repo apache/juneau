@@ -40,13 +40,13 @@ public class CollectionAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void a01_msg() throws Exception {
+	public void a01_msg() {
 		assertThrown(()->test(null).setMsg("A {0}", 1).isExists()).asMessage().is("A 1");
 		assertThrown(()->test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("A 1");
 	}
 
 	@Test
-	public void a02_stdout() throws Exception {
+	public void a02_stdout() {
 		test(null).setStdOut().setSilent();
 	}
 
@@ -55,14 +55,14 @@ public class CollectionAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void ba01a_asString() throws Exception {
+	public void ba01a_asString() {
 		List<Integer> x = alist(1), nil = null;
 		test(x).asString().is("[1]");
 		test(nil).asString().isNull();
 	}
 
 	@Test
-	public void ba01b_asString_wSerializer() throws Exception {
+	public void ba01b_asString_wSerializer() {
 		List<Integer> x = alist(1), nil = null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("[1]");
@@ -70,33 +70,33 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void ba01c_asString_wPredicate() throws Exception {
+	public void ba01c_asString_wPredicate() {
 		List<Integer> x1 = alist(1);
 		test(x1).asString(x -> "foo").is("foo");
 	}
 
 	@Test
-	public void ba02_asJson() throws Exception {
+	public void ba02_asJson() {
 		List<Integer> x = alist(1), nil = null;
 		test(x).asJson().is("[1]");
 		test(nil).asJson().is("null");
 	}
 
 	@Test
-	public void ba03_asJsonSorted() throws Exception {
+	public void ba03_asJsonSorted() {
 		List<Integer> x1 = alist(2,1), nil = null;
 		test(x1).asJsonSorted().is("[1,2]");
 		test(nil).asJsonSorted().is("null");
 	}
 
 	@Test
-	public void ba04_apply() throws Exception {
+	public void ba04_apply() {
 		List<Integer> x1 = alist(1), x2 = alist(2);
 		test(x1).asTransformed(x -> x2).is(x2);
 	}
 
 	@Test
-	public void bb01_asStrings() throws Exception {
+	public void bb01_asStrings() {
 		List<Integer> x1 = alist(1), nil = null;
 		test(x1).asStrings().asJoin().is("1");
 		test(nil).asStrings().isNull();
@@ -114,28 +114,28 @@ public class CollectionAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void ca01_exists() throws Exception {
+	public void ca01_exists() {
 		List<Integer> x = alist(), nil = null;
 		test(x).isExists().isExists();
 		assertThrown(()->test(nil).isExists()).asMessage().is("Value was null.");
 	}
 
 	@Test
-	public void ca02_isNull() throws Exception {
+	public void ca02_isNull() {
 		List<Integer> x = alist(), nil = null;
 		test(nil).isNull();
 		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
 	}
 
 	@Test
-	public void ca03_isNotNull() throws Exception {
+	public void ca03_isNotNull() {
 		List<Integer> x = alist(), nil = null;
 		test(x).isNotNull();
 		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
 	}
 
 	@Test
-	public void ca04a_is_T() throws Exception {
+	public void ca04a_is_T() {
 		List<Integer> x1 = alist(1,2), x1a = alist(1,2), x2 = alist(3,4), nil = null;
 		test(x1).is(x1);
 		test(x1).is(x1a);
@@ -146,7 +146,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void ca04b_is_predicate() throws Exception {
+	public void ca04b_is_predicate() {
 		List<Integer> x1 = alist(1,2);
 		test(x1).is(x->x.size()==2);
 		assertThrown(()->test(x1).is(x->x.size()==3)).asMessage().asOneLine().is("Unexpected value: '[1, 2]'.");
@@ -154,7 +154,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void ca05_isNot() throws Exception {
+	public void ca05_isNot() {
 		List<Integer> x1 = alist(1,2), x1a = alist(1,2), x2 = alist(3,4), nil = null;
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
@@ -164,7 +164,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void ca06_isAny() throws Exception {
+	public void ca06_isAny() {
 		List<Integer> x1 = alist(1,2), x1a = alist(1,2), x2 = alist(3,4), nil = null;
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[[3, 4]]'.  Actual='[1, 2]'.");
@@ -173,7 +173,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void ca07_isNotAny() throws Exception {
+	public void ca07_isNotAny() {
 		List<Integer> x1 = alist(1,2), x1a = alist(1,2), x2 = alist(3,4), nil = null;
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
@@ -183,7 +183,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void ca08_isSame() throws Exception {
+	public void ca08_isSame() {
 		List<Integer> x1 = list(1,2), x1a = list(1,2), nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
@@ -193,7 +193,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void ca09_isSameJsonAs() throws Exception {
+	public void ca09_isSameJsonAs() {
 		List<Integer> x1 = alist(1,2), x1a = alist(1,2), x2 = alist(3,4), nil = null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
@@ -203,7 +203,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void ca10_isSameSortedJsonAs() throws Exception {
+	public void ca10_isSameSortedJsonAs() {
 		List<Integer> x1 = alist(1,2), x1a = alist(2,1), x2 = alist(3,4), nil = null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
@@ -213,7 +213,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void ca11_isSameSerializedAs() throws Exception {
+	public void ca11_isSameSerializedAs() {
 		List<Integer> x1 = alist(1,2), x1a = alist(1,2), x2 = alist(3,4), nil = null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
@@ -224,7 +224,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void ca12_isType() throws Exception {
+	public void ca12_isType() {
 		List<Integer> x = list(1,2), nil = null;
 		test(x).isType(List.class);
 		test(x).isType(Object.class);
@@ -234,7 +234,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void ca13_isExactType() throws Exception {
+	public void ca13_isExactType() {
 		List<Integer> x = list(1,2), nil = null;
 		test(x).isExactType(ArrayList.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.util.ArrayList'.");
@@ -244,7 +244,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void ca14_isString() throws Exception {
+	public void ca14_isString() {
 		List<Integer> x = alist(1,2), nil = null;
 		test(x).isString("[1, 2]");
 		test(nil).isString(null);
@@ -254,7 +254,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void ca15_isJson() throws Exception {
+	public void ca15_isJson() {
 		List<Integer> x = alist(1,2), nil = null;
 		test(x).isJson("[1,2]");
 		test(nil).isJson("null");
@@ -264,7 +264,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void cb01_isEmpty() throws Exception {
+	public void cb01_isEmpty() {
 		List<String> x1 = alist(), x2 = alist("a","b"), nil = null;
 		test(x1).isEmpty();
 		assertThrown(()->test(x2).isEmpty()).asMessage().is("Collection was not empty.");
@@ -272,7 +272,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void cb02_isNotEmpty() throws Exception {
+	public void cb02_isNotEmpty() {
 		List<String> x1 = alist(), x2 = alist("a","b"), nil = null;
 		test(x2).isNotEmpty();
 		assertThrown(()->test(x1).isNotEmpty()).asMessage().is("Collection was empty.");
@@ -280,7 +280,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void cb03_contains() throws Exception {
+	public void cb03_contains() {
 		List<String> x = alist("a","b"), nil = null;
 		test(x).isContains("a");
 		assertThrown(()->test(x).isContains("z")).asMessage().asOneLine().is("Collection did not contain expected value.  Expect='z'.  Value='[a, b]'.");
@@ -288,7 +288,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void cb04_doesNotContain() throws Exception {
+	public void cb04_doesNotContain() {
 		List<String> x = alist("a","b"), nil = null;
 		test(x).isNotContains("z");
 		assertThrown(()->test(x).isNotContains("a")).asMessage().asOneLine().is("Collection contained unexpected value.  Unexpected='a'.  Value='[a, b]'.");
@@ -296,7 +296,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void cb05_any() throws Exception {
+	public void cb05_any() {
 		List<String> x1 = alist("a","b"), nil = null;
 		test(x1).isAny(x->x.equals("a"));
 		test(x1).isAny((Predicate<String>)null);
@@ -305,7 +305,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void cb06_all() throws Exception {
+	public void cb06_all() {
 		List<String> x1 = alist("a","b"), nil = null;
 		test(x1).isAll(x->x!=null);
 		test(x1).isAll(null);
@@ -314,7 +314,7 @@ public class CollectionAssertion_Test {
 	}
 
 	@Test
-	public void cb07_isSize() throws Exception {
+	public void cb07_isSize() {
 		List<String> x = alist("a","b"), nil = null;
 		test(x).isSize(2);
 		assertThrown(()->test(x).isSize(0)).asMessage().asOneLine().is("Collection did not have the expected size.  Expect=0.  Actual=2.");

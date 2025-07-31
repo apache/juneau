@@ -31,7 +31,7 @@ public class RestUtils_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void a01_testDecode() throws Exception {
+	public void a01_testDecode() {
 		assertNull(urlDecode(null));
 		assertEquals("foo/bar baz  bing", urlDecode("foo%2Fbar+baz++bing"));
 	}
@@ -41,7 +41,7 @@ public class RestUtils_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void b01_testEncode() throws Exception {
+	public void b01_testEncode() {
 		assertNull(urlEncode(null));
 		assertEquals("foo%2Fbar+baz++bing", urlEncode("foo/bar baz  bing"));
 		assertEquals("foobar", urlEncode("foobar"));
@@ -54,7 +54,7 @@ public class RestUtils_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void c01_testGetServletURI() throws Exception {
+	public void c01_testGetServletURI() {
 		String e, sp, cp;
 
 		e = "http://hostname";
@@ -143,7 +143,7 @@ public class RestUtils_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void d01_testTrimSlashes() throws Exception {
+	public void d01_testTrimSlashes() {
 		assertNull(trimSlashes(null));
 		assertEquals("", trimSlashes(""));
 		assertEquals("", trimSlashes("/"));
@@ -159,7 +159,7 @@ public class RestUtils_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void e01_testTrimTrailingSlashes() throws Exception {
+	public void e01_testTrimTrailingSlashes() {
 		assertNull(trimTrailingSlashes((String)null));
 		assertEquals("", trimTrailingSlashes(""));
 		assertEquals("", trimTrailingSlashes("/"));
@@ -175,7 +175,7 @@ public class RestUtils_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void g01_testParseIntoSimpleMap() throws Exception {
+	public void g01_testParseIntoSimpleMap() {
 		Map<String,String[]> m;
 
 		String s = "?f1=,()=&f2a=$b(true)&f2b=true&f3a=$n(123)&f3b=123&f4=$s(foo)";
@@ -206,7 +206,7 @@ public class RestUtils_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void h01_testParseIntoSimpleMapMultiValues() throws Exception {
+	public void h01_testParseIntoSimpleMapMultiValues() {
 		Map<String,String[]> m;
 
 		String s = "?f1&f1&f2&f2=abc&f2=def&f2";

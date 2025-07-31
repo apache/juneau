@@ -77,7 +77,7 @@ public class SerializerConfigAnnotationTest {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test
-	public void basicWriterSerializer() throws Exception {
+	public void basicWriterSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
 		check("true", ((SerializerSession)x).isAddBeanTypes());
@@ -102,7 +102,7 @@ public class SerializerConfigAnnotationTest {
 	}
 
 	@Test
-	public void basicOutputStreamSerializer() throws Exception {
+	public void basicOutputStreamSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("true", ((SerializerSession)x).isAddBeanTypes());
@@ -133,7 +133,7 @@ public class SerializerConfigAnnotationTest {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test
-	public void noValuesWriterSerializer() throws Exception {
+	public void noValuesWriterSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
@@ -154,7 +154,7 @@ public class SerializerConfigAnnotationTest {
 	}
 
 	@Test
-	public void noValuesOutputStreamSerializer() throws Exception {
+	public void noValuesOutputStreamSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
@@ -180,7 +180,7 @@ public class SerializerConfigAnnotationTest {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test
-	public void noAnnotationWriterSerializer() throws Exception {
+	public void noAnnotationWriterSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
@@ -201,7 +201,7 @@ public class SerializerConfigAnnotationTest {
 	}
 
 	@Test
-	public void noAnnotationOutputStreamSerializer() throws Exception {
+	public void noAnnotationOutputStreamSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());

@@ -118,7 +118,7 @@ public class InvalidXmlBeansTest {
 	private String expected;
 	private Object in;
 
-	public InvalidXmlBeansTest(String label, Object in, String expected) throws Exception {
+	public InvalidXmlBeansTest(String label, Object in, String expected) {
 		this.in = in;
 		this.expected = expected;
 	}

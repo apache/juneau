@@ -85,7 +85,7 @@ public class License_Test {
 	}
 
 	@Test
-	public void b02_copy() throws Exception {
+	public void b02_copy() {
 		License t = new License();
 
 		t = t.copy();
@@ -102,7 +102,7 @@ public class License_Test {
 	}
 
 	@Test
-	public void b03_keySet() throws Exception {
+	public void b03_keySet() {
 		License t = new License();
 
 		assertObject(t.keySet()).asJson().is("[]");

@@ -71,7 +71,7 @@ public class Remote_RequestAnnotation_Test {
 	}
 
 	@Test
-	public void a01_basic() throws Exception {
+	public void a01_basic() {
 		A2 x = remote(A.class,A2.class);
 		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}",x.post(new A1()));
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}",x.post(null));
@@ -127,7 +127,7 @@ public class Remote_RequestAnnotation_Test {
 	}
 
 	@Test
-	public void b01_annotationOnParent() throws Exception {
+	public void b01_annotationOnParent() {
 		B3 x = remote(B.class,B3.class);
 		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}",x.post(new B2()));
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}",x.post(null));
@@ -183,7 +183,7 @@ public class Remote_RequestAnnotation_Test {
 	}
 
 	@Test
-	public void c01_annotationOnInterface() throws Exception {
+	public void c01_annotationOnInterface() {
 		C3 x = remote(C.class,C3.class);
 		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}",x.post(new C2()));
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}",x.post(null));
@@ -231,7 +231,7 @@ public class Remote_RequestAnnotation_Test {
 	}
 
 	@Test
-	public void d01_annotationOnParameter() throws Exception {
+	public void d01_annotationOnParameter() {
 		D2 x = remote(D.class,D2.class);
 		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}",x.post(new D1()));
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}",x.post(null));
@@ -280,7 +280,7 @@ public class Remote_RequestAnnotation_Test {
 	}
 
 	@Test
-	public void e01_partSerializer() throws Exception {
+	public void e01_partSerializer() {
 		E2 x = remote(E.class,E2.class);
 		assertEquals("{body:'foo',header:'xxx',query:'xxx',path:'xxx'}",x.post(new E1()));
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}",x.post(null));

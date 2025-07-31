@@ -25,7 +25,7 @@ public class ParserSetTest {
 	// Test parser group matching
 	//====================================================================================================
 	@Test
-	public void testParserGroupMatching() throws Exception {
+	public void testParserGroupMatching() {
 
 		ParserSet s = ParserSet.create().add(Parser1.class, Parser2.class, Parser3.class).build();
 		assertObject(s.getParser("text/foo")).isType(Parser1.class);
@@ -53,7 +53,7 @@ public class ParserSetTest {
 	// Test inheritence
 	//====================================================================================================
 	@Test
-	public void testInheritence() throws Exception {
+	public void testInheritence() {
 		ParserSet.Builder sb = null;
 		ParserSet s = null;
 

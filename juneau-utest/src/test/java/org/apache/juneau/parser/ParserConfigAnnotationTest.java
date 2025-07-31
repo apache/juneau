@@ -67,7 +67,7 @@ public class ParserConfigAnnotationTest {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test
-	public void basicReaderParser() throws Exception {
+	public void basicReaderParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		JsonParserSession x = JsonParser.create().apply(al).build().getSession();
 		check("true", x.isAutoCloseStreams());
@@ -81,7 +81,7 @@ public class ParserConfigAnnotationTest {
 	}
 
 	@Test
-	public void basicInputStreamParser() throws Exception {
+	public void basicInputStreamParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		MsgPackParserSession x = MsgPackParser.create().apply(al).build().getSession();
 		check("true", x.isAutoCloseStreams());
@@ -102,7 +102,7 @@ public class ParserConfigAnnotationTest {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test
-	public void noValuesReaderParser() throws Exception {
+	public void noValuesReaderParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		JsonParserSession x = JsonParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
@@ -116,7 +116,7 @@ public class ParserConfigAnnotationTest {
 	}
 
 	@Test
-	public void noValuesInputStreamParser() throws Exception {
+	public void noValuesInputStreamParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		MsgPackParserSession x = MsgPackParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
@@ -136,7 +136,7 @@ public class ParserConfigAnnotationTest {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test
-	public void noAnnotationReaderParser() throws Exception {
+	public void noAnnotationReaderParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		JsonParserSession x = JsonParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
@@ -150,7 +150,7 @@ public class ParserConfigAnnotationTest {
 	}
 
 	@Test
-	public void noAnnotationInputStreamParser() throws Exception {
+	public void noAnnotationInputStreamParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		MsgPackParserSession x = MsgPackParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());

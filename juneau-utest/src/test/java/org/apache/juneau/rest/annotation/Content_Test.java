@@ -97,7 +97,7 @@ public class Content_Test {
 			return read(b);
 		}
 		@RestPut(path="/InputStreamTransform")
-		public A14 m(@Content A14 b) throws Exception {
+		public A14 m(@Content A14 b) {
 			return b;
 		}
 		public static class A14 {
@@ -106,7 +106,7 @@ public class Content_Test {
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/ReaderTransform")
-		public A15 n(@Content A15 b) throws Exception {
+		public A15 n(@Content A15 b) {
 			return b;
 		}
 		public static class A15 {
@@ -115,7 +115,7 @@ public class Content_Test {
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/StringTransform")
-		public A16 o(@Content A16 b) throws Exception { return b; }
+		public A16 o(@Content A16 b) { return b; }
 		public static class A16 {
 			private String s;
 			public A16(String s) { this.s = s; }
@@ -447,7 +447,7 @@ public class Content_Test {
 		@Content
 		public static class B3 extends LinkedList<B2> {}
 		@RestPut(path="/InputStreamTransform")
-		public B4 d(B4 b) throws Exception {
+		public B4 d(B4 b) {
 			return b;
 		}
 		@Content
@@ -457,7 +457,7 @@ public class Content_Test {
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/ReaderTransform")
-		public B5 e(B5 b) throws Exception {
+		public B5 e(B5 b) {
 			return b;
 		}
 		@Content
@@ -513,19 +513,19 @@ public class Content_Test {
 	@Rest
 	public static class D {
 		@RestPut(path="/String")
-		public Reader a(@Content Reader b) throws Exception {
+		public Reader a(@Content Reader b) {
 			return b;
 		}
 		@RestPut(path="/InputStream")
-		public InputStream b(@Content InputStream b) throws Exception {
+		public InputStream b(@Content InputStream b) {
 			return b;
 		}
 		@RestPut(path="/Reader")
-		public Reader c(@Content Reader b) throws Exception {
+		public Reader c(@Content Reader b) {
 			return b;
 		}
 		@RestPut(path="/StringTransform")
-		public Reader d(@Content D1 b) throws Exception {
+		public Reader d(@Content D1 b) {
 			return reader(b.toString());
 		}
 		public static class D1 {
@@ -534,7 +534,7 @@ public class Content_Test {
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/InputStreamTransform")
-		public Reader e(@Content D2 b) throws Exception {
+		public Reader e(@Content D2 b) {
 			return reader(b.toString());
 		}
 		public static class D2 {
@@ -543,7 +543,7 @@ public class Content_Test {
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/ReaderTransform")
-		public Reader f(@Content D3 b) throws Exception {
+		public Reader f(@Content D3 b) {
 			return reader(b.toString());
 		}
 		public static class D3 {
@@ -552,7 +552,7 @@ public class Content_Test {
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/StringTransformBodyOnPojo")
-		public Reader g(D4 b) throws Exception {
+		public Reader g(D4 b) {
 			return reader(b.toString());
 		}
 		@Content
@@ -562,7 +562,7 @@ public class Content_Test {
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/InputStreamTransformBodyOnPojo")
-		public Reader h(D5 b) throws Exception {
+		public Reader h(D5 b) {
 			return reader(b.toString());
 		}
 		@Content
@@ -573,7 +573,7 @@ public class Content_Test {
 		}
 
 		@RestPut(path="/ReaderTransformBodyOnPojo")
-		public Reader i(D6 b) throws Exception {
+		public Reader i(D6 b) {
 			return reader(b.toString());
 		}
 		@Content
@@ -735,7 +735,7 @@ public class Content_Test {
 		public Reader a(
 				@Content F1 bean,
 				@HasQuery("p1") boolean hqp1, @HasQuery("p2") boolean hqp2,
-				@Query("p1") String qp1, @Query("p2") int qp2) throws Exception {
+				@Query("p1") String qp1, @Query("p2") int qp2) {
 			return reader("bean=["+Json5Serializer.DEFAULT.toString(bean)+"],qp1=["+qp1+"],qp2=["+qp2+"],hqp1=["+hqp1+"],hqp2=["+hqp2+"]");
 		}
 		public static class F1 {
@@ -770,7 +770,7 @@ public class Content_Test {
 	@Rest(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
 	public static class G {
 		@RestPost(path="/")
-		public XBeans.XC a(@Content XBeans.XC content) throws Exception {
+		public XBeans.XC a(@Content XBeans.XC content) {
 			return content;
 		}
 	}
@@ -814,7 +814,7 @@ public class Content_Test {
 	public static class H {
 		@RestPost(path="/")
 		@UrlEncodingConfig(expandedParams="true")
-		public XBeans.XB a(@Content XBeans.XB content) throws Exception {
+		public XBeans.XB a(@Content XBeans.XB content) {
 			return content;
 		}
 	}
@@ -854,7 +854,7 @@ public class Content_Test {
 	public static class H2 {
 		@RestPost(path="/")
 		@UrlEncodingConfig(expandedParams="true")
-		public XBeans.XE a(@Content XBeans.XE content) throws Exception {
+		public XBeans.XE a(@Content XBeans.XE content) {
 			return content;
 		}
 	}
@@ -895,13 +895,13 @@ public class Content_Test {
 	@Rest(serializers=JsonSerializer.class,parsers=JsonParser.class)
 	public static class I {
 		@RestPost
-		public XBeans.XB a(@Content @Schema(r=true) XBeans.XB content) throws Exception {
+		public XBeans.XB a(@Content @Schema(r=true) XBeans.XB content) {
 			return content;
 		}
 		@RestPost
 		@Bean(on="A,B,C",sort=true)
 		@UrlEncoding(on="C",expandedParams=true)
-		public XBeans.XE b(@Content @Schema(r=true) XBeans.XE content) throws Exception {
+		public XBeans.XE b(@Content @Schema(r=true) XBeans.XE content) {
 			return content;
 		}
 	}
@@ -934,22 +934,22 @@ public class Content_Test {
 	@Rest(serializers=Json5Serializer.class,parsers=JsonParser.class)
 	public static class J {
 		@RestPost
-		public Object a(@Content Optional<Integer> body) throws Exception {
+		public Object a(@Content Optional<Integer> body) {
 			assertNotNull(body);
 			return body;
 		}
 		@RestPost
-		public Object b(@Content Optional<ABean> body) throws Exception {
+		public Object b(@Content Optional<ABean> body) {
 			assertNotNull(body);
 			return body;
 		}
 		@RestPost
-		public Object c(@Content Optional<List<ABean>> body) throws Exception {
+		public Object c(@Content Optional<List<ABean>> body) {
 			assertNotNull(body);
 			return body;
 		}
 		@RestPost
-		public Object d(@Content List<Optional<ABean>> body) throws Exception {
+		public Object d(@Content List<Optional<ABean>> body) {
 			return body;
 		}
 	}

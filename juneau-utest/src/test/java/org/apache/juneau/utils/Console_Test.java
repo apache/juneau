@@ -17,7 +17,7 @@ import org.junit.*;
 public class Console_Test {
 
 	@Test
-	public void basic() throws Exception {
+	public void basic() {
 		Console.out("test{0}",1);
 		Console.err("test{0}",2);
 	}

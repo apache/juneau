@@ -42,43 +42,44 @@ public class XmlTest {
 	@Test
 	public void testComparisonWithJson() throws Exception {
 
-		String json1 =
-			"{\n"
-			+"	name: \"John Smith\",\n"
-			+"	address: {\n"
-			+"		streetAddress: \"21 2nd Street\",\n"
-			+"		city: \"New York\",\n"
-			+"		state: \"NY\",\n"
-			+"		postalCode: 10021\n"
-			+"	},\n"
-			+"	phoneNumbers: [\n"
-			+"		\"212 555-1111\",\n"
-			+"		\"212 555-2222\"\n"
-			+"	],\n"
-			+"	additionalInfo: null,\n"
-			+"	remote: false,\n"
-			+"	height: 62.4,\n"
-			+"	\"fico score\": \" > 640\"\n"
-			+"}";
+		String json1 = """
+			{
+				name: "John Smith",
+				address: {
+					streetAddress: "21 2nd Street",
+					city: "New York",
+					state: "NY",
+					postalCode: 10021
+				},
+				phoneNumbers: [
+					"212 555-1111",
+					"212 555-2222"
+				],
+				additionalInfo: null,
+				remote: false,
+				height: 62.4,
+				"fico score": " > 640"
+			}""";
 
-		String xml1 =
-			"<object>\n"
-			+"	<name>John Smith</name>\n"
-			+"	<address _type='object'>\n"
-			+"		<streetAddress>21 2nd Street</streetAddress>\n"
-			+"		<city>New York</city>\n"
-			+"		<state>NY</state>\n"
-			+"		<postalCode _type='number'>10021</postalCode>\n"
-			+"	</address>\n"
-			+"	<phoneNumbers _type='array'>\n"
-			+"		<string>212 555-1111</string>\n"
-			+"		<string>212 555-2222</string>\n"
-			+"	</phoneNumbers>\n"
-			+"	<additionalInfo _type='null'/>\n"
-			+"	<remote _type='boolean'>false</remote>\n"
-			+"	<height _type='number'>62.4</height>\n"
-			+"	<fico_x0020_score>_x0020_&gt; 640</fico_x0020_score>\n"
-			+"</object>\n";
+			String xml1 = """
+			<object>
+				<name>John Smith</name>
+				<address _type='object'>
+					<streetAddress>21 2nd Street</streetAddress>
+					<city>New York</city>
+					<state>NY</state>
+					<postalCode _type='number'>10021</postalCode>
+				</address>
+				<phoneNumbers _type='array'>
+					<string>212 555-1111</string>
+					<string>212 555-2222</string>
+				</phoneNumbers>
+				<additionalInfo _type='null'/>
+				<remote _type='boolean'>false</remote>
+				<height _type='number'>62.4</height>
+				<fico_x0020_score>_x0020_&gt; 640</fico_x0020_score>
+			</object>
+			""";
 
 		JsonMap m = (JsonMap) XmlParser.DEFAULT.parse(xml1, Object.class);
 		String json2 = JsonSerializer.create().simpleAttrs().ws().keepNullProperties().build().serialize(m);
@@ -98,43 +99,44 @@ public class XmlTest {
 	@Test
 	public void testNamespaces() throws Exception {
 
-		String json1 =
-			"{\n"
-			+"	name: \"John Smith\", \n"
-			+"	address: {\n"
-			+"		streetAddress: \"21 2nd Street\", \n"
-			+"		city: \"New York\", \n"
-			+"		state: \"NY\", \n"
-			+"		postalCode: 10021\n"
-			+"	}, \n"
-			+"	phoneNumbers: [\n"
-			+"		\"212 555-1111\", \n"
-			+"		\"212 555-2222\"\n"
-			+"	], \n"
-			+"	additionalInfo: null, \n"
-			+"	remote: false, \n"
-			+"	height: 62.4, \n"
-			+"	\"fico score\": \" > 640\"\n"
-			+"}";
+		String json1 = """
+			{
+				name: "John Smith",
+				address: {
+					streetAddress: "21 2nd Street",
+					city: "New York",
+					state: "NY",
+					postalCode: 10021
+				},
+				phoneNumbers: [
+					"212 555-1111",
+					"212 555-2222"
+				],
+				additionalInfo: null,
+				remote: false,
+				height: 62.4,
+				"fico score": " > 640"
+			}""";
 
-		String xml1 =
-			"<object xmlns='http://www.apache.org'>\n"
-			+"	<name>John Smith</name>\n"
-			+"	<address _type='object'>\n"
-			+"		<streetAddress>21 2nd Street</streetAddress>\n"
-			+"		<city>New York</city>\n"
-			+"		<state>NY</state>\n"
-			+"		<postalCode _type='number'>10021</postalCode>\n"
-			+"	</address>\n"
-			+"	<phoneNumbers _type='array'>\n"
-			+"		<string>212 555-1111</string>\n"
-			+"		<string>212 555-2222</string>\n"
-			+"	</phoneNumbers>\n"
-			+"	<additionalInfo _type='null'/>\n"
-			+"	<remote _type='boolean'>false</remote>\n"
-			+"	<height _type='number'>62.4</height>\n"
-			+"	<fico_x0020_score>_x0020_&gt; 640</fico_x0020_score>\n"
-			+"</object>\n";
+			String xml1 = """
+			<object xmlns='http://www.apache.org'>
+				<name>John Smith</name>
+				<address _type='object'>
+					<streetAddress>21 2nd Street</streetAddress>
+					<city>New York</city>
+					<state>NY</state>
+					<postalCode _type='number'>10021</postalCode>
+				</address>
+				<phoneNumbers _type='array'>
+					<string>212 555-1111</string>
+					<string>212 555-2222</string>
+				</phoneNumbers>
+				<additionalInfo _type='null'/>
+				<remote _type='boolean'>false</remote>
+				<height _type='number'>62.4</height>
+				<fico_x0020_score>_x0020_&gt; 640</fico_x0020_score>
+			</object>
+			""";
 
 		JsonMap m = (JsonMap) JsonParser.DEFAULT.parse(json1, Object.class);
 		String r = XmlSerializer.create().ns().sq().ws()
@@ -151,11 +153,12 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testBeanNameAnnotation() throws Exception {
-		String e =
-			"<Person1>\n"
-			+ "	<name>John Smith</name>\n"
-			+ "	<age>123</age>\n"
-			+ "</Person1>\n";
+		String e = """
+			<Person1>
+				<name>John Smith</name>
+				<age>123</age>
+			</Person1>
+			""";
 		String r = XmlSerializer.DEFAULT_SQ_READABLE.serialize(new Person1("John Smith", 123));
 		assertEquals(e, r);
 	}
@@ -182,10 +185,11 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testTrimNulls() throws Exception {
-		String e =
-			"<Person1>\n"
-			+ "	<age>123</age>\n"
-			+ "</Person1>\n";
+		String e = """
+			<Person1>
+				<age>123</age>
+			</Person1>
+			""";
 		String r = XmlSerializer.DEFAULT_SQ_READABLE.serialize(new Person1(null, 123));
 		assertEquals(e, r);
 	}
@@ -310,7 +314,7 @@ public class XmlTest {
 	// @Xml.ns without matching nsUri.
 	//====================================================================================================
 	@Test
-	public void testXmlNsWithoutMatchingNsUri() throws Exception {
+	public void testXmlNsWithoutMatchingNsUri() {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		K t = new K();
 		assertThrown(()->s.serialize(t)).asMessage().is("Found @Xml.prefix annotation with no matching URI.  prefix='foo'");

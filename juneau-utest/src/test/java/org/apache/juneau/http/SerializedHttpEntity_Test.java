@@ -67,7 +67,7 @@ public class SerializedHttpEntity_Test {
 	}
 
 	@Test
-	public void a04_serializer_bad() throws Exception {
+	public void a04_serializer_bad() {
 		assertThrown(()->serializedEntity(null,OpenApiSerializer.DEFAULT).setSchema(schema().required().build()).asString()).asMessages().isContains("Required value not provided.");
 	}
 
@@ -79,12 +79,12 @@ public class SerializedHttpEntity_Test {
 	}
 
 	@Test
-	public void a06_isRepeatable() throws Exception {
+	public void a06_isRepeatable() {
 		assertBoolean(serializedEntity(ABean.get(),null).isRepeatable()).isTrue();
 	}
 
 	@Test
-	public void a07_getContentLength() throws Exception {
+	public void a07_getContentLength() {
 		assertLong(serializedEntity(ABean.get(),null).getContentLength()).is(-1L);
 	}
 

@@ -25,7 +25,7 @@ public class SerializerSetTest {
 	// Trim nulls from beans
 	//====================================================================================================
 	@Test
-	public void testSerializerGroupMatching() throws Exception {
+	public void testSerializerGroupMatching() {
 
 		SerializerSet sg = SerializerSet.create().add(SA1.class, SA2.class, SA3.class).build();
 		assertObject(sg.getSerializer("text/foo")).isType(SA1.class);
@@ -72,7 +72,7 @@ public class SerializerSetTest {
 	// Test inheritence
 	//====================================================================================================
 	@Test
-	public void testInheritence() throws Exception {
+	public void testInheritence() {
 		SerializerSet.Builder gb = null;
 		SerializerSet g = null;
 
@@ -123,7 +123,7 @@ public class SerializerSetTest {
 	// Test media type with meta-characters
 	//====================================================================================================
 	@Test
-	public void testMediaTypesWithMetaCharacters() throws Exception {
+	public void testMediaTypesWithMetaCharacters() {
 		SerializerSet.Builder gb = null;
 		SerializerSet g = null;
 

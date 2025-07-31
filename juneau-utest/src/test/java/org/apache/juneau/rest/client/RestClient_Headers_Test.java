@@ -131,13 +131,13 @@ public class RestClient_Headers_Test {
 		@Override
 		public HttpPartSerializerSession getPartSession() {
 			return (type, schema, value) -> {
-            	throw new SerializeException("bad");
-            };
+				throw new SerializeException("bad");
+			};
 		}
 	}
 
 	@Test
-	public void a12_badSerialization() throws Exception {
+	public void a12_badSerialization() {
 		assertThrown(()->checkFooClient().headers(header("Foo","bar",null).serializer(new A12())).build().get().run()).asMessages().isContains("bad");
 	}
 

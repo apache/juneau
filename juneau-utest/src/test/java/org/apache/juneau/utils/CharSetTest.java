@@ -25,7 +25,7 @@ public class CharSetTest {
 	// test - Basic tests
 	//====================================================================================================
 	@Test
-	public void test() throws Exception {
+	public void test() {
 		AsciiSet cs = AsciiSet.create("abc\u1234");
 		assertTrue(cs.contains('a'));
 		assertFalse(cs.contains('d'));

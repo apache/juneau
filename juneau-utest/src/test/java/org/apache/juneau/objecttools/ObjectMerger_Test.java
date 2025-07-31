@@ -27,7 +27,7 @@ public class ObjectMerger_Test {
 	// Basic tests
 	//====================================================================================================
 	@Test
-	public void a01_basic() throws Exception {
+	public void a01_basic() {
 		IA a1, a2, am;
 
 		a1 = new A("1"); a2 = new A("2");

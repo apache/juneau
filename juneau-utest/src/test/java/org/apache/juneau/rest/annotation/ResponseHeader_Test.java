@@ -130,7 +130,7 @@ public class ResponseHeader_Test {
 	}
 
 	@Test
-	public void b01_swagger_onPojo() throws Exception {
+	public void b01_swagger_onPojo() {
 		HeaderInfo x;
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(B.class);
 
@@ -219,7 +219,7 @@ public class ResponseHeader_Test {
 	}
 
 	@Test
-	public void c01_swagger_onMethodParameters() throws Exception {
+	public void c01_swagger_onMethodParameters() {
 		HeaderInfo x;
 		org.apache.juneau.bean.swagger.Swagger sc = getSwagger(C.class);
 

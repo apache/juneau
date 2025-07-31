@@ -683,7 +683,7 @@ public class XmlIgnoreCommentsTest {
 	private String input;
 	private boolean skipWsTests;
 
-	public XmlIgnoreCommentsTest(String label, Class<?> type, Object expected, String input, boolean skipWsTests) throws Exception {
+	public XmlIgnoreCommentsTest(String label, Class<?> type, Object expected, String input, boolean skipWsTests) {
 		this.label = label;
 		this.type = type;
 		this.expected = expected;

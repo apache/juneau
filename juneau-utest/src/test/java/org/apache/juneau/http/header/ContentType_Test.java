@@ -66,7 +66,7 @@ public class ContentType_Test {
 	}
 
 	@Test
-	public void a02_asMediaType() throws Exception {
+	public void a02_asMediaType() {
 		assertString(contentType(()->MediaType.JSON).asMediaType()).is("application/json");
 	}
 

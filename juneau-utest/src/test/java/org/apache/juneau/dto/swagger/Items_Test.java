@@ -190,7 +190,7 @@ public class Items_Test {
 	}
 
 	@Test
-	public void b02_copy() throws Exception {
+	public void b02_copy() {
 		Items t = new Items();
 
 		t = t.copy();
@@ -222,7 +222,7 @@ public class Items_Test {
 	}
 
 	@Test
-	public void b03_keySet() throws Exception {
+	public void b03_keySet() {
 		Items t = new Items();
 
 		assertObject(t.keySet()).asJson().is("[]");

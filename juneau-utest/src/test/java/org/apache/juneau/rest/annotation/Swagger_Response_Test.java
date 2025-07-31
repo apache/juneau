@@ -98,7 +98,7 @@ public class Swagger_Response_Test {
 	}
 
 	@Test
-	public void a01_fromPojo() throws Exception {
+	public void a01_fromPojo() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(A.class);
 		ResponseInfo x;
 
@@ -194,7 +194,7 @@ public class Swagger_Response_Test {
 	}
 
 	@Test
-	public void b01_schemaFromPojo() throws Exception {
+	public void b01_schemaFromPojo() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(B.class);
 		ResponseInfo x;
 
@@ -245,7 +245,7 @@ public class Swagger_Response_Test {
 	}
 
 	@Test
-	public void c01_exampleFromPojo() throws Exception {
+	public void c01_exampleFromPojo() {
 		org.apache.juneau.bean.swagger.Swagger sc = getSwagger(C.class);
 		ResponseInfo x;
 
@@ -307,7 +307,7 @@ public class Swagger_Response_Test {
 	}
 
 	@Test
-	public void d01_fromThrowable() throws Exception {
+	public void d01_fromThrowable() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(D.class);
 		ResponseInfo x;
 
@@ -349,7 +349,7 @@ public class Swagger_Response_Test {
 	}
 
 	@Test
-	public void e01_schemaFromThrowable() throws Exception {
+	public void e01_schemaFromThrowable() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(E.class);
 
 		ResponseInfo x = s.getResponseInfo("/a","get",500);
@@ -370,7 +370,7 @@ public class Swagger_Response_Test {
 	}
 
 	@Test
-	public void f01_exampeFromThrowable() throws Exception {
+	public void f01_exampeFromThrowable() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(F.class);
 		ResponseInfo x;
 

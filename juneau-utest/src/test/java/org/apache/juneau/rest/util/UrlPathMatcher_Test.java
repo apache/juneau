@@ -39,7 +39,7 @@ public class UrlPathMatcher_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void a01_comparision() throws Exception {
+	public void a01_comparision() {
 		List<UrlPathMatcher> l = new LinkedList<>();
 
 		l.add(of(""));
@@ -63,7 +63,7 @@ public class UrlPathMatcher_Test {
 	}
 
 	@Test
-	public void a02_comparision() throws Exception {
+	public void a02_comparision() {
 		List<UrlPathMatcher> l = new LinkedList<>();
 
 		l.add(of("foo.txt"));
@@ -87,7 +87,7 @@ public class UrlPathMatcher_Test {
 	}
 
 	@Test
-	public void a03_comparision() throws Exception {
+	public void a03_comparision() {
 		List<UrlPathMatcher> l = new LinkedList<>();
 
 		l.add(of("/foo"));
@@ -102,51 +102,51 @@ public class UrlPathMatcher_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void b01_simple_match() throws Exception {
+	public void b01_simple_match() {
 		UrlPathMatcher p = of("/foo");
 		check(p, "/foo", "{}");
 		check(p, "/foo/", "{r:''}");
 	}
 
 	@Test
-	public void b02_simple_noMatch() throws Exception {
+	public void b02_simple_noMatch() {
 		UrlPathMatcher p = of("/foo");
 		shouldNotMatch(p, "/fooo", "/fo", "/fooo/", "/", "/foo/bar");
 	}
 
 	@Test
-	public void b03_simple_match_2parts() throws Exception {
+	public void b03_simple_match_2parts() {
 		UrlPathMatcher p = of("/foo/bar");
 		check(p, "/foo/bar", "{}");
 		check(p, "/foo/bar/", "{r:''}");
 	}
 
 	@Test
-	public void b04_simple_noMatch_2parts() throws Exception {
+	public void b04_simple_noMatch_2parts() {
 		UrlPathMatcher p = of("/foo/bar");
 		shouldNotMatch(p, "/foo", "/foo/baz", "/foo/barr", "/foo/bar/baz");
 	}
 
 	@Test
-	public void b05_simple_match_0parts() throws Exception {
+	public void b05_simple_match_0parts() {
 		UrlPathMatcher p = of("/");
 		check(p, "/", "{r:''}");
 	}
 
 	@Test
-	public void b06_simple_noMatch_0parts() throws Exception {
+	public void b06_simple_noMatch_0parts() {
 		UrlPathMatcher p = of("/");
 		shouldNotMatch(p, "/foo", "/foo/bar");
 	}
 
 	@Test
-	public void b07_simple_match_blank() throws Exception {
+	public void b07_simple_match_blank() {
 		UrlPathMatcher p = of("");
 		check(p, "/", "{r:''}");
 	}
 
 	@Test
-	public void b08_simple_noMatch_blank() throws Exception {
+	public void b08_simple_noMatch_blank() {
 		UrlPathMatcher p = of("");
 		shouldNotMatch(p, "/foo", "/foo/bar");
 	}
@@ -156,7 +156,7 @@ public class UrlPathMatcher_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void c01_simple_withRemainder_match() throws Exception {
+	public void c01_simple_withRemainder_match() {
 		UrlPathMatcher p = of("/foo/*");
 		check(p, "/foo", "{}");
 		check(p, "/foo/", "{r:''}");
@@ -166,13 +166,13 @@ public class UrlPathMatcher_Test {
 	}
 
 	@Test
-	public void c02_simple_withRemainder_noMatch() throws Exception {
+	public void c02_simple_withRemainder_noMatch() {
 		UrlPathMatcher p = of("/foo/*");
 		shouldNotMatch(p, "/fooo", "/fo", "/fooo/", "/", "/fooo/bar");
 	}
 
 	@Test
-	public void c03_simple_withRemainder_match_2parts() throws Exception {
+	public void c03_simple_withRemainder_match_2parts() {
 		UrlPathMatcher p = of("/foo/bar/*");
 		check(p, "/foo/bar", "{}");
 		check(p, "/foo/bar/baz", "{r:'baz'}");
@@ -180,13 +180,13 @@ public class UrlPathMatcher_Test {
 	}
 
 	@Test
-	public void c04_simple_withRemainder_noMatch_2parts() throws Exception {
+	public void c04_simple_withRemainder_noMatch_2parts() {
 		UrlPathMatcher p = of("/foo/bar/*");
 		shouldNotMatch(p, "/", "/foo", "/foo/baz", "/foo/barr", "/foo/barr/");
 	}
 
 	@Test
-	public void c05_simple_withRemainder_match_0parts() throws Exception {
+	public void c05_simple_withRemainder_match_0parts() {
 		UrlPathMatcher p = of("/*");
 		check(p, "/", "{r:''}");
 		check(p, "/foo", "{r:'foo'}");
@@ -194,7 +194,7 @@ public class UrlPathMatcher_Test {
 	}
 
 	@Test
-	public void c06_simple_withRemainder_match_blank() throws Exception {
+	public void c06_simple_withRemainder_match_blank() {
 		UrlPathMatcher p = of("*");
 		check(p, "/", "{r:''}");
 		check(p, "/foo", "{r:'foo'}");
@@ -206,53 +206,53 @@ public class UrlPathMatcher_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void d01_1part1vars_match() throws Exception {
+	public void d01_1part1vars_match() {
 		UrlPathMatcher p = of("/{foo}");
 		check(p, "/bar", "{v:{foo:'bar'}}");
 		check(p, "/bar/", "{v:{foo:'bar'},r:''}");
 	}
 
 	@Test
-	public void d02_1part1var_noMatch() throws Exception {
+	public void d02_1part1var_noMatch() {
 		UrlPathMatcher p = of("/{foo}");
 		shouldNotMatch(p, "/foo/bar", "/");
 	}
 
 	@Test
-	public void d03_2parts1var_match() throws Exception {
+	public void d03_2parts1var_match() {
 		UrlPathMatcher p = of("/foo/{bar}");
 		check(p, "/foo/baz", "{v:{bar:'baz'}}");
 		check(p, "/foo/baz/", "{v:{bar:'baz'},r:''}");
 	}
 
 	@Test
-	public void d04_2parts1var_noMatch() throws Exception {
+	public void d04_2parts1var_noMatch() {
 		UrlPathMatcher p = of("/foo/{bar}");
 		shouldNotMatch(p, "/fooo/baz", "/fo/baz", "/foo", "/");
 	}
 
 	@Test
-	public void d05_3vars_match() throws Exception {
+	public void d05_3vars_match() {
 		UrlPathMatcher p = of("/{a}/{b}/{c}");
 		check(p, "/A/B/C", "{v:{a:'A',b:'B',c:'C'}}");
 		check(p, "/A/B/C/", "{v:{a:'A',b:'B',c:'C'},r:''}");
 	}
 
 	@Test
-	public void d06_3vars_noMatch() throws Exception {
+	public void d06_3vars_noMatch() {
 		UrlPathMatcher p = of("/{a}/{b}/{c}");
 		shouldNotMatch(p, "/A/B", "/A/B/C/D", "/");
 	}
 
 	@Test
-	public void d07_7parts3vars_match() throws Exception {
+	public void d07_7parts3vars_match() {
 		UrlPathMatcher p = of("/a/{a}/b/{b}/c/{c}/d");
 		check(p, "/a/A/b/B/c/C/d", "{v:{a:'A',b:'B',c:'C'}}");
 		check(p, "/a/A/b/B/c/C/d/", "{v:{a:'A',b:'B',c:'C'},r:''}");
 	}
 
 	@Test
-	public void d08_6parts3vars_noMatch() throws Exception {
+	public void d08_6parts3vars_noMatch() {
 		UrlPathMatcher p = of("/a/{a}/b/{b}/c/{c}/d");
 		shouldNotMatch(p, "/a/A/a/B/c/C/d", "/a/A/b/B/c/C/dd", "/a/b/c/d");
 	}
@@ -262,7 +262,7 @@ public class UrlPathMatcher_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void e01_1part1vars_withRemainder_match() throws Exception {
+	public void e01_1part1vars_withRemainder_match() {
 		UrlPathMatcher p = of("/{foo}/*");
 		check(p, "/bar", "{v:{foo:'bar'}}");
 		check(p, "/bar/", "{v:{foo:'bar'},r:''}");
@@ -271,13 +271,13 @@ public class UrlPathMatcher_Test {
 	}
 
 	@Test
-	public void e02_1part1var_withRemainder_noMatch() throws Exception {
+	public void e02_1part1var_withRemainder_noMatch() {
 		UrlPathMatcher p = of("/{foo}/*");
 		shouldNotMatch(p, "/");
 	}
 
 	@Test
-	public void e03_2parts1var_withRemainder_match() throws Exception {
+	public void e03_2parts1var_withRemainder_match() {
 		UrlPathMatcher p = of("/foo/{bar}/*");
 		check(p, "/foo/baz", "{v:{bar:'baz'}}");
 		check(p, "/foo/baz/", "{v:{bar:'baz'},r:''}");
@@ -285,7 +285,7 @@ public class UrlPathMatcher_Test {
 	}
 
 	@Test
-	public void e04_2parts1var_withRemainder_noMatch() throws Exception {
+	public void e04_2parts1var_withRemainder_noMatch() {
 		UrlPathMatcher p = of("/foo/{bar}/*");
 		shouldNotMatch(p, "/fooo/baz", "/fo/baz", "/foo", "/");
 	}
@@ -295,7 +295,7 @@ public class UrlPathMatcher_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void f01_innerMeta_withRemainder_match() throws Exception {
+	public void f01_innerMeta_withRemainder_match() {
 		UrlPathMatcher p = of("/*/*");
 		check(p, "/bar", "{}");
 		check(p, "/bar/", "{r:''}");
@@ -304,13 +304,13 @@ public class UrlPathMatcher_Test {
 	}
 
 	@Test
-	public void f02_innerMeta_withRemainder_noMatch() throws Exception {
+	public void f02_innerMeta_withRemainder_noMatch() {
 		UrlPathMatcher p = of("/*/*");
 		shouldNotMatch(p, "/");
 	}
 
 	@Test
-	public void f03_innerMeta_withRemainder_match() throws Exception {
+	public void f03_innerMeta_withRemainder_match() {
 		UrlPathMatcher p = of("/foo/*/bar/*");
 		check(p, "/foo/baz/bar", "{}");
 		check(p, "/foo/baz/bar/", "{r:''}");
@@ -318,7 +318,7 @@ public class UrlPathMatcher_Test {
 	}
 
 	@Test
-	public void f04_innerMeta_withRemainder_noMatch() throws Exception {
+	public void f04_innerMeta_withRemainder_noMatch() {
 		UrlPathMatcher p = of("/foo/*/bar/*");
 		shouldNotMatch(p, "/fooo/baz/bar", "/fo/baz/bar", "/foo/bar", "/");
 	}
@@ -328,7 +328,7 @@ public class UrlPathMatcher_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void g01_encodedVars() throws Exception {
+	public void g01_encodedVars() {
 		UrlPathMatcher p = of("/foo/{bar}/*");
 		check(p, "/foo/baz%2Fqux", "{v:{bar:'baz/qux'}}");
 		check(p, "/foo/baz+qux", "{v:{bar:'baz qux'}}");
@@ -341,21 +341,21 @@ public class UrlPathMatcher_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void h01_notVars() throws Exception {
+	public void h01_notVars() {
 		UrlPathMatcher p = of("/foo/{bar/*");
 		check(p, "/foo/{bar", "{}");
 		check(p, "/foo/{bar/{baz", "{r:'{baz'}");
 	}
 
 	@Test
-	public void h02_notVars() throws Exception {
+	public void h02_notVars() {
 		UrlPathMatcher p = of("/foo/bar}/*");
 		check(p, "/foo/bar}", "{}");
 		check(p, "/foo/bar}/baz}", "{r:'baz}'}");
 	}
 
 	@Test
-	public void h03_notVars() throws Exception {
+	public void h03_notVars() {
 		UrlPathMatcher p = of("/foo/x{bar}x/*");
 		check(p, "/foo/x{bar}x", "{}");
 		check(p, "/foo/x{bar}x/x{baz}x", "{r:'x{baz}x'}");
@@ -366,7 +366,7 @@ public class UrlPathMatcher_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void i01_filenameMatcher() throws Exception {
+	public void i01_filenameMatcher() {
 		UrlPathMatcher p = of("foo.bar");
 		check(p, "/foo.bar", "{}");
 		check(p, "/foo/foo.bar", "{}");

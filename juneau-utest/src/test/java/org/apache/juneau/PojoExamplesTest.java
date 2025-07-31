@@ -31,7 +31,7 @@ public class PojoExamplesTest {
 	// test BEAN_examples
 	//====================================================================================================
 	@Test
-	public void testProperty() throws Exception {
+	public void testProperty() {
 		BeanSession bs = BeanContext.create().example(A.class, new A().init()).build().getSession();
 		assertObject(bs.getClassMeta(A.class).getExample(bs,session)).asJson().is("{f1:'f1a'}");
 	}
@@ -49,7 +49,7 @@ public class PojoExamplesTest {
 	// test @Example on public field
 	//====================================================================================================
 	@Test
-	public void testExampleField() throws Exception {
+	public void testExampleField() {
 		BeanSession bs = BeanContext.DEFAULT_SESSION;
 		assertObject(bs.getClassMeta(B1.class).getExample(bs,session)).asJson().is("{f1:'f1b'}");
 	}
@@ -67,7 +67,7 @@ public class PojoExamplesTest {
 	}
 
 	@Test
-	public void testExampleField_usingConfig() throws Exception {
+	public void testExampleField_usingConfig() {
 		BeanSession bs = BeanContext.create().applyAnnotations(B1cConfig.class).build().getSession();
 		assertObject(bs.getClassMeta(B1c.class).getExample(bs,session)).asJson().is("{f1:'f1b'}");
 	}
@@ -92,7 +92,7 @@ public class PojoExamplesTest {
 	// test @Example on private field
 	//====================================================================================================
 	@Test
-	public void testExampleFieldPrivate() throws Exception {
+	public void testExampleFieldPrivate() {
 		BeanSession bs = BeanContext.DEFAULT_SESSION;
 		assertObject(bs.getClassMeta(B2.class).getExample(bs,session)).asJson().is("{f1:'f1b'}");
 	}
@@ -110,7 +110,7 @@ public class PojoExamplesTest {
 	}
 
 	@Test
-	public void testExampleFieldPrivate_usingConfig() throws Exception {
+	public void testExampleFieldPrivate_usingConfig() {
 		BeanSession bs = BeanContext.create().applyAnnotations(B2cConfig.class).build().getSession();
 		assertObject(bs.getClassMeta(B2c.class).getExample(bs,session)).asJson().is("{f1:'f1b'}");
 	}
@@ -136,7 +136,7 @@ public class PojoExamplesTest {
 	// test @Example on public no-arg method.
 	//====================================================================================================
 	@Test
-	public void testExampleOnPublicNoArgMethod() throws Exception {
+	public void testExampleOnPublicNoArgMethod() {
 		BeanSession bs = BeanContext.DEFAULT_SESSION;
 		assertObject(bs.getClassMeta(C1.class).getExample(bs,session)).asJson().is("{f1:'f1c'}");
 	}
@@ -156,7 +156,7 @@ public class PojoExamplesTest {
 	}
 
 	@Test
-	public void testExampleOnPublicNoArgMethod_usingConfig() throws Exception {
+	public void testExampleOnPublicNoArgMethod_usingConfig() {
 		BeanSession bs = BeanContext.create().applyAnnotations(C1cConfig.class).build().getSession();
 		assertObject(bs.getClassMeta(C1c.class).getExample(bs,session)).asJson().is("{f1:'f1c'}");
 	}
@@ -183,7 +183,7 @@ public class PojoExamplesTest {
 	// test @Example on private no-arg method.
 	//====================================================================================================
 	@Test
-	public void testExampleOnPrivateNoArgMethod() throws Exception {
+	public void testExampleOnPrivateNoArgMethod() {
 		BeanSession bs = BeanContext.DEFAULT_SESSION;
 		assertObject(bs.getClassMeta(C2.class).getExample(bs,session)).asJson().is("{f1:'f1c'}");
 	}
@@ -203,7 +203,7 @@ public class PojoExamplesTest {
 	}
 
 	@Test
-	public void testExampleOnPrivateNoArgMethod_usingConfig() throws Exception {
+	public void testExampleOnPrivateNoArgMethod_usingConfig() {
 		BeanSession bs = BeanContext.create().applyAnnotations(C2cConfig.class).build().getSession();
 		assertObject(bs.getClassMeta(C2c.class).getExample(bs,session)).asJson().is("{f1:'f1c'}");
 	}
@@ -231,7 +231,7 @@ public class PojoExamplesTest {
 	// test @Example on public 1-arg method
 	//====================================================================================================
 	@Test
-	public void testExampleOnPublicOneArgMethod() throws Exception {
+	public void testExampleOnPublicOneArgMethod() {
 		BeanSession bs = BeanContext.DEFAULT_SESSION;
 		assertObject(bs.getClassMeta(D1.class).getExample(bs,session)).asJson().is("{f1:'f1d'}");
 	}
@@ -251,7 +251,7 @@ public class PojoExamplesTest {
 	}
 
 	@Test
-	public void testExampleOnPublicOneArgMethod_usingConfig() throws Exception {
+	public void testExampleOnPublicOneArgMethod_usingConfig() {
 		BeanSession bs = BeanContext.create().applyAnnotations(D1cConfig.class).build().getSession();
 		assertObject(bs.getClassMeta(D1c.class).getExample(bs,session)).asJson().is("{f1:'f1d'}");
 	}
@@ -278,7 +278,7 @@ public class PojoExamplesTest {
 	// test example() method, no annotation.
 	//====================================================================================================
 	@Test
-	public void testExampleMethod() throws Exception {
+	public void testExampleMethod() {
 		BeanSession bs = BeanContext.DEFAULT_SESSION;
 		assertObject(bs.getClassMeta(E1.class).getExample(bs,session)).asJson().is("{f1:'f1e'}");
 	}
@@ -300,7 +300,7 @@ public class PojoExamplesTest {
 	// test example(BeanSession) method, no annotation.
 	//====================================================================================================
 	@Test
-	public void testExampleBeanSessionMethod() throws Exception {
+	public void testExampleBeanSessionMethod() {
 		BeanSession bs = BeanContext.DEFAULT_SESSION;
 		assertObject(bs.getClassMeta(E2.class).getExample(bs,session)).asJson().is("{f1:'f1e'}");
 	}
@@ -322,7 +322,7 @@ public class PojoExamplesTest {
 	// test invalid uses of @Example
 	//====================================================================================================
 	@Test
-	public void testInvalidUsesOfExample() throws Exception {
+	public void testInvalidUsesOfExample() {
 		BeanSession bs = BeanContext.DEFAULT_SESSION;
 		assertThrown(()->bs.getClassMeta(F1.class)).asMessage().isContains("invalid method 'example(String)'");
 		assertThrown(()->bs.getClassMeta(F2.class)).asMessage().isContains("invalid method 'example()'");

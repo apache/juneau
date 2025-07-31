@@ -55,7 +55,7 @@ public class HtmlConfigAnnotation_Test {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test
-	public void basicSerializer() throws Exception {
+	public void basicSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
@@ -67,7 +67,7 @@ public class HtmlConfigAnnotation_Test {
 	}
 
 	@Test
-	public void basicParser() throws Exception {
+	public void basicParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		HtmlParser.create().apply(al).build().createSession();
 	}
@@ -81,7 +81,7 @@ public class HtmlConfigAnnotation_Test {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test
-	public void defaultsSerializer() throws Exception {
+	public void defaultsSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
@@ -93,7 +93,7 @@ public class HtmlConfigAnnotation_Test {
 	}
 
 	@Test
-	public void defaultsParser() throws Exception {
+	public void defaultsParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		HtmlParser.create().apply(al).build().createSession();
 	}
@@ -106,7 +106,7 @@ public class HtmlConfigAnnotation_Test {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test
-	public void noAnnotationSerializer() throws Exception {
+	public void noAnnotationSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
@@ -118,7 +118,7 @@ public class HtmlConfigAnnotation_Test {
 	}
 
 	@Test
-	public void noAnnotationParser() throws Exception {
+	public void noAnnotationParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		HtmlParser.create().apply(al).build().createSession();
 	}

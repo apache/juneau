@@ -100,7 +100,7 @@ public class XmlConfigAnnotationTest {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test
-	public void basicSerializer() throws Exception {
+	public void basicSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		XmlSerializerSession x = XmlSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
@@ -112,7 +112,7 @@ public class XmlConfigAnnotationTest {
 	}
 
 	@Test
-	public void basicParser() throws Exception {
+	public void basicParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		XmlParserSession x = XmlParser.create().apply(al).build().getSession();
 		check("AA", x.getEventAllocator());
@@ -131,7 +131,7 @@ public class XmlConfigAnnotationTest {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test
-	public void noValuesSerializer() throws Exception {
+	public void noValuesSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		XmlSerializerSession x = XmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
@@ -143,7 +143,7 @@ public class XmlConfigAnnotationTest {
 	}
 
 	@Test
-	public void noValuesParser() throws Exception {
+	public void noValuesParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		XmlParserSession x = XmlParser.create().apply(al).build().getSession();
 		check(null, x.getEventAllocator());
@@ -161,7 +161,7 @@ public class XmlConfigAnnotationTest {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test
-	public void noAnnotationSerializer() throws Exception {
+	public void noAnnotationSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		XmlSerializerSession x = XmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
@@ -173,7 +173,7 @@ public class XmlConfigAnnotationTest {
 	}
 
 	@Test
-	public void noAnnotationParser() throws Exception {
+	public void noAnnotationParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		XmlParserSession x = XmlParser.create().apply(al).build().getSession();
 		check(null, x.getEventAllocator());

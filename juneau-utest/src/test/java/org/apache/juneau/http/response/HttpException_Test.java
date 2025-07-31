@@ -73,7 +73,7 @@ public class HttpException_Test {
 	}
 
 	@Test
-	public void a02_getRootCause() throws Exception {
+	public void a02_getRootCause() {
 		BasicHttpException x = new BasicHttpException(100, null);
 		assertObject(x.getRootCause()).isNull();
 
@@ -91,7 +91,7 @@ public class HttpException_Test {
 	}
 
 	@Test
-	public void a03_getFullStackMessage() throws Exception {
+	public void a03_getFullStackMessage() {
 		BasicHttpException x = new BasicHttpException(100, null);
 		assertString(x.getFullStackMessage(false)).is("Continue");
 		assertString(x.getFullStackMessage(true)).is("Continue");

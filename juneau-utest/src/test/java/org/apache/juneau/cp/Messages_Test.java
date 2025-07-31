@@ -26,7 +26,7 @@ import org.junit.*;
 public class Messages_Test {
 
 	@Test
-	public void a01_sameDirectory() throws Exception {
+	public void a01_sameDirectory() {
 		Messages x1 = Messages.of(MessageBundleTest1.class);
 		assertString(x1.getString("file")).is("MessageBundleTest1.properties");
 		assertString(x1.forLocale(JAPANESE).getString("file")).is("MessageBundleTest1_ja.properties");
@@ -36,7 +36,7 @@ public class Messages_Test {
 	}
 
 	@Test
-	public void a02_customName() throws Exception {
+	public void a02_customName() {
 		Messages x1 = Messages.of(MessageBundleTest1.class, "files/Test1");
 		assertString(x1.getString("file")).is("files/Test1.properties");
 		assertString(x1.forLocale(JAPANESE).getString("file")).is("files/Test1_ja.properties");
@@ -53,7 +53,7 @@ public class Messages_Test {
 	}
 
 	@Test
-	public void a03_customSearchPaths() throws Exception {
+	public void a03_customSearchPaths() {
 		Messages x = Messages.create(MessageBundleTest1.class).name("Test1").baseNames("{package}.files.{name}").build();
 		assertString(x.getString("file")).is("files/Test1.properties");
 		assertString(x.forLocale(JAPANESE).getString("file")).is("files/Test1_ja.properties");
@@ -66,7 +66,7 @@ public class Messages_Test {
 	}
 
 	@Test
-	public void a04_customLocale() throws Exception {
+	public void a04_customLocale() {
 		Messages x1 = Messages.create(MessageBundleTest1.class).locale(Locale.JAPAN).build();
 		assertString(x1.getString("file")).is("MessageBundleTest1_ja_JP.properties");
 		assertString(x1.forLocale(JAPANESE).getString("file")).is("MessageBundleTest1_ja.properties");
@@ -83,7 +83,7 @@ public class Messages_Test {
 	}
 
 	@Test
-	public void a05_nonExistentBundle() throws Exception {
+	public void a05_nonExistentBundle() {
 		Messages x1 = Messages.of(MessageBundleTest1.class, "Bad");
 		assertString(x1.getString("file")).is("{!file}");
 		assertString(x1.forLocale(JAPANESE).getString("file")).is("{!file}");
@@ -96,7 +96,7 @@ public class Messages_Test {
 	}
 
 	@Test
-	public void a06_parent() throws Exception {
+	public void a06_parent() {
 		Messages x1 = Messages.create(MessageBundleTest1.class).name("Bad").parent(Messages.of(Test2.class)).build();
 		assertString(x1.getString("file")).is("Test2.properties");
 		assertString(x1.forLocale(JAPANESE).getString("file")).is("Test2_ja.properties");
@@ -110,25 +110,25 @@ public class Messages_Test {
 	}
 
 	@Test
-	public void a07_nonExistentMessage() throws Exception {
+	public void a07_nonExistentMessage() {
 		Messages x = Messages.create(MessageBundleTest1.class).name("Bad").parent(Messages.of(Test2.class)).build();
 		assertString(x.getString("bad")).is("{!bad}");
 	}
 
 	@Test
-	public void a08_nonExistentMessage() throws Exception {
+	public void a08_nonExistentMessage() {
 		Messages x = Messages.create(MessageBundleTest1.class).name("Bad").parent(Messages.of(Test2.class)).build();
 		assertString(x.getString("bad")).is("{!bad}");
 	}
 
 	@Test
-	public void a09_keySet_prefix() throws Exception {
+	public void a09_keySet_prefix() {
 		Messages x = Messages.of(MessageBundleTest1.class);
 		assertObject(new TreeSet<>(x.keySet("xx"))).asJson().is("['xx','xx.','xx.foo']");
 	}
 
 	@Test
-	public void a10_getString() throws Exception {
+	public void a10_getString() {
 		Messages x = Messages.of(MessageBundleTest1.class);
 		assertString(x.getString("foo","bar")).is("foo bar");
 		assertString(x.getString("bar","bar")).is("bar bar");
@@ -142,7 +142,7 @@ public class Messages_Test {
 	}
 
 	@Test
-	public void a11_findFirstString() throws Exception {
+	public void a11_findFirstString() {
 		Messages x = Messages.of(MessageBundleTest1.class);
 		assertString(x.findFirstString("baz","foo")).is("foo {0}");
 		assertString(x.findFirstString("baz","baz")).isNull();
@@ -152,13 +152,13 @@ public class Messages_Test {
 	}
 
 	@Test
-	public void a12_getKeys() throws Exception {
+	public void a12_getKeys() {
 		Messages x = Messages.of(Test2.class);
 		assertObject(x.getKeys()).asJson().is("['file','yyy']");
 	}
 
 	@Test
-	public void a13_toString() throws Exception {
+	public void a13_toString() {
 		Messages x = Messages.of(Test2.class);
 		assertString(x).is("{file:'Test2.properties',yyy:'bar'}");
 	}

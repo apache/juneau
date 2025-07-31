@@ -51,7 +51,7 @@ public class RoundTripBeanInheritanceTest extends RoundTripTest {
 	}
 
 
-	public static abstract class A1 {
+	public abstract static class A1 {
 		protected String x;
 		protected String y;
 		protected String z;

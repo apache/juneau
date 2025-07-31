@@ -93,7 +93,7 @@ public abstract class ComboSerializeTest {
 		}
 	}
 
-	protected Serializer applySettings(Serializer s) throws Exception {
+	protected Serializer applySettings(Serializer s) {
 		return s;
 	}
 

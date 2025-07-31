@@ -91,7 +91,7 @@ public class Tag_Test {
 	}
 
 	@Test
-	public void b02_copy() throws Exception {
+	public void b02_copy() {
 		Tag t = new Tag();
 
 		t = t.copy();
@@ -109,7 +109,7 @@ public class Tag_Test {
 	}
 
 	@Test
-	public void b03_keySet() throws Exception {
+	public void b03_keySet() {
 		Tag t = new Tag();
 
 		assertObject(t.keySet()).asJson().is("[]");

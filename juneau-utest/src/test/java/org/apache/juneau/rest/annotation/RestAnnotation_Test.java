@@ -234,7 +234,7 @@ public class RestAnnotation_Test {
 	}
 
 	@Test
-	public void c01_otherMethods() throws Exception {
+	public void c01_otherMethods() {
 		Rest c1 = RestAnnotation.create(C1.class).on(C2.class).build();
 		Rest c2 = RestAnnotation.create("a").on("b").build();
 

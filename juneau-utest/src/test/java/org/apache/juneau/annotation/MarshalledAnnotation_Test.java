@@ -90,7 +90,7 @@ public class MarshalledAnnotation_Test {
 	}
 
 	@Test
-	public void c01_otherMethods() throws Exception {
+	public void c01_otherMethods() {
 		Marshalled c1 = MarshalledAnnotation.create(C1.class).on(C2.class).build();
 		Marshalled c2 = MarshalledAnnotation.create("a").on("b").build();
 

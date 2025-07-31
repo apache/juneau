@@ -64,7 +64,7 @@ public class Connection_Test {
 	}
 
 	@Test
-	public void a02_other() throws Exception {
+	public void a02_other() {
 		assertTrue(connection("Keep-Alive").isKeepAlive());
 		assertTrue(connection("keep-alive").isKeepAlive());
 		assertFalse(connection("foo").isKeepAlive());

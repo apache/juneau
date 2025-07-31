@@ -47,12 +47,12 @@ public class ReadWriteOnlyPropertiesTest {
 	}
 
 	@Test
-	public void a01_beanpOnPrimitiveFields_serializer() throws Exception {
+	public void a01_beanpOnPrimitiveFields_serializer() {
 		assertObject(A.create()).asJson().is("{f1:1}");
 	}
 
 	@Test
-	public void a02_beanpOnPrimitiveFields_parser() throws Exception {
+	public void a02_beanpOnPrimitiveFields_parser() {
 		A x = Json5.DEFAULT.read("{f1:1,f2:2}", A.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
@@ -79,12 +79,12 @@ public class ReadWriteOnlyPropertiesTest {
 	}
 
 	@Test
-	public void b01_beanAnnotation_serializer() throws Exception {
+	public void b01_beanAnnotation_serializer() {
 		assertObject(B.create()).asJson().is("{f1:1}");
 	}
 
 	@Test
-	public void b02_beanAnnotationParser() throws Exception {
+	public void b02_beanAnnotationParser() {
 		Bc x = JsonParser.DEFAULT.copy().applyAnnotations(BcConfig.class).build().parse("{f1:1,f2:2}", Bc.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
@@ -110,7 +110,7 @@ public class ReadWriteOnlyPropertiesTest {
 	}
 
 	@Test
-	public void b01_beanAnnotation_serializer_usingConfig() throws Exception {
+	public void b01_beanAnnotation_serializer_usingConfig() {
 		assertObject(B.create()).asJson().is("{f1:1}");
 	}
 
@@ -138,7 +138,7 @@ public class ReadWriteOnlyPropertiesTest {
 	}
 
 	@Test
-	public void c01_beanContext_serializer() throws Exception {
+	public void c01_beanContext_serializer() {
 		WriterSerializer sw;
 
 		sw = Json5Serializer.DEFAULT.copy()
@@ -236,12 +236,12 @@ public class ReadWriteOnlyPropertiesTest {
 	}
 
 	@Test
-	public void d01_beanAnnotation_bproAll_serializer() throws Exception {
+	public void d01_beanAnnotation_bproAll_serializer() {
 		assertObject(D.create()).asJson().is("{f1:1,f2:2}");
 	}
 
 	@Test
-	public void d02_beanAnnotation_bproAll_Parser() throws Exception {
+	public void d02_beanAnnotation_bproAll_Parser() {
 		D x = Json5.DEFAULT.read("{f1:1,f2:2}", D.class);
 		assertEquals(0, x.f1);
 		assertEquals(0, x.f2);
@@ -263,7 +263,7 @@ public class ReadWriteOnlyPropertiesTest {
 	}
 
 	@Test
-	public void d03_beanAnnotation_bproAll_serializer_usingConfig() throws Exception {
+	public void d03_beanAnnotation_bproAll_serializer_usingConfig() {
 		assertObject(Dc.create()).asString(Json5Serializer.DEFAULT.copy().applyAnnotations(DcConfig.class).build()).is("{f1:1,f2:2}");
 	}
 
@@ -292,7 +292,7 @@ public class ReadWriteOnlyPropertiesTest {
 	}
 
 	@Test
-	public void e01_beanAnnotation_bpwoAll_serializer() throws Exception {
+	public void e01_beanAnnotation_bpwoAll_serializer() {
 		assertObject(E.create()).asJson().is("{}");
 	}
 
@@ -319,7 +319,7 @@ public class ReadWriteOnlyPropertiesTest {
 	}
 
 	@Test
-	public void e03_beanAnnotation_bpwoAll_serializer_usingConfig() throws Exception {
+	public void e03_beanAnnotation_bpwoAll_serializer_usingConfig() {
 		assertObject(E.create()).asString(Json5Serializer.DEFAULT.copy().applyAnnotations(EcConfig.class).build()).is("{}");
 	}
 

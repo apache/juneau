@@ -38,12 +38,12 @@ public class Query_Test {
 	@Rest
 	public static class A {
 		@RestGet
-		public String a(RestRequest req, @Query("p1") @Schema(aev=true) String p1, @Query("p2") @Schema(aev=true) int p2) throws Exception {
+		public String a(RestRequest req, @Query("p1") @Schema(aev=true) String p1, @Query("p2") @Schema(aev=true) int p2) {
 			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"],p2=["+p2+","+q.get("p2").orElse(null)+","+q.get("p2").asInteger().orElse(0)+"]";
 		}
 		@RestPost
-		public String b(RestRequest req, @Query("p1") @Schema(aev=true) String p1, @Query("p2") @Schema(aev=true) int p2) throws Exception {
+		public String b(RestRequest req, @Query("p1") @Schema(aev=true) String p1, @Query("p2") @Schema(aev=true) int p2) {
 			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"],p2=["+p2+","+q.get("p2").orElse(null)+","+q.get("p2").asInteger().orElse(0)+"]";
 		}
@@ -87,22 +87,22 @@ public class Query_Test {
 	@Rest
 	public static class B {
 		@RestGet
-		public String a(RestRequest req, @Query("p1") String p1) throws Exception {
+		public String a(RestRequest req, @Query("p1") String p1) {
 			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestGet
-		public String b(RestRequest req, @Query("p1") @Schema(f="uon") String p1) throws Exception {
+		public String b(RestRequest req, @Query("p1") @Schema(f="uon") String p1) {
 			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestPost
-		public String c(RestRequest req, @Query("p1") String p1) throws Exception {
+		public String c(RestRequest req, @Query("p1") String p1) {
 			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestPost
-		public String d(RestRequest req, @Query("p1") @Schema(f="uon") String p1) throws Exception {
+		public String d(RestRequest req, @Query("p1") @Schema(f="uon") String p1) {
 			RequestQueryParams q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
@@ -232,22 +232,22 @@ public class Query_Test {
 	@Rest(serializers=Json5Serializer.class)
 	public static class E {
 		@RestGet
-		public Object a(@Query("f1") Optional<Integer> f1) throws Exception {
+		public Object a(@Query("f1") Optional<Integer> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestGet
-		public Object b(@Query("f1") Optional<ABean> f1) throws Exception {
+		public Object b(@Query("f1") Optional<ABean> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestGet
-		public Object c(@Query("f1") Optional<List<ABean>> f1) throws Exception {
+		public Object c(@Query("f1") Optional<List<ABean>> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestGet
-		public Object d(@Query("f1") List<Optional<ABean>> f1) throws Exception {
+		public Object d(@Query("f1") List<Optional<ABean>> f1) {
 			return f1;
 		}
 	}
@@ -296,37 +296,37 @@ public class Query_Test {
 	@Rest(serializers=Json5Serializer.class)
 	public static class F {
 		@RestGet
-		public Object a1(@Query(name="f1", def="1") Integer f1) throws Exception {
+		public Object a1(@Query(name="f1", def="1") Integer f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestGet
-		public Object a2(@Query(name="f1", def="1") Optional<Integer> f1) throws Exception {
+		public Object a2(@Query(name="f1", def="1") Optional<Integer> f1) {
 			assertNotNull(f1);
 			return f1.get();
 		}
 		@RestGet
-		public Object b1(@Query(name="f1", def="a=1,b=foo") ABean f1) throws Exception {
+		public Object b1(@Query(name="f1", def="a=1,b=foo") ABean f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestGet
-		public Object b2(@Query(name="f1", def="a=1,b=foo") Optional<ABean> f1) throws Exception {
+		public Object b2(@Query(name="f1", def="a=1,b=foo") Optional<ABean> f1) {
 			assertNotNull(f1);
 			return f1.get();
 		}
 		@RestGet
-		public Object c1(@Query(name="f1", def="@((a=1,b=foo))") List<ABean> f1) throws Exception {
+		public Object c1(@Query(name="f1", def="@((a=1,b=foo))") List<ABean> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestGet
-		public Object c2(@Query(name="f1", def="@((a=1,b=foo))") Optional<List<ABean>> f1) throws Exception {
+		public Object c2(@Query(name="f1", def="@((a=1,b=foo))") Optional<List<ABean>> f1) {
 			assertNotNull(f1);
 			return f1.get();
 		}
 		@RestGet
-		public Object d(@Query(name="f1", def="@((a=1,b=foo))") List<Optional<ABean>> f1) throws Exception {
+		public Object d(@Query(name="f1", def="@((a=1,b=foo))") List<Optional<ABean>> f1) {
 			return f1;
 		}
 	}

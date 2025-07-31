@@ -23,7 +23,7 @@ import org.junit.*;
 public class SimpleMapTest {
 
 	@Test
-	public void doTest() throws Exception {
+	public void doTest() {
 		String[] keys = {"a","b"};
 		Object[] vals = {"A","B"};
 		SimpleMap<String,Object> m = new SimpleMap<>(keys, vals);

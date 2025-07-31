@@ -24,7 +24,7 @@ public class Args_Test {
 	// test - Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
-	public void basic() throws Exception {
+	public void basic() {
 		Args a;
 
 		// Empty args

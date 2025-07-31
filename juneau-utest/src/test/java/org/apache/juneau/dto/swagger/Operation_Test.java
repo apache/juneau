@@ -167,7 +167,7 @@ public class Operation_Test {
 	}
 
 	@Test
-	public void b02_copy() throws Exception {
+	public void b02_copy() {
 		Operation t = new Operation();
 
 		t = t.copy();
@@ -194,7 +194,7 @@ public class Operation_Test {
 	}
 
 	@Test
-	public void b03_keySet() throws Exception {
+	public void b03_keySet() {
 		Operation t = new Operation();
 
 		assertObject(t.keySet()).asJson().is("[]");

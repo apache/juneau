@@ -70,12 +70,12 @@ public class BasicStringRangesHeader_Test {
 	}
 
 	@Test
-	public void a02_getRange() throws Exception {
+	public void a02_getRange() {
 		assertString(stringRangesHeader(HEADER,PARSED).getRange(0)).is("foo");
 	}
 
 	@Test
-	public void a03_getRanges() throws Exception {
+	public void a03_getRanges() {
 		assertObject(stringRangesHeader(HEADER,PARSED).toStringRanges().toList()).asJson().is("['foo','bar']");
 	}
 

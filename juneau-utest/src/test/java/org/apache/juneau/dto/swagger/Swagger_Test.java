@@ -202,7 +202,7 @@ public class Swagger_Test {
 	}
 
 	@Test
-	public void b02_copy() throws Exception {
+	public void b02_copy() {
 		Swagger t = new Swagger();
 
 		t = t.copy();
@@ -232,7 +232,7 @@ public class Swagger_Test {
 	}
 
 	@Test
-	public void b03_keySet() throws Exception {
+	public void b03_keySet() {
 		Swagger t = new Swagger();
 
 		assertObject(t.keySet()).asJson().is("['swagger']");

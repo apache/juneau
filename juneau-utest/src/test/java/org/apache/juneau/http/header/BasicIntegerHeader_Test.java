@@ -69,7 +69,7 @@ public class BasicIntegerHeader_Test {
 	}
 
 	@Test
-	public void a02_assertInteger() throws Exception {
+	public void a02_assertInteger() {
 		integerHeader(HEADER,1).assertInteger().is(1);
 	}
 

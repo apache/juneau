@@ -346,7 +346,7 @@ public class ExecutableInfoTest {
 	// Characteristics
 	//-----------------------------------------------------------------------------------------------------------------
 
-	static abstract class E {
+	abstract static class E {
 		@Deprecated public void deprecated() {}
 		public void notDeprecated() {}
 		public void hasParams(int foo) {}
@@ -514,7 +514,7 @@ public class ExecutableInfoTest {
 	// Visibility
 	//-----------------------------------------------------------------------------------------------------------------
 
-	static abstract class F {
+	abstract static class F {
 		public void isPublic() {}
 		protected void isProtected() {}
 		@SuppressWarnings("unused")

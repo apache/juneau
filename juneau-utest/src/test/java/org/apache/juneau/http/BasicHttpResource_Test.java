@@ -111,7 +111,7 @@ public class BasicHttpResource_Test {
 	}
 
 	@Test
-	public void a02_header_String_Object() throws Exception {
+	public void a02_header_String_Object() {
 		HeaderList x = stringResource("foo").addHeader("Foo","bar").addHeader("Foo","baz").addHeader(null,"bar").addHeader("foo",null).getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
@@ -121,7 +121,7 @@ public class BasicHttpResource_Test {
 	}
 
 	@Test
-	public void a03_header_Header() throws Exception {
+	public void a03_header_Header() {
 		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar")).addHeaders(header("Foo","baz")).addHeaders(header("Bar",null)).getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
@@ -131,7 +131,7 @@ public class BasicHttpResource_Test {
 	}
 
 	@Test
-	public void a04_headers_List() throws Exception {
+	public void a04_headers_List() {
 		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
@@ -141,7 +141,7 @@ public class BasicHttpResource_Test {
 	}
 
 	@Test
-	public void a05_headers_array() throws Exception {
+	public void a05_headers_array() {
 		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
@@ -152,7 +152,7 @@ public class BasicHttpResource_Test {
 
 
 	@Test
-	public void a06_chunked() throws Exception {
+	public void a06_chunked() {
 		StringResource x1 = stringResource("foo").setChunked();
 		assertBoolean(x1.isChunked()).isTrue();
 		StringResource x2 = stringResource("foo");
@@ -160,7 +160,7 @@ public class BasicHttpResource_Test {
 	}
 
 	@Test
-	public void a07_chunked_boolean() throws Exception {
+	public void a07_chunked_boolean() {
 		StringResource x1 = stringResource("foo").setChunked(true);
 		assertBoolean(x1.isChunked()).isTrue();
 		StringResource x2 = stringResource("foo").setChunked(false);
@@ -168,7 +168,7 @@ public class BasicHttpResource_Test {
 	}
 
 	@Test
-	public void a08_contentType_String() throws Exception {
+	public void a08_contentType_String() {
 		StringResource x1 = stringResource("foo").setContentType("text/plain");
 		assertString(x1.getContentType().getValue()).is("text/plain");
 		StringResource x2 = stringResource("foo").setContentType((String)null);
@@ -176,7 +176,7 @@ public class BasicHttpResource_Test {
 	}
 
 	@Test
-	public void a09_contentEncoding_String() throws Exception {
+	public void a09_contentEncoding_String() {
 		StringResource x1 = stringResource("foo").setContentEncoding("identity");
 		assertString(x1.getContentEncoding().getValue()).is("identity");
 		StringResource x2 = stringResource("foo").setContentEncoding((String)null);

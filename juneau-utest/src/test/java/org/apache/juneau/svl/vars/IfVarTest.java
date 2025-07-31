@@ -25,7 +25,7 @@ public class IfVarTest {
 	// test - Basic tests
 	//====================================================================================================
 	@Test
-	public void test() throws Exception {
+	public void test() {
 		VarResolver vr = VarResolver.create().vars(IfVar.class, SystemPropertiesVar.class).build();
 
 		for (String test : new String[]{"","0","false","FALSE","f","F","foobar"}) {

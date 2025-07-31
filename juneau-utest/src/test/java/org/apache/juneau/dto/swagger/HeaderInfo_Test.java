@@ -186,7 +186,7 @@ public class HeaderInfo_Test {
 	}
 
 	@Test
-	public void b02_copy() throws Exception {
+	public void b02_copy() {
 		HeaderInfo t = new HeaderInfo();
 
 		t = t.copy();
@@ -220,7 +220,7 @@ public class HeaderInfo_Test {
 	}
 
 	@Test
-	public void b03_keySet() throws Exception {
+	public void b03_keySet() {
 		HeaderInfo t = new HeaderInfo();
 
 		assertObject(t.keySet()).asJson().is("[]");
@@ -251,7 +251,7 @@ public class HeaderInfo_Test {
 	}
 
 	@Test
-	public void c01_strict() throws Exception {
+	public void c01_strict() {
 		HeaderInfo t = new HeaderInfo().strict();
 		t.setCollectionFormat("csv");
 		assertThrown(()->t.setCollectionFormat("foo")).asMessage().isContains("Invalid");
@@ -260,7 +260,7 @@ public class HeaderInfo_Test {
 	}
 
 	@Test
-	public void c02_resolveRefs() throws Exception {
+	public void c02_resolveRefs() {
 		Swagger s = new Swagger();
 		HeaderInfo t = new HeaderInfo();
 		t.resolveRefs(s, new ArrayDeque<>(), 10);

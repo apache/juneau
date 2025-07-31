@@ -48,14 +48,14 @@ public class UrlEncodingConfigAnnotationTest {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test
-	public void basicSerializer() throws Exception {
+	public void basicSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("true", x.isExpandedParams());
 	}
 
 	@Test
-	public void basicParser() throws Exception {
+	public void basicParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("true", x.isExpandedParams());
@@ -70,14 +70,14 @@ public class UrlEncodingConfigAnnotationTest {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test
-	public void noValuesSerializer() throws Exception {
+	public void noValuesSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test
-	public void noValuesParser() throws Exception {
+	public void noValuesParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
@@ -91,14 +91,14 @@ public class UrlEncodingConfigAnnotationTest {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test
-	public void noAnnotationSerializer() throws Exception {
+	public void noAnnotationSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test
-	public void noAnnotationParser() throws Exception {
+	public void noAnnotationParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());

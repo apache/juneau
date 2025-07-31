@@ -155,7 +155,7 @@ public class RestClient_FormData_Test {
 	}
 
 	@Test
-	public void a12_badSerialization() throws Exception {
+	public void a12_badSerialization() {
 		assertThrown(()->client().formData(part("Foo","bar",null).serializer(new A12())).build().post("/").run()).asMessages().isContains("bad");
 	}
 

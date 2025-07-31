@@ -25,7 +25,7 @@ public class Tuple5_Test {
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test
-	public void a01_basic() throws Exception {
+	public void a01_basic() {
 		Tuple5<String,Integer,Integer,Integer,Integer> x = Tuple5.of("foo",1,2,3,4);
 		assertString(x.getA()).is("foo");
 		assertInteger(x.getB()).is(1);
@@ -35,7 +35,7 @@ public class Tuple5_Test {
 	}
 
 	@Test
-	public void a02_equality() throws Exception {
+	public void a02_equality() {
 		Tuple5<String,Integer,Integer,Integer,Integer> x1 = Tuple5.of("foo",1,2,3,4), x2 = Tuple5.of("foo",1,2,3,4), x3 = Tuple5.of(null,1,2,3,4), x4 = Tuple5.of("foo",null,2,3,4), x5 = Tuple5.of("foo",1,null,3,4), x6 = Tuple5.of("foo",1,2,null,4), x7 = Tuple5.of("foo",1,2,3,null);
 		assertEquals(x1, x2);
 		assertEquals(x1.hashCode(), x2.hashCode());

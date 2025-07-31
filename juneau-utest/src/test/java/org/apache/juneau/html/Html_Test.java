@@ -60,144 +60,151 @@ public class Html_Test {
 
 		s.uriAnchorText(AnchorText.TO_STRING);
 		r = strip(s.build().serialize(t));
-		expected = ""
-			+"\n[f0]=<a href='f0/x0'>f0/x0</a>"
-			+"\n[f1]=<a href='f1/x1'>f1/x1</a>"
-			+"\n[f2]=<a href='/f2/x2'>/f2/x2</a>"
-			+"\n[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>"
-			+"\n[f4]=<a href='f4/x4'>f4/x4</a>"
-			+"\n[f5]=<a href='/f5/x5'>/f5/x5</a>"
-			+"\n[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>"
-			+"\n[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>"
-			+"\n[f8]=<a href='f8/x8'>f8/x8</a>"
-			+"\n[f9]=<a href='f9/x9'>f9/x9</a>"
-			+"\n[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>http://www.apache.org/fa/xa#MY_LABEL</a>"
-			+"\n[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar'>MY_LABEL</a>"
-			+"\n[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL'>MY_LABEL</a>"
-			+"\n[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar'>http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar</a>"
-			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</a>";
+		expected = """
+
+			[f0]=<a href='f0/x0'>f0/x0</a>
+			[f1]=<a href='f1/x1'>f1/x1</a>
+			[f2]=<a href='/f2/x2'>/f2/x2</a>
+			[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>
+			[f4]=<a href='f4/x4'>f4/x4</a>
+			[f5]=<a href='/f5/x5'>/f5/x5</a>
+			[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>
+			[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>
+			[f8]=<a href='f8/x8'>f8/x8</a>
+			[f9]=<a href='f9/x9'>f9/x9</a>
+			[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>http://www.apache.org/fa/xa#MY_LABEL</a>
+			[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar'>MY_LABEL</a>
+			[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL'>MY_LABEL</a>
+			[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar'>http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar</a>
+			[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</a>""";
 		assertEquals(expected, r);
 
 		s.uriAnchorText(AnchorText.URI);
 		r = strip(s.build().serialize(t));
-		expected = ""
-			+"\n[f0]=<a href='f0/x0'>f0/x0</a>"
-			+"\n[f1]=<a href='f1/x1'>f1/x1</a>"
-			+"\n[f2]=<a href='/f2/x2'>/f2/x2</a>"
-			+"\n[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>"
-			+"\n[f4]=<a href='f4/x4'>f4/x4</a>"
-			+"\n[f5]=<a href='/f5/x5'>/f5/x5</a>"
-			+"\n[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>"
-			+"\n[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>"
-			+"\n[f8]=<a href='f8/x8'>f8/x8</a>"
-			+"\n[f9]=<a href='f9/x9'>f9/x9</a>"
-			+"\n[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>http://www.apache.org/fa/xa#MY_LABEL</a>"
-			+"\n[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar'>MY_LABEL</a>"
-			+"\n[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL'>MY_LABEL</a>"
-			+"\n[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar'>http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar</a>"
-			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</a>";
+		expected = """
+
+			[f0]=<a href='f0/x0'>f0/x0</a>
+			[f1]=<a href='f1/x1'>f1/x1</a>
+			[f2]=<a href='/f2/x2'>/f2/x2</a>
+			[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>
+			[f4]=<a href='f4/x4'>f4/x4</a>
+			[f5]=<a href='/f5/x5'>/f5/x5</a>
+			[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>
+			[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>
+			[f8]=<a href='f8/x8'>f8/x8</a>
+			[f9]=<a href='f9/x9'>f9/x9</a>
+			[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>http://www.apache.org/fa/xa#MY_LABEL</a>
+			[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar'>MY_LABEL</a>
+			[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL'>MY_LABEL</a>
+			[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar'>http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar</a>
+			[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</a>""";
 		assertEquals(expected, r);
 
 		s.uriAnchorText(AnchorText.LAST_TOKEN);
 		r = strip(s.build().serialize(t));
-		expected = ""
-			+"\n[f0]=<a href='f0/x0'>x0</a>"
-			+"\n[f1]=<a href='f1/x1'>x1</a>"
-			+"\n[f2]=<a href='/f2/x2'>x2</a>"
-			+"\n[f3]=<a href='http://www.apache.org/f3/x3'>x3</a>"
-			+"\n[f4]=<a href='f4/x4'>x4</a>"
-			+"\n[f5]=<a href='/f5/x5'>x5</a>"
-			+"\n[f6]=<a href='http://www.apache.org/f6/x6'>x6</a>"
-			+"\n[f7]=<a href='http://www.apache.org/f7/x7'>x7</a>"
-			+"\n[f8]=<a href='f8/x8'>x8</a>"
-			+"\n[f9]=<a href='f9/x9'>x9</a>"
-			+"\n[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>xa</a>"
-			+"\n[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar'>MY_LABEL</a>"
-			+"\n[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL'>MY_LABEL</a>"
-			+"\n[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar'>xd</a>"
-			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL'>xe</a>";
+		expected = """
+
+			[f0]=<a href='f0/x0'>x0</a>
+			[f1]=<a href='f1/x1'>x1</a>
+			[f2]=<a href='/f2/x2'>x2</a>
+			[f3]=<a href='http://www.apache.org/f3/x3'>x3</a>
+			[f4]=<a href='f4/x4'>x4</a>
+			[f5]=<a href='/f5/x5'>x5</a>
+			[f6]=<a href='http://www.apache.org/f6/x6'>x6</a>
+			[f7]=<a href='http://www.apache.org/f7/x7'>x7</a>
+			[f8]=<a href='f8/x8'>x8</a>
+			[f9]=<a href='f9/x9'>x9</a>
+			[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>xa</a>
+			[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar'>MY_LABEL</a>
+			[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL'>MY_LABEL</a>
+			[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar'>xd</a>
+			[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL'>xe</a>""";
 		assertEquals(expected, r);
 
 		s.uriAnchorText(AnchorText.URI_ANCHOR);
 		r = strip(s.build().serialize(t));
-		expected = ""
-			+"\n[f0]=<a href='f0/x0'>f0/x0</a>"
-			+"\n[f1]=<a href='f1/x1'>f1/x1</a>"
-			+"\n[f2]=<a href='/f2/x2'>/f2/x2</a>"
-			+"\n[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>"
-			+"\n[f4]=<a href='f4/x4'>f4/x4</a>"
-			+"\n[f5]=<a href='/f5/x5'>/f5/x5</a>"
-			+"\n[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>"
-			+"\n[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>"
-			+"\n[f8]=<a href='f8/x8'>f8/x8</a>"
-			+"\n[f9]=<a href='f9/x9'>f9/x9</a>"
-			+"\n[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>MY_LABEL</a>"
-			+"\n[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar'>MY_LABEL</a>"
-			+"\n[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL'>MY_LABEL</a>"
-			+"\n[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar'>http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar</a>"
-			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</a>";
+		expected = """
+
+			[f0]=<a href='f0/x0'>f0/x0</a>
+			[f1]=<a href='f1/x1'>f1/x1</a>
+			[f2]=<a href='/f2/x2'>/f2/x2</a>
+			[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>
+			[f4]=<a href='f4/x4'>f4/x4</a>
+			[f5]=<a href='/f5/x5'>/f5/x5</a>
+			[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>
+			[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>
+			[f8]=<a href='f8/x8'>f8/x8</a>
+			[f9]=<a href='f9/x9'>f9/x9</a>
+			[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>MY_LABEL</a>
+			[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar'>MY_LABEL</a>
+			[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL'>MY_LABEL</a>
+			[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar'>http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar</a>
+			[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</a>""";
 		assertEquals(expected, r);
 
 		s.labelParameter("label2");
 		r = strip(s.build().serialize(t));
-		expected = ""
-			+"\n[f0]=<a href='f0/x0'>f0/x0</a>"
-			+"\n[f1]=<a href='f1/x1'>f1/x1</a>"
-			+"\n[f2]=<a href='/f2/x2'>/f2/x2</a>"
-			+"\n[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>"
-			+"\n[f4]=<a href='f4/x4'>f4/x4</a>"
-			+"\n[f5]=<a href='/f5/x5'>/f5/x5</a>"
-			+"\n[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>"
-			+"\n[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>"
-			+"\n[f8]=<a href='f8/x8'>f8/x8</a>"
-			+"\n[f9]=<a href='f9/x9'>f9/x9</a>"
-			+"\n[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>MY_LABEL</a>"
-			+"\n[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar'>http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar</a>"
-			+"\n[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL'>http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL</a>"
-			+"\n[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar'>MY_LABEL</a>"
-			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL'>MY_LABEL</a>";
+		expected = """
+
+			[f0]=<a href='f0/x0'>f0/x0</a>
+			[f1]=<a href='f1/x1'>f1/x1</a>
+			[f2]=<a href='/f2/x2'>/f2/x2</a>
+			[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>
+			[f4]=<a href='f4/x4'>f4/x4</a>
+			[f5]=<a href='/f5/x5'>/f5/x5</a>
+			[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>
+			[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>
+			[f8]=<a href='f8/x8'>f8/x8</a>
+			[f9]=<a href='f9/x9'>f9/x9</a>
+			[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>MY_LABEL</a>
+			[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar'>http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar</a>
+			[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL'>http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL</a>
+			[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar'>MY_LABEL</a>
+			[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL'>MY_LABEL</a>""";
 		assertEquals(expected, r);
 
 		s.disableDetectLinksInStrings();
 		r = strip(s.build().serialize(t));
-		expected = ""
-			+"\n[f0]=<a href='f0/x0'>f0/x0</a>"
-			+"\n[f1]=<a href='f1/x1'>f1/x1</a>"
-			+"\n[f2]=<a href='/f2/x2'>/f2/x2</a>"
-			+"\n[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>"
-			+"\n[f4]=<a href='f4/x4'>f4/x4</a>"
-			+"\n[f5]=<a href='/f5/x5'>/f5/x5</a>"
-			+"\n[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>"
-			+"\n[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>"
-			+"\n[f8]=<a href='f8/x8'>f8/x8</a>"
-			+"\n[f9]=<a href='f9/x9'>f9/x9</a>"
-			+"\n[fa]=http://www.apache.org/fa/xa#MY_LABEL"
-			+"\n[fb]=http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar"
-			+"\n[fc]=http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL"
-			+"\n[fd]=http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar"
-			+"\n[fe]=http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL";
-			assertEquals(expected, r);
+		expected = """
 
-			s.disableDetectLinksInStrings(false);
-			s.disableDetectLabelParameters();
-			r = strip(s.build().serialize(t));
-			expected = ""
-				+"\n[f0]=<a href='f0/x0'>f0/x0</a>"
-				+"\n[f1]=<a href='f1/x1'>f1/x1</a>"
-				+"\n[f2]=<a href='/f2/x2'>/f2/x2</a>"
-				+"\n[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>"
-				+"\n[f4]=<a href='f4/x4'>f4/x4</a>"
-				+"\n[f5]=<a href='/f5/x5'>/f5/x5</a>"
-				+"\n[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>"
-				+"\n[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>"
-				+"\n[f8]=<a href='f8/x8'>f8/x8</a>"
-				+"\n[f9]=<a href='f9/x9'>f9/x9</a>"
-				+"\n[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>MY_LABEL</a>"
-				+"\n[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar'>http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar</a>"
-				+"\n[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL'>http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL</a>"
-				+"\n[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar'>http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar</a>"
-				+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</a>";
-			assertEquals(expected, r);
+			[f0]=<a href='f0/x0'>f0/x0</a>
+			[f1]=<a href='f1/x1'>f1/x1</a>
+			[f2]=<a href='/f2/x2'>/f2/x2</a>
+			[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>
+			[f4]=<a href='f4/x4'>f4/x4</a>
+			[f5]=<a href='/f5/x5'>/f5/x5</a>
+			[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>
+			[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>
+			[f8]=<a href='f8/x8'>f8/x8</a>
+			[f9]=<a href='f9/x9'>f9/x9</a>
+			[fa]=http://www.apache.org/fa/xa#MY_LABEL
+			[fb]=http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar
+			[fc]=http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL
+			[fd]=http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar
+			[fe]=http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL""";
+		assertEquals(expected, r);
+
+		s.disableDetectLinksInStrings(false);
+		s.disableDetectLabelParameters();
+		r = strip(s.build().serialize(t));
+		expected = """
+
+			[f0]=<a href='f0/x0'>f0/x0</a>
+			[f1]=<a href='f1/x1'>f1/x1</a>
+			[f2]=<a href='/f2/x2'>/f2/x2</a>
+			[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>
+			[f4]=<a href='f4/x4'>f4/x4</a>
+			[f5]=<a href='/f5/x5'>/f5/x5</a>
+			[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>
+			[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>
+			[f8]=<a href='f8/x8'>f8/x8</a>
+			[f9]=<a href='f9/x9'>f9/x9</a>
+			[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>MY_LABEL</a>
+			[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar'>http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar</a>
+			[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL'>http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL</a>
+			[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar'>http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar</a>
+			[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</a>""";
+		assertEquals(expected, r);
 	}
 
 	private String strip(String html) {
@@ -431,7 +438,7 @@ public class Html_Test {
 	}
 
 	@Test
-	public void e01_collectionOfBeansWithBpi() throws Exception {
+	public void e01_collectionOfBeansWithBpi() {
 		E[] ee = {
 			new E(null, 2, 3),
 			new E(4, 5, 6)

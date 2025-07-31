@@ -81,7 +81,7 @@ public class IfRange_Test {
 	}
 
 	@Test
-	public void a02_asEntityTag() throws Exception {
+	public void a02_asEntityTag() {
 		EntityTag x = ifRange(VALUE1).asEntityTag().get();
 		assertString(x).is("\"foo\"");
 		assertOptional(ifRange(()->null).asEntityTag()).isNull();

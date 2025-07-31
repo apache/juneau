@@ -321,49 +321,49 @@ public class ClassInfoTest {
 	static ClassInfo cc3 = of(CC3.class), ci2 = of(CI2.class);
 
 	@Test
-	public void getPublicMethods() throws Exception {
+	public void getPublicMethods() {
 		check("CC3.c1a(),CC3.c2b(),CC3.c3a(),CC3.i1a(),CC3.i1b(),CC3.i2a(),CC3.i2b()", cc3.getPublicMethods());
 		check("CI2.i1a(),CI2.i1b(),CI2.i2a(),CI2.i2b()", ci2.getPublicMethods());
 	}
 
 	@Test
-	public void getPublicMethods_twice() throws Exception {
+	public void getPublicMethods_twice() {
 		check("CI2.i1a(),CI2.i1b(),CI2.i2a(),CI2.i2b()", ci2.getPublicMethods());
 		check("CI2.i1a(),CI2.i1b(),CI2.i2a(),CI2.i2b()", ci2.getPublicMethods());
 	}
 
 	@Test
-	public void getPublicMethods_onType() throws Exception {
+	public void getPublicMethods_onType() {
 		check("", aTypeInfo.getPublicMethods());
 		check("", pTypeGenericArgInfo.getPublicMethods());
 	}
 
 	@Test
-	public void getAllMethods() throws Exception {
+	public void getAllMethods() {
 		check("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getMethods());
 	}
 
 	@Test
-	public void getAllMethods_twice() throws Exception {
+	public void getAllMethods_twice() {
 		check("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getMethods());
 		check("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getMethods());
 	}
 
 	@Test
-	public void getDeclaredMethods() throws Exception {
+	public void getDeclaredMethods() {
 		check("CC3.c3a(),CC3.c3b(),CC3.i2b()", cc3.getDeclaredMethods());
 		check("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethods());
 		check("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethods());
 	}
 
 	@Test
-	public void getDeclaredMethods_twice() throws Exception {
+	public void getDeclaredMethods_twice() {
 		check("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethods());
 		check("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethods());
 	}
 
 	@Test
-	public void getDeclaredMethods_onType() throws Exception {
+	public void getDeclaredMethods_onType() {
 		check("", aTypeInfo.getDeclaredMethods());
 		check("", pTypeGenericArgInfo.getDeclaredMethods());
 	}
@@ -383,7 +383,7 @@ public class ClassInfoTest {
 	static class E2 {
 		protected E2() {}
 	}
-	static abstract class E3 {
+	abstract static class E3 {
 		public E3() {}
 	}
 	class E4 {
@@ -490,7 +490,7 @@ public class ClassInfoTest {
 	// Fields
 	//-----------------------------------------------------------------------------------------------------------------
 
-	static abstract class F1 {
+	abstract static class F1 {
 		public int f1a;
 		public int f1b;
 	}
@@ -1792,7 +1792,7 @@ public class ClassInfoTest {
 	static ClassInfo la=of(LA.class);
 
 	@Test
-	public void newInstance() throws Exception {
+	public void newInstance() {
 		assertNotNull(la.newInstance());
 	}
 

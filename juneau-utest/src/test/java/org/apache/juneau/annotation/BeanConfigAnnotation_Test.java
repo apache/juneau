@@ -144,7 +144,7 @@ public class BeanConfigAnnotation_Test {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test
-	public void a01_basic() throws Exception {
+	public void a01_basic() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		BeanSession bs = JsonSerializer.create().apply(al).build().getSession();
 
@@ -188,7 +188,7 @@ public class BeanConfigAnnotation_Test {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test
-	public void b01_noValues() throws Exception {
+	public void b01_noValues() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		JsonSerializer js = JsonSerializer.create().apply(al).build();
 		BeanContext bc = js.getBeanContext();
@@ -234,7 +234,7 @@ public class BeanConfigAnnotation_Test {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test
-	public void c01_noAnnotation() throws Exception {
+	public void c01_noAnnotation() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		JsonSerializer js = JsonSerializer.create().apply(al).build();
 		BeanContext bc = js.getBeanContext();

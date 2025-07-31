@@ -24,7 +24,7 @@ public class Tuple4Function_Test {
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test
-	public void a01_basic() throws Exception {
+	public void a01_basic() {
 		Tuple4Function<Integer,Integer,Integer,Integer,Integer> x = (a,b,c,d)->a+b+c+d;
 		assertInteger(x.apply(1,2,3,4)).is(10);
 	}

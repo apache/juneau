@@ -27,7 +27,7 @@ public class ResolvingJsonMapTest {
 	// test - Basic tests
 	//====================================================================================================
 	@Test
-	public void testBasic() throws Exception {
+	public void testBasic() {
 		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		JsonMap m = new ResolvingJsonMap(vr.createSession());
 
@@ -54,7 +54,7 @@ public class ResolvingJsonMapTest {
 	// testNulls
 	//====================================================================================================
 	@Test
-	public void testNulls() throws Exception {
+	public void testNulls() {
 		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		JsonMap m = new ResolvingJsonMap(vr.createSession());
 
@@ -75,7 +75,7 @@ public class ResolvingJsonMapTest {
 	// testNonStrings
 	//====================================================================================================
 	@Test
-	public void testNonStrings() throws Exception {
+	public void testNonStrings() {
 		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		JsonMap m = new ResolvingJsonMap(vr.createSession());
 
@@ -100,7 +100,7 @@ public class ResolvingJsonMapTest {
 	// testInner - Test inner maps
 	//====================================================================================================
 	@Test
-	public void testInner() throws Exception {
+	public void testInner() {
 		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		JsonMap m = new ResolvingJsonMap(vr.createSession());
 		JsonMap m2 = new JsonMap();

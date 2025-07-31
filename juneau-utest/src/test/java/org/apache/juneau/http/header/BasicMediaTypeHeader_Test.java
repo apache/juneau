@@ -70,19 +70,19 @@ public class BasicMediaTypeHeader_Test {
 	}
 
 	@Test
-	public void a02_getType() throws Exception {
+	public void a02_getType() {
 		assertString(contentType("text/foo").getType()).is("text");
 		assertString(new ContentType((String)null).getType()).isEmpty();
 	}
 
 	@Test
-	public void a03_getSubType() throws Exception {
+	public void a03_getSubType() {
 		assertString(contentType("text/foo").getSubType()).is("foo");
 		assertString(new ContentType((String)null).getSubType()).is("*");
 	}
 
 	@Test
-	public void a04_hasSubType() throws Exception {
+	public void a04_hasSubType() {
 		assertBoolean(contentType("text/foo+bar").hasSubType("bar")).isTrue();
 		assertBoolean(contentType("text/foo+bar").hasSubType("baz")).isFalse();
 		assertBoolean(contentType("text/foo+bar").hasSubType(null)).isFalse();
@@ -90,32 +90,32 @@ public class BasicMediaTypeHeader_Test {
 	}
 
 	@Test
-	public void a05_getSubTypes() throws Exception {
+	public void a05_getSubTypes() {
 		assertObject(contentType("text/foo+bar").getSubTypes()).asJson().is("['foo','bar']");
 		assertObject(new ContentType((String)null).getSubTypes()).asJson().is("['*']");
 	}
 
 	@Test
-	public void a06_isMeta() throws Exception {
+	public void a06_isMeta() {
 		assertBoolean(contentType("text/foo+bar").isMetaSubtype()).isFalse();
 		assertBoolean(contentType("text/*").isMetaSubtype()).isTrue();
 		assertBoolean(new ContentType((String)null).isMetaSubtype()).isTrue();
 	}
 
 	@Test
-	public void a07_match() throws Exception {
+	public void a07_match() {
 		assertInteger(contentType("text/foo").match(MediaType.of("text/foo"),true)).is(100000);
 		assertInteger(new ContentType((String)null).match(MediaType.of("text/foo"),true)).is(0);
 	}
 
 	@Test
-	public void a08_getParameters() throws Exception {
+	public void a08_getParameters() {
 		assertObject(contentType("text/foo;x=1;y=2").getParameters()).asJson().is("[{name:'x',value:'1'},{name:'y',value:'2'}]");
 		assertObject(new ContentType((String)null).getParameters()).asJson().is("[]");
 	}
 
 	@Test
-	public void a09_getParameter() throws Exception {
+	public void a09_getParameter() {
 		assertString(contentType("text/foo;x=1;y=2").getParameter("x")).is("1");
 		assertString(contentType("text/foo;x=1;y=2").getParameter("z")).isNull();
 		assertString(contentType("text/foo;x=1;y=2").getParameter(null)).isNull();

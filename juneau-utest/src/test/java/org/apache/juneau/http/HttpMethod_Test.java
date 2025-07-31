@@ -22,7 +22,7 @@ import org.junit.*;
 public class HttpMethod_Test {
 
 	@Test
-	public void a01_hasContent() throws Exception {
+	public void a01_hasContent() {
 		assertBoolean(hasContent(OPTIONS)).isFalse();
 		assertBoolean(hasContent(GET)).isFalse();
 		assertBoolean(hasContent(HEAD)).isFalse();

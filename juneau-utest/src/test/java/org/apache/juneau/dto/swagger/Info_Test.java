@@ -110,7 +110,7 @@ public class Info_Test {
 	}
 
 	@Test
-	public void b02_copy() throws Exception {
+	public void b02_copy() {
 		Info t = new Info();
 
 		t = t.copy();
@@ -131,7 +131,7 @@ public class Info_Test {
 	}
 
 	@Test
-	public void b03_keySet() throws Exception {
+	public void b03_keySet() {
 		Info t = new Info();
 
 		assertObject(t.keySet()).asJson().is("[]");

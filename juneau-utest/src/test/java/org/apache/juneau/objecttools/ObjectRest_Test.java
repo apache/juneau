@@ -271,7 +271,7 @@ public class ObjectRest_Test {
 	// PojoRest(Object,ReaderParser)
 	//====================================================================================================
 	@Test
-	public void c01_constructors() throws Exception {
+	public void c01_constructors() {
 		ObjectRest model = ObjectRest.create(new AddressBook(), JsonParser.DEFAULT);
 
 		// Try adding a person to the address book.
@@ -289,7 +289,7 @@ public class ObjectRest_Test {
 	// setRootLocked()
 	//====================================================================================================
 	@Test
-	public void d01_rootLocked() throws Exception {
+	public void d01_rootLocked() {
 		ObjectRest model = ObjectRest.create(new AddressBook()).setRootLocked();
 		assertThrown(()->model.put("", new AddressBook())).asMessage().is("Cannot overwrite root object");
 		assertThrown(()->model.put(null, new AddressBook())).asMessage().is("Cannot overwrite root object");
@@ -300,7 +300,7 @@ public class ObjectRest_Test {
 	// getRootObject()
 	//====================================================================================================
 	@Test
-	public void e01_getRootObject() throws Exception {
+	public void e01_getRootObject() {
 		ObjectRest model = ObjectRest.create(new AddressBook());
 		assertTrue(model.getRootObject() instanceof AddressBook);
 		model.put("", "foobar");

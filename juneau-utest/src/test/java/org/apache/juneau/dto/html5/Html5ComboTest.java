@@ -1348,28 +1348,34 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.xml("<html><head><title>title</title><base href='foo' target='_blank'/><link rel='stylesheet' type='text/css' href='theme.css'/><meta charset='UTF-8'/></head><body>bar</body></html>")
 				.xmlT("<html><head><title>title</title><base href='foo' target='_blank'/><link rel='stylesheet' type='text/css' href='theme.css'/><meta charset='UTF-8'/></head><body>bar</body></html>")
 				.xmlR(
-						"<html>\n"
-						+"	<head>\n"
-						+"		<title>title</title>\n"
-						+"		<base href='foo' target='_blank'/>\n"
-						+"		<link rel='stylesheet' type='text/css' href='theme.css'/>\n"
-						+"		<meta charset='UTF-8'/>\n"
-						+"	</head>\n"
-						+"	<body>bar</body>\n"
-						+"</html>\n")
+					"""
+					<html>
+						<head>
+							<title>title</title>
+							<base href='foo' target='_blank'/>
+							<link rel='stylesheet' type='text/css' href='theme.css'/>
+							<meta charset='UTF-8'/>
+						</head>
+						<body>bar</body>
+					</html>
+					"""
+				)
 				.xmlNs("<html><head><title>title</title><base href='foo' target='_blank'/><link rel='stylesheet' type='text/css' href='theme.css'/><meta charset='UTF-8'/></head><body>bar</body></html>")
 				.html("<html><head><title>title</title><base href='foo' target='_blank'/><link rel='stylesheet' type='text/css' href='theme.css'/><meta charset='UTF-8'/></head><body>bar</body></html>")
 				.htmlT("<html><head><title>title</title><base href='foo' target='_blank'/><link rel='stylesheet' type='text/css' href='theme.css'/><meta charset='UTF-8'/></head><body>bar</body></html>")
 				.htmlR(
-						"<html>\n"
-						+"	<head>\n"
-						+"		<title>title</title>\n"
-						+"		<base href='foo' target='_blank'/>\n"
-						+"		<link rel='stylesheet' type='text/css' href='theme.css'/>\n"
-						+"		<meta charset='UTF-8'/>\n"
-						+"	</head>\n"
-						+"	<body>bar</body>\n"
-						+"</html>\n")
+					"""
+					<html>
+						<head>
+							<title>title</title>
+							<base href='foo' target='_blank'/>
+							<link rel='stylesheet' type='text/css' href='theme.css'/>
+							<meta charset='UTF-8'/>
+						</head>
+						<body>bar</body>
+					</html>
+					"""
+				)
 				.uon("(_type=html,c=@((_type=head,c=@((_type=title,c=title),(_type=base,a=(href=foo,target=_blank)),(_type=link,a=(rel=stylesheet,type=text/css,href=theme.css)),(_type=meta,a=(charset=UTF-8)))),(_type=body,c=@(bar))))")
 				.uonT("(t=html,c=@((t=head,c=@((t=title,c=title),(t=base,a=(href=foo,target=_blank)),(t=link,a=(rel=stylesheet,type=text/css,href=theme.css)),(t=meta,a=(charset=UTF-8)))),(t=body,c=@(bar))))")
 				.uonR("(\n\t_type=html,\n\tc=@(\n\t\t(\n\t\t\t_type=head,\n\t\t\tc=@(\n\t\t\t\t(\n\t\t\t\t\t_type=title,\n\t\t\t\t\tc=title\n\t\t\t\t),\n\t\t\t\t(\n\t\t\t\t\t_type=base,\n\t\t\t\t\ta=(\n\t\t\t\t\t\thref=foo,\n\t\t\t\t\t\ttarget=_blank\n\t\t\t\t\t)\n\t\t\t\t),\n\t\t\t\t(\n\t\t\t\t\t_type=link,\n\t\t\t\t\ta=(\n\t\t\t\t\t\trel=stylesheet,\n\t\t\t\t\t\ttype=text/css,\n\t\t\t\t\t\thref=theme.css\n\t\t\t\t\t)\n\t\t\t\t),\n\t\t\t\t(\n\t\t\t\t\t_type=meta,\n\t\t\t\t\ta=(\n\t\t\t\t\t\tcharset=UTF-8\n\t\t\t\t\t)\n\t\t\t\t)\n\t\t\t)\n\t\t),\n\t\t(\n\t\t\t_type=body,\n\t\t\tc=@(\n\t\t\t\tbar\n\t\t\t)\n\t\t)\n\t)\n)")
@@ -2346,135 +2352,150 @@ public class Html5ComboTest extends ComboRoundTripTest {
 							+"</tfoot>"
 						+"</table>")
 				.xmlR(
-						"<table>\n"
-							+"\t<caption>caption1</caption>\n"
-							+"\t<colgroup>\n"
-								+"\t\t<col class='foo'/>\n"
-								+"\t\t<col class='bar'/>\n"
-							+"\t</colgroup>\n"
-							+"\t<thead>\n"
-								+"\t\t<tr>\n"
-									+"\t\t\t<th>c1</th>\n"
-									+"\t\t\t<th>c2</th>\n"
-								+"\t\t</tr>\n"
-							+"\t</thead>\n"
-							+"\t<tbody>\n"
-								+"\t\t<tr>\n"
-									+"\t\t\t<td>v1</td>\n"
-									+"\t\t\t<td>v2</td>\n"
-								+"\t\t</tr>\n"
-							+"\t</tbody>\n"
-							+"\t<tfoot>\n"
-								+"\t\t<tr>\n"
-									+"\t\t\t<td>f1</td>\n"
-									+"\t\t\t<td>f2</td>\n"
-								+"\t\t</tr>\n"
-							+"\t</tfoot>\n"
-						+"</table>\n")
+					"""
+					<table>
+						<caption>caption1</caption>
+						<colgroup>
+							<col class='foo'/>
+							<col class='bar'/>
+						</colgroup>
+						<thead>
+							<tr>
+								<th>c1</th>
+								<th>c2</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>v1</td>
+								<td>v2</td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td>f1</td>
+								<td>f2</td>
+							</tr>
+						</tfoot>
+					</table>
+					"""
+				)
 				.xmlNs(
-						"<table>"
-							+"<caption>caption1</caption>"
-							+"<colgroup>"
-								+"<col class='foo'/>"
-								+"<col class='bar'/>"
-							+"</colgroup>"
-							+"<thead>"
-								+"<tr>"
-									+"<th>c1</th>"
-									+"<th>c2</th>"
-								+"</tr>"
-							+"</thead>"
-							+"<tbody>"
-								+"<tr>"
-									+"<td>v1</td>"
-									+"<td>v2</td>"
-								+"</tr>"
-							+"</tbody>"
-							+"<tfoot>"
-								+"<tr>"
-									+"<td>f1</td>"
-									+"<td>f2</td>"
-								+"</tr>"
-							+"</tfoot>"
-						+"</table>")
+					"""
+					<table>
+						<caption>caption1</caption>
+						<colgroup>
+							<col class='foo'/>
+							<col class='bar'/>
+						</colgroup>
+						<thead>
+							<tr>
+								<th>c1</th>
+								<th>c2</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>v1</td>
+								<td>v2</td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td>f1</td>
+								<td>f2</td>
+							</tr>
+						</tfoot>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
+				)
 				.html(
-						"<table>"
-							+"<caption>caption1</caption>"
-							+"<colgroup>"
-								+"<col class='foo'/>"
-								+"<col class='bar'/>"
-							+"</colgroup>"
-							+"<thead>"
-								+"<tr>"
-									+"<th>c1</th>"
-									+"<th>c2</th>"
-								+"</tr>"
-							+"</thead>"
-							+"<tbody>"
-								+"<tr>"
-									+"<td>v1</td>"
-									+"<td>v2</td>"
-								+"</tr>"
-							+"</tbody>"
-							+"<tfoot>"
-								+"<tr>"
-									+"<td>f1</td>"
-									+"<td>f2</td>"
-								+"</tr>"
-							+"</tfoot>"
-						+"</table>")
+					"""
+					<table>
+						<caption>caption1</caption>
+						<colgroup>
+							<col class='foo'/>
+							<col class='bar'/>
+						</colgroup>
+						<thead>
+							<tr>
+								<th>c1</th>
+								<th>c2</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>v1</td>
+								<td>v2</td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td>f1</td>
+								<td>f2</td>
+							</tr>
+						</tfoot>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
+				)
 				.htmlT(
-						"<table>"
-							+"<caption>caption1</caption>"
-							+"<colgroup>"
-								+"<col class='foo'/>"
-								+"<col class='bar'/>"
-							+"</colgroup>"
-							+"<thead>"
-								+"<tr>"
-									+"<th>c1</th>"
-									+"<th>c2</th>"
-								+"</tr>"
-							+"</thead>"
-							+"<tbody>"
-								+"<tr>"
-									+"<td>v1</td>"
-									+"<td>v2</td>"
-								+"</tr>"
-							+"</tbody>"
-							+"<tfoot>"
-								+"<tr>"
-									+"<td>f1</td>"
-									+"<td>f2</td>"
-								+"</tr>"
-							+"</tfoot>"
-						+"</table>")
+					"""
+					<table>
+						<caption>caption1</caption>
+						<colgroup>
+							<col class='foo'/>
+							<col class='bar'/>
+						</colgroup>
+						<thead>
+							<tr>
+								<th>c1</th>
+								<th>c2</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>v1</td>
+								<td>v2</td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td>f1</td>
+								<td>f2</td>
+							</tr>
+						</tfoot>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
+				)
 				.htmlR(
-						"<table>\n"
-							+"\t<caption>caption1</caption>\n"
-							+"\t<colgroup>\n"
-								+"\t\t<col class='foo'/>\n"
-								+"\t\t<col class='bar'/>\n"
-							+"\t</colgroup>\n"
-							+"\t<thead>\n"
-								+"\t\t<tr>\n"
-									+"\t\t\t<th>c1</th>\n"
-									+"\t\t\t<th>c2</th>\n"
-								+"\t\t</tr>\n"
-							+"\t</thead>\n"
-							+"\t<tbody>\n"
-								+"\t\t<tr>\n"
-									+"\t\t\t<td>v1</td>\n"
-									+"\t\t\t<td>v2</td>\n"
-								+"\t\t</tr>\n"
-							+"\t</tbody>\n"
-							+"\t<tfoot>\n"
-								+"\t\t<tr>\n"
-									+"\t\t\t<td>f1</td>\n"
-									+"\t\t\t<td>f2</td>\n"
-								+"\t\t</tr>\n"
-							+"\t</tfoot>\n"
-						+"</table>\n")
+					"""
+					<table>
+						<caption>caption1</caption>
+						<colgroup>
+							<col class='foo'/>
+							<col class='bar'/>
+						</colgroup>
+						<thead>
+							<tr>
+								<th>c1</th>
+								<th>c2</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>v1</td>
+								<td>v2</td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td>f1</td>
+								<td>f2</td>
+							</tr>
+						</tfoot>
+					</table>
+					"""
+				)
 				.uon("(_type=table,c=@((_type=caption,c=@(caption1)),(_type=colgroup,c=@((_type=col,a=(class=foo)),(_type=col,a=(class=bar)))),(_type=thead,c=@((_type=tr,c=@((_type=th,c=@(c1)),(_type=th,c=@(c2)))))),(_type=tbody,c=@((_type=tr,c=@((_type=td,c=@(v1)),(_type=td,c=@(v2)))))),(_type=tfoot,c=@((_type=tr,c=@((_type=td,c=@(f1)),(_type=td,c=@(f2))))))))")
 				.uonT("(t=table,c=@((t=caption,c=@(caption1)),(t=colgroup,c=@((t=col,a=(class=foo)),(t=col,a=(class=bar)))),(t=thead,c=@((t=tr,c=@((t=th,c=@(c1)),(t=th,c=@(c2)))))),(t=tbody,c=@((t=tr,c=@((t=td,c=@(v1)),(t=td,c=@(v2)))))),(t=tfoot,c=@((t=tr,c=@((t=td,c=@(f1)),(t=td,c=@(f2))))))))")
 				.uonR("(\n\t_type=table,\n\tc=@(\n\t\t(\n\t\t\t_type=caption,\n\t\t\tc=@(\n\t\t\t\tcaption1\n\t\t\t)\n\t\t),\n\t\t(\n\t\t\t_type=colgroup,\n\t\t\tc=@(\n\t\t\t\t(\n\t\t\t\t\t_type=col,\n\t\t\t\t\ta=(\n\t\t\t\t\t\tclass=foo\n\t\t\t\t\t)\n\t\t\t\t),\n\t\t\t\t(\n\t\t\t\t\t_type=col,\n\t\t\t\t\ta=(\n\t\t\t\t\t\tclass=bar\n\t\t\t\t\t)\n\t\t\t\t)\n\t\t\t)\n\t\t),\n\t\t(\n\t\t\t_type=thead,\n\t\t\tc=@(\n\t\t\t\t(\n\t\t\t\t\t_type=tr,\n\t\t\t\t\tc=@(\n\t\t\t\t\t\t(\n\t\t\t\t\t\t\t_type=th,\n\t\t\t\t\t\t\tc=@(\n\t\t\t\t\t\t\t\tc1\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t),\n\t\t\t\t\t\t(\n\t\t\t\t\t\t\t_type=th,\n\t\t\t\t\t\t\tc=@(\n\t\t\t\t\t\t\t\tc2\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t)\n\t\t\t\t\t)\n\t\t\t\t)\n\t\t\t)\n\t\t),\n\t\t(\n\t\t\t_type=tbody,\n\t\t\tc=@(\n\t\t\t\t(\n\t\t\t\t\t_type=tr,\n\t\t\t\t\tc=@(\n\t\t\t\t\t\t(\n\t\t\t\t\t\t\t_type=td,\n\t\t\t\t\t\t\tc=@(\n\t\t\t\t\t\t\t\tv1\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t),\n\t\t\t\t\t\t(\n\t\t\t\t\t\t\t_type=td,\n\t\t\t\t\t\t\tc=@(\n\t\t\t\t\t\t\t\tv2\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t)\n\t\t\t\t\t)\n\t\t\t\t)\n\t\t\t)\n\t\t),\n\t\t(\n\t\t\t_type=tfoot,\n\t\t\tc=@(\n\t\t\t\t(\n\t\t\t\t\t_type=tr,\n\t\t\t\t\tc=@(\n\t\t\t\t\t\t(\n\t\t\t\t\t\t\t_type=td,\n\t\t\t\t\t\t\tc=@(\n\t\t\t\t\t\t\t\tf1\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t),\n\t\t\t\t\t\t(\n\t\t\t\t\t\t\t_type=td,\n\t\t\t\t\t\t\tc=@(\n\t\t\t\t\t\t\t\tf2\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t)\n\t\t\t\t\t)\n\t\t\t\t)\n\t\t\t)\n\t\t)\n\t)\n)")

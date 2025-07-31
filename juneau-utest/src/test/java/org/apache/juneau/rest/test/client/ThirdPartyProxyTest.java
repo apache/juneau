@@ -73,7 +73,7 @@ public class ThirdPartyProxyTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void a01_primitiveHeaders() throws Exception {
+	public void a01_primitiveHeaders() {
 		String r = proxy.primitiveHeaders(
 			"foo",
 			null,
@@ -88,7 +88,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void a02_primitiveCollectionHeaders() throws Exception {
+	public void a02_primitiveCollectionHeaders() {
 		String r = proxy.primitiveCollectionHeaders(
 			new int[][][]{{{1,2},null},null},
 			new Integer[][][]{{{1,null},null},null},
@@ -103,7 +103,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void a03_beanHeaders() throws Exception {
+	public void a03_beanHeaders() {
 		String r = proxy.beanHeaders(
 			ABean.get(),
 			null,
@@ -120,7 +120,7 @@ public class ThirdPartyProxyTest {
 
 
 	@Test
-	public void a04_typedBeanHeaders() throws Exception {
+	public void a04_typedBeanHeaders() {
 		String r = proxy.typedBeanHeaders(
 			TypedBeanImpl.get(),
 			null,
@@ -136,7 +136,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void a05_swappedObjectHeaders() throws Exception {
+	public void a05_swappedObjectHeaders() {
 		String r = proxy.swappedObjectHeaders(
 			new SwappedObject(),
 			new SwappedObject[][][]{{{new SwappedObject(),null},null},null},
@@ -147,7 +147,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void a06_implicitSwappedObjectHeaders() throws Exception {
+	public void a06_implicitSwappedObjectHeaders() {
 		String r = proxy.implicitSwappedObjectHeaders(
 			new ImplicitSwappedObject(),
 			new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null},
@@ -158,7 +158,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void a07_enumHeaders() throws Exception {
+	public void a07_enumHeaders() {
 		String r = proxy.enumHeaders(
 			TestEnum.TWO,
 			null,
@@ -174,7 +174,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void a08_mapHeader() throws Exception {
+	public void a08_mapHeader() {
 		String r = proxy.mapHeader(
 			map("a","foo","b","","c",null)
 		);
@@ -182,7 +182,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void a09_beanHeader() throws Exception {
+	public void a09_beanHeader() {
 		String r = proxy.beanHeader(
 			new NeBean().init()
 		);
@@ -190,7 +190,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void a10_headerList() throws Exception {
+	public void a10_headerList() {
 		String r = proxy.headerList(
 			headerList("a","foo","b","","c",null)
 		);
@@ -202,7 +202,7 @@ public class ThirdPartyProxyTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void b01_primitiveQueries() throws Exception {
+	public void b01_primitiveQueries() {
 		String r = proxy.primitiveQueries(
 			"foo",
 			null,
@@ -217,7 +217,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void b02_primitiveCollectionQueries() throws Exception {
+	public void b02_primitiveCollectionQueries() {
 		String r = proxy.primitiveCollectionQueries(
 			new int[][][]{{{1,2},null},null},
 			new Integer[][][]{{{1,null},null},null},
@@ -232,7 +232,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void b03_beanQueries() throws Exception {
+	public void b03_beanQueries() {
 		String r = proxy.beanQueries(
 			ABean.get(),
 			null,
@@ -249,7 +249,7 @@ public class ThirdPartyProxyTest {
 
 
 	@Test
-	public void b04_typedBeanQueries() throws Exception {
+	public void b04_typedBeanQueries() {
 		String r = proxy.typedBeanQueries(
 			TypedBeanImpl.get(),
 			null,
@@ -265,7 +265,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void b05_swappedObjectQueries() throws Exception {
+	public void b05_swappedObjectQueries() {
 		String r = proxy.swappedObjectQueries(
 			new SwappedObject(),
 			new SwappedObject[][][]{{{new SwappedObject(),null},null},null},
@@ -276,7 +276,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void b06_implicitSwappedObjectQueries() throws Exception {
+	public void b06_implicitSwappedObjectQueries() {
 		String r = proxy.implicitSwappedObjectQueries(
 			new ImplicitSwappedObject(),
 			new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null},
@@ -287,7 +287,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void b07_enumQueries() throws Exception {
+	public void b07_enumQueries() {
 		String r = proxy.enumQueries(
 			TestEnum.TWO,
 			null,
@@ -303,19 +303,19 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void b08_stringQuery1() throws Exception {
+	public void b08_stringQuery1() {
 		String r = proxy.stringQuery1("a=1&b=foo");
 		assertEquals("OK", r);
 	}
 
 	@Test
-	public void b09_stringQuery2() throws Exception {
+	public void b09_stringQuery2() {
 		String r = proxy.stringQuery2("a=1&b=foo");
 		assertEquals("OK", r);
 	}
 
 	@Test
-	public void b10_mapQuery() throws Exception {
+	public void b10_mapQuery() {
 		String r = proxy.mapQuery(
 			map("a",1,"b","foo")
 		);
@@ -323,7 +323,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void b11_beanQuery() throws Exception {
+	public void b11_beanQuery() {
 		String r = proxy.beanQuery(
 			new NeBean().init()
 		);
@@ -331,7 +331,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void b12_partListQuery() throws Exception {
+	public void b12_partListQuery() {
 		String r = proxy.partListQuery(
 			partList("a","foo","b","","c",null)
 		);
@@ -343,7 +343,7 @@ public class ThirdPartyProxyTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void c01_primitiveFormData() throws Exception {
+	public void c01_primitiveFormData() {
 		String r = proxy.primitiveFormData(
 			"foo",
 			null,
@@ -358,7 +358,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void c02_primitiveCollectionFormData() throws Exception {
+	public void c02_primitiveCollectionFormData() {
 		String r = proxy.primitiveCollectionFormData(
 			new int[][][]{{{1,2},null},null},
 			new Integer[][][]{{{1,null},null},null},
@@ -373,7 +373,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void c03_beanFormData() throws Exception {
+	public void c03_beanFormData() {
 		String r = proxy.beanFormData(
 			ABean.get(),
 			null,
@@ -390,7 +390,7 @@ public class ThirdPartyProxyTest {
 
 
 	@Test
-	public void c04_typedBeanFormData() throws Exception {
+	public void c04_typedBeanFormData() {
 		String r = proxy.typedBeanFormData(
 			TypedBeanImpl.get(),
 			null,
@@ -406,7 +406,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void c05_swappedObjectFormData() throws Exception {
+	public void c05_swappedObjectFormData() {
 		String r = proxy.swappedObjectFormData(
 			new SwappedObject(),
 			new SwappedObject[][][]{{{new SwappedObject(),null},null},null},
@@ -417,7 +417,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void c06_implicitSwappedObjectFormData() throws Exception {
+	public void c06_implicitSwappedObjectFormData() {
 		String r = proxy.implicitSwappedObjectFormData(
 			new ImplicitSwappedObject(),
 			new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null},
@@ -428,7 +428,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void c07_enumFormData() throws Exception {
+	public void c07_enumFormData() {
 		String r = proxy.enumFormData(
 			TestEnum.TWO,
 			null,
@@ -444,7 +444,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void c08_mapFormData() throws Exception {
+	public void c08_mapFormData() {
 		String r = proxy.mapFormData(
 			map("a","foo","b","","c",null)
 		);
@@ -452,7 +452,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void c09_beanFormData() throws Exception {
+	public void c09_beanFormData() {
 		String r = proxy.beanFormData(
 			new NeBean().init()
 		);
@@ -460,7 +460,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void c10_partListFormData() throws Exception {
+	public void c10_partListFormData() {
 		String r = proxy.partListFormData(
 			partList("a","foo","b","","c",null)
 		);
@@ -1097,7 +1097,7 @@ public class ThirdPartyProxyTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void ga01_reqBeanPath1() throws Exception {
+	public void ga01_reqBeanPath1() {
 		String r = proxy.reqBeanPath1(
 			new ReqBeanPath1() {
 				@Override
@@ -1114,7 +1114,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void ga01_reqBeanPath1a() throws Exception {
+	public void ga01_reqBeanPath1a() {
 		String r = proxy.reqBeanPath1(
 			new ReqBeanPath1Impl()
 		);
@@ -1122,7 +1122,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void ga02_reqBeanPath2() throws Exception {
+	public void ga02_reqBeanPath2() {
 		String r = proxy.reqBeanPath2(
 			new ReqBeanPath2()
 		);
@@ -1130,7 +1130,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void ga03_reqBeanPath3() throws Exception {
+	public void ga03_reqBeanPath3() {
 		String r = proxy.reqBeanPath3(
 			new ReqBeanPath3() {
 				@Override
@@ -1147,13 +1147,13 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-    public void ga06_reqBeanPath6() throws Exception {
+    public void ga06_reqBeanPath6() {
         String r = proxy.reqBeanPath6(() -> map("a", 1, "b", "foo"));
         assertEquals("OK", r);
     }
 
 	@Test
-    public void ga07_reqBeanPath7() throws Exception {
+    public void ga07_reqBeanPath7() {
         String r = proxy.reqBeanPath7(ABean::get);
         assertEquals("OK", r);
     }
@@ -1163,7 +1163,7 @@ public class ThirdPartyProxyTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void gb01_reqBeanQuery1() throws Exception {
+	public void gb01_reqBeanQuery1() {
 		String r = proxy.reqBeanQuery1(
 			new ReqBeanQuery1() {
 				@Override
@@ -1180,7 +1180,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void gb01_reqBeanQuery1a() throws Exception {
+	public void gb01_reqBeanQuery1a() {
 		String r = proxy.reqBeanQuery1(
 			new ReqBeanQuery1Impl()
 		);
@@ -1188,7 +1188,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void gb02_reqBeanQuery2() throws Exception {
+	public void gb02_reqBeanQuery2() {
 		String r = proxy.reqBeanQuery2(
 			new ReqBeanQuery2()
 		);
@@ -1196,7 +1196,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void gb03_reqBeanQuery3() throws Exception {
+	public void gb03_reqBeanQuery3() {
 		String r = proxy.reqBeanQuery3(
 			new ReqBeanQuery3() {
 				@Override
@@ -1213,7 +1213,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void gb06_reqBeanQuery6() throws Exception {
+	public void gb06_reqBeanQuery6() {
 		String r = proxy.reqBeanQuery6(
 			() -> map("a",1,"b","foo")
 		);
@@ -1221,7 +1221,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void gb07_reqBeanQuery7() throws Exception {
+	public void gb07_reqBeanQuery7() {
 		String r = proxy.reqBeanQuery7(
 			ABean::get
 		);
@@ -1233,7 +1233,7 @@ public class ThirdPartyProxyTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void gd01_reqBeanFormData1() throws Exception {
+	public void gd01_reqBeanFormData1() {
 		String r = proxy.reqBeanFormData1(
 			new ReqBeanFormData1() {
 				@Override
@@ -1250,7 +1250,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void gd01_reqBeanFormData1a() throws Exception {
+	public void gd01_reqBeanFormData1a() {
 		String r = proxy.reqBeanFormData1(
 			new ReqBeanFormData1Impl()
 		);
@@ -1258,7 +1258,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void gd02_reqBeanFormData2() throws Exception {
+	public void gd02_reqBeanFormData2() {
 		String r = proxy.reqBeanFormData2(
 			new ReqBeanFormData2()
 		);
@@ -1266,7 +1266,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void gd03_reqBeanFormData3() throws Exception {
+	public void gd03_reqBeanFormData3() {
 		String r = proxy.reqBeanFormData3(
 			new ReqBeanFormData3() {
 				@Override
@@ -1283,7 +1283,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void gd06_reqBeanFormData6() throws Exception {
+	public void gd06_reqBeanFormData6() {
 		String r = proxy.reqBeanFormData6(
 			() -> map("a",1,"b","foo")
 		);
@@ -1291,7 +1291,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void gd07_reqBeanFormData7() throws Exception {
+	public void gd07_reqBeanFormData7() {
 		String r = proxy.reqBeanFormData7(
 			ABean::get
 		);
@@ -1303,7 +1303,7 @@ public class ThirdPartyProxyTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void gf01_reqBeanHeader1() throws Exception {
+	public void gf01_reqBeanHeader1() {
 		String r = proxy.reqBeanHeader1(
 			new ReqBeanHeader1() {
 				@Override
@@ -1320,7 +1320,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void gf01_reqBeanHeader1a() throws Exception {
+	public void gf01_reqBeanHeader1a() {
 		String r = proxy.reqBeanHeader1(
 			new ReqBeanHeader1Impl()
 		);
@@ -1328,7 +1328,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void gf02_reqBeanHeader2() throws Exception {
+	public void gf02_reqBeanHeader2() {
 		String r = proxy.reqBeanHeader2(
 			new ReqBeanHeader2()
 		);
@@ -1336,7 +1336,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void gf03_reqBeanHeader3() throws Exception {
+	public void gf03_reqBeanHeader3() {
 		String r = proxy.reqBeanHeader3(
 			new ReqBeanHeader3() {
 				@Override
@@ -1353,7 +1353,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void gf06_reqBeanHeader6() throws Exception {
+	public void gf06_reqBeanHeader6() {
 		String r = proxy.reqBeanHeader6(
 			() -> map("a",1,"b","foo")
 		);
@@ -1361,7 +1361,7 @@ public class ThirdPartyProxyTest {
 	}
 
 	@Test
-	public void gf07_reqBeanHeader7() throws Exception {
+	public void gf07_reqBeanHeader7() {
 		String r = proxy.reqBeanHeader7(
 			ABean::get
 		);
@@ -1372,7 +1372,7 @@ public class ThirdPartyProxyTest {
 	// PartFormatters
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
-	public void h01() throws Exception {
+	public void h01() {
 		String r = proxy.partFormatters("1", "2", "3", "4");
 		assertEquals("OK", r);
 	}
@@ -1381,48 +1381,48 @@ public class ThirdPartyProxyTest {
 	// @RemoteOp(returns=HTTP_STATUS)
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
-	public void i01a() throws Exception {
+	public void i01a() {
 		int r = proxy.httpStatusReturnInt200();
 		assertEquals(200, r);
 	}
 
 	@Test
-	public void i01b() throws Exception {
+	public void i01b() {
 		Integer r = proxy.httpStatusReturnInteger200();
 		assertEquals(200, r.intValue());
 	}
 
 	@Test
-	public void i01c() throws Exception {
+	public void i01c() {
 		int r = proxy.httpStatusReturnInt404();
 		assertEquals(404, r);
 	}
 
 	@Test
-	public void i01d() throws Exception {
+	public void i01d() {
 		Integer r = proxy.httpStatusReturnInteger404();
 		assertEquals(404, r.intValue());
 	}
 
 	@Test
-	public void i02a() throws Exception {
+	public void i02a() {
 		boolean r = proxy.httpStatusReturnBool200();
 		assertEquals(true, r);
 	}
 
 	@Test
-	public void i02b() throws Exception {
+	public void i02b() {
 		Boolean r = proxy.httpStatusReturnBoolean200();
 		assertEquals(true, r);
 	}
 
 	@Test
-	public void i02c() throws Exception {
+	public void i02c() {
 		boolean r = proxy.httpStatusReturnBool404();
 		assertEquals(false, r);
 	}
 
-	public void i02d() throws Exception {
+	public void i02d() {
 		Boolean r = proxy.httpStatusReturnBoolean404();
 		assertEquals(false, r);
 	}

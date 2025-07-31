@@ -133,7 +133,7 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		void setF1(String f1);
 	}
 
-	public static abstract class AA implements IA {
+	public abstract static class AA implements IA {
 	}
 
 	@Bean(typeName="A")

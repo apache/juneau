@@ -107,7 +107,7 @@ public class ResponseInfo_Test {
 	}
 
 	@Test
-	public void b02_copy() throws Exception {
+	public void b02_copy() {
 		ResponseInfo t = new ResponseInfo();
 
 		t = t.copy();
@@ -126,7 +126,7 @@ public class ResponseInfo_Test {
 	}
 
 	@Test
-	public void b03_keySet() throws Exception {
+	public void b03_keySet() {
 		ResponseInfo t = new ResponseInfo();
 
 		assertObject(t.keySet()).asJson().is("[]");

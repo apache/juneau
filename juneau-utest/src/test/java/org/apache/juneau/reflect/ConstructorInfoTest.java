@@ -67,22 +67,22 @@ public class ConstructorInfoTest {
 	static ConstructorInfo a = ofc(A.class);
 
 	@Test
-	public void of_withDeclaringClass() throws Exception {
+	public void of_withDeclaringClass() {
 		check("A()", ConstructorInfo.of(ClassInfo.of(A.class), a.inner()));
 	}
 
 	@Test
-	public void of_noDeclaringClass() throws Exception {
+	public void of_noDeclaringClass() {
 		check("A()", a.inner());
 	}
 
 	@Test
-	public void getDeclaringClass() throws Exception {
+	public void getDeclaringClass() {
 		check("A", a.getDeclaringClass());
 	}
 
 	@Test
-	public void of_null() throws Exception {
+	public void of_null() {
 		check(null, ConstructorInfo.of(null));
 		check(null, ConstructorInfo.of(null, null));
 	}

@@ -55,7 +55,7 @@ public class BeanFilterTest {
 	}
 
 	@Bean(dictionary={A1.class, A2.class})
-	public static abstract class A {
+	public abstract static class A {
 		public String f0 = "f0";
 		public B fb;
 	}
@@ -71,7 +71,7 @@ public class BeanFilterTest {
 	}
 
 	@Bean(dictionary={B1.class,B2.class})
-	public static abstract class B {
+	public abstract static class B {
 		public String f0b = "f0b";
 	}
 
@@ -122,7 +122,7 @@ public class BeanFilterTest {
 
 	private static class EConfig2 extends EConfig {}
 
-	public static abstract class E {
+	public abstract static class E {
 		public String f0 = "f0";
 		public F fb;
 	}
@@ -135,7 +135,7 @@ public class BeanFilterTest {
 		public String f2;
 	}
 
-	public static abstract class F {
+	public abstract static class F {
 		public String f0b = "f0b";
 	}
 

@@ -28,7 +28,7 @@ public class BeanMapTest {
 	// testFilteredEntry
 	//====================================================================================================
 	@Test
-	public void testFilteredEntry() throws Exception {
+	public void testFilteredEntry() {
 		BeanSession session = BeanContext.create().swaps(ByteArraySwap.Base64.class).build().getSession();
 		BeanMap<A> m = session.toBeanMap(new A());
 
@@ -50,7 +50,7 @@ public class BeanMapTest {
 	// When bean properties can have multiple filters applied to them, pick the first match.
 	//====================================================================================================
 	@Test
-	public void testFilteredEntryWithMultipleMatchingFilters() throws Exception {
+	public void testFilteredEntryWithMultipleMatchingFilters() {
 		BeanSession session = BeanContext.create().swaps(B2Swap.class, B1Swap.class).build().getSession();
 		BeanMap<B> bm = session.toBeanMap(B.create());
 		JsonMap m = (JsonMap)bm.get("b1");

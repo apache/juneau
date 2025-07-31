@@ -33,7 +33,7 @@ public class HttpPartSchema_Body_Test {
 	// Basic test
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
-	public void testBasic() throws Exception {
+	public void testBasic() {
 		HttpPartSchema.create().build();
 	}
 
@@ -50,7 +50,7 @@ public class HttpPartSchema_Body_Test {
 	public static class A02 {}
 
 	@Test
-	public void a02_basic_onClass() throws Exception {
+	public void a02_basic_onClass() {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, A02.class).noValidate().build();
 		assertTrue(s.isRequired());
 	}
@@ -174,7 +174,7 @@ public class HttpPartSchema_Body_Test {
 	public static class A05 {}
 
 	@Test
-	public void a05_basic_nestedItems_onClass() throws Exception {
+	public void a05_basic_nestedItems_onClass() {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, A05.class).noValidate().build();
 
 		assertEquals(HttpPartDataType.NUMBER, s.getType());

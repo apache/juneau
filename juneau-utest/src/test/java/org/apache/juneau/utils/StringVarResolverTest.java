@@ -27,7 +27,7 @@ public class StringVarResolverTest {
 	// test - Basic tests
 	//====================================================================================================
 	@Test
-	public void test() throws Exception {
+	public void test() {
 		VarResolver vr = VarResolver.create().vars(XVar.class).build();
 		String t;
 
@@ -95,7 +95,7 @@ public class StringVarResolverTest {
 	// test - No-name variables
 	//====================================================================================================
 	@Test
-	public void test2() throws Exception {
+	public void test2() {
 		VarResolver vr = VarResolver.create().vars(BlankVar.class).build();
 		String t;
 
@@ -126,7 +126,7 @@ public class StringVarResolverTest {
 	// test - No-name variables
 	//====================================================================================================
 	@Test
-	public void testEscaped$() throws Exception {
+	public void testEscaped$() {
 		VarResolver vr = VarResolver.create().vars(BlankVar.class).build();
 		String t;
 
@@ -143,7 +143,7 @@ public class StringVarResolverTest {
 	// test - Escape sequences.
 	//====================================================================================================
 	@Test
-	public void testEscapedSequences() throws Exception {
+	public void testEscapedSequences() {
 		VarResolver vr = VarResolver.create().vars(XVar.class).build();
 		String t;
 		char b = '\\';
@@ -172,7 +172,7 @@ public class StringVarResolverTest {
 	// Test $E variables
 	//====================================================================================================
 	@Test
-	public void test$E() throws Exception {
+	public void test$E() {
 		String t;
 
 		t = "$E{PATH}";
@@ -183,7 +183,7 @@ public class StringVarResolverTest {
 	// Test that StringResolver(parent) works as expected.
 	//====================================================================================================
 	@Test
-	public void testParent() throws Exception {
+	public void testParent() {
 		VarResolver vr = VarResolver.create().defaultVars().vars(XMultipartVar.class).build();
 		String t;
 		System.setProperty("a", "a1");
@@ -209,7 +209,7 @@ public class StringVarResolverTest {
 	// Test false triggers.
 	//====================================================================================================
 	@Test
-	public void testFalseTriggers() throws Exception {
+	public void testFalseTriggers() {
 		VarResolver.Builder vrb = VarResolver.create().defaultVars();
 		String in = null;
 

@@ -24,7 +24,7 @@ public class Tuple2Function_Test {
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test
-	public void a01_basic() throws Exception {
+	public void a01_basic() {
 		Tuple2Function<Integer,Integer,Integer> x = (a,b)->a+b;
 		assertInteger(x.apply(1,2)).is(3);
 	}

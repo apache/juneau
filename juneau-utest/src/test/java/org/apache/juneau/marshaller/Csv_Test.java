@@ -37,7 +37,7 @@ public class Csv_Test {
 
 
 	@Test
-	public void a02_from() throws Exception {
+	public void a02_from() {
 		String in1 = "'foo'", in2 = "{foo:'bar'}";
 
 		assertThrown(()->Csv.to(in1, String.class)).asMessage().is("Not implemented.");

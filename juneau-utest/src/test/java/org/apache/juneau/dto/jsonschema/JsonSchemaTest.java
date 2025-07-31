@@ -31,84 +31,84 @@ public class JsonSchemaTest {
 		String r;
 		JsonSchema t, t2;
 
-		String expected =
-			"{\n"
-			+"	id: 'http://id',\n"
-			+"	'$schema': 'http://schemaVersionUri',\n"
-			+"	title: 'title',\n"
-			+"	description: 'description',\n"
-			+"	type: 'number',\n"
-			+"	definitions: {\n"
-			+"		definition: {\n"
-			+"			'$ref': 'http://definition'\n"
-			+"		}\n"
-			+"	},\n"
-			+"	properties: {\n"
-			+"		property: {\n"
-			+"			type: 'number'\n"
-			+"		}\n"
-			+"	},\n"
-			+"	patternProperties: {\n"
-			+"		'/pattern/': {\n"
-			+"			type: 'number'\n"
-			+"		}\n"
-			+"	},\n"
-			+"	dependencies: {\n"
-			+"		dependency: {\n"
-			+"			'$ref': 'http://dependency'\n"
-			+"		}\n"
-			+"	},\n"
-			+"	items: [\n"
-			+"		{\n"
-			+"			type: 'number'\n"
-			+"		}\n"
-			+"	],\n"
-			+"	multipleOf: 1,\n"
-			+"	maximum: 2,\n"
-			+"	exclusiveMaximum: true,\n"
-			+"	minimum: 3,\n"
-			+"	exclusiveMinimum: true,\n"
-			+"	maxLength: 4,\n"
-			+"	minLength: 5,\n"
-			+"	pattern: '/pattern/',\n"
-			+"	additionalItems: [\n"
-			+"		{\n"
-			+"			type: 'number'\n"
-			+"		}\n"
-			+"	],\n"
-			+"	maxItems: 6,\n"
-			+"	minItems: 7,\n"
-			+"	uniqueItems: true,\n"
-			+"	maxProperties: 8,\n"
-			+"	minProperties: 9,\n"
-			+"	required: [\n"
-			+"		'required'\n"
-			+"	],\n"
-			+"	additionalProperties: {\n"
-			+"		'$ref': 'http://additionalProperty'\n"
-			+"	},\n"
-			+"	'enum': [\n"
-			+"		'enum'\n"
-			+"	],\n"
-			+"	allOf: [\n"
-			+"		{\n"
-			+"			'$ref': 'http://allOf'\n"
-			+"		}\n"
-			+"	],\n"
-			+"	anyOf: [\n"
-			+"		{\n"
-			+"			'$ref': 'http://anyOf'\n"
-			+"		}\n"
-			+"	],\n"
-			+"	oneOf: [\n"
-			+"		{\n"
-			+"			'$ref': 'http://oneOf'\n"
-			+"		}\n"
-			+"	],\n"
-			+"	not: {\n"
-			+"		'$ref': 'http://not'\n"
-			+"	}\n"
-			+"}";
+		String expected = """
+			{
+				id: 'http://id',
+				'$schema': 'http://schemaVersionUri',
+				title: 'title',
+				description: 'description',
+				type: 'number',
+				definitions: {
+					definition: {
+						'$ref': 'http://definition'
+					}
+				},
+				properties: {
+					property: {
+						type: 'number'
+					}
+				},
+				patternProperties: {
+					'/pattern/': {
+						type: 'number'
+					}
+				},
+				dependencies: {
+					dependency: {
+						'$ref': 'http://dependency'
+					}
+				},
+				items: [
+					{
+						type: 'number'
+					}
+				],
+				multipleOf: 1,
+				maximum: 2,
+				exclusiveMaximum: true,
+				minimum: 3,
+				exclusiveMinimum: true,
+				maxLength: 4,
+				minLength: 5,
+				pattern: '/pattern/',
+				additionalItems: [
+					{
+						type: 'number'
+					}
+				],
+				maxItems: 6,
+				minItems: 7,
+				uniqueItems: true,
+				maxProperties: 8,
+				minProperties: 9,
+				required: [
+					'required'
+				],
+				additionalProperties: {
+					'$ref': 'http://additionalProperty'
+				},
+				'enum': [
+					'enum'
+				],
+				allOf: [
+					{
+						'$ref': 'http://allOf'
+					}
+				],
+				anyOf: [
+					{
+						'$ref': 'http://anyOf'
+					}
+				],
+				oneOf: [
+					{
+						'$ref': 'http://oneOf'
+					}
+				],
+				not: {
+					'$ref': 'http://not'
+				}
+			}""";
 
 		t = getTest1();
 		r = s.serialize(t);
@@ -125,27 +125,27 @@ public class JsonSchemaTest {
 		String r;
 		JsonSchema t, t2;
 
-		String expected =
-			"{\n"
-			+"	id: 'http://id',\n"
-			+"	'$schema': 'http://schemaVersionUri',\n"
-			+"	type: [\n"
-			+"		'string',\n"
-			+"		'number'\n"
-			+"	],\n"
-			+"	definitions: {\n"
-			+"		definition: {\n"
-			+"			id: 'http://definition'\n"
-			+"		}\n"
-			+"	},\n"
-			+"	items: [\n"
-			+"		{\n"
-			+"			'$ref': 'http://items'\n"
-			+"		}\n"
-			+"	],\n"
-			+"	additionalItems: true,\n"
-			+"	additionalProperties: true\n"
-			+"}";
+		String expected = """
+			{
+				id: 'http://id',
+				'$schema': 'http://schemaVersionUri',
+				type: [
+					'string',
+					'number'
+				],
+				definitions: {
+					definition: {
+						id: 'http://definition'
+					}
+				},
+				items: [
+					{
+						'$ref': 'http://items'
+					}
+				],
+				additionalItems: true,
+				additionalProperties: true
+			}""";
 
 		t = getTest2();
 		r = s.serialize(t);
@@ -162,84 +162,84 @@ public class JsonSchemaTest {
 		String r;
 		JsonSchema t, t2;
 
-		String expected =
-			"{\n"
-			+"	id: 'http://id',\n"
-			+"	'$schema': 'http://schemaVersionUri',\n"
-			+"	title: 'title',\n"
-			+"	description: 'description',\n"
-			+"	type: 'number',\n"
-			+"	definitions: {\n"
-			+"		definition: {\n"
-			+"			'$ref': 'http://definition'\n"
-			+"		}\n"
-			+"	},\n"
-			+"	properties: {\n"
-			+"		property: {\n"
-			+"			type: 'number'\n"
-			+"		}\n"
-			+"	},\n"
-			+"	patternProperties: {\n"
-			+"		'/pattern/': {\n"
-			+"			type: 'number'\n"
-			+"		}\n"
-			+"	},\n"
-			+"	dependencies: {\n"
-			+"		dependency: {\n"
-			+"			'$ref': 'http://dependency'\n"
-			+"		}\n"
-			+"	},\n"
-			+"	items: [\n"
-			+"		{\n"
-			+"			type: 'number'\n"
-			+"		}\n"
-			+"	],\n"
-			+"	multipleOf: 1,\n"
-			+"	maximum: 2,\n"
-			+"	exclusiveMaximum: true,\n"
-			+"	minimum: 3,\n"
-			+"	exclusiveMinimum: true,\n"
-			+"	maxLength: 4,\n"
-			+"	minLength: 5,\n"
-			+"	pattern: '/pattern/',\n"
-			+"	additionalItems: [\n"
-			+"		{\n"
-			+"			type: 'number'\n"
-			+"		}\n"
-			+"	],\n"
-			+"	maxItems: 6,\n"
-			+"	minItems: 7,\n"
-			+"	uniqueItems: true,\n"
-			+"	maxProperties: 8,\n"
-			+"	minProperties: 9,\n"
-			+"	required: [\n"
-			+"		'required'\n"
-			+"	],\n"
-			+"	additionalProperties: {\n"
-			+"		'$ref': 'http://additionalProperty'\n"
-			+"	},\n"
-			+"	'enum': [\n"
-			+"		'enum'\n"
-			+"	],\n"
-			+"	allOf: [\n"
-			+"		{\n"
-			+"			'$ref': 'http://allOf'\n"
-			+"		}\n"
-			+"	],\n"
-			+"	anyOf: [\n"
-			+"		{\n"
-			+"			'$ref': 'http://anyOf'\n"
-			+"		}\n"
-			+"	],\n"
-			+"	oneOf: [\n"
-			+"		{\n"
-			+"			'$ref': 'http://oneOf'\n"
-			+"		}\n"
-			+"	],\n"
-			+"	not: {\n"
-			+"		'$ref': 'http://not'\n"
-			+"	}\n"
-			+"}";
+		String expected = """
+			{
+				id: 'http://id',
+				'$schema': 'http://schemaVersionUri',
+				title: 'title',
+				description: 'description',
+				type: 'number',
+				definitions: {
+					definition: {
+						'$ref': 'http://definition'
+					}
+				},
+				properties: {
+					property: {
+						type: 'number'
+					}
+				},
+				patternProperties: {
+					'/pattern/': {
+						type: 'number'
+					}
+				},
+				dependencies: {
+					dependency: {
+						'$ref': 'http://dependency'
+					}
+				},
+				items: [
+					{
+						type: 'number'
+					}
+				],
+				multipleOf: 1,
+				maximum: 2,
+				exclusiveMaximum: true,
+				minimum: 3,
+				exclusiveMinimum: true,
+				maxLength: 4,
+				minLength: 5,
+				pattern: '/pattern/',
+				additionalItems: [
+					{
+						type: 'number'
+					}
+				],
+				maxItems: 6,
+				minItems: 7,
+				uniqueItems: true,
+				maxProperties: 8,
+				minProperties: 9,
+				required: [
+					'required'
+				],
+				additionalProperties: {
+					'$ref': 'http://additionalProperty'
+				},
+				'enum': [
+					'enum'
+				],
+				allOf: [
+					{
+						'$ref': 'http://allOf'
+					}
+				],
+				anyOf: [
+					{
+						'$ref': 'http://anyOf'
+					}
+				],
+				oneOf: [
+					{
+						'$ref': 'http://oneOf'
+					}
+				],
+				not: {
+					'$ref': 'http://not'
+				}
+			}""";
 
 		t = getTest1();
 		r = t.toString();

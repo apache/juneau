@@ -25,7 +25,7 @@ public class NotEmptyVarTest {
 	// test - Basic tests
 	//====================================================================================================
 	@Test
-	public void test() throws Exception {
+	public void test() {
 		VarResolver vr = VarResolver.create().vars(NotEmptyVar.class, SystemPropertiesVar.class).build();
 
 		assertEquals("false", vr.resolve("$NE{}"));

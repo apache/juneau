@@ -70,7 +70,7 @@ public class BasicEntityTagHeader_Test {
 	}
 
 	@Test
-	public void a02_asEntityTag() throws Exception {
+	public void a02_asEntityTag() {
 		EntityTag x = new BasicEntityTagHeader("Foo","W/\"foo\"").asEntityTag().get();
 		assertString(x).is("W/\"foo\"");
 		assertString(x.getEntityValue()).is("foo");

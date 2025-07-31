@@ -273,7 +273,7 @@ public class SchemaInfo_Test {
 	}
 
 	@Test
-	public void b02_copy() throws Exception {
+	public void b02_copy() {
 		SchemaInfo t = new SchemaInfo();
 
 		t = t.copy();
@@ -317,7 +317,7 @@ public class SchemaInfo_Test {
 	}
 
 	@Test
-	public void b03_keySet() throws Exception {
+	public void b03_keySet() {
 		SchemaInfo t = new SchemaInfo();
 
 		assertObject(t.keySet()).asJson().is("[]");

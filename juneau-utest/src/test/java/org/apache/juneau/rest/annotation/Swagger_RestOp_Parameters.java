@@ -141,7 +141,7 @@ public class Swagger_RestOp_Parameters {
 	}
 
 	@Test
-	public void a01_headerParameters() throws Exception {
+	public void a01_headerParameters() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(A.class);
 		ParameterInfo x;
 

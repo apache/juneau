@@ -85,7 +85,7 @@ public class JsonParserTest {
 	}
 
 	@Test
-	public void testStrictMode() throws Exception {
+	public void testStrictMode() {
 		JsonParser p = sp;
 		assertThrown(()->p.parse("{\"foo\":,\"bar\":}", JsonMap.class)).asMessage().isContains("Missing value detected.");
 		assertThrown(()->p.parse("{\"foo\":'bar'}", JsonMap.class)).asMessage().isContains("Invalid quote character");

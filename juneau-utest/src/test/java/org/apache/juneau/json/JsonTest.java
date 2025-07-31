@@ -95,7 +95,7 @@ public class JsonTest {
 	}
 
 	@Test
-	public void testReservedKeywordAttributes() throws Exception {
+	public void testReservedKeywordAttributes() {
 		Map<String,Object> m = new LinkedHashMap<>();
 
 		// Keys with reserved names.
@@ -144,26 +144,26 @@ public class JsonTest {
 	@Test
 	public void testIndentation() throws Exception {
 		JsonMap m = JsonMap.ofJson("{J:{B:['c',{D:'e'},['f',{G:'h'},1,false]]},I:'j'}");
-		String e = ""
-			+ "{"
-			+ "\n	J: {"
-			+ "\n		B: ["
-			+ "\n			'c',"
-			+ "\n			{"
-			+ "\n				D: 'e'"
-			+ "\n			},"
-			+ "\n			["
-			+ "\n				'f',"
-			+ "\n				{"
-			+ "\n					G: 'h'"
-			+ "\n				},"
-			+ "\n				1,"
-			+ "\n				false"
-			+ "\n			]"
-			+ "\n		]"
-			+ "\n	},"
-			+ "\n	I: 'j'"
-			+ "\n}";
+		String e = """
+			{
+				J: {
+					B: [
+						'c',
+						{
+							D: 'e'
+						},
+						[
+							'f',
+							{
+								G: 'h'
+							},
+							1,
+							false
+						]
+					]
+				},
+				I: 'j'
+			}""";
 		assertEquals(e, Json5Serializer.DEFAULT_READABLE.serialize(m));
 	}
 

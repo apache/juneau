@@ -610,7 +610,7 @@ public class FileFinder_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void e01_localDir_hashCode() throws Exception {
+	public void e01_localDir_hashCode() {
 		Set<LocalDir> s = null;
 
 		s = set(new LocalDir(Paths.get("test")), new LocalDir(Paths.get("test")));
@@ -660,7 +660,7 @@ public class FileFinder_Test {
 	}
 
 	@Test
-	public void e03_subclassing() throws Exception {
+	public void e03_subclassing() {
 		FileFinder x = E03b
 			.create()
 			.dir(".")

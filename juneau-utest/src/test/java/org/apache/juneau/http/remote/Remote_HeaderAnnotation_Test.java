@@ -610,7 +610,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Test
-	public void h01_required() throws Exception {
+	public void h01_required() {
 		H1 x = remote(H.class,H1.class);
 		assertEquals("{}",x.getX1(null));
 		assertEquals("{}",x.getX2(null));
@@ -639,7 +639,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Test
-	public void h01_skipIfEmpty() throws Exception {
+	public void h01_skipIfEmpty() {
 		I1 x = remote(I.class,I1.class);
 		assertEquals("{x:''}",x.getX1(""));
 		assertEquals("{x:''}",x.getX2(""));
@@ -665,7 +665,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Test
-	public void j01_serializer() throws Exception {
+	public void j01_serializer() {
 		J1 x = remote(J.class,J1.class);
 		assertEquals("{x:'xXx'}",x.getX1("X"));
 	}
@@ -736,7 +736,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Test
-	public void k01_requestBean_simpleVals() throws Exception {
+	public void k01_requestBean_simpleVals() {
 		K1 x1 = remote(K.class,K1.class);
 		K1 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K1.class);
 		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'true',h:'123',i1:'foo'}",x1.getX1(new K1a()));
@@ -774,7 +774,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Test
-	public void k02_requestBean_maps() throws Exception {
+	public void k02_requestBean_maps() {
 		K2 x1 = remote(K.class,K2.class);
 		K2 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K2.class);
 		assertEquals("{a:'a1=v1,a2=123,a3=null,a4=',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}",x1.getX1(new K2a()));
@@ -820,7 +820,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Test
-	public void k03_requestBean_headers() throws Exception {
+	public void k03_requestBean_headers() {
 		K3 x1 = remote(K.class,K3.class);
 		K3 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K3.class);
 		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:'',f1:'v1',f2:'123',f4:''}",x1.getX1(new K3a()));
@@ -878,7 +878,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Test
-	public void k04_requestBean_collections() throws Exception {
+	public void k04_requestBean_collections() {
 		K4 x1 = remote(K.class,K4.class);
 		K4 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K4.class);
 		assertString(x1.getX1(new K4a())).is("{a:'foo,,true,123,null,true,123,null',b:'foo,,true,123,null,true,123,null',c:'xfoo||true|123|null|true|123|nullx',d:'',f:'foo,,true,123,null,true,123,null',g:'xfoo||true|123|null|true|123|nullx',h:''}");

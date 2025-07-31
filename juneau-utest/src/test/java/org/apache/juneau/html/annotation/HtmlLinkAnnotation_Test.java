@@ -86,7 +86,7 @@ public class HtmlLinkAnnotation_Test {
 	}
 
 	@Test
-	public void c01_otherMethods() throws Exception {
+	public void c01_otherMethods() {
 		HtmlLink c1 = HtmlLinkAnnotation.create(C1.class).on(C2.class).build();
 		HtmlLink c2 = HtmlLinkAnnotation.create("a").on("b").build();
 

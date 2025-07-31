@@ -28,7 +28,7 @@ public class EntityTag_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void a01_basic() throws Exception {
+	public void a01_basic() {
 
 		EntityTag x1 = new EntityTag("\"foo\"");
 		assertString(x1).is("\"foo\"");

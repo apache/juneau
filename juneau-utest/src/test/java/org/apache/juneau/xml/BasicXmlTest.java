@@ -161,97 +161,109 @@ public class BasicXmlTest {
 			{	/* 17 */
 				"BeanWithNormalProperties",
 				new BeanWithNormalProperties().init(),
-				"<object>"
-					+"<a>foo</a>"
-					+"<b>123</b>"
-					+"<c>bar</c>"
-					+"<d _type='number'>456</d>"
-					+"<e>"
-						+"<h>qux</h>"
-					+"</e>"
-					+"<f>"
-						+"<string>baz</string>"
-					+"</f>"
-					+"<g>"
-						+"<number>789</number>"
-					+"</g>"
-				+"</object>",
-				"<object>"
-					+"\n\t<a>foo</a>"
-					+"\n\t<b>123</b>"
-					+"\n\t<c>bar</c>"
-					+"\n\t<d _type='number'>456</d>"
-					+"\n\t<e>"
-						+"\n\t\t<h>qux</h>"
-					+"\n\t</e>"
-					+"\n\t<f>"
-						+"\n\t\t<string>baz</string>"
-					+"\n\t</f>"
-					+"\n\t<g>"
-						+"\n\t\t<number>789</number>"
-					+"\n\t</g>"
-				+"\n</object>\n",
-				"<object>"
-					+"<a>foo</a>"
-					+"<b>123</b>"
-					+"<c>bar</c>"
-					+"<d _type='number'>456</d>"
-					+"<e>"
-						+"<h>qux</h>"
-					+"</e>"
-					+"<f>"
-						+"<string>baz</string>"
-					+"</f>"
-					+"<g>"
-						+"<number>789</number>"
-					+"</g>"
-				+"</object>",
+				"""
+				<object>
+					<a>foo</a>
+					<b>123</b>
+					<c>bar</c>
+					<d _type='number'>456</d>
+					<e>
+						<h>qux</h>
+					</e>
+					<f>
+						<string>baz</string>
+					</f>
+					<g>
+						<number>789</number>
+					</g>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
+				"""
+				<object>
+					<a>foo</a>
+					<b>123</b>
+					<c>bar</c>
+					<d _type='number'>456</d>
+					<e>
+						<h>qux</h>
+					</e>
+					<f>
+						<string>baz</string>
+					</f>
+					<g>
+						<number>789</number>
+					</g>
+				</object>
+				""",
+				"""
+				<object>
+					<a>foo</a>
+					<b>123</b>
+					<c>bar</c>
+					<d _type='number'>456</d>
+					<e>
+						<h>qux</h>
+					</e>
+					<f>
+						<string>baz</string>
+					</f>
+					<g>
+						<number>789</number>
+					</g>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
 			},
 			{	/* 18 */
 				"BeanWithMapProperties",
 				new BeanWithMapProperties().init(),
-				"<object>"
-					+"<a>"
-						+"<k1>foo</k1>"
-					+"</a>"
-					+"<b>"
-						+"<k2>123</k2>"
-					+"</b>"
-					+"<c>"
-						+"<k3>bar</k3>"
-						+"<k4 _type='number'>456</k4>"
-						+"<k5 _type='boolean'>true</k5>"
-						+"<k6 _type='null'/>"
-					+"</c>"
-				+"</object>",
-				"<object>"
-					+"\n\t<a>"
-						+"\n\t\t<k1>foo</k1>"
-					+"\n\t</a>"
-					+"\n\t<b>"
-						+"\n\t\t<k2>123</k2>"
-					+"\n\t</b>"
-					+"\n\t<c>"
-						+"\n\t\t<k3>bar</k3>"
-						+"\n\t\t<k4 _type='number'>456</k4>"
-						+"\n\t\t<k5 _type='boolean'>true</k5>"
-						+"\n\t\t<k6 _type='null'/>"
-					+"\n\t</c>"
-				+"\n</object>\n",
-				"<object>"
-					+"<a>"
-						+"<k1>foo</k1>"
-					+"</a>"
-					+"<b>"
-						+"<k2>123</k2>"
-					+"</b>"
-					+"<c>"
-						+"<k3>bar</k3>"
-						+"<k4 _type='number'>456</k4>"
-						+"<k5 _type='boolean'>true</k5>"
-						+"<k6 _type='null'/>"
-					+"</c>"
-				+"</object>",
+				"""
+				<object>
+					<a>
+						<k1>foo</k1>
+					</a>
+					<b>
+						<k2>123</k2>
+					</b>
+					<c>
+						<k3>bar</k3>
+						<k4 _type='number'>456</k4>
+						<k5 _type='boolean'>true</k5>
+						<k6 _type='null'/>
+					</c>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
+				"""
+				<object>
+					<a>
+						<k1>foo</k1>
+					</a>
+					<b>
+						<k2>123</k2>
+					</b>
+					<c>
+						<k3>bar</k3>
+						<k4 _type='number'>456</k4>
+						<k5 _type='boolean'>true</k5>
+						<k6 _type='null'/>
+					</c>
+				</object>
+				""",
+				"""
+				<object>
+					<a>
+						<k1>foo</k1>
+					</a>
+					<b>
+						<k2>123</k2>
+					</b>
+					<c>
+						<k3>bar</k3>
+						<k4 _type='number'>456</k4>
+						<k5 _type='boolean'>true</k5>
+						<k6 _type='null'/>
+					</c>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
 			},
 			{	/* 19 */
 				"BeanWithTypeName",
@@ -270,228 +282,252 @@ public class BasicXmlTest {
 			{	/* 21 */
 				"BeanWithPropertiesWithArrayTypeNames",
 				new BeanWithPropertiesWithArrayTypeNames().init(),
-				"<object>"
-					+"<b1>"
-						+"<B>"
-							+"<b>foo</b>"
-						+"</B>"
-					+"</b1>"
-					+"<b2>"
-						+"<B>"
-							+"<b>foo</b>"
-						+"</B>"
-					+"</b2>"
-					+"<b3>"
-						+"<B>"
-							+"<b>foo</b>"
-						+"</B>"
-					+"</b3>"
-				+"</object>",
-				"<object>\n"
-					+"\t<b1>\n"
-						+"\t\t<B>\n"
-							+"\t\t\t<b>foo</b>\n"
-						+"\t\t</B>\n"
-					+"\t</b1>\n"
-					+"\t<b2>\n"
-						+"\t\t<B>\n"
-							+"\t\t\t<b>foo</b>\n"
-						+"\t\t</B>\n"
-					+"\t</b2>\n"
-					+"\t<b3>\n"
-						+"\t\t<B>\n"
-							+"\t\t\t<b>foo</b>\n"
-						+"\t\t</B>\n"
-					+"\t</b3>\n"
-				+"</object>\n",
-				"<object>"
-					+"<b1>"
-						+"<B>"
-							+"<b>foo</b>"
-						+"</B>"
-					+"</b1>"
-					+"<b2>"
-						+"<B>"
-							+"<b>foo</b>"
-						+"</B>"
-					+"</b2>"
-					+"<b3>"
-						+"<B>"
-							+"<b>foo</b>"
-						+"</B>"
-					+"</b3>"
-				+"</object>",
+				"""
+				<object>
+					<b1>
+						<B>
+							<b>foo</b>
+						</B>
+					</b1>
+					<b2>
+						<B>
+							<b>foo</b>
+						</B>
+					</b2>
+					<b3>
+						<B>
+							<b>foo</b>
+						</B>
+					</b3>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
+				"""
+				<object>
+					<b1>
+						<B>
+							<b>foo</b>
+						</B>
+					</b1>
+					<b2>
+						<B>
+							<b>foo</b>
+						</B>
+					</b2>
+					<b3>
+						<B>
+							<b>foo</b>
+						</B>
+					</b3>
+				</object>
+				""",
+				"""
+				<object>
+					<b1>
+						<B>
+							<b>foo</b>
+						</B>
+					</b1>
+					<b2>
+						<B>
+							<b>foo</b>
+						</B>
+					</b2>
+					<b3>
+						<B>
+							<b>foo</b>
+						</B>
+					</b3>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
 			},
 			{	/* 22 */
 				"BeanWithPropertiesWithArray2dTypeNames",
 				new BeanWithPropertiesWith2dArrayTypeNames().init(),
-				"<object>"
-					+"<b1>"
-						+"<array>"
-							+"<B>"
-								+"<b>foo</b>"
-							+"</B>"
-						+"</array>"
-					+"</b1>"
-					+"<b2>"
-						+"<array>"
-							+"<B>"
-								+"<b>foo</b>"
-							+"</B>"
-						+"</array>"
-					+"</b2>"
-					+"<b3>"
-						+"<array>"
-							+"<B>"
-								+"<b>foo</b>"
-							+"</B>"
-						+"</array>"
-					+"</b3>"
-				+"</object>",
-				"<object>\n"
-					+"\t<b1>\n"
-						+"\t\t<array>\n"
-							+"\t\t\t<B>\n"
-								+"\t\t\t\t<b>foo</b>\n"
-							+"\t\t\t</B>\n"
-						+"\t\t</array>\n"
-					+"\t</b1>\n"
-					+"\t<b2>\n"
-						+"\t\t<array>\n"
-							+"\t\t\t<B>\n"
-								+"\t\t\t\t<b>foo</b>\n"
-							+"\t\t\t</B>\n"
-						+"\t\t</array>\n"
-					+"\t</b2>\n"
-					+"\t<b3>\n"
-						+"\t\t<array>\n"
-							+"\t\t\t<B>\n"
-								+"\t\t\t\t<b>foo</b>\n"
-							+"\t\t\t</B>\n"
-						+"\t\t</array>\n"
-					+"\t</b3>\n"
-				+"</object>\n",
-				"<object>"
-					+"<b1>"
-						+"<array>"
-							+"<B>"
-								+"<b>foo</b>"
-							+"</B>"
-						+"</array>"
-					+"</b1>"
-					+"<b2>"
-						+"<array>"
-							+"<B>"
-								+"<b>foo</b>"
-							+"</B>"
-						+"</array>"
-					+"</b2>"
-					+"<b3>"
-						+"<array>"
-							+"<B>"
-								+"<b>foo</b>"
-							+"</B>"
-						+"</array>"
-					+"</b3>"
-				+"</object>",
+				"""
+				<object>
+					<b1>
+						<array>
+							<B>
+								<b>foo</b>
+							</B>
+						</array>
+					</b1>
+					<b2>
+						<array>
+							<B>
+								<b>foo</b>
+							</B>
+						</array>
+					</b2>
+					<b3>
+						<array>
+							<B>
+								<b>foo</b>
+							</B>
+						</array>
+					</b3>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
+				"""
+				<object>
+					<b1>
+						<array>
+							<B>
+								<b>foo</b>
+							</B>
+						</array>
+					</b1>
+					<b2>
+						<array>
+							<B>
+								<b>foo</b>
+							</B>
+						</array>
+					</b2>
+					<b3>
+						<array>
+							<B>
+								<b>foo</b>
+							</B>
+						</array>
+					</b3>
+				</object>
+				""",
+				"""
+				<object>
+					<b1>
+						<array>
+							<B>
+								<b>foo</b>
+							</B>
+						</array>
+					</b1>
+					<b2>
+						<array>
+							<B>
+								<b>foo</b>
+							</B>
+						</array>
+					</b2>
+					<b3>
+						<array>
+							<B>
+								<b>foo</b>
+							</B>
+						</array>
+					</b3>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
 			},
 			{	/* 23 */
 				"BeanWithPropertiesWithMapTypeNames",
 				new BeanWithPropertiesWithMapTypeNames().init(),
-				"<object>"
-					+"<b1>"
-						+"<B _name='k1'>"
-							+"<b>foo</b>"
-						+"</B>"
-					+"</b1>"
-					+"<b2>"
-						+"<B _name='k2'>"
-							+"<b>foo</b>"
-						+"</B>"
-					+"</b2>"
-				+"</object>",
-				"<object>\n"
-					+"\t<b1>\n"
-						+"\t\t<B _name='k1'>\n"
-							+"\t\t\t<b>foo</b>\n"
-						+"\t\t</B>\n"
-					+"\t</b1>\n"
-					+"\t<b2>\n"
-						+"\t\t<B _name='k2'>\n"
-							+"\t\t\t<b>foo</b>\n"
-						+"\t\t</B>\n"
-					+"\t</b2>\n"
-				+"</object>\n",
-				"<object>"
-					+"<b1>"
-						+"<B _name='k1'>"
-							+"<b>foo</b>"
-						+"</B>"
-					+"</b1>"
-					+"<b2>"
-						+"<B _name='k2'>"
-							+"<b>foo</b>"
-						+"</B>"
-					+"</b2>"
-				+"</object>",
+				"""
+				<object>
+					<b1>
+						<B _name='k1'>
+							<b>foo</b>
+						</B>
+					</b1>
+					<b2>
+						<B _name='k2'>
+							<b>foo</b>
+						</B>
+					</b2>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
+				"""
+				<object>
+					<b1>
+						<B _name='k1'>
+							<b>foo</b>
+						</B>
+					</b1>
+					<b2>
+						<B _name='k2'>
+							<b>foo</b>
+						</B>
+					</b2>
+				</object>
+				""",
+				"""
+				<object>
+					<b1>
+						<B _name='k1'>
+							<b>foo</b>
+						</B>
+					</b1>
+					<b2>
+						<B _name='k2'>
+							<b>foo</b>
+						</B>
+					</b2>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
 			},
 			{	/* 24 */
 				"BeanWithChildTypeNames",
 				new BeanWithChildTypeNames().init(),
-				"<object>"
-					+"<X _name='a'>"
-						+"<fx>fx1</fx>"
-					+"</X>"
-					+"<X _name='b'>"
-						+"<fx>fx1</fx>"
-					+"</X>"
-					+"<c>"
-						+"<X>"
-							+"<fx>fx1</fx>"
-						+"</X>"
-					+"</c>"
-					+"<d>"
-						+"<X>"
-							+"<fx>fx1</fx>"
-						+"</X>"
-					+"</d>"
-				+"</object>",
-				"<object>"
-					+"\n\t<X _name='a'>"
-						+"\n\t\t<fx>fx1</fx>"
-					+"\n\t</X>"
-					+"\n\t<X _name='b'>"
-						+"\n\t\t<fx>fx1</fx>"
-					+"\n\t</X>"
-					+"\n\t<c>"
-						+"\n\t\t<X>"
-							+"\n\t\t\t<fx>fx1</fx>"
-						+"\n\t\t</X>"
-					+"\n\t</c>"
-					+"\n\t<d>"
-						+"\n\t\t<X>"
-							+"\n\t\t\t<fx>fx1</fx>"
-						+"\n\t\t</X>"
-					+"\n\t</d>"
-				+"\n</object>\n",
-				"<object>"
-					+"<X _name='a'>"
-						+"<fx>fx1</fx>"
-					+"</X>"
-					+"<X _name='b'>"
-						+"<fx>fx1</fx>"
-					+"</X>"
-					+"<c>"
-						+"<X>"
-							+"<fx>fx1</fx>"
-						+"</X>"
-					+"</c>"
-					+"<d>"
-						+"<X>"
-							+"<fx>fx1</fx>"
-						+"</X>"
-					+"</d>"
-				+"</object>",
+				"""
+				<object>
+					<X _name='a'>
+						<fx>fx1</fx>
+					</X>
+					<X _name='b'>
+						<fx>fx1</fx>
+					</X>
+					<c>
+						<X>
+							<fx>fx1</fx>
+						</X>
+					</c>
+					<d>
+						<X>
+							<fx>fx1</fx>
+						</X>
+					</d>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
+				"""
+				<object>
+					<X _name='a'>
+						<fx>fx1</fx>
+					</X>
+					<X _name='b'>
+						<fx>fx1</fx>
+					</X>
+					<c>
+						<X>
+							<fx>fx1</fx>
+						</X>
+					</c>
+					<d>
+						<X>
+							<fx>fx1</fx>
+						</X>
+					</d>
+				</object>
+				""",
+				"""
+				<object>
+					<X _name='a'>
+						<fx>fx1</fx>
+					</X>
+					<X _name='b'>
+						<fx>fx1</fx>
+					</X>
+					<c>
+						<X>
+							<fx>fx1</fx>
+						</X>
+					</c>
+					<d>
+						<X>
+							<fx>fx1</fx>
+						</X>
+					</d>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
 			},
 			{	/* 25 */
 				"BeanWithChildName",
@@ -587,357 +623,381 @@ public class BasicXmlTest {
 			{	/* 38 */
 				"BeanWithAbstractFields",
 				new BeanWithAbstractFields().init(),
-				"<object>"
-					+"<A _name='a'>"
-						+"<a>foo</a>"
-					+"</A>"
-					+"<A _name='ia'>"
-						+"<a>foo</a>"
-					+"</A>"
-					+"<A _name='aa'>"
-						+"<a>foo</a>"
-					+"</A>"
-					+"<A _name='o'>"
-						+"<a>foo</a>"
-					+"</A>"
-				+"</object>",
-				"<object>\n"
-					+"\t<A _name='a'>\n"
-						+"\t\t<a>foo</a>\n"
-					+"\t</A>\n"
-					+"\t<A _name='ia'>\n"
-						+"\t\t<a>foo</a>\n"
-					+"\t</A>\n"
-					+"\t<A _name='aa'>\n"
-						+"\t\t<a>foo</a>\n"
-					+"\t</A>\n"
-					+"\t<A _name='o'>\n"
-						+"\t\t<a>foo</a>\n"
-					+"\t</A>\n"
-				+"</object>\n",
-				"<object>"
-					+"<A _name='a'>"
-						+"<a>foo</a>"
-					+"</A>"
-					+"<A _name='ia'>"
-						+"<a>foo</a>"
-					+"</A>"
-					+"<A _name='aa'>"
-						+"<a>foo</a>"
-					+"</A>"
-					+"<A _name='o'>"
-						+"<a>foo</a>"
-					+"</A>"
-				+"</object>",
+				"""
+				<object>
+					<A _name='a'>
+						<a>foo</a>
+					</A>
+					<A _name='ia'>
+						<a>foo</a>
+					</A>
+					<A _name='aa'>
+						<a>foo</a>
+					</A>
+					<A _name='o'>
+						<a>foo</a>
+					</A>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
+				"""
+				<object>
+					<A _name='a'>
+						<a>foo</a>
+					</A>
+					<A _name='ia'>
+						<a>foo</a>
+					</A>
+					<A _name='aa'>
+						<a>foo</a>
+					</A>
+					<A _name='o'>
+						<a>foo</a>
+					</A>
+				</object>
+				""",
+				"""
+				<object>
+					<A _name='a'>
+						<a>foo</a>
+					</A>
+					<A _name='ia'>
+						<a>foo</a>
+					</A>
+					<A _name='aa'>
+						<a>foo</a>
+					</A>
+					<A _name='o'>
+						<a>foo</a>
+					</A>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
 			},
 			{	/* 39 */
 				"BeanWithAbstractArrayFields",
 				new BeanWithAbstractArrayFields().init(),
-				"<object>"
-					+"<a>"
-						+"<A>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</a>"
-					+"<ia1>"
-						+"<A>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</ia1>"
-					+"<ia2>"
-						+"<A>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</ia2>"
-					+"<aa1>"
-						+"<A>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</aa1>"
-					+"<aa2>"
-						+"<A>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</aa2>"
-					+"<o1>"
-						+"<A>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</o1>"
-					+"<o2>"
-						+"<A>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</o2>"
-				+"</object>",
-				"<object>\n"
-					+"\t<a>\n"
-						+"\t\t<A>\n"
-							+"\t\t\t<a>foo</a>\n"
-						+"\t\t</A>\n"
-					+"\t</a>\n"
-					+"\t<ia1>\n"
-						+"\t\t<A>\n"
-							+"\t\t\t<a>foo</a>\n"
-						+"\t\t</A>\n"
-					+"\t</ia1>\n"
-					+"\t<ia2>\n"
-						+"\t\t<A>\n"
-							+"\t\t\t<a>foo</a>\n"
-						+"\t\t</A>\n"
-					+"\t</ia2>\n"
-					+"\t<aa1>\n"
-						+"\t\t<A>\n"
-							+"\t\t\t<a>foo</a>\n"
-						+"\t\t</A>\n"
-					+"\t</aa1>\n"
-					+"\t<aa2>\n"
-						+"\t\t<A>\n"
-							+"\t\t\t<a>foo</a>\n"
-						+"\t\t</A>\n"
-					+"\t</aa2>\n"
-					+"\t<o1>\n"
-						+"\t\t<A>\n"
-							+"\t\t\t<a>foo</a>\n"
-						+"\t\t</A>\n"
-					+"\t</o1>\n"
-					+"\t<o2>\n"
-						+"\t\t<A>\n"
-							+"\t\t\t<a>foo</a>\n"
-						+"\t\t</A>\n"
-					+"\t</o2>\n"
-				+"</object>\n",
-				"<object>"
-					+"<a>"
-						+"<A>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</a>"
-					+"<ia1>"
-						+"<A>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</ia1>"
-					+"<ia2>"
-						+"<A>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</ia2>"
-					+"<aa1>"
-						+"<A>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</aa1>"
-					+"<aa2>"
-						+"<A>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</aa2>"
-					+"<o1>"
-						+"<A>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</o1>"
-					+"<o2>"
-						+"<A>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</o2>"
-				+"</object>",
+				"""
+				<object>
+					<a>
+						<A>
+							<a>foo</a>
+						</A>
+					</a>
+					<ia1>
+						<A>
+							<a>foo</a>
+						</A>
+					</ia1>
+					<ia2>
+						<A>
+							<a>foo</a>
+						</A>
+					</ia2>
+					<aa1>
+						<A>
+							<a>foo</a>
+						</A>
+					</aa1>
+					<aa2>
+						<A>
+							<a>foo</a>
+						</A>
+					</aa2>
+					<o1>
+						<A>
+							<a>foo</a>
+						</A>
+					</o1>
+					<o2>
+						<A>
+							<a>foo</a>
+						</A>
+					</o2>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
+				"""
+				<object>
+					<a>
+						<A>
+							<a>foo</a>
+						</A>
+					</a>
+					<ia1>
+						<A>
+							<a>foo</a>
+						</A>
+					</ia1>
+					<ia2>
+						<A>
+							<a>foo</a>
+						</A>
+					</ia2>
+					<aa1>
+						<A>
+							<a>foo</a>
+						</A>
+					</aa1>
+					<aa2>
+						<A>
+							<a>foo</a>
+						</A>
+					</aa2>
+					<o1>
+						<A>
+							<a>foo</a>
+						</A>
+					</o1>
+					<o2>
+						<A>
+							<a>foo</a>
+						</A>
+					</o2>
+				</object>
+				""",
+				"""
+				<object>
+					<a>
+						<A>
+							<a>foo</a>
+						</A>
+					</a>
+					<ia1>
+						<A>
+							<a>foo</a>
+						</A>
+					</ia1>
+					<ia2>
+						<A>
+							<a>foo</a>
+						</A>
+					</ia2>
+					<aa1>
+						<A>
+							<a>foo</a>
+						</A>
+					</aa1>
+					<aa2>
+						<A>
+							<a>foo</a>
+						</A>
+					</aa2>
+					<o1>
+						<A>
+							<a>foo</a>
+						</A>
+					</o1>
+					<o2>
+						<A>
+							<a>foo</a>
+						</A>
+					</o2>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", "")
 			},
 			{	/* 40 */
 				"BeanWithAbstractMapFields",
 				new BeanWithAbstractMapFields().init(),
-				"<object>"
-					+"<a>"
-						+"<A _name='k1'>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</a>"
-					+"<b>"
-						+"<A _name='k2'>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</b>"
-					+"<c>"
-						+"<A _name='k3'>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</c>"
-				+"</object>",
-				"<object>\n"
-					+"\t<a>\n"
-						+"\t\t<A _name='k1'>\n"
-							+"\t\t\t<a>foo</a>\n"
-						+"\t\t</A>\n"
-					+"\t</a>\n"
-					+"\t<b>\n"
-						+"\t\t<A _name='k2'>\n"
-							+"\t\t\t<a>foo</a>\n"
-						+"\t\t</A>\n"
-					+"\t</b>\n"
-					+"\t<c>\n"
-						+"\t\t<A _name='k3'>\n"
-							+"\t\t\t<a>foo</a>\n"
-						+"\t\t</A>\n"
-					+"\t</c>\n"
-				+"</object>\n",
-				"<object>"
-					+"<a>"
-						+"<A _name='k1'>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</a>"
-					+"<b>"
-						+"<A _name='k2'>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</b>"
-					+"<c>"
-						+"<A _name='k3'>"
-							+"<a>foo</a>"
-						+"</A>"
-					+"</c>"
-				+"</object>",
+				"""
+				<object>
+					<a>
+						<A _name='k1'>
+							<a>foo</a>
+						</A>
+					</a>
+					<b>
+						<A _name='k2'>
+							<a>foo</a>
+						</A>
+					</b>
+					<c>
+						<A _name='k3'>
+							<a>foo</a>
+						</A>
+					</c>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
+				"""
+				<object>
+					<a>
+						<A _name='k1'>
+							<a>foo</a>
+						</A>
+					</a>
+					<b>
+						<A _name='k2'>
+							<a>foo</a>
+						</A>
+					</b>
+					<c>
+						<A _name='k3'>
+							<a>foo</a>
+						</A>
+					</c>
+				</object>
+				""",
+				"""
+				<object>
+					<a>
+						<A _name='k1'>
+							<a>foo</a>
+						</A>
+					</a>
+					<b>
+						<A _name='k2'>
+							<a>foo</a>
+						</A>
+					</b>
+					<c>
+						<A _name='k3'>
+							<a>foo</a>
+						</A>
+					</c>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
 			},
 			{	/* 41 */
 				"BeanWithAbstractMapArrayFields",
 				new BeanWithAbstractMapArrayFields().init(),
-				"<object>"
-					+"<a>"
-						+"<a1>"
-							+"<A>"
-								+"<a>foo</a>"
-							+"</A>"
-						+"</a1>"
-					+"</a>"
-					+"<ia>"
-						+"<ia1>"
-							+"<A>"
-								+"<a>foo</a>"
-							+"</A>"
-						+"</ia1>"
-						+"<ia2>"
-							+"<A>"
-								+"<a>foo</a>"
-							+"</A>"
-						+"</ia2>"
-					+"</ia>"
-					+"<aa>"
-						+"<aa1>"
-							+"<A>"
-								+"<a>foo</a>"
-							+"</A>"
-						+"</aa1>"
-						+"<aa2>"
-							+"<A>"
-								+"<a>foo</a>"
-							+"</A>"
-						+"</aa2>"
-					+"</aa>"
-					+"<o>"
-						+"<o1>"
-							+"<A>"
-								+"<a>foo</a>"
-							+"</A>"
-						+"</o1>"
-						+"<o2>"
-							+"<A>"
-								+"<a>foo</a>"
-							+"</A>"
-						+"</o2>"
-					+"</o>"
-				+"</object>",
-				"<object>\n"
-					+"\t<a>\n"
-						+"\t\t<a1>\n"
-							+"\t\t\t<A>\n"
-								+"\t\t\t\t<a>foo</a>\n"
-							+"\t\t\t</A>\n"
-						+"\t\t</a1>\n"
-					+"\t</a>\n"
-					+"\t<ia>\n"
-						+"\t\t<ia1>\n"
-							+"\t\t\t<A>\n"
-								+"\t\t\t\t<a>foo</a>\n"
-							+"\t\t\t</A>\n"
-						+"\t\t</ia1>\n"
-						+"\t\t<ia2>\n"
-							+"\t\t\t<A>\n"
-								+"\t\t\t\t<a>foo</a>\n"
-							+"\t\t\t</A>\n"
-						+"\t\t</ia2>\n"
-					+"\t</ia>\n"
-					+"\t<aa>\n"
-						+"\t\t<aa1>\n"
-							+"\t\t\t<A>\n"
-								+"\t\t\t\t<a>foo</a>\n"
-							+"\t\t\t</A>\n"
-						+"\t\t</aa1>\n"
-						+"\t\t<aa2>\n"
-							+"\t\t\t<A>\n"
-								+"\t\t\t\t<a>foo</a>\n"
-							+"\t\t\t</A>\n"
-						+"\t\t</aa2>\n"
-					+"\t</aa>\n"
-					+"\t<o>\n"
-						+"\t\t<o1>\n"
-							+"\t\t\t<A>\n"
-								+"\t\t\t\t<a>foo</a>\n"
-							+"\t\t\t</A>\n"
-						+"\t\t</o1>\n"
-						+"\t\t<o2>\n"
-							+"\t\t\t<A>\n"
-								+"\t\t\t\t<a>foo</a>\n"
-							+"\t\t\t</A>\n"
-						+"\t\t</o2>\n"
-					+"\t</o>\n"
-				+"</object>\n",
-				"<object>"
-					+"<a>"
-						+"<a1>"
-							+"<A>"
-								+"<a>foo</a>"
-							+"</A>"
-						+"</a1>"
-					+"</a>"
-					+"<ia>"
-						+"<ia1>"
-							+"<A>"
-								+"<a>foo</a>"
-							+"</A>"
-						+"</ia1>"
-						+"<ia2>"
-							+"<A>"
-								+"<a>foo</a>"
-							+"</A>"
-						+"</ia2>"
-					+"</ia>"
-					+"<aa>"
-						+"<aa1>"
-							+"<A>"
-								+"<a>foo</a>"
-							+"</A>"
-						+"</aa1>"
-						+"<aa2>"
-							+"<A>"
-								+"<a>foo</a>"
-							+"</A>"
-						+"</aa2>"
-					+"</aa>"
-					+"<o>"
-						+"<o1>"
-							+"<A>"
-								+"<a>foo</a>"
-							+"</A>"
-						+"</o1>"
-						+"<o2>"
-							+"<A>"
-								+"<a>foo</a>"
-							+"</A>"
-						+"</o2>"
-					+"</o>"
-				+"</object>",
+				"""
+				<object>
+					<a>
+						<a1>
+							<A>
+								<a>foo</a>
+							</A>
+						</a1>
+					</a>
+					<ia>
+						<ia1>
+							<A>
+								<a>foo</a>
+							</A>
+						</ia1>
+						<ia2>
+							<A>
+								<a>foo</a>
+							</A>
+						</ia2>
+					</ia>
+					<aa>
+						<aa1>
+							<A>
+								<a>foo</a>
+							</A>
+						</aa1>
+						<aa2>
+							<A>
+								<a>foo</a>
+							</A>
+						</aa2>
+					</aa>
+					<o>
+						<o1>
+							<A>
+								<a>foo</a>
+							</A>
+						</o1>
+						<o2>
+							<A>
+								<a>foo</a>
+							</A>
+						</o2>
+					</o>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", ""),
+				"""
+				<object>
+					<a>
+						<a1>
+							<A>
+								<a>foo</a>
+							</A>
+						</a1>
+					</a>
+					<ia>
+						<ia1>
+							<A>
+								<a>foo</a>
+							</A>
+						</ia1>
+						<ia2>
+							<A>
+								<a>foo</a>
+							</A>
+						</ia2>
+					</ia>
+					<aa>
+						<aa1>
+							<A>
+								<a>foo</a>
+							</A>
+						</aa1>
+						<aa2>
+							<A>
+								<a>foo</a>
+							</A>
+						</aa2>
+					</aa>
+					<o>
+						<o1>
+							<A>
+								<a>foo</a>
+							</A>
+						</o1>
+						<o2>
+							<A>
+								<a>foo</a>
+							</A>
+						</o2>
+					</o>
+				</object>
+				""",
+				"""
+				<object>
+					<a>
+						<a1>
+							<A>
+								<a>foo</a>
+							</A>
+						</a1>
+					</a>
+					<ia>
+						<ia1>
+							<A>
+								<a>foo</a>
+							</A>
+						</ia1>
+						<ia2>
+							<A>
+								<a>foo</a>
+							</A>
+						</ia2>
+					</ia>
+					<aa>
+						<aa1>
+							<A>
+								<a>foo</a>
+							</A>
+						</aa1>
+						<aa2>
+							<A>
+								<a>foo</a>
+							</A>
+						</aa2>
+					</aa>
+					<o>
+						<o1>
+							<A>
+								<a>foo</a>
+							</A>
+						</o1>
+						<o2>
+							<A>
+								<a>foo</a>
+							</A>
+						</o2>
+					</o>
+				</object>
+				""".replaceAll("(?m)^\\s+|\\R", "")
 			},
 			{	/* 42 */
 				"BeanWithWhitespaceTextFields-1",
@@ -1639,7 +1699,7 @@ public class BasicXmlTest {
 		void setA(String a);
 	}
 
-	public static abstract class AA implements IA {}
+	public abstract static class AA implements IA {}
 
 	@Bean(typeName="A")
 	public static class A extends AA {

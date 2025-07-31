@@ -92,22 +92,22 @@ public class PathRemainder_Test {
 	@Rest(serializers=Json5Serializer.class)
 	public static class B {
 		@RestGet(path="/a/*")
-		public Object a(@Path("/*") Optional<Integer> f1) throws Exception {
+		public Object a(@Path("/*") Optional<Integer> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestPut(path="/b/*")
-		public Object b(@Path("/*") Optional<ABean> f1) throws Exception {
+		public Object b(@Path("/*") Optional<ABean> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestPost(path="/c/*")
-		public Object c(@Path("/*") Optional<List<ABean>> f1) throws Exception {
+		public Object c(@Path("/*") Optional<List<ABean>> f1) {
 			assertNotNull(f1);
 			return f1;
 		}
 		@RestDelete(path="/d/*")
-		public Object d(@Path("/*") List<Optional<ABean>> f1) throws Exception {
+		public Object d(@Path("/*") List<Optional<ABean>> f1) {
 			return f1;
 		}
 	}

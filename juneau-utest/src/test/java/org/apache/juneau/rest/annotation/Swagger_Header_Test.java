@@ -67,7 +67,7 @@ public class Swagger_Header_Test {
 	}
 
 	@Test
-	public void a01_fromPojo() throws Exception {
+	public void a01_fromPojo() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(A.class);
 		ParameterInfo x;
 
@@ -113,7 +113,7 @@ public class Swagger_Header_Test {
 	}
 
 	@Test
-	public void b01_schemaFromPojo() throws Exception {
+	public void b01_schemaFromPojo() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(B.class);
 		ParameterInfo x;
 
@@ -162,7 +162,7 @@ public class Swagger_Header_Test {
 	}
 
 	@Test
-	public void d01_fromParameter() throws Exception {
+	public void d01_fromParameter() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(D.class);
 		ParameterInfo x;
 
@@ -215,7 +215,7 @@ public class Swagger_Header_Test {
 	}
 
 	@Test
-	public void e01_schemaFromParameter() throws Exception {
+	public void e01_schemaFromParameter() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(E.class);
 		ParameterInfo x;
 

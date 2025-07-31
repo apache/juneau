@@ -23,20 +23,20 @@ import org.junit.*;
 public class ConfigMemoryStoreTest {
 
 	@Test
-	public void testNoFile() throws Exception {
+	public void testNoFile() {
 		MemoryStore fs = MemoryStore.create().build();
 		assertEquals("", fs.read("X"));
 	}
 
 	@Test
-	public void testSimpleCreate() throws Exception {
+	public void testSimpleCreate() {
 		MemoryStore fs = MemoryStore.create().build();
 		assertNull(fs.write("X", null, "foo"));
 		assertEquals("foo", fs.read("X"));
 	}
 
 	@Test
-	public void testFailOnMismatch() throws Exception {
+	public void testFailOnMismatch() {
 		MemoryStore fs = MemoryStore.create().build();
 		assertNotNull(fs.write("X", "xxx", "foo"));
 		assertEquals("", fs.read("X"));
@@ -54,13 +54,13 @@ public class ConfigMemoryStoreTest {
 
 		final CountDownLatch latch = new CountDownLatch(2);
 		fs.register("X", contents -> {
-        	if ("xxx".equals(contents))
-        		latch.countDown();
-        });
+			if ("xxx".equals(contents))
+				latch.countDown();
+		});
 		fs.register("Y", contents -> {
-        	if ("yyy".equals(contents))
-        		latch.countDown();
-        });
+			if ("yyy".equals(contents))
+				latch.countDown();
+		});
 
 		fs.update("X", "xxx");
 		fs.update("Y", "yyy");

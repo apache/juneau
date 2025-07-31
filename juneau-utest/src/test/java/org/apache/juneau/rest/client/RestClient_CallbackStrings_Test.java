@@ -60,7 +60,7 @@ public class RestClient_CallbackStrings_Test {
 	}
 
 	@Test
-	public void a02_callback_invalidStrings() throws Exception {
+	public void a02_callback_invalidStrings() {
 		RestClient x = MockRestClient.build(A.class);
 		for (String s : list("","GET","GET ","GET {","GET {xxx} /foo",null)) {
 			assertThrown(()->x.callback(s).run().getContent().asString()).asMessage().isContains("Invalid format for call string");

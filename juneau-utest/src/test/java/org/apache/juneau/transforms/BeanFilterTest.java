@@ -27,7 +27,7 @@ public class BeanFilterTest {
 	// Interface bean filters
 	//====================================================================================================
 	@Test
-	public void testInterfaceBeanFilters() throws Exception {
+	public void testInterfaceBeanFilters() {
 		BeanSession session;
 		BeanMap<A3> bm;
 
@@ -70,7 +70,7 @@ public class BeanFilterTest {
 	// Abstract class bean filters
 	//====================================================================================================
 	@Test
-	public void testAbstractClassBeanFilters() throws Exception {
+	public void testAbstractClassBeanFilters() {
 		BeanSession session;
 		BeanMap<Test2> bm;
 
@@ -115,7 +115,7 @@ public class BeanFilterTest {
 	// Filtered with stop classes
 	//====================================================================================================
 	@Test
-	public void testFilteredWithStopClass() throws Exception {
+	public void testFilteredWithStopClass() {
 		C3 c3 = new C3();
 		assertObject(c3).asJson().is("{f3:3,p3:3}");
 	}
@@ -137,7 +137,7 @@ public class BeanFilterTest {
 	}
 
 	@Test
-	public void testFilterWithStopClassOnParentClass() throws Exception {
+	public void testFilterWithStopClassOnParentClass() {
 		D3 d3 = new D3();
 		assertObject(d3).asJson().is("{f3:3,p3:3}");
 	}
@@ -159,7 +159,7 @@ public class BeanFilterTest {
 	}
 
 	@Test
-	public void testFilteredWithStopClassOnParentClassWithOverriddenAnnotation() throws Exception {
+	public void testFilteredWithStopClassOnParentClassWithOverriddenAnnotation() {
 		E3 e3 = new E3();
 		assertObject(e3).asJson().is("{f3:3,p3:3}");
 	}
@@ -182,7 +182,7 @@ public class BeanFilterTest {
 	}
 
 	@Test
-	public void testFilteredWithStopClassesAtMulitpleLevels() throws Exception {
+	public void testFilteredWithStopClassesAtMulitpleLevels() {
 		F3 e3 = new F3();
 		assertObject(e3).asJson().is("{f3:3,p3:3}");
 	}

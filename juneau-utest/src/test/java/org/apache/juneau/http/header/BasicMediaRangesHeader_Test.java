@@ -80,7 +80,7 @@ public class BasicMediaRangesHeader_Test {
 	}
 
 	@Test
-	public void a03_getRange() throws Exception {
+	public void a03_getRange() {
 		assertString(accept("text/foo").getRange(0)).is("text/foo");
 		assertString(accept("text/foo").getRange(1)).isNull();
 		assertString(accept("text/foo").getRange(-1)).isNull();
@@ -88,7 +88,7 @@ public class BasicMediaRangesHeader_Test {
 	}
 
 	@Test
-	public void a04_hasSubtypePart() throws Exception {
+	public void a04_hasSubtypePart() {
 		assertBoolean(accept("text/foo").hasSubtypePart("foo")).isTrue();
 		assertBoolean(accept("text/foo").hasSubtypePart("bar")).isFalse();
 		assertBoolean(accept("text/foo").hasSubtypePart(null)).isFalse();
@@ -96,7 +96,7 @@ public class BasicMediaRangesHeader_Test {
 	}
 
 	@Test
-	public void a05_getRanges() throws Exception {
+	public void a05_getRanges() {
 		assertObject(accept("text/foo,text/bar").toMediaRanges().toList()).asJson().is("['text/foo','text/bar']");
 		assertObject(new Accept((String)null).toMediaRanges()).isNull();
 	}

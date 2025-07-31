@@ -22,7 +22,7 @@ import org.junit.*;
 public class StringRange_Test {
 
 	@Test
-	public void a01_basic() throws Exception {
+	public void a01_basic() {
 		StringRange x1 = of("foo;a=1;q=0.5;b=2");
 		assertString(x1.getQValue()).is("0.5");
 		assertObject(x1.getExtensions()).asJson().is("[{name:'a',value:'1'},{name:'b',value:'2'}]");
@@ -47,7 +47,7 @@ public class StringRange_Test {
 	}
 
 	@Test
-	public void a02_match() throws Exception {
+	public void a02_match() {
 		assertInteger(of("foo").match("foo")).is(100);
 		assertInteger(of("foo").match("bar")).is(0);
 		assertInteger(of("foo").match(null)).is(0);
@@ -56,7 +56,7 @@ public class StringRange_Test {
 	}
 
 	@Test
-	public void a03_getName() throws Exception {
+	public void a03_getName() {
 		assertString(of("foo;a=1;q=0.5;b=2").getName()).is("foo");
 		assertString(of(null).getName()).is("*");
 	}

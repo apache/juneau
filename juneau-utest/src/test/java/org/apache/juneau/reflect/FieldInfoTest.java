@@ -283,7 +283,7 @@ public class FieldInfoTest {
 	// Visibility
 	//-----------------------------------------------------------------------------------------------------------------
 
-	static abstract class D {
+	abstract static class D {
 		public int isPublic;
 		protected int isProtected;
 		@SuppressWarnings("unused")

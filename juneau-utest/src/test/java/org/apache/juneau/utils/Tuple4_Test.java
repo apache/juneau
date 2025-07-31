@@ -25,7 +25,7 @@ public class Tuple4_Test {
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test
-	public void a01_basic() throws Exception {
+	public void a01_basic() {
 		Tuple4<String,Integer,Integer,Integer> x = Tuple4.of("foo",1,2,3);
 		assertString(x.getA()).is("foo");
 		assertInteger(x.getB()).is(1);
@@ -34,7 +34,7 @@ public class Tuple4_Test {
 	}
 
 	@Test
-	public void a02_equality() throws Exception {
+	public void a02_equality() {
 		Tuple4<String,Integer,Integer,Integer> x1 = Tuple4.of("foo",1,2,3), x2 = Tuple4.of("foo",1,2,3), x3 = Tuple4.of(null,1,2,3), x4 = Tuple4.of("foo",null,2,3), x5 = Tuple4.of("foo",1,null,3), x6 = Tuple4.of("foo",1,2,null);
 		assertEquals(x1, x2);
 		assertEquals(x1.hashCode(), x2.hashCode());

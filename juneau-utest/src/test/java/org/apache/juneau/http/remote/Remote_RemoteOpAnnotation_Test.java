@@ -63,7 +63,7 @@ public class Remote_RemoteOpAnnotation_Test {
 	}
 
 	@Test
-	public void a01_inferredMethodsAndPaths() throws Exception {
+	public void a01_inferredMethodsAndPaths() {
 		A1 t = remote(A.class,A1.class);
 		assertEquals("foo",t.doGet());
 		assertEquals("foo",t.doGET());

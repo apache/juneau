@@ -25,7 +25,7 @@ public class PatternExtractVarTest {
 	// test - Basic tests
 	//====================================================================================================
 	@Test
-	public void test() throws Exception {
+	public void test() {
 		VarResolver vr = VarResolver.create().vars(PatternExtractVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("PatternExtractVarTest.test", "foo bar");
@@ -38,7 +38,5 @@ public class PatternExtractVarTest {
 		assertEquals("size=23", vr.resolve("$PE{$S{PatternExtractVarTest.test2},(.*)=([0-9]+),0}"));
 		assertEquals("", vr.resolve("$PE{$S{PatternExtractVarTest.test2},(.*)=([0-9]+),-2}"));
 		assertEquals("", vr.resolve("$PE{$S{PatternExtractVarTest.test2},(.*)=([0-9]+),54}"));
-
-
 	}
 }

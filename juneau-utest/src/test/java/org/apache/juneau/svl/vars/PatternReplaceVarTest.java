@@ -25,7 +25,7 @@ public class PatternReplaceVarTest {
 	// test - Basic tests
 	//====================================================================================================
 	@Test
-	public void test() throws Exception {
+	public void test() {
 		VarResolver vr = VarResolver.create().vars(PatternReplaceVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("PatternReplaceVarTest.test", "foo bar");

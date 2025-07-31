@@ -77,7 +77,7 @@ public class MethodExecStore_Test {
 	}
 
 	@Test
-	public void a05_builder_beanFactory() throws Exception {
+	public void a05_builder_beanFactory() {
 		BeanStore bs = BeanStore.create().build();
 
 		assertThrown(()->MethodExecStore.create(bs).type(A5b.class).build()).asMessages().isAny(contains("Public constructor found but could not find prerequisites: A5a"));

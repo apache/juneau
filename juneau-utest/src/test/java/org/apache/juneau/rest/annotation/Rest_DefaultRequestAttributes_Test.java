@@ -139,7 +139,7 @@ public class Rest_DefaultRequestAttributes_Test {
 		}
 
 		@RestPut
-		public String b(RestRequest req, RequestAttributes attrs) throws Exception {
+		public String b(RestRequest req, RequestAttributes attrs) {
 			attrs.set("p3", "pp3");
 			attrs.set("p4", "pp4");
 			String accept = req.getHeaderParam("Accept").orElse(null);

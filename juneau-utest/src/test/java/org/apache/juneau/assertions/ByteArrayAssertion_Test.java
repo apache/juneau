@@ -37,13 +37,13 @@ public class ByteArrayAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void a01_msg() throws Exception {
+	public void a01_msg() {
 		assertThrown(()->test(null).setMsg("A {0}", 1).isExists()).asMessage().is("A 1");
 		assertThrown(()->test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("A 1");
 	}
 
 	@Test
-	public void a02_stdout() throws Exception {
+	public void a02_stdout() {
 		test(null).setStdOut();
 	}
 
@@ -52,14 +52,14 @@ public class ByteArrayAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void ba01a_asString() throws Exception {
+	public void ba01a_asString() {
 		byte[] x = {'a'}, nil = null;
 		test(x).asString().is("a");
 		test(nil).asString().isNull();
 	}
 
 	@Test
-	public void ba01b_asString_wSerializer() throws Exception {
+	public void ba01b_asString_wSerializer() {
 		byte[] x = {1}, nil = null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("[1]");
@@ -67,33 +67,33 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void ba01c_asString_wPredicate() throws Exception {
+	public void ba01c_asString_wPredicate() {
 		byte[] x1 = {1};
 		test(x1).asString(x -> "foo").is("foo");
 	}
 
 	@Test
-	public void ba02_asJson() throws Exception {
+	public void ba02_asJson() {
 		byte[] x = {1}, nil = null;
 		test(x).asJson().is("[1]");
 		test(nil).asJson().is("null");
 	}
 
 	@Test
-	public void ba03_asJsonSorted() throws Exception {
+	public void ba03_asJsonSorted() {
 		byte[] x1 = {2,1}, nil = null;
 		test(x1).asJsonSorted().is("[1,2]");
 		test(nil).asJsonSorted().is("null");
 	}
 
 	@Test
-	public void ba04_apply() throws Exception {
+	public void ba04_apply() {
 		byte[] x1 = {1}, x2 = {2};
 		test(x1).asTransformed(x -> x2).is(x2);
 	}
 
 	@Test
-	public void bb01_item() throws Exception {
+	public void bb01_item() {
 		byte[] x = {1}, nil = null;
 		test(x).asItem(0).is((byte)1);
 		test(x).asItem(1).isNull();
@@ -102,14 +102,14 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void bb02_length() throws Exception {
+	public void bb02_length() {
 		byte[] x = {1}, nil = null;
 		test(x).asLength().is(1);
 		test(nil).asLength().isNull();
 	}
 
 	@Test
-	public void bc01_asString_wCharset() throws Exception {
+	public void bc01_asString_wCharset() {
 		byte[] x = {'a','b'}, nil = null;
 		test(x).asString(IOUtils.UTF8).is("ab");
 		test(nil).asString(IOUtils.UTF8).isNull();
@@ -117,7 +117,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void bc02_asBase64() throws Exception {
+	public void bc02_asBase64() {
 		byte[] x = {'a','b'}, nil = null;
 		test(x).asBase64().is("YWI=");
 		test(nil).asBase64().isNull();
@@ -125,7 +125,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void bc03_asHex() throws Exception {
+	public void bc03_asHex() {
 		byte[] x = {'a','b'}, nil = null;
 		test(x).asHex().is("6162");
 		test(nil).asHex().isNull();
@@ -133,7 +133,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void bc04_asSpacedHex() throws Exception {
+	public void bc04_asSpacedHex() {
 		byte[] x = {'a','b'}, nil = null;
 		test(x).asSpacedHex().is("61 62");
 		test(nil).asSpacedHex().isNull();
@@ -145,28 +145,28 @@ public class ByteArrayAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void ca01_exists() throws Exception {
+	public void ca01_exists() {
 		byte[] x = {}, nil = null;
 		test(x).isExists().isExists();
 		assertThrown(()->test(nil).isExists()).asMessage().is("Value was null.");
 	}
 
 	@Test
-	public void ca02_isNull() throws Exception {
+	public void ca02_isNull() {
 		byte[] x = {}, nil = null;
 		test(nil).isNull();
 		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
 	}
 
 	@Test
-	public void ca03_isNotNull() throws Exception {
+	public void ca03_isNotNull() {
 		byte[] x = {}, nil = null;
 		test(x).isNotNull();
 		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
 	}
 
 	@Test
-	public void ca04a_is_T() throws Exception {
+	public void ca04a_is_T() {
 		byte[] x1 = {1,2}, x1a = {1,2}, x2 = {3,4}, nil = null;
 		test(x1).is(x1);
 		test(x1).is(x1a);
@@ -177,7 +177,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void ca04b_is_predicate() throws Exception {
+	public void ca04b_is_predicate() {
 		byte[] x1 = {1,2};
 		test(x1).is(x->x.length==2);
 		assertThrown(()->test(x1).is(x->x.length==3)).asMessage().asOneLine().is("Unexpected value: '[1, 2]'.");
@@ -185,7 +185,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void ca05_isNot() throws Exception {
+	public void ca05_isNot() {
 		byte[] x1 = {1,2}, x1a = {1,2}, x2 = {2,3}, nil = null;
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
@@ -195,7 +195,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void ca06_isAny() throws Exception {
+	public void ca06_isAny() {
 		byte[] x1 = {1,2}, x1a = {1,2}, x2 = {2,3}, nil = null;
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[[2, 3]]'.  Actual='[1, 2]'.");
@@ -204,7 +204,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void ca07_isNotAny() throws Exception {
+	public void ca07_isNotAny() {
 		byte[] x1 = {1,2}, x1a = {1,2}, x2 = {2,3}, nil = null;
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
@@ -214,7 +214,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void ca08_isSame() throws Exception {
+	public void ca08_isSame() {
 		byte[] x1 = {1,2}, x1a = {1,2}, nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
@@ -224,7 +224,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void ca09_isSameJsonAs() throws Exception {
+	public void ca09_isSameJsonAs() {
 		byte[] x1 = {1,2}, x1a = {1,2}, x2 = {2,3}, nil = null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
@@ -234,7 +234,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void ca10_isSameSortedJsonAs() throws Exception {
+	public void ca10_isSameSortedJsonAs() {
 		byte[] x1 = {1,2}, x1a = {2,1}, x2 = {1,3}, nil = null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
@@ -244,7 +244,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void ca11_isSameSerializedAs() throws Exception {
+	public void ca11_isSameSerializedAs() {
 		byte[] x1 = {1,2}, x1a = {1,2}, x2 = {1,3}, nil = null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
@@ -255,7 +255,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void ca12_isType() throws Exception {
+	public void ca12_isType() {
 		byte[] x = {1,2}, nil = null;
 		test(x).isType(byte[].class);
 		test(x).isType(Object.class);
@@ -265,7 +265,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void ca13_isExactType() throws Exception {
+	public void ca13_isExactType() {
 		byte[] x = {1,2}, nil = null;
 		test(x).isExactType(byte[].class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='[B'.");
@@ -275,7 +275,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void ca14_isString() throws Exception {
+	public void ca14_isString() {
 		byte[] x = {'a','b'}, nil = null;
 		test(x).isString("ab");
 		test(nil).isString(null);
@@ -285,7 +285,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void ca15_isJson() throws Exception {
+	public void ca15_isJson() {
 		byte[] x = {1,2}, nil = null;
 		test(x).isJson("[1,2]");
 		test(nil).isJson("null");
@@ -295,7 +295,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void cb01_isEmpty() throws Exception {
+	public void cb01_isEmpty() {
 		byte[] x1 = {}, x2 = {1,2}, nil = null;
 		test(x1).isEmpty();
 		assertThrown(()->test(x2).isEmpty()).asMessage().is("Array was not empty.");
@@ -303,7 +303,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void cb02_isNotEmpty() throws Exception {
+	public void cb02_isNotEmpty() {
 		byte[] x1={}, x2={1,2}, nil = null;
 		test(x2).isNotEmpty();
 		assertThrown(()->test(x1).isNotEmpty()).asMessage().is("Array was empty.");
@@ -311,7 +311,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void cb03_contains() throws Exception {
+	public void cb03_contains() {
 		byte[] x1 = {1,2}, nil = null;
 		test(x1).isContains((byte)1);
 		assertThrown(()->test(x1).isContains((byte)3)).asMessage().asOneLine().is("Array did not contain expected value.  Expect='3'.  Actual='[1, 2]'.");
@@ -320,7 +320,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void cb04_doesNotContain() throws Exception {
+	public void cb04_doesNotContain() {
 		byte[] x1 = {1,2}, nil = null;
 		test(x1).isNotContains((byte)3);
 		test(x1).isNotContains(null);
@@ -329,7 +329,7 @@ public class ByteArrayAssertion_Test {
 	}
 
 	@Test
-	public void cb05_isSize() throws Exception {
+	public void cb05_isSize() {
 		byte[] x1 = {}, x2={1,2}, nil = null;
 		test(x1).isSize(0);
 		test(x2).isSize(2);

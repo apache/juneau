@@ -29,7 +29,7 @@ public class IgnoredClassesTest {
 	// testFilesRenderedAsStrings
 	//====================================================================================================
 	@Test
-	public void testFilesRenderedAsStrings() throws Exception {
+	public void testFilesRenderedAsStrings() {
 		assumeTrue(System.getProperty("os.name").toLowerCase().startsWith("win"));
 		// Files should be rendered as strings.
 		File f = new File("C:/temp");

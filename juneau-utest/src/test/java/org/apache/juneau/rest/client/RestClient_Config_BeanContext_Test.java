@@ -534,7 +534,7 @@ public class RestClient_Config_BeanContext_Test {
 	}
 
 	@Test
-	public void a14_debug() throws Exception {
+	public void a14_debug() {
 		A14 x = new A14();
 		x.f = x;
 		assertThrown(()->client().debug().build().post("/echo",x).run()).asMessages().isAny(contains("Recursion occurred"));

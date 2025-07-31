@@ -52,13 +52,13 @@ public class DateAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void a01_msg() throws Exception {
+	public void a01_msg() {
 		assertThrown(()->test(null).setMsg("A {0}", 1).isExists()).asMessage().is("A 1");
 		assertThrown(()->test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("A 1");
 	}
 
 	@Test
-	public void a02_stdout() throws Exception {
+	public void a02_stdout() {
 		test(null).setStdOut();
 	}
 
@@ -67,14 +67,14 @@ public class DateAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void ba01a_asString() throws Exception {
+	public void ba01a_asString() {
 		Date x = MID1, nil = null;
 		test(x).asString().isMatches("*2000");
 		test(nil).asString().isNull();
 	}
 
 	@Test
-	public void ba01b_asString_wSerializer() throws Exception {
+	public void ba01b_asString_wSerializer() {
 		Date x = MID1, nil = null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).isMatches("'2000-*'");
@@ -82,40 +82,40 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void ba01c_asString_wPredicate() throws Exception {
+	public void ba01c_asString_wPredicate() {
 		Date x1 = MID1;
 		test(x1).asString(x -> "foo").is("foo");
 	}
 
 	@Test
-	public void ba02_asJson() throws Exception {
+	public void ba02_asJson() {
 		Date x = MID1, nil = null;
 		test(x).asJson().isMatches("'2000-*'");
 		test(nil).asJson().is("null");
 	}
 
 	@Test
-	public void ba03_asJsonSorted() throws Exception {
+	public void ba03_asJsonSorted() {
 		Date x1 = MID1, nil = null;
 		test(x1).asJsonSorted().isMatches("'2000-*'");
 		test(nil).asJsonSorted().is("null");
 	}
 
 	@Test
-	public void ba04_apply() throws Exception {
+	public void ba04_apply() {
 		Date x1 = MID1, x2 = MID2;
 		test(x1).asTransformed(x -> x2).is(MID2);
 	}
 
 	@Test
-	public void bc04a_asEpochMillis() throws Exception {
+	public void bc04a_asEpochMillis() {
 		Date x = MID1, nil = null;
 		test(x).asEpochMillis().is(959862896000L);
 		test(nil).asEpochMillis().isNull();
 	}
 
 	@Test
-	public void bc04b_asEpochSeconds() throws Exception {
+	public void bc04b_asEpochSeconds() {
 		Date x = MID1, nil = null;
 		test(x).asEpochSeconds().is(959862896L);
 		test(nil).asEpochSeconds().isNull();
@@ -126,28 +126,28 @@ public class DateAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void ca01_exists() throws Exception {
+	public void ca01_exists() {
 		Date x = MID1, nil = null;
 		test(x).isExists().isExists();
 		assertThrown(()->test(nil).isExists()).asMessage().is("Value was null.");
 	}
 
 	@Test
-	public void ca02_isNull() throws Exception {
+	public void ca02_isNull() {
 		Date x = MID1, nil = null;
 		test(nil).isNull();
 		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
 	}
 
 	@Test
-	public void ca03_isNotNull() throws Exception {
+	public void ca03_isNotNull() {
 		Date x = MID1, nil = null;
 		test(x).isNotNull();
 		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
 	}
 
 	@Test
-	public void ca04a_is_T() throws Exception {
+	public void ca04a_is_T() {
 		Date x1 = MID1, x1a = MID1a, x2 = MID2, nil = null;
 		test(x1).is(x1);
 		test(x1).is(x1a);
@@ -158,7 +158,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void ca04b_is_predicate() throws Exception {
+	public void ca04b_is_predicate() {
 		Date x1 = MID1;
 		test(x1).is(x->x!=null);
 		assertThrown(()->test(x1).is(x->x==null)).asMessage().asOneLine().isMatches("Unexpected value: '*2000'.");
@@ -166,7 +166,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void ca05_isNot() throws Exception {
+	public void ca05_isNot() {
 		Date x1 = MID1, x1a = MID1a, x2 = MID2, nil = null;
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
@@ -176,7 +176,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void ca06_isAny() throws Exception {
+	public void ca06_isAny() {
 		Date x1 = MID1, x1a = MID1a, x2 = MID2, nil = null;
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().isMatches("Expected value not found.  Expect='[*2010]'.  Actual='*2000'.");
@@ -185,7 +185,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void ca07_isNotAny() throws Exception {
+	public void ca07_isNotAny() {
 		Date x1 = MID1, x1a = MID1a, x2 = MID2, nil = null;
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
@@ -195,7 +195,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void ca08_isSame() throws Exception {
+	public void ca08_isSame() {
 		Date x1 = MID1, x1a = MID1a, nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
@@ -205,7 +205,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void ca09_isSameJsonAs() throws Exception {
+	public void ca09_isSameJsonAs() {
 		Date x1 = MID1, x1a = MID1a, x2 = MID2, nil = null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
@@ -215,7 +215,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void ca10_isSameSortedJsonAs() throws Exception {
+	public void ca10_isSameSortedJsonAs() {
 		Date x1 = MID1, x1a = MID1a, x2 = MID2, nil = null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
@@ -225,7 +225,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void ca11_isSameSerializedAs() throws Exception {
+	public void ca11_isSameSerializedAs() {
 		Date x1 = MID1, x1a = MID1a, x2 = MID2, nil = null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
@@ -236,7 +236,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void ca12_isType() throws Exception {
+	public void ca12_isType() {
 		Date x = MID1, nil = null;
 		test(x).isType(Date.class);
 		test(x).isType(Object.class);
@@ -246,7 +246,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void ca13_isExactType() throws Exception {
+	public void ca13_isExactType() {
 		Date x = MID1, nil = null;
 		test(x).isExactType(Date.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.util.Date'.");
@@ -256,7 +256,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void ca14_isString() throws Exception {
+	public void ca14_isString() {
 		Date x = MID1, nil = null;
 		test(x).isString(x.toString());
 		test(nil).isString(null);
@@ -266,7 +266,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void ca15_isJson() throws Exception {
+	public void ca15_isJson() {
 		Date x = MID1, nil = null;
 		test(nil).isJson("null");
 		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().isMatches("String differed at position 0.  Expect='bad'.  Actual=''2000*''.");
@@ -275,7 +275,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void cb01_isGt() throws Exception {
+	public void cb01_isGt() {
 		Date x1 = MID1, x2 = MID2, nil = null;
 		test(x2).isGt(x1);
 		assertThrown(()->test(x1).isGt(x1)).asMessage().asOneLine().isMatches("Value was not greater than expected.  Expect='*2000'.  Actual='*2000'.");
@@ -285,7 +285,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void cb02_isGte() throws Exception {
+	public void cb02_isGte() {
 		Date x1 = MID1, x2 = MID2, nil = null;
 		test(x2).isGte(x1);
 		test(x1).isGte(x1);
@@ -295,7 +295,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void cb03_isLt() throws Exception {
+	public void cb03_isLt() {
 		Date x1 = MID1, x2 = MID2, nil = null;
 		test(x1).isLt(x2);
 		assertThrown(()->test(x1).isLt(x1)).asMessage().asOneLine().isMatches("Value was not less than expected.  Expect='*2000'.  Actual='*2000'.");
@@ -305,7 +305,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void cb04_isLte() throws Exception {
+	public void cb04_isLte() {
 		Date x1 = MID1, x2 = MID2, nil = null;
 		test(x1).isLte(x2);
 		test(x1).isLte(x1);
@@ -315,7 +315,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void cb05_isBetween() throws Exception {
+	public void cb05_isBetween() {
 		Date x1 = MIN, x2 = MID1, x3 = MID2, x4 = MAX, nil = null;
 		test(x1).isBetween(x1, x3);
 		test(x2).isBetween(x1, x3);
@@ -327,7 +327,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void cc01_is_wChrono() throws Exception {
+	public void cc01_is_wChrono() {
 		Date x1 = MID1, x1a = MID1a, x2 = MIN, nil = null;
 		test(x1).is(x1, ChronoUnit.DAYS);
 		test(x1).is(x1a, ChronoUnit.DAYS);
@@ -337,7 +337,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void cc02_isAfter() throws Exception {
+	public void cc02_isAfter() {
 		Date x1 = MIN, x2 = MID1, x3 = MAX, nil = null;
 		test(x3).isAfter(x2);
 		assertThrown(()->test(x1).isAfter(nil)).asMessage().is("Argument 'value' cannot be null.");
@@ -346,7 +346,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void cc03_isAfterNow() throws Exception {
+	public void cc03_isAfterNow() {
 		Date x1 = MIN, x2 = MAX, nil = null;
 		test(x2).isAfterNow();
 		assertThrown(()->test(x1).isAfterNow()).asMessage().isContains("Value was not after expected.");
@@ -354,7 +354,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void cc04_isBefore() throws Exception {
+	public void cc04_isBefore() {
 		Date x1 = MIN, x2 = MID1, nil = null;
 		test(x1).isBefore(x2);
 		assertThrown(()->test(x1).isBefore(nil)).asMessage().is("Argument 'value' cannot be null.");
@@ -363,7 +363,7 @@ public class DateAssertion_Test {
 	}
 
 	@Test
-	public void cc05_isBeforeNow() throws Exception {
+	public void cc05_isBeforeNow() {
 		Date x1 = MIN, x2 = MAX, nil = null;
 		test(x1).isBeforeNow();
 		assertThrown(()->test(x2).isBeforeNow()).asMessage().isContains("Value was not before expected.");

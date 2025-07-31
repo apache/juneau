@@ -24,7 +24,7 @@ public class PropertyNamerTest {
 	// test dashed-lower-case
 	//====================================================================================================
 	@Test
-	public void testDLC() throws Exception {
+	public void testDLC() {
 		PropertyNamer n = new PropertyNamerDLC();
 
 		assertEquals("abc", n.getPropertyName("ABC"));
@@ -42,7 +42,7 @@ public class PropertyNamerTest {
 	// test underscore-lower-case
 	//====================================================================================================
 	@Test
-	public void testULC() throws Exception {
+	public void testULC() {
 		PropertyNamer n = new PropertyNamerULC();
 
 		assertEquals("abc", n.getPropertyName("ABC"));
