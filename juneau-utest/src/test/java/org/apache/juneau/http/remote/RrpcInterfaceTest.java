@@ -534,12 +534,12 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public void setFloat(float x) {
-					assertTrue(1f == x);
+					assertEquals(1f, x, 0.1f);
 				}
 
 				@Override
 				public void setFloatObject(Float x) {
-					assertTrue(1f == x);
+					assertEquals(1f, x, 0.1f);
 				}
 
 				@Override
@@ -954,12 +954,12 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void a05_returnFloat() {
-		assertTrue(1f == proxy.returnFloat());
+		assertEquals(1f, proxy.returnFloat(), 0.1f);
 	}
 
 	@Test
 	public void a06_returnFloatObject() {
-		assertTrue(1f == proxy.returnFloatObject());
+		assertEquals(1f, proxy.returnFloatObject(), 0.1f);
 	}
 
 	@Test

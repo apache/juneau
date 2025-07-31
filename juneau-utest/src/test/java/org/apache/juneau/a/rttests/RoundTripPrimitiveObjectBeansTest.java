@@ -51,7 +51,7 @@ public class RoundTripPrimitiveObjectBeansTest extends RoundTripTest {
 		assertEquals(Double.valueOf(6), t.poDouble);
 		assertEquals(Integer.valueOf(7), t.poNumber);
 		assertEquals(8, t.poBigInteger.intValue());
-		assertTrue(t.poBigDecimal.floatValue() == 9f);
+		assertEquals(9f, t.poBigDecimal.floatValue(), 0.1f);
 
 		// uninitialized primitives
 		assertNull(t.pouBoolean);

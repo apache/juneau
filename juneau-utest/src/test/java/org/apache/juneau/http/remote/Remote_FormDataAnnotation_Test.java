@@ -71,7 +71,7 @@ public class Remote_FormDataAnnotation_Test {
 	public static class A {
 		@RestPost
 		public String a(@FormData("*") JsonMap m, @Header("Content-Type") String ct) {
-			assertEquals(ct,"application/x-www-form-urlencoded");
+			assertEquals("application/x-www-form-urlencoded", ct);
 			return m.toString();
 		}
 	}

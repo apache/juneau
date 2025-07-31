@@ -36,7 +36,7 @@ public class RoundTripClassesTest extends RoundTripTest {
 	public void classObjects() throws Exception {
 		Object o = String.class;
 		o = roundTrip(o);
-		assertTrue(o == String.class);
+		assertSame(o, String.class);
 
 		o = new Class[]{String.class};
 		o = roundTrip(o);

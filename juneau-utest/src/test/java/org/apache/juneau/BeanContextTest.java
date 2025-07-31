@@ -35,7 +35,7 @@ public class BeanContextTest {
 	@Test
 	public void a01_normalCachableBean() throws ExecutableException {
 		ClassMeta cm1 = bc.getClassMeta(A1.class), cm2 = bc.getClassMeta(A1.class);
-		assertTrue(cm1 == cm2);
+		assertSame(cm1, cm2);
 	}
 
 	interface A2 {
@@ -47,14 +47,14 @@ public class BeanContextTest {
 		BeanContext bc = BeanContext.DEFAULT;
 		A2 fi = x -> System.out.println(x);
 		ClassMeta cm1 = bc.getClassMeta(fi.getClass()), cm2 = bc.getClassMeta(fi.getClass());
-		assertTrue(cm1 != cm2);
+		assertNotSame(cm1, cm2);
 	}
 
 	@Test
 	public void a03_proxiesNotCached() throws ExecutableException {
 		A1 a1 = bs.getBeanMeta(A1.class).newBean(null);
 		ClassMeta cm1 = bc.getClassMeta(a1.getClass()), cm2 = bc.getClassMeta(a1.getClass());
-		assertTrue(cm1 != cm2);
+		assertNotSame(cm1, cm2);
 	}
 
 	@Test

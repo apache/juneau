@@ -118,8 +118,8 @@ public class CommonParserTest {
 
 		String in =  "{a:1,unknown:3,b:2}";
 		b = p.parse(in, B.class);
-		assertEquals(b.a, 1);
-		assertEquals(b.b, 2);
+		assertEquals(1, b.a);
+		assertEquals(2, b.b);
 
 		assertThrown(()->JsonParser.DEFAULT.parse(in, B.class)).isType(ParseException.class);
 	}
@@ -137,7 +137,7 @@ public class CommonParserTest {
 		String json = "{ints:[1,2,3],beans:[{a:1,b:2}]}";
 		C t = p.parse(json, C.class);
 		assertEquals(t.getInts().size(), 3);
-		assertEquals(t.getBeans().get(0).b, 2);
+		assertEquals(2, t.getBeans().get(0).b);
 	}
 
 	public static class C {

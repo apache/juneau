@@ -110,8 +110,8 @@ public class CommonParser_UrlEncodingTest {
 
 		String in =  "a=1&unknown=3&b=2";
 		t = p.parse(in, B.class);
-		assertEquals(t.a, 1);
-		assertEquals(t.b, 2);
+		assertEquals(1, t.a);
+		assertEquals(2, t.b);
 
 		assertThrown(()->UrlEncodingParser.DEFAULT.parse(in, B.class)).isType(ParseException.class);
 	}
@@ -130,8 +130,8 @@ public class CommonParser_UrlEncodingTest {
 
 		String json = "ints=@(1,2,3)&beans=@((a=1,b=2))";
 		C t = p.parse(json, C.class);
-		assertEquals(t.getInts().size(), 3);
-		assertEquals(t.getBeans().get(0).b, 2);
+		assertEquals(3, t.getInts().size());
+		assertEquals(2, t.getBeans().get(0).b);
 	}
 
 	public static class C {

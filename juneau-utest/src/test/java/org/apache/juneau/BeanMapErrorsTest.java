@@ -41,9 +41,7 @@ public class BeanMapErrorsTest {
 		bm.put("f2", -2);
 		assertEquals(-2, bm.get("f2"));
 		assertFalse(bm.keySet().contains("f2"));
-        // TODO: Why does this fail?
-		// assertFalse(bm.containsKey("f2"));
-		assertFalse(bm.entrySet().stream().map(Entry::getKey).collect(Collectors.toList()).contains("f2"));
+		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
 	}
 
 	@Bean(p="f1")
@@ -71,9 +69,7 @@ public class BeanMapErrorsTest {
 		bm.put("f2", -2);
 		assertEquals(-2, bm.get("f2"));
 		assertFalse(bm.keySet().contains("f2"));
-        // TODO: Why does this fail?
-		// assertFalse(bm.containsKey("f2"));
-		assertFalse(bm.entrySet().stream().map(Entry::getKey).collect(Collectors.toList()).contains("f2"));
+		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
 	}
 
 	@Bean(on="Dummy",p="dummy")
@@ -109,9 +105,7 @@ public class BeanMapErrorsTest {
 		bm.put("f2", -2);
 		assertEquals(-2, bm.get("f2"));
 		assertFalse(bm.keySet().contains("f2"));
-		// TODO: Why does this fail?
-		// assertFalse(bm.containsKey("f2"));
-		assertFalse(bm.entrySet().stream().map(Entry::getKey).collect(Collectors.toList()).contains("f2"));
+		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
 	}
 
 	@Bean(p="f1")
@@ -132,9 +126,7 @@ public class BeanMapErrorsTest {
 		bm.put("f2", -2);
 		assertEquals(-2, bm.get("f2"));
 		assertFalse(bm.keySet().contains("f2"));
-	    // TODO: Why does this fail?
-		// assertFalse(bm.containsKey("f2"));
-		assertFalse(bm.entrySet().stream().map(Entry::getKey).collect(Collectors.toList()).contains("f2"));
+		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
 	}
 
 	@Bean(on="Dummy",p="dummy")

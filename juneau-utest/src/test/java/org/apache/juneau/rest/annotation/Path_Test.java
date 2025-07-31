@@ -94,7 +94,7 @@ public class Path_Test {
 			.assertContent("GET /a foo,123,r=baz");
 
 		// URL-encoded part should not get decoded before finding method to invoke.
-		// This should match /get1/{foo} and not /get1/{foo}/{bar}
+		// This should match /get1/{foo} and not /get1/{foo}/{bar} - NOSONAR
 		// NOTE:  When testing on Tomcat, must specify the following system property:
 		// -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
 		a.get("/a/x%2Fy")

@@ -36,15 +36,15 @@ public class Tuple4_Test {
 	@Test
 	public void a02_equality() throws Exception {
 		Tuple4<String,Integer,Integer,Integer> x1 = Tuple4.of("foo",1,2,3), x2 = Tuple4.of("foo",1,2,3), x3 = Tuple4.of(null,1,2,3), x4 = Tuple4.of("foo",null,2,3), x5 = Tuple4.of("foo",1,null,3), x6 = Tuple4.of("foo",1,2,null);
-		assertTrue(x1.equals(x2));
+		assertEquals(x1, x2);
 		assertEquals(x1.hashCode(), x2.hashCode());
-		assertFalse(x1.equals(x3));
+		assertNotEquals(x1, x3);
 		assertNotEquals(x1.hashCode(), x3.hashCode());
-		assertFalse(x1.equals(x4));
+		assertNotEquals(x1, x4);
 		assertNotEquals(x1.hashCode(), x4.hashCode());
-		assertFalse(x1.equals(x5));
+		assertNotEquals(x1, x5);
 		assertNotEquals(x1.hashCode(), x5.hashCode());
-		assertFalse(x1.equals(x6));
+		assertNotEquals(x1, x6);
 		assertNotEquals(x1.hashCode(), x6.hashCode());
 	}
 }

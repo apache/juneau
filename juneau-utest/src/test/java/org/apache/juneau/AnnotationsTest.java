@@ -33,12 +33,12 @@ class AnnotationsTest extends SimpleTestBase {
 		assertNotNull(bm);
 		assertNotNull(bm.getBean());
 		assertEquals(bm.get("age"), 21);
-		assertEquals(bm.get("name"), "foobar");
+		assertEquals("foobar", bm.get("name"));
 
 		bm.put("age", 65);
 		bm.put("name", "futbol");
-		assertEquals(bm.get("age"), 65);
-		assertEquals(bm.get("name"), "futbol");
+		assertEquals(65, bm.get("age"));
+		assertEquals("futbol", bm.get("name"));
 	}
 
 	/** Class with explicitly specified properties */
@@ -62,13 +62,13 @@ class AnnotationsTest extends SimpleTestBase {
 		bm = bc.newBeanMap(Person2.class).load("{age:21,name:'foobar'}");
 		assertNotNull(bm);
 		assertNotNull(bm.getBean());
-		assertEquals(bm.get("age"), 21);
-		assertEquals(bm.get("name"), "foobar");
+		assertEquals(21, bm.get("age"));
+		assertEquals("foobar", bm.get("name"));
 
 		bm.put("age", 65);
 		bm.put("name", "futbol");
-		assertEquals(bm.get("age"), 65);
-		assertEquals(bm.get("name"), "futbol");
+		assertEquals(65, bm.get("age"));
+		assertEquals("futbol", bm.get("name"));
 	}
 
 	/** Class with explicitly specified properties */
@@ -92,13 +92,13 @@ class AnnotationsTest extends SimpleTestBase {
 		bm = bc.newBeanMap(Person3.class).load("{age:21,name:'foobar'}");
 		assertNotNull(bm);
 		assertNotNull(bm.getBean());
-		assertEquals(bm.get("age"), 21);
-		assertEquals(bm.get("name"), "foobar");
+		assertEquals(21, bm.get("age"));
+		assertEquals("foobar", bm.get("name"));
 
 		bm.put("age", 65);
 		bm.put("name", "futbol");
-		assertEquals(bm.get("age"), 65);
-		assertEquals(bm.get("name"), "futbol");
+		assertEquals(65, bm.get("age"));
+		assertEquals("futbol", bm.get("name"));
 	}
 
 	/** Class with explicitly specified properties */
@@ -122,13 +122,13 @@ class AnnotationsTest extends SimpleTestBase {
 		bm = bc.newBeanMap(Person4.class).load("{age:21,name:'foobar'}");
 		assertNotNull(bm);
 		assertNotNull(bm.getBean());
-		assertEquals(bm.get("age"), 21);
-		assertEquals(bm.get("name"), "foobar");
+		assertEquals(21, bm.get("age"));
+		assertEquals("foobar", bm.get("name"));
 
 		bm.put("age", 65);
 		bm.put("name", "futbol");
-		assertEquals(bm.get("age"), 65);
-		assertEquals(bm.get("name"), "futbol");
+		assertEquals(65, bm.get("age"));
+		assertEquals("futbol", bm.get("name"));
 	}
 
 	/** Class with explicitly specified properties */

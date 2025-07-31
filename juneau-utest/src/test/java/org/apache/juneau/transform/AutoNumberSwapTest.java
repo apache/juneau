@@ -200,7 +200,6 @@ public class AutoNumberSwapTest {
 	//------------------------------------------------------------------------------------------------------------------
 	// Unswap methods
 	//------------------------------------------------------------------------------------------------------------------
-//	UNSWAP_METHOD_NAMES = newUnmodifiableHashSet("fromInteger", "fromInt", "fromLong", "fromFloat", "fromDouble", "fromShort", "fromByte", "create", "valueOf");
 
 	public static class B01 {
 		public Integer toInteger() {

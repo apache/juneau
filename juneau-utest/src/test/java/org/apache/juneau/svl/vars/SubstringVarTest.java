@@ -39,7 +39,7 @@ public class SubstringVarTest {
 		assertEquals("bar", vr.resolve("$ST{$S{SubstringVarTest.test},-3}"));
 		assertEquals("foo bar", vr.resolve("$ST{$S{SubstringVarTest.test},-7}"));
 
-		// $ST{stringArg, start, end}
+		// $ST{stringArg, start, end} - NOSONAR
 		assertEquals("foo bar", vr.resolve("$ST{$S{SubstringVarTest.test},0,7}"));
 		assertEquals("oo", vr.resolve("$ST{$S{SubstringVarTest.test},1,3}"));
 		assertEquals("", vr.resolve("$ST{$S{SubstringVarTest.test},-2, 2}"));

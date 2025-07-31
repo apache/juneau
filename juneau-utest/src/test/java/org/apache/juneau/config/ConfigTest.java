@@ -41,7 +41,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public String get(String key) {
+	//	public String get(String key)
 	//====================================================================================================
 	@Test
 	public void get() throws Exception {
@@ -58,7 +58,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public Config set(String key, String value) {
+	//	public Config set(String key, String value)
 	//====================================================================================================
 	@Test
 	public void set1() throws Exception {
@@ -100,7 +100,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public Config set(String key, Object value) throws SerializeException {
+	//	public Config set(String key, Object value)
 	//====================================================================================================
 	@Test
 	public void set2() throws Exception {
@@ -142,7 +142,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public Config set(String key, Object value, Serializer serializer) throws SerializeException {
+	//	public Config set(String key, Object value, Serializer serializer)
 	//====================================================================================================
 	@Test
 	public void set3() throws Exception {
@@ -165,7 +165,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public Config set(String key, Object value, Serializer serializer, ConfigMod[] modifiers, String comment, List<String> preLines) throws SerializeException {
+	//	public Config set(String key, Object value, Serializer serializer, ConfigMod[] modifiers, String comment, List<String> preLines)
 	//====================================================================================================
 	@Test
 	public void set4() throws Exception {
@@ -194,7 +194,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public Config remove(String key) {
+	//	public Config remove(String key)
 	//====================================================================================================
 	@Test
 	public void remove() throws Exception {
@@ -214,7 +214,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public String getString1(String key) {
+	//	public String getString1(String key)
 	//====================================================================================================
 	@Test
 	public void xgetString1() throws Exception {
@@ -230,7 +230,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public String getString(String key, String def) {
+	//	public String getString(String key, String def)
 	//====================================================================================================
 	@Test
 	public void getString2() throws Exception {
@@ -245,7 +245,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public String[] getStringArray(String key) {
+	//	public String[] getStringArray(String key)
 	//====================================================================================================
 	@Test
 	public void getStringArray1() throws Exception {
@@ -260,7 +260,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public String[] getStringArray(String key, String[] def) {
+	//	public String[] getStringArray(String key, String[] def)
 	//====================================================================================================
 	@Test
 	public void getStringArray2() throws Exception {
@@ -275,7 +275,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public int getInt(String key) {
+	//	public int getInt(String key)
 	//====================================================================================================
 	@Test
 	public void getInt1() throws Exception {
@@ -299,7 +299,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public int getInt2(String key, int def) {
+	//	public int getInt2(String key, int def)
 	//====================================================================================================
 	@Test
 	public void getInt2() throws Exception {
@@ -323,7 +323,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public boolean getBoolean(String key) {
+	//	public boolean getBoolean(String key)
 	//====================================================================================================
 	@Test
 	public void getBoolean1() throws Exception {
@@ -347,7 +347,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public boolean getBoolean(String key, boolean def) {
+	//	public boolean getBoolean(String key, boolean def)
 	//====================================================================================================
 	@Test
 	public void getBoolean2() throws Exception {
@@ -371,7 +371,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public long getLong(String key) {
+	//	public long getLong(String key)
 	//====================================================================================================
 	@Test
 	public void getLong1() throws Exception {
@@ -395,7 +395,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public long getLong(String key, long def) {
+	//	public long getLong(String key, long def)
 	//====================================================================================================
 	@Test
 	public void getLong2() throws Exception {
@@ -420,7 +420,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public boolean getBytes(String key) {
+	//	public boolean getBytes(String key)
 	//====================================================================================================
 	@Test
 	public void getBytes1() throws Exception {
@@ -433,7 +433,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public boolean getBytes(String key, byte[] def) {
+	//	public boolean getBytes(String key, byte[] def)
 	//====================================================================================================
 	@Test
 	public void getBytes2() throws Exception {
@@ -446,7 +446,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public <T> T getObject(String key, Type type, Type...args) throws ParseException {
+	//	public <T> T getObject(String key, Type type, Type...args) throws ParseException
 	//====================================================================================================
 	@SuppressWarnings("unchecked")
 	@Test
@@ -488,7 +488,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public <T> T getObject(String key, Parser parser, Type type, Type...args) throws ParseException {
+	//	public <T> T getObject(String key, Parser parser, Type type, Type...args) throws ParseException
 	//====================================================================================================
 	@SuppressWarnings("unchecked")
 	@Test
@@ -530,7 +530,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public <T> T getObject(String key, Class<T> type) throws ParseException {
+	//	public <T> T getObject(String key, Class<T> type) throws ParseException
 	//====================================================================================================
 	@SuppressWarnings("rawtypes")
 	@Test
@@ -568,7 +568,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public <T> T getObject(String key, Parser parser, Class<T> type) throws ParseException {
+	//	public <T> T getObject(String key, Parser parser, Class<T> type) throws ParseException
 	//====================================================================================================
 	@SuppressWarnings("rawtypes")
 	@Test
@@ -606,7 +606,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public <T> T getObjectWithDefault(String key, T def, Class<T> type) throws ParseException {
+	//	public <T> T getObjectWithDefault(String key, T def, Class<T> type) throws ParseException
 	//====================================================================================================
 	@SuppressWarnings("rawtypes")
 	@Test
@@ -653,9 +653,9 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	@SuppressWarnings("rawtypes")
-	//	public <T> T getObjectWithDefault(String key, Parser parser, T def, Class<T> type) throws ParseException {
+	//	public <T> T getObjectWithDefault(String key, Parser parser, T def, Class<T> type) throws ParseException
 	//====================================================================================================
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void getObjectWithDefault2() throws Exception {
 		Config c = init(
@@ -700,7 +700,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public <T> T getObjectWithDefault(String key, T def, Type type, Type...args) throws ParseException {
+	//	public <T> T getObjectWithDefault(String key, T def, Type type, Type...args) throws ParseException
 	//====================================================================================================
 	@SuppressWarnings("unchecked")
 	@Test
@@ -747,7 +747,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public <T> T getObjectWithDefault(String key, Parser parser, T def, Type type, Type...args) throws ParseException {
+	//	public <T> T getObjectWithDefault(String key, Parser parser, T def, Type type, Type...args) throws ParseException
 	//====================================================================================================
 	@SuppressWarnings("unchecked")
 	@Test
@@ -794,7 +794,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public Set<String> getKeys(String section) {
+	//	public Set<String> getKeys(String section)
 	//====================================================================================================
 	@Test
 	public void getKeys() throws Exception {
@@ -809,7 +809,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public Config writeProperties(String section, Object bean, boolean ignoreUnknownProperties) throws ParseException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+	//	public Config writeProperties(String section, Object bean, boolean ignoreUnknownProperties)
 	//====================================================================================================
 	@Test
 	public void writeProperties() throws Exception {
@@ -832,7 +832,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public <T> T getSectionAsBean(String sectionName, Class<T>c) throws ParseException {
+	//	public <T> T getSectionAsBean(String sectionName, Class<T>c)
 	//====================================================================================================
 	@Test
 	public void getSectionAsBean1() throws Exception {
@@ -862,7 +862,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public <T> T getSectionAsBean(String section, Class<T> c, boolean ignoreUnknownProperties) throws ParseException {
+	//	public <T> T getSectionAsBean(String section, Class<T> c, boolean ignoreUnknownProperties)
 	//====================================================================================================
 	@Test
 	public void getSectionAsBean2() throws Exception {
@@ -881,7 +881,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public JsonMap getSectionAsMap(String section) throws ParseException {
+	//	public JsonMap getSectionAsMap(String section)
 	//====================================================================================================
 	@Test
 	public void getSectionAsMap() throws Exception {
@@ -896,7 +896,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public <T> T getSectionAsInterface(final String sectionName, final Class<T> c) {
+	//	public <T> T getSectionAsInterface(final String sectionName, final Class<T> c)
 	//====================================================================================================
 	@Test
 	public void getSectionAsInterface() throws Exception {
@@ -926,7 +926,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public boolean exists(String key) {
+	//	public boolean exists(String key)
 	//====================================================================================================
 	@Test
 	public void exists() throws Exception {
@@ -941,7 +941,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public Config setSection(String name, List<String> preLines) {
+	//	public Config setSection(String name, List<String> preLines)
 	//====================================================================================================
 	@Test
 	public void setSection1() throws Exception {
@@ -966,7 +966,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public Config setSection(String name, List<String> preLines, Map<String,Object> contents) throws SerializeException {
+	//	public Config setSection(String name, List<String> preLines, Map<String,Object> contents)
 	//====================================================================================================
 	@Test
 	public void setSection2() throws Exception {
@@ -992,7 +992,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public Config removeSection(String name) {
+	//	public Config removeSection(String name)
 	//====================================================================================================
 	@Test
 	public void removeSection() throws Exception {
@@ -1008,7 +1008,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public Writer writeTo(Writer w) throws IOException {
+	//	public Writer writeTo(Writer w)
 	//====================================================================================================
 	@Test
 	public void writeTo() throws Exception {
@@ -1115,7 +1115,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	// public Config encodeEntries() {
+	// public Config encodeEntries()
 	//====================================================================================================
 	@Test
 	public void testEncodeEntries() throws Exception {

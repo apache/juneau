@@ -97,7 +97,6 @@ public class AutoObjectSwapTest {
 	//------------------------------------------------------------------------------------------------------------------
 	// Unswap methods
 	//------------------------------------------------------------------------------------------------------------------
-	//UNSWAP_METHOD_NAMES = newUnmodifiableHashSet("unswap", "create", "fromObject");
 
 	public static class B01 {
 		public Map<String,String> swap() {

@@ -35,7 +35,7 @@ public class JsonParserEdgeCasesTest {
 	public static Collection<Object[]> getPairs() {
 		return Arrays.asList(new Object[][] {
 			{ 0, "is_structure_500_nested_arrays", repeat(500, "[") + repeat(500, "]"), null },
-			{ 1, "ix_object_key_lone_2nd_surrogate", "7B 22 5C 75 44 46 41 41 22 3A 30 7D"/*{"buDFAA":0}*/, null },
+			{ 1, "ix_object_key_lone_2nd_surrogate", "7B 22 5C 75 44 46 41 41 22 3A 30 7D"/*{"buDFAA":0}*/, null },  // NOSONAR
 			{ 2, "ix_string_1st_surrogate_but_2nd_missing", "5B 22 5C 75 44 41 44 41 22 5D"/*["buDADA"]*/, null },
 			{ 3, "ix_string_1st_valid_surrogate_2nd_invalid", "5B 22 5C 75 44 38 38 38 5C 75 31 32 33 34 22 5D"/*["buD888bu1234"]*/, null },
 			{ 4, "ix_string_incomplete_surrogate_and_escape_valid", "5B 22 5C 75 44 38 30 30 5C 6E 22 5D"/*["buD800\n"]*/, null },
@@ -53,7 +53,7 @@ public class JsonParserEdgeCasesTest {
 			{ 16, "ix_string_unicode_U+FFFE_nonchar", "5B 22 5C 75 46 46 46 45 22 5D"/*["buFFFE"]*/, null },
 			{ 17, "ix_string_UTF-16LE_with_BOM", "FF FE 5B 00 22 00 E9 00 22 00 5D 00"/*[fffd][fffd][[0]"[0][fffd][0]"[0]][0]*/, null },
 			{ 18, "ix_string_UTF-8_invalid_sequence", "5B 22 E6 97 A5 D1 88 FA 22 5D"/*["[65e5][448][fffd]"]*/, null },
-			{ 19, "ix_structure_UTF-8_BOM_empty_object", "EF BB BF 7B 7D"/*[feff]{}*/, "Unrecognized syntax" },
+			{ 19, "ix_structure_UTF-8_BOM_empty_object", "EF BB BF 7B 7D"/*[feff]{}*/, "Unrecognized syntax" },  // NOSONAR
 			{ 20, "n_array_1_true_without_comma", "[1 true]", "Expected ',' or ']'" },
 			{ 21, "n_array_colon_instead_of_comma", "[\"\": 1]", "Expected ',' or ']'" },
 			{ 22, "n_array_comma_after_close", "[\"\"],", "Remainder after parse: ','" },
@@ -204,8 +204,8 @@ public class JsonParserEdgeCasesTest {
 			{ 167, "nx_number_invalid-utf-8-in-int", "5B 30 E5 5D 0A"/*[0[fffd]][a]*/, null },
 			{ 168, "nx_number_real_with_invalid_utf8_after_e", "5B 31 65 E5 5D"/*[1e[fffd]]*/, null },
 			{ 169, "nx_object_bracket_key", "7B 5B 3A 20 22 78 22 7D 0A"/*{[: "x"}[a]*/, null },
-			{ 170, "nx_object_emoji", "7B F0 9F 87 A8 F0 9F 87 AD 7D"/*{[d83c][dde8][d83c][dded]}*/, null },
-			{ 171, "nx_object_pi_in_key_and_trailing_comma", "7B 22 B9 22 3A 22 30 22 2C 7D"/*{"[fffd]":"0",}*/, null },
+			{ 170, "nx_object_emoji", "7B F0 9F 87 A8 F0 9F 87 AD 7D"/*{[d83c][dde8][d83c][dded]}*/, null },  // NOSONAR
+			{ 171, "nx_object_pi_in_key_and_trailing_comma", "7B 22 B9 22 3A 22 30 22 2C 7D"/*{"[fffd]":"0",}*/, null },  //. NOSONAR
 			{ 172, "nx_string_1_surrogate_then_escape u", "5B 22 5C 75 44 38 30 30 5C 75 22 5D"/*["buD800bu"]*/, "Invalid Unicode escape sequence in string" },
 			{ 173, "nx_string_1_surrogate_then_escape u1", "5B 22 5C 75 44 38 30 30 5C 75 31 22 5D"/*["buD800bu1"]*/, "Invalid Unicode escape sequence in string" },
 			{ 174, "nx_string_1_surrogate_then_escape u1x", "5B 22 5C 75 44 38 30 30 5C 75 31 78 22 5D"/*["buD800bu1x"]*/, "Invalid Unicode escape sequence in string" },
@@ -239,9 +239,9 @@ public class JsonParserEdgeCasesTest {
 			{ 202, "nx_string_unicode_CapitalU", "22 5C 55 41 36 36 44 22"/*"\UA66D"*/, "Invalid escape sequence" },
 			{ 203, "ix_string_UTF8_surrogate_U+D800", "5B 22 ED A0 80 22 5D"/*["[fffd]"]*/, null },  // Succeeds on Java 8, fails on Java 6 & 7.
 			{ 204, "nx_structure_ascii-unicode-identifier", "61 C3 A5"/*a[e5]*/, "Unrecognized syntax" },
-			{ 205, "nx_structure_incomplete_UTF8_BOM", "EF BB 7B 7D"/*[fffd]{}*/, null },
+			{ 205, "nx_structure_incomplete_UTF8_BOM", "EF BB 7B 7D"/*[fffd]{}*/, null },  // NOSONAR
 			{ 206, "nx_structure_lone-invalid-utf-8", "E5"/*[fffd]*/, null },
-			{ 207, "nx_structure_open_open", "5B 22 5C 7B 5B 22 5C 7B 5B 22 5C 7B 5B 22 5C 7B"/*["\{["\{["\{["\{*/, "Invalid escape sequence" },
+			{ 207, "nx_structure_open_open", "5B 22 5C 7B 5B 22 5C 7B 5B 22 5C 7B 5B 22 5C 7B"/*["\{["\{["\{["\{*/, "Invalid escape sequence" },  // NOSONAR
 			{ 208, "nx_structure_single_point", "E9"/*[fffd]*/, null },
 			{ 209, "nx_structure_U+2060_word_joined", "5B E2 81 A0 5D"/*[[2060]]*/, "Unrecognized syntax" },
 			{ 210, "nx_structure_uescaped_LF_before_string", "5B 5C 75 30 30 30 41 22 22 5D"/*[bu000A""]*/, "Unrecognized syntax" },
@@ -312,9 +312,9 @@ public class JsonParserEdgeCasesTest {
 			{ 275, "y_structure_true_in_array", "[true]", null },
 			{ 276, "y_structure_whitespace_array", "[]", null },
 			{ 277, "yx_array_with_1_and_newline", "5B 31 0A 5D"/*[1[a]]*/, null },
-			{ 278, "yx_object_escaped_null_in_key", "7B 22 66 6F 6F 5C 75 30 30 30 30 62 61 72 22 3A 20 34 32 7D"/*{"foobu0000bar": 42}*/, null },
-			{ 279, "yx_object_string_unicode", "7B 22 74 69 74 6C 65 22 3A 22 5C 75 30 34 31 66 5C 75 30 34 33 65 5C 75 30 34 33 62 5C 75 30 34 34 32 5C 75 30 34 33 65 5C 75 30 34 34 30 5C 75 30 34 33 30 20 5C 75 30 34 31 37 5C 75 30 34 33 35 5C 75 30 34 33 63 5C 75 30 34 33 62 5C 75 30 34 33 35 5C 75 30 34 33 61 5C 75 30 34 33 65 5C 75 30 34 33 66 5C 75 30 34 33 30 22 20 7D"/*{"title":"bu041fbu043ebu043bbu0442bu043ebu0440bu0430 bu0417bu0435bu043cbu043bbu0435bu043abu043ebu043fbu0430" }*/, null },
-			{ 280, "yx_object_with_newlines", "7B 0A 22 61 22 3A 20 22 62 22 0A 7D"/*{[a]"a": "b"[a]}*/, null },
+			{ 278, "yx_object_escaped_null_in_key", "7B 22 66 6F 6F 5C 75 30 30 30 30 62 61 72 22 3A 20 34 32 7D"/*{"foobu0000bar": 42}*/, null },  // NOSONAR
+			{ 279, "yx_object_string_unicode", "7B 22 74 69 74 6C 65 22 3A 22 5C 75 30 34 31 66 5C 75 30 34 33 65 5C 75 30 34 33 62 5C 75 30 34 34 32 5C 75 30 34 33 65 5C 75 30 34 34 30 5C 75 30 34 33 30 20 5C 75 30 34 31 37 5C 75 30 34 33 35 5C 75 30 34 33 63 5C 75 30 34 33 62 5C 75 30 34 33 35 5C 75 30 34 33 61 5C 75 30 34 33 65 5C 75 30 34 33 66 5C 75 30 34 33 30 22 20 7D"/*{"title":"bu041fbu043ebu043bbu0442bu043ebu0440bu0430 bu0417bu0435bu043cbu043bbu0435bu043abu043ebu043fbu0430" }*/, null },  // NOSONAR
+			{ 280, "yx_object_with_newlines", "7B 0A 22 61 22 3A 20 22 62 22 0A 7D"/*{[a]"a": "b"[a]}*/, null },  // NOSONAR
 			{ 281, "yx_string_1_2_3_bytes_UTF-8_sequences", "5B 22 5C 75 30 30 36 30 5C 75 30 31 32 61 5C 75 31 32 41 42 22 5D"/*["bu0060bu012abu12AB"]*/, null },
 			{ 282, "yx_string_accepted_surrogate_pair", "5B 22 5C 75 44 38 30 31 5C 75 64 63 33 37 22 5D"/*["buD801budc37"]*/, null },
 			{ 283, "yx_string_accepted_surrogate_pairs", "5B 22 5C 75 64 38 33 64 5C 75 64 65 33 39 5C 75 64 38 33 64 5C 75 64 63 38 64 22 5D"/*["bud83dbude39bud83dbudc8d"]*/, null },
@@ -429,7 +429,6 @@ public class JsonParserEdgeCasesTest {
 		} else if (expected == 'n') {
 			try {
 				p.parse(json, Object.class);
-				//fail("ParseException expected.  Test="+name+", Input=" + json);
 			} catch (ParseException e) {
 				if (errorText != null)
 					assertTrue("Got ParseException but didn't contain expected text '"+errorText+"'.  Test="+name+", Input=" + jsonReadable + ", Message=" + e.getRootCause().getMessage(), e.getRootCause().getMessage().contains(errorText));

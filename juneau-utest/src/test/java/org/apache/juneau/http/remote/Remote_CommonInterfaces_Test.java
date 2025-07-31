@@ -118,9 +118,7 @@ public class Remote_CommonInterfaces_Test {
 		Ok ok();
 		Accepted accepted();
 		AlreadyReported alreadyReported();
-		//Continue _continue();
 		Created created();
-		//EarlyHints earlyHints();
 		Found found();
 		IMUsed iMUsed();
 		MovedPermanently movedPermanently();
@@ -131,10 +129,8 @@ public class Remote_CommonInterfaces_Test {
 		NotModified notModified();
 		PartialContent partialContent();
 		PermanentRedirect permanentRedirect();
-		//Processing processing();
 		ResetContent resetContent();
 		SeeOther seeOther();
-		//SwitchingProtocols switchingProtocols();
 		TemporaryRedirect temporaryRedirect();
 		UseProxy useProxy();
 	}
@@ -143,9 +139,7 @@ public class Remote_CommonInterfaces_Test {
 		@Override public Ok ok() { return OK; }
 		@Override public Accepted accepted() { return ACCEPTED; }
 		@Override public AlreadyReported alreadyReported() { return ALREADY_REPORTED; }
-		//@Override public Continue _continue() { return Continue.INSTANCE; }
 		@Override public Created created() { return CREATED; }
-		//@Override public EarlyHints earlyHints() { return EarlyHints.INSTANCE; }
 		@Override public Found found() { return FOUND; }
 		@Override public IMUsed iMUsed() { return IM_USED; }
 		@Override public MovedPermanently movedPermanently() { return MOVED_PERMANENTLY; }
@@ -156,10 +150,8 @@ public class Remote_CommonInterfaces_Test {
 		@Override public NotModified notModified() { return NOT_MODIFIED; }
 		@Override public PartialContent partialContent() { return PARTIAL_CONTENT; }
 		@Override public PermanentRedirect permanentRedirect() { return PERMANENT_REDIRECT; }
-		//@Override public Processing processing() { return Processing.INSTANCE; }
 		@Override public ResetContent resetContent() { return RESET_CONTENT; }
 		@Override public SeeOther seeOther() { return SEE_OTHER; }
-		//@Override public SwitchingProtocols switchingProtocols() { return SwitchingProtocols.INSTANCE; }
 		@Override public TemporaryRedirect temporaryRedirect() { return TEMPORARY_REDIRECT; }
 		@Override public UseProxy useProxy() { return USE_PROXY; }
 	}

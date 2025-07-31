@@ -88,9 +88,5 @@ public class Rest_Encoders_Test {
 			.header(ContentEncoding.of("identity"))
 			.run()
 			.assertContent("foo");
-//		b.put("/", StringUtils.compress("foo"))
-//			.contentEncoding("mycoding")
-//			.run()
-//			.assertBody().is("foo");
 	}
 }

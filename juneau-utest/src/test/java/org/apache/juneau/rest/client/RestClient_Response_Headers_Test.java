@@ -155,7 +155,7 @@ public class RestClient_Response_Headers_Test {
 	@Test
 	public void a05_toResponse() throws Exception {
 		RestResponse r = checkFooClient().build().get("/echo").header("Foo","123").run();
-		assertTrue(r == r.getHeader("Foo").response());
+		assertSame(r, r.getHeader("Foo").response());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

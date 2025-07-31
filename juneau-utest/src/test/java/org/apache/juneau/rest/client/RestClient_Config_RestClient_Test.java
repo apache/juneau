@@ -429,7 +429,7 @@ public class RestClient_Config_RestClient_Test {
 		@RestGet(path="/")
 		public Ok get(@Header(name="Foo") @Schema(cf="multi") ABean[] foo,org.apache.juneau.rest.RestRequest req,org.apache.juneau.rest.RestResponse res) throws Exception {
 			assertEquals(2,foo.length);
-			assertObject(req.getHeaders().getAll("Foo").stream().map(RequestHeader::getValue).collect(Collectors.toList())).asJson().is("['x{f:1}','x{f:1}']");
+			assertObject(req.getHeaders().getAll("Foo").stream().map(RequestHeader::getValue).toList()).asJson().is("['x{f:1}','x{f:1}']");
 			assertEquals("{f:1}",foo[0].toString());
 			assertEquals("{f:1}",foo[1].toString());
 			res.setHeader("Foo",bean);

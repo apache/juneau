@@ -79,7 +79,7 @@ public class PartBeanMeta_Test {
 	@Test
 	public void a01_basic() {
 		PartBeanMeta<A1> a1 = PartBeanMeta.of(A1.class);
-		assertTrue(a1 == PartBeanMeta.of(A1.class));
+		assertSame(a1, PartBeanMeta.of(A1.class));
 		assertObject(a1.construct("X", "foo")).isJson("{name:'X',value:'foo'}");
 		assertThrown(()->a1.construct("foo")).asMessage().isContains("Constructor for type "+TNAME+"$A1 requires a name as the first argument.");
 		assertString(a1.getSchema().getName()).isNull();

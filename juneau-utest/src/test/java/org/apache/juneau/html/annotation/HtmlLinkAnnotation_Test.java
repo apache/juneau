@@ -69,7 +69,7 @@ public class HtmlLinkAnnotation_Test {
 	public void b01_testEquivalencyInPropertyStores() {
 		BeanContext bc1 = BeanContext.create().annotations(a1).build();
 		BeanContext bc2 = BeanContext.create().annotations(a2).build();
-		assertTrue(bc1 == bc2);
+		assertSame(bc1, bc2);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -126,7 +126,7 @@ public class BeanAnnotation_Test {
 	public void b01_testEquivalencyInPropertyStores() {
 		BeanContext b1 = BeanContext.create().annotations(a1).build();
 		BeanContext b2 = BeanContext.create().annotations(a2).build();
-		assertTrue(b1 == b2);
+		assertSame(b1, b2);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

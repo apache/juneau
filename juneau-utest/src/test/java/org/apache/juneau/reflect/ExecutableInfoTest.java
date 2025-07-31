@@ -304,7 +304,6 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void getAnnotation() {
-//		check(null, c_c1.getAnnotation(CA.class));
 		check(null, c_c2.getAnnotation(CA.class));
 		check("@CA()", c_c3.getAnnotation(CA.class));
 		check(null, c_m1.getAnnotation(CA.class));

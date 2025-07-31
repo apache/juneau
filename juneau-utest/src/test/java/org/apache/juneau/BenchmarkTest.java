@@ -108,42 +108,6 @@ public class BenchmarkTest {
 		startTime = System.currentTimeMillis();
 		for (int i = 0; i < cap; i++) list_foreach.accept(LIST);
 		System.err.println("X3=" + (System.currentTimeMillis() - startTime));
-
-//
-//		startTime = System.currentTimeMillis();
-//		for (int i = 0; i < cap; i++) map_forEach1.accept(MAP);
-//		System.err.println("X1=" + (System.currentTimeMillis() - startTime));
-//
-//		startTime = System.currentTimeMillis();
-//		for (int i = 0; i < cap; i++) map_forEach2.accept(MAP);
-//		System.err.println("X2=" + (System.currentTimeMillis() - startTime));
-//
-//		startTime = System.currentTimeMillis();
-//		for (int i = 0; i < cap; i++) map_iterator1.accept(MAP);
-//		System.err.println("X3=" + (System.currentTimeMillis() - startTime));
-//
-//		startTime = System.currentTimeMillis();
-//		for (int i = 0; i < cap; i++) map_iterator2.accept(MAP);
-//		System.err.println("X4=" + (System.currentTimeMillis() - startTime));
-//
-//		startTime = System.currentTimeMillis();
-//		for (int i = 0; i < cap; i++) map_forEach1.accept(MAP);
-//		System.err.println("X1=" + (System.currentTimeMillis() - startTime));
-//
-//		startTime = System.currentTimeMillis();
-//		for (int i = 0; i < cap; i++) map_forEach2.accept(MAP);
-//		System.err.println("X2=" + (System.currentTimeMillis() - startTime));
-//
-//		startTime = System.currentTimeMillis();
-//		for (int i = 0; i < cap; i++) map_iterator1.accept(MAP);
-//		System.err.println("X3=" + (System.currentTimeMillis() - startTime));
-//
-//		startTime = System.currentTimeMillis();
-//		for (int i = 0; i < cap; i++) map_iterator2.accept(MAP);
-//		System.err.println("X4=" + (System.currentTimeMillis() - startTime));
-
-		startTime = System.currentTimeMillis();
-
 	}
 
 }

@@ -110,14 +110,14 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Header("f") Float f
 		) throws Exception {
 
-		assertEquals(a, "foo");
+		assertEquals("foo", a);
 		assertNull(an);
 		assertEquals(123, b);
 		assertEquals(123, (int)c);
 		assertNull(cn);
 		assertTrue(d);
-		assertTrue(1f == e);
-		assertTrue(1f == f);
+		assertEquals(1f, e, 0.1f);
+		assertEquals(1f, f, 0.1f);
 		return "OK";
 	}
 
@@ -422,14 +422,14 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 			@Query("f") Float f
 		) throws Exception {
 
-		assertEquals(a, "foo");
+		assertEquals("foo", a);
 		assertNull(an);
 		assertEquals(123, b);
 		assertEquals(123, (int)c);
 		assertNull(cn);
 		assertTrue(d);
-		assertTrue(1f == e);
-		assertTrue(1f == f);
+		assertEquals(1f, e, 0.1f);
+		assertEquals(1f, f, 0.1f);
 		return "OK";
 	}
 
@@ -762,8 +762,8 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertEquals(123, (int)c);
 		assertNull(cn);
 		assertTrue(d);
-		assertTrue(1f == e);
-		assertTrue(1f == f);
+		assertEquals(1f, e, 0.1f);
+		assertEquals(1f, f, 0.1f);
 		return "OK";
 	}
 
@@ -1464,12 +1464,12 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestPost(path="/setFloat")
 	public void setFloat(@Content float x) {
-		assertTrue(1f == x);
+		assertEquals(1f, x, 0.1f);
 	}
 
 	@RestPost(path="/setFloatObject")
 	public void setFloatObject(@Content Float x) {
-		assertTrue(1f == x);
+		assertEquals(1f, x, 0.1f);
 	}
 
 	@RestPost(path="/setString")

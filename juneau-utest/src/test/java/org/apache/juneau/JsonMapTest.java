@@ -262,7 +262,7 @@ public class JsonMapTest {
 		JsonMap m1 = JsonMap.ofJson("{ firstName:'John', lastName:'Smith', age:123, isDeceased:false }");
 		JsonMap m2 = JsonMap.ofJson("{ age:123, isDeceased:false, lastName:'Smith', firstName:'John' }");
 
-		assertTrue(m1.equals(m2));
+		assertEquals(m1, m2);
 	}
 
 	//====================================================================================================

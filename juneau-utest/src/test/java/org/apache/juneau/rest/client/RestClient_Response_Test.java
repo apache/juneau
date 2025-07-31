@@ -229,7 +229,7 @@ public class RestClient_Response_Test {
 		RestResponse x = client(D.class).build().post("/bean",bean).run();
 		HttpParams p = new BasicHttpParams();
 		x.setParams(p);
-		assertTrue(x.getParams() == p);
+		assertSame(x.getParams(), p);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

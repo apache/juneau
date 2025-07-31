@@ -51,13 +51,13 @@ public class JsonTest {
 		m.put("x", "[\"]");
 		assertEquals("{x:\"[\\\"]\"}", s2.serialize(m));
 		// String = [\"]
-		// JSON = {x:"\\\""}
+		// JSON = {x:"\\\""} - NOSONAR
 		m.clear();
 		m.put("x", "[\\\"]");
 		assertEquals("{x:\"[\\\\\\\"]\"}", s2.serialize(m));
 
 		// String = [\w[\w\-\.]{3,}\w]
-		// JSON = {x:"\\w[\\w\\-\\.]{3,}\\w"}
+		// JSON = {x:"\\w[\\w\\-\\.]{3,}\\w"} - NOSONAR
 		m.clear();
 		r = "\\w[\\w\\-\\.]{3,}\\w";
 		m.put("x", r);
@@ -65,7 +65,7 @@ public class JsonTest {
 		assertEquals(r, JsonMap.ofJson(s2.serialize(m)).getString("x"));
 
 		// String = [foo\bar]
-		// JSON = {x:"foo\\bar"}
+		// JSON = {x:"foo\\bar"} - NOSONAR
 		m.clear();
 		m.put("x", "foo\\bar");
 		assertEquals("{x:\"foo\\\\bar\"}", s2.serialize(m));
@@ -117,7 +117,7 @@ public class JsonTest {
 		// [\\]
 		r = "\\";
 		r2 = s.serialize(r);
-		assertEquals(r2, "\"\\\\\"");
+		assertEquals("\"\\\\\"", r2);
 		assertEquals(JsonParser.DEFAULT.parse(r2, Object.class), r);
 
 		// [\b\f\n\t]
@@ -128,7 +128,7 @@ public class JsonTest {
 
 		// Special JSON case:  Forward slashes can OPTIONALLY be escaped.
 		// [\/]
-		assertEquals(JsonParser.DEFAULT.parse("\"\\/\"", Object.class), "/");
+		assertEquals("/", JsonParser.DEFAULT.parse("\"\\/\"", Object.class));
 
 		// Unicode
 		r = "\u1234\u1ABC\u1abc";

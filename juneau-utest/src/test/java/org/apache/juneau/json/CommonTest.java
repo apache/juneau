@@ -170,7 +170,7 @@ public class CommonTest {
 		r = s.serialize(t);
 		assertEquals("{x1:{f1:1},x2:{f1:1},x3:[{f1:1}],x4:[{f1:1}],x5:[{f1:1}],x6:[{f1:1}]}", r);
 		r = s.getSchemaSerializer().serialize(t);
-		assertTrue(r.indexOf("f2") == -1);
+		assertEquals(r.indexOf("f2"), -1);
 	}
 
 	public static class E1 {

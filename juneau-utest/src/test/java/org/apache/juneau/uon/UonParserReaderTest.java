@@ -169,7 +169,7 @@ public class UonParserReaderTest {
 		i = r.read(buff, 0, buff.length);
 		assertEquals(-1, i);
 
-		// Reader that only returns 1 character at a time;
+		// Reader that only returns 1 character at a time
 		s = "x¢€𤭢x¢€𤭢";
 		in = "x" + escape("¢€𤭢") + "x" + escape("¢€𤭢");
 		r = new UonReader(new ParserPipe(new SlowStringReader(in)), true);

@@ -34,11 +34,11 @@ public class Tuple2_Test {
 	@Test
 	public void a02_equality() throws Exception {
 		Tuple2<String,Integer> x1 = Tuple2.of("foo",1), x2 = Tuple2.of("foo",1), x3 = Tuple2.of(null,1), x4 = Tuple2.of("foo",null);
-		assertTrue(x1.equals(x2));
+		assertEquals(x1, x2);
 		assertEquals(x1.hashCode(), x2.hashCode());
-		assertFalse(x1.equals(x3));
+		assertNotEquals(x1, x3);
 		assertNotEquals(x1.hashCode(), x3.hashCode());
-		assertFalse(x1.equals(x4));
+		assertNotEquals(x1, x4);
 		assertNotEquals(x1.hashCode(), x4.hashCode());
 	}
 }

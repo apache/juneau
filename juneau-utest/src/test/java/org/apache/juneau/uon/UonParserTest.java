@@ -137,12 +137,12 @@ public class UonParserTest {
 		// Empty 2 dimensional array
 		t = "@(@())";
 		l = (List)p.parse(t, Object.class);
-		assertTrue(l.size() == 1);
+		assertEquals(1, l.size());
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
 		t = " @( @( ) ) ";
 		l = p.parse(t, LinkedList.class, List.class);
-		assertTrue(l.size() == 1);
+		assertEquals(1, l.size());
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
 
@@ -150,11 +150,11 @@ public class UonParserTest {
 		// Top level
 		t = "@('')";
 		l = (List)p.parse(t, Object.class);
-		assertTrue(l.size() == 1);
+		assertEquals(1, l.size());
 		assertEquals("", l.get(0));
 		t = " @( '' ) ";
 		l = p.parse(t, List.class, String.class);
-		assertTrue(l.size() == 1);
+		assertEquals(1, l.size());
 		assertEquals("", l.get(0));
 
 		// 2nd level
@@ -168,13 +168,13 @@ public class UonParserTest {
 		// Array containing 3 empty strings
 		t = "@('','','')";
 		l = (List)p.parse(t, Object.class);
-		assertTrue(l.size() == 3);
+		assertEquals(l.size(), 3);
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
 		t = " @( '' , '' , '' ) ";
 		l = p.parse(t, List.class, Object.class);
-		assertTrue(l.size() == 3);
+		assertEquals(l.size(), 3);
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
@@ -190,14 +190,14 @@ public class UonParserTest {
 		// 2nd level
 		t = "('\u0000'='\u0000')";
 		m = (Map)p.parse(t, Object.class);
-		assertTrue(m.size() == 1);
+		assertEquals(1, m.size());
 		assertEquals("\u0000", m.get("\u0000"));
 		t = " ( '\u0000' = '\u0000' ) ";
 		m = p.parse(t, HashMap.class, String.class, String.class);
-		assertTrue(m.size() == 1);
+		assertEquals(1, m.size());
 		assertEquals("\u0000", m.get("\u0000"));
 		m = p.parse(t, HashMap.class, String.class, Object.class);
-		assertTrue(m.size() == 1);
+		assertEquals(1, m.size());
 		assertEquals("\u0000", m.get("\u0000"));
 
 		// Boolean
@@ -513,7 +513,7 @@ public class UonParserTest {
 	//====================================================================================================
 	@Test
 	public void testStreamsAutoClose() throws Exception {
-		ReaderParser p = UonParser.DEFAULT.copy().autoCloseStreams().build();
+		var p = UonParser.DEFAULT.copy().autoCloseStreams().build();
 		Object x;
 		Reader r;
 
@@ -529,7 +529,7 @@ public class UonParserTest {
 	//====================================================================================================
 	@Test
 	public void testMultipleObjectsInStream() throws Exception {
-		ReaderParser p = UonParser.create().unbuffered().build();
+		var p = UonParser.create().unbuffered().build();
 		Object x;
 		Reader r;
 

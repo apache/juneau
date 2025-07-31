@@ -28,7 +28,7 @@ public class VersionRangeTest {
 	@Parameterized.Parameters
 	public static Collection<Object[]> getPairs() {
 		return Arrays.asList(new Object[][] {
-			// {range, version, shouldMatch }
+			// {range, version, shouldMatch } - NOSONAR
 			/* 00 */ {"1.1", "1.1.3", true},
 			/* 01 */ {"1.1", "1.1", true},
 			/* 02 */ {"1.1", "1.1.0", true},

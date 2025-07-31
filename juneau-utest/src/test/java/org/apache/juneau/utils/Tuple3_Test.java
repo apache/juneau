@@ -35,13 +35,13 @@ public class Tuple3_Test {
 	@Test
 	public void a02_equality() throws Exception {
 		Tuple3<String,Integer,Integer> x1 = Tuple3.of("foo",1,2), x2 = Tuple3.of("foo",1,2), x3 = Tuple3.of(null,1,2), x4 = Tuple3.of("foo",null,2), x5 = Tuple3.of("foo",1,null);
-		assertTrue(x1.equals(x2));
+		assertEquals(x1, x2);
 		assertEquals(x1.hashCode(), x2.hashCode());
-		assertFalse(x1.equals(x3));
+		assertNotEquals(x1, x3);
 		assertNotEquals(x1.hashCode(), x3.hashCode());
-		assertFalse(x1.equals(x4));
+		assertNotEquals(x1, x4);
 		assertNotEquals(x1.hashCode(), x4.hashCode());
-		assertFalse(x1.equals(x5));
+		assertNotEquals(x1, x5);
 		assertNotEquals(x1.hashCode(), x5.hashCode());
 	}
 }

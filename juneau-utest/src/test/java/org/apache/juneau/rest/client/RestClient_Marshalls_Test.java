@@ -37,7 +37,7 @@ public class RestClient_Marshalls_Test {
 		}
 
 		public void check() {
-			assertEquals(f,1);
+			assertEquals(1, f);
 		}
 
 		@Override

@@ -22,7 +22,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings("rawtypes")
 @FixMethodOrder(NAME_ASCENDING)
 public class DataConversionTest {
 
@@ -45,12 +45,12 @@ public class DataConversionTest {
 
 		// *** Number ***
 		m.put("x", 123);
-		assertEquals((int)m.getInt("x"), 123);
-		assertEquals((long)m.getLong("x"), 123);
+		assertEquals(123, (int)m.getInt("x"));
+		assertEquals(123, (long)m.getLong("x"));
 
 		// *** Boolean ***
 		m.put("x", true);
-		assertEquals((boolean)m.getBoolean("x"), true);
+		assertEquals(true, (boolean)m.getBoolean("x"));
 
 		// *** Null ***
 		m.put("x", null);
@@ -63,37 +63,37 @@ public class DataConversionTest {
 
 		// *** Map ***
 		m.put("x", new HashMap());
-		assertEquals(m.getString("x"), "{}");
+		assertEquals("{}", m.getString("x"));
 
 		// *** JsonMap ***
 		m.put("x", JsonMap.ofJson("{foo:123}"));
-		assertEquals(m.getString("x"), "{foo:123}");
+		assertEquals("{foo:123}", m.getString("x"));
 
 		// *** Collection ***
 		Set s = new HashSet();
 		s.add(123);
 		m.put("x", s);
-		assertEquals(m.getString("x"), "[123]");
+		assertEquals("[123]", m.getString("x"));
 
 		// *** JsonList ***
 		m.put("x", JsonList.ofJson("[123]"));
-		assertEquals(m.getString("x"), "[123]");
-		assertEquals(m.getList("x").size(), 1);
+		assertEquals("[123]", m.getString("x"));
+		assertEquals(1, m.getList("x").size());
 
 		// *** Array ***
 		m.put("x", new Integer[]{123});
-		assertEquals(m.getString("x"), "[123]");
-		assertEquals(m.getList("x").size(), 1);
+		assertEquals("[123]", m.getString("x"));
+		assertEquals(1, m.getList("x").size());
 
 		// *** Enum ***
 		m.put("x", TestEnum.ENUM2);
-		assertEquals(m.getString("x"), "ENUM2");
+		assertEquals("ENUM2", m.getString("x"));
 		assertFalse(m.getBoolean("x"));
 		assertThrown(()->m.getMap("x")).isType(InvalidDataConversionException.class);
 
 		// *** Not a bean ***
 		m.put("x", new NotABean("foo"));
-		assertEquals(m.getString("x"), "foo");
+		assertEquals("foo", m.getString("x"));
 		assertThrown(()->m.getInt("x")).isType(InvalidDataConversionException.class);
 		assertThrown(()->m.getLong("x")).isType(InvalidDataConversionException.class);
 		assertFalse(m.getBoolean("x"));

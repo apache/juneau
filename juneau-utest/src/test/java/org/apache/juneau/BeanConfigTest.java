@@ -277,7 +277,7 @@ public class BeanConfigTest {
 	}
 
 	//====================================================================================================
-	// Exhaustive test of BeanContext.convertToType();
+	// Exhaustive test of BeanContext.convertToType()
 	//====================================================================================================
 	@Test
 	public void testBeanContextConvertToType() throws Exception {
@@ -592,7 +592,7 @@ public class BeanConfigTest {
 		B2 t = new B2().init();
 		BeanMap m = BeanContext.DEFAULT.toBeanMap(t);
 		m.put("f1", 2);
-		assertEquals(t.f1, 2);
+		assertEquals(2, t.f1);
 	}
 
 	public static class B {
@@ -821,10 +821,10 @@ public class BeanConfigTest {
 			bm.add("f4", i);
 		}
 		D d = bm.getBean();
-		assertEquals(d.f1.length, 5000);
-		assertEquals(d.f2.length, 5000);
-		assertEquals(d.f3.length, 5003);
-		assertEquals(d.f4.length, 5003);
+		assertEquals(5000, d.f1.length);
+		assertEquals(5000, d.f2.length);
+		assertEquals(5003, d.f3.length);
+		assertEquals(5003, d.f4.length);
 	}
 
 	public class D {

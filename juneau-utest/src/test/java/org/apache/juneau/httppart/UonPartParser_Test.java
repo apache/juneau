@@ -91,12 +91,12 @@ public class UonPartParser_Test {
 		// Empty 2 dimensional array
 		t = "@(@())";
 		l = (List)parse(t, bs.object());
-		assertTrue(l.size() == 1);
+		assertEquals(l.size(), 1);
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
 		t = "@(@())";
 		l = (List)parse(t, bs.getClassMeta(LinkedList.class, List.class));
-		assertTrue(l.size() == 1);
+		assertEquals(l.size(), 1);
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
 
@@ -104,23 +104,23 @@ public class UonPartParser_Test {
 		// Top level
 		t = "@('')";
 		l = (List)parse(t, bs.object());
-		assertTrue(l.size() == 1);
+		assertEquals(l.size(), 1);
 		assertEquals("", l.get(0));
 		t = "@('')";
 		l = (List)parse(t, bs.getClassMeta(List.class, String.class));
-		assertTrue(l.size() == 1);
+		assertEquals(l.size(), 1);
 		assertEquals("", l.get(0));
 
 		// Array containing 3 empty strings
 		t = "@('','','')";
 		l = (List)parse(t, bs.object());
-		assertTrue(l.size() == 3);
+		assertEquals(l.size(), 3);
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
 		t = "@('','','')";
 		l = (List)parse(t, bs.getClassMeta(List.class, Object.class));
-		assertTrue(l.size() == 3);
+		assertEquals(l.size(), 3);
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));

@@ -828,7 +828,7 @@ public class StringUtilsTest {
 		assertTrue(compare("b","a") > 0);
 		assertTrue(compare(null,"b") < 0);
 		assertTrue(compare("b",null) > 0);
-		assertTrue(compare(null,null) == 0);
+		assertEquals(0, compare(null,null));
 	}
 
 	//====================================================================================================

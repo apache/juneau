@@ -113,12 +113,12 @@ public class UrlEncodingParserTest {
 		// Empty 2 dimensional array
 		t = "_value=@(@())";
 		l = (List)p.parse(t, Object.class);
-		assertTrue(l.size() == 1);
+		assertEquals(1, l.size());
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
 		t = "0=@()";
 		l = p.parse(t, LinkedList.class, List.class);
-		assertTrue(l.size() == 1);
+		assertEquals(l.size(), 1);
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
 
@@ -126,11 +126,11 @@ public class UrlEncodingParserTest {
 		// Top level
 		t = "_value=@('')";
 		l = (List)p.parse(t, Object.class);
-		assertTrue(l.size() == 1);
+		assertEquals(1, l.size());
 		assertEquals("", l.get(0));
 		t = "0=''";
 		l = p.parse(t, List.class, String.class);
-		assertTrue(l.size() == 1);
+		assertEquals(1, l.size());
 		assertEquals("", l.get(0));
 
 		// 2nd level
@@ -144,13 +144,13 @@ public class UrlEncodingParserTest {
 		// Array containing 3 empty strings
 		t = "_value=@('','','')";
 		l = (List)p.parse(t, Object.class);
-		assertTrue(l.size() == 3);
+		assertEquals(3, l.size());
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
 		t = "0=''&1=''&2=''";
 		l = p.parse(t, List.class, Object.class);
-		assertTrue(l.size() == 3);
+		assertEquals(3, l.size());
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
@@ -166,10 +166,10 @@ public class UrlEncodingParserTest {
 		// 2nd level
 		t = "?'\u0000'='\u0000'";
 		m = (Map)p.parse(t, Object.class);
-		assertTrue(m.size() == 1);
+		assertEquals(m.size(), 1);
 		assertEquals("\u0000", m.get("\u0000"));
 		m = p.parse(t, HashMap.class, String.class, Object.class);
-		assertTrue(m.size() == 1);
+		assertEquals(1, m.size());
 		assertEquals("\u0000", m.get("\u0000"));
 
 		// Boolean
@@ -413,7 +413,7 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	@Test
 	public void testSimpleBean() throws Exception {
-		UrlEncodingParser p = UrlEncodingParser.DEFAULT;
+		var p = UrlEncodingParser.DEFAULT;
 		A t;
 
 		String s = "?f1=foo&f2=123";
@@ -432,7 +432,7 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	@Test
 	public void testNoValues() throws Exception {
-		UrlEncodingParser p = UrlEncodingParser.DEFAULT;
+		var p = UrlEncodingParser.DEFAULT;
 		JsonMap m;
 
 		String s = "?f1";
@@ -451,7 +451,7 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	@Test
 	public void testCommaDelimitedLists() throws Exception {
-		UrlEncodingParser p = UrlEncodingParser.DEFAULT;
+		var p = UrlEncodingParser.DEFAULT;
 
 		String s = "?f1=1,2,3&f2=a,b,c&f3=true,false&f4=&f5";
 		C c = p.parse(s, C.class);
@@ -471,7 +471,7 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	@Test
 	public void testCommaDelimitedListsWithSpecialChars() throws Exception {
-		UrlEncodingParser p = UrlEncodingParser.DEFAULT;
+		var p = UrlEncodingParser.DEFAULT;
 		String s;
 		C1 c;
 

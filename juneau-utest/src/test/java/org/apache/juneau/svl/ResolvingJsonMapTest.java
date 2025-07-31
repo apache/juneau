@@ -32,7 +32,7 @@ public class ResolvingJsonMapTest {
 		JsonMap m = new ResolvingJsonMap(vr.createSession());
 
 		m.put("foo", "$X{a}");
-		assertEquals(m.get("foo"), "1");
+		assertEquals("1", m.get("foo"));
 
 		m.put("foo", new String[]{"$X{a}"});
 		assertObject(m.get("foo")).asJson().is("['1']");
@@ -109,7 +109,7 @@ public class ResolvingJsonMapTest {
 		m2.inner(m3);
 
 		m3.put("foo", "$X{a}");
-		assertEquals(m.get("foo"), "1");
+		assertEquals("1", m.get("foo"));
 
 		m3.put("foo", new String[]{"$X{a}"});
 		assertObject(m.get("foo")).asJson().is("['1']");

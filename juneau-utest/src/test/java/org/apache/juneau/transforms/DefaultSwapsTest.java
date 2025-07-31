@@ -68,7 +68,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(Enumeration.class, new EnumerationSwap());
+	//	POJO_SWAPS.put(Enumeration.class, new EnumerationSwap())
 	//------------------------------------------------------------------------------------------------------------------
 	private static Vector<String> A = new Vector<>();
 	static {
@@ -144,7 +144,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(Iterator.class, new IteratorSwap());
+	//	POJO_SWAPS.put(Iterator.class, new IteratorSwap())
 	//------------------------------------------------------------------------------------------------------------------
 	private static List<String> B = list("foo","bar");
 
@@ -211,7 +211,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(Locale.class, new LocaleSwap());
+	//	POJO_SWAPS.put(Locale.class, new LocaleSwap())
 	//------------------------------------------------------------------------------------------------------------------
 	private static Locale C = Locale.JAPAN;
 
@@ -244,7 +244,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(Calendar.class, new TemporalCalendarSwap.IsoOffsetDateTime());
+	//	POJO_SWAPS.put(Calendar.class, new TemporalCalendarSwap.IsoOffsetDateTime())
 	//------------------------------------------------------------------------------------------------------------------
 	private static GregorianCalendar D = GregorianCalendar.from(ZonedDateTime.from(DateTimeFormatter.ISO_ZONED_DATE_TIME.parse("2012-12-21T12:34:56Z")));
 
@@ -277,7 +277,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(Date.class, new TemporalDateSwap.IsoLocalDateTime());
+	//	POJO_SWAPS.put(Date.class, new TemporalDateSwap.IsoLocalDateTime())
 	//------------------------------------------------------------------------------------------------------------------
 	private static Date E = Date.from(Instant.from(DateTimeFormatter.ISO_INSTANT.parse("2012-12-21T12:34:56Z")));
 
@@ -310,7 +310,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(Instant.class, new TemporalSwap.IsoInstant());
+	//	POJO_SWAPS.put(Instant.class, new TemporalSwap.IsoInstant())
 	//------------------------------------------------------------------------------------------------------------------
 	private static Instant FA = Instant.parse("2012-12-21T12:34:56Z");
 
@@ -343,7 +343,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(ZonedDateTime.class, new TemporalSwap.IsoOffsetDateTime());
+	//	POJO_SWAPS.put(ZonedDateTime.class, new TemporalSwap.IsoOffsetDateTime())
 	//------------------------------------------------------------------------------------------------------------------
 	private static ZonedDateTime FB = ZonedDateTime.parse("2012-12-21T12:34:56Z");
 
@@ -376,7 +376,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(LocalDate.class, new TemporalSwap.IsoLocalDate());
+	//	POJO_SWAPS.put(LocalDate.class, new TemporalSwap.IsoLocalDate())
 	//------------------------------------------------------------------------------------------------------------------
 	private static LocalDate FC = LocalDate.parse("2012-12-21");
 
@@ -409,7 +409,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(LocalDateTime.class, new TemporalSwap.IsoLocalDateTime());
+	//	POJO_SWAPS.put(LocalDateTime.class, new TemporalSwap.IsoLocalDateTime())
 	//------------------------------------------------------------------------------------------------------------------
 	private static LocalDateTime FD = LocalDateTime.parse("2012-12-21T12:34:56");
 
@@ -442,7 +442,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(LocalTime.class, new TemporalSwap.IsoLocalTime());
+	//	POJO_SWAPS.put(LocalTime.class, new TemporalSwap.IsoLocalTime())
 	//------------------------------------------------------------------------------------------------------------------
 	private static LocalTime FE = LocalTime.parse("12:34:56");
 
@@ -475,7 +475,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(OffsetDateTime.class, new TemporalSwap.IsoOffsetDateTime());
+	//	POJO_SWAPS.put(OffsetDateTime.class, new TemporalSwap.IsoOffsetDateTime())
 	//------------------------------------------------------------------------------------------------------------------
 	private static OffsetDateTime FF = OffsetDateTime.parse("2012-12-21T12:34:56-05:00");
 
@@ -508,7 +508,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(OffsetTime.class, new TemporalSwap.IsoOffsetTime());
+	//	POJO_SWAPS.put(OffsetTime.class, new TemporalSwap.IsoOffsetTime())
 	//------------------------------------------------------------------------------------------------------------------
 	private static OffsetTime FG = OffsetTime.parse("12:34:56-05:00");
 
@@ -541,7 +541,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(Year.class, new TemporalSwap.IsoYear());
+	//	POJO_SWAPS.put(Year.class, new TemporalSwap.IsoYear())
 	//------------------------------------------------------------------------------------------------------------------
 	private static Year FH = Year.parse("2012");
 
@@ -574,7 +574,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(YearMonth.class, new TemporalSwap.IsoYearMonth());
+	//	POJO_SWAPS.put(YearMonth.class, new TemporalSwap.IsoYearMonth())
 	//------------------------------------------------------------------------------------------------------------------
 	private static YearMonth FI = YearMonth.parse("2012-12");
 
@@ -607,7 +607,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(Temporal.class, new TemporalSwap.IsoInstant());
+	//	POJO_SWAPS.put(Temporal.class, new TemporalSwap.IsoInstant())
 	//------------------------------------------------------------------------------------------------------------------
 	private static Temporal FJ = HijrahDate.from(FB);
 
@@ -640,7 +640,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(TimeZone.class, new TimeZoneSwap());
+	//	POJO_SWAPS.put(TimeZone.class, new TimeZoneSwap())
 	//------------------------------------------------------------------------------------------------------------------
 	private static TimeZone G = TimeZone.getTimeZone("Z");
 
@@ -673,7 +673,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(XMLGregorianCalendar.class, new XMLGregorianCalendarSwap());
+	//	POJO_SWAPS.put(XMLGregorianCalendar.class, new XMLGregorianCalendarSwap())
 	//------------------------------------------------------------------------------------------------------------------
 	private static XMLGregorianCalendar H;
 	static {
@@ -713,7 +713,7 @@ public class DefaultSwapsTest {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(ZoneId.class, new ZoneIdSwap());
+	//	POJO_SWAPS.put(ZoneId.class, new ZoneIdSwap())
 	//------------------------------------------------------------------------------------------------------------------
 	private static ZoneId I = ZoneId.of("Z");
 

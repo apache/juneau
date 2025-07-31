@@ -37,9 +37,9 @@ public class ContextPropertiesTest {
 			s2 = HtmlSerializer.create().applyAnnotations(B1Config.class),
 			s3 = HtmlSerializer.create().applyAnnotations(B1Config.class),
 			s4 = HtmlSerializer.create().applyAnnotations(B2Config.class);
-		assertFalse(s1.hashKey().equals(s2.hashKey()));
-		assertFalse(s1.hashKey().equals(s4.hashKey()));
-		assertTrue(s2.hashKey().equals(s3.hashKey()));
+		assertNotEquals(s1.hashKey(), s2.hashKey());
+		assertNotEquals(s1.hashKey(), s4.hashKey());
+		assertEquals(s2.hashKey(), s3.hashKey());
 	}
 
 	@Html(on="B1", format=HtmlFormat.XML)

@@ -210,7 +210,7 @@ public class Remote_ContentAnnotation_Test {
 		}
 
 		@RestPost
-		public Object x9(@Content Reader b, @Header("Content-Type") String ct) {
+		public Object x9(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR
 			assertEquals("text/plain",ct);
 			return b;
 		}
@@ -262,42 +262,42 @@ public class Remote_ContentAnnotation_Test {
 			return b;
 		}
 		@RestPost
-		public Reader x2(@Content Reader b, @Header("Content-Type") String ct) {
+		public Reader x2(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x3(@Content Reader b, @Header("Content-Type") String ct) {
+		public Reader x3(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x5(@Content Reader b, @Header("Content-Type") String ct) {
+		public Reader x5(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x6(@Content Reader b, @Header("Content-Type") String ct) {
+		public Reader x6(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x7(@Content Reader b, @Header("Content-Type") String ct) {
+		public Reader x7(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x8(@Content Reader b, @Header("Content-Type") String ct) {
+		public Reader x8(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x9(@Content Reader b, @Header("Content-Type") String ct) {
+		public Reader x9(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x10(@Content Reader b, @Header("Content-Type") String ct) {
+		public Reader x10(@Content Reader b, @Header("Content-Type") String ct) {  // NOSONAR
 			assertEquals("text/foo",ct);
 			return b;
 		}

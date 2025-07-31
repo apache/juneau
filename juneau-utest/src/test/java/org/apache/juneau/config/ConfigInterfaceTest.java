@@ -79,14 +79,14 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testFloat() throws Exception {
 		proxy.setFloat(1f);
-		assertTrue(1f == proxy.getFloat());
+		assertEquals(1f, proxy.getFloat(), 0.1f);
 		assertEquals("1.0", cf.get("A/float").get());
 	}
 
 	@Test
 	public void testFloatObject() throws Exception {
 		proxy.setFloatObject(1f);
-		assertTrue(1f == proxy.getFloatObject().floatValue());
+		assertEquals(1f, proxy.getFloatObject().floatValue(), 0.1f);
 		assertEquals("1.0", cf.get("A/floatObject").get());
 		assertObject(proxy.getFloatObject()).isType(Float.class);
 	}

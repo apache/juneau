@@ -173,20 +173,10 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		t.fCalendar.setTimeZone(TimeZone.getTimeZone("GMT"));
 		assertEquals(2001, t.fCalendar.get(Calendar.YEAR));
 		assertEquals(01, t.fCalendar.get(Calendar.MONTH));
-		// Note: We lose precision on the following because of the transform type.
-		//assertEquals(02, b.fCalendar.get(Calendar.DATE));
-		//assertEquals(03, b.fCalendar.get(Calendar.HOUR));
-		//assertEquals(04, b.fCalendar.get(Calendar.MINUTE));
-		//assertEquals(05, b.fCalendar.get(Calendar.SECOND));
 
 		t.faCalendar[0].setTimeZone(TimeZone.getTimeZone("GMT"));
 		assertEquals(2001, t.faCalendar[0].get(Calendar.YEAR));
 		assertEquals(01, t.faCalendar[0].get(Calendar.MONTH));
-		// Note: We lose precision on the following because of the transform type.
-		//assertEquals(02, b.faCalendar[0].get(Calendar.DATE));
-		//assertEquals(03, b.faCalendar[0].get(Calendar.HOUR));
-		//assertEquals(04, b.faCalendar[0].get(Calendar.MINUTE));
-		//assertEquals(05, b.faCalendar[0].get(Calendar.SECOND));
 		assertNull(t.fnCalendar);
 		assertNull(t.fn2Calendar);
 

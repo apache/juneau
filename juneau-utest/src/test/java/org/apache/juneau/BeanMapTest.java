@@ -627,10 +627,6 @@ public class BeanMapTest {
 		G1 t6 = new G1();
 		BeanMap m = bc.toBeanMap(t6);
 
-		// Expect exception on unsettable field
-		// TODO - Fix me.
-		//assertThrown(()->m.put("l1", "[{a:'a',i:1}]")).exists();
-
 		m.put("l2", "[{a:'a',i:1}]");
 		assertEquals("java.util.LinkedList", m.get("l2").getClass().getName());
 		assertEquals("org.apache.juneau.BeanMapTest$G", ((List)m.get("l2")).get(0).getClass().getName());
@@ -642,10 +638,6 @@ public class BeanMapTest {
 		m.put("l4", "[{a:'a',i:1}]");
 		assertEquals("java.util.LinkedList", m.get("l4").getClass().getName());
 		assertEquals("org.apache.juneau.BeanMapTest$G", ((List)m.get("l4")).get(0).getClass().getName());
-
-		// Expect exception on unsettable field
-		// TODO - Fix me.
-		//assertThrown(()->m.put("m1", "[{a:'a',i:1}]")).exists();
 
 		m.put("m2", "[{a:'a',i:1}]");
 		assertEquals("java.util.LinkedList", m.get("m2").getClass().getName());

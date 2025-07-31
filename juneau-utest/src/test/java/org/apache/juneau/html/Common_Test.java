@@ -266,7 +266,7 @@ public class Common_Test {
 			+"</table>",
 		r);
 		r = s.getSchemaSerializer().serialize(new E1());
-		assertTrue(r.indexOf("f2") == -1);
+		assertEquals(r.indexOf("f2"), -1);
 	}
 
 	public static class E1 {

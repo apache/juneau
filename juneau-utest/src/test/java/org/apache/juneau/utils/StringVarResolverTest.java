@@ -79,11 +79,6 @@ public class StringVarResolverTest {
 
 		t = "x$Y{y}";
 		assertEquals("x$Y{y}", vr.resolve(t));
-
-		// Incomplete vars
-		// TODO - fix
-//		t = "x$Y{y";
-//		assertEquals("x$Y{y", vr.resolve(t));
 	}
 
 	public static class XVar extends SimpleVar {
@@ -142,10 +137,6 @@ public class StringVarResolverTest {
 
 		t = "foo\\${y}foo";
 		assertEquals("foo${y}foo", vr.resolve(t));
-
-		// TODO - This doesn't work.
-		//t = "${\\${y}}";
-		//assertEquals("x${y}x", vr.resolve(t));
 	}
 
 	//====================================================================================================

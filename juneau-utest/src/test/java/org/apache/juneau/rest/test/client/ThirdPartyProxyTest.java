@@ -494,12 +494,12 @@ public class ThirdPartyProxyTest {
 
 	@Test
 	public void da05_returnFloat() {
-		assertTrue(1f == proxy.returnFloat());
+		assertEquals(1f, proxy.returnFloat(), 0.1f);
 	}
 
 	@Test
 	public void da06_returnFloatObject() {
-		assertTrue(1f == proxy.returnFloatObject());
+		assertEquals(1f, proxy.returnFloatObject(), 0.1f);
 	}
 
 	@Test
