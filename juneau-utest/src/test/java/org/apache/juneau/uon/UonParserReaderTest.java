@@ -214,8 +214,6 @@ public class UonParserReaderTest {
 		}
 
 		@Override /* Reader */
-		public void close() throws IOException {
-		}
-
+		public void close() throws IOException { /* no-op */ }
 	}
 }

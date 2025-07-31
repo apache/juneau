@@ -31,7 +31,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
-@SuppressWarnings({"unchecked","rawtypes","serial"})
+@SuppressWarnings({"rawtypes","serial"})
 @FixMethodOrder(NAME_ASCENDING)
 public class BeanMapTest {
 
@@ -1653,7 +1653,7 @@ public class BeanMapTest {
 		assertEquals("1", l[0]);
 
 		l2 = m.cast(bc.getClassMeta(StringBuffer[].class));
-		assertEquals("1", l[0].toString());
+		assertEquals("1", l[0]);
 	}
 
 	//====================================================================================================
@@ -1817,8 +1817,7 @@ public class BeanMapTest {
 		}
 
 		@BeanIgnore
-		public void setD(String d) {
-		}
+		public void setD(String d) {}  // NOSONAR
 	}
 
 	@Test
@@ -1875,8 +1874,7 @@ public class BeanMapTest {
 		}
 
 		@BeanIgnore
-		public void setD(String d) {
-		}
+		public void setD(String d) {}  // NOSONAR
 	}
 
 	//====================================================================================================

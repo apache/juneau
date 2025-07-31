@@ -360,7 +360,7 @@ public class JsonParserEdgeCasesTest {
 	private final char expected;
 	public boolean debug;
 
-	public JsonParserEdgeCasesTest(Integer testNum, String name, String json, String errorText) throws Exception {
+	public JsonParserEdgeCasesTest(Integer testNum, String name, String json, String errorText) {
 		this.name = name;
 		this.json = name.charAt(1) == 'x' ? fromSpacedHex(json) : json;
 		this.jsonReadable = name.charAt(1) == 'x' ? fromSpacedHexToUTF8(json) : json;

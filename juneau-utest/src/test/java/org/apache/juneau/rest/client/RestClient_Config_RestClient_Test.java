@@ -22,8 +22,6 @@ import static org.junit.runners.MethodSorters.*;
 import java.io.*;
 import java.util.concurrent.*;
 import java.util.logging.*;
-import java.util.stream.*;
-
 import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.impl.client.*;
@@ -170,24 +168,20 @@ public class RestClient_Config_RestClient_Test {
 
 	public static class A5b extends BasicRestCallInterceptor {
 		@Override
-		public void onInit(RestRequest req) throws Exception {
-		}
+		public void onInit(RestRequest req) throws Exception {}  // NOSONAR
 		@Override
 		public void onConnect(RestRequest req, RestResponse res) throws Exception {
 			throw new RuntimeException("foo");
 		}
 		@Override
-		public void onClose(RestRequest req, RestResponse res) throws Exception {
-		}
+		public void onClose(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR
 	}
 
 	public static class A5c extends BasicRestCallInterceptor {
 		@Override
-		public void onInit(RestRequest req) throws Exception {
-		}
+		public void onInit(RestRequest req) throws Exception {}  // NOSONAR
 		@Override
-		public void onConnect(RestRequest req, RestResponse res) throws Exception {
-		}
+		public void onConnect(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR
 		@Override
 		public void onClose(RestRequest req, RestResponse res) throws Exception {
 			throw new RuntimeException("foo");
@@ -203,24 +197,20 @@ public class RestClient_Config_RestClient_Test {
 
 	public static class A5e extends BasicRestCallInterceptor {
 		@Override
-		public void onInit(RestRequest req) throws Exception {
-		}
+		public void onInit(RestRequest req) throws Exception {}  // NOSONAR
 		@Override
 		public void onConnect(RestRequest req, RestResponse res) throws Exception {
 			throw new RestCallException(null,null,"foo");
 		}
 		@Override
-		public void onClose(RestRequest req, RestResponse res) throws Exception {
-		}
+		public void onClose(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR
 	}
 
 	public static class A5f extends BasicRestCallInterceptor {
 		@Override
-		public void onInit(RestRequest req) throws Exception {
-		}
+		public void onInit(RestRequest req) throws Exception {}  // NOSONAR
 		@Override
-		public void onConnect(RestRequest req, RestResponse res) throws Exception {
-		}
+		public void onConnect(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR
 		@Override
 		public void onClose(RestRequest req, RestResponse res) throws Exception {
 			throw new RestCallException(null,null,"foo");
@@ -236,24 +226,20 @@ public class RestClient_Config_RestClient_Test {
 
 	public static class A5h extends BasicRestCallInterceptor {
 		@Override
-		public void onInit(RestRequest req) throws Exception {
-		}
+		public void onInit(RestRequest req) throws Exception {}  // NOSONAR
 		@Override
 		public void onConnect(RestRequest req, RestResponse res) throws Exception {
 			throw new IOException("foo");
 		}
 		@Override
-		public void onClose(RestRequest req, RestResponse res) throws Exception {
-		}
+		public void onClose(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR
 	}
 
 	public static class A5i extends BasicRestCallInterceptor {
 		@Override
-		public void onInit(RestRequest req) throws Exception {
-		}
+		public void onInit(RestRequest req) throws Exception {}  // NOSONAR
 		@Override
-		public void onConnect(RestRequest req, RestResponse res) throws Exception {
-		}
+		public void onConnect(RestRequest req, RestResponse res) throws Exception {}  // NOSONAR
 		@Override
 		public void onClose(RestRequest req, RestResponse res) throws Exception {
 			throw new IOException("foo");
@@ -386,7 +372,6 @@ public class RestClient_Config_RestClient_Test {
 
 	@Test
 	public void a11_serializers_parsers() throws Exception {
-		@SuppressWarnings("unchecked")
 		final RestClient x = MockRestClient.create(A.class).serializers(XmlSerializer.class,JsonSerializer.class).parsers(XmlParser.class,JsonParser.class).build();
 
 		assertThrown(()->x.post("/echoBody",bean).run()).asMessage().is("Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");

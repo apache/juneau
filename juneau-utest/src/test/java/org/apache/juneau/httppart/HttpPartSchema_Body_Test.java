@@ -56,7 +56,7 @@ public class HttpPartSchema_Body_Test {
 	}
 
 	public static class A03 {
-		public void a(
+		public void a(  // NOSONAR
 				@Content
 				@Schema(
 					d={"b1","b2"},
@@ -77,7 +77,7 @@ public class HttpPartSchema_Body_Test {
 	}
 
 	public static class A04 {
-		public void a(
+		public void a(  // NOSONAR
 				@Content
 				@Schema(
 					d={"b3","b3"},

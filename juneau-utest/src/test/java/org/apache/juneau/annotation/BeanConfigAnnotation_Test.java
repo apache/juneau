@@ -71,7 +71,7 @@ public class BeanConfigAnnotation_Test {
 			if (t instanceof ClassInfo)
 				return ((ClassInfo)t).getSimpleName();
 			if (t instanceof PropertyNamer)
-				return ((PropertyNamer)t).getClass().getSimpleName();
+				return t.getClass().getSimpleName();
 			if (t instanceof TimeZone)
 				return ((TimeZone)t).getID();
 			return t.toString();

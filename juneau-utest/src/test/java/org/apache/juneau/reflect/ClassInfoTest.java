@@ -67,8 +67,7 @@ public class ClassInfoTest {
 			super(AConfig.class, Context.Builder.class, vr);
 		}
 		@Override
-		public void apply(AnnotationInfo<AConfig> a, Context.Builder b) {
-		}
+		public void apply(AnnotationInfo<AConfig> a, Context.Builder b) {}  // NOSONAR
 	}
 
 	private static void check(String expected, Object o) {
@@ -297,27 +296,27 @@ public class ClassInfoTest {
 	}
 	interface CI3 {}
 	interface CI4 {}
-	static abstract class CC1 implements CI1, CI2 {
+	abstract static class CC1 implements CI1, CI2 {
 		@Override
 		public void i1a() {}
 		protected void c1b() {}
 		public void c1a() {}
 	}
 	static class CC2 extends CC1 implements CI3 {
-		public void c2b() {}
+		public void c2b() {}  // NOSONAR
 		@Override
-		public void i1b() {}
+		public void i1b() {}  // NOSONAR
 		@Override
-		public void i2b() {}
+		public void i2b() {}  // NOSONAR
 		@Override
-		public void i2a() {}
-		protected void c2a() {}
+		public void i2a() {}  // NOSONAR
+		protected void c2a() {}  // NOSONAR
 	}
 	static class CC3 extends CC2 {
 		@Override
-		public void i2b() {}
-		public void c3a() {}
-		protected void c3b() {}
+		public void i2b() {}  // NOSONAR
+		public void c3a() {}  // NOSONAR
+		protected void c3b() {}  // NOSONAR
 	}
 	static ClassInfo cc3 = of(CC3.class), ci2 = of(CI2.class);
 
@@ -1814,7 +1813,7 @@ public class ClassInfoTest {
 	public static class MA extends HashMap<String,Integer> {}
 	@SuppressWarnings("serial")
 	public static class MB extends MA {}
-	@SuppressWarnings({ "serial", "hiding" })
+	@SuppressWarnings("serial")
 	public static class MC<K,E> extends HashMap<K,E> {}
 	@SuppressWarnings("serial")
 	public static class MD extends MC<String,Integer> {}

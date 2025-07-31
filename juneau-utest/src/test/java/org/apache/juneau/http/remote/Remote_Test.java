@@ -64,7 +64,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void a01_noPath() throws Exception {
+	public void a01_noPath() {
 		A1 x = plainRemote(A.class,A1.class);
 		assertEquals("foo",x.x1());
 		assertEquals("foo",x.x1a());
@@ -79,7 +79,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void a02_normalPath() throws Exception {
+	public void a02_normalPath() {
 		A2 x = plainRemote(A.class,A2.class);
 		assertEquals("foo",x.x2());
 		assertEquals("foo",x.x2a());
@@ -94,7 +94,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void a03_normalPathWithSlashes() throws Exception {
+	public void a03_normalPathWithSlashes() {
 		A3 x = plainRemote(A.class,A3.class);
 		assertEquals("foo",x.x2());
 		assertEquals("foo",x.x2a());
@@ -109,7 +109,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void a04_pathOnClient() throws Exception {
+	public void a04_pathOnClient() {
 		A4 x = plainRemote(A.class,A4.class,"http://localhost/A");
 		assertEquals("foo",x.x2());
 		assertEquals("foo",x.x2a());
@@ -124,7 +124,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void a05_normalPath() throws Exception {
+	public void a05_normalPath() {
 		A5 x = plainRemote(A.class,A5.class);
 		assertEquals("foo",x.x3());
 		assertEquals("foo",x.x3a());
@@ -139,7 +139,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void a06_normalPathWithSlashes() throws Exception {
+	public void a06_normalPathWithSlashes() {
 		A6 x = plainRemote(A.class,A6.class);
 		assertEquals("foo",x.x3());
 		assertEquals("foo",x.x3a());
@@ -154,7 +154,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void a07_partialPath() throws Exception {
+	public void a07_partialPath() {
 		A7 x = plainRemote(A.class,A7.class,"http://localhost/A");
 		assertEquals("foo",x.x3());
 		assertEquals("foo",x.x3a());
@@ -169,7 +169,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void a08_partialPathExtraSlashes() throws Exception {
+	public void a08_partialPathExtraSlashes() {
 		A8 x = plainRemote(A.class,A8.class,"http://localhost/A/");
 		assertEquals("foo",x.x3());
 		assertEquals("foo",x.x3a());
@@ -196,7 +196,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void b01_noPath() throws Exception {
+	public void b01_noPath() {
 		B1 x = plainRemote(B.class,B1.class,"http://localhost/B");
 		assertEquals("foo",x.x1());
 		assertEquals("foo",x.x1a());
@@ -211,7 +211,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void b02_absolutePathOnClass() throws Exception {
+	public void b02_absolutePathOnClass() {
 		B2 x = plainRemote(B.class,B2.class,"http://localhost/B");
 		assertEquals("foo",x.x1());
 		assertEquals("foo",x.x1a());
@@ -226,7 +226,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void b03_absolutePathsOnMethods() throws Exception {
+	public void b03_absolutePathsOnMethods() {
 		B3 x = plainRemote(B.class,B3.class,"http://localhost/B");
 		assertEquals("foo",x.x1());
 		assertEquals("foo",x.x1a());
@@ -271,7 +271,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void c01_overriddenRootUrl() throws Exception {
+	public void c01_overriddenRootUrl() {
 		C1 x = client(C.class).build().getRemote(C1.class,"http://localhost/C1");
 		assertEquals("foo",x.x1());
 		assertEquals("bar",x.x2());
@@ -309,7 +309,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void c03_methodNotAnnotated() throws Exception {
+	public void c03_methodNotAnnotated() {
 		C3b x = remote(C3a.class,C3b.class);
 		assertEquals("bar",x.x1());
 		assertEquals("baz",x.getX2());
@@ -367,17 +367,17 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void c04_rethrownExceptions() throws Exception {
+	public void c04_rethrownExceptions() {
 		C4b x = remote(C4a.class,C4b.class);
-		assertThrown(()->x.x1()).asMessage().is("foo");
+		assertThrown(x::x1).asMessage().is("foo");
 		assertThrown(()->x.x1a().get()).asMessages().isContains("foo");
 		assertThrown(()->x.x1b().get()).asMessages().isContains("foo");
-		assertThrown(()->x.x2()).asMessage().is("foo");
+		assertThrown(x::x2).asMessage().is("foo");
 		assertThrown(()->x.x3().get()).asMessages().isContains("foo");
-		assertThrown(()->x.x4()).asMessage().is("foo");
+		assertThrown(x::x4).asMessage().is("foo");
 		assertThrown(()->x.x4a().get()).asMessages().isContains("foo");
 		assertThrown(()->x.x4b().get()).asMessages().isContains("foo");
-		assertThrown(()->x.x5()).asMessage().is("foo");
+		assertThrown(x::x5).asMessage().is("foo");
 		assertThrown(()->x.x6().get()).asMessages().isContains("foo");
 	}
 
@@ -412,7 +412,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void d01_statusReturnType() throws Exception {
+	public void d01_statusReturnType() {
 		D1a x = client(D1.class).ignoreErrors().build().getRemote(D1a.class);
 		assertEquals(202,x.x1());
 		assertEquals(202,x.x2().intValue());
@@ -422,8 +422,8 @@ public class Remote_Test {
 		assertEquals(400,x.x7().intValue());
 		assertEquals(false,x.x8());
 		assertEquals(false,x.x9());
-		assertThrown(()->x.x5()).asMessages().isAny(contains("Only integer and booleans types are valid."));
-		assertThrown(()->x.x10()).asMessages().isAny(contains("Only integer and booleans types are valid."));
+		assertThrown(x::x5).asMessages().isAny(contains("Only integer and booleans types are valid."));
+		assertThrown(x::x10).asMessages().isAny(contains("Only integer and booleans types are valid."));
 	}
 
 	@Rest
@@ -446,7 +446,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void d02_primitiveReturns() throws Exception {
+	public void d02_primitiveReturns() {
 		D2a x = client(D2.class).ignoreErrors().build().getRemote(D2a.class);
 		assertEquals(0,x.x1());
 		assertEquals(1,x.x2());
@@ -470,7 +470,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void e01_rrpcBasic() throws Exception {
+	public void e01_rrpcBasic() {
 		E1 x = client(E.class).rootUrl("http://localhost/proxy").build().getRrpcInterface(E1.class);
 
 		assertEquals("foo",x.echo("foo"));
@@ -482,7 +482,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void e03_rrpc_noRestUrl() throws Exception {
+	public void e03_rrpc_noRestUrl() {
 		E3 x = client(E.class).rootUrl("http://localhost").build().getRrpcInterface(E3.class);
 		assertEquals("foo",x.echo("foo"));
 	}
@@ -493,7 +493,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void e04_rrpc_fullPathOnRemotePath() throws Exception {
+	public void e04_rrpc_fullPathOnRemotePath() {
 		E4 x = client(E.class).rootUrl("").build().getRrpcInterface(E4.class);
 		assertEquals("foo",x.echo("foo"));
 	}
@@ -503,8 +503,8 @@ public class Remote_Test {
 		@RestOp(method=HttpMethod.RRPC)
 		public E5b proxy() {
 			return body -> {
-            	throw new E5a("foobar");
-            };
+				throw new E5a("foobar");
+			};
 		}
 	}
 
@@ -520,7 +520,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void e05_rrpc_rethrownCheckedException() throws Exception {
+	public void e05_rrpc_rethrownCheckedException() {
 		RestClient x = client(E5.class).build();
 		assertThrown(()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo")).asMessage().is("foobar");
 	}
@@ -530,13 +530,13 @@ public class Remote_Test {
 		@RestOp(method=HttpMethod.RRPC)
 		public E5b proxy() {
 			return body -> {
-            	throw new AssertionError("foobar");
-            };
+				throw new AssertionError("foobar");
+			};
 		}
 	}
 
 	@Test
-	public void e06_rrpc_rethrownUncheckedException() throws Exception {
+	public void e06_rrpc_rethrownUncheckedException() {
 		RestClient x = client(E6.class).build();
 		assertThrown(()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo")).asMessages().isAny(contains("foobar"));
 	}
@@ -590,7 +590,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void f02_headers_badSupplier() throws Exception {
+	public void f02_headers_badSupplier() {
 		assertThrown(()->client(F.class).build().getRemote(F2a.class)).asMessages().isContains("foo");
 	}
 
@@ -608,7 +608,7 @@ public class Remote_Test {
 	}
 
 	@Test
-	public void g01_badMethodName() throws Exception {
+	public void g01_badMethodName() {
 		assertThrown(()->client(G.class).header("Check","Foo").build().getRemote(G1.class)).isType(RemoteMetadataException.class).asMessage().isContains("Invalid value");
 	}
 
@@ -669,7 +669,7 @@ public class Remote_Test {
 
 
 	@Test
-	public void h01_methodDetection() throws Exception {
+	public void h01_methodDetection() {
 
 		H1 x = client(H.class).build().getRemote(H1.class);
 		assertEquals("GET a1", x.a1());

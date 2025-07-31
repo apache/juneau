@@ -32,7 +32,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
 			{ 	/* 0 */
-				new ComboInput<byte[]>(
+				new ComboInput<>(
 					"ByteArray1d",
 					byte[].class,
 					new byte[] {1,2,3}
@@ -61,7 +61,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(byte[].class))
 			},
 			{ 	/* 1 */
-				new ComboInput<byte[][]>(
+				new ComboInput<>(
 					"ByteArray2d",
 					byte[][].class,
 					new byte[][]{{1,2,3},{4,5,6},null}
@@ -120,7 +120,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.get(0)).isType(byte[].class))
 			},
 			{ 	/* 3 */
-				new ComboInput<Map<String,byte[]>>(
+				new ComboInput<>(
 					"MapOfByteArrays",
 					getType(Map.class,String.class,byte[].class),
 					mapBuilder(String.class,byte[].class).add("foo",new byte[]{1,2,3}).add("bar",null).add(null,new byte[]{4,5,6}).add("null",new byte[]{7,8,9}).build()
@@ -151,7 +151,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.values().iterator().next()).isType(byte[].class))
 			},
 			{ 	/* 4 */
-				new ComboInput<BeanWithByteArrayField>(
+				new ComboInput<>(
 					"BeanWithByteArrayField",
 					BeanWithByteArrayField.class,
 					new BeanWithByteArrayField().init()
@@ -180,7 +180,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(BeanWithByteArrayField.class))
 			},
 			{	/* 5 */
-				new ComboInput<BeanWithByteArray2dField>(
+				new ComboInput<>(
 					"BeanWithByteArray2dField",
 					BeanWithByteArray2dField.class,
 					new BeanWithByteArray2dField().init()
@@ -209,7 +209,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(BeanWithByteArray2dField.class))
 			},
 			{	/* 6 */
-				new ComboInput<BeanWithByteArrayNullField>(
+				new ComboInput<>(
 					"BeanWithByteArrayNullField",
 					BeanWithByteArrayNullField.class,
 					new BeanWithByteArrayNullField().init()
@@ -238,7 +238,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(BeanWithByteArrayNullField.class))
 			},
 			{	/* 7 */
-				new ComboInput<BeanWithByteArrayListField>(
+				new ComboInput<>(
 					"BeanWithByteArrayListField",
 					BeanWithByteArrayListField.class,
 					new BeanWithByteArrayListField().init()
@@ -267,7 +267,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(BeanWithByteArrayListField.class))
 			},
 			{	/* 8 */
-				new ComboInput<BeanWithByteArrayMapField>(
+				new ComboInput<>(
 					"BeanWithByteArrayMapField",
 					BeanWithByteArrayMapField.class,
 					new BeanWithByteArrayMapField().init()
@@ -296,7 +296,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(BeanWithByteArrayMapField.class))
 			},
 			{	/* 9 */
-				new ComboInput<BeanWithByteArrayBeanListField>(
+				new ComboInput<>(
 					"BeanWithByteArrayBeanListField",
 					BeanWithByteArrayBeanListField.class,
 					new BeanWithByteArrayBeanListField().init()
@@ -325,7 +325,7 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(BeanWithByteArrayBeanListField.class))
 			},
 			{	/* 10 */
-				new ComboInput<BeanWithByteArrayBeanMapField>(
+				new ComboInput<>(
 					"BeanWithByteArrayBeanMapField",
 					BeanWithByteArrayBeanMapField.class,
 					new BeanWithByteArrayBeanMapField().init()

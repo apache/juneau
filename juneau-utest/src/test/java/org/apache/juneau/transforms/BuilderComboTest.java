@@ -31,7 +31,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
 			{ 	/* 0 */
-				new ComboInput<A>(
+				new ComboInput<>(
 					"A",
 					A.class,
 					new A(null).init()
@@ -61,7 +61,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.createdByBuilder).isTrue())
 			},
 			{ 	/* 1 */
-				new ComboInput<B>(
+				new ComboInput<>(
 					"B",
 					B.class,
 					new B(null).init()
@@ -91,7 +91,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.createdByBuilder).isTrue())
 			},
 			{ 	/* 2 */
-				new ComboInput<C>(
+				new ComboInput<>(
 					"C",
 					C.class,
 					new C(null).init()
@@ -121,7 +121,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.createdByBuilder).isTrue())
 			},
 			{ 	/* 3 */
-				new ComboInput<D>(
+				new ComboInput<>(
 					"D",
 					D.class,
 					new D(null).init()
@@ -151,7 +151,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.createdByBuilder).isTrue())
 			},
 			{ 	/* 4 */
-				new ComboInput<E>(
+				new ComboInput<>(
 					"E",
 					E.class,
 					new E(null).init()
@@ -181,7 +181,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.createdByBuilder).isTrue())
 			},
 			{ 	/* 5 */
-				new ComboInput<H>(
+				new ComboInput<>(
 					"H",
 					H.class,
 					new H(null).init()

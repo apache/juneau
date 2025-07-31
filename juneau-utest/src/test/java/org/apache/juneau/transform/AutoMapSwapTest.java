@@ -29,7 +29,7 @@ import org.apache.juneau.swap.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({"rawtypes"})
 public class AutoMapSwapTest {
 
 	private static final Map<String,String> STRINGMAP = map("foo","bar");
@@ -195,17 +195,17 @@ public class AutoMapSwapTest {
 	}
 
 	@Test
-	public void d01_ignoreClass_beanIgnore() throws Exception {
+	public void d01_ignoreClass_beanIgnore() {
 		assertNull(find(D01.class));
 	}
 
 	@Test
-	public void d01c_ignoreClass_beanIgnore_usingConfig() throws Exception {
+	public void d01c_ignoreClass_beanIgnore_usingConfig() {
 		assertNull(find(bc(D01Config.class), D01c.class));
 	}
 
 	@Test
-	public void d02_ignoreClass_memberClass() throws Exception {
+	public void d02_ignoreClass_memberClass() {
 		assertNull(find(D02.D02A.class));
 	}
 
@@ -250,7 +250,7 @@ public class AutoMapSwapTest {
 	}
 
 	@Test
-	public void e01_ignoreSwapMethod_beanIgnore() throws Exception {
+	public void e01_ignoreSwapMethod_beanIgnore() {
 		assertNull(find(E01.class));
 	}
 

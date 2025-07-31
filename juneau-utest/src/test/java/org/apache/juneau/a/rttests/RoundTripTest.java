@@ -37,7 +37,7 @@ import org.junit.runners.*;
  * with the same objects for all serializers and parsers.
  */
 @RunWith(Parameterized.class)
-@SuppressWarnings({"unchecked"})
+@SuppressWarnings({})
 public abstract class RoundTripTest {
 
 	public static class Flags {
@@ -157,7 +157,7 @@ public abstract class RoundTripTest {
 	protected String label;
 	public boolean debug;
 
-	public RoundTripTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
+	public RoundTripTest(String label, Serializer.Builder s, Parser.Builder p, int flags) {
 		this.label = label;
 		Map<Class<Object>, Class<? extends Object>> m = getImplClasses();
 		Class<?>[] pojoSwaps = getPojoSwaps();

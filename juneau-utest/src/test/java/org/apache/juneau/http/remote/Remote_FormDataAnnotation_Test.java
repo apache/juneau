@@ -107,7 +107,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Test
-	public void a01_objectTypes() throws Exception {
+	public void a01_objectTypes() {
 		A1 x = MockRestClient.build(A.class).getRemote(A1.class);
 		assertEquals("{x:'1'}",x.x1(1));
 		assertEquals("{x:'1.0'}",x.x2(1));
@@ -159,7 +159,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Test
-	public void b01_default_allowEmptyValue() throws Exception {
+	public void b01_default_allowEmptyValue() {
 		B1 x = remote(B.class,B1.class);
 		assertEquals("{x:'foo'}",x.postX1(null));
 		assertThrown(()->x.postX1("")).asMessages().isContains("Empty value not allowed.");
@@ -206,7 +206,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Test
-	public void c01_collectionFormat() throws Exception {
+	public void c01_collectionFormat() {
 		C1 x = remote(C.class,C1.class);
 		assertEquals("{x:'foo,bar'}",x.postX1("foo","bar"));
 		assertEquals("x=foo%2Cbar",x.postX2("foo","bar"));
@@ -284,7 +284,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Test
-	public void d01_min_max_emin_emax() throws Exception {
+	public void d01_min_max_emin_emax() {
 		D1 x = remote(D.class,D1.class);
 		assertEquals("{x:'1'}",x.postX1(1));
 		assertEquals("{x:'10'}",x.postX1(10));
@@ -497,11 +497,11 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Test
-	public void e01_mini_maxi_ui() throws Exception {
+	public void e01_mini_maxi_ui() {
 		E1 x = remote(E.class,E1.class);
 		assertEquals("{x:'1'}",x.postX1("1"));
 		assertEquals("{x:'1|2'}",x.postX1("1","2"));
-		assertThrown(()->x.postX1()).asMessages().isContains("Minimum number of items not met.");
+		assertThrown(x::postX1).asMessages().isContains("Minimum number of items not met.");
 		assertThrown(()->x.postX1("1","2","3")).asMessages().isContains("Maximum number of items exceeded.");
 		assertEquals("{x:null}",x.postX1((String)null));
 		assertEquals("{x:'1'}",x.postX2(new String[]{"1"}));
@@ -540,7 +540,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Test
-	public void f01_minl_maxl_enum_pattern() throws Exception {
+	public void f01_minl_maxl_enum_pattern() {
 		F1 x = remote(F.class,F1.class);
 		assertEquals("{x:'12'}",x.postX1("12"));
 		assertEquals("{x:'123'}",x.postX1("123"));
@@ -597,7 +597,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Test
-	public void g01_multipleOf() throws Exception {
+	public void g01_multipleOf() {
 		G1 x = remote(G.class,G1.class);
 		assertEquals("{x:'4'}",x.postX1(4));
 		assertThrown(()->x.postX1(5)).asMessages().isContains("Multiple-of not met.");
@@ -649,7 +649,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Test
-	public void h01_required() throws Exception {
+	public void h01_required() {
 		H1 x = remote(H.class,H1.class);
 		assertEquals("{}",x.postX1(null));
 		assertEquals("{}",x.postX2(null));
@@ -677,7 +677,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Test
-	public void i01_skipIfEmpty() throws Exception {
+	public void i01_skipIfEmpty() {
 		I1 x = remote(I.class,I1.class);
 		assertEquals("{x:''}",x.postX1(""));
 		assertEquals("{x:''}",x.postX2(""));
@@ -702,7 +702,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Test
-	public void j01_serializer() throws Exception {
+	public void j01_serializer() {
 		J1 x = remote(J.class,J1.class);
 		assertEquals("{x:'xXx'}",x.postX1("X"));
 	}
@@ -773,7 +773,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Test
-	public void k01_requestBean_simpleVals() throws Exception {
+	public void k01_requestBean_simpleVals() {
 		K1 x1 = remote(K.class,K1.class);
 		K1 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K1.class);
 		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'true',h:'123',i1:'foo'}",x1.postX1(new K1a()));
@@ -811,7 +811,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Test
-	public void k02_requestBean_maps() throws Exception {
+	public void k02_requestBean_maps() {
 		K2 x1 = remote(K.class,K2.class);
 		K2 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K2.class);
 		assertEquals("{a:'a1=v1,a2=123,a3=null,a4=',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}",x1.postX1(new K2a()));
@@ -853,7 +853,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Test
-	public void k03_requestBean_nameValuePairs() throws Exception {
+	public void k03_requestBean_nameValuePairs() {
 		K3 x1 = remote(K.class,K3.class);
 		K3 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K3.class);
 		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:''}",x1.postX1(new K3a()));
@@ -878,7 +878,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Test
-	public void k04_requestBean_charSequence() throws Exception {
+	public void k04_requestBean_charSequence() {
 		K4 x = remote(K.class,K4.class);
 		assertEquals("{foo:'bar',baz:'qux'}",x.post(new C04_Bean()));
 	}
@@ -900,7 +900,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Test
-	public void k05_requestBean_reader() throws Exception {
+	public void k05_requestBean_reader() {
 		K5 x = remote(K.class,K5.class);
 		assertEquals("{foo:'bar',baz:'qux'}",x.post(new K5a()));
 	}
@@ -955,7 +955,7 @@ public class Remote_FormDataAnnotation_Test {
 	}
 
 	@Test
-	public void k06_requestBean_collections() throws Exception {
+	public void k06_requestBean_collections() {
 		K6 x1 = remote(K.class,K6.class);
 		K6 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K6.class);
 		assertString(x1.postX1(new K6a())).is("{a:'foo,,true,123,null,true,123,null',b:'foo,,true,123,null,true,123,null',c:'xfoo||true|123|null|true|123|nullx',d:'',f:'foo,,true,123,null,true,123,null',g:'xfoo||true|123|null|true|123|nullx',h:''}");

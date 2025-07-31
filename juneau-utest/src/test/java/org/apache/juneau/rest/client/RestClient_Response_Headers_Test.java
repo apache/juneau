@@ -103,7 +103,6 @@ public class RestClient_Response_Headers_Test {
 		assertEquals("baz", s);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void a04_asType() throws Exception {
 		Integer i = checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").as(Integer.class).orElse(null);

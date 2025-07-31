@@ -187,7 +187,6 @@ public class ObjectAssertion_Test {
 		assertThrown(()->test(nil).isNotAny(nil)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void ca08_isSame() throws Exception {
 		Integer x1 = new Integer(1), x1a = new Integer(1), nil = null;

@@ -36,7 +36,7 @@ import org.junit.*;
  * Superclass for tests that verify results against all supported content types.
  */
 @FixMethodOrder(NAME_ASCENDING)
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({"rawtypes"})
 public abstract class ComboRoundTripTest {
 
 	private static final BeanSession BEANSESSION = BeanContext.DEFAULT_SESSION;

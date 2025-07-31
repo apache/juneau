@@ -770,43 +770,43 @@ public class RestOp_Throws_Test {
 
 	@Rest
 	public static class F {
-		@RestGet public void badRequest() throws BadRequest {}
-		@RestGet public void conflict() throws Conflict {}
-		@RestGet public void expectationFailed() throws ExpectationFailed {}
-		@RestGet public void failedDependency() throws FailedDependency {}
-		@RestGet public void forbidden() throws Forbidden {}
-		@RestGet public void gone() throws Gone {}
-		@RestGet public void httpVersionNotSupported() throws HttpVersionNotSupported {}
-		@RestGet public void insufficientStorage() throws InsufficientStorage {}
-		@RestGet public void internalServerError() throws InternalServerError {}
-		@RestGet public void lengthRequired() throws LengthRequired {}
-		@RestGet public void locked() throws Locked {}
-		@RestGet public void loopDetected() throws LoopDetected {}
-		@RestGet public void methodNotAllowed() throws MethodNotAllowed {}
-		@RestGet public void misdirectedRequest() throws MisdirectedRequest {}
-		@RestGet public void networkAuthenticationRequired() throws NetworkAuthenticationRequired {}
-		@RestGet public void notAcceptable() throws NotAcceptable {}
-		@RestGet public void notExtended() throws NotExtended {}
-		@RestGet public void notFound() throws NotFound {}
-		@RestGet public void notImplemented() throws NotImplemented {}
-		@RestGet public void payloadTooLarge() throws PayloadTooLarge {}
-		@RestGet public void preconditionFailed() throws PreconditionFailed {}
-		@RestGet public void preconditionRequired() throws PreconditionRequired {}
-		@RestGet public void rangeNotSatisfiable() throws RangeNotSatisfiable {}
-		@RestGet public void requestHeaderFieldsTooLarge() throws RequestHeaderFieldsTooLarge {}
-		@RestGet public void serviceUnavailable() throws ServiceUnavailable {}
-		@RestGet public void tooManyRequests() throws TooManyRequests {}
-		@RestGet public void unauthorized() throws Unauthorized {}
-		@RestGet public void unavailableForLegalReasons() throws UnavailableForLegalReasons {}
-		@RestGet public void unprocessableEntity() throws UnprocessableEntity {}
-		@RestGet public void unsupportedMediaType() throws UnsupportedMediaType {}
-		@RestGet public void upgradeRequired() throws UpgradeRequired {}
-		@RestGet public void uriTooLong() throws UriTooLong {}
-		@RestGet public void variantAlsoNegotiates() throws VariantAlsoNegotiates {}
+		@RestGet public void badRequest() throws BadRequest {}  // NOSONAR
+		@RestGet public void conflict() throws Conflict {}  // NOSONAR
+		@RestGet public void expectationFailed() throws ExpectationFailed {}  // NOSONAR
+		@RestGet public void failedDependency() throws FailedDependency {}  // NOSONAR
+		@RestGet public void forbidden() throws Forbidden {}  // NOSONAR
+		@RestGet public void gone() throws Gone {}  // NOSONAR
+		@RestGet public void httpVersionNotSupported() throws HttpVersionNotSupported {}  // NOSONAR
+		@RestGet public void insufficientStorage() throws InsufficientStorage {}  // NOSONAR
+		@RestGet public void internalServerError() throws InternalServerError {}  // NOSONAR
+		@RestGet public void lengthRequired() throws LengthRequired {}  // NOSONAR
+		@RestGet public void locked() throws Locked {}  // NOSONAR
+		@RestGet public void loopDetected() throws LoopDetected {}  // NOSONAR
+		@RestGet public void methodNotAllowed() throws MethodNotAllowed {}  // NOSONAR
+		@RestGet public void misdirectedRequest() throws MisdirectedRequest {}  // NOSONAR
+		@RestGet public void networkAuthenticationRequired() throws NetworkAuthenticationRequired {}  // NOSONAR
+		@RestGet public void notAcceptable() throws NotAcceptable {}  // NOSONAR
+		@RestGet public void notExtended() throws NotExtended {}  // NOSONAR
+		@RestGet public void notFound() throws NotFound {}  // NOSONAR
+		@RestGet public void notImplemented() throws NotImplemented {}  // NOSONAR
+		@RestGet public void payloadTooLarge() throws PayloadTooLarge {}  // NOSONAR
+		@RestGet public void preconditionFailed() throws PreconditionFailed {}  // NOSONAR
+		@RestGet public void preconditionRequired() throws PreconditionRequired {}  // NOSONAR
+		@RestGet public void rangeNotSatisfiable() throws RangeNotSatisfiable {}  // NOSONAR
+		@RestGet public void requestHeaderFieldsTooLarge() throws RequestHeaderFieldsTooLarge {}  // NOSONAR
+		@RestGet public void serviceUnavailable() throws ServiceUnavailable {}  // NOSONAR
+		@RestGet public void tooManyRequests() throws TooManyRequests {}  // NOSONAR
+		@RestGet public void unauthorized() throws Unauthorized {}  // NOSONAR
+		@RestGet public void unavailableForLegalReasons() throws UnavailableForLegalReasons {}  // NOSONAR
+		@RestGet public void unprocessableEntity() throws UnprocessableEntity {}  // NOSONAR
+		@RestGet public void unsupportedMediaType() throws UnsupportedMediaType {}  // NOSONAR
+		@RestGet public void upgradeRequired() throws UpgradeRequired {}  // NOSONAR
+		@RestGet public void uriTooLong() throws UriTooLong {}  // NOSONAR
+		@RestGet public void variantAlsoNegotiates() throws VariantAlsoNegotiates {}  // NOSONAR
 	}
 
 	@Test
-	public void f01_swagger() throws Exception {
+	public void f01_swagger() {
 		Map<String,OperationMap> paths = getSwagger(F.class).getPaths();
 
 		assertEquals(BadRequest.REASON_PHRASE, paths.get("/badRequest").get("get").getResponse(BadRequest.STATUS_CODE).getDescription());

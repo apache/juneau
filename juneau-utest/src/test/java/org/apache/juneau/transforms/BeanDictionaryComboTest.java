@@ -32,7 +32,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
 			{ 	/* 0 */
-				new ComboInput<A>(
+				new ComboInput<>(
 					"A",
 					A.class,
 					new A().init()
@@ -61,7 +61,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(A.class))
 			},
 			{	/* 1 */
-				new ComboInput<A[]>(
+				new ComboInput<>(
 					"A[]",
 					A[].class,
 					new A[]{new A().init()}
@@ -90,7 +90,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x[0]).isType(A.class))
 			},
 			{	/* 2 */
-				new ComboInput<A[][][]>(
+				new ComboInput<>(
 					"A[][][]",
 					A[][][].class,
 					new A[][][]{{{new A().init(),null},null},null}
@@ -236,7 +236,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(A.class))
 			},
 			{	/* 7 */
-				new ComboInput<IA[]>(
+				new ComboInput<>(
 					"IA[]",
 					IA[].class,
 					new IA[]{new A().init()}
@@ -265,7 +265,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x[0]).isType(A.class))
 			},
 			{	/* 8 */
-				new ComboInput<IA[][][]>(
+				new ComboInput<>(
 					"IA[][][]",
 					IA[][][].class,
 					new IA[][][]{{{new A().init(),null},null},null}
@@ -381,7 +381,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.get("x").get(0)[0][0][0]).isType(A.class))
 			},
 			{	/* 12 */
-				new ComboInput<B>(
+				new ComboInput<>(
 					"B",
 					B.class,
 					new B().init()
@@ -410,7 +410,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(B.class))
 			},
 			{	/* 13 */
-				new ComboInput<B[]>(
+				new ComboInput<>(
 					"B[]",
 					B[].class,
 					new B[]{new B().init()}
@@ -439,7 +439,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x[0]).isType(B.class))
 			},
 			{	/* 14 */
-				new ComboInput<B[][][]>(
+				new ComboInput<>(
 					"B[][][]",
 					B[][][].class,
 					new B[][][]{{{new B().init(),null},null},null}
@@ -584,7 +584,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(B.class))
 			},
 			{	/* 19 */
-				new ComboInput<IB[]>(
+				new ComboInput<>(
 					"IB[]",
 					IB[].class,
 					new IB[]{new B().init()}
@@ -613,7 +613,7 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x[0]).isType(B.class))
 			},
 			{	/* 20 */
-				new ComboInput<IB[][][]>(
+				new ComboInput<>(
 					"IB[][][]",
 					IB[][][].class,
 					new IB[][][]{{{new B().init(),null},null},null}

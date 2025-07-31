@@ -213,7 +213,6 @@ public class StringListAssertion_Test {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void ca06_isAny() throws Exception {
 		List<String> x1 = alist("1"), x1a = alist(new String("1")), x2 = alist("2"), nil = null;
 		test(x1).isAny(x1a, x2);
@@ -223,7 +222,6 @@ public class StringListAssertion_Test {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void ca07_isNotAny() throws Exception {
 		List<String> x1 = alist("1"), x1a = alist(new String("1")), x2 = alist("2"), nil = null;
 		test(x1).isNotAny(x2);

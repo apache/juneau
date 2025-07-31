@@ -46,7 +46,7 @@ public class HtmlDocConfigAnnotation_Test {
     			.map(HtmlDocConfigAnnotation_Test.TO_STRING)
     			.collect(Collectors.joining(","));
     	if (t instanceof HtmlDocTemplate)
-    		return ((HtmlDocTemplate)t).getClass().getSimpleName();
+    		return t.getClass().getSimpleName();
     	return t.toString();
     };
 

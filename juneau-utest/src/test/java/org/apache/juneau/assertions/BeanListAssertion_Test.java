@@ -224,7 +224,6 @@ public class BeanListAssertion_Test {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void ca06_isAny() throws Exception {
 		List<A> x1 = alist(A1,A2), x1a = alist(A1a,A2), x2 = alist(A1,A3), nil = null;
 		test(x1).isAny(x1a, x2);
@@ -234,7 +233,6 @@ public class BeanListAssertion_Test {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void ca07_isNotAny() throws Exception {
 		List<A> x1 = alist(A1,A2), x1a = alist(A1a,A2), x2 = alist(A1,A3), nil = null;
 		test(x1).isNotAny(x2);

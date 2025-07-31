@@ -25,7 +25,7 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
 
-@SuppressWarnings({"unchecked","rawtypes","serial"})
+@SuppressWarnings({"rawtypes","serial"})
 @FixMethodOrder(NAME_ASCENDING)
 public class Html_Test {
 

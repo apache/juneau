@@ -30,7 +30,7 @@ import org.apache.juneau.xml.*;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  */
-@SuppressWarnings({"unchecked"})
+@SuppressWarnings({})
 public class XmlValidatorParser extends XmlParser {
 
 	//-----------------------------------------------------------------------------------------------------------------

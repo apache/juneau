@@ -16,8 +16,6 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.Map.*;
-import java.util.stream.*;
-
 import org.apache.juneau.annotation.*;
 import org.junit.*;
 

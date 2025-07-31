@@ -192,7 +192,6 @@ public class ListAssertion_Test {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void ca06_isAny() throws Exception {
 		List<Integer> x1 = alist(1,2), x1a = alist(1,2), x2 = alist(3,4), nil = null;
 		test(x1).isAny(x1a, x2);
@@ -202,7 +201,6 @@ public class ListAssertion_Test {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void ca07_isNotAny() throws Exception {
 		List<Integer> x1 = alist(1,2), x1a = alist(1,2), x2 = alist(3,4), nil = null;
 		test(x1).isNotAny(x2);

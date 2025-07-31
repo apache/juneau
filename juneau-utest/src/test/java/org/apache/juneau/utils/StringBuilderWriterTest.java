@@ -19,7 +19,7 @@ import static org.junit.runners.MethodSorters.*;
 import org.apache.juneau.internal.*;
 import org.junit.*;
 
-@SuppressWarnings({"resource"})
+@SuppressWarnings({})
 @FixMethodOrder(NAME_ASCENDING)
 public class StringBuilderWriterTest {
 

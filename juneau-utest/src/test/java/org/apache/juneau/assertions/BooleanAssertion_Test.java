@@ -36,13 +36,13 @@ public class BooleanAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void a01_msg() throws Exception {
+	public void a01_msg() {
 		assertThrown(()->test(null).setMsg("A {0}", 1).isExists()).asMessage().is("A 1");
 		assertThrown(()->test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("A 1");
 	}
 
 	@Test
-	public void a02_stdout() throws Exception {
+	public void a02_stdout() {
 		test(null).setStdOut();
 	}
 
@@ -51,14 +51,14 @@ public class BooleanAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void ba01a_asString() throws Exception {
+	public void ba01a_asString() {
 		Boolean x = true, nil = null;
 		test(x).asString().is("true");
 		test(nil).asString().isNull();
 	}
 
 	@Test
-	public void ba01b_asString_wSerializer() throws Exception {
+	public void ba01b_asString_wSerializer() {
 		Boolean x = true, nil = null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("true");
@@ -66,27 +66,27 @@ public class BooleanAssertion_Test {
 	}
 
 	@Test
-	public void ba01c_asString_wPredicate() throws Exception {
+	public void ba01c_asString_wPredicate() {
 		Boolean x1 = true;
 		test(x1).asString(x -> "foo").is("foo");
 	}
 
 	@Test
-	public void ba02_asJson() throws Exception {
+	public void ba02_asJson() {
 		Boolean x = true, nil = null;
 		test(x).asJson().is("true");
 		test(nil).asJson().is("null");
 	}
 
 	@Test
-	public void ba03_asJsonSorted() throws Exception {
+	public void ba03_asJsonSorted() {
 		Boolean x1 = true, nil = null;
 		test(x1).asJsonSorted().is("true");
 		test(nil).asJsonSorted().is("null");
 	}
 
 	@Test
-	public void ba04_apply() throws Exception {
+	public void ba04_apply() {
 		Boolean x1 = true;
 		test(x1).asTransformed(x -> false).is(false);
 	}
@@ -96,28 +96,28 @@ public class BooleanAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void ca01_exists() throws Exception {
+	public void ca01_exists() {
 		Boolean x = true, nil = null;
 		test(x).isExists().isExists();
 		assertThrown(()->test(nil).isExists()).asMessage().is("Value was null.");
 	}
 
 	@Test
-	public void ca02_isNull() throws Exception {
+	public void ca02_isNull() {
 		Boolean x = true, nil = null;
 		test(nil).isNull();
 		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
 	}
 
 	@Test
-	public void ca03_isNotNull() throws Exception {
+	public void ca03_isNotNull() {
 		Boolean x = true, nil = null;
 		test(x).isNotNull();
 		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
 	}
 
 	@Test
-	public void ca04a_is_T() throws Exception {
+	public void ca04a_is_T() {
 		Boolean x1 = true, x1a = true, x2 = false, nil = null;
 		test(x1).is(x1);
 		test(x1).is(x1a);
@@ -128,7 +128,7 @@ public class BooleanAssertion_Test {
 	}
 
 	@Test
-	public void ca04b_is_predicate() throws Exception {
+	public void ca04b_is_predicate() {
 		Boolean x1 = true;
 		test(x1).is(x->x);
 		assertThrown(()->test(x1).is(x->!x)).asMessage().asOneLine().is("Unexpected value: 'true'.");
@@ -136,7 +136,7 @@ public class BooleanAssertion_Test {
 	}
 
 	@Test
-	public void ca05_isNot() throws Exception {
+	public void ca05_isNot() {
 		Boolean x1 = true, x1a = true, x2 = false, nil = null;
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
@@ -146,7 +146,7 @@ public class BooleanAssertion_Test {
 	}
 
 	@Test
-	public void ca06_isAny() throws Exception {
+	public void ca06_isAny() {
 		Boolean x1 = true, x1a = true, x2 = false, nil = null;
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[false]'.  Actual='true'.");
@@ -155,7 +155,7 @@ public class BooleanAssertion_Test {
 	}
 
 	@Test
-	public void ca07_isNotAny() throws Exception {
+	public void ca07_isNotAny() {
 		Boolean x1 = true, x1a = true, x2 = false, nil = null;
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
@@ -164,9 +164,8 @@ public class BooleanAssertion_Test {
 		assertThrown(()->test(nil).isNotAny(nil)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
-	public void ca08_isSame() throws Exception {
+	public void ca08_isSame() {
 		Boolean x1 = new Boolean(true), x1a = new Boolean(true), nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
@@ -176,7 +175,7 @@ public class BooleanAssertion_Test {
 	}
 
 	@Test
-	public void ca09_isSameJsonAs() throws Exception {
+	public void ca09_isSameJsonAs() {
 		Boolean x1 = true, x1a = true, x2 = false, nil = null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
@@ -186,7 +185,7 @@ public class BooleanAssertion_Test {
 	}
 
 	@Test
-	public void ca10_isSameSortedJsonAs() throws Exception {
+	public void ca10_isSameSortedJsonAs() {
 		Boolean x1 = true, x1a = true, x2 = false, nil = null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
@@ -196,7 +195,7 @@ public class BooleanAssertion_Test {
 	}
 
 	@Test
-	public void ca11_isSameSerializedAs() throws Exception {
+	public void ca11_isSameSerializedAs() {
 		Boolean x1 = true, x1a = true, x2 = false, nil = null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
@@ -207,7 +206,7 @@ public class BooleanAssertion_Test {
 	}
 
 	@Test
-	public void ca12_isType() throws Exception {
+	public void ca12_isType() {
 		Boolean x = true, nil = null;
 		test(x).isType(Boolean.class);
 		test(x).isType(Object.class);
@@ -217,7 +216,7 @@ public class BooleanAssertion_Test {
 	}
 
 	@Test
-	public void ca13_isExactType() throws Exception {
+	public void ca13_isExactType() {
 		Boolean x = true, nil = null;
 		test(x).isExactType(Boolean.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.lang.Boolean'.");
@@ -226,7 +225,7 @@ public class BooleanAssertion_Test {
 	}
 
 	@Test
-	public void ca14_isString() throws Exception {
+	public void ca14_isString() {
 		Boolean x = true, nil = null;
 		test(x).isString("true");
 		test(nil).isString(null);
@@ -236,7 +235,7 @@ public class BooleanAssertion_Test {
 	}
 
 	@Test
-	public void ca15_isJson() throws Exception {
+	public void ca15_isJson() {
 		Boolean x = true, nil = null;
 		test(x).isJson("true");
 		test(nil).isJson("null");
@@ -246,7 +245,7 @@ public class BooleanAssertion_Test {
 	}
 
 	@Test
-	public void cc01_isTrue() throws Exception {
+	public void cc01_isTrue() {
 		Boolean nil = null;
 		test(true).isTrue();
 		assertThrown(()->test(false).isTrue()).asMessage().is("Value was false.");
@@ -254,7 +253,7 @@ public class BooleanAssertion_Test {
 	}
 
 	@Test
-	public void cc02_isFalse() throws Exception {
+	public void cc02_isFalse() {
 		Boolean nil = null;
 		test(false).isFalse();
 		assertThrown(()->test(true).isFalse()).asMessage().is("Value was true.");

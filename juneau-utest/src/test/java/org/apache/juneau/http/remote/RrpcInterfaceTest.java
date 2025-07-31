@@ -245,8 +245,7 @@ public class RrpcInterfaceTest {
 				// Various primitives
 
 				@Override
-				public void returnVoid() {
-				}
+				public void returnVoid() {}  // NOSONAR
 
 				@Override
 				public Integer returnInteger() {
@@ -514,8 +513,7 @@ public class RrpcInterfaceTest {
 				// Various primitives
 
 				@Override
-				public void setNothing() {
-				}
+				public void setNothing() {}  // NOSONAR
 
 				@Override
 				public void setInt(int x) {

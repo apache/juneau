@@ -25,7 +25,6 @@ import org.apache.juneau.serializer.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-@SuppressWarnings("unchecked")
 public class RestGetAnnotation_Test {
 
 	private static final String CNAME = RestGetAnnotation_Test.class.getName();
@@ -137,11 +136,11 @@ public class RestGetAnnotation_Test {
 
 	public static class C1 {
 		public int f1;
-		public void m1() {}
+		public void m1() {}  // NOSONAR
 	}
 	public static class C2 {
 		public int f2;
-		public void m2() {}
+		public void m2() {}  // NOSONAR
 	}
 
 	@Test

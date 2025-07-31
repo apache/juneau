@@ -118,7 +118,7 @@ public class Content_Test {
 		public A16 o(@Content A16 b) throws Exception { return b; }
 		public static class A16 {
 			private String s;
-			public A16(String s) throws Exception { this.s = s; }
+			public A16(String s) { this.s = s; }
 			@Override public String toString() { return s; }
 		}
 	}
@@ -530,7 +530,7 @@ public class Content_Test {
 		}
 		public static class D1 {
 			private String s;
-			public D1(String in) throws Exception { this.s = in; }
+			public D1(String in) { this.s = in; }
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/InputStreamTransform")
@@ -558,7 +558,7 @@ public class Content_Test {
 		@Content
 		public static class D4 {
 			private String s;
-			public D4(String in) throws Exception { this.s = in; }
+			public D4(String in) { this.s = in; }
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/InputStreamTransformBodyOnPojo")

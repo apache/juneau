@@ -28,7 +28,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.junit.*;
 
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({"rawtypes"})
 @FixMethodOrder(NAME_ASCENDING)
 public class BeanConfigTest {
 

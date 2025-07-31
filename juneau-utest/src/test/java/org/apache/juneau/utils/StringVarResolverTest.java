@@ -208,7 +208,6 @@ public class StringVarResolverTest {
 	//====================================================================================================
 	// Test false triggers.
 	//====================================================================================================
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testFalseTriggers() throws Exception {
 		VarResolver.Builder vrb = VarResolver.create().defaultVars();

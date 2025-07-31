@@ -37,7 +37,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.*;
 
-@SuppressWarnings({"resource"})
+@SuppressWarnings({})
 @FixMethodOrder(NAME_ASCENDING)
 public class Remote_QueryAnnotation_Test {
 

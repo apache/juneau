@@ -15,7 +15,6 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
-import static org.apache.juneau.utest.utils.Utils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 

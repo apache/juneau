@@ -27,7 +27,7 @@ import org.apache.juneau.swap.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({"rawtypes"})
 public class AutoNumberSwapTest {
 
 	private static ObjectSwap find(Class<?> c) {
@@ -521,7 +521,7 @@ public class AutoNumberSwapTest {
 		}
 	}
 	public static class C13 {
-		public C13() {}
+		public C13() {}  // NOSONAR
 		public Integer toInteger() {
 			return 1;
 		}

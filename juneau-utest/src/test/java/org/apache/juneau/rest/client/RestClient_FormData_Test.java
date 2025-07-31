@@ -103,7 +103,7 @@ public class RestClient_FormData_Test {
 
 	@Test
 	public void a09_formData_String_Supplier() throws Exception {
-		MutableSupplier s = MutableSupplier.of(null);
+		MutableSupplier<JsonList> s = MutableSupplier.of(null);
 
 		RestClient x1 = client().formData(part("foo",s,null)).build();
 		s.set(JsonList.of("foo","bar"));
@@ -120,7 +120,7 @@ public class RestClient_FormData_Test {
 
 	@Test
 	public void a10_formData_String_Supplier_Schema_Serializer() throws Exception {
-		MutableSupplier s = MutableSupplier.of(JsonList.of("foo","bar"));
+		MutableSupplier<JsonList> s = MutableSupplier.of(JsonList.of("foo","bar"));
 		RestClient x = client().formData(part("foo",s,T_ARRAY_PIPES).serializer(FakeWriterSerializer.X)).build();
 		x.post("/formData").run().assertContent().asString().asUrlDecode().is("foo=xfoo|barx");
 		s.set(JsonList.of("bar","baz"));
@@ -130,7 +130,7 @@ public class RestClient_FormData_Test {
 	@Test
 	public void a11_formData_String_Supplier_Schema() throws Exception {
 		List<String> l1 = list("foo","bar"), l2 = list("bar","baz");
-		MutableSupplier s = MutableSupplier.of(null);
+		var s = MutableSupplier.of(null);
 
 		RestClient x1 = client().formData(part("foo",s,T_ARRAY_PIPES)).build();
 		s.set(l1);
@@ -147,11 +147,11 @@ public class RestClient_FormData_Test {
 
 	public static class A12 implements HttpPartSerializer {
 		@Override
-        public HttpPartSerializerSession getPartSession() {
-            return (type, schema, value) -> {
-                throw new SerializeException("bad");
-            };
-        }
+		public HttpPartSerializerSession getPartSession() {
+			return (type, schema, value) -> {
+				throw new SerializeException("bad");
+			};
+		}
 	}
 
 	@Test

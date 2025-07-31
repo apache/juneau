@@ -66,7 +66,7 @@ public class Remote_CommonInterfaces_Test {
 	}
 
 	@Test
-	public void a01_splitAnnotations() throws Exception {
+	public void a01_splitAnnotations() {
 		A x = MockRestClient.buildJson(A1.class).getRemote(A.class);
 		assertEquals("foo",x.putX1("foo"));
 		assertEquals("foo",x.getX2("foo"));
@@ -101,7 +101,7 @@ public class Remote_CommonInterfaces_Test {
 	}
 
 	@Test
-	public void b01_combinedAnnotations() throws Exception {
+	public void b01_combinedAnnotations() {
 		B x = MockRestClient.create(B1.class).json().build().getRemote(B.class);
 		assertEquals("foo",x.putX1("foo"));
 		assertEquals("foo",x.getX2("foo"));
@@ -157,7 +157,7 @@ public class Remote_CommonInterfaces_Test {
 	}
 
 	@Test
-	public void c01_standardResponses() throws Exception {
+	public void c01_standardResponses() {
 
 		// HttpClient goes into loop if status code is less than 200 so we can't test those.
 
@@ -206,7 +206,7 @@ public class Remote_CommonInterfaces_Test {
 		assertEquals("foo",read(sr.getContent()));
 		assertEquals("foo",sr.getHeaders().getLast("Foo").orElseThrow(RuntimeException::new).getValue());
 		assertEquals("\"bar\"",sr.getHeaders().getLast("ETag").orElseThrow(RuntimeException::new).getValue());
-		assertEquals("text/foo",sr.getContentType().getValue().toString());
+		assertEquals("text/foo",sr.getContentType().getValue());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -389,39 +389,39 @@ public class Remote_CommonInterfaces_Test {
 	@Test
 	public void e01_predefinedExceptions() {
 		E x = MockRestClient.create(E1.class).noTrace().build().getRemote(E.class);
-		assertThrown(()->x.badRequest()).isType(BadRequest.class).asMessage().is(BadRequest.REASON_PHRASE);
-		assertThrown(()->x.conflict()).asMessage().is(Conflict.REASON_PHRASE);
-		assertThrown(()->x.expectationFailed()).asMessage().is(ExpectationFailed.REASON_PHRASE);
-		assertThrown(()->x.failedDependency()).asMessage().is(FailedDependency.REASON_PHRASE);
-		assertThrown(()->x.forbidden()).asMessage().is(Forbidden.REASON_PHRASE);
-		assertThrown(()->x.gone()).asMessage().is(Gone.REASON_PHRASE);
-		assertThrown(()->x.httpVersionNotSupported()).asMessage().is(HttpVersionNotSupported.REASON_PHRASE);
-		assertThrown(()->x.insufficientStorage()).asMessage().is(InsufficientStorage.REASON_PHRASE);
-		assertThrown(()->x.internalServerError()).asMessage().is(InternalServerError.REASON_PHRASE);
-		assertThrown(()->x.lengthRequired()).asMessage().is(LengthRequired.REASON_PHRASE);
-		assertThrown(()->x.locked()).asMessage().is(Locked.REASON_PHRASE);
-		assertThrown(()->x.loopDetected()).asMessage().is(LoopDetected.REASON_PHRASE);
-		assertThrown(()->x.methodNotAllowed()).asMessage().is(MethodNotAllowed.REASON_PHRASE);
-		assertThrown(()->x.misdirectedRequest()).asMessage().is(MisdirectedRequest.REASON_PHRASE);
-		assertThrown(()->x.networkAuthenticationRequired()).asMessage().is(NetworkAuthenticationRequired.REASON_PHRASE);
-		assertThrown(()->x.notAcceptable()).asMessage().is(NotAcceptable.REASON_PHRASE);
-		assertThrown(()->x.notExtended()).asMessage().is(NotExtended.REASON_PHRASE);
-		assertThrown(()->x.notFound()).asMessage().is(NotFound.REASON_PHRASE);
-		assertThrown(()->x.notImplemented()).asMessage().is(NotImplemented.REASON_PHRASE);
-		assertThrown(()->x.payloadTooLarge()).asMessage().is(PayloadTooLarge.REASON_PHRASE);
-		assertThrown(()->x.preconditionFailed()).asMessage().is(PreconditionFailed.REASON_PHRASE);
-		assertThrown(()->x.preconditionRequired()).asMessage().is(PreconditionRequired.REASON_PHRASE);
-		assertThrown(()->x.rangeNotSatisfiable()).asMessage().is(RangeNotSatisfiable.REASON_PHRASE);
-		assertThrown(()->x.requestHeaderFieldsTooLarge()).asMessage().is(RequestHeaderFieldsTooLarge.REASON_PHRASE);
-		assertThrown(()->x.serviceUnavailable()).asMessage().is(ServiceUnavailable.REASON_PHRASE);
-		assertThrown(()->x.tooManyRequests()).asMessage().is(TooManyRequests.REASON_PHRASE);
-		assertThrown(()->x.unauthorized()).asMessage().is(Unauthorized.REASON_PHRASE);
-		assertThrown(()->x.unavailableForLegalReasons()).asMessage().is(UnavailableForLegalReasons.REASON_PHRASE);
-		assertThrown(()->x.unprocessableEntity()).asMessage().is(UnprocessableEntity.REASON_PHRASE);
-		assertThrown(()->x.unsupportedMediaType()).asMessage().is(UnsupportedMediaType.REASON_PHRASE);
-		assertThrown(()->x.upgradeRequired()).asMessage().is(UpgradeRequired.REASON_PHRASE);
-		assertThrown(()->x.uriTooLong()).asMessage().is(UriTooLong.REASON_PHRASE);
-		assertThrown(()->x.variantAlsoNegotiates()).asMessage().is(VariantAlsoNegotiates.REASON_PHRASE);
+		assertThrown(x::badRequest).isType(BadRequest.class).asMessage().is(BadRequest.REASON_PHRASE);
+		assertThrown(x::conflict).asMessage().is(Conflict.REASON_PHRASE);
+		assertThrown(x::expectationFailed).asMessage().is(ExpectationFailed.REASON_PHRASE);
+		assertThrown(x::failedDependency).asMessage().is(FailedDependency.REASON_PHRASE);
+		assertThrown(x::forbidden).asMessage().is(Forbidden.REASON_PHRASE);
+		assertThrown(x::gone).asMessage().is(Gone.REASON_PHRASE);
+		assertThrown(x::httpVersionNotSupported).asMessage().is(HttpVersionNotSupported.REASON_PHRASE);
+		assertThrown(x::insufficientStorage).asMessage().is(InsufficientStorage.REASON_PHRASE);
+		assertThrown(x::internalServerError).asMessage().is(InternalServerError.REASON_PHRASE);
+		assertThrown(x::lengthRequired).asMessage().is(LengthRequired.REASON_PHRASE);
+		assertThrown(x::locked).asMessage().is(Locked.REASON_PHRASE);
+		assertThrown(x::loopDetected).asMessage().is(LoopDetected.REASON_PHRASE);
+		assertThrown(x::methodNotAllowed).asMessage().is(MethodNotAllowed.REASON_PHRASE);
+		assertThrown(x::misdirectedRequest).asMessage().is(MisdirectedRequest.REASON_PHRASE);
+		assertThrown(x::networkAuthenticationRequired).asMessage().is(NetworkAuthenticationRequired.REASON_PHRASE);
+		assertThrown(x::notAcceptable).asMessage().is(NotAcceptable.REASON_PHRASE);
+		assertThrown(x::notExtended).asMessage().is(NotExtended.REASON_PHRASE);
+		assertThrown(x::notFound).asMessage().is(NotFound.REASON_PHRASE);
+		assertThrown(x::notImplemented).asMessage().is(NotImplemented.REASON_PHRASE);
+		assertThrown(x::payloadTooLarge).asMessage().is(PayloadTooLarge.REASON_PHRASE);
+		assertThrown(x::preconditionFailed).asMessage().is(PreconditionFailed.REASON_PHRASE);
+		assertThrown(x::preconditionRequired).asMessage().is(PreconditionRequired.REASON_PHRASE);
+		assertThrown(x::rangeNotSatisfiable).asMessage().is(RangeNotSatisfiable.REASON_PHRASE);
+		assertThrown(x::requestHeaderFieldsTooLarge).asMessage().is(RequestHeaderFieldsTooLarge.REASON_PHRASE);
+		assertThrown(x::serviceUnavailable).asMessage().is(ServiceUnavailable.REASON_PHRASE);
+		assertThrown(x::tooManyRequests).asMessage().is(TooManyRequests.REASON_PHRASE);
+		assertThrown(x::unauthorized).asMessage().is(Unauthorized.REASON_PHRASE);
+		assertThrown(x::unavailableForLegalReasons).asMessage().is(UnavailableForLegalReasons.REASON_PHRASE);
+		assertThrown(x::unprocessableEntity).asMessage().is(UnprocessableEntity.REASON_PHRASE);
+		assertThrown(x::unsupportedMediaType).asMessage().is(UnsupportedMediaType.REASON_PHRASE);
+		assertThrown(x::upgradeRequired).asMessage().is(UpgradeRequired.REASON_PHRASE);
+		assertThrown(x::uriTooLong).asMessage().is(UriTooLong.REASON_PHRASE);
+		assertThrown(x::variantAlsoNegotiates).asMessage().is(VariantAlsoNegotiates.REASON_PHRASE);
 	}
 
 	public static class E2 implements E {
@@ -562,39 +562,39 @@ public class Remote_CommonInterfaces_Test {
 	@Test
 	public void e02_predefinedExceptions_customMessages() {
 		E x = MockRestClient.create(E2.class).noTrace().build().getRemote(E.class);
-		assertThrown(()->x.badRequest()).asMessage().is("foo");
-		assertThrown(()->x.conflict()).asMessage().is("foo");
-		assertThrown(()->x.expectationFailed()).asMessage().is("foo");
-		assertThrown(()->x.failedDependency()).asMessage().is("foo");
-		assertThrown(()->x.forbidden()).asMessage().is("foo");
-		assertThrown(()->x.gone()).asMessage().is("foo");
-		assertThrown(()->x.httpVersionNotSupported()).asMessage().is("foo");
-		assertThrown(()->x.insufficientStorage()).asMessage().is("foo");
-		assertThrown(()->x.internalServerError()).asMessage().is("foo");
-		assertThrown(()->x.lengthRequired()).asMessage().is("foo");
-		assertThrown(()->x.locked()).asMessage().is("foo");
-		assertThrown(()->x.loopDetected()).asMessage().is("foo");
-		assertThrown(()->x.methodNotAllowed()).asMessage().is("foo");
-		assertThrown(()->x.misdirectedRequest()).asMessage().is("foo");
-		assertThrown(()->x.networkAuthenticationRequired()).asMessage().is("foo");
-		assertThrown(()->x.notAcceptable()).asMessage().is("foo");
-		assertThrown(()->x.notExtended()).asMessage().is("foo");
-		assertThrown(()->x.notFound()).asMessage().is("foo");
-		assertThrown(()->x.notImplemented()).asMessage().is("foo");
-		assertThrown(()->x.payloadTooLarge()).asMessage().is("foo");
-		assertThrown(()->x.preconditionFailed()).asMessage().is("foo");
-		assertThrown(()->x.preconditionRequired()).asMessage().is("foo");
-		assertThrown(()->x.rangeNotSatisfiable()).asMessage().is("foo");
-		assertThrown(()->x.requestHeaderFieldsTooLarge()).asMessage().is("foo");
-		assertThrown(()->x.serviceUnavailable()).asMessage().is("foo");
-		assertThrown(()->x.tooManyRequests()).asMessage().is("foo");
-		assertThrown(()->x.unauthorized()).asMessage().is("foo");
-		assertThrown(()->x.unavailableForLegalReasons()).asMessage().is("foo");
-		assertThrown(()->x.unprocessableEntity()).asMessage().is("foo");
-		assertThrown(()->x.unsupportedMediaType()).asMessage().is("foo");
-		assertThrown(()->x.upgradeRequired()).asMessage().is("foo");
-		assertThrown(()->x.uriTooLong()).asMessage().is("foo");
-		assertThrown(()->x.variantAlsoNegotiates()).asMessage().is("foo");
+		assertThrown(x::badRequest).asMessage().is("foo");
+		assertThrown(x::conflict).asMessage().is("foo");
+		assertThrown(x::expectationFailed).asMessage().is("foo");
+		assertThrown(x::failedDependency).asMessage().is("foo");
+		assertThrown(x::forbidden).asMessage().is("foo");
+		assertThrown(x::gone).asMessage().is("foo");
+		assertThrown(x::httpVersionNotSupported).asMessage().is("foo");
+		assertThrown(x::insufficientStorage).asMessage().is("foo");
+		assertThrown(x::internalServerError).asMessage().is("foo");
+		assertThrown(x::lengthRequired).asMessage().is("foo");
+		assertThrown(x::locked).asMessage().is("foo");
+		assertThrown(x::loopDetected).asMessage().is("foo");
+		assertThrown(x::methodNotAllowed).asMessage().is("foo");
+		assertThrown(x::misdirectedRequest).asMessage().is("foo");
+		assertThrown(x::networkAuthenticationRequired).asMessage().is("foo");
+		assertThrown(x::notAcceptable).asMessage().is("foo");
+		assertThrown(x::notExtended).asMessage().is("foo");
+		assertThrown(x::notFound).asMessage().is("foo");
+		assertThrown(x::notImplemented).asMessage().is("foo");
+		assertThrown(x::payloadTooLarge).asMessage().is("foo");
+		assertThrown(x::preconditionFailed).asMessage().is("foo");
+		assertThrown(x::preconditionRequired).asMessage().is("foo");
+		assertThrown(x::rangeNotSatisfiable).asMessage().is("foo");
+		assertThrown(x::requestHeaderFieldsTooLarge).asMessage().is("foo");
+		assertThrown(x::serviceUnavailable).asMessage().is("foo");
+		assertThrown(x::tooManyRequests).asMessage().is("foo");
+		assertThrown(x::unauthorized).asMessage().is("foo");
+		assertThrown(x::unavailableForLegalReasons).asMessage().is("foo");
+		assertThrown(x::unprocessableEntity).asMessage().is("foo");
+		assertThrown(x::unsupportedMediaType).asMessage().is("foo");
+		assertThrown(x::upgradeRequired).asMessage().is("foo");
+		assertThrown(x::uriTooLong).asMessage().is("foo");
+		assertThrown(x::variantAlsoNegotiates).asMessage().is("foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -859,7 +859,7 @@ public class Remote_CommonInterfaces_Test {
 	}
 
 	@Test
-	public void h01_seeOtherRoot() throws Exception {
+	public void h01_seeOtherRoot() {
 		IH x = MockRestClient.create(H.class).json().disableRedirectHandling().build().getRemote(IH.class);
 		assertObject(x.seeOtherRoot()).asString().isContains("HTTP/1.1 303 See Other");
 	}

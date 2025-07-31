@@ -1193,8 +1193,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	// Various primitives
 
 	@RestGet(path="/returnVoid")
-	public void returnVoid() {
-	}
+	public void returnVoid() {}  // NOSONAR
 
 	@RestGet(path="/returnInteger")
 	public Integer returnInteger() {

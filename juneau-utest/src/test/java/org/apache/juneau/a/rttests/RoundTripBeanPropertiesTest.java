@@ -27,7 +27,7 @@ import org.junit.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@SuppressWarnings({"unchecked"})
+@SuppressWarnings({})
 @FixMethodOrder(NAME_ASCENDING)
 public class RoundTripBeanPropertiesTest extends RoundTripTest {
 

@@ -606,7 +606,6 @@ public class OpenApiTest {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void f02a_tArray_StringList() throws Exception {
 		List<String> in = list("123");
 		HttpPartSchema ps = T_ARRAY;
@@ -623,7 +622,6 @@ public class OpenApiTest {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void f02b_tArray_3dStringList() throws Exception {
 		List<List<List<String>>> in = list(list(list("a")));
 		HttpPartSchema ps = tArray().items(

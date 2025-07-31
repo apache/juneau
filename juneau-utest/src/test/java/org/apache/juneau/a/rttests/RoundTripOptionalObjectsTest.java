@@ -338,7 +338,6 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void b07a_arrayOfOptionalIntegers() throws Exception {
 		B07 x = new B07();
 		x.f1 = new Optional[]{optional(123)};
@@ -348,7 +347,6 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void b07b_arrayOfOptionalIntegers_listWithEmpty() throws Exception {
 		B07 x = new B07();
 		x.f1 = new Optional[]{empty()};
@@ -358,7 +356,6 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void b07c_arrayOfOptionalIntegers_listWithNull() throws Exception {
 		B07 x = new B07();
 		x.f1 = new Optional[]{null};

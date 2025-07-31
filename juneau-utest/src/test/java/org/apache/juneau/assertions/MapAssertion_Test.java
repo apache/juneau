@@ -34,8 +34,7 @@ public class MapAssertion_Test {
 		return assertMap(value).setSilent();
 	}
 
-	@SuppressWarnings("unused") // Parameters required for LinkedHashMap<K,V>
-    @SafeVarargs
+	@SafeVarargs
 	private static <K,V> Map<K,V> map(Object...objects) {
 		return mapBuilder(new LinkedHashMap<K,V>()).addPairs(objects).build();
 	}
@@ -186,7 +185,6 @@ public class MapAssertion_Test {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void ca06_isAny() throws Exception {
 		Map<Integer,Integer> x1 = map(1,2), x1a = map(1,2), x2 = map(3,4), nil = null;
 		test(x1).isAny(x1a, x2);
@@ -196,7 +194,6 @@ public class MapAssertion_Test {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void ca07_isNotAny() throws Exception {
 		Map<Integer,Integer> x1 = map(1,2), x1a = map(1,2), x2 = map(3,4), nil = null;
 		test(x1).isNotAny(x2);

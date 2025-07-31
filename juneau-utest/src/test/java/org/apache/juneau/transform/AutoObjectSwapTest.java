@@ -29,7 +29,7 @@ import org.apache.juneau.swap.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({"rawtypes"})
 public class AutoObjectSwapTest {
 
 

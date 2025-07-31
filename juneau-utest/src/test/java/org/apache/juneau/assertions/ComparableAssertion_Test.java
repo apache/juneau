@@ -36,13 +36,13 @@ public class ComparableAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void a01_msg() throws Exception {
+	public void a01_msg() {
 		assertThrown(()->test(null).setMsg("A {0}", 1).isExists()).asMessage().is("A 1");
 		assertThrown(()->test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("A 1");
 	}
 
 	@Test
-	public void a02_stdout() throws Exception {
+	public void a02_stdout() {
 		test(null).setStdOut();
 	}
 
@@ -51,14 +51,14 @@ public class ComparableAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void ba01a_asString() throws Exception {
+	public void ba01a_asString() {
 		Integer x = 1, nil = null;
 		test(x).asString().is("1");
 		test(nil).asString().isNull();
 	}
 
 	@Test
-	public void ba01b_asString_wSerializer() throws Exception {
+	public void ba01b_asString_wSerializer() {
 		Integer x = 1, nil = null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("1");
@@ -66,27 +66,27 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void ba01c_asString_wPredicate() throws Exception {
+	public void ba01c_asString_wPredicate() {
 		Integer x1 = 1;
 		test(x1).asString(x -> "foo").is("foo");
 	}
 
 	@Test
-	public void ba02_asJson() throws Exception {
+	public void ba02_asJson() {
 		Integer x = 1, nil = null;
 		test(x).asJson().is("1");
 		test(nil).asJson().is("null");
 	}
 
 	@Test
-	public void ba03_asJsonSorted() throws Exception {
+	public void ba03_asJsonSorted() {
 		Integer x = 1, nil = null;
 		test(x).asJsonSorted().is("1");
 		test(nil).asJsonSorted().is("null");
 	}
 
 	@Test
-	public void ba04_apply() throws Exception {
+	public void ba04_apply() {
 		Integer x1 = 1, x2 = 2;
 		test(x1).asTransformed(x -> x2).is(x2);
 	}
@@ -96,28 +96,28 @@ public class ComparableAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void ca01_exists() throws Exception {
+	public void ca01_exists() {
 		Integer x = 1, nil = null;
 		test(x).isExists().isExists();
 		assertThrown(()->test(nil).isExists()).asMessage().is("Value was null.");
 	}
 
 	@Test
-	public void ca02_isNull() throws Exception {
+	public void ca02_isNull() {
 		Integer x = 1, nil = null;
 		test(nil).isNull();
 		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
 	}
 
 	@Test
-	public void ca03_isNotNull() throws Exception {
+	public void ca03_isNotNull() {
 		Integer x = 1, nil = null;
 		test(x).isNotNull();
 		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
 	}
 
 	@Test
-	public void ca04a_is_T() throws Exception {
+	public void ca04a_is_T() {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		test(x1).is(x1);
 		test(x1).is(x1a);
@@ -128,7 +128,7 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void ca04b_is_predicate() throws Exception {
+	public void ca04b_is_predicate() {
 		Integer x1 = 1;
 		test(x1).is(x->x==1);
 		assertThrown(()->test(x1).is(x->x==2)).asMessage().asOneLine().is("Unexpected value: '1'.");
@@ -136,7 +136,7 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void ca05_isNot() throws Exception {
+	public void ca05_isNot() {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
@@ -146,7 +146,7 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void ca06_isAny() throws Exception {
+	public void ca06_isAny() {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[2]'.  Actual='1'.");
@@ -155,7 +155,7 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void ca07_isNotAny() throws Exception {
+	public void ca07_isNotAny() {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
@@ -164,9 +164,8 @@ public class ComparableAssertion_Test {
 		assertThrown(()->test(nil).isNotAny(nil)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
-	public void ca08_isSame() throws Exception {
+	public void ca08_isSame() {
 		Integer x1 = new Integer(1), x1a = new Integer(1), nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
@@ -176,7 +175,7 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void ca09_isSameJsonAs() throws Exception {
+	public void ca09_isSameJsonAs() {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
@@ -186,7 +185,7 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void ca10_isSameSortedJsonAs() throws Exception {
+	public void ca10_isSameSortedJsonAs() {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
@@ -196,7 +195,7 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void ca11_isSameSerializedAs() throws Exception {
+	public void ca11_isSameSerializedAs() {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
@@ -207,7 +206,7 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void ca12_isType() throws Exception {
+	public void ca12_isType() {
 		Integer x = 1, nil = null;
 		test(x).isType(Integer.class);
 		test(x).isType(Object.class);
@@ -217,7 +216,7 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void ca13_isExactType() throws Exception {
+	public void ca13_isExactType() {
 		Integer x = 1, nil = null;
 		test(x).isExactType(Integer.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.lang.Integer'.");
@@ -227,7 +226,7 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void ca14_isString() throws Exception {
+	public void ca14_isString() {
 		Integer x = 1, nil = null;
 		test(x).isString("1");
 		test(nil).isString(null);
@@ -237,7 +236,7 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void ca15_isJson() throws Exception {
+	public void ca15_isJson() {
 		Integer x = 1, nil = null;
 		test(x).isJson("1");
 		test(nil).isJson("null");
@@ -247,7 +246,7 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void cb01_isGt() throws Exception {
+	public void cb01_isGt() {
 		Integer x1 = 1, x2 = 2, nil = null;
 		test(x2).isGt(x1);
 		assertThrown(()->test(x1).isGt(x1)).asMessage().asOneLine().is("Value was not greater than expected.  Expect='1'.  Actual='1'.");
@@ -257,7 +256,7 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void cb02_isGte() throws Exception {
+	public void cb02_isGte() {
 		Integer x1 = 1, x1a = Integer.valueOf(1), x2 = 2, nil = null;
 		test(x2).isGte(x1);
 		test(x1).isGte(x1);
@@ -268,7 +267,7 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void cb03_isLt() throws Exception {
+	public void cb03_isLt() {
 		Integer x1 = 1, x2 = 2, nil = null;
 		test(x1).isLt(x2);
 		assertThrown(()->test(x1).isLt(x1)).asMessage().asOneLine().is("Value was not less than expected.  Expect='1'.  Actual='1'.");
@@ -278,7 +277,7 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void cb04_isLte() throws Exception {
+	public void cb04_isLte() {
 		Integer x1 = 1, x1a = Integer.valueOf(1), x2 = 2, nil = null;
 		test(x1).isLte(x2);
 		test(x1).isLte(x1);
@@ -289,7 +288,7 @@ public class ComparableAssertion_Test {
 	}
 
 	@Test
-	public void cb05_isBetween() throws Exception {
+	public void cb05_isBetween() {
 		Integer x1 = 1, x2 = 2, x3 = 3, x4 = 4, nil = null;
 		test(x1).isBetween(x1, x3);
 		test(x2).isBetween(x1, x3);

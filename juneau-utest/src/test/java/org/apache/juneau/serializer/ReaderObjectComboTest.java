@@ -91,7 +91,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>foobar</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 2 */
-				new ComboInput<BeanWithReaderField>(
+				new ComboInput<>(
 					"BeanWithReaderField",
 					BeanWithReaderField.class,
 					() -> new BeanWithReaderField().init()
@@ -119,7 +119,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f>fv</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 3 */
-				new ComboInput<BeanWithReader1dField>(
+				new ComboInput<>(
 					"BeanWithReader1dField",
 					BeanWithReader1dField.class,
 					() -> new BeanWithReader1dField().init()
@@ -147,7 +147,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li>fv1</rdf:li>\n        <rdf:li>fv2</rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 4 */
-				new ComboInput<BeanWithReaderNullField>(
+				new ComboInput<>(
 					"BeanWithReaderNullField",
 					BeanWithReaderNullField.class,
 					() -> new BeanWithReaderNullField().init()
@@ -175,7 +175,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 5 */
-				new ComboInput<BeanWithReaderListField>(
+				new ComboInput<>(
 					"BeanWithReaderListField",
 					BeanWithReaderListField.class,
 					() -> new BeanWithReaderListField().init()
@@ -203,7 +203,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li>fv1</rdf:li>\n        <rdf:li>fv2</rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 6 */
-				new ComboInput<BeanWithReaderMapField>(
+				new ComboInput<>(
 					"BeanWithReaderMapField",
 					BeanWithReaderMapField.class,
 					() -> new BeanWithReaderMapField().init()
@@ -231,7 +231,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:parseType='Resource'>\n      <jp:foo>fv1</jp:foo>\n      <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      <jp:_x0000_>fv2</jp:_x0000_>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 7 */
-				new ComboInput<BeanWithReaderBeanListField>(
+				new ComboInput<>(
 					"BeanWithReaderBeanListField",
 					BeanWithReaderBeanListField.class,
 					() -> new BeanWithReaderBeanListField().init()
@@ -259,7 +259,7 @@ public class ReaderObjectComboTest extends ComboSerializeTest {
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:f1>f1v</jp:f1>\n          <jp:f2>\n            <rdf:Seq>\n              <rdf:li>f2v1</rdf:li>\n              <rdf:li>f2v2</rdf:li>\n              <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n            </rdf:Seq>\n          </jp:f2>\n          <jp:f3 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          <jp:f4>\n            <rdf:Seq>\n              <rdf:li>f4v1</rdf:li>\n              <rdf:li>f4v2</rdf:li>\n              <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n            </rdf:Seq>\n          </jp:f4>\n          <jp:f5 rdf:parseType='Resource'>\n            <jp:foo>f5v1</jp:foo>\n            <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n            <jp:_x0000_>f5v2</jp:_x0000_>\n          </jp:f5>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 8 */
-				new ComboInput<BeanWithReaderBeanMapField>(
+				new ComboInput<>(
 					"BeanWithReaderBeanMapField",
 					BeanWithReaderBeanMapField.class,
 					() -> new BeanWithReaderBeanMapField().init()

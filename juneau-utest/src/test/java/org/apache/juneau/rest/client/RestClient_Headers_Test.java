@@ -100,7 +100,7 @@ public class RestClient_Headers_Test {
 
 	@Test
 	public void a08_header_String_Supplier() throws Exception {
-		MutableSupplier s = MutableSupplier.of("foo");
+		MutableSupplier<String> s = MutableSupplier.of("foo");
 		RestClient x = checkFooClient().headers(header("Foo",s,null)).build();
 		x.get("/headers").header("Foo",s).run().assertContent("['foo','foo']");
 		s.set("bar");
@@ -114,7 +114,7 @@ public class RestClient_Headers_Test {
 
 	@Test
 	public void a10_headers_String_Supplier_Schema() throws Exception {
-		MutableSupplier s = MutableSupplier.of(new String[]{"foo","bar"});
+		MutableSupplier<String[]> s = MutableSupplier.of(new String[]{"foo","bar"});
 		RestClient x = checkFooClient().headers(header("Foo",s,T_ARRAY_PIPES)).build();
 		x.get("/headers").header(header("Foo",s,T_ARRAY_PIPES)).run().assertContent("['foo|bar','foo|bar']");
 		s.set(new String[]{"bar","baz"});
@@ -123,7 +123,7 @@ public class RestClient_Headers_Test {
 
 	@Test
 	public void a11_headers_String_Supplier_Schema_Serializer() throws Exception {
-		MutableSupplier s = MutableSupplier.of(new String[]{"foo","bar"});
+		MutableSupplier<String[]> s = MutableSupplier.of(new String[]{"foo","bar"});
 		checkFooClient().headers(header("Foo",s,T_ARRAY_PIPES).serializer(UonSerializer.DEFAULT)).build().get("/headers").run().assertContent("['@(foo,bar)']");
 	}
 

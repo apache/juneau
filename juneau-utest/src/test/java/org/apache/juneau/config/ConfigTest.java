@@ -448,7 +448,6 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public <T> T getObject(String key, Type type, Type...args) throws ParseException
 	//====================================================================================================
-	@SuppressWarnings("unchecked")
 	@Test
 	public void getObject1() throws Exception {
 		Config c = init(
@@ -490,7 +489,6 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public <T> T getObject(String key, Parser parser, Type type, Type...args) throws ParseException
 	//====================================================================================================
-	@SuppressWarnings("unchecked")
 	@Test
 	public void getObject2() throws Exception {
 		Config c = init(
@@ -702,7 +700,6 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public <T> T getObjectWithDefault(String key, T def, Type type, Type...args) throws ParseException
 	//====================================================================================================
-	@SuppressWarnings("unchecked")
 	@Test
 	public void getObjectWithDefault3() throws Exception {
 		Config c = init(
@@ -749,7 +746,6 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public <T> T getObjectWithDefault(String key, Parser parser, T def, Type type, Type...args) throws ParseException
 	//====================================================================================================
-	@SuppressWarnings("unchecked")
 	@Test
 	public void getObjectWithDefault4() throws Exception {
 		Config c = init(

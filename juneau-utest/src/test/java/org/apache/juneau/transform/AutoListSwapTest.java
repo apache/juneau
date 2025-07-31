@@ -29,7 +29,7 @@ import org.apache.juneau.swap.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({"rawtypes"})
 public class AutoListSwapTest {
 
 	private static final List<String> STRINGLIST = list("foo");
@@ -187,12 +187,12 @@ public class AutoListSwapTest {
 	}
 
 	@Test
-	public void d01_ignoreClass_beanIgnore() throws Exception {
+	public void d01_ignoreClass_beanIgnore() {
 		assertNull(find(D01.class));
 	}
 
 	@Test
-	public void d02_ignoreClass_memberClass() throws Exception {
+	public void d02_ignoreClass_memberClass() {
 		assertNull(find(D02.D02A.class));
 	}
 
@@ -213,12 +213,12 @@ public class AutoListSwapTest {
 	}
 
 	@Test
-	public void d03_ignoreClass_beanIgnore_usingConfig() throws Exception {
+	public void d03_ignoreClass_beanIgnore_usingConfig() {
 		assertNull(find(bc(D01cConfig.class), D01c.class));
 	}
 
 	@Test
-	public void d04_ignoreClass_memberClass_usingConfig() throws Exception {
+	public void d04_ignoreClass_memberClass_usingConfig() {
 		assertNull(find(bc(D01cConfig.class), D02c.D02Ac.class));
 	}
 
@@ -263,32 +263,32 @@ public class AutoListSwapTest {
 	}
 
 	@Test
-	public void e01_ignoreSwapMethod_beanIgnore() throws Exception {
+	public void e01_ignoreSwapMethod_beanIgnore() {
 		assertNull(find(E01.class));
 	}
 
 	@Test
-	public void e01c_ignoreSwapMethod_beanIgnore_usingConfig() throws Exception {
+	public void e01c_ignoreSwapMethod_beanIgnore_usingConfig() {
 		assertNull(find(BeanContext.DEFAULT.copy().applyAnnotations(E01Config.class).build(), E01c.class));
 	}
 
 	@Test
-	public void e02_ignoreSwapMethod_deprecated() throws Exception {
+	public void e02_ignoreSwapMethod_deprecated() {
 		assertNull(find(E02.class));
 	}
 
 	@Test
-	public void e03_ignoreSwapMethod_wrongReturnType() throws Exception {
+	public void e03_ignoreSwapMethod_wrongReturnType() {
 		assertNull(find(E03.class));
 	}
 
 	@Test
-	public void e04_ignoreSwapMethod_wrongParameters() throws Exception {
+	public void e04_ignoreSwapMethod_wrongParameters() {
 		assertNull(find(E04.class));
 	}
 
 	@Test
-	public void e05_ignoreSwapMethod_notStatic() throws Exception {
+	public void e05_ignoreSwapMethod_notStatic() {
 		assertNull(find(E05.class));
 	}
 

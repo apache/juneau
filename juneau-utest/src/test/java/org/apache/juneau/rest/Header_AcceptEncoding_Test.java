@@ -152,7 +152,6 @@ public class Header_AcceptEncoding_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(encoders=MyEncoder.class)
-	@SuppressWarnings("resource")
 	public static class C {
 		@RestGet
 		public void a(RestResponse res) throws Exception {

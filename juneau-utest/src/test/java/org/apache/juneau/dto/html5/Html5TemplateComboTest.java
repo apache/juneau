@@ -34,7 +34,7 @@ public class Html5TemplateComboTest extends ComboRoundTripTest {
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
 			{
-				new ComboInput<FormTemplate>(
+				new ComboInput<>(
 					"FormTemplate-1",
 					FormTemplate.class,
 					new FormTemplate("http://myaction", 123, true)

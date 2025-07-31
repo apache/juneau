@@ -690,7 +690,6 @@ public class RestClient_Config_BeanContext_Test {
 	}
 
 	public static class A22 {
-		@SuppressWarnings("unused")
 		private String foo, bar;
 		public String getFoo() {
 			return foo;

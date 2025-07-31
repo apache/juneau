@@ -46,7 +46,7 @@ public class ExecutableInfoTest {
 			if (t.getClass().isArray())
 				return StreamSupport.stream(ArrayUtils.toList(t, Object.class).spliterator(), false).map(this).collect(Collectors.joining(","));
 			if (t instanceof Annotation)
-				return "@" + ((Annotation)t).annotationType().getSimpleName().toString() + "()";
+				return "@" + ((Annotation)t).annotationType().getSimpleName() + "()";
 			if (t instanceof Class)
 				return ((Class<?>)t).getSimpleName();
 			if (t instanceof ClassInfo)
@@ -64,8 +64,8 @@ public class ExecutableInfoTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	static class A {
-		public A() {}
-		public void foo() {}
+		public A() {}  // NOSONAR
+		public void foo() {}  // NOSONAR
 	}
 	static ClassInfo a = ClassInfo.of(A.class);
 
@@ -87,9 +87,9 @@ public class ExecutableInfoTest {
 
 	static class B {
 		public B() {}
-		public B(String s) {}
-		public void m() {}
-		public int m(String s) { return 0; }
+		public B(String s) {}  // NOSONAR
+		public void m() {}  // NOSONAR
+		public int m(String s) { return 0; }  // NOSONAR
 	}
 	static ClassInfo b = ClassInfo.of(B.class);
 	static ExecutableInfo
@@ -258,11 +258,11 @@ public class ExecutableInfoTest {
 
 	static class C {
 		public C() {}
-		public C(@CA String foo) {}
-		public @CA C(int bar) {}
-		public void m() {}
-		public void m(@CA String foo) {}
-		public @CA void m(int bar) {}
+		public C(@CA String foo) {}  // NOSONAR
+		public @CA C(int bar) {}  // NOSONAR
+		public void m() {}  // NOSONAR
+		public void m(@CA String foo) {}  // NOSONAR
+		public @CA void m(int bar) {}  // NOSONAR
 	}
 	static ClassInfo c = ClassInfo.of(C.class);
 	static ConstructorInfo
@@ -321,8 +321,8 @@ public class ExecutableInfoTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	static class D {
-		public D() throws IOException {}
-		public void m() throws IOException {}
+		public D() throws IOException {}  // NOSONAR
+		public void m() throws IOException {}  // NOSONAR
 	}
 	static ClassInfo d = ClassInfo.of(D.class);
 	static ExecutableInfo
@@ -565,11 +565,11 @@ public class ExecutableInfoTest {
 
 	static class X {
 		public X() {}
-		public X(String foo) {}
-		public X(Map<String,Object> foo) {}
-		public void foo(){}
-		public void foo(String foo){}
-		public void foo(Map<String,Object> foo){}
+		public X(String foo) {}  // NOSONAR
+		public X(Map<String,Object> foo) {}  // NOSONAR
+		public void foo(){}  // NOSONAR
+		public void foo(String foo){}  // NOSONAR
+		public void foo(Map<String,Object> foo){}  // NOSONAR
 	}
 	static ClassInfo x = ClassInfo.of(X.class);
 

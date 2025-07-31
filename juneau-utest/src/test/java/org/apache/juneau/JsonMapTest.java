@@ -57,8 +57,8 @@ public class JsonMapTest {
 		checkStep(13, in, getDeepString(JsonMap.ofJson(in), "A/G"), "asdf\"asdf");
 
 		in = "{A:123, B: 123}";
-		checkStep(16, in, Integer.valueOf(JsonMap.ofJson(in).getInt("A")).toString(), "123");
-		checkStep(17, in, Integer.valueOf(JsonMap.ofJson(in).getInt("B")).toString(), "123");
+		checkStep(16, in, JsonMap.ofJson(in).getInt("A").toString(), "123");
+		checkStep(17, in, JsonMap.ofJson(in).getInt("B").toString(), "123");
 
 		in = "{A:true, B: true, C:false, D: false}";
 		checkStep(18, in, Boolean.valueOf(JsonMap.ofJson(in).getBoolean("A")).toString(), "true");

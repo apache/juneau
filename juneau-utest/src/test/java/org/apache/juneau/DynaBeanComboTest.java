@@ -35,7 +35,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
 			{ 	/* 0 */
-				new ComboInput<BeanWithDynaField>(
+				new ComboInput<>(
 					"BeanWithDynaField",
 					BeanWithDynaField.class,
 					new BeanWithDynaField().init()
@@ -64,7 +64,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(BeanWithDynaField.class))
 			},
 			{ 	/* 1 */
-				new ComboInput<BeanWithDynaMethods>(
+				new ComboInput<>(
 					"BeanWithDynaMethods",
 					BeanWithDynaMethods.class,
 					new BeanWithDynaMethods().init()
@@ -94,7 +94,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				.verify(x -> x.setterCalled ? null : "Setter not called")
 			},
 			{ 	/* 2 */
-				new ComboInput<BeanWithDynaGetterOnly>(
+				new ComboInput<>(
 					"BeanWithDynaGetterOnly",
 					BeanWithDynaGetterOnly.class,
 					new BeanWithDynaGetterOnly().init()
@@ -123,7 +123,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(BeanWithDynaGetterOnly.class))
 			},
 			{ 	/* 3 */
-				new ComboInput<BeanWithDynaFieldSwapped>(
+				new ComboInput<>(
 					"BeanWithDynaFieldSwapped",
 					BeanWithDynaFieldSwapped.class,
 					new BeanWithDynaFieldSwapped().init()
@@ -153,7 +153,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x.f1.get("f1a")).isType(Calendar.class))
 			},
 			{ 	/* 4 */
-				new ComboInput<BeanWithDynaFieldStringList>(
+				new ComboInput<>(
 					"BeanWithDynaFieldStringList",
 					BeanWithDynaFieldStringList.class,
 					new BeanWithDynaFieldStringList().init()
@@ -182,7 +182,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				.verify(x -> verify(x).isType(BeanWithDynaFieldStringList.class))
 			},
 			{ 	/* 5 */
-				new ComboInput<BeanWithDynaMethodsAndExtraKeys>(
+				new ComboInput<>(
 					"BeanWithDynaMethodsAndExtraKeys",
 					BeanWithDynaMethodsAndExtraKeys.class,
 					new BeanWithDynaMethodsAndExtraKeys().init()
