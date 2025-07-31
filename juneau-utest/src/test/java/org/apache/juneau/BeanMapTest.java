@@ -1114,8 +1114,8 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testPropertyNameFactoryDashedLC2() {
-		BeanContext bc = BeanContext.DEFAULT_SORTED;
-		BeanMap<P2> m = bc.newBeanMap(P2.class).load("{'foo-bar':1,'baz-bing':2}");
+		BeanContext bc2 = BeanContext.DEFAULT_SORTED;
+		BeanMap<P2> m = bc2.newBeanMap(P2.class).load("{'foo-bar':1,'baz-bing':2}");
 		assertEquals(1, m.get("foo-bar"));
 		assertEquals(2, m.get("baz-bing"));
 		P2 b = m.getBean();

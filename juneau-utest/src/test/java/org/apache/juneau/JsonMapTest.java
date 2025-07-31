@@ -61,10 +61,10 @@ public class JsonMapTest {
 		checkStep(17, in, JsonMap.ofJson(in).getInt("B").toString(), "123");
 
 		in = "{A:true, B: true, C:false, D: false}";
-		checkStep(18, in, Boolean.valueOf(JsonMap.ofJson(in).getBoolean("A")).toString(), "true");
-		checkStep(19, in, Boolean.valueOf(JsonMap.ofJson(in).getBoolean("B")).toString(), "true");
-		checkStep(20, in, Boolean.valueOf(JsonMap.ofJson(in).getBoolean("C")).toString(), "false");
-		checkStep(21, in, Boolean.valueOf(JsonMap.ofJson(in).getBoolean("D")).toString(), "false");
+		checkStep(18, in, JsonMap.ofJson(in).getBoolean("A").toString(), "true");
+		checkStep(19, in, JsonMap.ofJson(in).getBoolean("B").toString(), "true");
+		checkStep(20, in, JsonMap.ofJson(in).getBoolean("C").toString(), "false");
+		checkStep(21, in, JsonMap.ofJson(in).getBoolean("D").toString(), "false");
 
 		in = "{'AAA':{\"BBB\":\"CCC\",'DDD':false}}";
 		checkStep(31, in, getDeepString(JsonMap.ofJson(in), "AAA/BBB"), "CCC");

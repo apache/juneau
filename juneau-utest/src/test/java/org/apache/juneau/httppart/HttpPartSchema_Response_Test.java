@@ -32,7 +32,7 @@ public class HttpPartSchema_Response_Test {
 	// Basic test
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test
-	public void testBasic() throws Exception {
+	public void testBasic() {
 		HttpPartSchema.create().build();
 	}
 

@@ -34,7 +34,7 @@ public class MethodInvokerTest {
 	public static class A {
 		public int foo() { return 0; }
 		public int bar() { throw new RuntimeException("bar"); }
-		public void baz(int x) { }
+		public void baz(int x) { /* no-op */ }
 	}
 
 	private MethodInvoker create(Method m) {

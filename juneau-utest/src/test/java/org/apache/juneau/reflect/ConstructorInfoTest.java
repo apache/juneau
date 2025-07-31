@@ -62,7 +62,7 @@ public class ConstructorInfoTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	static class A {
-		public A() {}
+		public A() {}  // NOSONAR
 	}
 	static ConstructorInfo a = ofc(A.class);
 
@@ -100,7 +100,7 @@ public class ConstructorInfoTest {
 		public B(String f, String f2) {
 			this.f = f;
 		}
-		protected B(int f) {}
+		protected B(int f) {}  // NOSONAR
 		@Override
 		public String toString() {
 			return f;

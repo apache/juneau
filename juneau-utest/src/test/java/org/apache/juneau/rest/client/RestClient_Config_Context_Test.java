@@ -103,7 +103,7 @@ public class RestClient_Config_Context_Test {
 
 	public static class A6d {
 		@BeanConfig(sortProperties="true")
-		public void foo() {}
+		public void foo() { /* no-op */ }
 	}
 
 	@Test

@@ -126,7 +126,7 @@ public class HttpPartSchema_FormData_Test {
 				)
 				String x
 			) {
-
+			/* no-op */
 		}
 	}
 
@@ -182,7 +182,7 @@ public class HttpPartSchema_FormData_Test {
 				)
 				A01 x
 			) {
-
+			/* no-op */
 		}
 	}
 

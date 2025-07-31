@@ -71,7 +71,7 @@ public class BasicMediaRangesHeader_Test {
 	}
 
 	@Test
-	public void a02_match() throws Exception {
+	public void a02_match() {
 		assertInteger(accept("text/foo").match(alist(MediaType.of("text/foo")))).is(0);
 		assertInteger(accept("text/foo").match(alist(MediaType.of("text/bar")))).is(-1);
 		assertInteger(new Accept((String)null).match(alist(MediaType.of("text/bar")))).is(-1);

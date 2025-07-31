@@ -31,7 +31,7 @@ public class FunctionalSwapTest extends RoundTripObjectSwapTest<Locale,String> {
 	private static final LocaleSwap localeSwap = new LocaleSwap();
 	private static FunctionalSwap<Locale,String> SWAP = new FunctionalSwap<>(Locale.class, String.class, x->localeSwap.swap(BS, x), x->localeSwap.unswap(BS, x, null));
 
-	public FunctionalSwapTest(String label, Locale o, FunctionalSwap<Locale,String> s, String r, BeanSession bs) throws Exception {
+	public FunctionalSwapTest(String label, Locale o, FunctionalSwap<Locale,String> s, String r, BeanSession bs) {
 		super(label, o, s, r, bs);
 	}
 

@@ -42,7 +42,7 @@ public class Swagger_Header_Test {
 			public A1(String x) {}
 		}
 		@RestGet
-		public void a(A1 h) {}
+		public void a(A1 h) { /* no-op */ }
 
 		@Header(
 			name="H",
@@ -52,7 +52,7 @@ public class Swagger_Header_Test {
 			public A2(String x) {}
 		}
 		@RestPut
-		public void b(A2 h) {}
+		public void b(A2 h) { /* no-op */ }
 
 		@Header(
 			name="H",
@@ -63,7 +63,7 @@ public class Swagger_Header_Test {
 			public A3(String x) {}
 		}
 		@RestPost
-		public void c(A3 h) {}
+		public void c(A3 h) { /* no-op */ }
 	}
 
 	@Test
@@ -90,26 +90,26 @@ public class Swagger_Header_Test {
 		@Header(name="H")
 		public static class B1 {}
 		@RestGet
-		public void a(B1 h) {}
+		public void a(B1 h) { /* no-op */ }
 
 		@Header(name="H")
 		public static class B2 {
 			public String f1;
 		}
 		@RestPut
-		public void b(B2 b) {}
+		public void b(B2 b) { /* no-op */ }
 
 		@Header(name="H")
 		public static class B3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
 		@RestPost
-		public void c(B3 b) {}
+		public void c(B3 b) { /* no-op */ }
 
 		@Header(name="H")
 		public static class B4 {}
 		@RestDelete
-		public void d(B4 b) {}
+		public void d(B4 b) { /* no-op */ }
 	}
 
 	@Test
@@ -139,14 +139,14 @@ public class Swagger_Header_Test {
 				name="H"
 			)
 			@Schema(description={"a","b"}, type="string")
-			String h) {}
+			String h) { /* no-op */ }
 
 		@RestPut
 		public void b(
 			@Header(
 				name="H",
 				schema=@Schema(description="a\nb",type="string")
-			) String h) {}
+			) String h) { /* no-op */ }
 
 		@RestPost
 		public void c(
@@ -155,10 +155,10 @@ public class Swagger_Header_Test {
 				schema=@Schema(description="b\nc",type="string")
 			)
 			@Schema(description={"a","b"}, type="string")
-			String h) {}
+			String h) { /* no-op */ }
 
 		@RestDelete
-		public void d(@Header("H") String h) {}
+		public void d(@Header("H") String h) { /* no-op */ }
 	}
 
 	@Test
@@ -189,29 +189,29 @@ public class Swagger_Header_Test {
 	public static class E {
 
 		@RestGet
-		public void a(@Header(name="H") String h) {}
+		public void a(@Header(name="H") String h) { /* no-op */ }
 
 		public static class E2 {
 			public String f1;
 		}
 		@RestPut
-		public void b(@Header("H") E2 b) {}
+		public void b(@Header("H") E2 b) { /* no-op */ }
 
 		public static class E3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
 		@RestPost
-		public void c(@Header("H") E3 b) {}
+		public void c(@Header("H") E3 b) { /* no-op */ }
 
 		public static class E4 {}
 		@RestDelete
-		public void d(@Header("H") E4 b) {}
+		public void d(@Header("H") E4 b) { /* no-op */ }
 
 		@RestOp
-		public void e(@Header("H") Integer b) {}
+		public void e(@Header("H") Integer b) { /* no-op */ }
 
 		@RestGet
-		public void f(@Header("H") Boolean b) {}
+		public void f(@Header("H") Boolean b) { /* no-op */ }
 	}
 
 	@Test

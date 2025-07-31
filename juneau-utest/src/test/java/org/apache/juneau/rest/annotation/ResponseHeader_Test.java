@@ -86,7 +86,7 @@ public class ResponseHeader_Test {
 		)
 		public static class B1 {}
 		@RestGet
-		public void a(Value<B1> h) {}
+		public void a(Value<B1> h) { /* no-op */ }
 
 		@Header(
 			name="H",
@@ -94,7 +94,7 @@ public class ResponseHeader_Test {
 		)
 		public static class B2 {}
 		@RestGet
-		public void b(Value<B2> h) {}
+		public void b(Value<B2> h) { /* no-op */ }
 
 		@Header(
 			name="H",
@@ -106,27 +106,27 @@ public class ResponseHeader_Test {
 		)
 		public static class B3 {}
 		@RestGet
-		public void c(Value<B3> h) {}
+		public void c(Value<B3> h) { /* no-op */ }
 
 		@Header(name="H") @StatusCode(100)
 		public static class B4 {}
 		@RestGet
-		public void d(Value<B4> h) {}
+		public void d(Value<B4> h) { /* no-op */ }
 
 		@Header(name="H") @StatusCode({100,101})
 		public static class B5 {}
 		@RestGet
-		public void e(Value<B5> h) {}
+		public void e(Value<B5> h) { /* no-op */ }
 
 		@Header(name="H") @Schema(description="a")
 		public static class B6 {}
 		@RestGet
-		public void f(Value<B6> h) {}
+		public void f(Value<B6> h) { /* no-op */ }
 
 		@Header("H")
 		public static class B7 {}
 		@RestGet
-		public void g(Value<B7> h) {}
+		public void g(Value<B7> h) { /* no-op */ }
 	}
 
 	@Test
@@ -177,7 +177,7 @@ public class ResponseHeader_Test {
 				description="a",
 				type="string"
 			)
-			Value<C1> h) {}
+			Value<C1> h) { /* no-op */ }
 
 		public static class C2 {}
 		@RestGet
@@ -186,7 +186,7 @@ public class ResponseHeader_Test {
 				name="H",
 				schema=@Schema(description="a",type="string")
 			)
-			Value<C2> h) {}
+			Value<C2> h) { /* no-op */ }
 
 		public static class C3 {}
 		@RestGet
@@ -199,23 +199,23 @@ public class ResponseHeader_Test {
 				description="a",
 				type="string"
 			)
-			Value<C3> h) {}
+			Value<C3> h) { /* no-op */ }
 
 		public static class C4 {}
 		@RestGet
-		public void d(@Header(name="H") @StatusCode(100) Value<C4> h) {}
+		public void d(@Header(name="H") @StatusCode(100) Value<C4> h) { /* no-op */ }
 
 		public static class C5 {}
 		@RestGet
-		public void e(@Header(name="H") @StatusCode({100,101}) Value<C5> h) {}
+		public void e(@Header(name="H") @StatusCode({100,101}) Value<C5> h) { /* no-op */ }
 
 		public static class C6 {}
 		@RestGet
-		public void f(@Header(name="H") @Schema(description="a") Value<C6> h) {}
+		public void f(@Header(name="H") @Schema(description="a") Value<C6> h) { /* no-op */ }
 
 		public static class C7 {}
 		@RestGet
-		public void g(@Header("H") Value<C7> h) {}
+		public void g(@Header("H") Value<C7> h) { /* no-op */ }
 	}
 
 	@Test

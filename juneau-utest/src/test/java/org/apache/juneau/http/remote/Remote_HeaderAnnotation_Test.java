@@ -677,7 +677,7 @@ public class Remote_HeaderAnnotation_Test {
 	@Rest
 	public static class K {
 		@RestOp
-		public String get(RestRequest req) throws Exception {
+		public String get(RestRequest req) {
 			return req.getHeaders().subset("a,b,c,d,e,f,g,h,i,i1,i2,i3,a1,a2,a3,a4,b1,b2,b3,b4,c1,c2,c3,c4,e1,e2,e3,e4,f1,f2,f3,f4".split("\\,")).toString();
 		}
 	}

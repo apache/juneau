@@ -48,7 +48,7 @@ public class Swagger_Path_Test {
 			}
 		}
 		@RestGet(path="/a/{P}")
-		public void a(A1 f) {}
+		public void a(A1 f) { /* no-op */ }
 
 		@Path(
 			name="P",
@@ -62,7 +62,7 @@ public class Swagger_Path_Test {
 			}
 		}
 		@RestPut(path="/b/{P}")
-		public void b(A2 f) {}
+		public void b(A2 f) { /* no-op */ }
 
 		@Path(
 			name="P",
@@ -81,7 +81,7 @@ public class Swagger_Path_Test {
 			}
 		}
 		@RestPost(path="/c/{P}")
-		public void c(A3 f) {}
+		public void c(A3 f) { /* no-op */ }
 
 
 		@Path("P")
@@ -92,7 +92,7 @@ public class Swagger_Path_Test {
 			}
 		}
 		@RestDelete(path="/d/{P}")
-		public void d(A4 f) {}
+		public void d(A4 f) { /* no-op */ }
 
 		@Path("P")
 		@Schema(e="a,b")
@@ -103,7 +103,7 @@ public class Swagger_Path_Test {
 			}
 		}
 		@RestOp(path="/e/{P}")
-		public void e(A5 f) {}
+		public void e(A5 f) { /* no-op */ }
 	}
 
 	@Test
@@ -147,26 +147,26 @@ public class Swagger_Path_Test {
 		@Path(name="P")
 		public static class B1 {}
 		@RestGet(path="/a/{P}")
-		public void a(B1 f) {}
+		public void a(B1 f) { /* no-op */ }
 
 		@Path("P")
 		public static class B2 {
 			public String f1;
 		}
 		@RestPut(path="/b/{P}")
-		public void b(B2 b) {}
+		public void b(B2 b) { /* no-op */ }
 
 		@Path("P")
 		public static class B3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
 		@RestPost(path="/c/{P}")
-		public void c(B3 b) {}
+		public void c(B3 b) { /* no-op */ }
 
 		@Path("P")
 		public static class B4 {}
 		@RestDelete(path="/d/{P}")
-		public void d(B4 b) {}
+		public void d(B4 b) { /* no-op */ }
 	}
 
 	@Test
@@ -195,7 +195,7 @@ public class Swagger_Path_Test {
 			@Path("P")
 			@Schema(d="a", t="string")
 			String h
-		) {}
+		) { /* no-op */ }
 
 		@RestPut(path="/b/{P}")
 		public void b(
@@ -204,7 +204,7 @@ public class Swagger_Path_Test {
 				schema=@Schema(description="a",type="string")
 			)
 			String h
-		) {}
+		) { /* no-op */ }
 
 		@RestPost(path="/c/{P}")
 		public void c(
@@ -214,13 +214,13 @@ public class Swagger_Path_Test {
 			)
 			@Schema(d="a", t="string")
 			String h
-		) {}
+		) { /* no-op */ }
 
 		@RestDelete(path="/d/{P}")
-		public void d(@Path("P") String h) {}
+		public void d(@Path("P") String h) { /* no-op */ }
 
 		@RestOp(path="/e/{P}")
-		public void e(@Path("P") @Schema(e="a,b") String h) {}
+		public void e(@Path("P") @Schema(e="a,b") String h) { /* no-op */ }
 	}
 
 	@Test
@@ -251,29 +251,29 @@ public class Swagger_Path_Test {
 	public static class E {
 
 		@RestGet(path="/a/{P}")
-		public void a(@Path("P") String h) {}
+		public void a(@Path("P") String h) { /* no-op */ }
 
 		public static class E2 {
 			public String f1;
 		}
 		@RestPut(path="/b/{P}")
-		public void b(@Path("P") E2 b) {}
+		public void b(@Path("P") E2 b) { /* no-op */ }
 
 		public static class E3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
 		@RestPost(path="/c/{P}")
-		public void c(@Path("P") E3 b) {}
+		public void c(@Path("P") E3 b) { /* no-op */ }
 
 		public static class E4 {}
 		@RestDelete(path="/d/{P}")
-		public void d(@Path("P") E4 b) {}
+		public void d(@Path("P") E4 b) { /* no-op */ }
 
 		@RestOp(path="/e/{P}")
-		public void e(@Path("P") Integer b) {}
+		public void e(@Path("P") Integer b) { /* no-op */ }
 
 		@RestGet(path="/f/{P}")
-		public void f(@Path("P") Boolean b) {}
+		public void f(@Path("P") Boolean b) { /* no-op */ }
 	}
 
 	@Test

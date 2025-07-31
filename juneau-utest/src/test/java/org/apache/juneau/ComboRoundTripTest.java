@@ -99,7 +99,7 @@ public abstract class ComboRoundTripTest {
 		return p2;
 	}
 
-	private boolean isSkipped(String testName, String expected) throws Exception {
+	private boolean isSkipped(String testName, String expected) {
 		if ("SKIP".equals(expected) || comboInput.isTestSkipped(testName)) {
 			return true;
 		}

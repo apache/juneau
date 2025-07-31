@@ -76,10 +76,10 @@ public class MsgPackSerializerTest {
 		test(0x8000, "D2 00 00 80 00");
 		test(0xFFFF, "D2 00 00 FF FF");
 		test(0x00010000, "D2 00 01 00 00");
-		test(Long.decode("0x000000007FFFFFFF").longValue(), "D2 7F FF FF FF");
-		test(Long.decode("0x0000000080000000").longValue(), "D3 00 00 00 00 80 00 00 00");
-		test(Long.decode("0x0000000100000000").longValue(), "D3 00 00 00 01 00 00 00 00");
-		test(Long.decode("0x7FFFFFFFFFFFFFFF").longValue(), "D3 7F FF FF FF FF FF FF FF");
+		test(Long.decode("0x000000007FFFFFFF"), "D2 7F FF FF FF");
+		test(Long.decode("0x0000000080000000"), "D3 00 00 00 00 80 00 00 00");
+		test(Long.decode("0x0000000100000000"), "D3 00 00 00 01 00 00 00 00");
+		test(Long.decode("0x7FFFFFFFFFFFFFFF"), "D3 7F FF FF FF FF FF FF FF");
 		test(-Long.decode("0x7FFFFFFFFFFFFFFF").longValue(), "D3 80 00 00 00 00 00 00 01");
 		test(-1, "E1");
 		test(-63, "FF");

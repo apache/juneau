@@ -60,7 +60,7 @@ public class RestClient_Response_Headers_Test {
 	public static class A2 extends BasicHeader {
 		private static final long serialVersionUID = 1L;
 
-		private A2(String name, Object value) {
+		private A2(String name, Object value) {  // NOSONAR
 			super(name, value);  // Never called.
 		}
 	}

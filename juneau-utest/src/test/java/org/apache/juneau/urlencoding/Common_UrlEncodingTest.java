@@ -207,7 +207,7 @@ public class Common_UrlEncodingTest {
 	@Test
 	public void testURIAttr() throws Exception {
 		UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT;
-		UrlEncodingParser p = UrlEncodingParser.DEFAULT;
+		UrlEncodingParser p2 = UrlEncodingParser.DEFAULT;
 
 		G t = new G();
 		t.uri = new URI("http://uri");
@@ -215,7 +215,7 @@ public class Common_UrlEncodingTest {
 		t.f2 = new URL("http://f2");
 
 		String r = s.serialize(t);
-		t = p.parse(r, G.class);
+		t = p2.parse(r, G.class);
 		assertEquals("http://uri", t.uri.toString());
 		assertEquals("http://f1", t.f1.toString());
 		assertEquals("http://f2", t.f2.toString());

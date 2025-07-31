@@ -90,14 +90,14 @@ public class ReflectionMapTest {
 	//------------------------------------------------------------------------------------------------------------------
 
 	static class B1 {
-		public void m1() {}
-		public void m1(int x) {}
-		public void m1(String x) {}
-		public void m1(String x, int y) {}
-		public void m2(int x) {}
+		public void m1() { /* no-op */ }
+		public void m1(int x) { /* no-op */ }
+		public void m1(String x) { /* no-op */ }
+		public void m1(String x, int y) { /* no-op */ }
+		public void m2(int x) { /* no-op */ }
 	}
 	static class B2 {
-		public void m1() {}
+		public void m1() { /* no-op */ }
 	}
 
 	static ReflectionMap<Number>
@@ -231,13 +231,13 @@ public class ReflectionMapTest {
 	//------------------------------------------------------------------------------------------------------------------
 
 	static class D1 {
-		public D1() {}
-		public D1(int x) {}
-		public D1(String x) {}
-		public D1(String x, int y) {}
+		public D1() { /* no-op */ }
+		public D1(int x) { /* no-op */ }
+		public D1(String x) { /* no-op */ }
+		public D1(String x, int y) { /* no-op */ }
 	}
 	static class D2 {
-		public D2() {}
+		public D2() { /* no-op */ }
 	}
 
 	static ReflectionMap<Number>

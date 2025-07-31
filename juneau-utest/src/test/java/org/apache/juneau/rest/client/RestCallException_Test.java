@@ -53,7 +53,7 @@ public class RestCallException_Test {
 	@Test
 	public void a01_basic() throws Exception {
 		try {
-			client().build().get().run();
+			client().build().get().run();  // NOSONAR
 			fail();
 		} catch (RestCallException e) {
 			assertInteger(e.getResponse().getStatusCode()).is(404);

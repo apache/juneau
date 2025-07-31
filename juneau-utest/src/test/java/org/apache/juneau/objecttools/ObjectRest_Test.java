@@ -822,7 +822,7 @@ public class ObjectRest_Test {
 	// getPublicMethods(String url)
 	//====================================================================================================
 	@Test
-	public void f03_getPublicMethods() throws Exception {
+	public void f03_getPublicMethods() {
 		ObjectRest model = ObjectRest.create(new AddressBook().init());
 		assertTrue(Json5Serializer.DEFAULT.toString(model.getPublicMethods("0")).contains("'toString'"));
 		assertTrue(Json5Serializer.DEFAULT.toString(model.getPublicMethods("0/addresses/0/state")).contains("'toString'"));
@@ -833,7 +833,7 @@ public class ObjectRest_Test {
 	// getClassMeta(String url)
 	//====================================================================================================
 	@Test
-	public void f04_getClassMeta() throws Exception {
+	public void f04_getClassMeta() {
 		ObjectRest model = ObjectRest.create(new AddressBook().init());
 		assertEquals("Person", model.getClassMeta("0").getInnerClass().getSimpleName());
 		assertEquals("String", model.getClassMeta("0/addresses/0/state").getInnerClass().getSimpleName());

@@ -83,14 +83,14 @@ public class Rest_PredefinedStatusCodes_Test {
 			return "OK";
 		}
 		public class B4 {
-			public B4(){}
+			public B4(){ /* no-op */ }
 		}
 		@RestPut
 		public String e(@Content B5 in) {
 			return "OK";
 		}
 		static class B5 {
-			public B5(){}
+			public B5(){ /* no-op */ }
 		}
 		@RestPut
 		public String f(@Content B6 in) {

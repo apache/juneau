@@ -64,7 +64,7 @@ public class ETag_Test {
 	}
 
 	@Test
-	public void a0_asEntityTag() throws Exception {
+	public void a0_asEntityTag() {
 		EntityTag x = new ETag("W/\"foo\"").asEntityTag().get();
 		assertString(x).is("W/\"foo\"");
 		assertString(x.getEntityValue()).is("foo");

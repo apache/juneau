@@ -45,7 +45,7 @@ public class PathReaderBuilderTest {
 
 	@Test
 	public void testAllowNoFileException() {
-		assertThrows(IllegalStateException.class, () -> PathReaderBuilder.create().build());
+		assertThrows(IllegalStateException.class, () -> PathReaderBuilder.create().build());  // NOSONAR
 		assertThrows(NoSuchFileException.class, () -> PathReaderBuilder.create().path("this file does not exist, at all.").build());
 	}
 

@@ -1284,8 +1284,7 @@ public class RrpcInterfaceTest {
 		try {
 			proxy.throwException2();
 			fail();
-		} catch (InterfaceProxy.InterfaceProxyException2 e) {
-		}
+		} catch (InterfaceProxy.InterfaceProxyException2 e) {/*no-op*/}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

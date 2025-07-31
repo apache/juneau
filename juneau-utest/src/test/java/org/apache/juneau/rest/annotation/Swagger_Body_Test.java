@@ -44,7 +44,7 @@ public class Swagger_Body_Test {
 			public A1(String x) {}
 		}
 		@RestGet
-		public void a(A1 h) {}
+		public void a(A1 h) { /* no-op */ }
 
 		@Content
 		@Schema(
@@ -56,7 +56,7 @@ public class Swagger_Body_Test {
 			public A2(String x) {}
 		}
 		@RestPut
-		public void b(A2 h) {}
+		public void b(A2 h) { /* no-op */ }
 
 		@Content
 		@Schema(
@@ -68,7 +68,7 @@ public class Swagger_Body_Test {
 			public A3(String x) {}
 		}
 		@RestPost
-		public void c(A3 h) {}
+		public void c(A3 h) { /* no-op */ }
 	}
 
 	@Test
@@ -99,26 +99,26 @@ public class Swagger_Body_Test {
 		@Schema(type="object")
 		public static class B1 {}
 		@RestGet
-		public void a(B1 h) {}
+		public void a(B1 h) { /* no-op */ }
 
 		@Content
 		public static class B2 {
 			public String f1;
 		}
 		@RestPut
-		public void b(B2 b) {}
+		public void b(B2 b) { /* no-op */ }
 
 		@Content
 		public static class B3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
 		@RestPost
-		public void c(B3 b) {}
+		public void c(B3 b) { /* no-op */ }
 
 		@Content
 		public static class B4 {}
 		@RestDelete
-		public void d(B4 b) {}
+		public void d(B4 b) { /* no-op */ }
 	}
 
 	@Test
@@ -154,7 +154,7 @@ public class Swagger_Body_Test {
 				r=true,
 				type="string"
 			)
-			D1 b) {}
+			D1 b) { /* no-op */ }
 
 		public static class D2 {
 			public D2(String x) {}
@@ -168,7 +168,7 @@ public class Swagger_Body_Test {
 				required=true,
 				type="string"
 			)
-			D2 b) {}
+			D2 b) { /* no-op */ }
 
 		public static class D3 {
 			public D3(String x) {}
@@ -182,7 +182,7 @@ public class Swagger_Body_Test {
 				required=true,
 				type="string"
 			)
-			D3 b) {}
+			D3 b) { /* no-op */ }
 	}
 
 	@Test
@@ -211,29 +211,29 @@ public class Swagger_Body_Test {
 
 		public static class E1 {}
 		@RestGet
-		public void a(@Content @Schema(type="object") E1 b) {}
+		public void a(@Content @Schema(type="object") E1 b) { /* no-op */ }
 
 		public static class E2 {
 			public String f1;
 		}
 		@RestPut
-		public void b(@Content E2 b) {}
+		public void b(@Content E2 b) { /* no-op */ }
 
 		public static class E3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
 		@RestPost
-		public void c(@Content E3 b) {}
+		public void c(@Content E3 b) { /* no-op */ }
 
 		public static class E4 {}
 		@RestDelete
-		public void d(@Content E4 b) {}
+		public void d(@Content E4 b) { /* no-op */ }
 
 		@RestOp
-		public void e(@Content Integer b) {}
+		public void e(@Content Integer b) { /* no-op */ }
 
 		@RestGet
-		public void f(@Content Boolean b) {}
+		public void f(@Content Boolean b) { /* no-op */ }
 	}
 
 	@Test

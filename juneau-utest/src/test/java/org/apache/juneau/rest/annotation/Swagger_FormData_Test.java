@@ -42,7 +42,7 @@ public class Swagger_FormData_Test {
 			public A1(String x) {}
 		}
 		@RestGet
-		public void a(A1 f) {}
+		public void a(A1 f) { /* no-op */ }
 
 		@FormData(
 			name="F",
@@ -52,7 +52,7 @@ public class Swagger_FormData_Test {
 			public A2(String x) {}
 		}
 		@RestPut
-		public void b(A2 f) {}
+		public void b(A2 f) { /* no-op */ }
 
 		@FormData(
 			name="F",
@@ -63,12 +63,12 @@ public class Swagger_FormData_Test {
 			public A3(String x) {}
 		}
 		@RestPost
-		public void c(A3 f) {}
+		public void c(A3 f) { /* no-op */ }
 
 		@FormData("F")
 		public static class A4 {}
 		@RestDelete
-		public void d(A4 f) {}
+		public void d(A4 f) { /* no-op */ }
 	}
 
 	@Test
@@ -101,26 +101,26 @@ public class Swagger_FormData_Test {
 		@FormData(name="F")
 		public static class B1 {}
 		@RestGet
-		public void a(B1 f) {}
+		public void a(B1 f) { /* no-op */ }
 
 		@FormData("F")
 		public static class B2 {
 			public String f1;
 		}
 		@RestPut
-		public void b(B2 f) {}
+		public void b(B2 f) { /* no-op */ }
 
 		@FormData("F")
 		public static class B3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
 		@RestPost
-		public void c(B3 f) {}
+		public void c(B3 f) { /* no-op */ }
 
 		@FormData("F")
 		public static class B4 {}
 		@RestDelete
-		public void d(B4 f) {}
+		public void d(B4 f) { /* no-op */ }
 	}
 
 	@Test
@@ -150,14 +150,14 @@ public class Swagger_FormData_Test {
 				name="F"
 			)
 			@Schema(description={"a","b"}, type="string")
-			String f) {}
+			String f) { /* no-op */ }
 
 		@RestPut
 		public void b(
 			@FormData(
 				name="F",
 				schema=@Schema(description="a\nb",type="string")
-			) String f) {}
+			) String f) { /* no-op */ }
 
 		@RestPost
 		public void c(
@@ -166,10 +166,10 @@ public class Swagger_FormData_Test {
 				schema=@Schema(description="b\nc",type="string")
 			)
 			@Schema(description={"a","b"}, type="string")
-			String f) {}
+			String f) { /* no-op */ }
 
 		@RestDelete
-		public void d(@FormData("F") String f) {}
+		public void d(@FormData("F") String f) { /* no-op */ }
 	}
 
 	@Test
@@ -200,29 +200,29 @@ public class Swagger_FormData_Test {
 	public static class E {
 
 		@RestGet
-		public void a(@FormData(name="F") String f) {}
+		public void a(@FormData(name="F") String f) { /* no-op */ }
 
 		public static class E2 {
 			public String f1;
 		}
 		@RestPut
-		public void b(@FormData("F") E2 b) {}
+		public void b(@FormData("F") E2 b) { /* no-op */ }
 
 		public static class E3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
 		@RestPost
-		public void c(@FormData("F") E3 b) {}
+		public void c(@FormData("F") E3 b) { /* no-op */ }
 
 		public static class E4 {}
 		@RestDelete
-		public void d(@FormData("F") E4 b) {}
+		public void d(@FormData("F") E4 b) { /* no-op */ }
 
 		@RestOp
-		public void e(@FormData("F") Integer b) {}
+		public void e(@FormData("F") Integer b) { /* no-op */ }
 
 		@RestGet
-		public void f(@FormData("F") Boolean b) {}
+		public void f(@FormData("F") Boolean b) { /* no-op */ }
 	}
 
 	@Test

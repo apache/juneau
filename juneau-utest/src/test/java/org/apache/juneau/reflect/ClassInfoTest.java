@@ -184,12 +184,12 @@ public class ClassInfoTest {
 
 	@Test
 	public void resolvedParams() {
-		MethodInfo mi = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m1"));
-		check("A1", mi.getParamType(0).unwrap(Optional.class));
-		check("A1", mi.getReturnType().unwrap(Optional.class));
-		mi = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m2"));
-		check("A1", mi.getParamType(0).unwrap(Value.class));
-		check("A1", mi.getReturnType().unwrap(Value.class));
+		MethodInfo mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m1"));
+		check("A1", mi2.getParamType(0).unwrap(Optional.class));
+		check("A1", mi2.getReturnType().unwrap(Optional.class));
+		mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m2"));
+		check("A1", mi2.getParamType(0).unwrap(Value.class));
+		check("A1", mi2.getReturnType().unwrap(Value.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -374,11 +374,11 @@ public class ClassInfoTest {
 
 	static class E1 {
 		public E1() {}
-		public E1(String a) {}
-		public E1(Writer a) {}
-		public E1(String a, Writer b) {}
-		protected E1(int a) {}
-		E1(float a) {}
+		public E1(String a) {}  // NOSONAR
+		public E1(Writer a) {}  // NOSONAR
+		public E1(String a, Writer b) {}  // NOSONAR
+		protected E1(int a) {}  // NOSONAR
+		E1(float a) {}  // NOSONAR
 	}
 	static class E2 {
 		protected E2() {}
@@ -387,11 +387,11 @@ public class ClassInfoTest {
 		public E3() {}
 	}
 	class E4 {
-		public E4() {}
+		public E4() {}  // NOSONAR
 	}
 	static class E5 {
 		@Deprecated
-		public E5() {}
+		public E5() {}  // NOSONAR
 	}
 	class E6 {
 		public E6(String a) {}
@@ -712,7 +712,7 @@ public class ClassInfoTest {
 	public abstract class H_AbstractPublic {}
 	@Deprecated public class H_PublicDeprecated {}
 
-	static ClassInfo hPublic=of(H_Public.class), hPackage=of(H_Package.class), hProtected=of(H_Protected.class), hPrivate=of(H_Private.class), hPublicMember=of(H_PublicMember.class), hAbstractPublic=of(H_AbstractPublic.class), hPublicDeprecated=of(H_PublicDeprecated.class);
+	static ClassInfo hPublic=of(H_Public.class), hPackage=of(H_Package.class), hProtected=of(H_Protected.class), hPrivate=of(H_Private.class), hPublicMember=of(H_PublicMember.class), hAbstractPublic=of(H_AbstractPublic.class), hPublicDeprecated=of(H_PublicDeprecated.class);  // NOSONAR
 
 	@Test
 	public void isDeprecated() {
@@ -1019,7 +1019,7 @@ public class ClassInfoTest {
 	abstract class H2_Abstract {}
 	class H2_NotAbstract {}
 
-	static ClassInfo h2a=of(H2a.class), h2b=of(H2b.class), h2Deprecated=of(H2_Deprecated.class), h2NotDeprecated=of(H2_NotDeprecated.class), h2Public=of(H2_Public.class), h2NotPublic=of(H2_NotPublic.class), h2Static=of(H2_Static.class), h2NotStatic=of(H2_NotStatic.class), h2Member=of(H2_Member.class), h2StaticMember=of(H2_StaticMember.class), h2Abstract=of(H2_Abstract.class), h2NotAbstract=of(H2_NotAbstract.class);
+	static ClassInfo h2a=of(H2a.class), h2b=of(H2b.class), h2Deprecated=of(H2_Deprecated.class), h2NotDeprecated=of(H2_NotDeprecated.class), h2Public=of(H2_Public.class), h2NotPublic=of(H2_NotPublic.class), h2Static=of(H2_Static.class), h2NotStatic=of(H2_NotStatic.class), h2Member=of(H2_Member.class), h2StaticMember=of(H2_StaticMember.class), h2Abstract=of(H2_Abstract.class), h2NotAbstract=of(H2_NotAbstract.class);  // NOSONAR
 
 	@Test
 	public void isAll() {

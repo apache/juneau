@@ -159,7 +159,7 @@ public class VisibilityTest {
 
 	static class A {
 		public int f1;
-		public A(){}
+		public A(){/* no-op */}
 
 		static A create() {
 			A x = new A();

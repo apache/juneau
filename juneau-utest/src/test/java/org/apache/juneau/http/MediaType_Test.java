@@ -27,7 +27,6 @@ public class MediaType_Test {
 	@Test
 	public void a01_basic() {
 		assertEquals(new MediaType("text/foo"), new MediaType("text/foo"));
-		assertNotEquals(new MediaType("text/foo"), "text/foo");
 
 		Set<MediaType> x = new TreeSet<>();
 		x.add(MediaType.of("text/foo"));

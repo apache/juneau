@@ -86,14 +86,14 @@ public class JsonParserTest {
 
 	@Test
 	public void testStrictMode() {
-		JsonParser p = sp;
-		assertThrown(()->p.parse("{\"foo\":,\"bar\":}", JsonMap.class)).asMessage().isContains("Missing value detected.");
-		assertThrown(()->p.parse("{\"foo\":'bar'}", JsonMap.class)).asMessage().isContains("Invalid quote character");
-		assertThrown(()->p.parse("{'foo':\"bar\"}", JsonMap.class)).asMessage().isContains("Invalid quote character");
-		assertThrown(()->p.parse("{foo:\"bar\"}", JsonMap.class)).asMessage().isContains("Unquoted attribute detected.");
-		assertThrown(()->p.parse("{\"foo\":\"bar\"+\"baz\"}", JsonMap.class)).asMessage().isContains("String concatenation detected.");
-		assertThrown(()->p.parse("{\"foo\":\"bar\" + \"baz\"}", JsonMap.class)).asMessage().isContains("String concatenation detected.");
-		assertThrown(()->p.parse("{\"foo\":/*comment*/\"bar\"}", JsonMap.class)).asMessage().isContains("Javascript comment detected.");
+		JsonParser p2 = sp;
+		assertThrown(()->p2.parse("{\"foo\":,\"bar\":}", JsonMap.class)).asMessage().isContains("Missing value detected.");
+		assertThrown(()->p2.parse("{\"foo\":'bar'}", JsonMap.class)).asMessage().isContains("Invalid quote character");
+		assertThrown(()->p2.parse("{'foo':\"bar\"}", JsonMap.class)).asMessage().isContains("Invalid quote character");
+		assertThrown(()->p2.parse("{foo:\"bar\"}", JsonMap.class)).asMessage().isContains("Unquoted attribute detected.");
+		assertThrown(()->p2.parse("{\"foo\":\"bar\"+\"baz\"}", JsonMap.class)).asMessage().isContains("String concatenation detected.");
+		assertThrown(()->p2.parse("{\"foo\":\"bar\" + \"baz\"}", JsonMap.class)).asMessage().isContains("String concatenation detected.");
+		assertThrown(()->p2.parse("{\"foo\":/*comment*/\"bar\"}", JsonMap.class)).asMessage().isContains("Javascript comment detected.");
 	}
 
 	/**
@@ -102,15 +102,15 @@ public class JsonParserTest {
 	@Test
 	public void testPrimitivesAsStrings() throws Exception {
 		String json;
-		ReaderParser p = JsonParser.DEFAULT;
+		ReaderParser p2 = JsonParser.DEFAULT;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 
 		json = "{f01:'1',f02:'1',f03:'true',f04:'true',f05:'1',f06:'1',f07:'1',f08:'1',f09:'1',f10:'1'}";
-		B b = p.parse(json, B.class);
+		B b = p2.parse(json, B.class);
 		assertEquals("{f01:1,f02:1,f03:true,f04:true,f05:1.0,f06:1.0,f07:1,f08:1,f09:1,f10:1}", s.toString(b));
 
 		json = "{f01:'',f02:'',f03:'',f04:'',f05:'',f06:'',f07:'',f08:'',f09:'',f10:''}";
-		b = p.parse(json, B.class);
+		b = p2.parse(json, B.class);
 		assertEquals("{f01:0,f02:0,f03:false,f04:false,f05:0.0,f06:0.0,f07:0,f08:0,f09:0,f10:0}", s.toString(b));
 	}
 
@@ -221,14 +221,14 @@ public class JsonParserTest {
 	//====================================================================================================
 	@Test
 	public void testStreamsAutoClose() throws Exception {
-		ReaderParser p = JsonParser.DEFAULT.copy().autoCloseStreams().build();
+		ReaderParser p2 = JsonParser.DEFAULT.copy().autoCloseStreams().build();
 		Object x;
 		Reader r;
 
 		r = reader("{foo:'bar'}{baz:'qux'}");
-		x = p.parse(r, JsonMap.class);
+		x = p2.parse(r, JsonMap.class);
 		assertObject(x).asJson().is("{foo:'bar'}");
-		assertThrown(()->p.parse(r, JsonMap.class)).asMessage().isContains("Reader is closed");
+		assertThrown(()->p2.parse(r, JsonMap.class)).asMessage().isContains("Reader is closed");
 	}
 
 	//====================================================================================================
@@ -237,20 +237,20 @@ public class JsonParserTest {
 	//====================================================================================================
 	@Test
 	public void testMultipleObjectsInStream() throws Exception {
-		ReaderParser p = JsonParser.create().unbuffered().build();
+		ReaderParser p2 = JsonParser.create().unbuffered().build();
 		Object x;
 		Reader r;
 
 		r = reader("{foo:'bar'}{baz:'qux'}");
-		x = p.parse(r, JsonMap.class);
+		x = p2.parse(r, JsonMap.class);
 		assertObject(x).asJson().is("{foo:'bar'}");
-		x = p.parse(r, JsonMap.class);
+		x = p2.parse(r, JsonMap.class);
 		assertObject(x).asJson().is("{baz:'qux'}");
 
 		r = reader("[123][456]");
-		x = p.parse(r, JsonList.class);
+		x = p2.parse(r, JsonList.class);
 		assertObject(x).asJson().is("[123]");
-		x = p.parse(r, JsonList.class);
+		x = p2.parse(r, JsonList.class);
 		assertObject(x).asJson().is("[456]");
 	}
 

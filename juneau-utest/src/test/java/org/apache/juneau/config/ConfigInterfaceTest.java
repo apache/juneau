@@ -71,7 +71,7 @@ public class ConfigInterfaceTest {
 	@Test
 	public void testBooleanObject() {
 		proxy.setBooleanObject(true);
-		assertEquals(true, proxy.getBooleanObject().booleanValue());
+		assertEquals(true, proxy.getBooleanObject());
 		assertEquals("true", cf.get("A/booleanObject").get());
 		assertObject(proxy.getBooleanObject()).isType(Boolean.class);
 	}

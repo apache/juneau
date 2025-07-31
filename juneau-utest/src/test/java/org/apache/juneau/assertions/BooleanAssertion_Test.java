@@ -16,6 +16,8 @@ import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.*;
+
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -166,10 +168,10 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void ca08_isSame() {
-		Boolean x1 = new Boolean(true), x1a = new Boolean(true), nil = null;
+		// Note that even the following returns the same object sometimes.
+		Boolean x1 = Boolean.valueOf(new String("true")), x1a = Boolean.valueOf(new String("true")), nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
-		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='true(Boolean@*)'.  Actual='true(Boolean@*)'.");
 		assertThrown(()->test(nil).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='true(Boolean@*)'.  Actual='null(null)'.");
 		assertThrown(()->test(x1).isSame(nil)).asMessage().asOneLine().isMatches("Not the same value.  Expect='null(null)'.  Actual='true(Boolean@*)'.");
 	}

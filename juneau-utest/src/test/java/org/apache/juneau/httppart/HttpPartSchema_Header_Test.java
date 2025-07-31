@@ -126,7 +126,7 @@ public class HttpPartSchema_Header_Test {
 				)
 				String x
 			) {
-
+			/* no-op */
 		}
 	}
 
@@ -182,7 +182,7 @@ public class HttpPartSchema_Header_Test {
 				)
 				A01 x
 			) {
-
+			/* no-op */
 		}
 	}
 

@@ -37,20 +37,20 @@ public class Swagger_Query_Test {
 		@Query("Q")
 		@Schema(d= {"a","b"}, t="string")
 		public static class A1 {
-			public A1(String x) {}
+			public A1(String x) { /* no-op */ }
 		}
 		@RestGet
-		public void a(A1 q) {}
+		public void a(A1 q) { /* no-op */ }
 
 		@Query(
 			name="Q",
 			schema=@Schema(description="a\nb",type="string")
 		)
 		public static class A2 {
-			public A2(String x) {}
+			public A2(String x) { /* no-op */ }
 		}
 		@RestPut
-		public void b(A2 q) {}
+		public void b(A2 q) { /* no-op */ }
 
 		@Query(
 			name="Q",
@@ -58,15 +58,15 @@ public class Swagger_Query_Test {
 		)
 		@Schema(d={"a","b"}, t="string")
 		public static class A3 {
-			public A3(String x) {}
+			public A3(String x) { /* no-op */ }
 		}
 		@RestPost
-		public void c(A3 q) {}
+		public void c(A3 q) { /* no-op */ }
 
 		@Query("Q")
 		public static class A4 {}
 		@RestDelete
-		public void d(A4 q) {}
+		public void d(A4 q) { /* no-op */ }
 	}
 
 	@Test
@@ -99,26 +99,26 @@ public class Swagger_Query_Test {
 		@Query(name="Q")
 		public static class B1 {}
 		@RestGet
-		public void a(B1 q) {}
+		public void a(B1 q) { /* no-op */ }
 
 		@Query("Q")
 		public static class B2 {
 			public String f1;
 		}
 		@RestPut
-		public void b(B2 q) {}
+		public void b(B2 q) { /* no-op */ }
 
 		@Query("Q")
 		public static class B3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
 		@RestPost
-		public void c(B3 q) {}
+		public void c(B3 q) { /* no-op */ }
 
 		@Query("Q")
 		public static class B4 {}
 		@RestDelete
-		public void d(B4 q) {}
+		public void d(B4 q) { /* no-op */ }
 	}
 
 	@Test
@@ -147,7 +147,7 @@ public class Swagger_Query_Test {
 			@Query("Q")
 			@Schema(d= {"a","b"}, t="string")
 			String q
-		) {}
+		) { /* no-op */ }
 
 		@RestPut
 		public void b(
@@ -156,7 +156,7 @@ public class Swagger_Query_Test {
 				schema=@Schema(description="a\nb",type="string")
 			)
 			String q
-		) {}
+		) { /* no-op */ }
 
 		@RestPost
 		public void c(
@@ -166,7 +166,7 @@ public class Swagger_Query_Test {
 			)
 			@Schema(d= {"a","b"}, t="string")
 			String q
-		) {}
+		) { /* no-op */ }
 
 		@RestDelete
 		public void d(@Query("Q") String q) {}
@@ -204,7 +204,7 @@ public class Swagger_Query_Test {
 	public static class E {
 
 		@RestGet
-		public void a(@Query("Q") String q) {}
+		public void a(@Query("Q") String q) { /* no-op */ }
 	}
 
 	@Test

@@ -55,8 +55,8 @@ public class ConfigBuilderTest {
 		cf.commit();
 		assertObject(cf.toMap()).asJson().is("{'':{},Test:{A:'a'}}");
 
-		String NL = System.getProperty("line.separator");
-		cf = cf.load("[Test]"+NL+"A = b"+NL, true);
+		String nl = System.getProperty("line.separator");
+		cf = cf.load("[Test]"+nl+"A = b"+nl, true);
 		assertObject(cf.toMap()).asJson().is("{'':{},Test:{A:'b'}}");
 	}
 }

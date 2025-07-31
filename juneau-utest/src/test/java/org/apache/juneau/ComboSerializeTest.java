@@ -43,7 +43,7 @@ public abstract class ComboSerializeTest {
 		this.comboInput = comboInput;
 	}
 
-	private Serializer getSerializer(Serializer s) throws Exception {
+	private Serializer getSerializer(Serializer s) {
 		Serializer s2 = serializerMap.get(s);
 		if (s2 == null) {
 			s2 = applySettings(s);
@@ -52,7 +52,7 @@ public abstract class ComboSerializeTest {
 		return s2;
 	}
 
-	private boolean isSkipped(String testName, String expected) throws Exception {
+	private boolean isSkipped(String testName, String expected) {
 		if ("SKIP".equals(expected) || comboInput.isTestSkipped(testName)) {
 			System.err.println(getClass().getName() + ": " + comboInput.label + "/" + testName + " skipped.");  // NOT DEBUG
 			return true;

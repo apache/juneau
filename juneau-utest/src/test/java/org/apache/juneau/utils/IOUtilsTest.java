@@ -70,8 +70,7 @@ public class IOUtilsTest {
 	public static class TestWriter extends StringWriter {
 		boolean closed;
 
-		public TestWriter() {
-		}
+		public TestWriter() { /* no-op */ }
 
 		@Override /* Writer */
 		public void close() {
@@ -96,8 +95,7 @@ public class IOUtilsTest {
 	public static class TestOutputStream extends ByteArrayOutputStream {
 		boolean closed;
 
-		public TestOutputStream() {
-		}
+		public TestOutputStream() { /* no-op */ }
 
 		@Override /* OutputStream */
 		public void close() throws IOException {

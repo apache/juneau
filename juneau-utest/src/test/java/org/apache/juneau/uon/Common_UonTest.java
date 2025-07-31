@@ -205,7 +205,7 @@ public class Common_UonTest {
 	@Test
 	public void testURIAttr() throws Exception {
 		UonSerializer s = UonSerializer.DEFAULT;
-		UonParser p = UonParser.DEFAULT;
+		UonParser p2 = UonParser.DEFAULT;
 
 		G t = new G();
 		t.uri = new URI("http://uri");
@@ -213,7 +213,7 @@ public class Common_UonTest {
 		t.f2 = new URL("http://f2");
 
 		String r = s.serialize(t);
-		t = p.parse(r, G.class);
+		t = p2.parse(r, G.class);
 		assertEquals("http://uri", t.uri.toString());
 		assertEquals("http://f1", t.f1.toString());
 		assertEquals("http://f2", t.f2.toString());

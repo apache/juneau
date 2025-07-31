@@ -68,13 +68,11 @@ public class XmlConfigAnnotationTest {
 			return null;
 		}
 		@Override
-		public void allocate(XMLStreamReader reader, XMLEventConsumer consumer) throws XMLStreamException {
-		}
+		public void allocate(XMLStreamReader reader, XMLEventConsumer consumer) throws XMLStreamException {/* no-op */}
 	}
 	public static class AB extends XmlReporter {
 		@Override
-		public void report(String message, String errorType, Object relatedInformation, Location location) throws XMLStreamException {
-		}
+		public void report(String message, String errorType, Object relatedInformation, Location location) throws XMLStreamException {/* no-op */}
 	}
 	public static class AC extends XmlResolver {
 		@Override

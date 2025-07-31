@@ -317,12 +317,12 @@ public class UrlEncodingSerializerTest {
 	//====================================================================================================
 	@Test
 	public void testMultiPartParametersOnBeansViaProperty() throws Exception {
-		UrlEncodingSerializer s;
+		UrlEncodingSerializer s2;
 		DTOs.B t = DTOs.B.create();
 		String r;
 
-		s = UrlEncodingSerializer.DEFAULT;
-		r = s.serialize(t);
+		s2 = UrlEncodingSerializer.DEFAULT;
+		r = s2.serialize(t);
 		String e = ""
 			+ "f01=@(a,b)"
 			+ "&f02=@(c,d)"
@@ -346,8 +346,8 @@ public class UrlEncodingSerializerTest {
 			+ "&f20=@(@((a=a,b=1,c=true)),@((a=a,b=1,c=true)))";
 		assertEquals(e, r);
 
-		s = UrlEncodingSerializer.create().expandedParams().build();
-		r = s.serialize(t);
+		s2 = UrlEncodingSerializer.create().expandedParams().build();
+		r = s2.serialize(t);
 		e = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
@@ -374,12 +374,12 @@ public class UrlEncodingSerializerTest {
 
 	@Test
 	public void testMultiPartParametersOnBeansViaProperty_usingConfig() throws Exception {
-		UrlEncodingSerializer s;
+		UrlEncodingSerializer s2;
 		DTOs2.B t = DTOs2.B.create();
 		String r;
 
-		s = UrlEncodingSerializer.DEFAULT.copy().applyAnnotations(DTOs2.Annotations.class).build();
-		r = s.serialize(t);
+		s2 = UrlEncodingSerializer.DEFAULT.copy().applyAnnotations(DTOs2.Annotations.class).build();
+		r = s2.serialize(t);
 		String e = ""
 			+ "f01=@(a,b)"
 			+ "&f02=@(c,d)"
@@ -403,8 +403,8 @@ public class UrlEncodingSerializerTest {
 			+ "&f20=@(@((a=a,b=1,c=true)),@((a=a,b=1,c=true)))";
 		assertEquals(e, r);
 
-		s = UrlEncodingSerializer.create().expandedParams().applyAnnotations(DTOs2.Annotations.class).build();
-		r = s.serialize(t);
+		s2 = UrlEncodingSerializer.create().expandedParams().applyAnnotations(DTOs2.Annotations.class).build();
+		r = s2.serialize(t);
 		e = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
@@ -434,12 +434,12 @@ public class UrlEncodingSerializerTest {
 	//====================================================================================================
 	@Test
 	public void testMultiPartParametersOnBeansViaAnnotationOnClass() throws Exception {
-		UrlEncodingSerializer s;
+		UrlEncodingSerializer s2;
 		DTOs.C t = DTOs.C.create();
 		String r;
 
-		s = UrlEncodingSerializer.DEFAULT;
-		r = s.serialize(t);
+		s2 = UrlEncodingSerializer.DEFAULT;
+		r = s2.serialize(t);
 		String e = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
@@ -463,8 +463,8 @@ public class UrlEncodingSerializerTest {
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=a,b=1,c=true))";
 		assertEquals(e, r);
 
-		s = UrlEncodingSerializer.create().expandedParams().build();
-		r = s.serialize(t);
+		s2 = UrlEncodingSerializer.create().expandedParams().build();
+		r = s2.serialize(t);
 		e = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
@@ -491,12 +491,12 @@ public class UrlEncodingSerializerTest {
 
 	@Test
 	public void testMultiPartParametersOnBeansViaAnnotationOnClass_usingConfig() throws Exception {
-		UrlEncodingSerializer s;
+		UrlEncodingSerializer s2;
 		DTOs2.C t = DTOs2.C.create();
 		String r;
 
-		s = UrlEncodingSerializer.DEFAULT.copy().applyAnnotations(DTOs2.Annotations.class).build();
-		r = s.serialize(t);
+		s2 = UrlEncodingSerializer.DEFAULT.copy().applyAnnotations(DTOs2.Annotations.class).build();
+		r = s2.serialize(t);
 		String e = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
@@ -520,8 +520,8 @@ public class UrlEncodingSerializerTest {
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=a,b=1,c=true))";
 		assertEquals(e, r);
 
-		s = UrlEncodingSerializer.create().expandedParams().applyAnnotations(DTOs2.Annotations.class).build();
-		r = s.serialize(t);
+		s2 = UrlEncodingSerializer.create().expandedParams().applyAnnotations(DTOs2.Annotations.class).build();
+		r = s2.serialize(t);
 		e = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
@@ -548,15 +548,15 @@ public class UrlEncodingSerializerTest {
 
 	@Test
 	public void testMultiPartParametersOnMapOfStringArrays() throws Exception {
-		UrlEncodingSerializer s;
+		UrlEncodingSerializer s2;
 		String r;
 
 		Map<String,String[]> t = new LinkedHashMap<>();
 		t.put("f1", new String[]{"bar"});
 		t.put("f2", new String[]{"bar","baz"});
 		t.put("f3", new String[]{});
-		s = UrlEncodingSerializer.DEFAULT_EXPANDED;
-		r = s.serialize(t);
+		s2 = UrlEncodingSerializer.DEFAULT_EXPANDED;
+		r = s2.serialize(t);
 		String e = "f1=bar&f2=bar&f2=baz";
 		assertEquals(e, r);
 	}
@@ -566,21 +566,21 @@ public class UrlEncodingSerializerTest {
 	//====================================================================================================
 	@Test
 	public void testPlainTextParams() throws Exception {
-		WriterSerializer s = UrlEncodingSerializer.DEFAULT.copy().paramFormatPlain().build();
+		WriterSerializer s2 = UrlEncodingSerializer.DEFAULT.copy().paramFormatPlain().build();
 
-		assertEquals("_value=foo", s.serialize("foo"));
-		assertEquals("_value='foo'", s.serialize("'foo'"));
-		assertEquals("_value=(foo)", s.serialize("(foo)"));
-		assertEquals("_value=@(foo)", s.serialize("@(foo)"));
+		assertEquals("_value=foo", s2.serialize("foo"));
+		assertEquals("_value='foo'", s2.serialize("'foo'"));
+		assertEquals("_value=(foo)", s2.serialize("(foo)"));
+		assertEquals("_value=@(foo)", s2.serialize("@(foo)"));
 
 		Map<String,Object> m = mapBuilder(String.class,Object.class).add("foo","foo").add("'foo'","'foo'").add("(foo)","(foo)").add("@(foo)","@(foo)").build();
-		assertEquals("foo=foo&'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)", s.serialize(m));
+		assertEquals("foo=foo&'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)", s2.serialize(m));
 
 		List<String> l = list("foo", "'foo'", "(foo)", "@(foo)");
-		assertEquals("0=foo&1='foo'&2=(foo)&3=@(foo)", s.serialize(l));
+		assertEquals("0=foo&1='foo'&2=(foo)&3=@(foo)", s2.serialize(l));
 
 		A a = new A();
-		assertEquals("'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)&foo=foo", s.serialize(a));
+		assertEquals("'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)&foo=foo", s2.serialize(a));
 	}
 
 	@Bean(sort=true)

@@ -1363,7 +1363,7 @@ public class JsonSchemaGeneratorTest {
 		}
 
 		@Schema(type="foo",format="bar",description="baz")
-		public void setF1(int f1) {}
+		public void setF1(int f1) { /* no-op */ }
 	}
 
 	@Test
@@ -1380,7 +1380,7 @@ public class JsonSchemaGeneratorTest {
 			return 123;
 		}
 
-		public void setF1(int f1) {}
+		public void setF1(int f1) { /* no-op */ }
 	}
 
 	//====================================================================================================

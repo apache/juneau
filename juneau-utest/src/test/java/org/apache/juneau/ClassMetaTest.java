@@ -113,17 +113,17 @@ public class ClassMetaTest {
 
 	@Test
 	public void b01_swaps() {
-		BeanContext bc;
+		BeanContext bc2;
 		ClassMeta<?> ooo, hi1, hc1, hi2, hc2;
 		BeanSession bs;
 
-		bc = BeanContext.DEFAULT;
-		bs = bc.getSession();
-		ooo = bc.getClassMeta(Object.class);
-		hi1 = bc.getClassMeta(BI1.class);
-		hc1 = bc.getClassMeta(BC1.class);
-		hi2 = bc.getClassMeta(BI2.class);
-		hc2 = bc.getClassMeta(BC2.class);
+		bc2 = BeanContext.DEFAULT;
+		bs = bc2.getSession();
+		ooo = bc2.getClassMeta(Object.class);
+		hi1 = bc2.getClassMeta(BI1.class);
+		hc1 = bc2.getClassMeta(BC1.class);
+		hi2 = bc2.getClassMeta(BI2.class);
+		hc2 = bc2.getClassMeta(BC2.class);
 		assertFalse(ooo.hasChildSwaps());
 		assertFalse(hi1.hasChildSwaps());
 		assertFalse(hc1.hasChildSwaps());
@@ -140,13 +140,13 @@ public class ClassMetaTest {
 		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), BI2.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), BC2.class);
 
-		bc = BeanContext.create().swaps(BI1Swap.class).build();
-		bs = bc.getSession();
-		ooo = bc.getClassMeta(Object.class);
-		hi1 = bc.getClassMeta(BI1.class);
-		hc1 = bc.getClassMeta(BC1.class);
-		hi2 = bc.getClassMeta(BI2.class);
-		hc2 = bc.getClassMeta(BC2.class);
+		bc2 = BeanContext.create().swaps(BI1Swap.class).build();
+		bs = bc2.getSession();
+		ooo = bc2.getClassMeta(Object.class);
+		hi1 = bc2.getClassMeta(BI1.class);
+		hc1 = bc2.getClassMeta(BC1.class);
+		hi2 = bc2.getClassMeta(BI2.class);
+		hc2 = bc2.getClassMeta(BC2.class);
 		assertTrue(ooo.hasChildSwaps());
 		assertTrue(hi1.hasChildSwaps());
 		assertFalse(hc1.hasChildSwaps());
@@ -163,13 +163,13 @@ public class ClassMetaTest {
 		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
-		bc = BeanContext.create().swaps(BC1Swap.class).build();
-		bs = bc.getSession();
-		ooo = bc.getClassMeta(Object.class);
-		hi1 = bc.getClassMeta(BI1.class);
-		hc1 = bc.getClassMeta(BC1.class);
-		hi2 = bc.getClassMeta(BI2.class);
-		hc2 = bc.getClassMeta(BC2.class);
+		bc2 = BeanContext.create().swaps(BC1Swap.class).build();
+		bs = bc2.getSession();
+		ooo = bc2.getClassMeta(Object.class);
+		hi1 = bc2.getClassMeta(BI1.class);
+		hc1 = bc2.getClassMeta(BC1.class);
+		hi2 = bc2.getClassMeta(BI2.class);
+		hc2 = bc2.getClassMeta(BC2.class);
 		assertTrue(ooo.hasChildSwaps());
 		assertTrue(hi1.hasChildSwaps());
 		assertTrue(hc1.hasChildSwaps());
@@ -186,13 +186,13 @@ public class ClassMetaTest {
 		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), BI2.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
-		bc = BeanContext.create().swaps(BI2Swap.class).build();
-		bs = bc.getSession();
-		ooo = bc.getClassMeta(Object.class);
-		hi1 = bc.getClassMeta(BI1.class);
-		hc1 = bc.getClassMeta(BC1.class);
-		hi2 = bc.getClassMeta(BI2.class);
-		hc2 = bc.getClassMeta(BC2.class);
+		bc2 = BeanContext.create().swaps(BI2Swap.class).build();
+		bs = bc2.getSession();
+		ooo = bc2.getClassMeta(Object.class);
+		hi1 = bc2.getClassMeta(BI1.class);
+		hc1 = bc2.getClassMeta(BC1.class);
+		hi2 = bc2.getClassMeta(BI2.class);
+		hc2 = bc2.getClassMeta(BC2.class);
 		assertTrue(ooo.hasChildSwaps());
 		assertTrue(hi1.hasChildSwaps());
 		assertFalse(hc1.hasChildSwaps());
@@ -209,13 +209,13 @@ public class ClassMetaTest {
 		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
-		bc = BeanContext.create().swaps(BC2Swap.class).build();
-		bs = bc.getSession();
-		ooo = bc.getClassMeta(Object.class);
-		hi1 = bc.getClassMeta(BI1.class);
-		hc1 = bc.getClassMeta(BC1.class);
-		hi2 = bc.getClassMeta(BI2.class);
-		hc2 = bc.getClassMeta(BC2.class);
+		bc2 = BeanContext.create().swaps(BC2Swap.class).build();
+		bs = bc2.getSession();
+		ooo = bc2.getClassMeta(Object.class);
+		hi1 = bc2.getClassMeta(BI1.class);
+		hc1 = bc2.getClassMeta(BC1.class);
+		hi2 = bc2.getClassMeta(BI2.class);
+		hc2 = bc2.getClassMeta(BC2.class);
 		assertTrue(ooo.hasChildSwaps());
 		assertTrue(hi1.hasChildSwaps());
 		assertTrue(hc1.hasChildSwaps());
@@ -232,13 +232,13 @@ public class ClassMetaTest {
 		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), BI2.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
-		bc = BeanContext.create().swaps(BI1Swap.class,BC1Swap.class,BI2Swap.class, BC2Swap.class).build();
-		bs = bc.getSession();
-		ooo = bc.getClassMeta(Object.class);
-		hi1 = bc.getClassMeta(BI1.class);
-		hc1 = bc.getClassMeta(BC1.class);
-		hi2 = bc.getClassMeta(BI2.class);
-		hc2 = bc.getClassMeta(BC2.class);
+		bc2 = BeanContext.create().swaps(BI1Swap.class,BC1Swap.class,BI2Swap.class, BC2Swap.class).build();
+		bs = bc2.getSession();
+		ooo = bc2.getClassMeta(Object.class);
+		hi1 = bc2.getClassMeta(BI1.class);
+		hc1 = bc2.getClassMeta(BC1.class);
+		hi2 = bc2.getClassMeta(BI2.class);
+		hc2 = bc2.getClassMeta(BC2.class);
 		assertTrue(ooo.hasChildSwaps());
 		assertTrue(hi1.hasChildSwaps());
 		assertTrue(hc1.hasChildSwaps());
@@ -255,13 +255,13 @@ public class ClassMetaTest {
 		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
-		bc = BeanContext.create().swaps(BC2Swap.class,BI2Swap.class,BC1Swap.class, BI1Swap.class).build();
-		bs = bc.getSession();
-		ooo = bc.getClassMeta(Object.class);
-		hi1 = bc.getClassMeta(BI1.class);
-		hc1 = bc.getClassMeta(BC1.class);
-		hi2 = bc.getClassMeta(BI2.class);
-		hc2 = bc.getClassMeta(BC2.class);
+		bc2 = BeanContext.create().swaps(BC2Swap.class,BI2Swap.class,BC1Swap.class, BI1Swap.class).build();
+		bs = bc2.getSession();
+		ooo = bc2.getClassMeta(Object.class);
+		hi1 = bc2.getClassMeta(BI1.class);
+		hc1 = bc2.getClassMeta(BC1.class);
+		hi2 = bc2.getClassMeta(BI2.class);
+		hc2 = bc2.getClassMeta(BC2.class);
 		assertTrue(ooo.hasChildSwaps());
 		assertTrue(hi1.hasChildSwaps());
 		assertTrue(hc1.hasChildSwaps());

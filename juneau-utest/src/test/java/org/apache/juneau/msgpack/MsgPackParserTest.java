@@ -127,7 +127,7 @@ public class MsgPackParserTest {
 		assertObject(r).asJson().is("{'1':2}");
 	}
 
-	private InputStream is(String spacedHex) throws Exception {
+	private InputStream is(String spacedHex) {
 		return new CloseableByteArrayInputStream(StringUtils.fromSpacedHex(spacedHex));
 	}
 }

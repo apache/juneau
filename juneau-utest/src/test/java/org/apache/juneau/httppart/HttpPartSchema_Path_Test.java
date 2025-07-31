@@ -108,7 +108,7 @@ public class HttpPartSchema_Path_Test {
 				)
 				String x
 			) {
-
+			/* no-op */
 		}
 	}
 
@@ -152,7 +152,7 @@ public class HttpPartSchema_Path_Test {
 				)
 				A01 x
 			) {
-
+			/* no-op */
 		}
 	}
 

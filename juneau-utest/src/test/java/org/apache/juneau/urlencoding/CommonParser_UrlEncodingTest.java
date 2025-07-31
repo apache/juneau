@@ -105,11 +105,11 @@ public class CommonParser_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = UrlEncodingParser.create().ignoreUnknownBeanProperties().build();
+		ReaderParser p2 = UrlEncodingParser.create().ignoreUnknownBeanProperties().build();
 		B t;
 
 		String in =  "a=1&unknown=3&b=2";
-		t = p.parse(in, B.class);
+		t = p2.parse(in, B.class);
 		assertEquals(1, t.a);
 		assertEquals(2, t.b);
 
@@ -126,10 +126,10 @@ public class CommonParser_UrlEncodingTest {
 	@Test
 	public void testCollectionPropertiesWithNoSetters() throws Exception {
 
-		ReaderParser p = UrlEncodingParser.DEFAULT;
+		ReaderParser p2 = UrlEncodingParser.DEFAULT;
 
 		String json = "ints=@(1,2,3)&beans=@((a=1,b=2))";
-		C t = p.parse(json, C.class);
+		C t = p2.parse(json, C.class);
 		assertEquals(3, t.getInts().size());
 		assertEquals(2, t.getBeans().get(0).b);
 	}
@@ -150,10 +150,10 @@ public class CommonParser_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testParserListeners() throws Exception {
-		UonParser p = UrlEncodingParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
+		UonParser p2 = UrlEncodingParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		String in = "a=1&unknownProperty=foo&b=2";
-		p.parse(in, B.class);
+		p2.parse(in, B.class);
 		assertEquals(1, MyParserListener.events.size());
 		assertEquals("unknownProperty, line 1, column 4", MyParserListener.events.get(0));
 	}
@@ -170,13 +170,13 @@ public class CommonParser_UrlEncodingTest {
 	@Test
 	public void testCollections() throws Exception {
 		WriterSerializer s = UrlEncodingSerializer.DEFAULT;
-		ReaderParser p = UrlEncodingParser.DEFAULT;
+		ReaderParser p2 = UrlEncodingParser.DEFAULT;
 
 		List l = JsonList.of("foo","bar");
 		assertEquals("0=foo&1=bar", s.serialize(l));
 
 		String in =  "0=foo&1=bar";
-		l = p.parse(in, LinkedList.class, String.class);
+		l = p2.parse(in, LinkedList.class, String.class);
 		assertObject(l).asJson().is("['foo','bar']");
 	}
 }

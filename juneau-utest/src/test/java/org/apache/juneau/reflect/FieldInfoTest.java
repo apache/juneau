@@ -146,7 +146,7 @@ public class FieldInfoTest {
 	// Characteristics
 	//-----------------------------------------------------------------------------------------------------------------
 
-	static abstract class C {
+	abstract static class C {
 		@Deprecated public int deprecated;
 		public int notDeprecated;
 		public int isPublic;
