@@ -21,6 +21,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.list;
 import static org.apache.juneau.utest.utils.Utils.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.utest.utils.Utils.*;
 
 import java.io.*;
 import java.net.*;
@@ -122,7 +123,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			new URL("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -153,7 +154,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			new URL("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -196,7 +197,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			new URL("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -233,7 +234,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			new URL("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -253,7 +254,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			new URL("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -273,7 +274,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			new URL("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -297,7 +298,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			new URL("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -369,7 +370,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			new URL("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -406,7 +407,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			new URL("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -426,7 +427,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			new URL("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);

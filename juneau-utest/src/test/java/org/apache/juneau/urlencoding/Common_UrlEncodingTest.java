@@ -13,9 +13,9 @@
 package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.utest.utils.Utils.*;
 
 import java.net.*;
 import java.util.*;
@@ -212,7 +212,7 @@ public class Common_UrlEncodingTest {
 		G t = new G();
 		t.uri = new URI("http://uri");
 		t.f1 = new URI("http://f1");
-		t.f2 = new URL("http://f2");
+		t.f2 = url("http://f2");
 
 		String r = s.serialize(t);
 		t = p2.parse(r, G.class);

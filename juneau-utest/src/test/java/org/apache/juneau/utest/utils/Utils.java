@@ -13,6 +13,7 @@
 package org.apache.juneau.utest.utils;
 
 import java.io.*;
+import java.net.*;
 import java.util.*;
 import java.util.regex.*;
 
@@ -162,5 +163,12 @@ public class Utils extends org.apache.juneau.common.internal.Utils {  // NOSONAR
 	 */
 	public static final StringReader reader(String in) {
 		return new StringReader(in);
+	}
+
+	/**
+	 * Constructs a {@link URL} object from a string.
+	 */
+	public static URL url(String value) {
+		return safe(()->new URI(value).toURL());
 	}
 }

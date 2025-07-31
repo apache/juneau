@@ -449,7 +449,7 @@ public class XmlTest {
 		public String name;
 		public N() {}
 		public N(String url, int id, String name) throws Exception {
-			this.url = new URL(url);
+			this.url = url(url);
 			this.id = id;
 			this.name = name;
 		}
@@ -482,7 +482,7 @@ public class XmlTest {
 		public String name;
 		public O() {}
 		public O(String url, int id, String name) throws Exception {
-			this.url = new URL(url);
+			this.url = url(url);
 			this.id = id;
 			this.name = name;
 		}
@@ -515,7 +515,7 @@ public class XmlTest {
 		public String name;
 		public P() {}
 		public P(String url, int id, String name) throws Exception {
-			this.url = new URL(url);
+			this.url = url(url);
 			this.id = id;
 			this.name = name;
 		}
@@ -993,7 +993,7 @@ public class XmlTest {
 		String r;
 
 		Q t = new Q();
-		t.f1 = new URL("http://xf1");
+		t.f1 = url("http://xf1");
 		t.f2 = "xf2";
 		t.f3 = "xf3";
 		r = s.build().serialize(t);
@@ -1028,7 +1028,7 @@ public class XmlTest {
 		public String f3;
 
 		public Q() throws Exception {
-			f1 = new URL("http://f1");
+			f1 = url("http://f1");
 			f2 = "f2";
 			f3 = "f3";
 		}

@@ -13,9 +13,9 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Utils.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.utest.utils.Utils.*;
 
 import java.io.*;
 import java.net.*;
@@ -1030,12 +1030,12 @@ public class ConfigTest {
 		assertInteger(cf.get("key3").as(int[].class).get()[2]).is(3);
 		assertInteger(cf.get("xkey3").as(int[].class).orElse(new int[]{4,5,6})[2]).is(6);
 		assertInteger(cf.get("X/key3").as(int[].class).orElse(new int[]{4,5,6})[2]).is(6);
-		assertEquals(new URL("http://foo").toString(), cf.get("key4").as(URL.class).get().toString());
+		assertEquals(url("http://foo").toString(), cf.get("key4").as(URL.class).get().toString());
 
 		assertInteger(cf.get("section1/key1").asInteger().get()).is(2);
 		assertBoolean(cf.get("section1/key2").asBoolean().get()).isFalse();
 		assertInteger(cf.get("section1/key3").as(int[].class).get()[2]).is(6);
-		assertEquals(new URL("http://bar").toString(), cf.get("section1/key4").as(URL.class).get().toString());
+		assertEquals(url("http://bar").toString(), cf.get("section1/key4").as(URL.class).get().toString());
 
 		cf = init(
 			"# Default section",
@@ -1045,23 +1045,23 @@ public class ConfigTest {
 		cf.set("key1", 1);
 		cf.set("key2", true);
 		cf.set("key3", new int[]{1,2,3});
-		cf.set("key4", new URL("http://foo"));
+		cf.set("key4", url("http://foo"));
 		cf.set("section1/key1", 2);
 		cf.set("section1/key2", false);
 		cf.set("section1/key3", new int[]{4,5,6});
-		cf.set("section1/key4", new URL("http://bar"));
+		cf.set("section1/key4", url("http://bar"));
 
 		cf.commit();
 
 		assertInteger(cf.get("key1").asInteger().get()).is(1);
 		assertBoolean(cf.get("key2").asBoolean().get()).isTrue();
 		assertInteger(cf.get("key3").as(int[].class).get()[2]).is(3);
-		assertEquals(new URL("http://foo").toString(), cf.get("key4").as(URL.class).get().toString());
+		assertEquals(url("http://foo").toString(), cf.get("key4").as(URL.class).get().toString());
 
 		assertInteger(cf.get("section1/key1").asInteger().get()).is(2);
 		assertBoolean(cf.get("section1/key2").asBoolean().get()).isFalse();
 		assertInteger(cf.get("section1/key3").as(int[].class).get()[2]).is(6);
-		assertEquals(new URL("http://bar").toString(), cf.get("section1/key4").as(URL.class).get().toString());
+		assertEquals(url("http://bar").toString(), cf.get("section1/key4").as(URL.class).get().toString());
 	}
 
 	//====================================================================================================

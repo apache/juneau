@@ -16,6 +16,7 @@ import static org.apache.juneau.utest.utils.Utils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.utest.utils.Utils.*;
 
 import java.net.*;
 
@@ -53,7 +54,7 @@ public class CommonXmlTest {
 		public String name;
 		public A() {}
 		public A(String url, int id, String name) throws Exception {
-			this.url = new URL(url);
+			this.url = url(url);
 			this.id = id;
 			this.name = name;
 		}
@@ -76,8 +77,8 @@ public class CommonXmlTest {
 		public URL url2;
 		public B() {}
 		public B(String url) throws Exception {
-			this.url = new URL(url);
-			this.url2 = new URL(url+"/2");
+			this.url = url(url);
+			this.url2 = url(url+"/2");
 		}
 	}
 }
