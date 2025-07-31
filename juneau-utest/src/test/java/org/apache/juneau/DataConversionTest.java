@@ -28,12 +28,12 @@ public class DataConversionTest {
 
 	@Before
 	public void beforeTest() {
-		Utils.setLocale(Locale.US);
+		Utils2.setLocale(Locale.US);
 	}
 
 	@After
 	public void afterTest() {
-		Utils.unsetLocale();
+		Utils2.unsetLocale();
 	}
 
 	//====================================================================================================

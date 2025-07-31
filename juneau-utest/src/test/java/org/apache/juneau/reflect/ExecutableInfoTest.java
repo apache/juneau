@@ -16,6 +16,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -530,10 +531,10 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void setAccessible() {
-		f_isPublic.accessible();
-		f_isProtected.accessible();
-		f_isPrivate.accessible();
-		f_isDefault.accessible();
+		assertNotThrown(()->f_isPublic.accessible());
+		assertNotThrown(()->f_isProtected.accessible());
+		assertNotThrown(()->f_isPrivate.accessible());
+		assertNotThrown(()->f_isDefault.accessible());
 	}
 
 	@Test

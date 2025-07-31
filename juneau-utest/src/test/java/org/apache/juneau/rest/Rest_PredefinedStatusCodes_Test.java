@@ -13,7 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.header.ContentType.*;
-import static org.apache.juneau.utest.utils.Utils.*;
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;

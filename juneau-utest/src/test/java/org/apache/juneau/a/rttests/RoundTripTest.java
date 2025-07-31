@@ -14,7 +14,7 @@ package org.apache.juneau.a.rttests;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.a.rttests.RoundTripTest.Flags.*;
-import static org.apache.juneau.utest.utils.Utils.*;
+import static org.apache.juneau.utest.utils.Utils2.*;
 
 import java.lang.reflect.*;
 import java.util.*;

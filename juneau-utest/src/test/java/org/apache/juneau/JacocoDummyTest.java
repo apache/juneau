@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.lang.reflect.*;
@@ -41,6 +42,6 @@ public class JacocoDummyTest {
 		}
 
 		XmlFormat.valueOf(XmlFormat.DEFAULT.toString());
-		Visibility.valueOf(Visibility.DEFAULT.toString());
+		assertNotThrown(()->Visibility.valueOf(Visibility.DEFAULT.toString()));
 	}
 }

@@ -12,6 +12,7 @@
 //***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -66,23 +67,23 @@ public class BenchmarkTest {
 	private static final ThrowingConsumer<Map<String,Integer>> smap_forEach1 = x -> x.values().forEach(y -> result += y);
 	private static final ThrowingConsumer<Map<String,Integer>> smap_forEach2 = x -> x.forEach((k,v) -> result += v);
 
-	@Test public void a01a_list_iterator() { list_iterator.accept(LIST); }
-	@Test public void a01b_list_for() { list_for.accept(LIST); }
-	@Test public void a01c_list_foreach() { list_foreach.accept(LIST); }
+	@Test public void a01a_list_iterator() { assertNotThrown(()->list_iterator.accept(LIST)); }
+	@Test public void a01b_list_for() { assertNotThrown(()->list_for.accept(LIST)); }
+	@Test public void a01c_list_foreach() { assertNotThrown(()->list_foreach.accept(LIST)); }
 
-	@Test public void a01a_map_iterator1_S() { map_iterator1.accept(MAP); }
-	@Test public void a01b_map_iterator2_S() { map_iterator2.accept(MAP); }
-	@Test public void a01c_map_forEach1_S() { map_forEach1.accept(MAP); }
-	@Test public void a01d_map_forEach2_S() { map_forEach2.accept(MAP); }
+	@Test public void a01a_map_iterator1_S() { assertNotThrown(()->map_iterator1.accept(MAP)); }
+	@Test public void a01b_map_iterator2_S() { assertNotThrown(()->map_iterator2.accept(MAP)); }
+	@Test public void a01c_map_forEach1_S() { assertNotThrown(()->map_forEach1.accept(MAP)); }
+	@Test public void a01d_map_forEach2_S() { assertNotThrown(()->map_forEach2.accept(MAP)); }
 
-	@Test public void b01a_list_iterator() { slist_iterator.accept(LIST); }
-	@Test public void b01b_list_for() { slist_for.accept(LIST); }
-	@Test public void b01c_list_foreach() { slist_foreach.accept(LIST); }
+	@Test public void b01a_list_iterator() { assertNotThrown(()->slist_iterator.accept(LIST)); }
+	@Test public void b01b_list_for() { assertNotThrown(()->slist_for.accept(LIST)); }
+	@Test public void b01c_list_foreach() { assertNotThrown(()->slist_foreach.accept(LIST)); }
 
-	@Test public void b01a_map_iterator1_S() { smap_iterator1.accept(MAP); }
-	@Test public void b01b_map_iterator2_S() { smap_iterator2.accept(MAP); }
-	@Test public void b01c_map_forEach1_S() { smap_forEach1.accept(MAP); }
-	@Test public void b01d_map_forEach2_S() { smap_forEach2.accept(MAP); }
+	@Test public void b01a_map_iterator1_S() { assertNotThrown(()->smap_iterator1.accept(MAP)); }
+	@Test public void b01b_map_iterator2_S() { assertNotThrown(()->smap_iterator2.accept(MAP)); }
+	@Test public void b01c_map_forEach1_S() { assertNotThrown(()->smap_forEach1.accept(MAP)); }
+	@Test public void b01d_map_forEach2_S() { assertNotThrown(()->smap_forEach2.accept(MAP)); }
 
 	public static void main(String[] args) {
 		int cap = 100000;

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -57,7 +58,7 @@ public class MsgPackConfigAnnotationTest {
 	@Test
 	public void basicParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
-		MsgPackParser.create().apply(al).build().createSession();
+		assertNotThrown(()->MsgPackParser.create().apply(al).build().createSession());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -78,7 +79,7 @@ public class MsgPackConfigAnnotationTest {
 	@Test
 	public void noValuesParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		MsgPackParser.create().apply(al).build().createSession();
+		assertNotThrown(()->MsgPackParser.create().apply(al).build().createSession());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -98,6 +99,6 @@ public class MsgPackConfigAnnotationTest {
 	@Test
 	public void noAnnotationParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		MsgPackParser.create().apply(al).build().createSession();
+		assertNotThrown(()->MsgPackParser.create().apply(al).build().createSession());
 	}
 }

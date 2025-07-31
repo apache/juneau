@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -69,7 +70,7 @@ public class HtmlConfigAnnotation_Test {
 	@Test
 	public void basicParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
-		HtmlParser.create().apply(al).build().createSession();
+		assertNotThrown(()->HtmlParser.create().apply(al).build().createSession());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -95,7 +96,7 @@ public class HtmlConfigAnnotation_Test {
 	@Test
 	public void defaultsParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		HtmlParser.create().apply(al).build().createSession();
+		assertNotThrown(()->HtmlParser.create().apply(al).build().createSession());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -120,6 +121,6 @@ public class HtmlConfigAnnotation_Test {
 	@Test
 	public void noAnnotationParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		HtmlParser.create().apply(al).build().createSession();
+		assertNotThrown(()->HtmlParser.create().apply(al).build().createSession());
 	}
 }

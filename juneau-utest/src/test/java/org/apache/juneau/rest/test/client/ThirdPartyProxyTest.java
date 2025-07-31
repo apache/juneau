@@ -18,6 +18,7 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Constants.*;
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -474,7 +475,7 @@ public class ThirdPartyProxyTest {
 	// Various primitives
 	@Test
 	public void da01_returnVoid() {
-		proxy.returnVoid();
+		assertNotThrown(()->proxy.returnVoid());
 	}
 
 	@Test
@@ -815,7 +816,7 @@ public class ThirdPartyProxyTest {
 
 	@Test
 	public void ea01_setInt() {
-		proxy.setInt(1);
+		assertNotThrown(()->proxy.setInt(1));
 	}
 
 	@Test
@@ -825,32 +826,32 @@ public class ThirdPartyProxyTest {
 
 	@Test
 	public void ea03_setInteger() {
-		proxy.setInteger(1);
+		assertNotThrown(()->proxy.setInteger(1));
 	}
 
 	@Test
 	public void ea04_setBoolean() {
-		proxy.setBoolean(true);
+		assertNotThrown(()->proxy.setBoolean(true));
 	}
 
 	@Test
 	public void ea05_setFloat() {
-		proxy.setFloat(1f);
+		assertNotThrown(()->proxy.setFloat(1f));
 	}
 
 	@Test
 	public void ea06_setFloatObject() {
-		proxy.setFloatObject(1f);
+		assertNotThrown(()->proxy.setFloatObject(1f));
 	}
 
 	@Test
 	public void ea07_setString() {
-		proxy.setString("foo");
+		assertNotThrown(()->proxy.setString("foo"));
 	}
 
 	@Test
 	public void ea08_setNullString() {
-		proxy.setNullString(null);
+		assertNotThrown(()->proxy.setNullString(null));
 	}
 
 	@Test
@@ -860,210 +861,210 @@ public class ThirdPartyProxyTest {
 
 	@Test
 	public void ea10_setInt3dArray() {
-		proxy.setInt3dArray(new int[][][]{{{1},null},null}, 1);
+		assertNotThrown(()->proxy.setInt3dArray(new int[][][]{{{1},null},null}, 1));
 	}
 
 	@Test
 	public void ea11_setInteger3dArray() {
-		proxy.setInteger3dArray(new Integer[][][]{{{1,null},null},null});
+		assertNotThrown(()->proxy.setInteger3dArray(new Integer[][][]{{{1,null},null},null}));
 	}
 
 	@Test
 	public void ea12_setString3dArray() {
-		proxy.setString3dArray(new String[][][]{{{"foo",null},null},null});
+		assertNotThrown(()->proxy.setString3dArray(new String[][][]{{{"foo",null},null},null}));
 	}
 
 	@Test
 	public void ea13_setIntegerList() {
-		proxy.setIntegerList(alist(1,null));
+		assertNotThrown(()->proxy.setIntegerList(alist(1,null)));
 	}
 
 	@Test
 	public void ea14_setInteger3dList() {
-		proxy.setInteger3dList(alist(alist(alist(1,null),null),null));
+		assertNotThrown(()->proxy.setInteger3dList(alist(alist(alist(1,null),null),null)));
 	}
 
 	@Test
 	public void ea15_setInteger1d3dList() {
-		proxy.setInteger1d3dList(alist(new Integer[][][]{{{1,null},null},null},null));
+		assertNotThrown(()->proxy.setInteger1d3dList(alist(new Integer[][][]{{{1,null},null},null},null)));
 	}
 
 	@Test
 	public void ea16_setInt1d3dList() {
-		proxy.setInt1d3dList(alist(new int[][][]{{{1,2},null},null},null));
+		assertNotThrown(()->proxy.setInt1d3dList(alist(new int[][][]{{{1,2},null},null},null)));
 	}
 
 	@Test
 	public void ea17_setStringList() {
-		proxy.setStringList(alist("foo","bar",null));
+		assertNotThrown(()->proxy.setStringList(alist("foo","bar",null)));
 	}
 
 	// Beans
 	@Test
 	public void eb01_setBean() {
-		proxy.setBean(ABean.get());
+		assertNotThrown(()->proxy.setBean(ABean.get()));
 	}
 
 	@Test
 	public void eb02_setBean3dArray() {
-		proxy.setBean3dArray(new ABean[][][]{{{ABean.get(),null},null},null});
+		assertNotThrown(()->proxy.setBean3dArray(new ABean[][][]{{{ABean.get(),null},null},null}));
 	}
 
 	@Test
 	public void eb03_setBeanList() {
-		proxy.setBeanList(alist(ABean.get()));
+		assertNotThrown(()->proxy.setBeanList(alist(ABean.get())));
 	}
 
 	@Test
 	public void eb04_setBean1d3dList() {
-		proxy.setBean1d3dList(alist(new ABean[][][]{{{ABean.get(),null},null},null},null));
+		assertNotThrown(()->proxy.setBean1d3dList(alist(new ABean[][][]{{{ABean.get(),null},null},null},null)));
 	}
 
 	@Test
 	public void eb05_setBeanMap() {
-		proxy.setBeanMap(map("foo",ABean.get()));
+		assertNotThrown(()->proxy.setBeanMap(map("foo",ABean.get())));
 	}
 
 	@Test
 	public void eb06_setBeanListMap() {
-		proxy.setBeanListMap(map("foo",alist(ABean.get())));
+		assertNotThrown(()->proxy.setBeanListMap(map("foo",alist(ABean.get()))));
 	}
 
 	@Test
 	public void eb07_setBean1d3dListMap() {
-		proxy.setBean1d3dListMap(map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null)));
+		assertNotThrown(()->proxy.setBean1d3dListMap(map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null))));
 	}
 
 	@Test
 	public void eb08_setBeanListMapIntegerKeys() {
-		proxy.setBeanListMapIntegerKeys(map(1,alist(ABean.get())));
+		assertNotThrown(()->proxy.setBeanListMapIntegerKeys(map(1,alist(ABean.get()))));
 	}
 
 	// Typed beans
 
 	@Test
 	public void ec01_setTypedBean() {
-		proxy.setTypedBean(TypedBeanImpl.get());
+		assertNotThrown(()->proxy.setTypedBean(TypedBeanImpl.get()));
 	}
 
 	@Test
 	public void ec02_setTypedBean3dArray() {
-		proxy.setTypedBean3dArray(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null});
+		assertNotThrown(()->proxy.setTypedBean3dArray(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null}));
 	}
 
 	@Test
 	public void ec03_setTypedBeanList() {
-		proxy.setTypedBeanList(alist((TypedBean)TypedBeanImpl.get()));
+		assertNotThrown(()->proxy.setTypedBeanList(alist((TypedBean)TypedBeanImpl.get())));
 	}
 
 	@Test
 	public void ec04_setTypedBean1d3dList() {
-		proxy.setTypedBean1d3dList(alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
+		assertNotThrown(()->proxy.setTypedBean1d3dList(alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
 	}
 
 	@Test
 	public void ec05_setTypedBeanMap() {
-		proxy.setTypedBeanMap(map("foo",TypedBeanImpl.get()));
+		assertNotThrown(()->proxy.setTypedBeanMap(map("foo",TypedBeanImpl.get())));
 	}
 
 	@Test
 	public void ec06_setTypedBeanListMap() {
-		proxy.setTypedBeanListMap(map("foo",alist((TypedBean)TypedBeanImpl.get())));
+		assertNotThrown(()->proxy.setTypedBeanListMap(map("foo",alist((TypedBean)TypedBeanImpl.get()))));
 	}
 
 	@Test
 	public void ec07_setTypedBean1d3dListMap() {
-		proxy.setTypedBean1d3dListMap(map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
+		assertNotThrown(()->proxy.setTypedBean1d3dListMap(map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null))));
 	}
 
 	@Test
 	public void ec08_setTypedBeanListMapIntegerKeys() {
-		proxy.setTypedBeanListMapIntegerKeys(map(1,alist((TypedBean)TypedBeanImpl.get())));
+		assertNotThrown(()->proxy.setTypedBeanListMapIntegerKeys(map(1,alist((TypedBean)TypedBeanImpl.get()))));
 	}
 
 	// Swapped POJOs
 
 	@Test
 	public void ed01_setSwappedObject() {
-		proxy.setSwappedObject(new SwappedObject());
+		assertNotThrown(()->proxy.setSwappedObject(new SwappedObject()));
 	}
 
 	@Test
 	public void ed02_setSwappedObject3dArray() {
-		proxy.setSwappedObject3dArray(new SwappedObject[][][]{{{new SwappedObject(),null},null},null});
+		assertNotThrown(()->proxy.setSwappedObject3dArray(new SwappedObject[][][]{{{new SwappedObject(),null},null},null}));
 	}
 
 	@Test
 	public void ed03_setSwappedObjectMap() {
-		proxy.setSwappedObjectMap(map(new SwappedObject(),new SwappedObject()));
+		assertNotThrown(()->proxy.setSwappedObjectMap(map(new SwappedObject(),new SwappedObject())));
 	}
 
 	@Test
 	public void ed04_setSwappedObject3dMap() {
-		proxy.setSwappedObject3dMap(map(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null}));
+		assertNotThrown(()->proxy.setSwappedObject3dMap(map(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null})));
 	}
 
 	// Implicit swapped POJOs
 	@Test
 	public void ee01_setImplicitSwappedObject() {
-		proxy.setImplicitSwappedObject(new ImplicitSwappedObject());
+		assertNotThrown(()->proxy.setImplicitSwappedObject(new ImplicitSwappedObject()));
 	}
 
 	@Test
 	public void ee02_setImplicitSwappedObject3dArray() {
-		proxy.setImplicitSwappedObject3dArray(new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null});
+		assertNotThrown(()->proxy.setImplicitSwappedObject3dArray(new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null}));
 	}
 
 	@Test
 	public void ee03_setImplicitSwappedObjectMap() {
-		proxy.setImplicitSwappedObjectMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject()));
+		assertNotThrown(()->proxy.setImplicitSwappedObjectMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject())));
 	}
 
 	@Test
 	public void ee04_setImplicitSwappedObject3dMap() {
-		proxy.setImplicitSwappedObject3dMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null}));
+		assertNotThrown(()->proxy.setImplicitSwappedObject3dMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null})));
 	}
 
 	// Enums
 
 	@Test
 	public void ef01_setEnum() {
-		proxy.setEnum(TestEnum.TWO);
+		assertNotThrown(()->proxy.setEnum(TestEnum.TWO));
 	}
 
 	@Test
 	public void ef02_setEnum3d() {
-		proxy.setEnum3d(new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
+		assertNotThrown(()->proxy.setEnum3d(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
 	}
 
 	@Test
 	public void ef03_setEnumList() {
-		proxy.setEnumList(alist(TestEnum.TWO,null));
+		assertNotThrown(()->proxy.setEnumList(alist(TestEnum.TWO,null)));
 	}
 
 	@Test
 	public void ef04_setEnum3dList() {
-		proxy.setEnum3dList(alist(alist(alist(TestEnum.TWO,null),null),null));
+		assertNotThrown(()->proxy.setEnum3dList(alist(alist(alist(TestEnum.TWO,null),null),null)));
 	}
 
 	@Test
 	public void ef05_setEnum1d3dList() {
-		proxy.setEnum1d3dList(alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
+		assertNotThrown(()->proxy.setEnum1d3dList(alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
 	}
 
 	@Test
 	public void ef06_setEnumMap() {
-		proxy.setEnumMap(map(TestEnum.ONE,TestEnum.TWO));
+		assertNotThrown(()->proxy.setEnumMap(map(TestEnum.ONE,TestEnum.TWO)));
 	}
 
 	@Test
 	public void ef07_setEnum3dArrayMap() {
-		proxy.setEnum3dArrayMap(map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
+		assertNotThrown(()->proxy.setEnum3dArrayMap(map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null})));
 	}
 
 	@Test
 	public void ef08_setEnum1d3dListMap() {
-		proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
+		assertNotThrown(()->proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

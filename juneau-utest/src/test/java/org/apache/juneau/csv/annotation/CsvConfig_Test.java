@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv.annotation;
 
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
@@ -36,13 +37,13 @@ public class CsvConfig_Test {
 	@Test
 	public void defaultsSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(b.getAnnotationList());
-		CsvSerializer.create().apply(al).build();
+		assertNotThrown(()->CsvSerializer.create().apply(al).build());
 	}
 
 	@Test
 	public void defaultsParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(b.getAnnotationList());
-		CsvParser.create().apply(al).build();
+		assertNotThrown(()->CsvParser.create().apply(al).build());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -55,12 +56,12 @@ public class CsvConfig_Test {
 	@Test
 	public void noAnnotationSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(b.getAnnotationList());
-		CsvSerializer.create().apply(al).build();
+		assertNotThrown(()->CsvSerializer.create().apply(al).build());
 	}
 
 	@Test
 	public void noAnnotationParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(b.getAnnotationList());
-		CsvParser.create().apply(al).build();
+		assertNotThrown(()->CsvParser.create().apply(al).build());
 	}
 }

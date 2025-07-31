@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.junit.*;
@@ -21,6 +22,6 @@ public class ParameterType_Test {
 
 	@Test
 	public void a01_basic() {
-		new ParameterType();
+		assertNotThrown(ParameterType::new);
 	}
 }

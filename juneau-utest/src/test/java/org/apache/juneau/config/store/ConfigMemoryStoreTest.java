@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.store;
 
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -63,7 +64,7 @@ public class ConfigMemoryStoreTest {
 		});
 
 		fs.update("X", "xxx");
-		fs.update("Y", "yyy");
+		assertNotThrown(()->fs.update("Y", "yyy"));
 		if (! latch.await(10, TimeUnit.SECONDS))
 			throw new Exception("CountDownLatch never reached zero.");
 	}

@@ -48,12 +48,12 @@ public class OpenApiTest {
 
 	@Before
 	public void before() {
-		Utils.setTimeZone("GMT");
+		Utils2.setTimeZone("GMT");
 	}
 
 	@After
 	public void after() {
-		Utils.unsetTimeZone();
+		Utils2.unsetTimeZone();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

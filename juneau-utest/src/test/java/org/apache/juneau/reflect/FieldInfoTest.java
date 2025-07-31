@@ -16,6 +16,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -299,10 +300,10 @@ public class FieldInfoTest {
 
 	@Test
 	public void setAccessible() {
-		d_isPublic.setAccessible();
-		d_isProtected.setAccessible();
-		d_isPrivate.setAccessible();
-		d_isDefault.setAccessible();
+		assertNotThrown(()->d_isPublic.setAccessible());
+		assertNotThrown(()->d_isProtected.setAccessible());
+		assertNotThrown(()->d_isPrivate.setAccessible());
+		assertNotThrown(()->d_isDefault.setAccessible());
 	}
 
 	@Test

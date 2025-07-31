@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
@@ -39,13 +40,13 @@ public class OpenApiConfigAnnotationTest {
 	@Test
 	public void noValuesSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		OpenApiSerializer.create().apply(al).build().createSession();
+		assertNotThrown(()->OpenApiSerializer.create().apply(al).build().createSession());
 	}
 
 	@Test
 	public void noValuesParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		OpenApiParser.create().apply(al).build().createSession();
+		assertNotThrown(()->OpenApiParser.create().apply(al).build().createSession());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -58,12 +59,12 @@ public class OpenApiConfigAnnotationTest {
 	@Test
 	public void noAnnotationSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		OpenApiSerializer.create().apply(al).build().createSession();
+		assertNotThrown(()->OpenApiSerializer.create().apply(al).build().createSession());
 	}
 
 	@Test
 	public void noAnnotationParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		OpenApiParser.create().apply(al).build().createSession();
+		assertNotThrown(()->OpenApiParser.create().apply(al).build().createSession());
 	}
 }

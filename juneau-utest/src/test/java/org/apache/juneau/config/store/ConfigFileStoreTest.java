@@ -13,7 +13,7 @@
 package org.apache.juneau.config.store;
 
 import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.utest.utils.Utils.*;
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -146,24 +146,24 @@ public class ConfigFileStoreTest {
 
 		final CountDownLatch latch = new CountDownLatch(4);
 		fs.register("X.cfg", contents -> {
-        	if ("xxx".equals(contents))
-        		latch.countDown();
-        });
+			if ("xxx".equals(contents))
+				latch.countDown();
+		});
 		fs.register("X", contents -> {
-        	if ("xxx".equals(contents))
-        		latch.countDown();
-        });
+			if ("xxx".equals(contents))
+				latch.countDown();
+		});
 		fs.register("Y.cfg", contents -> {
-        	if ("yyy".equals(contents))
-        		latch.countDown();
-        });
+			if ("yyy".equals(contents))
+				latch.countDown();
+		});
 		fs.register("Y", contents -> {
-        	if ("yyy".equals(contents))
-        		latch.countDown();
-        });
+			if ("yyy".equals(contents))
+				latch.countDown();
+		});
 		pipe(reader("zzz"), new File(DIR, "Z.ini"));
 		pipe(reader("xxx"), new File(DIR, "X.cfg"));
-		pipe(reader("yyy"), new File(DIR, "Y.cfg"));
+		assertNotThrown(()->pipe(reader("yyy"), new File(DIR, "Y.cfg")));
 		if (! latch.await(10, TimeUnit.SECONDS))
 			throw new Exception("CountDownLatch never reached zero.");
 	}
@@ -174,24 +174,24 @@ public class ConfigFileStoreTest {
 
 		final CountDownLatch latch = new CountDownLatch(4);
 		fs.register("X.cfg", contents -> {
-        	if ("xxx".equals(contents))
-        		latch.countDown();
-        });
+			if ("xxx".equals(contents))
+				latch.countDown();
+		});
 		fs.register("X", contents -> {
-        	if ("xxx".equals(contents))
-        		latch.countDown();
-        });
+			if ("xxx".equals(contents))
+				latch.countDown();
+		});
 		fs.register("Y.cfg", contents -> {
-        	if ("yyy".equals(contents))
-        		latch.countDown();
-        });
+			if ("yyy".equals(contents))
+				latch.countDown();
+		});
 		fs.register("Y", contents -> {
-        	if ("yyy".equals(contents))
-        		latch.countDown();
-        });
+			if ("yyy".equals(contents))
+				latch.countDown();
+		});
 
 		fs.update("X.cfg", "xxx");
-		fs.update("Y.cfg", "yyy");
+		assertNotThrown(()->fs.update("Y.cfg", "yyy"));
 		if (! latch.await(10, TimeUnit.SECONDS))
 			throw new Exception("CountDownLatch never reached zero.");
 	}

@@ -16,6 +16,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -58,7 +59,7 @@ public class BeanStore_Test {
 
 	@Test
 	public void a00_dummy() {
-		new BeanStore.Void();
+		assertNotThrown(BeanStore.Void::new);
 	}
 
 	@Test

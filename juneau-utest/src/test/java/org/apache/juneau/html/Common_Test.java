@@ -16,7 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.utest.utils.Utils.*;
+import static org.apache.juneau.utest.utils.Utils2.*;
 
 import java.net.*;
 import java.util.*;

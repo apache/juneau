@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.junit.*;
@@ -21,6 +22,6 @@ public class CollectionFormatType_Test {
 
 	@Test
 	public void a01_basic() {
-		new CollectionFormatType();
+		assertNotThrown(CollectionFormatType::new);
 	}
 }

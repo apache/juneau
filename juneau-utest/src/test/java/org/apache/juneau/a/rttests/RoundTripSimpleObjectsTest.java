@@ -13,6 +13,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -755,12 +756,12 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	// testVector
 	//====================================================================================================
 	@Test
-	public void testVector() throws Exception {
+	public void testVector() {
 		Vector<Integer> t = new Vector<>();
 		t.add(1);
 		t.add(2);
 		t.add(3);
-		roundTrip(t, Vector.class, Integer.class);
+		assertNotThrown(()->roundTrip(t, Vector.class, Integer.class));
 	}
 
 	//====================================================================================================

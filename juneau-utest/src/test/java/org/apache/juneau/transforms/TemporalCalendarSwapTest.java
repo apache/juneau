@@ -33,12 +33,12 @@ public class TemporalCalendarSwapTest extends RoundTripStringSwapTest<Calendar> 
 
 	@BeforeClass
 	public static void beforeClass() {
-		Utils.setTimeZone("GMT-5");
+		Utils2.setTimeZone("GMT-5");
 	}
 
 	@AfterClass
 	public static void afterClass() {
-		Utils.unsetTimeZone();
+		Utils2.unsetTimeZone();
 	}
 
 	private static BeanSession

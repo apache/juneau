@@ -14,6 +14,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -645,9 +646,9 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	// testMemberClass
 	//====================================================================================================
 	@Test
-	public void testMemberClass() throws Exception {
+	public void testMemberClass() {
 		G t = G.create();
-		roundTrip(t, G.class);
+		assertNotThrown(()->roundTrip(t, G.class));
 	}
 
 	public static class G {
@@ -684,9 +685,9 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	// testMemberClassWithMapClass
 	//====================================================================================================
 	@Test
-	public void testMemberClassWithMapClass() throws Exception {
+	public void testMemberClassWithMapClass() {
 		H t = H.create();
-		roundTrip(t, H.class);
+		assertNotThrown(()->roundTrip(t, H.class));
 	}
 
 	public static class H extends LinkedHashMap<String,H.H1> {
@@ -723,9 +724,9 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	// testMemberClassWithListClass
 	//====================================================================================================
 	@Test
-	public void testMemberClassWithListClass() throws Exception {
+	public void testMemberClassWithListClass() {
 		I t = I.create();
-		roundTrip(t, I.class);
+		assertNotThrown(()->roundTrip(t, I.class));
 	}
 
 	public static class I extends LinkedList<I.I1> {
@@ -762,9 +763,9 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	// testMemberClassWithStringConstructor
 	//====================================================================================================
 	@Test
-	public void testMemberClassWithStringConstructor() throws Exception {
+	public void testMemberClassWithStringConstructor() {
 		J t = J.create();
-		roundTrip(t, J.class);
+		assertNotThrown(()->roundTrip(t, J.class));
 	}
 
 	public static class J {
@@ -798,9 +799,9 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	// testBeanPropertyPrecedence
 	//====================================================================================================
 	@Test
-	public void testBeanPropertyPrecedence() throws Exception {
+	public void testBeanPropertyPrecedence() {
 		K t = K.create();
-		roundTrip(t, K.class);
+		assertNotThrown(()->roundTrip(t, K.class));
 	}
 	public enum KEnum { FOO, BAR, BAZ }
 
@@ -872,13 +873,13 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	// testWrapperAttrAnnotationOnBean
 	//====================================================================================================
 	@Test
-	public void testWrapperAttrAnnotationOnBean() throws Exception {
+	public void testWrapperAttrAnnotationOnBean() {
 		L t = L.create();
-		roundTrip(t, L.class);
+		assertNotThrown(()->roundTrip(t, L.class));
 
 		Map<String,L> m = new LinkedHashMap<>();
 		m.put("bar", L.create());
-		roundTrip(m, LinkedHashMap.class, String.class, L.class);
+		assertNotThrown(()->roundTrip(m, LinkedHashMap.class, String.class, L.class));
 	}
 
 	@Json(wrapperAttr="foo")
@@ -893,13 +894,13 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	}
 
 	@Test
-	public void testWrapperAttrAnnotationOnBean_usingConfig() throws Exception {
+	public void testWrapperAttrAnnotationOnBean_usingConfig() {
 		L2 t = L2.create();
-		roundTrip(t, L2.class);
+		assertNotThrown(()->roundTrip(t, L2.class));
 
 		Map<String,L2> m = new LinkedHashMap<>();
 		m.put("bar", L2.create());
-		roundTrip(m, LinkedHashMap.class, String.class, L2.class);
+		assertNotThrown(()->roundTrip(m, LinkedHashMap.class, String.class, L2.class));
 	}
 
 	@Json(on="L2",wrapperAttr="foo")
@@ -919,13 +920,13 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	// testWrapperAttrAnnotationOnNonBean
 	//====================================================================================================
 	@Test
-	public void testWrapperAttrAnnotationOnNonBean() throws Exception {
+	public void testWrapperAttrAnnotationOnNonBean() {
 		M t = M.create();
-		roundTrip(t, M.class);
+		assertNotThrown(()->roundTrip(t, M.class));
 
 		Map<String,M> m = new LinkedHashMap<>();
 		m.put("bar", M.create());
-		roundTrip(m, LinkedHashMap.class, String.class, M.class);
+		assertNotThrown(()->roundTrip(m, LinkedHashMap.class, String.class, M.class));
 	}
 
 	@Json(wrapperAttr="foo")
@@ -951,13 +952,13 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	}
 
 	@Test
-	public void testWrapperAttrAnnotationOnNonBean_usingConfig() throws Exception {
+	public void testWrapperAttrAnnotationOnNonBean_usingConfig() {
 		M2 t = M2.create();
-		roundTrip(t, M2.class);
+		assertNotThrown(()->roundTrip(t, M2.class));
 
 		Map<String,M2> m = new LinkedHashMap<>();
 		m.put("bar", M2.create());
-		roundTrip(m, LinkedHashMap.class, String.class, M2.class);
+		assertNotThrown(()->roundTrip(m, LinkedHashMap.class, String.class, M2.class));
 	}
 
 	@Json(on="M2",wrapperAttr="foo")
@@ -1000,7 +1001,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		roundTrip(t, N.class);
 
 		Head h = new Head().child(new Style());
-		roundTrip(h, Head.class);
+		assertNotThrown(()->roundTrip(h, Head.class));
 	}
 
 	public static class N {

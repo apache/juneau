@@ -826,11 +826,11 @@ public class Remote_CommonInterfaces_Test {
 	public static class G1 implements G {
 		@Override
 		public Reader reader() {
-			return Utils.reader("foo");
+			return Utils2.reader("foo");
 		}
 		@Override
 		public InputStream inputStream() {
-			return Utils.inputStream("foo");
+			return Utils2.inputStream("foo");
 		}
 	}
 

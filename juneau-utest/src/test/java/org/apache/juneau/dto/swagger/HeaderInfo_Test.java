@@ -14,7 +14,7 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -263,6 +263,6 @@ public class HeaderInfo_Test {
 	public void c02_resolveRefs() {
 		Swagger s = new Swagger();
 		HeaderInfo t = new HeaderInfo();
-		t.resolveRefs(s, new ArrayDeque<>(), 10);
+		assertNotThrown(()->t.resolveRefs(s, new ArrayDeque<>(), 10));
 	}
 }

@@ -16,7 +16,7 @@ import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.http.header.ContentType.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.list;
-import static org.apache.juneau.utest.utils.Utils.*;
+import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 

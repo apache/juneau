@@ -12,13 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.utest.utils.Utils2.*;
+
 import org.junit.*;
 
 public class Console_Test {
 
 	@Test
 	public void basic() {
-		Console.out("test{0}",1);
-		Console.err("test{0}",2);
+		assertNotThrown(()->Console.out("test{0}", 1));
+		assertNotThrown(()->Console.err("test{0}", 2));
 	}
 }

@@ -12,21 +12,25 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utest.utils;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.regex.*;
 
+import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
 /**
  * Various utility methods.
  */
-public class Utils extends org.apache.juneau.common.internal.Utils {  // NOSONAR - Class name intentional.
+public class Utils2 extends Utils {  // NOSONAR - Class name intentional.
 
 	/** Constructor. */
-	protected Utils() {}
+	protected Utils2() {}
 
 	private static final ThreadLocal<TimeZone> SYSTEM_TIME_ZONE = new ThreadLocal<>();
 	private static final ThreadLocal<Locale> SYSTEM_LOCALE = new ThreadLocal<>();
@@ -170,5 +174,17 @@ public class Utils extends org.apache.juneau.common.internal.Utils {  // NOSONAR
 	 */
 	public static URL url(String value) {
 		return safe(()->new URI(value).toURL());
+	}
+
+	/**
+	 * Asserts an exception is not thrown
+	 * Example:  assertThrown(()->doSomething());
+	 */
+	public static void assertNotThrown(Snippet snippet) {
+		try {
+			snippet.run();
+		} catch (Throwable e) {
+			fail("Exception thrown.");
+		}
 	}
 }
