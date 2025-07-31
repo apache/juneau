@@ -62,8 +62,7 @@ public class MethodInfoTest {
 			super(AConfig.class, Context.Builder.class, vr);
 		}
 		@Override
-		public void apply(AnnotationInfo<AConfig> ai, Context.Builder b) {
-		}
+		public void apply(AnnotationInfo<AConfig> ai, Context.Builder b) {}  // NOSONAR
 	}
 
 	private static void check(String expected, Object o) {
@@ -114,9 +113,9 @@ public class MethodInfoTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	public static class A1 {
-		public void m() {}
+		public void m() {}  // NOSONAR
 	}
-	static MethodInfo a_m = ofm(A1.class, "m");
+	static MethodInfo a_m = ofm(A1.class, "m");  // NOSONAR
 
 	@Test
 	public void of_withDeclaringClass() {
@@ -146,8 +145,8 @@ public class MethodInfoTest {
 		int foo();
 	}
 	public static class B2 {
-		public int foo(int x) { return 0; }
-		public int foo(String x) {return 0;}
+		public int foo(int x) { return 0; }  // NOSONAR
+		public int foo(String x) {return 0;}  // NOSONAR
 		public int foo() {return 0;}
 	}
 	public static class B3 extends B2 implements B1 {
@@ -163,7 +162,7 @@ public class MethodInfoTest {
 	public void findMatchingMethods() throws Exception {
 		MethodInfo mi = MethodInfo.of(B3.class.getMethod("foo", int.class));
 		List<MethodInfo> l = new ArrayList<>();
-		mi.forEachMatching(x -> true, x -> l.add(x));
+		mi.forEachMatching(x -> true, l::add);
 		check("B3.foo(int),B2.foo(int),B1.foo(int)", l);
 	}
 
@@ -182,28 +181,28 @@ public class MethodInfoTest {
 
 	@A("C2")
 	public static class C2 implements C1 {
-		@Override public void a1() {}
-		@Override @A("a2b") public void a2() {}
-		@Override public void a3(CharSequence s) {}
-		@Override public void a4() {}
-		@Override public void a5() {}
+		@Override public void a1() {}  // NOSONAR
+		@Override @A("a2b") public void a2() {}  // NOSONAR
+		@Override public void a3(CharSequence s) {}  // NOSONAR
+		@Override public void a4() {}  // NOSONAR
+		@Override public void a5() {}  // NOSONAR
 	}
 
 	@A("C3")
 	public static class C3 extends C2 {
-		@Override public void a1() {}
-		@Override public void a2() {}
-		@Override public void a3(CharSequence foo) {}
-		@Override @A("a4") public void a4() {}
-		@Override public void a5() {}
+		@Override public void a1() {}  // NOSONAR
+		@Override public void a2() {}  // NOSONAR
+		@Override public void a3(CharSequence foo) {}  // NOSONAR
+		@Override @A("a4") public void a4() {}  // NOSONAR
+		@Override public void a5() {}  // NOSONAR
 	}
 
 	static MethodInfo
-		c_a1 = ofm(C3.class, "a1"),
-		c_a2 = ofm(C3.class, "a2"),
-		c_a3 = ofm(C3.class, "a3", CharSequence.class),
-		c_a4 = ofm(C3.class, "a4"),
-		c_a5 = ofm(C3.class, "a5");
+		c_a1 = ofm(C3.class, "a1"),  // NOSONAR
+		c_a2 = ofm(C3.class, "a2"),  // NOSONAR
+		c_a3 = ofm(C3.class, "a3", CharSequence.class),  // NOSONAR
+		c_a4 = ofm(C3.class, "a4"),  // NOSONAR
+		c_a5 = ofm(C3.class, "a5");  // NOSONAR
 
 	@Test
 	public void getAnnotationsParentFirst() {
@@ -267,28 +266,28 @@ public class MethodInfoTest {
 
 	@A("C2") @AConfig("C2")
 	public static class CB2 implements CB1 {
-		@Override public void a1() {}
-		@Override @A("a2b") @AConfig("a2b") public void a2() {}
-		@Override public void a3(CharSequence s) {}
-		@Override public void a4() {}
-		@Override public void a5() {}
+		@Override public void a1() {}  // NOSONAR
+		@Override @A("a2b") @AConfig("a2b") public void a2() {}  // NOSONAR
+		@Override public void a3(CharSequence s) {}  // NOSONAR
+		@Override public void a4() {}  // NOSONAR
+		@Override public void a5() {}  // NOSONAR
 	}
 
 	@A("C3") @AConfig("C3")
 	public static class CB3 extends CB2 {
-		@Override public void a1() {}
-		@Override public void a2() {}
-		@Override public void a3(CharSequence foo) {}
-		@Override @A("a4") @AConfig("a4") public void a4() {}
-		@Override public void a5() {}
+		@Override public void a1() {}  // NOSONAR
+		@Override public void a2() {}  // NOSONAR
+		@Override public void a3(CharSequence foo) {}  // NOSONAR
+		@Override @A("a4") @AConfig("a4") public void a4() {}  // NOSONAR
+		@Override public void a5() {}  // NOSONAR
 	}
 
 	static MethodInfo
-		cb_a1 = ofm(CB3.class, "a1"),
-		cb_a2 = ofm(CB3.class, "a2"),
-		cb_a3 = ofm(CB3.class, "a3", CharSequence.class),
-		cb_a4 = ofm(CB3.class, "a4"),
-		cb_a5 = ofm(CB3.class, "a5");
+		cb_a1 = ofm(CB3.class, "a1"),  // NOSONAR
+		cb_a2 = ofm(CB3.class, "a2"),  // NOSONAR
+		cb_a3 = ofm(CB3.class, "a3", CharSequence.class),  // NOSONAR
+		cb_a4 = ofm(CB3.class, "a4"),  // NOSONAR
+		cb_a5 = ofm(CB3.class, "a5");  // NOSONAR
 
 	@Test
 	public void getConfigAnnotationsMapParentFirst() {
@@ -308,8 +307,8 @@ public class MethodInfoTest {
 		public Integer a2() {return null;}
 	}
 	static MethodInfo
-		d_a1 = ofm(D.class, "a1"),
-		d_a2 = ofm(D.class, "a2");
+		d_a1 = ofm(D.class, "a1"),  // NOSONAR
+		d_a2 = ofm(D.class, "a2");  // NOSONAR
 
 	@Test
 	public void getReturnType() {
@@ -346,9 +345,9 @@ public class MethodInfoTest {
 		public void a3() {}
 	}
 	static MethodInfo
-		e_a1 = ofm(E.class, "a1", CharSequence.class),
-		e_a2 = ofm(E.class, "a2", int.class, int.class),
-		e_a3 = ofm(E.class, "a3");
+		e_a1 = ofm(E.class, "a1", CharSequence.class),  // NOSONAR
+		e_a2 = ofm(E.class, "a2", int.class, int.class),  // NOSONAR
+		e_a3 = ofm(E.class, "a3");  // NOSONAR
 
 	@Test
 	public void invoke() throws Exception {
@@ -392,13 +391,13 @@ public class MethodInfoTest {
 		public void foo() {}
 	}
 	static MethodInfo
-		f_isA = ofm(F.class, "isA"),
-		f_is = ofm(F.class, "is"),
-		f_getA = ofm(F.class, "getA"),
-		f_get = ofm(F.class, "get"),
-		f_setA = ofm(F.class, "setA"),
-		f_set = ofm(F.class, "set"),
-		f_foo = ofm(F.class, "foo");
+		f_isA = ofm(F.class, "isA"),  // NOSONAR
+		f_is = ofm(F.class, "is"),  // NOSONAR
+		f_getA = ofm(F.class, "getA"),  // NOSONAR
+		f_get = ofm(F.class, "get"),  // NOSONAR
+		f_setA = ofm(F.class, "setA"),  // NOSONAR
+		f_set = ofm(F.class, "set"),  // NOSONAR
+		f_foo = ofm(F.class, "foo");  // NOSONAR
 
 	@Test
 	public void getPropertyName() {
@@ -417,20 +416,20 @@ public class MethodInfoTest {
 	}
 
 	public static class G {
-		public void a1() {}
-		public void a1(int a1) {}
-		public void a1(int a1, int a2) {}
-		public void a1(String a1) {}
-		public void a2() {}
-		public void a3() {}
+		public void a1() {}  // NOSONAR
+		public void a1(int a1) {}  // NOSONAR
+		public void a1(int a1, int a2) {}  // NOSONAR
+		public void a1(String a1) {}  // NOSONAR
+		public void a2() {}  // NOSONAR
+		public void a3() {}  // NOSONAR
 	}
 	static MethodInfo
-		g_a1a = ofm(G.class, "a1"),
-		g_a1b = ofm(G.class, "a1", int.class),
-		g_a1c = ofm(G.class, "a1", int.class, int.class),
-		g_a1d = ofm(G.class, "a1", String.class),
-		g_a2 = ofm(G.class, "a2"),
-		g_a3 = ofm(G.class, "a3");
+		g_a1a = ofm(G.class, "a1"),  // NOSONAR
+		g_a1b = ofm(G.class, "a1", int.class),  // NOSONAR
+		g_a1c = ofm(G.class, "a1", int.class, int.class),  // NOSONAR
+		g_a1d = ofm(G.class, "a1", String.class),  // NOSONAR
+		g_a2 = ofm(G.class, "a2"),  // NOSONAR
+		g_a3 = ofm(G.class, "a3");  // NOSONAR
 
 	@Test
 	public void compareTo() {

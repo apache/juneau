@@ -361,12 +361,12 @@ public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 	}
 
 	@Override
-	protected Serializer applySettings(Serializer s) throws Exception {
+	protected Serializer applySettings(Serializer s) {
 		return s.copy().swaps(ByteArraySwap.Base64.class).keepNullProperties().build();
 	}
 
 	@Override
-	protected Parser applySettings(Parser p) throws Exception {
+	protected Parser applySettings(Parser p) {
 		return p.copy().swaps(ByteArraySwap.Base64.class).build();
 	}
 

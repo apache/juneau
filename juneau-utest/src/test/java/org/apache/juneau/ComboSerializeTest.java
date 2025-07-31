@@ -32,7 +32,7 @@ import org.junit.*;
  * Superclass for tests that verify results against all supported content types.
  */
 @FixMethodOrder(NAME_ASCENDING)
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings("rawtypes")
 public abstract class ComboSerializeTest {
 
 	private final ComboInput comboInput;

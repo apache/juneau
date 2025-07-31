@@ -45,7 +45,7 @@ public class BeanStore_Test {
 	public static class A1 {}
 	public static class A2 {}
 
-	public static String A1n = A1.class.getSimpleName();
+	public static final String A1n = A1.class.getSimpleName();  // NOSONAR
 
 	public static class A3 extends BeanStore {
 		protected A3(Builder builder) {
@@ -82,7 +82,7 @@ public class BeanStore_Test {
 			assertThrown(()->b.addBean(A1.class, a1a, "foo")).asMessage().is("Method cannot be used because BeanStore is read-only.");
 			assertThrown(()->b.addSupplier(A1.class, ()->a1a)).asMessage().is("Method cannot be used because BeanStore is read-only.");
 			assertThrown(()->b.addSupplier(A1.class, ()->a1a, "foo")).asMessage().is("Method cannot be used because BeanStore is read-only.");
-			assertThrown(()->b.clear()).asMessage().is("Method cannot be used because BeanStore is read-only.");
+			assertThrown(b::clear).asMessage().is("Method cannot be used because BeanStore is read-only.");
 			assertThrown(()->b.removeBean(A1.class)).asMessage().is("Method cannot be used because BeanStore is read-only.");
 			assertThrown(()->b.removeBean(A1.class, "foo")).asMessage().is("Method cannot be used because BeanStore is read-only.");
 		}
@@ -266,7 +266,7 @@ public class BeanStore_Test {
 	public void b01_getParams() {
 
 		Predicate<Object> pEmptyOptional = x -> !((Optional<?>)x).isPresent();
-		Predicate<Object> pIsBeanStore = x -> x instanceof BeanStore;
+		Predicate<Object> pIsBeanStore = BeanStore.class::isInstance;
 		Predicate<Object> pNull = x -> x == null;
 		Predicate<Object> pA1a = x -> x==a1a;
 		Predicate<Object> pA2a = x -> ((Optional<?>)x).get()==a2a;
@@ -402,7 +402,7 @@ public class BeanStore_Test {
 	public void b02_getParams_innerClass() {
 
 		Predicate<Object> pEmptyOptional = x -> !((Optional<?>)x).isPresent();
-		Predicate<Object> pIsBeanStore = x -> x instanceof BeanStore;
+		Predicate<Object> pIsBeanStore = BeanStore.class::isInstance;
 		Predicate<Object> pNull = x -> x == null;
 		Predicate<Object> pThis = x -> x == this;
 		Predicate<Object> pA1a = x -> x==a1a;
@@ -494,7 +494,7 @@ public class BeanStore_Test {
 	}
 
 	@Test
-	public void c00_createMethodFinder_invalidArgs() throws Exception {
+	public void c00_createMethodFinder_invalidArgs() {
 		BeanStore b = BeanStore.create().build();
 
 		assertThrown(()->b.createMethodFinder(null)).asMessage().is("Method cannot be used without outer bean definition.");
@@ -809,7 +809,7 @@ public class BeanStore_Test {
 		assertObject(bs.createBean(D2.class).run()).is(d2);
 	}
 
-	public static abstract class D3 {
+	public abstract static class D3 {
 		public static D3 getInstance() { return d3; }
 	}
 	public static D3 d3 = new D3() {};
@@ -913,7 +913,7 @@ public class BeanStore_Test {
 		assertString(bs.createBean(D8.class).run().a).is("bar,1");
 	}
 
-	public static abstract class D9a {
+	public abstract static class D9a {
 		public D9a() {}
 	}
 
@@ -991,8 +991,8 @@ public class BeanStore_Test {
 
 	public static class D14 {
 		public String a;
-		public D14(@Named("foo") String o) { a = o.toString(); }
-		public D14(@Named("foo") String o, Integer i) { a = o.toString() + "," + i; }
+		public D14(@Named("foo") String o) { a = o; }
+		public D14(@Named("foo") String o, Integer i) { a = o + "," + i; }
 	}
 
 	@Test
@@ -1005,8 +1005,8 @@ public class BeanStore_Test {
 
 	public class D15 {
 		public String a;
-		public D15(@Named("foo") String o) { a = o.toString(); }
-		public D15(@Named("foo") String o, Integer i) { a = o.toString() + "," + i; }
+		public D15(@Named("foo") String o) { a = o; }
+		public D15(@Named("foo") String o, Integer i) { a = o + "," + i; }
 	}
 
 	@Test

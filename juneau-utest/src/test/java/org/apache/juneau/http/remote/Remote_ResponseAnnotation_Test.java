@@ -114,12 +114,12 @@ public class Remote_ResponseAnnotation_Test {
 	}
 
 	@Test
-	public void a03_beanBody() throws Exception {
+	public void a03_beanBody() {
 		A3a x = client(A3.class).json().build().getRemote(A3b.class).get();
 		assertEquals("{f:1}",x.getContent().toString());
 
 		A3a x2 = client(A3.class).build().getRemote(A3b.class).get();
-		assertThrown(()->x2.getContent()).asMessages().isContains("Unsupported media-type in request header 'Content-Type': 'application/json'");
+		assertThrown(x2::getContent).asMessages().isContains("Unsupported media-type in request header 'Content-Type': 'application/json'");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

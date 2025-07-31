@@ -103,13 +103,13 @@ public class CommonParser_UonTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = UonParser.create().ignoreUnknownBeanProperties().build();
+		ReaderParser p2 = UonParser.create().ignoreUnknownBeanProperties().build();
 		B t;
 
 		String in =  "(a=1,unknown=3,b=2)";
-		t = p.parse(in, B.class);
-		assertEquals(t.a, 1);
-		assertEquals(t.b, 2);
+		t = p2.parse(in, B.class);
+		assertEquals(1, t.a);
+		assertEquals(2, t.b);
 
 		assertThrown(()->UonParser.DEFAULT.parse(in, B.class)).isType(ParseException.class);
 	}
@@ -124,12 +124,12 @@ public class CommonParser_UonTest {
 	@Test
 	public void testCollectionPropertiesWithNoSetters() throws Exception {
 
-		ReaderParser p = UonParser.DEFAULT;
+		ReaderParser p2 = UonParser.DEFAULT;
 
 		String json = "(ints=@(1,2,3),beans=@((a=1,b=2)))";
-		C t = p.parse(json, C.class);
-		assertEquals(t.getInts().size(), 3);
-		assertEquals(t.getBeans().get(0).b, 2);
+		C t = p2.parse(json, C.class);
+		assertEquals(3, t.getInts().size());
+		assertEquals(2, t.getBeans().get(0).b);
 	}
 
 	public static class C {
@@ -148,10 +148,10 @@ public class CommonParser_UonTest {
 	//====================================================================================================
 	@Test
 	public void testParserListeners() throws Exception {
-		UonParser p = UonParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
+		UonParser p2 = UonParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		String in = "(a=1,unknownProperty=foo,b=2)";
-		p.parse(in, B.class);
+		p2.parse(in, B.class);
 		assertEquals(1, MyParserListener.events.size());
 		assertEquals("unknownProperty, line 1, column 5", MyParserListener.events.get(0));
 	}

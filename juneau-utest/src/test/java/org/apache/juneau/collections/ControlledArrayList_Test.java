@@ -28,7 +28,7 @@ public class ControlledArrayList_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void a01_constructors() throws Exception {
+	public void a01_constructors() {
 		ControlledArrayList<Integer> x;
 
 		x = new ControlledArrayList<>(false);
@@ -45,7 +45,7 @@ public class ControlledArrayList_Test {
 	}
 
 	@Test
-	public void a02_basicMethods() throws Exception {
+	public void a02_basicMethods() {
 		ControlledArrayList<Integer> x1 = new ControlledArrayList<>(false, Arrays.asList(1));
 		ControlledArrayList<Integer> x2 = new ControlledArrayList<>(true, Arrays.asList(1));
 
@@ -105,7 +105,7 @@ public class ControlledArrayList_Test {
 		assertList(x1).is(x2);
 
 		x1.clear();
-		assertThrown(() -> x2.clear()).isType(UnsupportedOperationException.class);
+		assertThrown(x2::clear).isType(UnsupportedOperationException.class);
 		x2.overrideClear();
 		assertList(x1).is(x2);
 
@@ -127,7 +127,7 @@ public class ControlledArrayList_Test {
 	}
 
 	@Test
-	public void a03_iterator() throws Exception {
+	public void a03_iterator() {
 		ControlledArrayList<Integer> x1 = new ControlledArrayList<>(false, Arrays.asList(1));
 		ControlledArrayList<Integer> x2 = new ControlledArrayList<>(true, Arrays.asList(1));
 
@@ -141,14 +141,14 @@ public class ControlledArrayList_Test {
 		assertEquals(1, i2.next().intValue());
 
 		i1.remove();
-		assertThrown(() -> i2.remove()).isType(UnsupportedOperationException.class);
+		assertThrown(i2::remove).isType(UnsupportedOperationException.class);
 
 		i1.forEachRemaining(x -> {});
 		i2.forEachRemaining(x -> {});
 	}
 
 	@Test
-	public void a04_listIterator() throws Exception {
+	public void a04_listIterator() {
 		ControlledArrayList<Integer> x1 = new ControlledArrayList<>(false, Arrays.asList(1));
 		ControlledArrayList<Integer> x2 = new ControlledArrayList<>(true, Arrays.asList(1));
 
@@ -183,7 +183,7 @@ public class ControlledArrayList_Test {
 		i2a.next();
 
 		i1a.remove();
-		assertThrown(() -> i2a.remove()).isType(UnsupportedOperationException.class);
+		assertThrown(i2a::remove).isType(UnsupportedOperationException.class);
 
 		i1a.forEachRemaining(x -> {});
 		i2a.forEachRemaining(x -> {});

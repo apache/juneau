@@ -102,8 +102,8 @@ public class CommonParser_Test {
 
 		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><number>1</number></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";
 		t = p.parse(in, B.class);
-		assertEquals(t.a, 1);
-		assertEquals(t.b, 2);
+		assertEquals(1, t.a);
+		assertEquals(2, t.b);
 		assertThrown(()->HtmlParser.DEFAULT.parse(in, B.class)).isExists();
 	}
 
@@ -120,8 +120,8 @@ public class CommonParser_Test {
 
 		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>ints</string></td><td><ul><li><number>1</number></li><li><number>2</number></li><li><number>3</number></li></ul></td></tr><tr><td><string>beans</string></td><td><table _type='array'><tr><th>a</th><th>b</th></tr><tr><td><number>1</number></td><td><number>2</number></td></tr></table></td></tr></table>";
 		C t = p.parse(in, C.class);
-		assertEquals(t.getInts().size(), 3);
-		assertEquals(t.getBeans().get(0).b, 2);
+		assertEquals(3, t.getInts().size());
+		assertEquals(2, t.getBeans().get(0).b);
 	}
 
 	public static class C {

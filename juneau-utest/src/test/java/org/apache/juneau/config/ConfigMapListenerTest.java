@@ -546,7 +546,7 @@ public class ConfigMapListenerTest {
 			ConfigMap cm = s.getMap("A.cfg");
 			cm.register(l);
 			cm.setEntry("S1", "k1", "v1c", null, null, null);
-			assertThrown(()->cm.commit()).asMessage().is("Unable to store contents of config to store.");
+			assertThrown(cm::commit).asMessage().is("Unable to store contents of config to store.");
 			wait(latch);
 			assertNull(l.error);
 			cm.unregister(l);

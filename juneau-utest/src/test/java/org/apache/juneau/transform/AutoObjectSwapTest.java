@@ -29,7 +29,7 @@ import org.apache.juneau.swap.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings("rawtypes")
 public class AutoObjectSwapTest {
 
 
@@ -197,17 +197,17 @@ public class AutoObjectSwapTest {
 	}
 
 	@Test
-	public void d01_ignoreClass_beanIgnore() throws Exception {
+	public void d01_ignoreClass_beanIgnore() {
 		assertNull(find(D01.class));
 	}
 
 	@Test
-	public void d01c_ignoreClass_beanIgnore_usingConfig() throws Exception {
+	public void d01c_ignoreClass_beanIgnore_usingConfig() {
 		assertNull(find(bc(D01Config.class), D01c.class));
 	}
 
 	@Test
-	public void d02_ignoreClass_memberClass() throws Exception {
+	public void d02_ignoreClass_memberClass() {
 		assertNull(find(D02.D02A.class));
 	}
 
@@ -247,27 +247,27 @@ public class AutoObjectSwapTest {
 	}
 
 	@Test
-	public void e01_ignoreSwapMethod_beanIgnore() throws Exception {
+	public void e01_ignoreSwapMethod_beanIgnore() {
 		assertNull(find(E01.class));
 	}
 
 	@Test
-	public void e01c_ignoreSwapMethod_beanIgnore_usingConfig() throws Exception {
+	public void e01c_ignoreSwapMethod_beanIgnore_usingConfig() {
 		assertNull(find(bc(E01Config.class), E01c.class));
 	}
 
 	@Test
-	public void e02_ignoreSwapMethod_deprecated() throws Exception {
+	public void e02_ignoreSwapMethod_deprecated() {
 		assertNull(find(E02.class));
 	}
 
 	@Test
-	public void e04_ignoreSwapMethod_wrongParameters() throws Exception {
+	public void e04_ignoreSwapMethod_wrongParameters() {
 		assertNull(find(E04.class));
 	}
 
 	@Test
-	public void e05_ignoreSwapMethod_notStatic() throws Exception {
+	public void e05_ignoreSwapMethod_notStatic() {
 		assertNull(find(E05.class));
 	}
 

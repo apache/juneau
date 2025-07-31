@@ -32,19 +32,19 @@ public class SerializedHeader_Test {
 	private static final OpenApiSerializer OAPI_SERIALIZER = OpenApiSerializer.DEFAULT;
 
 	@Test
-	public void a01_basic() throws Exception {
+	public void a01_basic() {
 		SerializedHeader x1 = new SerializedHeader("Foo",alist("bar","baz"),OAPI_SESSION,T_ARRAY_PIPES,true);
 		assertString(x1).is("Foo: bar|baz");
 	}
 
 	@Test
-	public void a02_type() throws Exception {
+	public void a02_type() {
 		SerializedHeader x1 = serializedHeader("Foo",2).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
-		assertThrown(()->x1.toString()).asMessage().is("Validation error on request HEADER parameter 'Foo'='2'");
+		assertThrown(x1::toString).asMessage().is("Validation error on request HEADER parameter 'Foo'='2'");
 	}
 
 	@Test
-	public void a03_serializer() throws Exception {
+	public void a03_serializer() {
 		SerializedHeader x1 = serializedHeader("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null);
 		assertString(x1.getValue()).is("[bar, baz]");
 		SerializedHeader x2 = serializedHeader("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
@@ -58,17 +58,17 @@ public class SerializedHeader_Test {
 	}
 
 	@Test
-	public void a04_skipIfEmpty() throws Exception {
+	public void a04_skipIfEmpty() {
 		SerializedHeader x1 = serializedHeader("Foo",null).skipIfEmpty();
 		assertString(x1.getValue()).isNull();
 		SerializedHeader x2 = serializedHeader("Foo","").skipIfEmpty();
 		assertString(x2.getValue()).isNull();
 		SerializedHeader x3 = serializedHeader("Foo","").schema(schema(STRING)._default("bar").build()).serializer(OAPI_SERIALIZER).skipIfEmpty();
-		assertThrown(()->x3.getValue()).asMessages().isContains("Empty value not allowed.");
+		assertThrown(x3::getValue).asMessages().isContains("Empty value not allowed.");
 	}
 
 	@Test
-	public void a05_getValue_defaults() throws Exception {
+	public void a05_getValue_defaults() {
 		SerializedHeader x1 = serializedHeader("Foo",null).schema(schema(INTEGER)._default("1").build()).serializer(OAPI_SESSION);
 		assertString(x1.getValue()).is("1");
 
@@ -79,10 +79,10 @@ public class SerializedHeader_Test {
 		assertString(x3.getValue()).isNull();
 
 		SerializedHeader x4 = serializedHeader("Foo",null).schema(schema(STRING).required().build()).serializer(OAPI_SESSION);
-		assertThrown(()->x4.getValue()).asMessages().isContains("Required value not provided.");
+		assertThrown(x4::getValue).asMessages().isContains("Required value not provided.");
 
 		SerializedHeader x5 = serializedHeader("Foo",null).schema(schema(STRING).required().build()).serializer(new BadPartSerializerSession());
-		assertThrown(()->x5.getValue()).asMessages().isContains("Bad");
+		assertThrown(x5::getValue).asMessages().isContains("Bad");
 	}
 
 	private static class BadPartSerializerSession implements HttpPartSerializerSession {

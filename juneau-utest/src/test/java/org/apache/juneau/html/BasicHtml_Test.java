@@ -217,38 +217,44 @@ public class BasicHtml_Test {
 					"MapWithStrings",
 					MapWithStrings.class,
 					new MapWithStrings().append("k1", "v1").append("k2", null),
-					"<table>"
-						+"<tr>"
-							+"<td>k1</td>"
-							+"<td>v1</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>k2</td>"
-							+"<td><null/></td>"
-						+"</tr>"
-					+"</table>",
+					"""
+					<table>
+						<tr>
+							<td>k1</td>
+							<td>v1</td>
+						</tr>
+						<tr>
+							<td>k2</td>
+							<td><null/></td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"<table>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>k1</td>\n"
-							+"\t\t<td>v1</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>k2</td>\n"
-							+"\t\t<td><null/></td>\n"
-						+"\t</tr>\n"
-					+"</table>\n",
+					"""
+					<table>
+						<tr>
+							<td>k1</td>
+							<td>v1</td>
+						</tr>
+						<tr>
+							<td>k2</td>
+							<td><null/></td>
+						</tr>
+					</table>
+					""",
 
-					"<table>"
-						+"<tr>"
-							+"<td>k1</td>"
-							+"<td>v1</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>k2</td>"
-							+"<td><null/></td>"
-						+"</tr>"
-					+"</table>"
+					"""
+					<table>
+						<tr>
+							<td>k1</td>
+							<td>v1</td>
+						</tr>
+						<tr>
+							<td>k2</td>
+							<td><null/></td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
 				)
 				{
 					@Override
@@ -262,50 +268,56 @@ public class BasicHtml_Test {
 					"MapsWithNumbers",
 					MapWithNumbers.class,
 					new MapWithNumbers().append("k1", 123).append("k2", 1.23).append("k3", null),
-					"<table>"
-						+"<tr>"
-							+"<td>k1</td>"
-							+"<td><number>123</number></td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>k2</td>"
-							+"<td><number>1.23</number></td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>k3</td>"
-							+"<td><null/></td>"
-						+"</tr>"
-					+"</table>",
+					"""
+					<table>
+						<tr>
+							<td>k1</td>
+							<td><number>123</number></td>
+						</tr>
+						<tr>
+							<td>k2</td>
+							<td><number>1.23</number></td>
+						</tr>
+						<tr>
+							<td>k3</td>
+							<td><null/></td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"<table>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>k1</td>\n"
-							+"\t\t<td><number>123</number></td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>k2</td>\n"
-							+"\t\t<td><number>1.23</number></td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>k3</td>\n"
-							+"\t\t<td><null/></td>\n"
-						+"\t</tr>\n"
-					+"</table>\n",
+					"""
+					<table>
+						<tr>
+							<td>k1</td>
+							<td><number>123</number></td>
+						</tr>
+						<tr>
+							<td>k2</td>
+							<td><number>1.23</number></td>
+						</tr>
+						<tr>
+							<td>k3</td>
+							<td><null/></td>
+						</tr>
+					</table>
+					""",
 
-					"<table>"
-						+"<tr>"
-							+"<td>k1</td>"
-							+"<td>123</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>k2</td>"
-							+"<td>1.23</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>k3</td>"
-							+"<td><null/></td>"
-						+"</tr>"
-					+"</table>"
+					"""
+					<table>
+						<tr>
+							<td>k1</td>
+							<td>123</td>
+						</tr>
+						<tr>
+							<td>k2</td>
+							<td>1.23</td>
+						</tr>
+						<tr>
+							<td>k3</td>
+							<td><null/></td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
 				)
 				{
 					@Override
@@ -319,74 +331,80 @@ public class BasicHtml_Test {
 					"MapWithObjects",
 					getType(Map.class,String.class,Object.class),
 					new MapWithObjects().append("k1", "v1").append("k2", 123).append("k3", 1.23).append("k4", true).append("k5", null),
-					"<table>"
-						+"<tr>"
-							+"<td>k1</td>"
-							+"<td>v1</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>k2</td>"
-							+"<td><number>123</number></td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>k3</td>"
-							+"<td><number>1.23</number></td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>k4</td>"
-							+"<td><boolean>true</boolean></td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>k5</td>"
-							+"<td><null/></td>"
-						+"</tr>"
-					+"</table>",
+					"""
+					<table>
+						<tr>
+							<td>k1</td>
+							<td>v1</td>
+						</tr>
+						<tr>
+							<td>k2</td>
+							<td><number>123</number></td>
+						</tr>
+						<tr>
+							<td>k3</td>
+							<td><number>1.23</number></td>
+						</tr>
+						<tr>
+							<td>k4</td>
+							<td><boolean>true</boolean></td>
+						</tr>
+						<tr>
+							<td>k5</td>
+							<td><null/></td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"<table>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>k1</td>\n"
-							+"\t\t<td>v1</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>k2</td>\n"
-							+"\t\t<td><number>123</number></td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>k3</td>\n"
-							+"\t\t<td><number>1.23</number></td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>k4</td>\n"
-							+"\t\t<td><boolean>true</boolean></td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>k5</td>\n"
-							+"\t\t<td><null/></td>\n"
-						+"\t</tr>\n"
-					+"</table>\n",
+					"""
+					<table>
+						<tr>
+							<td>k1</td>
+							<td>v1</td>
+						</tr>
+						<tr>
+							<td>k2</td>
+							<td><number>123</number></td>
+						</tr>
+						<tr>
+							<td>k3</td>
+							<td><number>1.23</number></td>
+						</tr>
+						<tr>
+							<td>k4</td>
+							<td><boolean>true</boolean></td>
+						</tr>
+						<tr>
+							<td>k5</td>
+							<td><null/></td>
+						</tr>
+					</table>
+					""",
 
-					"<table>"
-						+"<tr>"
-							+"<td>k1</td>"
-							+"<td>v1</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>k2</td>"
-							+"<td><number>123</number></td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>k3</td>"
-							+"<td><number>1.23</number></td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>k4</td>"
-							+"<td><boolean>true</boolean></td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>k5</td>"
-							+"<td><null/></td>"
-						+"</tr>"
-					+"</table>"
+					"""
+					<table>
+						<tr>
+							<td>k1</td>
+							<td>v1</td>
+						</tr>
+						<tr>
+							<td>k2</td>
+							<td><number>123</number></td>
+						</tr>
+						<tr>
+							<td>k3</td>
+							<td><number>1.23</number></td>
+						</tr>
+						<tr>
+							<td>k4</td>
+							<td><boolean>true</boolean></td>
+						</tr>
+						<tr>
+							<td>k5</td>
+							<td><null/></td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
 				)
 				{
 					@Override
@@ -455,143 +473,149 @@ public class BasicHtml_Test {
 					"BeanWithNormalProperties",
 					BeanWithNormalProperties.class,
 					new BeanWithNormalProperties().init(),
-					"<table>"
-						+"<tr>"
-							+"<td>a</td>"
-							+"<td>foo</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b</td>"
-							+"<td>123</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>c</td>"
-							+"<td>bar</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>d</td>"
-							+"<td><number>456</number></td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>e</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>h</td>"
-										+"<td>qux</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>f</td>"
-							+"<td>"
-								+"<ul>"
-									+"<li>baz</li>"
-								+"</ul>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>g</td>"
-							+"<td>"
-								+"<ul>"
-									+"<li>789</li>"
-								+"</ul>"
-							+"</td>"
-						+"</tr>"
-					+"</table>",
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td>foo</td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>123</td>
+						</tr>
+						<tr>
+							<td>c</td>
+							<td>bar</td>
+						</tr>
+						<tr>
+							<td>d</td>
+							<td><number>456</number></td>
+						</tr>
+						<tr>
+							<td>e</td>
+							<td>
+								<table>
+									<tr>
+										<td>h</td>
+										<td>qux</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>f</td>
+							<td>
+								<ul>
+									<li>baz</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>g</td>
+							<td>
+								<ul>
+									<li>789</li>
+								</ul>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"<table>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>a</td>\n"
-							+"\t\t<td>foo</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>b</td>\n"
-							+"\t\t<td>123</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>c</td>\n"
-							+"\t\t<td>bar</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>d</td>\n"
-							+"\t\t<td><number>456</number></td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>e</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>h</td>\n"
-										+"\t\t\t\t\t<td>qux</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>f</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<ul>\n"
-									+"\t\t\t\t<li>baz</li>\n"
-								+"\t\t\t</ul>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>g</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<ul>\n"
-									+"\t\t\t\t<li>789</li>\n"
-								+"\t\t\t</ul>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-					+"</table>\n",
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td>foo</td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>123</td>
+						</tr>
+						<tr>
+							<td>c</td>
+							<td>bar</td>
+						</tr>
+						<tr>
+							<td>d</td>
+							<td><number>456</number></td>
+						</tr>
+						<tr>
+							<td>e</td>
+							<td>
+								<table>
+									<tr>
+										<td>h</td>
+										<td>qux</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>f</td>
+							<td>
+								<ul>
+									<li>baz</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>g</td>
+							<td>
+								<ul>
+									<li>789</li>
+								</ul>
+							</td>
+						</tr>
+					</table>
+					""",
 
-					"<table>"
-						+"<tr>"
-							+"<td>a</td>"
-							+"<td>foo</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b</td>"
-							+"<td>123</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>c</td>"
-							+"<td>bar</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>d</td>"
-							+"<td><number>456</number></td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>e</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>h</td>"
-										+"<td>qux</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>f</td>"
-							+"<td>"
-								+"<ul>"
-									+"<li>baz</li>"
-								+"</ul>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>g</td>"
-							+"<td>"
-								+"<ul>"
-									+"<li>789</li>"
-								+"</ul>"
-							+"</td>"
-						+"</tr>"
-					+"</table>"
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td>foo</td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>123</td>
+						</tr>
+						<tr>
+							<td>c</td>
+							<td>bar</td>
+						</tr>
+						<tr>
+							<td>d</td>
+							<td><number>456</number></td>
+						</tr>
+						<tr>
+							<td>e</td>
+							<td>
+								<table>
+									<tr>
+										<td>h</td>
+										<td>qux</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>f</td>
+							<td>
+								<ul>
+									<li>baz</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>g</td>
+							<td>
+								<ul>
+									<li>789</li>
+								</ul>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
 				)
 				{
 					@Override
@@ -607,149 +631,155 @@ public class BasicHtml_Test {
 					"BeanWithMapProperties",
 					BeanWithMapProperties.class,
 					new BeanWithMapProperties().init(),
-					"<table>"
-						+"<tr>"
-							+"<td>a</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>k1</td>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>k2</td>"
-										+"<td>123</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>c</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>k3</td>"
-										+"<td>bar</td>"
-									+"</tr>"
-									+"<tr>"
-										+"<td>k4</td>"
-										+"<td><number>456</number></td>"
-									+"</tr>"
-									+"<tr>"
-										+"<td>k5</td>"
-										+"<td><boolean>true</boolean></td>"
-									+"</tr>"
-									+"<tr>"
-										+"<td>k6</td>"
-										+"<td><null/></td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>",
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td>
+								<table>
+									<tr>
+										<td>k1</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>
+								<table>
+									<tr>
+										<td>k2</td>
+										<td>123</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>c</td>
+							<td>
+								<table>
+									<tr>
+										<td>k3</td>
+										<td>bar</td>
+									</tr>
+									<tr>
+										<td>k4</td>
+										<td><number>456</number></td>
+									</tr>
+									<tr>
+										<td>k5</td>
+										<td><boolean>true</boolean></td>
+									</tr>
+									<tr>
+										<td>k6</td>
+										<td><null/></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"<table>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>a</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>k1</td>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>b</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>k2</td>\n"
-										+"\t\t\t\t\t<td>123</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>c</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>k3</td>\n"
-										+"\t\t\t\t\t<td>bar</td>\n"
-									+"\t\t\t\t</tr>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>k4</td>\n"
-										+"\t\t\t\t\t<td><number>456</number></td>\n"
-									+"\t\t\t\t</tr>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>k5</td>\n"
-										+"\t\t\t\t\t<td><boolean>true</boolean></td>\n"
-									+"\t\t\t\t</tr>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>k6</td>\n"
-										+"\t\t\t\t\t<td><null/></td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-					+"</table>\n",
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td>
+								<table>
+									<tr>
+										<td>k1</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>
+								<table>
+									<tr>
+										<td>k2</td>
+										<td>123</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>c</td>
+							<td>
+								<table>
+									<tr>
+										<td>k3</td>
+										<td>bar</td>
+									</tr>
+									<tr>
+										<td>k4</td>
+										<td><number>456</number></td>
+									</tr>
+									<tr>
+										<td>k5</td>
+										<td><boolean>true</boolean></td>
+									</tr>
+									<tr>
+										<td>k6</td>
+										<td><null/></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""",
 
-					"<table>"
-						+"<tr>"
-							+"<td>a</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>k1</td>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>k2</td>"
-										+"<td>123</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>c</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>k3</td>"
-										+"<td>bar</td>"
-									+"</tr>"
-									+"<tr>"
-										+"<td>k4</td>"
-										+"<td><number>456</number></td>"
-									+"</tr>"
-									+"<tr>"
-										+"<td>k5</td>"
-										+"<td><boolean>true</boolean></td>"
-									+"</tr>"
-									+"<tr>"
-										+"<td>k6</td>"
-										+"<td><null/></td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>"
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td>
+								<table>
+									<tr>
+										<td>k1</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>
+								<table>
+									<tr>
+										<td>k2</td>
+										<td>123</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>c</td>
+							<td>
+								<table>
+									<tr>
+										<td>k3</td>
+										<td>bar</td>
+									</tr>
+									<tr>
+										<td>k4</td>
+										<td><number>456</number></td>
+									</tr>
+									<tr>
+										<td>k5</td>
+										<td><boolean>true</boolean></td>
+									</tr>
+									<tr>
+										<td>k6</td>
+										<td><null/></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
 				)
 				{
 					@Override
@@ -767,38 +797,44 @@ public class BasicHtml_Test {
 					"BeanWithTypeName",
 					BeanWithTypeName.class,
 					new BeanWithTypeName().init(),
-					"<table _type='X'>"
-						+"<tr>"
-							+"<td>a</td>"
-							+"<td>123</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b</td>"
-							+"<td>foo</td>"
-						+"</tr>"
-					+"</table>",
+					"""
+					<table _type='X'>
+						<tr>
+							<td>a</td>
+							<td>123</td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>foo</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"<table _type='X'>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>a</td>\n"
-							+"\t\t<td>123</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>b</td>\n"
-							+"\t\t<td>foo</td>\n"
-						+"\t</tr>\n"
-					+"</table>\n",
+					"""
+					<table _type='X'>
+						<tr>
+							<td>a</td>
+							<td>123</td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>foo</td>
+						</tr>
+					</table>
+					""",
 
-					"<table>"
-						+"<tr>"
-							+"<td>a</td>"
-							+"<td>123</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b</td>"
-							+"<td>foo</td>"
-						+"</tr>"
-					+"</table>"
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td>123</td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>foo</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
 				)
 				{
 					@Override
@@ -812,80 +848,86 @@ public class BasicHtml_Test {
 					"BeanWithPropertiesWithTypeNames",
 					BeanWithPropertiesWithTypeNames.class,
 					new BeanWithPropertiesWithTypeNames().init(),
-					"<table>"
-						+"<tr>"
-							+"<td>b1</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>b</td>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b2</td>"
-							+"<td>"
-								+"<table _type='B'>"
-									+"<tr>"
-										+"<td>b</td>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>",
+					"""
+					<table>
+						<tr>
+							<td>b1</td>
+							<td>
+								<table>
+									<tr>
+										<td>b</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b2</td>
+							<td>
+								<table _type='B'>
+									<tr>
+										<td>b</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"<table>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>b1</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>b</td>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>b2</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table _type='B'>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>b</td>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-					+"</table>\n",
+					"""
+					<table>
+						<tr>
+							<td>b1</td>
+							<td>
+								<table>
+									<tr>
+										<td>b</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b2</td>
+							<td>
+								<table _type='B'>
+									<tr>
+										<td>b</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""",
 
-					"<table>"
-						+"<tr>"
-							+"<td>b1</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>b</td>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b2</td>"
-							+"<td>"
-								+"<table _type='B'>"
-									+"<tr>"
-										+"<td>b</td>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>"
+					"""
+					<table>
+						<tr>
+							<td>b1</td>
+							<td>
+								<table>
+									<tr>
+										<td>b</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b2</td>
+							<td>
+								<table _type='B'>
+									<tr>
+										<td>b</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
 				)
 				{
 					@Override
@@ -899,131 +941,137 @@ public class BasicHtml_Test {
 					"BeanWithPropertiesWithArrayTypeNames",
 					BeanWithPropertiesWithArrayTypeNames.class,
 					new BeanWithPropertiesWithArrayTypeNames().init(),
-					"<table>"
-						+"<tr>"
-							+"<td>b1</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>b</th>"
-									+"</tr>"
-									+"<tr>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b2</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>b</th>"
-									+"</tr>"
-									+"<tr _type='B'>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b3</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>b</th>"
-									+"</tr>"
-									+"<tr _type='B'>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>",
+					"""
+					<table>
+						<tr>
+							<td>b1</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>b</th>
+									</tr>
+									<tr>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b2</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>b</th>
+									</tr>
+									<tr _type='B'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b3</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>b</th>
+									</tr>
+									<tr _type='B'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"<table>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>b1</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table _type='array'>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<th>b</th>\n"
-									+"\t\t\t\t</tr>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>b2</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table _type='array'>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<th>b</th>\n"
-									+"\t\t\t\t</tr>\n"
-									+"\t\t\t\t<tr _type='B'>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>b3</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table _type='array'>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<th>b</th>\n"
-									+"\t\t\t\t</tr>\n"
-									+"\t\t\t\t<tr _type='B'>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-					+"</table>\n",
+					"""
+					<table>
+						<tr>
+							<td>b1</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>b</th>
+									</tr>
+									<tr>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b2</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>b</th>
+									</tr>
+									<tr _type='B'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b3</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>b</th>
+									</tr>
+									<tr _type='B'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""",
 
-					"<table>"
-						+"<tr>"
-							+"<td>b1</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>b</th>"
-									+"</tr>"
-									+"<tr>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b2</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>b</th>"
-									+"</tr>"
-									+"<tr _type='B'>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b3</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>b</th>"
-									+"</tr>"
-									+"<tr _type='B'>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>"
+					"""
+					<table>
+						<tr>
+							<td>b1</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>b</th>
+									</tr>
+									<tr>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b2</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>b</th>
+									</tr>
+									<tr _type='B'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b3</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>b</th>
+									</tr>
+									<tr _type='B'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
 				)
 				{
 					@Override
@@ -1038,167 +1086,173 @@ public class BasicHtml_Test {
 					"BeanWithPropertiesWith2dArrayTypeNames",
 					BeanWithPropertiesWith2dArrayTypeNames.class,
 					new BeanWithPropertiesWith2dArrayTypeNames().init(),
-					"<table>"
-						+"<tr>"
-							+"<td>b1</td>"
-							+"<td>"
-								+"<ul>"
-									+"<li>"
-										+"<table _type='array'>"
-											+"<tr>"
-												+"<th>b</th>"
-											+"</tr>"
-											+"<tr>"
-												+"<td>foo</td>"
-											+"</tr>"
-										+"</table>"
-									+"</li>"
-								+"</ul>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b2</td>"
-							+"<td>"
-								+"<ul>"
-									+"<li>"
-										+"<table _type='array'>"
-											+"<tr>"
-												+"<th>b</th>"
-											+"</tr>"
-											+"<tr _type='B'>"
-												+"<td>foo</td>"
-											+"</tr>"
-										+"</table>"
-									+"</li>"
-								+"</ul>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b3</td>"
-							+"<td>"
-								+"<ul>"
-									+"<li>"
-										+"<table _type='array'>"
-											+"<tr>"
-												+"<th>b</th>"
-											+"</tr>"
-											+"<tr _type='B'>"
-												+"<td>foo</td>"
-											+"</tr>"
-										+"</table>"
-									+"</li>"
-								+"</ul>"
-							+"</td>"
-						+"</tr>"
-					+"</table>",
+					"""
+					<table>
+						<tr>
+							<td>b1</td>
+							<td>
+								<ul>
+									<li>
+										<table _type='array'>
+											<tr>
+												<th>b</th>
+											</tr>
+											<tr>
+												<td>foo</td>
+											</tr>
+										</table>
+									</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>b2</td>
+							<td>
+								<ul>
+									<li>
+										<table _type='array'>
+											<tr>
+												<th>b</th>
+											</tr>
+											<tr _type='B'>
+												<td>foo</td>
+											</tr>
+										</table>
+									</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>b3</td>
+							<td>
+								<ul>
+									<li>
+										<table _type='array'>
+											<tr>
+												<th>b</th>
+											</tr>
+											<tr _type='B'>
+												<td>foo</td>
+											</tr>
+										</table>
+									</li>
+								</ul>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"<table>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>b1</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<ul>\n"
-									+"\t\t\t\t<li>\n"
-										+"\t\t\t\t\t<table _type='array'>\n"
-											+"\t\t\t\t\t\t<tr>\n"
-												+"\t\t\t\t\t\t\t<th>b</th>\n"
-											+"\t\t\t\t\t\t</tr>\n"
-											+"\t\t\t\t\t\t<tr>\n"
-												+"\t\t\t\t\t\t\t<td>foo</td>\n"
-											+"\t\t\t\t\t\t</tr>\n"
-										+"\t\t\t\t\t</table>\n"
-									+"\t\t\t\t</li>\n"
-								+"\t\t\t</ul>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>b2</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<ul>\n"
-									+"\t\t\t\t<li>\n"
-										+"\t\t\t\t\t<table _type='array'>\n"
-											+"\t\t\t\t\t\t<tr>\n"
-												+"\t\t\t\t\t\t\t<th>b</th>\n"
-											+"\t\t\t\t\t\t</tr>\n"
-											+"\t\t\t\t\t\t<tr _type='B'>\n"
-												+"\t\t\t\t\t\t\t<td>foo</td>\n"
-											+"\t\t\t\t\t\t</tr>\n"
-										+"\t\t\t\t\t</table>\n"
-									+"\t\t\t\t</li>\n"
-								+"\t\t\t</ul>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>b3</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<ul>\n"
-									+"\t\t\t\t<li>\n"
-										+"\t\t\t\t\t<table _type='array'>\n"
-											+"\t\t\t\t\t\t<tr>\n"
-												+"\t\t\t\t\t\t\t<th>b</th>\n"
-											+"\t\t\t\t\t\t</tr>\n"
-											+"\t\t\t\t\t\t<tr _type='B'>\n"
-												+"\t\t\t\t\t\t\t<td>foo</td>\n"
-											+"\t\t\t\t\t\t</tr>\n"
-										+"\t\t\t\t\t</table>\n"
-									+"\t\t\t\t</li>\n"
-								+"\t\t\t</ul>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-					+"</table>\n",
+					"""
+					<table>
+						<tr>
+							<td>b1</td>
+							<td>
+								<ul>
+									<li>
+										<table _type='array'>
+											<tr>
+												<th>b</th>
+											</tr>
+											<tr>
+												<td>foo</td>
+											</tr>
+										</table>
+									</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>b2</td>
+							<td>
+								<ul>
+									<li>
+										<table _type='array'>
+											<tr>
+												<th>b</th>
+											</tr>
+											<tr _type='B'>
+												<td>foo</td>
+											</tr>
+										</table>
+									</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>b3</td>
+							<td>
+								<ul>
+									<li>
+										<table _type='array'>
+											<tr>
+												<th>b</th>
+											</tr>
+											<tr _type='B'>
+												<td>foo</td>
+											</tr>
+										</table>
+									</li>
+								</ul>
+							</td>
+						</tr>
+					</table>
+					""",
 
-					"<table>"
-						+"<tr>"
-							+"<td>b1</td>"
-							+"<td>"
-								+"<ul>"
-									+"<li>"
-										+"<table _type='array'>"
-											+"<tr>"
-												+"<th>b</th>"
-											+"</tr>"
-											+"<tr>"
-												+"<td>foo</td>"
-											+"</tr>"
-										+"</table>"
-									+"</li>"
-								+"</ul>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b2</td>"
-							+"<td>"
-								+"<ul>"
-									+"<li>"
-										+"<table _type='array'>"
-											+"<tr>"
-												+"<th>b</th>"
-											+"</tr>"
-											+"<tr _type='B'>"
-												+"<td>foo</td>"
-											+"</tr>"
-										+"</table>"
-									+"</li>"
-								+"</ul>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b3</td>"
-							+"<td>"
-								+"<ul>"
-									+"<li>"
-										+"<table _type='array'>"
-											+"<tr>"
-												+"<th>b</th>"
-											+"</tr>"
-											+"<tr _type='B'>"
-												+"<td>foo</td>"
-											+"</tr>"
-										+"</table>"
-									+"</li>"
-								+"</ul>"
-							+"</td>"
-						+"</tr>"
-					+"</table>"
+					"""
+					<table>
+						<tr>
+							<td>b1</td>
+							<td>
+								<ul>
+									<li>
+										<table _type='array'>
+											<tr>
+												<th>b</th>
+											</tr>
+											<tr>
+												<td>foo</td>
+											</tr>
+										</table>
+									</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>b2</td>
+							<td>
+								<ul>
+									<li>
+										<table _type='array'>
+											<tr>
+												<th>b</th>
+											</tr>
+											<tr _type='B'>
+												<td>foo</td>
+											</tr>
+										</table>
+									</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>b3</td>
+							<td>
+								<ul>
+									<li>
+										<table _type='array'>
+											<tr>
+												<th>b</th>
+											</tr>
+											<tr _type='B'>
+												<td>foo</td>
+											</tr>
+										</table>
+									</li>
+								</ul>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
 				)
 				{
 					@Override
@@ -1213,122 +1267,128 @@ public class BasicHtml_Test {
 					"BeanWithPropertiesWithMapTypeNames",
 					BeanWithPropertiesWithMapTypeNames.class,
 					new BeanWithPropertiesWithMapTypeNames().init(),
-					"<table>"
-						+"<tr>"
-							+"<td>b1</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>k1</td>"
-										+"<td>"
-											+"<table>"
-												+"<tr>"
-													+"<td>b</td>"
-													+"<td>foo</td>"
-												+"</tr>"
-											+"</table>"
-										+"</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b2</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>k2</td>"
-										+"<td>"
-											+"<table _type='B'>"
-												+"<tr>"
-													+"<td>b</td>"
-													+"<td>foo</td>"
-												+"</tr>"
-											+"</table>"
-										+"</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>",
+					"""
+					<table>
+						<tr>
+							<td>b1</td>
+							<td>
+								<table>
+									<tr>
+										<td>k1</td>
+										<td>
+											<table>
+												<tr>
+													<td>b</td>
+													<td>foo</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b2</td>
+							<td>
+								<table>
+									<tr>
+										<td>k2</td>
+										<td>
+											<table _type='B'>
+												<tr>
+													<td>b</td>
+													<td>foo</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"<table>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>b1</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>k1</td>\n"
-										+"\t\t\t\t\t<td>\n"
-											+"\t\t\t\t\t\t<table>\n"
-												+"\t\t\t\t\t\t\t<tr>\n"
-													+"\t\t\t\t\t\t\t\t<td>b</td>\n"
-													+"\t\t\t\t\t\t\t\t<td>foo</td>\n"
-												+"\t\t\t\t\t\t\t</tr>\n"
-											+"\t\t\t\t\t\t</table>\n"
-										+"\t\t\t\t\t</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>b2</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>k2</td>\n"
-										+"\t\t\t\t\t<td>\n"
-											+"\t\t\t\t\t\t<table _type='B'>\n"
-												+"\t\t\t\t\t\t\t<tr>\n"
-													+"\t\t\t\t\t\t\t\t<td>b</td>\n"
-													+"\t\t\t\t\t\t\t\t<td>foo</td>\n"
-												+"\t\t\t\t\t\t\t</tr>\n"
-											+"\t\t\t\t\t\t</table>\n"
-										+"\t\t\t\t\t</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-					+"</table>\n",
+					"""
+					<table>
+						<tr>
+							<td>b1</td>
+							<td>
+								<table>
+									<tr>
+										<td>k1</td>
+										<td>
+											<table>
+												<tr>
+													<td>b</td>
+													<td>foo</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b2</td>
+							<td>
+								<table>
+									<tr>
+										<td>k2</td>
+										<td>
+											<table _type='B'>
+												<tr>
+													<td>b</td>
+													<td>foo</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""",
 
-					"<table>"
-						+"<tr>"
-							+"<td>b1</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>k1</td>"
-										+"<td>"
-											+"<table>"
-												+"<tr>"
-													+"<td>b</td>"
-													+"<td>foo</td>"
-												+"</tr>"
-											+"</table>"
-										+"</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b2</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>k2</td>"
-										+"<td>"
-											+"<table _type='B'>"
-												+"<tr>"
-													+"<td>b</td>"
-													+"<td>foo</td>"
-												+"</tr>"
-											+"</table>"
-										+"</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>"
+					"""
+					<table>
+						<tr>
+							<td>b1</td>
+							<td>
+								<table>
+									<tr>
+										<td>k1</td>
+										<td>
+											<table>
+												<tr>
+													<td>b</td>
+													<td>foo</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b2</td>
+							<td>
+								<table>
+									<tr>
+										<td>k2</td>
+										<td>
+											<table _type='B'>
+												<tr>
+													<td>b</td>
+													<td>foo</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
 				)
 				{
 					@Override
@@ -1391,83 +1451,89 @@ public class BasicHtml_Test {
 					"BeanWithLinkBeanProperties",
 					BeanWithLinkBeanProperties.class,
 					new BeanWithLinkBeanProperties().init(),
-					"<table>"
-						+"<tr>"
-							+"<td>a</td>"
-							+"<td><a href='http://apache.org'>foo</a></td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b</td>"
-							+"<td>"
-								+"<ul>"
-									+"<li><a href='http://apache.org'>foo</a></li>"
-								+"</ul>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>c</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>c1</td>"
-										+"<td><a href='http://apache.org'>foo</a></td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>",
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td><a href='http://apache.org'>foo</a></td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>
+								<ul>
+									<li><a href='http://apache.org'>foo</a></li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>c</td>
+							<td>
+								<table>
+									<tr>
+										<td>c1</td>
+										<td><a href='http://apache.org'>foo</a></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"<table>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>a</td>\n"
-							+"\t\t<td><a href='http://apache.org'>foo</a></td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>b</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<ul>\n"
-									+"\t\t\t\t<li><a href='http://apache.org'>foo</a></li>\n"
-								+"\t\t\t</ul>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>c</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>c1</td>\n"
-										+"\t\t\t\t\t<td><a href='http://apache.org'>foo</a></td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-					+"</table>\n",
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td><a href='http://apache.org'>foo</a></td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>
+								<ul>
+									<li><a href='http://apache.org'>foo</a></li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>c</td>
+							<td>
+								<table>
+									<tr>
+										<td>c1</td>
+										<td><a href='http://apache.org'>foo</a></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""",
 
-					"<table>"
-						+"<tr>"
-							+"<td>a</td>"
-							+"<td><a href='http://apache.org'>foo</a></td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b</td>"
-							+"<td>"
-								+"<ul>"
-									+"<li><a href='http://apache.org'>foo</a></li>"
-								+"</ul>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>c</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>c1</td>"
-										+"<td><a href='http://apache.org'>foo</a></td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>"
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td><a href='http://apache.org'>foo</a></td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>
+								<ul>
+									<li><a href='http://apache.org'>foo</a></li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>c</td>
+							<td>
+								<table>
+									<tr>
+										<td>c1</td>
+										<td><a href='http://apache.org'>foo</a></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
 				)
 				{
 					@Override
@@ -1531,83 +1597,89 @@ public class BasicHtml_Test {
 					"BeanWithLinkBeanPropertiesC",
 					BeanWithLinkBeanPropertiesC.class,
 					new BeanWithLinkBeanPropertiesC().init(),
-					"<table>"
-						+"<tr>"
-							+"<td>a</td>"
-							+"<td><a href='http://apache.org'>foo</a></td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b</td>"
-							+"<td>"
-								+"<ul>"
-									+"<li><a href='http://apache.org'>foo</a></li>"
-								+"</ul>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>c</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>c1</td>"
-										+"<td><a href='http://apache.org'>foo</a></td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>",
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td><a href='http://apache.org'>foo</a></td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>
+								<ul>
+									<li><a href='http://apache.org'>foo</a></li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>c</td>
+							<td>
+								<table>
+									<tr>
+										<td>c1</td>
+										<td><a href='http://apache.org'>foo</a></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"<table>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>a</td>\n"
-							+"\t\t<td><a href='http://apache.org'>foo</a></td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>b</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<ul>\n"
-									+"\t\t\t\t<li><a href='http://apache.org'>foo</a></li>\n"
-								+"\t\t\t</ul>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>c</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>c1</td>\n"
-										+"\t\t\t\t\t<td><a href='http://apache.org'>foo</a></td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-					+"</table>\n",
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td><a href='http://apache.org'>foo</a></td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>
+								<ul>
+									<li><a href='http://apache.org'>foo</a></li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>c</td>
+							<td>
+								<table>
+									<tr>
+										<td>c1</td>
+										<td><a href='http://apache.org'>foo</a></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""",
 
-					"<table>"
-						+"<tr>"
-							+"<td>a</td>"
-							+"<td><a href='http://apache.org'>foo</a></td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b</td>"
-							+"<td>"
-								+"<ul>"
-									+"<li><a href='http://apache.org'>foo</a></li>"
-								+"</ul>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>c</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>c1</td>"
-										+"<td><a href='http://apache.org'>foo</a></td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>"
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td><a href='http://apache.org'>foo</a></td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>
+								<ul>
+									<li><a href='http://apache.org'>foo</a></li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>c</td>
+							<td>
+								<table>
+									<tr>
+										<td>c1</td>
+										<td><a href='http://apache.org'>foo</a></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
 				)
 				{
 					@Override
@@ -1641,12 +1713,14 @@ public class BasicHtml_Test {
 					new BeanWithSpecialCharacters().init(),
 					"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>",
 
-					"<table>\n"
-					+"	<tr>\n"
-					+"		<td>a</td>\n"
-					+"		<td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td>\n"
-					+"	</tr>\n"
-					+"</table>\n",
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td>
+						</tr>
+					</table>
+					""",
 
 					"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>"
 				)
@@ -1678,146 +1752,152 @@ public class BasicHtml_Test {
 					"BeanWithAbstractFields",
 					BeanWithAbstractFields.class,
 					new BeanWithAbstractFields().init(),
-					"<table>"
-						+"<tr>"
-							+"<td>a</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>a</td>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>ia</td>"
-							+"<td>"
-								+"<table _type='A'>"
-									+"<tr>"
-										+"<td>a</td>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>aa</td>"
-							+"<td>"
-								+"<table _type='A'>"
-									+"<tr>"
-										+"<td>a</td>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>o</td>"
-							+"<td>"
-								+"<table _type='A'>"
-									+"<tr>"
-										+"<td>a</td>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>",
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td>
+								<table>
+									<tr>
+										<td>a</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>ia</td>
+							<td>
+								<table _type='A'>
+									<tr>
+										<td>a</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>aa</td>
+							<td>
+								<table _type='A'>
+									<tr>
+										<td>a</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>o</td>
+							<td>
+								<table _type='A'>
+									<tr>
+										<td>a</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"<table>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>a</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>a</td>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>ia</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table _type='A'>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>a</td>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>aa</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table _type='A'>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>a</td>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>o</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table _type='A'>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>a</td>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-					+"</table>\n",
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td>
+								<table>
+									<tr>
+										<td>a</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>ia</td>
+							<td>
+								<table _type='A'>
+									<tr>
+										<td>a</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>aa</td>
+							<td>
+								<table _type='A'>
+									<tr>
+										<td>a</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>o</td>
+							<td>
+								<table _type='A'>
+									<tr>
+										<td>a</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""",
 
-					"<table>"
-						+"<tr>"
-							+"<td>a</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>a</td>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>ia</td>"
-							+"<td>"
-								+"<table _type='A'>"
-									+"<tr>"
-										+"<td>a</td>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>aa</td>"
-							+"<td>"
-								+"<table _type='A'>"
-									+"<tr>"
-										+"<td>a</td>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>o</td>"
-							+"<td>"
-								+"<table _type='A'>"
-									+"<tr>"
-										+"<td>a</td>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>"
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td>
+								<table>
+									<tr>
+										<td>a</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>ia</td>
+							<td>
+								<table _type='A'>
+									<tr>
+										<td>a</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>aa</td>
+							<td>
+								<table _type='A'>
+									<tr>
+										<td>a</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>o</td>
+							<td>
+								<table _type='A'>
+									<tr>
+										<td>a</td>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
 				)
 				{
 					@Override
@@ -1834,287 +1914,293 @@ public class BasicHtml_Test {
 					"BeanWithAbstractArrayFields",
 					BeanWithAbstractArrayFields.class,
 					new BeanWithAbstractArrayFields().init(),
-					"<table>"
-						+"<tr>"
-							+"<td>a</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>a</th>"
-									+"</tr>"
-									+"<tr>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>ia1</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>a</th>"
-									+"</tr>"
-									+"<tr _type='A'>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>ia2</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>a</th>"
-									+"</tr>"
-									+"<tr _type='A'>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>aa1</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>a</th>"
-									+"</tr>"
-									+"<tr _type='A'>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>aa2</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>a</th>"
-									+"</tr>"
-									+"<tr _type='A'>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>o1</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>a</th>"
-									+"</tr>"
-									+"<tr _type='A'>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>o2</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>a</th>"
-									+"</tr>"
-									+"<tr _type='A'>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>",
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>ia1</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>ia2</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>aa1</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>aa2</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>o1</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>o2</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"<table>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>a</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table _type='array'>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<th>a</th>\n"
-									+"\t\t\t\t</tr>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>ia1</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table _type='array'>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<th>a</th>\n"
-									+"\t\t\t\t</tr>\n"
-									+"\t\t\t\t<tr _type='A'>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>ia2</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table _type='array'>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<th>a</th>\n"
-									+"\t\t\t\t</tr>\n"
-									+"\t\t\t\t<tr _type='A'>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>aa1</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table _type='array'>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<th>a</th>\n"
-									+"\t\t\t\t</tr>\n"
-									+"\t\t\t\t<tr _type='A'>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>aa2</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table _type='array'>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<th>a</th>\n"
-									+"\t\t\t\t</tr>\n"
-									+"\t\t\t\t<tr _type='A'>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>o1</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table _type='array'>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<th>a</th>\n"
-									+"\t\t\t\t</tr>\n"
-									+"\t\t\t\t<tr _type='A'>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>o2</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table _type='array'>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<th>a</th>\n"
-									+"\t\t\t\t</tr>\n"
-									+"\t\t\t\t<tr _type='A'>\n"
-										+"\t\t\t\t\t<td>foo</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-					+"</table>\n",
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>ia1</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>ia2</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>aa1</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>aa2</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>o1</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>o2</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""",
 
-					"<table>"
-						+"<tr>"
-							+"<td>a</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>a</th>"
-									+"</tr>"
-									+"<tr>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>ia1</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>a</th>"
-									+"</tr>"
-									+"<tr _type='A'>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>ia2</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>a</th>"
-									+"</tr>"
-									+"<tr _type='A'>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>aa1</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>a</th>"
-									+"</tr>"
-									+"<tr _type='A'>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>aa2</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>a</th>"
-									+"</tr>"
-									+"<tr _type='A'>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>o1</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>a</th>"
-									+"</tr>"
-									+"<tr _type='A'>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>o2</td>"
-							+"<td>"
-								+"<table _type='array'>"
-									+"<tr>"
-										+"<th>a</th>"
-									+"</tr>"
-									+"<tr _type='A'>"
-										+"<td>foo</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>"
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>ia1</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>ia2</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>aa1</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>aa2</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>o1</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>o2</td>
+							<td>
+								<table _type='array'>
+									<tr>
+										<th>a</th>
+									</tr>
+									<tr _type='A'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
 				)
 				{
 					@Override
@@ -2134,176 +2220,182 @@ public class BasicHtml_Test {
 					"BeanWithAbstractMapFields",
 					BeanWithAbstractMapFields.class,
 					new BeanWithAbstractMapFields().init(),
-					"<table>"
-						+"<tr>"
-							+"<td>a</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>k1</td>"
-										+"<td>"
-											+"<table>"
-												+"<tr>"
-													+"<td>a</td>"
-													+"<td>foo</td>"
-												+"</tr>"
-											+"</table>"
-										+"</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>k2</td>"
-										+"<td>"
-											+"<table _type='A'>"
-												+"<tr>"
-													+"<td>a</td>"
-													+"<td>foo</td>"
-												+"</tr>"
-											+"</table>"
-										+"</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>c</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>k3</td>"
-										+"<td>"
-											+"<table _type='A'>"
-												+"<tr>"
-													+"<td>a</td>"
-													+"<td>foo</td>"
-												+"</tr>"
-											+"</table>"
-										+"</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>",
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td>
+								<table>
+									<tr>
+										<td>k1</td>
+										<td>
+											<table>
+												<tr>
+													<td>a</td>
+													<td>foo</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>
+								<table>
+									<tr>
+										<td>k2</td>
+										<td>
+											<table _type='A'>
+												<tr>
+													<td>a</td>
+													<td>foo</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>c</td>
+							<td>
+								<table>
+									<tr>
+										<td>k3</td>
+										<td>
+											<table _type='A'>
+												<tr>
+													<td>a</td>
+													<td>foo</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"<table>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>a</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>k1</td>\n"
-										+"\t\t\t\t\t<td>\n"
-											+"\t\t\t\t\t\t<table>\n"
-												+"\t\t\t\t\t\t\t<tr>\n"
-													+"\t\t\t\t\t\t\t\t<td>a</td>\n"
-													+"\t\t\t\t\t\t\t\t<td>foo</td>\n"
-												+"\t\t\t\t\t\t\t</tr>\n"
-											+"\t\t\t\t\t\t</table>\n"
-										+"\t\t\t\t\t</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>b</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>k2</td>\n"
-										+"\t\t\t\t\t<td>\n"
-											+"\t\t\t\t\t\t<table _type='A'>\n"
-												+"\t\t\t\t\t\t\t<tr>\n"
-													+"\t\t\t\t\t\t\t\t<td>a</td>\n"
-													+"\t\t\t\t\t\t\t\t<td>foo</td>\n"
-												+"\t\t\t\t\t\t\t</tr>\n"
-											+"\t\t\t\t\t\t</table>\n"
-										+"\t\t\t\t\t</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-						+"\t<tr>\n"
-							+"\t\t<td>c</td>\n"
-							+"\t\t<td>\n"
-								+"\t\t\t<table>\n"
-									+"\t\t\t\t<tr>\n"
-										+"\t\t\t\t\t<td>k3</td>\n"
-										+"\t\t\t\t\t<td>\n"
-											+"\t\t\t\t\t\t<table _type='A'>\n"
-												+"\t\t\t\t\t\t\t<tr>\n"
-													+"\t\t\t\t\t\t\t\t<td>a</td>\n"
-													+"\t\t\t\t\t\t\t\t<td>foo</td>\n"
-												+"\t\t\t\t\t\t\t</tr>\n"
-											+"\t\t\t\t\t\t</table>\n"
-										+"\t\t\t\t\t</td>\n"
-									+"\t\t\t\t</tr>\n"
-								+"\t\t\t</table>\n"
-							+"\t\t</td>\n"
-						+"\t</tr>\n"
-					+"</table>\n",
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td>
+								<table>
+									<tr>
+										<td>k1</td>
+										<td>
+											<table>
+												<tr>
+													<td>a</td>
+													<td>foo</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>
+								<table>
+									<tr>
+										<td>k2</td>
+										<td>
+											<table _type='A'>
+												<tr>
+													<td>a</td>
+													<td>foo</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>c</td>
+							<td>
+								<table>
+									<tr>
+										<td>k3</td>
+										<td>
+											<table _type='A'>
+												<tr>
+													<td>a</td>
+													<td>foo</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""",
 
-					"<table>"
-						+"<tr>"
-							+"<td>a</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>k1</td>"
-										+"<td>"
-											+"<table>"
-												+"<tr>"
-													+"<td>a</td>"
-													+"<td>foo</td>"
-												+"</tr>"
-											+"</table>"
-										+"</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>b</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>k2</td>"
-										+"<td>"
-											+"<table _type='A'>"
-												+"<tr>"
-													+"<td>a</td>"
-													+"<td>foo</td>"
-												+"</tr>"
-											+"</table>"
-										+"</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-						+"<tr>"
-							+"<td>c</td>"
-							+"<td>"
-								+"<table>"
-									+"<tr>"
-										+"<td>k3</td>"
-										+"<td>"
-											+"<table _type='A'>"
-												+"<tr>"
-													+"<td>a</td>"
-													+"<td>foo</td>"
-												+"</tr>"
-											+"</table>"
-										+"</td>"
-									+"</tr>"
-								+"</table>"
-							+"</td>"
-						+"</tr>"
-					+"</table>"
+					"""
+					<table>
+						<tr>
+							<td>a</td>
+							<td>
+								<table>
+									<tr>
+										<td>k1</td>
+										<td>
+											<table>
+												<tr>
+													<td>a</td>
+													<td>foo</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>b</td>
+							<td>
+								<table>
+									<tr>
+										<td>k2</td>
+										<td>
+											<table _type='A'>
+												<tr>
+													<td>a</td>
+													<td>foo</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>c</td>
+							<td>
+								<table>
+									<tr>
+										<td>k3</td>
+										<td>
+											<table _type='A'>
+												<tr>
+													<td>a</td>
+													<td>foo</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					""".replaceAll("(?m)^\\s+|\\R", "")
 				)
 				{
 					@Override
@@ -3032,7 +3124,7 @@ public class BasicHtml_Test {
 
 	private Input input;
 
-	public BasicHtml_Test(Input input) throws Exception {
+	public BasicHtml_Test(Input input) {
 		this.input = input;
 	}
 
@@ -3491,7 +3583,7 @@ public class BasicHtml_Test {
 		void setA(String a);
 	}
 
-	public static abstract class AA implements IA {}
+	public abstract static class AA implements IA {}
 
 	@Bean(typeName="A")
 	public static class A extends AA {

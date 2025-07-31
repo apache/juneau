@@ -23,7 +23,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings("rawtypes")
 @FixMethodOrder(NAME_ASCENDING)
 public class UrlEncodingParserTest {
 
@@ -118,7 +118,7 @@ public class UrlEncodingParserTest {
 		assertTrue(l.isEmpty());
 		t = "0=@()";
 		l = p.parse(t, LinkedList.class, List.class);
-		assertEquals(l.size(), 1);
+		assertEquals(1, l.size());
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
 
@@ -166,7 +166,7 @@ public class UrlEncodingParserTest {
 		// 2nd level
 		t = "?'\u0000'='\u0000'";
 		m = (Map)p.parse(t, Object.class);
-		assertEquals(m.size(), 1);
+		assertEquals(1, m.size());
 		assertEquals("\u0000", m.get("\u0000"));
 		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals(1, m.size());
@@ -413,11 +413,11 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	@Test
 	public void testSimpleBean() throws Exception {
-		var p = UrlEncodingParser.DEFAULT;
+		var p2 = UrlEncodingParser.DEFAULT;
 		A t;
 
 		String s = "?f1=foo&f2=123";
-		t = p.parse(s, A.class);
+		t = p2.parse(s, A.class);
 		assertEquals("foo", t.f1);
 		assertEquals(123, t.f2);
 	}
@@ -432,15 +432,15 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	@Test
 	public void testNoValues() throws Exception {
-		var p = UrlEncodingParser.DEFAULT;
+		var p2 = UrlEncodingParser.DEFAULT;
 		JsonMap m;
 
 		String s = "?f1";
-		m = p.parse(s, JsonMap.class);
+		m = p2.parse(s, JsonMap.class);
 		assertTrue(m.containsKey("f1"));
 		assertNull(m.get("f1"));
 		s = "?f1=f2&f3";
-		m = p.parse(s, JsonMap.class);
+		m = p2.parse(s, JsonMap.class);
 		assertEquals("f2", m.get("f1"));
 		assertTrue(m.containsKey("f3"));
 		assertNull(m.get("f3"));
@@ -451,10 +451,10 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	@Test
 	public void testCommaDelimitedLists() throws Exception {
-		var p = UrlEncodingParser.DEFAULT;
+		var p2 = UrlEncodingParser.DEFAULT;
 
 		String s = "?f1=1,2,3&f2=a,b,c&f3=true,false&f4=&f5";
-		C c = p.parse(s, C.class);
+		C c = p2.parse(s, C.class);
 		assertObject(c).asJson().is("{f1:[1,2,3],f2:['a','b','c'],f3:[true,false],f4:[]}");
 	}
 
@@ -471,82 +471,82 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	@Test
 	public void testCommaDelimitedListsWithSpecialChars() throws Exception {
-		var p = UrlEncodingParser.DEFAULT;
+		var p2 = UrlEncodingParser.DEFAULT;
 		String s;
 		C1 c;
 
 		// In the string below, the ~ character should not be interpreted as an escape.
 		s = "?f1=a~b,a~b";
-		c = p.parse(s, C1.class);
+		c = p2.parse(s, C1.class);
 		assertObject(c).asJson().is("{f1:['a~b','a~b']}");
 
 		s = "?f1=@(a~b,a~b)";
-		c = p.parse(s, C1.class);
+		c = p2.parse(s, C1.class);
 		assertObject(c).asJson().is("{f1:['a~b','a~b']}");
 
 		s = "?f1=@('a~b','a~b')";
-		c = p.parse(s, C1.class);
+		c = p2.parse(s, C1.class);
 		assertObject(c).asJson().is("{f1:['a~b','a~b']}");
 
 		s = "?f1=@('a~b','a~b')";
-		c = p.parse(s, C1.class);
+		c = p2.parse(s, C1.class);
 		assertObject(c).asJson().is("{f1:['a~b','a~b']}");
 
 		s = "?f1=@('a~b','a~b')";
-		c = p.parse(s, C1.class);
+		c = p2.parse(s, C1.class);
 		assertObject(c).asJson().is("{f1:['a~b','a~b']}");
 
 		s = "?f1=~~,~~";
-		c = p.parse(s, C1.class);
+		c = p2.parse(s, C1.class);
 		assertObject(c).asJson().is("{f1:['~','~']}");
 
 		s = "?f1=@(~~,~~)";
-		c = p.parse(s, C1.class);
+		c = p2.parse(s, C1.class);
 		assertObject(c).asJson().is("{f1:['~','~']}");
 
 		s = "?f1=@(~~~~~~,~~~~~~)";
-		c = p.parse(s, C1.class);
+		c = p2.parse(s, C1.class);
 		assertObject(c).asJson().is("{f1:['~~~','~~~']}");
 
 		s = "?f1=@('~~~~~~','~~~~~~')";
-		c = p.parse(s, C1.class);
+		c = p2.parse(s, C1.class);
 		assertObject(c).asJson().is("{f1:['~~~','~~~']}");
 
 		// The ~ should be treated as an escape if followed by any of the following characters:  '~
 		s = "?f1=~'~~,~'~~";
-		c = p.parse(s, C1.class);
+		c = p2.parse(s, C1.class);
 		assertObject(c).asJson().is("{f1:['\\'~','\\'~']}");
 
 		s = "?f1=@(~'~~,~'~~)";
-		c = p.parse(s, C1.class);
+		c = p2.parse(s, C1.class);
 		assertObject(c).asJson().is("{f1:['\\'~','\\'~']}");
 
 		s = "?f1=@('~'~~','~'~~')";
-		c = p.parse(s, C1.class);
+		c = p2.parse(s, C1.class);
 		assertObject(c).asJson().is("{f1:['\\'~','\\'~']}");
 
 		s = "?a~b=a~b";
-		JsonMap m = p.parse(s, JsonMap.class);
+		JsonMap m = p2.parse(s, JsonMap.class);
 		assertEquals("{'a~b':'a~b'}", m.toString());
 
 		s = "?'a~b'='a~b'";
-		m = p.parse(s, JsonMap.class);
+		m = p2.parse(s, JsonMap.class);
 		assertEquals("{'a~b':'a~b'}", m.toString());
 
 		s = "?~~=~~";
-		m = p.parse(s, JsonMap.class);
+		m = p2.parse(s, JsonMap.class);
 		assertEquals("{'~':'~'}", m.toString());
 
 		s = "?'~~'='~~'";
-		m = p.parse(s, JsonMap.class);
+		m = p2.parse(s, JsonMap.class);
 		assertEquals("{'~':'~'}", m.toString());
 
 		s = "?~~~~~~=~~~~~~";
-		m = p.parse(s, JsonMap.class);
+		m = p2.parse(s, JsonMap.class);
 		assertEquals("{'~~~':'~~~'}", m.toString());
 
 		s = "?'~~~~~~'='~~~~~~'";
-		m = p.parse(s, JsonMap.class);
+		m = p2.parse(s, JsonMap.class);
 		assertEquals("{'~~~':'~~~'}", m.toString());
 	}
 
@@ -559,53 +559,53 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	@Test
 	public void testWhitespace() throws Exception {
-		UrlEncodingParser p = UrlEncodingParser.DEFAULT;
+		UrlEncodingParser p2 = UrlEncodingParser.DEFAULT;
 		String s;
 		JsonMap m;
 
 		s = "?f1=foo\n\t&f2=bar\n\t";
-		m = p.parse(s, JsonMap.class);
+		m = p2.parse(s, JsonMap.class);
 		assertEquals("{f1:'foo',f2:'bar'}", m.toString());
 
 		s = "?f1='\n\t'&f2='\n\t'";
-		m = p.parse(s, JsonMap.class);
+		m = p2.parse(s, JsonMap.class);
 		assertEquals("\n\t", m.getString("f1"));
 		assertEquals("\n\t", m.getString("f2"));
 
 		s = "?f1='\n\t'\n\t&f2='\n\t'\n\t";
-		m = p.parse(s, JsonMap.class);
+		m = p2.parse(s, JsonMap.class);
 		assertEquals("\n\t", m.getString("f1"));
 		assertEquals("\n\t", m.getString("f2"));
 		assertEquals("{f1:'\\n\\t',f2:'\\n\\t'}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "?f1='\n\t'\n\t&f2='\n\t'\n\t";
-		m = p.parse(s, JsonMap.class);
+		m = p2.parse(s, JsonMap.class);
 		assertEquals("\n\t", m.getString("f1"));
 		assertEquals("\n\t", m.getString("f2"));
 		assertEquals("{f1:'\\n\\t',f2:'\\n\\t'}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "?f1=(\n\tf1a=a,\n\tf1b=b\n\t)\n\t&f2=(\n\tf2a=a,\n\tf2b=b\n\t)\n\t";
-		m = p.parse(s, JsonMap.class);
+		m = p2.parse(s, JsonMap.class);
 		assertEquals("{f1:{f1a:'a',f1b:'b'},f2:{f2a:'a',f2b:'b'}}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
-		D d = p.parse(s, D.class);
+		D d = p2.parse(s, D.class);
 		assertObject(d).asJson().is("{f1:{f1a:'a',f1b:'b'},f2:{f2a:'a',f2b:'b'}}");  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "?f1=(\n\tf1a='\n\t',\n\tf1b='\n\t'\n\t)\n\t&f2=(\n\tf2a='\n\t',\n\tf2b='\n\t'\n\t)\n\t";
-		m = p.parse(s, JsonMap.class);
+		m = p2.parse(s, JsonMap.class);
 		assertEquals("{f1:{f1a:'\\n\\t',f1b:'\\n\\t'},f2:{f2a:'\\n\\t',f2b:'\\n\\t'}}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
-		d = p.parse(s, D.class);
+		d = p2.parse(s, D.class);
 		assertObject(d).asJson().is("{f1:{f1a:'\\n\\t',f1b:'\\n\\t'},f2:{f2a:'\\n\\t',f2b:'\\n\\t'}}");  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "?f1=@(\n\tfoo,\n\tbar\n\t)\n\t&f2=@(\n\tfoo,\n\tbar\n\t)\n\t";
-		m = p.parse(s, JsonMap.class);
+		m = p2.parse(s, JsonMap.class);
 		assertEquals("{f1:['foo','bar'],f2:['foo','bar']}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "f1=a,\n\tb,\n\tc\n\t&f2=1,\n\t2,\n\t3\n\t&f3=true,\n\tfalse\n\t";
-		E e = p.parse(s, E.class);
+		E e = p2.parse(s, E.class);
 		assertObject(e).asJson().is("{f1:['a','b','c'],f2:[1,2,3],f3:[true,false]}");
 
 		s = "f1=a%2C%0D%0Ab%2C%0D%0Ac%0D%0A&f2=1%2C%0D%0A2%2C%0D%0A3%0D%0A&f3=true%2C%0D%0Afalse%0D%0A";
-		e = p.parse(s, E.class);
+		e = p2.parse(s, E.class);
 		assertObject(e).asJson().is("{f1:['a','b','c'],f2:[1,2,3],f3:[true,false]}");
 	}
 
@@ -633,10 +633,10 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	@Test
 	public void testMultiPartParametersOnBeansViaProperty() throws Exception {
-		UrlEncodingParser p;
+		UrlEncodingParser p2;
 		String in;
 
-		p = UrlEncodingParser.create().expandedParams().build();
+		p2 = UrlEncodingParser.create().expandedParams().build();
 		in = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
@@ -659,7 +659,7 @@ public class UrlEncodingParserTest {
 			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
 
-		DTOs.B t = p.parse(in, DTOs.B.class);
+		DTOs.B t = p2.parse(in, DTOs.B.class);
 		String e = "{"
 			+ "f01:['a','b'],"
 			+ "f02:['c','d'],"
@@ -687,10 +687,10 @@ public class UrlEncodingParserTest {
 
 	@Test
 	public void testMultiPartParametersOnBeansViaProperty_usingConfig() throws Exception {
-		UrlEncodingParser p;
+		UrlEncodingParser p2;
 		String in;
 
-		p = UrlEncodingParser.create().expandedParams().applyAnnotations(DTOs2.Annotations.class).build();
+		p2 = UrlEncodingParser.create().expandedParams().applyAnnotations(DTOs2.Annotations.class).build();
 		in = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
@@ -713,7 +713,7 @@ public class UrlEncodingParserTest {
 			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
 
-		DTOs2.B t = p.parse(in, DTOs2.B.class);
+		DTOs2.B t = p2.parse(in, DTOs2.B.class);
 		String e = "{"
 			+ "f01:['a','b'],"
 			+ "f02:['c','d'],"
@@ -744,9 +744,9 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	@Test
 	public void testMultiPartParametersOnBeansViaAnnotationOnClass() throws Exception {
-		UrlEncodingParser p;
+		UrlEncodingParser p2;
 		String in;
-		p = UrlEncodingParser.DEFAULT;
+		p2 = UrlEncodingParser.DEFAULT;
 		in = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
@@ -769,7 +769,7 @@ public class UrlEncodingParserTest {
 			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
 
-		DTOs.C t = p.parse(in, DTOs.C.class);
+		DTOs.C t = p2.parse(in, DTOs.C.class);
 		String e = "{"
 			+ "f01:['a','b'],"
 			+ "f02:['c','d'],"
@@ -797,9 +797,9 @@ public class UrlEncodingParserTest {
 
 	@Test
 	public void testMultiPartParametersOnBeansViaAnnotationOnClass_usingConfig() throws Exception {
-		UrlEncodingParser p;
+		UrlEncodingParser p2;
 		String in;
-		p = UrlEncodingParser.DEFAULT.copy().applyAnnotations(DTOs2.Annotations.class).build();
+		p2 = UrlEncodingParser.DEFAULT.copy().applyAnnotations(DTOs2.Annotations.class).build();
 		in = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
@@ -822,7 +822,7 @@ public class UrlEncodingParserTest {
 			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
 
-		DTOs2.C t = p.parse(in, DTOs2.C.class);
+		DTOs2.C t = p2.parse(in, DTOs2.C.class);
 		String e = "{"
 			+ "f01:['a','b'],"
 			+ "f02:['c','d'],"

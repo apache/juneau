@@ -36,7 +36,7 @@ import org.junit.*;
  * Superclass for tests that verify results against all supported content types.
  */
 @FixMethodOrder(NAME_ASCENDING)
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings("rawtypes")
 public abstract class ComboRoundTripTest {
 
 	private static final BeanSession BEANSESSION = BeanContext.DEFAULT_SESSION;
@@ -57,7 +57,7 @@ public abstract class ComboRoundTripTest {
 		return BEANSESSION.getClassMeta(type, args);
 	}
 
-	private Serializer getSerializer(Serializer s) throws Exception {
+	private Serializer getSerializer(Serializer s) {
 		Serializer s2 = serializerMap.get(s);
 		if (s2 == null) {
 			s2 = applySettings(s);
@@ -78,7 +78,7 @@ public abstract class ComboRoundTripTest {
 		return s2;
 	}
 
-	private Parser getParser(Parser p) throws Exception {
+	private Parser getParser(Parser p) {
 		Parser p2 = parserMap.get(p);
 		if (p2 == null) {
 			p2 = applySettings(p);
@@ -195,11 +195,11 @@ public abstract class ComboRoundTripTest {
 		try {
 			s = (OutputStreamSerializer)getSerializer(s);
 			p = (InputStreamParser)getParser(p);
-			WriterSerializer sJson = (WriterSerializer)getSerializer(this.sJson);
+			WriterSerializer sJson2 = (WriterSerializer)getSerializer(this.sJson);
 
 			String r = s.serializeToString(comboInput.in.get());
 			Object o = p.parse(r, comboInput.type);
-			r = sJson.serialize(o);
+			r = sJson2.serialize(o);
 			assertEquals(comboInput.label + "/" + testName + " parse-normal failed on JSON equivalency", expected, r);
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)
@@ -214,11 +214,11 @@ public abstract class ComboRoundTripTest {
 		}
 	}
 
-	protected Serializer applySettings(Serializer s) throws Exception {
+	protected Serializer applySettings(Serializer s) {
 		return s;
 	}
 
-	protected Parser applySettings(Parser p) throws Exception {
+	protected Parser applySettings(Parser p) {
 		return p;
 	}
 

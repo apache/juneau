@@ -24,7 +24,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings("rawtypes")
 @FixMethodOrder(NAME_ASCENDING)
 public class UonPartParser_Test {
 
@@ -91,12 +91,12 @@ public class UonPartParser_Test {
 		// Empty 2 dimensional array
 		t = "@(@())";
 		l = (List)parse(t, bs.object());
-		assertEquals(l.size(), 1);
+		assertEquals(1, l.size());
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
 		t = "@(@())";
 		l = (List)parse(t, bs.getClassMeta(LinkedList.class, List.class));
-		assertEquals(l.size(), 1);
+		assertEquals(1, l.size());
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
 
@@ -104,23 +104,23 @@ public class UonPartParser_Test {
 		// Top level
 		t = "@('')";
 		l = (List)parse(t, bs.object());
-		assertEquals(l.size(), 1);
+		assertEquals(1, l.size());
 		assertEquals("", l.get(0));
 		t = "@('')";
 		l = (List)parse(t, bs.getClassMeta(List.class, String.class));
-		assertEquals(l.size(), 1);
+		assertEquals(1, l.size());
 		assertEquals("", l.get(0));
 
 		// Array containing 3 empty strings
 		t = "@('','','')";
 		l = (List)parse(t, bs.object());
-		assertEquals(l.size(), 3);
+		assertEquals(3, l.size());
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
 		t = "@('','','')";
 		l = (List)parse(t, bs.getClassMeta(List.class, Object.class));
-		assertEquals(l.size(), 3);
+		assertEquals(3, l.size());
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
@@ -150,8 +150,8 @@ public class UonPartParser_Test {
 		// Top level
 		t = "123";
 		Integer i = -1;
-		Double d = -1d;
-		Float f = -1f;
+		Double d;
+		Float f;
 		i = (Integer)parse(t, bs.object());
 		assertEquals(123, i.intValue());
 		i = parse(t, bs.getClassMeta(Integer.class));

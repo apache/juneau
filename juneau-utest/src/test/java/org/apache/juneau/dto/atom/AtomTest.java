@@ -67,37 +67,37 @@ public class AtomTest {
 		String r;
 		Feed f = createFeed(), f2;
 
-		String expected =
-			"<feed>\n"
-			+"	<entry>\n"
-			+"		<author>\n"
-			+"			<email>foo@foo.org</email>\n"
-			+"			<name>John Smith</name>\n"
-			+"			<uri>http://foo.org/</uri>\n"
-			+"		</author>\n"
-			+"		<content base='http://foo.org/' lang='en' type='xhtml'><div><p><i>[Sample content]</i></p></div></content>\n"
-			+"		<contributor>\n"
-			+"			<name>John Smith</name>\n"
-			+"		</contributor>\n"
-			+"		<contributor>\n"
-			+"			<name>Jane Smith</name>\n"
-			+"		</contributor>\n"
-			+"		<id>tag:foo.org</id>\n"
-			+"		<link href='http://foo.org/2005/04/02/atom' rel='alternate' type='text/html'/>\n"
-			+"		<link href='http://foo.org/audio/foobar.mp3' length='1337' rel='enclosure' type='audio/mpeg'/>\n"
-			+"		<published>2016-12-31T05:02:03Z</published>\n"
-			+"		<title>Title</title>\n"
-			+"		<updated>2016-12-31T05:02:03Z</updated>\n"
-			+"	</entry>\n"
-			+"	<generator uri='http://www.foo.org/' version='1.0'>Example Toolkit</generator>\n"
-			+"	<id>tag:foo.org</id>\n"
-			+"	<link href='http://foo.org/' hreflang='en' rel='alternate' type='text/html'/>\n"
-			+"	<link href='http://foo.org/feed.atom' rel='self' type='application/atom+xml'/>\n"
-			+"	<subtitle type='html'>Subtitle</subtitle>\n"
-			+"	<title>Title</title>\n"
-			+"	<updated>2016-12-31T05:02:03Z</updated>\n"
-			+"</feed>\n";
-
+		String expected = """
+		<feed>
+			<entry>
+				<author>
+					<email>foo@foo.org</email>
+					<name>John Smith</name>
+					<uri>http://foo.org/</uri>
+				</author>
+				<content base='http://foo.org/' lang='en' type='xhtml'><div><p><i>[Sample content]</i></p></div></content>
+				<contributor>
+					<name>John Smith</name>
+				</contributor>
+				<contributor>
+					<name>Jane Smith</name>
+				</contributor>
+				<id>tag:foo.org</id>
+				<link href='http://foo.org/2005/04/02/atom' rel='alternate' type='text/html'/>
+				<link href='http://foo.org/audio/foobar.mp3' length='1337' rel='enclosure' type='audio/mpeg'/>
+				<published>2016-12-31T05:02:03Z</published>
+				<title>Title</title>
+				<updated>2016-12-31T05:02:03Z</updated>
+			</entry>
+			<generator uri='http://www.foo.org/' version='1.0'>Example Toolkit</generator>
+			<id>tag:foo.org</id>
+			<link href='http://foo.org/' hreflang='en' rel='alternate' type='text/html'/>
+			<link href='http://foo.org/feed.atom' rel='self' type='application/atom+xml'/>
+			<subtitle type='html'>Subtitle</subtitle>
+			<title>Title</title>
+			<updated>2016-12-31T05:02:03Z</updated>
+		</feed>
+		""";
 		s = XmlSerializer.create().sq().ws().sortProperties().build();
 		r = s.serialize(f);
 		assertEquals(expected, r);
@@ -112,37 +112,37 @@ public class AtomTest {
 		String r;
 		Feed f = createFeed(), f2;
 
-		String expected =
-			"<atom:feed xmlns='http://www.apache.org/2013/Juneau' xmlns:atom='http://www.w3.org/2005/Atom/' xmlns:xml='http://www.w3.org/XML/1998/namespace'>\n"
-			+"	<atom:entry>\n"
-			+"		<atom:author>\n"
-			+"			<atom:email>foo@foo.org</atom:email>\n"
-			+"			<atom:name>John Smith</atom:name>\n"
-			+"			<atom:uri>http://foo.org/</atom:uri>\n"
-			+"		</atom:author>\n"
-			+"		<atom:content xml:base='http://foo.org/' xml:lang='en' type='xhtml'><div><p><i>[Sample content]</i></p></div></atom:content>\n"
-			+"		<atom:contributor>\n"
-			+"			<atom:name>John Smith</atom:name>\n"
-			+"		</atom:contributor>\n"
-			+"		<atom:contributor>\n"
-			+"			<atom:name>Jane Smith</atom:name>\n"
-			+"		</atom:contributor>\n"
-			+"		<atom:id>tag:foo.org</atom:id>\n"
-			+"		<atom:link href='http://foo.org/2005/04/02/atom' rel='alternate' type='text/html'/>\n"
-			+"		<atom:link href='http://foo.org/audio/foobar.mp3' length='1337' rel='enclosure' type='audio/mpeg'/>\n"
-			+"		<atom:published>2016-12-31T05:02:03Z</atom:published>\n"
-			+"		<atom:title>Title</atom:title>\n"
-			+"		<atom:updated>2016-12-31T05:02:03Z</atom:updated>\n"
-			+"	</atom:entry>\n"
-			+"	<atom:generator uri='http://www.foo.org/' version='1.0'>Example Toolkit</atom:generator>\n"
-			+"	<atom:id>tag:foo.org</atom:id>\n"
-			+"	<atom:link href='http://foo.org/' hreflang='en' rel='alternate' type='text/html'/>\n"
-			+"	<atom:link href='http://foo.org/feed.atom' rel='self' type='application/atom+xml'/>\n"
-			+"	<atom:subtitle type='html'>Subtitle</atom:subtitle>\n"
-			+"	<atom:title>Title</atom:title>\n"
-			+"	<atom:updated>2016-12-31T05:02:03Z</atom:updated>\n"
-			+"</atom:feed>\n";
-
+		String expected = """
+		<atom:feed xmlns='http://www.apache.org/2013/Juneau' xmlns:atom='http://www.w3.org/2005/Atom/' xmlns:xml='http://www.w3.org/XML/1998/namespace'>
+			<atom:entry>
+				<atom:author>
+					<atom:email>foo@foo.org</atom:email>
+					<atom:name>John Smith</atom:name>
+					<atom:uri>http://foo.org/</atom:uri>
+				</atom:author>
+				<atom:content xml:base='http://foo.org/' xml:lang='en' type='xhtml'><div><p><i>[Sample content]</i></p></div></atom:content>
+				<atom:contributor>
+					<atom:name>John Smith</atom:name>
+				</atom:contributor>
+				<atom:contributor>
+					<atom:name>Jane Smith</atom:name>
+				</atom:contributor>
+				<atom:id>tag:foo.org</atom:id>
+				<atom:link href='http://foo.org/2005/04/02/atom' rel='alternate' type='text/html'/>
+				<atom:link href='http://foo.org/audio/foobar.mp3' length='1337' rel='enclosure' type='audio/mpeg'/>
+				<atom:published>2016-12-31T05:02:03Z</atom:published>
+				<atom:title>Title</atom:title>
+				<atom:updated>2016-12-31T05:02:03Z</atom:updated>
+			</atom:entry>
+			<atom:generator uri='http://www.foo.org/' version='1.0'>Example Toolkit</atom:generator>
+			<atom:id>tag:foo.org</atom:id>
+			<atom:link href='http://foo.org/' hreflang='en' rel='alternate' type='text/html'/>
+			<atom:link href='http://foo.org/feed.atom' rel='self' type='application/atom+xml'/>
+			<atom:subtitle type='html'>Subtitle</atom:subtitle>
+			<atom:title>Title</atom:title>
+			<atom:updated>2016-12-31T05:02:03Z</atom:updated>
+		</atom:feed>
+		""";
 		s = XmlSerializer.create().sq().ws().enableNamespaces().addNamespaceUrisToRoot().sortProperties().build();
 		r = s.serialize(f);
 		assertEquals(expected, r);
@@ -157,37 +157,37 @@ public class AtomTest {
 		String r;
 		Feed f = createFeed(), f2;
 
-		String expected =
-			"<feed xmlns='http://www.w3.org/2005/Atom/' xmlns:xml='http://www.w3.org/XML/1998/namespace'>\n"
-			+"	<entry>\n"
-			+"		<author>\n"
-			+"			<email>foo@foo.org</email>\n"
-			+"			<name>John Smith</name>\n"
-			+"			<uri>http://foo.org/</uri>\n"
-			+"		</author>\n"
-			+"		<content xml:base='http://foo.org/' xml:lang='en' type='xhtml'><div><p><i>[Sample content]</i></p></div></content>\n"
-			+"		<contributor>\n"
-			+"			<name>John Smith</name>\n"
-			+"		</contributor>\n"
-			+"		<contributor>\n"
-			+"			<name>Jane Smith</name>\n"
-			+"		</contributor>\n"
-			+"		<id>tag:foo.org</id>\n"
-			+"		<link href='http://foo.org/2005/04/02/atom' rel='alternate' type='text/html'/>\n"
-			+"		<link href='http://foo.org/audio/foobar.mp3' length='1337' rel='enclosure' type='audio/mpeg'/>\n"
-			+"		<published>2016-12-31T05:02:03Z</published>\n"
-			+"		<title>Title</title>\n"
-			+"		<updated>2016-12-31T05:02:03Z</updated>\n"
-			+"	</entry>\n"
-			+"	<generator uri='http://www.foo.org/' version='1.0'>Example Toolkit</generator>\n"
-			+"	<id>tag:foo.org</id>\n"
-			+"	<link href='http://foo.org/' hreflang='en' rel='alternate' type='text/html'/>\n"
-			+"	<link href='http://foo.org/feed.atom' rel='self' type='application/atom+xml'/>\n"
-			+"	<subtitle type='html'>Subtitle</subtitle>\n"
-			+"	<title>Title</title>\n"
-			+"	<updated>2016-12-31T05:02:03Z</updated>\n"
-			+"</feed>\n";
-
+		String expected = """
+		<feed xmlns='http://www.w3.org/2005/Atom/' xmlns:xml='http://www.w3.org/XML/1998/namespace'>
+			<entry>
+				<author>
+					<email>foo@foo.org</email>
+					<name>John Smith</name>
+					<uri>http://foo.org/</uri>
+				</author>
+				<content xml:base='http://foo.org/' xml:lang='en' type='xhtml'><div><p><i>[Sample content]</i></p></div></content>
+				<contributor>
+					<name>John Smith</name>
+				</contributor>
+				<contributor>
+					<name>Jane Smith</name>
+				</contributor>
+				<id>tag:foo.org</id>
+				<link href='http://foo.org/2005/04/02/atom' rel='alternate' type='text/html'/>
+				<link href='http://foo.org/audio/foobar.mp3' length='1337' rel='enclosure' type='audio/mpeg'/>
+				<published>2016-12-31T05:02:03Z</published>
+				<title>Title</title>
+				<updated>2016-12-31T05:02:03Z</updated>
+			</entry>
+			<generator uri='http://www.foo.org/' version='1.0'>Example Toolkit</generator>
+			<id>tag:foo.org</id>
+			<link href='http://foo.org/' hreflang='en' rel='alternate' type='text/html'/>
+			<link href='http://foo.org/feed.atom' rel='self' type='application/atom+xml'/>
+			<subtitle type='html'>Subtitle</subtitle>
+			<title>Title</title>
+			<updated>2016-12-31T05:02:03Z</updated>
+		</feed>
+		""";
 		s = XmlSerializer.create().sq().ws().defaultNamespace(Namespace.of("atom")).enableNamespaces().addNamespaceUrisToRoot().sortProperties().build();
 		r = s.serialize(f);
 		assertEquals(expected, r);

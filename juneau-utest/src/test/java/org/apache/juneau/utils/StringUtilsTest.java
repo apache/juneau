@@ -35,7 +35,7 @@ public class StringUtilsTest {
 	// parseNumber(String,Class)
 	//====================================================================================================
 	@Test
-	public void testParseNumber() throws Exception {
+	public void testParseNumber() {
 
 		// Integers
 		assertTrue(isNumeric("123"));
@@ -152,7 +152,7 @@ public class StringUtilsTest {
 	// test - Basic tests
 	//====================================================================================================
 	@Test
-	public void testNumberRanges() throws Exception {
+	public void testNumberRanges() {
 		String s;
 
 		// An integer range is -2,147,483,648 to 2,147,483,647
@@ -327,7 +327,7 @@ public class StringUtilsTest {
 	// isFloat(String)
 	//====================================================================================================
 	@Test
-	public void testisFloat() throws Exception {
+	public void testisFloat() {
 		String[] valid = {
 			"+1.0",
 			"-1.0",
@@ -368,7 +368,7 @@ public class StringUtilsTest {
 	// isDecimal(String)
 	//====================================================================================================
 	@Test
-	public void testisDecimal() throws Exception {
+	public void testisDecimal() {
 		String[] valid = {
 			"+1",
 			"-1",
@@ -410,7 +410,7 @@ public class StringUtilsTest {
 	// join(Collection,char)
 	//====================================================================================================
 	@Test
-	public void testJoin() throws Exception {
+	public void testJoin() {
 		assertNull(join((Object[])null, ","));
 		assertEquals("1", join(new Object[]{1}, ","));
 		assertEquals("1,2", join(new Object[]{1,2}, ","));
@@ -438,7 +438,7 @@ public class StringUtilsTest {
 	// split(String,char)
 	//====================================================================================================
 	@Test
-	public void testSplit() throws Exception {
+	public void testSplit() {
 		String[] r;
 
 		assertNull(split((String)null));
@@ -470,51 +470,51 @@ public class StringUtilsTest {
 	}
 
 	@Test
-	public void testSplit2() throws Exception {
+	public void testSplit2() {
 		List<String> l1 = list();
-		split((String)null, x -> l1.add(x));
+		split((String)null, l1::add);
 		assertList(l1).isEmpty();
 
 		List<String> l2 = list();
-		split("", x->l2.add(x));
+		split("", l2::add);
 		assertObject(l2).asJson().is("[]");
 
 		List<String> l3 = list();
-		split("1", x->l3.add(x));
+		split("1", l3::add);
 		assertObject(l3).asJson().is("['1']");
 
 		List<String> l4 = list();
-		split("1,2", x->l4.add(x));
+		split("1,2", l4::add);
 		assertObject(l4).asJson().is("['1','2']");
 
 		List<String> l5 = list();
-		split("1\\,2", x->l5.add(x));
+		split("1\\,2", l5::add);
 		assertObject(l5).asJson().is("['1,2']");
 
 		List<String> l6 = list();
-		split("1\\\\,2", x->l6.add(x));
+		split("1\\\\,2", l6::add);
 		assertEquals("1\\", l6.get(0));
 		assertEquals("2", l6.get(1));
 
 		List<String> l7 = list();
-		split("1\\\\\\,2", x->l7.add(x));
+		split("1\\\\\\,2", l7::add);
 		assertEquals(1, l7.size());
 		assertEquals("1\\,2", l7.get(0));
 
 		List<String> l8 = list();
-		split("1,2\\", x->l8.add(x));
+		split("1,2\\", l8::add);
 		assertEquals("2\\", l8.get(1));
 
 		List<String> l9 = list();
-		split("1,2\\\\", x->l9.add(x));
+		split("1,2\\\\", l9::add);
 		assertEquals("2\\", l9.get(1));
 
 		List<String> l10 = list();
-		split("1,2\\,", x->l10.add(x));
+		split("1,2\\,", l10::add);
 		assertEquals("2,", l10.get(1));
 
 		List<String> l11 = list();
-		split("1,2\\\\,", x->l11.add(x));
+		split("1,2\\\\,", l11::add);
 		assertEquals("2\\", l11.get(1));
 		assertEquals("", l11.get(2));
 	}
@@ -552,7 +552,7 @@ public class StringUtilsTest {
 	// nullIfEmpty(String)
 	//====================================================================================================
 	@Test
-	public void testNullIfEmpty() throws Exception {
+	public void testNullIfEmpty() {
 		assertNull(nullIfEmpty(null));
 		assertNull(nullIfEmpty(""));
 		assertNotNull(nullIfEmpty("x"));
@@ -562,7 +562,7 @@ public class StringUtilsTest {
 	// unescapeChars(String,char[],char)
 	//====================================================================================================
 	@Test
-	public void testUnescapeChars() throws Exception {
+	public void testUnescapeChars() {
 		AsciiSet escape = AsciiSet.create("\\,|");
 
 		assertNull(unEscapeChars(null, escape));
@@ -585,7 +585,7 @@ public class StringUtilsTest {
 	// decodeHex(String)
 	//====================================================================================================
 	@Test
-	public void testDecodeHex() throws Exception {
+	public void testDecodeHex() {
 		assertNull(decodeHex(null));
 		assertEquals("19azAZ", decodeHex("19azAZ"));
 		assertEquals("[0][1][ffff]", decodeHex("\u0000\u0001\uFFFF"));
@@ -595,7 +595,7 @@ public class StringUtilsTest {
 	// startsWith(String,char)
 	//====================================================================================================
 	@Test
-	public void testStartsWith() throws Exception {
+	public void testStartsWith() {
 		assertFalse(startsWith(null, 'a'));
 		assertFalse(startsWith("", 'a'));
 		assertTrue(startsWith("a", 'a'));
@@ -606,7 +606,7 @@ public class StringUtilsTest {
 	// endsWith(String,char)
 	//====================================================================================================
 	@Test
-	public void testEndsWith() throws Exception {
+	public void testEndsWith() {
 		assertFalse(endsWith(null, 'a'));
 		assertFalse(endsWith("", 'a'));
 		assertTrue(endsWith("a", 'a'));
@@ -618,7 +618,7 @@ public class StringUtilsTest {
 	// base64DecodeToString(String)
 	//====================================================================================================
 	@Test
-	public void testBase64EncodeToString() throws Exception {
+	public void testBase64EncodeToString() {
 		String s = null;
 
 		assertEquals(s, base64DecodeToString(base64EncodeToString(s)));
@@ -637,7 +637,7 @@ public class StringUtilsTest {
 	// generateUUID(String)
 	//====================================================================================================
 	@Test
-	public void testGenerateUUID() throws Exception {
+	public void testGenerateUUID() {
 		for (int i = 0; i < 10; i++) {
 			String s = random(i);
 			assertEquals(i, s.length());
@@ -650,7 +650,7 @@ public class StringUtilsTest {
 	// trim(String)
 	//====================================================================================================
 	@Test
-	public void testTrim() throws Exception {
+	public void testTrim() {
 		assertNull(trim(null));
 		assertEquals("", trim(""));
 		assertEquals("", trim("  "));
@@ -823,7 +823,7 @@ public class StringUtilsTest {
 	// compare(String,String)
 	//====================================================================================================
 	@Test
-	public void testCompare() throws Exception {
+	public void testCompare() {
 		assertTrue(compare("a","b") < 0);
 		assertTrue(compare("b","a") > 0);
 		assertTrue(compare(null,"b") < 0);
@@ -835,7 +835,7 @@ public class StringUtilsTest {
 	// matchPattern(String)
 	//====================================================================================================
 	@Test
-	public void testGetMatchPattern() throws Exception {
+	public void testGetMatchPattern() {
 		assertTrue(getMatchPattern("a").matcher("a").matches());
 		assertTrue(getMatchPattern("*a*").matcher("aaa").matches());
 		assertFalse(getMatchPattern("*b*").matcher("aaa").matches());
@@ -845,7 +845,7 @@ public class StringUtilsTest {
 	// getDuration(String)
 	//====================================================================================================
 	@Test
-	public void testGetDuration() throws Exception {
+	public void testGetDuration() {
 		assertEquals(-1, getDuration(null));
 		assertEquals(-1, getDuration(""));
 		assertEquals(-1, getDuration(" "));
@@ -930,7 +930,7 @@ public class StringUtilsTest {
 	// getDuration(String)
 	//====================================================================================================
 	@Test
-	public void testStripInvalidHttpHeaderChars() throws Exception {
+	public void testStripInvalidHttpHeaderChars() {
 		assertEquals("xxx", stripInvalidHttpHeaderChars("xxx"));
 		assertEquals("\t []^x", stripInvalidHttpHeaderChars("\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u0009\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u0020\\[]^x"));
 	}
@@ -939,7 +939,7 @@ public class StringUtilsTest {
 	// abbreviate(String,int)
 	//====================================================================================================
 	@Test
-	public void testAbbrevate() throws Exception {
+	public void testAbbrevate() {
 		assertNull("xxx", abbreviate(null, 0));
 		assertEquals("foo", abbreviate("foo", 3));
 		assertEquals("...", abbreviate("fooo", 3));
@@ -951,7 +951,7 @@ public class StringUtilsTest {
 	// splitMethodArgs(String)
 	//====================================================================================================
 	@Test
-	public void testSplitMethodArgs() throws Exception {
+	public void testSplitMethodArgs() {
 		assertObject(splitMethodArgs("java.lang.String")).asJson().is("['java.lang.String']");
 		assertObject(splitMethodArgs("java.lang.String,java.lang.Integer")).asJson().is("['java.lang.String','java.lang.Integer']");
 		assertObject(splitMethodArgs("x,y")).asJson().is("['x','y']");
@@ -963,7 +963,7 @@ public class StringUtilsTest {
 	// fixUrl(String)
 	//====================================================================================================
 	@Test
-	public void testFixUrl() throws Exception {
+	public void testFixUrl() {
 		assertEquals(null, fixUrl(null));
 		assertEquals("", fixUrl(""));
 		assertEquals("xxx", fixUrl("xxx"));
@@ -977,7 +977,7 @@ public class StringUtilsTest {
 	// diffPosition(String,String)
 	//====================================================================================================
 	@Test
-	public void testDiffPosition() throws Exception {
+	public void testDiffPosition() {
 		assertEquals(-1, diffPosition("a", "a"));
 		assertEquals(-1, diffPosition(null, null));
 		assertEquals(0, diffPosition("a", "b"));
@@ -992,7 +992,7 @@ public class StringUtilsTest {
 	// diffPositionIc(String,String)
 	//====================================================================================================
 	@Test
-	public void testDiffPositionIc() throws Exception {
+	public void testDiffPositionIc() {
 		assertEquals(-1, diffPositionIc("a", "a"));
 		assertEquals(-1, diffPositionIc("a", "A"));
 		assertEquals(-1, diffPositionIc(null, null));

@@ -29,7 +29,7 @@ import org.apache.juneau.swap.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings("rawtypes")
 public class AutoListSwapTest {
 
 	private static final List<String> STRINGLIST = list("foo");

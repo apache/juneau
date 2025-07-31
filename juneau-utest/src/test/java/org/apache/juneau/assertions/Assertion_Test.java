@@ -51,11 +51,11 @@ public class Assertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void a01_basicErrorHandling() throws Exception {
+	public void a01_basicErrorHandling() {
 		A a = new A("");
 		a.setSilent();
 
-		assertThrown(()->a.doError())
+		assertThrown(a::doError)
 			.isExactType(BasicAssertionError.class)
 			.asMessage().is("bar baz")
 			.asCausedBy().isExactType(A1.class)
@@ -63,7 +63,7 @@ public class Assertion_Test {
 			.asCausedBy().asCausedBy().isNull();
 
 		a.setThrowable(A2.class);
-		assertThrown(()->a.doError())
+		assertThrown(a::doError)
 			.isExactType(A2.class)
 			.asMessage().is("bar baz")
 			.asCausedBy().isExactType(A1.class)
@@ -71,7 +71,7 @@ public class Assertion_Test {
 			.asCausedBy().asCausedBy().isNull();
 
 		a.setThrowable(A3.class);
-		assertThrown(()->a.doError())
+		assertThrown(a::doError)
 			.isExactType(BasicRuntimeException.class)
 			.asMessage().is("bar baz")
 			.asCausedBy().isExactType(A1.class)
@@ -80,12 +80,12 @@ public class Assertion_Test {
 	}
 
 	@Test
-	public void a02_out() throws Exception {
+	public void a02_out() {
 		PrintStream out = new CapturingPrintStream();
 
 		try {
 			assertString("x").setOut(out).isNull();
-		} catch (BasicAssertionError e) {}
+		} catch (BasicAssertionError e) { /* Ignore */ }
 
 		assertString(out).isContains("Value was not null.");
 	}

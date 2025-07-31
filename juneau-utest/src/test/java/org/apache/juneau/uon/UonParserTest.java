@@ -24,7 +24,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings("rawtypes")
 @FixMethodOrder(NAME_ASCENDING)
 public class UonParserTest {
 
@@ -168,13 +168,13 @@ public class UonParserTest {
 		// Array containing 3 empty strings
 		t = "@('','','')";
 		l = (List)p.parse(t, Object.class);
-		assertEquals(l.size(), 3);
+		assertEquals(3, l.size());
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
 		t = " @( '' , '' , '' ) ";
 		l = p.parse(t, List.class, Object.class);
-		assertEquals(l.size(), 3);
+		assertEquals(3, l.size());
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
@@ -493,11 +493,11 @@ public class UonParserTest {
 	//====================================================================================================
 	@Test
 	public void testSimpleBean() throws Exception {
-		UonParser p = UonParser.DEFAULT;
+		UonParser p2 = UonParser.DEFAULT;
 		A t;
 
 		String s = "(f1=foo,f2=123)";
-		t = p.parse(s, A.class);
+		t = p2.parse(s, A.class);
 		assertEquals("foo", t.f1);
 		assertEquals(123, t.f2);
 	}
@@ -513,14 +513,14 @@ public class UonParserTest {
 	//====================================================================================================
 	@Test
 	public void testStreamsAutoClose() throws Exception {
-		var p = UonParser.DEFAULT.copy().autoCloseStreams().build();
+		var p2 = UonParser.DEFAULT.copy().autoCloseStreams().build();
 		Object x;
 		Reader r;
 
 		r = reader("(foo=bar)(foo=bar)");
-		x = p.parse(r, JsonMap.class);
+		x = p2.parse(r, JsonMap.class);
 		assertObject(x).asJson().is("{foo:'bar'}");
-		assertThrown(()->p.parse(r, JsonMap.class)).asMessages().isContains("Reader is closed");
+		assertThrown(()->p2.parse(r, JsonMap.class)).asMessages().isContains("Reader is closed");
 	}
 
 	//====================================================================================================
@@ -529,20 +529,20 @@ public class UonParserTest {
 	//====================================================================================================
 	@Test
 	public void testMultipleObjectsInStream() throws Exception {
-		var p = UonParser.create().unbuffered().build();
+		var p2 = UonParser.create().unbuffered().build();
 		Object x;
 		Reader r;
 
 		r = reader("(foo=bar)(baz=qux)");
-		x = p.parse(r, JsonMap.class);
+		x = p2.parse(r, JsonMap.class);
 		assertObject(x).asJson().is("{foo:'bar'}");
-		x = p.parse(r, JsonMap.class);
+		x = p2.parse(r, JsonMap.class);
 		assertObject(x).asJson().is("{baz:'qux'}");
 
 		r = reader("@(123)@(456)");
-		x = p.parse(r, JsonList.class);
+		x = p2.parse(r, JsonList.class);
 		assertObject(x).asJson().is("[123]");
-		x = p.parse(r, JsonList.class);
+		x = p2.parse(r, JsonList.class);
 		assertObject(x).asJson().is("[456]");
 	}
 

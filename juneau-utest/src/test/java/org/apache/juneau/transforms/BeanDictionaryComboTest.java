@@ -736,12 +736,12 @@ public class BeanDictionaryComboTest extends ComboRoundTripTest {
 	}
 
 	@Override
-	protected Serializer applySettings(Serializer s) throws Exception {
+	protected Serializer applySettings(Serializer s) {
 		return s.copy().keepNullProperties().build();
 	}
 
 	@Override
-	protected Parser applySettings(Parser p) throws Exception {
+	protected Parser applySettings(Parser p) {
 		return p;
 	}
 

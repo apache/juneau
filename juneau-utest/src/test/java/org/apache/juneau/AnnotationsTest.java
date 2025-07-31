@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings("rawtypes")
 class AnnotationsTest extends SimpleTestBase {
 
 	//====================================================================================================
@@ -32,7 +32,7 @@ class AnnotationsTest extends SimpleTestBase {
 		bm = bc.newBeanMap(Person1.class).load("{age:21,name:'foobar'}");
 		assertNotNull(bm);
 		assertNotNull(bm.getBean());
-		assertEquals(bm.get("age"), 21);
+		assertEquals(21, bm.get("age"));
 		assertEquals("foobar", bm.get("name"));
 
 		bm.put("age", 65);

@@ -20,7 +20,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings("rawtypes")
 @FixMethodOrder(NAME_ASCENDING)
 public class BeanContextTest {
 
@@ -44,9 +44,9 @@ public class BeanContextTest {
 
 	@Test
 	public void a02_lambdaExpressionsNotCached() throws ExecutableException {
-		BeanContext bc = BeanContext.DEFAULT;
-		A2 fi = x -> System.out.println(x);
-		ClassMeta cm1 = bc.getClassMeta(fi.getClass()), cm2 = bc.getClassMeta(fi.getClass());
+		BeanContext bc2 = BeanContext.DEFAULT;
+		A2 fi = System.out::println;
+		ClassMeta cm1 = bc2.getClassMeta(fi.getClass()), cm2 = bc2.getClassMeta(fi.getClass());
 		assertNotSame(cm1, cm2);
 	}
 

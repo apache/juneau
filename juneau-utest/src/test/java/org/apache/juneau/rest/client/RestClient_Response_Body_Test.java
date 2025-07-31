@@ -139,7 +139,7 @@ public class RestClient_Response_Body_Test {
 		TestClient x2 = client().interceptors(rci).build(TestClient.class).entity(new StringEntity("{f:2}"));
 		assertThrown(()->x2.get("/bean").run().getContent().cache().asInputStream()).asMessage().is("foo");
 		assertThrown(()->x2.get("/bean").run().getContent().asInputStream().close()).asMessage().is("foo");
-		assertThrown(()->((EofSensorInputStream)x2.get("/bean").run().getContent().asInputStream()).abortConnection()).asMessage().is("foo");
+		assertThrown(()->((EofSensorInputStream)x2.get("/bean").run().getContent().asInputStream()).abortConnection()).asMessage().is("foo");  // NOSONAR
 	}
 
 	@Test

@@ -48,7 +48,7 @@ public class PartList_Test {
 
 	@Query("a")
 	public static class APart extends BasicStringPart {
-		public static APart X = new APart("x"), Y = new APart("y"), Z = new APart("z");
+		public static final APart X = new APart("x"), Y = new APart("y"), Z = new APart("z");
 		public APart(Object value) {
 			super("a", stringify(value));
 		}
@@ -56,7 +56,7 @@ public class PartList_Test {
 
 	@FormData("b")
 	public static class BPart extends BasicStringPart {
-		public static BPart X = new BPart("x"), Y = new BPart("y"), Z = new BPart("z");
+		public static final BPart X = new BPart("x"), Y = new BPart("y"), Z = new BPart("z");
 		public BPart(Object value) {
 			super("b", stringify(value));
 		}
@@ -64,7 +64,7 @@ public class PartList_Test {
 
 	@Path("c")
 	public static class CPart extends BasicStringPart {
-		public static CPart X = new CPart("x");
+		public static final CPart X = new CPart("x");
 		public CPart(Object value) {
 			super("c", stringify(value));
 		}
@@ -466,27 +466,27 @@ public class PartList_Test {
 		PartIterator i1 = x.partIterator();
 		assertObject(i1.next()).isString("a=x");
 		assertObject(i1.next()).isString("b=x");
-		assertThrown(()->i1.next()).asMessage().is("Iteration already finished.");
+		assertThrown(i1::next).asMessage().is("Iteration already finished.");
 
 		PartIterator i2 = x.partIterator();
 		assertObject(i2.next()).isString("a=x");
 		assertObject(i2.next()).isString("b=x");
-		assertThrown(()->i2.next()).asMessage().is("Iteration already finished.");
+		assertThrown(i2::next).asMessage().is("Iteration already finished.");
 
 		PartIterator i3 = x.partIterator("a");
 		assertObject(i3.next()).isString("a=x");
-		assertThrown(()->i3.next()).asMessage().is("Iteration already finished.");
+		assertThrown(i3::next).asMessage().is("Iteration already finished.");
 
 		PartIterator i4 = x.partIterator("A");
-		assertThrown(()->i4.next()).asMessage().is("Iteration already finished.");
+		assertThrown(i4::next).asMessage().is("Iteration already finished.");
 
 		PartList x2 = PartList.create().append(APart.X,BPart.X).caseInsensitive(true);
 
 		PartIterator i5 = x2.partIterator("A");
 		assertObject(i5.next()).isString("a=x");
-		assertThrown(()->i5.next()).asMessage().is("Iteration already finished.");
+		assertThrown(i5::next).asMessage().is("Iteration already finished.");
 
-		assertThrown(()->i5.remove()).asMessage().is("Not supported.");
+		assertThrown(i5::remove).asMessage().is("Not supported.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

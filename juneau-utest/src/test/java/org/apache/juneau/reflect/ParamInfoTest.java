@@ -86,12 +86,12 @@ public class ParamInfoTest {
 
 	static ClassInfo b = ClassInfo.of(B.class);
 	static ParamInfo
-		b_b_a = b.getPublicConstructor(x -> x.hasParamTypes(int.class, String.class)).getParam(0),
-		b_b_b = b.getPublicConstructor(x -> x.hasParamTypes(int.class, String.class)).getParam(1),
-		b_a1_a = b.getMethod(x -> x.hasName("a1")).getParam(0),
-		b_a1_b = b.getMethod(x -> x.hasName("a1")).getParam(1),
-		b_a2_a = b.getMethod(x -> x.hasName("a2")).getParam(0),
-		b_a2_b = b.getMethod(x -> x.hasName("a2")).getParam(1);
+		b_b_a = b.getPublicConstructor(x -> x.hasParamTypes(int.class, String.class)).getParam(0),  // NOSONAR
+		b_b_b = b.getPublicConstructor(x -> x.hasParamTypes(int.class, String.class)).getParam(1),  // NOSONAR
+		b_a1_a = b.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
+		b_a1_b = b.getMethod(x -> x.hasName("a1")).getParam(1),  // NOSONAR
+		b_a2_a = b.getMethod(x -> x.hasName("a2")).getParam(0),  // NOSONAR
+		b_a2_b = b.getMethod(x -> x.hasName("a2")).getParam(1);  // NOSONAR
 
 
 	@Test
@@ -164,22 +164,22 @@ public class ParamInfoTest {
 	public static class CC implements CB {
 		public CC(@CA("9") C1 x) {}
 		@Override
-		public void a1(C1 x) {}
+		public void a1(C1 x) {}  // NOSONAR
 		@Override
-		public void a2(@CA("6") C1 x) {}
+		public void a2(@CA("6") C1 x) {}  // NOSONAR
 	}
 	static ClassInfo
 		cb = ClassInfo.of(CB.class),
 		cc = ClassInfo.of(CC.class);
 	static ParamInfo
-		cc_cc = cc.getPublicConstructor(x -> x.hasParamTypes(C1.class)).getParam(0),
-		cb_a1 = cb.getMethod(x -> x.hasName("a1")).getParam(0),
-		cb_a2 = cb.getMethod(x -> x.hasName("a2")).getParam(0),
-		cc_a1 = cc.getMethod(x -> x.hasName("a1")).getParam(0),
-		cc_a2 = cc.getMethod(x -> x.hasName("a2")).getParam(0);
+		cc_cc = cc.getPublicConstructor(x -> x.hasParamTypes(C1.class)).getParam(0),  // NOSONAR
+		cb_a1 = cb.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
+		cb_a2 = cb.getMethod(x -> x.hasName("a2")).getParam(0),  // NOSONAR
+		cc_a1 = cc.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
+		cc_a2 = cc.getMethod(x -> x.hasName("a2")).getParam(0);  // NOSONAR
 
 	@Test
-	public void getDeclaredAnnotations() throws Exception {
+	public void getDeclaredAnnotations() {
 		check("@CA(5)", declaredAnnotations(cb_a1, CA.class));
 		check("@CA(5)", declaredAnnotations(cb_a2, CA.class));
 		check("", declaredAnnotations(cc_a1, CA.class));
@@ -187,18 +187,18 @@ public class ParamInfoTest {
 	}
 
 	@Test
-	public void getDeclaredAnnotations_constructor() throws Exception {
+	public void getDeclaredAnnotations_constructor() {
 		check("@CA(9)", declaredAnnotations(cc_cc, CA.class));
 	}
 
 	private static <T extends Annotation> List<T> declaredAnnotations(ParamInfo pi, Class<T> type) {
 		List<T> l = new ArrayList<>();
-		pi.forEachDeclaredAnnotation(type, x -> true, x -> l.add(x));
+		pi.forEachDeclaredAnnotation(type, x -> true, l::add);
 		return l;
 	}
 
 	@Test
-	public void getDeclaredAnnotation() throws Exception {
+	public void getDeclaredAnnotation() {
 		check("@CA(5)", cb_a1.getDeclaredAnnotation(CA.class));
 		check("@CA(5)", cb_a2.getDeclaredAnnotation(CA.class));
 		check(null, cc_a1.getDeclaredAnnotation(CA.class));
@@ -206,32 +206,32 @@ public class ParamInfoTest {
 	}
 
 	@Test
-	public void getDeclaredAnnotation_constructor() throws Exception {
+	public void getDeclaredAnnotation_constructor() {
 		check("@CA(9)", cc_cc.getDeclaredAnnotation(CA.class));
 	}
 
 	@Test
-	public void getDeclaredAnnotation_notFound() throws Exception {
+	public void getDeclaredAnnotation_notFound() {
 		check(null, cb_a1.getDeclaredAnnotation(DA.class));
 	}
 
 	@Test
-	public void getDeclaredAnnotation_notFound_constructor() throws Exception {
+	public void getDeclaredAnnotation_notFound_constructor() {
 		check(null, cc_cc.getDeclaredAnnotation(DA.class));
 	}
 
 	@Test
-	public void getDeclaredAnnotation_null() throws Exception {
+	public void getDeclaredAnnotation_null() {
 		check(null, cb_a1.getDeclaredAnnotation(null));
 	}
 
 	@Test
-	public void getDeclaredAnnotation_null_constructor() throws Exception {
+	public void getDeclaredAnnotation_null_constructor() {
 		check(null, cc_cc.getDeclaredAnnotation(null));
 	}
 
 	@Test
-	public void getAnnotationsParentFirst() throws Exception {
+	public void getAnnotationsParentFirst() {
 		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", annotations(cb_a1, CA.class));
 		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", annotations(cb_a2, CA.class));
 		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", annotations(cc_a1, CA.class));
@@ -239,22 +239,22 @@ public class ParamInfoTest {
 	}
 
 	@Test
-	public void getAnnotationsParentFirst_notFound() throws Exception {
+	public void getAnnotationsParentFirst_notFound() {
 		check("", annotations(cb_a1, DA.class));
 	}
 
 	@Test
-	public void getAnnotationsParentFirst_constructor() throws Exception {
+	public void getAnnotationsParentFirst_constructor() {
 		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(9)", annotations(cc_cc, CA.class));
 	}
 
 	@Test
-	public void getAnnotationsParentFirst_notFound_constructor() throws Exception {
+	public void getAnnotationsParentFirst_notFound_constructor() {
 		check("", annotations(cc_cc, DA.class));
 	}
 
 	@Test
-	public void getAnnotation() throws Exception {
+	public void getAnnotation() {
 		check("@CA(5)", cb_a1.getAnnotation(CA.class));
 		check("@CA(5)", cb_a2.getAnnotation(CA.class));
 		check("@CA(5)", cc_a1.getAnnotation(CA.class));
@@ -262,34 +262,34 @@ public class ParamInfoTest {
 	}
 
 	@Test
-	public void getAnnotation_notFound() throws Exception {
+	public void getAnnotation_notFound() {
 		check(null, cb_a1.getAnnotation(DA.class));
 	}
 
 	@Test
-	public void getAnnotation_constructor() throws Exception {
+	public void getAnnotation_constructor() {
 		check("@CA(9)", cc_cc.getAnnotation(CA.class));
 	}
 
 	@Test
-	public void getAnnotation_notFound_constructor() throws Exception {
+	public void getAnnotation_notFound_constructor() {
 		check(null, cc_cc.getAnnotation(DA.class));
 	}
 
 	@Test
-	public void getAnnotation_twice() throws Exception {
+	public void getAnnotation_twice() {
 		check("@CA(5)", cb_a1.getAnnotation(CA.class));
 		check("@CA(5)", cb_a1.getAnnotation(CA.class));
 	}
 
 	@Test
-	public void getAnnotation_twice_constructor() throws Exception {
+	public void getAnnotation_twice_constructor() {
 		check("@CA(9)", cc_cc.getAnnotation(CA.class));
 		check("@CA(9)", cc_cc.getAnnotation(CA.class));
 	}
 
 	@Test
-	public void hasAnnotation() throws Exception {
+	public void hasAnnotation() {
 		assertTrue(cb_a1.hasAnnotation(CA.class));
 		assertTrue(cb_a2.hasAnnotation(CA.class));
 		assertTrue(cc_a1.hasAnnotation(CA.class));
@@ -298,7 +298,7 @@ public class ParamInfoTest {
 	}
 
 	@Test
-	public void hasAnnotation_constructor() throws Exception {
+	public void hasAnnotation_constructor() {
 		assertTrue(cc_cc.hasAnnotation(CA.class));
 		assertFalse(cc_cc.hasAnnotation(DA.class));
 	}
@@ -326,28 +326,28 @@ public class ParamInfoTest {
 		db = ClassInfo.of(DB.class),
 		dc = ClassInfo.of(DC.class);
 	static ParamInfo
-		db_a1 = db.getMethod(x -> x.hasName("a1")).getParam(0),
-		dc_a1 = dc.getMethod(x -> x.hasName("a1")).getParam(0);
+		db_a1 = db.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
+		dc_a1 = dc.getMethod(x -> x.hasName("a1")).getParam(0);  // NOSONAR
 
 	@Test
-	public void getAnnotationsParentFirst_inherited() throws Exception {
+	public void getAnnotationsParentFirst_inherited() {
 		check("@DA(4),@DA(3),@DA(2),@DA(1),@DA(0)", annotations(db_a1, DA.class));
 		check("@DA(4),@DA(3),@DA(2),@DA(1),@DA(0),@DA(5)", annotations(dc_a1, DA.class));
 	}
 
 	@Test
-	public void getAnnotationsParentFirst_inherited_notFound() throws Exception {
+	public void getAnnotationsParentFirst_inherited_notFound() {
 		check("", annotations(db_a1, CA.class));
 	}
 
 	@Test
-	public void getAnnotation_inherited() throws Exception {
+	public void getAnnotation_inherited() {
 		check("@DA(0)", db_a1.getAnnotation(DA.class));
 		check("@DA(5)", dc_a1.getAnnotation(DA.class));
 	}
 
 	@Test
-	public void getAnnotation_inherited_notFound() throws Exception {
+	public void getAnnotation_inherited_notFound() {
 		check(null, db_a1.getAnnotation(CA.class));
 	}
 
@@ -361,8 +361,8 @@ public class ParamInfoTest {
 
 	static ClassInfo e = ClassInfo.of(E.class);
 	static ParamInfo
-		e_a1_a = e.getMethod(x -> x.hasName("a1")).getParam(0),
-		e_a1_b = e.getMethod(x -> x.hasName("a1")).getParam(1);
+		e_a1_a = e.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
+		e_a1_b = e.getMethod(x -> x.hasName("a1")).getParam(1);  // NOSONAR
 
 	@Test
 	public void hasName() {
@@ -387,7 +387,7 @@ public class ParamInfoTest {
 
 	private static <T extends Annotation> List<T> annotations(ParamInfo pi, Class<T> a) {
 		List<T> l = list();
-		pi.forEachAnnotation(a, x -> true, x -> l.add(x));
+		pi.forEachAnnotation(a, x -> true, l::add);
 		return l;
 	}
 }

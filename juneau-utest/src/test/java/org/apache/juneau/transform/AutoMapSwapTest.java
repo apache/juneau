@@ -29,7 +29,7 @@ import org.apache.juneau.swap.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings("rawtypes")
 public class AutoMapSwapTest {
 
 	private static final Map<String,String> STRINGMAP = map("foo","bar");
@@ -239,7 +239,7 @@ public class AutoMapSwapTest {
 		}
 	}
 	public static class E04 {
-		public Map<String,String> toMap(Map<String,String> foo) {
+		public Map<String,String> toMap(Map<String,String> foo) {  // NOSONAR
 			return STRINGMAP;
 		}
 	}
@@ -255,27 +255,27 @@ public class AutoMapSwapTest {
 	}
 
 	@Test
-	public void e01c_ignoreSwapMethod_beanIgnore_usingConfig() throws Exception {
+	public void e01c_ignoreSwapMethod_beanIgnore_usingConfig() {
 		assertNull(find(bc(E01Config.class), E01c.class));
 	}
 
 	@Test
-	public void e02_ignoreSwapMethod_deprecated() throws Exception {
+	public void e02_ignoreSwapMethod_deprecated() {
 		assertNull(find(E02.class));
 	}
 
 	@Test
-	public void e03_ignoreSwapMethod_wrongReturnType() throws Exception {
+	public void e03_ignoreSwapMethod_wrongReturnType() {
 		assertNull(find(E03.class));
 	}
 
 	@Test
-	public void e04_ignoreSwapMethod_wrongParameters() throws Exception {
+	public void e04_ignoreSwapMethod_wrongParameters() {
 		assertNull(find(E04.class));
 	}
 
 	@Test
-	public void e05_ignoreSwapMethod_notStatic() throws Exception {
+	public void e05_ignoreSwapMethod_notStatic() {
 		assertNull(find(E05.class));
 	}
 
@@ -299,7 +299,7 @@ public class AutoMapSwapTest {
 		public Map<String,String> toMap() {
 			return STRINGMAP;
 		}
-		public static F01c create(Map<String,String> o) {
+		public static F01c create(Map<String,String> o) {  // NOSONAR
 			return null;
 		}
 	}
@@ -316,7 +316,7 @@ public class AutoMapSwapTest {
 		public Map<String,String> toMap() {
 			return STRINGMAP;
 		}
-		public static Object create(Map<String,String> o) {
+		public static Object create(Map<String,String> o) {  // NOSONAR
 			return null;
 		}
 	}
@@ -332,7 +332,7 @@ public class AutoMapSwapTest {
 		public Map<String,String> toMap() {
 			return STRINGMAP;
 		}
-		public F05 create(Map<String,String> o) {
+		public F05 create(Map<String,String> o) {  // NOSONAR
 			return null;
 		}
 	}
@@ -340,7 +340,7 @@ public class AutoMapSwapTest {
 		public Map<String,String> toMap() {
 			return STRINGMAP;
 		}
-		public static F06 createx(Map<String,String> o) {
+		public static F06 createx(Map<String,String> o) {  // NOSONAR
 			return null;
 		}
 	}

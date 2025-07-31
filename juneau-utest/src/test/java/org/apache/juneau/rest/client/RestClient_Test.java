@@ -100,21 +100,21 @@ public class RestClient_Test {
 
 
 	@Test
-	public void a04_request_whenClosed() throws Exception {
+	public void a04_request_whenClosed() {
 		RestClient rc = client().build();
 		rc.closeQuietly();
 		assertThrown(()->rc.request("get","/bean",null)).asMessage().isContains("RestClient.close() has already been called");
 	}
 
 	@Test
-	public void a05_request_whenClosed_withStackCreation() throws Exception {
+	public void a05_request_whenClosed_withStackCreation() {
 		RestClient rc = client().debug().build();
 		rc.closeQuietly();
 		assertThrown(()->rc.request("get","/bean",null)).asMessage().isContains("RestClient.close() has already been called");
 	}
 
 	@Test
-	public void a06_request_runCalledTwice() throws Exception {
+	public void a06_request_runCalledTwice() {
 		assertThrown(()->{RestRequest r = client().build().get("/echo"); r.run(); r.run();}).asMessage().is("run() already called.");
 	}
 
@@ -138,7 +138,7 @@ public class RestClient_Test {
 			return super.createResponse(req, httpResponse, parser);
 		}
 		@Override /* HttpClient */
-		public HttpResponse execute(HttpUriRequest request, HttpContext context) throws IOException, ClientProtocolException {
+		public HttpResponse execute(HttpUriRequest request, HttpContext context) throws IOException {
 			return new BasicHttpResponse(new ProtocolVersion("http",1,1),200,null);
 		}
 	}
@@ -221,7 +221,7 @@ public class RestClient_Test {
 	@Test
 	public void c06_httpClient_unusedHttpClientMethods() {
 		RestClient x = RestClient.create().build();
-		assertThrown(()->x.getParams()).isType(UnsupportedOperationException.class);
+		assertThrown(x::getParams).isType(UnsupportedOperationException.class);
 		assertNotNull(x.getConnectionManager());
 	}
 
@@ -308,7 +308,7 @@ public class RestClient_Test {
 	@Rest
 	public static class D extends BasicRestObject {
 		@RestGet
-		public String echo(@org.apache.juneau.http.annotation.Header("Authorization") String auth, org.apache.juneau.rest.RestResponse res) throws IOException {
+		public String echo(@org.apache.juneau.http.annotation.Header("Authorization") String auth, org.apache.juneau.rest.RestResponse res) {
 			if (auth == null) {
 				throw unauthorized().setHeader2("WWW-Authenticate","BASIC realm=\"foo\"");
 			} else {

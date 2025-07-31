@@ -136,7 +136,7 @@ public class CommonParserTest {
 		JsonParser p = JsonParser.DEFAULT;
 		String json = "{ints:[1,2,3],beans:[{a:1,b:2}]}";
 		C t = p.parse(json, C.class);
-		assertEquals(t.getInts().size(), 3);
+		assertEquals(3, t.getInts().size());
 		assertEquals(2, t.getBeans().get(0).b);
 	}
 

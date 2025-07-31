@@ -28,7 +28,7 @@ public class ArrayUtilsTest {
 	// append(T[], T...)
 	//====================================================================================================
 	@Test
-	public void testAppendArrayToArray() throws Exception {
+	public void testAppendArrayToArray() {
 		String[] s = {};
 
 		s = append(s, "a", "b");
@@ -51,7 +51,7 @@ public class ArrayUtilsTest {
 	// asSet(T[])
 	//====================================================================================================
 	@Test
-	public void testAsSet() throws Exception {
+	public void testAsSet() {
 		String[] s = null;
 
 		assertThrown(()->asSet((String[])null)).isType(IllegalArgumentException.class);
@@ -60,15 +60,15 @@ public class ArrayUtilsTest {
 		Iterator<String> i = asSet(s).iterator();
 		assertEquals("a", i.next());
 
-		assertThrown(()->i.remove()).isType(UnsupportedOperationException.class);
-		assertThrown(()->i.next()).isType(NoSuchElementException.class);
+		assertThrown(i::remove).isType(UnsupportedOperationException.class);
+		assertThrown(i::next).isType(NoSuchElementException.class);
 	}
 
 	//====================================================================================================
 	// combine(T[]...)
 	//====================================================================================================
 	@Test
-	public void testCombine() throws Exception {
+	public void testCombine() {
 		String[] s1 = {"a"}, s2 = {"b"};
 
 		assertObject(combine(s1, s2)).asJson().is("['a','b']");

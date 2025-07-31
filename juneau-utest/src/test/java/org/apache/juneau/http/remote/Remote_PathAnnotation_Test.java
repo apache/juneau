@@ -88,7 +88,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Test
-	public void a01_path_objectTypes() throws Exception {
+	public void a01_path_objectTypes() {
 		A1 x = remote(A.class,A1.class);
 		assertEquals("1",x.getX1(1));
 		assertEquals("1.0",x.getX2(1));
@@ -139,7 +139,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Test
-	public void b01_path_collectionFormat() throws Exception {
+	public void b01_path_collectionFormat() {
 		B1 x = remote(B.class,B1.class);
 		assertEquals("foo,bar",x.getX1("foo","bar"));
 		assertEquals("foo,bar",x.getX2("foo","bar"));
@@ -210,7 +210,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Test
-	public void c01_path_min_max_emin_emax() throws Exception {
+	public void c01_path_min_max_emin_emax() {
 		C1 x = remote(C.class,C1.class);
 		assertEquals("{x:'1'}",x.getX1(1));
 		assertEquals("{x:'10'}",x.getX1(10));
@@ -406,11 +406,11 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Test
-	public void d01_path_miniMaxi() throws Exception {
+	public void d01_path_miniMaxi() {
 		D1 x = remote(D.class,D1.class);
 		assertEquals("{x:'1'}",x.getX1("1"));
 		assertEquals("{x:'1|2'}",x.getX1("1","2"));
-		assertThrown(()->x.getX1()).asMessages().isContains("Minimum number of items not met.");
+		assertThrown(x::getX1).asMessages().isContains("Minimum number of items not met.");
 		assertThrown(()->x.getX1("1","2","3")).asMessages().isContains("Maximum number of items exceeded.");
 		assertEquals("{x:'null'}",x.getX1((String)null));
 		assertEquals("{x:'1'}",x.getX2(new String[]{"1"}));
@@ -450,7 +450,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Test
-	public void e01_path_minLength_maxLength() throws Exception {
+	public void e01_path_minLength_maxLength() {
 		E1 x = remote(E.class,E1.class);
 		assertEquals("{x:'12'}",x.getX1("12"));
 		assertEquals("{x:'123'}",x.getX1("123"));
@@ -505,7 +505,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Test
-	public void f01_path_multipleOf() throws Exception {
+	public void f01_path_multipleOf() {
 		F1 x = remote(F.class,F1.class);
 		assertEquals("{x:'4'}",x.getX1(4));
 		assertThrown(()->x.getX1(5)).asMessages().isContains("Multiple-of not met.");
@@ -551,7 +551,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Test
-	public void h01_path_required() throws Exception {
+	public void h01_path_required() {
 		G1 x = remote(G.class,G1.class);
 		assertThrown(()->x.getX1(null)).asMessages().isContains("Required value not provided.");
 	}
@@ -575,7 +575,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Test
-	public void h01_path_serializer() throws Exception {
+	public void h01_path_serializer() {
 		H1 x = remote(H.class,H1.class);
 		assertEquals("{x:'xXx'}",x.getX1("X"));
 	}
@@ -587,7 +587,7 @@ public class Remote_PathAnnotation_Test {
 	@Rest
 	public static class K  {
 		@RestOp(path="/*")
-		public String get(RestRequest req) throws Exception {
+		public String get(RestRequest req) {
 			return req.getPathParams().getRemainder().orElse(null);
 		}
 	}
@@ -630,7 +630,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Test
-	public void k01_requestBean_simpleVals() throws Exception {
+	public void k01_requestBean_simpleVals() {
 		K1 x1 = remote(K.class,K1.class);
 		K1 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K1.class);
 		assertEquals("a1/b1/c1//true/123",x1.getX1(new K1a()));
@@ -668,7 +668,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Test
-	public void k02_reauestBean_maps() throws Exception {
+	public void k02_reauestBean_maps() {
 		K2 x1 = remote(K.class,K2.class);
 		K2 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K2.class);
 		assertEquals("v1/123/null//true/123/null/v1/123/null/",x1.getX1(new K2a()));
@@ -710,7 +710,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Test
-	public void k03_requestBean_nameValuePairs() throws Exception {
+	public void k03_requestBean_nameValuePairs() {
 		K3 x1 = remote(K.class,K3.class);
 		K3 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K3.class);
 		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null/",x1.getX1(new K3a()));
@@ -760,7 +760,7 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	@Test
-	public void k04_requestBean_collections() throws Exception {
+	public void k04_requestBean_collections() {
 		K4 x1 = remote(K.class,K4.class);
 		K4 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K4.class);
 		assertString(x1.getX1(new K4a())).is("foo,,true,123,null,true,123,null/foo,,true,123,null,true,123,null/xfoo||true|123|null|true|123|nullx//foo,,true,123,null,true,123,null/xfoo||true|123|null|true|123|nullx/");

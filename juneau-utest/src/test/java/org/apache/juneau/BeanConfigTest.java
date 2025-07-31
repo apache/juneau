@@ -28,7 +28,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings("rawtypes")
 @FixMethodOrder(NAME_ASCENDING)
 public class BeanConfigTest {
 
@@ -36,7 +36,7 @@ public class BeanConfigTest {
 	// testBasic
 	//====================================================================================================
 	@Test
-	public void testBasic() throws Exception {
+	public void testBasic() {
 
 		BeanContext bc = BeanContext.DEFAULT;
 
@@ -504,7 +504,7 @@ public class BeanConfigTest {
 	// testProxyHandler
 	//====================================================================================================
 	@Test
-	public void testProxyHandler() throws Exception {
+	public void testProxyHandler() {
 		BeanSession session = BeanContext.DEFAULT_SESSION;
 
 		A f1 = (A) Proxy.newProxyInstance(this.getClass()
@@ -588,7 +588,7 @@ public class BeanConfigTest {
 	// testFluentStyleSetters
 	//====================================================================================================
 	@Test
-	public void testFluentStyleSetters() throws Exception {
+	public void testFluentStyleSetters() {
 		B2 t = new B2().init();
 		BeanMap m = BeanContext.DEFAULT.toBeanMap(t);
 		m.put("f1", 2);
@@ -611,7 +611,7 @@ public class BeanConfigTest {
 	// testClassMetaCaching
 	//====================================================================================================
 	@Test
-	public void testClassMetaCaching() throws Exception {
+	public void testClassMetaCaching() {
 		Parser.Builder p1, p2;
 
 		p1 = JsonParser.create();
@@ -794,7 +794,7 @@ public class BeanConfigTest {
 	// testNotABeanReasons
 	//====================================================================================================
 	@Test
-	public void testNotABeanNonStaticInnerClass() throws Exception {
+	public void testNotABeanNonStaticInnerClass() {
 		BeanContext bc = BeanContext.DEFAULT;
 		ClassMeta cm = bc.getClassMeta(C1.class);
 		assertFalse(cm.canCreateNewInstance());
@@ -811,7 +811,7 @@ public class BeanConfigTest {
 	// BeanMap.getBean() method is called.
 	//====================================================================================================
 	@Test(timeout=1000) // Should be around 100ms at most.
-	public void testAddingToArrayProperty() throws Exception {
+	public void testAddingToArrayProperty() {
 		BeanContext bc = BeanContext.DEFAULT;
 		BeanMap<D> bm = bc.newBeanMap(D.class);
 		for (int i = 0; i < 5000; i++) {
@@ -843,7 +843,7 @@ public class BeanConfigTest {
 	// Make sure we can get ClassMeta objects against the Class class.
 	//====================================================================================================
 	@Test
-	public void testClassClassMeta() throws Exception {
+	public void testClassClassMeta() {
 		ClassMeta cm = BeanContext.DEFAULT.getClassMeta(Class.class);
 		assertNotNull(cm);
 
