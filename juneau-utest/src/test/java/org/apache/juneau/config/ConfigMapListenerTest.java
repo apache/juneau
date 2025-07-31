@@ -584,8 +584,7 @@ public class ConfigMapListenerTest {
 				latch.countDown();
 		}
 
-		public void check(ConfigEvents events) throws Exception {
-		}
+		public void check(ConfigEvents events) throws Exception {}  // NOSONAR
 	}
 
 	private static void wait(CountDownLatch latch) throws InterruptedException {

@@ -24,7 +24,6 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.http.*;
 import org.apache.http.auth.*;
-import org.apache.http.client.*;
 import org.apache.http.client.config.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.concurrent.*;
@@ -71,8 +70,7 @@ public class RestClient_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A2 extends RestClient.Builder {
-		public A2() {
-		}
+		public A2() {}  // NOSONAR
 	}
 
 	@Test

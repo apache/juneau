@@ -303,7 +303,7 @@ public class MethodInfoTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	public static class D {
-		public void a1() {}
+		public void a1() {}  // NOSONAR
 		public Integer a2() {return null;}
 	}
 	static MethodInfo
@@ -341,8 +341,8 @@ public class MethodInfoTest {
 		public void a1(CharSequence foo) {
 			f = foo == null ? null : foo.toString();
 		}
-		public void a2(int f1, int f2) {}
-		public void a3() {}
+		public void a2(int f1, int f2) {}  // NOSONAR
+		public void a3() {}  // NOSONAR
 	}
 	static MethodInfo
 		e_a1 = ofm(E.class, "a1", CharSequence.class),  // NOSONAR
@@ -382,13 +382,13 @@ public class MethodInfoTest {
 	}
 
 	public static class F {
-		public void isA() {}
-		public void is() {}
-		public void getA() {}
-		public void get() {}
-		public void setA() {}
-		public void set() {}
-		public void foo() {}
+		public void isA() {}  // NOSONAR
+		public void is() {}  // NOSONAR
+		public void getA() {}  // NOSONAR
+		public void get() {}  // NOSONAR
+		public void setA() {}  // NOSONAR
+		public void set() {}  // NOSONAR
+		public void foo() {}  // NOSONAR
 	}
 	static MethodInfo
 		f_isA = ofm(F.class, "isA"),  // NOSONAR

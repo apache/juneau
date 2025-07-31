@@ -1041,8 +1041,8 @@ public class BeanStore_Test {
 			public String b;
 		}
 		protected D17(Builder b, Integer i) { a = b.b; }
-		protected D17(Integer i) {}
-		D17(String s) {}
+		protected D17(Integer i) {}  // NOSONAR
+		D17(String s) {}  // NOSONAR
 		protected D17(Builder b) { a = b.b; }
 	}
 

@@ -64,8 +64,7 @@ public class RestClient_Response_Body_Test {
 			return bean;
 		}
 		@RestOp
-		public void head() {
-		}
+		public void head() {}  // NOSONAR
 	}
 
 	public static class TestClient extends MockRestClient {

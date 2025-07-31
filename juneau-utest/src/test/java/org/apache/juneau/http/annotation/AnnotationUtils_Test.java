@@ -57,7 +57,7 @@ public class AnnotationUtils_Test {
 	}
 
 	@Test
-	public void a01_Body() throws Exception {
+	public void a01_Body() {
 		assertObject(body().build().annotationType()).asJson().isContains("Content");
 
 		assertTrue(ContentAnnotation.empty(A1.class.getAnnotation(Content.class)));
@@ -67,7 +67,7 @@ public class AnnotationUtils_Test {
 	}
 
 	@Test
-	public void a02_Contact() throws Exception {
+	public void a02_Contact() {
 		X1 x1 = A1.class.getAnnotation(X1.class);
 
 		assertObject(contact().build().annotationType()).asJson().isContains("Contact");
@@ -100,7 +100,7 @@ public class AnnotationUtils_Test {
 	}
 
 	@Test
-	public void a04_HasFormData() throws Exception {
+	public void a04_HasFormData() {
 		assertObject(hasFormData().build().annotationType()).asJson().isContains("HasFormData");
 
 		assertObject(hasFormData().name("foo").build().name()).asJson().is("'foo'");
@@ -126,7 +126,7 @@ public class AnnotationUtils_Test {
 	}
 
 	@Test
-	public void a06_HasQuery() throws Exception {
+	public void a06_HasQuery() {
 		assertObject(hasQuery().build().annotationType()).asJson().isContains("HasQuery");
 
 		assertObject(hasQuery().name("foo").build().name()).asJson().is("'foo'");
@@ -152,7 +152,7 @@ public class AnnotationUtils_Test {
 	}
 
 	@Test
-	public void a08_License() throws Exception {
+	public void a08_License() {
 		X1 x = A1.class.getAnnotation(X1.class);
 
 		assertObject(license().build().annotationType()).asJson().isContains("License");
@@ -184,7 +184,7 @@ public class AnnotationUtils_Test {
 	}
 
 	@Test
-	public void a10_Request() throws Exception {
+	public void a10_Request() {
 		assertObject(request().build().annotationType()).asJson().isContains("Request");
 
 		assertObject(request().parser(OpenApiParser.class).build().parser()).asJson().is("'org.apache.juneau.oapi.OpenApiParser'");
@@ -192,7 +192,7 @@ public class AnnotationUtils_Test {
 	}
 
 	@Test
-	public void a11_Response() throws Exception {
+	public void a11_Response() {
 		assertObject(response().build().annotationType()).asJson().isContains("Response");
 
 		assertTrue(ResponseAnnotation.empty(A1.class.getAnnotation(Response.class)));
@@ -208,12 +208,12 @@ public class AnnotationUtils_Test {
 	}
 
 	@Test
-	public void a14_ResponseStatus() throws Exception {
+	public void a14_ResponseStatus() {
 		assertObject(responseCode().build().annotationType()).asJson().isContains("StatusCode");
 	}
 
 	@Test
-	public void a15_Tag() throws Exception {
+	public void a15_Tag() {
 		assertObject(tag().build().annotationType()).asJson().isContains("Tag");
 
 		assertObject(tag().description(a("foo")).build().description()).asJson().is("['foo']");
@@ -222,7 +222,7 @@ public class AnnotationUtils_Test {
 	}
 
 	@Test
-	public void a16_ExternalDocs() throws Exception {
+	public void a16_ExternalDocs() {
 		X1 x = A1.class.getAnnotation(X1.class);
 
 		assertObject(externalDocs().build().annotationType()).asJson().isContains("ExternalDocs");
@@ -235,7 +235,7 @@ public class AnnotationUtils_Test {
 	}
 
 	@Test
-	public void a17_Schema() throws Exception {
+	public void a17_Schema() {
 		X1 x = A1.class.getAnnotation(X1.class);
 
 		assertObject(schema().build().annotationType()).asJson().isContains("Schema");
@@ -298,7 +298,7 @@ public class AnnotationUtils_Test {
 	}
 
 	@Test
-	public void a18_SubItems() throws Exception {
+	public void a18_SubItems() {
 		X1 x = A1.class.getAnnotation(X1.class);
 
 		assertObject(subItems().build().annotationType()).asJson().isContains("SubItems");
@@ -343,7 +343,7 @@ public class AnnotationUtils_Test {
 	}
 
 	@Test
-	public void a19_Items() throws Exception {
+	public void a19_Items() {
 		X1 x = A1.class.getAnnotation(X1.class);
 
 		assertObject(items().build().annotationType()).asJson().isContains("Items");

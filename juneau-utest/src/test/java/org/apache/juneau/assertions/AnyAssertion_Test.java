@@ -58,13 +58,13 @@ public class AnyAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void a01_msg() throws Exception {
+	public void a01_msg() {
 		assertThrown(()->test(null).setMsg("Foo {0}", 1).isExists()).asMessage().is("Foo 1");
 		assertThrown(()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("Foo 1");
 	}
 
 	@Test
-	public void a02_stdout() throws Exception {
+	public void a02_stdout() {
 		test(null).setStdOut();
 	}
 
@@ -73,14 +73,14 @@ public class AnyAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void ba01a_asString() throws Exception {
+	public void ba01a_asString() {
 		Integer x = 1, nil = null;
 		test(x).asString().is("1");
 		test(nil).asString().isNull();
 	}
 
 	@Test
-	public void ba01b_asString_wSerializer() throws Exception {
+	public void ba01b_asString_wSerializer() {
 		Integer x = 1, nil = null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("1");
@@ -88,13 +88,13 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void ba01c_asString_wPredicate() throws Exception {
+	public void ba01c_asString_wPredicate() {
 		Integer x1 = 1;
 		test(x1).asString(x -> "foo").is("foo");
 	}
 
 	@Test
-	public void ba02_asJson() throws Exception {
+	public void ba02_asJson() {
 		Integer x = 1, nil = null;
 		test(x).asJson().is("1");
 		test(nil).asJson().is("null");
@@ -102,7 +102,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void ba03_asJsonSorted() throws Exception {
+	public void ba03_asJsonSorted() {
 		Integer[] x1 = {2,1}, nil = null;
 		Object x2 = new A1();
 		test(x1).asJsonSorted().is("[1,2]");
@@ -111,13 +111,13 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void ba04_apply() throws Exception {
+	public void ba04_apply() {
 		Integer x1 = 1, x2 = 2;
 		test(x1).asTransformed(x -> x2).is(x2);
 	}
 
 	@Test
-	public void bb01_asArray() throws Exception {
+	public void bb01_asArray() {
 		Integer[] x1 = {1,2}, nil = null;
 		String x2 = "";
 		test(x1).asArray(Integer.class).asItem(0).is(1);
@@ -127,7 +127,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb02_asIntArray() throws Exception {
+	public void bb02_asIntArray() {
 		int[] x1 = {1}, nil = null;
 		Object x2 = "";
 		test(x1).asIntArray().isString("[1]");
@@ -136,7 +136,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb03_asLongArray() throws Exception {
+	public void bb03_asLongArray() {
 		long[] x1 = {1}, nil = null;
 		Object x2 = "";
 		test(x1).asLongArray().isString("[1]");
@@ -145,7 +145,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb04_asShortArray() throws Exception {
+	public void bb04_asShortArray() {
 		short[] x1 = {1}, nil = null;
 		Object x2 = "";
 		test(x1).asShortArray().isString("[1]");
@@ -154,7 +154,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb05_asFloatArray() throws Exception {
+	public void bb05_asFloatArray() {
 		float[] x1 = {1}, nil = null;
 		Object x2 = "";
 		test(x1).asFloatArray().isString("[1.0]");
@@ -163,7 +163,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb06_asDoubleArray() throws Exception {
+	public void bb06_asDoubleArray() {
 		double[] x1 = {1}, nil = null;
 		Object x2 = "";
 		test(x1).asDoubleArray().isString("[1.0]");
@@ -172,7 +172,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb07_asCharArray() throws Exception {
+	public void bb07_asCharArray() {
 		char[] x1 = {'a'}, nil = null;
 		Object x2 = "";
 		test(x1).asCharArray().isString("[a]");
@@ -181,7 +181,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb08_asByteArray() throws Exception {
+	public void bb08_asByteArray() {
 		byte[] x1 = {1}, nil = null;
 		Object x2 = "";
 		test(x1).asByteArray().isString("[1]");
@@ -190,7 +190,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb09_asBooleanArray() throws Exception {
+	public void bb09_asBooleanArray() {
 		boolean[] x1 = {true}, nil = null;
 		Object x2 = "";
 		test(x1).asBooleanArray().isString("[true]");
@@ -199,7 +199,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb10_asBoolean() throws Exception {
+	public void bb10_asBoolean() {
 		Boolean x1 = true, nil = null;
 		Object x2 = "";
 		test(x1).asBoolean().isString("true");
@@ -208,7 +208,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb11_asBytes() throws Exception {
+	public void bb11_asBytes() {
 		byte[] x1 = {'a'}, nil = null;
 		Object x2 = "";
 		test(x1).asBytes().isString("a");
@@ -217,7 +217,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb12_asCollection() throws Exception {
+	public void bb12_asCollection() {
 		List<Integer> x1 = alist(1), nil = null;
 		Object x2 = "";
 		test(x1).asCollection().isString("[1]");
@@ -226,7 +226,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb13_asCollection_wType() throws Exception {
+	public void bb13_asCollection_wType() {
 		List<Integer> x1 = alist(1), nil = null;
 		Object x2 = "";
 		test(x1).asCollection(Integer.class).isString("[1]");
@@ -236,7 +236,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb14_asComparable() throws Exception {
+	public void bb14_asComparable() {
 		Integer x1 = 1, nil = null;
 		Object x2 = list();
 		test(x1).asComparable().isString("1");
@@ -245,7 +245,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb15_asDate() throws Exception {
+	public void bb15_asDate() {
 		Date x1 = date("2000-06-01T12:34:56Z"), nil = null;
 		Object x2 = "";
 		test(x1).asDate().asString().isMatches("*2000");
@@ -254,7 +254,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb16_asInteger() throws Exception {
+	public void bb16_asInteger() {
 		Integer x1 = 1, nil = null;
 		Object x2 = "";
 		test(x1).asInteger().isString("1");
@@ -263,7 +263,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb17_asLong() throws Exception {
+	public void bb17_asLong() {
 		Long x1 = 1L, nil = null;
 		Object x2 = "";
 		test(x1).asLong().isString("1");
@@ -272,7 +272,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb18_asList() throws Exception {
+	public void bb18_asList() {
 		List<Integer> x1 = alist(1), nil = null;
 		Object x2 = "";
 		test(x1).asList().isString("[1]");
@@ -281,7 +281,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb19_asList_wType() throws Exception {
+	public void bb19_asList_wType() {
 		List<Integer> x1 = alist(1), nil = null;
 		Object x2 = "";
 		test(x1).asList(Integer.class).isString("[1]");
@@ -291,7 +291,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb20_asMap() throws Exception {
+	public void bb20_asMap() {
 		Map<String,Integer> x1 = map("a",2), nil = null;
 		Object x2 = "";
 		test(x1).asMap().isString("{a=2}");
@@ -300,7 +300,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb21_asMap_wTypes() throws Exception {
+	public void bb21_asMap_wTypes() {
 		Map<String,Integer> x1 = map("a",2), nil = null;
 		Object x2 = "";
 		test(x1).asMap(String.class,Integer.class).isString("{a=2}");
@@ -311,14 +311,14 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb22_asBean() throws Exception {
+	public void bb22_asBean() {
 		A1 x1 = A1, nil = null;
 		test(x1).asBean().isString("a=1,b=2");
 		test(nil).asBean().isNull();
 	}
 
 	@Test
-	public void bb23_asBean_wType() throws Exception {
+	public void bb23_asBean_wType() {
 		A1 x1 = A1, nil = null;
 		Object x2 = "";
 		test(x1).asBean().isString("a=1,b=2");
@@ -328,7 +328,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb24_asBeanList() throws Exception {
+	public void bb24_asBeanList() {
 		List<A1> x1 = alist(A1), nil = null;
 		Object x2 = "";
 		test(x1).asBeanList(A1.class).isString("[a=1,b=2]");
@@ -347,7 +347,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void bb26_asStringList() throws Exception {
+	public void bb26_asStringList() {
 		List<String> x1 = alist("1"), nil = null;
 		Object x2 = "";
 		test(x1).asStringList().isString("[1]");
@@ -360,28 +360,28 @@ public class AnyAssertion_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void ca01_exists() throws Exception {
+	public void ca01_exists() {
 		Integer x = 1, nil = null;
 		test(x).isExists().isExists();
 		assertThrown(()->test(nil).isExists()).asMessage().is("Value was null.");
 	}
 
 	@Test
-	public void ca02_isNull() throws Exception {
+	public void ca02_isNull() {
 		Integer x = 1, nil = null;
 		test(nil).isNull();
 		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
 	}
 
 	@Test
-	public void ca03_isNotNull() throws Exception {
+	public void ca03_isNotNull() {
 		Integer x = 1, nil = null;
 		test(x).isNotNull();
 		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
 	}
 
 	@Test
-	public void ca04a_is_T() throws Exception {
+	public void ca04a_is_T() {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		test(x1).is(x1);
 		test(x1).is(x1a);
@@ -392,7 +392,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void ca04b_is_predicate() throws Exception {
+	public void ca04b_is_predicate() {
 		Integer x1 = 1;
 		test(x1).is(x->x==1);
 		assertThrown(()->test(x1).is(x->x==2)).asMessage().asOneLine().is("Unexpected value: '1'.");
@@ -400,7 +400,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void ca05_isNot() throws Exception {
+	public void ca05_isNot() {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
@@ -410,7 +410,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void ca06_isAny() throws Exception {
+	public void ca06_isAny() {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[2]'.  Actual='1'.");
@@ -419,7 +419,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void ca07_isNotAny() throws Exception {
+	public void ca07_isNotAny() {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
@@ -429,7 +429,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void ca08_isSame() throws Exception {
+	public void ca08_isSame() {
 		Integer x1 = new Integer(1), x1a = new Integer(1), nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
@@ -439,7 +439,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void ca09_isSameJsonAs() throws Exception {
+	public void ca09_isSameJsonAs() {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
@@ -449,7 +449,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void ca10_isSameSortedJsonAs() throws Exception {
+	public void ca10_isSameSortedJsonAs() {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
@@ -459,7 +459,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void ca11_isSameSerializedAs() throws Exception {
+	public void ca11_isSameSerializedAs() {
 		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
@@ -470,7 +470,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void ca12_isType() throws Exception {
+	public void ca12_isType() {
 		Integer x = 1, nil = null;
 		test(x).isType(Integer.class);
 		test(x).isType(Object.class);
@@ -480,7 +480,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void ca13_isExactType() throws Exception {
+	public void ca13_isExactType() {
 		Integer x = 1, nil = null;
 		test(x).isExactType(Integer.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.lang.Integer'.");
@@ -490,7 +490,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void ca14_isString() throws Exception {
+	public void ca14_isString() {
 		Integer x = 1, nil = null;
 		test(x).isString("1");
 		test(nil).isString(null);
@@ -500,7 +500,7 @@ public class AnyAssertion_Test {
 	}
 
 	@Test
-	public void ca15_isJson() throws Exception {
+	public void ca15_isJson() {
 		Integer x = 1, nil = null;
 		test(x).isJson("1");
 		test(nil).isJson("null");

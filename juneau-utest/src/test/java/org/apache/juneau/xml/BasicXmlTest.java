@@ -1099,7 +1099,7 @@ public class BasicXmlTest {
 	private String label, e1, e2, e3;
 	private Object in;
 
-	public BasicXmlTest(String label, Object in, String e1, String e2, String e3) throws Exception {
+	public BasicXmlTest(String label, Object in, String e1, String e2, String e3) {
 		this.label = label;
 		this.in = in;
 		this.e1 = e1;

@@ -80,8 +80,8 @@ public class ParamInfoTest {
 
 	static class B {
 		public B(int a, String b) {}
-		public void a1(int a, String b) {}
-		void a2(int a, String b) {}
+		public void a1(int a, String b) {}  // NOSONAR
+		void a2(int a, String b) {}  // NOSONAR
 	}
 
 	static ClassInfo b = ClassInfo.of(B.class);
@@ -319,7 +319,7 @@ public class ParamInfoTest {
 	}
 	public static class DC implements DB {
 		@Override
-		public void a1(@DA("5") D1 x) {}
+		public void a1(@DA("5") D1 x) {}  // NOSONAR
 	}
 
 	static ClassInfo
@@ -356,7 +356,7 @@ public class ParamInfoTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	static class E {
-		public void a1(int a, @Name("b") int b) {}
+		public void a1(int a, @Name("b") int b) {}  // NOSONAR
 	}
 
 	static ClassInfo e = ClassInfo.of(E.class);

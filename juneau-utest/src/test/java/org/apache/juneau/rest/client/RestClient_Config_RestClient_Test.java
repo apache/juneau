@@ -23,7 +23,6 @@ import java.io.*;
 import java.util.concurrent.*;
 import java.util.logging.*;
 import org.apache.http.*;
-import org.apache.http.client.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
@@ -93,7 +92,7 @@ public class RestClient_Config_RestClient_Test {
 			super(client);
 		}
 		@Override
-		public HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws ClientProtocolException, IOException {
+		public HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws IOException {
 			request.addHeader("Check","Foo");
 			request.addHeader("Foo","baz");
 			return super.run(target,request,context);
@@ -106,7 +105,7 @@ public class RestClient_Config_RestClient_Test {
 	}
 
 	@Test
-	public void a02_errorCodes() throws Exception {
+	public void a02_errorCodes() {
 		RestClient x1 = client().errorCodes(x -> x == 200).build();
 		RestClient x2 = client().build();
 		assertThrown(()->x1.get("/echo").run()).is(x -> ((RestCallException)x).getResponseCode() == 200);
@@ -307,7 +306,7 @@ public class RestClient_Config_RestClient_Test {
 	}
 
 	@Test
-	public void a06_interceptors_exceptionHandling() throws Exception {
+	public void a06_interceptors_exceptionHandling() {
 		assertThrown(()->client().interceptors(A6a.class).build().post("/bean",bean).complete()).asMessage().is("foo");
 		assertThrown(()->client().interceptors(A6b.class).build().post("/bean",bean).complete()).asMessage().is("foo");
 		assertThrown(()->client().interceptors(A6c.class).build().post("/bean",bean).complete()).asMessage().is("foo");
@@ -459,7 +458,7 @@ public class RestClient_Config_RestClient_Test {
 
 
 	@Test
-	public void a13_toString() throws Exception {
+	public void a13_toString() {
 		String s = client().rootUrl("https://foo").build().toString();
 		assertTrue(s.contains("rootUrl: 'https://foo'"));
 	}
