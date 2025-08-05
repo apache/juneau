@@ -15,16 +15,14 @@ package org.apache.juneau.http.part;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests: {@link PartBeanMeta}
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class PartBeanMeta_Test {
+class PartBeanMeta_Test extends SimpleTestBase {
 
 	private static final String TNAME = PartBeanMeta_Test.class.getName();
 
@@ -76,8 +74,7 @@ public class PartBeanMeta_Test {
 	@Header(name="A7")
 	public static class A7 {}
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		PartBeanMeta<A1> a1 = PartBeanMeta.of(A1.class);
 		assertSame(a1, PartBeanMeta.of(A1.class));
 		assertObject(a1.construct("X", "foo")).isJson("{name:'X',value:'foo'}");

@@ -16,14 +16,13 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.http.*;
 import org.apache.http.client.config.*;
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
@@ -34,10 +33,9 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Remote_PathAnnotation_Test {
+class Remote_PathAnnotation_Test extends SimpleTestBase {
 
 	public static class Bean {
 		public int x;
@@ -87,8 +85,7 @@ public class Remote_PathAnnotation_Test {
 		@RemoteOp(path="a/{x}") String getX22(@Path List<NameValuePair> b);
 	}
 
-	@Test
-	public void a01_path_objectTypes() {
+	@Test void a01_path_objectTypes() {
 		A1 x = remote(A.class,A1.class);
 		assertEquals("1",x.getX1(1));
 		assertEquals("1.0",x.getX2(1));
@@ -138,8 +135,7 @@ public class Remote_PathAnnotation_Test {
 		@RemoteOp(path="/a/{x}") String getX7(@Path("x") @Schema(cf="uon") String...b);
 	}
 
-	@Test
-	public void b01_path_collectionFormat() {
+	@Test void b01_path_collectionFormat() {
 		B1 x = remote(B.class,B1.class);
 		assertEquals("foo,bar",x.getX1("foo","bar"));
 		assertEquals("foo,bar",x.getX2("foo","bar"));
@@ -209,8 +205,7 @@ public class Remote_PathAnnotation_Test {
 		@RemoteOp(path="/a/{x}") String getX42(@Path("x") @Schema(min="1",max="10",emin=true,emax=true) Byte b);
 	}
 
-	@Test
-	public void c01_path_min_max_emin_emax() {
+	@Test void c01_path_min_max_emin_emax() {
 		C1 x = remote(C.class,C1.class);
 		assertEquals("{x:'1'}",x.getX1(1));
 		assertEquals("{x:'10'}",x.getX1(10));
@@ -405,8 +400,7 @@ public class Remote_PathAnnotation_Test {
 		@RemoteOp(path="/{x}") String getX6(@Path("x") @Schema(items=@Items(cf="pipes",ui=true)) String[]...b);
 	}
 
-	@Test
-	public void d01_path_miniMaxi() {
+	@Test void d01_path_miniMaxi() {
 		D1 x = remote(D.class,D1.class);
 		assertEquals("{x:'1'}",x.getX1("1"));
 		assertEquals("{x:'1|2'}",x.getX1("1","2"));
@@ -449,8 +443,7 @@ public class Remote_PathAnnotation_Test {
 		@RemoteOp(path="/{x}") String getX6(@Path("x") @Schema(cf="pipes",items=@Items(p="foo\\d{1,3}")) String...b);
 	}
 
-	@Test
-	public void e01_path_minLength_maxLength() {
+	@Test void e01_path_minLength_maxLength() {
 		E1 x = remote(E.class,E1.class);
 		assertEquals("{x:'12'}",x.getX1("12"));
 		assertEquals("{x:'123'}",x.getX1("123"));
@@ -504,8 +497,7 @@ public class Remote_PathAnnotation_Test {
 		@RemoteOp(path="/{x}") String getX14(@Path("x") @Schema(mo="2") Byte b);
 	}
 
-	@Test
-	public void f01_path_multipleOf() {
+	@Test void f01_path_multipleOf() {
 		F1 x = remote(F.class,F1.class);
 		assertEquals("{x:'4'}",x.getX1(4));
 		assertThrown(()->x.getX1(5)).asMessages().isContains("Multiple-of not met.");
@@ -550,8 +542,7 @@ public class Remote_PathAnnotation_Test {
 		@RemoteOp(path="/{x}") String getX1(@Path("x") String b);
 	}
 
-	@Test
-	public void h01_path_required() {
+	@Test void h01_path_required() {
 		G1 x = remote(G.class,G1.class);
 		assertThrown(()->x.getX1(null)).asMessages().isContains("Required value not provided.");
 	}
@@ -574,8 +565,7 @@ public class Remote_PathAnnotation_Test {
 		@RemoteOp(path="/{x}") String getX1(@Path(name="x",serializer=FakeWriterSerializer.X.class) String b);
 	}
 
-	@Test
-	public void h01_path_serializer() {
+	@Test void h01_path_serializer() {
 		H1 x = remote(H.class,H1.class);
 		assertEquals("{x:'xXx'}",x.getX1("X"));
 	}
@@ -629,8 +619,7 @@ public class Remote_PathAnnotation_Test {
 		}
 	}
 
-	@Test
-	public void k01_requestBean_simpleVals() {
+	@Test void k01_requestBean_simpleVals() {
 		K1 x1 = remote(K.class,K1.class);
 		K1 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K1.class);
 		assertEquals("a1/b1/c1//true/123",x1.getX1(new K1a()));
@@ -667,8 +656,7 @@ public class Remote_PathAnnotation_Test {
 		}
 	}
 
-	@Test
-	public void k02_reauestBean_maps() {
+	@Test void k02_reauestBean_maps() {
 		K2 x1 = remote(K.class,K2.class);
 		K2 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K2.class);
 		assertEquals("v1/123/null//true/123/null/v1/123/null/",x1.getX1(new K2a()));
@@ -709,8 +697,7 @@ public class Remote_PathAnnotation_Test {
 		}
 	}
 
-	@Test
-	public void k03_requestBean_nameValuePairs() {
+	@Test void k03_requestBean_nameValuePairs() {
 		K3 x1 = remote(K.class,K3.class);
 		K3 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K3.class);
 		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null/",x1.getX1(new K3a()));
@@ -759,8 +746,7 @@ public class Remote_PathAnnotation_Test {
 		}
 	}
 
-	@Test
-	public void k04_requestBean_collections() {
+	@Test void k04_requestBean_collections() {
 		K4 x1 = remote(K.class,K4.class);
 		K4 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K4.class);
 		assertString(x1.getX1(new K4a())).is("foo,,true,123,null,true,123,null/foo,,true,123,null,true,123,null/xfoo||true|123|null|true|123|nullx//foo,,true,123,null,true,123,null/xfoo||true|123|null|true|123|nullx/");

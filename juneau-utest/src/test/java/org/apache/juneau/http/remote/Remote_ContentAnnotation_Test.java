@@ -17,13 +17,12 @@ import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.entity.*;
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.part.*;
@@ -32,13 +31,12 @@ import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests the @Body annotation.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class Remote_ContentAnnotation_Test {
+class Remote_ContentAnnotation_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Helpers
@@ -140,8 +138,7 @@ public class Remote_ContentAnnotation_Test {
 		String postX10(@Content PartList b);
 	}
 
-	@Test
-	public void a01_objectTypes_json() throws Exception {
+	@Test void a01_objectTypes_json() throws Exception {
 		A1 x = MockRestClient.create(A.class).serializer(JsonSerializer.class).build().getRemote(A1.class);
 		assertEquals("1",x.postX1(1));
 		assertEquals("1.0",x.postX2(1f));
@@ -235,8 +232,7 @@ public class Remote_ContentAnnotation_Test {
 		String postX10(@Content PartList b);
 	}
 
-	@Test
-	public void b01_objectTypes_openApi() throws Exception {
+	@Test void b01_objectTypes_openApi() throws Exception {
 		B1 x = MockRestClient.create(B.class).openApi().contentType(null).build().getRemote(B1.class);
 		assertEquals("1",x.postX1(1));
 		assertEquals("1.0",x.postX2(1f));
@@ -316,8 +312,7 @@ public class Remote_ContentAnnotation_Test {
 		String postX10(@Content PartList b);
 	}
 
-	@Test
-	public void c01_openApi_overriddenContentType() throws Exception {
+	@Test void c01_openApi_overriddenContentType() throws Exception {
 		C1 x = MockRestClient.create(C.class).parser(JsonParser.class).contentType("text/foo").build().getRemote(C1.class);
 		assertEquals("1",x.postX1(1));
 		assertEquals("1.0",x.postX2(1f));

@@ -13,25 +13,20 @@
 package org.apache.juneau;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
-import org.junit.*;
-
+import org.junit.jupiter.api.*;
 
 /**
  * Test the ContextProperties class.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class ContextPropertiesTest {
+class ContextPropertiesTest extends SimpleTestBase {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Other tests
 	//-------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void testEqualsWithAnnotations() {
+	@Test void testEqualsWithAnnotations() {
 		HtmlSerializer.Builder
 			s1 = HtmlSerializer.create(),
 			s2 = HtmlSerializer.create().applyAnnotations(B1Config.class),

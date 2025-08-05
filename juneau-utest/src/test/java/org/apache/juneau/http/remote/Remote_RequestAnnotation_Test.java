@@ -14,19 +14,17 @@ package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Remote_RequestAnnotation_Test {
+class Remote_RequestAnnotation_Test  extends SimpleTestBase{
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -70,8 +68,7 @@ public class Remote_RequestAnnotation_Test {
 		@RemoteOp(path="/{x}") String post(A1 req);
 	}
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		A2 x = remote(A.class,A2.class);
 		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}",x.post(new A1()));
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}",x.post(null));
@@ -126,8 +123,7 @@ public class Remote_RequestAnnotation_Test {
 		@RemoteOp(path="/{x}") String post(B1 req);
 	}
 
-	@Test
-	public void b01_annotationOnParent() {
+	@Test void b01_annotationOnParent() {
 		B3 x = remote(B.class,B3.class);
 		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}",x.post(new B2()));
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}",x.post(null));
@@ -182,8 +178,7 @@ public class Remote_RequestAnnotation_Test {
 		@RemoteOp(path="/{x}") String post(C1 req);
 	}
 
-	@Test
-	public void c01_annotationOnInterface() {
+	@Test void c01_annotationOnInterface() {
 		C3 x = remote(C.class,C3.class);
 		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}",x.post(new C2()));
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}",x.post(null));
@@ -230,8 +225,7 @@ public class Remote_RequestAnnotation_Test {
 		@RemoteOp(path="/{x}") String post(@Request D1 req);
 	}
 
-	@Test
-	public void d01_annotationOnParameter() {
+	@Test void d01_annotationOnParameter() {
 		D2 x = remote(D.class,D2.class);
 		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}",x.post(new D1()));
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}",x.post(null));
@@ -279,8 +273,7 @@ public class Remote_RequestAnnotation_Test {
 		@RemoteOp(path="/{x}") String post(E1 req);
 	}
 
-	@Test
-	public void e01_partSerializer() {
+	@Test void e01_partSerializer() {
 		E2 x = remote(E.class,E2.class);
 		assertEquals("{body:'foo',header:'xxx',query:'xxx',path:'xxx'}",x.post(new E1()));
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}",x.post(null));

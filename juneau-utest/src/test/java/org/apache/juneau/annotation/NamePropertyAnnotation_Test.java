@@ -14,13 +14,10 @@ package org.apache.juneau.annotation;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class NamePropertyAnnotation_Test {
+class NamePropertyAnnotation_Test extends SimpleTestBase {
 
 	private static final String CNAME = NamePropertyAnnotation_Test.class.getName();
 
@@ -38,8 +35,7 @@ public class NamePropertyAnnotation_Test {
 		.on("on")
 		.build();
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
                 + "description:['description'],"
@@ -48,8 +44,7 @@ public class NamePropertyAnnotation_Test {
 		);
 	}
 
-	@Test
-	public void a02_testEquivalency() {
+	@Test void a02_testEquivalency() {
 		assertObject(a1).is(a2);
 		assertInteger(a1.hashCode()).is(a2.hashCode()).isNotAny(0,-1);
 	}
@@ -58,8 +53,7 @@ public class NamePropertyAnnotation_Test {
 	// PropertyStore equivalency.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void b01_testEquivalencyInPropertyStores() {
+	@Test void b01_testEquivalencyInPropertyStores() {
 		BeanContext bc1 = BeanContext.create().annotations(a1).build();
 		BeanContext bc2 = BeanContext.create().annotations(a2).build();
 		assertSame(bc1, bc2);
@@ -78,8 +72,7 @@ public class NamePropertyAnnotation_Test {
 		public void m2() {}  // NOSONAR
 	}
 
-	@Test
-	public void c01_otherMethods() throws Exception {
+	@Test void c01_otherMethods() throws Exception {
 		NameProperty c1 = NamePropertyAnnotation.create("a").on("b").build();
 		NameProperty c2 = NamePropertyAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
 		NameProperty c3 = NamePropertyAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
@@ -107,8 +100,7 @@ public class NamePropertyAnnotation_Test {
 	public static class D2 {}
 	NameProperty d2 = D2.class.getAnnotationsByType(NameProperty.class)[0];
 
-	@Test
-	public void d01_comparisonWithDeclarativeAnnotations() {
+	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertObject(d1).is(d2).is(a1);
 		assertInteger(d1.hashCode()).is(d2.hashCode()).is(a1.hashCode()).isNotAny(0,-1);
 	}

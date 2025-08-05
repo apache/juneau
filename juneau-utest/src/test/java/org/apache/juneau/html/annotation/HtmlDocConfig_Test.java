@@ -1,13 +1,12 @@
 package org.apache.juneau.html.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 //***************************************************************************************************************************
 //* Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
@@ -22,9 +21,8 @@ import org.junit.*;
 //* specific language governing permissions and limitations under the License.                                              *
 //***************************************************************************************************************************
 
-@FixMethodOrder(NAME_ASCENDING)
 @SuppressWarnings({"serial"})
-public class HtmlDocConfig_Test {
+class HtmlDocConfig_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @HtmlDocConfig(aside)

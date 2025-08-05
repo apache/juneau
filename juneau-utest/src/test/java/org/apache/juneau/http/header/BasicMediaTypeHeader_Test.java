@@ -15,8 +15,6 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.function.*;
 
@@ -27,10 +25,9 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class BasicMediaTypeHeader_Test {
+class BasicMediaTypeHeader_Test extends SimpleTestBase {
 
 	private static final String HEADER = "Foo";
 	private static final String VALUE = "foo/bar";
@@ -48,8 +45,7 @@ public class BasicMediaTypeHeader_Test {
 	// Method tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient c = client().build();
 
 		// Normal usage.
@@ -69,53 +65,45 @@ public class BasicMediaTypeHeader_Test {
 		assertThrown(()->mediaTypeHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
 	}
 
-	@Test
-	public void a02_getType() {
+	@Test void a02_getType() {
 		assertString(contentType("text/foo").getType()).is("text");
 		assertString(new ContentType((String)null).getType()).isEmpty();
 	}
 
-	@Test
-	public void a03_getSubType() {
+	@Test void a03_getSubType() {
 		assertString(contentType("text/foo").getSubType()).is("foo");
 		assertString(new ContentType((String)null).getSubType()).is("*");
 	}
 
-	@Test
-	public void a04_hasSubType() {
+	@Test void a04_hasSubType() {
 		assertBoolean(contentType("text/foo+bar").hasSubType("bar")).isTrue();
 		assertBoolean(contentType("text/foo+bar").hasSubType("baz")).isFalse();
 		assertBoolean(contentType("text/foo+bar").hasSubType(null)).isFalse();
 		assertBoolean(new ContentType((String)null).hasSubType("bar")).isFalse();
 	}
 
-	@Test
-	public void a05_getSubTypes() {
+	@Test void a05_getSubTypes() {
 		assertObject(contentType("text/foo+bar").getSubTypes()).asJson().is("['foo','bar']");
 		assertObject(new ContentType((String)null).getSubTypes()).asJson().is("['*']");
 	}
 
-	@Test
-	public void a06_isMeta() {
+	@Test void a06_isMeta() {
 		assertBoolean(contentType("text/foo+bar").isMetaSubtype()).isFalse();
 		assertBoolean(contentType("text/*").isMetaSubtype()).isTrue();
 		assertBoolean(new ContentType((String)null).isMetaSubtype()).isTrue();
 	}
 
-	@Test
-	public void a07_match() {
+	@Test void a07_match() {
 		assertInteger(contentType("text/foo").match(MediaType.of("text/foo"),true)).is(100000);
 		assertInteger(new ContentType((String)null).match(MediaType.of("text/foo"),true)).is(0);
 	}
 
-	@Test
-	public void a08_getParameters() {
+	@Test void a08_getParameters() {
 		assertObject(contentType("text/foo;x=1;y=2").getParameters()).asJson().is("[{name:'x',value:'1'},{name:'y',value:'2'}]");
 		assertObject(new ContentType((String)null).getParameters()).asJson().is("[]");
 	}
 
-	@Test
-	public void a09_getParameter() {
+	@Test void a09_getParameter() {
 		assertString(contentType("text/foo;x=1;y=2").getParameter("x")).is("1");
 		assertString(contentType("text/foo;x=1;y=2").getParameter("z")).isNull();
 		assertString(contentType("text/foo;x=1;y=2").getParameter(null)).isNull();

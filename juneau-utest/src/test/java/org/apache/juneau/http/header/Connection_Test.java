@@ -15,21 +15,19 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Connection_Test {
+class Connection_Test extends SimpleTestBase {
 
 	private static final String HEADER = "Connection";
 	private static final String VALUE = "foo";
@@ -47,8 +45,7 @@ public class Connection_Test {
 	// Method tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient c = client().build();
 
 		// Normal usage.
@@ -63,8 +60,7 @@ public class Connection_Test {
 		c.get().header(connection(()->null)).run().assertContent("Keep-Alive");
 	}
 
-	@Test
-	public void a02_other() {
+	@Test void a02_other() {
 		assertTrue(connection("Keep-Alive").isKeepAlive());
 		assertTrue(connection("keep-alive").isKeepAlive());
 		assertFalse(connection("foo").isKeepAlive());

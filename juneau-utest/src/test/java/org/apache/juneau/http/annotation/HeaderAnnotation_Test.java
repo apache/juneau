@@ -14,14 +14,11 @@ package org.apache.juneau.http.annotation;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.oapi.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class HeaderAnnotation_Test {
+class HeaderAnnotation_Test extends SimpleTestBase {
 
 	private static final String CNAME = HeaderAnnotation_Test.class.getName();
 
@@ -53,8 +50,7 @@ public class HeaderAnnotation_Test {
 		.value("value")
 		.build();
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		assertObject(a1).asJson().isMatches(""
 			+ "{"
 				+ "def:'def',"
@@ -70,8 +66,7 @@ public class HeaderAnnotation_Test {
 		);
 	}
 
-	@Test
-	public void a02_testEquivalency() {
+	@Test void a02_testEquivalency() {
 		assertObject(a1).is(a2);
 		assertInteger(a1.hashCode()).is(a2.hashCode()).isNotAny(0,-1);
 	}
@@ -80,8 +75,7 @@ public class HeaderAnnotation_Test {
 	// PropertyStore equivalency.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void b01_testEquivalencyInPropertyStores() {
+	@Test void b01_testEquivalencyInPropertyStores() {
 		BeanContext bc1 = BeanContext.create().annotations(a1).build();
 		BeanContext bc2 = BeanContext.create().annotations(a2).build();
 		assertSame(bc1, bc2);
@@ -100,8 +94,7 @@ public class HeaderAnnotation_Test {
 		public void m2() {}  // NOSONAR
 	}
 
-	@Test
-	public void c01_otherMethods() throws Exception {
+	@Test void c01_otherMethods() throws Exception {
 		Header c1 = HeaderAnnotation.create(C1.class).on(C2.class).build();
 		Header c2 = HeaderAnnotation.create("a").on("b").build();
 		Header c3 = HeaderAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
@@ -143,8 +136,7 @@ public class HeaderAnnotation_Test {
 	public static class D2 {}
 	Header d2 = D2.class.getAnnotationsByType(Header.class)[0];
 
-	@Test
-	public void d01_comparisonWithDeclarativeAnnotations() {
+	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertObject(d1).is(d2).is(a1);
 		assertInteger(d1.hashCode()).is(d2.hashCode()).is(a1.hashCode()).isNotAny(0,-1);
 	}

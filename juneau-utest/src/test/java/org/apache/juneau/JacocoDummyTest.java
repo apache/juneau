@@ -13,17 +13,14 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.lang.reflect.*;
 
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class JacocoDummyTest {
+class JacocoDummyTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// Dummy code to add test coverage in Jacoco.

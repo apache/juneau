@@ -13,15 +13,12 @@
 package org.apache.juneau.http.annotation;
 
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-import org.junit.*;
+class ParameterType_Test extends SimpleTestBase {
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ParameterType_Test {
-
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		assertNotThrown(ParameterType::new);
 	}
 }

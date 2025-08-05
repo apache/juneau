@@ -19,15 +19,15 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
-import org.junit.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests {@link IOUtils}.
  */
-public class IOUtilsTest {
+class IOUtilsTest extends SimpleTestBase {
 
-    @Test
-    public void testReadPath() throws IOException {
+    @Test void testReadPath() throws IOException {
         var p = new Properties();
         p.load(new StringReader(IOUtils.read(Paths.get("src/test/resources/files/Test3.properties"))));
         assertEquals("files/Test3.properties", p.get("file"));

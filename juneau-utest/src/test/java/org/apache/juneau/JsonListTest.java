@@ -15,15 +15,12 @@ package org.apache.juneau;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class JsonListTest {
+class JsonListTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// testBasic

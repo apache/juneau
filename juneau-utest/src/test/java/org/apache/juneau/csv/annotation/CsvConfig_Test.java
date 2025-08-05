@@ -13,18 +13,15 @@
 package org.apache.juneau.csv.annotation;
 
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.reflect.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests the @CsvConfig annotation.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class CsvConfig_Test {
+class CsvConfig_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotation with no values.
@@ -34,14 +31,12 @@ public class CsvConfig_Test {
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test
-	public void defaultsSerializer() {
+	@Test void defaultsSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(b.getAnnotationList());
 		assertNotThrown(()->CsvSerializer.create().apply(al).build());
 	}
 
-	@Test
-	public void defaultsParser() {
+	@Test void defaultsParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(b.getAnnotationList());
 		assertNotThrown(()->CsvParser.create().apply(al).build());
 	}
@@ -53,14 +48,12 @@ public class CsvConfig_Test {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test
-	public void noAnnotationSerializer() {
+	@Test void noAnnotationSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(b.getAnnotationList());
 		assertNotThrown(()->CsvSerializer.create().apply(al).build());
 	}
 
-	@Test
-	public void noAnnotationParser() {
+	@Test void noAnnotationParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(b.getAnnotationList());
 		assertNotThrown(()->CsvParser.create().apply(al).build());
 	}

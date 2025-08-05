@@ -15,16 +15,14 @@ package org.apache.juneau.dto.atom;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.atom.AtomBuilder.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.net.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.atom.*;
 import org.apache.juneau.xml.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class AtomTest {
+class AtomTest extends SimpleTestBase {
 
 	public Feed createFeed() throws Exception {
 		return
@@ -60,8 +58,7 @@ public class AtomTest {
 			);
 	}
 
-	@Test
-	public void testNormal() throws Exception {
+	@Test void testNormal() throws Exception {
 		XmlSerializer s;
 		XmlParser p = XmlParser.DEFAULT;
 		String r;
@@ -105,8 +102,7 @@ public class AtomTest {
 		assertObject(f).isSameJsonAs(f2);
 	}
 
-	@Test
-	public void testWithNamespaces() throws Exception {
+	@Test void testWithNamespaces() throws Exception {
 		XmlSerializer s;
 		XmlParser p = XmlParser.DEFAULT;
 		String r;
@@ -150,8 +146,7 @@ public class AtomTest {
 		assertObject(f).isSameJsonAs(f2);
 	}
 
-	@Test
-	public void testWithNamespacesWithAtomAsDefault() throws Exception {
+	@Test void testWithNamespacesWithAtomAsDefault() throws Exception {
 		XmlSerializer s;
 		XmlParser p = XmlParser.DEFAULT;
 		String r;
@@ -195,8 +190,7 @@ public class AtomTest {
 		assertObject(f).isSameJsonAs(f2);
 	}
 
-	@Test
-	public void testToString() throws Exception {
+	@Test void testToString() throws Exception {
 		XmlParser p = XmlParser.DEFAULT;
 		String r;
 		Feed f = createFeed(), f2;

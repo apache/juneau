@@ -14,13 +14,10 @@ package org.apache.juneau.annotation;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class MarshalledAnnotation_Test {
+class MarshalledAnnotation_Test extends SimpleTestBase {
 
 	private static final String CNAME = MarshalledAnnotation_Test.class.getName();
 
@@ -46,8 +43,7 @@ public class MarshalledAnnotation_Test {
 		.onClass(X1.class)
 		.build();
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
                 + "description:['description'],"
@@ -59,8 +55,7 @@ public class MarshalledAnnotation_Test {
 		);
 	}
 
-	@Test
-	public void a02_testEquivalency() {
+	@Test void a02_testEquivalency() {
 		assertObject(a1).is(a2);
 		assertInteger(a1.hashCode()).is(a2.hashCode()).isNotAny(0,-1);
 	}
@@ -69,8 +64,7 @@ public class MarshalledAnnotation_Test {
 	// PropertyStore equivalency.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void b01_testEquivalencyInPropertyStores() {
+	@Test void b01_testEquivalencyInPropertyStores() {
 		BeanContext bc1 = BeanContext.create().annotations(a1).build();
 		BeanContext bc2 = BeanContext.create().annotations(a2).build();
 		assertSame(bc1, bc2);
@@ -89,8 +83,7 @@ public class MarshalledAnnotation_Test {
 		public void m2() {}  // NOSONAR
 	}
 
-	@Test
-	public void c01_otherMethods() {
+	@Test void c01_otherMethods() {
 		Marshalled c1 = MarshalledAnnotation.create(C1.class).on(C2.class).build();
 		Marshalled c2 = MarshalledAnnotation.create("a").on("b").build();
 
@@ -122,8 +115,7 @@ public class MarshalledAnnotation_Test {
 	public static class D2 {}
 	Marshalled d2 = D2.class.getAnnotationsByType(Marshalled.class)[0];
 
-	@Test
-	public void d01_comparisonWithDeclarativeAnnotations() {
+	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertObject(d1).is(d2).is(a1);
 		assertInteger(d1.hashCode()).is(d2.hashCode()).is(a1.hashCode()).isNotAny(0,-1);
 	}

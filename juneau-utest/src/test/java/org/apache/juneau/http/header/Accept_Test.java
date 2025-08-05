@@ -16,8 +16,6 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.function.*;
 
@@ -28,13 +26,12 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests: {@link Accept}
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class Accept_Test {
+class Accept_Test extends SimpleTestBase {
 
 	private static final String HEADER = "Accept";
 	private static final String VALUE = "foo";
@@ -52,8 +49,7 @@ public class Accept_Test {
 	// Method tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient c = client().build();
 
 		// Normal usage.
@@ -68,8 +64,7 @@ public class Accept_Test {
 		c.get().header(accept(()->null)).run().assertContent().isEmpty();
 	}
 
-	@Test
-	public void a02_asRanges() {
+	@Test void a02_asRanges() {
 		assertObject(new Accept((String)null).asMediaRanges().orElse(null)).isNull();
 		assertInteger(new Accept((String)null).match(alist(MediaType.JSON))).is(-1);
 		assertObject(new Accept((String)null).getRange(0)).isNull();

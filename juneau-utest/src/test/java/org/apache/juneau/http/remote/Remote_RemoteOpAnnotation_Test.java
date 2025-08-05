@@ -14,20 +14,18 @@ package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.concurrent.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Remote_RemoteOpAnnotation_Test {
+class Remote_RemoteOpAnnotation_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Inferred methods/paths
@@ -62,8 +60,7 @@ public class Remote_RemoteOpAnnotation_Test {
 		String postX2();
 	}
 
-	@Test
-	public void a01_inferredMethodsAndPaths() {
+	@Test void a01_inferredMethodsAndPaths() {
 		A1 t = remote(A.class,A1.class);
 		assertEquals("foo",t.doGet());
 		assertEquals("foo",t.doGET());
@@ -81,8 +78,7 @@ public class Remote_RemoteOpAnnotation_Test {
 		Future<String> postX2();
 	}
 
-	@Test
-	public void a02_inferredMethodsAndPaths_futures() throws Exception {
+	@Test void a02_inferredMethodsAndPaths_futures() throws Exception {
 		A2 t = remote(A.class,A2.class);
 		assertEquals("foo",t.doGet().get());
 		assertEquals("foo",t.doGET().get());
@@ -100,8 +96,7 @@ public class Remote_RemoteOpAnnotation_Test {
 		CompletableFuture<String> postX2();
 	}
 
-	@Test
-	public void a03_inferredMethodsAndPaths_completableFutures() throws Exception {
+	@Test void a03_inferredMethodsAndPaths_completableFutures() throws Exception {
 		A3 t = remote(A.class,A3.class);
 		assertEquals("foo",t.doGet().get());
 		assertEquals("foo",t.doGET().get());
@@ -141,8 +136,7 @@ public class Remote_RemoteOpAnnotation_Test {
 		CompletableFuture<InputStream> x15();
 	}
 
-	@Test
-	public void b01_returnTypes() throws Exception {
+	@Test void b01_returnTypes() throws Exception {
 		B1 x = remote(B.class,B1.class);
 		x.x1();
 		assertEquals("foo",x.x2());
@@ -189,8 +183,7 @@ public class Remote_RemoteOpAnnotation_Test {
 		CompletableFuture<InputStream> postX12(@Content String foo);
 	}
 
-	@Test
-	public void c01_returnTypes_json() throws Exception {
+	@Test void c01_returnTypes_json() throws Exception {
 		C1 x = MockRestClient.buildJson(C.class).getRemote(C1.class);
 		assertEquals("foo",x.postX1("foo"));
 		assertEquals("'foo'",read(x.postX2("foo").getEntity().getContent()));
@@ -234,8 +227,7 @@ public class Remote_RemoteOpAnnotation_Test {
 		CompletableFuture<InputStream> postX12(@Content String foo);
 	}
 
-	@Test
-	public void d01_returnTypes_partSerialization() throws Exception {
+	@Test void d01_returnTypes_partSerialization() throws Exception {
 		D1 x = MockRestClient.create(D.class).openApi().build().getRemote(D1.class);
 		assertEquals("foo",x.postX1("foo"));
 		assertEquals("foo",read(x.postX2("foo").getEntity().getContent()));

@@ -16,32 +16,29 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.config.store.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ConfigBuilderTest {
+class ConfigBuilderTest extends SimpleTestBase {
 
 	private static File tempDir;
 	private static String TEMP_DIR;
 
-	@BeforeClass
-	public static void setup() {
+	@BeforeAll
+	static void setup() {
 		tempDir = new File(System.getProperty("java.io.tmpdir"), random(12));
 		TEMP_DIR = tempDir.getAbsolutePath();
 	}
 
-	@AfterClass
-	public static void teardown() {
+	@AfterAll
+	static void teardown() {
 		delete(tempDir);
 	}
 
-	@Test
-	public void testGet_LONGRUNNING() throws Exception {
+	@Test void testGet_LONGRUNNING() throws Exception {
 		File f;
 		FileStore cfs = FileStore.create().directory(TEMP_DIR).enableWatcher().watcherSensitivity(WatcherSensitivity.HIGH).build();
 		Config.Builder cb = Config.create().store(cfs).name("TestGet.cfg");

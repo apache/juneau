@@ -14,21 +14,17 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-import org.junit.*;
+class ContentType_Other_Test extends SimpleTestBase {
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ContentType_Other_Test {
-
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		ContentType ct = contentType("application/json");
 		assertEquals("application/json", ct.getValue());
 	}
 
-	@Test
-	public void a02_getParameter() {
+	@Test void a02_getParameter() {
 		ContentType ct = contentType("application/json;charset=foo");
 		assertEquals("foo", ct.getParameter("charset"));
 		ct = contentType(" application/json ; charset = foo ");

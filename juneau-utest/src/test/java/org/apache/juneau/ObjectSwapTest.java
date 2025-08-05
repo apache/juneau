@@ -13,24 +13,20 @@
 package org.apache.juneau;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ObjectSwapTest {
+class ObjectSwapTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// Test same type
 	// If you define a ObjectSwap<String,String> filter, then it should be invoked on all strings.
 	//====================================================================================================
-	@Test
-	public void testSameType() throws Exception {
+	@Test void testSameType() throws Exception {
 		JsonSerializer s = JsonSerializer.create().json5().swaps(ASwap.class).build();
 		JsonParser p = JsonParser.create().swaps(ASwap.class).build();
 		String r;

@@ -14,15 +14,12 @@ package org.apache.juneau;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.pojos.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings("rawtypes")
-@FixMethodOrder(NAME_ASCENDING)
-public class BeanContextTest {
+class BeanContextTest extends SimpleTestBase {
 
 	BeanContext bc = BeanContext.DEFAULT;
 	BeanSession bs = BeanContext.DEFAULT_SESSION;
@@ -32,8 +29,7 @@ public class BeanContextTest {
 		void setF1(int f1);
 	}
 
-	@Test
-	public void a01_normalCachableBean() throws ExecutableException {
+	@Test void a01_normalCachableBean() throws ExecutableException {
 		ClassMeta cm1 = bc.getClassMeta(A1.class), cm2 = bc.getClassMeta(A1.class);
 		assertSame(cm1, cm2);
 	}
@@ -42,23 +38,20 @@ public class BeanContextTest {
 		void foo(int x);
 	}
 
-	@Test
-	public void a02_lambdaExpressionsNotCached() throws ExecutableException {
+	@Test void a02_lambdaExpressionsNotCached() throws ExecutableException {
 		BeanContext bc2 = BeanContext.DEFAULT;
 		A2 fi = System.out::println;
 		ClassMeta cm1 = bc2.getClassMeta(fi.getClass()), cm2 = bc2.getClassMeta(fi.getClass());
 		assertNotSame(cm1, cm2);
 	}
 
-	@Test
-	public void a03_proxiesNotCached() throws ExecutableException {
+	@Test void a03_proxiesNotCached() throws ExecutableException {
 		A1 a1 = bs.getBeanMeta(A1.class).newBean(null);
 		ClassMeta cm1 = bc.getClassMeta(a1.getClass()), cm2 = bc.getClassMeta(a1.getClass());
 		assertNotSame(cm1, cm2);
 	}
 
-	@Test
-	public void b01_ignoreUnknownEnumValues() {
+	@Test void b01_ignoreUnknownEnumValues() {
 		JsonParser p1 = JsonParser.DEFAULT;
 		assertThrown(() -> p1.parse("'UNKNOWN'", TestEnum.class)).asMessage().isContains("Could not resolve enum value 'UNKNOWN' on class 'org.apache.juneau.testutils.pojos.TestEnum'");
 

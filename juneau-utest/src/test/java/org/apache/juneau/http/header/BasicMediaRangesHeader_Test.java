@@ -16,8 +16,6 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.function.*;
 
@@ -28,10 +26,9 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class BasicMediaRangesHeader_Test {
+class BasicMediaRangesHeader_Test extends SimpleTestBase {
 
 	private static final String HEADER = "Foo";
 	private static final String VALUE = "foo/bar;x=1";
@@ -49,8 +46,7 @@ public class BasicMediaRangesHeader_Test {
 	// Method tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient c = client().build();
 
 		// Normal usage.
@@ -70,8 +66,7 @@ public class BasicMediaRangesHeader_Test {
 		assertThrown(()->mediaRangesHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
 	}
 
-	@Test
-	public void a02_match() {
+	@Test void a02_match() {
 		assertInteger(accept("text/foo").match(alist(MediaType.of("text/foo")))).is(0);
 		assertInteger(accept("text/foo").match(alist(MediaType.of("text/bar")))).is(-1);
 		assertInteger(new Accept((String)null).match(alist(MediaType.of("text/bar")))).is(-1);
@@ -79,24 +74,21 @@ public class BasicMediaRangesHeader_Test {
 		assertInteger(accept("text/foo").match(null)).is(-1);
 	}
 
-	@Test
-	public void a03_getRange() {
+	@Test void a03_getRange() {
 		assertString(accept("text/foo").getRange(0)).is("text/foo");
 		assertString(accept("text/foo").getRange(1)).isNull();
 		assertString(accept("text/foo").getRange(-1)).isNull();
 		assertString(new Accept((String)null).getRange(0)).isNull();
 	}
 
-	@Test
-	public void a04_hasSubtypePart() {
+	@Test void a04_hasSubtypePart() {
 		assertBoolean(accept("text/foo").hasSubtypePart("foo")).isTrue();
 		assertBoolean(accept("text/foo").hasSubtypePart("bar")).isFalse();
 		assertBoolean(accept("text/foo").hasSubtypePart(null)).isFalse();
 		assertBoolean(new Accept((String)null).hasSubtypePart("foo")).isFalse();
 	}
 
-	@Test
-	public void a05_getRanges() {
+	@Test void a05_getRanges() {
 		assertObject(accept("text/foo,text/bar").toMediaRanges().toList()).asJson().is("['text/foo','text/bar']");
 		assertObject(new Accept((String)null).toMediaRanges()).isNull();
 	}

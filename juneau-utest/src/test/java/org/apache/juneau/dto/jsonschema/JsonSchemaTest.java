@@ -13,19 +13,16 @@
 package org.apache.juneau.dto.jsonschema;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.net.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.jsonschema.*;
 import org.apache.juneau.json.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class JsonSchemaTest {
+public class JsonSchemaTest extends SimpleTestBase {
 
-	@Test
-	public void testSchema1() throws Exception {
+	@Test void testSchema1() throws Exception {
 		JsonSerializer s = JsonSerializer.create().json5().ws().build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
@@ -118,8 +115,7 @@ public class JsonSchemaTest {
 		assertEquals(expected, r);
 	}
 
-	@Test
-	public void testSchema2() throws Exception {
+	@Test void testSchema2() throws Exception {
 		JsonSerializer s = JsonSerializer.create().json5().ws().build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
@@ -155,8 +151,7 @@ public class JsonSchemaTest {
 		assertEquals(expected, r);
 	}
 
-	@Test
-	public void testToString() throws Exception {
+	@Test void testToString() throws Exception {
 		JsonSerializer s = JsonSerializer.create().json5().ws().build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;

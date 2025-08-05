@@ -14,8 +14,6 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 import java.util.function.*;
 
@@ -23,13 +21,12 @@ import org.apache.juneau.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests the @HtmlConfig annotation.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class HtmlConfigAnnotation_Test {
+class HtmlConfigAnnotation_Test extends SimpleTestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
@@ -55,8 +52,7 @@ public class HtmlConfigAnnotation_Test {
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test
-	public void basicSerializer() {
+	@Test void basicSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
@@ -67,8 +63,7 @@ public class HtmlConfigAnnotation_Test {
 		check("TO_STRING", x.getUriAnchorText());
 	}
 
-	@Test
-	public void basicParser() {
+	@Test void basicParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		assertNotThrown(()->HtmlParser.create().apply(al).build().createSession());
 	}
@@ -81,8 +76,7 @@ public class HtmlConfigAnnotation_Test {
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test
-	public void defaultsSerializer() {
+	@Test void defaultsSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
@@ -93,8 +87,7 @@ public class HtmlConfigAnnotation_Test {
 		check("TO_STRING", x.getUriAnchorText());
 	}
 
-	@Test
-	public void defaultsParser() {
+	@Test void defaultsParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		assertNotThrown(()->HtmlParser.create().apply(al).build().createSession());
 	}
@@ -106,8 +99,7 @@ public class HtmlConfigAnnotation_Test {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test
-	public void noAnnotationSerializer() {
+	@Test void noAnnotationSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
@@ -118,8 +110,7 @@ public class HtmlConfigAnnotation_Test {
 		check("TO_STRING", x.getUriAnchorText());
 	}
 
-	@Test
-	public void noAnnotationParser() {
+	@Test void noAnnotationParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		assertNotThrown(()->HtmlParser.create().apply(al).build().createSession());
 	}

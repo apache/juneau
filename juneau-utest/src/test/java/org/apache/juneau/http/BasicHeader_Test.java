@@ -15,20 +15,16 @@ package org.apache.juneau.http;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class BasicHeader_Test {
+class BasicHeader_Test extends SimpleTestBase {
 
-	@Test
-	public void a01_ofPair() {
+	@Test void a01_ofPair() {
 		Header x = stringHeader("Foo:bar");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar", x.getValue());
@@ -48,8 +44,7 @@ public class BasicHeader_Test {
 		assertNull(stringHeader((String)null));
 	}
 
-	@Test
-	public void a02_of() {
+	@Test void a02_of() {
 		BasicHeader x;
 		x = header("Foo","bar");
 		assertObject(x).asJson().is("'Foo: bar'");
@@ -57,22 +52,19 @@ public class BasicHeader_Test {
 		assertObject(x).asJson().is("'Foo: bar'");
 	}
 
-	@Test
-	public void a05_assertions() {
+	@Test void a05_assertions() {
 		BasicHeader x = header("X1","1");
 		x.assertName().is("X1").assertStringValue().is("1");
 	}
 
-	@Test
-	public void a07_eqIC() {
+	@Test void a07_eqIC() {
 		BasicHeader x = header("X1","1");
 		assertTrue(x.equalsIgnoreCase("1"));
 		assertFalse(x.equalsIgnoreCase("2"));
 		assertFalse(x.equalsIgnoreCase(null));
 	}
 
-	@Test
-	public void a08_getElements() {
+	@Test void a08_getElements() {
 		Value<Integer> m = Value.of(1);
 		Header h1 = header("X1","1");
 		Header h2 = header("X2",()->m);
@@ -100,8 +92,7 @@ public class BasicHeader_Test {
 	}
 
 	@SuppressWarnings("unlikely-arg-type")
-	@Test
-	public void a09_equals() {
+	@Test void a09_equals() {
 		BasicHeader h1 = header("Foo","bar"), h2 = header("Foo","bar"), h3 = header("Bar","bar"), h4 = header("Foo","baz");
 		assertInteger(h1.hashCode()).isExists();
 		assertBoolean(h1.equals(h2)).isTrue();

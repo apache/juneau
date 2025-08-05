@@ -15,20 +15,18 @@ package org.apache.juneau.http.remote;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Remote_ResponseAnnotation_Test {
+class Remote_ResponseAnnotation_Test extends SimpleTestBase {
 
 	public static class ABean {
 		public int f;
@@ -71,8 +69,7 @@ public class Remote_ResponseAnnotation_Test {
 		@RemoteOp A1a get();
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		A1a x = remote(A.class,A1b.class).get();
 		assertEquals("foo",read(x.getContent()));
 		assertEquals("x",x.getHeader());
@@ -89,8 +86,7 @@ public class Remote_ResponseAnnotation_Test {
 		@RemoteOp A2a get();
 	}
 
-	@Test
-	public void a02_unannotatedMethod() throws Exception {
+	@Test void a02_unannotatedMethod() throws Exception {
 		A2a x = remote(A.class,A2b.class).get();
 		assertEquals("foo",read(x.getContent()));
 	}
@@ -113,8 +109,7 @@ public class Remote_ResponseAnnotation_Test {
 		@RemoteOp A3a get();
 	}
 
-	@Test
-	public void a03_beanBody() {
+	@Test void a03_beanBody() {
 		A3a x = client(A3.class).json().build().getRemote(A3b.class).get();
 		assertEquals("{f:1}",x.getContent().toString());
 

@@ -14,12 +14,10 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpMethod.*;
-import static org.junit.runners.MethodSorters.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-import org.junit.*;
-
-@FixMethodOrder(NAME_ASCENDING)
-public class HttpMethod_Test {
+class HttpMethod_Test extends SimpleTestBase {
 
 	@Test
 	public void a01_hasContent() {

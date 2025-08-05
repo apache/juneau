@@ -13,24 +13,20 @@
 package org.apache.juneau;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.Map.*;
 import org.apache.juneau.annotation.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests various error conditions when defining beans.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class BeanMapErrorsTest {
+class BeanMapErrorsTest extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Beanp(name) on method not in @Bean(properties)
 	// Shouldn't be found in keySet()/entrySet() but should be found in containsKey()/get()
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test
-	public void beanPropertyMethodNotInBeanProperties() {
+	@Test void beanPropertyMethodNotInBeanProperties() {
 		BeanContext bc = BeanContext.DEFAULT;
 
 		BeanMap<A1> bm = bc.newBeanMap(A1.class);
@@ -57,8 +53,7 @@ public class BeanMapErrorsTest {
 		}
 	}
 
-	@Test
-	public void beanPropertyMethodNotInBeanProperties_usingConfig() {
+	@Test void beanPropertyMethodNotInBeanProperties_usingConfig() {
 		BeanContext bc = BeanContext.create().applyAnnotations(B1Config.class).build();
 
 		BeanMap<B1> bm = bc.newBeanMap(B1.class);
@@ -93,8 +88,7 @@ public class BeanMapErrorsTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Beanp(name) on field not in @Bean(properties)
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test
-	public void beanPropertyFieldNotInBeanProperties() {
+	@Test void beanPropertyFieldNotInBeanProperties() {
 		BeanContext bc = BeanContext.DEFAULT;
 
 		BeanMap<A2> bm = bc.newBeanMap(A2.class);
@@ -114,8 +108,7 @@ public class BeanMapErrorsTest {
 		public int f2 = -1;
 	}
 
-	@Test
-	public void beanPropertyFieldNotInBeanProperties_usingBeanConfig() {
+	@Test void beanPropertyFieldNotInBeanProperties_usingBeanConfig() {
 		BeanContext bc = BeanContext.create().applyAnnotations(B2Config.class).build();
 
 		BeanMap<B2> bm = bc.newBeanMap(B2.class);

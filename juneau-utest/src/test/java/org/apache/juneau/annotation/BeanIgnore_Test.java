@@ -13,13 +13,11 @@
 package org.apache.juneau.annotation;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class BeanIgnore_Test {
+class BeanIgnore_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test @BeanIgnore on properties
@@ -40,8 +38,7 @@ public class BeanIgnore_Test {
 		@BeanIgnore public String d = "d";
 	}
 
-	@Test
-	public void testBeanIgnoreOnProperties() {
+	@Test void testBeanIgnoreOnProperties() {
 		assertObject(new A()).asJson().is("{c:'c',a:'a'}");
 	}
 
@@ -63,8 +60,7 @@ public class BeanIgnore_Test {
 		public String d = "d";
 	}
 
-	@Test
-	public void testBeanIgnoreOnProperties_usingConfig() {
+	@Test void testBeanIgnoreOnProperties_usingConfig() {
 		assertObject(new Ac()).asString(Json5Serializer.DEFAULT.copy().applyAnnotations(AcConfig.class).build()).is("{c:'c',a:'a'}");
 	}
 
@@ -91,8 +87,7 @@ public class BeanIgnore_Test {
 		}
 	}
 
-	@Test
-	public void testBeanIgnoreOnBean() {
+	@Test void testBeanIgnoreOnBean() {
 		assertObject(new B()).asJson().is("{f2:2,f3:'xxx',f4:'xxx'}");
 	}
 
@@ -117,8 +112,7 @@ public class BeanIgnore_Test {
 		}
 	}
 
-	@Test
-	public void testBeanIgnoreOnBean_usingConfig() {
+	@Test void testBeanIgnoreOnBean_usingConfig() {
 		assertObject(new Bc()).asString(Json5Serializer.DEFAULT.copy().applyAnnotations(B1cConfig.class).build()).is("{f2:2,f3:'xxx',f4:'xxx'}");
 	}
 }

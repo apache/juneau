@@ -17,22 +17,20 @@ import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.time.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RetryAfter_Test {
+class RetryAfter_Test extends SimpleTestBase {
 
 	private static final String HEADER = "Retry-After";
 	private static final String VALUE1 = "123";
@@ -52,8 +50,7 @@ public class RetryAfter_Test {
 	// Method tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient c = client().build();
 
 		// Normal usage.
@@ -74,13 +71,11 @@ public class RetryAfter_Test {
 		c.get().header(retryAfter(()->null)).run().assertContent().isEmpty();
 	}
 
-	@Test
-	public void a02_asZonedDateTime() {
+	@Test void a02_asZonedDateTime() {
 		assertObject(retryAfter(PARSED2).asZonedDateTime().get().toString()).is("1994-10-29T19:43:31Z");
 	}
 
-	@Test
-	public void a03_asInt() {
+	@Test void a03_asInt() {
 		assertOptional(retryAfter(123).asInteger()).is(123);
 		assertOptional(new RetryAfter((String)null).asInteger()).isNull();
 		assertOptional(retryAfter(()->null).asInteger()).isNull();

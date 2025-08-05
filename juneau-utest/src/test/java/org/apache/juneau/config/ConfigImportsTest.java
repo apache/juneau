@@ -15,24 +15,21 @@ package org.apache.juneau.config;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Validates aspects of config imports.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class ConfigImportsTest {
+class ConfigImportsTest extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Value inheritance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void oneSimpleImport() throws Exception {
+	@Test void oneSimpleImport() throws Exception {
 		MemoryStore ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1");
 		ms.write("B", "", "<A>");
@@ -48,8 +45,7 @@ public class ConfigImportsTest {
 		assertEquals("x = 2\n", ms.read("B"));
 	}
 
-	@Test
-	public void twoSimpleImports() throws Exception {
+	@Test void twoSimpleImports() throws Exception {
 		MemoryStore ms = MemoryStore.create().build();
 		ms.write("A1", "", "x=1");
 		ms.write("A2", "", "y=2");
@@ -66,8 +62,7 @@ public class ConfigImportsTest {
 		assertEquals("x = 3\ny = 4\n", ms.read("B"));
 	}
 
-	@Test
-	public void nestedImports() throws Exception {
+	@Test void nestedImports() throws Exception {
 		MemoryStore ms = MemoryStore.create().build();
 		ms.write("A1", "", "x=1");
 		ms.write("A2", "", "<A1>\ny=2");
@@ -84,8 +79,7 @@ public class ConfigImportsTest {
 		assertEquals("x = 3\ny = 4\n", ms.read("B"));
 	}
 
-	@Test
-	public void nestedImportsLoop() {
+	@Test void nestedImportsLoop() {
 		// This shouldn't blow up.
 		MemoryStore ms = MemoryStore.create().build();
 		ms.write("A1", "", "<A2>\nx=1");
@@ -94,16 +88,14 @@ public class ConfigImportsTest {
 		assertThrown(()->Config.create("B").store(ms).build()).isExists();
 	}
 
-	@Test
-	public void importNotFound() {
+	@Test void importNotFound() {
 		MemoryStore ms = MemoryStore.create().build();
 		ms.write("B", "", "<A>\nx=1");
 		Config c = Config.create("B").store(ms).build();
 		assertEquals("1", c.get("x").get());
 	}
 
-	@Test
-	public void noOverwriteOnImports() {
+	@Test void noOverwriteOnImports() {
 		MemoryStore ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1");
 		ms.write("B", "", "<A>");
@@ -114,8 +106,7 @@ public class ConfigImportsTest {
 		assertEquals("1", Config.create("A").store(ms).build().get("x").get());
 	}
 
-	@Test
-	public void overlappingSections() {
+	@Test void overlappingSections() {
 		MemoryStore ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[A]\na2=2");
@@ -124,8 +115,7 @@ public class ConfigImportsTest {
 		assertEquals("2", c.get("A/a2").get());
 	}
 
-	@Test
-	public void overlappingSectionsImportAtEnd() {
+	@Test void overlappingSectionsImportAtEnd() {
 		MemoryStore ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "[A]\na2=2\n<A>");
@@ -134,8 +124,7 @@ public class ConfigImportsTest {
 		assertEquals("2", c.get("A/a2").get());
 	}
 
-	@Test
-	public void overlappingSectionsAndValues() {
+	@Test void overlappingSectionsAndValues() {
 		MemoryStore ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[A]\na1=2");
@@ -182,8 +171,7 @@ public class ConfigImportsTest {
 		}
 	}
 
-	@Test
-	public void testUpdateOnParent() {
+	@Test void testUpdateOnParent() {
 		MemoryStore ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
@@ -223,8 +211,7 @@ public class ConfigImportsTest {
 		assertEquals("2", cb.get("B/b1").get());
 	}
 
-	@Test
-	public void testUpdateOnGrandParent() {
+	@Test void testUpdateOnGrandParent() {
 		MemoryStore ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
@@ -271,8 +258,7 @@ public class ConfigImportsTest {
 		assertEquals("3", cc.get("C/c1").get());
 	}
 
-	@Test
-	public void testUpdateOnParentSameSection() {
+	@Test void testUpdateOnParentSameSection() {
 		MemoryStore ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
@@ -309,8 +295,7 @@ public class ConfigImportsTest {
 		assertEquals("2", cb.get("A/b1").get());
 	}
 
-	@Test
-	public void testUpdateOnParentSameSectionSameKey() {
+	@Test void testUpdateOnParentSameSectionSameKey() {
 		MemoryStore ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
@@ -331,8 +316,7 @@ public class ConfigImportsTest {
 		assertEquals("2", cb.get("A/a1").get());
 	}
 
-	@Test
-	public void testUpdateOnGrandParentSameSection() {
+	@Test void testUpdateOnGrandParentSameSection() {
 		MemoryStore ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
@@ -360,8 +344,7 @@ public class ConfigImportsTest {
 	// Listeners and dynamically modifying imports
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void testUpdateOnParentDynamic() {
+	@Test void testUpdateOnParentDynamic() {
 		MemoryStore ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\ny=1\n[A]\na1=1");

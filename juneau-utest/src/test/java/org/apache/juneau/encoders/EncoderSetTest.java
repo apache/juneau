@@ -13,18 +13,15 @@
 package org.apache.juneau.encoders;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-import org.junit.*;
-
-@FixMethodOrder(NAME_ASCENDING)
-public class EncoderSetTest {
+class EncoderSetTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// Test matching
 	//====================================================================================================
-	@Test
-	public void testEncoderGroupMatching() {
+	@Test void testEncoderGroupMatching() {
 
 		EncoderSet s = EncoderSet.create().add(Encoder1.class, Encoder2.class, Encoder3.class).build();
 		assertObject(s.getEncoder("gzip1")).isType(Encoder1.class);
@@ -62,8 +59,7 @@ public class EncoderSetTest {
 	//====================================================================================================
 	// Test inheritence
 	//====================================================================================================
-	@Test
-	public void testInheritence() {
+	@Test void testInheritence() {
 		EncoderSet.Builder sb = null;
 		EncoderSet s = null;
 

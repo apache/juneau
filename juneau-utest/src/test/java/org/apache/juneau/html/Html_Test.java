@@ -14,8 +14,6 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -23,17 +21,15 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.testutils.pojos.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"rawtypes","serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class Html_Test {
+class Html_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Verifies that lists of maps/beans are converted to tables correctly.
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test
-	public void a01_testTables1() throws Exception {
+	@Test void a01_testTables1() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
 		Object[] t;
 		String html;
@@ -51,8 +47,7 @@ public class Html_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test URI_ANCHOR_SET options
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test
-	public void a02_testAnchorTextOptions() throws Exception {
+	@Test void a02_testAnchorTextOptions() throws Exception {
 		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders().uriResolution(UriResolution.NONE);
 		TestURI t = new TestURI();
 		String r;
@@ -219,8 +214,7 @@ public class Html_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test @Html.asPlainText annotation on classes and fields
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test
-	public void b01_testHtmlAnnotationAsPlainText() throws Exception {
+	@Test void b01_testHtmlAnnotationAsPlainText() throws Exception {
 		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
 		Object o = null;
 		String r;
@@ -248,8 +242,7 @@ public class Html_Test {
 		public String f1 = "<f1>";
 	}
 
-	@Test
-	public void b02_testHtmlAnnotationAsPlainText_usingConfig() throws Exception {
+	@Test void b02_testHtmlAnnotationAsPlainText_usingConfig() throws Exception {
 		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(B3Config.class).build();
 
 		Object o = null;
@@ -283,8 +276,7 @@ public class Html_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test @Html.asXml annotation on classes and fields
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test
-	public void c01_testHtmlAnnotationAsXml() throws Exception {
+	@Test void c01_testHtmlAnnotationAsXml() throws Exception {
 		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
 		Object o = null;
 		String r;
@@ -308,8 +300,7 @@ public class Html_Test {
 		public String f1 = "<f1>";
 	}
 
-	@Test
-	public void c02_testHtmlAnnotationAsXml_usingConfig() throws Exception {
+	@Test void c02_testHtmlAnnotationAsXml_usingConfig() throws Exception {
 		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(C3Config.class).build();
 		Object o = null;
 		String r;
@@ -337,8 +328,7 @@ public class Html_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test @Html.noTableHeaders
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test
-	public void d01_testNoTableHeaders() throws Exception {
+	@Test void d01_testNoTableHeaders() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
 		Object o = null;
 		String r;
@@ -353,8 +343,7 @@ public class Html_Test {
 	@Html(noTables=true, noTableHeaders=true)
 	public static class MyMap extends LinkedHashMap<String,String> {}
 
-	@Test
-	public void d02_testNoTableHeaders_usingConfig() throws Exception {
+	@Test void d02_testNoTableHeaders_usingConfig() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.copy().applyAnnotations(MyMap2Config.class).build();
 		Object o = null;
 		String r;
@@ -374,8 +363,7 @@ public class Html_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test @Html.noTableHeaders on beans
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test
-	public void d03_testNoTableHeadersOnBeans() throws Exception {
+	@Test void d03_testNoTableHeadersOnBeans() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
 		Object o = null;
 		String r;
@@ -391,8 +379,7 @@ public class Html_Test {
 		public int a=1,b=2,c=3;
 	}
 
-	@Test
-	public void d04_testNoTableHeadersOnBeans_usingConfig() throws Exception {
+	@Test void d04_testNoTableHeadersOnBeans_usingConfig() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.copy().applyAnnotations(MyBean2Config.class).build();
 		Object o = null;
 		String r;
@@ -410,8 +397,7 @@ public class Html_Test {
 		public int a=1,b=2,c=3;
 	}
 
-	@Test
-	public void d05_testNoTableHeadersOnBeans_usingConcreteAnnotation() throws Exception {
+	@Test void d05_testNoTableHeadersOnBeans_usingConcreteAnnotation() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.copy().annotations(HtmlAnnotation.create("MyBean2").noTables(true).build()).build();
 		Object o = null;
 		String r;
@@ -437,8 +423,7 @@ public class Html_Test {
 		}
 	}
 
-	@Test
-	public void e01_collectionOfBeansWithBpi() {
+	@Test void e01_collectionOfBeansWithBpi() {
 		E[] ee = {
 			new E(null, 2, 3),
 			new E(4, 5, 6)

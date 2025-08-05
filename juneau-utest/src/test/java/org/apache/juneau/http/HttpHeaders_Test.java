@@ -9,9 +9,10 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 //***************************************************************************************************************************
 //* Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
@@ -25,10 +26,9 @@ import org.junit.*;
 //* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 //* specific language governing permissions and limitations under the License.                                              *
 //***************************************************************************************************************************
-public class HttpHeaders_Test {
+class HttpHeaders_Test extends SimpleTestBase {
 
-	@Test
-	public void a01_cast() {
+	@Test void a01_cast() {
 		BasicPart x1 = part("X1","1");
 		SerializedPart x2 = serializedPart("X2","2");
 		Header x3 = header("X3","3");

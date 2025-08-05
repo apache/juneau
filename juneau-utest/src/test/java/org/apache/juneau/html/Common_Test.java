@@ -15,26 +15,24 @@ package org.apache.juneau.html;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 
 import java.net.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class Common_Test {
+class Common_Test extends SimpleTestBase {
 
 	//====================================================================================================
 	// Trim nulls from beans
 	//====================================================================================================
-	@Test
-	public void testTrimNullsFromBeans() throws Exception {
+	@Test void testTrimNullsFromBeans() throws Exception {
 		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		HtmlParser p = HtmlParser.DEFAULT;
 		A t1 = A.create(), t2;
@@ -65,8 +63,7 @@ public class Common_Test {
 	//====================================================================================================
 	// Trim empty maps
 	//====================================================================================================
-	@Test
-	public void testTrimEmptyMaps() throws Exception {
+	@Test void testTrimEmptyMaps() throws Exception {
 		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		HtmlParser p = HtmlParser.DEFAULT;
 		B t1 = B.create(), t2;
@@ -98,8 +95,7 @@ public class Common_Test {
 	//====================================================================================================
 	// Trim empty lists
 	//====================================================================================================
-	@Test
-	public void testTrimEmptyLists() throws Exception {
+	@Test void testTrimEmptyLists() throws Exception {
 		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		HtmlParser p = HtmlParser.DEFAULT;
 		C t1 = C.create(), t2;
@@ -131,8 +127,7 @@ public class Common_Test {
 	//====================================================================================================
 	// Trim empty arrays
 	//====================================================================================================
-	@Test
-	public void testTrimEmptyArrays() throws Exception {
+	@Test void testTrimEmptyArrays() throws Exception {
 		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		HtmlParser p = HtmlParser.DEFAULT;
 		D t1 = D.create(), t2;
@@ -197,8 +192,7 @@ public class Common_Test {
 	//====================================================================================================
 	// @Beanp.bpi annotation.
 	//====================================================================================================
-	@Test
-	public void testBeanPropertyProperties() throws Exception {
+	@Test void testBeanPropertyProperties() throws Exception {
 		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
 		E1 t = new E1();
 		String r;
@@ -287,8 +281,7 @@ public class Common_Test {
 	//====================================================================================================
 	// @Beanp.bpi annotation on list of beans.
 	//====================================================================================================
-	@Test
-	public void testBeanPropertyPropertiesOnListOfBeans() throws Exception {
+	@Test void testBeanPropertyPropertiesOnListOfBeans() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
 		List<F> l = new LinkedList<>();
 		F t = new F();
@@ -319,8 +312,7 @@ public class Common_Test {
 	//====================================================================================================
 	// Test that URLs and URIs are serialized and parsed correctly.
 	//====================================================================================================
-	@Test
-	public void testURIAttr() throws Exception {
+	@Test void testURIAttr() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
 		HtmlParser p = HtmlParser.DEFAULT;
 
@@ -346,8 +338,7 @@ public class Common_Test {
 	//====================================================================================================
 	// Recursion
 	//====================================================================================================
-	@Test
-	public void testRecursion() throws Exception {
+	@Test void testRecursion() throws Exception {
 		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders().maxDepth(Integer.MAX_VALUE);
 
 		R1 r1 = new R1();
@@ -390,8 +381,7 @@ public class Common_Test {
 	//====================================================================================================
 	// Basic bean
 	//====================================================================================================
-	@Test
-	public void testBasicBean() throws Exception {
+	@Test void testBasicBean() throws Exception {
 		WriterSerializer s = HtmlSerializer.create().sq().keepNullProperties().sortProperties().addKeyValueTableHeaders().build();
 
 		J a = new J();

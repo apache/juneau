@@ -13,18 +13,15 @@
 package org.apache.juneau.collections;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-import org.junit.*;
-
-@FixMethodOrder(NAME_ASCENDING)
-public class Args_Test {
+class Args_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// test - Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test
-	public void basic() {
+	@Test void basic() {
 		Args a;
 
 		// Empty args

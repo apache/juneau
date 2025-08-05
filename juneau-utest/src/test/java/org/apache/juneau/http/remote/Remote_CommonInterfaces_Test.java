@@ -18,10 +18,9 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
@@ -30,10 +29,9 @@ import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Remote_CommonInterfaces_Test {
+class Remote_CommonInterfaces_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Simple tests, split annotations.
@@ -65,8 +63,7 @@ public class Remote_CommonInterfaces_Test {
 		}
 	}
 
-	@Test
-	public void a01_splitAnnotations() {
+	@Test void a01_splitAnnotations() {
 		A x = MockRestClient.buildJson(A1.class).getRemote(A.class);
 		assertEquals("foo",x.putX1("foo"));
 		assertEquals("foo",x.getX2("foo"));
@@ -100,8 +97,7 @@ public class Remote_CommonInterfaces_Test {
 		}
 	}
 
-	@Test
-	public void b01_combinedAnnotations() {
+	@Test void b01_combinedAnnotations() {
 		B x = MockRestClient.create(B1.class).json().build().getRemote(B.class);
 		assertEquals("foo",x.putX1("foo"));
 		assertEquals("foo",x.getX2("foo"));
@@ -156,8 +152,7 @@ public class Remote_CommonInterfaces_Test {
 		@Override public UseProxy useProxy() { return USE_PROXY; }
 	}
 
-	@Test
-	public void c01_standardResponses() {
+	@Test void c01_standardResponses() {
 
 		// HttpClient goes into loop if status code is less than 200 so we can't test those.
 
@@ -199,8 +194,7 @@ public class Remote_CommonInterfaces_Test {
 		}
 	}
 
-	@Test
-	public void d01_httpResource() throws Exception {
+	@Test void d01_httpResource() throws Exception {
 		D x = MockRestClient.build(D1.class).getRemote(D.class);
 		BasicResource sr = x.httpResource();
 		assertEquals("foo",read(sr.getContent()));
@@ -386,8 +380,7 @@ public class Remote_CommonInterfaces_Test {
 		}
 	}
 
-	@Test
-	public void e01_predefinedExceptions() {
+	@Test void e01_predefinedExceptions() {
 		E x = MockRestClient.create(E1.class).noTrace().build().getRemote(E.class);
 		assertThrown(x::badRequest).isType(BadRequest.class).asMessage().is(BadRequest.REASON_PHRASE);
 		assertThrown(x::conflict).asMessage().is(Conflict.REASON_PHRASE);
@@ -559,8 +552,7 @@ public class Remote_CommonInterfaces_Test {
 		}
 	}
 
-	@Test
-	public void e02_predefinedExceptions_customMessages() {
+	@Test void e02_predefinedExceptions_customMessages() {
 		E x = MockRestClient.create(E2.class).noTrace().build().getRemote(E.class);
 		assertThrown(x::badRequest).asMessage().is("foo");
 		assertThrown(x::conflict).asMessage().is("foo");
@@ -774,8 +766,7 @@ public class Remote_CommonInterfaces_Test {
 		}
 	}
 
-	@Test
-	public void f01_badRequest_returnedExceptions() {
+	@Test void f01_badRequest_returnedExceptions() {
 		F x = MockRestClient.create(F1.class).noTrace().json().build().getRemote(F.class);
 		assertEquals("foo",x.badRequest().getMessage());
 		assertEquals("foo",x.conflict().getMessage());
@@ -834,8 +825,7 @@ public class Remote_CommonInterfaces_Test {
 		}
 	}
 
-	@Test
-	public void g01_reader_inputStream() throws Exception {
+	@Test void g01_reader_inputStream() throws Exception {
 		G x = MockRestClient.build(G1.class).getRemote(G.class);
 		assertEquals("foo",read(x.reader()));
 		assertEquals("foo",read(x.inputStream()));
@@ -858,8 +848,7 @@ public class Remote_CommonInterfaces_Test {
 		}
 	}
 
-	@Test
-	public void h01_seeOtherRoot() {
+	@Test void h01_seeOtherRoot() {
 		IH x = MockRestClient.create(H.class).json().disableRedirectHandling().build().getRemote(IH.class);
 		assertObject(x.seeOtherRoot()).asString().isContains("HTTP/1.1 303 See Other");
 	}

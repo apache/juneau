@@ -15,17 +15,15 @@ package org.apache.juneau.cp;
 import static java.util.Locale.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.cp.sub.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class FileFinder_Test {
+public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be public.
 
 	private InputStream stream(FileFinder ff, String path) throws Exception {
 		return ff.getStream(path, null).orElse(null);
@@ -39,8 +37,7 @@ public class FileFinder_Test {
 	// Basic tests.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_empty() throws Exception {
+	@Test void a01_empty() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.build();
@@ -52,8 +49,7 @@ public class FileFinder_Test {
 	// File system tests.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void b01_fileSystem_rootDir() throws Exception {
+	@Test void b01_fileSystem_rootDir() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.dir(".")
@@ -77,8 +73,7 @@ public class FileFinder_Test {
 		}
 	}
 
-	@Test
-	public void b02_fileSystem_subDir() throws Exception {
+	@Test void b02_fileSystem_subDir() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.dir("files")
@@ -102,8 +97,7 @@ public class FileFinder_Test {
 		}
 	}
 
-	@Test
-	public void b03_fileSystem_localized_flat() throws Exception {
+	@Test void b03_fileSystem_localized_flat() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.dir("files")
@@ -147,8 +141,7 @@ public class FileFinder_Test {
 		}
 	}
 
-	@Test
-	public void b04_fileSystem_localized_hierarchical() throws Exception {
+	@Test void b04_fileSystem_localized_hierarchical() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.dir("files/test2")
@@ -180,8 +173,7 @@ public class FileFinder_Test {
 	// Classpath tests - Classpath root
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void c01_classpathRoot_rootDir() throws Exception {
+	@Test void c01_classpathRoot_rootDir() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.cp(FileFinder_Test.class, "/", false)
@@ -205,8 +197,7 @@ public class FileFinder_Test {
 		}
 	}
 
-	@Test
-	public void c02_classpathRoot_subdir() throws Exception {
+	@Test void c02_classpathRoot_subdir() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.cp(FileFinder_Test.class, "/files", false)
@@ -230,8 +221,7 @@ public class FileFinder_Test {
 		}
 	}
 
-	@Test
-	public void c03_classpathRoot_localized_flat() throws Exception {
+	@Test void c03_classpathRoot_localized_flat() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.cp(FileFinder_Test.class, "/files", false)
@@ -277,8 +267,7 @@ public class FileFinder_Test {
 	}
 
 
-	@Test
-	public void c04_classpathRoot_localized_hierarchical() throws Exception {
+	@Test void c04_classpathRoot_localized_hierarchical() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.cp(FileFinder_Test.class, "/files/test2", false)
@@ -310,8 +299,7 @@ public class FileFinder_Test {
 	// Classpath tests - Classpath relative
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void d01a_classpathRelative_rootDir() throws Exception {
+	@Test void d01a_classpathRelative_rootDir() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.cp(FileFinder_Test.class, "", false)
@@ -337,8 +325,7 @@ public class FileFinder_Test {
 		}
 	}
 
-	@Test
-	public void d01b_classpathRelative_rootDir_recursive() throws Exception {
+	@Test void d01b_classpathRelative_rootDir_recursive() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.cp(FileFinder_Test2.class, "", true)
@@ -356,8 +343,7 @@ public class FileFinder_Test {
 		}
 	}
 
-	@Test
-	public void d02a_classpathRelative_subdir() throws Exception {
+	@Test void d02a_classpathRelative_subdir() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.cp(FileFinder_Test.class, "files", false)
@@ -381,8 +367,7 @@ public class FileFinder_Test {
 		}
 	}
 
-	@Test
-	public void d02b_classpathRelative_subdir_recursive() throws Exception {
+	@Test void d02b_classpathRelative_subdir_recursive() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.cp(FileFinder_Test2.class, "files", true)
@@ -400,8 +385,7 @@ public class FileFinder_Test {
 		}
 	}
 
-	@Test
-	public void d03a_classpathRelative_localized_flat() throws Exception {
+	@Test void d03a_classpathRelative_localized_flat() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.cp(FileFinder_Test.class, "files", false)
@@ -446,8 +430,7 @@ public class FileFinder_Test {
 		}
 	}
 
-	@Test
-	public void d03b_classpathRelative_localized_flat_recursive() throws Exception {
+	@Test void d03b_classpathRelative_localized_flat_recursive() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.cp(FileFinder_Test2.class, "files", true)
@@ -484,8 +467,7 @@ public class FileFinder_Test {
 		}
 	}
 
-	@Test
-	public void d04a_classpathRelative_localized_hierarchical() throws Exception {
+	@Test void d04a_classpathRelative_localized_hierarchical() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.cp(FileFinder_Test.class, "files/test2", false)
@@ -513,8 +495,7 @@ public class FileFinder_Test {
 		assertBytes(stream(x,"/dir/dir/a.txt/", JAPAN)).asString().isContains("[cp:/org/apache/juneau/cp/files/test2/ja/JP/dir/dir/a.txt]");
 	}
 
-	@Test
-	public void d04b_classpathRelative_localized_hierarchical_recursive() throws Exception {
+	@Test void d04b_classpathRelative_localized_hierarchical_recursive() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.cp(FileFinder_Test2.class, "files/test2", true)
@@ -548,8 +529,7 @@ public class FileFinder_Test {
 			.build();
 	}
 
-	@Test
-	public void d05_classpathRelative_ignorePattern() throws Exception {
+	@Test void d05_classpathRelative_ignorePattern() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.cp(FileFinder_Test2.class, "files/test2", true)
@@ -609,8 +589,7 @@ public class FileFinder_Test {
 	// Other tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void e01_localDir_hashCode() {
+	@Test void e01_localDir_hashCode() {
 		Set<LocalDir> s = null;
 
 		s = set(new LocalDir(Paths.get("test")), new LocalDir(Paths.get("test")));
@@ -629,8 +608,7 @@ public class FileFinder_Test {
 		assertCollection(s).isSize(2);
 	}
 
-	@Test
-	public void e02_caching() throws Exception {
+	@Test void e02_caching() throws Exception {
 		FileFinder x = FileFinder
 			.create()
 			.dir(".")
@@ -659,8 +637,7 @@ public class FileFinder_Test {
 		assertBytes(stream(x,"files/test1/_a.txt")).asString().isContains("[cp:/files/test1/_a.txt]");
 	}
 
-	@Test
-	public void e03_subclassing() {
+	@Test void e03_subclassing() {
 		FileFinder x = E03b
 			.create()
 			.dir(".")

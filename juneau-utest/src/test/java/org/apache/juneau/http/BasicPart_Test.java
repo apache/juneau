@@ -17,21 +17,18 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class BasicPart_Test {
+class BasicPart_Test extends SimpleTestBase {
 
-	@Test
-	public void a01_ofPair() {
+	@Test void a01_ofPair() {
 		BasicPart x = basicPart("Foo:bar");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar", x.getValue());
@@ -51,8 +48,7 @@ public class BasicPart_Test {
 		assertNull(basicPart((String)null));
 	}
 
-	@Test
-	public void a02_of() {
+	@Test void a02_of() {
 		BasicPart x;
 		x = part("Foo","bar");
 		assertObject(x).asJson().is("'Foo=bar'");
@@ -60,8 +56,7 @@ public class BasicPart_Test {
 		assertObject(x).asJson().is("'Foo=bar'");
 	}
 
-	@Test
-	public void a03_cast() {
+	@Test void a03_cast() {
 		BasicPart x1 = part("X1","1");
 		SerializedPart x2 = serializedPart("X2","2");
 		Header x3 = header("X3","3");
@@ -95,14 +90,12 @@ public class BasicPart_Test {
 		assertFalse(BasicPart.canCast(null));
 	}
 
-	@Test
-	public void a04_asHeader() {
+	@Test void a04_asHeader() {
 		BasicPart x = part("X1","1");
 		assertObject(x.asHeader()).isType(Header.class).asJson().is("'X1: 1'");
 	}
 
-	@Test
-	public void a05_assertions() {
+	@Test void a05_assertions() {
 		BasicPart x = part("X1","1");
 		x.assertName().is("X1").assertValue().is("1");
 	}

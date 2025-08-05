@@ -17,22 +17,20 @@ import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.time.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class BasicDateHeader_Test {
+class BasicDateHeader_Test extends SimpleTestBase {
 
 	private static final String HEADER = "Foo";
 	private static final String VALUE = "Sat, 29 Oct 1994 19:43:31 GMT";
@@ -50,8 +48,7 @@ public class BasicDateHeader_Test {
 	// Method tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient c = client().build();
 
 		// Normal usage.
@@ -71,13 +68,11 @@ public class BasicDateHeader_Test {
 		assertThrown(()->dateHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
 	}
 
-	@Test
-	public void a02_asZonedDateTime() {
+	@Test void a02_asZonedDateTime() {
 		assertOptional(dateHeader(HEADER,VALUE).asZonedDateTime()).asString().is("1994-10-29T19:43:31Z");
 	}
 
-	@Test
-	public void a04_assertZonedDateTime() {
+	@Test void a04_assertZonedDateTime() {
 		dateHeader(HEADER,VALUE).assertZonedDateTime().asString().is("1994-10-29T19:43:31Z");
 	}
 

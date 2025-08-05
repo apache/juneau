@@ -13,8 +13,6 @@
 package org.apache.juneau.annotation;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -27,13 +25,12 @@ import org.apache.juneau.marshaller.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.swap.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests the @BeanConfig annotation.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class BeanConfigAnnotation_Test {
+class BeanConfigAnnotation_Test extends SimpleTestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
@@ -143,8 +140,7 @@ public class BeanConfigAnnotation_Test {
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		BeanSession bs = JsonSerializer.create().apply(al).build().getSession();
 
@@ -187,8 +183,7 @@ public class BeanConfigAnnotation_Test {
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test
-	public void b01_noValues() {
+	@Test void b01_noValues() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		JsonSerializer js = JsonSerializer.create().apply(al).build();
 		BeanContext bc = js.getBeanContext();
@@ -233,8 +228,7 @@ public class BeanConfigAnnotation_Test {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test
-	public void c01_noAnnotation() {
+	@Test void c01_noAnnotation() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		JsonSerializer js = JsonSerializer.create().apply(al).build();
 		BeanContext bc = js.getBeanContext();

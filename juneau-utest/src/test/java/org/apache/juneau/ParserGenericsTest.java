@@ -13,17 +13,14 @@
 package org.apache.juneau;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class ParserGenericsTest {
+class ParserGenericsTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// Test generic maps

@@ -15,21 +15,19 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class BasicLongHeader_Test {
+class BasicLongHeader_Test extends SimpleTestBase {
 
 	private static final String HEADER = "Foo";
 	private static final String VALUE = "123";
@@ -47,8 +45,7 @@ public class BasicLongHeader_Test {
 	// Method tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient c = client().build();
 
 		// Normal usage.
@@ -68,8 +65,7 @@ public class BasicLongHeader_Test {
 		assertThrown(()->longHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
 	}
 
-	@Test
-	public void a02_assertLong() {
+	@Test void a02_assertLong() {
 		longHeader(HEADER,1L).assertLong().is(1L);
 	}
 

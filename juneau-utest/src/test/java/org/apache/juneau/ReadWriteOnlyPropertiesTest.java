@@ -15,17 +15,14 @@ package org.apache.juneau;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ReadWriteOnlyPropertiesTest {
+class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Beanp(ro/wo)

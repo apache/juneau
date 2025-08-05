@@ -14,33 +14,29 @@ package org.apache.juneau;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings("rawtypes")
-@FixMethodOrder(NAME_ASCENDING)
-public class DataConversionTest {
+class DataConversionTest extends SimpleTestBase {
 
-	@Before
-	public void beforeTest() {
+	@BeforeEach
+	void beforeTest() {
 		Utils2.setLocale(Locale.US);
 	}
 
-	@After
-	public void afterTest() {
+	@AfterEach
+	void afterTest() {
 		Utils2.unsetLocale();
 	}
 
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@Test
-	public void testBasic() throws Exception {
+	@Test void testBasic() throws Exception {
 		JsonMap m = new JsonMap();
 
 		// *** Number ***
@@ -120,8 +116,7 @@ public class DataConversionTest {
 	//====================================================================================================
 	// Data conversions with swaps.
 	//====================================================================================================
-	@Test
-	public void testObjectSwaps() throws Exception {
+	@Test void testObjectSwaps() throws Exception {
 		String s = "2001-12-21T12:34:56Z";
 		BeanContext bc = BeanContext.DEFAULT;
 		Calendar c = bc.convertToType(s, GregorianCalendar.class);

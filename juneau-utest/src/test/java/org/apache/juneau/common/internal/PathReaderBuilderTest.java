@@ -20,17 +20,16 @@ import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.*;
 
-import org.junit.*;
-
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 /**
  * Tests {@link PathReaderBuilder}.
  */
-public class PathReaderBuilderTest {
+class PathReaderBuilderTest extends SimpleTestBase {
 
 	private static final Path PATH = Paths.get("src/test/resources/files/Test3.properties");
 
-	@Test
-	public void testAllowNoFile() throws IOException {
+	@Test void testAllowNoFile() throws IOException {
 		final var p = new Properties();
 		try (Reader r = PathReaderBuilder.create().allowNoFile().build()) {
 			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
@@ -43,14 +42,12 @@ public class PathReaderBuilderTest {
 		assertNull(p.get("file"));
 	}
 
-	@Test
-	public void testAllowNoFileException() {
+	@Test void testAllowNoFileException() {
 		assertThrows(IllegalStateException.class, () -> PathReaderBuilder.create().build());  // NOSONAR
 		assertThrows(NoSuchFileException.class, () -> PathReaderBuilder.create().path("this file does not exist, at all.").build());
 	}
 
-	@Test
-	public void testCharsetCharset() throws IOException {
+	@Test void testCharsetCharset() throws IOException {
 		final var p = new Properties();
 		try (Reader r = PathReaderBuilder.create().path(PATH).charset(StandardCharsets.UTF_8).build()) {
 			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
@@ -63,8 +60,7 @@ public class PathReaderBuilderTest {
 		assertEquals("files/Test3.properties", p.get("file"));
 	}
 
-	@Test
-	public void testCharsetString() throws IOException {
+	@Test void testCharsetString() throws IOException {
 		final var p = new Properties();
 		try (Reader r = PathReaderBuilder.create().path(PATH).charset(StandardCharsets.UTF_8.name()).build()) {
 			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
@@ -77,8 +73,7 @@ public class PathReaderBuilderTest {
 		assertEquals("files/Test3.properties", p.get("file"));
 	}
 
-	@Test
-	public void testCreate() throws IOException {
+	@Test void testCreate() throws IOException {
 		final var p = new Properties();
 		try (Reader r = PathReaderBuilder.create(PATH).build()) {
 			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
@@ -86,8 +81,7 @@ public class PathReaderBuilderTest {
 		assertEquals("files/Test3.properties", p.get("file"));
 	}
 
-	@Test
-	public void testPathPath() throws IOException {
+	@Test void testPathPath() throws IOException {
 		final var p = new Properties();
 		try (Reader r = PathReaderBuilder.create().path(PATH).build()) {
 			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
@@ -95,8 +89,7 @@ public class PathReaderBuilderTest {
 		assertEquals("files/Test3.properties", p.get("file"));
 	}
 
-	@Test
-	public void testPathString() throws IOException {
+	@Test void testPathString() throws IOException {
 		final var p = new Properties();
 		try (Reader r = PathReaderBuilder.create().path(PATH.toString()).build()) {
 			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));

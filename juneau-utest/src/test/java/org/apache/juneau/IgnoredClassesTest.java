@@ -15,21 +15,17 @@ package org.apache.juneau;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 
 import org.apache.juneau.json.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class IgnoredClassesTest {
+class IgnoredClassesTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// testFilesRenderedAsStrings
 	//====================================================================================================
-	@Test
-	public void testFilesRenderedAsStrings() {
+	@Test void testFilesRenderedAsStrings() {
 		assumeTrue(System.getProperty("os.name").toLowerCase().startsWith("win"));
 		// Files should be rendered as strings.
 		File f = new File("C:/temp");
@@ -39,8 +35,7 @@ public class IgnoredClassesTest {
 	//====================================================================================================
 	// testIgnorePackages
 	//====================================================================================================
-	@Test
-	public void testIgnorePackages() throws Exception {
+	@Test void testIgnorePackages() throws Exception {
 		A a = new A();
 		JsonSerializer.Builder s = JsonSerializer.create().json5();
 		assertEquals("{f1:'isBean'}", s.build().serialize(a));

@@ -15,21 +15,19 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class BasicCsvHeader_Test {
+class BasicCsvHeader_Test extends SimpleTestBase {
 
 	private static final String HEADER = "Foo";
 	private static final String VALUE = "foo, bar";
@@ -47,8 +45,7 @@ public class BasicCsvHeader_Test {
 	// Method tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient c = client().build();
 
 		// Normal usage.
@@ -68,8 +65,7 @@ public class BasicCsvHeader_Test {
 		assertThrown(()->csvHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
 	}
 
-	@Test
-	public void a02_contains() {
+	@Test void a02_contains() {
 		BasicCsvHeader x = new BasicCsvHeader("Foo", (String)null,"bar","baz");
 		assertBoolean(x.contains(null)).isTrue();
 		assertBoolean(x.containsIgnoreCase(null)).isTrue();
@@ -87,8 +83,7 @@ public class BasicCsvHeader_Test {
 		assertBoolean(x2.containsIgnoreCase("bar")).isFalse();
 	}
 
-	@Test
-	public void a03_assertList() {
+	@Test void a03_assertList() {
 		csvHeader("Foo", "bar").assertList().isContains("bar").assertList().isNotContains("baz");
 		new BasicCsvHeader("Foo", (String)null).assertList().isNull();
 	}

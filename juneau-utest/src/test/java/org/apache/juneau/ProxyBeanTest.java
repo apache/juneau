@@ -13,8 +13,6 @@
 package org.apache.juneau;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
@@ -22,10 +20,9 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ProxyBeanTest {
+class ProxyBeanTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// testBasic

@@ -16,10 +16,9 @@ import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.concurrent.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
@@ -31,10 +30,9 @@ import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Remote_Test {
+class Remote_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Remote(path), relative paths
@@ -63,8 +61,7 @@ public class Remote_Test {
 		@RemoteOp(path="/x1/") String x1b();
 	}
 
-	@Test
-	public void a01_noPath() {
+	@Test void a01_noPath() {
 		A1 x = plainRemote(A.class,A1.class);
 		assertEquals("foo",x.x1());
 		assertEquals("foo",x.x1a());
@@ -78,8 +75,7 @@ public class Remote_Test {
 		@RemoteOp(path="/x2/") String x2b();
 	}
 
-	@Test
-	public void a02_normalPath() {
+	@Test void a02_normalPath() {
 		A2 x = plainRemote(A.class,A2.class);
 		assertEquals("foo",x.x2());
 		assertEquals("foo",x.x2a());
@@ -93,8 +89,7 @@ public class Remote_Test {
 		@RemoteOp(path="/x2/") String x2b();
 	}
 
-	@Test
-	public void a03_normalPathWithSlashes() {
+	@Test void a03_normalPathWithSlashes() {
 		A3 x = plainRemote(A.class,A3.class);
 		assertEquals("foo",x.x2());
 		assertEquals("foo",x.x2a());
@@ -108,8 +103,7 @@ public class Remote_Test {
 		@RemoteOp(path="/x2/") String x2b();
 	}
 
-	@Test
-	public void a04_pathOnClient() {
+	@Test void a04_pathOnClient() {
 		A4 x = plainRemote(A.class,A4.class,"http://localhost/A");
 		assertEquals("foo",x.x2());
 		assertEquals("foo",x.x2a());
@@ -123,8 +117,7 @@ public class Remote_Test {
 		@RemoteOp(path="/x3/") String x3b();
 	}
 
-	@Test
-	public void a05_normalPath() {
+	@Test void a05_normalPath() {
 		A5 x = plainRemote(A.class,A5.class);
 		assertEquals("foo",x.x3());
 		assertEquals("foo",x.x3a());
@@ -138,8 +131,7 @@ public class Remote_Test {
 		@RemoteOp(path="/x3/") String x3b();
 	}
 
-	@Test
-	public void a06_normalPathWithSlashes() {
+	@Test void a06_normalPathWithSlashes() {
 		A6 x = plainRemote(A.class,A6.class);
 		assertEquals("foo",x.x3());
 		assertEquals("foo",x.x3a());
@@ -153,8 +145,7 @@ public class Remote_Test {
 		@RemoteOp(path="/x3/") String x3b();
 	}
 
-	@Test
-	public void a07_partialPath() {
+	@Test void a07_partialPath() {
 		A7 x = plainRemote(A.class,A7.class,"http://localhost/A");
 		assertEquals("foo",x.x3());
 		assertEquals("foo",x.x3a());
@@ -168,8 +159,7 @@ public class Remote_Test {
 		@RemoteOp(path="/x3/") String x3b();
 	}
 
-	@Test
-	public void a08_partialPathExtraSlashes() {
+	@Test void a08_partialPathExtraSlashes() {
 		A8 x = plainRemote(A.class,A8.class,"http://localhost/A/");
 		assertEquals("foo",x.x3());
 		assertEquals("foo",x.x3a());
@@ -195,8 +185,7 @@ public class Remote_Test {
 		@RemoteOp(path="/x1/") String x1b();
 	}
 
-	@Test
-	public void b01_noPath() {
+	@Test void b01_noPath() {
 		B1 x = plainRemote(B.class,B1.class,"http://localhost/B");
 		assertEquals("foo",x.x1());
 		assertEquals("foo",x.x1a());
@@ -210,8 +199,7 @@ public class Remote_Test {
 		@RemoteOp(path="/x1/") String x1b();
 	}
 
-	@Test
-	public void b02_absolutePathOnClass() {
+	@Test void b02_absolutePathOnClass() {
 		B2 x = plainRemote(B.class,B2.class,"http://localhost/B");
 		assertEquals("foo",x.x1());
 		assertEquals("foo",x.x1a());
@@ -225,8 +213,7 @@ public class Remote_Test {
 		@RemoteOp(path="http://localhost/B/x1/") String x1b();
 	}
 
-	@Test
-	public void b03_absolutePathsOnMethods() {
+	@Test void b03_absolutePathsOnMethods() {
 		B3 x = plainRemote(B.class,B3.class,"http://localhost/B");
 		assertEquals("foo",x.x1());
 		assertEquals("foo",x.x1a());
@@ -270,8 +257,7 @@ public class Remote_Test {
 		@RemoteOp("GET /x5") String x5x();
 	}
 
-	@Test
-	public void c01_overriddenRootUrl() {
+	@Test void c01_overriddenRootUrl() {
 		C1 x = client(C.class).build().getRemote(C1.class,"http://localhost/C1");
 		assertEquals("foo",x.x1());
 		assertEquals("bar",x.x2());
@@ -308,8 +294,7 @@ public class Remote_Test {
 		String getX4();
 	}
 
-	@Test
-	public void c03_methodNotAnnotated() {
+	@Test void c03_methodNotAnnotated() {
 		C3b x = remote(C3a.class,C3b.class);
 		assertEquals("bar",x.x1());
 		assertEquals("baz",x.getX2());
@@ -366,8 +351,7 @@ public class Remote_Test {
 		}
 	}
 
-	@Test
-	public void c04_rethrownExceptions() {
+	@Test void c04_rethrownExceptions() {
 		C4b x = remote(C4a.class,C4b.class);
 		assertThrown(x::x1).asMessage().is("foo");
 		assertThrown(()->x.x1a().get()).asMessages().isContains("foo");
@@ -411,8 +395,7 @@ public class Remote_Test {
 		@RemoteOp(path="/r400",returns=RemoteReturn.STATUS) String x10() throws AssertionError;
 	}
 
-	@Test
-	public void d01_statusReturnType() {
+	@Test void d01_statusReturnType() {
 		D1a x = client(D1.class).ignoreErrors().build().getRemote(D1a.class);
 		assertEquals(202,x.x1());
 		assertEquals(202,x.x2().intValue());
@@ -445,8 +428,7 @@ public class Remote_Test {
 		@RemoteOp(path="x1") Integer x1a() throws AssertionError;
 	}
 
-	@Test
-	public void d02_primitiveReturns() {
+	@Test void d02_primitiveReturns() {
 		D2a x = client(D2.class).ignoreErrors().build().getRemote(D2a.class);
 		assertEquals(0,x.x1());
 		assertEquals(1,x.x2());
@@ -469,8 +451,7 @@ public class Remote_Test {
 		String echo(String body);
 	}
 
-	@Test
-	public void e01_rrpcBasic() {
+	@Test void e01_rrpcBasic() {
 		E1 x = client(E.class).rootUrl("http://localhost/proxy").build().getRrpcInterface(E1.class);
 
 		assertEquals("foo",x.echo("foo"));
@@ -481,8 +462,7 @@ public class Remote_Test {
 		String echo(String body);
 	}
 
-	@Test
-	public void e03_rrpc_noRestUrl() {
+	@Test void e03_rrpc_noRestUrl() {
 		E3 x = client(E.class).rootUrl("http://localhost").build().getRrpcInterface(E3.class);
 		assertEquals("foo",x.echo("foo"));
 	}
@@ -492,8 +472,7 @@ public class Remote_Test {
 		String echo(String body);
 	}
 
-	@Test
-	public void e04_rrpc_fullPathOnRemotePath() {
+	@Test void e04_rrpc_fullPathOnRemotePath() {
 		E4 x = client(E.class).rootUrl("").build().getRrpcInterface(E4.class);
 		assertEquals("foo",x.echo("foo"));
 	}
@@ -519,8 +498,7 @@ public class Remote_Test {
 		String echo(String body) throws E5a;
 	}
 
-	@Test
-	public void e05_rrpc_rethrownCheckedException() {
+	@Test void e05_rrpc_rethrownCheckedException() {
 		RestClient x = client(E5.class).build();
 		assertThrown(()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo")).asMessage().is("foobar");
 	}
@@ -535,8 +513,7 @@ public class Remote_Test {
 		}
 	}
 
-	@Test
-	public void e06_rrpc_rethrownUncheckedException() {
+	@Test void e06_rrpc_rethrownUncheckedException() {
 		RestClient x = client(E6.class).build();
 		assertThrown(()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo")).asMessages().isAny(contains("foobar"));
 	}
@@ -569,8 +546,7 @@ public class Remote_Test {
 		}
 	}
 
-	@Test
-	public void f01_headers() throws Exception {
+	@Test void f01_headers() throws Exception {
 		F1a x = client(F.class).header("Check","Foo").build().getRemote(F1a.class);
 		assertEquals("['bar','baz','qux']",Json5.of(x.getHeaders()));
 		x = client(F.class).header("Check","Client-Version").build().getRemote(F1a.class);
@@ -589,8 +565,7 @@ public class Remote_Test {
 		}
 	}
 
-	@Test
-	public void f02_headers_badSupplier() {
+	@Test void f02_headers_badSupplier() {
 		assertThrown(()->client(F.class).build().getRemote(F2a.class)).asMessages().isContains("foo");
 	}
 
@@ -607,8 +582,7 @@ public class Remote_Test {
 		String[] getHeaders();
 	}
 
-	@Test
-	public void g01_badMethodName() {
+	@Test void g01_badMethodName() {
 		assertThrown(()->client(G.class).header("Check","Foo").build().getRemote(G1.class)).isType(RemoteMetadataException.class).asMessage().isContains("Invalid value");
 	}
 
@@ -668,8 +642,7 @@ public class Remote_Test {
 	}
 
 
-	@Test
-	public void h01_methodDetection() {
+	@Test void h01_methodDetection() {
 
 		H1 x = client(H.class).build().getRemote(H1.class);
 		assertEquals("GET a1", x.a1());

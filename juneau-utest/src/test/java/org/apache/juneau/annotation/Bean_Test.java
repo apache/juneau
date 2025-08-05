@@ -13,17 +13,14 @@
 package org.apache.juneau.annotation;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Bean_Test {
+class Bean_Test extends SimpleTestBase {
 
 	static VarResolverSession vr = VarResolver.create().vars(XVar.class).build().createSession();
 
@@ -43,8 +40,7 @@ public class Bean_Test {
 		}
 	}
 
-	@Test
-	public void testBeanAnnotationOverridesPrivate() throws Exception {
+	@Test void testBeanAnnotationOverridesPrivate() throws Exception {
 		String json = Json5.of(A1.create());
 		assertEquals("{f1:1}", json);
 		A1 a = Json5.DEFAULT.read(json, A1.class);
@@ -69,8 +65,7 @@ public class Bean_Test {
 	}
 	static ClassInfo a2ci = ClassInfo.of(A2Config.class);
 
-	@Test
-	public void testBeanAnnotationOverridesPrivate_usingConfig() throws Exception {
+	@Test void testBeanAnnotationOverridesPrivate_usingConfig() throws Exception {
 		AnnotationWorkList al = AnnotationWorkList.of(a2ci.getAnnotationList());
 		JsonSerializer js = Json5Serializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
@@ -114,8 +109,7 @@ public class Bean_Test {
 		}
 	}
 
-	@Test
-	public void testBeanxAnnotationOverridesPrivate() throws Exception {
+	@Test void testBeanxAnnotationOverridesPrivate() throws Exception {
 		String json = Json5.of(B1.create());
 		assertEquals("{f1:1,f2:2}", json);
 		B1 b = Json5.DEFAULT.read(json, B1.class);
@@ -155,8 +149,7 @@ public class Bean_Test {
 	}
 	static ClassInfo b2ci = ClassInfo.of(B2Config.class);
 
-	@Test
-	public void testBeanxAnnotationOverridesPrivate_usingConfig() throws Exception {
+	@Test void testBeanxAnnotationOverridesPrivate_usingConfig() throws Exception {
 		AnnotationWorkList al = AnnotationWorkList.of(b2ci.getAnnotationList());
 		JsonSerializer js = Json5Serializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
@@ -207,8 +200,7 @@ public class Bean_Test {
 
 	private static ClassInfo dConfig = ClassInfo.of(DConfig.class);
 
-	@Test
-	public void d01_beanPropertiesExcludePropertiesCombined_noBeanConfig() throws Exception {
+	@Test void d01_beanPropertiesExcludePropertiesCombined_noBeanConfig() throws Exception {
 		String json = Json5.of(D1.create());
 		assertEquals("{a:1,c:3}", json);
 		D1 x = Json5.DEFAULT.read(json, D1.class);
@@ -216,8 +208,7 @@ public class Bean_Test {
 		assertEquals("{a:1,c:3}", json);
 	}
 
-	@Test
-	public void d02_beanPXpCombined_noBeanConfig() throws Exception {
+	@Test void d02_beanPXpCombined_noBeanConfig() throws Exception {
 		String json = Json5.of(D2.create());
 		assertEquals("{a:1,c:3}", json);
 		D2 x = Json5.DEFAULT.read(json, D2.class);
@@ -225,8 +216,7 @@ public class Bean_Test {
 		assertEquals("{a:1,c:3}", json);
 	}
 
-	@Test
-	public void d03_beanPropertiesExcludePropertiesCombined_beanConfigOverride() throws Exception {
+	@Test void d03_beanPropertiesExcludePropertiesCombined_beanConfigOverride() throws Exception {
 		AnnotationWorkList al = AnnotationWorkList.of(vr, dConfig.getAnnotationList());
 		JsonSerializer js = Json5Serializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
@@ -238,8 +228,7 @@ public class Bean_Test {
 		assertEquals("{b:2,d:4}", json);
 	}
 
-	@Test
-	public void d04_beanPXpCombined_beanConfigOverride() throws Exception {
+	@Test void d04_beanPXpCombined_beanConfigOverride() throws Exception {
 		AnnotationWorkList al = AnnotationWorkList.of(vr, dConfig.getAnnotationList());
 		JsonSerializer js = Json5Serializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
@@ -251,8 +240,7 @@ public class Bean_Test {
 		assertEquals("{b:2,d:4}", json);
 	}
 
-	@Test
-	public void d05_beanPropertiesExcludePropertiesCombined_beanContextBuilderOverride() throws Exception {
+	@Test void d05_beanPropertiesExcludePropertiesCombined_beanContextBuilderOverride() throws Exception {
 		Bean ba = BeanAnnotation.create("D1").properties("b,c,d").excludeProperties("c").build();
 		JsonSerializer js = Json5Serializer.create().annotations(ba).build();
 		JsonParser jp = JsonParser.create().annotations(ba).build();
@@ -264,8 +252,7 @@ public class Bean_Test {
 		assertEquals("{b:2,d:4}", json);
 	}
 
-	@Test
-	public void d06_beanPXpCombined_beanContextBuilderOverride() throws Exception {
+	@Test void d06_beanPXpCombined_beanContextBuilderOverride() throws Exception {
 		Bean ba = BeanAnnotation.create("D2").p("b,c,d").xp("c").build();
 		JsonSerializer js = Json5Serializer.create().annotations(ba).build();
 		JsonParser jp = JsonParser.create().annotations(ba).build();
@@ -324,8 +311,7 @@ public class Bean_Test {
 
 	private static ClassInfo eConfig = ClassInfo.of(EConfig.class);
 
-	@Test
-	public void e01_beanPropertiesExcludePropertiesCombined_multipleBeanAnnotations_noBeanConfig() throws Exception {
+	@Test void e01_beanPropertiesExcludePropertiesCombined_multipleBeanAnnotations_noBeanConfig() throws Exception {
 		String json = Json5.of(E1.create());
 		assertEquals("{a:1,c:3}", json);
 		E1 e = Json5.DEFAULT.read(json, E1.class);
@@ -333,8 +319,7 @@ public class Bean_Test {
 		assertEquals("{a:1,c:3}", json);
 	}
 
-	@Test
-	public void e02_beanPXpCombined_multipleBeanAnnotations_noBeanConfig() throws Exception {
+	@Test void e02_beanPXpCombined_multipleBeanAnnotations_noBeanConfig() throws Exception {
 		String json = Json5.of(E2.create());
 		assertEquals("{a:1,c:3}", json);
 		E2 e = Json5.DEFAULT.read(json, E2.class);
@@ -342,8 +327,7 @@ public class Bean_Test {
 		assertEquals("{a:1,c:3}", json);
 	}
 
-	@Test
-	public void e03_beanPropertiesExcludePropertiesCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
+	@Test void e03_beanPropertiesExcludePropertiesCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
 		AnnotationWorkList al = AnnotationWorkList.of(vr, eConfig.getAnnotationList());
 		JsonSerializer js = Json5Serializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
@@ -355,8 +339,7 @@ public class Bean_Test {
 		assertEquals("{b:2,d:4}", json);
 	}
 
-	@Test
-	public void e04_beanPXpCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
+	@Test void e04_beanPXpCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
 		AnnotationWorkList al = AnnotationWorkList.of(vr, eConfig.getAnnotationList());
 		JsonSerializer js = Json5Serializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
@@ -368,8 +351,7 @@ public class Bean_Test {
 		assertEquals("{b:2,d:4}", json);
 	}
 
-	@Test
-	public void e05_beanPropertiersExcludePropertiesCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
+	@Test void e05_beanPropertiersExcludePropertiesCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
 		Bean ba = BeanAnnotation.create("E1").properties("b,c,d").excludeProperties("c").build();
 		JsonSerializer js = Json5Serializer.create().annotations(ba).build();
 		JsonParser jp = JsonParser.create().annotations(ba).build();
@@ -381,8 +363,7 @@ public class Bean_Test {
 		assertEquals("{b:2,d:4}", json);
 	}
 
-	@Test
-	public void e06_beanBpiBpxCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
+	@Test void e06_beanBpiBpxCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
 		Bean ba = BeanAnnotation.create("E2").p("b,c,d").xp("c").build();
 		JsonSerializer js = Json5Serializer.create().annotations(ba).build();
 		JsonParser jp = JsonParser.create().annotations(ba).build();

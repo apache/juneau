@@ -13,12 +13,10 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-import org.junit.*;
-
-@FixMethodOrder(NAME_ASCENDING)
-public class HttpHeader_Test {
+class HttpHeader_Test extends SimpleTestBase {
 
 	@Test
 	public void a01_basic() {

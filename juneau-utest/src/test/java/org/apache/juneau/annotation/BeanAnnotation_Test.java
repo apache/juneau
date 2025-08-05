@@ -14,14 +14,11 @@ package org.apache.juneau.annotation;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.swap.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class BeanAnnotation_Test {
+class BeanAnnotation_Test extends SimpleTestBase {
 
 	private static final String CNAME = BeanAnnotation_Test.class.getName();
 
@@ -33,7 +30,7 @@ public class BeanAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Bean a1 = BeanAnnotation.create()
-        .description("description")
+		.description("description")
 		.dictionary(X1.class)
 		.example("example")
 		.excludeProperties("excludeProperties")
@@ -82,8 +79,7 @@ public class BeanAnnotation_Test {
 		.xp("xp")
 		.build();
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
                 + "description:['description'],"
@@ -112,8 +108,7 @@ public class BeanAnnotation_Test {
 		);
 	}
 
-	@Test
-	public void a02_testEquivalency() {
+	@Test void a02_testEquivalency() {
 		assertObject(a1).is(a2);
 		assertInteger(a1.hashCode()).is(a2.hashCode()).isNotAny(0,-1);
 	}
@@ -122,8 +117,7 @@ public class BeanAnnotation_Test {
 	// PropertyStore equivalency.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void b01_testEquivalencyInPropertyStores() {
+	@Test void b01_testEquivalencyInPropertyStores() {
 		BeanContext b1 = BeanContext.create().annotations(a1).build();
 		BeanContext b2 = BeanContext.create().annotations(a2).build();
 		assertSame(b1, b2);
@@ -136,8 +130,7 @@ public class BeanAnnotation_Test {
 	public static class C1 {}
 	public static class C2 {}
 
-	@Test
-	public void c01_otherMethods() {
+	@Test void c01_otherMethods() {
 		Bean c1 = BeanAnnotation.create(C1.class).on(C2.class).build();
 		Bean c2 = BeanAnnotation.create("a").on("b").build();
 
@@ -203,8 +196,7 @@ public class BeanAnnotation_Test {
 	public static class D2 {}
 	Bean d2 = D2.class.getAnnotationsByType(Bean.class)[0];
 
-	@Test
-	public void d01_comparisonWithDeclarativeAnnotations() {
+	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertObject(d1).is(d2).is(a1);
 		assertInteger(d1.hashCode()).is(d2.hashCode()).is(a1.hashCode()).isNotAny(0,-1);
 	}

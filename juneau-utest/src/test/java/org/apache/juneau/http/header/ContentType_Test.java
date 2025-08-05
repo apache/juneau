@@ -12,11 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.function.*;
 
@@ -27,10 +24,9 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ContentType_Test {
+class ContentType_Test extends SimpleTestBase {
 
 	private static final String HEADER = "Content-Type";
 	private static final String VALUE = "foo/bar";
@@ -48,8 +44,7 @@ public class ContentType_Test {
 	// Method tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient c = client().build();
 
 		// Normal usage.
@@ -65,8 +60,7 @@ public class ContentType_Test {
 		c.get().header(contentType(()->null)).run().assertContent().isEmpty();
 	}
 
-	@Test
-	public void a02_asMediaType() {
+	@Test void a02_asMediaType() {
 		assertString(contentType(()->MediaType.JSON).asMediaType()).is("application/json");
 	}
 

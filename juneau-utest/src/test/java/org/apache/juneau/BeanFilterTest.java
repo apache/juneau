@@ -13,22 +13,18 @@
 package org.apache.juneau;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class BeanFilterTest {
+class BeanFilterTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// Test sub types
 	//====================================================================================================
-	@Test
-	public void testSubTypes() throws Exception {
+	@Test void testSubTypes() throws Exception {
 		JsonSerializer s = Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 		JsonParser p = JsonParser.DEFAULT;
 
@@ -85,8 +81,7 @@ public class BeanFilterTest {
 		public String f2;
 	}
 
-	@Test
-	public void testSubTypes_usingConfig() throws Exception {
+	@Test void testSubTypes_usingConfig() throws Exception {
 		JsonSerializer s = Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().applyAnnotations(EConfig.class).build();
 		JsonParser p = JsonParser.create().applyAnnotations(EConfig2.class).build();
 
@@ -152,8 +147,7 @@ public class BeanFilterTest {
 	//====================================================================================================
 	// Test parent class used as filter
 	//====================================================================================================
-	@Test
-	public void testParentClassFilter() throws Exception {
+	@Test void testParentClassFilter() throws Exception {
 		JsonSerializer s = JsonSerializer.create().json5().interfaces(C1.class).build();
 
 		C1 c1 = new C2();
@@ -177,8 +171,7 @@ public class BeanFilterTest {
 	//====================================================================================================
 	// Test non-static parent class used as filter
 	//====================================================================================================
-	@Test
-	public void testParentClassFilter2() throws Exception {
+	@Test void testParentClassFilter2() throws Exception {
 		JsonSerializer s = JsonSerializer.create().json5().interfaces(D1.class).build();
 
 		D1 d1 = new D2();

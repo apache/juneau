@@ -13,17 +13,14 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /*
  * Tests the BEAN_examples property and @Example annotation.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class PojoExamplesTest {
+class PojoExamplesTest extends SimpleTestBase {
 
 	private final JsonParserSession session = JsonParser.DEFAULT.getSession();
 

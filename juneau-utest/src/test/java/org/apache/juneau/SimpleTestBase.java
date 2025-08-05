@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.serializer.*;
@@ -264,5 +265,10 @@ public abstract class SimpleTestBase {
 	 */
 	public static Supplier<String> ss(String pattern, Object...args) {
 		return ()->StringUtils.format(pattern, args);
+	}
+
+	@Deprecated
+	protected static StringAssertion assertString(Object o) {
+		return org.apache.juneau.assertions.Assertions.assertString(o);
 	}
 }

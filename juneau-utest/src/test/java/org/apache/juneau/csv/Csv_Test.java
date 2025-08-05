@@ -13,21 +13,18 @@
 package org.apache.juneau.csv;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Csv_Test {
+class Csv_Test extends SimpleTestBase {
 
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@Test
-	public void testBasic() throws Exception {
+	@Test void testBasic() throws Exception {
 		List<A> l = new LinkedList<>();
 		l.add(new A("b1",1));
 		l.add(new A("b2",2));
