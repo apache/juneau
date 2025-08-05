@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.Visibility.*;
+import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.internal.CollectionUtils.map;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -26,107 +27,75 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings("rawtypes")
-@FixMethodOrder(NAME_ASCENDING)
-public class BeanConfigTest {
+class BeanConfig_Test extends SimpleTestBase {
 
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@Test
-	public void testBasic() {
+	@Test void a01_basic() {
 
-		BeanContext bc = BeanContext.DEFAULT;
+		var bc = BeanContext.DEFAULT;
 
-		Person p1 = new Person();
+		var p1 = new Person();
 		p1.setName("John Doe");
 		p1.setAge(25);
 
-		Address a = new Address("101 Main St.", "Las Vegas", "NV", "89101");
-		AddressablePerson p2 = new AddressablePerson();
+		var a = new Address("101 Main St.", "Las Vegas", "NV", "89101");
+		var p2 = new AddressablePerson();
 		p2.setName("Jane Doe");
 		p2.setAge(21);
 		p2.setAddress(a);
 
 		// setup the reference results
-		Map m1 = new LinkedHashMap();
+		var m1 = new LinkedHashMap();
 		m1.put("name", p1.getName());
 		m1.put("age", Integer.valueOf(p1.getAge()));
 
-		Map m2 = new LinkedHashMap();
+		var m2 = new LinkedHashMap();
 		m2.put("street", a.getStreet());
 		m2.put("city", a.getCity());
 		m2.put("state", a.getState());
 		m2.put("zip", a.getZip());
 
-		Map m3 = new LinkedHashMap();
+		var m3 = new LinkedHashMap();
 		m3.put("name", p2.getName());
 		m3.put("age", Integer.valueOf(p2.getAge()));
 		m3.put("address", p2.getAddress());
 
-		Map pm1 = bc.toBeanMap(p1);
+		var pm1 = bc.toBeanMap(p1);
 
-		if (pm1.size() != m1.size())
-			fail("Bean Map size failed for: " + p1 + " / " + pm1.size()+ " / " + m1.size());
+		assertEquals(pm1.size(), m1.size(), ss("Bean Map size failed for: {0} / {1} / {2}", p1, pm1.size(), m1.size()));
+		assertEquals(pm1.keySet(), m1.keySet(), ss("Bean Map key set equality failed for: {0} / {1} / {2}", p1, pm1.keySet() , m1.keySet()));
+		assertEquals(m1.keySet(), pm1.keySet(), ss("Bean Map key set reverse equality failed for: {0} / {1} / {2}", p1, pm1.keySet(), m1.keySet()));
+		assertEquals(pm1, m1, ss("Bean Map equality failed for: {0} / {1} / {2}", p1, pm1, m1));  // NOSONAR
+		assertThrows(BeanRuntimeException.class, ()->bc.newBeanMap(Address.class));  // Address returned as a new bean type, but shouldn't be since it doesn't have a default constructor.
+		assertNull(bc.newBeanMap(java.lang.Integer.class), "java.lang.Integer incorrectly designated as bean type.");
+		assertNull(bc.newBeanMap(java.lang.Class.class), "java.lang.Class incorrectly designated as bean type.");
 
-		if (!pm1.keySet().equals(m1.keySet()))
-			fail("Bean Map key set equality failed for: " + p1 + " / " + pm1.keySet() + " / " + m1.keySet());
+		var bm1 = bc.toBeanMap(new Address("street", "city", "state", "zip"));
 
-		if (!m1.keySet().equals(pm1.keySet()))
-			fail("Bean Map key set reverse equality failed for: " + p1 + " / " + pm1.keySet() + " / " + m1.keySet());
+		assertEquals(bm1.size(), m2.size(), ss("Bean Adapter map's key set has wrong size: {0} / {1} / {2}", a, bm1.size(), m2.size()));
 
-		if (!pm1.equals(m1))
-			fail("Bean Map equality failed for: " + p1 + " / " + pm1 + " / " + m1);
-
-		if (!m1.equals(pm1))
-			fail("Bean Map reverse equality failed for: " + p1 + " / " + pm1 + " / " + m1);
-
-		BeanMap bm1 = null;
-		// Address returned as a new bean type, but shouldn't be since it doesn't have a default constructor.
-		assertThrown(()->bc.newBeanMap(Address.class)).isType(BeanRuntimeException.class);
-		bm1 = bc.toBeanMap(new Address("street", "city", "state", "zip"));
-
-		BeanMap bm2 = bc.newBeanMap(java.lang.Integer.class);
-		if (bm2 != null)
-			fail("java.lang.Integer incorrectly desingated as bean type.");
-
-		BeanMap bm3 = bc.newBeanMap(java.lang.Class.class);
-		if (bm3 != null)
-			fail("java.lang.Class incorrectly desingated as bean type.");
-
-		Map m4 = bm1;
-		if (m4.size() != m2.size())
-			fail("Bean Adapter map's key set has wrong size: " + a + " / " + m4.size() + " / " + m2.size());
-
-		Iterator iter = m4.keySet().iterator();
-		Set temp = new HashSet();
-		int count = 0;
+		var iter = bm1.keySet().iterator();
+		var temp = new HashSet();
+		var count = 0;
 		while (iter.hasNext()) {
 			temp.add(iter.next());
 			count++;
 		}
-		if (count != m2.size())
-			fail("Iteration count over bean adpater key set failed: " + a + " / " + count + " / " + m2.size());
 
-		if (!m2.keySet().equals(temp))
-			fail("Iteration over bean adpater key set failed: " + a + " / " + m4.keySet() + " / " + m2.keySet());
+		assertEquals(count, m2.size(), ss("Iteration count over bean adpater key set failed: {0} / {1} / {2}", a, count, m2.size()));
+		assertEquals(m2.keySet(), temp, ss("Iteration over bean adpater key set failed: {0} / {1} / {2}", a, bm1.keySet(), m2.keySet()));
+		assertNotNull(bc.toBeanMap(p2), ss("Failed to identify class as bean type: {0}", p2.getClass()));
 
-		BeanMap bm4 = bc.toBeanMap(p2);
-		if (bm4 == null) {
-			fail("Failed to identify class as bean type: " + p2.getClass());
-			return;
-		}
-
-		Map m5 = bm4;
+		var m5 = bc.toBeanMap(p2);
 		Set es1 = m5.entrySet();
 
-		if (!es1.equals(m3.entrySet()))
-			fail("Entry set equality failed: " + p2 + " / " + es1 + " / " + m3.entrySet());
-
-		if (!m3.entrySet().equals(es1))
-			fail("Entry set reverse equality failed: " + p2 + " / " + es1 + " / " + m3.entrySet());
+		assertEquals(es1, m3.entrySet(), ss("Entry set equality failed: {0} / {1} / {2}", p2, es1, m3.entrySet()));
+		assertEquals(m3.entrySet(), es1, ss("Entry set reverse equality failed: {0} / {1} / {2}", p2, es1, m3.entrySet()));
 
 		iter = es1.iterator();
 		temp = new HashSet();
@@ -135,11 +104,9 @@ public class BeanConfigTest {
 			temp.add(iter.next());
 			count++;
 		}
-		if (count != m3.size())
-			fail("Iteration count over bean adpater entry set failed: " + a + " / " + count + " / " + m3.size());
 
-		if (!m3.entrySet().equals(temp))
-			fail("Iteration over bean adpater entry set failed: " + a + " / " + es1 + " / " + m3.entrySet());
+		assertEquals(count, m3.size(), ss("Iteration count over bean adpater entry set failed: {0} / {1} / {2}", a, count, m3.size()));
+		assertEquals(m3.entrySet(), temp, ss("Iteration over bean adpater entry set failed: {0} / {1} / {2}", a, es1, m3.entrySet()));
 	}
 
 	public static class Person {
@@ -147,30 +114,29 @@ public class BeanConfigTest {
 		private int age;
 
 		public Person() {
-			this.name = null;
-			this.age = -1;
+			name = null;
+			age = -1;
 		}
 
 		public String getName() {
-			return this.name;
+			return name;
 		}
 
-		public void setName(String name) {
-			this.name = name;
+		public void setName(String v) {
+			name = v;
 		}
 
 		public int getAge() {
-			return this.age;
+			return age;
 		}
 
-		public void setAge(int age) {
-			this.age = age;
+		public void setAge(int v) {
+			age = v;
 		}
 
 		@Override /* Object */
 		public String toString() {
-			return ("Person(name: " + this.getName() + ", age: "
-					+ this.getAge() + ")");
+			return format("Person(name: {0}, age: {1})", name, age);
 		}
 	}
 
@@ -188,70 +154,34 @@ public class BeanConfigTest {
 		}
 
 		public String getStreet() {
-			return this.street;
+			return street;
 		}
 
 		public String getCity() {
-			return this.city;
+			return city;
 		}
 
 		public String getState() {
-			return this.state;
+			return state;
 		}
 
 		public String getZip() {
-			return this.zip;
+			return zip;
 		}
 
 		@Override /* Object */
 		public boolean equals(Object o) {
-			if (o == null)
-				return false;
-			if (this == o)
-				return true;
-			if (this.getClass() != o.getClass())
-				return false;
-			Address a = (Address) o;
-
-			String v1 = this.getStreet();
-			String v2 = a.getStreet();
-			if ((v1 == null) ? (v2 != null) : (!v1.equals(v2)))
-				return false;
-
-			v1 = this.getCity();
-			v2 = a.getCity();
-			if ((v1 == null) ? (v2 != null) : (!v1.equals(v2)))
-				return false;
-
-			v1 = this.getState();
-			v2 = a.getState();
-			if ((v1 == null) ? (v2 != null) : (!v1.equals(v2)))
-				return false;
-
-			v1 = this.getZip();
-			v2 = a.getZip();
-			return ((v1 == null) ? (v2 == null) : (v1.equals(v2)));
+			return eq(this, (Address)o, (x,y) -> eq(x.getStreet(), y.getStreet()) && eq(x.getCity(), y.getCity()) && eq(x.getState(), y.getState()) && eq(x.getZip(), y.getZip()));
 		}
 
 		@Override /* Object */
 		public int hashCode() {
-			int code = 0;
-			if (this.street != null)
-				code ^= this.street.hashCode();
-			if (this.city != null)
-				code ^= this.city.hashCode();
-			if (this.state != null)
-				code ^= this.state.hashCode();
-			if (this.zip != null)
-				code ^= this.zip.hashCode();
-			return code;
+			return hash(street, city, state, zip);
 		}
 
 		@Override /* Object */
 		public String toString() {
-			return ("Address(street: " + this.getStreet() + ", city: "
-					+ this.getCity() + ", state: " + this.getState()
-					+ ", zip: " + this.getZip() + ")");
+			return format("Address(street: {0}, city: {1}, state: {2}, zip: {3})", street, city, state, zip);
 		}
 	}
 
@@ -263,11 +193,11 @@ public class BeanConfigTest {
 		}
 
 		public Address getAddress() {
-			return this.address;
+			return address;
 		}
 
-		public void setAddress(Address addr) {
-			this.address = addr;
+		public void setAddress(Address v) {
+			address = v;
 		}
 
 		@Override /* Object */
@@ -279,9 +209,8 @@ public class BeanConfigTest {
 	//====================================================================================================
 	// Exhaustive test of BeanContext.convertToType()
 	//====================================================================================================
-	@Test
-	public void testBeanContextConvertToType() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
+	@Test void testBeanContextConvertToType() throws Exception {
+		var bc = BeanContext.DEFAULT;
 		Object o;
 
 		// Primitive nulls.
@@ -345,7 +274,7 @@ public class BeanConfigTest {
 
 		// Class with Constructor(String).
 		o = "xxx";
-		File file = bc.convertToType(o, File.class);
+		var file = bc.convertToType(o, File.class);
 		assertEquals("xxx", file.getName());
 
 		// List of ints to array
@@ -361,12 +290,12 @@ public class BeanConfigTest {
 		assertEquals("x", bc.convertToType(o, ReadOnlyPerson[][].class)[0][0].getName());
 
 		// Array of strings to array of ints
-		o = new String[] { "1", "2", "3" };
+		o = a("1", "2", "3");
 		assertEquals(Integer.valueOf(1), bc.convertToType(o, Integer[].class)[0]);
 		assertEquals(1, bc.convertToType(o, int[].class)[0]);
 
 		// Array to list
-		o = new Integer[] { 1, 2, 3 };
+		o = a(1, 2, 3);
 		assertEquals(Integer.valueOf(1), bc.convertToType(o, LinkedList.class).get(0));
 
 		// HashMap to TreeMap
@@ -381,19 +310,17 @@ public class BeanConfigTest {
 		assertEquals("foo", bc.convertToType(o, Map.class).values().iterator().next());
 
 		// Array to String
-		o = new Object[] { "a", 1, false };
+		o = a("a", 1, false);
 		assertEquals("['a',1,false]", bc.convertToType(o, String.class));
-		o = new Object[][] { { "a", 1, false } };
+		o = new Object[]{a("a", 1, false)};
 		assertEquals("[['a',1,false]]", bc.convertToType(o, String.class));
-
 	}
 
 	//====================================================================================================
 	// Test properties set through a constructor.
 	//====================================================================================================
-	@Test
-	public void testReadOnlyProperties() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
+	@Test void testReadOnlyProperties() throws Exception {
+		var bc = BeanContext.DEFAULT;
 		Object o;
 
 		// Bean to String
@@ -404,7 +331,6 @@ public class BeanConfigTest {
 		o = JsonList.of(JsonMap.ofJson("{name:'x',age:1}"), JsonMap.ofJson("{name:'y',age:2}"));
 		assertEquals(1, bc.convertToType(o, ReadOnlyPerson[].class)[0].getAge());
 	}
-
 
 	@Bean(p="name,age")
 	public static class ReadOnlyPerson {
@@ -418,22 +344,21 @@ public class BeanConfigTest {
 		}
 
 		public String getName() {
-			return this.name;
+			return name;
 		}
 
 		public int getAge() {
-			return this.age;
+			return age;
 		}
 
 		@Override /* Object */
 		public String toString() {
-			return "toString():name=" + name + ",age=" + age;
+			return format("toString():name={0},age={1}", name, age);
 		}
 	}
 
-	@Test
-	public void testReadOnlyProperties_usingConfig() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT.copy().applyAnnotations(ReadOnlyPerson2Config.class).build();
+	@Test void testReadOnlyProperties_usingConfig() throws Exception {
+		var bc = BeanContext.DEFAULT.copy().applyAnnotations(ReadOnlyPerson2Config.class).build();
 		Object o;
 
 		// Bean to String
@@ -445,11 +370,9 @@ public class BeanConfigTest {
 		assertEquals(1, bc.convertToType(o, ReadOnlyPerson2[].class)[0].getAge());
 	}
 
-
 	public static class ReadOnlyPerson2 {
 		private final String name;
 		private final int age;
-
 
 		public ReadOnlyPerson2(String name, int age) {
 			this.name = name;
@@ -457,16 +380,16 @@ public class BeanConfigTest {
 		}
 
 		public String getName() {
-			return this.name;
+			return name;
 		}
 
 		public int getAge() {
-			return this.age;
+			return age;
 		}
 
 		@Override /* Object */
 		public String toString() {
-			return "toString():name=" + name + ",age=" + age;
+			return format("toString():name={0},age={1}", name, age);
 		}
 	}
 
@@ -481,9 +404,8 @@ public class BeanConfigTest {
 	//====================================================================================================
 	// testEnums
 	//====================================================================================================
-	@Test
-	public void testEnums() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
+	@Test void testEnums() throws Exception {
+		var bc = BeanContext.DEFAULT;
 		Object o;
 
 		// Enum
@@ -492,7 +414,7 @@ public class BeanConfigTest {
 		assertEquals("ENUM2", bc.convertToType(TestEnum.ENUM2, String.class));
 
 		// Array of enums
-		o = new String[] { "ENUM2" };
+		o = a("ENUM2");
 		assertEquals(TestEnum.ENUM2, bc.convertToType(o, TestEnum[].class)[0]);
 	}
 
@@ -503,41 +425,26 @@ public class BeanConfigTest {
 	//====================================================================================================
 	// testProxyHandler
 	//====================================================================================================
-	@Test
-	public void testProxyHandler() {
-		BeanSession session = BeanContext.DEFAULT_SESSION;
+	@Test void testProxyHandler() {
+		var session = BeanContext.DEFAULT_SESSION;
 
-		A f1 = (A) Proxy.newProxyInstance(this.getClass()
-				.getClassLoader(), new Class[] { A.class },
-				new AHandler());
+		var f1 = (A) Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { A.class }, new AHandler());
 
-		BeanMap bm1 = session.toBeanMap(f1);
-		if (bm1 == null) {
-			fail("Failed to obtain bean adapter for proxy: " + f1);
-			return;
-		}
+		var bm1 = session.toBeanMap(f1);
+		assertNotNull(bm1, ss("Failed to obtain bean adapter for proxy: {0}", f1));
 
-		BeanMap bm2 = session.newBeanMap(A.class);
-		if (bm2 == null) {
-			fail("Failed to create dynamic proxy bean for interface: " + A.class.getName());
-			return;
-		}
+		var bm2 = session.newBeanMap(A.class);
+		assertNotNull(bm2, ss("Failed to create dynamic proxy bean for interface: {0}", A.class.getName()));
+
 		bm2.put("a", "Hello");
 		bm2.put("b", Integer.valueOf(50));
 		f1.setA("Hello");
 		f1.setB(50);
 
-		if (!bm2.get("a").equals("Hello"))
-			fail("Failed to set string property 'a' on dynamic proxy bean.  " + bm2);
-
-		if (!bm2.get("b").equals(Integer.valueOf(50)))
-			fail("Failed to set string property 'b' on dynamic proxy bean.  " + bm2);
-
-		if (!bm1.equals(bm2))
-			fail("Failed equality test of dynamic proxies beans: " + bm1 + " / " + bm2);
-
-		if (!bm2.equals(bm1))
-			fail("Failed reverse equality test of dynamic proxies beans: " + bm1 + " / " + bm2);
+		assertEquals(bm2.get("a"), "Hello", ss("Failed to set string property 'a' on dynamic proxy bean. {0}", bm2));  // NOSONAR
+		assertEquals(bm2.get("b"), Integer.valueOf(50), ss("Failed to set string property 'b' on dynamic proxy bean. {0}", bm2));
+		assertEquals(bm1, bm2, ss("Failed equality test of dynamic proxies beans: {0} / {1}", bm1, bm2));
+		assertEquals(bm2, bm1, ss("Failed reverse equality test of dynamic proxies beans: {0} / {1}", bm1, bm2));
 	}
 
 	public interface A {
@@ -554,31 +461,30 @@ public class BeanConfigTest {
 		private Map map;
 
 		public AHandler() {
-			this.map = new HashMap();
-			this.map.put("a", "");
-			this.map.put("b", Integer.valueOf(0));
+			map = new HashMap();
+			map.put("a", "");
+			map.put("b", Integer.valueOf(0));
 		}
 
 		@Override /* InvocationHandler */
-		public Object invoke(Object proxy, Method method, Object[] args)
-				throws Throwable {
-			String methodName = method.getName();
+		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+			var methodName = method.getName();
 			if (methodName.equals("getA")) {
-				return this.map.get("a");
+				return map.get("a");
 			}
 			if (methodName.equals("setA")) {
-				this.map.put("a", args[0]);
+				map.put("a", args[0]);
 				return null;
 			}
 			if (methodName.equals("getB")) {
-				return this.map.get("b");
+				return map.get("b");
 			}
 			if (methodName.equals("setB")) {
-				this.map.put("b", args[0]);
+				map.put("b", args[0]);
 				return null;
 			}
 			if (methodName.equals("toString")) {
-				return this.map.toString();
+				return map.toString();
 			}
 			return null;
 		}
@@ -587,10 +493,9 @@ public class BeanConfigTest {
 	//====================================================================================================
 	// testFluentStyleSetters
 	//====================================================================================================
-	@Test
-	public void testFluentStyleSetters() {
-		B2 t = new B2().init();
-		BeanMap m = BeanContext.DEFAULT.toBeanMap(t);
+	@Test void testFluentStyleSetters() {
+		var t = new B2().init();
+		var m = BeanContext.DEFAULT.toBeanMap(t);
 		m.put("f1", 2);
 		assertEquals(2, t.f1);
 	}
@@ -598,181 +503,110 @@ public class BeanConfigTest {
 	public static class B {
 		int f1;
 		public int getF1() { return f1; }
-		public B setF1(int f1) { this.f1 = f1; return this; }
+		public B setF1(int v) { f1 = v; return this; }
 	}
 
 	public static class B2 extends B {
 		@Override /* B */
-		public B2 setF1(int f1) { this.f1 = f1; return this; }
-		public B2 init() { this.f1 = 1; return this;}
+		public B2 setF1(int v) { f1 = v; return this; }
+		public B2 init() { f1 = 1; return this;}
 	}
 
 	//====================================================================================================
 	// testClassMetaCaching
 	//====================================================================================================
-	@Test
-	public void testClassMetaCaching() {
-		Parser.Builder p1, p2;
-
-		p1 = JsonParser.create();
-		p2 = JsonParser.create();
+	@Test void testClassMetaCaching() {
+		var p1 = JsonParser.create();
+		var p2 = JsonParser.create();
 		assertSameCache(p1, p2);
 
-		p1.beansRequireDefaultConstructor();
-		assertDifferentCache(p1, p2);
-		p2.beansRequireDefaultConstructor();
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.beansRequireDefaultConstructor(), p2);
+		assertSameCache(p1, p2.beansRequireDefaultConstructor());
 
-		p1.beansRequireSerializable();
-		assertDifferentCache(p1, p2);
-		p2.beansRequireSerializable();
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.beansRequireSerializable(), p2);
+		assertSameCache(p1, p2.beansRequireSerializable());
 
-		p1.beansRequireSettersForGetters();
-		assertDifferentCache(p1, p2);
-		p2.beansRequireSettersForGetters();
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.beansRequireSettersForGetters(), p2);
+		assertSameCache(p1, p2.beansRequireSettersForGetters());
 
-		p1.disableBeansRequireSomeProperties();
-		assertDifferentCache(p1, p2);
-		p2.disableBeansRequireSomeProperties();
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.disableBeansRequireSomeProperties(), p2);
+		assertSameCache(p1, p2.disableBeansRequireSomeProperties());
 
-		p1.beanMapPutReturnsOldValue();
-		assertDifferentCache(p1, p2);
-		p2.beanMapPutReturnsOldValue();
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.beanMapPutReturnsOldValue(), p2);
+		assertSameCache(p1, p2.beanMapPutReturnsOldValue());
 
-		p1.beanConstructorVisibility(Visibility.DEFAULT);
-		assertDifferentCache(p1, p2);
-		p2.beanConstructorVisibility(Visibility.DEFAULT);
-		assertSameCache(p1, p2);
-		p1.beanConstructorVisibility(Visibility.NONE);
-		assertDifferentCache(p1, p2);
-		p2.beanConstructorVisibility(Visibility.NONE);
-		assertSameCache(p1, p2);
-		p1.beanConstructorVisibility(Visibility.PRIVATE);
-		assertDifferentCache(p1, p2);
-		p2.beanConstructorVisibility(Visibility.PRIVATE);
-		assertSameCache(p1, p2);
-		p1.beanConstructorVisibility(Visibility.PROTECTED);
-		assertDifferentCache(p1, p2);
-		p2.beanConstructorVisibility(Visibility.PROTECTED);
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.beanConstructorVisibility(DEFAULT), p2);
+		assertSameCache(p1, p2.beanConstructorVisibility(DEFAULT));
+		assertDifferentCache(p1.beanConstructorVisibility(NONE), p2);
+		assertSameCache(p1, p2.beanConstructorVisibility(NONE));
+		assertDifferentCache(p1.beanConstructorVisibility(PRIVATE), p2);
+		assertSameCache(p1, p2.beanConstructorVisibility(PRIVATE));
+		assertDifferentCache(p1.beanConstructorVisibility(PROTECTED), p2);
+		assertSameCache(p1, p2.beanConstructorVisibility(PROTECTED));
 
-		p1.beanClassVisibility(Visibility.DEFAULT);
-		assertDifferentCache(p1, p2);
-		p2.beanClassVisibility(Visibility.DEFAULT);
-		assertSameCache(p1, p2);
-		p1.beanClassVisibility(Visibility.NONE);
-		assertDifferentCache(p1, p2);
-		p2.beanClassVisibility(Visibility.NONE);
-		assertSameCache(p1, p2);
-		p1.beanClassVisibility(Visibility.PRIVATE);
-		assertDifferentCache(p1, p2);
-		p2.beanClassVisibility(Visibility.PRIVATE);
-		assertSameCache(p1, p2);
-		p1.beanClassVisibility(Visibility.PROTECTED);
-		assertDifferentCache(p1, p2);
-		p2.beanClassVisibility(Visibility.PROTECTED);
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.beanClassVisibility(DEFAULT), p2);
+		assertSameCache(p1, p2.beanClassVisibility(DEFAULT));
+		assertDifferentCache(p1.beanClassVisibility(NONE), p2);
+		assertSameCache(p1, p2.beanClassVisibility(NONE));
+		assertDifferentCache(p1.beanClassVisibility(PRIVATE), p2);
+		assertSameCache(p1, p2.beanClassVisibility(PRIVATE));
+		assertDifferentCache(p1.beanClassVisibility(PROTECTED), p2);
+		assertSameCache(p1, p2.beanClassVisibility(PROTECTED));
 
-		p1.beanFieldVisibility(Visibility.DEFAULT);
-		assertDifferentCache(p1, p2);
-		p2.beanFieldVisibility(Visibility.DEFAULT);
-		assertSameCache(p1, p2);
-		p1.beanFieldVisibility(Visibility.NONE);
-		assertDifferentCache(p1, p2);
-		p2.beanFieldVisibility(Visibility.NONE);
-		assertSameCache(p1, p2);
-		p1.beanFieldVisibility(Visibility.PRIVATE);
-		assertDifferentCache(p1, p2);
-		p2.beanFieldVisibility(Visibility.PRIVATE);
-		assertSameCache(p1, p2);
-		p1.beanFieldVisibility(Visibility.PROTECTED);
-		assertDifferentCache(p1, p2);
-		p2.beanFieldVisibility(Visibility.PROTECTED);
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.beanFieldVisibility(DEFAULT), p2);
+		assertSameCache(p1, p2.beanFieldVisibility(DEFAULT));
+		assertDifferentCache(p1.beanFieldVisibility(NONE), p2);
+		assertSameCache(p1, p2.beanFieldVisibility(NONE));
+		assertDifferentCache(p1.beanFieldVisibility(PRIVATE), p2);
+		assertSameCache(p1, p2.beanFieldVisibility(PRIVATE));
+		assertDifferentCache(p1.beanFieldVisibility(PROTECTED), p2);
+		assertSameCache(p1, p2.beanFieldVisibility(PROTECTED));
 
-		p1.beanMethodVisibility(Visibility.DEFAULT);
-		assertDifferentCache(p1, p2);
-		p2.beanMethodVisibility(Visibility.DEFAULT);
-		assertSameCache(p1, p2);
-		p1.beanMethodVisibility(Visibility.NONE);
-		assertDifferentCache(p1, p2);
-		p2.beanMethodVisibility(Visibility.NONE);
-		assertSameCache(p1, p2);
-		p1.beanMethodVisibility(Visibility.PRIVATE);
-		assertDifferentCache(p1, p2);
-		p2.beanMethodVisibility(Visibility.PRIVATE);
-		assertSameCache(p1, p2);
-		p1.beanMethodVisibility(Visibility.PROTECTED);
-		assertDifferentCache(p1, p2);
-		p2.beanMethodVisibility(Visibility.PROTECTED);
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.beanMethodVisibility(DEFAULT), p2);
+		assertSameCache(p1, p2.beanMethodVisibility(DEFAULT));
+		assertDifferentCache(p1.beanMethodVisibility(NONE), p2);
+		assertSameCache(p1, p2.beanMethodVisibility(NONE));
+		assertDifferentCache(p1.beanMethodVisibility(PRIVATE), p2);
+		assertSameCache(p1, p2.beanMethodVisibility(PRIVATE));
+		assertDifferentCache(p1.beanMethodVisibility(PROTECTED), p2);
+		assertSameCache(p1, p2.beanMethodVisibility(PROTECTED));
 
-		p1.useJavaBeanIntrospector();
-		assertDifferentCache(p1, p2);
-		p2.useJavaBeanIntrospector();
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.useJavaBeanIntrospector(), p2);
+		assertSameCache(p1, p2.useJavaBeanIntrospector());
 
-		p1.disableInterfaceProxies();
-		assertDifferentCache(p1, p2);
-		p2.disableInterfaceProxies();
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.disableInterfaceProxies(), p2);
+		assertSameCache(p1, p2.disableInterfaceProxies());
 
-		p1.ignoreUnknownBeanProperties();
-		assertDifferentCache(p1, p2);
-		p2.ignoreUnknownBeanProperties();
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.ignoreUnknownBeanProperties(), p2);
+		assertSameCache(p1, p2.ignoreUnknownBeanProperties());
 
-		p1.disableIgnoreUnknownNullBeanProperties();
-		assertDifferentCache(p1, p2);
-		p2.disableIgnoreUnknownNullBeanProperties();
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.disableIgnoreUnknownNullBeanProperties(), p2);
+		assertSameCache(p1, p2.disableIgnoreUnknownNullBeanProperties());
 
-		p1.disableIgnoreMissingSetters();
-		assertDifferentCache(p1, p2);
-		p2.disableIgnoreMissingSetters();
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.disableIgnoreMissingSetters(), p2);
+		assertSameCache(p1, p2.disableIgnoreMissingSetters());
 
-		p1.ignoreInvocationExceptionsOnGetters();
-		assertDifferentCache(p1, p2);
-		p2.ignoreInvocationExceptionsOnGetters();
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.ignoreInvocationExceptionsOnGetters(), p2);
+		assertSameCache(p1, p2.ignoreInvocationExceptionsOnGetters());
 
-		p1.ignoreInvocationExceptionsOnSetters();
-		assertDifferentCache(p1, p2);
-		p2.ignoreInvocationExceptionsOnSetters();
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.ignoreInvocationExceptionsOnSetters(), p2);
+		assertSameCache(p1, p2.ignoreInvocationExceptionsOnSetters());
 
-		p1.notBeanPackages("foo");
-		assertDifferentCache(p1, p2);
-		p2.notBeanPackages("foo");
-		assertSameCache(p1, p2);
-		p1.notBeanPackages("bar");
-		assertDifferentCache(p1, p2);
-		p2.notBeanPackages("bar");
-		assertSameCache(p1, p2);
-		p1.notBeanPackages("baz");
-		p1.notBeanPackages("bing");
-		assertDifferentCache(p1, p2);
-		p2.notBeanPackages("bing");
-		p2.notBeanPackages("baz");
-		assertSameCache(p1, p2);
+		assertDifferentCache(p1.notBeanPackages("foo"), p2);
+		assertSameCache(p1, p2.notBeanPackages("foo"));
+		assertDifferentCache(p1.notBeanPackages("bar"), p2);
+		assertSameCache(p1, p2.notBeanPackages("bar"));
+		assertDifferentCache(p1.notBeanPackages("baz").notBeanPackages("bing"), p2);
+		assertSameCache(p2.notBeanPackages("bing").notBeanPackages("baz"), p2);
 
 		p1.beanContext().notBeanPackages().remove("bar");
 		assertDifferentCache(p1, p2);
 		p2.beanContext().notBeanPackages().remove("bar");
 		assertSameCache(p1, p2);
 
-		p1.swaps(DummyPojoSwapA.class);
-		assertDifferentCache(p1, p2);
-		p2.swaps(DummyPojoSwapA.class);
-		assertSameCache(p1, p2);
-		p1.swaps(DummyPojoSwapB.class,DummyPojoSwapC.class);  // Order of filters is important!
-		p2.swaps(DummyPojoSwapC.class,DummyPojoSwapB.class);
-		assertDifferentCache(p1, p2);
+		assertDifferentCache(p1.swaps(DummyPojoSwapA.class), p2);
+		assertSameCache(p1, p2.swaps(DummyPojoSwapA.class));
+		assertDifferentCache(p1.swaps(DummyPojoSwapB.class,DummyPojoSwapC.class), p2.swaps(DummyPojoSwapC.class,DummyPojoSwapB.class));  // Order of filters is important!
 	}
 
 	public static class DummyPojoSwapA extends MapSwap<A> {}
@@ -781,22 +615,23 @@ public class BeanConfigTest {
 	public static class C {}
 
 	private void assertSameCache(Parser.Builder p1b, Parser.Builder p2b) {
-		Parser p1 = p1b.build(), p2 = p2b.build();
+		var p1 = p1b.build();
+		var p2 = p2b.build();
 		assertTrue(p1.getBeanContext().hasSameCache(p2.getBeanContext()));
 	}
 
 	private void assertDifferentCache(Parser.Builder p1b, Parser.Builder p2b) {
-		Parser p1 = p1b.build(), p2 = p2b.build();
+		var p1 = p1b.build();
+		var p2 = p2b.build();
 		assertFalse(p1.getBeanContext().hasSameCache(p2.getBeanContext()));
 	}
 
 	//====================================================================================================
 	// testNotABeanReasons
 	//====================================================================================================
-	@Test
-	public void testNotABeanNonStaticInnerClass() {
-		BeanContext bc = BeanContext.DEFAULT;
-		ClassMeta cm = bc.getClassMeta(C1.class);
+	@Test void testNotABeanNonStaticInnerClass() {
+		var bc = BeanContext.DEFAULT;
+		var cm = bc.getClassMeta(C1.class);
 		assertFalse(cm.canCreateNewInstance());
 	}
 
@@ -810,21 +645,23 @@ public class BeanConfigTest {
 	// For performance reasons, array properties are stored as temporary ArrayLists until the
 	// BeanMap.getBean() method is called.
 	//====================================================================================================
-	@Test(timeout=1000) // Should be around 100ms at most.
-	public void testAddingToArrayProperty() {
-		BeanContext bc = BeanContext.DEFAULT;
-		BeanMap<D> bm = bc.newBeanMap(D.class);
-		for (int i = 0; i < 5000; i++) {
-			bm.add("f1", i);
-			bm.add("f2", i);
-			bm.add("f3", i);
-			bm.add("f4", i);
-		}
-		D d = bm.getBean();
-		assertEquals(5000, d.f1.length);
-		assertEquals(5000, d.f2.length);
-		assertEquals(5003, d.f3.length);
-		assertEquals(5003, d.f4.length);
+	// Should be around 100ms at most.
+	@Test void testAddingToArrayProperty() {
+		assertTimeout(Duration.ofSeconds(1), () -> {
+			var bc = BeanContext.DEFAULT;
+			var bm = bc.newBeanMap(D.class);
+			for (var i = 0; i < 5000; i++) {
+				bm.add("f1", i);
+				bm.add("f2", i);
+				bm.add("f3", i);
+				bm.add("f4", i);
+			}
+			var d = bm.getBean();
+			assertEquals(5000, d.f1.length);
+			assertEquals(5000, d.f2.length);
+			assertEquals(5003, d.f3.length);
+			assertEquals(5003, d.f4.length);
+		});
 	}
 
 	public class D {
@@ -833,30 +670,25 @@ public class BeanConfigTest {
 		public int[] f3 = {1,2,3};
 		private int[] f4 = {1,2,3};
 		public int[] getF2() {return f2;}
-		public void setF2(int[] f2) {this.f2 = f2;}
+		public void setF2(int[] v) {f2 = v;}
 		public int[] getF4() {return f4;}
-		public void setF4(int[] f4) {this.f4 = f4;}
+		public void setF4(int[] v) {f4 = v;}
 	}
 
 	//====================================================================================================
 	// testClassClassMeta
 	// Make sure we can get ClassMeta objects against the Class class.
 	//====================================================================================================
-	@Test
-	public void testClassClassMeta() {
-		ClassMeta cm = BeanContext.DEFAULT.getClassMeta(Class.class);
-		assertNotNull(cm);
-
-		cm = BeanContext.DEFAULT.getClassMeta(Class[].class);
-		assertNotNull(cm);
+	@Test void testClassClassMeta() {
+		assertNotNull(BeanContext.DEFAULT.getClassMeta(Class.class));
+		assertNotNull(BeanContext.DEFAULT.getClassMeta(Class[].class));
 	}
 
 	//====================================================================================================
 	// testBlanks
 	//====================================================================================================
-	@Test
-	public void testBlanks() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
+	@Test void testBlanks() throws Exception {
+		var bc = BeanContext.DEFAULT;
 
 		// Blanks get interpreted as the default value for primitives and null for boxed objects.
 		assertEquals(0, (int)bc.convertToType("", int.class));

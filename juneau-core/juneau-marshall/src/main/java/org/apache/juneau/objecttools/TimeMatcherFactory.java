@@ -106,8 +106,8 @@ public class TimeMatcherFactory extends MatcherFactory {
 	private static class TimeMatcher extends AbstractMatcher {
 
 		private static final AsciiSet
-			DT = AsciiSet.create("0123456789-:T./"),
-			WS = AsciiSet.create(" \t");
+			DT = AsciiSet.of("0123456789-:T./"),
+			WS = AsciiSet.of(" \t");
 
 		TimestampRange[] ranges;
 		List<TimestampRange> l = new LinkedList<>();

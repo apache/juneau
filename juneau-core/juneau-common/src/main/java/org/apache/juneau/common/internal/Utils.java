@@ -559,16 +559,9 @@ public class Utils {
 		return result;
 	}
 
-	private static final AsciiSet QUOTE_ESCAPE_SET = AsciiSet.create("\"'\\");
-	private static final AsciiSet COMMA_ESCAPE_SET = AsciiSet.create(",");
+	private static final AsciiSet QUOTE_ESCAPE_SET = AsciiSet.of("\"'\\");
+	private static final AsciiSet COMMA_ESCAPE_SET = AsciiSet.of(",");
 
-
-	/**
-	 * Creates a supplier for a runtime exception.
-	 */
-	public static Supplier<RuntimeException> runtimeException(String msg, Object...args) {
-		return () -> new RuntimeException(MessageFormat.format(msg, args));
-	}
 
 	/**
 	 * Takes a supplier of anything and turns it into a Supplier<String>.
@@ -655,7 +648,42 @@ public class Utils {
 		return val == null ? null : val.toString();
 	}
 
-	private static final AsciiSet ESCAPE_SET = AsciiSet.create(",=");
+	private static final AsciiSet ESCAPE_SET = AsciiSet.of(",=");
+
+	/**
+	 * Shortcut for converting an object to a string.
+	 */
+	public static String readable(Object o) {
+		if (o instanceof Collection)
+			return (String) Collection.class.cast(o).stream().map(Utils::readable).collect(joining(",","[","]"));
+		if (o instanceof Map)
+			return (String) Map.class.cast(o).entrySet().stream().map(Utils::readable).collect(joining(",","{","}"));
+		if (o instanceof Map.Entry) {
+			var e = Map.Entry.class.cast(o);
+			return readable(e.getKey()) + '=' + readable(e.getValue());
+		}
+		if (o instanceof GregorianCalendar) {
+			return GregorianCalendar.class.cast(o).toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT);
+		}
+		if (o instanceof Date) {
+			return Date.class.cast(o).toInstant().toString();
+		}
+		if (o != null && o.getClass().isArray()) {
+			List<Object> l = list();
+			for (var i = 0; i < Array.getLength(o); i++) {
+				l.add(Array.get(o, i));
+			}
+			return readable(l);
+		}
+		return StringUtils.stringify(o);
+	}
+
+	/**
+	 * Shortcut for {@link #readable(Object)}
+	 */
+	public static String r(Object o) {
+		return readable(o);
+	}
 
 	/**
 	 * Prepends '\' to the beginning of ',' and '='.
@@ -752,8 +780,8 @@ public class Utils {
 	 * @return The same content that would normally be rendered via <c>t.printStackTrace()</c>
 	 */
 	public static String getStackTrace(Throwable t) {
-		StringWriter sw = new StringWriter();
-		try (PrintWriter pw = new PrintWriter(sw)) {
+		var sw = new StringWriter();
+		try (var pw = new PrintWriter(sw)) {
 			t.printStackTrace(pw);
 		}
 		return sw.toString();
@@ -765,6 +793,27 @@ public class Utils {
 	public static String obfuscate(String s) {
 		if (s == null || s.length() < 2)
 			return "*";
-		return s.substring(0, 1) + s.substring(1).replaceAll(".", "*");
+		return s.substring(0, 1) + s.substring(1).replaceAll(".", "*");  // NOSONAR
+	}
+
+	/**
+	 * Returns a stream of strings from a comma-delimited string.
+	 */
+	public static List<String> cdl(String value) {
+		return Arrays.asList(StringUtils.split(value));
+	}
+
+	/**
+	 * Creates an {@link IllegalArgumentException}.
+	 */
+	public static IllegalArgumentException illegalArg(String msg, Object...args) {
+		return new IllegalArgumentException(args.length == 0 ? msg : format(msg, args));
+	}
+
+	/**
+	 * Creates a {@link RuntimeException}.
+	 */
+	public static RuntimeException runtimeException(String msg, Object...args) {
+		return new RuntimeException(args.length == 0 ? msg : format(msg, args));
 	}
 }

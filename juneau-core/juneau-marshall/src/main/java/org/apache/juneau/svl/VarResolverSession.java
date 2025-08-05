@@ -362,8 +362,8 @@ public class VarResolverSession {
 	}
 
 	private static final AsciiSet
-		AS1 = AsciiSet.create("\\{"),
-		AS2 = AsciiSet.create("\\${}")
+		AS1 = AsciiSet.of("\\{"),
+		AS2 = AsciiSet.of("\\${}")
 	;
 
 	/**

@@ -431,11 +431,11 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	}
 
 	private static class OapiStringBuilder {
-		static final AsciiSet EQ = AsciiSet.create("=\\");
-		static final AsciiSet PIPE = AsciiSet.create("|\\");
-		static final AsciiSet PIPE_OR_EQ = AsciiSet.create("|=\\");
-		static final AsciiSet COMMA = AsciiSet.create(",\\");
-		static final AsciiSet COMMA_OR_EQ = AsciiSet.create(",=\\");
+		static final AsciiSet EQ = AsciiSet.of("=\\");
+		static final AsciiSet PIPE = AsciiSet.of("|\\");
+		static final AsciiSet PIPE_OR_EQ = AsciiSet.of("|=\\");
+		static final AsciiSet COMMA = AsciiSet.of(",\\");
+		static final AsciiSet COMMA_OR_EQ = AsciiSet.of(",=\\");
 
 		private final StringBuilder sb = new StringBuilder();
 		private final HttpPartCollectionFormat cf;

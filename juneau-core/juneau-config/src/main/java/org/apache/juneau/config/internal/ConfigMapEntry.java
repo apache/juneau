@@ -160,5 +160,5 @@ public class ConfigMapEntry {
 		return w;
 	}
 
-	private static final AsciiSet REPLACE_CHARS = AsciiSet.create("\\#");
+	private static final AsciiSet REPLACE_CHARS = AsciiSet.of("\\#");
 }

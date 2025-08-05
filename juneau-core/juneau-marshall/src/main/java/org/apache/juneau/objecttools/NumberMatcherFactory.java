@@ -64,9 +64,9 @@ public class NumberMatcherFactory extends MatcherFactory {
 		NumberRange[] numberRanges;
 		String pattern;
 		private static final AsciiSet
-			SNUM = AsciiSet.create("-0123456789."),
-			NUM = AsciiSet.create("0123456789."),
-			WS = AsciiSet.create(" \t");
+			SNUM = AsciiSet.of("-0123456789."),
+			NUM = AsciiSet.of("0123456789."),
+			WS = AsciiSet.of(" \t");
 
 		public NumberMatcher(String s) {
 

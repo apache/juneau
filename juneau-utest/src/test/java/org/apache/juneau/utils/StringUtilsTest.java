@@ -12,30 +12,30 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.utest.utils.Utils2;
-import org.junit.*;
+import org.apache.juneau.utest.utils.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class StringUtilsTest {
+class StringUtilsTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// isNumeric(String,Class)
 	// parseNumber(String,Class)
 	//====================================================================================================
-	@Test
-	public void testParseNumber() {
+	@Test void a01_testParser() {
 
 		// Integers
 		assertTrue(isNumeric("123"));
@@ -140,9 +140,9 @@ public class StringUtilsTest {
 		assertTrue(isNumeric("0x123e1"));
 		assertEquals(0x123e1, parseNumber("0x123e1", null));
 
-		assertThrown(()->parseNumber("x", Number.class)).isExists();
-		assertThrown(()->parseNumber("x", null)).isExists();
-		assertThrown(()->parseNumber("x", BadNumber.class)).asMessage().isContains("Unsupported Number type");
+		assertThrows(NumberFormatException.class, ()->parseNumber("x", Number.class));
+		assertThrows(NumberFormatException.class, ()->parseNumber("x", null));
+		assertThrows(NumberFormatException.class, ()->parseNumber("x", BadNumber.class), "Unsupported Number type");
 	}
 
 	@SuppressWarnings("serial")
@@ -151,8 +151,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test
-	public void testNumberRanges() {
+	@Test void a02_numberRanges() {
 		String s;
 
 		// An integer range is -2,147,483,648 to 2,147,483,647
@@ -245,89 +244,52 @@ public class StringUtilsTest {
 
 		s = String.valueOf("214748364x");
 		assertFalse(isNumeric(s));
-		assertThrown(()->parseNumber(String.valueOf("214748364x"), Number.class)).isType(NumberFormatException.class);
+		assertThrows(NumberFormatException.class, ()->parseNumber("214748364x", Number.class));
 
 		s = String.valueOf("2147483640x");
 		assertFalse(isNumeric(s));
-		assertThrown(()->parseNumber(String.valueOf("2147483640x"), Long.class)).isType(NumberFormatException.class);
+		assertThrows(NumberFormatException.class, ()->parseNumber("2147483640x", Long.class));
 	}
 
 	//====================================================================================================
 	// testReplaceVars
 	//====================================================================================================
-	@Test
-	public void testReplaceVars() throws Exception {
-		JsonMap m = JsonMap.ofJson("{a:'A',b:1,c:true,d:'{e}',e:'E{f}E',f:'F',g:'{a}',h:'a',i:null}");
+	@Test void a03_replaceVars() throws Exception {
+		var m = JsonMap.ofJson("{a:'A',b:1,c:true,d:'{e}',e:'E{f}E',f:'F',g:'{a}',h:'a',i:null}");
 
-		String s = "xxx";
-		assertEquals("xxx", replaceVars(s, m));
-
-		s = "{a}";
-		assertEquals("A", replaceVars(s, m));
-		s = "{a}{a}";
-		assertEquals("AA", replaceVars(s, m));
-		s = "x{a}x";
-		assertEquals("xAx", replaceVars(s, m));
-		s = "x{a}x{a}x";
-		assertEquals("xAxAx", replaceVars(s, m));
-
-		s = "{b}";
-		assertEquals("1", replaceVars(s, m));
-		s = "{b}{b}";
-		assertEquals("11", replaceVars(s, m));
-		s = "x{b}x";
-		assertEquals("x1x", replaceVars(s, m));
-		s = "x{b}x{b}x";
-		assertEquals("x1x1x", replaceVars(s, m));
-
-		s = "{c}";
-		assertEquals("true", replaceVars(s, m));
-		s = "{c}{c}";
-		assertEquals("truetrue", replaceVars(s, m));
-		s = "x{c}x{c}x";
-		assertEquals("xtruextruex", replaceVars(s, m));
-
-		s = "{d}";
-		assertEquals("EFE", replaceVars(s, m));
-		s = "{d}{d}";
-		assertEquals("EFEEFE", replaceVars(s, m));
-		s = "x{d}x";
-		assertEquals("xEFEx", replaceVars(s, m));
-		s = "x{d}x{d}x";
-		assertEquals("xEFExEFEx", replaceVars(s, m));
-
-		s = "{g}";
-		assertEquals("A", replaceVars(s, m));
-		s = "{g}{g}";
-		assertEquals("AA", replaceVars(s, m));
-		s = "x{g}x";
-		assertEquals("xAx", replaceVars(s, m));
-		s = "x{g}x{g}x";
-		assertEquals("xAxAx", replaceVars(s, m));
-
-		s = "{x}";
-		assertEquals("{x}", replaceVars(s, m));
-		s = "{x}{x}";
-		assertEquals("{x}{x}", replaceVars(s, m));
-		s = "x{x}x{x}x";
-		assertEquals("x{x}x{x}x", replaceVars(s, m));
-
-		s = "{{g}}";
-		assertEquals("{A}", replaceVars(s, m));
-		s = "{{h}}";
-		assertEquals("A", replaceVars(s, m));
-
-		s = "{{i}}";
-		assertEquals("{}", replaceVars(s, m));
-		s = "{}";
-		assertEquals("{}", replaceVars(s, m));
+		assertEquals("xxx", replaceVars("xxx", m));
+		assertEquals("A", replaceVars("{a}", m));
+		assertEquals("AA", replaceVars("{a}{a}", m));
+		assertEquals("xAx", replaceVars("x{a}x", m));
+		assertEquals("xAxAx", replaceVars("x{a}x{a}x", m));
+		assertEquals("1", replaceVars("{b}", m));
+		assertEquals("11", replaceVars("{b}{b}", m));
+		assertEquals("x1x", replaceVars("x{b}x", m));
+		assertEquals("x1x1x", replaceVars("x{b}x{b}x", m));
+		assertEquals("true", replaceVars("{c}", m));
+		assertEquals("truetrue", replaceVars("{c}{c}", m));
+		assertEquals("xtruextruex", replaceVars("x{c}x{c}x", m));
+		assertEquals("EFE", replaceVars("{d}", m));
+		assertEquals("EFEEFE", replaceVars("{d}{d}", m));
+		assertEquals("xEFEx", replaceVars("x{d}x", m));
+		assertEquals("xEFExEFEx", replaceVars("x{d}x{d}x", m));
+		assertEquals("A", replaceVars("{g}", m));
+		assertEquals("AA", replaceVars("{g}{g}", m));
+		assertEquals("xAx", replaceVars("x{g}x", m));
+		assertEquals("xAxAx", replaceVars("x{g}x{g}x", m));
+		assertEquals("{x}", replaceVars("{x}", m));
+		assertEquals("{x}{x}", replaceVars("{x}{x}", m));
+		assertEquals("x{x}x{x}x", replaceVars("x{x}x{x}x", m));
+		assertEquals("{A}", replaceVars("{{g}}", m));
+		assertEquals("A", replaceVars("{{h}}", m));
+		assertEquals("{}", replaceVars("{{i}}", m));
+		assertEquals("{}", replaceVars("{}", m));
 	}
 
 	//====================================================================================================
 	// isFloat(String)
 	//====================================================================================================
-	@Test
-	public void testisFloat() {
+	@Test void a04_isFloat() {
 		String[] valid = {
 			"+1.0",
 			"-1.0",
@@ -346,10 +308,10 @@ public class StringUtilsTest {
 			"0x1.fffffffffffffp1023",
 			"0x1.FFFFFFFFFFFFFP1023",
 		};
-		for (String s : valid)
+		for (var s : valid)
 			assertTrue(isFloat(s));
 
-		String[] invalid = {
+		var invalid = new String[] {
 			null,
 			"",
 			"a",
@@ -360,16 +322,15 @@ public class StringUtilsTest {
 			"+a",
 			"11a",
 		};
-		for (String s : invalid)
+		for (var s : invalid)
 			assertFalse(isFloat(s));
 	}
 
 	//====================================================================================================
 	// isDecimal(String)
 	//====================================================================================================
-	@Test
-	public void testisDecimal() {
-		String[] valid = {
+	@Test void a05_isDecimal() {
+		var valid = new String[] {
 			"+1",
 			"-1",
 			"0x123",
@@ -380,10 +341,10 @@ public class StringUtilsTest {
 			"#DEF",
 			"0123",
 		};
-		for (String s : valid)
+		for (var s : valid)
 			assertTrue(isDecimal(s));
 
-		String[] invalid = {
+		var invalid = new String[] {
 			null,
 			"",
 			"a",
@@ -397,7 +358,7 @@ public class StringUtilsTest {
 			"0128",
 			"012A",
 		};
-		for (String s : invalid)
+		for (var s : invalid)
 			assertFalse(isDecimal(s));
 	}
 
@@ -409,8 +370,7 @@ public class StringUtilsTest {
 	// join(int[],char)
 	// join(Collection,char)
 	//====================================================================================================
-	@Test
-	public void testJoin() {
+	@Test void a01_join() {
 		assertNull(join((Object[])null, ","));
 		assertEquals("1", join(new Object[]{1}, ","));
 		assertEquals("1,2", join(new Object[]{1,2}, ","));
@@ -437,122 +397,57 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// split(String,char)
 	//====================================================================================================
-	@Test
-	public void testSplit() {
-		String[] r;
-
+	@Test void a07_split() {
 		assertNull(split((String)null));
-		assertObject(split("")).asJson().is("[]");
-		assertObject(split("1")).asJson().is("['1']");
-		assertObject(split("1,2")).asJson().is("['1','2']");
-		assertObject(split("1\\,2")).asJson().is("['1,2']");
-
-		r = split("1\\\\,2");
-		assertEquals("1\\", r[0]);
-		assertEquals("2", r[1]);
-
-		r = split("1\\\\\\,2");
-		assertEquals(1, r.length);
-		assertEquals("1\\,2", r[0]);
-
-		r = split("1,2\\");
-		assertEquals("2\\", r[1]);
-
-		r = split("1,2\\\\");
-		assertEquals("2\\", r[1]);
-
-		r = split("1,2\\,");
-		assertEquals("2,", r[1]);
-
-		r = split("1,2\\\\,");
-		assertEquals("2\\", r[1]);
-		assertEquals("", r[2]);
+		assertArray(split(""));
+		assertArray(split("1"), "1");
+		assertArray(split("1,2"), "1", "2");
+		assertArray(split("1\\,2"), "1,2");
+		assertArray(split("1\\\\,2"), "1\\", "2");
+		assertArray(split("1\\\\\\,2"), "1\\,2");
+		assertArray(split("1,2\\"), "1", "2\\");
+		assertArray(split("1,2\\\\"), "1", "2\\");
+		assertArray(split("1,2\\,"), "1", "2,");
+		assertArray(split("1,2\\\\,"), "1", "2\\", "");
 	}
 
-	@Test
-	public void testSplit2() {
-		List<String> l1 = list();
-		split((String)null, l1::add);
-		assertList(l1).isEmpty();
+	@Test void a08_split2() {
+		assertEmpty(split2test(null));
+		assertString("[]", split2test(""));
+		assertString("[1]", split2test("1"));
+		assertString("[1,2]", split2test("1,2"));
+		assertList(split2test("1\\,2"), "1,2");
+		assertList(split2test("1\\\\,2"), "1\\", "2");
+		assertList(split2test("1\\\\\\,2"), "1\\,2");
+		assertList(split2test("1,2\\"), "1", "2\\");
+		assertList(split2test("1,2\\\\"), "1", "2\\");
+		assertList(split2test("1,2\\,"), "1", "2,");
+		assertList(split2test("1,2\\\\,"), "1", "2\\", "");
+	}
 
-		List<String> l2 = list();
-		split("", l2::add);
-		assertObject(l2).asJson().is("[]");
-
-		List<String> l3 = list();
-		split("1", l3::add);
-		assertObject(l3).asJson().is("['1']");
-
-		List<String> l4 = list();
-		split("1,2", l4::add);
-		assertObject(l4).asJson().is("['1','2']");
-
-		List<String> l5 = list();
-		split("1\\,2", l5::add);
-		assertObject(l5).asJson().is("['1,2']");
-
-		List<String> l6 = list();
-		split("1\\\\,2", l6::add);
-		assertEquals("1\\", l6.get(0));
-		assertEquals("2", l6.get(1));
-
-		List<String> l7 = list();
-		split("1\\\\\\,2", l7::add);
-		assertEquals(1, l7.size());
-		assertEquals("1\\,2", l7.get(0));
-
-		List<String> l8 = list();
-		split("1,2\\", l8::add);
-		assertEquals("2\\", l8.get(1));
-
-		List<String> l9 = list();
-		split("1,2\\\\", l9::add);
-		assertEquals("2\\", l9.get(1));
-
-		List<String> l10 = list();
-		split("1,2\\,", l10::add);
-		assertEquals("2,", l10.get(1));
-
-		List<String> l11 = list();
-		split("1,2\\\\,", l11::add);
-		assertEquals("2\\", l11.get(1));
-		assertEquals("", l11.get(2));
+	private List<String> split2test(String s) {
+		List<String> l = list();
+		split(s, l::add);
+		return l;
 	}
 
 	//====================================================================================================
 	// split(String,char,int)
 	//====================================================================================================
-	@Test
-	public void testSplitWithLimit() {
-		String[] r;
-
-		r = split("boo:and:foo", ':', 10);
-		assertObject(r).asJson().is("['boo','and','foo']");
-
-		r = split("boo:and:foo", ':', 2);
-		assertObject(r).asJson().is("['boo','and:foo']");
-
-		r = split("boo:and:foo", ':', 1);
-		assertObject(r).asJson().is("['boo:and:foo']");
-
-		r = split("boo:and:foo", ':', 0);
-		assertObject(r).asJson().is("['boo:and:foo']");
-
-		r = split("boo:and:foo", ':', -1);
-		assertObject(r).asJson().is("['boo:and:foo']");
-
-		r = split("boo : and : foo", ':', 10);
-		assertObject(r).asJson().is("['boo','and','foo']");
-
-		r = split("boo : and : foo", ':', 2);
-		assertObject(r).asJson().is("['boo','and : foo']");
+	@Test void a09_splitWithLimit() {
+		assertString("[boo,and,foo]", split("boo:and:foo", ':', 10));
+		assertString("[boo,and:foo]", split("boo:and:foo", ':', 2));
+		assertString("[boo:and:foo]", split("boo:and:foo", ':', 1));
+		assertString("[boo:and:foo]", split("boo:and:foo", ':', 0));
+		assertString("[boo:and:foo]", split("boo:and:foo", ':', -1));
+		assertString("[boo,and,foo]", split("boo : and : foo", ':', 10));
+		assertString("[boo,and : foo]", split("boo : and : foo", ':', 2));
 	}
 
 	//====================================================================================================
 	// nullIfEmpty(String)
 	//====================================================================================================
-	@Test
-	public void testNullIfEmpty() {
+	@Test void a10_nullIfEmpty() {
 		assertNull(nullIfEmpty(null));
 		assertNull(nullIfEmpty(""));
 		assertNotNull(nullIfEmpty("x"));
@@ -561,9 +456,8 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// unescapeChars(String,char[],char)
 	//====================================================================================================
-	@Test
-	public void testUnescapeChars() {
-		AsciiSet escape = AsciiSet.create("\\,|");
+	@Test void a11_unescapeChars() {
+		var escape = AsciiSet.of("\\,|");
 
 		assertNull(unEscapeChars(null, escape));
 		assertEquals("xxx", unEscapeChars("xxx", escape));
@@ -577,15 +471,14 @@ public class StringUtilsTest {
 		assertEquals(",", unEscapeChars("\\,", escape));
 		assertEquals("|", unEscapeChars("\\|", escape));
 
-		escape = AsciiSet.create(",|");
+		escape = AsciiSet.of(",|");
 		assertEquals("x\\\\xx", unEscapeChars("x\\\\xx", escape));
 	}
 
 	//====================================================================================================
 	// decodeHex(String)
 	//====================================================================================================
-	@Test
-	public void testDecodeHex() {
+	@Test void a12_decodeHex() {
 		assertNull(decodeHex(null));
 		assertEquals("19azAZ", decodeHex("19azAZ"));
 		assertEquals("[0][1][ffff]", decodeHex("\u0000\u0001\uFFFF"));
@@ -594,8 +487,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// startsWith(String,char)
 	//====================================================================================================
-	@Test
-	public void testStartsWith() {
+	@Test void a13_startsWith() {
 		assertFalse(startsWith(null, 'a'));
 		assertFalse(startsWith("", 'a'));
 		assertTrue(startsWith("a", 'a'));
@@ -605,8 +497,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// endsWith(String,char)
 	//====================================================================================================
-	@Test
-	public void testEndsWith() {
+	@Test void a14_endsWith() {
 		assertFalse(endsWith(null, 'a'));
 		assertFalse(endsWith("", 'a'));
 		assertTrue(endsWith("a", 'a'));
@@ -617,31 +508,23 @@ public class StringUtilsTest {
 	// base64EncodeToString(String)
 	// base64DecodeToString(String)
 	//====================================================================================================
-	@Test
-	public void testBase64EncodeToString() {
-		String s = null;
-
-		assertEquals(s, base64DecodeToString(base64EncodeToString(s)));
-		s = "";
-		assertEquals(s, base64DecodeToString(base64EncodeToString(s)));
-		s = "foobar";
-		assertEquals(s, base64DecodeToString(base64EncodeToString(s)));
-		s = "\u0000\uffff";
-		assertEquals(s, base64DecodeToString(base64EncodeToString(s)));
-
-		assertThrown(()->base64Decode("a")).asMessage().is("Invalid BASE64 string length.  Must be multiple of 4.");
-		assertThrown(()->base64Decode("aaa")).isType(IllegalArgumentException.class);
+	@Test void a15_base64EncodeToString() {
+		assertNull(base64DecodeToString(base64EncodeToString(null)));
+		assertEquals("", base64DecodeToString(base64EncodeToString("")));
+		assertEquals("foobar", base64DecodeToString(base64EncodeToString("foobar")));
+		assertEquals("\u0000\uffff", base64DecodeToString(base64EncodeToString("\u0000\uffff")));
+		assertThrows(IllegalArgumentException.class, ()->base64Decode("a"), "Invalid BASE64 string length.  Must be multiple of 4.");
+		assertThrows(IllegalArgumentException.class, ()->base64Decode("aaa"));
 	}
 
 	//====================================================================================================
 	// generateUUID(String)
 	//====================================================================================================
-	@Test
-	public void testGenerateUUID() {
-		for (int i = 0; i < 10; i++) {
-			String s = random(i);
+	@Test void a16_generateUUID() {
+		for (var i = 0; i < 10; i++) {
+			var s = random(i);
 			assertEquals(i, s.length());
-			for (char c : s.toCharArray())
+			for (var c : s.toCharArray())
 				assertTrue(Character.isLowerCase(c) || Character.isDigit(c));
 		}
 	}
@@ -649,8 +532,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// trim(String)
 	//====================================================================================================
-	@Test
-	public void testTrim() {
+	@Test void a17_trim() {
 		assertNull(trim(null));
 		assertEquals("", trim(""));
 		assertEquals("", trim("  "));
@@ -659,27 +541,22 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// parseISO8601Date(String)
 	//====================================================================================================
-	@Test
-	public void testParseISO8601Date() throws Exception {
-		WriterSerializer s = JsonSerializer.create().json5().build();
-
+	@Test void a18_parseISO8601Date() throws Exception {
 		assertNull(parseIsoDate(null));
 		assertNull(parseIsoDate(""));
 
 		Utils2.setTimeZone("GMT");
 		try {
-			assertEquals("'2000-01-01T00:00:00'", s.serialize(parseIsoDate("2000")));
-			assertEquals("'2000-02-01T00:00:00'", s.serialize(parseIsoDate("2000-02")));
-			assertEquals("'2000-02-03T00:00:00'", s.serialize(parseIsoDate("2000-02-03")));
-			assertEquals("'2000-02-03T04:00:00'", s.serialize(parseIsoDate("2000-02-03T04")));
-			assertEquals("'2000-02-03T04:05:00'", s.serialize(parseIsoDate("2000-02-03T04:05")));
-			assertEquals("'2000-02-03T04:05:06'", s.serialize(parseIsoDate("2000-02-03T04:05:06")));
-			assertEquals("'2000-02-03T04:00:00'", s.serialize(parseIsoDate("2000-02-03 04")));
-			assertEquals("'2000-02-03T04:05:00'", s.serialize(parseIsoDate("2000-02-03 04:05")));
-			assertEquals("'2000-02-03T04:05:06'", s.serialize(parseIsoDate("2000-02-03 04:05:06")));
-
-			// ISO8601 doesn't support milliseconds, so it gets trimmed.
-			assertEquals("'2000-02-03T04:05:06'", s.serialize(parseIsoDate("2000-02-03 04:05:06,789")));
+			assertString("2000-01-01T00:00:00Z", parseIsoDate("2000"));
+			assertString("2000-02-01T00:00:00Z", parseIsoDate("2000-02"));
+			assertString("2000-02-03T00:00:00Z", parseIsoDate("2000-02-03"));
+			assertString("2000-02-03T04:00:00Z", parseIsoDate("2000-02-03T04"));
+			assertString("2000-02-03T04:05:00Z", parseIsoDate("2000-02-03T04:05"));
+			assertString("2000-02-03T04:05:06Z", parseIsoDate("2000-02-03T04:05:06"));
+			assertString("2000-02-03T04:00:00Z", parseIsoDate("2000-02-03 04"));
+			assertString("2000-02-03T04:05:00Z", parseIsoDate("2000-02-03 04:05"));
+			assertString("2000-02-03T04:05:06Z", parseIsoDate("2000-02-03 04:05:06"));
+			assertString("2000-02-03T04:05:06Z", parseIsoDate("2000-02-03 04:05:06,789"));// ISO8601 doesn't support milliseconds, so it gets trimmed.
 		} finally {
 			Utils2.unsetTimeZone();
 		}
@@ -688,25 +565,23 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// parseMap(String,char,char,boolean)
 	//====================================================================================================
-	@Test
-	public void testSplitMap() {
-		assertObject(splitMap("a=1", true)).asJson().is("{a:'1'}");
-		assertObject(splitMap("a=1,b=2", true)).asJson().is("{a:'1',b:'2'}");
-		assertObject(splitMap(" a = 1 , b = 2 ", true)).asJson().is("{a:'1',b:'2'}");
-		assertObject(splitMap(" a = 1 , b = 2 ", false)).asJson().is("{' a ':' 1 ',' b ':' 2 '}");
-		assertObject(splitMap("a", true)).asJson().is("{a:''}");
-		assertObject(splitMap("a,b", true)).asJson().is("{a:'',b:''}");
-		assertObject(splitMap("a=1,b", true)).asJson().is("{a:'1',b:''}");
-		assertObject(splitMap("a,b=1", true)).asJson().is("{a:'',b:'1'}");
-		assertObject(splitMap("a\\==1", true)).asJson().is("{'a=':'1'}");
-		assertObject(splitMap("a\\\\=1", true)).asJson().is("{'a\\\\':'1'}");
+	@Test void a19_splitMap() {
+		assertString("{a=1}", splitMap("a=1", true));
+		assertString("{a=1,b=2}", splitMap("a=1,b=2", true));
+		assertString("{a=1,b=2}", splitMap(" a = 1 , b = 2 ", true));
+		assertString("{ a = 1 , b = 2 }", splitMap(" a = 1 , b = 2 ", false));
+		assertString("{a=}", splitMap("a", true));
+		assertString("{a=,b=}", splitMap("a,b", true));
+		assertString("{a=1,b=}", splitMap("a=1,b", true));
+		assertString("{a=,b=1}", splitMap("a,b=1", true));
+		assertString("{a==1}", splitMap("a\\==1", true));
+		assertString("{a\\=1}", splitMap("a\\\\=1", true));
 	}
 
 	//====================================================================================================
 	// isAbsoluteUri(String)
 	//====================================================================================================
-	@Test
-	public void testIsAbsoluteUri() {
+	@Test void a10_isAbsoluteUri() {
 		assertFalse(isAbsoluteUri(null));
 		assertFalse(isAbsoluteUri(""));
 		assertTrue(isAbsoluteUri("http://foo"));
@@ -722,8 +597,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// getAuthorityUri(String)
 	//====================================================================================================
-	@Test
-	public void testGetAuthorityUri() {
+	@Test void a21_getAuthorityUri() {
 		assertEquals("http://foo", getAuthorityUri("http://foo"));
 		assertEquals("http://foo:123", getAuthorityUri("http://foo:123"));
 		assertEquals("http://foo:123", getAuthorityUri("http://foo:123/"));
@@ -733,34 +607,32 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// splitQuoted(String)
 	//====================================================================================================
-	@Test
-	public void getSplitQuoted() {
-		assertObject(splitQuoted(null)).asJson().is("null");
-		assertObject(splitQuoted("")).asJson().is("[]");
-		assertObject(splitQuoted(" \t ")).asJson().is("[]");
-		assertObject(splitQuoted("foo")).asJson().is("['foo']");
-		assertObject(splitQuoted("foo  bar baz")).asJson().is("['foo','bar','baz']");
-		assertObject(splitQuoted("'foo'")).asJson().is("['foo']");
-		assertObject(splitQuoted(" ' foo ' ")).asJson().is("[' foo ']");
-		assertObject(splitQuoted("'foo' 'bar'")).asJson().is("['foo','bar']");
-		assertObject(splitQuoted("\"foo\"")).asJson().is("['foo']");
-		assertObject(splitQuoted(" \" foo \" ")).asJson().is("[' foo ']");
-		assertObject(splitQuoted("\"foo\" \"bar\"")).asJson().is("['foo','bar']");
-		assertObject(splitQuoted("'foo\\'bar'")).asJson().is("['foo\\'bar']");
-		assertObject(splitQuoted("'foo\\\"bar'")).asJson().is("['foo\"bar']");
-		assertObject(splitQuoted("'\\'foo\\'bar\\''")).asJson().is("['\\'foo\\'bar\\'']");
-		assertObject(splitQuoted("'\\\"foo\\\"bar\\\"'")).asJson().is("['\"foo\"bar\"']");
-		assertObject(splitQuoted("'\\'foo\\''")).asJson().is("['\\'foo\\'']");
-		assertObject(splitQuoted("\"\\\"foo\\\"\"")).asJson().is("['\"foo\"']");
-		assertObject(splitQuoted("'\"foo\"'")).asJson().is("['\"foo\"']");
-		assertObject(splitQuoted("\"'foo'\"")).asJson().is("['\\'foo\\'']");
+	@Test void a22_splitQuoted() {
+		assertNull(splitQuoted(null));
+		assertArray(splitQuoted(""));
+		assertArray(splitQuoted(" \t "));
+		assertArray(splitQuoted("foo"), "foo");
+		assertArray(splitQuoted("foo  bar baz"), "foo", "bar", "baz");
+		assertArray(splitQuoted("'foo'"), "foo");
+		assertArray(splitQuoted(" ' foo ' "), " foo ");
+		assertArray(splitQuoted("'foo' 'bar'"), "foo", "bar");
+		assertArray(splitQuoted("\"foo\""), "foo");
+		assertArray(splitQuoted(" \" foo \" "), " foo ");
+		assertArray(splitQuoted("\"foo\" \"bar\""), "foo", "bar");
+		assertArray(splitQuoted("'foo\\'bar'"), "foo'bar");
+		assertArray(splitQuoted("'foo\\\"bar'"), "foo\"bar");
+		assertArray(splitQuoted("'\\'foo\\'bar\\''"), "'foo'bar'");
+		assertArray(splitQuoted("'\\\"foo\\\"bar\\\"'"), "\"foo\"bar\"");
+		assertArray(splitQuoted("'\\'foo\\''"), "'foo'");
+		assertArray(splitQuoted("\"\\\"foo\\\"\""), "\"foo\"");
+		assertArray(splitQuoted("'\"foo\"'"), "\"foo\"");
+		assertArray(splitQuoted("\"'foo'\""), "'foo'");
 	}
 
 	//====================================================================================================
 	// firstNonWhitespaceChar(String)
 	//====================================================================================================
-	@Test
-	public void testFirstNonWhitespaceChar() {
+	@Test void a23_firstNonWhitespaceChar() {
 		assertEquals('f', firstNonWhitespaceChar("foo"));
 		assertEquals('f', firstNonWhitespaceChar(" foo"));
 		assertEquals('f', firstNonWhitespaceChar("\tfoo"));
@@ -773,8 +645,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// lastNonWhitespaceChar(String)
 	//====================================================================================================
-	@Test
-	public void testLastNonWhitespaceChar() {
+	@Test void a24_lastNonWhitespaceChar() {
 		assertEquals('r', lastNonWhitespaceChar("bar"));
 		assertEquals('r', lastNonWhitespaceChar(" bar "));
 		assertEquals('r', lastNonWhitespaceChar("\tbar\t"));
@@ -787,8 +658,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// testIsJsonObject(Object)
 	//====================================================================================================
-	@Test
-	public void testIsJsonObject() {
+	@Test void a25_isJsonObject() {
 		assertTrue(isJsonObject("{foo:'bar'}", true));
 		assertTrue(isJsonObject(" { foo:'bar' } ", true));
 		assertFalse(isJsonObject(" { foo:'bar'  ", true));
@@ -799,8 +669,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// isJsonArray(Object)
 	//====================================================================================================
-	@Test
-	public void testIsJsonArray() {
+	@Test void a26_isJsonArray() {
 		assertTrue(isJsonArray("[123,'bar']", true));
 		assertTrue(isJsonArray(" [ 123,'bar' ] ", true));
 		assertFalse(isJsonArray(" [ 123,'bar'  ", true));
@@ -811,8 +680,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// addLineNumbers(String)
 	//====================================================================================================
-	@Test
-	public void testAddLineNumbers() {
+	@Test void a27_addLineNumbers() {
 		assertNull(getNumberedLines(null));
 		assertEquals("1: \n", getNumberedLines(""));
 		assertEquals("1: foo\n", getNumberedLines("foo"));
@@ -822,8 +690,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// compare(String,String)
 	//====================================================================================================
-	@Test
-	public void testCompare() {
+	@Test void a28_compare() {
 		assertTrue(compare("a","b") < 0);
 		assertTrue(compare("b","a") > 0);
 		assertTrue(compare(null,"b") < 0);
@@ -834,8 +701,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// matchPattern(String)
 	//====================================================================================================
-	@Test
-	public void testGetMatchPattern() {
+	@Test void a29_getMatchPattern() {
 		assertTrue(getMatchPattern("a").matcher("a").matches());
 		assertTrue(getMatchPattern("*a*").matcher("aaa").matches());
 		assertFalse(getMatchPattern("*b*").matcher("aaa").matches());
@@ -844,8 +710,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// getDuration(String)
 	//====================================================================================================
-	@Test
-	public void testGetDuration() {
+	@Test void a30_getDuration() {
 		assertEquals(-1, getDuration(null));
 		assertEquals(-1, getDuration(""));
 		assertEquals(-1, getDuration(" "));
@@ -929,8 +794,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// getDuration(String)
 	//====================================================================================================
-	@Test
-	public void testStripInvalidHttpHeaderChars() {
+	@Test void a31_stripInvalidHttpHeaderChars() {
 		assertEquals("xxx", stripInvalidHttpHeaderChars("xxx"));
 		assertEquals("\t []^x", stripInvalidHttpHeaderChars("\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u0009\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u0020\\[]^x"));
 	}
@@ -938,8 +802,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// abbreviate(String,int)
 	//====================================================================================================
-	@Test
-	public void testAbbrevate() {
+	@Test void a32_abbrevate() {
 		assertNull("xxx", abbreviate(null, 0));
 		assertEquals("foo", abbreviate("foo", 3));
 		assertEquals("...", abbreviate("fooo", 3));
@@ -950,20 +813,18 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// splitMethodArgs(String)
 	//====================================================================================================
-	@Test
-	public void testSplitMethodArgs() {
-		assertObject(splitMethodArgs("java.lang.String")).asJson().is("['java.lang.String']");
-		assertObject(splitMethodArgs("java.lang.String,java.lang.Integer")).asJson().is("['java.lang.String','java.lang.Integer']");
-		assertObject(splitMethodArgs("x,y")).asJson().is("['x','y']");
-		assertObject(splitMethodArgs("x,y<a,b>,z")).asJson().is("['x','y<a,b>','z']");
-		assertObject(splitMethodArgs("x,y<a<b,c>,d<e,f>>,z")).asJson().is("['x','y<a<b,c>,d<e,f>>','z']");
+	@Test void a33_splitMethodArgs() {
+		assertArray(splitMethodArgs("java.lang.String"), "java.lang.String");
+		assertArray(splitMethodArgs("java.lang.String,java.lang.Integer"), "java.lang.String", "java.lang.Integer");
+		assertArray(splitMethodArgs("x,y"), "x","y");
+		assertArray(splitMethodArgs("x,y<a,b>,z"), "x", "y<a,b>", "z");
+		assertArray(splitMethodArgs("x,y<a<b,c>,d<e,f>>,z"), "x", "y<a<b,c>,d<e,f>>", "z");
 	}
 
 	//====================================================================================================
 	// fixUrl(String)
 	//====================================================================================================
-	@Test
-	public void testFixUrl() {
+	@Test void a34_fixUrl() {
 		assertEquals(null, fixUrl(null));
 		assertEquals("", fixUrl(""));
 		assertEquals("xxx", fixUrl("xxx"));
@@ -976,8 +837,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// diffPosition(String,String)
 	//====================================================================================================
-	@Test
-	public void testDiffPosition() {
+	@Test void a35_diffPosition() {
 		assertEquals(-1, diffPosition("a", "a"));
 		assertEquals(-1, diffPosition(null, null));
 		assertEquals(0, diffPosition("a", "b"));
@@ -991,8 +851,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	// diffPositionIc(String,String)
 	//====================================================================================================
-	@Test
-	public void testDiffPositionIc() {
+	@Test void a36_diffPositionIc() {
 		assertEquals(-1, diffPositionIc("a", "a"));
 		assertEquals(-1, diffPositionIc("a", "A"));
 		assertEquals(-1, diffPositionIc(null, null));
@@ -1003,4 +862,32 @@ public class StringUtilsTest {
 		assertEquals(0, diffPositionIc("a", null));
 		assertEquals(0, diffPositionIc(null, "b"));
 	}
-}
+
+	//====================================================================================================
+	// splitNested(String)
+	//====================================================================================================
+	@Test void a37_splitNested() {
+		assertNull(splitNested(null));
+		assertList(splitNested(""));
+		assertList(splitNested("a"), "a");
+		assertList(splitNested("a,b,c"), "a", "b", "c");
+		assertList(splitNested("a{b,c},d"), "a{b,c}", "d");
+		assertList(splitNested("a,b{c,d}"), "a", "b{c,d}");
+		assertList(splitNested("a,b{c,d{e,f}}"), "a", "b{c,d{e,f}}");
+		assertList(splitNested("a { b , c } , d "), "a { b , c }", "d");
+		assertList(splitNested("a\\,b"), "a,b");
+		assertList(splitNested("a\\\\,b"), "a\\", "b");
+	}
+
+	//====================================================================================================
+	// splitNestedInner(String)
+	//====================================================================================================
+	@Test void a38_splitNestedInner() {
+		assertThrows(IllegalArgumentException.class, ()->splitNestedInner(null), "String was null.");
+		assertThrows(IllegalArgumentException.class, ()->splitNestedInner(""), "String was empty.");
+		assertList(splitNestedInner("a{b}"), "b");
+		assertList(splitNestedInner(" a { b } "), "b");
+		assertList(splitNestedInner("a{b,c}"), "b", "c");
+		assertList(splitNestedInner("a{b{c,d},e{f,g}}"), "b{c,d}", "e{f,g}");
+	}
+}

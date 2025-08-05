@@ -12,24 +12,21 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("rawtypes")
-class AnnotationsTest extends SimpleTestBase {
+class Annotations_Test extends SimpleTestBase {
 
 	//====================================================================================================
 	// Bean with explicitly specified properties.
 	//====================================================================================================
 	@Test void testBeanWithExplicitProperties() throws Exception {
 		var bc = BeanContext.DEFAULT;
-		BeanMap bm = null;
 
 		// Basic test
-		bm = bc.newBeanMap(Person1.class).load("{age:21,name:'foobar'}");
+		var bm = bc.newBeanMap(Person1.class).load("{age:21,name:'foobar'}");
 		assertNotNull(bm);
 		assertNotNull(bm.getBean());
 		assertEquals(21, bm.get("age"));
@@ -37,8 +34,8 @@ class AnnotationsTest extends SimpleTestBase {
 
 		bm.put("age", 65);
 		bm.put("name", "futbol");
-		assertEquals(65, bm.get("age"));
-		assertEquals("futbol", bm.get("name"));
+		assertMap(bm, "name,age", "futbol,65");
+		assertBean(bm.getBean(), "name,age", "futbol,65");
 	}
 
 	/** Class with explicitly specified properties */
@@ -55,11 +52,10 @@ class AnnotationsTest extends SimpleTestBase {
 	}
 
 	@Test void testBeanWithExplicitProperties2() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
-		BeanMap bm = null;
+		var bc = BeanContext.DEFAULT;
 
 		// Basic test
-		bm = bc.newBeanMap(Person2.class).load("{age:21,name:'foobar'}");
+		var bm = bc.newBeanMap(Person2.class).load("{age:21,name:'foobar'}");
 		assertNotNull(bm);
 		assertNotNull(bm.getBean());
 		assertEquals(21, bm.get("age"));
@@ -67,8 +63,8 @@ class AnnotationsTest extends SimpleTestBase {
 
 		bm.put("age", 65);
 		bm.put("name", "futbol");
-		assertEquals(65, bm.get("age"));
-		assertEquals("futbol", bm.get("name"));
+		assertMap(bm, "name,age", "futbol,65");
+		assertBean(bm.getBean(), "name,age", "futbol,65");
 	}
 
 	/** Class with explicitly specified properties */
@@ -85,11 +81,10 @@ class AnnotationsTest extends SimpleTestBase {
 	}
 
 	@Test void testBeanWithExplicitProperties3() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
-		BeanMap bm = null;
+		var bc = BeanContext.DEFAULT;
 
 		// Basic test
-		bm = bc.newBeanMap(Person3.class).load("{age:21,name:'foobar'}");
+		var bm = bc.newBeanMap(Person3.class).load("{age:21,name:'foobar'}");
 		assertNotNull(bm);
 		assertNotNull(bm.getBean());
 		assertEquals(21, bm.get("age"));
@@ -97,8 +92,8 @@ class AnnotationsTest extends SimpleTestBase {
 
 		bm.put("age", 65);
 		bm.put("name", "futbol");
-		assertEquals(65, bm.get("age"));
-		assertEquals("futbol", bm.get("name"));
+		assertMap(bm, "name,age", "futbol,65");
+		assertBean(bm.getBean(), "name,age", "futbol,65");
 	}
 
 	/** Class with explicitly specified properties */
@@ -115,11 +110,10 @@ class AnnotationsTest extends SimpleTestBase {
 	}
 
 	@Test void testBeanWithExplicitProperties_usingConfig() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT.copy().applyAnnotations(PersonConfig.class).build();
-		BeanMap bm = null;
+		var bc = BeanContext.DEFAULT.copy().applyAnnotations(PersonConfig.class).build();
 
 		// Basic test
-		bm = bc.newBeanMap(Person4.class).load("{age:21,name:'foobar'}");
+		var bm = bc.newBeanMap(Person4.class).load("{age:21,name:'foobar'}");
 		assertNotNull(bm);
 		assertNotNull(bm.getBean());
 		assertEquals(21, bm.get("age"));
@@ -127,8 +121,8 @@ class AnnotationsTest extends SimpleTestBase {
 
 		bm.put("age", 65);
 		bm.put("name", "futbol");
-		assertEquals(65, bm.get("age"));
-		assertEquals("futbol", bm.get("name"));
+		assertMap(bm, "name,age", "futbol,65");
+		assertBean(bm.getBean(), "name,age", "futbol,65");
 	}
 
 	/** Class with explicitly specified properties */
@@ -150,14 +144,13 @@ class AnnotationsTest extends SimpleTestBase {
 	// Private/protected/default fields should be ignored.
 	//====================================================================================================
 	@Test void testForOnlyPublicFields() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
-		BeanMap bm = null;
+		var bc = BeanContext.DEFAULT;
 
 		// Make sure only public fields are detected
-		bm = bc.newBeanMap(A.class).load("{publicField:123}");
+		var bm = bc.newBeanMap(A.class).load("{publicField:123}");
 		assertNotNull("F1", bm);
 		assertNotNull("F2", bm.getBean());
-		assertObject(bm.getBean()).asJson().is("{publicField:123}");
+		assertJson(bm.getBean(), "{publicField:123}");
 	}
 
 	public static class A {

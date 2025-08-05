@@ -49,7 +49,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	//-------------------------------------------------------------------------------------------------------------------
 
 	// Characters that need to be preceded with an escape character.
-	private static final AsciiSet escapedChars = AsciiSet.create("~'\u0001\u0002");
+	private static final AsciiSet escapedChars = AsciiSet.of("~'\u0001\u0002");
 
 	private static final char AMP='\u0001', EQ='\u0002';  // Flags set in reader to denote & and = characters.
 
@@ -887,7 +887,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		return ("null".equals(s) ? null : trim(s));
 	}
 
-	private static final AsciiSet endCharsParam = AsciiSet.create(""+AMP), endCharsNormal = AsciiSet.create(",)"+AMP);
+	private static final AsciiSet endCharsParam = AsciiSet.of(""+AMP), endCharsNormal = AsciiSet.of(",)"+AMP);
 
 
 	/*

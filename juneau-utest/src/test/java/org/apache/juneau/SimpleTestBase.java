@@ -13,18 +13,20 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.regex.*;
+import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.marshaller.*;
+import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.*;
 
@@ -34,9 +36,11 @@ import org.junit.jupiter.api.MethodOrderer.*;
 @TestMethodOrder(MethodName.class)
 public abstract class SimpleTestBase {
 
-	/** Assert value when stringified matches the specified pattern. */
-	protected void assertMatches(String pattern, Object value) {
-		var m = StringUtils.getMatchPattern(pattern).matcher(s(value));
+	/**
+	 * Asserts value when stringified matches the specified pattern.
+	 */
+	protected static void assertMatches(String pattern, Object value) {
+		var m = getMatchPattern(pattern).matcher(s(value));
 		if (! m.matches()) {
 			var msg = "Pattern didn't match: \n\tExpected:\n"+pattern+"\n\tActual:\n"+value;
 			System.err.println(msg);  // For easier debugging.
@@ -44,158 +48,166 @@ public abstract class SimpleTestBase {
 		}
 	}
 
-	protected void assertJson(Object value, String json) {
+	/**
+	 * Asserts the JSON5 representation of the specified object.
+	 */
+	protected static void assertJson(Object value, String json) {
 		assertEquals(json, Json5.DEFAULT.write(value));
 	}
 
 	/**
-	 * Asserts an object matches the expected string after it's been stringified.
+	 * Asserts the serialized representation of the specified object.
 	 */
-	protected void assertString(String expected, Object actual) {
-		assertEquals(expected, s(actual));
+	protected static void assertSerialized(Object value, WriterSerializer s, String json) {
+		assertEquals(json, s.toString(value));
 	}
 
-	protected void assertNotEmpty(Collection<?> c) {
+	/**
+	 * Asserts an object matches the expected string after it's been made readable.
+	 */
+	protected static void assertString(String expected, Object actual) {
+		assertEquals(expected, r(actual));
+	}
+
+	/**
+	 * Asserts the entries in an array matches the expected strings after they've been made readable.
+	 */
+	protected static void assertArray(Object array, String...expected) {
+		if (Array.getLength(array) != expected.length)
+			ffail("Wrong array length.  expected={0}, actual={1}", expected.length, Array.getLength(array));
+		for (var i = 0; i < expected.length; i++)
+			if (ne(r(Array.get(array, i)), expected[i]))
+				ffail("Element at index {0} did not match.  expected={1}, actual={2}", i, expected[i], r(Array.get(array, i)));
+	}
+
+	/**
+	 * Asserts the entries in a list matches the expected strings after they've been made readable.
+	 */
+	protected static void assertList(List<?> list, String...expected) {
+		if (list.size() != expected.length)
+			ffail("Wrong list length.  expected={0}, actual={1}", expected.length, list.size());
+		for (var i = 0; i < expected.length; i++)
+			if (ne(r(list.get(i)), expected[i]))
+				ffail("Element at index {0} did not match.  expected={1}, actual={2}", i, expected[i], r(list.get(i)));
+	}
+
+	/**
+	 * Formatted fail.
+	 */
+	protected static void ffail(String msg, Object...args) {
+		fail(StringUtils.format(msg, args));
+	}
+
+	/**
+	 * Asserts the entries in a map matches the expected strings after they've been made readable.
+	 */
+	protected static void assertMap(Map<?,?> map, String...expected) {
+		assertList(map.entrySet().stream().map(x -> r(x.getKey()) + "=" + r(x.getValue())).toList(), expected);
+	}
+
+	/**
+	 * Asserts that a collection is not null or empty.
+	 */
+	protected static void assertNotEmpty(Collection<?> c) {
 		assertTrue(c != null && ! c.isEmpty());
 	}
 
-	protected void assertNotEmpty(Map<?,?> c) {
+	/**
+	 * Asserts that a maps is not null or empty.
+	 */
+	protected static void assertNotEmpty(Map<?,?> c) {
 		assertTrue(c != null && ! c.isEmpty());
 	}
 
-	protected void assertEmpty(Collection<?> c) {
+	/**
+	 * Asserts that a collection is not null and empty.
+	 */
+	protected static void assertEmpty(Collection<?> c) {
 		assertTrue(c != null && c.isEmpty());
 	}
 
-	protected void assertSize(int expected, Collection<?> c) {
+	/**
+	 * Asserts that a collection is not null and of the specified size.
+	 */
+	protected static void assertSize(int expected, Collection<?> c) {
 		assertEquals(expected, ofNullable(c).map(Collection::size).orElse(-1));
 	}
 
 	/**
-	 * Asserts an exception is thrown and contains the specified message.
-	 * Example:  assertThrown(()->doSomething(), "My exception message:  foo*");
-	 */
-	protected void assertThrown(Snippet snippet, String msg) {
-		try {
-			snippet.run();
-			fail("Exception not thrown.");
-		} catch (Throwable e) {
-			if (! StringUtils.getMatchPattern(msg, Pattern.DOTALL).matcher(e.getMessage()).matches()) {
-				System.err.println("Thrown message didn't match.  Message=" + e.getMessage());
-				fail("Thrown message didn't match.  Message=" + e.getMessage());
-			}
-		}
-	}
-
-	protected void assertThrown(Snippet snippet, Class<? extends Throwable> thrownType) {
-		try {
-			snippet.run();
-			fail("Exception not thrown.");
-		} catch (AssertionError e) {
-			throw e;
-		} catch (Throwable e) {
-			assertTrue(thrownType.isInstance(e), ()->"Wrong type thrown: " + e.getClass().getName());
-		}
-	}
-
-	/**
-	 * Asserts an exception is not thrown
-	 * Example:  assertThrown(()->doSomething());
-	 */
-	protected void assertNotThrown(Snippet snippet) {
-		try {
-			snippet.run();
-		} catch (Throwable e) {
-			fail("Exception thrown.");
-		}
-	}
-
-	/**
-	 * Asserts that the fields/properties on the specified bean are the specified values.
-	 * Collections and calendars are serialized consistently for ease of testing.
+	 * Asserts that the fields/properties on the specified bean are the specified values after being converted to readable strings.
+	 *
 	 * Example:
 	 * 	assertBean(
 	 * 		myBean,
 	 * 		"prop1,prop2,prop3"
 	 * 		"val1,val2,val3"
 	 * 	);
+	 *
+	 * Subsets of properties on nested beans can also be specified by appending arbitrarily-nested "{...}" constructs to property names.
+	 * 	assertBean(
+	 * 		myBean,
+	 * 		"prop1{prop1a,prop1b},prop2,prop3"
+	 * 		"val1{val1a,val1b},val2,val3"
+	 * 	);
+	 * This also works for lists and arrays when numeric subproperty names are used.
+	 * 	assertBean(
+	 * 		myBean,
+	 * 		"myListProp{0,1,2},prop2,prop3"
+	 * 		"val1{val1a,val1b,val1c},val2,val3"
+	 * 	);
 	 */
-	protected void assertBean(Object o, String fields, String value) {
+	protected static void assertBean(Object o, String fields, String value) {
 		if (o == null) throw new NullPointerException("Bean was null");
-		var sb = new StringBuilder();
-		var f = StringUtils.split(fields);
-		for (var i = 0; i < f.length; i++) {
-			if (i > 0) sb.append(",");
-			sb.append(s(getBeanProp(o, f[i])));
-		}
-		assertEquals(value, sb.toString());
+		assertEquals(value, splitNested(fields).stream().map(x -> getReadableEntry(o, x)).collect(joining(",")));
 	}
 
 	/**
-	 * Asserts that the values of the specified fields match the list of beans.
+	 * Asserts that the values in the specified map are the specified values after being converted to readable strings.
+	 * Example:
+	 * 	assertMap(
+	 * 		myMap,
+	 * 		"prop1,prop2,prop3"
+	 * 		"val1,val2,val3"
+	 * 	);
+	 */
+	protected static void assertMap(Map<?,?> o, String fields, String value) {
+		if (o == null) throw new NullPointerException("Map was null");
+		assertEquals(value, cdl(fields).stream().map(x -> getReadableEntry(o, x)).collect(joining(",")));
+	}
+
+	/**
+	 * Asserts that the values of the specified fields match the list of beans after being converted to readable strings.
 	 * @param l The list of beans to check.
 	 * @param fields A comma-delimited list of bean property names.
 	 * @param values The comma-delimited list of values for each bean.
 	 */
 	@SuppressWarnings("rawtypes")
-	protected void assertBeans(Collection l, String fields, Object...values) {
+	protected static void assertBeans(Collection l, String fields, Object...values) {
 		assertEquals(values.length, l.size(), ()->"Expected "+values.length+" rows but had actual " + l.size());
 		var r = 0;
-		var f = StringUtils.split(fields);
+		var f = splitNested(fields);
 		for (var o : l) {
-			var sb = new StringBuilder();
-			var first = true;
-			for (var ff : f) {
-				if (! first) sb.append(",");
-				first = false;
-				String[] subfields = null;
-				if (contains(ff, '{')) {
-					subfields = ff.substring(ff.indexOf('{')+1, ff.indexOf("}")).split(":");
-					ff = ff.substring(0, ff.indexOf('{'));
-				}
-				var bp = getBeanProp(o, ff);
-				if (subfields != null) {
-					if (isListOrArray(bp)) {
-						sb.append("[");
-						for (var i = 0; i < length(bp); i++) {
-							if (i > 0) sb.append(",");
-							sb.append(beanProps(get(bp, i), subfields));
-						}
-						sb.append("]");
-					} else {
-						sb.append(beanProps(bp, subfields));
-					}
-				} else {
-					sb.append(s(getBeanProp(o, ff)));
-				}
-			}
-			assertEquals(s(values[r]), sb.toString(), "Object at row " + (r+1) + " didn't match.");
+			var actual = f.stream().map(x -> getReadableEntry(o, x)).collect(joining(","));
+			var r2 = r+1;
+			assertEquals(r(values[r]), actual, ()->"Object at row " + r2 + " didn't match.");
 			r++;
 		}
 	}
 
-	/**
-	 * Returns the specified bean properties on the specified bean as a comma-delimited list.
-	 */
-	private String beanProps(Object o, String[] properties) {
-		if (o == null) return "null";
-		var sb = new StringBuilder();
-		sb.append("{");
-		for (var i = 0; i < properties.length; i++) {
-			if (i > 0) sb.append(",");
-			sb.append(s(getBeanProp(o, properties[i])));
-		}
-		sb.append("}");
-		return sb.toString();
+	private static String getReadableEntry(Object o, String name) {
+		var i = name.indexOf("{");
+		var pn = i == -1 ? name : name.substring(0, i);
+		var spn = i == -1 ? null : splitNestedInner(name);
+		var e = getEntry(o, pn);
+		if (spn == null) return r(e);
+		return spn.stream().map(x -> getReadableEntry(e, x)).collect(joining(","));
 	}
 
-	/**
-	 * Returns the specified element from a List or array.
-	 */
-	private Object get(Object o, int i) {
-		if (o instanceof List) return ((List<?>)o).get(i);
-		if (o.getClass().isArray()) return Array.get(o, i);
-		throw new RuntimeException("Invalid data type for length(Object): " + o.getClass().getSimpleName());
+	private static Object getEntry(Object o, String name) {
+		if (o instanceof List) return List.class.cast(o).get(Integer.parseInt(name));
+		if (o.getClass().isArray()) return Array.get(o, Integer.parseInt(name));
+		if (o instanceof Map) return Map.class.cast(o).get(name);
+		return getBeanProp(o, name);
 	}
 
 	/**
@@ -212,16 +224,16 @@ public abstract class SimpleTestBase {
 	 * Methods and fields can be any visibility.
 	 */
 	public static Object getBeanProp(Object o, String name) {
-		return Utils.safe(() -> {
-			Field f = null;
-			Class<?> c = o.getClass();
+		return safe(() -> {
+			var f = (Field)null;
+			var c = o.getClass();
 			var n = Character.toUpperCase(name.charAt(0)) + name.substring(1);
 			var m = Arrays.stream(c.getMethods()).filter(x -> isGetter(x, n)).filter(x -> x.getAnnotation(BeanIgnore.class) == null).findFirst().orElse(null);
 			if (m != null) {
 				m.setAccessible(true);
 				return m.invoke(o);
 			}
-			Class<?> c2 = c;
+			var c2 = c;
 			while (f == null && c2 != null) {
 				f = Arrays.stream(c2.getDeclaredFields()).filter(x -> x.getName().equals(name)).findFirst().orElse(null);
 				c2 = c2.getSuperclass();
@@ -230,7 +242,7 @@ public abstract class SimpleTestBase {
 				f.setAccessible(true);
 				return f.get(o);
 			}
-			throw new RuntimeException("No field called " + name + " found on class "+c.getName()+"");
+			throw runtimeException("No field called {0} found on class {1}", name, c.getName());
 		});
 	}
 
@@ -240,27 +252,17 @@ public abstract class SimpleTestBase {
 	}
 
 	/**
-	 * Returns true if this is a List or array.
-	 */
-	private boolean isListOrArray(Object o) {
-		return o instanceof List || o.getClass().isArray();
-	}
-
-	/**
-	 * Returns the length of a List or array.
-	 */
-	private int length(Object o) {
-		if (o == null) return 0;
-		if (o instanceof List) return ((List<?>)o).size();
-		if (o.getClass().isArray()) return Array.getLength(o);
-		throw new RuntimeException("Invalid data type for length(Object): " + o.getClass().getSimpleName());
-	}
-
-	/**
 	 * Creates an array of objects.
 	 */
 	@SafeVarargs
 	protected static <T> T[] a(T...x) {
 		return x;
+	}
+
+	/**
+	 * Simplified string supplier with message arguments.
+	 */
+	public static Supplier<String> ss(String pattern, Object...args) {
+		return ()->StringUtils.format(pattern, args);
 	}
 }

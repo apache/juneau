@@ -29,7 +29,7 @@ public final class AsciiSet {
 	 * @param chars The characters to keep in this store.
 	 * @return A new object.
 	 */
-	public static AsciiSet create(String chars) {
+	public static AsciiSet of(String chars) {
 		return new Builder().chars(chars).build();
 	}
 

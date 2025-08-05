@@ -50,7 +50,6 @@ public class RoundTripBeanPropertiesTest extends RoundTripTest {
 		o.f1[0] = alist(123L);
 		o = roundTrip(o);
 		assertEquals(123, o.f1[0].get(0).intValue());
-		assertTrue(o.f1[0].get(0) instanceof Long);
 	}
 
 	public static class A02 {
@@ -63,7 +62,6 @@ public class RoundTripBeanPropertiesTest extends RoundTripTest {
 		o.f1 = CollectionUtils.<Long[]>alist(new Long[]{123L});
 		o = roundTrip(o);
 		assertEquals(123, o.f1.get(0)[0].intValue());
-		assertTrue(o.f1.get(0)[0] instanceof Long);
 	}
 
 	public static class A03 {
@@ -77,7 +75,6 @@ public class RoundTripBeanPropertiesTest extends RoundTripTest {
 		o.f1[0] = new List[]{alist(123L)};
 		o = roundTrip(o);
 		assertEquals(123, o.f1[0][0].get(0).intValue());
-		assertTrue(o.f1[0][0].get(0) instanceof Long);
 	}
 
 	public static class A04 {
@@ -90,6 +87,5 @@ public class RoundTripBeanPropertiesTest extends RoundTripTest {
 		o.f1 = CollectionUtils.<Long[][]>alist(new Long[][]{new Long[]{123L}});
 		o = roundTrip(o);
 		assertEquals(123, o.f1.get(0)[0][0].intValue());
-		assertTrue(o.f1.get(0)[0][0] instanceof Long);
 	}
 }

@@ -64,10 +64,10 @@ public class StringMatcherFactory extends MatcherFactory {
 	private static class StringMatcher extends AbstractMatcher {
 		private String pattern;
 		private static final AsciiSet
-			META_CHARS = AsciiSet.create("*?'\""),
-			SQ_CHAR = AsciiSet.create("'"),
-			DQ_CHAR = AsciiSet.create("\""),
-			REGEX_CHARS = AsciiSet.create("+\\[]{}()^$.");
+			META_CHARS = AsciiSet.of("*?'\""),
+			SQ_CHAR = AsciiSet.of("'"),
+			DQ_CHAR = AsciiSet.of("\""),
+			REGEX_CHARS = AsciiSet.of("+\\[]{}()^$.");
 
 		Pattern[] orPatterns, andPatterns, notPatterns;
 

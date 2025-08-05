@@ -17,6 +17,7 @@ import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static java.nio.charset.StandardCharsets.*;
 import static java.lang.Character.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -49,11 +50,11 @@ public final class StringUtils {
 	 */
 	public static final Predicate<String> NOT_EMPTY = StringUtils::isNotEmpty;
 
-	private static final AsciiSet numberChars = AsciiSet.create("-xX.+-#pP0123456789abcdefABCDEF");
-	private static final AsciiSet firstNumberChars =AsciiSet.create("+-.#0123456789");
-	private static final AsciiSet octChars = AsciiSet.create("01234567");
-	private static final AsciiSet decChars = AsciiSet.create("0123456789");
-	private static final AsciiSet hexChars = AsciiSet.create("0123456789abcdefABCDEF");
+	private static final AsciiSet numberChars = AsciiSet.of("-xX.+-#pP0123456789abcdefABCDEF");
+	private static final AsciiSet firstNumberChars =AsciiSet.of("+-.#0123456789");
+	private static final AsciiSet octChars = AsciiSet.of("01234567");
+	private static final AsciiSet decChars = AsciiSet.of("0123456789");
+	private static final AsciiSet hexChars = AsciiSet.of("0123456789abcdefABCDEF");
 
 	// Maps 6-bit nibbles to BASE64 characters.
 	private static final char[] base64m1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
@@ -513,6 +514,16 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Shortcut for calling <code>split(s, <js>','</js>)</code>
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static List<String> split2(String s) {
+		return split2(s, ',');
+	}
+
+	/**
 	 * Same as {@link #split(String)} but consumes the tokens instead of creating an array.
 	 *
 	 * @param s The string to split.
@@ -547,6 +558,33 @@ public final class StringUtils {
 	 */
 	public static String[] split(String s, char c) {
 		return split(s, c, Integer.MAX_VALUE);
+	}
+
+	/**
+	 * Splits a character-delimited string into a string array.
+	 *
+	 * <p>
+	 * Does not split on escaped-delimiters (e.g. "\,");
+	 * Resulting tokens are trimmed of whitespace.
+	 *
+	 * <p>
+	 * <b>NOTE:</b>  This behavior is different than the Jakarta equivalent.
+	 * split("a,b,c",',') -&gt; {"a","b","c"}
+	 * split("a, b ,c ",',') -&gt; {"a","b","c"}
+	 * split("a,,c",',') -&gt; {"a","","c"}
+	 * split(",,",',') -&gt; {"","",""}
+	 * split("",',') -&gt; {}
+	 * split(null,',') -&gt; null
+	 * split("a,b\,c,d", ',', false) -&gt; {"a","b\,c","d"}
+	 * split("a,b\\,c,d", ',', false) -&gt; {"a","b\","c","d"}
+	 * split("a,b\,c,d", ',', true) -&gt; {"a","b,c","d"}
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static List<String> split2(String s, char c) {
+		return split2(s, c, Integer.MAX_VALUE);
 	}
 
 	/**
@@ -595,15 +633,28 @@ public final class StringUtils {
 	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
 	public static String[] split(String s, char c, int limit) {
+		var l = split2(s, c, limit);
+		return l == null ? null : l.toArray(new String[l.size()]);
+	}
+
+	/**
+	 * Same as {@link #split(String, char)} but limits the number of tokens returned.
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @param limit The maximum number of tokens to return.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static List<String> split2(String s, char c, int limit) {
 
 		var escapeChars = getEscapeSet(c);
 
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
 		if (isEmpty(s))
-			return new String[0];
+			return Collections.emptyList();
 		if (s.indexOf(c) == -1)
-			return new String[]{s};
+			return Collections.singletonList(s);
 
 		var l = new LinkedList<String>();
 		var sArray = s.toCharArray();
@@ -627,7 +678,7 @@ public final class StringUtils {
 		var s3 = unEscapeChars(s2, escapeChars);
 		l.add(s3.trim());
 
-		return l.toArray(new String[l.size()]);
+		return l;
 	}
 
 	/**
@@ -725,7 +776,7 @@ public final class StringUtils {
 		return m;
 	}
 
-	private static final AsciiSet MAP_ESCAPE_SET = AsciiSet.create(",=\\");
+	private static final AsciiSet MAP_ESCAPE_SET = AsciiSet.of(",=\\");
 
 	/**
 	 * Returns <jk>true</jk> if the specified string contains any of the specified characters.
@@ -769,6 +820,117 @@ public final class StringUtils {
 	 */
 	public static String[] splitQuoted(String s) {
 		return splitQuoted(s, false);
+	}
+
+	/**
+	 * Splits a comma-delimited list containing "nesting constructs".
+	 *
+	 * Nesting constructs are simple embedded "{...}" comma-delimted lists.
+	 *
+	 * Example:
+	 * 	"a{b,c},d" -> ["a{b,c}","d"]
+	 *
+	 * Handles escapes and trims whitespace from tokens.
+	 *
+	 * @param s The input string.
+	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * 	<br>An empty string results in an empty array.
+	 */
+	public static List<String> splitNested(String s) {
+		var escapeChars = getEscapeSet(',');
+
+		if (s == null) return null;  // NOSONAR - Intentional.
+		if (isEmpty(s)) return Collections.emptyList();
+		if (s.indexOf(',') == -1) return Collections.singletonList(trim(s));
+
+		var l = new LinkedList<String>();
+
+		var x1 = 0;
+		var inEscape = false;
+		var depthCount = 0;
+
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (inEscape) {
+				if (c == '\\') {
+					inEscape = false;
+				}
+			} else {
+				if (c == '\\') {
+					inEscape = true;
+				} else if (c == '{') {
+					depthCount++;
+				} else if (c == '}') {
+					depthCount--;
+				} else if (c == ',' && depthCount == 0) {
+					l.add(trim(unEscapeChars(s.substring(x1, i), escapeChars)));
+					x1 = i+1;
+				}
+			}
+		}
+		l.add(trim(unEscapeChars(s.substring(x1, s.length()), escapeChars)));
+
+		return l;
+	}
+
+	/**
+	 * Splits a nested comma-delimited list.
+	 *
+	 * Nesting constructs are simple embedded "{...}" comma-delimted lists.
+	 *
+	 * Example:
+	 * 	"a{b,c{d,e}}" -> ["b","c{d,e}"]
+	 *
+	 * Handles escapes and trims whitespace from tokens.
+	 *
+	 * @param s The input string.
+	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * 	<br>An empty string results in an empty array.
+	 */
+	public static List<String> splitNestedInner(String s) {
+		if (s == null) throw illegalArg("String was null.");
+		if (isEmpty(s)) throw illegalArg("String was empty.");
+
+		final int
+			S1 = 1,  // Looking for '{'
+			S2 = 2;  // Found '{', looking for '}'
+
+		var start = -1;
+		var end = -1;
+		var state = S1;
+		var depth = 0;
+		var inEscape = false;
+
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (inEscape) {
+				if (c == '\\') {
+					inEscape = false;
+				}
+			} else {
+				if (c == '\\') {
+					inEscape = true;
+				} else if (state == S1) {
+					if (c == '{') {
+						start = i+1;
+						state = S2;
+					}
+				} else /* state == S2 */ {
+					if (c == '{') {
+						depth++;
+					} else if (depth > 0 && c == '}') {
+						depth--;
+					} else if (c == '}') {
+						end = i;
+						break;
+					}
+				}
+			}
+		}
+
+		if (start == -1) throw illegalArg("Start character '{' not found in string.", s);
+		if (end == -1) throw illegalArg("End character '}' not found in string.", s);
+		return splitNested(s.substring(start, end));
 	}
 
 	/**
@@ -850,7 +1012,7 @@ public final class StringUtils {
 		return l.toArray(new String[l.size()]);
 	}
 
-	private static final AsciiSet QUOTE_ESCAPE_SET = AsciiSet.create("\"'\\");
+	private static final AsciiSet QUOTE_ESCAPE_SET = AsciiSet.of("\"'\\");
 
 	/**
 	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or empty.

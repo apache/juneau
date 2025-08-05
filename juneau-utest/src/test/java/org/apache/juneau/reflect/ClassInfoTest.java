@@ -162,7 +162,7 @@ public class ClassInfoTest {
 
 	@Test
 	public void inner() {
-		assertTrue(of(A1.class).inner() instanceof Class);
+		assertNotNull(of(A1.class).inner());
 		assertTrue(of(A1.class).innerType() instanceof Class);
 	}
 

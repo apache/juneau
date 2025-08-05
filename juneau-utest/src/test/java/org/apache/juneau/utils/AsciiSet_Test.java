@@ -13,24 +13,25 @@
 package org.apache.juneau.utils;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
 import org.junit.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class CharSetTest {
+/**
+ * Tests {@link AsciiSet}.
+ */
+class AsciiSet_Test extends SimpleTestBase {
 
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test
-	public void test() {
-		AsciiSet cs = AsciiSet.create("abc\u1234");
+	@Test void a01_basic() {
+		var cs = AsciiSet.of("abc\u1234");
 		assertTrue(cs.contains('a'));
 		assertFalse(cs.contains('d'));
 		assertFalse(cs.contains('\u1234'));
 		assertFalse(cs.contains((char)-1));
 		assertFalse(cs.contains((char)128));
 	}
-}
+}

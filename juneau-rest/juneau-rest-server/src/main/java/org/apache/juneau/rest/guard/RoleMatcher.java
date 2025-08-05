@@ -52,9 +52,9 @@ public class RoleMatcher {
 
 	private final Exp exp;
 	private static final AsciiSet
-		WS = AsciiSet.create(" \t"),
-		OP = AsciiSet.create(",|&"),
-		META = AsciiSet.create("*?");
+		WS = AsciiSet.of(" \t"),
+		OP = AsciiSet.of(",|&"),
+		META = AsciiSet.of("*?");
 
 	/**
 	 * Constructor.

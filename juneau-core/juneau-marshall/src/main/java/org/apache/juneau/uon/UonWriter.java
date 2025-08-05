@@ -44,9 +44,9 @@ public final class UonWriter extends SerializerWriter {
 	private static final AsciiSet unencodedCharsAttrName = AsciiSet.create().ranges("a-z","A-Z","0-9").chars(";/?:@-_.!*'$(),~").build();
 
 	// Characters that need to be preceded with an escape character.
-	private static final AsciiSet escapedChars = AsciiSet.create("~'");
+	private static final AsciiSet escapedChars = AsciiSet.of("~'");
 
-	private static final AsciiSet noChars = AsciiSet.create("");
+	private static final AsciiSet noChars = AsciiSet.of("");
 
 	private static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
