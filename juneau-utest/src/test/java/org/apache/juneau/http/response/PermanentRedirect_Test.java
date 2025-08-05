@@ -13,14 +13,11 @@
 package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.HttpResponses.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
-
-@FixMethodOrder(NAME_ASCENDING)
-public class PermanentRedirect_Test {
+import org.junit.jupiter.api.*;
+class PermanentRedirect_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A {
@@ -30,8 +27,7 @@ public class PermanentRedirect_Test {
 		@RestGet public PermanentRedirect a4() { return permanentRedirect("servlet:/foo").setHeader2("Foo","bar"); }
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		MockRestClient client = MockRestClient.createLax(A.class).disableRedirectHandling().build();
 
 		client.get("/a1")

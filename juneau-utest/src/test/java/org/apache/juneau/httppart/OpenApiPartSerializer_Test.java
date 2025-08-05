@@ -18,18 +18,16 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class OpenApiPartSerializer_Test {
+class OpenApiPartSerializer_Test extends SimpleTestBase {
 
 	static OpenApiSerializerSession s = OpenApiSerializer.DEFAULT.getSession();
 
@@ -41,16 +39,14 @@ public class OpenApiPartSerializer_Test {
 	// Input validations
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_outputValidations_nullOutput() throws Exception {
+	@Test void a01_outputValidations_nullOutput() throws Exception {
 		assertEquals("null", serialize(T_NONE, null));
 		assertEquals("null", serialize(tNone().required(false).build(), null));
 		assertThrown(()->serialize(tNone().required().build(), null)).asMessage().is("Required value not provided.");
 		assertThrown(()->serialize(tNone().required(true).build(), null)).asMessage().is("Required value not provided.");
 	}
 
-	@Test
-	public void a02_outputValidations_emptyOutput() throws Exception {
+	@Test void a02_outputValidations_emptyOutput() throws Exception {
 		assertEquals("", serialize(tNone().allowEmptyValue().build(), ""));
 		assertEquals("", serialize(tNone().allowEmptyValue().build(), ""));
 		assertThrown(()->serialize(tNone().allowEmptyValue(false).build(), "")).asMessage().is("Empty value not allowed.");
@@ -58,8 +54,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals(" ", serialize(tNone().allowEmptyValue(false).build(), " "));
 	}
 
-	@Test
-	public void a03_outputValidations_pattern() throws Exception {
+	@Test void a03_outputValidations_pattern() throws Exception {
 		final HttpPartSchema ps = tNone().pattern("x.*").allowEmptyValue().build();
 		assertEquals("x", serialize(ps, "x"));
 		assertEquals("xx", serialize(ps, "xx"));
@@ -73,8 +68,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("x", serialize(tNone().pattern(null).allowEmptyValue().build(), "x"));
 	}
 
-	@Test
-	public void a04_outputValidations_enum() throws Exception {
+	@Test void a04_outputValidations_enum() throws Exception {
 		final HttpPartSchema ps = tNone()._enum("foo").allowEmptyValue().build();
 
 		assertEquals("foo", serialize(ps, "foo"));
@@ -88,8 +82,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("foo", serialize(tNone()._enum("foo","foo").build(), "foo"));
 	}
 
-	@Test
-	public void a05_outputValidations_minMaxLength() throws Exception {
+	@Test void a05_outputValidations_minMaxLength() throws Exception {
 		HttpPartSchema ps = tNone().minLength(1L).maxLength(2L).allowEmptyValue().build();
 
 		assertEquals("null", serialize(ps, null));
@@ -136,21 +129,18 @@ public class OpenApiPartSerializer_Test {
 	}
 
 
-	@Test
-	public void c01_stringType_simple() throws Exception {
+	@Test void c01_stringType_simple() throws Exception {
 		HttpPartSchema ps = T_STRING;
 		assertEquals("foo", serialize(ps, "foo"));
 	}
 
-	@Test
-	public void c02_stringType_default() throws Exception {
+	@Test void c02_stringType_default() throws Exception {
 		HttpPartSchema ps = tString()._default("x").build();
 		assertEquals("foo", serialize(ps, "foo"));
 		assertEquals("x", serialize(ps, null));
 	}
 
-	@Test
-	public void c03_stringType_byteFormat() throws Exception {
+	@Test void c03_stringType_byteFormat() throws Exception {
 		HttpPartSchema ps = T_BYTE;
 		byte[] foob = "foo".getBytes();
 		String expected = base64Encode(foob);
@@ -160,8 +150,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("null", serialize(ps, null));
 	}
 
-	@Test
-	public void c04_stringType_binaryFormat() throws Exception {
+	@Test void c04_stringType_binaryFormat() throws Exception {
 		HttpPartSchema ps = T_BINARY;
 		byte[] foob = "foo".getBytes();
 		String expected = toHex(foob);
@@ -171,8 +160,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("null", serialize(ps, null));
 	}
 
-	@Test
-	public void c05_stringType_binarySpacedFormat() throws Exception {
+	@Test void c05_stringType_binarySpacedFormat() throws Exception {
 		HttpPartSchema ps = T_BINARY_SPACED;
 		byte[] foob = "foo".getBytes();
 		String expected = toSpacedHex(foob);
@@ -182,24 +170,21 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("null", serialize(ps, null));
 	}
 
-	@Test
-	public void c06_stringType_dateFormat() throws Exception {
+	@Test void c06_stringType_dateFormat() throws Exception {
 		HttpPartSchema ps = T_DATE;
 		Calendar in = StringUtils.parseIsoCalendar("2012-12-21");
 		assertTrue(serialize(ps, in).contains("2012"));
 		assertEquals("null", serialize(ps, null));
 	}
 
-	@Test
-	public void c07_stringType_dateTimeFormat() throws Exception {
+	@Test void c07_stringType_dateTimeFormat() throws Exception {
 		HttpPartSchema ps = T_DATETIME;
 		Calendar in = StringUtils.parseIsoCalendar("2012-12-21T12:34:56.789");
 		assertTrue(serialize(ps, in).contains("2012"));
 		assertEquals("null", serialize(ps, null));
 	}
 
-	@Test
-	public void c08_stringType_uonFormat() throws Exception {
+	@Test void c08_stringType_uonFormat() throws Exception {
 		HttpPartSchema ps = T_UON;
 		assertEquals("foo", serialize(ps, "foo"));
 		assertEquals("~'foo~'", serialize(ps, "'foo'"));
@@ -210,8 +195,7 @@ public class OpenApiPartSerializer_Test {
 		// UonPartSerializerTest should handle all other cases.
 	}
 
-	@Test
-	public void c09_stringType_noneFormat() throws Exception {
+	@Test void c09_stringType_noneFormat() throws Exception {
 		// If no format is specified, then we should transform directly from a string.
 		HttpPartSchema ps = T_STRING;
 		assertEquals("foo", serialize(ps, "foo"));
@@ -222,8 +206,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("null", serialize(ps, null));
 	}
 
-	@Test
-	public void c10_stringType_noneFormat_2d() throws Exception {
+	@Test void c10_stringType_noneFormat_2d() throws Exception {
 		HttpPartSchema ps = tArray(tString()).build();
 		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null)));
@@ -234,8 +217,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("foo,bar,null", serialize(ps, new C3("foo","bar",null)));
 	}
 
-	@Test
-	public void c11_stringType_noneFormat_3d() throws Exception {
+	@Test void c11_stringType_noneFormat_3d() throws Exception {
 		HttpPartSchema ps = tArrayPipes(tArray(tString())).build();
 		assertEquals("foo,bar|baz,null|null", serialize(ps, new String[][]{{"foo","bar"},{"baz",null},null}));
 		assertEquals("foo,bar|baz,null|null", serialize(ps, list(new String[]{"foo","bar"}, new String[]{"baz",null},null)));
@@ -250,8 +232,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("foo,bar|baz,null|null|null", serialize(ps, list(new C3("foo","bar"),new C3("baz",null),new C3((String)null),null)));
 	}
 
-	@Test
-	public void c12_stringType_uonKeywords_plain() throws Exception {
+	@Test void c12_stringType_uonKeywords_plain() throws Exception {
 		HttpPartSchema ps = T_STRING;
 		// When serialized normally, the following should not be quoted.
 		assertEquals("true", serialize(ps, "true"));
@@ -262,8 +243,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1.23", serialize(ps, "1.23"));
 	}
 
-	@Test
-	public void c13_stringType_uonKeywords_uon() throws Exception {
+	@Test void c13_stringType_uonKeywords_uon() throws Exception {
 		HttpPartSchema ps = T_UON;
 		// When serialized as UON, the following should be quoted so that they're not confused with booleans or numbers.
 		assertEquals("'true'", serialize(ps, "true"));
@@ -289,8 +269,7 @@ public class OpenApiPartSerializer_Test {
 		}
 	}
 
-	@Test
-	public void d01_arrayType_collectionFormatCsv() throws Exception {
+	@Test void d01_arrayType_collectionFormatCsv() throws Exception {
 		HttpPartSchema ps = T_ARRAY_CSV;
 		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo,bar,null", serialize(ps, new Object[]{"foo","bar",null}));
@@ -303,8 +282,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("foo\\,bar,null", serialize(ps, new String[]{"foo,bar",null}));
 	}
 
-	@Test
-	public void d02_arrayType_collectionFormatPipes() throws Exception {
+	@Test void d02_arrayType_collectionFormatPipes() throws Exception {
 		HttpPartSchema ps = T_ARRAY_PIPES;
 		assertEquals("foo|bar|null", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo|bar|null", serialize(ps, new Object[]{"foo","bar",null}));
@@ -315,8 +293,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("foo|bar|null", serialize(ps, JsonList.of("foo","bar",null)));
 	}
 
-	@Test
-	public void d03_arrayType_collectionFormatSsv() throws Exception {
+	@Test void d03_arrayType_collectionFormatSsv() throws Exception {
 		HttpPartSchema ps = T_ARRAY_SSV;
 		assertEquals("foo bar null", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo bar null", serialize(ps, new Object[]{"foo","bar",null}));
@@ -327,8 +304,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("foo bar null", serialize(ps, JsonList.of("foo","bar",null)));
 	}
 
-	@Test
-	public void d04_arrayType_collectionFormatTsv() throws Exception {
+	@Test void d04_arrayType_collectionFormatTsv() throws Exception {
 		HttpPartSchema ps = T_ARRAY_TSV;
 		assertEquals("foo\tbar\tnull", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo\tbar\tnull", serialize(ps, new Object[]{"foo","bar",null}));
@@ -339,8 +315,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("foo\tbar\tnull", serialize(ps, JsonList.of("foo","bar",null)));
 	}
 
-	@Test
-	public void d05_arrayType_collectionFormatUon() throws Exception {
+	@Test void d05_arrayType_collectionFormatUon() throws Exception {
 		HttpPartSchema ps = T_ARRAY_UON;
 		assertEquals("@(foo,bar,'null',null)", serialize(ps, new String[]{"foo","bar","null",null}));
 		assertEquals("@(foo,bar,'null',null)", serialize(ps, new Object[]{"foo","bar","null",null}));
@@ -351,8 +326,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("@(foo,bar,'null',null)", serialize(ps, JsonList.of("foo","bar","null",null)));
 	}
 
-	@Test
-	public void d06a_arrayType_collectionFormatNone() throws Exception {
+	@Test void d06a_arrayType_collectionFormatNone() throws Exception {
 		HttpPartSchema ps = T_ARRAY;
 		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo,bar,null", serialize(ps, new Object[]{"foo","bar",null}));
@@ -363,8 +337,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("foo,bar,null", serialize(ps, JsonList.of("foo","bar",null)));
 	}
 
-	@Test
-	public void d07_arrayType_collectionFormatMulti() throws Exception {
+	@Test void d07_arrayType_collectionFormatMulti() throws Exception {
 		// collectionFormat=multi really shouldn't be applicable to collections of values, so just use csv.
 		HttpPartSchema ps = T_ARRAY_MULTI;
 		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null}));
@@ -376,8 +349,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("foo,bar,null", serialize(ps, JsonList.of("foo","bar",null)));
 	}
 
-	@Test
-	public void d08_arrayType_collectionFormatCsvAndPipes() throws Exception {
+	@Test void d08_arrayType_collectionFormatCsvAndPipes() throws Exception {
 		HttpPartSchema ps = tArrayPipes(tArrayCsv()).build();
 		assertEquals("foo,bar|baz,null|null", serialize(ps, new String[][]{{"foo","bar"},{"baz",null},null}));
 		assertEquals("foo,bar|baz,null|null", serialize(ps, new Object[][]{{"foo","bar"},{"baz",null},null}));
@@ -387,8 +359,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("foo,bar|baz,null,null|null", serialize(ps, list(list(new D("foo"),new D("bar")),list(new D("baz"),new D(null),null),null)));
 	}
 
-	@Test
-	public void d09_arrayType_itemsInteger() throws Exception {
+	@Test void d09_arrayType_itemsInteger() throws Exception {
 		HttpPartSchema ps = tArrayCsv(tInteger()).build();
 		assertEquals("1,2", serialize(ps, new int[]{1,2}));
 		assertEquals("1,2,null", serialize(ps, new Integer[]{1,2,null}));
@@ -396,8 +367,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1,2,null", serialize(ps, list(1,2,null)));
 	}
 
-	@Test
-	public void d10_arrayType_itemsInteger_2d() throws Exception {
+	@Test void d10_arrayType_itemsInteger_2d() throws Exception {
 		HttpPartSchema ps = tArrayPipes(tArrayCsv(tInteger()).allowEmptyValue()).build();
 		assertEquals("1,2||null", serialize(ps, new int[][]{{1,2},{},null}));
 		assertEquals("1,2,null||null", serialize(ps, new Integer[][]{{1,2,null},{},null}));
@@ -429,8 +399,7 @@ public class OpenApiPartSerializer_Test {
 		}
 	}
 
-	@Test
-	public void e01_booleanType() throws Exception {
+	@Test void e01_booleanType() throws Exception {
 		HttpPartSchema ps = T_BOOLEAN;
 		assertEquals("true", serialize(ps, true));
 		assertEquals("true", serialize(ps, "true"));
@@ -443,8 +412,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("null", serialize(ps, new E1(null)));
 	}
 
-	@Test
-	public void e03_booleanType_2d() throws Exception {
+	@Test void e03_booleanType_2d() throws Exception {
 		HttpPartSchema ps = tArray(tBoolean()).build();
 		assertEquals("true", serialize(ps, new boolean[]{true}));
 		assertEquals("true,null", serialize(ps, new Boolean[]{true,null}));
@@ -458,8 +426,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("true,null", serialize(ps, new E2(true,null)));
 	}
 
-	@Test
-	public void e04_booleanType_3d() throws Exception {
+	@Test void e04_booleanType_3d() throws Exception {
 		HttpPartSchema ps = tArrayPipes(tArray(tBoolean())).build();
 		assertEquals("true,true|false", serialize(ps, new boolean[][]{{true,true},{false}}));
 		assertEquals("true,true|false", serialize(ps, list(new boolean[]{true,true},new boolean[]{false})));
@@ -522,8 +489,7 @@ public class OpenApiPartSerializer_Test {
 		}
 	}
 
-	@Test
-	public void f01_integerType_int32() throws Exception {
+	@Test void f01_integerType_int32() throws Exception {
 		HttpPartSchema ps = T_INT32;
 		assertEquals("1", serialize(ps, 1));
 		assertEquals("1", serialize(ps, Integer.valueOf(1)));
@@ -537,8 +503,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("null", serialize(ps, "null"));
 	}
 
-	@Test
-	public void f02_integerType_int32_2d() throws Exception {
+	@Test void f02_integerType_int32_2d() throws Exception {
 		HttpPartSchema ps = tArray(tInt32()).build();
 		assertEquals("1,2", serialize(ps, new int[]{1,2}));
 		assertEquals("1,2,null", serialize(ps, new Integer[]{1,2,null}));
@@ -558,8 +523,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1,2,null", serialize(ps, new F2(1,2,null)));
 	}
 
-	@Test
-	public void f03_integerType_int32_3d() throws Exception {
+	@Test void f03_integerType_int32_3d() throws Exception {
 		HttpPartSchema ps = tArrayPipes(tArray(tInt32())).build();
 		assertEquals("1,2|3|null", serialize(ps, new int[][]{{1,2},{3},null}));
 		assertEquals("1,2|3|null", serialize(ps, list(new int[]{1,2},new int[]{3},null)));
@@ -589,8 +553,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1,2|3,null|null", serialize(ps, list(new F2(1,2),new F2(3,null),null)));
 	}
 
-	@Test
-	public void f04_integerType_int64() throws Exception {
+	@Test void f04_integerType_int64() throws Exception {
 		HttpPartSchema ps = T_INT64;
 		assertEquals("1", serialize(ps, 1));
 		assertEquals("1", serialize(ps, Integer.valueOf(1)));
@@ -604,8 +567,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("null", serialize(ps, "null"));
 	}
 
-	@Test
-	public void f05_integerType_int64_2d() throws Exception {
+	@Test void f05_integerType_int64_2d() throws Exception {
 		HttpPartSchema ps = tArray(tInt64()).build();
 		assertEquals("1,2", serialize(ps, new int[]{1,2}));
 		assertEquals("1,2,null", serialize(ps, new Integer[]{1,2,null}));
@@ -625,8 +587,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1,2,null", serialize(ps, new F4(1L,2L,null)));
 	}
 
-	@Test
-	public void f06_integerType_int64_3d() throws Exception {
+	@Test void f06_integerType_int64_3d() throws Exception {
 		HttpPartSchema ps = tArrayPipes(tArray(tInt64())).build();
 		assertEquals("1,2|3|null", serialize(ps, new int[][]{{1,2},{3},null}));
 		assertEquals("1,2|3|null", serialize(ps, list(new int[]{1,2},new int[]{3},null)));
@@ -701,8 +662,7 @@ public class OpenApiPartSerializer_Test {
 		}
 	}
 
-	@Test
-	public void g01_numberType_float() throws Exception {
+	@Test void g01_numberType_float() throws Exception {
 		HttpPartSchema ps = T_FLOAT;
 		assertEquals("1.0", serialize(ps, 1f));
 		assertEquals("1.0", serialize(ps, Float.valueOf(1f)));
@@ -715,8 +675,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("null", serialize(ps, new G1(null)));
 	}
 
-	@Test
-	public void g02_numberType_float_2d() throws Exception {
+	@Test void g02_numberType_float_2d() throws Exception {
 		HttpPartSchema ps = tArray(tFloat()).build();
 		assertEquals("1.0,2.0", serialize(ps, new float[]{1,2}));
 		assertEquals("1.0,2.0,null", serialize(ps, new Float[]{1f,2f,null}));
@@ -733,8 +692,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1.0,2.0,null", serialize(ps, new G2(1f,2f,null)));
 	}
 
-	@Test
-	public void g03_numberType_float_3d() throws Exception {
+	@Test void g03_numberType_float_3d() throws Exception {
 		HttpPartSchema ps = tArrayPipes(tArray(tFloat())).build();
 		assertEquals("1.0,2.0|3.0|null", serialize(ps, new float[][]{{1,2},{3},null}));
 		assertEquals("1.0,2.0|3.0|null", serialize(ps, list(new float[]{1,2},new float[]{3},null)));
@@ -759,8 +717,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1.0,2.0,null|null", serialize(ps, list(new G2(1f,2f,null),null)));
 	}
 
-	@Test
-	public void g04_numberType_double() throws Exception {
+	@Test void g04_numberType_double() throws Exception {
 		HttpPartSchema ps = T_DOUBLE;
 		assertEquals("1.0", serialize(ps, 1f));
 		assertEquals("1.0", serialize(ps, Float.valueOf(1f)));
@@ -773,8 +730,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("null", serialize(ps, new G3(null)));
 	}
 
-	@Test
-	public void g05_numberType_double_2d() throws Exception {
+	@Test void g05_numberType_double_2d() throws Exception {
 		HttpPartSchema ps = tArray(tDouble()).build();
 		assertEquals("1.0,2.0", serialize(ps, new float[]{1,2}));
 		assertEquals("1.0,2.0,null", serialize(ps, new Float[]{1f,2f,null}));
@@ -791,8 +747,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("1.0,2.0,null", serialize(ps, new G4(1d,2d,null)));
 	}
 
-	@Test
-	public void g06_numberType_double_3d() throws Exception {
+	@Test void g06_numberType_double_3d() throws Exception {
 		HttpPartSchema ps = tArrayPipes(tArray(tDouble())).build();
 		assertEquals("1.0,2.0|3.0|null", serialize(ps, new float[][]{{1f,2f},{3f},null}));
 		assertEquals("1.0,2.0|3.0|null", serialize(ps, list(new float[]{1f,2f},new float[]{3f},null)));
@@ -833,8 +788,7 @@ public class OpenApiPartSerializer_Test {
 		}
 	}
 
-	@Test
-	public void h01_objectType() throws Exception {
+	@Test void h01_objectType() throws Exception {
 		HttpPartSchema ps = tObject().allowEmptyValue().build();
 		assertEquals("f1=1,f2=2,f3=true", serialize(ps, new H1("1",2,true)));
 		assertEquals("", serialize(ps, new H1(null,null,null)));
@@ -843,8 +797,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("null", serialize(ps, null));
 	}
 
-	@Test
-	public void h02_objectType_uon() throws Exception {
+	@Test void h02_objectType_uon() throws Exception {
 		HttpPartSchema ps = T_OBJECT_UON;
 		assertEquals("(f1='1',f2=2,f3=true)", serialize(ps, new H1("1",2,true)));
 		assertEquals("()", serialize(ps, new H1(null,null,null)));
@@ -853,8 +806,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("null", serialize(ps, null));
 	}
 
-	@Test
-	public void h03_objectType_2d() throws Exception {
+	@Test void h03_objectType_2d() throws Exception {
 		HttpPartSchema ps = tArray(tObject().allowEmptyValue()).build();
 		assertEquals("f1=1\\,f2=2\\,f3=true,,null", serialize(ps, new H1[]{new H1("1",2,true),new H1(null,null,null),null}));
 		assertEquals("f1=1\\,f2=2\\,f3=true,,null", serialize(ps, list(new H1("1",2,true),new H1(null,null,null),null)));
@@ -864,8 +816,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("f1=1\\,f2=2\\,f3=true,f1=1\\,f2=2\\,f3=true,null", serialize(ps, list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
 	}
 
-	@Test
-	public void h03_objectType_2d_pipes() throws Exception {
+	@Test void h03_objectType_2d_pipes() throws Exception {
 		HttpPartSchema ps = tArrayPipes(tObject().allowEmptyValue()).build();
 		assertEquals("f1=1,f2=2,f3=true||null", serialize(ps, new H1[]{new H1("1",2,true),new H1(null,null,null),null}));
 		assertEquals("f1=1,f2=2,f3=true||null", serialize(ps, list(new H1("1",2,true),new H1(null,null,null),null)));
@@ -875,8 +826,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true|null", serialize(ps, list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
 	}
 
-	@Test
-	public void h04_objectType_2d_uon() throws Exception {
+	@Test void h04_objectType_2d_uon() throws Exception {
 		HttpPartSchema ps = tArrayUon(tObject()).build();
 		assertEquals("@((f1='1',f2=2,f3=true),(),null)", serialize(ps, new H1[]{new H1("1",2,true),new H1(null,null,null),null}));
 		assertEquals("@((f1='1',f2=2,f3=true),(),null)", serialize(ps, list(new H1("1",2,true),new H1(null,null,null),null)));
@@ -886,8 +836,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true),null)", serialize(ps, list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
 	}
 
-	@Test
-	public void h03_objectType_3d() throws Exception {
+	@Test void h03_objectType_3d() throws Exception {
 		HttpPartSchema ps = tArray(tArray(tObject().allowEmptyValue())).build();
 		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=3\\\\\\,f3=false,\\,null,null", serialize(ps, new H1[][]{{new H1("1",2,true),new H1("x",3,false)},{new H1(null,null,null),null},null}));
 		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=3\\\\\\,f3=false,\\,null,null", serialize(ps, list(new H1[]{new H1("1",2,true),new H1("x",3,false)},new H1[]{new H1(null,null,null),null},null)));
@@ -900,8 +849,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, list(list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),list(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
 	}
 
-	@Test
-	public void h03_objectType_3d_ssvAndPipes() throws Exception {
+	@Test void h03_objectType_3d_ssvAndPipes() throws Exception {
 		HttpPartSchema ps = tArraySsv(tArrayPipes(tObject().allowEmptyValue())).build();
 		assertEquals("null|null null|null null null", serialize(ps, new String[][]{{null,null},{null,null},null,null}));
 //f1=1,f2=2,f3=true|f1=x,f2=3,f3=false null null
@@ -916,8 +864,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, list(list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),list(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
 	}
 
-	@Test
-	public void h03_objectType_3d_uon() throws Exception {
+	@Test void h03_objectType_3d_uon() throws Exception {
 		HttpPartSchema ps = tArrayUon(tArray(tObject())).build();
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", serialize(ps, new H1[][]{{new H1("1",2,true),new H1("x",3,false)},{new H1(null,null,null),null},null}));
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", serialize(ps, list(new H1[]{new H1("1",2,true),new H1("x",3,false)},new H1[]{new H1(null,null,null),null},null)));
@@ -948,8 +895,7 @@ public class OpenApiPartSerializer_Test {
 		}
 	}
 
-	@Test
-	public void h04_objectType_simpleProperties() throws Exception {
+	@Test void h04_objectType_simpleProperties() throws Exception {
 		HttpPartSchema ps = tObject()
 			.p("f01", tString())
 			.p("f02", tByte())
@@ -980,8 +926,7 @@ public class OpenApiPartSerializer_Test {
 		);
 	}
 
-	@Test
-	public void h05_objectType_arrayProperties() throws Exception {
+	@Test void h05_objectType_arrayProperties() throws Exception {
 		HttpPartSchema ps = tObjectUon()
 			.p("f01", tArray(tString()))
 			.p("f02", tArray(tByte()))
@@ -1009,83 +954,68 @@ public class OpenApiPartSerializer_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 	// No-schema tests
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test
-	public void i01a_noSchemaTests_Integer() throws Exception {
+	@Test void i01a_noSchemaTests_Integer() throws Exception {
 		for (Integer v : list(Integer.valueOf(1), Integer.MAX_VALUE, Integer.MIN_VALUE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
-	@Test
-	public void i01b_noSchemaTests_IntegerArray() throws Exception {
+	@Test void i01b_noSchemaTests_IntegerArray() throws Exception {
 		assertEquals("1,2147483647,-2147483648", serialize((HttpPartSchema)null, new Integer[]{Integer.valueOf(1), Integer.MAX_VALUE, Integer.MIN_VALUE}));
 	}
 
-	@Test
-	public void i02a_noSchemaTests_Short() throws Exception {
+	@Test void i02a_noSchemaTests_Short() throws Exception {
 		for (Short v : list(Short.valueOf((short)1), Short.MAX_VALUE, Short.MIN_VALUE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 
-	@Test
-	public void i02b_noSchemaTests_ShortArray() throws Exception {
+	@Test void i02b_noSchemaTests_ShortArray() throws Exception {
 		assertEquals("1,32767,-32768,null", serialize((HttpPartSchema)null, new Short[]{Short.valueOf((short)1), Short.MAX_VALUE, Short.MIN_VALUE, null}));
 	}
 
-	@Test
-	public void i03a_noSchemaTests_Long() throws Exception {
+	@Test void i03a_noSchemaTests_Long() throws Exception {
 		for (Long v : list(Long.valueOf(1), Long.MAX_VALUE, Long.MIN_VALUE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 
-	@Test
-	public void i03b_noSchemaTests_LongArray() throws Exception {
+	@Test void i03b_noSchemaTests_LongArray() throws Exception {
 		assertEquals("1,9223372036854775807,-9223372036854775808,null", serialize((HttpPartSchema)null, new Long[]{Long.valueOf(1), Long.MAX_VALUE, Long.MIN_VALUE, null}));
 	}
 
-	@Test
-	public void i04a_noSchemaTests_Float() throws Exception {
+	@Test void i04a_noSchemaTests_Float() throws Exception {
 		for (Float v : list(Float.valueOf(1f), Float.MAX_VALUE, Float.MIN_VALUE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 
-	@Test
-	public void i04b_noSchemaTests_FloatArray() throws Exception {
+	@Test void i04b_noSchemaTests_FloatArray() throws Exception {
 		assertEquals("1.0,3.4028235E38,1.4E-45", serialize((HttpPartSchema)null, new Float[]{Float.valueOf(1f), Float.MAX_VALUE, Float.MIN_VALUE}));
 	}
 
-	@Test
-	public void i05a_noSchemaTests_Double() throws Exception {
+	@Test void i05a_noSchemaTests_Double() throws Exception {
 		for (Double v : list(Double.valueOf(1d), Double.MAX_VALUE, Double.MIN_VALUE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 
-	@Test
-	public void i05b_noSchemaTests_DoubleArray() throws Exception {
+	@Test void i05b_noSchemaTests_DoubleArray() throws Exception {
 		assertEquals("1.0,1.7976931348623157E308,4.9E-324", serialize((HttpPartSchema)null, new Double[]{Double.valueOf(1), Double.MAX_VALUE, Double.MIN_VALUE}));
 	}
 
-	@Test
-	public void i06a_noSchemaTests_Boolean() throws Exception {
+	@Test void i06a_noSchemaTests_Boolean() throws Exception {
 		for (Boolean v : list(Boolean.TRUE, Boolean.FALSE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 
-	@Test
-	public void i06b_noSchemaTests_BooleanArray() throws Exception {
+	@Test void i06b_noSchemaTests_BooleanArray() throws Exception {
 		assertEquals("true,false,null", serialize((HttpPartSchema)null, new Boolean[]{Boolean.TRUE, Boolean.FALSE, null}));
 	}
 
-	@Test
-	public void i07_noSchemaTests_Null() throws Exception {
+	@Test void i07_noSchemaTests_Null() throws Exception {
 		assertEquals("null", serialize((HttpPartSchema)null, null));
 	}
 
-	@Test
-	public void i08a_noSchemaTests_String() throws Exception {
+	@Test void i08a_noSchemaTests_String() throws Exception {
 		for (String v : list("foo", ""))
 			assertEquals(v, serialize((HttpPartSchema)null, v));
 	}
-	@Test
-	public void i08b_noSchemaTests_StringArray() throws Exception {
+	@Test void i08b_noSchemaTests_StringArray() throws Exception {
 		assertEquals("foo,,null", serialize((HttpPartSchema)null, new String[]{"foo", "", null}));
 	}
 }

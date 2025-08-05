@@ -13,23 +13,20 @@
 package org.apache.juneau.uon;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.parser.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"resource"})
-@FixMethodOrder(NAME_ASCENDING)
-public class UonParserReaderTest {
+class UonParserReaderTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// Basic tests
 	//====================================================================================================
-	@Test
-	public void testBasic() throws Exception {
+	@Test void testBasic() throws Exception {
 
 		UonReader r;
 		String s, in;

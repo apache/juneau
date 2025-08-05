@@ -15,18 +15,14 @@ package org.apache.juneau.http;
 import static org.apache.juneau.StringRanges.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class StringRanges_Test {
+public class StringRanges_Test extends SimpleTestBase {
 
-	@Test
-	public void a01_match() {
+	@Test void a01_match() {
 		List<String> x = alist("foo","bar","baz");
 
 		assertInteger(of((String)null).match(x)).is(-1);
@@ -42,8 +38,7 @@ public class StringRanges_Test {
 		assertInteger(of("foo;q=0").match(x)).is(-1);
 	}
 
-	@Test
-	public void a02_getRange() {
+	@Test void a02_getRange() {
 		assertString(of("foo").getRange(0)).isNotNull();
 		assertString(of((String)null).getRange(0)).isNull();
 		assertString(of("").getRange(0)).isNull();
@@ -51,14 +46,12 @@ public class StringRanges_Test {
 		assertString(of((String)null).getRange(1)).isNull();
 	}
 
-	@Test
-	public void a03_getRanges() {
+	@Test void a03_getRanges() {
 		assertObject(of("foo").toList()).asJson().is("['foo']");
 		assertObject(of((String)null).toList()).asJson().is("[]");
 	}
 
-	@Test
-	public void a04_toString() {
+	@Test void a04_toString() {
 		assertString(new StringRange("*")).is("*");
 		assertString(of("foo;q=0.6,bar;q=0.9,qux")).is("qux, bar;q=0.9, foo;q=0.6");
 	}

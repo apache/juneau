@@ -12,17 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.http.client.config.*;
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Paths_Test {
+public class Paths_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Setup
@@ -54,8 +52,7 @@ public class Paths_Test {
 	}
 	static MockRestClient a = MockRestClient.create(A.class).contextPath("/cp").servletPath("/sp").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 
-	@Test
-	public void a01() throws Exception {
+	@Test void a01() throws Exception {
 		a.get("http://localhost/cp/sp").run()
 			.assertContent().isContains("pathInfo:null")
 			.assertContent().isContains("pathRemainder:null")
@@ -69,8 +66,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:1")
 		;
 	}
-	@Test
-	public void a02() throws Exception {
+	@Test void a02() throws Exception {
 		a.get("http://localhost/cp/sp/").run()
 			.assertContent().isContains("pathInfo:'/'")
 			.assertContent().isContains("pathRemainder:''")
@@ -84,8 +80,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:1")
 		;
 	}
-	@Test
-	public void a03() throws Exception {
+	@Test void a03() throws Exception {
 		a.get("http://localhost/cp/sp//").run()
 			.assertContent().isContains("pathInfo:'//'")
 			.assertContent().isContains("pathRemainder:'/'")
@@ -99,8 +94,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:1")
 		;
 	}
-	@Test
-	public void a04() throws Exception {
+	@Test void a04() throws Exception {
 		a.get("http://localhost/cp/sp///").run()
 			.assertContent().isContains("pathInfo:'///'")
 			.assertContent().isContains("pathRemainder:'//'")
@@ -114,8 +108,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:1")
 		;
 	}
-	@Test
-	public void a05() throws Exception {
+	@Test void a05() throws Exception {
 		a.get("http://localhost/cp/sp/foo/bar").run()
 			.assertContent().isContains("pathInfo:'/foo/bar'")
 			.assertContent().isContains("pathRemainder:'foo/bar'")
@@ -129,8 +122,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:1")
 		;
 	}
-	@Test
-	public void a06() throws Exception {
+	@Test void a06() throws Exception {
 		a.get("http://localhost/cp/sp/foo/bar/").run()
 			.assertContent().isContains("pathInfo:'/foo/bar/'")
 			.assertContent().isContains("pathRemainder:'foo/bar/'")
@@ -144,8 +136,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:1")
 		;
 	}
-	@Test
-	public void a07() throws Exception {
+	@Test void a07() throws Exception {
 		a.get("http://localhost/cp/sp//foo//bar//").run()
 			.assertContent().isContains("pathInfo:'//foo//bar//'")
 			.assertContent().isContains("pathRemainder:'/foo//bar//'")
@@ -159,8 +150,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:1")
 		;
 	}
-	@Test
-	public void a08() throws Exception {
+	@Test void a08() throws Exception {
 		a.get("http://localhost/cp/sp/%20").run()
 			.assertContent().isContains("pathInfo:'/ '")
 			.assertContent().isContains("pathRemainder:' '")
@@ -174,8 +164,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:1")
 		;
 	}
-	@Test
-	public void a09() throws Exception {
+	@Test void a09() throws Exception {
 		a.get("http://localhost/cp/sp/+").run()
 			.assertContent().isContains("pathInfo:'/ '")
 			.assertContent().isContains("pathRemainder:' '")
@@ -202,8 +191,7 @@ public class Paths_Test {
 	}
 	static MockRestClient b = MockRestClient.create(B.class).contextPath("/cp").servletPath("/sp").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 
-	@Test
-	public void b01() throws Exception {
+	@Test void b01() throws Exception {
 		b.get("http://localhost/cp/sp/subpath").run()
 			.assertContent().isContains("pathInfo:'/subpath'")
 			.assertContent().isContains("pathRemainder:null")
@@ -217,8 +205,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:2")
 		;
 	}
-	@Test
-	public void b02() throws Exception {
+	@Test void b02() throws Exception {
 		b.get("http://localhost/cp/sp/subpath/").run()
 			.assertContent().isContains("pathInfo:'/subpath/'")
 			.assertContent().isContains("pathRemainder:''")
@@ -232,8 +219,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:2")
 		;
 	}
-	@Test
-	public void b03() throws Exception {
+	@Test void b03() throws Exception {
 		b.get("http://localhost/cp/sp/subpath//").run()
 			.assertContent().isContains("pathInfo:'/subpath//'")
 			.assertContent().isContains("pathRemainder:'/'")
@@ -247,8 +233,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:2")
 		;
 	}
-	@Test
-	public void b04() throws Exception {
+	@Test void b04() throws Exception {
 		b.get("http://localhost/cp/sp/subpath///").run()
 			.assertContent().isContains("pathInfo:'/subpath///'")
 			.assertContent().isContains("pathRemainder:'//'")
@@ -262,8 +247,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:2")
 		;
 	}
-	@Test
-	public void b05() throws Exception {
+	@Test void b05() throws Exception {
 		b.get("http://localhost/cp/sp/subpath/foo/bar").run()
 			.assertContent().isContains("pathInfo:'/subpath/foo/bar'")
 			.assertContent().isContains("pathRemainder:'foo/bar'")
@@ -277,8 +261,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:2")
 		;
 	}
-	@Test
-	public void b06() throws Exception {
+	@Test void b06() throws Exception {
 		b.get("http://localhost/cp/sp/subpath/foo/bar/").run()
 			.assertContent().isContains("pathInfo:'/subpath/foo/bar/'")
 			.assertContent().isContains("pathRemainder:'foo/bar/'")
@@ -292,8 +275,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:2")
 		;
 	}
-	@Test
-	public void b07() throws Exception {
+	@Test void b07() throws Exception {
 		b.get("http://localhost/cp/sp/subpath//foo//bar//").run()
 			.assertContent().isContains("pathInfo:'/subpath//foo//bar//'")
 			.assertContent().isContains("pathRemainder:'/foo//bar//'")
@@ -307,8 +289,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:2")
 		;
 	}
-	@Test
-	public void b08() throws Exception {
+	@Test void b08() throws Exception {
 		b.get("http://localhost/cp/sp/subpath/%20").run()
 			.assertContent().isContains("pathInfo:'/subpath/ '")
 			.assertContent().isContains("pathRemainder:' '")
@@ -322,8 +303,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:2")
 		;
 	}
-	@Test
-	public void b09() throws Exception {
+	@Test void b09() throws Exception {
 		b.get("http://localhost/cp/sp/subpath/+").run()
 			.assertContent().isContains("pathInfo:'/subpath/ '")
 			.assertContent().isContains("pathRemainder:' '")
@@ -354,8 +334,7 @@ public class Paths_Test {
 	}
 	static MockRestClient c = MockRestClient.create(C.class).contextPath("/cp").servletPath("/sp").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 
-	@Test
-	public void c01() throws Exception {
+	@Test void c01() throws Exception {
 		c.get("http://localhost/cp/sp/a").run()
 			.assertContent().isContains("pathInfo:null")
 			.assertContent().isContains("pathRemainder:null")
@@ -369,8 +348,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:3")
 		;
 	}
-	@Test
-	public void c02() throws Exception {
+	@Test void c02() throws Exception {
 		c.get("http://localhost/cp/sp/a/").run()
 			.assertContent().isContains("pathInfo:'/'")
 			.assertContent().isContains("pathRemainder:''")
@@ -384,8 +362,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:3")
 		;
 	}
-	@Test
-	public void c03() throws Exception {
+	@Test void c03() throws Exception {
 		c.get("http://localhost/cp/sp/a//").run()
 			.assertContent().isContains("pathInfo:'//'")
 			.assertContent().isContains("pathRemainder:'/'")
@@ -399,8 +376,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:3")
 		;
 	}
-	@Test
-	public void c04() throws Exception {
+	@Test void c04() throws Exception {
 		c.get("http://localhost/cp/sp/a///").run()
 			.assertContent().isContains("pathInfo:'///'")
 			.assertContent().isContains("pathRemainder:'//'")
@@ -414,8 +390,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:3")
 		;
 	}
-	@Test
-	public void c05() throws Exception {
+	@Test void c05() throws Exception {
 		c.get("http://localhost/cp/sp/a/foo/bar").run()
 			.assertContent().isContains("pathInfo:'/foo/bar'")
 			.assertContent().isContains("pathRemainder:'foo/bar'")
@@ -429,8 +404,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:3")
 		;
 	}
-	@Test
-	public void c06() throws Exception {
+	@Test void c06() throws Exception {
 		c.get("http://localhost/cp/sp/a/foo/bar/").run()
 			.assertContent().isContains("pathInfo:'/foo/bar/'")
 			.assertContent().isContains("pathRemainder:'foo/bar/'")
@@ -444,8 +418,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:3")
 		;
 	}
-	@Test
-	public void c07() throws Exception {
+	@Test void c07() throws Exception {
 		c.get("http://localhost/cp/sp/a//foo//bar//").run()
 			.assertContent().isContains("pathInfo:'//foo//bar//'")
 			.assertContent().isContains("pathRemainder:'/foo//bar//'")
@@ -459,8 +432,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:3")
 		;
 	}
-	@Test
-	public void c08() throws Exception {
+	@Test void c08() throws Exception {
 		c.get("http://localhost/cp/sp/a/%20").run()
 			.assertContent().isContains("pathInfo:'/ '")
 			.assertContent().isContains("pathRemainder:' '")
@@ -474,8 +446,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:3")
 		;
 	}
-	@Test
-	public void c09() throws Exception {
+	@Test void c09() throws Exception {
 		c.get("http://localhost/cp/sp/a/+").run()
 			.assertContent().isContains("pathInfo:'/ '")
 			.assertContent().isContains("pathRemainder:' '")
@@ -506,8 +477,7 @@ public class Paths_Test {
 	}
 	static MockRestClient d = MockRestClient.create(D.class).contextPath("/cp").servletPath("/sp").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 
-	@Test
-	public void d01() throws Exception {
+	@Test void d01() throws Exception {
 		d.get("http://localhost/cp/sp/a/subpath").run()
 			.assertContent().isContains("pathInfo:'/subpath'")
 			.assertContent().isContains("pathRemainder:null")
@@ -521,8 +491,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:4")
 		;
 	}
-	@Test
-	public void d02() throws Exception {
+	@Test void d02() throws Exception {
 		d.get("http://localhost/cp/sp/a/subpath/").run()
 			.assertContent().isContains("pathInfo:'/subpath/'")
 			.assertContent().isContains("pathRemainder:''")
@@ -536,8 +505,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:4")
 		;
 	}
-	@Test
-	public void d03() throws Exception {
+	@Test void d03() throws Exception {
 		d.get("http://localhost/cp/sp/a/subpath//").run()
 			.assertContent().isContains("pathInfo:'/subpath//'")
 			.assertContent().isContains("pathRemainder:'/'")
@@ -551,8 +519,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:4")
 		;
 	}
-	@Test
-	public void d04() throws Exception {
+	@Test void d04() throws Exception {
 		d.get("http://localhost/cp/sp/a/subpath///").run()
 			.assertContent().isContains("pathInfo:'/subpath///'")
 			.assertContent().isContains("pathRemainder:'//'")
@@ -566,8 +533,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:4")
 		;
 	}
-	@Test
-	public void d05() throws Exception {
+	@Test void d05() throws Exception {
 		d.get("http://localhost/cp/sp/a/subpath/foo/bar").run()
 			.assertContent().isContains("pathInfo:'/subpath/foo/bar'")
 			.assertContent().isContains("pathRemainder:'foo/bar'")
@@ -581,8 +547,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:4")
 		;
 	}
-	@Test
-	public void d06() throws Exception {
+	@Test void d06() throws Exception {
 		d.get("http://localhost/cp/sp/a/subpath/foo/bar/").run()
 			.assertContent().isContains("pathInfo:'/subpath/foo/bar/'")
 			.assertContent().isContains("pathRemainder:'foo/bar/'")
@@ -596,8 +561,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:4")
 		;
 	}
-	@Test
-	public void d07() throws Exception {
+	@Test void d07() throws Exception {
 		d.get("http://localhost/cp/sp/a/subpath//foo//bar//").run()
 			.assertContent().isContains("pathInfo:'/subpath//foo//bar//'")
 			.assertContent().isContains("pathRemainder:'/foo//bar//'")
@@ -611,8 +575,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:4")
 		;
 	}
-	@Test
-	public void d08() throws Exception {
+	@Test void d08() throws Exception {
 		d.get("http://localhost/cp/sp/a/subpath/%20").run()
 			.assertContent().isContains("pathInfo:'/subpath/ '")
 			.assertContent().isContains("pathRemainder:' '")
@@ -626,8 +589,7 @@ public class Paths_Test {
 			.assertContent().isContains("method:4")
 		;
 	}
-	@Test
-	public void d09() throws Exception {
+	@Test void d09() throws Exception {
 		d.get("http://localhost/cp/sp/a/subpath/+").run()
 			.assertContent().isContains("pathInfo:'/subpath/ '")
 			.assertContent().isContains("pathRemainder:' '")

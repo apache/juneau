@@ -12,18 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import jakarta.servlet.http.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestOp_Matchers_Test {
+class RestOp_Matchers_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Overlapping matchers
@@ -66,8 +64,7 @@ public class RestOp_Matchers_Test {
 		}
 	}
 
-	@Test
-	public void a01_overlapping() throws Exception {
+	@Test void a01_overlapping() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.get("/one?t1=1").run().assertContent("OK-1a");
 		a.get("/one?t2=2").run().assertContent("OK-1b");

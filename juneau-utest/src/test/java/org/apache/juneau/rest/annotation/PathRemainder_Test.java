@@ -13,19 +13,17 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class PathRemainder_Test {
+public class PathRemainder_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Simple tests
@@ -55,8 +53,7 @@ public class PathRemainder_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 
 		a.get("/a").run().assertContent("null");
@@ -112,8 +109,7 @@ public class PathRemainder_Test {
 		}
 	}
 
-	@Test
-	public void b01_optionalParam() throws Exception {
+	@Test void b01_optionalParam() throws Exception {
 		RestClient b = MockRestClient.buildJson(B.class);
 		b.get("/a/123")
 			.run()

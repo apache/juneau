@@ -14,20 +14,17 @@ package org.apache.juneau.rest.mock2;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class MockServletRequest_Test {
+public class MockServletRequest_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// URIs
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_uris_basic() {
+	@Test void a01_uris_basic() {
 		MockServletRequest req = MockServletRequest.create("GET", "/foo");
 
 		assertEquals("", req.getContextPath());
@@ -39,8 +36,7 @@ public class MockServletRequest_Test {
 		assertEquals("", req.getServletPath());
 	}
 
-	@Test
-	public void a02_uris_full() {
+	@Test void a02_uris_full() {
 		MockServletRequest req = MockServletRequest.create("GET", "http://localhost:8080/foo?bar=baz#quz");
 
 		assertEquals("", req.getContextPath());
@@ -52,8 +48,7 @@ public class MockServletRequest_Test {
 		assertEquals("", req.getServletPath());
 	}
 
-	@Test
-	public void a03_uris_full2() {
+	@Test void a03_uris_full2() {
 		MockServletRequest req = MockServletRequest.create("GET", "http://localhost:8080/foo/bar/baz?bar=baz#quz");
 
 		assertEquals("", req.getContextPath());
@@ -65,8 +60,7 @@ public class MockServletRequest_Test {
 		assertEquals("", req.getServletPath());
 	}
 
-	@Test
-	public void a04_uris_contextPath() {
+	@Test void a04_uris_contextPath() {
 		MockServletRequest req = MockServletRequest.create("GET", "http://localhost:8080/foo/bar/baz?bar=baz#quz").contextPath("/foo");
 
 		assertEquals("/foo", req.getContextPath());
@@ -78,8 +72,7 @@ public class MockServletRequest_Test {
 		assertEquals("", req.getServletPath());
 	}
 
-	@Test
-	public void a05_uris_servletPath() {
+	@Test void a05_uris_servletPath() {
 		MockServletRequest req = MockServletRequest.create("GET", "http://localhost:8080/foo/bar/baz?bar=baz#quz").servletPath("/foo");
 
 		assertEquals("", req.getContextPath());
@@ -95,8 +88,7 @@ public class MockServletRequest_Test {
 	// Query strings
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void b01_query_basic() {
+	@Test void b01_query_basic() {
 		MockServletRequest req = MockServletRequest.create("GET", "/foo?bar=baz&bing=qux");
 
 		assertEquals("bar=baz&bing=qux", req.getQueryString());
@@ -106,8 +98,7 @@ public class MockServletRequest_Test {
 		assertObject(req.getParameterValues("bar")).asJson().is("['baz']");
 	}
 
-	@Test
-	public void b02_query_multivalues() {
+	@Test void b02_query_multivalues() {
 		MockServletRequest req = MockServletRequest.create("GET", "/foo?bar=baz&bar=bing");
 
 		assertEquals("bar=baz&bar=bing", req.getQueryString());

@@ -14,18 +14,15 @@ package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings("rawtypes")
-@FixMethodOrder(NAME_ASCENDING)
-public class UrlEncodingParserTest {
+public class UrlEncodingParserTest extends SimpleTestBase {
 
 	static UrlEncodingParser p = UrlEncodingParser.DEFAULT;
 	static BeanSession bs = p.getBeanContext().getSession();
@@ -33,8 +30,7 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	// Basic test
 	//====================================================================================================
-	@Test
-	public void testBasic() throws Exception {
+	@Test void testBasic() throws Exception {
 
 		String t;
 		Map m;
@@ -343,8 +339,7 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	// Unicode character test
 	//====================================================================================================
-	@Test
-	public void testUnicodeChars() throws Exception {
+	@Test void testUnicodeChars() throws Exception {
 		String t;
 		Map m;
 
@@ -409,8 +404,7 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	// Test simple bean
 	//====================================================================================================
-	@Test
-	public void testSimpleBean() throws Exception {
+	@Test void testSimpleBean() throws Exception {
 		var p2 = UrlEncodingParser.DEFAULT;
 		A t;
 
@@ -428,8 +422,7 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	// Test URL-encoded strings with no-value parameters.
 	//====================================================================================================
-	@Test
-	public void testNoValues() throws Exception {
+	@Test void testNoValues() throws Exception {
 		var p2 = UrlEncodingParser.DEFAULT;
 		JsonMap m;
 
@@ -447,8 +440,7 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	// Test comma-delimited list parameters.
 	//====================================================================================================
-	@Test
-	public void testCommaDelimitedLists() throws Exception {
+	@Test void testCommaDelimitedLists() throws Exception {
 		var p2 = UrlEncodingParser.DEFAULT;
 
 		String s = "?f1=1,2,3&f2=a,b,c&f3=true,false&f4=&f5";
@@ -467,8 +459,7 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	// Test comma-delimited list parameters with special characters.
 	//====================================================================================================
-	@Test
-	public void testCommaDelimitedListsWithSpecialChars() throws Exception {
+	@Test void testCommaDelimitedListsWithSpecialChars() throws Exception {
 		var p2 = UrlEncodingParser.DEFAULT;
 		String s;
 		C1 c;
@@ -555,8 +546,7 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	// Test comma-delimited list parameters.
 	//====================================================================================================
-	@Test
-	public void testWhitespace() throws Exception {
+	@Test void testWhitespace() throws Exception {
 		UrlEncodingParser p2 = UrlEncodingParser.DEFAULT;
 		String s;
 		JsonMap m;
@@ -629,8 +619,7 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	// Multi-part parameters on beans via URLENC_expandedParams
 	//====================================================================================================
-	@Test
-	public void testMultiPartParametersOnBeansViaProperty() throws Exception {
+	@Test void testMultiPartParametersOnBeansViaProperty() throws Exception {
 		UrlEncodingParser p2;
 		String in;
 
@@ -683,8 +672,7 @@ public class UrlEncodingParserTest {
 		assertObject(t).asJsonSorted().is(e);
 	}
 
-	@Test
-	public void testMultiPartParametersOnBeansViaProperty_usingConfig() throws Exception {
+	@Test void testMultiPartParametersOnBeansViaProperty_usingConfig() throws Exception {
 		UrlEncodingParser p2;
 		String in;
 
@@ -740,8 +728,7 @@ public class UrlEncodingParserTest {
 	//====================================================================================================
 	// Multi-part parameters on beans via @UrlEncoding.expandedParams on class
 	//====================================================================================================
-	@Test
-	public void testMultiPartParametersOnBeansViaAnnotationOnClass() throws Exception {
+	@Test void testMultiPartParametersOnBeansViaAnnotationOnClass() throws Exception {
 		UrlEncodingParser p2;
 		String in;
 		p2 = UrlEncodingParser.DEFAULT;
@@ -793,8 +780,7 @@ public class UrlEncodingParserTest {
 		assertObject(t).asJsonSorted().is(e);
 	}
 
-	@Test
-	public void testMultiPartParametersOnBeansViaAnnotationOnClass_usingConfig() throws Exception {
+	@Test void testMultiPartParametersOnBeansViaAnnotationOnClass_usingConfig() throws Exception {
 		UrlEncodingParser p2;
 		String in;
 		p2 = UrlEncodingParser.DEFAULT.copy().applyAnnotations(DTOs2.Annotations.class).build();

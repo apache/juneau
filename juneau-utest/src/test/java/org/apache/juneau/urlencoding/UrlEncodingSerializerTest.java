@@ -14,17 +14,15 @@ package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class UrlEncodingSerializerTest {
+class UrlEncodingSerializerTest extends SimpleTestBase {
 
 	static UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT.copy().addRootType().build();
 	static UrlEncodingSerializer sr = UrlEncodingSerializer.DEFAULT_READABLE.copy().addRootType().build();
@@ -33,8 +31,7 @@ public class UrlEncodingSerializerTest {
 	//====================================================================================================
 	// Basic test
 	//====================================================================================================
-	@Test
-	public void testBasic() throws Exception {
+	@Test void testBasic() throws Exception {
 
 		Object t;
 
@@ -259,8 +256,7 @@ public class UrlEncodingSerializerTest {
 	//====================================================================================================
 	// Unicode characters test
 	//====================================================================================================
-	@Test
-	public void testUnicodeChars() throws Exception {
+	@Test void testUnicodeChars() throws Exception {
 		Object t;
 
 		// 2-byte UTF-8 character
@@ -315,8 +311,7 @@ public class UrlEncodingSerializerTest {
 	//====================================================================================================
 	// Multi-part parameters on beans via URLENC_expandedParams
 	//====================================================================================================
-	@Test
-	public void testMultiPartParametersOnBeansViaProperty() throws Exception {
+	@Test void testMultiPartParametersOnBeansViaProperty() throws Exception {
 		UrlEncodingSerializer s2;
 		DTOs.B t = DTOs.B.create();
 		String r;
@@ -372,8 +367,7 @@ public class UrlEncodingSerializerTest {
 		assertEquals(e, r);
 	}
 
-	@Test
-	public void testMultiPartParametersOnBeansViaProperty_usingConfig() throws Exception {
+	@Test void testMultiPartParametersOnBeansViaProperty_usingConfig() throws Exception {
 		UrlEncodingSerializer s2;
 		DTOs2.B t = DTOs2.B.create();
 		String r;
@@ -432,8 +426,7 @@ public class UrlEncodingSerializerTest {
 	//====================================================================================================
 	// Multi-part parameters on beans via @UrlEncoding.expandedParams on class
 	//====================================================================================================
-	@Test
-	public void testMultiPartParametersOnBeansViaAnnotationOnClass() throws Exception {
+	@Test void testMultiPartParametersOnBeansViaAnnotationOnClass() throws Exception {
 		UrlEncodingSerializer s2;
 		DTOs.C t = DTOs.C.create();
 		String r;
@@ -489,8 +482,7 @@ public class UrlEncodingSerializerTest {
 		assertEquals(e, r);
 	}
 
-	@Test
-	public void testMultiPartParametersOnBeansViaAnnotationOnClass_usingConfig() throws Exception {
+	@Test void testMultiPartParametersOnBeansViaAnnotationOnClass_usingConfig() throws Exception {
 		UrlEncodingSerializer s2;
 		DTOs2.C t = DTOs2.C.create();
 		String r;
@@ -546,8 +538,7 @@ public class UrlEncodingSerializerTest {
 		assertEquals(e, r);
 	}
 
-	@Test
-	public void testMultiPartParametersOnMapOfStringArrays() throws Exception {
+	@Test void testMultiPartParametersOnMapOfStringArrays() throws Exception {
 		UrlEncodingSerializer s2;
 		String r;
 
@@ -564,8 +555,7 @@ public class UrlEncodingSerializerTest {
 	//====================================================================================================
 	// Test URLENC_paramFormat == PLAINTEXT.
 	//====================================================================================================
-	@Test
-	public void testPlainTextParams() throws Exception {
+	@Test void testPlainTextParams() throws Exception {
 		WriterSerializer s2 = UrlEncodingSerializer.DEFAULT.copy().paramFormatPlain().build();
 
 		assertEquals("_value=foo", s2.serialize("foo"));

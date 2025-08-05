@@ -13,21 +13,18 @@
 package org.apache.juneau.soap;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.soap.annotation.*;
 import org.apache.juneau.svl.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests the @SoapXmlConfig annotation.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class SoapXmlConfigAnnotationTest {
+public class SoapXmlConfigAnnotationTest extends SimpleTestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
@@ -47,8 +44,7 @@ public class SoapXmlConfigAnnotationTest {
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test
-	public void basic() {
+	@Test void basic() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		SoapXmlSerializerSession x = SoapXmlSerializer.create().apply(al).build().getSession();
 		check("foo", x.getSoapAction());
@@ -62,8 +58,7 @@ public class SoapXmlConfigAnnotationTest {
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test
-	public void noValues() {
+	@Test void noValues() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		SoapXmlSerializerSession x = SoapXmlSerializer.create().apply(al).build().getSession();
 		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
@@ -76,8 +71,7 @@ public class SoapXmlConfigAnnotationTest {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test
-	public void noAnnotation() {
+	@Test void noAnnotation() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		SoapXmlSerializerSession x = SoapXmlSerializer.create().apply(al).build().getSession();
 		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());

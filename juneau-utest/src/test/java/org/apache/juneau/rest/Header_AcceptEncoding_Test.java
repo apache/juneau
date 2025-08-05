@@ -13,20 +13,18 @@
 package org.apache.juneau.rest;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Header_AcceptEncoding_Test {
+public class Header_AcceptEncoding_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test with no compression enabled.
@@ -40,8 +38,7 @@ public class Header_AcceptEncoding_Test {
 		}
 	}
 
-	@Test
-	public void a01_noCompression() throws Exception {
+	@Test void a01_noCompression() throws Exception {
 		RestClient a = MockRestClient.buildLax(A.class);
 		a.get("/").run().assertContent("foo");
 		a.get("/").header(AcceptEncoding.of("")).run().assertContent("foo");
@@ -105,8 +102,7 @@ public class Header_AcceptEncoding_Test {
 		}
 	}
 
-	@Test
-	public void b01_withCompression() throws Exception {
+	@Test void b01_withCompression() throws Exception {
 		RestClient b = MockRestClient.buildLax(B.class);
 		b.get("/").run().assertContent("foo");
 		b.get("/").header(AcceptEncoding.of("")).run().assertContent("foo");
@@ -187,8 +183,7 @@ public class Header_AcceptEncoding_Test {
 		}
 	}
 
-	@Test
-	public void c01_direct() throws Exception {
+	@Test void c01_direct() throws Exception {
 		RestClient c = MockRestClient.build(C.class);
 
 		c.get("/a")

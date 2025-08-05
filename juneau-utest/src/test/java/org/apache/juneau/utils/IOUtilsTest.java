@@ -14,14 +14,12 @@ package org.apache.juneau.utils;
 
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 
-import org.junit.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class IOUtilsTest {
+public class IOUtilsTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// read(File)
@@ -29,8 +27,7 @@ public class IOUtilsTest {
 	// read(InputStream)
 	// read(Reader, int, int)
 	//====================================================================================================
-	@Test
-	public void testRead() throws Exception {
+	@Test void testRead() throws Exception {
 
 		TestReader in;
 		TestWriter out;
@@ -43,8 +40,7 @@ public class IOUtilsTest {
 		assertEquals("foobar", out.toString());
 	}
 
-	@Test
-	public void testLoadSystemResourceAsString() throws Exception {
+	@Test void testLoadSystemResourceAsString() throws Exception {
 		assertNotNull(loadSystemResourceAsString("test1.txt", "."));
 		assertNull(loadSystemResourceAsString("test2.txt", "."));
 		assertNull(loadSystemResourceAsString("test3.txt", "sub"));

@@ -13,8 +13,6 @@
 package org.apache.juneau.parser;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.nio.charset.*;
 import java.util.function.*;
 
@@ -24,13 +22,12 @@ import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests the @ParserConfig annotation.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class ParserConfigAnnotationTest {
+class ParserConfigAnnotationTest extends SimpleTestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
@@ -66,8 +63,7 @@ public class ParserConfigAnnotationTest {
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test
-	public void basicReaderParser() {
+	@Test void basicReaderParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		JsonParserSession x = JsonParser.create().apply(al).build().getSession();
 		check("true", x.isAutoCloseStreams());
@@ -80,8 +76,7 @@ public class ParserConfigAnnotationTest {
 		check("true", x.isUnbuffered());
 	}
 
-	@Test
-	public void basicInputStreamParser() {
+	@Test void basicInputStreamParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		MsgPackParserSession x = MsgPackParser.create().apply(al).build().getSession();
 		check("true", x.isAutoCloseStreams());
@@ -101,8 +96,7 @@ public class ParserConfigAnnotationTest {
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test
-	public void noValuesReaderParser() {
+	@Test void noValuesReaderParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		JsonParserSession x = JsonParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
@@ -115,8 +109,7 @@ public class ParserConfigAnnotationTest {
 		check("false", x.isUnbuffered());
 	}
 
-	@Test
-	public void noValuesInputStreamParser() {
+	@Test void noValuesInputStreamParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		MsgPackParserSession x = MsgPackParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
@@ -135,8 +128,7 @@ public class ParserConfigAnnotationTest {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test
-	public void noAnnotationReaderParser() {
+	@Test void noAnnotationReaderParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		JsonParserSession x = JsonParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
@@ -149,8 +141,7 @@ public class ParserConfigAnnotationTest {
 		check("false", x.isUnbuffered());
 	}
 
-	@Test
-	public void noAnnotationInputStreamParser() {
+	@Test void noAnnotationInputStreamParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		MsgPackParserSession x = MsgPackParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());

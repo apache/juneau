@@ -13,18 +13,15 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-import org.junit.*;
-
-@FixMethodOrder(NAME_ASCENDING)
-public class Tuple4Function_Test {
+class Tuple4Function_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		Tuple4Function<Integer,Integer,Integer,Integer,Integer> x = (a,b,c,d)->a+b+c+d;
 		assertInteger(x.apply(1,2,3,4)).is(10);
 	}

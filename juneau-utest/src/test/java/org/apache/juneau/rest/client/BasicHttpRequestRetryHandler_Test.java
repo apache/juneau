@@ -21,13 +21,14 @@ import java.net.*;
 
 import org.apache.http.*;
 import org.apache.http.protocol.*;
+import org.apache.juneau.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-public class BasicHttpRequestRetryHandler_Test {
+class BasicHttpRequestRetryHandler_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {
@@ -44,8 +45,7 @@ public class BasicHttpRequestRetryHandler_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		RestClient x = MockRestClient.create(A.class).retryHandler(new BasicHttpRequestRetryHandler(1, 1, true)).requestExecutor(new A1()).build();
 		assertThrown(()->x.get().run()).asMessages().isAny(contains("foo"));
 	}

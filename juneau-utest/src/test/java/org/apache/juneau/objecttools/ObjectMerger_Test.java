@@ -13,21 +13,18 @@
 package org.apache.juneau.objecttools;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
-import org.junit.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Test the PojoMerge class.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class ObjectMerger_Test {
+class ObjectMerger_Test extends SimpleTestBase {
 
 	//====================================================================================================
 	// Basic tests
 	//====================================================================================================
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		IA a1, a2, am;
 
 		a1 = new A("1"); a2 = new A("2");

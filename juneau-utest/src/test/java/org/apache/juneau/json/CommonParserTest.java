@@ -14,24 +14,21 @@ package org.apache.juneau.json;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"rawtypes","serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class CommonParserTest {
+class CommonParserTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// testFromSerializer
 	//====================================================================================================
-	@Test
-	public void testFromSerializer() throws Exception {
+	@Test void testFromSerializer() throws Exception {
 		ReaderParser p = JsonParser.create().beanDictionary(A1.class).build();
 
 		Map m = null;
@@ -111,8 +108,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	// Correct handling of unknown properties.
 	//====================================================================================================
-	@Test
-	public void testCorrectHandlingOfUnknownProperties() throws Exception {
+	@Test void testCorrectHandlingOfUnknownProperties() throws Exception {
 		ReaderParser p = JsonParser.create().ignoreUnknownBeanProperties().build();
 		B b;
 
@@ -131,8 +127,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	// Writing to Collection properties with no setters.
 	//====================================================================================================
-	@Test
-	public void testCollectionPropertiesWithNoSetters() throws Exception {
+	@Test void testCollectionPropertiesWithNoSetters() throws Exception {
 		JsonParser p = JsonParser.DEFAULT;
 		String json = "{ints:[1,2,3],beans:[{a:1,b:2}]}";
 		C t = p.parse(json, C.class);
@@ -154,8 +149,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	// Parser listeners.
 	//====================================================================================================
-	@Test
-	public void testParserListeners() throws Exception {
+	@Test void testParserListeners() throws Exception {
 		JsonParser p = JsonParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		String json = "{a:1,unknownProperty:\"/foo\",b:2}";

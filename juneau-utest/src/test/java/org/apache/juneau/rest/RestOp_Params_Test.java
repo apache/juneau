@@ -14,11 +14,10 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.http.HttpMethod.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
@@ -32,12 +31,11 @@ import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import jakarta.servlet.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestOp_Params_Test {
+public class RestOp_Params_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Various parameters
@@ -123,8 +121,7 @@ public class RestOp_Params_Test {
 		}
 	}
 
-	@Test
-	public void a01_params() throws Exception {
+	@Test void a01_params() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.post("/c", "foo").run().assertContent("foo");
 		a.post("/d", "foo").run().assertContent("foo");
@@ -285,8 +282,7 @@ public class RestOp_Params_Test {
 		}
 	}
 
-	@Test
-	public void b01_headers() throws Exception {
+	@Test void b01_headers() throws Exception {
 		RestClient b = MockRestClient.build(B1.class);
 
 		b.get("/accept").accept("text/foo").run().assertContent("text/foo");
@@ -367,8 +363,7 @@ public class RestOp_Params_Test {
 		}
 	}
 
-	@Test
-	public void b02_customHeader() throws Exception {
+	@Test void b02_customHeader() throws Exception {
 		RestClient b = MockRestClient.build(B2.class);
 		b.get("/a").header("Custom", "foo").run().assertContent("foo");
 		b.get("/a?Custom=foo").run().assertContent("foo");

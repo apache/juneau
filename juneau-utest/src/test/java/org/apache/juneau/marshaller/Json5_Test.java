@@ -13,19 +13,16 @@
 package org.apache.juneau.marshaller;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Json5_Test {
+class Json5_Test extends SimpleTestBase {
 
-	@Test
-	public void a01_to() throws Exception {
+	@Test void a01_to() throws Exception {
 		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
 		String expected1 = "'foo'", expected2 = "{foo:'bar'}";
 
@@ -35,8 +32,7 @@ public class Json5_Test {
 		assertString(Json5.of(in2,stringWriter())).is(expected2);
 	}
 
-	@Test
-	public void a02_from() throws Exception {
+	@Test void a02_from() throws Exception {
 		String in1 = "'foo'", in2 = "{foo:'bar'}";
 		String expected1 = "foo", expected2 = "{foo:'bar'}";
 

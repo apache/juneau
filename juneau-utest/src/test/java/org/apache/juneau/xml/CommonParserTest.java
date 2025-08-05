@@ -14,23 +14,20 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"rawtypes","serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class CommonParserTest {
+class CommonParserTest  extends SimpleTestBase{
 
 	//====================================================================================================
 	// testFromSerializer
 	//====================================================================================================
-	@Test
-	public void testFromSerializer() throws Exception {
+	@Test void testFromSerializer() throws Exception {
 		ReaderParser p = XmlParser.DEFAULT;
 
 		Map m = null;
@@ -100,8 +97,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	// Correct handling of unknown properties.
 	//====================================================================================================
-	@Test
-	public void testCorrectHandlingOfUnknownProperties() throws Exception {
+	@Test void testCorrectHandlingOfUnknownProperties() throws Exception {
 		ReaderParser p = XmlParser.create().ignoreUnknownBeanProperties().build();
 		B t;
 
@@ -125,8 +121,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	// Writing to Collection properties with no setters.
 	//====================================================================================================
-	@Test
-	public void testCollectionPropertiesWithNoSetters() throws Exception {
+	@Test void testCollectionPropertiesWithNoSetters() throws Exception {
 
 		ReaderParser p = XmlParser.DEFAULT;
 
@@ -150,8 +145,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	// Parser listeners.
 	//====================================================================================================
-	@Test
-	public void testParserListeners() throws Exception {
+	@Test void testParserListeners() throws Exception {
 		XmlParser p = XmlParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		String in = "<object><a _type='number'>1</a><unknownProperty _type='string'>foo</unknownProperty><b _type='number'>2</b></object>";

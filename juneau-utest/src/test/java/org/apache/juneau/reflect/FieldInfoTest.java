@@ -18,17 +18,14 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class FieldInfoTest {
+class FieldInfoTest extends SimpleTestBase {
 
 	@Documented
 	@Target(FIELD)
@@ -82,30 +79,25 @@ public class FieldInfoTest {
 	}
 	FieldInfo a1_f1 = off(A1.class, "f1");
 
-	@Test
-	public void of_withClass() {
+	@Test void of_withClass() {
 		check("f1", FieldInfo.of(ClassInfo.of(A1.class), a1_f1.inner()));
 	}
 
-	@Test
-	public void of_withoutClass() {
+	@Test void of_withoutClass() {
 		check("f1", FieldInfo.of(a1_f1.inner()));
 	}
 
-	@Test
-	public void of_null() {
+	@Test void of_null() {
 		check(null, FieldInfo.of(null));
 		check(null, FieldInfo.of(null, null));
 	}
 
-	@Test
-	public void getDeclaringClass() {
+	@Test void getDeclaringClass() {
 		check("A1", a1_f1.getDeclaringClass());
 		check("A1", a1_f1.getDeclaringClass());
 	}
 
-	@Test
-	public void inner() {
+	@Test void inner() {
 		check("f1", a1_f1.inner());
 	}
 
@@ -122,24 +114,20 @@ public class FieldInfoTest {
 		b_a1 = off(B.class, "a1"),
 		b_a2 = off(B.class, "a2");
 
-	@Test
-	public void getAnnotation() {
+	@Test void getAnnotation() {
 		check("@A(a1)", b_a1.getAnnotation(A.class));
 		check(null, b_a2.getAnnotation(A.class));
 	}
 
-	@Test
-	public void getAnnotation_null() {
+	@Test void getAnnotation_null() {
 		check(null, b_a1.getAnnotation(null));
 	}
 
-	@Test
-	public void hasAnnotation_true() {
+	@Test void hasAnnotation_true() {
 		assertTrue(b_a1.hasAnnotation(A.class));
 	}
 
-	@Test
-	public void hasAnnotation_false() {
+	@Test void hasAnnotation_false() {
 		assertFalse(b_a2.hasAnnotation(A.class));
 	}
 
@@ -169,8 +157,7 @@ public class FieldInfoTest {
 		c_isNotTransient = c.getPublicField(x -> x.hasName("isNotTransient"))
 	;
 
-	@Test
-	public void isAll() {
+	@Test void isAll() {
 		assertTrue(c_deprecated.isAll(DEPRECATED));
 		assertTrue(c_notDeprecated.isAll(NOT_DEPRECATED));
 		assertTrue(c_isPublic.isAll(PUBLIC));
@@ -190,13 +177,11 @@ public class FieldInfoTest {
 		assertFalse(c_isNotTransient.isAll(TRANSIENT));
 	}
 
-	@Test
-	public void isAll_invalidFlag() {
+	@Test void isAll_invalidFlag() {
 		assertThrown(()->c_deprecated.isAll(HAS_PARAMS)).asMessage().is("Invalid flag for field: HAS_PARAMS");
 	}
 
-	@Test
-	public void isAny() {
+	@Test void isAny() {
 		assertTrue(c_deprecated.isAny(DEPRECATED));
 		assertTrue(c_notDeprecated.isAny(NOT_DEPRECATED));
 		assertTrue(c_isPublic.isAny(PUBLIC));
@@ -216,67 +201,56 @@ public class FieldInfoTest {
 		assertFalse(c_isNotTransient.isAny(TRANSIENT));
 	}
 
-	@Test
-	public void isAny_invalidFlag() {
+	@Test void isAny_invalidFlag() {
 		assertThrown(()->c_deprecated.isAny(HAS_PARAMS)).asMessage().is("Invalid flag for field: HAS_PARAMS");
 	}
 
-	@Test
-	public void isDeprecated() {
+	@Test void isDeprecated() {
 		assertTrue(c_deprecated.isDeprecated());
 		assertFalse(c_notDeprecated.isDeprecated());
 	}
 
-	@Test
-	public void isNotDeprecated() {
+	@Test void isNotDeprecated() {
 		assertFalse(c_deprecated.isNotDeprecated());
 		assertTrue(c_notDeprecated.isNotDeprecated());
 	}
 
-	@Test
-	public void isTransient() {
+	@Test void isTransient() {
 		assertTrue(c_isTransient.isTransient());
 		assertFalse(c_isNotTransient.isTransient());
 	}
 
-	@Test
-	public void isNotTransient() {
+	@Test void isNotTransient() {
 		assertFalse(c_isTransient.isNotTransient());
 		assertTrue(c_isNotTransient.isNotTransient());
 	}
 
-	@Test
-	public void isPublic() {
+	@Test void isPublic() {
 		assertTrue(c_isPublic.isPublic());
 		assertFalse(c_isNotPublic.isPublic());
 	}
 
-	@Test
-	public void isNotPublic() {
+	@Test void isNotPublic() {
 		assertFalse(c_isPublic.isNotPublic());
 		assertTrue(c_isNotPublic.isNotPublic());
 	}
 
-	@Test
-	public void isStatic() {
+	@Test void isStatic() {
 		assertTrue(c_isStatic.isStatic());
 		assertFalse(c_isNotStatic.isStatic());
 	}
 
-	@Test
-	public void isNotStatic() {
+	@Test void isNotStatic() {
 		assertFalse(c_isStatic.isNotStatic());
 		assertTrue(c_isNotStatic.isNotStatic());
 	}
 
-	@Test
-	public void hasName() {
+	@Test void hasName() {
 		assertTrue(b_a1.hasName("a1"));
 		assertFalse(b_a1.hasName("a2"));
 	}
 
-	@Test
-	public void hasName_null() {
+	@Test void hasName_null() {
 		assertFalse(b_a1.hasName(null));
 	}
 
@@ -298,16 +272,14 @@ public class FieldInfoTest {
 		d_isPrivate = d.getDeclaredField(x -> x.hasName("isPrivate")),
 		d_isDefault = d.getDeclaredField(x -> x.hasName("isDefault"));
 
-	@Test
-	public void setAccessible() {
+	@Test void setAccessible() {
 		assertNotThrown(()->d_isPublic.setAccessible());
 		assertNotThrown(()->d_isProtected.setAccessible());
 		assertNotThrown(()->d_isPrivate.setAccessible());
 		assertNotThrown(()->d_isDefault.setAccessible());
 	}
 
-	@Test
-	public void isVisible() {
+	@Test void isVisible() {
 		assertTrue(d_isPublic.isVisible(Visibility.PUBLIC));
 		assertTrue(d_isPublic.isVisible(Visibility.PROTECTED));
 		assertTrue(d_isPublic.isVisible(Visibility.PRIVATE));
@@ -343,20 +315,17 @@ public class FieldInfoTest {
 		e_a1 = e.getPublicField(x -> x.hasName("a1")),
 		e_a2 = e.getDeclaredField(x -> x.hasName("a2"));
 
-	@Test
-	public void getType() {
+	@Test void getType() {
 		check("int", e_a1.getType());
 		check("int", e_a2.getType());
 	}
 
-	@Test
-	public void getType_twice() {
+	@Test void getType_twice() {
 		check("int", e_a1.getType());
 		check("int", e_a1.getType());
 	}
 
-	@Test
-	public void toString2() {
+	@Test void toString2() {
 		assertEquals("org.apache.juneau.reflect.FieldInfoTest$E.a1", e_a1.toString());
 	}
 }

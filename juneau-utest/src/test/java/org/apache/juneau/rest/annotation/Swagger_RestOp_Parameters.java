@@ -14,14 +14,12 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.header.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Swagger_RestOp_Parameters {
+public class Swagger_RestOp_Parameters extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Swagger on default headers.
@@ -140,8 +138,7 @@ public class Swagger_RestOp_Parameters {
 		}
 	}
 
-	@Test
-	public void a01_headerParameters() {
+	@Test void a01_headerParameters() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(A.class);
 		ParameterInfo x;
 

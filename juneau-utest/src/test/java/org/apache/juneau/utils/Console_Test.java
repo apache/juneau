@@ -14,12 +14,12 @@ package org.apache.juneau.utils;
 
 import static org.apache.juneau.utest.utils.Utils2.*;
 
-import org.junit.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-public class Console_Test {
+class Console_Test extends SimpleTestBase {
 
-	@Test
-	public void basic() {
+	@Test void basic() {
 		assertNotThrown(()->Console.out("test{0}", 1));
 		assertNotThrown(()->Console.err("test{0}", 2));
 	}

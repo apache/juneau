@@ -14,28 +14,25 @@ package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"rawtypes","serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class CommonParser_UrlEncodingTest {
+class CommonParser_UrlEncodingTest extends SimpleTestBase {
 
 	ReaderParser p = UrlEncodingParser.create().beanDictionary(A1.class).build();
 
 	//====================================================================================================
 	// testFromSerializer
 	//====================================================================================================
-	@Test
-	public void testFromSerializer() throws Exception {
+	@Test void testFromSerializer() throws Exception {
 		Map m = null;
 		String in;
 
@@ -103,8 +100,7 @@ public class CommonParser_UrlEncodingTest {
 	//====================================================================================================
 	// Correct handling of unknown properties.
 	//====================================================================================================
-	@Test
-	public void testCorrectHandlingOfUnknownProperties() throws Exception {
+	@Test void testCorrectHandlingOfUnknownProperties() throws Exception {
 		ReaderParser p2 = UrlEncodingParser.create().ignoreUnknownBeanProperties().build();
 		B t;
 
@@ -123,8 +119,7 @@ public class CommonParser_UrlEncodingTest {
 	//====================================================================================================
 	// Writing to Collection properties with no setters.
 	//====================================================================================================
-	@Test
-	public void testCollectionPropertiesWithNoSetters() throws Exception {
+	@Test void testCollectionPropertiesWithNoSetters() throws Exception {
 
 		ReaderParser p2 = UrlEncodingParser.DEFAULT;
 
@@ -148,8 +143,7 @@ public class CommonParser_UrlEncodingTest {
 	//====================================================================================================
 	// Parser listeners.
 	//====================================================================================================
-	@Test
-	public void testParserListeners() throws Exception {
+	@Test void testParserListeners() throws Exception {
 		UonParser p2 = UrlEncodingParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		String in = "a=1&unknownProperty=foo&b=2";
@@ -167,8 +161,7 @@ public class CommonParser_UrlEncodingTest {
 		}
 	}
 
-	@Test
-	public void testCollections() throws Exception {
+	@Test void testCollections() throws Exception {
 		WriterSerializer s = UrlEncodingSerializer.DEFAULT;
 		ReaderParser p2 = UrlEncodingParser.DEFAULT;
 

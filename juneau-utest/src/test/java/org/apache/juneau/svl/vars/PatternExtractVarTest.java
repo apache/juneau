@@ -13,19 +13,15 @@
 package org.apache.juneau.svl.vars;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.svl.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
 public class PatternExtractVarTest {
 
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test
-	public void test() {
+	@Test void test() {
 		VarResolver vr = VarResolver.create().vars(PatternExtractVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("PatternExtractVarTest.test", "foo bar");

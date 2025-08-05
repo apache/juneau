@@ -14,18 +14,15 @@ package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-import org.junit.*;
-
-@FixMethodOrder(NAME_ASCENDING)
-public class Tuple5_Test {
+class Tuple5_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		Tuple5<String,Integer,Integer,Integer,Integer> x = Tuple5.of("foo",1,2,3,4);
 		assertString(x.getA()).is("foo");
 		assertInteger(x.getB()).is(1);
@@ -34,8 +31,7 @@ public class Tuple5_Test {
 		assertInteger(x.getE()).is(4);
 	}
 
-	@Test
-	public void a02_equality() {
+	@Test void a02_equality() {
 		Tuple5<String,Integer,Integer,Integer,Integer> x1 = Tuple5.of("foo",1,2,3,4), x2 = Tuple5.of("foo",1,2,3,4), x3 = Tuple5.of(null,1,2,3,4), x4 = Tuple5.of("foo",null,2,3,4), x5 = Tuple5.of("foo",1,null,3,4), x6 = Tuple5.of("foo",1,2,null,4), x7 = Tuple5.of("foo",1,2,3,null);
 		assertEquals(x1, x2);
 		assertEquals(x1.hashCode(), x2.hashCode());

@@ -18,24 +18,21 @@ import static org.apache.juneau.internal.CollectionUtils.list;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.xml.annotation.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class CommonTest {
+class CommonTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// Trim nulls from beans
 	//====================================================================================================
-	@Test
-	public void testTrimNullsFromBeans() throws Exception {
+	@Test void testTrimNullsFromBeans() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		A t1 = A.create(), t2;
@@ -65,8 +62,7 @@ public class CommonTest {
 	//====================================================================================================
 	// Trim empty maps
 	//====================================================================================================
-	@Test
-	public void testTrimEmptyMaps() throws Exception {
+	@Test void testTrimEmptyMaps() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		B t1 = B.create(), t2;
@@ -98,8 +94,7 @@ public class CommonTest {
 	//====================================================================================================
 	// Trim empty lists
 	//====================================================================================================
-	@Test
-	public void testTrimEmptyLists() throws Exception {
+	@Test void testTrimEmptyLists() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		C t1 = C.create(), t2;
@@ -131,8 +126,7 @@ public class CommonTest {
 	//====================================================================================================
 	// Trim empty arrays
 	//====================================================================================================
-	@Test
-	public void testTrimEmptyArrays() throws Exception {
+	@Test void testTrimEmptyArrays() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		D t1 = D.create(), t2;
@@ -164,8 +158,7 @@ public class CommonTest {
 	//====================================================================================================
 	// @Beanp.bpi annotation.
 	//====================================================================================================
-	@Test
-	public void testBeanPropertyProperties() throws Exception {
+	@Test void testBeanPropertyProperties() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		E1 t = new E1();
 		String r = s.serialize(t);
@@ -201,8 +194,7 @@ public class CommonTest {
 	//====================================================================================================
 	// @Beanp.bpi annotation on list of beans.
 	//====================================================================================================
-	@Test
-	public void testBeanPropertyPropertiesOnListOfBeans() throws Exception {
+	@Test void testBeanPropertyPropertiesOnListOfBeans() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		List<Test7b> l = new LinkedList<>();
 		Test7b t = new Test7b();
@@ -220,8 +212,7 @@ public class CommonTest {
 	//====================================================================================================
 	// Recursion
 	//====================================================================================================
-	@Test
-	public void testRecursion() throws Exception {
+	@Test void testRecursion() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().maxDepth(Integer.MAX_VALUE);
 
 		R1 r1 = new R1();

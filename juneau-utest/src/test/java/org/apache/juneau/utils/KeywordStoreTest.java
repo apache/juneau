@@ -13,19 +13,16 @@
 package org.apache.juneau.utils;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class KeywordStoreTest {
+class KeywordStoreTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test
-	public void test() {
+	@Test void test() {
 		KeywordSet ks = new KeywordSet("aaa", "zzz");
 		assertTrue(ks.contains("aaa"));
 		assertTrue(ks.contains("zzz"));

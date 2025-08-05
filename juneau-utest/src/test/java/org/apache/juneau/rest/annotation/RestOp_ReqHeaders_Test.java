@@ -12,16 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestOp_ReqHeaders_Test {
+public class RestOp_ReqHeaders_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Default values - Default request headers
@@ -66,8 +64,7 @@ public class RestOp_ReqHeaders_Test {
 		}
 	}
 
-	@Test
-	public void a01_reqHeaders() throws Exception {
+	@Test void a01_reqHeaders() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 
 		a.get("/a").run().assertContent("{h1:'1',h2:'2',h3:'3'}");
@@ -106,8 +103,7 @@ public class RestOp_ReqHeaders_Test {
 		}
 	}
 
-	@Test
-	public void b01_reqHeadersCaseInsensitive() throws Exception {
+	@Test void b01_reqHeadersCaseInsensitive() throws Exception {
 		RestClient b = MockRestClient.build(B.class);
 		b.get("/a").run().assertContent("{h1:'1',h2:'2',h3:'3'}");
 		b.get("/a").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");

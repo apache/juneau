@@ -14,14 +14,12 @@ package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.lang.reflect.*;
 
-import org.junit.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ReflectionMapTest {
+public class ReflectionMapTest extends SimpleTestBase {
 
 	private static ReflectionMap.Builder<Number> create() {
 		return ReflectionMap.create(Number.class);
@@ -46,8 +44,7 @@ public class ReflectionMapTest {
 		A1b_SIMPLE = create().append("ReflectionMapTest$A1", 1).build(),
 		A1_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$A1", 1).build();  // Note this could be a static field.
 
-	@Test
-	public void a01_classNames_checkEntries() {
+	@Test void a01_classNames_checkEntries() {
 		checkEntries(A1_SIMPLE, true, false, false, false);
 		checkEntries(A1_FULL, true, false, true, false);
 	}
@@ -78,8 +75,7 @@ public class ReflectionMapTest {
 		assertFalse(A1_FULL.find(c, Long.class).isPresent());
 	}
 
-	@Test
-	public void a02_classNames_find() {
+	@Test void a02_classNames_find() {
 		checkA(A1.class, true, true, true);
 		checkA(A2.class, false, false, false);
 		checkA(null, false, false, false);
@@ -114,8 +110,7 @@ public class ReflectionMapTest {
 		B1m1si_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$B1.m1(String,int)", 1).build(),
 		B1m1ssi_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$B1.m1(java.lang.String , int)", 1).build();
 
-	@Test
-	public void b01_methodNames_checkEntries() {
+	@Test void b01_methodNames_checkEntries() {
 		checkEntries(B1m1_SIMPLE, false, true, true, false);
 		checkEntries(B1m1i_SIMPLE, false, true, false, false);
 		checkEntries(B1m1s_SIMPLE, false, true, false, false);
@@ -174,8 +169,7 @@ public class ReflectionMapTest {
 		assertFalse(B1m1ssi_FULL.find(m, Long.class).isPresent());
 	}
 
-	@Test
-	public void b02_methodName_find() throws Exception {
+	@Test void b02_methodName_find() throws Exception {
 		checkB(B1.class.getMethod("m1"), true, false, false, false, false, false, true, false, false, false, false, false);
 		checkB(B1.class.getMethod("m1", int.class), true, true, false, false, false, false, true, true, false, false, false, false);
 		checkB(B1.class.getMethod("m1", String.class), true, false, true, true, false, false, true, false, true, true, false, false);
@@ -201,8 +195,7 @@ public class ReflectionMapTest {
 		C1f1_SIMPLE = create().append("C1.f1", 1).build(),
 		C1f1_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$C1.f1", 1).build();
 
-	@Test
-	public void c01_fieldNames_checkEntries() {
+	@Test void c01_fieldNames_checkEntries() {
 		checkEntries(C1f1_SIMPLE, false, true, true, false);
 		checkEntries(C1f1_FULL, false, true, true, false);
 	}
@@ -218,8 +211,7 @@ public class ReflectionMapTest {
 		assertFalse(C1f1_FULL.find(f, Long.class).isPresent());
 	}
 
-	@Test
-	public void c02_fieldName_find() throws Exception {
+	@Test void c02_fieldName_find() throws Exception {
 		checkC(C1.class.getField("f1"), true, true);
 		checkC(C1.class.getField("f2"), false, false);
 		checkC(C2.class.getField("f1"), false, false);
@@ -254,8 +246,7 @@ public class ReflectionMapTest {
 		Dsi_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$D1(String, int)", 1).build(),
 		Dssi_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$D1(java.lang.String, int)", 1).build();
 
-	@Test
-	public void d01_constructorNames_checkEntries() {
+	@Test void d01_constructorNames_checkEntries() {
 		checkEntries(D_SIMPLE, false, false, false, true);
 		checkEntries(Di_SIMPLE, false, false, false, true);
 		checkEntries(Ds_SIMPLE, false, false, false, true);
@@ -314,8 +305,7 @@ public class ReflectionMapTest {
 		assertFalse(Dssi_FULL.find(c, Long.class).isPresent());
 	}
 
-	@Test
-	public void d02_constructorName_find() throws Exception {
+	@Test void d02_constructorName_find() throws Exception {
 		checkD(D1.class.getConstructor(), true, false, false, false, false, false, true, false, false, false, false, false);
 		checkD(D1.class.getConstructor(int.class), false, true, false, false, false, false, false, true, false, false, false, false);
 		checkD(D1.class.getConstructor(String.class), false, false, true, true, false, false, false, false, true, true, false, false);
@@ -328,18 +318,15 @@ public class ReflectionMapTest {
 	// Invalid input
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void e01_blankInput() {
+	@Test void e01_blankInput() {
 		assertThrown(()->create().append("", 1)).asMessage().is("Invalid reflection signature: []");
 	}
 
-	@Test
-	public void e02_nullInput() {
+	@Test void e02_nullInput() {
 		assertThrown(()->create().append(null, 1)).asMessage().is("Invalid reflection signature: [null]");
 	}
 
-	@Test
-	public void e03_badInput() {
+	@Test void e03_badInput() {
 		assertThrown(()->create().append("foo)", 1)).asMessage().is("Invalid reflection signature: [foo)]");
 	}
 
@@ -350,8 +337,7 @@ public class ReflectionMapTest {
 
 	static ReflectionMap<Number> RM_F = create().append("F2, F1", 1).build();
 
-	@Test
-	public void f01_cdl() {
+	@Test void f01_cdl() {
 		assertOptional(RM_F.find(F1.class, null)).asJson().is("1");
 	}
 
@@ -361,8 +347,7 @@ public class ReflectionMapTest {
 
 	static ReflectionMap<Number> RM_G = create().build();
 
-	@Test
-	public void g01_emptyReflectionMap() throws Exception {
+	@Test void g01_emptyReflectionMap() throws Exception {
 		assertFalse(RM_G.find(A1.class, null).isPresent());
 		assertFalse(RM_G.find(B1.class.getMethod("m1"), null).isPresent());
 		assertFalse(RM_G.find(C1.class.getField("f1"), null).isPresent());

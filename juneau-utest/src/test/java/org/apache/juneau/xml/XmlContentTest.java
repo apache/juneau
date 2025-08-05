@@ -15,22 +15,18 @@ package org.apache.juneau.xml;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
 public class XmlContentTest {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test beans with @Xml(format=CONTENT)
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test
-	public void testContentFormat() throws Exception {
+	@Test void testContentFormat() throws Exception {
 		A t = A.newInstance(), t2;
 		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ.copy().keepNullProperties().build(),
 			s2 = XmlSerializer.create().sq().ws().keepNullProperties().build();
@@ -134,8 +130,7 @@ public class XmlContentTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test beans with @Xml(format=MIXED)
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test
-	public void testXmlMixed() throws Exception {
+	@Test void testXmlMixed() throws Exception {
 		B t = B.newInstance(), t2;
 		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ.copy().keepNullProperties().build(),
 			s2 = XmlSerializer.create().sq().ws().keepNullProperties().build();

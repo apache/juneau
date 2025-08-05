@@ -16,19 +16,15 @@ import static org.apache.juneau.MediaRanges.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class MediaRanges_Test {
+public class MediaRanges_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Verifies that media type parameters are distinguished from media range extensions.
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test
-	public void a01_extensions() {
+	@Test void a01_extensions() {
 		MediaRanges x1;
 		MediaRange x2;
 
@@ -106,8 +102,7 @@ public class MediaRanges_Test {
 		assertObject(x2.getExtensions()).asJson().is("[]");
 	}
 
-	@Test
-	public void a02_hasSubtypePart() {
+	@Test void a02_hasSubtypePart() {
 		MediaRanges mr = of("text/json+x,text/foo+y;q=0.0");
 		assertTrue(mr.hasSubtypePart("json"));
 		assertTrue(mr.hasSubtypePart("x"));
@@ -115,8 +110,7 @@ public class MediaRanges_Test {
 		assertFalse(mr.hasSubtypePart("y"));
 	}
 
-	@Test
-	public void a03_ordering() {
+	@Test void a03_ordering() {
 		assertString(of("text/json")).is("text/json");
 		assertString(of("text/json,text/*")).is("text/json,text/*");
 		assertString(of("text/*,text/json")).is("text/json,text/*");
@@ -136,8 +130,7 @@ public class MediaRanges_Test {
 		assertString(of("foo/bar/baz")).is("foo/bar/baz");
 	}
 
-	@Test
-	public void a04_match() {
+	@Test void a04_match() {
 		MediaRanges x1 = of("text/json");
 		assertInteger(x1.match(alist(MediaType.of("text/json")))).is(0);
 		assertInteger(x1.match(alist(MediaType.of("text/foo")))).is(-1);
@@ -148,8 +141,7 @@ public class MediaRanges_Test {
 		assertInteger(x2.match(alist(MediaType.of("text/json")))).is(-1);
 	}
 
-	@Test
-	public void a05_getRanges() {
+	@Test void a05_getRanges() {
 		MediaRanges x1 = of("text/json");
 		assertObject(x1.toList()).asJson().is("['text/json']");
 	}

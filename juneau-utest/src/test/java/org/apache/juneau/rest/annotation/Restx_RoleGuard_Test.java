@@ -12,14 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Restx_RoleGuard_Test {
+public class Restx_RoleGuard_Test extends SimpleTestBase {
 
 	private static RestOperation[] ops(RestOperation...ops) {
 		return ops;
@@ -57,8 +55,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void a01a_onClass_simple() throws Exception {
+	@Test void a01a_onClass_simple() throws Exception {
 		MockRestClient a1 = MockRestClient.buildLax(A1.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -99,8 +96,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void a02a_onMethod_simple() throws Exception {
+	@Test void a02a_onMethod_simple() throws Exception {
 		MockRestClient a2 = MockRestClient.buildLax(A2.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -141,8 +137,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void a03a_onBoth_simple() throws Exception {
+	@Test void a03a_onBoth_simple() throws Exception {
 		MockRestClient a3 = MockRestClient.buildLax(A3.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -214,8 +209,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void a04a_inheritence_simple() throws Exception {
+	@Test void a04a_inheritence_simple() throws Exception {
 		MockRestClient a4 = MockRestClient.buildLax(A4b.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -259,8 +253,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="foo,bar")
 	public static class B1a extends B1 {}
 
-	@Test
-	public void b01a_orsWithComma_pass() throws Exception {
+	@Test void b01a_orsWithComma_pass() throws Exception {
 		MockRestClient b1a = MockRestClient.buildLax(B1a.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -276,8 +269,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="foo | bar")
 	public static class B1b extends B1 {}
 
-	@Test
-	public void b01b_orsWithSinglePipe_pass() throws Exception {
+	@Test void b01b_orsWithSinglePipe_pass() throws Exception {
 		MockRestClient b1b = MockRestClient.buildLax(B1b.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -293,8 +285,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="foo || bar")
 	public static class B1c extends B1 {}
 
-	@Test
-	public void b01c_orsWithDoublePipe_pass() throws Exception {
+	@Test void b01c_orsWithDoublePipe_pass() throws Exception {
 		MockRestClient b1c = MockRestClient.buildLax(B1c.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -310,8 +301,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="foo & bar")
 	public static class B1d extends B1 {}
 
-	@Test
-	public void b01d_andsWithSingleAmp_pass() throws Exception {
+	@Test void b01d_andsWithSingleAmp_pass() throws Exception {
 		MockRestClient b1d = MockRestClient.buildLax(B1d.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -327,8 +317,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="foo && bar")
 	public static class B1e extends B1 {}
 
-	@Test
-	public void b01e_andsWithDoubleAmp_pass() throws Exception {
+	@Test void b01e_andsWithDoubleAmp_pass() throws Exception {
 		MockRestClient b1e = MockRestClient.buildLax(B1e.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -344,8 +333,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="(foo) && (bar)")
 	public static class B1f extends B1 {}
 
-	@Test
-	public void b01f_andsWithDoubleAmpAndParens_pass() throws Exception {
+	@Test void b01f_andsWithDoubleAmpAndParens_pass() throws Exception {
 		MockRestClient b1f = MockRestClient.buildLax(B1f.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -361,8 +349,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="foo && (bar || baz)")
 	public static class B1g extends B1 {}
 
-	@Test
-	public void b01g_complex_pass() throws Exception {
+	@Test void b01g_complex_pass() throws Exception {
 		MockRestClient b1g = MockRestClient.buildLax(B1g.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -379,8 +366,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="foo || (bar && baz)")
 	public static class B1h extends B1 {}
 
-	@Test
-	public void b01h_complex_pass() throws Exception {
+	@Test void b01h_complex_pass() throws Exception {
 		MockRestClient b1h = MockRestClient.buildLax(B1h.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -421,8 +407,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void b02a_orsWithComma_pass() throws Exception {
+	@Test void b02a_orsWithComma_pass() throws Exception {
 		MockRestClient b2a = MockRestClient.buildLax(B2a.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -459,8 +444,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void b02b_orsWithSinglePipe_pass() throws Exception {
+	@Test void b02b_orsWithSinglePipe_pass() throws Exception {
 		MockRestClient b2b = MockRestClient.buildLax(B2b.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -497,8 +481,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void b02c_orsWithDoublePipe_pass() throws Exception {
+	@Test void b02c_orsWithDoublePipe_pass() throws Exception {
 		MockRestClient b2c = MockRestClient.buildLax(B2c.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -535,8 +518,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void b02d_andsWithSingleAmp_pass() throws Exception {
+	@Test void b02d_andsWithSingleAmp_pass() throws Exception {
 		MockRestClient b2d = MockRestClient.buildLax(B2d.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -573,8 +555,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void b02e_andsWithDoubleAmp_pass() throws Exception {
+	@Test void b02e_andsWithDoubleAmp_pass() throws Exception {
 		MockRestClient b2e = MockRestClient.buildLax(B2e.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -595,8 +576,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void b02f_andsWithDoubleAmpAndParens_pass() throws Exception {
+	@Test void b02f_andsWithDoubleAmpAndParens_pass() throws Exception {
 		MockRestClient b2f = MockRestClient.buildLax(B2f.class);
 		b2f.get().roles("foo","bar").run().assertStatus(200);
 		b2f.get().roles("foo","bar","baz").run().assertStatus(200);
@@ -614,8 +594,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void b02g_complex_pass() throws Exception {
+	@Test void b02g_complex_pass() throws Exception {
 		MockRestClient b2g = MockRestClient.buildLax(B2g.class);
 		b2g.get().roles("foo","bar").run().assertStatus(200);
 		b2g.get().roles("foo","baz").run().assertStatus(200);
@@ -634,8 +613,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void b02h_complex_pass() throws Exception {
+	@Test void b02h_complex_pass() throws Exception {
 		MockRestClient b2h = MockRestClient.buildLax(B2h.class);
 		b2h.get().roles("foo").run().assertStatus(200);
 		b2h.get().roles("bar","baz").run().assertStatus(200);
@@ -676,8 +654,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="fo*,*ar")
 	public static class C1a extends C1 {}
 
-	@Test
-	public void c01a_orPatternsWithComma_pass() throws Exception {
+	@Test void c01a_orPatternsWithComma_pass() throws Exception {
 		MockRestClient c1a = MockRestClient.buildLax(C1a.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -693,8 +670,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="fo* | *ar")
 	public static class C1b extends C1 {}
 
-	@Test
-	public void c01b_orPatternsWithSinglePipe_pass() throws Exception {
+	@Test void c01b_orPatternsWithSinglePipe_pass() throws Exception {
 		MockRestClient c1b = MockRestClient.buildLax(C1b.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -710,8 +686,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="fo* || *ar")
 	public static class C1c extends C1 {}
 
-	@Test
-	public void c01c_orPatternsWithDoublePipe_pass() throws Exception {
+	@Test void c01c_orPatternsWithDoublePipe_pass() throws Exception {
 		MockRestClient c1c = MockRestClient.buildLax(C1c.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -727,8 +702,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="fo* & *ar")
 	public static class C1d extends C1 {}
 
-	@Test
-	public void c01d_andPatternsWithSingleAmp_pass() throws Exception {
+	@Test void c01d_andPatternsWithSingleAmp_pass() throws Exception {
 		MockRestClient c1d = MockRestClient.buildLax(C1d.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -744,8 +718,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="fo* && *ar")
 	public static class C1e extends C1 {}
 
-	@Test
-	public void c01e_andPatternsWithDoubleAmp_pass() throws Exception {
+	@Test void c01e_andPatternsWithDoubleAmp_pass() throws Exception {
 		MockRestClient c1e = MockRestClient.buildLax(C1e.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -761,8 +734,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="(fo*) && (*ar)")
 	public static class C1f extends C1 {}
 
-	@Test
-	public void c01f_andPatternsWithDoubleAmpAndParens_pass() throws Exception {
+	@Test void c01f_andPatternsWithDoubleAmpAndParens_pass() throws Exception {
 		MockRestClient c1f = MockRestClient.buildLax(C1f.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -778,8 +750,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="fo* && (*ar || *az)")
 	public static class C1g extends C1 {}
 
-	@Test
-	public void c01g_complexPatterns_pass() throws Exception {
+	@Test void c01g_complexPatterns_pass() throws Exception {
 		MockRestClient c1g = MockRestClient.buildLax(C1g.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -796,8 +767,7 @@ public class Restx_RoleGuard_Test {
 	@Rest(roleGuard="fo* || (*ar && *az)")
 	public static class C1h extends C1 {}
 
-	@Test
-	public void c01h_complexPatterns_pass() throws Exception {
+	@Test void c01h_complexPatterns_pass() throws Exception {
 		MockRestClient c1h = MockRestClient.buildLax(C1h.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -838,8 +808,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void c02a_orPatternsWithComma_pass() throws Exception {
+	@Test void c02a_orPatternsWithComma_pass() throws Exception {
 		MockRestClient c2a = MockRestClient.buildLax(C2a.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -860,8 +829,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void c02b_orPatternsWithSinglePipe_pass() throws Exception {
+	@Test void c02b_orPatternsWithSinglePipe_pass() throws Exception {
 		MockRestClient c2b = MockRestClient.buildLax(C2b.class);
 		c2b.get().roles("foo").run().assertStatus(200);
 		c2b.get().roles("bar").run().assertStatus(200);
@@ -879,8 +847,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void c02c_orPatternsWithDoublePipe_pass() throws Exception {
+	@Test void c02c_orPatternsWithDoublePipe_pass() throws Exception {
 		MockRestClient c2c = MockRestClient.buildLax(C2c.class);
 		c2c.get().roles("foo").run().assertStatus(200);
 		c2c.get().roles("bar").run().assertStatus(200);
@@ -898,8 +865,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void c02d_andPatternsWithSingleAmp_pass() throws Exception {
+	@Test void c02d_andPatternsWithSingleAmp_pass() throws Exception {
 		MockRestClient c2d = MockRestClient.buildLax(C2d.class);
 		c2d.get().roles("foo","bar").run().assertStatus(200);
 		c2d.get().roles("foo","bar","baz").run().assertStatus(200);
@@ -917,8 +883,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void c02e_andPatternsWithDoubleAmp_pass() throws Exception {
+	@Test void c02e_andPatternsWithDoubleAmp_pass() throws Exception {
 		MockRestClient c2e = MockRestClient.buildLax(C2e.class);
 		c2e.get().roles("foo","bar").run().assertStatus(200);
 		c2e.get().roles("foo","bar","baz").run().assertStatus(200);
@@ -936,8 +901,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void c02f_andPatternsWithDoubleAmpAndParens_pass() throws Exception {
+	@Test void c02f_andPatternsWithDoubleAmpAndParens_pass() throws Exception {
 		MockRestClient c2f = MockRestClient.buildLax(C2f.class);
 		c2f.get().roles("foo","bar").run().assertStatus(200);
 		c2f.get().roles("foo","bar","baz").run().assertStatus(200);
@@ -955,8 +919,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void c02g_complexPatterns_pass() throws Exception {
+	@Test void c02g_complexPatterns_pass() throws Exception {
 		MockRestClient c2g = MockRestClient.buildLax(C2g.class);
 		c2g.get().roles("foo","bar").run().assertStatus(200);
 		c2g.get().roles("foo","baz").run().assertStatus(200);
@@ -975,8 +938,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void c02h_complexPatterns_pass() throws Exception {
+	@Test void c02h_complexPatterns_pass() throws Exception {
 		MockRestClient c2h = MockRestClient.buildLax(C2h.class);
 		c2h.get().roles("foo").run().assertStatus(200);
 		c2h.get().roles("bar","baz").run().assertStatus(200);
@@ -1014,8 +976,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void d01_patternsWithoutRoles() throws Exception {
+	@Test void d01_patternsWithoutRoles() throws Exception {
 		MockRestClient d = MockRestClient.buildLax(D.class);
 
 		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
@@ -1039,8 +1000,7 @@ public class Restx_RoleGuard_Test {
 		}
 	}
 
-	@Test
-	public void e01_anyRole_pass() throws Exception {
+	@Test void e01_anyRole_pass() throws Exception {
 		MockRestClient e = MockRestClient.buildLax(E.class);
 		e.get().roles("foo").run().assertStatus(200);
 		e.get().roles("bar").run().assertStatus(200);

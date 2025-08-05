@@ -16,24 +16,20 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.reflect.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class HttpPartSchema_Query_Test {
+class HttpPartSchema_Query_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic test
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test
-	public void testBasic() {
+	@Test void testBasic() {
 		assertNotThrown(()->HttpPartSchema.create().build());
 	}
 
@@ -44,8 +40,7 @@ public class HttpPartSchema_Query_Test {
 	@Query("x")
 	public static class A01 {}
 
-	@Test
-	public void a01_value() {
+	@Test void a01_value() {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, A01.class).build();
 		assertEquals("x", s.getName());
 	}
@@ -75,8 +70,7 @@ public class HttpPartSchema_Query_Test {
 	)
 	public static class A02 {}
 
-	@Test
-	public void a02_basic_onClass() {
+	@Test void a02_basic_onClass() {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, A02.class).noValidate().build();
 		assertEquals("x", s.getName());
 		assertEquals(HttpPartDataType.NUMBER, s.getType());
@@ -130,8 +124,7 @@ public class HttpPartSchema_Query_Test {
 		}
 	}
 
-	@Test
-	public void a03_basic_onParameter() throws Exception {
+	@Test void a03_basic_onParameter() throws Exception {
 		ParamInfo mpi = MethodInfo.of(A03.class.getMethod("a", String.class)).getParam(0);
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, mpi).noValidate().build();
 		assertEquals("x", s.getName());
@@ -186,8 +179,7 @@ public class HttpPartSchema_Query_Test {
 		}
 	}
 
-	@Test
-	public void a04_basic_onParameterAndClass() throws Exception {
+	@Test void a04_basic_onParameterAndClass() throws Exception {
 		ParamInfo mpi = MethodInfo.of(A04.class.getMethod("a", A01.class)).getParam(0);
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, mpi).noValidate().build();
 		assertEquals("y", s.getName());
@@ -288,8 +280,7 @@ public class HttpPartSchema_Query_Test {
 	)
 	public static class A05 {}
 
-	@Test
-	public void a05_basic_nestedItems_onClass() {
+	@Test void a05_basic_nestedItems_onClass() {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, A05.class).noValidate().build();
 		assertEquals("x", s.getName());
 
@@ -373,8 +364,7 @@ public class HttpPartSchema_Query_Test {
 	@Query @Schema(r=true)
 	public static class B01a {}
 
-	@Test
-	public void b01a_required() throws Exception {
+	@Test void b01a_required() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, B01a.class).build();
 
 		s.validateInput("x");
@@ -386,8 +376,7 @@ public class HttpPartSchema_Query_Test {
 	@Query @Schema(aev=true)
 	public static class B01b {}
 
-	@Test
-	public void b01b_allowEmptyValue() throws Exception {
+	@Test void b01b_allowEmptyValue() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, B01b.class).build();
 
 		s.validateInput("");
@@ -397,8 +386,7 @@ public class HttpPartSchema_Query_Test {
 	@Query @Schema(r=true,aev=true)
 	public static class B01c {}
 
-	@Test
-	public void b01b_required_allowEmptyValue() throws Exception {
+	@Test void b01b_required_allowEmptyValue() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, B01c.class).build();
 
 		s.validateInput("");
@@ -409,8 +397,7 @@ public class HttpPartSchema_Query_Test {
 	@Query @Schema(p="x.*")
 	public static class B02a {}
 
-	@Test
-	public void b02a_pattern() throws Exception {
+	@Test void b02a_pattern() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, B02a.class).build();
 		s.validateInput("x");
 		s.validateInput("xx");
@@ -422,8 +409,7 @@ public class HttpPartSchema_Query_Test {
 	@Query @Schema(minl=2, maxl=3)
 	public static class B03a {}
 
-	@Test
-	public void b03a_length() throws Exception {
+	@Test void b03a_length() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, B03a.class).build();
 		s.validateInput("12");
 		s.validateInput("123");
@@ -447,8 +433,7 @@ public class HttpPartSchema_Query_Test {
 	)
 	public static class B03b {}
 
-	@Test
-	public void b03b_length_items() throws Exception {
+	@Test void b03b_length_items() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, B03b.class).build();
 
 		s.getItems().validateInput("12");
@@ -480,8 +465,7 @@ public class HttpPartSchema_Query_Test {
 	@Query @Schema(e="X,Y")
 	public static class B04a {}
 
-	@Test
-	public void b04a_enum() throws Exception {
+	@Test void b04a_enum() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, B04a.class).build();
 		s.validateInput("X");
 		s.validateInput("Y");
@@ -492,8 +476,7 @@ public class HttpPartSchema_Query_Test {
 	@Query @Schema(e=" X , Y ")
 	public static class B04b {}
 
-	@Test
-	public void b04b_enum() throws Exception {
+	@Test void b04b_enum() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, B04b.class).build();
 		s.validateInput("X");
 		s.validateInput("Y");
@@ -504,8 +487,7 @@ public class HttpPartSchema_Query_Test {
 	@Query @Schema(e="X,Y")
 	public static class B04c {}
 
-	@Test
-	public void b04c_enum_json() throws Exception {
+	@Test void b04c_enum_json() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, B04c.class).build();
 		s.validateInput("X");
 		s.validateInput("Y");
@@ -528,8 +510,7 @@ public class HttpPartSchema_Query_Test {
 	)
 	public static class B04d {}
 
-	@Test
-	public void b04d_enum_items() throws Exception {
+	@Test void b04d_enum_items() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, B04d.class).build();
 
 		s.getItems().validateInput("W");
@@ -550,8 +531,7 @@ public class HttpPartSchema_Query_Test {
 	@Query @Schema(min="10", max="100")
 	public static class C01a {}
 
-	@Test
-	public void c01a_minmax_ints() throws Exception {
+	@Test void c01a_minmax_ints() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, C01a.class).build();
 		s.validateOutput(10, BeanContext.DEFAULT);
 		s.validateOutput(100, BeanContext.DEFAULT);
@@ -575,8 +555,7 @@ public class HttpPartSchema_Query_Test {
 	)
 	public static class C01b {}
 
-	@Test
-	public void c01b_minmax_ints_items() throws Exception {
+	@Test void c01b_minmax_ints_items() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, C01b.class).build();
 
 		s.getItems().validateOutput(10, BeanContext.DEFAULT);
@@ -603,8 +582,7 @@ public class HttpPartSchema_Query_Test {
 	@Query @Schema(min="10", max="100", emin=true, emax=true)
 	public static class C02a {}
 
-	@Test
-	public void c02a_minmax_exclusive() throws Exception {
+	@Test void c02a_minmax_exclusive() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, C02a.class).build();
 		s.validateOutput(11, BeanContext.DEFAULT);
 		s.validateOutput(99, BeanContext.DEFAULT);
@@ -628,8 +606,7 @@ public class HttpPartSchema_Query_Test {
 	)
 	public static class C02b {}
 
-	@Test
-	public void c02b_minmax_exclusive_items() throws Exception {
+	@Test void c02b_minmax_exclusive_items() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, C02b.class).build();
 
 		s.getItems().validateOutput(11, BeanContext.DEFAULT);
@@ -656,8 +633,7 @@ public class HttpPartSchema_Query_Test {
 	@Query @Schema(min="10.1", max="100.1")
 	public static class C03a {}
 
-	@Test
-	public void c03_minmax_floats() throws Exception {
+	@Test void c03_minmax_floats() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, C03a.class).build();
 		s.validateOutput(10.1f, BeanContext.DEFAULT);
 		s.validateOutput(100.1f, BeanContext.DEFAULT);
@@ -681,8 +657,7 @@ public class HttpPartSchema_Query_Test {
 	)
 	public static class C03b {}
 
-	@Test
-	public void c03b_minmax_floats_items() throws Exception {
+	@Test void c03b_minmax_floats_items() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, C03b.class).build();
 
 		s.getItems().validateOutput(10.1f, BeanContext.DEFAULT);
@@ -709,8 +684,7 @@ public class HttpPartSchema_Query_Test {
 	@Query @Schema(min="10.1", max="100.1", emin=true, emax=true)
 	public static class C04a {}
 
-	@Test
-	public void c04a_minmax_floats_exclusive() throws Exception {
+	@Test void c04a_minmax_floats_exclusive() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, C04a.class).build();
 		s.validateOutput(10.2f, BeanContext.DEFAULT);
 		s.validateOutput(100f, BeanContext.DEFAULT);
@@ -734,8 +708,7 @@ public class HttpPartSchema_Query_Test {
 	)
 	public static class C04b {}
 
-	@Test
-	public void c04b_minmax_floats_exclusive_items() throws Exception {
+	@Test void c04b_minmax_floats_exclusive_items() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, C04b.class).build();
 
 		s.getItems().validateOutput(10.2f, BeanContext.DEFAULT);
@@ -762,8 +735,7 @@ public class HttpPartSchema_Query_Test {
 	@Query @Schema(mo="10")
 	public static class C05a {}
 
-	@Test
-	public void c05a_multipleOf() throws Exception {
+	@Test void c05a_multipleOf() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, C05a.class).build();
 		s.validateOutput(0, BeanContext.DEFAULT);
 		s.validateOutput(10, BeanContext.DEFAULT);
@@ -789,8 +761,7 @@ public class HttpPartSchema_Query_Test {
 	)
 	public static class C05b {}
 
-	@Test
-	public void c05b_multipleOf_items() throws Exception {
+	@Test void c05b_multipleOf_items() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, C05b.class).build();
 
 		s.getItems().validateOutput(0, BeanContext.DEFAULT);
@@ -827,8 +798,7 @@ public class HttpPartSchema_Query_Test {
 	@Query @Schema(mo="10.1")
 	public static class C06a {}
 
-	@Test
-	public void c06a_multipleOf_floats() throws Exception {
+	@Test void c06a_multipleOf_floats() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, C06a.class).build();
 		s.validateOutput(0, BeanContext.DEFAULT);
 		s.validateOutput(10.1f, BeanContext.DEFAULT);
@@ -852,8 +822,7 @@ public class HttpPartSchema_Query_Test {
 	)
 	public static class C06b {}
 
-	@Test
-	public void c06b_multipleOf_floats_items() throws Exception {
+	@Test void c06b_multipleOf_floats_items() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, C06b.class).build();
 
 		s.getItems().validateOutput(0, BeanContext.DEFAULT);
@@ -897,8 +866,7 @@ public class HttpPartSchema_Query_Test {
 	)
 	public static class D01 {}
 
-	@Test
-	public void d01a_uniqueItems_arrays() throws Exception {
+	@Test void d01a_uniqueItems_arrays() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, D01.class).build();
 
 		String[] good = split("a,b"), bad = split("a,a");
@@ -915,8 +883,7 @@ public class HttpPartSchema_Query_Test {
 		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT)).asMessage().is("Duplicate items not allowed.");
 	}
 
-	@Test
-	public void d01b_uniqueItems_collections() throws Exception {
+	@Test void d01b_uniqueItems_collections() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, D01.class).build();
 
 		List<String>
@@ -951,8 +918,7 @@ public class HttpPartSchema_Query_Test {
 	)
 	public static class D02 {}
 
-	@Test
-	public void d02a_minMaxItems_arrays() throws Exception {
+	@Test void d02a_minMaxItems_arrays() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, D02.class).build();
 
 		s.getItems().validateOutput(split("1"), BeanContext.DEFAULT);

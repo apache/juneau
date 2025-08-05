@@ -12,16 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ResponseStatus_Test {
+public class ResponseStatus_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A {
@@ -31,8 +28,7 @@ public class ResponseStatus_Test {
 		}
 	}
 
-	@Test
-	public void a01_onMethodParameter() throws Exception {
+	@Test void a01_onMethodParameter() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.get("/a")
 			.run()

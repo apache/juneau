@@ -18,8 +18,6 @@ import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.time.*;
 import java.util.*;
 import java.util.regex.*;
@@ -31,10 +29,9 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestClient_Response_Headers_Test {
+class RestClient_Response_Headers_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {
@@ -51,8 +48,7 @@ public class RestClient_Response_Headers_Test {
 
 	private static final ZonedDateTime ZONEDDATETIME = ZonedDateTime.from(RFC_1123_DATE_TIME.parse("Sat, 29 Oct 1994 19:43:31 GMT")).truncatedTo(SECONDS);
 
-	@Test
-	public void a01_exists() throws Exception {
+	@Test void a01_exists() throws Exception {
 		assertFalse(checkFooClient().build().get("/echo").run().getHeader("Foo").isPresent());
 		assertTrue(checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").isPresent());
 	}
@@ -65,8 +61,7 @@ public class RestClient_Response_Headers_Test {
 		}
 	}
 
-	@Test
-	public void a02_asHeader() throws Exception {
+	@Test void a02_asHeader() throws Exception {
 		Header h = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(BasicStringHeader.class).assertName().is("Foo").assertStringValue().is("bar");
 		assertTrue(h instanceof BasicStringHeader);
 
@@ -83,8 +78,7 @@ public class RestClient_Response_Headers_Test {
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asUriHeader().assertName().is("Foo").assertStringValue().is("bar");
 	}
 
-	@Test
-	public void a03_asString() throws Exception {
+	@Test void a03_asString() throws Exception {
 		String s = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asString().orElse(null);
 		assertEquals("bar", s);
 
@@ -103,8 +97,7 @@ public class RestClient_Response_Headers_Test {
 		assertEquals("baz", s);
 	}
 
-	@Test
-	public void a04_asType() throws Exception {
+	@Test void a04_asType() throws Exception {
 		Integer i = checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").as(Integer.class).orElse(null);
 		assertEquals(123, i.intValue());
 
@@ -151,8 +144,7 @@ public class RestClient_Response_Headers_Test {
 		assertFalse(checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Bar").asMatcher("FOO",Pattern.CASE_INSENSITIVE).matches());
 	}
 
-	@Test
-	public void a05_toResponse() throws Exception {
+	@Test void a05_toResponse() throws Exception {
 		RestResponse r = checkFooClient().build().get("/echo").header("Foo","123").run();
 		assertSame(r, r.getHeader("Foo").response());
 	}
@@ -161,8 +153,7 @@ public class RestClient_Response_Headers_Test {
 	// Assertions.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void b01_assertions() throws Exception {
+	@Test void b01_assertions() throws Exception {
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").assertValue().is("bar");
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Bar").assertValue().isNull();
 		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").assertValue().asInteger().is(123);
@@ -177,8 +168,7 @@ public class RestClient_Response_Headers_Test {
 	// Header methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void c01_getElements() throws Exception {
+	@Test void c01_getElements() throws Exception {
 		HeaderElement[] e = checkFooClient().build().get("/echo").header("Foo","bar=baz;qux=quux").run().getHeader("Foo").getElements();
 		assertEquals("bar", e[0].getName());
 		assertEquals("baz", e[0].getValue());

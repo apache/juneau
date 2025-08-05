@@ -14,18 +14,15 @@ package org.apache.juneau.reflect;
 
 import static org.apache.juneau.reflect.ConstructorInfo.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ConstructorInfoTest {
+public class ConstructorInfoTest extends SimpleTestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
@@ -66,23 +63,19 @@ public class ConstructorInfoTest {
 	}
 	static ConstructorInfo a = ofc(A.class);
 
-	@Test
-	public void of_withDeclaringClass() {
+	@Test void of_withDeclaringClass() {
 		check("A()", ConstructorInfo.of(ClassInfo.of(A.class), a.inner()));
 	}
 
-	@Test
-	public void of_noDeclaringClass() {
+	@Test void of_noDeclaringClass() {
 		check("A()", a.inner());
 	}
 
-	@Test
-	public void getDeclaringClass() {
+	@Test void getDeclaringClass() {
 		check("A", a.getDeclaringClass());
 	}
 
-	@Test
-	public void of_null() {
+	@Test void of_null() {
 		check(null, ConstructorInfo.of(null));
 		check(null, ConstructorInfo.of(null, null));
 	}
@@ -114,20 +107,17 @@ public class ConstructorInfoTest {
 		b_c4 = b.getPublicConstructor(x -> x.hasParamTypes(String.class, String.class));
 
 
-	@Test
-	public void invoke() throws Exception {
+	@Test void invoke() throws Exception {
 		assertEquals(null, b_c1.invokeFuzzy().toString());
 		assertEquals("foo", b_c2.invokeFuzzy("foo").toString());
 	}
 
-	@Test
-	public void accessible() throws Exception {
+	@Test void accessible() throws Exception {
 		b_c3.accessible(Visibility.PROTECTED);
 		assertEquals(null, b_c3.invokeFuzzy(123).toString());
 	}
 
-	@Test
-	public void compareTo() {
+	@Test void compareTo() {
 		Set<ConstructorInfo> s = new TreeSet<>(Arrays.asList(b_c1, b_c2, b_c3, b_c4, a));
 		check("A(),B(),B(int),B(String),B(String,String)", s);
 

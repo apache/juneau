@@ -18,11 +18,10 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.time.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshaller.*;
@@ -34,10 +33,9 @@ import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestClient_Headers_Test {
+public class RestClient_Headers_Test extends SimpleTestBase {
 
 	public static final CaptureLogger LOGGER = new CaptureLogger();
 
@@ -77,8 +75,7 @@ public class RestClient_Headers_Test {
 	// Method tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_header_String_Object() throws Exception {
+	@Test void a01_header_String_Object() throws Exception {
 		checkFooClient().header("Foo","bar").build().get("/headers").run().assertContent("['bar']");
 		checkFooClient().build().get("/headers").header("Foo","baz").run().assertContent("['baz']");
 		checkFooClient().header("Foo","bar").build().get("/headers").header("Foo","baz").run().assertContent("['bar','baz']");
@@ -86,20 +83,17 @@ public class RestClient_Headers_Test {
 		checkFooClient().headers(header("Foo",null,null)).build().get("/headers").header("Foo",null).run().assertContent("[]");
 	}
 
-	@Test
-	public void a02_header_String_Object_Schema() throws Exception {
+	@Test void a02_header_String_Object_Schema() throws Exception {
 		List<String> l1 = list("bar","baz"), l2 = list("qux","quux");
 		checkFooClient().headers(header("Foo",l1,T_ARRAY_PIPES)).build().get("/headers").header(header("Foo",l2,T_ARRAY_PIPES)).run().assertContent("['bar|baz','qux|quux']");
 	}
 
-	@Test
-	public void a03_header_Header() throws Exception {
+	@Test void a03_header_Header() throws Exception {
 		checkFooClient().headers(header("Foo","bar")).build().get("/headers").header(header("Foo","baz")).run().assertContent("['bar','baz']");
 		checkFooClient().headers(stringHeader("Foo","bar")).build().get("/headers").header(stringHeader("Foo","baz")).run().assertContent("['bar','baz']");
 	}
 
-	@Test
-	public void a08_header_String_Supplier() throws Exception {
+	@Test void a08_header_String_Supplier() throws Exception {
 		MutableSupplier<String> s = MutableSupplier.of("foo");
 		RestClient x = checkFooClient().headers(header("Foo",s,null)).build();
 		x.get("/headers").header("Foo",s).run().assertContent("['foo','foo']");
@@ -107,13 +101,11 @@ public class RestClient_Headers_Test {
 		x.get("/headers").header("Foo",s).run().assertContent("['bar','bar']");
 	}
 
-	@Test
-	public void a09_headers_String_Object_Schema_Serializer() throws Exception {
+	@Test void a09_headers_String_Object_Schema_Serializer() throws Exception {
 		checkFooClient().headers(header("Foo",bean,null).serializer(FakeWriterSerializer.X)).build().get("/headers").run().assertContent("['x{f:1}x']");
 	}
 
-	@Test
-	public void a10_headers_String_Supplier_Schema() throws Exception {
+	@Test void a10_headers_String_Supplier_Schema() throws Exception {
 		MutableSupplier<String[]> s = MutableSupplier.of(new String[]{"foo","bar"});
 		RestClient x = checkFooClient().headers(header("Foo",s,T_ARRAY_PIPES)).build();
 		x.get("/headers").header(header("Foo",s,T_ARRAY_PIPES)).run().assertContent("['foo|bar','foo|bar']");
@@ -121,8 +113,7 @@ public class RestClient_Headers_Test {
 		x.get("/headers").header(header("Foo",s,T_ARRAY_PIPES)).run().assertContent("['bar|baz','bar|baz']");
 	}
 
-	@Test
-	public void a11_headers_String_Supplier_Schema_Serializer() throws Exception {
+	@Test void a11_headers_String_Supplier_Schema_Serializer() throws Exception {
 		MutableSupplier<String[]> s = MutableSupplier.of(new String[]{"foo","bar"});
 		checkFooClient().headers(header("Foo",s,T_ARRAY_PIPES).serializer(UonSerializer.DEFAULT)).build().get("/headers").run().assertContent("['@(foo,bar)']");
 	}
@@ -136,8 +127,7 @@ public class RestClient_Headers_Test {
 		}
 	}
 
-	@Test
-	public void a12_badSerialization() {
+	@Test void a12_badSerialization() {
 		assertThrown(()->checkFooClient().headers(header("Foo","bar",null).serializer(new A12())).build().get().run()).asMessages().isContains("bad");
 	}
 
@@ -145,8 +135,7 @@ public class RestClient_Headers_Test {
 	// Other tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void b01_standardHeaders() throws Exception {
+	@Test void b01_standardHeaders() throws Exception {
 		checkClient("Accept").accept("text/plain").build().get("/headers").run().assertContent("['text/plain']");
 		checkClient("Accept-Charset").acceptCharset("UTF-8").build().get("/headers").run().assertContent("['UTF-8']");
 		checkClient("Client-Version").clientVersion("1").build().get("/headers").run().assertContent("['1']");
@@ -159,8 +148,7 @@ public class RestClient_Headers_Test {
 		checkClient("No-Trace").build().get("/headers").noTrace().run().assertContent("['true','true']");
 	}
 
-	@Test
-	public void b02_headerBeans() throws Exception {
+	@Test void b02_headerBeans() throws Exception {
 		checkClient("Accept").headers(new Accept("text/plain")).build().get("/headers").run().assertContent("['text/plain']");
 		checkClient("Accept-Charset").headers(new AcceptCharset("UTF-8")).build().get("/headers").run().assertContent("['UTF-8']");
 		checkClient("Accept-Encoding").headers(new AcceptEncoding("identity")).build().get("/headers").run().assertContent("['identity']");
@@ -198,13 +186,11 @@ public class RestClient_Headers_Test {
 		checkClient("Warning").headers(new Warning("foo")).build().get("/headers").run().assertContent("['foo']");
 	}
 
-	@Test
-	public void b03_debugHeader() throws Exception {
+	@Test void b03_debugHeader() throws Exception {
 		checkClient("Debug").build().get("/headers").debug().suppressLogging().run().assertContent("['true']");
 	}
 
-	@Test
-	public void b04_dontOverrideAccept() throws Exception {
+	@Test void b04_dontOverrideAccept() throws Exception {
 		checkClient("Accept").header("Accept","text/plain").build().get("/headers").run().assertContent("['text/plain']");
 		checkClient("Accept").header("Accept","text/foo").build().get("/headers").header("Accept","text/plain").run().assertContent("['text/foo','text/plain']");
 		RestClient rc = checkClient("Accept").header("Accept","text/foo").build();
@@ -213,8 +199,7 @@ public class RestClient_Headers_Test {
 		req.run().assertContent("['text/plain']");
 	}
 
-	@Test
-	public void b05_dontOverrideContentType() throws Exception {
+	@Test void b05_dontOverrideContentType() throws Exception {
 		checkClient("Content-Type").header("Content-Type","text/plain").build().get("/headers").run().assertContent("['text/plain']");
 		checkClient("Content-Type").header("Content-Type","text/foo").build().get("/headers").header("Content-Type","text/plain").run().assertContent("['text/foo','text/plain']");
 	}

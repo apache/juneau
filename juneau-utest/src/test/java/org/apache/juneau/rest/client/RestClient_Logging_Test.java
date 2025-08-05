@@ -13,8 +13,6 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.logging.*;
 
@@ -24,10 +22,9 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestClient_Logging_Test {
+public class RestClient_Logging_Test extends SimpleTestBase {
 
 	public static class ABean {
 		public int f;
@@ -57,8 +54,7 @@ public class RestClient_Logging_Test {
 		}
 	}
 
-	@Test
-	public void a01_logToConsole() throws Exception {
+	@Test void a01_logToConsole() throws Exception {
 		MockConsole c = MockConsole.create();
 		MockLogger l = MockLogger.create();
 
@@ -130,8 +126,7 @@ public class RestClient_Logging_Test {
 		c.reset();
 	}
 
-	@Test
-	public void a02_logTo() throws Exception {
+	@Test void a02_logTo() throws Exception {
 		MockLogger l = MockLogger.create();
 
 		client().logRequests(DetailLevel.NONE,Level.SEVERE,null).logToConsole().logger(l).build().post("/bean",bean).complete();
@@ -198,8 +193,7 @@ public class RestClient_Logging_Test {
 		}
 	}
 
-	@Test
-	public void a04_other() throws Exception {
+	@Test void a04_other() throws Exception {
 		MockLogger ml = MockLogger.create();
 		MockConsole mc = MockConsole.create();
 		client().logger(ml).interceptors(A1.class).build().post("/bean",bean).complete();

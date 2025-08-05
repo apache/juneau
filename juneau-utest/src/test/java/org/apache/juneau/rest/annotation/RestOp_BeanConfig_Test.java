@@ -12,17 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
 @SuppressWarnings("serial")
-public class RestOp_BeanConfig_Test {
+public class RestOp_BeanConfig_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @BeanConfig(bpi)
@@ -46,8 +44,7 @@ public class RestOp_BeanConfig_Test {
 		}
 	}
 
-	@Test
-	public void a01_bpi() throws Exception {
+	@Test void a01_bpi() throws Exception {
 		RestClient a1 = MockRestClient.build(A1.class);
 		a1.get("/a").json().run().assertContent("{\"a\":1,\"_b\":\"foo\"}");
 		a1.get("/a").xml().run().assertContent().isContains("<object><a>1</a><_b>foo</_b></object>");
@@ -88,8 +85,7 @@ public class RestOp_BeanConfig_Test {
 		}
 	}
 
-	@Test
-	public void a02_bpx() throws Exception {
+	@Test void a02_bpx() throws Exception {
 		RestClient a2 = MockRestClient.build(A2.class);
 		a2.get("/a").json().run().assertContent("{}");
 		a2.get("/a").xml().run().assertContent().isContains("<object/>");
@@ -130,8 +126,7 @@ public class RestOp_BeanConfig_Test {
 		}
 	}
 
-	@Test
-	public void a03_bpi_overridesClass() throws Exception {
+	@Test void a03_bpi_overridesClass() throws Exception {
 		RestClient c = MockRestClient.build(A3.class);
 		c.get("/a").json().run().assertContent("{\"a\":1,\"_b\":\"foo\"}");
 		c.get("/a").xml().run().assertContent().isContains("<object><a>1</a><_b>foo</_b></object>");
@@ -172,8 +167,7 @@ public class RestOp_BeanConfig_Test {
 		}
 	}
 
-	@Test
-	public void a04_bpx_overridesClass() throws Exception {
+	@Test void a04_bpx_overridesClass() throws Exception {
 		RestClient a4 = MockRestClient.build(A4.class);
 		a4.get("/a").json().run().assertContent("{}");
 		a4.get("/a").xml().run().assertContent().isContains("<object/>");
@@ -204,8 +198,7 @@ public class RestOp_BeanConfig_Test {
 		}
 	}
 
-	@Test
-	public void a05_bpi_metaMatching() throws Exception {
+	@Test void a05_bpi_metaMatching() throws Exception {
 		RestClient a5 = MockRestClient.build(A5.class);
 		a5.get("/a").json().run().assertContent("{\"a\":1}");
 		a5.get("/a").xml().run().assertContent().isContains("<object><a>1</a></object>");
@@ -226,8 +219,7 @@ public class RestOp_BeanConfig_Test {
 		}
 	}
 
-	@Test
-	public void a06_bpi_fullyQualifiedClassNames() throws Exception {
+	@Test void a06_bpi_fullyQualifiedClassNames() throws Exception {
 		RestClient a6 = MockRestClient.build(A6.class);
 		a6.get("/a").json().run().assertContent("{\"a\":1}");
 		a6.get("/a").xml().run().assertContent().isContains("<object><a>1</a></object>");
@@ -255,8 +247,7 @@ public class RestOp_BeanConfig_Test {
 		}
 	}
 
-	@Test
-	public void a07_bpi_negativeMatching() throws Exception {
+	@Test void a07_bpi_negativeMatching() throws Exception {
 		RestClient a7 = MockRestClient.build(A7.class);
 		a7.get("/a").json().run().assertContent("{\"a\":1,\"_b\":\"foo\"}");
 		a7.get("/a").xml().run().assertContent().isContains("<object><a>1</a><_b>foo</_b></object>");

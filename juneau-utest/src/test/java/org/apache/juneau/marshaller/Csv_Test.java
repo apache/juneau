@@ -13,19 +13,16 @@
 package org.apache.juneau.marshaller;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Csv_Test {
+class Csv_Test  extends SimpleTestBase{
 
-	@Test
-	public void a01_to() throws Exception {
+	@Test void a01_to() throws Exception {
 		Object in1 = "foo", in2 = new Object[]{JsonMap.of("a","foo","b","bar")};
 		String expected1="value\nfoo\n", expected2 = "a,b\nfoo,bar\n";
 
@@ -36,8 +33,7 @@ public class Csv_Test {
 	}
 
 
-	@Test
-	public void a02_from() {
+	@Test void a02_from() {
 		String in1 = "'foo'", in2 = "{foo:'bar'}";
 
 		assertThrown(()->Csv.to(in1, String.class)).asMessage().is("Not implemented.");

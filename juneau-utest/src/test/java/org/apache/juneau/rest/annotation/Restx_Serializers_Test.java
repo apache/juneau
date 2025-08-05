@@ -12,18 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Restx_Serializers_Test {
+class Restx_Serializers_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -77,8 +75,7 @@ public class Restx_Serializers_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient a = MockRestClient.buildLax(A.class);
 		a.get("/a")
 			.accept("text/a")
@@ -167,8 +164,7 @@ public class Restx_Serializers_Test {
 		}
 	}
 
-	@Test
-	public void b01_inheritence() throws Exception {
+	@Test void b01_inheritence() throws Exception {
 		RestClient b = MockRestClient.build(B2.class);
 		b.get("/a").run().assertContent("['text/s3','text/s4','text/s1','text/s2']");
 		b.get("/b").run().assertContent("['text/s5']");

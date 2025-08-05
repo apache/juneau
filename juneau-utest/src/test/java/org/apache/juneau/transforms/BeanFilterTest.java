@@ -14,20 +14,16 @@ package org.apache.juneau.transforms;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class BeanFilterTest {
+class BeanFilterTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// Interface bean filters
 	//====================================================================================================
-	@Test
-	public void testInterfaceBeanFilters() {
+	@Test void testInterfaceBeanFilters() {
 		BeanSession session;
 		BeanMap<A3> bm;
 
@@ -69,8 +65,7 @@ public class BeanFilterTest {
 	//====================================================================================================
 	// Abstract class bean filters
 	//====================================================================================================
-	@Test
-	public void testAbstractClassBeanFilters() {
+	@Test void testAbstractClassBeanFilters() {
 		BeanSession session;
 		BeanMap<Test2> bm;
 
@@ -114,8 +109,7 @@ public class BeanFilterTest {
 	//====================================================================================================
 	// Filtered with stop classes
 	//====================================================================================================
-	@Test
-	public void testFilteredWithStopClass() {
+	@Test void testFilteredWithStopClass() {
 		C3 c3 = new C3();
 		assertObject(c3).asJson().is("{f3:3,p3:3}");
 	}
@@ -136,8 +130,7 @@ public class BeanFilterTest {
 		public int getP3() { return 3; }
 	}
 
-	@Test
-	public void testFilterWithStopClassOnParentClass() {
+	@Test void testFilterWithStopClassOnParentClass() {
 		D3 d3 = new D3();
 		assertObject(d3).asJson().is("{f3:3,p3:3}");
 	}
@@ -158,8 +151,7 @@ public class BeanFilterTest {
 		public int getP3() { return 3; }
 	}
 
-	@Test
-	public void testFilteredWithStopClassOnParentClassWithOverriddenAnnotation() {
+	@Test void testFilteredWithStopClassOnParentClassWithOverriddenAnnotation() {
 		E3 e3 = new E3();
 		assertObject(e3).asJson().is("{f3:3,p3:3}");
 	}
@@ -181,8 +173,7 @@ public class BeanFilterTest {
 		public int getP3() { return 3; }
 	}
 
-	@Test
-	public void testFilteredWithStopClassesAtMulitpleLevels() {
+	@Test void testFilteredWithStopClassesAtMulitpleLevels() {
 		F3 e3 = new F3();
 		assertObject(e3).asJson().is("{f3:3,p3:3}");
 	}

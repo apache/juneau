@@ -16,22 +16,20 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.lang.annotation.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * ParamInfo tests.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class ParamInfoTest {
+public class ParamInfoTest extends SimpleTestBase {
 
 	@Documented
 	@Target(METHOD)
@@ -94,8 +92,7 @@ public class ParamInfoTest {
 		b_a2_b = b.getMethod(x -> x.hasName("a2")).getParam(1);  // NOSONAR
 
 
-	@Test
-	public void getIndex() {
+	@Test void getIndex() {
 		assertEquals(0, b_b_a.getIndex());
 		assertEquals(1, b_b_b.getIndex());
 		assertEquals(0, b_a1_a.getIndex());
@@ -104,36 +101,31 @@ public class ParamInfoTest {
 		assertEquals(1, b_a2_b.getIndex());
 	}
 
-	@Test
-	public void getMethod() {
+	@Test void getMethod() {
 		check("B.a1(int,String)", b_a1_a.getMethod());
 		check("B.a1(int,String)", b_a1_b.getMethod());
 		check("B.a2(int,String)", b_a2_a.getMethod());
 		check("B.a2(int,String)", b_a2_b.getMethod());
 	}
 
-	@Test
-	public void getMethod_onConstrutor() {
+	@Test void getMethod_onConstrutor() {
 		check(null, b_b_a.getMethod());
 		check(null, b_b_b.getMethod());
 	}
 
-	@Test
-	public void getConstructor() {
+	@Test void getConstructor() {
 		check("B(int,String)", b_b_a.getConstructor());
 		check("B(int,String)", b_b_b.getConstructor());
 	}
 
-	@Test
-	public void getConstructor_onMethod() {
+	@Test void getConstructor_onMethod() {
 		check(null, b_a1_a.getConstructor());
 		check(null, b_a1_b.getConstructor());
 		check(null, b_a2_a.getConstructor());
 		check(null, b_a2_b.getConstructor());
 	}
 
-	@Test
-	public void getParameterType() {
+	@Test void getParameterType() {
 		check("int", b_b_a.getParameterType());
 		check("String", b_b_b.getParameterType());
 		check("int", b_a1_a.getParameterType());
@@ -178,16 +170,14 @@ public class ParamInfoTest {
 		cc_a1 = cc.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
 		cc_a2 = cc.getMethod(x -> x.hasName("a2")).getParam(0);  // NOSONAR
 
-	@Test
-	public void getDeclaredAnnotations() {
+	@Test void getDeclaredAnnotations() {
 		check("@CA(5)", declaredAnnotations(cb_a1, CA.class));
 		check("@CA(5)", declaredAnnotations(cb_a2, CA.class));
 		check("", declaredAnnotations(cc_a1, CA.class));
 		check("@CA(6)", declaredAnnotations(cc_a2, CA.class));
 	}
 
-	@Test
-	public void getDeclaredAnnotations_constructor() {
+	@Test void getDeclaredAnnotations_constructor() {
 		check("@CA(9)", declaredAnnotations(cc_cc, CA.class));
 	}
 
@@ -197,99 +187,82 @@ public class ParamInfoTest {
 		return l;
 	}
 
-	@Test
-	public void getDeclaredAnnotation() {
+	@Test void getDeclaredAnnotation() {
 		check("@CA(5)", cb_a1.getDeclaredAnnotation(CA.class));
 		check("@CA(5)", cb_a2.getDeclaredAnnotation(CA.class));
 		check(null, cc_a1.getDeclaredAnnotation(CA.class));
 		check("@CA(6)", cc_a2.getDeclaredAnnotation(CA.class));
 	}
 
-	@Test
-	public void getDeclaredAnnotation_constructor() {
+	@Test void getDeclaredAnnotation_constructor() {
 		check("@CA(9)", cc_cc.getDeclaredAnnotation(CA.class));
 	}
 
-	@Test
-	public void getDeclaredAnnotation_notFound() {
+	@Test void getDeclaredAnnotation_notFound() {
 		check(null, cb_a1.getDeclaredAnnotation(DA.class));
 	}
 
-	@Test
-	public void getDeclaredAnnotation_notFound_constructor() {
+	@Test void getDeclaredAnnotation_notFound_constructor() {
 		check(null, cc_cc.getDeclaredAnnotation(DA.class));
 	}
 
-	@Test
-	public void getDeclaredAnnotation_null() {
+	@Test void getDeclaredAnnotation_null() {
 		check(null, cb_a1.getDeclaredAnnotation(null));
 	}
 
-	@Test
-	public void getDeclaredAnnotation_null_constructor() {
+	@Test void getDeclaredAnnotation_null_constructor() {
 		check(null, cc_cc.getDeclaredAnnotation(null));
 	}
 
-	@Test
-	public void getAnnotationsParentFirst() {
+	@Test void getAnnotationsParentFirst() {
 		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", annotations(cb_a1, CA.class));
 		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", annotations(cb_a2, CA.class));
 		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", annotations(cc_a1, CA.class));
 		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5),@CA(6)", annotations(cc_a2, CA.class));
 	}
 
-	@Test
-	public void getAnnotationsParentFirst_notFound() {
+	@Test void getAnnotationsParentFirst_notFound() {
 		check("", annotations(cb_a1, DA.class));
 	}
 
-	@Test
-	public void getAnnotationsParentFirst_constructor() {
+	@Test void getAnnotationsParentFirst_constructor() {
 		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(9)", annotations(cc_cc, CA.class));
 	}
 
-	@Test
-	public void getAnnotationsParentFirst_notFound_constructor() {
+	@Test void getAnnotationsParentFirst_notFound_constructor() {
 		check("", annotations(cc_cc, DA.class));
 	}
 
-	@Test
-	public void getAnnotation() {
+	@Test void getAnnotation() {
 		check("@CA(5)", cb_a1.getAnnotation(CA.class));
 		check("@CA(5)", cb_a2.getAnnotation(CA.class));
 		check("@CA(5)", cc_a1.getAnnotation(CA.class));
 		check("@CA(6)", cc_a2.getAnnotation(CA.class));
 	}
 
-	@Test
-	public void getAnnotation_notFound() {
+	@Test void getAnnotation_notFound() {
 		check(null, cb_a1.getAnnotation(DA.class));
 	}
 
-	@Test
-	public void getAnnotation_constructor() {
+	@Test void getAnnotation_constructor() {
 		check("@CA(9)", cc_cc.getAnnotation(CA.class));
 	}
 
-	@Test
-	public void getAnnotation_notFound_constructor() {
+	@Test void getAnnotation_notFound_constructor() {
 		check(null, cc_cc.getAnnotation(DA.class));
 	}
 
-	@Test
-	public void getAnnotation_twice() {
+	@Test void getAnnotation_twice() {
 		check("@CA(5)", cb_a1.getAnnotation(CA.class));
 		check("@CA(5)", cb_a1.getAnnotation(CA.class));
 	}
 
-	@Test
-	public void getAnnotation_twice_constructor() {
+	@Test void getAnnotation_twice_constructor() {
 		check("@CA(9)", cc_cc.getAnnotation(CA.class));
 		check("@CA(9)", cc_cc.getAnnotation(CA.class));
 	}
 
-	@Test
-	public void hasAnnotation() {
+	@Test void hasAnnotation() {
 		assertTrue(cb_a1.hasAnnotation(CA.class));
 		assertTrue(cb_a2.hasAnnotation(CA.class));
 		assertTrue(cc_a1.hasAnnotation(CA.class));
@@ -297,8 +270,7 @@ public class ParamInfoTest {
 		assertFalse(cb_a1.hasAnnotation(DA.class));
 	}
 
-	@Test
-	public void hasAnnotation_constructor() {
+	@Test void hasAnnotation_constructor() {
 		assertTrue(cc_cc.hasAnnotation(CA.class));
 		assertFalse(cc_cc.hasAnnotation(DA.class));
 	}
@@ -329,25 +301,21 @@ public class ParamInfoTest {
 		db_a1 = db.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
 		dc_a1 = dc.getMethod(x -> x.hasName("a1")).getParam(0);  // NOSONAR
 
-	@Test
-	public void getAnnotationsParentFirst_inherited() {
+	@Test void getAnnotationsParentFirst_inherited() {
 		check("@DA(4),@DA(3),@DA(2),@DA(1),@DA(0)", annotations(db_a1, DA.class));
 		check("@DA(4),@DA(3),@DA(2),@DA(1),@DA(0),@DA(5)", annotations(dc_a1, DA.class));
 	}
 
-	@Test
-	public void getAnnotationsParentFirst_inherited_notFound() {
+	@Test void getAnnotationsParentFirst_inherited_notFound() {
 		check("", annotations(db_a1, CA.class));
 	}
 
-	@Test
-	public void getAnnotation_inherited() {
+	@Test void getAnnotation_inherited() {
 		check("@DA(0)", db_a1.getAnnotation(DA.class));
 		check("@DA(5)", dc_a1.getAnnotation(DA.class));
 	}
 
-	@Test
-	public void getAnnotation_inherited_notFound() {
+	@Test void getAnnotation_inherited_notFound() {
 		check(null, db_a1.getAnnotation(CA.class));
 	}
 
@@ -364,20 +332,17 @@ public class ParamInfoTest {
 		e_a1_a = e.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
 		e_a1_b = e.getMethod(x -> x.hasName("a1")).getParam(1);  // NOSONAR
 
-	@Test
-	public void hasName() {
+	@Test void hasName() {
 		e_a1_a.hasName();  // This might be true or false based on the JVM compiler used.
 		assertTrue(e_a1_b.hasName());
 	}
 
-	@Test
-	public void getName() {
+	@Test void getName() {
 		e_a1_a.getName();  // This might be null or a value based on the JVM compiler used.
 		assertEquals("b", e_a1_b.getName());
 	}
 
-	@Test
-	public void toString2() {
+	@Test void toString2() {
 		assertEquals("a1[1]", e_a1_b.toString());
 	}
 

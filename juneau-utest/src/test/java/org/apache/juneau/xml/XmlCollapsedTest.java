@@ -18,23 +18,20 @@ import static org.apache.juneau.internal.CollectionUtils.list;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class XmlCollapsedTest {
+public class XmlCollapsedTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// testBasic - @Xml.format=COLLAPSED
 	//====================================================================================================
-	@Test
-	public void testBasic() throws Exception {
+	@Test void testBasic() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		A t = new A();
@@ -73,8 +70,7 @@ public class XmlCollapsedTest {
 	//====================================================================================================
 	// testUninitializedFields - @Xml.format=COLLAPSED, uninitialized fields.
 	//====================================================================================================
-	@Test
-	public void testUninitializedFields() throws Exception {
+	@Test void testUninitializedFields() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		B t = new B();
@@ -113,8 +109,7 @@ public class XmlCollapsedTest {
 	//====================================================================================================
 	// testInitializedFields - @Xml.format=COLLAPSED, initialized fields.
 	//====================================================================================================
-	@Test
-	public void testInitializedFields() throws Exception {
+	@Test void testInitializedFields() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		C t = new C();
@@ -159,8 +154,7 @@ public class XmlCollapsedTest {
 	//====================================================================================================
 	// testGetters - @Xml.format=COLLAPSED, getters.
 	//====================================================================================================
-	@Test
-	public void testGetters() throws Exception {
+	@Test void testGetters() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		D t = new D();
@@ -219,8 +213,7 @@ public class XmlCollapsedTest {
 	//====================================================================================================
 	// testNullConstructibleCollectionFields - @Xml.format=COLLAPSED, null constructible collection fields.
 	//====================================================================================================
-	@Test
-	public void testNullConstructibleCollectionFields() throws Exception {
+	@Test void testNullConstructibleCollectionFields() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		E t = new E();
@@ -265,8 +258,7 @@ public class XmlCollapsedTest {
 	//====================================================================================================
 	// testElementNameOnElementClass - @Xml.format=COLLAPSED, element name defined on element class.
 	//====================================================================================================
-	@Test
-	public void testElementNameOnElementClass() throws Exception {
+	@Test void testElementNameOnElementClass() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		Object t1 = FA.newInstance(), t2;
@@ -332,8 +324,7 @@ public class XmlCollapsedTest {
 	// testElementNameOnElementClassOverridden - @Xml.format=COLLAPSED, element name defined on element class,
 	//	but overridden by @Xml.childName on property.
 	//====================================================================================================
-	@Test
-	public void testElementNameOnElementClassOverridden() throws Exception {
+	@Test void testElementNameOnElementClassOverridden() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		G t = G.newInstance(), t2;
@@ -366,8 +357,7 @@ public class XmlCollapsedTest {
 	//====================================================================================================
 	// testElementNameOnCollectionClass - @Xml.format=COLLAPSED, element name defined on bean class.
 	//====================================================================================================
-	@Test
-	public void testElementNameOnCollectionClass() throws Exception {
+	@Test void testElementNameOnCollectionClass() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		H t = H.newInstance(), t2;
@@ -405,8 +395,7 @@ public class XmlCollapsedTest {
 	// testElementNameOnCollectionClassOverridden - @Xml.format=COLLAPSED, element name defined on element class,
 	//	but overridden by @Xml.childName on property.
 	//====================================================================================================
-	@Test
-	public void testElementNameOnCollectionClassOverridden() throws Exception {
+	@Test void testElementNameOnCollectionClassOverridden() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		G t = G.newInstance(), t2;

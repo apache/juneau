@@ -13,10 +13,9 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
@@ -26,10 +25,9 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Query_Test {
+public class Query_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Simple tests
@@ -49,8 +47,7 @@ public class Query_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 
 		a.get("/a?p1=p1&p2=2").run().assertContent("p1=[p1,p1,p1],p2=[2,2,2]");
@@ -108,8 +105,7 @@ public class Query_Test {
 		}
 	}
 
-	@Test
-	public void b01_uonParameters() throws Exception {
+	@Test void b01_uonParameters() throws Exception {
 		RestClient b = MockRestClient.build(B.class);
 		b.get("/a?p1=p1").run().assertContent("p1=[p1,p1,p1]");
 		b.get("/a?p1='p1'").run().assertContent("p1=['p1','p1','p1']");
@@ -159,8 +155,7 @@ public class Query_Test {
 		}
 	}
 
-	@Test
-	public void c01_multipartParams() throws Exception {
+	@Test void c01_multipartParams() throws Exception {
 		RestClient c = MockRestClient.build(C.class);
 		c.get("/a?x=a").run().assertContent("['a']");
 		c.get("/a?x=a&x=b").run().assertContent("['a','b']");
@@ -212,8 +207,7 @@ public class Query_Test {
 		}
 	}
 
-	@Test
-	public void d01_defaultValues() throws Exception {
+	@Test void d01_defaultValues() throws Exception {
 		RestClient d = MockRestClient.build(D.class);
 		d.get("/a").run().assertContent("{f1:'1',f2:'2',f3:'3'}");
 		d.get("/a").queryData("f1",4).queryData("f2",5).queryData("f3",6).run().assertContent("{f1:'4',f2:'5',f3:'6'}");
@@ -252,8 +246,7 @@ public class Query_Test {
 		}
 	}
 
-	@Test
-	public void e01_optionalParams() throws Exception {
+	@Test void e01_optionalParams() throws Exception {
 		RestClient e = MockRestClient.buildJson(E.class);
 		e.get("/a?f1=123")
 			.run()
@@ -331,8 +324,7 @@ public class Query_Test {
 		}
 	}
 
-	@Test
-	public void f01_defaultParams() throws Exception {
+	@Test void f01_defaultParams() throws Exception {
 		RestClient f = MockRestClient.buildJson(F.class);
 		f.get("/a1?f1=123")
 			.run()

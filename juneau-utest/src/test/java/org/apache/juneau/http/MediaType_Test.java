@@ -14,18 +14,14 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class MediaType_Test {
+public class MediaType_Test extends SimpleTestBase {
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		assertEquals(new MediaType("text/foo"), new MediaType("text/foo"));
 
 		Set<MediaType> x = new TreeSet<>();
@@ -45,8 +41,7 @@ public class MediaType_Test {
 		assertFalse(x3.hasSubType(null));
 	}
 
-	@Test
-	public void a02_match() {
+	@Test void a02_match() {
 		MediaType x1 = MediaType.of("text/json");
 		assertInteger(x1.match(x1,true)).is(100000);
 
@@ -54,8 +49,7 @@ public class MediaType_Test {
 		assertInteger(x1.match(MediaType.of("text/json+foo"),false)).is(0);
 	}
 
-	@Test
-	public void a03_getParameter() {
+	@Test void a03_getParameter() {
 		MediaType x1 = MediaType.of("text/json;x=1;q=1;y=2");
 		assertString(x1.getParameter("x")).is("1");
 		assertString(x1.getParameter("q")).isNull();
@@ -63,16 +57,14 @@ public class MediaType_Test {
 		assertString(x1.getParameter(null)).isNull();
 	}
 
-	@Test
-	public void a04_equals() {
+	@Test void a04_equals() {
 		MediaType x1 = new MediaType("text/foo"), x2 = new MediaType("text/foo"), x3 = new MediaType("text/bar");
 		assertBoolean(x1.equals(x2)).isTrue();
 		assertBoolean(x1.equals(x3)).isFalse();
 		assertBoolean(x1.equals(null)).isFalse();
 	}
 
-	@Test
-	public void a05_hashCode() {
+	@Test void a05_hashCode() {
 		MediaType x1 = new MediaType("text/foo"), x2 = new MediaType("text/foo");
 		assertInteger(x1.hashCode()).is(x2.hashCode());
 	}

@@ -13,19 +13,16 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class SerializerSetTest {
+class SerializerSetTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// Trim nulls from beans
 	//====================================================================================================
-	@Test
-	public void testSerializerGroupMatching() {
+	@Test void testSerializerGroupMatching() {
 
 		SerializerSet sg = SerializerSet.create().add(SA1.class, SA2.class, SA3.class).build();
 		assertObject(sg.getSerializer("text/foo")).isType(SA1.class);
@@ -71,8 +68,7 @@ public class SerializerSetTest {
 	//====================================================================================================
 	// Test inheritence
 	//====================================================================================================
-	@Test
-	public void testInheritence() {
+	@Test void testInheritence() {
 		SerializerSet.Builder gb = null;
 		SerializerSet g = null;
 
@@ -122,8 +118,7 @@ public class SerializerSetTest {
 	//====================================================================================================
 	// Test media type with meta-characters
 	//====================================================================================================
-	@Test
-	public void testMediaTypesWithMetaCharacters() {
+	@Test void testMediaTypesWithMetaCharacters() {
 		SerializerSet.Builder gb = null;
 		SerializerSet g = null;
 

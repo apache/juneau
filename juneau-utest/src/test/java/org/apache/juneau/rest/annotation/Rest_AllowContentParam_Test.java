@@ -12,16 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Rest_AllowContentParam_Test {
+public class Rest_AllowContentParam_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Rest(disableBodyParam)
@@ -47,9 +45,7 @@ public class Rest_AllowContentParam_Test {
 	@Rest(disableContentParam="false")
 	public static class A4 extends A2 {}
 
-
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient a1 = MockRestClient.build(A1.class);
 		a1.put("/", "{a:'b'}").run().assertContent("{a:'b'}");
 		a1.put("/?content=(c=d)", "{a:'b'}").run().assertContent("{c:'d'}");

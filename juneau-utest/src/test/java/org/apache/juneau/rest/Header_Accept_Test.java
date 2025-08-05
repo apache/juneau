@@ -12,18 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Header_Accept_Test {
+class Header_Accept_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Setup classes
@@ -60,8 +58,7 @@ public class Header_Accept_Test {
 		}
 	}
 
-	@Test
-	public void a01_defaultHeadersOnServletAnnotation() throws Exception {
+	@Test void a01_defaultHeadersOnServletAnnotation() throws Exception {
 		RestClient a = MockRestClient.buildLax(A.class);
 		a.put("/", null)
 			.run()
@@ -97,8 +94,7 @@ public class Header_Accept_Test {
 		}
 	}
 
-	@Test
-	public void b01_restMethodWithParsersSerializers() throws Exception {
+	@Test void b01_restMethodWithParsersSerializers() throws Exception {
 		RestClient b = MockRestClient.buildLax(B.class);
 		b.put("/", null).accept("text/s3").run().assertContent("s3");
 		b.put("?noTrace=true", null)
@@ -127,8 +123,7 @@ public class Header_Accept_Test {
 		}
 	}
 
-	@Test
-	public void c01_restMethodAddParsersSerializersInherit() throws Exception {
+	@Test void c01_restMethodAddParsersSerializersInherit() throws Exception {
 		RestClient c = MockRestClient.buildLax(C.class);
 		c.put("/", null)
 			.run()
@@ -170,8 +165,7 @@ public class Header_Accept_Test {
 		}
 	}
 
-	@Test
-	public void d01_accept_valid() throws Exception {
+	@Test void d01_accept_valid() throws Exception {
 		RestClient d = MockRestClient.buildLax(D.class);
 		// "*/*" should match the first serializer, not the default serializer.
 		d.put("/", null).accept("*/*").run().assertContent("s1");
@@ -207,8 +201,7 @@ public class Header_Accept_Test {
 		}
 	}
 
-	@Test
-	public void e01_restMethodParserSerializerAnnotations() throws Exception {
+	@Test void e01_restMethodParserSerializerAnnotations() throws Exception {
 		RestClient e = MockRestClient.buildLax(E.class);
 		e.put("/", null).run().assertContent("s3");
 		e.put("/", null).accept("text/s3").run().assertContent("s3");
@@ -244,8 +237,7 @@ public class Header_Accept_Test {
 		}
 	}
 
-	@Test
-	public void f01_restMethodAddParsersSerializersAnnotations() throws Exception {
+	@Test void f01_restMethodAddParsersSerializersAnnotations() throws Exception {
 		RestClient f = MockRestClient.build(F.class);
 		f.put("/", null).run().assertContent("s3");
 		f.put("/", null).accept("text/s1").run().assertContent("s1");

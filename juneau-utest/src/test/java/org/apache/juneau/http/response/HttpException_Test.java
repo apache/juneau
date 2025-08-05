@@ -14,17 +14,15 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpResponses.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.lang.reflect.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class HttpException_Test {
+public class HttpException_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A {
@@ -50,8 +48,7 @@ public class HttpException_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient c = MockRestClient.create(A.class).ignoreErrors().build();
 
 		c.get("/f1").run()
@@ -72,8 +69,7 @@ public class HttpException_Test {
 			.assertHeader("Foo").is("bar");
 	}
 
-	@Test
-	public void a02_getRootCause() {
+	@Test void a02_getRootCause() {
 		BasicHttpException x = new BasicHttpException(100, null);
 		assertObject(x.getRootCause()).isNull();
 
@@ -90,8 +86,7 @@ public class HttpException_Test {
 		assertObject(x.getRootCause()).isType(RuntimeException.class);
 	}
 
-	@Test
-	public void a03_getFullStackMessage() {
+	@Test void a03_getFullStackMessage() {
 		BasicHttpException x = new BasicHttpException(100, null);
 		assertString(x.getFullStackMessage(false)).is("Continue");
 		assertString(x.getFullStackMessage(true)).is("Continue");

@@ -13,17 +13,14 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class FilteredMapTest {
+public class FilteredMapTest extends SimpleTestBase {
 
 	Map<?,?> m3;
 

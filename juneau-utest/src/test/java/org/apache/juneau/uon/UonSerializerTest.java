@@ -13,24 +13,19 @@
 package org.apache.juneau.uon;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.collections.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class UonSerializerTest {
+class UonSerializerTest {
 
 	static UonSerializer s = UonSerializer.DEFAULT_ENCODING;
 	static UonSerializer su = UonSerializer.DEFAULT;
 	static UonSerializer sr = UonSerializer.DEFAULT_READABLE;
 
-
 	//====================================================================================================
 	// Basic test
 	//====================================================================================================
-	@Test
-	public void testBasic() throws Exception {
+	@Test void testBasic() throws Exception {
 
 		Object t;
 
@@ -298,8 +293,7 @@ public class UonSerializerTest {
 	//====================================================================================================
 	// Unicode characters test
 	//====================================================================================================
-	@Test
-	public void testUnicodeChars() throws Exception {
+	@Test void testUnicodeChars() throws Exception {
 		Object t;
 
 		// 2-byte UTF-8 character

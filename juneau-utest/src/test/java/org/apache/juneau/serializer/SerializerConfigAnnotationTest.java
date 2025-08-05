@@ -13,8 +13,6 @@
 package org.apache.juneau.serializer;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -23,13 +21,12 @@ import org.apache.juneau.msgpack.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.svl.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests the @SerializerConfig annotation.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class SerializerConfigAnnotationTest {
+public class SerializerConfigAnnotationTest extends SimpleTestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
@@ -76,8 +73,7 @@ public class SerializerConfigAnnotationTest {
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test
-	public void basicWriterSerializer() {
+	@Test void basicWriterSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
 		check("true", ((SerializerSession)x).isAddBeanTypes());
@@ -101,8 +97,7 @@ public class SerializerConfigAnnotationTest {
 		check("true", x.isUseWhitespace());
 	}
 
-	@Test
-	public void basicOutputStreamSerializer() {
+	@Test void basicOutputStreamSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("true", ((SerializerSession)x).isAddBeanTypes());
@@ -132,8 +127,7 @@ public class SerializerConfigAnnotationTest {
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test
-	public void noValuesWriterSerializer() {
+	@Test void noValuesWriterSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
@@ -153,8 +147,7 @@ public class SerializerConfigAnnotationTest {
 		check("false", x.isUseWhitespace());
 	}
 
-	@Test
-	public void noValuesOutputStreamSerializer() {
+	@Test void noValuesOutputStreamSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
@@ -179,8 +172,7 @@ public class SerializerConfigAnnotationTest {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test
-	public void noAnnotationWriterSerializer() {
+	@Test void noAnnotationWriterSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
@@ -200,8 +192,7 @@ public class SerializerConfigAnnotationTest {
 		check("false", x.isUseWhitespace());
 	}
 
-	@Test
-	public void noAnnotationOutputStreamSerializer() {
+	@Test void noAnnotationOutputStreamSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());

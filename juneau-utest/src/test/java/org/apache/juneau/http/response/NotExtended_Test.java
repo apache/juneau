@@ -14,15 +14,13 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.http.response.NotExtended.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class NotExtended_Test {
+public class NotExtended_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A {

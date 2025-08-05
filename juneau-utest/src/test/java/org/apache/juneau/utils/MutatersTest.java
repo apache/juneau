@@ -14,12 +14,10 @@ package org.apache.juneau.utils;
 
 import static org.apache.juneau.reflect.Mutaters.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-import org.junit.*;
-
-@FixMethodOrder(NAME_ASCENDING)
-public class MutatersTest {
+class MutatersTest extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Constructors.
@@ -37,16 +35,13 @@ public class MutatersTest {
 			this.f = String.valueOf(f);
 		}
 	}
-	@Test
-	public void stringConstructor() {
+	@Test void stringConstructor() {
 		assertEquals("foo", get(String.class, A.class).mutate("foo").f);
 	}
-	@Test
-	public void intConstructor() {
+	@Test void intConstructor() {
 		assertEquals("1", get(int.class, A.class).mutate(1).f);
 	}
-	@Test
-	public void integerConstructor() {
+	@Test void integerConstructor() {
 		assertEquals("2", get(Integer.class, A.class).mutate(2).f);
 	}
 
@@ -60,8 +55,7 @@ public class MutatersTest {
 			D1 d = new D1(); d.f = f; return d;
 		}
 	}
-	@Test
-	public void fromString_create() {
+	@Test void fromString_create() {
 		assertEquals("foo", get(String.class, D1.class).mutate("foo").f);
 	}
 
@@ -71,8 +65,7 @@ public class MutatersTest {
 			D2 d = new D2(); d.f = f; return d;
 		}
 	}
-	@Test
-	public void fromString_fromString() {
+	@Test void fromString_fromString() {
 		assertEquals("foo", get(String.class, D2.class).mutate("foo").f);
 	}
 
@@ -82,8 +75,7 @@ public class MutatersTest {
 			D3 d = new D3(); d.f = f; return d;
 		}
 	}
-	@Test
-	public void fromString_fromValue() {
+	@Test void fromString_fromValue() {
 		assertEquals("foo", get(String.class, D3.class).mutate("foo").f);
 	}
 
@@ -93,8 +85,7 @@ public class MutatersTest {
 			D4 d = new D4(); d.f = f; return d;
 		}
 	}
-	@Test
-	public void fromString_valueOf() {
+	@Test void fromString_valueOf() {
 		assertEquals("foo", get(String.class, D4.class).mutate("foo").f);
 	}
 
@@ -104,8 +95,7 @@ public class MutatersTest {
 			D5 d = new D5(); d.f = f; return d;
 		}
 	}
-	@Test
-	public void fromString_parse() {
+	@Test void fromString_parse() {
 		assertEquals("foo", get(String.class, D5.class).mutate("foo").f);
 	}
 
@@ -115,8 +105,7 @@ public class MutatersTest {
 			D6 d = new D6(); d.f = f; return d;
 		}
 	}
-	@Test
-	public void fromString_parseString() {
+	@Test void fromString_parseString() {
 		assertEquals("foo", get(String.class, D6.class).mutate("foo").f);
 	}
 
@@ -126,8 +115,7 @@ public class MutatersTest {
 			D7 d = new D7(); d.f = f; return d;
 		}
 	}
-	@Test
-	public void fromString_forName() {
+	@Test void fromString_forName() {
 		assertEquals("foo", get(String.class, D7.class).mutate("foo").f);
 	}
 
@@ -137,8 +125,7 @@ public class MutatersTest {
 			D8 d = new D8(); d.f = f; return d;
 		}
 	}
-	@Test
-	public void fromString_forString() {
+	@Test void fromString_forString() {
 		assertEquals("foo", get(String.class, D8.class).mutate("foo").f);
 	}
 
@@ -154,8 +141,7 @@ public class MutatersTest {
 			E1 e = new E1(); e.f = "ok"; return e;
 		}
 	}
-	@Test
-	public void fromX_create() {
+	@Test void fromX_create() {
 		assertEquals("ok", get(X.class, E1.class).mutate(new X()).f);
 	}
 
@@ -165,8 +151,7 @@ public class MutatersTest {
 			E2 e = new E2(); e.f = "ok"; return e;
 		}
 	}
-	@Test
-	public void fromX_fromX() {
+	@Test void fromX_fromX() {
 		assertEquals("ok", get(X.class, E2.class).mutate(new X()).f);
 	}
 }

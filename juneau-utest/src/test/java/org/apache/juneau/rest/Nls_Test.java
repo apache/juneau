@@ -12,18 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Nls_Test {
+class Nls_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test getting an NLS property defined on a class or method.
@@ -56,8 +54,7 @@ public class Nls_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.get("/a").run().assertContent("value1");
 		a.get("/b").run().assertContent("value2");
@@ -76,8 +73,7 @@ public class Nls_Test {
 		}
 	}
 
-	@Test
-	public void b01_optionsPageWithoutNls() throws Exception {
+	@Test void b01_optionsPageWithoutNls() throws Exception {
 		MockRestClient b = MockRestClient.build(B.class);
 		b.options("/").run().assertContent().isContains("foo");
 	}
@@ -95,8 +91,7 @@ public class Nls_Test {
 		}
 	}
 
-	@Test
-	public void c01_missingResourceBundle() throws Exception {
+	@Test void c01_missingResourceBundle() throws Exception {
 		MockRestClient c = MockRestClient.build(C.class);
 		c.get("/a").run().assertContent("{!bad}");
 	}

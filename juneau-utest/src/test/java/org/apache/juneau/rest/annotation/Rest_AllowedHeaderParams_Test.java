@@ -12,16 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Rest_AllowedHeaderParams_Test {
+public class Rest_AllowedHeaderParams_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Rest(allowedHeaderParams)
@@ -60,9 +58,7 @@ public class Rest_AllowedHeaderParams_Test {
 	@Rest(allowedHeaderParams="None")
 	public static class A8 extends A5 {}
 
-
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient a1 = MockRestClient.build(A1.class);
 		a1.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent("Accept=text/plain+foo1; Content-Type=text/plain+foo2; Custom=foo3");
 		a1.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent("Accept=text/plain+foo1, text/plain+bar1; Content-Type=text/plain+foo2, text/plain+bar2; Custom=foo3");

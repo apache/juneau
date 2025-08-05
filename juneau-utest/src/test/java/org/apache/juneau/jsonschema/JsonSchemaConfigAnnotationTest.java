@@ -13,8 +13,6 @@
 package org.apache.juneau.jsonschema;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -23,13 +21,12 @@ import org.apache.juneau.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests the @JsonSchemaConfig annotation.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class JsonSchemaConfigAnnotationTest {
+class JsonSchemaConfigAnnotationTest extends SimpleTestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
@@ -64,8 +61,7 @@ public class JsonSchemaConfigAnnotationTest {
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test
-	public void basic() {
+	@Test void basic() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		check("BEAN", x.getAddDescriptionsTo());
@@ -85,8 +81,7 @@ public class JsonSchemaConfigAnnotationTest {
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test
-	public void noValues() {
+	@Test void noValues() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		check("", x.getAddDescriptionsTo());
@@ -105,8 +100,7 @@ public class JsonSchemaConfigAnnotationTest {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test
-	public void noAnnotation() {
+	@Test void noAnnotation() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		check("", x.getAddDescriptionsTo());

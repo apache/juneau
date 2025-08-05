@@ -12,18 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Restx_Parsers_Test {
+class Restx_Parsers_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Setup
@@ -81,8 +79,7 @@ public class Restx_Parsers_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		MockRestClient a = MockRestClient.buildLax(A.class);
 
 		a.put("/a", "test1")
@@ -174,8 +171,7 @@ public class Restx_Parsers_Test {
 		}
 	}
 
-	@Test
-	public void b01_inheritence() throws Exception {
+	@Test void b01_inheritence() throws Exception {
 		RestClient b = MockRestClient.build(B2.class);
 		b.get("/a").run().assertContent("['text/p3','text/p4','text/p1','text/p2']");
 		b.get("/b").run().assertContent("['text/p5']");

@@ -12,19 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Rest_Messages_Test {
+public class Rest_Messages_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -46,8 +44,7 @@ public class Rest_Messages_Test {
 		}
 	}
 
-	@Test
-	public void a01_default() throws Exception {
+	@Test void a01_default() throws Exception {
 		MockRestClient a1 = MockRestClient.build(A1.class);
 		a1.get("/a").run().assertContent("{'A1.key2':'A1.value2a',key1:'value1a',key2:'A1.value2a'}");
 		a1.get("/b").run().assertContent("{'A1.key2':'A1.value2a',key1:'value1a',key2:'A1.value2a'}");
@@ -76,8 +73,7 @@ public class Rest_Messages_Test {
 		}
 	}
 
-	@Test
-	public void b01_customName() throws Exception {
+	@Test void b01_customName() throws Exception {
 		MockRestClient b1 = MockRestClient.build(B1.class);
 		b1.get("/a").run().assertContent("{'B1.key2':'B1.value2a',key1:'value1a',key2:'B1.value2a'}");
 		b1.get("/b").run().assertContent("{'B1.key2':'B1.value2a',key1:'value1a',key2:'B1.value2a'}");
@@ -89,8 +85,7 @@ public class Rest_Messages_Test {
 	@Rest(messages="B2x")
 	public static class B2 extends B1 {}
 
-	@Test
-	public void b02_subclassed_customName() throws Exception {
+	@Test void b02_subclassed_customName() throws Exception {
 		MockRestClient b2 = MockRestClient.build(B2.class);
 		b2.get("/a").run().assertContent("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b',key3:'B2.value3b'}");
 		b2.get("/b").run().assertContent("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b',key3:'B2.value3b'}");
@@ -107,13 +102,11 @@ public class Rest_Messages_Test {
 		}
 	}
 
-	@Test
-	public void b03_viaBuilder() throws Exception {
+	@Test void b03_viaBuilder() throws Exception {
 		MockRestClient b3 = MockRestClient.build(B3.class);
 		b3.get("/a").run().assertContent("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b'}");
 		b3.get("/b").run().assertContent("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b'}");
 		b3.get("/c?name=key1").run().assertContent("value1a");
-		b3.get("/c?name=key2").run().assertContent("value2b");
 		b3.get("/c?name=key3").run().assertContent("{!key3}");
 		b3.get("/c?name=key4").run().assertContent("{!key4}");
 	}

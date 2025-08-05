@@ -16,22 +16,19 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.urlencoding.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestUtils_Test {
+class RestUtils_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// decode(String)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_testDecode() {
+	@Test void a01_testDecode() {
 		assertNull(urlDecode(null));
 		assertEquals("foo/bar baz  bing", urlDecode("foo%2Fbar+baz++bing"));
 	}
@@ -40,8 +37,7 @@ public class RestUtils_Test {
 	// encode(String)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void b01_testEncode() {
+	@Test void b01_testEncode() {
 		assertNull(urlEncode(null));
 		assertEquals("foo%2Fbar+baz++bing", urlEncode("foo/bar baz  bing"));
 		assertEquals("foobar", urlEncode("foobar"));
@@ -53,8 +49,7 @@ public class RestUtils_Test {
 	// trimPathInfo(String,String)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void c01_testGetServletURI() {
+	@Test void c01_testGetServletURI() {
 		String e, sp, cp;
 
 		e = "http://hostname";
@@ -142,8 +137,7 @@ public class RestUtils_Test {
 	// trimSlashes(String)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void d01_testTrimSlashes() {
+	@Test void d01_testTrimSlashes() {
 		assertNull(trimSlashes(null));
 		assertEquals("", trimSlashes(""));
 		assertEquals("", trimSlashes("/"));
@@ -158,8 +152,7 @@ public class RestUtils_Test {
 	// trimTrailingSlashes(String)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void e01_testTrimTrailingSlashes() {
+	@Test void e01_testTrimTrailingSlashes() {
 		assertNull(trimTrailingSlashes((String)null));
 		assertEquals("", trimTrailingSlashes(""));
 		assertEquals("", trimTrailingSlashes("/"));
@@ -174,8 +167,7 @@ public class RestUtils_Test {
 	// Test URL-encoded strings parsed into plain-text values using UrlEncodingParser.parseIntoSimpleMap().
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void g01_testParseIntoSimpleMap() {
+	@Test void g01_testParseIntoSimpleMap() {
 		Map<String,String[]> m;
 
 		String s = "?f1=,()=&f2a=$b(true)&f2b=true&f3a=$n(123)&f3b=123&f4=$s(foo)";
@@ -205,8 +197,7 @@ public class RestUtils_Test {
 	// Test parsing URL-encoded strings with multiple values.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void h01_testParseIntoSimpleMapMultiValues() {
+	@Test void h01_testParseIntoSimpleMapMultiValues() {
 		Map<String,String[]> m;
 
 		String s = "?f1&f1&f2&f2=abc&f2=def&f2";
@@ -214,8 +205,7 @@ public class RestUtils_Test {
 		assertObject(m).asJson().is("{f1:null,f2:['abc','def']}");
 	}
 
-	@Test
-	public void h02_testEmptyString() throws Exception {
+	@Test void h02_testEmptyString() throws Exception {
 		UrlEncodingParser p = UrlEncodingParser.DEFAULT;
 
 		String s = "";
@@ -231,8 +221,7 @@ public class RestUtils_Test {
 	// Other tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void i01_testTrimContextPath() {
+	@Test void i01_testTrimContextPath() {
 		assertEquals("/bar", trimContextPath("/foo", "/bar"));
 		assertEquals("/", trimContextPath("/foo", "/"));
 		assertEquals("", trimContextPath("/foo", ""));
@@ -245,8 +234,7 @@ public class RestUtils_Test {
 		assertEquals("/", trimContextPath("/foo", "/foo"));
 	}
 
-	@Test
-	public void i02_testIsValidContextPath() {
+	@Test void i02_testIsValidContextPath() {
 		assertTrue(isValidContextPath(""));
 		assertTrue(isValidContextPath("/foo"));
 		assertFalse(isValidContextPath("/"));
@@ -255,8 +243,7 @@ public class RestUtils_Test {
 		assertFalse(isValidContextPath("foo"));
 	}
 
-	@Test
-	public void i03_testIsValidServletPath() {
+	@Test void i03_testIsValidServletPath() {
 		assertTrue(isValidServletPath(""));
 		assertTrue(isValidServletPath("/foo"));
 		assertFalse(isValidServletPath("/"));
@@ -265,8 +252,7 @@ public class RestUtils_Test {
 		assertFalse(isValidServletPath("foo"));
 	}
 
-	@Test
-	public void i04_testIsValidPathInfo() {
+	@Test void i04_testIsValidPathInfo() {
 		assertFalse(isValidPathInfo(""));
 		assertTrue(isValidPathInfo("/foo"));
 		assertTrue(isValidPathInfo("/"));

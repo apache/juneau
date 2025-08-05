@@ -14,19 +14,16 @@ package org.apache.juneau.marshaller;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class MsgPack_Test {
+class MsgPack_Test extends SimpleTestBase {
 
-	@Test
-	public void a01_to() throws Exception {
+	@Test void a01_to() throws Exception {
 		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
 		String expected1 = "A3666F6F", expected2 = "81A3666F6FA3626172";
 
@@ -36,8 +33,7 @@ public class MsgPack_Test {
 		assertBytes(bytes(MsgPack.of(in2,baos()))).asHex().is(expected2);
 	}
 
-	@Test
-	public void a02_from() throws Exception {
+	@Test void a02_from() throws Exception {
 		String in1 = "A3666F6F", in2 = "81A3666F6FA3626172";
 		String expected1 = "foo", expected2 = "{foo:'bar'}";
 

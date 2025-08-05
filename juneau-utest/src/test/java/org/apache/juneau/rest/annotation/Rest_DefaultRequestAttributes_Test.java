@@ -14,10 +14,9 @@ package org.apache.juneau.rest.annotation;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.parser.*;
@@ -28,10 +27,9 @@ import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Rest_DefaultRequestAttributes_Test {
+public class Rest_DefaultRequestAttributes_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @RestPreCall
@@ -89,8 +87,7 @@ public class Rest_DefaultRequestAttributes_Test {
 		}
 	}
 
-	@Test
-	public void a01_preCall() throws Exception {
+	@Test void a01_preCall() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.put("/a", null).contentType("text/a1").run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
 		a.put("/a", null).contentType("text/a1").header("Override-Content-Type", "text/a2").run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
@@ -165,8 +162,7 @@ public class Rest_DefaultRequestAttributes_Test {
 		}
 	}
 
-	@Test
-	public void b01_postCall() throws Exception {
+	@Test void b01_postCall() throws Exception {
 		RestClient b = MockRestClient.build(B.class);
 		b.put("/a", null).accept("text/s1").run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
 		b.put("/a", null).accept("text/s1").header("Override-Accept", "text/s2").run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");

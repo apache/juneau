@@ -12,13 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import org.junit.*;
-import org.junit.runners.*;
+import org.apache.juneau.*;
 
 /**
  * Tests the @Response annotation.
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ResponseBody_Test {
+public class ResponseBody_Test extends SimpleTestBase {
 
 }

@@ -14,14 +14,11 @@ package org.apache.juneau.jsonschema.annotation;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ItemsAnnotation_Test {
+class ItemsAnnotation_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -101,8 +98,7 @@ public class ItemsAnnotation_Test {
 		.uniqueItems(true)
 		.build();
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "'$ref':'$ref',"
@@ -144,8 +140,7 @@ public class ItemsAnnotation_Test {
 		);
 	}
 
-	@Test
-	public void a02_testEquivalency() {
+	@Test void a02_testEquivalency() {
 		assertObject(a1).is(a2);
 		assertInteger(a1.hashCode()).is(a2.hashCode()).isNotAny(0,-1);
 	}
@@ -154,8 +149,7 @@ public class ItemsAnnotation_Test {
 	// PropertyStore equivalency.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void b01_testEquivalencyInPropertyStores() {
+	@Test void b01_testEquivalencyInPropertyStores() {
 		BeanContext bc1 = BeanContext.create().annotations(a1).build();
 		BeanContext bc2 = BeanContext.create().annotations(a2).build();
 		assertSame(bc1, bc2);
@@ -247,8 +241,7 @@ public class ItemsAnnotation_Test {
 	public static class D2 {}
 	Items d2 = D2.class.getAnnotationsByType(Items.class)[0];
 
-	@Test
-	public void d01_comparisonWithDeclarativeAnnotations() {
+	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertObject(d1).is(d2).is(a1);
 		assertInteger(d1.hashCode()).is(d2.hashCode()).is(a1.hashCode()).isNotAny(0,-1);
 	}

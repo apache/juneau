@@ -13,19 +13,16 @@
 package org.apache.juneau.oapi;
 
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.oapi.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests the @OpenApiConfig annotation.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class OpenApiConfigAnnotationTest {
+public class OpenApiConfigAnnotationTest extends SimpleTestBase {
 
 	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 
@@ -37,14 +34,12 @@ public class OpenApiConfigAnnotationTest {
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test
-	public void noValuesSerializer() {
+	@Test void noValuesSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		assertNotThrown(()->OpenApiSerializer.create().apply(al).build().createSession());
 	}
 
-	@Test
-	public void noValuesParser() {
+	@Test void noValuesParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		assertNotThrown(()->OpenApiParser.create().apply(al).build().createSession());
 	}
@@ -56,14 +51,12 @@ public class OpenApiConfigAnnotationTest {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test
-	public void noAnnotationSerializer() {
+	@Test void noAnnotationSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		assertNotThrown(()->OpenApiSerializer.create().apply(al).build().createSession());
 	}
 
-	@Test
-	public void noAnnotationParser() {
+	@Test void noAnnotationParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		assertNotThrown(()->OpenApiParser.create().apply(al).build().createSession());
 	}

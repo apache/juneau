@@ -14,8 +14,6 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.Context.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 
 import org.apache.juneau.*;
@@ -25,10 +23,9 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.swap.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestClient_Config_Context_Test {
+public class RestClient_Config_Context_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {
@@ -51,8 +48,7 @@ public class RestClient_Config_Context_Test {
 		}
 	}
 
-	@Test
-	public void a02_addToStringObject() throws Exception {
+	@Test void a02_addToStringObject() throws Exception {
 		client().notBeanClasses(A2.class).build().post("/echoBody",A2.fromString("bar")).run().cacheContent().assertContent("'bar'").getContent().as(A2.class);
 	}
 
@@ -72,14 +68,12 @@ public class RestClient_Config_Context_Test {
 		public A3a unswap(BeanSession session, Integer f, ClassMeta<?> hint) {return A3a.get(); }
 	}
 
-	@Test
-	public void a03_appendToStringObject() throws Exception {
+	@Test void a03_appendToStringObject() throws Exception {
 		A3a x = client().swaps(A3b.class).build().post("/echoBody",A3a.get()).run().cacheContent().assertContent("1").getContent().as(A3a.class);
 		assertEquals(1,x.foo);
 	}
 
-	@Test
-	public void a04_prependToStringObject() throws Exception {
+	@Test void a04_prependToStringObject() throws Exception {
 		A3a x = client().swaps(A3b.class).build().post("/echoBody",A3a.get()).run().cacheContent().assertContent("1").getContent().as(A3a.class);
 		assertEquals(1,x.foo);
 	}
@@ -106,8 +100,7 @@ public class RestClient_Config_Context_Test {
 		public void foo() { /* no-op */ }
 	}
 
-	@Test
-	public void a06_applyAnnotations() throws Exception {
+	@Test void a06_applyAnnotations() throws Exception {
 		new A6b();
 		new A6c();
 		new A6d().foo();
@@ -118,8 +111,7 @@ public class RestClient_Config_Context_Test {
 		client().apply(al).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
 	}
 
-	@Test
-	public void a09_annotations() throws Exception {
+	@Test void a09_annotations() throws Exception {
 		client().annotations(BeanAnnotation.create(A6a.class).sort(true).build()).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
 	}
 

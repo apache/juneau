@@ -14,24 +14,21 @@ package org.apache.juneau.json;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class JsonTest {
+public class JsonTest  extends SimpleTestBase{
 
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@Test
-	public void testBasic() throws Exception {
+	@Test void testBasic() throws Exception {
 		Map<String,Object> m = new LinkedHashMap<>();
 		List<Object> l = new LinkedList<>();
 
@@ -94,8 +91,7 @@ public class JsonTest {
 		assertEquals("K1", "[[{J:'f1',B:'b',C:'c'},['1','2','3']],'foo','bar',1,false,1.2,null]", s1.serialize(o2));
 	}
 
-	@Test
-	public void testReservedKeywordAttributes() {
+	@Test void testReservedKeywordAttributes() {
 		Map<String,Object> m = new LinkedHashMap<>();
 
 		// Keys with reserved names.
@@ -109,8 +105,7 @@ public class JsonTest {
 	//====================================================================================================
 	// Validate various backslashes in strings.
 	//====================================================================================================
-	@Test
-	public void testBackslashesInStrings() throws Exception {
+	@Test void testBackslashesInStrings() throws Exception {
 		JsonSerializer s = JsonSerializer.create().simpleAttrs().keepNullProperties().build();
 		String r, r2;
 
@@ -141,8 +136,7 @@ public class JsonTest {
 	//====================================================================================================
 	// Indentation
 	//====================================================================================================
-	@Test
-	public void testIndentation() throws Exception {
+	@Test void testIndentation() throws Exception {
 		JsonMap m = JsonMap.ofJson("{J:{B:['c',{D:'e'},['f',{G:'h'},1,false]]},I:'j'}");
 		String e = """
 			{
@@ -170,8 +164,7 @@ public class JsonTest {
 	//====================================================================================================
 	// Escaping double quotes
 	//====================================================================================================
-	@Test
-	public void testEscapingDoubleQuotes() throws Exception {
+	@Test void testEscapingDoubleQuotes() throws Exception {
 		JsonSerializer s = JsonSerializer.DEFAULT;
 		String r = s.serialize(JsonMap.of("f1", "x'x\"x"));
 		assertEquals("{\"f1\":\"x'x\\\"x\"}", r);
@@ -182,8 +175,7 @@ public class JsonTest {
 	//====================================================================================================
 	// Escaping single quotes
 	//====================================================================================================
-	@Test
-	public void testEscapingSingleQuotes() throws Exception {
+	@Test void testEscapingSingleQuotes() throws Exception {
 		JsonSerializer s = Json5Serializer.DEFAULT;
 		String r = s.serialize(JsonMap.of("f1", "x'x\"x"));
 		assertEquals("{f1:'x\\'x\"x'}", r);
@@ -194,8 +186,7 @@ public class JsonTest {
 	//====================================================================================================
 	// testWrapperAttrAnnotationOnBean
 	//====================================================================================================
-	@Test
-	public void testWrapperAttrAnnotationOnBean() throws Exception {
+	@Test void testWrapperAttrAnnotationOnBean() throws Exception {
 		JsonSerializer s = Json5Serializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
@@ -226,8 +217,7 @@ public class JsonTest {
 		}
 	}
 
-	@Test
-	public void testWrapperAttrAnnotationOnBean_usingConfig() throws Exception {
+	@Test void testWrapperAttrAnnotationOnBean_usingConfig() throws Exception {
 		JsonSerializer s = Json5Serializer.DEFAULT.copy().applyAnnotations(A2Config.class).build();
 		JsonParser p = JsonParser.DEFAULT.copy().applyAnnotations(A2Config.class).build();
 		String r;
@@ -265,8 +255,7 @@ public class JsonTest {
 	//====================================================================================================
 	// testWrapperAttrAnnotationOnNonBean
 	//====================================================================================================
-	@Test
-	public void testWrapperAttrAnnotationOnNonBean() throws Exception {
+	@Test void testWrapperAttrAnnotationOnNonBean() throws Exception {
 		JsonSerializer s = Json5Serializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
@@ -308,8 +297,7 @@ public class JsonTest {
 		}
 	}
 
-	@Test
-	public void testWrapperAttrAnnotationOnNonBean_usingConfig() throws Exception {
+	@Test void testWrapperAttrAnnotationOnNonBean_usingConfig() throws Exception {
 		JsonSerializer s = Json5Serializer.DEFAULT.copy().applyAnnotations(B2Config.class).build();
 		JsonParser p = JsonParser.DEFAULT.copy().applyAnnotations(B2Config.class).build();
 		String r;
@@ -356,8 +344,7 @@ public class JsonTest {
 	//====================================================================================================
 	// testSubclassedList
 	//====================================================================================================
-	@Test
-	public void testSubclassedList() throws Exception {
+	@Test void testSubclassedList() throws Exception {
 		JsonSerializer s = JsonSerializer.DEFAULT;
 		Map<String,Object> o = new HashMap<>();
 		o.put("c", new C());
@@ -370,8 +357,7 @@ public class JsonTest {
 	//====================================================================================================
 	// testEscapeSolidus
 	//====================================================================================================
-	@Test
-	public void testEscapeSolidus() throws Exception {
+	@Test void testEscapeSolidus() throws Exception {
 		JsonSerializer s = JsonSerializer.create().build();
 		String r = s.serialize("foo/bar");
 		assertEquals("\"foo/bar\"", r);

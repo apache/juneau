@@ -17,8 +17,6 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -32,16 +30,16 @@ import org.apache.http.impl.client.*;
 import org.apache.http.message.*;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
+import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestClient_Test {
+class RestClient_Test extends SimpleTestBase {
 
 	public static class ABean {
 		public int f;
@@ -74,13 +72,11 @@ public class RestClient_Test {
 		public A2() {}  // NOSONAR
 	}
 
-	@Test
-	public void a02_basic_useNoArgConstructor() {
+	@Test void a02_basic_useNoArgConstructor() {
 		assertNotThrown(()->new A2().build());
 	}
 
-	@Test
-	public void a03_basic_close() throws IOException {
+	@Test void a03_basic_close() throws IOException {
 		RestClient.create().build().close();
 		RestClient.create().build().closeQuietly();
 		RestClient.create().keepHttpClientOpen().build().close();
@@ -98,22 +94,19 @@ public class RestClient_Test {
 	}
 
 
-	@Test
-	public void a04_request_whenClosed() {
+	@Test void a04_request_whenClosed() {
 		RestClient rc = client().build();
 		rc.closeQuietly();
 		assertThrown(()->rc.request("get","/bean",null)).asMessage().isContains("RestClient.close() has already been called");
 	}
 
-	@Test
-	public void a05_request_whenClosed_withStackCreation() {
+	@Test void a05_request_whenClosed_withStackCreation() {
 		RestClient rc = client().debug().build();
 		rc.closeQuietly();
 		assertThrown(()->rc.request("get","/bean",null)).asMessage().isContains("RestClient.close() has already been called");
 	}
 
-	@Test
-	public void a06_request_runCalledTwice() {
+	@Test void a06_request_runCalledTwice() {
 		assertThrown(()->{RestRequest r = client().build().get("/echo"); r.run(); r.run();}).asMessage().is("run() already called.");
 	}
 
@@ -142,8 +135,7 @@ public class RestClient_Test {
 		}
 	}
 
-	@Test
-	public void b04_restClient_overrideCreateRequest() throws Exception {
+	@Test void b04_restClient_overrideCreateRequest() throws Exception {
 		RestClient.create().json5().build(B4.class).get("foo").run();
 		assertTrue(B4.CREATE_REQUEST_CALLED);
 		assertTrue(B4.CREATE_RESPONSE_CALLED);
@@ -164,8 +156,7 @@ public class RestClient_Test {
 		}
 	}
 
-	@Test
-	public void c01_httpClient_interceptors() throws Exception {
+	@Test void c01_httpClient_interceptors() throws Exception {
 		HttpRequestInterceptor x1 = (request, context) -> request.setHeader("A1","1");
 		HttpResponseInterceptor x2 = (response, context) -> response.setHeader("B1","1");
 		HttpRequestInterceptor x3 = (request, context) -> request.setHeader("A2","2");
@@ -177,8 +168,7 @@ public class RestClient_Test {
 		client().interceptors(new C01()).build().get("/echo").run().assertContent().isContains("A1: 1").assertHeader("B1").is("1");
 	}
 
-	@Test
-	public void c02_httpClient_httpProcessor() throws RestCallException {
+	@Test void c02_httpClient_httpProcessor() throws RestCallException {
 		HttpProcessor x = new HttpProcessor() {
 			@Override
 			public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
@@ -192,8 +182,7 @@ public class RestClient_Test {
 		client().httpProcessor(x).build().get("/echo").run().assertContent().isContains("A1: 1").assertHeader("B1").is("1");
 	}
 
-	@Test
-	public void c03_httpClient_requestExecutor() throws RestCallException {
+	@Test void c03_httpClient_requestExecutor() throws RestCallException {
 		AtomicBoolean b1 = new AtomicBoolean();
 		HttpRequestExecutor x = new HttpRequestExecutor() {
 			@Override
@@ -206,34 +195,29 @@ public class RestClient_Test {
 		assertTrue(b1.get());
 	}
 
-	@Test
-	public void c04_httpClient_defaultHeaders() throws RestCallException {
+	@Test void c04_httpClient_defaultHeaders() throws RestCallException {
 		client().headersDefault(stringHeader("Foo","bar")).build().get("/echo").run().assertContent().isContains("GET /echo HTTP/1.1","Foo: bar");
 	}
 
-	@Test
-	public void c05_httpClient_httpClientBuilderMethods() {
+	@Test void c05_httpClient_httpClientBuilderMethods() {
 		assertNotThrown(()->RestClient.create().disableRedirectHandling().redirectStrategy(DefaultRedirectStrategy.INSTANCE).defaultCookieSpecRegistry(null).sslHostnameVerifier(null).publicSuffixMatcher(null).sslContext(null).sslSocketFactory(null).maxConnTotal(10).maxConnPerRoute(10).defaultSocketConfig(null).defaultConnectionConfig(null).connectionTimeToLive(100,TimeUnit.DAYS).connectionManager(null).connectionManagerShared(true).connectionReuseStrategy(null).keepAliveStrategy(null).targetAuthenticationStrategy(null).proxyAuthenticationStrategy(null).userTokenHandler(null).disableConnectionState().schemePortResolver(null).disableCookieManagement().disableContentCompression().disableAuthCaching().retryHandler(null).disableAutomaticRetries().proxy(null).routePlanner(null).connectionBackoffStrategy(null).backoffManager(null).serviceUnavailableRetryStrategy(null).defaultCookieStore(null).defaultCredentialsProvider(null).defaultAuthSchemeRegistry(null).contentDecoderRegistry(null).defaultRequestConfig(null).useSystemProperties().evictExpiredConnections().evictIdleConnections(1,TimeUnit.DAYS));
 	}
 
 	@SuppressWarnings("deprecation")
-	@Test
-	public void c06_httpClient_unusedHttpClientMethods() {
+	@Test void c06_httpClient_unusedHttpClientMethods() {
 		RestClient x = RestClient.create().build();
 		assertThrown(x::getParams).isType(UnsupportedOperationException.class);
 		assertNotNull(x.getConnectionManager());
 	}
 
-	@Test
-	public void c07_httpClient_executeHttpUriRequest() throws Exception {
+	@Test void c07_httpClient_executeHttpUriRequest() throws Exception {
 		HttpGet x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","text/json5");
 		HttpResponse res = MockRestClient.create(A.class).build().execute(x);
 		assertEquals("{f:1}",IOUtils.read(res.getEntity().getContent()));
 	}
 
-	@Test
-	public void c08_httpClient_executeHttpHostHttpRequest() throws Exception {
+	@Test void c08_httpClient_executeHttpHostHttpRequest() throws Exception {
 		HttpGet x = new HttpGet("http://localhost/bean");
 		HttpHost target = new HttpHost("localhost");
 		x.addHeader("Accept","text/json5");
@@ -241,8 +225,7 @@ public class RestClient_Test {
 		assertEquals("{f:1}",IOUtils.read(res.getEntity().getContent()));
 	}
 
-	@Test
-	public void c09_httpClient_executeHttpHostHttpRequestHttpContext() throws Exception {
+	@Test void c09_httpClient_executeHttpHostHttpRequestHttpContext() throws Exception {
 		HttpGet x = new HttpGet("http://localhost/bean");
 		HttpHost target = new HttpHost("localhost");
 		HttpContext context = new BasicHttpContext();
@@ -251,47 +234,41 @@ public class RestClient_Test {
 		assertEquals("{f:1}",IOUtils.read(res.getEntity().getContent()));
 	}
 
-	@Test
-	public void c10_httpClient_executeResponseHandler() throws Exception {
+	@Test void c10_httpClient_executeResponseHandler() throws Exception {
 		HttpGet x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","text/json5");
 		String res = MockRestClient.create(A.class).build().execute(x,new BasicResponseHandler());
 		assertEquals("{f:1}",res);
 	}
 
-	@Test
-	public void c11_httpClient_executeHttpUriRequestResponseHandlerHttpContext() throws Exception {
+	@Test void c11_httpClient_executeHttpUriRequestResponseHandlerHttpContext() throws Exception {
 		HttpGet x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","text/json5");
 		String res = MockRestClient.create(A.class).build().execute(x,new BasicResponseHandler(),new BasicHttpContext());
 		assertEquals("{f:1}",res);
 	}
 
-	@Test
-	public void c12_httpClient_executeHttpHostHttpRequestResponseHandlerHttpContext() throws Exception {
+	@Test void c12_httpClient_executeHttpHostHttpRequestResponseHandlerHttpContext() throws Exception {
 		HttpGet x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","text/json5");
 		String res = MockRestClient.create(A.class).build().execute(new HttpHost("localhost"),x,new BasicResponseHandler(),new BasicHttpContext());
 		assertEquals("{f:1}",res);
 	}
 
-	@Test
-	public void c13_httpClient_executeHttpHostHttpRequestResponseHandler() throws Exception {
+	@Test void c13_httpClient_executeHttpHostHttpRequestResponseHandler() throws Exception {
 		HttpGet x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","text/json5");
 		String res = MockRestClient.create(A.class).build().execute(new HttpHost("localhost"),x,new BasicResponseHandler());
 		assertEquals("{f:1}",res);
 	}
 
-	@Test
-	public void c14_httpClient_requestConfig() throws Exception {
+	@Test void c14_httpClient_requestConfig() throws Exception {
 		RestRequest req = client().build().get("/bean").config(RequestConfig.custom().setMaxRedirects(1).build());
 		req.run().assertContent("{f:1}");
 		assertEquals(1, req.getConfig().getMaxRedirects());
 	}
 
-	@Test
-	public void c15_httpClient_pooled() throws Exception {
+	@Test void c15_httpClient_pooled() throws Exception {
 		RestClient x1 = RestClient.create().json5().pooled().build();
 		RestClient x2 = RestClient.create().json5().build();
 		RestClient x3 = client().pooled().build();
@@ -317,8 +294,7 @@ public class RestClient_Test {
 		}
 	}
 
-	@Test
-	public void d01_basicAuth() throws RestCallException {
+	@Test void d01_basicAuth() throws RestCallException {
 		client(D.class).basicAuth(AuthScope.ANY_HOST,AuthScope.ANY_PORT,"user","pw").build().get("/echo").run().assertContent().isContains("OK");
 	}
 
@@ -326,8 +302,7 @@ public class RestClient_Test {
 	// Other.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void e01_other_completeFuture() throws Exception {
+	@Test void e01_other_completeFuture() throws Exception {
 		client().build().get("/bean").completeFuture().get().assertStatus(200);
 	}
 
@@ -338,52 +313,44 @@ public class RestClient_Test {
 		}
 	}
 
-	@Test
-	public void e02_httpRequestBase_setCancellable() throws Exception {
+	@Test void e02_httpRequestBase_setCancellable() throws Exception {
 		client().build().get("/bean").cancellable(new E2()).run().assertStatus(200);
 	}
 
-	@Test
-	public void e03_httpRequestBase_protocolVersion() throws Exception {
+	@Test void e03_httpRequestBase_protocolVersion() throws Exception {
 		client().build().get("/bean").protocolVersion(new ProtocolVersion("http", 2, 0)).run().assertStatus(200);
 		ProtocolVersion x = client().build().get("/bean").protocolVersion(new ProtocolVersion("http", 2, 0)).getProtocolVersion();
 		assertEquals(2,x.getMajor());
 	}
 
 	@SuppressWarnings("deprecation")
-	@Test
-	public void e04_httpRequestBase_completed() throws Exception {
+	@Test void e04_httpRequestBase_completed() throws Exception {
 		client().build().get("/bean").completed().run().assertStatus(200);
 	}
 
-	@Test
-	public void e05_httpUriRequest_abort() throws Exception {
+	@Test void e05_httpUriRequest_abort() throws Exception {
 		RestRequest x = client().build().get("/bean");
 		x.abort();
 		assertTrue(x.isAborted());
 	}
 
-	@Test
-	public void e06_httpMessage_getRequestLine() throws Exception {
+	@Test void e06_httpMessage_getRequestLine() throws Exception {
 		RestRequest x = client().build().get("/bean");
 		assertEquals("GET",x.getRequestLine().getMethod());
 	}
 
-	@Test
-	public void e07_httpMessage_containsHeader() throws Exception {
+	@Test void e07_httpMessage_containsHeader() throws Exception {
 		RestRequest x = client().build().get("/bean").header("Foo", "bar");
 		assertTrue(x.containsHeader("Foo"));
 	}
 
-	@Test
-	public void e08_httpMessage_getFirstHeader_getLastHeader() throws Exception {
+	@Test void e08_httpMessage_getFirstHeader_getLastHeader() throws Exception {
 		RestRequest x = client().build().get("/bean").header("Foo","bar").header("Foo","baz");
 		assertEquals("bar",x.getFirstHeader("Foo").getValue());
 		assertEquals("baz",x.getLastHeader("Foo").getValue());
 	}
 
-	@Test
-	public void e09_httpMessage_addHeader() throws Exception {
+	@Test void e09_httpMessage_addHeader() throws Exception {
 		RestRequest x = client().build().get("/bean");
 		x.addHeader(header("Foo","bar"));
 		x.addHeader("Foo","baz");
@@ -391,8 +358,7 @@ public class RestClient_Test {
 		assertEquals("baz",x.getLastHeader("Foo").getValue());
 	}
 
-	@Test
-	public void e10_httpMessage_setHeader() throws Exception {
+	@Test void e10_httpMessage_setHeader() throws Exception {
 		RestRequest x = client().build().get("/bean");
 		x.setHeader(header("Foo","bar"));
 		x.setHeader(header("Foo","baz"));
@@ -403,31 +369,27 @@ public class RestClient_Test {
 		assertEquals("qux",x.getLastHeader("Foo").getValue());
 	}
 
-	@Test
-	public void e11_httpMessage_setHeaders() throws Exception {
+	@Test void e11_httpMessage_setHeaders() throws Exception {
 		RestRequest x = client().build().get("/bean");
 		x.setHeaders(new Header[]{header("Foo","bar")});
 		assertEquals("bar",x.getFirstHeader("Foo").getValue());
 	}
 
-	@Test
-	public void e12_httpMessage_removeHeaders() throws Exception {
+	@Test void e12_httpMessage_removeHeaders() throws Exception {
 		RestRequest x = client().build().get("/bean");
 		x.setHeaders(new Header[]{header("Foo","bar")});
 		x.removeHeaders("Foo");
 		assertNull(x.getFirstHeader("Foo"));
 	}
 
-	@Test
-	public void e13_httpMessage_removeHeader() throws Exception {
+	@Test void e13_httpMessage_removeHeader() throws Exception {
 		RestRequest x = client().build().get("/bean");
 		x.setHeaders(new Header[]{header("Foo","bar")});
 		x.removeHeader(header("Foo","bar"));
 		//assertNull(x.getFirstHeader("Foo"));  // Bug in HttpClient API?
 	}
 
-	@Test
-	public void e14_httpMessage_headerIterator() throws Exception {
+	@Test void e14_httpMessage_headerIterator() throws Exception {
 		RestRequest x = client().build().get("/bean");
 		x.setHeaders(new Header[]{header("Foo","bar")});
 		assertEquals("Foo: bar", x.headerIterator().next().toString());
@@ -435,16 +397,14 @@ public class RestClient_Test {
 	}
 
 	@SuppressWarnings("deprecation")
-	@Test
-	public void e15_httpMessage_getParams() throws Exception {
+	@Test void e15_httpMessage_getParams() throws Exception {
 		HttpParams p = new BasicHttpParams();
 		RestRequest x = client().build().get("/bean");
 		x.setParams(p);
 		assertEquals(p, x.getParams());
 	}
 
-	@Test
-	public void e16_toMap() throws Exception {
+	@Test void e16_toMap() throws Exception {
 		assertNotNull(client().build().toString());
 		assertNotNull(client().build().get("/bean").toString());
 	}

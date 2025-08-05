@@ -16,10 +16,11 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-public class PathResolverTest {
+public class PathResolverTest extends SimpleTestBase {
 
 	public static class PathResolver2 extends MockPathResolver {
 
@@ -56,8 +57,7 @@ public class PathResolverTest {
 		return new PathResolver2(target, contextPath, servletPath, pathToResolve, pathVars);
 	}
 
-	@Test
-	public void basicDefaultTarget() {
+	@Test void basicDefaultTarget() {
 		create(null, null, null, "/foo", null)
 			.assertUri().is("http://localhost/foo")
 			.assertTarget().is("http://localhost")
@@ -136,8 +136,7 @@ public class PathResolverTest {
 			.assertPathInfo().is("/foo/foo2");
 	}
 
-	@Test
-	public void basicWithTarget() {
+	@Test void basicWithTarget() {
 		create("http://foobar", null, null, "/foo", null)
 			.assertUri().is("http://foobar/foo")
 			.assertTarget().is("http://foobar")
@@ -202,8 +201,7 @@ public class PathResolverTest {
 			.assertPathInfo().is("");
 	}
 
-	@Test
-	public void basicWithPathVars() {
+	@Test void basicWithPathVars() {
 		Map<String,Object> vars = map("foo","123");
 
 		create(null, null, null, "/foo", vars)
@@ -221,8 +219,7 @@ public class PathResolverTest {
 			.assertPathInfo().is("/foo/{foo}");
 	}
 
-	@Test
-	public void fullPaths() {
+	@Test void fullPaths() {
 		Map<String,Object> vars = map("foo","123");
 
 		create(null, null, null, "http://foobar/foo", vars)
@@ -347,8 +344,7 @@ public class PathResolverTest {
 			.assertPathInfo().is("");
 	}
 
-	@Test
-	public void errors() {
+	@Test void errors() {
 		create(null, null, null, "http://", null)
 			.assertError().is("Invalid URI pattern encountered:  http://");
 		create(null, null, null, "http:///", null)

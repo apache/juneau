@@ -12,18 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Header_ContentType_Test {
+class Header_ContentType_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test that default Content-Type headers on servlet annotation are picked up.
@@ -40,8 +38,7 @@ public class Header_ContentType_Test {
 		}
 	}
 
-	@Test
-	public void a01_defaultHeadersOnServletAnnotation() throws Exception {
+	@Test void a01_defaultHeadersOnServletAnnotation() throws Exception {
 		RestClient a = MockRestClient.buildLax(A.class);
 		a.put("/a", null, ContentType.of(""))
 			.run()
@@ -74,8 +71,7 @@ public class Header_ContentType_Test {
 		}
 	}
 
-	@Test
-	public void b01_restMethodWithParsersSerializers() throws Exception {
+	@Test void b01_restMethodWithParsersSerializers() throws Exception {
 		RestClient b = MockRestClient.buildLax(B.class);
 		b.put("/a", null).contentType("text/p3").run().assertContent("p3");
 		b.put("/a?noTrace=true", null, ContentType.of(""))
@@ -117,8 +113,7 @@ public class Header_ContentType_Test {
 		}
 	}
 
-	@Test
-	public void c01_restMethodAddParsersSerializersInherit() throws Exception {
+	@Test void c01_restMethodAddParsersSerializersInherit() throws Exception {
 		RestClient c = MockRestClient.buildLax(C.class);
 		c.put("/a", null, ContentType.of("")).run().assertContent("p2");
 		c.put("/a", null, ContentType.of("text/p1")).run().assertContent("p1");
@@ -149,8 +144,7 @@ public class Header_ContentType_Test {
 		}
 	}
 
-	@Test
-	public void d01_restMethodParserSerializerAnnotations() throws Exception {
+	@Test void d01_restMethodParserSerializerAnnotations() throws Exception {
 		RestClient d = MockRestClient.buildLax(D.class);
 		d.put("/a", null, ContentType.of(""))
 			.run()
@@ -190,8 +184,7 @@ public class Header_ContentType_Test {
 		}
 	}
 
-	@Test
-	public void e01_restMethodAddParsersSerializersAnnotations() throws Exception {
+	@Test void e01_restMethodAddParsersSerializersAnnotations() throws Exception {
 		RestClient e = MockRestClient.build(E.class);
 		e.put("/a", null, ContentType.of(""))
 			.run()

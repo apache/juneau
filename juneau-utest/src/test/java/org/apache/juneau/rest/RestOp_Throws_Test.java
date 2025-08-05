@@ -14,10 +14,9 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.json.*;
@@ -26,10 +25,9 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestOp_Throws_Test {
+class RestOp_Throws_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic sanity tests
 	//-----------------------------------------------------------------------------------------------------------------
@@ -71,8 +69,7 @@ public class RestOp_Throws_Test {
 		@RestGet public void variantAlsoNegotiates() { throw new VariantAlsoNegotiates(); }
 	}
 
-	@Test
-	public void a01_noArgs() throws Exception {
+	@Test void a01_noArgs() throws Exception {
 		RestClient a = MockRestClient.buildLax(A.class);
 		a.get("/badRequest")
 			.run()
@@ -250,8 +247,7 @@ public class RestOp_Throws_Test {
 	}
 
 
-	@Test
-	public void b01_userSpecifiedMessage() throws Exception {
+	@Test void b01_userSpecifiedMessage() throws Exception {
 		RestClient b = MockRestClient.buildLax(B.class);
 		b.get("/badRequest")
 			.run()
@@ -430,8 +426,7 @@ public class RestOp_Throws_Test {
 		@RestGet public void variantAlsoNegotiates() { throw new VariantAlsoNegotiates(t); }
 	}
 
-	@Test
-	public void c01_nestedThrowable() throws Exception {
+	@Test void c01_nestedThrowable() throws Exception {
 		RestClient c = MockRestClient.buildLax(C.class);
 		c.get("/badRequest")
 			.run()
@@ -608,8 +603,7 @@ public class RestOp_Throws_Test {
 		@RestGet public void variantAlsoNegotiates() { throw new VariantAlsoNegotiates(t, "foo {0}", "bar"); }
 	}
 
-	@Test
-	public void d01_nestedThrowableWithMessage() throws Exception {
+	@Test void d01_nestedThrowableWithMessage() throws Exception {
 		RestClient d = MockRestClient.buildLax(D.class);
 		d.get("/badRequest")
 			.run()
@@ -754,8 +748,7 @@ public class RestOp_Throws_Test {
 		@RestGet public void badRequest() { throw new BadRequest(t, "foo {0}", "bar"); }
 	}
 
-	@Test
-	public void e01_useAcceptForSerialization() throws Exception {
+	@Test void e01_useAcceptForSerialization() throws Exception {
 		RestClient e = MockRestClient.buildLax(E.class);
 		e.get("/badRequest")
 			.json()
@@ -805,8 +798,7 @@ public class RestOp_Throws_Test {
 		@RestGet public void variantAlsoNegotiates() throws VariantAlsoNegotiates {}  // NOSONAR
 	}
 
-	@Test
-	public void f01_swagger() {
+	@Test void f01_swagger() {
 		Map<String,OperationMap> paths = getSwagger(F.class).getPaths();
 
 		assertEquals(BadRequest.REASON_PHRASE, paths.get("/badRequest").get("get").getResponse(BadRequest.STATUS_CODE).getDescription());
@@ -854,8 +846,7 @@ public class RestOp_Throws_Test {
 		public SeeOtherRoot a() throws Exception { throw new NotFound(); }
 	}
 
-	@Test
-	public void g01_thrownObjectDoesntMatchReturnType() throws Exception {
+	@Test void g01_thrownObjectDoesntMatchReturnType() throws Exception {
 		RestClient g = MockRestClient.buildLax(G.class);
 		g.get("/a")
 			.run()
@@ -874,8 +865,7 @@ public class RestOp_Throws_Test {
 		}
 	}
 
-	@Test
-	public void h01_parseExceptionCausesBadRequest() throws Exception {
+	@Test void h01_parseExceptionCausesBadRequest() throws Exception {
 		RestClient h = MockRestClient.buildLax(H.class);
 		h.get("/a")
 			.run()

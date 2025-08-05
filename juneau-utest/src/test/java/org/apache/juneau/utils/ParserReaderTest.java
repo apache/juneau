@@ -13,19 +13,16 @@
 package org.apache.juneau.utils;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ParserReaderTest {
+class ParserReaderTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// test
 	//====================================================================================================
-	@Test
-	public void test() throws Exception {
+	@Test void test() throws Exception {
 		try (ParserReader r = new ParserReader(new ParserPipe("abc123"))) {
 			assertEquals('a', r.read());
 			r.unread();

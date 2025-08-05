@@ -14,18 +14,15 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ResponseHeader_Test {
+public class ResponseHeader_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Header on method parameters
@@ -53,8 +50,7 @@ public class ResponseHeader_Test {
 		public String toString() {return "foo";}
 	}
 
-	@Test
-	public void a01_methodParameters() throws Exception {
+	@Test void a01_methodParameters() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.get("/a")
 			.run()
@@ -129,8 +125,7 @@ public class ResponseHeader_Test {
 		public void g(Value<B7> h) { /* no-op */ }
 	}
 
-	@Test
-	public void b01_swagger_onPojo() {
+	@Test void b01_swagger_onPojo() {
 		HeaderInfo x;
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(B.class);
 
@@ -218,8 +213,7 @@ public class ResponseHeader_Test {
 		public void g(@Header("H") Value<C7> h) { /* no-op */ }
 	}
 
-	@Test
-	public void c01_swagger_onMethodParameters() {
+	@Test void c01_swagger_onMethodParameters() {
 		HeaderInfo x;
 		org.apache.juneau.bean.swagger.Swagger sc = getSwagger(C.class);
 

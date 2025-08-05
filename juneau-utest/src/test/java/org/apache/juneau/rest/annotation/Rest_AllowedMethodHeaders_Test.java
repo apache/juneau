@@ -12,14 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Rest_AllowedMethodHeaders_Test {
+class Rest_AllowedMethodHeaders_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	// @Rest(allowedMethodHeaders)
 	//------------------------------------------------------------------------------------------------------------------
@@ -63,8 +61,7 @@ public class Rest_AllowedMethodHeaders_Test {
 	@Rest(allowedMethodHeaders="None")
 	public static class A8 extends A5 {}
 
-	@Test
-	public void c01_basic() throws Exception {
+	@Test void c01_basic() throws Exception {
 		RestClient a1 = MockRestClient.build(A1.class);
 		a1.get("/").run().assertContent("GET");
 		a1.put("/", "").run().assertContent("PUT");

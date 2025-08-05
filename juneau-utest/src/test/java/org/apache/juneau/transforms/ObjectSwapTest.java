@@ -13,8 +13,6 @@
 package org.apache.juneau.transforms;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
@@ -22,13 +20,12 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.serializer.WriterSerializer.Builder;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.xml.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests the example code in the ObjectSwap class.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class ObjectSwapTest {
+class ObjectSwapTest extends SimpleTestBase {
 
 	public static class MyPojo {}
 
@@ -71,8 +68,7 @@ public class ObjectSwapTest {
 		}
 	}
 
-	@Test
-	public void doTest() throws Exception {
+	@Test void doTest() throws Exception {
 
 		SerializerSet s = SerializerSet.create()
 			.add(JsonSerializer.class, XmlSerializer.class, HtmlSerializer.class)

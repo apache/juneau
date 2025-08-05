@@ -18,8 +18,6 @@ import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -37,10 +35,9 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.xml.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestClient_Response_Body_Test {
+public class RestClient_Response_Body_Test extends SimpleTestBase {
 
 	public static class ABean {
 		public int f;
@@ -91,14 +88,12 @@ public class RestClient_Response_Body_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		client().build().post("/echo",bean).run().assertContent().as(ABean.class).asJson().is("{f:1}");
 		client().build().post("/echo",bean).run().assertContent().asBytes().asString().is("{f:1}");
 	}
 
-	@Test
-	public void a02_overrideParser() throws Exception {
+	@Test void a02_overrideParser() throws Exception {
 		RestClient x = client().build();
 		ABean b = x.post("/echo",bean).run().getContent().parser(JsonParser.DEFAULT).as(ABean.class);
 		assertObject(b).asJson().is("{f:1}");
@@ -106,8 +101,7 @@ public class RestClient_Response_Body_Test {
 		assertThrown(()->x.post("/echo",bean).run().getContent().parser(XmlParser.DEFAULT).assertValue().as(ABean.class)).asMessages().isAny(contains("ParseError at [row,col]:[1,1]"));
 	}
 
-	@Test
-	public void a03_asInputStream() throws Exception {
+	@Test void a03_asInputStream() throws Exception {
 		RestResponse r1 = client().build().get("/bean").run();
 		InputStream is = r1.getContent().asInputStream();
 		assertBytes(is).asString().is("{f:1}");
@@ -141,8 +135,7 @@ public class RestClient_Response_Body_Test {
 		assertThrown(()->((EofSensorInputStream)x2.get("/bean").run().getContent().asInputStream()).abortConnection()).asMessage().is("foo");  // NOSONAR
 	}
 
-	@Test
-	public void a04_asReader() throws Exception {
+	@Test void a04_asReader() throws Exception {
 		TestClient x = testClient();
 		x.entity(inputStreamEntity("{f:1}"));
 		Reader r = x.get("/bean").run().getContent().asReader();
@@ -157,8 +150,7 @@ public class RestClient_Response_Body_Test {
 		assertReader(r).is("{f:1}");
 	}
 
-	@Test
-	public void a05_asBytes() throws Exception {
+	@Test void a05_asBytes() throws Exception {
 		byte[] x = client().build().get("/bean").run().getContent().asBytes();
 		assertBytes(x).asString().is("{f:1}");
 
@@ -168,8 +160,7 @@ public class RestClient_Response_Body_Test {
 		assertThrown(()->testClient().entity(new InputStreamEntity(badStream())).get().run().getContent().asBytes()).asMessages().isContains("foo");
 	}
 
-	@Test
-	public void a06_pipeTo() throws Exception {
+	@Test void a06_pipeTo() throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		client().build().get("/bean").run().getContent().pipeTo(baos);
 		assertBytes(baos.toByteArray()).asString().is("{f:1}");
@@ -207,8 +198,7 @@ public class RestClient_Response_Body_Test {
 		}
 	}
 
-	@Test
-	public void a07_asType() throws Exception {
+	@Test void a07_asType() throws Exception {
 		List<Integer> x1 = testClient().entity(stringEntity("[1,2]")).get().run().getContent().as(List.class,Integer.class);
 		assertObject(x1).asJson().is("[1,2]");
 
@@ -266,8 +256,7 @@ public class RestClient_Response_Body_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@SuppressWarnings("deprecation")
-	@Test
-	public void b01_httpEntityMethods() throws Exception {
+	@Test void b01_httpEntityMethods() throws Exception {
 		ResponseContent x1 = testClient().entity(stringEntity("foo")).get().run().getContent();
 		assertTrue(x1.isRepeatable());
 
@@ -304,8 +293,7 @@ public class RestClient_Response_Body_Test {
 	}
 
 	@SuppressWarnings("deprecation")
-	@Test
-	public void b02_head() throws Exception {
+	@Test void b02_head() throws Exception {
 		assertFalse(client().build().head("").run().getContent().isRepeatable());
 		assertFalse(client().build().head("").run().getContent().isChunked());
 		assertLong(client().build().head("").run().getContent().getContentLength()).is(-1L);

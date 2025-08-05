@@ -14,11 +14,10 @@ package org.apache.juneau.transforms;
 
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.plaintext.*;
@@ -26,16 +25,14 @@ import org.apache.juneau.swaps.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ReaderFilterTest {
+class ReaderFilterTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// testJson
 	//====================================================================================================
-	@Test
-	public void testJson() throws Exception {
+	@Test void testJson() throws Exception {
 		JsonSerializer s = JsonSerializer.create().json5().swaps(ParsedReaderSwap.Json.class).build();
 
 		Reader r;
@@ -50,8 +47,7 @@ public class ReaderFilterTest {
 	//====================================================================================================
 	// testXml
 	//====================================================================================================
-	@Test
-	public void testXml() throws Exception {
+	@Test void testXml() throws Exception {
 		XmlSerializer s = XmlSerializer.create().sq().swaps(ParsedReaderSwap.Xml.class).build();
 
 		Reader r;
@@ -66,8 +62,7 @@ public class ReaderFilterTest {
 	//====================================================================================================
 	// testHtml
 	//====================================================================================================
-	@Test
-	public void testHtml() throws Exception {
+	@Test void testHtml() throws Exception {
 		HtmlSerializer s = HtmlSerializer.create().sq().swaps(ParsedReaderSwap.Html.class).build();
 
 		Reader r;
@@ -82,8 +77,7 @@ public class ReaderFilterTest {
 	//====================================================================================================
 	// testPlainText
 	//====================================================================================================
-	@Test
-	public void testPlainText() throws Exception {
+	@Test void testPlainText() throws Exception {
 		PlainTextSerializer s = PlainTextSerializer.create().swaps(ParsedReaderSwap.PlainText.class).build();
 
 		Reader r;
@@ -98,8 +92,7 @@ public class ReaderFilterTest {
 	//====================================================================================================
 	// testUon
 	//====================================================================================================
-	@Test
-	public void testUon() throws Exception {
+	@Test void testUon() throws Exception {
 		UonSerializer s = UonSerializer.create().swaps(ParsedReaderSwap.Uon.class).build();
 
 		Reader r;
@@ -114,8 +107,7 @@ public class ReaderFilterTest {
 	//====================================================================================================
 	// testUrlEncoding
 	//====================================================================================================
-	@Test
-	public void testUrlEncoding() throws Exception {
+	@Test void testUrlEncoding() throws Exception {
 		UrlEncodingSerializer s = UrlEncodingSerializer.create().swaps(ParsedReaderSwap.PlainText.class).build();
 
 		Reader r;

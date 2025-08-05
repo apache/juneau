@@ -12,20 +12,18 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.helper;
 
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings("serial")
-@FixMethodOrder(NAME_ASCENDING)
-public class Hyperlink_Test {
+public class Hyperlink_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A extends BasicRestServlet {
@@ -43,8 +41,7 @@ public class Hyperlink_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.get("/a")
 			.accept("text/html+stripped")

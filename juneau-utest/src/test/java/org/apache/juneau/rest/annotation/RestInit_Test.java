@@ -12,17 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import jakarta.servlet.*;
 
-@FixMethodOrder(NAME_ASCENDING)
 public class RestInit_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -93,8 +90,7 @@ public class RestInit_Test {
 		}
 	}
 
-	@Test
-	public void a01_init() throws Exception {
+	@Test void a01_init() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.get("/super/events").run().assertContent("['super-1a','super-1b','super-1c','super-2a']");
 		a.get("/sub/events").run().assertContent("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");

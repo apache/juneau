@@ -14,18 +14,16 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestClient_CallbackStrings_Test {
+public class RestClient_CallbackStrings_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -48,8 +46,7 @@ public class RestClient_CallbackStrings_Test {
 		}
 	}
 
-	@Test
-	public void a01_callback() throws Exception {
+	@Test void a01_callback() throws Exception {
 		RestClient x = MockRestClient.build(A.class);
 		x.callback("GET /testCallback").run().assertContent("{method:'GET',headers:{},content:''}");
 		x.callback("GET /testCallback some sample content").run().assertContent("{method:'GET',headers:{},content:'some sample content'}");
@@ -59,8 +56,7 @@ public class RestClient_CallbackStrings_Test {
 		x.callback("PUT {Foo-X:123,Foo-Y:'abc'} /testCallback   some sample content  ").run().assertContent("{method:'PUT',headers:{'Foo-X':'123','Foo-Y':'abc'},content:'some sample content'}");
 	}
 
-	@Test
-	public void a02_callback_invalidStrings() {
+	@Test void a02_callback_invalidStrings() {
 		RestClient x = MockRestClient.build(A.class);
 		for (String s : list("","GET","GET ","GET {","GET {xxx} /foo",null)) {
 			assertThrown(()->x.callback(s).run().getContent().asString()).asMessage().isContains("Invalid format for call string");

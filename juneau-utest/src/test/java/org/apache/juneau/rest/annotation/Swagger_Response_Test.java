@@ -15,19 +15,16 @@ package org.apache.juneau.rest.annotation;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.annotation.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class Swagger_Response_Test {
+public class Swagger_Response_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Swagger tests
@@ -97,8 +94,7 @@ public class Swagger_Response_Test {
 		public A6 l() {return null;}
 	}
 
-	@Test
-	public void a01_fromPojo() {
+	@Test void a01_fromPojo() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(A.class);
 		ResponseInfo x;
 
@@ -193,8 +189,7 @@ public class Swagger_Response_Test {
 		public B4 h() {return null;}
 	}
 
-	@Test
-	public void b01_schemaFromPojo() {
+	@Test void b01_schemaFromPojo() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(B.class);
 		ResponseInfo x;
 
@@ -244,8 +239,7 @@ public class Swagger_Response_Test {
 		public C2 d() {return null;}
 	}
 
-	@Test
-	public void c01_exampleFromPojo() {
+	@Test void c01_exampleFromPojo() {
 		org.apache.juneau.bean.swagger.Swagger sc = getSwagger(C.class);
 		ResponseInfo x;
 
@@ -306,8 +300,7 @@ public class Swagger_Response_Test {
 		public void f() throws D6 { /* no-op */ }
 	}
 
-	@Test
-	public void d01_fromThrowable() {
+	@Test void d01_fromThrowable() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(D.class);
 		ResponseInfo x;
 
@@ -348,8 +341,7 @@ public class Swagger_Response_Test {
 		public void a() throws E1 { /* no-op */ }
 	}
 
-	@Test
-	public void e01_schemaFromThrowable() {
+	@Test void e01_schemaFromThrowable() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(E.class);
 
 		ResponseInfo x = s.getResponseInfo("/a","get",500);
@@ -369,8 +361,7 @@ public class Swagger_Response_Test {
 		public void b() throws F2 { /* no-op */ }
 	}
 
-	@Test
-	public void f01_exampeFromThrowable() {
+	@Test void f01_exampeFromThrowable() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(F.class);
 		ResponseInfo x;
 

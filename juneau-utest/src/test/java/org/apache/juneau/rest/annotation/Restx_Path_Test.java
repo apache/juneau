@@ -12,15 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Restx_Path_Test {
+class Restx_Path_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Nested children.
@@ -49,8 +47,7 @@ public class Restx_Path_Test {
 	@Rest(path="/p2")
 	public static class A2 extends A2a {}
 
-	@Test
-	public void a01_nestedChildren() throws Exception {
+	@Test void a01_nestedChildren() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		// Since we're not running from a servlet container, we access A directly with no path.
 		// However, the path is still reflected in RestContext.getPath().
@@ -99,8 +96,7 @@ public class Restx_Path_Test {
 		}
 	}
 
-	@Test
-	public void b01_overlappingPaths() throws Exception {
+	@Test void b01_overlappingPaths() throws Exception {
 		RestClient b = MockRestClient.build(B.class);
 		// [/] = [test5a]
 		// [/*] = [test5b]   -- Cannot get called.
@@ -139,8 +135,7 @@ public class Restx_Path_Test {
 		}
 	}
 
-	@Test
-	public void c01_pathOverriddenByChild() throws Exception {
+	@Test void c01_pathOverriddenByChild() throws Exception {
 		RestClient c2 = MockRestClient.build(C2.class);
 		c2.get("/foo").run().assertContent("b");
 	}

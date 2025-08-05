@@ -14,40 +14,33 @@ package org.apache.juneau.json;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class JsonParserTest {
+class JsonParserTest extends SimpleTestBase {
 
 	private static final JsonParser p = JsonParser.DEFAULT;
 	private static final JsonParser sp = JsonParser.DEFAULT_STRICT;
 
-
 	//====================================================================================================
 	// Test invalid input
 	//====================================================================================================
-	@Test
-	public void testInvalidJson() {
+	@Test void testInvalidJson() {
 		assertThrown(()->p.parse("{\na:1,\nb:xxx\n}", Object.class)).isType(ParseException.class);
 	}
 
-	@Test
-	public void testNonExistentAttribute() throws Exception {
+	@Test void testNonExistentAttribute() throws Exception {
 		String json = "{foo:,bar:}";
 		JsonMap m = p.parse(json, JsonMap.class);
 		assertEquals("{foo:null,bar:null}", m.toString());
 	}
 
-	@Test
-	public void testNonStringAsString() throws Exception {
+	@Test void testNonStringAsString() throws Exception {
 		String json = "123";
 		String s;
 
@@ -83,8 +76,7 @@ public class JsonParserTest {
 		public String fa;
 	}
 
-	@Test
-	public void testStrictMode() {
+	@Test void testStrictMode() {
 		JsonParser p2 = sp;
 		assertThrown(()->p2.parse("{\"foo\":,\"bar\":}", JsonMap.class)).asMessage().isContains("Missing value detected.");
 		assertThrown(()->p2.parse("{\"foo\":'bar'}", JsonMap.class)).asMessage().isContains("Invalid quote character");
@@ -98,8 +90,7 @@ public class JsonParserTest {
 	/**
 	 * JSON numbers and booleans should be representable as strings and converted accordingly.
 	 */
-	@Test
-	public void testPrimitivesAsStrings() throws Exception {
+	@Test void testPrimitivesAsStrings() throws Exception {
 		String json;
 		ReaderParser p2 = JsonParser.DEFAULT;
 		WriterSerializer s = Json5Serializer.DEFAULT;
@@ -130,8 +121,7 @@ public class JsonParserTest {
 	// testInvalidJsonNumbers
 	// Lax parser allows octal and hexadecimal numbers.  Strict parser does not.
 	//====================================================================================================
-	@Test
-	public void testInvalidJsonNumbers() throws Exception {
+	@Test void testInvalidJsonNumbers() throws Exception {
 		JsonParser p1 = JsonParser.DEFAULT;
 		JsonParser p2 = JsonParser.DEFAULT_STRICT;
 		Number r;
@@ -189,8 +179,7 @@ public class JsonParserTest {
 	// testUnquotedStrings
 	// Lax parser allows unquoted strings if POJO can be converted from a string.
 	//====================================================================================================
-	@Test
-	public void testUnquotedStrings() throws Exception {
+	@Test void testUnquotedStrings() throws Exception {
 		JsonParser p1 = JsonParser.DEFAULT;
 		JsonParser p2 = JsonParser.DEFAULT_STRICT;
 
@@ -218,8 +207,7 @@ public class JsonParserTest {
 	// testStreamsAutoClose
 	// Validates PARSER_autoCloseStreams.
 	//====================================================================================================
-	@Test
-	public void testStreamsAutoClose() throws Exception {
+	@Test void testStreamsAutoClose() throws Exception {
 		ReaderParser p2 = JsonParser.DEFAULT.copy().autoCloseStreams().build();
 		Object x;
 		Reader r;
@@ -234,8 +222,7 @@ public class JsonParserTest {
 	// testMultipleObjectsInStream
 	// Validates that readers are not closed so that we can read streams of POJOs.
 	//====================================================================================================
-	@Test
-	public void testMultipleObjectsInStream() throws Exception {
+	@Test void testMultipleObjectsInStream() throws Exception {
 		ReaderParser p2 = JsonParser.create().unbuffered().build();
 		Object x;
 		Reader r;

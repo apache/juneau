@@ -13,27 +13,23 @@
 package org.apache.juneau.msgpack;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.parser.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests the {@link MsgPackParser} class.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class MsgPackParserTest {
+public class MsgPackParserTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// testStreamsAutoClose
 	// Validates PARSER_autoCloseStreams.
 	//====================================================================================================
-	@Test
-	public void testStreamsAutoClose() throws Exception {
+	@Test void testStreamsAutoClose() throws Exception {
 		InputStreamParser p = MsgPackParser.DEFAULT.copy().autoCloseStreams().build();
 		Object r;
 		InputStream is;
@@ -48,8 +44,7 @@ public class MsgPackParserTest {
 	// testMultipleObjectsInStream
 	// Validates that input streams are not closed so that we can read streams of POJOs.
 	//====================================================================================================
-	@Test
-	public void testMultipleObjectsInStream() throws Exception {
+	@Test void testMultipleObjectsInStream() throws Exception {
 		InputStreamParser p = MsgPackParser.DEFAULT;
 		Object r;
 		InputStream is;

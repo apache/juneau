@@ -14,20 +14,16 @@ package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@SuppressWarnings({})
-@FixMethodOrder(NAME_ASCENDING)
-public class StringBuilderWriterTest {
+public class StringBuilderWriterTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// Basic tests
 	//====================================================================================================
-	@Test
-	public void test() throws Exception {
+	@Test void test() throws Exception {
 		StringBuilderWriter sbw = new StringBuilderWriter();
 		sbw.write("abc");
 		assertEquals("abc", sbw.toString());

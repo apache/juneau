@@ -20,14 +20,13 @@ import static org.apache.juneau.http.header.ContentType.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.list;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.http.client.utils.*;
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
@@ -37,10 +36,9 @@ import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestClient_BasicCalls_Test {
+public class RestClient_BasicCalls_Test extends SimpleTestBase {
 
 	public static class ABean {
 		public int f;
@@ -97,8 +95,7 @@ public class RestClient_BasicCalls_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient x = client().build();
 		x.get().run().assertContent("GET");
 		x.get("/").run().assertContent("GET");
@@ -109,15 +106,13 @@ public class RestClient_BasicCalls_Test {
 		x.formPost("/").run().assertContent("POST");
 	}
 
-	@Test
-	public void a02_get() throws Exception {
+	@Test void a02_get() throws Exception {
 		client().build().get("/bean").run().assertContent("{f:1}");
 
 		assertThrown(()->client().build().get("/bean").content(bean).run()).asMessage().isContains("Method does not support content entity.");
 	}
 
-	@Test
-	public void a03_get_exhaustiveUrls() throws Exception {
+	@Test void a03_get_exhaustiveUrls() throws Exception {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
@@ -131,24 +126,21 @@ public class RestClient_BasicCalls_Test {
 		}
 	}
 
-	@Test
-	public void a04_put() throws Exception {
+	@Test void a04_put() throws Exception {
 		client().build().put("/bean",bean).run().assertContent("{f:1}");
 		client().build().put("/bean").content(bean).run().assertContent("{f:1}");
 		client().build().put("/bean",MutableSupplier.of(bean)).run().assertContent("{f:1}");
 		client().build().put("/bean").content(MutableSupplier.of(bean)).run().assertContent("{f:1}");
 	}
 
-	@Test
-	public void a05_put_bodyString() throws Exception {
+	@Test void a05_put_bodyString() throws Exception {
 		client().build().put("/bean","{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
 		client().build().put("/bean").contentString("{f:1}").json5().run().assertContent("{f:1}");
 		client().build().put("/bean").contentString("").json5().run().assertContent("{f:0}");
 		client().build().put("/bean").contentString(null).json5().run().assertContent("null");
  	}
 
-	@Test
-	public void a06_put_exhaustiveUrls() throws Exception {
+	@Test void a06_put_exhaustiveUrls() throws Exception {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
@@ -164,8 +156,7 @@ public class RestClient_BasicCalls_Test {
 		}
 	}
 
-	@Test
-	public void a07_put_exhaustiveBodyTypes() throws Exception {
+	@Test void a07_put_exhaustiveBodyTypes() throws Exception {
 		List<Object> bodies = list(
 			reader("{f:1}"),
 			inputStream("{f:1}"),
@@ -179,19 +170,16 @@ public class RestClient_BasicCalls_Test {
 		}
 	}
 
-	@Test
-	public void a08_post() throws Exception {
+	@Test void a08_post() throws Exception {
 		client().build().post("/bean",bean).run().assertContent("{f:1}");
 		client().build().post("/bean").content(bean).run().assertContent("{f:1}");
 	}
 
-	@Test
-	public void a09_post_stringBody() throws Exception {
+	@Test void a09_post_stringBody() throws Exception {
 		client().build().post("/bean","{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
 	}
 
-	@Test
-	public void a10_post_exhaustiveUrls() throws Exception {
+	@Test void a10_post_exhaustiveUrls() throws Exception {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
@@ -207,8 +195,7 @@ public class RestClient_BasicCalls_Test {
 		}
 	}
 
-	@Test
-	public void a11_exhaustiveBodyTypes() throws Exception {
+	@Test void a11_exhaustiveBodyTypes() throws Exception {
 		List<Object> bodies = list(
 			reader("{f:1}"),
 			inputStream("{f:1}"),
@@ -222,13 +209,11 @@ public class RestClient_BasicCalls_Test {
 		}
 	}
 
-	@Test
-	public void a12_delete() throws Exception {
+	@Test void a12_delete() throws Exception {
 		client().build().delete("/bean").run().assertContent("{f:1}");
 	}
 
-	@Test
-	public void a13_delete_exhaustiveUrls() throws Exception {
+	@Test void a13_delete_exhaustiveUrls() throws Exception {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
@@ -242,13 +227,11 @@ public class RestClient_BasicCalls_Test {
 		}
 	}
 
-	@Test
-	public void a14_options() throws Exception {
+	@Test void a14_options() throws Exception {
 		client().build().options("/bean").run().assertContent("{f:1}");
 	}
 
-	@Test
-	public void a15_options_exhaustiveUrls() throws Exception {
+	@Test void a15_options_exhaustiveUrls() throws Exception {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
@@ -262,13 +245,11 @@ public class RestClient_BasicCalls_Test {
 		}
 	}
 
-	@Test
-	public void a16_head() throws Exception {
+	@Test void a16_head() throws Exception {
 		client().build().head("/bean").run().assertContent("");
 	}
 
-	@Test
-	public void a17_head_exhaustiveUrls() throws Exception {
+	@Test void a17_head_exhaustiveUrls() throws Exception {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
@@ -282,8 +263,7 @@ public class RestClient_BasicCalls_Test {
 		}
 	}
 
-	@Test
-	public void a18_formPost() throws Exception {
+	@Test void a18_formPost() throws Exception {
 		client().build().formPost("/bean",bean).accept("application/json5").run().assertContent("{f:1}");
 
 		client().build().formPost("/bean",bean).content(bean).accept("application/json5").run().assertContent("{f:1}");
@@ -291,8 +271,7 @@ public class RestClient_BasicCalls_Test {
 		client().build().post("/bean").urlEnc().content(bean).formDataBean(bean).accept("application/json5").run().assertContent("{f:1}");
 	}
 
-	@Test
-	public void a19_formPost_exhaustiveUrls() throws Exception {
+	@Test void a19_formPost_exhaustiveUrls() throws Exception {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
@@ -306,8 +285,7 @@ public class RestClient_BasicCalls_Test {
 		}
 	}
 
-	@Test
-	public void a20_formPost_exhaustiveBodyTypes() throws Exception {
+	@Test void a20_formPost_exhaustiveBodyTypes() throws Exception {
 		Supplier<Object>
 			s1 = () -> reader("f=1"),
 			s2 = () -> inputStream("f=1");
@@ -331,24 +309,20 @@ public class RestClient_BasicCalls_Test {
 		}
 	}
 
-	@Test
-	public void a21_formPostPairs() throws Exception {
+	@Test void a21_formPostPairs() throws Exception {
 		client().build().formPostPairs("/bean","f","1").accept("application/json5").run().assertContent("{f:1}");
 	}
 
-	@Test
-	public void a22_patch() throws Exception {
+	@Test void a22_patch() throws Exception {
 		client().build().patch("/bean",bean).run().assertContent("{f:1}");
 		client().build().patch("/bean").content(bean).run().assertContent("{f:1}");
 	}
 
-	@Test
-	public void a23_patch_fromString() throws Exception {
+	@Test void a23_patch_fromString() throws Exception {
 		client().build().patch("/bean","{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
 	}
 
-	@Test
-	public void a24_patch_exhaustiveBodyTypes() throws Exception {
+	@Test void a24_patch_exhaustiveBodyTypes() throws Exception {
 		List<Object> bodies = list(
 			reader("{f:1}"),
 			inputStream("{f:1}"),
@@ -363,8 +337,7 @@ public class RestClient_BasicCalls_Test {
 		}
 	}
 
-	@Test
-	public void a25_patch_exhaustiveUrls() throws Exception {
+	@Test void a25_patch_exhaustiveUrls() throws Exception {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
@@ -378,14 +351,12 @@ public class RestClient_BasicCalls_Test {
 		}
 	}
 
-	@Test
-	public void a26_request_PATCH() throws Exception {
+	@Test void a26_request_PATCH() throws Exception {
 		client().build().request("patch","/bean",bean).run().assertContent("{f:1}");
 		client().build().request("patch","/bean").content(bean).run().assertContent("{f:1}");
 	}
 
-	@Test
-	public void a27_request_PATCH_exhaustiveBodyTypes() throws Exception {
+	@Test void a27_request_PATCH_exhaustiveBodyTypes() throws Exception {
 		List<Object> bodies = list(
 			reader("{f:1}"),
 			inputStream("{f:1}"),
@@ -400,8 +371,7 @@ public class RestClient_BasicCalls_Test {
 		}
 	}
 
-	@Test
-	public void a28_request_PATCH_exhaustiveUrls() throws Exception {
+	@Test void a28_request_PATCH_exhaustiveUrls() throws Exception {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
@@ -415,13 +385,11 @@ public class RestClient_BasicCalls_Test {
 		}
 	}
 
-	@Test
-	public void a29_request_GET() throws Exception {
+	@Test void a29_request_GET() throws Exception {
 		client().build().request("get","/bean").run().assertContent("{f:1}");
 	}
 
-	@Test
-	public void a30_request_GET_exhaustiveUrls() throws Exception {
+	@Test void a30_request_GET_exhaustiveUrls() throws Exception {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),

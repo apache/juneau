@@ -12,18 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Header_AcceptCharset_Test {
+class Header_AcceptCharset_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test that Q-values are being resolved correctly.
@@ -37,8 +35,7 @@ public class Header_AcceptCharset_Test {
 		}
 	}
 
-	@Test
-	public void a01_qValues() throws Exception {
+	@Test void a01_qValues() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.get("/a").accept("text/plain").acceptCharset("utf-8").run().assertCharset().is("utf-8");
 		a.get("/a").accept("text/plain").acceptCharset("iso-8859-1").run().assertCharset().is("ISO-8859-1");
@@ -78,8 +75,7 @@ public class Header_AcceptCharset_Test {
 		}
 	}
 
-	@Test
-	public void b01_charsetOnResponse() throws Exception {
+	@Test void b01_charsetOnResponse() throws Exception {
 		RestClient b = MockRestClient.buildLax(B.class);
 		b.put("/a", null).plainText().run().assertContent("UTF-8/UTF-8");
 		b.put("/a", null).plainText().acceptCharset("Shift_JIS").run().assertContent("UTF-8/Shift_JIS");

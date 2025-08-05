@@ -13,20 +13,17 @@
 package org.apache.juneau.msgpack;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class MsgPackSerializerTest {
+public class MsgPackSerializerTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@Test
-	public void testBasic() throws Exception {
+	@Test void testBasic() throws Exception {
 
 		test(null, "C0");
 

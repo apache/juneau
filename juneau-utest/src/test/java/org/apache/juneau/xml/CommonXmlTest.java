@@ -15,21 +15,19 @@ package org.apache.juneau.xml;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 import java.net.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class CommonXmlTest {
+class CommonXmlTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// Test 18a - @Bean.uri annotation
 	//====================================================================================================
-	@Test
-	public void testBeanUriAnnotation() throws Exception {
+	@Test void testBeanUriAnnotation() throws Exception {
 		XmlParser p = XmlParser.DEFAULT;
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 
@@ -61,8 +59,7 @@ public class CommonXmlTest {
 	//====================================================================================================
 	// Bean.uri annotation, only uri property
 	//====================================================================================================
-	@Test
-	public void testBeanUriAnnotationOnlyUriProperty() throws Exception {
+	@Test void testBeanUriAnnotationOnlyUriProperty() throws Exception {
 		XmlSerializer s = XmlSerializer.create().sq().build();
 
 		B t = new B("http://foo");

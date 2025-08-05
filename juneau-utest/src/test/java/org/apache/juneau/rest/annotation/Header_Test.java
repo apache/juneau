@@ -13,10 +13,9 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
@@ -24,10 +23,9 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Header_Test {
+public class Header_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Optional header parameter.
@@ -56,8 +54,7 @@ public class Header_Test {
 		}
 	}
 
-	@Test
-	public void a01_optionalParams() throws Exception {
+	@Test void a01_optionalParams() throws Exception {
 		RestClient a = MockRestClient.buildJson(A.class);
 
 		a.get("/a").header("f1", 123)
@@ -115,8 +112,7 @@ public class Header_Test {
 		}
 	}
 
-	@Test
-	public void b01_annotatedHeaders() throws Exception {
+	@Test void b01_annotatedHeaders() throws Exception {
 		RestClient b = MockRestClient.build(B.class);
 		b.get("/a").run().assertContent("{h1:null,h2:null,h3:null}");
 		b.get("/a").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
@@ -138,8 +134,7 @@ public class Header_Test {
 		}
 	}
 
-	@Test
-	public void c01_annotatedHeadersCaseInsensitive() throws Exception {
+	@Test void c01_annotatedHeadersCaseInsensitive() throws Exception {
 		RestClient c = MockRestClient.build(C.class);
 		c.get("/a").run().assertContent("{h1:null,h2:null,h3:null}");
 		c.get("/a").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
@@ -161,8 +156,7 @@ public class Header_Test {
 		}
 	}
 
-	@Test
-	public void d01_annotatedHeadersDefault() throws Exception {
+	@Test void d01_annotatedHeadersDefault() throws Exception {
 		RestClient d1 = MockRestClient.build(D1.class);
 		d1.get("/a").run().assertContent("{h1:'1',h2:'2',h3:'3'}");
 		d1.get("/a").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
@@ -180,8 +174,7 @@ public class Header_Test {
 		}
 	}
 
-	@Test
-	public void d02_annotatedHeadersDefault() throws Exception {
+	@Test void d02_annotatedHeadersDefault() throws Exception {
 		RestClient d2 = MockRestClient.build(D2.class);
 		d2.get("/a").run().assertContent("{h1:'1',h2:'2',h3:'3'}");
 		d2.get("/a").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
@@ -203,8 +196,7 @@ public class Header_Test {
 		}
 	}
 
-	@Test
-	public void e01_annotatedAndDefaultHeaders() throws Exception {
+	@Test void e01_annotatedAndDefaultHeaders() throws Exception {
 		RestClient e = MockRestClient.build(E.class);
 		e.get("/a").run().assertContent("{h1:'4',h2:'5',h3:'6'}");
 		e.get("/a").header("H1",7).header("H2",8).header("H3",9).run().assertContent("{h1:'7',h2:'8',h3:'9'}");
@@ -253,8 +245,7 @@ public class Header_Test {
 		}
 	}
 
-	@Test
-	public void f01_defaultHeaders() throws Exception {
+	@Test void f01_defaultHeaders() throws Exception {
 		RestClient f = MockRestClient.buildJson(F.class);
 		f.get("/a1")
 			.header("f1","123")

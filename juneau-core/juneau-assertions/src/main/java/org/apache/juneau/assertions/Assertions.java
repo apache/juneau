@@ -69,6 +69,7 @@ import org.apache.juneau.common.utils.*;
  * 	<li class='link'><a class="doclink" href="../../../../index.html#ja.Overview">Fluent Assertions</a>
  * </ul>
  */
+@Deprecated
 public class Assertions {
 
 	/**

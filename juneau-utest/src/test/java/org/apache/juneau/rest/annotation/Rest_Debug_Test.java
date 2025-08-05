@@ -12,18 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Rest_Debug_Test {
+public class Rest_Debug_Test extends SimpleTestBase {
 
 	public static final CaptureLogger LOGGER = new CaptureLogger();
 
@@ -113,8 +111,7 @@ public class Rest_Debug_Test {
 		}
 	}
 
-	@Test
-	public void a01_restOp_debugDefault() throws Exception {
+	@Test void a01_restOp_debugDefault() throws Exception {
 		RestClient a1 = MockRestClient.buildJson5(A1_RestOp.class);
 		RestClient a1d = MockRestClient.create(A1_RestOp.class).json5().debug().suppressLogging().build();
 
@@ -257,8 +254,7 @@ public class Rest_Debug_Test {
 		}
 	}
 
-	@Test
-	public void a01a_debugDefault() throws Exception {
+	@Test void a01a_debugDefault() throws Exception {
 		RestClient a1a = MockRestClient.buildJson5(A1a.class);
 		RestClient a1ad = MockRestClient.create(A1a.class).json5().debug().suppressLogging().build();
 
@@ -336,8 +332,7 @@ public class Rest_Debug_Test {
 		}
 	}
 
-	@Test
-	public void a02_debugTrue() throws Exception {
+	@Test void a02_debugTrue() throws Exception {
 		RestClient a2 = MockRestClient.buildJson5(A2.class);
 		RestClient a2d = MockRestClient.create(A2.class).json5().debug().suppressLogging().build();
 
@@ -415,8 +410,7 @@ public class Rest_Debug_Test {
 		}
 	}
 
-	@Test
-	public void a03_restDebugFalse() throws Exception {
+	@Test void a03_restDebugFalse() throws Exception {
 		RestClient a3 = MockRestClient.buildJson5(A3.class);
 		RestClient a3d = MockRestClient.create(A3.class).json5().debug().suppressLogging().build();
 
@@ -494,8 +488,7 @@ public class Rest_Debug_Test {
 		}
 	}
 
-	@Test
-	public void a04_debugPerRequest() throws Exception {
+	@Test void a04_debugPerRequest() throws Exception {
 		RestClient a4 = MockRestClient.buildJson5(A4.class);
 		RestClient a4d = MockRestClient.create(A4.class).json5().debug().suppressLogging().build();
 
@@ -713,8 +706,7 @@ public class Rest_Debug_Test {
 		}
 	}
 
-	@Test
-	public void c01_debugDefault() throws Exception {
+	@Test void c01_debugDefault() throws Exception {
 		RestClient c1 = MockRestClient.buildJson5(C1.class);
 		RestClient c1d = MockRestClient.create(C1.class).json5().debug().suppressLogging().build();
 
@@ -1047,8 +1039,7 @@ public class Rest_Debug_Test {
 		}
 	}
 
-	@Test
-	public void c02_debugTrue() throws Exception {
+	@Test void c02_debugTrue() throws Exception {
 		RestClient c2 = MockRestClient.buildJson5(C2.class);
 		RestClient c2d = MockRestClient.create(C2.class).json5().debug().suppressLogging().build();
 

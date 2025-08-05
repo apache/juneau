@@ -13,19 +13,16 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ParserSetTest {
+public class ParserSetTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// Test parser group matching
 	//====================================================================================================
-	@Test
-	public void testParserGroupMatching() {
+	@Test void testParserGroupMatching() {
 
 		ParserSet s = ParserSet.create().add(Parser1.class, Parser2.class, Parser3.class).build();
 		assertObject(s.getParser("text/foo")).isType(Parser1.class);
@@ -52,8 +49,7 @@ public class ParserSetTest {
 	//====================================================================================================
 	// Test inheritence
 	//====================================================================================================
-	@Test
-	public void testInheritence() {
+	@Test void testInheritence() {
 		ParserSet.Builder sb = null;
 		ParserSet s = null;
 

@@ -12,19 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import jakarta.servlet.http.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestPostCall_Test {
+class RestPostCall_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @RestPostCall
@@ -67,8 +64,7 @@ public class RestPostCall_Test {
 		}
 	}
 
-	@Test
-	public void a01_postCall() throws Exception {
+	@Test void a01_postCall() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.get("/").run()
 			.assertHeader("post1-called").is("true")

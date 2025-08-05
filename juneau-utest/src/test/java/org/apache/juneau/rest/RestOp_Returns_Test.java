@@ -16,21 +16,19 @@ import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestOp_Returns_Test {
+public class RestOp_Returns_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Response beans
@@ -62,8 +60,7 @@ public class RestOp_Returns_Test {
 		@RestGet public UseProxy useProxy() { return USE_PROXY; }
 	}
 
-	@Test
-	public void a01_responseBeans() throws Exception {
+	@Test void a01_responseBeans() throws Exception {
 		RestClient c = client(A.class);
 		c.get("/accepted").run().assertStatus().asCode().is(Accepted.STATUS_CODE).assertContent(Accepted.REASON_PHRASE);
 		c.get("/alreadyReported").run().assertStatus().asCode().is(AlreadyReported.STATUS_CODE).assertContent(AlreadyReported.REASON_PHRASE);
@@ -89,8 +86,7 @@ public class RestOp_Returns_Test {
 		c.get("/useProxy").run().assertStatus().asCode().is(UseProxy.STATUS_CODE).assertContent(UseProxy.REASON_PHRASE);
 	}
 
-	@Test
-	public void a02_responseBeans_swagger() {
+	@Test void a02_responseBeans_swagger() {
 		Map<String,OperationMap> paths = getSwagger(A.class).getPaths();
 		assertEquals(Accepted.REASON_PHRASE, paths.get("/accepted").get("get").getResponse(Accepted.STATUS_CODE).getDescription());
 		assertEquals(AlreadyReported.REASON_PHRASE, paths.get("/alreadyReported").get("get").getResponse(AlreadyReported.STATUS_CODE).getDescription());
@@ -148,8 +144,7 @@ public class RestOp_Returns_Test {
 		}
 	}
 
-	@Test
-	public void b01_BasicHttpResource() throws Exception {
+	@Test void b01_BasicHttpResource() throws Exception {
 		RestClient b = MockRestClient.build(B.class);
 		b.get("/a")
 			.run()

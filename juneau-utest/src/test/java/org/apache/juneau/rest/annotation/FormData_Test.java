@@ -13,10 +13,9 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
@@ -27,10 +26,9 @@ import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.urlencoding.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class FormData_Test {
+public class FormData_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Simple tests
@@ -45,8 +43,7 @@ public class FormData_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.post("/a", "p1=p1&p2=2").contentType("application/x-www-form-urlencoded").run().assertContent("p1=[p1,p1,p1],p2=[2,2,2]");
 		a.post("/a", "p1&p2").contentType("application/x-www-form-urlencoded").run().assertContent("p1=[null,null,null],p2=[0,null,0]");
@@ -80,8 +77,7 @@ public class FormData_Test {
 		}
 	}
 
-	@Test
-	public void b01_uonParameters() throws Exception {
+	@Test void b01_uonParameters() throws Exception {
 		RestClient b = MockRestClient.build(B.class);
 
 		b.post("/a", "p1=p1").contentType("application/x-www-form-urlencoded").run().assertContent("p1=[p1,p1,p1]");
@@ -127,8 +123,7 @@ public class FormData_Test {
 		}
 	}
 
-	@Test
-	public void c01_defaultFormData() throws Exception {
+	@Test void c01_defaultFormData() throws Exception {
 		RestClient c = MockRestClient.build(C.class);
 
 		c.post("/a").contentType("application/x-www-form-urlencoded").run().assertContent("{f1:'1',f2:'2',f3:'3'}");
@@ -171,8 +166,7 @@ public class FormData_Test {
 		}
 	}
 
-	@Test
-	public void d01_optionalParams() throws Exception {
+	@Test void d01_optionalParams() throws Exception {
 		RestClient d = MockRestClient.create(D.class).accept("application/json").contentType("application/x-www-form-urlencoded").build();
 
 		d.post("/a", "f1=123")
@@ -254,8 +248,7 @@ public class FormData_Test {
 		}
 	}
 
-	@Test
-	public void f01_defaultParams() throws Exception {
+	@Test void f01_defaultParams() throws Exception {
 		RestClient f = MockRestClient.create(F.class).accept("application/json").contentType("application/x-www-form-urlencoded").build();
 
 		f.post("/a1", "f1=123")

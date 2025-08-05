@@ -14,22 +14,20 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.header.ContentType.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import jakarta.servlet.http.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Rest_PredefinedStatusCodes_Test {
+class Rest_PredefinedStatusCodes_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// OK (200)
@@ -42,8 +40,7 @@ public class Rest_PredefinedStatusCodes_Test {
 		}
 	}
 
-	@Test
-	public void a01_OK() throws Exception {
+	@Test void a01_OK() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.put("/a", "foo")
 			.run()
@@ -109,8 +106,7 @@ public class Rest_PredefinedStatusCodes_Test {
 		}
 	}
 
-	@Test
-	public void b01_badRequest() throws Exception {
+	@Test void b01_badRequest() throws Exception {
 		RestClient b = MockRestClient.buildLax(B.class);
 		b.put("/a?noTrace=true", "{f2:'foo'}", APPLICATION_JSON)
 			.run()
@@ -188,8 +184,7 @@ public class Rest_PredefinedStatusCodes_Test {
 	}
 	private static MockRestClient c = MockRestClient.buildLax(C.class);
 
-	@Test
-	public void c01_badPath() throws Exception {
+	@Test void c01_badPath() throws Exception {
 		c.get("/bad?noTrace=true")
 			.run()
 			.assertStatus(404)
@@ -217,7 +212,7 @@ public class Rest_PredefinedStatusCodes_Test {
 			return "OK";
 		}
 		public static class NeverMatcher extends RestMatcher {
-			@Override /* RestMatcher */
+			@Override
 			public boolean matches(HttpServletRequest req) {
 				return false;
 			}
@@ -225,8 +220,7 @@ public class Rest_PredefinedStatusCodes_Test {
 	}
 	private static MockRestClient d = MockRestClient.buildLax(D.class);
 
-	@Test
-	public void d01() throws Exception {
+	@Test void d01() throws Exception {
 		d.get("/d?noTrace=true")
 			.run()
 			.assertStatus(412)

@@ -12,16 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestPostInit_Test {
+public class RestPostInit_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @RestPostInit
@@ -103,8 +101,7 @@ public class RestPostInit_Test {
 		}
 	}
 
-	@Test
-	public void a01_postInit() throws Exception {
+	@Test void a01_postInit() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.get("/super/events").run().assertContent("['super-1a','super-1b','super-1c','super-2a']");
 		a.get("/sub/events").run().assertContent("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
@@ -198,8 +195,7 @@ public class RestPostInit_Test {
 		}
 	}
 
-	@Test
-	public void b01_postInitChildFirst() throws Exception {
+	@Test void b01_postInitChildFirst() throws Exception {
 		RestClient b = MockRestClient.build(B.class);
 		b.get("/super/postInitChildFirstEvents").run().assertContent("['super-1a','super-1b','super-1c','super-2a']");
 		b.get("/sub/postInitChildFirstEvents").run().assertContent("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");

@@ -15,19 +15,16 @@ package org.apache.juneau.svl;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ResolvingJsonMapTest {
+public class ResolvingJsonMapTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test
-	public void testBasic() {
+	@Test void testBasic() {
 		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		JsonMap m = new ResolvingJsonMap(vr.createSession());
 
@@ -53,8 +50,7 @@ public class ResolvingJsonMapTest {
 	//====================================================================================================
 	// testNulls
 	//====================================================================================================
-	@Test
-	public void testNulls() {
+	@Test void testNulls() {
 		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		JsonMap m = new ResolvingJsonMap(vr.createSession());
 
@@ -74,8 +70,7 @@ public class ResolvingJsonMapTest {
 	//====================================================================================================
 	// testNonStrings
 	//====================================================================================================
-	@Test
-	public void testNonStrings() {
+	@Test void testNonStrings() {
 		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		JsonMap m = new ResolvingJsonMap(vr.createSession());
 
@@ -99,8 +94,7 @@ public class ResolvingJsonMapTest {
 	//====================================================================================================
 	// testInner - Test inner maps
 	//====================================================================================================
-	@Test
-	public void testInner() {
+	@Test void testInner() {
 		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		JsonMap m = new ResolvingJsonMap(vr.createSession());
 		JsonMap m2 = new JsonMap();

@@ -17,34 +17,29 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class SerializedHeader_Test {
+public class SerializedHeader_Test extends SimpleTestBase {
 
 	private static final OpenApiSerializerSession OAPI_SESSION = OpenApiSerializer.DEFAULT.getSession();
 	private static final OpenApiSerializer OAPI_SERIALIZER = OpenApiSerializer.DEFAULT;
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		SerializedHeader x1 = new SerializedHeader("Foo",alist("bar","baz"),OAPI_SESSION,T_ARRAY_PIPES,true);
 		assertString(x1).is("Foo: bar|baz");
 	}
 
-	@Test
-	public void a02_type() {
+	@Test void a02_type() {
 		SerializedHeader x1 = serializedHeader("Foo",2).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
 		assertThrown(x1::toString).asMessage().is("Validation error on request HEADER parameter 'Foo'='2'");
 	}
 
-	@Test
-	public void a03_serializer() {
+	@Test void a03_serializer() {
 		SerializedHeader x1 = serializedHeader("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null);
 		assertString(x1.getValue()).is("[bar, baz]");
 		SerializedHeader x2 = serializedHeader("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
@@ -57,8 +52,7 @@ public class SerializedHeader_Test {
 		assertString(x5.getValue()).is("bar,baz");
 	}
 
-	@Test
-	public void a04_skipIfEmpty() {
+	@Test void a04_skipIfEmpty() {
 		SerializedHeader x1 = serializedHeader("Foo",null).skipIfEmpty();
 		assertString(x1.getValue()).isNull();
 		SerializedHeader x2 = serializedHeader("Foo","").skipIfEmpty();
@@ -67,8 +61,7 @@ public class SerializedHeader_Test {
 		assertThrown(x3::getValue).asMessages().isContains("Empty value not allowed.");
 	}
 
-	@Test
-	public void a05_getValue_defaults() {
+	@Test void a05_getValue_defaults() {
 		SerializedHeader x1 = serializedHeader("Foo",null).schema(schema(INTEGER)._default("1").build()).serializer(OAPI_SESSION);
 		assertString(x1.getValue()).is("1");
 

@@ -13,14 +13,12 @@
 package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.HttpResponses.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class IMUsed_Test {
+public class IMUsed_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A {
@@ -29,8 +27,7 @@ public class IMUsed_Test {
 		@RestGet public IMUsed a3() { return imUsed().setHeader2("Foo","bar"); }
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		MockRestClient client = MockRestClient.createLax(A.class).build();
 
 		client.get("/a1")

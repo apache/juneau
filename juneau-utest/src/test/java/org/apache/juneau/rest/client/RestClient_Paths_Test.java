@@ -15,17 +15,15 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestClient_Paths_Test {
+public class RestClient_Paths_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {
@@ -51,31 +49,26 @@ public class RestClient_Paths_Test {
 		}
 	}
 
-	@Test
-	public void a01_path_String_Object() throws Exception {
+	@Test void a01_path_String_Object() throws Exception {
 		client().build().get("/echo/{x}").pathData("x",new A1().init()).run().assertContent().isContains("GET /echo/x=1 HTTP/1.1");
 		client().build().get("/echo/*").pathData("/*",new A1().init()).run().assertContent().isContains("GET /echo/x=1 HTTP/1.1");
 		assertThrown(()->client().build().get("/echo/{x}").pathData("y","foo").run()).asMessage().is("Path variable {y} was not found in path.");
 	}
 
-	@Test
-	public void a02_path_NameValuePair() throws Exception {
+	@Test void a02_path_NameValuePair() throws Exception {
 		client().build().get("/echo/{x}").pathData(part("x","foo")).run().assertContent().isContains("GET /echo/foo HTTP/1.1");
 	}
 
-	@Test
-	public void a03_paths_Object() throws Exception {
+	@Test void a03_paths_Object() throws Exception {
 		client().build().get("/echo/{x}").pathData(part("x","foo")).run().assertContent().isContains("GET /echo/foo HTTP/1.1");
 	}
 
-	@Test
-	public void a04_pathPairs_Objects() throws Exception {
+	@Test void a04_pathPairs_Objects() throws Exception {
 		client().build().get("/echo/{x}").pathDataPairs("x","1").run().assertContent().isContains("GET /echo/1 HTTP/1.1");
 		assertThrown(()->client().build().get("/echo/{x}").pathDataPairs("x")).asMessage().is("Odd number of parameters passed into pathDataPairs(String...)");
 	}
 
-	@Test
-	public void a05_path_String_Object_Schema() throws Exception {
+	@Test void a05_path_String_Object_Schema() throws Exception {
 		String[] a = {"foo","bar"};
 		client().build().get("/echo/{x}").pathData(part("x",a,T_ARRAY_PIPES)).run().assertContent().isContains("GET /echo/foo%7Cbar HTTP/1.1");
 	}

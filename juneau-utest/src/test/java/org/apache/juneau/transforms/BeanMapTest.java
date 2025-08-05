@@ -13,22 +13,18 @@
 package org.apache.juneau.transforms;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.swaps.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class BeanMapTest {
+public class BeanMapTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// testFilteredEntry
 	//====================================================================================================
-	@Test
-	public void testFilteredEntry() {
+	@Test void testFilteredEntry() {
 		BeanSession session = BeanContext.create().swaps(ByteArraySwap.Base64.class).build().getSession();
 		BeanMap<A> m = session.toBeanMap(new A());
 
@@ -49,8 +45,7 @@ public class BeanMapTest {
 	// testFilteredEntryWithMultipleMatchingFilters
 	// When bean properties can have multiple filters applied to them, pick the first match.
 	//====================================================================================================
-	@Test
-	public void testFilteredEntryWithMultipleMatchingFilters() {
+	@Test void testFilteredEntryWithMultipleMatchingFilters() {
 		BeanSession session = BeanContext.create().swaps(B2Swap.class, B1Swap.class).build().getSession();
 		BeanMap<B> bm = session.toBeanMap(B.create());
 		JsonMap m = (JsonMap)bm.get("b1");

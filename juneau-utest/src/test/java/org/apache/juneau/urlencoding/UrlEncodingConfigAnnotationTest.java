@@ -13,21 +13,18 @@
 package org.apache.juneau.urlencoding;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.urlencoding.annotation.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests the @UrlEncodingConfig annotation.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class UrlEncodingConfigAnnotationTest {
+public class UrlEncodingConfigAnnotationTest extends SimpleTestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
@@ -47,15 +44,13 @@ public class UrlEncodingConfigAnnotationTest {
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test
-	public void basicSerializer() {
+	@Test void basicSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("true", x.isExpandedParams());
 	}
 
-	@Test
-	public void basicParser() {
+	@Test void basicParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("true", x.isExpandedParams());
@@ -69,15 +64,13 @@ public class UrlEncodingConfigAnnotationTest {
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test
-	public void noValuesSerializer() {
+	@Test void noValuesSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 
-	@Test
-	public void noValuesParser() {
+	@Test void noValuesParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
@@ -90,15 +83,13 @@ public class UrlEncodingConfigAnnotationTest {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test
-	public void noAnnotationSerializer() {
+	@Test void noAnnotationSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 
-	@Test
-	public void noAnnotationParser() {
+	@Test void noAnnotationParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());

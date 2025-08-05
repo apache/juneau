@@ -13,8 +13,6 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -24,11 +22,10 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class Response_Test {
+public class Response_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// HTTP status code
@@ -58,8 +55,7 @@ public class Response_Test {
 		public String toString() {return "foo";}
 	}
 
-	@Test
-	public void a01_httpstatusCodes() throws Exception {
+	@Test void a01_httpstatusCodes() throws Exception {
 		RestClient a = MockRestClient.buildLax(A.class);
 		a.get("/a")
 			.run()
@@ -107,8 +103,7 @@ public class Response_Test {
 		public String toString() {return "foo";}
 	}
 
-	@Test
-	public void b01_openApi() throws Exception {
+	@Test void b01_openApi() throws Exception {
 		RestClient b = MockRestClient.buildLax(B.class);
 		b.get("/a")
 			.run()
@@ -198,8 +193,7 @@ public class Response_Test {
 		}
 	}
 
-	@Test
-	public void d01_openApi_withSchema() throws Exception {
+	@Test void d01_openApi_withSchema() throws Exception {
 		RestClient d = MockRestClient.buildLax(D.class);
 		d.get("/a")
 			.run()
@@ -271,8 +265,7 @@ public class Response_Test {
 		public String toString() {return "foo";}
 	}
 
-	@Test
-	public void e01_defaultSerialization() throws Exception {
+	@Test void e01_defaultSerialization() throws Exception {
 		RestClient e = MockRestClient.build(E.class);
 		e.get("/a")
 			.run()
@@ -325,8 +318,7 @@ public class Response_Test {
 		}
 	}
 
-	@Test
-	public void g01_json() throws Exception {
+	@Test void g01_json() throws Exception {
 		RestClient g = MockRestClient.build(G.class);
 		g.get("/a").json()
 			.run()

@@ -13,23 +13,20 @@
 package org.apache.juneau.json;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.testutils.pojos.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Most of the heavy testing for JsonSchemaSerializer is done in JsonSchemaGeneratorTest.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class JsonSchemaSerializerTest {
+public class JsonSchemaSerializerTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// Simple objects
 	//====================================================================================================
 
-	@Test
-	public void simpleObjects() throws Exception {
+	@Test void simpleObjects() throws Exception {
 		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_SIMPLE;
 
 		assertEquals("{type:'integer',format:'int16'}", s.serialize((short)1));

@@ -13,24 +13,20 @@
 package org.apache.juneau.xml;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class XmlParserTest {
+public class XmlParserTest extends SimpleTestBase {
 
-	@Test
-	public void testGenericAttributes() throws Exception {
+	@Test void testGenericAttributes() throws Exception {
 		String xml = "<A b='1'><c>2</c></A>";
 		JsonMap m = XmlParser.DEFAULT.parse(xml, JsonMap.class);
 		assertEquals("{b:'1',c:'2'}", m.toString());
 	}
 
-	@Test
-	public void testGenericWithChildElements() throws Exception {
+	@Test void testGenericWithChildElements() throws Exception {
 		String xml;
 		JsonMap m;
 
@@ -79,8 +75,7 @@ public class XmlParserTest {
 		assertEquals("{B:{c:['c1','c2']}}", m.toString());
 	}
 
-	@Test
-	public void testPreserveRootElement() throws Exception {
+	@Test void testPreserveRootElement() throws Exception {
 		String xml;
 		JsonMap m;
 		ReaderParser p = XmlParser.create().preserveRootElement().build();

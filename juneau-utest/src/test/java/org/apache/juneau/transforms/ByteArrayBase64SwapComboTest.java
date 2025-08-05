@@ -25,7 +25,6 @@ import org.junit.runner.*;
 import org.junit.runners.*;
 
 @RunWith(Parameterized.class)
-@SuppressWarnings({})
 public class ByteArrayBase64SwapComboTest extends ComboRoundTripTest {
 
 	@Parameterized.Parameters

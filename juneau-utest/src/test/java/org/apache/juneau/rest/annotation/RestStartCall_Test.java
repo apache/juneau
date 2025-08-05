@@ -12,19 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import jakarta.servlet.http.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestStartCall_Test {
+public class RestStartCall_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @RestStartCall
@@ -71,8 +69,7 @@ public class RestStartCall_Test {
 		}
 	}
 
-	@Test
-	public void a01_startCall() throws Exception {
+	@Test void a01_startCall() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.get("/").run().assertContent("{'1':'true','2':'true','3':'true','4':'true'}");
 	}

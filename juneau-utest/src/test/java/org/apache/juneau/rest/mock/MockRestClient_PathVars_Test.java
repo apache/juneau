@@ -12,14 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class MockRestClient_PathVars_Test {
+public class MockRestClient_PathVars_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A {
@@ -29,8 +27,7 @@ public class MockRestClient_PathVars_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.pathVars("foo","bar")

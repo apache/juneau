@@ -12,17 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class HasFormData_Test {
+class HasFormData_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Simple tests
@@ -37,8 +35,7 @@ public class HasFormData_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.post("/a", "p1=p1&p2=2").run().assertContent("p1=[true,true],p2=[true,true]");
 		a.post("/a", "p1&p2").run().assertContent("p1=[true,true],p2=[true,true]");

@@ -13,8 +13,6 @@
 package org.apache.juneau.httppart;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -22,11 +20,10 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings("rawtypes")
-@FixMethodOrder(NAME_ASCENDING)
-public class UonPartParser_Test {
+public class UonPartParser_Test extends SimpleTestBase {
 
 	private static UonParserSession p = UonParser.DEFAULT.getSession();
 	private static BeanSession bs = p;
@@ -38,8 +35,7 @@ public class UonPartParser_Test {
 	//====================================================================================================
 	// Basic test
 	//====================================================================================================
-	@Test
-	public void testBasic() throws Exception {
+	@Test void testBasic() throws Exception {
 
 		String t;
 		Map m;
@@ -219,8 +215,7 @@ public class UonPartParser_Test {
 	//====================================================================================================
 	// Unicode character test
 	//====================================================================================================
-	@Test
-	public void testUnicodeChars() throws Exception {
+	@Test void testUnicodeChars() throws Exception {
 		String t;
 
 		// 2-byte UTF-8 character
@@ -254,8 +249,7 @@ public class UonPartParser_Test {
 	//====================================================================================================
 	// Test simple bean
 	//====================================================================================================
-	@Test
-	public void testSimpleBean() throws Exception {
+	@Test void testSimpleBean() throws Exception {
 		A t;
 		String s = null;
 
@@ -275,8 +269,7 @@ public class UonPartParser_Test {
 		public int f2;
 	}
 
-	@Test
-	public void testParseParameterJsonMap() throws Exception {
+	@Test void testParseParameterJsonMap() throws Exception {
 		String in = "(name='foo bar')";
 
 		JsonMap r =  parse(in, BeanContext.DEFAULT.getClassMeta(JsonMap.class));

@@ -14,8 +14,6 @@ package org.apache.juneau.transforms;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.time.*;
 import java.time.chrono.*;
 import java.time.format.*;
@@ -30,22 +28,19 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class DefaultSwapsTest {
+class DefaultSwapsTest extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Setup
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeforeClass
-	public static void beforeClass() {
+	@BeforeAll static void beforeClass() {
 		Utils2.setTimeZone("GMT-5");
 	}
 
-	@AfterClass
-	public static void afterClass() {
+	@AfterAll static void afterClass() {
 		Utils2.unsetTimeZone();
 	}
 
@@ -89,18 +84,15 @@ public class DefaultSwapsTest {
 		public Enumeration<String> f2 = A.elements();
 	}
 
-	@Test
-	public void a01_Enumeration() throws Exception {
+	@Test void a01_Enumeration() throws Exception {
 		test1("['foo','bar']", A.elements());
 	}
 
-	@Test
-	public void a02_Enumeration_overrideSwap() throws Exception {
+	@Test void a02_Enumeration_overrideSwap() throws Exception {
 		test3("'FOO'", A.elements(), ASwap.class);
 	}
 
-	@Test
-	public void a03_Enumeration_overrideAnnotation() throws Exception {
+	@Test void a03_Enumeration_overrideAnnotation() throws Exception {
 		test1("{f1:['foo','bar'],f2:'FOO'}", new ABean());
 	}
 
@@ -128,18 +120,15 @@ public class DefaultSwapsTest {
 		public Enumeration<String> f2 = A.elements();
 	}
 
-	@Test
-	public void a01c_Enumeration_usingConfig() throws Exception {
+	@Test void a01c_Enumeration_usingConfig() throws Exception {
 		test2("['foo','bar']", Ac.elements(), AcBeanConfig.class);
 	}
 
-	@Test
-	public void a02c_Enumeration_overrideSwap_usingConfig() throws Exception {
+	@Test void a02c_Enumeration_overrideSwap_usingConfig() throws Exception {
 		test4("'FOO'", Ac.elements(), AcSwap.class, AcBeanConfig.class);
 	}
 
-	@Test
-	public void a03c_Enumeration_overrideAnnotation_usingConfig() throws Exception {
+	@Test void a03c_Enumeration_overrideAnnotation_usingConfig() throws Exception {
 		test2("{f1:['foo','bar'],f2:'FOO'}", new AcBean(), AcBeanConfig.class);
 	}
 
@@ -161,18 +150,15 @@ public class DefaultSwapsTest {
 		public Iterator<?> f2 = B.iterator();
 	}
 
-	@Test
-	public void b01_Iterator() throws Exception {
+	@Test void b01_Iterator() throws Exception {
 		test1("['foo','bar']", B.iterator());
 	}
 
-	@Test
-	public void b02_Iterator_overrideSwap() throws Exception {
+	@Test void b02_Iterator_overrideSwap() throws Exception {
 		test3("'FOO'", B.iterator(), BSwap.class);
 	}
 
-	@Test
-	public void b03_Iterator_overrideAnnotation() throws Exception {
+	@Test void b03_Iterator_overrideAnnotation() throws Exception {
 		test1("{f1:['foo','bar'],f2:'FOO'}", new BBean());
 	}
 
@@ -195,18 +181,15 @@ public class DefaultSwapsTest {
 		public Iterator<?> f2 = B.iterator();
 	}
 
-	@Test
-	public void b01c_Iterator_usingConfig() throws Exception {
+	@Test void b01c_Iterator_usingConfig() throws Exception {
 		test2("['foo','bar']", Bc.iterator(), BcBeanConfig.class);
 	}
 
-	@Test
-	public void b02c_Iterator_overrideSwap_usingConfig() throws Exception {
+	@Test void b02c_Iterator_overrideSwap_usingConfig() throws Exception {
 		test4("'FOO'", Bc.iterator(), BcSwap.class, BcBeanConfig.class);
 	}
 
-	@Test
-	public void b03c_Iterator_overrideAnnotation_usingConfig() throws Exception {
+	@Test void b03c_Iterator_overrideAnnotation_usingConfig() throws Exception {
 		test2("{f1:['foo','bar'],f2:'FOO'}", new BcBean(), BcBeanConfig.class);
 	}
 
@@ -228,18 +211,15 @@ public class DefaultSwapsTest {
 		public Locale f2 = C;
 	}
 
-	@Test
-	public void c01_Locale() throws Exception {
+	@Test void c01_Locale() throws Exception {
 		test1("'ja-JP'", C);
 	}
 
-	@Test
-	public void c02_Locale_overrideSwap() throws Exception {
+	@Test void c02_Locale_overrideSwap() throws Exception {
 		test3("'FOO'", C, CSwap.class);
 	}
 
-	@Test
-	public void c03_Locale_overrideAnnotation() throws Exception {
+	@Test void c03_Locale_overrideAnnotation() throws Exception {
 		test1("{f1:'ja-JP',f2:'FOO'}", new CBean());
 	}
 
@@ -261,18 +241,15 @@ public class DefaultSwapsTest {
 		public GregorianCalendar f2 = D;
 	}
 
-	@Test
-	public void d01_Calendar() throws Exception {
+	@Test void d01_Calendar() throws Exception {
 		test1("'2012-12-21T12:34:56Z'", D);
 	}
 
-	@Test
-	public void d02_Calendar_overrideSwap() throws Exception {
+	@Test void d02_Calendar_overrideSwap() throws Exception {
 		test3("'FOO'", D, DSwap.class);
 	}
 
-	@Test
-	public void d03_Calendar_overrideAnnotation() throws Exception {
+	@Test void d03_Calendar_overrideAnnotation() throws Exception {
 		test1("{f1:'2012-12-21T12:34:56Z',f2:'FOO'}", new DBean());
 	}
 
@@ -294,18 +271,15 @@ public class DefaultSwapsTest {
 		public Date f2 = E;
 	}
 
-	@Test
-	public void e01_Date() throws Exception {
+	@Test void e01_Date() throws Exception {
 		test1("'2012-12-21T07:34:56'", E);
 	}
 
-	@Test
-	public void e02_Date_overrideSwap() throws Exception {
+	@Test void e02_Date_overrideSwap() throws Exception {
 		test3("'FOO'", E, ESwap.class);
 	}
 
-	@Test
-	public void e03_Date_overrideAnnotation() throws Exception {
+	@Test void e03_Date_overrideAnnotation() throws Exception {
 		test1("{f1:'2012-12-21T07:34:56',f2:'FOO'}", new EBean());
 	}
 
@@ -327,18 +301,15 @@ public class DefaultSwapsTest {
 		public Instant f2 = FA;
 	}
 
-	@Test
-	public void fa01_Instant() throws Exception {
+	@Test void fa01_Instant() throws Exception {
 		test1("'2012-12-21T12:34:56Z'", FA);
 	}
 
-	@Test
-	public void fa02_Instant_overrideSwap() throws Exception {
+	@Test void fa02_Instant_overrideSwap() throws Exception {
 		test3("'FOO'", FA, FASwap.class);
 	}
 
-	@Test
-	public void fa03_Instant_overrideAnnotation() throws Exception {
+	@Test void fa03_Instant_overrideAnnotation() throws Exception {
 		test1("{f1:'2012-12-21T12:34:56Z',f2:'FOO'}", new FABean());
 	}
 
@@ -360,18 +331,15 @@ public class DefaultSwapsTest {
 		public ZonedDateTime f2 = FB;
 	}
 
-	@Test
-	public void fb01_ZonedDateTime() throws Exception {
+	@Test void fb01_ZonedDateTime() throws Exception {
 		test1("'2012-12-21T12:34:56Z'", FB);
 	}
 
-	@Test
-	public void fb02_ZonedDateTime_overrideSwap() throws Exception {
+	@Test void fb02_ZonedDateTime_overrideSwap() throws Exception {
 		test3("'FOO'", FB, FBSwap.class);
 	}
 
-	@Test
-	public void fb03_ZonedDateTime_overrideAnnotation() throws Exception {
+	@Test void fb03_ZonedDateTime_overrideAnnotation() throws Exception {
 		test1("{f1:'2012-12-21T12:34:56Z',f2:'FOO'}", new FBBean());
 	}
 
@@ -393,18 +361,15 @@ public class DefaultSwapsTest {
 		public LocalDate f2 = FC;
 	}
 
-	@Test
-	public void fc01_LocalDate() throws Exception {
+	@Test void fc01_LocalDate() throws Exception {
 		test1("'2012-12-21'", FC);
 	}
 
-	@Test
-	public void fc02_LocalDate_overrideSwap() throws Exception {
+	@Test void fc02_LocalDate_overrideSwap() throws Exception {
 		test3("'FOO'", FC, FCSwap.class);
 	}
 
-	@Test
-	public void fc03_LocalDate_overrideAnnotation() throws Exception {
+	@Test void fc03_LocalDate_overrideAnnotation() throws Exception {
 		test1("{f1:'2012-12-21',f2:'FOO'}", new FCBean());
 	}
 
@@ -426,18 +391,15 @@ public class DefaultSwapsTest {
 		public LocalDateTime f2 = FD;
 	}
 
-	@Test
-	public void fd01_LocalDateTime() throws Exception {
+	@Test void fd01_LocalDateTime() throws Exception {
 		test1("'2012-12-21T12:34:56'", FD);
 	}
 
-	@Test
-	public void fd02_LocalDateTime_overrideSwap() throws Exception {
+	@Test void fd02_LocalDateTime_overrideSwap() throws Exception {
 		test3("'FOO'", FD, FDSwap.class);
 	}
 
-	@Test
-	public void fd03_LocalDateTime_overrideAnnotation() throws Exception {
+	@Test void fd03_LocalDateTime_overrideAnnotation() throws Exception {
 		test1("{f1:'2012-12-21T12:34:56',f2:'FOO'}", new FDBean());
 	}
 
@@ -459,18 +421,15 @@ public class DefaultSwapsTest {
 		public LocalTime f2 = FE;
 	}
 
-	@Test
-	public void fe01_LocalTime() throws Exception {
+	@Test void fe01_LocalTime() throws Exception {
 		test1("'12:34:56'", FE);
 	}
 
-	@Test
-	public void fe02_LocalTime_overrideSwap() throws Exception {
+	@Test void fe02_LocalTime_overrideSwap() throws Exception {
 		test3("'FOO'", FE, FESwap.class);
 	}
 
-	@Test
-	public void fe03_LocalTime_overrideAnnotation() throws Exception {
+	@Test void fe03_LocalTime_overrideAnnotation() throws Exception {
 		test1("{f1:'12:34:56',f2:'FOO'}", new FEBean());
 	}
 
@@ -492,18 +451,15 @@ public class DefaultSwapsTest {
 		public OffsetDateTime f2 = FF;
 	}
 
-	@Test
-	public void ff01_OffsetDateTime() throws Exception {
+	@Test void ff01_OffsetDateTime() throws Exception {
 		test1("'2012-12-21T12:34:56-05:00'", FF);
 	}
 
-	@Test
-	public void ff02_OffsetDateTime_overrideSwap() throws Exception {
+	@Test void ff02_OffsetDateTime_overrideSwap() throws Exception {
 		test3("'FOO'", FF, FFSwap.class);
 	}
 
-	@Test
-	public void ff03_OffsetDateTime_overrideAnnotation() throws Exception {
+	@Test void ff03_OffsetDateTime_overrideAnnotation() throws Exception {
 		test1("{f1:'2012-12-21T12:34:56-05:00',f2:'FOO'}", new FFBean());
 	}
 
@@ -525,18 +481,15 @@ public class DefaultSwapsTest {
 		public OffsetTime f2 = FG;
 	}
 
-	@Test
-	public void fg01_OffsetTime() throws Exception {
+	@Test void fg01_OffsetTime() throws Exception {
 		test1("'12:34:56-05:00'", FG);
 	}
 
-	@Test
-	public void fg02_OffsetTime_overrideSwap() throws Exception {
+	@Test void fg02_OffsetTime_overrideSwap() throws Exception {
 		test3("'FOO'", FG, FGSwap.class);
 	}
 
-	@Test
-	public void fg03_OffsetTime_overrideAnnotation() throws Exception {
+	@Test void fg03_OffsetTime_overrideAnnotation() throws Exception {
 		test1("{f1:'12:34:56-05:00',f2:'FOO'}", new FGBean());
 	}
 
@@ -558,18 +511,15 @@ public class DefaultSwapsTest {
 		public Year f2 = FH;
 	}
 
-	@Test
-	public void fh01_Year() throws Exception {
+	@Test void fh01_Year() throws Exception {
 		test1("'2012'", FH);
 	}
 
-	@Test
-	public void fh02_Year_overrideSwap() throws Exception {
+	@Test void fh02_Year_overrideSwap() throws Exception {
 		test3("'FOO'", FH, FHSwap.class);
 	}
 
-	@Test
-	public void fh03_Year_overrideAnnotation() throws Exception {
+	@Test void fh03_Year_overrideAnnotation() throws Exception {
 		test1("{f1:'2012',f2:'FOO'}", new FHBean());
 	}
 
@@ -591,18 +541,15 @@ public class DefaultSwapsTest {
 		public YearMonth f2 = FI;
 	}
 
-	@Test
-	public void fi01_YearMonth() throws Exception {
+	@Test void fi01_YearMonth() throws Exception {
 		test1("'2012-12'", FI);
 	}
 
-	@Test
-	public void fi02_YearMonth_overrideSwap() throws Exception {
+	@Test void fi02_YearMonth_overrideSwap() throws Exception {
 		test3("'FOO'", FI, FISwap.class);
 	}
 
-	@Test
-	public void fi03_YearMonth_overrideAnnotation() throws Exception {
+	@Test void fi03_YearMonth_overrideAnnotation() throws Exception {
 		test1("{f1:'2012-12',f2:'FOO'}", new FIBean());
 	}
 
@@ -624,18 +571,15 @@ public class DefaultSwapsTest {
 		public Temporal f2 = FJ;
 	}
 
-	@Test
-	public void fj01_Temporal() throws Exception {
+	@Test void fj01_Temporal() throws Exception {
 		test1("'2012-12-21T05:00:00Z'", FJ);
 	}
 
-	@Test
-	public void fj02_Temporal_overrideSwap() throws Exception {
+	@Test void fj02_Temporal_overrideSwap() throws Exception {
 		test3("'FOO'", FJ, FJSwap.class);
 	}
 
-	@Test
-	public void fj03_Temporal_overrideAnnotation() throws Exception {
+	@Test void fj03_Temporal_overrideAnnotation() throws Exception {
 		test1("{f1:'2012-12-21T05:00:00Z',f2:'FOO'}", new FJBean());
 	}
 
@@ -657,18 +601,15 @@ public class DefaultSwapsTest {
 		public TimeZone f2 = G;
 	}
 
-	@Test
-	public void g01_TimeZone() throws Exception {
+	@Test void g01_TimeZone() throws Exception {
 		test1("'GMT'", G);
 	}
 
-	@Test
-	public void g02_TimeZone_overrideSwap() throws Exception {
+	@Test void g02_TimeZone_overrideSwap() throws Exception {
 		test3("'FOO'", G, GSwap.class);
 	}
 
-	@Test
-	public void g03_TimeZone_overrideAnnotation() throws Exception {
+	@Test void g03_TimeZone_overrideAnnotation() throws Exception {
 		test1("{f1:'GMT',f2:'FOO'}", new GBean());
 	}
 
@@ -697,18 +638,15 @@ public class DefaultSwapsTest {
 		public XMLGregorianCalendar f2 = H;
 	}
 
-	@Test
-	public void h01_XMLGregorianCalendar() throws Exception {
+	@Test void h01_XMLGregorianCalendar() throws Exception {
 		test1("'2012-12-21T12:34:56.789Z'", H);
 	}
 
-	@Test
-	public void h02_XMLGregorianCalendar_overrideSwap() throws Exception {
+	@Test void h02_XMLGregorianCalendar_overrideSwap() throws Exception {
 		test3("'FOO'", H, HSwap.class);
 	}
 
-	@Test
-	public void h03_XMLGregorianCalendar_overrideAnnotation() throws Exception {
+	@Test void h03_XMLGregorianCalendar_overrideAnnotation() throws Exception {
 		test1("{f1:'2012-12-21T12:34:56.789Z',f2:'FOO'}", new HBean());
 	}
 
@@ -730,18 +668,15 @@ public class DefaultSwapsTest {
 		public ZoneId f2 = I;
 	}
 
-	@Test
-	public void i01_ZoneId() throws Exception {
+	@Test void i01_ZoneId() throws Exception {
 		test1("'Z'", I);
 	}
 
-	@Test
-	public void i02_ZoneId_overrideSwap() throws Exception {
+	@Test void i02_ZoneId_overrideSwap() throws Exception {
 		test3("'FOO'", I, ISwap.class);
 	}
 
-	@Test
-	public void i03_ZoneId_overrideAnnotation() throws Exception {
+	@Test void i03_ZoneId_overrideAnnotation() throws Exception {
 		test1("{f1:'Z',f2:'FOO'}", new IBean());
 	}
 }

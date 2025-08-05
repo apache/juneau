@@ -13,18 +13,15 @@
 package org.apache.juneau.svl.vars;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.svl.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestrictedVarsTest {
+class RestrictedVarsTest extends SimpleTestBase {
 
-	@Test
-	public void testNoNest() throws Exception {
+	@Test void testNoNest() throws Exception {
 		VarResolver vr = VarResolver.create().vars(NoNestVar.class).build();
 
 		test(vr, "$NoNest{foo}", "foo");
@@ -61,8 +58,7 @@ public class RestrictedVarsTest {
 		}
 	}
 
-	@Test
-	public void testNoRecurse() throws Exception {
+	@Test void testNoRecurse() throws Exception {
 		VarResolver vr = VarResolver.create().vars(XVar.class, NoRecurseVar.class).build();
 
 		test(vr, "$NoRecurse{foo}", "$X{foo}");
@@ -87,8 +83,7 @@ public class RestrictedVarsTest {
 		}
 	}
 
-	@Test
-	public void testNoNestOrRecurse() throws Exception {
+	@Test void testNoNestOrRecurse() throws Exception {
 		VarResolver vr = VarResolver.create().vars(XVar.class, NoEitherVar.class).build();
 
 		test(vr, "$NoEither{foo}", "$X{foo}");

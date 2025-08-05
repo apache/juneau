@@ -14,27 +14,25 @@ package org.apache.juneau.uon;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 
 import java.net.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class Common_UonTest {
+class Common_UonTest extends SimpleTestBase {
 	UonParser p = UonParser.DEFAULT;
 	UonParser pe = UonParser.DEFAULT_DECODING;
 
 	//====================================================================================================
 	// Trim nulls from beans
 	//====================================================================================================
-	@Test
-	public void testTrimNullsFromBeans() throws Exception {
+	@Test void testTrimNullsFromBeans() throws Exception {
 		UonSerializer.Builder s = UonSerializer.create().encoding();
 		A t1 = A.create(), t2;
 
@@ -63,8 +61,7 @@ public class Common_UonTest {
 	//====================================================================================================
 	// Trim empty maps
 	//====================================================================================================
-	@Test
-	public void testTrimEmptyMaps() throws Exception {
+	@Test void testTrimEmptyMaps() throws Exception {
 		UonSerializer.Builder s = UonSerializer.create().encoding();
 		B t1 = B.create(), t2;
 		String r;
@@ -95,8 +92,7 @@ public class Common_UonTest {
 	//====================================================================================================
 	// Trim empty lists
 	//====================================================================================================
-	@Test
-	public void testTrimEmptyLists() throws Exception {
+	@Test void testTrimEmptyLists() throws Exception {
 		UonSerializer.Builder s = UonSerializer.create().encoding();
 		C t1 = C.create(), t2;
 		String r;
@@ -127,8 +123,7 @@ public class Common_UonTest {
 	//====================================================================================================
 	// Trim empty arrays
 	//====================================================================================================
-	@Test
-	public void testTrimEmptyArrays() throws Exception {
+	@Test void testTrimEmptyArrays() throws Exception {
 		UonSerializer.Builder s = UonSerializer.create().encoding();
 		D t1 = D.create(), t2;
 		String r;
@@ -159,8 +154,7 @@ public class Common_UonTest {
 	//====================================================================================================
 	// @Beanp.bpi annotation.
 	//====================================================================================================
-	@Test
-	public void testBeanPropertyProperies() throws Exception {
+	@Test void testBeanPropertyProperies() throws Exception {
 		UonSerializer s = UonSerializer.DEFAULT;
 		String ue = s.serialize(new E1());
 		assertEquals("(x1=(f1=1),x2=(f1=1),x3=@((f1=1)),x4=@((f1=1)),x5=@((f1=1)),x6=@((f1=1)))", ue);
@@ -183,8 +177,7 @@ public class Common_UonTest {
 	//====================================================================================================
 	// @Beanp.bpi annotation on list of beans.
 	//====================================================================================================
-	@Test
-	public void testBeanPropertyPropertiesOnListOfBeans() throws Exception {
+	@Test void testBeanPropertyPropertiesOnListOfBeans() throws Exception {
 		UonSerializer s = UonSerializer.DEFAULT;
 		List<F> l = new LinkedList<>();
 		F t = new F();
@@ -202,8 +195,7 @@ public class Common_UonTest {
 	//====================================================================================================
 	// Test URIAttr - Test that URLs and URIs are serialized and parsed correctly.
 	//====================================================================================================
-	@Test
-	public void testURIAttr() throws Exception {
+	@Test void testURIAttr() throws Exception {
 		UonSerializer s = UonSerializer.DEFAULT;
 		UonParser p2 = UonParser.DEFAULT;
 
@@ -228,8 +220,7 @@ public class Common_UonTest {
 	//====================================================================================================
 	// Recursion
 	//====================================================================================================
-	@Test
-	public void testRecursion() throws Exception {
+	@Test void testRecursion() throws Exception {
 		UonSerializer.Builder s = UonSerializer.create().maxDepth(Integer.MAX_VALUE);
 
 		R1 r1 = new R1();

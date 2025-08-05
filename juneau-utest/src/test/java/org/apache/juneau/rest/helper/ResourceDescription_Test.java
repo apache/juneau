@@ -13,17 +13,14 @@
 package org.apache.juneau.rest.helper;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.beans.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ResourceDescription_Test {
+public class ResourceDescription_Test extends SimpleTestBase {
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		ResourceDescription rd = new ResourceDescription("a","b?c=d&e=f","g");
 		assertEquals("<table><tr><td>name</td><td><a href=\"/b?c=d&amp;e=f\">a</a></td></tr><tr><td>description</td><td>g</td></tr></table>", Html.of(rd));
 		assertEquals("{name:'a',description:'g'}", Json5.of(rd));

@@ -16,17 +16,15 @@ import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestClient_Config_Parser_Test {
+public class RestClient_Config_Parser_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {
@@ -40,8 +38,7 @@ public class RestClient_Config_Parser_Test {
 		public int f;
 	}
 
-	@Test
-	public void a02_parser_strict() {
+	@Test void a02_parser_strict() {
 		assertThrown(()->MockRestClient.create(A.class).json().strict().build().post("/echoBody",reader("{f:1}")).run().getContent().as(A2.class)).asMessages().isAny(contains("Unquoted attribute detected."));
 	}
 
@@ -49,8 +46,7 @@ public class RestClient_Config_Parser_Test {
 		public String f;
 	}
 
-	@Test
-	public void a03_parser_trimStringsOnRead() throws Exception {
+	@Test void a03_parser_trimStringsOnRead() throws Exception {
 		A3 x = client().trimStringsOnRead().build().post("/echoBody",reader("{f:' 1 '}")).run().getContent().as(A3.class);
 		assertEquals("1",x.f);
 	}

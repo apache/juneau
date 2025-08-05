@@ -13,23 +13,20 @@
 package org.apache.juneau.transforms;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swaps.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class IteratorSwapTest {
+class IteratorSwapTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// test
 	//====================================================================================================
-	@Test
-	public void test() throws Exception {
+	@Test void test() throws Exception {
 		WriterSerializer s = JsonSerializer.create().json5().swaps(IteratorSwap.class).build();
 
 		// Iterators

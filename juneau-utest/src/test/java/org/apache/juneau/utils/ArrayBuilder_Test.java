@@ -13,16 +13,13 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ArrayBuilder_Test {
+class ArrayBuilder_Test extends SimpleTestBase {
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		String[] empty = {};
 		ArrayBuilder<String> x = ArrayBuilder.of(String.class).filter(y -> y != null).size(2);
 		assertObject(x.orElse(empty)).asJson().is("[]");

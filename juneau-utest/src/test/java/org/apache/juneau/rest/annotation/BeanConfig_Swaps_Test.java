@@ -13,8 +13,6 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.header.ContentType.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
@@ -24,10 +22,9 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class BeanConfig_Swaps_Test {
+class BeanConfig_Swaps_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -119,8 +116,7 @@ public class BeanConfig_Swaps_Test {
 		}
 	}
 
-	@Test
-	public void a01_swaps() throws Exception {
+	@Test void a01_swaps() throws Exception {
 		RestClient a = MockRestClient.build(A1.class);
 		a.get("/a").json().run().assertContent("'A2-0'");
 		a.put("/b", "'A2-1'", APPLICATION_JSON).run().assertContent("'A2-1'");

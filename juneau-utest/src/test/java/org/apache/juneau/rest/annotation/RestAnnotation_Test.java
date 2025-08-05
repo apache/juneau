@@ -14,8 +14,6 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
@@ -31,10 +29,9 @@ import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestAnnotation_Test {
+public class RestAnnotation_Test extends SimpleTestBase {
 
 	private static final String CNAME = RestAnnotation_Test.class.getName();
 
@@ -146,8 +143,7 @@ public class RestAnnotation_Test {
 		.uriResolution("uriResolution")
 		.build();
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "allowedHeaderParams:'allowedHeaderParams',"
@@ -203,8 +199,7 @@ public class RestAnnotation_Test {
 		);
 	}
 
-	@Test
-	public void a02_testEquivalency() {
+	@Test void a02_testEquivalency() {
 		assertObject(a1).is(a2);
 		assertInteger(a1.hashCode()).is(a2.hashCode()).isNotAny(0,-1);
 	}
@@ -213,8 +208,7 @@ public class RestAnnotation_Test {
 	// PropertyStore equivalency.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void b01_testEquivalencyInPropertyStores() {
+	@Test void b01_testEquivalencyInPropertyStores() {
 		BeanContext bc1 = BeanContext.create().annotations(a1).build();
 		BeanContext bc2 = BeanContext.create().annotations(a2).build();
 		assertSame(bc1, bc2);
@@ -233,8 +227,7 @@ public class RestAnnotation_Test {
 		public void m2() {}  // NOSONAR
 	}
 
-	@Test
-	public void c01_otherMethods() {
+	@Test void c01_otherMethods() {
 		Rest c1 = RestAnnotation.create(C1.class).on(C2.class).build();
 		Rest c2 = RestAnnotation.create("a").on("b").build();
 
@@ -354,8 +347,7 @@ public class RestAnnotation_Test {
 	public static class D2 {}
 	Rest d2 = D2.class.getAnnotationsByType(Rest.class)[0];
 
-	@Test
-	public void d01_comparisonWithDeclarativeAnnotations() {
+	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertObject(d1).is(d2).is(a1);
 		assertInteger(d1.hashCode()).is(d2.hashCode()).is(a1.hashCode()).isNotAny(0,-1);
 	}

@@ -12,16 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestOp_Guards_Test {
+class RestOp_Guards_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Overlapping guards
@@ -83,8 +81,7 @@ public class RestOp_Guards_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient a = MockRestClient.buildLax(A.class);
 
 		a.get("/a1?t1=1")

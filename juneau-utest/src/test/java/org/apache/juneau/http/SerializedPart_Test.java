@@ -18,34 +18,29 @@ import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class SerializedPart_Test {
+public class SerializedPart_Test extends SimpleTestBase {
 
 	private static final OpenApiSerializerSession OAPI_SESSION = OpenApiSerializer.DEFAULT.getSession();
 	private static final OpenApiSerializer OAPI_SERIALIZER = OpenApiSerializer.DEFAULT;
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		SerializedPart x1 = new SerializedPart("Foo",alist("bar","baz"),HEADER,OAPI_SESSION,T_ARRAY_PIPES,true);
 		assertString(x1).is("Foo=bar|baz");
 	}
 
-	@Test
-	public void a02_type() {
+	@Test void a02_type() {
 		SerializedPart x1 = serializedPart("Foo",2).type(HEADER).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
 		assertThrown(x1::toString).asMessage().is("Validation error on request HEADER part 'Foo'='2'");
 	}
 
-	@Test
-	public void a03_serializer() {
+	@Test void a03_serializer() {
 		SerializedPart x1 = serializedPart("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null);
 		assertString(x1.getValue()).is("[bar, baz]");
 		SerializedPart x2 = serializedPart("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
@@ -58,8 +53,7 @@ public class SerializedPart_Test {
 		assertString(x5.getValue()).is("bar,baz");
 	}
 
-	@Test
-	public void a04_skipIfEmpty() {
+	@Test void a04_skipIfEmpty() {
 		SerializedPart x1 = serializedPart("Foo",null).skipIfEmpty();
 		assertString(x1.getValue()).isNull();
 		SerializedPart x2 = serializedPart("Foo","").skipIfEmpty();
@@ -68,8 +62,7 @@ public class SerializedPart_Test {
 		assertThrown(x3::getValue).asMessages().isContains("Empty value not allowed.");
 	}
 
-	@Test
-	public void a05_getValue_defaults() {
+	@Test void a05_getValue_defaults() {
 		SerializedPart x1 = serializedPart("Foo",null).schema(schema(INTEGER)._default("1").build()).serializer(OAPI_SESSION);
 		assertString(x1.getValue()).is("1");
 

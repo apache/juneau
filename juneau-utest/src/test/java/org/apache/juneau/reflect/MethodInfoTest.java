@@ -16,8 +16,6 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.Context.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -27,10 +25,9 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.svl.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class MethodInfoTest {
+class MethodInfoTest extends SimpleTestBase {
 
 	@Documented
 	@Target({METHOD,TYPE})
@@ -117,20 +114,17 @@ public class MethodInfoTest {
 	}
 	static MethodInfo a_m = ofm(A1.class, "m");  // NOSONAR
 
-	@Test
-	public void of_withDeclaringClass() {
+	@Test void of_withDeclaringClass() {
 		check("A1.m()", a_m);
 		check("A1.m()", MethodInfo.of(ClassInfo.of(A1.class), a_m.inner()));
 	}
 
-	@Test
-	public void of_withoutDeclaringClass() {
+	@Test void of_withoutDeclaringClass() {
 		MethodInfo mi = MethodInfo.of(a_m.inner());
 		check("A1.m()", mi);
 	}
 
-	@Test
-	public void of_null() {
+	@Test void of_null() {
 		check(null, MethodInfo.of(null));
 		check(null, MethodInfo.of((ClassInfo)null, null));
 	}
@@ -158,8 +152,7 @@ public class MethodInfoTest {
 		public int foo() {return 0;}
 	}
 
-	@Test
-	public void findMatchingMethods() throws Exception {
+	@Test void findMatchingMethods() throws Exception {
 		MethodInfo mi = MethodInfo.of(B3.class.getMethod("foo", int.class));
 		List<MethodInfo> l = new ArrayList<>();
 		mi.forEachMatching(x -> true, l::add);
@@ -204,8 +197,7 @@ public class MethodInfoTest {
 		c_a4 = ofm(C3.class, "a4"),  // NOSONAR
 		c_a5 = ofm(C3.class, "a5");  // NOSONAR
 
-	@Test
-	public void getAnnotationsParentFirst() {
+	@Test void getAnnotationsParentFirst() {
 		check("@A(C1),@A(C2),@A(C3),@A(a1)", annotations(c_a1, A.class));
 		check("@A(C1),@A(C2),@A(C3),@A(a2a),@A(a2b)", annotations(c_a2, A.class));
 		check("@A(C1),@A(C2),@A(C3),@A(a3)", annotations(c_a3, A.class));
@@ -213,8 +205,7 @@ public class MethodInfoTest {
 		check("@A(C1),@A(C2),@A(C3)", annotations(c_a5, A.class));
 	}
 
-	@Test
-	public void getAnnotationsParentFirst_notExistent() {
+	@Test void getAnnotationsParentFirst_notExistent() {
 		check("", annotations(c_a1, AX.class));
 		check("", annotations(c_a2, AX.class));
 		check("", annotations(c_a3, AX.class));
@@ -228,8 +219,7 @@ public class MethodInfoTest {
 		return l;
 	}
 
-	@Test
-	public void getAnnotation() {
+	@Test void getAnnotation() {
 		check("@A(a1)", c_a1.getAnnotation(A.class));
 		check("@A(a2b)", c_a2.getAnnotation(A.class));
 		check("@A(a3)", c_a3.getAnnotation(A.class));
@@ -237,8 +227,7 @@ public class MethodInfoTest {
 		check(null, c_a5.getAnnotation(A.class));
 	}
 
-	@Test
-	public void getAnnotationAny() {
+	@Test void getAnnotationAny() {
 		check("@A(a1)", c_a1.getAnyAnnotation(AX.class, A.class));
 		check("@A(a2b)", c_a2.getAnyAnnotation(AX.class, A.class));
 		check("@A(a3)", c_a3.getAnyAnnotation(AX.class, A.class));
@@ -246,8 +235,7 @@ public class MethodInfoTest {
 		check(null, c_a5.getAnyAnnotation(AX.class, A.class));
 	}
 
-	@Test
-	public void getAnnotationsMapParentFirst() {
+	@Test void getAnnotationsMapParentFirst() {
 		check("@PA(10),@A(C1),@A(a1),@A(C2),@A(C3)", c_a1.getAnnotationList());
 		check("@PA(10),@A(C1),@A(a2a),@A(C2),@A(a2b),@A(C3)", c_a2.getAnnotationList());
 		check("@PA(10),@A(C1),@A(a3),@A(C2),@A(C3)", c_a3.getAnnotationList());
@@ -289,8 +277,7 @@ public class MethodInfoTest {
 		cb_a4 = ofm(CB3.class, "a4"),  // NOSONAR
 		cb_a5 = ofm(CB3.class, "a5");  // NOSONAR
 
-	@Test
-	public void getConfigAnnotationsMapParentFirst() {
+	@Test void getConfigAnnotationsMapParentFirst() {
 		check("@AConfig(C1),@AConfig(a1),@AConfig(C2),@AConfig(C3)", cb_a1.getAnnotationList(CONTEXT_APPLY_FILTER));
 		check("@AConfig(C1),@AConfig(a2a),@AConfig(C2),@AConfig(a2b),@AConfig(C3)", cb_a2.getAnnotationList(CONTEXT_APPLY_FILTER));
 		check("@AConfig(C1),@AConfig(a3),@AConfig(C2),@AConfig(C3)", cb_a3.getAnnotationList(CONTEXT_APPLY_FILTER));
@@ -310,22 +297,19 @@ public class MethodInfoTest {
 		d_a1 = ofm(D.class, "a1"),  // NOSONAR
 		d_a2 = ofm(D.class, "a2");  // NOSONAR
 
-	@Test
-	public void getReturnType() {
+	@Test void getReturnType() {
 		check("void", d_a1.getReturnType());
 		check("Integer", d_a2.getReturnType());
 	}
 
-	@Test
-	public void hasReturnType() {
+	@Test void hasReturnType() {
 		assertTrue(d_a1.hasReturnType(void.class));
 		assertFalse(d_a1.hasReturnType(Integer.class));
 		assertTrue(d_a2.hasReturnType(Integer.class));
 		assertFalse(d_a2.hasReturnType(Number.class));
 	}
 
-	@Test
-	public void hasReturnTypeParent() {
+	@Test void hasReturnTypeParent() {
 		assertTrue(d_a1.hasReturnTypeParent(void.class));
 		assertFalse(d_a1.hasReturnTypeParent(Integer.class));
 		assertTrue(d_a2.hasReturnTypeParent(Integer.class));
@@ -349,8 +333,7 @@ public class MethodInfoTest {
 		e_a2 = ofm(E.class, "a2", int.class, int.class),  // NOSONAR
 		e_a3 = ofm(E.class, "a3");  // NOSONAR
 
-	@Test
-	public void invoke() throws Exception {
+	@Test void invoke() throws Exception {
 		E e = new E();
 		e_a1.invoke(e, "foo");
 		assertEquals("foo", e.f);
@@ -358,8 +341,7 @@ public class MethodInfoTest {
 		assertNull(e.f);
 	}
 
-	@Test
-	public void invokeFuzzy() throws Exception {
+	@Test void invokeFuzzy() throws Exception {
 		E e = new E();
 		e_a1.invokeFuzzy(e, "foo", 123);
 		assertEquals("foo", e.f);
@@ -367,15 +349,13 @@ public class MethodInfoTest {
 		assertEquals("bar", e.f);
 	}
 
-	@Test
-	public void getSignature() {
+	@Test void getSignature() {
 		assertEquals("a1(java.lang.CharSequence)", e_a1.getSignature());
 		assertEquals("a2(int,int)", e_a2.getSignature());
 		assertEquals("a3", e_a3.getSignature());
 	}
 
-	@Test
-	public void argsOnlyOfType() {
+	@Test void argsOnlyOfType() {
 		assertTrue(e_a1.argsOnlyOfType(CharSequence.class));
 		assertTrue(e_a1.argsOnlyOfType(CharSequence.class, Map.class));
 		assertFalse(e_a1.argsOnlyOfType());
@@ -399,8 +379,7 @@ public class MethodInfoTest {
 		f_set = ofm(F.class, "set"),  // NOSONAR
 		f_foo = ofm(F.class, "foo");  // NOSONAR
 
-	@Test
-	public void getPropertyName() {
+	@Test void getPropertyName() {
 		assertEquals("a", f_isA.getPropertyName());
 		assertEquals("is", f_is.getPropertyName());
 		assertEquals("a", f_getA.getPropertyName());
@@ -410,8 +389,7 @@ public class MethodInfoTest {
 		assertEquals("foo", f_foo.getPropertyName());
 	}
 
-	@Test
-	public void isBridge() {
+	@Test void isBridge() {
 		assertFalse(f_foo.isBridge());
 	}
 
@@ -431,8 +409,7 @@ public class MethodInfoTest {
 		g_a2 = ofm(G.class, "a2"),  // NOSONAR
 		g_a3 = ofm(G.class, "a3");  // NOSONAR
 
-	@Test
-	public void compareTo() {
+	@Test void compareTo() {
 		Set<MethodInfo> s = new TreeSet<>(Arrays.asList(g_a1a, g_a1b, g_a1c, g_a1d, g_a2, g_a3));
 		check("[a1(), a1(int), a1(String), a1(int,int), a2(), a3()]", s);
 	}

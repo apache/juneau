@@ -14,14 +14,11 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.http.response.Unauthorized.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
 public class Unauthorized_Test {
 
 	@Rest
@@ -52,8 +49,7 @@ public class Unauthorized_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient c = MockRestClient.create(A.class).ignoreErrors().noTrace().build();
 
 		c.get("/f1").run()

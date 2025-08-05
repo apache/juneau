@@ -18,11 +18,10 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.list;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
@@ -34,10 +33,9 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.urlencoding.annotation.*;
 import org.apache.juneau.urlencoding.annotation.UrlEncoding;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Content_Test {
+public class Content_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Body on parameter
@@ -123,8 +121,7 @@ public class Content_Test {
 		}
 	}
 
-	@Test
-	public void a01_onParameters() throws Exception {
+	@Test void a01_onParameters() throws Exception {
 		RestClient a = MockRestClient.buildLax(A.class);
 
 		a.put("/String", "foo")
@@ -468,8 +465,7 @@ public class Content_Test {
 		}
 	}
 
-	@Test
-	public void b01_onPojos() throws Exception {
+	@Test void b01_onPojos() throws Exception {
 		RestClient b = MockRestClient.buildLax(B.class);
 		b.put("/StringTransform", "'foo'", APPLICATION_JSON)
 			.run()
@@ -584,8 +580,7 @@ public class Content_Test {
 		}
 	}
 
-	@Test
-	public void d01_noMediaTypesOnStreams() throws Exception {
+	@Test void d01_noMediaTypesOnStreams() throws Exception {
 		RestClient d = MockRestClient.buildLax(D.class);
 		d.put("/String", "a")
 			.run()
@@ -659,8 +654,7 @@ public class Content_Test {
 		}
 	}
 
-	@Test
-	public void e01_complexPojos() throws Exception {
+	@Test void e01_complexPojos() throws Exception {
 		RestClient e = MockRestClient.build(E.class);
 		String expected;
 
@@ -699,8 +693,7 @@ public class Content_Test {
 		}
 	}
 
-	@Test
-	public void e02_complexPojos() throws Exception {
+	@Test void e02_complexPojos() throws Exception {
 		RestClient e2 = MockRestClient.build(E2.class);
 		String expected;
 
@@ -744,8 +737,7 @@ public class Content_Test {
 		}
 	}
 
-	@Test
-	public void f01_formPostAsContent() throws Exception {
+	@Test void f01_formPostAsContent() throws Exception {
 		RestClient f = MockRestClient.build(F.class);
 		f.post("/", "{p1:'p1',p2:2}", APPLICATION_JSON)
 			.run()
@@ -775,8 +767,7 @@ public class Content_Test {
 		}
 	}
 
-	@Test
-	public void g01_multiPartParameterKeysOnCollections() throws Exception {
+	@Test void g01_multiPartParameterKeysOnCollections() throws Exception {
 		RestClient g = MockRestClient.build(G.class);
 		String in = ""
 			+ "f01=a&f01=b"
@@ -819,8 +810,7 @@ public class Content_Test {
 		}
 	}
 
-	@Test
-	public void h01_multiPartParameterKeysOnCollections_usingExpandedParams() throws Exception {
+	@Test void h01_multiPartParameterKeysOnCollections_usingExpandedParams() throws Exception {
 		RestClient h = MockRestClient.build(H.class);
 		String in = ""
 			+ "f01=a&f01=b"
@@ -859,8 +849,7 @@ public class Content_Test {
 		}
 	}
 
-	@Test
-	public void h02_multiPartParameterKeysOnCollections_usingExpandedParams() throws Exception {
+	@Test void h02_multiPartParameterKeysOnCollections_usingExpandedParams() throws Exception {
 		RestClient h2 = MockRestClient.build(H2.class);
 		String in = ""
 			+ "f01=a&f01=b"
@@ -906,8 +895,7 @@ public class Content_Test {
 		}
 	}
 
-	@Test
-	public void i01_required() throws Exception {
+	@Test void i01_required() throws Exception {
 		RestClient i = MockRestClient.buildLax(I.class);
 
 		i.post("/a", "", APPLICATION_JSON)
@@ -954,8 +942,7 @@ public class Content_Test {
 		}
 	}
 
-	@Test
-	public void j01_optionalParams() throws Exception {
+	@Test void j01_optionalParams() throws Exception {
 		RestClient j = MockRestClient.buildJson(J.class);
 		j.post("/a", 123)
 			.run()

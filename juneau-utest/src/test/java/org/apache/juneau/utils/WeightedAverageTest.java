@@ -13,35 +13,29 @@
 package org.apache.juneau.utils;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-import org.junit.*;
+class WeightedAverageTest extends SimpleTestBase {
 
-@FixMethodOrder(NAME_ASCENDING)
-public class WeightedAverageTest {
-
-	@Test
-	public void testEmpty() {
+	@Test void testEmpty() {
 		WeightedAverage w = new WeightedAverage();
 		assertEquals(0f, w.getValue(), 0.01);
 	}
 
-	@Test
-	public void testBasic() {
+	@Test void testBasic() {
 		WeightedAverage w = new WeightedAverage();
 		w.add(0,100).add(1,1).add(1,2).add(1,3).add(0,100);
 		assertEquals(2f, w.getValue(), 0.01);
 	}
 
-	@Test
-	public void testBasicWithNullValue() {
+	@Test void testBasicWithNullValue() {
 		WeightedAverage w = new WeightedAverage();
 		w.add(1,1).add(1,null).add(1,3);
 		assertEquals(2f, w.getValue(), 0.01);
 	}
 
-	@Test
-	public void testDifferingWeights() {
+	@Test void testDifferingWeights() {
 		WeightedAverage w = new WeightedAverage();
 		w.add(10,1).add(20,3);
 		assertEquals(2.33f, w.getValue(), 0.01);

@@ -12,16 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Rest_AnnotationInheritance_Test {
+public class Rest_AnnotationInheritance_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Body on parameter
@@ -49,8 +47,7 @@ public class Rest_AnnotationInheritance_Test {
 		}
 	}
 
-	@Test
-	public void a01_inheritedFromInterface() throws Exception {
+	@Test void a01_inheritedFromInterface() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.put("/a", "foo").json().run().assertContent("'foo'");
 		a.get("/b").queryData("foo", "bar").json().run().assertContent("'bar'");

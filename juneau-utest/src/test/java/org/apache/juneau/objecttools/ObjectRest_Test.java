@@ -14,8 +14,6 @@ package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -23,17 +21,15 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"rawtypes","serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class ObjectRest_Test {
+public class ObjectRest_Test extends SimpleTestBase {
 
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 
 		// TODO: Need to write some exhaustive tests here. Will open work item
 		// to do that later.
@@ -62,8 +58,7 @@ public class ObjectRest_Test {
 	//====================================================================================================
 	// testBeans
 	//====================================================================================================
-	@Test
-	public void b01_beans() throws Exception {
+	@Test void b01_beans() throws Exception {
 		ObjectRest model;
 
 		// Java beans.
@@ -194,8 +189,7 @@ public class ObjectRest_Test {
 	//====================================================================================================
 	// testAddressBook
 	//====================================================================================================
-	@Test
-	public void b02_addressBook() {
+	@Test void b02_addressBook() {
 		ObjectRest model;
 
 		model = ObjectRest.create(new AddressBook());
@@ -270,8 +264,7 @@ public class ObjectRest_Test {
 	//====================================================================================================
 	// PojoRest(Object,ReaderParser)
 	//====================================================================================================
-	@Test
-	public void c01_constructors() {
+	@Test void c01_constructors() {
 		ObjectRest model = ObjectRest.create(new AddressBook(), JsonParser.DEFAULT);
 
 		// Try adding a person to the address book.
@@ -288,8 +281,7 @@ public class ObjectRest_Test {
 	//====================================================================================================
 	// setRootLocked()
 	//====================================================================================================
-	@Test
-	public void d01_rootLocked() {
+	@Test void d01_rootLocked() {
 		ObjectRest model = ObjectRest.create(new AddressBook()).setRootLocked();
 		assertThrown(()->model.put("", new AddressBook())).asMessage().is("Cannot overwrite root object");
 		assertThrown(()->model.put(null, new AddressBook())).asMessage().is("Cannot overwrite root object");
@@ -299,8 +291,7 @@ public class ObjectRest_Test {
 	//====================================================================================================
 	// getRootObject()
 	//====================================================================================================
-	@Test
-	public void e01_getRootObject() {
+	@Test void e01_getRootObject() {
 		ObjectRest model = ObjectRest.create(new AddressBook());
 		assertTrue(model.getRootObject() instanceof AddressBook);
 		model.put("", "foobar");
@@ -329,8 +320,7 @@ public class ObjectRest_Test {
 	// getJsonList(String url)
 	// getJsonList(String url, JsonList defVal)
 	//====================================================================================================
-	@Test
-	public void f01_getMethods() throws Exception {
+	@Test void f01_getMethods() throws Exception {
 		ObjectRest model = ObjectRest.create(new A());
 		JsonList l = JsonList.ofJson("[{a:'b'}]");
 		JsonMap m = JsonMap.ofJson("{a:'b'}");
@@ -806,8 +796,7 @@ public class ObjectRest_Test {
 	//====================================================================================================
 	// invokeMethod(String url, String method, String args)
 	//====================================================================================================
-	@Test
-	public void f02_invokeMethod() throws Exception {
+	@Test void f02_invokeMethod() throws Exception {
 
 		ObjectRest model = ObjectRest.create(new AddressBook().init());
 		assertEquals("Person(name=Bill Clinton,age=65)", model.invokeMethod("0", "toString", ""));
@@ -821,8 +810,7 @@ public class ObjectRest_Test {
 	//====================================================================================================
 	// getPublicMethods(String url)
 	//====================================================================================================
-	@Test
-	public void f03_getPublicMethods() {
+	@Test void f03_getPublicMethods() {
 		ObjectRest model = ObjectRest.create(new AddressBook().init());
 		assertTrue(Json5Serializer.DEFAULT.toString(model.getPublicMethods("0")).contains("'toString'"));
 		assertTrue(Json5Serializer.DEFAULT.toString(model.getPublicMethods("0/addresses/0/state")).contains("'toString'"));
@@ -832,8 +820,7 @@ public class ObjectRest_Test {
 	//====================================================================================================
 	// getClassMeta(String url)
 	//====================================================================================================
-	@Test
-	public void f04_getClassMeta() {
+	@Test void f04_getClassMeta() {
 		ObjectRest model = ObjectRest.create(new AddressBook().init());
 		assertEquals("Person", model.getClassMeta("0").getInnerClass().getSimpleName());
 		assertEquals("String", model.getClassMeta("0/addresses/0/state").getInnerClass().getSimpleName());

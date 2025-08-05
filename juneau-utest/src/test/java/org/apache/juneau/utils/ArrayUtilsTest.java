@@ -15,20 +15,17 @@ package org.apache.juneau.utils;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
-import org.junit.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ArrayUtilsTest {
+class ArrayUtilsTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// append(T[], T...)
 	//====================================================================================================
-	@Test
-	public void testAppendArrayToArray() {
+	@Test void testAppendArrayToArray() {
 		String[] s = {};
 
 		s = append(s, "a", "b");
@@ -50,8 +47,7 @@ public class ArrayUtilsTest {
 	//====================================================================================================
 	// asSet(T[])
 	//====================================================================================================
-	@Test
-	public void testAsSet() {
+	@Test void testAsSet() {
 		String[] s = null;
 
 		assertThrown(()->asSet((String[])null)).isType(IllegalArgumentException.class);
@@ -67,8 +63,7 @@ public class ArrayUtilsTest {
 	//====================================================================================================
 	// combine(T[]...)
 	//====================================================================================================
-	@Test
-	public void testCombine() {
+	@Test void testCombine() {
 		String[] s1 = {"a"}, s2 = {"b"};
 
 		assertObject(combine(s1, s2)).asJson().is("['a','b']");

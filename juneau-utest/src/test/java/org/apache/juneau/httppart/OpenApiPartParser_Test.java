@@ -17,20 +17,18 @@ import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class OpenApiPartParser_Test {
+public class OpenApiPartParser_Test extends SimpleTestBase {
 
 	static OpenApiParserSession p = OpenApiParser.DEFAULT.getSession();
 
@@ -46,16 +44,14 @@ public class OpenApiPartParser_Test {
 	// Input validations
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_inputValidations_nullInput() throws Exception {
+	@Test void a01_inputValidations_nullInput() throws Exception {
 		assertNull(parse(T_NONE, null, String.class));
 		assertNull(parse(tNone().required(false).build(), null, String.class));
 		assertThrown(()->parse(tNone().required().build(), null, String.class)).asMessage().is("No value specified.");
 		assertThrown(()->parse(tNone().required(true).build(), null, String.class)).asMessage().is("No value specified.");
 	}
 
-	@Test
-	public void a02_inputValidations_emptyInput() throws Exception {
+	@Test void a02_inputValidations_emptyInput() throws Exception {
 
 		HttpPartSchema s = tNone().allowEmptyValue().build();
 		assertEquals("", parse(s, "", String.class));
@@ -68,8 +64,7 @@ public class OpenApiPartParser_Test {
 		assertEquals(" ", parse(s, " ", String.class));
 	}
 
-	@Test
-	public void a03_inputValidations_pattern() throws Exception {
+	@Test void a03_inputValidations_pattern() throws Exception {
 		final HttpPartSchema s = tNone().pattern("x.*").allowEmptyValue().build();
 		assertEquals("x", parse(s, "x", String.class));
 		assertEquals("xx", parse(s, "xx", String.class));
@@ -83,8 +78,7 @@ public class OpenApiPartParser_Test {
 		assertEquals("x", parse(tNone().pattern(null).allowEmptyValue().build(), "x", String.class));
 	}
 
-	@Test
-	public void a04_inputValidations_enum() throws Exception {
+	@Test void a04_inputValidations_enum() throws Exception {
 		final HttpPartSchema s = tNone()._enum("foo").allowEmptyValue().build();
 
 		assertEquals("foo", parse(s, "foo", String.class));
@@ -98,8 +92,7 @@ public class OpenApiPartParser_Test {
 		assertEquals("foo", parse(tNone()._enum("foo","foo").build(), "foo", String.class));
 	}
 
-	@Test
-	public void a05_inputValidations_minMaxLength() throws Exception {
+	@Test void a05_inputValidations_minMaxLength() throws Exception {
 		HttpPartSchema s = tNone().minLength(1L).maxLength(2L).allowEmptyValue().build();
 
 		assertEquals(null, parse(s, null, String.class));
@@ -117,8 +110,7 @@ public class OpenApiPartParser_Test {
 	// Primitive defaults
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void b01_primitiveDefaults() throws Exception {
+	@Test void b01_primitiveDefaults() throws Exception {
 
 		assertEquals(null, parse(null, null, Boolean.class));
 		assertEquals(false, parse(null, null, boolean.class));
@@ -138,8 +130,7 @@ public class OpenApiPartParser_Test {
 		assertEquals(0, parse(null, null, byte.class).intValue());
 	}
 
-	@Test
-	public void b02_primitiveDefaults_nullKeyword() throws Exception {
+	@Test void b02_primitiveDefaults_nullKeyword() throws Exception {
 		assertEquals(null, parse(null, "null", Boolean.class));
 		assertEquals(false, parse(null, "null", boolean.class));
 		assertEquals(null, parse(null, "null", Character.class));
@@ -196,21 +187,18 @@ public class OpenApiPartParser_Test {
 	}
 
 
-	@Test
-	public void c01_stringType_simple() throws Exception {
+	@Test void c01_stringType_simple() throws Exception {
 		HttpPartSchema s = T_STRING;
 		assertEquals("foo", parse(s, "foo", String.class));
 	}
 
-	@Test
-	public void c02_stringType_default() throws Exception {
+	@Test void c02_stringType_default() throws Exception {
 		HttpPartSchema s = tString()._default("x").build();
 		assertEquals("foo", parse(s, "foo", String.class));
 		assertEquals("x", parse(s, null, String.class));
 	}
 
-	@Test
-	public void c03_stringType_byteFormat() throws Exception {
+	@Test void c03_stringType_byteFormat() throws Exception {
 		HttpPartSchema s = T_BYTE;
 		String in = base64Encode("foo".getBytes());
 		assertEquals("foo", parse(s, in, String.class));
@@ -219,8 +207,7 @@ public class OpenApiPartParser_Test {
 		assertEquals("C1-foo", parse(s, in, C1.class).toString());
 	}
 
-	@Test
-	public void c04_stringType_binaryFormat() throws Exception {
+	@Test void c04_stringType_binaryFormat() throws Exception {
 		HttpPartSchema s = T_BINARY;
 		String in = toHex("foo".getBytes());
 		assertEquals("foo", parse(s, in, String.class));
@@ -229,8 +216,7 @@ public class OpenApiPartParser_Test {
 		assertEquals("C1-foo", parse(s, in, C1.class).toString());
 	}
 
-	@Test
-	public void c05_stringType_binarySpacedFormat() throws Exception {
+	@Test void c05_stringType_binarySpacedFormat() throws Exception {
 		HttpPartSchema s = T_BINARY_SPACED;
 		String in = toSpacedHex("foo".getBytes());
 		assertEquals("foo", parse(s, in, String.class));
@@ -239,8 +225,7 @@ public class OpenApiPartParser_Test {
 		assertEquals("C1-foo", parse(s, in, C1.class).toString());
 	}
 
-	@Test
-	public void c06_stringType_dateFormat() throws Exception {
+	@Test void c06_stringType_dateFormat() throws Exception {
 		HttpPartSchema s = T_DATE;
 		String in = "2012-12-21";
 		assertTrue(parse(s, in, String.class).contains("2012"));
@@ -249,8 +234,7 @@ public class OpenApiPartParser_Test {
 		assertEquals(2012, parse(s, in, GregorianCalendar.class).get(Calendar.YEAR));
 	}
 
-	@Test
-	public void c07_stringType_dateTimeFormat() throws Exception {
+	@Test void c07_stringType_dateTimeFormat() throws Exception {
 		HttpPartSchema s = T_DATETIME;
 		String in = "2012-12-21T12:34:56.789";
 		assertTrue(parse(s, in, String.class).contains("2012"));
@@ -259,8 +243,7 @@ public class OpenApiPartParser_Test {
 		assertEquals(2012, parse(s, in, GregorianCalendar.class).get(Calendar.YEAR));
 	}
 
-	@Test
-	public void c08_stringType_uonFormat() throws Exception {
+	@Test void c08_stringType_uonFormat() throws Exception {
 		HttpPartSchema s = T_UON;
 		assertEquals("foo", parse(s, "foo", String.class));
 		assertEquals("foo", parse(s, "'foo'", String.class));
@@ -268,8 +251,7 @@ public class OpenApiPartParser_Test {
 		// UonPartParserTest should handle all other cases.
 	}
 
-	@Test
-	public void c09_stringType_noneFormat() throws Exception {
+	@Test void c09_stringType_noneFormat() throws Exception {
 		// If no format is specified, then we should transform directly from a string.
 		HttpPartSchema s = T_STRING;
 		assertEquals("foo", parse(s, "foo", String.class));
@@ -277,8 +259,7 @@ public class OpenApiPartParser_Test {
 		assertEquals("C2-foo", parse(s, "foo", C2.class).toString());
 	}
 
-	@Test
-	public void c10_stringType_noneFormat_2d() throws Exception {
+	@Test void c10_stringType_noneFormat_2d() throws Exception {
 		HttpPartSchema s = tArray(tString()).build();
 		assertObject(parse(s, "foo,bar", String[].class)).asJson().is("['foo','bar']");
 		assertObject(parse(s, "foo,bar", List.class, String.class)).asJson().is("['foo','bar']");
@@ -292,8 +273,7 @@ public class OpenApiPartParser_Test {
 		assertEquals("C3-['foo','bar']", parse(s, "foo,bar", C3.class).toString());
 	}
 
-	@Test
-	public void c11_stringType_noneFormat_3d() throws Exception {
+	@Test void c11_stringType_noneFormat_3d() throws Exception {
 		HttpPartSchema s = tArrayPipes(tArray(tString())).build();
 		assertObject(parse(s, "foo,bar|baz", String[][].class)).asJson().is("[['foo','bar'],['baz']]");
 		assertObject(parse(s, "foo,bar|baz", List.class, String[].class)).asJson().is("[['foo','bar'],['baz']]");
@@ -311,28 +291,24 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "foo,bar|baz", List.class, C3.class)).asJson().is("['C3-[\\'foo\\',\\'bar\\']','C3-[\\'baz\\']']");
 	}
 
-	@Test
-	public void c12a_stringType_nullKeyword_plain() throws Exception {
+	@Test void c12a_stringType_nullKeyword_plain() throws Exception {
 		HttpPartSchema s = T_STRING;
 		assertEquals(null, parse(s, "null", String.class));
 	}
 
-	@Test
-	public void c12b_stringType_nullKeyword_plain_2d() throws Exception {
+	@Test void c12b_stringType_nullKeyword_plain_2d() throws Exception {
 		HttpPartSchema s = tArray(tString()).build();
 		assertNull(parse(s, "null", String[].class));
 		assertObject(parse(s, "@(null)", String[].class)).asJson().is("[null]");
 	}
 
-	@Test
-	public void c12c_stringType_nullKeyword_uon() throws Exception {
+	@Test void c12c_stringType_nullKeyword_uon() throws Exception {
 		HttpPartSchema s = T_UON;
 		assertEquals(null, parse(s, "null", String.class));
 		assertEquals("null", parse(s, "'null'", String.class));
 	}
 
-	@Test
-	public void c12d_stringType_nullKeyword_uon_2d() throws Exception {
+	@Test void c12d_stringType_nullKeyword_uon_2d() throws Exception {
 		HttpPartSchema s = tArray(tUon()).build();
 		assertObject(parse(s, "null,x", String[].class)).asJson().is("[null,'x']");
 		assertNull(parse(s, "null", String[].class));
@@ -356,8 +332,7 @@ public class OpenApiPartParser_Test {
 		}
 	}
 
-	@Test
-	public void d01_arrayType_collectionFormatCsv() throws Exception {
+	@Test void d01_arrayType_collectionFormatCsv() throws Exception {
 		HttpPartSchema s = T_ARRAY_CSV;
 		assertObject(parse(s, "foo,bar", String[].class)).asJson().is("['foo','bar']");
 		assertObject(parse(s, "foo,bar", Object[].class)).asJson().is("['foo','bar']");
@@ -369,8 +344,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "foo,bar", JsonList.class)).asJson().is("['foo','bar']");
 	}
 
-	@Test
-	public void d02_arrayType_collectionFormatPipes() throws Exception {
+	@Test void d02_arrayType_collectionFormatPipes() throws Exception {
 		HttpPartSchema s = T_ARRAY_PIPES;
 		assertObject(parse(s, "foo|bar", String[].class)).asJson().is("['foo','bar']");
 		assertObject(parse(s, "foo|bar", Object[].class)).asJson().is("['foo','bar']");
@@ -382,8 +356,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "foo|bar", JsonList.class)).asJson().is("['foo','bar']");
 	}
 
-	@Test
-	public void d03_arrayType_collectionFormatSsv() throws Exception {
+	@Test void d03_arrayType_collectionFormatSsv() throws Exception {
 		HttpPartSchema s = T_ARRAY_SSV;
 		assertObject(parse(s, "foo bar", String[].class)).asJson().is("['foo','bar']");
 		assertObject(parse(s, "foo bar", Object[].class)).asJson().is("['foo','bar']");
@@ -395,8 +368,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "foo bar", JsonList.class)).asJson().is("['foo','bar']");
 	}
 
-	@Test
-	public void d04_arrayType_collectionFormatTsv() throws Exception {
+	@Test void d04_arrayType_collectionFormatTsv() throws Exception {
 		HttpPartSchema s = T_ARRAY_TSV;
 		assertObject(parse(s, "foo\tbar", String[].class)).asJson().is("['foo','bar']");
 		assertObject(parse(s, "foo\tbar", Object[].class)).asJson().is("['foo','bar']");
@@ -408,8 +380,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "foo\tbar", JsonList.class)).asJson().is("['foo','bar']");
 	}
 
-	@Test
-	public void d05_arrayType_collectionFormatUon() throws Exception {
+	@Test void d05_arrayType_collectionFormatUon() throws Exception {
 		HttpPartSchema s = T_ARRAY_UON;
 		assertObject(parse(s, "@(foo,bar)", String[].class)).asJson().is("['foo','bar']");
 		assertObject(parse(s, "@(foo,bar)", Object[].class)).asJson().is("['foo','bar']");
@@ -421,8 +392,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "@(foo,bar)", JsonList.class)).asJson().is("['foo','bar']");
 	}
 
-	@Test
-	public void d06a_arrayType_collectionFormatNone() throws Exception {
+	@Test void d06a_arrayType_collectionFormatNone() throws Exception {
 		HttpPartSchema s = T_ARRAY;
 		assertObject(parse(s, "foo,bar", String[].class)).asJson().is("['foo','bar']");
 		assertObject(parse(s, "foo,bar", Object[].class)).asJson().is("['foo','bar']");
@@ -433,8 +403,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "foo,bar", Object.class)).asJson().is("['foo','bar']");
 	}
 
-	@Test
-	public void d06b_arrayType_collectionFormatNone_autoDetectUon() throws Exception {
+	@Test void d06b_arrayType_collectionFormatNone_autoDetectUon() throws Exception {
 		HttpPartSchema s = T_ARRAY;
 		assertObject(parse(s, "@(foo,bar)", String[].class)).asJson().is("['foo','bar']");
 		assertObject(parse(s, "@(foo,bar)", Object[].class)).asJson().is("['foo','bar']");
@@ -445,8 +414,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "@(foo,bar)", Object.class)).asJson().is("['foo','bar']");
 	}
 
-	@Test
-	public void d07_arrayType_collectionFormatMulti() throws Exception {
+	@Test void d07_arrayType_collectionFormatMulti() throws Exception {
 		// collectionFormat=multi should not do any sort of splitting.
 		HttpPartSchema s = T_ARRAY_MULTI;
 		assertObject(parse(s, "foo,bar", String[].class)).asJson().is("['foo,bar']");
@@ -458,8 +426,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "foo,bar", Object.class)).asJson().is("['foo,bar']");
 	}
 
-	@Test
-	public void d08_arrayType_collectionFormatCsvAndPipes() throws Exception {
+	@Test void d08_arrayType_collectionFormatCsvAndPipes() throws Exception {
 		HttpPartSchema s = tArrayPipes(tArrayCsv()).build();
 		assertObject(parse(s, "foo,bar|baz,qux", String[][].class)).asJson().is("[['foo','bar'],['baz','qux']]");
 		assertObject(parse(s, "foo,bar|baz,qux", Object[][].class)).asJson().is("[['foo','bar'],['baz','qux']]");
@@ -470,8 +437,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "foo,bar|baz,qux", Object.class)).asJson().is("[['foo','bar'],['baz','qux']]");
 	}
 
-	@Test
-	public void d09_arrayType_itemsBoolean() throws Exception {
+	@Test void d09_arrayType_itemsBoolean() throws Exception {
 		HttpPartSchema s = tArrayCsv(tBoolean()).build();
 		assertObject(parse(s, "true,false", boolean[].class)).asJson().is("[true,false]");
 		assertObject(parse(s, "true,false,null", Boolean[].class)).asJson().is("[true,false,null]");
@@ -481,8 +447,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "true,false,null", Object.class)).asJson().is("[true,false,null]");
 	}
 
-	@Test
-	public void d10_arrayType_itemsInteger() throws Exception {
+	@Test void d10_arrayType_itemsInteger() throws Exception {
 		HttpPartSchema s = tArrayCsv(tInteger()).build();
 		assertObject(parse(s, "1,2", int[].class)).asJson().is("[1,2]");
 		assertObject(parse(s, "1,2,null", Integer[].class)).asJson().is("[1,2,null]");
@@ -492,8 +457,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "1,2,null", Object.class)).asJson().is("[1,2,null]");
 	}
 
-	@Test
-	public void d11_arrayType_itemsFloat() throws Exception {
+	@Test void d11_arrayType_itemsFloat() throws Exception {
 		HttpPartSchema s = tArrayCsv(tNumber()).build();
 		assertObject(parse(s, "1.0,2.0", float[].class)).asJson().is("[1.0,2.0]");
 		assertObject(parse(s, "1.0,2.0,null", Float[].class)).asJson().is("[1.0,2.0,null]");
@@ -529,8 +493,7 @@ public class OpenApiPartParser_Test {
 		}
 	}
 
-	@Test
-	public void e01_booleanType() throws Exception {
+	@Test void e01_booleanType() throws Exception {
 		HttpPartSchema s = T_BOOLEAN;
 		assertEquals(true, parse(s, "true", boolean.class));
 		assertEquals(true, parse(s, "true", Boolean.class));
@@ -545,8 +508,7 @@ public class OpenApiPartParser_Test {
 		assertNull(parse(s, "null", E1.class));
 	}
 
-	@Test
-	public void e02_booleanType_2d() throws Exception {
+	@Test void e02_booleanType_2d() throws Exception {
 		HttpPartSchema s = tArray(tBoolean()).build();
 		assertObject(parse(s, "true,true", boolean[].class)).asJson().is("[true,true]");
 		assertObject(parse(s, "true,true,null", Boolean[].class)).asJson().is("[true,true,null]");
@@ -563,8 +525,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "TRUE,true", boolean[].class)).asJson().is("[true,true]");
 	}
 
-	@Test
-	public void e03_booleanType_3d() throws Exception {
+	@Test void e03_booleanType_3d() throws Exception {
 		HttpPartSchema s = tArrayPipes(tArray(tBoolean())).build();
 		assertObject(parse(s, "true,true|false", boolean[][].class)).asJson().is("[[true,true],[false]]");
 		assertObject(parse(s, "true,true|false", List.class, boolean[].class)).asJson().is("[[true,true],[false]]");
@@ -634,8 +595,7 @@ public class OpenApiPartParser_Test {
 		}
 	}
 
-	@Test
-	public void f01_integerType_int32() throws Exception {
+	@Test void f01_integerType_int32() throws Exception {
 		HttpPartSchema s = T_INT32;
 		assertObject(parse(s, "1", int.class)).asJson().is("1");
 		assertObject(parse(s, "1", Integer.class)).asJson().is("1");
@@ -650,8 +610,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s,  "1", F1.class)).asJson().is("'F1-1'");
 	}
 
-	@Test
-	public void f02_integerType_int32_2d() throws Exception {
+	@Test void f02_integerType_int32_2d() throws Exception {
 		HttpPartSchema s = tArray(tInt32()).build();
 		assertObject(parse(s, "1,2", int[].class)).asJson().is("[1,2]");
 		assertObject(parse(s, "1,2", Integer[].class)).asJson().is("[1,2]");
@@ -671,8 +630,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s,  "1,2", F2.class)).asJson().is("'F2-[1,2]'");
 	}
 
-	@Test
-	public void f03_integerType_int32_3d() throws Exception {
+	@Test void f03_integerType_int32_3d() throws Exception {
 		HttpPartSchema s = tArrayPipes(tArray(tInt32())).build();
 		assertObject(parse(s, "1,2|3", int[][].class)).asJson().is("[[1,2],[3]]");
 		assertObject(parse(s, "1,2|3", List.class, int[].class)).asJson().is("[[1,2],[3]]");
@@ -702,8 +660,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "1,2|3", List.class, F2.class)).asJson().is("['F2-[1,2]','F2-[3]']");
 	}
 
-	@Test
-	public void f04_integerType_int64() throws Exception {
+	@Test void f04_integerType_int64() throws Exception {
 		HttpPartSchema s = T_INT64;
 		assertObject(parse(s, "1", int.class)).asJson().is("1");
 		assertObject(parse(s, "1", Integer.class)).asJson().is("1");
@@ -718,8 +675,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s,  "1", F3.class)).asJson().is("1");
 	}
 
-	@Test
-	public void f05_integerType_int64_2d() throws Exception {
+	@Test void f05_integerType_int64_2d() throws Exception {
 		HttpPartSchema s = tArray(tInt64()).build();
 		assertObject(parse(s, "1,2", int[].class)).asJson().is("[1,2]");
 		assertObject(parse(s, "1,2", Integer[].class)).asJson().is("[1,2]");
@@ -739,8 +695,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s,  "1,2", F4.class)).asJson().is("'F4-[1,2]'");
 	}
 
-	@Test
-	public void f06_integerType_int64_3d() throws Exception {
+	@Test void f06_integerType_int64_3d() throws Exception {
 		HttpPartSchema s = tArrayPipes(tArray(tInt64())).build();
 		assertObject(parse(s, "1,2|3", int[][].class)).asJson().is("[[1,2],[3]]");
 		assertObject(parse(s, "1,2|3", List.class, int[].class)).asJson().is("[[1,2],[3]]");
@@ -817,8 +772,7 @@ public class OpenApiPartParser_Test {
 		}
 	}
 
-	@Test
-	public void g01_numberType_float() throws Exception {
+	@Test void g01_numberType_float() throws Exception {
 		HttpPartSchema s = T_FLOAT;
 		assertObject(parse(s, "1", float.class)).asJson().is("1.0");
 		assertObject(parse(s, "1", Float.class)).asJson().is("1.0");
@@ -831,8 +785,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s,  "1", G1.class)).asJson().is("1.0");
 	}
 
-	@Test
-	public void g02_numberType_float_2d() throws Exception {
+	@Test void g02_numberType_float_2d() throws Exception {
 		HttpPartSchema s = tArray(tFloat()).build();
 		assertObject(parse(s, "1,2", float[].class)).asJson().is("[1.0,2.0]");
 		assertObject(parse(s, "1,2", Float[].class)).asJson().is("[1.0,2.0]");
@@ -849,8 +802,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s,  "1,2", G2.class)).asJson().is("'G2-[1.0,2.0]'");
 	}
 
-	@Test
-	public void g03_numberType_float_3d() throws Exception {
+	@Test void g03_numberType_float_3d() throws Exception {
 		HttpPartSchema s = tArrayPipes(tArray(tFloat())).build();
 		assertObject(parse(s, "1,2|3", float[][].class)).asJson().is("[[1.0,2.0],[3.0]]");
 		assertObject(parse(s, "1,2|3", List.class, float[].class)).asJson().is("[[1.0,2.0],[3.0]]");
@@ -875,8 +827,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "1,2|3", List.class, G2.class)).asJson().is("['G2-[1.0,2.0]','G2-[3.0]']");
 	}
 
-	@Test
-	public void g04_numberType_double() throws Exception {
+	@Test void g04_numberType_double() throws Exception {
 		HttpPartSchema s = T_DOUBLE;
 		assertObject(parse(s, "1", float.class)).asJson().is("1.0");
 		assertObject(parse(s, "1", Float.class)).asJson().is("1.0");
@@ -889,8 +840,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s,  "1", G3.class)).asJson().is("1.0");
 	}
 
-	@Test
-	public void g05_numberType_double_2d() throws Exception {
+	@Test void g05_numberType_double_2d() throws Exception {
 		HttpPartSchema s = tArray(tDouble()).build();
 		assertObject(parse(s, "1,2", float[].class)).asJson().is("[1.0,2.0]");
 		assertObject(parse(s, "1,2", Float[].class)).asJson().is("[1.0,2.0]");
@@ -907,8 +857,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s,  "1,2", G4.class)).asJson().is("'G4-[1.0,2.0]'");
 	}
 
-	@Test
-	public void g06_numberType_double_3d() throws Exception {
+	@Test void g06_numberType_double_3d() throws Exception {
 		HttpPartSchema s = tArrayPipes(tArray(tDouble())).build();
 		assertObject(parse(s, "1,2|3", float[][].class)).asJson().is("[[1.0,2.0],[3.0]]");
 		assertObject(parse(s, "1,2|3", List.class, float[].class)).asJson().is("[[1.0,2.0],[3.0]]");
@@ -942,8 +891,7 @@ public class OpenApiPartParser_Test {
 		public int f;
 	}
 
-	@Test
-	public void h01_objectType() throws Exception {
+	@Test void h01_objectType() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().type("object").build();
 		assertObject(parse(s, "f=1", H1.class)).asJson().is("{f:1}");
 		assertObject(parse(s, "f=1", JsonMap.class)).asJson().is("{f:'1'}");
@@ -952,8 +900,7 @@ public class OpenApiPartParser_Test {
 		assertObject(o).isType(JsonMap.class);
 	}
 
-	@Test
-	public void h02_objectType_2d() throws Exception {
+	@Test void h02_objectType_2d() throws Exception {
 		HttpPartSchema s = tArrayUon(tObject()).build();
 		assertObject(parse(s, "@((f=1),(f=2))", H1[].class)).asJson().is("[{f:1},{f:2}]");
 		assertObject(parse(s, "@((f=1),(f=2))", List.class, H1.class)).asJson().is("[{f:1},{f:2}]");
@@ -966,8 +913,7 @@ public class OpenApiPartParser_Test {
 		assertObject(o).isType(JsonList.class);
 	}
 
-	@Test
-	public void h03_objectType_3d() throws Exception {
+	@Test void h03_objectType_3d() throws Exception {
 		HttpPartSchema s = tArrayUon(tArray(tObject())).build();
 		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", H1[][].class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
 		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, H1[].class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
@@ -987,8 +933,7 @@ public class OpenApiPartParser_Test {
 		public Object f01, f02, f03, f04, f05, f06, f07, f08, f09, f10, f11, f12, f99;
 	}
 
-	@Test
-	public void h04_objectType_simpleProperties() throws Exception {
+	@Test void h04_objectType_simpleProperties() throws Exception {
 		HttpPartSchema s = tObject()
 			.p("f01", tString())
 			.p("f02", tByte())
@@ -1053,8 +998,7 @@ public class OpenApiPartParser_Test {
 		assertObject(om.get("f99")).isType(Integer.class);
 	}
 
-	@Test
-	public void h05_objectType_arrayProperties() throws Exception {
+	@Test void h05_objectType_arrayProperties() throws Exception {
 		HttpPartSchema s = tObject()
 			.p("f01", tArray(tString()))
 			.p("f02", tArray(tByte()))
@@ -1083,8 +1027,7 @@ public class OpenApiPartParser_Test {
 		assertObject(om).asJson().is("{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}");
 	}
 
-	@Test
-	public void h06_objectType_arrayProperties_pipes() throws Exception {
+	@Test void h06_objectType_arrayProperties_pipes() throws Exception {
 		HttpPartSchema s = tObject()
 			.p("f01", tArrayPipes(tString()))
 			.p("f02", tArrayPipes(tByte()))

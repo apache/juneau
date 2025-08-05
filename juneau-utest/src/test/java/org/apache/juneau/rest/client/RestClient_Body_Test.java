@@ -16,11 +16,10 @@ import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.json.*;
@@ -30,10 +29,9 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.pojos.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestClient_Body_Test {
+class RestClient_Body_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {
@@ -49,8 +47,7 @@ public class RestClient_Body_Test {
 	// Method tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_BasicHttpResource() throws Exception {
+	@Test void a01_BasicHttpResource() throws Exception {
 		HttpResource x1 = stringResource("foo");
 		client().build().post("/", x1).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
@@ -103,8 +100,7 @@ public class RestClient_Body_Test {
 		client().build().post("/",x8).run().assertContent("foo");
 	}
 
-	@Test
-	public void a02_StringEntity() throws Exception {
+	@Test void a02_StringEntity() throws Exception {
 		HttpEntity x1 = stringEntity("foo");
 		client().build().post("/", x1).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
@@ -149,8 +145,7 @@ public class RestClient_Body_Test {
 		x12.assertBytes().asString().is("foo");
 	}
 
-	@Test
-	public void a03_SerializedHttpEntity() throws Exception {
+	@Test void a03_SerializedHttpEntity() throws Exception {
 		Serializer js = JsonSerializer.DEFAULT;
 
 		SerializedEntity x1 = serializedEntity(ABean.get(),null,null);

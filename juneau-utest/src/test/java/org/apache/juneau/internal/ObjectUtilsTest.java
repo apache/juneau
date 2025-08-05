@@ -13,23 +13,19 @@
 package org.apache.juneau.internal;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-import org.junit.*;
+public class ObjectUtilsTest extends SimpleTestBase {
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ObjectUtilsTest {
-
-	@Test
-	public void a01_eq() {
+	@Test void a01_eq() {
 		assertTrue(ObjectUtils.eq("foo","foo"));
 		assertTrue(ObjectUtils.eq(null,null));
 		assertFalse(ObjectUtils.eq(null,"foo"));
 		assertFalse(ObjectUtils.eq("foo",null));
 	}
 
-	@Test
-	public void a02_ne() {
+	@Test void a02_ne() {
 		assertFalse(ObjectUtils.ne("foo","foo"));
 		assertFalse(ObjectUtils.ne(null,null));
 		assertTrue(ObjectUtils.ne(null,"foo"));

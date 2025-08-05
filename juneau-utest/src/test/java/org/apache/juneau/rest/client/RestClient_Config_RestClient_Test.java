@@ -17,8 +17,6 @@ import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.concurrent.*;
 import java.util.logging.*;
@@ -39,10 +37,9 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.utest.utils.*;
 import org.apache.juneau.xml.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestClient_Config_RestClient_Test {
+public class RestClient_Config_RestClient_Test extends SimpleTestBase {
 
 	public static class ABean {
 		public int f;
@@ -99,21 +96,18 @@ public class RestClient_Config_RestClient_Test {
 		}
 	}
 
-	@Test
-	public void a01_callHandler() throws Exception {
+	@Test void a01_callHandler() throws Exception {
 		client().callHandler(A1.class).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertContent("['f1','f2','baz']");
 	}
 
-	@Test
-	public void a02_errorCodes() {
+	@Test void a02_errorCodes() {
 		RestClient x1 = client().errorCodes(x -> x == 200).build();
 		RestClient x2 = client().build();
 		assertThrown(()->x1.get("/echo").run()).is(x -> ((RestCallException)x).getResponseCode() == 200);
 		assertThrown(()->x2.get("/echo").errorCodes(x -> x == 200).run()).is(x -> ((RestCallException)x).getResponseCode() == 200);
 	}
 
-	@Test
-	public void a03_executorService() throws Exception {
+	@Test void a03_executorService() throws Exception {
 		ExecutorService es = new ThreadPoolExecutor(1,1,30,TimeUnit.SECONDS,new ArrayBlockingQueue<>(10));
 		RestClient x1 = client().executorService(es,true).build();
 
@@ -126,8 +120,7 @@ public class RestClient_Config_RestClient_Test {
 		x2.get("/echo").runFuture().get().assertStatus(200).assertContent().isContains("GET /echo HTTP/1.1");
 	}
 
-	@Test
-	public void a04_keepHttpClientOpen() throws Exception {
+	@Test void a04_keepHttpClientOpen() throws Exception {
 		RestClient x = client().keepHttpClientOpen().build();
 
 		CloseableHttpClient c = x.httpClient;
@@ -245,8 +238,7 @@ public class RestClient_Config_RestClient_Test {
 		}
 	}
 
-	@Test
-	public void a05_interceptors() throws Exception {
+	@Test void a05_interceptors() throws Exception {
 		client().header("Foo","f1").interceptors(A5.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertContent("['f1','f2','f3']").assertHeader("Bar").is("b1");
 		assertEquals(111,A5.x);
 
@@ -305,8 +297,7 @@ public class RestClient_Config_RestClient_Test {
 		public void onClose(RestRequest req, RestResponse res) throws Exception { throw new RuntimeException("foo"); }
 	}
 
-	@Test
-	public void a06_interceptors_exceptionHandling() {
+	@Test void a06_interceptors_exceptionHandling() {
 		assertThrown(()->client().interceptors(A6a.class).build().post("/bean",bean).complete()).asMessage().is("foo");
 		assertThrown(()->client().interceptors(A6b.class).build().post("/bean",bean).complete()).asMessage().is("foo");
 		assertThrown(()->client().interceptors(A6c.class).build().post("/bean",bean).complete()).asMessage().is("foo");
@@ -323,21 +314,18 @@ public class RestClient_Config_RestClient_Test {
 		}
 	}
 
-	@Test
-	public void a07_leakDetection() throws Throwable {
+	@Test void a07_leakDetection() throws Throwable {
 		client().detectLeaks().build(A7.class).finalize();
 		assertEquals("WARNING:  RestClient garbage collected before it was finalized.",A7.lastMessage);
 	}
 
-	@Test
-	public void a08_marshaller() throws Exception {
+	@Test void a08_marshaller() throws Exception {
 		RestClient rc = MockRestClient.create(A.class).marshaller(Xml.DEFAULT).build();
 		ABean b = rc.post("/echoBody",bean).run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 	}
 
-	@Test
-	public void a09_marshalls() throws Exception {
+	@Test void a09_marshalls() throws Exception {
 		final RestClient x = MockRestClient.create(A.class).marshallers(Xml.DEFAULT,Json.DEFAULT).build();
 
 		assertThrown(()->x.post("/echoBody",bean).run()).asMessage().is("Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
@@ -357,8 +345,7 @@ public class RestClient_Config_RestClient_Test {
 		assertObject(b).isSameJsonAs(bean);
 	}
 
-	@Test
-	public void a10_serializer_parser() throws Exception {
+	@Test void a10_serializer_parser() throws Exception {
 		RestClient x = MockRestClient.create(A.class).serializer(XmlSerializer.class).parser(XmlParser.class).build();
 
 		ABean b = x.post("/echoBody",bean).run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
@@ -369,8 +356,7 @@ public class RestClient_Config_RestClient_Test {
 		assertObject(b).isSameJsonAs(bean);
 	}
 
-	@Test
-	public void a11_serializers_parsers() throws Exception {
+	@Test void a11_serializers_parsers() throws Exception {
 		final RestClient x = MockRestClient.create(A.class).serializers(XmlSerializer.class,JsonSerializer.class).parsers(XmlParser.class,JsonParser.class).build();
 
 		assertThrown(()->x.post("/echoBody",bean).run()).asMessage().is("Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
@@ -443,8 +429,7 @@ public class RestClient_Config_RestClient_Test {
 		}
 	}
 
-	@Test
-	public void a12_partSerializer_partParser() throws Exception {
+	@Test void a12_partSerializer_partParser() throws Exception {
 		RestClient x = client(A12.class).headers(serializedHeader("Foo", bean)).partSerializer(A12a.class).partParser(A12b.class).build();
 		ABean b = x.get("/").header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
@@ -457,24 +442,20 @@ public class RestClient_Config_RestClient_Test {
 	}
 
 
-	@Test
-	public void a13_toString() {
+	@Test void a13_toString() {
 		String s = client().rootUrl("https://foo").build().toString();
 		assertTrue(s.contains("rootUrl: 'https://foo'"));
 	}
 
-	@Test
-	public void a14_request_target() throws Exception {
+	@Test void a14_request_target() throws Exception {
 		client().build().get("/bean").target(new HttpHost("localhost")).run().assertContent("{f:1}");
 	}
 
-	@Test
-	public void a15_request_context() throws Exception {
+	@Test void a15_request_context() throws Exception {
 		client().build().get("/bean").context(new BasicHttpContext()).run().assertContent("{f:1}");
 	}
 
-	@Test
-	public void a16_request_uriParts() throws Exception {
+	@Test void a16_request_uriParts() throws Exception {
 		java.net.URI uri = client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo:bar").uri("/bean").uriFragment("baz").queryData("foo","bar").run().assertContent("{f:1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
 

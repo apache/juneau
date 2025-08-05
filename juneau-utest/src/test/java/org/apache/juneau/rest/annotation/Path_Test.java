@@ -14,11 +14,10 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.http.client.config.*;
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
@@ -29,10 +28,9 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Path_Test {
+public class Path_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -62,8 +60,7 @@ public class Path_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient a = MockRestClient.buildLax(A.class);
 
 		a.get("/bad?noTrace=true")
@@ -145,8 +142,7 @@ public class Path_Test {
 		}
 	}
 
-	@Test
-	public void b01_primitives() throws Exception {
+	@Test void b01_primitives() throws Exception {
 		RestClient b = MockRestClient.buildLax(B.class);
 
 		b.get("/a/123/foo")
@@ -246,8 +242,7 @@ public class Path_Test {
 		}
 	}
 
-	@Test
-	public void c01_primitiveObjects() throws Exception {
+	@Test void c01_primitiveObjects() throws Exception {
 		RestClient c = MockRestClient.buildLax(C.class);
 
 		c.get("/a/123/foo")
@@ -320,8 +315,7 @@ public class Path_Test {
 		}
 	}
 
-	@Test
-	public void d01_pojosConvertibleFromStrings() throws Exception {
+	@Test void d01_pojosConvertibleFromStrings() throws Exception {
 		RestClient d = MockRestClient.build(D.class);
 
 		UUID uuid = UUID.randomUUID();
@@ -358,8 +352,7 @@ public class Path_Test {
 		}
 	}
 
-	@Test
-	public void e01_withoutName() throws Exception {
+	@Test void e01_withoutName() throws Exception {
 		RestClient e = MockRestClient.build(E.class);
 		e.get("/x/x1/x2")
 			.run()
@@ -413,8 +406,7 @@ public class Path_Test {
 		}
 	}
 
-	@Test
-	public void f01_pathVariablesOnClass() throws Exception {
+	@Test void f01_pathVariablesOnClass() throws Exception {
 		RestClient f = MockRestClient.createLax(F.class).servletPath("/f").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 		f.get("http://localhost/f/x1/x2")
 			.run()
@@ -498,8 +490,7 @@ public class Path_Test {
 	public static class G {}
 
 
-	@Test
-	public void g01_pathVariablesOnChildClass() throws Exception {
+	@Test void g01_pathVariablesOnChildClass() throws Exception {
 		RestClient g = MockRestClient.createLax(G.class).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 		g.get("http://localhost/f/x1/x2")
 			.run()
@@ -570,8 +561,7 @@ public class Path_Test {
 	@Rest(path="/h/{ha}/{hb}", children={F.class})
 	public static class H {}
 
-	@Test
-	public void h01_pathVariablesOnParentAndChildClass() throws Exception {
+	@Test void h01_pathVariablesOnParentAndChildClass() throws Exception {
 		RestClient h = MockRestClient.createLax(H.class).servletPath("/h").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 		h.get("http://localhost/h/ha1/hb1/f/x1/x2")
 			.run()
@@ -667,8 +657,7 @@ public class Path_Test {
 	@Rest(path="/i/{ia}/{ib}", children={H.class})
 	public static class I {}
 
-	@Test
-	public void i01_pathVariablesOnParentAndChildClass() throws Exception {
+	@Test void i01_pathVariablesOnParentAndChildClass() throws Exception {
 		RestClient i = MockRestClient.createLax(I.class).servletPath("/i").build();
 		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2")
 			.run()
@@ -768,8 +757,7 @@ public class Path_Test {
 		}
 	}
 
-	@Test
-	public void j01_optionalParam() throws Exception {
+	@Test void j01_optionalParam() throws Exception {
 		RestClient j = MockRestClient.buildJson(J.class);
 		j.get("/a/123")
 			.run()
@@ -808,8 +796,7 @@ public class Path_Test {
 		}
 	}
 
-	@Test
-	public void k01_basic() throws Exception {
+	@Test void k01_basic() throws Exception {
 		RestClient k1 = MockRestClient.build(K1.class);
 		RestClient k2 = MockRestClient.build(K2.class);
 
@@ -850,8 +837,7 @@ public class Path_Test {
 		}
 	}
 
-	@Test
-	public void l01_multiplePaths() throws Exception {
+	@Test void l01_multiplePaths() throws Exception {
 		RestClient l1 = MockRestClient.build(L1.class);
 		RestClient l2 = MockRestClient.build(L2.class);
 

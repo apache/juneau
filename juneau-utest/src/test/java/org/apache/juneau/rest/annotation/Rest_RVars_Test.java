@@ -13,18 +13,16 @@
 package org.apache.juneau.rest.annotation;
 
 import static java.lang.String.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Rest_RVars_Test {
+public class Rest_RVars_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -73,8 +71,7 @@ public class Rest_RVars_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 		a.get("/p2").accept("text/plain").run().assertContent("A1=a1,A2=c,B1=b1,B2=c,C=c,R1a=/p1/p2,R1b=/p1,R2=bar,R3=,R4=a1,R5=a2,R6=");
 	}

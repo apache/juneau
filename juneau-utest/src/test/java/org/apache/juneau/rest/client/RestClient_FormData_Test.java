@@ -18,12 +18,11 @@ import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.list;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
@@ -34,10 +33,9 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestClient_FormData_Test {
+public class RestClient_FormData_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {
@@ -51,8 +49,7 @@ public class RestClient_FormData_Test {
 	// Method tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_formData_String_Object() throws Exception {
+	@Test void a01_formData_String_Object() throws Exception {
 		client().formData("foo","bar").formData(part("foo",new StringBuilder("baz"),null)).build().post("/formData").run().assertContent("foo=bar&foo=baz");
 		client().build().post("/formData").formData("foo","bar").formData("foo",new StringBuilder("baz")).run().assertContent("foo=bar&foo=baz");
 		client().build().post("/formData").formData(null,"bar").run().assertContent("");
@@ -60,13 +57,11 @@ public class RestClient_FormData_Test {
 		client().build().post("/formData").formData(null,(String)null).run().assertContent("");
 	}
 
-	@Test
-	public void a03_formData_NameValuePair() throws Exception {
+	@Test void a03_formData_NameValuePair() throws Exception {
 		client().formData(part("foo","bar")).build().post("/formData").formData(part("foo","baz")).run().assertContent("foo=bar&foo=baz");
 	}
 
-	@Test
-	public void a04_formDatas_Objects() throws Exception {
+	@Test void a04_formDatas_Objects() throws Exception {
 		client().formData(part("foo","bar")).build().post("/formData").run().assertContent("foo=bar");
 		client().formData(parts("foo","bar","foo","baz").getAll()).build().post("/formData").run().assertContent("foo=bar&foo=baz");
 		client().formData(part("foo","bar"),part("foo","baz")).build().post("/formData").run().assertContent("foo=bar&foo=baz");
@@ -89,20 +84,17 @@ public class RestClient_FormData_Test {
 		client().formData(part("foo",null,null).skipIfEmpty().schema(HttpPartSchema.create()._default("bar").build())).build().post("/formData").run().assertContent("foo=bar");
 	}
 
-	@Test
-	public void a06_formData_String_Object_Schema() throws Exception {
+	@Test void a06_formData_String_Object_Schema() throws Exception {
 		List<String> l = list("bar","baz"), l2 = list("qux","quux");
 		client().formData(part("foo",l,T_ARRAY_PIPES)).build().post("/formData").formData(part("foo",l2,T_ARRAY_PIPES)).run().assertContent().asString().asUrlDecode().is("foo=bar|baz&foo=qux|quux");
 	}
 
-	@Test
-	public void a07_formData_String_Object_Schema_Serializer() throws Exception {
+	@Test void a07_formData_String_Object_Schema_Serializer() throws Exception {
 		List<String> l = list("bar","baz");
 		client().formData(part("foo",l,T_ARRAY_PIPES).serializer(UonSerializer.DEFAULT)).build().post("/formData").run().assertContent().asString().asUrlDecode().is("foo=@(bar,baz)");
 	}
 
-	@Test
-	public void a09_formData_String_Supplier() throws Exception {
+	@Test void a09_formData_String_Supplier() throws Exception {
 		MutableSupplier<JsonList> s = MutableSupplier.of(null);
 
 		RestClient x1 = client().formData(part("foo",s,null)).build();
@@ -118,8 +110,7 @@ public class RestClient_FormData_Test {
 		x2.post("/formData").formData("foo",s).run().assertContent().asString().asUrlDecode().is("foo=bar,baz");
 	}
 
-	@Test
-	public void a10_formData_String_Supplier_Schema_Serializer() throws Exception {
+	@Test void a10_formData_String_Supplier_Schema_Serializer() throws Exception {
 		MutableSupplier<JsonList> s = MutableSupplier.of(JsonList.of("foo","bar"));
 		RestClient x = client().formData(part("foo",s,T_ARRAY_PIPES).serializer(FakeWriterSerializer.X)).build();
 		x.post("/formData").run().assertContent().asString().asUrlDecode().is("foo=xfoo|barx");
@@ -127,8 +118,7 @@ public class RestClient_FormData_Test {
 		x.post("/formData").run().assertContent().asString().asUrlDecode().is("foo=xbar|bazx");
 	}
 
-	@Test
-	public void a11_formData_String_Supplier_Schema() throws Exception {
+	@Test void a11_formData_String_Supplier_Schema() throws Exception {
 		List<String> l1 = list("foo","bar"), l2 = list("bar","baz");
 		var s = MutableSupplier.of(null);
 
@@ -154,8 +144,7 @@ public class RestClient_FormData_Test {
 		}
 	}
 
-	@Test
-	public void a12_badSerialization() {
+	@Test void a12_badSerialization() {
 		assertThrown(()->client().formData(part("Foo","bar",null).serializer(new A12())).build().post("/").run()).asMessages().isContains("bad");
 	}
 

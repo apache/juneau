@@ -14,18 +14,16 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestClient_Marshalls_Test {
+public class RestClient_Marshalls_Test extends SimpleTestBase {
 
 	public static class Bean {
 		public int f;
@@ -66,8 +64,7 @@ public class RestClient_Marshalls_Test {
 	// Basic tests - Single language support
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_singleLanguages() throws Exception {
+	@Test void a01_singleLanguages() throws Exception {
 		RestClient x1 = client().json5().build();
 		RestClient x2 = client().json().build();
 		RestClient x3 = client().xml().build();
@@ -95,8 +92,7 @@ public class RestClient_Marshalls_Test {
 		x1.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertStatus(200).getContent().as(Bean.class).check();
 	}
 
-	@Test
-	public void a02_singleLanguages_perRequest() throws Exception {
+	@Test void a02_singleLanguages_perRequest() throws Exception {
 		RestClient x = client().build();
 		x.post("/a01",bean).header("X-Accept","application/json5").header("X-Content-Type","application/json5").json5().run().assertStatus(200).getContent().as(Bean.class).check();
 		x.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").json().run().assertStatus(200).getContent().as(Bean.class).check();
@@ -111,8 +107,7 @@ public class RestClient_Marshalls_Test {
 		x.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html+stripped").htmlStrippedDoc().run().assertStatus(200).getContent().as(Bean.class).check();
 	}
 
-	@Test
-	public void a03_noLanguages() throws Exception {
+	@Test void a03_noLanguages() throws Exception {
 		RestClient x = client().build();
 		x.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").content("{f:1}").run().assertStatus(200).assertContent("{\"f\":1}");
 	}
@@ -121,8 +116,7 @@ public class RestClient_Marshalls_Test {
 	// Basic tests - Multiple language support
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void b01_multiLanguages() throws Exception {
+	@Test void b01_multiLanguages() throws Exception {
 		RestClient x = client().json5().json().xml().html().plainText().msgPack().uon().urlEnc().openApi().build();
 		x.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertStatus(200).getContent().as(Bean.class).check();
 		x.post("/a01",bean).header("Accept","text/xml").header("Content-Type","text/xml").header("X-Accept","text/xml").header("X-Content-Type","text/xml").run().assertStatus(200).getContent().as(Bean.class).check();
@@ -140,8 +134,7 @@ public class RestClient_Marshalls_Test {
 	// Basic tests - Universal language support
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void c01_universal() throws Exception {
+	@Test void c01_universal() throws Exception {
 		RestClient x = client().universal().build();
 		x.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertStatus(200).getContent().as(Bean.class).check();
 		x.post("/a01",bean).header("Accept","text/xml").header("Content-Type","text/xml").header("X-Accept","text/xml").header("X-Content-Type","text/xml").run().assertStatus(200).getContent().as(Bean.class).check();
@@ -160,8 +153,7 @@ public class RestClient_Marshalls_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 
-	@Test
-	public void d01_universal() throws Exception {
+	@Test void d01_universal() throws Exception {
 		RestClient x = client().universal().headersDefault(Accept.APPLICATION_JSON, ContentType.APPLICATION_JSON).build();
 		x.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertStatus(200).getContent().as(Bean.class).check();
 		x.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertStatus(200).getContent().as(Bean.class).check();
@@ -177,8 +169,7 @@ public class RestClient_Marshalls_Test {
 		x.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertStatus(200).getContent().as(Bean.class).check();
 	}
 
-	@Test
-	public void d03_nullMarshalls() throws Exception {
+	@Test void d03_nullMarshalls() throws Exception {
 		RestClient x = client().marshaller(null).marshallers(Json.DEFAULT,null).build();
 		x.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertStatus(200).getContent().as(Bean.class).check();
 	}

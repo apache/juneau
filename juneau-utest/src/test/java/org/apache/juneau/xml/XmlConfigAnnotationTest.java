@@ -13,8 +13,6 @@
 package org.apache.juneau.xml;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.function.*;
 
 import javax.xml.stream.*;
@@ -26,13 +24,12 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.annotation.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests the @XmlConfig annotation.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class XmlConfigAnnotationTest {
+public class XmlConfigAnnotationTest extends SimpleTestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
@@ -97,8 +94,7 @@ public class XmlConfigAnnotationTest {
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test
-	public void basicSerializer() {
+	@Test void basicSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		XmlSerializerSession x = XmlSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
@@ -109,8 +105,7 @@ public class XmlConfigAnnotationTest {
 		check("[foo:null]", x.getNamespaces());
 	}
 
-	@Test
-	public void basicParser() {
+	@Test void basicParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		XmlParserSession x = XmlParser.create().apply(al).build().getSession();
 		check("AA", x.getEventAllocator());
@@ -128,8 +123,7 @@ public class XmlConfigAnnotationTest {
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test
-	public void noValuesSerializer() {
+	@Test void noValuesSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		XmlSerializerSession x = XmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
@@ -140,8 +134,7 @@ public class XmlConfigAnnotationTest {
 		check("[]", x.getNamespaces());
 	}
 
-	@Test
-	public void noValuesParser() {
+	@Test void noValuesParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		XmlParserSession x = XmlParser.create().apply(al).build().getSession();
 		check(null, x.getEventAllocator());
@@ -158,8 +151,7 @@ public class XmlConfigAnnotationTest {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test
-	public void noAnnotationSerializer() {
+	@Test void noAnnotationSerializer() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		XmlSerializerSession x = XmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
@@ -170,8 +162,7 @@ public class XmlConfigAnnotationTest {
 		check("[]", x.getNamespaces());
 	}
 
-	@Test
-	public void noAnnotationParser() {
+	@Test void noAnnotationParser() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		XmlParserSession x = XmlParser.create().apply(al).build().getSession();
 		check(null, x.getEventAllocator());

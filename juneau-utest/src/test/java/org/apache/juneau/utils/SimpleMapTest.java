@@ -14,16 +14,13 @@ package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class SimpleMapTest {
+class SimpleMapTest extends SimpleTestBase {
 
-	@Test
-	public void doTest() {
+	@Test void doTest() {
 		String[] keys = {"a","b"};
 		Object[] vals = {"A","B"};
 		SimpleMap<String,Object> m = new SimpleMap<>(keys, vals);

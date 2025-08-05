@@ -14,19 +14,16 @@ package org.apache.juneau.uon;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings("rawtypes")
-@FixMethodOrder(NAME_ASCENDING)
-public class UonParserTest {
+public class UonParserTest extends SimpleTestBase {
 
 	static UonParser p = UonParser.DEFAULT;
 	static UonParser pe = UonParser.DEFAULT_DECODING;
@@ -34,8 +31,7 @@ public class UonParserTest {
 	//====================================================================================================
 	// Basic test
 	//====================================================================================================
-	@Test
-	public void testBasic() throws Exception {
+	@Test void testBasic() throws Exception {
 
 		String t;
 		Map m;
@@ -407,8 +403,7 @@ public class UonParserTest {
 	//====================================================================================================
 	// Unicode character test
 	//====================================================================================================
-	@Test
-	public void testUnicodeChars() throws Exception {
+	@Test void testUnicodeChars() throws Exception {
 		String t;
 		Map m;
 
@@ -491,8 +486,7 @@ public class UonParserTest {
 	//====================================================================================================
 	// Test simple bean
 	//====================================================================================================
-	@Test
-	public void testSimpleBean() throws Exception {
+	@Test void testSimpleBean() throws Exception {
 		UonParser p2 = UonParser.DEFAULT;
 		A t;
 
@@ -511,8 +505,7 @@ public class UonParserTest {
 	// testStreamsAutoClose
 	// Validates PARSER_autoCloseStreams.
 	//====================================================================================================
-	@Test
-	public void testStreamsAutoClose() throws Exception {
+	@Test void testStreamsAutoClose() throws Exception {
 		var p2 = UonParser.DEFAULT.copy().autoCloseStreams().build();
 		Object x;
 		Reader r;
@@ -527,8 +520,7 @@ public class UonParserTest {
 	// testMultipleObjectsInStream
 	// Validates that readers are not closed so that we can read streams of POJOs.
 	//====================================================================================================
-	@Test
-	public void testMultipleObjectsInStream() throws Exception {
+	@Test void testMultipleObjectsInStream() throws Exception {
 		var p2 = UonParser.create().unbuffered().build();
 		Object x;
 		Reader r;

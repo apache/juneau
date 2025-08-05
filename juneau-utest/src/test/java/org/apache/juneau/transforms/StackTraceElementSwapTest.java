@@ -13,17 +13,15 @@
 package org.apache.juneau.transforms;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.swaps.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests the {@link StackTraceElementSwap} class.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class StackTraceElementSwapTest {
+public class StackTraceElementSwapTest extends SimpleTestBase {
 
 	private String write(StackTraceElement ste) {
 		return Json5.of(ste);
@@ -36,8 +34,7 @@ public class StackTraceElementSwapTest {
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
-	@Test
-	public void basicTests() throws Exception {
+	@Test void basicTests() throws Exception {
 		StackTraceElement ste;
 
 		ste = new StackTraceElement("foo.bar.Baz", "qux", "Baz.java", 123);

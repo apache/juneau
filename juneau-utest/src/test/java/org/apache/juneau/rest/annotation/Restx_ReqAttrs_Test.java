@@ -12,19 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Restx_ReqAttrs_Test {
+class Restx_ReqAttrs_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test properties inheritance.
@@ -143,8 +141,7 @@ public class Restx_ReqAttrs_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A2.class);
 
 		a.get("/a1").run().assertContent("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");

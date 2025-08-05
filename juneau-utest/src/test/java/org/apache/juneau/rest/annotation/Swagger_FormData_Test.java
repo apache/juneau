@@ -15,17 +15,15 @@ package org.apache.juneau.rest.annotation;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.annotation.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Swagger_FormData_Test {
+class Swagger_FormData_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Swagger
@@ -71,8 +69,7 @@ public class Swagger_FormData_Test {
 		public void d(A4 f) { /* no-op */ }
 	}
 
-	@Test
-	public void a01_fromPojo() {
+	@Test void a01_fromPojo() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(A.class);
 		ParameterInfo x;
 
@@ -123,8 +120,7 @@ public class Swagger_FormData_Test {
 		public void d(B4 f) { /* no-op */ }
 	}
 
-	@Test
-	public void b01_schemaFromPojo() {
+	@Test void b01_schemaFromPojo() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(B.class);
 		ParameterInfo x;
 
@@ -172,8 +168,7 @@ public class Swagger_FormData_Test {
 		public void d(@FormData("F") String f) { /* no-op */ }
 	}
 
-	@Test
-	public void d01_fromParameter() {
+	@Test void d01_fromParameter() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(D.class);
 		ParameterInfo x;
 
@@ -225,8 +220,7 @@ public class Swagger_FormData_Test {
 		public void f(@FormData("F") Boolean b) { /* no-op */ }
 	}
 
-	@Test
-	public void e01_schemaFromParameter() {
+	@Test void e01_schemaFromParameter() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(E.class);
 		ParameterInfo x;
 

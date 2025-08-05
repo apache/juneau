@@ -14,18 +14,15 @@ package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class MultiSetTest {
+public class MultiSetTest extends SimpleTestBase {
 
-	@Test
-	public void doTest() {
+	@Test void doTest() {
 		List<String> l1, l2;
 		MultiSet<String> ms;
 

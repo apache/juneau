@@ -14,18 +14,15 @@ package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-import org.junit.*;
-
-@FixMethodOrder(NAME_ASCENDING)
-public class ObjectIntrospector_Test {
+class ObjectIntrospector_Test extends SimpleTestBase {
 
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@Test
-	public void a01_Basic() throws Exception {
+	@Test void a01_Basic() throws Exception {
 		String in = null;
 		Object r;
 

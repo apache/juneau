@@ -14,26 +14,24 @@ package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 
 import java.net.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class Common_UrlEncodingTest {
+class Common_UrlEncodingTest extends SimpleTestBase {
 	UrlEncodingParser p = UrlEncodingParser.DEFAULT;
 
 	//====================================================================================================
 	// Trim nulls from beans
 	//====================================================================================================
-	@Test
-	public void testTrimNullsFromBeans() throws Exception {
+	@Test void testTrimNullsFromBeans() throws Exception {
 		UrlEncodingSerializer.Builder s = UrlEncodingSerializer.create();
 		A t1 = A.create(), t2;
 
@@ -62,8 +60,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	// Trim empty maps
 	//====================================================================================================
-	@Test
-	public void testTrimEmptyMaps() throws Exception {
+	@Test void testTrimEmptyMaps() throws Exception {
 		UrlEncodingSerializer.Builder s = UrlEncodingSerializer.create();
 		B t1 = B.create(), t2;
 		String r;
@@ -94,8 +91,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	// Trim empty lists
 	//====================================================================================================
-	@Test
-	public void testTrimEmptyLists() throws Exception {
+	@Test void testTrimEmptyLists() throws Exception {
 		UrlEncodingSerializer.Builder s = UrlEncodingSerializer.create();
 		C t1 = C.create(), t2;
 		String r;
@@ -126,8 +122,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	// Trim empty arrays
 	//====================================================================================================
-	@Test
-	public void testTrimEmptyArrays() throws Exception {
+	@Test void testTrimEmptyArrays() throws Exception {
 		UrlEncodingSerializer.Builder s = UrlEncodingSerializer.create();
 		D t1 = D.create(), t2;
 		String r;
@@ -158,8 +153,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	// @Beanp.bpi annotation.
 	//====================================================================================================
-	@Test
-	public void testBeanPropertyProperies() throws Exception {
+	@Test void testBeanPropertyProperies() throws Exception {
 		UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT;
 		String ue = s.serialize(new E1());
 		assertEquals("x1=(f1=1)&x2=(f1=1)&x3=@((f1=1))&x4=@((f1=1))&x5=@((f1=1))&x6=@((f1=1))", ue);
@@ -182,8 +176,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	// @Beanp.bpi annotation on list of beans.
 	//====================================================================================================
-	@Test
-	public void testBeanPropertyPropertiesOnListOfBeans() throws Exception {
+	@Test void testBeanPropertyPropertiesOnListOfBeans() throws Exception {
 		UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT;
 		List<F> l = new LinkedList<>();
 		F t = new F();
@@ -204,8 +197,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	// Test URIAttr - Test that URLs and URIs are serialized and parsed correctly.
 	//====================================================================================================
-	@Test
-	public void testURIAttr() throws Exception {
+	@Test void testURIAttr() throws Exception {
 		UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT;
 		UrlEncodingParser p2 = UrlEncodingParser.DEFAULT;
 
@@ -230,8 +222,7 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	// Recursion
 	//====================================================================================================
-	@Test
-	public void testRecursion() throws Exception {
+	@Test void testRecursion() throws Exception {
 		UrlEncodingSerializer.Builder s = UrlEncodingSerializer.create().maxDepth(Integer.MAX_VALUE);
 
 		R1 r1 = new R1();

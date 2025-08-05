@@ -12,18 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Rest_Encoders_Test {
+class Rest_Encoders_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Setup classes
@@ -48,8 +46,7 @@ public class Rest_Encoders_Test {
 		}
 	}
 
-	@Test
-	public void a01_noCompression() throws Exception {
+	@Test void a01_noCompression() throws Exception {
 		RestClient a = MockRestClient.buildLax(A.class);
 		a.put("/", "foo").run().assertContent("foo");
 		a.put("/", "foo").header(ContentEncoding.of("")).run().assertContent("foo");
@@ -74,8 +71,7 @@ public class Rest_Encoders_Test {
 		}
 	}
 
-	@Test
-	public void b01_withCompression() throws Exception {
+	@Test void b01_withCompression() throws Exception {
 		RestClient b = MockRestClient.build(B.class);
 		b.put("/", "foo")
 			.run()

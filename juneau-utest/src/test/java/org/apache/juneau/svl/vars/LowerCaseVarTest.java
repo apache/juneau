@@ -13,19 +13,16 @@
 package org.apache.juneau.svl.vars;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.svl.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class LowerCaseVarTest {
+class LowerCaseVarTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test
-	public void test() {
+	@Test void test() {
 		VarResolver vr = VarResolver.create().vars(LowerCaseVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("LowerCaseVar.test", "fooBAR");

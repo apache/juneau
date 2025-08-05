@@ -18,11 +18,10 @@ import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.list;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.annotation.*;
@@ -30,10 +29,9 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestClient_Query_Test {
+public class RestClient_Query_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {
@@ -47,27 +45,23 @@ public class RestClient_Query_Test {
 	// Method tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_query_String_Object() throws Exception {
+	@Test void a01_query_String_Object() throws Exception {
 		client().queryData("foo","bar").queryData(part("foo",new StringBuilder("baz"),null)).build().get("/query").run().assertContent("foo=bar&foo=baz");
 		client().build().get("/query").queryData("foo","bar").run().assertContent().isContains("foo=bar");
 	}
 
-	@Test
-	public void a02_query_String_Object_Schema() throws Exception {
+	@Test void a02_query_String_Object_Schema() throws Exception {
 		List<String> l = list("bar","baz");
 		client().build().get("/query").queryData(part("foo",l,T_ARRAY_PIPES)).run().assertContent().asString().asUrlDecode().is("foo=bar|baz");
 		client().queryData(part("foo",l,T_ARRAY_PIPES)).build().get("/query").run().assertContent().asString().asUrlDecode().is("foo=bar|baz");
 	}
 
-	@Test
-	public void a03_query_String_Object_Schema_Serializer() throws Exception {
+	@Test void a03_query_String_Object_Schema_Serializer() throws Exception {
 		List<String> l = list("bar","baz");
 		client().queryData(part("foo",l,T_ARRAY_PIPES).serializer(UonSerializer.DEFAULT)).build().get("/query").run().assertContent().asString().asUrlDecode().is("foo=@(bar,baz)");
 	}
 
-	@Test
-	public void a06_query_String_Supplier() throws Exception {
+	@Test void a06_query_String_Supplier() throws Exception {
 		var l1 = list("foo","bar");
 		var l2 = list("bar","baz");
 		var s = MutableSupplier.of(l1);
@@ -77,8 +71,7 @@ public class RestClient_Query_Test {
 		x.get("/query").run().assertContent().asString().asUrlDecode().is("foo=bar,baz");
 	}
 
-	@Test
-	public void a07_query_String_Supplier_Schema() throws Exception {
+	@Test void a07_query_String_Supplier_Schema() throws Exception {
 		String[] l1 = {"foo","bar"},l2 = {"bar","baz"};
 		MutableSupplier<String[]> s = MutableSupplier.of(l1);
 		RestClient x = client().queryData(part("foo",s,T_ARRAY_PIPES)).build();
@@ -87,8 +80,7 @@ public class RestClient_Query_Test {
 		x.get("/query").queryData(part("bar",s,T_ARRAY_PIPES)).run().assertContent().asString().asUrlDecode().is("foo=bar|baz&bar=bar|baz");
 	}
 
-	@Test
-	public void a08_query_String_Supplier_Schema_Serializer() throws Exception {
+	@Test void a08_query_String_Supplier_Schema_Serializer() throws Exception {
 		var l1 = list("foo","bar");
 		var l2 = list("bar","baz");
 		var s = MutableSupplier.of(l1);
@@ -98,8 +90,7 @@ public class RestClient_Query_Test {
 		x.get("/query").run().assertContent().asString().asUrlDecode().is("foo=xbar|bazx");
 	}
 
-	@Test
-	public void a09_query_NameValuePair() throws Exception {
+	@Test void a09_query_NameValuePair() throws Exception {
 		client().queryData(part("foo","bar")).build().get("/query").queryData(part("foo","baz")).run().assertContent().isContains("foo=bar&foo=baz");
 	}
 
@@ -107,8 +98,7 @@ public class RestClient_Query_Test {
 		public String foo="bar";
 	}
 
-	@Test
-	public void a10_queries_Objects() throws Exception {
+	@Test void a10_queries_Objects() throws Exception {
 		client().build().get("/query").queryData(part("foo","bar")).run().assertContent("foo=bar");
 	}
 
@@ -121,8 +111,7 @@ public class RestClient_Query_Test {
 		public void close() throws IOException {}  // NOSONAR
 	}
 
-	@Test
-	public void a12_queryCustom_Object() throws Exception {
+	@Test void a12_queryCustom_Object() throws Exception {
 		client().build().get("/query").queryCustom("foo=bar").run().assertContent().isContains("foo=bar");
 		assertThrown(()->client().build().get("").queryCustom(new A12())).asMessages().isContains("foo");
 	}

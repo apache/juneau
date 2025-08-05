@@ -13,15 +13,13 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.HttpMethod.*;
-import static org.junit.runners.MethodSorters.*;
-
+import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestOp_ClientVersion_Test {
+class RestOp_ClientVersion_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests - default Client-Version header.
@@ -51,8 +49,7 @@ public class RestOp_ClientVersion_Test {
 		}
 	}
 
-	@Test
-	public void a01_defaultHeader() throws Exception {
+	@Test void a01_defaultHeader() throws Exception {
 		RestClient a = MockRestClient.build(A1.class);
 		a.get("/").run().assertContent("no-version");
 		for (String s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
@@ -90,8 +87,7 @@ public class RestOp_ClientVersion_Test {
 		}
 	}
 
-	@Test
-	public void a02_defaultHeader() throws Exception {
+	@Test void a02_defaultHeader() throws Exception {
 		RestClient a = MockRestClient.build(A2.class);
 		a.get("/").run().assertContent("no-version");
 		for (String s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
@@ -133,8 +129,7 @@ public class RestOp_ClientVersion_Test {
 		}
 	}
 
-	@Test
-	public void b01_testCustomHeader() throws Exception {
+	@Test void b01_testCustomHeader() throws Exception {
 		RestClient b = MockRestClient.build(B1.class);
 		b.get("/").run().assertContent("no-version");
 		for (String s : "0, 0.0, 0.1, .1, .9, .99".split("\\s*,\\s*")) {
@@ -175,8 +170,7 @@ public class RestOp_ClientVersion_Test {
 		}
 	}
 
-	@Test
-	public void b02_testCustomHeader() throws Exception {
+	@Test void b02_testCustomHeader() throws Exception {
 		RestClient b = MockRestClient.build(B2.class);
 		b.get("/").run().assertContent("no-version");
 		for (String s : "0, 0.0, 0.1, .1, .9, .99".split("\\s*,\\s*")) {
@@ -192,4 +186,4 @@ public class RestOp_ClientVersion_Test {
 			b.get("/").header("Custom-Client-Version", s).run().assertContent("2");
 		}
 	}
-}
+}
