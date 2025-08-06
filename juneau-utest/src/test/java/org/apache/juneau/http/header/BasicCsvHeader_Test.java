@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -69,20 +68,20 @@ class BasicCsvHeader_Test extends SimpleTestBase {
 
 	@Test void a02_contains() {
 		BasicCsvHeader x = new BasicCsvHeader("Foo", (String)null,"bar","baz");
-		assertBoolean(x.contains(null)).isTrue();
-		assertBoolean(x.containsIgnoreCase(null)).isTrue();
-		assertBoolean(x.contains("bar")).isTrue();
-		assertBoolean(x.containsIgnoreCase("bar")).isTrue();
-		assertBoolean(x.contains("qux")).isFalse();
-		assertBoolean(x.containsIgnoreCase("qux")).isFalse();
-		assertBoolean(x.contains("BAR")).isFalse();
-		assertBoolean(x.containsIgnoreCase("BAR")).isTrue();
+		assertTrue(x.contains(null));
+		assertTrue(x.containsIgnoreCase(null));
+		assertTrue(x.contains("bar"));
+		assertTrue(x.containsIgnoreCase("bar"));
+		assertFalse(x.contains("qux"));
+		assertFalse(x.containsIgnoreCase("qux"));
+		assertFalse(x.contains("BAR"));
+		assertTrue(x.containsIgnoreCase("BAR"));
 
 		BasicCsvHeader x2 = csvHeader("Foo",()->null);
-		assertBoolean(x2.contains((String)null)).isFalse();
-		assertBoolean(x2.containsIgnoreCase(null)).isFalse();
-		assertBoolean(x2.contains("bar")).isFalse();
-		assertBoolean(x2.containsIgnoreCase("bar")).isFalse();
+		assertFalse(x2.contains((String)null));
+		assertFalse(x2.containsIgnoreCase(null));
+		assertFalse(x2.contains("bar"));
+		assertFalse(x2.containsIgnoreCase("bar"));
 	}
 
 	@Test void a03_assertList() {

@@ -235,27 +235,27 @@ public class PartList_Test {
 	@Test
 	public void a11_contains() {
 		PartList x = PartList.of(FOO_1, FOO_2, X_x);
-		assertBoolean(x.contains(null)).isFalse();
-		assertBoolean(x.contains("Foo")).isTrue();
-		assertBoolean(x.contains("FOO")).isFalse();
-		assertBoolean(x.contains("Bar")).isFalse();
+		assertFalse(x.contains(null));
+		assertTrue(x.contains("Foo"));
+		assertFalse(x.contains("FOO"));
+		assertFalse(x.contains("Bar"));
 	}
 
 	@Test
 	public void a12_partIterator_all() {
 		PartList x = PartList.of();
-		assertBoolean(x.partIterator().hasNext()).isFalse();
+		assertFalse(x.partIterator().hasNext());
 		x = PartList.of(FOO_1);
-		assertBoolean(x.partIterator().hasNext()).isTrue();
+		assertTrue(x.partIterator().hasNext());
 	}
 
 	@Test
 	public void a13_partIterator_single() {
 		PartList x = PartList.of();
-		assertBoolean(x.partIterator("Foo").hasNext()).isFalse();
+		assertFalse(x.partIterator("Foo").hasNext());
 		x = PartList.of(FOO_1);
-		assertBoolean(x.partIterator("Foo").hasNext()).isTrue();
-		assertBoolean(x.partIterator("FOO").hasNext()).isFalse();
+		assertTrue(x.partIterator("Foo").hasNext());
+		assertFalse(x.partIterator("FOO").hasNext());
 	}
 
 	@Test

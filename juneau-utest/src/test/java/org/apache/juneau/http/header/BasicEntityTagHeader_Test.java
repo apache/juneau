@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -72,8 +71,8 @@ class BasicEntityTagHeader_Test extends SimpleTestBase {
 		EntityTag x = new BasicEntityTagHeader("Foo","W/\"foo\"").asEntityTag().get();
 		assertString("W/\"foo\"", x);
 		assertString("foo", x.getEntityValue());
-		assertBoolean(x.isWeak()).isTrue();
-		assertBoolean(x.isAny()).isFalse();
+		assertTrue(x.isWeak());
+		assertFalse(x.isAny());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

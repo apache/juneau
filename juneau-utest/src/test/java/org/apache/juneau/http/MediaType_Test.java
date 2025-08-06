@@ -59,9 +59,9 @@ public class MediaType_Test extends SimpleTestBase {
 
 	@Test void a04_equals() {
 		MediaType x1 = new MediaType("text/foo"), x2 = new MediaType("text/foo"), x3 = new MediaType("text/bar");
-		assertBoolean(x1.equals(x2)).isTrue();
-		assertBoolean(x1.equals(x3)).isFalse();
-		assertBoolean(x1.equals(null)).isFalse();
+		assertTrue(x1.equals(x2));
+		assertFalse(x1.equals(x3));
+		assertFalse(x1.equals(null));
 	}
 
 	@Test void a05_hashCode() {

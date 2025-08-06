@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +24,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
-public class RestClient_Paths_Test extends SimpleTestBase {
+class RestClient_Paths_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {

@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpMethod.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -21,17 +22,17 @@ class HttpMethod_Test extends SimpleTestBase {
 
 	@Test
 	public void a01_hasContent() {
-		assertBoolean(hasContent(OPTIONS)).isFalse();
-		assertBoolean(hasContent(GET)).isFalse();
-		assertBoolean(hasContent(HEAD)).isFalse();
-		assertBoolean(hasContent(POST)).isTrue();
-		assertBoolean(hasContent(PUT)).isTrue();
-		assertBoolean(hasContent(DELETE)).isFalse();
-		assertBoolean(hasContent(TRACE)).isFalse();
-		assertBoolean(hasContent(CONNECT)).isFalse();
-		assertBoolean(hasContent(PATCH)).isTrue();
-		assertBoolean(hasContent(RRPC)).isTrue();
-		assertBoolean(hasContent(OTHER)).isTrue();
-		assertBoolean(hasContent(ANY)).isTrue();
+		assertFalse(hasContent(OPTIONS));
+		assertFalse(hasContent(GET));
+		assertFalse(hasContent(HEAD));
+		assertTrue(hasContent(POST));
+		assertTrue(hasContent(PUT));
+		assertFalse(hasContent(DELETE));
+		assertFalse(hasContent(TRACE));
+		assertFalse(hasContent(CONNECT));
+		assertTrue(hasContent(PATCH));
+		assertTrue(hasContent(RRPC));
+		assertTrue(hasContent(OTHER));
+		assertTrue(hasContent(ANY));
 	}
 }

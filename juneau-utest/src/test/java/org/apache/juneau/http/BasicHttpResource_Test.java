@@ -154,17 +154,17 @@ public class BasicHttpResource_Test {
 	@Test
 	public void a06_chunked() {
 		StringResource x1 = stringResource("foo").setChunked();
-		assertBoolean(x1.isChunked()).isTrue();
+		assertTrue(x1.isChunked());
 		StringResource x2 = stringResource("foo");
-		assertBoolean(x2.isChunked()).isFalse();
+		assertFalse(x2.isChunked());
 	}
 
 	@Test
 	public void a07_chunked_boolean() {
 		StringResource x1 = stringResource("foo").setChunked(true);
-		assertBoolean(x1.isChunked()).isTrue();
+		assertTrue(x1.isChunked());
 		StringResource x2 = stringResource("foo").setChunked(false);
-		assertBoolean(x2.isChunked()).isFalse();
+		assertFalse(x2.isChunked());
 	}
 
 	@Test

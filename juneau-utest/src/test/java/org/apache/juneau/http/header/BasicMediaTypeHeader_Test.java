@@ -78,10 +78,10 @@ class BasicMediaTypeHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_hasSubType() {
-		assertBoolean(contentType("text/foo+bar").hasSubType("bar")).isTrue();
-		assertBoolean(contentType("text/foo+bar").hasSubType("baz")).isFalse();
-		assertBoolean(contentType("text/foo+bar").hasSubType(null)).isFalse();
-		assertBoolean(new ContentType((String)null).hasSubType("bar")).isFalse();
+		assertTrue(contentType("text/foo+bar").hasSubType("bar"));
+		assertFalse(contentType("text/foo+bar").hasSubType("baz"));
+		assertFalse(contentType("text/foo+bar").hasSubType(null));
+		assertFalse(new ContentType((String)null).hasSubType("bar"));
 	}
 
 	@Test void a05_getSubTypes() {
@@ -90,9 +90,9 @@ class BasicMediaTypeHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a06_isMeta() {
-		assertBoolean(contentType("text/foo+bar").isMetaSubtype()).isFalse();
-		assertBoolean(contentType("text/*").isMetaSubtype()).isTrue();
-		assertBoolean(new ContentType((String)null).isMetaSubtype()).isTrue();
+		assertFalse(contentType("text/foo+bar").isMetaSubtype());
+		assertTrue(contentType("text/*").isMetaSubtype());
+		assertTrue(new ContentType((String)null).isMetaSubtype());
 	}
 
 	@Test void a07_match() {

@@ -17,6 +17,8 @@ import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;
@@ -72,7 +74,7 @@ class SerializedHttpEntity_Test extends SimpleTestBase {
 	}
 
 	@Test void a06_isRepeatable() {
-		assertBoolean(serializedEntity(ABean.get(),null).isRepeatable()).isTrue();
+		assertTrue(serializedEntity(ABean.get(),null).isRepeatable());
 	}
 
 	@Test void a07_getContentLength() {

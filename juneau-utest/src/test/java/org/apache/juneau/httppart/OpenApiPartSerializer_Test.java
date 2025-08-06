@@ -13,7 +13,6 @@
 package org.apache.juneau.httppart;
 
 import static java.lang.String.valueOf;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;

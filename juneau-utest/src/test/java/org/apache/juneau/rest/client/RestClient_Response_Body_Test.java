@@ -39,7 +39,7 @@ import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
-public class RestClient_Response_Body_Test extends SimpleTestBase {
+class RestClient_Response_Body_Test extends SimpleTestBase {
 
 	public static class ABean {
 		public int f;

@@ -111,42 +111,42 @@ public class BeanStore_Test {
 		BeanStore b2c = BeanStore.create().threadSafe().parent(b2p).build();
 
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			assertBoolean(b.hasBean(A1.class)).isFalse();
+			assertFalse(b.hasBean(A1.class));
 			assertOptional(b.getBean(A1.class)).isNull();
 		}
 
 		b1p.addBean(A1.class, a1a);
 		b2p.addBean(A1.class, a1a);
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			assertBoolean(b.hasBean(A1.class)).isTrue();
+			assertTrue(b.hasBean(A1.class));
 			assertOptional(b.getBean(A1.class)).is(a1a);
 		}
 
 		b1p.clear();
 		b2p.clear();
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			assertBoolean(b.hasBean(A1.class)).isFalse();
+			assertFalse(b.hasBean(A1.class));
 			assertOptional(b.getBean(A1.class)).isNull();
 		}
 
 		b1p.addBean(A1.class, null);
 		b2p.addBean(A1.class, null);
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			assertBoolean(b.hasBean(A1.class)).isTrue();
+			assertTrue(b.hasBean(A1.class));
 			assertOptional(b.getBean(A1.class)).isNull();
 		}
 
 		b1p.clear().addSupplier(A1.class, ()->a1a);
 		b2p.clear().addSupplier(A1.class, ()->a1a);
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			assertBoolean(b.hasBean(A1.class)).isTrue();
+			assertTrue(b.hasBean(A1.class));
 			assertOptional(b.getBean(A1.class)).is(a1a);
 		}
 
 		b1p.add(A1.class, a1b);
 		b2p.add(A1.class, a1b);
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			assertBoolean(b.hasBean(A1.class)).isTrue();
+			assertTrue(b.hasBean(A1.class));
 			assertOptional(b.getBean(A1.class)).is(a1b);
 			assertList(b.stream(A1.class).map(BeanStoreEntry::get)).isHas(a1b,a1a);
 		}
@@ -154,12 +154,12 @@ public class BeanStore_Test {
 		b1c.add(A2.class, a2a);
 		b2c.add(A2.class, a2a);
 		for (BeanStore b : array(b1p, b2p)) {
-			assertBoolean(b.hasBean(A2.class)).isFalse();
+			assertFalse(b.hasBean(A2.class));
 			assertOptional(b.getBean(A2.class)).isNull();
 			assertList(b.stream(A2.class)).isEmpty();
 		}
 		for (BeanStore b : array(b1c, b2c)) {
-			assertBoolean(b.hasBean(A2.class)).isTrue();
+			assertTrue(b.hasBean(A2.class));
 			assertOptional(b.getBean(A2.class)).is(a2a);
 			assertList(b.stream(A2.class).map(BeanStoreEntry::get)).isHas(a2a);
 		}
@@ -175,12 +175,12 @@ public class BeanStore_Test {
 		b2c.clear().addBean(A1.class, a1a);
 
 		for (BeanStore b : array(b1p, b2p)) {
-			assertBoolean(b.hasBean(A1.class)).isFalse();
+			assertFalse(b.hasBean(A1.class));
 			assertOptional(b.getBean(A1.class)).isNull();
 			assertList(b.stream(A1.class)).isEmpty();
 		}
 		for (BeanStore b : array(b1c, b2c)) {
-			assertBoolean(b.hasBean(A1.class)).isTrue();
+			assertTrue(b.hasBean(A1.class));
 			assertOptional(b.getBean(A1.class)).is(a1a);
 			assertList(b.stream(A1.class).map(BeanStoreEntry::get)).isHas(a1a);
 		}
@@ -188,7 +188,7 @@ public class BeanStore_Test {
 		b1c.removeBean(A1.class);
 		b2c.removeBean(A1.class);
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			assertBoolean(b.hasBean(A1.class)).isFalse();
+			assertFalse(b.hasBean(A1.class));
 			assertOptional(b.getBean(A1.class)).isNull();
 			assertList(b.stream(A1.class)).isEmpty();
 		}
@@ -291,11 +291,11 @@ public class BeanStore_Test {
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, m1, m3)) {
 				assertString(b.getMissingParams(e)).is(A1n);
-				assertBoolean(b.hasAllParams(e)).isFalse();
+				assertFalse(b.hasAllParams(e));
 			}
 			for (ExecutableInfo e : array(c2, m2)) {
 				assertString(b.getMissingParams(e)).is(A1n+"@foo");
-				assertBoolean(b.hasAllParams(e)).isFalse();
+				assertFalse(b.hasAllParams(e));
 			}
 		}
 
@@ -315,11 +315,11 @@ public class BeanStore_Test {
 			assertString(b.getMissingParams(m1)).isNull();
 			assertString(b.getMissingParams(m2)).is(A1n+"@foo");
 			assertString(b.getMissingParams(m3)).isNull();
-			assertBoolean(b.hasAllParams(c1)).isTrue();
-			assertBoolean(b.hasAllParams(c2)).isFalse();
-			assertBoolean(b.hasAllParams(m1)).isTrue();
-			assertBoolean(b.hasAllParams(m2)).isFalse();
-			assertBoolean(b.hasAllParams(m3)).isTrue();
+			assertTrue(b.hasAllParams(c1));
+			assertFalse(b.hasAllParams(c2));
+			assertTrue(b.hasAllParams(m1));
+			assertFalse(b.hasAllParams(m2));
+			assertTrue(b.hasAllParams(m3));
 			assertArray(b.getParams(c1)).is(pA1a, pEmptyOptional, pIsBeanStore);
 			assertArray(b.getParams(c2)).is(pNull, pEmptyOptional);
 			assertArray(b.getParams(m1)).is(pA1a, pEmptyOptional, pIsBeanStore);
@@ -332,7 +332,7 @@ public class BeanStore_Test {
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, c2, m1, m2, m3)) {
 				assertString(b.getMissingParams(e)).isNull();
-				assertBoolean(b.hasAllParams(e)).isTrue();
+				assertTrue(b.hasAllParams(e));
 			}
 			assertArray(b.getParams(c1)).is(pA1a, pEmptyOptional, pIsBeanStore);
 			assertArray(b.getParams(c2)).is(pA1a, pEmptyOptional);
@@ -346,7 +346,7 @@ public class BeanStore_Test {
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, c2, m1, m2, m3)) {
 				assertString(b.getMissingParams(e)).isNull();
-				assertBoolean(b.hasAllParams(e)).isTrue();
+				assertTrue(b.hasAllParams(e));
 			}
 			assertArray(b.getParams(c1)).is(pA1a, pEmptyOptional, pIsBeanStore);
 			assertArray(b.getParams(c2)).is(pA1a, pEmptyOptional);
@@ -360,7 +360,7 @@ public class BeanStore_Test {
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, c2, m1, m2, m3)) {
 				assertString(b.getMissingParams(e)).isNull();
-				assertBoolean(b.hasAllParams(e)).isTrue();
+				assertTrue(b.hasAllParams(e));
 			}
 			assertArray(b.getParams(c1)).is(pA1a, pEmptyOptional, pIsBeanStore);
 			assertArray(b.getParams(c2)).is(pA1a, pA2a);
@@ -374,7 +374,7 @@ public class BeanStore_Test {
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, c2, m1, m2, m3)) {
 				assertString(b.getMissingParams(e)).isNull();
-				assertBoolean(b.hasAllParams(e)).isTrue();
+				assertTrue(b.hasAllParams(e));
 			}
 			assertArray(b.getParams(c1)).is(pA1a, pA2a, pIsBeanStore);
 			assertArray(b.getParams(c2)).is(pA1a, pA2a);
@@ -423,8 +423,8 @@ public class BeanStore_Test {
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			assertString(b.getMissingParams(c1)).is(A1n);
 			assertString(b.getMissingParams(c2)).is(A1n+"@foo");
-			assertBoolean(b.hasAllParams(c1)).isFalse();
-			assertBoolean(b.hasAllParams(c2)).isFalse();
+			assertFalse(b.hasAllParams(c1));
+			assertFalse(b.hasAllParams(c2));
 		}
 
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
@@ -437,8 +437,8 @@ public class BeanStore_Test {
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			assertString(b.getMissingParams(c1)).isNull();
 			assertString(b.getMissingParams(c2)).is(A1n+"@foo");
-			assertBoolean(b.hasAllParams(c1)).isTrue();
-			assertBoolean(b.hasAllParams(c2)).isFalse();
+			assertTrue(b.hasAllParams(c1));
+			assertFalse(b.hasAllParams(c2));
 			assertArray(b.getParams(c1)).is(pThis, pA1a, pEmptyOptional, pIsBeanStore);
 			assertArray(b.getParams(c2)).is(pThis, pNull, pEmptyOptional);
 		}
@@ -448,7 +448,7 @@ public class BeanStore_Test {
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, c2)) {
 				assertString(b.getMissingParams(e)).isNull();
-				assertBoolean(b.hasAllParams(e)).isTrue();
+				assertTrue(b.hasAllParams(e));
 			}
 			assertArray(b.getParams(c1)).is(pThis, pA1a, pEmptyOptional, pIsBeanStore);
 			assertArray(b.getParams(c2)).is(pThis, pA1a, pEmptyOptional);
@@ -459,7 +459,7 @@ public class BeanStore_Test {
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, c2)) {
 				assertString(b.getMissingParams(e)).isNull();
-				assertBoolean(b.hasAllParams(e)).isTrue();
+				assertTrue(b.hasAllParams(e));
 			}
 			assertArray(b.getParams(c1)).is(pThis, pA1a, pEmptyOptional, pIsBeanStore);
 			assertArray(b.getParams(c2)).is(pThis, pA1a, pEmptyOptional);
@@ -470,7 +470,7 @@ public class BeanStore_Test {
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, c2)) {
 				assertString(b.getMissingParams(e)).isNull();
-				assertBoolean(b.hasAllParams(e)).isTrue();
+				assertTrue(b.hasAllParams(e));
 			}
 			assertArray(b.getParams(c1)).is(pThis, pA1a, pEmptyOptional, pIsBeanStore);
 			assertArray(b.getParams(c2)).is(pThis, pA1a, pA2a);
@@ -481,7 +481,7 @@ public class BeanStore_Test {
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, c2)) {
 				assertString(b.getMissingParams(e)).isEmpty();
-				assertBoolean(b.hasAllParams(e)).isTrue();
+				assertTrue(b.hasAllParams(e));
 			}
 			assertArray(b.getParams(c1)).is(pThis, pA1a, pA2a, pIsBeanStore);
 			assertArray(b.getParams(c2)).is(pThis, pA1a, pA2a);

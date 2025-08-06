@@ -34,38 +34,38 @@ public class EntityTag_Test {
 		EntityTag x1 = new EntityTag("\"foo\"");
 		assertString(x1).is("\"foo\"");
 		assertString(x1.getEntityValue()).is("foo");
-		assertBoolean(x1.isWeak()).isFalse();
-		assertBoolean(x1.isAny()).isFalse();
+		assertFalse(x1.isWeak());
+		assertFalse(x1.isAny());
 
 		EntityTag x2 = new EntityTag("W/\"foo\"");
 		assertString(x2).is("W/\"foo\"");
 		assertString(x2.getEntityValue()).is("foo");
-		assertBoolean(x2.isWeak()).isTrue();
-		assertBoolean(x2.isAny()).isFalse();
+		assertTrue(x2.isWeak());
+		assertFalse(x2.isAny());
 
 		EntityTag x3 = new EntityTag("*");
 		assertString(x3).is("*");
 		assertString(x3.getEntityValue()).is("*");
-		assertBoolean(x3.isWeak()).isFalse();
-		assertBoolean(x3.isAny()).isTrue();
+		assertFalse(x3.isWeak());
+		assertTrue(x3.isAny());
 
 		EntityTag x5 = new EntityTag("\"\"");
 		assertString(x5).is("\"\"");
 		assertString(x5.getEntityValue()).is("");
-		assertBoolean(x5.isWeak()).isFalse();
-		assertBoolean(x5.isAny()).isFalse();
+		assertFalse(x5.isWeak());
+		assertFalse(x5.isAny());
 
 		EntityTag x6 = EntityTag.of("\"foo\"");
 		assertString(x6).is("\"foo\"");
 		assertString(x6.getEntityValue()).is("foo");
-		assertBoolean(x6.isWeak()).isFalse();
-		assertBoolean(x6.isAny()).isFalse();
+		assertFalse(x6.isWeak());
+		assertFalse(x6.isAny());
 
 		EntityTag x7 = EntityTag.of((Supplier<?>)()->"\"foo\"");
 		assertString(x7).is("\"foo\"");
 		assertString(x7.getEntityValue()).is("foo");
-		assertBoolean(x7.isWeak()).isFalse();
-		assertBoolean(x7.isAny()).isFalse();
+		assertFalse(x7.isWeak());
+		assertFalse(x7.isAny());
 
 		assertObject(EntityTag.of(null)).isNull();
 		assertObject(EntityTag.of((Supplier<?>)()->null)).isNull();

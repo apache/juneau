@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.util.function.*;
 
@@ -64,8 +65,8 @@ class ETag_Test extends SimpleTestBase {
 		EntityTag x = new ETag("W/\"foo\"").asEntityTag().get();
 		assertString(x).is("W/\"foo\"");
 		assertString(x.getEntityValue()).is("foo");
-		assertBoolean(x.isWeak()).isTrue();
-		assertBoolean(x.isAny()).isFalse();
+		assertTrue(x.isWeak());
+		assertFalse(x.isAny());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

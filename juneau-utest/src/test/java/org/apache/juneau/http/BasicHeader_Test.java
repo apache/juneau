@@ -95,10 +95,10 @@ class BasicHeader_Test extends SimpleTestBase {
 	@Test void a09_equals() {
 		BasicHeader h1 = header("Foo","bar"), h2 = header("Foo","bar"), h3 = header("Bar","bar"), h4 = header("Foo","baz");
 		assertInteger(h1.hashCode()).isExists();
-		assertBoolean(h1.equals(h2)).isTrue();
-		assertBoolean(h1.equals(h3)).isFalse();
-		assertBoolean(h1.equals(h4)).isFalse();
-		assertBoolean(h1.equals("foo")).isFalse();
+		assertTrue(h1.equals(h2));
+		assertFalse(h1.equals(h3));
+		assertFalse(h1.equals(h4));
+		assertFalse(h1.equals("foo"));
 
 	}
 

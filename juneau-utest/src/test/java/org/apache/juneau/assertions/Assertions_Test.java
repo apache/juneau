@@ -116,7 +116,7 @@ public class Assertions_Test {
 
 	@Test
 	public void a16_assertBoolean() {
-		assertBoolean(true).isTrue();
+		assertTrue(true);
 	}
 
 	@Test
