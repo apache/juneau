@@ -17,19 +17,17 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.io.*;
 import java.nio.file.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.resource.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class BasicHttpResource_Test {
-	@Test
-	public void a01_basic() throws Exception {
+class BasicHttpResource_Test extends SimpleTestBase {
+
+	@Test void a01_basic() throws Exception {
 		File f = Files.createTempFile("test","txt").toFile();
 
 		HttpResource x = stringResource((String)null);
@@ -110,18 +108,16 @@ public class BasicHttpResource_Test {
 		assertObject(x.getContentEncoding()).isNull();
 	}
 
-	@Test
-	public void a02_header_String_Object() {
+	@Test void a02_header_String_Object() {
 		HeaderList x = stringResource("foo").addHeader("Foo","bar").addHeader("Foo","baz").addHeader(null,"bar").addHeader("foo",null).getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
-		assertOptional(x.getFirst("Bar")).isNull();
-		assertOptional(x.getLast("Bar")).isNull();
+		assertEmpty(x.getFirst("Bar"));
+		assertEmpty(x.getLast("Bar"));
 		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz']");
 	}
 
-	@Test
-	public void a03_header_Header() {
+	@Test void a03_header_Header() {
 		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar")).addHeaders(header("Foo","baz")).addHeaders(header("Bar",null)).getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
@@ -130,8 +126,7 @@ public class BasicHttpResource_Test {
 		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','Bar: null']");
 	}
 
-	@Test
-	public void a04_headers_List() {
+	@Test void a04_headers_List() {
 		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
@@ -140,8 +135,7 @@ public class BasicHttpResource_Test {
 		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','Bar: null']");
 	}
 
-	@Test
-	public void a05_headers_array() {
+	@Test void a05_headers_array() {
 		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
@@ -151,32 +145,28 @@ public class BasicHttpResource_Test {
 	}
 
 
-	@Test
-	public void a06_chunked() {
+	@Test void a06_chunked() {
 		StringResource x1 = stringResource("foo").setChunked();
 		assertTrue(x1.isChunked());
 		StringResource x2 = stringResource("foo");
 		assertFalse(x2.isChunked());
 	}
 
-	@Test
-	public void a07_chunked_boolean() {
+	@Test void a07_chunked_boolean() {
 		StringResource x1 = stringResource("foo").setChunked(true);
 		assertTrue(x1.isChunked());
 		StringResource x2 = stringResource("foo").setChunked(false);
 		assertFalse(x2.isChunked());
 	}
 
-	@Test
-	public void a08_contentType_String() {
+	@Test void a08_contentType_String() {
 		StringResource x1 = stringResource("foo").setContentType("text/plain");
 		assertString(x1.getContentType().getValue()).is("text/plain");
 		StringResource x2 = stringResource("foo").setContentType((String)null);
 		assertObject(x2.getContentType()).isNull();
 	}
 
-	@Test
-	public void a09_contentEncoding_String() {
+	@Test void a09_contentEncoding_String() {
 		StringResource x1 = stringResource("foo").setContentEncoding("identity");
 		assertString(x1.getContentEncoding().getValue()).is("identity");
 		StringResource x2 = stringResource("foo").setContentEncoding((String)null);

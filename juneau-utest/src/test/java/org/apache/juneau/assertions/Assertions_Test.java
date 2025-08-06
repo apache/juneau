@@ -181,7 +181,6 @@ public class Assertions_Test {
 
 	@Test
 	public void a24_assertOptional() {
-		assertOptional(empty()).isNull();
 		assertOptional(optional(1)).isNotNull();
 	}
 

@@ -106,7 +106,7 @@ class BeanStore_Test extends SimpleTestBase {
 
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			assertFalse(b.hasBean(A1.class));
-			assertOptional(b.getBean(A1.class)).isNull();
+			assertEmpty(b.getBean(A1.class));
 		}
 
 		b1p.addBean(A1.class, a1a);
@@ -120,14 +120,14 @@ class BeanStore_Test extends SimpleTestBase {
 		b2p.clear();
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			assertFalse(b.hasBean(A1.class));
-			assertOptional(b.getBean(A1.class)).isNull();
+			assertEmpty(b.getBean(A1.class));
 		}
 
 		b1p.addBean(A1.class, null);
 		b2p.addBean(A1.class, null);
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			assertTrue(b.hasBean(A1.class));
-			assertOptional(b.getBean(A1.class)).isNull();
+			assertEmpty(b.getBean(A1.class));
 		}
 
 		b1p.clear().addSupplier(A1.class, ()->a1a);
@@ -149,7 +149,7 @@ class BeanStore_Test extends SimpleTestBase {
 		b2c.add(A2.class, a2a);
 		for (BeanStore b : array(b1p, b2p)) {
 			assertFalse(b.hasBean(A2.class));
-			assertOptional(b.getBean(A2.class)).isNull();
+			assertEmpty(b.getBean(A2.class));
 			assertStream(b.stream(A2.class));
 		}
 		for (BeanStore b : array(b1c, b2c)) {
@@ -170,7 +170,7 @@ class BeanStore_Test extends SimpleTestBase {
 
 		for (BeanStore b : array(b1p, b2p)) {
 			assertFalse(b.hasBean(A1.class));
-			assertOptional(b.getBean(A1.class)).isNull();
+			assertEmpty(b.getBean(A1.class));
 			assertStream(b.stream(A1.class));
 		}
 		for (BeanStore b : array(b1c, b2c)) {
@@ -183,7 +183,7 @@ class BeanStore_Test extends SimpleTestBase {
 		b2c.removeBean(A1.class);
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			assertFalse(b.hasBean(A1.class));
-			assertOptional(b.getBean(A1.class)).isNull();
+			assertEmpty(b.getBean(A1.class));
 			assertStream(b.stream(A1.class));
 		}
 	}
@@ -211,7 +211,7 @@ class BeanStore_Test extends SimpleTestBase {
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			assertOptional(b.getBean(A1.class, "foo")).is(a1b);
 			assertOptional(b.getBean(A1.class, "bar")).is(a1d);
-			assertOptional(b.getBean(A1.class, "baz")).isNull();
+			assertEmpty(b.getBean(A1.class, "baz"));
 		}
 		for (BeanStore b : array(b1p, b2p)) {
 			assertOptional(b.getBean(A1.class, null)).is(a1a);

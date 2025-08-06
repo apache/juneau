@@ -27,10 +27,10 @@ class DefaultClassList_Test extends SimpleTestBase {
 
 	@Test void a01_basic() {
 		DefaultClassList x = create();
-		assertOptional(x.get(String.class)).isNull();
+		assertEmpty(x.get(String.class));
 
 		x = of(Long.class,null);
-		assertOptional(x.get(String.class)).isNull();
+		assertEmpty(x.get(String.class));
 		assertOptional(x.get(Long.class)).isNotNull();
 		assertOptional(x.get(Number.class)).isNotNull();
 		assertOptional(x.get(Object.class)).isNotNull();

@@ -77,8 +77,8 @@ class RetryAfter_Test extends SimpleTestBase {
 
 	@Test void a03_asInt() {
 		assertOptional(retryAfter(123).asInteger()).is(123);
-		assertOptional(new RetryAfter((String)null).asInteger()).isNull();
-		assertOptional(retryAfter(()->null).asInteger()).isNull();
+		assertEmpty(new RetryAfter((String)null).asInteger());
+		assertEmpty(retryAfter(()->null).asInteger());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

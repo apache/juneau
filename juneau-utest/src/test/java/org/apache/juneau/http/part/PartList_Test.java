@@ -17,8 +17,6 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
@@ -170,12 +168,12 @@ class PartList_Test extends SimpleTestBase {
 
 	@Test void a06_getCondensed() {
 		PartList x = PartList.of(FOO_1);
-		assertOptional(x.get((String)null)).isNull();
+		assertEmpty(x.get((String)null));
 		assertOptional(x.get("Foo")).isString("Foo=1");
-		assertOptional(x.get("Bar")).isNull();
+		assertEmpty(x.get("Bar"));
 		x = PartList.of(FOO_1, FOO_2, FOO_3, X_x);
 		assertOptional(x.get("Foo")).isString("Foo=1,2,3");
-		assertOptional(x.get("Bar")).isNull();
+		assertEmpty(x.get("Bar"));
 	}
 
 	@Query("Foo")
@@ -187,12 +185,12 @@ class PartList_Test extends SimpleTestBase {
 
 	@Test void a07_getCondensed_asType() {
 		PartList x = PartList.of(FOO_1);
-		assertOptional(x.get(null, APart.class)).isNull();
+		assertEmpty(x.get(null, APart.class));
 		assertOptional(x.get("Foo", APart.class)).isString("a=1");
-		assertOptional(x.get("Bar", APart.class)).isNull();
+		assertEmpty(x.get("Bar", APart.class));
 		x = PartList.of(FOO_1, FOO_2, FOO_3, X_x);
 		assertOptional(x.get("Foo", APart.class)).isString("a=1,2,3");
-		assertOptional(x.get("Bar", APart.class)).isNull();
+		assertEmpty(x.get("Bar", APart.class));
 		assertOptional(x.get(Foo.class)).isString("Foo=1,2,3");
 		final PartList x2 = x;
 		assertThrows(IllegalArgumentException.class, ()->x2.get(String.class), "Part name could not be found on bean type 'java.lang.String'");
@@ -208,18 +206,18 @@ class PartList_Test extends SimpleTestBase {
 
 	@Test void a09_getFirst() {
 		PartList x = PartList.of(FOO_1, FOO_2, X_x);
-		assertOptional(x.getFirst(null)).isNull();
+		assertEmpty(x.getFirst(null));
 		assertOptional(x.getFirst("Foo")).isString("Foo=1");
-		assertOptional(x.getFirst("FOO")).isNull();
-		assertOptional(x.getFirst("Bar")).isNull();
+		assertEmpty(x.getFirst("FOO"));
+		assertEmpty(x.getFirst("Bar"));
 	}
 
 	@Test void a10_getLast() {
 		PartList x = PartList.of(FOO_1, FOO_2, X_x);
-		assertOptional(x.getLast(null)).isNull();
+		assertEmpty(x.getLast(null));
 		assertOptional(x.getLast("Foo")).isString("Foo=2");
-		assertOptional(x.getLast("FOO")).isNull();
-		assertOptional(x.getLast("Bar")).isNull();
+		assertEmpty(x.getLast("FOO"));
+		assertEmpty(x.getLast("Bar"));
 	}
 
 	@Test void a11_contains() {

@@ -14,24 +14,21 @@ package org.apache.juneau.mstat;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.stats.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings("serial")
-@FixMethodOrder(NAME_ASCENDING)
-public class ThrownStore_Test {
+class ThrownStore_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_testBasic() {
+	@Test void a01_testBasic() {
 
 		Throwable t1 = new Throwable();
 		t1.fillInStackTrace();
@@ -48,8 +45,7 @@ public class ThrownStore_Test {
 		assertLong(db.getStats(t1).get().getHash()).isNot(db.getStats(t2).get().getHash());
 	}
 
-	@Test
-	public void a02_getStats() {
+	@Test void a02_getStats() {
 
 		Throwable t1 = new Throwable();
 		t1.fillInStackTrace();
@@ -65,13 +61,12 @@ public class ThrownStore_Test {
 		List<ThrownStats> l = db.getStats();  // Should be a snapshot.
 		db.add(t1);
 
-		assertList(l).isSize(2);
+		assertSize(2, l);
 		assertInteger(l.get(0).getCount()).is(2);
 		assertInteger(l.get(1).getCount()).is(1);
 	}
 
-	@Test
-	public void a03_reset() {
+	@Test void a03_reset() {
 		Throwable t1 = new Throwable();
 		t1.fillInStackTrace();
 
@@ -79,11 +74,10 @@ public class ThrownStore_Test {
 		db.add(t1);
 		db.reset();
 
-		assertOptional(db.getStats(t1)).isNull();
+		assertEmpty(db.getStats(t1));
 	}
 
-	@Test
-	public void a04_sameStackTraces() {
+	@Test void a04_sameStackTraces() {
 		ThrownStore db = new ThrownStore();
 
 		Throwable t1 = new Throwable() {
@@ -116,8 +110,7 @@ public class ThrownStore_Test {
 		assertInteger(db.getStats(t2).get().getCount()).is(2);
 	}
 
-	@Test
-	public void a05_slightlyDifferentStackTraces() {
+	@Test void a05_slightlyDifferentStackTraces() {
 		ThrownStore db = new ThrownStore();
 
 		Throwable t1 = new Throwable() {
@@ -150,8 +143,7 @@ public class ThrownStore_Test {
 		assertInteger(db.getStats(t2).get().getCount()).is(1);
 	}
 
-	@Test
-	public void a06_proxyElements() {
+	@Test void a06_proxyElements() {
 		ThrownStore db = new ThrownStore();
 
 		Throwable t1 = new Throwable() {
@@ -188,15 +180,13 @@ public class ThrownStore_Test {
 	// Builder tests.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void b01_builder_default() {
+	@Test void b01_builder_default() {
 		assertObject(ThrownStore.create().build()).isType(ThrownStore.class);
 	}
 
 	public static class B1 extends ThrownStore{}
 
-	@Test
-	public void b02_builder_implClass() {
+	@Test void b02_builder_implClass() {
 		assertObject(ThrownStore.create().type(B1.class).build()).isType(B1.class);
 	}
 
@@ -206,8 +196,7 @@ public class ThrownStore_Test {
 		}
 	}
 
-	@Test
-	public void b04_builder_implClass_bad() {
+	@Test void b04_builder_implClass_bad() {
 		assertThrown(()->ThrownStore.create().type(B4.class).build()).asMessages().isContains("foobar");
 	}
 
@@ -227,8 +216,7 @@ public class ThrownStore_Test {
 		}
 	}
 
-	@Test
-	public void b05_builder_beanFactory() {
+	@Test void b05_builder_beanFactory() {
 		BeanStore bs = BeanStore.create().build();
 
 		assertThrown(()->ThrownStore.create(bs).type(B5b.class).build()).asMessages().isAny(contains("Public constructor found but could not find prerequisites: B5a"));
@@ -257,8 +245,7 @@ public class ThrownStore_Test {
 		}
 	}
 
-	@Test
-	public void b06_statsImplClass() {
+	@Test void b06_statsImplClass() {
 		BeanStore bs = BeanStore.create().build();
 
 		Throwable t1 = new Throwable();
@@ -276,8 +263,7 @@ public class ThrownStore_Test {
 	// ThrownStats tests.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void c01_thrownStats_basic() {
+	@Test void c01_thrownStats_basic() {
 		Throwable t1 = new Throwable("foo");
 		t1.fillInStackTrace();
 		Throwable t2 = new Throwable("bar", t1);
@@ -321,8 +307,7 @@ public class ThrownStore_Test {
 	public static class D2 {}
 
 
-	@Test
-	public void d01_ignoreClasses() {
+	@Test void d01_ignoreClasses() {
 		ThrownStore db = ThrownStore.create().ignoreClasses(D1.class,D2.class,ThrownStore_Test.class).build();
 
 		Throwable t1 = new Throwable() {
