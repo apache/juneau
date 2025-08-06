@@ -38,12 +38,12 @@ public class Swagger_Test {
 	@Test
 	public void a01_gettersAndSetters() {
 		Swagger t = new Swagger();
-		assertString(t.setSwagger("foo").getSwagger()).is("foo");
+		assertEquals("foo", t.setSwagger("foo").getSwagger());
 		assertString(t.setSwagger(null).getSwagger()).isNull();
 		assertObject(t.setInfo(info("foo", "bar")).getInfo()).asJson().is("{title:'foo',version:'bar'}");
-		assertString(t.setHost("foo").getHost()).is("foo");
+		assertEquals("foo", t.setHost("foo").getHost());
 		assertString(t.setHost(null).getHost()).isNull();
-		assertString(t.setBasePath("foo").getBasePath()).is("foo");
+		assertEquals("foo", t.setBasePath("foo").getBasePath());
 		assertString(t.setBasePath(null).getBasePath()).isNull();
 		assertObject(t.setSchemes(set("foo","bar")).getSchemes()).isType(Set.class).asJson().is("['foo','bar']");
 		assertObject(t.setSchemes(set()).getSchemes()).isType(Set.class).asJson().is("[]");
@@ -151,22 +151,22 @@ public class Swagger_Test {
 
 		assertObject(t).asJson().is("{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}");
 
-		assertString(t.get("basePath", String.class)).is("a");
-		assertString(t.get("consumes", String.class)).is("['text/b']");
-		assertString(t.get("definitions", String.class)).is("{c:{type:'c1'}}");
-		assertString(t.get("externalDocs", String.class)).is("{url:'d'}");
-		assertString(t.get("host", String.class)).is("e");
-		assertString(t.get("info", String.class)).is("{title:'f1',version:'f2'}");
-		assertString(t.get("parameters", String.class)).is("{g:{'in':'g1',name:'g2'}}");
-		assertString(t.get("paths", String.class)).is("{h:{h1:{operationId:'h2'}}}");
-		assertString(t.get("produces", String.class)).is("['text/i']");
-		assertString(t.get("responses", String.class)).is("{j:{description:'j1'}}");
-		assertString(t.get("schemes", String.class)).is("['k1']");
-		assertString(t.get("security", String.class)).is("[{l1:['l2']}]");
-		assertString(t.get("securityDefinitions", String.class)).is("{m:{type:'m1'}}");
-		assertString(t.get("swagger", String.class)).is("n");
-		assertString(t.get("tags", String.class)).is("[{name:'o'}]");
-		assertString(t.get("$ref", String.class)).is("ref");
+		assertEquals("a", t.get("basePath", String.class));
+		assertEquals("['text/b']", t.get("consumes", String.class));
+		assertEquals("{c:{type:'c1'}}", t.get("definitions", String.class));
+		assertEquals("{url:'d'}", t.get("externalDocs", String.class));
+		assertEquals("e", t.get("host", String.class));
+		assertEquals("{title:'f1',version:'f2'}", t.get("info", String.class));
+		assertEquals("{g:{'in':'g1',name:'g2'}}", t.get("parameters", String.class));
+		assertEquals("{h:{h1:{operationId:'h2'}}}", t.get("paths", String.class));
+		assertEquals("['text/i']", t.get("produces", String.class));
+		assertEquals("{j:{description:'j1'}}", t.get("responses", String.class));
+		assertEquals("['k1']", t.get("schemes", String.class));
+		assertEquals("[{l1:['l2']}]", t.get("security", String.class));
+		assertEquals("{m:{type:'m1'}}", t.get("securityDefinitions", String.class));
+		assertEquals("n", t.get("swagger", String.class));
+		assertEquals("[{name:'o'}]", t.get("tags", String.class));
+		assertEquals("ref", t.get("$ref", String.class));
 
 		assertObject(t.get("basePath", Object.class)).isType(String.class);
 		assertObject(t.get("consumes", Object.class)).isType(Set.class);

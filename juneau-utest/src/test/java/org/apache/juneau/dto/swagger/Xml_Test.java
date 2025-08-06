@@ -32,11 +32,11 @@ public class Xml_Test {
 	@Test
 	public void a01_gettersAndSetters() {
 		Xml t = new Xml();
-		assertString(t.setName("foo").getName()).is("foo");
+		assertEquals("foo", t.setName("foo").getName());
 		assertString(t.setName(null).getName()).isNull();
-		assertString(t.setNamespace("foo").getNamespace()).is("foo");
+		assertEquals("foo", t.setNamespace("foo").getNamespace());
 		assertString(t.setNamespace(null).getNamespace()).isNull();
-		assertString(t.setPrefix("foo").getPrefix()).is("foo");
+		assertEquals("foo", t.setPrefix("foo").getPrefix());
 		assertString(t.setPrefix(null).getPrefix()).isNull();
 		assertObject(t.setAttribute(true).getAttribute()).isType(Boolean.class).is(true);
 		assertObject(t.setWrapped(true).getWrapped()).isType(Boolean.class).is(true);
@@ -79,12 +79,12 @@ public class Xml_Test {
 
 		assertObject(t).asJson().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
 
-		assertString(t.get("attribute", String.class)).is("true");
-		assertString(t.get("name", String.class)).is("a");
-		assertString(t.get("namespace", String.class)).is("b");
-		assertString(t.get("prefix", String.class)).is("c");
-		assertString(t.get("wrapped", String.class)).is("true");
-		assertString(t.get("$ref", String.class)).is("ref");
+		assertEquals("true", t.get("attribute", String.class));
+		assertEquals("a", t.get("name", String.class));
+		assertEquals("b", t.get("namespace", String.class));
+		assertEquals("c", t.get("prefix", String.class));
+		assertEquals("true", t.get("wrapped", String.class));
+		assertEquals("ref", t.get("$ref", String.class));
 
 		assertObject(t.get("attribute", Object.class)).isType(Boolean.class);
 		assertObject(t.get("name", Object.class)).isType(String.class);

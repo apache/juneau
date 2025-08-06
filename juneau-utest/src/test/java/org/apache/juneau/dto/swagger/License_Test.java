@@ -34,7 +34,7 @@ public class License_Test {
 	@Test
 	public void a01_gettersAndSetters() {
 		License t = new License();
-		assertString(t.setName("foo").getName()).is("foo");
+		assertEquals("foo", t.setName("foo").getName());
 		assertString(t.setName(null).getName()).isNull();
 		assertObject(t.setUrl(URI.create("foo")).getUrl()).isType(URI.class).asString().is("foo");
 	}
@@ -67,9 +67,9 @@ public class License_Test {
 
 		assertObject(t).asJson().is("{name:'a',url:'b','$ref':'ref'}");
 
-		assertString(t.get("name", String.class)).is("a");
-		assertString(t.get("url", String.class)).is("b");
-		assertString(t.get("$ref", String.class)).is("ref");
+		assertEquals("a", t.get("name", String.class));
+		assertEquals("b", t.get("url", String.class));
+		assertEquals("ref", t.get("$ref", String.class));
 
 		assertObject(t.get("name", Object.class)).isType(String.class);
 		assertObject(t.get("url", Object.class)).isType(URI.class);

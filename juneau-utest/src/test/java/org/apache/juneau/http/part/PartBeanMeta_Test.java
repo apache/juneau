@@ -89,22 +89,22 @@ class PartBeanMeta_Test extends SimpleTestBase {
 		PartBeanMeta<A3> a3 = PartBeanMeta.of(A3.class);
 		assertObject(a3.construct("X", "foo")).isJson("{value:'foo'}");
 		assertObject(a3.construct("foo")).isJson("{value:'foo'}");
-		assertString(a3.getSchema().getName()).is("A3");
+		assertEquals("A3", a3.getSchema().getName());
 
 		PartBeanMeta<A4> a4 = PartBeanMeta.of(A4.class);
 		assertObject(a4.construct("X", "foo")).isJson("{value:'foo'}");
 		assertObject(a4.construct("foo")).isJson("{value:'foo'}");
-		assertString(a4.getSchema().getName()).is("A4");
+		assertEquals("A4", a4.getSchema().getName());
 
 		PartBeanMeta<A5> a5 = PartBeanMeta.of(A5.class);
 		assertThrown(()->a5.construct("foo")).asMessage().isContains("Constructor for type "+TNAME+"$A5 could not be found.");
-		assertString(a5.getSchema().getName()).is("A5");
+		assertEquals("A5", a5.getSchema().getName());
 
 		PartBeanMeta<A6> a6 = PartBeanMeta.of(A6.class);
 		assertThrown(()->a6.construct("X", "foo")).asMessages().isContains("oops");
 
 		PartBeanMeta<A7> a7 = PartBeanMeta.of(A7.class);
 		assertThrown(()->a7.construct("foo")).asMessage().isContains("Constructor for type "+TNAME+"$A7 could not be found.");
-		assertString(a7.getSchema().getName()).is("A7");
+		assertEquals("A7", a7.getSchema().getName());
 	}
 }

@@ -36,12 +36,12 @@ public class Items_Test {
 	@Test
 	public void a01_gettersAndSetters() {
 		Items t = new Items();
-		assertString(t.setType("foo").getType()).is("foo");
+		assertEquals("foo", t.setType("foo").getType());
 		assertString(t.setType(null).getType()).isNull();
-		assertString(t.setFormat("foo").getFormat()).is("foo");
+		assertEquals("foo", t.setFormat("foo").getFormat());
 		assertString(t.setFormat(null).getFormat()).isNull();
 		assertObject(t.setItems(items("foo")).getItems()).asJson().is("{type:'foo'}");
-		assertString(t.setCollectionFormat("foo").getCollectionFormat()).is("foo");
+		assertEquals("foo", t.setCollectionFormat("foo").getCollectionFormat());
 		assertString(t.setCollectionFormat(null).getCollectionFormat()).isNull();
 		assertObject(t.setDefault("foo").getDefault()).is("foo");
 		assertObject(t.setDefault(new StringBuilder("foo")).getDefault()).isType(StringBuilder.class).asString().is("foo");
@@ -54,7 +54,7 @@ public class Items_Test {
 		assertObject(t.setExclusiveMinimum(true).getExclusiveMinimum()).isType(Boolean.class).is(true);
 		assertObject(t.setMaxLength(123).getMaxLength()).isType(Integer.class).is(123);
 		assertObject(t.setMinLength(123).getMinLength()).isType(Integer.class).is(123);
-		assertString(t.setPattern("foo").getPattern()).is("foo");
+		assertEquals("foo", t.setPattern("foo").getPattern());
 		assertString(t.setPattern(null).getPattern()).isNull();
 		assertObject(t.setMaxItems(123).getMaxItems()).isType(Integer.class).is(123);
 		assertObject(t.setMinItems(123).getMinItems()).isType(Integer.class).is(123);
@@ -142,24 +142,24 @@ public class Items_Test {
 
 		assertObject(t).asJson().is("{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}");
 
-		assertString(t.get("default", String.class)).is("a");
-		assertString(t.get("enum", String.class)).is("['b']");
-		assertString(t.get("collectionFormat", String.class)).is("c");
-		assertString(t.get("exclusiveMaximum", String.class)).is("true");
-		assertString(t.get("exclusiveMinimum", String.class)).is("true");
-		assertString(t.get("format", String.class)).is("g");
-		assertString(t.get("items", String.class)).is("{type:'h'}");
-		assertString(t.get("maximum", String.class)).is("123.0");
-		assertString(t.get("maxItems", String.class)).is("123");
-		assertString(t.get("maxLength", String.class)).is("123");
-		assertString(t.get("minimum", String.class)).is("123.0");
-		assertString(t.get("minItems", String.class)).is("123");
-		assertString(t.get("minLength", String.class)).is("123");
-		assertString(t.get("multipleOf", String.class)).is("123.0");
-		assertString(t.get("pattern", String.class)).is("i");
-		assertString(t.get("type", String.class)).is("j");
-		assertString(t.get("uniqueItems", String.class)).is("true");
-		assertString(t.get("$ref", String.class)).is("ref");
+		assertEquals("a", t.get("default", String.class));
+		assertEquals("['b']", t.get("enum", String.class));
+		assertEquals("c", t.get("collectionFormat", String.class));
+		assertEquals("true", t.get("exclusiveMaximum", String.class));
+		assertEquals("true", t.get("exclusiveMinimum", String.class));
+		assertEquals("g", t.get("format", String.class));
+		assertEquals("{type:'h'}", t.get("items", String.class));
+		assertEquals("123.0", t.get("maximum", String.class));
+		assertEquals("123", t.get("maxItems", String.class));
+		assertEquals("123", t.get("maxLength", String.class));
+		assertEquals("123.0", t.get("minimum", String.class));
+		assertEquals("123", t.get("minItems", String.class));
+		assertEquals("123", t.get("minLength", String.class));
+		assertEquals("123.0", t.get("multipleOf", String.class));
+		assertEquals("i", t.get("pattern", String.class));
+		assertEquals("j", t.get("type", String.class));
+		assertEquals("true", t.get("uniqueItems", String.class));
+		assertEquals("ref", t.get("$ref", String.class));
 
 		assertObject(t.get("default", Object.class)).isType(StringBuilder.class);
 		assertObject(t.get("enum", Object.class)).isType(Set.class);

@@ -36,17 +36,17 @@ public class HeaderInfo_Test {
 	@Test
 	public void a01_gettersAndSetters() {
 		HeaderInfo t = new HeaderInfo();
-		assertString(t.setDescription("foo").getDescription()).is("foo");
+		assertEquals("foo", t.setDescription("foo").getDescription());
 		assertString(t.setDescription(null).getDescription()).isNull();
-		assertString(t.setType("foo").getType()).is("foo");
+		assertEquals("foo", t.setType("foo").getType());
 		assertString(t.setType(null).getType()).isNull();
-		assertString(t.setFormat("foo").getFormat()).is("foo");
+		assertEquals("foo", t.setFormat("foo").getFormat());
 		assertString(t.setFormat(null).getFormat()).isNull();
 		assertObject(t.setItems(items("foo")).getItems()).asJson().is("{type:'foo'}");
 		assertNull(t.setItems((Items)null).getItems());
-		assertString(t.setCollectionFormat("foo").getCollectionFormat()).is("foo");
+		assertEquals("foo", t.setCollectionFormat("foo").getCollectionFormat());
 		assertString(t.setCollectionFormat(null).getCollectionFormat()).isNull();
-		assertString(t.setDefault("foo").getDefault()).is("foo");
+		assertEquals("foo", t.setDefault("foo").getDefault());
 		assertObject(t.setDefault(new StringBuilder("foo")).getDefault()).isType(StringBuilder.class).asString().is("foo");
 		assertNull(t.setDefault(null).getDefault());
 		assertObject(t.setMaximum(123).getMaximum()).isType(Integer.class).is(123);
@@ -57,7 +57,7 @@ public class HeaderInfo_Test {
 		assertObject(t.setExclusiveMinimum(true).getExclusiveMinimum()).isType(Boolean.class).is(true);
 		assertObject(t.setMaxLength(123).getMaxLength()).isType(Integer.class).is(123);
 		assertObject(t.setMinLength(123).getMinLength()).isType(Integer.class).is(123);
-		assertString(t.setPattern("foo").getPattern()).is("foo");
+		assertEquals("foo", t.setPattern("foo").getPattern());
 		assertString(t.setPattern(null).getPattern()).isNull();
 		assertObject(t.setMaxItems(123).getMaxItems()).isType(Integer.class).is(123);
 		assertObject(t.setMinItems(123).getMinItems()).isType(Integer.class).is(123);
@@ -73,7 +73,7 @@ public class HeaderInfo_Test {
 		assertObject(t.setExample("foo").getExample()).isType(String.class).is("foo");
 		assertObject(t.setExample(123f).getExample()).isType(Float.class).is(123f);
 		assertNull(t.setExample((String)null).getExample());
-		assertString(t.setRef("foo").getRef()).is("foo");
+		assertEquals("foo", t.setRef("foo").getRef());
 		assertNull(t.setRef(null).getRef());
 	}
 

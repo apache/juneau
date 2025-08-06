@@ -33,9 +33,9 @@ public class Tag_Test {
 	@Test
 	public void a01_gettersAndSetters() {
 		Tag t = new Tag();
-		assertString(t.setName("foo").getName()).is("foo");
+		assertEquals("foo", t.setName("foo").getName());
 		assertString(t.setName(null).getName()).isNull();
-		assertString(t.setDescription("foo").getDescription()).is("foo");
+		assertEquals("foo", t.setDescription("foo").getDescription());
 		assertString(t.setDescription(null).getDescription()).isNull();
 		assertObject(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs()).asJson().is("{url:'foo'}");
 	}
@@ -71,10 +71,10 @@ public class Tag_Test {
 
 		assertObject(t).asJson().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
 
-		assertString(t.get("description", String.class)).is("a");
-		assertString(t.get("externalDocs", String.class)).is("{url:'b'}");
-		assertString(t.get("name", String.class)).is("c");
-		assertString(t.get("$ref", String.class)).is("ref");
+		assertEquals("a", t.get("description", String.class));
+		assertEquals("{url:'b'}", t.get("externalDocs", String.class));
+		assertEquals("c", t.get("name", String.class));
+		assertEquals("ref", t.get("$ref", String.class));
 
 		assertObject(t.get("description", Object.class)).isType(String.class);
 		assertObject(t.get("externalDocs", Object.class)).isType(ExternalDocumentation.class);

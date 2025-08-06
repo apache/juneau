@@ -100,8 +100,8 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		assertLong(readerResource(reader("foo")).setContentLength(3).getContentLength()).is(3L);
 
 		x = stringResource("foo", contentType("text/plain")).setContentEncoding("identity");
-		assertString(x.getContentType().getValue()).is("text/plain");
-		assertString(x.getContentEncoding().getValue()).is("identity");
+		assertEquals("text/plain", x.getContentType().getValue());
+		assertEquals("identity", x.getContentEncoding().getValue());
 
 		x = stringResource("foo", null).setContentEncoding((String)null);
 		assertNull(x.getContentType());
@@ -110,8 +110,8 @@ class BasicHttpResource_Test extends SimpleTestBase {
 
 	@Test void a02_header_String_Object() {
 		HeaderList x = stringResource("foo").addHeader("Foo","bar").addHeader("Foo","baz").addHeader(null,"bar").addHeader("foo",null).getHeaders();
-		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
-		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
+		assertEquals("Foo: bar", x.getFirst("Foo").get().toString());
+		assertEquals("Foo: baz", x.getLast("Foo").get().toString());
 		assertEmpty(x.getFirst("Bar"));
 		assertEmpty(x.getLast("Bar"));
 		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz']");
@@ -119,8 +119,8 @@ class BasicHttpResource_Test extends SimpleTestBase {
 
 	@Test void a03_header_Header() {
 		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar")).addHeaders(header("Foo","baz")).addHeaders(header("Bar",null)).getHeaders();
-		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
-		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
+		assertEquals("Foo: bar", x.getFirst("Foo").get().toString());
+		assertEquals("Foo: baz", x.getLast("Foo").get().toString());
 		assertNull(x.getFirst("Bar").get().getValue());
 		assertNull(x.getLast("Bar").get().getValue());
 		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','Bar: null']");
@@ -128,8 +128,8 @@ class BasicHttpResource_Test extends SimpleTestBase {
 
 	@Test void a04_headers_List() {
 		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).getHeaders();
-		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
-		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
+		assertEquals("Foo: bar", x.getFirst("Foo").get().toString());
+		assertEquals("Foo: baz", x.getLast("Foo").get().toString());
 		assertNull(x.getFirst("Bar").get().getValue());
 		assertNull(x.getLast("Bar").get().getValue());
 		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','Bar: null']");
@@ -137,8 +137,8 @@ class BasicHttpResource_Test extends SimpleTestBase {
 
 	@Test void a05_headers_array() {
 		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).getHeaders();
-		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
-		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
+		assertEquals("Foo: bar", x.getFirst("Foo").get().toString());
+		assertEquals("Foo: baz", x.getLast("Foo").get().toString());
 		assertNull(x.getFirst("Bar").get().getValue());
 		assertNull(x.getLast("Bar").get().getValue());
 		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','Bar: null']");
@@ -161,14 +161,14 @@ class BasicHttpResource_Test extends SimpleTestBase {
 
 	@Test void a08_contentType_String() {
 		StringResource x1 = stringResource("foo").setContentType("text/plain");
-		assertString(x1.getContentType().getValue()).is("text/plain");
+		assertEquals("text/plain", x1.getContentType().getValue());
 		StringResource x2 = stringResource("foo").setContentType((String)null);
 		assertNull(x2.getContentType());
 	}
 
 	@Test void a09_contentEncoding_String() {
 		StringResource x1 = stringResource("foo").setContentEncoding("identity");
-		assertString(x1.getContentEncoding().getValue()).is("identity");
+		assertEquals("identity", x1.getContentEncoding().getValue());
 		StringResource x2 = stringResource("foo").setContentEncoding((String)null);
 		assertNull(x2.getContentEncoding());
 	}

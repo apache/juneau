@@ -13,6 +13,8 @@
 package org.apache.juneau.marshaller;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -20,24 +22,24 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
-public class Uon_Test extends SimpleTestBase {
+class Uon_Test extends SimpleTestBase {
 
 	@Test void a01_to() throws Exception {
 		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
 		String expected1 = "foo", expected2 = "(foo=bar)";
 
-		assertString(Uon.of(in1)).is(expected1);
-		assertString(Uon.of(in1,stringWriter())).is(expected1);
-		assertString(Uon.of(in2)).is(expected2);
-		assertString(Uon.of(in2,stringWriter())).is(expected2);
+		assertString(expected1, Uon.of(in1));
+		assertString(expected1, Uon.of(in1,stringWriter()));
+		assertString(expected2, Uon.of(in2));
+		assertString(expected2, Uon.of(in2,stringWriter()));
 	}
 
 	@Test void a02_from() throws Exception {
 		String in1 = "foo", in2 = "(foo=bar)";
 		String expected1 = "foo", expected2 = "{foo:'bar'}";
 
-		assertString(Uon.to(in1, String.class)).is(expected1);
-		assertString(Uon.to(stringReader(in1), String.class)).is(expected1);
+		assertEquals(expected1, Uon.to(in1, String.class));
+		assertEquals(expected1, Uon.to(stringReader(in1), String.class));
 		assertObject(Uon.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
 		assertObject(Uon.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
 	}

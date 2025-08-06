@@ -29,12 +29,11 @@ class Csv_Test  extends SimpleTestBase{
 		Object in1 = "foo", in2 = new Object[]{JsonMap.of("a","foo","b","bar")};
 		String expected1="value\nfoo\n", expected2 = "a,b\nfoo,bar\n";
 
-		assertString(Csv.of(in1)).is(expected1);
-		assertString(Csv.of(in1,stringWriter())).is(expected1);
-		assertString(Csv.of(in2)).is(expected2);
-		assertString(Csv.of(in2,stringWriter())).is(expected2);
+		assertString(expected1, Csv.of(in1));
+		assertString(expected1, Csv.of(in1,stringWriter()));
+		assertString(expected2, Csv.of(in2));
+		assertString(expected2, Csv.of(in2,stringWriter()));
 	}
-
 
 	@Test void a02_from() {
 		String in1 = "'foo'", in2 = "{foo:'bar'}";

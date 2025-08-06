@@ -14,6 +14,8 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.util.function.*;
 
@@ -61,7 +63,7 @@ class ContentType_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_asMediaType() {
-		assertString(contentType(()->MediaType.JSON).asMediaType()).is("application/json");
+		assertString("application/json", contentType(()->MediaType.JSON).asMediaType());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

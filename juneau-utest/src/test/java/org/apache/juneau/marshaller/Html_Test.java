@@ -13,6 +13,8 @@
 package org.apache.juneau.marshaller;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -26,18 +28,18 @@ public class Html_Test extends SimpleTestBase {
 		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
 		String expected1 = "<string>foo</string>", expected2 = "<table><tr><td>foo</td><td>bar</td></tr></table>";
 
-		assertString(Html.of(in1)).is(expected1);
-		assertString(Html.of(in1,stringWriter())).is(expected1);
-		assertString(Html.of(in2)).is(expected2);
-		assertString(Html.of(in2,stringWriter())).is(expected2);
+		assertString(expected1, Html.of(in1));
+		assertString(expected1, Html.of(in1,stringWriter()));
+		assertString(expected2, Html.of(in2));
+		assertString(expected2, Html.of(in2,stringWriter()));
 	}
 
 	@Test void a02_from() throws Exception {
 		String in1 = "<string>foo</string>", in2 = "<table><tr><td>foo</td><td>bar</td></tr></table>";
 		String expected1 = "foo", expected2 = "{foo:'bar'}";
 
-		assertString(Html.to(in1, String.class)).is(expected1);
-		assertString(Html.to(stringReader(in1), String.class)).is(expected1);
+		assertEquals(expected1, Html.to(in1, String.class));
+		assertEquals(expected1, Html.to(stringReader(in1), String.class));
 		assertObject(Html.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
 		assertObject(Html.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
 	}

@@ -14,6 +14,8 @@ package org.apache.juneau.marshaller;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -37,8 +39,8 @@ class MsgPack_Test extends SimpleTestBase {
 		String in1 = "A3666F6F", in2 = "81A3666F6FA3626172";
 		String expected1 = "foo", expected2 = "{foo:'bar'}";
 
-		assertString(MsgPack.to(in1, String.class)).is(expected1);
-		assertString(MsgPack.to(fromHex(in1), String.class)).is(expected1);
+		assertEquals(expected1, MsgPack.to(in1, String.class));
+		assertEquals(expected1, MsgPack.to(fromHex(in1), String.class));
 		assertObject(MsgPack.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
 		assertObject(MsgPack.to(fromHex(in2), Map.class, String.class, String.class)).asJson().is(expected2);
 	}

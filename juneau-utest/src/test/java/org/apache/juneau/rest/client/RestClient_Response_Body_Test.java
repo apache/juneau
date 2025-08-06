@@ -169,11 +169,11 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 
 		StringWriter sw = new StringWriter();
 		client().build().get("/bean").run().getContent().pipeTo(sw);
-		assertString(sw.toString()).is("{f:1}");
+		assertEquals("{f:1}", sw.toString());
 
 		sw = new StringWriter();
 		client().build().get("/bean").run().getContent().pipeTo(sw,UTF8);
-		assertString(sw.toString()).is("{f:1}");
+		assertEquals("{f:1}", sw.toString());
 	}
 
 	public static class A7a {
@@ -228,29 +228,29 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 		assertObject(x12.get()).asJson().is("[1,2]");
 
 		String x14 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asString();
-		assertString(x14).is("{f:1}");
+		assertEquals("{f:1}", x14);
 
 		assertThrown(()->testClient().entity(new InputStreamEntity(badStream())).get().run().getContent().asString()).asMessages().isContains("foo");
 
 		Future<String> x16 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asStringFuture();
-		assertString(x16.get()).is("{f:1}");
+		assertEquals("{f:1}", x16.get());
 
 		String x18 = testClient().entity(stringEntity("12345")).get().run().getContent().asAbbreviatedString(4);
-		assertString(x18).is("1...");
+		assertEquals("1...", x18);
 
 		ObjectRest x20 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asObjectRest(ABean.class);
-		assertString(x20.get("f")).is("1");
+		assertString("1", x20.get("f"));
 
 		ObjectRest x22 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asObjectRest();
-		assertString(x22.get("f")).is("1");
+		assertString("1", x22.get("f"));
 
 		Matcher x24 = testClient().entity(stringEntity("foo=123")).get().run().getContent().asMatcher(Pattern.compile("foo=(.*)"));
 		assertTrue(x24.matches());
-		assertString(x24.group(1)).is("123");
+		assertEquals("123", x24.group(1));
 
 		Matcher x26 = testClient().entity(stringEntity("foo=123")).get().run().getContent().asMatcher("foo=(.*)");
 		assertTrue(x26.matches());
-		assertString(x26.group(1)).is("123");
+		assertEquals("123", x26.group(1));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

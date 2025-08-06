@@ -20,13 +20,11 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class Version_Test {
+class Version_Test extends SimpleTestBase {
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		assertNull(of(null));
 		assertObject(of("")).asString().is("0");
 
@@ -41,11 +39,10 @@ public class Version_Test {
 		assertInteger(x.getPart(3).orElse(null)).isNull();
 
 		x = of("1..x");
-		assertString(x).is("1.0.2147483647");
+		assertString("1.0.2147483647", x);
 	}
 
-	@Test
-	public void a02_isAtLeast() {
+	@Test void a02_isAtLeast() {
 		Version x = of("1.2.3");
 
 		assertTrue(x.isAtLeast(of("1.2.2")));
@@ -62,8 +59,7 @@ public class Version_Test {
 		assertFalse(x.isAtLeast(of("1.3.0.1")));
 	}
 
-	@Test
-	public void a03_isAtMost() {
+	@Test void a03_isAtMost() {
 		Version x = of("1.2.3");
 
 		assertFalse(x.isAtMost(of("1.2.2")));
@@ -80,8 +76,7 @@ public class Version_Test {
 		assertTrue(x.isAtMost(of("1.3.0.1")));
 	}
 
-	@Test
-	public void a04_isEqualsTo() {
+	@Test void a04_isEqualsTo() {
 		Version x = of("1.2.3");
 
 		assertTrue(x.equals(of("1.2.3")));
@@ -90,8 +85,7 @@ public class Version_Test {
 		assertFalse(x.equals(of("1.2.4")));
 	}
 
-	@Test
-	public void a05_compareTo() {
+	@Test void a05_compareTo() {
 		List<Version> l = alist(
 			of("1.2.3"),
 			of("1.2"),
@@ -100,8 +94,9 @@ public class Version_Test {
 			of("2.0"),
 			of("2")
 		);
-		assertList(l).asSorted().asString().is("[0, 1.2, 1.2.3, 1.2.3.4, 2, 2.0]");
+		Collections.sort(l);
+		assertList(l, "0,1.2,1.2.3,1.2.3.4,2,2.0");
 		Collections.reverse(l);
-		assertList(l).asSorted().asString().is("[0, 1.2, 1.2.3, 1.2.3.4, 2, 2.0]");
+		assertList(l, "2.0,2,1.2.3.4,1.2.3,1.2,0");
 	}
 }

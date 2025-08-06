@@ -24,7 +24,7 @@ public class Tuple3_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void a01_basic() {
 		Tuple3<String,Integer,Integer> x = Tuple3.of("foo",1,2);
-		assertString(x.getA()).is("foo");
+		assertEquals("foo", x.getA());
 		assertEquals(1, x.getB());
 		assertEquals(2, x.getC());
 	}

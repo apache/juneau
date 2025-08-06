@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.annotation.*;
@@ -40,7 +41,7 @@ public class RestContext_Builder_Test {
 	@Test
 	public void a01_createBeanStore_default() {
 		MockRestClient.buildLax(A1.class);
-		assertString(A1.beanStore.getClass().getSimpleName()).is("BeanStore");
+		assertEquals("BeanStore", A1.beanStore.getClass().getSimpleName());
 	}
 
 	public static class MyBeanStore extends BeanStore {

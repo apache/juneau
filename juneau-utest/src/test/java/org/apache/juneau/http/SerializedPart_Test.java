@@ -27,14 +27,14 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
-public class SerializedPart_Test extends SimpleTestBase {
+class SerializedPart_Test extends SimpleTestBase {
 
 	private static final OpenApiSerializerSession OAPI_SESSION = OpenApiSerializer.DEFAULT.getSession();
 	private static final OpenApiSerializer OAPI_SERIALIZER = OpenApiSerializer.DEFAULT;
 
 	@Test void a01_basic() {
 		SerializedPart x1 = new SerializedPart("Foo",alist("bar","baz"),HEADER,OAPI_SESSION,T_ARRAY_PIPES,true);
-		assertString(x1).is("Foo=bar|baz");
+		assertString("Foo=bar|baz", x1);
 	}
 
 	@Test void a02_type() {
@@ -44,15 +44,15 @@ public class SerializedPart_Test extends SimpleTestBase {
 
 	@Test void a03_serializer() {
 		SerializedPart x1 = serializedPart("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null);
-		assertString(x1.getValue()).is("[bar, baz]");
+		assertEquals("[bar, baz]", x1.getValue());
 		SerializedPart x2 = serializedPart("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
-		assertString(x2.getValue()).is("bar,baz");
+		assertEquals("bar,baz", x2.getValue());
 		SerializedPart x3 = serializedPart("Foo",alist("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
-		assertString(x3.getValue()).is("[bar, baz]");
+		assertEquals("[bar, baz]", x3.getValue());
 		SerializedPart x4 = serializedPart("Foo",alist("bar","baz")).serializer(OAPI_SERIALIZER).copyWith(null,null);
-		assertString(x4.getValue()).is("bar,baz");
+		assertEquals("bar,baz", x4.getValue());
 		SerializedPart x5 = serializedPart("Foo",alist("bar","baz")).copyWith(OAPI_SERIALIZER.getPartSession(),null);
-		assertString(x5.getValue()).is("bar,baz");
+		assertEquals("bar,baz", x5.getValue());
 	}
 
 	@Test void a04_skipIfEmpty() {
@@ -66,7 +66,7 @@ public class SerializedPart_Test extends SimpleTestBase {
 
 	@Test void a05_getValue_defaults() {
 		SerializedPart x1 = serializedPart("Foo",null).schema(schema(INTEGER)._default("1").build()).serializer(OAPI_SESSION);
-		assertString(x1.getValue()).is("1");
+		assertEquals("1", x1.getValue());
 
 		SerializedPart x2 = serializedPart("Foo",null).schema(schema(STRING).required().allowEmptyValue().build()).serializer(OAPI_SESSION);
 		assertString(x2.getValue()).isNull();

@@ -18,32 +18,30 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.json.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Testcase for {@link ExternalDocumentation}.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class ExternalDocumentation_Test {
+class ExternalDocumentation_Test extends SimpleTestBase {
 
 	/**
 	 * Test method for getters and setters.
 	 */
-	@Test
-	public void a01_gettersAndSetters() {
+	@Test void a01_gettersAndSetters() {
 		ExternalDocumentation t = new ExternalDocumentation();
-		assertString(t.setDescription("foo").getDescription()).is("foo");
+		assertEquals("foo", t.setDescription("foo").getDescription());
 		assertString(t.setDescription(null).getDescription()).isNull();
-		assertString(t.setUrl(URI.create("http://bar")).getUrl()).is("http://bar");
+		assertString("http://bar", t.setUrl(URI.create("http://bar")).getUrl());
 	}
 
 	/**
 	 * Test method for {@link ExternalDocumentation#set(java.lang.String, java.lang.Object)}.
 	 */
-	@Test
-	public void b01_set() throws Exception {
+	@Test void b01_set() throws Exception {
 		ExternalDocumentation t = new ExternalDocumentation();
 
 		t
@@ -72,8 +70,7 @@ public class ExternalDocumentation_Test {
 		assertObject(JsonParser.DEFAULT.parse("{description:'foo',url:'bar','$ref':'baz'}", ExternalDocumentation.class)).asJson().is("{description:'foo',url:'bar','$ref':'baz'}");
 	}
 
-	@Test
-	public void b02_copy() {
+	@Test void b02_copy() {
 		ExternalDocumentation t = new ExternalDocumentation();
 
 		t = t.copy();
@@ -89,8 +86,7 @@ public class ExternalDocumentation_Test {
 		assertObject(t).asJson().is("{description:'foo',url:'bar','$ref':'baz'}");
 	}
 
-	@Test
-	public void b03_keySet() {
+	@Test void b03_keySet() {
 		ExternalDocumentation t = new ExternalDocumentation();
 
 		assertObject(t.keySet()).asJson().is("[]");

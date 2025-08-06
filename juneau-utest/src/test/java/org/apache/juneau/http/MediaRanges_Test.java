@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-public class MediaRanges_Test extends SimpleTestBase {
+class MediaRanges_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Verifies that media type parameters are distinguished from media range extensions.
@@ -30,9 +30,9 @@ public class MediaRanges_Test extends SimpleTestBase {
 
 		x1 = of("text/json");
 		x2 = x1.getRange(0);
-		assertString(x2).is("text/json");
+		assertString("text/json", x2);
 		assertObject(x2.getParameters()).asJson().is("[]");
-		assertString(x2.getQValue()).is("1.0");
+		assertString("1.0", x2.getQValue());
 		assertObject(x2.getExtensions()).asJson().is("[]");
 
 		assertNull(x1.getRange(-1));
@@ -40,65 +40,65 @@ public class MediaRanges_Test extends SimpleTestBase {
 
 		x1 = of("foo,bar");
 		x2 = x1.getRange(0);
-		assertString(x2).is("foo");
+		assertString("foo", x2);
 		assertObject(x2.getParameters()).asJson().is("[]");
-		assertString(x2.getQValue()).is("1.0");
+		assertString("1.0", x2.getQValue());
 		assertObject(x2.getExtensions()).asJson().is("[]");
 
 		x1 = of(" foo , bar ");
 		x2 = x1.getRange(0);
-		assertString(x2).is("foo");
+		assertString("foo", x2);
 		assertObject(x2.getParameters()).asJson().is("[]");
-		assertString(x2.getQValue()).is("1.0");
+		assertString("1.0", x2.getQValue());
 		assertObject(x2.getExtensions()).asJson().is("[]");
 
 		x1 = of("text/json;a=1;q=0.9;b=2");
 		x2 = x1.getRange(0);
-		assertString(x2).is("text/json;a=1;q=0.9;b=2");
+		assertString("text/json;a=1;q=0.9;b=2", x2);
 		assertObject(x2.getParameters()).asJson().is("[{name:'a',value:'1'}]");
-		assertString(x2.getQValue()).is("0.9");
+		assertString("0.9", x2.getQValue());
 		assertObject(x2.getExtensions()).asJson().is("[{name:'b',value:'2'}]");
 
 		x1 = of("text/json;a=1;a=2;q=0.9;b=3;b=4");
 		x2 = x1.getRange(0);
-		assertString(x2).is("text/json;a=1;a=2;q=0.9;b=3;b=4");
+		assertString("text/json;a=1;a=2;q=0.9;b=3;b=4", x2);
 		assertObject(x2.getParameters()).asJson().is("[{name:'a',value:'1'},{name:'a',value:'2'}]");
-		assertString(x2.getQValue()).is("0.9");
+		assertString("0.9", x2.getQValue());
 		assertObject(x2.getExtensions()).asJson().is("[{name:'b',value:'3'},{name:'b',value:'4'}]");
 
 		x1 = of("text/json;a=1;a=2;q=1.0;b=3;b=4");
 		x2 = x1.getRange(0);
-		assertString(x2).is("text/json;a=1;a=2;q=1.0;b=3;b=4");
+		assertString("text/json;a=1;a=2;q=1.0;b=3;b=4", x2);
 		assertObject(x2.getParameters()).asJson().is("[{name:'a',value:'1'},{name:'a',value:'2'}]");
-		assertString(x2.getQValue()).is("1.0");
+		assertString("1.0", x2.getQValue());
 		assertObject(x2.getExtensions()).asJson().is("[{name:'b',value:'3'},{name:'b',value:'4'}]");
 
 		x1 = of("text/json;a=1");
 		x2 = x1.getRange(0);
-		assertString(x2).is("text/json;a=1");
+		assertString("text/json;a=1", x2);
 		assertObject(x2.getParameters()).asJson().is("[{name:'a',value:'1'}]");
-		assertString(x2.getQValue()).is("1.0");
+		assertString("1.0", x2.getQValue());
 		assertObject(x2.getExtensions()).asJson().is("[]");
 
 		x1 = of("text/json;a=1;");
 		x2 = x1.getRange(0);
-		assertString(x2).is("text/json;a=1");
+		assertString("text/json;a=1", x2);
 		assertObject(x2.getParameters()).asJson().is("[{name:'a',value:'1'}]");
-		assertString(x2.getQValue()).is("1.0");
+		assertString("1.0", x2.getQValue());
 		assertObject(x2.getExtensions()).asJson().is("[]");
 
 		x1 = of("text/json;q=0.9");
 		x2 = x1.getRange(0);
-		assertString(x2).is("text/json;q=0.9");
+		assertString("text/json;q=0.9", x2);
 		assertObject(x2.getParameters()).asJson().is("[]");
-		assertString(x2.getQValue()).is("0.9");
+		assertString("0.9", x2.getQValue());
 		assertObject(x2.getExtensions()).asJson().is("[]");
 
 		x1 = of("text/json;q=0.9;");
 		x2 = x1.getRange(0);
-		assertString(x2).is("text/json;q=0.9");
+		assertString("text/json;q=0.9", x2);
 		assertObject(x2.getParameters()).asJson().is("[]");
-		assertString(x2.getQValue()).is("0.9");
+		assertString("0.9", x2.getQValue());
 		assertObject(x2.getExtensions()).asJson().is("[]");
 	}
 
@@ -111,23 +111,23 @@ public class MediaRanges_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_ordering() {
-		assertString(of("text/json")).is("text/json");
-		assertString(of("text/json,text/*")).is("text/json,text/*");
-		assertString(of("text/*,text/json")).is("text/json,text/*");
-		assertString(of("text/*,text/*")).is("text/*,text/*");
-		assertString(of("*/text,text/*")).is("text/*,*/text");
-		assertString(of("text/*,*/text")).is("text/*,*/text");
-		assertString(of("a;q=0.9,b;q=0.1")).is("a;q=0.9,b;q=0.1");
-		assertString(of("b;q=0.9,a;q=0.1")).is("b;q=0.9,a;q=0.1");
-		assertString(of("a,b;q=0.9,c;q=0.1,d;q=0")).is("a,b;q=0.9,c;q=0.1,d;q=0.0");
-		assertString(of("d;q=0,c;q=0.1,b;q=0.9,a")).is("a,b;q=0.9,c;q=0.1,d;q=0.0");
-		assertString(of("a;q=1,b;q=0.9,c;q=0.1,d;q=0")).is("a,b;q=0.9,c;q=0.1,d;q=0.0");
-		assertString(of("d;q=0,c;q=0.1,b;q=0.9,a;q=1")).is("a,b;q=0.9,c;q=0.1,d;q=0.0");
-		assertString(of("a;q=0,b;q=0.1,c;q=0.9,d;q=1")).is("d,c;q=0.9,b;q=0.1,a;q=0.0");
-		assertString(of("*")).is("*");
-		assertString(of("")).is("");
-		assertString(of(null)).is("");
-		assertString(of("foo/bar/baz")).is("foo/bar/baz");
+		assertString("text/json", of("text/json"));
+		assertString("text/json,text/*", of("text/json,text/*"));
+		assertString("text/json,text/*", of("text/*,text/json"));
+		assertString("text/*,text/*", of("text/*,text/*"));
+		assertString("text/*,*/text", of("*/text,text/*"));
+		assertString("text/*,*/text", of("text/*,*/text"));
+		assertString("a;q=0.9,b;q=0.1", of("a;q=0.9,b;q=0.1"));
+		assertString("b;q=0.9,a;q=0.1", of("b;q=0.9,a;q=0.1"));
+		assertString("a,b;q=0.9,c;q=0.1,d;q=0.0", of("a,b;q=0.9,c;q=0.1,d;q=0"));
+		assertString("a,b;q=0.9,c;q=0.1,d;q=0.0", of("d;q=0,c;q=0.1,b;q=0.9,a"));
+		assertString("a,b;q=0.9,c;q=0.1,d;q=0.0", of("a;q=1,b;q=0.9,c;q=0.1,d;q=0"));
+		assertString("a,b;q=0.9,c;q=0.1,d;q=0.0", of("d;q=0,c;q=0.1,b;q=0.9,a;q=1"));
+		assertString("d,c;q=0.9,b;q=0.1,a;q=0.0", of("a;q=0,b;q=0.1,c;q=0.9,d;q=1"));
+		assertString("*", of("*"));
+		assertString("", of(""));
+		assertString("", of(null));
+		assertString("foo/bar/baz", of("foo/bar/baz"));
 	}
 
 	@Test void a04_match() {

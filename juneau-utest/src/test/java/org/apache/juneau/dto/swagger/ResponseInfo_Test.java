@@ -36,7 +36,7 @@ public class ResponseInfo_Test {
 	@Test
 	public void a01_gettersAndSetters() {
 		ResponseInfo t = new ResponseInfo();
-		assertString(t.setDescription("foo").getDescription()).is("foo");
+		assertEquals("foo", t.setDescription("foo").getDescription());
 		assertString(t.setDescription(null).getDescription()).isNull();
 		assertObject(t.setSchema(schemaInfo().setTitle("foo")).getSchema()).isType(SchemaInfo.class).asJson().is("{title:'foo'}");
 		assertObject(t.setHeaders(map("foo",headerInfo("bar"))).getHeaders()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
@@ -84,11 +84,11 @@ public class ResponseInfo_Test {
 
 		assertObject(t).asJson().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
 
-		assertString(t.get("description", String.class)).is("a");
-		assertString(t.get("examples", String.class)).is("{foo:'bar',baz:['qux']}");
-		assertString(t.get("headers", String.class)).is("{a:{type:'a1'}}");
-		assertString(t.get("schema", String.class)).is("{type:'d'}");
-		assertString(t.get("$ref", String.class)).is("ref");
+		assertEquals("a", t.get("description", String.class));
+		assertEquals("{foo:'bar',baz:['qux']}", t.get("examples", String.class));
+		assertEquals("{a:{type:'a1'}}", t.get("headers", String.class));
+		assertEquals("{type:'d'}", t.get("schema", String.class));
+		assertEquals("ref", t.get("$ref", String.class));
 
 		assertObject(t.get("description", Object.class)).isType(String.class);
 		assertObject(t.get("examples", Object.class)).isType(Map.class);

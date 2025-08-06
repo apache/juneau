@@ -18,19 +18,19 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-public class StringRange_Test extends SimpleTestBase {
+class StringRange_Test extends SimpleTestBase {
 
 	@Test void a01_basic() {
 		StringRange x1 = of("foo;a=1;q=0.5;b=2");
-		assertString(x1.getQValue()).is("0.5");
+		assertString("0.5", x1.getQValue());
 		assertObject(x1.getExtensions()).asJson().is("[{name:'a',value:'1'},{name:'b',value:'2'}]");
 
 		StringRange x2 = of("foo;q=1.0");
-		assertString(x2.getQValue()).is("1.0");
+		assertString("1.0", x2.getQValue());
 		assertObject(x2.getExtensions()).asJson().is("[]");
 
 		StringRange x3 = of("foo;a=1");
-		assertString(x3.getQValue()).is("1.0");
+		assertString("1.0", x3.getQValue());
 		assertObject(x3.getExtensions()).asJson().is("[{name:'a',value:'1'}]");
 
 		StringRange x4 = of("foo;a=1");
@@ -39,9 +39,9 @@ public class StringRange_Test extends SimpleTestBase {
 		assertObject(x3).asString().isNot("foo");
 		assertObject(x3.hashCode()).is(x4.hashCode());
 
-		assertString(of((String)null)).is("*");
+		assertString("*", of((String)null));
 
-		assertString(of("foo;q=0").match("foo")).is("0");
+		assertString("0", of("foo;q=0").match("foo"));
 	}
 
 	@Test void a02_match() {
@@ -53,8 +53,8 @@ public class StringRange_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_getName() {
-		assertString(of("foo;a=1;q=0.5;b=2").getName()).is("foo");
-		assertString(of(null).getName()).is("*");
+		assertEquals("foo", of("foo;a=1;q=0.5;b=2").getName());
+		assertEquals("*", of(null).getName());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

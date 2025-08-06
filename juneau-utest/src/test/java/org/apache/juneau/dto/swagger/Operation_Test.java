@@ -41,10 +41,10 @@ public class Operation_Test {
 		assertObject(t.setTags("bar","baz").getTags()).isType(Set.class).asJson().is("['bar','baz']");
 		assertObject(t.setTags(set()).getTags()).isType(Set.class).asJson().is("[]");
 		assertNull(t.setTags((Collection<String>)null).getTags());
-		assertString(t.setSummary("foo").getSummary()).is("foo");
-		assertString(t.setDescription("foo").getDescription()).is("foo");
+		assertEquals("foo", t.setSummary("foo").getSummary());
+		assertEquals("foo", t.setDescription("foo").getDescription());
 		assertObject(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs()).isType(ExternalDocumentation.class).asJson().is("{url:'foo'}");
-		assertString(t.setOperationId("foo").getOperationId()).is("foo");
+		assertEquals("foo", t.setOperationId("foo").getOperationId());
 		assertObject(t.setConsumes(set(MediaType.of("text/foo"))).getConsumes()).isType(Set.class).asJson().is("['text/foo']");
 		assertObject(t.setConsumes(set()).getConsumes()).isType(Set.class).asJson().is("[]");
 		assertNull(t.setConsumes((Collection<MediaType>)null).getConsumes());
@@ -124,19 +124,19 @@ public class Operation_Test {
 
 		assertObject(t).asJson().is("{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
 
-		assertString(t.get("consumes", String.class)).is("['text/a']");
-		assertString(t.get("deprecated", String.class)).is("true");
-		assertString(t.get("description", String.class)).is("b");
-		assertString(t.get("externalDocs", String.class)).is("{url:'c'}");
-		assertString(t.get("operationId", String.class)).is("d");
-		assertString(t.get("parameters", String.class)).is("[{'in':'e1',name:'e2'}]");
-		assertString(t.get("produces", String.class)).is("['text/f']");
-		assertString(t.get("responses", String.class)).is("{'1':{description:'g'}}");
-		assertString(t.get("schemes", String.class)).is("['h']");
-		assertString(t.get("security", String.class)).is("[{i1:['i2']}]");
-		assertString(t.get("summary", String.class)).is("j");
-		assertString(t.get("tags", String.class)).is("['k']");
-		assertString(t.get("$ref", String.class)).is("ref");
+		assertEquals("['text/a']", t.get("consumes", String.class));
+		assertEquals("true", t.get("deprecated", String.class));
+		assertEquals("b", t.get("description", String.class));
+		assertEquals("{url:'c'}", t.get("externalDocs", String.class));
+		assertEquals("d", t.get("operationId", String.class));
+		assertEquals("[{'in':'e1',name:'e2'}]", t.get("parameters", String.class));
+		assertEquals("['text/f']", t.get("produces", String.class));
+		assertEquals("{'1':{description:'g'}}", t.get("responses", String.class));
+		assertEquals("['h']", t.get("schemes", String.class));
+		assertEquals("[{i1:['i2']}]", t.get("security", String.class));
+		assertEquals("j", t.get("summary", String.class));
+		assertEquals("['k']", t.get("tags", String.class));
+		assertEquals("ref", t.get("$ref", String.class));
 
 		assertObject(t.get("consumes", Object.class)).isType(Set.class);
 		assertObject(t.get("consumes", List.class).get(0)).isType(MediaType.class);

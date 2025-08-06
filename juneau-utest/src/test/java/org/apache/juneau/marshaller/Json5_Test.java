@@ -13,6 +13,8 @@
 package org.apache.juneau.marshaller;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -26,18 +28,18 @@ class Json5_Test extends SimpleTestBase {
 		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
 		String expected1 = "'foo'", expected2 = "{foo:'bar'}";
 
-		assertString(Json5.of(in1)).is(expected1);
-		assertString(Json5.of(in1,stringWriter())).is(expected1);
-		assertString(Json5.of(in2)).is(expected2);
-		assertString(Json5.of(in2,stringWriter())).is(expected2);
+		assertString(expected1, Json5.of(in1));
+		assertString(expected1, Json5.of(in1,stringWriter()));
+		assertString(expected2, Json5.of(in2));
+		assertString(expected2, Json5.of(in2,stringWriter()));
 	}
 
 	@Test void a02_from() throws Exception {
 		String in1 = "'foo'", in2 = "{foo:'bar'}";
 		String expected1 = "foo", expected2 = "{foo:'bar'}";
 
-		assertString(Json5.to(in1, String.class)).is(expected1);
-		assertString(Json5.to(stringReader(in1), String.class)).is(expected1);
+		assertString(expected1, Json5.to(in1, String.class));
+		assertString(expected1, Json5.to(stringReader(in1), String.class));
 		assertObject(Json5.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
 		assertObject(Json5.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
 	}

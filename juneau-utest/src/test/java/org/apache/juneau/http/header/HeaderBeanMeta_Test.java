@@ -83,16 +83,16 @@ class HeaderBeanMeta_Test extends SimpleTestBase {
 		HeaderBeanMeta<A3> a3 = HeaderBeanMeta.of(A3.class);
 		assertObject(a3.construct("X", "foo")).isJson("{value:'foo'}");
 		assertObject(a3.construct("foo")).isJson("{value:'foo'}");
-		assertString(a3.getSchema().getName()).is("A3");
+		assertEquals("A3", a3.getSchema().getName());
 
 		HeaderBeanMeta<A4> a4 = HeaderBeanMeta.of(A4.class);
 		assertObject(a4.construct("X", "foo")).isJson("{value:'foo'}");
 		assertObject(a4.construct("foo")).isJson("{value:'foo'}");
-		assertString(a4.getSchema().getName()).is("A4");
+		assertEquals("A4", a4.getSchema().getName());
 
 		HeaderBeanMeta<A5> a5 = HeaderBeanMeta.of(A5.class);
 		assertThrown(()->a5.construct("foo")).asMessage().isContains("Constructor for type "+TNAME+"$A5 could not be found.");
-		assertString(a5.getSchema().getName()).is("A5");
+		assertEquals("A5", a5.getSchema().getName());
 
 		HeaderBeanMeta<A6> a6 = HeaderBeanMeta.of(A6.class);
 		assertThrown(()->a6.construct("X", "foo")).asMessages().isContains("oops");

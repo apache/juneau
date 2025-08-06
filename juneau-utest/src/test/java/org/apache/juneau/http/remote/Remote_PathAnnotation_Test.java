@@ -749,9 +749,9 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	@Test void k04_requestBean_collections() {
 		K4 x1 = remote(K.class,K4.class);
 		K4 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K4.class);
-		assertString(x1.getX1(new K4a())).is("foo,,true,123,null,true,123,null/foo,,true,123,null,true,123,null/xfoo||true|123|null|true|123|nullx//foo,,true,123,null,true,123,null/xfoo||true|123|null|true|123|nullx/");
-		assertString(x2.getX1(new K4a())).is("@(foo,'','true','123','null',true,123,null)/@(foo,'','true','123','null',true,123,null)/xfoo||true|123|null|true|123|nullx/@()/@(foo,'','true','123','null',true,123,null)/xfoo||true|123|null|true|123|nullx/@()");
-		assertString(x2.getX2(new K4a())).is("xfoo||true|123|null|true|123|nullx/xfoo||true|123|null|true|123|nullx/xfoo||true|123|null|true|123|nullx/xx/xfoo||true|123|null|true|123|nullx/xfoo||true|123|null|true|123|nullx/xx");
+		assertEquals("foo,,true,123,null,true,123,null/foo,,true,123,null,true,123,null/xfoo||true|123|null|true|123|nullx//foo,,true,123,null,true,123,null/xfoo||true|123|null|true|123|nullx/", x1.getX1(new K4a()));
+		assertEquals("@(foo,'','true','123','null',true,123,null)/@(foo,'','true','123','null',true,123,null)/xfoo||true|123|null|true|123|nullx/@()/@(foo,'','true','123','null',true,123,null)/xfoo||true|123|null|true|123|nullx/@()", x2.getX1(new K4a()));
+		assertEquals("xfoo||true|123|null|true|123|nullx/xfoo||true|123|null|true|123|nullx/xfoo||true|123|null|true|123|nullx/xx/xfoo||true|123|null|true|123|nullx/xfoo||true|123|null|true|123|nullx/xx", x2.getX2(new K4a()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

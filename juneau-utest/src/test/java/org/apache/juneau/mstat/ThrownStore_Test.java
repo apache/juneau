@@ -278,7 +278,7 @@ class ThrownStore_Test extends SimpleTestBase {
 		assertLong(stats.getGuid()).isNot(0L);
 		assertLong(stats.getFirstOccurrence()).isNot(0L);
 		assertLong(stats.getLastOccurrence()).isNot(0L);
-		assertString(stats.getFirstMessage()).is("bar");
+		assertEquals("bar", stats.getFirstMessage());
 		assertObject(stats.getStackTrace()).asJson().isContains("org.apache.juneau");
 		assertObject(stats).asString().isContains("bar");
 
@@ -287,7 +287,7 @@ class ThrownStore_Test extends SimpleTestBase {
 		assertLong(stats.getGuid()).isNot(0L);
 		assertLong(stats.getFirstOccurrence()).isNot(0L);
 		assertLong(stats.getLastOccurrence()).isNot(0L);
-		assertString(stats.getFirstMessage()).is("bar");
+		assertEquals("bar", stats.getFirstMessage());
 		assertObject(stats.getStackTrace()).asJson().isContains("org.apache.juneau");
 		assertObject(stats).asString().isContains("bar");
 
@@ -296,7 +296,7 @@ class ThrownStore_Test extends SimpleTestBase {
 		assertLong(stats.getGuid()).isNot(0L);
 		assertLong(stats.getFirstOccurrence()).isNot(0L);
 		assertLong(stats.getLastOccurrence()).isNot(0L);
-		assertString(stats.getFirstMessage()).is("foo");
+		assertEquals("foo", stats.getFirstMessage());
 		assertObject(stats.getStackTrace()).asJson().isContains("org.apache.juneau");
 		assertObject(stats).asString().isContains("foo");
 	}

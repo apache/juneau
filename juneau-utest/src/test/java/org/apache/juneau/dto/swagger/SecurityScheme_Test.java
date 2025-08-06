@@ -35,19 +35,19 @@ public class SecurityScheme_Test {
 	@Test
 	public void a01_gettersAndSetters() {
 		SecurityScheme t = new SecurityScheme();
-		assertString(t.setType("foo").getType()).is("foo");
+		assertEquals("foo", t.setType("foo").getType());
 		assertString(t.setType(null).getType()).isNull();
-		assertString(t.setDescription("foo").getDescription()).is("foo");
+		assertEquals("foo", t.setDescription("foo").getDescription());
 		assertString(t.setDescription(null).getDescription()).isNull();
-		assertString(t.setName("foo").getName()).is("foo");
+		assertEquals("foo", t.setName("foo").getName());
 		assertString(t.setName(null).getName()).isNull();
-		assertString(t.setIn("foo").getIn()).is("foo");
+		assertEquals("foo", t.setIn("foo").getIn());
 		assertString(t.setIn(null).getIn()).isNull();
-		assertString(t.setFlow("foo").getFlow()).is("foo");
+		assertEquals("foo", t.setFlow("foo").getFlow());
 		assertString(t.setFlow(null).getFlow()).isNull();
-		assertString(t.setAuthorizationUrl("foo").getAuthorizationUrl()).is("foo");
+		assertEquals("foo", t.setAuthorizationUrl("foo").getAuthorizationUrl());
 		assertString(t.setAuthorizationUrl(null).getAuthorizationUrl()).isNull();
-		assertString(t.setTokenUrl("foo").getTokenUrl()).is("foo");
+		assertEquals("foo", t.setTokenUrl("foo").getTokenUrl());
 		assertString(t.setTokenUrl(null).getTokenUrl()).isNull();
 		assertObject(t.setScopes(map("foo","bar")).getScopes()).isType(Map.class).asJson().is("{foo:'bar'}");
 		assertObject(t.setScopes(map()).getScopes()).isType(Map.class).asJson().is("{}");
@@ -100,15 +100,15 @@ public class SecurityScheme_Test {
 
 		assertObject(t).asJson().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
 
-		assertString(t.get("authorizationUrl", String.class)).is("a");
-		assertString(t.get("description", String.class)).is("b");
-		assertString(t.get("flow", String.class)).is("c");
-		assertString(t.get("in", String.class)).is("d");
-		assertString(t.get("name", String.class)).is("e");
-		assertString(t.get("scopes", String.class)).is("{foo:'bar'}");
-		assertString(t.get("tokenUrl", String.class)).is("f");
-		assertString(t.get("type", String.class)).is("g");
-		assertString(t.get("$ref", String.class)).is("ref");
+		assertEquals("a", t.get("authorizationUrl", String.class));
+		assertEquals("b", t.get("description", String.class));
+		assertEquals("c", t.get("flow", String.class));
+		assertEquals("d", t.get("in", String.class));
+		assertEquals("e", t.get("name", String.class));
+		assertEquals("{foo:'bar'}", t.get("scopes", String.class));
+		assertEquals("f", t.get("tokenUrl", String.class));
+		assertEquals("g", t.get("type", String.class));
+		assertEquals("ref", t.get("$ref", String.class));
 
 		assertObject(t.get("authorizationUrl", Object.class)).isType(String.class);
 		assertObject(t.get("description", Object.class)).isType(String.class);

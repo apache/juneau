@@ -22,7 +22,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-public class StringRanges_Test extends SimpleTestBase {
+class StringRanges_Test extends SimpleTestBase {
 
 	@Test void a01_match() {
 		List<String> x = alist("foo","bar","baz");
@@ -54,7 +54,7 @@ public class StringRanges_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_toString() {
-		assertString(new StringRange("*")).is("*");
-		assertString(of("foo;q=0.6,bar;q=0.9,qux")).is("qux, bar;q=0.9, foo;q=0.6");
+		assertString("*", new StringRange("*"));
+		assertString("qux, bar;q=0.9, foo;q=0.6", of("foo;q=0.6,bar;q=0.9,qux"));
 	}
 }

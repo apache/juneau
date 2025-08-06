@@ -31,7 +31,7 @@ public class MediaType_Test extends SimpleTestBase {
 
 		MediaType x2 = new MediaType((String)null);  // Interpreted as "/*"
 		assertString(x2.getType()).isEmpty();
-		assertString(x2.getSubType()).is("*");
+		assertEquals("*", x2.getSubType());
 		assertObject(x2.getSubTypes()).asJson().is("['*']");
 		assertTrue(x2.isMetaSubtype());
 
@@ -51,7 +51,7 @@ public class MediaType_Test extends SimpleTestBase {
 
 	@Test void a03_getParameter() {
 		MediaType x1 = MediaType.of("text/json;x=1;q=1;y=2");
-		assertString(x1.getParameter("x")).is("1");
+		assertEquals("1", x1.getParameter("x"));
 		assertString(x1.getParameter("q")).isNull();
 		assertString(x1.getParameter("y")).isNull();
 		assertString(x1.getParameter(null)).isNull();

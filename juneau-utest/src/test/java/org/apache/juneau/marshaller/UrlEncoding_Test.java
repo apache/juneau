@@ -13,6 +13,8 @@
 package org.apache.juneau.marshaller;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -26,18 +28,18 @@ class UrlEncoding_Test extends SimpleTestBase {
 		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
 		String expected1 = "_value=foo", expected2 = "foo=bar";
 
-		assertString(UrlEncoding.of(in1)).is(expected1);
-		assertString(UrlEncoding.of(in1,stringWriter())).is(expected1);
-		assertString(UrlEncoding.of(in2)).is(expected2);
-		assertString(UrlEncoding.of(in2,stringWriter())).is(expected2);
+		assertString(expected1, UrlEncoding.of(in1));
+		assertString(expected1, UrlEncoding.of(in1,stringWriter()));
+		assertString(expected2, UrlEncoding.of(in2));
+		assertString(expected2, UrlEncoding.of(in2,stringWriter()));
 	}
 
 	@Test void a02_from() throws Exception {
 		String in1 = "_value=foo", in2 = "foo=bar";
 		String expected1 = "foo", expected2 = "{foo:'bar'}";
 
-		assertString(UrlEncoding.to(in1, String.class)).is(expected1);
-		assertString(UrlEncoding.to(stringReader(in1), String.class)).is(expected1);
+		assertEquals(expected1, UrlEncoding.to(in1, String.class));
+		assertEquals(expected1, UrlEncoding.to(stringReader(in1), String.class));
 		assertObject(UrlEncoding.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
 		assertObject(UrlEncoding.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
 	}

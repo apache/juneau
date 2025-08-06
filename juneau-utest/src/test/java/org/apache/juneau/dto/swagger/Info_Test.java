@@ -33,15 +33,15 @@ public class Info_Test {
 	@Test
 	public void a01_gettersAndSetters() {
 		Info t = new Info();
-		assertString(t.setTitle("foo").getTitle()).is("foo");
+		assertEquals("foo", t.setTitle("foo").getTitle());
 		assertString(t.setTitle(null).getTitle()).isNull();
-		assertString(t.setDescription("foo").getDescription()).is("foo");
+		assertEquals("foo", t.setDescription("foo").getDescription());
 		assertString(t.setDescription(null).getDescription()).isNull();
-		assertString(t.setTermsOfService("foo").getTermsOfService()).is("foo");
+		assertEquals("foo", t.setTermsOfService("foo").getTermsOfService());
 		assertString(t.setTermsOfService(null).getTermsOfService()).isNull();
 		assertObject(t.setContact(contact("foo")).getContact()).asJson().is("{name:'foo'}");
 		assertObject(t.setLicense(license("foo")).getLicense()).isType(License.class).asJson().is("{name:'foo'}");
-		assertString(t.setVersion("foo").getVersion()).is("foo");
+		assertEquals("foo", t.setVersion("foo").getVersion());
 		assertString(t.setVersion(null).getVersion()).isNull();
 	}
 
@@ -85,13 +85,13 @@ public class Info_Test {
 
 		assertObject(t).asJson().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
 
-		assertString(t.get("contact", String.class)).is("{name:'a'}");
-		assertString(t.get("description", String.class)).is("b");
-		assertString(t.get("license", String.class)).is("{name:'c'}");
-		assertString(t.get("termsOfService", String.class)).is("d");
-		assertString(t.get("title", String.class)).is("e");
-		assertString(t.get("version", String.class)).is("f");
-		assertString(t.get("$ref", String.class)).is("ref");
+		assertEquals("{name:'a'}", t.get("contact", String.class));
+		assertEquals("b", t.get("description", String.class));
+		assertEquals("{name:'c'}", t.get("license", String.class));
+		assertEquals("d", t.get("termsOfService", String.class));
+		assertEquals("e", t.get("title", String.class));
+		assertEquals("f", t.get("version", String.class));
+		assertEquals("ref", t.get("$ref", String.class));
 
 		assertObject(t.get("contact", Object.class)).isType(Contact.class);
 		assertObject(t.get("description", Object.class)).isType(String.class);

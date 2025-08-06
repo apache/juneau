@@ -18,34 +18,32 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.json.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Testcase for {@link Contact}.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class Contact_Test {
+class Contact_Test extends SimpleTestBase {
 
 	/**
 	 * Test method for getters and setters.
 	 */
-	@Test
-	public void a01_gettersAndSetters() {
+	@Test void a01_gettersAndSetters() {
 		Contact t = new Contact();
-		assertString(t.setName("foo").getName()).is("foo");
+		assertEquals("foo", t.setName("foo").getName());
 		assertString(t.setName(null).getName()).isNull();
-		assertString(t.setUrl(URI.create("http://bar")).getUrl()).is("http://bar");
-		assertString(t.setEmail("foo").getEmail()).is("foo");
+		assertString("http://bar", t.setUrl(URI.create("http://bar")).getUrl());
+		assertEquals("foo", t.setEmail("foo").getEmail());
 		assertString(t.setEmail(null).getEmail()).isNull();
 	}
 
 	/**
 	 * Test method for {@link Contact#set(String, Object)}.
 	 */
-	@Test
-	public void b01_set() throws Exception {
+	@Test void b01_set() throws Exception {
 		Contact t = new Contact();
 
 		t
@@ -77,8 +75,7 @@ public class Contact_Test {
 		assertObject(JsonParser.DEFAULT.parse("{name:'foo',url:'bar',email:'baz','$ref':'qux'}", Contact.class)).asJson().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
 	}
 
-	@Test
-	public void b02_copy() {
+	@Test void b02_copy() {
 		Contact t = new Contact();
 
 		t = t.copy();
@@ -95,8 +92,7 @@ public class Contact_Test {
 		assertObject(t).asJson().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
 	}
 
-	@Test
-	public void b03_keySet() {
+	@Test void b03_keySet() {
 		Contact t = new Contact();
 
 		assertObject(t.keySet()).asJson().is("[]");

@@ -18,52 +18,51 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class EntityTag_Test {
+class EntityTag_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Method tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 
 		EntityTag x1 = new EntityTag("\"foo\"");
-		assertString(x1).is("\"foo\"");
-		assertString(x1.getEntityValue()).is("foo");
+		assertString("\"foo\"", x1);
+		assertEquals("foo", x1.getEntityValue());
 		assertFalse(x1.isWeak());
 		assertFalse(x1.isAny());
 
 		EntityTag x2 = new EntityTag("W/\"foo\"");
-		assertString(x2).is("W/\"foo\"");
-		assertString(x2.getEntityValue()).is("foo");
+		assertString("W/\"foo\"", x2);
+		assertEquals("foo", x2.getEntityValue());
 		assertTrue(x2.isWeak());
 		assertFalse(x2.isAny());
 
 		EntityTag x3 = new EntityTag("*");
-		assertString(x3).is("*");
-		assertString(x3.getEntityValue()).is("*");
+		assertString("*", x3);
+		assertEquals("*", x3.getEntityValue());
 		assertFalse(x3.isWeak());
 		assertTrue(x3.isAny());
 
 		EntityTag x5 = new EntityTag("\"\"");
-		assertString(x5).is("\"\"");
-		assertString(x5.getEntityValue()).is("");
+		assertString("\"\"", x5);
+		assertEquals("", x5.getEntityValue());
 		assertFalse(x5.isWeak());
 		assertFalse(x5.isAny());
 
 		EntityTag x6 = EntityTag.of("\"foo\"");
-		assertString(x6).is("\"foo\"");
-		assertString(x6.getEntityValue()).is("foo");
+		assertString("\"foo\"", x6);
+		assertEquals("foo", x6.getEntityValue());
 		assertFalse(x6.isWeak());
 		assertFalse(x6.isAny());
 
 		EntityTag x7 = EntityTag.of((Supplier<?>)()->"\"foo\"");
-		assertString(x7).is("\"foo\"");
-		assertString(x7.getEntityValue()).is("foo");
+		assertString("\"foo\"", x7);
+		assertEquals("foo", x7.getEntityValue());
 		assertFalse(x7.isWeak());
 		assertFalse(x7.isAny());
 

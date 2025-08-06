@@ -54,13 +54,6 @@ public class Assertions_Test {
 	}
 
 	@Test
-	public void a05_assertString() {
-		assertString("foo").is("foo");
-		assertString(optional("foo")).is("foo");
-		assertString(empty()).isNull();
-	}
-
-	@Test
 	public void a06_assertThrowable() {
 		assertThrowable(null).isNull();
 	}

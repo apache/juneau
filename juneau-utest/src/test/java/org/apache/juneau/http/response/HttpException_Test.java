@@ -90,20 +90,20 @@ public class HttpException_Test extends SimpleTestBase {
 
 	@Test void a03_getFullStackMessage() {
 		BasicHttpException x = new BasicHttpException(100, null);
-		assertString(x.getFullStackMessage(false)).is("Continue");
-		assertString(x.getFullStackMessage(true)).is("Continue");
+		assertEquals("Continue", x.getFullStackMessage(false));
+		assertEquals("Continue", x.getFullStackMessage(true));
 
 		x = new BasicHttpException(100, "foo<bar>&baz");
-		assertString(x.getFullStackMessage(false)).is("foo<bar>&baz");
-		assertString(x.getFullStackMessage(true)).is("foo bar  baz");
+		assertEquals("foo<bar>&baz", x.getFullStackMessage(false));
+		assertEquals("foo bar  baz", x.getFullStackMessage(true));
 
 		x = new BasicHttpException(100, new RuntimeException("foo<bar>&qux"), "foo{0}","<bar>&baz");
-		assertString(x.getFullStackMessage(false)).is("foo<bar>&baz\nCaused by (RuntimeException): foo<bar>&qux");
-		assertString(x.getFullStackMessage(true)).is("foo bar  baz\nCaused by (RuntimeException): foo bar  qux");
+		assertEquals("foo<bar>&baz\nCaused by (RuntimeException): foo<bar>&qux", x.getFullStackMessage(false));
+		assertEquals("foo bar  baz\nCaused by (RuntimeException): foo bar  qux", x.getFullStackMessage(true));
 
 		x = new BasicHttpException(100, new RuntimeException(), "foo{0}","<bar>&baz");
-		assertString(x.getFullStackMessage(false)).is("foo<bar>&baz\nCaused by (RuntimeException)");
-		assertString(x.getFullStackMessage(true)).is("foo bar  baz\nCaused by (RuntimeException)");
+		assertEquals("foo<bar>&baz\nCaused by (RuntimeException)", x.getFullStackMessage(false));
+		assertEquals("foo bar  baz\nCaused by (RuntimeException)", x.getFullStackMessage(true));
 
 		assertInteger(x.hashCode()).isExists();
 	}
