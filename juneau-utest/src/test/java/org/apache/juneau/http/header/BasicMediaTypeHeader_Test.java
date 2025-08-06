@@ -15,6 +15,8 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.util.function.*;
 
@@ -66,13 +68,13 @@ class BasicMediaTypeHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_getType() {
-		assertString(contentType("text/foo").getType()).is("text");
-		assertString(new ContentType((String)null).getType()).isEmpty();
+		assertEquals("text", contentType("text/foo").getType());
+		assertEquals("", new ContentType((String)null).getType());
 	}
 
 	@Test void a03_getSubType() {
-		assertString(contentType("text/foo").getSubType()).is("foo");
-		assertString(new ContentType((String)null).getSubType()).is("*");
+		assertEquals("foo", contentType("text/foo").getSubType());
+		assertEquals("*", new ContentType((String)null).getSubType());
 	}
 
 	@Test void a04_hasSubType() {
@@ -104,10 +106,10 @@ class BasicMediaTypeHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a09_getParameter() {
-		assertString(contentType("text/foo;x=1;y=2").getParameter("x")).is("1");
-		assertString(contentType("text/foo;x=1;y=2").getParameter("z")).isNull();
-		assertString(contentType("text/foo;x=1;y=2").getParameter(null)).isNull();
-		assertObject(new ContentType((String)null).getParameter("x")).isNull();
+		assertEquals("1", contentType("text/foo;x=1;y=2").getParameter("x"));
+		assertNull(contentType("text/foo;x=1;y=2").getParameter("z"));
+		assertNull(contentType("text/foo;x=1;y=2").getParameter(null));
+		assertNull(new ContentType((String)null).getParameter("x"));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

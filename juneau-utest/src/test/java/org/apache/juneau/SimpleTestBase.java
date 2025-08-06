@@ -70,10 +70,20 @@ public abstract class SimpleTestBase {
 		assertEquals(expected, r(actual));
 	}
 
+	protected static void assertEmpty(Optional<?> o) {
+		assertTrue(o != null && o.isEmpty(), "Optional was not empty.");
+	}
+
+	protected static void assertPresent(Optional<?> o) {
+		assertTrue(o != null && o.isPresent(), "Optional was not present.");
+	}
+
 	/**
 	 * Asserts the entries in an array matches the expected strings after they've been made readable.
 	 */
 	protected static void assertArray(Object array, String...expected) {
+		if (expected.length == 1 && expected[0].contains(","))
+			expected = expected[0].charAt(0) == '>' ? new String[]{expected[0].substring(1)} : StringUtils.split(expected[0]);
 		if (Array.getLength(array) != expected.length)
 			ffail("Wrong array length.  expected={0}, actual={1}", expected.length, Array.getLength(array));
 		for (var i = 0; i < expected.length; i++)
@@ -85,6 +95,8 @@ public abstract class SimpleTestBase {
 	 * Asserts the entries in a list matches the expected strings after they've been made readable.
 	 */
 	protected static void assertList(List<?> list, String...expected) {
+		if (expected.length == 1 && expected[0].contains(","))
+			expected = expected[0].charAt(0) == '>' ? new String[]{expected[0].substring(1)} : StringUtils.split(expected[0]);
 		if (list.size() != expected.length)
 			ffail("Wrong list length.  expected={0}, actual={1}", expected.length, list.size());
 		for (var i = 0; i < expected.length; i++)

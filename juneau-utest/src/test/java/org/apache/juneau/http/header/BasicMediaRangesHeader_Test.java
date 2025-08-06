@@ -12,10 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.util.function.*;
 
@@ -47,7 +49,7 @@ class BasicMediaRangesHeader_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_basic() throws Exception {
-		RestClient c = client().build();
+		var c = client().build();
 
 		// Normal usage.
 		c.get().header(mediaRangesHeader(HEADER,VALUE)).run().assertContent(VALUE);
@@ -58,39 +60,39 @@ class BasicMediaRangesHeader_Test extends SimpleTestBase {
 		// Invalid usage.
 		c.get().header(mediaRangesHeader(HEADER,(Supplier<MediaRanges>)null)).run().assertContent().isEmpty();
 		c.get().header(mediaRangesHeader(HEADER,()->null)).run().assertContent().isEmpty();
-		assertThrown(()->mediaRangesHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->mediaRangesHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->mediaRangesHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->mediaRangesHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->mediaRangesHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->mediaRangesHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->mediaRangesHeader("", VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->mediaRangesHeader(null, VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->mediaRangesHeader("", PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->mediaRangesHeader(null, PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->mediaRangesHeader("", ()->PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->mediaRangesHeader(null, ()->PARSED), "Name cannot be empty on header.");
 	}
 
 	@Test void a02_match() {
-		assertInteger(accept("text/foo").match(alist(MediaType.of("text/foo")))).is(0);
-		assertInteger(accept("text/foo").match(alist(MediaType.of("text/bar")))).is(-1);
-		assertInteger(new Accept((String)null).match(alist(MediaType.of("text/bar")))).is(-1);
-		assertInteger(accept("text/foo").match(alist(MediaType.of(null)))).is(-1);
-		assertInteger(accept("text/foo").match(null)).is(-1);
+		assertEquals(0, accept("text/foo").match(alist(MediaType.of("text/foo"))));
+		assertEquals(-1, accept("text/foo").match(alist(MediaType.of("text/bar"))));
+		assertEquals(-1, new Accept((String)null).match(alist(MediaType.of("text/bar"))));
+		assertEquals(-1, accept("text/foo").match(alist(MediaType.of(null))));
+		assertEquals(-1, accept("text/foo").match(null));
 	}
 
 	@Test void a03_getRange() {
-		assertString(accept("text/foo").getRange(0)).is("text/foo");
-		assertString(accept("text/foo").getRange(1)).isNull();
-		assertString(accept("text/foo").getRange(-1)).isNull();
-		assertString(new Accept((String)null).getRange(0)).isNull();
+		assertEquals("text/foo", s(accept("text/foo").getRange(0)));
+		assertNull(accept("text/foo").getRange(1));
+		assertNull(accept("text/foo").getRange(-1));
+		assertNull(new Accept((String)null).getRange(0));
 	}
 
 	@Test void a04_hasSubtypePart() {
-		assertBoolean(accept("text/foo").hasSubtypePart("foo")).isTrue();
-		assertBoolean(accept("text/foo").hasSubtypePart("bar")).isFalse();
-		assertBoolean(accept("text/foo").hasSubtypePart(null)).isFalse();
-		assertBoolean(new Accept((String)null).hasSubtypePart("foo")).isFalse();
+		assertTrue(accept("text/foo").hasSubtypePart("foo"));
+		assertFalse(accept("text/foo").hasSubtypePart("bar"));
+		assertFalse(accept("text/foo").hasSubtypePart(null));
+		assertFalse(new Accept((String)null).hasSubtypePart("foo"));
 	}
 
 	@Test void a05_getRanges() {
-		assertObject(accept("text/foo,text/bar").toMediaRanges().toList()).asJson().is("['text/foo','text/bar']");
-		assertObject(new Accept((String)null).toMediaRanges()).isNull();
+		assertList(accept("text/foo,text/bar").toMediaRanges().toList(), "text/foo" ,"text/bar");
+		assertNull(new Accept((String)null).toMediaRanges());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

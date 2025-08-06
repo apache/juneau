@@ -15,6 +15,8 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.util.function.*;
 
@@ -66,11 +68,11 @@ class BasicStringRangesHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_getRange() {
-		assertString(stringRangesHeader(HEADER,PARSED).getRange(0)).is("foo");
+		assertString("foo", stringRangesHeader(HEADER,PARSED).getRange(0));
 	}
 
 	@Test void a03_getRanges() {
-		assertObject(stringRangesHeader(HEADER,PARSED).toStringRanges().toList()).asJson().is("['foo','bar']");
+		assertList(stringRangesHeader(HEADER,PARSED).toStringRanges().toList(), "foo", "bar");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

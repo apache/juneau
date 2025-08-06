@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.function.*;
@@ -34,7 +35,6 @@ class BasicUriHeader_Test extends SimpleTestBase {
 	private static final String VALUE = "foo://bar";
 	private static final URI PARSED = URI.create("foo://bar");
 
-
 	@Rest
 	public static class A {
 		@RestOp
@@ -48,7 +48,7 @@ class BasicUriHeader_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_basic() throws Exception {
-		RestClient c = client().build();
+		var c = client().build();
 
 		// Normal usage.
 		c.get().header(uriHeader(HEADER,VALUE)).run().assertContent(VALUE);
@@ -59,17 +59,17 @@ class BasicUriHeader_Test extends SimpleTestBase {
 		// Invalid usage.
 		c.get().header(uriHeader(HEADER,(Supplier<URI>)null)).run().assertContent().isEmpty();
 		c.get().header(uriHeader(HEADER,()->null)).run().assertContent().isEmpty();
-		assertThrown(()->uriHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->uriHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->uriHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->uriHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->uriHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->uriHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->uriHeader("", VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->uriHeader(null, VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->uriHeader("", PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->uriHeader(null, PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->uriHeader("", ()->PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->uriHeader(null, ()->PARSED), "Name cannot be empty on header.");
 	}
 
 	@Test void a02_asUri() {
-		assertString(uriHeader(HEADER,"http://foo").asUri()).is("http://foo");
-		assertString(new BasicUriHeader(HEADER,(URI)null).asUri()).isNull();
+		assertString("http://foo", uriHeader(HEADER,"http://foo").asUri().get());
+		assertTrue(new BasicUriHeader(HEADER, (URI)null).asUri().isEmpty());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

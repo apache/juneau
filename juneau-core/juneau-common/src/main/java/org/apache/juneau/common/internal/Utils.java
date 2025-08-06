@@ -654,20 +654,18 @@ public class Utils {
 	 * Shortcut for converting an object to a string.
 	 */
 	public static String readable(Object o) {
-		if (o instanceof Collection)
-			return (String) Collection.class.cast(o).stream().map(Utils::readable).collect(joining(",","[","]"));
-		if (o instanceof Map)
-			return (String) Map.class.cast(o).entrySet().stream().map(Utils::readable).collect(joining(",","{","}"));
-		if (o instanceof Map.Entry) {
-			var e = Map.Entry.class.cast(o);
-			return readable(e.getKey()) + '=' + readable(e.getValue());
-		}
-		if (o instanceof GregorianCalendar) {
-			return GregorianCalendar.class.cast(o).toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT);
-		}
-		if (o instanceof Date) {
-			return Date.class.cast(o).toInstant().toString();
-		}
+		if (o instanceof Optional<?> o2)
+			return readable(o2.orElse(null));
+		if (o instanceof Collection<?> o2)
+			return o2.stream().map(Utils::readable).collect(joining(",","[","]"));
+		if (o instanceof Map<?,?> o2)
+			return o2.entrySet().stream().map(Utils::readable).collect(joining(",","{","}"));
+		if (o instanceof Map.Entry<?,?> o2)
+			return readable(o2.getKey()) + '=' + readable(o2.getValue());
+		if (o instanceof GregorianCalendar o2)
+			return o2.toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT);
+		if (o instanceof Date o2)
+			return o2.toInstant().toString();
 		if (o != null && o.getClass().isArray()) {
 			List<Object> l = list();
 			for (var i = 0; i < Array.getLength(o); i++) {

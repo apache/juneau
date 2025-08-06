@@ -402,9 +402,9 @@ class StringUtilsTest extends SimpleTestBase {
 		assertArray(split(""));
 		assertArray(split("1"), "1");
 		assertArray(split("1,2"), "1", "2");
-		assertArray(split("1\\,2"), "1,2");
+		assertArray(split("1\\,2"), ">1,2");
 		assertArray(split("1\\\\,2"), "1\\", "2");
-		assertArray(split("1\\\\\\,2"), "1\\,2");
+		assertArray(split("1\\\\\\,2"), ">1\\,2");
 		assertArray(split("1,2\\"), "1", "2\\");
 		assertArray(split("1,2\\\\"), "1", "2\\");
 		assertArray(split("1,2\\,"), "1", "2,");
@@ -416,9 +416,9 @@ class StringUtilsTest extends SimpleTestBase {
 		assertString("[]", split2test(""));
 		assertString("[1]", split2test("1"));
 		assertString("[1,2]", split2test("1,2"));
-		assertList(split2test("1\\,2"), "1,2");
+		assertList(split2test("1\\,2"), ">1,2");
 		assertList(split2test("1\\\\,2"), "1\\", "2");
-		assertList(split2test("1\\\\\\,2"), "1\\,2");
+		assertList(split2test("1\\\\\\,2"), ">1\\,2");
 		assertList(split2test("1,2\\"), "1", "2\\");
 		assertList(split2test("1,2\\\\"), "1", "2\\");
 		assertList(split2test("1,2\\,"), "1", "2,");
@@ -875,7 +875,7 @@ class StringUtilsTest extends SimpleTestBase {
 		assertList(splitNested("a,b{c,d}"), "a", "b{c,d}");
 		assertList(splitNested("a,b{c,d{e,f}}"), "a", "b{c,d{e,f}}");
 		assertList(splitNested("a { b , c } , d "), "a { b , c }", "d");
-		assertList(splitNested("a\\,b"), "a,b");
+		assertList(splitNested("a\\,b"), ">a,b");
 		assertList(splitNested("a\\\\,b"), "a\\", "b");
 	}
 
