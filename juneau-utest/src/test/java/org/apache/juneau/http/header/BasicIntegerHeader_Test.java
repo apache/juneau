@@ -15,6 +15,8 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.util.function.*;
 
@@ -56,13 +58,13 @@ class BasicIntegerHeader_Test extends SimpleTestBase {
 
 		// Invalid usage.
 		c.get().header(integerHeader(HEADER,(Supplier<Integer>)null)).run().assertContent().isEmpty();
-		assertThrown(()->integerHeader(HEADER,"foo")).asMessage().is("Value 'foo' could not be parsed as an integer.");
-		assertThrown(()->integerHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->integerHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->integerHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->integerHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->integerHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->integerHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrows(BasicRuntimeException.class, ()->integerHeader(HEADER,"foo"), "Value 'foo' could not be parsed as an integer.");
+		assertThrows(IllegalArgumentException.class, ()->integerHeader("", VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->integerHeader(null, VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->integerHeader("", PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->integerHeader(null, PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->integerHeader("", ()->PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->integerHeader(null, ()->PARSED), "Name cannot be empty on header.");
 	}
 
 	@Test void a02_assertInteger() {

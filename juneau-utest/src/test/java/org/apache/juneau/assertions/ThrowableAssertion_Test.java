@@ -14,10 +14,12 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -50,8 +52,8 @@ public class ThrowableAssertion_Test {
 
 	@Test
 	public void a01_msg() {
-		assertThrown(()->test(null).setMsg("Foo {0}", 1).isExists()).asMessage().is("Foo 1");
-		assertThrown(()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("Foo 1");
+		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("Foo {0}", 1).isExists(), "Foo 1");
+		assertThrows(RuntimeException.class, ()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists(), "Foo 1");
 	}
 
 	@Test
@@ -180,21 +182,21 @@ public class ThrowableAssertion_Test {
 	public void ca01_exists() {
 		Throwable x = throwable(), nil = null;
 		test(x).isExists().isExists();
-		assertThrown(()->test(nil).isExists()).asMessage().is("Exception was not thrown.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Exception was not thrown.");
 	}
 
 	@Test
 	public void ca02_isNull() {
 		Throwable x = throwable(), nil = null;
 		test(nil).isNull();
-		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
+		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test
 	public void ca03_isNotNull() {
 		Throwable x = throwable(), nil = null;
 		test(x).isNotNull();
-		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
 
 	@Test

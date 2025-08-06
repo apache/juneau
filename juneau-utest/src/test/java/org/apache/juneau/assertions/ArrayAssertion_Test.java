@@ -14,11 +14,13 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -46,8 +48,8 @@ public class ArrayAssertion_Test {
 
 	@Test
 	public void a01_msg() {
-		assertThrown(()->test(null).setMsg("Foo {0}", 1).isExists()).asMessage().is("Foo 1");
-		assertThrown(()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("Foo 1");
+		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("Foo {0}", 1).isExists(), "Foo 1");
+		assertThrows(RuntimeException.class, ()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists(), "Foo 1");
 	}
 
 	@Test
@@ -149,21 +151,21 @@ public class ArrayAssertion_Test {
 	public void ca01_exists() {
 		Integer[] x = {}, nil = null;
 		test(x).isExists().isExists();
-		assertThrown(()->test(nil).isExists()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
 	@Test
 	public void ca02_isNull() {
 		Integer[] x = {}, nil = null;
 		test(nil).isNull();
-		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
+		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test
 	public void ca03_isNotNull() {
 		Integer[] x = {}, nil = null;
 		test(x).isNotNull();
-		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
 
 	@Test
@@ -301,7 +303,7 @@ public class ArrayAssertion_Test {
 		test(x1).is(isNull(),eq("1"),eq("2"));
 		test(x1).is(isNull(),eq(1),eq(2));
 		assertThrown(()->test(x1).is(isNull(),eq("1"),eq("3"))).asMessage().asOneLine().is("Array did not contain expected value at index 2.  Value did not match expected.  Expect='3'.  Actual='2'.");
-		assertThrown(()->test(nil).is(isNull(),eq("1"),eq("3"))).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).is(isNull(),eq("1"),eq("3")), "Value was null.");
 		test(x1).is((Predicate<Integer>)null,null,null);
 	}
 
@@ -311,8 +313,8 @@ public class ArrayAssertion_Test {
 		test(x1).isAny(x -> x .equals(3));
 		test(x1).isAny(eq(3));
 		assertThrown(()->test(x1).isAny(x -> x.equals(4))).asMessage().asOneLine().is("Array did not contain any matching value.  Value='[2, 3, 1]'.");
-		assertThrown(()->test(x1).isAny((Predicate<Integer>)null)).asMessage().is("Argument 'test' cannot be null.");
-		assertThrown(()->test(nil).isAny(x->true)).asMessage().is("Value was null.");
+		assertThrows(IllegalArgumentException.class, ()->test(x1).isAny((Predicate<Integer>)null), "Argument 'test' cannot be null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isAny(x->true), "Value was null.");
 	}
 
 	@Test
@@ -321,24 +323,24 @@ public class ArrayAssertion_Test {
 		test(x1).isAll(x -> x < 4);
 		assertThrown(()->test(x1).isAll(x -> x < 3)).asMessage().asOneLine().is("Array contained non-matching value at index 1.  Unexpected value: '3'.");
 		assertThrown(()->test(x1).isAll(ne(3))).asMessage().asOneLine().is("Array contained non-matching value at index 1.  Value unexpectedly matched.  Value='3'.");
-		assertThrown(()->test(x1).isAll(null)).asMessage().is("Argument 'test' cannot be null.");
-		assertThrown(()->test(nil).isAll(x->true)).asMessage().is("Value was null.");
+		assertThrows(IllegalArgumentException.class, ()->test(x1).isAll(null), "Argument 'test' cannot be null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isAll(x->true), "Value was null.");
 	}
 
 	@Test
 	public void cb04_isEmpty() {
 		String[] x1={}, x2={"foo","bar"}, nil = null;
 		test(x1).isEmpty();
-		assertThrown(()->test(x2).isEmpty()).asMessage().is("Array was not empty.");
-		assertThrown(()->test(nil).isEmpty()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(x2).isEmpty(), "Array was not empty.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isEmpty(), "Value was null.");
 	}
 
 	@Test
 	public void cb05_isNotEmpty() {
 		String[] x1={}, x2={"foo","bar"}, nil = null;
 		test(x2).isNotEmpty();
-		assertThrown(()->test(x1).isNotEmpty()).asMessage().is("Array was empty.");
-		assertThrown(()->test(nil).isNotEmpty()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(x1).isNotEmpty(), "Array was empty.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isNotEmpty(), "Value was null.");
 	}
 
 	@Test
@@ -347,8 +349,8 @@ public class ArrayAssertion_Test {
 		test(x1).isContains(null);
 		test(x1).isContains(1);
 		assertThrown(()->test(x1).isContains(3)).asMessage().asOneLine().is("Array did not contain expected value.  Expect='3'.  Actual='[null, 1, 2]'.");
-		assertThrown(()->test(nil).isContains(3)).asMessage().is("Value was null.");
-		assertThrown(()->test(nil).isContains(null)).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isContains(3), "Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isContains(null), "Value was null.");
 	}
 
 	@Test
@@ -357,7 +359,7 @@ public class ArrayAssertion_Test {
 		test(x1).isNotContains(3);
 		assertThrown(()->test(x1).isNotContains(1)).asMessage().asOneLine().is("Array contained unexpected value.  Unexpected='1'.  Actual='[null, 1, 2]'.");
 		assertThrown(()->test(x1).isNotContains(null)).asMessage().asOneLine().is("Array contained unexpected value.  Unexpected='null'.  Actual='[null, 1, 2]'.");
-		assertThrown(()->test(nil).isNotContains(3)).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isNotContains(3), "Value was null.");
 	}
 
 	@Test
@@ -367,7 +369,7 @@ public class ArrayAssertion_Test {
 		test(x2).isSize(2);
 		assertThrown(()->test(x1).isSize(2)).asMessage().asOneLine().is("Array did not have the expected size.  Expect=2.  Actual=0.");
 		assertThrown(()->test(x2).isSize(0)).asMessage().asOneLine().is("Array did not have the expected size.  Expect=0.  Actual=2.");
-		assertThrown(()->test(nil).isSize(0)).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isSize(0), "Value was null.");
 	}
 
 	@Test

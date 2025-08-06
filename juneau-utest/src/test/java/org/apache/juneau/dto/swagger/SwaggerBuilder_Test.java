@@ -14,8 +14,10 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
 import org.junit.*;
 
@@ -59,7 +61,7 @@ public class SwaggerBuilder_Test {
 
 		t = headerInfoStrict("string");
 		assertObject(t).asJson().is("{type:'string'}");
-		assertThrown(()->headerInfoStrict("foo")).asMessage().is("Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']");
+		assertThrows(BasicRuntimeException.class, ()->headerInfoStrict("foo"), "Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']");
 	}
 
 	@Test
@@ -81,7 +83,7 @@ public class SwaggerBuilder_Test {
 
 		t = itemsStrict("string");
 		assertObject(t).asJson().is("{type:'string'}");
-		assertThrown(()->itemsStrict("foo")).asMessage().is("Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']");
+		assertThrows(BasicRuntimeException.class, ()->itemsStrict("foo"), "Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']");
 	}
 
 	@Test
@@ -109,7 +111,7 @@ public class SwaggerBuilder_Test {
 
 		t = parameterInfoStrict("query", "bar");
 		assertObject(t).asJson().is("{'in':'query',name:'bar'}");
-		assertThrown(()->parameterInfoStrict("foo", "bar")).asMessage().is("Invalid value passed in to setIn(String).  Value='foo', valid values=['query','header','path','formData','body']");
+		assertThrows(BasicRuntimeException.class, ()->parameterInfoStrict("foo", "bar"), "Invalid value passed in to setIn(String).  Value='foo', valid values=['query','header','path','formData','body']");
 	}
 
 	@Test

@@ -17,6 +17,8 @@ import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -47,8 +49,8 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 	@Test void a01_inputValidations_nullInput() throws Exception {
 		assertNull(parse(T_NONE, null, String.class));
 		assertNull(parse(tNone().required(false).build(), null, String.class));
-		assertThrown(()->parse(tNone().required().build(), null, String.class)).asMessage().is("No value specified.");
-		assertThrown(()->parse(tNone().required(true).build(), null, String.class)).asMessage().is("No value specified.");
+		assertThrows(SchemaValidationException.class, ()->parse(tNone().required().build(), null, String.class), "No value specified.");
+		assertThrows(SchemaValidationException.class, ()->parse(tNone().required(true).build(), null, String.class), "No value specified.");
 	}
 
 	@Test void a02_inputValidations_emptyInput() throws Exception {
@@ -59,7 +61,7 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		s = tNone().allowEmptyValue().build();
 		assertEquals("", parse(s, "", String.class));
 
-		assertThrown(()->parse(tNone().allowEmptyValue(false).build(), "", String.class)).asMessage().is("Empty value not allowed.");
+		assertThrows(SchemaValidationException.class, ()->parse(tNone().allowEmptyValue(false).build(), "", String.class), "Empty value not allowed.");
 
 		assertEquals(" ", parse(s, " ", String.class));
 	}
@@ -70,8 +72,8 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		assertEquals("xx", parse(s, "xx", String.class));
 		assertEquals(null, parse(s, null, String.class));
 
-		assertThrown(()->parse(s, "y", String.class)).asMessage().is("Value does not match expected pattern.  Must match pattern: x.*");
-		assertThrown(()->parse(s, "", String.class)).asMessage().is("Value does not match expected pattern.  Must match pattern: x.*");
+		assertThrows(SchemaValidationException.class, ()->parse(s, "y", String.class), "Value does not match expected pattern.  Must match pattern: x.*");
+		assertThrows(SchemaValidationException.class, ()->parse(s, "", String.class), "Value does not match expected pattern.  Must match pattern: x.*");
 
 		// Blank/null patterns are ignored.
 		assertEquals("x", parse(tNone().pattern("").allowEmptyValue().build(), "x", String.class));
@@ -84,8 +86,8 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		assertEquals("foo", parse(s, "foo", String.class));
 		assertEquals(null, parse(s, null, String.class));
 
-		assertThrown(()->parse(s, "bar", String.class)).asMessage().is("Value does not match one of the expected values.  Must be one of the following:  foo");
-		assertThrown(()->parse(s, "", String.class)).asMessage().is("Value does not match one of the expected values.  Must be one of the following:  foo");
+		assertThrows(SchemaValidationException.class, ()->parse(s, "bar", String.class), "Value does not match one of the expected values.  Must be one of the following:  foo");
+		assertThrows(SchemaValidationException.class, ()->parse(s, "", String.class), "Value does not match one of the expected values.  Must be one of the following:  foo");
 
 		assertEquals("foo", parse(tNone()._enum((Set<String>)null).build(), "foo", String.class));
 		assertEquals("foo", parse(tNone()._enum((Set<String>)null).allowEmptyValue().build(), "foo", String.class));
@@ -99,8 +101,8 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		assertEquals("1", parse(s, "1", String.class));
 		assertEquals("12", parse(s, "12", String.class));
 
-		assertThrown(()->parse(s, "", String.class)).asMessage().is("Minimum length of value not met.");
-		assertThrown(()->parse(s, "123", String.class)).asMessage().is("Maximum length of value exceeded.");
+		assertThrows(SchemaValidationException.class, ()->parse(s, "", String.class), "Minimum length of value not met.");
+		assertThrows(SchemaValidationException.class, ()->parse(s, "123", String.class), "Maximum length of value exceeded.");
 		assertThrown(()->tNone().minLength(2L).maxLength(1L).build()).asMessage().isContains("maxLength cannot be less than minLength.");
 		assertThrown(()->tNone().minLength(-2L).build()).asMessage().isContains("minLength cannot be less than zero.");
 		assertThrown(()->tNone().maxLength(-2L).build()).asMessage().isContains("maxLength cannot be less than zero.");

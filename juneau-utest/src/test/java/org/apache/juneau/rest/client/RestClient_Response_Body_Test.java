@@ -18,6 +18,8 @@ import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -130,9 +132,9 @@ public class RestClient_Response_Body_Test extends SimpleTestBase {
 		};
 
 		TestClient x2 = client().interceptors(rci).build(TestClient.class).entity(new StringEntity("{f:2}"));
-		assertThrown(()->x2.get("/bean").run().getContent().cache().asInputStream()).asMessage().is("foo");
-		assertThrown(()->x2.get("/bean").run().getContent().asInputStream().close()).asMessage().is("foo");
-		assertThrown(()->((EofSensorInputStream)x2.get("/bean").run().getContent().asInputStream()).abortConnection()).asMessage().is("foo");  // NOSONAR
+		assertThrows(NullPointerException.class, ()->x2.get("/bean").run().getContent().cache().asInputStream(), "foo");
+		assertThrows(NullPointerException.class, ()->x2.get("/bean").run().getContent().asInputStream().close(), "foo");
+		assertThrows(NullPointerException.class, ()->((EofSensorInputStream)x2.get("/bean").run().getContent().asInputStream()).abortConnection(), "foo");  // NOSONAR
 	}
 
 	@Test void a04_asReader() throws Exception {

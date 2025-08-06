@@ -14,6 +14,8 @@ package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
@@ -319,15 +321,15 @@ public class ReflectionMapTest extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void e01_blankInput() {
-		assertThrown(()->create().append("", 1)).asMessage().is("Invalid reflection signature: []");
+		assertThrows(BasicRuntimeException.class, ()->create().append("", 1), "Invalid reflection signature: []");
 	}
 
 	@Test void e02_nullInput() {
-		assertThrown(()->create().append(null, 1)).asMessage().is("Invalid reflection signature: [null]");
+		assertThrows(BasicRuntimeException.class, ()->create().append(null, 1), "Invalid reflection signature: [null]");
 	}
 
 	@Test void e03_badInput() {
-		assertThrown(()->create().append("foo)", 1)).asMessage().is("Invalid reflection signature: [foo)]");
+		assertThrows(BasicRuntimeException.class, ()->create().append("foo)", 1), "Invalid reflection signature: [foo)]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

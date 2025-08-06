@@ -14,12 +14,14 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.time.*;
 import java.time.temporal.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -53,8 +55,8 @@ public class DateAssertion_Test {
 
 	@Test
 	public void a01_msg() {
-		assertThrown(()->test(null).setMsg("A {0}", 1).isExists()).asMessage().is("A 1");
-		assertThrown(()->test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("A 1");
+		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("A {0}", 1).isExists(), "A 1");
+		assertThrows(RuntimeException.class, ()->test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class).isExists(), "A 1");
 	}
 
 	@Test
@@ -129,21 +131,21 @@ public class DateAssertion_Test {
 	public void ca01_exists() {
 		Date x = MID1, nil = null;
 		test(x).isExists().isExists();
-		assertThrown(()->test(nil).isExists()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
 	@Test
 	public void ca02_isNull() {
 		Date x = MID1, nil = null;
 		test(nil).isNull();
-		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
+		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test
 	public void ca03_isNotNull() {
 		Date x = MID1, nil = null;
 		test(x).isNotNull();
-		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
 
 	@Test
@@ -280,8 +282,8 @@ public class DateAssertion_Test {
 		test(x2).isGt(x1);
 		assertThrown(()->test(x1).isGt(x1)).asMessage().asOneLine().isMatches("Value was not greater than expected.  Expect='*2000'.  Actual='*2000'.");
 		assertThrown(()->test(x1).isGt(x2)).asMessage().asOneLine().isMatches("Value was not greater than expected.  Expect='*2010'.  Actual='*2000'.");
-		assertThrown(()->test(x1).isGt(nil)).asMessage().is("Argument 'value' cannot be null.");
-		assertThrown(()->test(nil).isGt(x2)).asMessage().is("Value was null.");
+		assertThrows(IllegalArgumentException.class, ()->test(x1).isGt(nil), "Argument 'value' cannot be null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isGt(x2), "Value was null.");
 	}
 
 	@Test
@@ -290,8 +292,8 @@ public class DateAssertion_Test {
 		test(x2).isGte(x1);
 		test(x1).isGte(x1);
 		assertThrown(()->test(x1).isGte(x2)).asMessage().asOneLine().isMatches("Value was not greater than or equals to expected.  Expect='*2010'.  Actual='*2000'.");
-		assertThrown(()->test(x1).isGte(nil)).asMessage().is("Argument 'value' cannot be null.");
-		assertThrown(()->test(nil).isGte(x2)).asMessage().is("Value was null.");
+		assertThrows(IllegalArgumentException.class, ()->test(x1).isGte(nil), "Argument 'value' cannot be null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isGte(x2), "Value was null.");
 	}
 
 	@Test
@@ -300,8 +302,8 @@ public class DateAssertion_Test {
 		test(x1).isLt(x2);
 		assertThrown(()->test(x1).isLt(x1)).asMessage().asOneLine().isMatches("Value was not less than expected.  Expect='*2000'.  Actual='*2000'.");
 		assertThrown(()->test(x2).isLt(x1)).asMessage().asOneLine().isMatches("Value was not less than expected.  Expect='*2000'.  Actual='*2010'.");
-		assertThrown(()->test(x2).isLt(nil)).asMessage().is("Argument 'value' cannot be null.");
-		assertThrown(()->test(nil).isLt(x1)).asMessage().is("Value was null.");
+		assertThrows(IllegalArgumentException.class, ()->test(x2).isLt(nil), "Argument 'value' cannot be null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isLt(x1), "Value was null.");
 	}
 
 	@Test
@@ -310,8 +312,8 @@ public class DateAssertion_Test {
 		test(x1).isLte(x2);
 		test(x1).isLte(x1);
 		assertThrown(()->test(x2).isLte(x1)).asMessage().asOneLine().isMatches("Value was not less than or equals to expected.  Expect='*2000'.  Actual='*2010'.");
-		assertThrown(()->test(x2).isLte(nil)).asMessage().is("Argument 'value' cannot be null.");
-		assertThrown(()->test(nil).isLte(x1)).asMessage().is("Value was null.");
+		assertThrows(IllegalArgumentException.class, ()->test(x2).isLte(nil), "Argument 'value' cannot be null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isLte(x1), "Value was null.");
 	}
 
 	@Test
@@ -321,8 +323,8 @@ public class DateAssertion_Test {
 		test(x2).isBetween(x1, x3);
 		test(x3).isBetween(x1, x3);
 		assertThrown(()->test(x4).isBetween(x1, x3)).asMessage().asOneLine().isMatches("Value was not less than or equals to expected.  Expect='*2010'.  Actual='*2100'.");
-		assertThrown(()->test(nil).isBetween(x1, x3)).asMessage().is("Value was null.");
-		assertThrown(()->test(x1).isBetween(nil, x3)).asMessage().is("Argument 'lower' cannot be null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isBetween(x1, x3), "Value was null.");
+		assertThrows(IllegalArgumentException.class, ()->test(x1).isBetween(nil, x3), "Argument 'lower' cannot be null.");
 		assertThrown(()->test(x1).isBetween(x1, nil)).asMessage().asOneLine().is("Argument 'upper' cannot be null.");
 	}
 
@@ -340,9 +342,9 @@ public class DateAssertion_Test {
 	public void cc02_isAfter() {
 		Date x1 = MIN, x2 = MID1, x3 = MAX, nil = null;
 		test(x3).isAfter(x2);
-		assertThrown(()->test(x1).isAfter(nil)).asMessage().is("Argument 'value' cannot be null.");
+		assertThrows(IllegalArgumentException.class, ()->test(x1).isAfter(nil), "Argument 'value' cannot be null.");
 		assertThrown(()->test(x1).isAfter(x2)).asMessage().isContains("Value was not after expected.");
-		assertThrown(()->test(nil).isAfter(x2)).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isAfter(x2), "Value was null.");
 	}
 
 	@Test
@@ -357,9 +359,9 @@ public class DateAssertion_Test {
 	public void cc04_isBefore() {
 		Date x1 = MIN, x2 = MID1, nil = null;
 		test(x1).isBefore(x2);
-		assertThrown(()->test(x1).isBefore(nil)).asMessage().is("Argument 'value' cannot be null.");
+		assertThrows(IllegalArgumentException.class, ()->test(x1).isBefore(nil), "Argument 'value' cannot be null.");
 		assertThrown(()->test(x2).isBefore(x1)).asMessage().isContains("Value was not before expected.");
-		assertThrown(()->test(nil).isBefore(x1)).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isBefore(x1), "Value was null.");
 	}
 
 	@Test

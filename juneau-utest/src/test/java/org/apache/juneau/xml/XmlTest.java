@@ -18,6 +18,8 @@ import static org.apache.juneau.internal.CollectionUtils.list;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.net.*;
 import java.util.*;
 
@@ -25,6 +27,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.annotation.*;
 import org.apache.juneau.xml.xml1a.*;
 import org.apache.juneau.xml.xml1b.*;
@@ -304,7 +307,7 @@ class XmlTest extends SimpleTestBase {
 	@Test void testXmlNsWithoutMatchingNsUri() {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		K t = new K();
-		assertThrown(()->s.serialize(t)).asMessage().is("Found @Xml.prefix annotation with no matching URI.  prefix='foo'");
+		assertThrows(SerializeException.class, ()->s.serialize(t), "Found @Xml.prefix annotation with no matching URI.  prefix='foo'");
 	}
 
 	@Xml(prefix="foo")

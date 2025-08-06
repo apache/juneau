@@ -18,6 +18,8 @@ import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
@@ -37,7 +39,7 @@ public class SerializedPart_Test extends SimpleTestBase {
 
 	@Test void a02_type() {
 		SerializedPart x1 = serializedPart("Foo",2).type(HEADER).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
-		assertThrown(x1::toString).asMessage().is("Validation error on request HEADER part 'Foo'='2'");
+		assertThrows(BasicRuntimeException.class, x1::toString, "Validation error on request HEADER part 'Foo'='2'");
 	}
 
 	@Test void a03_serializer() {

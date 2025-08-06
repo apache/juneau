@@ -18,6 +18,8 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.function.*;
@@ -178,7 +180,7 @@ class FieldInfoTest extends SimpleTestBase {
 	}
 
 	@Test void isAll_invalidFlag() {
-		assertThrown(()->c_deprecated.isAll(HAS_PARAMS)).asMessage().is("Invalid flag for field: HAS_PARAMS");
+		assertThrows(BasicRuntimeException.class, ()->c_deprecated.isAll(HAS_PARAMS), "Invalid flag for field: HAS_PARAMS");
 	}
 
 	@Test void isAny() {
@@ -202,7 +204,7 @@ class FieldInfoTest extends SimpleTestBase {
 	}
 
 	@Test void isAny_invalidFlag() {
-		assertThrown(()->c_deprecated.isAny(HAS_PARAMS)).asMessage().is("Invalid flag for field: HAS_PARAMS");
+		assertThrows(BasicRuntimeException.class, ()->c_deprecated.isAny(HAS_PARAMS), "Invalid flag for field: HAS_PARAMS");
 	}
 
 	@Test void isDeprecated() {

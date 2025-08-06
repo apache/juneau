@@ -20,6 +20,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.reflect.ClassInfo.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
@@ -1849,27 +1850,27 @@ public class ClassInfoTest {
 
 	@Test
 	public void getParameterType_outOfBounds() {
-		assertThrown(()->ma.getParameterType(2, HashMap.class)).asMessage().is("Invalid type index. index=2, argsLength=2");
+		assertThrows(IllegalArgumentException.class, ()->ma.getParameterType(2, HashMap.class), "Invalid type index. index=2, argsLength=2");
 	}
 
 	@Test
 	public void getParameterType_notASubclass() {
-		assertThrown(()->aClass.getParameterType(2, HashMap.class)).asMessage().is("Class 'AClass' is not a subclass of parameterized type 'HashMap'");
+		assertThrows(IllegalArgumentException.class, ()->aClass.getParameterType(2, HashMap.class), "Class 'AClass' is not a subclass of parameterized type 'HashMap'");
 	}
 
 	@Test
 	public void getParameterType_nullParameterizedType() {
-		assertThrown(()->aClass.getParameterType(2, null)).asMessage().is("Argument 'pt' cannot be null.");
+		assertThrows(IllegalArgumentException.class, ()->aClass.getParameterType(2, null), "Argument 'pt' cannot be null.");
 	}
 
 	@Test
 	public void getParameterType_notParamerizedType() {
-		assertThrown(()->mb.getParameterType(2, MA.class)).asMessage().is("Class 'MA' is not a parameterized type");
+		assertThrows(IllegalArgumentException.class, ()->mb.getParameterType(2, MA.class), "Class 'MA' is not a parameterized type");
 	}
 
 	@Test
 	public void getParameterType_unresolvedTypes() {
-		assertThrown(()->mc.getParameterType(1, HashMap.class)).asMessage().is("Could not resolve variable 'E' to a type.");
+		assertThrows(IllegalArgumentException.class, ()->mc.getParameterType(1, HashMap.class), "Could not resolve variable 'E' to a type.");
 	}
 
 	@Test
@@ -1899,12 +1900,12 @@ public class ClassInfoTest {
 
 	@Test
 	public void getParameterType_unresolvedGenericArrayType() {
-		assertThrown(()->mi.getParameterType(1, HashMap.class)).asMessage().is("Could not resolve variable 'X[]' to a type.");
+		assertThrows(IllegalArgumentException.class, ()->mi.getParameterType(1, HashMap.class), "Could not resolve variable 'X[]' to a type.");
 	}
 
 	@Test
 	public void getParameterType_wildcardType() {
-		assertThrown(()->mj.getParameterType(1, HashMap.class)).asMessage().is("Could not resolve variable 'X' to a type.");
+		assertThrows(IllegalArgumentException.class, ()->mj.getParameterType(1, HashMap.class), "Could not resolve variable 'X' to a type.");
 	}
 
 	@Test

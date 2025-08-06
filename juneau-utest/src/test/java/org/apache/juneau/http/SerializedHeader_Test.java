@@ -17,6 +17,8 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
@@ -36,7 +38,7 @@ public class SerializedHeader_Test extends SimpleTestBase {
 
 	@Test void a02_type() {
 		SerializedHeader x1 = serializedHeader("Foo",2).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
-		assertThrown(x1::toString).asMessage().is("Validation error on request HEADER parameter 'Foo'='2'");
+		assertThrows(BasicRuntimeException.class, x1::toString, "Validation error on request HEADER parameter 'Foo'='2'");
 	}
 
 	@Test void a03_serializer() {

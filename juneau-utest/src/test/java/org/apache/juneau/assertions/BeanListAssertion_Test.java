@@ -15,10 +15,12 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
@@ -52,8 +54,8 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void a01_msg() {
-		assertThrown(()->test(null).setMsg("Foo {0}", 1).isExists()).asMessage().is("Foo 1");
-		assertThrown(()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("Foo 1");
+		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("Foo {0}", 1).isExists(), "Foo 1");
+		assertThrows(RuntimeException.class, ()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists(), "Foo 1");
 	}
 
 	@Test
@@ -177,21 +179,21 @@ public class BeanListAssertion_Test {
 	public void ca01_exists() {
 		List<A> x = alist(), nil = null;
 		test(x).isExists().isExists();
-		assertThrown(()->test(nil).isExists()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
 	@Test
 	public void ca02_isNull() {
 		List<A> x = alist(), nil = null;
 		test(nil).isNull();
-		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
+		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test
 	public void ca03_isNotNull() {
 		List<A> x = alist(), nil = null;
 		test(x).isNotNull();
-		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
 
 	@Test
@@ -326,16 +328,16 @@ public class BeanListAssertion_Test {
 	public void cb01_isEmpty() {
 		List<A> x1 = alist(), x2 = alist(A1), nil = null;
 		test(x1).isEmpty();
-		assertThrown(()->test(nil).isEmpty()).asMessage().is("Value was null.");
-		assertThrown(()->test(x2).isEmpty()).asMessage().is("Collection was not empty.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isEmpty(), "Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(x2).isEmpty(), "Collection was not empty.");
 	}
 
 	@Test
 	public void cb02_isNotEmpty() {
 		List<A> x1 = alist(), x2 = alist(A1), nil = null;
 		test(x2).isNotEmpty();
-		assertThrown(()->test(nil).isNotEmpty()).asMessage().is("Value was null.");
-		assertThrown(()->test(x1).isNotEmpty()).asMessage().is("Collection was empty.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isNotEmpty(), "Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(x1).isNotEmpty(), "Collection was empty.");
 	}
 
 	@Test
@@ -343,7 +345,7 @@ public class BeanListAssertion_Test {
 		List<A> x = alist(A1), nil = null;
 		test(x).isContains(A1);
 		assertThrown(()->test(x).isContains(A2)).asMessage().asOneLine().is("Collection did not contain expected value.  Expect='(a=3,b=4)'.  Value='[(a=1,b=2)]'.");
-		assertThrown(()->test(nil).isContains(A2)).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isContains(A2), "Value was null.");
 	}
 
 	@Test
@@ -351,7 +353,7 @@ public class BeanListAssertion_Test {
 		List<A> x = alist(A1), nil = null;
 		test(x).isNotContains(A2);
 		assertThrown(()->test(x).isNotContains(A1)).asMessage().asOneLine().is("Collection contained unexpected value.  Unexpected='(a=1,b=2)'.  Value='[(a=1,b=2)]'.");
-		assertThrown(()->test(nil).isNotContains(A2)).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isNotContains(A2), "Value was null.");
 	}
 
 	@Test
@@ -359,7 +361,7 @@ public class BeanListAssertion_Test {
 		List<A> x1 = alist(A1), nil = null;
 		test(x1).isAny(x->x.equals(A1));
 		assertThrown(()->test(x1).isAny(x->x.equals(A2))).asMessage().asOneLine().is("Collection did not contain tested value.  Value='[(a=1,b=2)]'.");
-		assertThrown(()->test(nil).isAny(x->x.equals(A2))).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isAny(x->x.equals(A2)), "Value was null.");
 	}
 
 	@Test
@@ -367,7 +369,7 @@ public class BeanListAssertion_Test {
 		List<A> x1 = alist(A1), nil = null;
 		test(x1).isAll(x->x!=null);
 		assertThrown(()->test(x1).isAll(x->x.equals(A2))).asMessage().asOneLine().is("Collection did not contain tested value.  Value='[(a=1,b=2)]'.");
-		assertThrown(()->test(nil).isAll(x->x.equals(A2))).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isAll(x->x.equals(A2)), "Value was null.");
 	}
 
 	@Test
@@ -375,7 +377,7 @@ public class BeanListAssertion_Test {
 		List<A> x = alist(A1), nil = null;
 		test(x).isSize(1);
 		assertThrown(()->test(x).isSize(0)).asMessage().asOneLine().is("Collection did not have the expected size.  Expect=0.  Actual=1.");
-		assertThrown(()->test(nil).isSize(0)).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isSize(0), "Value was null.");
 	}
 
 	@Test
@@ -384,7 +386,7 @@ public class BeanListAssertion_Test {
 		test(x).isHas(A1,A2);
 		assertThrown(()->test(x).isHas(A1)).asMessage().asOneLine().is("Collection did not have the expected size.  Expect=1.  Actual=2.");
 		assertThrown(()->test(x).isHas(A1,A3)).asMessage().asOneLine().is("List did not contain expected value at index 1.  Value did not match expected.  Expect='(a=5,b=6)'.  Actual='(a=3,b=4)'.");
-		assertThrown(()->test(nil).isHas(A1,A3)).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isHas(A1,A3), "Value was null.");
 	}
 
 	@Test
@@ -393,6 +395,6 @@ public class BeanListAssertion_Test {
 		test(x1).isEach(x->x!=null,x->x!=null);
 		assertThrown(()->test(x1).isEach(x->x==null)).asMessage().asOneLine().is("Collection did not have the expected size.  Expect=1.  Actual=2.");
 		assertThrown(()->test(x1).isEach(x->x==null,x->x==null)).asMessage().asOneLine().is("List did not contain expected value at index 0.  Unexpected value: '(a=1,b=2)'.");
-		assertThrown(()->test(nil).isEach(x->x==null)).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isEach(x->x==null), "Value was null.");
 	}
 }

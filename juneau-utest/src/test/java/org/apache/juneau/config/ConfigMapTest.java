@@ -16,10 +16,12 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.config.store.*;
 import org.junit.*;
@@ -278,13 +280,13 @@ public class ConfigMapTest {
 	@Test
 	public void testDuplicateSectionNames() {
 		ConfigStore s = initStore("A.cfg", "[S1]", "[S1]");
-		assertThrown(()->s.getMap("A.cfg")).asMessage().is("Duplicate section found in configuration:  [S1]");
+		assertThrows(ConfigException.class, ()->s.getMap("A.cfg"), "Duplicate section found in configuration:  [S1]");
 	}
 
 	@Test
 	public void testDuplicateEntryNames() {
 		ConfigStore s = initStore("A.cfg", "[S1]", "foo=v1", "foo=v2");
-		assertThrown(()->s.getMap("A.cfg")).asMessage().is("Duplicate entry found in section [S1] of configuration:  foo");
+		assertThrows(ConfigException.class, ()->s.getMap("A.cfg"), "Duplicate entry found in section [S1] of configuration:  foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -692,7 +694,7 @@ public class ConfigMapTest {
 		cm.removeSection("S3");
 		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|k2 = v2|");
 
-		assertThrown(()->cm.removeSection(null)).asMessage().is("Invalid section name: 'null'");
+		assertThrows(IllegalArgumentException.class, ()->cm.removeSection(null), "Invalid section name: 'null'");
 	}
 
 	@Test

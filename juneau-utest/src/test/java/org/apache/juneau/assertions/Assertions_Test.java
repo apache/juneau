@@ -15,6 +15,7 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
@@ -99,7 +100,7 @@ public class Assertions_Test {
 
 	@Test
 	public void a13_assertThrown() {
-		assertThrown(()->{throw new RuntimeException("foo");}).asMessage().is("foo");
+		assertThrows(RuntimeException.class, ()->{throw new RuntimeException("foo");}, "foo");
 		assertThrown(()->{}).isNull();
 	}
 

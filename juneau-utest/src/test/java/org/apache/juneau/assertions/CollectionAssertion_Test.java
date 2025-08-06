@@ -15,11 +15,13 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -41,8 +43,8 @@ public class CollectionAssertion_Test {
 
 	@Test
 	public void a01_msg() {
-		assertThrown(()->test(null).setMsg("A {0}", 1).isExists()).asMessage().is("A 1");
-		assertThrown(()->test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("A 1");
+		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("A {0}", 1).isExists(), "A 1");
+		assertThrows(RuntimeException.class, ()->test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class).isExists(), "A 1");
 	}
 
 	@Test
@@ -117,21 +119,21 @@ public class CollectionAssertion_Test {
 	public void ca01_exists() {
 		List<Integer> x = alist(), nil = null;
 		test(x).isExists().isExists();
-		assertThrown(()->test(nil).isExists()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
 	@Test
 	public void ca02_isNull() {
 		List<Integer> x = alist(), nil = null;
 		test(nil).isNull();
-		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
+		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test
 	public void ca03_isNotNull() {
 		List<Integer> x = alist(), nil = null;
 		test(x).isNotNull();
-		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
 
 	@Test
@@ -267,16 +269,16 @@ public class CollectionAssertion_Test {
 	public void cb01_isEmpty() {
 		List<String> x1 = alist(), x2 = alist("a","b"), nil = null;
 		test(x1).isEmpty();
-		assertThrown(()->test(x2).isEmpty()).asMessage().is("Collection was not empty.");
-		assertThrown(()->test(nil).isEmpty()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(x2).isEmpty(), "Collection was not empty.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isEmpty(), "Value was null.");
 	}
 
 	@Test
 	public void cb02_isNotEmpty() {
 		List<String> x1 = alist(), x2 = alist("a","b"), nil = null;
 		test(x2).isNotEmpty();
-		assertThrown(()->test(x1).isNotEmpty()).asMessage().is("Collection was empty.");
-		assertThrown(()->test(nil).isNotEmpty()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(x1).isNotEmpty(), "Collection was empty.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isNotEmpty(), "Value was null.");
 	}
 
 	@Test
@@ -284,7 +286,7 @@ public class CollectionAssertion_Test {
 		List<String> x = alist("a","b"), nil = null;
 		test(x).isContains("a");
 		assertThrown(()->test(x).isContains("z")).asMessage().asOneLine().is("Collection did not contain expected value.  Expect='z'.  Value='[a, b]'.");
-		assertThrown(()->test(nil).isContains("z")).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isContains("z"), "Value was null.");
 	}
 
 	@Test
@@ -292,7 +294,7 @@ public class CollectionAssertion_Test {
 		List<String> x = alist("a","b"), nil = null;
 		test(x).isNotContains("z");
 		assertThrown(()->test(x).isNotContains("a")).asMessage().asOneLine().is("Collection contained unexpected value.  Unexpected='a'.  Value='[a, b]'.");
-		assertThrown(()->test(nil).isNotContains("z")).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isNotContains("z"), "Value was null.");
 	}
 
 	@Test
@@ -301,7 +303,7 @@ public class CollectionAssertion_Test {
 		test(x1).isAny(x->x.equals("a"));
 		test(x1).isAny((Predicate<String>)null);
 		assertThrown(()->test(x1).isAny(x->x.equals("z"))).asMessage().asOneLine().is("Collection did not contain tested value.  Value='[a, b]'.");
-		assertThrown(()->test(nil).isAny(x->x.equals("z"))).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isAny(x->x.equals("z")), "Value was null.");
 	}
 
 	@Test
@@ -310,7 +312,7 @@ public class CollectionAssertion_Test {
 		test(x1).isAll(x->x!=null);
 		test(x1).isAll(null);
 		assertThrown(()->test(x1).isAll(x->x.equals("z"))).asMessage().asOneLine().is("Collection did not contain tested value.  Value='[a, b]'.");
-		assertThrown(()->test(nil).isAll(x->x.equals("z"))).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isAll(x->x.equals("z")), "Value was null.");
 	}
 
 	@Test
@@ -318,6 +320,6 @@ public class CollectionAssertion_Test {
 		List<String> x = alist("a","b"), nil = null;
 		test(x).isSize(2);
 		assertThrown(()->test(x).isSize(0)).asMessage().asOneLine().is("Collection did not have the expected size.  Expect=0.  Actual=2.");
-		assertThrown(()->test(nil).isSize(0)).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isSize(0), "Value was null.");
 	}
 }

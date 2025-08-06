@@ -14,6 +14,8 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
@@ -127,7 +129,7 @@ public class RestClient_Marshalls_Test extends SimpleTestBase {
 		x.post("/a01",bean).header("Accept","application/x-www-form-urlencoded").header("Content-Type","application/x-www-form-urlencoded").header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").run().assertStatus(200).getContent().as(Bean.class).check();
 		x.post("/a01",bean).header("Accept","text/openapi").header("Content-Type","text/openapi").header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").run().assertStatus(200).getContent().as(Bean.class).check();
 
-		assertThrown(()->x.post("/a01",bean).run()).asMessage().is("Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
+		assertThrows(RestCallException.class, ()->x.post("/a01",bean).run(), "Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -145,7 +147,7 @@ public class RestClient_Marshalls_Test extends SimpleTestBase {
 		x.post("/a01",bean).header("Accept","application/x-www-form-urlencoded").header("Content-Type","application/x-www-form-urlencoded").header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").run().assertStatus(200).getContent().as(Bean.class).check();
 		x.post("/a01",bean).header("Accept","text/openapi").header("Content-Type","text/openapi").header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").run().assertStatus(200).getContent().as(Bean.class).check();
 
-		assertThrown(()->x.post("/a01",bean).run()).asMessage().is("Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
+		assertThrows(RestCallException.class, ()->x.post("/a01",bean).run(), "Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

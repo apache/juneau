@@ -15,6 +15,8 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.util.function.*;
 
@@ -57,12 +59,12 @@ class BasicEntityTagsHeader_Test extends SimpleTestBase {
 		// Invalid usage.
 		c.get().header(entityTagsHeader(HEADER,(Supplier<EntityTags>)null)).run().assertContent().isEmpty();
 		c.get().header(entityTagsHeader(HEADER,()->null)).run().assertContent().isEmpty();
-		assertThrown(()->entityTagsHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->entityTagsHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->entityTagsHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->entityTagsHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->entityTagsHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->entityTagsHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->entityTagsHeader("", VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->entityTagsHeader(null, VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->entityTagsHeader("", PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->entityTagsHeader(null, PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->entityTagsHeader("", ()->PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->entityTagsHeader(null, ()->PARSED), "Name cannot be empty on header.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

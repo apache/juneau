@@ -13,8 +13,10 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -36,8 +38,8 @@ public class IntegerAssertion_Test {
 
 	@Test
 	public void a01_msg() {
-		assertThrown(()->test(null).setMsg("Foo {0}", 1).isExists()).asMessage().is("Foo 1");
-		assertThrown(()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("Foo 1");
+		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("Foo {0}", 1).isExists(), "Foo 1");
+		assertThrows(RuntimeException.class, ()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists(), "Foo 1");
 	}
 
 	@Test
@@ -98,21 +100,21 @@ public class IntegerAssertion_Test {
 	public void ca01_exists() {
 		Integer x = 1;
 		test(x).isExists().isExists();
-		assertThrown(()->test(null).isExists()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(null).isExists(), "Value was null.");
 	}
 
 	@Test
 	public void ca02_isNull() {
 		Integer x = 1, nil = null;
 		test(nil).isNull();
-		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
+		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test
 	public void ca03_isNotNull() {
 		Integer x = 1, nil = null;
 		test(x).isNotNull();
-		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
 
 	@Test
@@ -252,8 +254,8 @@ public class IntegerAssertion_Test {
 		test(x2).isGt(x1);
 		assertThrown(()->test(x1).isGt(x1)).asMessage().asOneLine().is("Value was not greater than expected.  Expect='1'.  Actual='1'.");
 		assertThrown(()->test(x1).isGt(x2)).asMessage().asOneLine().is("Value was not greater than expected.  Expect='2'.  Actual='1'.");
-		assertThrown(()->test(x1).isGt(nil)).asMessage().is("Argument 'value' cannot be null.");
-		assertThrown(()->test(nil).isGt(x2)).asMessage().is("Value was null.");
+		assertThrows(IllegalArgumentException.class, ()->test(x1).isGt(nil), "Argument 'value' cannot be null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isGt(x2), "Value was null.");
 	}
 
 	@Test
@@ -262,8 +264,8 @@ public class IntegerAssertion_Test {
 		test(x2).isGte(x1);
 		test(x1).isGte(x1);
 		assertThrown(()->test(x1).isGte(x2)).asMessage().asOneLine().is("Value was not greater than or equals to expected.  Expect='2'.  Actual='1'.");
-		assertThrown(()->test(x1).isGte(nil)).asMessage().is("Argument 'value' cannot be null.");
-		assertThrown(()->test(nil).isGte(x2)).asMessage().is("Value was null.");
+		assertThrows(IllegalArgumentException.class, ()->test(x1).isGte(nil), "Argument 'value' cannot be null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isGte(x2), "Value was null.");
 	}
 
 	@Test
@@ -272,8 +274,8 @@ public class IntegerAssertion_Test {
 		test(x1).isLt(x2);
 		assertThrown(()->test(x1).isLt(x1)).asMessage().asOneLine().is("Value was not less than expected.  Expect='1'.  Actual='1'.");
 		assertThrown(()->test(x2).isLt(x1)).asMessage().asOneLine().is("Value was not less than expected.  Expect='1'.  Actual='2'.");
-		assertThrown(()->test(x2).isLt(nil)).asMessage().is("Argument 'value' cannot be null.");
-		assertThrown(()->test(nil).isLt(x1)).asMessage().is("Value was null.");
+		assertThrows(IllegalArgumentException.class, ()->test(x2).isLt(nil), "Argument 'value' cannot be null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isLt(x1), "Value was null.");
 	}
 
 	@Test
@@ -282,8 +284,8 @@ public class IntegerAssertion_Test {
 		test(x1).isLte(x2);
 		test(x1).isLte(x1);
 		assertThrown(()->test(x2).isLte(x1)).asMessage().asOneLine().is("Value was not less than or equals to expected.  Expect='1'.  Actual='2'.");
-		assertThrown(()->test(x2).isLte(nil)).asMessage().is("Argument 'value' cannot be null.");
-		assertThrown(()->test(nil).isLte(x1)).asMessage().is("Value was null.");
+		assertThrows(IllegalArgumentException.class, ()->test(x2).isLte(nil), "Argument 'value' cannot be null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isLte(x1), "Value was null.");
 	}
 
 	@Test
@@ -293,8 +295,8 @@ public class IntegerAssertion_Test {
 		test(x2).isBetween(x1, x3);
 		test(x3).isBetween(x1, x3);
 		assertThrown(()->test(x4).isBetween(x1, x3)).asMessage().asOneLine().is("Value was not less than or equals to expected.  Expect='3'.  Actual='4'.");
-		assertThrown(()->test(nil).isBetween(x1, x3)).asMessage().is("Value was null.");
-		assertThrown(()->test(x1).isBetween(nil, x3)).asMessage().is("Argument 'lower' cannot be null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isBetween(x1, x3), "Value was null.");
+		assertThrows(IllegalArgumentException.class, ()->test(x1).isBetween(nil, x3), "Argument 'lower' cannot be null.");
 		assertThrown(()->test(x1).isBetween(x1, nil)).asMessage().asOneLine().is("Argument 'upper' cannot be null.");
 	}
 }

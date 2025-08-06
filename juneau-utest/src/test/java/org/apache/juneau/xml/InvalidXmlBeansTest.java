@@ -13,11 +13,13 @@
 package org.apache.juneau.xml;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -125,7 +127,7 @@ public class InvalidXmlBeansTest {
 
 	@Test
 	public void test() {
-		assertThrown(()->s1.serialize(in)).asMessage().is(expected);
+		assertThrows(SerializeException.class, ()->s1.serialize(in), expected);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -108,7 +109,7 @@ public class PartList_Test {
 		x = partList("Foo","1","Foo","2");
 		assertObject(x).isString("Foo=1&Foo=2");
 
-		assertThrown(()->partList("Foo")).asMessage().is("Odd number of parameters passed into PartList.ofPairs()");
+		assertThrows(IllegalArgumentException.class, ()->partList("Foo"), "Odd number of parameters passed into PartList.ofPairs()");
 
 		x = PartList.of((List<NameValuePair>)null);
 		assertObject(x).isString("");
@@ -201,7 +202,7 @@ public class PartList_Test {
 		assertOptional(x.get("Bar", APart.class)).isNull();
 		assertOptional(x.get(Foo.class)).isString("Foo=1,2,3");
 		final PartList x2 = x;
-		assertThrown(()->x2.get(String.class)).asMessage().is("Part name could not be found on bean type 'java.lang.String'");
+		assertThrows(IllegalArgumentException.class, ()->x2.get(String.class), "Part name could not be found on bean type 'java.lang.String'");
 	}
 
 	@Test
@@ -466,27 +467,27 @@ public class PartList_Test {
 		PartIterator i1 = x.partIterator();
 		assertObject(i1.next()).isString("a=x");
 		assertObject(i1.next()).isString("b=x");
-		assertThrown(i1::next).asMessage().is("Iteration already finished.");
+		assertThrows(NoSuchElementException.class, i1::next, "Iteration already finished.");
 
 		PartIterator i2 = x.partIterator();
 		assertObject(i2.next()).isString("a=x");
 		assertObject(i2.next()).isString("b=x");
-		assertThrown(i2::next).asMessage().is("Iteration already finished.");
+		assertThrows(NoSuchElementException.class, i2::next, "Iteration already finished.");
 
 		PartIterator i3 = x.partIterator("a");
 		assertObject(i3.next()).isString("a=x");
-		assertThrown(i3::next).asMessage().is("Iteration already finished.");
+		assertThrows(NoSuchElementException.class, i3::next, "Iteration already finished.");
 
 		PartIterator i4 = x.partIterator("A");
-		assertThrown(i4::next).asMessage().is("Iteration already finished.");
+		assertThrows(NoSuchElementException.class, i4::next, "Iteration already finished.");
 
 		PartList x2 = PartList.create().append(APart.X,BPart.X).caseInsensitive(true);
 
 		PartIterator i5 = x2.partIterator("A");
 		assertObject(i5.next()).isString("a=x");
-		assertThrown(i5::next).asMessage().is("Iteration already finished.");
+		assertThrows(NoSuchElementException.class, i5::next, "Iteration already finished.");
 
-		assertThrown(i5::remove).asMessage().is("Not supported.");
+		assertThrows(UnsupportedOperationException.class, i5::remove, "Not supported.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

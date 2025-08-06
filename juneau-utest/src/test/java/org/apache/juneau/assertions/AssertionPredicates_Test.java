@@ -16,11 +16,13 @@ import static java.util.regex.Pattern.*;
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 
 import java.util.regex.*;
 
+import org.apache.juneau.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -41,12 +43,12 @@ public class AssertionPredicates_Test {
 	@Test
 	public void a02_notNull() {
 		A1.is(notNull());
-		assertThrown(()->A2.is(notNull())).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->A2.is(notNull()), "Value was null.");
 	}
 
 	@Test
 	public void a03_isNull() {
-		assertThrown(()->A1.is(isNull())).asMessage().is("Value was not null.");
+		assertThrows(BasicAssertionError.class, ()->A1.is(isNull()), "Value was not null.");
 		A2.is(isNull());
 	}
 
@@ -129,21 +131,21 @@ public class AssertionPredicates_Test {
 	public void a13_and() {
 		A1.is(and(notNull(),eq("foo"),null,x->x.equals("foo")));
 		assertThrown(()->A1.is(and(isNull()))).asMessage().asOneLine().is("Predicate test #1 failed.  Value was not null.");
-		assertThrown(()->A1.is(and(x -> x.equals("bar")))).asMessage().is("Predicate test #1 failed.");
+		assertThrows(BasicAssertionError.class, ()->A1.is(and(x -> x.equals("bar"))), "Predicate test #1 failed.");
 	}
 
 	@Test
 	public void a14_or() {
 		A1.is(or(null,isNull(),eq("foo"),x->x.equals("bar")));
-		assertThrown(()->A1.is(or(isNull()))).asMessage().is("No predicate tests passed.");
-		assertThrown(()->A1.is(or(x -> x.equals("bar")))).asMessage().is("No predicate tests passed.");
+		assertThrows(BasicAssertionError.class, ()->A1.is(or(isNull())), "No predicate tests passed.");
+		assertThrows(BasicAssertionError.class, ()->A1.is(or(x -> x.equals("bar"))), "No predicate tests passed.");
 	}
 
 	@Test
 	public void a15_not() {
 		A1.is(not(ne("foo")));
-		assertThrown(()->A2.is(not(ne("foo")))).asMessage().is("Predicate test unexpectedly passed.");
-		assertThrown(()->A1.is(not(eq("foo")))).asMessage().is("Predicate test unexpectedly passed.");
+		assertThrows(BasicAssertionError.class, ()->A2.is(not(ne("foo"))), "Predicate test unexpectedly passed.");
+		assertThrows(BasicAssertionError.class, ()->A1.is(not(eq("foo"))), "Predicate test unexpectedly passed.");
 		A2.is(not(x -> x != null && x.equals("bar")));
 		A1.is(not(null));
 		A2.is(not(null));

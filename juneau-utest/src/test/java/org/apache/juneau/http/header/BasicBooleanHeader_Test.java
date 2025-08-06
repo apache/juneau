@@ -15,6 +15,8 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.util.function.*;
 
@@ -57,12 +59,12 @@ class BasicBooleanHeader_Test extends SimpleTestBase {
 		// Invalid usage.
 		c.get().header(booleanHeader(HEADER,(Supplier<Boolean>)null)).run().assertContent().isEmpty();
 		c.get().header(booleanHeader(HEADER,()->null)).run().assertContent().isEmpty();
-		assertThrown(()->booleanHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->booleanHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->booleanHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->booleanHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->booleanHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->booleanHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->booleanHeader("", VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->booleanHeader(null, VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->booleanHeader("", PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->booleanHeader(null, PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->booleanHeader("", ()->PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->booleanHeader(null, ()->PARSED), "Name cannot be empty on header.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

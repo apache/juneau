@@ -14,8 +14,10 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
@@ -49,8 +51,8 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void a01_msg() {
-		assertThrown(()->test(null).setMsg("Foo {0}", 1).isExists()).asMessage().is("Foo 1");
-		assertThrown(()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("Foo 1");
+		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("Foo {0}", 1).isExists(), "Foo 1");
+		assertThrows(RuntimeException.class, ()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists(), "Foo 1");
 	}
 
 	@Test
@@ -108,7 +110,7 @@ public class BeanAssertion_Test {
 		A x = A1, nil = null;
 		test(x).asPropertyMap("b,a").asJson().is("{b:2,a:1}");
 		test(x).asPropertyMap("x").asJson().is("{}");
-		assertThrown(()->test(nil).asPropertyMap("x")).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).asPropertyMap("x"), "Value was null.");
 	}
 
 	@Test
@@ -116,7 +118,7 @@ public class BeanAssertion_Test {
 		A x = A1, nil = null;
 		test(x).asProperty("a").asInteger().is(1);
 		test(x).asProperty("x").asInteger().isNull();
-		assertThrown(()->test(nil).asProperty("x")).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).asProperty("x"), "Value was null.");
 	}
 
 	@Test
@@ -124,7 +126,7 @@ public class BeanAssertion_Test {
 		A x = A1, nil = null;
 		test(x).asProperties("a").asJson().is("[1]");
 		test(x).asProperties("x").asJson().is("[null]");
-		assertThrown(()->test(nil).asProperties("x")).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).asProperties("x"), "Value was null.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -135,21 +137,21 @@ public class BeanAssertion_Test {
 	public void ca01_exists() {
 		A x = A1, nil = null;
 		test(x).isExists().isExists();
-		assertThrown(()->test(nil).isExists()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
 	@Test
 	public void ca02_isNull() {
 		A x = A1, nil = null;
 		test(nil).isNull();
-		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
+		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test
 	public void ca03_isNotNull() {
 		A x = A1, nil = null;
 		test(x).isNotNull();
-		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
 
 	@Test

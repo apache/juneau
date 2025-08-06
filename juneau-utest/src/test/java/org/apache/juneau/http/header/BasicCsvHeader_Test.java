@@ -15,6 +15,8 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.util.function.*;
 
@@ -57,12 +59,12 @@ class BasicCsvHeader_Test extends SimpleTestBase {
 		// Invalid usage.
 		c.get().header(csvHeader(HEADER,(Supplier<String[]>)null)).run().assertContent().isEmpty();
 		c.get().header(csvHeader(HEADER,()->null)).run().assertContent().isEmpty();
-		assertThrown(()->csvHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->csvHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->csvHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->csvHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->csvHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->csvHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->csvHeader("", VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->csvHeader(null, VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->csvHeader("", PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->csvHeader(null, PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->csvHeader("", ()->PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->csvHeader(null, ()->PARSED), "Name cannot be empty on header.");
 	}
 
 	@Test void a02_contains() {

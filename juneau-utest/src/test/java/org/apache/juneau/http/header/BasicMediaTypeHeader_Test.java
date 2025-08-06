@@ -59,12 +59,12 @@ class BasicMediaTypeHeader_Test extends SimpleTestBase {
 		// Invalid usage.
 		c.get().header(mediaTypeHeader(HEADER,(Supplier<MediaType>)null)).run().assertContent().isEmpty();
 		c.get().header(mediaTypeHeader(HEADER,()->null)).run().assertContent().isEmpty();
-		assertThrown(()->mediaTypeHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->mediaTypeHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->mediaTypeHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->mediaTypeHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->mediaTypeHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->mediaTypeHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->mediaTypeHeader("", VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->mediaTypeHeader(null, VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->mediaTypeHeader("", PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->mediaTypeHeader(null, PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->mediaTypeHeader("", ()->PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->mediaTypeHeader(null, ()->PARSED), "Name cannot be empty on header.");
 	}
 
 	@Test void a02_getType() {

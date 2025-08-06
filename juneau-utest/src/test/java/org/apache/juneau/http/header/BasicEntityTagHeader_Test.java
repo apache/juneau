@@ -15,6 +15,8 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.util.function.*;
 
@@ -58,12 +60,12 @@ class BasicEntityTagHeader_Test extends SimpleTestBase {
 		c.get().header(entityTagHeader(HEADER,(String)null)).run().assertContent().isEmpty();
 		c.get().header(entityTagHeader(HEADER,(Supplier<EntityTag>)null)).run().assertContent().isEmpty();
 		c.get().header(entityTagHeader(HEADER,()->null)).run().assertContent().isEmpty();
-		assertThrown(()->entityTagHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->entityTagHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->entityTagHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->entityTagHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->entityTagHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->entityTagHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->entityTagHeader("", VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->entityTagHeader(null, VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->entityTagHeader("", PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->entityTagHeader(null, PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->entityTagHeader("", ()->PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->entityTagHeader(null, ()->PARSED), "Name cannot be empty on header.");
 	}
 
 	@Test void a02_asEntityTag() {

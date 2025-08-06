@@ -16,6 +16,8 @@ import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
@@ -353,15 +355,15 @@ class Remote_Test extends SimpleTestBase {
 
 	@Test void c04_rethrownExceptions() {
 		C4b x = remote(C4a.class,C4b.class);
-		assertThrown(x::x1).asMessage().is("foo");
+		assertThrows(Remote_Test.C4c.class, x::x1, "foo");
 		assertThrown(()->x.x1a().get()).asMessages().isContains("foo");
 		assertThrown(()->x.x1b().get()).asMessages().isContains("foo");
-		assertThrown(x::x2).asMessage().is("foo");
+		assertThrows(RuntimeException.class, x::x2, "foo");
 		assertThrown(()->x.x3().get()).asMessages().isContains("foo");
-		assertThrown(x::x4).asMessage().is("foo");
+		assertThrows(Remote_Test.C4c.class, x::x4, "foo");
 		assertThrown(()->x.x4a().get()).asMessages().isContains("foo");
 		assertThrown(()->x.x4b().get()).asMessages().isContains("foo");
-		assertThrown(x::x5).asMessage().is("foo");
+		assertThrows(RuntimeException.class, x::x5, "foo");
 		assertThrown(()->x.x6().get()).asMessages().isContains("foo");
 	}
 
@@ -500,7 +502,7 @@ class Remote_Test extends SimpleTestBase {
 
 	@Test void e05_rrpc_rethrownCheckedException() {
 		RestClient x = client(E5.class).build();
-		assertThrown(()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo")).asMessage().is("foobar");
+		assertThrows(Remote_Test.E5a.class, ()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo"), "foobar");
 	}
 
 	@Rest

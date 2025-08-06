@@ -15,6 +15,7 @@ package org.apache.juneau.config;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.*;
 import java.net.*;
@@ -26,6 +27,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.mod.*;
 import org.apache.juneau.config.store.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
 import org.junit.*;
@@ -52,7 +54,7 @@ public class ConfigTest {
 		assertNull(c.get("b").orElse(null));
 		assertNull(c.get("S/c").orElse(null));
 		assertNull(c.get("T/d").orElse(null));
-		assertThrown(()->c.get(null)).asMessage().is("Argument 'key' cannot be null.");
+		assertThrows(IllegalArgumentException.class, ()->c.get(null), "Argument 'key' cannot be null.");
 		c.close();
 	}
 
@@ -800,7 +802,7 @@ public class ConfigTest {
 		assertObject(c.getKeys("S")).asJson().is("['b1','b2']");
 		assertTrue(c.getKeys("T").isEmpty());
 
-		assertThrown(()->c.getKeys(null)).asMessage().is("Argument 'section' cannot be null.");
+		assertThrows(IllegalArgumentException.class, ()->c.getKeys(null), "Argument 'section' cannot be null.");
 	}
 
 	//====================================================================================================
@@ -816,8 +818,8 @@ public class ConfigTest {
 		assertObject(a).asJson().is("{foo:'baz'}");
 		c.getSection("S").writeToBean(b, true);
 		assertObject(b).asJson().is("{foo:'baz'}");
-		assertThrown(()->c.getSection("S").writeToBean(a, false)).asMessage().is("Unknown property 'bar' encountered in configuration section 'S'.");
-		assertThrown(()->c.getSection("S").writeToBean(b, false)).asMessage().is("Unknown property 'bar' encountered in configuration section 'S'.");
+		assertThrows(ParseException.class, ()->c.getSection("S").writeToBean(a, false), "Unknown property 'bar' encountered in configuration section 'S'.");
+		assertThrows(ParseException.class, ()->c.getSection("S").writeToBean(b, false), "Unknown property 'bar' encountered in configuration section 'S'.");
 		c.getSection("").writeToBean(b, true);
 		assertObject(b).asJson().is("{foo:'qux'}");
 		c.getSection("").writeToBean(a, true);
@@ -852,8 +854,8 @@ public class ConfigTest {
 		b = c.getSection("S").asBean(BBean.class).get();
 		assertObject(b).asJson().is("{foo:'baz'}");
 
-		assertThrown(()->c.getSection("T").asBean(ABean.class).get()).asMessage().is("Unknown property 'bar' encountered in configuration section 'T'.");
-		assertThrown(()->c.getSection("T").asBean(BBean.class).get()).asMessage().is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrows(ParseException.class, ()->c.getSection("T").asBean(ABean.class).get(), "Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrows(ParseException.class, ()->c.getSection("T").asBean(BBean.class).get(), "Unknown property 'bar' encountered in configuration section 'T'.");
 	}
 
 	//====================================================================================================
@@ -871,8 +873,8 @@ public class ConfigTest {
 		b = c.getSection("T").asBean(BBean.class, true).get();
 		assertObject(b).asJson().is("{foo:'qux'}");
 
-		assertThrown(()->c.getSection("T").asBean(ABean.class, false).get()).asMessage().is("Unknown property 'bar' encountered in configuration section 'T'.");
-		assertThrown(()->c.getSection("T").asBean(BBean.class, false).get()).asMessage().is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrows(ParseException.class, ()->c.getSection("T").asBean(ABean.class, false).get(), "Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrows(ParseException.class, ()->c.getSection("T").asBean(BBean.class, false).get(), "Unknown property 'bar' encountered in configuration section 'T'.");
 	}
 
 	//====================================================================================================
@@ -913,7 +915,7 @@ public class ConfigTest {
 		a = c.getSection("T").asInterface(AInterface.class).get();
 		assertEquals("qux", a.getFoo());
 
-		assertThrown(()->c.getSection("T").asInterface(ABean.class).get()).asMessage().is("Class 'org.apache.juneau.config.ConfigTest$ABean' passed to toInterface() is not an interface.");
+		assertThrows(IllegalArgumentException.class, ()->c.getSection("T").asInterface(ABean.class).get(), "Class 'org.apache.juneau.config.ConfigTest$ABean' passed to toInterface() is not an interface.");
 	}
 
 	public interface AInterface {
@@ -957,7 +959,7 @@ public class ConfigTest {
 		c.setSection("S1", Collections.<String>emptyList());
 		assertString(c).asReplaceAll("\\r?\\n", "|").is("#C3|#C4||[S1]|");
 
-		assertThrown(()->c.setSection(null, Arrays.asList("", "#C5", "#C6"))).asMessage().is("Argument 'section' cannot be null.");
+		assertThrows(IllegalArgumentException.class, ()->c.setSection(null, Arrays.asList("", "#C5", "#C6")), "Argument 'section' cannot be null.");
 	}
 
 	//====================================================================================================
@@ -983,7 +985,7 @@ public class ConfigTest {
 		c.setSection("S1", Collections.<String>emptyList(), m);
 		assertString(c).asReplaceAll("\\r?\\n", "|").is("#C3|#C4||a = b|[S1]|a = b|");
 
-		assertThrown(()->c.setSection(null, Arrays.asList("", "#C5", "#C6"), m)).asMessage().is("Argument 'section' cannot be null.");
+		assertThrows(IllegalArgumentException.class, ()->c.setSection(null, Arrays.asList("", "#C5", "#C6"), m), "Argument 'section' cannot be null.");
 	}
 
 	//====================================================================================================

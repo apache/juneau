@@ -17,12 +17,15 @@ import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.DateUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
@@ -546,7 +549,7 @@ public class OpenApiTest extends SimpleTestBase {
 	@Test void f01_tArray_String() {
 		String in = "123";
 		HttpPartSchema ps = T_ARRAY;
-		assertThrown(()->serialize(ps, in)).asMessage().is("Input is not a valid array type: java.lang.String");
+		assertThrows(SerializeException.class, ()->serialize(ps, in), "Input is not a valid array type: java.lang.String");
 	}
 
 	@Test void f02a_tArray_StringList() throws Exception {

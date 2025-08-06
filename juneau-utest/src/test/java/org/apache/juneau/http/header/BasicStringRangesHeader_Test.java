@@ -59,12 +59,12 @@ class BasicStringRangesHeader_Test extends SimpleTestBase {
 		// Invalid usage.
 		c.get().header(stringRangesHeader(HEADER,(Supplier<StringRanges>)null)).run().assertContent().isEmpty();
 		c.get().header(stringRangesHeader(HEADER,()->null)).run().assertContent().isEmpty();
-		assertThrown(()->stringRangesHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->stringRangesHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->stringRangesHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->stringRangesHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->stringRangesHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->stringRangesHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->stringRangesHeader("", VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->stringRangesHeader(null, VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->stringRangesHeader("", PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->stringRangesHeader(null, PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->stringRangesHeader("", ()->PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->stringRangesHeader(null, ()->PARSED), "Name cannot be empty on header.");
 	}
 
 	@Test void a02_getRange() {

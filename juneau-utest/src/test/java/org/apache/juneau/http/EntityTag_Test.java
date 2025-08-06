@@ -13,6 +13,7 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.function.*;
@@ -69,12 +70,12 @@ public class EntityTag_Test {
 		assertObject(EntityTag.of(null)).isNull();
 		assertObject(EntityTag.of((Supplier<?>)()->null)).isNull();
 
-		assertThrown(()->new EntityTag("foo")).asMessage().is("Invalid value for entity-tag: [foo]");
-		assertThrown(()->new EntityTag("\"")).asMessage().is("Invalid value for entity-tag: [\"]");
-		assertThrown(()->new EntityTag("")).asMessage().is("Invalid value for entity-tag: []");
-		assertThrown(()->new EntityTag(null)).asMessage().is("Argument 'value' cannot be null.");
-		assertThrown(()->new EntityTag("\"a")).asMessage().is("Invalid value for entity-tag: [\"a]");
-		assertThrown(()->new EntityTag("a\"")).asMessage().is("Invalid value for entity-tag: [a\"]");
-		assertThrown(()->new EntityTag("W/\"")).asMessage().is("Invalid value for entity-tag: [W/\"]");
+		assertThrows(IllegalArgumentException.class, ()->new EntityTag("foo"), "Invalid value for entity-tag: [foo]");
+		assertThrows(IllegalArgumentException.class, ()->new EntityTag("\""), "Invalid value for entity-tag: [\"]");
+		assertThrows(IllegalArgumentException.class, ()->new EntityTag(""), "Invalid value for entity-tag: []");
+		assertThrows(IllegalArgumentException.class, ()->new EntityTag(null), "Argument 'value' cannot be null.");
+		assertThrows(IllegalArgumentException.class, ()->new EntityTag("\"a"), "Invalid value for entity-tag: [\"a]");
+		assertThrows(IllegalArgumentException.class, ()->new EntityTag("a\""), "Invalid value for entity-tag: [a\"]");
+		assertThrows(IllegalArgumentException.class, ()->new EntityTag("W/\""), "Invalid value for entity-tag: [W/\"]");
 	}
 }

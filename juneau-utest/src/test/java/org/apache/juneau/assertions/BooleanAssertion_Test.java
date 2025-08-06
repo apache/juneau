@@ -14,8 +14,10 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -37,8 +39,8 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void a01_msg() {
-		assertThrown(()->test(null).setMsg("A {0}", 1).isExists()).asMessage().is("A 1");
-		assertThrown(()->test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("A 1");
+		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("A {0}", 1).isExists(), "A 1");
+		assertThrows(RuntimeException.class, ()->test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class).isExists(), "A 1");
 	}
 
 	@Test
@@ -99,21 +101,21 @@ public class BooleanAssertion_Test {
 	public void ca01_exists() {
 		Boolean x = true, nil = null;
 		test(x).isExists().isExists();
-		assertThrown(()->test(nil).isExists()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
 	@Test
 	public void ca02_isNull() {
 		Boolean x = true, nil = null;
 		test(nil).isNull();
-		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
+		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test
 	public void ca03_isNotNull() {
 		Boolean x = true, nil = null;
 		test(x).isNotNull();
-		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
 
 	@Test
@@ -248,15 +250,15 @@ public class BooleanAssertion_Test {
 	public void cc01_isTrue() {
 		Boolean nil = null;
 		test(true).isTrue();
-		assertThrown(()->test(false).isTrue()).asMessage().is("Value was false.");
-		assertThrown(()->test(nil).isTrue()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(false).isTrue(), "Value was false.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isTrue(), "Value was null.");
 	}
 
 	@Test
 	public void cc02_isFalse() {
 		Boolean nil = null;
 		test(false).isFalse();
-		assertThrown(()->test(true).isFalse()).asMessage().is("Value was true.");
-		assertThrown(()->test(nil).isFalse()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(true).isFalse(), "Value was true.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isFalse(), "Value was null.");
 	}
 }

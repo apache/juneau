@@ -15,6 +15,8 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.util.function.*;
 
@@ -56,13 +58,13 @@ class BasicLongHeader_Test extends SimpleTestBase {
 
 		// Invalid usage.
 		c.get().header(longHeader(HEADER,(Supplier<Long>)null)).run().assertContent().isEmpty();
-		assertThrown(()->longHeader(HEADER,"foo")).asMessage().is("Value 'foo' could not be parsed as a long.");
-		assertThrown(()->longHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->longHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->longHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->longHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->longHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
-		assertThrown(()->longHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrows(BasicRuntimeException.class, ()->longHeader(HEADER,"foo"), "Value 'foo' could not be parsed as a long.");
+		assertThrows(IllegalArgumentException.class, ()->longHeader("", VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->longHeader(null, VALUE), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->longHeader("", PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->longHeader(null, PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->longHeader("", ()->PARSED), "Name cannot be empty on header.");
+		assertThrows(IllegalArgumentException.class, ()->longHeader(null, ()->PARSED), "Name cannot be empty on header.");
 	}
 
 	@Test void a02_assertLong() {

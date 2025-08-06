@@ -15,10 +15,12 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -45,8 +47,8 @@ public class MapAssertion_Test {
 
 	@Test
 	public void a01_msg() {
-		assertThrown(()->test(null).setMsg("Foo {0}", 1).isExists()).asMessage().is("Foo 1");
-		assertThrown(()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("Foo 1");
+		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("Foo {0}", 1).isExists(), "Foo 1");
+		assertThrows(RuntimeException.class, ()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists(), "Foo 1");
 	}
 
 	@Test
@@ -138,21 +140,21 @@ public class MapAssertion_Test {
 	public void ca01_exists() {
 		Map<Integer,Integer> x = map(), nil = null;
 		test(x).isExists().isExists();
-		assertThrown(()->test(nil).isExists()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
 	@Test
 	public void ca02_isNull() {
 		Map<Integer,Integer> x = map(), nil = null;
 		assertMap(nil).isNull();
-		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
+		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test
 	public void ca03_isNotNull() {
 		Map<Integer,Integer> x = map(), nil = null;
 		test(x).isNotNull();
-		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
 
 	@Test
@@ -288,16 +290,16 @@ public class MapAssertion_Test {
 	public void cb01_isEmpty() {
 		Map<String,Integer> x1 = map(), x2 = map("a",1,"b",2), nil = null;
 		test(x1).isEmpty();
-		assertThrown(()->test(x2).isEmpty()).asMessage().is("Map was not empty.");
-		assertThrown(()->test(nil).isEmpty()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(x2).isEmpty(), "Map was not empty.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isEmpty(), "Value was null.");
 	}
 
 	@Test
 	public void cb02_isNotEmpty() {
 		Map<String,Integer> x1 = map(), x2 = map("a",1,"b",2), nil = null;
 		test(x2).isNotEmpty();
-		assertThrown(()->test(x1).isNotEmpty()).asMessage().is("Map was empty.");
-		assertThrown(()->test(nil).isNotEmpty()).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(x1).isNotEmpty(), "Map was empty.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isNotEmpty(), "Value was null.");
 	}
 
 	@Test
@@ -305,7 +307,7 @@ public class MapAssertion_Test {
 		Map<String,Integer> x = map("a",1,"b",2), nil = null;
 		test(x).isContainsKey("a");
 		assertThrown(()->test(x).isContainsKey("x")).asMessage().asOneLine().is("Map did not contain expected key.  Expected key='x'.  Value='{a=1, b=2}'.");
-		assertThrown(()->test(nil).isContainsKey("x")).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isContainsKey("x"), "Value was null.");
 	}
 
 	@Test
@@ -313,7 +315,7 @@ public class MapAssertion_Test {
 		Map<String,Integer> x = map("a",1,"b",2), nil = null;
 		test(x).isNotContainsKey("x");
 		assertThrown(()->test(x).isNotContainsKey("a")).asMessage().asOneLine().is("Map contained unexpected key.  Unexpected key='a'.  Value='{a=1, b=2}'.");
-		assertThrown(()->test(nil).isContainsKey("x")).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isContainsKey("x"), "Value was null.");
 	}
 
 	@Test
@@ -321,6 +323,6 @@ public class MapAssertion_Test {
 		Map<String,Integer> x = map("a",1,"b",2), nil = null;
 		test(x).isSize(2);
 		assertThrown(()->test(x).isSize(1)).asMessage().asOneLine().is("Map did not have the expected size.  Expect=1.  Actual=2.");
-		assertThrown(()->test(nil).isSize(0)).asMessage().is("Value was null.");
+		assertThrows(BasicAssertionError.class, ()->test(nil).isSize(0), "Value was null.");
 	}
 }

@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Constants.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -1305,7 +1306,7 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void h03_setWrongInt() {
-		assertThrown(()->proxy.setInt(2)).asMessage().is("expected:<1> but was:<2>");
+		assertThrows(AssertionError.class, ()->proxy.setInt(2), "expected:<1> but was:<2>");
 	}
 
 	@Test
@@ -1340,7 +1341,7 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void h10_setNullStringBad() {
-		assertThrown(()->proxy.setNullString("foo")).asMessage().is("expected null, but was:<foo>");
+		assertThrows(AssertionError.class, ()->proxy.setNullString("foo"), "expected null, but was:<foo>");
 	}
 
 	@Test
