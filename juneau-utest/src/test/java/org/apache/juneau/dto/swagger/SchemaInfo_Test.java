@@ -44,7 +44,7 @@ public class SchemaInfo_Test {
 		assertString(t.setDescription(null).getDescription()).isNull();
 		assertString(t.setDefault("foo").getDefault()).is("foo");
 		assertObject(t.setDefault(new StringBuilder("foo")).getDefault()).isType(StringBuilder.class).asString().is("foo");
-		assertObject(t.setDefault(null).getDefault()).isNull();
+		assertNull(t.setDefault(null).getDefault());
 		assertObject(t.setMultipleOf(123).getMultipleOf()).isType(Integer.class).is(123);
 		assertObject(t.setMultipleOf(123f).getMultipleOf()).isType(Float.class).is(123f);
 		assertObject(t.setMaximum(123).getMaximum()).isType(Integer.class).is(123);
@@ -63,10 +63,10 @@ public class SchemaInfo_Test {
 		assertObject(t.setMaxProperties(123).getMaxProperties()).isType(Integer.class).is(123);
 		assertObject(t.setMinProperties(123).getMinProperties()).isType(Integer.class).is(123);
 		assertObject(t.setRequiredProperties("x").getRequiredProperties()).isType(Set.class).asJson().is("['x']");
-		assertObject(t.setRequiredProperties((Collection<String>)null).getRequiredProperties()).isNull();
+		assertNull(t.setRequiredProperties((Collection<String>)null).getRequiredProperties());
 		assertObject(t.setEnum(set("foo","bar")).getEnum()).isType(Set.class).asJson().is("['foo','bar']");
 		assertObject(t.setEnum(set()).getEnum()).isType(Set.class).asJson().is("[]");
-		assertObject(t.setEnum((Collection<Object>)null).getEnum()).isNull();
+		assertNull(t.setEnum((Collection<Object>)null).getEnum());
 		assertObject(t.addEnum("foo","bar").getEnum()).isType(Set.class).asJson().is("['foo','bar']");
 		assertObject(t.addEnum("baz").getEnum()).isType(Set.class).asJson().is("['foo','bar','baz']");
 		assertString(t.setType("foo").getType()).is("foo");
@@ -74,14 +74,14 @@ public class SchemaInfo_Test {
 		assertObject(t.setItems(items("foo")).getItems()).asJson().is("{type:'foo'}");
 		assertObject(t.setAllOf(set("foo","bar")).getAllOf()).isType(Set.class).asJson().is("['foo','bar']");
 		assertObject(t.setAllOf(set()).getAllOf()).isType(Set.class).asJson().is("[]");
-		assertObject(t.setAllOf((Collection<Object>)null).getAllOf()).isNull();
+		assertNull(t.setAllOf((Collection<Object>)null).getAllOf());
 		assertObject(t.addAllOf("foo","bar").getAllOf()).isType(Set.class).asJson().is("['foo','bar']");
 		assertObject(t.setProperties(map("foo",new SchemaInfo().setType("foo"))).getProperties()).isType(Map.class).asJson().is("{foo:{type:'foo'}}");
 		assertObject(t.setProperties(map()).getProperties()).isType(Map.class).asJson().is("{}");
-		assertObject(t.setProperties((Map<String,SchemaInfo>)null).getProperties()).isNull();
+		assertNull(t.setProperties((Map<String,SchemaInfo>)null).getProperties());
 		assertObject(t.setAdditionalProperties(new SchemaInfo().setType("foo")).getAdditionalProperties()).isType(SchemaInfo.class).asJson().is("{type:'foo'}");
 		assertObject(t.setAdditionalProperties(new SchemaInfo()).getAdditionalProperties()).isType(SchemaInfo.class).asJson().is("{}");
-		assertObject(t.setAdditionalProperties((SchemaInfo)null).getAdditionalProperties()).isNull();
+		assertNull(t.setAdditionalProperties((SchemaInfo)null).getAdditionalProperties());
 		assertString(t.setDiscriminator("foo").getDiscriminator()).is("foo");
 		assertString(t.setDiscriminator(null).getDiscriminator()).isNull();
 		assertObject(t.setReadOnly(true).getReadOnly()).isType(Boolean.class).is(true);
@@ -89,7 +89,7 @@ public class SchemaInfo_Test {
 		assertObject(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs()).asJson().is("{url:'foo'}");
 		assertObject(t.setExample("foo").getExample()).is("foo");
 		assertObject(t.setExample(123).getExample()).is(123);
-		assertObject(t.setExample(null).getExample()).isNull();
+		assertNull(t.setExample(null).getExample());
 	}
 
 	/**

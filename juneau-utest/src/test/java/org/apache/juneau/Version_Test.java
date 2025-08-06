@@ -27,7 +27,7 @@ public class Version_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(of(null)).isNull();
+		assertNull(of(null));
 		assertObject(of("")).asString().is("0");
 
 		Version x = of("1.2.3");

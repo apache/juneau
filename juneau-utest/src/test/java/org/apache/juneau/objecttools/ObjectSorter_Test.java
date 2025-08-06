@@ -45,7 +45,7 @@ class ObjectSorter_Test extends SimpleTestBase {
 		Object in = map("a","b");
 		SortArgs sa = SortArgs.create("x");
 		assertObject(os.run(bs, in, sa)).asJson().is("{a:'b'}");
-		assertObject(os.run(in, "x")).isNull();
+		assertNull(os.run(in, "x"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

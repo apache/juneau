@@ -67,8 +67,8 @@ public class EntityTag_Test {
 		assertFalse(x7.isWeak());
 		assertFalse(x7.isAny());
 
-		assertObject(EntityTag.of(null)).isNull();
-		assertObject(EntityTag.of((Supplier<?>)()->null)).isNull();
+		assertNull(EntityTag.of(null));
+		assertNull(EntityTag.of((Supplier<?>)()->null));
 
 		assertThrows(IllegalArgumentException.class, ()->new EntityTag("foo"), "Invalid value for entity-tag: [foo]");
 		assertThrows(IllegalArgumentException.class, ()->new EntityTag("\""), "Invalid value for entity-tag: [\"]");

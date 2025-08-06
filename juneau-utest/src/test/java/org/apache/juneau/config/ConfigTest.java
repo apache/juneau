@@ -252,11 +252,11 @@ public class ConfigTest {
 		Config c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
 		assertObject(c.get("a1").as(String[].class).orElse(null)).asJson().is("['1','2']");
 		assertObject(c.get("a2").as(String[].class).orElse(null)).asJson().is("['2','3']");
-		assertObject(c.get("a3").as(String[].class).orElse(null)).isNull();
+		assertNull(c.get("a3").as(String[].class).orElse(null));
 		assertObject(c.get("S/b1").as(String[].class).orElse(null)).asJson().is("['1']");
 		assertObject(c.get("S/b2").as(String[].class).orElse(null)).asJson().is("[]");
-		assertObject(c.get("S/b3").as(String[].class).orElse(null)).isNull();
-		assertObject(c.get("T/c1").as(String[].class).orElse(null)).isNull();
+		assertNull(c.get("S/b3").as(String[].class).orElse(null));
+		assertNull(c.get("T/c1").as(String[].class).orElse(null));
 	}
 
 	//====================================================================================================
@@ -1397,7 +1397,7 @@ public class ConfigTest {
 		assertObject(cf.get("A/a1").asStringArray().get()).asJson().is("['1','2','3']");
 		assertObject(cf.get("A/a2").asStringArray().orElse(new String[]{"4","5","6"})).asJson().is("['4','5','6']");
 		assertObject(cf.get("B/a1").asStringArray().orElse(new String[]{"7","8","9"})).asJson().is("['7','8','9']");
-		assertObject(cf.get("B/a1").asStringArray().orElse(null)).isNull();
+		assertNull(cf.get("B/a1").asStringArray().orElse(null));
 
 		cf = init("[A]", "a1 = 1 ,\n\t2 ,\n\t3 ");
 		assertObject(cf.get("A/a1").asStringArray().get()).asJson().is("['1','2','3']");

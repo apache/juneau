@@ -14,6 +14,7 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.bean.swagger.*;
@@ -101,9 +102,9 @@ public class Info_Test {
 		assertObject(t.get("$ref", Object.class)).isType(StringBuilder.class);
 
 		t.set("null", null).set(null, "null");
-		assertObject(t.get("null", Object.class)).isNull();
-		assertObject(t.get(null, Object.class)).isNull();
-		assertObject(t.get("foo", Object.class)).isNull();
+		assertNull(t.get("null", Object.class));
+		assertNull(t.get(null, Object.class));
+		assertNull(t.get("foo", Object.class));
 
 		String s = "{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}";
 		assertObject(JsonParser.DEFAULT.parse(s, Info.class)).asJson().is(s);

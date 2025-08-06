@@ -42,10 +42,10 @@ public class ResponseInfo_Test {
 		assertObject(t.setHeaders(map("foo",headerInfo("bar"))).getHeaders()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 		assertObject(t.setHeaders(map("foo",headerInfo("bar"))).getHeaders().get("foo")).isType(HeaderInfo.class);
 		assertObject(t.setHeaders(map()).getHeaders()).isType(Map.class).asJson().is("{}");
-		assertObject(t.setHeaders((Map<String,HeaderInfo>)null).getHeaders()).isNull();
+		assertNull(t.setHeaders((Map<String,HeaderInfo>)null).getHeaders());
 		assertObject(t.setExamples(map("foo","bar","baz",alist("qux"))).getExamples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
 		assertObject(t.setExamples(map()).getExamples()).isType(Map.class).asJson().is("{}");
-		assertObject(t.setExamples((Map<String,Object>)null).getExamples()).isNull();
+		assertNull(t.setExamples((Map<String,Object>)null).getExamples());
 		assertObject(t.setExamples(map("foo","bar","baz",alist("qux"))).getExamples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
 		assertObject(t.setExamples(map()).addExample("text/a", "a").addExample("text/b", null).addExample(null, "c").getExamples()).asJson().is("{'text/a':'a','text/b':null,null:'c'}");
 	}

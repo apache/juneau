@@ -37,7 +37,7 @@ public class ParameterInfo_Test {
 	public void a01_gettersAndSetters() {
 		ParameterInfo t = new ParameterInfo();
 		assertString(t.setName("foo").getName()).is("foo");
-		assertObject(t.setName(null).getName()).isNull();
+		assertNull(t.setName(null).getName());
 		assertString(t.setIn("foo").getIn()).is("foo");
 		assertString(t.setIn(null).getIn()).isNull();
 		assertString(t.setDescription("foo").getDescription()).is("foo");
@@ -54,7 +54,7 @@ public class ParameterInfo_Test {
 		assertString(t.setCollectionFormat(null).getCollectionFormat()).isNull();
 		assertString(t.setDefault("foo").getDefault()).is("foo");
 		assertObject(t.setDefault(new StringBuilder("foo")).getDefault()).isType(StringBuilder.class).asString().is("foo");
-		assertObject(t.setDefault(null).getDefault()).isNull();
+		assertNull(t.setDefault(null).getDefault());
 		assertObject(t.setMaximum(123).getMaximum()).isType(Integer.class).is(123);
 		assertObject(t.setMaximum(123f).getMaximum()).isType(Float.class).is(123f);
 		assertObject(t.setExclusiveMaximum(true).getExclusiveMaximum()).isType(Boolean.class).is(true);
@@ -70,7 +70,7 @@ public class ParameterInfo_Test {
 		assertObject(t.setUniqueItems(true).getUniqueItems()).isType(Boolean.class).is(true);
 		assertObject(t.setEnum(set("foo","bar")).getEnum()).isType(Set.class).asJson().is("['foo','bar']");
 		assertObject(t.setEnum(set()).getEnum()).isType(Set.class).asJson().is("[]");
-		assertObject(t.setEnum((Collection<Object>)null).getEnum()).isNull();
+		assertNull(t.setEnum((Collection<Object>)null).getEnum());
 		assertObject(t.addEnum("foo","bar").getEnum()).isType(Set.class).asJson().is("['foo','bar']");
 		assertObject(t.addEnum("baz").getEnum()).isType(Set.class).asJson().is("['foo','bar','baz']");
 		assertObject(t.setMultipleOf(123).getMultipleOf()).isType(Integer.class).is(123);

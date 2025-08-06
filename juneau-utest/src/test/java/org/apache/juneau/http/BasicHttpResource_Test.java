@@ -104,8 +104,8 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		assertString(x.getContentEncoding().getValue()).is("identity");
 
 		x = stringResource("foo", null).setContentEncoding((String)null);
-		assertObject(x.getContentType()).isNull();
-		assertObject(x.getContentEncoding()).isNull();
+		assertNull(x.getContentType());
+		assertNull(x.getContentEncoding());
 	}
 
 	@Test void a02_header_String_Object() {
@@ -121,8 +121,8 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar")).addHeaders(header("Foo","baz")).addHeaders(header("Bar",null)).getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
-		assertObject(x.getFirst("Bar").get().getValue()).isNull();
-		assertObject(x.getLast("Bar").get().getValue()).isNull();
+		assertNull(x.getFirst("Bar").get().getValue());
+		assertNull(x.getLast("Bar").get().getValue());
 		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','Bar: null']");
 	}
 
@@ -130,8 +130,8 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
-		assertObject(x.getFirst("Bar").get().getValue()).isNull();
-		assertObject(x.getLast("Bar").get().getValue()).isNull();
+		assertNull(x.getFirst("Bar").get().getValue());
+		assertNull(x.getLast("Bar").get().getValue());
 		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','Bar: null']");
 	}
 
@@ -139,8 +139,8 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
-		assertObject(x.getFirst("Bar").get().getValue()).isNull();
-		assertObject(x.getLast("Bar").get().getValue()).isNull();
+		assertNull(x.getFirst("Bar").get().getValue());
+		assertNull(x.getLast("Bar").get().getValue());
 		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','Bar: null']");
 	}
 
@@ -163,14 +163,14 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		StringResource x1 = stringResource("foo").setContentType("text/plain");
 		assertString(x1.getContentType().getValue()).is("text/plain");
 		StringResource x2 = stringResource("foo").setContentType((String)null);
-		assertObject(x2.getContentType()).isNull();
+		assertNull(x2.getContentType());
 	}
 
 	@Test void a09_contentEncoding_String() {
 		StringResource x1 = stringResource("foo").setContentEncoding("identity");
 		assertString(x1.getContentEncoding().getValue()).is("identity");
 		StringResource x2 = stringResource("foo").setContentEncoding((String)null);
-		assertObject(x2.getContentEncoding()).isNull();
+		assertNull(x2.getContentEncoding());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

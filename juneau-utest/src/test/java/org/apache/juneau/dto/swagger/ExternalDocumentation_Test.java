@@ -13,6 +13,7 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
@@ -64,9 +65,9 @@ public class ExternalDocumentation_Test {
 		assertObject(t.get("$ref", String.class)).isType(String.class).is("baz");
 
 		t.set("null", null).set(null, "null");
-		assertObject(t.get("null", Object.class)).isNull();
-		assertObject(t.get(null, Object.class)).isNull();
-		assertObject(t.get("foo", Object.class)).isNull();
+		assertNull(t.get("null", Object.class));
+		assertNull(t.get(null, Object.class));
+		assertNull(t.get("foo", Object.class));
 
 		assertObject(JsonParser.DEFAULT.parse("{description:'foo',url:'bar','$ref':'baz'}", ExternalDocumentation.class)).asJson().is("{description:'foo',url:'bar','$ref':'baz'}");
 	}

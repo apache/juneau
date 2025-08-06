@@ -14,6 +14,8 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpResponses.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
@@ -71,10 +73,10 @@ public class HttpException_Test extends SimpleTestBase {
 
 	@Test void a02_getRootCause() {
 		BasicHttpException x = new BasicHttpException(100, null);
-		assertObject(x.getRootCause()).isNull();
+		assertNull(x.getRootCause());
 
 		x = new BasicHttpException(100, new BasicHttpException(100,"foo"));
-		assertObject(x.getRootCause()).isNull();
+		assertNull(x.getRootCause());
 
 		x = new BasicHttpException(100, new RuntimeException("foo"));
 		assertObject(x.getRootCause()).isType(RuntimeException.class);

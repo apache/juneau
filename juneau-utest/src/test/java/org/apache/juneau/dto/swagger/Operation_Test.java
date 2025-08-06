@@ -40,29 +40,29 @@ public class Operation_Test {
 		assertObject(t.setTags(set("foo","bar")).getTags()).isType(Set.class).asJson().is("['foo','bar']");
 		assertObject(t.setTags("bar","baz").getTags()).isType(Set.class).asJson().is("['bar','baz']");
 		assertObject(t.setTags(set()).getTags()).isType(Set.class).asJson().is("[]");
-		assertObject(t.setTags((Collection<String>)null).getTags()).isNull();
+		assertNull(t.setTags((Collection<String>)null).getTags());
 		assertString(t.setSummary("foo").getSummary()).is("foo");
 		assertString(t.setDescription("foo").getDescription()).is("foo");
 		assertObject(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs()).isType(ExternalDocumentation.class).asJson().is("{url:'foo'}");
 		assertString(t.setOperationId("foo").getOperationId()).is("foo");
 		assertObject(t.setConsumes(set(MediaType.of("text/foo"))).getConsumes()).isType(Set.class).asJson().is("['text/foo']");
 		assertObject(t.setConsumes(set()).getConsumes()).isType(Set.class).asJson().is("[]");
-		assertObject(t.setConsumes((Collection<MediaType>)null).getConsumes()).isNull();
+		assertNull(t.setConsumes((Collection<MediaType>)null).getConsumes());
 		assertObject(t.setProduces(set(MediaType.of("text/foo"))).getProduces()).isType(Set.class).asJson().is("['text/foo']");
 		assertObject(t.setProduces(set()).getProduces()).isType(Set.class).asJson().is("[]");
-		assertObject(t.setProduces((Collection<MediaType>)null).getProduces()).isNull();
+		assertNull(t.setProduces((Collection<MediaType>)null).getProduces());
 		assertObject(t.setParameters(set(parameterInfo("foo","bar"))).getParameters()).isType(List.class).asJson().is("[{'in':'foo',name:'bar'}]");
 		assertObject(t.setParameters(set()).getParameters()).isType(List.class).asJson().is("[]");
-		assertObject(t.setParameters((Collection<ParameterInfo>)null).getParameters()).isNull();
+		assertNull(t.setParameters((Collection<ParameterInfo>)null).getParameters());
 		assertObject(t.setResponses(map("123",responseInfo("bar"))).getResponses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
 		assertObject(t.setResponses(map()).getResponses()).isType(Map.class).asJson().is("{}");
-		assertObject(t.setResponses((Map<String,ResponseInfo>)null).getResponses()).isNull();
+		assertNull(t.setResponses((Map<String,ResponseInfo>)null).getResponses());
 		assertObject(t.setSchemes(set("foo")).getSchemes()).isType(Set.class).asJson().is("['foo']");
 		assertObject(t.setSchemes(set()).getSchemes()).isType(Set.class).asJson().is("[]");
-		assertObject(t.setSchemes((Set<String>)null).getSchemes()).isNull();
+		assertNull(t.setSchemes((Set<String>)null).getSchemes());
 		assertObject(t.setSecurity(alist(map("foo",alist("bar")))).getSecurity()).isType(List.class).asJson().is("[{foo:['bar']}]");
 		assertObject(t.setSecurity(alist()).getSecurity()).isType(List.class).asJson().is("[]");
-		assertObject(t.setSecurity((List<Map<String,List<String>>>)null).getSecurity()).isNull();
+		assertNull(t.setSecurity((List<Map<String,List<String>>>)null).getSecurity());
 		assertObject(t.setDeprecated(true).getDeprecated()).isType(Boolean.class).is(true);
 	}
 

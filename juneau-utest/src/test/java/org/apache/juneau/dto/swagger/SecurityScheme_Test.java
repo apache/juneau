@@ -51,7 +51,7 @@ public class SecurityScheme_Test {
 		assertString(t.setTokenUrl(null).getTokenUrl()).isNull();
 		assertObject(t.setScopes(map("foo","bar")).getScopes()).isType(Map.class).asJson().is("{foo:'bar'}");
 		assertObject(t.setScopes(map()).getScopes()).isType(Map.class).asJson().is("{}");
-		assertObject(t.setScopes((Map<String,String>)null).getScopes()).isNull();
+		assertNull(t.setScopes((Map<String,String>)null).getScopes());
 	}
 
 	/**

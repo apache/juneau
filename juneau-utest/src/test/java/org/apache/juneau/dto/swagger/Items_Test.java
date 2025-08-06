@@ -45,7 +45,7 @@ public class Items_Test {
 		assertString(t.setCollectionFormat(null).getCollectionFormat()).isNull();
 		assertObject(t.setDefault("foo").getDefault()).is("foo");
 		assertObject(t.setDefault(new StringBuilder("foo")).getDefault()).isType(StringBuilder.class).asString().is("foo");
-		assertObject(t.setDefault(null).getDefault()).isNull();
+		assertNull(t.setDefault(null).getDefault());
 		assertObject(t.setMaximum(123).getMaximum()).isType(Integer.class).is(123);
 		assertObject(t.setMaximum(123f).getMaximum()).isType(Float.class).is(123f);
 		assertObject(t.setExclusiveMaximum(true).getExclusiveMaximum()).isType(Boolean.class).is(true);
@@ -62,7 +62,7 @@ public class Items_Test {
 		assertObject(t.setEnum(set("foo","bar")).getEnum()).isType(Set.class).asJson().is("['foo','bar']");
 		assertObject(t.setEnum("foo","baz").getEnum()).isType(Set.class).asJson().is("['foo','baz']");
 		assertObject(t.setEnum(set()).getEnum()).isType(Set.class).asJson().is("[]");
-		assertObject(t.setEnum((Collection<Object>)null).getEnum()).isNull();
+		assertNull(t.setEnum((Collection<Object>)null).getEnum());
 		assertObject(t.addEnum("foo","bar").getEnum()).isType(Set.class).asJson().is("['foo','bar']");
 		assertObject(t.addEnum("baz").getEnum()).isType(Set.class).asJson().is("['foo','bar','baz']");
 		assertObject(t.setMultipleOf(123).getMultipleOf()).isType(Integer.class).is(123);
