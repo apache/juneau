@@ -132,13 +132,13 @@ public class MediaRanges_Test extends SimpleTestBase {
 
 	@Test void a04_match() {
 		MediaRanges x1 = of("text/json");
-		assertInteger(x1.match(alist(MediaType.of("text/json")))).is(0);
-		assertInteger(x1.match(alist(MediaType.of("text/foo")))).is(-1);
-		assertInteger(x1.match(alist((MediaType)null))).is(-1);
-		assertInteger(x1.match(null)).is(-1);
+		assertEquals(0, x1.match(alist(MediaType.of("text/json"))));
+		assertEquals(-1, x1.match(alist(MediaType.of("text/foo"))));
+		assertEquals(-1, x1.match(alist((MediaType)null)));
+		assertEquals(-1, x1.match(null));
 
 		MediaRanges x2 = of("");
-		assertInteger(x2.match(alist(MediaType.of("text/json")))).is(-1);
+		assertEquals(-1, x2.match(alist(MediaType.of("text/json"))));
 	}
 
 	@Test void a05_getRanges() {

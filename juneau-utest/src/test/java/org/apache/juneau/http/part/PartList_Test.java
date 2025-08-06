@@ -248,12 +248,12 @@ class PartList_Test extends SimpleTestBase {
 
 		final AtomicInteger i1 = new AtomicInteger();
 		x.forEach(h -> i1.incrementAndGet());
-		assertInteger(i1.get()).is(0);
+		assertEquals(0, i1.get());
 
 		x = PartList.of(FOO_1, FOO_2);
 		final AtomicInteger i2 = new AtomicInteger();
 		x.forEach(h -> i2.incrementAndGet());
-		assertInteger(i2.get()).is(2);
+		assertEquals(2, i2.get());
 	}
 
 	@Test void a15_forEach_single() {
@@ -261,12 +261,12 @@ class PartList_Test extends SimpleTestBase {
 
 		final AtomicInteger i1 = new AtomicInteger();
 		x.forEach("Foo", h -> i1.incrementAndGet());
-		assertInteger(i1.get()).is(0);
+		assertEquals(0, i1.get());
 
 		x = PartList.of(FOO_1, FOO_2, X_x);
 		final AtomicInteger i2 = new AtomicInteger();
 		x.forEach("Foo", h -> i2.incrementAndGet());
-		assertInteger(i2.get()).is(2);
+		assertEquals(2, i2.get());
 	}
 
 	@Test void a16_stream_all() {
@@ -274,12 +274,12 @@ class PartList_Test extends SimpleTestBase {
 
 		final AtomicInteger i1 = new AtomicInteger();
 		x.stream().forEach(h -> i1.incrementAndGet());
-		assertInteger(i1.get()).is(0);
+		assertEquals(0, i1.get());
 
 		x = PartList.of(FOO_1, FOO_2);
 		final AtomicInteger i2 = new AtomicInteger();
 		x.stream().forEach(h -> i2.incrementAndGet());
-		assertInteger(i2.get()).is(2);
+		assertEquals(2, i2.get());
 	}
 
 	@Test void a17_stream_single() {
@@ -287,12 +287,12 @@ class PartList_Test extends SimpleTestBase {
 
 		final AtomicInteger i1 = new AtomicInteger();
 		x.stream("Foo").forEach(h -> i1.incrementAndGet());
-		assertInteger(i1.get()).is(0);
+		assertEquals(0, i1.get());
 
 		x = PartList.of(FOO_1, FOO_2, X_x);
 		final AtomicInteger i2 = new AtomicInteger();
 		x.stream("Foo").forEach(h -> i2.incrementAndGet());
-		assertInteger(i2.get()).is(2);
+		assertEquals(2, i2.get());
 	}
 
 	@Test void a18_caseSensitive() {
@@ -307,7 +307,7 @@ class PartList_Test extends SimpleTestBase {
 
 	@Test void a19_size() {
 		PartList x = PartList.of(FOO_1);
-		assertInteger(x.size()).is(1);
+		assertEquals(1, x.size());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

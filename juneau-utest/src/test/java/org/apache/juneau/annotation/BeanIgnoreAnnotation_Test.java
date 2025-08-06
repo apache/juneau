@@ -14,6 +14,8 @@ package org.apache.juneau.annotation;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -51,7 +53,9 @@ class BeanIgnoreAnnotation_Test extends SimpleTestBase {
 
 	@Test void a02_testEquivalency() {
 		assertObject(a1).is(a2);
-		assertInteger(a1.hashCode()).is(a2.hashCode()).isNotAny(0,-1);
+		assertNotEquals(0, a2.hashCode());
+		assertNotEquals(-1, a2.hashCode());
+		assertEquals(a1.hashCode(), a2.hashCode());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -113,6 +117,9 @@ class BeanIgnoreAnnotation_Test extends SimpleTestBase {
 
 	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertObject(d1).is(d2).is(a1);
-		assertInteger(d1.hashCode()).is(d2.hashCode()).is(a1.hashCode()).isNotAny(0,-1);
+		assertNotEquals(0, a1.hashCode());
+		assertNotEquals(-1, a1.hashCode());
+		assertEquals(d1.hashCode(), a1.hashCode());
+		assertEquals(a1.hashCode(), d2.hashCode());
 	}
 }

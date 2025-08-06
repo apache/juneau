@@ -67,7 +67,7 @@ class BasicIntegerHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_assertInteger() {
-		integerHeader(HEADER,1).assertInteger().is(1);
+		assertEquals(1, integerHeader(HEADER,1).asInteger().get());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

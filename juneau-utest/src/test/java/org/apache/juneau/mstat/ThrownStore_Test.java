@@ -14,6 +14,8 @@ package org.apache.juneau.mstat;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -37,9 +39,9 @@ class ThrownStore_Test extends SimpleTestBase {
 
 		ThrownStore db = new ThrownStore();
 
-		assertInteger(db.add(t1).getCount()).is(1);
-		assertInteger(db.add(t1).getCount()).is(2);
-		assertInteger(db.add(t2).getCount()).is(1);
+		assertEquals(1, db.add(t1).getCount());
+		assertEquals(2, db.add(t1).getCount());
+		assertEquals(1, db.add(t2).getCount());
 
 		assertLong(db.getStats(t1).get().getHash()).is(db.getStats(t1).get().getHash());
 		assertLong(db.getStats(t1).get().getHash()).isNot(db.getStats(t2).get().getHash());
@@ -62,8 +64,8 @@ class ThrownStore_Test extends SimpleTestBase {
 		db.add(t1);
 
 		assertSize(2, l);
-		assertInteger(l.get(0).getCount()).is(2);
-		assertInteger(l.get(1).getCount()).is(1);
+		assertEquals(2, l.get(0).getCount());
+		assertEquals(1, l.get(1).getCount());
 	}
 
 	@Test void a03_reset() {
@@ -106,8 +108,8 @@ class ThrownStore_Test extends SimpleTestBase {
 		db.add(t1);
 		db.add(t2);
 
-		assertInteger(db.getStats(t1).get().getCount()).is(2);
-		assertInteger(db.getStats(t2).get().getCount()).is(2);
+		assertEquals(2, db.getStats(t1).get().getCount());
+		assertEquals(2, db.getStats(t2).get().getCount());
 	}
 
 	@Test void a05_slightlyDifferentStackTraces() {
@@ -139,8 +141,8 @@ class ThrownStore_Test extends SimpleTestBase {
 		db.add(t1);
 		db.add(t2);
 
-		assertInteger(db.getStats(t1).get().getCount()).is(1);
-		assertInteger(db.getStats(t2).get().getCount()).is(1);
+		assertEquals(1, db.getStats(t1).get().getCount());
+		assertEquals(1, db.getStats(t2).get().getCount());
 	}
 
 	@Test void a06_proxyElements() {
@@ -172,8 +174,8 @@ class ThrownStore_Test extends SimpleTestBase {
 		db.add(t1);
 		db.add(t2);
 
-		assertInteger(db.getStats(t1).get().getCount()).is(2);
-		assertInteger(db.getStats(t2).get().getCount()).is(2);
+		assertEquals(2, db.getStats(t1).get().getCount());
+		assertEquals(2, db.getStats(t2).get().getCount());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -341,8 +343,8 @@ class ThrownStore_Test extends SimpleTestBase {
 		assertObject(db.getStats(t1).get().getStackTrace()).asJson().is("['Foo.bar(Foo.class:1)','Foo.baz(Foo.class:2)','<ignored>','<ignored>','Object.baz(Object.class:5)']");
 		assertObject(db.getStats(t2).get().getStackTrace()).asJson().is("['Foo.bar(Foo.class:1)','Foo.baz(Foo.class:2)','<ignored>','<ignored>','Object.baz(Object.class:5)']");
 
-		assertInteger(db.getStats(t1).get().getCount()).is(2);
-		assertInteger(db.getStats(t2).get().getCount()).is(2);
+		assertEquals(2, db.getStats(t1).get().getCount());
+		assertEquals(2, db.getStats(t2).get().getCount());
 
 		ThrownStore db2 = ThrownStore.create().parent(db).build();
 
@@ -352,9 +354,9 @@ class ThrownStore_Test extends SimpleTestBase {
 		assertObject(db2.getStats(t1).get().getStackTrace()).asJson().is("['Foo.bar(Foo.class:1)','Foo.baz(Foo.class:2)','<ignored>','<ignored>','Object.baz(Object.class:5)']");
 		assertObject(db2.getStats(t2).get().getStackTrace()).asJson().is("['Foo.bar(Foo.class:1)','Foo.baz(Foo.class:2)','<ignored>','<ignored>','Object.baz(Object.class:5)']");
 
-		assertInteger(db2.getStats(t1).get().getCount()).is(2);
-		assertInteger(db2.getStats(t2).get().getCount()).is(2);
-		assertInteger(db.getStats(t1).get().getCount()).is(4);
-		assertInteger(db.getStats(t2).get().getCount()).is(4);
+		assertEquals(2, db2.getStats(t1).get().getCount());
+		assertEquals(2, db2.getStats(t2).get().getCount());
+		assertEquals(4, db.getStats(t1).get().getCount());
+		assertEquals(4, db.getStats(t2).get().getCount());
 	}
 }

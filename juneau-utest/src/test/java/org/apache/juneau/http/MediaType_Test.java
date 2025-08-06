@@ -43,10 +43,10 @@ public class MediaType_Test extends SimpleTestBase {
 
 	@Test void a02_match() {
 		MediaType x1 = MediaType.of("text/json");
-		assertInteger(x1.match(x1,true)).is(100000);
+		assertEquals(100000, x1.match(x1,true));
 
-		assertInteger(x1.match(MediaType.of("text/json+foo"),true)).is(10210);
-		assertInteger(x1.match(MediaType.of("text/json+foo"),false)).is(0);
+		assertEquals(10210, x1.match(MediaType.of("text/json+foo"),true));
+		assertEquals(0, x1.match(MediaType.of("text/json+foo"),false));
 	}
 
 	@Test void a03_getParameter() {
@@ -66,6 +66,6 @@ public class MediaType_Test extends SimpleTestBase {
 
 	@Test void a05_hashCode() {
 		MediaType x1 = new MediaType("text/foo"), x2 = new MediaType("text/foo");
-		assertInteger(x1.hashCode()).is(x2.hashCode());
+		assertEquals(x2.hashCode(), x1.hashCode());
 	}
 }

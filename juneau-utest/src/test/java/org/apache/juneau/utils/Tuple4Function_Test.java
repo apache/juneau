@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -23,6 +24,6 @@ class Tuple4Function_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void a01_basic() {
 		Tuple4Function<Integer,Integer,Integer,Integer,Integer> x = (a,b,c,d)->a+b+c+d;
-		assertInteger(x.apply(1,2,3,4)).is(10);
+		assertEquals(10, x.apply(1,2,3,4));
 	}
 }

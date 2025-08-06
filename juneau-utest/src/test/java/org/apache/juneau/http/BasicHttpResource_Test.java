@@ -35,7 +35,7 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		assertNull(x.getContentType());
 		assertBytes(x.getContent()).isNotNull().asString().isEmpty();
 		assertNull(x.getContentEncoding());
-		assertInteger(x.getHeaders().size()).is(0);
+		assertEquals(0, x.getHeaders().size());
 
 		x = stringResource("foo");
 		assertBytes(x.getContent()).asString().is("foo");

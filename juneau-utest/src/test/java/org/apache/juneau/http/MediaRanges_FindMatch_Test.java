@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -169,7 +169,7 @@ public class MediaRanges_FindMatch_Test {
 		Accept a = accept(this.accept);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
 		int r = a.match(alist(mt));
-		assertInteger(r).setMsg("{0} failed", label).is(expected);
+		assertEquals(expected, r);
 	}
 
 	@Test
@@ -179,6 +179,6 @@ public class MediaRanges_FindMatch_Test {
 		Collections.reverse(Arrays.asList(mt));
 		int r = a.match(alist(mt));
 		int expected2 = expectedReverse == -1 ? -1 : mt.length-expectedReverse-1;
-		assertInteger(r).setMsg("{0} failed", label).is(expected2);
+		assertEquals(expected2, r);
 	}
 }

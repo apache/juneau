@@ -240,6 +240,20 @@ public abstract class SimpleTestBase {
 		}
 	}
 
+	protected static void assertNotEqualsAny(Object o, Object...values) {
+		for (var i = 0; i < values.length; i++) {
+			if (eq(o, values[i]))
+				ffail("Element at index {0} unexpectedly matched.  expected={1}, actual={2}", i, values[i], s(o));
+		}
+	}
+
+	protected static void assertEqualsAll(Object...values) {
+		for (var i = 1; i < values.length; i++) {
+			if (ne(values[0], values[i]))
+				ffail("Elements at index {0} and {1} did not match.", 0, i);
+		}
+	}
+
 	private static String getReadableEntry(Object o, String name) {
 		var i = name.indexOf("{");
 		var pn = i == -1 ? name : name.substring(0, i);

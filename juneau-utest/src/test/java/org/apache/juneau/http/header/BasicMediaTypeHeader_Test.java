@@ -96,8 +96,8 @@ class BasicMediaTypeHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a07_match() {
-		assertInteger(contentType("text/foo").match(MediaType.of("text/foo"),true)).is(100000);
-		assertInteger(new ContentType((String)null).match(MediaType.of("text/foo"),true)).is(0);
+		assertEquals(100000, contentType("text/foo").match(MediaType.of("text/foo"),true));
+		assertEquals(0, new ContentType((String)null).match(MediaType.of("text/foo"),true));
 	}
 
 	@Test void a08_getParameters() {

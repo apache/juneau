@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -25,8 +25,8 @@ public class Tuple3_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		Tuple3<String,Integer,Integer> x = Tuple3.of("foo",1,2);
 		assertString(x.getA()).is("foo");
-		assertInteger(x.getB()).is(1);
-		assertInteger(x.getC()).is(2);
+		assertEquals(1, x.getB());
+		assertEquals(2, x.getC());
 	}
 
 	@Test void a02_equality() {

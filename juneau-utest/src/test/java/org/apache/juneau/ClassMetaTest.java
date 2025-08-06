@@ -321,19 +321,19 @@ public class ClassMetaTest {
 		ClassMeta<?> c3 = bc.getClassMeta(C3.class);
 		ClassMeta<?> c4 = bc.getClassMeta(C4.class);
 		ClassMeta<?> c5 = bc.getClassMeta(C5.class);
-		assertInteger(c3.firstAnnotation(A.class, null).get().value()).is(2);
-		assertInteger(c4.firstAnnotation(A.class, null).get().value()).is(2);
-		assertInteger(c5.firstAnnotation(A.class, null).get().value()).is(3);
-		assertInteger(c3.firstAnnotation(A.class, x -> x.value() == 5).get().value()).is(5);
+		assertEquals(2, c3.firstAnnotation(A.class, null).get().value());
+		assertEquals(2, c4.firstAnnotation(A.class, null).get().value());
+		assertEquals(3, c5.firstAnnotation(A.class, null).get().value());
+		assertEquals(5, c3.firstAnnotation(A.class, x -> x.value() == 5).get().value());
 	}
 	@Test
 	public void lastAnnotation() {
 		ClassMeta<?> c3 = bc.getClassMeta(C3.class);
 		ClassMeta<?> c4 = bc.getClassMeta(C4.class);
 		ClassMeta<?> c5 = bc.getClassMeta(C5.class);
-		assertInteger(c3.lastAnnotation(A.class, null).get().value()).is(7);
-		assertInteger(c4.lastAnnotation(A.class, null).get().value()).is(7);
-		assertInteger(c5.lastAnnotation(A.class, null).get().value()).is(3);
-		assertInteger(c3.lastAnnotation(A.class, x -> x.value() == 5).get().value()).is(5);
+		assertEquals(7, c3.lastAnnotation(A.class, null).get().value());
+		assertEquals(7, c4.lastAnnotation(A.class, null).get().value());
+		assertEquals(3, c5.lastAnnotation(A.class, null).get().value());
+		assertEquals(5, c3.lastAnnotation(A.class, x -> x.value() == 5).get().value());
 	}
 }

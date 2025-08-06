@@ -15,6 +15,8 @@ package org.apache.juneau.http;
 import static org.apache.juneau.StringRanges.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -25,17 +27,17 @@ public class StringRanges_Test extends SimpleTestBase {
 	@Test void a01_match() {
 		List<String> x = alist("foo","bar","baz");
 
-		assertInteger(of((String)null).match(x)).is(-1);
+		assertEquals(-1, of((String)null).match(x));
 
-		assertInteger(of("foo;q=0.5,bar").match(x)).is(1);
-		assertInteger(of("foo;q=0.5,bar").match(x)).is(1);
-		assertInteger(of("foo,*").match(x)).is(0);
-		assertInteger(of("*,bar").match(x)).is(1);
-		assertInteger(of("foo;q=0.6,bar;q=0.5").match(x)).is(0);
-		assertInteger(of("foo;q=0.6,bar;q=0.5,qux").match(x)).is(0);
-		assertInteger(of("qux").match(x)).is(-1);
-		assertInteger(of("qux,q2x;q=0").match(x)).is(-1);
-		assertInteger(of("foo;q=0").match(x)).is(-1);
+		assertEquals(1, of("foo;q=0.5,bar").match(x));
+		assertEquals(1, of("foo;q=0.5,bar").match(x));
+		assertEquals(0, of("foo,*").match(x));
+		assertEquals(1, of("*,bar").match(x));
+		assertEquals(0, of("foo;q=0.6,bar;q=0.5").match(x));
+		assertEquals(0, of("foo;q=0.6,bar;q=0.5,qux").match(x));
+		assertEquals(-1, of("qux").match(x));
+		assertEquals(-1, of("qux,q2x;q=0").match(x));
+		assertEquals(-1, of("foo;q=0").match(x));
 	}
 
 	@Test void a02_getRange() {

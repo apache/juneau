@@ -15,7 +15,7 @@ package org.apache.juneau;
 import static org.apache.juneau.Version.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -31,12 +31,12 @@ public class Version_Test {
 		assertObject(of("")).asString().is("0");
 
 		Version x = of("1.2.3");
-		assertInteger(x.getMajor().orElse(null)).is(1);
-		assertInteger(x.getMinor().orElse(null)).is(2);
-		assertInteger(x.getMaintenance().orElse(null)).is(3);
-		assertInteger(x.getPart(0).orElse(null)).is(1);
-		assertInteger(x.getPart(1).orElse(null)).is(2);
-		assertInteger(x.getPart(2).orElse(null)).is(3);
+		assertEquals(1, x.getMajor().orElse(null));
+		assertEquals(2, x.getMinor().orElse(null));
+		assertEquals(3, x.getMaintenance().orElse(null));
+		assertEquals(1, x.getPart(0).orElse(null));
+		assertEquals(2, x.getPart(1).orElse(null));
+		assertEquals(3, x.getPart(2).orElse(null));
 		assertInteger(x.getPart(-1).orElse(null)).isNull();
 		assertInteger(x.getPart(3).orElse(null)).isNull();
 

@@ -647,17 +647,17 @@ public class ClassInfoTest {
 
 	@Test
 	public void firstAnnotation() {
-		assertInteger(g3.firstAnnotation(A.class, null).value()).is(2);
-		assertInteger(g4.firstAnnotation(A.class, null).value()).is(2);
-		assertInteger(g5.firstAnnotation(A.class, null).value()).is(3);
-		assertInteger(g3.firstAnnotation(A.class, x -> x.value() == 5).value()).is(5);
+		assertEquals(2, g3.firstAnnotation(A.class, null).value());
+		assertEquals(2, g4.firstAnnotation(A.class, null).value());
+		assertEquals(3, g5.firstAnnotation(A.class, null).value());
+		assertEquals(5, g3.firstAnnotation(A.class, x -> x.value() == 5).value());
 	}
 	@Test
 	public void lastAnnotation() {
-		assertInteger(g3.lastAnnotation(A.class, null).value()).is(7);
-		assertInteger(g4.lastAnnotation(A.class, null).value()).is(7);
-		assertInteger(g5.lastAnnotation(A.class, null).value()).is(3);
-		assertInteger(g3.lastAnnotation(A.class, x -> x.value() == 5).value()).is(5);
+		assertEquals(7, g3.lastAnnotation(A.class, null).value());
+		assertEquals(7, g4.lastAnnotation(A.class, null).value());
+		assertEquals(3, g5.lastAnnotation(A.class, null).value());
+		assertEquals(5, g3.lastAnnotation(A.class, x -> x.value() == 5).value());
 	}
 
 	@Test

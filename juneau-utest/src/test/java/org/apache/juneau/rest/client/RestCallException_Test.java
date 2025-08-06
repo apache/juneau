@@ -53,7 +53,7 @@ public class RestCallException_Test extends SimpleTestBase {
 			client().build().get().run();  // NOSONAR
 			fail();
 		} catch (RestCallException e) {
-			assertInteger(e.getResponse().getStatusCode()).is(404);
+			assertEquals(404, e.getResponse().getStatusCode());
 			assertNull(e.getCause());
 		}
 

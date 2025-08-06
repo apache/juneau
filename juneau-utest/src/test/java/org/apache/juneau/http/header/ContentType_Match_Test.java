@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -89,6 +89,6 @@ public class ContentType_Match_Test {
 	public void test() throws Exception {
 		ContentType ct = contentType(this.contentType);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
-		assertInteger(ct.match(alist(mt))).setMsg("{0} failed", label).is(expected);
+		assertEquals(expected, ct.match(alist(mt)));
 	}
 }

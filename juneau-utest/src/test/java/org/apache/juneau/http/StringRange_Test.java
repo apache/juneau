@@ -13,6 +13,8 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -43,11 +45,11 @@ public class StringRange_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_match() {
-		assertInteger(of("foo").match("foo")).is(100);
-		assertInteger(of("foo").match("bar")).is(0);
-		assertInteger(of("foo").match(null)).is(0);
-		assertInteger(of("*").match("foo")).is(50);
-		assertInteger(of(null).match("foo")).is(50);
+		assertEquals(100, of("foo").match("foo"));
+		assertEquals(0, of("foo").match("bar"));
+		assertEquals(0, of("foo").match(null));
+		assertEquals(50, of("*").match("foo"));
+		assertEquals(50, of(null).match("foo"));
 	}
 
 	@Test void a03_getName() {

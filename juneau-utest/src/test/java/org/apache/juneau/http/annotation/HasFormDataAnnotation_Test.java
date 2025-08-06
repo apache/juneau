@@ -47,7 +47,8 @@ class HasFormDataAnnotation_Test extends SimpleTestBase {
 
 	@Test void a02_testEquivalency() {
 		assertObject(a1).is(a2);
-		assertInteger(a1.hashCode()).is(a2.hashCode()).isNotAny(0,-1);
+		assertNotEqualsAny(a1.hashCode(), 0, -1);
+		assertEquals(a1.hashCode(), a2.hashCode());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

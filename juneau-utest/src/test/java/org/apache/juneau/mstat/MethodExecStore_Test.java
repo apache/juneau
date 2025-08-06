@@ -14,6 +14,7 @@ package org.apache.juneau.mstat;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.lang.reflect.*;
@@ -168,22 +169,22 @@ public class MethodExecStore_Test {
 		assertLong(stats.getGuid()).isNot(0L);
 		assertObject(stats.getMethod()).isSame(m);
 
-		assertInteger(stats.getRuns()).is(0);
-		assertInteger(stats.getRunning()).is(0);
-		assertInteger(stats.getErrors()).is(0);
-		assertInteger(stats.getMinTime()).is(0);
-		assertInteger(stats.getMaxTime()).is(0);
-		assertInteger(stats.getAvgTime()).is(0);
+		assertEquals(0, stats.getRuns());
+		assertEquals(0, stats.getRunning());
+		assertEquals(0, stats.getErrors());
+		assertEquals(0, stats.getMinTime());
+		assertEquals(0, stats.getMaxTime());
+		assertEquals(0, stats.getAvgTime());
 		assertLong(stats.getTotalTime()).is(0L);
 
 		stats.started().finished(100*1000000).started().finished(200*1000000).started().error(new Throwable());
 
-		assertInteger(stats.getRuns()).is(3);
-		assertInteger(stats.getRunning()).is(1);
-		assertInteger(stats.getErrors()).is(1);
-		assertInteger(stats.getMinTime()).is(100);
-		assertInteger(stats.getMaxTime()).is(200);
-		assertInteger(stats.getAvgTime()).is(150);
+		assertEquals(3, stats.getRuns());
+		assertEquals(1, stats.getRunning());
+		assertEquals(1, stats.getErrors());
+		assertEquals(100, stats.getMinTime());
+		assertEquals(200, stats.getMaxTime());
+		assertEquals(150, stats.getAvgTime());
 		assertLong(stats.getTotalTime()).is(300L);
 
 		assertObject(stats).asString().isContains("300");

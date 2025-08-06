@@ -14,8 +14,7 @@ package org.apache.juneau.config;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.net.*;
@@ -281,13 +280,13 @@ public class ConfigTest {
 	@Test
 	public void getInt1() {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-		assertInteger(c.get("a1").asInteger().orElse(0)).is(1);
-		assertInteger(c.get("a2").asInteger().orElse(0)).is(2);
-		assertInteger(c.get("a3").asInteger().orElse(0)).is(0);
-		assertInteger(c.get("S/b1").asInteger().orElse(0)).is(1);
-		assertInteger(c.get("S/b2").asInteger().orElse(0)).is(0);
-		assertInteger(c.get("S/b3").asInteger().orElse(0)).is(0);
-		assertInteger(c.get("T/c1").asInteger().orElse(0)).is(0);
+		assertEquals(1, c.get("a1").asInteger().orElse(0));
+		assertEquals(2, c.get("a2").asInteger().orElse(0));
+		assertEquals(0, c.get("a3").asInteger().orElse(0));
+		assertEquals(1, c.get("S/b1").asInteger().orElse(0));
+		assertEquals(0, c.get("S/b2").asInteger().orElse(0));
+		assertEquals(0, c.get("S/b3").asInteger().orElse(0));
+		assertEquals(0, c.get("T/c1").asInteger().orElse(0));
 	}
 
 	@Test
@@ -305,13 +304,13 @@ public class ConfigTest {
 	@Test
 	public void getInt2() {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-		assertInteger(c.get("a1").asInteger().orElse(-1)).is(1);
-		assertInteger(c.get("a2").asInteger().orElse(-1)).is(2);
-		assertInteger(c.get("a3").asInteger().orElse(-1)).is(-1);
-		assertInteger(c.get("S/b1").asInteger().orElse(-1)).is(1);
-		assertInteger(c.get("S/b2").asInteger().orElse(-1)).is(-1);
-		assertInteger(c.get("S/b3").asInteger().orElse(-1)).is(-1);
-		assertInteger(c.get("T/c1").asInteger().orElse(-1)).is(-1);
+		assertEquals(1, c.get("a1").asInteger().orElse(-1));
+		assertEquals(2, c.get("a2").asInteger().orElse(-1));
+		assertEquals(-1, c.get("a3").asInteger().orElse(-1));
+		assertEquals(1, c.get("S/b1").asInteger().orElse(-1));
+		assertEquals(-1, c.get("S/b2").asInteger().orElse(-1));
+		assertEquals(-1, c.get("S/b3").asInteger().orElse(-1));
+		assertEquals(-1, c.get("T/c1").asInteger().orElse(-1));
 	}
 
 	@Test
@@ -1026,16 +1025,16 @@ public class ConfigTest {
 			"[section1]", "key1 = 2", "key2 = false", "key3 = [4,5,6]", "key4 = http://bar"
 		);
 
-		assertInteger(cf.get("key1").asInteger().get()).is(1);
+		assertEquals(1, cf.get("key1").asInteger().get());
 		assertTrue(cf.get("key2").asBoolean().get());
-		assertInteger(cf.get("key3").as(int[].class).get()[2]).is(3);
-		assertInteger(cf.get("xkey3").as(int[].class).orElse(new int[]{4,5,6})[2]).is(6);
-		assertInteger(cf.get("X/key3").as(int[].class).orElse(new int[]{4,5,6})[2]).is(6);
+		assertEquals(3, cf.get("key3").as(int[].class).get()[2]);
+		assertEquals(6, cf.get("xkey3").as(int[].class).orElse(new int[]{4,5,6})[2]);
+		assertEquals(6, cf.get("X/key3").as(int[].class).orElse(new int[]{4,5,6})[2]);
 		assertEquals(url("http://foo").toString(), cf.get("key4").as(URL.class).get().toString());
 
-		assertInteger(cf.get("section1/key1").asInteger().get()).is(2);
+		assertEquals(2, cf.get("section1/key1").asInteger().get());
 		assertFalse(cf.get("section1/key2").asBoolean().get());
-		assertInteger(cf.get("section1/key3").as(int[].class).get()[2]).is(6);
+		assertEquals(6, cf.get("section1/key3").as(int[].class).get()[2]);
 		assertEquals(url("http://bar").toString(), cf.get("section1/key4").as(URL.class).get().toString());
 
 		cf = init(
@@ -1054,14 +1053,14 @@ public class ConfigTest {
 
 		cf.commit();
 
-		assertInteger(cf.get("key1").asInteger().get()).is(1);
+		assertEquals(1, cf.get("key1").asInteger().get());
 		assertTrue(cf.get("key2").asBoolean().get());
-		assertInteger(cf.get("key3").as(int[].class).get()[2]).is(3);
+		assertEquals(3, cf.get("key3").as(int[].class).get()[2]);
 		assertEquals(url("http://foo").toString(), cf.get("key4").as(URL.class).get().toString());
 
-		assertInteger(cf.get("section1/key1").asInteger().get()).is(2);
+		assertEquals(2, cf.get("section1/key1").asInteger().get());
 		assertFalse(cf.get("section1/key2").asBoolean().get());
-		assertInteger(cf.get("section1/key3").as(int[].class).get()[2]).is(6);
+		assertEquals(6, cf.get("section1/key3").as(int[].class).get()[2]);
 		assertEquals(url("http://bar").toString(), cf.get("section1/key4").as(URL.class).get().toString());
 	}
 
@@ -1238,10 +1237,10 @@ public class ConfigTest {
 			"f3 = 1 M",
 			"f4 = 1 K"
 		);
-		assertInteger(cf.get("s1/f1").asInteger().get()).is(1048576);
-		assertInteger(cf.get("s1/f2").asInteger().get()).is(1024);
-		assertInteger(cf.get("s1/f3").asInteger().get()).is(1048576);
-		assertInteger(cf.get("s1/f4").asInteger().get()).is(1024);
+		assertEquals(1048576, cf.get("s1/f1").asInteger().get());
+		assertEquals(1024, cf.get("s1/f2").asInteger().get());
+		assertEquals(1048576, cf.get("s1/f3").asInteger().get());
+		assertEquals(1024, cf.get("s1/f4").asInteger().get());
 	}
 
 	//====================================================================================================
