@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
@@ -81,26 +82,58 @@ public abstract class SimpleTestBase {
 	/**
 	 * Asserts the entries in an array matches the expected strings after they've been made readable.
 	 */
-	protected static void assertArray(Object array, String...expected) {
-		if (expected.length == 1 && expected[0].contains(","))
-			expected = expected[0].charAt(0) == '>' ? new String[]{expected[0].substring(1)} : StringUtils.split(expected[0]);
+	protected static void assertArray(Object array, Object...expected) {
+		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
+			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : StringUtils.split(s(expected[0]));
 		if (Array.getLength(array) != expected.length)
 			ffail("Wrong array length.  expected={0}, actual={1}", expected.length, Array.getLength(array));
-		for (var i = 0; i < expected.length; i++)
-			if (ne(r(Array.get(array, i)), expected[i]))
-				ffail("Element at index {0} did not match.  expected={1}, actual={2}", i, expected[i], r(Array.get(array, i)));
+		for (var i = 0; i < expected.length; i++) {
+			var x = Array.get(array, i);
+			if (expected[i] instanceof String e) {
+				if (ne(r(x), e))
+					ffail("Element at index {0} did not match.  expected={1}, actual={2}", i, e, r(x));
+			} else if (expected[i] instanceof Predicate e) {
+				if (! e.test(x))
+					ffail("Element at index {0} did pass predicate.  actual={1}", i, r(x));
+			} else {
+				if (ne(expected[i], x))
+					ffail("Element at index {0} did not match.  expected={1}, actual={2}", i, r(expected[i]), r(x));
+			}
+		}
 	}
 
 	/**
 	 * Asserts the entries in a list matches the expected strings after they've been made readable.
 	 */
-	protected static void assertList(List<?> list, String...expected) {
-		if (expected.length == 1 && expected[0].contains(","))
-			expected = expected[0].charAt(0) == '>' ? new String[]{expected[0].substring(1)} : StringUtils.split(expected[0]);
+	protected static void assertList(List<?> list, Object...expected) {
+		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
+			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : StringUtils.split(s(expected[0]));
+		if (list.size() != expected.length)
+			ffail("Wrong list length.  expected={0}, actual={1}", expected.length, list.size());
+		for (var i = 0; i < expected.length; i++) {
+			var x = list.get(i);
+			if (expected[i] instanceof String e) {
+				if (ne(r(x), e))
+					ffail("Element at index {0} did not match.  expected={1}, actual={2}", i, e, r(x));
+			} else if (expected[i] instanceof Predicate e) {
+				if (! e.test(x))
+					ffail("Element at index {0} did pass predicate.  actual={1}", i, r(x));
+			} else {
+				if (ne(expected[i], x))
+					ffail("Element at index {0} did not match.  expected={1}, actual={2}", i, r(expected[i]), r(x));
+			}
+		}
+	}
+
+	/**
+	 * Asserts the entries in a list matches the expected strings after they've been made readable.
+	 */
+	protected static void assertStream(Stream<?> stream, Object...expected) {
+		var list = stream.toList();
 		if (list.size() != expected.length)
 			ffail("Wrong list length.  expected={0}, actual={1}", expected.length, list.size());
 		for (var i = 0; i < expected.length; i++)
-			if (ne(r(list.get(i)), expected[i]))
+			if (ne(list.get(i), expected[i]))
 				ffail("Element at index {0} did not match.  expected={1}, actual={2}", i, expected[i], r(list.get(i)));
 	}
 

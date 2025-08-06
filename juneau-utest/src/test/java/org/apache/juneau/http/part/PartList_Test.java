@@ -23,16 +23,16 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests: {@link PartList}, {@link PartList.Builder}, {@link BasicPartIterator}
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class PartList_Test {
+class PartList_Test extends SimpleTestBase {
 
 	private static final NameValuePair
 		FOO_1 = part("Foo","1"),
@@ -71,8 +71,7 @@ public class PartList_Test {
 		}
 	}
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		PartList x = PartList.create();
 
 		assertObject(x).isString("");
@@ -96,8 +95,7 @@ public class PartList_Test {
 		assertObject(new PartList.Void()).isString("");
 	}
 
-	@Test
-	public void a02_creators() {
+	@Test void a02_creators() {
 		PartList x;
 
 		x = partList(FOO_1, FOO_2, null);
@@ -136,8 +134,7 @@ public class PartList_Test {
 		assertObject(x).isString("");
 	}
 
-	@Test
-	public void a03_addMethods() {
+	@Test void a03_addMethods() {
 		String pname = "PartSupplierTest.x";
 
 		PartList x = PartList.create().resolving();
@@ -158,8 +155,7 @@ public class PartList_Test {
 		System.clearProperty(pname);
 	}
 
-	@Test
-	public void a04_toArrayMethods() {
+	@Test void a04_toArrayMethods() {
 		PartList x = PartList
 			.create()
 			.append("X1","1")
@@ -167,14 +163,12 @@ public class PartList_Test {
 		assertObject(x).isString("X1=1&X2=2");
 	}
 
-	@Test
-	public void a05_copy() {
+	@Test void a05_copy() {
 		PartList x = PartList.of(FOO_1).copy();
 		assertObject(x).isString("Foo=1");
 	}
 
-	@Test
-	public void a06_getCondensed() {
+	@Test void a06_getCondensed() {
 		PartList x = PartList.of(FOO_1);
 		assertOptional(x.get((String)null)).isNull();
 		assertOptional(x.get("Foo")).isString("Foo=1");
@@ -191,8 +185,7 @@ public class PartList_Test {
 		}
 	}
 
-	@Test
-	public void a07_getCondensed_asType() {
+	@Test void a07_getCondensed_asType() {
 		PartList x = PartList.of(FOO_1);
 		assertOptional(x.get(null, APart.class)).isNull();
 		assertOptional(x.get("Foo", APart.class)).isString("a=1");
@@ -205,17 +198,15 @@ public class PartList_Test {
 		assertThrows(IllegalArgumentException.class, ()->x2.get(String.class), "Part name could not be found on bean type 'java.lang.String'");
 	}
 
-	@Test
-	public void a08_get() {
+	@Test void a08_get() {
 		PartList x = PartList.of(FOO_1, FOO_2, X_x);
-		assertArray(x.getAll(null)).isString("[]");
-		assertArray(x.getAll("Foo")).isString("[Foo=1, Foo=2]");
-		assertArray(x.getAll("FOO")).isString("[]");
-		assertArray(x.getAll("Bar")).isString("[]");
+		assertArray(x.getAll(null));
+		assertArray(x.getAll("Foo"), "Foo=1, Foo=2");
+		assertArray(x.getAll("FOO"));
+		assertArray(x.getAll("Bar"));
 	}
 
-	@Test
-	public void a09_getFirst() {
+	@Test void a09_getFirst() {
 		PartList x = PartList.of(FOO_1, FOO_2, X_x);
 		assertOptional(x.getFirst(null)).isNull();
 		assertOptional(x.getFirst("Foo")).isString("Foo=1");
@@ -223,8 +214,7 @@ public class PartList_Test {
 		assertOptional(x.getFirst("Bar")).isNull();
 	}
 
-	@Test
-	public void a10_getLast() {
+	@Test void a10_getLast() {
 		PartList x = PartList.of(FOO_1, FOO_2, X_x);
 		assertOptional(x.getLast(null)).isNull();
 		assertOptional(x.getLast("Foo")).isString("Foo=2");
@@ -232,8 +222,7 @@ public class PartList_Test {
 		assertOptional(x.getLast("Bar")).isNull();
 	}
 
-	@Test
-	public void a11_contains() {
+	@Test void a11_contains() {
 		PartList x = PartList.of(FOO_1, FOO_2, X_x);
 		assertFalse(x.contains(null));
 		assertTrue(x.contains("Foo"));
@@ -241,16 +230,14 @@ public class PartList_Test {
 		assertFalse(x.contains("Bar"));
 	}
 
-	@Test
-	public void a12_partIterator_all() {
+	@Test void a12_partIterator_all() {
 		PartList x = PartList.of();
 		assertFalse(x.partIterator().hasNext());
 		x = PartList.of(FOO_1);
 		assertTrue(x.partIterator().hasNext());
 	}
 
-	@Test
-	public void a13_partIterator_single() {
+	@Test void a13_partIterator_single() {
 		PartList x = PartList.of();
 		assertFalse(x.partIterator("Foo").hasNext());
 		x = PartList.of(FOO_1);
@@ -258,8 +245,7 @@ public class PartList_Test {
 		assertFalse(x.partIterator("FOO").hasNext());
 	}
 
-	@Test
-	public void a14_forEach_all() {
+	@Test void a14_forEach_all() {
 		PartList x = PartList.of();
 
 		final AtomicInteger i1 = new AtomicInteger();
@@ -272,8 +258,7 @@ public class PartList_Test {
 		assertInteger(i2.get()).is(2);
 	}
 
-	@Test
-	public void a15_forEach_single() {
+	@Test void a15_forEach_single() {
 		PartList x = PartList.of();
 
 		final AtomicInteger i1 = new AtomicInteger();
@@ -286,8 +271,7 @@ public class PartList_Test {
 		assertInteger(i2.get()).is(2);
 	}
 
-	@Test
-	public void a16_stream_all() {
+	@Test void a16_stream_all() {
 		PartList x = PartList.of();
 
 		final AtomicInteger i1 = new AtomicInteger();
@@ -300,8 +284,7 @@ public class PartList_Test {
 		assertInteger(i2.get()).is(2);
 	}
 
-	@Test
-	public void a17_stream_single() {
+	@Test void a17_stream_single() {
 		PartList x = PartList.of();
 
 		final AtomicInteger i1 = new AtomicInteger();
@@ -314,19 +297,17 @@ public class PartList_Test {
 		assertInteger(i2.get()).is(2);
 	}
 
-	@Test
-	public void a18_caseSensitive() {
+	@Test void a18_caseSensitive() {
 		PartList x1 = PartList.create().append(FOO_1, FOO_2, X_x);
-		assertArray(x1.getAll("Foo")).isString("[Foo=1, Foo=2]");
-		assertArray(x1.getAll("FOO")).isString("[]");
+		assertArray(x1.getAll("Foo"), "Foo=1, Foo=2");
+		assertArray(x1.getAll("FOO"));
 
 		PartList x2 = x1.copy().caseInsensitive(true);
-		assertArray(x2.getAll("Foo")).isString("[Foo=1, Foo=2]");
-		assertArray(x2.getAll("FOO")).isString("[Foo=1, Foo=2]");
+		assertArray(x2.getAll("Foo"), "Foo=1, Foo=2");
+		assertArray(x2.getAll("FOO"), "Foo=1, Foo=2");
 	}
 
-	@Test
-	public void a19_size() {
+	@Test void a19_size() {
 		PartList x = PartList.of(FOO_1);
 		assertInteger(x.size()).is(1);
 	}
@@ -335,16 +316,14 @@ public class PartList_Test {
 	// Builder methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void b01_builder_clear() {
+	@Test void b01_builder_clear() {
 		PartList x = PartList.create();
 		x.append(FOO_1);
 		x.clear();
 		assertObject(x).isString("");
 	}
 
-	@Test
-	public void b02_builder_append() {
+	@Test void b02_builder_append() {
 		PartList x1 = PartList.create().append(FOO_1);
 		PartList x2 = PartList
 			.create()
@@ -361,8 +340,7 @@ public class PartList_Test {
 		assertObject(x2).isString("Foo=1&Foo=2&Foo=3&Bar=b1&Bar=b2&Foo=4");
 	}
 
-	@Test
-	public void b03_builder_prepend() {
+	@Test void b03_builder_prepend() {
 		PartList x1 = PartList.create().append(FOO_1);
 		PartList x2 = PartList
 			.create()
@@ -379,8 +357,7 @@ public class PartList_Test {
 		assertObject(x2).isString("Foo=4&Bar=b2&Bar=b1&Foo=2&Foo=3&Foo=1");
 	}
 
-	@Test
-	public void b04_builder_remove() {
+	@Test void b04_builder_remove() {
 		PartList x = PartList
 			.create()
 			.append(FOO_1,FOO_2,FOO_3,FOO_4,FOO_5,FOO_6,FOO_7)
@@ -396,8 +373,7 @@ public class PartList_Test {
 		assertObject(x).isString("");
 	}
 
-	@Test
-	public void b05_builder_set() {
+	@Test void b05_builder_set() {
 		PartList x = null;
 
 		x = PartList
@@ -460,8 +436,7 @@ public class PartList_Test {
 	// BasicPartIterator
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void c01_iterators() {
+	@Test void c01_iterators() {
 		PartList x = PartList.of(APart.X, BPart.X);
 
 		PartIterator i1 = x.partIterator();
@@ -494,8 +469,7 @@ public class PartList_Test {
 	// Default headers
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void d01_defaultParts() {
+	@Test void d01_defaultParts() {
 		PartList x1 = PartList.create().setDefault(APart.X);
 		assertObject(x1).isString("a=x");
 

@@ -19,7 +19,6 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.runners.MethodSorters.*;
 
 import java.lang.annotation.*;
 import java.util.*;
@@ -28,10 +27,9 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.reflect.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class BeanStore_Test {
+class BeanStore_Test extends SimpleTestBase {
 
 	@Documented
 	@Target({PARAMETER})
@@ -59,20 +57,17 @@ public class BeanStore_Test {
 	private static A1 a1a = new A1(), a1b = new A1(), a1c = new A1(), a1d = new A1(), a1e = new A1();
 	private static A2 a2a = new A2();
 
-	@Test
-	public void a00_dummy() {
+	@Test void a00_dummy() {
 		assertNotThrown(BeanStore.Void::new);
 	}
 
-	@Test
-	public void a01_builderCopyConstructor() {
+	@Test void a01_builderCopyConstructor() {
 		BeanStore b1p = BeanStore.create().readOnly().threadSafe().build();
 		BeanStore b1c = BeanStore.create().parent(b1p).build();
 		assertString(b1c.toString()).isContains("readOnly:true","threadSafe:true");
 	}
 
-	@Test
-	public void a02_readOnly() {
+	@Test void a02_readOnly() {
 		BeanStore b1p = BeanStore.create().readOnly().build();
 		BeanStore b1c = BeanStore.create().parent(b1p).build();
 		BeanStore b2p = BeanStore.create().readOnly().threadSafe().build();
@@ -103,8 +98,7 @@ public class BeanStore_Test {
 		}
 	}
 
-	@Test
-	public void a04_addBean() {
+	@Test void a04_addBean() {
 		BeanStore b1p = BeanStore.create().build();
 		BeanStore b1c = BeanStore.of(b1p);
 		BeanStore b2p = BeanStore.create().threadSafe().build();
@@ -148,7 +142,7 @@ public class BeanStore_Test {
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			assertTrue(b.hasBean(A1.class));
 			assertOptional(b.getBean(A1.class)).is(a1b);
-			assertList(b.stream(A1.class).map(BeanStoreEntry::get)).isHas(a1b,a1a);
+			assertStream(b.stream(A1.class).map(BeanStoreEntry::get), a1b, a1a);
 		}
 
 		b1c.add(A2.class, a2a);
@@ -156,12 +150,12 @@ public class BeanStore_Test {
 		for (BeanStore b : array(b1p, b2p)) {
 			assertFalse(b.hasBean(A2.class));
 			assertOptional(b.getBean(A2.class)).isNull();
-			assertList(b.stream(A2.class)).isEmpty();
+			assertStream(b.stream(A2.class));
 		}
 		for (BeanStore b : array(b1c, b2c)) {
 			assertTrue(b.hasBean(A2.class));
 			assertOptional(b.getBean(A2.class)).is(a2a);
-			assertList(b.stream(A2.class).map(BeanStoreEntry::get)).isHas(a2a);
+			assertStream(b.stream(A2.class).map(BeanStoreEntry::get), a2a);
 		}
 
 		assertString(b1p.toString()).isMatches("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}");
@@ -177,12 +171,12 @@ public class BeanStore_Test {
 		for (BeanStore b : array(b1p, b2p)) {
 			assertFalse(b.hasBean(A1.class));
 			assertOptional(b.getBean(A1.class)).isNull();
-			assertList(b.stream(A1.class)).isEmpty();
+			assertStream(b.stream(A1.class));
 		}
 		for (BeanStore b : array(b1c, b2c)) {
 			assertTrue(b.hasBean(A1.class));
 			assertOptional(b.getBean(A1.class)).is(a1a);
-			assertList(b.stream(A1.class).map(BeanStoreEntry::get)).isHas(a1a);
+			assertStream(b.stream(A1.class).map(BeanStoreEntry::get), a1a);
 		}
 
 		b1c.removeBean(A1.class);
@@ -190,12 +184,11 @@ public class BeanStore_Test {
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			assertFalse(b.hasBean(A1.class));
 			assertOptional(b.getBean(A1.class)).isNull();
-			assertList(b.stream(A1.class)).isEmpty();
+			assertStream(b.stream(A1.class));
 		}
 	}
 
-	@Test
-	public void a05_addNamedBeans() {
+	@Test void a05_addNamedBeans() {
 		BeanStore b1p = BeanStore.create().build();
 		BeanStore b1c = BeanStore.of(b1p);
 		BeanStore b2p = BeanStore.create().threadSafe().build();
@@ -209,10 +202,10 @@ public class BeanStore_Test {
 		}
 
 		for (BeanStore b : array(b1p, b2p)) {
-			assertList(b.stream(A1.class).map(BeanStoreEntry::get)).isHas(a1d,a1c,a1b,a1a);
+			assertStream(b.stream(A1.class).map(BeanStoreEntry::get), a1d,a1c,a1b,a1a);
 		}
 		for (BeanStore b : array(b1c, b2c)) {
-			assertList(b.stream(A1.class).map(BeanStoreEntry::get)).isHas(a1e,a1d,a1c,a1b,a1a);
+			assertStream(b.stream(A1.class).map(BeanStoreEntry::get), a1e,a1d,a1c,a1b,a1a);
 		}
 
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
@@ -265,8 +258,7 @@ public class BeanStore_Test {
 		}
 	}
 
-	@Test
-	public void b01_getParams() {
+	@Test void b01_getParams() {
 
 		Predicate<Object> pEmptyOptional = x -> !((Optional<?>)x).isPresent();
 		Predicate<Object> pIsBeanStore = BeanStore.class::isInstance;
@@ -300,11 +292,11 @@ public class BeanStore_Test {
 		}
 
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			assertArray(b.getParams(c1)).is(pNull, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2)).is(pNull, pEmptyOptional);
-			assertArray(b.getParams(m1)).is(pNull, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(m2)).is(pNull, pEmptyOptional);
-			assertArray(b.getParams(m3)).is(pNull, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(c1), pNull, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(c2), pNull, pEmptyOptional);
+			assertArray(b.getParams(m1), pNull, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(m2), pNull, pEmptyOptional);
+			assertArray(b.getParams(m3), pNull, pEmptyOptional, pIsBeanStore);
 		}
 
 		b1p.add(A1.class, a1a);
@@ -320,11 +312,11 @@ public class BeanStore_Test {
 			assertTrue(b.hasAllParams(m1));
 			assertFalse(b.hasAllParams(m2));
 			assertTrue(b.hasAllParams(m3));
-			assertArray(b.getParams(c1)).is(pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2)).is(pNull, pEmptyOptional);
-			assertArray(b.getParams(m1)).is(pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(m2)).is(pNull, pEmptyOptional);
-			assertArray(b.getParams(m3)).is(pA1a, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(c2), pNull, pEmptyOptional);
+			assertArray(b.getParams(m1), pA1a, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(m2), pNull, pEmptyOptional);
+			assertArray(b.getParams(m3), pA1a, pEmptyOptional, pIsBeanStore);
 		}
 
 		b1p.add(A1.class, a1a, "foo");
@@ -334,11 +326,11 @@ public class BeanStore_Test {
 				assertString(b.getMissingParams(e)).isNull();
 				assertTrue(b.hasAllParams(e));
 			}
-			assertArray(b.getParams(c1)).is(pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2)).is(pA1a, pEmptyOptional);
-			assertArray(b.getParams(m1)).is(pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(m2)).is(pA1a, pEmptyOptional);
-			assertArray(b.getParams(m3)).is(pA1a, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(c2), pA1a, pEmptyOptional);
+			assertArray(b.getParams(m1), pA1a, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(m2), pA1a, pEmptyOptional);
+			assertArray(b.getParams(m3), pA1a, pEmptyOptional, pIsBeanStore);
 		}
 
 		b1p.add(A1.class, a1b, "bar");
@@ -348,11 +340,11 @@ public class BeanStore_Test {
 				assertString(b.getMissingParams(e)).isNull();
 				assertTrue(b.hasAllParams(e));
 			}
-			assertArray(b.getParams(c1)).is(pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2)).is(pA1a, pEmptyOptional);
-			assertArray(b.getParams(m1)).is(pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(m2)).is(pA1a, pEmptyOptional);
-			assertArray(b.getParams(m3)).is(pA1a, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(c2), pA1a, pEmptyOptional);
+			assertArray(b.getParams(m1), pA1a, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(m2), pA1a, pEmptyOptional);
+			assertArray(b.getParams(m3), pA1a, pEmptyOptional, pIsBeanStore);
 		}
 
 		b1p.add(A2.class, a2a, "bar");
@@ -362,11 +354,11 @@ public class BeanStore_Test {
 				assertString(b.getMissingParams(e)).isNull();
 				assertTrue(b.hasAllParams(e));
 			}
-			assertArray(b.getParams(c1)).is(pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2)).is(pA1a, pA2a);
-			assertArray(b.getParams(m1)).is(pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(m2)).is(pA1a, pA2a);
-			assertArray(b.getParams(m3)).is(pA1a, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(c2), pA1a, pA2a);
+			assertArray(b.getParams(m1), pA1a, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(m2), pA1a, pA2a);
+			assertArray(b.getParams(m3), pA1a, pEmptyOptional, pIsBeanStore);
 		}
 
 		b1p.add(A2.class, a2a, null);
@@ -376,11 +368,11 @@ public class BeanStore_Test {
 				assertString(b.getMissingParams(e)).isNull();
 				assertTrue(b.hasAllParams(e));
 			}
-			assertArray(b.getParams(c1)).is(pA1a, pA2a, pIsBeanStore);
-			assertArray(b.getParams(c2)).is(pA1a, pA2a);
-			assertArray(b.getParams(m1)).is(pA1a, pA2a, pIsBeanStore);
-			assertArray(b.getParams(m2)).is(pA1a, pA2a);
-			assertArray(b.getParams(m3)).is(pA1a, pA2a, pIsBeanStore);
+			assertArray(b.getParams(c1), pA1a, pA2a, pIsBeanStore);
+			assertArray(b.getParams(c2), pA1a, pA2a);
+			assertArray(b.getParams(m1), pA1a, pA2a, pIsBeanStore);
+			assertArray(b.getParams(m2), pA1a, pA2a);
+			assertArray(b.getParams(m3), pA1a, pA2a, pIsBeanStore);
 		}
 	}
 
@@ -401,8 +393,7 @@ public class BeanStore_Test {
 		}
 	}
 
-	@Test
-	public void b02_getParams_innerClass() {
+	@Test void b02_getParams_innerClass() {
 
 		Predicate<Object> pEmptyOptional = x -> !((Optional<?>)x).isPresent();
 		Predicate<Object> pIsBeanStore = BeanStore.class::isInstance;
@@ -428,8 +419,8 @@ public class BeanStore_Test {
 		}
 
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			assertArray(b.getParams(c1)).is(pThis, pNull, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2)).is(pThis, pNull, pEmptyOptional);
+			assertArray(b.getParams(c1), pThis, pNull, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(c2), pThis, pNull, pEmptyOptional);
 		}
 
 		b1p.add(A1.class, a1a);
@@ -439,8 +430,8 @@ public class BeanStore_Test {
 			assertString(b.getMissingParams(c2)).is(A1n+"@foo");
 			assertTrue(b.hasAllParams(c1));
 			assertFalse(b.hasAllParams(c2));
-			assertArray(b.getParams(c1)).is(pThis, pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2)).is(pThis, pNull, pEmptyOptional);
+			assertArray(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(c2), pThis, pNull, pEmptyOptional);
 		}
 
 		b1p.add(A1.class, a1a, "foo");
@@ -450,8 +441,8 @@ public class BeanStore_Test {
 				assertString(b.getMissingParams(e)).isNull();
 				assertTrue(b.hasAllParams(e));
 			}
-			assertArray(b.getParams(c1)).is(pThis, pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2)).is(pThis, pA1a, pEmptyOptional);
+			assertArray(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(c2), pThis, pA1a, pEmptyOptional);
 		}
 
 		b1p.add(A1.class, a1b, "bar");
@@ -461,8 +452,8 @@ public class BeanStore_Test {
 				assertString(b.getMissingParams(e)).isNull();
 				assertTrue(b.hasAllParams(e));
 			}
-			assertArray(b.getParams(c1)).is(pThis, pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2)).is(pThis, pA1a, pEmptyOptional);
+			assertArray(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(c2), pThis, pA1a, pEmptyOptional);
 		}
 
 		b1p.add(A2.class, a2a, "bar");
@@ -472,8 +463,8 @@ public class BeanStore_Test {
 				assertString(b.getMissingParams(e)).isNull();
 				assertTrue(b.hasAllParams(e));
 			}
-			assertArray(b.getParams(c1)).is(pThis, pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2)).is(pThis, pA1a, pA2a);
+			assertArray(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
+			assertArray(b.getParams(c2), pThis, pA1a, pA2a);
 		}
 
 		b1p.add(A2.class, a2a, null);
@@ -483,8 +474,8 @@ public class BeanStore_Test {
 				assertString(b.getMissingParams(e)).isEmpty();
 				assertTrue(b.hasAllParams(e));
 			}
-			assertArray(b.getParams(c1)).is(pThis, pA1a, pA2a, pIsBeanStore);
-			assertArray(b.getParams(c2)).is(pThis, pA1a, pA2a);
+			assertArray(b.getParams(c1), pThis, pA1a, pA2a, pIsBeanStore);
+			assertArray(b.getParams(c2), pThis, pA1a, pA2a);
 		}
 	}
 
@@ -496,8 +487,7 @@ public class BeanStore_Test {
 		public A1 a;
 	}
 
-	@Test
-	public void c00_createMethodFinder_invalidArgs() {
+	@Test void c00_createMethodFinder_invalidArgs() {
 		BeanStore b = BeanStore.create().build();
 
 		assertThrows(IllegalArgumentException.class, ()->b.createMethodFinder(null), "Method cannot be used without outer bean definition.");
@@ -516,8 +506,7 @@ public class BeanStore_Test {
 		public C createA7() { throw new RuntimeException("foo"); }
 	}
 
-	@Test
-	public void c01_createMethodFinder_instanceMethods() throws Exception {
+	@Test void c01_createMethodFinder_instanceMethods() throws Exception {
 		C1 x = new C1();
 		BeanStore b1p = BeanStore.create().build();
 		BeanStore b1c = BeanStore.create().parent(b1p).build();
@@ -556,8 +545,7 @@ public class BeanStore_Test {
 		public static C createB7() { throw new RuntimeException("foo"); }
 	}
 
-	@Test
-	public void c02_createMethodFinder_staticMethods() throws Exception {
+	@Test void c02_createMethodFinder_staticMethods() throws Exception {
 		C2 x = new C2();
 		BeanStore b1p = BeanStore.create().build();
 		BeanStore b1c = BeanStore.create().parent(b1p).build();
@@ -595,8 +583,7 @@ public class BeanStore_Test {
 		public static C createC6(BeanStore bs) { assertNotNull(bs); return new C(); }
 	}
 
-	@Test
-	public void c03_createMethodFinder_beanMatching() throws Exception {
+	@Test void c03_createMethodFinder_beanMatching() throws Exception {
 		C3 x = new C3();
 		BeanStore b1p = BeanStore.create().build();
 		BeanStore b1c = BeanStore.create().parent(b1p).build();
@@ -726,8 +713,7 @@ public class BeanStore_Test {
 		public static String createC2() { return "createC2"; }
 	}
 
-	@Test
-	public void c04_createMethodFinder_beanMatching_requiredArgs() throws Exception {
+	@Test void c04_createMethodFinder_beanMatching_requiredArgs() throws Exception {
 		C4 x = new C4();
 		BeanStore b1p = BeanStore.create().build();
 		BeanStore b1c = BeanStore.create().outer(x).parent(b1p).build();
@@ -759,8 +745,7 @@ public class BeanStore_Test {
 		public String createC2() { return "createC2"; }
 	}
 
-	@Test
-	public void c05_createMethodFinder_beanMatching_requiredArgs_innerClass() throws Exception {
+	@Test void c05_createMethodFinder_beanMatching_requiredArgs_innerClass() throws Exception {
 		C5 x = new C5();
 		BeanStore b1p = BeanStore.create().build();
 		BeanStore b1c = BeanStore.create().outer(x).parent(b1p).build();
@@ -793,8 +778,7 @@ public class BeanStore_Test {
 	public static class D1a {}
 	public class D1b {}
 
-	@Test
-	public void d01_createBean_basic() {
+	@Test void d01_createBean_basic() {
 		BeanStore bs = BeanStore.create().outer(new BeanStore_Test()).build();
 		assertObject(bs.createBean(D1a.class).run()).isNotNull();
 		assertObject(bs.createBean(D1b.class).run()).isNotNull();
@@ -806,8 +790,7 @@ public class BeanStore_Test {
 	}
 	public static D2 d2 = new D2();
 
-	@Test
-	public void d02_createBean_staticCreator_create() {
+	@Test void d02_createBean_staticCreator_create() {
 		BeanStore bs = BeanStore.INSTANCE;
 		assertObject(bs.createBean(D2.class).run()).is(d2);
 	}
@@ -817,8 +800,7 @@ public class BeanStore_Test {
 	}
 	public static D3 d3 = new D3() {};
 
-	@Test
-	public void d03_createBean_staticCreator_getInstance() {
+	@Test void d03_createBean_staticCreator_getInstance() {
 		BeanStore bs = BeanStore.INSTANCE;
 		assertObject(bs.createBean(D3.class).run()).is(d3);
 	}
@@ -844,8 +826,7 @@ public class BeanStore_Test {
 		protected D4c() {}
 	}
 
-	@Test
-	public void d04_createBean_staticCreator_invalidSignatures() {
+	@Test void d04_createBean_staticCreator_invalidSignatures() {
 		BeanStore bs = BeanStore.INSTANCE;
 		assertObject(bs.createBean(D4a.class).run()).isNotAny(d4a1, d4a2, d4a3, d4a4);
 		assertObject(bs.createBean(D4b.class).run()).isNotAny(d4b1, d4b2);
@@ -860,8 +841,7 @@ public class BeanStore_Test {
 	}
 	public static D5 d5a = new D5(), d5b = new D5(), d5c = new D5();
 
-	@Test
-	public void d05_createBean_staticCreator_withBeans() {
+	@Test void d05_createBean_staticCreator_withBeans() {
 		BeanStore bs = BeanStore.create().build();
 		assertObject(bs.createBean(D5.class).run()).is(d5a);
 		bs.add(Integer.class, 1);
@@ -880,8 +860,7 @@ public class BeanStore_Test {
 		}
 	}
 
-	@Test
-	public void d06_createBean_staticCreator_ignoredWithBuilder() {
+	@Test void d06_createBean_staticCreator_ignoredWithBuilder() {
 		BeanStore bs = BeanStore.INSTANCE;
 		assertString(bs.createBean(D6.class).builder(String.class, "1").run().s).is("1");
 	}
@@ -892,8 +871,7 @@ public class BeanStore_Test {
 		protected D7(String s) { a = s; }
 	}
 
-	@Test
-	public void d07_createBean_staticCreator_withOptional() {
+	@Test void d07_createBean_staticCreator_withOptional() {
 		BeanStore bs = BeanStore.create().build();
 		assertString(bs.createBean(D7.class).run().a).is("X");
 		bs.add(String.class, "bar");
@@ -906,8 +884,7 @@ public class BeanStore_Test {
 		private D8(String s) { a = s; }
 	}
 
-	@Test
-	public void d08_createBean_staticCreator_missingPrereqs() {
+	@Test void d08_createBean_staticCreator_missingPrereqs() {
 		BeanStore bs = BeanStore.create().build();
 		assertThrows(ExecutableException.class, ()->bs.createBean(D8.class).run(), "Could not instantiate class org.apache.juneau.cp.BeanStore_Test$D8: Static creator found but could not find prerequisites: Integer.");
 		bs.add(Integer.class, 1);
@@ -922,8 +899,7 @@ public class BeanStore_Test {
 
 	public interface D9b {}
 
-	@Test
-	public void d09_createBean_staticCreator_withBeans() {
+	@Test void d09_createBean_staticCreator_withBeans() {
 		BeanStore bs = BeanStore.INSTANCE;
 		assertThrows(ExecutableException.class, ()->bs.createBean(D9a.class).run(), "Could not instantiate class "+D9a.class.getName()+": Class is abstract.");
 		assertThrows(ExecutableException.class, ()->bs.createBean(D9b.class).run(), "Could not instantiate class "+D9b.class.getName()+": Class is an interface.");
@@ -936,8 +912,7 @@ public class BeanStore_Test {
 		public D10(String s, Integer i) { a = "s="+s+",i="+i; }
 	}
 
-	@Test
-	public void d10_createBean_constructors_public() {
+	@Test void d10_createBean_constructors_public() {
 		BeanStore bs = BeanStore.create().build();
 		assertThrows(ExecutableException.class, ()->bs.createBean(D10.class).run(), "Could not instantiate class "+D10.class.getName()+": Public constructor found but could not find prerequisites: Integer or Integer,String or String.");
 		bs.add(String.class, "foo");
@@ -955,8 +930,7 @@ public class BeanStore_Test {
 		protected D11(String s, Integer i) { a = "s="+s+",i="+i; }
 	}
 
-	@Test
-	public void d11_createBean_constructors_protected() {
+	@Test void d11_createBean_constructors_protected() {
 		BeanStore bs = BeanStore.create().build();
 		assertThrows(ExecutableException.class, ()->bs.createBean(D11.class).run(), "Could not instantiate class "+D11.class.getName()+": Protected constructor found but could not find prerequisites: Integer or Integer,String or String.");
 		bs.add(String.class, "foo");
@@ -973,8 +947,7 @@ public class BeanStore_Test {
 		protected D12(String s, Integer i) { a = "s="+s+",i="+i; }
 	}
 
-	@Test
-	public void d12_createBean_constructors_publicOverProtected() {
+	@Test void d12_createBean_constructors_publicOverProtected() {
 		BeanStore bs = BeanStore.create().build();
 		assertThrows(ExecutableException.class, ()->bs.createBean(D12.class).run(), "Could not instantiate class "+D12.class.getName()+": Public constructor found but could not find prerequisites: String.");
 		bs.add(String.class, "foo");
@@ -986,8 +959,7 @@ public class BeanStore_Test {
 		private D13() {}
 	}
 
-	@Test
-	public void d13_createBean_constructors_private() {
+	@Test void d13_createBean_constructors_private() {
 		BeanStore bs = BeanStore.INSTANCE;
 		assertThrows(ExecutableException.class, ()->bs.createBean(D13.class).run(), "Could not instantiate class "+D13.class.getName()+": No public/protected constructors found.");
 	}
@@ -998,8 +970,7 @@ public class BeanStore_Test {
 		public D14(@Named("foo") String o, Integer i) { a = o + "," + i; }
 	}
 
-	@Test
-	public void d14_createBean_constructors_namedBean() {
+	@Test void d14_createBean_constructors_namedBean() {
 		BeanStore bs = BeanStore.create().build();
 		assertThrows(ExecutableException.class, ()->bs.createBean(D14.class).run(), "Could not instantiate class "+D14.class.getName()+": Public constructor found but could not find prerequisites: Integer,String@foo or String@foo.");
 		bs.add(String.class, "bar", "foo");
@@ -1012,8 +983,7 @@ public class BeanStore_Test {
 		public D15(@Named("foo") String o, Integer i) { a = o + "," + i; }
 	}
 
-	@Test
-	public void d15_createBean_constructors_namedBean_withOuter() {
+	@Test void d15_createBean_constructors_namedBean_withOuter() {
 		BeanStore bs = BeanStore.create().outer(new BeanStore_Test()).build();
 		assertThrows(ExecutableException.class, ()->bs.createBean(D15.class).run(), "Could not instantiate class "+D15.class.getName()+": Public constructor found but could not find prerequisites: Integer,String@foo or String@foo.");
 		bs.add(String.class, "bar", "foo");
@@ -1029,8 +999,7 @@ public class BeanStore_Test {
 		protected D16(Builder b) { a = b.b; }
 	}
 
-	@Test
-	public void d16_createBean_builders() {
+	@Test void d16_createBean_builders() {
 		BeanStore bs = BeanStore.create().build();
 		D16.Builder b = D16.create();
 		b.b = "foo";
@@ -1049,8 +1018,7 @@ public class BeanStore_Test {
 		protected D17(Builder b) { a = b.b; }
 	}
 
-	@Test
-	public void d17_createBean_builders_inherent() {
+	@Test void d17_createBean_builders_inherent() {
 		BeanStore bs = BeanStore.create().build();
 		assertString(bs.createBean(D17.class).run().a).isNull();
 		assertThrows(ExecutableException.class, ()->bs.createBean(D17.class).builder(Boolean.class, true).run(), "Could not instantiate class "+D17.class.getName()+": Protected constructor found but could not find prerequisites: Builder or Builder,Integer or Integer.");
