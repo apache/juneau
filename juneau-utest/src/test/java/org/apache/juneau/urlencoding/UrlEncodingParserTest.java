@@ -445,7 +445,7 @@ public class UrlEncodingParserTest extends SimpleTestBase {
 
 		String s = "?f1=1,2,3&f2=a,b,c&f3=true,false&f4=&f5";
 		C c = p2.parse(s, C.class);
-		assertObject(c).asJson().is("{f1:[1,2,3],f2:['a','b','c'],f3:[true,false],f4:[]}");
+		assertJson(c, "{f1:[1,2,3],f2:['a','b','c'],f3:[true,false],f4:[]}");
 	}
 
 	public static class C {
@@ -467,52 +467,52 @@ public class UrlEncodingParserTest extends SimpleTestBase {
 		// In the string below, the ~ character should not be interpreted as an escape.
 		s = "?f1=a~b,a~b";
 		c = p2.parse(s, C1.class);
-		assertObject(c).asJson().is("{f1:['a~b','a~b']}");
+		assertJson(c, "{f1:['a~b','a~b']}");
 
 		s = "?f1=@(a~b,a~b)";
 		c = p2.parse(s, C1.class);
-		assertObject(c).asJson().is("{f1:['a~b','a~b']}");
+		assertJson(c, "{f1:['a~b','a~b']}");
 
 		s = "?f1=@('a~b','a~b')";
 		c = p2.parse(s, C1.class);
-		assertObject(c).asJson().is("{f1:['a~b','a~b']}");
+		assertJson(c, "{f1:['a~b','a~b']}");
 
 		s = "?f1=@('a~b','a~b')";
 		c = p2.parse(s, C1.class);
-		assertObject(c).asJson().is("{f1:['a~b','a~b']}");
+		assertJson(c, "{f1:['a~b','a~b']}");
 
 		s = "?f1=@('a~b','a~b')";
 		c = p2.parse(s, C1.class);
-		assertObject(c).asJson().is("{f1:['a~b','a~b']}");
+		assertJson(c, "{f1:['a~b','a~b']}");
 
 		s = "?f1=~~,~~";
 		c = p2.parse(s, C1.class);
-		assertObject(c).asJson().is("{f1:['~','~']}");
+		assertJson(c, "{f1:['~','~']}");
 
 		s = "?f1=@(~~,~~)";
 		c = p2.parse(s, C1.class);
-		assertObject(c).asJson().is("{f1:['~','~']}");
+		assertJson(c, "{f1:['~','~']}");
 
 		s = "?f1=@(~~~~~~,~~~~~~)";
 		c = p2.parse(s, C1.class);
-		assertObject(c).asJson().is("{f1:['~~~','~~~']}");
+		assertJson(c, "{f1:['~~~','~~~']}");
 
 		s = "?f1=@('~~~~~~','~~~~~~')";
 		c = p2.parse(s, C1.class);
-		assertObject(c).asJson().is("{f1:['~~~','~~~']}");
+		assertJson(c, "{f1:['~~~','~~~']}");
 
 		// The ~ should be treated as an escape if followed by any of the following characters:  '~
 		s = "?f1=~'~~,~'~~";
 		c = p2.parse(s, C1.class);
-		assertObject(c).asJson().is("{f1:['\\'~','\\'~']}");
+		assertJson(c, "{f1:['\\'~','\\'~']}");
 
 		s = "?f1=@(~'~~,~'~~)";
 		c = p2.parse(s, C1.class);
-		assertObject(c).asJson().is("{f1:['\\'~','\\'~']}");
+		assertJson(c, "{f1:['\\'~','\\'~']}");
 
 		s = "?f1=@('~'~~','~'~~')";
 		c = p2.parse(s, C1.class);
-		assertObject(c).asJson().is("{f1:['\\'~','\\'~']}");
+		assertJson(c, "{f1:['\\'~','\\'~']}");
 
 		s = "?a~b=a~b";
 		JsonMap m = p2.parse(s, JsonMap.class);
@@ -576,13 +576,13 @@ public class UrlEncodingParserTest extends SimpleTestBase {
 		m = p2.parse(s, JsonMap.class);
 		assertEquals("{f1:{f1a:'a',f1b:'b'},f2:{f2a:'a',f2b:'b'}}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 		D d = p2.parse(s, D.class);
-		assertObject(d).asJson().is("{f1:{f1a:'a',f1b:'b'},f2:{f2a:'a',f2b:'b'}}");  // Note that JsonSerializer escapes newlines and tabs.
+		assertJson(d, "{f1:{f1a:'a',f1b:'b'},f2:{f2a:'a',f2b:'b'}}");  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "?f1=(\n\tf1a='\n\t',\n\tf1b='\n\t'\n\t)\n\t&f2=(\n\tf2a='\n\t',\n\tf2b='\n\t'\n\t)\n\t";
 		m = p2.parse(s, JsonMap.class);
 		assertEquals("{f1:{f1a:'\\n\\t',f1b:'\\n\\t'},f2:{f2a:'\\n\\t',f2b:'\\n\\t'}}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 		d = p2.parse(s, D.class);
-		assertObject(d).asJson().is("{f1:{f1a:'\\n\\t',f1b:'\\n\\t'},f2:{f2a:'\\n\\t',f2b:'\\n\\t'}}");  // Note that JsonSerializer escapes newlines and tabs.
+		assertJson(d, "{f1:{f1a:'\\n\\t',f1b:'\\n\\t'},f2:{f2a:'\\n\\t',f2b:'\\n\\t'}}");  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "?f1=@(\n\tfoo,\n\tbar\n\t)\n\t&f2=@(\n\tfoo,\n\tbar\n\t)\n\t";
 		m = p2.parse(s, JsonMap.class);
@@ -590,11 +590,11 @@ public class UrlEncodingParserTest extends SimpleTestBase {
 
 		s = "f1=a,\n\tb,\n\tc\n\t&f2=1,\n\t2,\n\t3\n\t&f3=true,\n\tfalse\n\t";
 		E e = p2.parse(s, E.class);
-		assertObject(e).asJson().is("{f1:['a','b','c'],f2:[1,2,3],f3:[true,false]}");
+		assertJson(e, "{f1:['a','b','c'],f2:[1,2,3],f3:[true,false]}");
 
 		s = "f1=a%2C%0D%0Ab%2C%0D%0Ac%0D%0A&f2=1%2C%0D%0A2%2C%0D%0A3%0D%0A&f3=true%2C%0D%0Afalse%0D%0A";
 		e = p2.parse(s, E.class);
-		assertObject(e).asJson().is("{f1:['a','b','c'],f2:[1,2,3],f3:[true,false]}");
+		assertJson(e, "{f1:['a','b','c'],f2:[1,2,3],f3:[true,false]}");
 	}
 
 	public static class D {

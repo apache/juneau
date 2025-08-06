@@ -12,9 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshaller;
 
-import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.*;
 import java.util.*;
 
@@ -40,8 +37,8 @@ class Json5_Test extends SimpleTestBase {
 
 		assertString(expected1, Json5.to(in1, String.class));
 		assertString(expected1, Json5.to(stringReader(in1), String.class));
-		assertObject(Json5.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
-		assertObject(Json5.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
+		assertJson(Json5.to(in2, Map.class, String.class, String.class), expected2);
+		assertJson(Json5.to(stringReader(in2), Map.class, String.class, String.class), expected2);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -13,10 +13,7 @@
 package org.apache.juneau.cp;
 
 import static java.util.Locale.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -116,7 +113,7 @@ public class Messages_Test extends SimpleTestBase {
 
 	@Test void a09_keySet_prefix() {
 		Messages x = Messages.of(MessageBundleTest1.class);
-		assertObject(new TreeSet<>(x.keySet("xx"))).asJson().is("['xx','xx.','xx.foo']");
+		assertJson(new TreeSet<>(x.keySet("xx")), "['xx','xx.','xx.foo']");
 	}
 
 	@Test void a10_getString() {
@@ -143,7 +140,7 @@ public class Messages_Test extends SimpleTestBase {
 
 	@Test void a12_getKeys() {
 		Messages x = Messages.of(Test2.class);
-		assertObject(x.getKeys()).asJson().is("['file','yyy']");
+		assertJson(x.getKeys(), "['file','yyy']");
 	}
 
 	@Test void a13_toString() {

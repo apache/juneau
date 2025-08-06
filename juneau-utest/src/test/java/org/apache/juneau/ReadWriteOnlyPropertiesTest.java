@@ -45,7 +45,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 
 	@Test
 	public void a01_beanpOnPrimitiveFields_serializer() {
-		assertObject(A.create()).asJson().is("{f1:1}");
+		assertJson(A.create(), "{f1:1}");
 	}
 
 	@Test
@@ -77,7 +77,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 
 	@Test
 	public void b01_beanAnnotation_serializer() {
-		assertObject(B.create()).asJson().is("{f1:1}");
+		assertJson(B.create(), "{f1:1}");
 	}
 
 	@Test
@@ -108,7 +108,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 
 	@Test
 	public void b01_beanAnnotation_serializer_usingConfig() {
-		assertObject(B.create()).asJson().is("{f1:1}");
+		assertJson(B.create(), "{f1:1}");
 	}
 
 	@Test
@@ -234,7 +234,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 
 	@Test
 	public void d01_beanAnnotation_bproAll_serializer() {
-		assertObject(D.create()).asJson().is("{f1:1,f2:2}");
+		assertJson(D.create(), "{f1:1,f2:2}");
 	}
 
 	@Test
@@ -290,7 +290,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 
 	@Test
 	public void e01_beanAnnotation_bpwoAll_serializer() {
-		assertObject(E.create()).asJson().is("{}");
+		assertJson(E.create(), "{}");
 	}
 
 	@Test

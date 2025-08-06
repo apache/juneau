@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import java.util.*;
@@ -123,16 +122,16 @@ public class Swagger_Query_Test extends SimpleTestBase {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","query","Q");
-		assertObject(x).asJson().is("{'in':'query',name:'Q',type:'string'}");
+		assertJson(x, "{'in':'query',name:'Q',type:'string'}");
 
 		x = s.getParameterInfo("/b","put","query","Q");
-		assertObject(x).asJson().is("{'in':'query',name:'Q',type:'object',schema:{properties:{f1:{type:'string'}}}}");
+		assertJson(x, "{'in':'query',name:'Q',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 
 		x = s.getParameterInfo("/c","post","query","Q");
-		assertObject(x).asJson().is("{'in':'query',name:'Q',type:'array',items:{type:'string'}}");
+		assertJson(x, "{'in':'query',name:'Q',type:'array',items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d","delete","query","Q");
-		assertObject(x).asJson().is("{'in':'query',name:'Q',type:'string'}");
+		assertJson(x, "{'in':'query',name:'Q',type:'string'}");
 	}
 
 	@Rest
@@ -206,6 +205,6 @@ public class Swagger_Query_Test extends SimpleTestBase {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(E.class);
 
 		ParameterInfo x = s.getParameterInfo("/a","get","query","Q");
-		assertObject(x).asJson().is("{'in':'query',name:'Q',type:'string'}");
+		assertJson(x, "{'in':'query',name:'Q',type:'string'}");
 	}
 }

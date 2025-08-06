@@ -12,10 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -26,11 +24,10 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
 @SuppressWarnings("rawtypes")
-public class AutoMapSwapTest {
+class AutoMapSwapTest extends SimpleTestBase {
 
 	private static final Map<String,String> STRINGMAP = map("foo","bar");
 	private static final JsonMap JSONMAP = JsonMap.of("foo","bar");
@@ -72,24 +69,20 @@ public class AutoMapSwapTest {
 		}
 	}
 
-	@Test
-	public void a01_swap_toMap() throws Exception {
-		assertObject(find(A01.class).swap(null, new A01())).asJson().is("{foo:'bar'}");
+	@Test void a01_swap_toMap() throws Exception {
+		assertJson(find(A01.class).swap(null, new A01()), "{foo:'bar'}");
 	}
 
-	@Test
-	public void a02_swap_toJsonMap() throws Exception {
-		assertObject(find(A02.class).swap(null, new A02())).asJson().is("{foo:'bar'}");
+	@Test void a02_swap_toJsonMap() throws Exception {
+		assertJson(find(A02.class).swap(null, new A02()), "{foo:'bar'}");
 	}
 
-	@Test(expected = SerializeException.class)
-	public void a03_swap_serializeException() throws Exception {
-		find(A03.class).swap(null, null);
+	@Test void a03_swap_serializeException() {
+		assertThrows(SerializeException.class, ()->find(A03.class).swap(null, null));
 	}
 
-	@Test(expected = SerializeException.class)
-	public void a04_swap_runtimeException() throws Exception {
-		find(A04.class).swap(null, null);
+	@Test void a04_swap_runtimeException() {
+		assertThrows(SerializeException.class, ()->find(A04.class).swap(null, null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -101,7 +94,7 @@ public class AutoMapSwapTest {
 			return STRINGMAP;
 		}
 		public static B01 fromMap(Map<String,String> o) {
-			assertObject(o).asJson().is("{foo:'bar'}");
+			assertMap(o, "foo=bar");
 			return new B01();
 		}
 	}
@@ -110,7 +103,7 @@ public class AutoMapSwapTest {
 			return JSONMAP;
 		}
 		public static B02 fromJsonMap(JsonMap o) {
-			assertObject(o).asJson().is("{foo:'bar'}");
+			assertMap(o, "foo=bar");
 			return new B02();
 		}
 	}
@@ -119,7 +112,7 @@ public class AutoMapSwapTest {
 			return STRINGMAP;
 		}
 		public static B03 create(Map<String,String> o) {
-			assertObject(o).asJson().is("{foo:'bar'}");
+			assertMap(o, "foo=bar");
 			return new B03();
 		}
 	}
@@ -129,24 +122,20 @@ public class AutoMapSwapTest {
 		}
 	}
 
-	@Test
-	public void b01_unswap_fromMap() throws Exception {
+	@Test void b01_unswap_fromMap() throws Exception {
 		assertNotNull(find(B01.class).unswap(null, STRINGMAP, null));
 	}
 
-	@Test
-	public void b02_unswap_fromJsonMap() throws Exception {
+	@Test void b02_unswap_fromJsonMap() throws Exception {
 		assertNotNull(find(B02.class).unswap(null, JSONMAP, null));
 	}
 
-	@Test
-	public void b03_unswap_create() throws Exception {
+	@Test void b03_unswap_create() throws Exception {
 		assertNotNull(find(B03.class).unswap(null, STRINGMAP, null));
 	}
 
-	@Test(expected = ParseException.class)
-	public void b04_unswap_noMethod() throws Exception {
-		find(B04.class).unswap(null, STRINGMAP, null);
+	@Test void b04_unswap_noMethod() throws Exception {
+		assertThrows(ParseException.class, ()->find(B04.class).unswap(null, STRINGMAP, null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -156,15 +145,14 @@ public class AutoMapSwapTest {
 	public static class C01 {
 		public C01() {}
 		public C01(Map<String,String> o) {
-			assertObject(o).asJson().is("{foo:'bar'}");
+			assertJson(o, "{foo:'bar'}");
 		}
 		public Map<String,String> toMap() {
 			return STRINGMAP;
 		}
 	}
 
-	@Test
-	public void c01_unswap_constructor() throws Exception {
+	@Test void c01_unswap_constructor() throws Exception {
 		assertNotNull(find(C01.class).unswap(null, STRINGMAP, null));
 	}
 
@@ -194,18 +182,15 @@ public class AutoMapSwapTest {
 		}
 	}
 
-	@Test
-	public void d01_ignoreClass_beanIgnore() {
+	@Test void d01_ignoreClass_beanIgnore() {
 		assertNull(find(D01.class));
 	}
 
-	@Test
-	public void d01c_ignoreClass_beanIgnore_usingConfig() {
+	@Test void d01c_ignoreClass_beanIgnore_usingConfig() {
 		assertNull(find(bc(D01Config.class), D01c.class));
 	}
 
-	@Test
-	public void d02_ignoreClass_memberClass() {
+	@Test void d02_ignoreClass_memberClass() {
 		assertNull(find(D02.D02A.class));
 	}
 
@@ -249,33 +234,27 @@ public class AutoMapSwapTest {
 		}
 	}
 
-	@Test
-	public void e01_ignoreSwapMethod_beanIgnore() {
+	@Test void e01_ignoreSwapMethod_beanIgnore() {
 		assertNull(find(E01.class));
 	}
 
-	@Test
-	public void e01c_ignoreSwapMethod_beanIgnore_usingConfig() {
+	@Test void e01c_ignoreSwapMethod_beanIgnore_usingConfig() {
 		assertNull(find(bc(E01Config.class), E01c.class));
 	}
 
-	@Test
-	public void e02_ignoreSwapMethod_deprecated() {
+	@Test void e02_ignoreSwapMethod_deprecated() {
 		assertNull(find(E02.class));
 	}
 
-	@Test
-	public void e03_ignoreSwapMethod_wrongReturnType() {
+	@Test void e03_ignoreSwapMethod_wrongReturnType() {
 		assertNull(find(E03.class));
 	}
 
-	@Test
-	public void e04_ignoreSwapMethod_wrongParameters() {
+	@Test void e04_ignoreSwapMethod_wrongParameters() {
 		assertNull(find(E04.class));
 	}
 
-	@Test
-	public void e05_ignoreSwapMethod_notStatic() {
+	@Test void e05_ignoreSwapMethod_notStatic() {
 		assertNull(find(E05.class));
 	}
 
@@ -345,39 +324,32 @@ public class AutoMapSwapTest {
 		}
 	}
 
-	@Test(expected = ParseException.class)
-	public void f01_ignoreUnswapMethod_beanIgnore() throws Exception {
-		find(F01.class).unswap(null, null, null);
+	@Test void f01_ignoreUnswapMethod_beanIgnore() throws Exception {
+		assertThrows(ParseException.class, ()->find(F01.class).unswap(null, null, null));
 	}
 
-	@Test(expected = ParseException.class)
-	public void f01c_ignoreUnswapMethod_beanIgnore_usingConfig() throws Exception {
-		find(bc(F01Config.class), F01c.class).unswap(null, null, null);
+	@Test void f01c_ignoreUnswapMethod_beanIgnore_usingConfig() throws Exception {
+		assertThrows(ParseException.class, ()->find(bc(F01Config.class), F01c.class).unswap(null, null, null));
 	}
 
-	@Test(expected = ParseException.class)
-	public void f02_ignoreUnswapMethod_deprecated() throws Exception {
-		find(F02.class).unswap(null, null, null);
+	@Test void f02_ignoreUnswapMethod_deprecated() throws Exception {
+		assertThrows(ParseException.class, ()->find(F02.class).unswap(null, null, null));
 	}
 
-	@Test(expected = ParseException.class)
-	public void f03_ignoreUnswapMethod_wrongReturnType() throws Exception {
-		find(F03.class).unswap(null, null, null);
+	@Test void f03_ignoreUnswapMethod_wrongReturnType() throws Exception {
+		assertThrows(ParseException.class, ()->find(F03.class).unswap(null, null, null));
 	}
 
-	@Test(expected = ParseException.class)
-	public void f04_ignoreUnswapMethod_wrongParameters() throws Exception {
-		find(F04.class).unswap(null, null, null);
+	@Test void f04_ignoreUnswapMethod_wrongParameters() throws Exception {
+		assertThrows(ParseException.class, ()->find(F04.class).unswap(null, null, null));
 	}
 
-	@Test(expected = ParseException.class)
-	public void f05_ignoreUnswapMethod_notStatic() throws Exception {
-		find(F05.class).unswap(null, null, null);
+	@Test void f05_ignoreUnswapMethod_notStatic() throws Exception {
+		assertThrows(ParseException.class, ()->find(F05.class).unswap(null, null, null));
 	}
 
-	@Test(expected = ParseException.class)
-	public void f06_ignoreUnswapMethod_wrongName() throws Exception {
-		find(F06.class).unswap(null, null, null);
+	@Test void f06_ignoreUnswapMethod_wrongName() throws Exception {
+		assertThrows(ParseException.class, ()->find(F06.class).unswap(null, null, null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -410,18 +382,15 @@ public class AutoMapSwapTest {
 		}
 	}
 
-	@Test(expected = ParseException.class)
-	public void g01_ignoreUnswapConstructor_beanIgnore() throws Exception {
-		find(G01.class).unswap(null, null, null);
+	@Test void g01_ignoreUnswapConstructor_beanIgnore() throws Exception {
+		assertThrows(ParseException.class, ()->find(G01.class).unswap(null, null, null));
 	}
 
-	@Test(expected = ParseException.class)
-	public void g01c_ignoreUnswapConstructor_beanIgnore_usingConfig() throws Exception {
-		find(bc(G01Config.class), G01c.class).unswap(null, null, null);
+	@Test void g01c_ignoreUnswapConstructor_beanIgnore_usingConfig() throws Exception {
+		assertThrows(ParseException.class, ()->find(bc(G01Config.class), G01c.class).unswap(null, null, null));
 	}
 
-	@Test(expected = ParseException.class)
-	public void g02_ignoreUnswapConstructor_deprecated() throws Exception {
-		find(G02.class).unswap(null, null, null);
+	@Test void g02_ignoreUnswapConstructor_deprecated() throws Exception {
+		assertThrows(ParseException.class, ()->find(G02.class).unswap(null, null, null));
 	}
 }

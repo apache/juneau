@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import java.util.*;
@@ -75,18 +74,18 @@ public class Swagger_Body_Test extends SimpleTestBase {
 
 		x = s.getParameterInfo("/a","get","body",null);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getRequired()).asJson().is("true");
-		assertObject(x.getSchema()).asJson().is("{required:true,type:'string'}");
+		assertJson(x.getRequired(), "true");
+		assertJson(x.getSchema(), "{required:true,type:'string'}");
 
 		x = s.getParameterInfo("/b","put","body",null);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getRequired()).asJson().is("true");
-		assertObject(x.getSchema()).asJson().is("{required:true,type:'string'}");
+		assertJson(x.getRequired(), "true");
+		assertJson(x.getSchema(), "{required:true,type:'string'}");
 
 		x = s.getParameterInfo("/c","post","body",null);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getRequired()).asJson().is("true");
-		assertObject(x.getSchema()).asJson().is("{required:true,type:'string'}");
+		assertJson(x.getRequired(), "true");
+		assertJson(x.getSchema(), "{required:true,type:'string'}");
 	}
 
 	@Rest
@@ -123,16 +122,16 @@ public class Swagger_Body_Test extends SimpleTestBase {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","body",null);
-		assertObject(x.getSchema()).asJson().is("{type:'object'}");
+		assertJson(x.getSchema(), "{type:'object'}");
 
 		x = s.getParameterInfo("/b","put","body",null);
-		assertObject(x.getSchema()).asJson().is("{type:'object',properties:{f1:{type:'string'}}}");
+		assertJson(x.getSchema(), "{type:'object',properties:{f1:{type:'string'}}}");
 
 		x = s.getParameterInfo("/c","post","body",null);
-		assertObject(x.getSchema()).asJson().is("{type:'array',items:{type:'string'}}");
+		assertJson(x.getSchema(), "{type:'array',items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d","delete","body",null);
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
+		assertJson(x.getSchema(), "{type:'string'}");
 	}
 
 	@Rest
@@ -187,18 +186,18 @@ public class Swagger_Body_Test extends SimpleTestBase {
 
 		x = s.getParameterInfo("/a","get","body",null);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getRequired()).asJson().is("true");
-		assertObject(x.getSchema()).asJson().is("{required:true,type:'string'}");
+		assertJson(x.getRequired(), "true");
+		assertJson(x.getSchema(), "{required:true,type:'string'}");
 
 		x = s.getParameterInfo("/b","put","body",null);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getRequired()).asJson().is("true");
-		assertObject(x.getSchema()).asJson().is("{required:true,type:'string'}");
+		assertJson(x.getRequired(), "true");
+		assertJson(x.getSchema(), "{required:true,type:'string'}");
 
 		x = s.getParameterInfo("/c","post","body",null);
 		assertEquals("b\nc", x.getDescription());
-		assertObject(x.getRequired()).asJson().is("true");
-		assertObject(x.getSchema()).asJson().is("{required:true,type:'string'}");
+		assertJson(x.getRequired(), "true");
+		assertJson(x.getSchema(), "{required:true,type:'string'}");
 	}
 
 	@Rest
@@ -236,21 +235,21 @@ public class Swagger_Body_Test extends SimpleTestBase {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","body",null);
-		assertObject(x.getSchema()).asJson().is("{type:'object'}");
+		assertJson(x.getSchema(), "{type:'object'}");
 
 		x = s.getParameterInfo("/b","put","body",null);
-		assertObject(x.getSchema()).asJson().is("{type:'object',properties:{f1:{type:'string'}}}");
+		assertJson(x.getSchema(), "{type:'object',properties:{f1:{type:'string'}}}");
 
 		x = s.getParameterInfo("/c","post","body",null);
-		assertObject(x.getSchema()).asJson().is("{type:'array',items:{type:'string'}}");
+		assertJson(x.getSchema(), "{type:'array',items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d","delete","body",null);
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
+		assertJson(x.getSchema(), "{type:'string'}");
 
 		x = s.getParameterInfo("/e","get","body",null);
-		assertObject(x.getSchema()).asJson().is("{format:'int32',type:'integer'}");
+		assertJson(x.getSchema(), "{format:'int32',type:'integer'}");
 
 		x = s.getParameterInfo("/f","get","body",null);
-		assertObject(x.getSchema()).asJson().is("{type:'boolean'}");
+		assertJson(x.getSchema(), "{type:'boolean'}");
 	}
 }

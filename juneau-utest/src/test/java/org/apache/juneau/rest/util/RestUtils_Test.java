@@ -202,7 +202,7 @@ class RestUtils_Test extends SimpleTestBase {
 
 		String s = "?f1&f1&f2&f2=abc&f2=def&f2";
 		m = parseQuery(s);
-		assertObject(m).asJson().is("{f1:null,f2:['abc','def']}");
+		assertJson(m, "{f1:null,f2:['abc','def']}");
 	}
 
 	@Test void h02_testEmptyString() throws Exception {

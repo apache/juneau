@@ -1058,48 +1058,48 @@ public class StringExpressionMatcherTest {
 	// Error conditions
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m01_startsWithOp() throws Exception {
-		new StringExpressionMatcher("&foo");
+		assertThrows(ParseException.class, ()->new StringExpressionMatcher("&foo"));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m02_noOperator() throws Exception {
-		new StringExpressionMatcher("foo bar");
+		assertThrows(ParseException.class, ()->new StringExpressionMatcher("foo bar"));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m03_unmatchedParentheses() throws Exception {
-		new StringExpressionMatcher("(foo");
+		assertThrows(ParseException.class, ()->new StringExpressionMatcher("(foo"));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m04a_danglingExpression_1() throws Exception {
-		new StringExpressionMatcher("foo &");
+		assertThrows(ParseException.class, ()->new StringExpressionMatcher("foo &"));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m04b_danglingExpression_2() throws Exception {
-		new StringExpressionMatcher("foo ||");
+		assertThrows(ParseException.class, ()->new StringExpressionMatcher("foo ||"));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m04c_danglingExpression_3() throws Exception {
-		new StringExpressionMatcher("foo ,");
+		assertThrows(ParseException.class, ()->new StringExpressionMatcher("foo ,"));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m04d_danglingExpression_4() throws Exception {
-		new StringExpressionMatcher("foo & ");
+		assertThrows(ParseException.class, ()->new StringExpressionMatcher("foo & "));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m04e_danglingExpression_5() throws Exception {
-		new StringExpressionMatcher("foo || ");
+		assertThrows(ParseException.class, ()->new StringExpressionMatcher("foo || "));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m04f_danglingExpression_6() throws Exception {
-		new StringExpressionMatcher("foo , ");
+		assertThrows(ParseException.class, ()->new StringExpressionMatcher("foo , "));
 	}
 }

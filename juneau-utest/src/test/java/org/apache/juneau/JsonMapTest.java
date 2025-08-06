@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import java.util.*;
@@ -282,13 +281,13 @@ class JsonMapTest extends SimpleTestBase {
 		JsonList l = m.getList("a");
 		JsonMap m2 = l.getMap(0);
 		m2.put("b", "x");
-		assertObject(m).asJson().is("{a:[{b:'x'}]}");
+		assertJson(m, "{a:[{b:'x'}]}");
 
 		m = JsonMap.ofJson("{a:[{b:'c'}]}");
 		for (JsonMap m3 : m.getList("a").elements(JsonMap.class))
 			m3.put("b", "y");
 
-		assertObject(m).asJson().is("{a:[{b:'y'}]}");
+		assertJson(m, "{a:[{b:'y'}]}");
 	}
 
 	//====================================================================================================
@@ -319,7 +318,7 @@ class JsonMapTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test
 	public void testFromReader() throws Exception {
-		assertObject(JsonMap.ofJson(reader("{foo:'bar'}"))).asJson().is("{foo:'bar'}");
+		assertJson(JsonMap.ofJson(reader("{foo:'bar'}")), "{foo:'bar'}");
 	}
 
 	//====================================================================================================
@@ -329,7 +328,7 @@ class JsonMapTest extends SimpleTestBase {
 	public void testGetMap() throws Exception {
 		JsonMap m = JsonMap.ofJson("{a:{1:'true',2:'false'}}");
 		Map<Integer,Boolean> m2 = m.getMap("a", Integer.class, Boolean.class, null);
-		assertObject(m2).asJson().is("{'1':true,'2':false}");
+		assertJson(m2, "{'1':true,'2':false}");
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
 		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
 
@@ -337,7 +336,7 @@ class JsonMapTest extends SimpleTestBase {
 		assertNull(m2);
 
 		m2 = m.get("a", Map.class, Integer.class, Boolean.class);
-		assertObject(m2).asJson().is("{'1':true,'2':false}");
+		assertJson(m2, "{'1':true,'2':false}");
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
 		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
 
@@ -352,14 +351,14 @@ class JsonMapTest extends SimpleTestBase {
 	public void testGetList() throws Exception {
 		JsonMap m = JsonMap.ofJson("{a:['123','456']}");
 		List<Integer> l2 = m.getList("a", Integer.class, null);
-		assertObject(l2).asJson().is("[123,456]");
+		assertList(l2, "123,456");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
 
 		l2 = m.getList("b", Integer.class, null);
 		assertNull(l2);
 
 		l2 = m.get("a", List.class, Integer.class);
-		assertObject(l2).asJson().is("[123,456]");
+		assertList(l2, "123,456");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
 
 		l2 = m.get("b", List.class, Integer.class);

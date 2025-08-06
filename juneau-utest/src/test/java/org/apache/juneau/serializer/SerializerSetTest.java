@@ -74,15 +74,15 @@ class SerializerSetTest extends SimpleTestBase {
 
 		gb = SerializerSet.create().add(SB1.class, SB2.class);
 		g = gb.build();
-		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/1','text/2','text/2a']");
+		assertJson(g.getSupportedMediaTypes(), "['text/1','text/2','text/2a']");
 
 		gb = SerializerSet.create().add(SB1.class, SB2.class).add(SB3.class, SB4.class);
 		g = gb.build();
-		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/3','text/4','text/4a','text/1','text/2','text/2a']");
+		assertJson(g.getSupportedMediaTypes(), "['text/3','text/4','text/4a','text/1','text/2','text/2a']");
 
 		gb = SerializerSet.create().add(SB1.class, SB2.class).add(SB3.class, SB4.class).add(SB5.class);
 		g = gb.build();
-		assertObject(g.getSupportedMediaTypes()).asJson().is("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']");
+		assertJson(g.getSupportedMediaTypes(), "['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']");
 	}
 
 	public static class SB1 extends JsonSerializer {

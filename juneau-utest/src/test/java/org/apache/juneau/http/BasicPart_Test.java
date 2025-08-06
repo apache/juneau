@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -53,9 +52,9 @@ class BasicPart_Test extends SimpleTestBase {
 	@Test void a02_of() {
 		BasicPart x;
 		x = part("Foo","bar");
-		assertObject(x).asJson().is("'Foo=bar'");
+		assertString("Foo=bar", x);
 		x = part("Foo",()->"bar");
-		assertObject(x).asJson().is("'Foo=bar'");
+		assertString("Foo=bar", x);
 	}
 
 	@Test void a03_cast() {
@@ -68,14 +67,14 @@ class BasicPart_Test extends SimpleTestBase {
 		NameValuePairable x7 = () -> part("X7","7");
 		Headerable x8 = () -> header("X8","8");
 
-		assertObject(BasicPart.cast(x1)).isType(NameValuePair.class).asJson().is("'X1=1'");
-		assertObject(BasicPart.cast(x2)).isType(NameValuePair.class).asJson().is("'X2=2'");
-		assertObject(BasicPart.cast(x3)).isType(NameValuePair.class).asJson().is("'X3: 3'");
-		assertObject(BasicPart.cast(x4)).isType(NameValuePair.class).asJson().is("'X4: 4'");
-		assertObject(BasicPart.cast(x5)).isType(NameValuePair.class).asJson().is("'X5=5'");
-		assertObject(BasicPart.cast(x6)).isType(NameValuePair.class).asJson().is("{name:'X6',value:'6'}");
-		assertObject(BasicPart.cast(x7)).isType(NameValuePair.class).asJson().is("'X7=7'");
-		assertObject(BasicPart.cast(x8)).isType(NameValuePair.class).asJson().is("'X8=8'");
+		assertTypeAndJson(BasicPart.cast(x1), NameValuePair.class, "'X1=1'");
+		assertTypeAndJson(BasicPart.cast(x2), NameValuePair.class, "'X2=2'");
+		assertTypeAndJson(BasicPart.cast(x3), NameValuePair.class, "'X3: 3'");
+		assertTypeAndJson(BasicPart.cast(x4), NameValuePair.class, "'X4: 4'");
+		assertTypeAndJson(BasicPart.cast(x5), NameValuePair.class, "'X5=5'");
+		assertTypeAndJson(BasicPart.cast(x6), NameValuePair.class, "{name:'X6',value:'6'}");
+		assertTypeAndJson(BasicPart.cast(x7), NameValuePair.class, "'X7=7'");
+		assertTypeAndJson(BasicPart.cast(x8), NameValuePair.class, "'X8=8'");
 
 		assertThrows(BasicRuntimeException.class, ()->BasicPart.cast("X"), "Object of type java.lang.String could not be converted to a Part.");
 		assertThrows(BasicRuntimeException.class, ()->BasicPart.cast(null), "Object of type null could not be converted to a Part.");
@@ -94,7 +93,7 @@ class BasicPart_Test extends SimpleTestBase {
 
 	@Test void a04_asHeader() {
 		BasicPart x = part("X1","1");
-		assertObject(x.asHeader()).isType(Header.class).asJson().is("'X1: 1'");
+		assertString("X1: 1", x.asHeader());
 	}
 
 	@Test void a05_assertions() {

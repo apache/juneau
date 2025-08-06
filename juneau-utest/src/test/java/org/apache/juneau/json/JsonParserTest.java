@@ -214,7 +214,7 @@ class JsonParserTest extends SimpleTestBase {
 
 		r = reader("{foo:'bar'}{baz:'qux'}");
 		x = p2.parse(r, JsonMap.class);
-		assertObject(x).asJson().is("{foo:'bar'}");
+		assertJson(x, "{foo:'bar'}");
 		assertThrown(()->p2.parse(r, JsonMap.class)).asMessage().isContains("Reader is closed");
 	}
 
@@ -229,15 +229,15 @@ class JsonParserTest extends SimpleTestBase {
 
 		r = reader("{foo:'bar'}{baz:'qux'}");
 		x = p2.parse(r, JsonMap.class);
-		assertObject(x).asJson().is("{foo:'bar'}");
+		assertJson(x, "{foo:'bar'}");
 		x = p2.parse(r, JsonMap.class);
-		assertObject(x).asJson().is("{baz:'qux'}");
+		assertJson(x, "{baz:'qux'}");
 
 		r = reader("[123][456]");
 		x = p2.parse(r, JsonList.class);
-		assertObject(x).asJson().is("[123]");
+		assertJson(x, "[123]");
 		x = p2.parse(r, JsonList.class);
-		assertObject(x).asJson().is("[456]");
+		assertJson(x, "[456]");
 	}
 
 	private Reader reader(String in) {

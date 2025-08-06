@@ -97,8 +97,8 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	@Test void a04_HasFormData() {
 		assertObject(hasFormData().build().annotationType()).asJson().isContains("HasFormData");
 
-		assertObject(hasFormData().name("foo").build().name()).asJson().is("'foo'");
-		assertObject(hasFormData().value("foo").build().value()).asJson().is("'foo'");
+		assertEquals("foo", hasFormData().name("foo").build().name());
+		assertEquals("foo", hasFormData().value("foo").build().value());
 	}
 
 	@Test void a05_Query() throws Exception {
@@ -121,8 +121,8 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	@Test void a06_HasQuery() {
 		assertObject(hasQuery().build().annotationType()).asJson().isContains("HasQuery");
 
-		assertObject(hasQuery().name("foo").build().name()).asJson().is("'foo'");
-		assertObject(hasQuery().value("foo").build().value()).asJson().is("'foo'");
+		assertEquals("foo", hasQuery().name("foo").build().name());
+		assertEquals("foo", hasQuery().value("foo").build().value());
 	}
 
 	@Test void a07_Header() throws Exception {
@@ -175,8 +175,8 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	@Test void a10_Request() {
 		assertObject(request().build().annotationType()).asJson().isContains("Request");
 
-		assertObject(request().parser(OpenApiParser.class).build().parser()).asJson().is("'org.apache.juneau.oapi.OpenApiParser'");
-		assertObject(request().serializer(OpenApiSerializer.class).build().serializer()).asJson().is("'org.apache.juneau.oapi.OpenApiSerializer'");
+		assertString("org.apache.juneau.oapi.OpenApiParser", request().parser(OpenApiParser.class).build().parser().getName());
+		assertString("org.apache.juneau.oapi.OpenApiSerializer", request().serializer(OpenApiSerializer.class).build().serializer().getName());
 	}
 
 	@Test void a11_Response() {
@@ -201,10 +201,8 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	@Test void a15_Tag() {
 		assertObject(tag().build().annotationType()).asJson().isContains("Tag");
 
-		assertObject(tag().description(a("foo")).build().description()).asJson().is("['foo']");
-		assertObject(tag().externalDocs(externalDocs().url("foo").build()).build().externalDocs().url()).asJson().is("'foo'");
-		assertObject(tag().name("foo").build().name()).asJson().is("'foo'");
-	}
+		assertArray(tag().description(a("foo")).build().description(), "foo");
+		assertEquals("foo", tag().externalDocs(externalDocs().url("foo").build()).build().externalDocs().url());		assertEquals("foo", tag().name("foo").build().name());	}
 
 	@Test void a16_ExternalDocs() {
 		X1 x = A1.class.getAnnotation(X1.class);

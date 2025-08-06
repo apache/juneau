@@ -263,34 +263,34 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 
 	@Test void c10_stringType_noneFormat_2d() throws Exception {
 		HttpPartSchema s = tArray(tString()).build();
-		assertObject(parse(s, "foo,bar", String[].class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo,bar", List.class, String.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo,bar", Object[].class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo,bar", List.class, Object.class)).asJson().is("['foo','bar']");
+		assertJson(parse(s, "foo,bar", String[].class), "['foo','bar']");
+		assertJson(parse(s, "foo,bar", List.class, String.class), "['foo','bar']");
+		assertJson(parse(s, "foo,bar", Object[].class), "['foo','bar']");
+		assertJson(parse(s, "foo,bar", List.class, Object.class), "['foo','bar']");
 		Object o = parse(s, "foo,bar", Object.class);
-		assertObject(o).asJson().is("['foo','bar']");
+		assertJson(o, "['foo','bar']");
 		assertObject(o).isType(JsonList.class);
-		assertObject(parse(s, "foo,bar", C2[].class)).asJson().is("['C2-foo','C2-bar']");
-		assertObject(parse(s, "foo,bar", List.class, C2.class)).asJson().is("['C2-foo','C2-bar']");
+		assertJson(parse(s, "foo,bar", C2[].class), "['C2-foo','C2-bar']");
+		assertJson(parse(s, "foo,bar", List.class, C2.class), "['C2-foo','C2-bar']");
 		assertEquals("C3-['foo','bar']", parse(s, "foo,bar", C3.class).toString());
 	}
 
 	@Test void c11_stringType_noneFormat_3d() throws Exception {
 		HttpPartSchema s = tArrayPipes(tArray(tString())).build();
-		assertObject(parse(s, "foo,bar|baz", String[][].class)).asJson().is("[['foo','bar'],['baz']]");
-		assertObject(parse(s, "foo,bar|baz", List.class, String[].class)).asJson().is("[['foo','bar'],['baz']]");
-		assertObject(parse(s, "foo,bar|baz", List.class, List.class, String.class)).asJson().is("[['foo','bar'],['baz']]");
-		assertObject(parse(s, "foo,bar|baz", Object[][].class)).asJson().is("[['foo','bar'],['baz']]");
-		assertObject(parse(s, "foo,bar|baz", List.class, Object[].class)).asJson().is("[['foo','bar'],['baz']]");
-		assertObject(parse(s, "foo,bar|baz", List.class, List.class, Object.class)).asJson().is("[['foo','bar'],['baz']]");
+		assertJson(parse(s, "foo,bar|baz", String[][].class), "[['foo','bar'],['baz']]");
+		assertJson(parse(s, "foo,bar|baz", List.class, String[].class), "[['foo','bar'],['baz']]");
+		assertJson(parse(s, "foo,bar|baz", List.class, List.class, String.class), "[['foo','bar'],['baz']]");
+		assertJson(parse(s, "foo,bar|baz", Object[][].class), "[['foo','bar'],['baz']]");
+		assertJson(parse(s, "foo,bar|baz", List.class, Object[].class), "[['foo','bar'],['baz']]");
+		assertJson(parse(s, "foo,bar|baz", List.class, List.class, Object.class), "[['foo','bar'],['baz']]");
 		Object o = parse(s, "foo,bar|baz", Object.class);
-		assertObject(o).asJson().is("[['foo','bar'],['baz']]");
+		assertJson(o, "[['foo','bar'],['baz']]");
 		assertObject(o).isType(JsonList.class);
-		assertObject(parse(s, "foo,bar|baz", C2[][].class)).asJson().is("[['C2-foo','C2-bar'],['C2-baz']]");
-		assertObject(parse(s, "foo,bar|baz", List.class, C2[].class)).asJson().is("[['C2-foo','C2-bar'],['C2-baz']]");
-		assertObject(parse(s, "foo,bar|baz", List.class, List.class, C2.class)).asJson().is("[['C2-foo','C2-bar'],['C2-baz']]");
-		assertObject(parse(s, "foo,bar|baz", C3[].class)).asJson().is("['C3-[\\'foo\\',\\'bar\\']','C3-[\\'baz\\']']");
-		assertObject(parse(s, "foo,bar|baz", List.class, C3.class)).asJson().is("['C3-[\\'foo\\',\\'bar\\']','C3-[\\'baz\\']']");
+		assertJson(parse(s, "foo,bar|baz", C2[][].class), "[['C2-foo','C2-bar'],['C2-baz']]");
+		assertJson(parse(s, "foo,bar|baz", List.class, C2[].class), "[['C2-foo','C2-bar'],['C2-baz']]");
+		assertJson(parse(s, "foo,bar|baz", List.class, List.class, C2.class), "[['C2-foo','C2-bar'],['C2-baz']]");
+		assertJson(parse(s, "foo,bar|baz", C3[].class), "['C3-[\\'foo\\',\\'bar\\']','C3-[\\'baz\\']']");
+		assertJson(parse(s, "foo,bar|baz", List.class, C3.class), "['C3-[\\'foo\\',\\'bar\\']','C3-[\\'baz\\']']");
 	}
 
 	@Test void c12a_stringType_nullKeyword_plain() throws Exception {
@@ -301,7 +301,7 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 	@Test void c12b_stringType_nullKeyword_plain_2d() throws Exception {
 		HttpPartSchema s = tArray(tString()).build();
 		assertNull(parse(s, "null", String[].class));
-		assertObject(parse(s, "@(null)", String[].class)).asJson().is("[null]");
+		assertJson(parse(s, "@(null)", String[].class), "[null]");
 	}
 
 	@Test void c12c_stringType_nullKeyword_uon() throws Exception {
@@ -312,11 +312,11 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 
 	@Test void c12d_stringType_nullKeyword_uon_2d() throws Exception {
 		HttpPartSchema s = tArray(tUon()).build();
-		assertObject(parse(s, "null,x", String[].class)).asJson().is("[null,'x']");
+		assertJson(parse(s, "null,x", String[].class), "[null,'x']");
 		assertNull(parse(s, "null", String[].class));
-		assertObject(parse(s, "@(null)", String[].class)).asJson().is("[null]");
-		assertObject(parse(s, "'null'", String[].class)).asJson().is("['null']");
-		assertObject(parse(s, "@('null')", String[].class)).asJson().is("['null']");
+		assertJson(parse(s, "@(null)", String[].class), "[null]");
+		assertJson(parse(s, "'null'", String[].class), "['null']");
+		assertJson(parse(s, "@('null')", String[].class), "['null']");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -336,137 +336,137 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 
 	@Test void d01_arrayType_collectionFormatCsv() throws Exception {
 		HttpPartSchema s = T_ARRAY_CSV;
-		assertObject(parse(s, "foo,bar", String[].class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo,bar", Object[].class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo,bar", D[].class)).asJson().is("['D-foo','D-bar']");
-		assertObject(parse(s, "foo,bar", List.class, String.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo,bar", List.class, Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo,bar", List.class, D.class)).asJson().is("['D-foo','D-bar']");
-		assertObject(parse(s, "foo,bar", Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo,bar", JsonList.class)).asJson().is("['foo','bar']");
+		assertJson(parse(s, "foo,bar", String[].class), "['foo','bar']");
+		assertJson(parse(s, "foo,bar", Object[].class), "['foo','bar']");
+		assertJson(parse(s, "foo,bar", D[].class), "['D-foo','D-bar']");
+		assertJson(parse(s, "foo,bar", List.class, String.class), "['foo','bar']");
+		assertJson(parse(s, "foo,bar", List.class, Object.class), "['foo','bar']");
+		assertJson(parse(s, "foo,bar", List.class, D.class), "['D-foo','D-bar']");
+		assertJson(parse(s, "foo,bar", Object.class), "['foo','bar']");
+		assertJson(parse(s, "foo,bar", JsonList.class), "['foo','bar']");
 	}
 
 	@Test void d02_arrayType_collectionFormatPipes() throws Exception {
 		HttpPartSchema s = T_ARRAY_PIPES;
-		assertObject(parse(s, "foo|bar", String[].class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo|bar", Object[].class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo|bar", D[].class)).asJson().is("['D-foo','D-bar']");
-		assertObject(parse(s, "foo|bar", List.class, String.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo|bar", List.class, Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo|bar", List.class, D.class)).asJson().is("['D-foo','D-bar']");
-		assertObject(parse(s, "foo|bar", Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo|bar", JsonList.class)).asJson().is("['foo','bar']");
+		assertJson(parse(s, "foo|bar", String[].class), "['foo','bar']");
+		assertJson(parse(s, "foo|bar", Object[].class), "['foo','bar']");
+		assertJson(parse(s, "foo|bar", D[].class), "['D-foo','D-bar']");
+		assertJson(parse(s, "foo|bar", List.class, String.class), "['foo','bar']");
+		assertJson(parse(s, "foo|bar", List.class, Object.class), "['foo','bar']");
+		assertJson(parse(s, "foo|bar", List.class, D.class), "['D-foo','D-bar']");
+		assertJson(parse(s, "foo|bar", Object.class), "['foo','bar']");
+		assertJson(parse(s, "foo|bar", JsonList.class), "['foo','bar']");
 	}
 
 	@Test void d03_arrayType_collectionFormatSsv() throws Exception {
 		HttpPartSchema s = T_ARRAY_SSV;
-		assertObject(parse(s, "foo bar", String[].class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo bar", Object[].class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo bar", D[].class)).asJson().is("['D-foo','D-bar']");
-		assertObject(parse(s, "foo bar", List.class, String.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo bar", List.class, Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo bar", List.class, D.class)).asJson().is("['D-foo','D-bar']");
-		assertObject(parse(s, "foo bar", Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo bar", JsonList.class)).asJson().is("['foo','bar']");
+		assertJson(parse(s, "foo bar", String[].class), "['foo','bar']");
+		assertJson(parse(s, "foo bar", Object[].class), "['foo','bar']");
+		assertJson(parse(s, "foo bar", D[].class), "['D-foo','D-bar']");
+		assertJson(parse(s, "foo bar", List.class, String.class), "['foo','bar']");
+		assertJson(parse(s, "foo bar", List.class, Object.class), "['foo','bar']");
+		assertJson(parse(s, "foo bar", List.class, D.class), "['D-foo','D-bar']");
+		assertJson(parse(s, "foo bar", Object.class), "['foo','bar']");
+		assertJson(parse(s, "foo bar", JsonList.class), "['foo','bar']");
 	}
 
 	@Test void d04_arrayType_collectionFormatTsv() throws Exception {
 		HttpPartSchema s = T_ARRAY_TSV;
-		assertObject(parse(s, "foo\tbar", String[].class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo\tbar", Object[].class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo\tbar", D[].class)).asJson().is("['D-foo','D-bar']");
-		assertObject(parse(s, "foo\tbar", List.class, String.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo\tbar", List.class, Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo\tbar", List.class, D.class)).asJson().is("['D-foo','D-bar']");
-		assertObject(parse(s, "foo\tbar", Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo\tbar", JsonList.class)).asJson().is("['foo','bar']");
+		assertJson(parse(s, "foo\tbar", String[].class), "['foo','bar']");
+		assertJson(parse(s, "foo\tbar", Object[].class), "['foo','bar']");
+		assertJson(parse(s, "foo\tbar", D[].class), "['D-foo','D-bar']");
+		assertJson(parse(s, "foo\tbar", List.class, String.class), "['foo','bar']");
+		assertJson(parse(s, "foo\tbar", List.class, Object.class), "['foo','bar']");
+		assertJson(parse(s, "foo\tbar", List.class, D.class), "['D-foo','D-bar']");
+		assertJson(parse(s, "foo\tbar", Object.class), "['foo','bar']");
+		assertJson(parse(s, "foo\tbar", JsonList.class), "['foo','bar']");
 	}
 
 	@Test void d05_arrayType_collectionFormatUon() throws Exception {
 		HttpPartSchema s = T_ARRAY_UON;
-		assertObject(parse(s, "@(foo,bar)", String[].class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "@(foo,bar)", Object[].class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "@(foo,bar)", D[].class)).asJson().is("['D-foo','D-bar']");
-		assertObject(parse(s, "@(foo,bar)", List.class, String.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "@(foo,bar)", List.class, Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "@(foo,bar)", List.class, D.class)).asJson().is("['D-foo','D-bar']");
-		assertObject(parse(s, "@(foo,bar)", Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "@(foo,bar)", JsonList.class)).asJson().is("['foo','bar']");
+		assertJson(parse(s, "@(foo,bar)", String[].class), "['foo','bar']");
+		assertJson(parse(s, "@(foo,bar)", Object[].class), "['foo','bar']");
+		assertJson(parse(s, "@(foo,bar)", D[].class), "['D-foo','D-bar']");
+		assertJson(parse(s, "@(foo,bar)", List.class, String.class), "['foo','bar']");
+		assertJson(parse(s, "@(foo,bar)", List.class, Object.class), "['foo','bar']");
+		assertJson(parse(s, "@(foo,bar)", List.class, D.class), "['D-foo','D-bar']");
+		assertJson(parse(s, "@(foo,bar)", Object.class), "['foo','bar']");
+		assertJson(parse(s, "@(foo,bar)", JsonList.class), "['foo','bar']");
 	}
 
 	@Test void d06a_arrayType_collectionFormatNone() throws Exception {
 		HttpPartSchema s = T_ARRAY;
-		assertObject(parse(s, "foo,bar", String[].class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo,bar", Object[].class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo,bar", D[].class)).asJson().is("['D-foo','D-bar']");
-		assertObject(parse(s, "foo,bar", List.class, String.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo,bar", List.class, Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo,bar", List.class, D.class)).asJson().is("['D-foo','D-bar']");
-		assertObject(parse(s, "foo,bar", Object.class)).asJson().is("['foo','bar']");
+		assertJson(parse(s, "foo,bar", String[].class), "['foo','bar']");
+		assertJson(parse(s, "foo,bar", Object[].class), "['foo','bar']");
+		assertJson(parse(s, "foo,bar", D[].class), "['D-foo','D-bar']");
+		assertJson(parse(s, "foo,bar", List.class, String.class), "['foo','bar']");
+		assertJson(parse(s, "foo,bar", List.class, Object.class), "['foo','bar']");
+		assertJson(parse(s, "foo,bar", List.class, D.class), "['D-foo','D-bar']");
+		assertJson(parse(s, "foo,bar", Object.class), "['foo','bar']");
 	}
 
 	@Test void d06b_arrayType_collectionFormatNone_autoDetectUon() throws Exception {
 		HttpPartSchema s = T_ARRAY;
-		assertObject(parse(s, "@(foo,bar)", String[].class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "@(foo,bar)", Object[].class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "@(foo,bar)", D[].class)).asJson().is("['D-foo','D-bar']");
-		assertObject(parse(s, "@(foo,bar)", List.class, String.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "@(foo,bar)", List.class, Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "@(foo,bar)", List.class, D.class)).asJson().is("['D-foo','D-bar']");
-		assertObject(parse(s, "@(foo,bar)", Object.class)).asJson().is("['foo','bar']");
+		assertJson(parse(s, "@(foo,bar)", String[].class), "['foo','bar']");
+		assertJson(parse(s, "@(foo,bar)", Object[].class), "['foo','bar']");
+		assertJson(parse(s, "@(foo,bar)", D[].class), "['D-foo','D-bar']");
+		assertJson(parse(s, "@(foo,bar)", List.class, String.class), "['foo','bar']");
+		assertJson(parse(s, "@(foo,bar)", List.class, Object.class), "['foo','bar']");
+		assertJson(parse(s, "@(foo,bar)", List.class, D.class), "['D-foo','D-bar']");
+		assertJson(parse(s, "@(foo,bar)", Object.class), "['foo','bar']");
 	}
 
 	@Test void d07_arrayType_collectionFormatMulti() throws Exception {
 		// collectionFormat=multi should not do any sort of splitting.
 		HttpPartSchema s = T_ARRAY_MULTI;
-		assertObject(parse(s, "foo,bar", String[].class)).asJson().is("['foo,bar']");
-		assertObject(parse(s, "foo,bar", Object[].class)).asJson().is("['foo,bar']");
-		assertObject(parse(s, "foo,bar", D[].class)).asJson().is("['D-foo,bar']");
-		assertObject(parse(s, "foo,bar", List.class, String.class)).asJson().is("['foo,bar']");
-		assertObject(parse(s, "foo,bar", List.class, Object.class)).asJson().is("['foo,bar']");
-		assertObject(parse(s, "foo,bar", List.class, D.class)).asJson().is("['D-foo,bar']");
-		assertObject(parse(s, "foo,bar", Object.class)).asJson().is("['foo,bar']");
+		assertJson(parse(s, "foo,bar", String[].class), "['foo,bar']");
+		assertJson(parse(s, "foo,bar", Object[].class), "['foo,bar']");
+		assertJson(parse(s, "foo,bar", D[].class), "['D-foo,bar']");
+		assertJson(parse(s, "foo,bar", List.class, String.class), "['foo,bar']");
+		assertJson(parse(s, "foo,bar", List.class, Object.class), "['foo,bar']");
+		assertJson(parse(s, "foo,bar", List.class, D.class), "['D-foo,bar']");
+		assertJson(parse(s, "foo,bar", Object.class), "['foo,bar']");
 	}
 
 	@Test void d08_arrayType_collectionFormatCsvAndPipes() throws Exception {
 		HttpPartSchema s = tArrayPipes(tArrayCsv()).build();
-		assertObject(parse(s, "foo,bar|baz,qux", String[][].class)).asJson().is("[['foo','bar'],['baz','qux']]");
-		assertObject(parse(s, "foo,bar|baz,qux", Object[][].class)).asJson().is("[['foo','bar'],['baz','qux']]");
-		assertObject(parse(s, "foo,bar|baz,qux", D[][].class)).asJson().is("[['D-foo','D-bar'],['D-baz','D-qux']]");
-		assertObject(parse(s, "foo,bar|baz,qux", List.class, List.class, String.class)).asJson().is("[['foo','bar'],['baz','qux']]");
-		assertObject(parse(s, "foo,bar|baz,qux", List.class, List.class, Object.class)).asJson().is("[['foo','bar'],['baz','qux']]");
-		assertObject(parse(s, "foo,bar|baz,qux", List.class, List.class, D.class)).asJson().is("[['D-foo','D-bar'],['D-baz','D-qux']]");
-		assertObject(parse(s, "foo,bar|baz,qux", Object.class)).asJson().is("[['foo','bar'],['baz','qux']]");
+		assertJson(parse(s, "foo,bar|baz,qux", String[][].class), "[['foo','bar'],['baz','qux']]");
+		assertJson(parse(s, "foo,bar|baz,qux", Object[][].class), "[['foo','bar'],['baz','qux']]");
+		assertJson(parse(s, "foo,bar|baz,qux", D[][].class), "[['D-foo','D-bar'],['D-baz','D-qux']]");
+		assertJson(parse(s, "foo,bar|baz,qux", List.class, List.class, String.class), "[['foo','bar'],['baz','qux']]");
+		assertJson(parse(s, "foo,bar|baz,qux", List.class, List.class, Object.class), "[['foo','bar'],['baz','qux']]");
+		assertJson(parse(s, "foo,bar|baz,qux", List.class, List.class, D.class), "[['D-foo','D-bar'],['D-baz','D-qux']]");
+		assertJson(parse(s, "foo,bar|baz,qux", Object.class), "[['foo','bar'],['baz','qux']]");
 	}
 
 	@Test void d09_arrayType_itemsBoolean() throws Exception {
 		HttpPartSchema s = tArrayCsv(tBoolean()).build();
-		assertObject(parse(s, "true,false", boolean[].class)).asJson().is("[true,false]");
-		assertObject(parse(s, "true,false,null", Boolean[].class)).asJson().is("[true,false,null]");
-		assertObject(parse(s, "true,false,null", Object[].class)).asJson().is("[true,false,null]");
-		assertObject(parse(s, "true,false,null", List.class, Boolean.class)).asJson().is("[true,false,null]");
-		assertObject(parse(s, "true,false,null", List.class, Object.class)).asJson().is("[true,false,null]");
-		assertObject(parse(s, "true,false,null", Object.class)).asJson().is("[true,false,null]");
+		assertJson(parse(s, "true,false", boolean[].class), "[true,false]");
+		assertJson(parse(s, "true,false,null", Boolean[].class), "[true,false,null]");
+		assertJson(parse(s, "true,false,null", Object[].class), "[true,false,null]");
+		assertJson(parse(s, "true,false,null", List.class, Boolean.class), "[true,false,null]");
+		assertJson(parse(s, "true,false,null", List.class, Object.class), "[true,false,null]");
+		assertJson(parse(s, "true,false,null", Object.class), "[true,false,null]");
 	}
 
 	@Test void d10_arrayType_itemsInteger() throws Exception {
 		HttpPartSchema s = tArrayCsv(tInteger()).build();
-		assertObject(parse(s, "1,2", int[].class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2,null", Integer[].class)).asJson().is("[1,2,null]");
-		assertObject(parse(s, "1,2,null", Object[].class)).asJson().is("[1,2,null]");
-		assertObject(parse(s, "1,2,null", List.class, Integer.class)).asJson().is("[1,2,null]");
-		assertObject(parse(s, "1,2,null", List.class, Object.class)).asJson().is("[1,2,null]");
-		assertObject(parse(s, "1,2,null", Object.class)).asJson().is("[1,2,null]");
+		assertJson(parse(s, "1,2", int[].class), "[1,2]");
+		assertJson(parse(s, "1,2,null", Integer[].class), "[1,2,null]");
+		assertJson(parse(s, "1,2,null", Object[].class), "[1,2,null]");
+		assertJson(parse(s, "1,2,null", List.class, Integer.class), "[1,2,null]");
+		assertJson(parse(s, "1,2,null", List.class, Object.class), "[1,2,null]");
+		assertJson(parse(s, "1,2,null", Object.class), "[1,2,null]");
 	}
 
 	@Test void d11_arrayType_itemsFloat() throws Exception {
 		HttpPartSchema s = tArrayCsv(tNumber()).build();
-		assertObject(parse(s, "1.0,2.0", float[].class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s, "1.0,2.0,null", Float[].class)).asJson().is("[1.0,2.0,null]");
-		assertObject(parse(s, "1.0,2.0,null", Object[].class)).asJson().is("[1.0,2.0,null]");
-		assertObject(parse(s, "1.0,2.0,null", List.class, Float.class)).asJson().is("[1.0,2.0,null]");
-		assertObject(parse(s, "1.0,2.0,null", List.class, Object.class)).asJson().is("[1.0,2.0,null]");
-		assertObject(parse(s, "1.0,2.0,null", Object.class)).asJson().is("[1.0,2.0,null]");
+		assertJson(parse(s, "1.0,2.0", float[].class), "[1.0,2.0]");
+		assertJson(parse(s, "1.0,2.0,null", Float[].class), "[1.0,2.0,null]");
+		assertJson(parse(s, "1.0,2.0,null", Object[].class), "[1.0,2.0,null]");
+		assertJson(parse(s, "1.0,2.0,null", List.class, Float.class), "[1.0,2.0,null]");
+		assertJson(parse(s, "1.0,2.0,null", List.class, Object.class), "[1.0,2.0,null]");
+		assertJson(parse(s, "1.0,2.0,null", Object.class), "[1.0,2.0,null]");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -506,48 +506,48 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		assertNull(parse(s, "null", String.class));
 		assertEquals(true, parse(s, "true", Object.class));
 		assertNull(parse(s, "null", Object.class));
-		assertObject(parse(s, "true", E1.class)).asJson().is("'E1-true'");
+		assertJson(parse(s, "true", E1.class), "'E1-true'");
 		assertNull(parse(s, "null", E1.class));
 	}
 
 	@Test void e02_booleanType_2d() throws Exception {
 		HttpPartSchema s = tArray(tBoolean()).build();
-		assertObject(parse(s, "true,true", boolean[].class)).asJson().is("[true,true]");
-		assertObject(parse(s, "true,true,null", Boolean[].class)).asJson().is("[true,true,null]");
-		assertObject(parse(s, "true,true,null", List.class, Boolean.class)).asJson().is("[true,true,null]");
-		assertObject(parse(s, "true,true,null", String[].class)).asJson().is("['true','true',null]");
-		assertObject(parse(s, "true,true,null", List.class, String.class)).asJson().is("['true','true',null]");
-		assertObject(parse(s, "true,true,null", Object[].class)).asJson().is("[true,true,null]");
-		assertObject(parse(s, "true,true,null", List.class, Object.class)).asJson().is("[true,true,null]");
-		assertObject(parse(s, "true,true,null", E1[].class)).asJson().is("['E1-true','E1-true',null]");
-		assertObject(parse(s, "true,true,null", List.class, E1.class)).asJson().is("['E1-true','E1-true',null]");
-		assertObject(parse(s, "true,true,null", E2.class)).asJson().is("'E2-[true,true,null]'");
+		assertJson(parse(s, "true,true", boolean[].class), "[true,true]");
+		assertJson(parse(s, "true,true,null", Boolean[].class), "[true,true,null]");
+		assertJson(parse(s, "true,true,null", List.class, Boolean.class), "[true,true,null]");
+		assertJson(parse(s, "true,true,null", String[].class), "['true','true',null]");
+		assertJson(parse(s, "true,true,null", List.class, String.class), "['true','true',null]");
+		assertJson(parse(s, "true,true,null", Object[].class), "[true,true,null]");
+		assertJson(parse(s, "true,true,null", List.class, Object.class), "[true,true,null]");
+		assertJson(parse(s, "true,true,null", E1[].class), "['E1-true','E1-true',null]");
+		assertJson(parse(s, "true,true,null", List.class, E1.class), "['E1-true','E1-true',null]");
+		assertJson(parse(s, "true,true,null", E2.class), "'E2-[true,true,null]'");
 
-		assertObject(parse(s, "True,true", boolean[].class)).asJson().is("[true,true]");
-		assertObject(parse(s, "TRUE,true", boolean[].class)).asJson().is("[true,true]");
+		assertJson(parse(s, "True,true", boolean[].class), "[true,true]");
+		assertJson(parse(s, "TRUE,true", boolean[].class), "[true,true]");
 	}
 
 	@Test void e03_booleanType_3d() throws Exception {
 		HttpPartSchema s = tArrayPipes(tArray(tBoolean())).build();
-		assertObject(parse(s, "true,true|false", boolean[][].class)).asJson().is("[[true,true],[false]]");
-		assertObject(parse(s, "true,true|false", List.class, boolean[].class)).asJson().is("[[true,true],[false]]");
-		assertObject(parse(s, "true,true|false,null", Boolean[][].class)).asJson().is("[[true,true],[false,null]]");
-		assertObject(parse(s, "true,true|false,null", List.class, Boolean[].class)).asJson().is("[[true,true],[false,null]]");
-		assertObject(parse(s, "true,true|false,null", List.class, List.class, Boolean.class)).asJson().is("[[true,true],[false,null]]");
-		assertObject(parse(s, "true,true|false,null", String[][].class)).asJson().is("[['true','true'],['false',null]]");
-		assertObject(parse(s, "true,true|false,null", List.class, List.class, String.class)).asJson().is("[['true','true'],['false',null]]");
-		assertObject(parse(s, "true,true|false,null", List.class, String[].class)).asJson().is("[['true','true'],['false',null]]");
-		assertObject(parse(s, "true,true|false,null", Object[][].class)).asJson().is("[[true,true],[false,null]]");
-		assertObject(parse(s, "true,true|false,null", List.class, List.class, Object.class)).asJson().is("[[true,true],[false,null]]");
-		assertObject(parse(s, "true,true|false,null", List.class, Object[].class)).asJson().is("[[true,true],[false,null]]");
-		assertObject(parse(s, "true,true|false,null", E1[][].class)).asJson().is("[['E1-true','E1-true'],['E1-false',null]]");
-		assertObject(parse(s, "true,true|false,null", List.class, List.class, E1.class)).asJson().is("[['E1-true','E1-true'],['E1-false',null]]");
-		assertObject(parse(s, "true,true|false,null", List.class, E1[].class)).asJson().is("[['E1-true','E1-true'],['E1-false',null]]");
-		assertObject(parse(s, "true,true|false,null", E2[].class)).asJson().is("['E2-[true,true]','E2-[false,null]']");
-		assertObject(parse(s, "true,true|false,null", List.class, E2.class)).asJson().is("['E2-[true,true]','E2-[false,null]']");
+		assertJson(parse(s, "true,true|false", boolean[][].class), "[[true,true],[false]]");
+		assertJson(parse(s, "true,true|false", List.class, boolean[].class), "[[true,true],[false]]");
+		assertJson(parse(s, "true,true|false,null", Boolean[][].class), "[[true,true],[false,null]]");
+		assertJson(parse(s, "true,true|false,null", List.class, Boolean[].class), "[[true,true],[false,null]]");
+		assertJson(parse(s, "true,true|false,null", List.class, List.class, Boolean.class), "[[true,true],[false,null]]");
+		assertJson(parse(s, "true,true|false,null", String[][].class), "[['true','true'],['false',null]]");
+		assertJson(parse(s, "true,true|false,null", List.class, List.class, String.class), "[['true','true'],['false',null]]");
+		assertJson(parse(s, "true,true|false,null", List.class, String[].class), "[['true','true'],['false',null]]");
+		assertJson(parse(s, "true,true|false,null", Object[][].class), "[[true,true],[false,null]]");
+		assertJson(parse(s, "true,true|false,null", List.class, List.class, Object.class), "[[true,true],[false,null]]");
+		assertJson(parse(s, "true,true|false,null", List.class, Object[].class), "[[true,true],[false,null]]");
+		assertJson(parse(s, "true,true|false,null", E1[][].class), "[['E1-true','E1-true'],['E1-false',null]]");
+		assertJson(parse(s, "true,true|false,null", List.class, List.class, E1.class), "[['E1-true','E1-true'],['E1-false',null]]");
+		assertJson(parse(s, "true,true|false,null", List.class, E1[].class), "[['E1-true','E1-true'],['E1-false',null]]");
+		assertJson(parse(s, "true,true|false,null", E2[].class), "['E2-[true,true]','E2-[false,null]']");
+		assertJson(parse(s, "true,true|false,null", List.class, E2.class), "['E2-[true,true]','E2-[false,null]']");
 
-		assertObject(parse(s, "True,true|false", boolean[][].class)).asJson().is("[[true,true],[false]]");
-		assertObject(parse(s, "TRUE,true|false", boolean[][].class)).asJson().is("[[true,true],[false]]");
+		assertJson(parse(s, "True,true|false", boolean[][].class), "[[true,true],[false]]");
+		assertJson(parse(s, "TRUE,true|false", boolean[][].class), "[[true,true],[false]]");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -599,132 +599,132 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 
 	@Test void f01_integerType_int32() throws Exception {
 		HttpPartSchema s = T_INT32;
-		assertObject(parse(s, "1", int.class)).asJson().is("1");
-		assertObject(parse(s, "1", Integer.class)).asJson().is("1");
-		assertObject(parse(s, "1", short.class)).asJson().is("1");
-		assertObject(parse(s, "1", Short.class)).asJson().is("1");
-		assertObject(parse(s, "1", long.class)).asJson().is("1");
-		assertObject(parse(s, "1", Long.class)).asJson().is("1");
-		assertObject(parse(s, "1", String.class)).asJson().is("'1'");
+		assertJson(parse(s, "1", int.class), "1");
+		assertJson(parse(s, "1", Integer.class), "1");
+		assertJson(parse(s, "1", short.class), "1");
+		assertJson(parse(s, "1", Short.class), "1");
+		assertJson(parse(s, "1", long.class), "1");
+		assertJson(parse(s, "1", Long.class), "1");
+		assertJson(parse(s, "1", String.class), "'1'");
 		Object o = parse(s, "1", Object.class);
-		assertObject(o).asJson().is("1");
+		assertJson(o, "1");
 		assertObject(o).isType(Integer.class);
-		assertObject(parse(s,  "1", F1.class)).asJson().is("'F1-1'");
+		assertJson(parse(s,  "1", F1.class), "'F1-1'");
 	}
 
 	@Test void f02_integerType_int32_2d() throws Exception {
 		HttpPartSchema s = tArray(tInt32()).build();
-		assertObject(parse(s, "1,2", int[].class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", Integer[].class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", List.class, Integer.class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", short[].class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", Short[].class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", List.class, Short.class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", long[].class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", Long[].class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", List.class, Long.class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", String[].class)).asJson().is("['1','2']");
-		assertObject(parse(s, "1,2", List.class, String.class)).asJson().is("['1','2']");
-		assertObject(parse(s, "1,2", Object[].class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", List.class, Object.class)).asJson().is("[1,2]");
-		assertObject(parse(s,  "1,2", F1[].class)).asJson().is("['F1-1','F1-2']");
-		assertObject(parse(s,  "1,2", List.class, F1.class)).asJson().is("['F1-1','F1-2']");
-		assertObject(parse(s,  "1,2", F2.class)).asJson().is("'F2-[1,2]'");
+		assertJson(parse(s, "1,2", int[].class), "[1,2]");
+		assertJson(parse(s, "1,2", Integer[].class), "[1,2]");
+		assertJson(parse(s, "1,2", List.class, Integer.class), "[1,2]");
+		assertJson(parse(s, "1,2", short[].class), "[1,2]");
+		assertJson(parse(s, "1,2", Short[].class), "[1,2]");
+		assertJson(parse(s, "1,2", List.class, Short.class), "[1,2]");
+		assertJson(parse(s, "1,2", long[].class), "[1,2]");
+		assertJson(parse(s, "1,2", Long[].class), "[1,2]");
+		assertJson(parse(s, "1,2", List.class, Long.class), "[1,2]");
+		assertJson(parse(s, "1,2", String[].class), "['1','2']");
+		assertJson(parse(s, "1,2", List.class, String.class), "['1','2']");
+		assertJson(parse(s, "1,2", Object[].class), "[1,2]");
+		assertJson(parse(s, "1,2", List.class, Object.class), "[1,2]");
+		assertJson(parse(s,  "1,2", F1[].class), "['F1-1','F1-2']");
+		assertJson(parse(s,  "1,2", List.class, F1.class), "['F1-1','F1-2']");
+		assertJson(parse(s,  "1,2", F2.class), "'F2-[1,2]'");
 	}
 
 	@Test void f03_integerType_int32_3d() throws Exception {
 		HttpPartSchema s = tArrayPipes(tArray(tInt32())).build();
-		assertObject(parse(s, "1,2|3", int[][].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, int[].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", Integer[][].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, Integer[].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, Integer.class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", short[][].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, short[].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", Short[][].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, Short[].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, Short.class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", long[][].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, long[].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", Long[][].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, Long[].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, Long.class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", String[][].class)).asJson().is("[['1','2'],['3']]");
-		assertObject(parse(s, "1,2|3", List.class, String[].class)).asJson().is("[['1','2'],['3']]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, String.class)).asJson().is("[['1','2'],['3']]");
-		assertObject(parse(s, "1,2|3", Object[][].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, Object[].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, Object.class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s,  "1,2|3", F1[][].class)).asJson().is("[['F1-1','F1-2'],['F1-3']]");
-		assertObject(parse(s,  "1,2|3", List.class, F1[].class)).asJson().is("[['F1-1','F1-2'],['F1-3']]");
-		assertObject(parse(s,  "1,2|3", List.class, List.class, F1.class)).asJson().is("[['F1-1','F1-2'],['F1-3']]");
-		assertObject(parse(s, "1,2|3", F2[].class)).asJson().is("['F2-[1,2]','F2-[3]']");
-		assertObject(parse(s, "1,2|3", List.class, F2.class)).asJson().is("['F2-[1,2]','F2-[3]']");
+		assertJson(parse(s, "1,2|3", int[][].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, int[].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", Integer[][].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, Integer[].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, Integer.class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", short[][].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, short[].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", Short[][].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, Short[].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, Short.class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", long[][].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, long[].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", Long[][].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, Long[].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, Long.class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", String[][].class), "[['1','2'],['3']]");
+		assertJson(parse(s, "1,2|3", List.class, String[].class), "[['1','2'],['3']]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, String.class), "[['1','2'],['3']]");
+		assertJson(parse(s, "1,2|3", Object[][].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, Object[].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, Object.class), "[[1,2],[3]]");
+		assertJson(parse(s,  "1,2|3", F1[][].class), "[['F1-1','F1-2'],['F1-3']]");
+		assertJson(parse(s,  "1,2|3", List.class, F1[].class), "[['F1-1','F1-2'],['F1-3']]");
+		assertJson(parse(s,  "1,2|3", List.class, List.class, F1.class), "[['F1-1','F1-2'],['F1-3']]");
+		assertJson(parse(s, "1,2|3", F2[].class), "['F2-[1,2]','F2-[3]']");
+		assertJson(parse(s, "1,2|3", List.class, F2.class), "['F2-[1,2]','F2-[3]']");
 	}
 
 	@Test void f04_integerType_int64() throws Exception {
 		HttpPartSchema s = T_INT64;
-		assertObject(parse(s, "1", int.class)).asJson().is("1");
-		assertObject(parse(s, "1", Integer.class)).asJson().is("1");
-		assertObject(parse(s, "1", short.class)).asJson().is("1");
-		assertObject(parse(s, "1", Short.class)).asJson().is("1");
-		assertObject(parse(s, "1", long.class)).asJson().is("1");
-		assertObject(parse(s, "1", Long.class)).asJson().is("1");
-		assertObject(parse(s, "1", String.class)).asJson().is("'1'");
+		assertJson(parse(s, "1", int.class), "1");
+		assertJson(parse(s, "1", Integer.class), "1");
+		assertJson(parse(s, "1", short.class), "1");
+		assertJson(parse(s, "1", Short.class), "1");
+		assertJson(parse(s, "1", long.class), "1");
+		assertJson(parse(s, "1", Long.class), "1");
+		assertJson(parse(s, "1", String.class), "'1'");
 		Object o = parse(s, "1", Object.class);
-		assertObject(o).asJson().is("1");
+		assertJson(o, "1");
 		assertObject(o).isType(Long.class);
-		assertObject(parse(s,  "1", F3.class)).asJson().is("1");
+		assertJson(parse(s,  "1", F3.class), "1");
 	}
 
 	@Test void f05_integerType_int64_2d() throws Exception {
 		HttpPartSchema s = tArray(tInt64()).build();
-		assertObject(parse(s, "1,2", int[].class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", Integer[].class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", List.class, Integer.class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", short[].class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", Short[].class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", List.class, Short.class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", long[].class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", Long[].class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", List.class, Long.class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", String[].class)).asJson().is("['1','2']");
-		assertObject(parse(s, "1,2", List.class, String.class)).asJson().is("['1','2']");
-		assertObject(parse(s, "1,2", Object[].class)).asJson().is("[1,2]");
-		assertObject(parse(s, "1,2", List.class, Object.class)).asJson().is("[1,2]");
-		assertObject(parse(s,  "1,2", F3[].class)).asJson().is("[1,2]");
-		assertObject(parse(s,  "1,2", List.class, F3.class)).asJson().is("[1,2]");
-		assertObject(parse(s,  "1,2", F4.class)).asJson().is("'F4-[1,2]'");
+		assertJson(parse(s, "1,2", int[].class), "[1,2]");
+		assertJson(parse(s, "1,2", Integer[].class), "[1,2]");
+		assertJson(parse(s, "1,2", List.class, Integer.class), "[1,2]");
+		assertJson(parse(s, "1,2", short[].class), "[1,2]");
+		assertJson(parse(s, "1,2", Short[].class), "[1,2]");
+		assertJson(parse(s, "1,2", List.class, Short.class), "[1,2]");
+		assertJson(parse(s, "1,2", long[].class), "[1,2]");
+		assertJson(parse(s, "1,2", Long[].class), "[1,2]");
+		assertJson(parse(s, "1,2", List.class, Long.class), "[1,2]");
+		assertJson(parse(s, "1,2", String[].class), "['1','2']");
+		assertJson(parse(s, "1,2", List.class, String.class), "['1','2']");
+		assertJson(parse(s, "1,2", Object[].class), "[1,2]");
+		assertJson(parse(s, "1,2", List.class, Object.class), "[1,2]");
+		assertJson(parse(s,  "1,2", F3[].class), "[1,2]");
+		assertJson(parse(s,  "1,2", List.class, F3.class), "[1,2]");
+		assertJson(parse(s,  "1,2", F4.class), "'F4-[1,2]'");
 	}
 
 	@Test void f06_integerType_int64_3d() throws Exception {
 		HttpPartSchema s = tArrayPipes(tArray(tInt64())).build();
-		assertObject(parse(s, "1,2|3", int[][].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, int[].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", Integer[][].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, Integer[].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, Integer.class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", short[][].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, short[].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", Short[][].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, Short[].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, Short.class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", long[][].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, long[].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", Long[][].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, Long[].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, Long.class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", String[][].class)).asJson().is("[['1','2'],['3']]");
-		assertObject(parse(s, "1,2|3", List.class, String[].class)).asJson().is("[['1','2'],['3']]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, String.class)).asJson().is("[['1','2'],['3']]");
-		assertObject(parse(s, "1,2|3", Object[][].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, Object[].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, Object.class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s,  "1,2|3", F3[][].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s,  "1,2|3", List.class, F3[].class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s,  "1,2|3", List.class, List.class, F3.class)).asJson().is("[[1,2],[3]]");
-		assertObject(parse(s, "1,2|3", F4[].class)).asJson().is("['F4-[1,2]','F4-[3]']");
-		assertObject(parse(s, "1,2|3", List.class, F4.class)).asJson().is("['F4-[1,2]','F4-[3]']");
+		assertJson(parse(s, "1,2|3", int[][].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, int[].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", Integer[][].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, Integer[].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, Integer.class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", short[][].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, short[].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", Short[][].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, Short[].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, Short.class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", long[][].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, long[].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", Long[][].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, Long[].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, Long.class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", String[][].class), "[['1','2'],['3']]");
+		assertJson(parse(s, "1,2|3", List.class, String[].class), "[['1','2'],['3']]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, String.class), "[['1','2'],['3']]");
+		assertJson(parse(s, "1,2|3", Object[][].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, Object[].class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, Object.class), "[[1,2],[3]]");
+		assertJson(parse(s,  "1,2|3", F3[][].class), "[[1,2],[3]]");
+		assertJson(parse(s,  "1,2|3", List.class, F3[].class), "[[1,2],[3]]");
+		assertJson(parse(s,  "1,2|3", List.class, List.class, F3.class), "[[1,2],[3]]");
+		assertJson(parse(s, "1,2|3", F4[].class), "['F4-[1,2]','F4-[3]']");
+		assertJson(parse(s, "1,2|3", List.class, F4.class), "['F4-[1,2]','F4-[3]']");
 	}
 
 
@@ -776,112 +776,112 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 
 	@Test void g01_numberType_float() throws Exception {
 		HttpPartSchema s = T_FLOAT;
-		assertObject(parse(s, "1", float.class)).asJson().is("1.0");
-		assertObject(parse(s, "1", Float.class)).asJson().is("1.0");
-		assertObject(parse(s, "1", double.class)).asJson().is("1.0");
-		assertObject(parse(s, "1", Double.class)).asJson().is("1.0");
-		assertObject(parse(s, "1", String.class)).asJson().is("'1.0'");
+		assertJson(parse(s, "1", float.class), "1.0");
+		assertJson(parse(s, "1", Float.class), "1.0");
+		assertJson(parse(s, "1", double.class), "1.0");
+		assertJson(parse(s, "1", Double.class), "1.0");
+		assertJson(parse(s, "1", String.class), "'1.0'");
 		Object o =  parse(s, "1", Object.class);
-		assertObject(o).asJson().is("1.0");
+		assertJson(o, "1.0");
 		assertObject(o).isType(Float.class);
-		assertObject(parse(s,  "1", G1.class)).asJson().is("1.0");
+		assertJson(parse(s,  "1", G1.class), "1.0");
 	}
 
 	@Test void g02_numberType_float_2d() throws Exception {
 		HttpPartSchema s = tArray(tFloat()).build();
-		assertObject(parse(s, "1,2", float[].class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s, "1,2", Float[].class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s, "1,2", List.class, Float.class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s, "1,2", double[].class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s, "1,2", Double[].class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s, "1,2", List.class, Double.class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s, "1,2", String[].class)).asJson().is("['1.0','2.0']");
-		assertObject(parse(s, "1,2", List.class, String.class)).asJson().is("['1.0','2.0']");
-		assertObject(parse(s, "1,2", Object[].class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s, "1,2", List.class, Object.class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s,  "1,2", G1[].class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s,  "1,2", List.class, G1.class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s,  "1,2", G2.class)).asJson().is("'G2-[1.0,2.0]'");
+		assertJson(parse(s, "1,2", float[].class), "[1.0,2.0]");
+		assertJson(parse(s, "1,2", Float[].class), "[1.0,2.0]");
+		assertJson(parse(s, "1,2", List.class, Float.class), "[1.0,2.0]");
+		assertJson(parse(s, "1,2", double[].class), "[1.0,2.0]");
+		assertJson(parse(s, "1,2", Double[].class), "[1.0,2.0]");
+		assertJson(parse(s, "1,2", List.class, Double.class), "[1.0,2.0]");
+		assertJson(parse(s, "1,2", String[].class), "['1.0','2.0']");
+		assertJson(parse(s, "1,2", List.class, String.class), "['1.0','2.0']");
+		assertJson(parse(s, "1,2", Object[].class), "[1.0,2.0]");
+		assertJson(parse(s, "1,2", List.class, Object.class), "[1.0,2.0]");
+		assertJson(parse(s,  "1,2", G1[].class), "[1.0,2.0]");
+		assertJson(parse(s,  "1,2", List.class, G1.class), "[1.0,2.0]");
+		assertJson(parse(s,  "1,2", G2.class), "'G2-[1.0,2.0]'");
 	}
 
 	@Test void g03_numberType_float_3d() throws Exception {
 		HttpPartSchema s = tArrayPipes(tArray(tFloat())).build();
-		assertObject(parse(s, "1,2|3", float[][].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", List.class, float[].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", Float[][].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", List.class, Float[].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, Float.class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", double[][].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", List.class, double[].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", Double[][].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", List.class, Double[].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, Double.class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", String[][].class)).asJson().is("[['1.0','2.0'],['3.0']]");
-		assertObject(parse(s, "1,2|3", List.class, String[].class)).asJson().is("[['1.0','2.0'],['3.0']]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, String.class)).asJson().is("[['1.0','2.0'],['3.0']]");
-		assertObject(parse(s, "1,2|3", Object[][].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", List.class, Object[].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, Object.class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s,  "1,2|3", G1[][].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s,  "1,2|3", List.class, G1[].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s,  "1,2|3", List.class, List.class, G1.class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", G2[].class)).asJson().is("['G2-[1.0,2.0]','G2-[3.0]']");
-		assertObject(parse(s, "1,2|3", List.class, G2.class)).asJson().is("['G2-[1.0,2.0]','G2-[3.0]']");
+		assertJson(parse(s, "1,2|3", float[][].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", List.class, float[].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", Float[][].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", List.class, Float[].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, Float.class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", double[][].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", List.class, double[].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", Double[][].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", List.class, Double[].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, Double.class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", String[][].class), "[['1.0','2.0'],['3.0']]");
+		assertJson(parse(s, "1,2|3", List.class, String[].class), "[['1.0','2.0'],['3.0']]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, String.class), "[['1.0','2.0'],['3.0']]");
+		assertJson(parse(s, "1,2|3", Object[][].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", List.class, Object[].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, Object.class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s,  "1,2|3", G1[][].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s,  "1,2|3", List.class, G1[].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s,  "1,2|3", List.class, List.class, G1.class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", G2[].class), "['G2-[1.0,2.0]','G2-[3.0]']");
+		assertJson(parse(s, "1,2|3", List.class, G2.class), "['G2-[1.0,2.0]','G2-[3.0]']");
 	}
 
 	@Test void g04_numberType_double() throws Exception {
 		HttpPartSchema s = T_DOUBLE;
-		assertObject(parse(s, "1", float.class)).asJson().is("1.0");
-		assertObject(parse(s, "1", Float.class)).asJson().is("1.0");
-		assertObject(parse(s, "1", double.class)).asJson().is("1.0");
-		assertObject(parse(s, "1", Double.class)).asJson().is("1.0");
-		assertObject(parse(s, "1", String.class)).asJson().is("'1.0'");
+		assertJson(parse(s, "1", float.class), "1.0");
+		assertJson(parse(s, "1", Float.class), "1.0");
+		assertJson(parse(s, "1", double.class), "1.0");
+		assertJson(parse(s, "1", Double.class), "1.0");
+		assertJson(parse(s, "1", String.class), "'1.0'");
 		Object o = parse(s, "1", Object.class);
-		assertObject(o).asJson().is("1.0");
+		assertJson(o, "1.0");
 		assertObject(o).isType(Double.class);
-		assertObject(parse(s,  "1", G3.class)).asJson().is("1.0");
+		assertJson(parse(s,  "1", G3.class), "1.0");
 	}
 
 	@Test void g05_numberType_double_2d() throws Exception {
 		HttpPartSchema s = tArray(tDouble()).build();
-		assertObject(parse(s, "1,2", float[].class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s, "1,2", Float[].class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s, "1,2", List.class, Float.class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s, "1,2", double[].class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s, "1,2", Double[].class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s, "1,2", List.class, Double.class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s, "1,2", String[].class)).asJson().is("['1.0','2.0']");
-		assertObject(parse(s, "1,2", List.class, String.class)).asJson().is("['1.0','2.0']");
-		assertObject(parse(s, "1,2", Object[].class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s, "1,2", List.class, Object.class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s,  "1,2", G3[].class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s,  "1,2", List.class, G3.class)).asJson().is("[1.0,2.0]");
-		assertObject(parse(s,  "1,2", G4.class)).asJson().is("'G4-[1.0,2.0]'");
+		assertJson(parse(s, "1,2", float[].class), "[1.0,2.0]");
+		assertJson(parse(s, "1,2", Float[].class), "[1.0,2.0]");
+		assertJson(parse(s, "1,2", List.class, Float.class), "[1.0,2.0]");
+		assertJson(parse(s, "1,2", double[].class), "[1.0,2.0]");
+		assertJson(parse(s, "1,2", Double[].class), "[1.0,2.0]");
+		assertJson(parse(s, "1,2", List.class, Double.class), "[1.0,2.0]");
+		assertJson(parse(s, "1,2", String[].class), "['1.0','2.0']");
+		assertJson(parse(s, "1,2", List.class, String.class), "['1.0','2.0']");
+		assertJson(parse(s, "1,2", Object[].class), "[1.0,2.0]");
+		assertJson(parse(s, "1,2", List.class, Object.class), "[1.0,2.0]");
+		assertJson(parse(s,  "1,2", G3[].class), "[1.0,2.0]");
+		assertJson(parse(s,  "1,2", List.class, G3.class), "[1.0,2.0]");
+		assertJson(parse(s,  "1,2", G4.class), "'G4-[1.0,2.0]'");
 	}
 
 	@Test void g06_numberType_double_3d() throws Exception {
 		HttpPartSchema s = tArrayPipes(tArray(tDouble())).build();
-		assertObject(parse(s, "1,2|3", float[][].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", List.class, float[].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", Float[][].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", List.class, Float[].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, Float.class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", double[][].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", List.class, double[].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", Double[][].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", List.class, Double[].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, Double.class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", String[][].class)).asJson().is("[['1.0','2.0'],['3.0']]");
-		assertObject(parse(s, "1,2|3", List.class, String[].class)).asJson().is("[['1.0','2.0'],['3.0']]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, String.class)).asJson().is("[['1.0','2.0'],['3.0']]");
-		assertObject(parse(s, "1,2|3", Object[][].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", List.class, Object[].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", List.class, List.class, Object.class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s,  "1,2|3", G3[][].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s,  "1,2|3", List.class, G3[].class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s,  "1,2|3", List.class, List.class, G3.class)).asJson().is("[[1.0,2.0],[3.0]]");
-		assertObject(parse(s, "1,2|3", G4[].class)).asJson().is("['G4-[1.0,2.0]','G4-[3.0]']");
-		assertObject(parse(s, "1,2|3", List.class, G4.class)).asJson().is("['G4-[1.0,2.0]','G4-[3.0]']");
+		assertJson(parse(s, "1,2|3", float[][].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", List.class, float[].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", Float[][].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", List.class, Float[].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, Float.class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", double[][].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", List.class, double[].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", Double[][].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", List.class, Double[].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, Double.class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", String[][].class), "[['1.0','2.0'],['3.0']]");
+		assertJson(parse(s, "1,2|3", List.class, String[].class), "[['1.0','2.0'],['3.0']]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, String.class), "[['1.0','2.0'],['3.0']]");
+		assertJson(parse(s, "1,2|3", Object[][].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", List.class, Object[].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", List.class, List.class, Object.class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s,  "1,2|3", G3[][].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s,  "1,2|3", List.class, G3[].class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s,  "1,2|3", List.class, List.class, G3.class), "[[1.0,2.0],[3.0]]");
+		assertJson(parse(s, "1,2|3", G4[].class), "['G4-[1.0,2.0]','G4-[3.0]']");
+		assertJson(parse(s, "1,2|3", List.class, G4.class), "['G4-[1.0,2.0]','G4-[3.0]']");
 	}
 
 
@@ -895,39 +895,39 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 
 	@Test void h01_objectType() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().type("object").build();
-		assertObject(parse(s, "f=1", H1.class)).asJson().is("{f:1}");
-		assertObject(parse(s, "f=1", JsonMap.class)).asJson().is("{f:'1'}");
+		assertJson(parse(s, "f=1", H1.class), "{f:1}");
+		assertJson(parse(s, "f=1", JsonMap.class), "{f:'1'}");
 		Object o = parse(s, "f=1", Object.class);
-		assertObject(o).asJson().is("{f:'1'}");
+		assertJson(o, "{f:'1'}");
 		assertObject(o).isType(JsonMap.class);
 	}
 
 	@Test void h02_objectType_2d() throws Exception {
 		HttpPartSchema s = tArrayUon(tObject()).build();
-		assertObject(parse(s, "@((f=1),(f=2))", H1[].class)).asJson().is("[{f:1},{f:2}]");
-		assertObject(parse(s, "@((f=1),(f=2))", List.class, H1.class)).asJson().is("[{f:1},{f:2}]");
-		assertObject(parse(s, "@((f=1),(f=2))", JsonMap[].class)).asJson().is("[{f:1},{f:2}]");
-		assertObject(parse(s, "@((f=1),(f=2))", List.class, JsonMap.class)).asJson().is("[{f:1},{f:2}]");
-		assertObject(parse(s, "@((f=1),(f=2))", Object[].class)).asJson().is("[{f:1},{f:2}]");
-		assertObject(parse(s, "@((f=1),(f=2))", List.class, Object.class)).asJson().is("[{f:1},{f:2}]");
+		assertJson(parse(s, "@((f=1),(f=2))", H1[].class), "[{f:1},{f:2}]");
+		assertJson(parse(s, "@((f=1),(f=2))", List.class, H1.class), "[{f:1},{f:2}]");
+		assertJson(parse(s, "@((f=1),(f=2))", JsonMap[].class), "[{f:1},{f:2}]");
+		assertJson(parse(s, "@((f=1),(f=2))", List.class, JsonMap.class), "[{f:1},{f:2}]");
+		assertJson(parse(s, "@((f=1),(f=2))", Object[].class), "[{f:1},{f:2}]");
+		assertJson(parse(s, "@((f=1),(f=2))", List.class, Object.class), "[{f:1},{f:2}]");
 		Object o = parse(s, "@((f=1),(f=2))", Object.class);
-		assertObject(o).asJson().is("[{f:1},{f:2}]");
+		assertJson(o, "[{f:1},{f:2}]");
 		assertObject(o).isType(JsonList.class);
 	}
 
 	@Test void h03_objectType_3d() throws Exception {
 		HttpPartSchema s = tArrayUon(tArray(tObject())).build();
-		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", H1[][].class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
-		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, H1[].class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
-		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, H1.class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
-		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", JsonMap[][].class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
-		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, JsonMap[].class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
-		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, JsonMap.class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
-		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", Object[][].class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
-		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, Object[].class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
-		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, Object.class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
+		assertJson(parse(s, "@(@((f=1),(f=2)),@((f=3)))", H1[][].class), "[[{f:1},{f:2}],[{f:3}]]");
+		assertJson(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, H1[].class), "[[{f:1},{f:2}],[{f:3}]]");
+		assertJson(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, H1.class), "[[{f:1},{f:2}],[{f:3}]]");
+		assertJson(parse(s, "@(@((f=1),(f=2)),@((f=3)))", JsonMap[][].class), "[[{f:1},{f:2}],[{f:3}]]");
+		assertJson(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, JsonMap[].class), "[[{f:1},{f:2}],[{f:3}]]");
+		assertJson(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, JsonMap.class), "[[{f:1},{f:2}],[{f:3}]]");
+		assertJson(parse(s, "@(@((f=1),(f=2)),@((f=3)))", Object[][].class), "[[{f:1},{f:2}],[{f:3}]]");
+		assertJson(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, Object[].class), "[[{f:1},{f:2}],[{f:3}]]");
+		assertJson(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, Object.class), "[[{f:1},{f:2}],[{f:3}]]");
 		Object o =  parse(s, "@(@((f=1),(f=2)),@((f=3)))", Object.class);
-		assertObject(o).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
+		assertJson(o, "[[{f:1},{f:2}],[{f:3}]]");
 		assertObject(o).isType(JsonList.class);
 	}
 
@@ -955,7 +955,7 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		String in = "f01=foo,f02="+base64Encode(foob)+",f04=2012-12-21T12:34:56Z,f05="+toHex(foob)+",f06="+toSpacedHex(foob)+",f07=foo,f08=1,f09=1,f10=1,f11=1,f12=true,f99=1";
 
 		H2 h2 = parse(s, in, H2.class);
-		assertObject(h2).asJson().is("{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}");
+		assertJson(h2, "{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}");
 		assertObject(h2.f01).isType(String.class);
 		assertObject(h2.f02).isType(byte[].class);
 		assertObject(h2.f04).isType(GregorianCalendar.class);
@@ -970,7 +970,7 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		assertObject(h2.f99).isType(Integer.class);
 
 		JsonMap om = parse(s, in, JsonMap.class);
-		assertObject(om).asJson().is("{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}");
+		assertJson(om, "{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}");
 		assertObject(om.get("f01")).isType(String.class);
 		assertObject(om.get("f02")).isType(byte[].class);
 		assertObject(om.get("f04")).isType(GregorianCalendar.class);
@@ -985,7 +985,7 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		assertObject(om.get("f99")).isType(Integer.class);
 
 		om = (JsonMap)parse(s, in, Object.class);
-		assertObject(om).asJson().is("{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}");
+		assertJson(om, "{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}");
 		assertObject(om.get("f01")).isType(String.class);
 		assertObject(om.get("f02")).isType(byte[].class);
 		assertObject(om.get("f04")).isType(GregorianCalendar.class);
@@ -1020,13 +1020,13 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		String in = "f01=foo,f02="+base64Encode(foob)+",f04=2012-12-21T12:34:56Z,f05="+toHex(foob)+",f06="+toSpacedHex(foob)+",f07=foo,f08=1,f09=1,f10=1,f11=1,f12=true,f99=1";
 
 		H2 h2 = parse(s, in, H2.class);
-		assertObject(h2).asJson().is("{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}");
+		assertJson(h2, "{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}");
 
 		JsonMap om = parse(s, in, JsonMap.class);
-		assertObject(om).asJson().is("{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}");
+		assertJson(om, "{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}");
 
 		om = (JsonMap)parse(s, in, Object.class);
-		assertObject(om).asJson().is("{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}");
+		assertJson(om, "{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}");
 	}
 
 	@Test void h06_objectType_arrayProperties_pipes() throws Exception {
@@ -1049,12 +1049,12 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		String in = "f01=foo|bar,f02="+base64Encode(foob)+"|"+base64Encode(barb)+",f04=2012-12-21T12:34:56Z|2012-12-21T12:34:56Z,f05="+toHex(foob)+"|"+toHex(barb)+",f06="+toSpacedHex(foob)+"|"+toSpacedHex(barb)+",f07=foo|bar,f08=1|2,f09=1|2,f10=1|2,f11=1|2,f12=true|true,f99=1|2";
 
 		H2 h2 = parse(s, in, H2.class);
-		assertObject(h2).asJson().is("{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}");
+		assertJson(h2, "{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}");
 
 		JsonMap om = parse(s, in, JsonMap.class);
-		assertObject(om).asJson().is("{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}");
+		assertJson(om, "{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}");
 
 		om = (JsonMap)parse(s, in, Object.class);
-		assertObject(om).asJson().is("{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}");
+		assertJson(om, "{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}");
 	}
 }

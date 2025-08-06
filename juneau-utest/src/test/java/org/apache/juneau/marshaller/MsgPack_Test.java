@@ -41,8 +41,8 @@ class MsgPack_Test extends SimpleTestBase {
 
 		assertEquals(expected1, MsgPack.to(in1, String.class));
 		assertEquals(expected1, MsgPack.to(fromHex(in1), String.class));
-		assertObject(MsgPack.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
-		assertObject(MsgPack.to(fromHex(in2), Map.class, String.class, String.class)).asJson().is(expected2);
+		assertJson(MsgPack.to(in2, Map.class, String.class, String.class), expected2);
+		assertJson(MsgPack.to(fromHex(in2), Map.class, String.class, String.class), expected2);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

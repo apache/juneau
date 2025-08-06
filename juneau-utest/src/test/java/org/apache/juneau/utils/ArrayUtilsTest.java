@@ -29,19 +29,19 @@ class ArrayUtilsTest extends SimpleTestBase {
 		String[] s = {};
 
 		s = append(s, "a", "b");
-		assertObject(s).asJson().is("['a','b']");
+		assertArray(s, "a,b");
 
 		s = append(s, "c");
-		assertObject(s).asJson().is("['a','b','c']");
+		assertArray(s, "a,b,c");
 
 		s = append(s);
-		assertObject(s).asJson().is("['a','b','c']");
+		assertArray(s, "a,b,c");
 
 		Object[] o = append((Object[])null);
-		assertObject(o).asJson().is("[]");
+		assertArray(o);
 
 		s = append((String[])null, "a", "b");
-		assertObject(s).asJson().is("['a','b']");
+		assertArray(s, "a,b");
 	}
 
 	//====================================================================================================
@@ -66,11 +66,11 @@ class ArrayUtilsTest extends SimpleTestBase {
 	@Test void testCombine() {
 		String[] s1 = {"a"}, s2 = {"b"};
 
-		assertObject(combine(s1, s2)).asJson().is("['a','b']");
-		assertObject(combine(s1)).asJson().is("['a']");
-		assertObject(combine(s2)).asJson().is("['b']");
-		assertObject(combine(s1,null)).asJson().is("['a']");
-		assertObject(combine(null,s2)).asJson().is("['b']");
+		assertArray(combine(s1, s2), "a,b");
+		assertArray(combine(s1), "a");
+		assertArray(combine(s2), "b");
+		assertArray(combine(s1,null), "a");
+		assertArray(combine(null,s2), "b");
 		assertNull(combine(null,null));
 		assertNull(combine());
 	}

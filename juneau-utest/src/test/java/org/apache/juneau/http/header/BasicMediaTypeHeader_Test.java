@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -85,8 +84,8 @@ class BasicMediaTypeHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_getSubTypes() {
-		assertObject(contentType("text/foo+bar").getSubTypes()).asJson().is("['foo','bar']");
-		assertObject(new ContentType((String)null).getSubTypes()).asJson().is("['*']");
+		assertJson(contentType("text/foo+bar").getSubTypes(), "['foo','bar']");
+		assertJson(new ContentType((String)null).getSubTypes(), "['*']");
 	}
 
 	@Test void a06_isMeta() {
@@ -101,8 +100,8 @@ class BasicMediaTypeHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a08_getParameters() {
-		assertObject(contentType("text/foo;x=1;y=2").getParameters()).asJson().is("[{name:'x',value:'1'},{name:'y',value:'2'}]");
-		assertObject(new ContentType((String)null).getParameters()).asJson().is("[]");
+		assertJson(contentType("text/foo;x=1;y=2").getParameters(), "[{name:'x',value:'1'},{name:'y',value:'2'}]");
+		assertJson(new ContentType((String)null).getParameters(), "[]");
 	}
 
 	@Test void a09_getParameter() {

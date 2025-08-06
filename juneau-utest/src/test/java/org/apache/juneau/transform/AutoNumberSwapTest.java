@@ -187,14 +187,14 @@ public class AutoNumberSwapTest {
 		assertObject(find(A13.class).swap(null, new A13())).asJson().is("1");
 	}
 
-	@Test(expected = SerializeException.class)
+	@Test
 	public void a14_swap_serializeException() throws Exception {
-		find(A14.class).swap(null, null);
+		assertThrows(SerializeException.class, ()->find(A14.class).swap(null, null));
 	}
 
-	@Test(expected = SerializeException.class)
+	@Test
 	public void a15_swap_runtimeException() throws Exception {
-		find(A15.class).swap(null, null);
+		assertThrows(SerializeException.class, ()->find(A15.class).swap(null, null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -403,9 +403,9 @@ public class AutoNumberSwapTest {
 		assertNotNull(find(B14.class).unswap(null, 1, null));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void b15_unswap_noMethod() throws Exception {
-		find(B15.class).unswap(null, 1, null);
+		assertThrows(ParseException.class, ()->find(B15.class).unswap(null, 1, null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -587,9 +587,9 @@ public class AutoNumberSwapTest {
 		assertNotNull(find(C12.class).unswap(null, 1, null));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void c13_unswapConstructor_noConstructor() throws Exception {
-		find(C13.class).unswap(null, 1, null);
+		assertThrows(ParseException.class, ()->find(C13.class).unswap(null, 1, null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -781,39 +781,39 @@ public class AutoNumberSwapTest {
 		}
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void f01_ignoreUnswapMethod_beanIgnore() throws Exception {
-		find(F01.class).unswap(null, null, null);
+		assertThrows(ParseException.class, ()->find(F01.class).unswap(null, null, null));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void f01c_ignoreUnswapMethod_beanIgnore_usingConfig() throws Exception {
-		find(bc(F01Config.class), F01c.class).unswap(null, null, null);
+		assertThrows(ParseException.class, ()->find(bc(F01Config.class), F01c.class).unswap(null, null, null));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void f02_ignoreUnswapMethod_deprecated() throws Exception {
-		find(F02.class).unswap(null, null, null);
+		assertThrows(ParseException.class, ()->find(F02.class).unswap(null, null, null));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void f03_ignoreUnswapMethod_wrongReturnType() throws Exception {
-		find(F03.class).unswap(null, null, null);
+		assertThrows(ParseException.class, ()->find(F03.class).unswap(null, null, null));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void f04_ignoreUnswapMethod_wrongParameters() throws Exception {
-		find(F04.class).unswap(null, null, null);
+		assertThrows(ParseException.class, ()->find(F04.class).unswap(null, null, null));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void f05_ignoreUnswapMethod_notStatic() throws Exception {
-		find(F05.class).unswap(null, null, null);
+		assertThrows(ParseException.class, ()->find(F05.class).unswap(null, null, null));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void f06_ignoreUnswapMethod_wrongName() throws Exception {
-		find(F06.class).unswap(null, null, null);
+		assertThrows(ParseException.class, ()->find(F06.class).unswap(null, null, null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -846,18 +846,18 @@ public class AutoNumberSwapTest {
 		}
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void g01_ignoreUnswapConstructor_beanIgnore() throws Exception {
-		find(G01.class).unswap(null, null, null);
+		assertThrows(ParseException.class, ()->find(G01.class).unswap(null, null, null));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void g01c_ignoreUnswapConstructor_beanIgnore_usingConfig() throws Exception {
-		find(bc(G01Config.class), G01c.class).unswap(null, null, null);
+		assertThrows(ParseException.class, ()->find(bc(G01Config.class), G01c.class).unswap(null, null, null));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void g02_ignoreUnswapConstructor_deprecated() throws Exception {
-		find(G02.class).unswap(null, null, null);
+		assertThrows(ParseException.class, ()->find(G02.class).unswap(null, null, null));
 	}
 }

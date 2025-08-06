@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import java.util.*;
@@ -125,16 +124,16 @@ class Swagger_FormData_Test extends SimpleTestBase {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","formData","F");
-		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'string'}");
+		assertJson(x, "{'in':'formData',name:'F',type:'string'}");
 
 		x = s.getParameterInfo("/b","put","formData","F");
-		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'object',schema:{properties:{f1:{type:'string'}}}}");
+		assertJson(x, "{'in':'formData',name:'F',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 
 		x = s.getParameterInfo("/c","post","formData","F");
-		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'array',items:{type:'string'}}");
+		assertJson(x, "{'in':'formData',name:'F',type:'array',items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d","delete","formData","F");
-		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'string'}");
+		assertJson(x, "{'in':'formData',name:'F',type:'string'}");
 	}
 
 	@Rest
@@ -225,21 +224,21 @@ class Swagger_FormData_Test extends SimpleTestBase {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","formData","F");
-		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'string'}");
+		assertJson(x, "{'in':'formData',name:'F',type:'string'}");
 
 		x = s.getParameterInfo("/b","put","formData","F");
-		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'object',schema:{properties:{f1:{type:'string'}}}}");
+		assertJson(x, "{'in':'formData',name:'F',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 
 		x = s.getParameterInfo("/c","post","formData","F");
-		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'array',items:{type:'string'}}");
+		assertJson(x, "{'in':'formData',name:'F',type:'array',items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d","delete","formData","F");
-		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'string'}");
+		assertJson(x, "{'in':'formData',name:'F',type:'string'}");
 
 		x = s.getParameterInfo("/e","get","formData","F");
-		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'integer',format:'int32'}");
+		assertJson(x, "{'in':'formData',name:'F',type:'integer',format:'int32'}");
 
 		x = s.getParameterInfo("/f","get","formData","F");
-		assertObject(x).asJson().is("{'in':'formData',name:'F',type:'boolean'}");
+		assertJson(x, "{'in':'formData',name:'F',type:'boolean'}");
 	}
 }

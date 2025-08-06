@@ -36,10 +36,10 @@ public class FilteredMapTest extends SimpleTestBase {
 
 		FilteredMap<String,Object> m2 = new FilteredMap<>(cm, m, new String[]{"a"});
 
-		assertObject(m2).asJson().is("{a:'1'}");
+		assertJson(m2, "{a:'1'}");
 
 		m2.entrySet().iterator().next().setValue("3");
-		assertObject(m2).asJson().is("{a:'3'}");
+		assertJson(m2, "{a:'3'}");
 
 		assertThrown(()->new FilteredMap<>(cm2, null, new String[0])).isType(IllegalArgumentException.class);
 		assertThrown(()->new FilteredMap<>(cm, m, null)).isType(IllegalArgumentException.class);

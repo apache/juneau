@@ -58,6 +58,14 @@ public abstract class SimpleTestBase {
 	}
 
 	/**
+	 * Asserts the JSON5 representation of the specified object.
+	 */
+	protected static void assertTypeAndJson(Object value, Class<?> c, String json) {
+		assertTrue(c.isInstance(value), "Incorrect type.");
+		assertEquals(json, Json5.DEFAULT.write(value));
+	}
+
+	/**
 	 * Asserts the serialized representation of the specified object.
 	 */
 	protected static void assertSerialized(Object value, WriterSerializer s, String json) {

@@ -1844,8 +1844,8 @@ class BeanMapTest extends SimpleTestBase {
 	// testBeanPropertyOrder
 	//====================================================================================================
 	@Test void testBeanPropertyOrder() {
-		assertObject(new V2()).asJson().is("{a1:'1',a2:'2',a3:'3',a4:'4'}");
-		assertObject(new V3()).asJson().is("{a3:'3',a4:'4',a5:'5',a6:'6'}");
+		assertJson(new V2(), "{a1:'1',a2:'2',a3:'3',a4:'4'}");
+		assertJson(new V3(), "{a3:'3',a4:'4',a5:'5',a6:'6'}");
 	}
 
 	public static class V {
@@ -1993,7 +1993,7 @@ class BeanMapTest extends SimpleTestBase {
 		BeanMap<AA> bm = BeanContext.DEFAULT.toBeanMap(aa);
 
 		bm.put("a", alist("x"));
-		assertObject(aa.a).asJson().is("['x']");
+		assertJson(aa.a, "['x']");
 	}
 
 	public static class AA {

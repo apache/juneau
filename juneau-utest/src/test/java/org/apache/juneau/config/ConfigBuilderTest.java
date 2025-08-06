@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.junit.Assert.*;
@@ -50,10 +49,10 @@ class ConfigBuilderTest extends SimpleTestBase {
 		assertFalse(f.exists());
 
 		cf.commit();
-		assertObject(cf.toMap()).asJson().is("{'':{},Test:{A:'a'}}");
+		assertJson(cf.toMap(), "{'':{},Test:{A:'a'}}");
 
 		String nl = System.getProperty("line.separator");
 		cf = cf.load("[Test]"+nl+"A = b"+nl, true);
-		assertObject(cf.toMap()).asJson().is("{'':{},Test:{A:'b'}}");
+		assertJson(cf.toMap(), "{'':{},Test:{A:'b'}}");
 	}
 }

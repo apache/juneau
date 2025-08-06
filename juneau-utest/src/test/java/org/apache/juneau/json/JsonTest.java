@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import java.util.*;
 
@@ -98,7 +97,7 @@ public class JsonTest  extends SimpleTestBase{
 		for (String attr : new String[]{"","true","false","null","try","123","1x","-123",".123"}) {
 			m.clear();
 			m.put(attr,1);
-			assertObject(m).asJson().is("{'"+attr+"':1}");
+			assertJson(m, "{'"+attr+"':1}");
 		}
 	}
 

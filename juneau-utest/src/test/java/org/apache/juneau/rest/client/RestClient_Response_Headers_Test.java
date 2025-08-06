@@ -106,7 +106,7 @@ class RestClient_Response_Headers_Test extends SimpleTestBase {
 		assertEquals(123, m1.get().intValue());
 
 		List<Integer> l = (List<Integer>) checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(LinkedList.class,Integer.class).get();
-		assertObject(l).asJson().is("[1,2]");
+		assertJson(l, "[1,2]");
 
 		Value<Integer> m2 = Value.empty();
 		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(m2,LinkedList.class,Integer.class);
@@ -115,16 +115,16 @@ class RestClient_Response_Headers_Test extends SimpleTestBase {
 		ClassMeta<Integer> cm2 = BeanContext.DEFAULT.getClassMeta(Integer.class);
 
 		l = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(cm1).get();
-		assertObject(l).asJson().is("[1,2]");
+		assertJson(l, "[1,2]");
 
 		Value<LinkedList<Integer>> m3 = Value.empty();
 		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(m3,cm1);
-		assertObject(m3.get()).asJson().is("[1,2]");
+		assertJson(m3.get(), "[1,2]");
 
 		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Foo").as(m2,cm1)).asMessages().isAny(contains("For input string:"));
 
 		Optional<List<Integer>> o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(LinkedList.class,Integer.class);
-		assertObject(o1.get()).asJson().is("[1,2]");
+		assertJson(o1.get(), "[1,2]");
 		o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Bar").as(LinkedList.class,Integer.class);
 		assertFalse(o1.isPresent());
 

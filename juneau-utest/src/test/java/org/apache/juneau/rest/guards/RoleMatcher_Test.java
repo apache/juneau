@@ -1099,48 +1099,48 @@ public class RoleMatcher_Test {
 	// Error conditions
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m01_startsWithOp() throws Exception {
-		new RoleMatcher("&foo");
+		assertThrows(ParseException.class, ()->new RoleMatcher("&foo"));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m02_noOperator() throws Exception {
-		new RoleMatcher("foo bar");
+		assertThrows(ParseException.class, ()->new RoleMatcher("foo bar"));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m03_unmatchedParentheses() throws Exception {
-		new RoleMatcher("(foo");
+		assertThrows(ParseException.class, ()->new RoleMatcher("(foo"));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m04a_danglingExpression_1() throws Exception {
-		new RoleMatcher("foo &");
+		assertThrows(ParseException.class, ()->new RoleMatcher("foo &"));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m04b_danglingExpression_2() throws Exception {
-		new RoleMatcher("foo ||");
+		assertThrows(ParseException.class, ()->new RoleMatcher("foo ||"));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m04c_danglingExpression_3() throws Exception {
-		new RoleMatcher("foo ,");
+		assertThrows(ParseException.class, ()->new RoleMatcher("foo ,"));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m04d_danglingExpression_4() throws Exception {
-		new RoleMatcher("foo & ");
+		assertThrows(ParseException.class, ()->new RoleMatcher("foo & "));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m04e_danglingExpression_5() throws Exception {
-		new RoleMatcher("foo || ");
+		assertThrows(ParseException.class, ()->new RoleMatcher("foo || "));
 	}
 
-	@Test(expected = ParseException.class)
+	@Test
 	public void m04f_danglingExpression_6() throws Exception {
-		new RoleMatcher("foo , ");
+		assertThrows(ParseException.class, ()->new RoleMatcher("foo , "));
 	}
 }

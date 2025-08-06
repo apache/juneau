@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -111,7 +110,7 @@ class BeanFilterTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void testFilteredWithStopClass() {
 		C3 c3 = new C3();
-		assertObject(c3).asJson().is("{f3:3,p3:3}");
+		assertJson(c3, "{f3:3,p3:3}");
 	}
 
 	public class C1 {
@@ -132,7 +131,7 @@ class BeanFilterTest extends SimpleTestBase {
 
 	@Test void testFilterWithStopClassOnParentClass() {
 		D3 d3 = new D3();
-		assertObject(d3).asJson().is("{f3:3,p3:3}");
+		assertJson(d3, "{f3:3,p3:3}");
 	}
 
 	public class D1 {
@@ -153,7 +152,7 @@ class BeanFilterTest extends SimpleTestBase {
 
 	@Test void testFilteredWithStopClassOnParentClassWithOverriddenAnnotation() {
 		E3 e3 = new E3();
-		assertObject(e3).asJson().is("{f3:3,p3:3}");
+		assertJson(e3, "{f3:3,p3:3}");
 	}
 
 	public class E1 {
@@ -175,7 +174,7 @@ class BeanFilterTest extends SimpleTestBase {
 
 	@Test void testFilteredWithStopClassesAtMulitpleLevels() {
 		F3 e3 = new F3();
-		assertObject(e3).asJson().is("{f3:3,p3:3}");
+		assertJson(e3, "{f3:3,p3:3}");
 	}
 
 	@Bean(stopClass=F1.class)

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
@@ -133,7 +132,7 @@ public class HttpPartSchema_Response_Test extends SimpleTestBase {
 		assertTrue(s.isExclusiveMaximum());
 		assertTrue(s.isExclusiveMinimum());
 		assertTrue(s.isUniqueItems());
-		assertObject(s.getEnum()).asJson().is("['e1','e2']");
+		assertJson(s.getEnum(), "['e1','e2']");
 		assertEquals("c1\nc2", s.getDefault());
 
 		HttpPartSchema items = s.getItems();
@@ -151,7 +150,7 @@ public class HttpPartSchema_Response_Test extends SimpleTestBase {
 		assertFalse(items.isExclusiveMaximum());
 		assertFalse(items.isExclusiveMinimum());
 		assertFalse(items.isUniqueItems());
-		assertObject(items.getEnum()).asJson().is("['e3','e4']");
+		assertJson(items.getEnum(), "['e3','e4']");
 		assertEquals("c3\nc4", items.getDefault());
 
 		items = items.getItems();
@@ -169,7 +168,7 @@ public class HttpPartSchema_Response_Test extends SimpleTestBase {
 		assertTrue(items.isExclusiveMaximum());
 		assertTrue(items.isExclusiveMinimum());
 		assertTrue(items.isUniqueItems());
-		assertObject(items.getEnum()).asJson().is("['e5','e6']");
+		assertJson(items.getEnum(), "['e5','e6']");
 		assertEquals("c5\nc6", items.getDefault());
 
 		items = items.getItems();
@@ -187,7 +186,7 @@ public class HttpPartSchema_Response_Test extends SimpleTestBase {
 		assertFalse(items.isExclusiveMaximum());
 		assertFalse(items.isExclusiveMinimum());
 		assertFalse(items.isUniqueItems());
-		assertObject(items.getEnum()).asJson().is("['e7','e8']");
+		assertJson(items.getEnum(), "['e7','e8']");
 		assertEquals("c7\nc8", items.getDefault());
 	}
 

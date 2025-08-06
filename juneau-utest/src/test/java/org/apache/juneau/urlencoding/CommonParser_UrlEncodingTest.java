@@ -170,6 +170,6 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 
 		String in =  "0=foo&1=bar";
 		l = p2.parse(in, LinkedList.class, String.class);
-		assertObject(l).asJson().is("['foo','bar']");
+		assertList(l, "foo,bar");
 	}
-}
+}

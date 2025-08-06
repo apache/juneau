@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshaller;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -40,8 +39,8 @@ class Uon_Test extends SimpleTestBase {
 
 		assertEquals(expected1, Uon.to(in1, String.class));
 		assertEquals(expected1, Uon.to(stringReader(in1), String.class));
-		assertObject(Uon.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
-		assertObject(Uon.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
+		assertJson(Uon.to(in2, Map.class, String.class, String.class), expected2);
+		assertJson(Uon.to(stringReader(in2), Map.class, String.class, String.class), expected2);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

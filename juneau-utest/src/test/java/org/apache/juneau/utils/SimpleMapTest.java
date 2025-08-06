@@ -27,12 +27,12 @@ class SimpleMapTest extends SimpleTestBase {
 		assertEquals(2, m.size());
 		assertEquals("A", m.get("a"));
 		assertEquals("B", m.get("b"));
-		assertObject(m).asJson().is("{a:'A',b:'B'}");
-		assertObject(m.keySet()).asJson().is("['a','b']");
+		assertJson(m, "{a:'A',b:'B'}");
+		assertJson(m.keySet(), "['a','b']");
 		m.put("a", "1");
-		assertObject(m).asJson().is("{a:'1',b:'B'}");
+		assertJson(m, "{a:'1',b:'B'}");
 		m.entrySet().iterator().next().setValue("2");
-		assertObject(m).asJson().is("{a:'2',b:'B'}");
+		assertJson(m, "{a:'2',b:'B'}");
 		assertThrown(()->m.put("c", "1")).isType(IllegalArgumentException.class);
 
 		assertNull(m.get("c"));

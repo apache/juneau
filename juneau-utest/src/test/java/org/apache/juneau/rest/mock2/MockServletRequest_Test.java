@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock2;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.*;
@@ -92,19 +91,17 @@ public class MockServletRequest_Test extends SimpleTestBase {
 		MockServletRequest req = MockServletRequest.create("GET", "/foo?bar=baz&bing=qux");
 
 		assertEquals("bar=baz&bing=qux", req.getQueryString());
-		assertObject(req.getParameterMap()).asJson().is("{bar:['baz'],bing:['qux']}");
-		assertObject(req.getParameter("bar")).asJson().is("'baz'");
-		assertObject(req.getParameterNames()).asJson().is("['bar','bing']");
-		assertObject(req.getParameterValues("bar")).asJson().is("['baz']");
+		assertJson(req.getParameterMap(), "{bar:['baz'],bing:['qux']}");
+		assertEquals("baz", req.getParameter("bar"));		assertJson(req.getParameterNames(), "['bar','bing']");
+		assertJson(req.getParameterValues("bar"), "['baz']");
 	}
 
 	@Test void b02_query_multivalues() {
 		MockServletRequest req = MockServletRequest.create("GET", "/foo?bar=baz&bar=bing");
 
 		assertEquals("bar=baz&bar=bing", req.getQueryString());
-		assertObject(req.getParameterMap()).asJson().is("{bar:['baz','bing']}");
-		assertObject(req.getParameter("bar")).asJson().is("'baz'");
-		assertObject(req.getParameterNames()).asJson().is("['bar']");
-		assertObject(req.getParameterValues("bar")).asJson().is("['baz','bing']");
+		assertJson(req.getParameterMap(), "{bar:['baz','bing']}");
+		assertEquals("baz", req.getParameter("bar"));		assertJson(req.getParameterNames(), "['bar']");
+		assertJson(req.getParameterValues("bar"), "['baz','bing']");
 	}
 }

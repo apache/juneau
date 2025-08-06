@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshaller;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -39,8 +38,8 @@ class Xml_Test extends SimpleTestBase {
 
 		assertEquals(expected1, Xml.to(in1, String.class));
 		assertEquals(expected1, Xml.to(stringReader(in1), String.class));
-		assertObject(Xml.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
-		assertObject(Xml.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
+		assertJson(Xml.to(in2, Map.class, String.class, String.class), expected2);
+		assertJson(Xml.to(stringReader(in2), Map.class, String.class, String.class), expected2);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

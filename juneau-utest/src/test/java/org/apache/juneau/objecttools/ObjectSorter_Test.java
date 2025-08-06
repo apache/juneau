@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
@@ -37,14 +36,14 @@ class ObjectSorter_Test extends SimpleTestBase {
 	@Test void a02_emptySort() {
 		Object in = set(A.create("c"),A.create("a"),A.create("b"));
 		SortArgs sa = SortArgs.create("");
-		assertObject(os.run(bs, in, sa)).asJson().is("[{f:'c'},{f:'a'},{f:'b'}]");
-		assertObject(os.run(in, "")).asJson().is("[{f:'c'},{f:'a'},{f:'b'}]");
+		assertJson(os.run(bs, in, sa), "[{f:'c'},{f:'a'},{f:'b'}]");
+		assertJson(os.run(in, ""), "[{f:'c'},{f:'a'},{f:'b'}]");
 	}
 
 	@Test void a03_invalidDataType() {
 		Object in = map("a","b");
 		SortArgs sa = SortArgs.create("x");
-		assertObject(os.run(bs, in, sa)).asJson().is("{a:'b'}");
+		assertJson(os.run(bs, in, sa), "{a:'b'}");
 		assertNull(os.run(in, "x"));
 	}
 
@@ -65,29 +64,29 @@ class ObjectSorter_Test extends SimpleTestBase {
 	@Test void b01_beanArray() {
 		Object in = new A[]{A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d")};
 		SortArgs sa = SortArgs.create("f");
-		assertObject(os.run(bs, in, sa)).asJson().is("[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
-		assertObject(os.run(in, "f")).asJson().is("[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
+		assertJson(os.run(bs, in, sa), "[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
+		assertJson(os.run(in, "f"), "[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
 	}
 
 	@Test void b02_beanArray_reverse() {
 		Object in = new A[]{A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d")};
 		SortArgs sa = SortArgs.create("f-");
-		assertObject(os.run(bs, in, sa)).asJson().is("[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
-		assertObject(os.run(in, "f-")).asJson().is("[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
+		assertJson(os.run(bs, in, sa), "[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
+		assertJson(os.run(in, "f-"), "[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
 	}
 
 	@Test void b03_beanArrayContainingNulls() {
 		Object in = new A[]{A.create("c"),A.create("a"),null,null,A.create("b")};
 		SortArgs sa = SortArgs.create("f");
-		assertObject(os.run(bs, in, sa)).asJson().is("[null,null,{f:'a'},{f:'b'},{f:'c'}]");
-		assertObject(os.run(in, "f")).asJson().is("[null,null,{f:'a'},{f:'b'},{f:'c'}]");
+		assertJson(os.run(bs, in, sa), "[null,null,{f:'a'},{f:'b'},{f:'c'}]");
+		assertJson(os.run(in, "f"), "[null,null,{f:'a'},{f:'b'},{f:'c'}]");
 	}
 
 	@Test void b04_beanArrayContainingDups() {
 		Object in = new A[]{A.create("c"),A.create("a"),null,A.create("a"),A.create("b")};
 		SortArgs sa = SortArgs.create("f");
-		assertObject(os.run(bs, in, sa)).asJson().is("[null,{f:'a'},{f:'a'},{f:'b'},{f:'c'}]");
-		assertObject(os.run(in, "f")).asJson().is("[null,{f:'a'},{f:'a'},{f:'b'},{f:'c'}]");
+		assertJson(os.run(bs, in, sa), "[null,{f:'a'},{f:'a'},{f:'b'},{f:'c'}]");
+		assertJson(os.run(in, "f"), "[null,{f:'a'},{f:'a'},{f:'b'},{f:'c'}]");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -97,29 +96,29 @@ class ObjectSorter_Test extends SimpleTestBase {
 	@Test void c01_beanList() {
 		Object in = list(A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d"));
 		SortArgs sa = SortArgs.create("f");
-		assertObject(os.run(bs, in, sa)).asJson().is("[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
-		assertObject(os.run(in, "f")).asJson().is("[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
+		assertJson(os.run(bs, in, sa), "[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
+		assertJson(os.run(in, "f"), "[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
 	}
 
 	@Test void c02_beanList_reverse() {
 		Object in = list(A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d"));
 		SortArgs sa = SortArgs.create("f-");
-		assertObject(os.run(bs, in, sa)).asJson().is("[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
-		assertObject(os.run(in, "f-")).asJson().is("[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
+		assertJson(os.run(bs, in, sa), "[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
+		assertJson(os.run(in, "f-"), "[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
 	}
 
 	@Test void c03_beanListContainingNull() {
 		Object in = list(A.create("c"),A.create("a"),null,null,A.create("b"));
 		SortArgs sa = SortArgs.create("f");
-		assertObject(os.run(bs, in, sa)).asJson().is("[null,null,{f:'a'},{f:'b'},{f:'c'}]");
-		assertObject(os.run(in, "f")).asJson().is("[null,null,{f:'a'},{f:'b'},{f:'c'}]");
+		assertJson(os.run(bs, in, sa), "[null,null,{f:'a'},{f:'b'},{f:'c'}]");
+		assertJson(os.run(in, "f"), "[null,null,{f:'a'},{f:'b'},{f:'c'}]");
 	}
 
 	@Test void c04_beanListContainingDups() {
 		Object in = list(A.create("c"),A.create("a"),null,A.create("a"),A.create("b"));
 		SortArgs sa = SortArgs.create("f");
-		assertObject(os.run(bs, in, sa)).asJson().is("[null,{f:'a'},{f:'a'},{f:'b'},{f:'c'}]");
-		assertObject(os.run(in, "f")).asJson().is("[null,{f:'a'},{f:'a'},{f:'b'},{f:'c'}]");
+		assertJson(os.run(bs, in, sa), "[null,{f:'a'},{f:'a'},{f:'b'},{f:'c'}]");
+		assertJson(os.run(in, "f"), "[null,{f:'a'},{f:'a'},{f:'b'},{f:'c'}]");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -129,29 +128,29 @@ class ObjectSorter_Test extends SimpleTestBase {
 	@Test void d01_beanSet() {
 		Object in = set(A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d"));
 		SortArgs sa = SortArgs.create("f");
-		assertObject(os.run(bs, in, sa)).asJson().is("[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
-		assertObject(os.run(in, "f")).asJson().is("[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
+		assertJson(os.run(bs, in, sa), "[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
+		assertJson(os.run(in, "f"), "[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
 	}
 
 	@Test void d02_beanSet_reverse() {
 		Object in = set(A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d"));
 		SortArgs sa = SortArgs.create("f-");
-		assertObject(os.run(bs, in, sa)).asJson().is("[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
-		assertObject(os.run(in, "f-")).asJson().is("[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
+		assertJson(os.run(bs, in, sa), "[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
+		assertJson(os.run(in, "f-"), "[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
 	}
 
 	@Test void d03_beanSetContainingNull() {
 		Object in = set(A.create("c"),A.create("a"),null,null,A.create("b"));
 		SortArgs sa = SortArgs.create("f");
-		assertObject(os.run(bs, in, sa)).asJson().is("[null,{f:'a'},{f:'b'},{f:'c'}]");
-		assertObject(os.run(in, "f")).asJson().is("[null,{f:'a'},{f:'b'},{f:'c'}]");
+		assertJson(os.run(bs, in, sa), "[null,{f:'a'},{f:'b'},{f:'c'}]");
+		assertJson(os.run(in, "f"), "[null,{f:'a'},{f:'b'},{f:'c'}]");
 	}
 
 	@Test void d04_beanSetContainingDups() {
 		Object in = set(A.create("c"),A.create("a"),null,A.create("a"),A.create("b"));
 		SortArgs sa = SortArgs.create("f");
-		assertObject(os.run(bs, in, sa)).asJson().is("[null,{f:'a'},{f:'a'},{f:'b'},{f:'c'}]");
-		assertObject(os.run(in, "f")).asJson().is("[null,{f:'a'},{f:'a'},{f:'b'},{f:'c'}]");
+		assertJson(os.run(bs, in, sa), "[null,{f:'a'},{f:'a'},{f:'b'},{f:'c'}]");
+		assertJson(os.run(in, "f"), "[null,{f:'a'},{f:'a'},{f:'b'},{f:'c'}]");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -161,15 +160,15 @@ class ObjectSorter_Test extends SimpleTestBase {
 	@Test void e01_listOfMaps() {
 		Object in = list(map("f","c"),map("f","a"),map("f","b"),map("f","e"),map("f","d"));
 		SortArgs sa = SortArgs.create("f");
-		assertObject(os.run(bs, in, sa)).asJson().is("[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
-		assertObject(os.run(in, "f")).asJson().is("[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
+		assertJson(os.run(bs, in, sa), "[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
+		assertJson(os.run(in, "f"), "[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
 	}
 
 	@Test void e02_listOfMaps_reverse() {
 		Object in = list(map("f","c"),map("f","a"),map("f","b"),map("f","e"),map("f","d"));
 		SortArgs sa = SortArgs.create("f-");
-		assertObject(os.run(bs, in, sa)).asJson().is("[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
-		assertObject(os.run(in, "f-")).asJson().is("[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
+		assertJson(os.run(bs, in, sa), "[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
+		assertJson(os.run(in, "f-"), "[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -179,15 +178,15 @@ class ObjectSorter_Test extends SimpleTestBase {
 	@Test void f01_listOfOther() {
 		Object in = list(list("c"),list("a"),list("b"));
 		SortArgs sa = SortArgs.create("f");
-		assertObject(os.run(bs, in, sa)).asJson().is("[['c'],['a'],['b']]");
-		assertObject(os.run(in, "f")).asJson().is("[['c'],['a'],['b']]");
+		assertJson(os.run(bs, in, sa), "[['c'],['a'],['b']]");
+		assertJson(os.run(in, "f"), "[['c'],['a'],['b']]");
 	}
 
 	@Test void f02_listOfOther_reverse() {
 		Object in = list(list("c"),list("a"),list("b"));
 		SortArgs sa = SortArgs.create("f-");
-		assertObject(os.run(bs, in, sa)).asJson().is("[['c'],['a'],['b']]");
-		assertObject(os.run(in, "f-")).asJson().is("[['c'],['a'],['b']]");
+		assertJson(os.run(bs, in, sa), "[['c'],['a'],['b']]");
+		assertJson(os.run(in, "f-"), "[['c'],['a'],['b']]");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -197,8 +196,8 @@ class ObjectSorter_Test extends SimpleTestBase {
 	@Test void g01_nonExistentField() {
 		Object in = new A[]{A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d")};
 		SortArgs sa = SortArgs.create("fx");
-		assertObject(os.run(bs, in, sa)).asJson().is("[{f:'c'},{f:'a'},{f:'b'},{f:'e'},{f:'d'}]");
-		assertObject(os.run(in, "fx")).asJson().is("[{f:'c'},{f:'a'},{f:'b'},{f:'e'},{f:'d'}]");
+		assertJson(os.run(bs, in, sa), "[{f:'c'},{f:'a'},{f:'b'},{f:'e'},{f:'d'}]");
+		assertJson(os.run(in, "fx"), "[{f:'c'},{f:'a'},{f:'b'},{f:'e'},{f:'d'}]");
 	}
 
 	public static class B {
@@ -215,8 +214,8 @@ class ObjectSorter_Test extends SimpleTestBase {
 	@Test void g02_mixtureOfTypes() {
 		Object in = new B[]{B.create(1),B.create(true),B.create("a")};
 		SortArgs sa = SortArgs.create("f");
-		assertObject(os.run(bs, in, sa)).asJson().is("[{f:1},{f:true},{f:'a'}]");
-		assertObject(os.run(in, "f")).asJson().is("[{f:1},{f:true},{f:'a'}]");
+		assertJson(os.run(bs, in, sa), "[{f:1},{f:true},{f:'a'}]");
+		assertJson(os.run(in, "f"), "[{f:1},{f:true},{f:'a'}]");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -238,21 +237,21 @@ class ObjectSorter_Test extends SimpleTestBase {
 	@Test void h01_sortMultipleColumns() {
 		Object in = new C[]{C.create(1,1),C.create(3,2),C.create(3,1),C.create(2,1),C.create(2,2)};
 		SortArgs sa = SortArgs.create("f1,f2");
-		assertObject(os.run(bs, in, sa)).asJson().is("[{f1:1,f2:1.0},{f1:2,f2:1.0},{f1:2,f2:2.0},{f1:3,f2:1.0},{f1:3,f2:2.0}]");
-		assertObject(os.run(in, "f1,f2")).asJson().is("[{f1:1,f2:1.0},{f1:2,f2:1.0},{f1:2,f2:2.0},{f1:3,f2:1.0},{f1:3,f2:2.0}]");
+		assertJson(os.run(bs, in, sa), "[{f1:1,f2:1.0},{f1:2,f2:1.0},{f1:2,f2:2.0},{f1:3,f2:1.0},{f1:3,f2:2.0}]");
+		assertJson(os.run(in, "f1,f2"), "[{f1:1,f2:1.0},{f1:2,f2:1.0},{f1:2,f2:2.0},{f1:3,f2:1.0},{f1:3,f2:2.0}]");
 	}
 
 	@Test void h02_sortMultipleColumns_descending() {
 		Object in = new C[]{C.create(1,1),C.create(3,2),C.create(3,1),C.create(2,1),C.create(2,2)};
 		SortArgs sa = SortArgs.create("f1-,f2-");
-		assertObject(os.run(bs, in, sa)).asJson().is("[{f1:3,f2:2.0},{f1:3,f2:1.0},{f1:2,f2:2.0},{f1:2,f2:1.0},{f1:1,f2:1.0}]");
-		assertObject(os.run(in, "f1-,f2-")).asJson().is("[{f1:3,f2:2.0},{f1:3,f2:1.0},{f1:2,f2:2.0},{f1:2,f2:1.0},{f1:1,f2:1.0}]");
+		assertJson(os.run(bs, in, sa), "[{f1:3,f2:2.0},{f1:3,f2:1.0},{f1:2,f2:2.0},{f1:2,f2:1.0},{f1:1,f2:1.0}]");
+		assertJson(os.run(in, "f1-,f2-"), "[{f1:3,f2:2.0},{f1:3,f2:1.0},{f1:2,f2:2.0},{f1:2,f2:1.0},{f1:1,f2:1.0}]");
 	}
 
 	@Test void h03_sortMultipleColumns_ascendingAndDescending() {
 		Object in = new C[]{C.create(1,1),C.create(3,2),C.create(3,1),C.create(2,1),C.create(2,2)};
 		SortArgs sa = SortArgs.create("f1-,f2+");
-		assertObject(os.run(bs, in, sa)).asJson().is("[{f1:3,f2:1.0},{f1:3,f2:2.0},{f1:2,f2:1.0},{f1:2,f2:2.0},{f1:1,f2:1.0}]");
-		assertObject(os.run(in, "f1-,f2+")).asJson().is("[{f1:3,f2:1.0},{f1:3,f2:2.0},{f1:2,f2:1.0},{f1:2,f2:2.0},{f1:1,f2:1.0}]");
+		assertJson(os.run(bs, in, sa), "[{f1:3,f2:1.0},{f1:3,f2:2.0},{f1:2,f2:1.0},{f1:2,f2:2.0},{f1:1,f2:1.0}]");
+		assertJson(os.run(in, "f1-,f2+"), "[{f1:3,f2:1.0},{f1:3,f2:2.0},{f1:2,f2:1.0},{f1:2,f2:2.0},{f1:1,f2:1.0}]");
 	}
 }

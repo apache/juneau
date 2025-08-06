@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import java.util.*;
@@ -100,39 +99,39 @@ public class Swagger_Response_Test extends SimpleTestBase {
 
 		x = s.getResponseInfo("/a","get",200);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
+		assertJson(x.getSchema(), "{type:'string'}");
+		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
+		assertJson(x.getExamples(), "{foo:'a'}");
 
 		x = s.getResponseInfo("/b","put",200);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
+		assertJson(x.getSchema(), "{type:'string'}");
+		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
+		assertJson(x.getExamples(), "{foo:'a'}");
 
 		x = s.getResponseInfo("/c","post",200);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
+		assertJson(x.getSchema(), "{type:'string'}");
+		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
+		assertJson(x.getExamples(), "{foo:'a'}");
 
 		x = s.getResponseInfo("/d","delete",200);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
+		assertJson(x.getSchema(), "{type:'string'}");
+		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
+		assertJson(x.getExamples(), "{foo:'a'}");
 
 		x = s.getResponseInfo("/e","get",200);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
+		assertJson(x.getSchema(), "{type:'string'}");
+		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
+		assertJson(x.getExamples(), "{foo:'a'}");
 
 		x = s.getResponseInfo("/f","get",200);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
+		assertJson(x.getSchema(), "{type:'string'}");
+		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
+		assertJson(x.getExamples(), "{foo:'a'}");
 
 		x = s.getResponseInfo("/g","get",100);
 		assertEquals("Continue", x.getDescription());
@@ -147,10 +146,10 @@ public class Swagger_Response_Test extends SimpleTestBase {
 		assertEquals("Continue", x.getDescription());
 
 		x = s.getResponseInfo("/k","get",200);
-		assertObject(x.getHeaders()).asJson().is("{foo:{type:'object'}}");
+		assertJson(x.getHeaders(), "{foo:{type:'object'}}");
 
 		x = s.getResponseInfo("/l","get",200);
-		assertObject(x.getHeaders()).asJson().is("{foo:{type:'object'}}");
+		assertJson(x.getHeaders(), "{foo:{type:'object'}}");
 	}
 
 	@Rest
@@ -194,28 +193,28 @@ public class Swagger_Response_Test extends SimpleTestBase {
 		ResponseInfo x;
 
 		x = s.getResponseInfo("/a","get",200);
-		assertObject(x.getSchema()).asJson().is("{type:'number'}");
+		assertJson(x.getSchema(), "{type:'number'}");
 
 		x = s.getResponseInfo("/b","put",200);
-		assertObject(x.getSchema()).asJson().is("{type:'number'}");
+		assertJson(x.getSchema(), "{type:'number'}");
 
 		x = s.getResponseInfo("/c","post",200);
-		assertObject(x.getSchema()).asJson().is("{type:'object',properties:{f1:{type:'string'}}}");
+		assertJson(x.getSchema(), "{type:'object',properties:{f1:{type:'string'}}}");
 
 		x = s.getResponseInfo("/d","delete",200);
-		assertObject(x.getSchema()).asJson().is("{type:'object',properties:{f1:{type:'string'}}}");
+		assertJson(x.getSchema(), "{type:'object',properties:{f1:{type:'string'}}}");
 
 		x = s.getResponseInfo("/e","get",200);
-		assertObject(x.getSchema()).asJson().is("{type:'array',items:{type:'string'}}");
+		assertJson(x.getSchema(), "{type:'array',items:{type:'string'}}");
 
 		x = s.getResponseInfo("/f","get",200);
-		assertObject(x.getSchema()).asJson().is("{type:'array',items:{type:'string'}}");
+		assertJson(x.getSchema(), "{type:'array',items:{type:'string'}}");
 
 		x = s.getResponseInfo("/g","get",200);
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
+		assertJson(x.getSchema(), "{type:'string'}");
 
 		x = s.getResponseInfo("/h","get",200);
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
+		assertJson(x.getSchema(), "{type:'string'}");
 	}
 
 	@Rest
@@ -248,10 +247,10 @@ public class Swagger_Response_Test extends SimpleTestBase {
 		sc.getResponseInfo("/b","put",200);
 
 		x = sc.getResponseInfo("/c","post",200);
-		assertObject(x.getExamples()).asJson().is("{foo:'b'}");
+		assertJson(x.getExamples(), "{foo:'b'}");
 
 		x = sc.getResponseInfo("/d","delete",200);
-		assertObject(x.getExamples()).asJson().is("{foo:'b'}");
+		assertJson(x.getExamples(), "{foo:'b'}");
 	}
 
 	@Rest
@@ -306,21 +305,21 @@ public class Swagger_Response_Test extends SimpleTestBase {
 
 		x = s.getResponseInfo("/a","get",500);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
+		assertJson(x.getSchema(), "{type:'string'}");
+		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
+		assertJson(x.getExamples(), "{foo:'a'}");
 
 		x = s.getResponseInfo("/b","put",500);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
+		assertJson(x.getSchema(), "{type:'string'}");
+		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
+		assertJson(x.getExamples(), "{foo:'a'}");
 
 		x = s.getResponseInfo("/c","post",500);
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getSchema()).asJson().is("{type:'string'}");
-		assertObject(x.getHeaders()).asJson().is("{foo:{type:'string'}}");
-		assertObject(x.getExamples()).asJson().is("{foo:'a'}");
+		assertJson(x.getSchema(), "{type:'string'}");
+		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
+		assertJson(x.getExamples(), "{foo:'a'}");
 
 		x = s.getResponseInfo("/d","delete",100);
 		assertEquals("Continue", x.getDescription());
@@ -329,7 +328,7 @@ public class Swagger_Response_Test extends SimpleTestBase {
 		assertEquals("Continue", x.getDescription());
 
 		x = s.getResponseInfo("/f","get",500);
-		assertObject(x.getHeaders()).asJson().is("{foo:{type:'number'}}");
+		assertJson(x.getHeaders(), "{foo:{type:'number'}}");
 	}
 
 	@Rest
@@ -345,7 +344,7 @@ public class Swagger_Response_Test extends SimpleTestBase {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(E.class);
 
 		ResponseInfo x = s.getResponseInfo("/a","get",500);
-		assertObject(x.getSchema()).asJson().is("{type:'number'}");
+		assertJson(x.getSchema(), "{type:'number'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -366,6 +365,6 @@ public class Swagger_Response_Test extends SimpleTestBase {
 		ResponseInfo x;
 
 		x = s.getResponseInfo("/b","put",500);
-		assertObject(x.getExamples()).asJson().is("{foo:'b'}");
+		assertJson(x.getExamples(), "{foo:'b'}");
 	}
 }

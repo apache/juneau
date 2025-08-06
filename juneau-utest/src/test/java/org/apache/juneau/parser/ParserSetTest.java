@@ -55,15 +55,15 @@ public class ParserSetTest extends SimpleTestBase {
 
 		sb = ParserSet.create().add(P1.class, P2.class);
 		s = sb.build();
-		assertObject(s.getSupportedMediaTypes()).asJson().is("['text/1','text/2','text/2a']");
+		assertJson(s.getSupportedMediaTypes(), "['text/1','text/2','text/2a']");
 
 		sb = ParserSet.create().add(P1.class, P2.class).add(P3.class, P4.class);
 		s = sb.build();
-		assertObject(s.getSupportedMediaTypes()).asJson().is("['text/3','text/4','text/4a','text/1','text/2','text/2a']");
+		assertJson(s.getSupportedMediaTypes(), "['text/3','text/4','text/4a','text/1','text/2','text/2a']");
 
 		sb = ParserSet.create().add(P1.class, P2.class).add(P3.class, P4.class).add(P5.class);
 		s = sb.build();
-		assertObject(s.getSupportedMediaTypes()).asJson().is("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']");
+		assertJson(s.getSupportedMediaTypes(), "['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']");
 	}
 
 	public static class P1 extends JsonParser { public P1(JsonParser.Builder b) { super(b.consumes("text/1")); }}

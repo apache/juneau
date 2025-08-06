@@ -1,6 +1,5 @@
 package org.apache.juneau.http;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -40,15 +39,15 @@ class HttpHeaders_Test extends SimpleTestBase {
 		Headerable x8 = () -> header("X8","8");
 		SerializedPart x9 = serializedPart("X9",()->"9");
 
-		assertObject(HttpHeaders.cast(x1)).isType(Header.class).asJson().is("'X1: 1'");
-		assertObject(HttpHeaders.cast(x2)).isType(Header.class).asJson().is("'X2: 2'");
-		assertObject(HttpHeaders.cast(x3)).isType(Header.class).asJson().is("'X3: 3'");
-		assertObject(HttpHeaders.cast(x4)).isType(Header.class).asJson().is("'X4: 4'");
-		assertObject(HttpHeaders.cast(x5)).isType(Header.class).asJson().is("'X5: 5'");
-		assertObject(HttpHeaders.cast(x6)).isType(Header.class).asJson().is("'X6: 6'");
-		assertObject(HttpHeaders.cast(x7)).isType(Header.class).asJson().is("'X7: 7'");
-		assertObject(HttpHeaders.cast(x8)).isType(Header.class).asJson().is("'X8: 8'");
-		assertObject(HttpHeaders.cast(x9)).isType(Header.class).asJson().is("'X9: 9'");
+		assertTypeAndJson(HttpHeaders.cast(x1), Header.class, "'X1: 1'");
+		assertTypeAndJson(HttpHeaders.cast(x2), Header.class, "'X2: 2'");
+		assertTypeAndJson(HttpHeaders.cast(x3), Header.class, "'X3: 3'");
+		assertTypeAndJson(HttpHeaders.cast(x4), Header.class, "'X4: 4'");
+		assertTypeAndJson(HttpHeaders.cast(x5), Header.class, "'X5: 5'");
+		assertTypeAndJson(HttpHeaders.cast(x6), Header.class, "'X6: 6'");
+		assertTypeAndJson(HttpHeaders.cast(x7), Header.class, "'X7: 7'");
+		assertTypeAndJson(HttpHeaders.cast(x8), Header.class, "'X8: 8'");
+		assertTypeAndJson(HttpHeaders.cast(x9), Header.class, "'X9: 9'");
 
 		assertThrows(BasicRuntimeException.class, ()->HttpHeaders.cast("X"), "Object of type java.lang.String could not be converted to a Header.");
 		assertThrows(BasicRuntimeException.class, ()->HttpHeaders.cast(null), "Object of type null could not be converted to a Header.");

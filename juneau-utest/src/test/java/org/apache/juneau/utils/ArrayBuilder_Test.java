@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.junit.jupiter.api.*;
@@ -22,15 +21,15 @@ class ArrayBuilder_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		String[] empty = {};
 		ArrayBuilder<String> x = ArrayBuilder.of(String.class).filter(y -> y != null).size(2);
-		assertObject(x.orElse(empty)).asJson().is("[]");
+		assertArray(x.orElse(empty));
 		x.add(null);
-		assertObject(x.orElse(empty)).asJson().is("[]");
+		assertArray(x.orElse(empty));
 		x.add("a");
-		assertObject(x.orElse(empty)).asJson().is("['a']");
+		assertArray(x.orElse(empty), "a");
 		x.add("b");
 		x.add(null);
-		assertObject(x.orElse(empty)).asJson().is("['a','b']");
+		assertArray(x.orElse(empty), "a,b");
 		x.add("c");
-		assertObject(x.orElse(empty)).asJson().is("['a','b','c']");
+		assertArray(x.orElse(empty), "a,b,c");
 	}
 }

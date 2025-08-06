@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
@@ -32,13 +31,13 @@ public class ResolvingJsonMapTest extends SimpleTestBase {
 		assertEquals("1", m.get("foo"));
 
 		m.put("foo", new String[]{"$X{a}"});
-		assertObject(m.get("foo")).asJson().is("['1']");
+		assertJson(m.get("foo"), "['1']");
 
 		m.put("foo", list("$X{a}"));
-		assertObject(m.get("foo")).asJson().is("['1']");
+		assertJson(m.get("foo"), "['1']");
 
 		m.put("foo", map("k1","$X{a}"));
-		assertObject(m.get("foo")).asJson().is("{k1:'1'}");
+		assertJson(m.get("foo"), "{k1:'1'}");
 	}
 
 	public static class XVar extends MapVar {
@@ -58,13 +57,13 @@ public class ResolvingJsonMapTest extends SimpleTestBase {
 		assertNull(m.get("foo"));
 
 		m.put("foo", new String[]{null});
-		assertObject(m.get("foo")).asJson().is("[null]");
+		assertJson(m.get("foo"), "[null]");
 
 		m.put("foo", list((String)null));
-		assertObject(m.get("foo")).asJson().is("[null]");
+		assertJson(m.get("foo"), "[null]");
 
 		m.put("foo", map("k1",null));
-		assertObject(m.get("foo")).asJson().is("{k1:null}");
+		assertJson(m.get("foo"), "{k1:null}");
 	}
 
 	//====================================================================================================
@@ -75,16 +74,15 @@ public class ResolvingJsonMapTest extends SimpleTestBase {
 		JsonMap m = new ResolvingJsonMap(vr.createSession());
 
 		m.put("foo", FooEnum.ONE);
-		assertObject(m.get("foo")).asJson().is("'ONE'");
-
+		assertString("ONE", m.get("foo"));
 		m.put("foo", new Object[]{FooEnum.ONE});
-		assertObject(m.get("foo")).asJson().is("['ONE']");
+		assertJson(m.get("foo"), "['ONE']");
 
 		m.put("foo", list(FooEnum.ONE));
-		assertObject(m.get("foo")).asJson().is("['ONE']");
+		assertJson(m.get("foo"), "['ONE']");
 
 		m.put("foo", map(FooEnum.ONE,FooEnum.ONE));
-		assertObject(m.get("foo")).asJson().is("{ONE:'ONE'}");
+		assertJson(m.get("foo"), "{ONE:'ONE'}");
 	}
 
 	public enum FooEnum {
@@ -106,12 +104,12 @@ public class ResolvingJsonMapTest extends SimpleTestBase {
 		assertEquals("1", m.get("foo"));
 
 		m3.put("foo", new String[]{"$X{a}"});
-		assertObject(m.get("foo")).asJson().is("['1']");
+		assertJson(m.get("foo"), "['1']");
 
 		m3.put("foo", list("$X{a}"));
-		assertObject(m.get("foo")).asJson().is("['1']");
+		assertJson(m.get("foo"), "['1']");
 
 		m3.put("foo", map("k1","$X{a}"));
-		assertObject(m.get("foo")).asJson().is("{k1:'1'}");
+		assertJson(m.get("foo"), "{k1:'1'}");
 	}
 }

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import java.util.*;
 
@@ -27,12 +26,12 @@ public class MediaType_Test extends SimpleTestBase {
 		Set<MediaType> x = new TreeSet<>();
 		x.add(MediaType.of("text/foo"));
 		x.add(MediaType.of("text/bar"));
-		assertObject(x).asJson().is("['text/bar','text/foo']");
+		assertJson(x, "['text/bar','text/foo']");
 
 		MediaType x2 = new MediaType((String)null);  // Interpreted as "/*"
 		assertString(x2.getType()).isEmpty();
 		assertEquals("*", x2.getSubType());
-		assertObject(x2.getSubTypes()).asJson().is("['*']");
+		assertJson(x2.getSubTypes(), "['*']");
 		assertTrue(x2.isMetaSubtype());
 
 		MediaType x3 = MediaType.of("text/foo+bar");

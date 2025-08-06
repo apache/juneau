@@ -78,111 +78,111 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	public static A[] A_ARRAY = {A.create("foo"), A.create("bar"), A.create("baz"), A.create("q ux"), A.create("qu'ux"), null, A.create(null)};
 
 	@Test void a01_stringSearch_singleWord() {
-		assertObject(run(A_LIST, "f=foo")).asJson().is("[{f:'foo'}]");
-		assertObject(run(A_SET, "f=foo")).asJson().is("[{f:'foo'}]");
-		assertObject(run(A_ARRAY, "f=foo")).asJson().is("[{f:'foo'}]");
-		assertObject(os.run(A_LIST, "f=foo")).asJson().is("[{f:'foo'}]");
-		assertObject(os.run(A_SET, "f=foo")).asJson().is("[{f:'foo'}]");
-		assertObject(os.run(A_ARRAY, "f=foo")).asJson().is("[{f:'foo'}]");
+		assertJson(run(A_LIST, "f=foo"), "[{f:'foo'}]");
+		assertJson(run(A_SET, "f=foo"), "[{f:'foo'}]");
+		assertJson(run(A_ARRAY, "f=foo"), "[{f:'foo'}]");
+		assertJson(os.run(A_LIST, "f=foo"), "[{f:'foo'}]");
+		assertJson(os.run(A_SET, "f=foo"), "[{f:'foo'}]");
+		assertJson(os.run(A_ARRAY, "f=foo"), "[{f:'foo'}]");
 	}
 
 	@Test void a02_stringSearch_pattern1() {
-		assertObject(run(A_LIST, "f=fo*")).asJson().is("[{f:'foo'}]");
-		assertObject(run(A_SET, "f=fo*")).asJson().is("[{f:'foo'}]");
-		assertObject(run(A_ARRAY, "f=fo*")).asJson().is("[{f:'foo'}]");
+		assertJson(run(A_LIST, "f=fo*"), "[{f:'foo'}]");
+		assertJson(run(A_SET, "f=fo*"), "[{f:'foo'}]");
+		assertJson(run(A_ARRAY, "f=fo*"), "[{f:'foo'}]");
 	}
 
 	@Test void a03_stringSearch_pattern2() {
-		assertObject(run(A_LIST, "f=*ar")).asJson().is("[{f:'bar'}]");
-		assertObject(run(A_SET, "f=*ar")).asJson().is("[{f:'bar'}]");
-		assertObject(run(A_ARRAY, "f=*ar")).asJson().is("[{f:'bar'}]");
+		assertJson(run(A_LIST, "f=*ar"), "[{f:'bar'}]");
+		assertJson(run(A_SET, "f=*ar"), "[{f:'bar'}]");
+		assertJson(run(A_ARRAY, "f=*ar"), "[{f:'bar'}]");
 	}
 
 	@Test void a04_stringSearch_pattern3() {
-		assertObject(run(A_LIST, "f=?ar")).asJson().is("[{f:'bar'}]");
-		assertObject(run(A_SET, "f=?ar")).asJson().is("[{f:'bar'}]");
-		assertObject(run(A_ARRAY, "f=?ar")).asJson().is("[{f:'bar'}]");
+		assertJson(run(A_LIST, "f=?ar"), "[{f:'bar'}]");
+		assertJson(run(A_SET, "f=?ar"), "[{f:'bar'}]");
+		assertJson(run(A_ARRAY, "f=?ar"), "[{f:'bar'}]");
 	}
 
 	@Test void a05_stringSearch_multiple() {
-		assertObject(run(A_LIST, "f=foo bar q ux")).asJson().is("[{f:'foo'},{f:'bar'}]");
-		assertObject(run(A_SET, "f=foo bar q ux")).asJson().is("[{f:'foo'},{f:'bar'}]");
-		assertObject(run(A_ARRAY, "f=foo bar q ux")).asJson().is("[{f:'foo'},{f:'bar'}]");
+		assertJson(run(A_LIST, "f=foo bar q ux"), "[{f:'foo'},{f:'bar'}]");
+		assertJson(run(A_SET, "f=foo bar q ux"), "[{f:'foo'},{f:'bar'}]");
+		assertJson(run(A_ARRAY, "f=foo bar q ux"), "[{f:'foo'},{f:'bar'}]");
 	}
 
 	@Test void a06_stringSearch_quoted() {
-		assertObject(run(A_LIST, "f='q ux'")).asJson().is("[{f:'q ux'}]");
-		assertObject(run(A_SET, "f='q ux'")).asJson().is("[{f:'q ux'}]");
-		assertObject(run(A_ARRAY, "f='q ux'")).asJson().is("[{f:'q ux'}]");
+		assertJson(run(A_LIST, "f='q ux'"), "[{f:'q ux'}]");
+		assertJson(run(A_SET, "f='q ux'"), "[{f:'q ux'}]");
+		assertJson(run(A_ARRAY, "f='q ux'"), "[{f:'q ux'}]");
 	}
 
 	@Test void a07_stringSearch_quotedWithPattern() {
-		assertObject(run(A_LIST, "f='q *x'")).asJson().is("[{f:'q ux'}]");
-		assertObject(run(A_SET, "f='q *x'")).asJson().is("[{f:'q ux'}]");
-		assertObject(run(A_ARRAY, "f='q *x'")).asJson().is("[{f:'q ux'}]");
+		assertJson(run(A_LIST, "f='q *x'"), "[{f:'q ux'}]");
+		assertJson(run(A_SET, "f='q *x'"), "[{f:'q ux'}]");
+		assertJson(run(A_ARRAY, "f='q *x'"), "[{f:'q ux'}]");
 	}
 
 	@Test void a08_stringSearch_unquotedContainingQuote() {
-		assertObject(run(A_LIST, "f=qu'ux")).asJson().is("[{f:'qu\\'ux'}]");
-		assertObject(run(A_SET, "f=qu'ux")).asJson().is("[{f:'qu\\'ux'}]");
-		assertObject(run(A_ARRAY, "f=qu'ux")).asJson().is("[{f:'qu\\'ux'}]");
+		assertJson(run(A_LIST, "f=qu'ux"), "[{f:'qu\\'ux'}]");
+		assertJson(run(A_SET, "f=qu'ux"), "[{f:'qu\\'ux'}]");
+		assertJson(run(A_ARRAY, "f=qu'ux"), "[{f:'qu\\'ux'}]");
 	}
 
 	@Test void a09_stringSearch_quotedContainingQuote() {
-		assertObject(run(A_LIST, "f='qu\\'ux'")).asJson().is("[{f:'qu\\'ux'}]");
-		assertObject(run(A_SET, "f='qu\\'ux'")).asJson().is("[{f:'qu\\'ux'}]");
-		assertObject(run(A_ARRAY, "f='qu\\'ux'")).asJson().is("[{f:'qu\\'ux'}]");
+		assertJson(run(A_LIST, "f='qu\\'ux'"), "[{f:'qu\\'ux'}]");
+		assertJson(run(A_SET, "f='qu\\'ux'"), "[{f:'qu\\'ux'}]");
+		assertJson(run(A_ARRAY, "f='qu\\'ux'"), "[{f:'qu\\'ux'}]");
 	}
 
 	@Test void a10_stringSearch_regExp() {
-		assertObject(run(A_LIST, "f=/q\\sux/")).asJson().is("[{f:'q ux'}]");
-		assertObject(run(A_SET, "f=/q\\sux/")).asJson().is("[{f:'q ux'}]");
-		assertObject(run(A_ARRAY, "f=/q\\sux/")).asJson().is("[{f:'q ux'}]");
+		assertJson(run(A_LIST, "f=/q\\sux/"), "[{f:'q ux'}]");
+		assertJson(run(A_SET, "f=/q\\sux/"), "[{f:'q ux'}]");
+		assertJson(run(A_ARRAY, "f=/q\\sux/"), "[{f:'q ux'}]");
 	}
 
 	@Test void a11_stringSearch_regExp_noEndSlash() {
 		Object in = list(A.create("/foo"), A.create("bar"));
 		for (String s : a("f=/foo","f='/foo'"))
-			assertObject(run(in, s)).asJson().is("[{f:'/foo'}]");
+			assertJson(run(in, s), "[{f:'/foo'}]");
 	}
 
 	@Test void a12_stringSearch_regExp_onlySlash() {
 		Object in = list(A.create("/"), A.create("bar"));
 		for (String s : a("f=/", "f='/'"))
-			assertObject(run(in, s)).asJson().is("[{f:'/'}]");
+			assertJson(run(in, s), "[{f:'/'}]");
 	}
 
 	@Test void a13_stringSearch_or_pattern() {
 		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
-		assertObject(run(in, "f=f* *r")).asJson().is("[{f:'foo'},{f:'bar'}]");
-		assertObject(run(in, "f='f* *r'")).asJson().is("[]");
-		assertObject(run(in, "f='f*oo'")).asJson().is("[{f:'foo'}]");
+		assertJson(run(in, "f=f* *r"), "[{f:'foo'},{f:'bar'}]");
+		assertJson(run(in, "f='f* *r'"), "[]");
+		assertJson(run(in, "f='f*oo'"), "[{f:'foo'}]");
 	}
 
 	@Test void a14_stringSearch_explicit_or_pattern() {
 		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
-		assertObject(run(in, "f=^f* ^*r")).asJson().is("[{f:'foo'},{f:'bar'}]");
-		assertObject(run(in, "f=^'f* *r'")).asJson().is("[]");
-		assertObject(run(in, "f=^'f*oo'")).asJson().is("[{f:'foo'}]");
+		assertJson(run(in, "f=^f* ^*r"), "[{f:'foo'},{f:'bar'}]");
+		assertJson(run(in, "f=^'f* *r'"), "[]");
+		assertJson(run(in, "f=^'f*oo'"), "[{f:'foo'}]");
 	}
 
 	@Test void a15_stringSearch_and_pattern() {
 		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
-		assertObject(run(in, "f=+b* +*r")).asJson().is("[{f:'bar'}]");
-		assertObject(run(in, "f=+'b*' +'*r'")).asJson().is("[{f:'bar'}]");
+		assertJson(run(in, "f=+b* +*r"), "[{f:'bar'}]");
+		assertJson(run(in, "f=+'b*' +'*r'"), "[{f:'bar'}]");
 	}
 
 	@Test void a16_stringSearch_not_pattern() {
 		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
-		assertObject(run(in, "f=b* -*r")).asJson().is("[{f:'baz'}]");
-		assertObject(run(in, "f=+'b*' -'*r'")).asJson().is("[{f:'baz'}]");
+		assertJson(run(in, "f=b* -*r"), "[{f:'baz'}]");
+		assertJson(run(in, "f=+'b*' -'*r'"), "[{f:'baz'}]");
 	}
 
 	@Test void a17_stringSearch_caseSensitive() {
 		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
-		assertObject(run(in, "f=F*")).asJson().is("[]");
-		assertObject(run(in, "f=\"F*\"")).asJson().is("[]");
-		assertObject(run(in, "f='F*'")).asJson().is("[{f:'foo'}]");
+		assertJson(run(in, "f=F*"), "[]");
+		assertJson(run(in, "f=\"F*\""), "[]");
+		assertJson(run(in, "f='F*'"), "[{f:'foo'}]");
 	}
 
 	@Test void a18_stringSearch_malformedQuotes() {
@@ -192,32 +192,32 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 
 		assertThrown(()->run(in, "f=\"*")).asMessage().isContains("Unmatched string quotes");
 
-		assertObject(run(in, "f='\\'*'")).asJson().is("[{f:'\\'foo'}]");
-		assertObject(run(in, "f='\"*'")).asJson().is("[{f:'\"bar'}]");
-		assertObject(run(in, "f=\"\\\"*\"")).asJson().is("[{f:'\"bar'}]");
+		assertJson(run(in, "f='\\'*'"), "[{f:'\\'foo'}]");
+		assertJson(run(in, "f='\"*'"), "[{f:'\"bar'}]");
+		assertJson(run(in, "f=\"\\\"*\""), "[{f:'\"bar'}]");
 	}
 
 	@Test void a19_stringSearch_regexChars() {
 		Object in = list(A.create("+\\[]{}()^$."), A.create("bar"), A.create("baz"));
-		assertObject(run(in, "f=*+*")).asJson().is("[{f:'+\\\\[]{}()^$.'}]");
-		assertObject(run(in, "f='+\\\\[]{}()^$.'")).asJson().is("[{f:'+\\\\[]{}()^$.'}]");
-		assertObject(run(in, "f=++\\\\[]{}()^$.")).asJson().is("[{f:'+\\\\[]{}()^$.'}]");
+		assertJson(run(in, "f=*+*"), "[{f:'+\\\\[]{}()^$.'}]");
+		assertJson(run(in, "f='+\\\\[]{}()^$.'"), "[{f:'+\\\\[]{}()^$.'}]");
+		assertJson(run(in, "f=++\\\\[]{}()^$."), "[{f:'+\\\\[]{}()^$.'}]");
 	}
 
 	@Test void a20_stringSearch_metaChars() {
 		Object in = list(A.create("*?\\'\""), A.create("bar"), A.create("baz"));
-		assertObject(run(in, "f='\\*\\?\\\\\\'\"'")).asJson().is("[{f:'*?\\\\\\'\"'}]");
+		assertJson(run(in, "f='\\*\\?\\\\\\'\"'"), "[{f:'*?\\\\\\'\"'}]");
 	}
 
 	@Test void a21_stringSearch_metaChars_escapedQuotes() {
 		Object in = list(A.create("'"), A.create("\""), A.create("baz"));
-		assertObject(run(in, "f=\\'")).asJson().is("[{f:'\\''}]");
-		assertObject(run(in, "f=\\\"")).asJson().is("[{f:'\"'}]");
+		assertJson(run(in, "f=\\'"), "[{f:'\\''}]");
+		assertJson(run(in, "f=\\\""), "[{f:'\"'}]");
 	}
 
 	@Test void a22_stringSearch_metaChars_falseEscape() {
 		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
-		assertObject(run(in, "f=\\f\\o\\o")).asJson().is("[{f:'foo'}]");
+		assertJson(run(in, "f=\\f\\o\\o"), "[{f:'foo'}]");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -238,113 +238,113 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 
 	@Test void b01_intSearch_oneNumber() {
 		for (String s : a("f=1", "f = 1"))
-			assertObject(run(INT_BEAN_ARRAY, s)).asJson().is("[{f:1}]");
+			assertJson(run(INT_BEAN_ARRAY, s), "[{f:1}]");
 	}
 
 	@Test void b02_intSearch_twoNumbers() {
 		for (String s : a("f=1 2", "f = 1  2 "))
-			assertObject(run(INT_BEAN_ARRAY, s)).asJson().is("[{f:1},{f:2}]");
+			assertJson(run(INT_BEAN_ARRAY, s), "[{f:1},{f:2}]");
 	}
 
 	@Test void b03_intSearch_oneNegativeNumber() {
 		for (String s : a("f=-1", "f = -1 "))
-			assertObject(run(INT_BEAN_ARRAY, s)).asJson().is("[{f:-1}]");
+			assertJson(run(INT_BEAN_ARRAY, s), "[{f:-1}]");
 	}
 
 	@Test void b04_intSearch_twoNegativeNumbers() {
-		assertObject(run(INT_BEAN_ARRAY, "f=-1 -2")).asJson().is("[{f:-2},{f:-1}]");
+		assertJson(run(INT_BEAN_ARRAY, "f=-1 -2"), "[{f:-2},{f:-1}]");
 	}
 
 	@Test void b05_intSearch_simpleRange() {
 		for (String s : a("f=1-2", "f = 1 - 2 ", "f = 1- 2 "))
-			assertObject(run(INT_BEAN_ARRAY, s)).asJson().is("[{f:1},{f:2}]");
+			assertJson(run(INT_BEAN_ARRAY, s), "[{f:1},{f:2}]");
 	}
 
 	@Test void b06_intSearch_simpleRange_invalid() {
-		assertObject(run(INT_BEAN_ARRAY, "f=2-1")).asJson().is("[]");
+		assertJson(run(INT_BEAN_ARRAY, "f=2-1"), "[]");
 	}
 
 	@Test void b07_intSearch_twoNumbersThatLookLikeRange() {
-		assertObject(run(INT_BEAN_ARRAY, "f = 1 -2 ")).asJson().is("[{f:-2},{f:1}]");
+		assertJson(run(INT_BEAN_ARRAY, "f = 1 -2 "), "[{f:-2},{f:1}]");
 	}
 
 	@Test void b08_intSearch_rangeWithNegativeNumbers() {
-		assertObject(run(INT_BEAN_ARRAY, "f = -2--1 ")).asJson().is("[{f:-2},{f:-1}]");
+		assertJson(run(INT_BEAN_ARRAY, "f = -2--1 "), "[{f:-2},{f:-1}]");
 	}
 
 	@Test void b09_intSearch_rangeWithNegativeNumbers_invalidRange() {
-		assertObject(run(INT_BEAN_ARRAY, "f = -1--2 ")).asJson().is("[]");
+		assertJson(run(INT_BEAN_ARRAY, "f = -1--2 "), "[]");
 	}
 
 	@Test void b10_intSearch_multipleRanges() {
-		assertObject(run(INT_BEAN_ARRAY, "f = 0-1 3-4")).asJson().is("[{f:0},{f:1},{f:3}]");
+		assertJson(run(INT_BEAN_ARRAY, "f = 0-1 3-4"), "[{f:0},{f:1},{f:3}]");
 	}
 
 	@Test void b11_intSearch_overlappingRanges() {
-		assertObject(run(INT_BEAN_ARRAY, "f = 0-0 2-2")).asJson().is("[{f:0},{f:2}]");
+		assertJson(run(INT_BEAN_ARRAY, "f = 0-0 2-2"), "[{f:0},{f:2}]");
 	}
 
 	@Test void b12_intSearch_LT() {
 		for (String s : a("f = <0", "f<0", "f = < 0 ", "f < 0 "))
-			assertObject(run(INT_BEAN_ARRAY, s)).asJson().is("[{f:-2},{f:-1}]");
+			assertJson(run(INT_BEAN_ARRAY, s), "[{f:-2},{f:-1}]");
 	}
 
 	@Test void b13_intSearch_LT_negativeNumber() {
 		for (String s : a("f = <-1", "f<-1", "f = < -1 ", "f < -1 "))
-			assertObject(run(INT_BEAN_ARRAY, s)).asJson().is("[{f:-2}]");
+			assertJson(run(INT_BEAN_ARRAY, s), "[{f:-2}]");
 	}
 
 	@Test void b14_intSearch_GT() {
 		for (String s : a("f = >1", "f>1", "f = > 1 ", "f > 1 "))
-			assertObject(run(INT_BEAN_ARRAY, s)).asJson().is("[{f:2},{f:3}]");
+			assertJson(run(INT_BEAN_ARRAY, s), "[{f:2},{f:3}]");
 	}
 
 	@Test void b15_intSearch_GT_negativeNumber() {
 		for (String s : a("f = >-1", "f>-1", "f = > -1 ", "f > -1 ", "f =  >  -1  ", "f >  -1  "))
-			assertObject(run(INT_BEAN_ARRAY, s)).asJson().is("[{f:0},{f:1},{f:2},{f:3}]");
+			assertJson(run(INT_BEAN_ARRAY, s), "[{f:0},{f:1},{f:2},{f:3}]");
 	}
 
 	@Test void b16_intSearch_LTE() {
 		for (String s : a("f = <=0", "f<=0", "f = <= 0 ", "f <= 0 ", "f =  <=  0  "))
-			assertObject(run(INT_BEAN_ARRAY, s)).asJson().is("[{f:-2},{f:-1},{f:0}]");
+			assertJson(run(INT_BEAN_ARRAY, s), "[{f:-2},{f:-1},{f:0}]");
 	}
 
 	@Test void b17_intSearch_LTE_negativeNumber() {
 		for (String s : a("f = <=-1", "f <=-1", "f = <= -1 ", "f =  <=  -1  ", "f <=  -1  "))
-			assertObject(run(INT_BEAN_ARRAY, s)).asJson().is("[{f:-2},{f:-1}]");
+			assertJson(run(INT_BEAN_ARRAY, s), "[{f:-2},{f:-1}]");
 	}
 
 	@Test void b18_intSearch_GTE() {
 		for (String s : a("f = >=1", "f >=1", "f = >= 1 ", "f >= 1 ", "f =  >=  1  "))
-			assertObject(run(INT_BEAN_ARRAY, s)).asJson().is("[{f:1},{f:2},{f:3}]");
+			assertJson(run(INT_BEAN_ARRAY, s), "[{f:1},{f:2},{f:3}]");
 	}
 
 	@Test void b19_intSearch_GTE_negativeNumber() {
 		for (String s : a("f = >=-1", "f >=-1", "f = >= -1 ", "f >= -1 ", "f =  >=  -1  "))
-			assertObject(run(INT_BEAN_ARRAY, s)).asJson().is("[{f:-1},{f:0},{f:1},{f:2},{f:3}]");
+			assertJson(run(INT_BEAN_ARRAY, s), "[{f:-1},{f:0},{f:1},{f:2},{f:3}]");
 	}
 
 	@Test void b20_intSearch_not_singleNumber() {
 		for (String s : a("f = !1", "f = ! 1 ", "f =  !  1  "))
-			assertObject(run(INT_BEAN_ARRAY, s)).asJson().is("[{f:-2},{f:-1},{f:0},{f:2},{f:3}]");
+			assertJson(run(INT_BEAN_ARRAY, s), "[{f:-2},{f:-1},{f:0},{f:2},{f:3}]");
 	}
 
 	@Test void b21_intSearch_not_range() {
-		assertObject(run(INT_BEAN_ARRAY, "f = !1-2")).asJson().is("[{f:-2},{f:-1},{f:0},{f:3}]");
+		assertJson(run(INT_BEAN_ARRAY, "f = !1-2"), "[{f:-2},{f:-1},{f:0},{f:3}]");
 	}
 
 	@Test void b22_intSearch_not_range_negativeNumbers() {
 		for (String s : a("f = !-2--1", "f = ! -2 - -1", "f =  !  -2  -  -1 "))
-			assertObject(run(INT_BEAN_ARRAY, s)).asJson().is("[{f:0},{f:1},{f:2},{f:3}]");
+			assertJson(run(INT_BEAN_ARRAY, s), "[{f:0},{f:1},{f:2},{f:3}]");
 	}
 
 	@Test void b23_intSearch_not_looksLikeRange() {
-		assertObject(run(INT_BEAN_ARRAY, "f = ! -2 -2")).asJson().is("[{f:-2},{f:-1},{f:0},{f:1},{f:2},{f:3}]");
+		assertJson(run(INT_BEAN_ARRAY, "f = ! -2 -2"), "[{f:-2},{f:-1},{f:0},{f:1},{f:2},{f:3}]");
 	}
 
 	@Test void b24_intSearch_empty() {
 		for (String s : a("f=", "f = ", "f =  "))
-			assertObject(run(INT_BEAN_ARRAY, s)).asJson().is("[{f:-2},{f:-1},{f:0},{f:1},{f:2},{f:3}]");
+			assertJson(run(INT_BEAN_ARRAY, s), "[{f:-2},{f:-1},{f:0},{f:1},{f:2},{f:3}]");
 	}
 
 	@Test void b25_intSearch_badSearches() {
@@ -660,7 +660,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			map("quux",null),
 			map(null,null)
 		);
-		assertObject(run(in, "f=foo")).asJson().is("[{f:'foo'}]");
+		assertJson(run(in, "f=foo"), "[{f:'foo'}]");
 	}
 
 	@Test void d02_d2SetOfMaps() {
@@ -672,7 +672,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			map("quux",null),
 			map(null,null)
 		);
-		assertObject(run(in, "f=foo")).asJson().is("[{f:'foo'}]");
+		assertJson(run(in, "f=foo"), "[{f:'foo'}]");
 	}
 
 
@@ -685,7 +685,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			map("quux",null),
 			map(null,null)
 		};
-		assertObject(run(in, "f=foo")).asJson().is("[{f:'foo'}]");
+		assertJson(run(in, "f=foo"), "[{f:'foo'}]");
 	}
 
 	@Test void d04_d2ListOfObjects() {
@@ -699,7 +699,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			"xxx",
 			123
 		);
-		assertObject(run(in, "f=foo")).asJson().is("[{f:'foo'}]");
+		assertJson(run(in, "f=foo"), "[{f:'foo'}]");
 	}
 
 	@Test void d05_d2SetOfObjects() {
@@ -713,7 +713,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			"xxx",
 			123
 		);
-		assertObject(run(in, "f=foo")).asJson().is("[{f:'foo'}]");
+		assertJson(run(in, "f=foo"), "[{f:'foo'}]");
 	}
 
 	@Test void d06_d2ArrayOfObjects() {
@@ -727,7 +727,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			"xxx",
 			123
 		};
-		assertObject(run(in, "f=foo")).asJson().is("[{f:'foo'}]");
+		assertJson(run(in, "f=foo"), "[{f:'foo'}]");
 	}
 
 	@Test void d07_d2ListOfMapsWithLists() {
@@ -739,7 +739,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			map("quux",list((Object)null)),
 			map(null,list((Object)null))
 		);
-		assertObject(run(in, "f=foo")).asJson().is("[{f:['foo']}]");
+		assertJson(run(in, "f=foo"), "[{f:['foo']}]");
 	}
 
 	@Test void d08_d2SetOfMapsWithSets() {
@@ -751,7 +751,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			map("quux",set((Object)null)),
 			map(null,set((Object)null))
 		);
-		assertObject(run(in, "f=foo")).asJson().is("[{f:['foo']}]");
+		assertJson(run(in, "f=foo"), "[{f:['foo']}]");
 	}
 
 	@Test void d09_d2ArrayOfMapsWithArrays() {
@@ -763,7 +763,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			map("quux",new Object[]{null}),
 			map(null,new Object[]{null})
 		};
-		assertObject(run(in, "f=foo")).asJson().is("[{f:['foo']}]");
+		assertJson(run(in, "f=foo"), "[{f:['foo']}]");
 	}
 
 	@Test void d10_d2ListOfBeans() {
@@ -773,7 +773,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			null,
 			A.create(null)
 		);
-		assertObject(run(in, "f=foo")).asJson().is("[{f:'foo'}]");
+		assertJson(run(in, "f=foo"), "[{f:'foo'}]");
 	}
 
 	@Test void d11_d3ListOfListOfMaps() {
@@ -786,7 +786,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			list(map(null,null)),
 			null
 		);
-		assertObject(run(in, "f=foo")).asJson().is("[[{f:'foo'}]]");
+		assertJson(run(in, "f=foo"), "[[{f:'foo'}]]");
 	}
 
 	@Test void d12_d3SetOfSetOfMaps() {
@@ -800,7 +800,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			set(map(null,null)),
 			null
 		);
-		assertObject(run(in, "f=foo")).asJson().is("[[{f:'foo'}]]");
+		assertJson(run(in, "f=foo"), "[[{f:'foo'}]]");
 	}
 
 	@Test void d13_d3ArrayOfArrayOfMaps() {
@@ -814,7 +814,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			new Map[]{map(null,null)},
 			null
 		};
-		assertObject(run(in, "f=foo")).asJson().is("[[{f:'foo'}]]");
+		assertJson(run(in, "f=foo"), "[[{f:'foo'}]]");
 	}
 
 	@Test void d14_d3ListOfListOfObjects() {
@@ -828,7 +828,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			list("xxx"),
 			null
 		);
-		assertObject(run(in, "f=foo")).asJson().is("[[{f:'foo'}]]");
+		assertJson(run(in, "f=foo"), "[[{f:'foo'}]]");
 	}
 
 	@Test void d15_d3SetOfSetOfObjects() {
@@ -843,7 +843,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			set(123),
 			null
 		);
-		assertObject(run(in, "f=foo")).asJson().is("[[{f:'foo'}]]");
+		assertJson(run(in, "f=foo"), "[[{f:'foo'}]]");
 	}
 
 	@Test void d16_d3ArrayOfArrayOfObjects() {
@@ -858,7 +858,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			new Object[]{123},
 			null
 		};
-		assertObject(run(in, "f=foo")).asJson().is("[[{f:'foo'}]]");
+		assertJson(run(in, "f=foo"), "[[{f:'foo'}]]");
 	}
 
 	@Test void d17_d3ListOfListOfMapsWithCollections() {
@@ -871,7 +871,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			list(map(null,list((Object)null))),
 			null
 		);
-		assertObject(run(in, "f=foo")).asJson().is("[[{f:['foo']}]]");
+		assertJson(run(in, "f=foo"), "[[{f:['foo']}]]");
 	}
 
 	@Test void d18_d3SetOfSetOfMapsWithCollections() {
@@ -884,7 +884,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			set(map(null,set((Object)null))),
 			null
 		);
-		assertObject(run(in, "f=foo")).asJson().is("[[{f:['foo']}]]");
+		assertJson(run(in, "f=foo"), "[[{f:['foo']}]]");
 	}
 
 	@Test void d19_d3ArrayOfArrayOfMapsWithCollections() {
@@ -897,7 +897,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			new Map[]{map(null,new Object[]{null})},
 			null
 		};
-		assertObject(run(in, "f=foo")).asJson().is("[[{f:['foo']}]]");
+		assertJson(run(in, "f=foo"), "[[{f:['foo']}]]");
 	}
 
 	@Test void d20_d3ArrayOfArrayOfBeans() {
@@ -908,6 +908,6 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			new A[]{A.create(null)},
 			null
 		};
-		assertObject(run(in, "f=foo")).asJson().is("[[{f:'foo'}]]");
+		assertJson(run(in, "f=foo"), "[[{f:'foo'}]]");
 	}
 }

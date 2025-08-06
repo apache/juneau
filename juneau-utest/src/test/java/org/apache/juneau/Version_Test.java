@@ -16,8 +16,6 @@ import static org.apache.juneau.Version.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.junit.jupiter.api.*;

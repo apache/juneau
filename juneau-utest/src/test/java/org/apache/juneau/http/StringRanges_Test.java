@@ -13,7 +13,6 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.StringRanges.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,8 +48,8 @@ class StringRanges_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_getRanges() {
-		assertObject(of("foo").toList()).asJson().is("['foo']");
-		assertObject(of((String)null).toList()).asJson().is("[]");
+		assertJson(of("foo").toList(), "['foo']");
+		assertJson(of((String)null).toList(), "[]");
 	}
 
 	@Test void a04_toString() {

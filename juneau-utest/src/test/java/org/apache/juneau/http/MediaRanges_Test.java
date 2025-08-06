@@ -13,7 +13,6 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.MediaRanges.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
@@ -31,9 +30,9 @@ class MediaRanges_Test extends SimpleTestBase {
 		x1 = of("text/json");
 		x2 = x1.getRange(0);
 		assertString("text/json", x2);
-		assertObject(x2.getParameters()).asJson().is("[]");
+		assertJson(x2.getParameters(), "[]");
 		assertString("1.0", x2.getQValue());
-		assertObject(x2.getExtensions()).asJson().is("[]");
+		assertJson(x2.getExtensions(), "[]");
 
 		assertNull(x1.getRange(-1));
 		assertNull(x1.getRange(1));
@@ -41,65 +40,65 @@ class MediaRanges_Test extends SimpleTestBase {
 		x1 = of("foo,bar");
 		x2 = x1.getRange(0);
 		assertString("foo", x2);
-		assertObject(x2.getParameters()).asJson().is("[]");
+		assertJson(x2.getParameters(), "[]");
 		assertString("1.0", x2.getQValue());
-		assertObject(x2.getExtensions()).asJson().is("[]");
+		assertJson(x2.getExtensions(), "[]");
 
 		x1 = of(" foo , bar ");
 		x2 = x1.getRange(0);
 		assertString("foo", x2);
-		assertObject(x2.getParameters()).asJson().is("[]");
+		assertJson(x2.getParameters(), "[]");
 		assertString("1.0", x2.getQValue());
-		assertObject(x2.getExtensions()).asJson().is("[]");
+		assertJson(x2.getExtensions(), "[]");
 
 		x1 = of("text/json;a=1;q=0.9;b=2");
 		x2 = x1.getRange(0);
 		assertString("text/json;a=1;q=0.9;b=2", x2);
-		assertObject(x2.getParameters()).asJson().is("[{name:'a',value:'1'}]");
+		assertJson(x2.getParameters(), "[{name:'a',value:'1'}]");
 		assertString("0.9", x2.getQValue());
-		assertObject(x2.getExtensions()).asJson().is("[{name:'b',value:'2'}]");
+		assertJson(x2.getExtensions(), "[{name:'b',value:'2'}]");
 
 		x1 = of("text/json;a=1;a=2;q=0.9;b=3;b=4");
 		x2 = x1.getRange(0);
 		assertString("text/json;a=1;a=2;q=0.9;b=3;b=4", x2);
-		assertObject(x2.getParameters()).asJson().is("[{name:'a',value:'1'},{name:'a',value:'2'}]");
+		assertJson(x2.getParameters(), "[{name:'a',value:'1'},{name:'a',value:'2'}]");
 		assertString("0.9", x2.getQValue());
-		assertObject(x2.getExtensions()).asJson().is("[{name:'b',value:'3'},{name:'b',value:'4'}]");
+		assertJson(x2.getExtensions(), "[{name:'b',value:'3'},{name:'b',value:'4'}]");
 
 		x1 = of("text/json;a=1;a=2;q=1.0;b=3;b=4");
 		x2 = x1.getRange(0);
 		assertString("text/json;a=1;a=2;q=1.0;b=3;b=4", x2);
-		assertObject(x2.getParameters()).asJson().is("[{name:'a',value:'1'},{name:'a',value:'2'}]");
+		assertJson(x2.getParameters(), "[{name:'a',value:'1'},{name:'a',value:'2'}]");
 		assertString("1.0", x2.getQValue());
-		assertObject(x2.getExtensions()).asJson().is("[{name:'b',value:'3'},{name:'b',value:'4'}]");
+		assertJson(x2.getExtensions(), "[{name:'b',value:'3'},{name:'b',value:'4'}]");
 
 		x1 = of("text/json;a=1");
 		x2 = x1.getRange(0);
 		assertString("text/json;a=1", x2);
-		assertObject(x2.getParameters()).asJson().is("[{name:'a',value:'1'}]");
+		assertJson(x2.getParameters(), "[{name:'a',value:'1'}]");
 		assertString("1.0", x2.getQValue());
-		assertObject(x2.getExtensions()).asJson().is("[]");
+		assertJson(x2.getExtensions(), "[]");
 
 		x1 = of("text/json;a=1;");
 		x2 = x1.getRange(0);
 		assertString("text/json;a=1", x2);
-		assertObject(x2.getParameters()).asJson().is("[{name:'a',value:'1'}]");
+		assertJson(x2.getParameters(), "[{name:'a',value:'1'}]");
 		assertString("1.0", x2.getQValue());
-		assertObject(x2.getExtensions()).asJson().is("[]");
+		assertJson(x2.getExtensions(), "[]");
 
 		x1 = of("text/json;q=0.9");
 		x2 = x1.getRange(0);
 		assertString("text/json;q=0.9", x2);
-		assertObject(x2.getParameters()).asJson().is("[]");
+		assertJson(x2.getParameters(), "[]");
 		assertString("0.9", x2.getQValue());
-		assertObject(x2.getExtensions()).asJson().is("[]");
+		assertJson(x2.getExtensions(), "[]");
 
 		x1 = of("text/json;q=0.9;");
 		x2 = x1.getRange(0);
 		assertString("text/json;q=0.9", x2);
-		assertObject(x2.getParameters()).asJson().is("[]");
+		assertJson(x2.getParameters(), "[]");
 		assertString("0.9", x2.getQValue());
-		assertObject(x2.getExtensions()).asJson().is("[]");
+		assertJson(x2.getExtensions(), "[]");
 	}
 
 	@Test void a02_hasSubtypePart() {
@@ -143,6 +142,6 @@ class MediaRanges_Test extends SimpleTestBase {
 
 	@Test void a05_getRanges() {
 		MediaRanges x1 = of("text/json");
-		assertObject(x1.toList()).asJson().is("['text/json']");
+		assertJson(x1.toList(), "['text/json']");
 	}
 }

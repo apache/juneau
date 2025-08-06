@@ -65,15 +65,15 @@ class EncoderSetTest extends SimpleTestBase {
 
 		sb = EncoderSet.create().add(E1.class, E2.class);
 		s = sb.build();
-		assertObject(s.getSupportedEncodings()).asJson().is("['E1','E2','E2a']");
+		assertList(s.getSupportedEncodings(), "E1,E2,E2a");
 
 		sb.add(E3.class, E4.class);
 		s = sb.build();
-		assertObject(s.getSupportedEncodings()).asJson().is("['E3','E4','E4a','E1','E2','E2a']");
+		assertList(s.getSupportedEncodings(), "E3,E4,E4a,E1,E2,E2a");
 
 		sb.add(E5.class);
 		s = sb.build();
-		assertObject(s.getSupportedEncodings()).asJson().is("['E5','E3','E4','E4a','E1','E2','E2a']");
+		assertList(s.getSupportedEncodings(), "E5,E3,E4,E4a,E1,E2,E2a");
 	}
 
 	public static class E1 extends GzipEncoder {

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import java.util.*;
@@ -103,7 +102,7 @@ class JsonListTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test
 	public void testFromReader() throws Exception {
-		assertObject(new JsonList(reader("[1,2,3]"))).asJson().is("[1,2,3]");
+		assertJson(new JsonList(reader("[1,2,3]")), "[1,2,3]");
 	}
 
 	//====================================================================================================
@@ -113,12 +112,12 @@ class JsonListTest extends SimpleTestBase {
 	public void testGetMap() throws Exception {
 		JsonList l = new JsonList("[{1:'true',2:'false'}]");
 		Map<Integer,Boolean> m2 = l.getMap(0, Integer.class, Boolean.class);
-		assertObject(m2).asJson().is("{'1':true,'2':false}");
+		assertJson(m2, "{'1':true,'2':false}");
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
 		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
 
 		m2 = l.get(0, Map.class, Integer.class, Boolean.class);
-		assertObject(m2).asJson().is("{'1':true,'2':false}");
+		assertJson(m2, "{'1':true,'2':false}");
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
 		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
 	}
@@ -130,11 +129,11 @@ class JsonListTest extends SimpleTestBase {
 	public void testGetList() throws Exception {
 		JsonList l = new JsonList("[['123','456']]");
 		List<Integer> l2 = l.getList(0, Integer.class);
-		assertObject(l2).asJson().is("[123,456]");
+		assertList(l2, "123,456");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
 
 		l2 = l.get(0, List.class, Integer.class);
-		assertObject(l2).asJson().is("[123,456]");
+		assertList(l2, "123,456");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
 	}
 }

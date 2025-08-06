@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import java.util.*;
@@ -70,16 +69,13 @@ public class Swagger_Header_Test extends SimpleTestBase {
 
 		x = s.getParameterInfo("/a","get","header","H");
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getType()).asJson().is("'string'");
-
+		assertEquals("string", x.getType());
 		x = s.getParameterInfo("/b","put","header","H");
 		assertEquals("a\nb", x.getDescription());
-		assertObject(x.getType()).asJson().is("'string'");
-
+		assertEquals("string", x.getType());
 		x = s.getParameterInfo("/c","post","header","H");
 		assertEquals("b\nc", x.getDescription());
-		assertObject(x.getType()).asJson().is("'string'");
-	}
+		assertEquals("string", x.getType());	}
 
 	@Rest
 	public static class B {
@@ -114,16 +110,16 @@ public class Swagger_Header_Test extends SimpleTestBase {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","header","H");
-		assertObject(x).asJson().is("{'in':'header',name:'H',type:'string'}");
+		assertJson(x, "{'in':'header',name:'H',type:'string'}");
 
 		x = s.getParameterInfo("/b","put","header","H");
-		assertObject(x).asJson().is("{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}");
+		assertJson(x, "{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 
 		x = s.getParameterInfo("/c","post","header","H");
-		assertObject(x).asJson().is("{'in':'header',name:'H',type:'array',items:{type:'string'}}");
+		assertJson(x, "{'in':'header',name:'H',type:'array',items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d","delete","header","H");
-		assertObject(x).asJson().is("{'in':'header',name:'H',type:'string'}");
+		assertJson(x, "{'in':'header',name:'H',type:'string'}");
 	}
 
 	@Rest
@@ -214,21 +210,21 @@ public class Swagger_Header_Test extends SimpleTestBase {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a","get","header","H");
-		assertObject(x).asJson().is("{'in':'header',name:'H',type:'string'}");
+		assertJson(x, "{'in':'header',name:'H',type:'string'}");
 
 		x = s.getParameterInfo("/b","put","header","H");
-		assertObject(x).asJson().is("{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}");
+		assertJson(x, "{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 
 		x = s.getParameterInfo("/c","post","header","H");
-		assertObject(x).asJson().is("{'in':'header',name:'H',type:'array',items:{type:'string'}}");
+		assertJson(x, "{'in':'header',name:'H',type:'array',items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d","delete","header","H");
-		assertObject(x).asJson().is("{'in':'header',name:'H',type:'string'}");
+		assertJson(x, "{'in':'header',name:'H',type:'string'}");
 
 		x = s.getParameterInfo("/e","get","header","H");
-		assertObject(x).asJson().is("{'in':'header',name:'H',type:'integer',format:'int32'}");
+		assertJson(x, "{'in':'header',name:'H',type:'integer',format:'int32'}");
 
 		x = s.getParameterInfo("/f","get","header","H");
-		assertObject(x).asJson().is("{'in':'header',name:'H',type:'boolean'}");
+		assertJson(x, "{'in':'header',name:'H',type:'boolean'}");
 	}
 }

@@ -36,7 +36,7 @@ public class MsgPackParserTest extends SimpleTestBase {
 
 		is = is("00 01");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("0");
+		assertJson(r, "0");
 		assertThrown(()->p.parse(is, Object.class)).asMessage().isContains("Stream is closed");
 	}
 
@@ -51,75 +51,72 @@ public class MsgPackParserTest extends SimpleTestBase {
 
 		is = is("00 01");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("0");
+		assertJson(r, "0");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("1");
+		assertJson(r, "1");
 
 		is = is("D1 00 80 D1 00 81");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("128");
+		assertJson(r, "128");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("129");
+		assertJson(r, "129");
 
 		is = is("D2 00 00 80 00 D2 00 00 80 01");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("32768");
+		assertJson(r, "32768");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("32769");
+		assertJson(r, "32769");
 
 		is = is("CA 00 00 00 00 CA 3F 80 00 00");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("0.0");
+		assertJson(r, "0.0");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("1.0");
+		assertJson(r, "1.0");
 
 		is = is("CB 3F F0 00 00 00 00 00 00 CB BF F0 00 00 00 00 00 00");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("1.0");
+		assertJson(r, "1.0");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("-1.0");
+		assertJson(r, "-1.0");
 
 		is = is("A0 A0");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("''");
+		assertString("", r);
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("''");
-
+		assertString("", r);
 		is = is("BF 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 BF 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'");
+		assertString("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", r);
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'");
-
+		assertString("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", r);
 		is = is("D9 20 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 D9 20 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'");
-		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'");
+		assertString("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", r);		r = p.parse(is, Object.class);
 
+		assertString("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", r);
 		is = is("90 90");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("[]");
+		assertJson(r, "[]");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("[]");
+		assertJson(r, "[]");
 
 		is = is("91 01 91 02");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("[1]");
+		assertJson(r, "[1]");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("[2]");
+		assertJson(r, "[2]");
 
 		is = is("80 80");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("{}");
+		assertJson(r, "{}");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("{}");
+		assertJson(r, "{}");
 
 		is = is("81 A1 31 01 81 A1 31 02");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("{'1':1}");
+		assertJson(r, "{'1':1}");
 		r = p.parse(is, Object.class);
-		assertObject(r).asJson().is("{'1':2}");
+		assertJson(r, "{'1':2}");
 	}
 
 	private InputStream is(String spacedHex) {

@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
-public class UrlPathMatcher_Test extends SimpleTestBase {
+class UrlPathMatcher_Test extends SimpleTestBase {
 
 	private void check(UrlPathMatcher p, String path, String expected) {
 		assertObject(p.match(UrlPath.of(path))).asString().is(expected);
@@ -29,7 +29,7 @@ public class UrlPathMatcher_Test extends SimpleTestBase {
 
 	private void shouldNotMatch(UrlPathMatcher p, String...paths) {
 		for (String path : paths)
-			assertObject(p.match(UrlPath.of(path))).setMsg("path={0}", path).asJson().is("null");
+			assertNull(p.match(UrlPath.of(path)));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

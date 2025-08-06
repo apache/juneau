@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshaller;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -40,8 +39,8 @@ class PlainText_Test extends SimpleTestBase {
 
 		assertEquals(expected1, PlainText.to(in1, String.class));
 		assertEquals(expected1, PlainText.to(stringReader(in1), String.class));
-		assertObject(PlainText.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
-		assertObject(PlainText.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
+		assertJson(PlainText.to(in2, Map.class, String.class, String.class), expected2);
+		assertJson(PlainText.to(stringReader(in2), Map.class, String.class, String.class), expected2);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

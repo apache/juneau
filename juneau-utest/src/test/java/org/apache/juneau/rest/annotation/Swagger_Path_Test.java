@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import java.util.*;
@@ -112,30 +111,30 @@ public class Swagger_Path_Test extends SimpleTestBase {
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
-		assertObject(x.getEnum()).asJson().is("['a','b']");
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b']}");
+		assertJson(x.getEnum(), "['a','b']");
+		assertJson(x, "{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b']}");
 
 		x = s.getParameterInfo("/b/{P}","put","path","P");
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
-		assertObject(x.getEnum()).asJson().is("['a','b']");
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b']}");
+		assertJson(x.getEnum(), "['a','b']");
+		assertJson(x, "{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b']}");
 
 		x = s.getParameterInfo("/c/{P}","post","path","P");
 		assertEquals("P", x.getName());
 		assertEquals("b\nc", x.getDescription());
 		assertEquals("string", x.getType());
-		assertObject(x.getEnum()).asJson().is("['b','c']");
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',description:'b\\nc',required:true,'enum':['b','c']}");
+		assertJson(x.getEnum(), "['b','c']");
+		assertJson(x, "{'in':'path',name:'P',type:'string',description:'b\\nc',required:true,'enum':['b','c']}");
 
 		x = s.getParameterInfo("/d/{P}","delete","path","P");
 		assertEquals("P", x.getName());
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true}");
+		assertJson(x, "{'in':'path',name:'P',type:'string',required:true}");
 
 		x = s.getParameterInfo("/e/{P}","get","path","P");
-		assertObject(x.getEnum()).asJson().is("['a','b']");
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true,'enum':['a','b']}");
+		assertJson(x.getEnum(), "['a','b']");
+		assertJson(x, "{'in':'path',name:'P',type:'string',required:true,'enum':['a','b']}");
 	}
 
 	@Rest
@@ -171,16 +170,16 @@ public class Swagger_Path_Test extends SimpleTestBase {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a/{P}","get","path","P");
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true}");
+		assertJson(x, "{'in':'path',name:'P',type:'string',required:true}");
 
 		x = s.getParameterInfo("/b/{P}","put","path","P");
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}");
+		assertJson(x, "{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}");
 
 		x = s.getParameterInfo("/c/{P}","post","path","P");
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}");
+		assertJson(x, "{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d/{P}","delete","path","P");
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true}");
+		assertJson(x, "{'in':'path',name:'P',type:'string',required:true}");
 	}
 
 	@Rest
@@ -239,7 +238,7 @@ public class Swagger_Path_Test extends SimpleTestBase {
 		assertEquals("P", x.getName());
 
 		x = s.getParameterInfo("/e/{P}","get","path","P");
-		assertObject(x.getEnum()).asJson().is("['a','b']");
+		assertJson(x.getEnum(), "['a','b']");
 	}
 
 	@Rest
@@ -276,21 +275,21 @@ public class Swagger_Path_Test extends SimpleTestBase {
 		ParameterInfo x;
 
 		x = s.getParameterInfo("/a/{P}","get","path","P");
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true}");
+		assertJson(x, "{'in':'path',name:'P',type:'string',required:true}");
 
 		x = s.getParameterInfo("/b/{P}","put","path","P");
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}");
+		assertJson(x, "{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}");
 
 		x = s.getParameterInfo("/c/{P}","post","path","P");
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}");
+		assertJson(x, "{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}");
 
 		x = s.getParameterInfo("/d/{P}","delete","path","P");
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'string',required:true}");
+		assertJson(x, "{'in':'path',name:'P',type:'string',required:true}");
 
 		x = s.getParameterInfo("/e/{P}","get","path","P");
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'integer',required:true,format:'int32'}");
+		assertJson(x, "{'in':'path',name:'P',type:'integer',required:true,format:'int32'}");
 
 		x = s.getParameterInfo("/f/{P}","get","path","P");
-		assertObject(x).asJson().is("{'in':'path',name:'P',type:'boolean',required:true}");
+		assertJson(x, "{'in':'path',name:'P',type:'boolean',required:true}");
 	}
 }

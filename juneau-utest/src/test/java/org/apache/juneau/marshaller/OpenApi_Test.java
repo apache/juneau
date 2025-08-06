@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshaller;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -40,8 +39,8 @@ class OpenApi_Test extends SimpleTestBase {
 
 		assertEquals(expected1, OpenApi.to(in1, String.class));
 		assertEquals(expected1, OpenApi.to(stringReader(in1), String.class));
-		assertObject(OpenApi.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
-		assertObject(OpenApi.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
+		assertJson(OpenApi.to(in2, Map.class, String.class, String.class), expected2);
+		assertJson(OpenApi.to(stringReader(in2), Map.class, String.class, String.class), expected2);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

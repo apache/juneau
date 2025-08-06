@@ -98,7 +98,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	@Test void a02_overrideParser() throws Exception {
 		RestClient x = client().build();
 		ABean b = x.post("/echo",bean).run().getContent().parser(JsonParser.DEFAULT).as(ABean.class);
-		assertObject(b).asJson().is("{f:1}");
+		assertJson(b, "{f:1}");
 		assertThrown(()->x.post("/echo",bean).run().getContent().parser(XmlParser.DEFAULT).as(ABean.class)).asMessages().isAny(contains("ParseError at [row,col]:[1,1]"));
 		assertThrown(()->x.post("/echo",bean).run().getContent().parser(XmlParser.DEFAULT).assertValue().as(ABean.class)).asMessages().isAny(contains("ParseError at [row,col]:[1,1]"));
 	}
@@ -202,10 +202,10 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 
 	@Test void a07_asType() throws Exception {
 		List<Integer> x1 = testClient().entity(stringEntity("[1,2]")).get().run().getContent().as(List.class,Integer.class);
-		assertObject(x1).asJson().is("[1,2]");
+		assertJson(x1, "[1,2]");
 
 		ABean x3 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().as(ABean.class);
-		assertObject(x3).asJson().is("{f:1}");
+		assertJson(x3, "{f:1}");
 
 		HttpEntity x5 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().as(ResponseContent.class);
 		assertTrue(x5 instanceof ResponseContent);
@@ -219,13 +219,13 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 		assertThrown(()->testClient().entity(stringEntity("")).get().run().getContent().as(A7c.class)).asMessages().isContains("foo");
 
 		Future<ABean> x8 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asFuture(ABean.class);
-		assertObject(x8.get()).asJson().is("{f:1}");
+		assertJson(x8.get(), "{f:1}");
 
 		Future<ABean> x10 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asFuture(cm(ABean.class));
-		assertObject(x10.get()).asJson().is("{f:1}");
+		assertJson(x10.get(), "{f:1}");
 
 		Future<List<Integer>> x12 = testClient().entity(stringEntity("[1,2]")).get().run().getContent().asFuture(List.class,Integer.class);
-		assertObject(x12.get()).asJson().is("[1,2]");
+		assertJson(x12.get(), "[1,2]");
 
 		String x14 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asString();
 		assertEquals("{f:1}", x14);
