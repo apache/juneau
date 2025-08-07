@@ -21,7 +21,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
-class Csv_Test  extends SimpleTestBase{
+class Csv_Test extends SimpleTestBase{
 
 	@Test void a01_to() throws Exception {
 		Object in1 = "foo", in2 = new Object[]{JsonMap.of("a","foo","b","bar")};
@@ -37,9 +37,9 @@ class Csv_Test  extends SimpleTestBase{
 		String in1 = "'foo'", in2 = "{foo:'bar'}";
 
 		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->Csv.to(in1, String.class));
-		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->assertString(Csv.to(stringReader(in1), String.class)));
-		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->assertObject(Csv.to(in2, Map.class, String.class, String.class)));
-		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->assertObject(Csv.to(stringReader(in2), Map.class, String.class, String.class)));
+		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->Csv.to(stringReader(in1), String.class));
+		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->Csv.to(in2, Map.class, String.class, String.class));
+		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->Csv.to(stringReader(in2), Map.class, String.class, String.class));
 	}
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods

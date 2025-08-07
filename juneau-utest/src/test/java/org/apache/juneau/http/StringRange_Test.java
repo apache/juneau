@@ -35,8 +35,8 @@ class StringRange_Test extends SimpleTestBase {
 
 		StringRange x4 = of("foo;a=1");
 		assertEquals(x4, x3);
-		assertObject(x3).isNot(x2);
-		assertObject(x3).asString().isNot("foo");
+		assertNotEquals(x3, x2);
+		assertNotEquals("foo", s(x3));
 		assertEquals(x4.hashCode(), x3.hashCode());
 
 		assertString("*", of((String)null));

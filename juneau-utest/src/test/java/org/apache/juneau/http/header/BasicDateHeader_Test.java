@@ -69,7 +69,7 @@ class BasicDateHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_asZonedDateTime() {
-		assertOptional(dateHeader(HEADER,VALUE).asZonedDateTime()).asString().is("1994-10-29T19:43:31Z");
+		assertString("1994-10-29T19:43:31Z", dateHeader(HEADER,VALUE).asZonedDateTime());
 	}
 
 	@Test void a04_assertZonedDateTime() {

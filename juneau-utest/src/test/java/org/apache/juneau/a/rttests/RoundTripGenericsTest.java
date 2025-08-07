@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.AssertionHelpers.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -46,14 +46,14 @@ public class RoundTripGenericsTest extends RoundTripTest {
 		// During parsing, these become JsonMaps.
 		Pair pair = new Pair<>(new Source().init(), new Target().init());
 		pair = roundTrip(pair);
-		assertObject(pair).asJsonSorted().is("{s:{s1:'a1'},t:{t1:'b1'}}");
+		assertJson(pair, "{s:{s1:'a1'},t:{t1:'b1'}}");
 		assertEquals("JsonMap", pair.getS().getClass().getSimpleName());
 		assertEquals("JsonMap", pair.getT().getClass().getSimpleName());
 
 		// If you specify a concrete class, the type variables become bound and
 		// the property types correctly resolve.
 		pair = roundTrip(pair, RealPair.class);
-		assertObject(pair).asJsonSorted().is("{s:{s1:'a1'},t:{t1:'b1'}}");
+		assertJson(pair, "{s:{s1:'a1'},t:{t1:'b1'}}");
 		assertEquals("Source", pair.getS().getClass().getSimpleName());
 		assertEquals("Target", pair.getT().getClass().getSimpleName());
 	}

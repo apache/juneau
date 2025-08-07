@@ -338,7 +338,7 @@ public class ReflectionMapTest extends SimpleTestBase {
 	static ReflectionMap<Number> RM_F = create().append("F2, F1", 1).build();
 
 	@Test void f01_cdl() {
-		assertOptional(RM_F.find(F1.class, null)).asJson().is("1");
+		assertString("1", RM_F.find(F1.class, null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

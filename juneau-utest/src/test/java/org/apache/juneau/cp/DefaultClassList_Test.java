@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.cp.DefaultClassList.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -29,9 +28,9 @@ class DefaultClassList_Test extends SimpleTestBase {
 
 		x = of(Long.class,null);
 		assertEmpty(x.get(String.class));
-		assertOptional(x.get(Long.class)).isNotNull();
-		assertOptional(x.get(Number.class)).isNotNull();
-		assertOptional(x.get(Object.class)).isNotNull();
+		assertPresent(x.get(Long.class));
+		assertPresent(x.get(Number.class));
+		assertPresent(x.get(Object.class));
 
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'type' cannot be null.", ()->create().get(null));
 	}
