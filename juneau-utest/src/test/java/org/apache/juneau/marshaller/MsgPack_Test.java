@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshaller;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,10 +28,10 @@ class MsgPack_Test extends SimpleTestBase {
 		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
 		String expected1 = "A3666F6F", expected2 = "81A3666F6FA3626172";
 
-		assertBytes(MsgPack.of(in1)).asHex().is(expected1);
-		assertBytes(bytes(MsgPack.of(in1,baos()))).asHex().is(expected1);
-		assertBytes(MsgPack.of(in2)).asHex().is(expected2);
-		assertBytes(bytes(MsgPack.of(in2,baos()))).asHex().is(expected2);
+		assertEquals(toHex(MsgPack.of(in1)), expected1);
+		assertEquals(toHex(bytes(MsgPack.of(in1,baos()))), expected1);
+		assertEquals(toHex(MsgPack.of(in2)), expected2);
+		assertEquals(toHex(bytes(MsgPack.of(in2,baos()))), expected2);
 	}
 
 	@Test void a02_from() throws Exception {

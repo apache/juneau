@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
@@ -103,7 +104,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	@Test void a03_asInputStream() throws Exception {
 		RestResponse r1 = client().build().get("/bean").run();
 		InputStream is = r1.getContent().asInputStream();
-		assertBytes(is).asString().is("{f:1}");
+		assertEquals("{f:1}", toUtf8(is));
 		assertThrown(()->r1.getContent().asInputStream()).asMessage().isContains("Response has already been consumed.");
 
 		// Non-repeatable entity.
@@ -117,7 +118,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 		RestResponse r3 = x.get("/bean").run();
 		r3.getContent().asInputStream();
 		is = r3.getContent().asInputStream();
-		assertBytes(is).asString().is("{f:2}");
+		assertEquals("{f:2}", toUtf8(is));
 		is = x.get("/bean").run().getContent().asInputStream();
 		((EofSensorInputStream)is).abortConnection();
 
@@ -151,10 +152,10 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 
 	@Test void a05_asBytes() throws Exception {
 		byte[] x = client().build().get("/bean").run().getContent().asBytes();
-		assertBytes(x).asString().is("{f:1}");
+		assertEquals("{f:1}", toUtf8(x));
 
 		x = client().build().get("/bean").run().assertContent().asBytes().asString().is("{f:1}").getContent().asBytes();
-		assertBytes(x).asString().is("{f:1}");
+		assertEquals("{f:1}", toUtf8(x));
 
 		assertThrowsWithMessage(Exception.class, "foo", ()->testClient().entity(new InputStreamEntity(badStream())).get().run().getContent().asBytes());
 	}
@@ -162,7 +163,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	@Test void a06_pipeTo() throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		client().build().get("/bean").run().getContent().pipeTo(baos);
-		assertBytes(baos.toByteArray()).asString().is("{f:1}");
+		assertEquals("{f:1}", toUtf8(baos.toByteArray()));
 
 		StringWriter sw = new StringWriter();
 		client().build().get("/bean").run().getContent().pipeTo(sw);

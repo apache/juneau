@@ -3028,4 +3028,16 @@ public final class StringUtils {
 	public static boolean isNumberChar(char c) {
 		return numberChars.contains(c);
 	}
+
+	public static String toUtf8(byte[] b) {
+		return b == null ? null : new String(b, IOUtils.UTF8);
+	}
+
+	public static String toUtf8(InputStream is) {
+		return safe(()->is == null ? null : new String(readBytes(is), IOUtils.UTF8));
+	}
+
+	public static String toHex(InputStream is) {
+		return safe(()->is == null ? null : toHex(readBytes(is)));
+	}
 }

@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.junit.Assert.*;
 import java.io.*;
 import java.nio.file.*;
@@ -33,62 +34,62 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		HttpResource x = stringResource((String)null);
 
 		assertNull(x.getContentType());
-		assertBytes(x.getContent()).isNotNull().asString().isEmpty();
+		assertEquals("", toUtf8(x.getContent()));
 		assertNull(x.getContentEncoding());
 		assertEquals(0, x.getHeaders().size());
 
 		x = stringResource("foo");
-		assertBytes(x.getContent()).asString().is("foo");
+		assertEquals("foo", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 		x = readerResource(reader("foo"));
-		assertBytes(x.getContent()).asString().is("foo");
+		assertEquals("foo", toUtf8(x.getContent()));
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
 
 		x = byteArrayResource("foo".getBytes());
-		assertBytes(x.getContent()).asString().is("foo");
+		assertEquals("foo", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 		x = streamResource(inputStream("foo"));
-		assertBytes(x.getContent()).asString().is("foo");
+		assertEquals("foo", toUtf8(x.getContent()));
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
 
 		x = fileResource(f);
-		assertBytes(x.getContent()).asString().isEmpty();
+		assertEquals("", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 		x = stringResource("foo").setCached();
-		assertBytes(x.getContent()).asString().is("foo");
-		assertBytes(x.getContent()).asString().is("foo");
+		assertEquals("foo", toUtf8(x.getContent()));
+		assertEquals("foo", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
 
 		x = readerResource(reader("foo")).setCached();
-		assertBytes(x.getContent()).asString().is("foo");
-		assertBytes(x.getContent()).asString().is("foo");
+		assertEquals("foo", toUtf8(x.getContent()));
+		assertEquals("foo", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
 
 		x = byteArrayResource("foo".getBytes()).setCached();
-		assertBytes(x.getContent()).asString().is("foo");
-		assertBytes(x.getContent()).asString().is("foo");
+		assertEquals("foo", toUtf8(x.getContent()));
+		assertEquals("foo", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
 
 		x = streamResource(inputStream("foo")).setCached();
-		assertBytes(x.getContent()).asString().is("foo");
-		assertBytes(x.getContent()).asString().is("foo");
+		assertEquals("foo", toUtf8(x.getContent()));
+		assertEquals("foo", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
 
 		x = stringResource((String)null).setCached();
-		assertBytes(x.getContent()).isExists().asString().isEmpty();
+		assertEquals("", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
 		x.writeTo(new ByteArrayOutputStream());
 
 		x = fileResource(f).setCached();
-		assertBytes(x.getContent()).asString().isEmpty();
+		assertEquals("", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
 		x.writeTo(new ByteArrayOutputStream());
 

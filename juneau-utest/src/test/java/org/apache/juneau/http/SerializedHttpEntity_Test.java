@@ -18,6 +18,7 @@ import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 
 import java.io.*;
 
@@ -70,7 +71,7 @@ class SerializedHttpEntity_Test extends SimpleTestBase {
 	@Test void a05_writeTo() throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		serializedEntity("foo", null).writeTo(baos);
-		assertBytes(baos.toByteArray()).asString().is("foo");
+		assertEquals("foo", toUtf8(baos.toByteArray()));
 	}
 
 	@Test void a06_isRepeatable() {
@@ -81,8 +82,8 @@ class SerializedHttpEntity_Test extends SimpleTestBase {
 		assertLong(serializedEntity(ABean.get(),null).getContentLength()).is(-1L);
 	}
 
-	@Test void a08_getContent() throws Exception {
-		assertBytes(serializedEntity("foo",null).getContent()).asString().is("foo");
+	@Test void a08_getContent() {
+		assertEquals("foo", toUtf8(serializedEntity("foo",null).getContent()));
 	}
 
 	@Test void a09_chunked() throws Exception {

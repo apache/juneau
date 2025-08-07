@@ -40,18 +40,6 @@ import org.junit.jupiter.api.MethodOrderer.*;
 public abstract class SimpleTestBase {
 
 	/**
-	 * Asserts value when stringified matches the specified pattern.
-	 */
-	protected static void assertMatches(String pattern, Object value) {
-		var m = getMatchPattern(pattern).matcher(s(value));
-		if (! m.matches()) {
-			var msg = "Pattern didn't match: \n\tExpected:\n"+pattern+"\n\tActual:\n"+value;
-			System.err.println(msg);  // For easier debugging.
-			fail(msg);
-		}
-	}
-
-	/**
 	 * Asserts the JSON5 representation of the specified object.
 	 */
 	protected static void assertJson(Object value, String json) {
@@ -78,6 +66,14 @@ public abstract class SimpleTestBase {
 	 */
 	protected static void assertString(String expected, Object actual) {
 		assertEquals(expected, r(actual));
+	}
+
+	/**
+	 * Asserts an object matches the expected string after it's been made readable.
+	 */
+	protected static void assertContains(String expected, Object actual) {
+		var a2 = r(actual);
+		assertTrue(a2.contains(expected), ss("String did not contain expected substring.  expected={0}, actual={1}", expected, a2));
 	}
 
 	protected static void assertEmpty(Optional<?> o) {

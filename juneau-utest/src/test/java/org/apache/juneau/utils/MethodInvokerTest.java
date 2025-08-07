@@ -12,17 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.lang.reflect.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.rest.stats.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class MethodInvokerTest {
+class MethodInvokerTest extends SimpleTestBase {
 
 	private MethodExecStore store = MethodExecStore
 		.create()
@@ -41,8 +38,7 @@ public class MethodInvokerTest {
 		return new MethodInvoker(m, store.getStats(m));
 	}
 
-	@Test
-	public void testBasic() throws Exception {
+	@Test void testBasic() throws Exception {
 		Method m = A.class.getMethod("foo");
 
 		MethodInvoker mi = create(m);
@@ -52,11 +48,10 @@ public class MethodInvokerTest {
 		mi.invoke(a);
 		mi.invoke(a);
 
-		assertBean(mi.getStats()).asPropertyMap("runs","errors").asJson().is("{runs:3,errors:0}");
+		assertBean(mi.getStats(), "runs,errors", "3,0");
 	}
 
-	@Test
-	public void testException() throws Exception {
+	@Test void testException() throws Exception {
 		Method m = A.class.getMethod("bar");
 
 		MethodInvoker mi = create(m);
@@ -66,11 +61,10 @@ public class MethodInvokerTest {
 		assertThrows(Exception.class, ()->mi.invoke(a));
 		assertThrows(Exception.class, ()->mi.invoke(a));
 
-		assertBean(mi.getStats()).asPropertyMap("runs","errors").asJson().is("{runs:3,errors:3}");
+		assertBean(mi.getStats(), "runs,errors", "3,3");
 	}
 
-	@Test
-	public void testIllegalArgument() throws Exception {
+	@Test void testIllegalArgument() throws Exception {
 		Method m = A.class.getMethod("baz", int.class);
 
 		MethodInvoker mi = create(m);
@@ -80,11 +74,10 @@ public class MethodInvokerTest {
 		assertThrows(Exception.class, ()->mi.invoke(a));
 		assertThrows(Exception.class, ()->mi.invoke(a, 1, "x"));
 
-		assertBean(mi.getStats()).asPropertyMap("runs","errors").asJson().is("{runs:3,errors:3}");
+		assertBean(mi.getStats(), "runs,errors", "3,3");
 	}
 
-	@Test
-	public void testOtherMethods() throws Exception {
+	@Test void testOtherMethods() throws Exception {
 		Method m = A.class.getMethod("foo");
 		MethodInvoker mi = create(m);
 

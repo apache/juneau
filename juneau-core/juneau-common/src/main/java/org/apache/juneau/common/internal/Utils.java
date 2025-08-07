@@ -13,6 +13,7 @@
 package org.apache.juneau.common.internal;
 
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -666,6 +667,10 @@ public class Utils {
 			return o2.toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT);
 		if (o instanceof Date o2)
 			return o2.toInstant().toString();
+		if (o instanceof InputStream o2)
+			return toHex(o2);
+		if (o instanceof byte[] o2)
+			return toHex(o2);
 		if (o != null && o.getClass().isArray()) {
 			List<Object> l = list();
 			for (var i = 0; i < Array.getLength(o); i++) {
