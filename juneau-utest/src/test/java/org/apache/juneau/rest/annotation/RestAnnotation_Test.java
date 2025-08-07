@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
@@ -232,8 +231,8 @@ public class RestAnnotation_Test extends SimpleTestBase {
 		Rest c1 = RestAnnotation.create(C1.class).on(C2.class).build();
 		Rest c2 = RestAnnotation.create("a").on("b").build();
 
-		assertObject(c1).asJson().isContains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertObject(c2).asJson().isContains("on:['a','b']");
+		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
+		assertJsonContains(c2, "on:['a','b']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

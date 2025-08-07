@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -74,8 +73,8 @@ class BeancAnnotation_Test extends SimpleTestBase {
 		Beanc c1 = BeancAnnotation.create("a").on("b").build();
 		Beanc c2 = BeancAnnotation.create().on(C1.class.getConstructor()).on(C2.class.getConstructor()).build();
 
-		assertObject(c1).asJson().isContains("on:['a','b']");
-		assertObject(c2).asJson().isContains("on:['"+CNAME+"$C1()','"+CNAME+"$C2()']");
+		assertJsonContains(c1, "on:['a','b']");
+		assertJsonContains(c2, "on:['"+CNAME+"$C1()','"+CNAME+"$C2()']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -100,9 +100,9 @@ class ResponseAnnotation_Test extends SimpleTestBase {
 		Response c2 = ResponseAnnotation.create("a").on("b").build();
 		Response c4 = ResponseAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
-		assertObject(c1).asJson().isContains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertObject(c2).asJson().isContains("on:['a','b']");
-		assertObject(c4).asJson().isContains("on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
+		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
+		assertJsonContains(c2, "on:['a','b']");
+		assertJsonContains(c4, "on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

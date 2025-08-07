@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.apache.juneau.oapi.*;
@@ -89,8 +88,8 @@ class RequestAnnotation_Test extends SimpleTestBase {
 		Request c1 = RequestAnnotation.create(C1.class).on(C2.class).build();
 		Request c2 = RequestAnnotation.create("a").on("b").build();
 
-		assertObject(c1).asJson().isContains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertObject(c2).asJson().isContains("on:['a','b']");
+		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
+		assertJsonContains(c2, "on:['a','b']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

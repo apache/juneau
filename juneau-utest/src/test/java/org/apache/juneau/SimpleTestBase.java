@@ -38,6 +38,12 @@ public abstract class SimpleTestBase {
 	/**
 	 * Asserts the JSON5 representation of the specified object.
 	 */
+	public static void assertJsonContains(Object value, String json) {
+		AssertionHelpers.assertJsonContains(value, json);
+	}
+	/**
+	 * Asserts the JSON5 representation of the specified object.
+	 */
 	protected static void assertTypeAndJson(Object value, Class<?> c, String json) {
 		AssertionHelpers.assertTypeAndJson(value, c, json);
 	}

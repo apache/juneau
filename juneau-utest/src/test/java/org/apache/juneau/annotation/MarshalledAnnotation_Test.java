@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -88,8 +87,8 @@ class MarshalledAnnotation_Test extends SimpleTestBase {
 		Marshalled c1 = MarshalledAnnotation.create(C1.class).on(C2.class).build();
 		Marshalled c2 = MarshalledAnnotation.create("a").on("b").build();
 
-		assertObject(c1).asJson().isContains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertObject(c2).asJson().isContains("on:['a','b']");
+		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
+		assertJsonContains(c2, "on:['a','b']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

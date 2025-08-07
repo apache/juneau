@@ -58,6 +58,13 @@ public class AssertionHelpers {
 	/**
 	 * Asserts the JSON5 representation of the specified object.
 	 */
+	public static void assertJsonContains(Object value, String json) {
+		assertContains(json, Json5.DEFAULT.write(value));
+	}
+
+	/**
+	 * Asserts the JSON5 representation of the specified object.
+	 */
 	public static void assertTypeAndJson(Object value, Class<?> c, String json) {
 		assertTrue(c.isInstance(value), "Incorrect type.");
 		assertEquals(json, Json5.DEFAULT.write(value));

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.mstat;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -278,7 +277,7 @@ class ThrownStore_Test extends SimpleTestBase {
 		assertNotEquals(0L, stats.getFirstOccurrence());
 		assertNotEquals(0L, stats.getLastOccurrence());
 		assertEquals("bar", stats.getFirstMessage());
-		assertObject(stats.getStackTrace()).asJson().isContains("org.apache.juneau");
+		assertJsonContains(stats.getStackTrace(), "org.apache.juneau");
 		assertContains("bar", stats);
 
 		stats = stats.clone();
@@ -287,7 +286,7 @@ class ThrownStore_Test extends SimpleTestBase {
 		assertNotEquals(0L, stats.getFirstOccurrence());
 		assertNotEquals(0L, stats.getLastOccurrence());
 		assertEquals("bar", stats.getFirstMessage());
-		assertObject(stats.getStackTrace()).asJson().isContains("org.apache.juneau");
+		assertJsonContains(stats.getStackTrace(), "org.apache.juneau");
 		assertContains("bar", stats);
 
 		stats = stats.getCausedBy().get();
@@ -296,7 +295,7 @@ class ThrownStore_Test extends SimpleTestBase {
 		assertNotEquals(0L, stats.getFirstOccurrence());
 		assertNotEquals(0L, stats.getLastOccurrence());
 		assertEquals("foo", stats.getFirstMessage());
-		assertObject(stats.getStackTrace()).asJson().isContains("org.apache.juneau");
+		assertJsonContains(stats.getStackTrace(), "org.apache.juneau");
 		assertContains("foo", stats);
 	}
 

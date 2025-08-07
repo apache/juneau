@@ -14,8 +14,6 @@ package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;

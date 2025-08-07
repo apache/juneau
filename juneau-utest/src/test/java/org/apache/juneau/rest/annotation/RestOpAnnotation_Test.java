@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
@@ -160,7 +159,7 @@ public class RestOpAnnotation_Test extends SimpleTestBase {
 	@Test void c01_otherMethods() throws Exception {
 		RestOp c4 = RestOpAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
-		assertObject(c4).asJson().isContains("on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
+		assertJsonContains(c4, "on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

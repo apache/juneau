@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.jsonschema.TypeCategory.*;
 import java.util.*;
 
@@ -1307,7 +1306,7 @@ public class JsonSchemaGeneratorTest extends SimpleTestBase {
 	@Test void schemaOnClass_onConfig() throws Exception {
 		AnnotationWorkList al = AnnotationWorkList.of(bConfig.getAnnotationList());
 		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().getSession();
-		assertObject(x.getSchema(new B())).asJson().isContains("'$ref':'ref'");
+		assertJsonContains(x.getSchema(new B()), "'$ref':'ref'");
 	}
 
 }

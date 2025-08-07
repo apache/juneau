@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html.annotation;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -84,8 +83,8 @@ class HtmlLinkAnnotation_Test extends SimpleTestBase {
 		HtmlLink c1 = HtmlLinkAnnotation.create(C1.class).on(C2.class).build();
 		HtmlLink c2 = HtmlLinkAnnotation.create("a").on("b").build();
 
-		assertObject(c1).asJson().isContains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertObject(c2).asJson().isContains("on:['a','b']");
+		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
+		assertJsonContains(c2, "on:['a','b']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
