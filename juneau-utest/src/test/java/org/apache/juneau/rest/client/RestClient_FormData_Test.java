@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -145,7 +144,7 @@ public class RestClient_FormData_Test extends SimpleTestBase {
 	}
 
 	@Test void a12_badSerialization() {
-		assertThrown(()->client().formData(part("Foo","bar",null).serializer(new A12())).build().post("/").run()).asMessages().isContains("bad");
+		assertThrowsWithMessage(Exception.class, "bad", ()->client().formData(part("Foo","bar",null).serializer(new A12())).build().post("/").run());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

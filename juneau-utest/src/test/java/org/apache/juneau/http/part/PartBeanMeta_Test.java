@@ -101,7 +101,7 @@ class PartBeanMeta_Test extends SimpleTestBase {
 		assertEquals("A5", a5.getSchema().getName());
 
 		PartBeanMeta<A6> a6 = PartBeanMeta.of(A6.class);
-		assertThrown(()->a6.construct("X", "foo")).asMessages().isContains("oops");
+		assertThrowsWithMessage(Exception.class, "oops", ()->a6.construct("X", "foo"));
 
 		PartBeanMeta<A7> a7 = PartBeanMeta.of(A7.class);
 		assertThrown(()->a7.construct("foo")).asMessage().isContains("Constructor for type "+TNAME+"$A7 could not be found.");

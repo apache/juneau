@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -113,7 +112,7 @@ public class RestClient_Query_Test extends SimpleTestBase {
 
 	@Test void a12_queryCustom_Object() throws Exception {
 		client().build().get("/query").queryCustom("foo=bar").run().assertContent().isContains("foo=bar");
-		assertThrown(()->client().build().get("").queryCustom(new A12())).asMessages().isContains("foo");
+		assertThrowsWithMessage(Exception.class, "foo", ()->client().build().get("").queryCustom(new A12()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

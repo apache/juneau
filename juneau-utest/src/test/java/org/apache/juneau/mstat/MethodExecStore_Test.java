@@ -12,27 +12,23 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.mstat;
 
-import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.stats.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class MethodExecStore_Test {
+class MethodExecStore_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Builder tests.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_builder_default() {
+	@Test void a01_builder_default() {
 		assertObject(MethodExecStore.create().build()).isType(MethodExecStore.class);
 	}
 
@@ -42,8 +38,7 @@ public class MethodExecStore_Test {
 		}
 	}
 
-	@Test
-	public void a02_builder_implClass() {
+	@Test void a02_builder_implClass() {
 		assertObject(MethodExecStore.create().type(A1.class).build()).isType(A1.class);
 	}
 
@@ -54,9 +49,8 @@ public class MethodExecStore_Test {
 		}
 	}
 
-	@Test
-	public void a04_builder_implClass_bad() {
-		assertThrown(()->MethodExecStore.create().type(A4.class).build()).asMessages().isContains("foobar");
+	@Test void a04_builder_implClass_bad() {
+		assertThrowsWithMessage(Exception.class, "foobar", ()->MethodExecStore.create().type(A4.class).build());
 	}
 
 	public static class A5a {}
@@ -77,11 +71,10 @@ public class MethodExecStore_Test {
 		}
 	}
 
-	@Test
-	public void a05_builder_beanFactory() {
+	@Test void a05_builder_beanFactory() {
 		BeanStore bs = BeanStore.create().build();
 
-		assertThrown(()->MethodExecStore.create(bs).type(A5b.class).build()).asMessages().isAny(contains("Public constructor found but could not find prerequisites: A5a"));
+		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: A5a", ()->MethodExecStore.create(bs).type(A5b.class).build());
 		assertObject(MethodExecStore.create(bs).type(A5c.class).build()).isType(A5c.class);
 
 		bs.addBean(A5a.class, new A5a());
@@ -108,12 +101,11 @@ public class MethodExecStore_Test {
 		}
 	}
 
-	@Test
-	public void a06_builder_statsImplClass() throws Exception {
+	@Test public void a06_builder_statsImplClass() throws Exception {
 		BeanStore bs = BeanStore.create().build();
 		Method m = MethodExecStore_Test.class.getMethod("a06_builder_statsImplClass");
 
-		assertThrown(()->MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m)).asMessages().isAny(contains("Public constructor found but could not find prerequisites: A6a"));
+		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: A6a", ()->MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m));
 		assertObject(MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m)).isType(A6c.class);
 
 		bs.addBean(A6a.class, new A6a());
@@ -121,14 +113,13 @@ public class MethodExecStore_Test {
 		assertObject(MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m)).isType(A6c.class);
 	}
 
-	@Test
-	public void a07_builder_thrownStore() throws Exception {
+	@Test public void a07_builder_thrownStore() throws Exception {
 		Method m = MethodExecStore_Test.class.getMethod("a07_builder_thrownStore");
 		ThrownStore s = ThrownStore.create().build();
 
 		MethodExecStore store = MethodExecStore.create().thrownStore(s).build();
 		store.getStats(m).error(new Throwable());
-		assertList(s.getStats()).isSize(1);
+		assertSize(1, s.getStats());
 		assertObject(store.getThrownStore()).isSame(s);
 
 		ThrownStore s2 = ThrownStore.create().build();
@@ -141,16 +132,15 @@ public class MethodExecStore_Test {
 	// Store tests.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void b01_store_getStats() throws Exception {
+	@Test public void b01_store_getStats() throws Exception {
 		Method m = MethodExecStore_Test.class.getMethod("b01_store_getStats");
 		ThrownStore s = ThrownStore.create().build();
 
 		MethodExecStore store = MethodExecStore.create().thrownStore(s).build();
 		store.getStats(m).error(new Throwable());
 
-		assertList(store.getStats(m).getThrownStore().getStats()).isSize(1);
-		assertList(store.getStats(m).getThrownStore().getStats()).isSize(1);
+		assertSize(1, store.getStats(m).getThrownStore().getStats());
+		assertSize(1, store.getStats(m).getThrownStore().getStats());
 		assertCollection(store.getStats()).isSize(1);
 	}
 
@@ -158,8 +148,7 @@ public class MethodExecStore_Test {
 	// MethodExecStats tests.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void c01_stats_basic() throws Exception {
+	@Test public void c01_stats_basic() throws Exception {
 		Method m = MethodExecStore_Test.class.getMethod("c01_stats_basic");
 		ThrownStore s = ThrownStore.create().build();
 

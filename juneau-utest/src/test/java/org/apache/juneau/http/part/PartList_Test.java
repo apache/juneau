@@ -105,7 +105,7 @@ class PartList_Test extends SimpleTestBase {
 		x = partList("Foo","1","Foo","2");
 		assertObject(x).isString("Foo=1&Foo=2");
 
-		assertThrows(IllegalArgumentException.class, ()->partList("Foo"), "Odd number of parameters passed into PartList.ofPairs()");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Odd number of parameters passed into PartList.ofPairs()", ()->partList("Foo"));
 
 		x = PartList.of((List<NameValuePair>)null);
 		assertObject(x).isString("");
@@ -193,7 +193,7 @@ class PartList_Test extends SimpleTestBase {
 		assertEmpty(x.get("Bar", APart.class));
 		assertOptional(x.get(Foo.class)).isString("Foo=1,2,3");
 		final PartList x2 = x;
-		assertThrows(IllegalArgumentException.class, ()->x2.get(String.class), "Part name could not be found on bean type 'java.lang.String'");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Part name could not be found on bean type 'java.lang.String'", ()->x2.get(String.class));
 	}
 
 	@Test void a08_get() {
@@ -440,27 +440,27 @@ class PartList_Test extends SimpleTestBase {
 		PartIterator i1 = x.partIterator();
 		assertObject(i1.next()).isString("a=x");
 		assertObject(i1.next()).isString("b=x");
-		assertThrows(NoSuchElementException.class, i1::next, "Iteration already finished.");
+		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i1::next);
 
 		PartIterator i2 = x.partIterator();
 		assertObject(i2.next()).isString("a=x");
 		assertObject(i2.next()).isString("b=x");
-		assertThrows(NoSuchElementException.class, i2::next, "Iteration already finished.");
+		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i2::next);
 
 		PartIterator i3 = x.partIterator("a");
 		assertObject(i3.next()).isString("a=x");
-		assertThrows(NoSuchElementException.class, i3::next, "Iteration already finished.");
+		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i3::next);
 
 		PartIterator i4 = x.partIterator("A");
-		assertThrows(NoSuchElementException.class, i4::next, "Iteration already finished.");
+		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i4::next);
 
 		PartList x2 = PartList.create().append(APart.X,BPart.X).caseInsensitive(true);
 
 		PartIterator i5 = x2.partIterator("A");
 		assertObject(i5.next()).isString("a=x");
-		assertThrows(NoSuchElementException.class, i5::next, "Iteration already finished.");
+		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i5::next);
 
-		assertThrows(UnsupportedOperationException.class, i5::remove, "Not supported.");
+		assertThrowsWithMessage(UnsupportedOperationException.class, "Not supported.", i5::remove);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

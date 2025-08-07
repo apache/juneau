@@ -14,8 +14,6 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.*;
 import java.util.function.*;
 
@@ -58,12 +56,12 @@ class BasicStringRangesHeader_Test extends SimpleTestBase {
 		// Invalid usage.
 		c.get().header(stringRangesHeader(HEADER,(Supplier<StringRanges>)null)).run().assertContent().isEmpty();
 		c.get().header(stringRangesHeader(HEADER,()->null)).run().assertContent().isEmpty();
-		assertThrows(IllegalArgumentException.class, ()->stringRangesHeader("", VALUE), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->stringRangesHeader(null, VALUE), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->stringRangesHeader("", PARSED), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->stringRangesHeader(null, PARSED), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->stringRangesHeader("", ()->PARSED), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->stringRangesHeader(null, ()->PARSED), "Name cannot be empty on header.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->stringRangesHeader("", VALUE));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->stringRangesHeader(null, VALUE));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->stringRangesHeader("", PARSED));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->stringRangesHeader(null, PARSED));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->stringRangesHeader("", ()->PARSED));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->stringRangesHeader(null, ()->PARSED));
 	}
 
 	@Test void a02_getRange() {

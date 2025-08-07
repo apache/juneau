@@ -29,9 +29,9 @@ import org.apache.juneau.config.store.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-public class ConfigTest {
+class ConfigTest extends SimpleTestBase {
 
 	private Config.Builder cb = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg");
 
@@ -43,8 +43,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public String get(String key)
 	//====================================================================================================
-	@Test
-	public void get() {
+	@Test void get() {
 		Config c = init("a=1", "[S]", "b=2");
 
 		assertEquals("1", c.get("a").get());
@@ -53,15 +52,14 @@ public class ConfigTest {
 		assertNull(c.get("b").orElse(null));
 		assertNull(c.get("S/c").orElse(null));
 		assertNull(c.get("T/d").orElse(null));
-		assertThrows(IllegalArgumentException.class, ()->c.get(null), "Argument 'key' cannot be null.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'key' cannot be null.", ()->c.get(null));
 		c.close();
 	}
 
 	//====================================================================================================
 	//	public Config set(String key, String value)
 	//====================================================================================================
-	@Test
-	public void set1() throws Exception {
+	@Test void set1() throws Exception {
 		Config c = init("a1=1", "[S]", "b1=1");
 
 		c.set("a1", "2");
@@ -102,8 +100,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public Config set(String key, Object value)
 	//====================================================================================================
-	@Test
-	public void set2() throws Exception {
+	@Test void set2() throws Exception {
 		Config c = init("a1=1", "[S]", "b1=1");
 
 		c.set("a1", 2);
@@ -144,8 +141,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public Config set(String key, Object value, Serializer serializer)
 	//====================================================================================================
-	@Test
-	public void set3() {
+	@Test void set3() {
 		Config c = init("a1=1", "[S]", "b1=1");
 
 		ABean b = new ABean().init();
@@ -167,8 +163,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public Config set(String key, Object value, Serializer serializer, ConfigMod[] modifiers, String comment, List<String> preLines)
 	//====================================================================================================
-	@Test
-	public void set4() throws Exception {
+	@Test void set4() throws Exception {
 		Config c = init("a1=1", "[S]", "b1=1");
 
 		ABean b = new ABean().init();
@@ -196,8 +191,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public Config remove(String key)
 	//====================================================================================================
-	@Test
-	public void remove() throws Exception {
+	@Test void remove() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1");
 
 		c.remove("a1");
@@ -216,8 +210,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public String getString1(String key)
 	//====================================================================================================
-	@Test
-	public void xgetString1() {
+	@Test void xgetString1() {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 
 		assertEquals("1", c.get("a1").as(String.class).orElse(null));
@@ -232,8 +225,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public String getString(String key, String def)
 	//====================================================================================================
-	@Test
-	public void getString2() {
+	@Test void getString2() {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		assertEquals("1", c.get("a1").orElse("foo"));
 		assertEquals("2", c.get("a2").orElse("foo"));
@@ -247,8 +239,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public String[] getStringArray(String key)
 	//====================================================================================================
-	@Test
-	public void getStringArray1() {
+	@Test void getStringArray1() {
 		Config c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
 		assertObject(c.get("a1").as(String[].class).orElse(null)).asJson().is("['1','2']");
 		assertObject(c.get("a2").as(String[].class).orElse(null)).asJson().is("['2','3']");
@@ -262,8 +253,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public String[] getStringArray(String key, String[] def)
 	//====================================================================================================
-	@Test
-	public void getStringArray2() {
+	@Test void getStringArray2() {
 		Config c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
 		assertObject(c.get("a1").asStringArray().orElse(new String[] {"foo"})).asJson().is("['1','2']");
 		assertObject(c.get("a2").asStringArray().orElse(new String[] {"foo"})).asJson().is("['2','3']");
@@ -277,8 +267,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public int getInt(String key)
 	//====================================================================================================
-	@Test
-	public void getInt1() {
+	@Test void getInt1() {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		assertEquals(1, c.get("a1").asInteger().orElse(0));
 		assertEquals(2, c.get("a2").asInteger().orElse(0));
@@ -289,8 +278,7 @@ public class ConfigTest {
 		assertEquals(0, c.get("T/c1").asInteger().orElse(0));
 	}
 
-	@Test
-	public void getInt1BadValues() {
+	@Test void getInt1BadValues() {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
 		assertThrows(Exception.class, ()->c.get("a1").asInteger().orElse(0));
 		assertThrows(Exception.class, ()->c.get("a2").asInteger().orElse(0));
@@ -301,8 +289,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public int getInt2(String key, int def)
 	//====================================================================================================
-	@Test
-	public void getInt2() {
+	@Test void getInt2() {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		assertEquals(1, c.get("a1").asInteger().orElse(-1));
 		assertEquals(2, c.get("a2").asInteger().orElse(-1));
@@ -313,8 +300,7 @@ public class ConfigTest {
 		assertEquals(-1, c.get("T/c1").asInteger().orElse(-1));
 	}
 
-	@Test
-	public void getInt2BadValues() {
+	@Test void getInt2BadValues() {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
 		assertThrows(Exception.class, ()->c.get("a1").asInteger().orElse(-1));
 		assertThrows(Exception.class, ()->c.get("a2").asInteger().orElse(-1));
@@ -325,8 +311,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public boolean getBoolean(String key)
 	//====================================================================================================
-	@Test
-	public void getBoolean1() {
+	@Test void getBoolean1() {
 		Config c = init("a1=true", "a2=false", "[S]", "b1=TRUE", "b2=");
 		assertEquals(true, c.get("a1").asBoolean().orElse(false));
 		assertEquals(false, c.get("a2").asBoolean().orElse(false));
@@ -337,8 +322,7 @@ public class ConfigTest {
 		assertEquals(false, c.get("T/c1").asBoolean().orElse(false));
 	}
 
-	@Test
-	public void getBoolean1BadValues() {
+	@Test void getBoolean1BadValues() {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=T");
 		assertEquals(false, c.get("a1").asBoolean().orElse(false));
 		assertEquals(false, c.get("a2").asBoolean().orElse(false));
@@ -349,8 +333,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public boolean getBoolean(String key, boolean def)
 	//====================================================================================================
-	@Test
-	public void getBoolean2() {
+	@Test void getBoolean2() {
 		Config c = init("a1=true", "a2=false", "[S]", "b1=TRUE", "b2=");
 		assertEquals(true, c.get("a1").asBoolean().orElse(true));
 		assertEquals(false, c.get("a2").asBoolean().orElse(true));
@@ -361,8 +344,7 @@ public class ConfigTest {
 		assertEquals(true, c.get("T/c1").asBoolean().orElse(true));
 	}
 
-	@Test
-	public void getBoolean2BadValues() {
+	@Test void getBoolean2BadValues() {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=T");
 		assertEquals(false, c.get("a1").asBoolean().orElse(true));
 		assertEquals(false, c.get("a2").asBoolean().orElse(true));
@@ -373,8 +355,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public long getLong(String key)
 	//====================================================================================================
-	@Test
-	public void getLong1() {
+	@Test void getLong1() {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		assertLong(c.get("a1").asLong().orElse(0L)).is(1L);
 		assertLong(c.get("a2").asLong().orElse(0L)).is(2L);
@@ -385,8 +366,7 @@ public class ConfigTest {
 		assertLong(c.get("T/c1").asLong().orElse(0L)).is(0L);
 	}
 
-	@Test
-	public void getLong1BadValues() {
+	@Test void getLong1BadValues() {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
 		assertThrows(Exception.class, ()->c.get("a1").as(long.class));
 		assertThrows(Exception.class, ()->c.get("a2").as(long.class));
@@ -397,8 +377,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public long getLong(String key, long def)
 	//====================================================================================================
-	@Test
-	public void getLong2() {
+	@Test void getLong2() {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 		assertLong(c.get("a1").asLong().orElse(Long.MAX_VALUE)).is(1L);
 		assertLong(c.get("a2").asLong().orElse(Long.MAX_VALUE)).is(2L);
@@ -409,8 +388,7 @@ public class ConfigTest {
 		assertLong(c.get("T/c1").asLong().orElse(Long.MAX_VALUE)).is(Long.MAX_VALUE);
 	}
 
-	@Test
-	public void getLong2BadValues() {
+	@Test void getLong2BadValues() {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
 
 		assertThrown(()->c.get("a1").asLong().orElse(-1L)).isType(NumberFormatException.class);
@@ -422,8 +400,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public boolean getBytes(String key)
 	//====================================================================================================
-	@Test
-	public void getBytes1() {
+	@Test void getBytes1() {
 		Config c = init("a1=Zm9v", "a2=Zm", "\t9v", "a3=");
 
 		assertObject(c.get("a1").as(byte[].class)).asJson().is("[102,111,111]");
@@ -435,8 +412,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public boolean getBytes(String key, byte[] def)
 	//====================================================================================================
-	@Test
-	public void getBytes2() {
+	@Test void getBytes2() {
 		Config c = init("a1=Zm9v", "a2=Zm", "\t9v", "a3=");
 
 		assertObject(c.get("a1").asBytes().orElse(new byte[] {1})).asJson().is("[102,111,111]");
@@ -448,8 +424,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public <T> T getObject(String key, Type type, Type...args) throws ParseException
 	//====================================================================================================
-	@Test
-	public void getObject1() {
+	@Test void getObject1() {
 		Config c = init(
 			"a1={foo:123}",
 			"a2=[{foo:123}]",
@@ -489,8 +464,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public <T> T getObject(String key, Parser parser, Type type, Type...args) throws ParseException
 	//====================================================================================================
-	@Test
-	public void getObject2() {
+	@Test void getObject2() {
 		Config c = init(
 			"a1=(foo=123)",
 			"a2=@((foo=123))",
@@ -531,8 +505,7 @@ public class ConfigTest {
 	//	public <T> T getObject(String key, Class<T> type) throws ParseException
 	//====================================================================================================
 	@SuppressWarnings("rawtypes")
-	@Test
-	public void getObject3() {
+	@Test void getObject3() {
 		Config c = init(
 			"a1={foo:123}",
 			"a2=[{foo:123}]",
@@ -569,8 +542,7 @@ public class ConfigTest {
 	//	public <T> T getObject(String key, Parser parser, Class<T> type) throws ParseException
 	//====================================================================================================
 	@SuppressWarnings("rawtypes")
-	@Test
-	public void getObject4() {
+	@Test void getObject4() {
 		Config c = init(
 			"a1=(foo=123)",
 			"a2=@((foo=123))",
@@ -607,8 +579,7 @@ public class ConfigTest {
 	//	public <T> T getObjectWithDefault(String key, T def, Class<T> type) throws ParseException
 	//====================================================================================================
 	@SuppressWarnings("rawtypes")
-	@Test
-	public void getObjectWithDefault1() {
+	@Test void getObjectWithDefault1() {
 		Config c = init(
 			"a1={foo:123}",
 			"a2=[{foo:123}]",
@@ -654,8 +625,7 @@ public class ConfigTest {
 	//	public <T> T getObjectWithDefault(String key, Parser parser, T def, Class<T> type) throws ParseException
 	//====================================================================================================
 	@SuppressWarnings("rawtypes")
-	@Test
-	public void getObjectWithDefault2() {
+	@Test void getObjectWithDefault2() {
 		Config c = init(
 			"a1=(foo=123)",
 			"a2=@((foo=123))",
@@ -700,8 +670,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public <T> T getObjectWithDefault(String key, T def, Type type, Type...args) throws ParseException
 	//====================================================================================================
-	@Test
-	public void getObjectWithDefault3() {
+	@Test void getObjectWithDefault3() {
 		Config c = init(
 			"a1={foo:123}",
 			"a2=[{foo:123}]",
@@ -746,8 +715,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public <T> T getObjectWithDefault(String key, Parser parser, T def, Type type, Type...args) throws ParseException
 	//====================================================================================================
-	@Test
-	public void getObjectWithDefault4() {
+	@Test void getObjectWithDefault4() {
 		Config c = init(
 			"a1=(foo=123)",
 			"a2=@((foo=123))",
@@ -792,8 +760,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public Set<String> getKeys(String section)
 	//====================================================================================================
-	@Test
-	public void getKeys() {
+	@Test void getKeys() {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
 
 		assertObject(c.getKeys("")).asJson().is("['a1','a2']");
@@ -801,14 +768,13 @@ public class ConfigTest {
 		assertObject(c.getKeys("S")).asJson().is("['b1','b2']");
 		assertTrue(c.getKeys("T").isEmpty());
 
-		assertThrows(IllegalArgumentException.class, ()->c.getKeys(null), "Argument 'section' cannot be null.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'section' cannot be null.", ()->c.getKeys(null));
 	}
 
 	//====================================================================================================
 	//	public Config writeProperties(String section, Object bean, boolean ignoreUnknownProperties)
 	//====================================================================================================
-	@Test
-	public void writeProperties() {
+	@Test void writeProperties() {
 		ABean a = new ABean().init();
 		BBean b = new BBean().init();
 
@@ -817,8 +783,8 @@ public class ConfigTest {
 		assertObject(a).asJson().is("{foo:'baz'}");
 		c.getSection("S").writeToBean(b, true);
 		assertObject(b).asJson().is("{foo:'baz'}");
-		assertThrows(ParseException.class, ()->c.getSection("S").writeToBean(a, false), "Unknown property 'bar' encountered in configuration section 'S'.");
-		assertThrows(ParseException.class, ()->c.getSection("S").writeToBean(b, false), "Unknown property 'bar' encountered in configuration section 'S'.");
+		assertThrowsWithMessage(ParseException.class, "Unknown property 'bar' encountered in configuration section 'S'.", ()->c.getSection("S").writeToBean(a, false));
+		assertThrowsWithMessage(ParseException.class, "Unknown property 'bar' encountered in configuration section 'S'.", ()->c.getSection("S").writeToBean(b, false));
 		c.getSection("").writeToBean(b, true);
 		assertObject(b).asJson().is("{foo:'qux'}");
 		c.getSection("").writeToBean(a, true);
@@ -830,8 +796,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public <T> T getSectionAsBean(String sectionName, Class<T>c)
 	//====================================================================================================
-	@Test
-	public void getSectionAsBean1() {
+	@Test void getSectionAsBean1() {
 		Config c = init("foo=qux", "[S]", "foo=baz", "[T]", "foo=qux", "bar=qux");
 
 		ABean a = null;
@@ -853,15 +818,14 @@ public class ConfigTest {
 		b = c.getSection("S").asBean(BBean.class).get();
 		assertObject(b).asJson().is("{foo:'baz'}");
 
-		assertThrows(ParseException.class, ()->c.getSection("T").asBean(ABean.class).get(), "Unknown property 'bar' encountered in configuration section 'T'.");
-		assertThrows(ParseException.class, ()->c.getSection("T").asBean(BBean.class).get(), "Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrowsWithMessage(ParseException.class, "Unknown property 'bar' encountered in configuration section 'T'.", ()->c.getSection("T").asBean(ABean.class).get());
+		assertThrowsWithMessage(ParseException.class, "Unknown property 'bar' encountered in configuration section 'T'.", ()->c.getSection("T").asBean(BBean.class).get());
 	}
 
 	//====================================================================================================
 	//	public <T> T getSectionAsBean(String section, Class<T> c, boolean ignoreUnknownProperties)
 	//====================================================================================================
-	@Test
-	public void getSectionAsBean2() {
+	@Test void getSectionAsBean2() {
 		Config c = init("foo=qux", "[S]", "foo=baz", "[T]", "foo=qux", "bar=qux");
 
 		ABean a = null;
@@ -872,15 +836,14 @@ public class ConfigTest {
 		b = c.getSection("T").asBean(BBean.class, true).get();
 		assertObject(b).asJson().is("{foo:'qux'}");
 
-		assertThrows(ParseException.class, ()->c.getSection("T").asBean(ABean.class, false).get(), "Unknown property 'bar' encountered in configuration section 'T'.");
-		assertThrows(ParseException.class, ()->c.getSection("T").asBean(BBean.class, false).get(), "Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrowsWithMessage(ParseException.class, "Unknown property 'bar' encountered in configuration section 'T'.", ()->c.getSection("T").asBean(ABean.class, false).get());
+		assertThrowsWithMessage(ParseException.class, "Unknown property 'bar' encountered in configuration section 'T'.", ()->c.getSection("T").asBean(BBean.class, false).get());
 	}
 
 	//====================================================================================================
 	//	public JsonMap getSectionAsMap(String section)
 	//====================================================================================================
-	@Test
-	public void getSectionAsMap() {
+	@Test void getSectionAsMap() {
 		Config c = init("a=1", "[S]", "b=2", "[T]");
 
 		assertObject(c.getSection("").asMap().get()).asJson().is("{a:'1'}");
@@ -894,8 +857,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public <T> T getSectionAsInterface(final String sectionName, final Class<T> c)
 	//====================================================================================================
-	@Test
-	public void getSectionAsInterface() {
+	@Test void getSectionAsInterface() {
 		Config c = init("foo=qux", "[S]", "foo=baz", "[T]", "foo=qux", "bar=qux");
 		AInterface a = null;
 
@@ -914,7 +876,7 @@ public class ConfigTest {
 		a = c.getSection("T").asInterface(AInterface.class).get();
 		assertEquals("qux", a.getFoo());
 
-		assertThrows(IllegalArgumentException.class, ()->c.getSection("T").asInterface(ABean.class).get(), "Class 'org.apache.juneau.config.ConfigTest$ABean' passed to toInterface() is not an interface.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Class 'org.apache.juneau.config.ConfigTest$ABean' passed to toInterface() is not an interface.", ()->c.getSection("T").asInterface(ABean.class).get());
 	}
 
 	public interface AInterface {
@@ -924,8 +886,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public boolean exists(String key)
 	//====================================================================================================
-	@Test
-	public void exists() {
+	@Test void exists() {
 		Config c = init("a=1", "[S]", "b=2", "c=", "[T]");
 
 		assertTrue(c.exists("a"));
@@ -939,8 +900,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public Config setSection(String name, List<String> preLines)
 	//====================================================================================================
-	@Test
-	public void setSection1() {
+	@Test void setSection1() {
 		Config c = init();
 
 		c.setSection("", Arrays.asList("#C1", "#C2"));
@@ -958,14 +918,13 @@ public class ConfigTest {
 		c.setSection("S1", Collections.<String>emptyList());
 		assertString(c).asReplaceAll("\\r?\\n", "|").is("#C3|#C4||[S1]|");
 
-		assertThrows(IllegalArgumentException.class, ()->c.setSection(null, Arrays.asList("", "#C5", "#C6")), "Argument 'section' cannot be null.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'section' cannot be null.", ()->c.setSection(null, Arrays.asList("", "#C5", "#C6")));
 	}
 
 	//====================================================================================================
 	//	public Config setSection(String name, List<String> preLines, Map<String,Object> contents)
 	//====================================================================================================
-	@Test
-	public void setSection2() {
+	@Test void setSection2() {
 		Config c = init();
 		JsonMap m = JsonMap.of("a", "b");
 
@@ -984,14 +943,13 @@ public class ConfigTest {
 		c.setSection("S1", Collections.<String>emptyList(), m);
 		assertString(c).asReplaceAll("\\r?\\n", "|").is("#C3|#C4||a = b|[S1]|a = b|");
 
-		assertThrows(IllegalArgumentException.class, ()->c.setSection(null, Arrays.asList("", "#C5", "#C6"), m), "Argument 'section' cannot be null.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'section' cannot be null.", ()->c.setSection(null, Arrays.asList("", "#C5", "#C6"), m));
 	}
 
 	//====================================================================================================
 	//	public Config removeSection(String name)
 	//====================================================================================================
-	@Test
-	public void removeSection() {
+	@Test void removeSection() {
 		Config c = init("a=1", "[S]", "b=2", "c=", "[T]");
 
 		c.removeSection("S");
@@ -1006,8 +964,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public Writer writeTo(Writer w)
 	//====================================================================================================
-	@Test
-	public void writeTo() throws Exception {
+	@Test void writeTo() throws Exception {
 		Config c = init("a=1", "[S]", "b=2", "c=", "[T]");
 
 		assertString(c.writeTo(new StringWriter())).asReplaceAll("\\r?\\n", "|").is("a=1|[S]|b=2|c=|[T]|");
@@ -1016,8 +973,7 @@ public class ConfigTest {
 	//====================================================================================================
 	// testExampleInConfig - Example in Config
 	//====================================================================================================
-	@Test
-	public void testExampleInConfig() throws Exception {
+	@Test void testExampleInConfig() throws Exception {
 
 		Config cf = init(
 			"# Default section", "key1 = 1", "key2 = true", "key3 = [1,2,3]", "key4 = http://foo", "",
@@ -1067,8 +1023,7 @@ public class ConfigTest {
 	//====================================================================================================
 	// testEnum
 	//====================================================================================================
-	@Test
-	public void testEnum() throws Exception {
+	@Test void testEnum() throws Exception {
 		Config cf = init(
 			"key1 = MINUTES"
 		);
@@ -1082,8 +1037,7 @@ public class ConfigTest {
 	//====================================================================================================
 	// testEncodedValues
 	//====================================================================================================
-	@Test
-	public void testEncodedValues() throws Exception {
+	@Test void testEncodedValues() throws Exception {
 		Config cf = init(
 			"[s1]", "", "foo<*> = "
 		);
@@ -1113,8 +1067,7 @@ public class ConfigTest {
 	//====================================================================================================
 	// public Config encodeEntries()
 	//====================================================================================================
-	@Test
-	public void testEncodeEntries() throws Exception {
+	@Test void testEncodeEntries() throws Exception {
 		Config cf = init(
 			"[s1]", "", "foo<*> = mypassword"
 		);
@@ -1127,8 +1080,7 @@ public class ConfigTest {
 	//====================================================================================================
 	// testVariables
 	//====================================================================================================
-	@Test
-	public void testVariables() {
+	@Test void testVariables() {
 
 		Config cf = init(
 			"[s1]",
@@ -1168,8 +1120,7 @@ public class ConfigTest {
 	//====================================================================================================
 	// testXorEncoder
 	//====================================================================================================
-	@Test
-	public void testXorEncoder() {
+	@Test void testXorEncoder() {
 		testXor("foo");
 		testXor("");
 		testXor("123");
@@ -1187,8 +1138,7 @@ public class ConfigTest {
 	//====================================================================================================
 	// testHex
 	//====================================================================================================
-	@Test
-	public void testHex() throws Exception {
+	@Test void testHex() throws Exception {
 		Config cf = init().copy().binaryFormat(BinaryFormat.HEX).build();
 
 		cf.set("foo", "bar".getBytes("UTF-8"));
@@ -1199,8 +1149,7 @@ public class ConfigTest {
 	//====================================================================================================
 	// testSpacedHex
 	//====================================================================================================
-	@Test
-	public void testSpacedHex() throws Exception {
+	@Test void testSpacedHex() throws Exception {
 		Config cf = init().copy().binaryFormat(BinaryFormat.SPACED_HEX).build();
 
 		cf.set("foo", "bar".getBytes("UTF-8"));
@@ -1211,8 +1160,7 @@ public class ConfigTest {
 	//====================================================================================================
 	// testMultiLines
 	//====================================================================================================
-	@Test
-	public void testMultiLines() throws Exception {
+	@Test void testMultiLines() throws Exception {
 		Config cf = init(
 			"[s1]",
 			"f1 = x \n\ty \n\tz"
@@ -1228,8 +1176,7 @@ public class ConfigTest {
 	//====================================================================================================
 	// testNumberShortcuts
 	//====================================================================================================
-	@Test
-	public void testNumberShortcuts() {
+	@Test void testNumberShortcuts() {
 		Config cf = init(
 			"[s1]",
 			"f1 = 1M",
@@ -1246,8 +1193,7 @@ public class ConfigTest {
 	//====================================================================================================
 	// testListeners
 	//====================================================================================================
-	@Test
-	public void testListeners() throws Exception {
+	@Test void testListeners() throws Exception {
 		Config cf = init();
 
 		final Set<String> changes = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
@@ -1353,8 +1299,7 @@ public class ConfigTest {
 	// getObjectArray(Class c, String key)
 	// getObjectArray(Class c, String key, T[] def)
 	//====================================================================================================
-	@Test
-	public void testGetObjectArray() {
+	@Test void testGetObjectArray() {
 		Config cf = init("[A]", "a1=[1,2,3]");
 		assertObject(cf.get("A/a1").as(Integer[].class).get()).asJson().is("[1,2,3]");
 		assertObject(cf.get("A/a2").as(Integer[].class).orElse(new Integer[]{4,5,6})).asJson().is("[4,5,6]");
@@ -1391,8 +1336,7 @@ public class ConfigTest {
 	// getStringArray(String key)
 	// getStringArray(String key, String[] def)
 	//====================================================================================================
-	@Test
-	public void testGetStringArray() {
+	@Test void testGetStringArray() {
 		Config cf = init("[A]", "a1=1,2,3");
 		assertObject(cf.get("A/a1").asStringArray().get()).asJson().is("['1','2','3']");
 		assertObject(cf.get("A/a2").asStringArray().orElse(new String[]{"4","5","6"})).asJson().is("['4','5','6']");
@@ -1414,8 +1358,7 @@ public class ConfigTest {
 	//====================================================================================================
 	// getSectionMap(String name)
 	//====================================================================================================
-	@Test
-	public void testGetSectionMap() {
+	@Test void testGetSectionMap() {
 		Config cf = init("[A]", "a1=1", "", "[D]", "d1=$C{A/a1}","d2=$S{X}");
 
 		assertObject(cf.getSection("A").asMap().get()).asJson().is("{a1:'1'}");
@@ -1434,8 +1377,7 @@ public class ConfigTest {
 	//====================================================================================================
 	// toWritable()
 	//====================================================================================================
-	@Test
-	public void testToWritable() throws Exception {
+	@Test void testToWritable() throws Exception {
 		Config cf = init("a = b");
 
 		StringWriter sw = new StringWriter();
@@ -1447,8 +1389,7 @@ public class ConfigTest {
 	//====================================================================================================
 	// Test resolving with override
 	//====================================================================================================
-	@Test
-	public void testResolvingWithOverride() {
+	@Test void testResolvingWithOverride() {
 		Config cf = init();
 		cf.set("a", "$A{X}");
 		cf.set("b", "$B{X}");
@@ -1522,8 +1463,7 @@ public class ConfigTest {
 	//====================================================================================================
 	// Ensure pound signs in values are encoded.
 	//====================================================================================================
-	@Test
-	public void testPoundSignEscape() throws Exception {
+	@Test void testPoundSignEscape() throws Exception {
 		Config cf = init();
 		cf.set("a", "a,#b,=c");
 		cf.set("A/a", "a,#b,=c");
@@ -1560,8 +1500,7 @@ public class ConfigTest {
 		}
 	}
 
-	@Test
-	public void testGetCandidateSystemDefaultConfigNames() {
+	@Test void testGetCandidateSystemDefaultConfigNames() {
 
 		System.setProperty("juneau.configFile", "foo.txt");
 		assertObject(Config.getCandidateSystemDefaultConfigNames()).asJson().is("['foo.txt']");
@@ -1574,8 +1513,7 @@ public class ConfigTest {
 	//	setSystemProperties
 	//====================================================================================================
 
-	@Test
-	public void setSystemProperties() {
+	@Test void setSystemProperties() {
 		Config c = init("a=1", "[S]", "b=2");
 		c.setSystemProperties();
 		assertEquals("1", System.getProperty("a"));

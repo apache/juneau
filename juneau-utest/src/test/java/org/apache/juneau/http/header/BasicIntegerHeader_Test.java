@@ -57,13 +57,13 @@ class BasicIntegerHeader_Test extends SimpleTestBase {
 
 		// Invalid usage.
 		c.get().header(integerHeader(HEADER,(Supplier<Integer>)null)).run().assertContent().isEmpty();
-		assertThrows(BasicRuntimeException.class, ()->integerHeader(HEADER,"foo"), "Value 'foo' could not be parsed as an integer.");
-		assertThrows(IllegalArgumentException.class, ()->integerHeader("", VALUE), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->integerHeader(null, VALUE), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->integerHeader("", PARSED), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->integerHeader(null, PARSED), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->integerHeader("", ()->PARSED), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->integerHeader(null, ()->PARSED), "Name cannot be empty on header.");
+		assertThrowsWithMessage(BasicRuntimeException.class, "Value 'foo' could not be parsed as an integer.", ()->integerHeader(HEADER,"foo"));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->integerHeader("", VALUE));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->integerHeader(null, VALUE));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->integerHeader("", PARSED));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->integerHeader(null, PARSED));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->integerHeader("", ()->PARSED));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->integerHeader(null, ()->PARSED));
 	}
 
 	@Test void a02_assertInteger() {

@@ -513,7 +513,7 @@ public class UonParserTest extends SimpleTestBase {
 		r = reader("(foo=bar)(foo=bar)");
 		x = p2.parse(r, JsonMap.class);
 		assertJson(x, "{foo:'bar'}");
-		assertThrown(()->p2.parse(r, JsonMap.class)).asMessages().isContains("Reader is closed");
+		assertThrowsWithMessage(Exception.class, "Reader is closed", ()->p2.parse(r, JsonMap.class));
 	}
 
 	//====================================================================================================

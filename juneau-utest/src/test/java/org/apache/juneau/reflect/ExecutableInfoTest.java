@@ -17,8 +17,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.io.*;
 import java.lang.annotation.*;
 import java.util.*;
@@ -148,16 +146,16 @@ public class ExecutableInfoTest extends SimpleTestBase {
 	}
 
 	@Test void getParam_indexOutOfBounds() {
-		assertThrows(IndexOutOfBoundsException.class, ()->b_c1.getParam(0), "Invalid index '0'.  No parameters.");
-		assertThrows(IndexOutOfBoundsException.class, ()->b_c2.getParam(-1), "Invalid index '-1'.  Parameter count: 1");
-		assertThrows(IndexOutOfBoundsException.class, ()->b_c2.getParam(1), "Invalid index '1'.  Parameter count: 1");
+		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '0'.  No parameters.", ()->b_c1.getParam(0));
+		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '-1'.  Parameter count: 1", ()->b_c2.getParam(-1));
+		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '1'.  Parameter count: 1", ()->b_c2.getParam(1));
 	}
 
 	@Test void getParam_indexOutOfBounds_noCache() {
 		ClassInfo b2 = ClassInfo.of(B.class);
-		assertThrows(IndexOutOfBoundsException.class, ()->b2.getPublicConstructor(ConstructorInfo::hasNoParams).getParam(0), "Invalid index '0'.  No parameters.");
-		assertThrows(IndexOutOfBoundsException.class, ()->b2.getPublicConstructor(x -> x.hasParamTypes(String.class)).getParam(-1), "Invalid index '-1'.  Parameter count: 1");
-		assertThrows(IndexOutOfBoundsException.class, ()->b2.getPublicConstructor(x -> x.hasParamTypes(String.class)).getParam(1), "Invalid index '1'.  Parameter count: 1");
+		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '0'.  No parameters.", ()->b2.getPublicConstructor(ConstructorInfo::hasNoParams).getParam(0));
+		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '-1'.  Parameter count: 1", ()->b2.getPublicConstructor(x -> x.hasParamTypes(String.class)).getParam(-1));
+		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '1'.  Parameter count: 1", ()->b2.getPublicConstructor(x -> x.hasParamTypes(String.class)).getParam(1));
 	}
 
 	@Test void getParamTypes() {
@@ -369,7 +367,7 @@ public class ExecutableInfoTest extends SimpleTestBase {
 	}
 
 	@Test void isAll_invalidFlag() {
-		assertThrows(BasicRuntimeException.class, ()->e_deprecated.isAll(TRANSIENT), "Invalid flag for executable: TRANSIENT");
+		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid flag for executable: TRANSIENT", ()->e_deprecated.isAll(TRANSIENT));
 	}
 
 	@Test void isAny() {
@@ -397,7 +395,7 @@ public class ExecutableInfoTest extends SimpleTestBase {
 	}
 
 	@Test void isAny_invalidFlag() {
-		assertThrows(BasicRuntimeException.class, ()->e_deprecated.isAny(TRANSIENT), "Invalid flag for executable: TRANSIENT");
+		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid flag for executable: TRANSIENT", ()->e_deprecated.isAny(TRANSIENT));
 	}
 
 	@Test void hasArgs() {

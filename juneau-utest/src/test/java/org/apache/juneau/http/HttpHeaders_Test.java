@@ -4,8 +4,6 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.util.*;
 
 import org.apache.http.*;
@@ -49,8 +47,8 @@ class HttpHeaders_Test extends SimpleTestBase {
 		assertTypeAndJson(HttpHeaders.cast(x8), Header.class, "'X8: 8'");
 		assertTypeAndJson(HttpHeaders.cast(x9), Header.class, "'X9: 9'");
 
-		assertThrows(BasicRuntimeException.class, ()->HttpHeaders.cast("X"), "Object of type java.lang.String could not be converted to a Header.");
-		assertThrows(BasicRuntimeException.class, ()->HttpHeaders.cast(null), "Object of type null could not be converted to a Header.");
+		assertThrowsWithMessage(BasicRuntimeException.class, "Object of type java.lang.String could not be converted to a Header.", ()->HttpHeaders.cast("X"));
+		assertThrowsWithMessage(BasicRuntimeException.class, "Object of type null could not be converted to a Header.", ()->HttpHeaders.cast(null));
 
 		assertTrue(HttpHeaders.canCast(x1));
 		assertTrue(HttpHeaders.canCast(x2));

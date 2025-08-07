@@ -95,6 +95,6 @@ class HeaderBeanMeta_Test extends SimpleTestBase {
 		assertEquals("A5", a5.getSchema().getName());
 
 		HeaderBeanMeta<A6> a6 = HeaderBeanMeta.of(A6.class);
-		assertThrown(()->a6.construct("X", "foo")).asMessages().isContains("oops");
+		assertThrowsWithMessage(Exception.class, "oops", ()->a6.construct("X", "foo"));
 	}
 }

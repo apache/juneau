@@ -30,6 +30,7 @@ import org.apache.juneau.common.internal.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer.*;
 
 /**
@@ -143,6 +144,17 @@ public abstract class SimpleTestBase {
 		for (var i = 0; i < expected.length; i++)
 			if (ne(list.get(i), expected[i]))
 				ffail("Element at index {0} did not match.  expected={1}, actual={2}", i, expected[i], r(list.get(i)));
+	}
+
+	protected static <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, String expectedSubstring, org.junit.jupiter.api.function.Executable executable) {
+		T exception = Assertions.assertThrows(expectedType, executable);
+		var messages = getMessages(exception);
+		assertTrue(messages.contains(expectedSubstring), ss("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
+		return exception;
+	}
+
+	private static String getMessages(Throwable t) {
+		return Stream.iterate(t, Throwable::getCause).takeWhile(e -> e != null).map(Throwable::getMessage).collect(joining("\n"));
 	}
 
 	/**

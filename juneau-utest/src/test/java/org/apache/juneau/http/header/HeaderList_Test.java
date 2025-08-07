@@ -61,7 +61,7 @@ class HeaderList_Test extends SimpleTestBase {
 		assertList(headerList(FOO_1, FOO_2, null), "Foo: 1,Foo: 2");
 		assertList(headerList(alist(FOO_1, FOO_2, null)), "Foo: 1,Foo: 2");
 		assertList(headerList("Foo","1","Foo","2"), "Foo: 1,Foo: 2");
-		assertThrows(IllegalArgumentException.class, ()->headerList("Foo"), "Odd number of parameters passed into HeaderList.ofPairs()");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Odd number of parameters passed into HeaderList.ofPairs()", ()->headerList("Foo"));
 		assertEmpty(HeaderList.of((List<Header>)null));
 		assertEmpty(HeaderList.of(Collections.emptyList()));
 		assertList(HeaderList.of(alist(FOO_1)), "Foo: 1");
@@ -135,7 +135,7 @@ class HeaderList_Test extends SimpleTestBase {
 		assertEmpty(x.get("Bar", Allow.class));
 		assertString("Foo: 1, 2, 3", x.get(Foo.class));
 		final var x2 = x;
-		assertThrows(IllegalArgumentException.class, ()->x2.get(String.class), "Header name could not be found on bean type 'java.lang.String'");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Header name could not be found on bean type 'java.lang.String'", ()->x2.get(String.class));
 	}
 
 	@Test void a08_get() {
@@ -371,27 +371,27 @@ class HeaderList_Test extends SimpleTestBase {
 		var i1 = x.headerIterator();
 		assertString("Accept: text/xml", i1.nextHeader());
 		assertString("Content-Type: text/xml", i1.nextHeader());
-		assertThrows(NoSuchElementException.class, i1::nextHeader, "Iteration already finished.");
+		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i1::nextHeader);
 
 		var i2 = x.headerIterator();
 		assertString("Accept: text/xml", i2.next());
 		assertString("Content-Type: text/xml", i2.nextHeader());
-		assertThrows(NoSuchElementException.class, i2::next, "Iteration already finished.");
+		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i2::next);
 
 		var i3 = x.headerIterator("accept");
 		assertString("Accept: text/xml", i3.nextHeader());
-		assertThrows(NoSuchElementException.class, i3::nextHeader, "Iteration already finished.");
+		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i3::nextHeader);
 
 		var x2 = HeaderList.create().append(Accept.TEXT_XML,ContentType.TEXT_XML).caseSensitive(true);
 
 		var i4 = x2.headerIterator("Accept");
 		assertString("Accept: text/xml", i4.nextHeader());
-		assertThrows(NoSuchElementException.class, i4::nextHeader, "Iteration already finished.");
+		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i4::nextHeader);
 
 		var i5 = x2.headerIterator("accept");
-		assertThrows(NoSuchElementException.class, i5::nextHeader, "Iteration already finished.");
+		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i5::nextHeader);
 
-		assertThrows(UnsupportedOperationException.class, i5::remove, "Not supported.");
+		assertThrowsWithMessage(UnsupportedOperationException.class, "Not supported.", i5::remove);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

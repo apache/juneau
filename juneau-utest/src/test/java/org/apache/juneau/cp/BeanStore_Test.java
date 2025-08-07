@@ -18,8 +18,6 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.lang.annotation.*;
 import java.util.*;
 import java.util.function.*;
@@ -74,15 +72,15 @@ class BeanStore_Test extends SimpleTestBase {
 		BeanStore b2c = BeanStore.create().parent(b1p).threadSafe().build();
 
 		for (BeanStore b : array(b1p, b2p)) {
-			assertThrows(IllegalStateException.class, ()->b.add(A1.class, a1a), "Method cannot be used because BeanStore is read-only.");
-			assertThrows(IllegalStateException.class, ()->b.add(A1.class, a1a, "foo"), "Method cannot be used because BeanStore is read-only.");
-			assertThrows(IllegalStateException.class, ()->b.addBean(A1.class, a1a), "Method cannot be used because BeanStore is read-only.");
-			assertThrows(IllegalStateException.class, ()->b.addBean(A1.class, a1a, "foo"), "Method cannot be used because BeanStore is read-only.");
-			assertThrows(IllegalStateException.class, ()->b.addSupplier(A1.class, ()->a1a), "Method cannot be used because BeanStore is read-only.");
-			assertThrows(IllegalStateException.class, ()->b.addSupplier(A1.class, ()->a1a, "foo"), "Method cannot be used because BeanStore is read-only.");
-			assertThrows(IllegalStateException.class, b::clear, "Method cannot be used because BeanStore is read-only.");
-			assertThrows(IllegalStateException.class, ()->b.removeBean(A1.class), "Method cannot be used because BeanStore is read-only.");
-			assertThrows(IllegalStateException.class, ()->b.removeBean(A1.class, "foo"), "Method cannot be used because BeanStore is read-only.");
+			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.add(A1.class, a1a));
+			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.add(A1.class, a1a, "foo"));
+			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.addBean(A1.class, a1a));
+			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.addBean(A1.class, a1a, "foo"));
+			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.addSupplier(A1.class, ()->a1a));
+			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.addSupplier(A1.class, ()->a1a, "foo"));
+			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", b::clear);
+			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.removeBean(A1.class));
+			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.removeBean(A1.class, "foo"));
 		}
 
 		for (BeanStore b : array(b1c, b2c)) {
@@ -490,9 +488,9 @@ class BeanStore_Test extends SimpleTestBase {
 	@Test void c00_createMethodFinder_invalidArgs() {
 		BeanStore b = BeanStore.create().build();
 
-		assertThrows(IllegalArgumentException.class, ()->b.createMethodFinder(null), "Method cannot be used without outer bean definition.");
-		assertThrows(IllegalArgumentException.class, ()->b.createMethodFinder((Class<?>)null,""), "Argument 'beanType' cannot be null.");
-		assertThrows(IllegalArgumentException.class, ()->b.createMethodFinder(String.class,null), "Argument 'resourceClass' cannot be null.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Method cannot be used without outer bean definition.", ()->b.createMethodFinder(null));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'beanType' cannot be null.", ()->b.createMethodFinder((Class<?>)null,""));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'resourceClass' cannot be null.", ()->b.createMethodFinder(String.class,null));
 	}
 
 	// Instance methods.
@@ -886,7 +884,7 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d08_createBean_staticCreator_missingPrereqs() {
 		BeanStore bs = BeanStore.create().build();
-		assertThrows(ExecutableException.class, ()->bs.createBean(D8.class).run(), "Could not instantiate class org.apache.juneau.cp.BeanStore_Test$D8: Static creator found but could not find prerequisites: Integer.");
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class org.apache.juneau.cp.BeanStore_Test$D8: Static creator found but could not find prerequisites: Integer.", ()->bs.createBean(D8.class).run());
 		bs.add(Integer.class, 1);
 		assertString(bs.createBean(D8.class).run().a).is("null,1");
 		bs.add(String.class, "bar");
@@ -901,8 +899,8 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d09_createBean_staticCreator_withBeans() {
 		BeanStore bs = BeanStore.INSTANCE;
-		assertThrows(ExecutableException.class, ()->bs.createBean(D9a.class).run(), "Could not instantiate class "+D9a.class.getName()+": Class is abstract.");
-		assertThrows(ExecutableException.class, ()->bs.createBean(D9b.class).run(), "Could not instantiate class "+D9b.class.getName()+": Class is an interface.");
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D9a.class.getName()+": Class is abstract.", ()->bs.createBean(D9a.class).run());
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D9b.class.getName()+": Class is an interface.", ()->bs.createBean(D9b.class).run());
 	}
 
 	public static class D10 {
@@ -914,7 +912,7 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d10_createBean_constructors_public() {
 		BeanStore bs = BeanStore.create().build();
-		assertThrows(ExecutableException.class, ()->bs.createBean(D10.class).run(), "Could not instantiate class "+D10.class.getName()+": Public constructor found but could not find prerequisites: Integer or Integer,String or String.");
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D10.class.getName()+": Public constructor found but could not find prerequisites: Integer or Integer,String or String.", ()->bs.createBean(D10.class).run());
 		bs.add(String.class, "foo");
 		assertString(bs.createBean(D10.class).run().a).is("s=foo");
 		bs.add(Integer.class, 1);
@@ -932,7 +930,7 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d11_createBean_constructors_protected() {
 		BeanStore bs = BeanStore.create().build();
-		assertThrows(ExecutableException.class, ()->bs.createBean(D11.class).run(), "Could not instantiate class "+D11.class.getName()+": Protected constructor found but could not find prerequisites: Integer or Integer,String or String.");
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D11.class.getName()+": Protected constructor found but could not find prerequisites: Integer or Integer,String or String.", ()->bs.createBean(D11.class).run());
 		bs.add(String.class, "foo");
 		assertString(bs.createBean(D11.class).run().a).is("s=foo");
 		bs.add(Integer.class, 1);
@@ -949,7 +947,7 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d12_createBean_constructors_publicOverProtected() {
 		BeanStore bs = BeanStore.create().build();
-		assertThrows(ExecutableException.class, ()->bs.createBean(D12.class).run(), "Could not instantiate class "+D12.class.getName()+": Public constructor found but could not find prerequisites: String.");
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D12.class.getName()+": Public constructor found but could not find prerequisites: String.", ()->bs.createBean(D12.class).run());
 		bs.add(String.class, "foo");
 		bs.add(Integer.class, 1);
 		assertString(bs.createBean(D12.class).run().a).is("s=foo");
@@ -961,7 +959,7 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d13_createBean_constructors_private() {
 		BeanStore bs = BeanStore.INSTANCE;
-		assertThrows(ExecutableException.class, ()->bs.createBean(D13.class).run(), "Could not instantiate class "+D13.class.getName()+": No public/protected constructors found.");
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D13.class.getName()+": No public/protected constructors found.", ()->bs.createBean(D13.class).run());
 	}
 
 	public static class D14 {
@@ -972,7 +970,7 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d14_createBean_constructors_namedBean() {
 		BeanStore bs = BeanStore.create().build();
-		assertThrows(ExecutableException.class, ()->bs.createBean(D14.class).run(), "Could not instantiate class "+D14.class.getName()+": Public constructor found but could not find prerequisites: Integer,String@foo or String@foo.");
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D14.class.getName()+": Public constructor found but could not find prerequisites: Integer,String@foo or String@foo.", ()->bs.createBean(D14.class).run());
 		bs.add(String.class, "bar", "foo");
 		assertString(bs.createBean(D14.class).run().a).is("bar");
 	}
@@ -985,7 +983,7 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d15_createBean_constructors_namedBean_withOuter() {
 		BeanStore bs = BeanStore.create().outer(new BeanStore_Test()).build();
-		assertThrows(ExecutableException.class, ()->bs.createBean(D15.class).run(), "Could not instantiate class "+D15.class.getName()+": Public constructor found but could not find prerequisites: Integer,String@foo or String@foo.");
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D15.class.getName()+": Public constructor found but could not find prerequisites: Integer,String@foo or String@foo.", ()->bs.createBean(D15.class).run());
 		bs.add(String.class, "bar", "foo");
 		assertString(bs.createBean(D15.class).run().a).is("bar");
 	}
@@ -1021,7 +1019,7 @@ class BeanStore_Test extends SimpleTestBase {
 	@Test void d17_createBean_builders_inherent() {
 		BeanStore bs = BeanStore.create().build();
 		assertString(bs.createBean(D17.class).run().a).isNull();
-		assertThrows(ExecutableException.class, ()->bs.createBean(D17.class).builder(Boolean.class, true).run(), "Could not instantiate class "+D17.class.getName()+": Protected constructor found but could not find prerequisites: Builder or Builder,Integer or Integer.");
+		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D17.class.getName()+": Protected constructor found but could not find prerequisites: Builder or Builder,Integer or Integer.", ()->bs.createBean(D17.class).builder(Boolean.class, true).run());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

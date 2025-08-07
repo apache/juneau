@@ -13,8 +13,6 @@
 package org.apache.juneau.marshaller;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.*;
 import java.util.*;
 
@@ -38,10 +36,10 @@ class Csv_Test  extends SimpleTestBase{
 	@Test void a02_from() {
 		String in1 = "'foo'", in2 = "{foo:'bar'}";
 
-		assertThrows(ParseException.class, ()->Csv.to(in1, String.class), "Not implemented.");
-		assertThrows(ParseException.class, ()->assertString(Csv.to(stringReader(in1), String.class)), "Not implemented.");
-		assertThrows(ParseException.class, ()->assertObject(Csv.to(in2, Map.class, String.class, String.class)), "Not implemented.");
-		assertThrows(ParseException.class, ()->assertObject(Csv.to(stringReader(in2), Map.class, String.class, String.class)), "Not implemented.");
+		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->Csv.to(in1, String.class));
+		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->assertString(Csv.to(stringReader(in1), String.class)));
+		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->assertObject(Csv.to(in2, Map.class, String.class, String.class)));
+		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->assertObject(Csv.to(stringReader(in2), Map.class, String.class, String.class)));
 	}
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods

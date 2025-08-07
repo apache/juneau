@@ -142,7 +142,7 @@ class StringUtilsTest extends SimpleTestBase {
 
 		assertThrows(NumberFormatException.class, ()->parseNumber("x", Number.class));
 		assertThrows(NumberFormatException.class, ()->parseNumber("x", null));
-		assertThrows(NumberFormatException.class, ()->parseNumber("x", BadNumber.class), "Unsupported Number type");
+		assertThrowsWithMessage(NumberFormatException.class, "Unsupported Number type", ()->parseNumber("x", BadNumber.class));
 	}
 
 	@SuppressWarnings("serial")
@@ -513,7 +513,7 @@ class StringUtilsTest extends SimpleTestBase {
 		assertEquals("", base64DecodeToString(base64EncodeToString("")));
 		assertEquals("foobar", base64DecodeToString(base64EncodeToString("foobar")));
 		assertEquals("\u0000\uffff", base64DecodeToString(base64EncodeToString("\u0000\uffff")));
-		assertThrows(IllegalArgumentException.class, ()->base64Decode("a"), "Invalid BASE64 string length.  Must be multiple of 4.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Invalid BASE64 string length.  Must be multiple of 4.", ()->base64Decode("a"));
 		assertThrows(IllegalArgumentException.class, ()->base64Decode("aaa"));
 	}
 
@@ -883,8 +883,8 @@ class StringUtilsTest extends SimpleTestBase {
 	// splitNestedInner(String)
 	//====================================================================================================
 	@Test void a38_splitNestedInner() {
-		assertThrows(IllegalArgumentException.class, ()->splitNestedInner(null), "String was null.");
-		assertThrows(IllegalArgumentException.class, ()->splitNestedInner(""), "String was empty.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "String was null.", ()->splitNestedInner(null));
+		assertThrowsWithMessage(IllegalArgumentException.class, "String was empty.", ()->splitNestedInner(""));
 		assertList(splitNestedInner("a{b}"), "b");
 		assertList(splitNestedInner(" a { b } "), "b");
 		assertList(splitNestedInner("a{b,c}"), "b", "c");

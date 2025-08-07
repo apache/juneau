@@ -14,8 +14,6 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.*;
 import java.util.function.*;
 
@@ -57,10 +55,10 @@ class BasicStringHeader_Test extends SimpleTestBase {
 
 		// Invalid usage.
 		c.get().header(stringHeader(HEADER,(Supplier<String>)null)).run().assertContent().isEmpty();
-		assertThrows(IllegalArgumentException.class, ()->stringHeader("", VALUE), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->stringHeader(null, VALUE), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->stringHeader("", ()->PARSED), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->stringHeader(null, ()->PARSED), "Name cannot be empty on header.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->stringHeader("", VALUE));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->stringHeader(null, VALUE));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->stringHeader("", ()->PARSED));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->stringHeader(null, ()->PARSED));
 	}
 
 	@Test void a02_assertString() {

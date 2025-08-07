@@ -16,8 +16,6 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.util.*;
 import java.util.function.*;
 
@@ -76,8 +74,8 @@ class BasicPart_Test extends SimpleTestBase {
 		assertTypeAndJson(BasicPart.cast(x7), NameValuePair.class, "'X7=7'");
 		assertTypeAndJson(BasicPart.cast(x8), NameValuePair.class, "'X8=8'");
 
-		assertThrows(BasicRuntimeException.class, ()->BasicPart.cast("X"), "Object of type java.lang.String could not be converted to a Part.");
-		assertThrows(BasicRuntimeException.class, ()->BasicPart.cast(null), "Object of type null could not be converted to a Part.");
+		assertThrowsWithMessage(BasicRuntimeException.class, "Object of type java.lang.String could not be converted to a Part.", ()->BasicPart.cast("X"));
+		assertThrowsWithMessage(BasicRuntimeException.class, "Object of type null could not be converted to a Part.", ()->BasicPart.cast(null));
 
 		assertTrue(BasicPart.canCast(x1));
 		assertTrue(BasicPart.canCast(x2));

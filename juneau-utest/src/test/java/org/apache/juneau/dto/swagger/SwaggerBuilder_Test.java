@@ -14,21 +14,17 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
-import org.junit.*;
+import org.apache.juneau.bean.swagger.Tag;
+import org.junit.jupiter.api.*;
 
 /**
  * Testcase for {@link SwaggerBuilder}.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class SwaggerBuilder_Test {
+class SwaggerBuilder_Test extends SimpleTestBase {
 
-	@Test
-	public void a01_contact() {
+	@Test void a01_contact() {
 		Contact t = contact();
 		assertObject(t).asJson().is("{}");
 
@@ -39,8 +35,7 @@ public class SwaggerBuilder_Test {
 		assertObject(t).asJson().is("{name:'foo',url:'bar',email:'baz'}");
 	}
 
-	@Test
-	public void a02_externalDocumentation() {
+	@Test void a02_externalDocumentation() {
 		ExternalDocumentation t = externalDocumentation();
 		assertObject(t).asJson().is("{}");
 
@@ -51,8 +46,7 @@ public class SwaggerBuilder_Test {
 		assertObject(t).asJson().is("{description:'bar',url:'foo'}");
 	}
 
-	@Test
-	public void a03_headerInfo() {
+	@Test void a03_headerInfo() {
 		HeaderInfo t = headerInfo();
 		assertObject(t).asJson().is("{}");
 
@@ -61,11 +55,10 @@ public class SwaggerBuilder_Test {
 
 		t = headerInfoStrict("string");
 		assertObject(t).asJson().is("{type:'string'}");
-		assertThrows(BasicRuntimeException.class, ()->headerInfoStrict("foo"), "Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']");
+		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']", ()->headerInfoStrict("foo"));
 	}
 
-	@Test
-	public void a04_info() {
+	@Test void a04_info() {
 		Info t = info();
 		assertObject(t).asJson().is("{}");
 
@@ -73,8 +66,7 @@ public class SwaggerBuilder_Test {
 		assertObject(t).asJson().is("{title:'foo',version:'bar'}");
 	}
 
-	@Test
-	public void a05_items() {
+	@Test void a05_items() {
 		Items t = items();
 		assertObject(t).asJson().is("{}");
 
@@ -83,11 +75,10 @@ public class SwaggerBuilder_Test {
 
 		t = itemsStrict("string");
 		assertObject(t).asJson().is("{type:'string'}");
-		assertThrows(BasicRuntimeException.class, ()->itemsStrict("foo"), "Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']");
+		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']", ()->itemsStrict("foo"));
 	}
 
-	@Test
-	public void a06_license() {
+	@Test void a06_license() {
 		License t = license();
 		assertObject(t).asJson().is("{}");
 
@@ -95,14 +86,12 @@ public class SwaggerBuilder_Test {
 		assertObject(t).asJson().is("{name:'foo'}");
 	}
 
-	@Test
-	public void a07_operation() {
+	@Test void a07_operation() {
 		Operation t = operation();
 		assertObject(t).asJson().is("{}");
 	}
 
-	@Test
-	public void a08_parameterInfo() {
+	@Test void a08_parameterInfo() {
 		ParameterInfo t = parameterInfo();
 		assertObject(t).asJson().is("{}");
 
@@ -111,11 +100,10 @@ public class SwaggerBuilder_Test {
 
 		t = parameterInfoStrict("query", "bar");
 		assertObject(t).asJson().is("{'in':'query',name:'bar'}");
-		assertThrows(BasicRuntimeException.class, ()->parameterInfoStrict("foo", "bar"), "Invalid value passed in to setIn(String).  Value='foo', valid values=['query','header','path','formData','body']");
+		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid value passed in to setIn(String).  Value='foo', valid values=['query','header','path','formData','body']", ()->parameterInfoStrict("foo", "bar"));
 	}
 
-	@Test
-	public void a09_responseInfo() {
+	@Test void a09_responseInfo() {
 		ResponseInfo t = responseInfo();
 		assertObject(t).asJson().is("{}");
 
@@ -123,14 +111,12 @@ public class SwaggerBuilder_Test {
 		assertObject(t).asJson().is("{description:'foo'}");
 	}
 
-	@Test
-	public void a10_schemaInfo() {
+	@Test void a10_schemaInfo() {
 		SchemaInfo t = schemaInfo();
 		assertObject(t).asJson().is("{}");
 	}
 
-	@Test
-	public void a11_securityScheme() {
+	@Test void a11_securityScheme() {
 		SecurityScheme t = securityScheme();
 		assertObject(t).asJson().is("{}");
 
@@ -141,8 +127,7 @@ public class SwaggerBuilder_Test {
 		assertObject(t).asJson().is("{type:'foo'}");
 	}
 
-	@Test
-	public void a12_swagger() {
+	@Test void a12_swagger() {
 		Swagger t = swagger();
 		assertObject(t).asJson().is("{swagger:'2.0'}");
 
@@ -150,8 +135,7 @@ public class SwaggerBuilder_Test {
 		assertObject(t).asJson().is("{swagger:'2.0',info:{}}");
 	}
 
-	@Test
-	public void a13_tag() {
+	@Test void a13_tag() {
 		Tag t = tag();
 		assertObject(t).asJson().is("{}");
 
@@ -159,8 +143,7 @@ public class SwaggerBuilder_Test {
 		assertObject(t).asJson().is("{name:'foo'}");
 	}
 
-	@Test
-	public void a14_xml() {
+	@Test void a14_xml() {
 		Xml t = xml();
 		assertObject(t).asJson().is("{}");
 	}

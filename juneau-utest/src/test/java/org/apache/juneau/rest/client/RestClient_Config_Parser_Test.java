@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.assertions.AssertionPredicates.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import java.io.*;
@@ -39,7 +37,7 @@ public class RestClient_Config_Parser_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_parser_strict() {
-		assertThrown(()->MockRestClient.create(A.class).json().strict().build().post("/echoBody",reader("{f:1}")).run().getContent().as(A2.class)).asMessages().isAny(contains("Unquoted attribute detected."));
+		assertThrowsWithMessage(Exception.class, "Unquoted attribute detected.", ()->MockRestClient.create(A.class).json().strict().build().post("/echoBody",reader("{f:1}")).run().getContent().as(A2.class));
 	}
 
 	public static class A3 {

@@ -59,12 +59,12 @@ class BasicUriHeader_Test extends SimpleTestBase {
 		// Invalid usage.
 		c.get().header(uriHeader(HEADER,(Supplier<URI>)null)).run().assertContent().isEmpty();
 		c.get().header(uriHeader(HEADER,()->null)).run().assertContent().isEmpty();
-		assertThrows(IllegalArgumentException.class, ()->uriHeader("", VALUE), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->uriHeader(null, VALUE), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->uriHeader("", PARSED), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->uriHeader(null, PARSED), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->uriHeader("", ()->PARSED), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->uriHeader(null, ()->PARSED), "Name cannot be empty on header.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->uriHeader("", VALUE));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->uriHeader(null, VALUE));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->uriHeader("", PARSED));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->uriHeader(null, PARSED));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->uriHeader("", ()->PARSED));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->uriHeader(null, ()->PARSED));
 	}
 
 	@Test void a02_asUri() {

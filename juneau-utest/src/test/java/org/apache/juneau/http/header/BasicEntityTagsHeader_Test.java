@@ -14,8 +14,6 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.*;
 import java.util.function.*;
 
@@ -58,12 +56,12 @@ class BasicEntityTagsHeader_Test extends SimpleTestBase {
 		// Invalid usage.
 		c.get().header(entityTagsHeader(HEADER,(Supplier<EntityTags>)null)).run().assertContent().isEmpty();
 		c.get().header(entityTagsHeader(HEADER,()->null)).run().assertContent().isEmpty();
-		assertThrows(IllegalArgumentException.class, ()->entityTagsHeader("", VALUE), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->entityTagsHeader(null, VALUE), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->entityTagsHeader("", PARSED), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->entityTagsHeader(null, PARSED), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->entityTagsHeader("", ()->PARSED), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->entityTagsHeader(null, ()->PARSED), "Name cannot be empty on header.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->entityTagsHeader("", VALUE));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->entityTagsHeader(null, VALUE));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->entityTagsHeader("", PARSED));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->entityTagsHeader(null, PARSED));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->entityTagsHeader("", ()->PARSED));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->entityTagsHeader(null, ()->PARSED));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

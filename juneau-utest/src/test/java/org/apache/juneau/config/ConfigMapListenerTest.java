@@ -14,9 +14,6 @@ package org.apache.juneau.config;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -24,17 +21,15 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.config.store.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ConfigMapListenerTest {
+class ConfigMapListenerTest extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Sanity tests.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void testBasicDefaultSection() throws Exception {
+	@Test void testBasicDefaultSection() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"foo=bar"
 		);
@@ -59,8 +54,7 @@ public class ConfigMapListenerTest {
 		assertString(cm).asReplaceAll("\\r?\\n", "|").is("foo = baz|");
 	}
 
-	@Test
-	public void testBasicNormalSection() throws Exception {
+	@Test void testBasicNormalSection() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"foo=bar"
@@ -90,8 +84,7 @@ public class ConfigMapListenerTest {
 	// Add new entries.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void testAddNewEntries() throws Exception {
+	@Test void testAddNewEntries() throws Exception {
 		ConfigStore s = initStore("A.cfg"
 		);
 
@@ -116,8 +109,7 @@ public class ConfigMapListenerTest {
 		assertString(cm).asReplaceAll("\\r?\\n", "|").is("k = vb|[S1]|k1 = v1b|");
 	}
 
-	@Test
-	public void testAddNewEntriesWithAttributes() throws Exception {
+	@Test void testAddNewEntriesWithAttributes() throws Exception {
 		ConfigStore s = initStore("A.cfg"
 		);
 
@@ -142,8 +134,7 @@ public class ConfigMapListenerTest {
 		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#k|k<^*> = kb # C|[S1]|#k1|k1<^*> = k1b # C1|");
 	}
 
-	@Test
-	public void testAddExistingEntriesWithAttributes() throws Exception {
+	@Test void testAddExistingEntriesWithAttributes() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"#ka",
 			"k=va # Ca",
@@ -178,8 +169,7 @@ public class ConfigMapListenerTest {
 	// Remove existing entries.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void testRemoveExistingEntries() throws Exception {
+	@Test void testRemoveExistingEntries() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"k=v",
 			"[S1]",
@@ -207,8 +197,7 @@ public class ConfigMapListenerTest {
 		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|");
 	}
 
-	@Test
-	public void testRemoveExistingEntriesWithAttributes() throws Exception {
+	@Test void testRemoveExistingEntriesWithAttributes() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"#ka",
 			"k=va # Ca",
@@ -243,8 +232,7 @@ public class ConfigMapListenerTest {
 	// Add new sections.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void testAddNewSections() throws Exception {
+	@Test void testAddNewSections() throws Exception {
 		ConfigStore s = initStore("A.cfg"
 		);
 
@@ -272,8 +260,7 @@ public class ConfigMapListenerTest {
 		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#D1||#S1|[S1]|[S2]|[S3]|k3 = v3|");
 	}
 
-	@Test
-	public void testModifyExistingSections() throws Exception {
+	@Test void testModifyExistingSections() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"#Da",
 			"",
@@ -311,8 +298,7 @@ public class ConfigMapListenerTest {
 	// Remove sections.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void testRemoveSections() throws Exception {
+	@Test void testRemoveSections() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"#Da",
 			"",
@@ -355,8 +341,7 @@ public class ConfigMapListenerTest {
 	// Update from store.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void testUpdateFromStore() throws Exception {
+	@Test void testUpdateFromStore() throws Exception {
 		ConfigStore s = initStore("A.cfg");
 
 		final CountDownLatch latch = new CountDownLatch(3);
@@ -395,8 +380,7 @@ public class ConfigMapListenerTest {
 	// Merges.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void testMergeNoOverwrite() throws Exception {
+	@Test void testMergeNoOverwrite() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1a"
@@ -433,8 +417,7 @@ public class ConfigMapListenerTest {
 	// If we're modifying an entry and it changes on the file system, we should overwrite the change on save().
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void testMergeWithOverwrite() throws Exception {
+	@Test void testMergeWithOverwrite() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1a"
@@ -471,8 +454,7 @@ public class ConfigMapListenerTest {
 	// If the contents of a file have been modified on the file system before a signal has been received.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void testMergeWithOverwriteNoSignal() throws Exception {
+	@Test void testMergeWithOverwriteNoSignal() throws Exception {
 
 		final Queue<String> contents = new ConcurrentLinkedQueue<>();
 		contents.add("[S1]\nk1 = v1a");
@@ -510,8 +492,7 @@ public class ConfigMapListenerTest {
 		}
 	}
 
-	@Test
-	public void testMergeWithConstantlyUpdatingFile() throws Exception {
+	@Test void testMergeWithConstantlyUpdatingFile() throws Exception {
 
 		try (var s = new MemoryStore(MemoryStore.create()) {
 			char c = 'a';
@@ -543,7 +524,7 @@ public class ConfigMapListenerTest {
 			ConfigMap cm = s.getMap("A.cfg");
 			cm.register(l);
 			cm.setEntry("S1", "k1", "v1c", null, null, null);
-			assertThrows(ConfigException.class, cm::commit, "Unable to store contents of config to store.");
+			assertThrowsWithMessage(ConfigException.class, "Unable to store contents of config to store.", cm::commit);
 			wait(latch);
 			assertNull(l.error);
 			cm.unregister(l);

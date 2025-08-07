@@ -15,8 +15,6 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.time.*;
 import java.util.*;
 
@@ -59,8 +57,8 @@ class AnyAssertion_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_msg() {
-		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("Foo {0}", 1).isExists(), "Foo 1");
-		assertThrows(RuntimeException.class, ()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists(), "Foo 1");
+		assertThrowsWithMessage(BasicAssertionError.class, "Foo 1", ()->test(null).setMsg("Foo {0}", 1).isExists());
+		assertThrowsWithMessage(RuntimeException.class, "Foo 1", ()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists());
 	}
 
 	@Test void a02_stdout() {
@@ -212,7 +210,7 @@ class AnyAssertion_Test extends SimpleTestBase {
 		test(x1).asCollection(Integer.class).isString("[1]");
 		test(nil).asCollection(Integer.class).isNull();
 		assertThrown(()->test(x2).asCollection(Integer.class)).asMessage().asOneLine().is("Object was not type 'java.util.Collection'.  Actual='java.lang.String'.");
-		assertThrows(IllegalArgumentException.class, ()->test(x1).asCollection(null), "Argument 'elementType' cannot be null.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'elementType' cannot be null.", ()->test(x1).asCollection(null));
 	}
 
 	@Test void bb14_asComparable() {
@@ -261,7 +259,7 @@ class AnyAssertion_Test extends SimpleTestBase {
 		test(x1).asList(Integer.class).isString("[1]");
 		test(nil).asList(Integer.class).isNull();
 		assertThrown(()->test(x2).asList(Integer.class)).asMessage().asOneLine().is("Object was not type 'java.util.List'.  Actual='java.lang.String'.");
-		assertThrows(IllegalArgumentException.class, ()->test(x1).asCollection(null), "Argument 'elementType' cannot be null.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'elementType' cannot be null.", ()->test(x1).asCollection(null));
 	}
 
 	@Test void bb20_asMap() {
@@ -278,8 +276,8 @@ class AnyAssertion_Test extends SimpleTestBase {
 		test(x1).asMap(String.class,Integer.class).isString("{a=2}");
 		test(nil).asMap(String.class,Integer.class).isNull();
 		assertThrown(()->test(x2).asMap(String.class,Integer.class)).asMessage().asOneLine().is("Object was not type 'java.util.Map'.  Actual='java.lang.String'.");
-		assertThrows(IllegalArgumentException.class, ()->test(x1).asMap(null,Integer.class), "Argument 'keyType' cannot be null.");
-		assertThrows(IllegalArgumentException.class, ()->test(x1).asMap(String.class,null), "Argument 'valueType' cannot be null.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'keyType' cannot be null.", ()->test(x1).asMap(null,Integer.class));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'valueType' cannot be null.", ()->test(x1).asMap(String.class,null));
 	}
 
 	@Test void bb22_asBean() {
@@ -294,7 +292,7 @@ class AnyAssertion_Test extends SimpleTestBase {
 		test(x1).asBean().isString("a=1,b=2");
 		test(nil).asBean(A1.class).isNull();
 		assertThrown(()->test(x2).asBean(A2.class)).asMessage().asOneLine().is("Object was not type 'org.apache.juneau.assertions.AnyAssertion_Test$A2'.  Actual='java.lang.String'.");
-		assertThrows(IllegalArgumentException.class, ()->test(x1).asBean(null), "Argument 'beanType' cannot be null.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'beanType' cannot be null.", ()->test(x1).asBean(null));
 	}
 
 	@Test void bb24_asBeanList() {
@@ -303,7 +301,7 @@ class AnyAssertion_Test extends SimpleTestBase {
 		test(x1).asBeanList(A1.class).isString("[a=1,b=2]");
 		test(nil).asBeanList(A1.class).isNull();
 		assertThrown(()->test(x2).asBeanList(A2.class)).asMessage().asOneLine().is("Object was not type 'java.util.List'.  Actual='java.lang.String'.");
-		assertThrows(IllegalArgumentException.class, ()->test(x1).asBeanList(null), "Argument 'beanType' cannot be null.");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'beanType' cannot be null.", ()->test(x1).asBeanList(null));
 	}
 
 	@Test void bb25_asZonedDateTime() {
@@ -329,19 +327,19 @@ class AnyAssertion_Test extends SimpleTestBase {
 	@Test void ca01_exists() {
 		Integer x = 1, nil = null;
 		test(x).isExists().isExists();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
+		assertThrowsWithMessage(BasicAssertionError.class, "Value was null.", ()->test(nil).isExists());
 	}
 
 	@Test void ca02_isNull() {
 		Integer x = 1, nil = null;
 		test(nil).isNull();
-		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
+		assertThrowsWithMessage(BasicAssertionError.class, "Value was not null.", ()->test(x).isNull());
 	}
 
 	@Test void ca03_isNotNull() {
 		Integer x = 1, nil = null;
 		test(x).isNotNull();
-		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
+		assertThrowsWithMessage(BasicAssertionError.class, "Value was null.", ()->test(nil).isNotNull());
 	}
 
 	@Test void ca04a_is_T() {

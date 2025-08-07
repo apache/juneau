@@ -12,12 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.remote;
 
-import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
@@ -355,16 +352,16 @@ class Remote_Test extends SimpleTestBase {
 
 	@Test void c04_rethrownExceptions() {
 		C4b x = remote(C4a.class,C4b.class);
-		assertThrows(Remote_Test.C4c.class, x::x1, "foo");
-		assertThrown(()->x.x1a().get()).asMessages().isContains("foo");
-		assertThrown(()->x.x1b().get()).asMessages().isContains("foo");
-		assertThrows(RuntimeException.class, x::x2, "foo");
-		assertThrown(()->x.x3().get()).asMessages().isContains("foo");
-		assertThrows(Remote_Test.C4c.class, x::x4, "foo");
-		assertThrown(()->x.x4a().get()).asMessages().isContains("foo");
-		assertThrown(()->x.x4b().get()).asMessages().isContains("foo");
-		assertThrows(RuntimeException.class, x::x5, "foo");
-		assertThrown(()->x.x6().get()).asMessages().isContains("foo");
+		assertThrowsWithMessage(Remote_Test.C4c.class, "foo", x::x1);
+		assertThrowsWithMessage(Exception.class, "foo", ()->x.x1a().get());
+		assertThrowsWithMessage(Exception.class, "foo", ()->x.x1b().get());
+		assertThrowsWithMessage(RuntimeException.class, "foo", x::x2);
+		assertThrowsWithMessage(Exception.class, "foo", ()->x.x3().get());
+		assertThrowsWithMessage(Remote_Test.C4c.class, "foo", x::x4);
+		assertThrowsWithMessage(Exception.class, "foo", ()->x.x4a().get());
+		assertThrowsWithMessage(Exception.class, "foo", ()->x.x4b().get());
+		assertThrowsWithMessage(RuntimeException.class, "foo", x::x5);
+		assertThrowsWithMessage(Exception.class, "foo", ()->x.x6().get());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -407,8 +404,8 @@ class Remote_Test extends SimpleTestBase {
 		assertEquals(400,x.x7().intValue());
 		assertEquals(false,x.x8());
 		assertEquals(false,x.x9());
-		assertThrown(x::x5).asMessages().isAny(contains("Only integer and booleans types are valid."));
-		assertThrown(x::x10).asMessages().isAny(contains("Only integer and booleans types are valid."));
+		assertThrowsWithMessage(Exception.class, "Only integer and booleans types are valid.", x::x5);
+		assertThrowsWithMessage(Exception.class, "Only integer and booleans types are valid.", x::x10);
 	}
 
 	@Rest
@@ -502,7 +499,7 @@ class Remote_Test extends SimpleTestBase {
 
 	@Test void e05_rrpc_rethrownCheckedException() {
 		RestClient x = client(E5.class).build();
-		assertThrows(Remote_Test.E5a.class, ()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo"), "foobar");
+		assertThrowsWithMessage(Remote_Test.E5a.class, "foobar", ()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo"));
 	}
 
 	@Rest
@@ -517,7 +514,7 @@ class Remote_Test extends SimpleTestBase {
 
 	@Test void e06_rrpc_rethrownUncheckedException() {
 		RestClient x = client(E6.class).build();
-		assertThrown(()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo")).asMessages().isAny(contains("foobar"));
+		assertThrowsWithMessage(Exception.class, "foobar", ()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -568,7 +565,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void f02_headers_badSupplier() {
-		assertThrown(()->client(F.class).build().getRemote(F2a.class)).asMessages().isContains("foo");
+		assertThrowsWithMessage(Exception.class, "foo", ()->client(F.class).build().getRemote(F2a.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

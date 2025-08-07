@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.mstat;
 
-import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -199,7 +198,7 @@ class ThrownStore_Test extends SimpleTestBase {
 	}
 
 	@Test void b04_builder_implClass_bad() {
-		assertThrown(()->ThrownStore.create().type(B4.class).build()).asMessages().isContains("foobar");
+		assertThrowsWithMessage(Exception.class, "foobar", ()->ThrownStore.create().type(B4.class).build());
 	}
 
 	public static class B5a {}
@@ -221,7 +220,7 @@ class ThrownStore_Test extends SimpleTestBase {
 	@Test void b05_builder_beanFactory() {
 		BeanStore bs = BeanStore.create().build();
 
-		assertThrown(()->ThrownStore.create(bs).type(B5b.class).build()).asMessages().isAny(contains("Public constructor found but could not find prerequisites: B5a"));
+		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: B5a", ()->ThrownStore.create(bs).type(B5b.class).build());
 		assertObject(ThrownStore.create(bs).type(B5c.class).build()).isType(B5c.class);
 
 		bs.addBean(B5a.class, new B5a());
@@ -253,7 +252,7 @@ class ThrownStore_Test extends SimpleTestBase {
 		Throwable t1 = new Throwable();
 		t1.fillInStackTrace();
 
-		assertThrown(()->ThrownStore.create(bs).statsImplClass(B6b.class).build().add(t1)).asMessages().isAny(contains("Public constructor found but could not find prerequisites: B6a"));
+		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: B6a", ()->ThrownStore.create(bs).statsImplClass(B6b.class).build().add(t1));
 		assertObject(ThrownStore.create(bs).statsImplClass(B6c.class).build().add(t1)).isType(B6c.class);
 
 		bs.addBean(B6a.class, new B6a());

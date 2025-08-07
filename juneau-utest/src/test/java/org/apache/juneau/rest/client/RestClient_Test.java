@@ -17,8 +17,6 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.io.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -109,7 +107,7 @@ class RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void a06_request_runCalledTwice() {
-		assertThrows(RestCallException.class, ()->{RestRequest r = client().build().get("/echo"); r.run(); r.run();}, "run() already called.");
+		assertThrowsWithMessage(RestCallException.class, "run() already called.", ()->{RestRequest r = client().build().get("/echo"); r.run(); r.run();});
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

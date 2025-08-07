@@ -12,14 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -99,8 +96,8 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 		RestClient x = client().build();
 		ABean b = x.post("/echo",bean).run().getContent().parser(JsonParser.DEFAULT).as(ABean.class);
 		assertJson(b, "{f:1}");
-		assertThrown(()->x.post("/echo",bean).run().getContent().parser(XmlParser.DEFAULT).as(ABean.class)).asMessages().isAny(contains("ParseError at [row,col]:[1,1]"));
-		assertThrown(()->x.post("/echo",bean).run().getContent().parser(XmlParser.DEFAULT).assertValue().as(ABean.class)).asMessages().isAny(contains("ParseError at [row,col]:[1,1]"));
+		assertThrowsWithMessage(Exception.class, "ParseError at [row,col]:[1,1]", ()->x.post("/echo",bean).run().getContent().parser(XmlParser.DEFAULT).as(ABean.class));
+		assertThrowsWithMessage(Exception.class, "ParseError at [row,col]:[1,1]", ()->x.post("/echo",bean).run().getContent().parser(XmlParser.DEFAULT).assertValue().as(ABean.class));
 	}
 
 	@Test void a03_asInputStream() throws Exception {
@@ -132,9 +129,9 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 		};
 
 		TestClient x2 = client().interceptors(rci).build(TestClient.class).entity(new StringEntity("{f:2}"));
-		assertThrows(NullPointerException.class, ()->x2.get("/bean").run().getContent().cache().asInputStream(), "foo");
-		assertThrows(NullPointerException.class, ()->x2.get("/bean").run().getContent().asInputStream().close(), "foo");
-		assertThrows(NullPointerException.class, ()->((EofSensorInputStream)x2.get("/bean").run().getContent().asInputStream()).abortConnection(), "foo");  // NOSONAR
+		assertThrowsWithMessage(NullPointerException.class, "foo", ()->x2.get("/bean").run().getContent().cache().asInputStream());
+		assertThrowsWithMessage(NullPointerException.class, "foo", ()->x2.get("/bean").run().getContent().asInputStream().close());
+		assertThrowsWithMessage(NullPointerException.class, "foo", ()->((EofSensorInputStream)x2.get("/bean").run().getContent().asInputStream()).abortConnection());  // NOSONAR
 	}
 
 	@Test void a04_asReader() throws Exception {
@@ -159,7 +156,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 		x = client().build().get("/bean").run().assertContent().asBytes().asString().is("{f:1}").getContent().asBytes();
 		assertBytes(x).asString().is("{f:1}");
 
-		assertThrown(()->testClient().entity(new InputStreamEntity(badStream())).get().run().getContent().asBytes()).asMessages().isContains("foo");
+		assertThrowsWithMessage(Exception.class, "foo", ()->testClient().entity(new InputStreamEntity(badStream())).get().run().getContent().asBytes());
 	}
 
 	@Test void a06_pipeTo() throws Exception {
@@ -215,8 +212,8 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 
 		plainTestClient().entity(stringEntity("foo")).get().run().assertContent().as(A7a.class).is(x->x.x.equals("foo"));
 		plainTestClient().entity(stringEntity("foo")).get().run().assertContent().as(A7b.class).is(x->x.x.equals("foo"));
-		assertThrows(Exception.class, ()->plainTestClient().entity(stringEntity("foo")).headers(header("Content-Type","foo")).get().run().getContent().as(A7c.class), "Unsupported media-type");
-		assertThrown(()->testClient().entity(stringEntity("")).get().run().getContent().as(A7c.class)).asMessages().isContains("foo");
+		assertThrowsWithMessage(Exception.class, "Unsupported media-type", ()->plainTestClient().entity(stringEntity("foo")).headers(header("Content-Type","foo")).get().run().getContent().as(A7c.class));
+		assertThrowsWithMessage(Exception.class, "foo", ()->testClient().entity(stringEntity("")).get().run().getContent().as(A7c.class));
 
 		Future<ABean> x8 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asFuture(ABean.class);
 		assertJson(x8.get(), "{f:1}");
@@ -230,7 +227,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 		String x14 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asString();
 		assertEquals("{f:1}", x14);
 
-		assertThrown(()->testClient().entity(new InputStreamEntity(badStream())).get().run().getContent().asString()).asMessages().isContains("foo");
+		assertThrowsWithMessage(Exception.class, "foo", ()->testClient().entity(new InputStreamEntity(badStream())).get().run().getContent().asString());
 
 		Future<String> x16 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asStringFuture();
 		assertEquals("{f:1}", x16.get());

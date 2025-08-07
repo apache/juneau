@@ -14,7 +14,6 @@ package org.apache.juneau.rest.client;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -128,7 +127,7 @@ public class RestClient_Headers_Test extends SimpleTestBase {
 	}
 
 	@Test void a12_badSerialization() {
-		assertThrown(()->checkFooClient().headers(header("Foo","bar",null).serializer(new A12())).build().get().run()).asMessages().isContains("bad");
+		assertThrowsWithMessage(Exception.class, "bad", ()->checkFooClient().headers(header("Foo","bar",null).serializer(new A12())).build().get().run());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

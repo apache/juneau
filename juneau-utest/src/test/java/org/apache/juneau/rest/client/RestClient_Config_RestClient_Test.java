@@ -17,8 +17,6 @@ import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.io.*;
 import java.util.concurrent.*;
 import java.util.logging.*;
@@ -250,38 +248,38 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 		client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5()).header("Check","foo").header("Foo","f3").run().assertContent("['f1','f2','f3']").assertHeader("Bar").is("b1");
 		assertEquals(111,A5.x);
 
-		assertThrows(RuntimeException.class, ()->client().header("Foo","f1").interceptors(A5a.class).build().get("/checkHeader"), "foo");
-		assertThrows(RuntimeException.class, ()->client().header("Foo","f1").interceptors(A5b.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run(), "foo");
-		assertThrows(RuntimeException.class, ()->client().header("Foo","f1").interceptors(A5c.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close(), "foo");
-		assertThrows(RuntimeException.class, ()->client().header("Foo","f1").interceptors(new A5a()).build().get("/checkHeader"), "foo");
-		assertThrows(RuntimeException.class, ()->client().header("Foo","f1").interceptors(new A5b()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run(), "foo");
-		assertThrows(RuntimeException.class, ()->client().header("Foo","f1").interceptors(new A5c()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close(), "foo");
-		assertThrows(RuntimeException.class, ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5a()), "foo");
-		assertThrows(RuntimeException.class, ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5b()).header("Check","foo").header("Foo","f3").run(), "foo");
-		assertThrows(RuntimeException.class, ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5c()).header("Check","foo").header("Foo","f3").run().close(), "foo");
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().header("Foo","f1").interceptors(A5a.class).build().get("/checkHeader"));
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().header("Foo","f1").interceptors(A5b.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run());
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().header("Foo","f1").interceptors(A5c.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close());
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5a()).build().get("/checkHeader"));
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5b()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run());
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5c()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close());
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5a()));
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5b()).header("Check","foo").header("Foo","f3").run());
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5c()).header("Check","foo").header("Foo","f3").run().close());
 
-		assertThrows(RestCallException.class, ()->client().header("Foo","f1").interceptors(A5d.class).build().get("/checkHeader"), "foo");
-		assertThrows(RestCallException.class, ()->client().header("Foo","f1").interceptors(A5e.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run(), "foo");
-		assertThrows(RestCallException.class, ()->client().header("Foo","f1").interceptors(A5f.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close(), "foo");
-		assertThrows(RestCallException.class, ()->client().header("Foo","f1").interceptors(new A5d()).build().get("/checkHeader"), "foo");
-		assertThrows(RestCallException.class, ()->client().header("Foo","f1").interceptors(new A5e()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run(), "foo");
-		assertThrows(RestCallException.class, ()->client().header("Foo","f1").interceptors(new A5f()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close(), "foo");
-		assertThrows(RestCallException.class, ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5d()), "foo");
-		assertThrows(RestCallException.class, ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5e()).header("Check","foo").header("Foo","f3").run(), "foo");
-		assertThrows(RestCallException.class, ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5f()).header("Check","foo").header("Foo","f3").run().close(), "foo");
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(A5d.class).build().get("/checkHeader"));
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(A5e.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run());
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(A5f.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close());
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5d()).build().get("/checkHeader"));
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5e()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run());
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5f()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close());
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5d()));
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5e()).header("Check","foo").header("Foo","f3").run());
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5f()).header("Check","foo").header("Foo","f3").run().close());
 
-		assertThrown(()->client().header("Foo","f1").interceptors(A5g.class).build().get("/checkHeader")).isType(RestCallException.class).asMessages().isContains("foo");
-		assertThrown(()->client().header("Foo","f1").interceptors(A5h.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run()).isType(RestCallException.class).asMessages().isContains("foo");
-		assertThrown(()->client().header("Foo","f1").interceptors(A5i.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close()).isType(RestCallException.class).asMessages().isContains("foo");
-		assertThrown(()->client().header("Foo","f1").interceptors(new A5g()).build().get("/checkHeader")).isType(RestCallException.class).asMessages().isContains("foo");
-		assertThrown(()->client().header("Foo","f1").interceptors(new A5h()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run()).isType(RestCallException.class).asMessages().isContains("foo");
-		assertThrown(()->client().header("Foo","f1").interceptors(new A5i()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close()).isType(RestCallException.class).asMessages().isContains("foo");
-		assertThrown(()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5g())).isType(RestCallException.class).asMessages().isContains("foo");
-		assertThrown(()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5h()).header("Check","foo").header("Foo","f3").run()).isType(RestCallException.class).asMessages().isContains("foo");
-		assertThrown(()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5i()).header("Check","foo").header("Foo","f3").run().close()).isType(RestCallException.class).asMessages().isContains("foo");
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(A5g.class).build().get("/checkHeader"));
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(A5h.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run());
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(A5i.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close());
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5g()).build().get("/checkHeader"));
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5h()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run());
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").interceptors(new A5i()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close());
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5g()));
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5h()).header("Check","foo").header("Foo","f3").run());
+		assertThrowsWithMessage(RestCallException.class, "foo", ()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5i()).header("Check","foo").header("Foo","f3").run().close());
 
-		assertThrows(ConfigException.class, ()->client().interceptors(String.class), "Invalid class of type 'java.lang.String' passed to interceptors().");
-		assertThrows(ConfigException.class, ()->client().interceptors(""), "Invalid object of type 'java.lang.String' passed to interceptors().");
+		assertThrowsWithMessage(ConfigException.class, "Invalid class of type 'java.lang.String' passed to interceptors().", ()->client().interceptors(String.class));
+		assertThrowsWithMessage(ConfigException.class, "Invalid object of type 'java.lang.String' passed to interceptors().", ()->client().interceptors(""));
 		client().interceptors((Object)null).header("Foo","f1").build().get("/checkHeader");
 		client().interceptors((Class<?>)null).header("Foo","f1").build().get("/checkHeader");
 	}
@@ -300,9 +298,9 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void a06_interceptors_exceptionHandling() {
-		assertThrows(RuntimeException.class, ()->client().interceptors(A6a.class).build().post("/bean",bean).complete(), "foo");
-		assertThrows(RuntimeException.class, ()->client().interceptors(A6b.class).build().post("/bean",bean).complete(), "foo");
-		assertThrows(RuntimeException.class, ()->client().interceptors(A6c.class).build().post("/bean",bean).complete(), "foo");
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().interceptors(A6a.class).build().post("/bean",bean).complete());
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().interceptors(A6b.class).build().post("/bean",bean).complete());
+		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().interceptors(A6c.class).build().post("/bean",bean).complete());
 	}
 
 	public static class A7 extends RestClient {
@@ -330,9 +328,9 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 	@Test void a09_marshalls() throws Exception {
 		final RestClient x = MockRestClient.create(A.class).marshallers(Xml.DEFAULT,Json.DEFAULT).build();
 
-		assertThrows(RestCallException.class, ()->x.post("/echoBody",bean).run(), "Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
+		assertThrowsWithMessage(RestCallException.class, "Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.", ()->x.post("/echoBody",bean).run());
 
-		assertThrown(()->x.post("/echoBody",bean).contentType("text/json").run().getContent().as(ABean.class)).asMessages().isContains("Content-Type not specified in response header.  Cannot find appropriate parser.");
+		assertThrowsWithMessage(Exception.class, "Content-Type not specified in response header.  Cannot find appropriate parser.", ()->x.post("/echoBody",bean).contentType("text/json").run().getContent().as(ABean.class));
 
 		ABean b = x.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
@@ -361,9 +359,9 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 	@Test void a11_serializers_parsers() throws Exception {
 		final RestClient x = MockRestClient.create(A.class).serializers(XmlSerializer.class,JsonSerializer.class).parsers(XmlParser.class,JsonParser.class).build();
 
-		assertThrows(RestCallException.class, ()->x.post("/echoBody",bean).run(), "Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
+		assertThrowsWithMessage(RestCallException.class, "Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.", ()->x.post("/echoBody",bean).run());
 
-		assertThrown(()->x.post("/echoBody",bean).contentType("text/json").run().getContent().as(ABean.class)).asMessages().isContains("Content-Type not specified in response header.  Cannot find appropriate parser.");
+		assertThrowsWithMessage(Exception.class, "Content-Type not specified in response header.  Cannot find appropriate parser.", ()->x.post("/echoBody",bean).contentType("text/json").run().getContent().as(ABean.class));
 
 		ABean b = x.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
@@ -379,9 +377,9 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 
 		final RestClient x2 = MockRestClient.create(A.class).serializers(XmlSerializer.DEFAULT,JsonSerializer.DEFAULT).parsers(XmlParser.DEFAULT,JsonParser.DEFAULT).build();
 
-		assertThrows(RestCallException.class, ()->x2.post("/echoBody",bean).run(), "Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
+		assertThrowsWithMessage(RestCallException.class, "Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.", ()->x2.post("/echoBody",bean).run());
 
-		assertThrown(()->x2.post("/echoBody",bean).contentType("text/json").run().getContent().as(ABean.class)).asMessages().isContains("Content-Type not specified in response header.  Cannot find appropriate parser.");
+		assertThrowsWithMessage(Exception.class, "Content-Type not specified in response header.  Cannot find appropriate parser.", ()->x2.post("/echoBody",bean).contentType("text/json").run().getContent().as(ABean.class));
 
 		b = x2.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);

@@ -14,7 +14,6 @@ package org.apache.juneau.rest.client;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
-import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
@@ -121,7 +120,7 @@ class RestClient_Response_Headers_Test extends SimpleTestBase {
 		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(m3,cm1);
 		assertJson(m3.get(), "[1,2]");
 
-		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Foo").as(m2,cm1)).asMessages().isAny(contains("For input string:"));
+		assertThrowsWithMessage(Exception.class, "For input string:", ()->checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Foo").as(m2,cm1));
 
 		Optional<List<Integer>> o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(LinkedList.class,Integer.class);
 		assertJson(o1.get(), "[1,2]");

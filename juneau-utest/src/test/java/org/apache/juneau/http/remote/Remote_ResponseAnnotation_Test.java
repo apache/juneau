@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.remote;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.junit.Assert.*;
 import java.io.*;
@@ -114,7 +113,7 @@ class Remote_ResponseAnnotation_Test extends SimpleTestBase {
 		assertEquals("{f:1}",x.getContent().toString());
 
 		A3a x2 = client(A3.class).build().getRemote(A3b.class).get();
-		assertThrown(x2::getContent).asMessages().isContains("Unsupported media-type in request header 'Content-Type': 'application/json'");
+		assertThrowsWithMessage(Exception.class, "Unsupported media-type in request header 'Content-Type': 'application/json'", x2::getContent);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -14,8 +14,6 @@ package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -285,9 +283,9 @@ public class ObjectRest_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void d01_rootLocked() {
 		ObjectRest model = ObjectRest.create(new AddressBook()).setRootLocked();
-		assertThrows(ObjectRestException.class, ()->model.put("", new AddressBook()), "Cannot overwrite root object");
-		assertThrows(ObjectRestException.class, ()->model.put(null, new AddressBook()), "Cannot overwrite root object");
-		assertThrows(ObjectRestException.class, ()->model.put("/", new AddressBook()), "Cannot overwrite root object");
+		assertThrowsWithMessage(ObjectRestException.class, "Cannot overwrite root object", ()->model.put("", new AddressBook()));
+		assertThrowsWithMessage(ObjectRestException.class, "Cannot overwrite root object", ()->model.put(null, new AddressBook()));
+		assertThrowsWithMessage(ObjectRestException.class, "Cannot overwrite root object", ()->model.put("/", new AddressBook()));
 	}
 
 	//====================================================================================================

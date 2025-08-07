@@ -14,8 +14,6 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
@@ -53,7 +51,7 @@ class RestClient_Paths_Test extends SimpleTestBase {
 	@Test void a01_path_String_Object() throws Exception {
 		client().build().get("/echo/{x}").pathData("x",new A1().init()).run().assertContent().isContains("GET /echo/x=1 HTTP/1.1");
 		client().build().get("/echo/*").pathData("/*",new A1().init()).run().assertContent().isContains("GET /echo/x=1 HTTP/1.1");
-		assertThrows(IllegalStateException.class, ()->client().build().get("/echo/{x}").pathData("y","foo").run(), "Path variable {y} was not found in path.");
+		assertThrowsWithMessage(IllegalStateException.class, "Path variable {y} was not found in path.", ()->client().build().get("/echo/{x}").pathData("y","foo").run());
 	}
 
 	@Test void a02_path_NameValuePair() throws Exception {
@@ -66,7 +64,7 @@ class RestClient_Paths_Test extends SimpleTestBase {
 
 	@Test void a04_pathPairs_Objects() throws Exception {
 		client().build().get("/echo/{x}").pathDataPairs("x","1").run().assertContent().isContains("GET /echo/1 HTTP/1.1");
-		assertThrows(IllegalArgumentException.class, ()->client().build().get("/echo/{x}").pathDataPairs("x"), "Odd number of parameters passed into pathDataPairs(String...)");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Odd number of parameters passed into pathDataPairs(String...)", ()->client().build().get("/echo/{x}").pathDataPairs("x"));
 	}
 
 	@Test void a05_path_String_Object_Schema() throws Exception {

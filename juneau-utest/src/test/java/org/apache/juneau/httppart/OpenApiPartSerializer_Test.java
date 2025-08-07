@@ -17,8 +17,6 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -43,15 +41,15 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	@Test void a01_outputValidations_nullOutput() throws Exception {
 		assertEquals("null", serialize(T_NONE, null));
 		assertEquals("null", serialize(tNone().required(false).build(), null));
-		assertThrows(SchemaValidationException.class, ()->serialize(tNone().required().build(), null), "Required value not provided.");
-		assertThrows(SchemaValidationException.class, ()->serialize(tNone().required(true).build(), null), "Required value not provided.");
+		assertThrowsWithMessage(SchemaValidationException.class, "Required value not provided.", ()->serialize(tNone().required().build(), null));
+		assertThrowsWithMessage(SchemaValidationException.class, "Required value not provided.", ()->serialize(tNone().required(true).build(), null));
 	}
 
 	@Test void a02_outputValidations_emptyOutput() throws Exception {
 		assertEquals("", serialize(tNone().allowEmptyValue().build(), ""));
 		assertEquals("", serialize(tNone().allowEmptyValue().build(), ""));
-		assertThrows(SchemaValidationException.class, ()->serialize(tNone().allowEmptyValue(false).build(), ""), "Empty value not allowed.");
-		assertThrows(SchemaValidationException.class, ()->serialize(tNone().allowEmptyValue(false).build(), ""), "Empty value not allowed.");
+		assertThrowsWithMessage(SchemaValidationException.class, "Empty value not allowed.", ()->serialize(tNone().allowEmptyValue(false).build(), ""));
+		assertThrowsWithMessage(SchemaValidationException.class, "Empty value not allowed.", ()->serialize(tNone().allowEmptyValue(false).build(), ""));
 		assertEquals(" ", serialize(tNone().allowEmptyValue(false).build(), " "));
 	}
 
@@ -61,8 +59,8 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 		assertEquals("xx", serialize(ps, "xx"));
 		assertEquals("null", serialize(ps, null));
 
-		assertThrows(SchemaValidationException.class, ()->serialize(ps, "y"), "Value does not match expected pattern.  Must match pattern: x.*");
-		assertThrows(SchemaValidationException.class, ()->serialize(ps, ""), "Value does not match expected pattern.  Must match pattern: x.*");
+		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match expected pattern.  Must match pattern: x.*", ()->serialize(ps, "y"));
+		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match expected pattern.  Must match pattern: x.*", ()->serialize(ps, ""));
 
 		// Blank/null patterns are ignored.
 		assertEquals("x", serialize(tNone().pattern("").allowEmptyValue().build(), "x"));
@@ -75,8 +73,8 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 		assertEquals("foo", serialize(ps, "foo"));
 		assertEquals("null", serialize(ps, null));
 
-		assertThrows(SchemaValidationException.class, ()->serialize(ps, "bar"), "Value does not match one of the expected values.  Must be one of the following:  foo");
-		assertThrows(SchemaValidationException.class, ()->serialize(ps, ""), "Value does not match one of the expected values.  Must be one of the following:  foo");
+		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match one of the expected values.  Must be one of the following:  foo", ()->serialize(ps, "bar"));
+		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match one of the expected values.  Must be one of the following:  foo", ()->serialize(ps, ""));
 
 		assertEquals("foo", serialize(tNone()._enum((Set<String>)null).build(), "foo"));
 		assertEquals("foo", serialize(tNone()._enum((Set<String>)null).allowEmptyValue().build(), "foo"));
@@ -90,8 +88,8 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 		assertEquals("1", serialize(ps, "1"));
 		assertEquals("12", serialize(ps, "12"));
 
-		assertThrows(SchemaValidationException.class, ()->serialize(ps, ""), "Minimum length of value not met.");
-		assertThrows(SchemaValidationException.class, ()->serialize(ps, "123"), "Maximum length of value exceeded.");
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum length of value not met.", ()->serialize(ps, ""));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum length of value exceeded.", ()->serialize(ps, "123"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

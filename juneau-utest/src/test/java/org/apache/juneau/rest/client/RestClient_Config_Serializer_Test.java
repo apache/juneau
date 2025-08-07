@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.assertions.AssertionPredicates.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import java.io.*;
 import java.util.*;
@@ -83,7 +81,7 @@ public class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	@Test void a03_detectRecursions() {
 		A1 l1 = new A1();
 		l1.f1 = l1;
-		assertThrown(()->client().detectRecursions().build().post("/echoBody",l1).run()).asMessages().isAny(contains("Recursion occurred"));
+		assertThrowsWithMessage(Exception.class, "Recursion occurred", ()->client().detectRecursions().build().post("/echoBody",l1).run());
 	}
 
 	@Test void a04_ignoreRecursions() throws Exception {

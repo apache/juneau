@@ -66,12 +66,12 @@ class EntityTag_Test extends SimpleTestBase {
 		assertNull(EntityTag.of(null));
 		assertNull(EntityTag.of((Supplier<?>)()->null));
 
-		assertThrows(IllegalArgumentException.class, ()->new EntityTag("foo"), "Invalid value for entity-tag: [foo]");
-		assertThrows(IllegalArgumentException.class, ()->new EntityTag("\""), "Invalid value for entity-tag: [\"]");
-		assertThrows(IllegalArgumentException.class, ()->new EntityTag(""), "Invalid value for entity-tag: []");
-		assertThrows(IllegalArgumentException.class, ()->new EntityTag(null), "Argument 'value' cannot be null.");
-		assertThrows(IllegalArgumentException.class, ()->new EntityTag("\"a"), "Invalid value for entity-tag: [\"a]");
-		assertThrows(IllegalArgumentException.class, ()->new EntityTag("a\""), "Invalid value for entity-tag: [a\"]");
-		assertThrows(IllegalArgumentException.class, ()->new EntityTag("W/\""), "Invalid value for entity-tag: [W/\"]");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Invalid value for entity-tag: [foo]", ()->new EntityTag("foo"));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Invalid value for entity-tag: [\"]", ()->new EntityTag("\""));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Invalid value for entity-tag: []", ()->new EntityTag(""));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'value' cannot be null.", ()->new EntityTag(null));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Invalid value for entity-tag: [\"a]", ()->new EntityTag("\"a"));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Invalid value for entity-tag: [a\"]", ()->new EntityTag("a\""));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Invalid value for entity-tag: [W/\"]", ()->new EntityTag("W/\""));
 	}
 }

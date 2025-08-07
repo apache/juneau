@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
@@ -39,7 +38,7 @@ class SerializedPart_Test extends SimpleTestBase {
 
 	@Test void a02_type() {
 		SerializedPart x1 = serializedPart("Foo",2).type(HEADER).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
-		assertThrows(BasicRuntimeException.class, x1::toString, "Validation error on request HEADER part 'Foo'='2'");
+		assertThrowsWithMessage(BasicRuntimeException.class, "Validation error on request HEADER part 'Foo'='2'", x1::toString);
 	}
 
 	@Test void a03_serializer() {
@@ -61,7 +60,7 @@ class SerializedPart_Test extends SimpleTestBase {
 		SerializedPart x2 = serializedPart("Foo","").skipIfEmpty();
 		assertString(x2.getValue()).isNull();
 		SerializedPart x3 = serializedPart("Foo","").schema(schema(STRING)._default("bar").build()).serializer(OAPI_SERIALIZER).skipIfEmpty();
-		assertThrown(x3::getValue).asMessages().isContains("Empty value not allowed.");
+		assertThrowsWithMessage(Exception.class, "Empty value not allowed.", x3::getValue);
 	}
 
 	@Test void a05_getValue_defaults() {
@@ -75,10 +74,10 @@ class SerializedPart_Test extends SimpleTestBase {
 		assertString(x3.getValue()).isNull();
 
 		SerializedPart x4 = serializedPart("Foo",null).schema(schema(STRING).required().build()).serializer(OAPI_SESSION);
-		assertThrown(x4::getValue).asMessages().isContains("Required value not provided.");
+		assertThrowsWithMessage(Exception.class, "Required value not provided.", x4::getValue);
 
 		SerializedPart x5 = serializedPart("Foo",null).schema(schema(STRING).required().build()).serializer(new BadPartSerializerSession());
-		assertThrown(x5::getValue).asMessages().isContains("Bad");
+		assertThrowsWithMessage(Exception.class, "Bad", x5::getValue);
 	}
 
 	private static class BadPartSerializerSession implements HttpPartSerializerSession {

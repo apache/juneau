@@ -14,8 +14,6 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.*;
 import java.util.function.*;
 
@@ -57,13 +55,13 @@ class BasicLongHeader_Test extends SimpleTestBase {
 
 		// Invalid usage.
 		c.get().header(longHeader(HEADER,(Supplier<Long>)null)).run().assertContent().isEmpty();
-		assertThrows(BasicRuntimeException.class, ()->longHeader(HEADER,"foo"), "Value 'foo' could not be parsed as a long.");
-		assertThrows(IllegalArgumentException.class, ()->longHeader("", VALUE), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->longHeader(null, VALUE), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->longHeader("", PARSED), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->longHeader(null, PARSED), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->longHeader("", ()->PARSED), "Name cannot be empty on header.");
-		assertThrows(IllegalArgumentException.class, ()->longHeader(null, ()->PARSED), "Name cannot be empty on header.");
+		assertThrowsWithMessage(BasicRuntimeException.class, "Value 'foo' could not be parsed as a long.", ()->longHeader(HEADER,"foo"));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->longHeader("", VALUE));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->longHeader(null, VALUE));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->longHeader("", PARSED));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->longHeader(null, PARSED));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->longHeader("", ()->PARSED));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->longHeader(null, ()->PARSED));
 	}
 
 	@Test void a02_assertLong() {
