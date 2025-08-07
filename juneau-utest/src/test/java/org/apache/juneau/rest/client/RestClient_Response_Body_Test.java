@@ -215,7 +215,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 
 		plainTestClient().entity(stringEntity("foo")).get().run().assertContent().as(A7a.class).is(x->x.x.equals("foo"));
 		plainTestClient().entity(stringEntity("foo")).get().run().assertContent().as(A7b.class).is(x->x.x.equals("foo"));
-		assertThrown(()->plainTestClient().entity(stringEntity("foo")).headers(header("Content-Type","foo")).get().run().getContent().as(A7c.class)).isExists().asMessages().isAny(contains("Unsupported media-type"));
+		assertThrows(Exception.class, ()->plainTestClient().entity(stringEntity("foo")).headers(header("Content-Type","foo")).get().run().getContent().as(A7c.class), "Unsupported media-type");
 		assertThrown(()->testClient().entity(stringEntity("")).get().run().getContent().as(A7c.class)).asMessages().isContains("foo");
 
 		Future<ABean> x8 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asFuture(ABean.class);

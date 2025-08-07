@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
@@ -85,7 +84,7 @@ class ConfigImportsTest extends SimpleTestBase {
 		ms.write("A1", "", "<A2>\nx=1");
 		ms.write("A2", "", "<A1>\ny=2");
 		ms.write("B", "", "<A2>");
-		assertThrown(()->Config.create("B").store(ms).build()).isExists();
+		assertThrows(Exception.class, ()->Config.create("B").store(ms).build());
 	}
 
 	@Test void importNotFound() {

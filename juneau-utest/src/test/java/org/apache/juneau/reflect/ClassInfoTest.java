@@ -1114,10 +1114,10 @@ public class ClassInfoTest {
 	@Test
 	public void isAll_invalid() {
 		ClassInfo a = aClass;
-		assertThrown(()->a.isAll(HAS_PARAMS)).isExists();
-		assertThrown(()->a.isAll(HAS_NO_PARAMS)).isExists();
-		assertThrown(()->a.isAll(TRANSIENT)).isExists();
-		assertThrown(()->a.isAll(NOT_TRANSIENT)).isExists();
+		assertThrows(Exception.class, ()->a.isAll(HAS_PARAMS));
+		assertThrows(Exception.class, ()->a.isAll(HAS_NO_PARAMS));
+		assertThrows(Exception.class, ()->a.isAll(TRANSIENT));
+		assertThrows(Exception.class, ()->a.isAll(NOT_TRANSIENT));
 	}
 
 	@Test
@@ -1219,10 +1219,10 @@ public class ClassInfoTest {
 	@Test
 	public void isAny_invalid() {
 		ClassInfo a = aClass;
-		assertThrown(()->a.isAny(HAS_PARAMS)).isExists();
-		assertThrown(()->a.isAny(HAS_NO_PARAMS)).isExists();
-		assertThrown(()->a.isAny(TRANSIENT)).isExists();
-		assertThrown(()->a.isAny(NOT_TRANSIENT)).isExists();
+		assertThrows(Exception.class, ()->a.isAny(HAS_PARAMS));
+		assertThrows(Exception.class, ()->a.isAny(HAS_NO_PARAMS));
+		assertThrows(Exception.class, ()->a.isAny(TRANSIENT));
+		assertThrows(Exception.class, ()->a.isAny(NOT_TRANSIENT));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -292,10 +292,10 @@ public class ConfigTest {
 	@Test
 	public void getInt1BadValues() {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
-		assertThrown(()->c.get("a1").asInteger().orElse(0)).isExists();
-		assertThrown(()->c.get("a2").asInteger().orElse(0)).isExists();
-		assertThrown(()->c.get("a3").asInteger().orElse(0)).isExists();
-		assertThrown(()->c.get("a4").asInteger().orElse(0)).isExists();
+		assertThrows(Exception.class, ()->c.get("a1").asInteger().orElse(0));
+		assertThrows(Exception.class, ()->c.get("a2").asInteger().orElse(0));
+		assertThrows(Exception.class, ()->c.get("a3").asInteger().orElse(0));
+		assertThrows(Exception.class, ()->c.get("a4").asInteger().orElse(0));
 	}
 
 	//====================================================================================================
@@ -316,10 +316,10 @@ public class ConfigTest {
 	@Test
 	public void getInt2BadValues() {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
-		assertThrown(()->c.get("a1").asInteger().orElse(-1)).isExists();
-		assertThrown(()->c.get("a2").asInteger().orElse(-1)).isExists();
-		assertThrown(()->c.get("a3").asInteger().orElse(-1)).isExists();
-		assertThrown(()->c.get("a4").asInteger().orElse(-1)).isExists();
+		assertThrows(Exception.class, ()->c.get("a1").asInteger().orElse(-1));
+		assertThrows(Exception.class, ()->c.get("a2").asInteger().orElse(-1));
+		assertThrows(Exception.class, ()->c.get("a3").asInteger().orElse(-1));
+		assertThrows(Exception.class, ()->c.get("a4").asInteger().orElse(-1));
 	}
 
 	//====================================================================================================
@@ -388,10 +388,10 @@ public class ConfigTest {
 	@Test
 	public void getLong1BadValues() {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
-		assertThrown(()->c.get("a1").as(long.class)).isExists();
-		assertThrown(()->c.get("a2").as(long.class)).isExists();
-		assertThrown(()->c.get("a3").as(long.class)).isExists();
-		assertThrown(()->c.get("a4").as(long.class)).isExists();
+		assertThrows(Exception.class, ()->c.get("a1").as(long.class));
+		assertThrows(Exception.class, ()->c.get("a2").as(long.class));
+		assertThrows(Exception.class, ()->c.get("a3").as(long.class));
+		assertThrows(Exception.class, ()->c.get("a4").as(long.class));
 	}
 
 	//====================================================================================================

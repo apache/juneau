@@ -62,9 +62,9 @@ public class MethodInvokerTest {
 		MethodInvoker mi = create(m);
 
 		A a = new A();
-		assertThrown(()->mi.invoke(a)).isExists();
-		assertThrown(()->mi.invoke(a)).isExists();
-		assertThrown(()->mi.invoke(a)).isExists();
+		assertThrows(Exception.class, ()->mi.invoke(a));
+		assertThrows(Exception.class, ()->mi.invoke(a));
+		assertThrows(Exception.class, ()->mi.invoke(a));
 
 		assertBean(mi.getStats()).asPropertyMap("runs","errors").asJson().is("{runs:3,errors:3}");
 	}
@@ -76,9 +76,9 @@ public class MethodInvokerTest {
 		MethodInvoker mi = create(m);
 
 		A a = new A();
-		assertThrown(()->mi.invoke(a, "x")).isExists();
-		assertThrown(()->mi.invoke(a)).isExists();
-		assertThrown(()->mi.invoke(a, 1, "x")).isExists();
+		assertThrows(Exception.class, ()->mi.invoke(a, "x"));
+		assertThrows(Exception.class, ()->mi.invoke(a));
+		assertThrows(Exception.class, ()->mi.invoke(a, 1, "x"));
 
 		assertBean(mi.getStats()).asPropertyMap("runs","errors").asJson().is("{runs:3,errors:3}");
 	}

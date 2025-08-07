@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.junit.Assert.*;
@@ -65,7 +64,7 @@ class RestUtils_Test extends SimpleTestBase {
 
 		for (String s : new String[]{
 				"http:/hostname?foo"}) {
-			assertThrown(()->trimPathInfo(new StringBuffer(s), "", "")).isExists();
+			assertThrows(Exception.class, ()->trimPathInfo(new StringBuffer(s), "", ""));
 		}
 
 		e = "http://hostname";
@@ -95,7 +94,7 @@ class RestUtils_Test extends SimpleTestBase {
 				"http://hostname?foo",
 				"http://hostname/fo?bar",
 				"http:/hostname/foo"}) {
-			assertThrown(()->trimPathInfo(new StringBuffer(s), "/", "/foo")).isExists();
+			assertThrows(Exception.class, ()->trimPathInfo(new StringBuffer(s), "/", "/foo"));
 		}
 
 		e = "http://hostname/foo/bar";
@@ -112,7 +111,7 @@ class RestUtils_Test extends SimpleTestBase {
 				"http://hostname/foo2/bar",
 				"http://hostname/foo/bar2"
 			}) {
-			assertThrown(()->trimPathInfo(new StringBuffer(s), "/foo/bar", "/foo/bar")).isExists();
+			assertThrows(Exception.class, ()->trimPathInfo(new StringBuffer(s), "/foo/bar", "/foo/bar"));
 		}
 
 		e = "http://hostname/foo/bar";
@@ -129,7 +128,7 @@ class RestUtils_Test extends SimpleTestBase {
 				"http://hostname/foo2/bar",
 				"http://hostname/foo/bar2"
 			}) {
-			assertThrown(()->trimPathInfo(new StringBuffer(s), "/foo", "/bar")).isExists();
+			assertThrows(Exception.class, ()->trimPathInfo(new StringBuffer(s), "/foo", "/bar"));
 		}
 	}
 

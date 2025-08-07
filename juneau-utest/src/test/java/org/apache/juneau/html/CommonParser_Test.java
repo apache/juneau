@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import java.util.*;
 
@@ -100,7 +99,7 @@ class CommonParser_Test extends SimpleTestBase {
 		t = p.parse(in, B.class);
 		assertEquals(1, t.a);
 		assertEquals(2, t.b);
-		assertThrown(()->HtmlParser.DEFAULT.parse(in, B.class)).isExists();
+		assertThrows(Exception.class, ()->HtmlParser.DEFAULT.parse(in, B.class));
 	}
 
 	public static class B {
