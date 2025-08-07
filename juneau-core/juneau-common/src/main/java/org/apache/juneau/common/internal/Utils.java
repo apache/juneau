@@ -669,6 +669,10 @@ public class Utils {
 			return o2.toInstant().toString();
 		if (o instanceof InputStream o2)
 			return toHex(o2);
+		if (o instanceof Reader o2)
+			return safe(()->IOUtils.read(o2));
+		if (o instanceof File o2)
+			return safe(()->IOUtils.read(o2));
 		if (o instanceof byte[] o2)
 			return toHex(o2);
 		if (o != null && o.getClass().isArray()) {

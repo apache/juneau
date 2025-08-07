@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.AssertionHelpers.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -303,7 +304,7 @@ public class MaxIndentTest {
 				return;
 			}
 
-			assertString(r).setMsg("{0}/{1} parse-normal failed", input.label, testName).is(expected);
+			assertEquals(expected, r, ss("{0}/{1} parse-normal failed", input.label, testName));
 
 		} catch (AssertionError e) {
 			throw e;

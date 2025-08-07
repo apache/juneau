@@ -94,6 +94,13 @@ public class AssertionHelpers {
 	/**
 	 * Asserts an object matches the expected string after it's been made readable.
 	 */
+	public static void assertString(String expected, Object actual, Supplier<String> messageSupplier) {
+		assertEquals(expected, r(actual), messageSupplier);
+	}
+
+	/**
+	 * Asserts an object matches the expected string after it's been made readable.
+	 */
 	public static void assertContains(String expected, Object actual) {
 		var a2 = r(actual);
 		assertTrue(a2.contains(expected), ss("String did not contain expected substring.  expected={0}, actual={1}", expected, a2));

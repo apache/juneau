@@ -12,8 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.AssertionHelpers.*;
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -78,7 +80,7 @@ public abstract class ComboSerializeTest {
 				}
 			}
 
-			assertString(r).setMsg("{0}/{1} parse-normal failed: <<<MSG>>>", comboInput.label, testName).is(expected);
+			assertEquals(expected, r, ss("{0}/{1} parse-normal failed: <<<MSG>>>", comboInput.label, testName));
 
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)

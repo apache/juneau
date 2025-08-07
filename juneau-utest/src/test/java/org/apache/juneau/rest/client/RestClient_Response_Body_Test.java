@@ -139,15 +139,15 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 		TestClient x = testClient();
 		x.entity(inputStreamEntity("{f:1}"));
 		Reader r = x.get("/bean").run().getContent().asReader();
-		assertReader(r).is("{f:1}");
+		assertString("{f:1}", r);
 
 		x.entity(inputStreamEntity("{f:1}"));
 		r = x.get("/bean").run().getContent().asReader(UTF8);
-		assertReader(r).is("{f:1}");
+		assertString("{f:1}", r);
 
 		x.entity(inputStreamEntity("{f:1}"));
 		r = x.get("/bean").run().getContent().asReader(null);
-		assertReader(r).is("{f:1}");
+		assertString("{f:1}", r);
 	}
 
 	@Test void a05_asBytes() throws Exception {

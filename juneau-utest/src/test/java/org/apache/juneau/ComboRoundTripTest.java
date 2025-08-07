@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.AssertionHelpers.*;
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
@@ -121,7 +122,7 @@ public abstract class ComboRoundTripTest {
 				System.out.println(r);
 			}
 
-			assertString(r).setMsg("{0}/{1} parse-normal failed.\n{msg}", comboInput.label, testName).is(expected);
+			assertString(expected, r, ss("{0}/{1} parse-normal failed.\n{msg}", comboInput.label, testName));
 
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)
@@ -150,7 +151,7 @@ public abstract class ComboRoundTripTest {
 			o = comboInput.convert(o);
 			r = s.serializeToString(o);
 
-			assertString(r).setMsg("{0}/{1} parse-normal failed", comboInput.label, testName).is(expected);
+			assertString(expected, r, ss("{0}/{1} parse-normal failed", comboInput.label, testName));
 
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)

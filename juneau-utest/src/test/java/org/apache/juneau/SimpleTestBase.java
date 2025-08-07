@@ -75,6 +75,13 @@ public abstract class SimpleTestBase {
 	/**
 	 * Asserts an object matches the expected string after it's been made readable.
 	 */
+	public static void assertString(String expected, Object actual, Supplier<String> messageSupplier) {
+		AssertionHelpers.assertString(expected, actual, messageSupplier);
+	}
+
+	/**
+	 * Asserts an object matches the expected string after it's been made readable.
+	 */
 	protected static void assertContains(String expected, Object actual) {
 		AssertionHelpers.assertContains(expected, actual);
 	}

@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.AssertionHelpers.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -231,36 +232,36 @@ public class UriContextUriComboTest {
 
 	@Test
 	public void a1_testAbsoluteAuthority() {
-		assertString(in.uriContext.getAbsoluteAuthority()).setMsg("{0}: testAbsoluteAuthority() failed", label).is(r.eAbsoluteAuthority);
+		assertEquals(r.eAbsoluteAuthority, in.uriContext.getAbsoluteAuthority(), ss("{0}: testAbsoluteAuthority() failed", label));
 	}
 
 	@Test
 	public void a2_testAbsoluteContext() {
-		assertString(in.uriContext.getAbsoluteContextRoot()).setMsg("{0}: testAbsoluteContext() failed", label).is(r.eAbsoluteContext);
+		assertEquals(r.eAbsoluteContext, in.uriContext.getAbsoluteContextRoot(), ss("{0}: testAbsoluteContext() failed", label));
 	}
 
 	@Test
 	public void a3_testAbsoluteResource() {
-		assertString(in.uriContext.getAbsoluteServletPath()).setMsg("{0}: testAbsoluteResource() failed", label).is(r.eAbsoluteResource);
+		assertEquals(r.eAbsoluteResource, in.uriContext.getAbsoluteServletPath(), ss("{0}: testAbsoluteResource() failed", label));
 	}
 
 	@Test
 	public void a4_testAbsolutePath() {
-		assertString(in.uriContext.getAbsolutePathInfo()).setMsg("{0}: testAbsolutePath() failed", label).is(r.eAbsolutePath);
+		assertEquals(r.eAbsolutePath, in.uriContext.getAbsolutePathInfo(), ss("{0}: testAbsolutePath() failed", label));
 	}
 
 	@Test
 	public void a5_testRootRelativeContext() {
-		assertString(in.uriContext.getRootRelativeContextRoot()).setMsg("{0}: testRootRelativeContext() failed", label).is(r.eRootRelativeContext);
+		assertEquals(r.eRootRelativeContext, in.uriContext.getRootRelativeContextRoot(), ss("{0}: testRootRelativeContext() failed", label));
 	}
 
 	@Test
 	public void a6_testRootRelativeResource() {
-		assertString(in.uriContext.getRootRelativeServletPath()).setMsg("{0}: testRootRelativeResource() failed", label).is(r.eRootRelativeResource);
+		assertEquals(r.eRootRelativeResource, in.uriContext.getRootRelativeServletPath(), ss("{0}: testRootRelativeResource() failed", label));
 	}
 
 	@Test
 	public void a7_testRootRelativePath() {
-		assertString(in.uriContext.getRootRelativePathInfo()).setMsg("{0}: testRootRelativePath() failed", label).is(r.eRootRelativePath);
+		assertEquals(r.eRootRelativePath, in.uriContext.getRootRelativePathInfo(), ss("{0}: testRootRelativePath() failed", label));
 	}
 }
