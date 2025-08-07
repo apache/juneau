@@ -12,8 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -25,30 +24,29 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests the @HtmlDocConfig annotation.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class HtmlDocConfigAnnotation_Test {
+class HtmlDocConfigAnnotation_Test extends SimpleTestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
 	}
 
 	private static final Function<Object,String> TO_STRING = t -> {
-    	if (t.getClass().isArray())
-    		return HtmlDocConfigAnnotation_Test.TO_STRING.apply(ArrayUtils.toList(t, Object.class));
-    	if (t instanceof Collection)
-    		return ((Collection<?>)t)
-    			.stream()
-    			.map(HtmlDocConfigAnnotation_Test.TO_STRING)
-    			.collect(Collectors.joining(","));
-    	if (t instanceof HtmlDocTemplate)
-    		return t.getClass().getSimpleName();
-    	return t.toString();
-    };
+		if (t.getClass().isArray())
+			return HtmlDocConfigAnnotation_Test.TO_STRING.apply(ArrayUtils.toList(t, Object.class));
+		if (t instanceof Collection)
+			return ((Collection<?>)t)
+				.stream()
+				.map(HtmlDocConfigAnnotation_Test.TO_STRING)
+				.collect(Collectors.joining(","));
+		if (t instanceof HtmlDocTemplate)
+			return t.getClass().getSimpleName();
+		return t.toString();
+	};
 
 	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 
@@ -73,8 +71,7 @@ public class HtmlDocConfigAnnotation_Test {
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
 
-	@Test
-	public void basic() {
+	@Test void basic() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("foo", x.getAside());
@@ -99,8 +96,7 @@ public class HtmlDocConfigAnnotation_Test {
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 
-	@Test
-	public void defaults() {
+	@Test void defaults() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("", x.getAside());
@@ -124,8 +120,7 @@ public class HtmlDocConfigAnnotation_Test {
 	static class C {}
 	static ClassInfo c = ClassInfo.of(C.class);
 
-	@Test
-	public void noAnnotation() {
+	@Test void noAnnotation() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("", x.getAside());
@@ -160,8 +155,7 @@ public class HtmlDocConfigAnnotation_Test {
 	static class D1 extends A {}
 	static ClassInfo d1 = ClassInfo.of(D1.class);
 
-	@Test
-	public void inheritance1() {
+	@Test void inheritance1() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, d1.getAnnotationList());
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("foo2,foo", x.getAside());
@@ -189,8 +183,7 @@ public class HtmlDocConfigAnnotation_Test {
 	static class D2 extends A {}
 	static ClassInfo d2 = ClassInfo.of(D2.class);
 
-	@Test
-	public void inheritance2() {
+	@Test void inheritance2() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, d2.getAnnotationList());
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("foo,foo2", x.getAside());
@@ -218,8 +211,7 @@ public class HtmlDocConfigAnnotation_Test {
 	static class D3 extends A {}
 	static ClassInfo d3 = ClassInfo.of(D3.class);
 
-	@Test
-	public void inheritance3() {
+	@Test void inheritance3() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, d3.getAnnotationList());
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("foo2", x.getAside());
@@ -247,8 +239,7 @@ public class HtmlDocConfigAnnotation_Test {
 	static class D4 extends A {}
 	static ClassInfo d4 = ClassInfo.of(D4.class);
 
-	@Test
-	public void inheritance4() {
+	@Test void inheritance4() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, d4.getAnnotationList());
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("", x.getAside());
@@ -302,8 +293,7 @@ public class HtmlDocConfigAnnotation_Test {
 		}
 	}
 
-	@Test
-	public void widgets_basic() {
+	@Test void widgets_basic() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, e.getAnnotationList());
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("$W{E}", x.getAside());
@@ -320,19 +310,11 @@ public class HtmlDocConfigAnnotation_Test {
 		check("BasicHtmlDocTemplate", x.getTemplate());
 	}
 
-	@Test
-	public void widgets_resolution() throws Exception {
+	@Test void widgets_resolution() throws Exception {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, e.getAnnotationList());
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().getSession();
 		String r = x.serialize(null).replaceAll("[\r\n]+", "|");
-		assertString(r).isContains(
-			"<aside>xxx</aside>",
-			"<footer>xxx</footer>",
-			"<head>xxx",
-			"<style>@import \"xxx\"; xxx zzz</style>",
-			"<nav><ol><li>xxx</li></ol>xxx</nav>",
-			"<script>xxx| yyy|</script>"
-		);
+		assertContainsAll("<aside>xxx</aside>,<footer>xxx</footer>,<head>xxx,<style>@import \"xxx\"; xxx zzz</style>,<nav><ol><li>xxx</li></ol>xxx</nav>,<script>xxx| yyy|</script>", r);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -374,36 +356,31 @@ public class HtmlDocConfigAnnotation_Test {
 	static ClassInfo f4 = ClassInfo.of(F4.class);
 	static ClassInfo f5 = ClassInfo.of(F5.class);
 
-	@Test
-	public void e01_rankedAnnotations_f1() {
+	@Test void e01_rankedAnnotations_f1() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, f1.getAnnotationList());
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("f1", x.getAside());
 	}
 
-	@Test
-	public void e02_rankedAnnotations_f2() {
+	@Test void e02_rankedAnnotations_f2() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, f2.getAnnotationList());
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("f1", x.getAside());
 	}
 
-	@Test
-	public void e03_rankedAnnotations_f3() {
+	@Test void e03_rankedAnnotations_f3() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, f3.getAnnotationList());
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("f3", x.getAside());
 	}
 
-	@Test
-	public void e04_rankedAnnotations_f4() {
+	@Test void e04_rankedAnnotations_f4() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, f4.getAnnotationList());
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("f3", x.getAside());
 	}
 
-	@Test
-	public void e05_rankedAnnotations_f5() {
+	@Test void e05_rankedAnnotations_f5() {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, f5.getAnnotationList());
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().getSession();
 		check("f5", x.getAside());

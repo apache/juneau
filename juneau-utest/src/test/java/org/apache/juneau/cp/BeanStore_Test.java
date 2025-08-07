@@ -62,7 +62,8 @@ class BeanStore_Test extends SimpleTestBase {
 	@Test void a01_builderCopyConstructor() {
 		BeanStore b1p = BeanStore.create().readOnly().threadSafe().build();
 		BeanStore b1c = BeanStore.create().parent(b1p).build();
-		assertString(b1c.toString()).isContains("readOnly:true","threadSafe:true");
+		assertContains("readOnly:true", b1c.toString());
+		assertContains("threadSafe:true", b1c.toString());
 	}
 
 	@Test void a02_readOnly() {

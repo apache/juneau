@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -84,6 +85,10 @@ public abstract class SimpleTestBase {
 	 */
 	protected static void assertContains(String expected, Object actual) {
 		AssertionHelpers.assertContains(expected, actual);
+	}
+
+	protected static void assertContainsAll(String expected, Object actual) {
+		AssertionHelpers.assertContainsAll(expected, actual);
 	}
 
 	protected static void assertEmpty(Optional<?> o) {

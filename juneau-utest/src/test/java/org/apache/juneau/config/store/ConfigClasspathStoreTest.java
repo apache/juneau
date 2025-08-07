@@ -12,50 +12,42 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.store;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.concurrent.*;
 
-import org.junit.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ConfigClasspathStoreTest {
+class ConfigClasspathStoreTest extends SimpleTestBase {
 
-	@Test
-	public void testNoFile() throws Exception {
+	@Test void testNoFile() throws Exception {
 		ClasspathStore fs = ClasspathStore.create().build();
 		assertEquals("", fs.read("X.cfg"));
 	}
 
-	@Test
-	public void testRealFiles() throws Exception {
+	@Test void testRealFiles() throws Exception {
 		ClasspathStore fs = ClasspathStore.create().build();
-		assertString(fs.read("foo1.cfg")).isContains("bar1");
-		assertString(fs.read("sub/foo2.cfg")).isContains("bar2");
+		assertContains("bar1", fs.read("foo1.cfg"));
+		assertContains("bar2", fs.read("sub/foo2.cfg"));
 		assertEquals("", fs.read("sub/bad.cfg"));
 		assertEquals("", fs.read("bad/bad.cfg"));
 	}
 
-	@Test
-	public void testOverwriteRealFiles() throws Exception {
+	@Test void testOverwriteRealFiles() throws Exception {
 		ClasspathStore fs = ClasspathStore.create().build();
-		assertString(fs.read("foo1.cfg")).isContains("bar1");
+		assertContains("bar1", fs.read("foo1.cfg"));
 		fs.write("foo1.cfg", fs.read("foo1.cfg"), "xxx");
 		assertEquals("xxx", fs.read("foo1.cfg"));
 	}
 
-	@Test
-	public void testSimpleCreate() throws Exception {
+	@Test void testSimpleCreate() throws Exception {
 		ClasspathStore fs = ClasspathStore.create().build();
 		assertNull(fs.write("X.cfg", null, "foo"));
 		assertEquals("foo", fs.read("X.cfg"));
 	}
 
-	@Test
-	public void testFailOnMismatch() throws Exception {
+	@Test void testFailOnMismatch() throws Exception {
 		ClasspathStore fs = ClasspathStore.create().build();
 		assertNotNull(fs.write("X.cfg", "xxx", "foo"));
 		assertEquals("", fs.read("X.cfg"));
@@ -67,8 +59,7 @@ public class ConfigClasspathStoreTest {
 		assertEquals("bar", fs.read("X.cfg"));
 	}
 
-	@Test
-	public void testUpdate() throws Exception {
+	@Test void testUpdate() throws Exception {
 		ClasspathStore fs = ClasspathStore.create().build();
 
 		final CountDownLatch latch = new CountDownLatch(2);
@@ -87,8 +78,7 @@ public class ConfigClasspathStoreTest {
 			throw new Exception("CountDownLatch never reached zero.");
 	}
 
-	@Test
-	public void testExists() throws Exception {
+	@Test void testExists() throws Exception {
 		ClasspathStore.DEFAULT.write("foo.cfg", null, "foo");
 
 		assertTrue(ClasspathStore.DEFAULT.exists("foo.cfg"));

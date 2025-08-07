@@ -106,6 +106,12 @@ public class AssertionHelpers {
 		assertTrue(a2.contains(expected), ss("String did not contain expected substring.  expected={0}, actual={1}", expected, a2));
 	}
 
+	public static void assertContainsAll(String expected, Object actual) {
+		var a2 = r(actual);
+		for (var e : StringUtils.split(expected))
+			assertTrue(a2.contains(e), ss("String did not contain expected substring.  expected={0}, actual={1}", e, a2));
+	}
+
 	public static void assertEmpty(Optional<?> o) {
 		assertTrue(o != null && o.isEmpty(), "Optional was not empty.");
 	}
