@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -84,8 +83,8 @@ class SchemaInfo_Test extends SimpleTestBase {
 		assertTrue(t.setReadOnly(true).getReadOnly());
 		assertJson(t.setXml(xml().setName("foo")).getXml(), "{name:'foo'}");
 		assertJson(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs(), "{url:'foo'}");
-		assertObject(t.setExample("foo").getExample()).is("foo");
-		assertObject(t.setExample(123).getExample()).is(123);
+		assertEquals("foo", t.setExample("foo").getExample());
+		assertEquals(123, t.setExample(123).getExample());
 		assertNull(t.setExample(null).getExample());
 	}
 

@@ -48,7 +48,7 @@ public class RestPostInitAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_testEquivalency() {
-		assertObject(a1).is(a2);
+		assertEquals(a2, a1);
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEquals(a1.hashCode(), a2.hashCode());
 	}
@@ -103,7 +103,7 @@ public class RestPostInitAnnotation_Test extends SimpleTestBase {
 	RestPostInit d2 = D2.class.getAnnotationsByType(RestPostInit.class)[0];
 
 	@Test void d01_comparisonWithDeclarativeAnnotations() {
-		assertObject(d1).is(d2).is(a1);
+		assertEqualsAll(a1, d1, d2);
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
 	}

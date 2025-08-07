@@ -60,10 +60,10 @@ class Contact_Test extends SimpleTestBase {
 
 		assertJson(t, "{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
 
-		assertObject(t.get("name", String.class)).isType(String.class).is("foo");
+		assertEquals("foo", t.get("name", String.class));
 		assertString("bar", t.get("url", URI.class));
-		assertObject(t.get("email", String.class)).isType(String.class).is("baz");
-		assertObject(t.get("$ref", String.class)).isType(String.class).is("qux");
+		assertEquals("baz", t.get("email", String.class));
+		assertEquals("qux", t.get("$ref", String.class));
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

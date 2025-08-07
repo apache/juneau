@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import java.util.*;
@@ -1131,7 +1130,7 @@ class BeanMapTest extends SimpleTestBase {
 		m.put("f2", 2);
 		m.put("f3", 3);
 
-		assertObject(m).asJsonSorted().is("{f1:1,f2:2,f3:0}");
+		assertJson(m, "{f1:1,f2:2,f3:0}");
 	}
 
 	public static class Q1 {}
@@ -1889,8 +1888,8 @@ class BeanMapTest extends SimpleTestBase {
 	// testBeanMethodOrder
 	//====================================================================================================
 	@Test void testBeanMethodOrder() {
-		assertObject(new W2()).asJsonSorted().is("{a1:'1',a2:'2',a3:'3',a4:'4'}");
-		assertObject(new W3()).asJsonSorted().is("{a3:'3',a4:'4',a5:'5',a6:'6'}");
+		assertJson(new W2(), "{a1:'1',a2:'2',a3:'3',a4:'4'}");
+		assertJson(new W3(), "{a3:'3',a4:'4',a5:'5',a6:'6'}");
 	}
 
 	public static class W {

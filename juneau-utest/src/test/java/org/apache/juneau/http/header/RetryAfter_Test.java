@@ -17,6 +17,8 @@ import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.time.*;
 import java.util.function.*;
@@ -72,7 +74,7 @@ class RetryAfter_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_asZonedDateTime() {
-		assertObject(retryAfter(PARSED2).asZonedDateTime().get().toString()).is("1994-10-29T19:43:31Z");
+		assertEquals("1994-10-29T19:43:31Z", retryAfter(PARSED2).asZonedDateTime().get().toString());
 	}
 
 	@Test void a03_asInt() {

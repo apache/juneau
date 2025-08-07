@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import java.util.*;
 
@@ -36,7 +35,7 @@ class ObjectPaginator_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_nonCollectionInput() {
-		assertObject(op.run(bs, "foo", PageArgs.create(1, 3))).is("foo");
+		assertEquals("foo", op.run(bs, "foo", PageArgs.create(1, 3)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

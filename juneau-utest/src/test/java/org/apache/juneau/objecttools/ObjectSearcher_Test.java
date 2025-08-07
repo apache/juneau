@@ -14,6 +14,8 @@ package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -398,7 +400,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 				"f = '2011' ",
 				"f = \"2011\" "
 			))
-			assertObject(run(in, s)).asString(ws).is("[{f:'2011-01-01T00:00:00'},{f:'2011-01-31T00:00:00'}]");
+			assertSerialized(run(in, s), ws, "[{f:'2011-01-01T00:00:00'},{f:'2011-01-31T00:00:00'}]");
 	}
 
 	@Test void c02_dateSearch_singleDate_ym() {
@@ -409,28 +411,28 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 				"f='2011-01'",
 				"f=\"2011-01\""
 			))
-			assertObject(run(in, s)).asString(ws).is("[{f:'2011-01-01T00:00:00'},{f:'2011-01-31T00:00:00'}]");
+			assertSerialized(run(in, s), ws, "[{f:'2011-01-01T00:00:00'},{f:'2011-01-31T00:00:00'}]");
 	}
 
 	@Test void c03_dateSearch_singleDate_ymd() {
 		B[] in = B.create("2010-01-01", "2011-01-01", "2011-01-31", "2012-01-01");
-		assertObject(run(in, "f=2011-01-01")).asString(ws).is("[{f:'2011-01-01T00:00:00'}]");
+		assertSerialized(run(in, "f=2011-01-01"), ws, "[{f:'2011-01-01T00:00:00'}]");
 	}
 
 
 	@Test void c04_dateSearch_singleDate_ymdh() {
 		B[] in = B.create("2011-01-01T11:15:59", "2011-01-01T12:00:00", "2011-01-01T12:59:59", "2011-01-01T13:00:00");
-		assertObject(run(in, "f=2011-01-01T12")).asString(ws).is("[{f:'2011-01-01T12:00:00'},{f:'2011-01-01T12:59:59'}]");
+		assertSerialized(run(in, "f=2011-01-01T12"), ws, "[{f:'2011-01-01T12:00:00'},{f:'2011-01-01T12:59:59'}]");
 	}
 
 	@Test void c05_dateSearch_singleDate_ymdhm() {
 		B[] in = B.create("2011-01-01T12:29:59", "2011-01-01T12:30:00", "2011-01-01T12:30:59", "2011-01-01T12:31:00");
-		assertObject(run(in, "f=2011-01-01T12:30")).asString(ws).is("[{f:'2011-01-01T12:30:00'},{f:'2011-01-01T12:30:59'}]");
+		assertSerialized(run(in, "f=2011-01-01T12:30"), ws, "[{f:'2011-01-01T12:30:00'},{f:'2011-01-01T12:30:59'}]");
 	}
 
 	@Test void c06_dateSearch_singleDate_ymdhms() {
 		B[] in = B.create("2011-01-01T12:30:29", "2011-01-01T12:30:30", "2011-01-01T12:30:31");
-		assertObject(run(in, "f=2011-01-01T12:30:30")).asString(ws).is("[{f:'2011-01-01T12:30:30'}]");
+		assertSerialized(run(in, "f=2011-01-01T12:30:30"), ws, "[{f:'2011-01-01T12:30:30'}]");
 	}
 
 	@Test void c07_dateSearch_openEndedRanges_y() {
@@ -449,7 +451,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 				"f>=\"2001\"",
 				"f >= \"2001\" "
 			))
-			assertObject(run(in, s)).asString(ws).is("[{f:'2001-01-01T00:00:00'}]");
+			assertSerialized(run(in, s), ws, "[{f:'2001-01-01T00:00:00'}]");
 		for (String s : a(
 				"f<2001",
 				"f < 2001 ",
@@ -464,19 +466,19 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 				"f<=\"2000\"",
 				"f <= \"2000\" "
 			))
-			assertObject(run(in, s)).asString(ws).is("[{f:'2000-12-31T00:00:00'}]");
+			assertSerialized(run(in, s), ws, "[{f:'2000-12-31T00:00:00'}]");
 	}
 
 	@Test void c08_dateSearch_openEndedRanges_toMinute() {
 		B[] in = B.create("2011-01-01T12:29:59", "2011-01-01T12:30:00");
-		assertObject(run(in, "f>=2011-01-01T12:30")).asString(ws).is("[{f:'2011-01-01T12:30:00'}]");
-		assertObject(run(in, "f<2011-01-01T12:30")).asString(ws).is("[{f:'2011-01-01T12:29:59'}]");
+		assertSerialized(run(in, "f>=2011-01-01T12:30"), ws, "[{f:'2011-01-01T12:30:00'}]");
+		assertSerialized(run(in, "f<2011-01-01T12:30"), ws, "[{f:'2011-01-01T12:29:59'}]");
 	}
 
 	@Test void c09_dateSearch_openEndedRanges_toSecond() {
 		B[] in = B.create("2011-01-01T12:30:59", "2011-01-01T12:31:00");
-		assertObject(run(in, "f>2011-01-01T12:30")).asString(ws).is("[{f:'2011-01-01T12:31:00'}]");
-		assertObject(run(in, "f<=2011-01-01T12:30")).asString(ws).is("[{f:'2011-01-01T12:30:59'}]");
+		assertSerialized(run(in, "f>2011-01-01T12:30"), ws, "[{f:'2011-01-01T12:31:00'}]");
+		assertSerialized(run(in, "f<=2011-01-01T12:30"), ws, "[{f:'2011-01-01T12:30:59'}]");
 	}
 
 	@Test void c10_dateSearch_closedRanges() {
@@ -494,7 +496,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 				"f=2001 -\"2003-06-30\"",
 				"f= 2001 - \"2003-06-30\" "
 			))
-			assertObject(run(in, s)).asString(ws).is("[{f:'2001-01-01T00:00:00'},{f:'2003-06-30T23:59:59'}]");
+			assertSerialized(run(in, s), ws, "[{f:'2001-01-01T00:00:00'},{f:'2003-06-30T23:59:59'}]");
 
 		for (String s : a(
 			"f= 2001 - 2003-06-30 2000",
@@ -519,7 +521,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			"f= 2001 - \"2003-06-30\"  '2000'",
 			"f= 2001 - \"2003-06-30\"  \"2000\""
 		))
-			assertObject(run(in, s)).asString(ws).is("[{f:'2000-12-31T23:59:59'},{f:'2001-01-01T00:00:00'},{f:'2003-06-30T23:59:59'}]");
+			assertSerialized(run(in, s), ws, "[{f:'2000-12-31T23:59:59'},{f:'2001-01-01T00:00:00'},{f:'2003-06-30T23:59:59'}]");
 	}
 
 	@Test void c11_dateSearch_or1() {
@@ -532,7 +534,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 				"f=\"2001\" \"2003\" \"2005\"",
 				"f= \"2001\"  \"2003\"  \"2005\" "
 			))
-			assertObject(run(in, s)).asString(ws).is("[{f:'2001-01-01T00:00:00'},{f:'2001-12-31T00:00:00'}]");
+			assertSerialized(run(in, s), ws, "[{f:'2001-01-01T00:00:00'},{f:'2001-12-31T00:00:00'}]");
 	}
 
 	@Test void c12_dateSearch_or2() {
@@ -545,7 +547,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 				"f=\"2001\" \"2003\" \"2005\"",
 				"f= \"2001\"  \"2003\"  \"2005\" "
 			))
-			assertObject(run(in, s)).asString(ws).is("[{f:'2003-01-01T00:00:00'},{f:'2003-12-31T00:00:00'}]");
+			assertSerialized(run(in, s), ws, "[{f:'2003-01-01T00:00:00'},{f:'2003-12-31T00:00:00'}]");
 	}
 
 	@Test void c13_dateSearch_or3() {
@@ -558,7 +560,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 				"f=\"2001\" \"2003\" \"2005\"",
 				"f= \"2001\"  \"2003\"  \"2005\" "
 			))
-			assertObject(run(in, s)).asString(ws).is("[{f:'2005-01-01T00:00:00'},{f:'2005-12-31T00:00:00'}]");
+			assertSerialized(run(in, s), ws, "[{f:'2005-01-01T00:00:00'},{f:'2005-12-31T00:00:00'}]");
 	}
 
 	@Test void c14_dateSearch_or_singleAndRange() {
@@ -589,7 +591,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 				"f=>=\"2003\" \"2001\"",
 				"f= >=\"2003\"  \"2001\" "
 			))
-			assertObject(run(in, s)).asString(ws).is("[{f:'2001-01-01T00:00:00'},{f:'2003-01-01T00:00:00'}]");
+			assertSerialized(run(in, s), ws, "[{f:'2001-01-01T00:00:00'},{f:'2003-01-01T00:00:00'}]");
 		for (String s : a(
 				"f=<2001 2003",
 				"f= <2001  2003 ",
@@ -616,7 +618,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 				"f=\"2003\" <=\"2000\"",
 				"f= \"2003\"  <=\"2000\" "
 			))
-			assertObject(run(in, s)).asString(ws).is("[{f:'2000-12-31T00:00:00'},{f:'2003-01-01T00:00:00'}]");
+			assertSerialized(run(in, s), ws, "[{f:'2000-12-31T00:00:00'},{f:'2003-01-01T00:00:00'}]");
 	}
 
 //	@Test

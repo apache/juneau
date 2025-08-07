@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -46,7 +45,7 @@ class HasFormDataAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_testEquivalency() {
-		assertObject(a1).is(a2);
+		assertEquals(a2, a1);
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEquals(a1.hashCode(), a2.hashCode());
 	}

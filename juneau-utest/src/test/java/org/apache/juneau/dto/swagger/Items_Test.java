@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,7 +39,7 @@ class Items_Test extends SimpleTestBase {
 		assertJson(t.setItems(items("foo")).getItems(), "{type:'foo'}");
 		assertEquals("foo", t.setCollectionFormat("foo").getCollectionFormat());
 		assertString(t.setCollectionFormat(null).getCollectionFormat()).isNull();
-		assertObject(t.setDefault("foo").getDefault()).is("foo");
+		assertEquals("foo", t.setDefault("foo").getDefault());
 		assertString("foo", t.setDefault(new StringBuilder("foo")).getDefault());
 		assertNull(t.setDefault(null).getDefault());
 		assertEquals(123, t.setMaximum(123).getMaximum());

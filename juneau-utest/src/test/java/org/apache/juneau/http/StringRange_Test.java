@@ -34,10 +34,10 @@ class StringRange_Test extends SimpleTestBase {
 		assertJson(x3.getExtensions(), "[{name:'a',value:'1'}]");
 
 		StringRange x4 = of("foo;a=1");
-		assertObject(x3).is(x4);
+		assertEquals(x4, x3);
 		assertObject(x3).isNot(x2);
 		assertObject(x3).asString().isNot("foo");
-		assertObject(x3.hashCode()).is(x4.hashCode());
+		assertEquals(x4.hashCode(), x3.hashCode());
 
 		assertString("*", of((String)null));
 

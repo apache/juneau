@@ -790,7 +790,7 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d02_createBean_staticCreator_create() {
 		BeanStore bs = BeanStore.INSTANCE;
-		assertObject(bs.createBean(D2.class).run()).is(d2);
+		assertEquals(d2, bs.createBean(D2.class).run());
 	}
 
 	public abstract static class D3 {
@@ -800,7 +800,7 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d03_createBean_staticCreator_getInstance() {
 		BeanStore bs = BeanStore.INSTANCE;
-		assertObject(bs.createBean(D3.class).run()).is(d3);
+		assertEquals(d3, bs.createBean(D3.class).run());
 	}
 
 	public static class D4a {
@@ -841,13 +841,13 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d05_createBean_staticCreator_withBeans() {
 		BeanStore bs = BeanStore.create().build();
-		assertObject(bs.createBean(D5.class).run()).is(d5a);
+		assertEquals(d5a, bs.createBean(D5.class).run());
 		bs.add(Integer.class, 1);
-		assertObject(bs.createBean(D5.class).run()).is(d5c);
+		assertEquals(d5c, bs.createBean(D5.class).run());
 		bs.add(String.class, "x");
-		assertObject(bs.createBean(D5.class).run()).is(d5b);
+		assertEquals(d5b, bs.createBean(D5.class).run());
 		bs.removeBean(Integer.class);
-		assertObject(bs.createBean(D5.class).run()).is(d5a);
+		assertEquals(d5a, bs.createBean(D5.class).run());
 	}
 
 	public static class D6 {

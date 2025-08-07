@@ -61,7 +61,7 @@ class BeanIgnore_Test extends SimpleTestBase {
 	}
 
 	@Test void testBeanIgnoreOnProperties_usingConfig() {
-		assertObject(new Ac()).asString(Json5Serializer.DEFAULT.copy().applyAnnotations(AcConfig.class).build()).is("{c:'c',a:'a'}");
+		assertSerialized(new Ac(), Json5Serializer.DEFAULT.copy().applyAnnotations(AcConfig.class).build(), "{c:'c',a:'a'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -113,6 +113,6 @@ class BeanIgnore_Test extends SimpleTestBase {
 	}
 
 	@Test void testBeanIgnoreOnBean_usingConfig() {
-		assertObject(new Bc()).asString(Json5Serializer.DEFAULT.copy().applyAnnotations(B1cConfig.class).build()).is("{f2:2,f3:'xxx',f4:'xxx'}");
+		assertSerialized(new Bc(), Json5Serializer.DEFAULT.copy().applyAnnotations(B1cConfig.class).build(), "{f2:2,f3:'xxx',f4:'xxx'}");
 	}
-}
+}

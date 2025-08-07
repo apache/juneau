@@ -109,7 +109,7 @@ class BeanAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_testEquivalency() {
-		assertObject(a1).is(a2);
+		assertEquals(a2, a1);
 		assertNotEquals(0, a1.hashCode());
 		assertNotEquals(-1, a1.hashCode());
 		assertEquals(a1.hashCode(), a2.hashCode());
@@ -199,10 +199,8 @@ class BeanAnnotation_Test extends SimpleTestBase {
 	Bean d2 = D2.class.getAnnotationsByType(Bean.class)[0];
 
 	@Test void d01_comparisonWithDeclarativeAnnotations() {
-		assertObject(d1).is(d2).is(a1);
-		assertNotEquals(0, a1.hashCode());
-		assertNotEquals(-1, a1.hashCode());
-		assertEquals(d1.hashCode(), a1.hashCode());
-		assertEquals(d2.hashCode(), a1.hashCode());
+		assertEqualsAll(a1, d1, d2);
+		assertNotEqualsAny(a1.hashCode(), 0, -1);
+		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
 	}
 }

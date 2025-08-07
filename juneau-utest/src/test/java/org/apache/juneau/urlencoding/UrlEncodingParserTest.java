@@ -669,7 +669,7 @@ public class UrlEncodingParserTest extends SimpleTestBase {
 			+ "f19:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
 			+ "f20:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]]"
 		+"}";
-		assertObject(t).asJsonSorted().is(e);
+		assertJson(t, e);
 	}
 
 	@Test void testMultiPartParametersOnBeansViaProperty_usingConfig() throws Exception {
@@ -722,7 +722,7 @@ public class UrlEncodingParserTest extends SimpleTestBase {
 			+ "f19:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
 			+ "f20:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]]"
 		+"}";
-		assertObject(t).asJsonSorted().is(e);
+		assertJson(t, e);
 	}
 
 	//====================================================================================================
@@ -777,7 +777,7 @@ public class UrlEncodingParserTest extends SimpleTestBase {
 			+ "f19:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
 			+ "f20:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]]"
 		+"}";
-		assertObject(t).asJsonSorted().is(e);
+		assertJson(t, e);
 	}
 
 	@Test void testMultiPartParametersOnBeansViaAnnotationOnClass_usingConfig() throws Exception {
@@ -829,6 +829,6 @@ public class UrlEncodingParserTest extends SimpleTestBase {
 			+ "f19:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
 			+ "f20:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]]"
 		+"}";
-		assertObject(t).asJsonSorted().is(e);
+		assertJson(t, e);
 	}
 }
