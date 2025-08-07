@@ -29,7 +29,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_builder_default() {
-		assertObject(MethodExecStore.create().build()).isType(MethodExecStore.class);
+		assertType(MethodExecStore.class, MethodExecStore.create().build());
 	}
 
 	public static class A1 extends MethodExecStore{
@@ -39,7 +39,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_builder_implClass() {
-		assertObject(MethodExecStore.create().type(A1.class).build()).isType(A1.class);
+		assertType(A1.class, MethodExecStore.create().type(A1.class).build());
 	}
 
 	public static class A4 extends MethodExecStore {
@@ -75,11 +75,11 @@ class MethodExecStore_Test extends SimpleTestBase {
 		BeanStore bs = BeanStore.create().build();
 
 		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: A5a", ()->MethodExecStore.create(bs).type(A5b.class).build());
-		assertObject(MethodExecStore.create(bs).type(A5c.class).build()).isType(A5c.class);
+		assertType(A5c.class, MethodExecStore.create(bs).type(A5c.class).build());
 
 		bs.addBean(A5a.class, new A5a());
-		assertObject(MethodExecStore.create(bs).type(A5b.class).build()).isType(A5b.class);
-		assertObject(MethodExecStore.create(bs).type(A5c.class).build()).isType(A5c.class);
+		assertType(A5b.class, MethodExecStore.create(bs).type(A5b.class).build());
+		assertType(A5c.class, MethodExecStore.create(bs).type(A5c.class).build());
 	}
 
 
@@ -106,11 +106,11 @@ class MethodExecStore_Test extends SimpleTestBase {
 		Method m = MethodExecStore_Test.class.getMethod("a06_builder_statsImplClass");
 
 		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: A6a", ()->MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m));
-		assertObject(MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m)).isType(A6c.class);
+		assertType(A6c.class, MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m));
 
 		bs.addBean(A6a.class, new A6a());
-		assertObject(MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m)).isType(A6b.class);
-		assertObject(MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m)).isType(A6c.class);
+		assertType(A6b.class, MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m));
+		assertType(A6c.class, MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m));
 	}
 
 	@Test public void a07_builder_thrownStore() throws Exception {

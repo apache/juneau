@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -79,13 +78,13 @@ public class HttpException_Test extends SimpleTestBase {
 		assertNull(x.getRootCause());
 
 		x = new BasicHttpException(100, new RuntimeException("foo"));
-		assertObject(x.getRootCause()).isType(RuntimeException.class);
+		assertType(RuntimeException.class, x.getRootCause());
 
 		x = new BasicHttpException(100, new BasicHttpException(100, new RuntimeException("foo")));
-		assertObject(x.getRootCause()).isType(RuntimeException.class);
+		assertType(RuntimeException.class, x.getRootCause());
 
 		x = new BasicHttpException(100, new InvocationTargetException(new RuntimeException("foo")));
-		assertObject(x.getRootCause()).isType(RuntimeException.class);
+		assertType(RuntimeException.class, x.getRootCause());
 	}
 
 	@Test void a03_getFullStackMessage() {

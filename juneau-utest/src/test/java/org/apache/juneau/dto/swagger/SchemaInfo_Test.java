@@ -15,26 +15,23 @@ package org.apache.juneau.dto.swagger;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.json.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Testcase for {@link SchemaInfo}.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class SchemaInfo_Test {
+class SchemaInfo_Test extends SimpleTestBase {
 
 	/**
 	 * Test method for getters and setters.
 	 */
-	@Test
-	public void a01_gettersAndSetters() {
+	@Test void a01_gettersAndSetters() {
 		SchemaInfo t = new SchemaInfo();
 		assertEquals("foo", t.setFormat("foo").getFormat());
 		assertString(t.setFormat(null).getFormat()).isNull();
@@ -43,48 +40,48 @@ public class SchemaInfo_Test {
 		assertEquals("foo", t.setDescription("foo").getDescription());
 		assertString(t.setDescription(null).getDescription()).isNull();
 		assertEquals("foo", t.setDefault("foo").getDefault());
-		assertObject(t.setDefault(new StringBuilder("foo")).getDefault()).isType(StringBuilder.class).asString().is("foo");
+		assertString("foo", t.setDefault(new StringBuilder("foo")).getDefault());
 		assertNull(t.setDefault(null).getDefault());
-		assertObject(t.setMultipleOf(123).getMultipleOf()).isType(Integer.class).is(123);
-		assertObject(t.setMultipleOf(123f).getMultipleOf()).isType(Float.class).is(123f);
-		assertObject(t.setMaximum(123).getMaximum()).isType(Integer.class).is(123);
-		assertObject(t.setMaximum(123f).getMaximum()).isType(Float.class).is(123f);
-		assertObject(t.setExclusiveMaximum(true).getExclusiveMaximum()).isType(Boolean.class).is(true);
-		assertObject(t.setMinimum(123).getMinimum()).isType(Integer.class).is(123);
-		assertObject(t.setMinimum(123f).getMinimum()).isType(Float.class).is(123f);
-		assertObject(t.setExclusiveMinimum(true).getExclusiveMinimum()).isType(Boolean.class).is(true);
-		assertObject(t.setMaxLength(123).getMaxLength()).isType(Integer.class).is(123);
-		assertObject(t.setMinLength(123).getMinLength()).isType(Integer.class).is(123);
+		assertEquals(123, t.setMultipleOf(123).getMultipleOf());
+		assertEquals(123f, t.setMultipleOf(123f).getMultipleOf());
+		assertEquals(123, t.setMaximum(123).getMaximum());
+		assertEquals(123f, t.setMaximum(123f).getMaximum());
+		assertTrue(t.setExclusiveMaximum(true).getExclusiveMaximum());
+		assertEquals(123, t.setMinimum(123).getMinimum());
+		assertEquals(123f, t.setMinimum(123f).getMinimum());
+		assertTrue(t.setExclusiveMinimum(true).getExclusiveMinimum());
+		assertEquals(123, t.setMaxLength(123).getMaxLength());
+		assertEquals(123, t.setMinLength(123).getMinLength());
 		assertEquals("foo", t.setPattern("foo").getPattern());
 		assertString(t.setPattern(null).getPattern()).isNull();
-		assertObject(t.setMaxItems(123).getMaxItems()).isType(Integer.class).is(123);
-		assertObject(t.setMinItems(123).getMinItems()).isType(Integer.class).is(123);
-		assertObject(t.setUniqueItems(true).getUniqueItems()).isType(Boolean.class).is(true);
-		assertObject(t.setMaxProperties(123).getMaxProperties()).isType(Integer.class).is(123);
-		assertObject(t.setMinProperties(123).getMinProperties()).isType(Integer.class).is(123);
-		assertObject(t.setRequiredProperties("x").getRequiredProperties()).isType(Set.class).asJson().is("['x']");
+		assertEquals(123, t.setMaxItems(123).getMaxItems());
+		assertEquals(123, t.setMinItems(123).getMinItems());
+		assertTrue(t.setUniqueItems(true).getUniqueItems());
+		assertEquals(123, t.setMaxProperties(123).getMaxProperties());
+		assertEquals(123, t.setMinProperties(123).getMinProperties());
+		assertJson(t.setRequiredProperties("x").getRequiredProperties(), "['x']");
 		assertNull(t.setRequiredProperties((Collection<String>)null).getRequiredProperties());
-		assertObject(t.setEnum(set("foo","bar")).getEnum()).isType(Set.class).asJson().is("['foo','bar']");
-		assertObject(t.setEnum(set()).getEnum()).isType(Set.class).asJson().is("[]");
+		assertJson(t.setEnum(set("foo","bar")).getEnum(), "['foo','bar']");
+		assertJson(t.setEnum(set()).getEnum(), "[]");
 		assertNull(t.setEnum((Collection<Object>)null).getEnum());
-		assertObject(t.addEnum("foo","bar").getEnum()).isType(Set.class).asJson().is("['foo','bar']");
-		assertObject(t.addEnum("baz").getEnum()).isType(Set.class).asJson().is("['foo','bar','baz']");
+		assertJson(t.addEnum("foo","bar").getEnum(), "['foo','bar']");
+		assertJson(t.addEnum("baz").getEnum(), "['foo','bar','baz']");
 		assertEquals("foo", t.setType("foo").getType());
 		assertString(t.setType(null).getType()).isNull();
 		assertObject(t.setItems(items("foo")).getItems()).asJson().is("{type:'foo'}");
-		assertObject(t.setAllOf(set("foo","bar")).getAllOf()).isType(Set.class).asJson().is("['foo','bar']");
-		assertObject(t.setAllOf(set()).getAllOf()).isType(Set.class).asJson().is("[]");
+		assertJson(t.setAllOf(set("foo","bar")).getAllOf(), "['foo','bar']");
+		assertJson(t.setAllOf(set()).getAllOf(), "[]");
 		assertNull(t.setAllOf((Collection<Object>)null).getAllOf());
-		assertObject(t.addAllOf("foo","bar").getAllOf()).isType(Set.class).asJson().is("['foo','bar']");
-		assertObject(t.setProperties(map("foo",new SchemaInfo().setType("foo"))).getProperties()).isType(Map.class).asJson().is("{foo:{type:'foo'}}");
-		assertObject(t.setProperties(map()).getProperties()).isType(Map.class).asJson().is("{}");
+		assertJson(t.addAllOf("foo","bar").getAllOf(), "['foo','bar']");
+		assertJson(t.setProperties(map("foo",new SchemaInfo().setType("foo"))).getProperties(), "{foo:{type:'foo'}}");
+		assertJson(t.setProperties(map()).getProperties(), "{}");
 		assertNull(t.setProperties((Map<String,SchemaInfo>)null).getProperties());
-		assertObject(t.setAdditionalProperties(new SchemaInfo().setType("foo")).getAdditionalProperties()).isType(SchemaInfo.class).asJson().is("{type:'foo'}");
-		assertObject(t.setAdditionalProperties(new SchemaInfo()).getAdditionalProperties()).isType(SchemaInfo.class).asJson().is("{}");
+		assertJson(t.setAdditionalProperties(new SchemaInfo().setType("foo")).getAdditionalProperties(), "{type:'foo'}");
+		assertJson(t.setAdditionalProperties(new SchemaInfo()).getAdditionalProperties(), "{}");
 		assertNull(t.setAdditionalProperties((SchemaInfo)null).getAdditionalProperties());
 		assertEquals("foo", t.setDiscriminator("foo").getDiscriminator());
 		assertString(t.setDiscriminator(null).getDiscriminator()).isNull();
-		assertObject(t.setReadOnly(true).getReadOnly()).isType(Boolean.class).is(true);
+		assertTrue(t.setReadOnly(true).getReadOnly());
 		assertObject(t.setXml(xml().setName("foo")).getXml()).asJson().is("{name:'foo'}");
 		assertObject(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs()).asJson().is("{url:'foo'}");
 		assertObject(t.setExample("foo").getExample()).is("foo");
@@ -95,8 +92,7 @@ public class SchemaInfo_Test {
 	/**
 	 * Test method for {@link SchemaInfo#set(java.lang.String, java.lang.Object)}.
 	 */
-	@Test
-	public void b01_set() throws Exception {
+	@Test void b01_set() throws Exception {
 		SchemaInfo t = new SchemaInfo();
 
 		t
@@ -232,36 +228,36 @@ public class SchemaInfo_Test {
 		assertEquals("{name:'o'}", t.get("xml", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
 
-		assertObject(t.get("default", Object.class)).isType(StringBuilder.class);
-		assertObject(t.get("enum", Object.class)).isType(Set.class);
-		assertObject(t.get("additionalProperties", Object.class)).isType(SchemaInfo.class);
-		assertObject(t.get("allOf", Object.class)).isType(Set.class);
-		assertObject(t.get("description", Object.class)).isType(String.class);
-		assertObject(t.get("discriminator", Object.class)).isType(String.class);
-		assertObject(t.get("example", Object.class)).isType(StringBuilder.class);
-		assertObject(t.get("exclusiveMaximum", Object.class)).isType(Boolean.class);
-		assertObject(t.get("exclusiveMinimum", Object.class)).isType(Boolean.class);
-		assertObject(t.get("externalDocs", Object.class)).isType(ExternalDocumentation.class);
-		assertObject(t.get("format", Object.class)).isType(String.class);
-		assertObject(t.get("items", Object.class)).isType(Items.class);
-		assertObject(t.get("maximum", Object.class)).isType(Float.class);
-		assertObject(t.get("maxItems", Object.class)).isType(Integer.class);
-		assertObject(t.get("maxLength", Object.class)).isType(Integer.class);
-		assertObject(t.get("maxProperties", Object.class)).isType(Integer.class);
-		assertObject(t.get("minimum", Object.class)).isType(Float.class);
-		assertObject(t.get("minItems", Object.class)).isType(Integer.class);
-		assertObject(t.get("minLength", Object.class)).isType(Integer.class);
-		assertObject(t.get("minProperties", Object.class)).isType(Integer.class);
-		assertObject(t.get("multipleOf", Object.class)).isType(Float.class);
-		assertObject(t.get("pattern", Object.class)).isType(String.class);
-		assertObject(t.get("properties", Object.class)).isType(Map.class);
-		assertObject(t.get("readOnly", Object.class)).isType(Boolean.class);
-		assertObject(t.get("requiredProperties", Object.class)).isType(Set.class);
-		assertObject(t.get("title", Object.class)).isType(String.class);
-		assertObject(t.get("type", Object.class)).isType(String.class);
-		assertObject(t.get("uniqueItems", Object.class)).isType(Boolean.class);
-		assertObject(t.get("xml", Object.class)).isType(Xml.class);
-		assertObject(t.get("$ref", Object.class)).isType(String.class);
+		assertType(StringBuilder.class, t.get("default", Object.class));
+		assertType(Set.class, t.get("enum", Object.class));
+		assertType(SchemaInfo.class, t.get("additionalProperties", Object.class));
+		assertType(Set.class, t.get("allOf", Object.class));
+		assertType(String.class, t.get("description", Object.class));
+		assertType(String.class, t.get("discriminator", Object.class));
+		assertType(StringBuilder.class, t.get("example", Object.class));
+		assertType(Boolean.class, t.get("exclusiveMaximum", Object.class));
+		assertType(Boolean.class, t.get("exclusiveMinimum", Object.class));
+		assertType(ExternalDocumentation.class, t.get("externalDocs", Object.class));
+		assertType(String.class, t.get("format", Object.class));
+		assertType(Items.class, t.get("items", Object.class));
+		assertType(Float.class, t.get("maximum", Object.class));
+		assertType(Integer.class, t.get("maxItems", Object.class));
+		assertType(Integer.class, t.get("maxLength", Object.class));
+		assertType(Integer.class, t.get("maxProperties", Object.class));
+		assertType(Float.class, t.get("minimum", Object.class));
+		assertType(Integer.class, t.get("minItems", Object.class));
+		assertType(Integer.class, t.get("minLength", Object.class));
+		assertType(Integer.class, t.get("minProperties", Object.class));
+		assertType(Float.class, t.get("multipleOf", Object.class));
+		assertType(String.class, t.get("pattern", Object.class));
+		assertType(Map.class, t.get("properties", Object.class));
+		assertType(Boolean.class, t.get("readOnly", Object.class));
+		assertType(Set.class, t.get("requiredProperties", Object.class));
+		assertType(String.class, t.get("title", Object.class));
+		assertType(String.class, t.get("type", Object.class));
+		assertType(Boolean.class, t.get("uniqueItems", Object.class));
+		assertType(Xml.class, t.get("xml", Object.class));
+		assertType(String.class, t.get("$ref", Object.class));
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
@@ -272,8 +268,7 @@ public class SchemaInfo_Test {
 		assertObject(JsonParser.DEFAULT.parse(s, SchemaInfo.class)).asJson().is(s);
 	}
 
-	@Test
-	public void b02_copy() {
+	@Test void b02_copy() {
 		SchemaInfo t = new SchemaInfo();
 
 		t = t.copy();
@@ -316,8 +311,7 @@ public class SchemaInfo_Test {
 		assertObject(t).asJson().is("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,requiredProperties:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}");
 	}
 
-	@Test
-	public void b03_keySet() {
+	@Test void b03_keySet() {
 		SchemaInfo t = new SchemaInfo();
 
 		assertObject(t.keySet()).asJson().is("[]");

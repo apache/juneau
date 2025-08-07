@@ -21,6 +21,7 @@ import static org.apache.juneau.utest.utils.Constants.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.AssertionHelpers.*;
 
 import java.util.*;
 
@@ -532,28 +533,28 @@ public class ThirdPartyProxyTest {
 	public void da12_returnIntegerList() {
 		List<Integer> x = proxy.returnIntegerList();
 		assertObject(x).asJson().is("[1,null]");
-		assertObject(x.get(0)).isType(Integer.class);
+		assertType(Integer.class, x.get(0));
 	}
 
 	@Test
 	public void da13_returnInteger3dList() {
 		List<List<List<Integer>>> x = proxy.returnInteger3dList();
 		assertObject(x).asJson().is("[[[1,null],null],null]");
-		assertObject(x.get(0).get(0).get(0)).isType(Integer.class);
+		assertType(Integer.class, x.get(0).get(0).get(0));
 	}
 
 	@Test
 	public void da14_returnInteger1d3dList() {
 		List<Integer[][][]> x = proxy.returnInteger1d3dList();
 		assertObject(x).asJson().is("[[[[1,null],null],null],null]");
-		assertObject(x.get(0)[0][0][0]).isType(Integer.class);
+		assertType(Integer.class, x.get(0)[0][0][0]);
 	}
 
 	@Test
 	public void da15_returnInt1d3dList() {
 		List<int[][][]> x = proxy.returnInt1d3dList();
 		assertObject(x).asJson().is("[[[[1,2],null],null],null]");
-		assertObject(x.get(0)).isType(int[][][].class);
+		assertType(int[][][].class, x.get(0));
 	}
 
 	@Test
@@ -567,49 +568,49 @@ public class ThirdPartyProxyTest {
 	public void db01_returnBean() {
 		ABean x = proxy.returnBean();
 		assertObject(x).asJson().is("{a:1,b:'foo'}");
-		assertObject(x).isType(ABean.class);
+		assertType(ABean.class, x);
 	}
 
 	@Test
 	public void db02_returnBean3dArray() {
 		ABean[][][] x = proxy.returnBean3dArray();
 		assertObject(x).asJson().is("[[[{a:1,b:'foo'},null],null],null]");
-		assertObject(x[0][0][0]).isType(ABean.class);
+		assertType(ABean.class, x[0][0][0]);
 	}
 
 	@Test
 	public void db03_returnBeanList() {
 		List<ABean> x = proxy.returnBeanList();
 		assertObject(x).asJson().is("[{a:1,b:'foo'}]");
-		assertObject(x.get(0)).isType(ABean.class);
+		assertType(ABean.class, x.get(0));
 	}
 
 	@Test
 	public void db04_returnBean1d3dList() {
 		List<ABean[][][]> x = proxy.returnBean1d3dList();
 		assertObject(x).asJson().is("[[[[{a:1,b:'foo'},null],null],null],null]");
-		assertObject(x.get(0)[0][0][0]).isType(ABean.class);
+		assertType(ABean.class, x.get(0)[0][0][0]);
 	}
 
 	@Test
 	public void db05_returnBeanMap() {
 		Map<String,ABean> x = proxy.returnBeanMap();
 		assertObject(x).asJson().is("{foo:{a:1,b:'foo'}}");
-		assertObject(x.get("foo")).isType(ABean.class);
+		assertType(ABean.class, x.get("foo"));
 	}
 
 	@Test
 	public void db06_returnBeanListMap() {
 		Map<String,List<ABean>> x = proxy.returnBeanListMap();
 		assertObject(x).asJson().is("{foo:[{a:1,b:'foo'}]}");
-		assertObject(x.get("foo").get(0)).isType(ABean.class);
+		assertType(ABean.class, x.get("foo").get(0));
 	}
 
 	@Test
 	public void db07_returnBean1d3dListMap() {
 		Map<String,List<ABean[][][]>> x = proxy.returnBean1d3dListMap();
 		assertObject(x).asJson().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
-		assertObject(x.get("foo").get(0)[0][0][0]).isType(ABean.class);
+		assertType(ABean.class, x.get("foo").get(0)[0][0][0]);
 	}
 
 	@Test
@@ -617,7 +618,7 @@ public class ThirdPartyProxyTest {
 		// Note: JsonSerializer serializes key as string.
 		Map<Integer,List<ABean>> x = proxy.returnBeanListMapIntegerKeys();
 		assertObject(x).asJson().is("{'1':[{a:1,b:'foo'}]}");
-		assertObject(x.keySet().iterator().next()).isType(Integer.class);
+		assertType(Integer.class, x.keySet().iterator().next());
 	}
 
 	// Typed beans
@@ -626,49 +627,49 @@ public class ThirdPartyProxyTest {
 	public void dc01_returnTypedBean() {
 		TypedBean x = proxy.returnTypedBean();
 		assertObject(x).asJson().is("{a:1,b:'foo'}");
-		assertObject(x).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, x);
 	}
 
 	@Test
 	public void dc02_returnTypedBean3dArray() {
 		TypedBean[][][] x = proxy.returnTypedBean3dArray();
 		assertObject(x).asJson().is("[[[{a:1,b:'foo'},null],null],null]");
-		assertObject(x[0][0][0]).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, x[0][0][0]);
 	}
 
 	@Test
 	public void dc03_returnTypedBeanList() {
 		List<TypedBean> x = proxy.returnTypedBeanList();
 		assertObject(x).asJson().is("[{a:1,b:'foo'}]");
-		assertObject(x.get(0)).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, x.get(0));
 	}
 
 	@Test
 	public void dc04_returnTypedBean1d3dList() {
 		List<TypedBean[][][]> x = proxy.returnTypedBean1d3dList();
 		assertObject(x).asJson().is("[[[[{a:1,b:'foo'},null],null],null],null]");
-		assertObject(x.get(0)[0][0][0]).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, x.get(0)[0][0][0]);
 	}
 
 	@Test
 	public void dc05_returnTypedBeanMap() {
 		Map<String,TypedBean> x = proxy.returnTypedBeanMap();
 		assertObject(x).asJson().is("{foo:{a:1,b:'foo'}}");
-		assertObject(x.get("foo")).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, x.get("foo"));
 	}
 
 	@Test
 	public void dc06_returnTypedBeanListMap() {
 		Map<String,List<TypedBean>> x = proxy.returnTypedBeanListMap();
 		assertObject(x).asJson().is("{foo:[{a:1,b:'foo'}]}");
-		assertObject(x.get("foo").get(0)).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, x.get("foo").get(0));
 	}
 
 	@Test
 	public void dc07_returnTypedBean1d3dListMap() {
 		Map<String,List<TypedBean[][][]>> x = proxy.returnTypedBean1d3dListMap();
 		assertObject(x).asJson().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
-		assertObject(x.get("foo").get(0)[0][0][0]).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0]);
 	}
 
 	@Test
@@ -676,7 +677,7 @@ public class ThirdPartyProxyTest {
 		// Note: JsonSerializer serializes key as string.
 		Map<Integer,List<TypedBean>> x = proxy.returnTypedBeanListMapIntegerKeys();
 		assertObject(x).asJson().is("{'1':[{a:1,b:'foo'}]}");
-		assertObject(x.get(1).get(0)).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, x.get(1).get(0));
 	}
 
 	// Swapped POJOs
@@ -759,28 +760,28 @@ public class ThirdPartyProxyTest {
 	public void df02_returnEnum3d() {
 		TestEnum[][][] x = proxy.returnEnum3d();
 		assertObject(x).asJson().is("[[['TWO',null],null],null]");
-		assertObject(x[0][0][0]).isType(TestEnum.class);
+		assertType(TestEnum.class, x[0][0][0]);
 	}
 
 	@Test
 	public void df03_returnEnumList() {
 		List<TestEnum> x = proxy.returnEnumList();
 		assertObject(x).asJson().is("['TWO',null]");
-		assertObject(x.get(0)).isType(TestEnum.class);
+		assertType(TestEnum.class, x.get(0));
 	}
 
 	@Test
 	public void df04_returnEnum3dList() {
 		List<List<List<TestEnum>>> x = proxy.returnEnum3dList();
 		assertObject(x).asJson().is("[[['TWO',null],null],null]");
-		assertObject(x.get(0).get(0).get(0)).isType(TestEnum.class);
+		assertType(TestEnum.class, x.get(0).get(0).get(0));
 	}
 
 	@Test
 	public void df05_returnEnum1d3dList() {
 		List<TestEnum[][][]> x = proxy.returnEnum1d3dList();
 		assertObject(x).asJson().is("[[[['TWO',null],null],null],null]");
-		assertObject(x.get(0)).isType(TestEnum[][][].class);
+		assertType(TestEnum[][][].class, x.get(0));
 	}
 
 	@Test
@@ -788,8 +789,8 @@ public class ThirdPartyProxyTest {
 		Map<TestEnum,TestEnum> x = proxy.returnEnumMap();
 		assertObject(x).asJson().is("{ONE:'TWO'}");
 		Map.Entry<TestEnum,TestEnum> e = x.entrySet().iterator().next();
-		assertObject(e.getKey()).isType(TestEnum.class);
-		assertObject(e.getValue()).isType(TestEnum.class);
+		assertType(TestEnum.class, e.getKey());
+		assertType(TestEnum.class, e.getValue());
 	}
 
 	@Test
@@ -797,15 +798,15 @@ public class ThirdPartyProxyTest {
 		Map<TestEnum,TestEnum[][][]> x = proxy.returnEnum3dArrayMap();
 		assertObject(x).asJson().is("{ONE:[[['TWO',null],null],null]}");
 		Map.Entry<TestEnum,TestEnum[][][]> e = x.entrySet().iterator().next();
-		assertObject(e.getKey()).isType(TestEnum.class);
-		assertObject(e.getValue()).isType(TestEnum[][][].class);
+		assertType(TestEnum.class, e.getKey());
+		assertType(TestEnum[][][].class, e.getValue());
 	}
 
 	@Test
 	public void df08_returnEnum1d3dListMap() {
 		Map<TestEnum,List<TestEnum[][][]>> x = proxy.returnEnum1d3dListMap();
 		assertObject(x).asJson().is("{ONE:[[[['TWO',null],null],null],null]}");
-		assertObject(x.get(TestEnum.ONE).get(0)).isType(TestEnum[][][].class);
+		assertType(TestEnum[][][].class, x.get(TestEnum.ONE).get(0));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

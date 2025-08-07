@@ -16,25 +16,22 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.json.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Testcase for {@link HeaderInfo}.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class HeaderInfo_Test {
+class HeaderInfo_Test extends SimpleTestBase {
 
 	/**
 	 * Test method for getters and setters.
 	 */
-	@Test
-	public void a01_gettersAndSetters() {
+	@Test void a01_gettersAndSetters() {
 		HeaderInfo t = new HeaderInfo();
 		assertEquals("foo", t.setDescription("foo").getDescription());
 		assertString(t.setDescription(null).getDescription()).isNull();
@@ -47,31 +44,31 @@ public class HeaderInfo_Test {
 		assertEquals("foo", t.setCollectionFormat("foo").getCollectionFormat());
 		assertString(t.setCollectionFormat(null).getCollectionFormat()).isNull();
 		assertEquals("foo", t.setDefault("foo").getDefault());
-		assertObject(t.setDefault(new StringBuilder("foo")).getDefault()).isType(StringBuilder.class).asString().is("foo");
+		assertString("foo", t.setDefault(new StringBuilder("foo")).getDefault());
 		assertNull(t.setDefault(null).getDefault());
-		assertObject(t.setMaximum(123).getMaximum()).isType(Integer.class).is(123);
-		assertObject(t.setMaximum(123f).getMaximum()).isType(Float.class).is(123f);
-		assertObject(t.setExclusiveMaximum(true).getExclusiveMaximum()).isType(Boolean.class).is(true);
-		assertObject(t.setMinimum(123).getMinimum()).isType(Integer.class).is(123);
-		assertObject(t.setMinimum(123f).getMinimum()).isType(Float.class).is(123f);
-		assertObject(t.setExclusiveMinimum(true).getExclusiveMinimum()).isType(Boolean.class).is(true);
-		assertObject(t.setMaxLength(123).getMaxLength()).isType(Integer.class).is(123);
-		assertObject(t.setMinLength(123).getMinLength()).isType(Integer.class).is(123);
+		assertEquals(123, t.setMaximum(123).getMaximum());
+		assertEquals(123f, t.setMaximum(123f).getMaximum());
+		assertTrue(t.setExclusiveMaximum(true).getExclusiveMaximum());
+		assertEquals(123, t.setMinimum(123).getMinimum());
+		assertEquals(123f, t.setMinimum(123f).getMinimum());
+		assertTrue(t.setExclusiveMinimum(true).getExclusiveMinimum());
+		assertEquals(123, t.setMaxLength(123).getMaxLength());
+		assertEquals(123, t.setMinLength(123).getMinLength());
 		assertEquals("foo", t.setPattern("foo").getPattern());
 		assertString(t.setPattern(null).getPattern()).isNull();
-		assertObject(t.setMaxItems(123).getMaxItems()).isType(Integer.class).is(123);
-		assertObject(t.setMinItems(123).getMinItems()).isType(Integer.class).is(123);
-		assertObject(t.setUniqueItems(true).getUniqueItems()).isType(Boolean.class).is(true);
-		assertObject(t.setEnum(set("foo","bar")).getEnum()).isType(Set.class).asJson().is("['foo','bar']");
-		assertObject(t.setEnum(set()).getEnum()).isType(Set.class).asJson().is("[]");
-		assertObject(t.setEnum("foo","bar").getEnum()).isType(Set.class).asJson().is("['foo','bar']");
+		assertEquals(123, t.setMaxItems(123).getMaxItems());
+		assertEquals(123, t.setMinItems(123).getMinItems());
+		assertTrue(t.setUniqueItems(true).getUniqueItems());
+		assertJson(t.setEnum(set("foo","bar")).getEnum(), "['foo','bar']");
+		assertJson(t.setEnum(set()).getEnum(), "[]");
+		assertJson(t.setEnum("foo","bar").getEnum(), "['foo','bar']");
 		assertNull(t.setEnum((Set<Object>)null).getEnum());
-		assertObject(t.addEnum("foo","bar").getEnum()).isType(Set.class).asJson().is("['foo','bar']");
-		assertObject(t.addEnum("baz").getEnum()).isType(Set.class).asJson().is("['foo','bar','baz']");
-		assertObject(t.setMultipleOf(123).getMultipleOf()).isType(Integer.class).is(123);
-		assertObject(t.setMultipleOf(123f).getMultipleOf()).isType(Float.class).is(123f);
-		assertObject(t.setExample("foo").getExample()).isType(String.class).is("foo");
-		assertObject(t.setExample(123f).getExample()).isType(Float.class).is(123f);
+		assertJson(t.addEnum("foo","bar").getEnum(), "['foo','bar']");
+		assertJson(t.addEnum("baz").getEnum(), "['foo','bar','baz']");
+		assertEquals(123, t.setMultipleOf(123).getMultipleOf());
+		assertEquals(123f, t.setMultipleOf(123f).getMultipleOf());
+		assertEquals("foo", t.setExample("foo").getExample());
+		assertEquals(123f, t.setExample(123f).getExample());
 		assertNull(t.setExample((String)null).getExample());
 		assertEquals("foo", t.setRef("foo").getRef());
 		assertNull(t.setRef(null).getRef());
@@ -80,8 +77,7 @@ public class HeaderInfo_Test {
 	/**
 	 * Test method for {@link HeaderInfo#set(java.lang.String, java.lang.Object)}.
 	 */
-	@Test
-	public void b01_set() throws Exception {
+	@Test void b01_set() throws Exception {
 		HeaderInfo t = new HeaderInfo();
 
 		t
@@ -156,26 +152,26 @@ public class HeaderInfo_Test {
 
 		assertObject(t).asJson().is("{description:'d',type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref',example:'e'}");
 
-		assertObject(t.get("default", Object.class)).isType(StringBuilder.class).asString().is("a");
-		assertObject(t.get("enum", Object.class)).isType(Set.class).asJson().is("['b']");
-		assertObject(t.get("collectionFormat", Object.class)).isType(String.class).is("c");
-		assertObject(t.get("description", Object.class)).isType(String.class).is("d");
-		assertObject(t.get("example", Object.class)).isType(StringBuilder.class).asString().is("e");
-		assertObject(t.get("exclusiveMaximum", Object.class)).isType(Boolean.class).is(true);
-		assertObject(t.get("exclusiveMinimum", Object.class)).isType(Boolean.class).is(true);
-		assertObject(t.get("format", Object.class)).isType(String.class).is("g");
-		assertObject(t.get("items", Object.class)).isType(Items.class).asJson().is("{type:'h'}");
-		assertObject(t.get("maximum", Object.class)).isType(Float.class).is(123f);
-		assertObject(t.get("maxItems", Object.class)).isType(Integer.class).is(123);
-		assertObject(t.get("maxLength", Object.class)).isType(Integer.class).is(123);
-		assertObject(t.get("minimum", Object.class)).isType(Float.class).is(123f);
-		assertObject(t.get("minItems", Object.class)).isType(Integer.class).is(123);
-		assertObject(t.get("minLength", Object.class)).isType(Integer.class).is(123);
-		assertObject(t.get("multipleOf", Object.class)).isType(Float.class).is(123f);
-		assertObject(t.get("pattern", Object.class)).isType(String.class).is("i");
-		assertObject(t.get("type", Object.class)).isType(String.class).is("j");
-		assertObject(t.get("uniqueItems", Object.class)).isType(Boolean.class).is(true);
-		assertObject(t.get("$ref", Object.class)).isType(String.class).is("ref");
+		assertString("a", t.get("default", Object.class));
+		assertJson(t.get("enum", Object.class), "['b']");
+		assertEquals("c", t.get("collectionFormat", Object.class));
+		assertEquals("d", t.get("description", Object.class));
+		assertString("e", t.get("example", Object.class));
+		assertTrue((Boolean)t.get("exclusiveMaximum", Object.class));
+		assertTrue((Boolean)t.get("exclusiveMinimum", Object.class));
+		assertEquals("g", t.get("format", Object.class));
+		assertJson(t.get("items", Object.class), "{type:'h'}");
+		assertEquals(123f, t.get("maximum", Object.class));
+		assertEquals(123, t.get("maxItems", Object.class));
+		assertEquals(123, t.get("maxLength", Object.class));
+		assertEquals(123f, t.get("minimum", Object.class));
+		assertEquals(123, t.get("minItems", Object.class));
+		assertEquals(123, t.get("minLength", Object.class));
+		assertEquals(123f, t.get("multipleOf", Object.class));
+		assertEquals("i", t.get("pattern", Object.class));
+		assertEquals("j", t.get("type", Object.class));
+		assertTrue((Boolean)t.get("uniqueItems", Object.class));
+		assertEquals("ref", t.get("$ref", Object.class));
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
@@ -186,8 +182,7 @@ public class HeaderInfo_Test {
 		assertObject(JsonParser.DEFAULT.parse(s, HeaderInfo.class)).asJson().is(s);
 	}
 
-	@Test
-	public void b02_copy() {
+	@Test void b02_copy() {
 		HeaderInfo t = new HeaderInfo();
 
 		t = t.copy();
@@ -220,8 +215,7 @@ public class HeaderInfo_Test {
 		assertObject(t).asJson().is("{description:'d',type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref',example:'e'}");
 	}
 
-	@Test
-	public void b03_keySet() {
+	@Test void b03_keySet() {
 		HeaderInfo t = new HeaderInfo();
 
 		assertObject(t.keySet()).asJson().is("[]");
@@ -251,8 +245,7 @@ public class HeaderInfo_Test {
 		assertObject(t.keySet()).asJson().is("['collectionFormat','default','description','enum','example','exclusiveMaximum','exclusiveMinimum','format','items','maximum','maxItems','maxLength','minimum','minItems','minLength','multipleOf','pattern','$ref','type','uniqueItems']");
 	}
 
-	@Test
-	public void c01_strict() {
+	@Test void c01_strict() {
 		HeaderInfo t = new HeaderInfo().strict();
 		t.setCollectionFormat("csv");
 		assertThrown(()->t.setCollectionFormat("foo")).asMessage().isContains("Invalid");
@@ -260,8 +253,7 @@ public class HeaderInfo_Test {
 		assertThrown(()->t.setType("foo")).asMessage().isContains("Invalid");
 	}
 
-	@Test
-	public void c02_resolveRefs() {
+	@Test void c02_resolveRefs() {
 		Swagger s = new Swagger();
 		HeaderInfo t = new HeaderInfo();
 		assertNotThrown(()->t.resolveRefs(s, new ArrayDeque<>(), 10));

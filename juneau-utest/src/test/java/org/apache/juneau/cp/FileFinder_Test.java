@@ -13,7 +13,6 @@
 package org.apache.juneau.cp;
 
 import static java.util.Locale.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -646,7 +645,7 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 			.caching(100_000_000)
 			.type(E03b.class)
 			.build();
-		assertObject(x).isType(E03b.class);
+		assertType(E03b.class, x);
 	}
 
 	public static class E03a extends FileFinder.Builder {

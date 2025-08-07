@@ -14,26 +14,23 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.json.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Testcase for {@link SecurityScheme}.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class SecurityScheme_Test {
+class SecurityScheme_Test extends SimpleTestBase {
 
 	/**
 	 * Test method for getters and setters.
 	 */
-	@Test
-	public void a01_gettersAndSetters() {
+	@Test void a01_gettersAndSetters() {
 		SecurityScheme t = new SecurityScheme();
 		assertEquals("foo", t.setType("foo").getType());
 		assertString(t.setType(null).getType()).isNull();
@@ -49,16 +46,15 @@ public class SecurityScheme_Test {
 		assertString(t.setAuthorizationUrl(null).getAuthorizationUrl()).isNull();
 		assertEquals("foo", t.setTokenUrl("foo").getTokenUrl());
 		assertString(t.setTokenUrl(null).getTokenUrl()).isNull();
-		assertObject(t.setScopes(map("foo","bar")).getScopes()).isType(Map.class).asJson().is("{foo:'bar'}");
-		assertObject(t.setScopes(map()).getScopes()).isType(Map.class).asJson().is("{}");
+		assertJson(t.setScopes(map("foo","bar")).getScopes(), "{foo:'bar'}");
+		assertJson(t.setScopes(map()).getScopes(), "{}");
 		assertNull(t.setScopes((Map<String,String>)null).getScopes());
 	}
 
 	/**
 	 * Test method for {@link SecurityScheme#set(java.lang.String, java.lang.Object)}.
 	 */
-	@Test
-	public void b01_set() throws Exception {
+	@Test void b01_set() throws Exception {
 		SecurityScheme t = new SecurityScheme();
 
 		t
@@ -110,15 +106,15 @@ public class SecurityScheme_Test {
 		assertEquals("g", t.get("type", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
 
-		assertObject(t.get("authorizationUrl", Object.class)).isType(String.class);
-		assertObject(t.get("description", Object.class)).isType(String.class);
-		assertObject(t.get("flow", Object.class)).isType(String.class);
-		assertObject(t.get("in", Object.class)).isType(String.class);
-		assertObject(t.get("name", Object.class)).isType(String.class);
-		assertObject(t.get("scopes", Object.class)).isType(Map.class);
-		assertObject(t.get("tokenUrl", Object.class)).isType(String.class);
-		assertObject(t.get("type", Object.class)).isType(String.class);
-		assertObject(t.get("$ref", Object.class)).isType(StringBuilder.class);
+		assertType(String.class, t.get("authorizationUrl", Object.class));
+		assertType(String.class, t.get("description", Object.class));
+		assertType(String.class, t.get("flow", Object.class));
+		assertType(String.class, t.get("in", Object.class));
+		assertType(String.class, t.get("name", Object.class));
+		assertType(Map.class, t.get("scopes", Object.class));
+		assertType(String.class, t.get("tokenUrl", Object.class));
+		assertType(String.class, t.get("type", Object.class));
+		assertType(StringBuilder.class, t.get("$ref", Object.class));
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
@@ -129,8 +125,7 @@ public class SecurityScheme_Test {
 		assertObject(JsonParser.DEFAULT.parse(s, SecurityScheme.class)).asJson().is(s);
 	}
 
-	@Test
-	public void b02_copy() {
+	@Test void b02_copy() {
 		SecurityScheme t = new SecurityScheme();
 
 		t = t.copy();
@@ -152,8 +147,7 @@ public class SecurityScheme_Test {
 		assertObject(t).asJson().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
 	}
 
-	@Test
-	public void b03_keySet() {
+	@Test void b03_keySet() {
 		SecurityScheme t = new SecurityScheme();
 
 		assertObject(t.keySet()).asJson().is("[]");

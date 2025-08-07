@@ -13,37 +13,33 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
+import static org.junit.jupiter.api.Assertions.*;
 import java.net.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.json.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Testcase for {@link License}.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class License_Test {
+class License_Test extends SimpleTestBase {
 
 	/**
 	 * Test method for getters and setters.
 	 */
-	@Test
-	public void a01_gettersAndSetters() {
+	@Test void a01_gettersAndSetters() {
 		License t = new License();
 		assertEquals("foo", t.setName("foo").getName());
 		assertString(t.setName(null).getName()).isNull();
-		assertObject(t.setUrl(URI.create("foo")).getUrl()).isType(URI.class).asString().is("foo");
+		assertString("foo", t.setUrl(URI.create("foo")).getUrl());
 	}
 
 	/**
 	 * Test method for {@link License#set(java.lang.String, java.lang.Object)}.
 	 */
-	@Test
-	public void b01_set() throws Exception {
+	@Test void b01_set() throws Exception {
 		License t = new License();
 
 		t
@@ -71,9 +67,9 @@ public class License_Test {
 		assertEquals("b", t.get("url", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
 
-		assertObject(t.get("name", Object.class)).isType(String.class);
-		assertObject(t.get("url", Object.class)).isType(URI.class);
-		assertObject(t.get("$ref", Object.class)).isType(StringBuilder.class);
+		assertType(String.class, t.get("name", Object.class));
+		assertType(URI.class, t.get("url", Object.class));
+		assertType(StringBuilder.class, t.get("$ref", Object.class));
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
@@ -84,8 +80,7 @@ public class License_Test {
 		assertObject(JsonParser.DEFAULT.parse(s, License.class)).asJson().is(s);
 	}
 
-	@Test
-	public void b02_copy() {
+	@Test void b02_copy() {
 		License t = new License();
 
 		t = t.copy();
@@ -101,8 +96,7 @@ public class License_Test {
 		assertObject(t).asJson().is("{name:'a',url:'b','$ref':'ref'}");
 	}
 
-	@Test
-	public void b03_keySet() {
+	@Test void b03_keySet() {
 		License t = new License();
 
 		assertObject(t.keySet()).asJson().is("[]");

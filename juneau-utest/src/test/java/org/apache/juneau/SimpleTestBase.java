@@ -12,25 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.utest.utils.Utils2.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static java.util.Optional.*;
-import static java.util.stream.Collectors.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.internal.*;
-import org.apache.juneau.marshaller.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer.*;
 
 /**
@@ -43,156 +31,110 @@ public abstract class SimpleTestBase {
 	 * Asserts the JSON5 representation of the specified object.
 	 */
 	protected static void assertJson(Object value, String json) {
-		assertEquals(json, Json5.DEFAULT.write(value));
+		AssertionHelpers.assertJson(value, json);
 	}
 
 	/**
 	 * Asserts the JSON5 representation of the specified object.
 	 */
 	protected static void assertTypeAndJson(Object value, Class<?> c, String json) {
-		assertTrue(c.isInstance(value), "Incorrect type.");
-		assertEquals(json, Json5.DEFAULT.write(value));
+		AssertionHelpers.assertTypeAndJson(value, c, json);
+	}
+
+	/**
+	 * Asserts the JSON5 representation of the specified object.
+	 */
+	protected static void assertType(Class<?> c, Object value) {
+		AssertionHelpers.assertType(c, value);
 	}
 
 	/**
 	 * Asserts the serialized representation of the specified object.
 	 */
 	protected static void assertSerialized(Object value, WriterSerializer s, String json) {
-		assertEquals(json, s.toString(value));
+		AssertionHelpers.assertSerialized(value, s, json);
 	}
 
 	/**
 	 * Asserts an object matches the expected string after it's been made readable.
 	 */
 	protected static void assertString(String expected, Object actual) {
-		assertEquals(expected, r(actual));
+		AssertionHelpers.assertString(expected, actual);
 	}
 
 	/**
 	 * Asserts an object matches the expected string after it's been made readable.
 	 */
 	protected static void assertContains(String expected, Object actual) {
-		var a2 = r(actual);
-		assertTrue(a2.contains(expected), ss("String did not contain expected substring.  expected={0}, actual={1}", expected, a2));
+		AssertionHelpers.assertContains(expected, actual);
 	}
 
 	protected static void assertEmpty(Optional<?> o) {
-		assertTrue(o != null && o.isEmpty(), "Optional was not empty.");
+		AssertionHelpers.assertEmpty(o);
 	}
 
 	protected static void assertPresent(Optional<?> o) {
-		assertTrue(o != null && o.isPresent(), "Optional was not present.");
+		AssertionHelpers.assertPresent(o);
 	}
 
 	/**
 	 * Asserts the entries in an array matches the expected strings after they've been made readable.
 	 */
 	protected static void assertArray(Object array, Object...expected) {
-		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
-			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : StringUtils.split(s(expected[0]));
-		if (Array.getLength(array) != expected.length)
-			ffail("Wrong array length.  expected={0}, actual={1}", expected.length, Array.getLength(array));
-		for (var i = 0; i < expected.length; i++) {
-			var x = Array.get(array, i);
-			if (expected[i] instanceof String e) {
-				if (ne(r(x), e))
-					ffail("Element at index {0} did not match.  expected={1}, actual={2}", i, e, r(x));
-			} else if (expected[i] instanceof Predicate e) {
-				if (! e.test(x))
-					ffail("Element at index {0} did pass predicate.  actual={1}", i, r(x));
-			} else {
-				if (ne(expected[i], x))
-					ffail("Element at index {0} did not match.  expected={1}, actual={2}", i, r(expected[i]), r(x));
-			}
-		}
+		AssertionHelpers.assertArray(array, expected);
 	}
 
 	/**
 	 * Asserts the entries in a list matches the expected strings after they've been made readable.
 	 */
 	protected static void assertList(List<?> list, Object...expected) {
-		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
-			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : StringUtils.split(s(expected[0]));
-		if (list.size() != expected.length)
-			ffail("Wrong list length.  expected={0}, actual={1}", expected.length, list.size());
-		for (var i = 0; i < expected.length; i++) {
-			var x = list.get(i);
-			if (expected[i] instanceof String e) {
-				if (ne(r(x), e))
-					ffail("Element at index {0} did not match.  expected={1}, actual={2}", i, e, r(x));
-			} else if (expected[i] instanceof Predicate e) {
-				if (! e.test(x))
-					ffail("Element at index {0} did pass predicate.  actual={1}", i, r(x));
-			} else {
-				if (ne(expected[i], x))
-					ffail("Element at index {0} did not match.  expected={1}, actual={2}", i, r(expected[i]), r(x));
-			}
-		}
+		AssertionHelpers.assertList(list, expected);
 	}
 
 	/**
 	 * Asserts the entries in a list matches the expected strings after they've been made readable.
 	 */
 	protected static void assertStream(Stream<?> stream, Object...expected) {
-		var list = stream.toList();
-		if (list.size() != expected.length)
-			ffail("Wrong list length.  expected={0}, actual={1}", expected.length, list.size());
-		for (var i = 0; i < expected.length; i++)
-			if (ne(list.get(i), expected[i]))
-				ffail("Element at index {0} did not match.  expected={1}, actual={2}", i, expected[i], r(list.get(i)));
+		AssertionHelpers.assertStream(stream, expected);
 	}
 
 	protected static <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, String expectedSubstring, org.junit.jupiter.api.function.Executable executable) {
-		T exception = Assertions.assertThrows(expectedType, executable);
-		var messages = getMessages(exception);
-		assertTrue(messages.contains(expectedSubstring), ss("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
-		return exception;
-	}
-
-	private static String getMessages(Throwable t) {
-		return Stream.iterate(t, Throwable::getCause).takeWhile(e -> e != null).map(Throwable::getMessage).collect(joining("\n"));
-	}
-
-	/**
-	 * Formatted fail.
-	 */
-	protected static void ffail(String msg, Object...args) {
-		fail(StringUtils.format(msg, args));
+		return AssertionHelpers.assertThrowsWithMessage(expectedType, expectedSubstring, executable);
 	}
 
 	/**
 	 * Asserts the entries in a map matches the expected strings after they've been made readable.
 	 */
 	protected static void assertMap(Map<?,?> map, String...expected) {
-		assertList(map.entrySet().stream().map(x -> r(x.getKey()) + "=" + r(x.getValue())).toList(), expected);
+		AssertionHelpers.assertMap(map, expected);
 	}
 
 	/**
 	 * Asserts that a collection is not null or empty.
 	 */
 	protected static void assertNotEmpty(Collection<?> c) {
-		assertTrue(c != null && ! c.isEmpty());
+		AssertionHelpers.assertNotEmpty(c);
 	}
 
 	/**
 	 * Asserts that a maps is not null or empty.
 	 */
 	protected static void assertNotEmpty(Map<?,?> c) {
-		assertTrue(c != null && ! c.isEmpty());
+		AssertionHelpers.assertNotEmpty(c);
 	}
 
 	/**
 	 * Asserts that a collection is not null and empty.
 	 */
 	protected static void assertEmpty(Collection<?> c) {
-		assertTrue(c != null && c.isEmpty());
+		AssertionHelpers.assertEmpty(c);
 	}
 
 	/**
 	 * Asserts that a collection is not null and of the specified size.
 	 */
 	protected static void assertSize(int expected, Collection<?> c) {
-		assertEquals(expected, ofNullable(c).map(Collection::size).orElse(-1));
+		AssertionHelpers.assertSize(expected, c);
 	}
 
 	/**
@@ -219,8 +161,7 @@ public abstract class SimpleTestBase {
 	 * 	);
 	 */
 	protected static void assertBean(Object o, String fields, String value) {
-		if (o == null) throw new NullPointerException("Bean was null");
-		assertEquals(value, splitNested(fields).stream().map(x -> getReadableEntry(o, x)).collect(joining(",")));
+		AssertionHelpers.assertBean(o, fields, value);
 	}
 
 	/**
@@ -233,8 +174,7 @@ public abstract class SimpleTestBase {
 	 * 	);
 	 */
 	protected static void assertMap(Map<?,?> o, String fields, String value) {
-		if (o == null) throw new NullPointerException("Map was null");
-		assertEquals(value, cdl(fields).stream().map(x -> getReadableEntry(o, x)).collect(joining(",")));
+		AssertionHelpers.assertMap(o, fields, value);
 	}
 
 	/**
@@ -245,45 +185,15 @@ public abstract class SimpleTestBase {
 	 */
 	@SuppressWarnings("rawtypes")
 	protected static void assertBeans(Collection l, String fields, Object...values) {
-		assertEquals(values.length, l.size(), ()->"Expected "+values.length+" rows but had actual " + l.size());
-		var r = 0;
-		var f = splitNested(fields);
-		for (var o : l) {
-			var actual = f.stream().map(x -> getReadableEntry(o, x)).collect(joining(","));
-			var r2 = r+1;
-			assertEquals(r(values[r]), actual, ()->"Object at row " + r2 + " didn't match.");
-			r++;
-		}
+		AssertionHelpers.assertBeans(l, fields, values);
 	}
 
 	protected static void assertNotEqualsAny(Object o, Object...values) {
-		for (var i = 0; i < values.length; i++) {
-			if (eq(o, values[i]))
-				ffail("Element at index {0} unexpectedly matched.  expected={1}, actual={2}", i, values[i], s(o));
-		}
+		AssertionHelpers.assertNotEqualsAny(o, values);
 	}
 
 	protected static void assertEqualsAll(Object...values) {
-		for (var i = 1; i < values.length; i++) {
-			if (ne(values[0], values[i]))
-				ffail("Elements at index {0} and {1} did not match.", 0, i);
-		}
-	}
-
-	private static String getReadableEntry(Object o, String name) {
-		var i = name.indexOf("{");
-		var pn = i == -1 ? name : name.substring(0, i);
-		var spn = i == -1 ? null : splitNestedInner(name);
-		var e = getEntry(o, pn);
-		if (spn == null) return r(e);
-		return spn.stream().map(x -> getReadableEntry(e, x)).collect(joining(","));
-	}
-
-	private static Object getEntry(Object o, String name) {
-		if (o instanceof List) return List.class.cast(o).get(Integer.parseInt(name));
-		if (o.getClass().isArray()) return Array.get(o, Integer.parseInt(name));
-		if (o instanceof Map) return Map.class.cast(o).get(name);
-		return getBeanProp(o, name);
+		AssertionHelpers.assertEqualsAll(values);
 	}
 
 	/**
@@ -292,39 +202,6 @@ public abstract class SimpleTestBase {
 	 */
 	public static <T> BeanMap<T> beanMap(T bean) {
 		return BeanContext.DEFAULT_SESSION.toBeanMap(bean);
-	}
-
-	/**
-	 * Returns the value of the specified field/property on the specified object.
-	 * First looks for getter, then looks for field.
-	 * Methods and fields can be any visibility.
-	 */
-	public static Object getBeanProp(Object o, String name) {
-		return safe(() -> {
-			var f = (Field)null;
-			var c = o.getClass();
-			var n = Character.toUpperCase(name.charAt(0)) + name.substring(1);
-			var m = Arrays.stream(c.getMethods()).filter(x -> isGetter(x, n)).filter(x -> x.getAnnotation(BeanIgnore.class) == null).findFirst().orElse(null);
-			if (m != null) {
-				m.setAccessible(true);
-				return m.invoke(o);
-			}
-			var c2 = c;
-			while (f == null && c2 != null) {
-				f = Arrays.stream(c2.getDeclaredFields()).filter(x -> x.getName().equals(name)).findFirst().orElse(null);
-				c2 = c2.getSuperclass();
-			}
-			if (f != null) {
-				f.setAccessible(true);
-				return f.get(o);
-			}
-			throw runtimeException("No field called {0} found on class {1}", name, c.getName());
-		});
-	}
-
-	private static boolean isGetter(Method m, String n) {
-		var mn = m.getName();
-		return ((("get"+n).equals(mn) || ("is"+n).equals(mn)) && m.getParameterCount() == 0);
 	}
 
 	/**
@@ -339,7 +216,7 @@ public abstract class SimpleTestBase {
 	 * Simplified string supplier with message arguments.
 	 */
 	public static Supplier<String> ss(String pattern, Object...args) {
-		return ()->StringUtils.format(pattern, args);
+		return AssertionHelpers.ss(pattern, args);
 	}
 
 	@Deprecated

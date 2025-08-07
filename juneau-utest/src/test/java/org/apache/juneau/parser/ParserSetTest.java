@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
@@ -25,20 +24,20 @@ public class ParserSetTest extends SimpleTestBase {
 	@Test void testParserGroupMatching() {
 
 		ParserSet s = ParserSet.create().add(Parser1.class, Parser2.class, Parser3.class).build();
-		assertObject(s.getParser("text/foo")).isType(Parser1.class);
-		assertObject(s.getParser("text/foo_a")).isType(Parser1.class);
-		assertObject(s.getParser("text/foo_a+xxx")).isType(Parser1.class);
-		assertObject(s.getParser("text/xxx+foo_a")).isType(Parser1.class);
-		assertObject(s.getParser("text/foo+bar")).isType(Parser2.class);
-		assertObject(s.getParser("text/foo+bar_a")).isType(Parser2.class);
-		assertObject(s.getParser("text/bar+foo")).isType(Parser2.class);
-		assertObject(s.getParser("text/bar+foo+xxx")).isType(Parser2.class);
-		assertObject(s.getParser("text/baz")).isType(Parser3.class);
-		assertObject(s.getParser("text/baz_a")).isType(Parser3.class);
-		assertObject(s.getParser("text/baz+yyy")).isType(Parser3.class);
-		assertObject(s.getParser("text/baz_a+yyy")).isType(Parser3.class);
-		assertObject(s.getParser("text/yyy+baz")).isType(Parser3.class);
-		assertObject(s.getParser("text/yyy+baz_a")).isType(Parser3.class);
+		assertType(Parser1.class, s.getParser("text/foo"));
+		assertType(Parser1.class, s.getParser("text/foo_a"));
+		assertType(Parser1.class, s.getParser("text/foo_a+xxx"));
+		assertType(Parser1.class, s.getParser("text/xxx+foo_a"));
+		assertType(Parser2.class, s.getParser("text/foo+bar"));
+		assertType(Parser2.class, s.getParser("text/foo+bar_a"));
+		assertType(Parser2.class, s.getParser("text/bar+foo"));
+		assertType(Parser2.class, s.getParser("text/bar+foo+xxx"));
+		assertType(Parser3.class, s.getParser("text/baz"));
+		assertType(Parser3.class, s.getParser("text/baz_a"));
+		assertType(Parser3.class, s.getParser("text/baz+yyy"));
+		assertType(Parser3.class, s.getParser("text/baz_a+yyy"));
+		assertType(Parser3.class, s.getParser("text/yyy+baz"));
+		assertType(Parser3.class, s.getParser("text/yyy+baz_a"));
 	}
 
 

@@ -267,7 +267,7 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		assertJson(parse(s, "foo,bar", List.class, Object.class), "['foo','bar']");
 		Object o = parse(s, "foo,bar", Object.class);
 		assertJson(o, "['foo','bar']");
-		assertObject(o).isType(JsonList.class);
+		assertType(JsonList.class, o);
 		assertJson(parse(s, "foo,bar", C2[].class), "['C2-foo','C2-bar']");
 		assertJson(parse(s, "foo,bar", List.class, C2.class), "['C2-foo','C2-bar']");
 		assertEquals("C3-['foo','bar']", parse(s, "foo,bar", C3.class).toString());
@@ -283,7 +283,7 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		assertJson(parse(s, "foo,bar|baz", List.class, List.class, Object.class), "[['foo','bar'],['baz']]");
 		Object o = parse(s, "foo,bar|baz", Object.class);
 		assertJson(o, "[['foo','bar'],['baz']]");
-		assertObject(o).isType(JsonList.class);
+		assertType(JsonList.class, o);
 		assertJson(parse(s, "foo,bar|baz", C2[][].class), "[['C2-foo','C2-bar'],['C2-baz']]");
 		assertJson(parse(s, "foo,bar|baz", List.class, C2[].class), "[['C2-foo','C2-bar'],['C2-baz']]");
 		assertJson(parse(s, "foo,bar|baz", List.class, List.class, C2.class), "[['C2-foo','C2-bar'],['C2-baz']]");
@@ -606,7 +606,7 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		assertJson(parse(s, "1", String.class), "'1'");
 		Object o = parse(s, "1", Object.class);
 		assertJson(o, "1");
-		assertObject(o).isType(Integer.class);
+		assertType(Integer.class, o);
 		assertJson(parse(s,  "1", F1.class), "'F1-1'");
 	}
 
@@ -671,7 +671,7 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		assertJson(parse(s, "1", String.class), "'1'");
 		Object o = parse(s, "1", Object.class);
 		assertJson(o, "1");
-		assertObject(o).isType(Long.class);
+		assertType(Long.class, o);
 		assertJson(parse(s,  "1", F3.class), "1");
 	}
 
@@ -781,7 +781,7 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		assertJson(parse(s, "1", String.class), "'1.0'");
 		Object o =  parse(s, "1", Object.class);
 		assertJson(o, "1.0");
-		assertObject(o).isType(Float.class);
+		assertType(Float.class, o);
 		assertJson(parse(s,  "1", G1.class), "1.0");
 	}
 
@@ -836,7 +836,7 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		assertJson(parse(s, "1", String.class), "'1.0'");
 		Object o = parse(s, "1", Object.class);
 		assertJson(o, "1.0");
-		assertObject(o).isType(Double.class);
+		assertType(Double.class, o);
 		assertJson(parse(s,  "1", G3.class), "1.0");
 	}
 
@@ -897,7 +897,7 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		assertJson(parse(s, "f=1", JsonMap.class), "{f:'1'}");
 		Object o = parse(s, "f=1", Object.class);
 		assertJson(o, "{f:'1'}");
-		assertObject(o).isType(JsonMap.class);
+		assertType(JsonMap.class, o);
 	}
 
 	@Test void h02_objectType_2d() throws Exception {
@@ -910,7 +910,7 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		assertJson(parse(s, "@((f=1),(f=2))", List.class, Object.class), "[{f:1},{f:2}]");
 		Object o = parse(s, "@((f=1),(f=2))", Object.class);
 		assertJson(o, "[{f:1},{f:2}]");
-		assertObject(o).isType(JsonList.class);
+		assertType(JsonList.class, o);
 	}
 
 	@Test void h03_objectType_3d() throws Exception {
@@ -926,7 +926,7 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 		assertJson(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, Object.class), "[[{f:1},{f:2}],[{f:3}]]");
 		Object o =  parse(s, "@(@((f=1),(f=2)),@((f=3)))", Object.class);
 		assertJson(o, "[[{f:1},{f:2}],[{f:3}]]");
-		assertObject(o).isType(JsonList.class);
+		assertType(JsonList.class, o);
 	}
 
 	public static class H2 {
@@ -954,48 +954,48 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 
 		H2 h2 = parse(s, in, H2.class);
 		assertJson(h2, "{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}");
-		assertObject(h2.f01).isType(String.class);
-		assertObject(h2.f02).isType(byte[].class);
-		assertObject(h2.f04).isType(GregorianCalendar.class);
-		assertObject(h2.f05).isType(byte[].class);
-		assertObject(h2.f06).isType(byte[].class);
-		assertObject(h2.f07).isType(String.class);
-		assertObject(h2.f08).isType(Integer.class);
-		assertObject(h2.f09).isType(Long.class);
-		assertObject(h2.f10).isType(Float.class);
-		assertObject(h2.f11).isType(Double.class);
-		assertObject(h2.f12).isType(Boolean.class);
-		assertObject(h2.f99).isType(Integer.class);
+		assertType(String.class, h2.f01);
+		assertType(byte[].class, h2.f02);
+		assertType(GregorianCalendar.class, h2.f04);
+		assertType(byte[].class, h2.f05);
+		assertType(byte[].class, h2.f06);
+		assertType(String.class, h2.f07);
+		assertType(Integer.class, h2.f08);
+		assertType(Long.class, h2.f09);
+		assertType(Float.class, h2.f10);
+		assertType(Double.class, h2.f11);
+		assertType(Boolean.class, h2.f12);
+		assertType(Integer.class, h2.f99);
 
 		JsonMap om = parse(s, in, JsonMap.class);
 		assertJson(om, "{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}");
-		assertObject(om.get("f01")).isType(String.class);
-		assertObject(om.get("f02")).isType(byte[].class);
-		assertObject(om.get("f04")).isType(GregorianCalendar.class);
-		assertObject(om.get("f05")).isType(byte[].class);
-		assertObject(om.get("f06")).isType(byte[].class);
-		assertObject(om.get("f07")).isType(String.class);
-		assertObject(om.get("f08")).isType(Integer.class);
-		assertObject(om.get("f09")).isType(Long.class);
-		assertObject(om.get("f10")).isType(Float.class);
-		assertObject(om.get("f11")).isType(Double.class);
-		assertObject(om.get("f12")).isType(Boolean.class);
-		assertObject(om.get("f99")).isType(Integer.class);
+		assertType(String.class, om.get("f01"));
+		assertType(byte[].class, om.get("f02"));
+		assertType(GregorianCalendar.class, om.get("f04"));
+		assertType(byte[].class, om.get("f05"));
+		assertType(byte[].class, om.get("f06"));
+		assertType(String.class, om.get("f07"));
+		assertType(Integer.class, om.get("f08"));
+		assertType(Long.class, om.get("f09"));
+		assertType(Float.class, om.get("f10"));
+		assertType(Double.class, om.get("f11"));
+		assertType(Boolean.class, om.get("f12"));
+		assertType(Integer.class, om.get("f99"));
 
 		om = (JsonMap)parse(s, in, Object.class);
 		assertJson(om, "{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}");
-		assertObject(om.get("f01")).isType(String.class);
-		assertObject(om.get("f02")).isType(byte[].class);
-		assertObject(om.get("f04")).isType(GregorianCalendar.class);
-		assertObject(om.get("f05")).isType(byte[].class);
-		assertObject(om.get("f06")).isType(byte[].class);
-		assertObject(om.get("f07")).isType(String.class);
-		assertObject(om.get("f08")).isType(Integer.class);
-		assertObject(om.get("f09")).isType(Long.class);
-		assertObject(om.get("f10")).isType(Float.class);
-		assertObject(om.get("f11")).isType(Double.class);
-		assertObject(om.get("f12")).isType(Boolean.class);
-		assertObject(om.get("f99")).isType(Integer.class);
+		assertType(String.class, om.get("f01"));
+		assertType(byte[].class, om.get("f02"));
+		assertType(GregorianCalendar.class, om.get("f04"));
+		assertType(byte[].class, om.get("f05"));
+		assertType(byte[].class, om.get("f06"));
+		assertType(String.class, om.get("f07"));
+		assertType(Integer.class, om.get("f08"));
+		assertType(Long.class, om.get("f09"));
+		assertType(Float.class, om.get("f10"));
+		assertType(Double.class, om.get("f11"));
+		assertType(Boolean.class, om.get("f12"));
+		assertType(Integer.class, om.get("f99"));
 	}
 
 	@Test void h05_objectType_arrayProperties() throws Exception {

@@ -644,7 +644,7 @@ class BeanStore_Test extends SimpleTestBase {
 		}
 		assertObject(b2c.createMethodFinder(C.class).find("createC1").run()).isNotNull();
 		assertObject(b2c.createMethodFinder(C.class).find("createC2").run()).isNotNull();
-		assertObject(b2c.createMethodFinder(C.class).find("createC3").run().a).isType(A1.class);
+		assertType(A1.class, b2c.createMethodFinder(C.class).find("createC3").run().a);
 		assertNull(b2c.createMethodFinder(C.class).find("createC4").run());
 		assertNull(b2c.createMethodFinder(C.class).find("createC5").run().a);
 		assertObject(b2c.createMethodFinder(C.class).find("createC6").run()).isNotNull();

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
@@ -25,25 +24,25 @@ class SerializerSetTest extends SimpleTestBase {
 	@Test void testSerializerGroupMatching() {
 
 		SerializerSet sg = SerializerSet.create().add(SA1.class, SA2.class, SA3.class).build();
-		assertObject(sg.getSerializer("text/foo")).isType(SA1.class);
-		assertObject(sg.getSerializer("text/foo_a")).isType(SA1.class);
-		assertObject(sg.getSerializer("text/xxx+foo_a")).isType(SA1.class);
-		assertObject(sg.getSerializer("text/foo_a+xxx")).isType(SA1.class);
-		assertObject(sg.getSerializer("text/foo+bar")).isType(SA2.class);
-		assertObject(sg.getSerializer("text/foo+bar_a")).isType(SA2.class);
-		assertObject(sg.getSerializer("text/bar+foo")).isType(SA2.class);
-		assertObject(sg.getSerializer("text/bar_a+foo")).isType(SA2.class);
-		assertObject(sg.getSerializer("text/bar+foo+xxx")).isType(SA2.class);
-		assertObject(sg.getSerializer("text/bar_a+foo+xxx")).isType(SA2.class);
-		assertObject(sg.getSerializer("text/baz")).isType(SA3.class);
-		assertObject(sg.getSerializer("text/baz_a")).isType(SA3.class);
-		assertObject(sg.getSerializer("text/baz+yyy")).isType(SA3.class);
-		assertObject(sg.getSerializer("text/baz_a+yyy")).isType(SA3.class);
-		assertObject(sg.getSerializer("text/yyy+baz")).isType(SA3.class);
-		assertObject(sg.getSerializer("text/yyy+baz_a")).isType(SA3.class);
+		assertType(SA1.class, sg.getSerializer("text/foo"));
+		assertType(SA1.class, sg.getSerializer("text/foo_a"));
+		assertType(SA1.class, sg.getSerializer("text/xxx+foo_a"));
+		assertType(SA1.class, sg.getSerializer("text/foo_a+xxx"));
+		assertType(SA2.class, sg.getSerializer("text/foo+bar"));
+		assertType(SA2.class, sg.getSerializer("text/foo+bar_a"));
+		assertType(SA2.class, sg.getSerializer("text/bar+foo"));
+		assertType(SA2.class, sg.getSerializer("text/bar_a+foo"));
+		assertType(SA2.class, sg.getSerializer("text/bar+foo+xxx"));
+		assertType(SA2.class, sg.getSerializer("text/bar_a+foo+xxx"));
+		assertType(SA3.class, sg.getSerializer("text/baz"));
+		assertType(SA3.class, sg.getSerializer("text/baz_a"));
+		assertType(SA3.class, sg.getSerializer("text/baz+yyy"));
+		assertType(SA3.class, sg.getSerializer("text/baz_a+yyy"));
+		assertType(SA3.class, sg.getSerializer("text/yyy+baz"));
+		assertType(SA3.class, sg.getSerializer("text/yyy+baz_a"));
 
-		assertObject(sg.getSerializer("text/foo;q=0.9,text/foo+bar;q=0.8")).isType(SA1.class);
-		assertObject(sg.getSerializer("text/foo;q=0.8,text/foo+bar;q=0.9")).isType(SA2.class);
+		assertType(SA1.class, sg.getSerializer("text/foo;q=0.9,text/foo+bar;q=0.8"));
+		assertType(SA2.class, sg.getSerializer("text/foo;q=0.8,text/foo+bar;q=0.9"));
 	}
 
 
@@ -124,9 +123,9 @@ class SerializerSetTest extends SimpleTestBase {
 
 		gb = SerializerSet.create().add(SC1.class, SC2.class, SC3.class);
 		g = gb.build();
-		assertObject(g.getSerializer("text/foo")).isType(SC1.class);
-		assertObject(g.getSerializer("foo/json")).isType(SC2.class);
-		assertObject(g.getSerializer("foo/foo")).isType(SC3.class);
+		assertType(SC1.class, g.getSerializer("text/foo"));
+		assertType(SC2.class, g.getSerializer("foo/json"));
+		assertType(SC3.class, g.getSerializer("foo/foo"));
 	}
 
 	public static class SC1 extends JsonSerializer {

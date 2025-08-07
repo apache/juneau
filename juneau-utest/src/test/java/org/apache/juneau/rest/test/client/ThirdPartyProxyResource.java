@@ -16,6 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Constants.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.AssertionHelpers.*;
 
 import java.io.*;
 import java.util.*;
@@ -142,10 +143,10 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(g).asJson().is("[[[[1,2],null],null],null]");
 		assertObject(h).asJson().is("['foo','bar',null]");
 
-		assertObject(d.get(0)).isType(Integer.class);
-		assertObject(e.get(0).get(0).get(0)).isType(Integer.class);
-		assertObject(f.get(0)).isType(Integer[][][].class);
-		assertObject(g.get(0)).isType(int[][][].class);
+		assertType(Integer.class, d.get(0));
+		assertType(Integer.class, e.get(0).get(0).get(0));
+		assertType(Integer[][][].class, f.get(0));
+		assertType(int[][][].class, g.get(0));
 
 		return "OK";
 	}
@@ -173,13 +174,13 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(g).asJson().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 		assertObject(h).asJson().is("{'1':[{a:1,b:'foo'}]}");
 
-		assertObject(c.get(0)).isType(ABean.class);
-		assertObject(d.get(0)).isType(ABean[][][].class);
-		assertObject(e.get("foo")).isType(ABean.class);
-		assertObject(f.get("foo").get(0)).isType(ABean.class);
-		assertObject(g.get("foo").get(0)).isType(ABean[][][].class);
-		assertObject(h.keySet().iterator().next()).isType(Integer.class);
-		assertObject(h.values().iterator().next().get(0)).isType(ABean.class);
+		assertType(ABean.class, c.get(0));
+		assertType(ABean[][][].class, d.get(0));
+		assertType(ABean.class, e.get("foo"));
+		assertType(ABean.class, f.get("foo").get(0));
+		assertType(ABean[][][].class, g.get("foo").get(0));
+		assertType(Integer.class, h.keySet().iterator().next());
+		assertType(ABean.class, h.values().iterator().next().get(0));
 		return "OK";
 	}
 
@@ -206,15 +207,15 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(g).asJson().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 		assertObject(h).asJson().is("{'1':[{a:1,b:'foo'}]}");
 
-		assertObject(a).isType(TypedBeanImpl.class);
-		assertObject(b[0][0][0]).isType(TypedBeanImpl.class);
-		assertObject(c.get(0)).isType(TypedBeanImpl.class);
-		assertObject(d.get(0)[0][0][0]).isType(TypedBeanImpl.class);
-		assertObject(e.get("foo")).isType(TypedBeanImpl.class);
-		assertObject(f.get("foo").get(0)).isType(TypedBeanImpl.class);
-		assertObject(g.get("foo").get(0)[0][0][0]).isType(TypedBeanImpl.class);
-		assertObject(h.keySet().iterator().next()).isType(Integer.class);
-		assertObject(h.get(1).get(0)).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, a);
+		assertType(TypedBeanImpl.class, b[0][0][0]);
+		assertType(TypedBeanImpl.class, c.get(0));
+		assertType(TypedBeanImpl.class, d.get(0)[0][0][0]);
+		assertType(TypedBeanImpl.class, e.get("foo"));
+		assertType(TypedBeanImpl.class, f.get("foo").get(0));
+		assertType(TypedBeanImpl.class, g.get("foo").get(0)[0][0][0]);
+		assertType(Integer.class, h.keySet().iterator().next());
+		assertType(TypedBeanImpl.class, h.get(1).get(0));
 
 		return "OK";
 	}
@@ -232,12 +233,12 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(c).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
 		assertObject(d).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
 
-		assertObject(a).isType(SwappedObject.class);
-		assertObject(b[0][0][0]).isType(SwappedObject.class);
-		assertObject(c.keySet().iterator().next()).isType(SwappedObject.class);
-		assertObject(c.values().iterator().next()).isType(SwappedObject.class);
-		assertObject(d.keySet().iterator().next()).isType(SwappedObject.class);
-		assertObject(d.values().iterator().next()[0][0][0]).isType(SwappedObject.class);
+		assertType(SwappedObject.class, a);
+		assertType(SwappedObject.class, b[0][0][0]);
+		assertType(SwappedObject.class, c.keySet().iterator().next());
+		assertType(SwappedObject.class, c.values().iterator().next());
+		assertType(SwappedObject.class, d.keySet().iterator().next());
+		assertType(SwappedObject.class, d.values().iterator().next()[0][0][0]);
 
 		return "OK";
 	}
@@ -255,12 +256,12 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(c).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
 		assertObject(d).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
 
-		assertObject(a).isType(ImplicitSwappedObject.class);
-		assertObject(b[0][0][0]).isType(ImplicitSwappedObject.class);
-		assertObject(c.keySet().iterator().next()).isType(ImplicitSwappedObject.class);
-		assertObject(c.values().iterator().next()).isType(ImplicitSwappedObject.class);
-		assertObject(d.keySet().iterator().next()).isType(ImplicitSwappedObject.class);
-		assertObject(d.values().iterator().next()[0][0][0]).isType(ImplicitSwappedObject.class);
+		assertType(ImplicitSwappedObject.class, a);
+		assertType(ImplicitSwappedObject.class, b[0][0][0]);
+		assertType(ImplicitSwappedObject.class, c.keySet().iterator().next());
+		assertType(ImplicitSwappedObject.class, c.values().iterator().next());
+		assertType(ImplicitSwappedObject.class, d.keySet().iterator().next());
+		assertType(ImplicitSwappedObject.class, d.values().iterator().next()[0][0][0]);
 
 		return "OK";
 	}
@@ -288,15 +289,15 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(g).asJson().is("{ONE:[[['TWO',null],null],null]}");
 		assertObject(h).asJson().is("{ONE:[[[['TWO',null],null],null],null]}");
 
-		assertObject(c.get(0)).isType(TestEnum.class);
-		assertObject(d.get(0).get(0).get(0)).isType(TestEnum.class);
-		assertObject(e.get(0)).isType(TestEnum[][][].class);
-		assertObject(f.keySet().iterator().next()).isType(TestEnum.class);
-		assertObject(f.values().iterator().next()).isType(TestEnum.class);
-		assertObject(g.keySet().iterator().next()).isType(TestEnum.class);
-		assertObject(g.values().iterator().next()).isType(TestEnum[][][].class);
-		assertObject(h.keySet().iterator().next()).isType(TestEnum.class);
-		assertObject(h.values().iterator().next().get(0)).isType(TestEnum[][][].class);
+		assertType(TestEnum.class, c.get(0));
+		assertType(TestEnum.class, d.get(0).get(0).get(0));
+		assertType(TestEnum[][][].class, e.get(0));
+		assertType(TestEnum.class, f.keySet().iterator().next());
+		assertType(TestEnum.class, f.values().iterator().next());
+		assertType(TestEnum.class, g.keySet().iterator().next());
+		assertType(TestEnum[][][].class, g.values().iterator().next());
+		assertType(TestEnum.class, h.keySet().iterator().next());
+		assertType(TestEnum[][][].class, h.values().iterator().next().get(0));
 
 		return "OK";
 	}
@@ -454,10 +455,10 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(g).asJson().is("[[[[1,2],null],null],null]");
 		assertObject(h).asJson().is("['foo','bar',null]");
 
-		assertObject(d.get(0)).isType(Integer.class);
-		assertObject(e.get(0).get(0).get(0)).isType(Integer.class);
-		assertObject(f.get(0)).isType(Integer[][][].class);
-		assertObject(g.get(0)).isType(int[][][].class);
+		assertType(Integer.class, d.get(0));
+		assertType(Integer.class, e.get(0).get(0).get(0));
+		assertType(Integer[][][].class, f.get(0));
+		assertType(int[][][].class, g.get(0));
 
 		return "OK";
 	}
@@ -485,13 +486,13 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(g).asJson().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 		assertObject(h).asJson().is("{'1':[{a:1,b:'foo'}]}");
 
-		assertObject(c.get(0)).isType(ABean.class);
-		assertObject(d.get(0)).isType(ABean[][][].class);
-		assertObject(e.get("foo")).isType(ABean.class);
-		assertObject(f.get("foo").get(0)).isType(ABean.class);
-		assertObject(g.get("foo").get(0)).isType(ABean[][][].class);
-		assertObject(h.keySet().iterator().next()).isType(Integer.class);
-		assertObject(h.values().iterator().next().get(0)).isType(ABean.class);
+		assertType(ABean.class, c.get(0));
+		assertType(ABean[][][].class, d.get(0));
+		assertType(ABean.class, e.get("foo"));
+		assertType(ABean.class, f.get("foo").get(0));
+		assertType(ABean[][][].class, g.get("foo").get(0));
+		assertType(Integer.class, h.keySet().iterator().next());
+		assertType(ABean.class, h.values().iterator().next().get(0));
 		return "OK";
 	}
 
@@ -518,15 +519,15 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(g).asJson().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 		assertObject(h).asJson().is("{'1':[{a:1,b:'foo'}]}");
 
-		assertObject(a).isType(TypedBeanImpl.class);
-		assertObject(b[0][0][0]).isType(TypedBeanImpl.class);
-		assertObject(c.get(0)).isType(TypedBeanImpl.class);
-		assertObject(d.get(0)[0][0][0]).isType(TypedBeanImpl.class);
-		assertObject(e.get("foo")).isType(TypedBeanImpl.class);
-		assertObject(f.get("foo").get(0)).isType(TypedBeanImpl.class);
-		assertObject(g.get("foo").get(0)[0][0][0]).isType(TypedBeanImpl.class);
-		assertObject(h.keySet().iterator().next()).isType(Integer.class);
-		assertObject(h.get(1).get(0)).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, a);
+		assertType(TypedBeanImpl.class, b[0][0][0]);
+		assertType(TypedBeanImpl.class, c.get(0));
+		assertType(TypedBeanImpl.class, d.get(0)[0][0][0]);
+		assertType(TypedBeanImpl.class, e.get("foo"));
+		assertType(TypedBeanImpl.class, f.get("foo").get(0));
+		assertType(TypedBeanImpl.class, g.get("foo").get(0)[0][0][0]);
+		assertType(Integer.class, h.keySet().iterator().next());
+		assertType(TypedBeanImpl.class, h.get(1).get(0));
 
 		return "OK";
 	}
@@ -544,12 +545,12 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(c).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
 		assertObject(d).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
 
-		assertObject(a).isType(SwappedObject.class);
-		assertObject(b[0][0][0]).isType(SwappedObject.class);
-		assertObject(c.keySet().iterator().next()).isType(SwappedObject.class);
-		assertObject(c.values().iterator().next()).isType(SwappedObject.class);
-		assertObject(d.keySet().iterator().next()).isType(SwappedObject.class);
-		assertObject(d.values().iterator().next()[0][0][0]).isType(SwappedObject.class);
+		assertType(SwappedObject.class, a);
+		assertType(SwappedObject.class, b[0][0][0]);
+		assertType(SwappedObject.class, c.keySet().iterator().next());
+		assertType(SwappedObject.class, c.values().iterator().next());
+		assertType(SwappedObject.class, d.keySet().iterator().next());
+		assertType(SwappedObject.class, d.values().iterator().next()[0][0][0]);
 
 		return "OK";
 	}
@@ -567,12 +568,12 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(c).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
 		assertObject(d).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
 
-		assertObject(a).isType(ImplicitSwappedObject.class);
-		assertObject(b[0][0][0]).isType(ImplicitSwappedObject.class);
-		assertObject(c.keySet().iterator().next()).isType(ImplicitSwappedObject.class);
-		assertObject(c.values().iterator().next()).isType(ImplicitSwappedObject.class);
-		assertObject(d.keySet().iterator().next()).isType(ImplicitSwappedObject.class);
-		assertObject(d.values().iterator().next()[0][0][0]).isType(ImplicitSwappedObject.class);
+		assertType(ImplicitSwappedObject.class, a);
+		assertType(ImplicitSwappedObject.class, b[0][0][0]);
+		assertType(ImplicitSwappedObject.class, c.keySet().iterator().next());
+		assertType(ImplicitSwappedObject.class, c.values().iterator().next());
+		assertType(ImplicitSwappedObject.class, d.keySet().iterator().next());
+		assertType(ImplicitSwappedObject.class, d.values().iterator().next()[0][0][0]);
 
 		return "OK";
 	}
@@ -600,15 +601,15 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(g).asJson().is("{ONE:[[['TWO',null],null],null]}");
 		assertObject(h).asJson().is("{ONE:[[[['TWO',null],null],null],null]}");
 
-		assertObject(c.get(0)).isType(TestEnum.class);
-		assertObject(d.get(0).get(0).get(0)).isType(TestEnum.class);
-		assertObject(e.get(0)).isType(TestEnum[][][].class);
-		assertObject(f.keySet().iterator().next()).isType(TestEnum.class);
-		assertObject(f.values().iterator().next()).isType(TestEnum.class);
-		assertObject(g.keySet().iterator().next()).isType(TestEnum.class);
-		assertObject(g.values().iterator().next()).isType(TestEnum[][][].class);
-		assertObject(h.keySet().iterator().next()).isType(TestEnum.class);
-		assertObject(h.values().iterator().next().get(0)).isType(TestEnum[][][].class);
+		assertType(TestEnum.class, c.get(0));
+		assertType(TestEnum.class, d.get(0).get(0).get(0));
+		assertType(TestEnum[][][].class, e.get(0));
+		assertType(TestEnum.class, f.keySet().iterator().next());
+		assertType(TestEnum.class, f.values().iterator().next());
+		assertType(TestEnum.class, g.keySet().iterator().next());
+		assertType(TestEnum[][][].class, g.values().iterator().next());
+		assertType(TestEnum.class, h.keySet().iterator().next());
+		assertType(TestEnum[][][].class, h.values().iterator().next().get(0));
 
 		return "OK";
 	}
@@ -788,10 +789,10 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(g).asJson().is("[[[[1,2],null],null],null]");
 		assertObject(h).asJson().is("['foo','bar',null]");
 
-		assertObject(d.get(0)).isType(Integer.class);
-		assertObject(e.get(0).get(0).get(0)).isType(Integer.class);
-		assertObject(f.get(0)).isType(Integer[][][].class);
-		assertObject(g.get(0)).isType(int[][][].class);
+		assertType(Integer.class, d.get(0));
+		assertType(Integer.class, e.get(0).get(0).get(0));
+		assertType(Integer[][][].class, f.get(0));
+		assertType(int[][][].class, g.get(0));
 
 		return "OK";
 	}
@@ -819,13 +820,13 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(g).asJson().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 		assertObject(h).asJson().is("{'1':[{a:1,b:'foo'}]}");
 
-		assertObject(c.get(0)).isType(ABean.class);
-		assertObject(d.get(0)).isType(ABean[][][].class);
-		assertObject(e.get("foo")).isType(ABean.class);
-		assertObject(f.get("foo").get(0)).isType(ABean.class);
-		assertObject(g.get("foo").get(0)).isType(ABean[][][].class);
-		assertObject(h.keySet().iterator().next()).isType(Integer.class);
-		assertObject(h.values().iterator().next().get(0)).isType(ABean.class);
+		assertType(ABean.class, c.get(0));
+		assertType(ABean[][][].class, d.get(0));
+		assertType(ABean.class, e.get("foo"));
+		assertType(ABean.class, f.get("foo").get(0));
+		assertType(ABean[][][].class, g.get("foo").get(0));
+		assertType(Integer.class, h.keySet().iterator().next());
+		assertType(ABean.class, h.values().iterator().next().get(0));
 		return "OK";
 	}
 
@@ -852,15 +853,15 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(g).asJson().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 		assertObject(h).asJson().is("{'1':[{a:1,b:'foo'}]}");
 
-		assertObject(a).isType(TypedBeanImpl.class);
-		assertObject(b[0][0][0]).isType(TypedBeanImpl.class);
-		assertObject(c.get(0)).isType(TypedBeanImpl.class);
-		assertObject(d.get(0)[0][0][0]).isType(TypedBeanImpl.class);
-		assertObject(e.get("foo")).isType(TypedBeanImpl.class);
-		assertObject(f.get("foo").get(0)).isType(TypedBeanImpl.class);
-		assertObject(g.get("foo").get(0)[0][0][0]).isType(TypedBeanImpl.class);
-		assertObject(h.keySet().iterator().next()).isType(Integer.class);
-		assertObject(h.get(1).get(0)).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, a);
+		assertType(TypedBeanImpl.class, b[0][0][0]);
+		assertType(TypedBeanImpl.class, c.get(0));
+		assertType(TypedBeanImpl.class, d.get(0)[0][0][0]);
+		assertType(TypedBeanImpl.class, e.get("foo"));
+		assertType(TypedBeanImpl.class, f.get("foo").get(0));
+		assertType(TypedBeanImpl.class, g.get("foo").get(0)[0][0][0]);
+		assertType(Integer.class, h.keySet().iterator().next());
+		assertType(TypedBeanImpl.class, h.get(1).get(0));
 
 		return "OK";
 	}
@@ -878,12 +879,12 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(c).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
 		assertObject(d).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
 
-		assertObject(a).isType(SwappedObject.class);
-		assertObject(b[0][0][0]).isType(SwappedObject.class);
-		assertObject(c.keySet().iterator().next()).isType(SwappedObject.class);
-		assertObject(c.values().iterator().next()).isType(SwappedObject.class);
-		assertObject(d.keySet().iterator().next()).isType(SwappedObject.class);
-		assertObject(d.values().iterator().next()[0][0][0]).isType(SwappedObject.class);
+		assertType(SwappedObject.class, a);
+		assertType(SwappedObject.class, b[0][0][0]);
+		assertType(SwappedObject.class, c.keySet().iterator().next());
+		assertType(SwappedObject.class, c.values().iterator().next());
+		assertType(SwappedObject.class, d.keySet().iterator().next());
+		assertType(SwappedObject.class, d.values().iterator().next()[0][0][0]);
 
 		return "OK";
 	}
@@ -901,12 +902,12 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(c).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
 		assertObject(d).asJson().is("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
 
-		assertObject(a).isType(ImplicitSwappedObject.class);
-		assertObject(b[0][0][0]).isType(ImplicitSwappedObject.class);
-		assertObject(c.keySet().iterator().next()).isType(ImplicitSwappedObject.class);
-		assertObject(c.values().iterator().next()).isType(ImplicitSwappedObject.class);
-		assertObject(d.keySet().iterator().next()).isType(ImplicitSwappedObject.class);
-		assertObject(d.values().iterator().next()[0][0][0]).isType(ImplicitSwappedObject.class);
+		assertType(ImplicitSwappedObject.class, a);
+		assertType(ImplicitSwappedObject.class, b[0][0][0]);
+		assertType(ImplicitSwappedObject.class, c.keySet().iterator().next());
+		assertType(ImplicitSwappedObject.class, c.values().iterator().next());
+		assertType(ImplicitSwappedObject.class, d.keySet().iterator().next());
+		assertType(ImplicitSwappedObject.class, d.values().iterator().next()[0][0][0]);
 
 		return "OK";
 	}
@@ -934,15 +935,15 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		assertObject(g).asJson().is("{ONE:[[['TWO',null],null],null]}");
 		assertObject(h).asJson().is("{ONE:[[[['TWO',null],null],null],null]}");
 
-		assertObject(c.get(0)).isType(TestEnum.class);
-		assertObject(d.get(0).get(0).get(0)).isType(TestEnum.class);
-		assertObject(e.get(0)).isType(TestEnum[][][].class);
-		assertObject(f.keySet().iterator().next()).isType(TestEnum.class);
-		assertObject(f.values().iterator().next()).isType(TestEnum.class);
-		assertObject(g.keySet().iterator().next()).isType(TestEnum.class);
-		assertObject(g.values().iterator().next()).isType(TestEnum[][][].class);
-		assertObject(h.keySet().iterator().next()).isType(TestEnum.class);
-		assertObject(h.values().iterator().next().get(0)).isType(TestEnum[][][].class);
+		assertType(TestEnum.class, c.get(0));
+		assertType(TestEnum.class, d.get(0).get(0).get(0));
+		assertType(TestEnum[][][].class, e.get(0));
+		assertType(TestEnum.class, f.keySet().iterator().next());
+		assertType(TestEnum.class, f.values().iterator().next());
+		assertType(TestEnum.class, g.keySet().iterator().next());
+		assertType(TestEnum[][][].class, g.values().iterator().next());
+		assertType(TestEnum.class, h.keySet().iterator().next());
+		assertType(TestEnum[][][].class, h.values().iterator().next().get(0));
 
 		return "OK";
 	}
@@ -1499,26 +1500,26 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	@RestPost(path="/setIntegerList")
 	public void setIntegerList(@Content List<Integer> x) {
 		assertObject(x).asJson().is("[1,null]");
-		assertObject(x.get(0)).isType(Integer.class);
+		assertType(Integer.class, x.get(0));
 	}
 
 	@RestPost(path="/setInteger3dList")
 	public void setInteger3dList(@Content List<List<List<Integer>>> x) {
 		assertObject(x).asJson().is("[[[1,null],null],null]");
-		assertObject(x.get(0).get(0).get(0)).isType(Integer.class);
+		assertType(Integer.class, x.get(0).get(0).get(0));
 	}
 
 	@RestPost(path="/setInteger1d3dList")
 	public void setInteger1d3dList(@Content List<Integer[][][]> x) {
 		assertObject(x).asJson().is("[[[[1,null],null],null],null]");
-		assertObject(x.get(0)).isType(Integer[][][].class);
-		assertObject(x.get(0)[0][0][0]).isType(Integer.class);
+		assertType(Integer[][][].class, x.get(0));
+		assertType(Integer.class, x.get(0)[0][0][0]);
 	}
 
 	@RestPost(path="/setInt1d3dList")
 	public void setInt1d3dList(@Content List<int[][][]> x) {
 		assertObject(x).asJson().is("[[[[1,2],null],null],null]");
-		assertObject(x.get(0)).isType(int[][][].class);
+		assertType(int[][][].class, x.get(0));
 	}
 
 	@RestPost(path="/setStringList")
@@ -1566,7 +1567,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	@RestPost(path="/setBeanListMapIntegerKeys")
 	public void setBeanListMapIntegerKeys(@Content Map<Integer,List<ABean>> x) {
 		assertObject(x).asJson().is("{'1':[{a:1,b:'foo'}]}");  // Note: JsonSerializer serializes key as string.
-		assertObject(x.keySet().iterator().next()).isType(Integer.class);
+		assertType(Integer.class, x.keySet().iterator().next());
 	}
 
 	// Typed beans
@@ -1574,49 +1575,49 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	@RestPost(path="/setTypedBean")
 	public void setTypedBean(@Content TypedBean x) {
 		assertObject(x).asJson().is("{a:1,b:'foo'}");
-		assertObject(x).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, x);
 	}
 
 	@RestPost(path="/setTypedBean3dArray")
 	public void setTypedBean3dArray(@Content TypedBean[][][] x) {
 		assertObject(x).asJson().is("[[[{a:1,b:'foo'},null],null],null]");
-		assertObject(x[0][0][0]).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, x[0][0][0]);
 	}
 
 	@RestPost(path="/setTypedBeanList")
 	public void setTypedBeanList(@Content List<TypedBean> x) {
 		assertObject(x).asJson().is("[{a:1,b:'foo'}]");
-		assertObject(x.get(0)).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, x.get(0));
 	}
 
 	@RestPost(path="/setTypedBean1d3dList")
 	public void setTypedBean1d3dList(@Content List<TypedBean[][][]> x) {
 		assertObject(x).asJson().is("[[[[{a:1,b:'foo'},null],null],null],null]");
-		assertObject(x.get(0)[0][0][0]).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, x.get(0)[0][0][0]);
 	}
 
 	@RestPost(path="/setTypedBeanMap")
 	public void setTypedBeanMap(@Content Map<String,TypedBean> x) {
 		assertObject(x).asJson().is("{foo:{a:1,b:'foo'}}");
-		assertObject(x.get("foo")).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, x.get("foo"));
 	}
 
 	@RestPost(path="/setTypedBeanListMap")
 	public void setTypedBeanListMap(@Content Map<String,List<TypedBean>> x) {
 		assertObject(x).asJson().is("{foo:[{a:1,b:'foo'}]}");
-		assertObject(x.get("foo").get(0)).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, x.get("foo").get(0));
 	}
 
 	@RestPost(path="/setTypedBean1d3dListMap")
 	public void setTypedBean1d3dListMap(@Content Map<String,List<TypedBean[][][]>> x) {
 		assertObject(x).asJson().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
-		assertObject(x.get("foo").get(0)[0][0][0]).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0]);
 	}
 
 	@RestPost(path="/setTypedBeanListMapIntegerKeys")
 	public void setTypedBeanListMapIntegerKeys(@Content Map<Integer,List<TypedBean>> x) {
 		assertObject(x).asJson().is("{'1':[{a:1,b:'foo'}]}");  // Note: JsonSerializer serializes key as string.
-		assertObject(x.get(1).get(0)).isType(TypedBeanImpl.class);
+		assertType(TypedBeanImpl.class, x.get(1).get(0));
 	}
 
 	// Swapped POJOs
@@ -1692,43 +1693,43 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	@RestPost(path="/setEnumList")
 	public void setEnumList(@Content List<TestEnum> x) {
 		assertObject(x).asJson().is("['TWO',null]");
-		assertObject(x.get(0)).isType(TestEnum.class);
+		assertType(TestEnum.class, x.get(0));
 	}
 
 	@RestPost(path="/setEnum3dList")
 	public void setEnum3dList(@Content List<List<List<TestEnum>>> x) {
 		assertObject(x).asJson().is("[[['TWO',null],null],null]");
-		assertObject(x.get(0).get(0).get(0)).isType(TestEnum.class);
+		assertType(TestEnum.class, x.get(0).get(0).get(0));
 	}
 
 	@RestPost(path="/setEnum1d3dList")
 	public void setEnum1d3dList(@Content List<TestEnum[][][]> x) {
 		assertObject(x).asJson().is("[[[['TWO',null],null],null],null]");
-		assertObject(x.get(0)).isType(TestEnum[][][].class);
+		assertType(TestEnum[][][].class, x.get(0));
 	}
 
 	@RestPost(path="/setEnumMap")
 	public void setEnumMap(@Content Map<TestEnum,TestEnum> x) {
 		assertObject(x).asJson().is("{ONE:'TWO'}");
 		Map.Entry<TestEnum,TestEnum> e = x.entrySet().iterator().next();
-		assertObject(e.getKey()).isType(TestEnum.class);
-		assertObject(e.getValue()).isType(TestEnum.class);
+		assertType(TestEnum.class, e.getKey());
+		assertType(TestEnum.class, e.getValue());
 	}
 
 	@RestPost(path="/setEnum3dArrayMap")
 	public void setEnum3dArrayMap(@Content Map<TestEnum,TestEnum[][][]> x) {
 		assertObject(x).asJson().is("{ONE:[[['TWO',null],null],null]}");
 		Map.Entry<TestEnum,TestEnum[][][]> e = x.entrySet().iterator().next();
-		assertObject(e.getKey()).isType(TestEnum.class);
-		assertObject(e.getValue()).isType(TestEnum[][][].class);
+		assertType(TestEnum.class, e.getKey());
+		assertType(TestEnum[][][].class, e.getValue());
 	}
 
 	@RestPost(path="/setEnum1d3dListMap")
 	public void setEnum1d3dListMap(@Content Map<TestEnum,List<TestEnum[][][]>> x) {
 		assertObject(x).asJson().is("{ONE:[[[['TWO',null],null],null],null]}");
 		Map.Entry<TestEnum,List<TestEnum[][][]>> e = x.entrySet().iterator().next();
-		assertObject(e.getKey()).isType(TestEnum.class);
-		assertObject(e.getValue().get(0)).isType(TestEnum[][][].class);
+		assertType(TestEnum.class, e.getKey());
+		assertType(TestEnum[][][].class, e.getValue().get(0));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

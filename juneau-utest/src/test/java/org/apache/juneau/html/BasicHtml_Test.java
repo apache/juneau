@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.AssertionHelpers.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -58,7 +58,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(String o) {
-						assertObject(o).isType(String.class);
+						assertType(String.class, o);
 					}
 				}
 			},
@@ -74,7 +74,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(Boolean o) {
-						assertObject(o).isType(Boolean.class);
+						assertType(Boolean.class, o);
 					}
 				}
 			},
@@ -90,7 +90,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(Integer o) {
-						assertObject(o).isType(Integer.class);
+						assertType(Integer.class, o);
 					}
 				}
 			},
@@ -106,7 +106,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(Float o) {
-						assertObject(o).isType(Float.class);
+						assertType(Float.class, o);
 					}
 				}
 			},
@@ -132,7 +132,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(String[] o) {
-						assertObject(o[0]).isType(String.class);
+						assertType(String.class, o[0]);
 					}
 				}
 			},
@@ -158,9 +158,9 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(Object[] o) {
-						assertObject(o[0]).isType(String.class);
-						assertObject(o[1]).isType(Integer.class);
-						assertObject(o[2]).isType(Boolean.class);
+						assertType(String.class, o[0]);
+						assertType(Integer.class, o[1]);
+						assertType(Boolean.class, o[2]);
 					}
 				}
 			},
@@ -176,7 +176,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(int[] o) {
-						assertObject(o).isType(int[].class);
+						assertType(int[].class, o);
 					}
 				}
 			},
@@ -192,7 +192,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(boolean[] o) {
-						assertObject(o).isType(boolean[].class);
+						assertType(boolean[].class, o);
 					}
 				}
 			},
@@ -208,7 +208,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(String[][] o) {
-						assertObject(o).isType(String[][].class);
+						assertType(String[][].class, o);
 					}
 				}
 			},
@@ -259,7 +259,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(Map<String,String> o) {
-						assertObject(o.get("k1")).isType(String.class);
+						assertType(String.class, o.get("k1"));
 					}
 				}
 			},
@@ -322,7 +322,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(Map<String,Number> o) {
-						assertObject(o.get("k1")).isType(Number.class);
+						assertType(Number.class, o.get("k1"));
 					}
 				}
 			},
@@ -409,10 +409,10 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(Map<String,Object> o) {
-						assertObject(o.get("k1")).isType(String.class);
-						assertObject(o.get("k2")).isType(Integer.class);
-						assertObject(o.get("k3")).isType(Float.class);
-						assertObject(o.get("k4")).isType(Boolean.class);
+						assertType(String.class, o.get("k1"));
+						assertType(Integer.class, o.get("k2"));
+						assertType(Float.class, o.get("k3"));
+						assertType(Boolean.class, o.get("k4"));
 					}
 				}
 			},
@@ -428,7 +428,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(List<String> o) {
-						assertObject(o.get(0)).isType(String.class);
+						assertType(String.class, o.get(0));
 					}
 				}
 			},
@@ -444,8 +444,8 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(List<Number> o) {
-						assertObject(o.get(0)).isType(Integer.class);
-						assertObject(o.get(1)).isType(Float.class);
+						assertType(Integer.class, o.get(0));
+						assertType(Float.class, o.get(1));
 					}
 				}
 			},
@@ -461,10 +461,10 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(List<Object> o) {
-						assertObject(o.get(0)).isType(String.class);
-						assertObject(o.get(1)).isType(Integer.class);
-						assertObject(o.get(2)).isType(Float.class);
-						assertObject(o.get(3)).isType(Boolean.class);
+						assertType(String.class, o.get(0));
+						assertType(Integer.class, o.get(1));
+						assertType(Float.class, o.get(2));
+						assertType(Boolean.class, o.get(3));
 					}
 				}
 			},
@@ -620,9 +620,9 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithNormalProperties o) {
-						assertObject(o.c).isType(String.class);
-						assertObject(o.d).isType(Integer.class);
-						assertObject(o.e).isType(Bean1a.class);
+						assertType(String.class, o.c);
+						assertType(Integer.class, o.d);
+						assertType(Bean1a.class, o.e);
 					}
 				}
 			},
@@ -784,11 +784,11 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithMapProperties o) {
-						assertObject(o.a.get("k1")).isType(String.class);
-						assertObject(o.b.get("k2")).isType(Integer.class);
-						assertObject(o.c.get("k3")).isType(String.class);
-						assertObject(o.c.get("k4")).isType(Integer.class);
-						assertObject(o.c.get("k5")).isType(Boolean.class);
+						assertType(String.class, o.a.get("k1"));
+						assertType(Integer.class, o.b.get("k2"));
+						assertType(String.class, o.c.get("k3"));
+						assertType(Integer.class, o.c.get("k4"));
+						assertType(Boolean.class, o.c.get("k5"));
 					}
 				}
 			},
@@ -839,7 +839,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithTypeName o) {
-						assertObject(o).isType(BeanWithTypeName.class);
+						assertType(BeanWithTypeName.class, o);
 					}
 				}
 			},
@@ -932,7 +932,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithPropertiesWithTypeNames o) {
-						assertObject(o.b2).isType(B.class);
+						assertType(B.class, o.b2);
 					}
 				}
 			},
@@ -1076,8 +1076,8 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithPropertiesWithArrayTypeNames o) {
-						assertObject(o.b2[0]).isType(B.class);
-						assertObject(o.b3[0]).isType(B.class);
+						assertType(B.class, o.b2[0]);
+						assertType(B.class, o.b3[0]);
 					}
 				}
 			},
@@ -1257,8 +1257,8 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithPropertiesWith2dArrayTypeNames o) {
-						assertObject(o.b2[0][0]).isType(B.class);
-						assertObject(o.b3[0][0]).isType(B.class);
+						assertType(B.class, o.b2[0][0]);
+						assertType(B.class, o.b3[0][0]);
 					}
 				}
 			},
@@ -1393,8 +1393,8 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithPropertiesWithMapTypeNames o) {
-						assertObject(o.b1.get("k1")).isType(B.class);
-						assertObject(o.b2.get("k2")).isType(B.class);
+						assertType(B.class, o.b1.get("k1"));
+						assertType(B.class, o.b2.get("k2"));
 					}
 				}
 			},
@@ -1410,7 +1410,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(LinkBean o) {
-						assertObject(o).isType(LinkBean.class);
+						assertType(LinkBean.class, o);
 					}
 				}
 			},
@@ -1426,7 +1426,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(LinkBean[] o) {
-						assertObject(o[0]).isType(LinkBean.class);
+						assertType(LinkBean.class, o[0]);
 					}
 				}
 			},
@@ -1442,7 +1442,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(List<LinkBean> o) {
-						assertObject(o.get(0)).isType(LinkBean.class);
+						assertType(LinkBean.class, o.get(0));
 					}
 				}
 			},
@@ -1538,9 +1538,9 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithLinkBeanProperties o) {
-						assertObject(o.a).isType(LinkBean.class);
-						assertObject(o.b.get(0)).isType(LinkBean.class);
-						assertObject(o.c.get("c1")).isType(LinkBean.class);
+						assertType(LinkBean.class, o.a);
+						assertType(LinkBean.class, o.b.get(0));
+						assertType(LinkBean.class, o.c.get("c1"));
 					}
 				}
 			},
@@ -1556,7 +1556,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(LinkBeanC o) {
-						assertObject(o).isType(LinkBeanC.class);
+						assertType(LinkBeanC.class, o);
 					}
 				}
 			},
@@ -1572,7 +1572,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(LinkBeanC[] o) {
-						assertObject(o[0]).isType(LinkBeanC.class);
+						assertType(LinkBeanC.class, o[0]);
 					}
 				}
 			},
@@ -1588,7 +1588,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(List<LinkBeanC> o) {
-						assertObject(o.get(0)).isType(LinkBeanC.class);
+						assertType(LinkBeanC.class, o.get(0));
 					}
 				}
 			},
@@ -1684,9 +1684,9 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithLinkBeanPropertiesC o) {
-						assertObject(o.a).isType(LinkBeanC.class);
-						assertObject(o.b.get(0)).isType(LinkBeanC.class);
-						assertObject(o.c.get("c1")).isType(LinkBeanC.class);
+						assertType(LinkBeanC.class, o.a);
+						assertType(LinkBeanC.class, o.b.get(0));
+						assertType(LinkBeanC.class, o.c.get("c1"));
 					}
 				}
 			},
@@ -1702,7 +1702,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithSpecialCharacters o) {
-						assertObject(o).isType(BeanWithSpecialCharacters.class);
+						assertType(BeanWithSpecialCharacters.class, o);
 					}
 				}
 			},
@@ -1727,7 +1727,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithSpecialCharacters o) {
-						assertObject(o).isType(BeanWithSpecialCharacters.class);
+						assertType(BeanWithSpecialCharacters.class, o);
 					}
 				}
 			},
@@ -1743,7 +1743,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithNullProperties o) {
-						assertObject(o).isType(BeanWithNullProperties.class);
+						assertType(BeanWithNullProperties.class, o);
 					}
 				}
 			},
@@ -1902,10 +1902,10 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithAbstractFields o) {
-						assertObject(o.a).isType(A.class);
-						assertObject(o.ia).isType(A.class);
-						assertObject(o.aa).isType(A.class);
-						assertObject(o.o).isType(A.class);
+						assertType(A.class, o.a);
+						assertType(A.class, o.ia);
+						assertType(A.class, o.aa);
+						assertType(A.class, o.o);
 					}
 				}
 			},
@@ -2205,13 +2205,13 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithAbstractArrayFields o) {
-						assertObject(o.a[0]).isType(A.class);
-						assertObject(o.ia1[0]).isType(A.class);
-						assertObject(o.ia2[0]).isType(A.class);
-						assertObject(o.aa1[0]).isType(A.class);
-						assertObject(o.aa2[0]).isType(A.class);
-						assertObject(o.o1[0]).isType(A.class);
-						assertObject(o.o2[0]).isType(A.class);
+						assertType(A.class, o.a[0]);
+						assertType(A.class, o.ia1[0]);
+						assertType(A.class, o.ia2[0]);
+						assertType(A.class, o.aa1[0]);
+						assertType(A.class, o.aa2[0]);
+						assertType(A.class, o.o1[0]);
+						assertType(A.class, o.o2[0]);
 					}
 				}
 			},
@@ -2400,9 +2400,9 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithAbstractMapFields o) {
-						assertObject(o.a.get("k1")).isType(A.class);
-						assertObject(o.b.get("k2")).isType(A.class);
-						assertObject(o.c.get("k3")).isType(A.class);
+						assertType(A.class, o.a.get("k1"));
+						assertType(A.class, o.b.get("k2"));
+						assertType(A.class, o.c.get("k3"));
 					}
 				}
 			},
@@ -2418,7 +2418,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextFields o) {
-						assertObject(o).isType(BeanWithWhitespaceTextFields.class);
+						assertType(BeanWithWhitespaceTextFields.class, o);
 					}
 				}
 			},
@@ -2434,7 +2434,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextFields o) {
-						assertObject(o).isType(BeanWithWhitespaceTextFields.class);
+						assertType(BeanWithWhitespaceTextFields.class, o);
 					}
 				}
 			},
@@ -2450,7 +2450,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextFields o) {
-						assertObject(o).isType(BeanWithWhitespaceTextFields.class);
+						assertType(BeanWithWhitespaceTextFields.class, o);
 					}
 				}
 			},
@@ -2466,7 +2466,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextFields o) {
-						assertObject(o).isType(BeanWithWhitespaceTextFields.class);
+						assertType(BeanWithWhitespaceTextFields.class, o);
 					}
 				}
 			},
@@ -2482,7 +2482,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextFields o) {
-						assertObject(o).isType(BeanWithWhitespaceTextFields.class);
+						assertType(BeanWithWhitespaceTextFields.class, o);
 					}
 				}
 			},
@@ -2498,7 +2498,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields o) {
-						assertObject(o).isType(BeanWithWhitespaceTextPwsFields.class);
+						assertType(BeanWithWhitespaceTextPwsFields.class, o);
 					}
 				}
 			},
@@ -2514,7 +2514,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields o) {
-						assertObject(o).isType(BeanWithWhitespaceTextPwsFields.class);
+						assertType(BeanWithWhitespaceTextPwsFields.class, o);
 					}
 				}
 			},
@@ -2530,7 +2530,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields o) {
-						assertObject(o).isType(BeanWithWhitespaceTextPwsFields.class);
+						assertType(BeanWithWhitespaceTextPwsFields.class, o);
 					}
 				}
 			},
@@ -2546,7 +2546,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields o) {
-						assertObject(o).isType(BeanWithWhitespaceTextPwsFields.class);
+						assertType(BeanWithWhitespaceTextPwsFields.class, o);
 					}
 				}
 			},
@@ -2562,7 +2562,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields o) {
-						assertObject(o).isType(BeanWithWhitespaceTextPwsFields.class);
+						assertType(BeanWithWhitespaceTextPwsFields.class, o);
 					}
 				}
 			},
@@ -2578,7 +2578,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedFields.class);
+						assertType(BeanWithWhitespaceMixedFields.class, o);
 					}
 				}
 			},
@@ -2594,7 +2594,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedFields.class);
+						assertType(BeanWithWhitespaceMixedFields.class, o);
 					}
 				}
 			},
@@ -2610,7 +2610,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedFields.class);
+						assertType(BeanWithWhitespaceMixedFields.class, o);
 					}
 				}
 			},
@@ -2626,7 +2626,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedFields.class);
+						assertType(BeanWithWhitespaceMixedFields.class, o);
 					}
 				}
 			},
@@ -2642,7 +2642,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedFields.class);
+						assertType(BeanWithWhitespaceMixedFields.class, o);
 					}
 				}
 			},
@@ -2658,7 +2658,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedFields.class);
+						assertType(BeanWithWhitespaceMixedFields.class, o);
 					}
 				}
 			},
@@ -2674,7 +2674,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedPwsFields.class);
+						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
 				}
 			},
@@ -2690,7 +2690,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedPwsFields.class);
+						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
 				}
 			},
@@ -2706,7 +2706,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedPwsFields.class);
+						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
 				}
 			},
@@ -2722,7 +2722,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedPwsFields.class);
+						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
 				}
 			},
@@ -2738,7 +2738,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedPwsFields.class);
+						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
 				}
 			},
@@ -2754,7 +2754,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedPwsFields.class);
+						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
 					}
 				}
 			},
@@ -2770,7 +2770,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceTextFields2.class);
+						assertType(BeanWithWhitespaceTextFields2.class, o);
 					}
 				}
 			},
@@ -2786,7 +2786,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceTextFields2.class);
+						assertType(BeanWithWhitespaceTextFields2.class, o);
 					}
 				}
 			},
@@ -2802,7 +2802,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceTextFields2.class);
+						assertType(BeanWithWhitespaceTextFields2.class, o);
 					}
 				}
 			},
@@ -2818,7 +2818,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceTextFields2.class);
+						assertType(BeanWithWhitespaceTextFields2.class, o);
 					}
 				}
 			},
@@ -2834,7 +2834,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceTextFields2.class);
+						assertType(BeanWithWhitespaceTextFields2.class, o);
 					}
 				}
 			},
@@ -2850,7 +2850,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceTextPwsFields2.class);
+						assertType(BeanWithWhitespaceTextPwsFields2.class, o);
 					}
 				}
 			},
@@ -2866,7 +2866,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceTextPwsFields2.class);
+						assertType(BeanWithWhitespaceTextPwsFields2.class, o);
 					}
 				}
 			},
@@ -2882,7 +2882,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceTextPwsFields2.class);
+						assertType(BeanWithWhitespaceTextPwsFields2.class, o);
 					}
 				}
 			},
@@ -2898,7 +2898,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceTextPwsFields2.class);
+						assertType(BeanWithWhitespaceTextPwsFields2.class, o);
 					}
 				}
 			},
@@ -2914,7 +2914,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceTextPwsFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceTextPwsFields2.class);
+						assertType(BeanWithWhitespaceTextPwsFields2.class, o);
 					}
 				}
 			},
@@ -2930,7 +2930,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedFields2.class);
+						assertType(BeanWithWhitespaceMixedFields2.class, o);
 					}
 				}
 			},
@@ -2946,7 +2946,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedFields2.class);
+						assertType(BeanWithWhitespaceMixedFields2.class, o);
 					}
 				}
 			},
@@ -2962,7 +2962,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedFields2.class);
+						assertType(BeanWithWhitespaceMixedFields2.class, o);
 					}
 				}
 			},
@@ -2978,7 +2978,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedFields2.class);
+						assertType(BeanWithWhitespaceMixedFields2.class, o);
 					}
 				}
 			},
@@ -2994,7 +2994,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedFields2.class);
+						assertType(BeanWithWhitespaceMixedFields2.class, o);
 					}
 				}
 			},
@@ -3010,7 +3010,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedFields2.class);
+						assertType(BeanWithWhitespaceMixedFields2.class, o);
 					}
 				}
 			},
@@ -3026,7 +3026,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedPwsFields2.class);
+						assertType(BeanWithWhitespaceMixedPwsFields2.class, o);
 					}
 				}
 			},
@@ -3042,7 +3042,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedPwsFields2.class);
+						assertType(BeanWithWhitespaceMixedPwsFields2.class, o);
 					}
 				}
 			},
@@ -3058,7 +3058,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedPwsFields2.class);
+						assertType(BeanWithWhitespaceMixedPwsFields2.class, o);
 					}
 				}
 			},
@@ -3074,7 +3074,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedPwsFields2.class);
+						assertType(BeanWithWhitespaceMixedPwsFields2.class, o);
 					}
 				}
 			},
@@ -3090,7 +3090,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedPwsFields2.class);
+						assertType(BeanWithWhitespaceMixedPwsFields2.class, o);
 					}
 				}
 			},
@@ -3106,7 +3106,7 @@ public class BasicHtml_Test {
 				{
 					@Override
 					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
-						assertObject(o).isType(BeanWithWhitespaceMixedPwsFields2.class);
+						assertType(BeanWithWhitespaceMixedPwsFields2.class, o);
 					}
 				}
 			},
