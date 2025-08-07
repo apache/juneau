@@ -12,20 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
 import org.apache.juneau.reflect.ClassInfoTest.*;
 import org.apache.juneau.swap.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"rawtypes","serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class ClassMetaTest {
+class ClassMetaTest extends SimpleTestBase {
 
 	BeanContext bc = BeanContext.DEFAULT;
 
@@ -35,8 +31,7 @@ public class ClassMetaTest {
 
 	public Map<String,String> fa;
 
-	@Test
-	public void a01_map() throws Exception {
+	@Test void a01_map() throws Exception {
 		ClassMeta t = bc.getClassMeta(this.getClass().getField("fa").getGenericType());
 		assertEquals("java.util.Map<java.lang.String,java.lang.String>", t.toString());
 		assertTrue(t.isMap());
@@ -49,8 +44,7 @@ public class ClassMetaTest {
 
 	public String fb;
 
-	@Test
-	public void a02_string() throws Exception {
+	@Test void a02_string() throws Exception {
 		ClassMeta t = bc.getClassMeta(this.getClass().getField("fb").getGenericType());
 		assertEquals(String.class, t.getInnerClass());
 		t = bc.getClassMeta(this.getClass().getField("fb").getType());
@@ -59,8 +53,7 @@ public class ClassMetaTest {
 
 	public Map<String,Map<String,Integer>> fc;
 
-	@Test
-	public void a03_mapWithMapValues() throws Exception {
+	@Test void a03_mapWithMapValues() throws Exception {
 		ClassMeta t = bc.getClassMeta(this.getClass().getField("fc").getGenericType());
 		assertEquals("java.util.Map<java.lang.String,java.util.Map<java.lang.String,java.lang.Integer>>", t.toString());
 		t = bc.getClassMeta(this.getClass().getField("fc").getType());
@@ -69,8 +62,7 @@ public class ClassMetaTest {
 
 	public List<Map<String,List>> fd;
 
-	@Test
-	public void a04_listWithMapValues() throws Exception {
+	@Test void a04_listWithMapValues() throws Exception {
 		ClassMeta t = bc.getClassMeta(this.getClass().getField("fd").getGenericType());
 		assertEquals("java.util.List<java.util.Map<java.lang.String,java.util.List>>", t.toString());
 	}
@@ -78,8 +70,7 @@ public class ClassMetaTest {
 	public List<? extends String> fe1;
 	public List<? super String> fe2;
 
-	@Test
-	public void a05_listWithUpperBoundGenericEntryTypes() throws Exception {
+	@Test void a05_listWithUpperBoundGenericEntryTypes() throws Exception {
 		ClassMeta t = bc.getClassMeta(this.getClass().getField("fe1").getGenericType());
 		assertEquals("java.util.List", t.toString());
 		t = bc.getClassMeta(this.getClass().getField("fe2").getGenericType());
@@ -89,8 +80,7 @@ public class ClassMetaTest {
 	public class G extends HashMap<String,Object> {}
 	public G g;
 
-	@Test
-	public void a06_beanExtendsMap() throws Exception {
+	@Test void a06_beanExtendsMap() throws Exception {
 		ClassMeta t = bc.getClassMeta(this.getClass().getField("g").getGenericType());
 		assertEquals("org.apache.juneau.ClassMetaTest$G<java.lang.String,java.lang.Object>", t.toString());
 		assertTrue(t.isMap());
@@ -111,8 +101,7 @@ public class ClassMetaTest {
 	public static class BC2Swap extends ObjectSwap<BC2,Map> {}
 	public static class BI2Swap extends ObjectSwap<BI2,Map> {}
 
-	@Test
-	public void b01_swaps() {
+	@Test void b01_swaps() {
 		BeanContext bc2;
 		ClassMeta<?> ooo, hi1, hc1, hi2, hc2;
 		BeanSession bs;
@@ -293,31 +282,29 @@ public class ClassMetaTest {
 	static class C4 extends C3 {}
 	static class C5 implements CI3 {}
 
-	@Test
-	public void forEachAnnotation() {
+	@Test void forEachAnnotation() {
 		ClassMeta<?> c3 = bc.getClassMeta(C3.class);
 		ClassMeta<?> c4 = bc.getClassMeta(C4.class);
 		ClassMeta<?> c5 = bc.getClassMeta(C5.class);
 
 		List<Integer> l1 = list();
 		c3.forEachAnnotation(A.class, null, x -> l1.add(x.value()));
-		assertList(l1).asCdl().isString("2,1,3,5,6,7");
+		assertList(l1, "2,1,3,5,6,7");
 
 		List<Integer> l2 = list();
 		c4.forEachAnnotation(A.class, null, x -> l2.add(x.value()));
-		assertList(l2).asCdl().isString("2,1,3,5,6,7");
+		assertList(l2, "2,1,3,5,6,7");
 
 		List<Integer> l3 = list();
 		c5.forEachAnnotation(A.class, null, x -> l3.add(x.value()));
-		assertList(l3).asCdl().isString("3");
+		assertList(l3, "3");
 
 		List<Integer> l4 = list();
 		c3.forEachAnnotation(A.class, x -> x.value() == 5, x -> l4.add(x.value()));
-		assertList(l4).asCdl().isString("5");
+		assertList(l4, "5");
 	}
 
-	@Test
-	public void firstAnnotation() {
+	@Test void firstAnnotation() {
 		ClassMeta<?> c3 = bc.getClassMeta(C3.class);
 		ClassMeta<?> c4 = bc.getClassMeta(C4.class);
 		ClassMeta<?> c5 = bc.getClassMeta(C5.class);
@@ -326,8 +313,8 @@ public class ClassMetaTest {
 		assertEquals(3, c5.firstAnnotation(A.class, null).get().value());
 		assertEquals(5, c3.firstAnnotation(A.class, x -> x.value() == 5).get().value());
 	}
-	@Test
-	public void lastAnnotation() {
+
+	@Test void lastAnnotation() {
 		ClassMeta<?> c3 = bc.getClassMeta(C3.class);
 		ClassMeta<?> c4 = bc.getClassMeta(C4.class);
 		ClassMeta<?> c5 = bc.getClassMeta(C5.class);

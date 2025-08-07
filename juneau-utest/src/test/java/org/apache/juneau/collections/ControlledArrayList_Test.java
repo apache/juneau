@@ -52,62 +52,62 @@ public class ControlledArrayList_Test {
 		x1.set(0, 2);
 		assertThrown(() -> x2.set(0, 2)).isType(UnsupportedOperationException.class);
 		x2.overrideSet(0, 2);
-		assertList(x1).is(x2);
+		assertEquals(x2, x1);
 
 		x1.add(0, 2);
 		assertThrown(() -> x2.add(0, 2)).isType(UnsupportedOperationException.class);
 		x2.overrideAdd(0, 2);
-		assertList(x1).is(x2);
+		assertEquals(x2, x1);
 
 		x1.remove(0);
 		assertThrown(() -> x2.remove(0)).isType(UnsupportedOperationException.class);
 		x2.overrideRemove(0);
-		assertList(x1).is(x2);
+		assertEquals(x2, x1);
 
 		x1.addAll(0, Arrays.asList(3));
 		assertThrown(() -> x2.addAll(0, Arrays.asList(3))).isType(UnsupportedOperationException.class);
 		x2.overrideAddAll(0, Arrays.asList(3));
-		assertList(x1).is(x2);
+		assertEquals(x2, x1);
 
 		x1.replaceAll(x -> x);
 		assertThrown(() -> x2.replaceAll(x -> x)).isType(UnsupportedOperationException.class);
 		x2.overrideReplaceAll(x -> x);
-		assertList(x1).is(x2);
+		assertEquals(x2, x1);
 
 		x1.sort(null);
 		assertThrown(() -> x2.sort(null)).isType(UnsupportedOperationException.class);
 		x2.overrideSort(null);
-		assertList(x1).is(x2);
+		assertEquals(x2, x1);
 
 		x1.add(1);
 		assertThrown(() -> x2.add(1)).isType(UnsupportedOperationException.class);
 		x2.overrideAdd(1);
-		assertList(x1).is(x2);
+		assertEquals(x2, x1);
 
 		x1.remove((Integer)1);
 		assertThrown(() -> x2.remove((Integer)1)).isType(UnsupportedOperationException.class);
 		x2.overrideRemove((Integer)1);
-		assertList(x1).is(x2);
+		assertEquals(x2, x1);
 
 		x1.addAll(Arrays.asList(3));
 		assertThrown(() -> x2.addAll(Arrays.asList(3))).isType(UnsupportedOperationException.class);
 		x2.overrideAddAll(Arrays.asList(3));
-		assertList(x1).is(x2);
+		assertEquals(x2, x1);
 
 		x1.removeAll(Arrays.asList(3));
 		assertThrown(() -> x2.removeAll(Arrays.asList(3))).isType(UnsupportedOperationException.class);
 		x2.overrideRemoveAll(Arrays.asList(3));
-		assertList(x1).is(x2);
+		assertEquals(x2, x1);
 
 		x1.retainAll(Arrays.asList(2));
 		assertThrown(() -> x2.retainAll(Arrays.asList(2))).isType(UnsupportedOperationException.class);
 		x2.overrideRetainAll(Arrays.asList(2));
-		assertList(x1).is(x2);
+		assertEquals(x2, x1);
 
 		x1.clear();
 		assertThrown(x2::clear).isType(UnsupportedOperationException.class);
 		x2.overrideClear();
-		assertList(x1).is(x2);
+		assertEquals(x2, x1);
 
 		x1.add(1);
 		x2.overrideAdd(1);
@@ -115,7 +115,7 @@ public class ControlledArrayList_Test {
 		x1.removeIf(x -> x == 1);
 		assertThrown(() -> x2.removeIf(x -> x == 1)).isType(UnsupportedOperationException.class);
 		x2.overrideRemoveIf(x -> x == 1);
-		assertList(x1).is(x2);
+		assertEquals(x2, x1);
 
 		x1.add(1);
 		x2.overrideAdd(1);

@@ -14,16 +14,13 @@ package org.apache.juneau.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.lang.annotation.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class AnnotationInfoTest {
+class AnnotationInfoTest extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Is in group.
@@ -46,10 +43,9 @@ public class AnnotationInfoTest {
 	@D1 @D2 @D3
 	public static class D {}
 
-	@Test
-	public void d01_isInGroup() {
+	@Test void d01_isInGroup() {
 		ClassInfo d = ClassInfo.of(D.class);
 		AnnotationList l = d.getAnnotationList(x -> x.isInGroup(D1.class));
-		assertList(l).isSize(2);
+		assertSize(2, l);
 	}
 }
