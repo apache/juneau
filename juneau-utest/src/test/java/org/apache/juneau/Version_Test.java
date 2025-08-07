@@ -13,7 +13,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.Version.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
@@ -24,7 +23,7 @@ class Version_Test extends SimpleTestBase {
 
 	@Test void a01_basic() {
 		assertNull(of(null));
-		assertObject(of("")).asString().is("0");
+		assertString("0", of(""));
 
 		Version x = of("1.2.3");
 		assertEquals(1, x.getMajor().orElse(null));

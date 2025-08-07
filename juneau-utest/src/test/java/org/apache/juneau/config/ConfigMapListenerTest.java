@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -39,7 +38,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asString().is("[SET(foo = baz)]");
+				assertString("[SET(foo = baz)]", events);
 			}
 		};
 
@@ -65,7 +64,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asString().is("[SET(S1/foo = baz)]");
+				assertString("[SET(S1/foo = baz)]", events);
 			}
 		};
 
@@ -93,7 +92,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asString().is("[SET(k = vb), SET(S1/k1 = v1b)]");
+				assertString("[SET(k = vb),SET(S1/k1 = v1b)]", events);
 			}
 		};
 
@@ -118,7 +117,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asString().is("[SET(k^* = kb # C), SET(S1/k1^* = k1b # C1)]");
+				assertString("[SET(k^* = kb # C),SET(S1/k1^* = k1b # C1)]", events);
 			}
 		};
 
@@ -149,7 +148,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asString().is("[SET(k^* = kb # Cb), SET(S1/k1^* = k1b # Cb1)]");
+				assertString("[SET(k^* = kb # Cb),SET(S1/k1^* = k1b # Cb1)]", events);
 			}
 		};
 
@@ -181,7 +180,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asString().is("[REMOVE_ENTRY(k), REMOVE_ENTRY(S1/k1)]");
+				assertString("[REMOVE_ENTRY(k),REMOVE_ENTRY(S1/k1)]", events);
 			}
 		};
 
@@ -212,7 +211,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asString().is("[REMOVE_ENTRY(k), REMOVE_ENTRY(S1/k1)]");
+				assertString("[REMOVE_ENTRY(k),REMOVE_ENTRY(S1/k1)]", events);
 			}
 		};
 
@@ -241,7 +240,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asString().is("[SET(S3/k3 = v3)]");
+				assertString("[SET(S3/k3 = v3)]", events);
 			}
 		};
 
@@ -275,7 +274,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asString().is("[SET(S3/k3 = v3)]");
+				assertString("[SET(S3/k3 = v3)]", events);
 			}
 		};
 
@@ -319,7 +318,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asString().is("[REMOVE_ENTRY(k), REMOVE_ENTRY(S1/k1), REMOVE_ENTRY(S2/k2)]");
+				assertString("[REMOVE_ENTRY(k),REMOVE_ENTRY(S1/k1),REMOVE_ENTRY(S2/k2)]", events);
 			}
 		};
 
@@ -349,7 +348,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asString().is("[SET(k = v # cv), SET(S1/k1 = v1 # cv1), SET(S2/k2 = v2 # cv2)]");
+				assertString("[SET(k = v # cv),SET(S1/k1 = v1 # cv1),SET(S2/k2 = v2 # cv2)]", events);
 			}
 		};
 
@@ -394,7 +393,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asString().is(eventList.poll());
+				assertString(eventList.poll(), events);
 			}
 		};
 
@@ -431,7 +430,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObject(events).asString().is(eventList.poll());
+				assertString(eventList.poll(), events);
 			}
 		};
 
@@ -476,7 +475,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			LatchedListener l = new LatchedListener(latch) {
 				@Override
 				public void check(ConfigEvents events) throws Exception {
-					assertObject(events).asString().is(eventList.poll());
+					assertString(eventList.poll(), events);
 				}
 			};
 
@@ -517,7 +516,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			LatchedListener l = new LatchedListener(latch) {
 				@Override
 				public void check(ConfigEvents events) throws Exception {
-					assertObject(events).asString().is(eventList.poll());
+					assertString(eventList.poll(), events);
 				}
 			};
 

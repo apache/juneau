@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.rest.util.UrlPathMatcher.*;
 import static org.junit.Assert.*;
 import java.util.*;
@@ -24,7 +23,7 @@ import org.junit.jupiter.api.*;
 class UrlPathMatcher_Test extends SimpleTestBase {
 
 	private void check(UrlPathMatcher p, String path, String expected) {
-		assertObject(p.match(UrlPath.of(path))).asString().is(expected);
+		assertString(expected, p.match(UrlPath.of(path)));
 	}
 
 	private void shouldNotMatch(UrlPathMatcher p, String...paths) {

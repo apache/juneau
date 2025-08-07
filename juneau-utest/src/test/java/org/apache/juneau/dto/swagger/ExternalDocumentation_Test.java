@@ -57,7 +57,7 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 		assertJson(t, "{description:'foo',url:'bar','$ref':'baz'}");
 
 		assertObject(t.get("description", String.class)).isType(String.class).is("foo");
-		assertObject(t.get("url", URI.class)).isType(URI.class).asString().is("bar");
+		assertString("bar", t.get("url", URI.class));
 		assertObject(t.get("$ref", String.class)).isType(String.class).is("baz");
 
 		t.set("null", null).set(null, "null");
