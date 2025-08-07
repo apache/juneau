@@ -12,11 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.common.internal.ArgUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.*;
 import java.util.function.*;
+import java.util.regex.*;
 import java.util.stream.*;
 
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
@@ -201,6 +207,11 @@ public abstract class SimpleTestBase {
 
 	protected static void assertEqualsAll(Object...values) {
 		AssertionHelpers.assertEqualsAll(values);
+	}
+
+	protected static void assertJsonMatches(Object o, String pattern) throws AssertionError {
+		var json = json(o);
+		assertTrue(StringUtils.getMatchPattern(pattern).matcher(json).matches(), ss("JSON did not match pattern.\njson={0}", json));
 	}
 
 	/**
