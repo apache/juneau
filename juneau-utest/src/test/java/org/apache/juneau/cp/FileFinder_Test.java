@@ -595,19 +595,19 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 		Set<LocalDir> s = null;
 
 		s = set(new LocalDir(Paths.get("test")), new LocalDir(Paths.get("test")));
-		assertCollection(s).isSize(1);
+		assertSize(1, s);
 
 		s = set(new LocalDir(Paths.get("test")), new LocalDir(Paths.get("test","test")));
-		assertCollection(s).isSize(2);
+		assertSize(2, s);
 
 		s = set(new LocalDir(List.class,null), new LocalDir(List.class,null));
-		assertCollection(s).isSize(1);
+		assertSize(1, s);
 
 		s = set(new LocalDir(List.class,null), new LocalDir(List.class,"foo"));
-		assertCollection(s).isSize(2);
+		assertSize(2, s);
 
 		s = set(new LocalDir(List.class,null), new LocalDir(String.class,null));
-		assertCollection(s).isSize(2);
+		assertSize(2, s);
 	}
 
 	@Test void e02_caching() throws Exception {

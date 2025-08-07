@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
 import java.util.function.*;
@@ -94,7 +93,6 @@ class BasicHeader_Test extends SimpleTestBase {
 	@SuppressWarnings("unlikely-arg-type")
 	@Test void a09_equals() {
 		BasicHeader h1 = header("Foo","bar"), h2 = header("Foo","bar"), h3 = header("Bar","bar"), h4 = header("Foo","baz");
-		assertInteger(h1.hashCode()).isExists();
 		assertTrue(h1.equals(h2));
 		assertFalse(h1.equals(h3));
 		assertFalse(h1.equals(h4));

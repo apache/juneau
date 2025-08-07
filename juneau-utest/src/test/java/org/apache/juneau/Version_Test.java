@@ -33,8 +33,8 @@ class Version_Test extends SimpleTestBase {
 		assertEquals(1, x.getPart(0).orElse(null));
 		assertEquals(2, x.getPart(1).orElse(null));
 		assertEquals(3, x.getPart(2).orElse(null));
-		assertInteger(x.getPart(-1).orElse(null)).isNull();
-		assertInteger(x.getPart(3).orElse(null)).isNull();
+		assertNull(x.getPart(-1).orElse(null));
+		assertNull(x.getPart(3).orElse(null));
 
 		x = of("1..x");
 		assertString("1.0.2147483647", x);

@@ -104,7 +104,5 @@ public class HttpException_Test extends SimpleTestBase {
 		x = new BasicHttpException(100, new RuntimeException(), "foo{0}","<bar>&baz");
 		assertEquals("foo<bar>&baz\nCaused by (RuntimeException)", x.getFullStackMessage(false));
 		assertEquals("foo bar  baz\nCaused by (RuntimeException)", x.getFullStackMessage(true));
-
-		assertInteger(x.hashCode()).isExists();
 	}
 }

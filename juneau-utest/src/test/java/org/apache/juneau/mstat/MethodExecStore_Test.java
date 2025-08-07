@@ -141,7 +141,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 
 		assertSize(1, store.getStats(m).getThrownStore().getStats());
 		assertSize(1, store.getStats(m).getThrownStore().getStats());
-		assertCollection(store.getStats()).isSize(1);
+		assertSize(1, store.getStats());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
