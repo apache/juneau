@@ -169,10 +169,10 @@ class PartList_Test extends SimpleTestBase {
 	@Test void a06_getCondensed() {
 		PartList x = PartList.of(FOO_1);
 		assertEmpty(x.get((String)null));
-		assertOptional(x.get("Foo")).isString("Foo=1");
+		assertString("Foo=1", x.get("Foo"));
 		assertEmpty(x.get("Bar"));
 		x = PartList.of(FOO_1, FOO_2, FOO_3, X_x);
-		assertOptional(x.get("Foo")).isString("Foo=1,2,3");
+		assertString("Foo=1,2,3", x.get("Foo"));
 		assertEmpty(x.get("Bar"));
 	}
 
@@ -186,12 +186,12 @@ class PartList_Test extends SimpleTestBase {
 	@Test void a07_getCondensed_asType() {
 		PartList x = PartList.of(FOO_1);
 		assertEmpty(x.get(null, APart.class));
-		assertOptional(x.get("Foo", APart.class)).isString("a=1");
+		assertString("a=1", x.get("Foo", APart.class));
 		assertEmpty(x.get("Bar", APart.class));
 		x = PartList.of(FOO_1, FOO_2, FOO_3, X_x);
-		assertOptional(x.get("Foo", APart.class)).isString("a=1,2,3");
+		assertString("a=1,2,3", x.get("Foo", APart.class));
 		assertEmpty(x.get("Bar", APart.class));
-		assertOptional(x.get(Foo.class)).isString("Foo=1,2,3");
+		assertString("Foo=1,2,3", x.get(Foo.class));
 		final PartList x2 = x;
 		assertThrowsWithMessage(IllegalArgumentException.class, "Part name could not be found on bean type 'java.lang.String'", ()->x2.get(String.class));
 	}
@@ -207,7 +207,7 @@ class PartList_Test extends SimpleTestBase {
 	@Test void a09_getFirst() {
 		PartList x = PartList.of(FOO_1, FOO_2, X_x);
 		assertEmpty(x.getFirst(null));
-		assertOptional(x.getFirst("Foo")).isString("Foo=1");
+		assertString("Foo=1", x.getFirst("Foo"));
 		assertEmpty(x.getFirst("FOO"));
 		assertEmpty(x.getFirst("Bar"));
 	}
@@ -215,7 +215,7 @@ class PartList_Test extends SimpleTestBase {
 	@Test void a10_getLast() {
 		PartList x = PartList.of(FOO_1, FOO_2, X_x);
 		assertEmpty(x.getLast(null));
-		assertOptional(x.getLast("Foo")).isString("Foo=2");
+		assertString("Foo=2", x.getLast("Foo"));
 		assertEmpty(x.getLast("FOO"));
 		assertEmpty(x.getLast("Bar"));
 	}

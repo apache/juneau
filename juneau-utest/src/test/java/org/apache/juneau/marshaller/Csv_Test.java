@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshaller;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import java.io.*;
 import java.util.*;
 

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.mstat;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.lang.reflect.*;
 import java.util.*;
