@@ -38,7 +38,7 @@ class ContactAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertObject(a1).asJson().is(""
+		assertJson(a1, ""
 			+ "{"
                 + "description:['description'],"
 				+ "email:'email',"

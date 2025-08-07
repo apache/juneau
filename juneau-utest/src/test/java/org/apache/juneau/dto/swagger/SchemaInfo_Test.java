@@ -348,7 +348,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 			.set("uniqueItems", true)
 			.set("xml", xml().setName("o"));
 
-		assertObject(t.keySet()).asJson().is(
+		assertJson(t.keySet(), 
 			"['additionalProperties','allOf','default','description','discriminator','enum','example','exclusiveMaximum','exclusiveMinimum',"
 			+ "'externalDocs','format','items','maximum','maxItems','maxLength','maxProperties','minimum','minItems','minLength','minProperties',"
 			+ "'multipleOf','pattern','properties','readOnly','$ref','requiredProperties','title','type','uniqueItems','xml']"

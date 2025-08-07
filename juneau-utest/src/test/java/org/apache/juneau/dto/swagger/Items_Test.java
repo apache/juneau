@@ -241,7 +241,7 @@ class Items_Test extends SimpleTestBase {
 			.set("type", "j")
 			.set("uniqueItems", true);
 
-		assertObject(t.keySet()).asJson().is(
+		assertJson(t.keySet(), 
 			"['collectionFormat','default','enum','exclusiveMaximum','exclusiveMinimum','format','items','maximum','maxItems',"
 			+ "'maxLength','minimum','minItems','minLength','multipleOf','pattern','$ref','type','uniqueItems']"
 		);

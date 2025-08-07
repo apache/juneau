@@ -81,7 +81,7 @@ public class RestGetAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertObject(a1).asJson().is(""
+		assertJson(a1, ""
 			+ "{"
 				+ "clientVersion:'clientVersion',"
 				+ "converters:['org.apache.juneau.rest.converter.RestConverter'],"

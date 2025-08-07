@@ -99,7 +99,7 @@ class ItemsAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertObject(a1).asJson().is(""
+		assertJson(a1, ""
 			+ "{"
 				+ "'$ref':'$ref',"
 				+ "_default:['default'],"

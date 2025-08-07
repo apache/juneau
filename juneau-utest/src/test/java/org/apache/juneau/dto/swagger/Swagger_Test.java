@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -249,7 +248,7 @@ class Swagger_Test extends SimpleTestBase {
 			.set("tags", set(tag("o")))
 			.set("$ref", "ref");
 
-		assertObject(t.keySet()).asJson().is(
+		assertJson(t.keySet(), 
 			"['basePath','consumes','definitions','externalDocs','host','info','parameters','paths','produces','responses',"
 			+ "'schemes','security','securityDefinitions','swagger','tags','$ref']"
 		);

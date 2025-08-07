@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -291,7 +290,7 @@ class ParameterInfo_Test extends SimpleTestBase {
 			.set("uniqueItems", true)
 			.set("$ref", "ref");
 
-		assertObject(t.keySet()).asJson().is(
+		assertJson(t.keySet(), 
 			"['allowEmptyValue','collectionFormat','default','description','enum','exclusiveMaximum','exclusiveMinimum',"
 			+ "'format','in','items','maximum','maxItems','maxLength','minimum','minItems','minLength','multipleOf','name',"
 			+ "'pattern','required','schema','type','uniqueItems','$ref']"
