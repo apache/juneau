@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
@@ -93,12 +92,12 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		assertTrue(x.isRepeatable());
 		x.writeTo(new ByteArrayOutputStream());
 
-		assertLong(stringResource("foo").getContentLength()).is(3L);
-		assertLong(byteArrayResource("foo".getBytes()).getContentLength()).is(3L);
-		assertLong(fileResource(f).getContentLength()).is(0L);
+		assertEquals(3L, stringResource("foo").getContentLength());
+		assertEquals(3L, byteArrayResource("foo".getBytes()).getContentLength());
+		assertEquals(0L, fileResource(f).getContentLength());
 
-		assertLong(readerResource(reader("foo")).getContentLength()).is(-1L);
-		assertLong(readerResource(reader("foo")).setContentLength(3).getContentLength()).is(3L);
+		assertEquals(-1L, readerResource(reader("foo")).getContentLength());
+		assertEquals(3L, readerResource(reader("foo")).setContentLength(3).getContentLength());
 
 		x = stringResource("foo", contentType("text/plain")).setContentEncoding("identity");
 		assertEquals("text/plain", x.getContentType().getValue());

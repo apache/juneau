@@ -155,7 +155,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 		MethodExecStore store = MethodExecStore.create().thrownStore(s).build();
 		MethodExecStats stats = store.getStats(m);
 
-		assertLong(stats.getGuid()).isNot(0L);
+		assertNotEquals(0L, stats.getGuid());
 		assertObject(stats.getMethod()).isSame(m);
 
 		assertEquals(0, stats.getRuns());
@@ -164,7 +164,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 		assertEquals(0, stats.getMinTime());
 		assertEquals(0, stats.getMaxTime());
 		assertEquals(0, stats.getAvgTime());
-		assertLong(stats.getTotalTime()).is(0L);
+		assertEquals(0L, stats.getTotalTime());
 
 		stats.started().finished(100*1000000).started().finished(200*1000000).started().error(new Throwable());
 
@@ -174,7 +174,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 		assertEquals(100, stats.getMinTime());
 		assertEquals(200, stats.getMaxTime());
 		assertEquals(150, stats.getAvgTime());
-		assertLong(stats.getTotalTime()).is(300L);
+		assertEquals(300L, stats.getTotalTime());
 
 		assertObject(stats).asString().isContains("300");
 	}

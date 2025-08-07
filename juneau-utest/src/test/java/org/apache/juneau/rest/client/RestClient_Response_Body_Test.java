@@ -262,10 +262,10 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 
 		ResponseContent x2 = testClient().entity(inputStreamEntity("foo")).get().run().getContent();
 		assertFalse(x2.isRepeatable());
-		assertLong(x2.getContentLength()).is(-1L);
+		assertEquals(-1L, x2.getContentLength());
 		x2.cache().asString();
 		assertTrue(x2.isRepeatable());
-		assertLong(x2.getContentLength()).is(3L);
+		assertEquals(3L, x2.getContentLength());
 
 		assertFalse(x2.isChunked());
 
@@ -296,7 +296,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	@Test void b02_head() throws Exception {
 		assertFalse(client().build().head("").run().getContent().isRepeatable());
 		assertFalse(client().build().head("").run().getContent().isChunked());
-		assertLong(client().build().head("").run().getContent().getContentLength()).is(-1L);
+		assertEquals(-1L, client().build().head("").run().getContent().getContentLength());
 		client().build().head("").run().getContent().getContentType().assertValue().isNull();
 		client().build().head("").run().getContent().getContentEncoding().assertValue().isNull();
 		client().build().head("").run().getContent().writeTo(new ByteArrayOutputStream());

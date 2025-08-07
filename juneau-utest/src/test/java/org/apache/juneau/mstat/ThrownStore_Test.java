@@ -42,8 +42,8 @@ class ThrownStore_Test extends SimpleTestBase {
 		assertEquals(2, db.add(t1).getCount());
 		assertEquals(1, db.add(t2).getCount());
 
-		assertLong(db.getStats(t1).get().getHash()).is(db.getStats(t1).get().getHash());
-		assertLong(db.getStats(t1).get().getHash()).isNot(db.getStats(t2).get().getHash());
+		assertEquals(db.getStats(t1).get().getHash(), db.getStats(t1).get().getHash());
+		assertNotEquals(db.getStats(t2).get().getHash(), db.getStats(t1).get().getHash());
 	}
 
 	@Test void a02_getStats() {
@@ -273,28 +273,28 @@ class ThrownStore_Test extends SimpleTestBase {
 		ThrownStore store = ThrownStore.create().build();
 
 		ThrownStats stats = store.add(t2);
-		assertLong(stats.getHash()).isNot(0L);
-		assertLong(stats.getGuid()).isNot(0L);
-		assertLong(stats.getFirstOccurrence()).isNot(0L);
-		assertLong(stats.getLastOccurrence()).isNot(0L);
+		assertNotEquals(0L, stats.getHash());
+		assertNotEquals(0L, stats.getGuid());
+		assertNotEquals(0L, stats.getFirstOccurrence());
+		assertNotEquals(0L, stats.getLastOccurrence());
 		assertEquals("bar", stats.getFirstMessage());
 		assertObject(stats.getStackTrace()).asJson().isContains("org.apache.juneau");
 		assertObject(stats).asString().isContains("bar");
 
 		stats = stats.clone();
-		assertLong(stats.getHash()).isNot(0L);
-		assertLong(stats.getGuid()).isNot(0L);
-		assertLong(stats.getFirstOccurrence()).isNot(0L);
-		assertLong(stats.getLastOccurrence()).isNot(0L);
+		assertNotEquals(0L, stats.getHash());
+		assertNotEquals(0L, stats.getGuid());
+		assertNotEquals(0L, stats.getFirstOccurrence());
+		assertNotEquals(0L, stats.getLastOccurrence());
 		assertEquals("bar", stats.getFirstMessage());
 		assertObject(stats.getStackTrace()).asJson().isContains("org.apache.juneau");
 		assertObject(stats).asString().isContains("bar");
 
 		stats = stats.getCausedBy().get();
-		assertLong(stats.getHash()).isNot(0L);
-		assertLong(stats.getGuid()).isNot(0L);
-		assertLong(stats.getFirstOccurrence()).isNot(0L);
-		assertLong(stats.getLastOccurrence()).isNot(0L);
+		assertNotEquals(0L, stats.getHash());
+		assertNotEquals(0L, stats.getGuid());
+		assertNotEquals(0L, stats.getFirstOccurrence());
+		assertNotEquals(0L, stats.getLastOccurrence());
 		assertEquals("foo", stats.getFirstMessage());
 		assertObject(stats.getStackTrace()).asJson().isContains("org.apache.juneau");
 		assertObject(stats).asString().isContains("foo");

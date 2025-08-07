@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -79,7 +78,7 @@ class SerializedHttpEntity_Test extends SimpleTestBase {
 	}
 
 	@Test void a07_getContentLength() {
-		assertLong(serializedEntity(ABean.get(),null).getContentLength()).is(-1L);
+		assertEquals(-1L, serializedEntity(ABean.get(),null).getContentLength());
 	}
 
 	@Test void a08_getContent() {

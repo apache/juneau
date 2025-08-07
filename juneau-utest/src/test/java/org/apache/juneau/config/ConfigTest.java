@@ -357,13 +357,13 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void getLong1() {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-		assertLong(c.get("a1").asLong().orElse(0L)).is(1L);
-		assertLong(c.get("a2").asLong().orElse(0L)).is(2L);
-		assertLong(c.get("a3").asLong().orElse(0L)).is(0L);
-		assertLong(c.get("S/b1").asLong().orElse(0L)).is(1L);
-		assertLong(c.get("S/b2").asLong().orElse(0L)).is(0L);
-		assertLong(c.get("S/b3").asLong().orElse(0L)).is(0L);
-		assertLong(c.get("T/c1").asLong().orElse(0L)).is(0L);
+		assertEquals(1L, c.get("a1").asLong().orElse(0L));
+		assertEquals(2L, c.get("a2").asLong().orElse(0L));
+		assertEquals(0L, c.get("a3").asLong().orElse(0L));
+		assertEquals(1L, c.get("S/b1").asLong().orElse(0L));
+		assertEquals(0L, c.get("S/b2").asLong().orElse(0L));
+		assertEquals(0L, c.get("S/b3").asLong().orElse(0L));
+		assertEquals(0L, c.get("T/c1").asLong().orElse(0L));
 	}
 
 	@Test void getLong1BadValues() {
@@ -379,13 +379,13 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void getLong2() {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-		assertLong(c.get("a1").asLong().orElse(Long.MAX_VALUE)).is(1L);
-		assertLong(c.get("a2").asLong().orElse(Long.MAX_VALUE)).is(2L);
-		assertLong(c.get("a3").asLong().orElse(Long.MAX_VALUE)).is(Long.MAX_VALUE);
-		assertLong(c.get("S/b1").asLong().orElse(Long.MAX_VALUE)).is(1L);
-		assertLong(c.get("S/b2").asLong().orElse(Long.MAX_VALUE)).is(Long.MAX_VALUE);
-		assertLong(c.get("S/b3").asLong().orElse(Long.MAX_VALUE)).is(Long.MAX_VALUE);
-		assertLong(c.get("T/c1").asLong().orElse(Long.MAX_VALUE)).is(Long.MAX_VALUE);
+		assertEquals(1L, c.get("a1").asLong().orElse(Long.MAX_VALUE));
+		assertEquals(2L, c.get("a2").asLong().orElse(Long.MAX_VALUE));
+		assertEquals(Long.MAX_VALUE, c.get("a3").asLong().orElse(Long.MAX_VALUE));
+		assertEquals(1L, c.get("S/b1").asLong().orElse(Long.MAX_VALUE));
+		assertEquals(Long.MAX_VALUE, c.get("S/b2").asLong().orElse(Long.MAX_VALUE));
+		assertEquals(Long.MAX_VALUE, c.get("S/b3").asLong().orElse(Long.MAX_VALUE));
+		assertEquals(Long.MAX_VALUE, c.get("T/c1").asLong().orElse(Long.MAX_VALUE));
 	}
 
 	@Test void getLong2BadValues() {
