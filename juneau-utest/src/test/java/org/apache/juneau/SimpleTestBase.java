@@ -242,6 +242,10 @@ public abstract class SimpleTestBase {
 		return Json5.DEFAULT.write(o);
 	}
 
+	public static String s(Object o) {
+		return StringUtils.stringify(o);
+	}
+
 	@Deprecated
 	protected static StringAssertion assertString(Object o) {
 		return org.apache.juneau.assertions.Assertions.assertString(o);

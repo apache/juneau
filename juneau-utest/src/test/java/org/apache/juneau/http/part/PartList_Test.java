@@ -72,64 +72,64 @@ class PartList_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		PartList x = PartList.create();
 
-		assertObject(x).isString("");
+		assertEquals("", s(x));
 		x.append(FOO_1);
-		assertObject(x).isString("Foo=1");
+		assertEquals("Foo=1", s(x));
 		x.append(FOO_2);
-		assertObject(x).isString("Foo=1&Foo=2");
+		assertEquals("Foo=1&Foo=2", s(x));
 		x.append(PartList.of().getAll());
-		assertObject(x).isString("Foo=1&Foo=2");
+		assertEquals("Foo=1&Foo=2", s(x));
 		x.append(PartList.of(FOO_3).getAll());
-		assertObject(x).isString("Foo=1&Foo=2&Foo=3");
+		assertEquals("Foo=1&Foo=2&Foo=3", s(x));
 		x.append(PartList.of(FOO_4, FOO_5).getAll());
-		assertObject(x).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5");
+		assertEquals("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5", s(x));
 		x.append(PartList.of(FOO_6, FOO_7).getAll());
-		assertObject(x).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7");
+		assertEquals("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7", s(x));
 		x.append((NameValuePair)null);
-		assertObject(x).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7");
+		assertEquals("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7", s(x));
 		x.append((List<NameValuePair>)null);
-		assertObject(x).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7");
+		assertEquals("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7", s(x));
 
-		assertObject(new PartList.Void()).isString("");
+		assertEquals("", s(new PartList.Void()));
 	}
 
 	@Test void a02_creators() {
 		PartList x;
 
 		x = partList(FOO_1, FOO_2, null);
-		assertObject(x).isString("Foo=1&Foo=2");
+		assertEquals("Foo=1&Foo=2", s(x));
 
 		x = partList(alist(FOO_1, FOO_2, null));
-		assertObject(x).isString("Foo=1&Foo=2");
+		assertEquals("Foo=1&Foo=2", s(x));
 
 		x = partList("Foo","1","Foo","2");
-		assertObject(x).isString("Foo=1&Foo=2");
+		assertEquals("Foo=1&Foo=2", s(x));
 
 		assertThrowsWithMessage(IllegalArgumentException.class, "Odd number of parameters passed into PartList.ofPairs()", ()->partList("Foo"));
 
 		x = PartList.of((List<NameValuePair>)null);
-		assertObject(x).isString("");
+		assertEquals("", s(x));
 
 		x = PartList.of(Collections.emptyList());
-		assertObject(x).isString("");
+		assertEquals("", s(x));
 
 		x = PartList.of(alist(FOO_1));
-		assertObject(x).isString("Foo=1");
+		assertEquals("Foo=1", s(x));
 
 		x = PartList.of((NameValuePair[])null);
-		assertObject(x).isString("");
+		assertEquals("", s(x));
 
 		x = PartList.of();
-		assertObject(x).isString("");
+		assertEquals("", s(x));
 
 		x = PartList.of(FOO_1);
-		assertObject(x).isString("Foo=1");
+		assertEquals("Foo=1", s(x));
 
 		x = PartList.ofPairs((String[])null);
-		assertObject(x).isString("");
+		assertEquals("", s(x));
 
 		x = PartList.ofPairs();
-		assertObject(x).isString("");
+		assertEquals("", s(x));
 	}
 
 	@Test void a03_addMethods() {
@@ -144,11 +144,11 @@ class PartList_Test extends SimpleTestBase {
 		x.append("X4",()->"$S{"+pname+"}");
 		x.append(new SerializedPart("X5","bar",HttpPartType.QUERY,openApiSession(),null,false));
 
-		assertObject(x).isString("X1=bar&X2=y&X3=bar&X4=y&X5=bar");
+		assertEquals("X1=bar&X2=y&X3=bar&X4=y&X5=bar", s(x));
 
 		System.setProperty(pname, "z");
 
-		assertObject(x).isString("X1=bar&X2=z&X3=bar&X4=z&X5=bar");
+		assertEquals("X1=bar&X2=z&X3=bar&X4=z&X5=bar", s(x));
 
 		System.clearProperty(pname);
 	}
@@ -158,12 +158,12 @@ class PartList_Test extends SimpleTestBase {
 			.create()
 			.append("X1","1")
 			.append(partList("X2","2").getAll());
-		assertObject(x).isString("X1=1&X2=2");
+		assertEquals("X1=1&X2=2", s(x));
 	}
 
 	@Test void a05_copy() {
 		PartList x = PartList.of(FOO_1).copy();
-		assertObject(x).isString("Foo=1");
+		assertEquals("Foo=1", s(x));
 	}
 
 	@Test void a06_getCondensed() {
@@ -318,7 +318,7 @@ class PartList_Test extends SimpleTestBase {
 		PartList x = PartList.create();
 		x.append(FOO_1);
 		x.clear();
-		assertObject(x).isString("");
+		assertEquals("", s(x));
 	}
 
 	@Test void b02_builder_append() {
@@ -335,7 +335,7 @@ class PartList_Test extends SimpleTestBase {
 			.append("Bar", ()->"b2")
 			.append((List<NameValuePair>)null)
 			.append(alist(FOO_4));
-		assertObject(x2).isString("Foo=1&Foo=2&Foo=3&Bar=b1&Bar=b2&Foo=4");
+		assertEquals("Foo=1&Foo=2&Foo=3&Bar=b1&Bar=b2&Foo=4", s(x2));
 	}
 
 	@Test void b03_builder_prepend() {
@@ -352,7 +352,7 @@ class PartList_Test extends SimpleTestBase {
 			.prepend("Bar", ()->"b2")
 			.prepend((List<NameValuePair>)null)
 			.prepend(alist(FOO_4));
-		assertObject(x2).isString("Foo=4&Bar=b2&Bar=b1&Foo=2&Foo=3&Foo=1");
+		assertEquals("Foo=4&Bar=b2&Bar=b1&Foo=2&Foo=3&Foo=1", s(x2));
 	}
 
 	@Test void b04_builder_remove() {
@@ -365,10 +365,10 @@ class PartList_Test extends SimpleTestBase {
 			.remove(FOO_2)
 			.remove(FOO_3, FOO_4)
 			.remove(alist(FOO_5));
-		assertObject(x).isString("Foo=6&Foo=7");
+		assertEquals("Foo=6&Foo=7", s(x));
 
 		x = PartList.create().append(FOO_1,FOO_2).remove((String[])null).remove("Bar","Foo");
-		assertObject(x).isString("");
+		assertEquals("", s(x));
 	}
 
 	@Test void b05_builder_set() {
@@ -381,53 +381,53 @@ class PartList_Test extends SimpleTestBase {
 			.set(BAR_1)
 			.set((NameValuePair)null)
 			.set((PartList)null);
-		assertObject(x).isString("Foo=3&Bar=1");
+		assertEquals("Foo=3&Bar=1", s(x));
 
 		x = PartList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set(FOO_3);
-		assertObject(x).isString("Bar=1&Foo=3&Bar=2");
+		assertEquals("Bar=1&Foo=3&Bar=2", s(x));
 
 		x = PartList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set((NameValuePair[])null)
 			.set(null,FOO_3,FOO_4,FOO_5);
-		assertObject(x).isString("Bar=1&Bar=2&Foo=3&Foo=4&Foo=5");
+		assertEquals("Bar=1&Bar=2&Foo=3&Foo=4&Foo=5", s(x));
 
 		x = PartList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set((List<NameValuePair>)null)
 			.set(alist(null,FOO_3,FOO_4,FOO_5));
-		assertObject(x).isString("Bar=1&Bar=2&Foo=3&Foo=4&Foo=5");
+		assertEquals("Bar=1&Bar=2&Foo=3&Foo=4&Foo=5", s(x));
 
 		x = PartList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.caseInsensitive(true)
 			.set("FOO", "x");
-		assertObject(x).isString("Bar=1&FOO=x&Bar=2");
+		assertEquals("Bar=1&FOO=x&Bar=2", s(x));
 
 		x = PartList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.caseInsensitive(true)
 			.set("FOO", ()->"x");
-		assertObject(x).isString("Bar=1&FOO=x&Bar=2");
+		assertEquals("Bar=1&FOO=x&Bar=2", s(x));
 
 		x = PartList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set("FOO", ()->"x");
-		assertObject(x).isString("Bar=1&Foo=1&Foo=2&Bar=2&FOO=x");
+		assertEquals("Bar=1&Foo=1&Foo=2&Bar=2&FOO=x", s(x));
 
 		x = PartList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set(PartList.of(FOO_3,FOO_4));
-		assertObject(x).isString("Bar=1&Bar=2&Foo=3&Foo=4");
+		assertEquals("Bar=1&Bar=2&Foo=3&Foo=4", s(x));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -438,17 +438,17 @@ class PartList_Test extends SimpleTestBase {
 		PartList x = PartList.of(APart.X, BPart.X);
 
 		PartIterator i1 = x.partIterator();
-		assertObject(i1.next()).isString("a=x");
-		assertObject(i1.next()).isString("b=x");
+		assertString("a=x", i1.next());
+		assertString("b=x", i1.next());
 		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i1::next);
 
 		PartIterator i2 = x.partIterator();
-		assertObject(i2.next()).isString("a=x");
-		assertObject(i2.next()).isString("b=x");
+		assertString("a=x", i2.next());
+		assertString("b=x", i2.next());
 		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i2::next);
 
 		PartIterator i3 = x.partIterator("a");
-		assertObject(i3.next()).isString("a=x");
+		assertString("a=x", i3.next());
 		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i3::next);
 
 		PartIterator i4 = x.partIterator("A");
@@ -457,7 +457,7 @@ class PartList_Test extends SimpleTestBase {
 		PartList x2 = PartList.create().append(APart.X,BPart.X).caseInsensitive(true);
 
 		PartIterator i5 = x2.partIterator("A");
-		assertObject(i5.next()).isString("a=x");
+		assertString("a=x", i5.next());
 		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i5::next);
 
 		assertThrowsWithMessage(UnsupportedOperationException.class, "Not supported.", i5::remove);
@@ -469,25 +469,25 @@ class PartList_Test extends SimpleTestBase {
 
 	@Test void d01_defaultParts() {
 		PartList x1 = PartList.create().setDefault(APart.X);
-		assertObject(x1).isString("a=x");
+		assertEquals("a=x", s(x1));
 
 		PartList x2 = PartList.create().set(APart.X).setDefault(APart.Y);
-		assertObject(x2).isString("a=x");
+		assertEquals("a=x", s(x2));
 
 		PartList x3 = PartList.create().set(BPart.X,APart.X,BPart.Y).setDefault(APart.Y);
-		assertObject(x3).isString("b=x&a=x&b=y");
+		assertEquals("b=x&a=x&b=y", s(x3));
 
 		PartList x4 = PartList.create().set(BPart.X,BPart.Y).setDefault(APart.X);
-		assertObject(x4).isString("b=x&b=y&a=x");
+		assertEquals("b=x&b=y&a=x", s(x4));
 
 		PartList x5 = PartList.create().set(BPart.X,BPart.Y).setDefault(APart.X).setDefault(BPart.X);
-		assertObject(x5).isString("b=x&b=y&a=x");
+		assertEquals("b=x&b=y&a=x", s(x5));
 
 		PartList x7 = PartList.create().setDefault(APart.X).setDefault(APart.Y);
-		assertObject(x7).isString("a=x");
+		assertEquals("a=x", s(x7));
 
 		PartList x8 = PartList.create().setDefault(APart.X,APart.Y).setDefault(APart.Z);
-		assertObject(x8).isString("a=x");
+		assertEquals("a=x", s(x8));
 
 		PartList x9 = PartList
 			.create()
@@ -495,25 +495,25 @@ class PartList_Test extends SimpleTestBase {
 			.setDefault((PartList)null)
 			.setDefault((NameValuePair[])null)
 			.setDefault((List<NameValuePair>)null);
-		assertObject(x9).isString("");
+		assertEquals("", s(x9));
 
 		PartList x10 = PartList.create().setDefault("a","x");
-		assertObject(x10).isString("a=x");
+		assertEquals("a=x", s(x10));
 
 		PartList x11 = PartList.create().setDefault("a",()->"x");
-		assertObject(x11).isString("a=x");
+		assertEquals("a=x", s(x11));
 
 		PartList x12 = PartList.create().set(BPart.X,BPart.Y).setDefault(alist(APart.X,BPart.Z,null));
-		assertObject(x12).isString("b=x&b=y&a=x");
+		assertEquals("b=x&b=y&a=x", s(x12));
 
 		PartList x13 = PartList.create().set(BPart.X,BPart.Y).setDefault(PartList.of(APart.X,BPart.Z,null));
-		assertObject(x13).isString("b=x&b=y&a=x");
+		assertEquals("b=x&b=y&a=x", s(x13));
 
 		PartList x14 = PartList.create().set(BPart.X,BPart.Y)
 			.setDefault(alist(APart.X,BPart.X,null))
 			.setDefault(alist(APart.Y,BPart.Y,null))
 			.setDefault(alist(CPart.X));
-		assertObject(x14).isString("b=x&b=y&a=x&c=x");
+		assertEquals("b=x&b=y&a=x&c=x", s(x14));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
