@@ -26,6 +26,7 @@ import org.apache.juneau.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
+@Deprecated
 public class AssertionPredicates_Test {
 
 	//------------------------------------------------------------------------------------------------------------------

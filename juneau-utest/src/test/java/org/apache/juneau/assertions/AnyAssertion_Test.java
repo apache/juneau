@@ -25,6 +25,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
+@Deprecated
 class AnyAssertion_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

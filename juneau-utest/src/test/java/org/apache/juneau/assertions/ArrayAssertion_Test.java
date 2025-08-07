@@ -26,6 +26,7 @@ import org.apache.juneau.serializer.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
+@Deprecated
 public class ArrayAssertion_Test {
 
 	//------------------------------------------------------------------------------------------------------------------

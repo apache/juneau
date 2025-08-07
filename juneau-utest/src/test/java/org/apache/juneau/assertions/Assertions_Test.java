@@ -27,6 +27,7 @@ import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
+@Deprecated
 public class Assertions_Test {
 
 	//------------------------------------------------------------------------------------------------------------------

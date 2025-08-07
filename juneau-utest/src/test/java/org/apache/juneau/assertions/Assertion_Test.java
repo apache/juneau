@@ -23,6 +23,7 @@ import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 @SuppressWarnings("serial")
+@Deprecated
 public class Assertion_Test {
 
 	//------------------------------------------------------------------------------------------------------------------

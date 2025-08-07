@@ -21,6 +21,7 @@ import java.util.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
+@Deprecated
 public class Verify_Test {
 
 	//-----------------------------------------------------------------------------------------------------------------
