@@ -522,9 +522,9 @@ class BeanStore_Test extends SimpleTestBase {
 				assertNull(b.createMethodFinder(C.class).find(m).run());
 			}
 		}
-		assertObject(b1c.createMethodFinder(C.class, x).find("createA1").run()).isNotNull();
+		assertNotNull(b1c.createMethodFinder(C.class, x).find("createA1").run());
 		assertNull(b1c.createMethodFinder(C.class, C1.class).find("createA1").run());
-		assertObject(b2c.createMethodFinder(C.class).find("createA1").run()).isNotNull();
+		assertNotNull(b2c.createMethodFinder(C.class).find("createA1").run());
 		assertNull(b3c.createMethodFinder(C.class).find("createA1").run());
 		assertThrown(()->b1c.createMethodFinder(C.class, x).find("createA7").run()).asMessage().isContains("foo");
 		assertNull(b1c.createMethodFinder(C.class, C1.class).find("createA7").run());
@@ -561,9 +561,9 @@ class BeanStore_Test extends SimpleTestBase {
 				assertNull(b.createMethodFinder(C.class).find(m).run());
 			}
 		}
-		assertObject(b1c.createMethodFinder(C.class, x).find("createB1").run()).isNotNull();
-		assertObject(b1c.createMethodFinder(C.class, C2.class).find("createB1").run()).isNotNull();
-		assertObject(b2c.createMethodFinder(C.class).find("createB1").run()).isNotNull();
+		assertNotNull(b1c.createMethodFinder(C.class, x).find("createB1").run());
+		assertNotNull(b1c.createMethodFinder(C.class, C2.class).find("createB1").run());
+		assertNotNull(b2c.createMethodFinder(C.class).find("createB1").run());
 		assertNull(b3c.createMethodFinder(C.class).find("createB1").run());
 		assertThrown(()->b1c.createMethodFinder(C.class, x).find("createB7").run()).asMessage().isContains("foo");
 		assertThrown(()->b1c.createMethodFinder(C.class, C2.class).find("createB7").run()).asMessage().isContains("foo");
@@ -596,32 +596,32 @@ class BeanStore_Test extends SimpleTestBase {
 			assertNull(b.createMethodFinder(C.class, x).find("createC3").run().a);
 			assertNull(b.createMethodFinder(C.class, x).find("createC4").run());
 			assertNull(b.createMethodFinder(C.class, x).find("createC5").run().a);
-			assertObject(b.createMethodFinder(C.class, x).find("createC6").run()).isNotNull();
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC6").run());
 		}
 
 		b1p.addBean(A1.class, new A1());
 		b2p.addBean(A1.class, new A1());
 		b3p.addBean(A1.class, new A1());
 		for (BeanStore b : array(b1c, b2c)) {
-			assertObject(b.createMethodFinder(C.class, x).find("createC1").run()).isNotNull();
-			assertObject(b.createMethodFinder(C.class, x).find("createC2").run()).isNotNull();
-			assertObject(b.createMethodFinder(C.class, x).find("createC3").run().a).isNotNull();
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC1").run());
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC2").run());
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC3").run().a);
 			assertNull(b.createMethodFinder(C.class, x).find("createC4").run());
 			assertNull(b.createMethodFinder(C.class, x).find("createC5").run().a);
-			assertObject(b.createMethodFinder(C.class, x).find("createC6").run()).isNotNull();
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC6").run());
 			assertNull(b.createMethodFinder(C.class, C3.class).find("createC1").run());
-			assertObject(b.createMethodFinder(C.class, C3.class).find("createC2").run()).isNotNull();
-			assertObject(b.createMethodFinder(C.class, C3.class).find("createC3").run().a).isNotNull();
+			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC2").run());
+			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC3").run().a);
 			assertNull(b.createMethodFinder(C.class, C3.class).find("createC4").run());
 			assertNull(b.createMethodFinder(C.class, C3.class).find("createC5").run().a);
-			assertObject(b.createMethodFinder(C.class, C3.class).find("createC6").run()).isNotNull();
+			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC6").run());
 		}
-		assertObject(b2c.createMethodFinder(C.class).find("createC1").run()).isNotNull();
-		assertObject(b2c.createMethodFinder(C.class).find("createC2").run()).isNotNull();
-		assertObject(b2c.createMethodFinder(C.class).find("createC3").run().a).isNotNull();
+		assertNotNull(b2c.createMethodFinder(C.class).find("createC1").run());
+		assertNotNull(b2c.createMethodFinder(C.class).find("createC2").run());
+		assertNotNull(b2c.createMethodFinder(C.class).find("createC3").run().a);
 		assertNull(b2c.createMethodFinder(C.class).find("createC4").run());
 		assertNull(b2c.createMethodFinder(C.class).find("createC5").run().a);
-		assertObject(b2c.createMethodFinder(C.class).find("createC6").run()).isNotNull();
+		assertNotNull(b2c.createMethodFinder(C.class).find("createC6").run());
 		for (String m : array("createC1","createC2","createC3","createC4","createC5","createC6")) {
 			assertNull(b3c.createMethodFinder(C.class).find(m).run());
 		}
@@ -629,25 +629,25 @@ class BeanStore_Test extends SimpleTestBase {
 		b1p.clear().addSupplier(A1.class, A1::new);
 		b2p.clear().addSupplier(A1.class, A1::new);
 		for (BeanStore b : array(b1c, b2c)) {
-			assertObject(b.createMethodFinder(C.class, x).find("createC1").run()).isNotNull();
-			assertObject(b.createMethodFinder(C.class, x).find("createC2").run()).isNotNull();
-			assertObject(b.createMethodFinder(C.class, x).find("createC3").run().a).isNotNull();
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC1").run());
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC2").run());
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC3").run().a);
 			assertNull(b.createMethodFinder(C.class, x).find("createC4").run());
 			assertNull(b.createMethodFinder(C.class, x).find("createC5").run().a);
-			assertObject(b.createMethodFinder(C.class, x).find("createC6").run()).isNotNull();
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC6").run());
 			assertNull(b.createMethodFinder(C.class, C3.class).find("createC1").run());
-			assertObject(b.createMethodFinder(C.class, C3.class).find("createC2").run()).isNotNull();
-			assertObject(b.createMethodFinder(C.class, C3.class).find("createC3").run().a).isNotNull();
+			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC2").run());
+			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC3").run().a);
 			assertNull(b.createMethodFinder(C.class, C3.class).find("createC4").run());
 			assertNull(b.createMethodFinder(C.class, C3.class).find("createC5").run().a);
-			assertObject(b.createMethodFinder(C.class, C3.class).find("createC6").run()).isNotNull();
+			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC6").run());
 		}
-		assertObject(b2c.createMethodFinder(C.class).find("createC1").run()).isNotNull();
-		assertObject(b2c.createMethodFinder(C.class).find("createC2").run()).isNotNull();
+		assertNotNull(b2c.createMethodFinder(C.class).find("createC1").run());
+		assertNotNull(b2c.createMethodFinder(C.class).find("createC2").run());
 		assertType(A1.class, b2c.createMethodFinder(C.class).find("createC3").run().a);
 		assertNull(b2c.createMethodFinder(C.class).find("createC4").run());
 		assertNull(b2c.createMethodFinder(C.class).find("createC5").run().a);
-		assertObject(b2c.createMethodFinder(C.class).find("createC6").run()).isNotNull();
+		assertNotNull(b2c.createMethodFinder(C.class).find("createC6").run());
 		for (String m : array("createC1","createC2","createC3","createC4","createC5","createC6")) {
 			assertNull(b3c.createMethodFinder(C.class).find(m).run());
 		}
@@ -655,25 +655,25 @@ class BeanStore_Test extends SimpleTestBase {
 		b1p.clear().add(A1.class, null);
 		b2p.clear().add(A1.class, null);
 		for (BeanStore b : array(b1c, b2c)) {
-			assertObject(b.createMethodFinder(C.class, x).find("createC1").run()).isNotNull();
-			assertObject(b.createMethodFinder(C.class, x).find("createC2").run()).isNotNull();
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC1").run());
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC2").run());
 			assertNull(b.createMethodFinder(C.class, x).find("createC3").run().a);
 			assertNull(b.createMethodFinder(C.class, x).find("createC4").run());
 			assertNull(b.createMethodFinder(C.class, x).find("createC5").run().a);
-			assertObject(b.createMethodFinder(C.class, x).find("createC6").run()).isNotNull();
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC6").run());
 			assertNull(b.createMethodFinder(C.class, C3.class).find("createC1").run());
-			assertObject(b.createMethodFinder(C.class, C3.class).find("createC2").run()).isNotNull();
+			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC2").run());
 			assertNull(b.createMethodFinder(C.class, C3.class).find("createC3").run().a);
 			assertNull(b.createMethodFinder(C.class, C3.class).find("createC4").run());
 			assertNull(b.createMethodFinder(C.class, C3.class).find("createC5").run().a);
-			assertObject(b.createMethodFinder(C.class, C3.class).find("createC6").run()).isNotNull();
+			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC6").run());
 		}
-		assertObject(b2c.createMethodFinder(C.class).find("createC1").run()).isNotNull();
-		assertObject(b2c.createMethodFinder(C.class).find("createC2").run()).isNotNull();
+		assertNotNull(b2c.createMethodFinder(C.class).find("createC1").run());
+		assertNotNull(b2c.createMethodFinder(C.class).find("createC2").run());
 		assertNull(b2c.createMethodFinder(C.class).find("createC3").run().a);
 		assertNull(b2c.createMethodFinder(C.class).find("createC4").run());
 		assertNull(b2c.createMethodFinder(C.class).find("createC5").run().a);
-		assertObject(b2c.createMethodFinder(C.class).find("createC6").run()).isNotNull();
+		assertNotNull(b2c.createMethodFinder(C.class).find("createC6").run());
 		for (String m : array("createC1","createC2","createC3","createC4","createC5","createC6")) {
 			assertNull(b3c.createMethodFinder(C.class).find(m).run());
 		}
@@ -681,25 +681,25 @@ class BeanStore_Test extends SimpleTestBase {
 		b1p.clear().addBean(A1.class, new A1()).add(A1.class, new A1(), "Foo");
 		b2p.clear().addBean(A1.class, new A1()).add(A1.class, new A1(), "Foo");
 		for (BeanStore b : array(b1c, b2c)) {
-			assertObject(b.createMethodFinder(C.class, x).find("createC1").run()).isNotNull();
-			assertObject(b.createMethodFinder(C.class, x).find("createC2").run()).isNotNull();
-			assertObject(b.createMethodFinder(C.class, x).find("createC3").run().a).isNotNull();
-			assertObject(b.createMethodFinder(C.class, x).find("createC4").run()).isNotNull();
-			assertObject(b.createMethodFinder(C.class, x).find("createC5").run().a).isNotNull();
-			assertObject(b.createMethodFinder(C.class, x).find("createC6").run()).isNotNull();
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC1").run());
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC2").run());
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC3").run().a);
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC4").run());
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC5").run().a);
+			assertNotNull(b.createMethodFinder(C.class, x).find("createC6").run());
 			assertNull(b.createMethodFinder(C.class, C3.class).find("createC1").run());
-			assertObject(b.createMethodFinder(C.class, C3.class).find("createC2").run()).isNotNull();
-			assertObject(b.createMethodFinder(C.class, C3.class).find("createC3").run().a).isNotNull();
-			assertObject(b.createMethodFinder(C.class, C3.class).find("createC4").run()).isNotNull();
-			assertObject(b.createMethodFinder(C.class, C3.class).find("createC5").run().a).isNotNull();
-			assertObject(b.createMethodFinder(C.class, C3.class).find("createC6").run()).isNotNull();
+			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC2").run());
+			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC3").run().a);
+			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC4").run());
+			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC5").run().a);
+			assertNotNull(b.createMethodFinder(C.class, C3.class).find("createC6").run());
 		}
-		assertObject(b2c.createMethodFinder(C.class).find("createC1").run()).isNotNull();
-		assertObject(b2c.createMethodFinder(C.class).find("createC2").run()).isNotNull();
-		assertObject(b2c.createMethodFinder(C.class).find("createC3").run().a).isNotNull();
-		assertObject(b2c.createMethodFinder(C.class).find("createC4").run()).isNotNull();
-		assertObject(b2c.createMethodFinder(C.class).find("createC5").run().a).isNotNull();
-		assertObject(b2c.createMethodFinder(C.class).find("createC6").run()).isNotNull();
+		assertNotNull(b2c.createMethodFinder(C.class).find("createC1").run());
+		assertNotNull(b2c.createMethodFinder(C.class).find("createC2").run());
+		assertNotNull(b2c.createMethodFinder(C.class).find("createC3").run().a);
+		assertNotNull(b2c.createMethodFinder(C.class).find("createC4").run());
+		assertNotNull(b2c.createMethodFinder(C.class).find("createC5").run().a);
+		assertNotNull(b2c.createMethodFinder(C.class).find("createC6").run());
 		for (String m : array("createC1","createC2","createC3","createC4","createC5","createC6")) {
 			assertNull(b3c.createMethodFinder(C.class).find(m).run());
 		}
@@ -778,8 +778,8 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d01_createBean_basic() {
 		BeanStore bs = BeanStore.create().outer(new BeanStore_Test()).build();
-		assertObject(bs.createBean(D1a.class).run()).isNotNull();
-		assertObject(bs.createBean(D1b.class).run()).isNotNull();
+		assertNotNull(bs.createBean(D1a.class).run());
+		assertNotNull(bs.createBean(D1b.class).run());
 		assertNull(bs.createBean(null).run());
 	}
 
@@ -828,7 +828,7 @@ class BeanStore_Test extends SimpleTestBase {
 		BeanStore bs = BeanStore.INSTANCE;
 		assertObject(bs.createBean(D4a.class).run()).isNotAny(d4a1, d4a2, d4a3, d4a4);
 		assertObject(bs.createBean(D4b.class).run()).isNotAny(d4b1, d4b2);
-		assertObject(bs.createBean(D4c.class).run()).isNotNull();
+		assertNotNull(bs.createBean(D4c.class).run());
 	}
 
 	public static class D5 {

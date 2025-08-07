@@ -12,16 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshaller;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-public class Marshall_Test extends SimpleTestBase {
+class Marshall_Test extends SimpleTestBase {
 
 	@Test void basic() {
 		Marshaller m = Json5.DEFAULT;
-		assertObject(m.getParser()).isNotNull();
-		assertObject(m.getSerializer()).isNotNull();
+		assertNotNull(m.getParser());
+		assertNotNull(m.getSerializer());
 	}
 }

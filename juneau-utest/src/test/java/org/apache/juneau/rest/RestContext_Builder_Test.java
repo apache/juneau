@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -58,7 +57,7 @@ public class RestContext_Builder_Test {
 	@Test
 	public void a02_createBeanStore_annotation() {
 		MockRestClient.buildLax(A2.class);
-		assertObject(A2.beanStore.getBean(A.class)).isNotNull();
+		assertNotNull(A2.beanStore.getBean(A.class));
 	}
 
 	@Rest
@@ -73,7 +72,7 @@ public class RestContext_Builder_Test {
 	@Test
 	public void a03_createBeanStore_restBean1() {
 		MockRestClient.buildLax(A3.class);
-		assertObject(A3.beanStore.getBean(A.class)).isNotNull();
+		assertNotNull(A3.beanStore.getBean(A.class));
 	}
 
 	@Rest
@@ -88,7 +87,7 @@ public class RestContext_Builder_Test {
 	@Test
 	public void a04_createBeanStore_restBean2() {
 		MockRestClient.buildLax(A4.class);
-		assertObject(A4.beanStore.getBean(A.class)).isNotNull();
+		assertNotNull(A4.beanStore.getBean(A.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
