@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
@@ -53,7 +52,7 @@ class Xml_Test extends SimpleTestBase {
 			.set("wrapped", true)
 			.set("$ref", "ref");
 
-		assertObject(t).asJson().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
+		assertJson(t, "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
 
 		t
 			.set("attribute", "true")
@@ -63,7 +62,7 @@ class Xml_Test extends SimpleTestBase {
 			.set("wrapped", "true")
 			.set("$ref", "ref");
 
-		assertObject(t).asJson().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
+		assertJson(t, "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
 
 		t
 			.set("attribute", new StringBuilder("true"))
@@ -73,7 +72,7 @@ class Xml_Test extends SimpleTestBase {
 			.set("wrapped", new StringBuilder("true"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObject(t).asJson().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
+		assertJson(t, "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
 
 		assertEquals("true", t.get("attribute", String.class));
 		assertEquals("a", t.get("name", String.class));
@@ -95,7 +94,7 @@ class Xml_Test extends SimpleTestBase {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}";
-		assertObject(JsonParser.DEFAULT.parse(s, Xml.class)).asJson().is(s);
+		assertJson(JsonParser.DEFAULT.parse(s, Xml.class), s);
 	}
 
 	@Test void b02_copy() {
@@ -103,7 +102,7 @@ class Xml_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertObject(t).asJson().is("{}");
+		assertJson(t, "{}");
 
 		t
 			.set("attribute", true)
@@ -114,13 +113,13 @@ class Xml_Test extends SimpleTestBase {
 			.set("$ref", "ref")
 			.copy();
 
-		assertObject(t).asJson().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
+		assertJson(t, "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
 	}
 
 	@Test void b03_keySet() {
 		Xml t = new Xml();
 
-		assertObject(t.keySet()).asJson().is("[]");
+		assertJson(t.keySet(), "[]");
 
 		t
 			.set("attribute", true)
@@ -130,6 +129,6 @@ class Xml_Test extends SimpleTestBase {
 			.set("wrapped", true)
 			.set("$ref", "ref");
 
-		assertObject(t.keySet()).asJson().is("['attribute','name','namespace','prefix','wrapped','$ref']");
+		assertJson(t.keySet(), "['attribute','name','namespace','prefix','wrapped','$ref']");
 	}
 }

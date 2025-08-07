@@ -17,6 +17,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.*;
@@ -217,6 +218,10 @@ public abstract class SimpleTestBase {
 	 */
 	public static Supplier<String> ss(String pattern, Object...args) {
 		return AssertionHelpers.ss(pattern, args);
+	}
+
+	public static String json(Object o) {
+		return Json5.DEFAULT.write(o);
 	}
 
 	@Deprecated

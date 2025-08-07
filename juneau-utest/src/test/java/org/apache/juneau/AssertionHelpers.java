@@ -334,4 +334,8 @@ public class AssertionHelpers {
 	public static Supplier<String> ss(String pattern, Object...args) {
 		return ()->StringUtils.format(pattern, args);
 	}
+
+	public static String json(Object o) {
+		return Json5.DEFAULT.write(o);
+	}
 }

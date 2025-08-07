@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.AssertionHelpers.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -41,7 +41,7 @@ public class RoundTripObjectsWithSpecialMethodsTest extends RoundTripTest {
 	public void testNameProperty() throws Exception {
 		A t = new A().init();
 		t = roundTrip(t);
-		assertObject(t).asJson().is("{a2:{f2:2},m:{k1:{f2:2}}}");
+		assertJson(t, "{a2:{f2:2},m:{k1:{f2:2}}}");
 		if (isValidationOnly())
 			return;
 		assertEquals("a2", t.a2.name);

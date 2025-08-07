@@ -83,7 +83,7 @@ class Operation_Test extends SimpleTestBase {
 			.set("tags", set("k"))
 			.set("$ref", "ref");
 
-		assertObject(t).asJson().is("{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
+		assertJson(t, "{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
 
 		t
 			.set("consumes", "['text/a']")
@@ -100,7 +100,7 @@ class Operation_Test extends SimpleTestBase {
 			.set("tags", "['k']")
 			.set("$ref", "ref");
 
-		assertObject(t).asJson().is("{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
+		assertJson(t, "{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
 
 		t
 			.set("consumes", new StringBuilder("['text/a']"))
@@ -117,7 +117,7 @@ class Operation_Test extends SimpleTestBase {
 			.set("tags", new StringBuilder("['k']"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObject(t).asJson().is("{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
+		assertJson(t, "{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
 
 		assertEquals("['text/a']", t.get("consumes", String.class));
 		assertEquals("true", t.get("deprecated", String.class));
@@ -158,7 +158,7 @@ class Operation_Test extends SimpleTestBase {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}";
-		assertObject(JsonParser.DEFAULT.parse(s, Operation.class)).asJson().is(s);
+		assertJson(JsonParser.DEFAULT.parse(s, Operation.class), s);
 	}
 
 	@Test void b02_copy() {
@@ -166,7 +166,7 @@ class Operation_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertObject(t).asJson().is("{}");
+		assertJson(t, "{}");
 
 		t
 			.set("consumes", set(MediaType.of("text/a")))
@@ -184,13 +184,13 @@ class Operation_Test extends SimpleTestBase {
 			.set("$ref", "ref")
 			.copy();
 
-		assertObject(t).asJson().is("{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
+		assertJson(t, "{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
 	}
 
 	@Test void b03_keySet() {
 		Operation t = new Operation();
 
-		assertObject(t.keySet()).asJson().is("[]");
+		assertJson(t.keySet(), "[]");
 
 		t
 			.set("consumes", set(MediaType.of("text/a")))

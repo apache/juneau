@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
@@ -68,7 +67,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 			.set("type", "g")
 			.set("$ref", "ref");
 
-		assertObject(t).asJson().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
+		assertJson(t, "{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
 
 		t
 			.set("authorizationUrl", "a")
@@ -81,7 +80,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 			.set("type", "g")
 			.set("$ref", "ref");
 
-		assertObject(t).asJson().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
+		assertJson(t, "{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
 
 		t
 			.set("authorizationUrl", new StringBuilder("a"))
@@ -94,7 +93,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 			.set("type", new StringBuilder("g"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObject(t).asJson().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
+		assertJson(t, "{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
 
 		assertEquals("a", t.get("authorizationUrl", String.class));
 		assertEquals("b", t.get("description", String.class));
@@ -122,7 +121,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}";
-		assertObject(JsonParser.DEFAULT.parse(s, SecurityScheme.class)).asJson().is(s);
+		assertJson(JsonParser.DEFAULT.parse(s, SecurityScheme.class), s);
 	}
 
 	@Test void b02_copy() {
@@ -130,7 +129,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertObject(t).asJson().is("{}");
+		assertJson(t, "{}");
 
 		t
 			.set("authorizationUrl", "a")
@@ -144,13 +143,13 @@ class SecurityScheme_Test extends SimpleTestBase {
 			.set("$ref", "ref")
 			.copy();
 
-		assertObject(t).asJson().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
+		assertJson(t, "{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
 	}
 
 	@Test void b03_keySet() {
 		SecurityScheme t = new SecurityScheme();
 
-		assertObject(t.keySet()).asJson().is("[]");
+		assertJson(t.keySet(), "[]");
 
 		t
 			.set("authorizationUrl", "a")
@@ -163,6 +162,6 @@ class SecurityScheme_Test extends SimpleTestBase {
 			.set("type", "g")
 			.set("$ref", "ref");
 
-		assertObject(t.keySet()).asJson().is("['authorizationUrl','description','flow','in','name','scopes','tokenUrl','type','$ref']");
+		assertJson(t.keySet(), "['authorizationUrl','description','flow','in','name','scopes','tokenUrl','type','$ref']");
 	}
 }

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
@@ -36,7 +35,7 @@ class Info_Test extends SimpleTestBase {
 		assertString(t.setDescription(null).getDescription()).isNull();
 		assertEquals("foo", t.setTermsOfService("foo").getTermsOfService());
 		assertString(t.setTermsOfService(null).getTermsOfService()).isNull();
-		assertObject(t.setContact(contact("foo")).getContact()).asJson().is("{name:'foo'}");
+		assertJson(t.setContact(contact("foo")).getContact(), "{name:'foo'}");
 		assertJson(t.setLicense(license("foo")).getLicense(), "{name:'foo'}");
 		assertEquals("foo", t.setVersion("foo").getVersion());
 		assertString(t.setVersion(null).getVersion()).isNull();
@@ -57,7 +56,7 @@ class Info_Test extends SimpleTestBase {
 			.set("version", "f")
 			.set("$ref", "ref");
 
-		assertObject(t).asJson().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
+		assertJson(t, "{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
 
 		t
 			.set("contact", "{name:'a'}")
@@ -68,7 +67,7 @@ class Info_Test extends SimpleTestBase {
 			.set("version", "f")
 			.set("$ref", "ref");
 
-		assertObject(t).asJson().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
+		assertJson(t, "{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
 
 		t
 			.set("contact", new StringBuilder("{name:'a'}"))
@@ -79,7 +78,7 @@ class Info_Test extends SimpleTestBase {
 			.set("version", new StringBuilder("f"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObject(t).asJson().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
+		assertJson(t, "{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
 
 		assertEquals("{name:'a'}", t.get("contact", String.class));
 		assertEquals("b", t.get("description", String.class));
@@ -103,7 +102,7 @@ class Info_Test extends SimpleTestBase {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}";
-		assertObject(JsonParser.DEFAULT.parse(s, Info.class)).asJson().is(s);
+		assertJson(JsonParser.DEFAULT.parse(s, Info.class), s);
 	}
 
 	@Test void b02_copy() {
@@ -111,7 +110,7 @@ class Info_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertObject(t).asJson().is("{}");
+		assertJson(t, "{}");
 
 		t
 			.set("contact", contact("a"))
@@ -123,13 +122,13 @@ class Info_Test extends SimpleTestBase {
 			.set("$ref", "ref")
 			.copy();
 
-		assertObject(t).asJson().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
+		assertJson(t, "{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
 	}
 
 	@Test void b03_keySet() {
 		Info t = new Info();
 
-		assertObject(t.keySet()).asJson().is("[]");
+		assertJson(t.keySet(), "[]");
 
 		t
 			.set("contact", contact("a"))
@@ -140,6 +139,6 @@ class Info_Test extends SimpleTestBase {
 			.set("version", "f")
 			.set("$ref", "ref");
 
-		assertObject(t.keySet()).asJson().is("['contact','description','license','termsOfService','title','version','$ref']");
+		assertJson(t.keySet(), "['contact','description','license','termsOfService','title','version','$ref']");
 	}
 }

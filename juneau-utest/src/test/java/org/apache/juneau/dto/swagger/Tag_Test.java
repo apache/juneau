@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
@@ -35,7 +34,7 @@ class Tag_Test extends SimpleTestBase {
 		assertString(t.setName(null).getName()).isNull();
 		assertEquals("foo", t.setDescription("foo").getDescription());
 		assertString(t.setDescription(null).getDescription()).isNull();
-		assertObject(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs()).asJson().is("{url:'foo'}");
+		assertJson(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs(), "{url:'foo'}");
 	}
 
 	/**
@@ -50,7 +49,7 @@ class Tag_Test extends SimpleTestBase {
 			.set("name", "c")
 			.set("$ref", "ref");
 
-		assertObject(t).asJson().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
+		assertJson(t, "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
 
 		t
 			.set("description", "a")
@@ -58,7 +57,7 @@ class Tag_Test extends SimpleTestBase {
 			.set("name", "c")
 			.set("$ref", "ref");
 
-		assertObject(t).asJson().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
+		assertJson(t, "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
 
 		t
 			.set("description", new StringBuilder("a"))
@@ -66,7 +65,7 @@ class Tag_Test extends SimpleTestBase {
 			.set("name", new StringBuilder("c"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObject(t).asJson().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
+		assertJson(t, "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
 
 		assertEquals("a", t.get("description", String.class));
 		assertEquals("{url:'b'}", t.get("externalDocs", String.class));
@@ -84,7 +83,7 @@ class Tag_Test extends SimpleTestBase {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}";
-		assertObject(JsonParser.DEFAULT.parse(s, Tag.class)).asJson().is(s);
+		assertJson(JsonParser.DEFAULT.parse(s, Tag.class), s);
 	}
 
 	@Test void b02_copy() {
@@ -92,7 +91,7 @@ class Tag_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertObject(t).asJson().is("{}");
+		assertJson(t, "{}");
 
 		t
 			.set("description", "a")
@@ -101,13 +100,13 @@ class Tag_Test extends SimpleTestBase {
 			.set("$ref", "ref")
 			.copy();
 
-		assertObject(t).asJson().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
+		assertJson(t, "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
 	}
 
 	@Test void b03_keySet() {
 		Tag t = new Tag();
 
-		assertObject(t.keySet()).asJson().is("[]");
+		assertJson(t.keySet(), "[]");
 
 		t
 			.set("description", "a")
@@ -115,6 +114,6 @@ class Tag_Test extends SimpleTestBase {
 			.set("name", "c")
 			.set("$ref", "ref");
 
-		assertObject(t.keySet()).asJson().is("['description','externalDocs','name','$ref']");
+		assertJson(t.keySet(), "['description','externalDocs','name','$ref']");
 	}
 }

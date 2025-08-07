@@ -47,14 +47,14 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 			.set("url", "bar")
 			.set("$ref", "baz");
 
-		assertObject(t).asJson().is("{description:'foo',url:'bar','$ref':'baz'}");
+		assertJson(t, "{description:'foo',url:'bar','$ref':'baz'}");
 
 		t
 			.set("description", new StringBuilder("foo"))
 			.set("url", new StringBuilder("bar"))
 			.set("$ref", new StringBuilder("baz"));
 
-		assertObject(t).asJson().is("{description:'foo',url:'bar','$ref':'baz'}");
+		assertJson(t, "{description:'foo',url:'bar','$ref':'baz'}");
 
 		assertObject(t.get("description", String.class)).isType(String.class).is("foo");
 		assertObject(t.get("url", URI.class)).isType(URI.class).asString().is("bar");
@@ -65,7 +65,7 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
 
-		assertObject(JsonParser.DEFAULT.parse("{description:'foo',url:'bar','$ref':'baz'}", ExternalDocumentation.class)).asJson().is("{description:'foo',url:'bar','$ref':'baz'}");
+		assertJson(JsonParser.DEFAULT.parse("{description:'foo',url:'bar','$ref':'baz'}", ExternalDocumentation.class), "{description:'foo',url:'bar','$ref':'baz'}");
 	}
 
 	@Test void b02_copy() {
@@ -73,7 +73,7 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertObject(t).asJson().is("{}");
+		assertJson(t, "{}");
 
 		t
 			.set("description", "foo")
@@ -81,19 +81,19 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 			.set("$ref", "baz")
 			.copy();
 
-		assertObject(t).asJson().is("{description:'foo',url:'bar','$ref':'baz'}");
+		assertJson(t, "{description:'foo',url:'bar','$ref':'baz'}");
 	}
 
 	@Test void b03_keySet() {
 		ExternalDocumentation t = new ExternalDocumentation();
 
-		assertObject(t.keySet()).asJson().is("[]");
+		assertJson(t.keySet(), "[]");
 
 		t
 			.set("description", "foo")
 			.set("url", "bar")
 			.set("$ref", "baz");
 
-		assertObject(t.keySet()).asJson().is("['description','url','$ref']");
+		assertJson(t.keySet(), "['description','url','$ref']");
 	}
 }

@@ -50,7 +50,7 @@ class Contact_Test extends SimpleTestBase {
 			.set("email", "baz")
 			.set("$ref", "qux");
 
-		assertObject(t).asJson().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
+		assertJson(t, "{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
 
 		t
 			.set("name", new StringBuilder("foo"))
@@ -58,7 +58,7 @@ class Contact_Test extends SimpleTestBase {
 			.set("email", new StringBuilder("baz"))
 			.set("$ref", new StringBuilder("qux"));
 
-		assertObject(t).asJson().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
+		assertJson(t, "{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
 
 		assertObject(t.get("name", String.class)).isType(String.class).is("foo");
 		assertObject(t.get("url", URI.class)).isType(URI.class).asString().is("bar");
@@ -70,7 +70,7 @@ class Contact_Test extends SimpleTestBase {
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
 
-		assertObject(JsonParser.DEFAULT.parse("{name:'foo',url:'bar',email:'baz','$ref':'qux'}", Contact.class)).asJson().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
+		assertJson(JsonParser.DEFAULT.parse("{name:'foo',url:'bar',email:'baz','$ref':'qux'}", Contact.class), "{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
 	}
 
 	@Test void b02_copy() {
@@ -78,7 +78,7 @@ class Contact_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertObject(t).asJson().is("{}");
+		assertJson(t, "{}");
 
 		t
 			.set("name", "foo")
@@ -87,13 +87,13 @@ class Contact_Test extends SimpleTestBase {
 			.set("$ref", "qux")
 			.copy();
 
-		assertObject(t).asJson().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
+		assertJson(t, "{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
 	}
 
 	@Test void b03_keySet() {
 		Contact t = new Contact();
 
-		assertObject(t.keySet()).asJson().is("[]");
+		assertJson(t.keySet(), "[]");
 
 		t
 			.set("name", "foo")
@@ -101,6 +101,6 @@ class Contact_Test extends SimpleTestBase {
 			.set("email", "baz")
 			.set("$ref", "qux");
 
-		assertObject(t.keySet()).asJson().is("['email','name','url','$ref']");
+		assertJson(t.keySet(), "['email','name','url','$ref']");
 	}
 }

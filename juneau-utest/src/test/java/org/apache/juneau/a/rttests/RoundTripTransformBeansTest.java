@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.AssertionHelpers.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.DateUtils.*;
@@ -505,7 +505,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals("{c:'2018-12-12T05:12:00'}", r);
 
 		x = p.parse(r, F1.class);
-		assertObject(x).asJson().is("{c:'2018-12-12T05:12:00'}");
+		assertJson(x, "{c:'2018-12-12T05:12:00'}");
 
 		roundTrip(x, F1.class);
 	}
@@ -546,7 +546,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals("{c:'2018-12-12T05:12:00'}", r);
 
 		x = p.parse(r, F1c.class);
-		assertObject(x).asString(s).is("{c:'2018-12-12T05:12:00'}");
+		assertSerialized(x, s, "{c:'2018-12-12T05:12:00'}");
 
 		roundTrip(x, F1c.class);
 	}
@@ -587,7 +587,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals("{c:'2018-12-12T05:12:00'}", r);
 
 		x = p.parse(r, F2.class);
-		assertObject(x).asJson().is("{c:'2018-12-12T05:12:00'}");
+		assertJson(x, "{c:'2018-12-12T05:12:00'}");
 
 		roundTrip(x, F2.class);
 	}
@@ -630,7 +630,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals("{c:'2018-12-12T05:12:00'}", r);
 
 		x = p.parse(r, F2.class);
-		assertObject(x).asString(s).is("{c:'2018-12-12T05:12:00'}");
+		assertJson(x, "{c:'2018-12-12T05:12:00'}");
 
 		roundTrip(x, F2.class);
 	}
@@ -663,7 +663,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	public void testBeanWithIncompleteCopyConstructor() throws Exception {
 		F f = F.create();
 		f = roundTrip(f);
-		assertObject(f).asJson().is("{f1:1,f2:2}");
+		assertJson(f, "{f1:1,f2:2}");
 	}
 
 

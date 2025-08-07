@@ -37,7 +37,7 @@ class Swagger_Test extends SimpleTestBase {
 		Swagger t = new Swagger();
 		assertEquals("foo", t.setSwagger("foo").getSwagger());
 		assertString(t.setSwagger(null).getSwagger()).isNull();
-		assertObject(t.setInfo(info("foo", "bar")).getInfo()).asJson().is("{title:'foo',version:'bar'}");
+		assertJson(t.setInfo(info("foo", "bar")).getInfo(), "{title:'foo',version:'bar'}");
 		assertEquals("foo", t.setHost("foo").getHost());
 		assertString(t.setHost(null).getHost()).isNull();
 		assertEquals("foo", t.setBasePath("foo").getBasePath());
@@ -54,31 +54,31 @@ class Swagger_Test extends SimpleTestBase {
 		assertJson(t.setPaths(map("foo", new OperationMap().append("bar",operation().setSummary("baz")))).getPaths(), "{foo:{bar:{summary:'baz'}}}");
 		assertNull(t.setPaths(map()).getPaths());
 		assertNull(t.setPaths((Map<String,OperationMap>)null).getPaths());
-		assertObject(t.setPaths(null).addPath("a", "a1", operation().setDescription("a2")).addPath("b", null, null).getPaths()).asJson().is("{a:{a1:{description:'a2'}},b:{null:null}}");
+		assertJson(t.setPaths(null).addPath("a", "a1", operation().setDescription("a2")).addPath("b", null, null).getPaths(), "{a:{a1:{description:'a2'}},b:{null:null}}");
 		assertJson(t.setDefinitions(map("foo",JsonMap.of("type","bar"))).getDefinitions(), "{foo:{type:'bar'}}");
 		assertJson(t.setDefinitions(map()).getDefinitions(), "{}");
 		assertNull(t.setDefinitions((Map<String,JsonMap>)null).getDefinitions());
-		assertObject(t.setDefinitions(null).addDefinition("a", JsonMap.of("type","a1")).addDefinition("b", (JsonMap)null).addDefinition(null, JsonMap.of("type", "c1")).getDefinitions()).asJson().is("{a:{type:'a1'},b:null,null:{type:'c1'}}");
+		assertJson(t.setDefinitions(null).addDefinition("a", JsonMap.of("type","a1")).addDefinition("b", (JsonMap)null).addDefinition(null, JsonMap.of("type", "c1")).getDefinitions(), "{a:{type:'a1'},b:null,null:{type:'c1'}}");
 		assertJson(t.setParameters(map("foo",parameterInfo().setName("bar"))).getParameters(), "{foo:{name:'bar'}}");
 		assertJson(t.setParameters(map()).getParameters(), "{}");
 		assertNull(t.setParameters((Map<String,ParameterInfo>)null).getParameters());
-		assertObject(t.setParameters(null).addParameter("a", parameterInfo().setIn("a1")).addParameter("b", null).addParameter(null, parameterInfo().setIn("c1")).getParameters()).asJson().is("{a:{'in':'a1'},b:null,null:{'in':'c1'}}");
+		assertJson(t.setParameters(null).addParameter("a", parameterInfo().setIn("a1")).addParameter("b", null).addParameter(null, parameterInfo().setIn("c1")).getParameters(), "{a:{'in':'a1'},b:null,null:{'in':'c1'}}");
 		assertJson(t.setResponses(map("123",responseInfo("bar"))).getResponses(), "{'123':{description:'bar'}}");
 		assertJson(t.setResponses(map()).getResponses(), "{}");
 		assertNull(t.setResponses((Map<String,ResponseInfo>)null).getResponses());
-		assertObject(t.setResponses(null).addResponse("a", responseInfo("a1")).addResponse(null, responseInfo("b1")).addResponse("c", null).getResponses()).asJson().is("{a:{description:'a1'},null:{description:'b1'},c:null}");
+		assertJson(t.setResponses(null).addResponse("a", responseInfo("a1")).addResponse(null, responseInfo("b1")).addResponse("c", null).getResponses(), "{a:{description:'a1'},null:{description:'b1'},c:null}");
 		assertJson(t.setSecurityDefinitions(map("foo",securityScheme("bar"))).getSecurityDefinitions(), "{foo:{type:'bar'}}");
 		assertJson(t.setSecurityDefinitions(map()).getSecurityDefinitions(), "{}");
 		assertNull(t.setSecurityDefinitions((Map<String,SecurityScheme>)null).getSecurityDefinitions());
-		assertObject(t.setSecurityDefinitions(null).addSecurityDefinition("a", securityScheme("a1")).addSecurityDefinition("b", null).addSecurityDefinition(null, securityScheme("c1")).getSecurityDefinitions()).asJson().is("{a:{type:'a1'},b:null,null:{type:'c1'}}");
+		assertJson(t.setSecurityDefinitions(null).addSecurityDefinition("a", securityScheme("a1")).addSecurityDefinition("b", null).addSecurityDefinition(null, securityScheme("c1")).getSecurityDefinitions(), "{a:{type:'a1'},b:null,null:{type:'c1'}}");
 		assertJson(t.setSecurity(set(map("foo",alist("bar")))).getSecurity(), "[{foo:['bar']}]");
 		assertJson(t.setSecurity(set()).getSecurity(), "[]");
 		assertNull(t.setSecurity((Collection<Map<String, List<String>>>)null).getSecurity());
-		assertObject(t.setSecurity(null).addSecurity("a", "a1", "a2").addSecurity("b", (String)null).addSecurity(null, "d1", "d2").getSecurity()).asJson().is("[{a:['a1','a2']},{b:[null]},{null:['d1','d2']}]");
+		assertJson(t.setSecurity(null).addSecurity("a", "a1", "a2").addSecurity("b", (String)null).addSecurity(null, "d1", "d2").getSecurity(), "[{a:['a1','a2']},{b:[null]},{null:['d1','d2']}]");
 		assertJson(t.setTags(set(tag("foo"))).getTags(), "[{name:'foo'}]");
 		assertJson(t.setTags(set()).getTags(), "[]");
 		assertNull(t.setTags((Collection<Tag>)null).getTags());
-		assertObject(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs()).asJson().is("{url:'foo'}");
+		assertJson(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs(), "{url:'foo'}");
 	}
 
 	/**
@@ -105,7 +105,7 @@ class Swagger_Test extends SimpleTestBase {
 			.set("tags", set(tag("o")))
 			.set("$ref", "ref");
 
-		assertObject(t).asJson().is("{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}");
+		assertJson(t, "{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}");
 
 		t
 			.set("basePath", "a")
@@ -125,7 +125,7 @@ class Swagger_Test extends SimpleTestBase {
 			.set("tags", "[{name:'o'}]")
 			.set("$ref", "ref");
 
-		assertObject(t).asJson().is("{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}");
+		assertJson(t, "{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}");
 
 		t
 			.set("basePath", new StringBuilder("a"))
@@ -145,7 +145,7 @@ class Swagger_Test extends SimpleTestBase {
 			.set("tags", new StringBuilder("[{name:'o'}]"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObject(t).asJson().is("{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}");
+		assertJson(t, "{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}");
 
 		assertEquals("a", t.get("basePath", String.class));
 		assertEquals("['text/b']", t.get("consumes", String.class));
@@ -194,7 +194,7 @@ class Swagger_Test extends SimpleTestBase {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}";
-		assertObject(JsonParser.DEFAULT.parse(s, Swagger.class)).asJson().is(s);
+		assertJson(JsonParser.DEFAULT.parse(s, Swagger.class), s);
 	}
 
 	@Test void b02_copy() {
@@ -202,7 +202,7 @@ class Swagger_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertObject(t).asJson().is("{swagger:'2.0'}");
+		assertJson(t, "{swagger:'2.0'}");
 
 		t
 			.set("basePath", "a")
@@ -223,13 +223,13 @@ class Swagger_Test extends SimpleTestBase {
 			.set("$ref", "ref")
 			.copy();
 
-		assertObject(t).asJson().is("{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}");
+		assertJson(t, "{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}");
 	}
 
 	@Test void b03_keySet() {
 		Swagger t = new Swagger();
 
-		assertObject(t.keySet()).asJson().is("['swagger']");
+		assertJson(t.keySet(), "['swagger']");
 
 		t
 			.set("basePath", "a")

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,7 +43,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 		assertJson(t.setExamples(map()).getExamples(), "{}");
 		assertNull(t.setExamples((Map<String,Object>)null).getExamples());
 		assertJson(t.setExamples(map("foo","bar","baz",alist("qux"))).getExamples(), "{foo:'bar',baz:['qux']}");
-		assertObject(t.setExamples(map()).addExample("text/a", "a").addExample("text/b", null).addExample(null, "c").getExamples()).asJson().is("{'text/a':'a','text/b':null,null:'c'}");
+		assertJson(t.setExamples(map()).addExample("text/a", "a").addExample("text/b", null).addExample(null, "c").getExamples(), "{'text/a':'a','text/b':null,null:'c'}");
 	}
 
 	/**
@@ -60,7 +59,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 			.set("schema", schemaInfo().setType("d"))
 			.set("$ref", "ref");
 
-		assertObject(t).asJson().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
+		assertJson(t, "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
 
 		t
 			.set("description", "a")
@@ -69,7 +68,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 			.set("schema", "{type:'d'}")
 			.set("$ref", "ref");
 
-		assertObject(t).asJson().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
+		assertJson(t, "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
 
 		t
 			.set("description", new StringBuilder("a"))
@@ -78,7 +77,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 			.set("schema", new StringBuilder("{type:'d'}"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObject(t).asJson().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
+		assertJson(t, "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
 
 		assertEquals("a", t.get("description", String.class));
 		assertEquals("{foo:'bar',baz:['qux']}", t.get("examples", String.class));
@@ -99,7 +98,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}";
-		assertObject(JsonParser.DEFAULT.parse(s, ResponseInfo.class)).asJson().is(s);
+		assertJson(JsonParser.DEFAULT.parse(s, ResponseInfo.class), s);
 	}
 
 	@Test void b02_copy() {
@@ -107,7 +106,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertObject(t).asJson().is("{}");
+		assertJson(t, "{}");
 
 		t
 			.set("description", "a")
@@ -117,13 +116,13 @@ class ResponseInfo_Test extends SimpleTestBase {
 			.set("$ref", "ref")
 			.copy();
 
-		assertObject(t).asJson().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
+		assertJson(t, "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
 	}
 
 	@Test void b03_keySet() {
 		ResponseInfo t = new ResponseInfo();
 
-		assertObject(t.keySet()).asJson().is("[]");
+		assertJson(t.keySet(), "[]");
 
 		t
 			.set("description", "a")
@@ -132,6 +131,6 @@ class ResponseInfo_Test extends SimpleTestBase {
 			.set("schema", schemaInfo().setType("d"))
 			.set("$ref", "ref");
 
-		assertObject(t.keySet()).asJson().is("['description','examples','headers','schema','$ref']");
+		assertJson(t.keySet(), "['description','examples','headers','schema','$ref']");
 	}
 }

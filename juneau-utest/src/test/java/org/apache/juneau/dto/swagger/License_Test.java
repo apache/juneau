@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.net.*;
 
@@ -47,21 +46,21 @@ class License_Test extends SimpleTestBase {
 			.set("url", URI.create("b"))
 			.set("$ref", "ref");
 
-		assertObject(t).asJson().is("{name:'a',url:'b','$ref':'ref'}");
+		assertJson(t, "{name:'a',url:'b','$ref':'ref'}");
 
 		t
 			.set("name", "a")
 			.set("url", "b")
 			.set("$ref", "ref");
 
-		assertObject(t).asJson().is("{name:'a',url:'b','$ref':'ref'}");
+		assertJson(t, "{name:'a',url:'b','$ref':'ref'}");
 
 		t
 			.set("name", new StringBuilder("a"))
 			.set("url", new StringBuilder("b"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObject(t).asJson().is("{name:'a',url:'b','$ref':'ref'}");
+		assertJson(t, "{name:'a',url:'b','$ref':'ref'}");
 
 		assertEquals("a", t.get("name", String.class));
 		assertEquals("b", t.get("url", String.class));
@@ -77,7 +76,7 @@ class License_Test extends SimpleTestBase {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{name:'a',url:'b','$ref':'ref'}";
-		assertObject(JsonParser.DEFAULT.parse(s, License.class)).asJson().is(s);
+		assertJson(JsonParser.DEFAULT.parse(s, License.class), s);
 	}
 
 	@Test void b02_copy() {
@@ -85,7 +84,7 @@ class License_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertObject(t).asJson().is("{}");
+		assertJson(t, "{}");
 
 		t
 			.set("name", "a")
@@ -93,19 +92,19 @@ class License_Test extends SimpleTestBase {
 			.set("$ref", "ref")
 			.copy();
 
-		assertObject(t).asJson().is("{name:'a',url:'b','$ref':'ref'}");
+		assertJson(t, "{name:'a',url:'b','$ref':'ref'}");
 	}
 
 	@Test void b03_keySet() {
 		License t = new License();
 
-		assertObject(t.keySet()).asJson().is("[]");
+		assertJson(t.keySet(), "[]");
 
 		t
 			.set("name", "a")
 			.set("url", URI.create("b"))
 			.set("$ref", "ref");
 
-		assertObject(t.keySet()).asJson().is("['name','url','$ref']");
+		assertJson(t.keySet(), "['name','url','$ref']");
 	}
 }
