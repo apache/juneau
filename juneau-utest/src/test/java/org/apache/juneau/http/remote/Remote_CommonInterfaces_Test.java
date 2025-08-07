@@ -157,24 +157,24 @@ class Remote_CommonInterfaces_Test extends SimpleTestBase {
 		// HttpClient goes into loop if status code is less than 200 so we can't test those.
 
 		C x = MockRestClient.create(C1.class).json().disableRedirectHandling().build().getRemote(C.class);
-		assertObject(x.ok()).asString().isContains("HTTP/1.1 200");
-		assertObject(x.accepted()).asString().isContains("HTTP/1.1 202");
-		assertObject(x.alreadyReported()).asString().isContains("HTTP/1.1 208");
-		assertObject(x.created()).asString().isContains("HTTP/1.1 201");
-		assertObject(x.found()).asString().isContains("HTTP/1.1 302");
-		assertObject(x.iMUsed()).asString().isContains("HTTP/1.1 226");
-		assertObject(x.movedPermanently()).asString().isContains("HTTP/1.1 301");
-		assertObject(x.multipleChoices()).asString().isContains("HTTP/1.1 300");
-		assertObject(x.multiStatus()).asString().isContains("HTTP/1.1 207");
-		assertObject(x.noContent()).asString().isContains("HTTP/1.1 204");
-		assertObject(x.nonAuthoritiveInformation()).asString().isContains("HTTP/1.1 203");
-		assertObject(x.notModified()).asString().isContains("HTTP/1.1 304");
-		assertObject(x.partialContent()).asString().isContains("HTTP/1.1 206");
-		assertObject(x.permanentRedirect()).asString().isContains("HTTP/1.1 308");
-		assertObject(x.resetContent()).asString().isContains("HTTP/1.1 205");
-		assertObject(x.seeOther()).asString().isContains("HTTP/1.1 303");
-		assertObject(x.temporaryRedirect()).asString().isContains("HTTP/1.1 307");
-		assertObject(x.useProxy()).asString().isContains("HTTP/1.1 305");
+		assertContains("HTTP/1.1 200", x.ok());
+		assertContains("HTTP/1.1 202", x.accepted());
+		assertContains("HTTP/1.1 208", x.alreadyReported());
+		assertContains("HTTP/1.1 201", x.created());
+		assertContains("HTTP/1.1 302", x.found());
+		assertContains("HTTP/1.1 226", x.iMUsed());
+		assertContains("HTTP/1.1 301", x.movedPermanently());
+		assertContains("HTTP/1.1 300", x.multipleChoices());
+		assertContains("HTTP/1.1 207", x.multiStatus());
+		assertContains("HTTP/1.1 204", x.noContent());
+		assertContains("HTTP/1.1 203", x.nonAuthoritiveInformation());
+		assertContains("HTTP/1.1 304", x.notModified());
+		assertContains("HTTP/1.1 206", x.partialContent());
+		assertContains("HTTP/1.1 308", x.permanentRedirect());
+		assertContains("HTTP/1.1 205", x.resetContent());
+		assertContains("HTTP/1.1 303", x.seeOther());
+		assertContains("HTTP/1.1 307", x.temporaryRedirect());
+		assertContains("HTTP/1.1 305", x.useProxy());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -850,6 +850,6 @@ class Remote_CommonInterfaces_Test extends SimpleTestBase {
 
 	@Test void h01_seeOtherRoot() {
 		IH x = MockRestClient.create(H.class).json().disableRedirectHandling().build().getRemote(IH.class);
-		assertObject(x.seeOtherRoot()).asString().isContains("HTTP/1.1 303 See Other");
+		assertContains("HTTP/1.1 303 See Other", x.seeOtherRoot());
 	}
 }

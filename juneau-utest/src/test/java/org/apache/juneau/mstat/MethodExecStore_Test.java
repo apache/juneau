@@ -176,6 +176,6 @@ class MethodExecStore_Test extends SimpleTestBase {
 		assertEquals(150, stats.getAvgTime());
 		assertEquals(300L, stats.getTotalTime());
 
-		assertObject(stats).asString().isContains("300");
+		assertContains("300", stats);
 	}
 }
