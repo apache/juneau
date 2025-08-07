@@ -12,13 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.function.*;
-import java.util.regex.*;
 import java.util.stream.*;
 
 import org.apache.juneau.assertions.*;
@@ -228,6 +225,10 @@ public abstract class SimpleTestBase {
 	@SafeVarargs
 	protected static <T> T[] a(T...x) {
 		return x;
+	}
+
+	public static void assertSameObject(Object o1, Object o2) {
+		assertTrue(o1 == o2, "Not the same object.");
 	}
 
 	/**

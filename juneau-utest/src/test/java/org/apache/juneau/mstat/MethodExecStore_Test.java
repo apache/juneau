@@ -120,12 +120,12 @@ class MethodExecStore_Test extends SimpleTestBase {
 		MethodExecStore store = MethodExecStore.create().thrownStore(s).build();
 		store.getStats(m).error(new Throwable());
 		assertSize(1, s.getStats());
-		assertObject(store.getThrownStore()).isSame(s);
+		assertSameObject(s, store.getThrownStore());
 
 		ThrownStore s2 = ThrownStore.create().build();
 		BeanStore bs = BeanStore.create().build().addBean(ThrownStore.class, s2);
 		store = MethodExecStore.create(bs).build();
-		assertObject(store.getThrownStore()).isSame(s2);
+		assertSameObject(s2, store.getThrownStore());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -156,7 +156,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 		MethodExecStats stats = store.getStats(m);
 
 		assertNotEquals(0L, stats.getGuid());
-		assertObject(stats.getMethod()).isSame(m);
+		assertSameObject(m, stats.getMethod());
 
 		assertEquals(0, stats.getRuns());
 		assertEquals(0, stats.getRunning());

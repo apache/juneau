@@ -71,23 +71,23 @@ class HeaderBeanMeta_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		HeaderBeanMeta<A1> a1 = HeaderBeanMeta.of(A1.class);
 		assertSame(a1, HeaderBeanMeta.of(A1.class));
-		assertObject(a1.construct("X", "foo")).isJson("{name:'X',value:'foo'}");
+		assertJson(a1.construct("X", "foo"), "{name:'X',value:'foo'}");
 		assertThrown(()->a1.construct("foo")).asMessage().isContains("Constructor for type "+TNAME+"$A1 requires a name as the first argument.");
 		assertString(a1.getSchema().getName()).isNull();
 
 		HeaderBeanMeta<A2> a2 = HeaderBeanMeta.of(A2.class);
-		assertObject(a2.construct("X", "foo")).isJson("{name:'X',value:'foo'}");
+		assertJson(a2.construct("X", "foo"), "{name:'X',value:'foo'}");
 		assertThrown(()->a2.construct("foo")).asMessage().isContains("Constructor for type "+TNAME+"$A2 requires a name as the first argument.");
 		assertString(a2.getSchema().getName()).isNull();
 
 		HeaderBeanMeta<A3> a3 = HeaderBeanMeta.of(A3.class);
-		assertObject(a3.construct("X", "foo")).isJson("{value:'foo'}");
-		assertObject(a3.construct("foo")).isJson("{value:'foo'}");
+		assertJson(a3.construct("X", "foo"), "{value:'foo'}");
+		assertJson(a3.construct("foo"), "{value:'foo'}");
 		assertEquals("A3", a3.getSchema().getName());
 
 		HeaderBeanMeta<A4> a4 = HeaderBeanMeta.of(A4.class);
-		assertObject(a4.construct("X", "foo")).isJson("{value:'foo'}");
-		assertObject(a4.construct("foo")).isJson("{value:'foo'}");
+		assertJson(a4.construct("X", "foo"), "{value:'foo'}");
+		assertJson(a4.construct("foo"), "{value:'foo'}");
 		assertEquals("A4", a4.getSchema().getName());
 
 		HeaderBeanMeta<A5> a5 = HeaderBeanMeta.of(A5.class);
