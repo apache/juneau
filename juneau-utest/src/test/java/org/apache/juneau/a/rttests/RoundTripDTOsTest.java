@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.AssertionHelpers.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.bean.jsonschema.*;
@@ -39,13 +40,13 @@ public class RoundTripDTOsTest extends RoundTripTest {
 	public void testJsonSchema1() throws Exception {
 		JsonSchema s = JsonSchemaTest.getTest1();
 		JsonSchema s2 = roundTrip(s, JsonSchema.class);
-		assertObject(s).isSameJsonAs(s2);
+		assertEquals(json(s2), json(s));
 	}
 
 	@Test
 	public void testJsonSchema2() throws Exception {
 		JsonSchema s = JsonSchemaTest.getTest2();
 		JsonSchema s2 = roundTrip(s, JsonSchema.class);
-		assertObject(s).isSameJsonAs(s2);
+		assertEquals(json(s2), json(s));
 	}
 }

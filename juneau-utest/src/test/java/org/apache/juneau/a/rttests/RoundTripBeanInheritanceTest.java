@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.AssertionHelpers.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.parser.*;
@@ -43,7 +44,7 @@ public class RoundTripBeanInheritanceTest extends RoundTripTest {
 		A2 t1 = new A2(), t2;
 		t1.init();
 		t2 = roundTrip(t1, A2.class);
-		assertObject(t1).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t1));
 
 		A3 t3 = new A3();
 		t3.init();
@@ -143,7 +144,7 @@ public class RoundTripBeanInheritanceTest extends RoundTripTest {
 	public void testBeanInheritance2() throws Exception {
 		B1 t1 = new B1().init(), t2;
 		t2 = roundTrip(t1, B1.class);
-		assertObject(t1).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t1));
 	}
 
 	public static class B1 extends B2 {

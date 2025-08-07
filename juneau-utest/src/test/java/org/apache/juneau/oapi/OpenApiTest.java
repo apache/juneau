@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.DateUtils.*;
@@ -590,13 +589,13 @@ public class OpenApiTest extends SimpleTestBase {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("123,456", s);
 		r = parse(ps, s, int[].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 	}
 
 	@Test void f03b_tArray_3dIntArray() throws Exception {
@@ -609,14 +608,14 @@ public class OpenApiTest extends SimpleTestBase {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("1\\\\\\,2\\,3\\\\\\,4,5\\\\\\,6\\,7\\\\\\,8", s);
 		r = parse(ps, s, int[][][].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 	}
 
 
@@ -638,13 +637,13 @@ public class OpenApiTest extends SimpleTestBase {
 		String s = serialize(ps, in);
 		assertEquals("a", s);
 		F04 r = parse(ps, s, F04.class);
-		assertObject(in.toStringArray()).isSameJsonAs(r.toStringArray());
+		assertEquals(json(r.toStringArray()), json(in.toStringArray()));
 
 		in = new F04("a","b");
 		s = serialize(ps, in);
 		assertEquals("a,b", s);
 		r = parse(ps, s, F04.class);
-		assertObject(in.toStringArray()).isSameJsonAs(r.toStringArray());
+		assertEquals(json(r.toStringArray()), json(in.toStringArray()));
 	}
 
 	@Test void f05a_tArrayUon_IntArray() throws Exception {
@@ -653,13 +652,13 @@ public class OpenApiTest extends SimpleTestBase {
 		String s = serialize(ps, in);
 		assertEquals("@(123)", s);
 		int[] r = parse(ps, s, int[].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("@(123,456)", s);
 		r = parse(ps, s, int[].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 	}
 
 	@Test void f05b_tArrayUon_3dIntArray() throws Exception {
@@ -668,14 +667,14 @@ public class OpenApiTest extends SimpleTestBase {
 		String s = serialize(ps, in);
 		assertEquals("@(@(@(123)))", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("@(@(@(1,2),@(3,4)),@(@(5,6),@(7,8)))", s);
 		r = parse(ps, s, int[][][].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 	}
 
 	@Test void f06a_tArrayPipes_IntArray() throws Exception {
@@ -684,13 +683,13 @@ public class OpenApiTest extends SimpleTestBase {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("123|456", s);
 		r = parse(ps, s, int[].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 	}
 
 	@Test void f06b_tArrayPipes_3dIntArray() throws Exception {
@@ -699,14 +698,14 @@ public class OpenApiTest extends SimpleTestBase {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("1\\\\,2,3\\\\,4|5\\\\,6,7\\\\,8", s);
 		r = parse(ps, s, int[][][].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 	}
 
 	@Test void f07a_tArraySsv_IntArray() throws Exception {
@@ -715,13 +714,13 @@ public class OpenApiTest extends SimpleTestBase {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("123 456", s);
 		r = parse(ps, s, int[].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 	}
 
 	@Test void f07b_tArraySsv_3dIntArray() throws Exception {
@@ -730,14 +729,14 @@ public class OpenApiTest extends SimpleTestBase {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("1\\,2,3\\,4 5\\,6,7\\,8", s);
 		r = parse(ps, s, int[][][].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 	}
 
 	@Test void f08a_tArrayTsv_IntArray() throws Exception {
@@ -746,13 +745,13 @@ public class OpenApiTest extends SimpleTestBase {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("123\t456", s);
 		r = parse(ps, s, int[].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 	}
 
 	@Test void f08b_tArrayTsv_3dIntArray() throws Exception {
@@ -761,14 +760,14 @@ public class OpenApiTest extends SimpleTestBase {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("1\\,2,3\\,4\t5\\,6,7\\,8", s);
 		r = parse(ps, s, int[][][].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 	}
 
 	@Test void f09a_tArrayCsv_IntArray() throws Exception {
@@ -777,13 +776,13 @@ public class OpenApiTest extends SimpleTestBase {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("123,456", s);
 		r = parse(ps, s, int[].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 	}
 
 	@Test void f09b_tArrayCsv_3dIntArray() throws Exception {
@@ -792,14 +791,14 @@ public class OpenApiTest extends SimpleTestBase {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("1\\\\\\,2\\,3\\\\\\,4,5\\\\\\,6\\,7\\\\\\,8", s);
 		r = parse(ps, s, int[][][].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 	}
 
 
@@ -813,7 +812,7 @@ public class OpenApiTest extends SimpleTestBase {
 		String s = serialize(ps, in);
 		assertEquals("1 2|3 4,5 6|7 8", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -826,13 +825,13 @@ public class OpenApiTest extends SimpleTestBase {
 		String s = serialize(ps, in);
 		assertEquals("a=b", s);
 		JsonMap r = parse(ps, s, JsonMap.class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 
 		in = JsonMap.of("a","b","c","d");
 		s = serialize(ps, in);
 		assertEquals("a=b,c=d", s);
 		r = parse(ps, s, JsonMap.class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 	}
 
 	@Test void g01b_objectType_formatDefault_Map_3d() throws Exception {
@@ -846,13 +845,13 @@ public class OpenApiTest extends SimpleTestBase {
 		String s = serialize(ps, in);
 		assertEquals("a=b\\=c\\\\\\=d", s);
 		JsonMap r = parse(ps, s, JsonMap.class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 
 		in = JsonMap.of("a",JsonMap.of("b",JsonMap.of("c","d"),"e",JsonMap.of("f","g")));
 		s = serialize(ps, in);
 		assertEquals("a=b\\=c\\\\\\=d\\,e\\=f\\\\\\=g", s);
 		r = parse(ps, s, JsonMap.class);
-		assertObject(in).isSameJsonAs(r);
+		assertEquals(json(r), json(in));
 	}
 
 	//---------------------------------------------------------------------------------------------

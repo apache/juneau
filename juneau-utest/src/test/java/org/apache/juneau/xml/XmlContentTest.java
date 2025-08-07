@@ -12,16 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.api.*;
 
-public class XmlContentTest {
+class XmlContentTest extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test beans with @Xml(format=CONTENT)
@@ -44,14 +45,14 @@ public class XmlContentTest {
 		r = sw.toString();
 		assertEquals("<A f1='f1' nil='true'></A>", r);
 		t2 = p.parse(r, A.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		sw = new StringWriter();
 		s2.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1' nil='true'></A>\n", r);
 		t2 = p.parse(r, A.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Normal text
@@ -61,12 +62,12 @@ public class XmlContentTest {
 		r = s1.serialize(t);
 		assertEquals("<A f1='f1'>foobar</A>", r);
 		t2 = p.parse(r, A.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		r = s2.serialize(t);
 		assertEquals("<A f1='f1'>foobar</A>\n", r);
 		t2 = p.parse(r, A.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Special characters
@@ -76,12 +77,12 @@ public class XmlContentTest {
 		r = s1.serialize(t);
 		assertEquals("<A f1='f1'>~!@#$%^&amp;*()_+`-={}|[]\\:\";'&lt;&gt;?,.&#x000a;&#x000d;&#x0009;_x0008_</A>", r);
 		t2 = p.parse(r, A.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		r = s2.serialize(t);
 		assertEquals("<A f1='f1'>~!@#$%^&amp;*()_+`-={}|[]\\:\";'&lt;&gt;?,.&#x000a;&#x000d;&#x0009;_x0008_</A>\n", r);
 		t2 = p.parse(r, A.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Leading spaces
@@ -91,12 +92,12 @@ public class XmlContentTest {
 		r = s1.serialize(t);
 		assertEquals("<A f1='f1'>_x0020_ foobar</A>", r);
 		t2 = p.parse(r, A.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		r = s2.serialize(t);
 		assertEquals("<A f1='f1'>_x0020_ foobar</A>\n", r);
 		t2 = p.parse(r, A.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Trailing spaces
@@ -106,12 +107,12 @@ public class XmlContentTest {
 		r = s1.serialize(t);
 		assertEquals("<A f1='f1'>foobar _x0020_</A>", r);
 		t2 = p.parse(r, A.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		r = s2.serialize(t);
 		assertEquals("<A f1='f1'>foobar _x0020_</A>\n", r);
 		t2 = p.parse(r, A.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 	}
 
 	@Bean(typeName="A")
@@ -148,14 +149,14 @@ public class XmlContentTest {
 		r = sw.toString();
 		assertEquals("<A f1='f1' nil='true'></A>", r);
 		t2 = p.parse(r, B.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		sw = new StringWriter();
 		s2.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1' nil='true'></A>\n", r);
 		t2 = p.parse(r, B.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Normal text
@@ -165,12 +166,12 @@ public class XmlContentTest {
 		r = s1.serialize(t);
 		assertEquals("<A f1='f1'>foobar</A>", r);
 		t2 = p.parse(r, B.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		r = s2.serialize(t);
 		assertEquals("<A f1='f1'>foobar</A>\n", r);
 		t2 = p.parse(r, B.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Normal XML
@@ -180,12 +181,12 @@ public class XmlContentTest {
 		r = s1.serialize(t);
 		assertEquals("<A f1='f1'>&lt;xxx&gt;foobar&lt;yyy&gt;baz&lt;/yyy&gt;foobar&lt;/xxx&gt;</A>", r);
 		t2 = p.parse(r, B.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		r = s2.serialize(t);
 		assertEquals("<A f1='f1'>&lt;xxx&gt;foobar&lt;yyy&gt;baz&lt;/yyy&gt;foobar&lt;/xxx&gt;</A>\n", r);
 		t2 = p.parse(r, B.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Normal XML with leading and trailing space
@@ -195,12 +196,12 @@ public class XmlContentTest {
 		r = s1.serialize(t);
 		assertEquals("<A f1='f1'>_x0020_ &lt;xxx&gt;foobar&lt;yyy&gt;baz&lt;/yyy&gt;foobar&lt;/xxx&gt; _x0020_</A>", r);
 		t2 = p.parse(r, B.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		r = s2.serialize(t);
 		assertEquals("<A f1='f1'>_x0020_ &lt;xxx&gt;foobar&lt;yyy&gt;baz&lt;/yyy&gt;foobar&lt;/xxx&gt; _x0020_</A>\n", r);
 		t2 = p.parse(r, B.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
 		// XML with attributes
@@ -210,12 +211,12 @@ public class XmlContentTest {
 		r = s1.serialize(t);
 		assertEquals("<A f1='f1'>&lt;xxx x=\"x\"&gt;foobar&lt;/xxx&gt;</A>", r);
 		t2 = p.parse(r, B.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		r = s2.serialize(t);
 		assertEquals("<A f1='f1'>&lt;xxx x=\"x\"&gt;foobar&lt;/xxx&gt;</A>\n", r);
 		t2 = p.parse(r, B.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		//-------------------------------------------------------------------------------------------------------------
 		// XML with embedded entities
@@ -225,12 +226,12 @@ public class XmlContentTest {
 		r = s1.serialize(t);
 		assertEquals("<A f1='f1'>&lt;xxx x=\"x\"&gt;foo&amp;lt;&amp;gt;bar&lt;/xxx&gt;</A>", r);
 		t2 = p.parse(r, B.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		r = s2.serialize(t);
 		assertEquals("<A f1='f1'>&lt;xxx x=\"x\"&gt;foo&amp;lt;&amp;gt;bar&lt;/xxx&gt;</A>\n", r);
 		t2 = p.parse(r, B.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 	}
 
 	@Bean(typeName="A")

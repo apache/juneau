@@ -826,8 +826,8 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d04_createBean_staticCreator_invalidSignatures() {
 		BeanStore bs = BeanStore.INSTANCE;
-		assertObject(bs.createBean(D4a.class).run()).isNotAny(d4a1, d4a2, d4a3, d4a4);
-		assertObject(bs.createBean(D4b.class).run()).isNotAny(d4b1, d4b2);
+		assertNotEqualsAny(bs.createBean(D4a.class).run(), d4a1, d4a2, d4a3, d4a4);
+		assertNotEqualsAny(bs.createBean(D4b.class).run(), d4b1, d4b2);
 		assertNotNull(bs.createBean(D4c.class).run());
 	}
 

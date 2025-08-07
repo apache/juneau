@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.list;
 import static org.apache.juneau.utest.utils.Utils2.*;
@@ -267,14 +266,14 @@ public class XmlCollapsedTest extends SimpleTestBase {
 		r = s.serialize(t1);
 		assertEquals("<object><xf1>x1</xf1><xf1>x2</xf1></object>", r);
 		t2 = p.parse(r, FA.class);
-		assertObject(t1).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t1));
 		validateXml(t1, s);
 
 		t1 = FB.newInstance();
 		r = s.serialize(t1);
 		assertEquals("<object><xf1>x1</xf1><xf1>x2</xf1></object>", r);
 		t2 = p.parse(r, FB.class);
-		assertObject(t1).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t1));
 		validateXml(t1, s);
 	}
 
@@ -334,7 +333,7 @@ public class XmlCollapsedTest extends SimpleTestBase {
 
 		// Note that existing fields should be reused and appended to.
 		t2 = p.parse(xml, G.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		validateXml(t, s);
 	}
@@ -367,7 +366,7 @@ public class XmlCollapsedTest extends SimpleTestBase {
 
 		// Note that existing fields should be reused and appended to.
 		t2 = p.parse(xml, H.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		validateXml(t, s);
 	}
@@ -405,7 +404,7 @@ public class XmlCollapsedTest extends SimpleTestBase {
 
 		// Note that existing fields should be reused and appended to.
 		t2 = p.parse(xml, G.class);
-		assertObject(t).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t));
 
 		validateXml(t, s);
 	}

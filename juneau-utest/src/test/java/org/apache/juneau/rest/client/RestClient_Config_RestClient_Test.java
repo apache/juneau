@@ -322,7 +322,7 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 	@Test void a08_marshaller() throws Exception {
 		RestClient rc = MockRestClient.create(A.class).marshaller(Xml.DEFAULT).build();
 		ABean b = rc.post("/echoBody",bean).run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
-		assertObject(b).isSameJsonAs(bean);
+		assertEquals(json(bean), json(b));
 	}
 
 	@Test void a09_marshalls() throws Exception {
@@ -333,27 +333,27 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 		assertThrowsWithMessage(Exception.class, "Content-Type not specified in response header.  Cannot find appropriate parser.", ()->x.post("/echoBody",bean).contentType("text/json").run().getContent().as(ABean.class));
 
 		ABean b = x.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
-		assertObject(b).isSameJsonAs(bean);
+		assertEquals(json(bean), json(b));
 
 		b = x.post("/echoBody",bean).mediaType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
-		assertObject(b).isSameJsonAs(bean);
+		assertEquals(json(bean), json(b));
 
 		b = x.post("/echoBody",bean).accept("text/json").contentType("text/json").run().cacheContent().assertContent("{\"f\":1}").getContent().as(ABean.class);
-		assertObject(b).isSameJsonAs(bean);
+		assertEquals(json(bean), json(b));
 
 		b = x.post("/echoBody",bean).mediaType("text/json").run().cacheContent().assertContent("{\"f\":1}").getContent().as(ABean.class);
-		assertObject(b).isSameJsonAs(bean);
+		assertEquals(json(bean), json(b));
 	}
 
 	@Test void a10_serializer_parser() throws Exception {
 		RestClient x = MockRestClient.create(A.class).serializer(XmlSerializer.class).parser(XmlParser.class).build();
 
 		ABean b = x.post("/echoBody",bean).run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
-		assertObject(b).isSameJsonAs(bean);
+		assertEquals(json(bean), json(b));
 
 		x = MockRestClient.create(A.class).serializer(XmlSerializer.DEFAULT).parser(XmlParser.DEFAULT).build();
 		b = x.post("/echoBody",bean).run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
-		assertObject(b).isSameJsonAs(bean);
+		assertEquals(json(bean), json(b));
 	}
 
 	@Test void a11_serializers_parsers() throws Exception {
@@ -364,16 +364,16 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 		assertThrowsWithMessage(Exception.class, "Content-Type not specified in response header.  Cannot find appropriate parser.", ()->x.post("/echoBody",bean).contentType("text/json").run().getContent().as(ABean.class));
 
 		ABean b = x.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
-		assertObject(b).isSameJsonAs(bean);
+		assertEquals(json(bean), json(b));
 
 		b = x.post("/echoBody",bean).mediaType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
-		assertObject(b).isSameJsonAs(bean);
+		assertEquals(json(bean), json(b));
 
 		b = x.post("/echoBody",bean).accept("text/json").contentType("text/json").run().cacheContent().assertContent("{\"f\":1}").getContent().as(ABean.class);
-		assertObject(b).isSameJsonAs(bean);
+		assertEquals(json(bean), json(b));
 
 		b = x.post("/echoBody",bean).mediaType("text/json").run().cacheContent().assertContent("{\"f\":1}").getContent().as(ABean.class);
-		assertObject(b).isSameJsonAs(bean);
+		assertEquals(json(bean), json(b));
 
 		final RestClient x2 = MockRestClient.create(A.class).serializers(XmlSerializer.DEFAULT,JsonSerializer.DEFAULT).parsers(XmlParser.DEFAULT,JsonParser.DEFAULT).build();
 
@@ -382,16 +382,16 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 		assertThrowsWithMessage(Exception.class, "Content-Type not specified in response header.  Cannot find appropriate parser.", ()->x2.post("/echoBody",bean).contentType("text/json").run().getContent().as(ABean.class));
 
 		b = x2.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
-		assertObject(b).isSameJsonAs(bean);
+		assertEquals(json(bean), json(b));
 
 		b = x2.post("/echoBody",bean).mediaType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
-		assertObject(b).isSameJsonAs(bean);
+		assertEquals(json(bean), json(b));
 
 		b = x2.post("/echoBody",bean).accept("text/json").contentType("text/json").run().cacheContent().assertContent("{\"f\":1}").getContent().as(ABean.class);
-		assertObject(b).isSameJsonAs(bean);
+		assertEquals(json(bean), json(b));
 
 		b = x2.post("/echoBody",bean).mediaType("text/json").run().cacheContent().assertContent("{\"f\":1}").getContent().as(ABean.class);
-		assertObject(b).isSameJsonAs(bean);
+		assertEquals(json(bean), json(b));
 	}
 
 	@Rest(partSerializer=A12a.class,partParser=A12b.class)

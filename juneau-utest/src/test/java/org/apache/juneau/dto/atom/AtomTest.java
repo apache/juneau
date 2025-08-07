@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.atom.AtomBuilder.*;
 import static org.junit.Assert.*;
 import java.net.*;
@@ -99,7 +98,7 @@ class AtomTest extends SimpleTestBase {
 		r = s.serialize(f);
 		assertEquals(expected, r);
 		f2 = p.parse(r, Feed.class);
-		assertObject(f).isSameJsonAs(f2);
+		assertEquals(json(f2), json(f));
 	}
 
 	@Test void testWithNamespaces() throws Exception {
@@ -143,7 +142,7 @@ class AtomTest extends SimpleTestBase {
 		r = s.serialize(f);
 		assertEquals(expected, r);
 		f2 = p.parse(r, Feed.class);
-		assertObject(f).isSameJsonAs(f2);
+		assertEquals(json(f2), json(f));
 	}
 
 	@Test void testWithNamespacesWithAtomAsDefault() throws Exception {
@@ -187,7 +186,7 @@ class AtomTest extends SimpleTestBase {
 		r = s.serialize(f);
 		assertEquals(expected, r);
 		f2 = p.parse(r, Feed.class);
-		assertObject(f).isSameJsonAs(f2);
+		assertEquals(json(f2), json(f));
 	}
 
 	@Test void testToString() throws Exception {
@@ -196,6 +195,6 @@ class AtomTest extends SimpleTestBase {
 		Feed f = createFeed(), f2;
 		r = f.toString();
 		f2 = p.parse(r, Feed.class);
-		assertObject(f).isSameJsonAs(f2);
+		assertEquals(json(f2), json(f));
 	}
 }

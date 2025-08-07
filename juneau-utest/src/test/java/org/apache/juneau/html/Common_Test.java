@@ -41,13 +41,13 @@ class Common_Test extends SimpleTestBase {
 		String r = s.build().serialize(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>s1</td><td><null/></td></tr><tr><td>s2</td><td>s2</td></tr></table>", r);
 		t2 = p.parse(r, A.class);
-		assertObject(t1).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t1));
 
 		s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		r = s.build().serialize(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>s2</td><td>s2</td></tr></table>", r);
 		t2 = p.parse(r, A.class);
-		assertObject(t1).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t1));
 	}
 
 	public static class A {
@@ -72,7 +72,7 @@ class Common_Test extends SimpleTestBase {
 		r = s.build().serialize(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><table><tr><th>key</th><th>value</th></tr></table></td></tr><tr><td>f2</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>f2a</td><td><null/></td></tr><tr><td>f2b</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>s2</td><td>s2</td></tr></table></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, B.class);
-		assertObject(t1).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyMaps();
 		r = s.build().serialize(t1);
@@ -104,7 +104,7 @@ class Common_Test extends SimpleTestBase {
 		r = s.build().serialize(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><ul></ul></td></tr><tr><td>f2</td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td>s2</td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, C.class);
-		assertObject(t1).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);
@@ -155,7 +155,7 @@ class Common_Test extends SimpleTestBase {
 			r);
 
 		t2 = p.parse(r, D.class);
-		assertObject(t1).isSameJsonAs(t2);
+		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);
