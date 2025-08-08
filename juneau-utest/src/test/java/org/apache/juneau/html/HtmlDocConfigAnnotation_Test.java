@@ -13,8 +13,6 @@
 package org.apache.juneau.html;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;

@@ -157,10 +157,10 @@ class BeanStore_Test extends SimpleTestBase {
 			assertStream(b.stream(A2.class).map(BeanStoreEntry::get), a2a);
 		}
 
-		assertString(b1p.toString()).isMatches("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}");
-		assertString(b1c.toString()).isMatches("{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}}");
-		assertString(b2p.toString()).isMatches("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true}");
-		assertString(b2c.toString()).isMatches("{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true},threadSafe:true}");
+		assertMatches(b1p.toString(), "{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}");
+		assertMatches(b1c.toString(), "{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}}");
+		assertMatches(b2p.toString(), "{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true}");
+		assertMatches(b2c.toString(), "{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true},threadSafe:true}");
 
 		b1p.removeBean(A1.class);
 		b1c.clear().addBean(A1.class, a1a);
@@ -281,11 +281,11 @@ class BeanStore_Test extends SimpleTestBase {
 
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, m1, m3)) {
-				assertString(b.getMissingParams(e)).is(A1n);
+				assertString(A1n, b.getMissingParams(e));
 				assertFalse(b.hasAllParams(e));
 			}
 			for (ExecutableInfo e : array(c2, m2)) {
-				assertString(b.getMissingParams(e)).is(A1n+"@foo");
+				assertString(A1n+"@foo", b.getMissingParams(e));
 				assertFalse(b.hasAllParams(e));
 			}
 		}
@@ -302,9 +302,9 @@ class BeanStore_Test extends SimpleTestBase {
 		b2p.add(A1.class, a1a);
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			assertString(b.getMissingParams(c1)).isNull();
-			assertString(b.getMissingParams(c2)).is(A1n+"@foo");
+			assertString(A1n+"@foo", b.getMissingParams(c2));
 			assertString(b.getMissingParams(m1)).isNull();
-			assertString(b.getMissingParams(m2)).is(A1n+"@foo");
+			assertString(A1n+"@foo", b.getMissingParams(m2));
 			assertString(b.getMissingParams(m3)).isNull();
 			assertTrue(b.hasAllParams(c1));
 			assertFalse(b.hasAllParams(c2));
@@ -411,8 +411,8 @@ class BeanStore_Test extends SimpleTestBase {
 		ConstructorInfo c2 = ci.getPublicConstructor(x -> x.hasParamTypes(BeanStore_Test.class, A1.class, Optional.class));
 
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			assertString(b.getMissingParams(c1)).is(A1n);
-			assertString(b.getMissingParams(c2)).is(A1n+"@foo");
+			assertString(A1n, b.getMissingParams(c1));
+			assertString(A1n+"@foo", b.getMissingParams(c2));
 			assertFalse(b.hasAllParams(c1));
 			assertFalse(b.hasAllParams(c2));
 		}
@@ -426,7 +426,7 @@ class BeanStore_Test extends SimpleTestBase {
 		b2p.add(A1.class, a1a);
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			assertString(b.getMissingParams(c1)).isNull();
-			assertString(b.getMissingParams(c2)).is(A1n+"@foo");
+			assertString(A1n+"@foo", b.getMissingParams(c2));
 			assertTrue(b.hasAllParams(c1));
 			assertFalse(b.hasAllParams(c2));
 			assertArray(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
@@ -717,23 +717,23 @@ class BeanStore_Test extends SimpleTestBase {
 		BeanStore b1p = BeanStore.create().build();
 		BeanStore b1c = BeanStore.create().outer(x).parent(b1p).build();
 
-		assertString(b1c.createMethodFinder(String.class).find("createC1").thenFind("createC2").run()).is("createC2");
-		assertString(b1c.createMethodFinder(String.class).find("createC2").thenFind("createC1").run()).is("createC2");
+		assertString("createC2", b1c.createMethodFinder(String.class).find("createC1").thenFind("createC2").run());
+		assertString("createC2", b1c.createMethodFinder(String.class).find("createC2").thenFind("createC1").run());
 
 		b1p.add(A1.class, null);
-		assertString(b1c.createMethodFinder(String.class).find("createC1").thenFind("createC2").run()).is("createC1");
-		assertString(b1c.createMethodFinder(String.class).find("createC2").thenFind("createC1").run()).is("createC2");
-		assertString(b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).run()).is("createC1");
-		assertString(b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).run()).is("createC1");
+		assertString("createC1", b1c.createMethodFinder(String.class).find("createC1").thenFind("createC2").run());
+		assertString("createC2", b1c.createMethodFinder(String.class).find("createC2").thenFind("createC1").run());
+		assertString("createC1", b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).run());
+		assertString("createC1", b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).run());
 
 		b1p.clear();
-		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC1").thenFind("createC2").run()).is("createC1");
-		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC2").thenFind("createC1").run()).is("createC2");
-		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).run()).is("createC1");
-		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).run()).is("createC1");
+		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC1").thenFind("createC2").run());
+		assertString("createC2", b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC2").thenFind("createC1").run());
+		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).run());
+		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).run());
 
-		assertString(b1c.createMethodFinder(String.class).withDefault("X").run()).is("X");
-		assertString(b1c.createMethodFinder(String.class).withDefault(()->"X").run()).is("X");
+		assertString("X", b1c.createMethodFinder(String.class).withDefault("X").run());
+		assertString("X", b1c.createMethodFinder(String.class).withDefault(()->"X").run());
 
 		b1c.createMethodFinder(String.class).withDefault("X").run(y -> assertString(y).is("X"));
 	}
@@ -749,23 +749,23 @@ class BeanStore_Test extends SimpleTestBase {
 		BeanStore b1p = BeanStore.create().build();
 		BeanStore b1c = BeanStore.create().outer(x).parent(b1p).build();
 
-		assertString(b1c.createMethodFinder(String.class).find("createC1").thenFind("createC2").run()).is("createC2");
-		assertString(b1c.createMethodFinder(String.class).find("createC2").thenFind("createC1").run()).is("createC2");
+		assertString("createC2", b1c.createMethodFinder(String.class).find("createC1").thenFind("createC2").run());
+		assertString("createC2", b1c.createMethodFinder(String.class).find("createC2").thenFind("createC1").run());
 
 		b1p.add(A1.class, null);
-		assertString(b1c.createMethodFinder(String.class).find("createC1").thenFind("createC2").run()).is("createC1");
-		assertString(b1c.createMethodFinder(String.class).find("createC2").thenFind("createC1").run()).is("createC2");
-		assertString(b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).run()).is("createC1");
-		assertString(b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).run()).is("createC1");
+		assertString("createC1", b1c.createMethodFinder(String.class).find("createC1").thenFind("createC2").run());
+		assertString("createC2", b1c.createMethodFinder(String.class).find("createC2").thenFind("createC1").run());
+		assertString("createC1", b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).run());
+		assertString("createC1", b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).run());
 
 		b1p.clear();
-		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC1").thenFind("createC2").run()).is("createC1");
-		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC2").thenFind("createC1").run()).is("createC2");
-		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).run()).is("createC1");
-		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).run()).is("createC1");
+		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC1").thenFind("createC2").run());
+		assertString("createC2", b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC2").thenFind("createC1").run());
+		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).run());
+		assertString("createC1", b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).run());
 
-		assertString(b1c.createMethodFinder(String.class).withDefault("X").run()).is("X");
-		assertString(b1c.createMethodFinder(String.class).withDefault(()->"X").run()).is("X");
+		assertString("X", b1c.createMethodFinder(String.class).withDefault("X").run());
+		assertString("X", b1c.createMethodFinder(String.class).withDefault(()->"X").run());
 
 		b1c.createMethodFinder(String.class).withDefault("X").run(y -> assertString(y).is("X"));
 	}
@@ -861,7 +861,7 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d06_createBean_staticCreator_ignoredWithBuilder() {
 		BeanStore bs = BeanStore.INSTANCE;
-		assertString(bs.createBean(D6.class).builder(String.class, "1").run().s).is("1");
+		assertString("1", bs.createBean(D6.class).builder(String.class, "1").run().s);
 	}
 
 	public static class D7 {
@@ -872,9 +872,9 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d07_createBean_staticCreator_withOptional() {
 		BeanStore bs = BeanStore.create().build();
-		assertString(bs.createBean(D7.class).run().a).is("X");
+		assertString("X", bs.createBean(D7.class).run().a);
 		bs.add(String.class, "bar");
-		assertString(bs.createBean(D7.class).run().a).is("bar");
+		assertString("bar", bs.createBean(D7.class).run().a);
 	}
 
 	public static class D8 {
@@ -887,9 +887,9 @@ class BeanStore_Test extends SimpleTestBase {
 		BeanStore bs = BeanStore.create().build();
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class org.apache.juneau.cp.BeanStore_Test$D8: Static creator found but could not find prerequisites: Integer.", ()->bs.createBean(D8.class).run());
 		bs.add(Integer.class, 1);
-		assertString(bs.createBean(D8.class).run().a).is("null,1");
+		assertString("null,1", bs.createBean(D8.class).run().a);
 		bs.add(String.class, "bar");
-		assertString(bs.createBean(D8.class).run().a).is("bar,1");
+		assertString("bar,1", bs.createBean(D8.class).run().a);
 	}
 
 	public abstract static class D9a {
@@ -915,11 +915,11 @@ class BeanStore_Test extends SimpleTestBase {
 		BeanStore bs = BeanStore.create().build();
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D10.class.getName()+": Public constructor found but could not find prerequisites: Integer or Integer,String or String.", ()->bs.createBean(D10.class).run());
 		bs.add(String.class, "foo");
-		assertString(bs.createBean(D10.class).run().a).is("s=foo");
+		assertString("s=foo", bs.createBean(D10.class).run().a);
 		bs.add(Integer.class, 1);
-		assertString(bs.createBean(D10.class).run().a).is("s=foo,i=1");
+		assertString("s=foo,i=1", bs.createBean(D10.class).run().a);
 		bs.removeBean(String.class);
-		assertString(bs.createBean(D10.class).run().a).is("i=1");
+		assertString("i=1", bs.createBean(D10.class).run().a);
 	}
 
 	public static class D11 {
@@ -933,11 +933,11 @@ class BeanStore_Test extends SimpleTestBase {
 		BeanStore bs = BeanStore.create().build();
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D11.class.getName()+": Protected constructor found but could not find prerequisites: Integer or Integer,String or String.", ()->bs.createBean(D11.class).run());
 		bs.add(String.class, "foo");
-		assertString(bs.createBean(D11.class).run().a).is("s=foo");
+		assertString("s=foo", bs.createBean(D11.class).run().a);
 		bs.add(Integer.class, 1);
-		assertString(bs.createBean(D11.class).run().a).is("s=foo,i=1");
+		assertString("s=foo,i=1", bs.createBean(D11.class).run().a);
 		bs.removeBean(String.class);
-		assertString(bs.createBean(D11.class).run().a).is("i=1");
+		assertString("i=1", bs.createBean(D11.class).run().a);
 	}
 
 	public static class D12 {
@@ -951,7 +951,7 @@ class BeanStore_Test extends SimpleTestBase {
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D12.class.getName()+": Public constructor found but could not find prerequisites: String.", ()->bs.createBean(D12.class).run());
 		bs.add(String.class, "foo");
 		bs.add(Integer.class, 1);
-		assertString(bs.createBean(D12.class).run().a).is("s=foo");
+		assertString("s=foo", bs.createBean(D12.class).run().a);
 	}
 
 	public static class D13 {
@@ -973,7 +973,7 @@ class BeanStore_Test extends SimpleTestBase {
 		BeanStore bs = BeanStore.create().build();
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D14.class.getName()+": Public constructor found but could not find prerequisites: Integer,String@foo or String@foo.", ()->bs.createBean(D14.class).run());
 		bs.add(String.class, "bar", "foo");
-		assertString(bs.createBean(D14.class).run().a).is("bar");
+		assertString("bar", bs.createBean(D14.class).run().a);
 	}
 
 	public class D15 {
@@ -986,7 +986,7 @@ class BeanStore_Test extends SimpleTestBase {
 		BeanStore bs = BeanStore.create().outer(new BeanStore_Test()).build();
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D15.class.getName()+": Public constructor found but could not find prerequisites: Integer,String@foo or String@foo.", ()->bs.createBean(D15.class).run());
 		bs.add(String.class, "bar", "foo");
-		assertString(bs.createBean(D15.class).run().a).is("bar");
+		assertString("bar", bs.createBean(D15.class).run().a);
 	}
 
 	public static class D16 {
@@ -1002,7 +1002,7 @@ class BeanStore_Test extends SimpleTestBase {
 		BeanStore bs = BeanStore.create().build();
 		D16.Builder b = D16.create();
 		b.b = "foo";
-		assertString(bs.createBean(D16.class).builder(D16.Builder.class, b).run().a).is("foo");
+		assertString("foo", bs.createBean(D16.class).builder(D16.Builder.class, b).run().a);
 	}
 
 	public static class D17 {
