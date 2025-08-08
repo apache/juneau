@@ -31,9 +31,9 @@ class Tag_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		Tag t = new Tag();
 		assertEquals("foo", t.setName("foo").getName());
-		assertString(t.setName(null).getName()).isNull();
+		assertNull(t.setName(null).getName());
 		assertEquals("foo", t.setDescription("foo").getDescription());
-		assertString(t.setDescription(null).getDescription()).isNull();
+		assertNull(t.setDescription(null).getDescription());
 		assertJson(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs(), "{url:'foo'}");
 	}
 

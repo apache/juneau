@@ -31,10 +31,10 @@ class Contact_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		Contact t = new Contact();
 		assertEquals("foo", t.setName("foo").getName());
-		assertString(t.setName(null).getName()).isNull();
+		assertNull(t.setName(null).getName());
 		assertString("http://bar", t.setUrl(URI.create("http://bar")).getUrl());
 		assertEquals("foo", t.setEmail("foo").getEmail());
-		assertString(t.setEmail(null).getEmail()).isNull();
+		assertNull(t.setEmail(null).getEmail());
 	}
 
 	/**

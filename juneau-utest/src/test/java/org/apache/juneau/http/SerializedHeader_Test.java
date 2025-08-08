@@ -55,9 +55,9 @@ class SerializedHeader_Test extends SimpleTestBase {
 
 	@Test void a04_skipIfEmpty() {
 		SerializedHeader x1 = serializedHeader("Foo",null).skipIfEmpty();
-		assertString(x1.getValue()).isNull();
+		assertNull(x1.getValue());
 		SerializedHeader x2 = serializedHeader("Foo","").skipIfEmpty();
-		assertString(x2.getValue()).isNull();
+		assertNull(x2.getValue());
 		SerializedHeader x3 = serializedHeader("Foo","").schema(schema(STRING)._default("bar").build()).serializer(OAPI_SERIALIZER).skipIfEmpty();
 		assertThrowsWithMessage(Exception.class, "Empty value not allowed.", x3::getValue);
 	}
@@ -67,10 +67,10 @@ class SerializedHeader_Test extends SimpleTestBase {
 		assertEquals("1", x1.getValue());
 
 		SerializedHeader x2 = serializedHeader("Foo",null).schema(schema(STRING).required().allowEmptyValue().build()).serializer(OAPI_SESSION);
-		assertString(x2.getValue()).isNull();
+		assertNull(x2.getValue());
 
 		SerializedHeader x3 = serializedHeader("Foo",null).schema(schema(STRING).required(false).build()).serializer(OAPI_SESSION);
-		assertString(x3.getValue()).isNull();
+		assertNull(x3.getValue());
 
 		SerializedHeader x4 = serializedHeader("Foo",null).schema(schema(STRING).required().build()).serializer(OAPI_SESSION);
 		assertThrowsWithMessage(Exception.class, "Required value not provided.", x4::getValue);

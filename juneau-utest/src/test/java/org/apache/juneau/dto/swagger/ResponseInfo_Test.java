@@ -33,7 +33,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		ResponseInfo t = new ResponseInfo();
 		assertEquals("foo", t.setDescription("foo").getDescription());
-		assertString(t.setDescription(null).getDescription()).isNull();
+		assertNull(t.setDescription(null).getDescription());
 		assertJson(t.setSchema(schemaInfo().setTitle("foo")).getSchema(), "{title:'foo'}");
 		assertJson(t.setHeaders(map("foo",headerInfo("bar"))).getHeaders(), "{foo:{type:'bar'}}");
 		assertType(HeaderInfo.class, t.setHeaders(map("foo",headerInfo("bar"))).getHeaders().get("foo"));

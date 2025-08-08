@@ -41,10 +41,10 @@ class StringRanges_Test extends SimpleTestBase {
 
 	@Test void a02_getRange() {
 		assertString(of("foo").getRange(0)).isNotNull();
-		assertString(of((String)null).getRange(0)).isNull();
-		assertString(of("").getRange(0)).isNull();
-		assertString(of((String)null).getRange(-1)).isNull();
-		assertString(of((String)null).getRange(1)).isNull();
+		assertNull(of((String)null).getRange(0));
+		assertNull(of("").getRange(0));
+		assertNull(of((String)null).getRange(-1));
+		assertNull(of((String)null).getRange(1));
 	}
 
 	@Test void a03_getRanges() {

@@ -51,9 +51,9 @@ public class MediaType_Test extends SimpleTestBase {
 	@Test void a03_getParameter() {
 		MediaType x1 = MediaType.of("text/json;x=1;q=1;y=2");
 		assertEquals("1", x1.getParameter("x"));
-		assertString(x1.getParameter("q")).isNull();
-		assertString(x1.getParameter("y")).isNull();
-		assertString(x1.getParameter(null)).isNull();
+		assertNull(x1.getParameter("q"));
+		assertNull(x1.getParameter("y"));
+		assertNull(x1.getParameter(null));
 	}
 
 	@Test void a04_equals() {

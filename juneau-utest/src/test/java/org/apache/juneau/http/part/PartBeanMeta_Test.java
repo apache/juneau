@@ -79,12 +79,12 @@ class PartBeanMeta_Test extends SimpleTestBase {
 		assertSame(a1, PartBeanMeta.of(A1.class));
 		assertJson(a1.construct("X", "foo"), "{name:'X',value:'foo'}");
 		assertThrown(()->a1.construct("foo")).asMessage().isContains("Constructor for type "+TNAME+"$A1 requires a name as the first argument.");
-		assertString(a1.getSchema().getName()).isNull();
+		assertNull(a1.getSchema().getName());
 
 		PartBeanMeta<A2> a2 = PartBeanMeta.of(A2.class);
 		assertJson(a2.construct("X", "foo"), "{name:'X',value:'foo'}");
 		assertThrown(()->a2.construct("foo")).asMessage().isContains("Constructor for type "+TNAME+"$A2 requires a name as the first argument.");
-		assertString(a2.getSchema().getName()).isNull();
+		assertNull(a2.getSchema().getName());
 
 		PartBeanMeta<A3> a3 = PartBeanMeta.of(A3.class);
 		assertJson(a3.construct("X", "foo"), "{value:'foo'}");

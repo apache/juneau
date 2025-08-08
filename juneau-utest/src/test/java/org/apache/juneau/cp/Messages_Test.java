@@ -132,10 +132,10 @@ public class Messages_Test extends SimpleTestBase {
 	@Test void a11_findFirstString() {
 		Messages x = Messages.of(MessageBundleTest1.class);
 		assertEquals("foo {0}", x.findFirstString("baz","foo"));
-		assertString(x.findFirstString("baz","baz")).isNull();
+		assertNull(x.findFirstString("baz","baz"));
 		assertEquals("baz", x.forLocale(JAPAN).findFirstString("baz","foo"));
-		assertString(x.forLocale(CHINA).findFirstString("baz","baz")).isNull();
-		assertString(x.forLocale(null).findFirstString("baz","baz")).isNull();
+		assertNull(x.forLocale(CHINA).findFirstString("baz","baz"));
+		assertNull(x.forLocale(null).findFirstString("baz","baz"));
 	}
 
 	@Test void a12_getKeys() {

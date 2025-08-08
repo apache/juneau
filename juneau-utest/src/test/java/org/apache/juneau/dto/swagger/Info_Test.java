@@ -30,15 +30,15 @@ class Info_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		Info t = new Info();
 		assertEquals("foo", t.setTitle("foo").getTitle());
-		assertString(t.setTitle(null).getTitle()).isNull();
+		assertNull(t.setTitle(null).getTitle());
 		assertEquals("foo", t.setDescription("foo").getDescription());
-		assertString(t.setDescription(null).getDescription()).isNull();
+		assertNull(t.setDescription(null).getDescription());
 		assertEquals("foo", t.setTermsOfService("foo").getTermsOfService());
-		assertString(t.setTermsOfService(null).getTermsOfService()).isNull();
+		assertNull(t.setTermsOfService(null).getTermsOfService());
 		assertJson(t.setContact(contact("foo")).getContact(), "{name:'foo'}");
 		assertJson(t.setLicense(license("foo")).getLicense(), "{name:'foo'}");
 		assertEquals("foo", t.setVersion("foo").getVersion());
-		assertString(t.setVersion(null).getVersion()).isNull();
+		assertNull(t.setVersion(null).getVersion());
 	}
 
 	/**

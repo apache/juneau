@@ -56,9 +56,9 @@ class SerializedPart_Test extends SimpleTestBase {
 
 	@Test void a04_skipIfEmpty() {
 		SerializedPart x1 = serializedPart("Foo",null).skipIfEmpty();
-		assertString(x1.getValue()).isNull();
+		assertNull(x1.getValue());
 		SerializedPart x2 = serializedPart("Foo","").skipIfEmpty();
-		assertString(x2.getValue()).isNull();
+		assertNull(x2.getValue());
 		SerializedPart x3 = serializedPart("Foo","").schema(schema(STRING)._default("bar").build()).serializer(OAPI_SERIALIZER).skipIfEmpty();
 		assertThrowsWithMessage(Exception.class, "Empty value not allowed.", x3::getValue);
 	}
@@ -68,10 +68,10 @@ class SerializedPart_Test extends SimpleTestBase {
 		assertEquals("1", x1.getValue());
 
 		SerializedPart x2 = serializedPart("Foo",null).schema(schema(STRING).required().allowEmptyValue().build()).serializer(OAPI_SESSION);
-		assertString(x2.getValue()).isNull();
+		assertNull(x2.getValue());
 
 		SerializedPart x3 = serializedPart("Foo",null).schema(schema(STRING).required(false).build()).serializer(OAPI_SESSION);
-		assertString(x3.getValue()).isNull();
+		assertNull(x3.getValue());
 
 		SerializedPart x4 = serializedPart("Foo",null).schema(schema(STRING).required().build()).serializer(OAPI_SESSION);
 		assertThrowsWithMessage(Exception.class, "Required value not provided.", x4::getValue);

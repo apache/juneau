@@ -32,19 +32,19 @@ class SecurityScheme_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		SecurityScheme t = new SecurityScheme();
 		assertEquals("foo", t.setType("foo").getType());
-		assertString(t.setType(null).getType()).isNull();
+		assertNull(t.setType(null).getType());
 		assertEquals("foo", t.setDescription("foo").getDescription());
-		assertString(t.setDescription(null).getDescription()).isNull();
+		assertNull(t.setDescription(null).getDescription());
 		assertEquals("foo", t.setName("foo").getName());
-		assertString(t.setName(null).getName()).isNull();
+		assertNull(t.setName(null).getName());
 		assertEquals("foo", t.setIn("foo").getIn());
-		assertString(t.setIn(null).getIn()).isNull();
+		assertNull(t.setIn(null).getIn());
 		assertEquals("foo", t.setFlow("foo").getFlow());
-		assertString(t.setFlow(null).getFlow()).isNull();
+		assertNull(t.setFlow(null).getFlow());
 		assertEquals("foo", t.setAuthorizationUrl("foo").getAuthorizationUrl());
-		assertString(t.setAuthorizationUrl(null).getAuthorizationUrl()).isNull();
+		assertNull(t.setAuthorizationUrl(null).getAuthorizationUrl());
 		assertEquals("foo", t.setTokenUrl("foo").getTokenUrl());
-		assertString(t.setTokenUrl(null).getTokenUrl()).isNull();
+		assertNull(t.setTokenUrl(null).getTokenUrl());
 		assertJson(t.setScopes(map("foo","bar")).getScopes(), "{foo:'bar'}");
 		assertJson(t.setScopes(map()).getScopes(), "{}");
 		assertNull(t.setScopes((Map<String,String>)null).getScopes());

@@ -31,7 +31,7 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		ExternalDocumentation t = new ExternalDocumentation();
 		assertEquals("foo", t.setDescription("foo").getDescription());
-		assertString(t.setDescription(null).getDescription()).isNull();
+		assertNull(t.setDescription(null).getDescription());
 		assertString("http://bar", t.setUrl(URI.create("http://bar")).getUrl());
 	}
 

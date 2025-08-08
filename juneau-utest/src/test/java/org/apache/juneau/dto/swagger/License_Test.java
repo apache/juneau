@@ -31,7 +31,7 @@ class License_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		License t = new License();
 		assertEquals("foo", t.setName("foo").getName());
-		assertString(t.setName(null).getName()).isNull();
+		assertNull(t.setName(null).getName());
 		assertString("foo", t.setUrl(URI.create("foo")).getUrl());
 	}
 

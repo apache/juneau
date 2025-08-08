@@ -29,11 +29,11 @@ class Xml_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		Xml t = new Xml();
 		assertEquals("foo", t.setName("foo").getName());
-		assertString(t.setName(null).getName()).isNull();
+		assertNull(t.setName(null).getName());
 		assertEquals("foo", t.setNamespace("foo").getNamespace());
-		assertString(t.setNamespace(null).getNamespace()).isNull();
+		assertNull(t.setNamespace(null).getNamespace());
 		assertEquals("foo", t.setPrefix("foo").getPrefix());
-		assertString(t.setPrefix(null).getPrefix()).isNull();
+		assertNull(t.setPrefix(null).getPrefix());
 		assertTrue(t.setAttribute(true).getAttribute());
 		assertTrue(t.setWrapped(true).getWrapped());
 	}

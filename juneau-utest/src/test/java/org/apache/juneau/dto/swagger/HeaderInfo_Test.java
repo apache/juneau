@@ -34,15 +34,15 @@ class HeaderInfo_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		HeaderInfo t = new HeaderInfo();
 		assertEquals("foo", t.setDescription("foo").getDescription());
-		assertString(t.setDescription(null).getDescription()).isNull();
+		assertNull(t.setDescription(null).getDescription());
 		assertEquals("foo", t.setType("foo").getType());
-		assertString(t.setType(null).getType()).isNull();
+		assertNull(t.setType(null).getType());
 		assertEquals("foo", t.setFormat("foo").getFormat());
-		assertString(t.setFormat(null).getFormat()).isNull();
+		assertNull(t.setFormat(null).getFormat());
 		assertJson(t.setItems(items("foo")).getItems(), "{type:'foo'}");
 		assertNull(t.setItems((Items)null).getItems());
 		assertEquals("foo", t.setCollectionFormat("foo").getCollectionFormat());
-		assertString(t.setCollectionFormat(null).getCollectionFormat()).isNull();
+		assertNull(t.setCollectionFormat(null).getCollectionFormat());
 		assertEquals("foo", t.setDefault("foo").getDefault());
 		assertString("foo", t.setDefault(new StringBuilder("foo")).getDefault());
 		assertNull(t.setDefault(null).getDefault());
@@ -55,7 +55,7 @@ class HeaderInfo_Test extends SimpleTestBase {
 		assertEquals(123, t.setMaxLength(123).getMaxLength());
 		assertEquals(123, t.setMinLength(123).getMinLength());
 		assertEquals("foo", t.setPattern("foo").getPattern());
-		assertString(t.setPattern(null).getPattern()).isNull();
+		assertNull(t.setPattern(null).getPattern());
 		assertEquals(123, t.setMaxItems(123).getMaxItems());
 		assertEquals(123, t.setMinItems(123).getMinItems());
 		assertTrue(t.setUniqueItems(true).getUniqueItems());

@@ -301,11 +301,11 @@ class BeanStore_Test extends SimpleTestBase {
 		b1p.add(A1.class, a1a);
 		b2p.add(A1.class, a1a);
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			assertString(b.getMissingParams(c1)).isNull();
+			assertNull(b.getMissingParams(c1));
 			assertString(A1n+"@foo", b.getMissingParams(c2));
-			assertString(b.getMissingParams(m1)).isNull();
+			assertNull(b.getMissingParams(m1));
 			assertString(A1n+"@foo", b.getMissingParams(m2));
-			assertString(b.getMissingParams(m3)).isNull();
+			assertNull(b.getMissingParams(m3));
 			assertTrue(b.hasAllParams(c1));
 			assertFalse(b.hasAllParams(c2));
 			assertTrue(b.hasAllParams(m1));
@@ -322,7 +322,7 @@ class BeanStore_Test extends SimpleTestBase {
 		b2p.add(A1.class, a1a, "foo");
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, c2, m1, m2, m3)) {
-				assertString(b.getMissingParams(e)).isNull();
+				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
 			assertArray(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
@@ -336,7 +336,7 @@ class BeanStore_Test extends SimpleTestBase {
 		b2p.add(A1.class, a1b, "bar");
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, c2, m1, m2, m3)) {
-				assertString(b.getMissingParams(e)).isNull();
+				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
 			assertArray(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
@@ -350,7 +350,7 @@ class BeanStore_Test extends SimpleTestBase {
 		b2p.add(A2.class, a2a, "bar");
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, c2, m1, m2, m3)) {
-				assertString(b.getMissingParams(e)).isNull();
+				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
 			assertArray(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
@@ -364,7 +364,7 @@ class BeanStore_Test extends SimpleTestBase {
 		b2p.add(A2.class, a2a, null);
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, c2, m1, m2, m3)) {
-				assertString(b.getMissingParams(e)).isNull();
+				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
 			assertArray(b.getParams(c1), pA1a, pA2a, pIsBeanStore);
@@ -425,7 +425,7 @@ class BeanStore_Test extends SimpleTestBase {
 		b1p.add(A1.class, a1a);
 		b2p.add(A1.class, a1a);
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			assertString(b.getMissingParams(c1)).isNull();
+			assertNull(b.getMissingParams(c1));
 			assertString(A1n+"@foo", b.getMissingParams(c2));
 			assertTrue(b.hasAllParams(c1));
 			assertFalse(b.hasAllParams(c2));
@@ -437,7 +437,7 @@ class BeanStore_Test extends SimpleTestBase {
 		b2p.add(A1.class, a1a, "foo");
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, c2)) {
-				assertString(b.getMissingParams(e)).isNull();
+				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
 			assertArray(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
@@ -448,7 +448,7 @@ class BeanStore_Test extends SimpleTestBase {
 		b2p.add(A1.class, a1b, "bar");
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, c2)) {
-				assertString(b.getMissingParams(e)).isNull();
+				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
 			assertArray(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
@@ -459,7 +459,7 @@ class BeanStore_Test extends SimpleTestBase {
 		b2p.add(A2.class, a2a, "bar");
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, c2)) {
-				assertString(b.getMissingParams(e)).isNull();
+				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
 			assertArray(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
@@ -1019,7 +1019,7 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d17_createBean_builders_inherent() {
 		BeanStore bs = BeanStore.create().build();
-		assertString(bs.createBean(D17.class).run().a).isNull();
+		assertNull(bs.createBean(D17.class).run().a);
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D17.class.getName()+": Protected constructor found but could not find prerequisites: Builder or Builder,Integer or Integer.", ()->bs.createBean(D17.class).builder(Boolean.class, true).run());
 	}
 

@@ -35,12 +35,12 @@ class Swagger_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		Swagger t = new Swagger();
 		assertEquals("foo", t.setSwagger("foo").getSwagger());
-		assertString(t.setSwagger(null).getSwagger()).isNull();
+		assertNull(t.setSwagger(null).getSwagger());
 		assertJson(t.setInfo(info("foo", "bar")).getInfo(), "{title:'foo',version:'bar'}");
 		assertEquals("foo", t.setHost("foo").getHost());
-		assertString(t.setHost(null).getHost()).isNull();
+		assertNull(t.setHost(null).getHost());
 		assertEquals("foo", t.setBasePath("foo").getBasePath());
-		assertString(t.setBasePath(null).getBasePath()).isNull();
+		assertNull(t.setBasePath(null).getBasePath());
 		assertJson(t.setSchemes(set("foo","bar")).getSchemes(), "['foo','bar']");
 		assertJson(t.setSchemes(set()).getSchemes(), "[]");
 		assertNull(t.setSchemes((Collection<String>)null).getSchemes());

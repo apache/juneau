@@ -33,11 +33,11 @@ class SchemaInfo_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		SchemaInfo t = new SchemaInfo();
 		assertEquals("foo", t.setFormat("foo").getFormat());
-		assertString(t.setFormat(null).getFormat()).isNull();
+		assertNull(t.setFormat(null).getFormat());
 		assertEquals("foo", t.setTitle("foo").getTitle());
-		assertString(t.setTitle(null).getTitle()).isNull();
+		assertNull(t.setTitle(null).getTitle());
 		assertEquals("foo", t.setDescription("foo").getDescription());
-		assertString(t.setDescription(null).getDescription()).isNull();
+		assertNull(t.setDescription(null).getDescription());
 		assertEquals("foo", t.setDefault("foo").getDefault());
 		assertString("foo", t.setDefault(new StringBuilder("foo")).getDefault());
 		assertNull(t.setDefault(null).getDefault());
@@ -52,7 +52,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 		assertEquals(123, t.setMaxLength(123).getMaxLength());
 		assertEquals(123, t.setMinLength(123).getMinLength());
 		assertEquals("foo", t.setPattern("foo").getPattern());
-		assertString(t.setPattern(null).getPattern()).isNull();
+		assertNull(t.setPattern(null).getPattern());
 		assertEquals(123, t.setMaxItems(123).getMaxItems());
 		assertEquals(123, t.setMinItems(123).getMinItems());
 		assertTrue(t.setUniqueItems(true).getUniqueItems());
@@ -66,7 +66,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 		assertJson(t.addEnum("foo","bar").getEnum(), "['foo','bar']");
 		assertJson(t.addEnum("baz").getEnum(), "['foo','bar','baz']");
 		assertEquals("foo", t.setType("foo").getType());
-		assertString(t.setType(null).getType()).isNull();
+		assertNull(t.setType(null).getType());
 		assertJson(t.setItems(items("foo")).getItems(), "{type:'foo'}");
 		assertJson(t.setAllOf(set("foo","bar")).getAllOf(), "['foo','bar']");
 		assertJson(t.setAllOf(set()).getAllOf(), "[]");
@@ -79,7 +79,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 		assertJson(t.setAdditionalProperties(new SchemaInfo()).getAdditionalProperties(), "{}");
 		assertNull(t.setAdditionalProperties((SchemaInfo)null).getAdditionalProperties());
 		assertEquals("foo", t.setDiscriminator("foo").getDiscriminator());
-		assertString(t.setDiscriminator(null).getDiscriminator()).isNull();
+		assertNull(t.setDiscriminator(null).getDiscriminator());
 		assertTrue(t.setReadOnly(true).getReadOnly());
 		assertJson(t.setXml(xml().setName("foo")).getXml(), "{name:'foo'}");
 		assertJson(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs(), "{url:'foo'}");
