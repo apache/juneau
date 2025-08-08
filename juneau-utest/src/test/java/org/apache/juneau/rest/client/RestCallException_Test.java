@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import java.io.*;
 
@@ -61,7 +60,7 @@ public class RestCallException_Test extends SimpleTestBase {
 			client().build().post("/echo",new StringEntity("{f:")).run().getContent().as(ABean.class);
 			fail();
 		} catch (RestCallException e) {
-			assertThrowable(e.getCause(ParseException.class)).asMessage().isContains("Could not find '}'");
+			assertThrowable(Exception.class, "Could not find '}'", e.getCause(ParseException.class));
 		}
 
 		RestCallException e = new RestCallException(null, null, null);

@@ -127,6 +127,12 @@ public abstract class SimpleTestBase {
 		return AssertionHelpers.assertThrowsWithMessage(expectedType, expectedSubstring, executable);
 	}
 
+	protected static <T extends Throwable> T assertThrowable(Class<T> expectedType, String expectedSubstring, T t) {
+		var messages = AssertionHelpers.getMessages(t);
+		assertTrue(messages.contains(expectedSubstring), ss("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
+		return t;
+	}
+
 	/**
 	 * Asserts the entries in a map matches the expected strings after they've been made readable.
 	 */

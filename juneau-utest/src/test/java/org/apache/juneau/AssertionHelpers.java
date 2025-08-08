@@ -185,7 +185,13 @@ public class AssertionHelpers {
 		return exception;
 	}
 
-	private static String getMessages(Throwable t) {
+	public static <T extends Throwable> T assertThrowable(Class<? extends Throwable> expectedType, String expectedSubstring, T t) {
+		var messages = AssertionHelpers.getMessages(t);
+		assertTrue(messages.contains(expectedSubstring), ss("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
+		return t;
+	}
+
+	static String getMessages(Throwable t) {
 		return Stream.iterate(t, Throwable::getCause).takeWhile(e -> e != null).map(Throwable::getMessage).collect(joining("\n"));
 	}
 
