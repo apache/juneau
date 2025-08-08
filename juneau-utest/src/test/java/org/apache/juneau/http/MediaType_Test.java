@@ -29,7 +29,7 @@ public class MediaType_Test extends SimpleTestBase {
 		assertJson(x, "['text/bar','text/foo']");
 
 		MediaType x2 = new MediaType((String)null);  // Interpreted as "/*"
-		assertString(x2.getType()).isEmpty();
+		assertStringEmpty(x2.getType());
 		assertEquals("*", x2.getSubType());
 		assertJson(x2.getSubTypes(), "['*']");
 		assertTrue(x2.isMetaSubtype());

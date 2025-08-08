@@ -59,7 +59,7 @@ class ConfigMapTest extends SimpleTestBase {
 		);
 		ConfigMap cm = s.getMap("A.cfg");
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("foo=bar|");
+		assertLines("foo=bar|", cm);
 
 		assertEquals("", join(cm.getPreLines(""), '|'));
 		assertEquals("", join(cm.getEntry("", "foo").getPreLines(), '|'));
@@ -69,7 +69,7 @@ class ConfigMapTest extends SimpleTestBase {
 		// Round trip.
 		s.update("A.cfg", cm.toString());
 		cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("foo=bar|");
+		assertLines("foo=bar|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -82,7 +82,7 @@ class ConfigMapTest extends SimpleTestBase {
 		);
 		ConfigMap cm = s.getMap("A.cfg");
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#comment|foo=bar|");
+		assertLines("#comment|foo=bar|", cm);
 
 		assertEquals("", join(cm.getPreLines(""), '|'));
 		assertEquals("#comment", join(cm.getEntry("", "foo").getPreLines(), '|'));
@@ -92,7 +92,7 @@ class ConfigMapTest extends SimpleTestBase {
 		// Round trip.
 		s.update("A.cfg", cm.toString());
 		cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#comment|foo=bar|");
+		assertLines("#comment|foo=bar|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ class ConfigMapTest extends SimpleTestBase {
 		);
 		ConfigMap cm = s.getMap("A.cfg");
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[MySection]|foo=bar|");
+		assertLines("[MySection]|foo=bar|", cm);
 
 		assertEquals("", join(cm.getPreLines(""), '|'));
 		assertEquals("", join(cm.getPreLines("MySection"), '|'));
@@ -116,7 +116,7 @@ class ConfigMapTest extends SimpleTestBase {
 		// Round trip.
 		s.update("A.cfg", cm.toString());
 		cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[MySection]|foo=bar|");
+		assertLines("[MySection]|foo=bar|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ class ConfigMapTest extends SimpleTestBase {
 		);
 		ConfigMap cm = s.getMap("A.cfg");
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[MySection]|foo=bar|");
+		assertLines("[MySection]|foo=bar|", cm);
 
 		assertEquals("", join(cm.getPreLines(""), '|'));
 
@@ -154,7 +154,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"k2=v2"
 		);
 		ConfigMap cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#S1|[S1]|#k1|k1=v1|#S2|[S2]|#k2|k2=v2|");
+		assertLines("#S1|[S1]|#k1|k1=v1|#S2|[S2]|#k2|k2=v2|", cm);
 
 		assertEquals("", join(cm.getPreLines(""), '|'));
 		assertEquals("#S1", join(cm.getPreLines("S1"), '|'));
@@ -168,7 +168,7 @@ class ConfigMapTest extends SimpleTestBase {
 		// Round trip.
 		s.update("A.cfg", cm.toString());
 		cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#S1|[S1]|#k1|k1=v1|#S2|[S2]|#k2|k2=v2|");
+		assertLines("#S1|[S1]|#k1|k1=v1|#S2|[S2]|#k2|k2=v2|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -186,7 +186,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"k1=v1"
 		);
 		ConfigMap cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#D||#k|k=v|#S1|[S1]|#k1|k1=v1|");
+		assertLines("#D||#k|k=v|#S1|[S1]|#k1|k1=v1|", cm);
 
 		assertEquals("#D", join(cm.getPreLines(""), '|'));
 		assertEquals("#k", join(cm.getEntry("", "k").getPreLines(), '|'));
@@ -199,7 +199,7 @@ class ConfigMapTest extends SimpleTestBase {
 		// Round trip.
 		s.update("A.cfg", cm.toString());
 		cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#D||#k|k=v|#S1|[S1]|#k1|k1=v1|");
+		assertLines("#D||#k|k=v|#S1|[S1]|#k1|k1=v1|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -229,7 +229,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"k1=v1"
 		);
 		ConfigMap cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#Da|#Db||#ka||#kb||k=v||#S1a||#S1b||[S1]||#k1a||#k1b||k1=v1|");
+		assertLines("#Da|#Db||#ka||#kb||k=v||#S1a||#S1b||[S1]||#k1a||#k1b||k1=v1|", cm);
 
 		assertEquals("#Da|#Db", join(cm.getPreLines(""), '|'));
 		assertEquals("#ka||#kb|", join(cm.getEntry("", "k").getPreLines(), '|'));
@@ -242,7 +242,7 @@ class ConfigMapTest extends SimpleTestBase {
 		// Round trip.
 		s.update("A.cfg", cm.toString());
 		cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#Da|#Db||#ka||#kb||k=v||#S1a||#S1b||[S1]||#k1a||#k1b||k1=v1|");
+		assertLines("#Da|#Db||#ka||#kb||k=v||#S1a||#S1b||[S1]||#k1a||#k1b||k1=v1|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -290,7 +290,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertEquals("", join(cm.getEntry("", "k1").getPreLines(), '|'));
 		assertEquals("", join(cm.getEntry("", "k2").getPreLines(), '|'));
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|");
+		assertLines("k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|", cm);
 
 		assertEquals("v1a,\nv1b,\nv1c", cm.getEntry("", "k1").getValue());
 		assertEquals("v2a,\nv2b,\nv2c", cm.getEntry("", "k2").getValue());
@@ -298,7 +298,7 @@ class ConfigMapTest extends SimpleTestBase {
 		// Round trip.
 		s.update("A.cfg", cm.toString());
 		cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|");
+		assertLines("k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|", cm);
 	}
 
 	@Test void testMultipleLinesWithSpacesAndComments() throws Exception {
@@ -321,7 +321,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertEquals("|#k1|", join(cm.getEntry("", "k1").getPreLines(), '|'));
 		assertEquals("|#k2|", join(cm.getEntry("", "k2").getPreLines(), '|'));
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("|#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|");
+		assertLines("|#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|", cm);
 
 		assertEquals("v1a,\nv1b,\nv1c", cm.getEntry("", "k1").getValue());
 		assertEquals("v2a,\nv2b,\nv2c", cm.getEntry("", "k2").getValue());
@@ -329,7 +329,7 @@ class ConfigMapTest extends SimpleTestBase {
 		// Round trip.
 		s.update("A.cfg", cm.toString());
 		cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("|#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|");
+		assertLines("|#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|", cm);
 	}
 
 	@Test void testMultipleLinesInSection() throws Exception {
@@ -347,7 +347,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertEquals("", join(cm.getEntry("S1", "k1").getPreLines(), '|'));
 		assertEquals("", join(cm.getEntry("S1", "k2").getPreLines(), '|'));
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|");
+		assertLines("[S1]|k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|", cm);
 
 		assertEquals("v1a,\nv1b,\nv1c", cm.getEntry("S1", "k1").getValue());
 		assertEquals("v2a,\nv2b,\nv2c", cm.getEntry("S1", "k2").getValue());
@@ -355,7 +355,7 @@ class ConfigMapTest extends SimpleTestBase {
 		// Round trip.
 		s.update("A.cfg", cm.toString());
 		cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|");
+		assertLines("[S1]|k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|", cm);
 	}
 
 	@Test void testMultipleLinesInSectionWithSpacesAndPrelines() throws Exception {
@@ -383,7 +383,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertEquals("|#k1|", join(cm.getEntry("S1", "k1").getPreLines(), '|'));
 		assertEquals("|#k2|", join(cm.getEntry("S1", "k2").getPreLines(), '|'));
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("|#S1||[S1]||#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|");
+		assertLines("|#S1||[S1]||#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|", cm);
 
 		assertEquals("v1a,\nv1b,\nv1c", cm.getEntry("S1", "k1").getValue());
 		assertEquals("v2a,\nv2b,\nv2c", cm.getEntry("S1", "k2").getValue());
@@ -391,7 +391,7 @@ class ConfigMapTest extends SimpleTestBase {
 		// Round trip.
 		s.update("A.cfg", cm.toString());
 		cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("|#S1||[S1]||#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|");
+		assertLines("|#S1||[S1]||#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -404,22 +404,22 @@ class ConfigMapTest extends SimpleTestBase {
 		);
 		ConfigMap cm = s.getMap("A.cfg");
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = foo # comment|");
+		assertLines("[S1]|k1 = foo # comment|", cm);
 		assertEquals("foo", cm.getEntry("S1", "k1").getValue());
 		assertEquals("comment", cm.getEntry("S1", "k1").getComment());
 
 		cm.setEntry("S1", "k1", null, null, "newcomment", null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = foo # newcomment|");
+		assertLines("[S1]|k1 = foo # newcomment|", cm);
 		assertEquals("foo", cm.getEntry("S1", "k1").getValue());
 		assertEquals("newcomment", cm.getEntry("S1", "k1").getComment());
 
 		cm.setEntry("S1", "k1", null, null, "", null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = foo|");
+		assertLines("[S1]|k1 = foo|", cm);
 		assertEquals("foo", cm.getEntry("S1", "k1").getValue());
 		assertEquals("", cm.getEntry("S1", "k1").getComment());
 
 		cm.setEntry("S1", "k1", null, null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = foo|");
+		assertLines("[S1]|k1 = foo|", cm);
 		assertEquals("foo", cm.getEntry("S1", "k1").getValue());
 		assertEquals("", cm.getEntry("S1", "k1").getComment());
 	}
@@ -431,7 +431,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"k2 = foo # "
 		);
 		ConfigMap cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = foo#|k2 = foo # |");
+		assertLines("[S1]|k1 = foo#|k2 = foo # |", cm);
 		assertEquals("", cm.getEntry("S1", "k1").getComment());
 		assertEquals("", cm.getEntry("S1", "k2").getComment());
 	}
@@ -444,7 +444,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"k3 = foo \\# bar # real-comment"
 		);
 		ConfigMap cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = foo\\#bar|k2 = foo \\# bar|k3 = foo \\# bar # real-comment|");
+		assertLines("[S1]|k1 = foo\\#bar|k2 = foo \\# bar|k3 = foo \\# bar # real-comment|", cm);
 
 		assertEquals(null, cm.getEntry("S1", "k1").getComment());
 		assertEquals(null, cm.getEntry("S1", "k2").getComment());
@@ -466,14 +466,14 @@ class ConfigMapTest extends SimpleTestBase {
 		cm.setEntry("S1", "k2", null, null, null, null);
 		cm.setEntry("S1", "k3", "v3b", null, null, null);
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1b|k2 = v2a|k3 = v3b|");
+		assertLines("[S1]|k1 = v1b|k2 = v2a|k3 = v3b|", cm);
 
 		cm.commit();
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1b|k2 = v2a|k3 = v3b|");
+		assertLines("[S1]|k1 = v1b|k2 = v2a|k3 = v3b|", cm);
 
 		// Round trip.
 		cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1b|k2 = v2a|k3 = v3b|");
+		assertLines("[S1]|k1 = v1b|k2 = v2a|k3 = v3b|", cm);
 	}
 
 	@Test void testSettingEntriesWithPreLines() throws Exception {
@@ -498,14 +498,14 @@ class ConfigMapTest extends SimpleTestBase {
 		cm.setEntry("S1", "k3", "v3b", null, null, null);
 		cm.setEntry("S1", "k4", "v4b", null, null, Arrays.asList("","#k4",""));
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|");
+		assertLines("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|", cm);
 
 		cm.commit();
-		assertString(s.read("A.cfg")).asReplaceAll("\\r?\\n", "|").is("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|");
+		assertLines("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|", s.read("A.cfg"));
 
 		// Round trip.
 		cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|");
+		assertLines("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|", cm);
 	}
 
 	@Test void testSettingEntriesWithNewlines() throws Exception {
@@ -515,16 +515,16 @@ class ConfigMapTest extends SimpleTestBase {
 		cm.setEntry("", "k", "v1\nv2\nv3", null, null, null);
 		cm.setEntry("S1", "k1", "v1\nv2\nv3", null, null, null);
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|");
+		assertLines("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|", cm);
 
 		assertEquals("v1\nv2\nv3", cm.getEntry("", "k").getValue());
 		assertEquals("v1\nv2\nv3", cm.getEntry("S1", "k1").getValue());
 		cm.commit();
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|");
+		assertLines("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|", cm);
 
 		// Round trip.
 		cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|");
+		assertLines("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|", cm);
 	}
 
 	@Test void testSettingEntriesWithNewlinesAndSpaces() throws Exception {
@@ -534,16 +534,16 @@ class ConfigMapTest extends SimpleTestBase {
 		cm.setEntry("", "k", "v1 \n v2 \n v3", null, null, null);
 		cm.setEntry("S1", "k1", "v1\t\n\tv2\t\n\tv3", null, null, null);
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("k = v1 |	 v2 |	 v3|[S1]|k1 = v1	|		v2	|		v3|");
+		assertLines("k = v1 |	 v2 |	 v3|[S1]|k1 = v1	|		v2	|		v3|", cm);
 
 		assertEquals("v1 \n v2 \n v3", cm.getEntry("", "k").getValue());
 		assertEquals("v1\t\n\tv2\t\n\tv3", cm.getEntry("S1", "k1").getValue());
 		cm.commit();
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("k = v1 |	 v2 |	 v3|[S1]|k1 = v1	|		v2	|		v3|");
+		assertLines("k = v1 |	 v2 |	 v3|[S1]|k1 = v1	|		v2	|		v3|", cm);
 
 		// Round trip.
 		cm = s.getMap("A.cfg");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("k = v1 |	 v2 |	 v3|[S1]|k1 = v1	|		v2	|		v3|");
+		assertLines("k = v1 |	 v2 |	 v3|[S1]|k1 = v1	|		v2	|		v3|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -557,11 +557,11 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setSection("S1", Arrays.asList("#S1"));
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#S1|[S1]|k1 = v1|");
+		assertLines("#S1|[S1]|k1 = v1|", cm);
 		cm.setSection("S1", Collections.<String>emptyList());
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
+		assertLines("[S1]|k1 = v1|", cm);
 		cm.setSection("S1", null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
+		assertLines("[S1]|k1 = v1|", cm);
 	}
 
 	@Test void testSetSectionOnDefaultSection() throws Exception {
@@ -572,11 +572,11 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setSection("", Arrays.asList("#D"));
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#D||[S1]|k1 = v1|");
+		assertLines("#D||[S1]|k1 = v1|", cm);
 		cm.setSection("", Collections.<String>emptyList());
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
+		assertLines("[S1]|k1 = v1|", cm);
 		cm.setSection("", null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
+		assertLines("[S1]|k1 = v1|", cm);
 	}
 
 	@Test void testSetSectionOnNewSection() throws Exception {
@@ -587,11 +587,11 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setSection("S2", Arrays.asList("#S2"));
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|#S2|[S2]|");
+		assertLines("[S1]|k1 = v1|#S2|[S2]|", cm);
 		cm.setSection("S3", Collections.<String>emptyList());
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|#S2|[S2]|[S3]|");
+		assertLines("[S1]|k1 = v1|#S2|[S2]|[S3]|", cm);
 		cm.setSection("S4", null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|#S2|[S2]|[S3]|[S4]|");
+		assertLines("[S1]|k1 = v1|#S2|[S2]|[S3]|[S4]|", cm);
 	}
 
 	@Test void testSetSectionBadNames() throws Exception {
@@ -644,7 +644,7 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.removeSection("S1");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S2]|k2 = v2|");
+		assertLines("[S2]|k2 = v2|", cm);
 	}
 
 	@Test void testRemoveSectionOnNonExistingSection() throws Exception {
@@ -658,7 +658,7 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.removeSection("S3");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|k2 = v2|");
+		assertLines("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
 
 		assertThrowsWithMessage(IllegalArgumentException.class, "Invalid section name: 'null'", ()->cm.removeSection(null));
 	}
@@ -675,7 +675,7 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.removeSection("");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|k2 = v2|");
+		assertLines("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
 	}
 
 	@Test void testRemoveDefaultSectionWithComments() throws Exception {
@@ -693,7 +693,7 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.removeSection("");
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|k2 = v2|");
+		assertLines("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -707,11 +707,11 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", null, null, null, Arrays.asList("#k1"));
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|#k1|k1 = v1|");
+		assertLines("[S1]|#k1|k1 = v1|", cm);
 		cm.setEntry("S1", "k1", null, null, null, Collections.<String>emptyList());
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
+		assertLines("[S1]|k1 = v1|", cm);
 		cm.setEntry("S1", "k1", null, null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
+		assertLines("[S1]|k1 = v1|", cm);
 	}
 
 	@Test void testSetPrelinesOnExistingEntryWithAtrributes() throws Exception {
@@ -723,7 +723,7 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", null, null, null, Arrays.asList("#k1b"));
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|#k1b|k1 = v1 # comment|");
+		assertLines("[S1]|#k1b|k1 = v1 # comment|", cm);
 	}
 
 	@Test void testSetPrelinesOnNonExistingEntry() throws Exception {
@@ -734,18 +734,18 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k2", null, null, null, Arrays.asList("#k2"));
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
+		assertLines("[S1]|k1 = v1|", cm);
 		cm.setEntry("S1", "k2", null, null, null, Collections.<String>emptyList());
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
+		assertLines("[S1]|k1 = v1|", cm);
 		cm.setEntry("S1", "k2", null, null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
+		assertLines("[S1]|k1 = v1|", cm);
 
 		cm.setEntry("S2", "k2", null, null, null, Arrays.asList("#k2"));
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|");
+		assertLines("[S1]|k1 = v1|[S2]|", cm);
 		cm.setEntry("S2", "k2", null, null, null, Collections.<String>emptyList());
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|");
+		assertLines("[S1]|k1 = v1|[S2]|", cm);
 		cm.setEntry("S2", "k2", null, null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|");
+		assertLines("[S1]|k1 = v1|[S2]|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -759,7 +759,7 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", "v2", null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v2|");
+		assertLines("[S1]|k1 = v2|", cm);
 	}
 
 	@Test void testSetValueOnExistingEntryWithAttributes() throws Exception {
@@ -771,7 +771,7 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", "v2", null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|#k1|k1 = v2 # comment|");
+		assertLines("[S1]|#k1|k1 = v2 # comment|", cm);
 	}
 
 	@Test void testSetValueToNullOnExistingEntry() throws Exception {
@@ -782,7 +782,7 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", null, null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
+		assertLines("[S1]|k1 = v1|", cm);
 	}
 
 	@Test void testSetValueOnNonExistingEntry() throws Exception {
@@ -793,11 +793,11 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k2", "v2", null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|k2 = v2|");
+		assertLines("[S1]|k1 = v1|k2 = v2|", cm);
 		cm.setEntry("S1", "k2", null, null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|k2 = v2|");
+		assertLines("[S1]|k1 = v1|k2 = v2|", cm);
 		cm.setEntry("S1", "k2", null, null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|k2 = v2|");
+		assertLines("[S1]|k1 = v1|k2 = v2|", cm);
 	}
 
 	@Test void testSetValueOnNonExistingEntryOnNonExistentSection() throws Exception {
@@ -808,7 +808,7 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setEntry("S2", "k2", "v2", null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|k2 = v2|");
+		assertLines("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
 	}
 
 	@Test void testSetValueInvalidSectionNames() throws Exception {
@@ -856,7 +856,7 @@ class ConfigMapTest extends SimpleTestBase {
 
 		// If value has # in it, it should get escaped.
 		cm.setEntry("S1", "k1", "v1 # foo", null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1 \\u0023 foo|");
+		assertLines("[S1]|k1 = v1 \\u0023 foo|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -870,15 +870,15 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", null, null, "c1", null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1 # c1|");
+		assertLines("[S1]|k1 = v1 # c1|", cm);
 
 		cm.setEntry("S1", "k1", null, null, "", null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
+		assertLines("[S1]|k1 = v1|", cm);
 		cm.commit();
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
+		assertLines("[S1]|k1 = v1|", cm);
 
 		cm.setEntry("S1", "k1", null, null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
+		assertLines("[S1]|k1 = v1|", cm);
 	}
 
 	@Test void testSetCommentOnExistingEntryWithAttributes() throws Exception {
@@ -890,7 +890,7 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", null, null, "c2", null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|#k1a|k1 = v1 # c2|");
+		assertLines("[S1]|#k1a|k1 = v1 # c2|", cm);
 	}
 
 	@Test void testSetCommentOnNonExistingEntry() throws Exception {
@@ -901,14 +901,14 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k2", null, null, "foo", null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
+		assertLines("[S1]|k1 = v1|", cm);
 		cm.setEntry("S1", "k2", null, null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
+		assertLines("[S1]|k1 = v1|", cm);
 
 		cm.setEntry("S2", "k2", null, null, "foo", null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|");
+		assertLines("[S1]|k1 = v1|[S2]|", cm);
 		cm.setEntry("S2", "k2", null, null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|");
+		assertLines("[S1]|k1 = v1|[S2]|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -922,13 +922,13 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", "v2", null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v2|");
+		assertLines("[S1]|k1 = v2|", cm);
 
 		cm.setEntry("S1", "k1", "v3", ENCODED, "c3", Arrays.asList("#k1a"));
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|#k1a|k1<*> = v3 # c3|");
+		assertLines("[S1]|#k1a|k1<*> = v3 # c3|", cm);
 
 		cm.setEntry("S1", "k1", "v4", BASE64, "c4", Arrays.asList("#k1b"));
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|#k1b|k1<^> = v4 # c4|");
+		assertLines("[S1]|#k1b|k1<^> = v4 # c4|", cm);
 	}
 
 	@Test void testSetEntryOnExistingEntryWithAttributes() throws Exception {
@@ -940,13 +940,13 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", "v2", null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|#k1|k1 = v2 # comment|");
+		assertLines("[S1]|#k1|k1 = v2 # comment|", cm);
 
 		cm.setEntry("S1", "k1", "v3", ENCODED, "c3", Arrays.asList("#k1a"));
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|#k1a|k1<*> = v3 # c3|");
+		assertLines("[S1]|#k1a|k1<*> = v3 # c3|", cm);
 
 		cm.setEntry("S1", "k1", "v4", BASE64, "c4", Arrays.asList("#k1b"));
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|#k1b|k1<^> = v4 # c4|");
+		assertLines("[S1]|#k1b|k1<^> = v4 # c4|", cm);
 	}
 
 	@Test void testSetEntryToNullOnExistingEntry() throws Exception {
@@ -957,7 +957,7 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", null, null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
+		assertLines("[S1]|k1 = v1|", cm);
 	}
 
 	@Test void testSetEntryOnNonExistingEntry() throws Exception {
@@ -968,11 +968,11 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k2", "v2", null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|k2 = v2|");
+		assertLines("[S1]|k1 = v1|k2 = v2|", cm);
 		cm.setEntry("S1", "k2", null, null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|k2 = v2|");
+		assertLines("[S1]|k1 = v1|k2 = v2|", cm);
 		cm.setEntry("S1", "k2", "", null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|k2 = |");
+		assertLines("[S1]|k1 = v1|k2 = |", cm);
 	}
 
 	@Test void testSetEntryOnNonExistingEntryOnNonExistentSection() throws Exception {
@@ -983,7 +983,7 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		cm.setEntry("S2", "k2", "v2", null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|k2 = v2|");
+		assertLines("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
 	}
 
 	@Test void testSetEntryInvalidSectionNames() throws Exception {
@@ -1031,7 +1031,7 @@ class ConfigMapTest extends SimpleTestBase {
 
 		// If value has # in it, it should get escaped.
 		cm.setEntry("S1", "k1", "v1 # foo", null, null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1 \\u0023 foo|");
+		assertLines("[S1]|k1 = v1 \\u0023 foo|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1046,13 +1046,13 @@ class ConfigMapTest extends SimpleTestBase {
 		);
 		ConfigMap cm = s.getMap("A.cfg");
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1<^> = v1|k2<*> = v2|k3<*^> = v3|");
+		assertLines("[S1]|k1<^> = v1|k2<*> = v2|k3<*^> = v3|", cm);
 		assertEquals("^", cm.getEntry("S1", "k1").getModifiers());
 		assertEquals("*", cm.getEntry("S1", "k2").getModifiers());
 		assertEquals("*^", cm.getEntry("S1", "k3").getModifiers());
 
 		cm.setEntry("S1", "k1", "v1", "#$%&*+^@~", null, null);
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1<#$%&*+^@~> = v1|k2<*> = v2|k3<*^> = v3|");
+		assertLines("[S1]|k1<#$%&*+^@~> = v1|k2<*> = v2|k3<*^> = v3|", cm);
 	}
 
 	@Test void testInvalidModifier() throws Exception {

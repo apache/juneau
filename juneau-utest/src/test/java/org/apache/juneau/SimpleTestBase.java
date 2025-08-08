@@ -38,6 +38,10 @@ public abstract class SimpleTestBase {
 		AssertionHelpers.assertJson(value, json);
 	}
 
+	protected static void assertLines(String expected, Object value) {
+		assertEquals(expected, Utils.readable(value).replaceAll("\\r?\\n", "|"));
+	}
+
 	/**
 	 * Asserts the JSON5 representation of the specified object.
 	 */
@@ -149,6 +153,14 @@ public abstract class SimpleTestBase {
 	 */
 	protected static void assertEmpty(Collection<?> c) {
 		AssertionHelpers.assertEmpty(c);
+	}
+
+	/**
+	 * Asserts that a collection is not null and empty.
+	 */
+	protected static void assertStringEmpty(Object s) {
+		assertNotNull(s);
+		assertTrue(Utils.readable(s).isEmpty());
 	}
 
 	/**

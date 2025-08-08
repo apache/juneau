@@ -470,7 +470,7 @@ class BeanStore_Test extends SimpleTestBase {
 		b2p.add(A2.class, a2a, null);
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			for (ExecutableInfo e : array(c1, c2)) {
-				assertString(b.getMissingParams(e)).isEmpty();
+				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
 			assertArray(b.getParams(c1), pThis, pA1a, pA2a, pIsBeanStore);
@@ -735,7 +735,7 @@ class BeanStore_Test extends SimpleTestBase {
 		assertString("X", b1c.createMethodFinder(String.class).withDefault("X").run());
 		assertString("X", b1c.createMethodFinder(String.class).withDefault(()->"X").run());
 
-		b1c.createMethodFinder(String.class).withDefault("X").run(y -> assertString(y).is("X"));
+		b1c.createMethodFinder(String.class).withDefault("X").run(y -> assertString("X", y));
 	}
 
 	// Bean matching.
@@ -767,7 +767,7 @@ class BeanStore_Test extends SimpleTestBase {
 		assertString("X", b1c.createMethodFinder(String.class).withDefault("X").run());
 		assertString("X", b1c.createMethodFinder(String.class).withDefault(()->"X").run());
 
-		b1c.createMethodFinder(String.class).withDefault("X").run(y -> assertString(y).is("X"));
+		b1c.createMethodFinder(String.class).withDefault("X").run(y -> assertString("X", y));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -50,7 +50,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("foo = baz|");
+		assertLines("foo = baz|", cm);
 	}
 
 	@Test void testBasicNormalSection() throws Exception {
@@ -76,7 +76,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|foo = baz|");
+		assertLines("[S1]|foo = baz|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("k = vb|[S1]|k1 = v1b|");
+		assertLines("k = vb|[S1]|k1 = v1b|", cm);
 	}
 
 	@Test void testAddNewEntriesWithAttributes() throws Exception {
@@ -130,7 +130,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#k|k<^*> = kb # C|[S1]|#k1|k1<^*> = k1b # C1|");
+		assertLines("#k|k<^*> = kb # C|[S1]|#k1|k1<^*> = k1b # C1|", cm);
 	}
 
 	@Test void testAddExistingEntriesWithAttributes() throws Exception {
@@ -161,7 +161,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#kb|k<^*> = kb # Cb|#S1|[S1]|#k1b|k1<^*> = k1b # Cb1|");
+		assertLines("#kb|k<^*> = kb # Cb|#S1|[S1]|#k1b|k1<^*> = k1b # Cb1|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -193,7 +193,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|");
+		assertLines("[S1]|", cm);
 	}
 
 	@Test void testRemoveExistingEntriesWithAttributes() throws Exception {
@@ -224,7 +224,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#S1|[S1]|");
+		assertLines("#S1|[S1]|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -256,7 +256,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#D1||#S1|[S1]|[S2]|[S3]|k3 = v3|");
+		assertLines("#D1||#S1|[S1]|[S2]|[S3]|k3 = v3|", cm);
 	}
 
 	@Test void testModifyExistingSections() throws Exception {
@@ -290,7 +290,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#Db||#S1b|[S1]|[S2]|[S3]|k3 = v3|");
+		assertLines("#Db||#S1b|[S1]|[S2]|[S3]|k3 = v3|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -333,7 +333,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("");
+		assertLines("", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -372,7 +372,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("#Da||k = v # cv||#S1|[S1]|#k1|k1 = v1 # cv1|[S2]|#k2|k2 = v2 # cv2|[S3]|");
+		assertLines("#Da||k = v # cv||#S1|[S1]|#k1|k1 = v1 # cv1|[S2]|#k2|k2 = v2 # cv2|[S3]|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -409,7 +409,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1b|[S2]|k2 = v2b|");
+		assertLines("[S1]|k1 = v1b|[S2]|k2 = v2b|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -446,7 +446,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1c|");
+		assertLines("[S1]|k1 = v1c|", cm);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -487,7 +487,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			assertNull(l.error);
 			cm.unregister(l);
 
-			assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1c|");
+			assertLines("[S1]|k1 = v1c|", cm);
 		}
 	}
 
@@ -528,7 +528,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			assertNull(l.error);
 			cm.unregister(l);
 
-			assertString(cm).asReplaceAll("\\r?\\n", "|").is("[S1]|k1 = v1c|");
+			assertLines("[S1]|k1 = v1c|", cm);
 		}
 	}
 
