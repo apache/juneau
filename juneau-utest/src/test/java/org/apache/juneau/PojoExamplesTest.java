@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
@@ -321,10 +322,10 @@ class PojoExamplesTest extends SimpleTestBase {
 	@Test
 	public void testInvalidUsesOfExample() {
 		BeanSession bs = BeanContext.DEFAULT_SESSION;
-		assertThrown(()->bs.getClassMeta(F1.class)).asMessage().isContains("invalid method 'example(String)'");
-		assertThrown(()->bs.getClassMeta(F2.class)).asMessage().isContains("invalid method 'example()'");
-		assertThrown(()->bs.getClassMeta(F3.class)).asMessage().isContains("invalid field","$F3.F3");
-		assertThrown(()->bs.getClassMeta(F4.class)).asMessage().isContains("invalid field ","$F4.f4");
+		assertThrowsWithMessage(Exception.class, "invalid method 'example(String)'", ()->bs.getClassMeta(F1.class));
+		assertThrowsWithMessage(Exception.class, "invalid method 'example()'", ()->bs.getClassMeta(F2.class));
+		assertThrowsWithMessage(Exception.class, list("invalid field","$F3.F3"), ()->bs.getClassMeta(F3.class));
+		assertThrowsWithMessage(Exception.class, list("invalid field ","$F4.f4"), ()->bs.getClassMeta(F4.class));
 	}
 
 	public static class F1 {

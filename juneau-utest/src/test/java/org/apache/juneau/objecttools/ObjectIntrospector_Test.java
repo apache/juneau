@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -42,7 +41,7 @@ class ObjectIntrospector_Test extends SimpleTestBase {
 		r = new ObjectIntrospector(in).invokeMethod("toString", "[]");
 		assertEquals("foobar", r);
 
-		assertThrown(()->new ObjectIntrospector("foobar").invokeMethod("noSuchMethod", "[3,6]")).isType(NoSuchMethodException.class);
+		assertThrows(NoSuchMethodException.class, ()->new ObjectIntrospector("foobar").invokeMethod("noSuchMethod", "[3,6]"));
 
 		r = new ObjectIntrospector(null).invokeMethod(String.class.getMethod("toString"), null);
 		assertNull(r);

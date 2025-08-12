@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import java.util.*;
 
@@ -39,7 +38,7 @@ public class MultiSetTest extends SimpleTestBase {
 		assertTrue(i1.hasNext());
 		assertEquals("4", i1.next());
 		assertFalse(i1.hasNext());
-		assertThrown(i1::next).isType(NoSuchElementException.class);
+		assertThrows(NoSuchElementException.class, i1::next);
 
 		l1 = Arrays.asList(new String[]{"1","2"});
 		l2 = Arrays.asList(new String[]{});
@@ -50,7 +49,7 @@ public class MultiSetTest extends SimpleTestBase {
 		assertTrue(i2.hasNext());
 		assertEquals("2", i2.next());
 		assertFalse(i2.hasNext());
-		assertThrown(i2::next).isType(NoSuchElementException.class);
+		assertThrows(NoSuchElementException.class, i2::next);
 
 		l1 = Arrays.asList(new String[]{});
 		l2 = Arrays.asList(new String[]{"3","4"});
@@ -61,14 +60,14 @@ public class MultiSetTest extends SimpleTestBase {
 		assertTrue(i3.hasNext());
 		assertEquals("4", i3.next());
 		assertFalse(i3.hasNext());
-		assertThrown(i3::next).isType(NoSuchElementException.class);
+		assertThrows(NoSuchElementException.class, i3::next);
 
 		l1 = Arrays.asList(new String[]{});
 		l2 = Arrays.asList(new String[]{});
 		ms = new MultiSet<>(l1, l2);
 		Iterator<String> i4 = ms.iterator();
 		assertFalse(i4.hasNext());
-		assertThrown(i4::next).isType(NoSuchElementException.class);
+		assertThrows(NoSuchElementException.class, i4::next);
 
 		l1 = Arrays.asList(new String[]{"1","2"});
 		ms = new MultiSet<>(l1);
@@ -78,7 +77,7 @@ public class MultiSetTest extends SimpleTestBase {
 		assertTrue(i5.hasNext());
 		assertEquals("2", i5.next());
 		assertFalse(i5.hasNext());
-		assertThrown(i5::next).isType(NoSuchElementException.class);
+		assertThrows(NoSuchElementException.class, i5::next);
 
 		l1 = new LinkedList<>(Arrays.asList(new String[]{"1","2"}));
 		l2 = new LinkedList<>(Arrays.asList(new String[]{"3","4"}));
@@ -112,9 +111,9 @@ public class MultiSetTest extends SimpleTestBase {
 		assertJson(ms, "[]");
 		assertEquals(0, ms.size());
 
-		assertThrown(()->new MultiSet<>((Collection<String>)null)).isType(IllegalArgumentException.class);
-		assertThrown(()->new MultiSet<String>().iterator().next()).isType(NoSuchElementException.class);
-		assertThrown(()->new MultiSet<String>().iterator().remove()).isType(NoSuchElementException.class);
+		assertThrows(IllegalArgumentException.class, ()->new MultiSet<>((Collection<String>)null));
+		assertThrows(NoSuchElementException.class, ()->new MultiSet<String>().iterator().next());
+		assertThrows(NoSuchElementException.class, ()->new MultiSet<String>().iterator().remove());
 
 	}
 }

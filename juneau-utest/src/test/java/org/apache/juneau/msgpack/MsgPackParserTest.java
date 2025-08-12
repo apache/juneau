@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import java.io.*;
 
 import org.apache.juneau.*;
@@ -37,7 +36,7 @@ public class MsgPackParserTest extends SimpleTestBase {
 		is = is("00 01");
 		r = p.parse(is, Object.class);
 		assertJson(r, "0");
-		assertThrown(()->p.parse(is, Object.class)).asMessage().isContains("Stream is closed");
+		assertThrowsWithMessage(Exception.class, "Stream is closed", ()->p.parse(is, Object.class));
 	}
 
 	//====================================================================================================

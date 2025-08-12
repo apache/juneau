@@ -23,6 +23,7 @@ import org.apache.juneau.common.internal.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer.*;
 
 /**
@@ -40,6 +41,36 @@ public abstract class SimpleTestBase {
 
 	protected static void assertLines(String expected, Object value) {
 		assertEquals(expected, Utils.readable(value).replaceAll("\\r?\\n", "|"));
+	}
+
+	protected static <T> void assertTests(T value, AssertionPredicate<T>...tests) {
+		Stream.of(tests).forEach(x -> x.test(value));
+	}
+
+	protected static <T extends Throwable> void assertThrowsTests(org.junit.jupiter.api.function.Executable executable, AssertionPredicate<T>...tests) {
+		try {
+			executable.execute();
+			fail("Exception expected");
+		} catch (Throwable t) {
+			Stream.of(tests).forEach(x -> x.test((T)t));
+		}
+	}
+
+	public static <T extends Throwable> T thrown(Class<T> throwableType, org.junit.jupiter.api.function.Executable executable) {
+		return (T)assertThrows(Throwable.class, executable);
+	}
+
+	protected static <T extends Throwable> AssertionPredicate<T> messagesContains(String...values) {
+		return x -> {
+			var messages = AssertionHelpers.getMessages(x);
+			for (var v : values) {
+				assertTrue(messages.contains(v), ss("Throwable did not contain expected substring ''{0}''.  Messages={1}", v, messages));
+			}
+		};
+	}
+
+	protected static <T> AssertionPredicate<T> isType(Class<?> type) {
+		return x -> assertType(type, type);
 	}
 
 	/**
@@ -125,6 +156,13 @@ public abstract class SimpleTestBase {
 
 	protected static <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, String expectedSubstring, org.junit.jupiter.api.function.Executable executable) {
 		return AssertionHelpers.assertThrowsWithMessage(expectedType, expectedSubstring, executable);
+	}
+
+	protected static <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, List<String> expectedSubstrings, org.junit.jupiter.api.function.Executable executable) {
+		T exception = Assertions.assertThrows(expectedType, executable);
+		var messages = AssertionHelpers.getMessages(exception);
+		expectedSubstrings.stream().forEach(x -> assertTrue(messages.contains(x), ss("Expected message to contain: {0}.\nActual:\n{1}", x, messages)));
+		return exception;
 	}
 
 	protected static <T extends Throwable> T assertThrowable(Class<T> expectedType, String expectedSubstring, T t) {

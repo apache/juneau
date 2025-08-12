@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.junit.Assert.*;
 import java.util.*;
@@ -50,14 +49,14 @@ class ArrayUtilsTest extends SimpleTestBase {
 	@Test void testAsSet() {
 		String[] s = null;
 
-		assertThrown(()->asSet((String[])null)).isType(IllegalArgumentException.class);
+		assertThrows(IllegalArgumentException.class, ()->asSet((String[])null));
 
 		s = new String[]{"a"};
 		Iterator<String> i = asSet(s).iterator();
 		assertEquals("a", i.next());
 
-		assertThrown(i::remove).isType(UnsupportedOperationException.class);
-		assertThrown(i::next).isType(NoSuchElementException.class);
+		assertThrows(UnsupportedOperationException.class, i::remove);
+		assertThrows(NoSuchElementException.class, i::next);
 	}
 
 	//====================================================================================================

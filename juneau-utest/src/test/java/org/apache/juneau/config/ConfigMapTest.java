@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
@@ -259,7 +258,7 @@ class ConfigMapTest extends SimpleTestBase {
 
 		for (String t : test) {
 			ConfigStore s = initStore("A.cfg", t);
-			assertThrown(()->s.getMap("A.cfg")).asMessage().isContains("Invalid section name");
+			assertThrowsWithMessage(Exception.class, "Invalid section name", ()->s.getMap("A.cfg"));
 		}
 	}
 
@@ -606,7 +605,7 @@ class ConfigMapTest extends SimpleTestBase {
 		};
 
 		for (String t : test) {
-			assertThrown(()->cm.setSection(t, null)).asMessage().isContains("Invalid section name");
+			assertThrowsWithMessage(Exception.class, "Invalid section name", ()->cm.setSection(t, null));
 		}
 	}
 
@@ -823,7 +822,7 @@ class ConfigMapTest extends SimpleTestBase {
 		};
 
 		for (String t : test) {
-			assertThrown(()->cm.setEntry(t, "k1", "foo", null, null, null)).asMessage().isContains("Invalid section name:");
+			assertThrowsWithMessage(Exception.class, "Invalid section name:", ()->cm.setEntry(t, "k1", "foo", null, null, null));
 		}
 	}
 
@@ -843,7 +842,7 @@ class ConfigMapTest extends SimpleTestBase {
 		};
 
 		for (String t : test) {
-			assertThrown(()->cm.setEntry("S1", t, "foo", null, null, null)).asMessage().isContains("Invalid key name");
+			assertThrowsWithMessage(Exception.class, "Invalid key name", ()->cm.setEntry("S1", t, "foo", null, null, null));
 		}
 	}
 
@@ -998,7 +997,7 @@ class ConfigMapTest extends SimpleTestBase {
 		};
 
 		for (String t : test) {
-			assertThrown(()->cm.setEntry(t, "k1", "foo", null, null, null)).asMessage().isContains("Invalid section name");
+			assertThrowsWithMessage(Exception.class, "Invalid section name", ()->cm.setEntry(t, "k1", "foo", null, null, null));
 		}
 	}
 
@@ -1018,7 +1017,7 @@ class ConfigMapTest extends SimpleTestBase {
 		};
 
 		for (String t : test) {
-			assertThrown(()->cm.setEntry("S1", t, "foo", null, null, null)).asMessage().isContains("Invalid key name");
+			assertThrowsWithMessage(Exception.class, "Invalid key name", ()->cm.setEntry("S1", t, "foo", null, null, null));
 		}
 	}
 

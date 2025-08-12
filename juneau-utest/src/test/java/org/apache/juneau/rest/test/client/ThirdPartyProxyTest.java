@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test.client;
 
-import static org.apache.juneau.assertions.AssertionPredicates.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -822,7 +820,7 @@ public class ThirdPartyProxyTest {
 
 	@Test
 	public void ea02_setWrongInt() {
-		assertThrown(()->proxy.setInt(2)).asMessages().isAny(contains("expected:<1> but was:<2>"));
+		assertThrowsWithMessage(AssertionError.class, "expected:<1> but was:<2>", ()->proxy.setInt(2));
 	}
 
 	@Test
@@ -857,7 +855,7 @@ public class ThirdPartyProxyTest {
 
 	@Test
 	public void ea09_setNullStringBad() {
-		assertThrown(()->proxy.setNullString("foo")).asMessages().isAny(contains("expected null, but was:<foo>"));
+		assertThrowsWithMessage(AssertionError.class, "expected null, but was:<foo>", ()->proxy.setNullString("foo"));
 	}
 
 	@Test

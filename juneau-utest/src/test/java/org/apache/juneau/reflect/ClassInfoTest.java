@@ -15,7 +15,6 @@ package org.apache.juneau.reflect;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.Context.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.reflect.ClassInfo.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
@@ -1586,11 +1585,11 @@ public class ClassInfoTest extends SimpleTestBase {
 	}
 
 	@Test void newInstance_type() {
-		assertThrown(()->aTypeInfo.newInstance()).isType(ExecutableException.class);
-		assertThrown(()->pTypeInfo.newInstance()).isType(ExecutableException.class);
-		assertThrown(()->pTypeDimensionalInfo.newInstance()).isType(ExecutableException.class);
-		assertThrown(()->pTypeGenericInfo.newInstance()).isType(Exception.class);
-		assertThrown(()->pTypeGenericArgInfo.newInstance()).isType(ExecutableException.class);
+		assertThrows(ExecutableException.class, ()->aTypeInfo.newInstance());
+		assertThrows(ExecutableException.class, ()->pTypeInfo.newInstance());
+		assertThrows(ExecutableException.class, ()->pTypeDimensionalInfo.newInstance());
+		assertThrows(Exception.class, ()->pTypeGenericInfo.newInstance());
+		assertThrows(ExecutableException.class, ()->pTypeGenericArgInfo.newInstance());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

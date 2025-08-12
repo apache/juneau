@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import java.util.*;
 
@@ -225,13 +224,13 @@ public class UrlEncodingParserTest extends SimpleTestBase {
 
 		// Encoded chars
 		// Top level
-		assertThrown(()->p.parse("_value=x{}|\\^[]`<>#%\"&+", Object.class)).isType(ParseException.class);
+		assertThrows(ParseException.class, ()->p.parse("_value=x{}|\\^[]`<>#%\"&+", Object.class));
 		t = "_value=x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B";
 		assertEquals("x{}|\\^[]`<>#%\"&+", p.parse(t, Object.class));
 		assertEquals("x{}|\\^[]`<>#%\"&+", p.parse(t, String.class));
 
 		// 2nd level
-		assertThrown(()->p.parse("?x{}|\\^[]`<>#%\"&+=x{}|\\^[]`<>#%\"&+", Object.class)).isType(ParseException.class);
+		assertThrows(ParseException.class, ()->p.parse("?x{}|\\^[]`<>#%\"&+=x{}|\\^[]`<>#%\"&+", Object.class));
 		t = "?x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B=x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("x{}|\\^[]`<>#%\"&+", m.get("x{}|\\^[]`<>#%\"&+"));

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import java.io.*;
 
@@ -50,7 +49,7 @@ class ParserReaderTest extends SimpleTestBase {
 		ParserReader pr2 = createParserReader(t);
 		pr2.read();
 		pr2.unread();
-		assertThrown(pr2::unread).isType(IOException.class);
+		assertThrows(IOException.class, pr2::unread);
 	}
 
 	//====================================================================================================

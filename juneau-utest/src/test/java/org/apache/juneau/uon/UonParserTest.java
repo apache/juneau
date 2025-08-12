@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import java.io.*;
 import java.util.*;
@@ -260,7 +259,7 @@ public class UonParserTest extends SimpleTestBase {
 		t = "x{}|\\^[]`<>#%\"&+";
 		assertEquals("x{}|\\^[]`<>#%\"&+", p.parse(t, Object.class));
 		assertEquals("x{}|\\^[]`<>#%\"&+", p.parse(t, String.class));
-		assertThrown(()->pe.parse( "x{}|\\^[]`<>#%\"&+", Object.class)).isType(ParseException.class);
+		assertThrows(ParseException.class, ()->pe.parse( "x{}|\\^[]`<>#%\"&+", Object.class));
 		t = "x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B";
 		assertEquals("x{}|\\^[]`<>#%\"&+", pe.parse(t, Object.class));
 		assertEquals("x{}|\\^[]`<>#%\"&+", pe.parse(t, String.class));
@@ -269,7 +268,7 @@ public class UonParserTest extends SimpleTestBase {
 		t = "(x{}|\\^[]`<>#%\"&+=x{}|\\^[]`<>#%\"&+)";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("x{}|\\^[]`<>#%\"&+", m.get("x{}|\\^[]`<>#%\"&+"));
-		assertThrown(()->pe.parse("(x{}|\\^[]`<>#%\"&+=x{}|\\^[]`<>#%\"&+)", Object.class)).isType(ParseException.class);
+		assertThrows(ParseException.class, ()->pe.parse("(x{}|\\^[]`<>#%\"&+=x{}|\\^[]`<>#%\"&+)", Object.class));
 		t = "(x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B=x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B)";
 		m = (Map)pe.parse(t, Object.class);
 		assertEquals("x{}|\\^[]`<>#%\"&+", m.get("x{}|\\^[]`<>#%\"&+"));

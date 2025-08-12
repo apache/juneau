@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import java.util.*;
 
@@ -85,15 +84,15 @@ class DataConversionTest extends SimpleTestBase {
 		m.put("x", TestEnum.ENUM2);
 		assertEquals("ENUM2", m.getString("x"));
 		assertFalse(m.getBoolean("x"));
-		assertThrown(()->m.getMap("x")).isType(InvalidDataConversionException.class);
+		assertThrows(InvalidDataConversionException.class, ()->m.getMap("x"));
 
 		// *** Not a bean ***
 		m.put("x", new NotABean("foo"));
 		assertEquals("foo", m.getString("x"));
-		assertThrown(()->m.getInt("x")).isType(InvalidDataConversionException.class);
-		assertThrown(()->m.getLong("x")).isType(InvalidDataConversionException.class);
+		assertThrows(InvalidDataConversionException.class, ()->m.getInt("x"));
+		assertThrows(InvalidDataConversionException.class, ()->m.getLong("x"));
 		assertFalse(m.getBoolean("x"));
-		assertThrown(()->m.getMap("x")).isType(InvalidDataConversionException.class);
+		assertThrows(InvalidDataConversionException.class, ()->m.getMap("x"));
 	}
 
 	public enum TestEnum {

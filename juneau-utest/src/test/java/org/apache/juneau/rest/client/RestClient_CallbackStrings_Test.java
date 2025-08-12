@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
 
@@ -59,7 +58,7 @@ public class RestClient_CallbackStrings_Test extends SimpleTestBase {
 	@Test void a02_callback_invalidStrings() {
 		RestClient x = MockRestClient.build(A.class);
 		for (String s : list("","GET","GET ","GET {","GET {xxx} /foo",null)) {
-			assertThrown(()->x.callback(s).run().getContent().asString()).asMessage().isContains("Invalid format for call string");
+			assertThrowsWithMessage(Exception.class, "Invalid format for call string", ()->x.callback(s).run().getContent().asString());
 		}
 	}
 }

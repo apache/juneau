@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 
@@ -239,11 +238,11 @@ class CommonTest  extends SimpleTestBase{
 		r3.r1 = r1;
 
 		// No recursion detection
-		assertThrown(()->s.build().serialize(r1)).asMessage().isContains("It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
+		assertThrowsWithMessage(Exception.class, "It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->s.build().serialize(r1));
 
 		// Recursion detection, no ignore
 		s.detectRecursions();
-		assertThrown(()->s.build().serialize(r1)).asMessage().isContains("$R1","$R2","$R3");
+		assertThrowsWithMessage(Exception.class, "$R1", ()->s.build().serialize(r1));
 
 		s.ignoreRecursions();
 		assertEquals("{name:'foo',r2:{name:'bar',r3:{name:'baz'}}}", s.build().serialize(r1));

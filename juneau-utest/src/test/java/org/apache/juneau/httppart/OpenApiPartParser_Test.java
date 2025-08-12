@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
@@ -101,9 +100,9 @@ public class OpenApiPartParser_Test extends SimpleTestBase {
 
 		assertThrowsWithMessage(SchemaValidationException.class, "Minimum length of value not met.", ()->parse(s, "", String.class));
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum length of value exceeded.", ()->parse(s, "123", String.class));
-		assertThrown(()->tNone().minLength(2L).maxLength(1L).build()).asMessage().isContains("maxLength cannot be less than minLength.");
-		assertThrown(()->tNone().minLength(-2L).build()).asMessage().isContains("minLength cannot be less than zero.");
-		assertThrown(()->tNone().maxLength(-2L).build()).asMessage().isContains("maxLength cannot be less than zero.");
+		assertThrowsWithMessage(Exception.class, "maxLength cannot be less than minLength.", ()->tNone().minLength(2L).maxLength(1L).build());
+		assertThrowsWithMessage(Exception.class, "minLength cannot be less than zero.", ()->tNone().minLength(-2L).build());
+		assertThrowsWithMessage(Exception.class, "maxLength cannot be less than zero.", ()->tNone().maxLength(-2L).build());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

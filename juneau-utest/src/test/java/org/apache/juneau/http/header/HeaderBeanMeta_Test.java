@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
@@ -72,12 +71,12 @@ class HeaderBeanMeta_Test extends SimpleTestBase {
 		HeaderBeanMeta<A1> a1 = HeaderBeanMeta.of(A1.class);
 		assertSame(a1, HeaderBeanMeta.of(A1.class));
 		assertJson(a1.construct("X", "foo"), "{name:'X',value:'foo'}");
-		assertThrown(()->a1.construct("foo")).asMessage().isContains("Constructor for type "+TNAME+"$A1 requires a name as the first argument.");
+		assertThrowsWithMessage(Exception.class, "Constructor for type "+TNAME+"$A1 requires a name as the first argument.", ()->a1.construct("foo"));
 		assertNull(a1.getSchema().getName());
 
 		HeaderBeanMeta<A2> a2 = HeaderBeanMeta.of(A2.class);
 		assertJson(a2.construct("X", "foo"), "{name:'X',value:'foo'}");
-		assertThrown(()->a2.construct("foo")).asMessage().isContains("Constructor for type "+TNAME+"$A2 requires a name as the first argument.");
+		assertThrowsWithMessage(Exception.class, "Constructor for type "+TNAME+"$A2 requires a name as the first argument.", ()->a2.construct("foo"));
 		assertNull(a2.getSchema().getName());
 
 		HeaderBeanMeta<A3> a3 = HeaderBeanMeta.of(A3.class);
@@ -91,7 +90,7 @@ class HeaderBeanMeta_Test extends SimpleTestBase {
 		assertEquals("A4", a4.getSchema().getName());
 
 		HeaderBeanMeta<A5> a5 = HeaderBeanMeta.of(A5.class);
-		assertThrown(()->a5.construct("foo")).asMessage().isContains("Constructor for type "+TNAME+"$A5 could not be found.");
+		assertThrowsWithMessage(Exception.class, "Constructor for type "+TNAME+"$A5 could not be found.", ()->a5.construct("foo"));
 		assertEquals("A5", a5.getSchema().getName());
 
 		HeaderBeanMeta<A6> a6 = HeaderBeanMeta.of(A6.class);

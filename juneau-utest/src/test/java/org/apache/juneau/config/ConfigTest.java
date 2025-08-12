@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -391,10 +390,10 @@ class ConfigTest extends SimpleTestBase {
 	@Test void getLong2BadValues() {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
 
-		assertThrown(()->c.get("a1").asLong().orElse(-1L)).isType(NumberFormatException.class);
-		assertThrown(()->c.get("a2").asLong().orElse(-1L)).isType(NumberFormatException.class);
-		assertThrown(()->c.get("a3").asLong().orElse(-1L)).isType(NumberFormatException.class);
-		assertThrown(()->c.get("a4").asLong().orElse(-1L)).isType(NumberFormatException.class);
+		assertThrows(NumberFormatException.class, ()->c.get("a1").asLong().orElse(-1L));
+		assertThrows(NumberFormatException.class, ()->c.get("a2").asLong().orElse(-1L));
+		assertThrows(NumberFormatException.class, ()->c.get("a3").asLong().orElse(-1L));
+		assertThrows(NumberFormatException.class, ()->c.get("a4").asLong().orElse(-1L));
 	}
 
 	//====================================================================================================

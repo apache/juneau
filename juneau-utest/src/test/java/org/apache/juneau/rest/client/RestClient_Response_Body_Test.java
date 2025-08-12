@@ -105,13 +105,13 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 		RestResponse r1 = client().build().get("/bean").run();
 		InputStream is = r1.getContent().asInputStream();
 		assertEquals("{f:1}", toUtf8(is));
-		assertThrown(()->r1.getContent().asInputStream()).asMessage().isContains("Response has already been consumed.");
+		assertThrowsWithMessage(Exception.class, "Response has already been consumed.", ()->r1.getContent().asInputStream());
 
 		// Non-repeatable entity.
 		TestClient x = testClient().entity(inputStreamEntity("{f:2}"));
 		RestResponse r2 = x.get("/bean").run();
 		r2.getContent().asInputStream();
-		assertThrown(()->r2.getContent().asInputStream()).asMessage().isContains("Response has already been consumed");
+		assertThrowsWithMessage(Exception.class, "Response has already been consumed", ()->r2.getContent().asInputStream());
 
 		// Repeatable entity.
 		x.entity(new StringEntity("{f:2}"));

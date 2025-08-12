@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -20,15 +21,14 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.junit.jupiter.api.*;
 
-public class FilteredMapTest extends SimpleTestBase {
+class FilteredMapTest extends SimpleTestBase {
 
 	Map<?,?> m3;
 
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@Test
-	public void testBasic() throws Exception {
+	@Test void testBasic() throws Exception {
 		JsonMap m = JsonMap.ofJson("{a:'1',b:'2'}");
 
 		ClassMeta<Map<String,Object>> cm = BeanContext.DEFAULT.getClassMeta(Map.class, String.class, Object.class);
@@ -41,7 +41,7 @@ public class FilteredMapTest extends SimpleTestBase {
 		m2.entrySet().iterator().next().setValue("3");
 		assertJson(m2, "{a:'3'}");
 
-		assertThrown(()->new FilteredMap<>(cm2, null, new String[0])).isType(IllegalArgumentException.class);
-		assertThrown(()->new FilteredMap<>(cm, m, null)).isType(IllegalArgumentException.class);
+		assertThrows(IllegalArgumentException.class, ()->new FilteredMap<>(cm2, null, new String[0]));
+		assertThrows(IllegalArgumentException.class, ()->new FilteredMap<>(cm, m, null));
 	}
 }

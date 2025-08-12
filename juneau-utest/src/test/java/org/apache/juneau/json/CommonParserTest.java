@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import java.util.*;
 
@@ -117,7 +116,7 @@ class CommonParserTest extends SimpleTestBase {
 		assertEquals(1, b.a);
 		assertEquals(2, b.b);
 
-		assertThrown(()->JsonParser.DEFAULT.parse(in, B.class)).isType(ParseException.class);
+		assertThrows(ParseException.class, ()->JsonParser.DEFAULT.parse(in, B.class));
 	}
 
 	public static class B {

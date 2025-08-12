@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.remote;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
 import java.util.concurrent.*;
@@ -582,7 +581,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void g01_badMethodName() {
-		assertThrown(()->client(G.class).header("Check","Foo").build().getRemote(G1.class)).isType(RemoteMetadataException.class).asMessage().isContains("Invalid value");
+		assertThrowsWithMessage(RemoteMetadataException.class, "Invalid value", ()->client(G.class).header("Check","Foo").build().getRemote(G1.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

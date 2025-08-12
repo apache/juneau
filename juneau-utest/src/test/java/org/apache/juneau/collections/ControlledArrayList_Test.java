@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.collections;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -50,62 +49,62 @@ public class ControlledArrayList_Test {
 		ControlledArrayList<Integer> x2 = new ControlledArrayList<>(true, Arrays.asList(1));
 
 		x1.set(0, 2);
-		assertThrown(() -> x2.set(0, 2)).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, () -> x2.set(0, 2));
 		x2.overrideSet(0, 2);
 		assertEquals(x2, x1);
 
 		x1.add(0, 2);
-		assertThrown(() -> x2.add(0, 2)).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, () -> x2.add(0, 2));
 		x2.overrideAdd(0, 2);
 		assertEquals(x2, x1);
 
 		x1.remove(0);
-		assertThrown(() -> x2.remove(0)).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, () -> x2.remove(0));
 		x2.overrideRemove(0);
 		assertEquals(x2, x1);
 
 		x1.addAll(0, Arrays.asList(3));
-		assertThrown(() -> x2.addAll(0, Arrays.asList(3))).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, () -> x2.addAll(0, Arrays.asList(3)));
 		x2.overrideAddAll(0, Arrays.asList(3));
 		assertEquals(x2, x1);
 
 		x1.replaceAll(x -> x);
-		assertThrown(() -> x2.replaceAll(x -> x)).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, () -> x2.replaceAll(x -> x));
 		x2.overrideReplaceAll(x -> x);
 		assertEquals(x2, x1);
 
 		x1.sort(null);
-		assertThrown(() -> x2.sort(null)).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, () -> x2.sort(null));
 		x2.overrideSort(null);
 		assertEquals(x2, x1);
 
 		x1.add(1);
-		assertThrown(() -> x2.add(1)).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, () -> x2.add(1));
 		x2.overrideAdd(1);
 		assertEquals(x2, x1);
 
 		x1.remove((Integer)1);
-		assertThrown(() -> x2.remove((Integer)1)).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, () -> x2.remove((Integer)1));
 		x2.overrideRemove((Integer)1);
 		assertEquals(x2, x1);
 
 		x1.addAll(Arrays.asList(3));
-		assertThrown(() -> x2.addAll(Arrays.asList(3))).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, () -> x2.addAll(Arrays.asList(3)));
 		x2.overrideAddAll(Arrays.asList(3));
 		assertEquals(x2, x1);
 
 		x1.removeAll(Arrays.asList(3));
-		assertThrown(() -> x2.removeAll(Arrays.asList(3))).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, () -> x2.removeAll(Arrays.asList(3)));
 		x2.overrideRemoveAll(Arrays.asList(3));
 		assertEquals(x2, x1);
 
 		x1.retainAll(Arrays.asList(2));
-		assertThrown(() -> x2.retainAll(Arrays.asList(2))).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, () -> x2.retainAll(Arrays.asList(2)));
 		x2.overrideRetainAll(Arrays.asList(2));
 		assertEquals(x2, x1);
 
 		x1.clear();
-		assertThrown(x2::clear).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, x2::clear);
 		x2.overrideClear();
 		assertEquals(x2, x1);
 
@@ -113,7 +112,7 @@ public class ControlledArrayList_Test {
 		x2.overrideAdd(1);
 
 		x1.removeIf(x -> x == 1);
-		assertThrown(() -> x2.removeIf(x -> x == 1)).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, () -> x2.removeIf(x -> x == 1));
 		x2.overrideRemoveIf(x -> x == 1);
 		assertEquals(x2, x1);
 
@@ -141,7 +140,7 @@ public class ControlledArrayList_Test {
 		assertEquals(1, i2.next().intValue());
 
 		i1.remove();
-		assertThrown(i2::remove).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, i2::remove);
 
 		i1.forEachRemaining(x -> {});
 		i2.forEachRemaining(x -> {});
@@ -174,16 +173,16 @@ public class ControlledArrayList_Test {
 		i2a.previous();
 
 		i1a.set(1);
-		assertThrown(() -> i2a.set(1)).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, () -> i2a.set(1));
 
 		i1a.add(1);
-		assertThrown(() -> i2a.add(1)).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, () -> i2a.add(1));
 
 		i1a.next();
 		i2a.next();
 
 		i1a.remove();
-		assertThrown(i2a::remove).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, i2a::remove);
 
 		i1a.forEachRemaining(x -> {});
 		i2a.forEachRemaining(x -> {});

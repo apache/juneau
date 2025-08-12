@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
@@ -97,13 +96,13 @@ class RestClient_Test extends SimpleTestBase {
 	@Test void a04_request_whenClosed() {
 		RestClient rc = client().build();
 		rc.closeQuietly();
-		assertThrown(()->rc.request("get","/bean",null)).asMessage().isContains("RestClient.close() has already been called");
+		assertThrowsWithMessage(Exception.class, "RestClient.close() has already been called", ()->rc.request("get","/bean",null));
 	}
 
 	@Test void a05_request_whenClosed_withStackCreation() {
 		RestClient rc = client().debug().build();
 		rc.closeQuietly();
-		assertThrown(()->rc.request("get","/bean",null)).asMessage().isContains("RestClient.close() has already been called");
+		assertThrowsWithMessage(Exception.class, "RestClient.close() has already been called", ()->rc.request("get","/bean",null));
 	}
 
 	@Test void a06_request_runCalledTwice() {
@@ -206,7 +205,7 @@ class RestClient_Test extends SimpleTestBase {
 	@SuppressWarnings("deprecation")
 	@Test void c06_httpClient_unusedHttpClientMethods() {
 		RestClient x = RestClient.create().build();
-		assertThrown(x::getParams).isType(UnsupportedOperationException.class);
+		assertThrows(UnsupportedOperationException.class, x::getParams);
 		assertNotNull(x.getConnectionManager());
 	}
 

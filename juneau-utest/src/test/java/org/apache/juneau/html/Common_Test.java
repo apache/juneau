@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
@@ -23,6 +22,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
@@ -349,11 +349,12 @@ class Common_Test extends SimpleTestBase {
 		r3.r1 = r1;
 
 		// No recursion detection
-		assertThrown(()->s.build().serialize(r1)).asMessage().isContains("It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
+		assertThrowsWithMessage(Exception.class, "It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->s.build().serialize(r1));
+		assertThrowsWithMessage(Exception.class, "It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->s.build().serialize(r1));
 
 		// Recursion detection, no ignore
 		s.detectRecursions();
-		assertThrown(()->s.build().serialize(r1)).asMessage().isContains("[0] <noname>:org.apache.juneau.html.Common_Test$R1", "->[1] r2:org.apache.juneau.html.Common_Test$R2", "->[2] r3:org.apache.juneau.html.Common_Test$R3", "->[3] r1:org.apache.juneau.html.Common_Test$R1");
+		assertThrowsWithMessage(Exception.class, Utils.list("[0] <noname>:org.apache.juneau.html.Common_Test$R1", "->[1] r2:org.apache.juneau.html.Common_Test$R2", "->[2] r3:org.apache.juneau.html.Common_Test$R3", "->[3] r1:org.apache.juneau.html.Common_Test$R1"), ()->s.build().serialize(r1));
 
 		s.ignoreRecursions();
 		assertEquals(

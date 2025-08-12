@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
 
@@ -188,9 +187,9 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	@Test void a18_stringSearch_malformedQuotes() {
 		Object in = list(A.create("'foo"), A.create("\"bar"), A.create("baz"));
 
-		assertThrown(()->run(in, "f='*")).asMessage().isContains("Unmatched string quotes");
+		assertThrowsWithMessage(Exception.class, "Unmatched string quotes", ()->run(in, "f='*"));
 
-		assertThrown(()->run(in, "f=\"*")).asMessage().isContains("Unmatched string quotes");
+		assertThrowsWithMessage(Exception.class, "Unmatched string quotes", ()->run(in, "f=\"*"));
 
 		assertJson(run(in, "f='\\'*'"), "[{f:'\\'foo'}]");
 		assertJson(run(in, "f='\"*'"), "[{f:'\"bar'}]");
@@ -369,7 +368,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 
 		for (int i = 0; i < ss.length; i+=2) {
 			final int i2 = i;
-			assertThrown(()->run(INT_BEAN_ARRAY, ss[i2])).asMessage().isContains(ss[i+1]);
+			assertThrowsWithMessage(Exception.class, ss[i+1], ()->run(INT_BEAN_ARRAY, ss[i2]));
 		}
 	}
 

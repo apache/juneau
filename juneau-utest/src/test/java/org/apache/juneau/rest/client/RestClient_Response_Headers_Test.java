@@ -14,7 +14,6 @@ package org.apache.juneau.rest.client;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
 import java.time.*;
@@ -67,8 +66,8 @@ class RestClient_Response_Headers_Test extends SimpleTestBase {
 		h = checkFooClient().build().get("/echo").header("Foo","\"bar\"").run().getHeader("Foo").asHeader(ETag.class).assertName().is("ETag").assertStringValue().is("\"bar\"");
 		assertTrue(h instanceof ETag);
 
-		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(Age.class)).asMessage().isContains("Value 'bar' could not be parsed as an integer.");
-		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(A2.class)).asMessage().isContains("Could not determine a method to construct type");
+		assertThrowsWithMessage(Exception.class, "Value 'bar' could not be parsed as an integer.", ()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(Age.class));
+		assertThrowsWithMessage(Exception.class, "Could not determine a method to construct type", ()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(A2.class));
 
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asCsvHeader().assertName().is("Foo").assertStringValue().is("bar");
 		checkFooClient().build().get("/echo").header("Foo","*").run().getHeader("Foo").asEntityTagsHeader().assertName().is("Foo").assertStringValue().is("*");

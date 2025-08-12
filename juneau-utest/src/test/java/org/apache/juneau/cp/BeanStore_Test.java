@@ -14,7 +14,6 @@ package org.apache.juneau.cp;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
@@ -527,9 +526,9 @@ class BeanStore_Test extends SimpleTestBase {
 		assertNull(b1c.createMethodFinder(C.class, C1.class).find("createA1").run());
 		assertNotNull(b2c.createMethodFinder(C.class).find("createA1").run());
 		assertNull(b3c.createMethodFinder(C.class).find("createA1").run());
-		assertThrown(()->b1c.createMethodFinder(C.class, x).find("createA7").run()).asMessage().isContains("foo");
+		assertThrowsWithMessage(Exception.class, "foo", ()->b1c.createMethodFinder(C.class, x).find("createA7").run());
 		assertNull(b1c.createMethodFinder(C.class, C1.class).find("createA7").run());
-		assertThrown(()->b2c.createMethodFinder(C.class).find("createA7").run()).asMessage().isContains("foo");
+		assertThrowsWithMessage(Exception.class, "foo", ()->b2c.createMethodFinder(C.class).find("createA7").run());
 		assertNull(b3c.createMethodFinder(C.class).find("createA7").run());
 	}
 
@@ -566,9 +565,9 @@ class BeanStore_Test extends SimpleTestBase {
 		assertNotNull(b1c.createMethodFinder(C.class, C2.class).find("createB1").run());
 		assertNotNull(b2c.createMethodFinder(C.class).find("createB1").run());
 		assertNull(b3c.createMethodFinder(C.class).find("createB1").run());
-		assertThrown(()->b1c.createMethodFinder(C.class, x).find("createB7").run()).asMessage().isContains("foo");
-		assertThrown(()->b1c.createMethodFinder(C.class, C2.class).find("createB7").run()).asMessage().isContains("foo");
-		assertThrown(()->b2c.createMethodFinder(C.class).find("createB7").run()).asMessage().isContains("foo");
+		assertThrowsWithMessage(Exception.class, "foo", ()->b1c.createMethodFinder(C.class, x).find("createB7").run());
+		assertThrowsWithMessage(Exception.class, "foo", ()->b1c.createMethodFinder(C.class, C2.class).find("createB7").run());
+		assertThrowsWithMessage(Exception.class, "foo", ()->b2c.createMethodFinder(C.class).find("createB7").run());
 		assertNull(b3c.createMethodFinder(C.class).find("createB7").run());
 	}
 

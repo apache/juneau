@@ -14,7 +14,6 @@ package org.apache.juneau.rest.client;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
 import java.time.*;
@@ -68,7 +67,7 @@ class RestClient_Response_Test extends SimpleTestBase {
 
 	@Test void a01_getStatusLine() throws RestCallException {
 		assertEquals(200,client().build().get("/bean").run().getStatusLine().getStatusCode());
-		assertThrown(()->client().build(A1.class).get("/bean").run()).asMessage().isContains("caused response code '0, null'");
+		assertThrowsWithMessage(Exception.class, "caused response code '0, null'", ()->client().build(A1.class).get("/bean").run());
 		assertEquals(0,client().ignoreErrors().build(A1.class).get("/bean").run().getStatusLine().getStatusCode());
 	}
 

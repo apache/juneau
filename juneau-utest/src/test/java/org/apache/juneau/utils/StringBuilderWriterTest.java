@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
@@ -47,11 +46,11 @@ public class StringBuilderWriterTest extends SimpleTestBase {
 		sbw2.write(buff, 0, 0);
 		assertEquals("abc", sbw2.toString());
 
-		assertThrown(()-> sbw2.write(buff, -1, buff.length)).isType(IndexOutOfBoundsException.class);
-		assertThrown(()-> sbw2.write(buff, buff.length+1, 0)).isType(IndexOutOfBoundsException.class);
-		assertThrown(()-> sbw2.write(buff, buff.length-1, 2)).isType(IndexOutOfBoundsException.class);
-		assertThrown(()-> sbw2.write(buff, 0, buff.length+1)).isType(IndexOutOfBoundsException.class);
-		assertThrown(()-> sbw2.write(buff, 0, -1)).isType(IndexOutOfBoundsException.class);
+		assertThrows(IndexOutOfBoundsException.class, ()-> sbw2.write(buff, -1, buff.length));
+		assertThrows(IndexOutOfBoundsException.class, ()-> sbw2.write(buff, buff.length+1, 0));
+		assertThrows(IndexOutOfBoundsException.class, ()-> sbw2.write(buff, buff.length-1, 2));
+		assertThrows(IndexOutOfBoundsException.class, ()-> sbw2.write(buff, 0, buff.length+1));
+		assertThrows(IndexOutOfBoundsException.class, ()-> sbw2.write(buff, 0, -1));
 
 		sbw.flush();
 		sbw.close();

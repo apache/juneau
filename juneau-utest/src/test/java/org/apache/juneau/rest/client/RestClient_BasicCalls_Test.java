@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.http.HttpResources.*;
@@ -109,7 +108,7 @@ public class RestClient_BasicCalls_Test extends SimpleTestBase {
 	@Test void a02_get() throws Exception {
 		client().build().get("/bean").run().assertContent("{f:1}");
 
-		assertThrown(()->client().build().get("/bean").content(bean).run()).asMessage().isContains("Method does not support content entity.");
+		assertThrowsWithMessage(Exception.class, "Method does not support content entity.", ()->client().build().get("/bean").content(bean).run());
 	}
 
 	@Test void a03_get_exhaustiveUrls() throws Exception {

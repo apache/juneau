@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import java.util.*;
 
@@ -107,7 +106,7 @@ class CommonParser_UonTest extends SimpleTestBase {
 		assertEquals(1, t.a);
 		assertEquals(2, t.b);
 
-		assertThrown(()->UonParser.DEFAULT.parse(in, B.class)).isType(ParseException.class);
+		assertThrows(ParseException.class, ()->UonParser.DEFAULT.parse(in, B.class));
 	}
 
 	public static class B {

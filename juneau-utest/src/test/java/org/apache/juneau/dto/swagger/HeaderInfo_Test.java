@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -248,9 +247,9 @@ class HeaderInfo_Test extends SimpleTestBase {
 	@Test void c01_strict() {
 		HeaderInfo t = new HeaderInfo().strict();
 		t.setCollectionFormat("csv");
-		assertThrown(()->t.setCollectionFormat("foo")).asMessage().isContains("Invalid");
+		assertThrowsWithMessage(Exception.class, "Invalid", ()->t.setCollectionFormat("foo"));
 		t.setType("string");
-		assertThrown(()->t.setType("foo")).asMessage().isContains("Invalid");
+		assertThrowsWithMessage(Exception.class, "Invalid", ()->t.setType("foo"));
 	}
 
 	@Test void c02_resolveRefs() {

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import java.util.*;
 
@@ -109,7 +108,7 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 		assertEquals(1, t.a);
 		assertEquals(2, t.b);
 
-		assertThrown(()->UrlEncodingParser.DEFAULT.parse(in, B.class)).isType(ParseException.class);
+		assertThrows(ParseException.class, ()->UrlEncodingParser.DEFAULT.parse(in, B.class));
 	}
 
 	public static class B {

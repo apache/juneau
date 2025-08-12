@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResponses.*;
@@ -103,8 +102,8 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 	@Test void a02_errorCodes() {
 		RestClient x1 = client().errorCodes(x -> x == 200).build();
 		RestClient x2 = client().build();
-		assertThrown(()->x1.get("/echo").run()).is(x -> ((RestCallException)x).getResponseCode() == 200);
-		assertThrown(()->x2.get("/echo").errorCodes(x -> x == 200).run()).is(x -> ((RestCallException)x).getResponseCode() == 200);
+		assertEquals(200, thrown(RestCallException.class, ()->x1.get("/echo").run()).getResponseCode());
+		assertEquals(200, thrown(RestCallException.class, ()->x2.get("/echo").errorCodes(x -> x == 200).run()).getResponseCode());
 	}
 
 	@Test void a03_executorService() throws Exception {

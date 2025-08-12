@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.pojos.*;
@@ -53,7 +52,7 @@ class BeanContextTest extends SimpleTestBase {
 
 	@Test void b01_ignoreUnknownEnumValues() {
 		JsonParser p1 = JsonParser.DEFAULT;
-		assertThrown(() -> p1.parse("'UNKNOWN'", TestEnum.class)).asMessage().isContains("Could not resolve enum value 'UNKNOWN' on class 'org.apache.juneau.testutils.pojos.TestEnum'");
+		assertThrowsWithMessage(Exception.class, "Could not resolve enum value 'UNKNOWN' on class 'org.apache.juneau.testutils.pojos.TestEnum'", () -> p1.parse("'UNKNOWN'", TestEnum.class));
 
 		JsonParser p2 = JsonParser.create().ignoreUnknownEnumValues().build();
 		assertNull(p2.parse("'UNKNOWN'", TestEnum.class));

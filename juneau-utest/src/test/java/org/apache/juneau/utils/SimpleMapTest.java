@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
@@ -33,15 +32,15 @@ class SimpleMapTest extends SimpleTestBase {
 		assertJson(m, "{a:'1',b:'B'}");
 		m.entrySet().iterator().next().setValue("2");
 		assertJson(m, "{a:'2',b:'B'}");
-		assertThrown(()->m.put("c", "1")).isType(IllegalArgumentException.class);
+		assertThrows(IllegalArgumentException.class, ()->m.put("c", "1"));
 
 		assertNull(m.get("c"));
 
-		assertThrown(()->new SimpleMap<>(null, vals)).isType(IllegalArgumentException.class);
-		assertThrown(()->new SimpleMap<>(keys, null)).isType(IllegalArgumentException.class);
-		assertThrown(()->new SimpleMap<>(keys, new Object[0])).isType(IllegalArgumentException.class);
+		assertThrows(IllegalArgumentException.class, ()->new SimpleMap<>(null, vals));
+		assertThrows(IllegalArgumentException.class, ()->new SimpleMap<>(keys, null));
+		assertThrows(IllegalArgumentException.class, ()->new SimpleMap<>(keys, new Object[0]));
 
 		keys[0] = null;
-		assertThrown(()->new SimpleMap<>(keys, vals)).isType(IllegalArgumentException.class);
+		assertThrows(IllegalArgumentException.class, ()->new SimpleMap<>(keys, vals));
 	}
 }
