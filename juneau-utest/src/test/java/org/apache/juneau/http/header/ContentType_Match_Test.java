@@ -89,6 +89,6 @@ public class ContentType_Match_Test {
 	public void test() throws Exception {
 		ContentType ct = contentType(this.contentType);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
-		assertEquals(expected, ct.match(alist(mt)));
+		assertEquals(expected, ct.match(alist(mt)), () -> label + " failed");
 	}
 }

@@ -24,7 +24,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @SoapXmlConfig annotation.
  */
-public class SoapXmlConfigAnnotationTest extends SimpleTestBase {
+class SoapXmlConfigAnnotationTest extends SimpleTestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));

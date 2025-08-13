@@ -22,7 +22,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.jupiter.api.*;
 
-public class HttpPartSchema_Response_Test extends SimpleTestBase {
+class HttpPartSchema_Response_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic test

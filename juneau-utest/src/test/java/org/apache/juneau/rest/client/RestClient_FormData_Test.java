@@ -34,7 +34,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
-public class RestClient_FormData_Test extends SimpleTestBase {
+class RestClient_FormData_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {

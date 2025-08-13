@@ -26,19 +26,19 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @SerializerConfig annotation.
  */
-public class SerializerConfigAnnotationTest extends SimpleTestBase {
+class SerializerConfigAnnotationTest extends SimpleTestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
 	}
 
 	private static final Function<Object,String> TO_STRING = t -> {
-    	if (t == null)
-    		return null;
-    	if (t instanceof AA)
-    		return "AA";
-    	return t.toString();
-    };
+		if (t == null)
+			return null;
+		if (t instanceof AA)
+			return "AA";
+		return t.toString();
+	};
 
 	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 

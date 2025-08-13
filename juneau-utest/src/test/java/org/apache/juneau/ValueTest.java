@@ -24,8 +24,7 @@ class ValueTest extends SimpleTestBase {
 	public static class A extends Value<A1>{}
 	public static class A1 {}
 
-	@Test
-	public void testSubclass() {
+	@Test void a01_testSubclass() {
 		assertEquals(A1.class, Value.getParameterType(A.class));
 	}
 }

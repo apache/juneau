@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.junit.jupiter.api.*;
 
-public class MultiSetTest extends SimpleTestBase {
+class MultiSetTest extends SimpleTestBase {
 
 	@Test void doTest() {
 		List<String> l1, l2;

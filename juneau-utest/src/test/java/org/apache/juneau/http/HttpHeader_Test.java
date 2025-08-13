@@ -18,8 +18,7 @@ import org.junit.jupiter.api.*;
 
 class HttpHeader_Test extends SimpleTestBase {
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		assertNotThrown(HttpMethod::new);
 	}
 }

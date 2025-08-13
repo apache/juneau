@@ -18,7 +18,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
-public class XmlParserTest extends SimpleTestBase {
+class XmlParserTest extends SimpleTestBase {
 
 	@Test void testGenericAttributes() throws Exception {
 		String xml = "<A b='1'><c>2</c></A>";

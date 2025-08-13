@@ -24,7 +24,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-public class Header_AcceptEncoding_Test extends SimpleTestBase {
+class Header_AcceptEncoding_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Test with no compression enabled.

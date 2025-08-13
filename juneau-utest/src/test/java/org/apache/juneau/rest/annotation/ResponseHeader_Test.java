@@ -22,7 +22,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-public class ResponseHeader_Test extends SimpleTestBase {
+class ResponseHeader_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Header on method parameters

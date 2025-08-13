@@ -1,14 +1,14 @@
 // ***************************************************************************************************************************
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
-// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
-// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              *
-// *                                                                                                                         *
-// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
-// *                                                                                                                         *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file		*
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance		    *
+// * with the License.  You may obtain a copy of the License at														      *
+// *																														 *
+// *  http://www.apache.org/licenses/LICENSE-2.0																		     *
+// *																														 *
 // * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
-// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
-// * specific language governing permissions and limitations under the License.                                              *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the		*
+// * specific language governing permissions and limitations under the License.										      *
 // ***************************************************************************************************************************
 package org.apache.juneau.soap.annotation;
 
@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-public class SoapXmlAnnotation_Test extends SimpleTestBase {
+class SoapXmlAnnotation_Test extends SimpleTestBase {
 
 	private static final String CNAME = SoapXmlAnnotation_Test.class.getName();
 
@@ -25,19 +25,19 @@ public class SoapXmlAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	SoapXml a1 = SoapXmlAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.build();
 
 	SoapXml a2 = SoapXmlAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.build();
 
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "on:['a'],"
 				+ "onClass:[]"
 			+ "}"
@@ -90,14 +90,14 @@ public class SoapXmlAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@SoapXml(
-        description={ "description" },
+		description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
 	SoapXml d1 = D1.class.getAnnotationsByType(SoapXml.class)[0];
 
 	@SoapXml(
-        description={ "description" },
+		description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

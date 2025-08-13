@@ -22,7 +22,7 @@ import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings("rawtypes")
-public class UonParserTest extends SimpleTestBase {
+class UonParserTest extends SimpleTestBase {
 
 	static UonParser p = UonParser.DEFAULT;
 	static UonParser pe = UonParser.DEFAULT_DECODING;

@@ -19,7 +19,7 @@ import java.io.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-public class IOUtilsTest extends SimpleTestBase {
+class IOUtilsTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// read(File)

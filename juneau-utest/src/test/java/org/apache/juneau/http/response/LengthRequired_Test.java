@@ -20,7 +20,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-public class LengthRequired_Test extends SimpleTestBase {
+class LengthRequired_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A {

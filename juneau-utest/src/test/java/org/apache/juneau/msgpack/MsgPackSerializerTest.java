@@ -18,7 +18,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
 import org.junit.jupiter.api.*;
 
-public class MsgPackSerializerTest extends SimpleTestBase {
+class MsgPackSerializerTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// testBasic

@@ -20,8 +20,7 @@ import org.junit.jupiter.api.*;
 
 class HttpMethod_Test extends SimpleTestBase {
 
-	@Test
-	public void a01_hasContent() {
+	@Test void a01_hasContent() {
 		assertFalse(hasContent(OPTIONS));
 		assertFalse(hasContent(GET));
 		assertFalse(hasContent(HEAD));

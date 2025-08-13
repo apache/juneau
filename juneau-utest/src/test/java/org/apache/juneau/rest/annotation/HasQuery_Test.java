@@ -20,7 +20,7 @@ import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-public class HasQuery_Test extends SimpleTestBase {
+class HasQuery_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Simple tests

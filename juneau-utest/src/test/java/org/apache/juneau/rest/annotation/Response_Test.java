@@ -25,7 +25,7 @@ import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-public class Response_Test extends SimpleTestBase {
+class Response_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// HTTP status code

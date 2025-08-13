@@ -20,7 +20,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-public class NotExtended_Test extends SimpleTestBase {
+class NotExtended_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A {
@@ -50,8 +50,7 @@ public class NotExtended_Test extends SimpleTestBase {
 		}
 	}
 
-	@Test
-	public void a01_basic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		RestClient c = MockRestClient.create(A.class).ignoreErrors().noTrace().build();
 
 		c.get("/f1").run()

@@ -20,7 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.junit.jupiter.api.*;
 
-public class PathResolverTest extends SimpleTestBase {
+class PathResolverTest extends SimpleTestBase {
 
 	public static class PathResolver2 extends MockPathResolver {
 

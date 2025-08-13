@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-public class OpenApiAnnotation_Test extends SimpleTestBase {
+class OpenApiAnnotation_Test extends SimpleTestBase {
 
 	private static final String CNAME = OpenApiAnnotation_Test.class.getName();
 
@@ -25,19 +25,19 @@ public class OpenApiAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	OpenApi a1 = OpenApiAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.build();
 
 	OpenApi a2 = OpenApiAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.build();
 
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "on:['a'],"
 				+ "onClass:[]"
 			+ "}"
@@ -90,14 +90,14 @@ public class OpenApiAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@OpenApi(
-        description={ "description" },
+		description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
 	OpenApi d1 = D1.class.getAnnotationsByType(OpenApi.class)[0];
 
 	@OpenApi(
-        description={ "description" },
+		description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

@@ -170,11 +170,11 @@ class AutoNumberSwapTest extends SimpleTestBase {
 		assertJson(find(A13.class).swap(null, new A13()), "1");
 	}
 
-	@Test void a14_swap_serializeException() throws Exception {
+	@Test void a14_swap_serializeException() {
 		assertThrows(SerializeException.class, ()->find(A14.class).swap(null, null));
 	}
 
-	@Test void a15_swap_runtimeException() throws Exception {
+	@Test void a15_swap_runtimeException() {
 		assertThrows(SerializeException.class, ()->find(A15.class).swap(null, null));
 	}
 
@@ -196,7 +196,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B02 fromInt(int o) {
-			assertJson((Object) o, "1");
+			assertJson(o, "1");
 			return new B02();
 		}
 	}
@@ -214,7 +214,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B04 fromLong(long o) {
-			assertJson((Object) o, "1");
+			assertJson(o, "1");
 			return new B04();
 		}
 	}
@@ -232,7 +232,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B06 fromFloat(float o) {
-			assertJson((Object) o, "1.0");
+			assertJson(o, "1.0");
 			return new B06();
 		}
 	}
@@ -250,7 +250,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1d;
 		}
 		public static B08 fromDouble(double o) {
-			assertJson((Object) o, "1.0");
+			assertJson(o, "1.0");
 			return new B08();
 		}
 	}
@@ -268,7 +268,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B10 fromShort(short o) {
-			assertJson((Object) o, "1");
+			assertJson(o, "1");
 			return new B10();
 		}
 	}
@@ -286,7 +286,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B12 fromByte(byte o) {
-			assertJson((Object) o, "1");
+			assertJson(o, "1");
 			return new B12();
 		}
 	}
@@ -295,7 +295,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B13 create(int o) {
-			assertJson((Object) o, "1");
+			assertJson(o, "1");
 			return new B13();
 		}
 	}
@@ -304,7 +304,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B14 valueOf(int o) {
-			assertJson((Object) o, "1");
+			assertJson(o, "1");
 			return new B14();
 		}
 	}
@@ -370,7 +370,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 		assertNotNull(find(B14.class).unswap(null, 1, null));
 	}
 
-	@Test void b15_unswap_noMethod() throws Exception {
+	@Test void b15_unswap_noMethod() {
 		assertThrows(ParseException.class, ()->find(B15.class).unswap(null, 1, null));
 	}
 
@@ -390,7 +390,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C02 {
 		public C02() {}
 		public C02(int o) {
-			assertJson((Object) o, "1");
+			assertJson(o, "1");
 		}
 		public int toInt() {
 			return 1;
@@ -408,7 +408,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C04 {
 		public C04() {}
 		public C04(long o) {
-			assertJson((Object) o, "1");
+			assertJson(o, "1");
 		}
 		public long toLong() {
 			return 1L;
@@ -426,7 +426,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C06 {
 		public C06() {}
 		public C06(float o) {
-			assertJson((Object) o, "1.0");
+			assertJson(o, "1.0");
 		}
 		public float toFloat() {
 			return 1f;
@@ -444,7 +444,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C08 {
 		public C08() {}
 		public C08(double o) {
-			assertJson((Object) o, "1.0");
+			assertJson(o, "1.0");
 		}
 		public double toDouble() {
 			return 1d;
@@ -462,7 +462,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C10 {
 		public C10() {}
 		public C10(short o) {
-			assertJson((Object) o, "1");
+			assertJson(o, "1");
 		}
 		public short toShort() {
 			return 1;
@@ -480,7 +480,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C12 {
 		public C12() {}
 		public C12(byte o) {
-			assertJson((Object) o, "1");
+			assertJson(o, "1");
 		}
 		public byte toByte() {
 			return 1;
@@ -541,7 +541,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 		assertNotNull(find(C12.class).unswap(null, 1, null));
 	}
 
-	@Test void c13_unswapConstructor_noConstructor() throws Exception {
+	@Test void c13_unswapConstructor_noConstructor() {
 		assertThrows(ParseException.class, ()->find(C13.class).unswap(null, 1, null));
 	}
 
@@ -723,31 +723,31 @@ class AutoNumberSwapTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void f01_ignoreUnswapMethod_beanIgnore() throws Exception {
+	@Test void f01_ignoreUnswapMethod_beanIgnore() {
 		assertThrows(ParseException.class, ()->find(F01.class).unswap(null, null, null));
 	}
 
-	@Test void f01c_ignoreUnswapMethod_beanIgnore_usingConfig() throws Exception {
+	@Test void f01c_ignoreUnswapMethod_beanIgnore_usingConfig() {
 		assertThrows(ParseException.class, ()->find(bc(F01Config.class), F01c.class).unswap(null, null, null));
 	}
 
-	@Test void f02_ignoreUnswapMethod_deprecated() throws Exception {
+	@Test void f02_ignoreUnswapMethod_deprecated() {
 		assertThrows(ParseException.class, ()->find(F02.class).unswap(null, null, null));
 	}
 
-	@Test void f03_ignoreUnswapMethod_wrongReturnType() throws Exception {
+	@Test void f03_ignoreUnswapMethod_wrongReturnType() {
 		assertThrows(ParseException.class, ()->find(F03.class).unswap(null, null, null));
 	}
 
-	@Test void f04_ignoreUnswapMethod_wrongParameters() throws Exception {
+	@Test void f04_ignoreUnswapMethod_wrongParameters() {
 		assertThrows(ParseException.class, ()->find(F04.class).unswap(null, null, null));
 	}
 
-	@Test void f05_ignoreUnswapMethod_notStatic() throws Exception {
+	@Test void f05_ignoreUnswapMethod_notStatic() {
 		assertThrows(ParseException.class, ()->find(F05.class).unswap(null, null, null));
 	}
 
-	@Test void f06_ignoreUnswapMethod_wrongName() throws Exception {
+	@Test void f06_ignoreUnswapMethod_wrongName() {
 		assertThrows(ParseException.class, ()->find(F06.class).unswap(null, null, null));
 	}
 
@@ -781,15 +781,15 @@ class AutoNumberSwapTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void g01_ignoreUnswapConstructor_beanIgnore() throws Exception {
+	@Test void g01_ignoreUnswapConstructor_beanIgnore() {
 		assertThrows(ParseException.class, ()->find(G01.class).unswap(null, null, null));
 	}
 
-	@Test void g01c_ignoreUnswapConstructor_beanIgnore_usingConfig() throws Exception {
+	@Test void g01c_ignoreUnswapConstructor_beanIgnore_usingConfig() {
 		assertThrows(ParseException.class, ()->find(bc(G01Config.class), G01c.class).unswap(null, null, null));
 	}
 
-	@Test void g02_ignoreUnswapConstructor_deprecated() throws Exception {
+	@Test void g02_ignoreUnswapConstructor_deprecated() {
 		assertThrows(ParseException.class, ()->find(G02.class).unswap(null, null, null));
 	}
 }

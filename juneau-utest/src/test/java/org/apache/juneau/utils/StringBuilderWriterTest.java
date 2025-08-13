@@ -17,7 +17,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.junit.jupiter.api.*;
 
-public class StringBuilderWriterTest extends SimpleTestBase {
+class StringBuilderWriterTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// Basic tests

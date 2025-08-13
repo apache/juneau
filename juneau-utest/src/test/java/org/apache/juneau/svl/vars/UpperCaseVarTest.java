@@ -17,7 +17,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
-public class UpperCaseVarTest extends SimpleTestBase {
+class UpperCaseVarTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// test - Basic tests

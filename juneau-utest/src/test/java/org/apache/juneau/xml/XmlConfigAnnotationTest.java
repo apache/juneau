@@ -29,25 +29,25 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @XmlConfig annotation.
  */
-public class XmlConfigAnnotationTest extends SimpleTestBase {
+class XmlConfigAnnotationTest extends SimpleTestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
 	}
 
 	private static final Function<Object,String> TO_STRING = t -> {
-    	if (t == null)
-    		return null;
-    	if (t.getClass().isArray())
-    		return XmlConfigAnnotationTest.TO_STRING.apply(ArrayUtils.toList(t, Object.class));
-    	if (t instanceof AA)
-    		return "AA";
-    	if (t instanceof AB)
-    		return "AB";
-    	if (t instanceof AC)
-    		return "AC";
-    	return t.toString();
-    };
+		if (t == null)
+			return null;
+		if (t.getClass().isArray())
+			return XmlConfigAnnotationTest.TO_STRING.apply(ArrayUtils.toList(t, Object.class));
+		if (t instanceof AA)
+			return "AA";
+		if (t instanceof AB)
+			return "AB";
+		if (t instanceof AC)
+			return "AC";
+		return t.toString();
+	};
 
 	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 

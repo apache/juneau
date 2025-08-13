@@ -18,7 +18,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-public class Processing_Test extends SimpleTestBase {
+class Processing_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A {

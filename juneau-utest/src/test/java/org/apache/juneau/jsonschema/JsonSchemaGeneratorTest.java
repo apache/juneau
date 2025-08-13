@@ -23,7 +23,7 @@ import org.apache.juneau.swap.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
-public class JsonSchemaGeneratorTest extends SimpleTestBase {
+class JsonSchemaGeneratorTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// Simple objects

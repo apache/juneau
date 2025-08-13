@@ -18,7 +18,7 @@ import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.header.*;
 import org.junit.jupiter.api.*;
 
-public class Swagger_RestOp_Parameters extends SimpleTestBase {
+class Swagger_RestOp_Parameters extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Swagger on default headers.

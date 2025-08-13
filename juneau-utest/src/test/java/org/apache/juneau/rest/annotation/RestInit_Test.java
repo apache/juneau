@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.*;
@@ -20,7 +21,7 @@ import org.junit.jupiter.api.*;
 
 import jakarta.servlet.*;
 
-public class RestInit_Test {
+class RestInit_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @RestInit

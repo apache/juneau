@@ -18,7 +18,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-public class MediaType_Test extends SimpleTestBase {
+class MediaType_Test extends SimpleTestBase {
 
 	@Test void a01_basic() {
 		assertEquals(new MediaType("text/foo"), new MediaType("text/foo"));
@@ -58,9 +58,9 @@ public class MediaType_Test extends SimpleTestBase {
 
 	@Test void a04_equals() {
 		MediaType x1 = new MediaType("text/foo"), x2 = new MediaType("text/foo"), x3 = new MediaType("text/bar");
-		assertTrue(x1.equals(x2));
-		assertFalse(x1.equals(x3));
-		assertFalse(x1.equals(null));
+		assertEquals(x1, x2);
+		assertNotEquals(x1, x3);
+		assertNotEquals(x1, null);
 	}
 
 	@Test void a05_hashCode() {

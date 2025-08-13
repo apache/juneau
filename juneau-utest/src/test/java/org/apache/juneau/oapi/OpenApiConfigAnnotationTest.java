@@ -22,7 +22,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @OpenApiConfig annotation.
  */
-public class OpenApiConfigAnnotationTest extends SimpleTestBase {
+class OpenApiConfigAnnotationTest extends SimpleTestBase {
 
 	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 

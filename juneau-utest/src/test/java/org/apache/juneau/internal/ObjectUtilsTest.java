@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-public class ObjectUtilsTest extends SimpleTestBase {
+class ObjectUtilsTest extends SimpleTestBase {
 
 	@Test void a01_eq() {
 		assertTrue(ObjectUtils.eq("foo","foo"));

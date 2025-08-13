@@ -25,8 +25,7 @@ class JacocoDummyTest extends SimpleTestBase {
 	//====================================================================================================
 	// Dummy code to add test coverage in Jacoco.
 	//====================================================================================================
-	@Test
-	public void accessPrivateConstructorsOnStaticUtilityClasses() throws Exception {
+	@Test void accessPrivateConstructorsOnStaticUtilityClasses() throws Exception {
 
 		Class<?>[] classes = new Class[] {
 			StringUtils.class, ArrayUtils.class, ClassUtils.class, CollectionUtils.class

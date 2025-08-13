@@ -17,7 +17,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
-public class PatternReplaceVarTest extends SimpleTestBase {
+class PatternReplaceVarTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// test - Basic tests

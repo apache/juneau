@@ -22,7 +22,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the {@link MsgPackParser} class.
  */
-public class MsgPackParserTest extends SimpleTestBase {
+class MsgPackParserTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// testStreamsAutoClose

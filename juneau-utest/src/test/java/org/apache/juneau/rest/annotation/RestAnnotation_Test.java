@@ -30,7 +30,7 @@ import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
-public class RestAnnotation_Test extends SimpleTestBase {
+class RestAnnotation_Test extends SimpleTestBase {
 
 	private static final String CNAME = RestAnnotation_Test.class.getName();
 

@@ -24,7 +24,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the @UrlEncodingConfig annotation.
  */
-public class UrlEncodingConfigAnnotationTest extends SimpleTestBase {
+class UrlEncodingConfigAnnotationTest extends SimpleTestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));

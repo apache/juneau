@@ -22,7 +22,7 @@ import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-public class JsonTest  extends SimpleTestBase{
+class JsonTest  extends SimpleTestBase{
 
 	//====================================================================================================
 	// testBasic

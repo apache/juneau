@@ -20,8 +20,7 @@ class PropertyNamerTest extends SimpleTestBase {
 	//====================================================================================================
 	// test dashed-lower-case
 	//====================================================================================================
-	@Test
-	public void testDLC() {
+	@Test void testDLC() {
 		PropertyNamer n = new PropertyNamerDLC();
 
 		assertEquals("abc", n.getPropertyName("ABC"));
@@ -38,8 +37,7 @@ class PropertyNamerTest extends SimpleTestBase {
 	//====================================================================================================
 	// test underscore-lower-case
 	//====================================================================================================
-	@Test
-	public void testULC() {
+	@Test void testULC() {
 		PropertyNamer n = new PropertyNamerULC();
 
 		assertEquals("abc", n.getPropertyName("ABC"));

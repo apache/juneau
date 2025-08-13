@@ -198,7 +198,7 @@ public class AssertionHelpers {
 	/**
 	 * Asserts the entries in a map matches the expected strings after they've been made readable.
 	 */
-	public static void assertMap(Map<?,?> map, String...expected) {
+	public static void assertMap(Map<?,?> map, Object...expected) {
 		assertList(map.entrySet().stream().map(x -> r(x.getKey()) + "=" + r(x.getValue())).toList(), expected);
 	}
 

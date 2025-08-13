@@ -14,12 +14,14 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.http.response.Unauthorized.*;
+
+import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-public class Unauthorized_Test {
+class Unauthorized_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A {

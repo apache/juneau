@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-public class JsonAnnotation_Test extends SimpleTestBase {
+class JsonAnnotation_Test extends SimpleTestBase {
 
 	private static final String CNAME = JsonAnnotation_Test.class.getName();
 
@@ -25,13 +25,13 @@ public class JsonAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Json a1 = JsonAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.wrapperAttr("b")
 		.build();
 
 	Json a2 = JsonAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.wrapperAttr("b")
 		.build();
@@ -39,10 +39,10 @@ public class JsonAnnotation_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
-				+ "on:['a'],"
-				+ "onClass:[],"
-				+ "wrapperAttr:'b'"
+			+ "description:['description'],"
+			+ "on:['a'],"
+			+ "onClass:[],"
+			+ "wrapperAttr:'b'"
 			+ "}"
 		);
 	}
@@ -93,7 +93,7 @@ public class JsonAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Json(
-        description={ "description" },
+		description={ "description" },
 		on="a",
 		wrapperAttr="b"
 	)
@@ -101,7 +101,7 @@ public class JsonAnnotation_Test extends SimpleTestBase {
 	Json d1 = D1.class.getAnnotationsByType(Json.class)[0];
 
 	@Json(
-        description={ "description" },
+		description={ "description" },
 		on="a",
 		wrapperAttr="b"
 	)

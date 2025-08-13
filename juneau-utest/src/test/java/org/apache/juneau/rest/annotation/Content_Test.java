@@ -35,7 +35,7 @@ import org.apache.juneau.urlencoding.annotation.*;
 import org.apache.juneau.urlencoding.annotation.UrlEncoding;
 import org.junit.jupiter.api.*;
 
-public class Content_Test extends SimpleTestBase {
+class Content_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Body on parameter

@@ -17,7 +17,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
-public class SystemPropertiesVarTest extends SimpleTestBase {
+class SystemPropertiesVarTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// test - Basic tests

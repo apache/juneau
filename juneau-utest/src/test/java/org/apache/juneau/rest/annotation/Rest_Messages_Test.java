@@ -22,7 +22,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-public class Rest_Messages_Test extends SimpleTestBase {
+class Rest_Messages_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests

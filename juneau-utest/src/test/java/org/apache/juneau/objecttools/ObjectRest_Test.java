@@ -23,15 +23,13 @@ import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"rawtypes","serial"})
-public class ObjectRest_Test extends SimpleTestBase {
+class ObjectRest_Test extends SimpleTestBase {
 
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
 	@Test void a01_basic() {
 
-		// TODO: Need to write some exhaustive tests here. Will open work item
-		// to do that later.
 		ObjectRest model = ObjectRest.create(new JsonMap()); // An empty model.
 
 		// Do a PUT

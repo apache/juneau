@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
-public class Html_Test extends SimpleTestBase {
+class Html_Test extends SimpleTestBase {
 
 	@Test void a01_to() throws Exception {
 		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");

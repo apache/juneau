@@ -20,7 +20,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-public class MethodNotAllowed_Test extends SimpleTestBase {
+class MethodNotAllowed_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A {

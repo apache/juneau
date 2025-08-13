@@ -1,14 +1,14 @@
 // ***************************************************************************************************************************
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
-// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
-// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              *
-// *                                                                                                                         *
-// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
-// *                                                                                                                         *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file		*
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance		    *
+// * with the License.  You may obtain a copy of the License at														      *
+// *																														 *
+// *  http://www.apache.org/licenses/LICENSE-2.0																		     *
+// *																														 *
 // * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
-// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
-// * specific language governing permissions and limitations under the License.                                              *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the		*
+// * specific language governing permissions and limitations under the License.										      *
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-public class RestPostInitAnnotation_Test extends SimpleTestBase {
+class RestPostInitAnnotation_Test extends SimpleTestBase {
 
 	private static final String CNAME = RestPostInitAnnotation_Test.class.getName();
 
@@ -25,13 +25,13 @@ public class RestPostInitAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestPostInit a1 = RestPostInitAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.childFirst()
 		.build();
 
 	RestPostInit a2 = RestPostInitAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.childFirst()
 		.build();
@@ -40,7 +40,7 @@ public class RestPostInitAnnotation_Test extends SimpleTestBase {
 		assertJson(a1, ""
 			+ "{"
 				+ "childFirst:true,"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "on:['a']"
 			+ "}"
 		);
@@ -87,7 +87,7 @@ public class RestPostInitAnnotation_Test extends SimpleTestBase {
 
 	@RestPostInit(
 		childFirst=true,
-        description={ "description" },
+		description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
@@ -95,7 +95,7 @@ public class RestPostInitAnnotation_Test extends SimpleTestBase {
 
 	@RestPostInit(
 		childFirst=true,
-        description={ "description" },
+		description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

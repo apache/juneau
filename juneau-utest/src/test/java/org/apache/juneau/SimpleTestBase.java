@@ -174,7 +174,7 @@ public abstract class SimpleTestBase {
 	/**
 	 * Asserts the entries in a map matches the expected strings after they've been made readable.
 	 */
-	protected static void assertMap(Map<?,?> map, String...expected) {
+	protected static void assertMap(Map<?,?> map, Object...expected) {
 		AssertionHelpers.assertMap(map, expected);
 	}
 
@@ -300,7 +300,7 @@ public abstract class SimpleTestBase {
 	}
 
 	public static void assertSameObject(Object o1, Object o2) {
-		assertTrue(o1 == o2, "Not the same object.");
+		assertSame(o1, o2);
 	}
 
 	/**
@@ -322,4 +322,15 @@ public abstract class SimpleTestBase {
 	protected static StringAssertion assertString(Object o) {
 		return org.apache.juneau.assertions.Assertions.assertString(o);
 	}
+
+	public static <T> T safe(ThrowingSupplier<T> s) {
+		try {
+			return s.get();
+		} catch (RuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 }

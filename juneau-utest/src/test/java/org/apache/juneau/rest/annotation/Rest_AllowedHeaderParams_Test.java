@@ -19,7 +19,7 @@ import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-public class Rest_AllowedHeaderParams_Test extends SimpleTestBase {
+class Rest_AllowedHeaderParams_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Rest(allowedHeaderParams)

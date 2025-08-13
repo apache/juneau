@@ -25,8 +25,7 @@ class ParserGenericsTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test generic maps
 	//====================================================================================================
-	@Test
-	public void testMap() throws Exception {
+	@Test void testMap() throws Exception {
 		ReaderParser p = JsonParser.DEFAULT;
 
 		String t = "{foo:{bar:'baz'}}";
@@ -47,8 +46,7 @@ class ParserGenericsTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test generic maps
 	//====================================================================================================
-	@Test
-	public void testCollection() throws Exception {
+	@Test void testCollection() throws Exception {
 		ReaderParser p = JsonParser.DEFAULT;
 
 		String t = "[{foo:{bar:'baz'}}]";

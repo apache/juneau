@@ -17,7 +17,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
 
-public class SchemaAnnotation_Test extends SimpleTestBase {
+class SchemaAnnotation_Test extends SimpleTestBase {
 
 	private static final String CNAME = SchemaAnnotation_Test.class.getName();
 

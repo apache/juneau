@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-public class RestDestroyAnnotation_Test extends SimpleTestBase {
+class RestDestroyAnnotation_Test extends SimpleTestBase {
 
 	private static final String CNAME = RestDestroyAnnotation_Test.class.getName();
 
@@ -25,19 +25,19 @@ public class RestDestroyAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestDestroy a1 = RestDestroyAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.build();
 
 	RestDestroy a2 = RestDestroyAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.build();
 
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "on:['a']"
 			+ "}"
 		);
@@ -83,14 +83,14 @@ public class RestDestroyAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@RestDestroy(
-        description={ "description" },
+		description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
 	RestDestroy d1 = D1.class.getAnnotationsByType(RestDestroy.class)[0];
 
 	@RestDestroy(
-        description={ "description" },
+		description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

@@ -25,7 +25,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
-public class Header_Test extends SimpleTestBase {
+class Header_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Optional header parameter.

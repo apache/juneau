@@ -78,11 +78,11 @@ class AutoObjectSwapTest extends SimpleTestBase {
 		assertJson(find(A02.class).swap(null, new A02()), "{foo:'bar'}");
 	}
 
-	@Test void a03_swap_serializeException() throws Exception {
+	@Test void a03_swap_serializeException() {
 		assertThrows(SerializeException.class, ()->find(A03.class).swap(null, null));
 	}
 
-	@Test void a04_swap_runtimeException() throws Exception {
+	@Test void a04_swap_runtimeException() {
 		assertThrows(SerializeException.class, ()->find(A04.class).swap(null, null));
 	}
 
@@ -135,7 +135,7 @@ class AutoObjectSwapTest extends SimpleTestBase {
 		assertNotNull(find(B03.class).unswap(null, STRINGMAP, null));
 	}
 
-	@Test void b04_unswap_noMethod() throws Exception {
+	@Test void b04_unswap_noMethod() {
 		assertThrows(ParseException.class, ()->find(B04.class).unswap(null, STRINGMAP, null));
 	}
 
@@ -316,31 +316,31 @@ class AutoObjectSwapTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void f01_ignoreUnswapMethod_beanIgnore() throws Exception {
+	@Test void f01_ignoreUnswapMethod_beanIgnore() {
 		assertThrows(ParseException.class, ()->find(F01.class).unswap(null, null, null));
 	}
 
-	@Test void f01c_ignoreUnswapMethod_beanIgnore_usingConfig() throws Exception {
+	@Test void f01c_ignoreUnswapMethod_beanIgnore_usingConfig() {
 		assertThrows(ParseException.class, ()->find(bc(F01Config.class), F01c.class).unswap(null, null, null));
 	}
 
-	@Test void f02_ignoreUnswapMethod_deprecated() throws Exception {
+	@Test void f02_ignoreUnswapMethod_deprecated() {
 		assertThrows(ParseException.class, ()->find(F02.class).unswap(null, null, null));
 	}
 
-	@Test void f03_ignoreUnswapMethod_wrongReturnType() throws Exception {
+	@Test void f03_ignoreUnswapMethod_wrongReturnType() {
 		assertThrows(ParseException.class, ()->find(F03.class).unswap(null, null, null));
 	}
 
-	@Test void f04_ignoreUnswapMethod_wrongParameters() throws Exception {
+	@Test void f04_ignoreUnswapMethod_wrongParameters() {
 		assertThrows(ParseException.class, ()->find(F04.class).unswap(null, null, null));
 	}
 
-	@Test void f05_ignoreUnswapMethod_notStatic() throws Exception {
+	@Test void f05_ignoreUnswapMethod_notStatic() {
 		assertThrows(ParseException.class, ()->find(F05.class).unswap(null, null, null));
 	}
 
-	@Test void f06_ignoreUnswapMethod_wrongName() throws Exception {
+	@Test void f06_ignoreUnswapMethod_wrongName() {
 		assertThrows(ParseException.class, ()->find(F06.class).unswap(null, null, null));
 	}
 
@@ -374,15 +374,15 @@ class AutoObjectSwapTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void g01_ignoreUnswapConstructor_beanIgnore() throws Exception {
+	@Test void g01_ignoreUnswapConstructor_beanIgnore() {
 		assertThrows(ParseException.class, ()->find(G01.class).unswap(null, null, null));
 	}
 
-	@Test void g01c_ignoreUnswapConstructor_beanIgnore_usingConfig() throws Exception {
+	@Test void g01c_ignoreUnswapConstructor_beanIgnore_usingConfig() {
 		assertThrows(ParseException.class, ()->find(bc(G01Config.class), G01c.class).unswap(null, null, null));
 	}
 
-	@Test void g02_ignoreUnswapConstructor_deprecated() throws Exception {
+	@Test void g02_ignoreUnswapConstructor_deprecated() {
 		assertThrows(ParseException.class, ()->find(G02.class).unswap(null, null, null));
 	}
 }

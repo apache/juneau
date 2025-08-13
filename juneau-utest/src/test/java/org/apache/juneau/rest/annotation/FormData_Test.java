@@ -28,7 +28,7 @@ import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.urlencoding.*;
 import org.junit.jupiter.api.*;
 
-public class FormData_Test extends SimpleTestBase {
+class FormData_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Simple tests

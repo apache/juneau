@@ -24,7 +24,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
-public class RestClient_Logging_Test extends SimpleTestBase {
+class RestClient_Logging_Test extends SimpleTestBase {
 
 	public static class ABean {
 		public int f;

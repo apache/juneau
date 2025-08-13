@@ -23,7 +23,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-public class HttpException_Test extends SimpleTestBase {
+class HttpException_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A {

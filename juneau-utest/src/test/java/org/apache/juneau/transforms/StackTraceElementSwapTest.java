@@ -21,7 +21,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the {@link StackTraceElementSwap} class.
  */
-public class StackTraceElementSwapTest extends SimpleTestBase {
+class StackTraceElementSwapTest extends SimpleTestBase {
 
 	private String write(StackTraceElement ste) {
 		return Json5.of(ste);

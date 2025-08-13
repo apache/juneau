@@ -25,7 +25,7 @@ import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
-public class XmlCollapsedTest extends SimpleTestBase {
+class XmlCollapsedTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// testBasic - @Xml.format=COLLAPSED

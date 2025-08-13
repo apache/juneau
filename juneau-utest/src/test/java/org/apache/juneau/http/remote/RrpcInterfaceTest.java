@@ -808,7 +808,7 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public void setMultiParamsInts(int x1,int[][][] x2,int[][][] x2n,List<int[][][]> x3,List<int[][][]> x3n) {
-					assertJson((Object) x1, "1");
+					assertJson(x1, "1");
 					assertJson(x2, "[[[1,2],null],null]");
 					assertNull(x2n);
 					assertJson(x3, "[[[[1,2],null],null],null]");
@@ -828,7 +828,7 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public void setMultiParamsFloat(float x1,float[][][] x2,float[][][] x2n,List<float[][][]> x3,List<float[][][]> x3n) {
-					assertJson((Object) x1, "1.0");
+					assertJson(x1, "1.0");
 					assertJson(x2, "[[[1.0,2.0],null],null]");
 					assertNull(x2n);
 					assertJson(x3, "[[[[1.0,2.0],null],null],null]");

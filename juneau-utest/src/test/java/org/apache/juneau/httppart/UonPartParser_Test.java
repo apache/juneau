@@ -23,7 +23,7 @@ import org.apache.juneau.uon.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings("rawtypes")
-public class UonPartParser_Test extends SimpleTestBase {
+class UonPartParser_Test extends SimpleTestBase {
 
 	private static UonParserSession p = UonParser.DEFAULT.getSession();
 	private static BeanSession bs = p;

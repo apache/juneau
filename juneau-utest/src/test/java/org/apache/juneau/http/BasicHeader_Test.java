@@ -90,13 +90,12 @@ class BasicHeader_Test extends SimpleTestBase {
 		assertEquals(0, x.length);
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
 	@Test void a09_equals() {
 		BasicHeader h1 = header("Foo","bar"), h2 = header("Foo","bar"), h3 = header("Bar","bar"), h4 = header("Foo","baz");
-		assertTrue(h1.equals(h2));
-		assertFalse(h1.equals(h3));
-		assertFalse(h1.equals(h4));
-		assertFalse(h1.equals("foo"));
+		assertEquals(h1, h2);
+		assertNotEquals(h1, h3);
+		assertNotEquals(h1, h4);
+		assertNotEquals(h1, "foo");
 
 	}
 

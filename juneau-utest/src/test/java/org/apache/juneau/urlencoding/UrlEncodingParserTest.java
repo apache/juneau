@@ -21,7 +21,7 @@ import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings("rawtypes")
-public class UrlEncodingParserTest extends SimpleTestBase {
+class UrlEncodingParserTest extends SimpleTestBase {
 
 	static UrlEncodingParser p = UrlEncodingParser.DEFAULT;
 	static BeanSession bs = p.getBeanContext().getSession();

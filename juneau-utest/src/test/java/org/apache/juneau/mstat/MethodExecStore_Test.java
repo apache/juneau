@@ -100,7 +100,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 		}
 	}
 
-	@Test public void a06_builder_statsImplClass() throws Exception {
+	@Test public void a06_builder_statsImplClass() throws Exception {  // NOSONAR - Must be public.
 		BeanStore bs = BeanStore.create().build();
 		Method m = MethodExecStore_Test.class.getMethod("a06_builder_statsImplClass");
 
@@ -112,7 +112,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 		assertType(A6c.class, MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m));
 	}
 
-	@Test public void a07_builder_thrownStore() throws Exception {
+	@Test public void a07_builder_thrownStore() throws Exception {  // NOSONAR - Must be public.
 		Method m = MethodExecStore_Test.class.getMethod("a07_builder_thrownStore");
 		ThrownStore s = ThrownStore.create().build();
 
@@ -131,7 +131,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 	// Store tests.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test public void b01_store_getStats() throws Exception {
+	@Test public void b01_store_getStats() throws Exception {  // NOSONAR - Must be public.
 		Method m = MethodExecStore_Test.class.getMethod("b01_store_getStats");
 		ThrownStore s = ThrownStore.create().build();
 
@@ -147,7 +147,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 	// MethodExecStats tests.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test public void c01_stats_basic() throws Exception {
+	@Test public void c01_stats_basic() throws Exception {  // NOSONAR - Must be public.
 		Method m = MethodExecStore_Test.class.getMethod("c01_stats_basic");
 		ThrownStore s = ThrownStore.create().build();
 

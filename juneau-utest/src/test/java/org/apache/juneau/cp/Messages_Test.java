@@ -21,7 +21,7 @@ import org.apache.juneau.cp.test3.*;
 import org.apache.juneau.cp.test4.*;
 import org.junit.jupiter.api.*;
 
-public class Messages_Test extends SimpleTestBase {
+class Messages_Test extends SimpleTestBase {
 
 	@Test void a01_sameDirectory() {
 		Messages x1 = Messages.of(MessageBundleTest1.class);

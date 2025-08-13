@@ -25,8 +25,7 @@ class JsonMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@Test
-	public void testBasic() throws Exception {
+	@Test void testBasic() throws Exception {
 		String in;
 
 		in = "{A:'asdf'}";
@@ -253,8 +252,7 @@ class JsonMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testComparison
 	//====================================================================================================
-	@Test
-	public void testComparison() throws Exception {
+	@Test void testComparison() throws Exception {
 		JsonMap m1 = JsonMap.ofJson("{ firstName:'John', lastName:'Smith', age:123, isDeceased:false }");
 		JsonMap m2 = JsonMap.ofJson("{ age:123, isDeceased:false, lastName:'Smith', firstName:'John' }");
 
@@ -264,8 +262,7 @@ class JsonMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testParent
 	//====================================================================================================
-	@Test
-	public void testParent() throws Exception {
+	@Test void testParent() throws Exception {
 		JsonMap m1 = JsonMap.ofJson("{a:1}");
 		JsonMap m2 = JsonMap.ofJson("{b:2}").inner(m1);
 
@@ -275,8 +272,7 @@ class JsonMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testUpdatability
 	//====================================================================================================
-	@Test
-	public void testUpdatability() throws Exception {
+	@Test void testUpdatability() throws Exception {
 		JsonMap m = JsonMap.ofJson("{a:[{b:'c'}]}");
 		JsonList l = m.getList("a");
 		JsonMap m2 = l.getMap(0);
@@ -293,8 +289,7 @@ class JsonMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testAtMethods
 	//====================================================================================================
-	@Test
-	public void testAtMethods() throws Exception {
+	@Test void testAtMethods() throws Exception {
 		JsonMap m = JsonMap.ofJson("{a:[{b:'c'}]}");
 		String r;
 
@@ -316,16 +311,14 @@ class JsonMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// JsonMap(Reader)
 	//====================================================================================================
-	@Test
-	public void testFromReader() throws Exception {
+	@Test void testFromReader() throws Exception {
 		assertJson(JsonMap.ofJson(reader("{foo:'bar'}")), "{foo:'bar'}");
 	}
 
 	//====================================================================================================
 	// testGetMap
 	//====================================================================================================
-	@Test
-	public void testGetMap() throws Exception {
+	@Test void testGetMap() throws Exception {
 		JsonMap m = JsonMap.ofJson("{a:{1:'true',2:'false'}}");
 		Map<Integer,Boolean> m2 = m.getMap("a", Integer.class, Boolean.class, null);
 		assertJson(m2, "{'1':true,'2':false}");
@@ -347,8 +340,7 @@ class JsonMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testGetList
 	//====================================================================================================
-	@Test
-	public void testGetList() throws Exception {
+	@Test void testGetList() throws Exception {
 		JsonMap m = JsonMap.ofJson("{a:['123','456']}");
 		List<Integer> l2 = m.getList("a", Integer.class, null);
 		assertList(l2, "123,456");

@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
-public class PatternExtractVarTest {
+class PatternExtractVarTest {
 
 	//====================================================================================================
 	// test - Basic tests

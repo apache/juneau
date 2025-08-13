@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-public class MsgPackAnnotation_Test extends SimpleTestBase {
+class MsgPackAnnotation_Test extends SimpleTestBase {
 
 	private static final String CNAME = MsgPackAnnotation_Test.class.getName();
 
@@ -27,19 +27,19 @@ public class MsgPackAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	MsgPack a1 = MsgPackAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.build();
 
 	MsgPack a2 = MsgPackAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.build();
 
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+			+ "description:['description'],"
 				+ "on:['a'],"
 				+ "onClass:[]"
 			+ "}"

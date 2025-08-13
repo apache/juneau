@@ -21,13 +21,12 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.swaps.*;
 import org.junit.jupiter.api.*;
 
-public class EnumerationSwapTest extends SimpleTestBase {
+class EnumerationSwapTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// test
 	//====================================================================================================
-	@Test
-	public void test() throws Exception {
+	@Test void test() throws Exception {
 		WriterSerializer s = JsonSerializer.create().json5().swaps(EnumerationSwap.class).build();
 		Vector<String> v = new Vector<>(Arrays.asList(new String[]{"foo","bar","baz"}));
 		Enumeration<String> e = v.elements();

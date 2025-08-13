@@ -17,7 +17,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-public class Restx_RoleGuard_Test extends SimpleTestBase {
+class Restx_RoleGuard_Test extends SimpleTestBase {
 
 	private static RestOperation[] ops(RestOperation...ops) {
 		return ops;

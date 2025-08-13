@@ -27,7 +27,7 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
-public class OpenApiPartParser_Test extends SimpleTestBase {
+class OpenApiPartParser_Test extends SimpleTestBase {
 
 	static OpenApiParserSession p = OpenApiParser.DEFAULT.getSession();
 

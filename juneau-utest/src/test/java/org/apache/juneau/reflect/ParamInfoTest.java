@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 /**
  * ParamInfo tests.
  */
-public class ParamInfoTest extends SimpleTestBase {
+class ParamInfoTest extends SimpleTestBase {
 
 	@Documented
 	@Target(METHOD)

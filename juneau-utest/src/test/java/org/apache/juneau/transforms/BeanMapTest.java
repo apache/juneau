@@ -19,7 +19,7 @@ import org.apache.juneau.swap.*;
 import org.apache.juneau.swaps.*;
 import org.junit.jupiter.api.*;
 
-public class BeanMapTest extends SimpleTestBase {
+class BeanMapTest extends SimpleTestBase {
 
 	//====================================================================================================
 	// testFilteredEntry

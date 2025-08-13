@@ -24,8 +24,7 @@ class JsonListTest extends SimpleTestBase {
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@Test
-	public void testBasic() {
+	@Test void testBasic() {
 
 		assertEquals(
 			"['A','B','C']",
@@ -46,8 +45,7 @@ class JsonListTest extends SimpleTestBase {
 	//====================================================================================================
 	// testIterateAs
 	//====================================================================================================
-	@Test
-	public void testIterateAs() throws Exception {
+	@Test void testIterateAs() throws Exception {
 
 		// Iterate over a list of JsonMaps.
 		JsonList l = new JsonList("[{foo:'bar'},{baz:123}]");
@@ -77,8 +75,7 @@ class JsonListTest extends SimpleTestBase {
 	//====================================================================================================
 	// testAtMethods
 	//====================================================================================================
-	@Test
-	public void testAtMethods() throws Exception {
+	@Test void testAtMethods() throws Exception {
 		JsonList l = new JsonList("[{foo:'bar'},{baz:123}]");
 		String r;
 
@@ -100,16 +97,14 @@ class JsonListTest extends SimpleTestBase {
 	//====================================================================================================
 	// JsonList(Reader)
 	//====================================================================================================
-	@Test
-	public void testFromReader() throws Exception {
+	@Test void testFromReader() throws Exception {
 		assertJson(new JsonList(reader("[1,2,3]")), "[1,2,3]");
 	}
 
 	//====================================================================================================
 	// testGetMap
 	//====================================================================================================
-	@Test
-	public void testGetMap() throws Exception {
+	@Test void testGetMap() throws Exception {
 		JsonList l = new JsonList("[{1:'true',2:'false'}]");
 		Map<Integer,Boolean> m2 = l.getMap(0, Integer.class, Boolean.class);
 		assertJson(m2, "{'1':true,'2':false}");
@@ -125,8 +120,7 @@ class JsonListTest extends SimpleTestBase {
 	//====================================================================================================
 	// testGetList
 	//====================================================================================================
-	@Test
-	public void testGetList() throws Exception {
+	@Test void testGetList() throws Exception {
 		JsonList l = new JsonList("[['123','456']]");
 		List<Integer> l2 = l.getList(0, Integer.class);
 		assertList(l2, "123,456");

@@ -18,7 +18,7 @@ import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.beans.*;
 import org.junit.jupiter.api.*;
 
-public class ResourceDescription_Test extends SimpleTestBase {
+class ResourceDescription_Test extends SimpleTestBase {
 
 	@Test void a01_basic() throws Exception {
 		ResourceDescription rd = new ResourceDescription("a","b?c=d&e=f","g");

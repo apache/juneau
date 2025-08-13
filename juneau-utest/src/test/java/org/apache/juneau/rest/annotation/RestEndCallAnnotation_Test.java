@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-public class RestEndCallAnnotation_Test extends SimpleTestBase {
+class RestEndCallAnnotation_Test extends SimpleTestBase {
 
 	private static final String CNAME = RestEndCallAnnotation_Test.class.getName();
 
@@ -25,19 +25,19 @@ public class RestEndCallAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestEndCall a1 = RestEndCallAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.build();
 
 	RestEndCall a2 = RestEndCallAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.build();
 
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "on:['a']"
 			+ "}"
 		);
@@ -83,14 +83,14 @@ public class RestEndCallAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@RestEndCall(
-        description={ "description" },
+		description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
 	RestEndCall d1 = D1.class.getAnnotationsByType(RestEndCall.class)[0];
 
 	@RestEndCall(
-        description={ "description" },
+		description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

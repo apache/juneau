@@ -19,7 +19,7 @@ import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-public class RestOp_ReqHeaders_Test extends SimpleTestBase {
+class RestOp_ReqHeaders_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Default values - Default request headers

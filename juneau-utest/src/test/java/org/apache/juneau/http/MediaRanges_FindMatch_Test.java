@@ -169,7 +169,7 @@ public class MediaRanges_FindMatch_Test {
 		Accept a = accept(this.accept);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
 		int r = a.match(alist(mt));
-		assertEquals(expected, r);
+		assertEquals(expected, r, () -> label + " failed");
 	}
 
 	@Test
