@@ -12,142 +12,98 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.a.rttests.RoundTripTest.Flags.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
+import java.util.stream.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
-import org.junit.*;
-import org.junit.runners.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@Ignore
+@Disabled
 @SuppressWarnings({"serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class RoundTripLargeObjectsTest extends RoundTripTest {
+class RoundTripLargeObjects_Test extends SimpleTestBase {
 
 	private static final int NUM_RUNS = 10;
 	private static final int SIZE_PARAM = 20000;
 
-	public RoundTripLargeObjectsTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
-		super(label, s, p, flags);
+	private static RoundTripTester[] TESTERS = {
+		tester("Json DEFAULT")
+			.serializer(JsonSerializer.create().keepNullProperties())
+			.parser(JsonParser.create())
+			.build(),
+		tester("Json5 DEFAULT")
+			.serializer(Json5Serializer.create().keepNullProperties())
+			.parser(Json5Parser.create())
+			.build(),
+		tester("Json DEFAULT_SQ")
+			.serializer(JsonSerializer.create().json5().keepNullProperties())
+			.parser(JsonParser.create())
+			.build(),
+		tester("Xml DEFAULT w/namespaces,validation")
+			.serializer(XmlSerializer.create().sq().ns().keepNullProperties().addNamespaceUrisToRoot().useWhitespace())
+			.parser(XmlParser.create())
+			.validateXml()
+			.validateXmlWhitespace()
+			.build(),
+		tester("Xml DEFAULT wo/namespaces,validation")
+			.serializer(XmlSerializer.create().sq().keepNullProperties())
+			.parser(XmlParser.create())
+			.validateXmlWhitespace()
+			.build(),
+		tester("Html")
+			.serializer(HtmlSerializer.create().keepNullProperties())
+			.parser(HtmlParser.create())
+			.validateXmlWhitespace()
+			.build(),
+		tester("UrlEncoding")
+			.serializer(UrlEncodingSerializer.create().keepNullProperties())
+			.parser(UrlEncodingParser.create())
+			.build(),
+		tester("Uon")
+			.serializer(UonSerializer.create().keepNullProperties())
+			.parser(UonParser.create())
+			.build(),
+		tester("MsgPack")
+			.serializer(MsgPackSerializer.create().keepNullProperties())
+			.parser(MsgPackParser.create())
+			.build()
+	};
+
+	static Stream<Arguments> testers() {
+		return Stream.of(TESTERS).map(x -> args(x));
 	}
 
-	@Parameterized.Parameters
-	public static Collection<Object[]> getPairs() {
-		return Arrays.asList(new Object[][] {
-			// Full round-trip testing
-			{ /* 0 */
-				"Json DEFAULT",
-				JsonSerializer.create().keepNullProperties(),
-				JsonParser.create(),
-				0
-			},
-			{ /* 1 */
-				"Json5 DEFAULT",
-				Json5Serializer.create().keepNullProperties(),
-				Json5Parser.create(),
-				0
-			},
-			{ /* 2 */
-				"Json DEFAULT_SQ",
-				JsonSerializer.create().json5().keepNullProperties(),
-				JsonParser.create(),
-				0
-			},
-			{ /* 3 */
-				"Xml DEFAULT w/namespaces,validation",
-				XmlSerializer.create().sq().ns().keepNullProperties().addNamespaceUrisToRoot().useWhitespace(),
-				XmlParser.create(),
-				CHECK_XML_WHITESPACE | VALIDATE_XML
-			},
-			{ /* 4 */
-				"Xml DEFAULT wo/namespaces,validation",
-				XmlSerializer.create().sq().keepNullProperties(),
-				XmlParser.create(),
-				CHECK_XML_WHITESPACE
-			},
-			{ /* 5 */
-				"Html",
-				HtmlSerializer.create().keepNullProperties(),
-				HtmlParser.create(),
-				CHECK_XML_WHITESPACE
-			},
-			{ /* 6 */
-				"UrlEncoding",
-				UrlEncodingSerializer.create().keepNullProperties(),
-				UrlEncodingParser.create(),
-				0
-			},
-			{ /* 7 */
-				"Uon",
-				UonSerializer.create().keepNullProperties(),
-				UonParser.create(),
-				0
-			},
-			{ /* 8 */
-				"MsgPack",
-				MsgPackSerializer.create().keepNullProperties(),
-				MsgPackParser.create(),
-				0
-			},
-//			{ /* 9 */
-//				"Rdf.Xml",
-//				new RdfSerializer.Xml().setTrimNullProperties(false).setAddLiteralTypes(true),
-//				RdfXmlParser.DEFAULT,
-//				0
-//			},
-//			{ /* 10 */
-//				"Rdf.XmlAbbrev",
-//				new RdfSerializer.XmlAbbrev().setTrimNullProperties(false).setAddLiteralTypes(true),
-//				RdfXmlParser.DEFAULT,
-//				0
-//			},
-//			{ /* 11 */
-//				"Rdf.Turtle",
-//				new RdfSerializer.Turtle().setTrimNullProperties(false).setAddLiteralTypes(true),
-//				TurtleParser.DEFAULT,
-//				0
-//			},
-//			{ /* 12 */
-//				"Rdf.NTriple",
-//				new RdfSerializer.NTriple().setTrimNullProperties(false).setAddLiteralTypes(true),
-//				NTripleParser.DEFAULT,
-//				0
-//			},
-//			{ /* 13 */
-//				"Rdf.N3",
-//				new RdfSerializer.N3().setTrimNullProperties(false).setAddLiteralTypes(true),
-//				N3Parser.DEFAULT,
-//				0
-//			},
-		});
+	protected static RoundTripTester.Builder tester(String label) {
+		return RoundTripTester.create(label);
 	}
 
 	//====================================================================================================
 	// test
 	//====================================================================================================
-	@Test
-	public void testLargeMap() throws Exception {
-		long startTime;
-		int numRuns = NUM_RUNS;
 
-		A a = A.create();
-		Serializer s = getSerializer();
-		Parser p = getParser();
-		System.err.println("\n---Speed test on " + label + "---"); // NOT DEBUG
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a01_largeMap(RoundTripTester t) throws Exception {
+		long startTime;
+		var numRuns = NUM_RUNS;
+
+		var a = A.create();
+		var s = t.getSerializer();
+		var p = t.getParser();
+		System.err.println("\n---Speed test on " + t.label + "---"); // NOT DEBUG
 		Object r = "";
 
 		// Initialization run.
@@ -171,7 +127,7 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 		public A1[] a1Array;
 
 		static A create() {
-			A a = new A();
+			var a = new A();
 			a.a1Map = new A1Map();
 			a.a1List = new A1List();
 			for (int i = 0; i < SIZE_PARAM; i++) {

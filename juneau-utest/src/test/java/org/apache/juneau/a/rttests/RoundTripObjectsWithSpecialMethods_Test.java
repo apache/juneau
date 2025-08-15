@@ -12,88 +12,100 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.AssertionHelpers.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
+
+import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class RoundTripGenericsTest extends RoundTripTest {
-
-	public RoundTripGenericsTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
-		super(label, s, p, flags);
-	}
+class RoundTripObjectsWithSpecialMethods_Test extends BasicRoundTripTest {
 
 	//====================================================================================================
-	// testBeansWithUnboundTypeVars
+	// @NameProperty method.
 	//====================================================================================================
-	@SuppressWarnings("rawtypes")
-	@Test
-	public void testBeansWithUnboundTypeVars() throws Exception {
 
-		if (returnOriginalObject)
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a01_nameProperty(RoundTripTester t) throws Exception {
+		var x = new A().init();
+		x = t.roundTrip(x);
+		assertJson(x, "{a2:{f2:2},m:{k1:{f2:2}}}");
+		if (t.isValidationOnly())
 			return;
-
-		// Unbound type variables should be interpreted as Object.
-		// During parsing, these become JsonMaps.
-		Pair pair = new Pair<>(new Source().init(), new Target().init());
-		pair = roundTrip(pair);
-		assertJson(pair, "{s:{s1:'a1'},t:{t1:'b1'}}");
-		assertEquals("JsonMap", pair.getS().getClass().getSimpleName());
-		assertEquals("JsonMap", pair.getT().getClass().getSimpleName());
-
-		// If you specify a concrete class, the type variables become bound and
-		// the property types correctly resolve.
-		pair = roundTrip(pair, RealPair.class);
-		assertJson(pair, "{s:{s1:'a1'},t:{t1:'b1'}}");
-		assertEquals("Source", pair.getS().getClass().getSimpleName());
-		assertEquals("Target", pair.getT().getClass().getSimpleName());
+		assertEquals("a2", x.a2.name);
+		assertEquals("k1", x.m.get("k1").name);
 	}
 
-	// Class with unbound type variables.
-	@Bean(p="s,t")
-	public static class Pair<S,T> {
-		private S s;
-		private T t;
+	public static class A {
+		public A2 a2;
+		public Map<String,A2> m;
 
-		public Pair() {}
-
-		public Pair(S s, T t) {
-			this.s = s;
-			this.t = t;
+		A init() {
+			a2 = new A2().init();
+			m = new LinkedHashMap<>();
+			m.put("k1", new A2().init());
+			return this;
 		}
 
-		// Getters/setters
-		public S getS() { return s; }
-		public void setS(S s) { this.s = s; }
-		public T getT() { return t; }
-		public void setT(T t) { this.t = t; }
 	}
+	public static class A2 {
+		String name;
+		public int f2;
 
-	// Sublcass with bound type variables.
-	public static class RealPair extends Pair<Source,Target> {}
+		@NameProperty
+		protected void setName(String name) {
+			this.name = name;
+		}
 
-	public static class Source {
-		public String s1;
-		public Source init() {
-			this.s1 = "a1";
+		A2 init() {
+			f2 = 2;
 			return this;
 		}
 	}
 
-	public static class Target {
-		public String t1;
-		public Target init() {
-			this.t1 = "b1";
+	//====================================================================================================
+	// @ParentProperty method.
+	//====================================================================================================
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a02_parentProperty(RoundTripTester t) throws Exception {
+		var x = new B().init();
+		x = t.roundTrip(x);
+		if (t.isValidationOnly())
+			return;
+		assertEquals(x.f1, x.b2.parent.f1);
+	}
+
+	public static class B {
+		public int f1;
+		public B2 b2;
+
+		B init() {
+			f1 = 1;
+			b2 = new B2().init();
+			return this;
+		}
+
+	}
+	public static class B2 {
+		B parent;
+		public int f2;
+
+		@ParentProperty
+		protected void setParent(B v) {
+			parent = v;
+		}
+
+		B2 init() {
+			f2 = 2;
 			return this;
 		}
 	}
-}
+}

@@ -14,46 +14,39 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class RoundTripOptionalObjectsTest extends RoundTripTest {
-
-	public RoundTripOptionalObjectsTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
-		super(label, s, p, flags);
-	}
+class RoundTripOptionalObjects_Test extends BasicRoundTripTest {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Standalone Optional objects
 	//------------------------------------------------------------------------------------------------------------------
 
-	// Empty Optional
-	@Test
-	public void a01_emptyOptional() throws Exception {
-		Optional<String> o = empty();
-		o = roundTrip(o);
-		assertFalse(o.isPresent());
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a01_emptyOptional(RoundTripTester t) throws Exception {
+		var x = empty();
+		x = t.roundTrip(x);
+		assertFalse(x.isPresent());
 	}
 
-	// Optional containing String.
-	@Test
-	public void a02_optionalContainingString() throws Exception {
-		Optional<String> o = optional("foobar");
-		o = roundTrip(o);
-		assertEquals("foobar", o.get());
-		o = optional("");
-		o = roundTrip(o);
-		assertEquals("", o.get());
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a02_optionalContainingString(RoundTripTester t) throws Exception {
+		var x = optional("foobar");
+		x = t.roundTrip(x);
+		assertEquals("foobar", x.get());
+		x = optional("");
+		x = t.roundTrip(x);
+		assertEquals("", x.get());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -68,28 +61,31 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 		public Optional<String> f1;
 	}
 
-	@Test
-	public void b01a_stringField() throws Exception {
-		B01 x = new B01();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b01a_stringField(RoundTripTester t) throws Exception {
+		var x = new B01();
 		x.f1 = optional("foo");
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertEquals("foo", x.f1.get());
 	}
 
-	@Test
-	public void b01b_stringField_emptyValue() throws Exception {
-		B01 x = new B01();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b01b_stringField_emptyValue(RoundTripTester t) throws Exception {
+		var x = new B01();
 		x.f1 = empty();
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertFalse(x.f1.isPresent());
 	}
 
-	@Test
-	public void b01c_stringField_nullField() throws Exception {
-		B01 x = new B01();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b01c_stringField_nullField(RoundTripTester t) throws Exception {
+		var x = new B01();
 		x.f1 = null;
-		x = roundTrip(x);
-		if (isValidationOnly())
+		x = t.roundTrip(x);
+		if (t.isValidationOnly())
 			return;
 		assertFalse(x.f1.isPresent());
 	}
@@ -102,28 +98,31 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 		public Optional<Integer> f1;
 	}
 
-	@Test
-	public void b02a_integerField() throws Exception {
-		B02 x = new B02();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b02a_integerField(RoundTripTester t) throws Exception {
+		var x = new B02();
 		x.f1 = optional(123);
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertEquals(123, x.f1.get().intValue());
 	}
 
-	@Test
-	public void b02b_integerField_emptyValue() throws Exception {
-		B02 x = new B02();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b02b_integerField_emptyValue(RoundTripTester t) throws Exception {
+		var x = new B02();
 		x.f1 = empty();
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertFalse(x.f1.isPresent());
 	}
 
-	@Test
-	public void b02c_integerField_nullField() throws Exception {
-		B02 x = new B02();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b02c_integerField_nullField(RoundTripTester t) throws Exception {
+		var x = new B02();
 		x.f1 = null;
-		x = roundTrip(x);
-		if (isValidationOnly())
+		x = t.roundTrip(x);
+		if (t.isValidationOnly())
 			return;
 		assertFalse(x.f1.isPresent());
 	}
@@ -136,47 +135,52 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 		public Optional<List<Integer>> f1;
 	}
 
-	@Test
-	public void b03a_integerListField() throws Exception {
-		B03 x = new B03();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b03a_integerListField(RoundTripTester t) throws Exception {
+		var x = new B03();
 		x.f1 = optional(alist(123));
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertEquals(123, x.f1.get().get(0).intValue());
 	}
 
-	@Test
-	public void b03b_integerListField_listWithNull() throws Exception {
-		B03 x = new B03();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b03b_integerListField_listWithNull(RoundTripTester t) throws Exception {
+		var x = new B03();
 		x.f1 = optional(alist((Integer)null));
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertEquals(1, x.f1.get().size());
 		assertNull(x.f1.get().get(0));
 	}
 
-	@Test
-	public void b03c_integerListField_emptyList() throws Exception {
-		B03 x = new B03();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b03c_integerListField_emptyList(RoundTripTester t) throws Exception {
+		var x = new B03();
 		x.f1 = optional(alist());
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertEquals(0, x.f1.get().size());
 	}
 
-	@Test
-	public void b03d_integerListField_emptyValue() throws Exception {
-		B03 x = new B03();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b03d_integerListField_emptyValue(RoundTripTester t) throws Exception {
+		var x = new B03();
 		x.f1 = empty();
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertFalse(x.f1.isPresent());
 	}
 
-	@Test
-	public void b03e_integerListField_nullField() throws Exception {
-		B03 x = new B03();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b03e_integerListField_nullField(RoundTripTester t) throws Exception {
+		var x = new B03();
 		x.f1 = null;
-		x = roundTrip(x);
-		if (isValidationOnly())
+		x = t.roundTrip(x);
+		if (t.isValidationOnly())
 			return;
 		assertFalse(x.f1.isPresent());
 	}
@@ -189,40 +193,44 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 		public Optional<Optional<Integer>> f1;
 	}
 
-	@Test
-	public void b04a_optionalOptionalInteger() throws Exception {
-		B04 x = new B04();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b04a_optionalOptionalInteger(RoundTripTester t) throws Exception {
+		var x = new B04();
 		x.f1 = optional(optional(123));
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertEquals(123, x.f1.get().get().intValue());
 	}
 
-	@Test
-	public void b04b_optionalOptionalInteger_emptyInnerValue() throws Exception {
-		B04 x = new B04();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b04b_optionalOptionalInteger_emptyInnerValue(RoundTripTester t) throws Exception {
+		var x = new B04();
 		x.f1 = optional(empty());
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertFalse(x.f1.get().isPresent());
 	}
 
-	@Test
-	public void b04c_optionalOptionalInteger_emptyOuterValue() throws Exception {
-		B04 x = new B04();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b04c_optionalOptionalInteger_emptyOuterValue(RoundTripTester t) throws Exception {
+		var x = new B04();
 		x.f1 = empty();
-		x = roundTrip(x);
-		if (isValidationOnly())
+		x = t.roundTrip(x);
+		if (t.isValidationOnly())
 			return;
 		assertTrue(x.f1.isPresent());
 		assertFalse(x.f1.get().isPresent());
 	}
 
-	@Test
-	public void b04d_optionalOptionalInteger_nullField() throws Exception {
-		B04 x = new B04();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b04d_optionalOptionalInteger_nullField(RoundTripTester t) throws Exception {
+		var x = new B04();
 		x.f1 = null;
-		x = roundTrip(x);
-		if (isValidationOnly())
+		x = t.roundTrip(x);
+		if (t.isValidationOnly())
 			return;
 		assertTrue(x.f1.isPresent());
 		assertFalse(x.f1.get().isPresent());
@@ -245,40 +253,44 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 		}
 	}
 
-	@Test
-	public void b05a_optionalOptionalBean() throws Exception {
-		B05 x = new B05();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b05a_optionalOptionalBean(RoundTripTester t) throws Exception {
+		var x = new B05();
 		x.f1 = optional(optional(B05B.create()));
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertEquals(123, x.f1.get().get().f2);
 	}
 
-	@Test
-	public void b05b_optionalOptionalBean_emptyInnerValue() throws Exception {
-		B05 x = new B05();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b05b_optionalOptionalBean_emptyInnerValue(RoundTripTester t) throws Exception {
+		var x = new B05();
 		x.f1 = optional(empty());
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertFalse(x.f1.get().isPresent());
 	}
 
-	@Test
-	public void b05c_optionalOptionalBean_emptyOuterValue() throws Exception {
-		B05 x = new B05();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b05c_optionalOptionalBean_emptyOuterValue(RoundTripTester t) throws Exception {
+		var x = new B05();
 		x.f1 = empty();
-		x = roundTrip(x);
-		if (isValidationOnly())
+		x = t.roundTrip(x);
+		if (t.isValidationOnly())
 			return;
 		assertTrue(x.f1.isPresent());
 		assertFalse(x.f1.get().isPresent());
 	}
 
-	@Test
-	public void b05d_optionalOptionalBean_nullField() throws Exception {
-		B05 x = new B05();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b05d_optionalOptionalBean_nullField(RoundTripTester t) throws Exception {
+		var x = new B05();
 		x.f1 = null;
-		x = roundTrip(x);
-		if (isValidationOnly())
+		x = t.roundTrip(x);
+		if (t.isValidationOnly())
 			return;
 		assertTrue(x.f1.isPresent());
 		assertFalse(x.f1.get().isPresent());
@@ -292,39 +304,43 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 		public List<Optional<Integer>> f1;
 	}
 
-	@Test
-	public void b06a_listOfOptionalIntegers() throws Exception {
-		B06 x = new B06();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b06a_listOfOptionalIntegers(RoundTripTester t) throws Exception {
+		var x = new B06();
 		x.f1 = alist(optional(123));
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertEquals(123, x.f1.get(0).get().intValue());
 	}
 
-	@Test
-	public void b06b_listOfOptionalIntegers_listWithEmpty() throws Exception {
-		B06 x = new B06();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b06b_listOfOptionalIntegers_listWithEmpty(RoundTripTester t) throws Exception {
+		var x = new B06();
 		x.f1 = alist(empty());
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertEquals(1, x.f1.size());
 		assertFalse(x.f1.get(0).isPresent());
 	}
 
-	@Test
-	public void b06c_listOfOptionalIntegers_listWithNull() throws Exception {
-		B06 x = new B06();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b06c_listOfOptionalIntegers_listWithNull(RoundTripTester t) throws Exception {
+		var x = new B06();
 		x.f1 = alist((Optional<Integer>)null);
-		x = roundTrip(x);
-		if (isValidationOnly())
+		x = t.roundTrip(x);
+		if (t.isValidationOnly())
 			return;
 		assertEquals(1, x.f1.size());
 		assertFalse(x.f1.get(0).isPresent());
 	}
 
-	@Test
-	public void b06d_listOfOptionalIntegers_nullField() throws Exception {
-		B06 x = new B06();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b06d_listOfOptionalIntegers_nullField(RoundTripTester t) throws Exception {
+		var x = new B06();
 		x.f1 = null;
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertNull(x.f1);
 	}
 
@@ -337,40 +353,44 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 		public List<Integer>[] f2;
 	}
 
-	@Test
-	public void b07a_arrayOfOptionalIntegers() throws Exception {
-		B07 x = new B07();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b07a_arrayOfOptionalIntegers(RoundTripTester t) throws Exception {
+		var x = new B07();
 		x.f1 = new Optional[]{optional(123)};
 		x.f2 = new List[]{alist(123)};
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertEquals(123, x.f1[0].get().intValue());
 	}
 
-	@Test
-	public void b07b_arrayOfOptionalIntegers_listWithEmpty() throws Exception {
-		B07 x = new B07();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b07b_arrayOfOptionalIntegers_listWithEmpty(RoundTripTester t) throws Exception {
+		var x = new B07();
 		x.f1 = new Optional[]{empty()};
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertEquals(1, x.f1.length);
 		assertFalse(x.f1[0].isPresent());
 	}
 
-	@Test
-	public void b07c_arrayOfOptionalIntegers_listWithNull() throws Exception {
-		B07 x = new B07();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b07c_arrayOfOptionalIntegers_listWithNull(RoundTripTester t) throws Exception {
+		var x = new B07();
 		x.f1 = new Optional[]{null};
-		x = roundTrip(x);
-		if (isValidationOnly())
+		x = t.roundTrip(x);
+		if (t.isValidationOnly())
 			return;
 		assertEquals(1, x.f1.length);
 		assertFalse(x.f1[0].isPresent());
 	}
 
-	@Test
-	public void b07d_arrayOfOptionalIntegers_nullField() throws Exception {
-		B07 x = new B07();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void b07d_arrayOfOptionalIntegers_nullField(RoundTripTester t) throws Exception {
+		var x = new B07();
 		x.f1 = null;
-		x = roundTrip(x);
+		x = t.roundTrip(x);
 		assertNull(x.f1);
 	}
-}
+}

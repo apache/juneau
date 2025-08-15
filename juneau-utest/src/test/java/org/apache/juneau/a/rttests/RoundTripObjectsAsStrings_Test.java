@@ -12,35 +12,28 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.AssertionHelpers.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests to ensure the valueOf(String), fromString(String), parse(String), and parseString(String) methods
  * are used correctly by parsers.
  */
-@SuppressWarnings({"unused"})
-@FixMethodOrder(NAME_ASCENDING)
-public class RoundTripObjectsAsStringsTest extends RoundTripTest {
-
-	public RoundTripObjectsAsStringsTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
-		super(label, s, p, flags);
-	}
+class RoundTripObjectsAsStrings_Test extends BasicRoundTripTest {
 
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@Test
-	public void testBasic() throws Exception {
-		A t = new A().init();
-		t = roundTrip(t);
-		assertJson(t, "{a1:{f:'1'},a2:{f:'2'},a3:{f:'3'},a4:{f:'4'}}");
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a01_basic(RoundTripTester t) throws Exception {
+		var x = new A().init();
+		x = t.roundTrip(x);
+		assertJson(x, "{a1:{f:'1'},a2:{f:'2'},a3:{f:'3'},a4:{f:'4'}}");
 	}
 
 	public static class A {
@@ -118,15 +111,17 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 	// testEnumWithOverriddenStringValue
 	// The B1 enum should serialize as "X1" but the B2 enum should serialize as "X-1".
 	//====================================================================================================
-	@Test
-	public void testEnumWithOverriddenStringValue() throws Exception {
-		B t = new B().init();
-		if (! returnOriginalObject) {
-			Object r = getSerializer().serialize(t);
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a02_enumWithOverriddenStringValue(RoundTripTester t) throws Exception {
+		var x = new B().init();
+		if (! t.returnOriginalObject) {
+			var r = t.getSerializer().serialize(x);
 			assertTrue(toString(r).contains("X-2"));
 		}
-		t = roundTrip(t);
-		assertJson(t, "{b1:'X1',b2:'X-2'}");
+		x = t.roundTrip(x);
+		assertJson(x, "{b1:'X1',b2:'X-2'}");
 	}
 
 	public static class B {
@@ -146,6 +141,7 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 		X2(2),
 		X3(3);
 
+		@SuppressWarnings("unused")
 		private int i;
 		B1(int i) {
 			this.i = i;
@@ -175,11 +171,13 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 	//====================================================================================================
 	// testMethodOrdering
 	//====================================================================================================
-	@Test
-	public void testOrdering() throws Exception {
-		C t = new C().init();
-		t = roundTrip(t);
-		assertJson(t, "{c1:{f:'1'},c2:{f:'2'},c3:{f:'3'},c4:{f:'4'}}");
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a03_ordering(RoundTripTester t) throws Exception {
+		var x = new C().init();
+		x = t.roundTrip(x);
+		assertJson(x, "{c1:{f:'1'},c2:{f:'2'},c3:{f:'3'},c4:{f:'4'}}");
 	}
 
 	public static class C {
@@ -213,7 +211,7 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 			throw new IllegalCallerException("Shouldn't be called!");
 		}
 		public static C1 fromString(String s) {
-			C1 x = new C1();
+			var x = new C1();
 			x.f = s.substring(3);
 			return x;
 		}
@@ -233,7 +231,7 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 			throw new IllegalCallerException("Shouldn't be called!");
 		}
 		public static C2 valueOf(String s) {
-			C2 x = new C2();
+			var x = new C2();
 			x.f = s.substring(3);
 			return x;
 		}
@@ -249,7 +247,7 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 			throw new IllegalCallerException("Shouldn't be called!");
 		}
 		public static C3 parse(String s) {
-			C3 x = new C3();
+			var x = new C3();
 			x.f = s.substring(3);
 			return x;
 		}
@@ -262,7 +260,7 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 	public static class C4 {
 		public String f;
 		public static C4 parseString(String s) {
-			C4 x = new C4();
+			var x = new C4();
 			x.f = s.substring(3);
 			return x;
 		}
@@ -285,4 +283,4 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 			return new String((byte[])o, UTF8);
 		return o.toString();
 	}
-}
+}

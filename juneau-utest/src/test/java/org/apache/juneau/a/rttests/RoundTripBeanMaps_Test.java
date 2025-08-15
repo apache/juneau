@@ -12,132 +12,207 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.AssertionHelpers.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 import java.util.Map;
+import java.util.stream.*;
 
 import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.html5.*;
+import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json.annotation.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.apache.juneau.msgpack.*;
+import org.apache.juneau.uon.*;
+import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.xml.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
 @SuppressWarnings({"serial"})
-@FixMethodOrder(NAME_ASCENDING)
-public class RoundTripBeanMapsTest extends RoundTripTest {
+class RoundTripBeanMaps_Test extends SimpleTestBase {
 
-	static Class<?>[] ANNOTATED_CLASSES={L2Config.class, M2Config.class};
+	private static RoundTripTester[] TESTERS = {
+		tester("Json - default")
+			.serializer(JsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(JsonParser.create())
+			.build(),
+		tester("Json - lax")
+			.serializer(JsonSerializer.create().json5().keepNullProperties().addBeanTypes().addRootType())
+			.parser(JsonParser.create())
+			.build(),
+		tester("Json - lax, readable")
+			.serializer(JsonSerializer.create().json5().ws().keepNullProperties().addBeanTypes().addRootType())
+			.parser(JsonParser.create())
+			.build(),
+		tester("Xml - namespaces, validation, readable")
+			.serializer(XmlSerializer.create().ns().sq().keepNullProperties().addNamespaceUrisToRoot().useWhitespace().addBeanTypes().addRootType())
+			.parser(XmlParser.create())
+			.validateXmlWhitespace()
+			.validateXml()
+			.build(),
+		tester("Xml - no namespaces, validation")
+			.serializer(XmlSerializer.create().sq().keepNullProperties().addBeanTypes().addRootType())
+			.parser(XmlParser.create())
+			.validateXmlWhitespace()
+			.build(),
+		tester("Html - default")
+			.serializer(HtmlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(HtmlParser.create())
+			.validateXmlWhitespace()
+			.build(),
+		tester("Html - readable")
+			.serializer(HtmlSerializer.create().sq().ws().keepNullProperties().addBeanTypes().addRootType())
+			.parser(HtmlParser.create())
+			.validateXmlWhitespace()
+			.build(),
+		tester("Html - with key/value headers")
+			.serializer(HtmlSerializer.create().addKeyValueTableHeaders().addBeanTypes().addRootType())
+			.parser(HtmlParser.create())
+			.validateXmlWhitespace()
+			.build(),
+		tester("Uon - default")
+			.serializer(UonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(UonParser.create())
+			.build(),
+		tester("Uon - readable")
+			.serializer(UonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
+			.parser(UonParser.create())
+			.build(),
+		tester("Uon - encoded")
+			.serializer(UonSerializer.create().encoding().keepNullProperties().addBeanTypes().addRootType())
+			.parser(UonParser.create().decoding())
+			.build(),
+		tester("UrlEncoding - default")
+			.serializer(UrlEncodingSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(UrlEncodingParser.create())
+			.build(),
+		tester("UrlEncoding - readable")
+			.serializer(UrlEncodingSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
+			.parser(UrlEncodingParser.create())
+			.build(),
+		tester("UrlEncoding - expanded params")
+			.serializer(UrlEncodingSerializer.create().expandedParams().addBeanTypes().addRootType())
+			.parser(UrlEncodingParser.create().expandedParams())
+			.build(),
+		tester("MsgPack")
+			.serializer(MsgPackSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(MsgPackParser.create())
+			.build(),
+		tester("Json schema")
+			.serializer(JsonSchemaSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.returnOriginalObject()
+			.build(),
+	};
 
-	public RoundTripBeanMapsTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
-		super(label, s, p, flags);
+	static Stream<Arguments> testers() {
+		return Stream.of(TESTERS).map(x -> args(x));
 	}
 
-	@Override /* RoundTripTest */
-	public Map<Class<?>,Class<?>> getImplClasses() {
-		Map<Class<?>,Class<?>> m = new HashMap<>();
-		m.put(IBean.class, CBean.class);
-		return m;
-	}
-
-	@Override /* RoundTripTest */
-	public Class<?>[] getAnnotatedClasses() {
-		return ANNOTATED_CLASSES;
+	protected static RoundTripTester.Builder tester(String label) {
+		return RoundTripTester.create(label).annotatedClasses(L2Config.class, M2Config.class).implClasses(Map.of(IBean.class, CBean.class));
 	}
 
 	//====================================================================================================
 	// IBean/ABean/Bean
 	//====================================================================================================
-	@Test
-	public void testImplClasses() throws Exception {
-		IBean bean = new CBean();
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a01_implClasses(RoundTripTester t) throws Exception {
+		var bean = new CBean();
 
 		bean.setF1("bar");
-		bean = roundTrip(bean, IBean.class);
+		bean = t.roundTrip(bean, IBean.class);
 		assertEquals("bar", bean.getF1());
 
 		bean.setF1("bing");
-		bean = roundTrip(bean, CBean.class);
+		bean = t.roundTrip(bean, CBean.class);
 		assertEquals("bing", bean.getF1());
 	}
 
 	//====================================================================================================
 	// IBean[]/ABean[]/Bean[]
 	//====================================================================================================
-	@Test
-	public void testImplArrayClasses() throws Exception {
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a02_implArrayClasses(RoundTripTester t) throws Exception {
 		IBean[] bean = new CBean[]{new CBean()};
 
 		bean[0].setF1("bar");
-		bean = roundTrip(bean, IBean[].class);
+		bean = t.roundTrip(bean, IBean[].class);
 		assertEquals("bar", bean[0].getF1());
 
 		bean[0].setF1("bing");
-		bean = roundTrip(bean, CBean[].class);
+		bean = t.roundTrip(bean, CBean[].class);
 		assertEquals("bing", bean[0].getF1());
 	}
 
 	//====================================================================================================
 	// List<IBean/ABean/Bean>
 	//====================================================================================================
-	@Test
-	public void testImplListClasses() throws Exception {
-		List<IBean> l = alist(new CBean());
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a03_implListClasses(RoundTripTester t) throws Exception {
+		var l = alist(new CBean());
 
 		l.get(0).setF1("bar");
-		l = roundTrip(l, List.class, IBean.class);
+		l = t.roundTrip(l, List.class, IBean.class);
 		assertEquals("bar", l.get(0).getF1());
-		l = roundTrip(l, LinkedList.class, IBean.class);
+		l = t.roundTrip(l, LinkedList.class, IBean.class);
 		assertEquals("bar", l.get(0).getF1());
 
 		l.get(0).setF1("bing");
-		l = roundTrip(l, List.class, CBean.class);
+		l = t.roundTrip(l, List.class, CBean.class);
 		assertEquals("bing", l.get(0).getF1());
-		l = roundTrip(l, LinkedList.class, CBean.class);
+		l = t.roundTrip(l, LinkedList.class, CBean.class);
 		assertEquals("bing", l.get(0).getF1());
 	}
 
 	//====================================================================================================
 	// Map<String,IBean/ABean/Bean>
 	//====================================================================================================
-	@Test
-	public void testImplMap() throws Exception {
-		Map<String,IBean> l = map("foo",new CBean());
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a04_implMap(RoundTripTester t) throws Exception {
+		var l = map("foo",new CBean());
 
 		l.get("foo").setF1("bar");
-		l = roundTrip(l, Map.class, String.class, IBean.class);
+		l = t.roundTrip(l, Map.class, String.class, IBean.class);
 		assertEquals("bar", l.get("foo").getF1());
-		l = roundTrip(l, LinkedHashMap.class, String.class, IBean.class);
+		l = t.roundTrip(l, LinkedHashMap.class, String.class, IBean.class);
 		assertEquals("bar", l.get("foo").getF1());
 
 		l.get("foo").setF1("bing");
-		l = roundTrip(l, Map.class, String.class, CBean.class);
+		l = t.roundTrip(l, Map.class, String.class, CBean.class);
 		assertEquals("bing", l.get("foo").getF1());
-		l = roundTrip(l, LinkedHashMap.class, String.class, CBean.class);
+		l = t.roundTrip(l, LinkedHashMap.class, String.class, CBean.class);
 		assertEquals("bing", l.get("foo").getF1());
 	}
 
 	//====================================================================================================
 	// Map<String,IBean/ABean/Bean>
 	//====================================================================================================
-	@Test
-	public void testImplMap2() throws Exception {
-		A b = new A(1);
-		b = roundTrip(b);
-		if (returnOriginalObject || p == null)
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a05_implMap2(RoundTripTester t) throws Exception {
+		var b = new A(1);
+		b = t.roundTrip(b);
+		if (t.returnOriginalObject || t.getParser() == null)
 			return;
 		assertEquals(0, b.f1);
 		assertEquals(0, b.f2);
@@ -149,26 +224,22 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 
 	public interface IBean {
 		String getF1();
-		void setF1(String f1);
+		void setF1(String v);
 	}
 
 	public abstract static class ABean implements IBean {
 		@Override /* IBean */
 		public abstract String getF1();
 		@Override /* IBean */
-		public abstract void setF1(String f1);
+		public abstract void setF1(String v);
 	}
 
 	public static class CBean extends ABean {
 		private String f1 = "foo";
 		@Override /* IBean */
-		public String getF1() {
-			return f1;
-		}
+		public String getF1() { return f1; }
 		@Override /* IBean */
-		public void setF1(String f1) {
-			this.f1 = f1;
-		}
+		public void setF1(String v) { f1 = v; }
 	}
 
 	public static class A {
@@ -180,20 +251,11 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		private int f5, f6;
 
 		@BeanIgnore
-		public int getF5() {
-			return f5;
-		}
-		public void setF5(int f5) {
-			this.f5 = f5;
-		}
+		public int getF5() { return f5; }
+		public void setF5(int v) { f5 = v; }
 
-		public int getF6() {
-			return f6;
-		}
-		public A withF6(int f6) {
-			this.f6 = f6;
-			return this;
-		}
+		public int getF6() { return f6; }
+		public A withF6(int v) { f6 = v; return this; }
 
 		public A() {}
 
@@ -205,35 +267,37 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	// Test @Bean(subTypes=xxx)
 	//====================================================================================================
-	@Test
-	public void testSubTypesUsingAnnotation() throws Exception {
-		JsonSerializer js = JsonSerializer.create().json5().addBeanTypes().addRootType().build();
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a06_subTypesUsingAnnotation(RoundTripTester t) throws Exception {
+		var js = JsonSerializer.create().json5().addBeanTypes().addRootType().build();
 
 		// Skip validation-only tests
-		if (isValidationOnly())
+		if (t.isValidationOnly())
 			return;
 
-		Serializer s = getSerializer();
-		Parser p = getParser();
+		var s = t.getSerializer();
+		var p = t. getParser();
 
-		B1 b1 = B1.create();
-		Object r = s.serialize(b1);
-		B b = p.parse(r, B.class);
+		var b1 = B1.create();
+		var r = s.serialize(b1);
+		var b = p.parse(r, B.class);
 		assertTrue(b instanceof B1);
 		assertSerialized(b, js, "{_type:'B1',f0:'f0',f1:'f1'}");
 
-		B2 b2 = B2.create();
+		var b2 = B2.create();
 		r = s.serialize(b2);
 		b = p.parse(r, B.class);
 		assertTrue(b instanceof B2);
 		assertSerialized(b, js, "{_type:'B2',f0:'f0',f2:1}");
 
-		B3 b3 = B3.create();
+		var b3 = B3.create();
 		r = s.serialize(b3);
 		b = p.parse(r, B.class);
 		assertTrue(b instanceof B3);
 		assertSerialized(b, js, "{_type:'B3',f0:'f0',f3:'2001-01-01T12:34:56.789Z'}");
-}
+	}
 
 	@Bean(
 		dictionary={B1.class,B2.class,B3.class}
@@ -246,7 +310,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	public static class B1 extends B {
 		public String f1;
 		public static B1 create() {
-			B1 b = new B1();
+			var b = new B1();
 			b.f0 = "f0";
 			b.f1 = "f1";
 			return b;
@@ -257,7 +321,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	public static class B2 extends B {
 		public int f2;
 		public static B2 create() {
-			B2 b = new B2();
+			var b = new B2();
 			b.f0 = "f0";
 			b.f2 = 1;
 			return b;
@@ -268,7 +332,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	public static class B3 extends B {
 		public XMLGregorianCalendar f3;
 		public static B3 create() throws Exception {
-			B3 b = new B3();
+			var b = new B3();
 			b.f0 = "f0";
 			b.f3 = DatatypeFactory.newInstance().newXMLGregorianCalendar("2001-01-01T12:34:56.789Z");
 			return b;
@@ -278,30 +342,32 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	// Test @Bean(subTypes=xxx) using BeanFilter
 	//====================================================================================================
-	@Test
-	public void testSubTypesUsingBeanFilter() throws Exception {
-		JsonSerializer js = JsonSerializer.create().json5().build();
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a07_subTypesUsingBeanFilter(RoundTripTester t) throws Exception {
+		var js = JsonSerializer.create().json5().build();
 
 		// Skip validation-only tests
-		if (isValidationOnly())
+		if (t.isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().copy().dictionaryOn(C.class, CFilterDictionaryMap.class).build();
-		Parser p = getParser().copy().dictionaryOn(C.class, CFilterDictionaryMap.class).build();
+		var s = t.getSerializer().copy().dictionaryOn(C.class, CFilterDictionaryMap.class).build();
+		var p = t.getParser().copy().dictionaryOn(C.class, CFilterDictionaryMap.class).build();
 
-		C1 c1 = C1.create();
-		Object r = s.serialize(c1);
-		C c = p.parse(r, C.class);
+		var c1 = C1.create();
+		var r = s.serialize(c1);
+		var c = p.parse(r, C.class);
 		assertTrue(c instanceof C1);
 		assertSerialized(c, js, "{f0:'f0',f1:'f1'}");
 
-		C2 c2 = C2.create();
+		var c2 = C2.create();
 		r = s.serialize(c2);
 		c = p.parse(r, C.class);
 		assertTrue(c instanceof C2);
 		assertSerialized(c, js, "{f0:'f0',f2:1}");
 
-		C3 c3 = C3.create();
+		var c3 = C3.create();
 		r = s.serialize(c3);
 		c = p.parse(r, C.class);
 		assertTrue(c instanceof C3);
@@ -315,7 +381,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	public static class C1 extends C {
 		public String f1;
 		public static C1 create() {
-			C1 c = new C1();
+			var c = new C1();
 			c.f0 = "f0";
 			c.f1 = "f1";
 			return c;
@@ -325,7 +391,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	public static class C2 extends C {
 		public int f2;
 		public static C2 create() {
-			C2 c = new C2();
+			var c = new C2();
 			c.f0 = "f0";
 			c.f2 = 1;
 			return c;
@@ -335,7 +401,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	public static class C3 extends C {
 		public XMLGregorianCalendar f3;
 		public static C3 create() throws Exception {
-			C3 c = new C3();
+			var c = new C3();
 			c.f0 = "f0";
 			c.f3 = DatatypeFactory.newInstance().newXMLGregorianCalendar("2001-01-01T12:34:56.789Z");
 			return c;
@@ -353,18 +419,20 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	// Test @Bean(subTypeProperty=xxx) with real bean property
 	//====================================================================================================
-	@Test
-	public void testSubTypePropertyWithRealPropertyUsingAnnotation() throws Exception {
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a08_subTypePropertyWithRealPropertyUsingAnnotation(RoundTripTester t) throws Exception {
 		// Skip validation-only tests
-		if (isValidationOnly())
+		if (t.isValidationOnly())
 			return;
 
-		Serializer s = getSerializer();
-		Parser p = getParser();
+		var s = t.getSerializer();
+		var p = t.getParser();
 
-		BA1 ba1 = BA1.create();
-		Object r = s.serialize(ba1);
-		BA b = p.parse(r, BA.class);
+		var ba1 = BA1.create();
+		var r = s.serialize(ba1);
+		var b = p.parse(r, BA.class);
 		assertTrue(b instanceof BA1);
 		assertJson(b, "{f0a:'f0a',f0b:'f0b',f1:'f1'}");
 	}
@@ -378,7 +446,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	public static class BA1 extends BA {
 		public String f1;
 		public static BA1 create() {
-			BA1 b = new BA1();
+			var b = new BA1();
 			b.f0a = "f0a";
 			b.f0b = "f0b";
 			b.f1 = "f1";
@@ -391,22 +459,23 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		public String f2;
 	}
 
-
 	//====================================================================================================
 	// Test @Bean(subTypes=xxx) with real bean property using BeanFilter
 	//====================================================================================================
-	@Test
-	public void testSubTypePropertyWithRealPropertyUsingBeanFilter() throws Exception {
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a09_subTypePropertyWithRealPropertyUsingBeanFilter(RoundTripTester t) throws Exception {
 		// Skip validation-only tests
-		if (isValidationOnly())
+		if (t.isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().copy().annotations(BeanAnnotation.create(CA.class).dictionary(CAFilterDictionaryMap.class).build()).build();
-		Parser p = getParser().copy().annotations(BeanAnnotation.create(CA.class).dictionary(CAFilterDictionaryMap.class).build()).build();
+		var s = t.getSerializer().copy().annotations(BeanAnnotation.create(CA.class).dictionary(CAFilterDictionaryMap.class).build()).build();
+		var p = t.getParser().copy().annotations(BeanAnnotation.create(CA.class).dictionary(CAFilterDictionaryMap.class).build()).build();
 
-		CA1 c1 = CA1.create();
-		Object r = s.serialize(c1);
-		CA c = p.parse(r, CA.class);
+		var c1 = CA1.create();
+		var r = s.serialize(c1);
+		var c = p.parse(r, CA.class);
 		assertTrue(c instanceof CA1);
 		assertJson(c, "{f0a:'f0a',f0b:'f0b',f1:'f1'}");
 	}
@@ -418,7 +487,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	public static class CA1 extends CA {
 		public String f1;
 		public static CA1 create() {
-			CA1 c = new CA1();
+			var c = new CA1();
 			c.f0a = "f0a";
 			c.f0b = "f0b";
 			c.f1 = "f1";
@@ -440,17 +509,19 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	// Test @Bean(bpi=xxx)
 	//====================================================================================================
-	@Test
-	public void testPropertiesUsingAnnotation() throws Exception {
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a10_propertiesUsingAnnotation(RoundTripTester t) throws Exception {
 		// Skip validation-only tests
-		if (isValidationOnly())
+		if (t.isValidationOnly())
 			return;
 
-		Serializer s = getSerializer();
-		Parser p = getParser();
+		var s = t.getSerializer();
+		var p = t.getParser();
 
-		D1 d = new D1().init();
-		Object r = s.serialize(d);
+		var d = new D1().init();
+		var r = s.serialize(d);
 		d = p.parse(r, D1.class);
 		assertNull(d.f1);
 		assertJson(d, "{f3:'f3',f2:'f2'}");
@@ -470,19 +541,21 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	// Test @Bean(bpi=xxx) using BeanFilter
 	//====================================================================================================
-	@Test
-	public void testPropertiesUsingBeanFilter() throws Exception {
-		JsonSerializer js = JsonSerializer.create().json5().beanProperties(D2.class, "f3,f2").build();
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a11_propertiesUsingBeanFilter(RoundTripTester t) throws Exception {
+		var js = JsonSerializer.create().json5().beanProperties(D2.class, "f3,f2").build();
 
 		// Skip validation-only tests
-		if (isValidationOnly())
+		if (t.isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().copy().beanProperties(D2.class, "f3,f2").build();
-		Parser p = getParser().copy().beanProperties(D2.class, "f3,f2").build();
+		var s = t.getSerializer().copy().beanProperties(D2.class, "f3,f2").build();
+		var p = t.getParser().copy().beanProperties(D2.class, "f3,f2").build();
 
-		D2 d = new D2().init();
-		Object r = s.serialize(d);
+		var d = new D2().init();
+		var r = s.serialize(d);
 		d = p.parse(r, D2.class);
 		assertNull(d.f1);
 		assertSerialized(d, js, "{f3:'f3',f2:'f2'}");
@@ -501,17 +574,19 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	// Test @Bean(bpx=xxx)
 	//====================================================================================================
-	@Test
-	public void testExcludePropertiesUsingAnnotation() throws Exception {
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a12_excludePropertiesUsingAnnotation(RoundTripTester t) throws Exception {
 		// Skip validation-only tests
-		if (isValidationOnly())
+		if (t.isValidationOnly())
 			return;
 
-		Serializer s = getSerializer();
-		Parser p = getParser();
+		var s = t.getSerializer();
+		var p = t.getParser();
 
-		E1 e = new E1().init();
-		Object r = s.serialize(e);
+		var e = new E1().init();
+		var r = s.serialize(e);
 		e = p.parse(r, E1.class);
 		assertJson(e, "{f1:'f1',f3:'f3'}");
 	}
@@ -530,17 +605,19 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	// Test @Bean(bpx=xxx) using BeanFilter
 	//====================================================================================================
-	@Test
-	public void testExcludePropertiesUsingBeanFilter() throws Exception {
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a13_excludePropertiesUsingBeanFilter(RoundTripTester t) throws Exception {
 		// Skip validation-only tests
-		if (isValidationOnly())
+		if (t.isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().copy().beanPropertiesExcludes(E2.class, "f2").build();
-		Parser p = getParser().copy().beanPropertiesExcludes(E2.class, "f2").build();
+		var s = t.getSerializer().copy().beanPropertiesExcludes(E2.class, "f2").build();
+		var p = t.getParser().copy().beanPropertiesExcludes(E2.class, "f2").build();
 
-		E2 e = new E2().init();
-		Object r = s.serialize(e);
+		var e = new E2().init();
+		var r = s.serialize(e);
 		e = p.parse(r, E2.class);
 		assertJson(e, "{f1:'f1',f3:'f3'}");
 	}
@@ -558,19 +635,21 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	// Test @Bean(interfaceClass=xxx)
 	//====================================================================================================
-	@Test
-	public void testInterfaceClassUsingAnnotation() throws Exception {
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a14_interfaceClassUsingAnnotation(RoundTripTester t) throws Exception {
 		// Skip validation-only tests
-		if (isValidationOnly())
+		if (t.isValidationOnly())
 			return;
 
-		Serializer s = getSerializer();
-		Parser p = getParser();
+		var s = t.getSerializer();
+		var p = t.getParser();
 
-		FA2 t = new FA2().init();
-		Object r = s.serialize(t);
-		t = p.parse(r, FA2.class);
-		assertJson(t, "{f1:'f1'}");
+		var x = new FA2().init();
+		var r = s.serialize(x);
+		x = p.parse(r, FA2.class);
+		assertJson(x, "{f1:'f1'}");
 	}
 
 	@Bean(interfaceClass=FA1.class)
@@ -590,43 +669,45 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	// Test @Bean(interfaceClass=xxx) using BeanFilter
 	//====================================================================================================
-	@Test
-	public void testInterfaceClassUsingBeanFilter() throws Exception {
-		Serializer.Builder s = getSerializer().copy();
-		Parser.Builder p = getParser() == null ? null : getParser().copy();
-		FB2 t;
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a15_interfaceClassUsingBeanFilter(RoundTripTester t) throws Exception {
+		var s = t.getSerializer().copy();
+		var p = t.getParser() == null ? null : t.getParser().copy();
+		FB2 x;
 		Object r;
 
 		// Skip validation-only tests
-		if (isValidationOnly())
+		if (t.isValidationOnly())
 			return;
 
 		// --- BeanFilter defined on parent class ---
 		s.interfaces(FB1.class);
 		p.interfaces(FB1.class);
 
-		t = new FB2().init();
-		r = s.build().serialize(t);
-		t = p.build().parse(r, FB2.class);
-		assertJson(t, "{f1:'f1'}");
+		x = new FB2().init();
+		r = s.build().serialize(x);
+		x = p.build().parse(r, FB2.class);
+		assertJson(x, "{f1:'f1'}");
 
 		// --- BeanFilter defined on child class class ---
 		s.interfaces(FB1.class);
 		p.interfaces(FB1.class);
 
-		t = new FB2().init();
-		r = s.build().serialize(t);
-		t = p.build().parse(r, FB2.class);
-		assertJson(t, "{f1:'f1'}");
+		x = new FB2().init();
+		r = s.build().serialize(x);
+		x = p.build().parse(r, FB2.class);
+		assertJson(x, "{f1:'f1'}");
 
 		// --- BeanFilter defined as plain class ---
 		s.interfaces(FB1.class);
 		p.interfaces(FB1.class);
 
-		t = new FB2().init();
-		r = s.build().serialize(t);
-		t = p.build().parse(r, FB2.class);
-		assertJson(t, "{f1:'f1'}");
+		x = new FB2().init();
+		r = s.build().serialize(x);
+		x = p.build().parse(r, FB2.class);
+		assertJson(x, "{f1:'f1'}");
 	}
 
 	public static class FB1 {
@@ -645,10 +726,12 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	// testMemberClass
 	//====================================================================================================
-	@Test
-	public void testMemberClass() {
-		G t = G.create();
-		assertNotThrown(()->roundTrip(t, G.class));
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a16_memberClass(RoundTripTester t) {
+		var x = G.create();
+		assertNotThrown(()->t.roundTrip(x, G.class));
 	}
 
 	public static class G {
@@ -656,7 +739,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		public G1 g1;
 
 		public static G create() {
-			G g = new G();
+			var g = new G();
 			g.a1 = 1;
 			g.g1.a2 = 2;
 			g.g1.g2.a3 = 3;
@@ -684,22 +767,24 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	// testMemberClassWithMapClass
 	//====================================================================================================
-	@Test
-	public void testMemberClassWithMapClass() {
-		H t = H.create();
-		assertNotThrown(()->roundTrip(t, H.class));
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a17_memberClassWithMapClass(RoundTripTester t) {
+		var x = H.create();
+		assertNotThrown(()->t.roundTrip(x, H.class));
 	}
 
 	public static class H extends LinkedHashMap<String,H.H1> {
 
 		static H create() {
-			H h = new H();
+			var h = new H();
 			h.add("foo", 1, 2);
 			return h;
 		}
 
 		H add(String key, int a2, int a3) {
-			H1 h1 = new H1();
+			var h1 = new H1();
 			h1.a2 = a2;
 			h1.h2.a3 = a3;
 			put(key, h1);
@@ -723,22 +808,24 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	// testMemberClassWithListClass
 	//====================================================================================================
-	@Test
-	public void testMemberClassWithListClass() {
-		I t = I.create();
-		assertNotThrown(()->roundTrip(t, I.class));
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a18_memberClassWithListClass(RoundTripTester t) {
+		var x = I.create();
+		assertNotThrown(()->t.roundTrip(x, I.class));
 	}
 
 	public static class I extends LinkedList<I.I1> {
 
 		static I create() {
-			I i = new I();
+			var i = new I();
 			i.add(1, 2);
 			return i;
 		}
 
 		I add(int a2, int a3) {
-			I1 i1 = new I1();
+			var i1 = new I1();
 			i1.a2 = a2;
 			i1.i2.a3 = a3;
 			super.add(i1);
@@ -762,17 +849,19 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	// testMemberClassWithStringConstructor
 	//====================================================================================================
-	@Test
-	public void testMemberClassWithStringConstructor() {
-		J t = J.create();
-		assertNotThrown(()->roundTrip(t, J.class));
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a19_memberClassWithStringConstructor(RoundTripTester t) {
+		var x = J.create();
+		assertNotThrown(()->t.roundTrip(x, J.class));
 	}
 
 	public static class J {
 		public J2 j2;
 
 		static J create() {
-			J j = new J();
+			var j = new J();
 			j.init();
 			return j;
 		}
@@ -784,8 +873,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		public class J2 {
 			int a2;
 
-			public J2(String arg) {
-				this.a2 = Integer.parseInt(arg);
+			public J2(String v) {
+				a2 = Integer.parseInt(v);
 			}
 
 			@Override /* Object */
@@ -798,10 +887,12 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	// testBeanPropertyPrecedence
 	//====================================================================================================
-	@Test
-	public void testBeanPropertyPrecedence() {
-		K t = K.create();
-		assertNotThrown(()->roundTrip(t, K.class));
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a20_beanPropertyPrecedence(RoundTripTester t) {
+		var x = K.create();
+		assertNotThrown(()->t.roundTrip(x, K.class));
 	}
 	public enum KEnum { FOO, BAR, BAZ }
 
@@ -809,77 +900,46 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		private KEnum a, b, c;
 
 		static K create() {
-			K t = new K();
+			var t = new K();
 			t.a = KEnum.FOO;
 			t.b = KEnum.BAR;
 			t.c = KEnum.BAZ;
 			return t;
 		}
 
-		@BeanIgnore
-		public KEnum getA() {
-			return KEnum.FOO;
-		}
-
-		@Beanp(name="a")
-		public String getA2() {
-			return a.toString();
-		}
-
-		// This method should not be interpreted as the setter for this
-		// property because it doesn't match the getter return type above.
-		public void setA(KEnum a) {
+		@BeanIgnore public KEnum getA() { return KEnum.FOO; }
+		@Beanp(name="a") public String getA2() { return a.toString(); }
+		public void setA(KEnum v) {
+			// This method should not be interpreted as the setter for this
+			// property because it doesn't match the getter return type above.
 			throw new IllegalCallerException("Should not be called!");
 		}
+		public void setA(String v) { this.a = KEnum.valueOf(v); }
 
-		public void setA(String a) {
-			this.a = KEnum.valueOf(a);
-		}
+		public KEnum getB() { return b; }
+		public void setB(String v) { throw new IllegalCallerException("Should not be called!"); }
+		public void setB(Object v) { throw new IllegalCallerException("Should not be called!"); }
+		public void setB(KEnum v) { b = v;}
 
-		public KEnum getB() {
-			return b;
-		}
-
-		public void setB(String b) {
-			throw new IllegalCallerException("Should not be called!");
-		}
-
-		public void setB(Object b) {
-			throw new IllegalCallerException("Should not be called!");
-		}
-
-		public void setB(KEnum b) {
-			this.b = b;
-		}
-
-		public KEnum getC() {
-			return c;
-		}
-
-		public void setC(KEnum c) {
-			this.c = c;
-		}
-
-		public void setC(String c) {
-			throw new IllegalCallerException("Should not be called!");
-		}
-
-		public void setC(Object c) {
-			throw new IllegalCallerException("Should not be called!");
-		}
+		public KEnum getC() { return c; }
+		public void setC(KEnum v) { c = v; }
+		public void setC(String v) { throw new IllegalCallerException("Should not be called!"); }
+		public void setC(Object v) { throw new IllegalCallerException("Should not be called!"); }
 	}
 
 	//====================================================================================================
 	// testWrapperAttrAnnotationOnBean
 	//====================================================================================================
-	@Test
-	public void testWrapperAttrAnnotationOnBean() {
-		L t = L.create();
-		assertNotThrown(()->roundTrip(t, L.class));
 
-		Map<String,L> m = new LinkedHashMap<>();
-		m.put("bar", L.create());
-		assertNotThrown(()->roundTrip(m, LinkedHashMap.class, String.class, L.class));
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a21_wrapperAttrAnnotationOnBean(RoundTripTester t) {
+		var x = L.create();
+		assertNotThrown(()->t.roundTrip(x, L.class));
+
+		var x2 = new LinkedHashMap<String,L>();
+		x2.put("bar", L.create());
+		assertNotThrown(()->t.roundTrip(x2, LinkedHashMap.class, String.class, L.class));
 	}
 
 	@Json(wrapperAttr="foo")
@@ -887,20 +947,21 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		public int f1;
 
 		static L create() {
-			L l = new L();
+			var l = new L();
 			l.f1 = 1;
 			return l;
 		}
 	}
 
-	@Test
-	public void testWrapperAttrAnnotationOnBean_usingConfig() {
-		L2 t = L2.create();
-		assertNotThrown(()->roundTrip(t, L2.class));
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a22_wrapperAttrAnnotationOnBean_usingConfig(RoundTripTester t) {
+		var x = L2.create();
+		assertNotThrown(()->t.roundTrip(x, L2.class));
 
-		Map<String,L2> m = new LinkedHashMap<>();
-		m.put("bar", L2.create());
-		assertNotThrown(()->roundTrip(m, LinkedHashMap.class, String.class, L2.class));
+		var x2 = new LinkedHashMap<String,L2>();
+		x2.put("bar", L2.create());
+		assertNotThrown(()->t.roundTrip(x2, LinkedHashMap.class, String.class, L2.class));
 	}
 
 	@Json(on="L2",wrapperAttr="foo")
@@ -910,7 +971,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		public int f1;
 
 		static L2 create() {
-			L2 l = new L2();
+			var l = new L2();
 			l.f1 = 1;
 			return l;
 		}
@@ -919,14 +980,16 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	// testWrapperAttrAnnotationOnNonBean
 	//====================================================================================================
-	@Test
-	public void testWrapperAttrAnnotationOnNonBean() {
-		M t = M.create();
-		assertNotThrown(()->roundTrip(t, M.class));
 
-		Map<String,M> m = new LinkedHashMap<>();
-		m.put("bar", M.create());
-		assertNotThrown(()->roundTrip(m, LinkedHashMap.class, String.class, M.class));
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a23_wrapperAttrAnnotationOnNonBean(RoundTripTester t) {
+		var x = M.create();
+		assertNotThrown(()->t.roundTrip(x, M.class));
+
+		var x2 = new LinkedHashMap<String,M>();
+		x2.put("bar", M.create());
+		assertNotThrown(()->t.roundTrip(x2, LinkedHashMap.class, String.class, M.class));
 	}
 
 	@Json(wrapperAttr="foo")
@@ -934,7 +997,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		int f1;
 
 		static M create() {
-			M m = new M();
+			var m = new M();
 			m.f1 = 1;
 			return m;
 		}
@@ -945,20 +1008,21 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		}
 
 		public static M valueOf(String s) {
-			M m = new M();
+			var m = new M();
 			m.f1 = Integer.parseInt(s);
 			return m;
 		}
 	}
 
-	@Test
-	public void testWrapperAttrAnnotationOnNonBean_usingConfig() {
-		M2 t = M2.create();
-		assertNotThrown(()->roundTrip(t, M2.class));
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a24_WrapperAttrAnnotationOnNonBean_usingConfig(RoundTripTester t) {
+		var x = M2.create();
+		assertNotThrown(()->t.roundTrip(x, M2.class));
 
-		Map<String,M2> m = new LinkedHashMap<>();
-		m.put("bar", M2.create());
-		assertNotThrown(()->roundTrip(m, LinkedHashMap.class, String.class, M2.class));
+		var x2 = new LinkedHashMap<String,M2>();
+		x2.put("bar", M2.create());
+		assertNotThrown(()->t.roundTrip(x2, LinkedHashMap.class, String.class, M2.class));
 	}
 
 	@Json(on="M2",wrapperAttr="foo")
@@ -968,7 +1032,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		int f1;
 
 		static M2 create() {
-			M2 m = new M2();
+			var m = new M2();
 			m.f1 = 1;
 			return m;
 		}
@@ -979,7 +1043,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		}
 
 		public static M2 valueOf(String s) {
-			M2 m = new M2();
+			var m = new M2();
 			m.f1 = Integer.parseInt(s);
 			return m;
 		}
@@ -989,28 +1053,29 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	// testBeanPropertyWithBeanWithAttrsField
 	//====================================================================================================
 
-	@Test
-	public void testBeanPropertyWithBeanWithAttrsField() throws Exception {
-		N t = N.create();
-		t = roundTrip(t, N.class);
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a25_BeanPropertyWithBeanWithAttrsField(RoundTripTester t) throws Exception {
+		var x = N.create();
+		x = t.roundTrip(x, N.class);
 
-		t.f1.type("foo");
-		t = roundTrip(t, N.class);
+		x.f1.type("foo");
+		x = t.roundTrip(x, N.class);
 
-		t.f1.attr("foo", "bar").attrUri("href", "http://foo");
-		roundTrip(t, N.class);
+		x.f1.attr("foo", "bar").attrUri("href", "http://foo");
+		t.roundTrip(x, N.class);
 
-		Head h = new Head().child(new Style());
-		assertNotThrown(()->roundTrip(h, Head.class));
+		var x2 = new Head().child(new Style());
+		assertNotThrown(()->t.roundTrip(x2, Head.class));
 	}
 
 	public static class N {
 		public Style f1;
 
 		static N create() {
-			N n = new N();
+			var n = new N();
 			n.f1 = new Style();
 			return n;
 		}
 	}
-}
+}

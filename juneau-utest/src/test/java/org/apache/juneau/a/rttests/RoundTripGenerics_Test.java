@@ -12,41 +12,81 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.AssertionHelpers.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
+import static org.junit.Assert.*;
 
-import org.apache.juneau.bean.jsonschema.*;
-import org.apache.juneau.dto.jsonschema.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.apache.juneau.annotation.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class RoundTripDTOsTest extends RoundTripTest {
-
-	public RoundTripDTOsTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
-		super(label, s, p, flags);
-	}
+class RoundTripGenerics_Test extends BasicRoundTripTest {
 
 	//====================================================================================================
-	// org.apache.juneau.test.dto.jsonschema
+	// testBeansWithUnboundTypeVars
 	//====================================================================================================
-	@Test
-	public void testJsonSchema1() throws Exception {
-		JsonSchema s = JsonSchemaTest.getTest1();
-		JsonSchema s2 = roundTrip(s, JsonSchema.class);
-		assertEquals(json(s2), json(s));
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a01_beansWithUnboundTypeVars(RoundTripTester t) throws Exception {
+
+		if (t.returnOriginalObject)
+			return;
+
+		// Unbound type variables should be interpreted as Object.
+		// During parsing, these become JsonMaps.
+		Pair<?,?> x = new Pair<>(new Source().init(), new Target().init());
+		x = t.roundTrip(x);
+		assertJson(x, "{s:{s1:'a1'},t:{t1:'b1'}}");
+		assertEquals("JsonMap", x.getS().getClass().getSimpleName());
+		assertEquals("JsonMap", x.getT().getClass().getSimpleName());
+
+		// If you specify a concrete class, the type variables become bound and
+		// the property types correctly resolve.
+		x = t.roundTrip(x, RealPair.class);
+		assertJson(x, "{s:{s1:'a1'},t:{t1:'b1'}}");
+		assertEquals("Source", x.getS().getClass().getSimpleName());
+		assertEquals("Target", x.getT().getClass().getSimpleName());
 	}
 
-	@Test
-	public void testJsonSchema2() throws Exception {
-		JsonSchema s = JsonSchemaTest.getTest2();
-		JsonSchema s2 = roundTrip(s, JsonSchema.class);
-		assertEquals(json(s2), json(s));
+	// Class with unbound type variables.
+	@Bean(p="s,t")
+	public static class Pair<S,T> {
+		private S s;
+		private T t;
+
+		public Pair() {}
+
+		public Pair(S s, T t) {
+			this.s = s;
+			this.t = t;
+		}
+
+		// Getters/setters
+		public S getS() { return s; }
+		public void setS(S v) { s = v; }
+		public T getT() { return t; }
+		public void setT(T v) { t = v; }
 	}
-}
+
+	// Sublcass with bound type variables.
+	public static class RealPair extends Pair<Source,Target> {}
+
+	public static class Source {
+		public String s1;
+		public Source init() {
+			s1 = "a1";
+			return this;
+		}
+	}
+
+	public static class Target {
+		public String t1;
+		public Target init() {
+			t1 = "b1";
+			return this;
+		}
+	}
+}

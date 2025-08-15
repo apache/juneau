@@ -14,116 +14,111 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class RoundTripPrimitivesBeansTest extends RoundTripTest {
-
-	public RoundTripPrimitivesBeansTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
-		super(label, s, p, flags);
-	}
+class RoundTripPrimitivesBeans_Test extends BasicRoundTripTest {
 
 	//====================================================================================================
 	// testPrimitivesBean
 	//====================================================================================================
-	@Test
-	public void testPrimitivesBean() throws Exception {
-		PrimitivesBean t = new PrimitivesBean().init();
-		t = roundTrip(t, PrimitivesBean.class);
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a01_primitivesBean(RoundTripTester t) throws Exception {
+		var x = new PrimitivesBean().init();
+		x = t.roundTrip(x, PrimitivesBean.class);
 
 		// primitives
-		assertEquals(true, t.pBoolean);
-		assertEquals(1, t.pByte);
-		assertEquals('a', t.pChar);
-		assertEquals(2, t.pShort);
-		assertEquals(3, t.pInt);
-		assertEquals(4L, t.pLong);
-		assertEquals(5f, t.pFloat, 0.1f);
-		assertEquals(6d, t.pDouble, 0.1f);
+		assertEquals(true, x.pBoolean);
+		assertEquals(1, x.pByte);
+		assertEquals('a', x.pChar);
+		assertEquals(2, x.pShort);
+		assertEquals(3, x.pInt);
+		assertEquals(4L, x.pLong);
+		assertEquals(5f, x.pFloat, 0.1f);
+		assertEquals(6d, x.pDouble, 0.1f);
 
 		// uninitialized primitives
-		assertEquals(false, t.puBoolean);
-		assertEquals(0, t.puByte);
-		assertEquals((char)0, t.puChar);
-		assertEquals(0, t.puShort);
-		assertEquals(0, t.puInt);
-		assertEquals(0L, t.puLong);
-		assertEquals(0f, t.puFloat, 0.1f);
-		assertEquals(0d, t.puDouble, 0.1f);
+		assertEquals(false, x.puBoolean);
+		assertEquals(0, x.puByte);
+		assertEquals((char)0, x.puChar);
+		assertEquals(0, x.puShort);
+		assertEquals(0, x.puInt);
+		assertEquals(0L, x.puLong);
+		assertEquals(0f, x.puFloat, 0.1f);
+		assertEquals(0d, x.puDouble, 0.1f);
 
 		// primitive arrays
-		assertEquals(false, t.paBoolean[1][0]);
-		assertEquals(2, t.paByte[1][0]);
-		assertEquals('b', t.paChar[1][0]);
-		assertEquals(2, t.paShort[1][0]);
-		assertEquals(2, t.paInt[1][0]);
-		assertEquals(2L, t.paLong[1][0]);
-		assertEquals(2f, t.paFloat[1][0], 0.1f);
-		assertEquals(2d, t.paDouble[1][0], 0.1f);
-		assertNull(t.paBoolean[2]);
-		assertNull(t.paByte[2]);
-		assertNull(t.paChar[2]);
-		assertNull(t.paShort[2]);
-		assertNull(t.paInt[2]);
-		assertNull(t.paLong[2]);
-		assertNull(t.paFloat[2]);
-		assertNull(t.paDouble[2]);
+		assertEquals(false, x.paBoolean[1][0]);
+		assertEquals(2, x.paByte[1][0]);
+		assertEquals('b', x.paChar[1][0]);
+		assertEquals(2, x.paShort[1][0]);
+		assertEquals(2, x.paInt[1][0]);
+		assertEquals(2L, x.paLong[1][0]);
+		assertEquals(2f, x.paFloat[1][0], 0.1f);
+		assertEquals(2d, x.paDouble[1][0], 0.1f);
+		assertNull(x.paBoolean[2]);
+		assertNull(x.paByte[2]);
+		assertNull(x.paChar[2]);
+		assertNull(x.paShort[2]);
+		assertNull(x.paInt[2]);
+		assertNull(x.paLong[2]);
+		assertNull(x.paFloat[2]);
+		assertNull(x.paDouble[2]);
 
 		// uninitialized primitive arrays
-		assertNull(t.pauBoolean);
-		assertNull(t.pauByte);
-		assertNull(t.pauChar);
-		assertNull(t.pauShort);
-		assertNull(t.pauInt);
-		assertNull(t.pauLong);
-		assertNull(t.pauFloat);
-		assertNull(t.pauDouble);
+		assertNull(x.pauBoolean);
+		assertNull(x.pauByte);
+		assertNull(x.pauChar);
+		assertNull(x.pauShort);
+		assertNull(x.pauInt);
+		assertNull(x.pauLong);
+		assertNull(x.pauFloat);
+		assertNull(x.pauDouble);
 
 		// anonymous list of primitive arrays
-		assertEquals(true, t.palBoolean.get(0)[0]);
-		assertEquals(1, t.palByte.get(0)[0]);
-		assertEquals('a', t.palChar.get(0)[0]);
-		assertEquals(1, t.palShort.get(0)[0]);
-		assertEquals(1, t.palInt.get(0)[0]);
-		assertEquals(1L, t.palLong.get(0)[0]);
-		assertEquals(1f, t.palFloat.get(0)[0], 0.1f);
-		assertEquals(1d, t.palDouble.get(0)[0], 0.1f);
-		assertNull(t.palBoolean.get(1));
-		assertNull(t.palByte.get(1));
-		assertNull(t.palChar.get(1));
-		assertNull(t.palShort.get(1));
-		assertNull(t.palInt.get(1));
-		assertNull(t.palLong.get(1));
-		assertNull(t.palFloat.get(1));
-		assertNull(t.palDouble.get(1));
+		assertEquals(true, x.palBoolean.get(0)[0]);
+		assertEquals(1, x.palByte.get(0)[0]);
+		assertEquals('a', x.palChar.get(0)[0]);
+		assertEquals(1, x.palShort.get(0)[0]);
+		assertEquals(1, x.palInt.get(0)[0]);
+		assertEquals(1L, x.palLong.get(0)[0]);
+		assertEquals(1f, x.palFloat.get(0)[0], 0.1f);
+		assertEquals(1d, x.palDouble.get(0)[0], 0.1f);
+		assertNull(x.palBoolean.get(1));
+		assertNull(x.palByte.get(1));
+		assertNull(x.palChar.get(1));
+		assertNull(x.palShort.get(1));
+		assertNull(x.palInt.get(1));
+		assertNull(x.palLong.get(1));
+		assertNull(x.palFloat.get(1));
+		assertNull(x.palDouble.get(1));
 
 		// regular list of primitive arrays
-		assertEquals(true, t.plBoolean.get(0)[0]);
-		assertEquals(1, t.plByte.get(0)[0]);
-		assertEquals('a', t.plChar.get(0)[0]);
-		assertEquals(1, t.plShort.get(0)[0]);
-		assertEquals(1, t.plInt.get(0)[0]);
-		assertEquals(1L, t.plLong.get(0)[0]);
-		assertEquals(1f, t.plFloat.get(0)[0], 0.1f);
-		assertEquals(1d, t.plDouble.get(0)[0], 0.1f);
-		assertNull(t.plBoolean.get(1));
-		assertNull(t.plByte.get(1));
-		assertNull(t.plChar.get(1));
-		assertNull(t.plShort.get(1));
-		assertNull(t.plInt.get(1));
-		assertNull(t.plLong.get(1));
-		assertNull(t.plFloat.get(1));
-		assertNull(t.plDouble.get(1));
+		assertEquals(true, x.plBoolean.get(0)[0]);
+		assertEquals(1, x.plByte.get(0)[0]);
+		assertEquals('a', x.plChar.get(0)[0]);
+		assertEquals(1, x.plShort.get(0)[0]);
+		assertEquals(1, x.plInt.get(0)[0]);
+		assertEquals(1L, x.plLong.get(0)[0]);
+		assertEquals(1f, x.plFloat.get(0)[0], 0.1f);
+		assertEquals(1d, x.plDouble.get(0)[0], 0.1f);
+		assertNull(x.plBoolean.get(1));
+		assertNull(x.plByte.get(1));
+		assertNull(x.plChar.get(1));
+		assertNull(x.plShort.get(1));
+		assertNull(x.plInt.get(1));
+		assertNull(x.plLong.get(1));
+		assertNull(x.plFloat.get(1));
+		assertNull(x.plDouble.get(1));
 	}
 
 	public static class PrimitivesBean {
@@ -251,14 +246,16 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 	//====================================================================================================
 	// List of PrimitivesBean
 	//====================================================================================================
-	@Test
-	public void testPrimitivesBeanList() throws Exception {
-		List<PrimitivesBean> t = alist(new PrimitivesBean().init(), null, new PrimitivesBean().init());
-		if (p == null)
-			return;
-		t = roundTrip(t, List.class, PrimitivesBean.class);
 
-		PrimitivesBean t2 = t.get(2);
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a02_primitivesBeanList(RoundTripTester t) throws Exception {
+		var x = alist(new PrimitivesBean().init(), null, new PrimitivesBean().init());
+		if (t.getParser() == null)
+			return;
+		x = t.roundTrip(x, List.class, PrimitivesBean.class);
+
+		PrimitivesBean t2 = x.get(2);
 
 		// primitives
 		assertEquals(true, t2.pBoolean);
@@ -344,6 +341,6 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 		assertNull(t2.plFloat.get(1));
 		assertNull(t2.plDouble.get(1));
 
-		assertNull(t.get(1));
+		assertNull(x.get(1));
 	}
-}
+}

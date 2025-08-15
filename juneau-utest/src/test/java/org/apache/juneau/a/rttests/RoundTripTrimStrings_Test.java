@@ -12,38 +12,34 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.AssertionHelpers.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests for the {@link Serializer#SERIALIZER_trimStrings} and {@link Parser#PARSER_trimStrings}.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class RoundTripTrimStringsTest extends RoundTripTest {
-
-	public RoundTripTrimStringsTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
-		super(label, s, p, flags);
-	}
+class RoundTripTrimStrings_Test extends BasicRoundTripTest {
 
 	//====================================================================================================
 	// test
 	//====================================================================================================
-	@Test
-	public void test() throws Exception {
-		if (isValidationOnly())
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a01_basic(RoundTripTester t) throws Exception {
+		if (t.isValidationOnly())
 			return;
-		Serializer s = getSerializer();
-		Parser p = getParser();
+		var s = t.getSerializer();
+		var p = t.getParser();
 		Object in, a, e;
 
-		Serializer s2 = s.copy().trimStrings().build();
-		Parser p2 = p.copy().trimStrings().build();
+		var s2 = s.copy().trimStrings().build();
+		var p2 = p.copy().trimStrings().build();
 
 		in = " foo bar ";
 		e = "foo bar";
@@ -96,4 +92,4 @@ public class RoundTripTrimStringsTest extends RoundTripTest {
 			return this;
 		}
 	}
-}
+}

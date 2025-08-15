@@ -25,6 +25,7 @@ import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Base class for all JUnit 5 unit tests.
@@ -333,4 +334,7 @@ public abstract class SimpleTestBase {
 		}
 	}
 
+	public static Arguments args(Object...args) {
+		return Arguments.of(args);
+	}
 }

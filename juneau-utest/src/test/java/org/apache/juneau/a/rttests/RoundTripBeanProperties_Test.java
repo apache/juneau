@@ -14,26 +14,18 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
 import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@SuppressWarnings({})
-@FixMethodOrder(NAME_ASCENDING)
-public class RoundTripBeanPropertiesTest extends RoundTripTest {
-
-	public RoundTripBeanPropertiesTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
-		super(label, s, p, flags);
-	}
+class RoundTripBeanProperties_Test extends BasicRoundTripTest {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Combo arrays/lists
@@ -43,12 +35,13 @@ public class RoundTripBeanPropertiesTest extends RoundTripTest {
 		public List<Long>[] f1;
 	}
 
-	@Test
-	public void a01_arrayOfListOfLongs() throws Exception {
-		A01 o = new A01();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a01_arrayOfListOfLongs(RoundTripTester t) throws Exception {
+		var o = new A01();
 		o.f1 = new List[1];
 		o.f1[0] = alist(123L);
-		o = roundTrip(o);
+		o = t.roundTrip(o);
 		assertEquals(123, o.f1[0].get(0).intValue());
 	}
 
@@ -56,11 +49,12 @@ public class RoundTripBeanPropertiesTest extends RoundTripTest {
 		public List<Long[]> f1;
 	}
 
-	@Test
-	public void a02_ListOfArrayOfLongs() throws Exception {
-		A02 o = new A02();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a02_listOfArrayOfLongs(RoundTripTester t) throws Exception {
+		var o = new A02();
 		o.f1 = CollectionUtils.<Long[]>alist(new Long[]{123L});
-		o = roundTrip(o);
+		o = t.roundTrip(o);
 		assertEquals(123, o.f1.get(0)[0].intValue());
 	}
 
@@ -68,12 +62,13 @@ public class RoundTripBeanPropertiesTest extends RoundTripTest {
 		public List<Long>[][] f1;
 	}
 
-	@Test
-	public void a03_2dArrayOfListOfLongs() throws Exception {
-		A03 o = new A03();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a03_2dArrayOfListOfLongs(RoundTripTester t) throws Exception {
+		var o = new A03();
 		o.f1 = new List[1][1];
 		o.f1[0] = new List[]{alist(123L)};
-		o = roundTrip(o);
+		o = t.roundTrip(o);
 		assertEquals(123, o.f1[0][0].get(0).intValue());
 	}
 
@@ -81,11 +76,12 @@ public class RoundTripBeanPropertiesTest extends RoundTripTest {
 		public List<Long[][]> f1;
 	}
 
-	@Test
-	public void a04_ListOf2dArrayOfLongs() throws Exception {
-		A04 o = new A04();
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a04_listOf2dArrayOfLongs(RoundTripTester t) throws Exception {
+		var o = new A04();
 		o.f1 = CollectionUtils.<Long[][]>alist(new Long[][]{new Long[]{123L}});
-		o = roundTrip(o);
+		o = t.roundTrip(o);
 		assertEquals(123, o.f1.get(0)[0][0].intValue());
 	}
-}
+}

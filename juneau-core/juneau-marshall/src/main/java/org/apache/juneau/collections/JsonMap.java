@@ -1902,4 +1902,4 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	public String toString() {
 		return Json5.of(this);
 	}
-}
+}

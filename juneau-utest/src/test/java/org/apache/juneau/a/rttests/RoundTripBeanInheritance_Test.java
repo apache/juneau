@@ -12,43 +12,35 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.AssertionHelpers.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class RoundTripBeanInheritanceTest extends RoundTripTest {
-
-	public RoundTripBeanInheritanceTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
-		super(label, s, p, flags);
-	}
+class RoundTripBeanInheritance_Test extends BasicRoundTripTest {
 
 	//====================================================================================================
 	// testBeanInheritance
 	//====================================================================================================
-	@Test
-	public void testBeanInheritance() throws Exception {
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a01_beanInheritance(RoundTripTester t) throws Exception {
 
 		// Skip tests that just return the same object.
-		if (returnOriginalObject)
+		if (t.returnOriginalObject)
 			return;
 
-		A2 t1 = new A2(), t2;
-		t1.init();
-		t2 = roundTrip(t1, A2.class);
+		var t1 = new A2().init();
+		var t2 = t.roundTrip(t1, A2.class);
 		assertEquals(json(t2), json(t1));
 
-		A3 t3 = new A3();
-		t3.init();
-		roundTrip(t3, A3.class);
+		var t3 = new A3().init();
+		t.roundTrip(t3, A3.class);
 	}
 
 
@@ -69,21 +61,15 @@ public class RoundTripBeanInheritanceTest extends RoundTripTest {
 			this.z = z;
 		}
 
-		public void setX(String x) {
-			this.x = x;
-		}
+		public void setX(String v) { x = v; }
 
-		public void setY(String y) {
-			this.y = y;
-		}
+		public void setY(String v) { y = v; }
 
-		public void setZ(String z) {
-			this.z = z;
-		}
+		public void setZ(String v) { z = v; }
 
 		@Override /* Object */
 		public String toString() {
-			return ("A1(x: " + this.x + ", y: " + this.y + ", z: " + this.z + ")");
+			return ("A1(x: " + x + ", y: " + y + ", z: " + z + ")");
 		}
 
 		public A1 init() {
@@ -95,24 +81,17 @@ public class RoundTripBeanInheritanceTest extends RoundTripTest {
 	}
 
 	public static class A2 extends A1 {
-		public A2() {
-		}
+		public A2() {}
 
 		public A2(String x, String y, String z) {
 			super(x, y, z);
 		}
 
-		public String getX() {
-			return this.x;
-		}
+		public String getX() { return x; }
 
-		public String getY() {
-			return this.y;
-		}
+		public String getY() { return y; }
 
-		public String getZ() {
-			return this.z;
-		}
+		public String getZ() { return z; }
 	}
 
 	// This is not supposed to be a valid bean since it has no getters defined.
@@ -138,29 +117,26 @@ public class RoundTripBeanInheritanceTest extends RoundTripTest {
 	}
 
 	//====================================================================================================
-	// testBeanInheritance2
+	// Test bean inheritance
 	//====================================================================================================
-	@Test
-	public void testBeanInheritance2() throws Exception {
-		B1 t1 = new B1().init(), t2;
-		t2 = roundTrip(t1, B1.class);
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a02_beanInheritance(RoundTripTester t) throws Exception {
+		var t1 = new B1().init();
+		var t2 = t. roundTrip(t1, B1.class);
 		assertEquals(json(t2), json(t1));
 	}
 
 	public static class B1 extends B2 {
 		private A2 f4;
 
-		public A2 getF4() {
-			return this.f4;
-		}
-
-		public void setF4(A2 f4) {
-			this.f4 = f4;
-		}
+		public A2 getF4() { return f4; }
+		public void setF4(A2 v) { f4 = v; }
 
 		@Override /* Object */
 		public String toString() {
-			return super.toString() + " / " + this.f4;
+			return super.toString() + " / " + f4;
 		}
 
 		public B1 init() {
@@ -177,33 +153,18 @@ public class RoundTripBeanInheritanceTest extends RoundTripTest {
 		private int f2 = -1;
 		private boolean f3;
 
-		public String getF1() {
-			return this.f1;
-		}
+		public String getF1() { return f1; }
+		public void setF1(String v) { f1 = v; }
 
-		public void setF1(String f1) {
-			this.f1 = f1;
-		}
+		public int getF2() { return f2; }
+		public void setF2(int v) { f2 = v; }
 
-		public int getF2() {
-			return this.f2;
-		}
-
-		public void setF2(int f2) {
-			this.f2 = f2;
-		}
-
-		public boolean isF3() {
-			return this.f3;
-		}
-
-		public void setF3(boolean f3) {
-			this.f3 = f3;
-		}
+		public boolean isF3() { return f3; }
+		public void setF3(boolean v) { f3 = v; }
 
 		@Override /* Object */
 		public String toString() {
-			return ("B2(f1: " + this.getF1() + ", f2: " + this.getF2() + ")");
+			return ("B2(f1: " + getF1() + ", f2: " + getF2() + ")");
 		}
 	}
-}
+}

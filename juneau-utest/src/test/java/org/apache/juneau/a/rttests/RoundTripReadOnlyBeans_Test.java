@@ -12,42 +12,73 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.AssertionHelpers.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.apache.juneau.annotation.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@FixMethodOrder(NAME_ASCENDING)
-public class RoundTripClassesTest extends RoundTripTest {
+class RoundTripReadOnlyBeans_Test extends BasicRoundTripTest {
 
-	public RoundTripClassesTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
-		super(label, s, p, flags);
+	//====================================================================================================
+	// test
+	//====================================================================================================
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a01_basic(RoundTripTester t) throws Exception {
+		var x1 = new B(1, "a");
+		var x2 = new B(2, "b");
+		var x3 = new A(x1, x2);
+
+		x3 = t.roundTrip(x3, A.class);
+		assertEquals(1, x3.getF1().getF1());
+		assertEquals("a", x3.getF1().getF2());
+		assertEquals(2, x3.getF2().getF1());
+		assertEquals("b", x3.getF2().getF2());
 	}
 
-	@Test
-	public void classObjects() throws Exception {
-		Object o = String.class;
-		o = roundTrip(o);
-		assertSame(o, String.class);
+	public static class A {
+		private B f1;
+		private final B f2;
 
-		o = new Class[]{String.class};
-		o = roundTrip(o);
-		assertJson(o, "['java.lang.String']");
+		@Beanc(properties="f2")
+		public A(B f2) {
+			this.f2 = f2;
+		}
 
-		o = alist(String.class, Integer.class);
-		o = roundTrip(o);
-		assertJson(o, "['java.lang.String','java.lang.Integer']");
+		public A(B f1, B f2) {
+			this.f1 = f1;
+			this.f2 = f2;
+		}
 
-		o = map(String.class, String.class);
-		o = roundTrip(o);
-		assertJson(o, "{'java.lang.String':'java.lang.String'}");
+		public B getF1() { return f1; }
+		public void setF1(B v) { f1 = v; }
+
+		public B getF2() { return f2; }
 	}
-}
+
+	public static class B {
+		private int f1;
+		private final String f2;
+
+		@Beanc(properties="f2")
+		public B(String sField) {
+			this.f2 = sField;
+		}
+
+		public B(int iField, String sField) {
+			this.f1 = iField;
+			this.f2 = sField;
+		}
+
+		public int getF1() { return f1;}
+		public void setF1(int v) { f1 = v; }
+
+		public String getF2() { return f2; }
+	}
+}

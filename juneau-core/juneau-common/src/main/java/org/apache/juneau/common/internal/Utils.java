@@ -823,4 +823,13 @@ public class Utils {
 	public static RuntimeException runtimeException(String msg, Object...args) {
 		return new RuntimeException(args.length == 0 ? msg : format(msg, args));
 	}
+
+	/**
+	 * Creates an array of objects.
+	 */
+	@SafeVarargs
+	public static <T> T[] a(T...x) {
+		return x;
+	}
+
 }
