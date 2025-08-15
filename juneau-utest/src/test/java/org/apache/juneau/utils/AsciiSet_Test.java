@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests {@link AsciiSet}.

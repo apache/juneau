@@ -13,24 +13,19 @@
 package org.apache.juneau.collections;
 
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 
-import org.junit.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ControlledArrayList_Test {
+class ControlledArrayList_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// test - Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_constructors() {
-		ControlledArrayList<Integer> x;
-
-		x = new ControlledArrayList<>(false);
+	@Test void a01_constructors() {
+		var x = new ControlledArrayList<>(false);
 		assertTrue(x.isModifiable());
 
 		x = new ControlledArrayList<>(true);
@@ -43,10 +38,9 @@ public class ControlledArrayList_Test {
 		assertFalse(x.isModifiable());
 	}
 
-	@Test
-	public void a02_basicMethods() {
-		ControlledArrayList<Integer> x1 = new ControlledArrayList<>(false, Arrays.asList(1));
-		ControlledArrayList<Integer> x2 = new ControlledArrayList<>(true, Arrays.asList(1));
+	@Test void a02_basicMethods() {
+		var x1 = new ControlledArrayList<>(false, Arrays.asList(1));
+		var x2 = new ControlledArrayList<>(true, Arrays.asList(1));
 
 		x1.set(0, 2);
 		assertThrows(UnsupportedOperationException.class, () -> x2.set(0, 2));
@@ -119,19 +113,18 @@ public class ControlledArrayList_Test {
 		x1.add(1);
 		x2.overrideAdd(1);
 
-		ControlledArrayList<Integer> x1a = (ControlledArrayList<Integer>) x1.subList(0, 0);
-		ControlledArrayList<Integer> x2a = (ControlledArrayList<Integer>) x2.subList(0, 0);
+		var x1a = (ControlledArrayList<Integer>) x1.subList(0, 0);
+		var x2a = (ControlledArrayList<Integer>) x2.subList(0, 0);
 		assertTrue(x1a.isModifiable());
 		assertFalse(x2a.isModifiable());
 	}
 
-	@Test
-	public void a03_iterator() {
-		ControlledArrayList<Integer> x1 = new ControlledArrayList<>(false, Arrays.asList(1));
-		ControlledArrayList<Integer> x2 = new ControlledArrayList<>(true, Arrays.asList(1));
+	@Test void a03_iterator() {
+		var x1 = new ControlledArrayList<>(false, Arrays.asList(1));
+		var x2 = new ControlledArrayList<>(true, Arrays.asList(1));
 
-		Iterator<Integer> i1 = x1.iterator();
-		Iterator<Integer> i2 = x2.iterator();
+		var i1 = x1.iterator();
+		var i2 = x2.iterator();
 
 		assertTrue(i1.hasNext());
 		assertTrue(i2.hasNext());
@@ -146,13 +139,12 @@ public class ControlledArrayList_Test {
 		i2.forEachRemaining(x -> {});
 	}
 
-	@Test
-	public void a04_listIterator() {
-		ControlledArrayList<Integer> x1 = new ControlledArrayList<>(false, Arrays.asList(1));
-		ControlledArrayList<Integer> x2 = new ControlledArrayList<>(true, Arrays.asList(1));
+	@Test void a04_listIterator() {
+		var x1 = new ControlledArrayList<>(false, Arrays.asList(1));
+		var x2 = new ControlledArrayList<>(true, Arrays.asList(1));
 
-		ListIterator<Integer> i1a = x1.listIterator();
-		ListIterator<Integer> i2a = x2.listIterator();
+		var i1a = x1.listIterator();
+		var i2a = x2.listIterator();
 
 		assertTrue(i1a.hasNext());
 		assertTrue(i2a.hasNext());
@@ -187,4 +179,4 @@ public class ControlledArrayList_Test {
 		i1a.forEachRemaining(x -> {});
 		i2a.forEachRemaining(x -> {});
 	}
-}
+}

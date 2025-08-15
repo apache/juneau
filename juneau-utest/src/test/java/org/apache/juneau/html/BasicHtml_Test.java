@@ -14,24 +14,21 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.AssertionHelpers.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.xml.annotation.*;
-import org.junit.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
-@RunWith(Parameterized.class)
 @SuppressWarnings({"serial","rawtypes"})
-@FixMethodOrder(NAME_ASCENDING)
-public class BasicHtml_Test {
+class BasicHtml_Test extends SimpleTestBase {
 
 	private static final Class<?>[] ANNOTATED_CLASSES = {
 		BeanWithWhitespaceTextFields2Config.class, BeanWithWhitespaceTextPwsFields2Config.class, BeanWithWhitespaceMixedFields2Config.class, BeanWithWhitespaceMixedPwsFields2Config.class, LinkBeanCConfig.class
@@ -42,910 +39,895 @@ public class BasicHtml_Test {
 		s3 = HtmlSerializer.DEFAULT_SQ.copy().applyAnnotations(ANNOTATED_CLASSES).build();
 	private static final HtmlParser parser = HtmlParser.DEFAULT.copy().applyAnnotations(ANNOTATED_CLASSES).build();
 
-	@Parameterized.Parameters
-	public static Collection<Object[]> getParameters() {
-		return Arrays.asList(new Object[][] {
+	private static final BeanSession BEANSESSION = BeanContext.DEFAULT_SESSION;
 
-			{	/* 0 */
-				new Input<>(
-					"SimpleTypes-1",
-					String.class,
-					"foo",
-					"<string>foo</string>",
-					"<string>foo</string>",
-					"<string>foo</string>"
-				)
-				{
-					@Override
-					public void verify(String o) {
-						assertType(String.class, o);
-					}
-				}
-			},
-			{	/* 1 */
-				new Input<>(
-					"SimpleTypes-2",
-					boolean.class,
-					true,
-					"<boolean>true</boolean>",
-					"<boolean>true</boolean>",
-					"<boolean>true</boolean>"
-				)
-				{
-					@Override
-					public void verify(Boolean o) {
-						assertType(Boolean.class, o);
-					}
-				}
-			},
-			{	/* 2 */
-				new Input<>(
-					"SimpleTypes-3",
-					int.class,
-					123,
-					"<number>123</number>",
-					"<number>123</number>",
-					"<number>123</number>"
-				)
-				{
-					@Override
-					public void verify(Integer o) {
-						assertType(Integer.class, o);
-					}
-				}
-			},
-			{	/* 3 */
-				new Input<>(
-					"SimpleTypes-4",
-					float.class,
-					1.23f,
-					"<number>1.23</number>",
-					"<number>1.23</number>",
-					"<number>1.23</number>"
-				)
-				{
-					@Override
-					public void verify(Float o) {
-						assertType(Float.class, o);
-					}
-				}
-			},
-			{	/* 4 */
-				new Input<String>(
-					"SimpleTypes-5",
-					String.class,
-					null,
-					"<null/>",
-					"<null/>",
-					"<null/>"
-				)
-			},
-			{	/* 5 */
-				new Input<>(
-					"Arrays-1",
-					String[].class,
-					new String[]{"foo"},
-					"<ul><li>foo</li></ul>",
-					"<ul>\n\t<li>foo</li>\n</ul>\n",
-					"<ul><li>foo</li></ul>"
-				)
-				{
-					@Override
-					public void verify(String[] o) {
-						assertType(String.class, o[0]);
-					}
-				}
-			},
-			{	/* 6 */
-				new Input<>(
-					"Arrays-2",
-					String[].class,
-					new String[]{null},
-					"<ul><li><null/></li></ul>",
-					"<ul>\n\t<li><null/></li>\n</ul>\n",
-					"<ul><li><null/></li></ul>"
-				)
-			},
-			{	/* 7 */
-				new Input<>(
-					"Arrays-3",
-					Object[].class,
-					new Object[]{"foo",123,true},
-					"<ul><li>foo</li><li><number>123</number></li><li><boolean>true</boolean></li></ul>",
-					"<ul>\n\t<li>foo</li>\n\t<li><number>123</number></li>\n\t<li><boolean>true</boolean></li>\n</ul>\n",
-					"<ul><li>foo</li><li><number>123</number></li><li><boolean>true</boolean></li></ul>"
-				)
-				{
-					@Override
-					public void verify(Object[] o) {
-						assertType(String.class, o[0]);
-						assertType(Integer.class, o[1]);
-						assertType(Boolean.class, o[2]);
-					}
-				}
-			},
-			{	/* 8 */
-				new Input<>(
-					"Arrays-4",
-					int[].class,
-					new int[]{123},
-					"<ul><li><number>123</number></li></ul>",
-					"<ul>\n\t<li><number>123</number></li>\n</ul>\n",
-					"<ul><li>123</li></ul>"
-				)
-				{
-					@Override
-					public void verify(int[] o) {
-						assertType(int[].class, o);
-					}
-				}
-			},
-			{	/* 9 */
-				new Input<>(
-					"Arrays-5",
-					boolean[].class,
-					new boolean[]{true},
-					"<ul><li><boolean>true</boolean></li></ul>",
-					"<ul>\n\t<li><boolean>true</boolean></li>\n</ul>\n",
-					"<ul><li>true</li></ul>"
-				)
-				{
-					@Override
-					public void verify(boolean[] o) {
-						assertType(boolean[].class, o);
-					}
-				}
-			},
-			{	/* 10 */
-				new Input<>(
-					"Arrays-6",
-					String[][].class,
-					new String[][]{{"foo"}},
-					"<ul><li><ul><li>foo</li></ul></li></ul>",
-					"<ul>\n\t<li>\n\t\t<ul>\n\t\t\t<li>foo</li>\n\t\t</ul>\n\t</li>\n</ul>\n",
-					"<ul><li><ul><li>foo</li></ul></li></ul>"
-				)
-				{
-					@Override
-					public void verify(String[][] o) {
-						assertType(String[][].class, o);
-					}
-				}
-			},
-			{	/* 11 */
-				new Input<Map<String,String>>(
-					"MapWithStrings",
-					MapWithStrings.class,
-					new MapWithStrings().append("k1", "v1").append("k2", null),
-					"""
-					<table>
-						<tr>
-							<td>k1</td>
-							<td>v1</td>
-						</tr>
-						<tr>
-							<td>k2</td>
-							<td><null/></td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", ""),
+	private static Input[] INPUT = {
+		input(
+			"SimpleTypes-1",
+			String.class,
+			"foo",
+			"<string>foo</string>",
+			"<string>foo</string>",
+			"<string>foo</string>",
+			x -> assertType(String.class, x)
+		),
+		input(
+			"SimpleTypes-2",
+			boolean.class,
+			true,
+			"<boolean>true</boolean>",
+			"<boolean>true</boolean>",
+			"<boolean>true</boolean>",
+			x -> assertType(Boolean.class, x)
+		),
+		input(
+			"SimpleTypes-3",
+			int.class,
+			123,
+			"<number>123</number>",
+			"<number>123</number>",
+			"<number>123</number>",
+			x -> assertType(Integer.class, x)
+		),
+		input(
+			"SimpleTypes-4",
+			float.class,
+			1.23f,
+			"<number>1.23</number>",
+			"<number>1.23</number>",
+			"<number>1.23</number>",
+			x -> assertType(Float.class, x)
+		),
+		input(
+			"SimpleTypes-5",
+			String.class,
+			null,
+			"<null/>",
+			"<null/>",
+			"<null/>"
+		),
+		input(
+			"Arrays-1",
+			String[].class,
+			new String[]{"foo"},
+			"<ul><li>foo</li></ul>",
+			"<ul>\n\t<li>foo</li>\n</ul>\n",
+			"<ul><li>foo</li></ul>",
+			x -> assertType(String.class, x[0])
+		),
+		input(
+			"Arrays-2",
+			String[].class,
+			new String[]{null},
+			"<ul><li><null/></li></ul>",
+			"<ul>\n\t<li><null/></li>\n</ul>\n",
+			"<ul><li><null/></li></ul>"
+		),
+		input(
+			"Arrays-3",
+			Object[].class,
+			new Object[]{"foo",123,true},
+			"<ul><li>foo</li><li><number>123</number></li><li><boolean>true</boolean></li></ul>",
+			"<ul>\n\t<li>foo</li>\n\t<li><number>123</number></li>\n\t<li><boolean>true</boolean></li>\n</ul>\n",
+			"<ul><li>foo</li><li><number>123</number></li><li><boolean>true</boolean></li></ul>",
+			x -> { assertType(String.class, x[0]); assertType(Integer.class, x[1]); assertType(Boolean.class, x[2]); }
+		),
+		input(
+			"Arrays-4",
+			int[].class,
+			new int[]{123},
+			"<ul><li><number>123</number></li></ul>",
+			"<ul>\n\t<li><number>123</number></li>\n</ul>\n",
+			"<ul><li>123</li></ul>",
+			x -> assertType(int[].class, x)
+		),
+		input(
+			"Arrays-5",
+			boolean[].class,
+			new boolean[]{true},
+			"<ul><li><boolean>true</boolean></li></ul>",
+			"<ul>\n\t<li><boolean>true</boolean></li>\n</ul>\n",
+			"<ul><li>true</li></ul>",
+			x -> assertType(boolean[].class, x)
+		),
+		input(
+			"Arrays-6",
+			String[][].class,
+			new String[][]{{"foo"}},
+			"<ul><li><ul><li>foo</li></ul></li></ul>",
+			"<ul>\n\t<li>\n\t\t<ul>\n\t\t\t<li>foo</li>\n\t\t</ul>\n\t</li>\n</ul>\n",
+			"<ul><li><ul><li>foo</li></ul></li></ul>",
+			x -> assertType(String[][].class, x)
+		),
+		new Input<Map<String,String>>(
+			"MapWithStrings",
+			MapWithStrings.class,
+			new MapWithStrings().append("k1", "v1").append("k2", null),
+			"""
+			<table>
+				<tr>
+					<td>k1</td>
+					<td>v1</td>
+				</tr>
+				<tr>
+					<td>k2</td>
+					<td><null/></td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"""
-					<table>
-						<tr>
-							<td>k1</td>
-							<td>v1</td>
-						</tr>
-						<tr>
-							<td>k2</td>
-							<td><null/></td>
-						</tr>
-					</table>
-					""",
+			"""
+			<table>
+				<tr>
+					<td>k1</td>
+					<td>v1</td>
+				</tr>
+				<tr>
+					<td>k2</td>
+					<td><null/></td>
+				</tr>
+			</table>
+			""",
 
-					"""
-					<table>
-						<tr>
-							<td>k1</td>
-							<td>v1</td>
-						</tr>
-						<tr>
-							<td>k2</td>
-							<td><null/></td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", "")
-				)
-				{
-					@Override
-					public void verify(Map<String,String> o) {
-						assertType(String.class, o.get("k1"));
-					}
-				}
-			},
-			{	/* 12 */
-				new Input<Map<String,Number>>(
-					"MapsWithNumbers",
-					MapWithNumbers.class,
-					new MapWithNumbers().append("k1", 123).append("k2", 1.23).append("k3", null),
-					"""
-					<table>
-						<tr>
-							<td>k1</td>
-							<td><number>123</number></td>
-						</tr>
-						<tr>
-							<td>k2</td>
-							<td><number>1.23</number></td>
-						</tr>
-						<tr>
-							<td>k3</td>
-							<td><null/></td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", ""),
+			"""
+			<table>
+				<tr>
+					<td>k1</td>
+					<td>v1</td>
+				</tr>
+				<tr>
+					<td>k2</td>
+					<td><null/></td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
+			x -> assertType(String.class, x.get("k1"))
+		),
+		new Input<Map<String,Number>>(
+			"MapsWithNumbers",
+			MapWithNumbers.class,
+			new MapWithNumbers().append("k1", 123).append("k2", 1.23).append("k3", null),
+			"""
+			<table>
+				<tr>
+					<td>k1</td>
+					<td><number>123</number></td>
+				</tr>
+				<tr>
+					<td>k2</td>
+					<td><number>1.23</number></td>
+				</tr>
+				<tr>
+					<td>k3</td>
+					<td><null/></td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"""
-					<table>
-						<tr>
-							<td>k1</td>
-							<td><number>123</number></td>
-						</tr>
-						<tr>
-							<td>k2</td>
-							<td><number>1.23</number></td>
-						</tr>
-						<tr>
-							<td>k3</td>
-							<td><null/></td>
-						</tr>
-					</table>
-					""",
+			"""
+			<table>
+				<tr>
+					<td>k1</td>
+					<td><number>123</number></td>
+				</tr>
+				<tr>
+					<td>k2</td>
+					<td><number>1.23</number></td>
+				</tr>
+				<tr>
+					<td>k3</td>
+					<td><null/></td>
+				</tr>
+			</table>
+			""",
 
-					"""
-					<table>
-						<tr>
-							<td>k1</td>
-							<td>123</td>
-						</tr>
-						<tr>
-							<td>k2</td>
-							<td>1.23</td>
-						</tr>
-						<tr>
-							<td>k3</td>
-							<td><null/></td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", "")
-				)
-				{
-					@Override
-					public void verify(Map<String,Number> o) {
-						assertType(Number.class, o.get("k1"));
-					}
-				}
-			},
-			{	/* 13 */
-				new Input<Map<String,Object>>(
-					"MapWithObjects",
-					getType(Map.class,String.class,Object.class),
-					new MapWithObjects().append("k1", "v1").append("k2", 123).append("k3", 1.23).append("k4", true).append("k5", null),
-					"""
-					<table>
-						<tr>
-							<td>k1</td>
-							<td>v1</td>
-						</tr>
-						<tr>
-							<td>k2</td>
-							<td><number>123</number></td>
-						</tr>
-						<tr>
-							<td>k3</td>
-							<td><number>1.23</number></td>
-						</tr>
-						<tr>
-							<td>k4</td>
-							<td><boolean>true</boolean></td>
-						</tr>
-						<tr>
-							<td>k5</td>
-							<td><null/></td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", ""),
+			"""
+			<table>
+				<tr>
+					<td>k1</td>
+					<td>123</td>
+				</tr>
+				<tr>
+					<td>k2</td>
+					<td>1.23</td>
+				</tr>
+				<tr>
+					<td>k3</td>
+					<td><null/></td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
+			x -> assertType(Number.class, x.get("k1"))
+		),
+		new Input<Map<String,Object>>(
+			"MapWithObjects",
+			getType(Map.class,String.class,Object.class),
+			new MapWithObjects().append("k1", "v1").append("k2", 123).append("k3", 1.23).append("k4", true).append("k5", null),
+			"""
+			<table>
+				<tr>
+					<td>k1</td>
+					<td>v1</td>
+				</tr>
+				<tr>
+					<td>k2</td>
+					<td><number>123</number></td>
+				</tr>
+				<tr>
+					<td>k3</td>
+					<td><number>1.23</number></td>
+				</tr>
+				<tr>
+					<td>k4</td>
+					<td><boolean>true</boolean></td>
+				</tr>
+				<tr>
+					<td>k5</td>
+					<td><null/></td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"""
-					<table>
-						<tr>
-							<td>k1</td>
-							<td>v1</td>
-						</tr>
-						<tr>
-							<td>k2</td>
-							<td><number>123</number></td>
-						</tr>
-						<tr>
-							<td>k3</td>
-							<td><number>1.23</number></td>
-						</tr>
-						<tr>
-							<td>k4</td>
-							<td><boolean>true</boolean></td>
-						</tr>
-						<tr>
-							<td>k5</td>
-							<td><null/></td>
-						</tr>
-					</table>
-					""",
+			"""
+			<table>
+				<tr>
+					<td>k1</td>
+					<td>v1</td>
+				</tr>
+				<tr>
+					<td>k2</td>
+					<td><number>123</number></td>
+				</tr>
+				<tr>
+					<td>k3</td>
+					<td><number>1.23</number></td>
+				</tr>
+				<tr>
+					<td>k4</td>
+					<td><boolean>true</boolean></td>
+				</tr>
+				<tr>
+					<td>k5</td>
+					<td><null/></td>
+				</tr>
+			</table>
+			""",
 
-					"""
-					<table>
-						<tr>
-							<td>k1</td>
-							<td>v1</td>
-						</tr>
-						<tr>
-							<td>k2</td>
-							<td><number>123</number></td>
-						</tr>
-						<tr>
-							<td>k3</td>
-							<td><number>1.23</number></td>
-						</tr>
-						<tr>
-							<td>k4</td>
-							<td><boolean>true</boolean></td>
-						</tr>
-						<tr>
-							<td>k5</td>
-							<td><null/></td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", "")
-				)
-				{
-					@Override
-					public void verify(Map<String,Object> o) {
-						assertType(String.class, o.get("k1"));
-						assertType(Integer.class, o.get("k2"));
-						assertType(Float.class, o.get("k3"));
-						assertType(Boolean.class, o.get("k4"));
-					}
-				}
-			},
-			{	/* 14 */
-				new Input<List<String>>(
-					"ListWithStrings",
-					getType(List.class,String.class),
-					new ListWithStrings().append("foo").append(null),
-					"<ul><li>foo</li><li><null/></li></ul>",
-					"<ul>\n\t<li>foo</li>\n\t<li><null/></li>\n</ul>\n",
-					"<ul><li>foo</li><li><null/></li></ul>"
-				)
-				{
-					@Override
-					public void verify(List<String> o) {
-						assertType(String.class, o.get(0));
-					}
-				}
-			},
-			{	/* 15 */
-				new Input<List<Number>>(
-					"ListWithNumbers",
-					ListWithNumbers.class,
-					new ListWithNumbers().append(123).append(1.23).append(null),
-					"<ul><li><number>123</number></li><li><number>1.23</number></li><li><null/></li></ul>",
-					"<ul>\n\t<li><number>123</number></li>\n\t<li><number>1.23</number></li>\n\t<li><null/></li>\n</ul>\n",
-					"<ul><li>123</li><li>1.23</li><li><null/></li></ul>"
-				)
-				{
-					@Override
-					public void verify(List<Number> o) {
-						assertType(Integer.class, o.get(0));
-						assertType(Float.class, o.get(1));
-					}
-				}
-			},
-			{	/* 16 */
-				new Input<List<Object>>(
-					"ListWithObjects",
-					getType(List.class,Object.class),
-					new ListWithObjects().append("foo").append(123).append(1.23).append(true).append(null),
-					"<ul><li>foo</li><li><number>123</number></li><li><number>1.23</number></li><li><boolean>true</boolean></li><li><null/></li></ul>",
-					"<ul>\n\t<li>foo</li>\n\t<li><number>123</number></li>\n\t<li><number>1.23</number></li>\n\t<li><boolean>true</boolean></li>\n\t<li><null/></li>\n</ul>\n",
-					"<ul><li>foo</li><li><number>123</number></li><li><number>1.23</number></li><li><boolean>true</boolean></li><li><null/></li></ul>"
-				)
-				{
-					@Override
-					public void verify(List<Object> o) {
-						assertType(String.class, o.get(0));
-						assertType(Integer.class, o.get(1));
-						assertType(Float.class, o.get(2));
-						assertType(Boolean.class, o.get(3));
-					}
-				}
-			},
-			{	/* 17 */
-				new Input<>(
-					"BeanWithNormalProperties",
-					BeanWithNormalProperties.class,
-					new BeanWithNormalProperties().init(),
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td>foo</td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>123</td>
-						</tr>
-						<tr>
-							<td>c</td>
-							<td>bar</td>
-						</tr>
-						<tr>
-							<td>d</td>
-							<td><number>456</number></td>
-						</tr>
-						<tr>
-							<td>e</td>
-							<td>
-								<table>
-									<tr>
-										<td>h</td>
-										<td>qux</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>f</td>
-							<td>
-								<ul>
-									<li>baz</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td>g</td>
-							<td>
-								<ul>
-									<li>789</li>
-								</ul>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", ""),
+			"""
+			<table>
+				<tr>
+					<td>k1</td>
+					<td>v1</td>
+				</tr>
+				<tr>
+					<td>k2</td>
+					<td><number>123</number></td>
+				</tr>
+				<tr>
+					<td>k3</td>
+					<td><number>1.23</number></td>
+				</tr>
+				<tr>
+					<td>k4</td>
+					<td><boolean>true</boolean></td>
+				</tr>
+				<tr>
+					<td>k5</td>
+					<td><null/></td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
+			x -> { assertType(String.class, x.get("k1")); assertType(Integer.class, x.get("k2")); assertType(Float.class, x.get("k3")); assertType(Boolean.class, x.get("k4")); }
+		),
+		new Input<List<String>>(
+			"ListWithStrings",
+			getType(List.class,String.class),
+			new ListWithStrings().append("foo").append(null),
+			"<ul><li>foo</li><li><null/></li></ul>",
+			"<ul>\n\t<li>foo</li>\n\t<li><null/></li>\n</ul>\n",
+			"<ul><li>foo</li><li><null/></li></ul>",
+			x -> assertType(String.class, x.get(0))
+		),
+		new Input<List<Number>>(
+			"ListWithNumbers",
+			ListWithNumbers.class,
+			new ListWithNumbers().append(123).append(1.23).append(null),
+			"<ul><li><number>123</number></li><li><number>1.23</number></li><li><null/></li></ul>",
+			"<ul>\n\t<li><number>123</number></li>\n\t<li><number>1.23</number></li>\n\t<li><null/></li>\n</ul>\n",
+			"<ul><li>123</li><li>1.23</li><li><null/></li></ul>",
+			x -> { assertType(Integer.class, x.get(0)); assertType(Float.class, x.get(1)); }
+		),
+		new Input<List<Object>>(
+			"ListWithObjects",
+			getType(List.class,Object.class),
+			new ListWithObjects().append("foo").append(123).append(1.23).append(true).append(null),
+			"<ul><li>foo</li><li><number>123</number></li><li><number>1.23</number></li><li><boolean>true</boolean></li><li><null/></li></ul>",
+			"<ul>\n\t<li>foo</li>\n\t<li><number>123</number></li>\n\t<li><number>1.23</number></li>\n\t<li><boolean>true</boolean></li>\n\t<li><null/></li>\n</ul>\n",
+			"<ul><li>foo</li><li><number>123</number></li><li><number>1.23</number></li><li><boolean>true</boolean></li><li><null/></li></ul>",
+			x -> { assertType(String.class, x.get(0)); assertType(Integer.class, x.get(1)); assertType(Float.class, x.get(2)); assertType(Boolean.class, x.get(3)); }
+		),
+		input(
+			"BeanWithNormalProperties",
+			BeanWithNormalProperties.class,
+			new BeanWithNormalProperties().init(),
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td>foo</td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>123</td>
+				</tr>
+				<tr>
+					<td>c</td>
+					<td>bar</td>
+				</tr>
+				<tr>
+					<td>d</td>
+					<td><number>456</number></td>
+				</tr>
+				<tr>
+					<td>e</td>
+					<td>
+						<table>
+							<tr>
+								<td>h</td>
+								<td>qux</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>f</td>
+					<td>
+						<ul>
+							<li>baz</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>g</td>
+					<td>
+						<ul>
+							<li>789</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td>foo</td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>123</td>
-						</tr>
-						<tr>
-							<td>c</td>
-							<td>bar</td>
-						</tr>
-						<tr>
-							<td>d</td>
-							<td><number>456</number></td>
-						</tr>
-						<tr>
-							<td>e</td>
-							<td>
-								<table>
-									<tr>
-										<td>h</td>
-										<td>qux</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>f</td>
-							<td>
-								<ul>
-									<li>baz</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td>g</td>
-							<td>
-								<ul>
-									<li>789</li>
-								</ul>
-							</td>
-						</tr>
-					</table>
-					""",
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td>foo</td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>123</td>
+				</tr>
+				<tr>
+					<td>c</td>
+					<td>bar</td>
+				</tr>
+				<tr>
+					<td>d</td>
+					<td><number>456</number></td>
+				</tr>
+				<tr>
+					<td>e</td>
+					<td>
+						<table>
+							<tr>
+								<td>h</td>
+								<td>qux</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>f</td>
+					<td>
+						<ul>
+							<li>baz</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>g</td>
+					<td>
+						<ul>
+							<li>789</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+			""",
 
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td>foo</td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>123</td>
-						</tr>
-						<tr>
-							<td>c</td>
-							<td>bar</td>
-						</tr>
-						<tr>
-							<td>d</td>
-							<td><number>456</number></td>
-						</tr>
-						<tr>
-							<td>e</td>
-							<td>
-								<table>
-									<tr>
-										<td>h</td>
-										<td>qux</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>f</td>
-							<td>
-								<ul>
-									<li>baz</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td>g</td>
-							<td>
-								<ul>
-									<li>789</li>
-								</ul>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", "")
-				)
-				{
-					@Override
-					public void verify(BeanWithNormalProperties o) {
-						assertType(String.class, o.c);
-						assertType(Integer.class, o.d);
-						assertType(Bean1a.class, o.e);
-					}
-				}
-			},
-			{	/* 18 */
-				new Input<>(
-					"BeanWithMapProperties",
-					BeanWithMapProperties.class,
-					new BeanWithMapProperties().init(),
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td>
-								<table>
-									<tr>
-										<td>k1</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>
-								<table>
-									<tr>
-										<td>k2</td>
-										<td>123</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>c</td>
-							<td>
-								<table>
-									<tr>
-										<td>k3</td>
-										<td>bar</td>
-									</tr>
-									<tr>
-										<td>k4</td>
-										<td><number>456</number></td>
-									</tr>
-									<tr>
-										<td>k5</td>
-										<td><boolean>true</boolean></td>
-									</tr>
-									<tr>
-										<td>k6</td>
-										<td><null/></td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", ""),
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td>foo</td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>123</td>
+				</tr>
+				<tr>
+					<td>c</td>
+					<td>bar</td>
+				</tr>
+				<tr>
+					<td>d</td>
+					<td><number>456</number></td>
+				</tr>
+				<tr>
+					<td>e</td>
+					<td>
+						<table>
+							<tr>
+								<td>h</td>
+								<td>qux</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>f</td>
+					<td>
+						<ul>
+							<li>baz</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>g</td>
+					<td>
+						<ul>
+							<li>789</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
+			x -> { assertType(String.class, x.c); assertType(Integer.class, x.d); assertType(Bean1a.class, x.e); }
+		),
+		input(
+			"BeanWithMapProperties",
+			BeanWithMapProperties.class,
+			new BeanWithMapProperties().init(),
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td>
+						<table>
+							<tr>
+								<td>k1</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>
+						<table>
+							<tr>
+								<td>k2</td>
+								<td>123</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>c</td>
+					<td>
+						<table>
+							<tr>
+								<td>k3</td>
+								<td>bar</td>
+							</tr>
+							<tr>
+								<td>k4</td>
+								<td><number>456</number></td>
+							</tr>
+							<tr>
+								<td>k5</td>
+								<td><boolean>true</boolean></td>
+							</tr>
+							<tr>
+								<td>k6</td>
+								<td><null/></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td>
-								<table>
-									<tr>
-										<td>k1</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>
-								<table>
-									<tr>
-										<td>k2</td>
-										<td>123</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>c</td>
-							<td>
-								<table>
-									<tr>
-										<td>k3</td>
-										<td>bar</td>
-									</tr>
-									<tr>
-										<td>k4</td>
-										<td><number>456</number></td>
-									</tr>
-									<tr>
-										<td>k5</td>
-										<td><boolean>true</boolean></td>
-									</tr>
-									<tr>
-										<td>k6</td>
-										<td><null/></td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""",
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td>
+						<table>
+							<tr>
+								<td>k1</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>
+						<table>
+							<tr>
+								<td>k2</td>
+								<td>123</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>c</td>
+					<td>
+						<table>
+							<tr>
+								<td>k3</td>
+								<td>bar</td>
+							</tr>
+							<tr>
+								<td>k4</td>
+								<td><number>456</number></td>
+							</tr>
+							<tr>
+								<td>k5</td>
+								<td><boolean>true</boolean></td>
+							</tr>
+							<tr>
+								<td>k6</td>
+								<td><null/></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""",
 
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td>
-								<table>
-									<tr>
-										<td>k1</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>
-								<table>
-									<tr>
-										<td>k2</td>
-										<td>123</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>c</td>
-							<td>
-								<table>
-									<tr>
-										<td>k3</td>
-										<td>bar</td>
-									</tr>
-									<tr>
-										<td>k4</td>
-										<td><number>456</number></td>
-									</tr>
-									<tr>
-										<td>k5</td>
-										<td><boolean>true</boolean></td>
-									</tr>
-									<tr>
-										<td>k6</td>
-										<td><null/></td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", "")
-				)
-				{
-					@Override
-					public void verify(BeanWithMapProperties o) {
-						assertType(String.class, o.a.get("k1"));
-						assertType(Integer.class, o.b.get("k2"));
-						assertType(String.class, o.c.get("k3"));
-						assertType(Integer.class, o.c.get("k4"));
-						assertType(Boolean.class, o.c.get("k5"));
-					}
-				}
-			},
-			{	/* 19 */
-				new Input<>(
-					"BeanWithTypeName",
-					BeanWithTypeName.class,
-					new BeanWithTypeName().init(),
-					"""
-					<table _type='X'>
-						<tr>
-							<td>a</td>
-							<td>123</td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>foo</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", ""),
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td>
+						<table>
+							<tr>
+								<td>k1</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>
+						<table>
+							<tr>
+								<td>k2</td>
+								<td>123</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>c</td>
+					<td>
+						<table>
+							<tr>
+								<td>k3</td>
+								<td>bar</td>
+							</tr>
+							<tr>
+								<td>k4</td>
+								<td><number>456</number></td>
+							</tr>
+							<tr>
+								<td>k5</td>
+								<td><boolean>true</boolean></td>
+							</tr>
+							<tr>
+								<td>k6</td>
+								<td><null/></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
+			x -> { assertType(String.class, x.a.get("k1")); assertType(Integer.class, x.b.get("k2")); assertType(String.class, x.c.get("k3")); assertType(Integer.class, x.c.get("k4")); assertType(Boolean.class, x.c.get("k5")); }
+		),
+		input(
+			"BeanWithTypeName",
+			BeanWithTypeName.class,
+			new BeanWithTypeName().init(),
+			"""
+			<table _type='X'>
+				<tr>
+					<td>a</td>
+					<td>123</td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>foo</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"""
-					<table _type='X'>
-						<tr>
-							<td>a</td>
-							<td>123</td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>foo</td>
-						</tr>
-					</table>
-					""",
+			"""
+			<table _type='X'>
+				<tr>
+					<td>a</td>
+					<td>123</td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>foo</td>
+				</tr>
+			</table>
+			""",
 
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td>123</td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>foo</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", "")
-				)
-				{
-					@Override
-					public void verify(BeanWithTypeName o) {
-						assertType(BeanWithTypeName.class, o);
-					}
-				}
-			},
-			{	/* 20 */
-				new Input<>(
-					"BeanWithPropertiesWithTypeNames",
-					BeanWithPropertiesWithTypeNames.class,
-					new BeanWithPropertiesWithTypeNames().init(),
-					"""
-					<table>
-						<tr>
-							<td>b1</td>
-							<td>
-								<table>
-									<tr>
-										<td>b</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b2</td>
-							<td>
-								<table _type='B'>
-									<tr>
-										<td>b</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", ""),
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td>123</td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>foo</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
+			x -> assertType(BeanWithTypeName.class, x)
+		),
+		input(
+			"BeanWithPropertiesWithTypeNames",
+			BeanWithPropertiesWithTypeNames.class,
+			new BeanWithPropertiesWithTypeNames().init(),
+			"""
+			<table>
+				<tr>
+					<td>b1</td>
+					<td>
+						<table>
+							<tr>
+								<td>b</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b2</td>
+					<td>
+						<table _type='B'>
+							<tr>
+								<td>b</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"""
-					<table>
-						<tr>
-							<td>b1</td>
-							<td>
-								<table>
-									<tr>
-										<td>b</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b2</td>
-							<td>
-								<table _type='B'>
-									<tr>
-										<td>b</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""",
+			"""
+			<table>
+				<tr>
+					<td>b1</td>
+					<td>
+						<table>
+							<tr>
+								<td>b</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b2</td>
+					<td>
+						<table _type='B'>
+							<tr>
+								<td>b</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""",
 
-					"""
-					<table>
-						<tr>
-							<td>b1</td>
-							<td>
-								<table>
-									<tr>
-										<td>b</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b2</td>
-							<td>
-								<table _type='B'>
-									<tr>
-										<td>b</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", "")
-				)
-				{
-					@Override
-					public void verify(BeanWithPropertiesWithTypeNames o) {
-						assertType(B.class, o.b2);
-					}
-				}
-			},
-			{	/* 21 */
-				new Input<>(
-					"BeanWithPropertiesWithArrayTypeNames",
-					BeanWithPropertiesWithArrayTypeNames.class,
-					new BeanWithPropertiesWithArrayTypeNames().init(),
-					"""
-					<table>
-						<tr>
-							<td>b1</td>
-							<td>
+			"""
+			<table>
+				<tr>
+					<td>b1</td>
+					<td>
+						<table>
+							<tr>
+								<td>b</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b2</td>
+					<td>
+						<table _type='B'>
+							<tr>
+								<td>b</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
+			x -> assertType(B.class, x.b2)
+		),
+		input(
+			"BeanWithPropertiesWithArrayTypeNames",
+			BeanWithPropertiesWithArrayTypeNames.class,
+			new BeanWithPropertiesWithArrayTypeNames().init(),
+			"""
+			<table>
+				<tr>
+					<td>b1</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>b</th>
+							</tr>
+							<tr>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b2</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>b</th>
+							</tr>
+							<tr _type='B'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b3</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>b</th>
+							</tr>
+							<tr _type='B'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
+
+			"""
+			<table>
+				<tr>
+					<td>b1</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>b</th>
+							</tr>
+							<tr>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b2</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>b</th>
+							</tr>
+							<tr _type='B'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b3</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>b</th>
+							</tr>
+							<tr _type='B'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""",
+
+			"""
+			<table>
+				<tr>
+					<td>b1</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>b</th>
+							</tr>
+							<tr>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b2</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>b</th>
+							</tr>
+							<tr _type='B'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b3</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>b</th>
+							</tr>
+							<tr _type='B'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
+			x -> assertTypes(B.class, x.b2[0], x.b3[0])
+		),
+		input(
+			"BeanWithPropertiesWith2dArrayTypeNames",
+			BeanWithPropertiesWith2dArrayTypeNames.class,
+			new BeanWithPropertiesWith2dArrayTypeNames().init(),
+			"""
+			<table>
+				<tr>
+					<td>b1</td>
+					<td>
+						<ul>
+							<li>
 								<table _type='array'>
 									<tr>
 										<th>b</th>
@@ -954,11 +936,15 @@ public class BasicHtml_Test {
 										<td>foo</td>
 									</tr>
 								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b2</td>
-							<td>
+							</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>b2</td>
+					<td>
+						<ul>
+							<li>
 								<table _type='array'>
 									<tr>
 										<th>b</th>
@@ -967,11 +953,15 @@ public class BasicHtml_Test {
 										<td>foo</td>
 									</tr>
 								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b3</td>
-							<td>
+							</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>b3</td>
+					<td>
+						<ul>
+							<li>
 								<table _type='array'>
 									<tr>
 										<th>b</th>
@@ -980,16 +970,20 @@ public class BasicHtml_Test {
 										<td>foo</td>
 									</tr>
 								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", ""),
+							</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"""
-					<table>
-						<tr>
-							<td>b1</td>
-							<td>
+			"""
+			<table>
+				<tr>
+					<td>b1</td>
+					<td>
+						<ul>
+							<li>
 								<table _type='array'>
 									<tr>
 										<th>b</th>
@@ -998,24 +992,15 @@ public class BasicHtml_Test {
 										<td>foo</td>
 									</tr>
 								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b2</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>b</th>
-									</tr>
-									<tr _type='B'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b3</td>
-							<td>
+							</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>b2</td>
+					<td>
+						<ul>
+							<li>
 								<table _type='array'>
 									<tr>
 										<th>b</th>
@@ -1024,29 +1009,15 @@ public class BasicHtml_Test {
 										<td>foo</td>
 									</tr>
 								</table>
-							</td>
-						</tr>
-					</table>
-					""",
-
-					"""
-					<table>
-						<tr>
-							<td>b1</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>b</th>
-									</tr>
-									<tr>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b2</td>
-							<td>
+							</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>b3</td>
+					<td>
+						<ul>
+							<li>
 								<table _type='array'>
 									<tr>
 										<th>b</th>
@@ -1055,11 +1026,37 @@ public class BasicHtml_Test {
 										<td>foo</td>
 									</tr>
 								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b3</td>
-							<td>
+							</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+			""",
+
+			"""
+			<table>
+				<tr>
+					<td>b1</td>
+					<td>
+						<ul>
+							<li>
+								<table _type='array'>
+									<tr>
+										<th>b</th>
+									</tr>
+									<tr>
+										<td>foo</td>
+									</tr>
+								</table>
+							</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>b2</td>
+					<td>
+						<ul>
+							<li>
 								<table _type='array'>
 									<tr>
 										<th>b</th>
@@ -1068,2087 +1065,1497 @@ public class BasicHtml_Test {
 										<td>foo</td>
 									</tr>
 								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", "")
-				)
-				{
-					@Override
-					public void verify(BeanWithPropertiesWithArrayTypeNames o) {
-						assertType(B.class, o.b2[0]);
-						assertType(B.class, o.b3[0]);
-					}
-				}
-			},
-			{	/* 22 */
-				new Input<>(
-					"BeanWithPropertiesWith2dArrayTypeNames",
-					BeanWithPropertiesWith2dArrayTypeNames.class,
-					new BeanWithPropertiesWith2dArrayTypeNames().init(),
-					"""
-					<table>
-						<tr>
-							<td>b1</td>
-							<td>
-								<ul>
-									<li>
-										<table _type='array'>
-											<tr>
-												<th>b</th>
-											</tr>
-											<tr>
-												<td>foo</td>
-											</tr>
-										</table>
-									</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td>b2</td>
-							<td>
-								<ul>
-									<li>
-										<table _type='array'>
-											<tr>
-												<th>b</th>
-											</tr>
-											<tr _type='B'>
-												<td>foo</td>
-											</tr>
-										</table>
-									</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td>b3</td>
-							<td>
-								<ul>
-									<li>
-										<table _type='array'>
-											<tr>
-												<th>b</th>
-											</tr>
-											<tr _type='B'>
-												<td>foo</td>
-											</tr>
-										</table>
-									</li>
-								</ul>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", ""),
+							</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>b3</td>
+					<td>
+						<ul>
+							<li>
+								<table _type='array'>
+									<tr>
+										<th>b</th>
+									</tr>
+									<tr _type='B'>
+										<td>foo</td>
+									</tr>
+								</table>
+							</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
+			x -> { assertType(B.class, x.b2[0][0]); assertType(B.class, x.b3[0][0]); }
+		),
+		input(
+			"BeanWithPropertiesWithMapTypeNames",
+			BeanWithPropertiesWithMapTypeNames.class,
+			new BeanWithPropertiesWithMapTypeNames().init(),
+			"""
+			<table>
+				<tr>
+					<td>b1</td>
+					<td>
+						<table>
+							<tr>
+								<td>k1</td>
+								<td>
+									<table>
+										<tr>
+											<td>b</td>
+											<td>foo</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b2</td>
+					<td>
+						<table>
+							<tr>
+								<td>k2</td>
+								<td>
+									<table _type='B'>
+										<tr>
+											<td>b</td>
+											<td>foo</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"""
-					<table>
-						<tr>
-							<td>b1</td>
-							<td>
-								<ul>
-									<li>
-										<table _type='array'>
-											<tr>
-												<th>b</th>
-											</tr>
-											<tr>
-												<td>foo</td>
-											</tr>
-										</table>
-									</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td>b2</td>
-							<td>
-								<ul>
-									<li>
-										<table _type='array'>
-											<tr>
-												<th>b</th>
-											</tr>
-											<tr _type='B'>
-												<td>foo</td>
-											</tr>
-										</table>
-									</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td>b3</td>
-							<td>
-								<ul>
-									<li>
-										<table _type='array'>
-											<tr>
-												<th>b</th>
-											</tr>
-											<tr _type='B'>
-												<td>foo</td>
-											</tr>
-										</table>
-									</li>
-								</ul>
-							</td>
-						</tr>
-					</table>
-					""",
+			"""
+			<table>
+				<tr>
+					<td>b1</td>
+					<td>
+						<table>
+							<tr>
+								<td>k1</td>
+								<td>
+									<table>
+										<tr>
+											<td>b</td>
+											<td>foo</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b2</td>
+					<td>
+						<table>
+							<tr>
+								<td>k2</td>
+								<td>
+									<table _type='B'>
+										<tr>
+											<td>b</td>
+											<td>foo</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""",
 
-					"""
-					<table>
-						<tr>
-							<td>b1</td>
-							<td>
-								<ul>
-									<li>
-										<table _type='array'>
-											<tr>
-												<th>b</th>
-											</tr>
-											<tr>
-												<td>foo</td>
-											</tr>
-										</table>
-									</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td>b2</td>
-							<td>
-								<ul>
-									<li>
-										<table _type='array'>
-											<tr>
-												<th>b</th>
-											</tr>
-											<tr _type='B'>
-												<td>foo</td>
-											</tr>
-										</table>
-									</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td>b3</td>
-							<td>
-								<ul>
-									<li>
-										<table _type='array'>
-											<tr>
-												<th>b</th>
-											</tr>
-											<tr _type='B'>
-												<td>foo</td>
-											</tr>
-										</table>
-									</li>
-								</ul>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", "")
-				)
-				{
-					@Override
-					public void verify(BeanWithPropertiesWith2dArrayTypeNames o) {
-						assertType(B.class, o.b2[0][0]);
-						assertType(B.class, o.b3[0][0]);
-					}
-				}
-			},
-			{	/* 23 */
-				new Input<>(
-					"BeanWithPropertiesWithMapTypeNames",
-					BeanWithPropertiesWithMapTypeNames.class,
-					new BeanWithPropertiesWithMapTypeNames().init(),
-					"""
-					<table>
-						<tr>
-							<td>b1</td>
-							<td>
-								<table>
-									<tr>
-										<td>k1</td>
-										<td>
-											<table>
-												<tr>
-													<td>b</td>
-													<td>foo</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b2</td>
-							<td>
-								<table>
-									<tr>
-										<td>k2</td>
-										<td>
-											<table _type='B'>
-												<tr>
-													<td>b</td>
-													<td>foo</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", ""),
+			"""
+			<table>
+				<tr>
+					<td>b1</td>
+					<td>
+						<table>
+							<tr>
+								<td>k1</td>
+								<td>
+									<table>
+										<tr>
+											<td>b</td>
+											<td>foo</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b2</td>
+					<td>
+						<table>
+							<tr>
+								<td>k2</td>
+								<td>
+									<table _type='B'>
+										<tr>
+											<td>b</td>
+											<td>foo</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
+			x -> { assertType(B.class, x.b1.get("k1")); assertType(B.class, x.b2.get("k2")); }
+		),
+		input(
+			"LinkBean-1",
+			LinkBean.class,
+			new LinkBean().init(),
+			"<a href='http://apache.org'>foo</a>",
+			"<a href='http://apache.org'>foo</a>",
+			"<a href='http://apache.org'>foo</a>",
+			x -> assertType(LinkBean.class, x)
+		),
+		input(
+			"LinkBean-2",
+			LinkBean[].class,
+			new LinkBean[]{new LinkBean().init(),new LinkBean().init()},
+			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
+			"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
+			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
+			x -> assertType(LinkBean.class, x[0])
+		),
+		new Input<List<LinkBean>>(
+			"ListWithLinkBeans",
+			ListWithLinkBeans.class,
+			new ListWithLinkBeans().append(new LinkBean().init()).append(new LinkBean().init()),
+			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
+			"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
+			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
+			x -> assertType(LinkBean.class, x.get(0))
+		),
+		input(
+			"BeanWithLinkBeanProperties",
+			BeanWithLinkBeanProperties.class,
+			new BeanWithLinkBeanProperties().init(),
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td><a href='http://apache.org'>foo</a></td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>
+						<ul>
+							<li><a href='http://apache.org'>foo</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>c</td>
+					<td>
+						<table>
+							<tr>
+								<td>c1</td>
+								<td><a href='http://apache.org'>foo</a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"""
-					<table>
-						<tr>
-							<td>b1</td>
-							<td>
-								<table>
-									<tr>
-										<td>k1</td>
-										<td>
-											<table>
-												<tr>
-													<td>b</td>
-													<td>foo</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b2</td>
-							<td>
-								<table>
-									<tr>
-										<td>k2</td>
-										<td>
-											<table _type='B'>
-												<tr>
-													<td>b</td>
-													<td>foo</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""",
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td><a href='http://apache.org'>foo</a></td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>
+						<ul>
+							<li><a href='http://apache.org'>foo</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>c</td>
+					<td>
+						<table>
+							<tr>
+								<td>c1</td>
+								<td><a href='http://apache.org'>foo</a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""",
 
-					"""
-					<table>
-						<tr>
-							<td>b1</td>
-							<td>
-								<table>
-									<tr>
-										<td>k1</td>
-										<td>
-											<table>
-												<tr>
-													<td>b</td>
-													<td>foo</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b2</td>
-							<td>
-								<table>
-									<tr>
-										<td>k2</td>
-										<td>
-											<table _type='B'>
-												<tr>
-													<td>b</td>
-													<td>foo</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", "")
-				)
-				{
-					@Override
-					public void verify(BeanWithPropertiesWithMapTypeNames o) {
-						assertType(B.class, o.b1.get("k1"));
-						assertType(B.class, o.b2.get("k2"));
-					}
-				}
-			},
-			{	/* 24 */
-				new Input<>(
-					"LinkBean-1",
-					LinkBean.class,
-					new LinkBean().init(),
-					"<a href='http://apache.org'>foo</a>",
-					"<a href='http://apache.org'>foo</a>",
-					"<a href='http://apache.org'>foo</a>"
-				)
-				{
-					@Override
-					public void verify(LinkBean o) {
-						assertType(LinkBean.class, o);
-					}
-				}
-			},
-			{	/* 25 */
-				new Input<>(
-					"LinkBean-2",
-					LinkBean[].class,
-					new LinkBean[]{new LinkBean().init(),new LinkBean().init()},
-					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
-					"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
-					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>"
-				)
-				{
-					@Override
-					public void verify(LinkBean[] o) {
-						assertType(LinkBean.class, o[0]);
-					}
-				}
-			},
-			{	/* 26 */
-				new Input<List<LinkBean>>(
-					"ListWithLinkBeans",
-					ListWithLinkBeans.class,
-					new ListWithLinkBeans().append(new LinkBean().init()).append(new LinkBean().init()),
-					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
-					"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
-					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>"
-				)
-				{
-					@Override
-					public void verify(List<LinkBean> o) {
-						assertType(LinkBean.class, o.get(0));
-					}
-				}
-			},
-			{	/* 27 */
-				new Input<>(
-					"BeanWithLinkBeanProperties",
-					BeanWithLinkBeanProperties.class,
-					new BeanWithLinkBeanProperties().init(),
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td><a href='http://apache.org'>foo</a></td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>
-								<ul>
-									<li><a href='http://apache.org'>foo</a></li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td>c</td>
-							<td>
-								<table>
-									<tr>
-										<td>c1</td>
-										<td><a href='http://apache.org'>foo</a></td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", ""),
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td><a href='http://apache.org'>foo</a></td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>
+						<ul>
+							<li><a href='http://apache.org'>foo</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>c</td>
+					<td>
+						<table>
+							<tr>
+								<td>c1</td>
+								<td><a href='http://apache.org'>foo</a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
+			x -> { assertType(LinkBean.class, x.a); assertType(LinkBean.class, x.b.get(0)); assertType(LinkBean.class, x.c.get("c1")); }
+		),
+		input(
+			"LinkBeanC-1",
+			LinkBeanC.class,
+			new LinkBeanC().init(),
+			"<a href='http://apache.org'>foo</a>",
+			"<a href='http://apache.org'>foo</a>",
+			"<a href='http://apache.org'>foo</a>",
+			x -> assertType(LinkBeanC.class, x)
+		),
+		input(
+			"LinkBeanC-2",
+			LinkBeanC[].class,
+			new LinkBeanC[]{new LinkBeanC().init(),new LinkBeanC().init()},
+			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
+			"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
+			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
+			x -> assertType(LinkBeanC.class, x[0])
+		),
+		new Input<List<LinkBeanC>>(
+			"ListWithLinkBeansC",
+			ListWithLinkBeansC.class,
+			new ListWithLinkBeansC().append(new LinkBeanC().init()).append(new LinkBeanC().init()),
+			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
+			"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
+			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
+			x -> assertType(LinkBeanC.class, x.get(0))
+		),
+		input(
+			"BeanWithLinkBeanPropertiesC",
+			BeanWithLinkBeanPropertiesC.class,
+			new BeanWithLinkBeanPropertiesC().init(),
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td><a href='http://apache.org'>foo</a></td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>
+						<ul>
+							<li><a href='http://apache.org'>foo</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>c</td>
+					<td>
+						<table>
+							<tr>
+								<td>c1</td>
+								<td><a href='http://apache.org'>foo</a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td><a href='http://apache.org'>foo</a></td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>
-								<ul>
-									<li><a href='http://apache.org'>foo</a></li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td>c</td>
-							<td>
-								<table>
-									<tr>
-										<td>c1</td>
-										<td><a href='http://apache.org'>foo</a></td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""",
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td><a href='http://apache.org'>foo</a></td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>
+						<ul>
+							<li><a href='http://apache.org'>foo</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>c</td>
+					<td>
+						<table>
+							<tr>
+								<td>c1</td>
+								<td><a href='http://apache.org'>foo</a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""",
 
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td><a href='http://apache.org'>foo</a></td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>
-								<ul>
-									<li><a href='http://apache.org'>foo</a></li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td>c</td>
-							<td>
-								<table>
-									<tr>
-										<td>c1</td>
-										<td><a href='http://apache.org'>foo</a></td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", "")
-				)
-				{
-					@Override
-					public void verify(BeanWithLinkBeanProperties o) {
-						assertType(LinkBean.class, o.a);
-						assertType(LinkBean.class, o.b.get(0));
-						assertType(LinkBean.class, o.c.get("c1"));
-					}
-				}
-			},
-			{	/* 28 */
-				new Input<>(
-					"LinkBeanC-1",
-					LinkBeanC.class,
-					new LinkBeanC().init(),
-					"<a href='http://apache.org'>foo</a>",
-					"<a href='http://apache.org'>foo</a>",
-					"<a href='http://apache.org'>foo</a>"
-				)
-				{
-					@Override
-					public void verify(LinkBeanC o) {
-						assertType(LinkBeanC.class, o);
-					}
-				}
-			},
-			{	/* 29 */
-				new Input<>(
-					"LinkBeanC-2",
-					LinkBeanC[].class,
-					new LinkBeanC[]{new LinkBeanC().init(),new LinkBeanC().init()},
-					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
-					"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
-					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>"
-				)
-				{
-					@Override
-					public void verify(LinkBeanC[] o) {
-						assertType(LinkBeanC.class, o[0]);
-					}
-				}
-			},
-			{	/* 30 */
-				new Input<List<LinkBeanC>>(
-					"ListWithLinkBeansC",
-					ListWithLinkBeansC.class,
-					new ListWithLinkBeansC().append(new LinkBeanC().init()).append(new LinkBeanC().init()),
-					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
-					"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
-					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>"
-				)
-				{
-					@Override
-					public void verify(List<LinkBeanC> o) {
-						assertType(LinkBeanC.class, o.get(0));
-					}
-				}
-			},
-			{	/* 31 */
-				new Input<>(
-					"BeanWithLinkBeanPropertiesC",
-					BeanWithLinkBeanPropertiesC.class,
-					new BeanWithLinkBeanPropertiesC().init(),
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td><a href='http://apache.org'>foo</a></td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>
-								<ul>
-									<li><a href='http://apache.org'>foo</a></li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td>c</td>
-							<td>
-								<table>
-									<tr>
-										<td>c1</td>
-										<td><a href='http://apache.org'>foo</a></td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", ""),
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td><a href='http://apache.org'>foo</a></td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>
+						<ul>
+							<li><a href='http://apache.org'>foo</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>c</td>
+					<td>
+						<table>
+							<tr>
+								<td>c1</td>
+								<td><a href='http://apache.org'>foo</a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
+			x -> { assertType(LinkBeanC.class, x.a); assertType(LinkBeanC.class, x.b.get(0)); assertType(LinkBeanC.class, x.c.get("c1")); }
+		),
+		input(
+			"BeanWithSpecialCharacters",
+			BeanWithSpecialCharacters.class,
+			new BeanWithSpecialCharacters().init(),
+			"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>",
+			"<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td>\n\t</tr>\n</table>\n",
+			"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>",
+			x -> assertType(BeanWithSpecialCharacters.class, x)
+		),
+		input(
+			"BeanWithSpecialCharacters-2",
+			BeanWithSpecialCharacters.class,
+			new BeanWithSpecialCharacters().init(),
+			"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>",
 
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td><a href='http://apache.org'>foo</a></td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>
-								<ul>
-									<li><a href='http://apache.org'>foo</a></li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td>c</td>
-							<td>
-								<table>
-									<tr>
-										<td>c1</td>
-										<td><a href='http://apache.org'>foo</a></td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""",
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td>
+				</tr>
+			</table>
+			""",
 
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td><a href='http://apache.org'>foo</a></td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>
-								<ul>
-									<li><a href='http://apache.org'>foo</a></li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td>c</td>
-							<td>
-								<table>
-									<tr>
-										<td>c1</td>
-										<td><a href='http://apache.org'>foo</a></td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", "")
-				)
-				{
-					@Override
-					public void verify(BeanWithLinkBeanPropertiesC o) {
-						assertType(LinkBeanC.class, o.a);
-						assertType(LinkBeanC.class, o.b.get(0));
-						assertType(LinkBeanC.class, o.c.get("c1"));
-					}
-				}
-			},
-			{	/* 32 */
-				new Input<>(
-					"BeanWithSpecialCharacters",
-					BeanWithSpecialCharacters.class,
-					new BeanWithSpecialCharacters().init(),
-					"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>",
-					"<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td>\n\t</tr>\n</table>\n",
-					"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>"
-				)
-				{
-					@Override
-					public void verify(BeanWithSpecialCharacters o) {
-						assertType(BeanWithSpecialCharacters.class, o);
-					}
-				}
-			},
-			{	/* 33 */
-				new Input<>(
-					"BeanWithSpecialCharacters-2",
-					BeanWithSpecialCharacters.class,
-					new BeanWithSpecialCharacters().init(),
-					"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>",
+			"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>",
+			x -> assertType(BeanWithSpecialCharacters.class, x)
+		),
+		input(
+			"BeanWithNullProperties",
+			BeanWithNullProperties.class,
+			new BeanWithNullProperties(),
+			"<table></table>",
+			"<table>\n</table>\n",
+			"<table></table>",
+			x -> assertType(BeanWithNullProperties.class, x)
+		),
+		input(
+			"BeanWithAbstractFields",
+			BeanWithAbstractFields.class,
+			new BeanWithAbstractFields().init(),
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td>
+						<table>
+							<tr>
+								<td>a</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>ia</td>
+					<td>
+						<table _type='A'>
+							<tr>
+								<td>a</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>aa</td>
+					<td>
+						<table _type='A'>
+							<tr>
+								<td>a</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>o</td>
+					<td>
+						<table _type='A'>
+							<tr>
+								<td>a</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td>
-						</tr>
-					</table>
-					""",
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td>
+						<table>
+							<tr>
+								<td>a</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>ia</td>
+					<td>
+						<table _type='A'>
+							<tr>
+								<td>a</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>aa</td>
+					<td>
+						<table _type='A'>
+							<tr>
+								<td>a</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>o</td>
+					<td>
+						<table _type='A'>
+							<tr>
+								<td>a</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""",
 
-					"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>"
-				)
-				{
-					@Override
-					public void verify(BeanWithSpecialCharacters o) {
-						assertType(BeanWithSpecialCharacters.class, o);
-					}
-				}
-			},
-			{	/* 34 */
-				new Input<>(
-					"BeanWithNullProperties",
-					BeanWithNullProperties.class,
-					new BeanWithNullProperties(),
-					"<table></table>",
-					"<table>\n</table>\n",
-					"<table></table>"
-				)
-				{
-					@Override
-					public void verify(BeanWithNullProperties o) {
-						assertType(BeanWithNullProperties.class, o);
-					}
-				}
-			},
-			{	/* 35 */
-				new Input<>(
-					"BeanWithAbstractFields",
-					BeanWithAbstractFields.class,
-					new BeanWithAbstractFields().init(),
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td>
-								<table>
-									<tr>
-										<td>a</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>ia</td>
-							<td>
-								<table _type='A'>
-									<tr>
-										<td>a</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>aa</td>
-							<td>
-								<table _type='A'>
-									<tr>
-										<td>a</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>o</td>
-							<td>
-								<table _type='A'>
-									<tr>
-										<td>a</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", ""),
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td>
+						<table>
+							<tr>
+								<td>a</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>ia</td>
+					<td>
+						<table _type='A'>
+							<tr>
+								<td>a</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>aa</td>
+					<td>
+						<table _type='A'>
+							<tr>
+								<td>a</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>o</td>
+					<td>
+						<table _type='A'>
+							<tr>
+								<td>a</td>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
+			x -> assertTypes(A.class, x.a, x.ia, x.aa, x.o)
+		),
+		input(
+			"BeanWithAbstractArrayFields",
+			BeanWithAbstractArrayFields.class,
+			new BeanWithAbstractArrayFields().init(),
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>ia1</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>ia2</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>aa1</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>aa2</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>o1</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>o2</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td>
-								<table>
-									<tr>
-										<td>a</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>ia</td>
-							<td>
-								<table _type='A'>
-									<tr>
-										<td>a</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>aa</td>
-							<td>
-								<table _type='A'>
-									<tr>
-										<td>a</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>o</td>
-							<td>
-								<table _type='A'>
-									<tr>
-										<td>a</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""",
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>ia1</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>ia2</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>aa1</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>aa2</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>o1</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>o2</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""",
 
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td>
-								<table>
-									<tr>
-										<td>a</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>ia</td>
-							<td>
-								<table _type='A'>
-									<tr>
-										<td>a</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>aa</td>
-							<td>
-								<table _type='A'>
-									<tr>
-										<td>a</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>o</td>
-							<td>
-								<table _type='A'>
-									<tr>
-										<td>a</td>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", "")
-				)
-				{
-					@Override
-					public void verify(BeanWithAbstractFields o) {
-						assertType(A.class, o.a);
-						assertType(A.class, o.ia);
-						assertType(A.class, o.aa);
-						assertType(A.class, o.o);
-					}
-				}
-			},
-			{	/* 36 */
-				new Input<>(
-					"BeanWithAbstractArrayFields",
-					BeanWithAbstractArrayFields.class,
-					new BeanWithAbstractArrayFields().init(),
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>ia1</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>ia2</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>aa1</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>aa2</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>o1</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>o2</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", ""),
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>ia1</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>ia2</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>aa1</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>aa2</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>o1</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>o2</td>
+					<td>
+						<table _type='array'>
+							<tr>
+								<th>a</th>
+							</tr>
+							<tr _type='A'>
+								<td>foo</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
+			x -> assertTypes(A.class, x.a[0], x.ia1[0], x.ia2[0], x.aa1[0], x.aa2[0], x.o1[0], x.o2[0])
+		),
+		input(
+			"BeanWithAbstractMapFields",
+			BeanWithAbstractMapFields.class,
+			new BeanWithAbstractMapFields().init(),
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td>
+						<table>
+							<tr>
+								<td>k1</td>
+								<td>
+									<table>
+										<tr>
+											<td>a</td>
+											<td>foo</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>
+						<table>
+							<tr>
+								<td>k2</td>
+								<td>
+									<table _type='A'>
+										<tr>
+											<td>a</td>
+											<td>foo</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>c</td>
+					<td>
+						<table>
+							<tr>
+								<td>k3</td>
+								<td>
+									<table _type='A'>
+										<tr>
+											<td>a</td>
+											<td>foo</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
 
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>ia1</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>ia2</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>aa1</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>aa2</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>o1</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>o2</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""",
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td>
+						<table>
+							<tr>
+								<td>k1</td>
+								<td>
+									<table>
+										<tr>
+											<td>a</td>
+											<td>foo</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>
+						<table>
+							<tr>
+								<td>k2</td>
+								<td>
+									<table _type='A'>
+										<tr>
+											<td>a</td>
+											<td>foo</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>c</td>
+					<td>
+						<table>
+							<tr>
+								<td>k3</td>
+								<td>
+									<table _type='A'>
+										<tr>
+											<td>a</td>
+											<td>foo</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""",
 
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>ia1</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>ia2</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>aa1</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>aa2</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>o1</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>o2</td>
-							<td>
-								<table _type='array'>
-									<tr>
-										<th>a</th>
-									</tr>
-									<tr _type='A'>
-										<td>foo</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", "")
-				)
-				{
-					@Override
-					public void verify(BeanWithAbstractArrayFields o) {
-						assertType(A.class, o.a[0]);
-						assertType(A.class, o.ia1[0]);
-						assertType(A.class, o.ia2[0]);
-						assertType(A.class, o.aa1[0]);
-						assertType(A.class, o.aa2[0]);
-						assertType(A.class, o.o1[0]);
-						assertType(A.class, o.o2[0]);
-					}
-				}
-			},
-			{	/* 37 */
-				new Input<>(
-					"BeanWithAbstractMapFields",
-					BeanWithAbstractMapFields.class,
-					new BeanWithAbstractMapFields().init(),
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td>
-								<table>
-									<tr>
-										<td>k1</td>
-										<td>
-											<table>
-												<tr>
-													<td>a</td>
-													<td>foo</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>
-								<table>
-									<tr>
-										<td>k2</td>
-										<td>
-											<table _type='A'>
-												<tr>
-													<td>a</td>
-													<td>foo</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>c</td>
-							<td>
-								<table>
-									<tr>
-										<td>k3</td>
-										<td>
-											<table _type='A'>
-												<tr>
-													<td>a</td>
-													<td>foo</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", ""),
+			"""
+			<table>
+				<tr>
+					<td>a</td>
+					<td>
+						<table>
+							<tr>
+								<td>k1</td>
+								<td>
+									<table>
+										<tr>
+											<td>a</td>
+											<td>foo</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>
+						<table>
+							<tr>
+								<td>k2</td>
+								<td>
+									<table _type='A'>
+										<tr>
+											<td>a</td>
+											<td>foo</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>c</td>
+					<td>
+						<table>
+							<tr>
+								<td>k3</td>
+								<td>
+									<table _type='A'>
+										<tr>
+											<td>a</td>
+											<td>foo</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			""".replaceAll("(?m)^\\s+|\\R", ""),
+			x -> assertTypes(A.class, x.a.get("k1"), x.b.get("k2"), x.c.get("k3"))
+		),
+		input(
+			"BeanWithWhitespaceTextFields-1",
+			BeanWithWhitespaceTextFields.class,
+			new BeanWithWhitespaceTextFields().init(null),
+			"<object nil='true'></object>",
+			"<object nil='true'>\n</object>\n",
+			"<object nil='true'></object>",
+			x -> assertType(BeanWithWhitespaceTextFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextFields-2",
+			BeanWithWhitespaceTextFields.class,
+			new BeanWithWhitespaceTextFields().init(""),
+			"<object><sp/></object>",
+			"<object><sp/></object>\n",
+			"<object><sp/></object>",
+			x -> assertType(BeanWithWhitespaceTextFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextFields-3",
+			BeanWithWhitespaceTextFields.class,
+			new BeanWithWhitespaceTextFields().init(" "),
+			"<object><sp> </sp></object>",
+			"<object><sp> </sp></object>\n",
+			"<object><sp> </sp></object>",
+			x -> assertType(BeanWithWhitespaceTextFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextFields-4",
+			BeanWithWhitespaceTextFields.class,
+			new BeanWithWhitespaceTextFields().init("  "),
+			"<object><sp> </sp><sp> </sp></object>",
+			"<object><sp> </sp><sp> </sp></object>\n",
+			"<object><sp> </sp><sp> </sp></object>",
+			x -> assertType(BeanWithWhitespaceTextFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextFields-5",
+			BeanWithWhitespaceTextFields.class,
+			new BeanWithWhitespaceTextFields().init("  foobar  "),
+			"<object><sp> </sp> foobar <sp> </sp></object>",
+			"<object><sp> </sp> foobar <sp> </sp></object>\n",
+			"<object><sp> </sp> foobar <sp> </sp></object>",
+			x -> assertType(BeanWithWhitespaceTextFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextPwsFields-1",
+			BeanWithWhitespaceTextPwsFields.class,
+			new BeanWithWhitespaceTextPwsFields().init(null),
+			"<object nil='true'></object>",
+			"<object nil='true'>\n</object>\n",
+			"<object nil='true'></object>",
+			x -> assertType(BeanWithWhitespaceTextPwsFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextPwsFields-2",
+			BeanWithWhitespaceTextPwsFields.class,
+			new BeanWithWhitespaceTextPwsFields().init(""),
+			"<object><sp/></object>",
+			"<object><sp/></object>\n",
+			"<object><sp/></object>",
+			x -> assertType(BeanWithWhitespaceTextPwsFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextPwsFields-3",
+			BeanWithWhitespaceTextPwsFields.class,
+			new BeanWithWhitespaceTextPwsFields().init(" "),
+			"<object> </object>",
+			"<object> </object>\n",
+			"<object> </object>",
+			x -> assertType(BeanWithWhitespaceTextPwsFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextPwsFields-4",
+			BeanWithWhitespaceTextPwsFields.class,
+			new BeanWithWhitespaceTextPwsFields().init("  "),
+			"<object>  </object>",
+			"<object>  </object>\n",
+			"<object>  </object>",
+			x -> assertType(BeanWithWhitespaceTextPwsFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextPwsFields-5",
+			BeanWithWhitespaceTextPwsFields.class,
+			new BeanWithWhitespaceTextPwsFields().init("  foobar  "),
+			"<object>  foobar  </object>",
+			"<object>  foobar  </object>\n",
+			"<object>  foobar  </object>",
+			x -> assertType(BeanWithWhitespaceTextPwsFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedFields-1",
+			BeanWithWhitespaceMixedFields.class,
+			new BeanWithWhitespaceMixedFields().init(null),
+			"<object nil='true'></object>",
+			"<object nil='true'>\n</object>\n",
+			"<object nil='true'></object>",
+			x -> assertType(BeanWithWhitespaceMixedFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedFields-2",
+			BeanWithWhitespaceMixedFields.class,
+			new BeanWithWhitespaceMixedFields().init(new String[0]),
+			"<object></object>",
+			"<object></object>\n",
+			"<object></object>",
+			x -> assertType(BeanWithWhitespaceMixedFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedFields-3",
+			BeanWithWhitespaceMixedFields.class,
+			new BeanWithWhitespaceMixedFields().init(new String[]{""}),
+			"<object><sp/></object>",
+			"<object><sp/></object>\n",
+			"<object><sp/></object>",
+			x -> assertType(BeanWithWhitespaceMixedFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedFields-4",
+			BeanWithWhitespaceMixedFields.class,
+			new BeanWithWhitespaceMixedFields().init(new String[]{" "}),
+			"<object><sp> </sp></object>",
+			"<object><sp> </sp></object>\n",
+			"<object><sp> </sp></object>",
+			x -> assertType(BeanWithWhitespaceMixedFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedFields-5",
+			BeanWithWhitespaceMixedFields.class,
+			new BeanWithWhitespaceMixedFields().init(new String[]{"  "}),
+			"<object><sp> </sp><sp> </sp></object>",
+			"<object><sp> </sp><sp> </sp></object>\n",
+			"<object><sp> </sp><sp> </sp></object>",
+			x -> assertType(BeanWithWhitespaceMixedFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedFields-6",
+			BeanWithWhitespaceMixedFields.class,
+			new BeanWithWhitespaceMixedFields().init(new String[]{"  foobar  "}),
+			"<object><sp> </sp> foobar <sp> </sp></object>",
+			"<object><sp> </sp> foobar <sp> </sp></object>\n",
+			"<object><sp> </sp> foobar <sp> </sp></object>",
+			x -> assertType(BeanWithWhitespaceMixedFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedPwsFields-1",
+			BeanWithWhitespaceMixedPwsFields.class,
+			new BeanWithWhitespaceMixedPwsFields().init(null),
+			"<object nil='true'></object>",
+			"<object nil='true'>\n</object>\n",
+			"<object nil='true'></object>",
+			x -> assertType(BeanWithWhitespaceMixedPwsFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedPwsFields-2",
+			BeanWithWhitespaceMixedPwsFields.class,
+			new BeanWithWhitespaceMixedPwsFields().init(new String[0]),
+			"<object></object>",
+			"<object></object>\n",
+			"<object></object>",
+			x -> assertType(BeanWithWhitespaceMixedPwsFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedPwsFields-3",
+			BeanWithWhitespaceMixedPwsFields.class,
+			new BeanWithWhitespaceMixedPwsFields().init(new String[]{""}),
+			"<object><sp/></object>",
+			"<object><sp/></object>\n",
+			"<object><sp/></object>",
+			x -> assertType(BeanWithWhitespaceMixedPwsFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedPwsFields-4",
+			BeanWithWhitespaceMixedPwsFields.class,
+			new BeanWithWhitespaceMixedPwsFields().init(new String[]{" "}),
+			"<object> </object>",
+			"<object> </object>\n",
+			"<object> </object>",
+			x -> assertType(BeanWithWhitespaceMixedPwsFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedPwsFields-5",
+			BeanWithWhitespaceMixedPwsFields.class,
+			new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  "}),
+			"<object>  </object>",
+			"<object>  </object>\n",
+			"<object>  </object>",
+			x -> assertType(BeanWithWhitespaceMixedPwsFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedPwsFields-6",
+			BeanWithWhitespaceMixedPwsFields.class,
+			new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  foobar  "}),
+			"<object>  foobar  </object>",
+			"<object>  foobar  </object>\n",
+			"<object>  foobar  </object>",
+			x -> assertType(BeanWithWhitespaceMixedPwsFields.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextFields2-1",
+			BeanWithWhitespaceTextFields2.class,
+			new BeanWithWhitespaceTextFields2().init(null),
+			"<object nil='true'></object>",
+			"<object nil='true'>\n</object>\n",
+			"<object nil='true'></object>",
+			x -> assertType(BeanWithWhitespaceTextFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextFields2-2",
+			BeanWithWhitespaceTextFields2.class,
+			new BeanWithWhitespaceTextFields2().init(""),
+			"<object><sp/></object>",
+			"<object><sp/></object>\n",
+			"<object><sp/></object>",
+			x -> assertType(BeanWithWhitespaceTextFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextFields2-3",
+			BeanWithWhitespaceTextFields2.class,
+			new BeanWithWhitespaceTextFields2().init(" "),
+			"<object><sp> </sp></object>",
+			"<object><sp> </sp></object>\n",
+			"<object><sp> </sp></object>",
+			x -> assertType(BeanWithWhitespaceTextFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextFields2-4",
+			BeanWithWhitespaceTextFields2.class,
+			new BeanWithWhitespaceTextFields2().init("  "),
+			"<object><sp> </sp><sp> </sp></object>",
+			"<object><sp> </sp><sp> </sp></object>\n",
+			"<object><sp> </sp><sp> </sp></object>",
+			x -> assertType(BeanWithWhitespaceTextFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextFields2-5",
+			BeanWithWhitespaceTextFields2.class,
+			new BeanWithWhitespaceTextFields2().init("  foobar  "),
+			"<object><sp> </sp> foobar <sp> </sp></object>",
+			"<object><sp> </sp> foobar <sp> </sp></object>\n",
+			"<object><sp> </sp> foobar <sp> </sp></object>",
+			x -> assertType(BeanWithWhitespaceTextFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextPwsFields2-1",
+			BeanWithWhitespaceTextPwsFields2.class,
+			new BeanWithWhitespaceTextPwsFields2().init(null),
+			"<object nil='true'></object>",
+			"<object nil='true'>\n</object>\n",
+			"<object nil='true'></object>",
+			x -> assertType(BeanWithWhitespaceTextPwsFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextPwsFields2-2",
+			BeanWithWhitespaceTextPwsFields2.class,
+			new BeanWithWhitespaceTextPwsFields2().init(""),
+			"<object><sp/></object>",
+			"<object><sp/></object>\n",
+			"<object><sp/></object>",
+			x -> assertType(BeanWithWhitespaceTextPwsFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextPwsFields2-3",
+			BeanWithWhitespaceTextPwsFields2.class,
+			new BeanWithWhitespaceTextPwsFields2().init(" "),
+			"<object> </object>",
+			"<object> </object>\n",
+			"<object> </object>",
+			x -> assertType(BeanWithWhitespaceTextPwsFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextPwsFields2-4",
+			BeanWithWhitespaceTextPwsFields2.class,
+			new BeanWithWhitespaceTextPwsFields2().init("  "),
+			"<object>  </object>",
+			"<object>  </object>\n",
+			"<object>  </object>",
+			x -> assertType(BeanWithWhitespaceTextPwsFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceTextPwsFields2-5",
+			BeanWithWhitespaceTextPwsFields2.class,
+			new BeanWithWhitespaceTextPwsFields2().init("  foobar  "),
+			"<object>  foobar  </object>",
+			"<object>  foobar  </object>\n",
+			"<object>  foobar  </object>",
+			x -> assertType(BeanWithWhitespaceTextPwsFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedFields2-1",
+			BeanWithWhitespaceMixedFields2.class,
+			new BeanWithWhitespaceMixedFields2().init(null),
+			"<object nil='true'></object>",
+			"<object nil='true'>\n</object>\n",
+			"<object nil='true'></object>",
+			x -> assertType(BeanWithWhitespaceMixedFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedFields2-2",
+			BeanWithWhitespaceMixedFields2.class,
+			new BeanWithWhitespaceMixedFields2().init(new String[0]),
+			"<object></object>",
+			"<object></object>\n",
+			"<object></object>",
+			x -> assertType(BeanWithWhitespaceMixedFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedFields2-3",
+			BeanWithWhitespaceMixedFields2.class,
+			new BeanWithWhitespaceMixedFields2().init(new String[]{""}),
+			"<object><sp/></object>",
+			"<object><sp/></object>\n",
+			"<object><sp/></object>",
+			x -> assertType(BeanWithWhitespaceMixedFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedFields2-4",
+			BeanWithWhitespaceMixedFields2.class,
+			new BeanWithWhitespaceMixedFields2().init(new String[]{" "}),
+			"<object><sp> </sp></object>",
+			"<object><sp> </sp></object>\n",
+			"<object><sp> </sp></object>",
+			x -> assertType(BeanWithWhitespaceMixedFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedFields2-5",
+			BeanWithWhitespaceMixedFields2.class,
+			new BeanWithWhitespaceMixedFields2().init(new String[]{"  "}),
+			"<object><sp> </sp><sp> </sp></object>",
+			"<object><sp> </sp><sp> </sp></object>\n",
+			"<object><sp> </sp><sp> </sp></object>",
+			x -> assertType(BeanWithWhitespaceMixedFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedFields2-6",
+			BeanWithWhitespaceMixedFields2.class,
+			new BeanWithWhitespaceMixedFields2().init(new String[]{"  foobar  "}),
+			"<object><sp> </sp> foobar <sp> </sp></object>",
+			"<object><sp> </sp> foobar <sp> </sp></object>\n",
+			"<object><sp> </sp> foobar <sp> </sp></object>",
+			x -> assertType(BeanWithWhitespaceMixedFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedPwsFields2-1",
+			BeanWithWhitespaceMixedPwsFields2.class,
+			new BeanWithWhitespaceMixedPwsFields2().init(null),
+			"<object nil='true'></object>",
+			"<object nil='true'>\n</object>\n",
+			"<object nil='true'></object>",
+			x -> assertType(BeanWithWhitespaceMixedPwsFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedPwsFields2-2",
+			BeanWithWhitespaceMixedPwsFields2.class,
+			new BeanWithWhitespaceMixedPwsFields2().init(new String[0]),
+			"<object></object>",
+			"<object></object>\n",
+			"<object></object>",
+			x -> assertType(BeanWithWhitespaceMixedPwsFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedPwsFields2-3",
+			BeanWithWhitespaceMixedPwsFields2.class,
+			new BeanWithWhitespaceMixedPwsFields2().init(new String[]{""}),
+			"<object><sp/></object>",
+			"<object><sp/></object>\n",
+			"<object><sp/></object>",
+			x -> assertType(BeanWithWhitespaceMixedPwsFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedPwsFields2-4",
+			BeanWithWhitespaceMixedPwsFields2.class,
+			new BeanWithWhitespaceMixedPwsFields2().init(new String[]{" "}),
+			"<object> </object>",
+			"<object> </object>\n",
+			"<object> </object>",
+			x -> assertType(BeanWithWhitespaceMixedPwsFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedPwsFields2-5",
+			BeanWithWhitespaceMixedPwsFields2.class,
+			new BeanWithWhitespaceMixedPwsFields2().init(new String[]{"  "}),
+			"<object>  </object>",
+			"<object>  </object>\n",
+			"<object>  </object>",
+			x -> assertType(BeanWithWhitespaceMixedPwsFields2.class, x)
+		),
+		input(
+			"BeanWithWhitespaceMixedPwsFields2-6",
+			BeanWithWhitespaceMixedPwsFields2.class,
+			new BeanWithWhitespaceMixedPwsFields2().init(new String[]{"  foobar  "}),
+			"<object>  foobar  </object>",
+			"<object>  foobar  </object>\n",
+			"<object>  foobar  </object>",
+			x -> assertType(BeanWithWhitespaceMixedPwsFields2.class, x)
+		)
+	};
 
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td>
-								<table>
-									<tr>
-										<td>k1</td>
-										<td>
-											<table>
-												<tr>
-													<td>a</td>
-													<td>foo</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>
-								<table>
-									<tr>
-										<td>k2</td>
-										<td>
-											<table _type='A'>
-												<tr>
-													<td>a</td>
-													<td>foo</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>c</td>
-							<td>
-								<table>
-									<tr>
-										<td>k3</td>
-										<td>
-											<table _type='A'>
-												<tr>
-													<td>a</td>
-													<td>foo</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""",
-
-					"""
-					<table>
-						<tr>
-							<td>a</td>
-							<td>
-								<table>
-									<tr>
-										<td>k1</td>
-										<td>
-											<table>
-												<tr>
-													<td>a</td>
-													<td>foo</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>b</td>
-							<td>
-								<table>
-									<tr>
-										<td>k2</td>
-										<td>
-											<table _type='A'>
-												<tr>
-													<td>a</td>
-													<td>foo</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>c</td>
-							<td>
-								<table>
-									<tr>
-										<td>k3</td>
-										<td>
-											<table _type='A'>
-												<tr>
-													<td>a</td>
-													<td>foo</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					""".replaceAll("(?m)^\\s+|\\R", "")
-				)
-				{
-					@Override
-					public void verify(BeanWithAbstractMapFields o) {
-						assertType(A.class, o.a.get("k1"));
-						assertType(A.class, o.b.get("k2"));
-						assertType(A.class, o.c.get("k3"));
-					}
-				}
-			},
-			{	/* 38 */
-				new Input<>(
-					"BeanWithWhitespaceTextFields-1",
-					BeanWithWhitespaceTextFields.class,
-					new BeanWithWhitespaceTextFields().init(null),
-					"<object nil='true'></object>",
-					"<object nil='true'>\n</object>\n",
-					"<object nil='true'></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextFields o) {
-						assertType(BeanWithWhitespaceTextFields.class, o);
-					}
-				}
-			},
-			{	/* 39 */
-				new Input<>(
-					"BeanWithWhitespaceTextFields-2",
-					BeanWithWhitespaceTextFields.class,
-					new BeanWithWhitespaceTextFields().init(""),
-					"<object><sp/></object>",
-					"<object><sp/></object>\n",
-					"<object><sp/></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextFields o) {
-						assertType(BeanWithWhitespaceTextFields.class, o);
-					}
-				}
-			},
-			{	/* 40 */
-				new Input<>(
-					"BeanWithWhitespaceTextFields-3",
-					BeanWithWhitespaceTextFields.class,
-					new BeanWithWhitespaceTextFields().init(" "),
-					"<object><sp> </sp></object>",
-					"<object><sp> </sp></object>\n",
-					"<object><sp> </sp></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextFields o) {
-						assertType(BeanWithWhitespaceTextFields.class, o);
-					}
-				}
-			},
-			{	/* 41 */
-				new Input<>(
-					"BeanWithWhitespaceTextFields-4",
-					BeanWithWhitespaceTextFields.class,
-					new BeanWithWhitespaceTextFields().init("  "),
-					"<object><sp> </sp><sp> </sp></object>",
-					"<object><sp> </sp><sp> </sp></object>\n",
-					"<object><sp> </sp><sp> </sp></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextFields o) {
-						assertType(BeanWithWhitespaceTextFields.class, o);
-					}
-				}
-			},
-			{	/* 42 */
-				new Input<>(
-					"BeanWithWhitespaceTextFields-5",
-					BeanWithWhitespaceTextFields.class,
-					new BeanWithWhitespaceTextFields().init("  foobar  "),
-					"<object><sp> </sp> foobar <sp> </sp></object>",
-					"<object><sp> </sp> foobar <sp> </sp></object>\n",
-					"<object><sp> </sp> foobar <sp> </sp></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextFields o) {
-						assertType(BeanWithWhitespaceTextFields.class, o);
-					}
-				}
-			},
-			{	/* 43 */
-				new Input<>(
-					"BeanWithWhitespaceTextPwsFields-1",
-					BeanWithWhitespaceTextPwsFields.class,
-					new BeanWithWhitespaceTextPwsFields().init(null),
-					"<object nil='true'></object>",
-					"<object nil='true'>\n</object>\n",
-					"<object nil='true'></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextPwsFields o) {
-						assertType(BeanWithWhitespaceTextPwsFields.class, o);
-					}
-				}
-			},
-			{	/* 44 */
-				new Input<>(
-					"BeanWithWhitespaceTextPwsFields-2",
-					BeanWithWhitespaceTextPwsFields.class,
-					new BeanWithWhitespaceTextPwsFields().init(""),
-					"<object><sp/></object>",
-					"<object><sp/></object>\n",
-					"<object><sp/></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextPwsFields o) {
-						assertType(BeanWithWhitespaceTextPwsFields.class, o);
-					}
-				}
-			},
-			{	/* 45 */
-				new Input<>(
-					"BeanWithWhitespaceTextPwsFields-3",
-					BeanWithWhitespaceTextPwsFields.class,
-					new BeanWithWhitespaceTextPwsFields().init(" "),
-					"<object> </object>",
-					"<object> </object>\n",
-					"<object> </object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextPwsFields o) {
-						assertType(BeanWithWhitespaceTextPwsFields.class, o);
-					}
-				}
-			},
-			{	/* 46 */
-				new Input<>(
-					"BeanWithWhitespaceTextPwsFields-4",
-					BeanWithWhitespaceTextPwsFields.class,
-					new BeanWithWhitespaceTextPwsFields().init("  "),
-					"<object>  </object>",
-					"<object>  </object>\n",
-					"<object>  </object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextPwsFields o) {
-						assertType(BeanWithWhitespaceTextPwsFields.class, o);
-					}
-				}
-			},
-			{	/* 47 */
-				new Input<>(
-					"BeanWithWhitespaceTextPwsFields-5",
-					BeanWithWhitespaceTextPwsFields.class,
-					new BeanWithWhitespaceTextPwsFields().init("  foobar  "),
-					"<object>  foobar  </object>",
-					"<object>  foobar  </object>\n",
-					"<object>  foobar  </object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextPwsFields o) {
-						assertType(BeanWithWhitespaceTextPwsFields.class, o);
-					}
-				}
-			},
-			{	/* 48 */
-				new Input<>(
-					"BeanWithWhitespaceMixedFields-1",
-					BeanWithWhitespaceMixedFields.class,
-					new BeanWithWhitespaceMixedFields().init(null),
-					"<object nil='true'></object>",
-					"<object nil='true'>\n</object>\n",
-					"<object nil='true'></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertType(BeanWithWhitespaceMixedFields.class, o);
-					}
-				}
-			},
-			{	/* 49 */
-				new Input<>(
-					"BeanWithWhitespaceMixedFields-2",
-					BeanWithWhitespaceMixedFields.class,
-					new BeanWithWhitespaceMixedFields().init(new String[0]),
-					"<object></object>",
-					"<object></object>\n",
-					"<object></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertType(BeanWithWhitespaceMixedFields.class, o);
-					}
-				}
-			},
-			{	/* 50 */
-				new Input<>(
-					"BeanWithWhitespaceMixedFields-3",
-					BeanWithWhitespaceMixedFields.class,
-					new BeanWithWhitespaceMixedFields().init(new String[]{""}),
-					"<object><sp/></object>",
-					"<object><sp/></object>\n",
-					"<object><sp/></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertType(BeanWithWhitespaceMixedFields.class, o);
-					}
-				}
-			},
-			{	/* 51 */
-				new Input<>(
-					"BeanWithWhitespaceMixedFields-4",
-					BeanWithWhitespaceMixedFields.class,
-					new BeanWithWhitespaceMixedFields().init(new String[]{" "}),
-					"<object><sp> </sp></object>",
-					"<object><sp> </sp></object>\n",
-					"<object><sp> </sp></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertType(BeanWithWhitespaceMixedFields.class, o);
-					}
-				}
-			},
-			{	/* 52 */
-				new Input<>(
-					"BeanWithWhitespaceMixedFields-5",
-					BeanWithWhitespaceMixedFields.class,
-					new BeanWithWhitespaceMixedFields().init(new String[]{"  "}),
-					"<object><sp> </sp><sp> </sp></object>",
-					"<object><sp> </sp><sp> </sp></object>\n",
-					"<object><sp> </sp><sp> </sp></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertType(BeanWithWhitespaceMixedFields.class, o);
-					}
-				}
-			},
-			{	/* 53 */
-				new Input<>(
-					"BeanWithWhitespaceMixedFields-6",
-					BeanWithWhitespaceMixedFields.class,
-					new BeanWithWhitespaceMixedFields().init(new String[]{"  foobar  "}),
-					"<object><sp> </sp> foobar <sp> </sp></object>",
-					"<object><sp> </sp> foobar <sp> </sp></object>\n",
-					"<object><sp> </sp> foobar <sp> </sp></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedFields o) {
-						assertType(BeanWithWhitespaceMixedFields.class, o);
-					}
-				}
-			},
-			{	/* 54 */
-				new Input<>(
-					"BeanWithWhitespaceMixedPwsFields-1",
-					BeanWithWhitespaceMixedPwsFields.class,
-					new BeanWithWhitespaceMixedPwsFields().init(null),
-					"<object nil='true'></object>",
-					"<object nil='true'>\n</object>\n",
-					"<object nil='true'></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
-					}
-				}
-			},
-			{	/* 55 */
-				new Input<>(
-					"BeanWithWhitespaceMixedPwsFields-2",
-					BeanWithWhitespaceMixedPwsFields.class,
-					new BeanWithWhitespaceMixedPwsFields().init(new String[0]),
-					"<object></object>",
-					"<object></object>\n",
-					"<object></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
-					}
-				}
-			},
-			{	/* 56 */
-				new Input<>(
-					"BeanWithWhitespaceMixedPwsFields-3",
-					BeanWithWhitespaceMixedPwsFields.class,
-					new BeanWithWhitespaceMixedPwsFields().init(new String[]{""}),
-					"<object><sp/></object>",
-					"<object><sp/></object>\n",
-					"<object><sp/></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
-					}
-				}
-			},
-			{	/* 57 */
-				new Input<>(
-					"BeanWithWhitespaceMixedPwsFields-4",
-					BeanWithWhitespaceMixedPwsFields.class,
-					new BeanWithWhitespaceMixedPwsFields().init(new String[]{" "}),
-					"<object> </object>",
-					"<object> </object>\n",
-					"<object> </object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
-					}
-				}
-			},
-			{	/* 58 */
-				new Input<>(
-					"BeanWithWhitespaceMixedPwsFields-5",
-					BeanWithWhitespaceMixedPwsFields.class,
-					new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  "}),
-					"<object>  </object>",
-					"<object>  </object>\n",
-					"<object>  </object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
-					}
-				}
-			},
-			{	/* 59 */
-				new Input<>(
-					"BeanWithWhitespaceMixedPwsFields-6",
-					BeanWithWhitespaceMixedPwsFields.class,
-					new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  foobar  "}),
-					"<object>  foobar  </object>",
-					"<object>  foobar  </object>\n",
-					"<object>  foobar  </object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedPwsFields o) {
-						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
-					}
-				}
-			},
-			{	/* 60 */
-				new Input<>(
-					"BeanWithWhitespaceTextFields2-1",
-					BeanWithWhitespaceTextFields2.class,
-					new BeanWithWhitespaceTextFields2().init(null),
-					"<object nil='true'></object>",
-					"<object nil='true'>\n</object>\n",
-					"<object nil='true'></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextFields2 o) {
-						assertType(BeanWithWhitespaceTextFields2.class, o);
-					}
-				}
-			},
-			{	/* 61 */
-				new Input<>(
-					"BeanWithWhitespaceTextFields2-2",
-					BeanWithWhitespaceTextFields2.class,
-					new BeanWithWhitespaceTextFields2().init(""),
-					"<object><sp/></object>",
-					"<object><sp/></object>\n",
-					"<object><sp/></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextFields2 o) {
-						assertType(BeanWithWhitespaceTextFields2.class, o);
-					}
-				}
-			},
-			{	/* 62 */
-				new Input<>(
-					"BeanWithWhitespaceTextFields2-3",
-					BeanWithWhitespaceTextFields2.class,
-					new BeanWithWhitespaceTextFields2().init(" "),
-					"<object><sp> </sp></object>",
-					"<object><sp> </sp></object>\n",
-					"<object><sp> </sp></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextFields2 o) {
-						assertType(BeanWithWhitespaceTextFields2.class, o);
-					}
-				}
-			},
-			{	/* 63 */
-				new Input<>(
-					"BeanWithWhitespaceTextFields2-4",
-					BeanWithWhitespaceTextFields2.class,
-					new BeanWithWhitespaceTextFields2().init("  "),
-					"<object><sp> </sp><sp> </sp></object>",
-					"<object><sp> </sp><sp> </sp></object>\n",
-					"<object><sp> </sp><sp> </sp></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextFields2 o) {
-						assertType(BeanWithWhitespaceTextFields2.class, o);
-					}
-				}
-			},
-			{	/* 64 */
-				new Input<>(
-					"BeanWithWhitespaceTextFields2-5",
-					BeanWithWhitespaceTextFields2.class,
-					new BeanWithWhitespaceTextFields2().init("  foobar  "),
-					"<object><sp> </sp> foobar <sp> </sp></object>",
-					"<object><sp> </sp> foobar <sp> </sp></object>\n",
-					"<object><sp> </sp> foobar <sp> </sp></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextFields2 o) {
-						assertType(BeanWithWhitespaceTextFields2.class, o);
-					}
-				}
-			},
-			{	/* 65 */
-				new Input<>(
-					"BeanWithWhitespaceTextPwsFields2-1",
-					BeanWithWhitespaceTextPwsFields2.class,
-					new BeanWithWhitespaceTextPwsFields2().init(null),
-					"<object nil='true'></object>",
-					"<object nil='true'>\n</object>\n",
-					"<object nil='true'></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextPwsFields2 o) {
-						assertType(BeanWithWhitespaceTextPwsFields2.class, o);
-					}
-				}
-			},
-			{	/* 66 */
-				new Input<>(
-					"BeanWithWhitespaceTextPwsFields2-2",
-					BeanWithWhitespaceTextPwsFields2.class,
-					new BeanWithWhitespaceTextPwsFields2().init(""),
-					"<object><sp/></object>",
-					"<object><sp/></object>\n",
-					"<object><sp/></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextPwsFields2 o) {
-						assertType(BeanWithWhitespaceTextPwsFields2.class, o);
-					}
-				}
-			},
-			{	/* 67 */
-				new Input<>(
-					"BeanWithWhitespaceTextPwsFields2-3",
-					BeanWithWhitespaceTextPwsFields2.class,
-					new BeanWithWhitespaceTextPwsFields2().init(" "),
-					"<object> </object>",
-					"<object> </object>\n",
-					"<object> </object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextPwsFields2 o) {
-						assertType(BeanWithWhitespaceTextPwsFields2.class, o);
-					}
-				}
-			},
-			{	/* 68 */
-				new Input<>(
-					"BeanWithWhitespaceTextPwsFields2-4",
-					BeanWithWhitespaceTextPwsFields2.class,
-					new BeanWithWhitespaceTextPwsFields2().init("  "),
-					"<object>  </object>",
-					"<object>  </object>\n",
-					"<object>  </object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextPwsFields2 o) {
-						assertType(BeanWithWhitespaceTextPwsFields2.class, o);
-					}
-				}
-			},
-			{	/* 69 */
-				new Input<>(
-					"BeanWithWhitespaceTextPwsFields2-5",
-					BeanWithWhitespaceTextPwsFields2.class,
-					new BeanWithWhitespaceTextPwsFields2().init("  foobar  "),
-					"<object>  foobar  </object>",
-					"<object>  foobar  </object>\n",
-					"<object>  foobar  </object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceTextPwsFields2 o) {
-						assertType(BeanWithWhitespaceTextPwsFields2.class, o);
-					}
-				}
-			},
-			{	/* 70 */
-				new Input<>(
-					"BeanWithWhitespaceMixedFields2-1",
-					BeanWithWhitespaceMixedFields2.class,
-					new BeanWithWhitespaceMixedFields2().init(null),
-					"<object nil='true'></object>",
-					"<object nil='true'>\n</object>\n",
-					"<object nil='true'></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedFields2 o) {
-						assertType(BeanWithWhitespaceMixedFields2.class, o);
-					}
-				}
-			},
-			{	/* 71 */
-				new Input<>(
-					"BeanWithWhitespaceMixedFields2-2",
-					BeanWithWhitespaceMixedFields2.class,
-					new BeanWithWhitespaceMixedFields2().init(new String[0]),
-					"<object></object>",
-					"<object></object>\n",
-					"<object></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedFields2 o) {
-						assertType(BeanWithWhitespaceMixedFields2.class, o);
-					}
-				}
-			},
-			{	/* 72 */
-				new Input<>(
-					"BeanWithWhitespaceMixedFields2-3",
-					BeanWithWhitespaceMixedFields2.class,
-					new BeanWithWhitespaceMixedFields2().init(new String[]{""}),
-					"<object><sp/></object>",
-					"<object><sp/></object>\n",
-					"<object><sp/></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedFields2 o) {
-						assertType(BeanWithWhitespaceMixedFields2.class, o);
-					}
-				}
-			},
-			{	/* 73 */
-				new Input<>(
-					"BeanWithWhitespaceMixedFields2-4",
-					BeanWithWhitespaceMixedFields2.class,
-					new BeanWithWhitespaceMixedFields2().init(new String[]{" "}),
-					"<object><sp> </sp></object>",
-					"<object><sp> </sp></object>\n",
-					"<object><sp> </sp></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedFields2 o) {
-						assertType(BeanWithWhitespaceMixedFields2.class, o);
-					}
-				}
-			},
-			{	/* 74 */
-				new Input<>(
-					"BeanWithWhitespaceMixedFields2-5",
-					BeanWithWhitespaceMixedFields2.class,
-					new BeanWithWhitespaceMixedFields2().init(new String[]{"  "}),
-					"<object><sp> </sp><sp> </sp></object>",
-					"<object><sp> </sp><sp> </sp></object>\n",
-					"<object><sp> </sp><sp> </sp></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedFields2 o) {
-						assertType(BeanWithWhitespaceMixedFields2.class, o);
-					}
-				}
-			},
-			{	/* 75 */
-				new Input<>(
-					"BeanWithWhitespaceMixedFields2-6",
-					BeanWithWhitespaceMixedFields2.class,
-					new BeanWithWhitespaceMixedFields2().init(new String[]{"  foobar  "}),
-					"<object><sp> </sp> foobar <sp> </sp></object>",
-					"<object><sp> </sp> foobar <sp> </sp></object>\n",
-					"<object><sp> </sp> foobar <sp> </sp></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedFields2 o) {
-						assertType(BeanWithWhitespaceMixedFields2.class, o);
-					}
-				}
-			},
-			{	/* 76 */
-				new Input<>(
-					"BeanWithWhitespaceMixedPwsFields2-1",
-					BeanWithWhitespaceMixedPwsFields2.class,
-					new BeanWithWhitespaceMixedPwsFields2().init(null),
-					"<object nil='true'></object>",
-					"<object nil='true'>\n</object>\n",
-					"<object nil='true'></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
-						assertType(BeanWithWhitespaceMixedPwsFields2.class, o);
-					}
-				}
-			},
-			{	/* 77 */
-				new Input<>(
-					"BeanWithWhitespaceMixedPwsFields2-2",
-					BeanWithWhitespaceMixedPwsFields2.class,
-					new BeanWithWhitespaceMixedPwsFields2().init(new String[0]),
-					"<object></object>",
-					"<object></object>\n",
-					"<object></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
-						assertType(BeanWithWhitespaceMixedPwsFields2.class, o);
-					}
-				}
-			},
-			{	/* 78 */
-				new Input<>(
-					"BeanWithWhitespaceMixedPwsFields2-3",
-					BeanWithWhitespaceMixedPwsFields2.class,
-					new BeanWithWhitespaceMixedPwsFields2().init(new String[]{""}),
-					"<object><sp/></object>",
-					"<object><sp/></object>\n",
-					"<object><sp/></object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
-						assertType(BeanWithWhitespaceMixedPwsFields2.class, o);
-					}
-				}
-			},
-			{	/* 79 */
-				new Input<>(
-					"BeanWithWhitespaceMixedPwsFields2-4",
-					BeanWithWhitespaceMixedPwsFields2.class,
-					new BeanWithWhitespaceMixedPwsFields2().init(new String[]{" "}),
-					"<object> </object>",
-					"<object> </object>\n",
-					"<object> </object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
-						assertType(BeanWithWhitespaceMixedPwsFields2.class, o);
-					}
-				}
-			},
-			{	/* 80 */
-				new Input<>(
-					"BeanWithWhitespaceMixedPwsFields2-5",
-					BeanWithWhitespaceMixedPwsFields2.class,
-					new BeanWithWhitespaceMixedPwsFields2().init(new String[]{"  "}),
-					"<object>  </object>",
-					"<object>  </object>\n",
-					"<object>  </object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
-						assertType(BeanWithWhitespaceMixedPwsFields2.class, o);
-					}
-				}
-			},
-			{	/* 81 */
-				new Input<>(
-					"BeanWithWhitespaceMixedPwsFields2-6",
-					BeanWithWhitespaceMixedPwsFields2.class,
-					new BeanWithWhitespaceMixedPwsFields2().init(new String[]{"  foobar  "}),
-					"<object>  foobar  </object>",
-					"<object>  foobar  </object>\n",
-					"<object>  foobar  </object>"
-				)
-				{
-					@Override
-					public void verify(BeanWithWhitespaceMixedPwsFields2 o) {
-						assertType(BeanWithWhitespaceMixedPwsFields2.class, o);
-					}
-				}
-			},
-		});
+	static Stream<Arguments> input() {
+		return Stream.of(INPUT).map(x -> args(x));
 	}
 
-	private static final BeanSession BEANSESSION = BeanContext.DEFAULT_SESSION;
+	private static <T> Input<T> input(String label, Type type, T in, String e1, String e2, String e3) {
+		return input(label, type, in, e1, e2, e3, null);
+	}
+
+	private static <T> Input<T> input(String label, Type type, T in, String e1, String e2, String e3, Consumer<T> verifier) {
+		return new Input<>(label, type, in, e1, e2, e3, verifier);
+	}
 
 	/**
 	 * Creates a ClassMeta for the given types.
 	 */
-	public static final Type getType(Type type, Type...args) {
+	private static final Type getType(Type type, Type...args) {
 		return BEANSESSION.getClassMeta(type, args);
-	}
-
-	private Input input;
-
-	public BasicHtml_Test(Input input) {
-		this.input = input;
 	}
 
 	public static class Input<T> {
 		private final String label, e1, e2, e3;
 		private final Type type;
 		private final Object in;
+		private final Consumer<T> verifier;
 
-		public Input(String label, Type type, T in, String e1, String e2, String e3) {
+		public Input(String label, Type type, T in, String e1, String e2, String e3, Consumer<T> verifier) {
 			this.label = label;
 			this.type = type;
 			this.in = in;
 			this.e1 = e1;
 			this.e2 = e2;
 			this.e3 = e3;
+			this.verifier = verifier;
 		}
 
-		public void verify(T o) {}  // NOSONAR
+		public void verify(T o) {
+			if (verifier != null) verifier.accept(o);
+		}
 	}
 
-	@Test
-	public void a1_serializeNormal() {
+	@ParameterizedTest
+	@MethodSource("input")
+	void a1_serializeNormal(Input input) {
 		try {
-			String r = s1.serialize(input.in);
+			var r = s1.serialize(input.in);
 			assertEquals(input.label + " serialize-normal failed", input.e1, r);
 		} catch (AssertionError e) {
 			throw e;
@@ -3157,11 +2564,12 @@ public class BasicHtml_Test {
 		}
 	}
 
-	@Test
-	public void a2_parseNormal() {
+	@ParameterizedTest
+	@MethodSource("input")
+	void a2_parseNormal(Input input) {
 		try {
-			String r = s1.serialize(input.in);
-			Object o = parser.parse(r, input.type);
+			var r = s1.serialize(input.in);
+			var o = parser.parse(r, input.type);
 			r = s1.serialize(o);
 			assertEquals(input.label + " parse-normal failed", input.e1, r);
 		} catch (AssertionError e) {
@@ -3171,11 +2579,12 @@ public class BasicHtml_Test {
 		}
 	}
 
-	@Test
-	public void a3_verifyNormal() {
+	@ParameterizedTest
+	@MethodSource("input")
+	void a3_verifyNormal(Input input) {
 		try {
-			String r = s1.serialize(input.in);
-			Object o = parser.parse(r, input.type);
+			var r = s1.serialize(input.in);
+			var o = parser.parse(r, input.type);
 			input.verify(o);
 		} catch (AssertionError e) {
 			throw e;
@@ -3184,10 +2593,11 @@ public class BasicHtml_Test {
 		}
 	}
 
-	@Test
-	public void b1_serializeReadable() {
+	@ParameterizedTest
+	@MethodSource("input")
+	void b1_serializeReadable(Input input) {
 		try {
-			String r = s2.serialize(input.in);
+			var r = s2.serialize(input.in);
 			assertEquals(input.label + " serialize-readable failed", input.e2, r);
 		} catch (AssertionError e) {
 			throw e;
@@ -3196,11 +2606,12 @@ public class BasicHtml_Test {
 		}
 	}
 
-	@Test
-	public void b2_parseReadable() {
+	@ParameterizedTest
+	@MethodSource("input")
+	void b2_parseReadable(Input input) {
 		try {
-			String r = s2.serialize(input.in);
-			Object o = parser.parse(r, input.type);
+			var r = s2.serialize(input.in);
+			var o = parser.parse(r, input.type);
 			r = s2.serialize(o);
 			assertEquals(input.label + " parse-readable failed", input.e2, r);
 		} catch (AssertionError e) {
@@ -3210,11 +2621,12 @@ public class BasicHtml_Test {
 		}
 	}
 
-	@Test
-	public void b3_verifyReadable() {
+	@ParameterizedTest
+	@MethodSource("input")
+	void b3_verifyReadable(Input input) {
 		try {
-			String r = s2.serialize(input.in);
-			Object o = parser.parse(r, input.type);
+			var r = s2.serialize(input.in);
+			var o = parser.parse(r, input.type);
 			input.verify(o);
 		} catch (AssertionError e) {
 			throw e;
@@ -3223,10 +2635,11 @@ public class BasicHtml_Test {
 		}
 	}
 
-	@Test
-	public void c1_serializeAbridged() {
+	@ParameterizedTest
+	@MethodSource("input")
+	void c1_serializeAbridged(Input input) {
 		try {
-			String r = s3.serialize(input.in);
+			var r = s3.serialize(input.in);
 			assertEquals(input.label + " serialize-addRootType failed", input.e3, r);
 		} catch (AssertionError e) {
 			throw e;
@@ -3235,11 +2648,12 @@ public class BasicHtml_Test {
 		}
 	}
 
-	@Test
-	public void c2_parseAbridged() {
+	@ParameterizedTest
+	@MethodSource("input")
+	void c2_parseAbridged(Input input) {
 		try {
-			String r = s3.serialize(input.in);
-			Object o = parser.parse(r, input.type);
+			var r = s3.serialize(input.in);
+			var o = parser.parse(r, input.type);
 			r = s3.serialize(o);
 			assertEquals(input.label + " parse-addRootType failed", input.e3, r);
 		} catch (AssertionError e) {
@@ -3249,11 +2663,12 @@ public class BasicHtml_Test {
 		}
 	}
 
-	@Test
-	public void c3_verifyAbridged() {
+	@ParameterizedTest
+	@MethodSource("input")
+	void c3_verifyAbridged(Input input) {
 		try {
-			String r = s3.serialize(input.in);
-			Object o = parser.parse(r, input.type);
+			var r = s3.serialize(input.in);
+			var o = parser.parse(r, input.type);
 			input.verify(o);
 		} catch (AssertionError e) {
 			throw e;
@@ -3289,21 +2704,21 @@ public class BasicHtml_Test {
 
 	public static class ListWithStrings extends ArrayList<String> {
 		public ListWithStrings append(String value) {
-			this.add(value);
+			add(value);
 			return this;
 		}
 	}
 
 	public static class ListWithNumbers extends ArrayList<Number> {
 		public ListWithNumbers append(Number value) {
-			this.add(value);
+			add(value);
 			return this;
 		}
 	}
 
 	public static class ListWithObjects extends ArrayList<Object> {
 		public ListWithObjects append(Object value) {
-			this.add(value);
+			add(value);
 			return this;
 		}
 	}
@@ -3587,17 +3002,10 @@ public class BasicHtml_Test {
 
 	@Bean(typeName="A")
 	public static class A extends AA {
+
 		private String a;
-
-		@Override
-		public String getA() {
-			return a;
-		}
-
-		@Override
-		public void setA(String a) {
-			this.a = a;
-		}
+		@Override public String getA() { return a; }
+		@Override public void setA(String v) { a = v; }
 
 		A init() {
 			this.a = "foo";

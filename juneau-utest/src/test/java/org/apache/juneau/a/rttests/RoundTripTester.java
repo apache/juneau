@@ -86,7 +86,7 @@ public class RoundTripTester {
 
 		if (! (b.implClasses.isEmpty() && b.pojoSwaps.length == 0 && b.dictionary.length == 0 && b.annotatedClasses.length == 0)) {
 			bs = bs.copy();
-			bp = bp.map(x -> x.copy());
+			bp = bp.map(Parser.Builder::copy);
 			for (var e : b.implClasses.entrySet()) {
 				bs.implClass(e.getKey(), e.getValue());
 				bp.ifPresent(x -> x.implClass(e.getKey(), e.getValue()));
@@ -96,7 +96,7 @@ public class RoundTripTester {
 		}
 
 		s = bs.build();
-		p = bp.map(x -> x.build()).orElse(null);
+		p = bp.map(Parser.Builder::build).orElse(null);
 		validateXmlWhitespace = b.validateXmlWhitespace;
 		validateXml = b.validateXml;
 		returnOriginalObject = b.returnOriginalObject;

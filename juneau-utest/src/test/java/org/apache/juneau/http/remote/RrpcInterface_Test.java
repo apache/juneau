@@ -13,17 +13,17 @@
 package org.apache.juneau.http.remote;
 
 import static java.util.Arrays.*;
-import static org.apache.juneau.AssertionHelpers.*;
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Constants.*;
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
+import java.util.stream.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
@@ -38,25 +38,35 @@ import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
-import org.junit.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-@RunWith(Parameterized.class)
-public class RrpcInterfaceTest {
+class RrpcInterface_Test extends SimpleTestBase {
 
-	@Parameterized.Parameters
-	public static Collection<Object[]> getParameters() {
-		return Arrays.asList(new Object[][] {
-			{ /* 0 */ "Json", JsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), JsonParser.DEFAULT },
-			{ /* 1 */ "Xml", XmlSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), XmlParser.DEFAULT },
-			{ /* 2 */ "Mixed", JsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), XmlParser.DEFAULT },
-			{ /* 3 */ "Html", HtmlSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), HtmlParser.DEFAULT },
-			{ /* 4 */ "MessagePack", MsgPackSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), MsgPackParser.DEFAULT },
-			{ /* 5 */ "UrlEncoding", UrlEncodingSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), UrlEncodingParser.DEFAULT },
-			{ /* 6 */ "Uon", UonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), UonParser.DEFAULT }
-		});
+	private static final Input[] INPUT = {
+		input("Json", JsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), JsonParser.DEFAULT),
+		input("Xml", XmlSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), XmlParser.DEFAULT),
+		input("Mixed", JsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), XmlParser.DEFAULT),
+		input("Html", HtmlSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), HtmlParser.DEFAULT),
+		input("MessagePack", MsgPackSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), MsgPackParser.DEFAULT),
+		input("UrlEncoding", UrlEncodingSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), UrlEncodingParser.DEFAULT),
+		input("Uon", UonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), UonParser.DEFAULT)
+	};
+
+	private static Input input(String label, Serializer serializer, Parser parser) {
+		return new Input(label, serializer, parser);
+	}
+
+	private static class Input {
+		InterfaceProxy proxy;
+
+		public Input(String label, Serializer serializer, Parser parser) {
+			proxy = MockRestClient.create(InterfaceProxyResource.class).serializer(serializer).parser(parser).noTrace().build().getRrpcInterface(InterfaceProxy.class,"/proxy");
+		}
+	}
+
+	static Stream<Arguments> input() {
+		return Stream.of(INPUT).map(x -> args(x));
 	}
 
 	public interface InterfaceProxy {
@@ -706,7 +716,7 @@ public class RrpcInterfaceTest {
 				@Override
 				public void setSwappedObjectMap(Map<SwappedObject,SwappedObject> x) {
 					assertJson(x, "{'"+SWAP+"':'"+SWAP+"'}");
-					Map.Entry<SwappedObject,SwappedObject> e = x.entrySet().iterator().next();
+					var e = x.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue().wasUnswapped);
 				}
@@ -714,7 +724,7 @@ public class RrpcInterfaceTest {
 				@Override
 				public void setSwappedObject3dMap(Map<SwappedObject,SwappedObject[][][]> x) {
 					assertJson(x, "{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
-					Map.Entry<SwappedObject,SwappedObject[][][]> e = x.entrySet().iterator().next();
+					var e = x.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue()[0][0][0].wasUnswapped);
 				}
@@ -735,7 +745,7 @@ public class RrpcInterfaceTest {
 				@Override
 				public void setImplicitSwappedObjectMap(Map<ImplicitSwappedObject,ImplicitSwappedObject> x) {
 					assertJson(x, "{'"+SWAP+"':'"+SWAP+"'}");
-					Map.Entry<ImplicitSwappedObject,ImplicitSwappedObject> e = x.entrySet().iterator().next();
+					var e = x.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue().wasUnswapped);
 				}
@@ -743,7 +753,7 @@ public class RrpcInterfaceTest {
 				@Override
 				public void setImplicitSwappedObject3dMap(Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> x) {
 					assertJson(x, "{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
-					Map.Entry<ImplicitSwappedObject,ImplicitSwappedObject[][][]> e = x.entrySet().iterator().next();
+					var e = x.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue()[0][0][0].wasUnswapped);
 				}
@@ -781,7 +791,7 @@ public class RrpcInterfaceTest {
 				@Override
 				public void setEnumMap(Map<TestEnum,TestEnum> x) {
 					assertJson(x, "{ONE:'TWO'}");
-					Map.Entry<TestEnum,TestEnum> e = x.entrySet().iterator().next();
+					var e = x.entrySet().iterator().next();
 					assertType(TestEnum.class, e.getKey());
 					assertType(TestEnum.class, e.getValue());
 				}
@@ -789,7 +799,7 @@ public class RrpcInterfaceTest {
 				@Override
 				public void setEnum3dArrayMap(Map<TestEnum,TestEnum[][][]> x) {
 					assertJson(x, "{ONE:[[['TWO',null],null],null]}");
-					Map.Entry<TestEnum,TestEnum[][][]> e = x.entrySet().iterator().next();
+					var e = x.entrySet().iterator().next();
 					assertType(TestEnum.class, e.getKey());
 					assertType(TestEnum[][][].class, e.getValue());
 				}
@@ -915,354 +925,390 @@ public class RrpcInterfaceTest {
 		}
 	}
 
-	private static Map<String,InterfaceProxy> cache = new LinkedHashMap<>();
-
-	private InterfaceProxy proxy;
-
-	public RrpcInterfaceTest(String label, Serializer serializer, Parser parser) {
-		proxy = cache.get(label);
-		if (proxy == null) {
-			proxy = MockRestClient.create(InterfaceProxyResource.class).serializer(serializer).parser(parser).noTrace().build().getRrpcInterface(InterfaceProxy.class,"/proxy");
-			cache.put(label,proxy);
-		}
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test return types.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// Various primitives
-	@Test
-	public void a01_returnVoid() {
-		assertNotThrown(()->proxy.returnVoid());
+	@ParameterizedTest
+	@MethodSource("input")
+	void a01_returnVoid(Input input) {
+		assertNotThrown(()->input.proxy.returnVoid());
 	}
 
-	@Test
-	public void a02_returnInteger() {
-		assertEquals((Integer)1, proxy.returnInteger());
+	@ParameterizedTest
+	@MethodSource("input")
+	void a02_returnInteger(Input input) {
+		assertEquals((Integer)1, input.proxy.returnInteger());
 	}
 
-	@Test
-	public void a03_returnInt() {
-		assertEquals(1, proxy.returnInt());
+	@ParameterizedTest
+	@MethodSource("input")
+	void a03_returnInt(Input input) {
+		assertEquals(1, input.proxy.returnInt());
 	}
 
-	@Test
-	public void a04_returnBoolean() {
-		assertEquals(true, proxy.returnBoolean());
+	@ParameterizedTest
+	@MethodSource("input")
+	void a04_returnBoolean(Input input) {
+		assertEquals(true, input.proxy.returnBoolean());
 	}
 
-	@Test
-	public void a05_returnFloat() {
-		assertEquals(1f, proxy.returnFloat(), 0.1f);
+	@ParameterizedTest
+	@MethodSource("input")
+	void a05_returnFloat(Input input) {
+		assertEquals(1f, input.proxy.returnFloat(), 0.1f);
 	}
 
-	@Test
-	public void a06_returnFloatObject() {
-		assertEquals(1f, proxy.returnFloatObject(), 0.1f);
+	@ParameterizedTest
+	@MethodSource("input")
+	void a06_returnFloatObject(Input input) {
+		assertEquals(1f, input.proxy.returnFloatObject(), 0.1f);
 	}
 
-	@Test
-	public void a07_returnString() {
-		assertEquals("foobar",proxy.returnString());
+	@ParameterizedTest
+	@MethodSource("input")
+	void a07_returnString(Input input) {
+		assertEquals("foobar",input.proxy.returnString());
 	}
 
-	@Test
-	public void a08_returnNullString() {
-		assertNull(proxy.returnNullString());
+	@ParameterizedTest
+	@MethodSource("input")
+	void a08_returnNullString(Input input) {
+		assertNull(input.proxy.returnNullString());
 	}
 
-	@Test
-	public void a09_returnInt3dArray() {
-		assertJson(proxy.returnInt3dArray(), "[[[1,2],null],null]");
+	@ParameterizedTest
+	@MethodSource("input")
+	void a09_returnInt3dArray(Input input) {
+		assertJson(input.proxy.returnInt3dArray(), "[[[1,2],null],null]");
 	}
 
-	@Test
-	public void a10_returnInteger3dArray() {
-		assertJson(proxy.returnInteger3dArray(), "[[[1,null],null],null]");
+	@ParameterizedTest
+	@MethodSource("input")
+	void a10_returnInteger3dArray(Input input) {
+		assertJson(input.proxy.returnInteger3dArray(), "[[[1,null],null],null]");
 	}
 
-	@Test
-	public void a11_returnString3dArray() {
-		assertJson(proxy.returnString3dArray(), "[[['foo','bar',null],null],null]");
+	@ParameterizedTest
+	@MethodSource("input")
+	void a11_returnString3dArray(Input input) {
+		assertJson(input.proxy.returnString3dArray(), "[[['foo','bar',null],null],null]");
 	}
 
-	@Test
-	public void a12_returnIntegerList() {
-		List<Integer> x = proxy.returnIntegerList();
+	@ParameterizedTest
+	@MethodSource("input")
+	void a12_returnIntegerList(Input input) {
+		var x = input.proxy.returnIntegerList();
 		assertJson(x, "[1,null]");
 		assertType(Integer.class, x.get(0));
 	}
 
-	@Test
-	public void a13_returnInteger3dList() {
-		List<List<List<Integer>>> x = proxy.returnInteger3dList();
+	@ParameterizedTest
+	@MethodSource("input")
+	void a13_returnInteger3dList(Input input) {
+		var x = input.proxy.returnInteger3dList();
 		assertJson(x, "[[[1,null],null],null]");
 		assertType(Integer.class, x.get(0).get(0).get(0));
 	}
 
-	@Test
-	public void a14_returnInteger1d3dList() {
-		List<Integer[][][]> x = proxy.returnInteger1d3dList();
+	@ParameterizedTest
+	@MethodSource("input")
+	void a14_returnInteger1d3dList(Input input) {
+		var x = input.proxy.returnInteger1d3dList();
 		assertJson(x, "[[[[1,null],null],null],null]");
 		assertType(Integer.class, x.get(0)[0][0][0]);
 	}
 
-	@Test
-	public void a15_returnInt1d3dList() {
-		List<int[][][]> x = proxy.returnInt1d3dList();
+	@ParameterizedTest
+	@MethodSource("input")
+	void a15_returnInt1d3dList(Input input) {
+		var x = input.proxy.returnInt1d3dList();
 		assertJson(x, "[[[[1,2],null],null],null]");
 		assertType(int[][][].class, x.get(0));
 	}
 
-	@Test
-	public void a16_returnStringList() {
-		assertJson(proxy.returnStringList(), "['foo','bar',null]");
+	@ParameterizedTest
+	@MethodSource("input")
+	void a16_returnStringList(Input input) {
+		assertJson(input.proxy.returnStringList(), "['foo','bar',null]");
 	}
 
 	// Beans
 
-	@Test
-	public void b01_returnBean() {
-		ABean x = proxy.returnBean();
+	@ParameterizedTest
+	@MethodSource("input")
+	void b01_returnBean(Input input) {
+		var x = input.proxy.returnBean();
 		assertJson(x, "{a:1,b:'foo'}");
 		assertType(ABean.class, x);
 	}
 
-	@Test
-	public void b02_returnBean3dArray() {
-		ABean[][][] x = proxy.returnBean3dArray();
+	@ParameterizedTest
+	@MethodSource("input")
+	void b02_returnBean3dArray(Input input) {
+		var x = input.proxy.returnBean3dArray();
 		assertJson(x, "[[[{a:1,b:'foo'},null],null],null]");
 		assertType(ABean.class, x[0][0][0]);
 	}
 
-	@Test
-	public void b03_returnBeanList() {
-		List<ABean> x = proxy.returnBeanList();
+	@ParameterizedTest
+	@MethodSource("input")
+	void b03_returnBeanList(Input input) {
+		var x = input.proxy.returnBeanList();
 		assertJson(x, "[{a:1,b:'foo'}]");
 		assertType(ABean.class, x.get(0));
 	}
 
-	@Test
-	public void b04_returnBean1d3dList() {
-		List<ABean[][][]> x = proxy.returnBean1d3dList();
+	@ParameterizedTest
+	@MethodSource("input")
+	void b04_returnBean1d3dList(Input input) {
+		var x = input.proxy.returnBean1d3dList();
 		assertJson(x, "[[[[{a:1,b:'foo'},null],null],null],null]");
 		assertType(ABean.class, x.get(0)[0][0][0]);
 	}
 
-	@Test
-	public void b05_returnBeanMap() {
-		Map<String,ABean> x = proxy.returnBeanMap();
+	@ParameterizedTest
+	@MethodSource("input")
+	void b05_returnBeanMap(Input input) {
+		var x = input.proxy.returnBeanMap();
 		assertJson(x, "{foo:{a:1,b:'foo'}}");
 		assertType(ABean.class, x.get("foo"));
 	}
 
-	@Test
-	public void b06_returnBeanListMap() {
-		Map<String,List<ABean>> x = proxy.returnBeanListMap();
+	@ParameterizedTest
+	@MethodSource("input")
+	void b06_returnBeanListMap(Input input) {
+		var x = input.proxy.returnBeanListMap();
 		assertJson(x, "{foo:[{a:1,b:'foo'}]}");
 		assertType(ABean.class, x.get("foo").get(0));
 	}
 
-	@Test
-	public void b07_returnBean1d3dListMap() {
-		Map<String,List<ABean[][][]>> x = proxy.returnBean1d3dListMap();
+	@ParameterizedTest
+	@MethodSource("input")
+	void b07_returnBean1d3dListMap(Input input) {
+		var x = input.proxy.returnBean1d3dListMap();
 		assertJson(x, "{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 		assertType(ABean.class, x.get("foo").get(0)[0][0][0]);
 	}
 
-	@Test
-	public void b08_returnBeanListMapIntegerKeys() {
+	@ParameterizedTest
+	@MethodSource("input")
+	void b08_returnBeanListMapIntegerKeys(Input input) {
 		// Note: JsonSerializer serializes key as string.
-		Map<Integer,List<ABean>> x = proxy.returnBeanListMapIntegerKeys();
+		var x = input.proxy.returnBeanListMapIntegerKeys();
 		assertJson(x, "{'1':[{a:1,b:'foo'}]}");
 		assertType(Integer.class, x.keySet().iterator().next());
 	}
 
 	// Typed beans
 
-	@Test
-	public void c01_returnTypedBean() {
-		TypedBean x = proxy.returnTypedBean();
+	@ParameterizedTest
+	@MethodSource("input")
+	void c01_returnTypedBean(Input input) {
+		var x = input.proxy.returnTypedBean();
 		assertJson(x, "{a:1,b:'foo'}");
 		assertType(TypedBeanImpl.class, x);
 	}
 
-	@Test
-	public void c02_returnTypedBean3dArray() {
-		TypedBean[][][] x = proxy.returnTypedBean3dArray();
+	@ParameterizedTest
+	@MethodSource("input")
+	void c02_returnTypedBean3dArray(Input input) {
+		var x = input.proxy.returnTypedBean3dArray();
 		assertJson(x, "[[[{a:1,b:'foo'},null],null],null]");
 		assertType(TypedBeanImpl.class, x[0][0][0]);
 	}
 
-	@Test
-	public void c03_returnTypedBeanList() {
-		List<TypedBean> x = proxy.returnTypedBeanList();
+	@ParameterizedTest
+	@MethodSource("input")
+	void c03_returnTypedBeanList(Input input) {
+		var x = input.proxy.returnTypedBeanList();
 		assertJson(x, "[{a:1,b:'foo'}]");
 		assertType(TypedBeanImpl.class, x.get(0));
 	}
 
-	@Test
-	public void c04_returnTypedBean1d3dList() {
-		List<TypedBean[][][]> x = proxy.returnTypedBean1d3dList();
+	@ParameterizedTest
+	@MethodSource("input")
+	void c04_returnTypedBean1d3dList(Input input) {
+		var x = input.proxy.returnTypedBean1d3dList();
 		assertJson(x, "[[[[{a:1,b:'foo'},null],null],null],null]");
 		assertType(TypedBeanImpl.class, x.get(0)[0][0][0]);
 	}
 
-	@Test
-	public void c05_returnTypedBeanMap() {
-		Map<String,TypedBean> x = proxy.returnTypedBeanMap();
+	@ParameterizedTest
+	@MethodSource("input")
+	void c05_returnTypedBeanMap(Input input) {
+		var x = input.proxy.returnTypedBeanMap();
 		assertJson(x, "{foo:{a:1,b:'foo'}}");
 		assertType(TypedBeanImpl.class, x.get("foo"));
 	}
 
-	@Test
-	public void c06_returnTypedBeanListMap() {
-		Map<String,List<TypedBean>> x = proxy.returnTypedBeanListMap();
+	@ParameterizedTest
+	@MethodSource("input")
+	void c06_returnTypedBeanListMap(Input input) {
+		var x = input.proxy.returnTypedBeanListMap();
 		assertJson(x, "{foo:[{a:1,b:'foo'}]}");
 		assertType(TypedBeanImpl.class, x.get("foo").get(0));
 	}
 
-	@Test
-	public void c07_returnTypedBean1d3dListMap() {
-		Map<String,List<TypedBean[][][]>> x = proxy.returnTypedBean1d3dListMap();
+	@ParameterizedTest
+	@MethodSource("input")
+	void c07_returnTypedBean1d3dListMap(Input input) {
+		var x = input.proxy.returnTypedBean1d3dListMap();
 		assertJson(x, "{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 		assertType(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0]);
 	}
 
-	@Test
-	public void c08_returnTypedBeanListMapIntegerKeys() {
+	@ParameterizedTest
+	@MethodSource("input")
+	void c08_returnTypedBeanListMapIntegerKeys(Input input) {
 		// Note: JsonSerializer serializes key as string.
-		Map<Integer,List<TypedBean>> x = proxy.returnTypedBeanListMapIntegerKeys();
+		var x = input.proxy.returnTypedBeanListMapIntegerKeys();
 		assertJson(x, "{'1':[{a:1,b:'foo'}]}");
 		assertType(TypedBeanImpl.class, x.get(1).get(0));
 	}
 
 	// Swapped POJOs
 
-	@Test
-	public void d01_returnSwappedObject() {
-		SwappedObject x = proxy.returnSwappedObject();
+	@ParameterizedTest
+	@MethodSource("input")
+	void d01_returnSwappedObject(Input input) {
+		var x = input.proxy.returnSwappedObject();
 		assertJson(x, "'"+SWAP+"'");
 		assertTrue(x.wasUnswapped);
 	}
 
-	@Test
-	public void d02_returnSwappedObject3dArray() {
-		SwappedObject[][][] x = proxy.returnSwappedObject3dArray();
+	@ParameterizedTest
+	@MethodSource("input")
+	void d02_returnSwappedObject3dArray(Input input) {
+		var x = input.proxy.returnSwappedObject3dArray();
 		assertJson(x, "[[['"+SWAP+"',null],null],null]");
 		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
-	@Test
-	public void d03_returnSwappedObjectMap() {
-		Map<SwappedObject,SwappedObject> x = proxy.returnSwappedObjectMap();
+	@ParameterizedTest
+	@MethodSource("input")
+	void d03_returnSwappedObjectMap(Input input) {
+		var x = input.proxy.returnSwappedObjectMap();
 		assertJson(x, "{'"+SWAP+"':'"+SWAP+"'}");
-		Map.Entry<SwappedObject,SwappedObject> e = x.entrySet().iterator().next();
+		var e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue().wasUnswapped);
 	}
 
-	@Test
-	public void d04_returnSwappedObject3dMap() {
-		Map<SwappedObject,SwappedObject[][][]> x = proxy.returnSwappedObject3dMap();
+	@ParameterizedTest
+	@MethodSource("input")
+	void d04_returnSwappedObject3dMap(Input input) {
+		var x = input.proxy.returnSwappedObject3dMap();
 		assertJson(x, "{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
-		Map.Entry<SwappedObject,SwappedObject[][][]> e = x.entrySet().iterator().next();
+		var e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);
 	}
 
 	// Implicit swapped POJOs
 
-	@Test
-	public void e01_returnImplicitSwappedObject() {
-		ImplicitSwappedObject x = proxy.returnImplicitSwappedObject();
+	@ParameterizedTest
+	@MethodSource("input")
+	void e01_returnImplicitSwappedObject(Input input) {
+		var x = input.proxy.returnImplicitSwappedObject();
 		assertJson(x, "'"+SWAP+"'");
 		assertTrue(x.wasUnswapped);
 	}
 
-	@Test
-	public void e02_returnImplicitSwappedObject3dArray() {
-		ImplicitSwappedObject[][][] x = proxy.returnImplicitSwappedObject3dArray();
+	@ParameterizedTest
+	@MethodSource("input")
+	void e02_returnImplicitSwappedObject3dArray(Input input) {
+		var x = input.proxy.returnImplicitSwappedObject3dArray();
 		assertJson(x, "[[['"+SWAP+"',null],null],null]");
 		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
-	@Test
-	public void e03_returnImplicitSwappedObjectMap() {
-		Map<ImplicitSwappedObject,ImplicitSwappedObject> x = proxy.returnImplicitSwappedObjectMap();
+	@ParameterizedTest
+	@MethodSource("input")
+	void e03_returnImplicitSwappedObjectMap(Input input) {
+		var x = input.proxy.returnImplicitSwappedObjectMap();
 		assertJson(x, "{'"+SWAP+"':'"+SWAP+"'}");
-		Map.Entry<ImplicitSwappedObject,ImplicitSwappedObject> e = x.entrySet().iterator().next();
+		var e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue().wasUnswapped);
 	}
 
-	@Test
-	public void e04_returnImplicitSwappedObject3dMap() {
-		Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> x = proxy.returnImplicitSwappedObject3dMap();
+	@ParameterizedTest
+	@MethodSource("input")
+	void e04_returnImplicitSwappedObject3dMap(Input input) {
+		var x = input.proxy.returnImplicitSwappedObject3dMap();
 		assertJson(x, "{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
-		Map.Entry<ImplicitSwappedObject,ImplicitSwappedObject[][][]> e = x.entrySet().iterator().next();
+		var e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);
 	}
 
 	// Enums
 
-	@Test
-	public void f01_returnEnum() {
-		TestEnum x = proxy.returnEnum();
+	@ParameterizedTest
+	@MethodSource("input")
+	void f01_returnEnum(Input input) {
+		var x = input.proxy.returnEnum();
 		assertJson(x, "'TWO'");
 	}
 
-	@Test
-	public void f02_returnEnum3d() {
-		TestEnum[][][] x = proxy.returnEnum3d();
+	@ParameterizedTest
+	@MethodSource("input")
+	void f02_returnEnum3d(Input input) {
+		var x = input.proxy.returnEnum3d();
 		assertJson(x, "[[['TWO',null],null],null]");
 		assertType(TestEnum.class, x[0][0][0]);
 	}
 
-	@Test
-	public void f03_returnEnumList() {
-		List<TestEnum> x = proxy.returnEnumList();
+	@ParameterizedTest
+	@MethodSource("input")
+	void f03_returnEnumList(Input input) {
+		var x = input.proxy.returnEnumList();
 		assertJson(x, "['TWO',null]");
 		assertType(TestEnum.class, x.get(0));
 	}
 
-	@Test
-	public void f04_returnEnum3dList() {
-		List<List<List<TestEnum>>> x = proxy.returnEnum3dList();
+	@ParameterizedTest
+	@MethodSource("input")
+	void f04_returnEnum3dList(Input input) {
+		var x = input.proxy.returnEnum3dList();
 		assertJson(x, "[[['TWO',null],null],null]");
 		assertType(TestEnum.class, x.get(0).get(0).get(0));
 	}
 
-	@Test
-	public void f05_returnEnum1d3dList() {
-		List<TestEnum[][][]> x = proxy.returnEnum1d3dList();
+	@ParameterizedTest
+	@MethodSource("input")
+	void f05_returnEnum1d3dList(Input input) {
+		var x = input.proxy.returnEnum1d3dList();
 		assertJson(x, "[[[['TWO',null],null],null],null]");
 		assertType(TestEnum[][][].class, x.get(0));
 	}
 
-	@Test
-	public void f06_returnEnumMap() {
-		Map<TestEnum,TestEnum> x = proxy.returnEnumMap();
+	@ParameterizedTest
+	@MethodSource("input")
+	void f06_returnEnumMap(Input input) {
+		var x = input.proxy.returnEnumMap();
 		assertJson(x, "{ONE:'TWO'}");
-		Map.Entry<TestEnum,TestEnum> e = x.entrySet().iterator().next();
+		var e = x.entrySet().iterator().next();
 		assertType(TestEnum.class, e.getKey());
 		assertType(TestEnum.class, e.getValue());
 	}
 
-	@Test
-	public void f07_returnEnum3dArrayMap() {
-		Map<TestEnum,TestEnum[][][]> x = proxy.returnEnum3dArrayMap();
+	@ParameterizedTest
+	@MethodSource("input")
+	void f07_returnEnum3dArrayMap(Input input) {
+		var x = input.proxy.returnEnum3dArrayMap();
 		assertJson(x, "{ONE:[[['TWO',null],null],null]}");
-		Map.Entry<TestEnum,TestEnum[][][]> e = x.entrySet().iterator().next();
+		var e = x.entrySet().iterator().next();
 		assertType(TestEnum.class, e.getKey());
 		assertType(TestEnum[][][].class, e.getValue());
 	}
 
-	@Test
-	public void f08_returnEnum1d3dListMap() {
-		Map<TestEnum,List<TestEnum[][][]>> x = proxy.returnEnum1d3dListMap();
+	@ParameterizedTest
+	@MethodSource("input")
+	void f08_returnEnum1d3dListMap(Input input) {
+		var x = input.proxy.returnEnum1d3dListMap();
 		assertJson(x, "{ONE:[[[['TWO',null],null],null],null]}");
 		assertType(TestEnum[][][].class, x.get(TestEnum.ONE).get(0));
 	}
@@ -1271,20 +1317,22 @@ public class RrpcInterfaceTest {
 	// Test server-side exception serialization.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void g01_throwException1() {
+	@ParameterizedTest
+	@MethodSource("input")
+	void g01_throwException1(Input input) {
 		try {
-			proxy.throwException1();
+			input.proxy.throwException1();
 			fail();
 		} catch (InterfaceProxy.InterfaceProxyException1 e) {
 			assertEquals("foo",e.getMessage());
 		}
 	}
 
-	@Test
-	public void g02_throwException2() {
+	@ParameterizedTest
+	@MethodSource("input")
+	void g02_throwException2(Input input) {
 		try {
-			proxy.throwException2();
+			input.proxy.throwException2();
 			fail();
 		} catch (InterfaceProxy.InterfaceProxyException2 e) {/*no-op*/}
 	}
@@ -1294,373 +1342,432 @@ public class RrpcInterfaceTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// Various primitives
-	@Test
-	public void h01_setNothing() {
-		assertNotThrown(()->proxy.setNothing());
+	@ParameterizedTest
+	@MethodSource("input")
+	void h01_setNothing(Input input) {
+		assertNotThrown(()->input.proxy.setNothing());
 	}
 
-	@Test
-	public void h02_setInt() {
-		assertNotThrown(()->proxy.setInt(1));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h02_setInt(Input input) {
+		assertNotThrown(()->input.proxy.setInt(1));
 	}
 
-	@Test
-	public void h03_setWrongInt() {
-		assertThrows(AssertionError.class, ()->proxy.setInt(2), "expected:<1> but was:<2>");
+	@ParameterizedTest
+	@MethodSource("input")
+	void h03_setWrongInt(Input input) {
+		assertThrows(AssertionError.class, ()->input.proxy.setInt(2), "expected:<1> but was:<2>");
 	}
 
-	@Test
-	public void h04_setInteger() {
-		assertNotThrown(()->proxy.setInteger(1));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h04_setInteger(Input input) {
+		assertNotThrown(()->input.proxy.setInteger(1));
 	}
 
-	@Test
-	public void h05_setBoolean() {
-		assertNotThrown(()->proxy.setBoolean(true));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h05_setBoolean(Input input) {
+		assertNotThrown(()->input.proxy.setBoolean(true));
 	}
 
-	@Test
-	public void h06_setFloat() {
-		assertNotThrown(()->proxy.setFloat(1f));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h06_setFloat(Input input) {
+		assertNotThrown(()->input.proxy.setFloat(1f));
 	}
 
-	@Test
-	public void h07_setFloatObject() {
-		assertNotThrown(()->proxy.setFloatObject(1f));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h07_setFloatObject(Input input) {
+		assertNotThrown(()->input.proxy.setFloatObject(1f));
 	}
 
-	@Test
-	public void h08_setString() {
-		assertNotThrown(()->proxy.setString("foo"));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h08_setString(Input input) {
+		assertNotThrown(()->input.proxy.setString("foo"));
 	}
 
-	@Test
-	public void h09_setNullString() {
-		assertNotThrown(()->proxy.setNullString(null));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h09_setNullString(Input input) {
+		assertNotThrown(()->input.proxy.setNullString(null));
 	}
 
-	@Test
-	public void h10_setNullStringBad() {
-		assertThrows(AssertionError.class, ()->proxy.setNullString("foo"), "expected null, but was:<foo>");
+	@ParameterizedTest
+	@MethodSource("input")
+	void h10_setNullStringBad(Input input) {
+		assertThrows(AssertionError.class, ()->input.proxy.setNullString("foo"), "expected null, but was:<foo>");
 	}
 
-	@Test
-	public void h11_setInt3dArray() {
-		assertNotThrown(()->proxy.setInt3dArray(new int[][][]{{{1,2},null},null}));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h11_setInt3dArray(Input input) {
+		assertNotThrown(()->input.proxy.setInt3dArray(new int[][][]{{{1,2},null},null}));
 	}
 
-	@Test
-	public void h12_setInteger3dArray() {
-		assertNotThrown(()->proxy.setInteger3dArray(new Integer[][][]{{{1,null},null},null}));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h12_setInteger3dArray(Input input) {
+		assertNotThrown(()->input.proxy.setInteger3dArray(new Integer[][][]{{{1,null},null},null}));
 	}
 
-	@Test
-	public void h13_setString3dArray() {
-		assertNotThrown(()->proxy.setString3dArray(new String[][][]{{{"foo",null},null},null}));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h13_setString3dArray(Input input) {
+		assertNotThrown(()->input.proxy.setString3dArray(new String[][][]{{{"foo",null},null},null}));
 	}
 
-	@Test
-	public void h14_setIntegerList() {
-		assertNotThrown(()->proxy.setIntegerList(alist(1,null)));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h14_setIntegerList(Input input) {
+		assertNotThrown(()->input.proxy.setIntegerList(alist(1,null)));
 	}
 
-	@Test
-	public void h15_setInteger3dList() {
-		assertNotThrown(()->proxy.setInteger3dList(alist(alist(alist(1,null),null),null)));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h15_setInteger3dList(Input input) {
+		assertNotThrown(()->input.proxy.setInteger3dList(alist(alist(alist(1,null),null),null)));
 	}
 
-	@Test
-	public void h16_setInteger1d3dList() {
-		assertNotThrown(()->proxy.setInteger1d3dList(alist(new Integer[][][]{{{1,null},null},null},null)));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h16_setInteger1d3dList(Input input) {
+		assertNotThrown(()->input.proxy.setInteger1d3dList(alist(new Integer[][][]{{{1,null},null},null},null)));
 	}
 
-	@Test
-	public void h17_setInt1d3dList() {
-		assertNotThrown(()->proxy.setInt1d3dList(alist(new int[][][]{{{1,2},null},null},null)));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h17_setInt1d3dList(Input input) {
+		assertNotThrown(()->input.proxy.setInt1d3dList(alist(new int[][][]{{{1,2},null},null},null)));
 	}
 
-	@Test
-	public void h18_setStringList() {
-		assertNotThrown(()->proxy.setStringList(Arrays.asList("foo","bar",null)));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h18_setStringList(Input input) {
+		assertNotThrown(()->input.proxy.setStringList(Arrays.asList("foo","bar",null)));
 	}
 
 	// Beans
-	@Test
-	public void h19_setBean() {
-		assertNotThrown(()->proxy.setBean(ABean.get()));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h19_setBean(Input input) {
+		assertNotThrown(()->input.proxy.setBean(ABean.get()));
 	}
 
-	@Test
-	public void h20_setBean3dArray() {
-		assertNotThrown(()->proxy.setBean3dArray(new ABean[][][]{{{ABean.get(),null},null},null}));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h20_setBean3dArray(Input input) {
+		assertNotThrown(()->input.proxy.setBean3dArray(new ABean[][][]{{{ABean.get(),null},null},null}));
 	}
 
-	@Test
-	public void h21_setBeanList() {
-		assertNotThrown(()->proxy.setBeanList(Arrays.asList(ABean.get())));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h21_setBeanList(Input input) {
+		assertNotThrown(()->input.proxy.setBeanList(Arrays.asList(ABean.get())));
 	}
 
-	@Test
-	public void h22_setBean1d3dList() {
-		assertNotThrown(()->proxy.setBean1d3dList(alist(new ABean[][][]{{{ABean.get(),null},null},null},null)));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h22_setBean1d3dList(Input input) {
+		assertNotThrown(()->input.proxy.setBean1d3dList(alist(new ABean[][][]{{{ABean.get(),null},null},null},null)));
 	}
 
-	@Test
-	public void h23_setBeanMap() {
-		assertNotThrown(()->proxy.setBeanMap(map("foo",ABean.get())));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h23_setBeanMap(Input input) {
+		assertNotThrown(()->input.proxy.setBeanMap(map("foo",ABean.get())));
 	}
 
-	@Test
-	public void h24_setBeanListMap() {
-		assertNotThrown(()->proxy.setBeanListMap(map("foo",Arrays.asList(ABean.get()))));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h24_setBeanListMap(Input input) {
+		assertNotThrown(()->input.proxy.setBeanListMap(map("foo",Arrays.asList(ABean.get()))));
 	}
 
-	@Test
-	public void h25_setBean1d3dListMap() {
-		assertNotThrown(()->proxy.setBean1d3dListMap(map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null))));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h25_setBean1d3dListMap(Input input) {
+		assertNotThrown(()->input.proxy.setBean1d3dListMap(map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null))));
 	}
 
-	@Test
-	public void h26_setBeanListMapIntegerKeys() {
-		assertNotThrown(()->proxy.setBeanListMapIntegerKeys(map(1,Arrays.asList(ABean.get()))));
+	@ParameterizedTest
+	@MethodSource("input")
+	void h26_setBeanListMapIntegerKeys(Input input) {
+		assertNotThrown(()->input.proxy.setBeanListMapIntegerKeys(map(1,Arrays.asList(ABean.get()))));
 	}
 
 	// Typed beans
 
-	@Test
-	public void i01_setTypedBean() {
-		assertNotThrown(()->proxy.setTypedBean(TypedBeanImpl.get()));
+	@ParameterizedTest
+	@MethodSource("input")
+	void i01_setTypedBean(Input input) {
+		assertNotThrown(()->input.proxy.setTypedBean(TypedBeanImpl.get()));
 	}
 
-	@Test
-	public void i02_setTypedBean3dArray() {
-		assertNotThrown(()->proxy.setTypedBean3dArray(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null}));
+	@ParameterizedTest
+	@MethodSource("input")
+	void i02_setTypedBean3dArray(Input input) {
+		assertNotThrown(()->input.proxy.setTypedBean3dArray(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null}));
 	}
 
-	@Test
-	public void i03_setTypedBeanList() {
-		assertNotThrown(()->proxy.setTypedBeanList(Arrays.asList((TypedBean)TypedBeanImpl.get())));
+	@ParameterizedTest
+	@MethodSource("input")
+	void i03_setTypedBeanList(Input input) {
+		assertNotThrown(()->input.proxy.setTypedBeanList(Arrays.asList((TypedBean)TypedBeanImpl.get())));
 	}
 
-	@Test
-	public void i04_setTypedBean1d3dList() {
-		assertNotThrown(()->proxy.setTypedBean1d3dList(alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
+	@ParameterizedTest
+	@MethodSource("input")
+	void i04_setTypedBean1d3dList(Input input) {
+		assertNotThrown(()->input.proxy.setTypedBean1d3dList(alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
 	}
 
-	@Test
-	public void i05_setTypedBeanMap() {
-		assertNotThrown(()->proxy.setTypedBeanMap(map("foo",TypedBeanImpl.get())));
+	@ParameterizedTest
+	@MethodSource("input")
+	void i05_setTypedBeanMap(Input input) {
+		assertNotThrown(()->input.proxy.setTypedBeanMap(map("foo",TypedBeanImpl.get())));
 	}
 
-	@Test
-	public void i06_setTypedBeanListMap() {
-		assertNotThrown(()->proxy.setTypedBeanListMap(map("foo",Arrays.asList((TypedBean)TypedBeanImpl.get()))));
+	@ParameterizedTest
+	@MethodSource("input")
+	void i06_setTypedBeanListMap(Input input) {
+		assertNotThrown(()->input.proxy.setTypedBeanListMap(map("foo",Arrays.asList((TypedBean)TypedBeanImpl.get()))));
 	}
 
-	@Test
-	public void i07_setTypedBean1d3dListMap() {
-		assertNotThrown(()->proxy.setTypedBean1d3dListMap(map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null))));
+	@ParameterizedTest
+	@MethodSource("input")
+	void i07_setTypedBean1d3dListMap(Input input) {
+		assertNotThrown(()->input.proxy.setTypedBean1d3dListMap(map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null))));
 	}
 
-	@Test
-	public void i08_setTypedBeanListMapIntegerKeys() {
-		assertNotThrown(()->proxy.setTypedBeanListMapIntegerKeys(map(1,Arrays.asList((TypedBean)TypedBeanImpl.get()))));
+	@ParameterizedTest
+	@MethodSource("input")
+	void i08_setTypedBeanListMapIntegerKeys(Input input) {
+		assertNotThrown(()->input.proxy.setTypedBeanListMapIntegerKeys(map(1,Arrays.asList((TypedBean)TypedBeanImpl.get()))));
 	}
 
 	// Swapped POJOs
 
-	@Test
-	public void j01_setSwappedObject() {
-		assertNotThrown(()->proxy.setSwappedObject(new SwappedObject()));
+	@ParameterizedTest
+	@MethodSource("input")
+	void j01_setSwappedObject(Input input) {
+		assertNotThrown(()->input.proxy.setSwappedObject(new SwappedObject()));
 	}
 
-	@Test
-	public void j02_setSwappedObject3dArray() {
-		assertNotThrown(()->proxy.setSwappedObject3dArray(new SwappedObject[][][]{{{new SwappedObject(),null},null},null}));
+	@ParameterizedTest
+	@MethodSource("input")
+	void j02_setSwappedObject3dArray(Input input) {
+		assertNotThrown(()->input.proxy.setSwappedObject3dArray(new SwappedObject[][][]{{{new SwappedObject(),null},null},null}));
 	}
 
-	@Test
-	public void j03_setSwappedObjectMap() {
-		assertNotThrown(()->proxy.setSwappedObjectMap(map(new SwappedObject(),new SwappedObject())));
+	@ParameterizedTest
+	@MethodSource("input")
+	void j03_setSwappedObjectMap(Input input) {
+		assertNotThrown(()->input.proxy.setSwappedObjectMap(map(new SwappedObject(),new SwappedObject())));
 	}
 
-	@Test
-	public void j04_setSwappedObject3dMap() {
-		assertNotThrown(()->proxy.setSwappedObject3dMap(map(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null})));
+	@ParameterizedTest
+	@MethodSource("input")
+	void j04_setSwappedObject3dMap(Input input) {
+		assertNotThrown(()->input.proxy.setSwappedObject3dMap(map(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null})));
 	}
 
 	// Implicit swapped POJOs
-	@Test
-	public void k01_setImplicitSwappedObject() {
-		assertNotThrown(()->proxy.setImplicitSwappedObject(new ImplicitSwappedObject()));
+	@ParameterizedTest
+	@MethodSource("input")
+	void k01_setImplicitSwappedObject(Input input) {
+		assertNotThrown(()->input.proxy.setImplicitSwappedObject(new ImplicitSwappedObject()));
 	}
 
-	@Test
-	public void k02_setImplicitSwappedObject3dArray() {
-		assertNotThrown(()->proxy.setImplicitSwappedObject3dArray(new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null}));
+	@ParameterizedTest
+	@MethodSource("input")
+	void k02_setImplicitSwappedObject3dArray(Input input) {
+		assertNotThrown(()->input.proxy.setImplicitSwappedObject3dArray(new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null}));
 	}
 
-	@Test
-	public void k03_setImplicitSwappedObjectMap() {
-		assertNotThrown(()->proxy.setImplicitSwappedObjectMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject())));
+	@ParameterizedTest
+	@MethodSource("input")
+	void k03_setImplicitSwappedObjectMap(Input input) {
+		assertNotThrown(()->input.proxy.setImplicitSwappedObjectMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject())));
 	}
 
-	@Test
-	public void k04_setImplicitSwappedObject3dMap() {
-		assertNotThrown(()->proxy.setImplicitSwappedObject3dMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null})));
+	@ParameterizedTest
+	@MethodSource("input")
+	void k04_setImplicitSwappedObject3dMap(Input input) {
+		assertNotThrown(()->input.proxy.setImplicitSwappedObject3dMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null})));
 	}
 
 	// Enums
 
-	@Test
-	public void l01_setEnum() {
-		assertNotThrown(()->proxy.setEnum(TestEnum.TWO));
+	@ParameterizedTest
+	@MethodSource("input")
+	void l01_setEnum(Input input) {
+		assertNotThrown(()->input.proxy.setEnum(TestEnum.TWO));
 	}
 
-	@Test
-	public void l02_setEnum3d() {
-		assertNotThrown(()->proxy.setEnum3d(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
+	@ParameterizedTest
+	@MethodSource("input")
+	void l02_setEnum3d(Input input) {
+		assertNotThrown(()->input.proxy.setEnum3d(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
 	}
 
-	@Test
-	public void l03_setEnumList() {
-		assertNotThrown(()->proxy.setEnumList(alist(TestEnum.TWO,null)));
+	@ParameterizedTest
+	@MethodSource("input")
+	void l03_setEnumList(Input input) {
+		assertNotThrown(()->input.proxy.setEnumList(alist(TestEnum.TWO,null)));
 	}
 
-	@Test
-	public void l04_setEnum3dList() {
-		assertNotThrown(()->proxy.setEnum3dList(alist(alist(alist(TestEnum.TWO,null),null),null)));
+	@ParameterizedTest
+	@MethodSource("input")
+	void l04_setEnum3dList(Input input) {
+		assertNotThrown(()->input.proxy.setEnum3dList(alist(alist(alist(TestEnum.TWO,null),null),null)));
 	}
 
-	@Test
-	public void l05_setEnum1d3dList() {
-		assertNotThrown(()->proxy.setEnum1d3dList(alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
+	@ParameterizedTest
+	@MethodSource("input")
+	void l05_setEnum1d3dList(Input input) {
+		assertNotThrown(()->input.proxy.setEnum1d3dList(alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
 	}
 
-	@Test
-	public void l06_setEnumMap() {
-		assertNotThrown(()->proxy.setEnumMap(map(TestEnum.ONE,TestEnum.TWO)));
+	@ParameterizedTest
+	@MethodSource("input")
+	void l06_setEnumMap(Input input) {
+		assertNotThrown(()->input.proxy.setEnumMap(map(TestEnum.ONE,TestEnum.TWO)));
 	}
 
-	@Test
-	public void l07_setEnum3dArrayMap() {
-		assertNotThrown(()->proxy.setEnum3dArrayMap(map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null})));
+	@ParameterizedTest
+	@MethodSource("input")
+	void l07_setEnum3dArrayMap(Input input) {
+		assertNotThrown(()->input.proxy.setEnum3dArrayMap(map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null})));
 	}
 
-	@Test
-	public void l08_setEnum1d3dListMap() {
-		assertNotThrown(()->proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))));
+	@ParameterizedTest
+	@MethodSource("input")
+	void l08_setEnum1d3dListMap(Input input) {
+		assertNotThrown(()->input.proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test multi-parameters
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void m01_setMultiParamsInts() {
-		int x1 = 1;
-		int[][][] x2 = {{{1,2},null},null};
+	@ParameterizedTest
+	@MethodSource("input")
+	void m01_setMultiParamsInts(Input input) {
+		var x1 = 1;
+		var x2 = new int[][][]{{{1,2},null},null};
 		int[][][] x2n = null;
-		List<int[][][]> x3 = alist(x2,null);
+		var x3 = alist(x2,null);
 		List<int[][][]> x3n = null;
-		assertNotThrown(()->proxy.setMultiParamsInts(x1,x2,x2n,x3,x3n));
+		assertNotThrown(()->input.proxy.setMultiParamsInts(x1,x2,x2n,x3,x3n));
 	}
 
-	@Test
-	public void m02_setMultiParamsInteger() {
-		Integer x1 = 1;
+	@ParameterizedTest
+	@MethodSource("input")
+	void m02_setMultiParamsInteger(Input input) {
+		var x1 = Integer.valueOf(1);
 		Integer x1n = null;
-		Integer[][][] x2 = {{{1,null},null},null};
+		var x2 = new Integer[][][]{{{1,null},null},null};
 		Integer[][][] x2n = null;
-		List<Integer[][][]> x3 = alist(x2,null);
+		var x3 = alist(x2,null);
 		List<Integer[][][]> x3n = null;
-		assertNotThrown(()->proxy.setMultiParamsInteger(x1,x1n,x2,x2n,x3,x3n));
+		assertNotThrown(()->input.proxy.setMultiParamsInteger(x1,x1n,x2,x2n,x3,x3n));
 	}
 
-	@Test
-	public void m03_setMultiParamsFloat() {
-		float x1 = 1;
-		float[][][] x2 = {{{1,2},null},null};
+	@ParameterizedTest
+	@MethodSource("input")
+	void m03_setMultiParamsFloat(Input input) {
+		var x1 = 1f;
+		var x2 = new float[][][]{{{1,2},null},null};
 		float[][][] x2n = null;
-		List<float[][][]> x3 = alist(x2,null);
+		var x3 = alist(x2,null);
 		List<float[][][]> x3n = null;
-		assertNotThrown(()->proxy.setMultiParamsFloat(x1,x2,x2n,x3,x3n));
+		assertNotThrown(()->input.proxy.setMultiParamsFloat(x1,x2,x2n,x3,x3n));
 	}
 
-	@Test
-	public void m04_setMultiParamsFloatObject() {
-		Float x1 = 1f;
+	@ParameterizedTest
+	@MethodSource("input")
+	void m04_setMultiParamsFloatObject(Input input) {
+		var x1 = 1f;
 		Float x1n = null;
-		Float[][][] x2 = {{{1f,null},null},null};
+		var x2 = new Float[][][]{{{1f,null},null},null};
 		Float[][][] x2n = null;
-		List<Float[][][]> x3 = alist(x2,null);
+		var x3 = alist(x2,null);
 		List<Float[][][]> x3n = null;
-		assertNotThrown(()->proxy.setMultiParamsFloatObject(x1,x1n,x2,x2n,x3,x3n));
+		assertNotThrown(()->input.proxy.setMultiParamsFloatObject(x1,x1n,x2,x2n,x3,x3n));
 	}
 
-	@Test
-	public void m05_setMultiParamsString() {
-		String x1 = "foo";
-		String[][][] x2 = {{{"foo",null},null},null};
+	@ParameterizedTest
+	@MethodSource("input")
+	void m05_setMultiParamsString(Input input) {
+		var x1 = "foo";
+		var x2 = new String[][][]{{{"foo",null},null},null};
 		String[][][] x2n = null;
-		List<String[][][]> x3 = alist(x2,null);
+		var x3 = alist(x2,null);
 		List<String[][][]> x3n = null;
-		assertNotThrown(()->proxy.setMultiParamsString(x1,x2,x2n,x3,x3n));
+		assertNotThrown(()->input.proxy.setMultiParamsString(x1,x2,x2n,x3,x3n));
 	}
 
-	@Test
-	public void m06_setMultiParamsBean() {
-		ABean x1 = ABean.get();
-		ABean[][][] x2 = {{{ABean.get(),null},null},null};
+	@ParameterizedTest
+	@MethodSource("input")
+	void m06_setMultiParamsBean(Input input) {
+		var x1 = ABean.get();
+		var x2 = new ABean[][][]{{{ABean.get(),null},null},null};
 		ABean[][][] x2n = null;
-		List<ABean[][][]> x3 = alist(x2,null);
+		var x3 = alist(x2,null);
 		List<ABean[][][]> x3n = null;
-		Map<String,ABean> x4 = map("foo",ABean.get());
+		var x4 = map("foo",ABean.get());
 		Map<String,ABean> x4n = null;
-		Map<String,List<ABean[][][]>> x5 = map("foo",x3);
+		var x5 = map("foo",x3);
 		Map<String,List<ABean[][][]>> x5n = null;
-		assertNotThrown(()->proxy.setMultiParamsBean(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
+		assertNotThrown(()->input.proxy.setMultiParamsBean(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
 	}
 
-	@Test
-	public void m07_setMultiParamsSwappedObject() {
-		SwappedObject x1 = new SwappedObject();
-		SwappedObject[][][] x2 = {{{new SwappedObject(),null},null},null};
+	@ParameterizedTest
+	@MethodSource("input")
+	void m07_setMultiParamsSwappedObject(Input input) {
+		var x1 = new SwappedObject();
+		var x2 = new SwappedObject[][][]{{{new SwappedObject(),null},null},null};
 		SwappedObject[][][] x2n = null;
-		List<SwappedObject[][][]> x3 = alist(x2,null);
+		var x3 = alist(x2,null);
 		List<SwappedObject[][][]> x3n = null;
-		Map<SwappedObject,SwappedObject> x4 = map(new SwappedObject(),new SwappedObject());
+		var x4 = map(new SwappedObject(),new SwappedObject());
 		Map<SwappedObject,SwappedObject> x4n = null;
-		Map<SwappedObject,List<SwappedObject[][][]>> x5 = map(new SwappedObject(),x3);
+		var x5 = map(new SwappedObject(),x3);
 		Map<SwappedObject,List<SwappedObject[][][]>> x5n = null;
-		assertNotThrown(()->proxy.setMultiParamsSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
+		assertNotThrown(()->input.proxy.setMultiParamsSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
 	}
 
-	@Test
-	public void m08_setMultiParamsImplicitSwappedObject() {
-		ImplicitSwappedObject x1 = new ImplicitSwappedObject();
-		ImplicitSwappedObject[][][] x2 = {{{new ImplicitSwappedObject(),null},null},null};
+	@ParameterizedTest
+	@MethodSource("input")
+	void m08_setMultiParamsImplicitSwappedObject(Input input) {
+		var x1 = new ImplicitSwappedObject();
+		var x2 = new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null};
 		ImplicitSwappedObject[][][] x2n = null;
-		List<ImplicitSwappedObject[][][]> x3 = alist(x2,null);
+		var x3 = alist(x2,null);
 		List<ImplicitSwappedObject[][][]> x3n = null;
-		Map<ImplicitSwappedObject,ImplicitSwappedObject> x4 = map(new ImplicitSwappedObject(),new ImplicitSwappedObject());
+		var x4 = map(new ImplicitSwappedObject(),new ImplicitSwappedObject());
 		Map<ImplicitSwappedObject,ImplicitSwappedObject> x4n = null;
-		Map<ImplicitSwappedObject,List<ImplicitSwappedObject[][][]>> x5 = map(new ImplicitSwappedObject(),x3);
+		var x5 = map(new ImplicitSwappedObject(),x3);
 		Map<ImplicitSwappedObject,List<ImplicitSwappedObject[][][]>> x5n = null;
-		assertNotThrown(()->proxy.setMultiParamsImplicitSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
+		assertNotThrown(()->input.proxy.setMultiParamsImplicitSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
 	}
 
-	@Test
-	public void m09_setMultiParamsEnum() {
-		TestEnum x1 = TestEnum.TWO;
-		TestEnum[][][] x2 = {{{TestEnum.TWO,null},null},null};
+	@ParameterizedTest
+	@MethodSource("input")
+	void m09_setMultiParamsEnum(Input input) {
+		var x1 = TestEnum.TWO;
+		var x2 = new TestEnum[][][]{{{TestEnum.TWO,null},null},null};
 		TestEnum[][][] x2n = null;
-		List<TestEnum[][][]> x3 = alist(x2,null);
+		var x3 = alist(x2,null);
 		List<TestEnum[][][]> x3n = null;
-		Map<TestEnum,TestEnum> x4 = map(TestEnum.ONE,TestEnum.TWO);
+		var x4 = map(TestEnum.ONE,TestEnum.TWO);
 		Map<TestEnum,TestEnum> x4n = null;
-		Map<TestEnum,List<TestEnum[][][]>> x5 = map(TestEnum.ONE,x3);
+		var x5 = map(TestEnum.ONE,x3);
 		Map<TestEnum,List<TestEnum[][][]>> x5n = null;
-		assertNotThrown(()->proxy.setMultiParamsEnum(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
+		assertNotThrown(()->input.proxy.setMultiParamsEnum(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
 	}
-}
+}

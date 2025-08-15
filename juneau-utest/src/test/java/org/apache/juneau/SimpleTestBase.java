@@ -91,7 +91,12 @@ public abstract class SimpleTestBase {
 	 * Asserts the JSON5 representation of the specified object.
 	 */
 	protected static void assertType(Class<?> c, Object value) {
-		AssertionHelpers.assertType(c, value);
+		AssertionHelpers.assertTypes(c, value);
+	}
+
+	public static void assertTypes(Class<?> c, Object...value) {
+		for (int i = 0; i < value.length; i++)
+			assertTrue(c.isInstance(value[i]), ss("Incorrect type at index [{0}].", i));
 	}
 
 	/**

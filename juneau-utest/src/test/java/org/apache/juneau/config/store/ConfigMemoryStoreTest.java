@@ -14,31 +14,27 @@ package org.apache.juneau.config.store;
 
 import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
 
 import java.util.concurrent.*;
 
-import org.junit.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ConfigMemoryStoreTest {
+class ConfigMemoryStoreTest extends SimpleTestBase {
 
-	@Test
-	public void testNoFile() {
-		MemoryStore fs = MemoryStore.create().build();
+	@Test void a01_noFile() {
+		var fs = MemoryStore.create().build();
 		assertEquals("", fs.read("X"));
 	}
 
-	@Test
-	public void testSimpleCreate() {
-		MemoryStore fs = MemoryStore.create().build();
+	@Test void a02_simpleCreate() {
+		var fs = MemoryStore.create().build();
 		assertNull(fs.write("X", null, "foo"));
 		assertEquals("foo", fs.read("X"));
 	}
 
-	@Test
-	public void testFailOnMismatch() {
-		MemoryStore fs = MemoryStore.create().build();
+	@Test void a03_failOnMismatch() {
+		var fs = MemoryStore.create().build();
 		assertNotNull(fs.write("X", "xxx", "foo"));
 		assertEquals("", fs.read("X"));
 		assertNull(fs.write("X", null, "foo"));
@@ -49,11 +45,10 @@ public class ConfigMemoryStoreTest {
 		assertEquals("bar", fs.read("X"));
 	}
 
-	@Test
-	public void testUpdate() throws Exception {
-		MemoryStore fs = MemoryStore.create().build();
+	@Test void a04_update() throws Exception {
+		var fs = MemoryStore.create().build();
 
-		final CountDownLatch latch = new CountDownLatch(2);
+		final var latch = new CountDownLatch(2);
 		fs.register("X", contents -> {
 			if ("xxx".equals(contents))
 				latch.countDown();
@@ -69,8 +64,7 @@ public class ConfigMemoryStoreTest {
 			throw new Exception("CountDownLatch never reached zero.");
 	}
 
-	@Test
-	public void testExists() {
+	@Test void a05_exists() {
 		MemoryStore.DEFAULT.write("foo", null, "foo");
 
 		assertTrue(MemoryStore.DEFAULT.exists("foo"));

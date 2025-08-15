@@ -74,7 +74,15 @@ public class AssertionHelpers {
 	 * Asserts the JSON5 representation of the specified object.
 	 */
 	public static void assertType(Class<?> c, Object value) {
-		assertTrue(c.isInstance(value), "Incorrect type.");
+		assertTrue(c.isInstance(value), "Incorrect type");
+	}
+
+	/**
+	 * Asserts the JSON5 representation of the specified object.
+	 */
+	public static void assertTypes(Class<?> c, Object...value) {
+		for (int i = 0; i < value.length; i++)
+			assertTrue(c.isInstance(value[i]), ss("Incorrect type at index [{0}].", i));
 	}
 
 	/**

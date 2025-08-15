@@ -13,18 +13,17 @@
 package org.apache.juneau.rest;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
+import org.apache.juneau.annotation.Named;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class RestContext_Builder_Test {
+class RestContext_Builder_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// beanStore
@@ -37,8 +36,7 @@ public class RestContext_Builder_Test {
 		@RestInject static BeanStore beanStore;
 	}
 
-	@Test
-	public void a01_createBeanStore_default() {
+	@Test void a01_createBeanStore_default() {
 		MockRestClient.buildLax(A1.class);
 		assertEquals("BeanStore", A1.beanStore.getClass().getSimpleName());
 	}
@@ -54,8 +52,7 @@ public class RestContext_Builder_Test {
 		@RestInject static BeanStore beanStore;
 	}
 
-	@Test
-	public void a02_createBeanStore_annotation() {
+	@Test void a02_createBeanStore_annotation() {
 		MockRestClient.buildLax(A2.class);
 		assertNotNull(A2.beanStore.getBean(A.class));
 	}
@@ -69,8 +66,7 @@ public class RestContext_Builder_Test {
 		}
 	}
 
-	@Test
-	public void a03_createBeanStore_restBean1() {
+	@Test void a03_createBeanStore_restBean1() {
 		MockRestClient.buildLax(A3.class);
 		assertNotNull(A3.beanStore.getBean(A.class));
 	}
@@ -84,8 +80,7 @@ public class RestContext_Builder_Test {
 		}
 	}
 
-	@Test
-	public void a04_createBeanStore_restBean2() {
+	@Test void a04_createBeanStore_restBean2() {
 		MockRestClient.buildLax(A4.class);
 		assertNotNull(A4.beanStore.getBean(A.class));
 	}
@@ -126,8 +121,7 @@ public class RestContext_Builder_Test {
 
 	static RestClient b1b = MockRestClient.createLax(B1b.class).json5().build();
 
-	@Test
-	public void b01_RestBean_fields() throws Exception {
+	@Test void b01_RestBean_fields() throws Exception {
 		b1b.get("/a1").run().assertContent("{id:1}");
 		b1b.get("/a2").run().assertContent("{id:2}");
 		b1b.get("/a3").run().assertContent("{id:1}");
