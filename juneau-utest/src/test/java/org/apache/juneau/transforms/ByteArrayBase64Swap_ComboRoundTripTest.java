@@ -23,14 +23,8 @@ import org.apache.juneau.swaps.*;
 
 class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
-	protected static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Class<T> type, T bean) {
-		return ComboRoundTripTester.tester(index, label, type, bean)
-			.serializerApply(s -> s.swaps(ByteArraySwap.Base64.class).keepNullProperties())
-			.parserApply(p -> p.swaps(ByteArraySwap.Base64.class));
-	}
-
-	protected static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Type type, T bean) {
-		return ComboRoundTripTester.tester(index, label, type, bean)
+	private static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Type type, T bean) {
+		return ComboRoundTripTester.create(index, label, type, ()->bean)
 			.serializerApply(s -> s.swaps(ByteArraySwap.Base64.class).keepNullProperties())
 			.parserApply(p -> p.swaps(ByteArraySwap.Base64.class));
 	}

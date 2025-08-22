@@ -15,6 +15,8 @@ package org.apache.juneau.dto.html5;
 import static org.apache.juneau.assertions.Verify.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 
+import java.lang.reflect.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.html5.*;
@@ -24,6 +26,10 @@ import org.apache.juneau.bean.html5.*;
  */
 @SuppressWarnings({})
 class Html5Template_ComboRoundTripTest extends ComboRoundTripTest_Base {
+
+	private static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Type type, T bean) {
+		return ComboRoundTripTester.create(index, label, type, ()->bean);
+	}
 
 	private static ComboRoundTripTester<?>[] TESTERS = {
 		tester(1, "FormTemplate-1", FormTemplate.class, new FormTemplate("http://myaction", 123, true))

@@ -27,8 +27,8 @@ import org.apache.juneau.serializer.*;
  */
 class BeanDictionary_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
-	public static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Type type, T bean) {
-		return ComboRoundTripTester.tester(index, label, type, bean).serializerApply(Serializer.Builder::keepNullProperties);
+	private static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Type type, T bean) {
+		return ComboRoundTripTester.create(index, label, type, ()->bean).serializerApply(Serializer.Builder::keepNullProperties);
 	}
 
 	private static ComboRoundTripTester<?>[] TESTERS = {

@@ -19,6 +19,7 @@ import static org.apache.juneau.AssertionHelpers.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
@@ -34,11 +35,7 @@ import org.apache.juneau.xml.*;
  */
 public class ComboSerializeTester<T> {
 
-	public static <T> Builder<T> tester(int index, String label, T in) {
-		return new Builder<>("["+index+"] " + label, in);
-	}
-
-	public static <T> Builder<T> tester(int index, String label, Supplier<T> in) {
+	public static <T> Builder<T> create(int index, String label, Supplier<T> in) {
 		return new Builder<>("["+index+"] " + label, in);
 	}
 
@@ -116,7 +113,7 @@ public class ComboSerializeTester<T> {
 		exceptionMsg = b.exceptionMsg;
 
 		serializers.put("json", create(b, Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType()));
-		serializers.put("jsonT", create(b, JsonSerializer.create().json5().typePropertyName("t").addBeanTypes().addRootType()));
+		serializers.put("jsonT", create(b, Json5Serializer.create().json5().typePropertyName("t").addBeanTypes().addRootType()));
 		serializers.put("jsonR", create(b, Json5Serializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
 		serializers.put("xml", create(b, XmlSerializer.DEFAULT_SQ.copy().addBeanTypes().addRootType()));
 		serializers.put("xmlT", create(b, XmlSerializer.create().sq().typePropertyName("t").addBeanTypes().addRootType()));
@@ -163,6 +160,9 @@ public class ComboSerializeTester<T> {
 			if (eq(exp, "xxx")) {
 				System.out.println(getClass().getName() + ": " + label + "/" + testName + "=\n" + r.replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")); // NOT DEBUG
 				System.out.println(r);
+				if (s instanceof MsgPackSerializer) {
+					System.out.println("decoded=["+new String(StringUtils.fromHex(r))+"]");
+				}
 			}
 
 			assertEquals(exp, r, ss("{0}/{1} serialize-normal failed.", label, testName));

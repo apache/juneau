@@ -22,10 +22,6 @@ import org.junit.jupiter.params.provider.*;
  */
 public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
-	protected static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Type type, T bean) {
-		return ComboRoundTripTester.tester(index, label, type, bean);
-	}
-
 	/**
 	 * Creates a ClassMeta for the given types.
 	 */

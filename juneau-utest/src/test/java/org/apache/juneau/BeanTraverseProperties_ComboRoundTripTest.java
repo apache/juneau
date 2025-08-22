@@ -12,12 +12,18 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import java.lang.reflect.*;
+
 import org.apache.juneau.BeanTraverseContext.*;
 
 /**
  * Exhaustive serialization tests for BeanTraverseContext properties.
  */
 class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
+
+	private static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Type type, T bean) {
+		return ComboRoundTripTester.create(index, label, type, ()->bean);
+	}
 
 	private static ComboRoundTripTester<?>[] TESTERS = {
 		tester(1, "BEANTRAVERSE_initialDepth", A.class, new A().init())

@@ -36,11 +36,7 @@ import org.apache.juneau.xml.*;
  */
 public class ComboRoundTripTester<T> {
 
-	public static <T> Builder<T> tester(int index, String label, Type type, T in) {
-		return new Builder<>("["+index+"] " + label, type, in);
-	}
-
-	public static <T> Builder<T> tester(int index, String label, Type type, Supplier<T> in) {
+	public static <T> Builder<T> create(int index, String label, Type type, Supplier<T> in) {
 		return new Builder<>("["+index+"] " + label, type, in);
 	}
 

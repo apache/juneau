@@ -18,6 +18,7 @@ import static org.apache.juneau.bean.html5.HtmlBuilder.map;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.map;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -35,6 +36,10 @@ class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
 	private static A a2(Object ref, Object...children) {
 		return HtmlBuilder.a(ref, children);
+	}
+
+	private static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Type type, T bean) {
+		return ComboRoundTripTester.create(index, label, type, ()->bean);
 	}
 
 	private static ComboRoundTripTester<?>[] TESTERS = {

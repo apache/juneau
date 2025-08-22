@@ -14,9 +14,16 @@ package org.apache.juneau.transforms;
 
 import static org.apache.juneau.assertions.Verify.*;
 
+import java.lang.reflect.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+
 class Builder_ComboRoundTripTest extends ComboRoundTripTest_Base {
+
+	private static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Type type, T bean) {
+		return ComboRoundTripTester.create(index, label, type, ()->bean);
+	}
 
 	private static ComboRoundTripTester<?>[] TESTERS = {
 		tester(1, "A", A.class, new A(null).init())

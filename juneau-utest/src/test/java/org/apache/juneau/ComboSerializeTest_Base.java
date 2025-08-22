@@ -12,25 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import java.lang.reflect.*;
-
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
  * Superclass for tests that verify results against all supported content types.
  */
-public abstract class ComboSerializeTest_Base {
-
-	protected static <T> ComboSerializeTester.Builder<T> tester(int index, String label, T bean) {
-		return ComboSerializeTester.tester(index, label, bean);
-	}
-	/**
-	 * Creates a ClassMeta for the given types.
-	 */
-	public static final Type getType(Type type, Type...args) {
-		return BeanContext.DEFAULT_SESSION.getClassMeta(type, args);
-	}
+public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// JSON

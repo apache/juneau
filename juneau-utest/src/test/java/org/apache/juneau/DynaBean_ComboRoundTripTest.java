@@ -15,7 +15,6 @@ package org.apache.juneau;
 import static org.apache.juneau.assertions.Verify.*;
 
 import java.util.*;
-
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
@@ -32,8 +31,8 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		SINGLE_DATE.set(1901, 2, 3, 10, 11, 12);
 	}
 
-	protected static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Class<T> type, T bean) {
-		return ComboRoundTripTester.tester(index, label, type, bean).serializerApply(Serializer.Builder::keepNullProperties);
+	private static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Class<T> type, T bean) {
+		return ComboRoundTripTester.create(index, label, type, ()->bean).serializerApply(Serializer.Builder::keepNullProperties);
 	}
 
 	private static ComboRoundTripTester<?>[] TESTERS = {

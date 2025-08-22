@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -27,6 +28,10 @@ import org.apache.juneau.xml.*;
  */
 @SuppressWarnings({})
 class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
+
+	private static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Type type, T bean) {
+		return ComboRoundTripTester.create(index, label, type, ()->bean);
+	}
 
 	private static ComboRoundTripTester<?>[] TESTERS = {
 		tester(1, "SERIALIZER_addBeanTypes", JsonMap.class, JsonMap.of("a", T0.create()))
