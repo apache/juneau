@@ -100,7 +100,7 @@ public class RdfAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends TargetedAnnotationTMFBuilder {
+	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
 
 		String namespace="", prefix="";
 		boolean	beanUri;
@@ -175,13 +175,13 @@ public class RdfAnnotation {
 		}
 
 		@Override /* GENERATED - TargetedAnnotationTBuilder */
-		public Builder on(java.lang.Class<?>...value) {
+		public Builder on(Class<?>...value) {
 			super.on(value);
 			return this;
 		}
 
 		@Override /* GENERATED - TargetedAnnotationTBuilder */
-		public Builder onClass(java.lang.Class<?>...value) {
+		public Builder onClass(Class<?>...value) {
 			super.onClass(value);
 			return this;
 		}

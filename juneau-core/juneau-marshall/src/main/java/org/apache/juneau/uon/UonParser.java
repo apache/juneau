@@ -13,6 +13,8 @@
 package org.apache.juneau.uon;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.internal.Utils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -243,14 +245,14 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
-			super.applyAnnotations(fromClasses);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(Method...fromMethods) {
-			super.applyAnnotations(fromMethods);
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
@@ -603,7 +605,13 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
-		public Builder swaps(java.lang.Class<?>...values) {
+		public Builder swaps(Object...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		public Builder swaps(Class<?>...values) {
 			super.swaps(values);
 			return this;
 		}

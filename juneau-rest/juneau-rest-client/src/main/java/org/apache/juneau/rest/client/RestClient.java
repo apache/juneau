@@ -5288,14 +5288,14 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
-			super.applyAnnotations(fromClasses);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(Method...fromMethods) {
-			super.applyAnnotations(fromMethods);
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
@@ -5612,7 +5612,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
-		public Builder swaps(java.lang.Class<?>...values) {
+		public Builder swaps(Object...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		public Builder swaps(Class<?>...values) {
 			super.swaps(values);
 			return this;
 		}

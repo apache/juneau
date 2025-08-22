@@ -14,10 +14,10 @@ package org.apache.juneau;
 
 import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.beans.*;
 import java.io.*;
@@ -29,6 +29,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -1065,7 +1066,7 @@ public class BeanContext extends Context {
 		 */
 		@FluentSetter
 		public Builder beanProperties(Map<String,Object> values) {
-			values.forEach((k,v) -> annotations(BeanAnnotation.create(k).p(stringify(v)).build()));
+			values.forEach((k,v) -> annotations(BeanAnnotation.create(k).p(s(v)).build()));
 			return this;
 		}
 
@@ -1234,7 +1235,7 @@ public class BeanContext extends Context {
 		 */
 		@FluentSetter
 		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			values.forEach((k,v) -> annotations(BeanAnnotation.create(k).xp(stringify(v)).build()));
+			values.forEach((k,v) -> annotations(BeanAnnotation.create(k).xp(s(v)).build()));
 			return this;
 		}
 
@@ -1401,7 +1402,7 @@ public class BeanContext extends Context {
 		 */
 		@FluentSetter
 		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			values.forEach((k,v) -> annotations(BeanAnnotation.create(k).ro(stringify(v)).build()));
+			values.forEach((k,v) -> annotations(BeanAnnotation.create(k).ro(s(v)).build()));
 			return this;
 		}
 
@@ -1569,7 +1570,7 @@ public class BeanContext extends Context {
 		 */
 		@FluentSetter
 		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			values.forEach((k,v) -> annotations(BeanAnnotation.create(k).wo(stringify(v)).build()));
+			values.forEach((k,v) -> annotations(BeanAnnotation.create(k).wo(s(v)).build()));
 			return this;
 		}
 
@@ -1749,7 +1750,7 @@ public class BeanContext extends Context {
 		 */
 		public List<Class<?>> beanDictionary() {
 			if (beanDictionary == null)
-				beanDictionary = list();
+				beanDictionary = Utils.list();
 			return beanDictionary;
 		}
 
@@ -3041,26 +3042,31 @@ public class BeanContext extends Context {
 		 * 	<ul>
 		 * 		<li>Any subclass of {@link ObjectSwap}.
 		 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
-		 * 		<li>Any array or collection of the objects above.
+		 * 		<li>Any array/collection/stream of the objects above.
+		 * 	</ul>
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder swaps(Object...values) {
+			swaps().addAll(0, accumulate(values));
+			return this;
+		}
+
+		/**
+		 * Same as {@link #swaps(Object...)} but explicitly specifies an array of classes to avoid compilation warnings.
+		 *
+		 * @param values
+		 * 	The values to add to this setting.
+		 * 	<br>Values can consist of any of the following types:
+		 * 	<ul>
+		 * 		<li>Any subclass of {@link ObjectSwap}.
+		 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
 		 * 	</ul>
 		 * @return This object.
 		 */
 		@FluentSetter
 		public Builder swaps(Class<?>...values) {
-			return swaps(alist(values));
-		}
-
-		/**
-		 * Same as {@link #swaps(Class...)} but allows you to pass in a collection of classes.
-		 *
-		 * @param values
-		 * 	The values to add to this setting.
-		 * @return This object.
-		 * @see #swaps(Class...)
-		 */
-		@FluentSetter
-		public Builder swaps(Collection<Class<?>> values) {
-			swaps().addAll(0, values);
+			swaps().addAll(0, accumulate(values));
 			return this;
 		}
 
@@ -3125,7 +3131,7 @@ public class BeanContext extends Context {
 		 */
 		public List<Object> swaps() {
 			if (swaps == null)
-				swaps = list();
+				swaps = Utils.list();
 			return swaps;
 		}
 
@@ -3453,14 +3459,14 @@ public class BeanContext extends Context {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
-			super.applyAnnotations(fromClasses);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(Method...fromMethods) {
-			super.applyAnnotations(fromMethods);
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
@@ -4178,7 +4184,7 @@ public class BeanContext extends Context {
 	private final <T> ObjectSwap[] findObjectSwaps(Class<T> c) {
 		// Note:  On first
 		if (c != null) {
-			List<ObjectSwap> l = list();
+			List<ObjectSwap> l = Utils.list();
 			for (ObjectSwap f : swapArray)
 				if (f.getNormalClass().isParentOf(c))
 					l.add(f);
@@ -4200,7 +4206,7 @@ public class BeanContext extends Context {
 		for (ObjectSwap f : swapArray) {
 			if (f.getNormalClass().isChildOf(c)) {
 				if (l == null)
-					l = list();
+					l = Utils.list();
 				l.add(f);
 			}
 		}

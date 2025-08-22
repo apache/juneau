@@ -17,6 +17,7 @@ import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -26,6 +27,7 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.config.mod.*;
@@ -479,20 +481,26 @@ public final class Config extends Context implements ConfigEventListener {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder annotations(List<Annotation> values) {
+			super.annotations(values);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder apply(AnnotationWorkList work) {
 			super.apply(work);
 			return this;
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
-			super.applyAnnotations(fromClasses);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(Method...fromMethods) {
-			super.applyAnnotations(fromMethods);
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
@@ -710,7 +718,7 @@ public final class Config extends Context implements ConfigEventListener {
 		if (ce == null && value == null)
 			return this;
 
-		var s = applyMods(ce == null ? null : ce.getModifiers(), stringify(value));
+		var s = applyMods(ce == null ? null : ce.getModifiers(), s(value));
 
 		configMap.setEntry(sname, skey, s, null, null, null);
 		return this;
@@ -779,7 +787,7 @@ public final class Config extends Context implements ConfigEventListener {
 		assertArgNotNull("key", key);
 		var sname = sname(key);
 		var skey = skey(key);
-		modifiers = nullIfEmpty(modifiers);
+		modifiers = Utils.nullIfEmpty(modifiers);
 
 		var s = applyMods(modifiers, serialize(value, serializer));
 
@@ -895,7 +903,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * @return The section bean, never <jk>null</jk>.
 	 */
 	public Section getSection(String name) {
-		return new Section(this, configMap, emptyIfNull(name));
+		return new Section(this, configMap, Utils.emptyIfNull(name));
 	}
 
 	/**
@@ -928,7 +936,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * @return <jk>true</jk> if this section contains the specified key and the key has a non-blank value.
 	 */
 	public boolean exists(String key) {
-		return isNotEmpty(get(key).as(String.class).orElse(null));
+		return Utils.isNotEmpty(get(key).as(String.class).orElse(null));
 	}
 
 	/**
@@ -1259,7 +1267,7 @@ public final class Config extends Context implements ConfigEventListener {
 
 	private String section(String section) {
 		assertArgNotNull("section", section);
-		if (isEmpty(section))
+		if (Utils.isEmpty(section))
 			return "";
 		return section;
 	}

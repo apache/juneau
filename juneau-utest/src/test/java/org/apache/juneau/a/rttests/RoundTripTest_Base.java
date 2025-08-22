@@ -27,7 +27,7 @@ import org.junit.jupiter.params.provider.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-public abstract class BasicRoundTripTest extends SimpleTestBase {
+public abstract class RoundTripTest_Base extends SimpleTestBase {
 
 	private static RoundTripTester[] TESTERS = {
 		tester("Json - default")

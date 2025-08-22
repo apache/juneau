@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
+import static org.apache.juneau.common.internal.Utils.*;
+
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
@@ -19,7 +21,6 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static java.util.Collections.*;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
@@ -27,6 +28,7 @@ import java.util.regex.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.utils.*;
@@ -405,14 +407,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
-			super.applyAnnotations(fromClasses);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(Method...fromMethods) {
-			super.applyAnnotations(fromMethods);
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
@@ -765,7 +767,13 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
-		public Builder swaps(java.lang.Class<?>...values) {
+		public Builder swaps(Object...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		public Builder swaps(Class<?>...values) {
 			super.swaps(values);
 			return this;
 		}
@@ -877,7 +885,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		addDescriptionsTo = builder.addDescriptionsTo == null ? emptySet() : new TreeSet<>(builder.addDescriptionsTo);
 		ignoreTypes = builder.ignoreTypes == null ? emptySet() : new TreeSet<>(builder.ignoreTypes);
 
-		Set<Pattern> ignoreTypePatterns = set();
+		Set<Pattern> ignoreTypePatterns = Utils.set();
 		ignoreTypes.forEach(y -> split(y, x -> ignoreTypePatterns.add(Pattern.compile(x.replace(".", "\\.").replace("*", ".*")))));
 		this.ignoreTypePatterns = ignoreTypePatterns.toArray(new Pattern[ignoreTypePatterns.size()]);
 
@@ -981,7 +989,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * 	Custom schema information for particular class types.
 	 */
 	public List<Pattern> getIgnoreTypes() {
-		return ulist(ignoreTypePatterns);
+		return Utils.ulist(ignoreTypePatterns);
 	}
 
 	/**

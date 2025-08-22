@@ -22,7 +22,7 @@ import org.junit.jupiter.params.provider.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-class RoundTripGenerics_Test extends BasicRoundTripTest {
+class Generics_RoundTripTest extends RoundTripTest_Base {
 
 	//====================================================================================================
 	// testBeansWithUnboundTypeVars

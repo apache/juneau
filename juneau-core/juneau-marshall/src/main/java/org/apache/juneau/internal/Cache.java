@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.SystemEnv.*;
+import static org.apache.juneau.common.internal.Utils.*;
+
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;

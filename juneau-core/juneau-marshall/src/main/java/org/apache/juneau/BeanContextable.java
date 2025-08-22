@@ -2595,7 +2595,25 @@ public abstract class BeanContextable extends Context {
 		 * 	<ul>
 		 * 		<li>Any subclass of {@link ObjectSwap}.
 		 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
-		 * 		<li>Any array or collection of the objects above.
+		 * 		<li>Any array/collection/stream of the objects above.
+		 * 	</ul>
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder swaps(Object...values) {
+			bcBuilder.swaps(values);
+			return this;
+		}
+
+		/**
+		 * Same as {@link #swaps(Object...)} except explicitly specifies class varargs to avoid compilation warnings.
+		 *
+		 * @param values
+		 * 	The values to add to this setting.
+		 * 	<br>Values can consist of any of the following types:
+		 * 	<ul>
+		 * 		<li>Any subclass of {@link ObjectSwap}.
+		 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
 		 * 	</ul>
 		 * @return This object.
 		 */
@@ -2969,14 +2987,14 @@ public abstract class BeanContextable extends Context {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
-			super.applyAnnotations(fromClasses);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(Method...fromMethods) {
-			super.applyAnnotations(fromMethods);
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 

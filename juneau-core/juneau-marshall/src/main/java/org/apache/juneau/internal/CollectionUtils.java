@@ -163,7 +163,7 @@ public final class CollectionUtils {
 	 * @return A new modifiable list.
 	 */
 	@SafeVarargs
-	public static <E> ArrayList<E> list(E...values) {
+	public static <E> List<E> list(E...values) {
 		ArrayList<E> l = new ArrayList<>(values.length);
 		for (E v : values)
 			l.add(v);
@@ -179,7 +179,7 @@ public final class CollectionUtils {
 	 * @return A new modifiable list.
 	 */
 	@SafeVarargs
-	public static <E> ArrayList<E> listOf(Class<E> elementType, E...values) {
+	public static <E> List<E> listOf(Class<E> elementType, E...values) {
 		return list(values);
 	}
 
@@ -474,8 +474,8 @@ public final class CollectionUtils {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@SafeVarargs
-	public static <E> ArrayList<E> sortedList(E...values) {
-		ArrayList<E> l = list(values);
+	public static <E> List<E> sortedList(E...values) {
+		List<E> l = list(values);
 		Collections.sort((List<Comparable>) l);
 		return l;
 	}
@@ -488,8 +488,8 @@ public final class CollectionUtils {
 	 * @param values The values to initialize the list with.
 	 * @return A new modifiable list.
 	 */
-	public static <E> ArrayList<E> sortedList(Comparator<E> comparator, E[] values) {
-		ArrayList<E> l = list(values);
+	public static <E> List<E> sortedList(Comparator<E> comparator, E[] values) {
+		List<E> l = list(values);
 		Collections.sort(l, comparator);
 		return l;
 	}
@@ -678,6 +678,25 @@ public final class CollectionUtils {
 				value = list(entries);
 			else
 				Collections.addAll(value, entries);
+		}
+		return value;
+	}
+
+	/**
+	 * Adds all the specified values to the specified collection.
+	 * Creates a new set if the value is <jk>null</jk>.
+	 *
+	 * @param <E> The element type.
+	 * @param value The collection to add to.
+	 * @param entries The entries to add.
+	 * @return The set.
+	 */
+	public static <E> List<E> addAll(List<E> value, List<E> entries) {
+		if (entries != null) {
+			if (value == null)
+				value = new ArrayList<>(entries);
+			else
+				value.addAll(entries);
 		}
 		return value;
 	}

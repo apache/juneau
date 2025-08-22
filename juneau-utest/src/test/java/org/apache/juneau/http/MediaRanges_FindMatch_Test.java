@@ -15,13 +15,10 @@ package org.apache.juneau.http;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
-
 import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;

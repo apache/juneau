@@ -12,11 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 
-import java.util.*;
-
-import org.apache.juneau.annotation.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -24,88 +22,25 @@ import org.junit.jupiter.params.provider.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-class RoundTripObjectsWithSpecialMethods_Test extends BasicRoundTripTest {
-
-	//====================================================================================================
-	// @NameProperty method.
-	//====================================================================================================
+class Classes_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_nameProperty(RoundTripTester t) throws Exception {
-		var x = new A().init();
-		x = t.roundTrip(x);
-		assertJson(x, "{a2:{f2:2},m:{k1:{f2:2}}}");
-		if (t.isValidationOnly())
-			return;
-		assertEquals("a2", x.a2.name);
-		assertEquals("k1", x.m.get("k1").name);
+	void a01_classObjects(RoundTripTester t) throws Exception {
+		Object o = String.class;
+		o = t.roundTrip(o);
+		assertSame(o, String.class);
+
+		o = new Class[]{String.class};
+		o = t.roundTrip(o);
+		assertJson(o, "['java.lang.String']");
+
+		o = alist(String.class, Integer.class);
+		o = t.roundTrip(o);
+		assertJson(o, "['java.lang.String','java.lang.Integer']");
+
+		o = map(String.class, String.class);
+		o = t.roundTrip(o);
+		assertJson(o, "{'java.lang.String':'java.lang.String'}");
 	}
-
-	public static class A {
-		public A2 a2;
-		public Map<String,A2> m;
-
-		A init() {
-			a2 = new A2().init();
-			m = new LinkedHashMap<>();
-			m.put("k1", new A2().init());
-			return this;
-		}
-
-	}
-	public static class A2 {
-		String name;
-		public int f2;
-
-		@NameProperty
-		protected void setName(String name) {
-			this.name = name;
-		}
-
-		A2 init() {
-			f2 = 2;
-			return this;
-		}
-	}
-
-	//====================================================================================================
-	// @ParentProperty method.
-	//====================================================================================================
-
-	@ParameterizedTest
-	@MethodSource("testers")
-	void a02_parentProperty(RoundTripTester t) throws Exception {
-		var x = new B().init();
-		x = t.roundTrip(x);
-		if (t.isValidationOnly())
-			return;
-		assertEquals(x.f1, x.b2.parent.f1);
-	}
-
-	public static class B {
-		public int f1;
-		public B2 b2;
-
-		B init() {
-			f1 = 1;
-			b2 = new B2().init();
-			return this;
-		}
-
-	}
-	public static class B2 {
-		B parent;
-		public int f2;
-
-		@ParentProperty
-		protected void setParent(B v) {
-			parent = v;
-		}
-
-		B2 init() {
-			f2 = 2;
-			return this;
-		}
-	}
-}
+}

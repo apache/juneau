@@ -12,62 +12,84 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
-
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.serializer.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * Tests designed to serialize and parse objects to make sure we end up
- * with the same objects for all serializers and parsers.
+ * Tests for the {@link Serializer#SERIALIZER_trimStrings} and {@link Parser#PARSER_trimStrings}.
  */
-class RoundTripToJsonMaps_Test extends BasicRoundTripTest {
+class TrimStrings_RoundTripTest extends RoundTripTest_Base {
 
 	//====================================================================================================
-	// Class with X(JsonMap) constructor and toJsonMap() method.
+	// test
 	//====================================================================================================
 
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a01_basic(RoundTripTester t) throws Exception {
-		var x1 = new A(JsonMap.ofJson("{f1:'a',f2:2}"));
-		x1 = t.roundTrip(x1, A.class);
-		assertEquals("a", x1.f1);
-		assertEquals(2, x1.f2);
+		if (t.isValidationOnly())
+			return;
+		var s = t.getSerializer();
+		var p = t.getParser();
+		Object in, a, e;
 
-		var x2 = new A[]{x1};
-		x2 = t.roundTrip(x2, A[].class);
-		assertEquals(1, x2.length);
-		assertEquals("a", x2[0].f1);
-		assertEquals(2, x2[0].f2);
+		var s2 = s.copy().trimStrings().build();
+		var p2 = p.copy().trimStrings().build();
 
-		var x3 = alist(new A(JsonMap.ofJson("{f1:'a',f2:2}")));
-		x3 = t.roundTrip(x3, List.class, A.class);
-		assertEquals(1, x3.size());
-		assertEquals("a", x3.get(0).f1);
-		assertEquals(2, x3.get(0).f2);
+		in = " foo bar ";
+		e = "foo bar";
+		a = p.parse(s2.serialize(in), String.class);
+		assertEquals(json(a), json(e));
+		a = p2.parse(s.serialize(in), String.class);
+		assertEquals(json(a), json(e));
 
-		var x4 = map("a",new A(JsonMap.ofJson("{f1:'a',f2:2}")));
-		x4 = t.roundTrip(x4, Map.class, String.class, A.class);
-		assertEquals(1, x4.size());
-		assertEquals("a", x4.get("a").f1);
-		assertEquals(2, x4.get("a").f2);
+		in = JsonMap.ofJson("{' foo ': ' bar '}");
+		e = JsonMap.ofJson("{foo:'bar'}");
+		a = p.parse(s2.serialize(in), JsonMap.class);
+		assertEquals(json(a), json(e));
+		a = p2.parse(s.serialize(in), JsonMap.class);
+		assertEquals(json(a), json(e));
+
+		in = new JsonList("[' foo ', {' foo ': ' bar '}]");
+		e = new JsonList("['foo',{foo:'bar'}]");
+		a = p.parse(s2.serialize(in), JsonList.class);
+		assertEquals(json(a), json(e));
+		a = p2.parse(s.serialize(in), JsonList.class);
+		assertEquals(json(a), json(e));
+
+		in = new A().init1();
+		e = new A().init2();
+		a = p.parse(s2.serialize(in), A.class);
+		assertEquals(json(a), json(e));
+		a = p2.parse(s.serialize(in), A.class);
+		assertEquals(json(a), json(e));
 	}
 
 	public static class A {
-		private String f1;
-		private int f2;
-		public A(JsonMap m) {
-			this.f1 = m.getString("f1");
-			this.f2 = m.getInt("f2");
+		public String f1;
+		public String[] f2;
+		public JsonList f3;
+		public JsonMap f4;
+
+		public A init1() throws Exception {
+			f1 = " f1 ";
+			f2 = new String[]{" f2a ", " f2b "};
+			f3 = JsonList.ofJson("[' f3a ',' f3b ']");
+			f4 = JsonMap.ofJson("{' foo ':' bar '}");
+			return this;
 		}
-		public JsonMap swap(BeanSession session) {
-			return JsonMap.of("f1",f1,"f2",f2);
+
+		public A init2() throws Exception {
+			f1 = "f1";
+			f2 = new String[]{"f2a", "f2b"};
+			f3 = JsonList.ofJson("['f3a','f3b']");
+			f4 = JsonMap.ofJson("{'foo':'bar'}");
+			return this;
 		}
 	}
 }

@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.api.*;
 
@@ -217,8 +218,8 @@ class XmlCollapsedTest extends SimpleTestBase {
 		XmlParser p = XmlParser.DEFAULT;
 		E t = new E();
 
-		t.f1 = list("f1a");
-		t.f2 = list("f2a");
+		t.f1 = Utils.list("f1a");
+		t.f2 = Utils.list("f2a");
 
 		String xml = s.serialize(t);
 		assertEquals("<object><f1>f1a</f1><xf2>f2a</xf2></object>", xml);

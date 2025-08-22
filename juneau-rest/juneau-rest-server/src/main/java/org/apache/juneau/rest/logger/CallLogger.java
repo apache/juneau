@@ -16,9 +16,8 @@ import static java.util.logging.Level.*;
 import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-import static org.apache.juneau.internal.SystemEnv.*;
 import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
 
 import java.util.*;
@@ -194,7 +193,7 @@ public class CallLogger {
 
 		Logger logger;
 		ThrownStore thrownStore;
-		List<CallLoggerRule> normalRules = list(), debugRules = list();
+		List<CallLoggerRule> normalRules = Utils.list(), debugRules = Utils.list();
 		Enablement enabled;
 		Predicate<HttpServletRequest> enabledTest;
 		CallLoggingDetail requestDetail, responseDetail;

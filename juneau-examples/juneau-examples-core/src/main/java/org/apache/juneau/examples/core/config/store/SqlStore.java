@@ -13,6 +13,7 @@
 package org.apache.juneau.examples.core.config.store;
 
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -185,7 +186,7 @@ public class SqlStore extends ConfigStore {
 	public synchronized String write(String name, String expectedContents, String newContents) {
 
 		// This is a no-op.
-		if (eq(expectedContents, newContents))
+		if (Utils.eq(expectedContents, newContents))
 			return null;
 
 		var currentContents = read(name);

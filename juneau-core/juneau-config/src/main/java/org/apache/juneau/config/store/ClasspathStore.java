@@ -16,7 +16,6 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
@@ -119,14 +118,14 @@ public class ClasspathStore extends ConfigStore {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
-			super.applyAnnotations(fromClasses);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(Method...fromMethods) {
-			super.applyAnnotations(fromMethods);
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 

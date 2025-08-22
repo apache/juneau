@@ -12,12 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 
-import java.util.*;
-
-import org.apache.juneau.internal.*;
+import org.apache.juneau.annotation.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -25,63 +22,63 @@ import org.junit.jupiter.params.provider.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-class RoundTripBeanProperties_Test extends BasicRoundTripTest {
+class ReadOnlyBeans_RoundTripTest extends RoundTripTest_Base {
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Combo arrays/lists
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class A01 {
-		public List<Long>[] f1;
-	}
+	//====================================================================================================
+	// test
+	//====================================================================================================
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_arrayOfListOfLongs(RoundTripTester t) throws Exception {
-		var o = new A01();
-		o.f1 = new List[1];
-		o.f1[0] = alist(123L);
-		o = t.roundTrip(o);
-		assertEquals(123, o.f1[0].get(0).intValue());
+	void a01_basic(RoundTripTester t) throws Exception {
+		var x1 = new B(1, "a");
+		var x2 = new B(2, "b");
+		var x3 = new A(x1, x2);
+
+		x3 = t.roundTrip(x3, A.class);
+		assertEquals(1, x3.getF1().getF1());
+		assertEquals("a", x3.getF1().getF2());
+		assertEquals(2, x3.getF2().getF1());
+		assertEquals("b", x3.getF2().getF2());
 	}
 
-	public static class A02 {
-		public List<Long[]> f1;
+	public static class A {
+		private B f1;
+		private final B f2;
+
+		@Beanc(properties="f2")
+		public A(B f2) {
+			this.f2 = f2;
+		}
+
+		public A(B f1, B f2) {
+			this.f1 = f1;
+			this.f2 = f2;
+		}
+
+		public B getF1() { return f1; }
+		public void setF1(B v) { f1 = v; }
+
+		public B getF2() { return f2; }
 	}
 
-	@ParameterizedTest
-	@MethodSource("testers")
-	void a02_listOfArrayOfLongs(RoundTripTester t) throws Exception {
-		var o = new A02();
-		o.f1 = CollectionUtils.<Long[]>alist(new Long[]{123L});
-		o = t.roundTrip(o);
-		assertEquals(123, o.f1.get(0)[0].intValue());
-	}
+	public static class B {
+		private int f1;
+		private final String f2;
 
-	public static class A03 {
-		public List<Long>[][] f1;
-	}
+		@Beanc(properties="f2")
+		public B(String sField) {
+			this.f2 = sField;
+		}
 
-	@ParameterizedTest
-	@MethodSource("testers")
-	void a03_2dArrayOfListOfLongs(RoundTripTester t) throws Exception {
-		var o = new A03();
-		o.f1 = new List[1][1];
-		o.f1[0] = new List[]{alist(123L)};
-		o = t.roundTrip(o);
-		assertEquals(123, o.f1[0][0].get(0).intValue());
-	}
+		public B(int iField, String sField) {
+			this.f1 = iField;
+			this.f2 = sField;
+		}
 
-	public static class A04 {
-		public List<Long[][]> f1;
-	}
+		public int getF1() { return f1;}
+		public void setF1(int v) { f1 = v; }
 
-	@ParameterizedTest
-	@MethodSource("testers")
-	void a04_listOf2dArrayOfLongs(RoundTripTester t) throws Exception {
-		var o = new A04();
-		o.f1 = CollectionUtils.<Long[][]>alist(new Long[][]{new Long[]{123L}});
-		o = t.roundTrip(o);
-		assertEquals(123, o.f1.get(0)[0][0].intValue());
+		public String getF2() { return f2; }
 	}
 }

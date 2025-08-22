@@ -27,7 +27,7 @@ import org.junit.jupiter.params.provider.*;
  * with the same objects for all serializers and parsers.
  */
 @SuppressWarnings("rawtypes")
-class RoundTripSimpleObjects_Test extends BasicRoundTripTest {
+class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")

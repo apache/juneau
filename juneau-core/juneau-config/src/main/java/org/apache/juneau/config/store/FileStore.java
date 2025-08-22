@@ -17,10 +17,10 @@ import static java.nio.file.StandardOpenOption.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 import java.nio.*;
 import java.nio.channels.*;
 import java.nio.charset.*;
@@ -29,6 +29,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
 
@@ -306,14 +307,14 @@ public class FileStore extends ConfigStore {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
-			super.applyAnnotations(fromClasses);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(Method...fromMethods) {
-			super.applyAnnotations(fromMethods);
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
@@ -386,7 +387,7 @@ public class FileStore extends ConfigStore {
 		try {
 			dir = new File(directory).getCanonicalFile();
 			dir.mkdirs();
-			exts = split(extensions);
+			exts = Utils.split(extensions);
 			watcher = enableWatcher ? new WatcherThread(dir, watcherSensitivity) : null;
 			if (watcher != null)
 				watcher.start();
@@ -447,7 +448,7 @@ public class FileStore extends ConfigStore {
 		var exists = Files.exists(p);
 
 		// Don't create the file if we're not going to match.
-		if ((!exists) && isNotEmpty(expectedContents))
+		if ((!exists) && Utils.isNotEmpty(expectedContents))
 			return "";
 
 		if (isWritable(p)) {

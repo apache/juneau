@@ -12,83 +12,99 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-import org.apache.juneau.collections.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
+import java.util.*;
+
+import org.apache.juneau.annotation.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * Tests for the {@link Serializer#SERIALIZER_trimStrings} and {@link Parser#PARSER_trimStrings}.
+ * Tests designed to serialize and parse objects to make sure we end up
+ * with the same objects for all serializers and parsers.
  */
-class RoundTripTrimStrings_Test extends BasicRoundTripTest {
+class ObjectsWithSpecialMethods_RoundTripTest extends RoundTripTest_Base {
 
 	//====================================================================================================
-	// test
+	// @NameProperty method.
 	//====================================================================================================
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_basic(RoundTripTester t) throws Exception {
+	void a01_nameProperty(RoundTripTester t) throws Exception {
+		var x = new A().init();
+		x = t.roundTrip(x);
+		assertJson(x, "{a2:{f2:2},m:{k1:{f2:2}}}");
 		if (t.isValidationOnly())
 			return;
-		var s = t.getSerializer();
-		var p = t.getParser();
-		Object in, a, e;
-
-		var s2 = s.copy().trimStrings().build();
-		var p2 = p.copy().trimStrings().build();
-
-		in = " foo bar ";
-		e = "foo bar";
-		a = p.parse(s2.serialize(in), String.class);
-		assertEquals(json(a), json(e));
-		a = p2.parse(s.serialize(in), String.class);
-		assertEquals(json(a), json(e));
-
-		in = JsonMap.ofJson("{' foo ': ' bar '}");
-		e = JsonMap.ofJson("{foo:'bar'}");
-		a = p.parse(s2.serialize(in), JsonMap.class);
-		assertEquals(json(a), json(e));
-		a = p2.parse(s.serialize(in), JsonMap.class);
-		assertEquals(json(a), json(e));
-
-		in = new JsonList("[' foo ', {' foo ': ' bar '}]");
-		e = new JsonList("['foo',{foo:'bar'}]");
-		a = p.parse(s2.serialize(in), JsonList.class);
-		assertEquals(json(a), json(e));
-		a = p2.parse(s.serialize(in), JsonList.class);
-		assertEquals(json(a), json(e));
-
-		in = new A().init1();
-		e = new A().init2();
-		a = p.parse(s2.serialize(in), A.class);
-		assertEquals(json(a), json(e));
-		a = p2.parse(s.serialize(in), A.class);
-		assertEquals(json(a), json(e));
+		assertEquals("a2", x.a2.name);
+		assertEquals("k1", x.m.get("k1").name);
 	}
 
 	public static class A {
-		public String f1;
-		public String[] f2;
-		public JsonList f3;
-		public JsonMap f4;
+		public A2 a2;
+		public Map<String,A2> m;
 
-		public A init1() throws Exception {
-			f1 = " f1 ";
-			f2 = new String[]{" f2a ", " f2b "};
-			f3 = JsonList.ofJson("[' f3a ',' f3b ']");
-			f4 = JsonMap.ofJson("{' foo ':' bar '}");
+		A init() {
+			a2 = new A2().init();
+			m = new LinkedHashMap<>();
+			m.put("k1", new A2().init());
 			return this;
 		}
 
-		public A init2() throws Exception {
-			f1 = "f1";
-			f2 = new String[]{"f2a", "f2b"};
-			f3 = JsonList.ofJson("['f3a','f3b']");
-			f4 = JsonMap.ofJson("{'foo':'bar'}");
+	}
+	public static class A2 {
+		String name;
+		public int f2;
+
+		@NameProperty
+		protected void setName(String name) {
+			this.name = name;
+		}
+
+		A2 init() {
+			f2 = 2;
+			return this;
+		}
+	}
+
+	//====================================================================================================
+	// @ParentProperty method.
+	//====================================================================================================
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	void a02_parentProperty(RoundTripTester t) throws Exception {
+		var x = new B().init();
+		x = t.roundTrip(x);
+		if (t.isValidationOnly())
+			return;
+		assertEquals(x.f1, x.b2.parent.f1);
+	}
+
+	public static class B {
+		public int f1;
+		public B2 b2;
+
+		B init() {
+			f1 = 1;
+			b2 = new B2().init();
+			return this;
+		}
+
+	}
+	public static class B2 {
+		B parent;
+		public int f2;
+
+		@ParentProperty
+		protected void setParent(B v) {
+			parent = v;
+		}
+
+		B2 init() {
+			f2 = 2;
 			return this;
 		}
 	}

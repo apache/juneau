@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 import static org.apache.juneau.collections.JsonMap.*;
@@ -23,9 +24,11 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.csv.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.internal.*;
@@ -130,7 +133,7 @@ public abstract class Context implements AnnotationProvider {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public static abstract class Builder {
+	public abstract static class Builder {
 
 		private static final Map<Class<?>,ConstructorInfo> CONTEXT_CONSTRUCTORS = new ConcurrentHashMap<>();
 
@@ -140,7 +143,7 @@ public abstract class Context implements AnnotationProvider {
 		List<Annotation> annotations;
 		Cache<HashKey,? extends Context> cache;
 
-		private final List<Object> builders = list();
+		private final List<Object> builders = Utils.list();
 		private final AnnotationWorkList applied = AnnotationWorkList.create();
 
 		/**
@@ -359,7 +362,7 @@ public abstract class Context implements AnnotationProvider {
 		@FluentSetter
 		public Builder apply(AnnotationWorkList work) {
 			applied.addAll(work);
-			work.forEach(x -> builders.forEach(y -> x.apply(y)));
+			work.forEach(x -> builders.forEach(x::apply));
 			return this;
 		}
 
@@ -384,15 +387,15 @@ public abstract class Context implements AnnotationProvider {
 			for (Object b : builders) {
 				if (b == this)
 					this.builders.add(b);
-				else if (b instanceof Builder)
-					this.builders.addAll(((Builder)b).builders);
+				else if (b instanceof Builder b2)
+					this.builders.addAll(b2.builders);
 				else
 					this.builders.add(b);
 			}
 		}
 
 		/**
-		 * Applies any of the various <ja>@XConfig</ja> annotations on the specified class to this context.
+		 * Applies any of the various <ja>@XConfig</ja> annotations on the specified classes or methods to this context.
 		 *
 		 * <p>
 		 * Any annotations found that themselves are annotated with {@link ContextApply} will be resolved and
@@ -426,58 +429,6 @@ public abstract class Context implements AnnotationProvider {
 		 * </ol>
 		 *
 		 * <p>
-		 * The default var resolver {@link VarResolver#DEFAULT} is used to resolve any variables in annotation field values.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A class annotated with a config annotation.</jc>
-		 * 	<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
-		 * 	<jk>public class</jk> MyClass {...}
-		 *
-		 * 	<jc>// Apply any settings found on the annotations.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.applyAnnotations(MyClass.<jk>class</jk>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param fromClasses The classes on which the annotations are defined.
-		 * @return This object.
-		 */
-		@FluentSetter
-		public Builder applyAnnotations(Class<?>...fromClasses) {
-			AnnotationWorkList work = AnnotationWorkList.create();
-			for (Class<?> c : fromClasses)
-				work.add(ClassInfo.of(c).getAnnotationList(CONTEXT_APPLY_FILTER));
-			return apply(work);
-		}
-
-		/**
-		 * Applies any of the various <ja>@XConfig</ja> annotations on the specified method to this context.
-		 *
-		 * <p>
-		 * Any annotations found that themselves are annotated with {@link ContextApply} will be resolved and
-		 * applied as properties to this builder.  These annotations include:
-		 * <ul class='javatreec'>
-		 * 	<li class ='ja'>{@link BeanConfig}
-		 * 	<li class ='ja'>{@link CsvConfig}
-		 * 	<li class ='ja'>{@link HtmlConfig}
-		 * 	<li class ='ja'>{@link HtmlDocConfig}
-		 * 	<li class ='ja'>{@link JsonConfig}
-		 * 	<li class ='ja'>{@link JsonSchemaConfig}
-		 * 	<li class ='ja'>{@link MsgPackConfig}
-		 * 	<li class ='ja'>{@link OpenApiConfig}
-		 * 	<li class ='ja'>{@link ParserConfig}
-		 * 	<li class ='ja'>{@link PlainTextConfig}
-		 * 	<li class ='ja'>{@link SerializerConfig}
-		 * 	<li class ='ja'>{@link SoapXmlConfig}
-		 * 	<li class ='ja'>{@link UonConfig}
-		 * 	<li class ='ja'>{@link UrlEncodingConfig}
-		 * 	<li class ='ja'>{@link XmlConfig}
-		 * 	<li class ='ja'><c>RdfConfig</c>
-		 * </ul>
-		 *
-		 * <p>
 		 * Annotations on methods are appended in the following order:
 		 * <ol>
 		 * 	<li>On the package of the method class.
@@ -492,6 +443,16 @@ public abstract class Context implements AnnotationProvider {
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
+		 * 	<jc>// A class annotated with a config annotation.</jc>
+		 * 	<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
+		 * 	<jk>public class</jk> MyClass {...}
+		 *
+		 * 	<jc>// Apply any settings found on the annotations.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.applyAnnotations(MyClass.<jk>class</jk>)
+		 * 		.build();
+		 *
 		 * 	<jc>// A method annotated with a config annotation.</jc>
 		 * 	<jk>public class</jk> MyClass {
 		 * 		<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
@@ -505,15 +466,48 @@ public abstract class Context implements AnnotationProvider {
 		 * 		.build();
 		 * </p>
 		 *
-		 * @param fromMethods The methods on which the annotations are defined.
+		 * @param from The classes or methods on which the annotations are defined.
+		 * 	Can be any of the following types:
+		 * 	<ul>
+		 * 		<li>{@link Class}
+		 * 		<li>{@link ClassInfo}
+		 * 		<li>{@link Method}
+		 * 		<li>{@link MethodInfo}
+		 *		<li>A collection/stream/array of anything on this list.
 		 * @return This object.
 		 */
 		@FluentSetter
-		public Builder applyAnnotations(Method...fromMethods) {
-			AnnotationWorkList work = AnnotationWorkList.create();
-			for (Method m : fromMethods)
-				work.add(MethodInfo.of(m).getAnnotationList(CONTEXT_APPLY_FILTER));
+		public Builder applyAnnotations(Object...from) {
+			var work = AnnotationWorkList.create();
+			Arrays.stream(from).forEach(x -> traverse(work, x));
 			return apply(work);
+		}
+
+		private AnnotationWorkList traverse(AnnotationWorkList work, Object x) {
+			Utils.traverse(x, y -> {
+				if (x instanceof Class<?> x2)
+					work.add(ClassInfo.of(x2).getAnnotationList(CONTEXT_APPLY_FILTER));
+				else if (x instanceof ClassInfo x2)
+					work.add(x2.getAnnotationList(CONTEXT_APPLY_FILTER));
+				else if (x instanceof Method x2)
+					work.add(MethodInfo.of(x2).getAnnotationList(CONTEXT_APPLY_FILTER));
+				else if (x instanceof MethodInfo x2)
+					work.add(x2.getAnnotationList(CONTEXT_APPLY_FILTER));
+				else
+					throw illegalArg("Invalid type passed to applyAnnotations:  {0}", x.getClass().getName());
+			});
+			return work;
+		}
+
+		/**
+		 * Same as {@link #applyAnnotations(Object...)} but explicitly specifies a class varargs to avoid compilation warnings.
+		 *
+		 * @param from The classes or methods on which the annotations are defined.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder applyAnnotations(Class<?>...from) {
+			return applyAnnotations((Object[])from);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -698,6 +692,19 @@ public abstract class Context implements AnnotationProvider {
 		}
 
 		/**
+		 * Same as {@link #annotations(Annotation...)} but uses a list as input.
+		 *
+		 * @param values
+		 * 	The annotations to register with the context.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder annotations(List<Annotation> values) {
+			annotations = addAll(annotations, values);
+			return this;
+		}
+
+		/**
 		 * <i><l>Context</l> configuration property:&emsp;</i>  Debug mode.
 		 *
 		 * <p>
@@ -770,35 +777,6 @@ public abstract class Context implements AnnotationProvider {
 			return debug;
 		}
 
-		/**
-		 * Looks up a system property or environment variable.
-		 *
-		 * <p>
-		 * First looks in system properties.  Then converts the name to env-safe and looks in the system environment.
-		 * Then returns the default if it can't be found.
-		 *
-		 * @param <T> The type to convert to.
-		 * @param name The property name.
-		 * @param def The default value if not found.
-		 * @return The default value.
-		 */
-		protected <T> T env(String name, T def) {
-			return SystemEnv.env(name, def);
-		}
-
-		/**
-		 * Looks up a system property or environment variable.
-		 *
-		 * <p>
-		 * First looks in system properties.  Then converts the name to env-safe and looks in the system environment.
-		 * Then returns the default if it can't be found.
-		 *
-		 * @param name The property name.
-		 * @return The value if found.
-		 */
-		protected Optional<String> env(String name) {
-			return SystemEnv.env(name);
-		}
 		// <FluentSetters>
 
 		// </FluentSetters>

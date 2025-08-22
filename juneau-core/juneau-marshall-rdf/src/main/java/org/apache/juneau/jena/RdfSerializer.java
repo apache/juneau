@@ -14,15 +14,16 @@ package org.apache.juneau.jena;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
@@ -128,7 +129,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			collectionFormat = copyFrom.collectionFormat;
 			juneauNs = copyFrom.juneauNs;
 			juneauBpNs = copyFrom.juneauBpNs;
-			namespaces = copyFrom.namespaces.length == 0 ? null : list(copyFrom.namespaces);
+			namespaces = copyFrom.namespaces.length == 0 ? null : Utils.list(copyFrom.namespaces);
 			jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 		}
 
@@ -1205,14 +1206,14 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
-			super.applyAnnotations(fromClasses);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(Method...fromMethods) {
-			super.applyAnnotations(fromMethods);
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
@@ -1565,7 +1566,13 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
-		public Builder swaps(java.lang.Class<?>...values) {
+		public Builder swaps(Object...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		public Builder swaps(Class<?>...values) {
 			super.swaps(values);
 			return this;
 		}

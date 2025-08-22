@@ -13,8 +13,7 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -24,6 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -599,14 +599,14 @@ public class Parser extends BeanContextable {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
-			super.applyAnnotations(fromClasses);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(Method...fromMethods) {
-			super.applyAnnotations(fromMethods);
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
@@ -959,7 +959,13 @@ public class Parser extends BeanContextable {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
-		public Builder swaps(java.lang.Class<?>...values) {
+		public Builder swaps(Object...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		public Builder swaps(Class<?>...values) {
 			super.swaps(values);
 			return this;
 		}
@@ -1030,7 +1036,7 @@ public class Parser extends BeanContextable {
 		unbuffered = builder.unbuffered;
 		listener = builder.listener;
 
-		String[] _consumes = split(consumes != null ? consumes : "");
+		String[] _consumes = Utils.split(consumes != null ? consumes : "");
 		this.consumesArray = new MediaType[_consumes.length];
 		for (int i = 0; i < _consumes.length; i++) {
 			this.consumesArray[i] = MediaType.of(_consumes[i]);
@@ -1373,7 +1379,7 @@ public class Parser extends BeanContextable {
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
 	public final List<MediaType> getMediaTypes() {
-		return ulist(consumesArray);
+		return Utils.ulist(consumesArray);
 	}
 
 	/**

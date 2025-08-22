@@ -22,7 +22,7 @@ import org.junit.jupiter.params.provider.*;
  * Tests to ensure the valueOf(String), fromString(String), parse(String), and parseString(String) methods
  * are used correctly by parsers.
  */
-class RoundTripObjectsAsStrings_Test extends BasicRoundTripTest {
+class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 
 	//====================================================================================================
 	// testBasic

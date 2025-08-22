@@ -13,17 +13,17 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.utils.*;
@@ -849,14 +849,14 @@ public class Serializer extends BeanTraverseContext {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
-			super.applyAnnotations(fromClasses);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(Method...fromMethods) {
-			super.applyAnnotations(fromMethods);
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
@@ -1209,7 +1209,13 @@ public class Serializer extends BeanTraverseContext {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
-		public Builder swaps(java.lang.Class<?>...values) {
+		public Builder swaps(Object...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		public Builder swaps(Class<?>...values) {
 			super.swaps(values);
 			return this;
 		}
@@ -1337,7 +1343,7 @@ public class Serializer extends BeanTraverseContext {
 
 		this.producesMediaType = MediaType.of(produces);
 		this.acceptRanges = accept != null ? MediaRanges.of(accept) : MediaRanges.of(produces);
-		this.acceptMediaTypes = builder.accept != null ? MediaType.ofAll(split(builder.accept)) : new MediaType[] {this.producesMediaType};
+		this.acceptMediaTypes = builder.accept != null ? MediaType.ofAll(Utils.split(builder.accept)) : new MediaType[] {this.producesMediaType};
 	}
 
 	@Override /* Context */

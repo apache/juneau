@@ -30,7 +30,7 @@ import org.apache.juneau.svl.*;
  * Class used to add properties to a context builder (e.g. {@link BeanContext.Builder}) from an annotation (e.g. {@link BeanConfig}).
  *
  * <p>
- * Used by {@link Context.Builder#applyAnnotations(Class...)} and {@link Context.Builder#applyAnnotations(java.lang.reflect.Method...)} to apply
+ * Used by {@link Context.Builder#applyAnnotations(Class...)} and {@link Context.Builder#applyAnnotations(Object...)} to apply
  * annotations to context beans.
  *
  * <p>

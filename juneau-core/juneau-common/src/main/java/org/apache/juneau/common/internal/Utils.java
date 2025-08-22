@@ -17,6 +17,7 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.nio.charset.*;
 
 import static java.util.Optional.*;
 
@@ -24,6 +25,7 @@ import java.text.*;
 import java.time.*;
 import java.time.format.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.regex.*;
 import java.util.stream.*;
@@ -33,13 +35,26 @@ public class Utils {
 	/** Constructor */
 	protected Utils() {}
 
+	/**
+	 * Shortcut for calling {@link Objects#hash(Object...)}.
+	 */
 	public static final int hash(Object...values) {
 		return Objects.hash(values);
 	}
 
+	/**
+	 * Prints all the specified lines to System.out.
+	 */
 	public static final void printLines(String[] lines) {
 		for (var i = 0; i < lines.length; i++)
 			System.out.println(String.format("%4s:" + lines[i], i+1)); // NOSONAR - NOT DEBUG
+	}
+
+	/**
+	 * Shortcut for calling {@link Optional#ofNullable(Object)}.
+	 */
+	public static final <T> Optional<T> opt(T t) {
+		return Optional.ofNullable(t);
 	}
 
 	/**
@@ -264,6 +279,14 @@ public class Utils {
 	@SafeVarargs
 	public static <T> ArrayList<T> list(T...values) {  // NOSONAR
 		return new ArrayList<>(Arrays.asList(values));
+	}
+
+	/**
+	 * Shortcut for creating an unmodifiable list out of an array of values.
+	 */
+	@SafeVarargs
+	public static <T> List<T> ulist(T...values) {  // NOSONAR
+		return Collections.unmodifiableList(Arrays.asList(values));
 	}
 
 	/**
@@ -832,4 +855,108 @@ public class Utils {
 		return x;
 	}
 
+	/**
+	 * Looks up a system property or environment variable.
+	 *
+	 * <p>
+	 * First looks in system properties.  Then converts the name to env-safe and looks in the system environment.
+	 * Then returns the default if it can't be found.
+	 *
+	 * @param <T> The type to convert the value to.
+	 * @param name The property name.
+	 * @param def The default value if not found.
+	 * @return The default value.
+	 */
+	public static <T> T env(String name, T def) {
+		return env(name).map(x -> toType(x, def)).orElse(def);
+	}
+
+	/**
+	 * Converts an array to a stream of objects.
+	 * @param array The array to convert.
+	 * @return A new stream.
+	 */
+	public static Stream<Object> toStream(Object array) {
+		if (array == null || ! array.getClass().isArray()) {
+			throw new IllegalArgumentException("Not an array: " + array);
+		}
+		var length = Array.getLength(array);
+		return IntStream.range(0, length).mapToObj(i -> Array.get(array, i));
+	}
+
+	/**
+	 * Looks up a system property or environment variable.
+	 *
+	 * <p>
+	 * First looks in system properties.  Then converts the name to env-safe and looks in the system environment.
+	 * Then returns the default if it can't be found.
+	 *
+	 * @param name The property name.
+	 * @return The value if found.
+	 */
+	public static Optional<String> env(String name) {
+		String s = System.getProperty(name);
+		if (s == null)
+			s = System.getenv(envName(name));
+		return opt(s);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private static <T> T toType(String s, T def) {
+		if (s == null || def == null)
+			return null;
+		Class<T> c = (Class<T>)def.getClass();
+		if (c == String.class)
+			return (T)s;
+		if (c.isEnum())
+			return (T)Enum.valueOf((Class<? extends Enum>) c, s);
+		Function<String,T> f = (Function<String,T>)ENV_FUNCTIONS.get(c);
+		if (f == null)
+			throw runtimeException("Invalid env type: {0}", c);
+		return f.apply(s);
+	}
+
+	private static final Map<Class<?>,Function<String,?>> ENV_FUNCTIONS = new IdentityHashMap<>();
+	static {
+		ENV_FUNCTIONS.put(Boolean.class, Boolean::valueOf);
+		ENV_FUNCTIONS.put(Charset.class, Charset::forName);
+	}
+
+	private static final ConcurrentHashMap<String,String> PROPERTY_TO_ENV = new ConcurrentHashMap<>();
+	private static String envName(String name) {
+		return PROPERTY_TO_ENV.computeIfAbsent(name, x->x.toUpperCase().replace(".", "_"));
+	}
+
+	/**
+	 * Traverses all elements in the specified object and executes a consumer for it.
+	 *
+	 * @param <T> The element type.
+	 * @param o The object to traverse.
+	 * @param c The consumer of the objects.
+	 */
+	public static <T> void traverse(Object o, Consumer<T> c) {
+		if (o == null)
+			return;
+		if (o instanceof Iterable<?> o2)
+			o2.forEach(x -> traverse(x, c));
+		else if (o instanceof Stream<?> o2)
+			o2.forEach(x -> traverse(x, c));
+		else if (o.getClass().isArray())
+			toStream(o).forEach(x -> traverse(x, c));
+		else
+			c.accept((T)o);
+	}
+
+	/**
+	 * Traverses all elements in the specified object and accumulates them into a list.
+	 *
+	 * @param <T> The element type.
+	 * @param o The object to traverse.
+	 * @param c The consumer of the objects.
+	 */
+	public static <T> List<T> accumulate(Object o) {
+		var l = list();
+		traverse(o, l::add);
+		return (List<T>) l;
+	}
 }

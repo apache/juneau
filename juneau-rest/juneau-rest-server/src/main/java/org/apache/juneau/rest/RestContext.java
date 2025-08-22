@@ -16,6 +16,7 @@ import static jakarta.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -163,7 +164,7 @@ public class RestContext extends Context {
 	@FluentSetters(ignore={"set"})
 	public static final class Builder extends Context.Builder implements ServletConfig {
 
-		private static final Set<Class<?>> DELAYED_INJECTION = set(
+		private static final Set<Class<?>> DELAYED_INJECTION = Utils.set(
 			BeanContext.Builder.class,
 			BeanStore.Builder.class,
 			BeanStore.class,
@@ -210,7 +211,7 @@ public class RestContext extends Context {
 			VarResolver.class
 		);
 
-		private static final Set<String> DELAYED_INJECTION_NAMES = set(
+		private static final Set<String> DELAYED_INJECTION_NAMES = Utils.set(
 			"defaultRequestAttributes",
 			"defaultRequestHeaders",
 			"defaultResponseHeaders",
@@ -288,7 +289,7 @@ public class RestContext extends Context {
 		Class<? extends RestOpContext> opContextClass = RestOpContext.class;
 		Class<? extends RestOperations> operationsClass = RestOperations.class;
 
-		List<Object> children = list();
+		List<Object> children = Utils.list();
 
 		/**
 		 * Constructor.
@@ -929,7 +930,7 @@ public class RestContext extends Context {
 			// Find our config file.  It's the last non-empty @RestResource(config).
 			VarResolver vr = beanStore.getBean(VarResolver.class).orElseThrow(() -> new IllegalArgumentException("VarResolver not found."));
 			Value<String> cfv = Value.empty();
-			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> isNotEmpty(x.config()), x -> cfv.set(vr.resolve(x.config())));
+			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> Utils.isNotEmpty(x.config()), x -> cfv.set(vr.resolve(x.config())));
 			String cf = cfv.orElse("");
 
 			// If not specified or value is set to SYSTEM_DEFAULT, use system default config.
@@ -2869,7 +2870,7 @@ public class RestContext extends Context {
 		 */
 		@FluentSetter
 		public Builder defaultAccept(String value) {
-			if (isNotEmpty(value))
+			if (Utils.isNotEmpty(value))
 				defaultRequestHeaders(accept(value));
 			return this;
 		}
@@ -2884,7 +2885,7 @@ public class RestContext extends Context {
 		 */
 		@FluentSetter
 		public Builder defaultContentType(String value) {
-			if (isNotEmpty(value))
+			if (Utils.isNotEmpty(value))
 				defaultRequestHeaders(contentType(value));
 			return this;
 		}
@@ -4929,7 +4930,7 @@ public class RestContext extends Context {
 		@FluentSetter
 		public Builder path(String value) {
 			value = trimLeadingSlashes(value);
-			if (! isEmpty(value))
+			if (Utils.isNotEmpty(value))
 				path = value;
 			return this;
 		}
@@ -5270,14 +5271,14 @@ public class RestContext extends Context {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(java.lang.Class<?>...fromClasses) {
-			super.applyAnnotations(fromClasses);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder applyAnnotations(Method...fromMethods) {
-			super.applyAnnotations(fromMethods);
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
@@ -6301,7 +6302,7 @@ public class RestContext extends Context {
 					sb.pathVars(uppm.getVars());
 					sb.req(
 						new OverrideableHttpServletRequest(sb.req())
-							.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
+							.pathInfo(Utils.nullIfEmpty(urlDecode(uppm.getSuffix())))
 							.servletPath(uppm.getPrefix())
 					);
 				} else {
@@ -6319,7 +6320,7 @@ public class RestContext extends Context {
 				if (! uppm.hasEmptyVars()) {
 					sb.pathVars(uppm.getVars());
 					HttpServletRequest childRequest = new OverrideableHttpServletRequest(sb.req())
-						.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
+						.pathInfo(Utils.nullIfEmpty(urlDecode(uppm.getSuffix())))
 						.servletPath(sb.req().getServletPath() + uppm.getPrefix());
 					rc.execute(rc.getResource(), childRequest, sb.res());
 				} else {
@@ -6591,7 +6592,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(session.getBeanStore(), session.getResource());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING, unwrap(e), ()->format("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), ()->Utils.format("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
 			}
 		}
 	}
@@ -6657,7 +6658,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(beanStore, getResource());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING, unwrap(e), ()->format("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), ()->Utils.format("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
 			}
 		}
 
@@ -6723,11 +6724,11 @@ public class RestContext extends Context {
 	}
 
 	static ServletException servletException(String msg, Object...args) {
-		return new ServletException(format(msg, args));
+		return new ServletException(Utils.format(msg, args));
 	}
 
 	static ServletException servletException(Throwable t, String msg, Object...args) {
-		return new ServletException(format(msg, args), t);
+		return new ServletException(Utils.format(msg, args), t);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

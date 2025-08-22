@@ -15,6 +15,10 @@ package org.apache.juneau.a.rttests;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 
+import java.util.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -22,25 +26,48 @@ import org.junit.jupiter.params.provider.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-class RoundTripClasses_Test extends BasicRoundTripTest {
+class JsonMaps_RoundTripTest extends RoundTripTest_Base {
+
+	//====================================================================================================
+	// Class with X(JsonMap) constructor and toJsonMap() method.
+	//====================================================================================================
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_classObjects(RoundTripTester t) throws Exception {
-		Object o = String.class;
-		o = t.roundTrip(o);
-		assertSame(o, String.class);
+	void a01_basic(RoundTripTester t) throws Exception {
+		var x1 = new A(JsonMap.ofJson("{f1:'a',f2:2}"));
+		x1 = t.roundTrip(x1, A.class);
+		assertEquals("a", x1.f1);
+		assertEquals(2, x1.f2);
 
-		o = new Class[]{String.class};
-		o = t.roundTrip(o);
-		assertJson(o, "['java.lang.String']");
+		var x2 = new A[]{x1};
+		x2 = t.roundTrip(x2, A[].class);
+		assertEquals(1, x2.length);
+		assertEquals("a", x2[0].f1);
+		assertEquals(2, x2[0].f2);
 
-		o = alist(String.class, Integer.class);
-		o = t.roundTrip(o);
-		assertJson(o, "['java.lang.String','java.lang.Integer']");
+		var x3 = alist(new A(JsonMap.ofJson("{f1:'a',f2:2}")));
+		x3 = t.roundTrip(x3, List.class, A.class);
+		assertEquals(1, x3.size());
+		assertEquals("a", x3.get(0).f1);
+		assertEquals(2, x3.get(0).f2);
 
-		o = map(String.class, String.class);
-		o = t.roundTrip(o);
-		assertJson(o, "{'java.lang.String':'java.lang.String'}");
+		var x4 = map("a",new A(JsonMap.ofJson("{f1:'a',f2:2}")));
+		x4 = t.roundTrip(x4, Map.class, String.class, A.class);
+		assertEquals(1, x4.size());
+		assertEquals("a", x4.get("a").f1);
+		assertEquals(2, x4.get("a").f2);
 	}
-}
+
+	public static class A {
+		private String f1;
+		private int f2;
+		public A(JsonMap m) {
+			this.f1 = m.getString("f1");
+			this.f2 = m.getInt("f2");
+		}
+		public JsonMap swap(BeanSession session) {
+			return JsonMap.of("f1",f1,"f2",f2);
+		}
+	}
+}
