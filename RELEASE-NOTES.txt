@@ -15,7 +15,7 @@ Release Notes - Juneau - Version 9.2.0
 
 ** Changes
 
-    * Bump org.springframework.boot:spring-boot-maven-plugin from 3.4.5 to 3.5.4 #218, #224.
+    * Bump org.springframework.boot:spring-boot-maven-plugin from 3.4.5 to 3.5.5 #218, #224, #232.
     * Bump org.springframework.boot:spring-boot-starter-web from 3.4.5 to 3.5.4 #217, #225.
     * Bump org.apache:apache from 34 to 35 #220.
     * Bump org.eclipse.jgit:org.eclipse.jgit from 7.2.1.202505142326-r to 7.3.0.202506031305-r #221.
