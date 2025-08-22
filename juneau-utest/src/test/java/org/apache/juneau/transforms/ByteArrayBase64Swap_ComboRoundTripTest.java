@@ -23,7 +23,19 @@ import org.apache.juneau.swaps.*;
 
 class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
-	private static ComboTester<?>[] TESTERS = {
+	protected static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Class<T> type, T bean) {
+		return ComboRoundTripTester.tester(index, label, type, bean)
+			.serializerApply(s -> s.swaps(ByteArraySwap.Base64.class).keepNullProperties())
+			.parserApply(p -> p.swaps(ByteArraySwap.Base64.class));
+	}
+
+	protected static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Type type, T bean) {
+		return ComboRoundTripTester.tester(index, label, type, bean)
+			.serializerApply(s -> s.swaps(ByteArraySwap.Base64.class).keepNullProperties())
+			.parserApply(p -> p.swaps(ByteArraySwap.Base64.class));
+	}
+
+	private static ComboRoundTripTester<?>[] TESTERS = {
 		tester(1, "ByteArray1d", byte[].class, new byte[] {1,2,3})
 			.json("'AQID'")
 			.jsonT("'AQID'")
@@ -293,20 +305,8 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.build()
 	};
 
-	static ComboTester<?>[] testers() {
+	static ComboRoundTripTester<?>[] testers() {
 		return TESTERS;
-	}
-
-	private static <T> ComboTester.Builder<T> tester(int index, String label, Class<T> type, T bean) {
-		return ComboTester.tester("[" + index + "] " + label, type, bean)
-			.serializerApply(s -> s.swaps(ByteArraySwap.Base64.class).keepNullProperties())
-			.parserApply(p -> p.swaps(ByteArraySwap.Base64.class));
-	}
-
-	private static <T> ComboTester.Builder<T> tester(int index, String label, Type type, T bean) {
-		return ComboTester.tester("[" + index + "] " + label, type, bean)
-			.serializerApply(s -> s.swaps(ByteArraySwap.Base64.class).keepNullProperties())
-			.parserApply(p -> p.swaps(ByteArraySwap.Base64.class));
 	}
 
 	public static class BeanWithByteArrayField {

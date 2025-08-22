@@ -16,10 +16,9 @@ import static org.apache.juneau.assertions.Verify.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.serializer.*;
 class Builder_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
-	private static ComboTester<?>[] TESTERS = {
+	private static ComboRoundTripTester<?>[] TESTERS = {
 		tester(1, "A", A.class, new A(null).init())
 			.json("{a:1}")
 			.jsonT("{a:1}")
@@ -172,15 +171,9 @@ class Builder_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.build()
 	};
 
-	static ComboTester<?>[] testers() {
+	static ComboRoundTripTester<?>[] testers() {
 		return TESTERS;
 	}
-
-	private static <T> ComboTester.Builder<T> tester(int index, String label, Class<T> type, T bean) {
-		return ComboTester.tester("[" + index + "] " + label, type, bean).serializerApply(Serializer.Builder::keepNullProperties);
-	}
-
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Typical builder scenario

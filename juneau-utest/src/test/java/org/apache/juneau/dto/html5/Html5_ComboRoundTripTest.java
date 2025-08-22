@@ -18,7 +18,6 @@ import static org.apache.juneau.bean.html5.HtmlBuilder.map;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.map;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -38,7 +37,7 @@ class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		return HtmlBuilder.a(ref, children);
 	}
 
-	private static ComboTester<?>[] TESTERS = {
+	private static ComboRoundTripTester<?>[] TESTERS = {
 		tester(1, "A", A.class, a2("http://foo", "bar"))
 			.json("{_type:'a',a:{href:'http://foo'},c:['bar']}")
 			.jsonT("{t:'a',a:{href:'http://foo'},c:['bar']}")
@@ -2221,12 +2220,8 @@ class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.build(),
 	};
 
-	static ComboTester<?>[] testers() {
+	static ComboRoundTripTester<?>[] testers() {
 		return TESTERS;
-	}
-
-	private static <T> ComboTester.Builder<T> tester(int testIndex, String label, Type type, T bean) {
-		return ComboTester.tester("["+testIndex+"] " + label, type, bean);
 	}
 
 	public static class BeanWithAField {

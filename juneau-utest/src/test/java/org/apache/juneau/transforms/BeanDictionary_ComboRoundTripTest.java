@@ -27,7 +27,11 @@ import org.apache.juneau.serializer.*;
  */
 class BeanDictionary_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
-	private static ComboTester<?>[] TESTERS = {
+	public static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Type type, T bean) {
+		return ComboRoundTripTester.tester(index, label, type, bean).serializerApply(Serializer.Builder::keepNullProperties);
+	}
+
+	private static ComboRoundTripTester<?>[] TESTERS = {
 		tester(1, "A", A.class, new A().init())
 			.json("{_type:'A',a:1}")
 			.jsonT("{t:'A',a:1}")
@@ -606,12 +610,8 @@ class BeanDictionary_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.build()
 	};
 
-	static ComboTester<?>[] testers() {
+	static ComboRoundTripTester<?>[] testers() {
 		return TESTERS;
-	}
-
-	private static <T> ComboTester.Builder<T> tester(int index, String label, Type type, T bean) {
-		return ComboTester.tester("[" + index + "] " + label, type, bean).serializerApply(Serializer.Builder::keepNullProperties);
 	}
 
 	@Bean(dictionary={A.class})

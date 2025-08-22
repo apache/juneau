@@ -28,7 +28,7 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings({})
 class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
-	private static ComboTester<?>[] TESTERS = {
+	private static ComboRoundTripTester<?>[] TESTERS = {
 		tester(1, "SERIALIZER_addBeanTypes", JsonMap.class, JsonMap.of("a", T0.create()))
 			.json("{a:{_type:'BwT',f:1}}")
 			.jsonT("{a:{t:'BwT',f:1}}")
@@ -326,12 +326,8 @@ class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.build(),
 	};
 
-	static ComboTester<?>[] testers() {
+	static ComboRoundTripTester<?>[] testers() {
 		return TESTERS;
-	}
-
-	private static <T> ComboTester.Builder<T> tester(int index, String label, Class<T> type, T bean) {
-		return ComboTester.tester("[" + index + "] " + label, type, bean);
 	}
 
 	@Bean(typeName="BwT")

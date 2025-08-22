@@ -34,14 +34,14 @@ import org.apache.juneau.xml.*;
  * Represents the input to a ComboTest.
  * @param <T>
  */
-public class ComboTester<T> {
+public class ComboRoundTripTester<T> {
 
-	public static <T> Builder<T> tester(String label, Type type, T in) {
-		return new Builder<>(label, type, in);
+	public static <T> Builder<T> tester(int index, String label, Type type, T in) {
+		return new Builder<>("["+index+"] " + label, type, in);
 	}
 
-	public static <T> Builder<T> tester(String label, Type type, Supplier<T> in) {
-		return new Builder<>(label, type, in);
+	public static <T> Builder<T> tester(int index, String label, Type type, Supplier<T> in) {
+		return new Builder<>("["+index+"] " + label, type, in);
 	}
 
 	public static class Builder<T> {
@@ -112,8 +112,8 @@ public class ComboTester<T> {
 		public Builder<T> rdfXmlT(String value) { expected.put("rdfXmlT", value); return this; }
 		public Builder<T> rdfXmlR(String value) { expected.put("rdfXmlR", value); return this; }
 
-		public ComboTester<T> build() {
-			return new ComboTester<>(this);
+		public ComboRoundTripTester<T> build() {
+			return new ComboRoundTripTester<>(this);
 		}
 	}
 
@@ -128,7 +128,7 @@ public class ComboTester<T> {
 	private final Map<String,Parser> parsers = map();
 	private final Function<T,T> postConvert;
 
-	private ComboTester(Builder<T> b) {
+	private ComboRoundTripTester(Builder<T> b) {
 		label = b.label;
 		type = b.type;
 		in = b.in;
@@ -308,6 +308,6 @@ public class ComboTester<T> {
 
 	@Override
 	public String toString() {
-		return "ComboTester: " + label;
+		return "ComboRoundTripTester: " + label;
 	}
 }

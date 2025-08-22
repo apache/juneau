@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import java.lang.reflect.*;
-
 import org.apache.juneau.BeanTraverseContext.*;
 
 /**
@@ -21,7 +19,7 @@ import org.apache.juneau.BeanTraverseContext.*;
  */
 class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
-	private static ComboTester<?>[] TESTERS = {
+	private static ComboRoundTripTester<?>[] TESTERS = {
 		tester(1, "BEANTRAVERSE_initialDepth", A.class, new A().init())
 			.json("{f:1}")
 			.jsonT("{f:1}")
@@ -121,12 +119,8 @@ class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base 
 			.build()
 	};
 
-	static ComboTester<?>[] testers() {
+	static ComboRoundTripTester<?>[] testers() {
 		return TESTERS;
-	}
-
-	private static <T> ComboTester.Builder<T> tester(int index, String label, Type type, T bean) {
-		return ComboTester.tester("[" + index + "] " + label, type, bean);
 	}
 
 	public static class A {

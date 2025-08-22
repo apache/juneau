@@ -25,7 +25,7 @@ import org.apache.juneau.bean.html5.*;
 @SuppressWarnings({})
 class Html5Template_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
-	private static ComboTester<?>[] TESTERS = {
+	private static ComboRoundTripTester<?>[] TESTERS = {
 		tester(1, "FormTemplate-1", FormTemplate.class, new FormTemplate("http://myaction", 123, true))
 			.json("{a:{action:'http://myaction'},c:[{_type:'input',a:{type:'text',name:'v1',value:123}},{_type:'input',a:{type:'text',name:'v2',value:true}}]}")
 			.jsonT("{a:{action:'http://myaction'},c:[{t:'input',a:{type:'text',name:'v1',value:123}},{t:'input',a:{type:'text',name:'v2',value:true}}]}")
@@ -80,11 +80,7 @@ class Html5Template_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		}
 	}
 
-	static ComboTester<?>[] testers() {
+	static ComboRoundTripTester<?>[] testers() {
 		return TESTERS;
-	}
-
-	private static <T> ComboTester.Builder<T> tester(int index, String label, Class<T> type, T bean) {
-		return ComboTester.tester("[" + index + "] " + label, type, bean);
 	}
 }
