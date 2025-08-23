@@ -43,7 +43,7 @@ class MethodInvokerTest extends SimpleTestBase {
 
 		MethodInvoker mi = create(m);
 
-		A a = new A();
+		var a = new A();
 		mi.invoke(a);
 		mi.invoke(a);
 		mi.invoke(a);
@@ -56,7 +56,7 @@ class MethodInvokerTest extends SimpleTestBase {
 
 		MethodInvoker mi = create(m);
 
-		A a = new A();
+		var a = new A();
 		assertThrows(Exception.class, ()->mi.invoke(a));
 		assertThrows(Exception.class, ()->mi.invoke(a));
 		assertThrows(Exception.class, ()->mi.invoke(a));
@@ -69,7 +69,7 @@ class MethodInvokerTest extends SimpleTestBase {
 
 		MethodInvoker mi = create(m);
 
-		A a = new A();
+		var a = new A();
 		assertThrows(Exception.class, ()->mi.invoke(a, "x"));
 		assertThrows(Exception.class, ()->mi.invoke(a));
 		assertThrows(Exception.class, ()->mi.invoke(a, 1, "x"));

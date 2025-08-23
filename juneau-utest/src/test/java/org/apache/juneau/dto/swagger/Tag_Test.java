@@ -29,7 +29,7 @@ class Tag_Test extends SimpleTestBase {
 	 * Test method for getters and setters.
 	 */
 	@Test void a01_gettersAndSetters() {
-		Tag t = new Tag();
+		var t = new Tag();
 		assertEquals("foo", t.setName("foo").getName());
 		assertNull(t.setName(null).getName());
 		assertEquals("foo", t.setDescription("foo").getDescription());
@@ -41,7 +41,7 @@ class Tag_Test extends SimpleTestBase {
 	 * Test method for {@link Tag#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test void b01_set() throws Exception {
-		Tag t = new Tag();
+		var t = new Tag();
 
 		t
 			.set("description", "a")
@@ -87,7 +87,7 @@ class Tag_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_copy() {
-		Tag t = new Tag();
+		var t = new Tag();
 
 		t = t.copy();
 
@@ -104,7 +104,7 @@ class Tag_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_keySet() {
-		Tag t = new Tag();
+		var t = new Tag();
 
 		assertJson(t.keySet(), "[]");
 

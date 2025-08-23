@@ -31,7 +31,7 @@ class HeaderInfo_Test extends SimpleTestBase {
 	 * Test method for getters and setters.
 	 */
 	@Test void a01_gettersAndSetters() {
-		HeaderInfo t = new HeaderInfo();
+		var t = new HeaderInfo();
 		assertEquals("foo", t.setDescription("foo").getDescription());
 		assertNull(t.setDescription(null).getDescription());
 		assertEquals("foo", t.setType("foo").getType());
@@ -77,7 +77,7 @@ class HeaderInfo_Test extends SimpleTestBase {
 	 * Test method for {@link HeaderInfo#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test void b01_set() throws Exception {
-		HeaderInfo t = new HeaderInfo();
+		var t = new HeaderInfo();
 
 		t
 			.set("default", "a")
@@ -182,7 +182,7 @@ class HeaderInfo_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_copy() {
-		HeaderInfo t = new HeaderInfo();
+		var t = new HeaderInfo();
 
 		t = t.copy();
 
@@ -215,7 +215,7 @@ class HeaderInfo_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_keySet() {
-		HeaderInfo t = new HeaderInfo();
+		var t = new HeaderInfo();
 
 		assertJson(t.keySet(), "[]");
 
@@ -245,7 +245,7 @@ class HeaderInfo_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_strict() {
-		HeaderInfo t = new HeaderInfo().strict();
+		var t = new HeaderInfo().strict();
 		t.setCollectionFormat("csv");
 		assertThrowsWithMessage(Exception.class, "Invalid", ()->t.setCollectionFormat("foo"));
 		t.setType("string");
@@ -253,8 +253,8 @@ class HeaderInfo_Test extends SimpleTestBase {
 	}
 
 	@Test void c02_resolveRefs() {
-		Swagger s = new Swagger();
-		HeaderInfo t = new HeaderInfo();
+		var s = new Swagger();
+		var t = new HeaderInfo();
 		assertNotThrown(()->t.resolveRefs(s, new ArrayDeque<>(), 10));
 	}
 }

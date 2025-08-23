@@ -40,7 +40,7 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 		public int x;
 
 		public static Bean create() {
-			Bean b = new Bean();
+			var b = new Bean();
 			b.x = 1;
 			return b;
 		}

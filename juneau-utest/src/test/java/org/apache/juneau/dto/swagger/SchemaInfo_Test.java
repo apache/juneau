@@ -31,7 +31,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 	 * Test method for getters and setters.
 	 */
 	@Test void a01_gettersAndSetters() {
-		SchemaInfo t = new SchemaInfo();
+		var t = new SchemaInfo();
 		assertEquals("foo", t.setFormat("foo").getFormat());
 		assertNull(t.setFormat(null).getFormat());
 		assertEquals("foo", t.setTitle("foo").getTitle());
@@ -92,7 +92,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 	 * Test method for {@link SchemaInfo#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test void b01_set() throws Exception {
-		SchemaInfo t = new SchemaInfo();
+		var t = new SchemaInfo();
 
 		t
 			.set("default", "a")
@@ -268,7 +268,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_copy() {
-		SchemaInfo t = new SchemaInfo();
+		var t = new SchemaInfo();
 
 		t = t.copy();
 
@@ -311,7 +311,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_keySet() {
-		SchemaInfo t = new SchemaInfo();
+		var t = new SchemaInfo();
 
 		assertJson(t.keySet(), "[]");
 

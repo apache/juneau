@@ -276,7 +276,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	}
 
 	@Test void addExample_BEAN_exampleMethod_wDefault() throws Exception {
-		B1 b = new B1();
+		var b = new B1();
 		b.f1 = "baz";
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).example(B1.class, b).build().getSession();
 		assertJson(s.getSchema(B1.class), "{type:'object',properties:{f1:{type:'string'}},example:{f1:'baz'}}");
@@ -291,7 +291,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 
 		@Example
 		public static B1 example() {
-			B1 ex = new B1();
+			var ex = new B1();
 			ex.f1 = "foobar";
 			return ex;
 		}
@@ -303,7 +303,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	}
 
 	@Test void addExample_BEAN_exampleMethod_wDefault_usingConfig() throws Exception {
-		B1c b = new B1c();
+		var b = new B1c();
 		b.f1 = "baz";
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).applyAnnotations(B1cConfig.class).example(B1c.class, b).build().getSession();
 		assertJson(s.getSchema(B1c.class), "{type:'object',properties:{f1:{type:'string'}},example:{f1:'baz'}}");
@@ -322,14 +322,14 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	public static class B1c extends SimpleBean {
 
 		public static B1c example() {
-			B1c ex = new B1c();
+			var ex = new B1c();
 			ex.f1 = "foobar";
 			return ex;
 		}
 	}
 
 	@Test void addExample_BEAN_exampleMethodOverridden_wDefault() throws Exception {
-		B2 b = new B2();
+		var b = new B2();
 		b.f1 = "baz";
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).example(B2.class, b).build().getSession();
 		assertJson(s.getSchema(B2.class), "{type:'object',properties:{f1:{type:'string'}},example:{f1:'baz'}}");
@@ -344,14 +344,14 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 
 		@Example
 		public static B2 example2() {
-			B2 ex = new B2();
+			var ex = new B2();
 			ex.f1 = "foobar";
 			return ex;
 		}
 	}
 
 	@Test void addExample_BEAN_exampleMethodOverridden_wDefault_usingConfig() throws Exception {
-		B2c b = new B2c();
+		var b = new B2c();
 		b.f1 = "baz";
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).applyAnnotations(B2cConfig.class).example(B2c.class, b).build().getSession();
 		assertJson(s.getSchema(B2c.class), "{type:'object',properties:{f1:{type:'string'}},example:{f1:'baz'}}");
@@ -370,7 +370,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	public static class B2c extends B1c {
 
 		public static B2c example2() {
-			B2c ex = new B2c();
+			var ex = new B2c();
 			ex.f1 = "foobar";
 			return ex;
 		}
@@ -392,7 +392,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 		public static B3 EXAMPLE = getExample();
 
 		private static B3 getExample() {
-			B3 ex = new B3();
+			var ex = new B3();
 			ex.f1 = "foobar";
 			return ex;
 		}
@@ -416,7 +416,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 		public static B3c EXAMPLE = getExample();
 
 		private static B3c getExample() {
-			B3c ex = new B3c();
+			var ex = new B3c();
 			ex.f1 = "foobar";
 			return ex;
 		}
@@ -451,14 +451,14 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	public static class B4c extends SimpleBean {}
 
 	@Test void addExample_BEAN_exampleBeanProperty() throws Exception {
-		SimpleBean b = new SimpleBean();
+		var b = new SimpleBean();
 		b.f1 = "foobar";
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).example(SimpleBean.class, b).build().getSession();
 		assertJson(s.getSchema(SimpleBean.class), "{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}");
 	}
 
 	@Test void addExample_BEAN_exampleBeanProperty_2darray() throws Exception {
-		SimpleBean b = new SimpleBean();
+		var b = new SimpleBean();
 		b.f1 = "foobar";
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).example(SimpleBean.class, b).build().getSession();
 		assertJson(s.getSchema(SimpleBean[][].class), "{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}}}");
@@ -479,7 +479,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	}
 
 	@Test void addExample_MAP_exampleMethod_wDefault() throws Exception {
-		C1 b = new C1();
+		var b = new C1();
 		b.put(456, B1.example());
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).example(C1.class, b).build().getSession();
 		assertJson(s.getSchema(C1.class), "{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'456':{f1:'foobar'}}}");
@@ -490,7 +490,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 
 		@Example
 		public static C1 example() {
-			C1 m = new C1();
+			var m = new C1();
 			m.put(123, B1.example());
 			return m;
 		}
@@ -502,7 +502,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	}
 
 	@Test void addExample_MAP_exampleMethod_wDefault_usingConfig() throws Exception {
-		C1c b = new C1c();
+		var b = new C1c();
 		b.put(456, B1.example());
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).applyAnnotations(C1cConfig.class).example(C1c.class, b).build().getSession();
 		assertJson(s.getSchema(C1c.class), "{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'456':{f1:'foobar'}}}");
@@ -515,7 +515,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	public static class C1c extends BeanMap {
 
 		public static C1c example() {
-			C1c m = new C1c();
+			var m = new C1c();
 			m.put(123, B1.example());
 			return m;
 		}
@@ -538,7 +538,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 		public static C2 EXAMPLE = getExample();
 
 		private static C2 getExample() {
-			C2 ex = new C2();
+			var ex = new C2();
 			ex.put(123, B1.example());
 			return ex;
 		}
@@ -563,7 +563,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 		public static C2c EXAMPLE = getExample();
 
 		private static C2c getExample() {
-			C2c ex = new C2c();
+			var ex = new C2c();
 			ex.put(123, B1.example());
 			return ex;
 		}
@@ -624,8 +624,8 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	}
 
 	@Test void addExample_COLLECTION_exampleMethod_wDefault() throws Exception {
-		D1 b = new D1();
-		SimpleBean sb = new SimpleBean();
+		var b = new D1();
+		var sb = new SimpleBean();
 		sb.f1 = "baz";
 		b.add(sb);
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(COLLECTION).example(D1.class, b).build().getSession();
@@ -637,7 +637,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 
 		@Example
 		public static D1 example() {
-			D1 m = new D1();
+			var m = new D1();
 			m.add(B1.example());
 			return m;
 		}
@@ -649,8 +649,8 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	}
 
 	@Test void addExample_COLLECTION_exampleMethod_wDefault_usingConfig() throws Exception {
-		D1c b = new D1c();
-		SimpleBean sb = new SimpleBean();
+		var b = new D1c();
+		var sb = new SimpleBean();
 		sb.f1 = "baz";
 		b.add(sb);
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(COLLECTION).applyAnnotations(D1cConfig.class).example(D1c.class, b).build().getSession();
@@ -664,7 +664,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	public static class D1c extends BeanList {
 
 		public static D1c example() {
-			D1c m = new D1c();
+			var m = new D1c();
 			m.add(B1.example());
 			return m;
 		}
@@ -687,7 +687,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 		public static D2 EXAMPLE = getExample();
 
 		private static D2 getExample() {
-			D2 ex = new D2();
+			var ex = new D2();
 			ex.add(B1.example());
 			return ex;
 		}
@@ -712,7 +712,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 		public static D2c EXAMPLE = getExample();
 
 		private static D2c getExample() {
-			D2c ex = new D2c();
+			var ex = new D2c();
 			ex.add(B1.example());
 			return ex;
 		}

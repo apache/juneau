@@ -24,7 +24,7 @@ class BeanDiffTest extends SimpleTestBase {
 		public String f2;
 
 		static A create(int f1, String f2) {
-			A a = new A();
+			var a = new A();
 			a.f1 = f1;
 			a.f2 = f2;
 			return a;
@@ -96,4 +96,4 @@ class BeanDiffTest extends SimpleTestBase {
 		assertTrue(bd.hasDiffs());
 		assertEquals("{v1:{f1:1},v2:{f1:2,f2:'b'}}", bd.toString());
 	}
-}
+}

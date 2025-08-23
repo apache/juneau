@@ -31,7 +31,7 @@ class ParameterInfo_Test extends SimpleTestBase {
 	 * Test method for getters and setters.
 	 */
 	@Test void a01_gettersAndSetters() {
-		ParameterInfo t = new ParameterInfo();
+		var t = new ParameterInfo();
 		assertEquals("foo", t.setName("foo").getName());
 		assertNull(t.setName(null).getName());
 		assertEquals("foo", t.setIn("foo").getIn());
@@ -77,7 +77,7 @@ class ParameterInfo_Test extends SimpleTestBase {
 	 * Test method for {@link ParameterInfo#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test void testSet() throws Exception {
-		ParameterInfo t = new ParameterInfo();
+		var t = new ParameterInfo();
 
 		t
 			.set("default", "a")
@@ -223,7 +223,7 @@ class ParameterInfo_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_copy() {
-		ParameterInfo t = new ParameterInfo();
+		var t = new ParameterInfo();
 
 		t = t.copy();
 
@@ -260,7 +260,7 @@ class ParameterInfo_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_keySet() {
-		ParameterInfo t = new ParameterInfo();
+		var t = new ParameterInfo();
 
 		assertJson(t.keySet(), "[]");
 

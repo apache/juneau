@@ -95,8 +95,8 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 	@Test void testInner() {
 		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		JsonMap m = new ResolvingJsonMap(vr.createSession());
-		JsonMap m2 = new JsonMap();
-		JsonMap m3 = new JsonMap();
+		var m2 = new JsonMap();
+		var m3 = new JsonMap();
 		m.inner(m2);
 		m2.inner(m3);
 

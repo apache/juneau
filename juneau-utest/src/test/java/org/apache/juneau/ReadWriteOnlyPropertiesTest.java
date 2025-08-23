@@ -35,7 +35,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 		public int f2;
 
 		static A create() {
-			A x = new A();
+			var x = new A();
 			x.f1 = 1;
 			x.f2 = 2;
 			return x;
@@ -65,7 +65,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 		public int f2;
 
 		static B create() {
-			B x = new B();
+			var x = new B();
 			x.f1 = 1;
 			x.f2 = 2;
 			return x;
@@ -94,7 +94,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 		public int f2;
 
 		static Bc create() {
-			Bc x = new Bc();
+			var x = new Bc();
 			x.f1 = 1;
 			x.f2 = 2;
 			return x;
@@ -120,7 +120,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 		public int f2;
 
 		static C create() {
-			C x = new C();
+			var x = new C();
 			x.f1 = 1;
 			x.f2 = 2;
 			return x;
@@ -216,7 +216,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 		public int f2;
 
 		static D create() {
-			D x = new D();
+			var x = new D();
 			x.f1 = 1;
 			x.f2 = 2;
 			return x;
@@ -241,7 +241,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 		public int f2;
 
 		static Dc create() {
-			Dc x = new Dc();
+			var x = new Dc();
 			x.f1 = 1;
 			x.f2 = 2;
 			return x;
@@ -268,7 +268,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 		public int f2;
 
 		static E create() {
-			E x = new E();
+			var x = new E();
 			x.f1 = 1;
 			x.f2 = 2;
 			return x;
@@ -293,7 +293,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 		public int f2;
 
 		static Ec create() {
-			Ec x = new Ec();
+			var x = new Ec();
 			x.f1 = 1;
 			x.f2 = 2;
 			return x;

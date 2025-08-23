@@ -34,7 +34,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	@Test void testBasic() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
-		A t = new A();
+		var t = new A();
 
 		t.f1 = list("f1a","f1b");
 		t.f2 = new String[]{"f2a","f2b"};
@@ -73,7 +73,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	@Test void testUninitializedFields() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
-		B t = new B();
+		var t = new B();
 
 		t.f1 = list("f1a","f1b");
 		t.f2 = new String[]{"f2a","f2b"};
@@ -112,7 +112,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	@Test void testInitializedFields() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
-		C t = new C();
+		var t = new C();
 
 		t.f1 = list("f1b");
 		t.f2 = new String[]{"f2b"};
@@ -157,7 +157,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	@Test void testGetters() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
-		D t = new D();
+		var t = new D();
 
 		t.f1 = list("f1a");
 		t.f2 = new String[]{"f2a"};
@@ -193,7 +193,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 			return f2;
 		}
 		public void setF2(String[] v) {
-			this.f2 = v;
+			f2 = v;
 		}
 
 		@Xml(format=COLLAPSED,childName="xf3")
@@ -206,7 +206,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 			return f4;
 		}
 		public void setF4(String[] v) {
-			this.f4 = v;
+			f4 = v;
 		}
 	}
 
@@ -216,7 +216,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	@Test void testNullConstructibleCollectionFields() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
-		E t = new E();
+		var t = new E();
 
 		t.f1 = Utils.list("f1a");
 		t.f2 = Utils.list("f2a");
@@ -242,7 +242,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 			return f1;
 		}
 		public void setF1(ArrayList<String> v) {
-			this.f1 = v;
+			f1 = v;
 		}
 
 		@Xml(format=COLLAPSED,childName="xf2")
@@ -250,7 +250,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 			return f2;
 		}
 		public void setF2(ArrayList<String> v) {
-			this.f2 = v;
+			f2 = v;
 		}
 	}
 
@@ -284,7 +284,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		public List<F1> f1;
 
 		public static FA newInstance() {
-			FA t = new FA();
+			var t = new FA();
 			t.f1 = new LinkedList<>();
 			t.f1.add(F1.newInstance("x1"));
 			t.f1.add(F1.newInstance("x2"));
@@ -297,7 +297,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		public F1[] f1;
 
 		public static FB newInstance() {
-			FB t = new FB();
+			var t = new FB();
 			t.f1 = new F1[]{
 				F1.newInstance("x1"),
 				F1.newInstance("x2")
@@ -313,7 +313,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		public String text;
 
 		public static F1 newInstance(String text) {
-			F1 t = new F1();
+			var t = new F1();
 			t.text = text;
 			return t;
 		}
@@ -345,7 +345,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		public List<F1> f1;
 
 		public static G newInstance() {
-			G t = new G();
+			var t = new G();
 			t.f1 = new LinkedList<>();
 			t.f1.add(F1.newInstance("x1"));
 			t.f1.add(F1.newInstance("x2"));
@@ -378,7 +378,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		public H1 f1;
 
 		public static H newInstance() {
-			H t = new H();
+			var t = new H();
 			t.f1 = new H1();
 			t.f1.add("x1");
 			t.f1.add("x2");
@@ -416,7 +416,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		public H1 f1;
 
 		public static I newInstance() {
-			I t = new I();
+			var t = new I();
 			t.f1 = new H1();
 			t.f1.add("x1");
 			t.f1.add("x2");

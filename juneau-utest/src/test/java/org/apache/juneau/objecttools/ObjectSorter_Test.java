@@ -55,7 +55,7 @@ class ObjectSorter_Test extends SimpleTestBase {
 		public String f;
 
 		public static A create(String f) {
-			A a = new A();
+			var a = new A();
 			a.f = f;
 			return a;
 		}
@@ -204,7 +204,7 @@ class ObjectSorter_Test extends SimpleTestBase {
 		public Object f;
 
 		public static B create(Object f) {
-			B b = new B();
+			var b = new B();
 			b.f = f;
 			return b;
 		}
@@ -227,7 +227,7 @@ class ObjectSorter_Test extends SimpleTestBase {
 		public float f2;
 
 		public static C create(int f1, float f2) {
-			C c = new C();
+			var c = new C();
 			c.f1 = f1;
 			c.f2 = f2;
 			return c;

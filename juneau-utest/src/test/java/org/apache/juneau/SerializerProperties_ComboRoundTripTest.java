@@ -340,7 +340,7 @@ class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		public int f;
 
 		public static T0 create() {
-			T0 l = new T0();
+			var l = new T0();
 			l.f = 1;
 			return l;
 		}
@@ -374,7 +374,8 @@ class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		public T10 f2;
 
 		public T10 init() {
-			T10 x2 = new T10(), x3 = new T10();
+			var x2 = new T10();
+			var x3 = new T10();
 			f1 = 1;
 			x2.f1 = 2;
 			x3.f1 = 3;

@@ -29,7 +29,7 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	public static class ABean {
 		public int f;
 		static ABean get() {
-			ABean x = new ABean();
+			var x = new ABean();
 			x.f = 1;
 			return x;
 		}
@@ -52,7 +52,7 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	public static class A1 {
 		public Object f1;
 		static A1 get() {
-			A1 x = new A1();
+			var x = new A1();
 			x.f1 = A2.get();
 			return x;
 		}
@@ -67,7 +67,7 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	public static class A2 {
 		public int f2;
 		static A2 get() {
-			A2 x = new A2();
+			var x = new A2();
 			x.f2 = 1;
 			return x;
 		}
@@ -79,13 +79,13 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_detectRecursions() {
-		A1 l1 = new A1();
+		var l1 = new A1();
 		l1.f1 = l1;
 		assertThrowsWithMessage(Exception.class, "Recursion occurred", ()->client().detectRecursions().build().post("/echoBody",l1).run());
 	}
 
 	@Test void a04_ignoreRecursions() throws Exception {
-		A1 l1 = new A1();
+		var l1 = new A1();
 		l1.f1 = l1;
 		client().ignoreRecursions().build().post("/echoBody",l1).run().assertContent("{}");
 	}
@@ -97,7 +97,7 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	public static class A6 {
 		public ABean f;
 		static A6 get() {
-			A6 x = new A6();
+			var x = new A6();
 			x.f = bean;
 			return x;
 		}
@@ -123,7 +123,7 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	}
 
 	@Test void a09_trimEmptyCollections() throws Exception {
-		A9 x = new A9();
+		var x = new A9();
 		client().trimEmptyCollections().build().post("/echoBody",x).run().assertContent("{}");
 	}
 
@@ -133,7 +133,7 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	}
 
 	@Test void a10_trimEmptyMaps() throws Exception {
-		A10 x = new A10();
+		var x = new A10();
 		client().trimEmptyMaps().build().post("/echoBody",x).run().assertContent("{}");
 	}
 
@@ -142,7 +142,7 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	}
 
 	@Test void a11_trimNullPropertiesBoolean() throws Exception {
-		A11 x = new A11();
+		var x = new A11();
 		client().keepNullProperties().build().post("/echoBody",x).run().assertContent("{f:null}");
 	}
 
@@ -151,7 +151,7 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	}
 
 	@Test void a12_trimStringsOnWrite() throws Exception {
-		A12 x = new A12();
+		var x = new A12();
 		client().trimStringsOnWrite().build().post("/echoBody",x).run().assertContent("{f:'foo'}");
 	}
 
@@ -161,7 +161,7 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	}
 
 	@Test void a13_uriContext_uriResolution_uriRelativity() throws Exception {
-		A13 x = new A13();
+		var x = new A13();
 		client().uriResolution(UriResolution.ABSOLUTE).uriRelativity(UriRelativity.PATH_INFO).uriContext(UriContext.of("http://localhost:80","/context","/resource","/path")).build().post("/echoBody",x).run().assertContent("{f:'http://localhost:80/context/resource/foo'}");
 		client().uriResolution(UriResolution.NONE).uriRelativity(UriRelativity.RESOURCE).uriContext(UriContext.of("http://localhost:80","/context","/resource","/path")).build().post("/echoBody",x).run().assertContent("{f:'foo'}");
 	}
@@ -171,8 +171,9 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 		public A14 f2;
 
 		static A14 get() {
-			A14 x = new A14();
-			A14 x2 = new A14(),x3 = new A14();
+			var x = new A14();
+			var x2 = new A14();
+			var x3 = new A14();
 			x.f1 = 1;
 			x2.f1 = 2;
 			x3.f1 = 3;
@@ -192,19 +193,19 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	}
 
 	@Test void a15_quoteChar() throws Exception {
-		A15 x = new A15();
+		var x = new A15();
 		MockRestClient.create(A.class).json().quoteChar('\'').build().post("/echoBody",x).run().assertContent("{'f1':'foo'}");
 		MockRestClient.create(A.class).json().quoteChar('|').build().post("/echoBody",x).run().assertContent("{|f1|:|foo|}");
 	}
 
 	@Test void a16_sq() throws Exception {
-		A15 x = new A15();
+		var x = new A15();
 		MockRestClient.create(A.class).json().sq().build().post("/echoBody",x).run().assertContent("{'f1':'foo'}");
 		client().sq().build().post("/echoBody",x).run().assertContent("{f1:'foo'}");
 	}
 
 	@Test void a17_useWhitespace() throws Exception {
-		A15 x = new A15();
+		var x = new A15();
 		client().ws().build().post("/echoBody",x).run().assertContent("{\n\tf1: 'foo'\n}");
 		client().useWhitespace().build().post("/echoBody",x).run().assertContent("{\n\tf1: 'foo'\n}");
 	}

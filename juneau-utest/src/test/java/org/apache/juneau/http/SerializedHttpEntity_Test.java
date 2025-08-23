@@ -68,7 +68,7 @@ class SerializedHttpEntity_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_writeTo() throws Exception {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		var baos = new ByteArrayOutputStream();
 		serializedEntity("foo", null).writeTo(baos);
 		assertEquals("foo", toUtf8(baos.toByteArray()));
 	}

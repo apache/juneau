@@ -42,7 +42,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	public static class ABean {
 		public int f;
 		static ABean get() {
-			ABean x = new ABean();
+			var x = new ABean();
 			x.f = 1;
 			return x;
 		}
@@ -161,11 +161,11 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	}
 
 	@Test void a06_pipeTo() throws Exception {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		var baos = new ByteArrayOutputStream();
 		client().build().get("/bean").run().getContent().pipeTo(baos);
 		assertEquals("{f:1}", toUtf8(baos.toByteArray()));
 
-		StringWriter sw = new StringWriter();
+		var sw = new StringWriter();
 		client().build().get("/bean").run().getContent().pipeTo(sw);
 		assertEquals("{f:1}", sw.toString());
 
@@ -177,7 +177,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	public static class A7a {
 		String x;
 		public static A7a fromReader(Reader r) throws IOException {
-			A7a x = new A7a();
+			var x = new A7a();
 			x.x = read(r);
 			return x;
 		}
@@ -186,7 +186,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	public static class A7b {
 		String x;
 		public static A7b fromInputStream(InputStream is) throws IOException {
-			A7b x = new A7b();
+			var x = new A7b();
 			x.x = read(is);
 			return x;
 		}
@@ -281,7 +281,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 		InputStream x4 = testClient().entity(inputStreamEntity("foo")).get().run().getContent().asInputStream();
 		assertBytes(x4).asString().is("foo");
 
-		ByteArrayOutputStream x5 = new ByteArrayOutputStream();
+		var x5 = new ByteArrayOutputStream();
 		testClient().entity(inputStreamEntity("foo")).get().run().getContent().writeTo(x5);
 		assertBytes(x5.toByteArray()).asString().is("foo");
 

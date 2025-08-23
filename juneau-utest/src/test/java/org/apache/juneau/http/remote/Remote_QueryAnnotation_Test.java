@@ -41,7 +41,7 @@ class Remote_QueryAnnotation_Test extends SimpleTestBase {
 		public int f;
 
 		public static Bean create() {
-			Bean b = new Bean();
+			var b = new Bean();
 			b.f = 1;
 			return b;
 		}

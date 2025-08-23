@@ -28,7 +28,7 @@ class BeanFilterTest extends SimpleTestBase {
 		JsonSerializer s = Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 		JsonParser p = JsonParser.DEFAULT;
 
-		A1 a1 = new A1();
+		var a1 = new A1();
 		a1.f1 = "f1";
 		a1.fb = new B2();
 		((B2)a1.fb).f2 = "f2";
@@ -85,7 +85,7 @@ class BeanFilterTest extends SimpleTestBase {
 		JsonSerializer s = Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().applyAnnotations(EConfig.class).build();
 		JsonParser p = JsonParser.create().applyAnnotations(EConfig2.class).build();
 
-		E1 e1 = new E1();
+		var e1 = new E1();
 		e1.f1 = "f1";
 		e1.fb = new F2();
 		((F2)e1.fb).f2 = "f2";
@@ -192,4 +192,4 @@ class BeanFilterTest extends SimpleTestBase {
 		public String f1 = "f1";
 	}
 
-}
+}

@@ -109,7 +109,7 @@ class BeanFilterTest extends SimpleTestBase {
 	// Filtered with stop classes
 	//====================================================================================================
 	@Test void testFilteredWithStopClass() {
-		C3 c3 = new C3();
+		var c3 = new C3();
 		assertJson(c3, "{f3:3,p3:3}");
 	}
 
@@ -130,7 +130,7 @@ class BeanFilterTest extends SimpleTestBase {
 	}
 
 	@Test void testFilterWithStopClassOnParentClass() {
-		D3 d3 = new D3();
+		var d3 = new D3();
 		assertJson(d3, "{f3:3,p3:3}");
 	}
 
@@ -151,7 +151,7 @@ class BeanFilterTest extends SimpleTestBase {
 	}
 
 	@Test void testFilteredWithStopClassOnParentClassWithOverriddenAnnotation() {
-		E3 e3 = new E3();
+		var e3 = new E3();
 		assertJson(e3, "{f3:3,p3:3}");
 	}
 
@@ -173,7 +173,7 @@ class BeanFilterTest extends SimpleTestBase {
 	}
 
 	@Test void testFilteredWithStopClassesAtMulitpleLevels() {
-		F3 e3 = new F3();
+		var e3 = new F3();
 		assertJson(e3, "{f3:3,p3:3}");
 	}
 

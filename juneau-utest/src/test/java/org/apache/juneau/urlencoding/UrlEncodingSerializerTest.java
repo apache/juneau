@@ -569,7 +569,7 @@ class UrlEncodingSerializerTest extends SimpleTestBase {
 		List<String> l = list("foo", "'foo'", "(foo)", "@(foo)");
 		assertEquals("0=foo&1='foo'&2=(foo)&3=@(foo)", s2.serialize(l));
 
-		A a = new A();
+		var a = new A();
 		assertEquals("'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)&foo=foo", s2.serialize(a));
 	}
 

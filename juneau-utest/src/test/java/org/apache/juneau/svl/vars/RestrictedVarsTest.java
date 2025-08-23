@@ -114,7 +114,7 @@ class RestrictedVarsTest extends SimpleTestBase {
 	}
 
 	private void test(VarResolver vr, String s, String expected) throws IOException {
-		StringWriter sw = new StringWriter();
+		var sw = new StringWriter();
 		vr.resolveTo(s, sw);
 		assertEquals(expected, sw.toString());
 		assertEquals(expected, vr.resolve(s));

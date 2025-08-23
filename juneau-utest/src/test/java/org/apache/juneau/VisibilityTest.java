@@ -158,7 +158,7 @@ class VisibilityTest extends SimpleTestBase {
 		public A(){/* no-op */}
 
 		static A create() {
-			A x = new A();
+			var x = new A();
 			x.f1 = 1;
 			return x;
 		}

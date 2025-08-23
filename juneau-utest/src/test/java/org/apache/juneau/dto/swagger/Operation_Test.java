@@ -31,7 +31,7 @@ class Operation_Test extends SimpleTestBase {
 	 * Test method for getters and setters.
 	 */
 	@Test void a01_gettersAndSetters() {
-		Operation t = new Operation();
+		var t = new Operation();
 		assertJson(t.setTags(set("foo","bar")).getTags(), "['foo','bar']");
 		assertJson(t.setTags("bar","baz").getTags(), "['bar','baz']");
 		assertJson(t.setTags(set()).getTags(), "[]");
@@ -65,7 +65,7 @@ class Operation_Test extends SimpleTestBase {
 	 * Test method for {@link Operation#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test void testSet() throws Exception {
-		Operation t = new Operation();
+		var t = new Operation();
 
 		t
 			.set("consumes", set(MediaType.of("text/a")))
@@ -161,7 +161,7 @@ class Operation_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_copy() {
-		Operation t = new Operation();
+		var t = new Operation();
 
 		t = t.copy();
 
@@ -187,7 +187,7 @@ class Operation_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_keySet() {
-		Operation t = new Operation();
+		var t = new Operation();
 
 		assertJson(t.keySet(), "[]");
 

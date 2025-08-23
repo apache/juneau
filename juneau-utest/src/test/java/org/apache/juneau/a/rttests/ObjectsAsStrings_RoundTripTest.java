@@ -58,7 +58,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 	public static class A1 {
 		public String f;
 		public static A1 fromString(String s) {
-			A1 x = new A1();
+			var x = new A1();
 			x.f = s.substring(3);
 			return x;
 		}
@@ -71,7 +71,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 	public static class A2 {
 		public String f;
 		public static A2 valueOf(String s) {
-			A2 x = new A2();
+			var x = new A2();
 			x.f = s.substring(3);
 			return x;
 		}
@@ -84,7 +84,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 	public static class A3 {
 		public String f;
 		public static A3 parse(String s) {
-			A3 x = new A3();
+			var x = new A3();
 			x.f = s.substring(3);
 			return x;
 		}
@@ -97,7 +97,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 	public static class A4 {
 		public String f;
 		public static A4 parseString(String s) {
-			A4 x = new A4();
+			var x = new A4();
 			x.f = s.substring(3);
 			return x;
 		}

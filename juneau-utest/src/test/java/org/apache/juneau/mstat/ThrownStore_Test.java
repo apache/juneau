@@ -30,12 +30,12 @@ class ThrownStore_Test extends SimpleTestBase {
 
 	@Test void a01_testBasic() {
 
-		Throwable t1 = new Throwable();
+		var t1 = new Throwable();
 		t1.fillInStackTrace();
-		Throwable t2 = new Throwable();
+		var t2 = new Throwable();
 		t2.fillInStackTrace();
 
-		ThrownStore db = new ThrownStore();
+		var db = new ThrownStore();
 
 		assertEquals(1, db.add(t1).getCount());
 		assertEquals(2, db.add(t1).getCount());
@@ -47,12 +47,12 @@ class ThrownStore_Test extends SimpleTestBase {
 
 	@Test void a02_getStats() {
 
-		Throwable t1 = new Throwable();
+		var t1 = new Throwable();
 		t1.fillInStackTrace();
-		Throwable t2 = new Throwable();
+		var t2 = new Throwable();
 		t2.fillInStackTrace();
 
-		ThrownStore db = new ThrownStore();
+		var db = new ThrownStore();
 
 		db.add(t1);
 		db.add(t1);
@@ -67,10 +67,10 @@ class ThrownStore_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_reset() {
-		Throwable t1 = new Throwable();
+		var t1 = new Throwable();
 		t1.fillInStackTrace();
 
-		ThrownStore db = new ThrownStore();
+		var db = new ThrownStore();
 		db.add(t1);
 		db.reset();
 
@@ -78,7 +78,7 @@ class ThrownStore_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_sameStackTraces() {
-		ThrownStore db = new ThrownStore();
+		var db = new ThrownStore();
 
 		Throwable t1 = new Throwable() {
 			@Override
@@ -111,7 +111,7 @@ class ThrownStore_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_slightlyDifferentStackTraces() {
-		ThrownStore db = new ThrownStore();
+		var db = new ThrownStore();
 
 		Throwable t1 = new Throwable() {
 			@Override
@@ -144,7 +144,7 @@ class ThrownStore_Test extends SimpleTestBase {
 	}
 
 	@Test void a06_proxyElements() {
-		ThrownStore db = new ThrownStore();
+		var db = new ThrownStore();
 
 		Throwable t1 = new Throwable() {
 			@Override
@@ -248,7 +248,7 @@ class ThrownStore_Test extends SimpleTestBase {
 	@Test void b06_statsImplClass() {
 		BeanStore bs = BeanStore.create().build();
 
-		Throwable t1 = new Throwable();
+		var t1 = new Throwable();
 		t1.fillInStackTrace();
 
 		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: B6a", ()->ThrownStore.create(bs).statsImplClass(B6b.class).build().add(t1));
@@ -264,9 +264,9 @@ class ThrownStore_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_thrownStats_basic() {
-		Throwable t1 = new Throwable("foo");
+		var t1 = new Throwable("foo");
 		t1.fillInStackTrace();
-		Throwable t2 = new Throwable("bar", t1);
+		var t2 = new Throwable("bar", t1);
 		t2.fillInStackTrace();
 
 		ThrownStore store = ThrownStore.create().build();

@@ -49,7 +49,7 @@ class Html_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void a02_testAnchorTextOptions() throws Exception {
 		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders().uriResolution(UriResolution.NONE);
-		TestURI t = new TestURI();
+		var t = new TestURI();
 		String r;
 		String expected = null;
 
@@ -368,7 +368,7 @@ class Html_Test extends SimpleTestBase {
 		Object o = null;
 		String r;
 
-		MyBean b = new MyBean();
+		var b = new MyBean();
 		o = JsonList.of(b,b);
 		r = s.serialize(o);
 		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
@@ -384,7 +384,7 @@ class Html_Test extends SimpleTestBase {
 		Object o = null;
 		String r;
 
-		MyBean b = new MyBean();
+		var b = new MyBean();
 		o = JsonList.of(b,b);
 		r = s.serialize(o);
 		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
@@ -402,7 +402,7 @@ class Html_Test extends SimpleTestBase {
 		Object o = null;
 		String r;
 
-		MyBean b = new MyBean();
+		var b = new MyBean();
 		o = JsonList.of(b,b);
 		r = s.serialize(o);
 		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);

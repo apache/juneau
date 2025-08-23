@@ -31,7 +31,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 	 * Test method for getters and setters.
 	 */
 	@Test void a01_gettersAndSetters() {
-		ResponseInfo t = new ResponseInfo();
+		var t = new ResponseInfo();
 		assertEquals("foo", t.setDescription("foo").getDescription());
 		assertNull(t.setDescription(null).getDescription());
 		assertJson(t.setSchema(schemaInfo().setTitle("foo")).getSchema(), "{title:'foo'}");
@@ -50,7 +50,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 	 * Test method for {@link ResponseInfo#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test void b01_set() throws Exception {
-		ResponseInfo t = new ResponseInfo();
+		var t = new ResponseInfo();
 
 		t
 			.set("description", "a")
@@ -102,7 +102,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_copy() {
-		ResponseInfo t = new ResponseInfo();
+		var t = new ResponseInfo();
 
 		t = t.copy();
 
@@ -120,7 +120,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_keySet() {
-		ResponseInfo t = new ResponseInfo();
+		var t = new ResponseInfo();
 
 		assertJson(t.keySet(), "[]");
 

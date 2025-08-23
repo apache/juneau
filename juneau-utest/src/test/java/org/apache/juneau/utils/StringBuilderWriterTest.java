@@ -23,7 +23,7 @@ class StringBuilderWriterTest extends SimpleTestBase {
 	// Basic tests
 	//====================================================================================================
 	@Test void test() throws Exception {
-		StringBuilderWriter sbw = new StringBuilderWriter();
+		var sbw = new StringBuilderWriter();
 		sbw.write("abc");
 		assertEquals("abc", sbw.toString());
 		sbw.append("abc");
@@ -40,7 +40,7 @@ class StringBuilderWriterTest extends SimpleTestBase {
 		assertEquals("abcabcbbnullnullnull", sbw.toString());
 
 		char[] buff = "abc".toCharArray();
-		StringBuilderWriter sbw2 = new StringBuilderWriter();
+		var sbw2 = new StringBuilderWriter();
 		sbw2.write(buff, 0, buff.length);
 		assertEquals("abc", sbw2.toString());
 		sbw2.write(buff, 0, 0);
@@ -58,4 +58,4 @@ class StringBuilderWriterTest extends SimpleTestBase {
 		sbw2.flush();
 		sbw2.close();
 	}
-}
+}

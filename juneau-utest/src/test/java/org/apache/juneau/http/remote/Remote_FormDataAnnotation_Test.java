@@ -42,7 +42,7 @@ class Remote_FormDataAnnotation_Test extends SimpleTestBase {
 	public static class Bean {
 		public int f;
 		public static Bean create() {
-			Bean b = new Bean();
+			var b = new Bean();
 			b.f = 1;
 			return b;
 		}
@@ -50,7 +50,7 @@ class Remote_FormDataAnnotation_Test extends SimpleTestBase {
 
 	public static class Bean2 extends Bean {
 		public static Bean2 create() {
-			Bean2 b = new Bean2();
+			var b = new Bean2();
 			b.f = 1;
 			return b;
 		}

@@ -44,7 +44,7 @@ import org.apache.juneau.encoders.*;
 @Target(METHOD)
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(RestGetAnnotation.RestOpContextApply.class)
+@ContextApply(RestOptionsAnnotation.RestOpContextApply.class)
 @AnnotationGroup(RestOp.class)
 public @interface RestOptions {
 

@@ -210,7 +210,7 @@ class JsonTest  extends SimpleTestBase{
 		public int f1;
 
 		static A create() {
-			A a = new A();
+			var a = new A();
 			a.f1 = 1;
 			return a;
 		}
@@ -245,7 +245,7 @@ class JsonTest  extends SimpleTestBase{
 		public int f1;
 
 		static A2 create() {
-			A2 a = new A2();
+			var a = new A2();
 			a.f1 = 1;
 			return a;
 		}
@@ -279,7 +279,7 @@ class JsonTest  extends SimpleTestBase{
 		int f1;
 
 		static B create() {
-			B b = new B();
+			var b = new B();
 			b.f1 = 1;
 			return b;
 		}
@@ -290,7 +290,7 @@ class JsonTest  extends SimpleTestBase{
 		}
 
 		public static B valueOf(String s) {
-			B b = new B();
+			var b = new B();
 			b.f1 = Integer.parseInt(s);
 			return b;
 		}
@@ -323,7 +323,7 @@ class JsonTest  extends SimpleTestBase{
 		int f1;
 
 		static B2 create() {
-			B2 b = new B2();
+			var b = new B2();
 			b.f1 = 1;
 			return b;
 		}
@@ -334,7 +334,7 @@ class JsonTest  extends SimpleTestBase{
 		}
 
 		public static B2 valueOf(String s) {
-			B2 b = new B2();
+			var b = new B2();
 			b.f1 = Integer.parseInt(s);
 			return b;
 		}

@@ -132,7 +132,7 @@ class Restx_ReqAttrs_Test extends SimpleTestBase {
 		}
 
 		private JsonMap transform(RequestAttributes attrs) {
-			JsonMap m = new JsonMap();
+			var m = new JsonMap();
 			for (Map.Entry<String,Object> e : attrs.asMap().entrySet()) {
 				if (e.getKey().startsWith("p"))
 					m.put(e.getKey(), e.getValue());
@@ -164,4 +164,4 @@ class Restx_ReqAttrs_Test extends SimpleTestBase {
 		a.delete("/e2").run().assertContent("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
 		a.delete("/e2?override").run().assertContent("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
 	}
-}
+}

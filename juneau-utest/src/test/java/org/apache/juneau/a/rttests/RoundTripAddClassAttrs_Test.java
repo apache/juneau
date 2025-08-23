@@ -212,7 +212,7 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 
 		public C(){}
 		public C(String f1) {
-			A b = new A(f1);
+			var b = new A(f1);
 			f3a.put("foo", b);
 			f3b.put("foo", b);
 			f3c.put("foo", b);
@@ -250,7 +250,7 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 
 		public D(){}
 		public D(String f1) {
-			A b = new A(f1);
+			var b = new A(f1);
 			f4a = new A[]{b};
 			f4b = new AA[]{b};
 			f4c = new IA[]{b};
@@ -288,7 +288,7 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 
 		public E(){}
 		public E(String f1) {
-			A b = new A(f1);
+			var b = new A(f1);
 			f5a.add(b);
 			f5b.add(b);
 			f5c.add(b);

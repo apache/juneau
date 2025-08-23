@@ -24,11 +24,11 @@ public class T7 {
 
 	private int f3 = 3;
 	@Beanp(name="g3") public int getF3() { return f3; }
-	@Beanp(name="g3") public void setF3(int v) { this.f3 = v; }
+	@Beanp(name="g3") public void setF3(int v) { f3 = v; }
 
 	private int f4 = 4;
 	@Beanp(name="g4") @Xml(prefix="baz",namespace="http://baz") public int getF4() { return f4; }
-	@Beanp(name="g4") public void setF4(int v) { this.f4 = v; }
+	@Beanp(name="g4") public void setF4(int v) { f4 = v; }
 
 	public boolean equals(T7 x) {
 		return x.f1 == f1 && x.f2 == f2 && x.f3 == f3 && x.f4 == f4;

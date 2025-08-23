@@ -182,7 +182,7 @@ class ConfigImportsTest extends SimpleTestBase {
 		assertEquals(2, ca.getConfigMap().getListeners().size());
 		assertEquals(1, cb.getConfigMap().getListeners().size());
 
-		TestListener l = new TestListener();
+		var l = new TestListener();
 		cb.addListener(l);
 
 		assertEquals(0, ca.getListeners().size());
@@ -225,7 +225,7 @@ class ConfigImportsTest extends SimpleTestBase {
 		assertEquals(2, cb.getConfigMap().getListeners().size());
 		assertEquals(1, cc.getConfigMap().getListeners().size());
 
-		TestListener l = new TestListener();
+		var l = new TestListener();
 		cc.addListener(l);
 
 		assertEquals(0, ca.getListeners().size());
@@ -269,7 +269,7 @@ class ConfigImportsTest extends SimpleTestBase {
 		assertEquals(2, ca.getConfigMap().getListeners().size());
 		assertEquals(1, cb.getConfigMap().getListeners().size());
 
-		TestListener l = new TestListener();
+		var l = new TestListener();
 		cb.addListener(l);
 
 		ms.write("A", "x=1\n[A]\na1=1", "x=1\n[A]\na1=2");
@@ -306,7 +306,7 @@ class ConfigImportsTest extends SimpleTestBase {
 		assertEquals(2, ca.getConfigMap().getListeners().size());
 		assertEquals(1, cb.getConfigMap().getListeners().size());
 
-		TestListener l = new TestListener();
+		var l = new TestListener();
 		cb.addListener(l);
 
 		ms.write("A", "x=1\n[A]\na1=1", "x=1\n[A]\na1=3");
@@ -330,7 +330,7 @@ class ConfigImportsTest extends SimpleTestBase {
 		assertEquals(2, cb.getConfigMap().getListeners().size());
 		assertEquals(1, cc.getConfigMap().getListeners().size());
 
-		TestListener l = new TestListener();
+		var l = new TestListener();
 		cc.addListener(l);
 
 		ms.write("A", "x=1\n[A]\na1=1", "x=1\n[A]\na1=4");
@@ -355,7 +355,7 @@ class ConfigImportsTest extends SimpleTestBase {
 		assertEquals(1, ca.getConfigMap().getListeners().size());
 		assertEquals(1, cb.getConfigMap().getListeners().size());
 
-		TestListener l = new TestListener();
+		var l = new TestListener();
 		cb.addListener(l);
 
 		assertEquals(0, ca.getListeners().size());

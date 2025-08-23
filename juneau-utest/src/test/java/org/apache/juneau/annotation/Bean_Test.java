@@ -34,7 +34,7 @@ class Bean_Test extends SimpleTestBase {
 		public int f1;
 
 		public static A1 create() {
-			A1 a = new A1();
+			var a = new A1();
 			a.f1 = 1;
 			return a;
 		}
@@ -58,7 +58,7 @@ class Bean_Test extends SimpleTestBase {
 		public int f1;
 
 		public static A2 create() {
-			A2 a = new A2();
+			var a = new A2();
 			a.f1 = 1;
 			return a;
 		}
@@ -102,7 +102,7 @@ class Bean_Test extends SimpleTestBase {
 		private B1() {}
 
 		public static B1 create() {
-			B1 b = new B1();
+			var b = new B1();
 			b.f1 = 1;
 			b.f2 = 2;
 			return b;
@@ -141,7 +141,7 @@ class Bean_Test extends SimpleTestBase {
 		private B2() {}
 
 		public static B2 create() {
-			B2 b = new B2();
+			var b = new B2();
 			b.f1 = 1;
 			b.f2 = 2;
 			return b;
@@ -170,7 +170,7 @@ class Bean_Test extends SimpleTestBase {
 		public int a, b, c, d;
 
 		public static D1 create() {
-			D1 d = new D1();
+			var d = new D1();
 			d.a = 1;
 			d.b = 2;
 			d.c = 3;
@@ -184,7 +184,7 @@ class Bean_Test extends SimpleTestBase {
 		public int a, b, c, d;
 
 		public static D2 create() {
-			D2 d = new D2();
+			var d = new D2();
 			d.a = 1;
 			d.b = 2;
 			d.c = 3;
@@ -277,7 +277,7 @@ class Bean_Test extends SimpleTestBase {
 	static class E1 extends E1a {
 
 		public static E1 create() {
-			E1 e = new E1();
+			var e = new E1();
 			e.a = 1;
 			e.b = 2;
 			e.c = 3;
@@ -295,7 +295,7 @@ class Bean_Test extends SimpleTestBase {
 	static class E2 extends E2a {
 
 		public static E2 create() {
-			E2 e = new E2();
+			var e = new E2();
 			e.a = 1;
 			e.b = 2;
 			e.c = 3;
@@ -374,4 +374,5 @@ class Bean_Test extends SimpleTestBase {
 		json = js.serialize(e);
 		assertEquals("{b:2,d:4}", json);
 	}
-}
+}
+

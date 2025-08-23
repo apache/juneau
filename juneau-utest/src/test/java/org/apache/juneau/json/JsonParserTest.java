@@ -192,7 +192,7 @@ class JsonParserTest extends SimpleTestBase {
 	public static class C {
 		String f;
 		public static C valueOf(String s) {
-			C c = new C();
+			var c = new C();
 			c.f = s;
 			return c;
 		}
@@ -242,4 +242,4 @@ class JsonParserTest extends SimpleTestBase {
 	private Reader reader(String in) {
 		return new CloseableStringReader(in);
 	}
-}
+}

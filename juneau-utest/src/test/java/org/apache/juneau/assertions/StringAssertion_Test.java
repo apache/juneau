@@ -229,7 +229,9 @@ public class StringAssertion_Test {
 
 	@Test
 	public void ca08_isSame() {
-		String x1 = new String("1"), x1a = new String("1"), nil = null;
+		var x1 = new String("1");
+		var x1a = new String("1");
+		String nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='1(String@*)'.  Actual='1(String@*)'.");

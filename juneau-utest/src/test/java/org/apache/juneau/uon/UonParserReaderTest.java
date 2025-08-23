@@ -182,7 +182,7 @@ class UonParserReaderTest extends SimpleTestBase {
 	}
 
 	private String escape(String s) throws UnsupportedEncodingException {
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 		byte[] b = s.getBytes("UTF-8");
 		for (byte element : b)
             sb.append('%').append(StringUtils.toHex(element));

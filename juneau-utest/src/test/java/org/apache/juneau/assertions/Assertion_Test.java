@@ -53,7 +53,7 @@ public class Assertion_Test {
 
 	@Test
 	public void a01_basicErrorHandling() {
-		A a = new A("");
+		var a = new A("");
 		a.setSilent();
 
 		assertThrown(a::doError)

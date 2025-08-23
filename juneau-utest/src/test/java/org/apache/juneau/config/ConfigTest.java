@@ -143,7 +143,7 @@ class ConfigTest extends SimpleTestBase {
 	@Test void set3() {
 		Config c = init("a1=1", "[S]", "b1=1");
 
-		ABean b = new ABean().init();
+		var b = new ABean().init();
 		c.set("a1", b, UonSerializer.DEFAULT);
 		c.set("a2", b, UonSerializer.DEFAULT);
 		c.set("a3", b, UonSerializer.DEFAULT);
@@ -165,7 +165,7 @@ class ConfigTest extends SimpleTestBase {
 	@Test void set4() throws Exception {
 		Config c = init("a1=1", "[S]", "b1=1");
 
-		ABean b = new ABean().init();
+		var b = new ABean().init();
 		c.set("a1", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
 		c.set("a2", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
 		c.set("a3", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
@@ -615,7 +615,7 @@ class ConfigTest extends SimpleTestBase {
 		Map a4b = c.get("a4b").as(Map.class).orElseGet(JsonMap::new);
 		assertJson(a4b, "{}");
 
-		ABean a4c = c.get("a4c").as(ABean.class).orElse(new ABean().init());
+		var a4c = c.get("a4c").as(ABean.class).orElse(new ABean().init());
 		assertJson(a4c, "{foo:'bar'}");
 		assertType(ABean.class, a4c);
 	}
@@ -661,7 +661,7 @@ class ConfigTest extends SimpleTestBase {
 		Map a4b = c.get("a4b").as(UonParser.DEFAULT, Map.class).orElseGet(JsonMap::new);
 		assertJson(a4b, "{}");
 
-		ABean a4c = c.get("a4c").as(UonParser.DEFAULT, ABean.class).orElse(new ABean().init());
+		var a4c = c.get("a4c").as(UonParser.DEFAULT, ABean.class).orElse(new ABean().init());
 		assertJson(a4c, "{foo:'bar'}");
 		assertType(ABean.class, a4c);
 	}
@@ -706,7 +706,7 @@ class ConfigTest extends SimpleTestBase {
 		Map<String,Integer> a4b = (Map<String,Integer>) c.get("a4b").as(Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertJson(a4b, "{}");
 
-		ABean a4c = c.get("a4c").as(ABean.class).orElse(new ABean().init());
+		var a4c = c.get("a4c").as(ABean.class).orElse(new ABean().init());
 		assertJson(a4c, "{foo:'bar'}");
 		assertType(ABean.class, a4c);
 	}
@@ -751,7 +751,7 @@ class ConfigTest extends SimpleTestBase {
 		Map<String,Integer> a4b = (Map<String,Integer>) c.get("a4b").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertJson(a4b, "{}");
 
-		ABean a4c = c.get("a4c").as(UonParser.DEFAULT, ABean.class).orElse(new ABean().init());
+		var a4c = c.get("a4c").as(UonParser.DEFAULT, ABean.class).orElse(new ABean().init());
 		assertJson(a4c, "{foo:'bar'}");
 		assertType(ABean.class, a4c);
 	}
@@ -774,8 +774,8 @@ class ConfigTest extends SimpleTestBase {
 	//	public Config writeProperties(String section, Object bean, boolean ignoreUnknownProperties)
 	//====================================================================================================
 	@Test void writeProperties() {
-		ABean a = new ABean().init();
-		BBean b = new BBean().init();
+		var a = new ABean().init();
+		var b = new BBean().init();
 
 		Config c = init("foo=qux", "[S]", "foo=baz", "bar=baz");
 		c.getSection("S").writeToBean(a, true);
@@ -1058,7 +1058,7 @@ class ConfigTest extends SimpleTestBase {
 		cf.set("s1/foo", "mypassword");
 
 		// INI output should be encoded
-		StringWriter sw = new StringWriter();
+		var sw = new StringWriter();
 		cf.writeTo(new PrintWriter(sw));
 		assertLines("[s1]|foo<*> = {AwwJVhwUQFZEMg==}|", sw);
 	}
@@ -1128,7 +1128,7 @@ class ConfigTest extends SimpleTestBase {
 	}
 
 	private void testXor(String in) {
-		XorEncodeMod e = new XorEncodeMod();
+		var e = new XorEncodeMod();
 		String s = e.apply(in);
 		String s2 = e.remove(s);
 		assertEquals(in, s2);
@@ -1167,7 +1167,7 @@ class ConfigTest extends SimpleTestBase {
 
 		assertEquals("x \ny \nz", cf.get("s1/f1").get());
 
-		StringWriter sw = new StringWriter();
+		var sw = new StringWriter();
 		cf.writeTo(sw);
 		assertLines("[s1]|f1 = x |\ty |\tz|", sw);
 	}
@@ -1379,7 +1379,7 @@ class ConfigTest extends SimpleTestBase {
 	@Test void testToWritable() throws Exception {
 		Config cf = init("a = b");
 
-		StringWriter sw = new StringWriter();
+		var sw = new StringWriter();
 		cf.writeTo(sw);
 		assertLines("a = b|", sw);
 	}

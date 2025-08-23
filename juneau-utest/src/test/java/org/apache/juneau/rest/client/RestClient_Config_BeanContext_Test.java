@@ -110,7 +110,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 		public int f1;
 		protected int f2;
 		static A3 get() {
-			A3 x = new A3();
+			var x = new A3();
 			x.f1 = 1;
 			x.f2 = 2;
 			return x;
@@ -149,10 +149,10 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 		}
 		@Override
 		public void setF3(int v) {
-			this.f3 = v;
+			f3 = v;
 		}
 		static A4b get() {
-			A4b x = new A4b();
+			var x = new A4b();
 			x.f1 = 1;
 			x.f2 = 2;
 			x.f3 = 3;
@@ -233,7 +233,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 			return f1;
 		}
 		public void setF1(int v) {
-			this.f1 = v;
+			f1 = v;
 		}
 		protected int getF2() {
 			return f2;
@@ -242,7 +242,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 			this.f2 = f2;
 		}
 		static A5 get() {
-			A5 x = new A5();
+			var x = new A5();
 			x.f1 = 1;
 			x.f2 = 2;
 			return x;
@@ -326,13 +326,13 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 			return f1;
 		}
 		public void setF1(int v) {
-			this.f1 = v;
+			f1 = v;
 		}
 		public int getF2() {
 			return f2;
 		}
 		static A9 get() {
-			A9 x = new A9();
+			var x = new A9();
 			x.f1 = 1;
 			x.f2 = 2;
 			return x;
@@ -516,7 +516,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	}
 
 	@Test void a14_debug() {
-		A14 x = new A14();
+		var x = new A14();
 		x.f = x;
 		assertThrowsWithMessage(Exception.class, "Recursion occurred", ()->client().debug().build().post("/echo",x).run());
 	}
@@ -525,7 +525,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	public static class A15a {
 		public String foo;
 		static A15a get() {
-			A15a x = new A15a();
+			var x = new A15a();
 			x.foo = "1";
 			return x;
 		}
@@ -535,7 +535,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	public static class A15b {
 		public String foo;
 		static A15b get() {
-			A15b x = new A15b();
+			var x = new A15b();
 			x.foo = "2";
 			return x;
 		}
@@ -544,7 +544,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	public static class A15c {
 		public Object foo;
 		static A15c get() {
-			A15c x = new A15c();
+			var x = new A15c();
 			x.foo = A15a.get();
 			return x;
 		}
@@ -569,7 +569,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 			return foo;
 		}
 		static A16 get() {
-			A16 x = new A16();
+			var x = new A16();
 			x.foo = "foo";
 			return x;
 		}
@@ -585,7 +585,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 		public String foo;
 		public transient String bar;
 		static A17 get() {
-			A17 x = new A17();
+			var x = new A17();
 			x.foo = "1";
 			x.bar = "2";
 			return x;
@@ -644,13 +644,13 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 			return foo;
 		}
 		public void setFoo(String v) {
-			this.foo = v;
+			foo = v;
 		}
 		public String getBar() {
 			throw new RuntimeException("xxx");
 		}
 		static A21 get() {
-			A21 x = new A21();
+			var x = new A21();
 			x.foo = "1";
 			x.bar = "2";
 			return x;
@@ -669,7 +669,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 			return foo;
 		}
 		public void setFoo(String v) {
-			this.foo = v;
+			foo = v;
 		}
 		public String getBar() {
 			return bar;
@@ -678,7 +678,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 			throw new RuntimeException("xxx");
 		}
 		static A22 get() {
-			A22 x = new A22();
+			var x = new A22();
 			x.foo = "1";
 			x.bar = "2";
 			return x;
@@ -714,7 +714,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 		}
 		@Override
 		public void setFoo(int v) {
-			this.foo = v;
+			foo = v;
 		}
 	}
 
@@ -738,12 +738,12 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 		@Override
 		public int getFoo() { return foo; }
 		@Override
-		public void setFoo(int v) { this.foo = v; }
+		public void setFoo(int v) { foo = v; }
 		public int getBar() { return bar; }  // Not executed
-		public void setBar(int v) { this.bar = v; }  // Not executed
+		public void setBar(int v) { bar = v; }  // Not executed
 
 		static A25b get() {
-			A25b x = new A25b();
+			var x = new A25b();
 			x.foo = 1;
 			x.bar = 2;
 			return x;
@@ -760,7 +760,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	public static class A26 {
 		public int foo;
 		static A26 get() {
-			A26 x = new A26();
+			var x = new A26();
 			x.foo = 1;
 			return x;
 		}
@@ -779,7 +779,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	public static class A28 {
 		public int foo;
 		static A28 get() {
-			A28 x = new A28();
+			var x = new A28();
 			x.foo = 1;
 			return x;
 		}
@@ -788,7 +788,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 			return String.valueOf(foo);
 		}
 		public static A28 fromString(String foo) throws ParseException {
-			A28 x = new A28();
+			var x = new A28();
 			x.foo = JsonParser.DEFAULT.parse(foo,int.class);
 			return x;
 		}
@@ -807,9 +807,9 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	public static class A30a {
 		private String foo;
 		public String getFoo() { return foo; }
-		public void setFoo(String v) { this.foo = v; }
+		public void setFoo(String v) { foo = v; }
 		static A30a get() {
-			A30a x = new A30a();
+			var x = new A30a();
 			x.foo = "foo";
 			return x;
 		}
@@ -839,9 +839,9 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	public static class A31 {
 		private String fooBar;
 		public String getFooBar() { return fooBar; }
-		public void setFooBar(String v) { this.fooBar = v; }
+		public void setFooBar(String v) { fooBar = v; }
 		static A31 get() {
-			A31 x = new A31();
+			var x = new A31();
 			x.fooBar = "fooBar";
 			return x;
 		}
@@ -857,7 +857,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	public static class A32 {
 		public int foo, bar, baz;
 		static A32 get() {
-			A32 x = new A32();
+			var x = new A32();
 			x.foo = 1;
 			x.bar = 2;
 			x.baz = 3;
@@ -879,7 +879,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	public static class A33b extends A33a {
 		public int bar;
 		static A33b get() {
-			A33b x = new A33b();
+			var x = new A33b();
 			x.foo = 1;
 			x.bar = 2;
 			return x;
@@ -895,7 +895,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	public static class A34a {
 		public int foo;
 		static A34a get() {
-			A34a x = new A34a();
+			var x = new A34a();
 			x.foo = 1;
 			return x;
 		}
@@ -916,7 +916,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	public static class A35 {
 		public int foo;
 		static A35 get() {
-			A35 x = new A35();
+			var x = new A35();
 			x.foo = 1;
 			return x;
 		}
@@ -930,7 +930,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	public static class A36 {
 		public int foo;
 		static A36 get() {
-			A36 x = new A36();
+			var x = new A36();
 			x.foo = 1;
 			return x;
 		}
@@ -963,7 +963,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	public static class A38b {
 		public A38a foo;
 		static A38b get() {
-			A38b x = new A38b();
+			var x = new A38b();
 			x.foo = A38a.ONE;
 			return x;
 		}
@@ -981,10 +981,10 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 			return foo;
 		}
 		public void setFoo(int v) {
-			this.foo = v;
+			foo = v;
 		}
 		static A39 get() {
-			A39 x = new A39();
+			var x = new A39();
 			x.foo = 1;
 			x.bar = 2;
 			return x;

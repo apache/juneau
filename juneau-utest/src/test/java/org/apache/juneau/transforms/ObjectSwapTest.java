@@ -76,7 +76,7 @@ class ObjectSwapTest extends SimpleTestBase {
 			.forEach(Serializer.Builder.class, x -> x.swaps(MyJsonSwap.class, MyXmlSwap.class, MyOtherSwap.class))
 			.build();
 
-		MyPojo myPojo = new MyPojo();
+		var myPojo = new MyPojo();
 
 		String json = s.getWriterSerializer("text/json").serialize(myPojo);
 		assertEquals("'It\\'s JSON!'", json);

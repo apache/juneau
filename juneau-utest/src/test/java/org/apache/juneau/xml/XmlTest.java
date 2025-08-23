@@ -171,7 +171,7 @@ class XmlTest extends SimpleTestBase {
 			return name;
 		}
 		public void setName(String v) {
-			this.name = v;
+			name = v;
 		}
 	}
 
@@ -193,7 +193,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void testElementName() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
-		A t = new A();
+		var t = new A();
 		String r = s.serialize(t);
 		assertEquals("<foo><f1>1</f1></foo>", r);
 		validateXml(t);
@@ -209,7 +209,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void testElementNameOnSuperclass() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
-		B2 t = new B2();
+		var t = new B2();
 		String r = s.serialize(t);
 		assertEquals("<foo><f1>1</f1></foo>", r);
 		validateXml(t);
@@ -223,7 +223,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void testElementNameOnInterface() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
-		C3 t = new C3();
+		var t = new C3();
 		String r = s.serialize(t);
 		assertEquals("<foo><f1>1</f1></foo>", r);
 		validateXml(t);
@@ -242,7 +242,7 @@ class XmlTest extends SimpleTestBase {
 	@Test void testElementNameWithInvalidChars() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
-		D t = new D();
+		var t = new D();
 		String r = s.serialize(t);
 		assertEquals("<_x007E__x0021__x0040__x0023__x0024__x0025__x005E__x0026__x002A__x0028__x0029___x002B__x0060_-_x003D__x007B__x007D__x007C__x005B__x005D__x005C__x003A__x0022__x003B__x0027__x003C__x003E__x003F__x002C_._x000A__x000D__x0009__x0008_><f1>1</f1></_x007E__x0021__x0040__x0023__x0024__x0025__x005E__x0026__x002A__x0028__x0029___x002B__x0060_-_x003D__x007B__x007D__x007C__x005B__x005D__x005C__x003A__x0022__x003B__x0027__x003C__x003E__x003F__x002C_._x000A__x000D__x0009__x0008_>", r);
 		t = p.parse(r, D.class);
@@ -261,7 +261,7 @@ class XmlTest extends SimpleTestBase {
 	@Test void testIgnoreCollectionFieldWithElementName() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
-		G t = new G();
+		var t = new G();
 		t.f1.add("bar");
 		String r = s.serialize(t);
 		assertEquals("<bar><foo _name='f1'><string>bar</string></foo></bar>", r);
@@ -303,7 +303,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void testXmlNsWithoutMatchingNsUri() {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
-		K t = new K();
+		var t = new K();
 		assertThrowsWithMessage(SerializeException.class, "Found @Xml.prefix annotation with no matching URI.  prefix='foo'", ()->s.serialize(t));
 	}
 
@@ -318,7 +318,7 @@ class XmlTest extends SimpleTestBase {
 	@Test void testXmlFormatAttr() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
-		L t = new L();
+		var t = new L();
 		String r = s.serialize(t);
 		assertEquals("<object f2='2'><f1>1</f1><f3>3</f3></object>", r);
 		t.f1 = 4; t.f2 = 5; t.f3 = 6;
@@ -342,7 +342,7 @@ class XmlTest extends SimpleTestBase {
 	@Test void testXmlFormatAttrWithNs() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
-		M t = new M();
+		var t = new M();
 		String r = null;
 		r = s.build().serialize(t);
 		assertEquals("<object f1='1' f2='2' f3='3'/>", r);
@@ -509,7 +509,7 @@ class XmlTest extends SimpleTestBase {
 		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
-		T1 t = new T1();
+		var t = new T1();
 		String r = s.build().serialize(t);
 		assertEquals("<object><f1>1</f1><f2>2</f2><f3>3</f3><f4>4</f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T1.class)));
@@ -560,7 +560,7 @@ class XmlTest extends SimpleTestBase {
 		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
-		T2 t = new T2();
+		var t = new T2();
 		String r = s.build().serialize(t);
 		assertEquals("<T2><f1>1</f1><f2>2</f2><f3>3</f3><f4>4</f4></T2>", r);
 		assertTrue(t.equals(p.parse(r, T2.class)));
@@ -610,7 +610,7 @@ class XmlTest extends SimpleTestBase {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 
-		T3 t = new T3();
+		var t = new T3();
 		String r = s.build().serialize(t);
 		assertEquals("<object><f1>1</f1><f2>2</f2><f3>3</f3><f4>4</f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T3.class)));
@@ -661,7 +661,7 @@ class XmlTest extends SimpleTestBase {
 		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
-		T4 t = new T4();
+		var t = new T4();
 		String r = s.build().serialize(t);
 		assertEquals("<T4><f1>1</f1><f2>2</f2><f3>3</f3><f4>4</f4></T4>", r);
 		assertTrue(t.equals(p.parse(r, T4.class)));
@@ -711,7 +711,7 @@ class XmlTest extends SimpleTestBase {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 
-		T5 t = new T5();
+		var t = new T5();
 		String r = s.build().serialize(t);
 		assertEquals("<T5><f1>1</f1><f2>2</f2><f3>3</f3><f4>4</f4></T5>", r);
 		assertTrue(t.equals(p.parse(r, T5.class)));
@@ -763,7 +763,7 @@ class XmlTest extends SimpleTestBase {
 		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
-		T6 t = new T6();
+		var t = new T6();
 		String r = s.build().serialize(t);
 		assertEquals("<object><f1>1</f1><f2>2</f2><f3>3</f3><f4>4</f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T6.class)));
@@ -814,7 +814,7 @@ class XmlTest extends SimpleTestBase {
 		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
-		T7 t = new T7();
+		var t = new T7();
 		String r = s.build().serialize(t);
 		assertEquals("<object><g1>1</g1><g2>2</g2><g3>3</g3><g4>4</g4></object>", r);
 		assertTrue(t.equals(p.parse(r, T7.class)));
@@ -862,7 +862,7 @@ class XmlTest extends SimpleTestBase {
 		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
-		T8 t = new T8();
+		var t = new T8();
 		String r = s.build().serialize(t);
 		assertEquals("<object><f1>1</f1><f2>2</f2><f3>3</f3><f4>4</f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T8.class)));
@@ -912,7 +912,7 @@ class XmlTest extends SimpleTestBase {
 		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
-		T9 t = new T9();
+		var t = new T9();
 		String r = s.build().serialize(t);
 		assertEquals("<object><f1>1</f1></object>", r);
 		assertTrue(t.equals(p.parse(r, T9.class)));
@@ -963,7 +963,7 @@ class XmlTest extends SimpleTestBase {
 		XmlParser p = XmlParser.DEFAULT;
 		String r;
 
-		Q t = new Q();
+		var t = new Q();
 		t.f1 = url("http://xf1");
 		t.f2 = "xf2";
 		t.f3 = "xf3";

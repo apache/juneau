@@ -29,7 +29,7 @@ class Contact_Test extends SimpleTestBase {
 	 * Test method for getters and setters.
 	 */
 	@Test void a01_gettersAndSetters() {
-		Contact t = new Contact();
+		var t = new Contact();
 		assertEquals("foo", t.setName("foo").getName());
 		assertNull(t.setName(null).getName());
 		assertString("http://bar", t.setUrl(URI.create("http://bar")).getUrl());
@@ -41,7 +41,7 @@ class Contact_Test extends SimpleTestBase {
 	 * Test method for {@link Contact#set(String, Object)}.
 	 */
 	@Test void b01_set() throws Exception {
-		Contact t = new Contact();
+		var t = new Contact();
 
 		t
 			.set("name", "foo")
@@ -73,7 +73,7 @@ class Contact_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_copy() {
-		Contact t = new Contact();
+		var t = new Contact();
 
 		t = t.copy();
 
@@ -90,7 +90,7 @@ class Contact_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_keySet() {
-		Contact t = new Contact();
+		var t = new Contact();
 
 		assertJson(t.keySet(), "[]");
 

@@ -215,7 +215,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 
 		private BEnum f2;
 		public BEnum getF2() { return f2; }
-		public void setF2(BEnum v) { this.f2 = v; }
+		public void setF2(BEnum v) { f2 = v; }
 
 		public BEnum[] f3;
 		public BEnum[][] f4;

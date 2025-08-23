@@ -292,7 +292,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 		}
 		@Override /* ObjectSwap */
 		public B unswap(BeanSession session, String f, ClassMeta<?> hint) throws ParseException {
-			B b1 = new B();
+			var b1 = new B();
 			b1.f1 = f;
 			return b1;
 		}
@@ -652,7 +652,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 	public static class F2c extends F2ac {
 
 		public void setC(Calendar v) {
-			this.c = v;
+			c = v;
 		}
 
 		public Calendar getC() {

@@ -71,7 +71,7 @@ class HttpException_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_getRootCause() {
-		BasicHttpException x = new BasicHttpException(100, null);
+		var x = new BasicHttpException(100, null);
 		assertNull(x.getRootCause());
 
 		x = new BasicHttpException(100, new BasicHttpException(100,"foo"));
@@ -88,7 +88,7 @@ class HttpException_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_getFullStackMessage() {
-		BasicHttpException x = new BasicHttpException(100, null);
+		var x = new BasicHttpException(100, null);
 		assertEquals("Continue", x.getFullStackMessage(false));
 		assertEquals("Continue", x.getFullStackMessage(true));
 

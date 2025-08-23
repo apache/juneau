@@ -27,7 +27,7 @@ class EntityTag_Test extends SimpleTestBase {
 
 	@Test void a01_basic() {
 
-		EntityTag x1 = new EntityTag("\"foo\"");
+		var x1 = new EntityTag("\"foo\"");
 		assertString("\"foo\"", x1);
 		assertEquals("foo", x1.getEntityValue());
 		assertFalse(x1.isWeak());
@@ -45,7 +45,7 @@ class EntityTag_Test extends SimpleTestBase {
 		assertFalse(x3.isWeak());
 		assertTrue(x3.isAny());
 
-		EntityTag x5 = new EntityTag("\"\"");
+		var x5 = new EntityTag("\"\"");
 		assertString("\"\"", x5);
 		assertEquals("", x5.getEntityValue());
 		assertFalse(x5.isWeak());

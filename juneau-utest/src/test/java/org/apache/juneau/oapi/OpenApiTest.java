@@ -632,7 +632,7 @@ public class OpenApiTest extends SimpleTestBase {
 	}
 
 	@Test void f04_tArray_StringArrayMutator() throws Exception {
-		F04 in = new F04("a");
+		var in = new F04("a");
 		HttpPartSchema ps = T_ARRAY;
 		String s = serialize(ps, in);
 		assertEquals("a", s);

@@ -30,7 +30,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 	 * Test method for getters and setters.
 	 */
 	@Test void a01_gettersAndSetters() {
-		SecurityScheme t = new SecurityScheme();
+		var t = new SecurityScheme();
 		assertEquals("foo", t.setType("foo").getType());
 		assertNull(t.setType(null).getType());
 		assertEquals("foo", t.setDescription("foo").getDescription());
@@ -54,7 +54,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 	 * Test method for {@link SecurityScheme#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test void b01_set() throws Exception {
-		SecurityScheme t = new SecurityScheme();
+		var t = new SecurityScheme();
 
 		t
 			.set("authorizationUrl", "a")
@@ -125,7 +125,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_copy() {
-		SecurityScheme t = new SecurityScheme();
+		var t = new SecurityScheme();
 
 		t = t.copy();
 
@@ -147,7 +147,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_keySet() {
-		SecurityScheme t = new SecurityScheme();
+		var t = new SecurityScheme();
 
 		assertJson(t.keySet(), "[]");
 

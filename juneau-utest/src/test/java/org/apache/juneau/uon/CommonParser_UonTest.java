@@ -62,8 +62,8 @@ class CommonParser_UonTest extends SimpleTestBase {
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("'value'", jl.getMap(1).getString("attribute"));
 
-		A1 b = new A1();
-		A2 tl = new A2();
+		var b = new A1();
+		var tl = new A2();
 		tl.add(new A3("name0","value0"));
 		tl.add(new A3("name1","value1"));
 		b.list = tl;
@@ -157,4 +157,4 @@ class CommonParser_UonTest extends SimpleTestBase {
 			events.add(propertyName + ", " + session.getPosition());
 		}
 	}
-}
+}

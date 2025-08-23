@@ -58,7 +58,7 @@ class BasicBeans_Test extends SimpleTestBase {
 		public int f1;
 
 		private int f2;
-		public void setF2(int v) { this.f2 = v; }
+		public void setF2(int v) { f2 = v; }
 		@Transient public int getF2() { return f2; }
 
 		public static A2 create() {

@@ -31,7 +31,7 @@ class Items_Test extends SimpleTestBase {
 	 * Test method for getters and setters.
 	 */
 	@Test void a01_gettersAndSetters() {
-		Items t = new Items();
+		var t = new Items();
 		assertEquals("foo", t.setType("foo").getType());
 		assertNull(t.setType(null).getType());
 		assertEquals("foo", t.setFormat("foo").getFormat());
@@ -69,7 +69,7 @@ class Items_Test extends SimpleTestBase {
 	 * Test method for {@link Items#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test void b01_set() throws Exception {
-		Items t = new Items();
+		var t = new Items();
 
 		t
 			.set("default", "a")
@@ -185,7 +185,7 @@ class Items_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_copy() {
-		Items t = new Items();
+		var t = new Items();
 
 		t = t.copy();
 
@@ -216,7 +216,7 @@ class Items_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_keySet() {
-		Items t = new Items();
+		var t = new Items();
 
 		assertJson(t.keySet(), "[]");
 

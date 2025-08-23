@@ -2235,7 +2235,7 @@ class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		public Collection<A> f3;
 
 		public static BeanWithAField create(A a) {
-			BeanWithAField b = new BeanWithAField();
+			var b = new BeanWithAField();
 			b.f1 = a;
 			b.f2 = new A[]{a,a};
 			b.f3 = alist(a,a);

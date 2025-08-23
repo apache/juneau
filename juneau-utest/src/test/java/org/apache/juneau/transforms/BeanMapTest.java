@@ -62,8 +62,8 @@ class BeanMapTest extends SimpleTestBase {
 		public B1 b1;
 
 		static B create() {
-			B b = new B();
-			B2 b2 = new B2();
+			var b = new B();
+			var b2 = new B2();
 			b2.f1 = "f1";
 			b2.f2 = "f2";
 			b.b1 = b2;

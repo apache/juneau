@@ -36,7 +36,7 @@ class DataConversionTest extends SimpleTestBase {
 	// testBasic
 	//====================================================================================================
 	@Test void testBasic() throws Exception {
-		JsonMap m = new JsonMap();
+		var m = new JsonMap();
 
 		// *** Number ***
 		m.put("x", 123);
@@ -125,4 +125,4 @@ class DataConversionTest extends SimpleTestBase {
 		s = bc.convertToType(c, String.class);
 		assertEquals("2001-12-21T12:34:56Z", s);
 	}
-}
+}

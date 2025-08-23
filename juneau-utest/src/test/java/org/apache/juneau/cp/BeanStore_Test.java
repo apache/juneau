@@ -264,7 +264,7 @@ class BeanStore_Test extends SimpleTestBase {
 		Predicate<Object> pA1a = x -> x==a1a;
 		Predicate<Object> pA2a = x -> ((Optional<?>)x).get()==a2a;
 
-		B1 outer = new B1(null, null, null);
+		var outer = new B1(null, null, null);
 
 		BeanStore b1p = BeanStore.create().outer(outer).build();
 		BeanStore b1c = BeanStore.create().outer(outer).parent(b1p).build();
@@ -505,7 +505,7 @@ class BeanStore_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_createMethodFinder_instanceMethods() throws Exception {
-		C1 x = new C1();
+		var x = new C1();
 		BeanStore b1p = BeanStore.create().build();
 		BeanStore b1c = BeanStore.create().parent(b1p).build();
 		BeanStore b2p = BeanStore.create().build();
@@ -544,7 +544,7 @@ class BeanStore_Test extends SimpleTestBase {
 	}
 
 	@Test void c02_createMethodFinder_staticMethods() throws Exception {
-		C2 x = new C2();
+		var x = new C2();
 		BeanStore b1p = BeanStore.create().build();
 		BeanStore b1c = BeanStore.create().parent(b1p).build();
 		BeanStore b2p = BeanStore.create().build();
@@ -582,7 +582,7 @@ class BeanStore_Test extends SimpleTestBase {
 	}
 
 	@Test void c03_createMethodFinder_beanMatching() throws Exception {
-		C3 x = new C3();
+		var x = new C3();
 		BeanStore b1p = BeanStore.create().build();
 		BeanStore b1c = BeanStore.create().parent(b1p).build();
 		BeanStore b2p = BeanStore.create().build();
@@ -712,7 +712,7 @@ class BeanStore_Test extends SimpleTestBase {
 	}
 
 	@Test void c04_createMethodFinder_beanMatching_requiredArgs() throws Exception {
-		C4 x = new C4();
+		var x = new C4();
 		BeanStore b1p = BeanStore.create().build();
 		BeanStore b1c = BeanStore.create().outer(x).parent(b1p).build();
 
@@ -744,7 +744,7 @@ class BeanStore_Test extends SimpleTestBase {
 	}
 
 	@Test void c05_createMethodFinder_beanMatching_requiredArgs_innerClass() throws Exception {
-		C5 x = new C5();
+		var x = new C5();
 		BeanStore b1p = BeanStore.create().build();
 		BeanStore b1c = BeanStore.create().outer(x).parent(b1p).build();
 

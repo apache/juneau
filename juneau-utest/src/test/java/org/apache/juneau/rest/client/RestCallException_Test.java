@@ -29,7 +29,7 @@ class RestCallException_Test extends SimpleTestBase {
 	public static class ABean {
 		public int f;
 		static ABean get() {
-			ABean x = new ABean();
+			var x = new ABean();
 			x.f = 1;
 			return x;
 		}
@@ -63,7 +63,7 @@ class RestCallException_Test extends SimpleTestBase {
 			assertThrowable(Exception.class, "Could not find '}'", e.getCause(ParseException.class));
 		}
 
-		RestCallException e = new RestCallException(null, null, null);
+		var e = new RestCallException(null, null, null);
 		assertNotNull(e.getThrown());
 		assertFalse(e.getThrown().isPresent());
 		assertEquals(0, e.getResponseCode());

@@ -35,7 +35,7 @@ class IgnoredClassesTest extends SimpleTestBase {
 	// testIgnorePackages
 	//====================================================================================================
 	@Test void testIgnorePackages() throws Exception {
-		A a = new A();
+		var a = new A();
 		JsonSerializer.Builder s = JsonSerializer.create().json5();
 		assertEquals("{f1:'isBean'}", s.build().serialize(a));
 		s.notBeanPackages("org.apache.juneau");
@@ -63,4 +63,4 @@ class IgnoredClassesTest extends SimpleTestBase {
 			return "isNotBean";
 		}
 	}
-}
+}

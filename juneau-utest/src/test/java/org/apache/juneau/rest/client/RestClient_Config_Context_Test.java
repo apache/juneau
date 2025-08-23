@@ -42,7 +42,7 @@ class RestClient_Config_Context_Test extends SimpleTestBase {
 			return foo;
 		}
 		public static A2 fromString(String s) {
-			A2 p2 = new A2();
+			var p2 = new A2();
 			p2.foo = s;
 			return p2;
 		}
@@ -55,7 +55,7 @@ class RestClient_Config_Context_Test extends SimpleTestBase {
 	public static class A3a {
 		public int foo;
 		static A3a get() {
-			A3a x = new A3a();
+			var x = new A3a();
 			x.foo = 1;
 			return x;
 		}
@@ -81,7 +81,7 @@ class RestClient_Config_Context_Test extends SimpleTestBase {
 	public static class A6a {
 		public int foo,bar,baz;
 		static A6a get() {
-			A6a x = new A6a();
+			var x = new A6a();
 			x.foo = 1;
 			x.bar = 2;
 			x.baz = 3;

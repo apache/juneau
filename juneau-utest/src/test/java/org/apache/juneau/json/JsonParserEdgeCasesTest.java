@@ -456,7 +456,7 @@ public class JsonParserEdgeCasesTest {
 		File f = new File("src/test/resources/org/apache/juneau/json/jsonTestSuite");
 		int i = 0;
 		String pattern = "\n\t\t'{' {0}, \"{1}\", {2}, {3} '}',";
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 		for (File fc : f.listFiles()) {
 			String n = fc.getName();
 			if (n.endsWith(".json")) {

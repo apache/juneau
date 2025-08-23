@@ -33,7 +33,7 @@ class Swagger_Test extends SimpleTestBase {
 	 * Test method for getters and setters.
 	 */
 	@Test void a01_gettersAndSetters() {
-		Swagger t = new Swagger();
+		var t = new Swagger();
 		assertEquals("foo", t.setSwagger("foo").getSwagger());
 		assertNull(t.setSwagger(null).getSwagger());
 		assertJson(t.setInfo(info("foo", "bar")).getInfo(), "{title:'foo',version:'bar'}");
@@ -84,7 +84,7 @@ class Swagger_Test extends SimpleTestBase {
 	 * Test method for {@link Swagger#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test void b01_set() throws Exception {
-		Swagger t = new Swagger();
+		var t = new Swagger();
 
 		t
 			.set("basePath", "a")
@@ -197,7 +197,7 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_copy() {
-		Swagger t = new Swagger();
+		var t = new Swagger();
 
 		t = t.copy();
 
@@ -226,7 +226,7 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_keySet() {
-		Swagger t = new Swagger();
+		var t = new Swagger();
 
 		assertJson(t.keySet(), "['swagger']");
 

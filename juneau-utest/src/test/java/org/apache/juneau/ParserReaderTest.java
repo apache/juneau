@@ -158,7 +158,7 @@ class ParserReaderTest extends SimpleTestBase {
 	}
 
 	private String read(ParserReader r, int length) throws IOException {
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 		for (int i = 0; i < length; i++) {
 			int c = r.read();
 			if (c == -1)
@@ -171,4 +171,4 @@ class ParserReaderTest extends SimpleTestBase {
 	private ParserReader createParserReader(Object in) throws Exception {
 		return new ParserReader(new ParserPipe(in));
 	}
-}
+}

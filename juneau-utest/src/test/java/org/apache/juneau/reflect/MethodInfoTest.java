@@ -334,7 +334,7 @@ class MethodInfoTest extends SimpleTestBase {
 		e_a3 = ofm(E.class, "a3");  // NOSONAR
 
 	@Test void invoke() throws Exception {
-		E e = new E();
+		var e = new E();
 		e_a1.invoke(e, "foo");
 		assertEquals("foo", e.f);
 		e_a1.invoke(e, (CharSequence)null);
@@ -342,7 +342,7 @@ class MethodInfoTest extends SimpleTestBase {
 	}
 
 	@Test void invokeFuzzy() throws Exception {
-		E e = new E();
+		var e = new E();
 		e_a1.invokeFuzzy(e, "foo", 123);
 		assertEquals("foo", e.f);
 		e_a1.invokeFuzzy(e, 123, "bar");

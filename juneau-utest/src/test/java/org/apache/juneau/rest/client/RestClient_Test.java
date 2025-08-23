@@ -43,7 +43,7 @@ class RestClient_Test extends SimpleTestBase {
 	public static class ABean {
 		public int f;
 		static ABean get() {
-			ABean x = new ABean();
+			var x = new ABean();
 			x.f = 1;
 			return x;
 		}
@@ -182,7 +182,7 @@ class RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void c03_httpClient_requestExecutor() throws RestCallException {
-		AtomicBoolean b1 = new AtomicBoolean();
+		var b1 = new AtomicBoolean();
 		HttpRequestExecutor x = new HttpRequestExecutor() {
 			@Override
 			public HttpResponse execute(HttpRequest request, HttpClientConnection conn, HttpContext context) throws HttpException, IOException {
@@ -218,7 +218,7 @@ class RestClient_Test extends SimpleTestBase {
 
 	@Test void c08_httpClient_executeHttpHostHttpRequest() throws Exception {
 		HttpGet x = new HttpGet("http://localhost/bean");
-		HttpHost target = new HttpHost("localhost");
+		var target = new HttpHost("localhost");
 		x.addHeader("Accept","text/json5");
 		HttpResponse res = MockRestClient.create(A.class).build().execute(target,x);
 		assertEquals("{f:1}",IOUtils.read(res.getEntity().getContent()));
@@ -226,7 +226,7 @@ class RestClient_Test extends SimpleTestBase {
 
 	@Test void c09_httpClient_executeHttpHostHttpRequestHttpContext() throws Exception {
 		HttpGet x = new HttpGet("http://localhost/bean");
-		HttpHost target = new HttpHost("localhost");
+		var target = new HttpHost("localhost");
 		HttpContext context = new BasicHttpContext();
 		x.addHeader("Accept","text/json5");
 		HttpResponse res = MockRestClient.create(A.class).build().execute(target,x,context);

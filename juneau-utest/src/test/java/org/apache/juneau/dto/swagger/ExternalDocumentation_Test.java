@@ -29,7 +29,7 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 	 * Test method for getters and setters.
 	 */
 	@Test void a01_gettersAndSetters() {
-		ExternalDocumentation t = new ExternalDocumentation();
+		var t = new ExternalDocumentation();
 		assertEquals("foo", t.setDescription("foo").getDescription());
 		assertNull(t.setDescription(null).getDescription());
 		assertString("http://bar", t.setUrl(URI.create("http://bar")).getUrl());
@@ -39,7 +39,7 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 	 * Test method for {@link ExternalDocumentation#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test void b01_set() throws Exception {
-		ExternalDocumentation t = new ExternalDocumentation();
+		var t = new ExternalDocumentation();
 
 		t
 			.set("description", "foo")
@@ -68,7 +68,7 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_copy() {
-		ExternalDocumentation t = new ExternalDocumentation();
+		var t = new ExternalDocumentation();
 
 		t = t.copy();
 
@@ -84,7 +84,7 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_keySet() {
-		ExternalDocumentation t = new ExternalDocumentation();
+		var t = new ExternalDocumentation();
 
 		assertJson(t.keySet(), "[]");
 

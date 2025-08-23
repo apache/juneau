@@ -121,7 +121,7 @@ class XmlContentTest extends SimpleTestBase {
 		@Xml(format=TEXT) public String f2;
 
 		public static A newInstance() {
-			A t = new A();
+			var t = new A();
 			t.f1 = "f1";
 			t.f2 = null;
 			return t;
@@ -240,10 +240,10 @@ class XmlContentTest extends SimpleTestBase {
 		@Xml(format=TEXT) public String f2;
 
 		public static B newInstance() {
-			B t = new B();
+			var t = new B();
 			t.f1 = "f1";
 			t.f2 = null;
 			return t;
 		}
 	}
-}
+}

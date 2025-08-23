@@ -121,7 +121,7 @@ class JsonListTest extends SimpleTestBase {
 	// testGetList
 	//====================================================================================================
 	@Test void testGetList() throws Exception {
-		JsonList l = new JsonList("[['123','456']]");
+		var l = new JsonList("[['123','456']]");
 		List<Integer> l2 = l.getList(0, Integer.class);
 		assertList(l2, "123,456");
 		assertEquals(Integer.class, l2.iterator().next().getClass());

@@ -247,7 +247,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	public static class B05B {
 		public int f2;
 		public static B05B create() {
-			B05B b = new B05B();
+			var b = new B05B();
 			b.f2 = 123;
 			return b;
 		}

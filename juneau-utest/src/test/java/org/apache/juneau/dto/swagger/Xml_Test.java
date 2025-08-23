@@ -27,7 +27,7 @@ class Xml_Test extends SimpleTestBase {
 	 * Test method for getters and setters.
 	 */
 	@Test void a01_gettersAndSetters() {
-		Xml t = new Xml();
+		var t = new Xml();
 		assertEquals("foo", t.setName("foo").getName());
 		assertNull(t.setName(null).getName());
 		assertEquals("foo", t.setNamespace("foo").getNamespace());
@@ -42,7 +42,7 @@ class Xml_Test extends SimpleTestBase {
 	 * Test method for {@link Xml#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test void b01_set() throws Exception {
-		Xml t = new Xml();
+		var t = new Xml();
 
 		t
 			.set("attribute", true)
@@ -98,7 +98,7 @@ class Xml_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_copy() {
-		Xml t = new Xml();
+		var t = new Xml();
 
 		t = t.copy();
 
@@ -117,7 +117,7 @@ class Xml_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_keySet() {
-		Xml t = new Xml();
+		var t = new Xml();
 
 		assertJson(t.keySet(), "[]");
 

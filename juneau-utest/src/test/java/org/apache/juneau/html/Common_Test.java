@@ -54,7 +54,7 @@ class Common_Test extends SimpleTestBase {
 		public String s1, s2;
 
 		public static A create() {
-			A t = new A();
+			var t = new A();
 			t.s2 = "s2";
 			return t;
 		}
@@ -85,7 +85,7 @@ class Common_Test extends SimpleTestBase {
 		public TreeMap<String,A> f1, f2;
 
 		public static B create() {
-			B t = new B();
+			var t = new B();
 			t.f1 = new TreeMap<>();
 			t.f2 = new TreeMap<>(){{put("f2a",null);put("f2b",A.create());}};
 			return t;
@@ -117,7 +117,7 @@ class Common_Test extends SimpleTestBase {
 		public List<A> f1, f2;
 
 		public static C create() {
-			C t = new C();
+			var t = new C();
 			t.f1 = alist();
 			t.f2 = alist(null,A.create());
 			return t;
@@ -182,7 +182,7 @@ class Common_Test extends SimpleTestBase {
 		public A[] f1, f2;
 
 		public static D create() {
-			D t = new D();
+			var t = new D();
 			t.f1 = new A[]{};
 			t.f2 = new A[]{null, A.create()};
 			return t;
@@ -194,7 +194,7 @@ class Common_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void testBeanPropertyProperties() throws Exception {
 		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
-		E1 t = new E1();
+		var t = new E1();
 		String r;
 
 		r = s.serialize(t);
@@ -284,7 +284,7 @@ class Common_Test extends SimpleTestBase {
 	@Test void testBeanPropertyPropertiesOnListOfBeans() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
 		List<F> l = new LinkedList<>();
-		F t = new F();
+		var t = new F();
 		t.x1.add(new F());
 		l.add(t);
 		String html = s.serialize(l);
@@ -316,7 +316,7 @@ class Common_Test extends SimpleTestBase {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
 		HtmlParser p = HtmlParser.DEFAULT;
 
-		G t = new G();
+		var t = new G();
 		t.uri = new URI("http://uri");
 		t.f1 = new URI("http://f1");
 		t.f2 = url("http://f2");
@@ -341,9 +341,9 @@ class Common_Test extends SimpleTestBase {
 	@Test void testRecursion() throws Exception {
 		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders().maxDepth(Integer.MAX_VALUE);
 
-		R1 r1 = new R1();
-		R2 r2 = new R2();
-		R3 r3 = new R3();
+		var r1 = new R1();
+		var r2 = new R2();
+		var r3 = new R3();
 		r1.r2 = r2;
 		r2.r3 = r3;
 		r3.r1 = r1;
@@ -385,7 +385,7 @@ class Common_Test extends SimpleTestBase {
 	@Test void testBasicBean() throws Exception {
 		WriterSerializer s = HtmlSerializer.create().sq().keepNullProperties().sortProperties().addKeyValueTableHeaders().build();
 
-		J a = new J();
+		var a = new J();
 		a.setF1("J");
 		a.setF2(100);
 		a.setF3(true);
@@ -409,7 +409,7 @@ class Common_Test extends SimpleTestBase {
 		}
 
 		public void setF1(String v) {
-			this.f1 = v;
+			f1 = v;
 		}
 
 		public int getF2() {
@@ -417,7 +417,7 @@ class Common_Test extends SimpleTestBase {
 		}
 
 		public void setF2(int v) {
-			this.f2 = v;
+			f2 = v;
 		}
 
 		public boolean isF3() {
@@ -425,7 +425,7 @@ class Common_Test extends SimpleTestBase {
 		}
 
 		public void setF3(boolean v) {
-			this.f3 = v;
+			f3 = v;
 		}
 
 		@Override /* Object */

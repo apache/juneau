@@ -66,7 +66,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 		public String f;
 
 		public static A create(String f) {
-			A a = new A();
+			var a = new A();
 			a.f = f;
 			return a;
 		}
@@ -227,7 +227,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 		public int f;
 
 		static C create(int f) {
-			C c = new C();
+			var c = new C();
 			c.f = f;
 			return c;
 		}

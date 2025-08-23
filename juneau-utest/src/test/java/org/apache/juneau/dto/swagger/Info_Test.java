@@ -28,7 +28,7 @@ class Info_Test extends SimpleTestBase {
 	 * Test method for getters and setters.
 	 */
 	@Test void a01_gettersAndSetters() {
-		Info t = new Info();
+		var t = new Info();
 		assertEquals("foo", t.setTitle("foo").getTitle());
 		assertNull(t.setTitle(null).getTitle());
 		assertEquals("foo", t.setDescription("foo").getDescription());
@@ -45,7 +45,7 @@ class Info_Test extends SimpleTestBase {
 	 * Test method for {@link Info#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test void b01_set() throws Exception {
-		Info t = new Info();
+		var t = new Info();
 
 		t
 			.set("contact", contact("a"))
@@ -106,7 +106,7 @@ class Info_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_copy() {
-		Info t = new Info();
+		var t = new Info();
 
 		t = t.copy();
 
@@ -126,7 +126,7 @@ class Info_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_keySet() {
-		Info t = new Info();
+		var t = new Info();
 
 		assertJson(t.keySet(), "[]");
 

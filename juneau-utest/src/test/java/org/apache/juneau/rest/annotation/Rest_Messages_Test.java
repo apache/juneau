@@ -116,9 +116,9 @@ class Rest_Messages_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static JsonMap asMap(ResourceBundle rb) {
-		JsonMap m = new JsonMap();
+		var m = new JsonMap();
 		for (String k : new TreeSet<>(rb.keySet()))
 			m.put(k, rb.getString(k));
 		return m;
 	}
-}
+}

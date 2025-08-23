@@ -30,7 +30,7 @@ class Remote_ResponseAnnotation_Test extends SimpleTestBase {
 	public static class ABean {
 		public int f;
 		static ABean get() {
-			ABean x = new ABean();
+			var x = new ABean();
 			x.f = 1;
 			return x;
 		}

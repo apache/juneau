@@ -52,7 +52,7 @@ class CommonTest extends SimpleTestBase {
 		public String s1, s2;
 
 		public static A create() {
-			A t = new A();
+			var t = new A();
 			t.s2 = "s2";
 			return t;
 		}
@@ -83,7 +83,7 @@ class CommonTest extends SimpleTestBase {
 		public TreeMap<String,A> f1, f2;
 
 		public static B create() {
-			B t = new B();
+			var t = new B();
 			t.f1 = new TreeMap<>();
 			t.f2 = new TreeMap<>(){{put("f2a",null);put("f2b",A.create());}};
 			return t;
@@ -115,7 +115,7 @@ class CommonTest extends SimpleTestBase {
 		public List<A> f1, f2;
 
 		public static C create() {
-			C t = new C();
+			var t = new C();
 			t.f1 = list();
 			t.f2 = list(null,A.create());
 			return t;
@@ -147,7 +147,7 @@ class CommonTest extends SimpleTestBase {
 		public A[] f1, f2;
 
 		public static D create() {
-			D t = new D();
+			var t = new D();
 			t.f1 = new A[]{};
 			t.f2 = new A[]{null, A.create()};
 			return t;
@@ -159,7 +159,7 @@ class CommonTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void testBeanPropertyProperties() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
-		E1 t = new E1();
+		var t = new E1();
 		String r = s.serialize(t);
 		assertEquals(
 			"<object>"
@@ -196,7 +196,7 @@ class CommonTest extends SimpleTestBase {
 	@Test void testBeanPropertyPropertiesOnListOfBeans() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		List<Test7b> l = new LinkedList<>();
-		Test7b t = new Test7b();
+		var t = new Test7b();
 		t.x1.add(new Test7b());
 		l.add(t);
 		String xml = s.serialize(l);
@@ -214,9 +214,9 @@ class CommonTest extends SimpleTestBase {
 	@Test void testRecursion() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().maxDepth(Integer.MAX_VALUE);
 
-		R1 r1 = new R1();
-		R2 r2 = new R2();
-		R3 r3 = new R3();
+		var r1 = new R1();
+		var r2 = new R2();
+		var r3 = new R3();
 		r1.r2 = r2;
 		r2.r3 = r3;
 		r3.r1 = r1;
@@ -248,4 +248,4 @@ class CommonTest extends SimpleTestBase {
 		public String name = "baz";
 		public R1 r1;
 	}
-}
+}

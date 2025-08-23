@@ -29,7 +29,7 @@ class License_Test extends SimpleTestBase {
 	 * Test method for getters and setters.
 	 */
 	@Test void a01_gettersAndSetters() {
-		License t = new License();
+		var t = new License();
 		assertEquals("foo", t.setName("foo").getName());
 		assertNull(t.setName(null).getName());
 		assertString("foo", t.setUrl(URI.create("foo")).getUrl());
@@ -39,7 +39,7 @@ class License_Test extends SimpleTestBase {
 	 * Test method for {@link License#set(java.lang.String, java.lang.Object)}.
 	 */
 	@Test void b01_set() throws Exception {
-		License t = new License();
+		var t = new License();
 
 		t
 			.set("name", "a")
@@ -80,7 +80,7 @@ class License_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_copy() {
-		License t = new License();
+		var t = new License();
 
 		t = t.copy();
 
@@ -96,7 +96,7 @@ class License_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_keySet() {
-		License t = new License();
+		var t = new License();
 
 		assertJson(t.keySet(), "[]");
 
