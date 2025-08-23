@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="juneau-marshall" />
+        <module name="juneau-bean-openapi3" />
+        <module name="juneau-config" />
+        <module name="juneau-rest-mock" />
+        <module name="juneau-bean-common" />
+        <module name="juneau-my-jetty-microservice" />
+        <module name="juneau-microservice-jetty" />
+        <module name="juneau-rest-common" />
+        <module name="juneau-assertions" />
+        <module name="juneau-sc-client" />
+        <module name="juneau-all" />
+        <module name="juneau-my-springboot-microservice" />
+        <module name="juneau-common" />
+        <module name="juneau-microservice-core" />
+        <module name="juneau-rest-server-springboot" />
+        <module name="juneau-rest-client" />
+        <module name="juneau-examples-core" />
+        <module name="juneau-bean-html5" />
+        <module name="juneau-utest" />
+        <module name="juneau-examples-rest" />
+        <module name="juneau-bean-jsonschema" />
+        <module name="juneau-examples-rest-jetty" />
+        <module name="juneau-rest-server" />
+        <module name="juneau-bean-atom" />
+        <module name="juneau-examples-rest-springboot" />
+        <module name="juneau-examples-rest-jetty-ftest" />
+        <module name="juneau-sc-server" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
