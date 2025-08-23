@@ -17,11 +17,8 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.swaps.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
 
-@RunWith(Parameterized.class)
-public class FunctionalSwapTest extends RoundTripObjectSwapTest<Locale,String> {
+class FunctionalSwapTest extends RoundTripObjectSwapTest_Base {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Setup
@@ -31,42 +28,21 @@ public class FunctionalSwapTest extends RoundTripObjectSwapTest<Locale,String> {
 	private static final LocaleSwap localeSwap = new LocaleSwap();
 	private static FunctionalSwap<Locale,String> SWAP = new FunctionalSwap<>(Locale.class, String.class, x->localeSwap.swap(BS, x), x->localeSwap.unswap(BS, x, null));
 
-	public FunctionalSwapTest(String label, Locale o, FunctionalSwap<Locale,String> s, String r, BeanSession bs) {
-		super(label, o, s, r, bs);
+	private static <T,S> RoundTripObjectSwapTester<T,S> tester(int index, String label, T object, ObjectSwap<T,S> swap, S expected, BeanSession bs) {
+		return RoundTripObjectSwapTester.create(index, label, object, swap, expected, bs).build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Parameters
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Parameterized.Parameters
-	public static Collection<Object[]> getPairs() {
-		return Arrays.asList(new Object[][] {
+	private static final RoundTripObjectSwapTester<?,?>[] TESTERS = {
+		tester(1, "Language only", Locale.ENGLISH, SWAP, "en", BS),
+		tester(2, "Language and country", Locale.JAPAN, SWAP, "ja-JP", BS),
+		tester(3, "null", null, SWAP, null, BS)
+	};
 
-			//----------------------------------------------------------------------------------------------------------
-			// Basic tests
-			//----------------------------------------------------------------------------------------------------------
-			{
-				"[0] Language only ",
-				Locale.ENGLISH,
-				SWAP,
-				"en",
-				BS
-			},
-			{
-				"[1] Language and country",
-				Locale.JAPAN,
-				SWAP,
-				"ja-JP",
-				BS
-			},
-			{
-				"[2] null",
-				null,
-				SWAP,
-				null,
-				BS
-			},
-		});
+	static RoundTripObjectSwapTester<?,?>[] testers() {
+		return TESTERS;
 	}
 }

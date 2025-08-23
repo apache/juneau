@@ -14,17 +14,11 @@ package org.apache.juneau.transforms;
 
 import static org.apache.juneau.utest.utils.Utils2.*;
 
-import java.io.*;
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.swaps.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
 
-@RunWith(Parameterized.class)
-public class InputStreamBase64SwapTest extends OneWayStringSwapTest<InputStream> {
+class InputStreamBase64SwapTest extends OneWayStringSwapTest_Base {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Setup
@@ -33,42 +27,21 @@ public class InputStreamBase64SwapTest extends OneWayStringSwapTest<InputStream>
 	private static BeanSession BS = BeanContext.DEFAULT_SESSION;
 	private static InputStreamSwap SWAP = new InputStreamSwap.Base64();
 
-	public InputStreamBase64SwapTest(String label, InputStream o, StringSwap<InputStream> s, String r, BeanSession bs) throws Exception {
-		super(label, o, s, r, bs);
+	private static <T> OneWayStringSwapTester<T> tester(int index, String label, T object, StringSwap<T> swap, String expected, BeanSession bs) {
+		return OneWayStringSwapTester.create(index, label, object, swap, expected, bs).build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Parameters
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Parameterized.Parameters
-	public static Collection<Object[]> getPairs() {
-		return Arrays.asList(new Object[][] {
+	private static final OneWayStringSwapTester<?>[] TESTERS = {
+		tester(1, "Basic string", inputStream("foo"), SWAP, "Zm9v", BS),
+		tester(2, "Blank string", inputStream(""), SWAP, "", BS),
+		tester(3, "null", null, SWAP, "", BS)
+	};
 
-			//----------------------------------------------------------------------------------------------------------
-			// Basic tests
-			//----------------------------------------------------------------------------------------------------------
-			{
-				"[0] Basic string",
-				inputStream("foo"),
-				SWAP,
-				"Zm9v",
-				BS
-			},
-			{
-				"[1] Blank string",
-				inputStream(""),
-				SWAP,
-				"",
-				BS
-			},
-			{
-				"[2] null",
-				null,
-				SWAP,
-				"",
-				BS
-			},
-		});
+	static OneWayStringSwapTester<?>[] testers() {
+		return TESTERS;
 	}
 }
