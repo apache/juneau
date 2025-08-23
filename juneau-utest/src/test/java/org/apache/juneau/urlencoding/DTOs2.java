@@ -78,16 +78,16 @@ public class DTOs2 {
 		public A[][] getF19() { return f19; }
 		public List<List<A>> getF20() { return f20; }
 
-		public void setF11(String[] f11) { this.f11 = f11; }
-		public void setF12(List<String> f12) { this.f12 = f12; }
-		public void setF13(int[] f13) { this.f13 = f13; }
-		public void setF14(List<Integer> f14) { this.f14 = f14; }
-		public void setF15(String[][] f15) { this.f15 = f15; }
-		public void setF16(List<String[]> f16) { this.f16 = f16; }
-		public void setF17(A[] f17) { this.f17 = f17; }
-		public void setF18(List<A> f18) { this.f18 = f18; }
-		public void setF19(A[][] f19) { this.f19 = f19; }
-		public void setF20(List<List<A>> f20) { this.f20 = f20; }
+		public void setF11(String[] v) { this.f11 = v; }
+		public void setF12(List<String> v) { this.f12 = v; }
+		public void setF13(int[] v) { this.f13 = v; }
+		public void setF14(List<Integer> v) { this.f14 = v; }
+		public void setF15(String[][] v) { this.f15 = v; }
+		public void setF16(List<String[]> v) { this.f16 = v; }
+		public void setF17(A[] v) { this.f17 = v; }
+		public void setF18(List<A> v) { this.f18 = v; }
+		public void setF19(A[][] v) { this.f19 = v; }
+		public void setF20(List<List<A>> v) { this.f20 = v; }
 
 		static B create() {
 			B t = new B();
@@ -141,4 +141,4 @@ public class DTOs2 {
 			return t;
 		}
 	}
-}
+}

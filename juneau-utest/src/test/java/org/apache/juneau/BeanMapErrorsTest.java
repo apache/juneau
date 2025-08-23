@@ -41,16 +41,10 @@ class BeanMapErrorsTest extends SimpleTestBase {
 	@Bean(p="f1")
 	public static class A1 {
 		public int f1;
+
 		private int f2 = -1;
-
-		@Beanp("f2")
-		public int f2() {
-			return f2;
-		}
-
-		public void setF2(int f2) {
-			this.f2 = f2;
-		}
+		@Beanp("f2") public int f2() { return f2; }
+		public void setF2(int v) { this.f2 = v; }
 	}
 
 	@Test void beanPropertyMethodNotInBeanProperties_usingConfig() {
@@ -73,16 +67,10 @@ class BeanMapErrorsTest extends SimpleTestBase {
 
 	public static class B1 {
 		public int f1;
+
 		private int f2 = -1;
-
-		@Beanp("f2")
-		public int f2() {
-			return f2;
-		}
-
-		public void setF2(int f2) {
-			this.f2 = f2;
-		}
+		@Beanp("f2") public int f2() { return f2; }
+		public void setF2(int v) { this.f2 = v; }
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -58,15 +58,8 @@ class BasicBeans_Test extends SimpleTestBase {
 		public int f1;
 
 		private int f2;
-
-		public void setF2(int f2) {
-			this.f2 = f2;
-		}
-
-		@Transient
-		public int getF2() {
-			return f2;
-		}
+		public void setF2(int v) { this.f2 = v; }
+		@Transient public int getF2() { return f2; }
 
 		public static A2 create() {
 			var x = new A2();

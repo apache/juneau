@@ -78,8 +78,8 @@ class ObjectMerger_Test extends SimpleTestBase {
 		}
 
 		@Override
-		public void setA(String a) {
-			this.a = a;
+		public void setA(String v) {
+			this.a = v;
 		}
 	}
 }

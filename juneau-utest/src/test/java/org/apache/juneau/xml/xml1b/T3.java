@@ -24,11 +24,11 @@ public class T3 {
 
 	private int f3 = 3;
 	public int getF3() { return f3; }
-	public void setF3(int f3) { this.f3 = f3; }
+	public void setF3(int v) { this.f3 = v; }
 
 	private int f4 = 4;
 	@Xml(prefix="baz",namespace="http://baz") public int getF4() { return f4; }
-	public void setF4(int f4) { this.f4 = f4; }
+	public void setF4(int v) { this.f4 = v; }
 
 	public boolean equals(T3 x) {
 		return x.f1 == f1 && x.f2 == f2 && x.f3 == f3 && x.f4 == f4;

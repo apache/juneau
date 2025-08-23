@@ -192,8 +192,8 @@ class XmlCollapsedTest extends SimpleTestBase {
 		public String[] getF2() {
 			return f2;
 		}
-		public void setF2(String[] f2) {
-			this.f2 = f2;
+		public void setF2(String[] v) {
+			this.f2 = v;
 		}
 
 		@Xml(format=COLLAPSED,childName="xf3")
@@ -205,8 +205,8 @@ class XmlCollapsedTest extends SimpleTestBase {
 		public String[] getF4() {
 			return f4;
 		}
-		public void setF4(String[] f4) {
-			this.f4 = f4;
+		public void setF4(String[] v) {
+			this.f4 = v;
 		}
 	}
 
@@ -241,16 +241,16 @@ class XmlCollapsedTest extends SimpleTestBase {
 		public ArrayList<String> getF1() {
 			return f1;
 		}
-		public void setF1(ArrayList<String> f1) {
-			this.f1 = f1;
+		public void setF1(ArrayList<String> v) {
+			this.f1 = v;
 		}
 
 		@Xml(format=COLLAPSED,childName="xf2")
 		public ArrayList<String> getF2() {
 			return f2;
 		}
-		public void setF2(ArrayList<String> f2) {
-			this.f2 = f2;
+		public void setF2(ArrayList<String> v) {
+			this.f2 = v;
 		}
 	}
 

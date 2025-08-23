@@ -41,9 +41,9 @@ public class Utils2 extends Utils {  // NOSONAR - Class name intentional.
 	 *
 	 * @param name
 	 */
-	public static final synchronized void setTimeZone(String name) {
+	public static final synchronized void setTimeZone(String v) {
 		SYSTEM_TIME_ZONE.set(TimeZone.getDefault());
-		TimeZone.setDefault(TimeZone.getTimeZone(name));
+		TimeZone.setDefault(TimeZone.getTimeZone(v));
 	}
 
 	public static final synchronized void unsetTimeZone() {
@@ -56,9 +56,9 @@ public class Utils2 extends Utils {  // NOSONAR - Class name intentional.
 	 *
 	 * @param name
 	 */
-	public static final void setLocale(Locale locale) {
+	public static final void setLocale(Locale v) {
 		SYSTEM_LOCALE.set(Locale.getDefault());
-		Locale.setDefault(locale);
+		Locale.setDefault(v);
 	}
 
 	public static final void unsetLocale() {

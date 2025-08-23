@@ -26,13 +26,13 @@ public class A1 {
 	private int f5, f6, f7, f8;
 
 	public int getF5() { return f5; }
-	public void setF5(int f5) { this.f5 = f5; }
+	public void setF5(int v) { this.f5 = v; }
 	protected int getF6() { return f6; }
-	protected void setF6(int f6) { this.f6 = f6; }
+	protected void setF6(int v) { this.f6 = v; }
 	int getF7() { return f7; }
-	void setF7(int f7) { this.f7 = f7; }
+	void setF7(int v) { this.f7 = v; }
 	private int getF8() { return f8; }
-	private void setF8(int f8) { this.f8 = f8; }
+	private void setF8(int v) { this.f8 = v; }
 
 	public A2 g2;
 	public A3 g3;
@@ -98,13 +98,13 @@ public class A1 {
 		private int f5, f6, f7, f8;
 
 		public int getF5() { return f5; }
-		public void setF5(int f5) { this.f5 = f5; }
+		public void setF5(int v) { this.f5 = v; }
 		protected int getF6() { return f6; }
-		protected void setF6(int f6) { this.f6 = f6; }
+		protected void setF6(int v) { this.f6 = v; }
 		int getF7() { return f7; }
-		void setF7(int f7) { this.f7 = f7; }
+		void setF7(int v) { this.f7 = v; }
 		private int getF8() { return f8; }
-		private void setF8(int f8) { this.f8 = f8; }
+		private void setF8(int v) { this.f8 = v; }
 
 		@Override /* Object */
 		public String toString() {
@@ -122,13 +122,13 @@ public class A1 {
 		private int f5, f6, f7, f8;
 
 		public int getF5() { return f5; }
-		public void setF5(int f5) { this.f5 = f5; }
+		public void setF5(int v) { this.f5 = v; }
 		protected int getF6() { return f6; }
-		protected void setF6(int f6) { this.f6 = f6; }
+		protected void setF6(int v) { this.f6 = v; }
 		int getF7() { return f7; }
-		void setF7(int f7) { this.f7 = f7; }
+		void setF7(int v) { this.f7 = v; }
 		private int getF8() { return f8; }
-		private void setF8(int f8) { this.f8 = f8; }
+		private void setF8(int v) { this.f8 = v; }
 
 		@Override /* Object */
 		public String toString() {
@@ -146,13 +146,13 @@ public class A1 {
 		private int f5, f6, f7, f8;
 
 		public int getF5() { return f5; }
-		public void setF5(int f5) { this.f5 = f5; }
+		public void setF5(int v) { this.f5 = v; }
 		protected int getF6() { return f6; }
-		protected void setF6(int f6) { this.f6 = f6; }
+		protected void setF6(int v) { this.f6 = v; }
 		int getF7() { return f7; }
-		void setF7(int f7) { this.f7 = f7; }
+		void setF7(int v) { this.f7 = v; }
 		private int getF8() { return f8; }
-		private void setF8(int f8) { this.f8 = f8; }
+		private void setF8(int v) { this.f8 = v; }
 
 		@Override /* Object */
 		public String toString() {
@@ -170,17 +170,17 @@ public class A1 {
 		private int f5, f6, f7, f8;
 
 		public int getF5() { return f5; }
-		public void setF5(int f5) { this.f5 = f5; }
+		public void setF5(int v) { this.f5 = v; }
 		protected int getF6() { return f6; }
-		protected void setF6(int f6) { this.f6 = f6; }
+		protected void setF6(int v) { this.f6 = v; }
 		int getF7() { return f7; }
-		void setF7(int f7) { this.f7 = f7; }
+		void setF7(int v) { this.f7 = v; }
 		private int getF8() { return f8; }
-		private void setF8(int f8) { this.f8 = f8; }
+		private void setF8(int v) { this.f8 = v; }
 
 		@Override /* Object */
 		public String toString() {
 			return "A5";
 		}
 	}
-}
+}

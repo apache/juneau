@@ -286,24 +286,24 @@ class CommonTest  extends SimpleTestBase{
 			return this.f1;
 		}
 
-		public void setF1(String f1) {
-			this.f1 = f1;
+		public void setF1(String v) {
+			this.f1 = v;
 		}
 
 		public int getF2() {
 			return this.f2;
 		}
 
-		public void setF2(int f2) {
-			this.f2 = f2;
+		public void setF2(int v) {
+			this.f2 = v;
 		}
 
 		public boolean isF3() {
 			return this.f3;
 		}
 
-		public void setF3(boolean f3) {
-			this.f3 = f3;
+		public void setF3(boolean v) {
+			this.f3 = v;
 		}
 
 		@Override /* Object */
@@ -311,4 +311,4 @@ class CommonTest  extends SimpleTestBase{
 			return ("J(f1: " + this.getF1() + ", f2: " + this.getF2() + ")");
 		}
 	}
-}
+}

@@ -42,13 +42,10 @@ class Annotations_Test extends SimpleTestBase {
 	@Bean(properties="age,name")
 	public static class Person1 {
 		public int age;
+
 		private String name;
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
+		public String getName() { return name; }
+		public void setName(String v) { this.name = v; }
 	}
 
 	@Test void testBeanWithExplicitProperties2() throws Exception {
@@ -71,13 +68,10 @@ class Annotations_Test extends SimpleTestBase {
 	@Bean(p="age,name")
 	public static class Person2 {
 		public int age;
+
 		private String name;
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
+		public String getName() { return name; }
+		public void setName(String v) { this.name = v; }
 	}
 
 	@Test void testBeanWithExplicitProperties3() throws Exception {
@@ -100,13 +94,10 @@ class Annotations_Test extends SimpleTestBase {
 	@Bean(properties="age",p="name")
 	public static class Person3 {
 		public int age;
+		
 		private String name;
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
+		public String getName() { return name; }
+		public void setName(String v) { this.name = v; }
 	}
 
 	@Test void testBeanWithExplicitProperties_usingConfig() throws Exception {
@@ -128,13 +119,10 @@ class Annotations_Test extends SimpleTestBase {
 	/** Class with explicitly specified properties */
 	public static class Person4 {
 		public int age;
+
 		private String name;
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
+		public String getName() { return name; }
+		public void setName(String v) { this.name = v; }
 	}
 
 	@Bean(on="Person4",properties="age,name")

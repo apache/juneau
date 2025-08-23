@@ -1951,8 +1951,8 @@ class Swagger_Test extends SimpleTestBase {
 	public static class T2 {
 		private int f1;
 
-		public T2 setF1(int f1) {
-			this.f1 = f1;
+		public T2 setF1(int v) {
+			this.f1 = v;
 			return this;
 		}
 

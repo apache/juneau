@@ -528,203 +528,203 @@ class RrpcInterface_Test extends SimpleTestBase {
 				public void setNothing() {}  // NOSONAR
 
 				@Override
-				public void setInt(int x) {
-					assertEquals(1,x);
+				public void setInt(int v) {
+					assertEquals(1,v);
 				}
 
 				@Override
-				public void setInteger(Integer x) {
-					assertEquals((Integer)1,x);
+				public void setInteger(Integer v) {
+					assertEquals((Integer)1,v);
 				}
 
 				@Override
-				public void setBoolean(boolean x) {
-					assertTrue(x);
+				public void setBoolean(boolean v) {
+					assertTrue(v);
 				}
 
 				@Override
-				public void setFloat(float x) {
-					assertEquals(1f, x, 0.1f);
+				public void setFloat(float v) {
+					assertEquals(1f, v, 0.1f);
 				}
 
 				@Override
-				public void setFloatObject(Float x) {
-					assertEquals(1f, x, 0.1f);
+				public void setFloatObject(Float v) {
+					assertEquals(1f, v, 0.1f);
 				}
 
 				@Override
-				public void setString(String x) {
-					assertEquals("foo",x);
+				public void setString(String v) {
+					assertEquals("foo",v);
 				}
 
 				@Override
-				public void setNullString(String x) {
-					assertNull(x);
+				public void setNullString(String v) {
+					assertNull(v);
 				}
 
 				@Override
-				public void setInt3dArray(int[][][] x) {
-					assertJson(x, "[[[1,2],null],null]");
+				public void setInt3dArray(int[][][] v) {
+					assertJson(v, "[[[1,2],null],null]");
 				}
 
 				@Override
-				public void setInteger3dArray(Integer[][][] x) {
-					assertJson(x, "[[[1,null],null],null]");
+				public void setInteger3dArray(Integer[][][] v) {
+					assertJson(v, "[[[1,null],null],null]");
 				}
 
 				@Override
-				public void setString3dArray(String[][][] x) {
-					assertJson(x, "[[['foo',null],null],null]");
+				public void setString3dArray(String[][][] v) {
+					assertJson(v, "[[['foo',null],null],null]");
 				}
 
 				@Override
-				public void setIntegerList(List<Integer> x) {
-					assertJson(x, "[1,null]");
-					assertType(Integer.class, x.get(0));
+				public void setIntegerList(List<Integer> v) {
+					assertJson(v, "[1,null]");
+					assertType(Integer.class, v.get(0));
 				}
 
 				@Override
-				public void setInteger3dList(List<List<List<Integer>>> x) {
-					assertJson(x, "[[[1,null],null],null]");
-					assertType(Integer.class, x.get(0).get(0).get(0));
+				public void setInteger3dList(List<List<List<Integer>>> v) {
+					assertJson(v, "[[[1,null],null],null]");
+					assertType(Integer.class, v.get(0).get(0).get(0));
 				}
 
 				@Override
-				public void setInteger1d3dList(List<Integer[][][]> x) {
-					assertJson(x, "[[[[1,null],null],null],null]");
-					assertType(Integer[][][].class, x.get(0));
-					assertType(Integer.class, x.get(0)[0][0][0]);
+				public void setInteger1d3dList(List<Integer[][][]> v) {
+					assertJson(v, "[[[[1,null],null],null],null]");
+					assertType(Integer[][][].class, v.get(0));
+					assertType(Integer.class, v.get(0)[0][0][0]);
 				}
 
 				@Override
-				public void setInt1d3dList(List<int[][][]> x) {
-					assertJson(x, "[[[[1,2],null],null],null]");
-					assertType(int[][][].class, x.get(0));
+				public void setInt1d3dList(List<int[][][]> v) {
+					assertJson(v, "[[[[1,2],null],null],null]");
+					assertType(int[][][].class, v.get(0));
 				}
 
 				@Override
-				public void setStringList(List<String> x) {
-					assertJson(x, "['foo','bar',null]");
+				public void setStringList(List<String> v) {
+					assertJson(v, "['foo','bar',null]");
 				}
 
 				// Beans
 
 				@Override
-				public void setBean(ABean x) {
-					assertJson(x, "{a:1,b:'foo'}");
+				public void setBean(ABean v) {
+					assertJson(v, "{a:1,b:'foo'}");
 				}
 
 				@Override
-				public void setBean3dArray(ABean[][][] x) {
-					assertJson(x, "[[[{a:1,b:'foo'},null],null],null]");
+				public void setBean3dArray(ABean[][][] v) {
+					assertJson(v, "[[[{a:1,b:'foo'},null],null],null]");
 				}
 
 				@Override
-				public void setBeanList(List<ABean> x) {
-					assertJson(x, "[{a:1,b:'foo'}]");
+				public void setBeanList(List<ABean> v) {
+					assertJson(v, "[{a:1,b:'foo'}]");
 				}
 
 				@Override
-				public void setBean1d3dList(List<ABean[][][]> x) {
-					assertJson(x, "[[[[{a:1,b:'foo'},null],null],null],null]");
+				public void setBean1d3dList(List<ABean[][][]> v) {
+					assertJson(v, "[[[[{a:1,b:'foo'},null],null],null],null]");
 				}
 
 				@Override
-				public void setBeanMap(Map<String,ABean> x) {
-					assertJson(x, "{foo:{a:1,b:'foo'}}");
+				public void setBeanMap(Map<String,ABean> v) {
+					assertJson(v, "{foo:{a:1,b:'foo'}}");
 				}
 
 				@Override
-				public void setBeanListMap(Map<String,List<ABean>> x) {
-					assertJson(x, "{foo:[{a:1,b:'foo'}]}");
+				public void setBeanListMap(Map<String,List<ABean>> v) {
+					assertJson(v, "{foo:[{a:1,b:'foo'}]}");
 				}
 
 				@Override
-				public void setBean1d3dListMap(Map<String,List<ABean[][][]>> x) {
-					assertJson(x, "{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
+				public void setBean1d3dListMap(Map<String,List<ABean[][][]>> v) {
+					assertJson(v, "{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 				}
 
 				@Override
-				public void setBeanListMapIntegerKeys(Map<Integer,List<ABean>> x) {
-					assertJson(x, "{'1':[{a:1,b:'foo'}]}");  // Note: JsonSerializer serializes key as string.
-					assertType(Integer.class, x.keySet().iterator().next());
+				public void setBeanListMapIntegerKeys(Map<Integer,List<ABean>> v) {
+					assertJson(v, "{'1':[{a:1,b:'foo'}]}");  // Note: JsonSerializer serializes key as string.
+					assertType(Integer.class, v.keySet().iterator().next());
 				}
 
 				// Typed beans
 
 				@Override
-				public void setTypedBean(TypedBean x) {
-					assertJson(x, "{a:1,b:'foo'}");
-					assertType(TypedBeanImpl.class, x);
+				public void setTypedBean(TypedBean v) {
+					assertJson(v, "{a:1,b:'foo'}");
+					assertType(TypedBeanImpl.class, v);
 				}
 
 				@Override
-				public void setTypedBean3dArray(TypedBean[][][] x) {
-					assertJson(x, "[[[{a:1,b:'foo'},null],null],null]");
-					assertType(TypedBeanImpl.class, x[0][0][0]);
+				public void setTypedBean3dArray(TypedBean[][][] v) {
+					assertJson(v, "[[[{a:1,b:'foo'},null],null],null]");
+					assertType(TypedBeanImpl.class, v[0][0][0]);
 				}
 
 				@Override
-				public void setTypedBeanList(List<TypedBean> x) {
-					assertJson(x, "[{a:1,b:'foo'}]");
-					assertType(TypedBeanImpl.class, x.get(0));
+				public void setTypedBeanList(List<TypedBean> v) {
+					assertJson(v, "[{a:1,b:'foo'}]");
+					assertType(TypedBeanImpl.class, v.get(0));
 				}
 
 				@Override
-				public void setTypedBean1d3dList(List<TypedBean[][][]> x) {
-					assertJson(x, "[[[[{a:1,b:'foo'},null],null],null],null]");
-					assertType(TypedBeanImpl.class, x.get(0)[0][0][0]);
+				public void setTypedBean1d3dList(List<TypedBean[][][]> v) {
+					assertJson(v, "[[[[{a:1,b:'foo'},null],null],null],null]");
+					assertType(TypedBeanImpl.class, v.get(0)[0][0][0]);
 				}
 
 				@Override
-				public void setTypedBeanMap(Map<String,TypedBean> x) {
-					assertJson(x, "{foo:{a:1,b:'foo'}}");
-					assertType(TypedBeanImpl.class, x.get("foo"));
+				public void setTypedBeanMap(Map<String,TypedBean> v) {
+					assertJson(v, "{foo:{a:1,b:'foo'}}");
+					assertType(TypedBeanImpl.class, v.get("foo"));
 				}
 
 				@Override
-				public void setTypedBeanListMap(Map<String,List<TypedBean>> x) {
-					assertJson(x, "{foo:[{a:1,b:'foo'}]}");
-					assertType(TypedBeanImpl.class, x.get("foo").get(0));
+				public void setTypedBeanListMap(Map<String,List<TypedBean>> v) {
+					assertJson(v, "{foo:[{a:1,b:'foo'}]}");
+					assertType(TypedBeanImpl.class, v.get("foo").get(0));
 				}
 
 				@Override
-				public void setTypedBean1d3dListMap(Map<String,List<TypedBean[][][]>> x) {
-					assertJson(x, "{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
-					assertType(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0]);
+				public void setTypedBean1d3dListMap(Map<String,List<TypedBean[][][]>> v) {
+					assertJson(v, "{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
+					assertType(TypedBeanImpl.class, v.get("foo").get(0)[0][0][0]);
 				}
 
 				@Override
-				public void setTypedBeanListMapIntegerKeys(Map<Integer,List<TypedBean>> x) {
-					assertJson(x, "{'1':[{a:1,b:'foo'}]}");  // Note: JsonSerializer serializes key as string.
-					assertType(TypedBeanImpl.class, x.get(1).get(0));
+				public void setTypedBeanListMapIntegerKeys(Map<Integer,List<TypedBean>> v) {
+					assertJson(v, "{'1':[{a:1,b:'foo'}]}");  // Note: JsonSerializer serializes key as string.
+					assertType(TypedBeanImpl.class, v.get(1).get(0));
 				}
 
 				// Swapped POJOs
 
 				@Override
-				public void setSwappedObject(SwappedObject x) {
-					assertTrue(x.wasUnswapped);
+				public void setSwappedObject(SwappedObject v) {
+					assertTrue(v.wasUnswapped);
 				}
 
 				@Override
-				public void setSwappedObject3dArray(SwappedObject[][][] x) {
-					assertJson(x, "[[['"+SWAP+"',null],null],null]");
-					assertTrue(x[0][0][0].wasUnswapped);
+				public void setSwappedObject3dArray(SwappedObject[][][] v) {
+					assertJson(v, "[[['"+SWAP+"',null],null],null]");
+					assertTrue(v[0][0][0].wasUnswapped);
 				}
 
 				@Override
-				public void setSwappedObjectMap(Map<SwappedObject,SwappedObject> x) {
-					assertJson(x, "{'"+SWAP+"':'"+SWAP+"'}");
-					var e = x.entrySet().iterator().next();
+				public void setSwappedObjectMap(Map<SwappedObject,SwappedObject> v) {
+					assertJson(v, "{'"+SWAP+"':'"+SWAP+"'}");
+					var e = v.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue().wasUnswapped);
 				}
 
 				@Override
-				public void setSwappedObject3dMap(Map<SwappedObject,SwappedObject[][][]> x) {
-					assertJson(x, "{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
-					var e = x.entrySet().iterator().next();
+				public void setSwappedObject3dMap(Map<SwappedObject,SwappedObject[][][]> v) {
+					assertJson(v, "{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
+					var e = v.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue()[0][0][0].wasUnswapped);
 				}
@@ -732,28 +732,28 @@ class RrpcInterface_Test extends SimpleTestBase {
 				// Implicit swapped POJOs
 
 				@Override
-				public void setImplicitSwappedObject(ImplicitSwappedObject x) {
-					assertTrue(x.wasUnswapped);
+				public void setImplicitSwappedObject(ImplicitSwappedObject v) {
+					assertTrue(v.wasUnswapped);
 				}
 
 				@Override
-				public void setImplicitSwappedObject3dArray(ImplicitSwappedObject[][][] x) {
-					assertJson(x, "[[['"+SWAP+"',null],null],null]");
-					assertTrue(x[0][0][0].wasUnswapped);
+				public void setImplicitSwappedObject3dArray(ImplicitSwappedObject[][][] v) {
+					assertJson(v, "[[['"+SWAP+"',null],null],null]");
+					assertTrue(v[0][0][0].wasUnswapped);
 				}
 
 				@Override
-				public void setImplicitSwappedObjectMap(Map<ImplicitSwappedObject,ImplicitSwappedObject> x) {
-					assertJson(x, "{'"+SWAP+"':'"+SWAP+"'}");
-					var e = x.entrySet().iterator().next();
+				public void setImplicitSwappedObjectMap(Map<ImplicitSwappedObject,ImplicitSwappedObject> v) {
+					assertJson(v, "{'"+SWAP+"':'"+SWAP+"'}");
+					var e = v.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue().wasUnswapped);
 				}
 
 				@Override
-				public void setImplicitSwappedObject3dMap(Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> x) {
-					assertJson(x, "{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
-					var e = x.entrySet().iterator().next();
+				public void setImplicitSwappedObject3dMap(Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> v) {
+					assertJson(v, "{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
+					var e = v.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue()[0][0][0].wasUnswapped);
 				}
@@ -761,53 +761,53 @@ class RrpcInterface_Test extends SimpleTestBase {
 				// Enums
 
 				@Override
-				public void setEnum(TestEnum x) {
-					assertEquals(TestEnum.TWO,x);
+				public void setEnum(TestEnum v) {
+					assertEquals(TestEnum.TWO,v);
 				}
 
 				@Override
-				public void setEnum3d(TestEnum[][][] x) {
-					assertJson(x, "[[['TWO',null],null],null]");
+				public void setEnum3d(TestEnum[][][] v) {
+					assertJson(v, "[[['TWO',null],null],null]");
 				}
 
 				@Override
-				public void setEnumList(List<TestEnum> x) {
-					assertJson(x, "['TWO',null]");
-					assertType(TestEnum.class, x.get(0));
+				public void setEnumList(List<TestEnum> v) {
+					assertJson(v, "['TWO',null]");
+					assertType(TestEnum.class, v.get(0));
 				}
 
 				@Override
-				public void setEnum3dList(List<List<List<TestEnum>>> x) {
-					assertJson(x, "[[['TWO',null],null],null]");
-					assertType(TestEnum.class, x.get(0).get(0).get(0));
+				public void setEnum3dList(List<List<List<TestEnum>>> v) {
+					assertJson(v, "[[['TWO',null],null],null]");
+					assertType(TestEnum.class, v.get(0).get(0).get(0));
 				}
 
 				@Override
-				public void setEnum1d3dList(List<TestEnum[][][]> x) {
-					assertJson(x, "[[[['TWO',null],null],null],null]");
-					assertType(TestEnum[][][].class, x.get(0));
+				public void setEnum1d3dList(List<TestEnum[][][]> v) {
+					assertJson(v, "[[[['TWO',null],null],null],null]");
+					assertType(TestEnum[][][].class, v.get(0));
 				}
 
 				@Override
-				public void setEnumMap(Map<TestEnum,TestEnum> x) {
-					assertJson(x, "{ONE:'TWO'}");
-					var e = x.entrySet().iterator().next();
+				public void setEnumMap(Map<TestEnum,TestEnum> v) {
+					assertJson(v, "{ONE:'TWO'}");
+					var e = v.entrySet().iterator().next();
 					assertType(TestEnum.class, e.getKey());
 					assertType(TestEnum.class, e.getValue());
 				}
 
 				@Override
-				public void setEnum3dArrayMap(Map<TestEnum,TestEnum[][][]> x) {
-					assertJson(x, "{ONE:[[['TWO',null],null],null]}");
-					var e = x.entrySet().iterator().next();
+				public void setEnum3dArrayMap(Map<TestEnum,TestEnum[][][]> v) {
+					assertJson(v, "{ONE:[[['TWO',null],null],null]}");
+					var e = v.entrySet().iterator().next();
 					assertType(TestEnum.class, e.getKey());
 					assertType(TestEnum[][][].class, e.getValue());
 				}
 
 				@Override
-				public void setEnum1d3dListMap(Map<TestEnum,List<TestEnum[][][]>> x) {
-					assertJson(x, "{ONE:[[[['TWO',null],null],null],null]}");
-					Map.Entry<TestEnum,List<TestEnum[][][]>> e = x.entrySet().iterator().next();
+				public void setEnum1d3dListMap(Map<TestEnum,List<TestEnum[][][]>> v) {
+					assertJson(v, "{ONE:[[[['TWO',null],null],null],null]}");
+					Map.Entry<TestEnum,List<TestEnum[][][]>> e = v.entrySet().iterator().next();
 					assertType(TestEnum.class, e.getKey());
 					assertType(TestEnum[][][].class, e.getValue().get(0));
 				}

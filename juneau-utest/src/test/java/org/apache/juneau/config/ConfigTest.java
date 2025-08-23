@@ -1492,7 +1492,7 @@ class ConfigTest extends SimpleTestBase {
 		private String foo;
 
 		public String getFoo() { return foo; }
-		public BBean setFoo(String foo) {this.foo = foo; return this;}
+		public BBean setFoo(String v) {this.foo = v; return this;}
 		public BBean init() {
 			foo = "bar";
 			return this;

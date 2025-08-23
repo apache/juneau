@@ -1244,7 +1244,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 		}
 
 		@Schema(type="foo",format="bar",description="baz")
-		public void setF1(int f1) { /* no-op */ }
+		public void setF1(int v) { /* no-op */ }
 	}
 
 	@Test void jsonSchema_onbeansetter_usingConfig() throws Exception {
@@ -1260,7 +1260,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 			return 123;
 		}
 
-		public void setF1(int f1) { /* no-op */ }
+		public void setF1(int v) { /* no-op */ }
 	}
 
 	//====================================================================================================

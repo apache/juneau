@@ -1447,203 +1447,203 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	// Various primitives
 
 	@RestPost(path="/setInt")
-	public void setInt(@Content int x) {
-		assertEquals(1, x);
+	public void setInt(@Content int v) {
+		assertEquals(1, v);
 	}
 
 	@RestPost(path="/setInteger")
-	public void setInteger(@Content Integer x) {
-		assertEquals((Integer)1, x);
+	public void setInteger(@Content Integer v) {
+		assertEquals((Integer)1, v);
 	}
 
 	@RestPost(path="/setBoolean")
-	public void setBoolean(@Content boolean x) {
-		assertTrue(x);
+	public void setBoolean(@Content boolean v) {
+		assertTrue(v);
 	}
 
 	@RestPost(path="/setFloat")
-	public void setFloat(@Content float x) {
-		assertEquals(1f, x, 0.1f);
+	public void setFloat(@Content float v) {
+		assertEquals(1f, v, 0.1f);
 	}
 
 	@RestPost(path="/setFloatObject")
-	public void setFloatObject(@Content Float x) {
-		assertEquals(1f, x, 0.1f);
+	public void setFloatObject(@Content Float v) {
+		assertEquals(1f, v, 0.1f);
 	}
 
 	@RestPost(path="/setString")
-	public void setString(@Content String x) {
-		assertEquals("foo", x);
+	public void setString(@Content String v) {
+		assertEquals("foo", v);
 	}
 
 	@RestPost(path="/setNullString")
-	public void setNullString(@Content String x) {
-		assertNull(x);
+	public void setNullString(@Content String v) {
+		assertNull(v);
 	}
 
 	@RestPost(path="/setInt3dArray")
-	public String setInt3dArray(@Content int[][][] x) {
-		return ""+x[0][0][0];
+	public String setInt3dArray(@Content int[][][] v) {
+		return ""+v[0][0][0];
 	}
 
 	@RestPost(path="/setInteger3dArray")
-	public void setInteger3dArray(@Content Integer[][][] x) {
-		assertJson(x, "[[[1,null],null],null]");
+	public void setInteger3dArray(@Content Integer[][][] v) {
+		assertJson(v, "[[[1,null],null],null]");
 	}
 
 	@RestPost(path="/setString3dArray")
-	public void setString3dArray(@Content String[][][] x) {
-		assertJson(x, "[[['foo',null],null],null]");
+	public void setString3dArray(@Content String[][][] v) {
+		assertJson(v, "[[['foo',null],null],null]");
 	}
 
 	@RestPost(path="/setIntegerList")
-	public void setIntegerList(@Content List<Integer> x) {
-		assertJson(x, "[1,null]");
-		assertType(Integer.class, x.get(0));
+	public void setIntegerList(@Content List<Integer> v) {
+		assertJson(v, "[1,null]");
+		assertType(Integer.class, v.get(0));
 	}
 
 	@RestPost(path="/setInteger3dList")
-	public void setInteger3dList(@Content List<List<List<Integer>>> x) {
-		assertJson(x, "[[[1,null],null],null]");
-		assertType(Integer.class, x.get(0).get(0).get(0));
+	public void setInteger3dList(@Content List<List<List<Integer>>> v) {
+		assertJson(v, "[[[1,null],null],null]");
+		assertType(Integer.class, v.get(0).get(0).get(0));
 	}
 
 	@RestPost(path="/setInteger1d3dList")
-	public void setInteger1d3dList(@Content List<Integer[][][]> x) {
-		assertJson(x, "[[[[1,null],null],null],null]");
-		assertType(Integer[][][].class, x.get(0));
-		assertType(Integer.class, x.get(0)[0][0][0]);
+	public void setInteger1d3dList(@Content List<Integer[][][]> v) {
+		assertJson(v, "[[[[1,null],null],null],null]");
+		assertType(Integer[][][].class, v.get(0));
+		assertType(Integer.class, v.get(0)[0][0][0]);
 	}
 
 	@RestPost(path="/setInt1d3dList")
-	public void setInt1d3dList(@Content List<int[][][]> x) {
-		assertJson(x, "[[[[1,2],null],null],null]");
-		assertType(int[][][].class, x.get(0));
+	public void setInt1d3dList(@Content List<int[][][]> v) {
+		assertJson(v, "[[[[1,2],null],null],null]");
+		assertType(int[][][].class, v.get(0));
 	}
 
 	@RestPost(path="/setStringList")
-	public void setStringList(@Content List<String> x) {
-		assertJson(x, "['foo','bar',null]");
+	public void setStringList(@Content List<String> v) {
+		assertJson(v, "['foo','bar',null]");
 	}
 
 	// Beans
 
 	@RestPost(path="/setBean")
-	public void setBean(@Content ABean x) {
-		assertJson(x, "{a:1,b:'foo'}");
+	public void setBean(@Content ABean v) {
+		assertJson(v, "{a:1,b:'foo'}");
 	}
 
 	@RestPost(path="/setBean3dArray")
-	public void setBean3dArray(@Content ABean[][][] x) {
-		assertJson(x, "[[[{a:1,b:'foo'},null],null],null]");
+	public void setBean3dArray(@Content ABean[][][] v) {
+		assertJson(v, "[[[{a:1,b:'foo'},null],null],null]");
 	}
 
 	@RestPost(path="/setBeanList")
-	public void setBeanList(@Content List<ABean> x) {
-		assertJson(x, "[{a:1,b:'foo'}]");
+	public void setBeanList(@Content List<ABean> v) {
+		assertJson(v, "[{a:1,b:'foo'}]");
 	}
 
 	@RestPost(path="/setBean1d3dList")
-	public void setBean1d3dList(@Content List<ABean[][][]> x) {
-		assertJson(x, "[[[[{a:1,b:'foo'},null],null],null],null]");
+	public void setBean1d3dList(@Content List<ABean[][][]> v) {
+		assertJson(v, "[[[[{a:1,b:'foo'},null],null],null],null]");
 	}
 
 	@RestPost(path="/setBeanMap")
-	public void setBeanMap(@Content Map<String,ABean> x) {
-		assertJson(x, "{foo:{a:1,b:'foo'}}");
+	public void setBeanMap(@Content Map<String,ABean> v) {
+		assertJson(v, "{foo:{a:1,b:'foo'}}");
 	}
 
 	@RestPost(path="/setBeanListMap")
-	public void setBeanListMap(@Content Map<String,List<ABean>> x) {
-		assertJson(x, "{foo:[{a:1,b:'foo'}]}");
+	public void setBeanListMap(@Content Map<String,List<ABean>> v) {
+		assertJson(v, "{foo:[{a:1,b:'foo'}]}");
 	}
 
 	@RestPost(path="/setBean1d3dListMap")
-	public void setBean1d3dListMap(@Content Map<String,List<ABean[][][]>> x) {
-		assertJson(x, "{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
+	public void setBean1d3dListMap(@Content Map<String,List<ABean[][][]>> v) {
+		assertJson(v, "{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 	}
 
 	@RestPost(path="/setBeanListMapIntegerKeys")
-	public void setBeanListMapIntegerKeys(@Content Map<Integer,List<ABean>> x) {
-		assertJson(x, "{'1':[{a:1,b:'foo'}]}");  // Note: JsonSerializer serializes key as string.
-		assertType(Integer.class, x.keySet().iterator().next());
+	public void setBeanListMapIntegerKeys(@Content Map<Integer,List<ABean>> v) {
+		assertJson(v, "{'1':[{a:1,b:'foo'}]}");  // Note: JsonSerializer serializes key as string.
+		assertType(Integer.class, v.keySet().iterator().next());
 	}
 
 	// Typed beans
 
 	@RestPost(path="/setTypedBean")
-	public void setTypedBean(@Content TypedBean x) {
-		assertJson(x, "{a:1,b:'foo'}");
-		assertType(TypedBeanImpl.class, x);
+	public void setTypedBean(@Content TypedBean v) {
+		assertJson(v, "{a:1,b:'foo'}");
+		assertType(TypedBeanImpl.class, v);
 	}
 
 	@RestPost(path="/setTypedBean3dArray")
-	public void setTypedBean3dArray(@Content TypedBean[][][] x) {
-		assertJson(x, "[[[{a:1,b:'foo'},null],null],null]");
-		assertType(TypedBeanImpl.class, x[0][0][0]);
+	public void setTypedBean3dArray(@Content TypedBean[][][] v) {
+		assertJson(v, "[[[{a:1,b:'foo'},null],null],null]");
+		assertType(TypedBeanImpl.class, v[0][0][0]);
 	}
 
 	@RestPost(path="/setTypedBeanList")
-	public void setTypedBeanList(@Content List<TypedBean> x) {
-		assertJson(x, "[{a:1,b:'foo'}]");
-		assertType(TypedBeanImpl.class, x.get(0));
+	public void setTypedBeanList(@Content List<TypedBean> v) {
+		assertJson(v, "[{a:1,b:'foo'}]");
+		assertType(TypedBeanImpl.class, v.get(0));
 	}
 
 	@RestPost(path="/setTypedBean1d3dList")
-	public void setTypedBean1d3dList(@Content List<TypedBean[][][]> x) {
-		assertJson(x, "[[[[{a:1,b:'foo'},null],null],null],null]");
-		assertType(TypedBeanImpl.class, x.get(0)[0][0][0]);
+	public void setTypedBean1d3dList(@Content List<TypedBean[][][]> v) {
+		assertJson(v, "[[[[{a:1,b:'foo'},null],null],null],null]");
+		assertType(TypedBeanImpl.class, v.get(0)[0][0][0]);
 	}
 
 	@RestPost(path="/setTypedBeanMap")
-	public void setTypedBeanMap(@Content Map<String,TypedBean> x) {
-		assertJson(x, "{foo:{a:1,b:'foo'}}");
-		assertType(TypedBeanImpl.class, x.get("foo"));
+	public void setTypedBeanMap(@Content Map<String,TypedBean> v) {
+		assertJson(v, "{foo:{a:1,b:'foo'}}");
+		assertType(TypedBeanImpl.class, v.get("foo"));
 	}
 
 	@RestPost(path="/setTypedBeanListMap")
-	public void setTypedBeanListMap(@Content Map<String,List<TypedBean>> x) {
-		assertJson(x, "{foo:[{a:1,b:'foo'}]}");
-		assertType(TypedBeanImpl.class, x.get("foo").get(0));
+	public void setTypedBeanListMap(@Content Map<String,List<TypedBean>> v) {
+		assertJson(v, "{foo:[{a:1,b:'foo'}]}");
+		assertType(TypedBeanImpl.class, v.get("foo").get(0));
 	}
 
 	@RestPost(path="/setTypedBean1d3dListMap")
-	public void setTypedBean1d3dListMap(@Content Map<String,List<TypedBean[][][]>> x) {
-		assertJson(x, "{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
-		assertType(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0]);
+	public void setTypedBean1d3dListMap(@Content Map<String,List<TypedBean[][][]>> v) {
+		assertJson(v, "{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
+		assertType(TypedBeanImpl.class, v.get("foo").get(0)[0][0][0]);
 	}
 
 	@RestPost(path="/setTypedBeanListMapIntegerKeys")
-	public void setTypedBeanListMapIntegerKeys(@Content Map<Integer,List<TypedBean>> x) {
-		assertJson(x, "{'1':[{a:1,b:'foo'}]}");  // Note: JsonSerializer serializes key as string.
-		assertType(TypedBeanImpl.class, x.get(1).get(0));
+	public void setTypedBeanListMapIntegerKeys(@Content Map<Integer,List<TypedBean>> v) {
+		assertJson(v, "{'1':[{a:1,b:'foo'}]}");  // Note: JsonSerializer serializes key as string.
+		assertType(TypedBeanImpl.class, v.get(1).get(0));
 	}
 
 	// Swapped POJOs
 
 	@RestPost(path="/setSwappedObject")
-	public void setSwappedObject(@Content SwappedObject x) {
-		assertTrue(x.wasUnswapped);
+	public void setSwappedObject(@Content SwappedObject v) {
+		assertTrue(v.wasUnswapped);
 	}
 
 	@RestPost(path="/setSwappedObject3dArray")
-	public void setSwappedObject3dArray(@Content SwappedObject[][][] x) {
-		assertJson(x, "[[['"+SWAP+"',null],null],null]");
-		assertTrue(x[0][0][0].wasUnswapped);
+	public void setSwappedObject3dArray(@Content SwappedObject[][][] v) {
+		assertJson(v, "[[['"+SWAP+"',null],null],null]");
+		assertTrue(v[0][0][0].wasUnswapped);
 	}
 
 	@RestPost(path="/setSwappedObjectMap")
-	public void setSwappedObjectMap(@Content Map<SwappedObject,SwappedObject> x) {
-		assertJson(x, "{'"+SWAP+"':'"+SWAP+"'}");
-		Map.Entry<SwappedObject,SwappedObject> e = x.entrySet().iterator().next();
+	public void setSwappedObjectMap(@Content Map<SwappedObject,SwappedObject> v) {
+		assertJson(v, "{'"+SWAP+"':'"+SWAP+"'}");
+		Map.Entry<SwappedObject,SwappedObject> e = v.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue().wasUnswapped);
 	}
 
 	@RestPost(path="/setSwappedObject3dMap")
-	public void setSwappedObject3dMap(@Content Map<SwappedObject,SwappedObject[][][]> x) {
-		assertJson(x, "{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
-		Map.Entry<SwappedObject,SwappedObject[][][]> e = x.entrySet().iterator().next();
+	public void setSwappedObject3dMap(@Content Map<SwappedObject,SwappedObject[][][]> v) {
+		assertJson(v, "{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
+		Map.Entry<SwappedObject,SwappedObject[][][]> e = v.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);
 	}
@@ -1651,28 +1651,28 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	// Implicit swapped POJOs
 
 	@RestPost(path="/setImplicitSwappedObject")
-	public void setImplicitSwappedObject(@Content ImplicitSwappedObject x) {
-		assertTrue(x.wasUnswapped);
+	public void setImplicitSwappedObject(@Content ImplicitSwappedObject v) {
+		assertTrue(v.wasUnswapped);
 	}
 
 	@RestPost(path="/setImplicitSwappedObject3dArray")
-	public void setImplicitSwappedObject3dArray(@Content ImplicitSwappedObject[][][] x) {
-		assertJson(x, "[[['"+SWAP+"',null],null],null]");
-		assertTrue(x[0][0][0].wasUnswapped);
+	public void setImplicitSwappedObject3dArray(@Content ImplicitSwappedObject[][][] v) {
+		assertJson(v, "[[['"+SWAP+"',null],null],null]");
+		assertTrue(v[0][0][0].wasUnswapped);
 	}
 
 	@RestPost(path="/setImplicitSwappedObjectMap")
-	public void setImplicitSwappedObjectMap(@Content Map<ImplicitSwappedObject,ImplicitSwappedObject> x) {
-		assertJson(x, "{'"+SWAP+"':'"+SWAP+"'}");
-		Map.Entry<ImplicitSwappedObject,ImplicitSwappedObject> e = x.entrySet().iterator().next();
+	public void setImplicitSwappedObjectMap(@Content Map<ImplicitSwappedObject,ImplicitSwappedObject> v) {
+		assertJson(v, "{'"+SWAP+"':'"+SWAP+"'}");
+		Map.Entry<ImplicitSwappedObject,ImplicitSwappedObject> e = v.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue().wasUnswapped);
 	}
 
 	@RestPost(path="/setImplicitSwappedObject3dMap")
-	public void setImplicitSwappedObject3dMap(@Content Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> x) {
-		assertJson(x, "{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
-		Map.Entry<ImplicitSwappedObject,ImplicitSwappedObject[][][]> e = x.entrySet().iterator().next();
+	public void setImplicitSwappedObject3dMap(@Content Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> v) {
+		assertJson(v, "{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}");
+		Map.Entry<ImplicitSwappedObject,ImplicitSwappedObject[][][]> e = v.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);
 	}
@@ -1680,53 +1680,53 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	// Enums
 
 	@RestPost(path="/setEnum")
-	public void setEnum(@Content TestEnum x) {
-		assertEquals(TestEnum.TWO, x);
+	public void setEnum(@Content TestEnum v) {
+		assertEquals(TestEnum.TWO, v);
 	}
 
 	@RestPost(path="/setEnum3d")
-	public void setEnum3d(@Content TestEnum[][][] x) {
-		assertJson(x, "[[['TWO',null],null],null]");
+	public void setEnum3d(@Content TestEnum[][][] v) {
+		assertJson(v, "[[['TWO',null],null],null]");
 	}
 
 	@RestPost(path="/setEnumList")
-	public void setEnumList(@Content List<TestEnum> x) {
-		assertJson(x, "['TWO',null]");
-		assertType(TestEnum.class, x.get(0));
+	public void setEnumList(@Content List<TestEnum> v) {
+		assertJson(v, "['TWO',null]");
+		assertType(TestEnum.class, v.get(0));
 	}
 
 	@RestPost(path="/setEnum3dList")
-	public void setEnum3dList(@Content List<List<List<TestEnum>>> x) {
-		assertJson(x, "[[['TWO',null],null],null]");
-		assertType(TestEnum.class, x.get(0).get(0).get(0));
+	public void setEnum3dList(@Content List<List<List<TestEnum>>> v) {
+		assertJson(v, "[[['TWO',null],null],null]");
+		assertType(TestEnum.class, v.get(0).get(0).get(0));
 	}
 
 	@RestPost(path="/setEnum1d3dList")
-	public void setEnum1d3dList(@Content List<TestEnum[][][]> x) {
-		assertJson(x, "[[[['TWO',null],null],null],null]");
-		assertType(TestEnum[][][].class, x.get(0));
+	public void setEnum1d3dList(@Content List<TestEnum[][][]> v) {
+		assertJson(v, "[[[['TWO',null],null],null],null]");
+		assertType(TestEnum[][][].class, v.get(0));
 	}
 
 	@RestPost(path="/setEnumMap")
-	public void setEnumMap(@Content Map<TestEnum,TestEnum> x) {
-		assertJson(x, "{ONE:'TWO'}");
-		Map.Entry<TestEnum,TestEnum> e = x.entrySet().iterator().next();
+	public void setEnumMap(@Content Map<TestEnum,TestEnum> v) {
+		assertJson(v, "{ONE:'TWO'}");
+		Map.Entry<TestEnum,TestEnum> e = v.entrySet().iterator().next();
 		assertType(TestEnum.class, e.getKey());
 		assertType(TestEnum.class, e.getValue());
 	}
 
 	@RestPost(path="/setEnum3dArrayMap")
-	public void setEnum3dArrayMap(@Content Map<TestEnum,TestEnum[][][]> x) {
-		assertJson(x, "{ONE:[[['TWO',null],null],null]}");
-		Map.Entry<TestEnum,TestEnum[][][]> e = x.entrySet().iterator().next();
+	public void setEnum3dArrayMap(@Content Map<TestEnum,TestEnum[][][]> v) {
+		assertJson(v, "{ONE:[[['TWO',null],null],null]}");
+		Map.Entry<TestEnum,TestEnum[][][]> e = v.entrySet().iterator().next();
 		assertType(TestEnum.class, e.getKey());
 		assertType(TestEnum[][][].class, e.getValue());
 	}
 
 	@RestPost(path="/setEnum1d3dListMap")
-	public void setEnum1d3dListMap(@Content Map<TestEnum,List<TestEnum[][][]>> x) {
-		assertJson(x, "{ONE:[[[['TWO',null],null],null],null]}");
-		Map.Entry<TestEnum,List<TestEnum[][][]>> e = x.entrySet().iterator().next();
+	public void setEnum1d3dListMap(@Content Map<TestEnum,List<TestEnum[][][]>> v) {
+		assertJson(v, "{ONE:[[[['TWO',null],null],null],null]}");
+		Map.Entry<TestEnum,List<TestEnum[][][]>> e = v.entrySet().iterator().next();
 		assertType(TestEnum.class, e.getKey());
 		assertType(TestEnum[][][].class, e.getValue().get(0));
 	}
@@ -1764,4 +1764,4 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 	public void httpStatusReturn404(RestResponse res) {
 		res.setStatus(404);
 	}
-}
+}

@@ -148,8 +148,8 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 			return f3;
 		}
 		@Override
-		public void setF3(int f3) {
-			this.f3 = f3;
+		public void setF3(int v) {
+			this.f3 = v;
 		}
 		static A4b get() {
 			A4b x = new A4b();
@@ -232,8 +232,8 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 		public int getF1() {
 			return f1;
 		}
-		public void setF1(int f1) {
-			this.f1 = f1;
+		public void setF1(int v) {
+			this.f1 = v;
 		}
 		protected int getF2() {
 			return f2;
@@ -325,8 +325,8 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 		public int getF1() {
 			return f1;
 		}
-		public void setF1(int f1) {
-			this.f1 = f1;
+		public void setF1(int v) {
+			this.f1 = v;
 		}
 		public int getF2() {
 			return f2;
@@ -643,8 +643,8 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 		public String getFoo() {
 			return foo;
 		}
-		public void setFoo(String foo) {
-			this.foo = foo;
+		public void setFoo(String v) {
+			this.foo = v;
 		}
 		public String getBar() {
 			throw new RuntimeException("xxx");
@@ -668,13 +668,13 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 		public String getFoo() {
 			return foo;
 		}
-		public void setFoo(String foo) {
-			this.foo = foo;
+		public void setFoo(String v) {
+			this.foo = v;
 		}
 		public String getBar() {
 			return bar;
 		}
-		public void setBar(String bar) {
+		public void setBar(String v) {
 			throw new RuntimeException("xxx");
 		}
 		static A22 get() {
@@ -713,8 +713,8 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 			return foo;
 		}
 		@Override
-		public void setFoo(int foo) {
-			this.foo = foo;
+		public void setFoo(int v) {
+			this.foo = v;
 		}
 	}
 
@@ -738,9 +738,9 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 		@Override
 		public int getFoo() { return foo; }
 		@Override
-		public void setFoo(int foo) { this.foo = foo; }
+		public void setFoo(int v) { this.foo = v; }
 		public int getBar() { return bar; }  // Not executed
-		public void setBar(int bar) { this.bar = bar; }  // Not executed
+		public void setBar(int v) { this.bar = v; }  // Not executed
 
 		static A25b get() {
 			A25b x = new A25b();
@@ -807,7 +807,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	public static class A30a {
 		private String foo;
 		public String getFoo() { return foo; }
-		public void setFoo(String foo) { this.foo = foo; }
+		public void setFoo(String v) { this.foo = v; }
 		static A30a get() {
 			A30a x = new A30a();
 			x.foo = "foo";
@@ -839,7 +839,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	public static class A31 {
 		private String fooBar;
 		public String getFooBar() { return fooBar; }
-		public void setFooBar(String fooBar) { this.fooBar = fooBar; }
+		public void setFooBar(String v) { this.fooBar = v; }
 		static A31 get() {
 			A31 x = new A31();
 			x.fooBar = "fooBar";
@@ -980,8 +980,8 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 		public int getFoo() {
 			return foo;
 		}
-		public void setFoo(int foo) {
-			this.foo = foo;
+		public void setFoo(int v) {
+			this.foo = v;
 		}
 		static A39 get() {
 			A39 x = new A39();

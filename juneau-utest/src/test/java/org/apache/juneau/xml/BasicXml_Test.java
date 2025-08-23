@@ -1715,17 +1715,10 @@ class BasicXml_Test extends SimpleTestBase {
 
 	@Bean(typeName="A")
 	public static class A extends AA {
+
 		private String a;
-
-		@Override
-		public String getA() {
-			return a;
-		}
-
-		@Override
-		public void setA(String a) {
-			this.a = a;
-		}
+		@Override public String getA() { return a; }
+		@Override public void setA(String v) { this.a = v; }
 
 		A init() {
 			this.a = "foo";
