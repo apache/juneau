@@ -17,55 +17,22 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.swaps.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
 
-@RunWith(Parameterized.class)
-public class LocaleSwapTest extends RoundTripStringSwapTest<Locale> {
+class LocaleSwap_StringSwapTest extends StringSwapTest_Base {
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Setup
-	//------------------------------------------------------------------------------------------------------------------
-
-	private static BeanSession BS = BeanContext.DEFAULT_SESSION;
 	private static LocaleSwap SWAP = new LocaleSwap();
 
-	public LocaleSwapTest(String label, Locale o, StringSwap<Locale> s, String r, BeanSession bs) throws Exception {
-		super(label, o, s, r, bs);
+	private static <T> StringSwapTester<T> tester(int index, String label, T object, StringSwap<T> swap, String expected) {
+		return StringSwapTester.create(index, label, object, swap, expected, BeanContext.DEFAULT_SESSION).build();
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Parameters
-	//------------------------------------------------------------------------------------------------------------------
+	private static final StringSwapTester<?>[] TESTERS = {
+		tester(1, "Language only", Locale.ENGLISH, SWAP, "en"),
+		tester(2, "Language and country", Locale.JAPAN, SWAP, "ja-JP"),
+		tester(3, "null", null, SWAP, null)
+	};
 
-	@Parameterized.Parameters
-	public static Collection<Object[]> getPairs() {
-		return Arrays.asList(new Object[][] {
-
-			//----------------------------------------------------------------------------------------------------------
-			// Basic tests
-			//----------------------------------------------------------------------------------------------------------
-			{
-				"[0] Language only ",
-				Locale.ENGLISH,
-				SWAP,
-				"en",
-				BS
-			},
-			{
-				"[1] Language and country",
-				Locale.JAPAN,
-				SWAP,
-				"ja-JP",
-				BS
-			},
-			{
-				"[2] null",
-				null,
-				SWAP,
-				null,
-				BS
-			},
-		});
+	static StringSwapTester<?>[] testers() {
+		return TESTERS;
 	}
 }

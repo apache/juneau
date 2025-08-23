@@ -37,9 +37,9 @@
 
 		<!-- First step in migration to Jetty 12: EE 8 -->
 		<juneau.compare.version>9.0.1</juneau.compare.version>
-		<javadoc.juneau.version>9.1.0</javadoc.juneau.version>
-		<juneauVersion>9.1.0</juneauVersion>
-		<juneauVersionNext>9.2.0</juneauVersionNext>
+		<javadoc.juneau.version>9.2.0</javadoc.juneau.version>
+		<juneauVersion>9.2.0</juneauVersion>
+		<juneauVersionNext>9.2.1</juneauVersionNext>
 		<junit.version>5.13.4</junit.version>
 		<javadoc.plugin.version>3.11.2</javadoc.plugin.version>
 		<jacoco.plugin.version>0.8.13</jacoco.plugin.version>

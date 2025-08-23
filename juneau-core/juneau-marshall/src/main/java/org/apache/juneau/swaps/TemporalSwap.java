@@ -419,6 +419,8 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	@SuppressWarnings("unchecked")
 	@Override /* ObjectSwap */
 	public Temporal unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
+		if (f == null)
+			return null;
 		if (hint == null)
 			hint = session.getClassMeta(Instant.class);
 		Class<? extends Temporal> tc = (Class<? extends Temporal>)hint.getInnerClass();
