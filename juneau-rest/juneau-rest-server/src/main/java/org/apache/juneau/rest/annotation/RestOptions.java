@@ -38,13 +38,14 @@ import org.apache.juneau.encoders.*;
  * This is a specialized subtype of <c><ja>{@link RestOp @RestOp}(method=<jsf>OPTIONS</jsf>)</c>.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.RestOpAnnotatedMethods">@RestOp-Annotated Methods</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#jrs.RestOpAnnotatedMethods">@RestOp-Annotated Methods</a>
+
  * </ul>
  */
 @Target(METHOD)
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(RestGetAnnotation.RestOpContextApply.class)
+@ContextApply(RestOptionsAnnotation.RestOpContextApply.class)
 @AnnotationGroup(RestOp.class)
 public @interface RestOptions {
 
@@ -723,4 +724,4 @@ public @interface RestOptions {
 	 * @return The annotation value.
 	 */
 	String value() default "";
-}
+}
