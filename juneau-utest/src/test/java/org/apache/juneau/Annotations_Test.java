@@ -45,7 +45,7 @@ class Annotations_Test extends SimpleTestBase {
 
 		private String name;
 		public String getName() { return name; }
-		public void setName(String v) { this.name = v; }
+		public void setName(String v) { name = v; }
 	}
 
 	@Test void testBeanWithExplicitProperties2() throws Exception {
@@ -71,7 +71,7 @@ class Annotations_Test extends SimpleTestBase {
 
 		private String name;
 		public String getName() { return name; }
-		public void setName(String v) { this.name = v; }
+		public void setName(String v) { name = v; }
 	}
 
 	@Test void testBeanWithExplicitProperties3() throws Exception {
@@ -97,7 +97,7 @@ class Annotations_Test extends SimpleTestBase {
 		
 		private String name;
 		public String getName() { return name; }
-		public void setName(String v) { this.name = v; }
+		public void setName(String v) { name = v; }
 	}
 
 	@Test void testBeanWithExplicitProperties_usingConfig() throws Exception {
@@ -122,7 +122,7 @@ class Annotations_Test extends SimpleTestBase {
 
 		private String name;
 		public String getName() { return name; }
-		public void setName(String v) { this.name = v; }
+		public void setName(String v) { name = v; }
 	}
 
 	@Bean(on="Person4",properties="age,name")

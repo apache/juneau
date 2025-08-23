@@ -211,34 +211,34 @@ class BeanMapTest extends SimpleTestBase {
 		private Boolean b2;
 
 		public int getI1() {return i1;}
-		public void setI1(int v) {this.i1 = v;}
+		public void setI1(int v) {i1 = v;}
 		public Integer getI2() {return i2;}
-		public void setI2(Integer v) {this.i2 = v;}
+		public void setI2(Integer v) {i2 = v;}
 
 		public short getS1() {return s1;}
-		public void setS1(short v) {this.s1 = v;}
+		public void setS1(short v) {s1 = v;}
 		public Short getS2() {return s2;}
-		public void setS2(Short v) {this.s2 = v;}
+		public void setS2(Short v) {s2 = v;}
 
 		public long getL1() {return l1;}
-		public void setL1(long v) {this.l1 = v;}
+		public void setL1(long v) {l1 = v;}
 		public Long getL2() {return l2;}
-		public void setL2(Long v) {this.l2 = v;}
+		public void setL2(Long v) {l2 = v;}
 
 		public double getD1() {return d1;}
-		public void setD1(double v) {this.d1 = v;}
+		public void setD1(double v) {d1 = v;}
 		public Double getD2() {return d2;}
-		public void setD2(Double v) {this.d2 = v;}
+		public void setD2(Double v) {d2 = v;}
 
 		public float getF1() {return f1;}
-		public void setF1(float v) {this.f1 = v;}
+		public void setF1(float v) {f1 = v;}
 		public Float getF2() {return f2;}
-		public void setF2(Float v) {this.f2 = v;}
+		public void setF2(Float v) {f2 = v;}
 
 		public boolean getB1() {return b1;}
-		public void setB1(boolean v) {this.b1 = v;}
+		public void setB1(boolean v) {b1 = v;}
 		public Boolean getB2() {return b2;}
-		public void setB2(Boolean v) {this.b2 = v;}
+		public void setB2(Boolean v) {b2 = v;}
 	}
 
 	//====================================================================================================
@@ -383,75 +383,75 @@ class BeanMapTest extends SimpleTestBase {
 	public static class D {
 		private List l1;
 		public List getL1() {return l1;}
-		public void setL1(List v) {this.l1 = v;}
+		public void setL1(List v) {l1 = v;}
 
 		private ArrayList al1;
 		public ArrayList getAl1() {return al1;}
-		public void setAl1(ArrayList v) {this.al1 = v;}
+		public void setAl1(ArrayList v) {al1 = v;}
 
 		private LinkedList ll1;
 		public LinkedList getLl1() {return ll1;}
-		public void setLl1(LinkedList v) {this.ll1 = v;}
+		public void setLl1(LinkedList v) {ll1 = v;}
 
 		private Collection c1;
 		public Collection getC1() {return c1;}
-		public void setC1(Collection v) {this.c1 = v;}
+		public void setC1(Collection v) {c1 = v;}
 
 		private Map m1;
 		public Map getM1() {return m1;}
-		public void setM1(Map v) {this.m1 = v;}
+		public void setM1(Map v) {m1 = v;}
 
 		private HashMap hm1;
 		public HashMap getHm1() {return hm1;}
-		public void setHm1(HashMap v) {this.hm1 = v;}
+		public void setHm1(HashMap v) {hm1 = v;}
 
 		private JsonMap jm1;
 		public JsonMap getJm1() {return jm1;}
-		public void setJm1(JsonMap v) {this.jm1 = v;}
+		public void setJm1(JsonMap v) {jm1 = v;}
 
 		private TreeMap tm1;
 		public TreeMap getTm1() {return tm1;}
-		public void setTm1(TreeMap v) {this.tm1 = v;}
+		public void setTm1(TreeMap v) {tm1 = v;}
 
 		private JsonList jl1;
 		public JsonList getJl1() {return jl1;}
-		public void setJl1(JsonList v) {this.jl1 = v;}
+		public void setJl1(JsonList v) {jl1 = v;}
 
 		private List l2 = new ArrayList();
 		public List getL2() {return l2;}
-		public void setL2(List v) {this.l2 = v;}
+		public void setL2(List v) {l2 = v;}
 
 		private ArrayList al2 = new ArrayList();
 		public ArrayList getAl2() {return al2;}
-		public void setAl2(ArrayList v) {this.al2 = v;}
+		public void setAl2(ArrayList v) {al2 = v;}
 
 		private LinkedList ll2 = new LinkedList();
 		public LinkedList getLl2() {return ll2;}
-		public void setLl2(LinkedList v) {this.ll2 = v;}
+		public void setLl2(LinkedList v) {ll2 = v;}
 
 		private Collection c2 = new ArrayList();
 		public Collection getC2() {return c2;}
-		public void setC2(Collection v) {this.c2 = v;}
+		public void setC2(Collection v) {c2 = v;}
 
 		private Map m2 = new HashMap();
 		public Map getM2() {return m2;}
-		public void setM2(Map v) {this.m2 = v;}
+		public void setM2(Map v) {m2 = v;}
 
 		private HashMap hm2 = new HashMap();
 		public HashMap getHm2() {return hm2;}
-		public void setHm2(HashMap v) {this.hm2 = v;}
+		public void setHm2(HashMap v) {hm2 = v;}
 
 		private TreeMap tm2 = new TreeMap();
 		public TreeMap getTm2() {return tm2;}
-		public void setTm2(TreeMap v) {this.tm2 = v;}
+		public void setTm2(TreeMap v) {tm2 = v;}
 
 		private JsonMap jm2 = new JsonMap();
 		public JsonMap getJm2() {return jm2;}
-		public void setJm2(JsonMap v) {this.jm2 = v;}
+		public void setJm2(JsonMap v) {jm2 = v;}
 
 		private JsonList jl2 = new JsonList();
 		public JsonList getJl2() {return jl2;}
-		public void setJl2(JsonList v) {this.jl2 = v;}
+		public void setJl2(JsonList v) {jl2 = v;}
 	}
 
 	//====================================================================================================
@@ -662,26 +662,26 @@ class BeanMapTest extends SimpleTestBase {
 
 		private List<G> m1;
 		public List<G> getM1() { return m1; }
-		public void setM1(List<G> v) { this.m1 = v; }
+		public void setM1(List<G> v) { m1 = v; }
 
 		private List<G> m2 = new LinkedList<>();
 		public List<G> getM2() { return m2; }
-		public void setM2(List<G> v) { this.m2 = v; }
+		public void setM2(List<G> v) { m2 = v; }
 
 		private List<G> m3;
 		@Beanp(type=List.class,params={G.class})
 		public List<G> getM3() { return m3; }
-		public void setM3(List<G> v) { this.m3 = v; }
+		public void setM3(List<G> v) { m3 = v; }
 
 		private List<G> m4;
 		@Beanp(type=LinkedList.class,params={G.class})
 		public List<G> getM4() { return m4; }
-		public void setM4(List<G> v) { this.m4 = v; }
+		public void setM4(List<G> v) { m4 = v; }
 
 		@Beanp(type=LinkedList.class,params={G.class})
 		private List<G> m5;
 		public List<G> getM5() { return m5; }
-		public void setM5(List<G> v) { this.m5 = v; }
+		public void setM5(List<G> v) { m5 = v; }
 	}
 
 	//====================================================================================================
@@ -724,7 +724,7 @@ class BeanMapTest extends SimpleTestBase {
 
 		private HEnum enum2;
 		public HEnum getEnum2() { return enum2; }
-		public void setEnum2(HEnum v) { this.enum2 = v; }
+		public void setEnum2(HEnum v) { enum2 = v; }
 	}
 
 	//====================================================================================================
@@ -944,7 +944,7 @@ class BeanMapTest extends SimpleTestBase {
 
 	public static class N1<T> {
 		private T x;
-		public void setX(T v) { this.x = v; }
+		public void setX(T v) { x = v; }
 		public T getX() { return x; }
 	}
 
@@ -1100,13 +1100,13 @@ class BeanMapTest extends SimpleTestBase {
 			return fooBar;
 		}
 		public void setFooBar(int v) {
-			this.fooBar = v;
+			fooBar = v;
 		}
 		public int getBazBING() {
 			return bazBING;
 		}
 		public void setBazBING(int v) {
-			this.bazBING = v;
+			bazBING = v;
 		}
 	}
 
@@ -1740,7 +1740,7 @@ class BeanMapTest extends SimpleTestBase {
 		}
 
 		public void setA(String v) {
-			this.a = v;
+			a = v;
 		}
 
 		@BeanIgnore
@@ -1928,7 +1928,7 @@ class BeanMapTest extends SimpleTestBase {
 		}
 
 		public void setF2(Object v) {
-			this.f2 = v;
+			f2 = v;
 		}
 	}
 
@@ -1949,7 +1949,7 @@ class BeanMapTest extends SimpleTestBase {
 		}
 
 		public void setF2(Integer v) {
-			this.f2 = v;
+			f2 = v;
 		}
 	}
 
@@ -1983,7 +1983,7 @@ class BeanMapTest extends SimpleTestBase {
 			return Collections.emptyList();
 		}
 		public void setA(List<String> v) {
-			this.a = v;
+			a = v;
 		}
 	}
 }

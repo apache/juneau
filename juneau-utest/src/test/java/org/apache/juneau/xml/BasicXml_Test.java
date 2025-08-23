@@ -1718,7 +1718,7 @@ class BasicXml_Test extends SimpleTestBase {
 
 		private String a;
 		@Override public String getA() { return a; }
-		@Override public void setA(String v) { this.a = v; }
+		@Override public void setA(String v) { a = v; }
 
 		A init() {
 			this.a = "foo";

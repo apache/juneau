@@ -287,7 +287,7 @@ class CommonTest  extends SimpleTestBase{
 		}
 
 		public void setF1(String v) {
-			this.f1 = v;
+			f1 = v;
 		}
 
 		public int getF2() {
@@ -295,7 +295,7 @@ class CommonTest  extends SimpleTestBase{
 		}
 
 		public void setF2(int v) {
-			this.f2 = v;
+			f2 = v;
 		}
 
 		public boolean isF3() {
@@ -303,7 +303,7 @@ class CommonTest  extends SimpleTestBase{
 		}
 
 		public void setF3(boolean v) {
-			this.f3 = v;
+			f3 = v;
 		}
 
 		@Override /* Object */

@@ -914,7 +914,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 			// property because it doesn't match the getter return type above.
 			throw new IllegalCallerException("Should not be called!");
 		}
-		public void setA(String v) { this.a = KEnum.valueOf(v); }
+		public void setA(String v) { a = KEnum.valueOf(v); }
 
 		public KEnum getB() { return b; }
 		public void setB(String v) { throw new IllegalCallerException("Should not be called!"); }

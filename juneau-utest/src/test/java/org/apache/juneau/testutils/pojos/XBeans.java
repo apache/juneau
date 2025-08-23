@@ -74,16 +74,16 @@ public class XBeans {
 		public XA[][] getF19() { return f19; }
 		public List<List<XA>> getF20() { return f20; }
 
-		public void setF11(String[] v) { this.f11 = v; }
-		public void setF12(List<String> v) { this.f12 = v; }
-		public void setF13(int[] v) { this.f13 = v; }
-		public void setF14(List<Integer> v) { this.f14 = v; }
-		public void setF15(String[][] v) { this.f15 = v; }
-		public void setF16(List<String[]> v) { this.f16 = v; }
-		public void setF17(XA[] v) { this.f17 = v; }
-		public void setF18(List<XA> v) { this.f18 = v; }
-		public void setF19(XA[][] v) { this.f19 = v; }
-		public void setF20(List<List<XA>> v) { this.f20 = v; }
+		public void setF11(String[] v) { f11 = v; }
+		public void setF12(List<String> v) { f12 = v; }
+		public void setF13(int[] v) { f13 = v; }
+		public void setF14(List<Integer> v) { f14 = v; }
+		public void setF15(String[][] v) { f15 = v; }
+		public void setF16(List<String[]> v) { f16 = v; }
+		public void setF17(XA[] v) { f17 = v; }
+		public void setF18(List<XA> v) { f18 = v; }
+		public void setF19(XA[][] v) { f19 = v; }
+		public void setF20(List<List<XA>> v) { f20 = v; }
 
 		public static XB get() {
 			var t = new XB();
@@ -196,16 +196,16 @@ public class XBeans {
 		public XD[][] getF19() { return f19; }
 		public List<List<XD>> getF20() { return f20; }
 
-		public void setF11(String[] v) { this.f11 = v; }
-		public void setF12(List<String> v) { this.f12 = v; }
-		public void setF13(int[] v) { this.f13 = v; }
-		public void setF14(List<Integer> v) { this.f14 = v; }
-		public void setF15(String[][] v) { this.f15 = v; }
-		public void setF16(List<String[]> v) { this.f16 = v; }
-		public void setF17(XD[] v) { this.f17 = v; }
-		public void setF18(List<XD> v) { this.f18 = v; }
-		public void setF19(XD[][] v) { this.f19 = v; }
-		public void setF20(List<List<XD>> v) { this.f20 = v; }
+		public void setF11(String[] v) { f11 = v; }
+		public void setF12(List<String> v) { f12 = v; }
+		public void setF13(int[] v) { f13 = v; }
+		public void setF14(List<Integer> v) { f14 = v; }
+		public void setF15(String[][] v) { f15 = v; }
+		public void setF16(List<String[]> v) { f16 = v; }
+		public void setF17(XD[] v) { f17 = v; }
+		public void setF18(List<XD> v) { f18 = v; }
+		public void setF19(XD[][] v) { f19 = v; }
+		public void setF20(List<List<XD>> v) { f20 = v; }
 
 		public static XE get() {
 			var t = new XE();

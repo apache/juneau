@@ -44,7 +44,7 @@ class BeanMapErrorsTest extends SimpleTestBase {
 
 		private int f2 = -1;
 		@Beanp("f2") public int f2() { return f2; }
-		public void setF2(int v) { this.f2 = v; }
+		public void setF2(int v) { f2 = v; }
 	}
 
 	@Test void beanPropertyMethodNotInBeanProperties_usingConfig() {
@@ -70,7 +70,7 @@ class BeanMapErrorsTest extends SimpleTestBase {
 
 		private int f2 = -1;
 		@Beanp("f2") public int f2() { return f2; }
-		public void setF2(int v) { this.f2 = v; }
+		public void setF2(int v) { f2 = v; }
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

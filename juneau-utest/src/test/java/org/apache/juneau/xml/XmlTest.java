@@ -171,7 +171,7 @@ class XmlTest extends SimpleTestBase {
 			return name;
 		}
 		public void setName(String v) {
-			this.name = v;
+			name = v;
 		}
 	}
 
