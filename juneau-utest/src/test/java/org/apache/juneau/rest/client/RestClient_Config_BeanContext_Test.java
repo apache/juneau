@@ -142,15 +142,11 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 
 	public static class A4b implements A4a {
 		public int f1, f2;
+
 		private int f3;
-		@Override
-		public int getF3() {
-			return f3;
-		}
-		@Override
-		public void setF3(int v) {
-			f3 = v;
-		}
+		@Override public int getF3() { return f3; }
+		@Override public void setF3(int v) { f3 = v; }
+
 		static A4b get() {
 			var x = new A4b();
 			x.f1 = 1;
@@ -228,25 +224,21 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	}
 
 	public static class A5  {
-		private int f1, f2;
-		public int getF1() {
-			return f1;
-		}
-		public void setF1(int v) {
-			f1 = v;
-		}
-		protected int getF2() {
-			return f2;
-		}
-		protected void setF2(int f2) {
-			this.f2 = f2;
-		}
+		private int f1;
+		public int getF1() { return f1; }
+		public void setF1(int v) { f1 = v; }
+
+		private int f2;
+		protected int getF2() { return f2; }
+		protected void setF2(int v) { f2 = v; }
+
 		static A5 get() {
 			var x = new A5();
 			x.f1 = 1;
 			x.f2 = 2;
 			return x;
 		}
+
 		@Override
 		public String toString() {
 			return f1 + "/" + f2;
@@ -321,22 +313,20 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	}
 
 	public static class A9 {
-		private int f1, f2;
-		public int getF1() {
-			return f1;
-		}
-		public void setF1(int v) {
-			f1 = v;
-		}
-		public int getF2() {
-			return f2;
-		}
+		private int f1;
+		public int getF1() { return f1; }
+		public void setF1(int v) { f1 = v; }
+
+		private int f2;
+		public int getF2() { return f2; }
+
 		static A9 get() {
 			var x = new A9();
 			x.f1 = 1;
 			x.f2 = 2;
 			return x;
 		}
+
 		@Override
 		public String toString() {
 			return f1 + "/" + f2;
@@ -565,9 +555,8 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 
 	public static class A16 {
 		private String foo;
-		public String getFoo() {
-			return foo;
-		}
+		public String getFoo() { return foo; }
+
 		static A16 get() {
 			var x = new A16();
 			x.foo = "foo";
@@ -621,9 +610,8 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 
 	public static class A20 {
 		private String foo;
-		public String getFoo() {
-			return foo;
-		}
+		public String getFoo() { return foo; }
+
 		public A20 foo(String foo) {
 			this.foo = foo;
 			return this;
@@ -638,17 +626,13 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	}
 
 	public static class A21 {
-		@SuppressWarnings("unused")
-		private String foo, bar;
-		public String getFoo() {
-			return foo;
-		}
-		public void setFoo(String v) {
-			foo = v;
-		}
-		public String getBar() {
-			throw new RuntimeException("xxx");
-		}
+		private String foo;
+		public String getFoo() { return foo; }
+		public void setFoo(String v) { foo = v; }
+
+		@SuppressWarnings("unused") private String bar;
+		public String getBar() { throw new RuntimeException("xxx"); }
+
 		static A21 get() {
 			var x = new A21();
 			x.foo = "1";
@@ -664,19 +648,14 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	}
 
 	public static class A22 {
-		private String foo, bar;
-		public String getFoo() {
-			return foo;
-		}
-		public void setFoo(String v) {
-			foo = v;
-		}
-		public String getBar() {
-			return bar;
-		}
-		public void setBar(String v) {
-			throw new RuntimeException("xxx");
-		}
+		private String foo;
+		public String getFoo() { return foo; }
+		public void setFoo(String v) { foo = v; }
+
+		private String bar;
+		public String getBar() { return bar; }
+		public void setBar(String v) { throw new RuntimeException("xxx"); }
+
 		static A22 get() {
 			var x = new A22();
 			x.foo = "1";
@@ -708,14 +687,8 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 
 	public static class A24b implements A24a {
 		private int foo;
-		@Override
-		public int getFoo() {
-			return foo;
-		}
-		@Override
-		public void setFoo(int v) {
-			foo = v;
-		}
+		@Override public int getFoo() { return foo; }
+		@Override public void setFoo(int v) { foo = v; }
 	}
 
 	@Test void a24_implClass() throws Exception {
@@ -734,11 +707,11 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	}
 
 	public static class A25b implements A25a {
-		private int foo, bar;
-		@Override
-		public int getFoo() { return foo; }
-		@Override
-		public void setFoo(int v) { foo = v; }
+		private int foo;
+		@Override public int getFoo() { return foo; }
+		@Override public void setFoo(int v) { foo = v; }
+
+		private int bar;
 		public int getBar() { return bar; }  // Not executed
 		public void setBar(int v) { bar = v; }  // Not executed
 
@@ -808,6 +781,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 		private String foo;
 		public String getFoo() { return foo; }
 		public void setFoo(String v) { foo = v; }
+
 		static A30a get() {
 			var x = new A30a();
 			x.foo = "foo";
@@ -840,6 +814,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 		private String fooBar;
 		public String getFooBar() { return fooBar; }
 		public void setFooBar(String v) { fooBar = v; }
+
 		static A31 get() {
 			var x = new A31();
 			x.fooBar = "fooBar";
@@ -902,10 +877,8 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	}
 
 	public static class A34b extends ObjectSwap<A34a,Integer> {
-		@Override
-		public Integer swap(BeanSession session,A34a o) { return o.foo; }
-		@Override
-		public A34a unswap(BeanSession session,Integer f,ClassMeta<?> hint) {return A34a.get(); }
+		@Override public Integer swap(BeanSession session,A34a o) { return o.foo; }
+		@Override public A34a unswap(BeanSession session,Integer f,ClassMeta<?> hint) {return A34a.get(); }
 	}
 
 	@Test void a34_swaps() throws Exception {
@@ -976,13 +949,11 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 
 	public static class A39 {
 		private int foo;
+		public int getFoo() { return foo; }
+		public void setFoo(int v) { foo = v; }
+
 		public int bar;
-		public int getFoo() {
-			return foo;
-		}
-		public void setFoo(int v) {
-			foo = v;
-		}
+
 		static A39 get() {
 			var x = new A39();
 			x.foo = 1;

@@ -23,7 +23,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
-import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
@@ -401,32 +400,16 @@ class Common_Test extends SimpleTestBase {
 
 	public static class J {
 		private String f1;
+		public String getF1() { return f1; }
+		public void setF1(String v) { f1 = v; }
+
 		private int f2 = -1;
+		public int getF2() { return f2; }
+		public void setF2(int v) { f2 = v; }
+
 		private boolean f3;
-
-		public String getF1() {
-			return this.f1;
-		}
-
-		public void setF1(String v) {
-			f1 = v;
-		}
-
-		public int getF2() {
-			return this.f2;
-		}
-
-		public void setF2(int v) {
-			f2 = v;
-		}
-
-		public boolean isF3() {
-			return this.f3;
-		}
-
-		public void setF3(boolean v) {
-			f3 = v;
-		}
+		public boolean isF3() { return f3; }
+		public void setF3(boolean v) { f3 = v; }
 
 		@Override /* Object */
 		public String toString() {

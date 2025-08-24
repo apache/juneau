@@ -120,13 +120,10 @@ class CommonParser_Test extends SimpleTestBase {
 
 	public static class C {
 		private Collection<Integer> ints = new LinkedList<>();
+		public Collection<Integer> getInts() { return ints; }
+
 		private List<B> beans = new LinkedList<>();
-		public Collection<Integer> getInts() {
-			return ints;
-		}
-		public List<B> getBeans() {
-			return beans;
-		}
+		public List<B> getBeans() { return beans; }
 	}
 
 	//====================================================================================================

@@ -651,13 +651,8 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 	public static class F2c extends F2ac {
 
-		public void setC(Calendar v) {
-			c = v;
-		}
-
-		public Calendar getC() {
-			return c;
-		}
+		public void setC(Calendar v) { c = v; }
+		public Calendar getC() { return c; }
 
 		public static F2c create() {
 			var x = new F2c();

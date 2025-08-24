@@ -1179,16 +1179,8 @@ class XmlIgnoreComments_Test extends SimpleTestBase {
 	@Bean(typeName="A")
 	public static class A extends AA {
 		private String a;
-
-		@Override
-		public String getA() {
-			return a;
-		}
-
-		@Override
-		public void setA(String v) {
-			a = v;
-		}
+		@Override public String getA() { return a; }
+		@Override public void setA(String v) { a = v; }
 
 		A init() {
 			this.a = "foo";

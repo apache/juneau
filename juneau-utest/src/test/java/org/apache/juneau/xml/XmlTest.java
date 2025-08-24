@@ -162,17 +162,14 @@ class XmlTest extends SimpleTestBase {
 	@Bean(typeName="Person1", properties="name,age")
 	public static class Person1 {
 		public int age;
-		private String name;
 		protected Person1(String name, int age) {
 			this.name = name;
 			this.age = age;
 		}
-		public String getName() {
-			return name;
-		}
-		public void setName(String v) {
-			name = v;
-		}
+	
+		private String name;
+		public String getName() { return name; }
+		public void setName(String v) { name = v; }
 	}
 
 	//====================================================================================================

@@ -1214,9 +1214,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 
 	public static class A3 {
 		@Schema(type="foo",format="bar",description="baz")
-		public int getF1() {
-			return 123;
-		}
+		public int getF1() { return 123; }
 	}
 
 	@Test void jsonSchema_onbeangetter_usingConfig() throws Exception {
@@ -1228,9 +1226,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	private static class A3aConfig {}
 
 	public static class A3a {
-		public int getF1() {
-			return 123;
-		}
+		public int getF1() { return 123; }
 	}
 
 	@Test void jsonSchema_onbeansetter() throws Exception {
@@ -1239,9 +1235,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	}
 
 	public static class A4 {
-		public int getF1() {
-			return 123;
-		}
+		public int getF1() { return 123; }
 
 		@Schema(type="foo",format="bar",description="baz")
 		public void setF1(int v) { /* no-op */ }
@@ -1256,9 +1250,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	private static class A4aConfig {}
 
 	public static class A4a {
-		public int getF1() {
-			return 123;
-		}
+		public int getF1() { return 123; }
 
 		public void setF1(int v) { /* no-op */ }
 	}

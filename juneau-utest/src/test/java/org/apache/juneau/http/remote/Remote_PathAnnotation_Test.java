@@ -592,30 +592,12 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K1a {
-		@Path
-		public String getA() {
-			return "a1";
-		}
-		@Path("b")
-		public String getX1() {
-			return "b1";
-		}
-		@Path("c")
-		public String getX2() {
-			return "c1";
-		}
-		@Path("e") @Schema(aev=true)
-		public String getX4() {
-			return "";
-		}
-		@Path("g")
-		public String getX6() {
-			return "true";
-		}
-		@Path("h")
-		public String getX7() {
-			return "123";
-		}
+		@Path public String getA() { return "a1"; }
+		@Path("b") public String getX1() { return "b1"; }
+		@Path("c") public String getX2() { return "c1"; }
+		@Path("e") @Schema(aev=true) public String getX4() { return ""; }
+		@Path("g") public String getX6() { return "true"; }
+		@Path("h") public String getX7() { return "123"; }
 	}
 
 	@Test void k01_requestBean_simpleVals() {
@@ -637,22 +619,11 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K2a {
-		@Path("*") @Schema(aev=true)
-		public Map<String,Object> getA() {
-			return mapBuilder(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build();
-		}
+		@Path("*") @Schema(aev=true) public Map<String,Object> getA() { return mapBuilder(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build(); }
+		@Path("*") public Map<String,Object> getB() { return map("b1","true","b2","123","b3","null"); }
+		@Path("*") @Schema(aev=true) public Map<String,Object> getC() { return mapBuilder(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build(); }
 		@Path("*")
-		public Map<String,Object> getB() {
-			return map("b1","true","b2","123","b3","null");
-		}
-		@Path("*") @Schema(aev=true)
-		public Map<String,Object> getC() {
-			return mapBuilder(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build();
-		}
-		@Path("*")
-		public Map<String,Object> getD() {
-			return null;
-		}
+		public Map<String,Object> getD() { return null; }
 	}
 
 	@Test void k02_reauestBean_maps() {
@@ -674,26 +645,12 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K3a {
-		@Path("*") @Schema(aev=true)
-		public PartList getA() {
-			return parts("a1","v1","a2","123","a3",null,"a4","");
-		}
+		@Path("*") @Schema(aev=true) public PartList getA() { return parts("a1","v1","a2","123","a3",null,"a4",""); }
+		@Path("/*") public PartList getB() { return parts("b1","true","b2","123","b3","null"); }
+		@Path("*") @Schema(aev=true) public PartList getC() { return parts("c1","v1","c2","123","c3",null,"c4",""); }
 		@Path("/*")
-		public PartList getB() {
-			return parts("b1","true","b2","123","b3","null");
-		}
-		@Path("*") @Schema(aev=true)
-		public PartList getC() {
-			return parts("c1","v1","c2","123","c3",null,"c4","");
-		}
-		@Path("/*")
-		public PartList getD() {
-			return null;
-		}
-		@Path @Schema(aev=true)
-		public NameValuePair[] getE() {
-			return parts("e1","v1","e2","123","e3",null,"e4","").getAll();
-		}
+		public PartList getD() { return null; }
+		@Path @Schema(aev=true) public NameValuePair[] getE() { return parts("e1","v1","e2","123","e3",null,"e4","").getAll(); }
 	}
 
 	@Test void k03_requestBean_nameValuePairs() {
@@ -715,30 +672,12 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K4a {
-		@Path
-		public List<Object> getA() {
-			return alist("foo","","true","123","null",true,123,null);
-		}
-		@Path("b")
-		public List<Object> getX1() {
-			return alist("foo","","true","123","null",true,123,null);
-		}
-		@Path(name="c",serializer=FakeWriterSerializer.X.class)
-		public List<Object> getX2() {
-			return alist("foo","","true","123","null",true,123,null);
-		}
-		@Path("d") @Schema(aev=true)
-		public List<Object> getX3() {
-			return alist();
-		}
-		@Path("f")
-		public Object[] getX5() {
-			return new Object[]{"foo","","true","123","null",true,123,null};
-		}
-		@Path(name="g",serializer=FakeWriterSerializer.X.class)
-		public Object[] getX6() {
-			return new Object[]{"foo","","true","123","null",true,123,null};
-		}
+		@Path public List<Object> getA() { return alist("foo","","true","123","null",true,123,null); }
+		@Path("b") public List<Object> getX1() { return alist("foo","","true","123","null",true,123,null); }
+		@Path(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return alist("foo","","true","123","null",true,123,null); }
+		@Path("d") @Schema(aev=true) public List<Object> getX3() { return alist(); }
+		@Path("f") public Object[] getX5() { return new Object[]{"foo","","true","123","null",true,123,null}; }
+		@Path(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return new Object[]{"foo","","true","123","null",true,123,null}; }
 		@Path("h") @Schema(aev=true)
 		public Object[] getX7() {
 			return new Object[]{};

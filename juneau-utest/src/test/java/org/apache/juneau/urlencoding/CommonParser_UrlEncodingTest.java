@@ -20,7 +20,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.uon.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"rawtypes","serial"})
@@ -130,13 +129,10 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 
 	public static class C {
 		private Collection<Integer> ints = new LinkedList<>();
+		public Collection<Integer> getInts() { return ints; }
+
 		private List<B> beans = new LinkedList<>();
-		public Collection<Integer> getInts() {
-			return ints;
-		}
-		public List<B> getBeans() {
-			return beans;
-		}
+		public List<B> getBeans() { return beans; }
 	}
 
 	//====================================================================================================

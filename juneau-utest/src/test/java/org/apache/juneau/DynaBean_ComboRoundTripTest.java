@@ -207,22 +207,16 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	@Bean(sort=true)
 	public static class BeanWithDynaMethods {
 
-		private int f1, f3;
 		private Map<String,Object> f2 = new LinkedHashMap<>();
 		private boolean setterCalled;
 
-		public int getF1() {
-			return f1;
-		}
-		public void setF1(int v) {
-			f1 = v;
-		}
-		public int getF3() {
-			return f3;
-		}
-		public void setF3(int v) {
-			f3 = v;
-		}
+		private int f1;
+		public int getF1() { return f1; }
+		public void setF1(int v) { f1 = v; }
+
+		private int f3;
+		public int getF3() { return f3; }
+		public void setF3(int v) { f3 = v; }
 
 		@Beanp(name="*")
 		public Map<String, Object> xxx() {
@@ -246,22 +240,16 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	@Bean(sort=true)
 	public static class BeanWithDynaMethodsAndExtraKeys {
 
-		private int f1, f3;
 		private Map<String,Object> f2 = new LinkedHashMap<>();
 		private boolean setterCalled;
 
-		public int getF1() {
-			return f1;
-		}
-		public void setF1(int v) {
-			f1 = v;
-		}
-		public int getF3() {
-			return f3;
-		}
-		public void setF3(int v) {
-			f3 = v;
-		}
+		private int f1;
+		public int getF1() { return f1; }
+		public void setF1(int v) { f1 = v; }
+
+		private int f3;
+		public int getF3() { return f3; }
+		public void setF3(int v) { f3 = v; }
 
 		@Beanp(name="*")
 		public Object get(String name) {
@@ -290,21 +278,15 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	@Bean(sort=true)
 	public static class BeanWithDynaGetterOnly {
 
-		private int f1, f3;
 		private Map<String,Object> f2 = new LinkedHashMap<>();
 
-		public int getF1() {
-			return f1;
-		}
-		public void setF1(int v) {
-			f1 = v;
-		}
-		public int getF3() {
-			return f3;
-		}
-		public void setF3(int v) {
-			f3 = v;
-		}
+		private int f1;
+		public int getF1() { return f1; }
+		public void setF1(int v) { f1 = v; }
+
+		private int f3;
+		public int getF3() { return f3; }
+		public void setF3(int v) { f3 = v; }
 
 		@Beanp(name="*")
 		public Map<String, Object> xxx() {

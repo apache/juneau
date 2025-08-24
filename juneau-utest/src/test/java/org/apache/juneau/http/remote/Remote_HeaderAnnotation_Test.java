@@ -679,46 +679,16 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K1a {
-		@Header
-		public String getA() {
-			return "a1";
-		}
-		@Header("b")
-		public String getX1() {
-			return "b1";
-		}
-		@Header(name="c")
-		public String getX2() {
-			return "c1";
-		}
-		@Header(name="e") @Schema(allowEmptyValue=true)
-		public String getX4() {
-			return "";
-		}
-		@Header("f")
-		public String getX5() {
-			return null;
-		}
-		@Header("g")
-		public String getX6() {
-			return "true";
-		}
-		@Header("h")
-		public String getX7() {
-			return "123";
-		}
-		@Header("i1") @Schema(sie=true)
-		public String getX8() {
-			return "foo";
-		}
-		@Header("i2") @Schema(sie=true)
-		public String getX9() {
-			return "";
-		}
-		@Header("i3") @Schema(sie=true)
-		public String getX10() {
-			return null;
-		}
+		@Header public String getA() { return "a1"; }
+		@Header("b") public String getX1() { return "b1"; }
+		@Header(name="c") public String getX2() { return "c1"; }
+		@Header(name="e") @Schema(allowEmptyValue=true) public String getX4() { return ""; }
+		@Header("f") public String getX5() { return null; }
+		@Header("g") public String getX6() { return "true"; }
+		@Header("h") public String getX7() { return "123"; }
+		@Header("i1") @Schema(sie=true) public String getX8() { return "foo"; }
+		@Header("i2") @Schema(sie=true) public String getX9() { return ""; }
+		@Header("i3") @Schema(sie=true) public String getX10() { return null; }
 	}
 
 	@Test void k01_requestBean_simpleVals() {
@@ -740,22 +710,10 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K2a {
-		@Header
-		public Map<String,Object> getA() {
-			return mapBuilder(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build();
-		}
-		@Header("*")
-		public Map<String,Object> getB() {
-			return map("b1","true","b2","123","b3","null");
-		}
-		@Header(name="*") @Schema(aev=true)
-		public Map<String,Object> getC() {
-			return mapBuilder(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build();
-		}
-		@Header("*")
-		public Map<String,Object> getD() {
-			return null;
-		}
+		@Header public Map<String,Object> getA() { return mapBuilder(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build(); }
+		@Header("*") public Map<String,Object> getB() { return map("b1","true","b2","123","b3","null"); }
+		@Header(name="*") @Schema(aev=true) public Map<String,Object> getC() { return mapBuilder(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build(); }
+		@Header("*") public Map<String,Object> getD() { return null; }
 	}
 
 	@Test void k02_requestBean_maps() {
@@ -777,30 +735,12 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K3a {
-		@Header() @Schema(aev=true)
-		public HeaderList getA() {
-			return headerList(stringHeader("a1","v1"),integerHeader("a2",123),basicHeader("a3",null),stringHeader("a4",""));
-		}
-		@Header(value="*") @Schema(aev=true)
-		public HeaderList getB() {
-			return headers("b1","true","b2","123","b3","null");
-		}
-		@Header("*") @Schema(aev=true)
-		public HeaderList getC() {
-			return headerList(stringHeader("c1","v1"),integerHeader("c2",123),basicHeader("c3",null),stringHeader("c4",""));
-		}
-		@Header(value="*") @Schema(aev=true)
-		public HeaderList getD() {
-			return null;
-		}
-		@Header() @Schema(aev=true)
-		public org.apache.http.Header[] getE() {
-			return headerList(stringHeader("e1","v1"),integerHeader("e2",123),basicHeader("e3",null),stringHeader("e4","")).getAll();
-		}
-		@Header() @Schema(aev=true)
-		public BasicHeader[] getF() {
-			return headerList(stringHeader("f1","v1"),integerHeader("f2",123),basicHeader("f3",null),stringHeader("f4","")).stream().toArray(BasicHeader[]::new);
-		}
+		@Header() @Schema(aev=true) public HeaderList getA() { return headerList(stringHeader("a1","v1"),integerHeader("a2",123),basicHeader("a3",null),stringHeader("a4","")); }
+		@Header(value="*") @Schema(aev=true) public HeaderList getB() { return headers("b1","true","b2","123","b3","null"); }
+		@Header("*") @Schema(aev=true) public HeaderList getC() { return headerList(stringHeader("c1","v1"),integerHeader("c2",123),basicHeader("c3",null),stringHeader("c4","")); }
+		@Header(value="*") @Schema(aev=true) public HeaderList getD() { return null; }
+		@Header() @Schema(aev=true) public org.apache.http.Header[] getE() { return headerList(stringHeader("e1","v1"),integerHeader("e2",123),basicHeader("e3",null),stringHeader("e4","")).getAll(); }
+		@Header() @Schema(aev=true) public BasicHeader[] getF() { return headerList(stringHeader("f1","v1"),integerHeader("f2",123),basicHeader("f3",null),stringHeader("f4","")).stream().toArray(BasicHeader[]::new); }
 	}
 
 	@Test void k03_requestBean_headers() {
@@ -822,42 +762,15 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K4a {
-		@Header
-		public List<Object> getA() {
-			return alist("foo","","true","123","null",true,123,null);
-		}
-		@Header("b")
-		public List<Object> getX1() {
-			return alist("foo","","true","123","null",true,123,null);
-		}
-		@Header(name="c",serializer=FakeWriterSerializer.X.class)
-		public List<Object> getX2() {
-			return alist("foo","","true","123","null",true,123,null);
-		}
-		@Header(name="d") @Schema(aev=true)
-		public List<Object> getX3() {
-			return alist();
-		}
-		@Header("e")
-		public List<Object> getX4() {
-			return null;
-		}
-		@Header("f")
-		public Object[] getX5() {
-			return new Object[]{"foo","","true","123","null",true,123,null};
-		}
-		@Header(name="g",serializer=FakeWriterSerializer.X.class)
-		public Object[] getX6() {
-			return new Object[]{"foo","","true","123","null",true,123,null};
-		}
-		@Header(name="h") @Schema(aev=true)
-		public Object[] getX7() {
-			return new Object[]{};
-		}
-		@Header("i")
-		public Object[] getX8() {
-			return null;
-		}
+		@Header public List<Object> getA() { return alist("foo","","true","123","null",true,123,null); }
+		@Header("b") public List<Object> getX1() { return alist("foo","","true","123","null",true,123,null); }
+		@Header(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return alist("foo","","true","123","null",true,123,null); }
+		@Header(name="d") @Schema(aev=true) public List<Object> getX3() { return alist(); }
+		@Header("e") public List<Object> getX4() { return null; }
+		@Header("f") public Object[] getX5() { return new Object[]{"foo","","true","123","null",true,123,null}; }
+		@Header(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return new Object[]{"foo","","true","123","null",true,123,null}; }
+		@Header(name="h") @Schema(aev=true) public Object[] getX7() { return new Object[]{}; }
+		@Header("i") public Object[] getX8() { return null; }
 	}
 
 	@Test void k04_requestBean_collections() {

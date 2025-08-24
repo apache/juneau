@@ -742,22 +742,11 @@ class Remote_QueryAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K2a {
-		@Query
-		public Map<String,Object> getA() {
-			return mapBuilder(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build();
-		}
+		@Query public Map<String,Object> getA() { return mapBuilder(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build(); }
+		@Query("*") public Map<String,Object> getB() { return map("b1","true","b2","123","b3","null"); }
+		@Query("*") @Schema(allowEmptyValue=true) public Map<String,Object> getC() { return mapBuilder(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build(); }
 		@Query("*")
-		public Map<String,Object> getB() {
-			return map("b1","true","b2","123","b3","null");
-		}
-		@Query("*") @Schema(allowEmptyValue=true)
-		public Map<String,Object> getC() {
-			return mapBuilder(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build();
-		}
-		@Query("*")
-		public Map<String,Object> getD() {
-			return null;
-		}
+		public Map<String,Object> getD() { return null; }
 	}
 
 	@Test void k02_requestBean_maps() {
@@ -779,26 +768,12 @@ class Remote_QueryAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K3a {
-		@Query() @Schema(aev=true)
-		public PartList getA() {
-			return parts("a1","v1","a2","123","a3",null,"a4","");
-		}
+		@Query() @Schema(aev=true) public PartList getA() { return parts("a1","v1","a2","123","a3",null,"a4",""); }
+		@Query("*") public PartList getB() { return parts("b1","true","b2","123","b3","null"); }
+		@Query("*") @Schema(aev=true) public PartList getC() { return parts("c1","v1","c2","123","c3",null,"c4",""); }
 		@Query("*")
-		public PartList getB() {
-			return parts("b1","true","b2","123","b3","null");
-		}
-		@Query("*") @Schema(aev=true)
-		public PartList getC() {
-			return parts("c1","v1","c2","123","c3",null,"c4","");
-		}
-		@Query("*")
-		public PartList getD() {
-			return null;
-		}
-		@Query() @Schema(aev=true)
-		public NameValuePair[] getE() {
-			return parts("e1","v1","e2","123","e3",null,"e4","").getAll();
-		}
+		public PartList getD() { return null; }
+		@Query() @Schema(aev=true) public NameValuePair[] getE() { return parts("e1","v1","e2","123","e3",null,"e4","").getAll(); }
 	}
 
 	@Test void k03_requestBean_nameValuePairs() {
@@ -818,10 +793,7 @@ class Remote_QueryAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K4a {
-		@Query("*")
-		public StringBuilder getA() {
-			return new StringBuilder("foo=bar&baz=qux");
-		}
+		@Query("*") public StringBuilder getA() { return new StringBuilder("foo=bar&baz=qux"); }
 	}
 
 	@Test void k04_requestBean_charSequence() {
@@ -839,10 +811,7 @@ class Remote_QueryAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K5a {
-		@Query("*")
-		public Reader getA() {
-			return reader("foo=bar&baz=qux");
-		}
+		@Query("*") public Reader getA() { return reader("foo=bar&baz=qux"); }
 	}
 
 	@Test void k05_requestBean_reader() {
@@ -861,42 +830,15 @@ class Remote_QueryAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K6a {
-		@Query
-		public List<Object> getA() {
-			return alist("foo","","true","123","null",true,123,null);
-		}
-		@Query("b")
-		public List<Object> getX1() {
-			return alist("foo","","true","123","null",true,123,null);
-		}
-		@Query(name="c",serializer=FakeWriterSerializer.X.class)
-		public List<Object> getX2() {
-			return alist("foo","","true","123","null",true,123,null);
-		}
-		@Query("d") @Schema(allowEmptyValue=true)
-		public List<Object> getX3() {
-			return alist();
-		}
-		@Query("e")
-		public List<Object> getX4() {
-			return null;
-		}
-		@Query("f")
-		public Object[] getX5() {
-			return new Object[]{"foo","","true","123","null",true,123,null};
-		}
-		@Query(name="g",serializer=FakeWriterSerializer.X.class)
-		public Object[] getX6() {
-			return new Object[]{"foo","","true","123","null",true,123,null};
-		}
-		@Query("h") @Schema(allowEmptyValue=true)
-		public Object[] getX7() {
-			return new Object[]{};
-		}
-		@Query("i")
-		public Object[] getX8() {
-			return null;
-		}
+		@Query public List<Object> getA() { return alist("foo","","true","123","null",true,123,null); }
+		@Query("b") public List<Object> getX1() { return alist("foo","","true","123","null",true,123,null); }
+		@Query(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return alist("foo","","true","123","null",true,123,null); }
+		@Query("d") @Schema(allowEmptyValue=true) public List<Object> getX3() { return alist(); }
+		@Query("e") public List<Object> getX4() { return null; }
+		@Query("f") public Object[] getX5() { return new Object[]{"foo","","true","123","null",true,123,null}; }
+		@Query(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return new Object[]{"foo","","true","123","null",true,123,null}; }
+		@Query("h") @Schema(allowEmptyValue=true) public Object[] getX7() { return new Object[]{}; }
+		@Query("i") public Object[] getX8() { return null; }
 	}
 
 	@Test void k06_requestBean_collections() {

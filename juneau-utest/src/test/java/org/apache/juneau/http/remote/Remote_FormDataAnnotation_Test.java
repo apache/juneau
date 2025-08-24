@@ -717,46 +717,16 @@ class Remote_FormDataAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K1a {
-		@FormData
-		public String getA() {
-			return "a1";
-		}
-		@FormData("b")
-		public String getX1() {
-			return "b1";
-		}
-		@FormData("c")
-		public String getX2() {
-			return "c1";
-		}
-		@FormData("e") @Schema(aev=true)
-		public String getX4() {
-			return "";
-		}
-		@FormData("f")
-		public String getX5() {
-			return null;
-		}
-		@FormData("g")
-		public String getX6() {
-			return "true";
-		}
-		@FormData("h")
-		public String getX7() {
-			return "123";
-		}
-		@FormData("i1") @Schema(sie=true)
-		public String getX8() {
-			return "foo";
-		}
-		@FormData("i2") @Schema(sie=true)
-		public String getX9() {
-			return "";
-		}
-		@FormData("i3") @Schema(sie=true)
-		public String getX10() {
-			return null;
-		}
+		@FormData public String getA() { return "a1"; }
+		@FormData("b") public String getX1() { return "b1"; }
+		@FormData("c") public String getX2() { return "c1"; }
+		@FormData("e") @Schema(aev=true) public String getX4() { return ""; }
+		@FormData("f") public String getX5() { return null; }
+		@FormData("g") public String getX6() { return "true"; }
+		@FormData("h") public String getX7() { return "123"; }
+		@FormData("i1") @Schema(sie=true) public String getX8() { return "foo"; }
+		@FormData("i2") @Schema(sie=true) public String getX9() { return ""; }
+		@FormData("i3") @Schema(sie=true) public String getX10() { return null; }
 	}
 
 	@Test void k01_requestBean_simpleVals() {
@@ -778,22 +748,10 @@ class Remote_FormDataAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K2a {
-		@FormData
-		public Map<String,Object> getA() {
-			return mapBuilder(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build();
-		}
-		@FormData("*")
-		public Map<String,Object> getB() {
-			return map("b1","true","b2","123","b3","null");
-		}
-		@FormData("*") @Schema(aev=true)
-		public Map<String,Object> getC() {
-			return mapBuilder(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build();
-		}
-		@FormData("*")
-		public Map<String,Object> getD() {
-			return null;
-		}
+		@FormData public Map<String,Object> getA() { return mapBuilder(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build(); }
+		@FormData("*") public Map<String,Object> getB() { return map("b1","true","b2","123","b3","null"); }
+		@FormData("*") @Schema(aev=true) public Map<String,Object> getC() { return mapBuilder(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build(); }
+		@FormData("*") public Map<String,Object> getD() { return null; }
 	}
 
 	@Test void k02_requestBean_maps() {
@@ -815,26 +773,11 @@ class Remote_FormDataAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K3a {
-		@FormData
-		public PartList getA() {
-			return parts("a1","v1","a2","123","a3",null,"a4","");
-		}
-		@FormData("*")
-		public PartList getB() {
-			return parts("b1","true","b2","123","b3","null");
-		}
-		@FormData("*")
-		public PartList getC() {
-			return parts("c1","v1","c2","123","c3",null,"c4","");
-		}
-		@FormData("*")
-		public PartList getD() {
-			return null;
-		}
-		@FormData
-		public NameValuePair[] getE() {
-			return parts("e1","v1","e2","123","e3",null,"e4","").getAll();
-		}
+		@FormData public PartList getA() { return parts("a1","v1","a2","123","a3",null,"a4",""); }
+		@FormData("*") public PartList getB() { return parts("b1","true","b2","123","b3","null"); }
+		@FormData("*") public PartList getC() { return parts("c1","v1","c2","123","c3",null,"c4",""); }
+		@FormData("*") public PartList getD() { return null; }
+		@FormData public NameValuePair[] getE() { return parts("e1","v1","e2","123","e3",null,"e4","").getAll(); }
 	}
 
 	@Test void k03_requestBean_nameValuePairs() {
@@ -855,10 +798,7 @@ class Remote_FormDataAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class C04_Bean {
-		@FormData("*")
-		public StringBuilder getA() {
-			return new StringBuilder("foo=bar&baz=qux");
-		}
+		@FormData("*") public StringBuilder getA() { return new StringBuilder("foo=bar&baz=qux"); }
 	}
 
 	@Test void k04_requestBean_charSequence() {
@@ -876,10 +816,7 @@ class Remote_FormDataAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K5a {
-		@FormData("*")
-		public Reader getA() {
-			return reader("foo=bar&baz=qux");
-		}
+		@FormData("*") public Reader getA() { return reader("foo=bar&baz=qux"); }
 	}
 
 	@Test void k05_requestBean_reader() {
@@ -898,42 +835,15 @@ class Remote_FormDataAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K6a {
-		@FormData
-		public List<Object> getA() {
-			return alist("foo","","true","123","null",true,123,null);
-		}
-		@FormData("b")
-		public List<Object> getX1() {
-			return alist("foo","","true","123","null",true,123,null);
-		}
-		@FormData(name="c",serializer=FakeWriterSerializer.X.class)
-		public List<Object> getX2() {
-			return alist("foo","","true","123","null",true,123,null);
-		}
-		@FormData("d") @Schema(aev=true)
-		public List<Object> getX3() {
-			return alist();
-		}
-		@FormData("e")
-		public List<Object> getX4() {
-			return null;
-		}
-		@FormData("f")
-		public Object[] getX5() {
-			return new Object[]{"foo","","true","123","null",true,123,null};
-		}
-		@FormData(name="g",serializer=FakeWriterSerializer.X.class)
-		public Object[] getX6() {
-			return new Object[]{"foo","","true","123","null",true,123,null};
-		}
-		@FormData("h") @Schema(aev=true)
-		public Object[] getX7() {
-			return new Object[]{};
-		}
-		@FormData("i")
-		public Object[] getX8() {
-			return null;
-		}
+		@FormData public List<Object> getA() { return alist("foo","","true","123","null",true,123,null); }
+		@FormData("b") public List<Object> getX1() { return alist("foo","","true","123","null",true,123,null); }
+		@FormData(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return alist("foo","","true","123","null",true,123,null); }
+		@FormData("d") @Schema(aev=true) public List<Object> getX3() { return alist(); }
+		@FormData("e") public List<Object> getX4() { return null; }
+		@FormData("f") public Object[] getX5() { return new Object[]{"foo","","true","123","null",true,123,null}; }
+		@FormData(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return new Object[]{"foo","","true","123","null",true,123,null}; }
+		@FormData("h") @Schema(aev=true) public Object[] getX7() { return new Object[]{}; }
+		@FormData("i") public Object[] getX8() { return null; }
 	}
 
 	@Test void k06_requestBean_collections() {

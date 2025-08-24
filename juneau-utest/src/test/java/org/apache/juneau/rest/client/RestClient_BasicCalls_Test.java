@@ -56,42 +56,15 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {
-		@RestOp(path="/bean")
-		public ABean getBean() {
-			return bean;
-		}
-		@RestOp(path="/bean")
-		public ABean postBean(@Content ABean b) {
-			return b;
-		}
-		@RestOp(path="/bean")
-		public ABean putBean(@Content ABean b) {
-			return b;
-		}
-		@RestOp(path="/bean")
-		public ABean patchBean(@Content ABean b) {
-			return b;
-		}
-		@RestOp(path="/bean")
-		public ABean deleteBean() {
-			return bean;
-		}
-		@RestOp(path="/bean")
-		public ABean optionsBean() {
-			return bean;
-		}
-		@RestOp(path="/bean")
-		public ABean headBean() {
-			return bean;
-		}
-		@RestOp(path="/checkHeader")
-		public String[] postHeader(org.apache.juneau.rest.RestRequest req) {
-			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new);
-		}
-		@RestOp(path="/",method="*")
-		public Reader echoMethod(@Method String method) {
-			return reader(method);
-		}
+		@RestOp(path="/bean") public ABean getBean() { return bean; }
+		@RestOp(path="/bean") public ABean postBean(@Content ABean b) { return b; }
+		@RestOp(path="/bean") public ABean putBean(@Content ABean b) { return b; }
+		@RestOp(path="/bean") public ABean patchBean(@Content ABean b) { return b; }
+		@RestOp(path="/bean") public ABean deleteBean() { return bean; }
+		@RestOp(path="/bean") public ABean optionsBean() { return bean; }
+		@RestOp(path="/bean") public ABean headBean() { return bean; }
+		@RestOp(path="/checkHeader") public String[] postHeader(org.apache.juneau.rest.RestRequest req) { return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new); }
+		@RestOp(path="/",method="*") public Reader echoMethod(@Method String method) { return reader(method); }
 	}
 
 	@Test void a01_basic() throws Exception {

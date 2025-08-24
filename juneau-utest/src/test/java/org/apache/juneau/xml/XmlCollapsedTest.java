@@ -179,35 +179,19 @@ class XmlCollapsedTest extends SimpleTestBase {
 
 	@Bean(properties="f1,f2,f3,f4")
 	public static class D {
+		private List<String> f1 = new LinkedList<>();
+		@Xml(format=COLLAPSED) public List<String> getF1() { return f1; }
 
-		private List<String> f1 = new LinkedList<>(), f3 = new LinkedList<>();
-		private String[] f2, f4;
+		private String[] f2;
+		@Xml(format=COLLAPSED) public String[] getF2() { return f2;}
+		public void setF2(String[] v) { f2 = v; }
 
-		@Xml(format=COLLAPSED)
-		public List<String> getF1() {
-			return f1;
-		}
+		private List<String> f3 = new LinkedList<>();
+		@Xml(format=COLLAPSED,childName="xf3") public List<String> getF3() { return f3; }
 
-		@Xml(format=COLLAPSED)
-		public String[] getF2() {
-			return f2;
-		}
-		public void setF2(String[] v) {
-			f2 = v;
-		}
-
-		@Xml(format=COLLAPSED,childName="xf3")
-		public List<String> getF3() {
-			return f3;
-		}
-
-		@Xml(format=COLLAPSED,childName="xf4")
-		public String[] getF4() {
-			return f4;
-		}
-		public void setF4(String[] v) {
-			f4 = v;
-		}
+		private String[] f4;
+		@Xml(format=COLLAPSED,childName="xf4") public String[] getF4() { return f4; }
+		public void setF4(String[] v) { f4 = v; }
 	}
 
 	//====================================================================================================
@@ -234,26 +218,14 @@ class XmlCollapsedTest extends SimpleTestBase {
 
 	@Bean(properties="f1,f2")
 	public static class E {
+		private ArrayList<String> f1;
+		@Xml(format=COLLAPSED) public ArrayList<String> getF1() { return f1; }
+		public void setF1(ArrayList<String> v) { f1 = v; }
 
-		private ArrayList<String> f1, f2;
-
-		@Xml(format=COLLAPSED)
-		public ArrayList<String> getF1() {
-			return f1;
-		}
-		public void setF1(ArrayList<String> v) {
-			f1 = v;
-		}
-
-		@Xml(format=COLLAPSED,childName="xf2")
-		public ArrayList<String> getF2() {
-			return f2;
-		}
-		public void setF2(ArrayList<String> v) {
-			f2 = v;
-		}
+		private ArrayList<String> f2;
+		@Xml(format=COLLAPSED,childName="xf2") public ArrayList<String> getF2() { return f2; }
+		public void setF2(ArrayList<String> v) { f2 = v; }
 	}
-
 
 	//====================================================================================================
 	// testElementNameOnElementClass - @Xml.format=COLLAPSED, element name defined on element class.
@@ -279,9 +251,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	}
 
 	public static class FA {
-
-		@Xml(format=COLLAPSED)
-		public List<F1> f1;
+		@Xml(format=COLLAPSED) public List<F1> f1;
 
 		public static FA newInstance() {
 			var t = new FA();
@@ -293,8 +263,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	}
 
 	public static class FB {
-		@Xml(format=COLLAPSED)
-		public F1[] f1;
+		@Xml(format=COLLAPSED) public F1[] f1;
 
 		public static FB newInstance() {
 			var t = new FB();
@@ -308,9 +277,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 
 	@Bean(typeName="xf1")
 	public static class F1 {
-
-		@Xml(format=TEXT)
-		public String text;
+		@Xml(format=TEXT) public String text;
 
 		public static F1 newInstance(String text) {
 			var t = new F1();
@@ -340,9 +307,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	}
 
 	public static class G {
-
-		@Xml(format=COLLAPSED, childName="yf1")
-		public List<F1> f1;
+		@Xml(format=COLLAPSED, childName="yf1") public List<F1> f1;
 
 		public static G newInstance() {
 			var t = new G();
@@ -373,9 +338,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	}
 
 	public static class H {
-
-		@Xml(format=COLLAPSED)
-		public H1 f1;
+		@Xml(format=COLLAPSED) public H1 f1;
 
 		public static H newInstance() {
 			var t = new H();
@@ -411,9 +374,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	}
 
 	public static class I {
-
-		@Xml(format=COLLAPSED, childName="yf1")
-		public H1 f1;
+		@Xml(format=COLLAPSED, childName="yf1") public H1 f1;
 
 		public static I newInstance() {
 			var t = new I();

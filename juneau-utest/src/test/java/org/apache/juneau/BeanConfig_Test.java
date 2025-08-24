@@ -110,29 +110,19 @@ class BeanConfig_Test extends SimpleTestBase {
 	}
 
 	public static class Person {
-		private String name;
-		private int age;
 
 		public Person() {
 			name = null;
 			age = -1;
 		}
 
-		public String getName() {
-			return name;
-		}
+		private String name;
+		public String getName() { return name; }
+		public void setName(String v) { name = v; }
 
-		public void setName(String v) {
-			name = v;
-		}
-
-		public int getAge() {
-			return age;
-		}
-
-		public void setAge(int v) {
-			age = v;
-		}
+		private int age;
+		public int getAge() { return age; }
+		public void setAge(int v) { age = v; }
 
 		@Override /* Object */
 		public String toString() {
@@ -141,10 +131,6 @@ class BeanConfig_Test extends SimpleTestBase {
 	}
 
 	public static class Address {
-		protected String street;
-		protected String city;
-		protected String state;
-		protected String zip;
 
 		public Address(String street, String city, String state, String zip) {
 			this.street = street;
@@ -153,21 +139,17 @@ class BeanConfig_Test extends SimpleTestBase {
 			this.zip = zip;
 		}
 
-		public String getStreet() {
-			return street;
-		}
+		protected String street;
+		public String getStreet() { return street; }
 
-		public String getCity() {
-			return city;
-		}
+		protected String city;
+		public String getCity() { return city; }
 
-		public String getState() {
-			return state;
-		}
+		protected String state;
+		public String getState() { return state; }
 
-		public String getZip() {
-			return zip;
-		}
+		protected String zip;
+		public String getZip() { return zip; }
 
 		@Override /* Object */
 		public boolean equals(Object o) {
@@ -186,19 +168,14 @@ class BeanConfig_Test extends SimpleTestBase {
 	}
 
 	public static class AddressablePerson extends Person {
-		private Address address;
 
 		public AddressablePerson() {
 			this.address = null;
 		}
 
-		public Address getAddress() {
-			return address;
-		}
-
-		public void setAddress(Address v) {
-			address = v;
-		}
+		private Address address;
+		public Address getAddress() { return address; }
+		public void setAddress(Address v) { address = v; }
 
 		@Override /* Object */
 		public String toString() {
@@ -334,7 +311,6 @@ class BeanConfig_Test extends SimpleTestBase {
 
 	@Bean(p="name,age")
 	public static class ReadOnlyPerson {
-		private final String name;
 		private final int age;
 
 		@Beanc(properties="name,age")
@@ -343,13 +319,9 @@ class BeanConfig_Test extends SimpleTestBase {
 			this.age = age;
 		}
 
-		public String getName() {
-			return name;
-		}
-
-		public int getAge() {
-			return age;
-		}
+		private final String name;
+		public String getName() { return name; }
+		public int getAge() { return age; }
 
 		@Override /* Object */
 		public String toString() {
@@ -371,7 +343,6 @@ class BeanConfig_Test extends SimpleTestBase {
 	}
 
 	public static class ReadOnlyPerson2 {
-		private final String name;
 		private final int age;
 
 		public ReadOnlyPerson2(String name, int age) {
@@ -379,13 +350,9 @@ class BeanConfig_Test extends SimpleTestBase {
 			this.age = age;
 		}
 
-		public String getName() {
-			return name;
-		}
-
-		public int getAge() {
-			return age;
-		}
+		private final String name;
+		public String getName() { return name; }
+		public int getAge() { return age; }
 
 		@Override /* Object */
 		public String toString() {

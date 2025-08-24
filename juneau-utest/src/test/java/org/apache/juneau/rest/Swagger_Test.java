@@ -1950,19 +1950,10 @@ class Swagger_Test extends SimpleTestBase {
 	@Bean(sort=true)
 	public static class T2 {
 		private int f1;
+		public int getF1() { return f1; }
+		public T2 setF1(int v) { f1 = v; return this; }
 
-		public T2 setF1(int v) {
-			this.f1 = v;
-			return this;
-		}
-
-		public int getF1() {
-			return f1;
-		}
-
-		public int getF2() {
-			return 2;
-		}
+		public int getF2() { return 2; }
 
 		@Example
 		public static T2 example() {

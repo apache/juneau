@@ -66,20 +66,12 @@ class ObjectMerger_Test extends SimpleTestBase {
 	}
 
 	public static class A implements IA {
-		private String a;
-
 		public A(String a) {
 			this.a = a;
 		}
 
-		@Override
-		public String getA() {
-			return a;
-		}
-
-		@Override
-		public void setA(String v) {
-			a = v;
-		}
+		private String a;
+		@Override public String getA() { return a; }
+		@Override public void setA(String v) { a = v; }
 	}
 }

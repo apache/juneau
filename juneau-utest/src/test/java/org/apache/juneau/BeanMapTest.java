@@ -22,7 +22,6 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
@@ -744,21 +743,11 @@ class BeanMapTest extends SimpleTestBase {
 	}
 
 	public static class I {
-
 		public List<String> p1;
-
-		public List<Integer> getP2() {
-			return null;
-		}
-
+		public List<Integer> getP2() { return null; }
 		public List<? extends Integer> p3;
-
 		public Map<String,Integer> p4;
-
-		public Map<String,Integer> getP5() {
-			return null;
-		}
-
+		public Map<String,Integer> getP5() { return null; }
 		public Map<String,? extends Integer> p6;
 	}
 
@@ -779,28 +768,12 @@ class BeanMapTest extends SimpleTestBase {
 	}
 
 	public static class J {
-
-		@Beanp(params={Float.class})
-		public List<String> p1;
-
-		@Beanp(params={Float.class})
-		public List<Integer> getP2() {
-			return null;
-		}
-
-		@Beanp(params={Float.class})
-		public List<? extends Integer> p3;
-
-		@Beanp(params={Object.class, Float.class})
-		public Map<String,Integer> p4;
-
-		@Beanp(params={Object.class, Float.class})
-		public Map<String,Integer> getP5() {
-			return null;
-		}
-
-		@Beanp(params={String.class, Float.class})
-		public Map<String,? extends Integer> p6;
+		@Beanp(params={Float.class}) public List<String> p1;
+		@Beanp(params={Float.class}) public List<Integer> getP2() { return null; }
+		@Beanp(params={Float.class}) public List<? extends Integer> p3;
+		@Beanp(params={Object.class, Float.class}) public Map<String,Integer> p4;
+		@Beanp(params={Object.class, Float.class}) public Map<String,Integer> getP5() { return null; }
+		@Beanp(params={String.class, Float.class}) public Map<String,? extends Integer> p6;
 	}
 
 	//====================================================================================================
@@ -820,28 +793,12 @@ class BeanMapTest extends SimpleTestBase {
 	}
 
 	public static class K {
-
-		@Beanp(params=Float.class)
-		public List<String> p1;
-
-		@Beanp(params=Float.class)
-		public List<Integer> getP2() {
-			return null;
-		}
-
-		@Beanp(params=Float.class)
-		public List<? extends Integer> p3;
-
-		@Beanp(params={String.class,Float.class})
-		public Map<String,Integer> p4;
-
-		@Beanp(params={String.class,Float.class})
-		public Map<String,Integer> getP5() {
-			return null;
-		}
-
-		@Beanp(params={String.class,Float.class})
-		public Map<String,? extends Integer> p6;
+		@Beanp(params=Float.class) public List<String> p1;
+		@Beanp(params=Float.class) public List<Integer> getP2() { return null; }
+		@Beanp(params=Float.class) public List<? extends Integer> p3;
+		@Beanp(params={String.class,Float.class}) public Map<String,Integer> p4;
+		@Beanp(params={String.class,Float.class}) public Map<String,Integer> getP5() { return null; }
+		@Beanp(params={String.class,Float.class}) public Map<String,? extends Integer> p6;
 	}
 
 	//====================================================================================================
@@ -1095,19 +1052,13 @@ class BeanMapTest extends SimpleTestBase {
 
 	@Bean(propertyNamer=PropertyNamerDLC.class)
 	public static class P2 {
-		private int fooBar, bazBING;
-		public int getFooBar() {
-			return fooBar;
-		}
-		public void setFooBar(int v) {
-			fooBar = v;
-		}
-		public int getBazBING() {
-			return bazBING;
-		}
-		public void setBazBING(int v) {
-			bazBING = v;
-		}
+		private int fooBar;
+		public int getFooBar() { return fooBar; }
+		public void setFooBar(int v) { fooBar = v; }
+
+		private int bazBING;
+		public int getBazBING() { return bazBING; }
+		public void setBazBING(int v) { bazBING = v; }
 	}
 
 	//====================================================================================================
@@ -1733,35 +1684,18 @@ class BeanMapTest extends SimpleTestBase {
 	}
 
 	public static class U {
-		public String a, b;
+		public String a;
+		public String getA() { return a; }
+		public void setA(String v) { a = v; }
 
-		public String getA() {
-			return a;
-		}
+		public String b;
+		@BeanIgnore public String getB() { return b; }
+		public void setB(String v) { this.b = v+"(setter)"; }
 
-		public void setA(String v) {
-			a = v;
-		}
+		@BeanIgnore public String c;
 
-		@BeanIgnore
-		public String getB() {
-			return b;
-		}
-
-		public void setB(String v) {
-			this.b = v+"(setter)";
-		}
-
-		@BeanIgnore
-		public String c;
-
-		@BeanIgnore
-		public String getD() {
-			return null;
-		}
-
-		@BeanIgnore
-		public void setD(String v) {}  // NOSONAR
+		@BeanIgnore public String getD() { return null; }
+		@BeanIgnore public void setD(String v) {}  // NOSONAR
 	}
 
 	@Test void testHiddenProperties_usingConfig() {
@@ -1789,35 +1723,18 @@ class BeanMapTest extends SimpleTestBase {
 	private static class UcConfig {}
 
 	public static class Uc {
-		public String a, b;
+		public String a;
+		public String getA() { return a; }
+		public void setA(String v) { a = v; }
 
-		public String getA() {
-			return a;
-		}
+		public String b;
+		@BeanIgnore public String getB() { return b; }
+		public void setB(String b) { this.b = b+"(setter)"; }
 
-		public void setA(String a) {
-			this.a = a;
-		}
+		@BeanIgnore public String c;
 
-		@BeanIgnore
-		public String getB() {
-			return b;
-		}
-
-		public void setB(String b) {
-			this.b = b+"(setter)";
-		}
-
-		@BeanIgnore
-		public String c;
-
-		@BeanIgnore
-		public String getD() {
-			return null;
-		}
-
-		@BeanIgnore
-		public void setD(String v) {}  // NOSONAR
+		@BeanIgnore public String getD() { return null; }
+		@BeanIgnore public void setD(String v) {}  // NOSONAR
 	}
 
 	//====================================================================================================
@@ -1914,7 +1831,6 @@ class BeanMapTest extends SimpleTestBase {
 
 	public static class X1 {
 		public Object f1;
-		private Object f2;
 
 		static X1 create() {
 			var x = new X1();
@@ -1923,18 +1839,13 @@ class BeanMapTest extends SimpleTestBase {
 			return x;
 		}
 
-		public Object getF2() {
-			return f2;
-		}
-
-		public void setF2(Object v) {
-			f2 = v;
-		}
+		private Object f2;
+		public Object getF2() { return f2; }
+		public void setF2(Object v) { f2 = v; }
 	}
 
 	public static class X2 extends X1 {
 		public Integer f1;
-		private Integer f2;
 
 		static X2 create() {
 			var x = new X2();
@@ -1943,14 +1854,9 @@ class BeanMapTest extends SimpleTestBase {
 			return x;
 		}
 
-		@Override /* X1 */
-		public Integer getF2() {
-			return f2;
-		}
-
-		public void setF2(Integer v) {
-			f2 = v;
-		}
+		private Integer f2;
+		@Override /* X1 */ public Integer getF2() { return f2; }
+		public void setF2(Integer v) { f2 = v; }
 	}
 
 	@Test void testSettingCollectionPropertyMultipleTimes() {
@@ -1978,12 +1884,7 @@ class BeanMapTest extends SimpleTestBase {
 
 	public static class AA {
 		private List<String> a = new ArrayList<>();
-
-		public List<String> getA() {
-			return Collections.emptyList();
-		}
-		public void setA(List<String> v) {
-			a = v;
-		}
+		public List<String> getA() { return Collections.emptyList(); }
+		public void setA(List<String> v) { a = v; }
 	}
 }
