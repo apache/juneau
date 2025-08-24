@@ -69,7 +69,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_basic() {
-		PartList x = PartList.create();
+		var x = PartList.create();
 
 		assertEquals("", s(x));
 		x.append(FOO_1);
@@ -134,7 +134,7 @@ class PartList_Test extends SimpleTestBase {
 	@Test void a03_addMethods() {
 		String pname = "PartSupplierTest.x";
 
-		PartList x = PartList.create().resolving();
+		var x = PartList.create().resolving();
 		System.setProperty(pname, "y");
 
 		x.append("X1","bar");
@@ -161,12 +161,12 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_copy() {
-		PartList x = PartList.of(FOO_1).copy();
+		var x = PartList.of(FOO_1).copy();
 		assertEquals("Foo=1", s(x));
 	}
 
 	@Test void a06_getCondensed() {
-		PartList x = PartList.of(FOO_1);
+		var x = PartList.of(FOO_1);
 		assertEmpty(x.get((String)null));
 		assertString("Foo=1", x.get("Foo"));
 		assertEmpty(x.get("Bar"));
@@ -183,7 +183,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a07_getCondensed_asType() {
-		PartList x = PartList.of(FOO_1);
+		var x = PartList.of(FOO_1);
 		assertEmpty(x.get(null, APart.class));
 		assertString("a=1", x.get("Foo", APart.class));
 		assertEmpty(x.get("Bar", APart.class));
@@ -196,7 +196,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a08_get() {
-		PartList x = PartList.of(FOO_1, FOO_2, X_x);
+		var x = PartList.of(FOO_1, FOO_2, X_x);
 		assertArray(x.getAll(null));
 		assertArray(x.getAll("Foo"), "Foo=1, Foo=2");
 		assertArray(x.getAll("FOO"));
@@ -204,7 +204,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a09_getFirst() {
-		PartList x = PartList.of(FOO_1, FOO_2, X_x);
+		var x = PartList.of(FOO_1, FOO_2, X_x);
 		assertEmpty(x.getFirst(null));
 		assertString("Foo=1", x.getFirst("Foo"));
 		assertEmpty(x.getFirst("FOO"));
@@ -212,7 +212,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a10_getLast() {
-		PartList x = PartList.of(FOO_1, FOO_2, X_x);
+		var x = PartList.of(FOO_1, FOO_2, X_x);
 		assertEmpty(x.getLast(null));
 		assertString("Foo=2", x.getLast("Foo"));
 		assertEmpty(x.getLast("FOO"));
@@ -220,7 +220,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a11_contains() {
-		PartList x = PartList.of(FOO_1, FOO_2, X_x);
+		var x = PartList.of(FOO_1, FOO_2, X_x);
 		assertFalse(x.contains(null));
 		assertTrue(x.contains("Foo"));
 		assertFalse(x.contains("FOO"));
@@ -228,14 +228,14 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a12_partIterator_all() {
-		PartList x = PartList.of();
+		var x = PartList.of();
 		assertFalse(x.partIterator().hasNext());
 		x = PartList.of(FOO_1);
 		assertTrue(x.partIterator().hasNext());
 	}
 
 	@Test void a13_partIterator_single() {
-		PartList x = PartList.of();
+		var x = PartList.of();
 		assertFalse(x.partIterator("Foo").hasNext());
 		x = PartList.of(FOO_1);
 		assertTrue(x.partIterator("Foo").hasNext());
@@ -243,7 +243,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a14_forEach_all() {
-		PartList x = PartList.of();
+		var x = PartList.of();
 
 		final AtomicInteger i1 = new AtomicInteger();
 		x.forEach(h -> i1.incrementAndGet());
@@ -256,7 +256,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a15_forEach_single() {
-		PartList x = PartList.of();
+		var x = PartList.of();
 
 		final AtomicInteger i1 = new AtomicInteger();
 		x.forEach("Foo", h -> i1.incrementAndGet());
@@ -269,7 +269,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a16_stream_all() {
-		PartList x = PartList.of();
+		var x = PartList.of();
 
 		final AtomicInteger i1 = new AtomicInteger();
 		x.stream().forEach(h -> i1.incrementAndGet());
@@ -282,7 +282,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a17_stream_single() {
-		PartList x = PartList.of();
+		var x = PartList.of();
 
 		final AtomicInteger i1 = new AtomicInteger();
 		x.stream("Foo").forEach(h -> i1.incrementAndGet());
@@ -295,7 +295,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a18_caseSensitive() {
-		PartList x1 = PartList.create().append(FOO_1, FOO_2, X_x);
+		var x1 = PartList.create().append(FOO_1, FOO_2, X_x);
 		assertArray(x1.getAll("Foo"), "Foo=1, Foo=2");
 		assertArray(x1.getAll("FOO"));
 
@@ -305,7 +305,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a19_size() {
-		PartList x = PartList.of(FOO_1);
+		var x = PartList.of(FOO_1);
 		assertEquals(1, x.size());
 	}
 
@@ -314,14 +314,14 @@ class PartList_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_builder_clear() {
-		PartList x = PartList.create();
+		var x = PartList.create();
 		x.append(FOO_1);
 		x.clear();
 		assertEquals("", s(x));
 	}
 
 	@Test void b02_builder_append() {
-		PartList x1 = PartList.create().append(FOO_1);
+		var x1 = PartList.create().append(FOO_1);
 		PartList x2 = PartList
 			.create()
 			.append()
@@ -338,7 +338,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_builder_prepend() {
-		PartList x1 = PartList.create().append(FOO_1);
+		var x1 = PartList.create().append(FOO_1);
 		PartList x2 = PartList
 			.create()
 			.prepend()
@@ -434,7 +434,7 @@ class PartList_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_iterators() {
-		PartList x = PartList.of(APart.X, BPart.X);
+		var x = PartList.of(APart.X, BPart.X);
 
 		PartIterator i1 = x.partIterator();
 		assertString("a=x", i1.next());
@@ -453,7 +453,7 @@ class PartList_Test extends SimpleTestBase {
 		PartIterator i4 = x.partIterator("A");
 		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i4::next);
 
-		PartList x2 = PartList.create().append(APart.X,BPart.X).caseInsensitive(true);
+		var x2 = PartList.create().append(APart.X,BPart.X).caseInsensitive(true);
 
 		PartIterator i5 = x2.partIterator("A");
 		assertString("a=x", i5.next());
@@ -467,25 +467,25 @@ class PartList_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_defaultParts() {
-		PartList x1 = PartList.create().setDefault(APart.X);
+		var x1 = PartList.create().setDefault(APart.X);
 		assertEquals("a=x", s(x1));
 
-		PartList x2 = PartList.create().set(APart.X).setDefault(APart.Y);
+		var x2 = PartList.create().set(APart.X).setDefault(APart.Y);
 		assertEquals("a=x", s(x2));
 
-		PartList x3 = PartList.create().set(BPart.X,APart.X,BPart.Y).setDefault(APart.Y);
+		var x3 = PartList.create().set(BPart.X,APart.X,BPart.Y).setDefault(APart.Y);
 		assertEquals("b=x&a=x&b=y", s(x3));
 
-		PartList x4 = PartList.create().set(BPart.X,BPart.Y).setDefault(APart.X);
+		var x4 = PartList.create().set(BPart.X,BPart.Y).setDefault(APart.X);
 		assertEquals("b=x&b=y&a=x", s(x4));
 
-		PartList x5 = PartList.create().set(BPart.X,BPart.Y).setDefault(APart.X).setDefault(BPart.X);
+		var x5 = PartList.create().set(BPart.X,BPart.Y).setDefault(APart.X).setDefault(BPart.X);
 		assertEquals("b=x&b=y&a=x", s(x5));
 
-		PartList x7 = PartList.create().setDefault(APart.X).setDefault(APart.Y);
+		var x7 = PartList.create().setDefault(APart.X).setDefault(APart.Y);
 		assertEquals("a=x", s(x7));
 
-		PartList x8 = PartList.create().setDefault(APart.X,APart.Y).setDefault(APart.Z);
+		var x8 = PartList.create().setDefault(APart.X,APart.Y).setDefault(APart.Z);
 		assertEquals("a=x", s(x8));
 
 		PartList x9 = PartList
@@ -496,16 +496,16 @@ class PartList_Test extends SimpleTestBase {
 			.setDefault((List<NameValuePair>)null);
 		assertEquals("", s(x9));
 
-		PartList x10 = PartList.create().setDefault("a","x");
+		var x10 = PartList.create().setDefault("a","x");
 		assertEquals("a=x", s(x10));
 
-		PartList x11 = PartList.create().setDefault("a",()->"x");
+		var x11 = PartList.create().setDefault("a",()->"x");
 		assertEquals("a=x", s(x11));
 
-		PartList x12 = PartList.create().set(BPart.X,BPart.Y).setDefault(alist(APart.X,BPart.Z,null));
+		var x12 = PartList.create().set(BPart.X,BPart.Y).setDefault(alist(APart.X,BPart.Z,null));
 		assertEquals("b=x&b=y&a=x", s(x12));
 
-		PartList x13 = PartList.create().set(BPart.X,BPart.Y).setDefault(PartList.of(APart.X,BPart.Z,null));
+		var x13 = PartList.create().set(BPart.X,BPart.Y).setDefault(PartList.of(APart.X,BPart.Z,null));
 		assertEquals("b=x&b=y&a=x", s(x13));
 
 		PartList x14 = PartList.create().set(BPart.X,BPart.Y)

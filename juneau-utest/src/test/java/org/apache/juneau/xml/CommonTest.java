@@ -34,11 +34,11 @@ class CommonTest extends SimpleTestBase {
 	@Test void testTrimNullsFromBeans() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
-		A t1 = A.create(), t2;
+		var t1 = A.create();
 
 		String r = s.build().serialize(t1);
 		assertEquals("<object><s2>s2</s2></object>", r);
-		t2 = p.parse(r, A.class);
+		var t2 = p.parse(r, A.class);
 		assertEquals(json(t2), json(t1));
 
 		s.keepNullProperties();
@@ -64,12 +64,12 @@ class CommonTest extends SimpleTestBase {
 	@Test void testTrimEmptyMaps() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
-		B t1 = B.create(), t2;
+		var t1 = B.create();
 		String r;
 
 		r = s.build().serialize(t1);
 		assertEquals("<object><f1/><f2><f2a _type='null'/><f2b><s2>s2</s2></f2b></f2></object>", r);
-		t2 = p.parse(r, B.class);
+		var t2 = p.parse(r, B.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyMaps();
@@ -96,12 +96,12 @@ class CommonTest extends SimpleTestBase {
 	@Test void testTrimEmptyLists() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
-		C t1 = C.create(), t2;
+		var t1 = C.create();
 		String r;
 
 		r = s.build().serialize(t1);
 		assertEquals("<object><f1></f1><f2><null/><object><s2>s2</s2></object></f2></object>", r);
-		t2 = p.parse(r, C.class);
+		var t2 = p.parse(r, C.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
@@ -128,12 +128,12 @@ class CommonTest extends SimpleTestBase {
 	@Test void testTrimEmptyArrays() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
-		D t1 = D.create(), t2;
+		var t1 = D.create();
 		String r;
 
 		r = s.build().serialize(t1);
 		assertEquals("<object><f1></f1><f2><null/><object><s2>s2</s2></object></f2></object>", r);
-		t2 = p.parse(r, D.class);
+		var t2 = p.parse(r, D.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();

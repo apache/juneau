@@ -22,12 +22,12 @@ import org.junit.jupiter.api.*;
 class ConfigClasspathStoreTest extends SimpleTestBase {
 
 	@Test void testNoFile() throws Exception {
-		ClasspathStore fs = ClasspathStore.create().build();
+		var fs = ClasspathStore.create().build();
 		assertEquals("", fs.read("X.cfg"));
 	}
 
 	@Test void testRealFiles() throws Exception {
-		ClasspathStore fs = ClasspathStore.create().build();
+		var fs = ClasspathStore.create().build();
 		assertContains("bar1", fs.read("foo1.cfg"));
 		assertContains("bar2", fs.read("sub/foo2.cfg"));
 		assertEquals("", fs.read("sub/bad.cfg"));
@@ -35,20 +35,20 @@ class ConfigClasspathStoreTest extends SimpleTestBase {
 	}
 
 	@Test void testOverwriteRealFiles() throws Exception {
-		ClasspathStore fs = ClasspathStore.create().build();
+		var fs = ClasspathStore.create().build();
 		assertContains("bar1", fs.read("foo1.cfg"));
 		fs.write("foo1.cfg", fs.read("foo1.cfg"), "xxx");
 		assertEquals("xxx", fs.read("foo1.cfg"));
 	}
 
 	@Test void testSimpleCreate() throws Exception {
-		ClasspathStore fs = ClasspathStore.create().build();
+		var fs = ClasspathStore.create().build();
 		assertNull(fs.write("X.cfg", null, "foo"));
 		assertEquals("foo", fs.read("X.cfg"));
 	}
 
 	@Test void testFailOnMismatch() throws Exception {
-		ClasspathStore fs = ClasspathStore.create().build();
+		var fs = ClasspathStore.create().build();
 		assertNotNull(fs.write("X.cfg", "xxx", "foo"));
 		assertEquals("", fs.read("X.cfg"));
 		assertNull(fs.write("X.cfg", null, "foo"));
@@ -60,7 +60,7 @@ class ConfigClasspathStoreTest extends SimpleTestBase {
 	}
 
 	@Test void testUpdate() throws Exception {
-		ClasspathStore fs = ClasspathStore.create().build();
+		var fs = ClasspathStore.create().build();
 
 		final CountDownLatch latch = new CountDownLatch(2);
 		fs.register("X.cfg", contents -> {

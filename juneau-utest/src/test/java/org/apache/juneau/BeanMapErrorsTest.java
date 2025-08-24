@@ -48,7 +48,7 @@ class BeanMapErrorsTest extends SimpleTestBase {
 	}
 
 	@Test void beanPropertyMethodNotInBeanProperties_usingConfig() {
-		BeanContext bc = BeanContext.create().applyAnnotations(B1Config.class).build();
+		var bc = BeanContext.create().applyAnnotations(B1Config.class).build();
 
 		BeanMap<B1> bm = bc.newBeanMap(B1.class);
 		assertTrue(bm.containsKey("f2"));
@@ -97,7 +97,7 @@ class BeanMapErrorsTest extends SimpleTestBase {
 	}
 
 	@Test void beanPropertyFieldNotInBeanProperties_usingBeanConfig() {
-		BeanContext bc = BeanContext.create().applyAnnotations(B2Config.class).build();
+		var bc = BeanContext.create().applyAnnotations(B2Config.class).build();
 
 		BeanMap<B2> bm = bc.newBeanMap(B2.class);
 		assertTrue(bm.containsKey("f2"));

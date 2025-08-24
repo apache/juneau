@@ -97,7 +97,7 @@ class CommonParserTest  extends SimpleTestBase{
 	// Correct handling of unknown properties.
 	//====================================================================================================
 	@Test void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = XmlParser.create().ignoreUnknownBeanProperties().build();
+		var p = XmlParser.create().ignoreUnknownBeanProperties().build();
 		B t;
 
 		String in =  "<object><a>1</a><unknown>foo</unknown><b>2</b></object>";
@@ -145,7 +145,7 @@ class CommonParserTest  extends SimpleTestBase{
 	// Parser listeners.
 	//====================================================================================================
 	@Test void testParserListeners() throws Exception {
-		XmlParser p = XmlParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
+		var p = XmlParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		String in = "<object><a _type='number'>1</a><unknownProperty _type='string'>foo</unknownProperty><b _type='number'>2</b></object>";
 		p.parse(in, B.class);

@@ -119,8 +119,8 @@ class BeanAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_testEquivalencyInPropertyStores() {
-		BeanContext b1 = BeanContext.create().annotations(a1).build();
-		BeanContext b2 = BeanContext.create().annotations(a2).build();
+		var b1 = BeanContext.create().annotations(a1).build();
+		var b2 = BeanContext.create().annotations(a2).build();
 		assertSame(b1, b2);
 	}
 
@@ -202,4 +202,5 @@ class BeanAnnotation_Test extends SimpleTestBase {
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
 	}
-}
+}
+

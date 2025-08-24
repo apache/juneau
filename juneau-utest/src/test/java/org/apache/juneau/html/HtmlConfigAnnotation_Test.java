@@ -53,7 +53,7 @@ class HtmlConfigAnnotation_Test extends SimpleTestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basicSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddKeyValueTableHeaders());
@@ -64,7 +64,7 @@ class HtmlConfigAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void basicParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		assertNotThrown(()->HtmlParser.create().apply(al).build().createSession());
 	}
 
@@ -77,7 +77,7 @@ class HtmlConfigAnnotation_Test extends SimpleTestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void defaultsSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddKeyValueTableHeaders());
@@ -88,7 +88,7 @@ class HtmlConfigAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void defaultsParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		assertNotThrown(()->HtmlParser.create().apply(al).build().createSession());
 	}
 
@@ -100,7 +100,7 @@ class HtmlConfigAnnotation_Test extends SimpleTestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddKeyValueTableHeaders());
@@ -111,7 +111,7 @@ class HtmlConfigAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void noAnnotationParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		assertNotThrown(()->HtmlParser.create().apply(al).build().createSession());
 	}
 }

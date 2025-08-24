@@ -22,7 +22,7 @@ class EncoderSetTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void testEncoderGroupMatching() {
 
-		EncoderSet s = EncoderSet.create().add(Encoder1.class, Encoder2.class, Encoder3.class).build();
+		var s = EncoderSet.create().add(Encoder1.class, Encoder2.class, Encoder3.class).build();
 		assertType(Encoder1.class, s.getEncoder("gzip1"));
 		assertType(Encoder2.class, s.getEncoder("gzip2"));
 		assertType(Encoder2.class, s.getEncoder("gzip2a"));
@@ -109,4 +109,4 @@ class EncoderSetTest extends SimpleTestBase {
 			return new String[]{"E5"};
 		}
 	}
-}
+}

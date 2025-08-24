@@ -925,7 +925,7 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void setSection2() {
 		Config c = init();
-		JsonMap m = JsonMap.of("a", "b");
+		var m = JsonMap.of("a", "b");
 
 		c.setSection("", Arrays.asList("#C1", "#C2"), m);
 		assertLines("#C1|#C2||a = b|", c);
@@ -1396,7 +1396,7 @@ class ConfigTest extends SimpleTestBase {
 		cf.set("d", "$B{$A{X}}");
 		cf.set("e", "$D{X}");
 
-		VarResolver vr = VarResolver.create().defaultVars().vars(ALVar.class, BLVar.class).build();
+		var vr = VarResolver.create().defaultVars().vars(ALVar.class, BLVar.class).build();
 
 		cf = cf.resolving(vr.createSession());
 

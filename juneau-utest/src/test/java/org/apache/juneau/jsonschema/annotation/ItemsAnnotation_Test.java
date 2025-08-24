@@ -150,8 +150,8 @@ class ItemsAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_testEquivalencyInPropertyStores() {
-		BeanContext bc1 = BeanContext.create().annotations(a1).build();
-		BeanContext bc2 = BeanContext.create().annotations(a2).build();
+		var bc1 = BeanContext.create().annotations(a1).build();
+		var bc2 = BeanContext.create().annotations(a2).build();
 		assertSame(bc1, bc2);
 	}
 

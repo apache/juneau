@@ -28,7 +28,7 @@ class AlreadyReported_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		MockRestClient client = MockRestClient.createLax(A.class).build();
+		var client = MockRestClient.createLax(A.class).build();
 
 		client.get("/a1")
 			.run()

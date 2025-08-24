@@ -45,7 +45,7 @@ class Rest_Messages_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_default() throws Exception {
-		MockRestClient a1 = MockRestClient.build(A1.class);
+		var a1 = MockRestClient.build(A1.class);
 		a1.get("/a").run().assertContent("{'A1.key2':'A1.value2a',key1:'value1a',key2:'A1.value2a'}");
 		a1.get("/b").run().assertContent("{'A1.key2':'A1.value2a',key1:'value1a',key2:'A1.value2a'}");
 		a1.get("/c?name=key1").run().assertContent("value1a");
@@ -74,7 +74,7 @@ class Rest_Messages_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_customName() throws Exception {
-		MockRestClient b1 = MockRestClient.build(B1.class);
+		var b1 = MockRestClient.build(B1.class);
 		b1.get("/a").run().assertContent("{'B1.key2':'B1.value2a',key1:'value1a',key2:'B1.value2a'}");
 		b1.get("/b").run().assertContent("{'B1.key2':'B1.value2a',key1:'value1a',key2:'B1.value2a'}");
 		b1.get("/c?name=key1").run().assertContent("value1a");
@@ -86,7 +86,7 @@ class Rest_Messages_Test extends SimpleTestBase {
 	public static class B2 extends B1 {}
 
 	@Test void b02_subclassed_customName() throws Exception {
-		MockRestClient b2 = MockRestClient.build(B2.class);
+		var b2 = MockRestClient.build(B2.class);
 		b2.get("/a").run().assertContent("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b',key3:'B2.value3b'}");
 		b2.get("/b").run().assertContent("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b',key3:'B2.value3b'}");
 		b2.get("/c?name=key1").run().assertContent("value1a");
@@ -103,7 +103,7 @@ class Rest_Messages_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_viaBuilder() throws Exception {
-		MockRestClient b3 = MockRestClient.build(B3.class);
+		var b3 = MockRestClient.build(B3.class);
 		b3.get("/a").run().assertContent("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b'}");
 		b3.get("/b").run().assertContent("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b'}");
 		b3.get("/c?name=key1").run().assertContent("value1a");

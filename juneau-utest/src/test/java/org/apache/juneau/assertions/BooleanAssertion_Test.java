@@ -170,7 +170,9 @@ public class BooleanAssertion_Test {
 	@Test
 	public void ca08_isSame() {
 		// Note that even the following returns the same object sometimes.
-		Boolean x1 = Boolean.valueOf(new String("true")), x1a = Boolean.valueOf(new String("true")), nil = null;
+		var x1 = Boolean.valueOf(new String("true"));
+		var x1a = Boolean.valueOf(new String("true"));
+		var nil = (Boolean)null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(nil).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='true(Boolean@*)'.  Actual='null(null)'.");

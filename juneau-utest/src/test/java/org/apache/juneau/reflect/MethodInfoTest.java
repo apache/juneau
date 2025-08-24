@@ -120,7 +120,7 @@ class MethodInfoTest extends SimpleTestBase {
 	}
 
 	@Test void of_withoutDeclaringClass() {
-		MethodInfo mi = MethodInfo.of(a_m.inner());
+		var mi = MethodInfo.of(a_m.inner());
 		check("A1.m()", mi);
 	}
 
@@ -153,7 +153,7 @@ class MethodInfoTest extends SimpleTestBase {
 	}
 
 	@Test void findMatchingMethods() throws Exception {
-		MethodInfo mi = MethodInfo.of(B3.class.getMethod("foo", int.class));
+		var mi = MethodInfo.of(B3.class.getMethod("foo", int.class));
 		List<MethodInfo> l = new ArrayList<>();
 		mi.forEachMatching(x -> true, l::add);
 		check("B3.foo(int),B2.foo(int),B1.foo(int)", l);

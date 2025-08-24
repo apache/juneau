@@ -22,7 +22,7 @@ import org.junit.jupiter.api.*;
 class RestrictedVarsTest extends SimpleTestBase {
 
 	@Test void testNoNest() throws Exception {
-		VarResolver vr = VarResolver.create().vars(NoNestVar.class).build();
+		var vr = VarResolver.create().vars(NoNestVar.class).build();
 
 		test(vr, "$NoNest{foo}", "foo");
 		test(vr, "$NoNest{$NoNest{foo}}", "$NoNest{foo}");
@@ -59,7 +59,7 @@ class RestrictedVarsTest extends SimpleTestBase {
 	}
 
 	@Test void testNoRecurse() throws Exception {
-		VarResolver vr = VarResolver.create().vars(XVar.class, NoRecurseVar.class).build();
+		var vr = VarResolver.create().vars(XVar.class, NoRecurseVar.class).build();
 
 		test(vr, "$NoRecurse{foo}", "$X{foo}");
 		test(vr, "$NoRecurse{$NoRecurse{foo}}", "$X{$X{foo}}");
@@ -84,7 +84,7 @@ class RestrictedVarsTest extends SimpleTestBase {
 	}
 
 	@Test void testNoNestOrRecurse() throws Exception {
-		VarResolver vr = VarResolver.create().vars(XVar.class, NoEitherVar.class).build();
+		var vr = VarResolver.create().vars(XVar.class, NoEitherVar.class).build();
 
 		test(vr, "$NoEither{foo}", "$X{foo}");
 		test(vr, "$NoEither{$NoEither{foo}}", "$X{$NoEither{foo}}");

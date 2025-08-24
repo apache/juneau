@@ -413,7 +413,7 @@ class XmlTest extends SimpleTestBase {
 		XmlParser p = XmlParser.DEFAULT;
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 
-		N t = new N("http://foo",123, "bar");
+		var t = new N("http://foo",123, "bar");
 		String r = s.serialize(t);
 		assertEquals("<object><url>http://foo</url><id>123</id><name>bar</name></object>", r);
 
@@ -445,7 +445,7 @@ class XmlTest extends SimpleTestBase {
 		XmlParser p = XmlParser.DEFAULT;
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 
-		O t = new O("http://foo", 123, "bar");
+		var t = new O("http://foo", 123, "bar");
 		String r = s.serialize(t);
 		assertEquals("<object><url2>http://foo</url2><id2>123</id2><name>bar</name></object>", r);
 
@@ -477,7 +477,7 @@ class XmlTest extends SimpleTestBase {
 		XmlParser p = XmlParser.DEFAULT;
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 
-		P t = new P("http://foo", 123, "bar");
+		var t = new P("http://foo", 123, "bar");
 		String r = s.serialize(t);
 		assertEquals("<object url2='http://foo' id2='123'><name>bar</name></object>", r);
 

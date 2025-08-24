@@ -34,14 +34,14 @@ class MediaType_Test extends SimpleTestBase {
 		assertJson(x2.getSubTypes(), "['*']");
 		assertTrue(x2.isMetaSubtype());
 
-		MediaType x3 = MediaType.of("text/foo+bar");
+		var x3 = MediaType.of("text/foo+bar");
 		assertTrue(x3.hasSubType("bar"));
 		assertFalse(x3.hasSubType("baz"));
 		assertFalse(x3.hasSubType(null));
 	}
 
 	@Test void a02_match() {
-		MediaType x1 = MediaType.of("text/json");
+		var x1 = MediaType.of("text/json");
 		assertEquals(100000, x1.match(x1,true));
 
 		assertEquals(10210, x1.match(MediaType.of("text/json+foo"),true));
@@ -57,14 +57,17 @@ class MediaType_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_equals() {
-		MediaType x1 = new MediaType("text/foo"), x2 = new MediaType("text/foo"), x3 = new MediaType("text/bar");
+		var x1 = new MediaType("text/foo");
+		var x2 = new MediaType("text/foo");
+		var x3 = new MediaType("text/bar");
 		assertEquals(x1, x2);
 		assertNotEquals(x1, x3);
 		assertNotEquals(x1, null);
 	}
 
 	@Test void a05_hashCode() {
-		MediaType x1 = new MediaType("text/foo"), x2 = new MediaType("text/foo");
+		var x1 = new MediaType("text/foo");
+		var x2 = new MediaType("text/foo");
 		assertEquals(x2.hashCode(), x1.hashCode());
 	}
 }

@@ -28,7 +28,7 @@ class CommonParserTest extends SimpleTestBase {
 	// testFromSerializer
 	//====================================================================================================
 	@Test void testFromSerializer() throws Exception {
-		ReaderParser p = JsonParser.create().beanDictionary(A1.class).build();
+		var p = JsonParser.create().beanDictionary(A1.class).build();
 
 		Map m = null;
 		m = (Map)p.parse("{a:1}", Object.class);
@@ -108,7 +108,7 @@ class CommonParserTest extends SimpleTestBase {
 	// Correct handling of unknown properties.
 	//====================================================================================================
 	@Test void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = JsonParser.create().ignoreUnknownBeanProperties().build();
+		var p = JsonParser.create().ignoreUnknownBeanProperties().build();
 		B b;
 
 		String in =  "{a:1,unknown:3,b:2}";
@@ -149,7 +149,7 @@ class CommonParserTest extends SimpleTestBase {
 	// Parser listeners.
 	//====================================================================================================
 	@Test void testParserListeners() throws Exception {
-		JsonParser p = JsonParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
+		var p = JsonParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		String json = "{a:1,unknownProperty:\"/foo\",b:2}";
 		p.parse(json, B.class);

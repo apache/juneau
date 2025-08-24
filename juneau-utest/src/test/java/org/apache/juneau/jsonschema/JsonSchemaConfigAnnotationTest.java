@@ -62,7 +62,7 @@ class JsonSchemaConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basic() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		check("BEAN", x.getAddDescriptionsTo());
 		check("BEAN", x.getAddExamplesTo());
@@ -82,7 +82,7 @@ class JsonSchemaConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValues() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		check("", x.getAddDescriptionsTo());
 		check("", x.getAddExamplesTo());
@@ -101,7 +101,7 @@ class JsonSchemaConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotation() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		check("", x.getAddDescriptionsTo());
 		check("", x.getAddExamplesTo());

@@ -68,32 +68,32 @@ class HeaderBeanMeta_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_basic() {
-		HeaderBeanMeta<A1> a1 = HeaderBeanMeta.of(A1.class);
+		var a1 = HeaderBeanMeta.of(A1.class);
 		assertSame(a1, HeaderBeanMeta.of(A1.class));
 		assertJson(a1.construct("X", "foo"), "{name:'X',value:'foo'}");
 		assertThrowsWithMessage(Exception.class, "Constructor for type "+TNAME+"$A1 requires a name as the first argument.", ()->a1.construct("foo"));
 		assertNull(a1.getSchema().getName());
 
-		HeaderBeanMeta<A2> a2 = HeaderBeanMeta.of(A2.class);
+		var a2 = HeaderBeanMeta.of(A2.class);
 		assertJson(a2.construct("X", "foo"), "{name:'X',value:'foo'}");
 		assertThrowsWithMessage(Exception.class, "Constructor for type "+TNAME+"$A2 requires a name as the first argument.", ()->a2.construct("foo"));
 		assertNull(a2.getSchema().getName());
 
-		HeaderBeanMeta<A3> a3 = HeaderBeanMeta.of(A3.class);
+		var a3 = HeaderBeanMeta.of(A3.class);
 		assertJson(a3.construct("X", "foo"), "{value:'foo'}");
 		assertJson(a3.construct("foo"), "{value:'foo'}");
 		assertEquals("A3", a3.getSchema().getName());
 
-		HeaderBeanMeta<A4> a4 = HeaderBeanMeta.of(A4.class);
+		var a4 = HeaderBeanMeta.of(A4.class);
 		assertJson(a4.construct("X", "foo"), "{value:'foo'}");
 		assertJson(a4.construct("foo"), "{value:'foo'}");
 		assertEquals("A4", a4.getSchema().getName());
 
-		HeaderBeanMeta<A5> a5 = HeaderBeanMeta.of(A5.class);
+		var a5 = HeaderBeanMeta.of(A5.class);
 		assertThrowsWithMessage(Exception.class, "Constructor for type "+TNAME+"$A5 could not be found.", ()->a5.construct("foo"));
 		assertEquals("A5", a5.getSchema().getName());
 
-		HeaderBeanMeta<A6> a6 = HeaderBeanMeta.of(A6.class);
+		var a6 = HeaderBeanMeta.of(A6.class);
 		assertThrowsWithMessage(Exception.class, "oops", ()->a6.construct("X", "foo"));
 	}
 }

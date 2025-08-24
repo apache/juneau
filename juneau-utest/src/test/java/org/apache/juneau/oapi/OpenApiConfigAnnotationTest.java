@@ -35,12 +35,12 @@ class OpenApiConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValuesSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		assertNotThrown(()->OpenApiSerializer.create().apply(al).build().createSession());
 	}
 
 	@Test void noValuesParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		assertNotThrown(()->OpenApiParser.create().apply(al).build().createSession());
 	}
 
@@ -52,12 +52,12 @@ class OpenApiConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		assertNotThrown(()->OpenApiSerializer.create().apply(al).build().createSession());
 	}
 
 	@Test void noAnnotationParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		assertNotThrown(()->OpenApiParser.create().apply(al).build().createSession());
 	}
 }

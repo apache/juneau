@@ -23,7 +23,7 @@ class SerializerSetTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void testSerializerGroupMatching() {
 
-		SerializerSet sg = SerializerSet.create().add(SA1.class, SA2.class, SA3.class).build();
+		var sg = SerializerSet.create().add(SA1.class, SA2.class, SA3.class).build();
 		assertType(SA1.class, sg.getSerializer("text/foo"));
 		assertType(SA1.class, sg.getSerializer("text/foo_a"));
 		assertType(SA1.class, sg.getSerializer("text/xxx+foo_a"));
@@ -145,4 +145,4 @@ class SerializerSetTest extends SimpleTestBase {
 			super(builder.accept("*/*"));
 		}
 	}
-}
+}

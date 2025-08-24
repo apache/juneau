@@ -54,7 +54,7 @@ class BeanContextTest extends SimpleTestBase {
 		JsonParser p1 = JsonParser.DEFAULT;
 		assertThrowsWithMessage(Exception.class, "Could not resolve enum value 'UNKNOWN' on class 'org.apache.juneau.testutils.pojos.TestEnum'", () -> p1.parse("'UNKNOWN'", TestEnum.class));
 
-		JsonParser p2 = JsonParser.create().ignoreUnknownEnumValues().build();
+		var p2 = JsonParser.create().ignoreUnknownEnumValues().build();
 		assertNull(p2.parse("'UNKNOWN'", TestEnum.class));
 
 	}

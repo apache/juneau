@@ -28,7 +28,7 @@ class XmlContentTest extends SimpleTestBase {
 	// Test beans with @Xml(format=CONTENT)
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void testContentFormat() throws Exception {
-		A t = A.newInstance(), t2;
+		var t = A.newInstance();
 		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ.copy().keepNullProperties().build(),
 			s2 = XmlSerializer.create().sq().ws().keepNullProperties().build();
 		XmlParser p = XmlParser.DEFAULT;
@@ -44,7 +44,7 @@ class XmlContentTest extends SimpleTestBase {
 		s1.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1' nil='true'></A>", r);
-		t2 = p.parse(r, A.class);
+		var t2 = p.parse(r, A.class);
 		assertEquals(json(t2), json(t));
 
 		sw = new StringWriter();
@@ -132,7 +132,7 @@ class XmlContentTest extends SimpleTestBase {
 	// Test beans with @Xml(format=MIXED)
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void testXmlMixed() throws Exception {
-		B t = B.newInstance(), t2;
+		var t = B.newInstance();
 		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ.copy().keepNullProperties().build(),
 			s2 = XmlSerializer.create().sq().ws().keepNullProperties().build();
 		XmlParser p = XmlParser.DEFAULT;
@@ -148,7 +148,7 @@ class XmlContentTest extends SimpleTestBase {
 		s1.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1' nil='true'></A>", r);
-		t2 = p.parse(r, B.class);
+		var t2 = p.parse(r, B.class);
 		assertEquals(json(t2), json(t));
 
 		sw = new StringWriter();

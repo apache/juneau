@@ -23,7 +23,8 @@ import org.junit.jupiter.api.*;
 class Csv_Test extends SimpleTestBase{
 
 	@Test void a01_to() throws Exception {
-		Object in1 = "foo", in2 = new Object[]{JsonMap.of("a","foo","b","bar")};
+		var in1 = "foo";
+		var in2 = new Object[]{JsonMap.of("a","foo","b","bar")};
 		String expected1="value\nfoo\n", expected2 = "a,b\nfoo,bar\n";
 
 		assertString(expected1, Csv.of(in1));

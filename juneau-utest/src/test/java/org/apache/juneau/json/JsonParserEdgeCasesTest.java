@@ -453,7 +453,7 @@ public class JsonParserEdgeCasesTest {
 
 
 	public static void main(String[] generateParams) throws Exception {
-		File f = new File("src/test/resources/org/apache/juneau/json/jsonTestSuite");
+		var f = new File("src/test/resources/org/apache/juneau/json/jsonTestSuite");
 		int i = 0;
 		String pattern = "\n\t\t'{' {0}, \"{1}\", {2}, {3} '}',";
 		var sb = new StringBuilder();

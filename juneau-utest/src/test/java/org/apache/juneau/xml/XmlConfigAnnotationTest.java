@@ -95,7 +95,7 @@ class XmlConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basicSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		XmlSerializerSession x = XmlSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddNamespaceUrisToRoot());
@@ -106,7 +106,7 @@ class XmlConfigAnnotationTest extends SimpleTestBase {
 	}
 
 	@Test void basicParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		XmlParserSession x = XmlParser.create().apply(al).build().getSession();
 		check("AA", x.getEventAllocator());
 		check("true", x.isPreserveRootElement());
@@ -124,7 +124,7 @@ class XmlConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValuesSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		XmlSerializerSession x = XmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddNamespaceUrisToRoot());
@@ -135,7 +135,7 @@ class XmlConfigAnnotationTest extends SimpleTestBase {
 	}
 
 	@Test void noValuesParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		XmlParserSession x = XmlParser.create().apply(al).build().getSession();
 		check(null, x.getEventAllocator());
 		check("false", x.isPreserveRootElement());
@@ -152,7 +152,7 @@ class XmlConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		XmlSerializerSession x = XmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddNamespaceUrisToRoot());
@@ -163,7 +163,7 @@ class XmlConfigAnnotationTest extends SimpleTestBase {
 	}
 
 	@Test void noAnnotationParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		XmlParserSession x = XmlParser.create().apply(al).build().getSession();
 		check(null, x.getEventAllocator());
 		check("false", x.isPreserveRootElement());

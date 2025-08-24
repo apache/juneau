@@ -23,7 +23,7 @@ class SystemPropertiesVarTest extends SimpleTestBase {
 	// test - Basic tests
 	//====================================================================================================
 	@Test void test() {
-		VarResolver vr = VarResolver.create().vars(SystemPropertiesVar.class).build();
+		var vr = VarResolver.create().vars(SystemPropertiesVar.class).build();
 
 		System.setProperty("SystemPropertiesVar.x", "foo");
 		assertEquals("foo", vr.resolve("$S{SystemPropertiesVar.x}"));
@@ -35,4 +35,4 @@ class SystemPropertiesVarTest extends SimpleTestBase {
 		assertEquals(" bar,bar ", vr.resolve("$S{ SystemPropertiesVar.y , bar,bar }"));
 		assertEquals("", vr.resolve("$S{SystemPropertiesVar.y,}"));
 	}
-}
+}

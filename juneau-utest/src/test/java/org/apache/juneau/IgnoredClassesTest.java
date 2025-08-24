@@ -27,7 +27,7 @@ class IgnoredClassesTest extends SimpleTestBase {
 	@Test void testFilesRenderedAsStrings() {
 		assumeTrue(System.getProperty("os.name").toLowerCase().startsWith("win"));
 		// Files should be rendered as strings.
-		File f = new File("C:/temp");
+		var f = new File("C:/temp");
 		assertJson(f, "'C:\\\\temp'");
 	}
 

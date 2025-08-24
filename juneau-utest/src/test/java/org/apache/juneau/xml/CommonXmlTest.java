@@ -31,7 +31,7 @@ class CommonXmlTest extends SimpleTestBase {
 		XmlParser p = XmlParser.DEFAULT;
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 
-		A t = new A("http://foo", 123, "bar");
+		var t = new A("http://foo", 123, "bar");
 		String xml = s.serialize(t);
 		assertEquals("<object url='http://foo' id='123'><name>bar</name></object>", xml);
 
@@ -60,9 +60,9 @@ class CommonXmlTest extends SimpleTestBase {
 	// Bean.uri annotation, only uri property
 	//====================================================================================================
 	@Test void testBeanUriAnnotationOnlyUriProperty() throws Exception {
-		XmlSerializer s = XmlSerializer.create().sq().build();
+		var s = XmlSerializer.create().sq().build();
 
-		B t = new B("http://foo");
+		var t = new B("http://foo");
 		String xml = s.serialize(t);
 		assertEquals("<object url='http://foo'><url2>http://foo/2</url2></object>", xml);
 	}
@@ -76,4 +76,4 @@ class CommonXmlTest extends SimpleTestBase {
 			this.url2 = url(url+"/2");
 		}
 	}
-}
+}

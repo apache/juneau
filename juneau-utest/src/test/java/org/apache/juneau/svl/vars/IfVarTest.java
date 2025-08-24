@@ -23,7 +23,7 @@ class IfVarTest extends SimpleTestBase {
 	// test - Basic tests
 	//====================================================================================================
 	@Test void test() {
-		VarResolver vr = VarResolver.create().vars(IfVar.class, SystemPropertiesVar.class).build();
+		var vr = VarResolver.create().vars(IfVar.class, SystemPropertiesVar.class).build();
 
 		for (String test : new String[]{"","0","false","FALSE","f","F","foobar"}) {
 			System.setProperty("IfVarTest.test", test);
@@ -41,4 +41,4 @@ class IfVarTest extends SimpleTestBase {
 			assertEquals("x YES x", vr.resolve("x $IF{ $S{ IfVarTest.test } , YES } x"));
 		}
 	}
-}
+}

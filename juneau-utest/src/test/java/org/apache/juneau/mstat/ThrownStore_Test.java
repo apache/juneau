@@ -217,7 +217,7 @@ class ThrownStore_Test extends SimpleTestBase {
 	}
 
 	@Test void b05_builder_beanFactory() {
-		BeanStore bs = BeanStore.create().build();
+		var bs = BeanStore.create().build();
 
 		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: B5a", ()->ThrownStore.create(bs).type(B5b.class).build());
 		assertType(B5c.class, ThrownStore.create(bs).type(B5c.class).build());
@@ -246,7 +246,7 @@ class ThrownStore_Test extends SimpleTestBase {
 	}
 
 	@Test void b06_statsImplClass() {
-		BeanStore bs = BeanStore.create().build();
+		var bs = BeanStore.create().build();
 
 		var t1 = new Throwable();
 		t1.fillInStackTrace();
@@ -269,7 +269,7 @@ class ThrownStore_Test extends SimpleTestBase {
 		var t2 = new Throwable("bar", t1);
 		t2.fillInStackTrace();
 
-		ThrownStore store = ThrownStore.create().build();
+		var store = ThrownStore.create().build();
 
 		ThrownStats stats = store.add(t2);
 		assertNotEquals(0L, stats.getHash());
@@ -308,7 +308,7 @@ class ThrownStore_Test extends SimpleTestBase {
 
 
 	@Test void d01_ignoreClasses() {
-		ThrownStore db = ThrownStore.create().ignoreClasses(D1.class,D2.class,ThrownStore_Test.class).build();
+		var db = ThrownStore.create().ignoreClasses(D1.class,D2.class,ThrownStore_Test.class).build();
 
 		Throwable t1 = new Throwable() {
 			@Override
@@ -344,7 +344,7 @@ class ThrownStore_Test extends SimpleTestBase {
 		assertEquals(2, db.getStats(t1).get().getCount());
 		assertEquals(2, db.getStats(t2).get().getCount());
 
-		ThrownStore db2 = ThrownStore.create().parent(db).build();
+		var db2 = ThrownStore.create().parent(db).build();
 
 		db2.add(t1);
 		db2.add(t2);

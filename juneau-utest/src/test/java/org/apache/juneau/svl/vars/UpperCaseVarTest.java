@@ -23,10 +23,10 @@ class UpperCaseVarTest extends SimpleTestBase {
 	// test - Basic tests
 	//====================================================================================================
 	@Test void test() {
-		VarResolver vr = VarResolver.create().vars(UpperCaseVar.class, SystemPropertiesVar.class).build();
+		var vr = VarResolver.create().vars(UpperCaseVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("UpperCaseVar.test", "fooBAR");
 
 		assertEquals("FOOBAR", vr.resolve("$UC{$S{UpperCaseVar.test}}"));
 	}
-}
+}

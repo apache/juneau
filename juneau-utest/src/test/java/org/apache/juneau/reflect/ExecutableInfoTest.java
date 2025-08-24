@@ -140,7 +140,7 @@ class ExecutableInfoTest extends SimpleTestBase {
 	}
 
 	@Test void getParam_nocache() {
-		ClassInfo b2 = ClassInfo.of(B.class);
+		var b2 = ClassInfo.of(B.class);
 		check("B[0]", b2.getPublicConstructor(x -> x.hasParamTypes(String.class)).getParam(0));
 		check("m[0]", b2.getPublicMethod(x -> x.hasName("m") && x.hasParamTypes(String.class)).getParam(0));
 	}
@@ -152,7 +152,7 @@ class ExecutableInfoTest extends SimpleTestBase {
 	}
 
 	@Test void getParam_indexOutOfBounds_noCache() {
-		ClassInfo b2 = ClassInfo.of(B.class);
+		var b2 = ClassInfo.of(B.class);
 		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '0'.  No parameters.", ()->b2.getPublicConstructor(ConstructorInfo::hasNoParams).getParam(0));
 		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '-1'.  Parameter count: 1", ()->b2.getPublicConstructor(x -> x.hasParamTypes(String.class)).getParam(-1));
 		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '1'.  Parameter count: 1", ()->b2.getPublicConstructor(x -> x.hasParamTypes(String.class)).getParam(1));
@@ -175,7 +175,7 @@ class ExecutableInfoTest extends SimpleTestBase {
 	}
 
 	@Test void getParamTypes_enum() {
-		ClassInfo b1 = ClassInfo.of(B1.class);
+		var b1 = ClassInfo.of(B1.class);
 		check("B1(String,int)", b1.getDeclaredConstructors());
 		check("String,int", b1.getDeclaredConstructors().get(0).getParamTypes());
 	}

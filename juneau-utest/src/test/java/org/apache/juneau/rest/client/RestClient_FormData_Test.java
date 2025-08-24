@@ -94,7 +94,7 @@ class RestClient_FormData_Test extends SimpleTestBase {
 	}
 
 	@Test void a09_formData_String_Supplier() throws Exception {
-		MutableSupplier<JsonList> s = MutableSupplier.of(null);
+		var s = MutableSupplier.of(null);
 
 		RestClient x1 = client().formData(part("foo",s,null)).build();
 		s.set(JsonList.of("foo","bar"));
@@ -110,7 +110,7 @@ class RestClient_FormData_Test extends SimpleTestBase {
 	}
 
 	@Test void a10_formData_String_Supplier_Schema_Serializer() throws Exception {
-		MutableSupplier<JsonList> s = MutableSupplier.of(JsonList.of("foo","bar"));
+		var s = MutableSupplier.of(JsonList.of("foo","bar"));
 		RestClient x = client().formData(part("foo",s,T_ARRAY_PIPES).serializer(FakeWriterSerializer.X)).build();
 		x.post("/formData").run().assertContent().asString().asUrlDecode().is("foo=xfoo|barx");
 		s.set(JsonList.of("bar","baz"));

@@ -27,10 +27,10 @@ class IteratorSwapTest extends SimpleTestBase {
 	// test
 	//====================================================================================================
 	@Test void test() throws Exception {
-		WriterSerializer s = JsonSerializer.create().json5().swaps(IteratorSwap.class).build();
+		var s = JsonSerializer.create().json5().swaps(IteratorSwap.class).build();
 
 		// Iterators
-		List<String> l = new ArrayList<>(Arrays.asList(new String[]{"foo","bar","baz"}));
+		var l = new ArrayList<>(Arrays.asList(new String[]{"foo","bar","baz"}));
 		Iterator<String> i = l.iterator();
 		assertEquals("['foo','bar','baz']", s.serialize(i));
 	}

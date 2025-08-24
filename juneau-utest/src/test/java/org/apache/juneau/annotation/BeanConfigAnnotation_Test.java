@@ -141,7 +141,7 @@ class BeanConfigAnnotation_Test extends SimpleTestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void a01_basic() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		BeanSession bs = JsonSerializer.create().apply(al).build().getSession();
 
 		check("PRIVATE", bs.getBeanClassVisibility());
@@ -184,8 +184,8 @@ class BeanConfigAnnotation_Test extends SimpleTestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void b01_noValues() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		JsonSerializer js = JsonSerializer.create().apply(al).build();
+		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var js = JsonSerializer.create().apply(al).build();
 		BeanContext bc = js.getBeanContext();
 		check("PUBLIC", bc.getBeanClassVisibility());
 		check("PUBLIC", bc.getBeanConstructorVisibility());
@@ -229,8 +229,8 @@ class BeanConfigAnnotation_Test extends SimpleTestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void c01_noAnnotation() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		JsonSerializer js = JsonSerializer.create().apply(al).build();
+		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var js = JsonSerializer.create().apply(al).build();
 		BeanContext bc = js.getBeanContext();
 		check("PUBLIC", bc.getBeanClassVisibility());
 		check("PUBLIC", bc.getBeanConstructorVisibility());

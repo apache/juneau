@@ -71,7 +71,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_builder_beanFactory() {
-		BeanStore bs = BeanStore.create().build();
+		var bs = BeanStore.create().build();
 
 		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: A5a", ()->MethodExecStore.create(bs).type(A5b.class).build());
 		assertType(A5c.class, MethodExecStore.create(bs).type(A5c.class).build());
@@ -101,7 +101,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 	}
 
 	@Test public void a06_builder_statsImplClass() throws Exception {  // NOSONAR - Must be public.
-		BeanStore bs = BeanStore.create().build();
+		var bs = BeanStore.create().build();
 		Method m = MethodExecStore_Test.class.getMethod("a06_builder_statsImplClass");
 
 		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: A6a", ()->MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m));
@@ -114,15 +114,15 @@ class MethodExecStore_Test extends SimpleTestBase {
 
 	@Test public void a07_builder_thrownStore() throws Exception {  // NOSONAR - Must be public.
 		Method m = MethodExecStore_Test.class.getMethod("a07_builder_thrownStore");
-		ThrownStore s = ThrownStore.create().build();
+		var s = ThrownStore.create().build();
 
-		MethodExecStore store = MethodExecStore.create().thrownStore(s).build();
+		var store = MethodExecStore.create().thrownStore(s).build();
 		store.getStats(m).error(new Throwable());
 		assertSize(1, s.getStats());
 		assertSameObject(s, store.getThrownStore());
 
-		ThrownStore s2 = ThrownStore.create().build();
-		BeanStore bs = BeanStore.create().build().addBean(ThrownStore.class, s2);
+		var s2 = ThrownStore.create().build();
+		var bs = BeanStore.create().build().addBean(ThrownStore.class, s2);
 		store = MethodExecStore.create(bs).build();
 		assertSameObject(s2, store.getThrownStore());
 	}
@@ -133,9 +133,9 @@ class MethodExecStore_Test extends SimpleTestBase {
 
 	@Test public void b01_store_getStats() throws Exception {  // NOSONAR - Must be public.
 		Method m = MethodExecStore_Test.class.getMethod("b01_store_getStats");
-		ThrownStore s = ThrownStore.create().build();
+		var s = ThrownStore.create().build();
 
-		MethodExecStore store = MethodExecStore.create().thrownStore(s).build();
+		var store = MethodExecStore.create().thrownStore(s).build();
 		store.getStats(m).error(new Throwable());
 
 		assertSize(1, store.getStats(m).getThrownStore().getStats());
@@ -149,9 +149,9 @@ class MethodExecStore_Test extends SimpleTestBase {
 
 	@Test public void c01_stats_basic() throws Exception {  // NOSONAR - Must be public.
 		Method m = MethodExecStore_Test.class.getMethod("c01_stats_basic");
-		ThrownStore s = ThrownStore.create().build();
+		var s = ThrownStore.create().build();
 
-		MethodExecStore store = MethodExecStore.create().thrownStore(s).build();
+		var store = MethodExecStore.create().thrownStore(s).build();
 		MethodExecStats stats = store.getStats(m);
 
 		assertNotEquals(0L, stats.getGuid());

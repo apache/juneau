@@ -33,7 +33,7 @@ class ReaderFilterTest extends SimpleTestBase {
 	// testJson
 	//====================================================================================================
 	@Test void testJson() throws Exception {
-		JsonSerializer s = JsonSerializer.create().json5().swaps(ParsedReaderSwap.Json.class).build();
+		var s = JsonSerializer.create().json5().swaps(ParsedReaderSwap.Json.class).build();
 
 		Reader r;
 		Map<String,Object> m;
@@ -48,7 +48,7 @@ class ReaderFilterTest extends SimpleTestBase {
 	// testXml
 	//====================================================================================================
 	@Test void testXml() throws Exception {
-		XmlSerializer s = XmlSerializer.create().sq().swaps(ParsedReaderSwap.Xml.class).build();
+		var s = XmlSerializer.create().sq().swaps(ParsedReaderSwap.Xml.class).build();
 
 		Reader r;
 		Map<String,Object> m;
@@ -63,7 +63,7 @@ class ReaderFilterTest extends SimpleTestBase {
 	// testHtml
 	//====================================================================================================
 	@Test void testHtml() throws Exception {
-		HtmlSerializer s = HtmlSerializer.create().sq().swaps(ParsedReaderSwap.Html.class).build();
+		var s = HtmlSerializer.create().sq().swaps(ParsedReaderSwap.Html.class).build();
 
 		Reader r;
 		Map<String,Object> m;
@@ -78,7 +78,7 @@ class ReaderFilterTest extends SimpleTestBase {
 	// testPlainText
 	//====================================================================================================
 	@Test void testPlainText() throws Exception {
-		PlainTextSerializer s = PlainTextSerializer.create().swaps(ParsedReaderSwap.PlainText.class).build();
+		var s = PlainTextSerializer.create().swaps(ParsedReaderSwap.PlainText.class).build();
 
 		Reader r;
 		Map<String,Object> m;
@@ -93,7 +93,7 @@ class ReaderFilterTest extends SimpleTestBase {
 	// testUon
 	//====================================================================================================
 	@Test void testUon() throws Exception {
-		UonSerializer s = UonSerializer.create().swaps(ParsedReaderSwap.Uon.class).build();
+		var s = UonSerializer.create().swaps(ParsedReaderSwap.Uon.class).build();
 
 		Reader r;
 		Map<String,Object> m;
@@ -108,7 +108,7 @@ class ReaderFilterTest extends SimpleTestBase {
 	// testUrlEncoding
 	//====================================================================================================
 	@Test void testUrlEncoding() throws Exception {
-		UrlEncodingSerializer s = UrlEncodingSerializer.create().swaps(ParsedReaderSwap.PlainText.class).build();
+		var s = UrlEncodingSerializer.create().swaps(ParsedReaderSwap.PlainText.class).build();
 
 		Reader r;
 		Map<String,Object> m;

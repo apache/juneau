@@ -23,7 +23,7 @@ class ParserSetTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void testParserGroupMatching() {
 
-		ParserSet s = ParserSet.create().add(Parser1.class, Parser2.class, Parser3.class).build();
+		var s = ParserSet.create().add(Parser1.class, Parser2.class, Parser3.class).build();
 		assertType(Parser1.class, s.getParser("text/foo"));
 		assertType(Parser1.class, s.getParser("text/foo_a"));
 		assertType(Parser1.class, s.getParser("text/foo_a+xxx"));
@@ -70,4 +70,4 @@ class ParserSetTest extends SimpleTestBase {
 	public static class P3 extends JsonParser { public P3(JsonParser.Builder b) { super(b.consumes("text/3")); }}
 	public static class P4 extends JsonParser { public P4(JsonParser.Builder b) { super(b.consumes("text/4,text/4a"));} }
 	public static class P5 extends JsonParser { public P5(JsonParser.Builder b) { super(b.consumes("text/5"));}}
-}
+}

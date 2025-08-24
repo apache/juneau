@@ -23,7 +23,7 @@ class LenVarTest extends SimpleTestBase {
 	// test - Basic tests
 	//====================================================================================================
 	@Test void test() {
-		VarResolver vr = VarResolver.create().vars(LenVar.class, SystemPropertiesVar.class).build();
+		var vr = VarResolver.create().vars(LenVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("LenVarTest.test", "foo bar");
 		System.setProperty("LenVarTest.test2", "1.2.3.4.5");

@@ -1304,7 +1304,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	static ClassInfo bConfig = ClassInfo.of(BConfig.class);
 
 	@Test void schemaOnClass_onConfig() throws Exception {
-		AnnotationWorkList al = AnnotationWorkList.of(bConfig.getAnnotationList());
+		var al = AnnotationWorkList.of(bConfig.getAnnotationList());
 		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		assertJsonContains(x.getSchema(new B()), "'$ref':'ref'");
 	}

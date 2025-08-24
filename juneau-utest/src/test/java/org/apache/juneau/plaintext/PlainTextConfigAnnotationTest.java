@@ -35,12 +35,12 @@ class PlainTextConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValuesSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		assertNotThrown(()->PlainTextSerializer.create().apply(al).build().createSession());
 	}
 
 	@Test void noValuesParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		assertNotThrown(()->PlainTextParser.create().apply(al).build().createSession());
 	}
 
@@ -52,12 +52,12 @@ class PlainTextConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		assertNotThrown(()->PlainTextSerializer.create().apply(al).build().createSession());
 	}
 
 	@Test void noAnnotationParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		assertNotThrown(()->PlainTextParser.create().apply(al).build().createSession());
 	}
 }

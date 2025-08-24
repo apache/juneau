@@ -39,7 +39,7 @@ class ConfigBuilderTest extends SimpleTestBase {
 
 	@Test void testGet_LONGRUNNING() throws Exception {
 		File f;
-		FileStore cfs = FileStore.create().directory(TEMP_DIR).enableWatcher().watcherSensitivity(WatcherSensitivity.HIGH).build();
+		var cfs = FileStore.create().directory(TEMP_DIR).enableWatcher().watcherSensitivity(WatcherSensitivity.HIGH).build();
 		Config.Builder cb = Config.create().store(cfs).name("TestGet.cfg");
 
 		Config cf = cb.build();

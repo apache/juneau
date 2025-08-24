@@ -64,7 +64,7 @@ class BasicHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a08_getElements() {
-		Value<Integer> m = Value.of(1);
+		var m = Value.of(1);
 		Header h1 = header("X1","1");
 		Header h2 = header("X2",()->m);
 		Header h3 = header("X3",null);

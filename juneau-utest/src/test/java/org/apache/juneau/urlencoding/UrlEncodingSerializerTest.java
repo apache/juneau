@@ -556,7 +556,7 @@ class UrlEncodingSerializerTest extends SimpleTestBase {
 	// Test URLENC_paramFormat == PLAINTEXT.
 	//====================================================================================================
 	@Test void testPlainTextParams() throws Exception {
-		WriterSerializer s2 = UrlEncodingSerializer.DEFAULT.copy().paramFormatPlain().build();
+		var s2 = UrlEncodingSerializer.DEFAULT.copy().paramFormatPlain().build();
 
 		assertEquals("_value=foo", s2.serialize("foo"));
 		assertEquals("_value='foo'", s2.serialize("'foo'"));

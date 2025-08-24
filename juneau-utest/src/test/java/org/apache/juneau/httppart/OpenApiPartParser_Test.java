@@ -891,7 +891,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void h01_objectType() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().type("object").build();
+		var s = HttpPartSchema.create().type("object").build();
 		assertJson(parse(s, "f=1", H1.class), "{f:1}");
 		assertJson(parse(s, "f=1", JsonMap.class), "{f:'1'}");
 		Object o = parse(s, "f=1", Object.class);

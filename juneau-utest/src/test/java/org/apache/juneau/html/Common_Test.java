@@ -35,12 +35,12 @@ class Common_Test extends SimpleTestBase {
 	@Test void testTrimNullsFromBeans() throws Exception {
 		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		HtmlParser p = HtmlParser.DEFAULT;
-		A t1 = A.create(), t2;
+		var t1 = A.create();
 
 		s.keepNullProperties();
 		String r = s.build().serialize(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>s1</td><td><null/></td></tr><tr><td>s2</td><td>s2</td></tr></table>", r);
-		t2 = p.parse(r, A.class);
+		var t2 = p.parse(r, A.class);
 		assertEquals(json(t2), json(t1));
 
 		s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
@@ -66,12 +66,12 @@ class Common_Test extends SimpleTestBase {
 	@Test void testTrimEmptyMaps() throws Exception {
 		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		HtmlParser p = HtmlParser.DEFAULT;
-		B t1 = B.create(), t2;
+		var t1 = B.create();
 		String r;
 
 		r = s.build().serialize(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><table><tr><th>key</th><th>value</th></tr></table></td></tr><tr><td>f2</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>f2a</td><td><null/></td></tr><tr><td>f2b</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>s2</td><td>s2</td></tr></table></td></tr></table></td></tr></table>", r);
-		t2 = p.parse(r, B.class);
+		var t2 = p.parse(r, B.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyMaps();
@@ -98,12 +98,12 @@ class Common_Test extends SimpleTestBase {
 	@Test void testTrimEmptyLists() throws Exception {
 		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		HtmlParser p = HtmlParser.DEFAULT;
-		C t1 = C.create(), t2;
+		var t1 = C.create();
 		String r;
 
 		r = s.build().serialize(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><ul></ul></td></tr><tr><td>f2</td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td>s2</td></tr></table></td></tr></table>", r);
-		t2 = p.parse(r, C.class);
+		var t2 = p.parse(r, C.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
@@ -130,7 +130,7 @@ class Common_Test extends SimpleTestBase {
 	@Test void testTrimEmptyArrays() throws Exception {
 		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		HtmlParser p = HtmlParser.DEFAULT;
-		D t1 = D.create(), t2;
+		var t1 = D.create();
 		String r;
 
 		r = s.build().serialize(t1);
@@ -154,7 +154,7 @@ class Common_Test extends SimpleTestBase {
 			+"</table>",
 			r);
 
-		t2 = p.parse(r, D.class);
+		var t2 = p.parse(r, D.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
@@ -193,7 +193,7 @@ class Common_Test extends SimpleTestBase {
 	// @Beanp.bpi annotation.
 	//====================================================================================================
 	@Test void testBeanPropertyProperties() throws Exception {
-		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
+		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
 		var t = new E1();
 		String r;
 
@@ -383,7 +383,7 @@ class Common_Test extends SimpleTestBase {
 	// Basic bean
 	//====================================================================================================
 	@Test void testBasicBean() throws Exception {
-		WriterSerializer s = HtmlSerializer.create().sq().keepNullProperties().sortProperties().addKeyValueTableHeaders().build();
+		var s = HtmlSerializer.create().sq().keepNullProperties().sortProperties().addKeyValueTableHeaders().build();
 
 		var a = new J();
 		a.setF1("J");

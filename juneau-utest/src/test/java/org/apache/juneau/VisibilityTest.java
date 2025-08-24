@@ -29,7 +29,7 @@ class VisibilityTest extends SimpleTestBase {
 		JsonSerializer.Builder s3 = JsonSerializer.create().json5().sortProperties().disableBeansRequireSomeProperties().beanClassVisibility(Visibility.DEFAULT);
 		JsonSerializer.Builder s4 = JsonSerializer.create().json5().sortProperties().disableBeansRequireSomeProperties().beanClassVisibility(PRIVATE);
 
-		A1 a1 = A1.create();
+		var a1 = A1.create();
 		String r;
 
 		s1.beanFieldVisibility(NONE);

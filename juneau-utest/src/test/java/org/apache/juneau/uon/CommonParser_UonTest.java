@@ -98,7 +98,7 @@ class CommonParser_UonTest extends SimpleTestBase {
 	// Correct handling of unknown properties.
 	//====================================================================================================
 	@Test void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p2 = UonParser.create().ignoreUnknownBeanProperties().build();
+		var p2 = UonParser.create().ignoreUnknownBeanProperties().build();
 		B t;
 
 		String in =  "(a=1,unknown=3,b=2)";
@@ -141,7 +141,7 @@ class CommonParser_UonTest extends SimpleTestBase {
 	// Parser listeners.
 	//====================================================================================================
 	@Test void testParserListeners() throws Exception {
-		UonParser p2 = UonParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
+		var p2 = UonParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		String in = "(a=1,unknownProperty=foo,b=2)";
 		p2.parse(in, B.class);

@@ -29,7 +29,7 @@ class ConfigImportsTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void oneSimpleImport() throws Exception {
-		MemoryStore ms = MemoryStore.create().build();
+		var ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1");
 		ms.write("B", "", "<A>");
 		Config c = Config
@@ -45,11 +45,11 @@ class ConfigImportsTest extends SimpleTestBase {
 	}
 
 	@Test void twoSimpleImports() throws Exception {
-		MemoryStore ms = MemoryStore.create().build();
+		var ms = MemoryStore.create().build();
 		ms.write("A1", "", "x=1");
 		ms.write("A2", "", "y=2");
 		ms.write("B", "", "<A1>\n<A2>");
-		Config c = Config.create("B").store(ms).build();
+		var c = Config.create("B").store(ms).build();
 		assertEquals("1", c.get("x").get());
 		assertEquals("2", c.get("y").get());
 
@@ -62,11 +62,11 @@ class ConfigImportsTest extends SimpleTestBase {
 	}
 
 	@Test void nestedImports() throws Exception {
-		MemoryStore ms = MemoryStore.create().build();
+		var ms = MemoryStore.create().build();
 		ms.write("A1", "", "x=1");
 		ms.write("A2", "", "<A1>\ny=2");
 		ms.write("B", "", "<A2>");
-		Config c = Config.create("B").store(ms).build();
+		var c = Config.create("B").store(ms).build();
 		assertEquals("1", c.get("x").get());
 		assertEquals("2", c.get("y").get());
 
@@ -80,7 +80,7 @@ class ConfigImportsTest extends SimpleTestBase {
 
 	@Test void nestedImportsLoop() {
 		// This shouldn't blow up.
-		MemoryStore ms = MemoryStore.create().build();
+		var ms = MemoryStore.create().build();
 		ms.write("A1", "", "<A2>\nx=1");
 		ms.write("A2", "", "<A1>\ny=2");
 		ms.write("B", "", "<A2>");
@@ -88,17 +88,17 @@ class ConfigImportsTest extends SimpleTestBase {
 	}
 
 	@Test void importNotFound() {
-		MemoryStore ms = MemoryStore.create().build();
+		var ms = MemoryStore.create().build();
 		ms.write("B", "", "<A>\nx=1");
-		Config c = Config.create("B").store(ms).build();
+		var c = Config.create("B").store(ms).build();
 		assertEquals("1", c.get("x").get());
 	}
 
 	@Test void noOverwriteOnImports() {
-		MemoryStore ms = MemoryStore.create().build();
+		var ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1");
 		ms.write("B", "", "<A>");
-		Config c = Config.create("B").store(ms).build();
+		var c = Config.create("B").store(ms).build();
 		assertEquals("1", c.get("x").get());
 		c.set("x", "2");
 		assertEquals("2", c.get("x").get());
@@ -106,28 +106,28 @@ class ConfigImportsTest extends SimpleTestBase {
 	}
 
 	@Test void overlappingSections() {
-		MemoryStore ms = MemoryStore.create().build();
+		var ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[A]\na2=2");
-		Config c = Config.create("B").store(ms).build();
+		var c = Config.create("B").store(ms).build();
 		assertEquals("1", c.get("A/a1").get());
 		assertEquals("2", c.get("A/a2").get());
 	}
 
 	@Test void overlappingSectionsImportAtEnd() {
-		MemoryStore ms = MemoryStore.create().build();
+		var ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "[A]\na2=2\n<A>");
-		Config c = Config.create("B").store(ms).build();
+		var c = Config.create("B").store(ms).build();
 		assertEquals("1", c.get("A/a1").get());
 		assertEquals("2", c.get("A/a2").get());
 	}
 
 	@Test void overlappingSectionsAndValues() {
-		MemoryStore ms = MemoryStore.create().build();
+		var ms = MemoryStore.create().build();
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[A]\na1=2");
-		Config c = Config.create("B").store(ms).build();
+		var c = Config.create("B").store(ms).build();
 		assertEquals("2", c.get("A/a1").get());
 	}
 
@@ -171,13 +171,13 @@ class ConfigImportsTest extends SimpleTestBase {
 	}
 
 	@Test void testUpdateOnParent() {
-		MemoryStore ms = MemoryStore.create().build();
+		var ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[B]\nb1=2");
 
-		Config ca = Config.create("A").store(ms).build();
-		Config cb = Config.create("B").store(ms).build();
+		var ca = Config.create("A").store(ms).build();
+		var cb = Config.create("B").store(ms).build();
 
 		assertEquals(2, ca.getConfigMap().getListeners().size());
 		assertEquals(1, cb.getConfigMap().getListeners().size());
@@ -211,15 +211,15 @@ class ConfigImportsTest extends SimpleTestBase {
 	}
 
 	@Test void testUpdateOnGrandParent() {
-		MemoryStore ms = MemoryStore.create().build();
+		var ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[B]\nb1=2");
 		ms.write("C", "", "<B>\n[C]\nc1=3");
 
-		Config ca = Config.create("A").store(ms).build();
-		Config cb = Config.create("B").store(ms).build();
-		Config cc = Config.create("C").store(ms).build();
+		var ca = Config.create("A").store(ms).build();
+		var cb = Config.create("B").store(ms).build();
+		var cc = Config.create("C").store(ms).build();
 
 		assertEquals(3, ca.getConfigMap().getListeners().size());
 		assertEquals(2, cb.getConfigMap().getListeners().size());
@@ -258,13 +258,13 @@ class ConfigImportsTest extends SimpleTestBase {
 	}
 
 	@Test void testUpdateOnParentSameSection() {
-		MemoryStore ms = MemoryStore.create().build();
+		var ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[A]\nb1=2");
 
-		Config ca = Config.create("A").store(ms).build();
-		Config cb = Config.create("B").store(ms).build();
+		var ca = Config.create("A").store(ms).build();
+		var cb = Config.create("B").store(ms).build();
 
 		assertEquals(2, ca.getConfigMap().getListeners().size());
 		assertEquals(1, cb.getConfigMap().getListeners().size());
@@ -295,13 +295,13 @@ class ConfigImportsTest extends SimpleTestBase {
 	}
 
 	@Test void testUpdateOnParentSameSectionSameKey() {
-		MemoryStore ms = MemoryStore.create().build();
+		var ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[A]\na1=2");
 
-		Config ca = Config.create("A").store(ms).build();
-		Config cb = Config.create("B").store(ms).build();
+		var ca = Config.create("A").store(ms).build();
+		var cb = Config.create("B").store(ms).build();
 
 		assertEquals(2, ca.getConfigMap().getListeners().size());
 		assertEquals(1, cb.getConfigMap().getListeners().size());
@@ -316,15 +316,15 @@ class ConfigImportsTest extends SimpleTestBase {
 	}
 
 	@Test void testUpdateOnGrandParentSameSection() {
-		MemoryStore ms = MemoryStore.create().build();
+		var ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[A]\na1=2");
 		ms.write("C", "", "<B>\n[A]\na1=3");
 
-		Config ca = Config.create("A").store(ms).build();
-		Config cb = Config.create("B").store(ms).build();
-		Config cc = Config.create("C").store(ms).build();
+		var ca = Config.create("A").store(ms).build();
+		var cb = Config.create("B").store(ms).build();
+		var cc = Config.create("C").store(ms).build();
 
 		assertEquals(3, ca.getConfigMap().getListeners().size());
 		assertEquals(2, cb.getConfigMap().getListeners().size());
@@ -344,13 +344,13 @@ class ConfigImportsTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void testUpdateOnParentDynamic() {
-		MemoryStore ms = MemoryStore.create().build();
+		var ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\ny=1\n[A]\na1=1");
 		ms.write("B", "", "x=2\n[B]\nb1=2");
 
-		Config ca = Config.create("A").store(ms).build();
-		Config cb = Config.create("B").store(ms).build();
+		var ca = Config.create("A").store(ms).build();
+		var cb = Config.create("B").store(ms).build();
 
 		assertEquals(1, ca.getConfigMap().getListeners().size());
 		assertEquals(1, cb.getConfigMap().getListeners().size());

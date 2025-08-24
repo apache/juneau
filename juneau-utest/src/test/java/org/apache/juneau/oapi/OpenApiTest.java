@@ -164,7 +164,7 @@ public class OpenApiTest extends SimpleTestBase {
 	}
 
 	@Test void a09_noType_formatDate_Other() throws Exception {
-		StringBuilder in = new StringBuilder("2012-12-21");
+		var in = new StringBuilder("2012-12-21");
 		HttpPartSchema ps = tNone().fDate().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21", s);
@@ -221,7 +221,7 @@ public class OpenApiTest extends SimpleTestBase {
 	}
 
 	@Test void a15_noType_formatDate_Other() throws Exception {
-		StringBuilder in = new StringBuilder("2012-12-21T00:00:00");
+		var in = new StringBuilder("2012-12-21T00:00:00");
 		HttpPartSchema ps = tNone().fDateTime().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00", s);
@@ -327,7 +327,7 @@ public class OpenApiTest extends SimpleTestBase {
 	}
 
 	@Test void b09_typeString_formatDate_Other() throws Exception {
-		StringBuilder in = new StringBuilder("2012-12-21");
+		var in = new StringBuilder("2012-12-21");
 		HttpPartSchema ps = T_DATE;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21", s);
@@ -384,7 +384,7 @@ public class OpenApiTest extends SimpleTestBase {
 	}
 
 	@Test void b15_typeString_formatDate_Other() throws Exception {
-		StringBuilder in = new StringBuilder("2012-12-21T00:00:00");
+		var in = new StringBuilder("2012-12-21T00:00:00");
 		HttpPartSchema ps = T_DATETIME;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00", s);
@@ -820,7 +820,7 @@ public class OpenApiTest extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void g01a_objectType_formatDefault_Map() throws Exception {
-		JsonMap in = JsonMap.of("a","b");
+		var in = JsonMap.of("a","b");
 		HttpPartSchema ps = T_OBJECT;
 		String s = serialize(ps, in);
 		assertEquals("a=b", s);
@@ -835,7 +835,7 @@ public class OpenApiTest extends SimpleTestBase {
 	}
 
 	@Test void g01b_objectType_formatDefault_Map_3d() throws Exception {
-		JsonMap in = JsonMap.of("a",JsonMap.of("b",JsonMap.of("c","d")));
+		var in = JsonMap.of("a",JsonMap.of("b",JsonMap.of("c","d")));
 		HttpPartSchema ps = tObject()
 			.p("a", tObject()
 				.p("b", tObject())

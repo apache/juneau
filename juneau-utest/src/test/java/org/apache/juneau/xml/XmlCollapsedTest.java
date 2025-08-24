@@ -327,13 +327,13 @@ class XmlCollapsedTest extends SimpleTestBase {
 	@Test void testElementNameOnElementClassOverridden() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
-		G t = G.newInstance(), t2;
+		var t = G.newInstance();
 
 		String xml = s.serialize(t);
 		assertEquals("<object><yf1>x1</yf1><yf1>x2</yf1></object>", xml);
 
 		// Note that existing fields should be reused and appended to.
-		t2 = p.parse(xml, G.class);
+		var t2 = p.parse(xml, G.class);
 		assertEquals(json(t2), json(t));
 
 		validateXml(t, s);
@@ -360,13 +360,13 @@ class XmlCollapsedTest extends SimpleTestBase {
 	@Test void testElementNameOnCollectionClass() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
-		H t = H.newInstance(), t2;
+		var t = H.newInstance();
 
 		String xml = s.serialize(t);
 		assertEquals("<object><xf1>x1</xf1><xf1>x2</xf1></object>", xml);
 
 		// Note that existing fields should be reused and appended to.
-		t2 = p.parse(xml, H.class);
+		var t2 = p.parse(xml, H.class);
 		assertEquals(json(t2), json(t));
 
 		validateXml(t, s);
@@ -398,13 +398,13 @@ class XmlCollapsedTest extends SimpleTestBase {
 	@Test void testElementNameOnCollectionClassOverridden() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
-		G t = G.newInstance(), t2;
+		var t = G.newInstance();
 
 		String xml = s.serialize(t);
 		assertEquals("<object><yf1>x1</yf1><yf1>x2</yf1></object>", xml);
 
 		// Note that existing fields should be reused and appended to.
-		t2 = p.parse(xml, G.class);
+		var t2 = p.parse(xml, G.class);
 		assertEquals(json(t2), json(t));
 
 		validateXml(t, s);

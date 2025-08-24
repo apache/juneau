@@ -386,7 +386,9 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void ca08_isSame() {
-		Integer x1 = Integer.valueOf(999), x1a = Integer.valueOf(999), nil = null;
+		var x1 = Integer.valueOf(999);
+		var x1a = Integer.valueOf(999);
+		var nil = (Integer)null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='999(Integer@*)'.  Actual='999(Integer@*)'.");

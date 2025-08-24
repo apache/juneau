@@ -473,7 +473,7 @@ class BeanMapTest extends SimpleTestBase {
 		m.put("b", new D2());
 		assertEquals("default", t.b.s);
 
-		JsonParser p = JsonParser.create().beanDictionary(D2.class).build();
+		var p = JsonParser.create().beanDictionary(D2.class).build();
 		m.put("lb1", JsonList.ofText("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals(JsonList.class.getName(), t.lb1.getClass().getName());
 		assertEquals(D2.class.getName(), t.lb1.get(0).getClass().getName());
@@ -524,7 +524,7 @@ class BeanMapTest extends SimpleTestBase {
 		m.put("b", new D2c());
 		assertEquals("default", t.b.s);
 
-		JsonParser p = JsonParser.create().beanDictionary(D2c.class).applyAnnotations(D1cConfig.class).build();
+		var p = JsonParser.create().beanDictionary(D2c.class).applyAnnotations(D1cConfig.class).build();
 		m.put("lb1", JsonList.ofText("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals(JsonList.class.getName(), t.lb1.getClass().getName());
 		assertEquals(D2c.class.getName(), t.lb1.get(0).getClass().getName());
@@ -706,7 +706,7 @@ class BeanMapTest extends SimpleTestBase {
 		assertEquals(HEnum.THREE, t7.getEnum2());
 
 		// Create instance directly from JSON.
-		JsonParser p = JsonParser.create().beanDictionary(H.class).build();
+		var p = JsonParser.create().beanDictionary(H.class).build();
 		t7 = (H)p.parse("{_type:'H',enum1:'THREE',enum2:'ONE'}", Object.class);
 		assertEquals("{_type:'H',enum1:'THREE',enum2:'ONE'}", serializer.serialize(t7));
 		assertEquals(HEnum.THREE, t7.enum1);
@@ -1765,7 +1765,7 @@ class BeanMapTest extends SimpleTestBase {
 	}
 
 	@Test void testHiddenProperties_usingConfig() {
-		JsonSerializer s = Json5Serializer.DEFAULT.copy().applyAnnotations(UcConfig.class).build();
+		var s = Json5Serializer.DEFAULT.copy().applyAnnotations(UcConfig.class).build();
 		BeanMeta bm = s.getBeanContext().getBeanMeta(U.class);
 		assertNotNull(bm.getPropertyMeta("a"));
 		assertNotNull(bm.getPropertyMeta("b"));
@@ -1842,7 +1842,7 @@ class BeanMapTest extends SimpleTestBase {
 	}
 
 	@Test void testBeanPropertyOrder_usingConfig() {
-		WriterSerializer ws = Json5Serializer.create().applyAnnotations(VcConfig.class).build();
+		var ws = Json5Serializer.create().applyAnnotations(VcConfig.class).build();
 		assertEquals("{a1:'1',a2:'2',a3:'3',a4:'4'}", ws.toString(new V2c()));
 		assertEquals("{a3:'3',a4:'4',a5:'5',a6:'6'}", ws.toString(new V3c()));
 	}
@@ -1897,14 +1897,14 @@ class BeanMapTest extends SimpleTestBase {
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 
-		X1 t1 = X1.create();
+		var t1 = X1.create();
 		r = s.serialize(t1);
 		assertEquals("{f1:'1',f2:'2'}", r);
 		t1 = p.parse(r, X1.class);
 		assertEquals("1", t1.f1);
 		assertEquals("2", t1.getF2());
 
-		X2 t2 = X2.create();
+		var t2 = X2.create();
 		r = s.serialize(t2);
 		assertEquals("{f1:1,f2:2}", r);
 		t2 = p.parse(r, X2.class);

@@ -67,7 +67,7 @@ class ObjectRest_Test extends SimpleTestBase {
 		model.put("/person1", p);
 
 		// Make sure it got stored correctly.
-		JsonSerializer serializer = JsonSerializer.create().json5().addRootType().build();
+		var serializer = JsonSerializer.create().json5().addRootType().build();
 		assertEquals("{person1:{name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}}", serializer.serialize(model.getRootObject()));
 
 		// Get the original Person object back.
@@ -262,7 +262,7 @@ class ObjectRest_Test extends SimpleTestBase {
 	// PojoRest(Object,ReaderParser)
 	//====================================================================================================
 	@Test void c01_constructors() {
-		ObjectRest model = ObjectRest.create(new AddressBook(), JsonParser.DEFAULT);
+		var model = ObjectRest.create(new AddressBook(), JsonParser.DEFAULT);
 
 		// Try adding a person to the address book.
 		Person billClinton = new Person("Bill Clinton", 65,
@@ -279,7 +279,7 @@ class ObjectRest_Test extends SimpleTestBase {
 	// setRootLocked()
 	//====================================================================================================
 	@Test void d01_rootLocked() {
-		ObjectRest model = ObjectRest.create(new AddressBook()).setRootLocked();
+		var model = ObjectRest.create(new AddressBook()).setRootLocked();
 		assertThrowsWithMessage(ObjectRestException.class, "Cannot overwrite root object", ()->model.put("", new AddressBook()));
 		assertThrowsWithMessage(ObjectRestException.class, "Cannot overwrite root object", ()->model.put(null, new AddressBook()));
 		assertThrowsWithMessage(ObjectRestException.class, "Cannot overwrite root object", ()->model.put("/", new AddressBook()));
@@ -289,7 +289,7 @@ class ObjectRest_Test extends SimpleTestBase {
 	// getRootObject()
 	//====================================================================================================
 	@Test void e01_getRootObject() {
-		ObjectRest model = ObjectRest.create(new AddressBook());
+		var model = ObjectRest.create(new AddressBook());
 		assertTrue(model.getRootObject() instanceof AddressBook);
 		model.put("", "foobar");
 		assertTrue(model.getRootObject() instanceof String);
@@ -318,7 +318,7 @@ class ObjectRest_Test extends SimpleTestBase {
 	// getJsonList(String url, JsonList defVal)
 	//====================================================================================================
 	@Test void f01_getMethods() throws Exception {
-		ObjectRest model = ObjectRest.create(new A());
+		var model = ObjectRest.create(new A());
 		JsonList l = JsonList.ofJson("[{a:'b'}]");
 		JsonMap m = JsonMap.ofJson("{a:'b'}");
 
@@ -795,7 +795,7 @@ class ObjectRest_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void f02_invokeMethod() throws Exception {
 
-		ObjectRest model = ObjectRest.create(new AddressBook().init());
+		var model = ObjectRest.create(new AddressBook().init());
 		assertEquals("Person(name=Bill Clinton,age=65)", model.invokeMethod("0", "toString", ""));
 
 		model = ObjectRest.create(new AddressBook().init(), JsonParser.DEFAULT);
@@ -808,7 +808,7 @@ class ObjectRest_Test extends SimpleTestBase {
 	// getPublicMethods(String url)
 	//====================================================================================================
 	@Test void f03_getPublicMethods() {
-		ObjectRest model = ObjectRest.create(new AddressBook().init());
+		var model = ObjectRest.create(new AddressBook().init());
 		assertTrue(Json5Serializer.DEFAULT.toString(model.getPublicMethods("0")).contains("'toString'"));
 		assertTrue(Json5Serializer.DEFAULT.toString(model.getPublicMethods("0/addresses/0/state")).contains("'toString'"));
 		assertNull(model.getPublicMethods("1"));
@@ -818,10 +818,10 @@ class ObjectRest_Test extends SimpleTestBase {
 	// getClassMeta(String url)
 	//====================================================================================================
 	@Test void f04_getClassMeta() {
-		ObjectRest model = ObjectRest.create(new AddressBook().init());
+		var model = ObjectRest.create(new AddressBook().init());
 		assertEquals("Person", model.getClassMeta("0").getInnerClass().getSimpleName());
 		assertEquals("String", model.getClassMeta("0/addresses/0/state").getInnerClass().getSimpleName());
 		assertNull(model.getClassMeta("1"));
 		assertNull(model.getClassMeta("0/addresses/1/state"));
 	}
-}
+}

@@ -49,7 +49,7 @@ class UonConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basicSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		UonSerializerSession x = UonSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isEncoding());
@@ -57,7 +57,7 @@ class UonConfigAnnotationTest extends SimpleTestBase {
 	}
 
 	@Test void basicParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		UonParserSession x = UonParser.create().apply(al).build().getSession();
 		check("true", x.isDecoding());
 		check("true", x.isValidateEnd());
@@ -72,7 +72,7 @@ class UonConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValuesSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		UonSerializerSession x = UonSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEncoding());
@@ -80,7 +80,7 @@ class UonConfigAnnotationTest extends SimpleTestBase {
 	}
 
 	@Test void noValuesParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		UonParserSession x = UonParser.create().apply(al).build().getSession();
 		check("false", x.isDecoding());
 		check("false", x.isValidateEnd());
@@ -94,7 +94,7 @@ class UonConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		UonSerializerSession x = UonSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEncoding());
@@ -102,7 +102,7 @@ class UonConfigAnnotationTest extends SimpleTestBase {
 	}
 
 	@Test void noAnnotationParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		UonParserSession x = UonParser.create().apply(al).build().getSession();
 		check("false", x.isDecoding());
 		check("false", x.isValidateEnd());

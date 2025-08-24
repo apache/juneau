@@ -22,7 +22,7 @@ class PatternMatchVarTest {
 	// test - Basic tests
 	//====================================================================================================
 	@Test void test() {
-		VarResolver vr = VarResolver.create().vars(PatternMatchVar.class, SystemPropertiesVar.class).build();
+		var vr = VarResolver.create().vars(PatternMatchVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("PatternMatchVarTest.test", "foobar");
 
@@ -41,4 +41,4 @@ class PatternMatchVarTest {
 		assertEquals("false", vr.resolve("$PM{$S{PatternMatchVarTest.test},?????}"));
 		assertEquals("false", vr.resolve("$PM{$S{PatternMatchVarTest.test},???????}"));
 	}
-}
+}

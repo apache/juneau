@@ -74,7 +74,7 @@ class Nls_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_optionsPageWithoutNls() throws Exception {
-		MockRestClient b = MockRestClient.build(B.class);
+		var b = MockRestClient.build(B.class);
 		b.options("/").run().assertContent().isContains("foo");
 	}
 
@@ -92,7 +92,7 @@ class Nls_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_missingResourceBundle() throws Exception {
-		MockRestClient c = MockRestClient.build(C.class);
+		var c = MockRestClient.build(C.class);
 		c.get("/a").run().assertContent("{!bad}");
 	}
-}
+}

@@ -204,20 +204,20 @@ class RestClient_Test extends SimpleTestBase {
 
 	@SuppressWarnings("deprecation")
 	@Test void c06_httpClient_unusedHttpClientMethods() {
-		RestClient x = RestClient.create().build();
+		var x = RestClient.create().build();
 		assertThrows(UnsupportedOperationException.class, x::getParams);
 		assertNotNull(x.getConnectionManager());
 	}
 
 	@Test void c07_httpClient_executeHttpUriRequest() throws Exception {
-		HttpGet x = new HttpGet("http://localhost/bean");
+		var x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","text/json5");
 		HttpResponse res = MockRestClient.create(A.class).build().execute(x);
 		assertEquals("{f:1}",IOUtils.read(res.getEntity().getContent()));
 	}
 
 	@Test void c08_httpClient_executeHttpHostHttpRequest() throws Exception {
-		HttpGet x = new HttpGet("http://localhost/bean");
+		var x = new HttpGet("http://localhost/bean");
 		var target = new HttpHost("localhost");
 		x.addHeader("Accept","text/json5");
 		HttpResponse res = MockRestClient.create(A.class).build().execute(target,x);
@@ -225,7 +225,7 @@ class RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void c09_httpClient_executeHttpHostHttpRequestHttpContext() throws Exception {
-		HttpGet x = new HttpGet("http://localhost/bean");
+		var x = new HttpGet("http://localhost/bean");
 		var target = new HttpHost("localhost");
 		HttpContext context = new BasicHttpContext();
 		x.addHeader("Accept","text/json5");
@@ -234,28 +234,28 @@ class RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void c10_httpClient_executeResponseHandler() throws Exception {
-		HttpGet x = new HttpGet("http://localhost/bean");
+		var x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","text/json5");
 		String res = MockRestClient.create(A.class).build().execute(x,new BasicResponseHandler());
 		assertEquals("{f:1}",res);
 	}
 
 	@Test void c11_httpClient_executeHttpUriRequestResponseHandlerHttpContext() throws Exception {
-		HttpGet x = new HttpGet("http://localhost/bean");
+		var x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","text/json5");
 		String res = MockRestClient.create(A.class).build().execute(x,new BasicResponseHandler(),new BasicHttpContext());
 		assertEquals("{f:1}",res);
 	}
 
 	@Test void c12_httpClient_executeHttpHostHttpRequestResponseHandlerHttpContext() throws Exception {
-		HttpGet x = new HttpGet("http://localhost/bean");
+		var x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","text/json5");
 		String res = MockRestClient.create(A.class).build().execute(new HttpHost("localhost"),x,new BasicResponseHandler(),new BasicHttpContext());
 		assertEquals("{f:1}",res);
 	}
 
 	@Test void c13_httpClient_executeHttpHostHttpRequestResponseHandler() throws Exception {
-		HttpGet x = new HttpGet("http://localhost/bean");
+		var x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","text/json5");
 		String res = MockRestClient.create(A.class).build().execute(new HttpHost("localhost"),x,new BasicResponseHandler());
 		assertEquals("{f:1}",res);
@@ -268,8 +268,8 @@ class RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void c15_httpClient_pooled() throws Exception {
-		RestClient x1 = RestClient.create().json5().pooled().build();
-		RestClient x2 = RestClient.create().json5().build();
+		var x1 = RestClient.create().json5().pooled().build();
+		var x2 = RestClient.create().json5().build();
 		RestClient x3 = client().pooled().build();
 		assertEquals("PoolingHttpClientConnectionManager",ClassInfo.of(x1.httpClient).getDeclaredField(x -> x.hasName("connManager")).accessible().get(x1.httpClient).getClass().getSimpleName());
 		assertEquals("BasicHttpClientConnectionManager",ClassInfo.of(x2.httpClient).getDeclaredField(x -> x.hasName("connManager")).accessible().get(x2.httpClient).getClass().getSimpleName());
@@ -318,7 +318,7 @@ class RestClient_Test extends SimpleTestBase {
 
 	@Test void e03_httpRequestBase_protocolVersion() throws Exception {
 		client().build().get("/bean").protocolVersion(new ProtocolVersion("http", 2, 0)).run().assertStatus(200);
-		ProtocolVersion x = client().build().get("/bean").protocolVersion(new ProtocolVersion("http", 2, 0)).getProtocolVersion();
+		var x = client().build().get("/bean").protocolVersion(new ProtocolVersion("http", 2, 0)).getProtocolVersion();
 		assertEquals(2,x.getMajor());
 	}
 

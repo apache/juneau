@@ -28,7 +28,7 @@ class CommonParser_Test extends SimpleTestBase {
 	// testFromSerializer
 	//====================================================================================================
 	@Test void testFromSerializer() throws Exception {
-		ReaderParser p = HtmlParser.create().beanDictionary(A1.class).build();
+		var p = HtmlParser.create().beanDictionary(A1.class).build();
 		Map m = null;
 		String in;
 
@@ -92,7 +92,7 @@ class CommonParser_Test extends SimpleTestBase {
 	// Correct handling of unknown properties.
 	//====================================================================================================
 	@Test void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = HtmlParser.create().ignoreUnknownBeanProperties().build();
+		var p = HtmlParser.create().ignoreUnknownBeanProperties().build();
 		B t;
 
 		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><number>1</number></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";
@@ -133,7 +133,7 @@ class CommonParser_Test extends SimpleTestBase {
 	// Parser listeners.
 	//====================================================================================================
 	@Test void testParserListeners() throws Exception {
-		HtmlParser p = HtmlParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
+		var p = HtmlParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><string>/foo</string></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";
 		p.parse(in, B.class);

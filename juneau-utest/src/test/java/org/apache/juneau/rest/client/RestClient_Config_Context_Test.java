@@ -107,7 +107,7 @@ class RestClient_Config_Context_Test extends SimpleTestBase {
 		client().applyAnnotations(A6b.class).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
 		client().applyAnnotations(A6c.class).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
 		client().applyAnnotations(A6d.class.getMethod("foo")).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
-		AnnotationWorkList al = AnnotationWorkList.of(ClassInfo.of(A6c.class).getAnnotationList(CONTEXT_APPLY_FILTER));
+		var al = AnnotationWorkList.of(ClassInfo.of(A6c.class).getAnnotationList(CONTEXT_APPLY_FILTER));
 		client().apply(al).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
 	}
 

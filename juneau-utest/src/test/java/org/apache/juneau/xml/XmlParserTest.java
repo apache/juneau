@@ -78,7 +78,7 @@ class XmlParserTest extends SimpleTestBase {
 	@Test void testPreserveRootElement() throws Exception {
 		String xml;
 		JsonMap m;
-		ReaderParser p = XmlParser.create().preserveRootElement().build();
+		var p = XmlParser.create().preserveRootElement().build();
 
 		xml = "<A><B><C>c</C></B></A>";
 		m = p.parse(xml, JsonMap.class);

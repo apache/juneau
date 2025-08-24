@@ -66,9 +66,9 @@ class Bean_Test extends SimpleTestBase {
 	static ClassInfo a2ci = ClassInfo.of(A2Config.class);
 
 	@Test void testBeanAnnotationOverridesPrivate_usingConfig() throws Exception {
-		AnnotationWorkList al = AnnotationWorkList.of(a2ci.getAnnotationList());
-		JsonSerializer js = Json5Serializer.create().apply(al).build();
-		JsonParser jp = JsonParser.create().apply(al).build();
+		var al = AnnotationWorkList.of(a2ci.getAnnotationList());
+		var js = Json5Serializer.create().apply(al).build();
+		var jp = JsonParser.create().apply(al).build();
 
 		String json = js.serialize(A2.create());
 		assertEquals("{f1:1}", json);
@@ -150,9 +150,9 @@ class Bean_Test extends SimpleTestBase {
 	static ClassInfo b2ci = ClassInfo.of(B2Config.class);
 
 	@Test void testBeanxAnnotationOverridesPrivate_usingConfig() throws Exception {
-		AnnotationWorkList al = AnnotationWorkList.of(b2ci.getAnnotationList());
-		JsonSerializer js = Json5Serializer.create().apply(al).build();
-		JsonParser jp = JsonParser.create().apply(al).build();
+		var al = AnnotationWorkList.of(b2ci.getAnnotationList());
+		var js = Json5Serializer.create().apply(al).build();
+		var jp = JsonParser.create().apply(al).build();
 
 		String json = js.serialize(B2.create());
 		assertEquals("{f1:1,f2:2}", json);
@@ -217,9 +217,9 @@ class Bean_Test extends SimpleTestBase {
 	}
 
 	@Test void d03_beanPropertiesExcludePropertiesCombined_beanConfigOverride() throws Exception {
-		AnnotationWorkList al = AnnotationWorkList.of(vr, dConfig.getAnnotationList());
-		JsonSerializer js = Json5Serializer.create().apply(al).build();
-		JsonParser jp = JsonParser.create().apply(al).build();
+		var al = AnnotationWorkList.of(vr, dConfig.getAnnotationList());
+		var js = Json5Serializer.create().apply(al).build();
+		var jp = JsonParser.create().apply(al).build();
 
 		String json = js.serialize(D1.create());
 		assertEquals("{b:2,d:4}", json);
@@ -229,9 +229,9 @@ class Bean_Test extends SimpleTestBase {
 	}
 
 	@Test void d04_beanPXpCombined_beanConfigOverride() throws Exception {
-		AnnotationWorkList al = AnnotationWorkList.of(vr, dConfig.getAnnotationList());
-		JsonSerializer js = Json5Serializer.create().apply(al).build();
-		JsonParser jp = JsonParser.create().apply(al).build();
+		var al = AnnotationWorkList.of(vr, dConfig.getAnnotationList());
+		var js = Json5Serializer.create().apply(al).build();
+		var jp = JsonParser.create().apply(al).build();
 
 		String json = js.serialize(D2.create());
 		assertEquals("{b:2,d:4}", json);
@@ -242,8 +242,8 @@ class Bean_Test extends SimpleTestBase {
 
 	@Test void d05_beanPropertiesExcludePropertiesCombined_beanContextBuilderOverride() throws Exception {
 		Bean ba = BeanAnnotation.create("D1").properties("b,c,d").excludeProperties("c").build();
-		JsonSerializer js = Json5Serializer.create().annotations(ba).build();
-		JsonParser jp = JsonParser.create().annotations(ba).build();
+		var js = Json5Serializer.create().annotations(ba).build();
+		var jp = JsonParser.create().annotations(ba).build();
 
 		String json = js.serialize(D1.create());
 		assertEquals("{b:2,d:4}", json);
@@ -254,8 +254,8 @@ class Bean_Test extends SimpleTestBase {
 
 	@Test void d06_beanPXpCombined_beanContextBuilderOverride() throws Exception {
 		Bean ba = BeanAnnotation.create("D2").p("b,c,d").xp("c").build();
-		JsonSerializer js = Json5Serializer.create().annotations(ba).build();
-		JsonParser jp = JsonParser.create().annotations(ba).build();
+		var js = Json5Serializer.create().annotations(ba).build();
+		var jp = JsonParser.create().annotations(ba).build();
 
 		String json = js.serialize(D2.create());
 		assertEquals("{b:2,d:4}", json);
@@ -328,9 +328,9 @@ class Bean_Test extends SimpleTestBase {
 	}
 
 	@Test void e03_beanPropertiesExcludePropertiesCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
-		AnnotationWorkList al = AnnotationWorkList.of(vr, eConfig.getAnnotationList());
-		JsonSerializer js = Json5Serializer.create().apply(al).build();
-		JsonParser jp = JsonParser.create().apply(al).build();
+		var al = AnnotationWorkList.of(vr, eConfig.getAnnotationList());
+		var js = Json5Serializer.create().apply(al).build();
+		var jp = JsonParser.create().apply(al).build();
 
 		String json = js.serialize(E1.create());
 		assertEquals("{b:2,d:4}", json);
@@ -340,9 +340,9 @@ class Bean_Test extends SimpleTestBase {
 	}
 
 	@Test void e04_beanPXpCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
-		AnnotationWorkList al = AnnotationWorkList.of(vr, eConfig.getAnnotationList());
-		JsonSerializer js = Json5Serializer.create().apply(al).build();
-		JsonParser jp = JsonParser.create().apply(al).build();
+		var al = AnnotationWorkList.of(vr, eConfig.getAnnotationList());
+		var js = Json5Serializer.create().apply(al).build();
+		var jp = JsonParser.create().apply(al).build();
 
 		String json = js.serialize(E2.create());
 		assertEquals("{b:2,d:4}", json);
@@ -353,8 +353,8 @@ class Bean_Test extends SimpleTestBase {
 
 	@Test void e05_beanPropertiersExcludePropertiesCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
 		Bean ba = BeanAnnotation.create("E1").properties("b,c,d").excludeProperties("c").build();
-		JsonSerializer js = Json5Serializer.create().annotations(ba).build();
-		JsonParser jp = JsonParser.create().annotations(ba).build();
+		var js = Json5Serializer.create().annotations(ba).build();
+		var jp = JsonParser.create().annotations(ba).build();
 
 		String json = js.serialize(E1.create());
 		assertEquals("{b:2,d:4}", json);
@@ -365,8 +365,8 @@ class Bean_Test extends SimpleTestBase {
 
 	@Test void e06_beanBpiBpxCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
 		Bean ba = BeanAnnotation.create("E2").p("b,c,d").xp("c").build();
-		JsonSerializer js = Json5Serializer.create().annotations(ba).build();
-		JsonParser jp = JsonParser.create().annotations(ba).build();
+		var js = Json5Serializer.create().annotations(ba).build();
+		var jp = JsonParser.create().annotations(ba).build();
 
 		String json = js.serialize(E2.create());
 		assertEquals("{b:2,d:4}", json);

@@ -55,8 +55,8 @@ class RestClient_Logging_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_logToConsole() throws Exception {
-		MockConsole c = MockConsole.create();
-		MockLogger l = MockLogger.create();
+		var c = MockConsole.create();
+		var l = MockLogger.create();
 
 		client().logRequests(DetailLevel.NONE,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/bean",bean).complete();
 		c.assertContents().is("");
@@ -127,7 +127,7 @@ class RestClient_Logging_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_logTo() throws Exception {
-		MockLogger l = MockLogger.create();
+		var l = MockLogger.create();
 
 		client().logRequests(DetailLevel.NONE,Level.SEVERE,null).logToConsole().logger(l).build().post("/bean",bean).complete();
 		l.assertContents().is("");
@@ -194,8 +194,8 @@ class RestClient_Logging_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_other() throws Exception {
-		MockLogger ml = MockLogger.create();
-		MockConsole mc = MockConsole.create();
+		var ml = MockLogger.create();
+		var mc = MockConsole.create();
 		client().logger(ml).interceptors(A1.class).build().post("/bean",bean).complete();
 		ml.assertRecordCount().is(5);
 		ml.reset();

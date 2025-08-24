@@ -215,7 +215,7 @@ class Html_Test extends SimpleTestBase {
 	// Test @Html.asPlainText annotation on classes and fields
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void b01_testHtmlAnnotationAsPlainText() throws Exception {
-		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
+		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
 		Object o = null;
 		String r;
 
@@ -243,7 +243,7 @@ class Html_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_testHtmlAnnotationAsPlainText_usingConfig() throws Exception {
-		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(B3Config.class).build();
+		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(B3Config.class).build();
 
 		Object o = null;
 		String r;
@@ -277,7 +277,7 @@ class Html_Test extends SimpleTestBase {
 	// Test @Html.asXml annotation on classes and fields
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void c01_testHtmlAnnotationAsXml() throws Exception {
-		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
+		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
 		Object o = null;
 		String r;
 
@@ -301,7 +301,7 @@ class Html_Test extends SimpleTestBase {
 	}
 
 	@Test void c02_testHtmlAnnotationAsXml_usingConfig() throws Exception {
-		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(C3Config.class).build();
+		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(C3Config.class).build();
 		Object o = null;
 		String r;
 
@@ -344,7 +344,7 @@ class Html_Test extends SimpleTestBase {
 	public static class MyMap extends LinkedHashMap<String,String> {}
 
 	@Test void d02_testNoTableHeaders_usingConfig() throws Exception {
-		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.copy().applyAnnotations(MyMap2Config.class).build();
+		var s = HtmlSerializer.DEFAULT_SQ.copy().applyAnnotations(MyMap2Config.class).build();
 		Object o = null;
 		String r;
 
@@ -380,7 +380,7 @@ class Html_Test extends SimpleTestBase {
 	}
 
 	@Test void d04_testNoTableHeadersOnBeans_usingConfig() throws Exception {
-		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.copy().applyAnnotations(MyBean2Config.class).build();
+		var s = HtmlSerializer.DEFAULT_SQ.copy().applyAnnotations(MyBean2Config.class).build();
 		Object o = null;
 		String r;
 
@@ -398,7 +398,7 @@ class Html_Test extends SimpleTestBase {
 	}
 
 	@Test void d05_testNoTableHeadersOnBeans_usingConcreteAnnotation() throws Exception {
-		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.copy().annotations(HtmlAnnotation.create("MyBean2").noTables(true).build()).build();
+		var s = HtmlSerializer.DEFAULT_SQ.copy().annotations(HtmlAnnotation.create("MyBean2").noTables(true).build()).build();
 		Object o = null;
 		String r;
 

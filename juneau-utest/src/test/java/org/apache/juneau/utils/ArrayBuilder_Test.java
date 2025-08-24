@@ -20,7 +20,7 @@ class ArrayBuilder_Test extends SimpleTestBase {
 
 	@Test void a01_basic() {
 		String[] empty = {};
-		ArrayBuilder<String> x = ArrayBuilder.of(String.class).filter(y -> y != null).size(2);
+		var x = ArrayBuilder.of(String.class).filter(y -> y != null).size(2);
 		assertArray(x.orElse(empty));
 		x.add(null);
 		assertArray(x.orElse(empty));
@@ -32,4 +32,4 @@ class ArrayBuilder_Test extends SimpleTestBase {
 		x.add("c");
 		assertArray(x.orElse(empty), "a,b,c");
 	}
-}
+}

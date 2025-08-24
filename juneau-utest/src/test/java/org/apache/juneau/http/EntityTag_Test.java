@@ -33,13 +33,13 @@ class EntityTag_Test extends SimpleTestBase {
 		assertFalse(x1.isWeak());
 		assertFalse(x1.isAny());
 
-		EntityTag x2 = new EntityTag("W/\"foo\"");
+		var x2 = new EntityTag("W/\"foo\"");
 		assertString("W/\"foo\"", x2);
 		assertEquals("foo", x2.getEntityValue());
 		assertTrue(x2.isWeak());
 		assertFalse(x2.isAny());
 
-		EntityTag x3 = new EntityTag("*");
+		var x3 = new EntityTag("*");
 		assertString("*", x3);
 		assertEquals("*", x3.getEntityValue());
 		assertFalse(x3.isWeak());
@@ -51,13 +51,13 @@ class EntityTag_Test extends SimpleTestBase {
 		assertFalse(x5.isWeak());
 		assertFalse(x5.isAny());
 
-		EntityTag x6 = EntityTag.of("\"foo\"");
+		var x6 = EntityTag.of("\"foo\"");
 		assertString("\"foo\"", x6);
 		assertEquals("foo", x6.getEntityValue());
 		assertFalse(x6.isWeak());
 		assertFalse(x6.isAny());
 
-		EntityTag x7 = EntityTag.of((Supplier<?>)()->"\"foo\"");
+		var x7 = EntityTag.of((Supplier<?>)()->"\"foo\"");
 		assertString("\"foo\"", x7);
 		assertEquals("foo", x7.getEntityValue());
 		assertFalse(x7.isWeak());

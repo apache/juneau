@@ -33,11 +33,11 @@ class Common_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void testTrimNullsFromBeans() throws Exception {
 		UonSerializer.Builder s = UonSerializer.create().encoding();
-		A t1 = A.create(), t2;
+		var t1 = A.create();
 
 		String r = s.build().serialize(t1);
 		assertEquals("(s2=s2)", r);
-		t2 = p.parse(r, A.class);
+		var t2 = p.parse(r, A.class);
 		assertEquals(json(t2), json(t1));
 
 		s.keepNullProperties();
@@ -62,12 +62,12 @@ class Common_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void testTrimEmptyMaps() throws Exception {
 		UonSerializer.Builder s = UonSerializer.create().encoding();
-		B t1 = B.create(), t2;
+		var t1 = B.create();
 		String r;
 
 		r = s.build().serialize(t1);
 		assertEquals("(f1=(),f2=(f2a=null,f2b=(s2=s2)))", r);
-		t2 = pe.parse(r, B.class);
+		var t2 = pe.parse(r, B.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyMaps();
@@ -93,12 +93,12 @@ class Common_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void testTrimEmptyLists() throws Exception {
 		UonSerializer.Builder s = UonSerializer.create().encoding();
-		C t1 = C.create(), t2;
+		var t1 = C.create();
 		String r;
 
 		r = s.build().serialize(t1);
 		assertEquals("(f1=@(),f2=@(null,(s2=s2)))", r);
-		t2 = pe.parse(r, C.class);
+		var t2 = pe.parse(r, C.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
@@ -124,12 +124,12 @@ class Common_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void testTrimEmptyArrays() throws Exception {
 		UonSerializer.Builder s = UonSerializer.create().encoding();
-		D t1 = D.create(), t2;
+		var t1 = D.create();
 		String r;
 
 		r = s.build().serialize(t1);
 		assertEquals("(f1=@(),f2=@(null,(s2=s2)))", r);
-		t2 = pe.parse(r, D.class);
+		var t2 = pe.parse(r, D.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();

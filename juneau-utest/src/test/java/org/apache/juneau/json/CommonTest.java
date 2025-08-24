@@ -32,11 +32,11 @@ class CommonTest  extends SimpleTestBase{
 	@Test void testTrimNullsFromBeans() throws Exception {
 		JsonSerializer.Builder s = JsonSerializer.create().json5();
 		JsonParser p = JsonParser.DEFAULT;
-		A t1 = A.create(), t2;
+		var t1 = A.create();
 
 		String r = s.build().serialize(t1);
 		assertEquals("{s2:'s2'}", r);
-		t2 = p.parse(r, A.class);
+		var t2 = p.parse(r, A.class);
 		assertEquals(json(t2), json(t1));
 
 		s.keepNullProperties();
@@ -62,12 +62,12 @@ class CommonTest  extends SimpleTestBase{
 	@Test void testTrimEmptyMaps() throws Exception {
 		JsonSerializer.Builder s = JsonSerializer.create().json5();
 		JsonParser p = JsonParser.DEFAULT;
-		B t1 = B.create(), t2;
+		var t1 = B.create();
 		String r;
 
 		r = s.build().serialize(t1);
 		assertEquals("{f1:{},f2:{f2a:null,f2b:{s2:'s2'}}}", r);
-		t2 = p.parse(r, B.class);
+		var t2 = p.parse(r, B.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyMaps();
@@ -94,12 +94,12 @@ class CommonTest  extends SimpleTestBase{
 	@Test void testTrimEmptyLists() throws Exception {
 		JsonSerializer.Builder s = JsonSerializer.create().json5();
 		JsonParser p = JsonParser.DEFAULT;
-		C t1 = C.create(), t2;
+		var t1 = C.create();
 		String r;
 
 		r = s.build().serialize(t1);
 		assertEquals("{f1:[],f2:[null,{s2:'s2'}]}", r);
-		t2 = p.parse(r, C.class);
+		var t2 = p.parse(r, C.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
@@ -126,12 +126,12 @@ class CommonTest  extends SimpleTestBase{
 	@Test void testTrimEmptyArrays() throws Exception {
 		JsonSerializer.Builder s = JsonSerializer.create().json5();
 		JsonParser p = JsonParser.DEFAULT;
-		D t1 = D.create(), t2;
+		var t1 = D.create();
 		String r;
 
 		r = s.build().serialize(t1);
 		assertEquals("{f1:[],f2:[null,{s2:'s2'}]}", r);
-		t2 = p.parse(r, D.class);
+		var t2 = p.parse(r, D.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
@@ -268,7 +268,7 @@ class CommonTest  extends SimpleTestBase{
 	// Basic bean
 	//====================================================================================================
 	@Test void testBasicBean() throws Exception {
-		JsonSerializer s = JsonSerializer.create().json5().keepNullProperties().sortProperties().build();
+		var s = JsonSerializer.create().json5().keepNullProperties().sortProperties().build();
 
 		var a = new J();
 		a.setF1("J");

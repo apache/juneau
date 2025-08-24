@@ -233,12 +233,12 @@ class JsonMapTest extends SimpleTestBase {
 	}
 
 	private String getDeepString(JsonMap m, String url) {
-		ObjectRest r = ObjectRest.create(m);
+		var r = ObjectRest.create(m);
 		return (String)r.get(url);
 	}
 
 	private Boolean getDeepBoolean(JsonMap m, String url) {
-		ObjectRest r = ObjectRest.create(m);
+		var r = ObjectRest.create(m);
 		return (Boolean)r.get(url);
 	}
 

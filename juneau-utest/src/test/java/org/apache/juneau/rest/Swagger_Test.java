@@ -44,18 +44,18 @@ class Swagger_Test extends SimpleTestBase {
 	public void testMethod() { /* no-op */ }
 
 	private org.apache.juneau.bean.swagger.Swagger getSwaggerWithFile(Object resource) throws Exception {
-		RestContext rc = RestContext.create(resource.getClass(),null,null).init(()->resource).defaultClasses(TestClasspathFileFinder.class).build();
-		RestOpContext roc = RestOpContext.create(Swagger_Test.class.getMethod("testMethod"), rc).build();
-		RestSession call = RestSession.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
+		var rc = RestContext.create(resource.getClass(),null,null).init(()->resource).defaultClasses(TestClasspathFileFinder.class).build();
+		var roc = RestOpContext.create(Swagger_Test.class.getMethod("testMethod"), rc).build();
+		var call = RestSession.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
 		RestRequest req = roc.createRequest(call);
 		SwaggerProvider ip = rc.getSwaggerProvider();
 		return ip.getSwagger(rc, req.getLocale());
 	}
 
 	private static org.apache.juneau.bean.swagger.Swagger getSwagger(Object resource) throws Exception {
-		RestContext rc = RestContext.create(resource.getClass(),null,null).init(()->resource).build();
-		RestOpContext roc = RestOpContext.create(Swagger_Test.class.getMethod("testMethod"), rc).build();
-		RestSession call = RestSession.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
+		var rc = RestContext.create(resource.getClass(),null,null).init(()->resource).build();
+		var roc = RestOpContext.create(Swagger_Test.class.getMethod("testMethod"), rc).build();
+		var call = RestSession.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
 		RestRequest req = roc.createRequest(call);
 		SwaggerProvider ip = rc.getSwaggerProvider();
 		return ip.getSwagger(rc, req.getLocale());
@@ -1971,7 +1971,7 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void t01_bodyWithReadOnlyProperty() throws Exception {
-		MockRestClient p = MockRestClient.build(T1.class);
+		var p = MockRestClient.build(T1.class);
 		org.apache.juneau.bean.swagger.Swagger s = JsonParser.DEFAULT.parse(p.get("/api").accept("application/json").run().getContent().asString(), org.apache.juneau.bean.swagger.Swagger.class);
 		Operation o = s.getOperation("/", "get");
 

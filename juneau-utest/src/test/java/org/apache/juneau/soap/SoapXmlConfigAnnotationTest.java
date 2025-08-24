@@ -45,7 +45,7 @@ class SoapXmlConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basic() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		SoapXmlSerializerSession x = SoapXmlSerializer.create().apply(al).build().getSession();
 		check("foo", x.getSoapAction());
 	}
@@ -59,7 +59,7 @@ class SoapXmlConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValues() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		SoapXmlSerializerSession x = SoapXmlSerializer.create().apply(al).build().getSession();
 		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
 	}
@@ -72,7 +72,7 @@ class SoapXmlConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotation() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		SoapXmlSerializerSession x = SoapXmlSerializer.create().apply(al).build().getSession();
 		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
 	}

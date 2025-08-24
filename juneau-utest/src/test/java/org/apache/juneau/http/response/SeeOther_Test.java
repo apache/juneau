@@ -29,7 +29,7 @@ class SeeOther_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		MockRestClient client = MockRestClient.createLax(A.class).disableRedirectHandling().build();
+		var client = MockRestClient.createLax(A.class).disableRedirectHandling().build();
 
 		client.get("/a1")
 			.run()

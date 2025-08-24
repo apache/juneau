@@ -48,7 +48,7 @@ class JsonListTest extends SimpleTestBase {
 	@Test void testIterateAs() throws Exception {
 
 		// Iterate over a list of JsonMaps.
-		JsonList l = new JsonList("[{foo:'bar'},{baz:123}]");
+		var l = new JsonList("[{foo:'bar'},{baz:123}]");
 		Iterator<JsonMap> i1 = l.elements(JsonMap.class).iterator();
 		assertEquals("bar", i1.next().getString("foo"));
 		assertEquals(123, (int)i1.next().getInt("baz"));
@@ -76,7 +76,7 @@ class JsonListTest extends SimpleTestBase {
 	// testAtMethods
 	//====================================================================================================
 	@Test void testAtMethods() throws Exception {
-		JsonList l = new JsonList("[{foo:'bar'},{baz:123}]");
+		var l = new JsonList("[{foo:'bar'},{baz:123}]");
 		String r;
 
 		r = l.getAt("0/foo", String.class);
@@ -105,7 +105,7 @@ class JsonListTest extends SimpleTestBase {
 	// testGetMap
 	//====================================================================================================
 	@Test void testGetMap() throws Exception {
-		JsonList l = new JsonList("[{1:'true',2:'false'}]");
+		var l = new JsonList("[{1:'true',2:'false'}]");
 		Map<Integer,Boolean> m2 = l.getMap(0, Integer.class, Boolean.class);
 		assertJson(m2, "{'1':true,'2':false}");
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());

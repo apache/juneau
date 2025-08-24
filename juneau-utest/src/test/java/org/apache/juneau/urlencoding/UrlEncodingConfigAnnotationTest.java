@@ -45,13 +45,13 @@ class UrlEncodingConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo a = ClassInfo.of(A.class);
 
 	@Test void basicSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("true", x.isExpandedParams());
 	}
 
 	@Test void basicParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("true", x.isExpandedParams());
 	}
@@ -65,13 +65,13 @@ class UrlEncodingConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void noValuesSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test void noValuesParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
@@ -84,13 +84,13 @@ class UrlEncodingConfigAnnotationTest extends SimpleTestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test void noAnnotationParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
+		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}

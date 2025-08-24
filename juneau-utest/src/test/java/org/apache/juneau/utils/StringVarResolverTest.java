@@ -24,7 +24,7 @@ class StringVarResolverTest extends SimpleTestBase {
 	// test - Basic tests
 	//====================================================================================================
 	@Test void test() {
-		VarResolver vr = VarResolver.create().vars(XVar.class).build();
+		var vr = VarResolver.create().vars(XVar.class).build();
 		String t;
 
 		t = null;
@@ -91,7 +91,7 @@ class StringVarResolverTest extends SimpleTestBase {
 	// test - No-name variables
 	//====================================================================================================
 	@Test void test2() {
-		VarResolver vr = VarResolver.create().vars(BlankVar.class).build();
+		var vr = VarResolver.create().vars(BlankVar.class).build();
 		String t;
 
 		t = "${y}";
@@ -121,7 +121,7 @@ class StringVarResolverTest extends SimpleTestBase {
 	// test - No-name variables
 	//====================================================================================================
 	@Test void testEscaped$() {
-		VarResolver vr = VarResolver.create().vars(BlankVar.class).build();
+		var vr = VarResolver.create().vars(BlankVar.class).build();
 		String t;
 
 		t = "${y}";
@@ -137,7 +137,7 @@ class StringVarResolverTest extends SimpleTestBase {
 	// test - Escape sequences.
 	//====================================================================================================
 	@Test void testEscapedSequences() {
-		VarResolver vr = VarResolver.create().vars(XVar.class).build();
+		var vr = VarResolver.create().vars(XVar.class).build();
 		String t;
 		char b = '\\';
 
@@ -175,7 +175,7 @@ class StringVarResolverTest extends SimpleTestBase {
 	// Test that StringResolver(parent) works as expected.
 	//====================================================================================================
 	@Test void testParent() {
-		VarResolver vr = VarResolver.create().defaultVars().vars(XMultipartVar.class).build();
+		var vr = VarResolver.create().defaultVars().vars(XMultipartVar.class).build();
 		String t;
 		System.setProperty("a", "a1");
 		System.setProperty("b", "b1");
@@ -311,4 +311,4 @@ class StringVarResolverTest extends SimpleTestBase {
 			super("|");
 		}
 	}
-}
+}

@@ -45,7 +45,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class A02 {}
 
 	@Test void a02_basic_onClass() {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, A02.class).noValidate().build();
+		var s = HttpPartSchema.create().applyAll(Content.class, A02.class).noValidate().build();
 		assertTrue(s.isRequired());
 	}
 
@@ -65,7 +65,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 
 	@Test void a03_basic_onParameter() throws Exception {
 		ParamInfo mpi = MethodInfo.of(A03.class.getMethod("a", String.class)).getParam(0);
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, mpi).noValidate().build();
+		var s = HttpPartSchema.create().applyAll(Content.class, mpi).noValidate().build();
 		assertTrue(s.isRequired());
 	}
 
@@ -85,7 +85,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 
 	@Test void a04_basic_onParameterAndClass() throws Exception {
 		ParamInfo mpi = MethodInfo.of(A04.class.getMethod("a", A02.class)).getParam(0);
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, mpi).noValidate().build();
+		var s = HttpPartSchema.create().applyAll(Content.class, mpi).noValidate().build();
 		assertTrue(s.isRequired());
 	}
 
@@ -166,7 +166,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class A05 {}
 
 	@Test void a05_basic_nestedItems_onClass() {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, A05.class).noValidate().build();
+		var s = HttpPartSchema.create().applyAll(Content.class, A05.class).noValidate().build();
 
 		assertEquals(HttpPartDataType.NUMBER, s.getType());
 		assertEquals(HttpPartFormat.INT32, s.getFormat());
@@ -249,7 +249,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class B01a {}
 
 	@Test void b01a_required() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, B01a.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, B01a.class).build();
 
 		s.validateInput("x");
 		assertThrowsWithMessage(SchemaValidationException.class, "No value specified.", ()->s.validateInput(null));
@@ -261,7 +261,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class B02a {}
 
 	@Test void b02a_pattern() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, B02a.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, B02a.class).build();
 
 		s.validateInput("x");
 		s.validateInput("xx");
@@ -292,7 +292,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class B03a {}
 
 	@Test void b03a_length() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, B03a.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, B03a.class).build();
 		s.validateInput("12");
 		s.validateInput("123");
 		s.validateInput(null);
@@ -316,7 +316,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class B03b {}
 
 	@Test void b03b_length_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, B03b.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, B03b.class).build();
 
 		s.getItems().validateInput("12");
 		s.getItems().getItems().validateInput("123");
@@ -351,7 +351,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class B04a {}
 
 	@Test void b04a_enum() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, B04a.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, B04a.class).build();
 		s.validateInput("X");
 		s.validateInput("Y");
 		s.validateInput(null);
@@ -365,7 +365,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class B04b {}
 
 	@Test void b04b_enum() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, B04b.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, B04b.class).build();
 		s.validateInput("X");
 		s.validateInput("Y");
 		s.validateInput(null);
@@ -379,7 +379,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class B04c {}
 
 	@Test void b04c_enum_json() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, B04c.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, B04c.class).build();
 		s.validateInput("X");
 		s.validateInput("Y");
 		s.validateInput(null);
@@ -402,7 +402,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class B04d {}
 
 	@Test void b04d_enum_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, B04d.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, B04d.class).build();
 
 		s.getItems().validateInput("W");
 		s.getItems().getItems().validateInput("X");
@@ -426,7 +426,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class C01a {}
 
 	@Test void c01a_minmax_ints() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, C01a.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, C01a.class).build();
 		s.validateOutput(10, BeanContext.DEFAULT);
 		s.validateOutput(100, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
@@ -450,7 +450,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class C01b {}
 
 	@Test void c01b_minmax_ints_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, C01b.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, C01b.class).build();
 
 		s.getItems().validateOutput(10, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(100, BeanContext.DEFAULT);
@@ -480,7 +480,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class C02a {}
 
 	@Test void c02a_minmax_exclusive() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, C02a.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, C02a.class).build();
 		s.validateOutput(11, BeanContext.DEFAULT);
 		s.validateOutput(99, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
@@ -504,7 +504,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class C02b {}
 
 	@Test void c02b_minmax_exclusive_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, C02b.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, C02b.class).build();
 
 		s.getItems().validateOutput(11, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(101, BeanContext.DEFAULT);
@@ -534,7 +534,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class C03a {}
 
 	@Test void c03_minmax_floats() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, C03a.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, C03a.class).build();
 		s.validateOutput(10.1f, BeanContext.DEFAULT);
 		s.validateOutput(100.1f, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
@@ -558,7 +558,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class C03b {}
 
 	@Test void c03b_minmax_floats_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, C03b.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, C03b.class).build();
 
 		s.getItems().validateOutput(10.1f, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(100.1f, BeanContext.DEFAULT);
@@ -588,7 +588,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class C04a {}
 
 	@Test void c04a_minmax_floats_exclusive() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, C04a.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, C04a.class).build();
 		s.validateOutput(10.2f, BeanContext.DEFAULT);
 		s.validateOutput(100f, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
@@ -612,7 +612,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class C04b {}
 
 	@Test void c04b_minmax_floats_exclusive_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, C04b.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, C04b.class).build();
 
 		s.getItems().validateOutput(10.2f, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(100.2f, BeanContext.DEFAULT);
@@ -642,7 +642,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class C05a {}
 
 	@Test void c05a_multipleOf() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, C05a.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, C05a.class).build();
 		s.validateOutput(0, BeanContext.DEFAULT);
 		s.validateOutput(10, BeanContext.DEFAULT);
 		s.validateOutput(20, BeanContext.DEFAULT);
@@ -668,7 +668,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class C05b {}
 
 	@Test void c05b_multipleOf_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, C05b.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, C05b.class).build();
 
 		s.getItems().validateOutput(0, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
@@ -708,7 +708,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class C06a {}
 
 	@Test void c06a_multipleOf_floats() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, C06a.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, C06a.class).build();
 		s.validateOutput(0, BeanContext.DEFAULT);
 		s.validateOutput(10.1f, BeanContext.DEFAULT);
 		s.validateOutput(20.2f, BeanContext.DEFAULT);
@@ -732,7 +732,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class C06b {}
 
 	@Test void c06b_multipleOf_floats_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, C06b.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, C06b.class).build();
 
 		s.getItems().validateOutput(0, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
@@ -775,7 +775,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class D01 {}
 
 	@Test void d01a_uniqueItems_arrays() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, D01.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, D01.class).build();
 
 		String[] good = split("a,b"), bad = split("a,a");
 
@@ -792,7 +792,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	}
 
 	@Test void d01b_uniqueItems_collections() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, D01.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, D01.class).build();
 
 		List<String>
 			good = alist("a","b"),
@@ -826,7 +826,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	public static class D02 {}
 
 	@Test void d02a_minMaxItems_arrays() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().applyAll(Content.class, D02.class).build();
+		var s = HttpPartSchema.create().applyAll(Content.class, D02.class).build();
 
 		s.getItems().validateOutput(split("1"), BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(split("1,2"), BeanContext.DEFAULT);

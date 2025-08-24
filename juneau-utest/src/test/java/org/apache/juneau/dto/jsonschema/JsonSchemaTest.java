@@ -23,7 +23,7 @@ import org.junit.jupiter.api.*;
 public class JsonSchemaTest extends SimpleTestBase {
 
 	@Test void testSchema1() throws Exception {
-		JsonSerializer s = JsonSerializer.create().json5().ws().build();
+		var s = JsonSerializer.create().json5().ws().build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 		JsonSchema t, t2;
@@ -116,7 +116,7 @@ public class JsonSchemaTest extends SimpleTestBase {
 	}
 
 	@Test void testSchema2() throws Exception {
-		JsonSerializer s = JsonSerializer.create().json5().ws().build();
+		var s = JsonSerializer.create().json5().ws().build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 		JsonSchema t, t2;
@@ -152,7 +152,7 @@ public class JsonSchemaTest extends SimpleTestBase {
 	}
 
 	@Test void testToString() throws Exception {
-		JsonSerializer s = JsonSerializer.create().json5().ws().build();
+		var s = JsonSerializer.create().json5().ws().build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 		JsonSchema t, t2;
@@ -292,4 +292,4 @@ public class JsonSchemaTest extends SimpleTestBase {
 			.setAdditionalItems(Boolean.TRUE)
 			.setAdditionalProperties(Boolean.TRUE);
 	}
-}
+}

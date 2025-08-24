@@ -27,8 +27,8 @@ class ObjectSwapTest extends SimpleTestBase {
 	// If you define a ObjectSwap<String,String> filter, then it should be invoked on all strings.
 	//====================================================================================================
 	@Test void testSameType() throws Exception {
-		JsonSerializer s = JsonSerializer.create().json5().swaps(ASwap.class).build();
-		JsonParser p = JsonParser.create().swaps(ASwap.class).build();
+		var s = JsonSerializer.create().json5().swaps(ASwap.class).build();
+		var p = JsonParser.create().swaps(ASwap.class).build();
 		String r;
 
 		r = s.serialize("foobar");
@@ -52,4 +52,4 @@ class ObjectSwapTest extends SimpleTestBase {
 			return f.substring(1, f.length()-1);
 		}
 	}
-}
+}

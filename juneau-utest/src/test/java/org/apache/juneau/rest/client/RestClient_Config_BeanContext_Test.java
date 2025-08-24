@@ -554,7 +554,7 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 		Object o = client().beanDictionary(A15a.class,A15b.class).addRootType().addBeanTypes().build().post("/echoBody",A15a.get()).run().cacheContent().assertContent().isContains("{_type:'foo',foo:'1'}").getContent().as(Object.class);
 		assertTrue(o instanceof A15a);
 
-		JsonMap m = JsonMap.of("x",A15a.get(),"y",A15b.get());
+		var m = JsonMap.of("x",A15a.get(),"y",A15b.get());
 		m = client().beanDictionary(A15a.class,A15b.class).addRootType().addBeanTypes().build().post("/echoBody",m).run().cacheContent().assertContent("{x:{_type:'foo',foo:'1'},y:{_type:'bar',foo:'2'}}").getContent().as(JsonMap.class);
 		assertTrue(m.get("x") instanceof A15a);
 		assertTrue(m.get("y") instanceof A15b);

@@ -31,8 +31,8 @@ class JsonTest  extends SimpleTestBase{
 		Map<String,Object> m = new LinkedHashMap<>();
 		List<Object> l = new LinkedList<>();
 
-		WriterSerializer s1 = JsonSerializer.create().json5().keepNullProperties().build();
-		WriterSerializer s2 = JsonSerializer.create().simpleAttrs().keepNullProperties().build();
+		var s1 = JsonSerializer.create().json5().keepNullProperties().build();
+		var s2 = JsonSerializer.create().simpleAttrs().keepNullProperties().build();
 		String r;
 
 		// Null keys and values
@@ -85,8 +85,8 @@ class JsonTest  extends SimpleTestBase{
 		l.add("1");
 		l.add("2");
 		l.add("3");
-		Object o = new Object[] { m, l };
-		Object o2 = new Object[] { o, "foo", "bar", Integer.valueOf(1), Boolean.valueOf(false), Float.valueOf(1.2f), null };
+		var o = new Object[] { m, l };
+		var o2 = new Object[] { o, "foo", "bar", Integer.valueOf(1), Boolean.valueOf(false), Float.valueOf(1.2f), null };
 		assertEquals("K1", "[[{J:'f1',B:'b',C:'c'},['1','2','3']],'foo','bar',1,false,1.2,null]", s1.serialize(o2));
 	}
 
@@ -105,7 +105,7 @@ class JsonTest  extends SimpleTestBase{
 	// Validate various backslashes in strings.
 	//====================================================================================================
 	@Test void testBackslashesInStrings() throws Exception {
-		JsonSerializer s = JsonSerializer.create().simpleAttrs().keepNullProperties().build();
+		var s = JsonSerializer.create().simpleAttrs().keepNullProperties().build();
 		String r, r2;
 
 		// [\\]
@@ -190,7 +190,7 @@ class JsonTest  extends SimpleTestBase{
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 
-		A t = A.create();
+		var t = A.create();
 		r = s.serialize(t);
 		assertEquals("{foo:{f1:1}}", r);
 		t = p.parse(r, A.class);
@@ -217,11 +217,11 @@ class JsonTest  extends SimpleTestBase{
 	}
 
 	@Test void testWrapperAttrAnnotationOnBean_usingConfig() throws Exception {
-		JsonSerializer s = Json5Serializer.DEFAULT.copy().applyAnnotations(A2Config.class).build();
-		JsonParser p = JsonParser.DEFAULT.copy().applyAnnotations(A2Config.class).build();
+		var s = Json5Serializer.DEFAULT.copy().applyAnnotations(A2Config.class).build();
+		var p = JsonParser.DEFAULT.copy().applyAnnotations(A2Config.class).build();
 		String r;
 
-		A2 t = A2.create();
+		var t = A2.create();
 		r = s.serialize(t);
 		assertEquals("{foo:{f1:1}}", r);
 		t = p.parse(r, A2.class);
@@ -259,7 +259,7 @@ class JsonTest  extends SimpleTestBase{
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 
-		B t = B.create();
+		var t = B.create();
 		r = s.serialize(t);
 		assertEquals("{foo:'1'}", r);
 		t = p.parse(r, B.class);
@@ -297,11 +297,11 @@ class JsonTest  extends SimpleTestBase{
 	}
 
 	@Test void testWrapperAttrAnnotationOnNonBean_usingConfig() throws Exception {
-		JsonSerializer s = Json5Serializer.DEFAULT.copy().applyAnnotations(B2Config.class).build();
-		JsonParser p = JsonParser.DEFAULT.copy().applyAnnotations(B2Config.class).build();
+		var s = Json5Serializer.DEFAULT.copy().applyAnnotations(B2Config.class).build();
+		var p = JsonParser.DEFAULT.copy().applyAnnotations(B2Config.class).build();
 		String r;
 
-		B2 t = B2.create();
+		var t = B2.create();
 		r = s.serialize(t);
 		assertEquals("{foo:'1'}", r);
 		t = p.parse(r, B2.class);
@@ -357,7 +357,7 @@ class JsonTest  extends SimpleTestBase{
 	// testEscapeSolidus
 	//====================================================================================================
 	@Test void testEscapeSolidus() throws Exception {
-		JsonSerializer s = JsonSerializer.create().build();
+		var s = JsonSerializer.create().build();
 		String r = s.serialize("foo/bar");
 		assertEquals("\"foo/bar\"", r);
 		r = JsonParser.DEFAULT.parse(r, String.class);

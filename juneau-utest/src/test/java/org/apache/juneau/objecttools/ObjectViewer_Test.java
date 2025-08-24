@@ -132,42 +132,42 @@ class ObjectViewer_Test extends SimpleTestBase {
 
 	@Test void c01_beanArray() {
 		var sa = new ViewArgs("f1");
-		Object in = new A[]{A.create("x1","x2")};
+		var in = new A[]{A.create("x1","x2")};
 		assertJson(ov.run(bs, in, sa), "[{f1:'x1'}]");
 		assertJson(ov.run(in, "f1"), "[{f1:'x1'}]");
 	}
 
 	@Test void c02_beanArray_reverseColumns() {
 		var sa = new ViewArgs("f2,f1");
-		Object in = new A[]{A.create("x1","x2")};
+		var in = new A[]{A.create("x1","x2")};
 		assertJson(ov.run(bs, in, sa), "[{f2:'x2',f1:'x1'}]");
 		assertJson(ov.run(in, "f2,f1"), "[{f2:'x2',f1:'x1'}]");
 	}
 
 	@Test void c03_beanArray_dupColumns() {
 		var sa = new ViewArgs("f1,f1");
-		Object in = new A[]{A.create("x1","x2")};
+		var in = new A[]{A.create("x1","x2")};
 		assertJson(ov.run(bs, in, sa), "[{f1:'x1'}]");
 		assertJson(ov.run(in, "f1,f1"), "[{f1:'x1'}]");
 	}
 
 	@Test void c04_beanArray_nonExistentColumns() {
 		var sa = new ViewArgs("fx");
-		Object in = new A[]{A.create("x1","x2")};
+		var in = new A[]{A.create("x1","x2")};
 		assertJson(ov.run(bs, in, sa), "[{}]");
 		assertJson(ov.run(in, "fx"), "[{}]");
 	}
 
 	@Test void c05_beanArray_emptyArgs() {
 		var sa = new ViewArgs("");
-		Object in = new A[]{A.create("x1","x2")};
+		var in = new A[]{A.create("x1","x2")};
 		assertJson(ov.run(bs, in, sa), "[{}]");
 		assertJson(ov.run(in, ""), "[{}]");
 	}
 
 	@Test void c06_beanArray_withNull() {
 		var sa = new ViewArgs("f1");
-		Object in = new A[]{A.create("x1","x2"),null};
+		var in = new A[]{A.create("x1","x2"),null};
 		assertJson(ov.run(bs, in, sa), "[{f1:'x1'},null]");
 		assertJson(ov.run(in, "f1"), "[{f1:'x1'},null]");
 	}

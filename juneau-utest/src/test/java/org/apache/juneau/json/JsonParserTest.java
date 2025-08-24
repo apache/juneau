@@ -207,7 +207,7 @@ class JsonParserTest extends SimpleTestBase {
 	// Validates PARSER_autoCloseStreams.
 	//====================================================================================================
 	@Test void testStreamsAutoClose() throws Exception {
-		ReaderParser p2 = JsonParser.DEFAULT.copy().autoCloseStreams().build();
+		var p2 = JsonParser.DEFAULT.copy().autoCloseStreams().build();
 		Object x;
 		Reader r;
 
@@ -222,7 +222,7 @@ class JsonParserTest extends SimpleTestBase {
 	// Validates that readers are not closed so that we can read streams of POJOs.
 	//====================================================================================================
 	@Test void testMultipleObjectsInStream() throws Exception {
-		ReaderParser p2 = JsonParser.create().unbuffered().build();
+		var p2 = JsonParser.create().unbuffered().build();
 		Object x;
 		Reader r;
 

@@ -29,7 +29,7 @@ class MsgPackParserTest extends SimpleTestBase {
 	// Validates PARSER_autoCloseStreams.
 	//====================================================================================================
 	@Test void testStreamsAutoClose() throws Exception {
-		InputStreamParser p = MsgPackParser.DEFAULT.copy().autoCloseStreams().build();
+		var p = MsgPackParser.DEFAULT.copy().autoCloseStreams().build();
 		Object r;
 		InputStream is;
 

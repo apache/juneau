@@ -32,12 +32,12 @@ class CsvConfig_Test extends SimpleTestBase {
 	static ClassInfo b = ClassInfo.of(B.class);
 
 	@Test void defaultsSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(b.getAnnotationList());
+		var al = AnnotationWorkList.of(b.getAnnotationList());
 		assertNotThrown(()->CsvSerializer.create().apply(al).build());
 	}
 
 	@Test void defaultsParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(b.getAnnotationList());
+		var al = AnnotationWorkList.of(b.getAnnotationList());
 		assertNotThrown(()->CsvParser.create().apply(al).build());
 	}
 
@@ -49,12 +49,12 @@ class CsvConfig_Test extends SimpleTestBase {
 	static ClassInfo c = ClassInfo.of(C.class);
 
 	@Test void noAnnotationSerializer() {
-		AnnotationWorkList al = AnnotationWorkList.of(b.getAnnotationList());
+		var al = AnnotationWorkList.of(b.getAnnotationList());
 		assertNotThrown(()->CsvSerializer.create().apply(al).build());
 	}
 
 	@Test void noAnnotationParser() {
-		AnnotationWorkList al = AnnotationWorkList.of(b.getAnnotationList());
+		var al = AnnotationWorkList.of(b.getAnnotationList());
 		assertNotThrown(()->CsvParser.create().apply(al).build());
 	}
 }

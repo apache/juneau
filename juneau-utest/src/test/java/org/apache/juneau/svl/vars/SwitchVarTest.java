@@ -23,7 +23,7 @@ class SwitchVarTest extends SimpleTestBase {
 	// test - Basic tests
 	//====================================================================================================
 	@Test void test() {
-		VarResolver vr = VarResolver.create().vars(SwitchVar.class, SystemPropertiesVar.class).build();
+		var vr = VarResolver.create().vars(SwitchVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("SwitchVarTest.test", "foobar");
 
@@ -48,4 +48,4 @@ class SwitchVarTest extends SimpleTestBase {
 
 		assertEquals("NO", vr.resolve("$SW{$S{SwitchVarTest.test},foox*:YES1,fooy*:YES2,*:NO}"));
 	}
-}
+}

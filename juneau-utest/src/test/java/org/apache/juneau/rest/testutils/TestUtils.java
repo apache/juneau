@@ -28,9 +28,9 @@ public class TestUtils extends org.apache.juneau.utest.utils.Utils2 {
 	public static Swagger getSwagger(Class<?> c) {
 		try {
 			Object r = c.getDeclaredConstructor().newInstance();
-			RestContext rc = RestContext.create(r.getClass(),null,null).init(()->r).build();
-			RestOpContext ctx = RestOpContext.create(TestUtils.class.getMethod("getSwagger", Class.class), rc).build();
-			RestSession session = RestSession.create(rc).resource(r).req(new MockServletRequest()).res(new MockServletResponse()).build();
+			var rc = RestContext.create(r.getClass(),null,null).init(()->r).build();
+			var ctx = RestOpContext.create(TestUtils.class.getMethod("getSwagger", Class.class), rc).build();
+			var session = RestSession.create(rc).resource(r).req(new MockServletRequest()).res(new MockServletResponse()).build();
 			RestRequest req = ctx.createRequest(session);
 			SwaggerProvider ip = rc.getSwaggerProvider();
 			return ip.getSwagger(rc, req.getLocale());
@@ -38,4 +38,4 @@ public class TestUtils extends org.apache.juneau.utest.utils.Utils2 {
 			throw new RuntimeException(e);
 		}
 	}
-}
+}

@@ -23,7 +23,7 @@ class Tuple3_Test extends SimpleTestBase {
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void a01_basic() {
-		Tuple3<String,Integer,Integer> x = Tuple3.of("foo",1,2);
+		var x = Tuple3.of("foo",1,2);
 		assertEquals("foo", x.getA());
 		assertEquals(1, x.getB());
 		assertEquals(2, x.getC());
@@ -40,4 +40,4 @@ class Tuple3_Test extends SimpleTestBase {
 		assertNotEquals(x1, x5);
 		assertNotEquals(x1.hashCode(), x5.hashCode());
 	}
-}
+}

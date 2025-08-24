@@ -22,7 +22,7 @@ class PatternExtractVarTest {
 	// test - Basic tests
 	//====================================================================================================
 	@Test void test() {
-		VarResolver vr = VarResolver.create().vars(PatternExtractVar.class, SystemPropertiesVar.class).build();
+		var vr = VarResolver.create().vars(PatternExtractVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("PatternExtractVarTest.test", "foo bar");
 		System.setProperty("PatternExtractVarTest.test2", "size=23");
