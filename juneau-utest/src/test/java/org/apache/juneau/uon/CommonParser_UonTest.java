@@ -120,7 +120,7 @@ class CommonParser_UonTest extends SimpleTestBase {
 
 		ReaderParser p2 = UonParser.DEFAULT;
 
-		String json = "(ints=@(1,2,3),beans=@((a=1,b=2)))";
+		var json = "(ints=@(1,2,3),beans=@((a=1,b=2)))";
 		C t = p2.parse(json, C.class);
 		assertEquals(3, t.getInts().size());
 		assertEquals(2, t.getBeans().get(0).b);
@@ -140,7 +140,7 @@ class CommonParser_UonTest extends SimpleTestBase {
 	@Test void testParserListeners() throws Exception {
 		var p2 = UonParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
-		String in = "(a=1,unknownProperty=foo,b=2)";
+		var in = "(a=1,unknownProperty=foo,b=2)";
 		p2.parse(in, B.class);
 		assertEquals(1, MyParserListener.events.size());
 		assertEquals("unknownProperty, line 1, column 5", MyParserListener.events.get(0));

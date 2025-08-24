@@ -144,7 +144,7 @@ class ResponseHeader_Test extends SimpleTestBase {
 		x = s.getResponseInfo("/d","get",100).getHeader("H");
 		assertNotNull(x);
 
-		Operation x2 = s.getOperation("/e","get");
+		var x2 = s.getOperation("/e","get");
 		assertNotNull(x2.getResponse(100).getHeader("H"));
 		assertNotNull(x2.getResponse(101).getHeader("H"));
 
@@ -232,7 +232,7 @@ class ResponseHeader_Test extends SimpleTestBase {
 		x = sc.getResponseInfo("/d","get",100).getHeader("H");
 		assertNotNull(x);
 
-		Operation x2 = sc.getOperation("/e","get");
+		var x2 = sc.getOperation("/e","get");
 		assertNotNull(x2.getResponse(100).getHeader("H"));
 		assertNotNull(x2.getResponse(101).getHeader("H"));
 

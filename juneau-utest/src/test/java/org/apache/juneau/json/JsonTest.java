@@ -18,7 +18,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.json.annotation.*;
-import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
@@ -28,8 +27,8 @@ class JsonTest  extends SimpleTestBase{
 	// testBasic
 	//====================================================================================================
 	@Test void testBasic() throws Exception {
-		Map<String,Object> m = new LinkedHashMap<>();
-		List<Object> l = new LinkedList<>();
+		var m = new LinkedHashMap<String,Object>();
+		var l = new LinkedList<Object>();
 
 		var s1 = JsonSerializer.create().json5().keepNullProperties().build();
 		var s2 = JsonSerializer.create().simpleAttrs().keepNullProperties().build();
@@ -91,7 +90,7 @@ class JsonTest  extends SimpleTestBase{
 	}
 
 	@Test void testReservedKeywordAttributes() {
-		Map<String,Object> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<String,Object>();
 
 		// Keys with reserved names.
 		for (String attr : new String[]{"","true","false","null","try","123","1x","-123",".123"}) {
@@ -136,7 +135,7 @@ class JsonTest  extends SimpleTestBase{
 	// Indentation
 	//====================================================================================================
 	@Test void testIndentation() throws Exception {
-		JsonMap m = JsonMap.ofJson("{J:{B:['c',{D:'e'},['f',{G:'h'},1,false]]},I:'j'}");
+		var m = JsonMap.ofJson("{J:{B:['c',{D:'e'},['f',{G:'h'},1,false]]},I:'j'}");
 		String e = """
 			{
 				J: {
@@ -196,7 +195,7 @@ class JsonTest  extends SimpleTestBase{
 		t = p.parse(r, A.class);
 		assertEquals(1, t.f1);
 
-		Map<String,A> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<String,A>();
 		m.put("bar", A.create());
 		r = s.serialize(m);
 		assertEquals("{bar:{foo:{f1:1}}}", r);

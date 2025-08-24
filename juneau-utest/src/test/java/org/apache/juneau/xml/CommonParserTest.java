@@ -124,7 +124,7 @@ class CommonParserTest  extends SimpleTestBase{
 
 		ReaderParser p = XmlParser.DEFAULT;
 
-		String in = "<object><ints _type='array'><number>1</number><number>2</number><number>3</number></ints><beans _type='array'><object><a _type='number'>1</a><b _type='number'>2</b></object></beans></object>";
+		var in = "<object><ints _type='array'><number>1</number><number>2</number><number>3</number></ints><beans _type='array'><object><a _type='number'>1</a><b _type='number'>2</b></object></beans></object>";
 		C t = p.parse(in, C.class);
 		assertEquals(3, t.getInts().size());
 		assertEquals(2, t.getBeans().get(0).b);
@@ -144,7 +144,7 @@ class CommonParserTest  extends SimpleTestBase{
 	@Test void testParserListeners() throws Exception {
 		var p = XmlParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
-		String in = "<object><a _type='number'>1</a><unknownProperty _type='string'>foo</unknownProperty><b _type='number'>2</b></object>";
+		var in = "<object><a _type='number'>1</a><unknownProperty _type='string'>foo</unknownProperty><b _type='number'>2</b></object>";
 		p.parse(in, B.class);
 		assertEquals(1, MyParserListener.events.size());
 		// XML parser may or may not support line numbers.

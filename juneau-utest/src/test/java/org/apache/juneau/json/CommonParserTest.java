@@ -128,7 +128,7 @@ class CommonParserTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void testCollectionPropertiesWithNoSetters() throws Exception {
 		JsonParser p = JsonParser.DEFAULT;
-		String json = "{ints:[1,2,3],beans:[{a:1,b:2}]}";
+		var json = "{ints:[1,2,3],beans:[{a:1,b:2}]}";
 		C t = p.parse(json, C.class);
 		assertEquals(3, t.getInts().size());
 		assertEquals(2, t.getBeans().get(0).b);

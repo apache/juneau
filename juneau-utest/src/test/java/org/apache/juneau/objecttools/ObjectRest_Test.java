@@ -166,7 +166,7 @@ class ObjectRest_Test extends SimpleTestBase {
 		assertEquals("{}", s);
 
 		// Make sure doing a PUT against "" or "/" replaces the root object.
-		JsonMap m2 = JsonMap.ofJson("{x:1}");
+		var m2 = JsonMap.ofJson("{x:1}");
 		model.put("", m2);
 		s = model.get("").toString();
 		assertEquals("{x:1}", s);
@@ -319,8 +319,8 @@ class ObjectRest_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void f01_getMethods() throws Exception {
 		var model = ObjectRest.create(new A());
-		JsonList l = JsonList.ofJson("[{a:'b'}]");
-		JsonMap m = JsonMap.ofJson("{a:'b'}");
+		var l = JsonList.ofJson("[{a:'b'}]");
+		var m = JsonMap.ofJson("{a:'b'}");
 
 		assertNull(model.get("f1"));
 		assertEquals(0, model.get("f2"));

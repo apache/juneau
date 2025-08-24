@@ -1964,7 +1964,7 @@ class Swagger_Test extends SimpleTestBase {
 	@Test void t01_bodyWithReadOnlyProperty() throws Exception {
 		var p = MockRestClient.build(T1.class);
 		org.apache.juneau.bean.swagger.Swagger s = JsonParser.DEFAULT.parse(p.get("/api").accept("application/json").run().getContent().asString(), org.apache.juneau.bean.swagger.Swagger.class);
-		Operation o = s.getOperation("/", "get");
+		var o = s.getOperation("/", "get");
 
 		ResponseInfo ri = o.getResponse("200");
 		assertEquals("{\n\tf1: 1,\n\tf2: 2\n}", ri.getExamples().get("application/json5"));

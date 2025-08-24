@@ -253,8 +253,8 @@ class JsonMapTest extends SimpleTestBase {
 	// testComparison
 	//====================================================================================================
 	@Test void testComparison() throws Exception {
-		JsonMap m1 = JsonMap.ofJson("{ firstName:'John', lastName:'Smith', age:123, isDeceased:false }");
-		JsonMap m2 = JsonMap.ofJson("{ age:123, isDeceased:false, lastName:'Smith', firstName:'John' }");
+		var m1 = JsonMap.ofJson("{ firstName:'John', lastName:'Smith', age:123, isDeceased:false }");
+		var m2 = JsonMap.ofJson("{ age:123, isDeceased:false, lastName:'Smith', firstName:'John' }");
 
 		assertEquals(m1, m2);
 	}
