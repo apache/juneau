@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -412,14 +413,14 @@ public class HeaderInfo extends OpenApiElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "description" -> setDescription(stringify(value));
+			case "description" -> setDescription(Utils.s(value));
 			case "required" -> setRequired(toBoolean(value));
 			case "explode" -> setExplode(toBoolean(value));
 			case "deprecated" -> setDeprecated(toBoolean(value));
 			case "allowEmptyValue" -> setAllowEmptyValue(toBoolean(value));
-			case "$ref" -> setRef(stringify(value));
+			case "$ref" -> setRef(Utils.s(value));
 			case "schema" -> setSchema(toType(value, SchemaInfo.class));
-			case "x-example" -> setExample(stringify(value));
+			case "x-example" -> setExample(Utils.s(value));
 			case "examples" -> setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
 			default -> {
 				super.set(property, value);

@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -339,12 +340,12 @@ public class Info extends SwaggerElement {
 			return this;
 		return switch (property) {
 			case "contact" -> setContact(toType(value, Contact.class));
-			case "description" -> setDescription(stringify(value));
+			case "description" -> setDescription(Utils.s(value));
 			case "license" -> setLicense(toType(value, License.class));
-			case "siteName" -> setSiteName(stringify(value));
-			case "termsOfService" -> setTermsOfService(stringify(value));
-			case "title" -> setTitle(stringify(value));
-			case "version" -> setVersion(stringify(value));
+			case "siteName" -> setSiteName(Utils.s(value));
+			case "termsOfService" -> setTermsOfService(Utils.s(value));
+			case "title" -> setTitle(Utils.s(value));
+			case "version" -> setVersion(Utils.s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

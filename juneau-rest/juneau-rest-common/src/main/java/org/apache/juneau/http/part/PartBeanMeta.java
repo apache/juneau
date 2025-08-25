@@ -18,6 +18,7 @@ import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import java.lang.reflect.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
@@ -160,12 +161,12 @@ public class PartBeanMeta<T> {
 		Class<?>[] pt = constructor.getParameterTypes();
 		Object[] args = new Object[pt.length];
 		if (pt.length == 1) {
-			args[0] = pt[0] == String.class ? stringify(value) : value;
+			args[0] = pt[0] == String.class ? Utils.s(value) : value;
 		} else {
 			if (name == null)
 				throw new UnsupportedOperationException("Constructor for type "+type.getName()+" requires a name as the first argument.");
 			args[0] = name;
-			args[1] = pt[1] == String.class ? stringify(value) : value;
+			args[1] = pt[1] == String.class ? Utils.s(value) : value;
 		}
 
 		try {

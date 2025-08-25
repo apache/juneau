@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
@@ -49,7 +50,7 @@ class PartList_Test extends SimpleTestBase {
 	public static class APart extends BasicStringPart {
 		public static final APart X = new APart("x"), Y = new APart("y"), Z = new APart("z");
 		public APart(Object value) {
-			super("a", stringify(value));
+			super("a", Utils.s(value));
 		}
 	}
 
@@ -57,7 +58,7 @@ class PartList_Test extends SimpleTestBase {
 	public static class BPart extends BasicStringPart {
 		public static final BPart X = new BPart("x"), Y = new BPart("y"), Z = new BPart("z");
 		public BPart(Object value) {
-			super("b", stringify(value));
+			super("b", Utils.s(value));
 		}
 	}
 
@@ -65,7 +66,7 @@ class PartList_Test extends SimpleTestBase {
 	public static class CPart extends BasicStringPart {
 		public static final CPart X = new CPart("x");
 		public CPart(Object value) {
-			super("c", stringify(value));
+			super("c", Utils.s(value));
 		}
 	}
 
@@ -179,7 +180,7 @@ class PartList_Test extends SimpleTestBase {
 	@Query("Foo")
 	static class Foo extends BasicStringPart {
 		public Foo(Object value) {
-			super("Foo", stringify(value));
+			super("Foo", Utils.s(value));
 		}
 	}
 

@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -217,9 +218,9 @@ public class Example extends OpenApiElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "description" -> setDescription(stringify(value));
-			case "externalValue" -> setExternalValue(stringify(value));
-			case "summary" -> setSummary(stringify(value));
+			case "description" -> setDescription(Utils.s(value));
+			case "externalValue" -> setExternalValue(Utils.s(value));
+			case "summary" -> setSummary(Utils.s(value));
 			case "value" -> setValue(value);
 			default -> {
 				super.set(property, value);

@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
@@ -640,7 +641,7 @@ public class Items extends OpenApiElement {
 	 */
 	@Beanp("$ref")
 	public Items setRef(Object value) {
-		ref = stringify(value);
+		ref = Utils.s(value);
 		return this;
 	}
 
@@ -692,10 +693,10 @@ public class Items extends OpenApiElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "type" -> setType(stringify(value));
-			case "format" -> setFormat(stringify(value));
+			case "type" -> setType(Utils.s(value));
+			case "format" -> setFormat(Utils.s(value));
 			case "items" -> setItems(toType(value,Items.class));
-			case "collectionFormat" -> setCollectionFormat(stringify(value));
+			case "collectionFormat" -> setCollectionFormat(Utils.s(value));
 			case "default" -> setDefault(value);
 			case "maximum" -> setMaximum(toNumber(value));
 			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
@@ -703,7 +704,7 @@ public class Items extends OpenApiElement {
 			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
 			case "maxLength" -> setMaxLength(toInteger(value));
 			case "minLength" -> setMinLength(toInteger(value));
-			case "pattern" -> setPattern(stringify(value));
+			case "pattern" -> setPattern(Utils.s(value));
 			case "maxItems" -> setMaxItems(toInteger(value));
 			case "minItems" -> setMinItems(toInteger(value));
 			case "uniqueItems" -> setUniqueItems(toBoolean(value));

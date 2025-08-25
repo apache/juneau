@@ -271,7 +271,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 */
 	public RequestQueryParams add(String name, Object value) {
 		assertArgNotNull("name", name);
-		add(new RequestQueryParam(req, name, stringify(value)).parser(parser));
+		add(new RequestQueryParam(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
 
@@ -309,7 +309,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 */
 	public RequestQueryParams set(String name, Object value) {
 		assertArgNotNull("name", name);
-		set(new RequestQueryParam(req, name, stringify(value)).parser(parser));
+		set(new RequestQueryParam(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
 

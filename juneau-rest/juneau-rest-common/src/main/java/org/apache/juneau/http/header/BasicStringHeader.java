@@ -20,6 +20,7 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Category of headers that consist of a single string value.
@@ -135,7 +136,7 @@ public class BasicStringHeader extends BasicHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		return stringify(value());
+		return Utils.s(value());
 	}
 
 	@Override /* BasicHeader */

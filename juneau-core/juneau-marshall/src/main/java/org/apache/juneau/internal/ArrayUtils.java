@@ -256,7 +256,7 @@ public final class ArrayUtils {
 		String[] r = new String[c.size()];
 		int i = 0;
 		for (Object o : c)
-			r[i++] = stringify(o);
+			r[i++] = Utils.s(o);
 		return r;
 	}
 

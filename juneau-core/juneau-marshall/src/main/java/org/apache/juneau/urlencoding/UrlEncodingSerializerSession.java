@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -347,13 +348,13 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 					((Collection<?>)value).forEach(x -> {
 						addAmp.ifSet(()->out.cr(indent).append('&')).set();
 						out.appendObject(key, true).append('=');
-						super.serializeAnything(out, x, null, stringify(key), null);
+						super.serializeAnything(out, x, null, Utils.s(key), null);
 					});
 				} else /* array */ {
 					for (int i = 0; i < Array.getLength(value); i++) {
 						addAmp.ifSet(()->out.cr(indent).append('&')).set();
 						out.appendObject(key, true).append('=');
-						super.serializeAnything(out, Array.get(value, i), null, stringify(key), null);
+						super.serializeAnything(out, Array.get(value, i), null, Utils.s(key), null);
 					}
 				}
 			} else {

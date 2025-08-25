@@ -20,6 +20,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.reflect.*;
 
@@ -78,7 +79,7 @@ public class BeanRegistry {
 				} else if (ci.isChildOf(Map.class)) {
 					Map<?,?> m = BeanCreator.of(Map.class).type(c).run();
 					m.forEach((k,v) -> {
-						String typeName = stringify(k);
+						String typeName = Utils.s(k);
 						ClassMeta<?> val = null;
 						if (v instanceof Type)
 							val = beanContext.getClassMeta((Type)v);

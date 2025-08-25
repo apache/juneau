@@ -373,7 +373,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		if (keyValuePairs.length % 2 != 0)
 			throw new IllegalArgumentException("Odd number of parameters passed into JsonMap(Object...)");
 		for (int i = 0; i < keyValuePairs.length; i+=2)
-			put(stringify(keyValuePairs[i]), keyValuePairs[i+1]);
+			put(Utils.s(keyValuePairs[i]), keyValuePairs[i+1]);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -819,7 +819,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		else if (s instanceof Object[])
 			r = ArrayUtils.toStringArray(alist((Object[])s));
 		else
-			r = split(stringify(s));
+			r = split(Utils.s(s));
 		return (r.length == 0 ? def : r);
 	}
 
@@ -1600,7 +1600,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 */
 	public String asString() {
 		if (Json5Serializer.DEFAULT == null)
-			return stringify(this);
+			return Utils.s(this);
 		return Json5Serializer.DEFAULT.toString(this);
 	}
 
@@ -1611,7 +1611,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 */
 	public String asReadableString() {
 		if (Json5Serializer.DEFAULT_READABLE == null)
-			return stringify(this);
+			return Utils.s(this);
 		return Json5Serializer.DEFAULT_READABLE.toString(this);
 	}
 

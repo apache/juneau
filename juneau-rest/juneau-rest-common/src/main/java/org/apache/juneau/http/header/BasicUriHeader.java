@@ -19,6 +19,8 @@ import java.net.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.internal.*;
+
 /**
  * Category of headers that consist of a single URL value.
  *
@@ -122,7 +124,7 @@ public class BasicUriHeader extends BasicHeader {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicUriHeader(String name, URI value) {
-		super(name, stringify(value));
+		super(name, Utils.s(value));
 		this.value = value;
 		this.supplier = null;
 	}
@@ -147,7 +149,7 @@ public class BasicUriHeader extends BasicHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		return stringify(value());
+		return Utils.s(value());
 	}
 
 	/**

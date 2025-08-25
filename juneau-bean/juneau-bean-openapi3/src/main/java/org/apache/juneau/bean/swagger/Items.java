@@ -21,6 +21,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
 
@@ -666,12 +667,12 @@ public class Items extends SwaggerElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "collectionFormat" -> setCollectionFormat(stringify(value));
+			case "collectionFormat" -> setCollectionFormat(Utils.s(value));
 			case "default" -> setDefault(value);
 			case "enum" -> setEnum(listBuilder(Object.class).sparse().addAny(value).build());
 			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
 			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
-			case "format" -> setFormat(stringify(value));
+			case "format" -> setFormat(Utils.s(value));
 			case "items" -> setItems(toType(value,Items.class));
 			case "maximum" -> setMaximum(toNumber(value));
 			case "maxItems" -> setMaxItems(toInteger(value));
@@ -680,9 +681,9 @@ public class Items extends SwaggerElement {
 			case "minItems" -> setMinItems(toInteger(value));
 			case "minLength" -> setMinLength(toInteger(value));
 			case "multipleOf" -> setMultipleOf(toNumber(value));
-			case "pattern" -> setPattern(stringify(value));
-			case "$ref" -> setRef(stringify(value));
-			case "type" -> setType(stringify(value));
+			case "pattern" -> setPattern(Utils.s(value));
+			case "$ref" -> setRef(Utils.s(value));
+			case "type" -> setType(Utils.s(value));
 			case "uniqueItems" -> setUniqueItems(toBoolean(value));
 			default -> {
 				super.set(property, value);

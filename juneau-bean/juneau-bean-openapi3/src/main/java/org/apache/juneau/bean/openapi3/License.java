@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -155,7 +156,7 @@ public class License extends OpenApiElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "name" -> setName(stringify(value));
+			case "name" -> setName(Utils.s(value));
 			case "url" -> setUrl(toURI(value));
 			default -> {
 				super.set(property, value);

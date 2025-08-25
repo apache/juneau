@@ -255,7 +255,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public RequestHeaders add(String name, Object value) {
 		assertArgNotNull("name", name);
-		add(new RequestHeader(req, name, stringify(value)).parser(parser));
+		add(new RequestHeader(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
 
@@ -293,7 +293,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public RequestHeaders set(String name, Object value) {
 		assertArgNotNull("name", name);
-		set(new RequestHeader(req, name, stringify(value)).parser(parser));
+		set(new RequestHeader(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
 

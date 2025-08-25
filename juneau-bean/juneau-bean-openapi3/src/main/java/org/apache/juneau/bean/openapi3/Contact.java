@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -191,9 +192,9 @@ public class Contact extends OpenApiElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "name" -> setName(stringify(value));
+			case "name" -> setName(Utils.s(value));
 			case "url" -> setUrl(toURI(value));
-			case "email" -> setEmail(stringify(value));
+			case "email" -> setEmail(Utils.s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

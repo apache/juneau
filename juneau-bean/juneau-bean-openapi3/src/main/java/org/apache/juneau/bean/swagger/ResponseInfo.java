@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -297,7 +298,7 @@ public class ResponseInfo extends SwaggerElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "description" -> setDescription(stringify(value));
+			case "description" -> setDescription(Utils.s(value));
 			case "examples" -> setExamples(mapBuilder(String.class,Object.class).sparse().addAny(value).build());
 			case "headers" -> setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
 			case "schema" -> setSchema(toType(value, SchemaInfo.class));

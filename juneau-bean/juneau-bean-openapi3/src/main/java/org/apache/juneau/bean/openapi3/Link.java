@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -287,9 +288,9 @@ public class Link extends OpenApiElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "description" -> setDescription(stringify(value));
-			case "operationId" -> setOperationId(stringify(value));
-			case "operationRef" -> setOperationRef(stringify(value));
+			case "description" -> setDescription(Utils.s(value));
+			case "operationId" -> setOperationId(Utils.s(value));
+			case "operationRef" -> setOperationRef(Utils.s(value));
 			case "requestBody" -> setRequestBody(value);
 			case "server" -> setServer(toType(value, Server.class));
 			case "parameters" -> setParameters(mapBuilder(String.class,Object.class).sparse().addAny(value).build());

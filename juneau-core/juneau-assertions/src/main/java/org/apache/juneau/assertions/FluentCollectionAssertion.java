@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -171,7 +171,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @return A new fluent string assertion.
 	 */
 	public FluentStringListAssertion<R> asStrings() {
-		return new FluentStringListAssertion<>(this, valueIsNull() ? null : value().stream().map(StringUtils::stringify).toList(), returns());
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : value().stream().map(o -> s(o)).toList(), returns());
 	}
 
 

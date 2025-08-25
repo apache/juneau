@@ -20,6 +20,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -125,7 +126,7 @@ public class ClientVersion extends BasicStringHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public ClientVersion(Version value) {
-		super(NAME, stringify(value));
+		super(NAME, Utils.s(value));
 		this.value = value;
 		this.supplier = null;
 	}
@@ -149,7 +150,7 @@ public class ClientVersion extends BasicStringHeader {
 	@Override /* Header */
 	public String getValue() {
 		if (supplier != null)
-			return stringify(supplier.get());
+			return Utils.s(supplier.get());
 		return super.getValue();
 	}
 

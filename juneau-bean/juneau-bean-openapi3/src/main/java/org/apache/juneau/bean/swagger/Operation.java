@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -825,15 +826,15 @@ public class Operation extends SwaggerElement {
 		return switch (property) {
 			case "consumes" -> setConsumes(listBuilder(MediaType.class).sparse().addAny(value).build());
 			case "deprecated" -> setDeprecated(toBoolean(value));
-			case "description" -> setDescription(stringify(value));
+			case "description" -> setDescription(Utils.s(value));
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "operationId" -> setOperationId(stringify(value));
+			case "operationId" -> setOperationId(Utils.s(value));
 			case "parameters" -> setParameters(listBuilder(ParameterInfo.class).sparse().addAny(value).build());
 			case "produces" -> setProduces(listBuilder(MediaType.class).sparse().addAny(value).build());
 			case "responses" -> setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addAny(value).build());
 			case "schemes" -> setSchemes(listBuilder(String.class).sparse().addAny(value).build());
 			case "security" -> setSecurity((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addAny(value).build());
-			case "summary" -> setSummary(stringify(value));
+			case "summary" -> setSummary(Utils.s(value));
 			case "tags" -> setTags(listBuilder(String.class).sparse().addAny(value).build());
 			default -> {
 				super.set(property, value);

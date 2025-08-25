@@ -24,6 +24,7 @@ import java.util.regex.*;
 import jakarta.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
@@ -291,7 +292,7 @@ public final class RestUtils {
 			if (m == null)
 				m = map();
 
-			if (qs == null || ((qs instanceof CharSequence) && isEmpty(stringify(qs))))
+			if (qs == null || ((qs instanceof CharSequence) && isEmpty(Utils.s(qs))))
 				return m;
 
 			try (ParserPipe p = new ParserPipe(qs)) {

@@ -37,7 +37,7 @@ public class FakeStreamSerializer extends OutputStreamSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	public static class Builder extends OutputStreamSerializer.Builder {
-		BiFunction<SerializerSession,Object,byte[]> function = (s,o) -> StringUtils.stringify(o).getBytes();
+		BiFunction<SerializerSession,Object,byte[]> function = (s,o) -> Utils.s(o).getBytes();
 		Function<SerializerSession,Map<String,String>> headers = s -> Collections.emptyMap();
 
 		public Builder function(BiFunction<SerializerSession,Object,byte[]> function) {

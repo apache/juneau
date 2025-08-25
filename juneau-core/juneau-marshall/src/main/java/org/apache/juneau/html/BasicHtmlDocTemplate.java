@@ -270,7 +270,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 				w = new HtmlWriter(w) {
 					@Override
 					public HtmlWriter text(Object value, boolean preserveWhitespace) {
-						return super.text(session.resolve(stringify(value)), preserveWhitespace);
+						return super.text(session.resolve(Utils.s(value)), preserveWhitespace);
 					}
 				};
 			}

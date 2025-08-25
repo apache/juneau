@@ -18,6 +18,7 @@ import java.io.*;
 import java.util.function.*;
 import java.util.regex.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
@@ -149,7 +150,7 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public StringAssertion(Object value) {
-		super(stringify(value), null);
+		super(Utils.s(value), null);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

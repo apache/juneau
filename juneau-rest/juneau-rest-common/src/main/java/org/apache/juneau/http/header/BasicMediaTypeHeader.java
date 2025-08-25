@@ -20,6 +20,7 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -108,7 +109,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicMediaTypeHeader(String name, MediaType value) {
-		super(name, stringify(value));
+		super(name, Utils.s(value));
 		this.value = value;
 		this.supplier = null;
 	}
@@ -133,7 +134,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		return stringify(value());
+		return Utils.s(value());
 	}
 
 	/**

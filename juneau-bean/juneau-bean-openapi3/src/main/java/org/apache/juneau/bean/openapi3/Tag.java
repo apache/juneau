@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -189,8 +190,8 @@ public class Tag extends OpenApiElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "name" -> setName(stringify(value));
-			case "description" -> setDescription(stringify(value));
+			case "name" -> setName(Utils.s(value));
+			case "description" -> setDescription(Utils.s(value));
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
 			default -> {
 				super.set(property, value);

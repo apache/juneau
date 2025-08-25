@@ -20,6 +20,7 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * A {@link NameValuePair} that consists of a single integer value.
@@ -112,7 +113,7 @@ public class BasicIntegerPart extends BasicPart {
 
 	@Override /* Header */
 	public String getValue() {
-		return stringify(value());
+		return Utils.s(value());
 	}
 
 	/**

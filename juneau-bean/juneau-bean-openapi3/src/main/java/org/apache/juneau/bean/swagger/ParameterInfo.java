@@ -22,6 +22,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
 
@@ -946,14 +947,14 @@ public class ParameterInfo extends SwaggerElement {
 			return this;
 		return switch (property) {
 			case "allowEmptyValue" -> setAllowEmptyValue(toBoolean(value));
-			case "collectionFormat" -> setCollectionFormat(stringify(value));
+			case "collectionFormat" -> setCollectionFormat(Utils.s(value));
 			case "default" -> setDefault(value);
-			case "description" -> setDescription(stringify(value));
+			case "description" -> setDescription(Utils.s(value));
 			case "enum" -> setEnum(value);
 			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
 			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
-			case "format" -> setFormat(stringify(value));
-			case "in" -> setIn(stringify(value));
+			case "format" -> setFormat(Utils.s(value));
+			case "in" -> setIn(Utils.s(value));
 			case "items" -> setItems(toType(value, Items.class));
 			case "maximum" -> setMaximum(toNumber(value));
 			case "maxItems" -> setMaxItems(toInteger(value));
@@ -962,11 +963,11 @@ public class ParameterInfo extends SwaggerElement {
 			case "minItems" -> setMinItems(toInteger(value));
 			case "minLength" -> setMinLength(toInteger(value));
 			case "multipleOf" -> setMultipleOf(toNumber(value));
-			case "name" -> setName(stringify(value));
-			case "pattern" -> setPattern(stringify(value));
+			case "name" -> setName(Utils.s(value));
+			case "pattern" -> setPattern(Utils.s(value));
 			case "required" -> setRequired(toBoolean(value));
 			case "schema" -> setSchema(toType(value, SchemaInfo.class));
-			case "type" -> setType(stringify(value));
+			case "type" -> setType(Utils.s(value));
 			case "uniqueItems" -> setUniqueItems(toBoolean(value));
 			default -> {
 				super.set(property, value);

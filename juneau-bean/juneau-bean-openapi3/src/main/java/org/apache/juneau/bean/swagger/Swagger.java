@@ -22,6 +22,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.objecttools.*;
@@ -888,11 +889,11 @@ public class Swagger extends SwaggerElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "basePath" -> setBasePath(stringify(value));
+			case "basePath" -> setBasePath(Utils.s(value));
 			case "consumes" -> setConsumes(listBuilder(MediaType.class).sparse().addAny(value).build());
 			case "definitions" -> setDefinitions(mapBuilder(String.class,JsonMap.class).sparse().addAny(value).build());
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "host" -> setHost(stringify(value));
+			case "host" -> setHost(Utils.s(value));
 			case "info" -> setInfo(toType(value, Info.class));
 			case "parameters" -> setParameters(mapBuilder(String.class,ParameterInfo.class).sparse().addAny(value).build());
 			case "paths" -> setPaths(mapBuilder(String.class,OperationMap.class).sparse().addAny(value).build());
@@ -901,7 +902,7 @@ public class Swagger extends SwaggerElement {
 			case "schemes" -> setSchemes(listBuilder(String.class).sparse().addAny(value).build());
 			case "security" -> setSecurity((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addAny(value).build());
 			case "securityDefinitions" -> setSecurityDefinitions(mapBuilder(String.class,SecurityScheme.class).sparse().addAny(value).build());
-			case "swagger" -> setSwagger(stringify(value));
+			case "swagger" -> setSwagger(Utils.s(value));
 			case "tags" -> setTags(listBuilder(Tag.class).sparse().addAny(value).build());
 			default -> {
 				super.set(property, value);

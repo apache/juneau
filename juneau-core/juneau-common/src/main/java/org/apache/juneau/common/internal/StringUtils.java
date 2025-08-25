@@ -388,7 +388,7 @@ public final class StringUtils {
 		if (tokens == null)
 			return null;
 		if (tokens.length == 1)
-			return emptyIfNull(stringify(tokens[0]));
+			return emptyIfNull(Utils.s(tokens[0]));
 		return join(tokens, d, new StringBuilder()).toString();
 	}
 
@@ -488,7 +488,7 @@ public final class StringUtils {
 		for (int i = 0, j = tokens.size(); i < j; i++) {
 			if (i > 0)
 				sb.append(d);
-			sb.append(escapeChars(stringify(tokens.get(i)), as));
+			sb.append(escapeChars(Utils.s(tokens.get(i)), as));
 		}
 		return sb.toString();
 	}
@@ -1747,16 +1747,6 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Calls {@link #toString()} on the specified object if it's not null.
-	 *
-	 * @param o The object to convert to a string.
-	 * @return The object converted to a string, or <jk>null</jk> if the object was null.
-	 */
-	public static String stringify(Object o) {
-		return o == null ? null : o.toString();
-	}
-
-	/**
 	 * Converts the specified array to a string.
 	 *
 	 * @param o The array to convert to a string.
@@ -2008,7 +1998,7 @@ public final class StringUtils {
 		if (o == null)
 			return null;
 
-		var s = stringify(o);
+		var s = Utils.s(o);
 
 		var needsEncode = false;
 		for (var i = 0; i < s.length() && ! needsEncode; i++)

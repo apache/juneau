@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -147,7 +148,7 @@ public class Discriminator extends OpenApiElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "propertyName" -> setPropertyName(stringify(value));
+			case "propertyName" -> setPropertyName(Utils.s(value));
 			case "mapping" -> setMapping(mapBuilder(String.class,String.class).sparse().addAny(value).build());
 			default -> {
 				super.set(property, value);

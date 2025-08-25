@@ -280,7 +280,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 */
 	public RequestFormParams add(String name, Object value) {
 		assertArgNotNull("name", name);
-		add(new RequestFormParam(req, name, stringify(value)).parser(parser));
+		add(new RequestFormParam(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
 
@@ -334,7 +334,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 */
 	public RequestFormParams set(String name, Object value) {
 		assertArgNotNull("name", name);
-		set(new RequestFormParam(req, name, stringify(value)).parser(parser));
+		set(new RequestFormParam(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
 

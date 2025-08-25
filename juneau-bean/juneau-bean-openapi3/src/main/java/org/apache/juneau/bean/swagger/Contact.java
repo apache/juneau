@@ -20,6 +20,7 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -194,8 +195,8 @@ public class Contact extends SwaggerElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "email" -> setEmail(stringify(value));
-			case "name" -> setName(stringify(value));
+			case "email" -> setEmail(Utils.s(value));
+			case "name" -> setName(Utils.s(value));
 			case "url" -> setUrl(toURI(value));
 			default -> {
 				super.set(property, value);

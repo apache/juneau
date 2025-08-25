@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -136,7 +137,7 @@ public class ExternalDocumentation extends OpenApiElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "description" -> setDescription(stringify(value));
+			case "description" -> setDescription(Utils.s(value));
 			case "url" -> setUrl(toURI(value));
 			default -> {
 				super.set(property, value);

@@ -602,7 +602,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.attr("style", style);
 		out.cTag();
 		if (link != null)
-			out.oTag(i+3, "a").attrUri("href", link.replace("{#}", stringify(value))).cTag();
+			out.oTag(i+3, "a").attrUri("href", link.replace("{#}", Utils.s(value))).cTag();
 		ContentResult cr = serializeAnything(out, key, keyType, null, null, 2, false, false);
 		if (link != null)
 			out.eTag("a");
@@ -830,7 +830,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				if (! isDc)
 					out.cTag();
 				if (link != null)
-					out.oTag(i+2, "a").attrUri("href", link.replace("{#}", stringify(o))).cTag();
+					out.oTag(i+2, "a").attrUri("href", link.replace("{#}", Utils.s(o))).cTag();
 				ContentResult cr = serializeAnything(out, o, eType.getElementType(), name, null, 1, false, true);
 				if (link != null)
 					out.eTag("a");

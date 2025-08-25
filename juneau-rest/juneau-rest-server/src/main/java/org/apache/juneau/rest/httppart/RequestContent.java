@@ -24,6 +24,7 @@ import jakarta.servlet.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -533,7 +534,7 @@ public class RequestContent {
 
 		MediaType mt = getMediaType();
 
-		if ((isEmpty(stringify(mt)) || mt.toString().startsWith("text/plain")) && cm.hasStringMutater())
+		if ((isEmpty(Utils.s(mt)) || mt.toString().startsWith("text/plain")) && cm.hasStringMutater())
 			return cm.getStringMutater().mutate(asString());
 
 		Optional<ContentType> ct = req.getHeader(ContentType.class);

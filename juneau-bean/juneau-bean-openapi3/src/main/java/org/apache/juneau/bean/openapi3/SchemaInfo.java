@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -1133,7 +1134,7 @@ public class SchemaInfo extends OpenApiElement {
 	 */
 	@Beanp("$ref")
 	public SchemaInfo setRef(Object value) {
-		ref = stringify(value);
+		ref = Utils.s(value);
 		return this;
 	}
 
@@ -1191,9 +1192,9 @@ public class SchemaInfo extends OpenApiElement {
 		if (property == null)
 			return this;
 		return switch (property) {  // NOSONAR
-			case "format" -> setFormat(stringify(value));
-			case "title" -> setTitle(stringify(value));
-			case "description" -> setDescription(stringify(value));
+			case "format" -> setFormat(Utils.s(value));
+			case "title" -> setTitle(Utils.s(value));
+			case "description" -> setDescription(Utils.s(value));
 			case "default" -> setDefault(value);
 			case "multipleOf" -> setMultipleOf(toNumber(value));
 			case "maximum" -> setMaximum(toNumber(value));
@@ -1202,15 +1203,15 @@ public class SchemaInfo extends OpenApiElement {
 			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
 			case "maxLength" -> setMaxLength(toInteger(value));
 			case "minLength" -> setMinLength(toInteger(value));
-			case "pattern" -> setPattern(stringify(value));
+			case "pattern" -> setPattern(Utils.s(value));
 			case "maxItems" -> setMaxItems(toInteger(value));
 			case "minItems" -> setMinItems(toInteger(value));
 			case "uniqueItems" -> setUniqueItems(toBoolean(value));
 			case "maxProperties" -> setMaxProperties(toInteger(value));
 			case "minProperties" -> setMinProperties(toInteger(value));
-			case "required" -> addRequired(stringify(value));
+			case "required" -> addRequired(Utils.s(value));
 			case "enum" -> addEnum(value);
-			case "type" -> setType(stringify(value));
+			case "type" -> setType(Utils.s(value));
 			case "items" -> setItems(toType(value, Items.class));
 			case "allOf" -> addAllOf(value);
 			case "anyOf" -> addAnyOf(value);

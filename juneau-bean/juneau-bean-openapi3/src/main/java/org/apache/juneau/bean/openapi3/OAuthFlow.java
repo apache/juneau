@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -226,9 +227,9 @@ public class OAuthFlow extends OpenApiElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "authorizationUrl" -> setAuthorizationUrl(stringify(value));
-			case "tokenUrl" -> setTokenUrl(stringify(value));
-			case "refreshUrl" -> setRefreshUrl(stringify(value));
+			case "authorizationUrl" -> setAuthorizationUrl(Utils.s(value));
+			case "tokenUrl" -> setTokenUrl(Utils.s(value));
+			case "refreshUrl" -> setRefreshUrl(Utils.s(value));
 			case "scopes" -> setScopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
 			default -> {
 				super.set(property, value);

@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -222,9 +223,9 @@ public class ServerVariable extends OpenApiElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "default" -> setDefault(stringify(value));
+			case "default" -> setDefault(Utils.s(value));
 			case "enum" -> setEnum(listBuilder(Object.class).sparse().addAny(value).build());
-			case "description" -> setDescription(stringify(value));
+			case "description" -> setDescription(Utils.s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

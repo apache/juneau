@@ -23,6 +23,7 @@ import java.util.*;
 import org.apache.juneau.rest.*;
 import org.apache.http.*;
 import org.apache.http.Header;
+import org.apache.juneau.common.internal.Utils;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
@@ -76,7 +77,7 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 						if (o2 instanceof Map.Entry) {
 							@SuppressWarnings("rawtypes")
 							Map.Entry x = (Map.Entry)o2;
-							String k = stringify(x.getKey());
+							String k = Utils.s(x.getKey());
 							h = new SerializedHeader(k, x.getValue(), hm.getSerializer().orElse(defaultPartSerializer).getPartSession(), ps.getProperty(k), true);
 						} else if (o2 instanceof Header) {
 							h = (Header)o2;

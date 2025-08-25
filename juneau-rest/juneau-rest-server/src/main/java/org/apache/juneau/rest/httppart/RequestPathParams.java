@@ -252,7 +252,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 */
 	public RequestPathParams add(String name, Object value) {
 		assertArgNotNull("name", name);
-		add(new RequestPathParam(req, name, stringify(value)).parser(parser));
+		add(new RequestPathParam(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
 
@@ -290,7 +290,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 */
 	public RequestPathParams set(String name, Object value) {
 		assertArgNotNull("name", name);
-		set(new RequestPathParam(req, name, stringify(value)).parser(parser));
+		set(new RequestPathParam(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
 

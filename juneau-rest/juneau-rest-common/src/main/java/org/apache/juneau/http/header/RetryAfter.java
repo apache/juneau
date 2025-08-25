@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -208,7 +209,7 @@ public class RetryAfter extends BasicDateHeader {
 			throw new BasicRuntimeException("Invalid object type returned by supplier: {0}", className(o));
 		}
 		if (value != null)
-			return stringify(value);
+			return Utils.s(value);
 		return super.getValue();
 	}
 

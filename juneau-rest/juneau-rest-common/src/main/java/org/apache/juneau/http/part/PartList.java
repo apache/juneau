@@ -901,7 +901,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	}
 
 	private Supplier<Object> resolver(Object input) {
-		return ()->varResolver.resolve(stringify(unwrap(input)));
+		return ()->varResolver.resolve(Utils.s(unwrap(input)));
 	}
 
 	private Object unwrap(Object o) {

@@ -4087,7 +4087,7 @@ public class HttpPartSchema {
 	@Override
 	public String toString() {
 		try {
-			Predicate<Object> ne = x -> isNotEmpty(stringify(x));
+			Predicate<Object> ne = x -> isNotEmpty(Utils.s(x));
 			Predicate<Boolean> nf = Utils::isTrue;
 			Predicate<Number> nm1 = Utils::isNotMinusOne;
 			Predicate<Object> nn = Utils::isNotNull;

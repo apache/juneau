@@ -934,7 +934,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	}
 
 	private Supplier<Object> resolver(Object input) {
-		return ()->varResolver.resolve(stringify(unwrap(input)));
+		return ()->varResolver.resolve(Utils.s(unwrap(input)));
 	}
 
 	private Object unwrap(Object o) {

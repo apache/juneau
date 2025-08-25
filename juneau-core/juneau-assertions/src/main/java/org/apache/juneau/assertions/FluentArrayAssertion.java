@@ -13,7 +13,7 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.common.internal.ArgUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static java.util.Arrays.*;
@@ -190,7 +190,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @return A new fluent string assertion.
 	 */
 	public FluentStringListAssertion<R> asStrings() {
-		return new FluentStringListAssertion<>(this, valueIsNull() ? null : stream(value()).map(StringUtils::stringify).toList(), returns());
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : stream(value()).map((o) -> s(o)).toList(), returns());
 	}
 
 	/**
@@ -221,7 +221,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	public FluentStringAssertion<R> asCdl(Function<E,String> function) {
 		List<String> l = valueIsNull() ? null : stream(value()).map(function::apply).toList();
-		return new FluentStringAssertion<>(this, join(l, ','), returns());
+		return new FluentStringAssertion<>(this, StringUtils.join(l, ','), returns());
 	}
 
 	/**
@@ -453,7 +453,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	}
 
 	private List<E> toList() {
-		return valueIsNull() ? null : list(value());
+		return valueIsNull() ? null : Utils.list(value());
 	}
 
 	private List<E> toSortedList(Comparator<E> comparator) {

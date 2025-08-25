@@ -13,7 +13,7 @@
 
 package org.apache.juneau.utest.utils;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.io.*;
@@ -46,11 +46,11 @@ public class FakeWriterSerializer extends WriterSerializer implements HttpPartSe
 
 		private static String out(Object value) {
 			if (value instanceof List<?> x)
-				value = join(x, '|');
+				value = StringUtils.join(x, '|');
 			if (value instanceof Collection<?> x)
-				value = join(x, '|');
+				value = StringUtils.join(x, '|');
 			if (isArray(value))
-				value = join(toList(value, Object.class), "|");
+				value = StringUtils.join(toList(value, Object.class), "|");
 			return "x" + value + "x";
 		}
 	}
@@ -68,8 +68,8 @@ public class FakeWriterSerializer extends WriterSerializer implements HttpPartSe
 	//-------------------------------------------------------------------------------------------------------------------
 
 	public static class Builder extends WriterSerializer.Builder {
-		Function2<WriterSerializerSession,Object,String> function = (s,o) -> StringUtils.stringify(o);
-		Function3<HttpPartType,HttpPartSchema,Object,String> partFunction = (t,s,o) -> StringUtils.stringify(o);
+		Function2<WriterSerializerSession,Object,String> function = (s,o) -> s(o);
+		Function3<HttpPartType,HttpPartSchema,Object,String> partFunction = (t,s,o) -> s(o);
 		Function<WriterSerializerSession,Map<String,String>> headers = s -> Collections.emptyMap();
 
 		public Builder function(Function2<WriterSerializerSession,Object,String> value) {

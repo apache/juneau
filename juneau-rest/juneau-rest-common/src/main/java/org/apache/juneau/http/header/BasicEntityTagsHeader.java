@@ -18,6 +18,8 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.internal.*;
+
 /**
  * Category of headers that consist of a comma-delimited list of entity validator values.
  *
@@ -148,7 +150,7 @@ public class BasicEntityTagsHeader extends BasicHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		return stringify(value());
+		return Utils.s(value());
 	}
 
 	/**

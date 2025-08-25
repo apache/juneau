@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 
@@ -85,7 +86,7 @@ public class RequestAttribute extends BasicNamedAttribute {
 	 * @return The value of this part as a string, or {@link Optional#empty()} if the part was not present.
 	 */
 	public Optional<String> asString() {
-		return optional(stringify(getValue()));
+		return optional(Utils.s(getValue()));
 	}
 
 	/**

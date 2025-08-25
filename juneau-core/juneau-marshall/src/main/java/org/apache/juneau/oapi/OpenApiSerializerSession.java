@@ -343,21 +343,21 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 			} else if (t == BOOLEAN) {
 
-				out = stringify(toType(value, CM_Boolean));
+				out = Utils.s(toType(value, CM_Boolean));
 
 			} else if (t == INTEGER) {
 
 				if (f == INT64)
-					out = stringify(toType(value, CM_Long));
+					out = Utils.s(toType(value, CM_Long));
 				else
-					out = stringify(toType(value, CM_Integer));
+					out = Utils.s(toType(value, CM_Integer));
 
 			} else if (t == NUMBER) {
 
 				if (f == DOUBLE)
-					out = stringify(toType(value, CM_Double));
+					out = Utils.s(toType(value, CM_Double));
 				else
-					out = stringify(toType(value, CM_Float));
+					out = Utils.s(toType(value, CM_Float));
 
 			} else if (t == ARRAY) {
 
@@ -406,7 +406,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 				} else if (type.isMap()) {
 					OapiStringBuilder sb = new OapiStringBuilder(cf);
 					HttpPartSchema schema2 = schema;
-					((Map<?,?>)value).forEach((k,v) -> sb.append(k, serialize(partType, schema2.getProperty(stringify(k)), v)));
+					((Map<?,?>)value).forEach((k,v) -> sb.append(k, serialize(partType, schema2.getProperty(Utils.s(k)), v)));
 					out = sb.toString();
 
 				} else {
@@ -461,11 +461,11 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 				delim(cf);
 			first = false;
 			if (cf == PIPES)
-				sb.append(escapeChars(stringify(o), PIPE));
+				sb.append(escapeChars(Utils.s(o), PIPE));
 			else if (cf == SSV || cf == TSV)
-				sb.append(stringify(o));
+				sb.append(Utils.s(o));
 			else
-				sb.append(escapeChars(stringify(o), COMMA));
+				sb.append(escapeChars(Utils.s(o), COMMA));
 			return this;
 		}
 
@@ -474,11 +474,11 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 				delim(cf);
 			first = false;
 			if (cf == PIPES)
-				sb.append(escapeChars(stringify(key), PIPE_OR_EQ)).append('=').append(escapeChars(stringify(val), PIPE_OR_EQ));
+				sb.append(escapeChars(Utils.s(key), PIPE_OR_EQ)).append('=').append(escapeChars(Utils.s(val), PIPE_OR_EQ));
 			else if (cf == SSV || cf == TSV)
-				sb.append(escapeChars(stringify(key), EQ)).append('=').append(escapeChars(stringify(val), EQ));
+				sb.append(escapeChars(Utils.s(key), EQ)).append('=').append(escapeChars(Utils.s(val), EQ));
 			else
-				sb.append(escapeChars(stringify(key), COMMA_OR_EQ)).append('=').append(escapeChars(stringify(val), COMMA_OR_EQ));
+				sb.append(escapeChars(Utils.s(key), COMMA_OR_EQ)).append('=').append(escapeChars(Utils.s(val), COMMA_OR_EQ));
 			return this;
 		}
 
@@ -501,7 +501,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			});
 		} else {
 			HttpPartSchema s2 = s;
-			((Map<?,?>)o).forEach((k,v) -> m.put(stringify(k), toObject(partType, v, s2.getProperty(stringify(k)))));
+			((Map<?,?>)o).forEach((k,v) -> m.put(Utils.s(k), toObject(partType, v, s2.getProperty(Utils.s(k)))));
 		}
 		if (isSortMaps())
 			return sort(m);

@@ -165,7 +165,7 @@ public class ExternalDocumentation extends SwaggerElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "description" -> setDescription(stringify(value));
+			case "description" -> setDescription(Utils.s(value));
 			case "url" -> setUrl(StringUtils.toURI(value));
 			default -> {
 				super.set(property, value);

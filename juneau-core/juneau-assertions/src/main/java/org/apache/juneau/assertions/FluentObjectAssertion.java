@@ -21,6 +21,7 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -586,7 +587,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The inner value as a string, or <jk>null</jk> if the value was null.
 	 */
 	protected String valueAsString() {
-		return stringify(value);
+		return Utils.s(value);
 	}
 
 	/**

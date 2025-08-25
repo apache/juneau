@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -1032,14 +1033,14 @@ public class SchemaInfo extends SwaggerElement {
 			case "additionalProperties" -> setAdditionalProperties(toType(value, SchemaInfo.class));
 			case "allOf" -> setAllOf(value);
 			case "default" -> setDefault(value);
-			case "description" -> setDescription(stringify(value));
-			case "discriminator" -> setDiscriminator(stringify(value));
+			case "description" -> setDescription(Utils.s(value));
+			case "discriminator" -> setDiscriminator(Utils.s(value));
 			case "enum" -> setEnum(value);
 			case "example" -> setExample(value);
 			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
 			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "format" -> setFormat(stringify(value));
+			case "format" -> setFormat(Utils.s(value));
 			case "items" -> setItems(toType(value, Items.class));
 			case "maximum" -> setMaximum(toNumber(value));
 			case "maxItems" -> setMaxItems(toInteger(value));
@@ -1050,14 +1051,14 @@ public class SchemaInfo extends SwaggerElement {
 			case "minLength" -> setMinLength(toInteger(value));
 			case "minProperties" -> setMinProperties(toInteger(value));
 			case "multipleOf" -> setMultipleOf(toNumber(value));
-			case "pattern" -> setPattern(stringify(value));
+			case "pattern" -> setPattern(Utils.s(value));
 			case "properties" -> setProperties(mapBuilder(String.class,SchemaInfo.class).sparse().addAny(value).build());
 			case "readOnly" -> setReadOnly(toBoolean(value));
-			case "$ref" -> setRef(stringify(value));
+			case "$ref" -> setRef(Utils.s(value));
 			case "required" -> setRequired(toBoolean(value));
 			case "requiredProperties" -> setRequiredProperties(listBuilder(String.class).sparse().addAny(value).build());
-			case "title" -> setTitle(stringify(value));
-			case "type" -> setType(stringify(value));
+			case "title" -> setTitle(Utils.s(value));
+			case "type" -> setType(Utils.s(value));
 			case "uniqueItems" -> setUniqueItems(toBoolean(value));
 			case "xml" -> setXml(toType(value, Xml.class));
 			default -> {

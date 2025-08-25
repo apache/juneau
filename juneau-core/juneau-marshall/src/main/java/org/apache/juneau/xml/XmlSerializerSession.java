@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -754,7 +755,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 						} else /* Map */ {
 							Map m2 = (Map)value;
 							if (m2 != null)
-								m2.forEach((k,v) -> out.attr(ns, stringify(k), v));
+								m2.forEach((k,v) -> out.attr(ns, Utils.s(k), v));
 						}
 					} else {
 						out.attr(ns, key, value);

@@ -114,7 +114,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		assertArg(StringUtils.isNotEmpty(name), "Name cannot be empty on header.");
 		this.name = name;
 		this.value = value instanceof Supplier ? null : value;
-		this.stringValue = stringify(value);
+		this.stringValue = Utils.s(value);
 		this.supplier = Utils.cast(Supplier.class, value);
 	}
 
@@ -158,7 +158,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	@Override /* Header */
 	public String getValue() {
 		if (supplier != null)
-			return stringify(supplier.get());
+			return Utils.s(supplier.get());
 		return stringValue;
 	}
 

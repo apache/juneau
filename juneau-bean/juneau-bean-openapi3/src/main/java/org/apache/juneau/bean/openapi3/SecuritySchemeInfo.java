@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -442,14 +443,14 @@ public class SecuritySchemeInfo extends OpenApiElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "name" -> setName(stringify(value));
-			case "in" -> setIn(stringify(value));
-			case "description" -> setDescription(stringify(value));
-			case "scheme" -> setScheme(stringify(value));
-			case "bearerFormat" -> setBearerFormat(stringify(value));
-			case "type" -> setType(stringify(value));
+			case "name" -> setName(Utils.s(value));
+			case "in" -> setIn(Utils.s(value));
+			case "description" -> setDescription(Utils.s(value));
+			case "scheme" -> setScheme(Utils.s(value));
+			case "bearerFormat" -> setBearerFormat(Utils.s(value));
+			case "type" -> setType(Utils.s(value));
 			case "flows" -> setFlows(toType(value, OAuthFlow.class));
-			case "openIdConnectUrl" -> setOpenIdConnectUrl(stringify(value));
+			case "openIdConnectUrl" -> setOpenIdConnectUrl(Utils.s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

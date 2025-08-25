@@ -19,6 +19,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * POJO model searcher.
@@ -215,7 +216,7 @@ public final class ObjectSearcher implements ObjectTool<SearchArgs> {
 		@SuppressWarnings("unchecked")
 		RowMatcher(BeanSession bs, Map query) {
 			this.bs = bs;
-			query.forEach((k,v) -> entryMatchers.put(stringify(k), new ColumnMatcher(bs, stringify(v))));
+			query.forEach((k,v) -> entryMatchers.put(Utils.s(k), new ColumnMatcher(bs, Utils.s(v))));
 		}
 
 		boolean matches(Object o) {

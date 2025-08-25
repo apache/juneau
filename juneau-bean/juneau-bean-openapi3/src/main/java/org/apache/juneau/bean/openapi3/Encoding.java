@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -240,8 +241,8 @@ public class Encoding extends OpenApiElement{
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "contentType" -> setContentType(stringify(value));
-			case "style" -> setStyle(stringify(value));
+			case "contentType" -> setContentType(Utils.s(value));
+			case "style" -> setStyle(Utils.s(value));
 			case "headers" -> setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
 			case "explode" -> setExplode(toBoolean(value));
 			case "allowReserved" -> setAllowReserved(toBoolean(value));

@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -272,9 +273,9 @@ public class Xml extends SwaggerElement {
 			return this;
 		return switch (property) {
 			case "attribute" -> setAttribute(toBoolean(value));
-			case "name" -> setName(stringify(value));
-			case "namespace" -> setNamespace(stringify(value));
-			case "prefix" -> setPrefix(stringify(value));
+			case "name" -> setName(Utils.s(value));
+			case "namespace" -> setNamespace(Utils.s(value));
+			case "prefix" -> setPrefix(Utils.s(value));
 			case "wrapped" -> setWrapped(toBoolean(value));
 			default -> {
 				super.set(property, value);

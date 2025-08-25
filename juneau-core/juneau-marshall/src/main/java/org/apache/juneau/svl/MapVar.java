@@ -17,6 +17,8 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.common.internal.*;
+
 /**
  * A subclass of {@link DefaultingVar} that simply pulls values from a {@link Map}.
  *
@@ -43,6 +45,6 @@ public abstract class MapVar extends DefaultingVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String varVal) {
-		return stringify(m.get(varVal));
+		return Utils.s(m.get(varVal));
 	}
 }

@@ -23,6 +23,7 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
@@ -103,7 +104,7 @@ public class BasicPart implements NameValuePair, Headerable {
 		}
 		if (o instanceof Map.Entry) {
 			Map.Entry e = (Map.Entry)o;
-			return BasicPart.of(stringify(e.getKey()), e.getValue());
+			return BasicPart.of(Utils.s(e.getKey()), e.getValue());
 		}
 		throw new BasicRuntimeException("Object of type {0} could not be converted to a Part.", className(o));
 	}
@@ -161,7 +162,7 @@ public class BasicPart implements NameValuePair, Headerable {
 
 	@Override /* Headerable */
 	public BasicHeader asHeader() {
-		return BasicHeader.of(name, stringify(value));
+		return BasicHeader.of(name, Utils.s(value));
 	}
 
 	@Override /* NameValuePair */
@@ -171,7 +172,7 @@ public class BasicPart implements NameValuePair, Headerable {
 
 	@Override /* NameValuePair */
 	public String getValue() {
-		return stringify(unwrap(value));
+		return Utils.s(unwrap(value));
 	}
 
 	/**

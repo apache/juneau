@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Category of headers that consist of simple comma-delimited lists of strings with q-values.
@@ -125,7 +126,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicStringRangesHeader(String name, StringRanges value) {
-		super(name, stringify(value));
+		super(name, Utils.s(value));
 		this.stringValue = null;
 		this.value = value;
 		this.supplier = null;
@@ -152,7 +153,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		return stringValue != null ? stringValue : stringify(value());
+		return stringValue != null ? stringValue : Utils.s(value());
 	}
 
 	/**

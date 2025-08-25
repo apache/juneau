@@ -135,7 +135,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> eq(String value) {
-		return test(x -> Objects.equals(stringify(x), value), MSG_valueDidNotMatchExpected, value, VALUE);
+		return test(x -> Objects.equals(Utils.s(x), value), MSG_valueDidNotMatchExpected, value, VALUE);
 	}
 
 	/**
@@ -163,7 +163,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> ne(String value) {
-		return test(x -> ! Objects.equals(stringify(x), value), MSG_valueUnexpectedlyMatched, VALUE);
+		return test(x -> ! Objects.equals(Utils.s(x), value), MSG_valueUnexpectedlyMatched, VALUE);
 	}
 
 	/**
@@ -177,7 +177,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> eqic(String value) {
-		return test(x -> StringUtils.eqic(stringify(x), value), MSG_valueDidNotMatchExpected, value, VALUE);
+		return test(x -> StringUtils.eqic(Utils.s(x), value), MSG_valueDidNotMatchExpected, value, VALUE);
 	}
 
 	/**
@@ -191,7 +191,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> contains(String value) {
-		return test(x -> StringUtils.contains(stringify(x), value), MSG_valueDidNotContainExpected, value, VALUE);
+		return test(x -> StringUtils.contains(Utils.s(x), value), MSG_valueDidNotContainExpected, value, VALUE);
 	}
 
 	/**
@@ -240,7 +240,7 @@ public class AssertionPredicates {
 	public static final <T> AssertionPredicate<T> match(String value) {
 		assertArgNotNull("value", value);
 		var p = StringUtils.getMatchPattern(value);
-		return test(x -> x != null && p.matcher(stringify(x)).matches(), MSG_valueDidNotMatchPattern, value, VALUE);
+		return test(x -> x != null && p.matcher(Utils.s(x)).matches(), MSG_valueDidNotMatchPattern, value, VALUE);
 	}
 
 	/**
@@ -256,7 +256,7 @@ public class AssertionPredicates {
 	public static final <T> AssertionPredicate<T> regex(String expression) {
 		assertArgNotNull("expression", expression);
 		var p = Pattern.compile(expression);
-		return test(x -> x != null && p.matcher(stringify(x)).matches(), MSG_valueDidNotMatchPattern, expression, VALUE);
+		return test(x -> x != null && p.matcher(Utils.s(x)).matches(), MSG_valueDidNotMatchPattern, expression, VALUE);
 	}
 
 	/**
@@ -283,7 +283,7 @@ public class AssertionPredicates {
 	public static final <T> AssertionPredicate<T> regex(String expression, int flags) {
 		assertArgNotNull("expression", expression);
 		var p = Pattern.compile(expression, flags);
-		return test(x -> x != null && p.matcher(stringify(x)).matches(), MSG_valueDidNotMatchPattern, expression, VALUE);
+		return test(x -> x != null && p.matcher(Utils.s(x)).matches(), MSG_valueDidNotMatchPattern, expression, VALUE);
 	}
 
 	/**
@@ -298,7 +298,7 @@ public class AssertionPredicates {
 	 */
 	public static final <T> AssertionPredicate<T> regex(Pattern value) {
 		assertArgNotNull("value", value);
-		return test(x -> x != null && value.matcher(stringify(x)).matches(), MSG_valueDidNotMatchPattern, value.pattern(), VALUE);
+		return test(x -> x != null && value.matcher(Utils.s(x)).matches(), MSG_valueDidNotMatchPattern, value.pattern(), VALUE);
 	}
 
 	/**

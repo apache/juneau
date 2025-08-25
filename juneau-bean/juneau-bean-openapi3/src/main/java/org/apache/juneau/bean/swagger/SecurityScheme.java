@@ -22,6 +22,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
 
@@ -411,14 +412,14 @@ public class SecurityScheme extends SwaggerElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "authorizationUrl" -> setAuthorizationUrl(stringify(value));
-			case "description" -> setDescription(stringify(value));
-			case "flow" -> setFlow(stringify(value));
-			case "in" -> setIn(stringify(value));
-			case "name" -> setName(stringify(value));
+			case "authorizationUrl" -> setAuthorizationUrl(Utils.s(value));
+			case "description" -> setDescription(Utils.s(value));
+			case "flow" -> setFlow(Utils.s(value));
+			case "in" -> setIn(Utils.s(value));
+			case "name" -> setName(Utils.s(value));
 			case "scopes" -> setScopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
-			case "tokenUrl" -> setTokenUrl(stringify(value));
-			case "type" -> setType(stringify(value));
+			case "tokenUrl" -> setTokenUrl(Utils.s(value));
+			case "type" -> setType(Utils.s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

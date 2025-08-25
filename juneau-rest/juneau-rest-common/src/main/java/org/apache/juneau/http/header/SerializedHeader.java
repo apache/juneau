@@ -17,6 +17,7 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
@@ -289,9 +290,9 @@ public class SerializedHeader extends BasicHeader {
 				if ((def == null && ! schema.isRequired()) || (def == null && schema.isAllowEmptyValue()))
 					return null;
 			}
-			if (isEmpty(stringify(v)) && skipIfEmpty && def == null)
+			if (isEmpty(Utils.s(v)) && skipIfEmpty && def == null)
 				return null;
-			return serializer == null ? stringify(v) : serializer.serialize(HttpPartType.HEADER, schema, v);
+			return serializer == null ? Utils.s(v) : serializer.serialize(HttpPartType.HEADER, schema, v);
 		} catch (SchemaValidationException e) {
 			throw new BasicRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", HttpPartType.HEADER, getName(), value);
 		} catch (SerializeException e) {

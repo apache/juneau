@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Category of headers that consist of multiple parameterized string values.
@@ -108,7 +109,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicMediaRangesHeader(String name, MediaRanges value) {
-		super(name, stringify(value));
+		super(name, Utils.s(value));
 		this.stringValue = null;
 		this.value = value;
 		this.supplier = null;
@@ -203,7 +204,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		return stringValue != null ? stringValue : stringify(value());
+		return stringValue != null ? stringValue : Utils.s(value());
 	}
 
 	/**

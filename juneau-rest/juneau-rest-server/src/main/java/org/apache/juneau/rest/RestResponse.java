@@ -27,6 +27,7 @@ import jakarta.servlet.http.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.Utils;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
@@ -816,7 +817,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	private String resolveUris(Object value) {
-		String s = stringify(value);
+		String s = Utils.s(value);
 		return request.getUriResolver().resolve(s);
 	}
 

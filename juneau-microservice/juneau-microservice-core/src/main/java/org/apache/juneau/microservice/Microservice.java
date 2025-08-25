@@ -1080,7 +1080,7 @@ public class Microservice implements ConfigEventListener {
 		List<String> l = list();
 		l.add(command);
 		for (Object a : args)
-			l.add(stringify(a));
+			l.add(Utils.s(a));
 		Args args2 = new Args(l.toArray(new String[l.size()]));
 		try (Scanner in = new Scanner(input); PrintWriter out = new PrintWriter(sw)) {
 			executeCommand(args2, in, out);

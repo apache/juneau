@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -260,9 +261,9 @@ public class Xml extends OpenApiElement {
 		if (property == null)
 			return this;
 		return switch (property) {
-			case "name" -> setName(stringify(value));
-			case "namespace" -> setNamespace(stringify(value));
-			case "prefix" -> setPrefix(stringify(value));
+			case "name" -> setName(Utils.s(value));
+			case "namespace" -> setNamespace(Utils.s(value));
+			case "prefix" -> setPrefix(Utils.s(value));
 			case "attribute" -> setAttribute(toBoolean(value));
 			case "wrapped" -> setWrapped(toBoolean(value));
 			default -> {
