@@ -15,6 +15,7 @@ package org.apache.juneau.utils;
 import static java.lang.Character.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.lang.reflect.*;
@@ -161,10 +162,10 @@ public class ReflectionMap<V> {
 		 * Constructor.
 		 */
 		protected Builder() {
-			classEntries = list2();
-			methodEntries = list2();
-			fieldEntries = list2();
-			constructorEntries = list2();
+			classEntries = list();
+			methodEntries = list();
+			fieldEntries = list();
+			constructorEntries = list();
 		}
 
 		/**
@@ -363,7 +364,7 @@ public class ReflectionMap<V> {
 
 	private static <V> List<V> lazyAdd(List<V> list, V v) {
 		if (list == null)
-			list = list2();
+			list = list();
 		list.add(v);
 		return list;
 	}
@@ -803,7 +804,7 @@ public class ReflectionMap<V> {
 
 	private static <V> List<V> lazyAdd(V[] array, List<V> list, V v) {
 		if (list == null)
-			list = list2(array);
+			list = list(array);
 		list.add(v);
 		return list;
 	}

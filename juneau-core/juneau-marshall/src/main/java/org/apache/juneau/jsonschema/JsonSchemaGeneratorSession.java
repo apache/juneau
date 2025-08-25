@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.jsonschema.TypeCategory.*;
 
@@ -376,7 +377,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 	@SuppressWarnings("unchecked")
 	private List<String> getEnums(ClassMeta<?> cm) {
-		List<String> l = list2();
+		List<String> l = list();
 		for (Enum<?> e : ((Class<Enum<?>>)cm.getInnerClass()).getEnumConstants())
 			l.add(cm.toString(e));
 		return l;

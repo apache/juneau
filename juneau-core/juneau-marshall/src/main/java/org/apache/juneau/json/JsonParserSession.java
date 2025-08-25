@@ -13,6 +13,7 @@
 package org.apache.juneau.json;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.io.*;
@@ -360,7 +361,7 @@ public final class JsonParserSession extends ReaderParserSession {
 				parseIntoMap2(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else {
-				ArrayList l = (ArrayList)parseIntoCollection2(r, list2(), sType, pMeta);
+				ArrayList l = (ArrayList)parseIntoCollection2(r, list(), sType, pMeta);
 				o = toArray(sType, l);
 			}
 		} else if (c == '{') {

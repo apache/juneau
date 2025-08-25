@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -168,7 +169,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 		boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
-			List<Class<?>> bdClasses = list2();
+			List<Class<?>> bdClasses = list();
 
 			if (field == null && getter == null && setter == null)
 				return false;
@@ -180,7 +181,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			canWrite |= (field != null || setter != null);
 
 			if (innerField != null) {
-				List<Beanp> lp = list2();
+				List<Beanp> lp = list();
 				bc.forEachAnnotation(Beanp.class, innerField, x -> true, x -> lp.add(x));
 				if (field != null || Utils.isNotEmpty2(lp)) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
@@ -202,7 +203,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			}
 
 			if (getter != null) {
-				List<Beanp> lp = list2();
+				List<Beanp> lp = list();
 				bc.forEachAnnotation(Beanp.class, getter, x -> true, x -> lp.add(x));
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), getter.getGenericReturnType(), typeVarImpls);
@@ -220,7 +221,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			}
 
 			if (setter != null) {
-				List<Beanp> lp = list2();
+				List<Beanp> lp = list ();
 				bc.forEachAnnotation(Beanp.class, setter, x -> true, x -> lp.add(x));
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), setter.getGenericParameterTypes()[0], typeVarImpls);

@@ -14,6 +14,7 @@ package org.apache.juneau.cp;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static java.util.stream.Collectors.*;
 
@@ -588,7 +589,7 @@ public class BeanStore {
 	 */
 	public String getMissingParams(ExecutableInfo executable) {
 		List<ParamInfo> params = executable.getParams();
-		List<String> l = list2();
+		List<String> l = list();
 		loop: for (int i = 0; i < params.size(); i++) {
 			ParamInfo pi = params.get(i);
 			ClassInfo pt = pi.getParameterType();

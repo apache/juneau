@@ -13,6 +13,7 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.common.internal.ArgUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
@@ -64,7 +65,7 @@ public class DefaultClassList {
 	 * Constructor.
 	 */
 	protected DefaultClassList() {
-		entries = list2();
+		entries = list();
 	}
 
 	/**

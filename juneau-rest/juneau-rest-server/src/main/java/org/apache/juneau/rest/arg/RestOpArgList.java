@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.arg;
 
 import static org.apache.juneau.common.internal.ArgUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
@@ -63,7 +64,7 @@ public class RestOpArgList {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(RestOpArgList.class, beanStore);
-			entries = list2();
+			entries = list();
 		}
 
 		@Override /* BeanBuilder */

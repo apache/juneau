@@ -14,6 +14,7 @@ package org.apache.juneau.jena;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.jena.Constants.*;
 
 import java.io.*;
@@ -240,7 +241,7 @@ public class RdfParserSession extends ReaderParserSession {
 		if (isLooseCollections() && type.isCollectionOrArray()) {
 			Collection c = null;
 			if (type.isArray() || type.isArgs())
-				c = list2();
+				c = list();
 			else
 				c = (
 					type.canCreateNewInstance(getOuter())
@@ -464,7 +465,7 @@ public class RdfParserSession extends ReaderParserSession {
 			o = parseIntoMap(r, m, eType.getKeyType(), eType.getValueType(), pMeta);
 		} else if (sType.isCollectionOrArray() || sType.isArgs()) {
 			if (sType.isArray() || sType.isArgs())
-				o = list2();
+				o = list();
 			else
 				o = (sType.canCreateNewInstance(outer) ? (Collection<?>)sType.newInstance(outer) : new JsonList(this));
 			Resource r = n.asResource();

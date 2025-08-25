@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.guard;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
@@ -62,7 +63,7 @@ public class RestGuardList {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(RestGuardList.class, beanStore);
-			entries = list2();
+			entries = list();
 		}
 
 		@Override /* BeanBuilder */

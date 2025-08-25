@@ -631,7 +631,7 @@ public final class BeanFilter {
 		 */
 		public Builder dictionary(Class<?>...values) {
 			if (dictionary == null)
-				dictionary = list2(values);
+				dictionary = list(values);
 			else for (Class<?> cc : values)
 				dictionary.add(cc);
 			return this;

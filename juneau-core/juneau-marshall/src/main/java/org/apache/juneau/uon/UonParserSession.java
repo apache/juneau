@@ -14,6 +14,7 @@ package org.apache.juneau.uon;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.io.*;
@@ -418,7 +419,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 					o = toArray(sType, l);
 				}
 			} else {
-				ArrayList l = (ArrayList)parseIntoCollection(r, list2(), sType, isUrlParamValue, pMeta);
+				ArrayList l = (ArrayList)parseIntoCollection(r, list(), sType, isUrlParamValue, pMeta);
 				o = toArray(sType, l);
 			}
 		} else if (c == '(') {

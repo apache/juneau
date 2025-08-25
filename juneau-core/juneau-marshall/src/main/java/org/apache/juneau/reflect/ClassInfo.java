@@ -396,7 +396,7 @@ public final class ClassInfo {
 	ClassInfo[] _getParents() {
 		if (parents == null) {
 			synchronized(this) {
-				List<ClassInfo> l = list2();
+				List<ClassInfo> l = list();
 				Class<?> pc = c;
 				while (pc != null && pc != Object.class) {
 					l.add(of(pc));
@@ -602,7 +602,7 @@ public final class ClassInfo {
 	MethodInfo[] _getAllMethods() {
 		if (allMethods == null) {
 			synchronized(this) {
-				List<MethodInfo> l = list2();
+				List<MethodInfo> l = list();
 				for (ClassInfo c : _getAllParents())
 					c._appendDeclaredMethods(l);
 				allMethods = l.toArray(new MethodInfo[l.size()]);
@@ -614,7 +614,7 @@ public final class ClassInfo {
 	MethodInfo[] _getAllMethodsParentFirst() {
 		if (allMethodsParentFirst == null) {
 			synchronized(this) {
-				List<MethodInfo> l = list2();
+				List<MethodInfo> l = list();
 				ClassInfo[] parents = _getAllParents();
 				for (int i = parents.length-1; i >=0; i--)
 					parents[i]._appendDeclaredMethods(l);
@@ -909,7 +909,7 @@ public final class ClassInfo {
 	FieldInfo[] _getAllFields() {
 		if (allFields == null) {
 			synchronized(this) {
-				List<FieldInfo> l = list2();
+				List<FieldInfo> l = list();
 				ClassInfo[] parents = _getAllParents();
 				for (int i = parents.length-1; i >=0; i--)
 					for (FieldInfo f : parents[i]._getDeclaredFields())
@@ -947,7 +947,7 @@ public final class ClassInfo {
 	 * @return The matching annotations.
 	 */
 	public <A extends Annotation> List<A> getAnnotations(AnnotationProvider annotationProvider, Class<A> type) {
-		List<A> l = list2();
+		List<A> l = list();
 		forEachAnnotation(annotationProvider, type, x-> true, x -> l.add(x));
 		return l;
 	}

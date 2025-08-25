@@ -149,7 +149,7 @@ public final class SerializerSet {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(SerializerSet.class, beanStore);
-			this.entries = list2();
+			this.entries = list();
 		}
 
 		/**
@@ -159,7 +159,7 @@ public final class SerializerSet {
 		 */
 		protected Builder(SerializerSet copyFrom) {
 			super(copyFrom.getClass());
-			this.entries = list2((Object[])copyFrom.entries);
+			this.entries = list((Object[])copyFrom.entries);
 		}
 
 		/**
@@ -173,7 +173,7 @@ public final class SerializerSet {
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
 			bcBuilder = copyFrom.bcBuilder == null ? null : copyFrom.bcBuilder.copy();
-			entries = list2();
+			entries = list();
 			copyFrom.entries.stream().map(this::copyBuilder).forEach(x -> entries.add(x));
 		}
 
@@ -258,7 +258,7 @@ public final class SerializerSet {
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Serializer}.
 		 */
 		public Builder add(Class<?>...values) {
-			List<Object> l = list2();
+			List<Object> l = list();
 			for (Class<?> e : values) {
 				if (Serializer.class.isAssignableFrom(e)) {
 					l.add(createBuilder(e));
@@ -295,7 +295,7 @@ public final class SerializerSet {
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Serializer} or named <js>"Inherit"</js>.
 		 */
 		public Builder set(Class<?>...values) {
-			List<Object> l = list2();
+			List<Object> l = list();
 			for (Class<?> e : values) {
 				if (e.getSimpleName().equals("Inherit")) {
 					l.addAll(entries);
@@ -500,9 +500,9 @@ public final class SerializerSet {
 		this.entries = builder.entries.stream().map(this::build).toArray(Serializer[]::new);
 		this.entriesList = Utils.ulist2(entries);
 
-		List<MediaRange> lmtr = list2();
+		List<MediaRange> lmtr = list();
 		Set<MediaType> lmt = set();
-		List<Serializer> l = list2();
+		List<Serializer> l = list();
 		for (Serializer e : entries) {
 			e.getMediaTypeRanges().forEachRange(x -> {
 				lmtr.add(x);

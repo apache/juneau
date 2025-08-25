@@ -14,6 +14,7 @@ package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
@@ -217,7 +218,7 @@ public final class RestUtils {
 		if (value.length == 0)
 			return fromParent;
 
-		List<String> l = list2();
+		List<String> l = list();
 		for (String v : value) {
 			if (! "INHERIT".equals(v))
 				l.add(v);
@@ -233,7 +234,7 @@ public final class RestUtils {
 		if (links.length == 0)
 			return parentLinks;
 
-		List<String> list = list2();
+		List<String> list = list();
 		for (String l : links) {
 			if ("INHERIT".equals(l))
 				addAll(list, parentLinks);
@@ -255,7 +256,7 @@ public final class RestUtils {
 		if (content.length == 0)
 			return parentContent;
 
-		List<String> list = list2();
+		List<String> list = list();
 		for (String l : content) {
 			if ("INHERIT".equals(l)) {
 				addAll(list, parentContent);

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
@@ -56,7 +57,7 @@ public class Position {
 
 	@Override /* Object */
 	public String toString() {
-		List<String> l = list2();
+		List<String> l = list();
 		if (line != -1)
 			l.add("line " + line);
 		if (column != -1)

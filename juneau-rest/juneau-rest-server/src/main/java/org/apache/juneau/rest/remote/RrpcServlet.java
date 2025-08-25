@@ -14,6 +14,7 @@ package org.apache.juneau.rest.remote;
 
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
@@ -98,7 +99,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 			@Path("javaInterface") @Schema(description="Java interface name") String javaInterface
 		) throws Exception {
 
-		List<LinkString> l = list2();
+		List<LinkString> l = list();
 		for (String s : getMethods(javaInterface).keySet())
 			l.add(new LinkString(s, "servlet:/{0}/{1}", urlEncode(javaInterface), urlEncode(s)));
 		return l;

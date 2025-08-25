@@ -19,6 +19,7 @@ import java.util.regex.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 
@@ -100,8 +101,8 @@ public class RoleMatcher {
 
 		expression = expression.trim();
 
-		List<Exp> ors = list2();
-		List<Exp> ands = list2();
+		List<Exp> ors = list();
+		List<Exp> ands = list();
 
 		StateMachineState state = S01;
 		int i = 0, mark = -1;

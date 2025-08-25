@@ -18,6 +18,7 @@ import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.rest.client.RestOperation.*;
@@ -87,7 +88,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	final RestClient client;                               // The client that created this call.
 	private final HttpRequestBase request;                 // The request.
 	private RestResponse response;                         // The response.
-	List<RestCallInterceptor> interceptors = list2();   // Used for intercepting and altering requests.
+	List<RestCallInterceptor> interceptors = list();   // Used for intercepting and altering requests.
 
 	private HeaderList headerData;
 	private PartList queryData, formData, pathData;
@@ -687,7 +688,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@FluentSetter
 	public RestRequest rethrow(Class<?>...values) {
 		if (rethrow == null)
-			rethrow = list2();
+			rethrow = list();
 		for (Class<?> v : values) {
 			if (v != null && Throwable.class.isAssignableFrom(v))
 				rethrow.add((Class<? extends Throwable>)v);
@@ -1499,7 +1500,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			return this;
 		}
 
-		List<Header> l = list2();
+		List<Header> l = list();
 
 		if (HttpHeaders.canCast(value)) {
 			l.add(HttpHeaders.cast(value));
@@ -1535,7 +1536,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			return this;
 		}
 
-		List<NameValuePair> l = list2();
+		List<NameValuePair> l = list();
 
 		if (HttpParts.canCast(value)) {
 			l.add(HttpParts.cast(value));
@@ -1572,7 +1573,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			return this;
 		}
 
-		List<NameValuePair> l = list2();
+		List<NameValuePair> l = list();
 
 		if (HttpParts.canCast(value)) {
 			l.add(HttpParts.cast(value));
@@ -1606,7 +1607,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (! isMulti)
 			return pathData(createPart(name, value, PATH, serializer, schema, false));
 
-		List<NameValuePair> l = list2();
+		List<NameValuePair> l = list();
 
 		if (HttpParts.canCast(value)) {
 			l.add(HttpParts.cast(value));

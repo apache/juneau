@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.matcher;
 
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
@@ -63,7 +64,7 @@ public class RestMatcherList {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(RestMatcherList.class, beanStore);
-			entries = list2();
+			entries = list();
 		}
 
 		@Override /* BeanBuilder */

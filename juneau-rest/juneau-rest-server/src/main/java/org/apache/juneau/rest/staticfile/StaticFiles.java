@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.staticfile;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.nio.file.*;
@@ -73,7 +74,7 @@ public interface StaticFiles extends FileFinder {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(BasicStaticFiles.class, beanStore);
-			headers = list2();
+			headers = list();
 			fileFinder = FileFinder.create(beanStore);
 			mimeTypes = new ExtendedMimetypesFileTypeMap();
 		}

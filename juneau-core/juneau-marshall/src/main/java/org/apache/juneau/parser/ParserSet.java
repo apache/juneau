@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static java.util.stream.Collectors.*;
 
@@ -149,7 +150,7 @@ public final class ParserSet {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(ParserSet.class, beanStore);
-			this.entries = list2();
+			this.entries = list();
 		}
 
 		/**
@@ -159,7 +160,7 @@ public final class ParserSet {
 		 */
 		protected Builder(ParserSet copyFrom) {
 			super(copyFrom.getClass(), BeanStore.INSTANCE);
-			this.entries = list2((Object[])copyFrom.entries);
+			this.entries = list((Object[])copyFrom.entries);
 		}
 
 		/**
@@ -173,7 +174,7 @@ public final class ParserSet {
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
 			bcBuilder = copyFrom.bcBuilder == null ? null : copyFrom.bcBuilder.copy();
-			entries = list2();
+			entries = list();
 			copyFrom.entries.stream().map(this::copyBuilder).forEach(x -> entries.add(x));
 		}
 
@@ -258,7 +259,7 @@ public final class ParserSet {
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Parser}.
 		 */
 		public Builder add(Class<?>...values) {
-			List<Object> l = list2();
+			List<Object> l = list();
 			for (Class<?> v : values)
 				if (v.getSimpleName().equals("NoInherit"))
 					clear();
@@ -298,7 +299,7 @@ public final class ParserSet {
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Parser} or named <js>"Inherit"</js>.
 		 */
 		public Builder set(Class<?>...values) {
-			List<Object> l = list2();
+			List<Object> l = list();
 			for (Class<?> v : values) {
 				if (v.getSimpleName().equals("Inherit")) {
 					l.addAll(entries);
@@ -494,8 +495,8 @@ public final class ParserSet {
 
 		this.entries = builder.entries.stream().map(this::build).toArray(Parser[]::new);
 
-		List<MediaType> lmt = list2();
-		List<Parser> l = list2();
+		List<MediaType> lmt = list();
+		List<Parser> l = list();
 		for (Parser e : entries) {
 			e.getMediaTypes().forEach(x -> {
 				lmt.add(x);

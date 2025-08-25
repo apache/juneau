@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.converter;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
@@ -62,7 +63,7 @@ public class RestConverterList {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(RestConverterList.class, beanStore);
-			this.entries = list2();
+			this.entries = list();
 		}
 
 		@Override /* BeanBuilder */

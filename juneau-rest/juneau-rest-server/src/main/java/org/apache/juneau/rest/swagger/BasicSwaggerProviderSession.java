@@ -417,9 +417,9 @@ public class BasicSwaggerProviderSession {
 			}
 
 			if (mi.hasAnnotation(Response.class) || mi.getReturnType().unwrap(Value.class,Optional.class).hasAnnotation(Response.class)) {
-				List<Response> la = list2();
+				List<Response> la = list();
 				mi.forEachAnnotation(context, Response.class, x -> true, x -> la.add(x));
-				List<StatusCode> la2 = list2();
+				List<StatusCode> la2 = list();
 				mi.forEachAnnotation(context, StatusCode.class, x -> true, x -> la2.add(x));
 				Set<Integer> codes = getCodes(la2, 200);
 				for (Response a : la) {
@@ -468,10 +468,10 @@ public class BasicSwaggerProviderSession {
 				ClassInfo pt = mpi.getParameterType();
 
 				if (pt.is(Value.class) && (mpi.hasAnnotation(Header.class) || pt.hasAnnotation(Header.class))) {
-					List<Header> la = list2();
+					List<Header> la = list();
 					mpi.forEachAnnotation(Header.class, x -> true, x -> la.add(x));
 					pt.forEachAnnotation(Header.class, x -> true, x -> la.add(x));
-					List<StatusCode> la2 = list2();
+					List<StatusCode> la2 = list();
 					mpi.forEachAnnotation(StatusCode.class, x -> true, x -> la2.add(x));
 					pt.forEachAnnotation(StatusCode.class, x -> true, x -> la2.add(x));
 					Set<Integer> codes = getCodes(la2, 200);
@@ -489,10 +489,10 @@ public class BasicSwaggerProviderSession {
 					}
 
 				} else if (mpi.hasAnnotation(Response.class) || pt.hasAnnotation(Response.class)) {
-					List<Response> la = list2();
+					List<Response> la = list();
 					mpi.forEachAnnotation(Response.class, x -> true, x -> la.add(x));
 					pt.forEachAnnotation(Response.class, x -> true, x -> la.add(x));
-					List<StatusCode> la2 = list2();
+					List<StatusCode> la2 = list();
 					mpi.forEachAnnotation(StatusCode.class, x -> true, x -> la2.add(x));
 					pt.forEachAnnotation(StatusCode.class, x -> true, x -> la2.add(x));
 					Set<Integer> codes = getCodes(la2, 200);

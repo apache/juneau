@@ -148,20 +148,20 @@ public final class CollectionUtils {
 		return new SetBuilder<>(elementType, elementTypeArgs);
 	}
 
-	/**
-	 * Convenience method for creating an {@link ArrayList}.
-	 *
-	 * @param <E> The element type.
-	 * @param values The values to initialize the list with.
-	 * @return A new modifiable list.
-	 */
-	@SafeVarargs
-	public static <E> List<E> list2(E...values) {
-		ArrayList<E> l = new ArrayList<>(values.length);
-		for (E v : values)
-			l.add(v);
-		return l;
-	}
+//	/**
+//	 * Convenience method for creating an {@link ArrayList}.
+//	 *
+//	 * @param <E> The element type.
+//	 * @param values The values to initialize the list with.
+//	 * @return A new modifiable list.
+//	 */
+//	@SafeVarargs
+//	public static <E> List<E> list2(E...values) {
+//		ArrayList<E> l = new ArrayList<>(values.length);
+//		for (E v : values)
+//			l.add(v);
+//		return l;
+//	}
 
 	/**
 	 * Convenience method for creating an {@link ArrayList}.
