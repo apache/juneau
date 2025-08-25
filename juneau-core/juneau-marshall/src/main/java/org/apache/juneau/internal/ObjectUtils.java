@@ -31,17 +31,6 @@ import org.apache.juneau.reflect.*;
 public class ObjectUtils {
 
 	/**
-	 * Tests two objects for equality, gracefully handling nulls and arrays.
-	 *
-	 * @param o1 Object 1.
-	 * @param o2 Object 2.
-	 * @return <jk>false</jk> if both objects are equal based on the {@link Object#equals(Object)} method.
-	 */
-	public static boolean ne(Object o1, Object o2) {
-		return ! Utils.eq(o1, o2);
-	}
-
-	/**
 	 * If the specified object is a {@link Supplier} or {@link Value}, returns the inner value, otherwise the same value.
 	 *
 	 * @param o The object to unwrap.

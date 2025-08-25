@@ -25,6 +25,7 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.svl.*;
@@ -176,7 +177,7 @@ public final class AnnotationInfo<T extends Annotation> {
 			try {
 				Object v = x.invoke(a);
 				Object d = x.inner().getDefaultValue();
-				if (ne(v, d)) {
+				if (Utils.ne(v, d)) {
 					if (! (ArrayUtils.isArray(v) && Array.getLength(v) == 0 && Array.getLength(d) == 0))
 						ja.put(m.getName(), v);
 				}

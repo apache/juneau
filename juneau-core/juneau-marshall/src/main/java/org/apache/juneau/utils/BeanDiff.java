@@ -19,6 +19,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.marshaller.*;
 
 /**
@@ -206,7 +207,7 @@ public class BeanDiff {
 			if ((include == null || include.contains(k)) && (exclude == null || ! exclude.contains(k))) {
 				Object o1 = bm1 == null ? null : bm1.get(k);
 				Object o2 = bm2 == null ? null : bm2.get(k);
-				if (ne(o1, o2)) {
+				if (Utils.ne(o1, o2)) {
 					if (o1 != null)
 						v1.put(k, o1);
 					if (o2 != null)

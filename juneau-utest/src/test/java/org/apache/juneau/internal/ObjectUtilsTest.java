@@ -12,17 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.junit.Assert.*;
-
 import org.apache.juneau.*;
-import org.junit.jupiter.api.*;
 
 class ObjectUtilsTest extends SimpleTestBase {
-
-	@Test void a02_ne() {
-		assertFalse(ObjectUtils.ne("foo","foo"));
-		assertFalse(ObjectUtils.ne(null,null));
-		assertTrue(ObjectUtils.ne(null,"foo"));
-		assertTrue(ObjectUtils.ne("foo",null));
-	}
 }

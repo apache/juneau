@@ -22,6 +22,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
@@ -180,7 +181,7 @@ public final class SerializerSet {
 			if (o instanceof Serializer.Builder) {
 				Serializer.Builder x = (Serializer.Builder)o;
 				Serializer.Builder x2 = x.copy();
-				if (ne(x.getClass(), x2.getClass()))
+				if (Utils.ne(x.getClass(), x2.getClass()))
 					throw new BasicRuntimeException("Copy method not implemented on class {0}", x.getClass().getName());
 				x = x2;
 				if (bcBuilder != null)
