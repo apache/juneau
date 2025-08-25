@@ -166,7 +166,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a03_implListClasses(RoundTripTester t) throws Exception {
-		var l = ulist(new CBean());
+		var l = alist(new CBean());
 
 		l.get(0).setF1("bar");
 		l = t.roundTrip(l, List.class, IBean.class);

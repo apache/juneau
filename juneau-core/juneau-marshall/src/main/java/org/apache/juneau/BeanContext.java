@@ -16,7 +16,6 @@ import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
 
 import java.beans.*;
@@ -288,10 +287,10 @@ public class BeanContext extends Context {
 			beanConstructorVisibility = copyFrom.beanConstructorVisibility;
 			beanMethodVisibility = copyFrom.beanMethodVisibility;
 			beanFieldVisibility = copyFrom.beanFieldVisibility;
-			beanDictionary = listFrom(copyFrom.beanDictionary, true);
-			swaps = listFrom(copyFrom.swaps, true);
+			beanDictionary = CollectionUtils.listFrom(copyFrom.beanDictionary, true);
+			swaps = CollectionUtils.listFrom(copyFrom.swaps, true);
 			notBeanClasses = classSet(copyFrom.notBeanClasses, true);
-			notBeanPackages = sortedSetFrom(copyFrom.notBeanPackages, true);
+			notBeanPackages = CollectionUtils.sortedSetFrom(copyFrom.notBeanPackages, true);
 			disableBeansRequireSomeProperties = ! copyFrom.beansRequireSomeProperties;
 			beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
@@ -327,10 +326,10 @@ public class BeanContext extends Context {
 			beanConstructorVisibility = copyFrom.beanConstructorVisibility;
 			beanMethodVisibility = copyFrom.beanMethodVisibility;
 			beanFieldVisibility = copyFrom.beanFieldVisibility;
-			beanDictionary = copyOf(copyFrom.beanDictionary);
-			swaps = copyOf(copyFrom.swaps);
+			beanDictionary = CollectionUtils.copyOf(copyFrom.beanDictionary);
+			swaps = CollectionUtils.copyOf(copyFrom.swaps);
 			notBeanClasses = classSet(copyFrom.notBeanClasses);
-			notBeanPackages = sortedSetFrom(copyFrom.notBeanPackages);
+			notBeanPackages = CollectionUtils.sortedSetFrom(copyFrom.notBeanPackages);
 			disableBeansRequireSomeProperties = copyFrom.disableBeansRequireSomeProperties;
 			beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
@@ -3609,10 +3608,10 @@ public class BeanContext extends Context {
 		locale = builder.locale != null ? builder.locale : Locale.getDefault();
 		timeZone = builder.timeZone;
 		mediaType = builder.mediaType;
-		beanDictionary = optional(builder.beanDictionary).map(Collections::unmodifiableList).orElse(emptyList());
-		swaps = optional(builder.swaps).map(Collections::unmodifiableList).orElse(emptyList());
-		notBeanClasses = optional(builder.notBeanClasses).map(ArrayList::new).map(Collections::unmodifiableList).orElse(emptyList());
-		notBeanPackages = optional(builder.notBeanPackages).map(ArrayList::new).map(Collections::unmodifiableList).orElse(emptyList());
+		beanDictionary = opt(builder.beanDictionary).map(Collections::unmodifiableList).orElse(list());
+		swaps = opt(builder.swaps).map(Collections::unmodifiableList).orElse(list());
+		notBeanClasses = opt(builder.notBeanClasses).map(ArrayList::new).map(Collections::unmodifiableList).orElse(list());
+		notBeanPackages = opt(builder.notBeanPackages).map(ArrayList::new).map(Collections::unmodifiableList).orElse(list());
 		propertyNamer = builder.propertyNamer != null ? builder.propertyNamer : BasicPropertyNamer.class;
 
 		notBeanClassesArray = notBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.of(notBeanClasses, alist(DEFAULT_NOTBEAN_CLASSES)).flatMap(Collection::stream).toArray(Class[]::new);

@@ -12,9 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -22,6 +20,7 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Represents a single value in a comma-delimited header value that optionally contains a quality metric for
@@ -134,7 +133,7 @@ public class StringRange {
 	 * @return The optional list of extensions, never <jk>null</jk>.
 	 */
 	public List<NameValuePair> getExtensions() {
-		return ulist(extensions);
+		return alist(extensions);
 	}
 
 	/**
@@ -188,7 +187,7 @@ public class StringRange {
 	}
 
 	private static HeaderElement parse(String value) {
-		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
+		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
 		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("*", ""));
 	}
 

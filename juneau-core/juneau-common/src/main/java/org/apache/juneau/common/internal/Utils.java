@@ -81,8 +81,8 @@ public class Utils {
 	/**
 	 * Returns the specified string, or blank if that string is null.
 	 */
-	public static String emptyIfNull(String value) {
-		return value == null ? "" : value;
+	public static String emptyIfNull(Object value) {
+		return value == null ? "" : value.toString();
 	}
 
 	/**
@@ -371,8 +371,8 @@ public class Utils {
 	 * Shortcut for creating an unmodifiable list out of an array of values.
 	 */
 	@SafeVarargs
-	public static <T> List<T> ulist(T...values) {  // NOSONAR
-		return Collections.unmodifiableList(Arrays.asList(values));
+	public static <T> List<T> alist(T...values) {  // NOSONAR
+		return Arrays.asList(values);
 	}
 
 	private static final Map<Class<?>,Function<String,?>> ENV_FUNCTIONS = new IdentityHashMap<>();

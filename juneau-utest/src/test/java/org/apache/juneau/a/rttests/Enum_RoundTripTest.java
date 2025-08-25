@@ -200,8 +200,8 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 			f2 = AEnum.BAR;
 			f3 = new AEnum[]{AEnum.FOO,null};
 			f4 = new AEnum[][]{{AEnum.FOO,null},null};
-			f5 = ulist(AEnum.FOO);
-			f6 = ulist(AEnum.FOO);
+			f5 = alist(AEnum.FOO);
+			f6 = alist(AEnum.FOO);
 			f7 = Utils.set(AEnum.FOO);
 			f8 = Utils.set(AEnum.FOO);
 
@@ -242,8 +242,8 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 			f2 = BEnum.BAR;
 			f3 = new BEnum[]{BEnum.FOO,null};
 			f4 = new BEnum[][]{{BEnum.FOO,null},null};
-			f5 = ulist(BEnum.FOO);
-			f6 = ulist(BEnum.FOO);
+			f5 = alist(BEnum.FOO);
+			f6 = alist(BEnum.FOO);
 			f7 = Utils.set(BEnum.FOO);
 			f8 = Utils.set(BEnum.FOO);
 

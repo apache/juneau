@@ -139,7 +139,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b03a_integerListField(RoundTripTester t) throws Exception {
 		var x = new B03();
-		x.f1 = opt(ulist(123));
+		x.f1 = opt(alist(123));
 		x = t.roundTrip(x);
 		assertEquals(123, x.f1.get().get(0).intValue());
 	}
@@ -148,7 +148,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b03b_integerListField_listWithNull(RoundTripTester t) throws Exception {
 		var x = new B03();
-		x.f1 = opt(ulist((Integer)null));
+		x.f1 = opt(alist((Integer)null));
 		x = t.roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertEquals(1, x.f1.get().size());
@@ -159,7 +159,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b03c_integerListField_emptyList(RoundTripTester t) throws Exception {
 		var x = new B03();
-		x.f1 = opt(ulist());
+		x.f1 = opt(alist());
 		x = t.roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertEquals(0, x.f1.get().size());
@@ -308,7 +308,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b06a_listOfOptionalIntegers(RoundTripTester t) throws Exception {
 		var x = new B06();
-		x.f1 = ulist(opt(123));
+		x.f1 = alist(opt(123));
 		x = t.roundTrip(x);
 		assertEquals(123, x.f1.get(0).get().intValue());
 	}
@@ -317,7 +317,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b06b_listOfOptionalIntegers_listWithEmpty(RoundTripTester t) throws Exception {
 		var x = new B06();
-		x.f1 = ulist(empty());
+		x.f1 = alist(empty());
 		x = t.roundTrip(x);
 		assertEquals(1, x.f1.size());
 		assertFalse(x.f1.get(0).isPresent());
@@ -327,7 +327,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b06c_listOfOptionalIntegers_listWithNull(RoundTripTester t) throws Exception {
 		var x = new B06();
-		x.f1 = ulist((Optional<Integer>)null);
+		x.f1 = alist((Optional<Integer>)null);
 		x = t.roundTrip(x);
 		if (t.isValidationOnly())
 			return;
@@ -358,7 +358,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	void b07a_arrayOfOptionalIntegers(RoundTripTester t) throws Exception {
 		var x = new B07();
 		x.f1 = new Optional[]{opt(123)};
-		x.f2 = new List[]{ulist(123)};
+		x.f2 = new List[]{alist(123)};
 		x = t.roundTrip(x);
 		assertEquals(123, x.f1[0].get().intValue());
 	}

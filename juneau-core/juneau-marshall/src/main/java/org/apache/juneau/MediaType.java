@@ -12,9 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -252,7 +250,7 @@ public class MediaType implements Comparable<MediaType>  {
 	 * @return An unmodifiable list of subtype fragments.  Never <jk>null</jk>.
 	 */
 	public final List<String> getSubTypes() {
-		return ulist(subTypes);
+		return alist(subTypes);
 	}
 
 	/**
@@ -376,7 +374,7 @@ public class MediaType implements Comparable<MediaType>  {
 	 * @return The map of additional parameters, or an empty map if there are no parameters.
 	 */
 	public List<NameValuePair> getParameters() {
-		return ulist(parameters);
+		return alist(parameters);
 	}
 
 	/**
@@ -434,7 +432,7 @@ public class MediaType implements Comparable<MediaType>  {
 	}
 
 	private static HeaderElement parse(String value) {
-		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
+		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
 		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("", ""));
 	}
 

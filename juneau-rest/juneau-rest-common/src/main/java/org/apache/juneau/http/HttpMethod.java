@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.util.*;
+
+import org.apache.juneau.internal.*;
 
 /**
  * Represents valid HTTP 1.1 method name static strings per the RFC 2616 spec.
@@ -63,7 +64,7 @@ public class HttpMethod {
 	/** Represents any HTTP method. */
 	public static final String ANY = "*";
 
-	private static final Set<String> NO_BODY_METHODS = unmodifiable(set("GET","HEAD","DELETE","CONNECT","OPTIONS","TRACE"));
+	private static final Set<String> NO_BODY_METHODS = CollectionUtils.unmodifiable(set("GET","HEAD","DELETE","CONNECT","OPTIONS","TRACE"));
 
 	/**
 	 * Returns <jk>true</jk> if specified http method has content.

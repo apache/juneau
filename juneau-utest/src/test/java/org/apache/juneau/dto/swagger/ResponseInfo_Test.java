@@ -40,10 +40,10 @@ class ResponseInfo_Test extends SimpleTestBase {
 		assertType(HeaderInfo.class, t.setHeaders(map("foo",headerInfo("bar"))).getHeaders().get("foo"));
 		assertJson(t.setHeaders(map()).getHeaders(), "{}");
 		assertNull(t.setHeaders((Map<String,HeaderInfo>)null).getHeaders());
-		assertJson(t.setExamples(map("foo","bar","baz",ulist("qux"))).getExamples(), "{foo:'bar',baz:['qux']}");
+		assertJson(t.setExamples(map("foo","bar","baz",alist("qux"))).getExamples(), "{foo:'bar',baz:['qux']}");
 		assertJson(t.setExamples(map()).getExamples(), "{}");
 		assertNull(t.setExamples((Map<String,Object>)null).getExamples());
-		assertJson(t.setExamples(map("foo","bar","baz",ulist("qux"))).getExamples(), "{foo:'bar',baz:['qux']}");
+		assertJson(t.setExamples(map("foo","bar","baz",alist("qux"))).getExamples(), "{foo:'bar',baz:['qux']}");
 		assertJson(t.setExamples(map()).addExample("text/a", "a").addExample("text/b", null).addExample(null, "c").getExamples(), "{'text/a':'a','text/b':null,null:'c'}");
 	}
 
@@ -55,7 +55,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 
 		t
 			.set("description", "a")
-			.set("examples", map("foo","bar","baz",ulist("qux")))
+			.set("examples", map("foo","bar","baz",alist("qux")))
 			.set("headers", map("a", headerInfo("a1")))
 			.set("schema", schemaInfo().setType("d"))
 			.set("$ref", "ref");
@@ -111,7 +111,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 
 		t
 			.set("description", "a")
-			.set("examples", map("foo","bar","baz",ulist("qux")))
+			.set("examples", map("foo","bar","baz",alist("qux")))
 			.set("headers", map("a", headerInfo("a1")))
 			.set("schema", schemaInfo().setType("d"))
 			.set("$ref", "ref")
@@ -127,7 +127,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 
 		t
 			.set("description", "a")
-			.set("examples", map("foo","bar","baz",ulist("qux")))
+			.set("examples", map("foo","bar","baz",alist("qux")))
 			.set("headers", map("a", headerInfo("a1")))
 			.set("schema", schemaInfo().setType("d"))
 			.set("$ref", "ref");

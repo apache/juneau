@@ -12,10 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.Enablement.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static java.util.Collections.*;
 
 import java.io.*;
@@ -558,7 +557,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * @return This object.
 		 */
 		public Builder pathVars(String...pairs) {
-			return pathVars(mapBuilder(String.class,String.class).addPairs((Object[])pairs).build());
+			return pathVars(CollectionUtils.mapBuilder(String.class,String.class).addPairs((Object[])pairs).build());
 		}
 
 		/**

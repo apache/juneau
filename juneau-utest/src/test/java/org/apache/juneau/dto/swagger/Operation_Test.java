@@ -56,8 +56,8 @@ class Operation_Test extends SimpleTestBase {
 		assertJson(t.setSchemes(set("foo")).getSchemes(), "['foo']");
 		assertJson(t.setSchemes(set()).getSchemes(), "[]");
 		assertNull(t.setSchemes((Set<String>)null).getSchemes());
-		assertJson(t.setSecurity(ulist(map("foo",ulist("bar")))).getSecurity(), "[{foo:['bar']}]");
-		assertJson(t.setSecurity(ulist()).getSecurity(), "[]");
+		assertJson(t.setSecurity(alist(map("foo",alist("bar")))).getSecurity(), "[{foo:['bar']}]");
+		assertJson(t.setSecurity(alist()).getSecurity(), "[]");
 		assertNull(t.setSecurity((List<Map<String,List<String>>>)null).getSecurity());
 		assertTrue(t.setDeprecated(true).getDeprecated());
 	}
@@ -78,7 +78,7 @@ class Operation_Test extends SimpleTestBase {
 			.set("produces", set(MediaType.of("text/f")))
 			.set("responses", map(1,responseInfo("g")))
 			.set("schemes", set("h"))
-			.set("security", set(map("i1",ulist("i2"))))
+			.set("security", set(map("i1",alist("i2"))))
 			.set("summary", "j")
 			.set("tags", set("k"))
 			.set("$ref", "ref");
@@ -178,7 +178,7 @@ class Operation_Test extends SimpleTestBase {
 			.set("produces", set(MediaType.of("text/f")))
 			.set("responses", map(1,responseInfo("g")))
 			.set("schemes", set("h"))
-			.set("security", set(map("i1",ulist("i2"))))
+			.set("security", set(map("i1",alist("i2"))))
 			.set("summary", "j")
 			.set("tags", set("k"))
 			.set("$ref", "ref")
@@ -202,7 +202,7 @@ class Operation_Test extends SimpleTestBase {
 			.set("produces", set(MediaType.of("text/f")))
 			.set("responses", map(1,responseInfo("g")))
 			.set("schemes", set("h"))
-			.set("security", set(map("i1",ulist("i2"))))
+			.set("security", set(map("i1",alist("i2"))))
 			.set("summary", "j")
 			.set("tags", set("k"))
 			.set("$ref", "ref");

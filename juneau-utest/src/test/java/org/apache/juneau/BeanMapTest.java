@@ -1879,7 +1879,7 @@ class BeanMapTest extends SimpleTestBase {
 		var aa = new AA();
 		BeanMap<AA> bm = BeanContext.DEFAULT.toBeanMap(aa);
 
-		bm.put("a", ulist("x"));
+		bm.put("a", alist("x"));
 		assertJson(aa.a, "['x']");
 	}
 

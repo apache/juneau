@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import static org.apache.juneau.TestUtils.*;
+
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.rest.mock.*;
@@ -53,13 +54,13 @@ class RestOp_Matchers_Test extends SimpleTestBase {
 		public static class A1 extends RestMatcher {
 			@Override /* RestMatcher */
 			public boolean matches(HttpServletRequest req) {
-				return StringUtils.emptyIfNull(req.getQueryString()).contains("t1=1");
+				return emptyIfNull(req.getQueryString()).contains("t1=1");
 			}
 		}
 		public static class A2 extends RestMatcher {
 			@Override /* RestMatcher */
 			public boolean matches(HttpServletRequest req) {
-				return StringUtils.emptyIfNull(req.getQueryString()).contains("t2=2");
+				return emptyIfNull(req.getQueryString()).contains("t2=2");
 			}
 		}
 	}

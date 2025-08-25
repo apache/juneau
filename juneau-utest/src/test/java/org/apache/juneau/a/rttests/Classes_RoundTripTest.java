@@ -35,7 +35,7 @@ class Classes_RoundTripTest extends RoundTripTest_Base {
 		o = t.roundTrip(o);
 		assertJson(o, "['java.lang.String']");
 
-		o = ulist(String.class, Integer.class);
+		o = alist(String.class, Integer.class);
 		o = t.roundTrip(o);
 		assertJson(o, "['java.lang.String','java.lang.Integer']");
 

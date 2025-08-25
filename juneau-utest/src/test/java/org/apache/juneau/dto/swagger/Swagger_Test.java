@@ -71,7 +71,7 @@ class Swagger_Test extends SimpleTestBase {
 		assertJson(t.setSecurityDefinitions(map()).getSecurityDefinitions(), "{}");
 		assertNull(t.setSecurityDefinitions((Map<String,SecurityScheme>)null).getSecurityDefinitions());
 		assertJson(t.setSecurityDefinitions(null).addSecurityDefinition("a", securityScheme("a1")).addSecurityDefinition("b", null).addSecurityDefinition(null, securityScheme("c1")).getSecurityDefinitions(), "{a:{type:'a1'},b:null,null:{type:'c1'}}");
-		assertJson(t.setSecurity(set(map("foo",ulist("bar")))).getSecurity(), "[{foo:['bar']}]");
+		assertJson(t.setSecurity(set(map("foo",alist("bar")))).getSecurity(), "[{foo:['bar']}]");
 		assertJson(t.setSecurity(set()).getSecurity(), "[]");
 		assertNull(t.setSecurity((Collection<Map<String, List<String>>>)null).getSecurity());
 		assertJson(t.setSecurity(null).addSecurity("a", "a1", "a2").addSecurity("b", (String)null).addSecurity(null, "d1", "d2").getSecurity(), "[{a:['a1','a2']},{b:[null]},{null:['d1','d2']}]");
@@ -99,7 +99,7 @@ class Swagger_Test extends SimpleTestBase {
 			.set("produces", set(MediaType.of("text/i")))
 			.set("responses", map("j",responseInfo("j1")))
 			.set("schemes", set("k1"))
-			.set("security", set(map("l1",ulist("l2"))))
+			.set("security", set(map("l1",alist("l2"))))
 			.set("securityDefinitions", map("m",securityScheme("m1")))
 			.set("swagger", "n")
 			.set("tags", set(tag("o")))
@@ -216,7 +216,7 @@ class Swagger_Test extends SimpleTestBase {
 			.set("produces", set(MediaType.of("text/i")))
 			.set("responses", map("j",responseInfo("j1")))
 			.set("schemes", set("k1"))
-			.set("security", set(map("l1",ulist("l2"))))
+			.set("security", set(map("l1",alist("l2"))))
 			.set("securityDefinitions", map("m",securityScheme("m1")))
 			.set("swagger", "n")
 			.set("tags", set(tag("o")))
@@ -243,7 +243,7 @@ class Swagger_Test extends SimpleTestBase {
 			.set("produces", set(MediaType.of("text/i")))
 			.set("responses", map("j",responseInfo("j1")))
 			.set("schemes", set("k1"))
-			.set("security", set(map("l1",ulist("l2"))))
+			.set("security", set(map("l1",alist("l2"))))
 			.set("securityDefinitions", map("m",securityScheme("m1")))
 			.set("swagger", "n")
 			.set("tags", set(tag("o")))

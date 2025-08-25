@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.store;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.io.*;
 import java.lang.annotation.*;

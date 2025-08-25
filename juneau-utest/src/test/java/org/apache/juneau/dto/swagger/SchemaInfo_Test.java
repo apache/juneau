@@ -98,7 +98,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 		t
 			.set("default", "a")
 			.set("enum", set("b"))
-			.set("additionalProperties", map("c",ulist("c1")))
+			.set("additionalProperties", map("c",alist("c1")))
 			.set("allOf", set("d"))
 			.set("description", "e")
 			.set("discriminator", "f")
@@ -278,7 +278,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 		t
 			.set("default", "a")
 			.set("enum", set("b"))
-			.set("additionalProperties", map("c",ulist("c1")))
+			.set("additionalProperties", map("c",alist("c1")))
 			.set("allOf", set("d"))
 			.set("description", "e")
 			.set("discriminator", "f")
@@ -317,7 +317,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 		assertJson(t.keySet(), "[]");
 
 		t
-			.set("additionalProperties", map("c",ulist("c1")))
+			.set("additionalProperties", map("c",alist("c1")))
 			.set("allOf", set("d"))
 			.set("default", "a")
 			.set("description", "e")

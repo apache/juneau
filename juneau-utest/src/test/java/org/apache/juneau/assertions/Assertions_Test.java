@@ -65,12 +65,12 @@ public class Assertions_Test {
 
 	@Test
 	public void a08_assertCollection() {
-		assertCollection(ulist()).isEmpty();
+		assertCollection(alist()).isEmpty();
 	}
 
 	@Test
 	public void a09_assertList() {
-		assertList(ulist()).isEmpty();
+		assertList(alist()).isEmpty();
 	}
 
 	@Test
@@ -124,7 +124,7 @@ public class Assertions_Test {
 
 	@Test
 	public void a19_assertBeanList() {
-		assertBeanList(ulist(ABean.get())).asJson().is("[{a:1,b:'foo'}]");
+		assertBeanList(alist(ABean.get())).asJson().is("[{a:1,b:'foo'}]");
 	}
 
 	@Test
@@ -179,7 +179,7 @@ public class Assertions_Test {
 
 	@Test
 	public void a25_assertStringList() {
-		assertStringList(ulist()).isNotNull();
+		assertStringList(alist()).isNotNull();
 		assertStringList(null).isNull();
 	}
 }

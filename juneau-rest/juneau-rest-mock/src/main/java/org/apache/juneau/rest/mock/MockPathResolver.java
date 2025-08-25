@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import java.util.*;
 
@@ -60,7 +60,7 @@ class MockPathResolver {
 
 	private void init(String target, String contextPath, String servletPath, String pathToResolve, Map<String,Object> pathVars) {
 
-		target = trimTrailingSlashes(emptyIfNull(target));
+		target = StringUtils.trimTrailingSlashes(emptyIfNull(target));
 		if (target.isEmpty())
 			target = "http://localhost";
 
@@ -165,10 +165,10 @@ class MockPathResolver {
 	}
 
 	private static String fixSegment(String s, Map<String,Object> pathVars) {
-		s = replaceVars(emptyIfNull(s), pathVars);
+		s = StringUtils.replaceVars(emptyIfNull(s), pathVars);
 		if (s.isEmpty() || s.equals("/"))
 			return "";
-		s = trimTrailingSlashes(s);
+		s = StringUtils.trimTrailingSlashes(s);
 		if (s.charAt(0) != '/')
 			s = '/' + s;
 		return s;

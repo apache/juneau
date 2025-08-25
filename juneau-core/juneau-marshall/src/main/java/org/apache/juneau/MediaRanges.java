@@ -12,8 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -213,7 +212,7 @@ public class MediaRanges {
 	 * @return The media ranges that make up this object.
 	 */
 	public List<MediaRange> toList() {
-		return ulist(ranges);
+		return alist(ranges);
 	}
 
 	/**
@@ -229,7 +228,7 @@ public class MediaRanges {
 	}
 
 	private static HeaderElement[] parse(String value) {
-		return BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
+		return BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
 	}
 
 	@Override /* Object */

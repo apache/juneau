@@ -892,8 +892,8 @@ class HttpPartSchema_FormData_Test extends SimpleTestBase {
 		var s = HttpPartSchema.create().applyAll(FormData.class, D01.class).build();
 
 		List<String>
-			good = ulist("a","b"),
-			bad = ulist("a","a");
+			good = alist("a","b"),
+			bad = alist("a","a");
 
 		s.getItems().validateOutput(good, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(good, BeanContext.DEFAULT);

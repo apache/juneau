@@ -18,12 +18,11 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.internal.ArgUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.rest.client.RestOperation.*;
 import static java.util.logging.Level.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import static java.lang.Character.*;
 
@@ -64,6 +63,7 @@ import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.remote.RemoteReturn;
@@ -3874,7 +3874,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder rootUrl(Object value) {
-			String s = stringify(value);
+			String s = s(value);
 			if (! isEmpty(s))
 				s = s.replaceAll("\\/$", "");
 			if (isEmpty(s))
@@ -7059,7 +7059,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		try {
 			RestRequest req = request(method, uri, isNotEmpty(content));
 			if (headers != null)
-				JsonMap.ofJson(headers).forEach((k,v) -> req.header(stringHeader(k, stringify(v))));
+				JsonMap.ofJson(headers).forEach((k,v) -> req.header(stringHeader(k, s(v))));
 			if (isNotEmpty(content))
 				req.contentString(content);
 			return req;
@@ -7339,7 +7339,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		if (rootUrl == null)
 			rootUrl = this.rootUrl;
 
-		final String restUrl2 = trimSlashes(emptyIfNull(rootUrl));
+		final String restUrl2 = StringUtils.trimSlashes(emptyIfNull(rootUrl));
 
 		return (T)Proxy.newProxyInstance(
 			interfaceClass.getClassLoader(),
@@ -7558,12 +7558,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (path.indexOf("://") == -1) {
 				if (isEmpty(rootUrl))
 					throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote interface.");
-				path = trimSlashes(rootUrl) + '/' + path;
+				path = StringUtils.trimSlashes(rootUrl) + '/' + path;
 			}
 			uri = path;
 		}
 
-		final String restUrl2 = stringify(uri);
+		final String restUrl2 = s(uri);
 
 		return (T)Proxy.newProxyInstance(
 			interfaceClass.getClassLoader(),
@@ -8141,7 +8141,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					s = sb.toString();
 				}
 			}
-			s = fixUrl(s);
+			s = StringUtils.fixUrl(s);
 			return new URI(s);
 		} catch (URISyntaxException e) {
 			throw new RestCallException(null, e, "Invalid URI encountered:  {0}", x);  // Shouldn't happen.
@@ -8218,7 +8218,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	}
 
 	private Reader stringBody(String body) {
-		return body == null ? null : new StringReader(stringify(body));
+		return body == null ? null : new StringReader(s(body));
 	}
 
 	@Override /* Context */

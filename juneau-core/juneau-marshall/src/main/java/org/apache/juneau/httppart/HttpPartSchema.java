@@ -3763,7 +3763,7 @@ public class HttpPartSchema {
 			if (! isValidPattern(in))
 				throw new SchemaValidationException("Value does not match expected pattern.  Must match pattern: {0}", pattern.pattern());
 			if (! isValidEnum(in))
-				throw new SchemaValidationException("Value does not match one of the expected values.  Must be one of the following:  {0}", cdl(_enum));
+				throw new SchemaValidationException("Value does not match one of the expected values.  Must be one of the following:  {0}", toCdl(_enum));
 			if (! isValidMaxLength(in))
 				throw new SchemaValidationException("Maximum length of value exceeded.");
 			if (! isValidMinLength(in))

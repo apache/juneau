@@ -47,7 +47,7 @@ class JsonMaps_RoundTripTest extends RoundTripTest_Base {
 		assertEquals("a", x2[0].f1);
 		assertEquals(2, x2[0].f2);
 
-		var x3 = ulist(new A(JsonMap.ofJson("{f1:'a',f2:2}")));
+		var x3 = alist(new A(JsonMap.ofJson("{f1:'a',f2:2}")));
 		x3 = t.roundTrip(x3, List.class, A.class);
 		assertEquals(1, x3.size());
 		assertEquals("a", x3.get(0).f1);

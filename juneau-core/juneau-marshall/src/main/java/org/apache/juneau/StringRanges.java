@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ArrayUtils.copyOf;
-import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -112,7 +111,7 @@ public class StringRanges {
 	 * @param value The string range header value.
 	 */
 	public StringRanges(StringRange...value) {
-		this.string = join(value, ", ");
+		this.string = StringUtils.join(value, ", ");
 		this.value = copyOf(value);
 	}
 
@@ -216,7 +215,7 @@ public class StringRanges {
 	 * @return The string ranges that make up this object.
 	 */
 	public List<StringRange> toList() {
-		return ulist(value);
+		return alist(value);
 	}
 
 	/**
@@ -232,7 +231,7 @@ public class StringRanges {
 	}
 
 	private static HeaderElement[] parse(String value) {
-		return value == null ? null : BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
+		return value == null ? null : BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
 	}
 
 	@Override /* Object */

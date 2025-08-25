@@ -1379,7 +1379,7 @@ public class Parser extends BeanContextable {
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
 	public final List<MediaType> getMediaTypes() {
-		return Utils.ulist(consumesArray);
+		return Utils.alist(consumesArray);
 	}
 
 	/**

@@ -1078,30 +1078,6 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Returns an empty string if the specified string is <jk>null</jk>.
-	 *
-	 * @param s The string to check.
-	 * @return An empty string if the specified string is <jk>null</jk>, or the same string otherwise.
-	 */
-	public static String emptyIfNull(String s) {
-		if (s == null)
-			return "";
-		return s;
-	}
-
-	/**
-	 * Returns an empty string if the specified object is <jk>null</jk>.
-	 *
-	 * @param o The object to check.
-	 * @return An empty string if the specified object is <jk>null</jk>, or the object converted to a string using {@link String#toString()}.
-	 */
-	public static String emptyIfNull(Object o) {
-		if (o == null)
-			return "";
-		return o.toString();
-	}
-
-	/**
 	 * Removes escape characters from the specified characters.
 	 *
 	 * @param s The string to remove escape characters from.
@@ -3002,7 +2978,7 @@ public final class StringUtils {
 	 * @param o The object to convert.
 	 * @return The specified object as a comma-delimited list.
 	 */
-	public static String cdl(Object o) {
+	public static String toCdl(Object o) {
 		if (o == null)
 			return null;
 		if (o.getClass().isArray()) {

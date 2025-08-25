@@ -24,7 +24,7 @@ import org.junit.jupiter.api.*;
 class StringRanges_Test extends SimpleTestBase {
 
 	@Test void a01_match() {
-		List<String> x = ulist("foo","bar","baz");
+		List<String> x = alist("foo","bar","baz");
 
 		assertEquals(-1, of((String)null).match(x));
 

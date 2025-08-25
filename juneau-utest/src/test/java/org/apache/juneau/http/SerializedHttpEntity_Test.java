@@ -55,7 +55,7 @@ class SerializedHttpEntity_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_schema() throws Exception {
-		serializedEntity(ulist("foo","bar"),OpenApiSerializer.DEFAULT).setSchema(T_ARRAY_PIPES).assertString().is("foo|bar");
+		serializedEntity(alist("foo","bar"),OpenApiSerializer.DEFAULT).setSchema(T_ARRAY_PIPES).assertString().is("foo|bar");
 	}
 
 	@Test void a03_serializer_streaming() throws Exception {

@@ -13,10 +13,9 @@
 package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static java.util.Collections.*;
 
 import java.io.*;
@@ -173,7 +172,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest pathVars(String...pairs) {
-		return pathVars(mapBuilder(String.class,String.class).addPairs((Object[])pairs).build());
+		return pathVars(CollectionUtils.mapBuilder(String.class,String.class).addPairs((Object[])pairs).build());
 	}
 
 	/**
@@ -546,7 +545,7 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* HttpServletRequest */
 	public Enumeration<String> getParameterNames() {
-		return enumeration(listFrom(getParameterMap().keySet()));
+		return enumeration(CollectionUtils.listFrom(getParameterMap().keySet()));
 	}
 
 	@Override /* HttpServletRequest */
@@ -737,7 +736,7 @@ public class MockServletRequest implements HttpServletRequest {
 			if (isNotEmpty(servletPath))
 				pathInfo = pathInfo.substring(servletPath.length());
 		}
-		return nullIfEmpty(urlDecode(pathInfo));
+		return nullIfEmpty(StringUtils.urlDecode(pathInfo));
 	}
 
 	@Override /* HttpServletRequest */
@@ -761,9 +760,9 @@ public class MockServletRequest implements HttpServletRequest {
 				StringBuilder sb = new StringBuilder();
 				queryDataMap.forEach((k,v) -> {
 					if (v == null)
-						sb.append(sb.length() == 0 ? "" : "&").append(urlEncode(k));
+						sb.append(sb.length() == 0 ? "" : "&").append(StringUtils.urlEncode(k));
 					else for (String v2 : v)
-						sb.append(sb.length() == 0 ? "" : "&").append(urlEncode(k)).append('=').append(urlEncode(v2));
+						sb.append(sb.length() == 0 ? "" : "&").append(StringUtils.urlEncode(k)).append('=').append(StringUtils.urlEncode(v2));
 				});
 				queryString = sb.toString();
 			}

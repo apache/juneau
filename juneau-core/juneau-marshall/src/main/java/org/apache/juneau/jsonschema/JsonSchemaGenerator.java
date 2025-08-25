@@ -989,7 +989,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * 	Custom schema information for particular class types.
 	 */
 	public List<Pattern> getIgnoreTypes() {
-		return Utils.ulist(ignoreTypePatterns);
+		return Utils.alist(ignoreTypePatterns);
 	}
 
 	/**

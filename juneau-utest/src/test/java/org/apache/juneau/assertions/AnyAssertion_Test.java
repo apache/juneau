@@ -198,7 +198,7 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void bb12_asCollection() {
-		List<Integer> x1 = ulist(1), nil = null;
+		List<Integer> x1 = alist(1), nil = null;
 		Object x2 = "";
 		test(x1).asCollection().isString("[1]");
 		test(nil).asCollection().isNull();
@@ -206,7 +206,7 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void bb13_asCollection_wType() {
-		List<Integer> x1 = ulist(1), nil = null;
+		List<Integer> x1 = alist(1), nil = null;
 		Object x2 = "";
 		test(x1).asCollection(Integer.class).isString("[1]");
 		test(nil).asCollection(Integer.class).isNull();
@@ -247,7 +247,7 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void bb18_asList() {
-		List<Integer> x1 = ulist(1), nil = null;
+		List<Integer> x1 = alist(1), nil = null;
 		Object x2 = "";
 		test(x1).asList().isString("[1]");
 		test(nil).asList().isNull();
@@ -255,7 +255,7 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void bb19_asList_wType() {
-		List<Integer> x1 = ulist(1), nil = null;
+		List<Integer> x1 = alist(1), nil = null;
 		Object x2 = "";
 		test(x1).asList(Integer.class).isString("[1]");
 		test(nil).asList(Integer.class).isNull();
@@ -297,7 +297,7 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void bb24_asBeanList() {
-		List<A1> x1 = ulist(A1), nil = null;
+		List<A1> x1 = alist(A1), nil = null;
 		Object x2 = "";
 		test(x1).asBeanList(A1.class).isString("[a=1,b=2]");
 		test(nil).asBeanList(A1.class).isNull();
@@ -314,7 +314,7 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void bb26_asStringList() {
-		List<String> x1 = ulist("1"), nil = null;
+		List<String> x1 = alist("1"), nil = null;
 		Object x2 = "";
 		test(x1).asStringList().isString("[1]");
 		test(nil).asStringList().isNull();

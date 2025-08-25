@@ -59,12 +59,12 @@ class HeaderList_Test extends SimpleTestBase {
 
 	@Test void a02_creators() {
 		assertList(headerList(FOO_1, FOO_2, null), "Foo: 1,Foo: 2");
-		assertList(headerList(ulist(FOO_1, FOO_2, null)), "Foo: 1,Foo: 2");
+		assertList(headerList(alist(FOO_1, FOO_2, null)), "Foo: 1,Foo: 2");
 		assertList(headerList("Foo","1","Foo","2"), "Foo: 1,Foo: 2");
 		assertThrowsWithMessage(IllegalArgumentException.class, "Odd number of parameters passed into HeaderList.ofPairs()", ()->headerList("Foo"));
 		assertEmpty(HeaderList.of((List<Header>)null));
 		assertEmpty(HeaderList.of(Collections.emptyList()));
-		assertList(HeaderList.of(ulist(FOO_1)), "Foo: 1");
+		assertList(HeaderList.of(alist(FOO_1)), "Foo: 1");
 		assertEmpty(HeaderList.of((Header[])null));
 		assertEmpty(HeaderList.of());
 		assertList(HeaderList.of(FOO_1), "Foo: 1");
@@ -268,7 +268,7 @@ class HeaderList_Test extends SimpleTestBase {
 			.append("Bar", "b1")
 			.append("Bar", ()->"b2")
 			.append((List<Header>)null)
-			.append(ulist(FOO_4));
+			.append(alist(FOO_4));
 		assertList(x2, "Foo: 1", "Foo: 2", "Foo: 3", "Bar: b1", "Bar: b2", "Foo: 4");
 	}
 
@@ -285,7 +285,7 @@ class HeaderList_Test extends SimpleTestBase {
 			.prepend("Bar", "b1")
 			.prepend("Bar", ()->"b2")
 			.prepend((List<Header>)null)
-			.prepend(ulist(FOO_4));
+			.prepend(alist(FOO_4));
 		assertList(x2, "Foo: 4,Bar: b2,Bar: b1,Foo: 2,Foo: 3,Foo: 1");
 	}
 
@@ -298,7 +298,7 @@ class HeaderList_Test extends SimpleTestBase {
 			.remove(HeaderList.of(FOO_1))
 			.remove(FOO_2)
 			.remove(FOO_3, FOO_4)
-			.remove(ulist(FOO_5));
+			.remove(alist(FOO_5));
 		assertList(x, "Foo: 6,Foo: 7");
 
 		x = HeaderList.create().append(FOO_1,FOO_2).remove((String[])null).remove("Bar","Foo");
@@ -332,7 +332,7 @@ class HeaderList_Test extends SimpleTestBase {
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set((List<Header>)null)
-			.set(ulist(null,FOO_3,FOO_4,FOO_5));
+			.set(alist(null,FOO_3,FOO_4,FOO_5));
 		assertList(x, "Bar: 1,Bar: 2,Foo: 3,Foo: 4,Foo: 5");
 
 		x = HeaderList
@@ -437,16 +437,16 @@ class HeaderList_Test extends SimpleTestBase {
 		var x11 = HeaderList.create().setDefault("Accept",()->"text/xml");
 		assertList(x11, "Accept: text/xml");
 
-		var x12 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN).setDefault(ulist(Accept.TEXT_XML,ContentType.TEXT_HTML,null));
+		var x12 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN).setDefault(alist(Accept.TEXT_XML,ContentType.TEXT_HTML,null));
 		assertList(x12, "Content-Type: text/xml,Content-Type: text/plain,Accept: text/xml");
 
 		var x13 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN).setDefault(HeaderList.of(Accept.TEXT_XML,ContentType.TEXT_HTML,null));
 		assertList(x13, "Content-Type: text/xml,Content-Type: text/plain,Accept: text/xml");
 
 		var x14 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN)
-			.setDefault(ulist(Accept.TEXT_XML,ContentType.TEXT_HTML,null))
-			.setDefault(ulist(Accept.TEXT_HTML,ContentType.TEXT_XML,null))
-			.setDefault(ulist(Age.of(1)));
+			.setDefault(alist(Accept.TEXT_XML,ContentType.TEXT_HTML,null))
+			.setDefault(alist(Accept.TEXT_HTML,ContentType.TEXT_XML,null))
+			.setDefault(alist(Age.of(1)));
 		assertList(x14, "Content-Type: text/xml,Content-Type: text/plain,Accept: text/xml,Age: 1");
 	}
 

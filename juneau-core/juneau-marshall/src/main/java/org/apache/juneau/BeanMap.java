@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -320,7 +319,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	@Override /* Map */
 	public Object get(Object property) {
-		String pName = stringify(property);
+		String pName = s(property);
 		BeanPropertyMeta p = getPropertyMeta(pName);
 		if (p == null)
 			return meta.onReadProperty(this.bean, pName, null);
@@ -344,7 +343,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	@SuppressWarnings("unchecked")
 	public <T2> T2 get(String property, Class<T2> c) {
-		String pName = stringify(property);
+		String pName = s(property);
 		BeanPropertyMeta p = getPropertyMeta(pName);
 		if (p == null)
 			return (T2)meta.onReadProperty(this.bean, pName, null);
@@ -359,7 +358,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return The raw property value.
 	 */
 	public Object getRaw(Object property) {
-		String pName = stringify(property);
+		String pName = s(property);
 		BeanPropertyMeta p = getPropertyMeta(pName);
 		if (p == null)
 			return null;
@@ -513,7 +512,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 		// Bean with dyna properties.
 		} else {
-			Map<String,BeanPropertyValue> actions = (meta.sortProperties ? sortedMap() : map());
+			Map<String,BeanPropertyValue> actions = (meta.sortProperties ? CollectionUtils.sortedMap() : map());
 
 			forEachProperty(x -> ! x.isDyna(), bpm -> {
 				try {
@@ -567,7 +566,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return A simple collection of properties for this bean map.
 	 */
 	protected Collection<BeanPropertyMeta> getProperties() {
-		return ulist(meta.propertyArray);
+		return alist(meta.propertyArray);
 	}
 
 	/**

@@ -92,8 +92,8 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 		assertEquals("{f:'1'}",x.getX5(Bean.create()));
 		assertEquals("{x:'f=1,f=1'}",x.getX6(new Bean[]{Bean.create(),Bean.create()}));
 		assertEquals("{x:'@((f=1),(f=1))'}",x.getX7(new Bean[]{Bean.create(),Bean.create()}));
-		assertEquals("{x:'f=1,f=1'}",x.getX8(ulist(Bean.create(),Bean.create())));
-		assertEquals("{x:'@((f=1),(f=1))'}",x.getX9(ulist(Bean.create(),Bean.create())));
+		assertEquals("{x:'f=1,f=1'}",x.getX8(alist(Bean.create(),Bean.create())));
+		assertEquals("{x:'@((f=1),(f=1))'}",x.getX9(alist(Bean.create(),Bean.create())));
 		assertEquals("{x:'k1=f\\\\=1'}",x.getX10(map("k1",Bean.create())));
 		assertEquals("{k1:'f=1'}",x.getX11(map("k1",Bean.create())));
 		assertEquals("{k1:'f=1'}",x.getX12(map("k1",Bean.create())));
@@ -105,7 +105,7 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 		assertEquals("{foo:'bar'}",x.getX18(new org.apache.http.Header[]{header("foo","bar")}));
 		assertThrowsWithMessage(Exception.class, "Invalid value type", ()->x.getX19("Foo"));
 		assertEquals("{}",x.getX19(null));
-		assertEquals("{foo:'bar'}",x.getX20(ulist(header("foo","bar"))));
+		assertEquals("{foo:'bar'}",x.getX20(alist(header("foo","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -764,10 +764,10 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K4a {
-		@Header public List<Object> getA() { return ulist("foo","","true","123","null",true,123,null); }
-		@Header("b") public List<Object> getX1() { return ulist("foo","","true","123","null",true,123,null); }
-		@Header(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return ulist("foo","","true","123","null",true,123,null); }
-		@Header(name="d") @Schema(aev=true) public List<Object> getX3() { return ulist(); }
+		@Header public List<Object> getA() { return alist("foo","","true","123","null",true,123,null); }
+		@Header("b") public List<Object> getX1() { return alist("foo","","true","123","null",true,123,null); }
+		@Header(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return alist("foo","","true","123","null",true,123,null); }
+		@Header(name="d") @Schema(aev=true) public List<Object> getX3() { return alist(); }
 		@Header("e") public List<Object> getX4() { return null; }
 		@Header("f") public Object[] getX5() { return new Object[]{"foo","","true","123","null",true,123,null}; }
 		@Header(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return new Object[]{"foo","","true","123","null",true,123,null}; }

@@ -14,7 +14,7 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.ArgUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 
@@ -72,7 +72,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	public BasicHttpException(int statusCode, Throwable cause, String msg, Object...args) {
 		super(cause, msg, args);
 		setStatusCode(statusCode);
-		setContent(format(msg, args));
+		setContent(f(msg, args));
 	}
 
 	/**
@@ -407,9 +407,9 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 				msg = msg.replace('<', ' ').replace('>', ' ').replace('&', ' ');
 			String cls = e.getClass().getSimpleName();
 			if (msg == null)
-				sb.append(format("\nCaused by ({0})", cls));
+				sb.append(f("\nCaused by ({0})", cls));
 			else
-				sb.append(format("\nCaused by ({0}): {1}", cls, msg));
+				sb.append(f("\nCaused by ({0}): {1}", cls, msg));
 			e = e.getCause();
 		}
 		return sb.toString();
