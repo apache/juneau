@@ -1307,11 +1307,7 @@ public final class StringUtils {
 	 * @return <jk>true</jk> if the strings are equal.
 	 */
 	public static boolean eq3(String s1, String s2) {
-		if (s1 == null)
-			return s2 == null;
-		if (s2 == null)
-			return false;
-		return s1.equals(s2);
+		return Utils.eq(s1, s2);
 	}
 
 	/**
@@ -1323,7 +1319,7 @@ public final class StringUtils {
 	 * @return <jk>true</jk> if the strings are equal.
 	 */
 	public static boolean eq3(boolean caseInsensitive, String s1, String s2) {
-		return caseInsensitive ? eqic3(s1, s2) : eq3(s1, s2);
+		return Utils.eq(caseInsensitive, s1, s2);
 	}
 
 	/**
@@ -1380,11 +1376,7 @@ public final class StringUtils {
 	 * @return <jk>true</jk> if the strings are equal.
 	 */
 	public static boolean eqic3(String s1, String s2) {
-		if (s1 == null)
-			return s2 == null;
-		if (s2 == null)
-			return false;
-		return s1.equalsIgnoreCase(s2);
+		return Utils.eqic(s1, s2);
 	}
 
 	/**
@@ -1395,7 +1387,7 @@ public final class StringUtils {
 	 * @return <jk>true</jk> if the strings are not equal.
 	 */
 	public static boolean ne3(String s1, String s2) {
-		return ! eq3(s1, s2);
+		return Utils.ne(s1, s2);
 	}
 
 	/**
@@ -1406,7 +1398,7 @@ public final class StringUtils {
 	 * @return <jk>true</jk> if the strings are not equal ignoring case.
 	 */
 	public static boolean neic3(String s1, String s2) {
-		return ! eqic3(s1, s2);
+		return Utils.neic(s1, s2);
 	}
 
 	/**

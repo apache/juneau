@@ -701,4 +701,42 @@ public class Utils {
 	public static <E> ArrayList<E> listOfSize(int size) {
 		return new ArrayList<>(size);
 	}
+
+	/**
+	 * Tests two strings for equality, but gracefully handles nulls.
+	 *
+	 * @param caseInsensitive Use case-insensitive matching.
+	 * @param s1 String 1.
+	 * @param s2 String 2.
+	 * @return <jk>true</jk> if the strings are equal.
+	 */
+	public static boolean eq(boolean caseInsensitive, String s1, String s2) {
+		return caseInsensitive ? eqic(s1, s2) : eq(s1, s2);
+	}
+
+	/**
+	 * Tests two strings for case-insensitive equality, but gracefully handles nulls.
+	 *
+	 * @param s1 String 1.
+	 * @param s2 String 2.
+	 * @return <jk>true</jk> if the strings are equal.
+	 */
+	public static boolean eqic(String s1, String s2) {
+		if (s1 == null)
+			return s2 == null;
+		if (s2 == null)
+			return false;
+		return s1.equalsIgnoreCase(s2);
+	}
+
+	/**
+	 * Tests two strings for non-equality ignoring case, but gracefully handles nulls.
+	 *
+	 * @param s1 String 1.
+	 * @param s2 String 2.
+	 * @return <jk>true</jk> if the strings are not equal ignoring case.
+	 */
+	public static boolean neic(String s1, String s2) {
+		return ! eqic(s1, s2);
+	}
 }
