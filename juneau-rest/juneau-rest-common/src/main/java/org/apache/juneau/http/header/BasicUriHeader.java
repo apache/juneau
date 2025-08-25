@@ -158,7 +158,7 @@ public class BasicUriHeader extends BasicHeader {
 	 * @return The header value as a {@link URI} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<URI> asUri() {
-		return optional(value());
+		return Utils.opt(value());
 	}
 
 	/**

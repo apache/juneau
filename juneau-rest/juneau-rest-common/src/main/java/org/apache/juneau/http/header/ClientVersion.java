@@ -159,7 +159,7 @@ public class ClientVersion extends BasicStringHeader {
 	 * @return The header value as a {@link Version} object, or {@link Optional#empty()} if the value is <jk>null</jk>.
 	 */
 	public Optional<Version> asVersion() {
-		return optional(value);
+		return Utils.opt(value);
 	}
 
 	/**

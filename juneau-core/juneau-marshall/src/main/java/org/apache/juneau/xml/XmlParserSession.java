@@ -28,6 +28,7 @@ import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -455,7 +456,7 @@ public class XmlParserSession extends ReaderParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)optional(parseAnything(eType.getElementType(), currAttr, r, outer, isRoot, pMeta));
+			return (T)Utils.opt(parseAnything(eType.getElementType(), currAttr, r, outer, isRoot, pMeta));
 
 		setCurrentClass(sType);
 

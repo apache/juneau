@@ -207,7 +207,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @return The value of this header as a string, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<String> asString() {
-		return optional(getValue());
+		return Utils.opt(getValue());
 	}
 
 	/**

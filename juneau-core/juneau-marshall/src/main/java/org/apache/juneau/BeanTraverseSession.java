@@ -384,7 +384,7 @@ public class BeanTraverseSession extends BeanSession {
 	 */
 	public final JsonMap getLastLocation() {
 		Predicate<Object> nn = Utils::isNotNull;
-		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
+		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty2;
 		return JsonMap.create()
 			.appendIf(nn, "currentClass", currentClass)
 			.appendIf(nn, "currentProperty", currentProperty)

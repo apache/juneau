@@ -221,8 +221,8 @@ public class RetryAfter extends BasicDateHeader {
 	public Optional<Integer> asInteger() {
 		if (supplier != null) {
 			Object o = supplier.get();
-			return optional(o instanceof Integer ? (Integer)o : null);
+			return Utils.opt(o instanceof Integer ? (Integer)o : null);
 		}
-		return optional(value);
+		return Utils.opt(value);
 	}
 }

@@ -284,7 +284,7 @@ public final class JsonParserSession extends ReaderParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)optional(parseAnything(eType.getElementType(), r, outer, pMeta));
+			return (T)Utils.opt(parseAnything(eType.getElementType(), r, outer, pMeta));
 
 		setCurrentClass(sType);
 		String wrapperAttr = getJsonClassMeta(sType).getWrapperAttr();

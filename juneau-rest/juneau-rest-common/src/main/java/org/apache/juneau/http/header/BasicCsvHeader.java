@@ -20,6 +20,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Category of headers that consist of a comma-delimited list of string values.
@@ -161,7 +162,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @return The header value as an array wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String[]> asArray() {
-		return optional(copyOf(value()));
+		return Utils.opt(copyOf(value()));
 	}
 
 	/**
@@ -185,7 +186,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @return The header value as a list wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<List<String>> asList() {
-		return optional(ulist(value()));
+		return Utils.opt(ulist(value()));
 	}
 
 	/**

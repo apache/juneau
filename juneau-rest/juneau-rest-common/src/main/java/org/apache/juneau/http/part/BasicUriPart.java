@@ -20,6 +20,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * A {@link NameValuePair} that consists of a single URL value.
@@ -116,7 +117,7 @@ public class BasicUriPart extends BasicPart {
 	 * @return The part value as a {@link URI} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<URI> asUri() {
-		return optional(value());
+		return Utils.opt(value());
 	}
 
 	/**

@@ -19,6 +19,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.Utils;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
@@ -54,7 +55,7 @@ public class RequestBeanPropertyMeta {
 		this.partType = b.partType;
 		this.schema = b.schema;
 		this.getter = b.getter;
-		this.serializer = optional(schema.getSerializer() == null ? serializer : BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).run());
+		this.serializer = Utils.opt(schema.getSerializer() == null ? serializer : BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).run());
 		this.parser = schema.getParser() == null ? parser : BeanCreator.of(HttpPartParser.class).type(schema.getParser()).run();
 	}
 

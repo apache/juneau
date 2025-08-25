@@ -328,7 +328,7 @@ public final class AnnotationInfo<T extends Annotation> {
 				try {
 					V v = (V)m.invoke(a);
 					if (test(test, v))
-						return optional(v);
+						return Utils.opt(v);
 				} catch (Exception e) {
 					e.printStackTrace(); // Shouldn't happen.
 				}

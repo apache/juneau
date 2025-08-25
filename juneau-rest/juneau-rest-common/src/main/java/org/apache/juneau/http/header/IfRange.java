@@ -223,9 +223,9 @@ public class IfRange extends BasicDateHeader {
 	public Optional<EntityTag> asEntityTag() {
 		if (supplier != null) {
 			Object o = supplier.get();
-			return optional(o instanceof EntityTag ? (EntityTag)o : null);
+			return Utils.opt(o instanceof EntityTag ? (EntityTag)o : null);
 		}
-		return optional(value);
+		return Utils.opt(value);
 	}
 
 	private static boolean isEtag(String s) {

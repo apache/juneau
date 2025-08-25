@@ -507,7 +507,7 @@ public class BeanSession extends ContextSession {
 			}
 
 			if (to.isOptional() && (! (value instanceof Optional)))
-				return (T) optional(convertToMemberType(outer, value, to.getElementType()));
+				return (T) Utils.opt(convertToMemberType(outer, value, to.getElementType()));
 
 			Class<T> tc = to.getInnerClass();
 

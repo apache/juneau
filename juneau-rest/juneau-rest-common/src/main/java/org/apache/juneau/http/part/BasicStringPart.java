@@ -20,6 +20,7 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * A {@link NameValuePair} that consists of a single string value.
@@ -115,7 +116,7 @@ public class BasicStringPart extends BasicPart {
 	 * @return The part value as a {@link String} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> asString() {
-		return optional(value());
+		return Utils.opt(value());
 	}
 
 	/**

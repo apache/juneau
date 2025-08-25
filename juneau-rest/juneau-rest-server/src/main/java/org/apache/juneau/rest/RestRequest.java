@@ -36,6 +36,7 @@ import org.apache.juneau.assertions.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.internal.Utils;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.Messages;
 import org.apache.juneau.http.annotation.Content;
@@ -594,7 +595,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public Optional<TimeZone> getTimeZone() {
 		String tz = headers.get("Time-Zone").asString().orElse(null);
 		if (tz != null)
-			return optional(TimeZone.getTimeZone(tz));
+			return Utils.opt(TimeZone.getTimeZone(tz));
 		return Optional.empty();
 	}
 

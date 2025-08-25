@@ -147,7 +147,7 @@ public class RestChildren {
 				UrlPathMatcher upp = rc.getPathMatcher();
 				UrlPathMatch uppm = upp.match(builder.getUrlPath());
 				if (uppm != null) {
-					return optional(RestChildMatch.create(uppm, rc));
+					return Utils.opt(RestChildMatch.create(uppm, rc));
 				}
 			}
 		}

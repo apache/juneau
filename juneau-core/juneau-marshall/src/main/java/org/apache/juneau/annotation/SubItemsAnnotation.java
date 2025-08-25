@@ -70,8 +70,8 @@ public class SubItemsAnnotation {
 		if (SubItemsAnnotation.empty(a))
 			return om;
 		Predicate<String> ne = StringUtils::isNotEmpty;
-		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
-		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
+		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty2;
+		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty2;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::isNotMinusOne;
 		return om

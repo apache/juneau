@@ -175,7 +175,7 @@ public class ThrownStore {
 	 * @param builder The builder for this object.
 	 */
 	public ThrownStore(Builder builder) {
-		this.parent = optional(builder.parent);
+		this.parent = Utils.opt(builder.parent);
 		this.beanStore = builder.beanStore();
 
 		this.statsImplClass = Utils.firstNonNull(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : null, null);
@@ -222,7 +222,7 @@ public class ThrownStore {
 	 */
 	public Optional<ThrownStats> getStats(long hash) {
 		ThrownStats s = db.get(hash);
-		return optional(s == null ? null : s.clone());
+		return Utils.opt(s == null ? null : s.clone());
 	}
 
 	/**

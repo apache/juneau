@@ -456,9 +456,9 @@ public class RequestContent {
 	 */
 	public Optional<ParserMatch> getParserMatch() {
 		if (mediaType != null && parser != null)
-			return optional(new ParserMatch(mediaType, parser));
+			return Utils.opt(new ParserMatch(mediaType, parser));
 		MediaType mt = getMediaType();
-		return optional(mt).map(x -> parsers.getParserMatch(x));
+		return Utils.opt(mt).map(x -> parsers.getParserMatch(x));
 	}
 
 	private MediaType getMediaType() {

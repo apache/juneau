@@ -227,7 +227,7 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 			}
 
 			// TODO - Doesn't support DynaBeans.
-			if (isNotEmpty(l)) {
+			if (isNotEmpty2(l)) {
 				ClassMeta<?> entryType = getClassMetaForObject(l.iterator().next());
 				if (entryType.isBean()) {
 					BeanMeta<?> bm = entryType.getBeanMeta();

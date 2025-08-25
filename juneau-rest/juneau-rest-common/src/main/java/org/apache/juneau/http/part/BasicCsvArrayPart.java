@@ -21,6 +21,7 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * A {@link NameValuePair} that consists of a comma-delimited list of string values.
@@ -185,7 +186,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return The part value as a {@link List} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<List<String>> asList() {
-		return optional(toList());
+		return Utils.opt(toList());
 	}
 
 	/**
@@ -209,7 +210,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return The part value as an array wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String[]> asArray() {
-		return optional(copyOf(value()));
+		return Utils.opt(copyOf(value()));
 	}
 
 	/**

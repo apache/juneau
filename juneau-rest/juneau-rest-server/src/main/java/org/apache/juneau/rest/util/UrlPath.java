@@ -79,7 +79,7 @@ public class UrlPath {
 		String p = parts[parts.length-1];
 		if (p.indexOf('.') == -1)
 			return Utils.opte();
-		return optional(p);
+		return Utils.opt(p);
 	}
 
 	/**

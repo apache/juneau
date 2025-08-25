@@ -16,6 +16,8 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.common.internal.*;
+
 /**
  * A list of default settings.
  *
@@ -88,7 +90,7 @@ public class DefaultSettingsMap {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> get(Class<T> type, String name) {
-		return optional((T)entries.get(name));
+		return Utils.opt((T)entries.get(name));
 	}
 
 	/**

@@ -51,7 +51,7 @@ public class SpringBeanStore extends BeanStore {
 			if (o.isPresent())
 				return o;
 			if (appContext.isPresent()) {
-				return optional(appContext.get().getBeanProvider(c).getIfAvailable());
+				return Utils.opt(appContext.get().getBeanProvider(c).getIfAvailable());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -68,8 +68,8 @@ public class SpringBeanStore extends BeanStore {
 			if (appContext.isPresent()) {
 				ApplicationContext ctx = appContext.get();
 				if (name != null)
-					return optional(ctx.containsBean(name) ? appContext.get().getBean(name, c) : null);
-				return optional(appContext.get().getBean(c));
+					return Utils.opt(ctx.containsBean(name) ? appContext.get().getBean(name, c) : null);
+				return Utils.opt(appContext.get().getBean(c));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -131,7 +131,7 @@ public class Thrown extends BasicCsvHeader {
 	 * @return The class name portion of the header, or <jk>null</jk> if not there.
 	 */
 	public Optional<List<Part>> asParts() {
-		return optional(value);
+		return Utils.opt(value);
 	}
 
 	/**

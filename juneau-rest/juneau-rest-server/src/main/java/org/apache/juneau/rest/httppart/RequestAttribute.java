@@ -85,7 +85,7 @@ public class RequestAttribute extends BasicNamedAttribute {
 	 * @return The value of this part as a string, or {@link Optional#empty()} if the part was not present.
 	 */
 	public Optional<String> asString() {
-		return optional(Utils.s(getValue()));
+		return Utils.opt(Utils.s(getValue()));
 	}
 
 	/**
@@ -97,6 +97,6 @@ public class RequestAttribute extends BasicNamedAttribute {
 	 * @throws BasicHttpException If value could not be parsed.
 	 */
 	public <T> Optional<T> as(Class<T> type) {
-		return optional(req.getBeanSession().convertToType(getValue(), type));
+		return Utils.opt(req.getBeanSession().convertToType(getValue(), type));
 	}
 }

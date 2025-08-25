@@ -180,7 +180,7 @@ public class RequestHttpPart {
 	 * @return The value of this part as a string, or {@link Optional#empty()} if the part was not present.
 	 */
 	public Optional<String> asString() {
-		return optional(getValue());
+		return Utils.opt(getValue());
 	}
 
 	/**
@@ -249,12 +249,12 @@ public class RequestHttpPart {
 					if (! isPresent())
 						return Utils.opte();
 					if (cc.hasParamTypes(String.class))
-						return optional(cc.invoke(get()));
+						return Utils.opt(cc.invoke(get()));
 					if (cc.hasParamTypes(String.class, String.class))
-						return optional(cc.invoke(getName(), get()));
+						return Utils.opt(cc.invoke(getName(), get()));
 				}
 			}
-			return optional(parser.parse(HEADER, schema, orElse(null), type));
+			return Utils.opt(parser.parse(HEADER, schema, orElse(null), type));
 		} catch (ParseException e) {
 			throw new BadRequest(e, "Could not parse {0} parameter ''{1}''.", partType.toString().toLowerCase(), getName());
 		}

@@ -461,7 +461,7 @@ public class RestContext extends Context {
 		 */
 		public <T> Optional<T> resourceAs(Class<T> type) {
 			Object r = resource().get();
-			return optional(type.isInstance(r) ? type.cast(r) : null);
+			return Utils.opt(type.isInstance(r) ? type.cast(r) : null);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -5193,7 +5193,7 @@ public class RestContext extends Context {
 		 * @return The media types.
 		 */
 		public Optional<List<MediaType>> produces() {
-			return optional(produces);
+			return Utils.opt(produces);
 		}
 
 		/**
@@ -5253,7 +5253,7 @@ public class RestContext extends Context {
 		 * @return The media types.
 		 */
 		public Optional<List<MediaType>> consumes() {
-			return optional(consumes);
+			return Utils.opt(consumes);
 		}
 
 		// <FluentSetters>
@@ -6205,7 +6205,7 @@ public class RestContext extends Context {
 				throw new InternalServerError(e);
 			}
 		}
-		return optional(s);
+		return Utils.opt(s);
 	}
 
 	/**

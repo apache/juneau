@@ -252,7 +252,7 @@ public class OpenApiParserSession extends UonParserSession {
 		schema.validateOutput(t, ctx.getBeanContext());
 
 		if (isOptional)
-			t = (T)optional(t);
+			t = (T)Utils.opt(t);
 
 		return t;
 	}
@@ -282,7 +282,7 @@ public class OpenApiParserSession extends UonParserSession {
 				sType = type;
 
 			if (sType.isOptional())
-				return (T)optional(parseInner(partType, schema, in, sType.getElementType()));
+				return (T)Utils.opt(parseInner(partType, schema, in, sType.getElementType()));
 
 			HttpPartDataType t = schema.getType(sType);
 			if (partType == null)

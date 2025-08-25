@@ -593,7 +593,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 		for (int i = 0; i < size(); i++) {
 			NameValuePair x = get(i);
 			if (eq(x.getName(), name))
-				return optional(x);
+				return Utils.opt(x);
 		}
 		return opte();
 	}
@@ -611,7 +611,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 		for (int i = size() - 1; i >= 0; i--) {
 			NameValuePair x = get(i);
 			if (eq(x.getName(), name))
-				return optional(x);
+				return Utils.opt(x);
 		}
 		return opte();
 	}
@@ -646,7 +646,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 			return opte();
 
 		if (rest == null)
-			return optional(first);
+			return Utils.opt(first);
 
 		CharArrayBuffer sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
@@ -655,7 +655,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 			sb.append(element.getValue());
 		}
 
-		return optional(new BasicStringPart(name, sb.toString()));
+		return Utils.opt(new BasicStringPart(name, sb.toString()));
 	}
 
 	/**
@@ -713,7 +713,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 			sb.append(element.getValue());
 		}
 
-		return optional(PartBeanMeta.of(type).construct(name, sb.toString()));
+		return Utils.opt(PartBeanMeta.of(type).construct(name, sb.toString()));
 	}
 
 	/**

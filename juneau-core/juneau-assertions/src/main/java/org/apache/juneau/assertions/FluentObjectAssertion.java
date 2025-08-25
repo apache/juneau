@@ -624,7 +624,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The value wrapped in an {@link Optional}.
 	 */
 	protected Optional<T> opt() {
-		return optional(value);
+		return Utils.opt(value);
 	}
 
 	/**

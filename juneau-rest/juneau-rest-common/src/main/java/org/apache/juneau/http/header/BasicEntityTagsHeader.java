@@ -158,7 +158,7 @@ public class BasicEntityTagsHeader extends BasicHeader {
 	 * @return The header value as an {@link EntityTags} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<EntityTags> asEntityTags() {
-		return optional(value());
+		return Utils.opt(value());
 	}
 
 	/**

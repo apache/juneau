@@ -300,7 +300,7 @@ public class ReflectionMap<V> {
 		for (ClassEntry<V> e : classEntries)
 			if (e.matches(c))
 				if (ofType == null || ofType.isInstance(e.value))
-					return optional(e.value);
+					return Utils.opt(e.value);
 		return Utils.opte();
 	}
 
@@ -379,7 +379,7 @@ public class ReflectionMap<V> {
 		for (MethodEntry<V> e : methodEntries)
 			if (e.matches(m))
 				if (ofType == null || ofType.isInstance(e.value))
-					return optional(e.value);
+					return Utils.opt(e.value);
 		return Utils.opte();
 	}
 
@@ -451,7 +451,7 @@ public class ReflectionMap<V> {
 		for (FieldEntry<V> e : fieldEntries)
 			if (e.matches(f))
 				if (ofType == null || ofType.isInstance(e.value))
-					return optional(e.value);
+					return Utils.opt(e.value);
 		return Utils.opte();
 	}
 
@@ -523,7 +523,7 @@ public class ReflectionMap<V> {
 		for (ConstructorEntry<V> e : constructorEntries)
 			if (e.matches(c))
 				if (ofType == null || ofType.isInstance(e.value))
-					return optional(e.value);
+					return Utils.opt(e.value);
 		return Utils.opte();
 	}
 

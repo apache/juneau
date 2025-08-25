@@ -337,7 +337,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		Optional<BeanContext> getBeanContext() {
-			return optional(beanContext).map(BeanContext.Builder::build);
+			return Utils.opt(beanContext).map(BeanContext.Builder::build);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -420,7 +420,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		Optional<EncoderSet> getEncoders() {
-			return optional(encoders).map(EncoderSet.Builder::build);
+			return Utils.opt(encoders).map(EncoderSet.Builder::build);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -503,7 +503,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		Optional<SerializerSet> getSerializers() {
-			return optional(serializers).map(SerializerSet.Builder::build);
+			return Utils.opt(serializers).map(SerializerSet.Builder::build);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -586,7 +586,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		Optional<ParserSet> getParsers() {
-			return optional(parsers).map(ParserSet.Builder::build);
+			return Utils.opt(parsers).map(ParserSet.Builder::build);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -668,7 +668,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		Optional<HttpPartSerializer> getPartSerializer() {
-			return optional(partSerializer).map(Creator::create);
+			return Utils.opt(partSerializer).map(Creator::create);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -750,7 +750,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		Optional<HttpPartParser> getPartParser() {
-			return optional(partParser).map(org.apache.juneau.httppart.HttpPartParser.Creator::create);
+			return Utils.opt(partParser).map(org.apache.juneau.httppart.HttpPartParser.Creator::create);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -832,7 +832,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		Optional<JsonSchemaGenerator> getJsonSchemaGenerator() {
-			return optional(jsonSchemaGenerator).map(JsonSchemaGenerator.Builder::build);
+			return Utils.opt(jsonSchemaGenerator).map(JsonSchemaGenerator.Builder::build);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -1100,7 +1100,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 		RestGuardList getGuards() {
 			RestGuardList.Builder b = guards();
-			Set<String> roleGuard = optional(this.roleGuard).orElseGet(CollectionUtils::set);
+			Set<String> roleGuard = Utils.opt(this.roleGuard).orElseGet(CollectionUtils::set);
 
 			for (String rg : roleGuard) {
 				try {

@@ -21,6 +21,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -244,7 +245,7 @@ public class BeanCreator<T> {
 	 * @return A new bean wrapped in an {@link Optional}.
 	 */
 	public Optional<T> execute() {
-		return optional(silent().run());
+		return Utils.opt(silent().run());
 	}
 
 	/**

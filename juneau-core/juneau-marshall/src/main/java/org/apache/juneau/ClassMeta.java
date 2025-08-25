@@ -440,24 +440,20 @@ public final class ClassMeta<T> implements Type {
 			// parse() is used by the java logging Level class.
 			// forName() is used by Class and Charset
 			String[] fromStringMethodNames = {"fromString","fromValue","valueOf","parse","parseString","forName","forString"};
-			fromStringMethod = optional(
-				ci.getPublicMethod(
-					x -> x.isStatic()
-					&& x.isNotDeprecated()
-					&& x.hasReturnType(c)
-					&& x.hasParamTypes(String.class)
-					&& ArrayUtils.contains(x.getName(), fromStringMethodNames))
-				).map(MethodInfo::inner)
+			fromStringMethod = Utils.opt(ci.getPublicMethod(
+			x -> x.isStatic()
+			&& x.isNotDeprecated()
+			&& x.hasReturnType(c)
+			&& x.hasParamTypes(String.class)
+			&& ArrayUtils.contains(x.getName(), fromStringMethodNames))).map(MethodInfo::inner)
 				.orElse(null);
 
 			// Find example() method if present.
-			exampleMethod = optional(
-				ci.getPublicMethod(
-					x -> x.isStatic()
-					&& x.isNotDeprecated()
-					&& x.hasName("example")
-					&& x.hasFuzzyParamTypes(BeanSession.class))
-				).map(MethodInfo::inner)
+			exampleMethod = Utils.opt(ci.getPublicMethod(
+			x -> x.isStatic()
+			&& x.isNotDeprecated()
+			&& x.hasName("example")
+			&& x.hasFuzzyParamTypes(BeanSession.class))).map(MethodInfo::inner)
 				.orElse(null);
 
 			ci.forEachAllField(x -> x.hasAnnotation(bc, ParentProperty.class), x -> {
@@ -1706,7 +1702,7 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public Optional<?> getOptionalDefault() {
 		if (isOptional())
-			return optional(getElementType().getOptionalDefault());
+			return Utils.opt(getElementType().getOptionalDefault());
 		return null;
 	}
 
@@ -2095,7 +2091,7 @@ public final class ClassMeta<T> implements Type {
 		if (o == null) {
 			if (beanContext == null)
 				return info.getAnnotation(BeanContext.DEFAULT, a);
-			o = optional(info.getAnnotation(beanContext, a));
+			o = Utils.opt(info.getAnnotation(beanContext, a));
 			annotationLastMap.put(a, o);
 		}
 		return o.orElse(null);
@@ -2190,7 +2186,7 @@ public final class ClassMeta<T> implements Type {
 	public <T2> Optional<T2> getProperty(String name, Function<ClassMeta<?>,T2> function) {
 		Optional<T2> t = (Optional<T2>) properties.get(name);
 		if (t == null) {
-			t = optional(function.apply(this));
+			t = Utils.opt(function.apply(this));
 			properties.put(name, t);
 		}
 		return t;

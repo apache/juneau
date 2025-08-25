@@ -98,8 +98,8 @@ public class BasicSwaggerProviderSession {
 		InputStream is = ff.getStream(rci.getSimpleName() + ".json", locale).orElse(null);
 
 		Predicate<String> ne = StringUtils::isNotEmpty;
-		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
-		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
+		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty2;
+		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty2;
 
 		// Load swagger JSON from classpath.
 		JsonMap omSwagger = Json5.DEFAULT.read(is, JsonMap.class);
@@ -762,7 +762,7 @@ public class BasicSwaggerProviderSession {
 	private JsonMap toMap(Tag a, String location, Object...locationArgs) {
 		JsonMap om = JsonMap.create();
 		Predicate<String> ne = StringUtils::isNotEmpty;
-		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
+		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty2;
 		om
 			.appendIf(ne, "name", resolve(a.name()))
 			.appendIf(ne, "description", resolve(joinnl(a.description())))
@@ -932,8 +932,8 @@ public class BasicSwaggerProviderSession {
 				return om;
 			om = newMap(om);
 			Predicate<String> ne = StringUtils::isNotEmpty;
-			Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
-			Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
+			Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty2;
+			Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty2;
 			Predicate<Boolean> nf = Utils::isTrue;
 			Predicate<Long> nm1 = Utils::isNotMinusOne;
 			return om
@@ -990,8 +990,8 @@ public class BasicSwaggerProviderSession {
 			return om;
 		om = newMap(om);
 		Predicate<String> ne = StringUtils::isNotEmpty;
-		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
-		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
+		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty2;
+		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty2;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::isNotMinusOne;
 		return om
@@ -1021,8 +1021,8 @@ public class BasicSwaggerProviderSession {
 			return om;
 		om = newMap(om);
 		Predicate<String> ne = StringUtils::isNotEmpty;
-		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
-		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
+		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty2;
+		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty2;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::isNotMinusOne;
 		return om
@@ -1051,7 +1051,7 @@ public class BasicSwaggerProviderSession {
 		if (ResponseAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
+		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty2;
 		if (! SchemaAnnotation.empty(a.schema()))
 			merge(om, a.schema());
 		return om

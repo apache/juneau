@@ -124,7 +124,7 @@ public class Section {
 			}
 		}
 
-		return optional(bm.getBean());
+		return Utils.opt(bm.getBean());
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class Section {
 		var m = new JsonMap();
 		for (var k : keys)
 			m.put(k, config.get(name + '/' + k).as(Object.class).orElse(null));
-		return optional(m);
+		return Utils.opt(m);
 	}
 
 	/**
@@ -211,7 +211,7 @@ public class Section {
 		if (!c.isInterface())
 			throw new IllegalArgumentException("Class '" + c.getName() + "' passed to toInterface() is not an interface.");
 
-		return optional((T) Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, (InvocationHandler) (proxy, method, args) -> {
+		return Utils.opt((T) Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, (InvocationHandler) (proxy, method, args) -> {
 			var bi = Introspector.getBeanInfo(c, null);
 			for (var pd : bi.getPropertyDescriptors()) {
 				var rm = pd.getReadMethod();

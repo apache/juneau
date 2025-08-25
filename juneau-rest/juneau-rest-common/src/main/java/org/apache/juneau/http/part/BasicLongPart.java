@@ -123,7 +123,7 @@ public class BasicLongPart extends BasicPart {
 	 * @return The part value as a {@link Long} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Long> asLong() {
-		return optional(value());
+		return Utils.opt(value());
 	}
 
 	/**

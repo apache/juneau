@@ -618,7 +618,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 		for (int i = 0; i < size(); i++) {
 			Header x = get(i);
 			if (eq(x.getName(), name))
-				return optional(x);
+				return Utils.opt(x);
 		}
 		return opte();
 	}
@@ -636,7 +636,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 		for (int i = size() - 1; i >= 0; i--) {
 			Header x = get(i);
 			if (eq(x.getName(), name))
-				return optional(x);
+				return Utils.opt(x);
 		}
 		return opte();
 	}
@@ -671,7 +671,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 			return opte();
 
 		if (rest == null)
-			return optional(first);
+			return Utils.opt(first);
 
 		CharArrayBuffer sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
@@ -680,7 +680,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 			sb.append(element.getValue());
 		}
 
-		return optional(new BasicHeader(name, sb.toString()));
+		return Utils.opt(new BasicHeader(name, sb.toString()));
 	}
 
 	/**
@@ -729,7 +729,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 			return opte();
 
 		if (rest == null)
-			return optional(HeaderBeanMeta.of(type).construct(name, first.getValue()));
+			return Utils.opt(HeaderBeanMeta.of(type).construct(name, first.getValue()));
 
 		CharArrayBuffer sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
@@ -738,7 +738,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 			sb.append(element.getValue());
 		}
 
-		return optional(HeaderBeanMeta.of(type).construct(name, sb.toString()));
+		return Utils.opt(HeaderBeanMeta.of(type).construct(name, sb.toString()));
 	}
 
 	/**

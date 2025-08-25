@@ -23,6 +23,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Lightweight utility class for introspecting information about a method parameter.
@@ -144,7 +145,7 @@ public final class ParamInfo {
 	public <A extends Annotation> A getAnnotation(Class<A> type) {
 		Optional<Annotation> o = annotationMap().get(type);
 		if (o == null) {
-			o = optional(findAnnotation(type));
+			o = Utils.opt(findAnnotation(type));
 			annotationMap().put(type, o);
 		}
 		return o.isPresent() ? (A)o.get() : null;

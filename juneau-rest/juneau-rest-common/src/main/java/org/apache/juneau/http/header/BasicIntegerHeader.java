@@ -162,7 +162,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @return The header value as an {@link Integer} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> asInteger() {
-		return optional(value());
+		return Utils.opt(value());
 	}
 
 	/**

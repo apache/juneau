@@ -22,6 +22,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -259,7 +260,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)optional(parseAnything(eType.getElementType(), r, outer));
+			return (T)Utils.opt(parseAnything(eType.getElementType(), r, outer));
 
 		int c = r.peekSkipWs();
 		if (c == '?')

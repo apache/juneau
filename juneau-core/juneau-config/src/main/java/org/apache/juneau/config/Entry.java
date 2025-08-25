@@ -214,7 +214,8 @@ public class Entry {
 			if (type == JsonList.class) return (Optional<T>)asList();
 			if (isEmpty())
 				return Utils.opte();
-			if (isSimpleType(type)) return optional((T)config.beanSession.convertToType(v, (Class<?>)type));
+			if (isSimpleType(type))
+				return Utils.opt((T)config.beanSession.convertToType(v, (Class<?>)type));
 
 			if (parser instanceof JsonParser) {
 				var s1 = firstNonWhitespaceChar(v);
@@ -223,7 +224,7 @@ public class Entry {
 				else if (s1 != '[' && s1 != '{' && ! "null".equals(v))
 					v = '\'' + v + '\'';
 			}
-			return optional(parser.parse(v, type, args));
+			return Utils.opt(parser.parse(v, type, args));
 		} catch (ParseException e) {
 			throw new BeanRuntimeException(e, null, "Value could not be parsed.");
 		}
@@ -257,7 +258,7 @@ public class Entry {
 	 * @return This entry as a string, or {@link Optional#empty()} if the entry does not exist.
 	 */
 	public Optional<String> asString() {
- 		return optional(isPresent() ? config.varSession.resolve(value) : null);
+ 		return Utils.opt(isPresent() ? config.varSession.resolve(value) : null);
 	}
 
 	/**
@@ -276,12 +277,12 @@ public class Entry {
 		var s2 = lastNonWhitespaceChar(v);
 		if (s1 == '[' && s2 == ']' && config.parser instanceof JsonParser) {
 			try {
-				return optional(config.parser.parse(v, String[].class));
+				return Utils.opt(config.parser.parse(v, String[].class));
 			} catch (ParseException e) {
 				throw new BeanRuntimeException(e);
 			}
 		}
-		return optional(split(v));
+		return Utils.opt(split(v));
 	}
 
 	/**
@@ -315,7 +316,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Integer> asInteger() {
-		return optional(isEmpty() ? null : (Integer)parseIntWithSuffix(toString()));
+		return Utils.opt(isEmpty() ? null : (Integer)parseIntWithSuffix(toString()));
 	}
 
 
@@ -328,7 +329,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Boolean> asBoolean() {
-		return optional(isEmpty() ? null : (Boolean)Boolean.parseBoolean(toString()));
+		return Utils.opt(isEmpty() ? null : (Boolean)Boolean.parseBoolean(toString()));
 	}
 
 	/**
@@ -362,7 +363,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Long> asLong() {
-		return optional(isEmpty() ? null : (Long)parseLongWithSuffix(toString()));
+		return Utils.opt(isEmpty() ? null : (Long)parseLongWithSuffix(toString()));
 	}
 
 	/**
@@ -380,7 +381,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Double> asDouble() {
-		return optional(isEmpty() ? null : Double.valueOf(toString()));
+		return Utils.opt(isEmpty() ? null : Double.valueOf(toString()));
 	}
 
 	/**
@@ -398,7 +399,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Float> asFloat() {
-		return optional(isEmpty() ? null : Float.valueOf(toString()));
+		return Utils.opt(isEmpty() ? null : Float.valueOf(toString()));
 	}
 
 	/**
@@ -417,10 +418,10 @@ public class Entry {
 			s = s.replace("\n", "");
 		try {
 			if (config.binaryFormat == HEX)
-				return optional(fromHex(s));
+				return Utils.opt(fromHex(s));
 			if (config.binaryFormat == SPACED_HEX)
-				return optional(fromSpacedHex(s));
-			return optional(base64Decode(s));
+				return Utils.opt(fromSpacedHex(s));
+			return Utils.opt(base64Decode(s));
 		} catch (Exception e) {
 			throw new BeanRuntimeException(e, null, "Value could not be converted to a byte array.");
 		}
@@ -463,7 +464,7 @@ public class Entry {
 			if (s1 != '{' && ! "null".equals(s))
 				s = '{' + s + '}';
 		}
-		return optional(JsonMap.ofText(s, parser));
+		return Utils.opt(JsonMap.ofText(s, parser));
 	}
 
 	/**
@@ -503,7 +504,7 @@ public class Entry {
 			if (s1 != '[' && ! "null".equals(s))
 				s = '[' + s + ']';
 		}
-		return optional(JsonList.ofText(s, parser));
+		return Utils.opt(JsonList.ofText(s, parser));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -302,7 +302,7 @@ public abstract class Context implements AnnotationProvider {
 		 * @return The context class if it was specified.
 		 */
 		public Optional<Class<?>> getType() {
-			return optional(type);
+			return Utils.opt(type);
 		}
 
 		/**
@@ -818,7 +818,7 @@ public abstract class Context implements AnnotationProvider {
 	protected Context(Builder builder) {
 		init(builder);
 		debug = builder.debug;
-		annotations = optional(builder.annotations).orElseGet(Collections::emptyList);
+		annotations = Utils.opt(builder.annotations).orElseGet(Collections::emptyList);
 
 		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
 

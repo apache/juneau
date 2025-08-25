@@ -122,7 +122,7 @@ public class BasicIntegerPart extends BasicPart {
 	 * @return The part value as an {@link Integer} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> asInteger() {
-		return optional(toInteger());
+		return Utils.opt(toInteger());
 	}
 
 	/**

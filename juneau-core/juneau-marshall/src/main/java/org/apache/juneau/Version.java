@@ -91,7 +91,7 @@ public class Version implements Comparable<Version> {
 	public Optional<Integer> getPart(int index) {
 		if (index < 0 || parts.length <= index)
 			return Utils.opte();
-		return optional(parts[index]);
+		return Utils.opt(parts[index]);
 	}
 
 	/**

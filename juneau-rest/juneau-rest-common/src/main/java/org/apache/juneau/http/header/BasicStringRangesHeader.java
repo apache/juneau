@@ -161,7 +161,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 	 * @return The header value as a {@link StringRanges} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<StringRanges> asStringRanges() {
-		return optional(value());
+		return Utils.opt(value());
 	}
 
 	/**

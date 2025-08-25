@@ -163,7 +163,7 @@ public class BasicLongHeader extends BasicHeader {
 	 * @return The header value as a {@link Long} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Long> asLong() {
-		return optional(value());
+		return Utils.opt(value());
 	}
 
 	/**

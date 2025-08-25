@@ -139,7 +139,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	 * @return The header value as a {@link MediaRanges} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<MediaRanges> asMediaRanges() {
-		return optional(value());
+		return Utils.opt(value());
 	}
 
 	/**

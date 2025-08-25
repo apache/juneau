@@ -24,6 +24,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.Utils;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -111,8 +112,8 @@ public class ResponseBeanMeta {
 	ResponseBeanMeta(Builder b) {
 		this.cm = b.cm;
 		this.code = b.code;
-		this.partSerializer = optional(b.partSerializer).map(x -> HttpPartSerializer.creator().type(x).apply(b.annotations).create());
-		this.partParser = optional(b.partParser).map(x -> HttpPartParser.creator().type(x).apply(b.annotations).create());
+		this.partSerializer = Utils.opt(b.partSerializer).map(x -> HttpPartSerializer.creator().type(x).apply(b.annotations).create());
+		this.partParser = Utils.opt(b.partParser).map(x -> HttpPartParser.creator().type(x).apply(b.annotations).create());
 		this.schema = b.schema.build();
 
 		Map<String,ResponseBeanPropertyMeta> properties = map();

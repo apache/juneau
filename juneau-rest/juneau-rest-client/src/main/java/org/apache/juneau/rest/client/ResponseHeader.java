@@ -25,6 +25,7 @@ import java.util.regex.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
@@ -362,7 +363,7 @@ public class ResponseHeader extends BasicHeader {
 	 */
 	public <T> Optional<T> as(ClassMeta<T> type) {
 		try {
-			return optional(parser.parse(HEADER, schema, getValue(), type));
+			return Utils.opt(parser.parse(HEADER, schema, getValue(), type));
 		} catch (ParseException e) {
 			throw new BasicRuntimeException(e, "Could not parse response header {0}.", getName());
 		}

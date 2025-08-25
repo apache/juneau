@@ -102,7 +102,7 @@ public class BasicFileFinder implements FileFinder {
 
 	@Override /* FileFinder */
 	public Optional<String> getString(String name, Locale locale) throws IOException {
-		return optional(read(find(name, locale).orElse(null)));
+		return Utils.opt(read(find(name, locale).orElse(null)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -160,7 +160,7 @@ public class BasicFileFinder implements FileFinder {
 			}
 		}
 
-		return optional(lf == null ? null : lf.read());
+		return Utils.opt(lf == null ? null : lf.read());
 	}
 
 	/**

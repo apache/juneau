@@ -312,7 +312,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)optional(parseAnything(eType.getElementType(), r, outer, isUrlParamValue, pMeta));
+			return (T)Utils.opt(parseAnything(eType.getElementType(), r, outer, isUrlParamValue, pMeta));
 
 		setCurrentClass(sType);
 

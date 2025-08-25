@@ -140,7 +140,7 @@ public class BasicStringHeader extends BasicHeader {
 
 	@Override /* BasicHeader */
 	public Optional<String> asString() {
-		return optional(value());
+		return Utils.opt(value());
 	}
 
 	/**

@@ -118,11 +118,9 @@ public class BasicStaticFiles implements StaticFiles {
 			Optional<InputStream> is = getStream(path, locale);
 			if (! is.isPresent())
 				return Utils.opte();
-			return optional(
-				streamResource(is.get())
-					.setHeaders(contentType(mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path))))
-					.addHeaders(headers)
-			);
+			return Utils.opt(streamResource(is.get())
+			.setHeaders(contentType(mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path))))
+			.addHeaders(headers));
 		} catch (IOException e) {
 			throw new InternalServerError(e);
 		}

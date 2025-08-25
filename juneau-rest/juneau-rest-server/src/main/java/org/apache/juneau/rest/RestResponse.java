@@ -226,7 +226,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return This object.
 	 */
 	public RestResponse setContent(Object output) {
-		this.content = optional(output);
+		this.content = Utils.opt(output);
 		return this;
 	}
 
@@ -547,7 +547,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return This object.
 	 */
 	public RestResponse setContentSchema(HttpPartSchema schema) {
-		this.contentSchema = optional(schema);
+		this.contentSchema = Utils.opt(schema);
 		return this;
 	}
 
@@ -830,9 +830,9 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		if (serializerMatch != null)
 			return serializerMatch;
 		if (serializer != null) {
-			serializerMatch = optional(new SerializerMatch(getMediaType(), serializer));
+			serializerMatch = Utils.opt(new SerializerMatch(getMediaType(), serializer));
 		} else {
-			serializerMatch = optional(opContext.getSerializers().getSerializerMatch(request.getHeaderParam("Accept").orElse("*/*")));
+			serializerMatch = Utils.opt(opContext.getSerializers().getSerializerMatch(request.getHeaderParam("Accept").orElse("*/*")));
 		}
 		return serializerMatch;
 	}
@@ -846,11 +846,11 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		if (contentSchema != null)
 			return contentSchema;
 		if (responseBeanMeta != null)
-			contentSchema = optional(responseBeanMeta.getSchema());
+			contentSchema = Utils.opt(responseBeanMeta.getSchema());
 		else {
 			ResponseBeanMeta rbm = opContext.getResponseBeanMeta(getContent(Object.class));
 			if (rbm != null)
-				contentSchema = optional(rbm.getSchema());
+				contentSchema = Utils.opt(rbm.getSchema());
 			else
 				contentSchema = Utils.opte();
 		}

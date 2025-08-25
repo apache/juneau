@@ -727,24 +727,13 @@ public final class CollectionUtils {
 	}
 
 	/**
-	 * Returns an optional of the specified value.
-	 *
-	 * @param <T> The component type.
-	 * @param value The value.
-	 * @return A new Optional.
-	 */
-	public static <T> Optional<T> optional(T value) {
-		return Optional.ofNullable(value);
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
 	 *
 	 * @param <E> The element type.
 	 * @param value The value being checked.
 	 * @return <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
 	 */
-	public static <E> boolean isNotEmpty(Collection<E> value) {
+	public static <E> boolean isNotEmpty2(Collection<E> value) {
 		return value != null && ! value.isEmpty();
 	}
 
@@ -756,7 +745,7 @@ public final class CollectionUtils {
 	 * @param value The value being checked.
 	 * @return <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
 	 */
-	public static <K,V> boolean isNotEmpty(Map<K,V> value) {
+	public static <K,V> boolean isNotEmpty2(Map<K,V> value) {
 		return value != null && ! value.isEmpty();
 	}
 

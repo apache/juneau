@@ -24,6 +24,7 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * A {@link NameValuePair} that consist of a single HTTP-date.
@@ -126,7 +127,7 @@ public class BasicDatePart extends BasicPart {
 	 * @return The part value as a {@link ZonedDateTime} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<ZonedDateTime> asZonedDateTime() {
-		return optional(toZonedDateTime());
+		return Utils.opt(toZonedDateTime());
 	}
 
 	/**

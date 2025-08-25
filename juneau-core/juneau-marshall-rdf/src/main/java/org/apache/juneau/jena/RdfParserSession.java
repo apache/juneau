@@ -392,7 +392,7 @@ public class RdfParserSession extends ReaderParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)optional(parseAnything(eType.getElementType(), n, outer, pMeta));
+			return (T)Utils.opt(parseAnything(eType.getElementType(), n, outer, pMeta));
 
 		setCurrentClass(sType);
 

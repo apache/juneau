@@ -162,7 +162,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @return The header value as a {@link Boolean} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> asBoolean() {
-		return optional(value());
+		return Utils.opt(value());
 	}
 
 	/**

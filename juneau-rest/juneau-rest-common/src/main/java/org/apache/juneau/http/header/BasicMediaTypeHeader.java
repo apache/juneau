@@ -142,7 +142,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return The header value as a {@link MediaType} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<MediaType> asMediaType() {
-		return optional(value());
+		return Utils.opt(value());
 	}
 
 	/**

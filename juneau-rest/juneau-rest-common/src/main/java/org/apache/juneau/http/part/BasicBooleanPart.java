@@ -122,7 +122,7 @@ public class BasicBooleanPart extends BasicPart {
 	 * @return The part value as a {@link Boolean} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> asBoolean() {
-		return optional(toBoolean());
+		return Utils.opt(toBoolean());
 	}
 
 	/**
