@@ -13,6 +13,8 @@
 package org.apache.juneau.config;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 

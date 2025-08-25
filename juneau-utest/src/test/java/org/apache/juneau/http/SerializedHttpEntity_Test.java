@@ -15,7 +15,6 @@ package org.apache.juneau.http;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 
@@ -94,7 +93,7 @@ class SerializedHttpEntity_Test extends SimpleTestBase {
 	}
 
 	@Test void a12_contentType() throws Exception {
-		checkHeaderClient("Content-Type").post("/",serializedEntity(reader("foo"),null).setContentType("text/foo")).run().assertContent("['text/foo']");
+		checkHeaderClient("Content-Type").post("/",serializedEntity(TestUtils.reader("foo"),null).setContentType("text/foo")).run().assertContent("['text/foo']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

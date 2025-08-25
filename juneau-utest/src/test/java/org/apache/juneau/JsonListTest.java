@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.collections.*;
@@ -98,7 +99,7 @@ class JsonListTest extends SimpleTestBase {
 	// JsonList(Reader)
 	//====================================================================================================
 	@Test void testFromReader() throws Exception {
-		assertJson(new JsonList(reader("[1,2,3]")), "[1,2,3]");
+		assertJson(new JsonList(TestUtils.reader("[1,2,3]")), "[1,2,3]");
 	}
 
 	//====================================================================================================

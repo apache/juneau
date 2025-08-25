@@ -14,6 +14,7 @@ package org.apache.juneau.annotation;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.apache.juneau.TestUtils.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;

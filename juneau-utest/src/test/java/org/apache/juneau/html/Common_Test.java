@@ -14,8 +14,6 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
-
 import java.net.*;
 import java.util.*;
 
@@ -318,7 +316,7 @@ class Common_Test extends SimpleTestBase {
 		var t = new G();
 		t.uri = new URI("http://uri");
 		t.f1 = new URI("http://f1");
-		t.f2 = url("http://f2");
+		t.f2 = TestUtils.url("http://f2");
 
 		String html = s.serialize(t);
 		t = p.parse(html, G.class);

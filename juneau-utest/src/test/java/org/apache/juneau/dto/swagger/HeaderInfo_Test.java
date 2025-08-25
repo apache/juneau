@@ -13,8 +13,9 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -255,6 +256,6 @@ class HeaderInfo_Test extends SimpleTestBase {
 	@Test void c02_resolveRefs() {
 		var s = new Swagger();
 		var t = new HeaderInfo();
-		assertNotThrown(()->t.resolveRefs(s, new ArrayDeque<>(), 10));
+		TestUtils.assertNotThrown(()->t.resolveRefs(s, new ArrayDeque<>(), 10));
 	}
 }

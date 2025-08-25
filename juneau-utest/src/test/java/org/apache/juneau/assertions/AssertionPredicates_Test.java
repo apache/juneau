@@ -18,8 +18,6 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
-
 import java.util.regex.*;
 
 import org.apache.juneau.*;
@@ -37,8 +35,8 @@ public class AssertionPredicates_Test {
 
 	@Test
 	public void a01_any() {
-		assertNotThrown(()->A1.is(any()));
-		assertNotThrown(()->A2.is(any()));
+		TestUtils.assertNotThrown(()->A1.is(any()));
+		TestUtils.assertNotThrown(()->A2.is(any()));
 	}
 
 	@Test

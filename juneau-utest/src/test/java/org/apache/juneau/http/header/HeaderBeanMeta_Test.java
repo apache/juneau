@@ -14,6 +14,8 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.jupiter.api.*;

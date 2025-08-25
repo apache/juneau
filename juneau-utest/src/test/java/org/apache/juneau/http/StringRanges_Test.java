@@ -15,6 +15,7 @@ package org.apache.juneau.http;
 import static org.apache.juneau.StringRanges.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 

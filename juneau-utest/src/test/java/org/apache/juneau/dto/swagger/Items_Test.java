@@ -13,8 +13,9 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -240,7 +241,7 @@ class Items_Test extends SimpleTestBase {
 			.set("type", "j")
 			.set("uniqueItems", true);
 
-		assertJson(t.keySet(), 
+		assertJson(t.keySet(),
 			"['collectionFormat','default','enum','exclusiveMaximum','exclusiveMinimum','format','items','maximum','maxItems',"
 			+ "'maxLength','minimum','minItems','minLength','multipleOf','pattern','$ref','type','uniqueItems']"
 		);

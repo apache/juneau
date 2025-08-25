@@ -13,6 +13,8 @@
 package org.apache.juneau.json;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;

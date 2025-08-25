@@ -14,6 +14,8 @@ package org.apache.juneau.cp;
 
 import static java.util.Locale.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;

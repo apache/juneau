@@ -15,7 +15,6 @@ package org.apache.juneau.reflect;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -272,10 +271,10 @@ class FieldInfoTest extends SimpleTestBase {
 		d_isDefault = d.getDeclaredField(x -> x.hasName("isDefault"));
 
 	@Test void setAccessible() {
-		assertNotThrown(()->d_isPublic.setAccessible());
-		assertNotThrown(()->d_isProtected.setAccessible());
-		assertNotThrown(()->d_isPrivate.setAccessible());
-		assertNotThrown(()->d_isDefault.setAccessible());
+		TestUtils.assertNotThrown(()->d_isPublic.setAccessible());
+		TestUtils.assertNotThrown(()->d_isProtected.setAccessible());
+		TestUtils.assertNotThrown(()->d_isPrivate.setAccessible());
+		TestUtils.assertNotThrown(()->d_isDefault.setAccessible());
 	}
 
 	@Test void isVisible() {

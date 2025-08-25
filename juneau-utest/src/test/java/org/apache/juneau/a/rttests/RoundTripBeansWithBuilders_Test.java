@@ -13,6 +13,7 @@
 package org.apache.juneau.a.rttests;
 
 import static java.util.Collections.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 import java.util.stream.*;

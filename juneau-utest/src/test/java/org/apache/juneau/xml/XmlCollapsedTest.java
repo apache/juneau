@@ -14,7 +14,6 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.list;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
 import java.util.*;
@@ -49,7 +48,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		assertEquals("f3a", t.f3.get(0));
 		assertEquals("f4a", t.f4[0]);
 
-		validateXml(t, s);
+		TestUtils.validateXml(t, s);
 	}
 
 	public static class A {
@@ -88,7 +87,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		assertEquals("f3a", t.f3.get(0));
 		assertEquals("f4a", t.f4[0]);
 
-		validateXml(t, s);
+		TestUtils.validateXml(t, s);
 	}
 
 	public static class B {
@@ -133,7 +132,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		assertEquals("f4a", t.f4[0]);
 		assertEquals("f4b", t.f4[1]);
 
-		validateXml(t, s);
+		TestUtils.validateXml(t, s);
 	}
 
 	public static class C {
@@ -174,7 +173,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		assertEquals("f3a", t.f3.get(0));
 		assertEquals("f4a", t.f4[0]);
 
-		validateXml(t, s);
+		TestUtils.validateXml(t, s);
 	}
 
 	@Bean(properties="f1,f2,f3,f4")
@@ -213,7 +212,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		assertEquals("f1a", t.f1.get(0));
 		assertEquals("f2a", t.f2.get(0));
 
-		validateXml(t, s);
+		TestUtils.validateXml(t, s);
 	}
 
 	@Bean(properties="f1,f2")
@@ -240,14 +239,14 @@ class XmlCollapsedTest extends SimpleTestBase {
 		assertEquals("<object><xf1>x1</xf1><xf1>x2</xf1></object>", r);
 		t2 = p.parse(r, FA.class);
 		assertEquals(json(t2), json(t1));
-		validateXml(t1, s);
+		TestUtils.validateXml(t1, s);
 
 		t1 = FB.newInstance();
 		r = s.serialize(t1);
 		assertEquals("<object><xf1>x1</xf1><xf1>x2</xf1></object>", r);
 		t2 = p.parse(r, FB.class);
 		assertEquals(json(t2), json(t1));
-		validateXml(t1, s);
+		TestUtils.validateXml(t1, s);
 	}
 
 	public static class FA {
@@ -303,7 +302,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		var t2 = p.parse(xml, G.class);
 		assertEquals(json(t2), json(t));
 
-		validateXml(t, s);
+		TestUtils.validateXml(t, s);
 	}
 
 	public static class G {
@@ -334,7 +333,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		var t2 = p.parse(xml, H.class);
 		assertEquals(json(t2), json(t));
 
-		validateXml(t, s);
+		TestUtils.validateXml(t, s);
 	}
 
 	public static class H {
@@ -370,7 +369,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		var t2 = p.parse(xml, G.class);
 		assertEquals(json(t2), json(t));
 
-		validateXml(t, s);
+		TestUtils.validateXml(t, s);
 	}
 
 	public static class I {

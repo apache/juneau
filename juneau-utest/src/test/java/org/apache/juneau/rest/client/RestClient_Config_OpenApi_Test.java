@@ -14,7 +14,6 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.httppart.HttpPartCollectionFormat.*;
 import static org.apache.juneau.uon.ParamFormat.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import java.io.*;
 
 import org.apache.juneau.*;
@@ -40,11 +39,11 @@ class RestClient_Config_OpenApi_Test extends SimpleTestBase {
 		}
 		@RestGet
 		public Reader checkQuery(org.apache.juneau.rest.RestRequest req) {
-			return reader(req.getQueryParams().asQueryString());
+			return TestUtils.reader(req.getQueryParams().asQueryString());
 		}
 		@RestPost
 		public Reader checkFormData(org.apache.juneau.rest.RestRequest req) {
-			return reader(req.getFormParams().asQueryString());
+			return TestUtils.reader(req.getFormParams().asQueryString());
 		}
 	}
 

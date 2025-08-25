@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -985,12 +985,12 @@ class ConfigTest extends SimpleTestBase {
 		assertEquals(3, cf.get("key3").as(int[].class).get()[2]);
 		assertEquals(6, cf.get("xkey3").as(int[].class).orElse(new int[]{4,5,6})[2]);
 		assertEquals(6, cf.get("X/key3").as(int[].class).orElse(new int[]{4,5,6})[2]);
-		assertEquals(url("http://foo").toString(), cf.get("key4").as(URL.class).get().toString());
+		assertEquals(TestUtils.url("http://foo").toString(), cf.get("key4").as(URL.class).get().toString());
 
 		assertEquals(2, cf.get("section1/key1").asInteger().get());
 		assertFalse(cf.get("section1/key2").asBoolean().get());
 		assertEquals(6, cf.get("section1/key3").as(int[].class).get()[2]);
-		assertEquals(url("http://bar").toString(), cf.get("section1/key4").as(URL.class).get().toString());
+		assertEquals(TestUtils.url("http://bar").toString(), cf.get("section1/key4").as(URL.class).get().toString());
 
 		cf = init(
 			"# Default section",
@@ -1000,23 +1000,23 @@ class ConfigTest extends SimpleTestBase {
 		cf.set("key1", 1);
 		cf.set("key2", true);
 		cf.set("key3", new int[]{1,2,3});
-		cf.set("key4", url("http://foo"));
+		cf.set("key4", TestUtils.url("http://foo"));
 		cf.set("section1/key1", 2);
 		cf.set("section1/key2", false);
 		cf.set("section1/key3", new int[]{4,5,6});
-		cf.set("section1/key4", url("http://bar"));
+		cf.set("section1/key4", TestUtils.url("http://bar"));
 
 		cf.commit();
 
 		assertEquals(1, cf.get("key1").asInteger().get());
 		assertTrue(cf.get("key2").asBoolean().get());
 		assertEquals(3, cf.get("key3").as(int[].class).get()[2]);
-		assertEquals(url("http://foo").toString(), cf.get("key4").as(URL.class).get().toString());
+		assertEquals(TestUtils.url("http://foo").toString(), cf.get("key4").as(URL.class).get().toString());
 
 		assertEquals(2, cf.get("section1/key1").asInteger().get());
 		assertFalse(cf.get("section1/key2").asBoolean().get());
 		assertEquals(6, cf.get("section1/key3").as(int[].class).get()[2]);
-		assertEquals(url("http://bar").toString(), cf.get("section1/key4").as(URL.class).get().toString());
+		assertEquals(TestUtils.url("http://bar").toString(), cf.get("section1/key4").as(URL.class).get().toString());
 	}
 
 	//====================================================================================================
@@ -1051,7 +1051,7 @@ class ConfigTest extends SimpleTestBase {
 
 		assertEquals("mypassword", cf.get("s1/foo").get());
 
-		cf.load(reader("[s1]\nfoo<*> = mypassword2\n"), true);
+		cf.load(TestUtils.reader("[s1]\nfoo<*> = mypassword2\n"), true);
 
 		assertEquals("mypassword2", cf.get("s1/foo").get());
 

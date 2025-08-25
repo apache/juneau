@@ -15,7 +15,6 @@ package org.apache.juneau.cp;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import java.lang.annotation.*;
 import java.util.*;
@@ -55,7 +54,7 @@ class BeanStore_Test extends SimpleTestBase {
 	private static A2 a2a = new A2();
 
 	@Test void a00_dummy() {
-		assertNotThrown(BeanStore.Void::new);
+		TestUtils.assertNotThrown(BeanStore.Void::new);
 	}
 
 	@Test void a01_builderCopyConstructor() {

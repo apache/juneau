@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
+import static org.apache.juneau.TestUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;

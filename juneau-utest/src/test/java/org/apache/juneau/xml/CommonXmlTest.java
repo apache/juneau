@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
 import java.net.*;
@@ -40,7 +39,7 @@ class CommonXmlTest extends SimpleTestBase {
 		assertEquals(123, t.id);
 		assertEquals("bar", t.name);
 
-		validateXml(t, s);
+		TestUtils.validateXml(t, s);
 	}
 
 	@Bean(p="url,id,name")
@@ -50,7 +49,7 @@ class CommonXmlTest extends SimpleTestBase {
 		public String name;
 		public A() {}
 		public A(String url, int id, String name) {
-			this.url = url(url);
+			this.url = TestUtils.url(url);
 			this.id = id;
 			this.name = name;
 		}
@@ -72,8 +71,8 @@ class CommonXmlTest extends SimpleTestBase {
 		public URL url2;
 		public B() {}
 		public B(String url) {
-			this.url = url(url);
-			this.url2 = url(url+"/2");
+			this.url = TestUtils.url(url);
+			this.url2 = TestUtils.url(url+"/2");
 		}
 	}
 }

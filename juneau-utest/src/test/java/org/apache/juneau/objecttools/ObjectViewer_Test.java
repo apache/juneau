@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 

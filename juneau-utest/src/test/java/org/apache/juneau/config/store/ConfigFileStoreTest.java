@@ -13,7 +13,6 @@
 package org.apache.juneau.config.store;
 
 import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 
 import java.io.*;
@@ -148,9 +147,9 @@ class ConfigFileStoreTest extends SimpleTestBase {
 			if ("yyy".equals(contents))
 				latch.countDown();
 		});
-		pipe(reader("zzz"), new File(DIR, "Z.ini"));
-		pipe(reader("xxx"), new File(DIR, "X.cfg"));
-		assertNotThrown(()->pipe(reader("yyy"), new File(DIR, "Y.cfg")));
+		pipe(TestUtils.reader("zzz"), new File(DIR, "Z.ini"));
+		pipe(TestUtils.reader("xxx"), new File(DIR, "X.cfg"));
+		TestUtils.assertNotThrown(()->pipe(TestUtils.reader("yyy"), new File(DIR, "Y.cfg")));
 		if (! latch.await(10, TimeUnit.SECONDS))
 			throw new Exception("CountDownLatch never reached zero.");
 	}
@@ -177,7 +176,7 @@ class ConfigFileStoreTest extends SimpleTestBase {
 		});
 
 		fs.update("X.cfg", "xxx");
-		assertNotThrown(()->fs.update("Y.cfg", "yyy"));
+		TestUtils.assertNotThrown(()->fs.update("Y.cfg", "yyy"));
 		if (! latch.await(10, TimeUnit.SECONDS))
 			throw new Exception("CountDownLatch never reached zero.");
 	}
@@ -196,7 +195,7 @@ class ConfigFileStoreTest extends SimpleTestBase {
 		assertFalse(cs.exists("foo.cfg"));
 		assertFalse(cs.exists("foo"));
 
-		pipe(reader("xxx"), new File("Foox.cfg"));
+		pipe(TestUtils.reader("xxx"), new File("Foox.cfg"));
 		assertTrue(cs.exists("Foox.cfg"));
 		assertTrue(cs.exists("Foox"));
 		new File("Foox.cfg").delete();

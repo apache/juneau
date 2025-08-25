@@ -58,7 +58,7 @@ public class Utils {
 	public static boolean contains(String s, String...values) {
 		if (s == null || values == null || values.length == 0)
 			return false;
-		for (String v : values) {
+		for (var v : values) {
 			if (s.contains(v))
 				return true;
 		}
@@ -71,7 +71,7 @@ public class Utils {
 	public static boolean contains(String s, char...values) {
 		if (s == null || values == null || values.length == 0)
 			return false;
-		for (char v : values) {
+		for (var v : values) {
 			if (s.indexOf(v) >= 0)
 				return true;
 		}
@@ -112,7 +112,7 @@ public class Utils {
 	 * @return The value if found.
 	 */
 	public static Optional<String> env(String name) {
-		String s = System.getProperty(name);
+		var s = System.getProperty(name);
 		if (s == null)
 			s = System.getenv(envName(name));
 		return opt(s);
@@ -274,7 +274,7 @@ public class Utils {
 		if (o instanceof byte[] o2)
 			return toHex(o2);
 		if (o != null && o.getClass().isArray()) {
-			List<Object> l = list();
+			var l = list();
 			for (var i = 0; i < Array.getLength(o); i++) {
 				l.add(Array.get(o, i));
 			}
@@ -391,12 +391,12 @@ public class Utils {
 	private static <T> T toType(String s, T def) {
 		if (s == null || def == null)
 			return null;
-		Class<T> c = (Class<T>)def.getClass();
+		var c = (Class<T>)def.getClass();
 		if (c == String.class)
 			return (T)s;
 		if (c.isEnum())
 			return (T)Enum.valueOf((Class<? extends Enum>) c, s);
-		Function<String,T> f = (Function<String,T>)ENV_FUNCTIONS.get(c);
+		var f = (Function<String,T>)ENV_FUNCTIONS.get(c);
 		if (f == null)
 			throw runtimeException("Invalid env type: {0}", c);
 		return f.apply(s);

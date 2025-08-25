@@ -15,7 +15,6 @@ package org.apache.juneau.reflect;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import java.io.*;
 import java.lang.annotation.*;
@@ -482,10 +481,10 @@ class ExecutableInfoTest extends SimpleTestBase {
 		f_isDefault = f.getMethod(x -> x.hasName("isDefault"));
 
 	@Test void setAccessible() {
-		assertNotThrown(()->f_isPublic.accessible());
-		assertNotThrown(()->f_isProtected.accessible());
-		assertNotThrown(()->f_isPrivate.accessible());
-		assertNotThrown(()->f_isDefault.accessible());
+		TestUtils.assertNotThrown(()->f_isPublic.accessible());
+		TestUtils.assertNotThrown(()->f_isProtected.accessible());
+		TestUtils.assertNotThrown(()->f_isPrivate.accessible());
+		TestUtils.assertNotThrown(()->f_isDefault.accessible());
 	}
 
 	@Test void isVisible() {

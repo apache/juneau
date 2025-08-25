@@ -16,6 +16,8 @@ import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
+
 import java.io.*;
 import java.util.concurrent.*;
 import java.util.logging.*;

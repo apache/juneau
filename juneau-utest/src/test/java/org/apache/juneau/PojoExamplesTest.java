@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -310,8 +311,8 @@ class PojoExamplesTest extends SimpleTestBase {
 		BeanSession bs = BeanContext.DEFAULT_SESSION;
 		assertThrowsWithMessage(Exception.class, "invalid method 'example(String)'", ()->bs.getClassMeta(F1.class));
 		assertThrowsWithMessage(Exception.class, "invalid method 'example()'", ()->bs.getClassMeta(F2.class));
-		assertThrowsWithMessage(Exception.class, list("invalid field","$F3.F3"), ()->bs.getClassMeta(F3.class));
-		assertThrowsWithMessage(Exception.class, list("invalid field ","$F4.f4"), ()->bs.getClassMeta(F4.class));
+		assertThrowsWithMessage(Exception.class, Utils.list("invalid field","$F3.F3"), ()->bs.getClassMeta(F3.class));
+		assertThrowsWithMessage(Exception.class, Utils.list("invalid field ","$F4.f4"), ()->bs.getClassMeta(F4.class));
 	}
 
 	public static class F1 {

@@ -14,7 +14,6 @@ package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import java.io.*;
 import java.math.*;
@@ -119,17 +118,17 @@ class Remote_FormDataAnnotation_Test extends SimpleTestBase {
 		assertEquals("{k1:'f=1'}",x.x12(map("k1",Bean.create())));
 		assertEquals("{x:'k1=f\\\\=1'}",x.x13(map("k1",Bean.create())));
 		assertEquals("{k1:'f=1'}",x.x14(map("k1",Bean.create())));
-		assertEquals("{x:'1'}",x.x15(reader("x=1")));
-		assertEquals("{x:'1'}",x.x16(reader("x=1")));
-		assertEquals("{x:'1'}",x.x17(inputStream("x=1")));
-		assertEquals("{x:'1'}",x.x18(inputStream("x=1")));
+		assertEquals("{x:'1'}",x.x15(TestUtils.reader("x=1")));
+		assertEquals("{x:'1'}",x.x16(TestUtils.reader("x=1")));
+		assertEquals("{x:'1'}",x.x17(TestUtils.inputStream("x=1")));
+		assertEquals("{x:'1'}",x.x18(TestUtils.inputStream("x=1")));
 		assertEquals("{foo:'bar'}",x.x19(parts("foo","bar")));
 		assertEquals("{foo:'bar'}",x.x20(parts("foo","bar")));
 		assertEquals("{foo:'bar'}",x.x21(part("foo","bar")));
 		assertEquals("{foo:'bar'}",x.x22("foo=bar"));
 		assertEquals("{}",x.x22(null));
-		assertEquals("{foo:'bar'}",x.x23(inputStream("foo=bar")));
-		assertEquals("{foo:'bar'}",x.x24(reader("foo=bar")));
+		assertEquals("{foo:'bar'}",x.x23(TestUtils.inputStream("foo=bar")));
+		assertEquals("{foo:'bar'}",x.x24(TestUtils.reader("foo=bar")));
 		assertEquals("{f:'1'}",x.x25(Bean2.create()));
 		assertEquals("{foo:'bar'}",x.x26(alist(part("foo","bar"))));
 	}
@@ -816,7 +815,7 @@ class Remote_FormDataAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K5a {
-		@FormData("*") public Reader getA() { return reader("foo=bar&baz=qux"); }
+		@FormData("*") public Reader getA() { return TestUtils.reader("foo=bar&baz=qux"); }
 	}
 
 	@Test void k05_requestBean_reader() {

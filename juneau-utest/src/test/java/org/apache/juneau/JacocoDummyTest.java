@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.utest.utils.Utils2.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.common.internal.*;
@@ -38,6 +37,6 @@ class JacocoDummyTest extends SimpleTestBase {
 		}
 
 		XmlFormat.valueOf(XmlFormat.DEFAULT.toString());
-		assertNotThrown(()->Visibility.valueOf(Visibility.DEFAULT.toString()));
+		TestUtils.assertNotThrown(()->Visibility.valueOf(Visibility.DEFAULT.toString()));
 	}
 }

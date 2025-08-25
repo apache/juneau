@@ -14,8 +14,9 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.http.HttpResponses.*;
-import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -136,11 +137,11 @@ class RestOp_Returns_Test extends SimpleTestBase {
 		}
 		@RestGet
 		public HttpResource e() {
-			return streamResource(inputStream("foo"));
+			return streamResource(TestUtils.inputStream("foo"));
 		}
 		@RestGet
 		public HttpResource f() {
-			return readerResource(reader("foo"));
+			return readerResource(TestUtils.reader("foo"));
 		}
 	}
 

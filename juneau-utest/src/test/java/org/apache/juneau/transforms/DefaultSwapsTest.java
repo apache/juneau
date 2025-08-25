@@ -27,7 +27,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 class DefaultSwapsTest extends SimpleTestBase {
@@ -37,11 +36,11 @@ class DefaultSwapsTest extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@BeforeAll static void beforeClass() {
-		Utils2.setTimeZone("GMT-5");
+		TestUtils.setTimeZone("GMT-5");
 	}
 
 	@AfterAll static void afterClass() {
-		Utils2.unsetTimeZone();
+		TestUtils.unsetTimeZone();
 	}
 
 	private static final WriterSerializer SERIALIZER = Json5Serializer.DEFAULT;

@@ -14,7 +14,6 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.list;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
 import java.util.*;
@@ -171,7 +170,7 @@ class CommonTest extends SimpleTestBase {
 				+"<x6><object><f1 _type='number'>1</f1></object></x6>"
 			+"</object>",
 			r);
-		validateXml(t);
+		TestUtils.validateXml(t);
 	}
 
 	public static class E1 {

@@ -15,7 +15,6 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import java.io.*;
 
 import org.apache.http.*;
@@ -92,10 +91,10 @@ class RestClient_Body_Test extends SimpleTestBase {
 			.assertHeader("X-Baz").is("qux")
 		;
 
-		HttpResource x7 = readerResource(reader("foo"));
+		HttpResource x7 = readerResource(TestUtils.reader("foo"));
 		client().build().post("/",x7).run().assertContent("foo");
 
-		HttpResource x8 = readerResource(reader("foo")).setCached();
+		HttpResource x8 = readerResource(TestUtils.reader("foo")).setCached();
 		client().build().post("/",x8).run().assertContent("foo");
 		client().build().post("/",x8).run().assertContent("foo");
 	}
@@ -133,10 +132,10 @@ class RestClient_Body_Test extends SimpleTestBase {
 			.assertHeader("X-Transfer-Encoding").isNull()
 		;
 
-		HttpEntity x7 = readerEntity(reader("foo"));
+		HttpEntity x7 = readerEntity(TestUtils.reader("foo"));
 		client().build().post("/",x7).run().assertContent("foo");
 
-		HttpEntity x8 = readerEntity(reader("foo")).setCached();
+		HttpEntity x8 = readerEntity(TestUtils.reader("foo")).setCached();
 		client().build().post("/",x8).run().assertContent("foo");
 		client().build().post("/",x8).run().assertContent("foo");
 

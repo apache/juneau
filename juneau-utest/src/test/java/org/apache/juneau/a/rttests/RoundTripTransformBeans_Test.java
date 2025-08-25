@@ -16,6 +16,8 @@ import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.DateUtils.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.io.*;
 import java.util.*;

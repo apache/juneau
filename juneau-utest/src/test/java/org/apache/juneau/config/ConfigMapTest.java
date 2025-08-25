@@ -13,8 +13,9 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -1064,7 +1065,7 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 
 		// This is okay.
-		assertNotThrown(()->cm.setEntry("S1", "k1", "v1", "", null, null));
+		TestUtils.assertNotThrown(()->cm.setEntry("S1", "k1", "v1", "", null, null));
 	}
 
 	private static ConfigStore initStore(String name, String...contents) {

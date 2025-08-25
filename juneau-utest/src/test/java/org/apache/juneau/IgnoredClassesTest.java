@@ -14,6 +14,8 @@ package org.apache.juneau;
 
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
+import static org.apache.juneau.TestUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.json.*;

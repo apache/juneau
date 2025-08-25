@@ -27,7 +27,6 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 class Remote_CommonInterfaces_Test extends SimpleTestBase {
@@ -816,11 +815,11 @@ class Remote_CommonInterfaces_Test extends SimpleTestBase {
 	public static class G1 implements G {
 		@Override
 		public Reader reader() {
-			return Utils2.reader("foo");
+			return TestUtils.reader("foo");
 		}
 		@Override
 		public InputStream inputStream() {
-			return Utils2.inputStream("foo");
+			return TestUtils.inputStream("foo");
 		}
 	}
 

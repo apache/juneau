@@ -13,6 +13,7 @@
 package org.apache.juneau.http;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;

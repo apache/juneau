@@ -14,7 +14,6 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -76,7 +75,7 @@ public class Assertions_Test {
 
 	@Test
 	public void a10_assertStream() throws Exception {
-		assertBytes(inputStream("foo")).asString().is("foo");
+		assertBytes(TestUtils.inputStream("foo")).asString().is("foo");
 		assertBytes((InputStream)null).asString().isNull();
 	}
 
@@ -88,7 +87,7 @@ public class Assertions_Test {
 
 	@Test
 	public void a12_assertReader() throws Exception {
-		assertReader(reader("foo")).is("foo");
+		assertReader(TestUtils.reader("foo")).is("foo");
 		assertReader((Reader)null).isNull();
 	}
 

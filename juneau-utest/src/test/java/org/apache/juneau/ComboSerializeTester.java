@@ -14,8 +14,6 @@ package org.apache.juneau;
 
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.apache.juneau.AssertionHelpers.*;
-
 import java.util.*;
 import java.util.function.*;
 
@@ -169,11 +167,11 @@ public class ComboSerializeTester<T> {
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
-			assertContains(exceptionMsg, e.getMessage());
+			TestUtils.assertContains(exceptionMsg, e.getMessage());
 		} catch (Exception e) {
 			if (exceptionMsg == null)
 				throw new BasicAssertionError(e, "{0}/{1} failed.  exception={2}", label, testName, e.getLocalizedMessage());
-			assertContains(exceptionMsg, e.getMessage());
+			TestUtils.assertContains(exceptionMsg, e.getMessage());
 		}
 	}
 

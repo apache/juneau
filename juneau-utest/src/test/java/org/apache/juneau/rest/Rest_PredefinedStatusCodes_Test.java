@@ -13,7 +13,6 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.header.ContentType.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import java.io.*;
 
 import org.apache.juneau.*;
@@ -36,7 +35,7 @@ class Rest_PredefinedStatusCodes_Test extends SimpleTestBase {
 	public static class A {
 		@RestPut
 		public Reader a(@Content String b) {
-			return reader(b);
+			return TestUtils.reader(b);
 		}
 	}
 

@@ -13,8 +13,9 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -97,7 +98,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 		t
 			.set("default", "a")
 			.set("enum", set("b"))
-			.set("additionalProperties", map("c",alist("c1")))
+			.set("additionalProperties", map("c",ulist("c1")))
 			.set("allOf", set("d"))
 			.set("description", "e")
 			.set("discriminator", "f")
@@ -277,7 +278,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 		t
 			.set("default", "a")
 			.set("enum", set("b"))
-			.set("additionalProperties", map("c",alist("c1")))
+			.set("additionalProperties", map("c",ulist("c1")))
 			.set("allOf", set("d"))
 			.set("description", "e")
 			.set("discriminator", "f")
@@ -316,7 +317,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 		assertJson(t.keySet(), "[]");
 
 		t
-			.set("additionalProperties", map("c",alist("c1")))
+			.set("additionalProperties", map("c",ulist("c1")))
 			.set("allOf", set("d"))
 			.set("default", "a")
 			.set("description", "e")
@@ -347,7 +348,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 			.set("uniqueItems", true)
 			.set("xml", xml().setName("o"));
 
-		assertJson(t.keySet(), 
+		assertJson(t.keySet(),
 			"['additionalProperties','allOf','default','description','discriminator','enum','example','exclusiveMaximum','exclusiveMinimum',"
 			+ "'externalDocs','format','items','maximum','maxItems','maxLength','maxProperties','minimum','minItems','minLength','minProperties',"
 			+ "'multipleOf','pattern','properties','readOnly','$ref','requiredProperties','title','type','uniqueItems','xml']"

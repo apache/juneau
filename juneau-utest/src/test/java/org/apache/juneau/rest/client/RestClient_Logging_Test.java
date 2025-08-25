@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.utest.utils.Utils2.*;
 import java.io.*;
 import java.util.logging.*;
 
@@ -104,7 +103,7 @@ class RestClient_Logging_Test extends SimpleTestBase {
 		);
 		c.reset();
 
-		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(inputStream("foo"))).complete();
+		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(TestUtils.inputStream("foo"))).complete();
 		c.assertContents().asTrimmed().isLines(
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
@@ -121,7 +120,7 @@ class RestClient_Logging_Test extends SimpleTestBase {
 		);
 		c.reset();
 
-		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,(req,res)->false).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(inputStream("foo"))).complete();
+		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,(req,res)->false).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(TestUtils.inputStream("foo"))).complete();
 		c.assertContents().isEmpty();
 		c.reset();
 	}

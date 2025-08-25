@@ -26,7 +26,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
-import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 class StringUtilsTest extends SimpleTestBase {
@@ -545,7 +544,7 @@ class StringUtilsTest extends SimpleTestBase {
 		assertNull(parseIsoDate(null));
 		assertNull(parseIsoDate(""));
 
-		Utils2.setTimeZone("GMT");
+		TestUtils.setTimeZone("GMT");
 		try {
 			assertString("2000-01-01T00:00:00Z", parseIsoDate("2000"));
 			assertString("2000-02-01T00:00:00Z", parseIsoDate("2000-02"));
@@ -558,7 +557,7 @@ class StringUtilsTest extends SimpleTestBase {
 			assertString("2000-02-03T04:05:06Z", parseIsoDate("2000-02-03 04:05:06"));
 			assertString("2000-02-03T04:05:06Z", parseIsoDate("2000-02-03 04:05:06,789"));// ISO8601 doesn't support milliseconds, so it gets trimmed.
 		} finally {
-			Utils2.unsetTimeZone();
+			TestUtils.unsetTimeZone();
 		}
 	}
 

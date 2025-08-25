@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import static org.apache.juneau.utest.utils.Utils2.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.swaps.*;
@@ -36,8 +34,8 @@ class ReaderSwapTest extends OneWayStringSwapTest_Base {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static final OneWayStringSwapTester<?>[] TESTERS = {
-		tester(1, "Basic string", reader("foo"), SWAP, "foo", BS),
-		tester(2, "Blank string", reader(""), SWAP, "", BS),
+		tester(1, "Basic string", TestUtils.reader("foo"), SWAP, "foo", BS),
+		tester(2, "Blank string", TestUtils.reader(""), SWAP, "", BS),
 		tester(3, "null", null, SWAP, null, BS)
 	};
 

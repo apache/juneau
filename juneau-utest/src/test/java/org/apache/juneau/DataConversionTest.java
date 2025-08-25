@@ -16,7 +16,6 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings("rawtypes")
@@ -24,12 +23,12 @@ class DataConversionTest extends SimpleTestBase {
 
 	@BeforeEach
 	void beforeTest() {
-		Utils2.setLocale(Locale.US);
+		TestUtils.setLocale(Locale.US);
 	}
 
 	@AfterEach
 	void afterTest() {
-		Utils2.unsetLocale();
+		TestUtils.unsetLocale();
 	}
 
 	//====================================================================================================

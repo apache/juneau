@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.collections.*;
@@ -312,7 +313,7 @@ class JsonMapTest extends SimpleTestBase {
 	// JsonMap(Reader)
 	//====================================================================================================
 	@Test void testFromReader() throws Exception {
-		assertJson(JsonMap.ofJson(reader("{foo:'bar'}")), "{foo:'bar'}");
+		assertJson(JsonMap.ofJson(TestUtils.reader("{foo:'bar'}")), "{foo:'bar'}");
 	}
 
 	//====================================================================================================

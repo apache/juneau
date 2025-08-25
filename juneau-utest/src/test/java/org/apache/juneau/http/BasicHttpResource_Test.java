@@ -14,7 +14,6 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.junit.Assert.*;
 import java.io.*;
@@ -42,7 +41,7 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
-		x = readerResource(reader("foo"));
+		x = readerResource(TestUtils.reader("foo"));
 		assertEquals("foo", toUtf8(x.getContent()));
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
@@ -52,7 +51,7 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
-		x = streamResource(inputStream("foo"));
+		x = streamResource(TestUtils.inputStream("foo"));
 		assertEquals("foo", toUtf8(x.getContent()));
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
@@ -67,7 +66,7 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		assertEquals("foo", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
 
-		x = readerResource(reader("foo")).setCached();
+		x = readerResource(TestUtils.reader("foo")).setCached();
 		assertEquals("foo", toUtf8(x.getContent()));
 		assertEquals("foo", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
@@ -77,7 +76,7 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		assertEquals("foo", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
 
-		x = streamResource(inputStream("foo")).setCached();
+		x = streamResource(TestUtils.inputStream("foo")).setCached();
 		assertEquals("foo", toUtf8(x.getContent()));
 		assertEquals("foo", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
@@ -96,8 +95,8 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		assertEquals(3L, byteArrayResource("foo".getBytes()).getContentLength());
 		assertEquals(0L, fileResource(f).getContentLength());
 
-		assertEquals(-1L, readerResource(reader("foo")).getContentLength());
-		assertEquals(3L, readerResource(reader("foo")).setContentLength(3).getContentLength());
+		assertEquals(-1L, readerResource(TestUtils.reader("foo")).getContentLength());
+		assertEquals(3L, readerResource(TestUtils.reader("foo")).setContentLength(3).getContentLength());
 
 		x = stringResource("foo", contentType("text/plain")).setContentEncoding("identity");
 		assertEquals("text/plain", x.getContentType().getValue());

@@ -13,11 +13,11 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -578,7 +578,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 		x.add(1);
 		x.add(2);
 		x.add(3);
-		assertNotThrown(()->t.roundTrip(x, Vector.class, Integer.class));
+		TestUtils.assertNotThrown(()->t.roundTrip(x, Vector.class, Integer.class));
 	}
 
 	@ParameterizedTest

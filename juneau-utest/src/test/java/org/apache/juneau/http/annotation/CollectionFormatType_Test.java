@@ -12,13 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
-import static org.apache.juneau.utest.utils.Utils2.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 class CollectionFormatType_Test extends SimpleTestBase {
 
 	@Test void a01_basic() {
-		assertNotThrown(CollectionFormatType::new);
+		TestUtils.assertNotThrown(CollectionFormatType::new);
 	}
 }

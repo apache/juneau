@@ -14,6 +14,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
 
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;

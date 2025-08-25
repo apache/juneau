@@ -13,8 +13,9 @@
 package org.apache.juneau.httppart;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -29,7 +30,7 @@ class HttpPartSchema_Header_Test extends SimpleTestBase {
 	// Basic test
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void testBasic() {
-		assertNotThrown(()->HttpPartSchema.create().build());
+		TestUtils.assertNotThrown(()->HttpPartSchema.create().build());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

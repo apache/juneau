@@ -14,7 +14,6 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.list;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
 import java.net.*;
@@ -193,7 +192,7 @@ class XmlTest extends SimpleTestBase {
 		var t = new A();
 		String r = s.serialize(t);
 		assertEquals("<foo><f1>1</f1></foo>", r);
-		validateXml(t);
+		TestUtils.validateXml(t);
 	}
 
 	@Bean(typeName="foo")
@@ -209,7 +208,7 @@ class XmlTest extends SimpleTestBase {
 		var t = new B2();
 		String r = s.serialize(t);
 		assertEquals("<foo><f1>1</f1></foo>", r);
-		validateXml(t);
+		TestUtils.validateXml(t);
 	}
 
 	public static class B1 extends A {}
@@ -223,7 +222,7 @@ class XmlTest extends SimpleTestBase {
 		var t = new C3();
 		String r = s.serialize(t);
 		assertEquals("<foo><f1>1</f1></foo>", r);
-		validateXml(t);
+		TestUtils.validateXml(t);
 	}
 
 	@Bean(typeName="foo")
@@ -243,7 +242,7 @@ class XmlTest extends SimpleTestBase {
 		String r = s.serialize(t);
 		assertEquals("<_x007E__x0021__x0040__x0023__x0024__x0025__x005E__x0026__x002A__x0028__x0029___x002B__x0060_-_x003D__x007B__x007D__x007C__x005B__x005D__x005C__x003A__x0022__x003B__x0027__x003C__x003E__x003F__x002C_._x000A__x000D__x0009__x0008_><f1>1</f1></_x007E__x0021__x0040__x0023__x0024__x0025__x005E__x0026__x002A__x0028__x0029___x002B__x0060_-_x003D__x007B__x007D__x007C__x005B__x005D__x005C__x003A__x0022__x003B__x0027__x003C__x003E__x003F__x002C_._x000A__x000D__x0009__x0008_>", r);
 		t = p.parse(r, D.class);
-		validateXml(t);
+		TestUtils.validateXml(t);
 	}
 
 	@Bean(typeName="~!@#$%^&*()_+`-={}|[]\\:\";'<>?,.\n\r\t\b")
@@ -263,7 +262,7 @@ class XmlTest extends SimpleTestBase {
 		String r = s.serialize(t);
 		assertEquals("<bar><foo _name='f1'><string>bar</string></foo></bar>", r);
 		t = p.parse(r, G.class);
-		validateXml(t);
+		TestUtils.validateXml(t);
 	}
 
 	@Bean(typeName="foo")
@@ -323,7 +322,7 @@ class XmlTest extends SimpleTestBase {
 		assertEquals(4, t.f1);
 		assertEquals(5, t.f2);
 		assertEquals(6, t.f3);
-		validateXml(t);
+		TestUtils.validateXml(t);
 	}
 
 	public static class L {
@@ -351,7 +350,7 @@ class XmlTest extends SimpleTestBase {
 		assertEquals(4, t.f1);
 		assertEquals(5, t.f2);
 		assertEquals(6, t.f3);
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 	}
 
 	@Xml(prefix="bar", namespace="http://bar")
@@ -419,7 +418,7 @@ class XmlTest extends SimpleTestBase {
 		assertEquals(123, t.id);
 		assertEquals("bar", t.name);
 
-		validateXml(t, s);
+		TestUtils.validateXml(t, s);
 	}
 
 	@Bean(properties="url,id,name")
@@ -429,7 +428,7 @@ class XmlTest extends SimpleTestBase {
 		public String name;
 		public N() {}
 		public N(String url, int id, String name) {
-			this.url = url(url);
+			this.url = TestUtils.url(url);
 			this.id = id;
 			this.name = name;
 		}
@@ -451,7 +450,7 @@ class XmlTest extends SimpleTestBase {
 		assertEquals(123, t.id);
 		assertEquals("bar", t.name);
 
-		validateXml(t, s);
+		TestUtils.validateXml(t, s);
 	}
 
 	@Bean(properties="url2,id2,name")
@@ -461,7 +460,7 @@ class XmlTest extends SimpleTestBase {
 		public String name;
 		public O() {}
 		public O(String url, int id, String name) {
-			this.url = url(url);
+			this.url = TestUtils.url(url);
 			this.id = id;
 			this.name = name;
 		}
@@ -483,7 +482,7 @@ class XmlTest extends SimpleTestBase {
 		assertEquals(123, t.id);
 		assertEquals("bar", t.name);
 
-		validateXml(t, s);
+		TestUtils.validateXml(t, s);
 	}
 
 	@Bean(properties="url2,id2,name")
@@ -493,7 +492,7 @@ class XmlTest extends SimpleTestBase {
 		public String name;
 		public P() {}
 		public P(String url, int id, String name) {
-			this.url = url(url);
+			this.url = TestUtils.url(url);
 			this.id = id;
 			this.name = name;
 		}
@@ -530,7 +529,7 @@ class XmlTest extends SimpleTestBase {
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T1.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		// Auto-detect namespaces.
 		s = XmlSerializer.create().sq();
@@ -547,7 +546,7 @@ class XmlTest extends SimpleTestBase {
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T1.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 	}
 
 	//====================================================================================================
@@ -581,7 +580,7 @@ class XmlTest extends SimpleTestBase {
 		r = s.build().serialize(t);
 		assertEquals("<foo:T2 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T2>", r);
 		assertTrue(t.equals(p.parse(r, T2.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		// Auto-detect namespaces.
 		s = XmlSerializer.create().sq();
@@ -596,7 +595,7 @@ class XmlTest extends SimpleTestBase {
 		r = s.build().serialize(t);
 		assertEquals("<foo:T2 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T2>", r);
 		assertTrue(t.equals(p.parse(r, T2.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 	}
 
 
@@ -611,7 +610,7 @@ class XmlTest extends SimpleTestBase {
 		String r = s.build().serialize(t);
 		assertEquals("<object><f1>1</f1><f2>2</f2><f3>3</f3><f4>4</f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T3.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		s.enableNamespaces();
 		r = s.build().serialize(t);
@@ -633,7 +632,7 @@ class XmlTest extends SimpleTestBase {
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T3.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		// Auto-detect namespaces.
 		s = XmlSerializer.create().sq();
@@ -648,7 +647,7 @@ class XmlTest extends SimpleTestBase {
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T3.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 	}
 
 	//====================================================================================================
@@ -683,7 +682,7 @@ class XmlTest extends SimpleTestBase {
 		r = s.build().serialize(t);
 		assertEquals("<p1:T4 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:p1='http://p1'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></p1:T4>", r);
 		assertTrue(t.equals(p.parse(r, T4.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		// Auto-detect namespaces.
 		s = XmlSerializer.create().sq();
@@ -698,7 +697,7 @@ class XmlTest extends SimpleTestBase {
 		r = s.build().serialize(t);
 		assertEquals("<p1:T4 xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></p1:T4>", r);
 		assertTrue(t.equals(p.parse(r, T4.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 	}
 
 	//====================================================================================================
@@ -712,7 +711,7 @@ class XmlTest extends SimpleTestBase {
 		String r = s.build().serialize(t);
 		assertEquals("<T5><f1>1</f1><f2>2</f2><f3>3</f3><f4>4</f4></T5>", r);
 		assertTrue(t.equals(p.parse(r, T5.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		s.ns().disableAutoDetectNamespaces();
 		r = s.build().serialize(t);
@@ -733,24 +732,24 @@ class XmlTest extends SimpleTestBase {
 		r = s.build().serialize(t);
 		assertEquals("<foo:T5 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T5>", r);
 		assertTrue(t.equals(p.parse(r, T5.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		// Auto-detect namespaces.
 		s = XmlSerializer.create().sq();
 		r = s.build().serialize(t);
 		assertEquals("<T5><f1>1</f1><f2>2</f2><f3>3</f3><f4>4</f4></T5>", r);
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		s.addNamespaceUrisToRoot();
 		r = s.build().serialize(t);
 		assertEquals("<T5><f1>1</f1><f2>2</f2><f3>3</f3><f4>4</f4></T5>", r);
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		s.ns();
 		r = s.build().serialize(t);
 		assertEquals("<foo:T5 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T5>", r);
 		assertTrue(t.equals(p.parse(r, T5.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 	}
 
 	//====================================================================================================
@@ -784,24 +783,24 @@ class XmlTest extends SimpleTestBase {
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T6.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		// Auto-detect namespaces.
 		s = XmlSerializer.create().sq();
 		r = s.build().serialize(t);
 		assertEquals("<object><f1>1</f1><f2>2</f2><f3>3</f3><f4>4</f4></object>", r);
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		s.addNamespaceUrisToRoot();
 		r = s.build().serialize(t);
 		assertEquals("<object><f1>1</f1><f2>2</f2><f3>3</f3><f4>4</f4></object>", r);
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		s.ns();
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T6.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 	}
 
 	//====================================================================================================
@@ -849,7 +848,7 @@ class XmlTest extends SimpleTestBase {
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz'><p1:g1>1</p1:g1><bar:g2>2</bar:g2><p1:g3>3</p1:g3><baz:g4>4</baz:g4></object>", r);
 		assertTrue(t.equals(p.parse(r, T7.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 	}
 
 	//====================================================================================================
@@ -888,18 +887,18 @@ class XmlTest extends SimpleTestBase {
 		r = s.build().serialize(t);
 		assertEquals("<object><f1>1</f1><f2>2</f2><f3>3</f3><f4>4</f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T8.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		s.addNamespaceUrisToRoot();
 		r = s.build().serialize(t);
 		assertEquals("<object><f1>1</f1><f2>2</f2><f3>3</f3><f4>4</f4></object>", r);
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		s.ns();
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:p2='http://p2' xmlns:p1='http://p1' xmlns:c1='http://c1' xmlns:f1='http://f1'><p2:f1>1</p2:f1><p1:f2>2</p1:f2><c1:f3>3</c1:f3><f1:f4>4</f1:f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T8.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 	}
 
 	//====================================================================================================
@@ -938,18 +937,18 @@ class XmlTest extends SimpleTestBase {
 		r = s.build().serialize(t);
 		assertEquals("<object><f1>1</f1></object>", r);
 		assertTrue(t.equals(p.parse(r, T9.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		s.addNamespaceUrisToRoot();
 		r = s.build().serialize(t);
 		assertEquals("<object><f1>1</f1></object>", r);
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		s.ns();
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1'><p1:f1>1</p1:f1></object>", r);
 		assertTrue(t.equals(p.parse(r, T9.class)));
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 	}
 
 	//====================================================================================================
@@ -961,7 +960,7 @@ class XmlTest extends SimpleTestBase {
 		String r;
 
 		var t = new Q();
-		t.f1 = url("http://xf1");
+		t.f1 = TestUtils.url("http://xf1");
 		t.f2 = "xf2";
 		t.f3 = "xf3";
 		r = s.build().serialize(t);
@@ -974,7 +973,7 @@ class XmlTest extends SimpleTestBase {
 		s.ns().addNamespaceUrisToRoot();
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:ns='http://ns' xmlns:nsf1='http://nsf1' xmlns:nsf3='http://nsf3' nsf1:f1='http://xf1' ns:f2='xf2' nsf3:x3='xf3'/>", r);
-		validateXml(t, s.build());
+		TestUtils.validateXml(t, s.build());
 
 		t = p.parse(r, Q.class);
 		assertEquals("http://xf1", t.f1.toString());
@@ -996,7 +995,7 @@ class XmlTest extends SimpleTestBase {
 		public String f3;
 
 		public Q() throws Exception {
-			f1 = url("http://f1");
+			f1 = TestUtils.url("http://f1");
 			f2 = "f2";
 			f3 = "f3";
 		}

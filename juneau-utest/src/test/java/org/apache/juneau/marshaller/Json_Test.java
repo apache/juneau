@@ -13,6 +13,7 @@
 package org.apache.juneau.marshaller;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.io.*;
 import java.util.*;

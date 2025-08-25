@@ -13,7 +13,7 @@
 package org.apache.juneau.uon;
 
 import static org.junit.Assert.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.net.*;
 import java.util.*;
@@ -201,7 +201,7 @@ class Common_UonTest extends SimpleTestBase {
 		var t = new G();
 		t.uri = new URI("http://uri");
 		t.f1 = new URI("http://f1");
-		t.f2 = url("http://f2");
+		t.f2 = TestUtils.url("http://f2");
 
 		String r = s.serialize(t);
 		t = p2.parse(r, G.class);

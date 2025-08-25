@@ -16,7 +16,6 @@ import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.http.header.ContentType.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.list;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import java.io.*;
 import java.util.*;
@@ -522,7 +521,7 @@ class Content_Test extends SimpleTestBase {
 		}
 		@RestPut(path="/StringTransform")
 		public Reader d(@Content D1 b) {
-			return reader(b.toString());
+			return TestUtils.reader(b.toString());
 		}
 		public static class D1 {
 			private String s;
@@ -531,7 +530,7 @@ class Content_Test extends SimpleTestBase {
 		}
 		@RestPut(path="/InputStreamTransform")
 		public Reader e(@Content D2 b) {
-			return reader(b.toString());
+			return TestUtils.reader(b.toString());
 		}
 		public static class D2 {
 			String s;
@@ -540,7 +539,7 @@ class Content_Test extends SimpleTestBase {
 		}
 		@RestPut(path="/ReaderTransform")
 		public Reader f(@Content D3 b) {
-			return reader(b.toString());
+			return TestUtils.reader(b.toString());
 		}
 		public static class D3 {
 			private String s;
@@ -549,7 +548,7 @@ class Content_Test extends SimpleTestBase {
 		}
 		@RestPut(path="/StringTransformBodyOnPojo")
 		public Reader g(D4 b) {
-			return reader(b.toString());
+			return TestUtils.reader(b.toString());
 		}
 		@Content
 		public static class D4 {
@@ -559,7 +558,7 @@ class Content_Test extends SimpleTestBase {
 		}
 		@RestPut(path="/InputStreamTransformBodyOnPojo")
 		public Reader h(D5 b) {
-			return reader(b.toString());
+			return TestUtils.reader(b.toString());
 		}
 		@Content
 		public static class D5 {
@@ -570,7 +569,7 @@ class Content_Test extends SimpleTestBase {
 
 		@RestPut(path="/ReaderTransformBodyOnPojo")
 		public Reader i(D6 b) {
-			return reader(b.toString());
+			return TestUtils.reader(b.toString());
 		}
 		@Content
 		public static class D6 {
@@ -729,7 +728,7 @@ class Content_Test extends SimpleTestBase {
 				@Content F1 bean,
 				@HasQuery("p1") boolean hqp1, @HasQuery("p2") boolean hqp2,
 				@Query("p1") String qp1, @Query("p2") int qp2) {
-			return reader("bean=["+Json5Serializer.DEFAULT.toString(bean)+"],qp1=["+qp1+"],qp2=["+qp2+"],hqp1=["+hqp1+"],hqp2=["+hqp2+"]");
+			return TestUtils.reader("bean=["+Json5Serializer.DEFAULT.toString(bean)+"],qp1=["+qp1+"],qp2=["+qp2+"],hqp1=["+hqp1+"],hqp2=["+hqp2+"]");
 		}
 		public static class F1 {
 			public String p1;

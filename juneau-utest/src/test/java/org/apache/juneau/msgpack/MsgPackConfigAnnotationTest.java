@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
 import java.util.function.*;
 
@@ -53,7 +52,7 @@ class MsgPackConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void basicParser() {
 		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
-		assertNotThrown(()->MsgPackParser.create().apply(al).build().createSession());
+		TestUtils.assertNotThrown(()->MsgPackParser.create().apply(al).build().createSession());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -72,7 +71,7 @@ class MsgPackConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noValuesParser() {
 		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		assertNotThrown(()->MsgPackParser.create().apply(al).build().createSession());
+		TestUtils.assertNotThrown(()->MsgPackParser.create().apply(al).build().createSession());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -90,6 +89,6 @@ class MsgPackConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noAnnotationParser() {
 		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		assertNotThrown(()->MsgPackParser.create().apply(al).build().createSession());
+		TestUtils.assertNotThrown(()->MsgPackParser.create().apply(al).build().createSession());
 	}
 }

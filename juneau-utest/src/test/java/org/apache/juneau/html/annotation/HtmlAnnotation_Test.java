@@ -13,6 +13,8 @@
 package org.apache.juneau.html.annotation;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.junit.jupiter.api.*;

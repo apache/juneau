@@ -14,8 +14,6 @@ package org.apache.juneau;
 
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.apache.juneau.AssertionHelpers.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
@@ -228,11 +226,11 @@ public class ComboRoundTripTester<T> {
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
-			assertContains(exceptionMsg, e.getMessage());
+			TestUtils.assertContains(exceptionMsg, e.getMessage());
 		} catch (Exception e) {
 			if (exceptionMsg == null)
 				throw new BasicAssertionError(e, "{0}/{1} failed.  exception={2}", label, testName, e.getLocalizedMessage());
-			assertContains(exceptionMsg, e.getMessage());
+			TestUtils.assertContains(exceptionMsg, e.getMessage());
 		}
 	}
 
@@ -252,11 +250,11 @@ public class ComboRoundTripTester<T> {
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
-			assertContains(exceptionMsg, e.getMessage());
+			TestUtils.assertContains(exceptionMsg, e.getMessage());
 		} catch (Throwable e) {
 			if (exceptionMsg == null)
 				throw new BasicAssertionError(e, "{0}/{1} failed.  exception={2}", label, testName, e.getLocalizedMessage());
-			assertContains(exceptionMsg, e.getMessage());
+			TestUtils.assertContains(exceptionMsg, e.getMessage());
 		}
 	}
 
@@ -273,11 +271,11 @@ public class ComboRoundTripTester<T> {
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
-			assertContains(exceptionMsg, e.getMessage());
+			TestUtils.assertContains(exceptionMsg, e.getMessage());
 		} catch (Exception e) {
 			if (exceptionMsg == null)
 				throw new BasicAssertionError(e, "{0}/{1} failed.  exception={2}", label, testName, e.getLocalizedMessage());
-			assertContains(exceptionMsg, e.getMessage());
+			TestUtils.assertContains(exceptionMsg, e.getMessage());
 		}
 	}
 
@@ -294,11 +292,11 @@ public class ComboRoundTripTester<T> {
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
-			assertContains(exceptionMsg, e.getMessage());
+			TestUtils.assertContains(exceptionMsg, e.getMessage());
 		} catch (Exception e) {
 			if (exceptionMsg == null)
 				throw new BasicAssertionError(e, "{0}/{1} failed.  exception={2}", label, testName, e.getLocalizedMessage());
-			assertContains(exceptionMsg, e.getMessage());
+			TestUtils.assertContains(exceptionMsg, e.getMessage());
 		}
 	}
 

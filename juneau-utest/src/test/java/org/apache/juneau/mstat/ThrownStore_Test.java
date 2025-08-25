@@ -13,6 +13,7 @@
 package org.apache.juneau.mstat;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 

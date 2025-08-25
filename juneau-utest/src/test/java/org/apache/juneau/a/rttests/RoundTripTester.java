@@ -14,11 +14,12 @@ package org.apache.juneau.a.rttests;
 
 import static java.util.Collections.*;
 import static java.util.Optional.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -148,10 +149,10 @@ public class RoundTripTester {
 			System.err.println("Serialized contents from ["+label+"]...\n---START---\n" + (out instanceof byte[] ? StringUtils.toReadableBytes((byte[])out) : out) + "\n---END---\n"); // NOT DEBUG
 
 		if (validateXmlWhitespace)
-			checkXmlWhitespace(out.toString());
+			TestUtils.checkXmlWhitespace(out.toString());
 
 		if (validateXml)
-			validateXml(object, (XmlSerializer)s);
+			TestUtils.validateXml(object, (XmlSerializer)s);
 
 		return out;
 	}

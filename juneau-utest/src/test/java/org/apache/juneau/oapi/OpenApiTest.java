@@ -23,7 +23,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 import jakarta.xml.bind.*;
@@ -45,11 +44,11 @@ public class OpenApiTest extends SimpleTestBase {
 	}
 
 	@BeforeEach void before() {
-		Utils2.setTimeZone("GMT");
+		TestUtils.setTimeZone("GMT");
 	}
 
 	@AfterEach void after() {
-		Utils2.unsetTimeZone();
+		TestUtils.unsetTimeZone();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

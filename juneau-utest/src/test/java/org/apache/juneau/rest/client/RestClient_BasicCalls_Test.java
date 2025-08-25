@@ -18,7 +18,6 @@ import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.http.header.ContentType.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.list;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
@@ -64,7 +63,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 		@RestOp(path="/bean") public ABean optionsBean() { return bean; }
 		@RestOp(path="/bean") public ABean headBean() { return bean; }
 		@RestOp(path="/checkHeader") public String[] postHeader(org.apache.juneau.rest.RestRequest req) { return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new); }
-		@RestOp(path="/",method="*") public Reader echoMethod(@Method String method) { return reader(method); }
+		@RestOp(path="/",method="*") public Reader echoMethod(@Method String method) { return TestUtils.reader(method); }
 	}
 
 	@Test void a01_basic() throws Exception {
@@ -88,7 +87,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			url("http://localhost/bean"),
+			TestUtils.url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -116,7 +115,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			url("http://localhost/bean"),
+			TestUtils.url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -130,8 +129,8 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 
 	@Test void a07_put_exhaustiveBodyTypes() throws Exception {
 		List<Object> bodies = list(
-			reader("{f:1}"),
-			inputStream("{f:1}"),
+			TestUtils.reader("{f:1}"),
+			TestUtils.inputStream("{f:1}"),
 			stringResource("{f:1}"),
 			bean,
 			stringEntity("{f:1}"),
@@ -155,7 +154,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			url("http://localhost/bean"),
+			TestUtils.url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -169,8 +168,8 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 
 	@Test void a11_exhaustiveBodyTypes() throws Exception {
 		List<Object> bodies = list(
-			reader("{f:1}"),
-			inputStream("{f:1}"),
+			TestUtils.reader("{f:1}"),
+			TestUtils.inputStream("{f:1}"),
 			stringResource("{f:1}"),
 			bean,
 			stringEntity("{f:1}"),
@@ -189,7 +188,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			url("http://localhost/bean"),
+			TestUtils.url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -207,7 +206,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			url("http://localhost/bean"),
+			TestUtils.url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -225,7 +224,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			url("http://localhost/bean"),
+			TestUtils.url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -247,7 +246,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			url("http://localhost/bean"),
+			TestUtils.url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -259,8 +258,8 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 
 	@Test void a20_formPost_exhaustiveBodyTypes() throws Exception {
 		Supplier<Object>
-			s1 = () -> reader("f=1"),
-			s2 = () -> inputStream("f=1");
+			s1 = () -> TestUtils.reader("f=1"),
+			s2 = () -> TestUtils.inputStream("f=1");
 		List<Object> bodies = list(
 			/*[ 0]*/ bean,
 			/*[ 1]*/ parts("f","1"),
@@ -296,8 +295,8 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 
 	@Test void a24_patch_exhaustiveBodyTypes() throws Exception {
 		List<Object> bodies = list(
-			reader("{f:1}"),
-			inputStream("{f:1}"),
+			TestUtils.reader("{f:1}"),
+			TestUtils.inputStream("{f:1}"),
 			stringResource("{f:1}"),
 			bean,
 			stringEntity("{f:1}"),
@@ -313,7 +312,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			url("http://localhost/bean"),
+			TestUtils.url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -330,8 +329,8 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 
 	@Test void a27_request_PATCH_exhaustiveBodyTypes() throws Exception {
 		List<Object> bodies = list(
-			reader("{f:1}"),
-			inputStream("{f:1}"),
+			TestUtils.reader("{f:1}"),
+			TestUtils.inputStream("{f:1}"),
 			stringResource("{f:1}"),
 			bean,
 			stringEntity("{f:1}"),
@@ -347,7 +346,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			url("http://localhost/bean"),
+			TestUtils.url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
@@ -365,7 +364,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			url("http://localhost/bean"),
+			TestUtils.url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);

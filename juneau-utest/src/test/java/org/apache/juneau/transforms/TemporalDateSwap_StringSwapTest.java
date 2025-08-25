@@ -19,19 +19,18 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.swaps.*;
-import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 class TemporalDateSwap_StringSwapTest extends StringSwapTest_Base {
 
 	@BeforeAll
 	static void beforeClass() {
-		Utils2.setTimeZone("GMT-5");
+		TestUtils.setTimeZone("GMT-5");
 	}
 
 	@AfterAll
 	static void afterClass() {
-		Utils2.unsetTimeZone();
+		TestUtils.unsetTimeZone();
 	}
 
 	private static BeanSession

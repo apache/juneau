@@ -14,9 +14,11 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -201,8 +203,8 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 			f4 = new AEnum[][]{{AEnum.FOO,null},null};
 			f5 = alist(AEnum.FOO);
 			f6 = alist(AEnum.FOO);
-			f7 = set(AEnum.FOO);
-			f8 = set(AEnum.FOO);
+			f7 = Utils.set(AEnum.FOO);
+			f8 = Utils.set(AEnum.FOO);
 
 			return this;
 		}
@@ -243,8 +245,8 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 			f4 = new BEnum[][]{{BEnum.FOO,null},null};
 			f5 = alist(BEnum.FOO);
 			f6 = alist(BEnum.FOO);
-			f7 = set(BEnum.FOO);
-			f8 = set(BEnum.FOO);
+			f7 = Utils.set(BEnum.FOO);
+			f8 = Utils.set(BEnum.FOO);
 
 			return this;
 		}

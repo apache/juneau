@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.store;
 
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.concurrent.*;
 
@@ -73,7 +72,7 @@ class ConfigClasspathStoreTest extends SimpleTestBase {
 		});
 
 		fs.update("X.cfg", "xxx");
-		assertNotThrown(()->fs.update("Y.cfg", "yyy"));
+		TestUtils.assertNotThrown(()->fs.update("Y.cfg", "yyy"));
 		if (! latch.await(10, TimeUnit.SECONDS))
 			throw new Exception("CountDownLatch never reached zero.");
 	}

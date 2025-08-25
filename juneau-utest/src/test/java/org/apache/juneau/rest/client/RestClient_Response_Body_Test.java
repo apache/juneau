@@ -16,8 +16,9 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -329,7 +330,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	}
 
 	private static InputStreamEntity inputStreamEntity(String in) {
-		return new InputStreamEntity(inputStream(in));
+		return new InputStreamEntity(TestUtils.inputStream(in));
 	}
 
 	private static <T> ClassMeta<T> cm(Class<T> t) {

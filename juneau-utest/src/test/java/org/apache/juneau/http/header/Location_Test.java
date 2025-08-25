@@ -13,7 +13,6 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.utest.utils.Utils2.*;
 import java.io.*;
 import java.net.*;
 import java.util.function.*;
@@ -37,7 +36,7 @@ class Location_Test extends SimpleTestBase {
 	public static class A {
 		@RestOp
 		public StringReader get(@Header(name=HEADER) @Schema(cf="multi") String[] h) {
-			return reader(h == null ? "null" : StringUtils.join(h, ','));
+			return TestUtils.reader(h == null ? "null" : StringUtils.join(h, ','));
 		}
 	}
 

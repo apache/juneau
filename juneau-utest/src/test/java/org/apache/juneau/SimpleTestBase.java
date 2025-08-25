@@ -34,21 +34,6 @@ import org.junit.jupiter.params.provider.*;
 @TestMethodOrder(MethodName.class)
 public abstract class SimpleTestBase {
 
-	/**
-	 * Asserts the JSON5 representation of the specified object.
-	 */
-	protected static void assertJson(Object value, String json) {
-		AssertionHelpers.assertJson(value, json);
-	}
-
-	protected static void assertLines(String expected, Object value) {
-		assertEquals(expected, r(value).replaceAll("\\r?\\n", "|"));
-	}
-
-	protected static <T> void assertTests(T value, AssertionPredicate<T>...tests) {
-		Stream.of(tests).forEach(x -> x.test(value));
-	}
-
 	protected static <T extends Throwable> void assertThrowsTests(org.junit.jupiter.api.function.Executable executable, AssertionPredicate<T>...tests) {
 		try {
 			executable.execute();
@@ -64,7 +49,7 @@ public abstract class SimpleTestBase {
 
 	protected static <T extends Throwable> AssertionPredicate<T> messagesContains(String...values) {
 		return x -> {
-			var messages = AssertionHelpers.getMessages(x);
+			var messages = TestUtils.getMessages(x);
 			for (var v : values) {
 				assertTrue(messages.contains(v), ss("Throwable did not contain expected substring ''{0}''.  Messages={1}", v, messages));
 			}
@@ -79,20 +64,20 @@ public abstract class SimpleTestBase {
 	 * Asserts the JSON5 representation of the specified object.
 	 */
 	public static void assertJsonContains(Object value, String json) {
-		AssertionHelpers.assertJsonContains(value, json);
+		TestUtils.assertJsonContains(value, json);
 	}
 	/**
 	 * Asserts the JSON5 representation of the specified object.
 	 */
 	protected static void assertTypeAndJson(Object value, Class<?> c, String json) {
-		AssertionHelpers.assertTypeAndJson(value, c, json);
+		TestUtils.assertTypeAndJson(value, c, json);
 	}
 
 	/**
 	 * Asserts the JSON5 representation of the specified object.
 	 */
 	protected static void assertType(Class<?> c, Object value) {
-		AssertionHelpers.assertTypes(c, value);
+		TestUtils.assertTypes(c, value);
 	}
 
 	public static void assertTypes(Class<?> c, Object...value) {
@@ -104,76 +89,76 @@ public abstract class SimpleTestBase {
 	 * Asserts the serialized representation of the specified object.
 	 */
 	protected static void assertSerialized(Object value, WriterSerializer s, String json) {
-		AssertionHelpers.assertSerialized(value, s, json);
+		TestUtils.assertSerialized(value, s, json);
 	}
 
 	/**
 	 * Asserts an object matches the expected string after it's been made readable.
 	 */
 	protected static void assertString(String expected, Object actual) {
-		AssertionHelpers.assertString(expected, actual);
+		TestUtils.assertString(expected, actual);
 	}
 
 	/**
 	 * Asserts an object matches the expected string after it's been made readable.
 	 */
 	public static void assertString(String expected, Object actual, Supplier<String> messageSupplier) {
-		AssertionHelpers.assertString(expected, actual, messageSupplier);
+		TestUtils.assertString(expected, actual, messageSupplier);
 	}
 
 	/**
 	 * Asserts an object matches the expected string after it's been made readable.
 	 */
 	protected static void assertContains(String expected, Object actual) {
-		AssertionHelpers.assertContains(expected, actual);
+		TestUtils.assertContains(expected, actual);
 	}
 
 	protected static void assertContainsAll(String expected, Object actual) {
-		AssertionHelpers.assertContainsAll(expected, actual);
+		TestUtils.assertContainsAll(expected, actual);
 	}
 
 	protected static void assertEmpty(Optional<?> o) {
-		AssertionHelpers.assertEmpty(o);
+		TestUtils.assertEmpty(o);
 	}
 
 	protected static void assertPresent(Optional<?> o) {
-		AssertionHelpers.assertPresent(o);
+		TestUtils.assertPresent(o);
 	}
 
 	/**
 	 * Asserts the entries in an array matches the expected strings after they've been made readable.
 	 */
 	protected static void assertArray(Object array, Object...expected) {
-		AssertionHelpers.assertArray(array, expected);
+		TestUtils.assertArray(array, expected);
 	}
 
 	/**
 	 * Asserts the entries in a list matches the expected strings after they've been made readable.
 	 */
 	protected static void assertList(List<?> list, Object...expected) {
-		AssertionHelpers.assertList(list, expected);
+		TestUtils.assertList(list, expected);
 	}
 
 	/**
 	 * Asserts the entries in a list matches the expected strings after they've been made readable.
 	 */
 	protected static void assertStream(Stream<?> stream, Object...expected) {
-		AssertionHelpers.assertStream(stream, expected);
+		TestUtils.assertStream(stream, expected);
 	}
 
 	protected static <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, String expectedSubstring, org.junit.jupiter.api.function.Executable executable) {
-		return AssertionHelpers.assertThrowsWithMessage(expectedType, expectedSubstring, executable);
+		return TestUtils.assertThrowsWithMessage(expectedType, expectedSubstring, executable);
 	}
 
 	protected static <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, List<String> expectedSubstrings, org.junit.jupiter.api.function.Executable executable) {
 		T exception = Assertions.assertThrows(expectedType, executable);
-		var messages = AssertionHelpers.getMessages(exception);
+		var messages = TestUtils.getMessages(exception);
 		expectedSubstrings.stream().forEach(x -> assertTrue(messages.contains(x), ss("Expected message to contain: {0}.\nActual:\n{1}", x, messages)));
 		return exception;
 	}
 
 	protected static <T extends Throwable> T assertThrowable(Class<T> expectedType, String expectedSubstring, T t) {
-		var messages = AssertionHelpers.getMessages(t);
+		var messages = TestUtils.getMessages(t);
 		assertTrue(messages.contains(expectedSubstring), ss("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
 		return t;
 	}
@@ -182,28 +167,28 @@ public abstract class SimpleTestBase {
 	 * Asserts the entries in a map matches the expected strings after they've been made readable.
 	 */
 	protected static void assertMap(Map<?,?> map, Object...expected) {
-		AssertionHelpers.assertMap(map, expected);
+		TestUtils.assertMap(map, expected);
 	}
 
 	/**
 	 * Asserts that a collection is not null or empty.
 	 */
 	protected static void assertNotEmpty(Collection<?> c) {
-		AssertionHelpers.assertNotEmpty(c);
+		TestUtils.assertNotEmpty(c);
 	}
 
 	/**
 	 * Asserts that a maps is not null or empty.
 	 */
 	protected static void assertNotEmpty(Map<?,?> c) {
-		AssertionHelpers.assertNotEmpty(c);
+		TestUtils.assertNotEmpty(c);
 	}
 
 	/**
 	 * Asserts that a collection is not null and empty.
 	 */
 	protected static void assertEmpty(Collection<?> c) {
-		AssertionHelpers.assertEmpty(c);
+		TestUtils.assertEmpty(c);
 	}
 
 	/**
@@ -218,7 +203,7 @@ public abstract class SimpleTestBase {
 	 * Asserts that a collection is not null and of the specified size.
 	 */
 	protected static void assertSize(int expected, Collection<?> c) {
-		AssertionHelpers.assertSize(expected, c);
+		TestUtils.assertSize(expected, c);
 	}
 
 	/**
@@ -245,7 +230,7 @@ public abstract class SimpleTestBase {
 	 * 	);
 	 */
 	protected static void assertBean(Object o, String fields, String value) {
-		AssertionHelpers.assertBean(o, fields, value);
+		TestUtils.assertBean(o, fields, value);
 	}
 
 	/**
@@ -258,7 +243,7 @@ public abstract class SimpleTestBase {
 	 * 	);
 	 */
 	protected static void assertMap(Map<?,?> o, String fields, String value) {
-		AssertionHelpers.assertMap(o, fields, value);
+		TestUtils.assertMap(o, fields, value);
 	}
 
 	/**
@@ -269,15 +254,15 @@ public abstract class SimpleTestBase {
 	 */
 	@SuppressWarnings("rawtypes")
 	protected static void assertBeans(Collection l, String fields, Object...values) {
-		AssertionHelpers.assertBeans(l, fields, values);
+		TestUtils.assertBeans(l, fields, values);
 	}
 
 	protected static void assertNotEqualsAny(Object o, Object...values) {
-		AssertionHelpers.assertNotEqualsAny(o, values);
+		TestUtils.assertNotEqualsAny(o, values);
 	}
 
 	protected static void assertEqualsAll(Object...values) {
-		AssertionHelpers.assertEqualsAll(values);
+		TestUtils.assertEqualsAll(values);
 	}
 
 	protected static void assertJsonMatches(Object o, String pattern) throws AssertionError {
