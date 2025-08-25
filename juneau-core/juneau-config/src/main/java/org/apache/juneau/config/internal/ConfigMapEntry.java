@@ -49,7 +49,7 @@ public class ConfigMapEntry {
 
 		i = line.indexOf('#');
 		if (i != -1) {
-			var l2 = Utils.split3(line, '#', 2);
+			var l2 = Utils.splita(line, '#', 2);
 			line = l2[0];
 			if (l2.length == 2)
 				this.comment = l2[1].trim();

@@ -434,13 +434,13 @@ class StringUtilsTest extends SimpleTestBase {
 	// split(String,char,int)
 	//====================================================================================================
 	@Test void a09_splitWithLimit() {
-		TestUtils.assertString("[boo,and,foo]", Utils.split3("boo:and:foo", ':', 10));
-		TestUtils.assertString("[boo,and:foo]", Utils.split3("boo:and:foo", ':', 2));
-		TestUtils.assertString("[boo:and:foo]", Utils.split3("boo:and:foo", ':', 1));
-		TestUtils.assertString("[boo:and:foo]", Utils.split3("boo:and:foo", ':', 0));
-		TestUtils.assertString("[boo:and:foo]", Utils.split3("boo:and:foo", ':', -1));
-		TestUtils.assertString("[boo,and,foo]", Utils.split3("boo : and : foo", ':', 10));
-		TestUtils.assertString("[boo,and : foo]", Utils.split3("boo : and : foo", ':', 2));
+		TestUtils.assertString("[boo,and,foo]", Utils.splita("boo:and:foo", ':', 10));
+		TestUtils.assertString("[boo,and:foo]", Utils.splita("boo:and:foo", ':', 2));
+		TestUtils.assertString("[boo:and:foo]", Utils.splita("boo:and:foo", ':', 1));
+		TestUtils.assertString("[boo:and:foo]", Utils.splita("boo:and:foo", ':', 0));
+		TestUtils.assertString("[boo:and:foo]", Utils.splita("boo:and:foo", ':', -1));
+		TestUtils.assertString("[boo,and,foo]", Utils.splita("boo : and : foo", ':', 10));
+		TestUtils.assertString("[boo,and : foo]", Utils.splita("boo : and : foo", ':', 2));
 	}
 
 	//====================================================================================================

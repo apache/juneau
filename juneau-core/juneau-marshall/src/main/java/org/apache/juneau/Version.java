@@ -68,7 +68,7 @@ public class Version implements Comparable<Version> {
 	public Version(String value) {
 		if (Utils.isEmpty(value))
 			value = "0";
-		String[] sParts = Utils.split3(value, '.');
+		String[] sParts = Utils.splita(value, '.');
 		parts = new int[sParts.length];
 		for (int i = 0; i < sParts.length; i++) {
 			try {

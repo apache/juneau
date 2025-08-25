@@ -890,7 +890,7 @@ public class Utils {
 	}
 
 	/**
-	 * Same as {@link #split3(String, char)} but limits the number of tokens returned.
+	 * Same as {@link #splita(String, char)} but limits the number of tokens returned.
 	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @param c The character to split on.
@@ -956,12 +956,12 @@ public class Utils {
 	 * @param c The character to split on.
 	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
-	public static String[] split3(String s, char c) {
-		return split3(s, c, Integer.MAX_VALUE);
+	public static String[] splita(String s, char c) {
+		return splita(s, c, Integer.MAX_VALUE);
 	}
 
 	/**
-	 * Same as {@link #split3(String,char)} but consumes the tokens instead of creating an array.
+	 * Same as {@link #splita(String,char)} but consumes the tokens instead of creating an array.
 	 *
 	 * @param s The string to split.
 	 * @param c The character to split on.
@@ -998,14 +998,14 @@ public class Utils {
 	}
 
 	/**
-	 * Same as {@link #split3(String, char)} but limits the number of tokens returned.
+	 * Same as {@link #splita(String, char)} but limits the number of tokens returned.
 	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @param c The character to split on.
 	 * @param limit The maximum number of tokens to return.
 	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
-	public static String[] split3(String s, char c, int limit) {
+	public static String[] splita(String s, char c, int limit) {
 		var l = split(s, c, limit);
 		return l == null ? null : l.toArray(new String[l.size()]);
 	}
@@ -1021,7 +1021,7 @@ public class Utils {
 	}
 
 	/**
-	 * Same as {@link #split3(String, char)} except splits all strings in the input and returns a single result.
+	 * Same as {@link #splita(String, char)} except splits all strings in the input and returns a single result.
 	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @param c The character to split on.
@@ -1035,7 +1035,7 @@ public class Utils {
 			if (ss == null || ss.indexOf(c) == -1)
 				l.add(ss);
 			else
-				Collections.addAll(l, split3(ss, c));
+				Collections.addAll(l, splita(ss, c));
 		}
 		return l.toArray(new String[l.size()]);
 	}
@@ -1044,7 +1044,7 @@ public class Utils {
 	 * Splits a comma-delimited list into an array of strings.
 	 */
 	public static String[] splita(String s) {
-		return split3(s, ',');
+		return splita(s, ',');
 	}
 
 	/**

@@ -128,7 +128,7 @@ public class JsonList extends LinkedList<Object> {
 		if (Utils.isEmpty(s))
 			return null;
 		if (! StringUtils.isJsonArray(s, true))
-			return new JsonList((Object[])Utils.split3(s.trim(), ','));
+			return new JsonList((Object[])Utils.splita(s.trim(), ','));
 		return new JsonList(s);
 	}
 
