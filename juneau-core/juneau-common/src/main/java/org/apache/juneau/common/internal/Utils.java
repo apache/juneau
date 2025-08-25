@@ -39,6 +39,9 @@ public class Utils {
 
 	private static final ConcurrentHashMap<String,String> PROPERTY_TO_ENV = new ConcurrentHashMap<>();
 
+	/** Constructor - This class is meant to be subclasses. */
+	protected Utils() {}
+
 	/**
 	 * Creates an array of objects.
 	 */
@@ -1433,7 +1436,4 @@ public class Utils {
 	public static <T> Set<T> u(Set<? extends T> value) {
 		return value == null ? null : Collections.unmodifiableSet(value);
 	}
-
-	/** Constructor */
-	protected Utils() {}
 }
