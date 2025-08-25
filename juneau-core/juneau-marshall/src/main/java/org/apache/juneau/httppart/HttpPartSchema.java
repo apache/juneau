@@ -15,6 +15,7 @@ package org.apache.juneau.httppart;
 import static java.util.Collections.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartFormat.*;
 import static org.apache.juneau.internal.ClassUtils.*;
@@ -920,7 +921,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder name(String value) {
-			if (isNotEmpty(value))
+			if (Utils.isNotEmpty(value))
 				name = value;
 			return this;
 		}
@@ -1124,7 +1125,7 @@ public class HttpPartSchema {
 		 */
 		public Builder type(String value) {
 			try {
-				if (isNotEmpty(value))
+				if (Utils.isNotEmpty(value))
 					type = HttpPartDataType.fromString(value);
 			} catch (Exception e) {
 				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as type value.  Valid values: {1}", value, HttpPartDataType.values());
@@ -1364,7 +1365,7 @@ public class HttpPartSchema {
 		 */
 		public Builder format(String value) {
 			try {
-				if (isNotEmpty(value))
+				if (Utils.isNotEmpty(value))
 					format = HttpPartFormat.fromString(value);
 			} catch (Exception e) {
 				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as format value.  Valid values: {1}", value, HttpPartFormat.values());
@@ -1808,7 +1809,7 @@ public class HttpPartSchema {
 		 */
 		public Builder collectionFormat(String value) {
 			try {
-				if (isNotEmpty(value))
+				if (Utils.isNotEmpty(value))
 					this.collectionFormat = HttpPartCollectionFormat.fromString(value);
 			} catch (Exception e) {
 				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}", value, HttpPartCollectionFormat.values());
@@ -2399,7 +2400,7 @@ public class HttpPartSchema {
 		 */
 		public Builder pattern(String value) {
 			try {
-				if (isNotEmpty(value))
+				if (Utils.isNotEmpty(value))
 					this.pattern = Pattern.compile(value);
 			} catch (Exception e) {
 				throw new ContextRuntimeException(e, "Invalid value {0} passed in as pattern value.  Must be a valid regular expression.", value);
@@ -2765,7 +2766,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder _enum(String...values) {
-			return _enum(set(values));
+			return _enum(Utils.set(values));
 		}
 
 		/**
@@ -3164,7 +3165,7 @@ public class HttpPartSchema {
 		}
 
 		private Boolean resolve(String newValue, Boolean oldValue) {
-			return isEmpty(newValue) ? oldValue : Boolean.valueOf(newValue);
+			return Utils.isEmpty(newValue) ? oldValue : Boolean.valueOf(newValue);
 		}
 
 		private Boolean resolve(Boolean newValue, Boolean oldValue) {
@@ -3172,7 +3173,7 @@ public class HttpPartSchema {
 		}
 
 		private Long resolve(String newValue, Long oldValue) {
-			return isEmpty(newValue) ? oldValue : Long.parseLong(newValue);
+			return Utils.isEmpty(newValue) ? oldValue : Long.parseLong(newValue);
 		}
 
 		private Long resolve(Long newValue, Long oldValue) {
@@ -3282,7 +3283,7 @@ public class HttpPartSchema {
 			return;
 
 		// Validation.
-		List<String> errors = list();
+		List<String> errors = Utils.list();
 		ListBuilder<String> notAllowed = listBuilder(String.class);
 		boolean invalidFormat = false;
 		switch (type) {
@@ -3925,7 +3926,7 @@ public class HttpPartSchema {
 	}
 
 	private boolean isValidAllowEmpty(String x) {
-		return allowEmptyValue || isNotEmpty(x);
+		return allowEmptyValue || Utils.isNotEmpty(x);
 	}
 
 	private boolean isValidPattern(String x) {
@@ -4007,7 +4008,7 @@ public class HttpPartSchema {
 	}
 
 	private static <T> Set<T> copy(Set<T> in) {
-		return in == null ? emptySet() : unmodifiable(copyOf(in));
+		return in == null ? emptySet() : u(copyOf(in));
 	}
 
 	private static Map<String,HttpPartSchema> build(Map<String,Object> in, boolean noValidate) {
@@ -4015,7 +4016,7 @@ public class HttpPartSchema {
 			return null;
 		Map<String,HttpPartSchema> m = map();
 		in.forEach((k,v) -> m.put(k, build(v, noValidate)));
-		return unmodifiable(m);
+		return u(m);
 	}
 
 	private static HttpPartSchema build(Object in, boolean noValidate) {
@@ -4040,7 +4041,7 @@ public class HttpPartSchema {
 			isNotEmpty |= ss.length > 0;
 		if (! isNotEmpty)
 			return null;
-		Set<String> set = set();
+		Set<String> set = Utils.set();
 		for (String[] ss : s)
 			if (ss != null)
 				for (String ss2 : ss)
@@ -4049,9 +4050,9 @@ public class HttpPartSchema {
 	}
 
 	final static Set<String> toSet(String s) {
-		if (isEmpty(s))
+		if (Utils.isEmpty(s))
 			return null;
-		Set<String> set = set();
+		Set<String> set = Utils.set();
 		try {
 			JsonList.ofJsonOrCdl(s).forEach(x -> set.add(x.toString()));
 		} catch (ParseException e) {
@@ -4063,7 +4064,7 @@ public class HttpPartSchema {
 	final static Number toNumber(String...s) {
 		try {
 			for (String ss : s)
-				if (isNotEmpty(ss))
+				if (Utils.isNotEmpty(ss))
 					return parseNumber(ss, Number.class);
 			return null;
 		} catch (ParseException e) {
@@ -4087,7 +4088,7 @@ public class HttpPartSchema {
 	@Override
 	public String toString() {
 		try {
-			Predicate<Object> ne = x -> isNotEmpty(Utils.s(x));
+			Predicate<Object> ne = x -> Utils.isNotEmpty(Utils.s(x));
 			Predicate<Boolean> nf = Utils::isTrue;
 			Predicate<Number> nm1 = Utils::isNotMinusOne;
 			Predicate<Object> nn = Utils::isNotNull;

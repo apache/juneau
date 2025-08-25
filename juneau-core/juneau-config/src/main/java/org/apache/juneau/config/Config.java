@@ -578,7 +578,7 @@ public final class Config extends Context implements ConfigEventListener {
 		serializer = builder.serializer;
 		parser = builder.parser;
 		beanSession = parser.getBeanContext().getSession();
-		mods = unmodifiable(copyOf(builder.mods));
+		mods = u(copyOf(builder.mods));
 		varResolver = builder.varResolver;
 		varSession = varResolver
 			.copy()
@@ -926,7 +926,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * @return The section names defined in this config.
 	 */
 	public Set<String> getSectionNames() {
-		return unmodifiable(configMap.getSections());
+		return u(configMap.getSections());
 	}
 
 	/**
@@ -1181,7 +1181,7 @@ public final class Config extends Context implements ConfigEventListener {
 	}
 
 	List<ConfigEventListener> getListeners() {
-		return unmodifiable(listeners);
+		return u(listeners);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

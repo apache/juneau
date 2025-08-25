@@ -113,7 +113,7 @@ public class SortArgs {
 			}
 			sort.put(s, isDesc);
 		});
-		this.sort = unmodifiable(sort);
+		this.sort = u(sort);
 	}
 
 	/**

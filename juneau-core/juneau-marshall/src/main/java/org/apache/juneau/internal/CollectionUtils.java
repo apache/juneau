@@ -278,7 +278,7 @@ public final class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <E> Set<E> uset(E...values) {
-		return unmodifiable(set(values));
+		return u(set(values));
 	}
 
 	/**
@@ -292,7 +292,7 @@ public final class CollectionUtils {
 	public static <E> List<E> ulist(E...values) {
 		if (values == null)
 			return null;
-		return unmodifiable(alist(values));
+		return u(alist(values));
 	}
 
 	/**
@@ -485,39 +485,39 @@ public final class CollectionUtils {
 		return l;
 	}
 
-	/**
-	 * Wraps the specified list in {@link Collections#unmodifiableList(List)}.
-	 *
-	 * @param <E> The element type.
-	 * @param value The list to wrap.
-	 * @return The wrapped list.
-	 */
-	public static <E> List<E> unmodifiable(List<E> value) {
-		return value == null ? null: Collections.unmodifiableList(value);
-	}
-
-	/**
-	 * Wraps the specified set in {@link Collections#unmodifiableSet(Set)}.
-	 *
-	 * @param <E> The element type.
-	 * @param value The set to wrap.
-	 * @return The wrapped set.
-	 */
-	public static <E> Set<E> unmodifiable(Set<E> value) {
-		return value == null ? null: Collections.unmodifiableSet(value);
-	}
-
-	/**
-	 * Wraps the specified map in {@link Collections#unmodifiableMap(Map)}.
-	 *
-	 * @param <K> The key type.
-	 * @param <V> The value type.
-	 * @param value The map to wrap.
-	 * @return The wrapped map.
-	 */
-	public static <K,V> Map<K,V> unmodifiable(Map<K,V> value) {
-		return value == null ? null: Collections.unmodifiableMap(value);
-	}
+//	/**
+//	 * Wraps the specified list in {@link Collections#unmodifiableList(List)}.
+//	 *
+//	 * @param <E> The element type.
+//	 * @param value The list to wrap.
+//	 * @return The wrapped list.
+//	 */
+//	public static <E> List<E> unmodifiable(List<E> value) {
+//		return value == null ? null: Collections.unmodifiableList(value);
+//	}
+//
+//	/**
+//	 * Wraps the specified set in {@link Collections#unmodifiableSet(Set)}.
+//	 *
+//	 * @param <E> The element type.
+//	 * @param value The set to wrap.
+//	 * @return The wrapped set.
+//	 */
+//	public static <E> Set<E> unmodifiable(Set<E> value) {
+//		return value == null ? null: Collections.unmodifiableSet(value);
+//	}
+//
+//	/**
+//	 * Wraps the specified map in {@link Collections#unmodifiableMap(Map)}.
+//	 *
+//	 * @param <K> The key type.
+//	 * @param <V> The value type.
+//	 * @param value The map to wrap.
+//	 * @return The wrapped map.
+//	 */
+//	public static <K,V> Map<K,V> unmodifiable(Map<K,V> value) {
+//		return value == null ? null: Collections.unmodifiableMap(value);
+//	}
 
 	/**
 	 * Wraps the specified list in {@link Collections#unmodifiableList(List)}.

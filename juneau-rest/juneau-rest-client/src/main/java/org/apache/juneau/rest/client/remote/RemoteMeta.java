@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.remote;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -21,6 +21,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.reflect.*;
@@ -59,7 +60,7 @@ public class RemoteMeta {
 
 		for (Remote r : remotes) {
 			if (isNotEmpty(r.path()))
-				path = trimSlashes(resolve(r.path()));
+				path = StringUtils.trimSlashes(resolve(r.path()));
 			for (String h : r.headers())
 				headers.append(stringHeader(resolve(h)));
 			if (isNotEmpty(r.version()))
@@ -85,7 +86,7 @@ public class RemoteMeta {
 			x -> operations.put(x.inner(), new RemoteOperationMeta(path2, x.inner(), "GET"))
 		);
 
-		this.operations = unmodifiable(operations);
+		this.operations = u(operations);
 		this.headers = headers;
 	}
 

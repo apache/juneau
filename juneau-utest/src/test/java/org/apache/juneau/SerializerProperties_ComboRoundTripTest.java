@@ -133,7 +133,7 @@ class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>a</rdf:li>\n    <rdf:li>b</rdf:li>\n    <rdf:li>c</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
 			.apply(Serializer.Builder.class, Builder::sortCollections)
 			.build(),
-		tester(5, "SERIALIZER_sortMaps", Map.class, CollectionUtils.unmodifiable(map("c","3","a","1","b","2")))
+		tester(5, "SERIALIZER_sortMaps", Map.class, u(map("c","3","a","1","b","2")))
 			.json("{a:'1',b:'2',c:'3'}")
 			.jsonT("{a:'1',b:'2',c:'3'}")
 			.jsonR("{\n\ta: '1',\n\tb: '2',\n\tc: '3'\n}")

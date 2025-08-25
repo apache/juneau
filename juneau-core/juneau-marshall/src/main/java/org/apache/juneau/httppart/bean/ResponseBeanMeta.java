@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.annotation.InvalidAnnotationException.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -122,17 +123,17 @@ public class ResponseBeanMeta {
 			hm.put(k, pm);
 			properties.put(pm.getGetter().getName(), pm);
 		});
-		this.headerMethods = unmodifiable(hm);
+		this.headerMethods = u(hm);
 
 		this.contentMethod = b.contentMethod == null ? null : b.contentMethod.schema(schema).build(partSerializer, partParser);
-		this.statusMethod = b.statusMethod == null ? null : b.statusMethod.build(empty(), empty());
+		this.statusMethod = b.statusMethod == null ? null : b.statusMethod.build(opte(), opte());
 
 		if (contentMethod != null)
 			properties.put(contentMethod.getGetter().getName(), contentMethod);
 		if (statusMethod != null)
 			properties.put(statusMethod.getGetter().getName(), statusMethod);
 
-		this.properties = unmodifiable(properties);
+		this.properties = u(properties);
 	}
 
 	static class Builder {

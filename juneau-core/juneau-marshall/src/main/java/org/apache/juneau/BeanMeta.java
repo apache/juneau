@@ -12,11 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 import static org.apache.juneau.BeanMeta.MethodType.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.beans.*;
 import java.io.*;
@@ -128,13 +127,13 @@ public class BeanMeta<T> {
 
 		this.beanFilter = beanFilter;
 		this.dictionaryName = b.dictionaryName;
-		this.properties = unmodifiable(b.properties);
-		this.propertyArray = properties == null ? EMPTY_PROPERTIES : array(properties.values(), BeanPropertyMeta.class);
-		this.hiddenProperties = unmodifiable(b.hiddenProperties);
-		this.getterProps = unmodifiable(b.getterProps);
-		this.setterProps = unmodifiable(b.setterProps);
+		this.properties = u(b.properties);
+		this.propertyArray = properties == null ? EMPTY_PROPERTIES : CollectionUtils.array(properties.values(), BeanPropertyMeta.class);
+		this.hiddenProperties = u(b.hiddenProperties);
+		this.getterProps = u(b.getterProps);
+		this.setterProps = u(b.setterProps);
 		this.dynaProperty = b.dynaProperty;
-		this.typeVarImpls = unmodifiable(b.typeVarImpls);
+		this.typeVarImpls = u(b.typeVarImpls);
 		this.constructor = b.constructor;
 		this.constructorArgs = b.constructorArgs;
 		this.beanRegistry = b.beanRegistry;
@@ -187,7 +186,7 @@ public class BeanMeta<T> {
 
 				List<Class<?>> bdClasses = list();
 				if (beanFilter != null && beanFilter.getBeanDictionary() != null)
-					addAll(bdClasses, beanFilter.getBeanDictionary());
+					CollectionUtils.addAll(bdClasses, beanFilter.getBeanDictionary());
 
 				Value<String> typeName = Value.empty();
 				classMeta.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
@@ -234,7 +233,7 @@ public class BeanMeta<T> {
 						throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 					constructor = x;
 					constructorArgs = new String[0];
-					ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = split(z.properties()));
+					ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = StringUtils.split(z.properties()));
 					if (! x.hasNumParams(constructorArgs.length)) {
 						if (constructorArgs.length != 0)
 							throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -257,7 +256,7 @@ public class BeanMeta<T> {
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
 						constructorArgs = new String[0];
-						ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = split(z.properties()));
+						ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = StringUtils.split(z.properties()));
 						if (! x.hasNumParams(constructorArgs.length)) {
 							if (constructorArgs.length != 0)
 								throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -437,7 +436,7 @@ public class BeanMeta<T> {
 
 				sortProperties = (ctx.isSortProperties() || (beanFilter != null && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
 
-				properties = sortProperties ? sortedMap() : map();
+				properties = sortProperties ? CollectionUtils.sortedMap() : map();
 
 				if (beanFilter != null && beanFilter.getTypeName() != null)
 					dictionaryName = beanFilter.getTypeName();
@@ -807,7 +806,7 @@ public class BeanMeta<T> {
 	 * @return Metadata on all properties associated with this bean.
 	 */
 	public Collection<BeanPropertyMeta> getPropertyMetas() {
-		return ulist(propertyArray);
+		return CollectionUtils.ulist(propertyArray);
 	}
 
 	/**
@@ -972,7 +971,7 @@ public class BeanMeta<T> {
 		if (p.isEmpty() && n.isEmpty())
 			return null;
 		if (! n.isEmpty())
-			return last(n).value();
+			return CollectionUtils.last(n).value();
 
 		Value<String> name = Value.of(p.isEmpty() ? null : "");
 		p.forEach(x -> {

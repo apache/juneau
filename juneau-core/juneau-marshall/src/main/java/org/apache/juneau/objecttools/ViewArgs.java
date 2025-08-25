@@ -79,7 +79,7 @@ public class ViewArgs {
 	 * 	<br>Values are column names.
 	 */
 	public ViewArgs(Collection<String> viewArgs) {
-		this.view = unmodifiable(listFrom(viewArgs));
+		this.view = u(listFrom(viewArgs));
 	}
 
 	/**

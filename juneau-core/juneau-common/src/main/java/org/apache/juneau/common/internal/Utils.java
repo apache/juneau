@@ -612,4 +612,16 @@ public class Utils {
 			return false;
 		return ! test.test(o1, o2);
 	}
+
+	public static <K,V> Map<K,V> u(Map<? extends K, ? extends V> value) {
+		return value == null ? null : Collections.unmodifiableMap(value);
+	}
+
+	public static <T> List<T> u(List<? extends T> value) {
+		return value == null ? null : Collections.unmodifiableList(value);
+	}
+
+	public static <T> Set<T> u(Set<? extends T> value) {
+		return value == null ? null : Collections.unmodifiableSet(value);
+	}
 }

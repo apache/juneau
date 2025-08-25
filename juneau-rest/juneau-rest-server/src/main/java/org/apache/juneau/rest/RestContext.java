@@ -130,7 +130,7 @@ public class RestContext extends Context {
 	 * @return An unmodifiable map of resource classes to {@link RestContext} objects.
 	 */
 	public static final Map<Class<?>, RestContext> getGlobalRegistry() {
-		return unmodifiable(REGISTRY);
+		return u(REGISTRY);
 	}
 
 	/**
@@ -5535,14 +5535,14 @@ public class RestContext extends Context {
 				()->{
 					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : toSet(opContexts.get(0).getSerializers().getSupportedMediaTypes());
 					opContexts.forEach(x -> s.retainAll(x.getSerializers().getSupportedMediaTypes()));
-					return unmodifiable(listFrom(s));
+					return u(listFrom(s));
 				}
 			);
 			consumes = builder.consumes().orElseGet(
 				()->{
 					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : toSet(opContexts.get(0).getParsers().getSupportedMediaTypes());
 					opContexts.forEach(x -> s.retainAll(x.getParsers().getSupportedMediaTypes()));
-					return unmodifiable(listFrom(s));
+					return u(listFrom(s));
 				}
 			);
 
@@ -5570,7 +5570,7 @@ public class RestContext extends Context {
 			}
 		};
 		split(value, x -> s.add(x));
-		return unmodifiable(s);
+		return u(s);
 	}
 
 	@Override /* Context */

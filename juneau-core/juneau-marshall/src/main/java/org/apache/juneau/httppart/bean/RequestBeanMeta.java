@@ -15,6 +15,7 @@ package org.apache.juneau.httppart.bean;
 import static org.apache.juneau.httppart.bean.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.util.*;
@@ -76,7 +77,7 @@ public class RequestBeanMeta {
 		this.parser = b.parser.orElse(null);
 		Map<String,RequestBeanPropertyMeta> properties = map();
 		b.properties.forEach((k,v) -> properties.put(k, v.build(serializer, parser)));
-		this.properties = unmodifiable(properties);
+		this.properties = u(properties);
 	}
 
 	static class Builder {

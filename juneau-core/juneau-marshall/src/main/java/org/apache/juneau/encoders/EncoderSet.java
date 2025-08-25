@@ -13,12 +13,14 @@
 package org.apache.juneau.encoders;
 
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static java.util.stream.Collectors.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
@@ -126,7 +128,7 @@ public final class EncoderSet {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(EncoderSet.class, beanStore);
-			entries = list();
+			entries = Utils.list();
 		}
 
 		/**
@@ -168,7 +170,7 @@ public final class EncoderSet {
 		 * @throws IllegalArgumentException if any class does not extend from {@link Encoder}.
 		 */
 		public Builder add(Class<?>...values) {
-			List<Object> l = list();
+			List<Object> l = Utils.list();
 			for (Class<?> v : values)
 				if (v.getSimpleName().equals("NoInherit"))
 					clear();
@@ -198,7 +200,7 @@ public final class EncoderSet {
 		 * @throws IllegalArgumentException if any class does not extend from {@link Encoder}.
 		 */
 		public Builder set(Class<?>...values) {
-			List<Object> l = list();
+			List<Object> l = Utils.list();
 			for (Class<?> v : values) {
 				if (v.getSimpleName().equals("Inherit")) {
 					l.addAll(entries);
@@ -314,8 +316,8 @@ public final class EncoderSet {
 	protected EncoderSet(Builder builder) {
 		entries = builder.entries.stream().map(x -> instantiate(builder.beanStore(), x)).toArray(Encoder[]::new);
 
-		List<String> lc = list();
-		List<Encoder> l = list();
+		List<String> lc = Utils.list();
+		List<Encoder> l = Utils.list();
 		for (Encoder e : entries) {
 			for (String c: e.getCodings()) {
 				lc.add(c);
@@ -323,7 +325,7 @@ public final class EncoderSet {
 			}
 		}
 
-		this.encodings = unmodifiable(lc);
+		this.encodings = u(lc);
 		this.encodingsEncoders = l.toArray(new Encoder[l.size()]);
 	}
 

@@ -111,7 +111,7 @@ public class Thrown extends BasicCsvHeader {
 		super(NAME, value);
 		List<Part> l = Utils.list();
 		split(value, x -> l.add(new Part(x)));
-		this.value = value == null ? null : unmodifiable(l);
+		this.value = value == null ? null : u(l);
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class Thrown extends BasicCsvHeader {
 	 */
 	public Thrown(List<Part> value) {
 		super(NAME, join(value, ", "));
-		this.value = unmodifiable(value);
+		this.value = u(value);
 	}
 
 	/**

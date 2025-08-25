@@ -15,6 +15,7 @@ package org.apache.juneau.config.internal;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.config.event.ConfigEventType.*;
 
 import java.io.*;
@@ -42,7 +43,7 @@ public class ConfigMap implements ConfigStoreListener {
 	private final List<ConfigEvent> changes = synced(new ConfigEvents());
 
 	// Registered listeners listening for changes during saves or reloads.
-	private final Set<ConfigEventListener> listeners = synced(set());
+	private final Set<ConfigEventListener> listeners = synced(Utils.set());
 
 	// The parsed entries of this map with all changes applied.
 	final Map<String,ConfigSection> entries = synced(map());
@@ -104,7 +105,7 @@ public class ConfigMap implements ConfigStoreListener {
 						if (! isValidConfigName(l2))
 							throw new ConfigException("Invalid import config name found in configuration:  {0}", line);
 						var l3 = l.substring(i+1);
-						if (! (isEmpty(l3) || firstChar(l3) == '#'))
+						if (! (Utils.isEmpty(l3) || firstChar(l3) == '#'))
 							throw new ConfigException("Invalid import config name found in configuration:  {0}", line);
 						var importName = l2.trim();
 						try {
@@ -266,7 +267,7 @@ public class ConfigMap implements ConfigStoreListener {
 			imports.forEach(x -> s.addAll(x.getConfigMap().getSections()));
 			s.addAll(entries.keySet());
 		}
-		return unmodifiable(s);
+		return u(s);
 	}
 
 	/**
@@ -288,7 +289,7 @@ public class ConfigMap implements ConfigStoreListener {
 			if (cs != null)
 				s.addAll(cs.entries.keySet());
 		}
-		return unmodifiable(s);
+		return u(s);
 	}
 
 	/**
@@ -572,7 +573,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @return The listeners currently associated with this config map.
 	 */
 	public Set<ConfigEventListener> getListeners() {
-		return unmodifiable(listeners);
+		return u(listeners);
 	}
 
 	@Override /* ConfigStoreListener */
@@ -805,7 +806,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 		final String name;   // The config section name, or blank if the default section.  Never null.
 
-		final List<String> preLines = synced(list());
+		final List<String> preLines = synced(Utils.list());
 		private final String rawLine;
 
 		final Map<String,ConfigMapEntry> oentries = synced(map());

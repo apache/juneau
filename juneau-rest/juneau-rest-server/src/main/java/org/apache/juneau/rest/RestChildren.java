@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
@@ -19,6 +20,7 @@ import java.util.*;
 import jakarta.servlet.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
@@ -76,7 +78,7 @@ public class RestChildren {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(RestChildren.class, beanStore);
-			list = list();
+			list = Utils.list();
 		}
 
 		@Override /* BeanBuilder */
@@ -149,7 +151,7 @@ public class RestChildren {
 				}
 			}
 		}
-		return empty();
+		return opte();
 	}
 
 	/**
@@ -161,7 +163,7 @@ public class RestChildren {
 	 * @return The children as an unmodifiable map.
 	 */
 	public Map<String,RestContext> asMap() {
-		return unmodifiable(children);
+		return u(children);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

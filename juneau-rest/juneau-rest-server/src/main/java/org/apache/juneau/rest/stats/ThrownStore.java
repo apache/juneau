@@ -187,7 +187,7 @@ public class ThrownStore {
 			s = parent.get().ignoreClasses;
 		if (s == null)
 			s = Collections.emptySet();
-		this.ignoreClasses = unmodifiable(s);
+		this.ignoreClasses = u(s);
 	}
 
 

@@ -14,8 +14,8 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
@@ -1650,7 +1650,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 						Header h = (Header)a;
 						if (def != null) {
 							try {
-								defaultRequestHeaders().set(basicHeader(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
+								defaultRequestHeaders().set(basicHeader(StringUtils.firstNonEmpty(h.name(), h.value()), parseAnything(def)));
 							} catch (ParseException e) {
 								throw new ConfigException(e, "Malformed @Header annotation");
 							}
@@ -1660,7 +1660,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 						Query h = (Query)a;
 						if (def != null) {
 							try {
-								defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
+								defaultRequestQueryData().setDefault(basicPart(StringUtils.firstNonEmpty(h.name(), h.value()), parseAnything(def)));
 							} catch (ParseException e) {
 								throw new ConfigException(e, "Malformed @Query annotation");
 							}
@@ -1670,7 +1670,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 						FormData h = (FormData)a;
 						if (def != null) {
 							try {
-								defaultRequestFormData().setDefault(basicPart(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
+								defaultRequestFormData().setDefault(basicPart(StringUtils.firstNonEmpty(h.name(), h.value()), parseAnything(def)));
 							} catch (ParseException e) {
 								throw new ConfigException(e, "Malformed @FormData annotation");
 							}
@@ -2079,7 +2079,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		@FluentSetter
 		public Builder roleGuard(String value) {
 			if (roleGuard == null)
-				roleGuard = set(value);
+				roleGuard = Utils.set(value);
 			else
 				roleGuard.add(value);
 			return this;
@@ -2204,7 +2204,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		private String joinnlFirstNonEmptyArray(String[]...s) {
 			for (String[] ss : s)
 				if (ss.length > 0)
-					return joinnl(ss);
+					return StringUtils.joinnl(ss);
 			return null;
 		}
 
@@ -2293,8 +2293,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			pathMatchers = bs.add(UrlPathMatcher[].class, builder.getPathMatchers().asArray());
 			bs.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
 
-			supportedAcceptTypes = unmodifiable(builder.produces != null ? builder.produces : serializers.getSupportedMediaTypes());
-			supportedContentTypes = unmodifiable(builder.consumes != null ? builder.consumes : parsers.getSupportedMediaTypes());
+			supportedAcceptTypes = u(builder.produces != null ? builder.produces : serializers.getSupportedMediaTypes());
+			supportedContentTypes = u(builder.consumes != null ? builder.consumes : parsers.getSupportedMediaTypes());
 
 			defaultRequestHeaders = builder.defaultRequestHeaders();
 			defaultResponseHeaders = builder.defaultResponseHeaders();
