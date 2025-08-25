@@ -173,8 +173,8 @@ public final class ObjectSorter implements ObjectTool<SortArgs> {
 		@Override
 		public int compareTo(Object o) {
 			if (isDesc)
-				return ObjectUtils.compare(((SortEntry)o).sortVal, this.sortVal);
-			return ObjectUtils.compare(this.sortVal, ((SortEntry)o).sortVal);
+				return Utils.compare(((SortEntry)o).sortVal, this.sortVal);
+			return Utils.compare(this.sortVal, ((SortEntry)o).sortVal);
 		}
 	}
 }

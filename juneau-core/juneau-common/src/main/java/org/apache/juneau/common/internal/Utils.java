@@ -540,4 +540,32 @@ public class Utils {
 		if (value.getClass().isArray()) return Array.getLength(value) > 0;
 		return StringUtils.isNotEmpty(s(value));
 	}
+
+	/**
+	 * Compares two objects for equality.
+	 *
+	 * <p>
+	 * Nulls are always considered less-than unless both are null.
+	 *
+	 * @param o1 Object 1.
+	 * @param o2 Object 2.
+	 * @return
+	 * 	<c>-1</c>, <c>0</c>, or <c>1</c> if <c>o1</c> is less-than, equal, or greater-than <c>o2</c>.
+	 *	<br><c>0</c> if objects are not of the same type or do not implement the {@link Comparable} interface.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static int compare(Object o1, Object o2) {
+		if (o1 == null) {
+			if (o2 == null)
+				return 0;
+			return -1;
+		} else if (o2 == null) {
+			return 1;
+		}
+	
+		if (o1.getClass() == o2.getClass() && o1 instanceof Comparable)
+			return ((Comparable)o1).compareTo(o2);
+	
+		return 0;
+	}
 }

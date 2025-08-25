@@ -31,48 +31,6 @@ import org.apache.juneau.reflect.*;
 public class ObjectUtils {
 
 	/**
-	 * Compares two objects for equality.
-	 *
-	 * <p>
-	 * Nulls are always considered less-than unless both are null.
-	 *
-	 * @param o1 Object 1.
-	 * @param o2 Object 2.
-	 * @return
-	 * 	<c>-1</c>, <c>0</c>, or <c>1</c> if <c>o1</c> is less-than, equal, or greater-than <c>o2</c>.
-	 *	<br><c>0</c> if objects are not of the same type or do not implement the {@link Comparable} interface.
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static int compare(Object o1, Object o2) {
-		if (o1 == null) {
-			if (o2 == null)
-				return 0;
-			return -1;
-		} else if (o2 == null) {
-			return 1;
-		}
-
-		if (o1.getClass() == o2.getClass() && o1 instanceof Comparable)
-			return ((Comparable)o1).compareTo(o2);
-
-		return 0;
-	}
-
-	/**
-	 * Compare two integers numerically.
-	 *
-	 * @param i1 Integer #1
-	 * @param i2 Integer #2
-	 * @return
-	 * 	The value <c>0</c> if Integer #1 is equal to Integer #2; a value less than <c>0</c> if
-	 * 	Integer #1 numerically less than Integer #2; and a value greater than <c>0</c> if Integer #1 is
-	 * 	numerically greater than Integer #2 (signed comparison).
-	 */
-	public static final int compare(int i1, int i2) {
-		return (i1<i2 ? -1 : (i1==i2 ? 0 : 1));
-	}
-
-	/**
 	 * Tests two objects for equality, gracefully handling nulls.
 	 *
 	 * @param <T> Object 1 type.

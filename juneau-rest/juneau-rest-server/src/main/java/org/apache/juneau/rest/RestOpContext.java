@@ -2693,19 +2693,19 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				return c;
 		}
 
-		c = ObjectUtils.compare(o.hierarchyDepth, hierarchyDepth);
+		c = Utils.compare(o.hierarchyDepth, hierarchyDepth);
 		if (c != 0)
 			return c;
 
-		c = ObjectUtils.compare(o.requiredMatchers.length, requiredMatchers.length);
+		c = Utils.compare(o.requiredMatchers.length, requiredMatchers.length);
 		if (c != 0)
 			return c;
 
-		c = ObjectUtils.compare(o.optionalMatchers.length, optionalMatchers.length);
+		c = Utils.compare(o.optionalMatchers.length, optionalMatchers.length);
 		if (c != 0)
 			return c;
 
-		c = ObjectUtils.compare(o.guards.length, guards.length);
+		c = Utils.compare(o.guards.length, guards.length);
 
 		if (c != 0)
 			return c;
@@ -2714,7 +2714,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		if (c != 0)
 			return c;
 
-		c = ObjectUtils.compare(method.getParameterCount(), o.method.getParameterCount());
+		c = Utils.compare(method.getParameterCount(), o.method.getParameterCount());
 		if (c != 0)
 			return c;
 
