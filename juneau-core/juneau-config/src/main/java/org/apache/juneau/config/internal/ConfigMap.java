@@ -87,7 +87,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 		var imports2 = mapOf(String.class, ConfigMap.class);
 
-		List<String> lines = linkedList();
+		List<String> lines = new LinkedList<>();
 		try (var scanner = new Scanner(contents)) {
 			while (scanner.hasNextLine()) {
 				var line = scanner.nextLine();

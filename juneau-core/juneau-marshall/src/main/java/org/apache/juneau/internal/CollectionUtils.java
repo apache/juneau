@@ -177,21 +177,6 @@ public final class CollectionUtils {
 	}
 
 	/**
-	 * Convenience method for creating a {@link LinkedList}.
-	 *
-	 * @param <E> The element type.
-	 * @param values The values to initialize the list with.
-	 * @return A new modifiable list.
-	 */
-	@SafeVarargs
-	public static <E> LinkedList<E> linkedList(E...values) {
-		LinkedList<E> l = new LinkedList<>();
-		for (E v : values)
-			l.add(v);
-		return l;
-	}
-
-	/**
 	 * Creates an {@link ArrayList} copy from a collection.
 	 *
 	 * @param <E> The element type.

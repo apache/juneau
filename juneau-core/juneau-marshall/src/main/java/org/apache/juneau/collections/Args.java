@@ -14,8 +14,10 @@ package org.apache.juneau.collections;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static java.util.stream.Collectors.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 
@@ -121,7 +123,7 @@ public final class Args extends JsonMap {
 	 * @param args Arguments passed in through a <c>main(String[] args)</c> method.
 	 */
 	public Args(String[] args) {
-		List<String> argList = linkedList(args);
+		List<String> argList = Arrays.stream(args).collect(toCollection(LinkedList::new));
 
 		// Capture the main arguments.
 		int i = 0;

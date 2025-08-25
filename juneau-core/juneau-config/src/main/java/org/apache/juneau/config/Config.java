@@ -554,7 +554,7 @@ public final class Config extends Context implements ConfigEventListener {
 	final VarResolverSession varSession;
 
 	private final ConfigMap configMap;
-	private final List<ConfigEventListener> listeners = synced(linkedList());
+	private final List<ConfigEventListener> listeners = synced(new LinkedList<>());
 
 
 	@Override /* Context */
