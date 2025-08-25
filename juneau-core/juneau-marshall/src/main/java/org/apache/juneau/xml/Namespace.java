@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -127,7 +128,7 @@ public final class Namespace {
 		}
 
 		if (o instanceof CharSequence) {
-			String[] ss = Utils.split3(o.toString());
+			String[] ss = splita(o.toString());
 			Namespace[] n = new Namespace[ss.length];
 			for (int i = 0; i < ss.length; i++)
 				n[i] = create(ss[i]);

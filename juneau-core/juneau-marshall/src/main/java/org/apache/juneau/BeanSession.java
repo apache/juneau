@@ -720,7 +720,7 @@ public class BeanSession extends ContextSession {
 				else if (from.hasMutaterTo(to))
 					return from.mutateTo(value, to);
 				else
-					return (T)toArray(to, new JsonList((Object[])Utils.split3(value.toString())).setBeanSession(this));
+					return (T)toArray(to, new JsonList((Object[])splita(value.toString())).setBeanSession(this));
 			}
 
 			// Target type is some sort of Map that needs to be converted.

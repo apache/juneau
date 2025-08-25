@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import java.util.*;
 import java.util.function.*;
@@ -108,7 +109,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 */
 	public BasicCsvHeader(String name, String value) {
 		super(name, value);
-		this.value = Utils.split3(value);
+		this.value = splita(value);
 		this.supplier = null;
 	}
 

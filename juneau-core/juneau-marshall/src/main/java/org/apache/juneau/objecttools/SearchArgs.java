@@ -66,7 +66,7 @@ public class SearchArgs {
 	 * @param searchArgs Search arguments.
 	 */
 	public SearchArgs(String searchArgs) {
-		this(alist(Utils.split3(searchArgs)));
+		this(alist(splita(searchArgs)));
 	}
 
 	/**

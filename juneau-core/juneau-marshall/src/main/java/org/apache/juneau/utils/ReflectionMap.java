@@ -677,7 +677,7 @@ public class ReflectionMap<V> {
 
 		ConstructorEntry(String name, V value) {
 			int i = name.indexOf('(');
-			this.args = Utils.split3(name.substring(i+1, name.length()-1));
+			this.args = splita(name.substring(i+1, name.length()-1));
 			name = name.substring(0, i).trim();
 			this.simpleClassName = simpleClassName(name);
 			this.fullClassName = name;

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ArrayUtils.copyOf;
 import java.util.*;
 import java.util.function.*;
@@ -110,7 +111,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 */
 	public BasicCsvArrayPart(String name, String value) {
 		super(name, value);
-		this.value = Utils.split3(value);
+		this.value = splita(value);
 		this.supplier = null;
 		this.stringValue = value;
 	}

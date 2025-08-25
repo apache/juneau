@@ -120,7 +120,7 @@ public class TestUtils extends Utils {
 
 	public static void assertContainsAll(String expected, Object actual) {
 		var a2 = r(actual);
-		for (var e : Utils.split3(expected))
+		for (var e : splita(expected))
 			assertTrue(a2.contains(e), fs("String did not contain expected substring.  expected={0}, actual={1}", e, a2));
 	}
 
@@ -137,7 +137,7 @@ public class TestUtils extends Utils {
 	 */
 	public static void assertArray(Object array, Object...expected) {
 		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
-			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : Utils.split3(s(expected[0]));
+			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : splita(s(expected[0]));
 		if (Array.getLength(array) != expected.length)
 			fail(fs("Wrong array length.  expected={0}, actual={1}", expected.length, Array.getLength(array)));
 		for (var i = 0; i < expected.length; i++) {
@@ -160,7 +160,7 @@ public class TestUtils extends Utils {
 	 */
 	public static void assertList(List<?> list, Object...expected) {
 		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
-			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : Utils.split3(s(expected[0]));
+			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : splita(s(expected[0]));
 		if (list.size() != expected.length)
 			fail(fs("Wrong list length.  expected={0}, actual={1}", expected.length, list.size()));
 		for (var i = 0; i < expected.length; i++) {

@@ -397,17 +397,17 @@ class StringUtilsTest extends SimpleTestBase {
 	// split(String,char)
 	//====================================================================================================
 	@Test void a07_split() {
-		assertNull(Utils.split3((String)null));
-		assertArray(Utils.split3(""));
-		assertArray(Utils.split3("1"), "1");
-		assertArray(Utils.split3("1,2"), "1", "2");
-		assertArray(Utils.split3("1\\,2"), ">1,2");
-		assertArray(Utils.split3("1\\\\,2"), "1\\", "2");
-		assertArray(Utils.split3("1\\\\\\,2"), ">1\\,2");
-		assertArray(Utils.split3("1,2\\"), "1", "2\\");
-		assertArray(Utils.split3("1,2\\\\"), "1", "2\\");
-		assertArray(Utils.split3("1,2\\,"), "1", "2,");
-		assertArray(Utils.split3("1,2\\\\,"), "1", "2\\", "");
+		assertNull(Utils.splita((String)null));
+		assertArray(Utils.splita(""));
+		assertArray(Utils.splita("1"), "1");
+		assertArray(Utils.splita("1,2"), "1", "2");
+		assertArray(Utils.splita("1\\,2"), ">1,2");
+		assertArray(Utils.splita("1\\\\,2"), "1\\", "2");
+		assertArray(Utils.splita("1\\\\\\,2"), ">1\\,2");
+		assertArray(Utils.splita("1,2\\"), "1", "2\\");
+		assertArray(Utils.splita("1,2\\\\"), "1", "2\\");
+		assertArray(Utils.splita("1,2\\,"), "1", "2,");
+		assertArray(Utils.splita("1,2\\\\,"), "1", "2\\", "");
 	}
 
 	@Test void a08_split2() {

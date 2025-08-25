@@ -934,16 +934,6 @@ public class Utils {
 	}
 
 	/**
-	 * Shortcut for calling <code>split(s, <js>','</js>)</code>
-	 *
-	 * @param s The string to split.  Can be <jk>null</jk>.
-	 * @return The tokens, or <jk>null</jk> if the string was null.
-	 */
-	public static String[] split3(String s) {
-		return split3(s, ',');
-	}
-
-	/**
 	 * Splits a character-delimited string into a string array.
 	 *
 	 * <p>
@@ -1054,7 +1044,7 @@ public class Utils {
 	 * Splits a comma-delimited list into an array of strings.
 	 */
 	public static String[] splita(String s) {
-		return s == null ? new String[0] : Utils.split3(s);
+		return split3(s, ',');
 	}
 
 	/**

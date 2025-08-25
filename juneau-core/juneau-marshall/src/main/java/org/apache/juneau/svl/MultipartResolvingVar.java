@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
+import static org.apache.juneau.common.internal.Utils.*;
+
 import org.apache.juneau.common.internal.*;
 
 /**
@@ -47,7 +49,7 @@ public abstract class MultipartResolvingVar extends SimpleVar {
 		int i = s.indexOf(',');
 		if (i == -1)
 			return resolve(session, s.trim());
-		for (String s2 : Utils.split3(s)) {
+		for (String s2 : splita(s)) {
 			String v = resolve(session, s2);
 			if (v != null)
 				return v;

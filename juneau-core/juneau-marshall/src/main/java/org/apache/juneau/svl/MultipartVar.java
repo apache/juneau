@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
+import static org.apache.juneau.common.internal.Utils.*;
+
 import org.apache.juneau.common.internal.*;
 
 /**
@@ -48,7 +50,7 @@ public abstract class MultipartVar extends SimpleVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String s) {
-		String[] s2 = s.indexOf(',') == -1 ? new String[]{s.trim()} : Utils.split3(s);
+		String[] s2 = s.indexOf(',') == -1 ? new String[]{s.trim()} : splita(s);
 		return resolve(session, s2);
 	}
 }

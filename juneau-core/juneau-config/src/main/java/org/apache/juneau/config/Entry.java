@@ -14,6 +14,7 @@ package org.apache.juneau.config;
 
 import static org.apache.juneau.BinaryFormat.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -281,7 +282,7 @@ public class Entry {
 				throw new BeanRuntimeException(e);
 			}
 		}
-		return Utils.opt(Utils.split3(v));
+		return Utils.opt(splita(v));
 	}
 
 	/**

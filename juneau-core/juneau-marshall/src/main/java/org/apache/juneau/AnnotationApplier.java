@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import java.lang.annotation.*;
 import java.nio.charset.*;
@@ -187,7 +188,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return An array with resolved strings.
 	 */
 	protected Stream<String> cdl(String in) {
-		return Arrays.stream(Utils.split3(vr.resolve(in))).filter(Utils::isNotEmpty);
+		return Arrays.stream(splita(vr.resolve(in))).filter(Utils::isNotEmpty);
 	}
 
 	/**
