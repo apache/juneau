@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 import java.net.*;
 import java.nio.file.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -113,7 +114,7 @@ public class LocalDir {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return o instanceof LocalDir && eq(this, (LocalDir)o, (x,y)->eq(x.clazz, y.clazz) && eq(x.clazzPath, y.clazzPath) && eq(x.path, y.path));
+		return o instanceof LocalDir && Utils.eq(this, (LocalDir)o, (x,y)->eq(x.clazz, y.clazz) && eq(x.clazzPath, y.clazzPath) && eq(x.path, y.path));
 	}
 
 	@Override /* Object */

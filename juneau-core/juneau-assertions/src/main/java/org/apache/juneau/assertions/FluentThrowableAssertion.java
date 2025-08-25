@@ -21,6 +21,7 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -456,7 +457,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	@Override
 	protected boolean equals(Object o1, Object o2) {
 		if (o1 instanceof Throwable o1t && o2 instanceof Throwable o2t)
-			return ObjectUtils.eq(o1t, o2t, (x,y)->ObjectUtils.eq(x.getClass(),y.getClass()) && ObjectUtils.eq(x.getMessage(),y.getMessage()));
+			return Utils.eq(o1t, o2t, (x,y)->ObjectUtils.eq(x.getClass(),y.getClass()) && ObjectUtils.eq(x.getMessage(),y.getMessage()));
 		return super.equals(o1, o2);
 	}
 }

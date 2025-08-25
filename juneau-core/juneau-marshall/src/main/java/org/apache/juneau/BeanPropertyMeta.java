@@ -28,6 +28,7 @@ import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -1270,6 +1271,6 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return (o instanceof BeanPropertyMeta) && eq(this, (BeanPropertyMeta)o, (x,y)->eq(x.name, y.name) && eq(x.beanMeta, y.beanMeta));
+		return (o instanceof BeanPropertyMeta) && Utils.eq(this, (BeanPropertyMeta)o, (x,y)->eq(x.name, y.name) && eq(x.beanMeta, y.beanMeta));
 	}
 }

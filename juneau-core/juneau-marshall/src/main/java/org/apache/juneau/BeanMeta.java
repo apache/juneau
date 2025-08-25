@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
@@ -1002,6 +1003,6 @@ public class BeanMeta<T> {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return (o instanceof BeanMeta) && eq(this, (BeanMeta<?>)o, (x,y)->eq(x.classMeta, y.classMeta));
+		return (o instanceof BeanMeta) && Utils.eq(this, (BeanMeta<?>)o, (x,y)->eq(x.classMeta, y.classMeta));
 	}
 }

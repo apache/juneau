@@ -568,4 +568,24 @@ public class Utils {
 	
 		return 0;
 	}
+
+	/**
+	 * Tests two objects for inequality, gracefully handling nulls.
+	 *
+	 * @param <T> Object 1 type.
+	 * @param <U> Object 2 type.
+	 * @param o1 Object 1.
+	 * @param o2 Object 2.
+	 * @param test The test to use for equality.
+	 * @return <jk>false</jk> if both objects are equal based on the test.
+	 */
+	public static <T,U> boolean ne(T o1, U o2, BiPredicate<T,U> test) {
+		if (o1 == null)
+			return o2 != null;
+		if (o2 == null)
+			return true;
+		if (o1 == o2)
+			return false;
+		return ! test.test(o1, o2);
+	}
 }

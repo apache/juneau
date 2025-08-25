@@ -32,6 +32,7 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -2203,6 +2204,6 @@ public final class ClassMeta<T> implements Type {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return (o instanceof ClassMeta) && eq(this, (ClassMeta<?>)o, (x,y)->eq(x.innerClass, y.innerClass));
+		return (o instanceof ClassMeta) && Utils.eq(this, (ClassMeta<?>)o, (x,y)->eq(x.innerClass, y.innerClass));
 	}
 }

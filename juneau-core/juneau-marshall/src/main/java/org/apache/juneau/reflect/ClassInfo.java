@@ -26,6 +26,7 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -2473,6 +2474,6 @@ public final class ClassInfo {
 
 	@Override
 	public boolean equals(Object o) {
-		return (o instanceof ClassInfo) && eq(this, (ClassInfo)o, (x,y)->eq(x.t, y.t));
+		return (o instanceof ClassInfo) && Utils.eq(this, (ClassInfo)o, (x,y)->eq(x.t, y.t));
 	}
 }
