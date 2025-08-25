@@ -12,25 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.common.internal;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
+import java.io.*;
+import java.nio.charset.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.concurrent.atomic.*;
+import java.util.function.*;
 
 /**
  * Various I/O related utility methods.

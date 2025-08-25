@@ -22,6 +22,21 @@ import org.apache.juneau.common.utils.*;
 public class ThrowableUtils {
 
 	/**
+	 * Interface used with {@link #safeSupplier(SupplierWithThrowable)}.
+	 */
+	@FunctionalInterface
+	public interface SupplierWithThrowable<T> {
+
+		/**
+		 * Gets a result.
+		 *
+		 * @return a result
+		 * @throws Throwable if supplier threw an exception.
+		 */
+		T get() throws Throwable;
+	}
+
+	/**
 	 * Creates a new {@link RuntimeException}.
 	 *
 	 * @param cause The caused-by exception.
@@ -65,54 +80,6 @@ public class ThrowableUtils {
 	}
 
 	/**
-	 * Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.
-	 *
-	 * @param <T> The supplier type.
-	 * @param supplier The supplier throwing an exception.
-	 * @return The supplied result.
-	 * @throws RuntimeException if supplier threw an exception.
-	 */
-	public static <T> T safeSupplier(SupplierWithThrowable<T> supplier) {
-		try {
-			return supplier.get();
-		} catch (RuntimeException t) {
-			throw t;
-		} catch (Throwable t) {
-			throw asRuntimeException(t);
-		}
-	}
-
-	/**
-	 * Interface used with {@link #safeSupplier(SupplierWithThrowable)}.
-	 */
-	@FunctionalInterface
-	public interface SupplierWithThrowable<T> {
-
-		/**
-		 * Gets a result.
-		 *
-		 * @return a result
-		 * @throws Throwable if supplier threw an exception.
-		 */
-		T get() throws Throwable;
-	}
-
-	/**
-	 * Runs a snippet of code and encapsulates any throwable inside a {@link RuntimeException}.
-	 *
-	 * @param snippet The snippet of code to run.
-	 */
-	public static void safeRun(Snippet snippet) {
-		try {
-			snippet.run();
-		} catch (RuntimeException t) {
-			throw t;
-		} catch (Throwable t) {
-			throw asRuntimeException(t);
-		}
-	}
-
-	/**
 	 * Convenience method for getting a stack trace as a string.
 	 *
 	 * @param t The throwable to get the stack trace from.
@@ -145,5 +112,38 @@ public class ThrowableUtils {
 			t = t.getCause();
 		}
 		return i;
+	}
+
+	/**
+	 * Runs a snippet of code and encapsulates any throwable inside a {@link RuntimeException}.
+	 *
+	 * @param snippet The snippet of code to run.
+	 */
+	public static void safeRun(Snippet snippet) {
+		try {
+			snippet.run();
+		} catch (RuntimeException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw asRuntimeException(t);
+		}
+	}
+
+	/**
+	 * Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.
+	 *
+	 * @param <T> The supplier type.
+	 * @param supplier The supplier throwing an exception.
+	 * @return The supplied result.
+	 * @throws RuntimeException if supplier threw an exception.
+	 */
+	public static <T> T safeSupplier(SupplierWithThrowable<T> supplier) {
+		try {
+			return supplier.get();
+		} catch (RuntimeException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw asRuntimeException(t);
+		}
 	}
 }

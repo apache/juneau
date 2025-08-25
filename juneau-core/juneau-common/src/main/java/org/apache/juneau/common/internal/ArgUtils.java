@@ -20,9 +20,27 @@ import java.text.*;
 public class ArgUtils {
 
 	/**
-	 * Constructor.
+	 * Throws an {@link IllegalArgumentException} if the specified expression is <jk>false</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.internal.ArgUtils.*;
+	 *
+	 *	<jk>public</jk> String setFoo(List&lt;String&gt; <jv>foo</jv>) {
+	 *		<jsm>assertArg</jsm>(<jv>foo</jv> != <jk>null</jk> &amp;&amp; ! <jv>foo</jv>.isEmpty(), <js>"'foo' cannot be null or empty."</js>);
+	 *		...
+	 *	}
+	 * </p>
+	 *
+	 * @param expression The boolean expression to check.
+	 * @param msg The exception message.
+	 * @param args The exception message args.
+	 * @throws IllegalArgumentException Constructed exception.
 	 */
-	protected ArgUtils() {}
+	public static final void assertArg(boolean expression, String msg, Object...args) throws IllegalArgumentException {
+		if (! expression)
+			throw new IllegalArgumentException(MessageFormat.format(msg, args));
+	}
 
 	/**
 	 * Throws an {@link IllegalArgumentException} if the specified argument is <jk>null</jk>.
@@ -49,29 +67,6 @@ public class ArgUtils {
 	}
 
 	/**
-	 * Throws an {@link IllegalArgumentException} if the specified expression is <jk>false</jk>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.internal.ArgUtils.*;
-	 *
-	 *	<jk>public</jk> String setFoo(List&lt;String&gt; <jv>foo</jv>) {
-	 *		<jsm>assertArg</jsm>(<jv>foo</jv> != <jk>null</jk> &amp;&amp; ! <jv>foo</jv>.isEmpty(), <js>"'foo' cannot be null or empty."</js>);
-	 *		...
-	 *	}
-	 * </p>
-	 *
-	 * @param expression The boolean expression to check.
-	 * @param msg The exception message.
-	 * @param args The exception message args.
-	 * @throws IllegalArgumentException Constructed exception.
-	 */
-	public static final void assertArg(boolean expression, String msg, Object...args) throws IllegalArgumentException {
-		if (! expression)
-			throw new IllegalArgumentException(MessageFormat.format(msg, args));
-	}
-
-	/**
 	 * Throws an {@link IllegalArgumentException} if the specified value doesn't have all subclasses of the specified type.
 	 *
 	 * @param <E> The element type.
@@ -87,4 +82,9 @@ public class ArgUtils {
 				throw new IllegalArgumentException("Arg "+name+" did not have arg of type "+type.getName()+" at index "+i+": "+value[i].getName());
 		return (Class<E>[])value;
 	}
+
+	/**
+	 * Constructor.
+	 */
+	protected ArgUtils() {}
 }

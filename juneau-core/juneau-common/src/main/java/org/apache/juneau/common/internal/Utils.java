@@ -18,7 +18,6 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
-
 import java.text.*;
 import java.time.format.*;
 import java.util.*;

@@ -21,12 +21,8 @@ import java.util.function.*;
  */
 public class SystemUtils {
 
-	/**
-	 * Constructor.
-	 */
-	protected SystemUtils() {}
-
 	static final List<Supplier<String>> SHUTDOWN_MESSAGES = new CopyOnWriteArrayList<>();
+
 	static {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
@@ -36,7 +32,6 @@ public class SystemUtils {
 			}
 		});
 	}
-
 	/**
 	 * Adds a console message to display when the JVM shuts down.
 	 *
@@ -45,4 +40,9 @@ public class SystemUtils {
 	public static void shutdownMessage(Supplier<String> message) {
 		SHUTDOWN_MESSAGES.add(message);
 	}
+
+	/**
+	 * Constructor.
+	 */
+	protected SystemUtils() {}
 }
