@@ -182,7 +182,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (innerField != null) {
 				List<Beanp> lp = list();
 				bc.forEachAnnotation(Beanp.class, innerField, x -> true, x -> lp.add(x));
-				if (field != null || Utils.isNotEmpty2(lp)) {
+				if (field != null || Utils.isNotEmpty(lp)) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
 					rawTypeMeta = bc.resolveClassMeta(last(lp), innerField.getGenericType(), typeVarImpls);

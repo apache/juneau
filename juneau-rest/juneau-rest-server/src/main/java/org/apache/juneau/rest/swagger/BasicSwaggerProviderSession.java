@@ -98,7 +98,7 @@ public class BasicSwaggerProviderSession {
 		InputStream is = ff.getStream(rci.getSimpleName() + ".json", locale).orElse(null);
 
 		Predicate<String> ne = Utils::isNotEmpty3;
-		Predicate<Collection<?>> nec = Utils::isNotEmpty2;
+		Predicate<Collection<?>> nec = Utils::isNotEmpty;
 		Predicate<Map<?,?>> nem = Utils::isNotEmpty2;
 
 		// Load swagger JSON from classpath.
@@ -932,7 +932,7 @@ public class BasicSwaggerProviderSession {
 				return om;
 			om = newMap(om);
 			Predicate<String> ne = Utils::isNotEmpty3;
-			Predicate<Collection<?>> nec = Utils::isNotEmpty2;
+			Predicate<Collection<?>> nec = Utils::isNotEmpty;
 			Predicate<Map<?,?>> nem = Utils::isNotEmpty2;
 			Predicate<Boolean> nf = Utils::isTrue;
 			Predicate<Long> nm1 = Utils::isNotMinusOne;
@@ -990,7 +990,7 @@ public class BasicSwaggerProviderSession {
 			return om;
 		om = newMap(om);
 		Predicate<String> ne = Utils::isNotEmpty3;
-		Predicate<Collection<?>> nec = Utils::isNotEmpty2;
+		Predicate<Collection<?>> nec = Utils::isNotEmpty;
 		Predicate<Map<?,?>> nem = Utils::isNotEmpty2;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::isNotMinusOne;
@@ -1021,7 +1021,7 @@ public class BasicSwaggerProviderSession {
 			return om;
 		om = newMap(om);
 		Predicate<String> ne = Utils::isNotEmpty3;
-		Predicate<Collection<?>> nec = Utils::isNotEmpty2;
+		Predicate<Collection<?>> nec = Utils::isNotEmpty;
 		Predicate<Map<?,?>> nem = Utils::isNotEmpty2;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::isNotMinusOne;

@@ -96,13 +96,13 @@ public final class BeanFilter {
 		public Builder applyAnnotations(List<Bean> annotations) {
 
 			annotations.forEach(x -> {
-				if (Utils.isNotEmpty3(x.properties(), x.p())) properties(x.properties(), x.p());
+				if (isNotEmpty(x.properties()) || isNotEmpty(x.p())) properties(x.properties(), x.p());
 				if (x.sort()) sortProperties(true);
 				if (x.findFluentSetters()) findFluentSetters();
-				if (Utils.isNotEmpty3(x.excludeProperties(), x.xp())) excludeProperties(x.excludeProperties(), x.xp());
-				if (Utils.isNotEmpty3(x.readOnlyProperties(), x.ro())) readOnlyProperties(x.readOnlyProperties(), x.ro());
-				if (Utils.isNotEmpty3(x.writeOnlyProperties(), x.wo())) writeOnlyProperties(x.writeOnlyProperties(), x.wo());
-				if (Utils.isNotEmpty3(x.typeName())) typeName(x.typeName());
+				if (isNotEmpty(x.excludeProperties()) || isNotEmpty(x.xp())) excludeProperties(x.excludeProperties(), x.xp());
+				if (isNotEmpty(x.readOnlyProperties()) || isNotEmpty(x.ro())) readOnlyProperties(x.readOnlyProperties(), x.ro());
+				if (isNotEmpty(x.writeOnlyProperties()) || isNotEmpty(x.wo())) writeOnlyProperties(x.writeOnlyProperties(), x.wo());
+				if (isNotEmpty(x.typeName())) typeName(x.typeName());
 				if (isNotVoid(x.propertyNamer())) propertyNamer(x.propertyNamer());
 				if (isNotVoid(x.interfaceClass())) interfaceClass(x.interfaceClass());
 				if (isNotVoid(x.stopClass())) stopClass(x.stopClass());

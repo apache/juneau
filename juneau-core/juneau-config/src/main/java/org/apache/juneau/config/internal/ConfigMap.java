@@ -719,7 +719,7 @@ public class ConfigMap implements ConfigStoreListener {
 	}
 
 	private void signal(ConfigEvents changes) {
-		if (Utils.isNotEmpty2(changes))
+		if (Utils.isNotEmpty(changes))
 			listeners.forEach(x -> x.onConfigChange(changes));
 	}
 

@@ -446,16 +446,6 @@ public class Utils {
 	public static boolean isNotEmpty(String o) {
 		return ! isEmpty(o);
 	}
-	/**
-	 * Returns <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
-	 *
-	 * @param <E> The element type.
-	 * @param value The value being checked.
-	 * @return <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
-	 */
-	public static <E> boolean isNotEmpty2(Collection<E> value) {
-		return value != null && ! value.isEmpty();
-	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
@@ -466,7 +456,7 @@ public class Utils {
 	 * @return <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
 	 */
 	public static <K,V> boolean isNotEmpty2(Map<K,V> value) {
-		return value != null && ! value.isEmpty();
+		return isNotEmpty(value);
 	}
 
 	/**
@@ -476,18 +466,7 @@ public class Utils {
 	 * @return <jk>true</jk> if specified string is not <jk>null</jk> or empty.
 	 */
 	public static boolean isNotEmpty3(String s) {
-		return ! isEmpty(s);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if either of the specified strings are not <jk>null</jk> or empty.
-	 *
-	 * @param s1 The string to check.
-	 * @param s2 The string to check.
-	 * @return <jk>true</jk> if either of the specified strings are not <jk>null</jk> or empty.
-	 */
-	public static boolean isNotEmpty3(String s1, String s2) {
-		return isNotEmpty3(s1) || isNotEmpty3(s2);
+		return isNotEmpty(s);
 	}
 
 	/**
