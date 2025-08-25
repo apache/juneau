@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
 import org.junit.jupiter.api.*;
@@ -165,7 +165,7 @@ class ConfigImportsTest extends SimpleTestBase {
 			if (events.isEmpty())
 				return null;
 			for (ConfigEvent ce : events)
-				if (eq3(section, ce.getSection()) && eq3(key, ce.getKey()))
+				if (Utils.eq(section, ce.getSection()) && Utils.eq(key, ce.getKey()))
 					return ce.getValue();
 			return null;
 		}

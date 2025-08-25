@@ -16,6 +16,7 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.swap.*;
 import org.junit.*;
 
@@ -43,7 +44,7 @@ public abstract class OneWayStringSwapTest<T> {
 	@Test
 	public void testSwap() throws Exception {
 		String s = ss.swap(bs, o);
-		if (ne3(expected, s)) {
+		if (Utils.ne(expected, s)) {
 			if (expected.isEmpty()) {
 				if (! label.startsWith("[]"))
 					System.err.println(label.substring(0, label.indexOf(']')+1) + " "+s);  // NOT DEBUG

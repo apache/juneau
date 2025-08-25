@@ -555,8 +555,8 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 
 	private boolean eq(String s1, String s2) {
 		if (caseSensitive)
-			return StringUtils.eq3(s1, s2);
-		return StringUtils.eqic3(s1, s2);
+			return Utils.eq(s1, s2);
+		return Utils.eqic(s1, s2);
 	}
 
 	@Override /* Object */

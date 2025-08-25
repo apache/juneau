@@ -656,7 +656,7 @@ public class ReflectionMap<V> {
 			Class<?> c = m.getDeclaringClass();
 			return
 				classMatches(simpleClassName, fullClassName, c)
-				&& (eq3(m.getName(), methodName))
+				&& (Utils.eq(m.getName(), methodName))
 				&& (argsMatch(args, m.getParameterTypes()));
 		}
 
@@ -724,7 +724,7 @@ public class ReflectionMap<V> {
 			Class<?> c = f.getDeclaringClass();
 			return
 				classMatches(simpleClassName, fullClassName, c)
-				&& (eq3(f.getName(), fieldName));
+				&& (Utils.eq(f.getName(), fieldName));
 		}
 
 		@Override
@@ -746,7 +746,7 @@ public class ReflectionMap<V> {
 		for (int i = 0; i < args.length; i++) {
 			String n = names[i];
 			Class<?> a = args[i];
-			if (! (eq3(n, a.getSimpleName()) || eq3(n, a.getName())))
+			if (! (Utils.eq(n, a.getSimpleName()) || Utils.eq(n, a.getName())))
 				return false;
 		}
 		return true;
@@ -765,18 +765,18 @@ public class ReflectionMap<V> {
 		// c.getFullName() == "org.apache.juneau.a.rttests.RountTripBeansWithBuilders$Ac$Builder"
 		// c.getPackage() == "org.apache.juneau.a.rttests"
 		String cSimple = c.getSimpleName(), cFull = c.getName();
-		if (eq3(simpleName, cSimple) || eq3(fullName, cFull) || "*".equals(simpleName))
+		if (Utils.eq(simpleName, cSimple) || Utils.eq(fullName, cFull) || "*".equals(simpleName))
 			return true;
 		if (cFull.indexOf('$') != -1) {
 			Package p = c.getPackage();
 			if (p != null)
 				cFull = cFull.substring(p.getName().length() + 1);
-			if (eq3(simpleName, cFull))
+			if (Utils.eq(simpleName, cFull))
 				return true;
 			int i = cFull.indexOf('$');
 			while (i != -1) {
 				cFull = cFull.substring(i+1);
-				if (eq3(simpleName, cFull))
+				if (Utils.eq(simpleName, cFull))
 					return true;
 				i = cFull.indexOf('$');
 			}

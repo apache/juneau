@@ -269,7 +269,7 @@ public final class ArrayUtils {
 		if (a1.length != a2.length)
 			return false;
 		for (int i = 0; i < a1.length; i++)
-			if (! StringUtils.eq3(a1[i], a2[i]))
+			if (! Utils.eq(a1[i], a2[i]))
 				return false;
 		return true;
 	}

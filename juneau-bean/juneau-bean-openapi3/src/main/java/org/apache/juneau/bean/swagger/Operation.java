@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.swagger;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
@@ -433,7 +432,7 @@ public class Operation extends SwaggerElement {
 	public ParameterInfo getParameter(String in, String name) {
 		if (parameters != null)
 			for (var pi : parameters)
-				if (eq3(pi.getIn(), in) && (eq3(pi.getName(), name) || "body".equals(pi.getIn())))
+				if (Utils.eq(pi.getIn(), in) && (Utils.eq(pi.getName(), name) || "body".equals(pi.getIn())))
 					return pi;
 		return null;
 	}

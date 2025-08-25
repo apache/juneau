@@ -911,7 +911,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return caseInsensitive ? StringUtils.eqic3(s1, s2) : StringUtils.eq3(s1, s2);
+		return caseInsensitive ? Utils.eqic(s1, s2) : Utils.eq(s1, s2);
 	}
 
 	/**

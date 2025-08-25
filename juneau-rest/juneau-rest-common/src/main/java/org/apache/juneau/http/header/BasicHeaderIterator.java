@@ -104,6 +104,6 @@ public class BasicHeaderIterator implements HeaderIterator {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return StringUtils.eq3(!caseSensitive, s1, s2);
+		return Utils.eq(!caseSensitive, s1, s2);
 	}
 }

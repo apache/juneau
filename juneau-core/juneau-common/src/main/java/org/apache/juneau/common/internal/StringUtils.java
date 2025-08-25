@@ -1300,29 +1300,6 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Tests two strings for equality, but gracefully handles nulls.
-	 *
-	 * @param s1 String 1.
-	 * @param s2 String 2.
-	 * @return <jk>true</jk> if the strings are equal.
-	 */
-	public static boolean eq3(String s1, String s2) {
-		return Utils.eq(s1, s2);
-	}
-
-	/**
-	 * Tests two strings for equality, but gracefully handles nulls.
-	 *
-	 * @param caseInsensitive Use case-insensitive matching.
-	 * @param s1 String 1.
-	 * @param s2 String 2.
-	 * @return <jk>true</jk> if the strings are equal.
-	 */
-	public static boolean eq3(boolean caseInsensitive, String s1, String s2) {
-		return Utils.eq(caseInsensitive, s1, s2);
-	}
-
-	/**
 	 * Finds the position where the two strings differ.
 	 *
 	 * @param s1 The first string.
@@ -1366,39 +1343,6 @@ public final class StringUtils {
 		if (i == len && s1.length() == s2.length())
 			return -1;
 		return i;
-	}
-
-	/**
-	 * Tests two strings for case-insensitive equality, but gracefully handles nulls.
-	 *
-	 * @param s1 String 1.
-	 * @param s2 String 2.
-	 * @return <jk>true</jk> if the strings are equal.
-	 */
-	public static boolean eqic3(String s1, String s2) {
-		return Utils.eqic(s1, s2);
-	}
-
-	/**
-	 * Tests two strings for non-equality, but gracefully handles nulls.
-	 *
-	 * @param s1 String 1.
-	 * @param s2 String 2.
-	 * @return <jk>true</jk> if the strings are not equal.
-	 */
-	public static boolean ne3(String s1, String s2) {
-		return Utils.ne(s1, s2);
-	}
-
-	/**
-	 * Tests two strings for non-equality ignoring case, but gracefully handles nulls.
-	 *
-	 * @param s1 String 1.
-	 * @param s2 String 2.
-	 * @return <jk>true</jk> if the strings are not equal ignoring case.
-	 */
-	public static boolean neic3(String s1, String s2) {
-		return Utils.neic(s1, s2);
 	}
 
 	/**
@@ -1909,7 +1853,7 @@ public final class StringUtils {
 	 */
 	public static boolean isOneOf(String s, String...values) {
 		for (var value : values)
-			if (eq3(s, value))
+			if (Utils.eq(s, value))
 				return true;
 		return false;
 	}

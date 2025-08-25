@@ -175,7 +175,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> eqic(String value) {
-		return test(x -> StringUtils.eqic3(Utils.s(x), value), MSG_valueDidNotMatchExpected, value, VALUE);
+		return test(x -> Utils.eqic(Utils.s(x), value), MSG_valueDidNotMatchExpected, value, VALUE);
 	}
 
 	/**

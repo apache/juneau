@@ -13,7 +13,6 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.common.internal.ArgUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
@@ -179,7 +178,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @return <jk>true</jk> if the specified value is the same.
 	 */
 	public boolean equalsIgnoreCase(String compare) {
-		return eqic3(getValue(), compare);
+		return Utils.eqic(getValue(), compare);
 	}
 
 	/**
@@ -264,7 +263,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		// Not a perfect equality operator if using SVL vars.
 		if (! (o instanceof Header))
 			return false;
-		return Utils.eq(this, (Header)o, (x,y)->eq3(x.name,y.getName()) && eq3(x.getValue(),y.getValue()));
+		return Utils.eq(this, (Header)o, (x,y)->Utils.eq(x.name, y.getName()) && Utils.eq(x.getValue(), y.getValue()));
 	}
 
 	@Override /* Object */

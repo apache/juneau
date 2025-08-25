@@ -95,7 +95,7 @@ public class BeanStoreEntry<T> {
 	 */
 	public boolean matches(Class<?> type, String name) {
 		name = nullIfEmpty3(name);
-		return matches(type) && StringUtils.eq3(this.name, name);
+		return matches(type) && Utils.eq(this.name, name);
 	}
 
 	/**

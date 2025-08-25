@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.event;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.util.*;
 
@@ -31,7 +31,7 @@ public class ConfigEvents extends ArrayList<ConfigEvent> {
 	 * @return <jk>true</jk> if the specified section was modified in this list of events.
 	 */
 	public boolean isSectionModified(String name) {
-		return stream().anyMatch(x -> eq3(name, x.getSection()));
+		return stream().anyMatch(x -> eq(name, x.getSection()));
 	}
 
 	/**
@@ -42,6 +42,6 @@ public class ConfigEvents extends ArrayList<ConfigEvent> {
 	 * @return <jk>true</jk> if the specified key was modified in this list of events.
 	 */
 	public boolean isKeyModified(String section, String key) {
-		return stream().anyMatch(x -> eq3(section, x.getSection()) && eq3(key, x.getKey()));
+		return stream().anyMatch(x -> eq(section, x.getSection()) && eq(key, x.getKey()));
 	}
 }
