@@ -102,7 +102,7 @@ public class MediaRange extends MediaType {
 	 * @return The optional list of extensions, never <jk>null</jk>.
 	 */
 	public List<NameValuePair> getExtensions() {
-		return Utils.ulist2(extensions);
+		return u(alist(extensions));
 	}
 
 	/**

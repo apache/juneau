@@ -13,6 +13,7 @@
 package org.apache.juneau.reflect;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.lang.annotation.*;
@@ -139,7 +140,7 @@ public abstract class ExecutableInfo {
 	 * @return An array of parameter information, never <jk>null</jk>.
 	 */
 	public final List<ParamInfo> getParams() {
-		return Utils.ulist2(_getParams());
+		return u(alist(_getParams()));
 	}
 
 	/**
@@ -173,7 +174,7 @@ public abstract class ExecutableInfo {
 	 * @return The parameter types on this executable.
 	 */
 	public final List<ClassInfo> getParamTypes() {
-		return Utils.ulist2(_getParameterTypes());
+		return u(alist(_getParameterTypes()));
 	}
 
 	/**
@@ -193,7 +194,7 @@ public abstract class ExecutableInfo {
 	 * @return The raw parameter types on this executable.
 	 */
 	public final List<Class<?>> getRawParamTypes() {
-		return Utils.ulist2(_getRawParamTypes());
+		return u(alist(_getRawParamTypes()));
 	}
 
 	/**
@@ -213,7 +214,7 @@ public abstract class ExecutableInfo {
 	 * @return The raw generic parameter types on this executable.
 	 */
 	public final List<Type> getRawGenericParamTypes() {
-		return Utils.ulist2(_getRawGenericParamTypes());
+		return u(alist(_getRawGenericParamTypes()));
 	}
 
 	/**
@@ -234,7 +235,7 @@ public abstract class ExecutableInfo {
 	 * @see Executable#getParameters()
 	 */
 	public final List<Parameter> getRawParameters() {
-		return Utils.ulist2(_getRawParameters());
+		return u(alist(_getRawParameters()));
 	}
 
 	/**
@@ -392,7 +393,7 @@ public abstract class ExecutableInfo {
 	 * @return The exception types on this executable.
 	 */
 	public final List<ClassInfo> getExceptionTypes() {
-		return Utils.ulist2(_getExceptionTypes());
+		return u(alist(_getExceptionTypes()));
 	}
 
 	final ClassInfo[] _getExceptionTypes() {

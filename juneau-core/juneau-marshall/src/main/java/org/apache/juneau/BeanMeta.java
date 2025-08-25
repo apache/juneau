@@ -806,7 +806,7 @@ public class BeanMeta<T> {
 	 * @return Metadata on all properties associated with this bean.
 	 */
 	public Collection<BeanPropertyMeta> getPropertyMetas() {
-		return Utils.ulist2(propertyArray);
+		return u(alist(propertyArray));
 	}
 
 	/**

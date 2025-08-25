@@ -99,7 +99,7 @@ public class EntityTags {
 	 * @return The entity tags in this object as a list.  Can be <jk>null</jk>.
 	 */
 	public List<EntityTag> toList() {
-		return Utils.ulist2(value);
+		return u(alist(value));
 	}
 
 	/**

@@ -184,7 +184,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @return The header value as a list wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<List<String>> asList() {
-		return Utils.opt(Utils.ulist2(value()));
+		return opt(u(alist(value())));
 	}
 
 	/**
@@ -196,7 +196,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @return The header value as a list.  Can be <jk>null</jk>.
 	 */
 	public List<String> toList() {
-		return Utils.ulist2(value());
+		return u(alist(value()));
 	}
 
 	/**
@@ -249,7 +249,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentListAssertion<String,BasicCsvHeader> assertList() {
-		return new FluentListAssertion<>(Utils.ulist2(value()), this);
+		return new FluentListAssertion<>(u(alist(value())), this);
 	}
 
 

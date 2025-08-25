@@ -65,7 +65,7 @@ public class Utils {
 	 */
 	@SafeVarargs
 	public static <T> List<T> alist(T...values) {  // NOSONAR
-		return Arrays.asList(values);
+		return values == null ? null : Arrays.asList(values);
 	}
 
 	/**
@@ -1432,20 +1432,6 @@ public class Utils {
 
 	public static <T> Set<T> u(Set<? extends T> value) {
 		return value == null ? null : Collections.unmodifiableSet(value);
-	}
-
-	/**
-	 * Convenience method for creating an unmodifiable list.
-	 *
-	 * @param <E> The element type.
-	 * @param values The values to initialize the list with.
-	 * @return A new unmodifiable list, or <jk>null</jk> if the array was <jk>null</jk>.
-	 */
-	@SafeVarargs
-	public static <E> List<E> ulist2(E...values) {
-		if (values == null)
-			return null;
-		return u(alist(values));
 	}
 
 	/**

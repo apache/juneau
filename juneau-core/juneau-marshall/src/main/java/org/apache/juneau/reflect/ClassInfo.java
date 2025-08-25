@@ -299,7 +299,7 @@ public final class ClassInfo {
 	 * 	<br>Results are in the same order as {@link Class#getInterfaces()}.
 	 */
 	public List<ClassInfo> getDeclaredInterfaces() {
-		return Utils.ulist2(_getDeclaredInterfaces());
+		return u(alist(_getDeclaredInterfaces()));
 	}
 
 	/**
@@ -313,7 +313,7 @@ public final class ClassInfo {
 	 * 	<br>Results are in child-to-parent order.
 	 */
 	public List<ClassInfo> getInterfaces() {
-		return Utils.ulist2(_getInterfaces());
+		return u(alist(_getInterfaces()));
 	}
 
 	/**
@@ -329,7 +329,7 @@ public final class ClassInfo {
 	 * 	<br>Results are in child-to-parent order.
 	 */
 	public List<ClassInfo> getParents() {
-		return Utils.ulist2(_getParents());
+		return u(alist(_getParents()));
 	}
 
 	/**
@@ -342,7 +342,7 @@ public final class ClassInfo {
 	 * 	<br>Results are ordered child-to-parent order with classes listed before interfaces.
 	 */
 	public List<ClassInfo> getAllParents() {
-		return Utils.ulist2(_getAllParents());
+		return u(alist(_getAllParents()));
 	}
 
 	/**
@@ -439,7 +439,7 @@ public final class ClassInfo {
 	 * 	<br>Results are ordered alphabetically.
 	 */
 	public List<MethodInfo> getPublicMethods() {
-		return Utils.ulist2(_getPublicMethods());
+		return u(alist(_getPublicMethods()));
 	}
 
 	/**
@@ -477,7 +477,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<MethodInfo> getDeclaredMethods() {
-		return Utils.ulist2(_getDeclaredMethods());
+		return u(alist(_getDeclaredMethods()));
 	}
 
 	/**
@@ -515,7 +515,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<MethodInfo> getMethods() {
-		return Utils.ulist2(_getAllMethods());
+		return u(alist(_getAllMethods()));
 	}
 
 	/**
@@ -553,7 +553,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<MethodInfo> getAllMethodsParentFirst() {
-		return Utils.ulist2(_getAllMethodsParentFirst());
+		return u(alist(_getAllMethodsParentFirst()));
 	}
 
 	/**
@@ -640,7 +640,7 @@ public final class ClassInfo {
 	 * @return All public constructors defined on this class.
 	 */
 	public List<ConstructorInfo> getPublicConstructors() {
-		return Utils.ulist2(_getPublicConstructors());
+		return u(alist(_getPublicConstructors()));
 	}
 
 	/**
@@ -677,7 +677,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<ConstructorInfo> getDeclaredConstructors() {
-		return Utils.ulist2(_getDeclaredConstructors());
+		return u(alist(_getDeclaredConstructors()));
 	}
 
 	/**
@@ -775,7 +775,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<FieldInfo> getPublicFields() {
-		return Utils.ulist2(_getPublicFields());
+		return u(alist(_getPublicFields()));
 	}
 
 	/**
@@ -813,7 +813,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<FieldInfo> getDeclaredFields() {
-		return Utils.ulist2(_getDeclaredFields());
+		return u(alist(_getDeclaredFields()));
 	}
 
 	/**
@@ -853,7 +853,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<FieldInfo> getAllFields() {
-		return Utils.ulist2(_getAllFields());
+		return u(alist(_getAllFields()));
 	}
 
 	/**

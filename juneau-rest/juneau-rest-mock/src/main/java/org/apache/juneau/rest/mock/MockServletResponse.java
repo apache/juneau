@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.io.*;
@@ -264,7 +265,7 @@ public class MockServletResponse implements HttpServletResponse {
 	@Override /* HttpServletResponse */
 	public Collection<String> getHeaders(String name) {
 		String[] s = headerMap.get(name);
-		return s == null ? Collections.emptyList() : Utils.ulist2(s);
+		return s == null ? Collections.emptyList() : u(alist(s));
 	}
 
 	@Override /* HttpServletResponse */
