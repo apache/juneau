@@ -15,6 +15,7 @@ package org.apache.juneau.rest.servlet;
 import static java.util.logging.Level.*;
 import static jakarta.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.io.*;
@@ -116,7 +117,7 @@ public abstract class RestServlet extends HttpServlet {
 			return context.getFullPath();
 		ClassInfo ci = ClassInfo.of(getClass());
 		Value<String> path = Value.empty();
-		ci.forEachAnnotation(Rest.class, x -> Utils.isNotEmpty3(x.path()), x -> path.set(trimSlashes(x.path())));
+		ci.forEachAnnotation(Rest.class, x -> isNotEmpty(x.path()), x -> path.set(trimSlashes(x.path())));
 		return path.orElse("");
 	}
 

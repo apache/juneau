@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.common.internal.Utils.*;
+
 import java.net.*;
 import java.time.*;
 import java.util.*;
@@ -418,29 +420,29 @@ public class HttpParts {
 
 	private static final Function<ClassMeta<?>,String> HEADER_NAME_FUNCTION = x -> {
 		Value<String> n = Value.empty();
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> Utils.isNotEmpty3(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> Utils.isNotEmpty3(y.name()), y -> n.set(y.name()));
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> isNotEmpty(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> isNotEmpty(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> QUERY_NAME_FUNCTION = x -> {
 		Value<String> n = Value.empty();
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Query.class, y -> Utils.isNotEmpty3(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Query.class, y -> Utils.isNotEmpty3(y.name()), y -> n.set(y.name()));
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Query.class, y -> isNotEmpty(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Query.class, y -> isNotEmpty(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> FORMDATA_NAME_FUNCTION = x -> {
 		Value<String> n = Value.empty();
-		x.forEachAnnotation(org.apache.juneau.http.annotation.FormData.class, y -> Utils.isNotEmpty3(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.annotation.FormData.class, y -> Utils.isNotEmpty3(y.name()), y -> n.set(y.name()));
+		x.forEachAnnotation(org.apache.juneau.http.annotation.FormData.class, y -> isNotEmpty(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.annotation.FormData.class, y -> isNotEmpty(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> PATH_NAME_FUNCTION = x -> {
 		Value<String> n = Value.empty();
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Path.class, y -> Utils.isNotEmpty3(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Path.class, y -> Utils.isNotEmpty3(y.name()), y -> n.set(y.name()));
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Path.class, y -> isNotEmpty(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Path.class, y -> isNotEmpty(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 

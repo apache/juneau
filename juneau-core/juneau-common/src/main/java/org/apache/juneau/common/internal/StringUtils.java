@@ -48,7 +48,7 @@ public final class StringUtils {
 	/**
 	 * Predicate check to filter out null and empty strings.
 	 */
-	public static final Predicate<String> NOT_EMPTY = Utils::isNotEmpty3;
+	public static final Predicate<String> NOT_EMPTY = Utils::isNotEmpty;
 
 	private static final AsciiSet numberChars = AsciiSet.of("-xX.+-#pP0123456789abcdefABCDEF");
 	private static final AsciiSet firstNumberChars =AsciiSet.of("+-.#0123456789");
@@ -1069,7 +1069,7 @@ public final class StringUtils {
 	 */
 	public static String trimStart(String s) {
 		if (s != null)
-			while (Utils.isNotEmpty3(s) && isWhitespace(s.charAt(0)))
+			while (Utils.isNotEmpty(s) && isWhitespace(s.charAt(0)))
 				s = s.substring(1);
 		return s;
 	}
@@ -1082,7 +1082,7 @@ public final class StringUtils {
 	 */
 	public static String trimEnd(String s) {
 		if (s != null)
-			while (Utils.isNotEmpty3(s) && isWhitespace(s.charAt(s.length()-1)))
+			while (Utils.isNotEmpty(s) && isWhitespace(s.charAt(s.length()-1)))
 				s = s.substring(0, s.length()-1);
 		return s;
 	}
@@ -1118,7 +1118,7 @@ public final class StringUtils {
 			return s;
 		while (endsWith(s, '/'))
 			s = s.substring(0, s.length()-1);
-		while (Utils.isNotEmpty3(s) && s.charAt(0) == '/')  // NOSONAR - NPE not possible here.
+		while (Utils.isNotEmpty(s) && s.charAt(0) == '/')  // NOSONAR - NPE not possible here.
 			s = s.substring(1);
 		return s;
 	}
@@ -1132,9 +1132,9 @@ public final class StringUtils {
 	public static String trimSlashesAndSpaces(String s) {
 		if (s == null)
 			return null;
-		while (Utils.isNotEmpty3(s) && (s.charAt(s.length()-1) == '/' || isWhitespace(s.charAt(s.length()-1))))
+		while (Utils.isNotEmpty(s) && (s.charAt(s.length()-1) == '/' || isWhitespace(s.charAt(s.length()-1))))
 			s = s.substring(0, s.length()-1);
-		while (Utils.isNotEmpty3(s) && (s.charAt(0) == '/' || isWhitespace(s.charAt(0))))
+		while (Utils.isNotEmpty(s) && (s.charAt(0) == '/' || isWhitespace(s.charAt(0))))
 			s = s.substring(1);
 		return s;
 	}
@@ -1162,7 +1162,7 @@ public final class StringUtils {
 	public static String trimLeadingSlashes(String s) {
 		if (s == null)
 			return null;
-		while (Utils.isNotEmpty3(s) && s.charAt(0) == '/')
+		while (Utils.isNotEmpty(s) && s.charAt(0) == '/')
 			s = s.substring(1);
 		return s;
 	}
@@ -1554,7 +1554,7 @@ public final class StringUtils {
 	 */
 	public static String firstNonEmpty(String...s) {
 		for (var ss : s)
-			if (Utils.isNotEmpty3(ss))
+			if (Utils.isNotEmpty(ss))
 				return ss;
 		return null;
 	}

@@ -167,7 +167,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return The array wrapped in an {@link Optional}.
 	 */
 	protected Optional<String[]> strings(String[] in) {
-		return Utils.opt(in.length == 0 ? null : Arrays.stream(in).map(vr::resolve).filter(Utils::isNotEmpty3).toArray(String[]::new));
+		return Utils.opt(in.length == 0 ? null : Arrays.stream(in).map(vr::resolve).filter(Utils::isNotEmpty).toArray(String[]::new));
 	}
 
 	/**
@@ -177,7 +177,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return An array with resolved strings.
 	 */
 	protected Stream<String> stream(String[] in) {
-		return Arrays.stream(in).map(vr::resolve).filter(Utils::isNotEmpty3);
+		return Arrays.stream(in).map(vr::resolve).filter(Utils::isNotEmpty);
 	}
 
 	/**
@@ -187,7 +187,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return An array with resolved strings.
 	 */
 	protected Stream<String> cdl(String in) {
-		return Arrays.stream(Utils.split3(vr.resolve(in))).filter(Utils::isNotEmpty3);
+		return Arrays.stream(Utils.split3(vr.resolve(in))).filter(Utils::isNotEmpty);
 	}
 
 	/**

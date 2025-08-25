@@ -95,7 +95,7 @@ public class SchemaAnnotation {
 		JsonMap m = new JsonMap();
 		if (SchemaAnnotation.empty(a))
 			return m;
-		Predicate<String> ne = Utils::isNotEmpty3;
+		Predicate<String> ne = Utils::isNotEmpty;
 		Predicate<Collection<?>> nec = Utils::isNotEmpty;
 		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
 		Predicate<Boolean> nf = Utils::isTrue;
@@ -138,7 +138,7 @@ public class SchemaAnnotation {
 	private static JsonMap merge(JsonMap m, Items a) throws ParseException {
 		if (ItemsAnnotation.empty(a))
 			return m;
-		Predicate<String> ne = Utils::isNotEmpty3;
+		Predicate<String> ne = Utils::isNotEmpty;
 		Predicate<Collection<?>> nec = Utils::isNotEmpty;
 		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
 		Predicate<Boolean> nf = Utils::isTrue;

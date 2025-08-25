@@ -437,7 +437,7 @@ public class Utils {
 		if (value instanceof Collection<?> x) return ! x.isEmpty();
 		if (value instanceof Map<?,?> x) return ! x.isEmpty();
 		if (value.getClass().isArray()) return Array.getLength(value) > 0;
-		return Utils.isNotEmpty3(s(value));
+		return isNotEmpty(s(value));
 	}
 
 	/**
@@ -445,16 +445,6 @@ public class Utils {
 	 */
 	public static boolean isNotEmpty(String o) {
 		return ! isEmpty(o);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if specified string is not <jk>null</jk> or empty.
-	 *
-	 * @param s The string to check.
-	 * @return <jk>true</jk> if specified string is not <jk>null</jk> or empty.
-	 */
-	public static boolean isNotEmpty3(String s) {
-		return isNotEmpty(s);
 	}
 
 	/**

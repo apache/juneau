@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl.vars;
 
+import static org.apache.juneau.common.internal.Utils.*;
+
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -79,7 +80,7 @@ public class ArgsVar extends DefaultingVar {
 			this.args = ARGS;
 		else {
 			String s = System.getProperty("sun.java.command");
-			if (Utils.isNotEmpty3(s)) {
+			if (isNotEmpty(s)) {
 				int i = s.indexOf(' ');
 				args = new Args(i == -1 ? "" : s.substring(i+1));
 			} else {

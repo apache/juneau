@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.event;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.config.event.ConfigEventType.*;
 
 import java.util.*;
@@ -227,7 +228,7 @@ public class ConfigEvent {
 				if (val.indexOf('#') != -1)
 					val = val.replace("#", "\\#");
 				out.append(val);
-				if (Utils.isNotEmpty3(comment))
+				if (isNotEmpty(comment))
 					out.append(" # ").append(comment);
 				out.append(')');
 				yield out.toString();

@@ -109,7 +109,7 @@ public final class BeanFilter {
 				if (isNotVoid(x.interceptor())) interceptor(x.interceptor());
 				if (isNotVoid(x.implClass())) implClass(x.implClass());
 				if (isNotEmptyArray(x.dictionary())) dictionary(x.dictionary());
-				if (Utils.isNotEmpty3(x.example())) example(x.example());
+				if (isNotEmpty(x.example())) example(x.example());
 			});
 			return this;
 		}

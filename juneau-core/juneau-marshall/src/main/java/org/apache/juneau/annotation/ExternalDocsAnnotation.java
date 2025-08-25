@@ -66,7 +66,7 @@ public class ExternalDocsAnnotation {
 	public static JsonMap merge(JsonMap m, ExternalDocs a) throws ParseException {
 		if (ExternalDocsAnnotation.empty(a))
 			return m;
-		Predicate<String> ne = Utils::isNotEmpty3;
+		Predicate<String> ne = Utils::isNotEmpty;
 		return m
 			.appendIf(ne, "description", joinnl(a.description()))
 			.appendIf(ne, "url", a.url())

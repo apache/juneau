@@ -14,6 +14,8 @@ package org.apache.juneau.rest.httppart;
 
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -545,7 +547,7 @@ public class RequestContent {
 	private Encoder getEncoder() throws UnsupportedMediaType {
 		if (encoder == null) {
 			String ce = req.getHeaderParam("content-encoding").orElse(null);
-			if (Utils.isNotEmpty3(ce)) {
+			if (isNotEmpty(ce)) {
 				ce = ce.trim();
 				encoder = encoders.getEncoder(ce);
 				if (encoder == null)

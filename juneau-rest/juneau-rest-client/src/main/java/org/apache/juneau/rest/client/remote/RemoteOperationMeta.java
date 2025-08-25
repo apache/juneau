@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.http.remote.RemoteUtils.*;
 
 import java.lang.reflect.*;
@@ -99,7 +100,7 @@ public class RemoteOperationMeta {
 			path = _path.orElse("").trim();
 
 			Value<String> value = Value.empty();
-			al.forEach(RemoteOp.class, x -> Utils.isNotEmpty3(x.inner().value().trim()), x -> value.set(x.inner().value().trim()));
+			al.forEach(RemoteOp.class, x -> isNotEmpty(x.inner().value().trim()), x -> value.set(x.inner().value().trim()));
 
 			if (value.isPresent()) {
 				String v = value.get();
@@ -111,7 +112,7 @@ public class RemoteOperationMeta {
 					path = v.substring(i).trim();
 				}
 			} else {
-				al.forEach(x -> ! x.isType(RemoteOp.class) && Utils.isNotEmpty3(x.getValue(String.class, "value", NOT_EMPTY).orElse("").trim()),x -> value.set(x.getValue(String.class, "value", NOT_EMPTY).get().trim()));
+				al.forEach(x -> ! x.isType(RemoteOp.class) && isNotEmpty(x.getValue(String.class, "value", NOT_EMPTY).orElse("").trim()),x -> value.set(x.getValue(String.class, "value", NOT_EMPTY).get().trim()));
 				if (value.isPresent())
 					path = value.get();
 			}

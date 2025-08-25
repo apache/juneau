@@ -259,7 +259,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
 		if (in == null)
 			return null;
-		if (toType.isString() && Utils.isNotEmpty3(in)) {
+		if (toType.isString() && isNotEmpty(in)) {
 			// Shortcut - If we're returning a string and the value doesn't start with "'" or is "null", then
 			// just return the string since it's a plain value.
 			// This allows us to bypass the creation of a UonParserSession object.

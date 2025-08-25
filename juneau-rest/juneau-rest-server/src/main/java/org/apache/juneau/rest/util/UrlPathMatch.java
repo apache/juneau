@@ -13,6 +13,8 @@
 package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.internal.Utils.*;
+
 import java.util.*;
 
 import org.apache.juneau.common.internal.*;
@@ -89,7 +91,7 @@ public class UrlPathMatch {
 	 */
 	public String getRemainder() {
 		String suffix = getSuffix();
-		if (Utils.isNotEmpty3(suffix) && suffix.charAt(0) == '/')
+		if (isNotEmpty(suffix) && suffix.charAt(0) == '/')
 			suffix = suffix.substring(1);
 		return suffix;
 	}

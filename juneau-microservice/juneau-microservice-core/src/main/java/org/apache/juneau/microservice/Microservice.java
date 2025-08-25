@@ -773,7 +773,7 @@ public class Microservice implements ConfigEventListener {
 			this.logger = Logger.getLogger("");
 			String logFile = Utils.firstNonNull(logConfig.logFile, config.get("Logging/logFile").orElse(null));
 
-			if (Utils.isNotEmpty3(logFile)) {
+			if (isNotEmpty(logFile)) {
 				String logDir = Utils.firstNonNull(logConfig.logDir, config.get("Logging/logDir").orElse("."));
 				File logDirFile = resolveFile(logDir);
 				mkdirs(logDirFile, false);
