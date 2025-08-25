@@ -14,7 +14,6 @@ package org.apache.juneau.bean.swagger.ui;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.common.internal.Utils.set;
 
 import java.util.*;

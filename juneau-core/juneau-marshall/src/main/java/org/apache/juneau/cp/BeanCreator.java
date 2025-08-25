@@ -14,8 +14,6 @@ package org.apache.juneau.cp;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.Visibility.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.util.*;
 import java.util.function.*;
 

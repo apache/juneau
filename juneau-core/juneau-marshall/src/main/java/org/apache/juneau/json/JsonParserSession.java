@@ -14,8 +14,6 @@ package org.apache.juneau.json;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;

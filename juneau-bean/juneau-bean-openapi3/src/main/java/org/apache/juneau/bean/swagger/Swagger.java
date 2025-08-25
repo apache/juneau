@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.swagger;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;

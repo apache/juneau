@@ -15,8 +15,6 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.io.*;
 import java.util.*;
 import java.util.function.*;

@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.springboot;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.util.*;
 import java.util.stream.*;
 

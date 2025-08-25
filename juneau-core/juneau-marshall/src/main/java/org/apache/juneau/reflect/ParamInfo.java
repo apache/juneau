@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.lang.annotation.*;

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.BinaryFormat.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 

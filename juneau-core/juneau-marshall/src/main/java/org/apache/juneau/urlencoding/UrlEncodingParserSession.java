@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.io.IOException;
 import java.lang.reflect.*;
 import java.nio.charset.*;

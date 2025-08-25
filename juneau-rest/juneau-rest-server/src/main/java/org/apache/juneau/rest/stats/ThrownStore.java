@@ -14,7 +14,6 @@ package org.apache.juneau.rest.stats;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static java.util.Comparator.*;
 
 import java.util.*;

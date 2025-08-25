@@ -14,8 +14,6 @@ package org.apache.juneau.http.part;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.copyOf;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.util.*;
 import java.util.function.*;
 

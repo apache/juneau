@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 

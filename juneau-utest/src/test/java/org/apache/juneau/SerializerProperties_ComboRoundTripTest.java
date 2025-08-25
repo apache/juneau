@@ -19,7 +19,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.serializer.Serializer.Builder;
 import org.apache.juneau.xml.*;

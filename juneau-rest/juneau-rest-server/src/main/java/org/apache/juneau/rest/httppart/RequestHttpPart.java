@@ -13,8 +13,6 @@
 package org.apache.juneau.rest.httppart;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.lang.reflect.*;
 import java.time.*;
 import java.util.*;

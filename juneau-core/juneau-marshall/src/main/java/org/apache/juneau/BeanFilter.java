@@ -22,7 +22,6 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.swap.*;
 

@@ -13,8 +13,6 @@
 package org.apache.juneau.svl;
 
 import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;

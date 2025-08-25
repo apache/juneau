@@ -15,7 +15,6 @@ package org.apache.juneau.rest.util;
 import java.util.*;
 
 import org.apache.juneau.common.internal.*;
-import org.apache.juneau.internal.*;
 
 /**
  * A list of {@link UrlPathMatcher} objects.

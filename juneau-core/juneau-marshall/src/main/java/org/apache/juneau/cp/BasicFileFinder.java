@@ -15,7 +15,6 @@ package org.apache.juneau.cp;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.FileUtils.*;
 import java.io.*;
 import java.util.*;

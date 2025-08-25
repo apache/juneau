@@ -13,8 +13,6 @@
 package org.apache.juneau.msgpack;
 
 import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;

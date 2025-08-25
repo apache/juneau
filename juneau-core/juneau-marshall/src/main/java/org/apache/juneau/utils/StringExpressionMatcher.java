@@ -20,7 +20,6 @@ import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 
 /**

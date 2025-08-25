@@ -15,8 +15,6 @@ package org.apache.juneau.http.part;
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.time.*;
 import java.time.format.*;
 import java.util.*;

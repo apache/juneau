@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.msgpack.DataType.*;
 
 import java.io.IOException;

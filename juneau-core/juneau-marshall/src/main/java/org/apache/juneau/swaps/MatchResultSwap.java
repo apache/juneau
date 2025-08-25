@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.swaps;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.util.*;
 import java.util.regex.*;
 

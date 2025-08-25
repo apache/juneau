@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
 import java.util.function.*;
 

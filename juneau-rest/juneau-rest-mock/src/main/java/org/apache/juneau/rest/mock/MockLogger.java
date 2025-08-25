@@ -14,8 +14,6 @@ package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;

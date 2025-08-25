@@ -13,8 +13,6 @@
 package org.apache.juneau.rest.widget;
 
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
