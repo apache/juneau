@@ -16,6 +16,7 @@ import static javax.xml.stream.XMLStreamConstants.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.html.HtmlTag.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.io.IOException;
 import java.lang.reflect.*;
@@ -53,7 +54,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final Set<String> whitespaceElements = set2("br","bs","sp","ff");
+	private static final Set<String> whitespaceElements = set("br","bs","sp","ff");
 
 	/**
 	 * Creates a new builder for this object.

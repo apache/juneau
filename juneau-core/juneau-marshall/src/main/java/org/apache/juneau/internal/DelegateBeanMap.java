@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -35,7 +35,7 @@ import org.apache.juneau.collections.*;
  */
 public class DelegateBeanMap<T> extends BeanMap<T> {
 
-	private Set<String> keys = set2();
+	private Set<String> keys = set();
 	private JsonMap overrideValues = new JsonMap();
 
 	/**
@@ -106,7 +106,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 
 	@Override /* Map */
 	public synchronized Set<Entry<String,Object>> entrySet() {
-		Set<Entry<String,Object>> s = set2();
+		Set<Entry<String,Object>> s = set();
 		keys.forEach(k -> {
 			BeanMapEntry bme;
 			if (overrideValues.containsKey(k))

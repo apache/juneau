@@ -15,6 +15,7 @@ package org.apache.juneau.reflect;
 import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.lang.annotation.*;
@@ -364,7 +365,7 @@ public final class ClassInfo {
 	ClassInfo[] _getInterfaces() {
 		if (interfaces == null) {
 			synchronized(this) {
-				Set<ClassInfo> s = set2();
+				Set<ClassInfo> s = set();
 				for (ClassInfo ci : _getParents())
 					for (ClassInfo ci2 : ci._getDeclaredInterfaces()) {
 						s.add(ci2);

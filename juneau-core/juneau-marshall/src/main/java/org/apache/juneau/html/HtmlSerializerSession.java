@@ -15,6 +15,7 @@ package org.apache.juneau.html;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -912,7 +913,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		// If it's a non-bean map, only use table if all entries are also maps.
 		if (cm1.isMap() && ! cm1.isBeanMap()) {
 
-			Set<Object> set = CollectionUtils.set2();
+			Set<Object> set = set();
 			for (Object o : c) {
 				o = swap(swap, o);
 				if (! canIgnoreValue(cm1, null, o)) {

@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.util.*;
 
@@ -77,7 +78,7 @@ public class RestOperations {
 		protected Builder(BeanStore beanStore) {
 			super(RestOperations.class, beanStore);
 			map = new TreeMap<>();
-			set = set2();
+			set = set();
 		}
 
 		@Override /* BeanBuilder */

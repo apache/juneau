@@ -14,6 +14,8 @@ package org.apache.juneau.serializer;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -499,7 +501,7 @@ public final class SerializerSet {
 		this.entriesList = Utils.ulist2(entries);
 
 		List<MediaRange> lmtr = list2();
-		Set<MediaType> lmt = set2();
+		Set<MediaType> lmt = set();
 		List<Serializer> l = list2();
 		for (Serializer e : entries) {
 			e.getMediaTypeRanges().forEachRange(x -> {

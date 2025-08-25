@@ -17,10 +17,12 @@ import java.util.*;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.swap.*;
 
@@ -66,10 +68,10 @@ public final class BeanFilter {
 		Class<?> beanClass;
 		String typeName, example;
 		Set<String>
-			properties = set2(),
-			excludeProperties = set2(),
-			readOnlyProperties = set2(),
-			writeOnlyProperties = set2();
+			properties = set(),
+			excludeProperties = set(),
+			readOnlyProperties = set(),
+			writeOnlyProperties = set();
 		Class<?> implClass, interfaceClass, stopClass;
 		boolean sortProperties, fluentSetters;
 		BeanCreator<PropertyNamer> propertyNamer = BeanCreator.of(PropertyNamer.class);
@@ -450,7 +452,7 @@ public final class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder properties(String...value) {
-			this.properties = set2();
+			this.properties = set();
 			for (String v : value)
 				split3(v, x -> properties.add(x));
 			return this;
@@ -494,7 +496,7 @@ public final class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder excludeProperties(String...value) {
-			this.excludeProperties = set2();
+			this.excludeProperties = set();
 			for (String v : value)
 				split3(v, x -> excludeProperties.add(x));
 			return this;
@@ -540,7 +542,7 @@ public final class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder readOnlyProperties(String...value) {
-			this.readOnlyProperties = set2();
+			this.readOnlyProperties = set();
 			for (String v : value)
 				split3(v, x -> readOnlyProperties.add(x));
 			return this;
@@ -586,7 +588,7 @@ public final class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder writeOnlyProperties(String...value) {
-			this.writeOnlyProperties = set2();
+			this.writeOnlyProperties = set();
 			for (String v : value)
 				split3(v, x -> writeOnlyProperties.add(x));
 			return this;

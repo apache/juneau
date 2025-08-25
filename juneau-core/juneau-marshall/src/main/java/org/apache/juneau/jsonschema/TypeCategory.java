@@ -14,6 +14,8 @@ package org.apache.juneau.jsonschema;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
+
 import java.util.*;
 
 /**
@@ -69,7 +71,7 @@ public enum TypeCategory {
 	public static Set<TypeCategory> parse(String s) {
 		if (s == null || s.isEmpty())
 			return Collections.emptySet();
-		Set<TypeCategory> set = set2();
+		Set<TypeCategory> set = set();
 		split3(s, x -> set.add(valueOf(x.toUpperCase())));
 		return set;
 	}

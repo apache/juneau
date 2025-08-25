@@ -221,28 +221,13 @@ public final class CollectionUtils {
 	 * Convenience method for creating a {@link LinkedHashSet}.
 	 *
 	 * @param <E> The element type.
-	 * @param values The values to initialize the set with.
-	 * @return A new modifiable set.
-	 */
-	@SafeVarargs
-	public static <E> LinkedHashSet<E> set2(E...values) {
-		LinkedHashSet<E> l = new LinkedHashSet<>();
-		for (E v : values)
-			l.add(v);
-		return l;
-	}
-
-	/**
-	 * Convenience method for creating a {@link LinkedHashSet}.
-	 *
-	 * @param <E> The element type.
 	 * @param elementType The element type.
 	 * @param values The values to initialize the set with.
 	 * @return A new modifiable set.
 	 */
 	@SafeVarargs
 	public static <E> LinkedHashSet<E> setOf(Class<E> elementType, E...values) {
-		return set2(values);
+		return Utils.set(values);
 	}
 
 	/**
@@ -435,40 +420,6 @@ public final class CollectionUtils {
 		return l;
 	}
 
-//	/**
-//	 * Wraps the specified list in {@link Collections#unmodifiableList(List)}.
-//	 *
-//	 * @param <E> The element type.
-//	 * @param value The list to wrap.
-//	 * @return The wrapped list.
-//	 */
-//	public static <E> List<E> unmodifiable(List<E> value) {
-//		return value == null ? null: Collections.unmodifiableList(value);
-//	}
-//
-//	/**
-//	 * Wraps the specified set in {@link Collections#unmodifiableSet(Set)}.
-//	 *
-//	 * @param <E> The element type.
-//	 * @param value The set to wrap.
-//	 * @return The wrapped set.
-//	 */
-//	public static <E> Set<E> unmodifiable(Set<E> value) {
-//		return value == null ? null: Collections.unmodifiableSet(value);
-//	}
-//
-//	/**
-//	 * Wraps the specified map in {@link Collections#unmodifiableMap(Map)}.
-//	 *
-//	 * @param <K> The key type.
-//	 * @param <V> The value type.
-//	 * @param value The map to wrap.
-//	 * @return The wrapped map.
-//	 */
-//	public static <K,V> Map<K,V> unmodifiable(Map<K,V> value) {
-//		return value == null ? null: Collections.unmodifiableMap(value);
-//	}
-
 	/**
 	 * Wraps the specified list in {@link Collections#unmodifiableList(List)}.
 	 *
@@ -546,7 +497,7 @@ public final class CollectionUtils {
 	public static <E> Set<E> addAll(Set<E> value, E...entries) {
 		if (entries != null) {
 			if (value == null)
-				value = set2(entries);
+				value = Utils.set(entries);
 			else
 				Collections.addAll(value, entries);
 		}

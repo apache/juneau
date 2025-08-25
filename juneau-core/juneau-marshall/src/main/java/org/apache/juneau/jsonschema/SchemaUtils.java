@@ -15,6 +15,7 @@ package org.apache.juneau.jsonschema;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.util.*;
 
@@ -89,7 +90,7 @@ public class SchemaUtils {
 		String s = joinnl(ss);
 		if (s.isEmpty())
 			return null;
-		Set<String> set = set2();
+		Set<String> set = set();
 		JsonList.ofJsonOrCdl(s).forEach(x -> set.add(x.toString()));
 		return set;
 	}

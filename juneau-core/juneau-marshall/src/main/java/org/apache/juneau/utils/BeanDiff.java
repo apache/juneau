@@ -13,6 +13,8 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -125,7 +127,7 @@ public class BeanDiff {
 		 * @return This object.
 		 */
 		public Builder<T> include(String...properties) {
-			include = set2(properties);
+			include = set(properties);
 			return this;
 		}
 
@@ -150,7 +152,7 @@ public class BeanDiff {
 		 * @return This object.
 		 */
 		public Builder<T> exclude(String...properties) {
-			exclude = set2(properties);
+			exclude = set(properties);
 			return this;
 		}
 
