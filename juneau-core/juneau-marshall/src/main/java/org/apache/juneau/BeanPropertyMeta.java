@@ -899,7 +899,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		if (isDyna) {
 			if (extraKeys != null && getter != null && ! isDynaGetterMap) {
 				Map<String,Object> m = map();
-				((Collection<String>)extraKeys.invoke(bean)).forEach(x -> safeRun(()->m.put(x, getter.invoke(bean, x))));
+				((Collection<String>)extraKeys.invoke(bean)).forEach(x -> safe(()->m.put(x, getter.invoke(bean, x))));
 				return m;
 			}
 			if (getter != null && isDynaGetterMap)

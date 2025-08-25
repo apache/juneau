@@ -19,6 +19,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.*;
 
+import org.apache.juneau.common.internal.*;
+
 /**
  * Annotation utilities.
  *
@@ -47,7 +49,7 @@ public class AnnotationUtils {
 			return false;
 
 		boolean b= getAnnotationMethods(t1)
-			.anyMatch(x -> ! memberEquals(x.getReturnType(), safeSupplier(()->x.invoke(a1)), safeSupplier(()->x.invoke(a2))));
+			.anyMatch(x -> ! memberEquals(x.getReturnType(), Utils.safeSupplier(()->x.invoke(a1)), Utils.safeSupplier(()->x.invoke(a2))));
 		if (b)
 			return false;
 
@@ -64,7 +66,7 @@ public class AnnotationUtils {
 	 */
 	public static int hashCode(Annotation a) {
 		return getAnnotationMethods(a.annotationType())
-			.mapToInt(x -> hashMember(x.getName(), safeSupplier(()->x.invoke(a))))
+			.mapToInt(x -> hashMember(x.getName(), Utils.safeSupplier(()->x.invoke(a))))
 			.sum();
 	}
 

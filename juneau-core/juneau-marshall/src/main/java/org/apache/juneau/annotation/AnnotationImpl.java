@@ -22,6 +22,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -108,7 +109,7 @@ public class AnnotationImpl implements Annotation {
 		stream(annotationType().getDeclaredMethods())
 			.filter(x->x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation())
 			.sorted(Comparator.comparing(Method::getName))
-			.forEach(x -> m.append(x.getName(), safeSupplier(()->x.invoke(this))));
+			.forEach(x -> m.append(x.getName(), Utils.safeSupplier(()->x.invoke(this))));
 		return m;
 	}
 

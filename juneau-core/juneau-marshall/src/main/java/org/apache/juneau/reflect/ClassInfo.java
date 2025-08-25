@@ -149,7 +149,7 @@ public final class ClassInfo {
 		Value<Class<?>> v = Value.empty();
 		ClassInfo.of(c).forEachPublicMethod(
 			m -> m.hasName("getTargetClass") && m.hasNoParams() && m.hasReturnType(Class.class),
-			m -> safeRun(() -> v.set(m.invoke(o)))
+			m -> safe(() -> v.set(m.invoke(o)))
 		);
 		return v.orElse(null);
 	}

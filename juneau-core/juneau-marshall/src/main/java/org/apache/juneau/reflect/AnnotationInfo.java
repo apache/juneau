@@ -307,7 +307,7 @@ public final class AnnotationInfo<T extends Annotation> {
 	public <V> AnnotationInfo<?> forEachValue(Class<V> type, String name, Predicate<V> test, Consumer<V> action) {
 		for (Method m : _getMethods())
 			if (m.getName().equals(name) && m.getReturnType().equals(type))
-				safeRun(() -> consume(test, action, (V)m.invoke(a)));
+				Utils.safe(() -> consume(test, action, (V)m.invoke(a)));
 		return this;
 	}
 

@@ -22,7 +22,7 @@ import org.apache.juneau.common.utils.*;
 public class ThrowableUtils {
 
 	/**
-	 * Interface used with {@link #safeSupplier(SupplierWithThrowable)}.
+	 * Interface used with {@link Utils#safeSupplier(SupplierWithThrowable)}.
 	 */
 	@FunctionalInterface
 	public interface SupplierWithThrowable<T> {
@@ -112,38 +112,5 @@ public class ThrowableUtils {
 			t = t.getCause();
 		}
 		return i;
-	}
-
-	/**
-	 * Runs a snippet of code and encapsulates any throwable inside a {@link RuntimeException}.
-	 *
-	 * @param snippet The snippet of code to run.
-	 */
-	public static void safeRun(Snippet snippet) {
-		try {
-			snippet.run();
-		} catch (RuntimeException t) {
-			throw t;
-		} catch (Throwable t) {
-			throw asRuntimeException(t);
-		}
-	}
-
-	/**
-	 * Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.
-	 *
-	 * @param <T> The supplier type.
-	 * @param supplier The supplier throwing an exception.
-	 * @return The supplied result.
-	 * @throws RuntimeException if supplier threw an exception.
-	 */
-	public static <T> T safeSupplier(SupplierWithThrowable<T> supplier) {
-		try {
-			return supplier.get();
-		} catch (RuntimeException t) {
-			throw t;
-		} catch (Throwable t) {
-			throw asRuntimeException(t);
-		}
 	}
 }

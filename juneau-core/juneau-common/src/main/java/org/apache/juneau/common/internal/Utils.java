@@ -26,6 +26,9 @@ import java.util.function.*;
 import java.util.regex.*;
 import java.util.stream.*;
 
+import org.apache.juneau.common.internal.ThrowableUtils.*;
+import org.apache.juneau.common.utils.*;
+
 
 public class Utils {
 
@@ -1434,5 +1437,38 @@ public class Utils {
 
 	public static <T> Set<T> u(Set<? extends T> value) {
 		return value == null ? null : Collections.unmodifiableSet(value);
+	}
+
+	/**
+	 * Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.
+	 *
+	 * @param <T> The supplier type.
+	 * @param supplier The supplier throwing an exception.
+	 * @return The supplied result.
+	 * @throws RuntimeException if supplier threw an exception.
+	 */
+	public static <T> T safeSupplier(ThrowableUtils.SupplierWithThrowable<T> supplier) {
+		try {
+			return supplier.get();
+		} catch (RuntimeException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw ThrowableUtils.asRuntimeException(t);
+		}
+	}
+
+	/**
+	 * Runs a snippet of code and encapsulates any throwable inside a {@link RuntimeException}.
+	 *
+	 * @param snippet The snippet of code to run.
+	 */
+	public static void safe(Snippet snippet) {
+		try {
+			snippet.run();
+		} catch (RuntimeException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw ThrowableUtils.asRuntimeException(t);
+		}
 	}
 }

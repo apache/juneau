@@ -64,6 +64,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.internal.Utils;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.remote.RemoteReturn;
@@ -7379,7 +7380,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 							Object bean = args[rmba.getIndex()];
 							if (bean != null) {
 								for (RequestBeanPropertyMeta p : rbm.getProperties()) {
-									Object val = safeSupplier(()->p.getGetter().invoke(bean));
+									Object val = Utils.safeSupplier(()->p.getGetter().invoke(bean));
 									HttpPartType pt = p.getPartType();
 									String pn = p.getPartName();
 									HttpPartSchema schema = p.getSchema();
