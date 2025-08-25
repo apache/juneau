@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.swap;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -102,8 +103,8 @@ import org.apache.juneau.serializer.*;
 public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 
 	private static final Set<String>
-		SWAP_METHOD_NAMES = Utils.uset2("toNumber", "toInteger", "toInt", "toLong", "toFloat", "toDouble", "toShort", "toByte"),
-		UNSWAP_METHOD_NAMES = Utils.uset2("fromInteger", "fromInt", "fromLong", "fromFloat", "fromDouble", "fromShort", "fromByte", "create", "valueOf");
+		SWAP_METHOD_NAMES = u(set("toNumber", "toInteger", "toInt", "toLong", "toFloat", "toDouble", "toShort", "toByte")),
+		UNSWAP_METHOD_NAMES = u(set("fromInteger", "fromInt", "fromLong", "fromFloat", "fromDouble", "fromShort", "fromByte", "create", "valueOf"));
 
 	/**
 	 * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.

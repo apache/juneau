@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.swap;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -79,8 +80,8 @@ import org.apache.juneau.serializer.*;
 public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 
 	private static final Set<String>
-		SWAP_METHOD_NAMES = Utils.uset2("toMap", "toJsonMap"),
-		UNSWAP_METHOD_NAMES = Utils.uset2("fromMap", "fromJsonMap", "create", "valueOf");
+		SWAP_METHOD_NAMES = u(set("toMap", "toJsonMap")),
+		UNSWAP_METHOD_NAMES = u(set("fromMap", "fromJsonMap", "create", "valueOf"));
 
 	/**
 	 * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.

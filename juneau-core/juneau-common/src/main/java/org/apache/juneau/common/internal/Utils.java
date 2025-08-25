@@ -1434,18 +1434,6 @@ public class Utils {
 		return value == null ? null : Collections.unmodifiableSet(value);
 	}
 
-	/**
-	 * Convenience method for creating an unmodifiable {@link LinkedHashSet}.
-	 *
-	 * @param <E> The element type.
-	 * @param values The values to initialize the set with.
-	 * @return A new unmodifiable set.
-	 */
-	@SafeVarargs
-	public static <E> Set<E> uset2(E...values) {
-		return u(set(values));
-	}
-
 	/** Constructor */
 	protected Utils() {}
 }
