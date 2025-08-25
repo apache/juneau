@@ -19,7 +19,6 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.internal.*;
 
 /**
  * Represents a simple namespace mapping between a simple name and URI.

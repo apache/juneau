@@ -16,7 +16,6 @@ import static org.apache.juneau.common.internal.Utils.*;
 
 import java.io.*;
 
-import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;

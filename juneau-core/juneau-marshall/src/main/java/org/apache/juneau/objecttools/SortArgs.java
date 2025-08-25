@@ -18,8 +18,6 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.common.internal.*;
-
 /**
  * Arguments passed to {@link ObjectSorter}.
  *
