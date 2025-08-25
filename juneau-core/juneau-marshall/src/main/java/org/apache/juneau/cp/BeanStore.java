@@ -25,6 +25,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.reflect.*;
@@ -698,7 +699,7 @@ public class BeanStore {
 	}
 
 	private JsonMap properties() {
-		Predicate<Boolean> nf = ObjectUtils::isTrue;
+		Predicate<Boolean> nf = Utils::isTrue;
 		return filteredMap()
 			.append("identity", ObjectUtils.identity(this))
 			.append("entries", entries.stream().map(BeanStoreEntry::properties).collect(toList()))

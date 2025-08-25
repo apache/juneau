@@ -72,8 +72,8 @@ public class SubItemsAnnotation {
 		Predicate<String> ne = StringUtils::isNotEmpty;
 		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
 		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
-		Predicate<Boolean> nf = ObjectUtils::isTrue;
-		Predicate<Long> nm1 = ObjectUtils::isNotMinusOne;
+		Predicate<Boolean> nf = Utils::isTrue;
+		Predicate<Long> nm1 = Utils::isNotMinusOne;
 		return om
 			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
 			.appendIf(ne, "default", joinnl(a._default(), a.df()))

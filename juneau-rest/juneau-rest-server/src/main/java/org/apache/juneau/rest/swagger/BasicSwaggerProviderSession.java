@@ -723,7 +723,7 @@ public class BasicSwaggerProviderSession {
 	@SafeVarargs
 	private final <T> T firstNonEmpty(T...t) {
 		for (T oo : t)
-			if (! ObjectUtils.isEmpty(oo))
+			if (! Utils.isEmpty(oo))
 				return oo;
 		return null;
 	}
@@ -803,7 +803,7 @@ public class BasicSwaggerProviderSession {
 	 * Replaces non-standard JSON-Schema attributes with standard Swagger attributes.
 	 */
 	private JsonMap fixSwaggerExtensions(JsonMap om) {
-		Predicate<Object> nn = ObjectUtils::isNotNull;
+		Predicate<Object> nn = Utils::isNotNull;
 		om
 			.appendIf(nn, "discriminator", om.remove("x-discriminator"))
 			.appendIf(nn, "readOnly", om.remove("x-readOnly"))
@@ -934,8 +934,8 @@ public class BasicSwaggerProviderSession {
 			Predicate<String> ne = StringUtils::isNotEmpty;
 			Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
 			Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
-			Predicate<Boolean> nf = ObjectUtils::isTrue;
-			Predicate<Long> nm1 = ObjectUtils::isNotMinusOne;
+			Predicate<Boolean> nf = Utils::isTrue;
+			Predicate<Long> nm1 = Utils::isNotMinusOne;
 			return om
 				.appendIf(nem, "additionalProperties", toJsonMap(a.additionalProperties()))
 				.appendIf(ne, "allOf", joinnl(a.allOf()))
@@ -992,8 +992,8 @@ public class BasicSwaggerProviderSession {
 		Predicate<String> ne = StringUtils::isNotEmpty;
 		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
 		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
-		Predicate<Boolean> nf = ObjectUtils::isTrue;
-		Predicate<Long> nm1 = ObjectUtils::isNotMinusOne;
+		Predicate<Boolean> nf = Utils::isTrue;
+		Predicate<Long> nm1 = Utils::isNotMinusOne;
 		return om
 			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
 			.appendIf(ne, "default", joinnl(a._default(), a.df()))
@@ -1023,8 +1023,8 @@ public class BasicSwaggerProviderSession {
 		Predicate<String> ne = StringUtils::isNotEmpty;
 		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
 		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
-		Predicate<Boolean> nf = ObjectUtils::isTrue;
-		Predicate<Long> nm1 = ObjectUtils::isNotMinusOne;
+		Predicate<Boolean> nf = Utils::isTrue;
+		Predicate<Long> nm1 = Utils::isNotMinusOne;
 		return om
 			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
 			.appendIf(ne, "default", joinnl(a._default(), a.df()))
@@ -1075,7 +1075,7 @@ public class BasicSwaggerProviderSession {
 	}
 
 	private JsonMap pushupSchemaFields(RestPartType type, JsonMap param, JsonMap schema) {
-		Predicate<Object> ne = ObjectUtils::isNotEmpty;
+		Predicate<Object> ne = Utils::isNotEmpty;
 		if (schema != null && ! schema.isEmpty()) {
 			if (type == BODY || type == RESPONSE) {
 				param

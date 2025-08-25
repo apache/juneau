@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
@@ -177,7 +178,7 @@ public class ThrownStore {
 		this.parent = optional(builder.parent);
 		this.beanStore = builder.beanStore();
 
-		this.statsImplClass = firstNonNull(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : null, null);
+		this.statsImplClass = Utils.firstNonNull(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : null, null);
 
 		Set<String> s = null;
 		if (builder.ignoreClasses != null)

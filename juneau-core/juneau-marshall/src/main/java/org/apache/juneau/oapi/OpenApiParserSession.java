@@ -26,6 +26,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -243,7 +244,7 @@ public class OpenApiParserSession extends UonParserSession {
 		if (type == null)
 			type = (ClassMeta<T>)object();
 
-		schema = ObjectUtils.firstNonNull(schema, getSchema(), DEFAULT_SCHEMA);
+		schema = Utils.firstNonNull(schema, getSchema(), DEFAULT_SCHEMA);
 
 		T t = parseInner(partType, schema, in, type);
 		if (t == null && type.isPrimitive())

@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -382,7 +383,7 @@ public class BeanTraverseSession extends BeanSession {
 	 * @return A map, typically containing something like <c>{line:123,column:456,currentProperty:"foobar"}</c>
 	 */
 	public final JsonMap getLastLocation() {
-		Predicate<Object> nn = ObjectUtils::isNotNull;
+		Predicate<Object> nn = Utils::isNotNull;
 		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
 		return JsonMap.create()
 			.appendIf(nn, "currentClass", currentClass)

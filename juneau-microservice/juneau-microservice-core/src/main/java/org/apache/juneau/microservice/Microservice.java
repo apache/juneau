@@ -32,6 +32,7 @@ import java.util.logging.Formatter;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
@@ -652,11 +653,11 @@ public class Microservice implements ConfigEventListener {
 		// --------------------------------------------------------------------------------
 		// Initialize console commands.
 		// --------------------------------------------------------------------------------
-		this.consoleEnabled = ObjectUtils.firstNonNull(builder.consoleEnabled, config.get("Console/enabled").asBoolean().orElse(false));
+		this.consoleEnabled = Utils.firstNonNull(builder.consoleEnabled, config.get("Console/enabled").asBoolean().orElse(false));
 		if (consoleEnabled) {
 			Console c = System.console();
-			this.consoleReader = ObjectUtils.firstNonNull(builder.consoleReader, new Scanner(c == null ? new InputStreamReader(System.in) : c.reader()));
-			this.consoleWriter = ObjectUtils.firstNonNull(builder.consoleWriter, c == null ? new PrintWriter(System.out, true) : c.writer());
+			this.consoleReader = Utils.firstNonNull(builder.consoleReader, new Scanner(c == null ? new InputStreamReader(System.in) : c.reader()));
+			this.consoleWriter = Utils.firstNonNull(builder.consoleWriter, c == null ? new PrintWriter(System.out, true) : c.writer());
 
 			for (ConsoleCommand cc : builder.consoleCommands) {
 				consoleCommandMap.put(cc.getName(), cc);
@@ -773,18 +774,18 @@ public class Microservice implements ConfigEventListener {
 		if (this.logger == null) {
 			LogManager.getLogManager().reset();
 			this.logger = Logger.getLogger("");
-			String logFile = firstNonNull(logConfig.logFile, config.get("Logging/logFile").orElse(null));
+			String logFile = Utils.firstNonNull(logConfig.logFile, config.get("Logging/logFile").orElse(null));
 
 			if (isNotEmpty(logFile)) {
-				String logDir = firstNonNull(logConfig.logDir, config.get("Logging/logDir").orElse("."));
+				String logDir = Utils.firstNonNull(logConfig.logDir, config.get("Logging/logDir").orElse("."));
 				File logDirFile = resolveFile(logDir);
 				mkdirs(logDirFile, false);
 				logDir = logDirFile.getAbsolutePath();
 				System.setProperty("juneau.logDir", logDir);
 
-				boolean append = firstNonNull(logConfig.append, config.get("Logging/append").asBoolean().orElse(false));
-				int limit = firstNonNull(logConfig.limit, config.get("Logging/limit").asInteger().orElse(1024*1024));
-				int count = firstNonNull(logConfig.count, config.get("Logging/count").asInteger().orElse(1));
+				boolean append = Utils.firstNonNull(logConfig.append, config.get("Logging/append").asBoolean().orElse(false));
+				int limit = Utils.firstNonNull(logConfig.limit, config.get("Logging/limit").asInteger().orElse(1024*1024));
+				int count = Utils.firstNonNull(logConfig.count, config.get("Logging/count").asInteger().orElse(1));
 
 				FileHandler fh = new FileHandler(logDir + '/' + logFile, limit, count, append);
 
@@ -796,11 +797,11 @@ public class Microservice implements ConfigEventListener {
 					f = new LogEntryFormatter(format, dateFormat, useStackTraceHashes);
 				}
 				fh.setFormatter(f);
-				fh.setLevel(firstNonNull(logConfig.fileLevel, config.get("Logging/fileLevel").as(Level.class).orElse(Level.INFO)));
+				fh.setLevel(Utils.firstNonNull(logConfig.fileLevel, config.get("Logging/fileLevel").as(Level.class).orElse(Level.INFO)));
 				logger.addHandler(fh);
 
 				ConsoleHandler ch = new ConsoleHandler();
-				ch.setLevel(firstNonNull(logConfig.consoleLevel, config.get("Logging/consoleLevel").as(Level.class).orElse(Level.WARNING)));
+				ch.setLevel(Utils.firstNonNull(logConfig.consoleLevel, config.get("Logging/consoleLevel").as(Level.class).orElse(Level.WARNING)));
 				ch.setFormatter(f);
 				logger.addHandler(ch);
 			}

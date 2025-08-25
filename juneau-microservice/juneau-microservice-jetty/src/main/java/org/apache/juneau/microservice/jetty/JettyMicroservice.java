@@ -42,11 +42,10 @@ import org.apache.juneau.BasicRuntimeException;
 import org.apache.juneau.ExecutableException;
 import org.apache.juneau.collections.Args;
 import org.apache.juneau.collections.JsonMap;
-import org.apache.juneau.common.internal.IOUtils;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.config.Config;
 import org.apache.juneau.config.store.ConfigStore;
 import org.apache.juneau.cp.Messages;
-import org.apache.juneau.internal.ObjectUtils;
 import org.apache.juneau.microservice.Microservice;
 import org.apache.juneau.microservice.console.ConsoleCommand;
 import org.apache.juneau.parser.ParseException;
@@ -692,7 +691,7 @@ public class JettyMicroservice extends Microservice {
 		JsonMap mf = getManifest();
 		VarResolver vr = getVarResolver();
 
-		int[] ports = ObjectUtils.firstNonNull(builder.ports, cf.get("Jetty/port").as(int[].class).orElseGet(()->mf.getWithDefault("Jetty-Port", new int[]{8000}, int[].class)));
+		int[] ports = Utils.firstNonNull(builder.ports, cf.get("Jetty/port").as(int[].class).orElseGet(()->mf.getWithDefault("Jetty-Port", new int[]{8000}, int[].class)));
 		int availablePort = findOpenPort(ports);
 
 		if (System.getProperty("availablePort") == null)
@@ -700,7 +699,7 @@ public class JettyMicroservice extends Microservice {
 
 		String jettyXml = builder.jettyXml;
 		String jettyConfig = cf.get("Jetty/config").orElse(mf.getString("Jetty-Config", "jetty.xml"));
-		boolean resolveVars = ObjectUtils.firstNonNull(builder.jettyXmlResolveVars, cf.get("Jetty/resolveVars").asBoolean().orElse(false));
+		boolean resolveVars = Utils.firstNonNull(builder.jettyXmlResolveVars, cf.get("Jetty/resolveVars").asBoolean().orElse(false));
 
 		if (jettyXml == null)
 			jettyXml = IOUtils.loadSystemResourceAsString("jetty.xml", ".", "files");

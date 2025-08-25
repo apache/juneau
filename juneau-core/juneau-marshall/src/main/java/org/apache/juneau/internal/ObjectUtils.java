@@ -31,20 +31,6 @@ import org.apache.juneau.reflect.*;
 public class ObjectUtils {
 
 	/**
-	 * If the specified object is an instance of the specified class, casts it to that type.
-	 *
-	 * @param <T> The class to cast to.
-	 * @param o The object to cast.
-	 * @param c The class to cast to.
-	 * @return The cast object, or <jk>null</jk> if the object wasn't an instance of the specified class.
-	 */
-	public static <T> T castOrNull(Object o, Class<T> c) {
-		if (c.isInstance(o))
-			return c.cast(o);
-		return null;
-	}
-
-	/**
 	 * Compares two objects for equality.
 	 *
 	 * <p>
@@ -200,64 +186,6 @@ public class ObjectUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified object is empty.
-	 *
-	 * <p>
-	 * Return <jk>true</jk> if the value is any of the following:
-	 * <ul>
-	 * 	<li><jk>null</jk>
-	 * 	<li>An empty Collection
-	 * 	<li>An empty Map
-	 * 	<li>An empty array
-	 * 	<li>An empty CharSequence
-	 * 	<li>An empty String when serialized to a string using {@link Object#toString()}.
-	 * </ul>
-	 *
-	 * @param o The object to test.
-	 * @return <jk>true</jk> if the specified object is empty.
-	 */
-	@SuppressWarnings("rawtypes")
-	public static boolean isEmpty(Object o) {
-		if (o == null)
-			return true;
-		if (o instanceof Collection)
-			return ((Collection)o).isEmpty();
-		if (o instanceof Map)
-			return ((Map)o).isEmpty();
-		if (o.getClass().isArray())
-			return (Array.getLength(o) == 0);
-		return o.toString().isEmpty();
-	}
-
-	/**
-	 * Returns the first non-null value in the specified array
-	 *
-	 * @param <T> The value types.
-	 * @param t The values to check.
-	 * @return The first non-null value, or <jk>null</jk> if the array is null or empty or contains only <jk>null</jk> values.
-	 */
-	@SafeVarargs
-	public static <T> T firstNonNull(T... t) {
-		if (t != null)
-			for (T tt : t)
-				if (tt != null)
-					return tt;
-		return null;
-	}
-
-	/**
-	 * Casts an object to a specific type if it's an instance of that type.
-	 *
-	 * @param <T> The type to cast to.
-	 * @param c The type to cast to.
-	 * @param o The object to cast to.
-	 * @return The cast object, or <jk>null</jk> if the object wasn't the specified type.
-	 */
-	public static <T> T cast(Class<T> c, Object o) {
-		return o != null && c.isInstance(o) ? c.cast(o) : null;
-	}
-
-	/**
 	 * Converts the specified object into an identifiable string of the form "Class[identityHashCode]"
 	 * @param o The object to convert to a string.
 	 * @return An identity string.
@@ -298,55 +226,5 @@ public class ObjectUtils {
 		JsonMap m = JsonMap.create().append("id", identity(o));
 		methods.forEach((k,v) -> m.put(k, v.invoke(o)));
 		return m;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified object is not <jk>null</jk>.
-	 *
-	 * @param <T> The value type.
-	 * @param value The value being checked.
-	 * @return <jk>true</jk> if the specified object is not <jk>null</jk>.
-	 */
-	public static <T> boolean isNotNull(T value) {
-		return value != null;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified boolean is not <jk>null</jk> and is <jk>true</jk>.
-	 *
-	 * @param value The value being checked.
-	 * @return <jk>true</jk> if the specified boolean is not <jk>null</jk> and is <jk>true</jk>.
-	 */
-	public static boolean isTrue(Boolean value) {
-		return value != null && value;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified number is not <jk>null</jk> and not <c>-1</c>.
-	 *
-	 * @param <T> The value types.
-	 * @param value The value being checked.
-	 * @return <jk>true</jk> if the specified number is not <jk>null</jk> and not <c>-1</c>.
-	 */
-	public static <T extends Number> boolean isNotMinusOne(T value) {
-		return value != null && value.intValue() != -1;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified object is not <jk>null</jk> and not empty.
-	 *
-	 * Works on any of the following data types:  String, CharSequence, Collection, Map, array.
-	 * All other types are stringified and then checked as a String.
-	 *
-	 * @param value The value being checked.
-	 * @return <jk>true</jk> if the specified object is not <jk>null</jk> and not empty.
-	 */
-	public static boolean isNotEmpty(Object value) {
-		if (value == null) return false;
-		if (value instanceof CharSequence) return CharSequence.class.cast(value).length() > 0;
-		if (value instanceof Collection) return ! Collection.class.cast(value).isEmpty();
-		if (value instanceof Map) return ! Map.class.cast(value).isEmpty();
-		if (value.getClass().isArray()) return Array.getLength(value) > 0;
-		return StringUtils.isNotEmpty(StringUtils.stringify(value));
 	}
 }

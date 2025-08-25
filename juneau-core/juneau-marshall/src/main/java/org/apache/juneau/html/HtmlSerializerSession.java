@@ -25,6 +25,7 @@ import java.util.function.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -460,7 +461,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			HtmlClassMeta cHtml = getHtmlClassMeta(sType);
 			HtmlBeanPropertyMeta bpHtml = getHtmlBeanPropertyMeta(pMeta);
 
-			HtmlRender render = firstNonNull(bpHtml.getRender(), cHtml.getRender());
+			HtmlRender render = Utils.firstNonNull(bpHtml.getRender(), cHtml.getRender());
 
 			if (render != null) {
 				Object o2 = render.getContent(this, o);

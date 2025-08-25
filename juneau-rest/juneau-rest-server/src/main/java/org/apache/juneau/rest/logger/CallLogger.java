@@ -582,16 +582,16 @@ public class CallLogger {
 		if (! isEnabled(rule, req))
 			return;
 
-		Level level = firstNonNull(rule.getLevel(), this.level);
+		Level level = Utils.firstNonNull(rule.getLevel(), this.level);
 
 		if (level == Level.OFF)
 			return;
 
-		Throwable e = ObjectUtils.castOrNull(req.getAttribute("Exception"), Throwable.class);
-		Long execTime = ObjectUtils.castOrNull(req.getAttribute("ExecTime"), Long.class);
+		Throwable e = Utils.castOrNull(req.getAttribute("Exception"), Throwable.class);
+		Long execTime = Utils.castOrNull(req.getAttribute("ExecTime"), Long.class);
 
-		CallLoggingDetail reqd = firstNonNull(rule.getRequestDetail(), requestDetail);
-		CallLoggingDetail resd = firstNonNull(rule.getResponseDetail(), responseDetail);
+		CallLoggingDetail reqd = Utils.firstNonNull(rule.getRequestDetail(), requestDetail);
+		CallLoggingDetail resd = Utils.firstNonNull(rule.getResponseDetail(), responseDetail);
 
 		String method = req.getMethod();
 		int status = res.getStatus();
@@ -721,7 +721,7 @@ public class CallLogger {
 	 * @see RestOp#debug()
 	 */
 	protected boolean isDebug(HttpServletRequest req) {
-		return firstNonNull(ObjectUtils.castOrNull(req.getAttribute("Debug"), Boolean.class), false);
+		return Utils.firstNonNull(Utils.castOrNull(req.getAttribute("Debug"), Boolean.class), false);
 	}
 
 	/**
@@ -739,8 +739,8 @@ public class CallLogger {
 	 * @return <jk>true</jk> if logging is enabled for this request.
 	 */
 	protected boolean isEnabled(CallLoggerRule rule, HttpServletRequest req) {
-		Enablement enabled = firstNonNull(rule.getEnabled(), this.enabled);
-		Predicate<HttpServletRequest> enabledTest = firstNonNull(rule.getEnabledTest(), this.enabledTest);
+		Enablement enabled = Utils.firstNonNull(rule.getEnabled(), this.enabled);
+		Predicate<HttpServletRequest> enabledTest = Utils.firstNonNull(rule.getEnabledTest(), this.enabledTest);
 		return enabled.isEnabled(enabledTest.test(req));
 	}
 
@@ -780,13 +780,13 @@ public class CallLogger {
 	private byte[] getRequestContent(HttpServletRequest req) {
 		if (req instanceof CachingHttpServletRequest)
 			return ((CachingHttpServletRequest)req).getContent();
-		return ObjectUtils.castOrNull(req.getAttribute("RequestContent"), byte[].class);
+		return Utils.castOrNull(req.getAttribute("RequestContent"), byte[].class);
 	}
 
 	private byte[] getResponseContent(HttpServletRequest req, HttpServletResponse res) {
 		if (res instanceof CachingHttpServletResponse)
 			return ((CachingHttpServletResponse)res).getContent();
-		return ObjectUtils.castOrNull(req.getAttribute("ResponseContent"), byte[].class);
+		return Utils.castOrNull(req.getAttribute("ResponseContent"), byte[].class);
 	}
 
 	private ThrownStats getThrownStats(Throwable e) {

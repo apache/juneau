@@ -191,7 +191,7 @@ public class Messages extends ResourceBundle {
 				Builder x = null;
 
 				for (int i = mbl.length-1; i >= 0; i--) {
-					Class<?> c = firstNonNull(mbl[i].getA(), forClass);
+					Class<?> c = Utils.firstNonNull(mbl[i].getA(), forClass);
 					String value = mbl[i].getB();
 					if (isJsonObject(value, true)) {
 						MessagesString ms;

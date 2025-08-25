@@ -99,8 +99,8 @@ public class SchemaAnnotation {
 		Predicate<String> ne = StringUtils::isNotEmpty;
 		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
 		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
-		Predicate<Boolean> nf = ObjectUtils::isTrue;
-		Predicate<Long> nm1 = ObjectUtils::isNotMinusOne;
+		Predicate<Boolean> nf = Utils::isTrue;
+		Predicate<Long> nm1 = Utils::isNotMinusOne;
 		return m
 			.appendIf(nem, "additionalProperties", parseMap(a.additionalProperties()))
 			.appendIf(ne, "allOf", joinnl(a.allOf()))
@@ -142,8 +142,8 @@ public class SchemaAnnotation {
 		Predicate<String> ne = StringUtils::isNotEmpty;
 		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
 		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
-		Predicate<Boolean> nf = ObjectUtils::isTrue;
-		Predicate<Long> nm1 = ObjectUtils::isNotMinusOne;
+		Predicate<Boolean> nf = Utils::isTrue;
+		Predicate<Long> nm1 = Utils::isNotMinusOne;
 		return m
 			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
 			.appendIf(ne, "default", joinnl(a._default(), a.df()))

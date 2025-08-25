@@ -120,7 +120,7 @@ public class ResponseContent implements HttpEntity {
 		this.request = request;
 		this.response = response;
 		this.parser = parser;
-		this.entity = ObjectUtils.firstNonNull(response.asHttpResponse().getEntity(), NULL_ENTITY);
+		this.entity = Utils.firstNonNull(response.asHttpResponse().getEntity(), NULL_ENTITY);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

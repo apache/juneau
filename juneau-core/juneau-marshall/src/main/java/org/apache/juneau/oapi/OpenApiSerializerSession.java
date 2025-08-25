@@ -273,7 +273,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 				type = getClassMetaForObject(value);
 		}
 
-		schema = ObjectUtils.firstNonNull(schema, DEFAULT_SCHEMA);
+		schema = Utils.firstNonNull(schema, DEFAULT_SCHEMA);
 
 		HttpPartDataType t = schema.getType(type);
 

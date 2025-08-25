@@ -115,7 +115,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		this.name = name;
 		this.value = value instanceof Supplier ? null : value;
 		this.stringValue = stringify(value);
-		this.supplier = cast(Supplier.class, value);
+		this.supplier = Utils.cast(Supplier.class, value);
 	}
 
 	/**

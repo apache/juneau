@@ -13,6 +13,9 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.html.AsideFloat.*;
+
+import org.apache.juneau.common.internal.*;
+
 import static org.apache.juneau.common.internal.StringUtils.*;
 
 import org.apache.juneau.internal.*;
@@ -256,7 +259,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 
 		if (o == null) {
 			w.append(6, "<null/>").nl(6);
-		} else if (ObjectUtils.isEmpty(o)){
+		} else if (Utils.isEmpty(o)){
 			String m = session.getNoResultsMessage();
 			if (exists(m))
 				w.append(6, session.resolve(m)).nl(6);

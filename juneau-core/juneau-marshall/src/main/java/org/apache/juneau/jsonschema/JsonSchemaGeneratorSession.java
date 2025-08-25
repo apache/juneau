@@ -360,7 +360,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		out.append(jscm.getSchema());
 
-		Predicate<Object> neo = ObjectUtils::isNotEmpty;
+		Predicate<Object> neo = Utils::isNotEmpty;
 		out.appendIfAbsentIf(neo, "description", description);
 		out.appendIfAbsentIf(neo, "example", example);
 
