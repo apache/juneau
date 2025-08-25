@@ -120,7 +120,7 @@ public class Thrown extends BasicCsvHeader {
 	 * 	The header value.
 	 */
 	public Thrown(List<Part> value) {
-		super(NAME, join(value, ", "));
+		super(NAME, Utils.join(value, ", "));
 		this.value = u(value);
 	}
 

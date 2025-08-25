@@ -281,7 +281,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * @return A fluent string assertion.  Never <jk>null</jk>.
 	 */
 	public FluentStringAssertion<R> asCdl() {
-		return new FluentStringAssertion<>(this, valueIsNull() ? null : StringUtils.join(value(), ','), returns());
+		return new FluentStringAssertion<>(this, valueIsNull() ? null : Utils.join(value(), ','), returns());
 	}
 
 	/**
@@ -292,7 +292,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 */
 	public FluentStringAssertion<R> asCdl(Function<E,String> function) {
 		List<String> l = valueIsNull() ? null : value().stream().map(function::apply).toList();
-		return new FluentStringAssertion<>(this, join(l, ','), returns());
+		return new FluentStringAssertion<>(this, Utils.join(l, ','), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

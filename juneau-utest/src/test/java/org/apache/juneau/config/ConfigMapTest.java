@@ -19,6 +19,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.config.store.*;
 import org.junit.jupiter.api.*;
@@ -61,8 +62,8 @@ class ConfigMapTest extends SimpleTestBase {
 
 		assertLines("foo=bar|", cm);
 
-		assertEquals("", join(cm.getPreLines(""), '|'));
-		assertEquals("", join(cm.getEntry("", "foo").getPreLines(), '|'));
+		assertEquals("", Utils.join(cm.getPreLines(""), '|'));
+		assertEquals("", Utils.join(cm.getEntry("", "foo").getPreLines(), '|'));
 
 		assertEquals("bar", cm.getEntry("", "foo").getValue());
 
@@ -84,8 +85,8 @@ class ConfigMapTest extends SimpleTestBase {
 
 		assertLines("#comment|foo=bar|", cm);
 
-		assertEquals("", join(cm.getPreLines(""), '|'));
-		assertEquals("#comment", join(cm.getEntry("", "foo").getPreLines(), '|'));
+		assertEquals("", Utils.join(cm.getPreLines(""), '|'));
+		assertEquals("#comment", Utils.join(cm.getEntry("", "foo").getPreLines(), '|'));
 
 		assertEquals("bar", cm.getEntry("", "foo").getValue());
 
@@ -107,9 +108,9 @@ class ConfigMapTest extends SimpleTestBase {
 
 		assertLines("[MySection]|foo=bar|", cm);
 
-		assertEquals("", join(cm.getPreLines(""), '|'));
-		assertEquals("", join(cm.getPreLines("MySection"), '|'));
-		assertEquals("", join(cm.getEntry("MySection", "foo").getPreLines(), '|'));
+		assertEquals("", Utils.join(cm.getPreLines(""), '|'));
+		assertEquals("", Utils.join(cm.getPreLines("MySection"), '|'));
+		assertEquals("", Utils.join(cm.getEntry("MySection", "foo").getPreLines(), '|'));
 
 		assertEquals("bar", cm.getEntry("MySection", "foo").getValue());
 
@@ -131,7 +132,7 @@ class ConfigMapTest extends SimpleTestBase {
 
 		assertLines("[MySection]|foo=bar|", cm);
 
-		assertEquals("", join(cm.getPreLines(""), '|'));
+		assertEquals("", Utils.join(cm.getPreLines(""), '|'));
 
 		assertNull(cm.getPreLines("XXX"));
 
@@ -156,11 +157,11 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 		assertLines("#S1|[S1]|#k1|k1=v1|#S2|[S2]|#k2|k2=v2|", cm);
 
-		assertEquals("", join(cm.getPreLines(""), '|'));
-		assertEquals("#S1", join(cm.getPreLines("S1"), '|'));
-		assertEquals("#k1", join(cm.getEntry("S1", "k1").getPreLines(), '|'));
-		assertEquals("#S2", join(cm.getPreLines("S2"), '|'));
-		assertEquals("#k2", join(cm.getEntry("S2", "k2").getPreLines(), '|'));
+		assertEquals("", Utils.join(cm.getPreLines(""), '|'));
+		assertEquals("#S1", Utils.join(cm.getPreLines("S1"), '|'));
+		assertEquals("#k1", Utils.join(cm.getEntry("S1", "k1").getPreLines(), '|'));
+		assertEquals("#S2", Utils.join(cm.getPreLines("S2"), '|'));
+		assertEquals("#k2", Utils.join(cm.getEntry("S2", "k2").getPreLines(), '|'));
 
 		assertEquals("v1", cm.getEntry("S1", "k1").getValue());
 		assertEquals("v2", cm.getEntry("S2", "k2").getValue());
@@ -188,10 +189,10 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 		assertLines("#D||#k|k=v|#S1|[S1]|#k1|k1=v1|", cm);
 
-		assertEquals("#D", join(cm.getPreLines(""), '|'));
-		assertEquals("#k", join(cm.getEntry("", "k").getPreLines(), '|'));
-		assertEquals("#S1", join(cm.getPreLines("S1"), '|'));
-		assertEquals("#k1", join(cm.getEntry("S1", "k1").getPreLines(), '|'));
+		assertEquals("#D", Utils.join(cm.getPreLines(""), '|'));
+		assertEquals("#k", Utils.join(cm.getEntry("", "k").getPreLines(), '|'));
+		assertEquals("#S1", Utils.join(cm.getPreLines("S1"), '|'));
+		assertEquals("#k1", Utils.join(cm.getEntry("S1", "k1").getPreLines(), '|'));
 
 		assertEquals("v", cm.getEntry("", "k").getValue());
 		assertEquals("v1", cm.getEntry("S1", "k1").getValue());
@@ -231,10 +232,10 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigMap cm = s.getMap("A.cfg");
 		assertLines("#Da|#Db||#ka||#kb||k=v||#S1a||#S1b||[S1]||#k1a||#k1b||k1=v1|", cm);
 
-		assertEquals("#Da|#Db", join(cm.getPreLines(""), '|'));
-		assertEquals("#ka||#kb|", join(cm.getEntry("", "k").getPreLines(), '|'));
-		assertEquals("|#S1a||#S1b|", join(cm.getPreLines("S1"), '|'));
-		assertEquals("|#k1a||#k1b|", join(cm.getEntry("S1", "k1").getPreLines(), '|'));
+		assertEquals("#Da|#Db", Utils.join(cm.getPreLines(""), '|'));
+		assertEquals("#ka||#kb|", Utils.join(cm.getEntry("", "k").getPreLines(), '|'));
+		assertEquals("|#S1a||#S1b|", Utils.join(cm.getPreLines("S1"), '|'));
+		assertEquals("|#k1a||#k1b|", Utils.join(cm.getEntry("S1", "k1").getPreLines(), '|'));
 
 		assertEquals("v", cm.getEntry("", "k").getValue());
 		assertEquals("v1", cm.getEntry("S1", "k1").getValue());
@@ -287,8 +288,8 @@ class ConfigMapTest extends SimpleTestBase {
 		);
 		ConfigMap cm = s.getMap("A.cfg");
 
-		assertEquals("", join(cm.getEntry("", "k1").getPreLines(), '|'));
-		assertEquals("", join(cm.getEntry("", "k2").getPreLines(), '|'));
+		assertEquals("", Utils.join(cm.getEntry("", "k1").getPreLines(), '|'));
+		assertEquals("", Utils.join(cm.getEntry("", "k2").getPreLines(), '|'));
 
 		assertLines("k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|", cm);
 
@@ -318,8 +319,8 @@ class ConfigMapTest extends SimpleTestBase {
 		);
 		ConfigMap cm = s.getMap("A.cfg");
 
-		assertEquals("|#k1|", join(cm.getEntry("", "k1").getPreLines(), '|'));
-		assertEquals("|#k2|", join(cm.getEntry("", "k2").getPreLines(), '|'));
+		assertEquals("|#k1|", Utils.join(cm.getEntry("", "k1").getPreLines(), '|'));
+		assertEquals("|#k2|", Utils.join(cm.getEntry("", "k2").getPreLines(), '|'));
 
 		assertLines("|#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|", cm);
 
@@ -344,8 +345,8 @@ class ConfigMapTest extends SimpleTestBase {
 		);
 		ConfigMap cm = s.getMap("A.cfg");
 
-		assertEquals("", join(cm.getEntry("S1", "k1").getPreLines(), '|'));
-		assertEquals("", join(cm.getEntry("S1", "k2").getPreLines(), '|'));
+		assertEquals("", Utils.join(cm.getEntry("S1", "k1").getPreLines(), '|'));
+		assertEquals("", Utils.join(cm.getEntry("S1", "k2").getPreLines(), '|'));
 
 		assertLines("[S1]|k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|", cm);
 
@@ -379,9 +380,9 @@ class ConfigMapTest extends SimpleTestBase {
 		);
 		ConfigMap cm = s.getMap("A.cfg");
 
-		assertEquals("|#S1|", join(cm.getPreLines("S1"), '|'));
-		assertEquals("|#k1|", join(cm.getEntry("S1", "k1").getPreLines(), '|'));
-		assertEquals("|#k2|", join(cm.getEntry("S1", "k2").getPreLines(), '|'));
+		assertEquals("|#S1|", Utils.join(cm.getPreLines("S1"), '|'));
+		assertEquals("|#k1|", Utils.join(cm.getEntry("S1", "k1").getPreLines(), '|'));
+		assertEquals("|#k2|", Utils.join(cm.getEntry("S1", "k2").getPreLines(), '|'));
 
 		assertLines("|#S1||[S1]||#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|", cm);
 

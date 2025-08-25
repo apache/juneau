@@ -76,7 +76,7 @@ public class EntityTags {
 	 * @param value The header value.
 	 */
 	public EntityTags(EntityTag...value) {
-		this.string = join(value, ", ");
+		this.string = Utils.join(value, ", ");
 		this.value = copyOf(value);
 	}
 

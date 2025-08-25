@@ -270,7 +270,7 @@ public class StringExpressionMatcher {
 
 		@Override /* Object */
 		public String toString() {
-			return "(& " + StringUtils.join(clauses, " ") + ')';
+			return "(& " + Utils.join(clauses, " ") + ')';
 		}
 	}
 
@@ -297,7 +297,7 @@ public class StringExpressionMatcher {
 
 		@Override /* Object */
 		public String toString() {
-			return "(| " + StringUtils.join(clauses, " ") + ')';
+			return "(| " + Utils.join(clauses, " ") + ')';
 		}
 	}
 

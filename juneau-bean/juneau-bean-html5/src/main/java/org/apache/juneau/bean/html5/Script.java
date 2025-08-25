@@ -18,6 +18,7 @@ import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -45,7 +46,7 @@ public class Script extends HtmlElementRawText {
 	 * @param text The child text node.
 	 */
 	public Script(String type, String...text) {
-		type(type).text(joinnl(text));
+		type(type).text(Utils.joinnl(text));
 	}
 
 	/**

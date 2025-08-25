@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -237,7 +238,7 @@ public abstract class ContextSession {
 	 */
 	public void checkForWarnings() {
 		if (debug && ! getWarnings().isEmpty())
-			throw new BeanRuntimeException("Warnings occurred in session: \n" + join(getWarnings(), "\n"));
+			throw new BeanRuntimeException("Warnings occurred in session: \n" + Utils.join(getWarnings(), "\n"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

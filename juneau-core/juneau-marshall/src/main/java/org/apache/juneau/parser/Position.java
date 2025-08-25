@@ -64,7 +64,7 @@ public class Position {
 			l.add("position " + position);
 		if (l.isEmpty())
 			l.add("unknown");
-		return StringUtils.join(l, ", ");
+		return Utils.join(l, ", ");
 	}
 
 	/**

@@ -225,7 +225,7 @@ public final class RestUtils {
 			else if (fromParent != null)
 				l.add(fromParent);
 		}
-		return join(l, '\n');
+		return Utils.join(l, '\n');
 	}
 
 	private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");

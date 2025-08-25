@@ -119,9 +119,9 @@ public class BasicCsvArrayPart extends BasicPart {
 	@Override /* Header */
 	public String getValue() {
 		if (supplier != null)
-			return join(supplier.get(), ',');
+			return Utils.join(supplier.get(), ',');
 		if (stringValue != null)
-			stringValue = join(value, ',');
+			stringValue = Utils.join(value, ',');
 		return stringValue;
 	}
 

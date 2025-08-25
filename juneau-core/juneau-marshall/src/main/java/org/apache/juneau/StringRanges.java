@@ -111,7 +111,7 @@ public class StringRanges {
 	 * @param value The string range header value.
 	 */
 	public StringRanges(StringRange...value) {
-		this.string = StringUtils.join(value, ", ");
+		this.string = Utils.join(value, ", ");
 		this.value = copyOf(value);
 	}
 
@@ -127,7 +127,7 @@ public class StringRanges {
 			value[i] = new StringRange(e[i]);
 		Arrays.sort(value, RANGE_COMPARATOR);
 
-		this.string = value.length == 1 ? value[0].toString() : StringUtils.join(value, ", ");
+		this.string = value.length == 1 ? value[0].toString() : Utils.join(value, ", ");
 	}
 
 	/**

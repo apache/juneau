@@ -275,7 +275,7 @@ public class DocGenerator {
 					if (titleMap.flags != null)
 						Arrays.stream(titleMap.flags.split(",")).forEach(x -> tags.add("<b><red>"+x+"</red></b>"));
 					title = titleMap.title;
-					this.tags = StringUtils.join(tags, ", ");
+					this.tags = Utils.join(tags, ", ");
 				}
 				if (s.contains("{@link org.apache.juneau."))
 					WARNINGS.add("Found {@link org.apache.juneau...} in file " + f.getAbsolutePath());

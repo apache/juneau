@@ -15,6 +15,7 @@ package org.apache.juneau.bean.html5;
 import static org.apache.juneau.common.internal.StringUtils.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -51,7 +52,7 @@ public class Style extends HtmlElementRawText {
 	 * 	<br>Values will be concatenated with newlines.
 	 */
 	public Style(String...text) {
-		text(joinnl(text));
+		text(Utils.joinnl(text));
 	}
 
 	/**

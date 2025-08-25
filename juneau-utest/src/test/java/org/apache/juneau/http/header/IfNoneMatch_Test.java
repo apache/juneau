@@ -36,7 +36,7 @@ class IfNoneMatch_Test extends SimpleTestBase {
 	public static class A {
 		@RestOp
 		public StringReader get(@Header(name=HEADER) @Schema(cf="multi",aev=true) String[] h) {
-			return TestUtils.reader(h == null ? "null" : StringUtils.join(h, ','));
+			return TestUtils.reader(h == null ? "null" : Utils.join(h, ','));
 		}
 	}
 

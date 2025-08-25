@@ -3198,7 +3198,7 @@ public class HttpPartSchema {
 		private String joinnlOrNull(String[]...s) {
 			for (String[] ss : s)
 				if (ss.length > 0)
-					return joinnl(ss);
+					return Utils.joinnl(ss);
 			return null;
 		}
 	}
@@ -3400,7 +3400,7 @@ public class HttpPartSchema {
 
 		List<String> notAllowed2 = notAllowed.build();
 		if (! notAllowed2.isEmpty())
-			errors.add("Attributes not allow for type='"+type+"': " + StringUtils.join(notAllowed2, ","));
+			errors.add("Attributes not allow for type='"+type+"': " + Utils.join(notAllowed2, ","));
 		if (invalidFormat)
 			errors.add("Invalid format for type='"+type+"': '"+format+"'");
 		if (exclusiveMaximum && maximum == null)
@@ -3433,7 +3433,7 @@ public class HttpPartSchema {
 			errors.add("Cannot define an array of objects unless array format is 'uon'.");
 
 		if (! errors.isEmpty())
-			throw new ContextRuntimeException("Schema specification errors: \n\t" + join(errors, "\n\t"), new Object[0]);
+			throw new ContextRuntimeException("Schema specification errors: \n\t" + Utils.join(errors, "\n\t"), new Object[0]);
 	}
 
 	/**
@@ -4073,7 +4073,7 @@ public class HttpPartSchema {
 	}
 
 	final static JsonMap toJsonMap(String[] ss) {
-		String s = joinnl(ss);
+		String s = Utils.joinnl(ss);
 		if (s.isEmpty())
 			return null;
 		if (! isJsonObject(s, true))

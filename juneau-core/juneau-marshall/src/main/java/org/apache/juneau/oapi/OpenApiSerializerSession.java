@@ -553,13 +553,13 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		} else if (t == ARRAY) {
 			List l = toList(partType, getClassMetaForObject(o), o, s);
 			if (cf == CSV)
-				return joine(l, ',');
+				return StringUtils.joine(l, ',');
 			if (cf == PIPES)
-				return joine(l, '|');
+				return StringUtils.joine(l, '|');
 			if (cf == SSV)
-				return join(l, ' ');
+				return Utils.join(l, ' ');
 			if (cf == TSV)
-				return join(l, '\t');
+				return Utils.join(l, '\t');
 			return l;
 		} else if (t == OBJECT) {
 			return toMap(partType, getClassMetaForObject(o), o, s);

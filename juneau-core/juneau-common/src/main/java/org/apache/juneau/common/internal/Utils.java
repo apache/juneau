@@ -739,4 +739,188 @@ public class Utils {
 	public static boolean neic(String s1, String s2) {
 		return ! eqic(s1, s2);
 	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param separator The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(Object[] tokens, String separator) {
+		if (tokens == null)
+			return null;
+		var sb = new StringBuilder();
+		for (var i = 0; i < tokens.length; i++) {
+			if (i > 0)
+				sb.append(separator);
+			sb.append(tokens[i]);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(Collection<?> tokens, String d) {
+		if (tokens == null)
+			return null;
+		return join(tokens, d, new StringBuilder()).toString();
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(List<?> tokens, String d) {
+		if (tokens == null)
+			return null;
+		return join(tokens, d, new StringBuilder()).toString();
+	}
+
+	/**
+	 * Joins the specified tokens into a delimited string and writes the output to the specified string builder.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @param sb The string builder to append the response to.
+	 * @return The same string builder passed in as <c>sb</c>.
+	 */
+	public static StringBuilder join(Collection<?> tokens, String d, StringBuilder sb) {
+		if (tokens == null)
+			return sb;
+		for (var iter = tokens.iterator(); iter.hasNext();) {
+			sb.append(iter.next());
+			if (iter.hasNext())
+				sb.append(d);
+		}
+		return sb;
+	}
+
+	/**
+	 * Joins the specified tokens into a delimited string and writes the output to the specified string builder.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @param sb The string builder to append the response to.
+	 * @return The same string builder passed in as <c>sb</c>.
+	 */
+	public static StringBuilder join(List<?> tokens, String d, StringBuilder sb) {
+		if (tokens == null)
+			return sb;
+		for (int i = 0, j = tokens.size(); i < j; i++) {
+			if (i > 0)
+				sb.append(d);
+			sb.append(tokens.get(i));
+		}
+		return sb;
+	}
+
+	/**
+	 * Joins the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(Object[] tokens, char d) {
+		if (tokens == null)
+			return null;
+		if (tokens.length == 1)
+			return emptyIfNull(s(tokens[0]));
+		return join(tokens, d, new StringBuilder()).toString();
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string and writes the output to the specified string builder.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @param sb The string builder to append the response to.
+	 * @return The same string builder passed in as <c>sb</c>.
+	 */
+	public static StringBuilder join(Object[] tokens, char d, StringBuilder sb) {
+		if (tokens == null)
+			return sb;
+		for (var i = 0; i < tokens.length; i++) {
+			if (i > 0)
+				sb.append(d);
+			sb.append(tokens[i]);
+		}
+		return sb;
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(int[] tokens, char d) {
+		if (tokens == null)
+			return null;
+		var sb = new StringBuilder();
+		for (var i = 0; i < tokens.length; i++) {
+			if (i > 0)
+				sb.append(d);
+			sb.append(tokens[i]);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(Collection<?> tokens, char d) {
+		if (tokens == null)
+			return null;
+		var sb = new StringBuilder();
+		for (var iter = tokens.iterator(); iter.hasNext();) {
+			sb.append(iter.next());
+			if (iter.hasNext())
+				sb.append(d);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(List<?> tokens, char d) {
+		if (tokens == null)
+			return null;
+		var sb = new StringBuilder();
+		for (int i = 0, j = tokens.size(); i < j; i++) {
+			if (i > 0)
+				sb.append(d);
+			sb.append(tokens.get(i));
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Joins tokens with newlines.
+	 *
+	 * @param tokens The tokens to concatenate.
+	 * @return A string with the specified tokens contatenated with newlines.
+	 */
+	public static String joinnl(Object[] tokens) {
+		return join(tokens, '\n');
+	}
 }

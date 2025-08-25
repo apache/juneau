@@ -949,7 +949,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 
 	@Override /* Object */
 	public String toString() {
-		return "[" + join(this, ", ") + "]";
+		return "[" + Utils.join(this, ", ") + "]";
 	}
 
 	// <FluentSetters>

@@ -236,7 +236,7 @@ public class Version implements Comparable<Version> {
 
 	@Override /* Object */
 	public String toString() {
-		return join(parts, '.');
+		return Utils.join(parts, '.');
 	}
 
 	@Override

@@ -123,7 +123,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicCsvHeader(String name, String...value) {
-		super(name, join(value, ", "));
+		super(name, Utils.join(value, ", "));
 		this.value = copyOf(value);
 		this.supplier = null;
 	}
@@ -148,7 +148,7 @@ public class BasicCsvHeader extends BasicHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		return join(value(), ", ");
+		return Utils.join(value(), ", ");
 	}
 
 	/**

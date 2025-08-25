@@ -392,7 +392,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isLines(String...lines) throws AssertionError {
 		assertArgNotNull("lines", lines);
-		var v = join(lines, '\n');
+		var v = Utils.join(lines, '\n');
 		var s = value();
 		if (Utils.ne(v, s))
 			throw error(MSG_stringDifferedAtPosition, diffPosition(v, s), fix(v), fix(s));
@@ -425,7 +425,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		assertArgNotNull("lines", lines);
 
 		// Must work for windows too.
-		var e = StringUtils.join(lines, '\n').trim().split("[\r\n]+");
+		var e = Utils.join(lines, '\n').trim().split("[\r\n]+");
 		var a = value().trim().split("[\r\n]+");
 
 		if (e.length != a.length)

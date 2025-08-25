@@ -370,27 +370,27 @@ class StringUtilsTest extends SimpleTestBase {
 	// join(Collection,char)
 	//====================================================================================================
 	@Test void a01_join() {
-		assertNull(join((Object[])null, ","));
-		assertEquals("1", join(new Object[]{1}, ","));
-		assertEquals("1,2", join(new Object[]{1,2}, ","));
+		assertNull(Utils.join((Object[])null, ","));
+		assertEquals("1", Utils.join(new Object[]{1}, ","));
+		assertEquals("1,2", Utils.join(new Object[]{1,2}, ","));
 
-		assertNull(join((Collection<?>)null, ","));
-		assertEquals("1", join(Arrays.asList(new Integer[]{1}), ","));
-		assertEquals("1,2", join(Arrays.asList(new Integer[]{1,2}), ","));
+		assertNull(Utils.join((Collection<?>)null, ","));
+		assertEquals("1", Utils.join(Arrays.asList(new Integer[]{1}), ","));
+		assertEquals("1,2", Utils.join(Arrays.asList(new Integer[]{1,2}), ","));
 
-		assertNull(join((Object[])null, ','));
-		assertEquals("x,y,z", join(new Object[]{"x,y","z"}, ','));
+		assertNull(Utils.join((Object[])null, ','));
+		assertEquals("x,y,z", Utils.join(new Object[]{"x,y","z"}, ','));
 
-		assertNull(join((int[])null, ','));
-		assertEquals("1", join(new int[]{1}, ','));
-		assertEquals("1,2", join(new int[]{1,2}, ','));
+		assertNull(Utils.join((int[])null, ','));
+		assertEquals("1", Utils.join(new int[]{1}, ','));
+		assertEquals("1,2", Utils.join(new int[]{1,2}, ','));
 
-		assertNull(join((Collection<?>)null, ','));
-		assertEquals("1", join(Arrays.asList(new Integer[]{1}), ','));
-		assertEquals("1,2", join(Arrays.asList(new Integer[]{1,2}), ','));
+		assertNull(Utils.join((Collection<?>)null, ','));
+		assertEquals("1", Utils.join(Arrays.asList(new Integer[]{1}), ','));
+		assertEquals("1,2", Utils.join(Arrays.asList(new Integer[]{1,2}), ','));
 
-		assertNull(joine((List<?>)null, ','));
-		assertEquals("x\\,y,z", joine(Arrays.asList(new String[]{"x,y","z"}), ','));
+		assertNull(StringUtils.joine((List<?>)null, ','));
+		assertEquals("x\\,y,z", StringUtils.joine(Arrays.asList(new String[]{"x,y","z"}), ','));
 	}
 
 	//====================================================================================================

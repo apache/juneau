@@ -100,7 +100,7 @@ public class MediaRanges {
 			ranges[i] = new MediaRange(e[i]);
 		Arrays.sort(ranges, RANGE_COMPARATOR);
 
-		this.string = ranges.length == 1 ? ranges[0].toString() : StringUtils.join(ranges, ',');
+		this.string = ranges.length == 1 ? ranges[0].toString() : Utils.join(ranges, ',');
 	}
 
 	/**

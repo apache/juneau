@@ -16,6 +16,7 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
@@ -193,7 +194,7 @@ class StringVarResolverTest extends SimpleTestBase {
 		}
 		@Override /* MultipartVar */
 		public String resolve(VarResolverSession session, String[] args) {
-			return join(args, '+');
+			return Utils.join(args, '+');
 		}
 	}
 
