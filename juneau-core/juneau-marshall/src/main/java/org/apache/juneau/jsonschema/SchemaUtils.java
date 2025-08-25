@@ -89,7 +89,7 @@ public class SchemaUtils {
 		String s = joinnl(ss);
 		if (s.isEmpty())
 			return null;
-		Set<String> set = set();
+		Set<String> set = set2();
 		JsonList.ofJsonOrCdl(s).forEach(x -> set.add(x.toString()));
 		return set;
 	}

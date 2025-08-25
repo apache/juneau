@@ -35,7 +35,7 @@ import org.apache.juneau.collections.*;
  */
 public class DelegateBeanMap<T> extends BeanMap<T> {
 
-	private Set<String> keys = set();
+	private Set<String> keys = set2();
 	private JsonMap overrideValues = new JsonMap();
 
 	/**
@@ -106,7 +106,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 
 	@Override /* Map */
 	public synchronized Set<Entry<String,Object>> entrySet() {
-		Set<Entry<String,Object>> s = set();
+		Set<Entry<String,Object>> s = set2();
 		keys.forEach(k -> {
 			BeanMapEntry bme;
 			if (overrideValues.containsKey(k))

@@ -66,10 +66,10 @@ public final class BeanFilter {
 		Class<?> beanClass;
 		String typeName, example;
 		Set<String>
-			properties = set(),
-			excludeProperties = set(),
-			readOnlyProperties = set(),
-			writeOnlyProperties = set();
+			properties = set2(),
+			excludeProperties = set2(),
+			readOnlyProperties = set2(),
+			writeOnlyProperties = set2();
 		Class<?> implClass, interfaceClass, stopClass;
 		boolean sortProperties, fluentSetters;
 		BeanCreator<PropertyNamer> propertyNamer = BeanCreator.of(PropertyNamer.class);
@@ -450,7 +450,7 @@ public final class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder properties(String...value) {
-			this.properties = set();
+			this.properties = set2();
 			for (String v : value)
 				split3(v, x -> properties.add(x));
 			return this;
@@ -494,7 +494,7 @@ public final class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder excludeProperties(String...value) {
-			this.excludeProperties = set();
+			this.excludeProperties = set2();
 			for (String v : value)
 				split3(v, x -> excludeProperties.add(x));
 			return this;
@@ -540,7 +540,7 @@ public final class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder readOnlyProperties(String...value) {
-			this.readOnlyProperties = set();
+			this.readOnlyProperties = set2();
 			for (String v : value)
 				split3(v, x -> readOnlyProperties.add(x));
 			return this;
@@ -586,7 +586,7 @@ public final class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder writeOnlyProperties(String...value) {
-			this.writeOnlyProperties = set();
+			this.writeOnlyProperties = set2();
 			for (String v : value)
 				split3(v, x -> writeOnlyProperties.add(x));
 			return this;

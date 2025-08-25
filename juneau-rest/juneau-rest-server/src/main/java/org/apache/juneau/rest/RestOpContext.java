@@ -1100,7 +1100,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 		RestGuardList getGuards() {
 			RestGuardList.Builder b = guards();
-			Set<String> roleGuard = Utils.opt(this.roleGuard).orElseGet(CollectionUtils::set);
+			Set<String> roleGuard = Utils.opt(this.roleGuard).orElseGet(CollectionUtils::set2);
 
 			for (String rg : roleGuard) {
 				try {

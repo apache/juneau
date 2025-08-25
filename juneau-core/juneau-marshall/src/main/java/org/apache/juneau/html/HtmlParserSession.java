@@ -53,7 +53,7 @@ public final class HtmlParserSession extends XmlParserSession {
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private static final Set<String> whitespaceElements = set("br","bs","sp","ff");
+	private static final Set<String> whitespaceElements = set2("br","bs","sp","ff");
 
 	/**
 	 * Creates a new builder for this object.

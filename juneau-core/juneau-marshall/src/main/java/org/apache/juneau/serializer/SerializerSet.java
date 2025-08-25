@@ -499,7 +499,7 @@ public final class SerializerSet {
 		this.entriesList = Utils.ulist2(entries);
 
 		List<MediaRange> lmtr = list2();
-		Set<MediaType> lmt = set();
+		Set<MediaType> lmt = set2();
 		List<Serializer> l = list2();
 		for (Serializer e : entries) {
 			e.getMediaTypeRanges().forEachRange(x -> {

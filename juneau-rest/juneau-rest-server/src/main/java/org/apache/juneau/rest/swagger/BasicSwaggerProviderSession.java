@@ -1126,7 +1126,7 @@ public class BasicSwaggerProviderSession {
 	private Set<String> toSet(String[] ss) {
 		if (ss.length == 0)
 			return null;
-		Set<String> set = set();
+		Set<String> set = set2();
 		for (String s : ss)
 			split3(s, x -> set.add(x));
 		return set.isEmpty() ? null : set;

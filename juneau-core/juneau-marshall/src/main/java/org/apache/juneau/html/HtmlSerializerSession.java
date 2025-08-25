@@ -912,7 +912,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		// If it's a non-bean map, only use table if all entries are also maps.
 		if (cm1.isMap() && ! cm1.isBeanMap()) {
 
-			Set<Object> set = CollectionUtils.set();
+			Set<Object> set = CollectionUtils.set2();
 			for (Object o : c) {
 				o = swap(swap, o);
 				if (! canIgnoreValue(cm1, null, o)) {

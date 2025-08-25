@@ -364,7 +364,7 @@ public final class ClassInfo {
 	ClassInfo[] _getInterfaces() {
 		if (interfaces == null) {
 			synchronized(this) {
-				Set<ClassInfo> s = set();
+				Set<ClassInfo> s = set2();
 				for (ClassInfo ci : _getParents())
 					for (ClassInfo ci2 : ci._getDeclaredInterfaces()) {
 						s.add(ci2);

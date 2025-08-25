@@ -125,7 +125,7 @@ public class BeanDiff {
 		 * @return This object.
 		 */
 		public Builder<T> include(String...properties) {
-			include = set(properties);
+			include = set2(properties);
 			return this;
 		}
 
@@ -150,7 +150,7 @@ public class BeanDiff {
 		 * @return This object.
 		 */
 		public Builder<T> exclude(String...properties) {
-			exclude = set(properties);
+			exclude = set2(properties);
 			return this;
 		}
 

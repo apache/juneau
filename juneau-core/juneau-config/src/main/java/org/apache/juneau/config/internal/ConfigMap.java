@@ -283,7 +283,7 @@ public class ConfigMap implements ConfigStoreListener {
 	public Set<String> getKeys(String section) {
 		checkSectionName(section);
 		var cs = entries.get(section);
-		var s = imports.isEmpty() && cs != null ? cs.entries.keySet() : CollectionUtils.<String>set();
+		var s = imports.isEmpty() && cs != null ? cs.entries.keySet() : CollectionUtils.<String>set2();
 		if (! imports.isEmpty()) {
 			imports.forEach(x -> s.addAll(x.getConfigMap().getKeys(section)));
 			if (cs != null)

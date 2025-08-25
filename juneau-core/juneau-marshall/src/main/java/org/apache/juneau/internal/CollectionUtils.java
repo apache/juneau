@@ -225,7 +225,7 @@ public final class CollectionUtils {
 	 * @return A new modifiable set.
 	 */
 	@SafeVarargs
-	public static <E> LinkedHashSet<E> set(E...values) {
+	public static <E> LinkedHashSet<E> set2(E...values) {
 		LinkedHashSet<E> l = new LinkedHashSet<>();
 		for (E v : values)
 			l.add(v);
@@ -242,7 +242,7 @@ public final class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <E> LinkedHashSet<E> setOf(Class<E> elementType, E...values) {
-		return set(values);
+		return set2(values);
 	}
 
 	/**
@@ -546,7 +546,7 @@ public final class CollectionUtils {
 	public static <E> Set<E> addAll(Set<E> value, E...entries) {
 		if (entries != null) {
 			if (value == null)
-				value = set(entries);
+				value = set2(entries);
 			else
 				Collections.addAll(value, entries);
 		}

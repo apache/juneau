@@ -69,7 +69,7 @@ public enum TypeCategory {
 	public static Set<TypeCategory> parse(String s) {
 		if (s == null || s.isEmpty())
 			return Collections.emptySet();
-		Set<TypeCategory> set = set();
+		Set<TypeCategory> set = set2();
 		split3(s, x -> set.add(valueOf(x.toUpperCase())));
 		return set;
 	}

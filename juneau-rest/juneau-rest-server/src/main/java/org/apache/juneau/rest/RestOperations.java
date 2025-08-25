@@ -77,7 +77,7 @@ public class RestOperations {
 		protected Builder(BeanStore beanStore) {
 			super(RestOperations.class, beanStore);
 			map = new TreeMap<>();
-			set = set();
+			set = set2();
 		}
 
 		@Override /* BeanBuilder */
