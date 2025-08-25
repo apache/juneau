@@ -15,6 +15,7 @@ package org.apache.juneau;
 import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
@@ -755,7 +756,7 @@ public class BeanSession extends ContextSession {
 			// Target type is some sort of Collection
 			if (to.isCollection()) {
 				try {
-					Collection l = to.canCreateNewInstance(outer) ? (Collection)to.newInstance(outer) : to.isSet() ? set() : new JsonList(this);
+					Collection l = to.canCreateNewInstance(outer) ? (Collection)to.newInstance(outer) : to.isSet() ? Utils.set() : new JsonList(this);
 					ClassMeta elementType = to.getElementType();
 
 					if (from.isArray()) {

@@ -14,6 +14,7 @@ package org.apache.juneau.http.part;
 
 import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
@@ -594,7 +595,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 			if (eq(x.getName(), name))
 				return optional(x);
 		}
-		return empty();
+		return opte();
 	}
 
 	/**
@@ -612,7 +613,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 			if (eq(x.getName(), name))
 				return optional(x);
 		}
-		return empty();
+		return opte();
 	}
 
 	/**
@@ -635,14 +636,14 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 					first = x;
 				else {
 					if (rest == null)
-						rest = list();
+						rest = Utils.list();
 					rest.add(x);
 				}
 			}
 		}
 
 		if (first == null)
-			return empty();
+			return opte();
 
 		if (rest == null)
 			return optional(first);
@@ -693,17 +694,17 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 					first = x;
 				else {
 					if (rest == null)
-						rest = list();
+						rest = Utils.list();
 					rest.add(x);
 				}
 			}
 		}
 
 		if (first == null)
-			return empty();
+			return opte();
 
 		if (rest == null)
-			return optional(PartBeanMeta.of(type).construct(name, first.getValue()));
+			return opt(PartBeanMeta.of(type).construct(name, first.getValue()));
 
 		CharArrayBuffer sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());

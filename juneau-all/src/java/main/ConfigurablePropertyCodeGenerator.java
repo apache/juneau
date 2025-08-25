@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 
 import static org.apache.juneau.common.internal.IOUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.io.*;
@@ -21,12 +22,13 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 public class ConfigurablePropertyCodeGenerator {
 
-	static Set<Class<?>> IGNORE_CLASSES = set(
+	static Set<Class<?>> IGNORE_CLASSES = Utils.set(
 		org.apache.http.entity.AbstractHttpEntity.class,
 		org.apache.http.entity.BasicHttpEntity.class,
 		org.apache.http.message.AbstractHttpMessage.class,
@@ -119,7 +121,7 @@ public class ConfigurablePropertyCodeGenerator {
 			StringBuilder sb = new StringBuilder();
 			ClassInfo ci = ClassInfo.of(c);
 			String cName = ci.getSimpleName();
-			Set<String> ignore = set();
+			Set<String> ignore = Utils.set();
 			FluentSetters fs = ci.getAnnotation(FluentSetters.class);
 			if (! fs.returns().isEmpty())
 				cName = fs.returns();

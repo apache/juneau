@@ -14,6 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
@@ -619,7 +620,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 			if (eq(x.getName(), name))
 				return optional(x);
 		}
-		return empty();
+		return opte();
 	}
 
 	/**
@@ -637,7 +638,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 			if (eq(x.getName(), name))
 				return optional(x);
 		}
-		return empty();
+		return opte();
 	}
 
 	/**
@@ -660,14 +661,14 @@ public class HeaderList extends ControlledArrayList<Header> {
 					first = x;
 				else {
 					if (rest == null)
-						rest = list();
+						rest = Utils.list();
 					rest.add(x);
 				}
 			}
 		}
 
 		if (first == null)
-			return empty();
+			return opte();
 
 		if (rest == null)
 			return optional(first);
@@ -718,14 +719,14 @@ public class HeaderList extends ControlledArrayList<Header> {
 					first = x;
 				else {
 					if (rest == null)
-						rest = list();
+						rest = Utils.list();
 					rest.add(x);
 				}
 			}
 		}
 
 		if (first == null)
-			return empty();
+			return opte();
 
 		if (rest == null)
 			return optional(HeaderBeanMeta.of(type).construct(name, first.getValue()));

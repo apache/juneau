@@ -13,6 +13,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -174,7 +175,7 @@ public class Operation extends SwaggerElement {
 		if (copyFrom.parameters == null) {
 			this.parameters = null;
 		} else {
-			this.parameters = list();
+			this.parameters = Utils.list();
 			copyFrom.parameters.forEach(x -> this.parameters.add(x.copy()));
 		}
 
@@ -188,7 +189,7 @@ public class Operation extends SwaggerElement {
 		if (copyFrom.security == null) {
 			this.security = null;
 		} else {
-			this.security = list();
+			this.security = Utils.list();
 			copyFrom.security.forEach(x -> {
 				Map<String,List<String>> m2 = map();
 				x.forEach((k,v) -> m2.put(k, copyOf(v)));

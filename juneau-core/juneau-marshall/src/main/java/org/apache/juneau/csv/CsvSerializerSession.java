@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.io.*;

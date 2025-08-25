@@ -261,6 +261,10 @@ public class Utils {
 		return Optional.ofNullable(t);
 	}
 
+	public static final <T> Optional<T> opte() {
+		return Optional.empty();
+	}
+
 	/**
 	 * Prints all the specified lines to System.out.
 	 */

@@ -13,14 +13,14 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.common.internal.ArgUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
+import static org.apache.juneau.common.internal.Utils.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -133,7 +133,7 @@ public interface FileFinder {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(BasicFileFinder.class, beanStore);
-			roots = set();
+			roots = Utils.set();
 			cachingLimit = -1;
 			include = new Pattern[]{Pattern.compile(".*")};
 			exclude = new Pattern[0];

@@ -13,9 +13,12 @@
 package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
+
+import org.apache.juneau.common.internal.*;
 
 /**
  * Arguments passed to {@link ObjectSorter}.
@@ -85,7 +88,7 @@ public class SortArgs {
 	 * 	</ul>
 	 */
 	public SortArgs(String sortArgs) {
-		this(alist(split(sortArgs)));
+		this(alist(StringUtils.split(sortArgs)));
 	}
 
 	/**

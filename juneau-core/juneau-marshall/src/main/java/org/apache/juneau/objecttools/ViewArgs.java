@@ -12,10 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
+
+import org.apache.juneau.common.internal.*;
 
 /**
  * Arguments passed to {@link ObjectViewer}.
@@ -66,7 +68,7 @@ public class ViewArgs {
 	 * 	<br>Values are column names.
 	 */
 	public ViewArgs(String viewArgs) {
-		this(alist(split(viewArgs)));
+		this(alist(StringUtils.split(viewArgs)));
 	}
 
 	/**

@@ -13,6 +13,7 @@
 package org.apache.juneau.internal;
 
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -216,12 +217,10 @@ public final class CollectionUtils {
 	 * @param values The values to initialize the list with.
 	 * @return A new modifiable list, or <jk>null</jk> if the array was <jk>null</jk>.
 	 */
-	@SafeVarargs
-	public static <E> List<E> alist(E...values) {
-		if (values == null)
-			return null;
-		return Arrays.asList(values);
-	}
+//	@SafeVarargs
+//	public static <E> List<E> alist(E...values) {
+//		return Utils.alist(values);
+//	}
 
 	/**
 	 * Creates an {@link ArrayList} copy from a collection.

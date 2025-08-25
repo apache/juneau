@@ -13,11 +13,13 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
 import java.util.stream.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -107,7 +109,7 @@ public class Thrown extends BasicCsvHeader {
 	 */
 	public Thrown(String value) {
 		super(NAME, value);
-		List<Part> l = list();
+		List<Part> l = Utils.list();
 		split(value, x -> l.add(new Part(x)));
 		this.value = value == null ? null : unmodifiable(l);
 	}

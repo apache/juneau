@@ -12,8 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.collections;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.io.*;
@@ -819,7 +818,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		else if (s instanceof Object[])
 			r = ArrayUtils.toStringArray(alist((Object[])s));
 		else
-			r = split(Utils.s(s));
+			r = StringUtils.split(Utils.s(s));
 		return (r.length == 0 ? def : r);
 	}
 
@@ -1827,7 +1826,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	public Set<String> keySet() {
 		if (inner == null)
 			return super.keySet();
-		LinkedHashSet<String> s = set();
+		LinkedHashSet<String> s = Utils.set();
 		s.addAll(inner.keySet());
 		s.addAll(super.keySet());
 		return s;

@@ -13,6 +13,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
@@ -955,7 +956,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The referenced node, or <jk>null</jk> if the ref was <jk>null</jk> or empty or not found.
 	 */
 	public <T> T findRef(String ref, Class<T> c) {
-		if (isEmpty(ref))
+		if (Utils.isEmpty(ref))
 			return null;
 		if (! ref.startsWith("#/"))
 			throw new BasicRuntimeException("Unsupported reference:  ''{0}''", ref);

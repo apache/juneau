@@ -14,7 +14,7 @@ package org.apache.juneau.cp;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.FileUtils.*;
 import java.io.*;
@@ -127,7 +127,7 @@ public class BasicFileFinder implements FileFinder {
 		name = StringUtils.trimSlashesAndSpaces(name);
 
 		if (isInvalidPath(name))
-			return empty();
+			return CollectionUtils.empty();
 
 		if (locale != null)
 			localizedFiles.putIfAbsent(locale, new ConcurrentHashMap<>());
@@ -239,7 +239,7 @@ public class BasicFileFinder implements FileFinder {
 	 * @return <jk>true</jk> if the path is invalid.
 	 */
 	protected boolean isInvalidPath(String path) {
-		return isEmpty(path) || path.contains("..") || path.contains("%");
+		return StringUtils.isEmpty(path) || path.contains("..") || path.contains("%");
 	}
 
 	/**

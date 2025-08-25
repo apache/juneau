@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.stats;
 
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static java.util.Comparator.*;
 
@@ -130,7 +131,7 @@ public class ThrownStore {
 		 * @return This object.
 		 */
 		public Builder ignoreClasses(Class<?>...value) {
-			this.ignoreClasses = set(value);
+			this.ignoreClasses = Utils.set(value);
 			return this;
 		}
 
