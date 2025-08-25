@@ -36,7 +36,7 @@ public final class CollectionUtils {
 	 * @param val The value to copy from.
 	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
 	 */
-	public static <E> Set<E> setFrom(Collection<E> val) {
+	public static <E> Set<E> toSet(Collection<E> val) {
 		return val == null ? null : new LinkedHashSet<>(val);
 	}
 
@@ -147,16 +147,6 @@ public final class CollectionUtils {
 	}
 
 	/**
-	 * Simple passthrough to {@link Collections#emptyList()}
-	 *
-	 * @param <E> The element type.
-	 * @return A new unmodifiable empty list.
-	 */
-	public static <E> List<E> emptyList() {
-		return Collections.emptyList();
-	}
-
-	/**
 	 * Convenience method for creating an {@link ArrayList}.
 	 *
 	 * @param <E> The element type.
@@ -209,18 +199,6 @@ public final class CollectionUtils {
 			l.add(v);
 		return l;
 	}
-
-	/**
-	 * Convenience method for creating an array-backed list by calling {@link Arrays#asList(Object...)}.
-	 *
-	 * @param <E> The element type.
-	 * @param values The values to initialize the list with.
-	 * @return A new modifiable list, or <jk>null</jk> if the array was <jk>null</jk>.
-	 */
-//	@SafeVarargs
-//	public static <E> List<E> alist(E...values) {
-//		return Utils.alist(values);
-//	}
 
 	/**
 	 * Creates an {@link ArrayList} copy from a collection.

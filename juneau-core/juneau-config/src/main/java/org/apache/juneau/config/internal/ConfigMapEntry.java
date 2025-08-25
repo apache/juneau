@@ -61,7 +61,7 @@ public class ConfigMapEntry {
 
 		this.value = StringUtils.replaceUnicodeSequences(line.trim());
 
-		this.preLines = preLines == null ? emptyList() : unmodifiable(copyOf(preLines));
+		this.preLines = preLines == null ? Collections.emptyList() : unmodifiable(copyOf(preLines));
 	}
 
 	ConfigMapEntry(String key, String value, String modifiers, String comment, List<String> preLines) {
@@ -70,7 +70,7 @@ public class ConfigMapEntry {
 		this.value = value;
 		this.comment = comment;
 		this.modifiers = modifiers;
-		this.preLines = preLines == null ? emptyList() : unmodifiable(copyOf(preLines));
+		this.preLines = preLines == null ? Collections.emptyList() : unmodifiable(copyOf(preLines));
 	}
 
 	/**

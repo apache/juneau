@@ -1694,7 +1694,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		nowrap = builder.nowrap;
 		resolveBodyVars = builder.resolveBodyVars;
 		template = builder.template;
-		widgets = builder.widgets == null ? emptyList() : copyOf(builder.widgets);
+		widgets = builder.widgets == null ? Collections.emptyList() : copyOf(builder.widgets);
 
 		templateBean = newInstance(template);
 		widgetMap = new HtmlWidgetMap();
