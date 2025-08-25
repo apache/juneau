@@ -587,8 +587,8 @@ public class CallLogger {
 		if (level == Level.OFF)
 			return;
 
-		Throwable e = castOrNull(req.getAttribute("Exception"), Throwable.class);
-		Long execTime = castOrNull(req.getAttribute("ExecTime"), Long.class);
+		Throwable e = ObjectUtils.castOrNull(req.getAttribute("Exception"), Throwable.class);
+		Long execTime = ObjectUtils.castOrNull(req.getAttribute("ExecTime"), Long.class);
 
 		CallLoggingDetail reqd = firstNonNull(rule.getRequestDetail(), requestDetail);
 		CallLoggingDetail resd = firstNonNull(rule.getResponseDetail(), responseDetail);
@@ -721,7 +721,7 @@ public class CallLogger {
 	 * @see RestOp#debug()
 	 */
 	protected boolean isDebug(HttpServletRequest req) {
-		return firstNonNull(castOrNull(req.getAttribute("Debug"), Boolean.class), false);
+		return firstNonNull(ObjectUtils.castOrNull(req.getAttribute("Debug"), Boolean.class), false);
 	}
 
 	/**
@@ -780,13 +780,13 @@ public class CallLogger {
 	private byte[] getRequestContent(HttpServletRequest req) {
 		if (req instanceof CachingHttpServletRequest)
 			return ((CachingHttpServletRequest)req).getContent();
-		return castOrNull(req.getAttribute("RequestContent"), byte[].class);
+		return ObjectUtils.castOrNull(req.getAttribute("RequestContent"), byte[].class);
 	}
 
 	private byte[] getResponseContent(HttpServletRequest req, HttpServletResponse res) {
 		if (res instanceof CachingHttpServletResponse)
 			return ((CachingHttpServletResponse)res).getContent();
-		return castOrNull(req.getAttribute("ResponseContent"), byte[].class);
+		return ObjectUtils.castOrNull(req.getAttribute("ResponseContent"), byte[].class);
 	}
 
 	private ThrownStats getThrownStats(Throwable e) {

@@ -25,6 +25,7 @@ import java.util.*;
 import jakarta.activation.*;
 
 import org.apache.http.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
@@ -136,7 +137,7 @@ public class BasicStaticFiles implements StaticFiles {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return super.equals(o) && o instanceof BasicStaticFiles && eq(this, (BasicStaticFiles)o, (x,y)->eq(x.headers, y.headers));
+		return super.equals(o) && o instanceof BasicStaticFiles && Utils.eq(this, (BasicStaticFiles)o, (x,y)->eq(x.headers, y.headers));
 	}
 
 	@Override /* FileFinder */

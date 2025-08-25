@@ -266,7 +266,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		// Not a perfect equality operator if using SVL vars.
 		if (! (o instanceof Header))
 			return false;
-		return eq(this, (Header)o, (x,y)->eq(x.name,y.getName()) && eq(x.getValue(),y.getValue()));
+		return Utils.eq(this, (Header)o, (x,y)->eq(x.name,y.getName()) && eq(x.getValue(),y.getValue()));
 	}
 
 	@Override /* Object */

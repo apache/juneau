@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.ObjectUtils.eq;
 import java.text.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
@@ -182,7 +183,7 @@ public class LinkString implements Comparable<LinkString> {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return (o instanceof LinkString o2) && eq(this, o2, (x,y)->x.name.equals(y.name));
+		return (o instanceof LinkString o2) && Utils.eq(this, o2, (x,y)->x.name.equals(y.name));
 	}
 
 	@Override /* Object */

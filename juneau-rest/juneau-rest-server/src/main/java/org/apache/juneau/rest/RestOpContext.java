@@ -36,6 +36,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.internal.Utils;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.annotation.*;
@@ -2692,19 +2693,19 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				return c;
 		}
 
-		c = compare(o.hierarchyDepth, hierarchyDepth);
+		c = ObjectUtils.compare(o.hierarchyDepth, hierarchyDepth);
 		if (c != 0)
 			return c;
 
-		c = compare(o.requiredMatchers.length, requiredMatchers.length);
+		c = ObjectUtils.compare(o.requiredMatchers.length, requiredMatchers.length);
 		if (c != 0)
 			return c;
 
-		c = compare(o.optionalMatchers.length, optionalMatchers.length);
+		c = ObjectUtils.compare(o.optionalMatchers.length, optionalMatchers.length);
 		if (c != 0)
 			return c;
 
-		c = compare(o.guards.length, guards.length);
+		c = ObjectUtils.compare(o.guards.length, guards.length);
 
 		if (c != 0)
 			return c;
@@ -2713,7 +2714,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		if (c != 0)
 			return c;
 
-		c = compare(method.getParameterCount(), o.method.getParameterCount());
+		c = ObjectUtils.compare(method.getParameterCount(), o.method.getParameterCount());
 		if (c != 0)
 			return c;
 
@@ -2732,7 +2733,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return (o instanceof RestOpContext) && eq(this, (RestOpContext)o, (x,y)->x.method.equals(y.method));
+		return (o instanceof RestOpContext) && Utils.eq(this, (RestOpContext)o, (x,y)->x.method.equals(y.method));
 	}
 
 	@Override /* Object */
