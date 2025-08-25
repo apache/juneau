@@ -1061,7 +1061,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if the specified class is an exact match for this metadata.
 	 */
 	public boolean is(Class<?> value) {
-		return eq(innerClass, value);
+		return Utils.eq(innerClass, value);
 	}
 
 	/**
@@ -2204,6 +2204,6 @@ public final class ClassMeta<T> implements Type {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return (o instanceof ClassMeta) && Utils.eq(this, (ClassMeta<?>)o, (x,y)->eq(x.innerClass, y.innerClass));
+		return (o instanceof ClassMeta) && Utils.eq(this, (ClassMeta<?>)o, (x,y)->Utils.eq(x.innerClass, y.innerClass));
 	}
 }

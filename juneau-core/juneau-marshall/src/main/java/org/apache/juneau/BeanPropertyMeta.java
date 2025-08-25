@@ -1271,6 +1271,6 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return (o instanceof BeanPropertyMeta) && Utils.eq(this, (BeanPropertyMeta)o, (x,y)->eq(x.name, y.name) && eq(x.beanMeta, y.beanMeta));
+		return (o instanceof BeanPropertyMeta) && Utils.eq(this, (BeanPropertyMeta)o, (x,y)->Utils.eq(x.name, y.name) && Utils.eq(x.beanMeta, y.beanMeta));
 	}
 }

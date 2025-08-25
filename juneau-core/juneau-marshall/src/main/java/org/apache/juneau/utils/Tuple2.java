@@ -80,6 +80,6 @@ public class Tuple2<A,B> {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return o instanceof Tuple2 && Utils.eq(this, (Tuple2<?,?>)o, (x,y)->eq(x.a,y.a) && eq(x.b,y.b));
+		return o instanceof Tuple2 && Utils.eq(this, (Tuple2<?,?>)o, (x,y)->Utils.eq(x.a,y.a) && Utils.eq(x.b,y.b));
 	}
 }

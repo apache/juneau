@@ -2474,6 +2474,6 @@ public final class ClassInfo {
 
 	@Override
 	public boolean equals(Object o) {
-		return (o instanceof ClassInfo) && Utils.eq(this, (ClassInfo)o, (x,y)->eq(x.t, y.t));
+		return (o instanceof ClassInfo) && Utils.eq(this, (ClassInfo)o, (x,y)->Utils.eq(x.t, y.t));
 	}
 }

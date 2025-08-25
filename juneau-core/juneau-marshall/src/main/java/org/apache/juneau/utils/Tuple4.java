@@ -110,6 +110,6 @@ public class Tuple4<A,B,C,D> {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return o instanceof Tuple4 && Utils.eq(this, (Tuple4<?,?,?,?>)o, (x,y)->eq(x.a,y.a) && eq(x.b,y.b) && eq(x.c,y.c) && eq(x.d,y.d));
+		return o instanceof Tuple4 && Utils.eq(this, (Tuple4<?,?,?,?>)o, (x,y)->Utils.eq(x.a,y.a) && Utils.eq(x.b,y.b) && Utils.eq(x.c,y.c) && Utils.eq(x.d,y.d));
 	}
 }

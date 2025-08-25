@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -334,7 +335,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 */
 	public R isContains(E entry) throws AssertionError {
 		for (int i = 0, j = length2(); i < j; i++)
-			if (eq(at(i), entry))
+			if (Utils.eq(at(i), entry))
 				return returns();
 		throw error(MSG_arrayDidNotContainExpectedValue, entry, value());
 	}
@@ -348,7 +349,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 */
 	public R isNotContains(E entry) throws AssertionError {
 		for (var i = 0; i < length2(); i++)
-			if (eq(at(i), entry))
+			if (Utils.eq(at(i), entry))
 				throw error(MSG_arrayContainedUnexpectedValue, entry, value());
 		return returns();
 	}

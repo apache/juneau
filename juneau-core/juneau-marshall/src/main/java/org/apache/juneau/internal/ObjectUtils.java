@@ -31,18 +31,6 @@ import org.apache.juneau.reflect.*;
 public class ObjectUtils {
 
 	/**
-	 * Tests two objects for equality, gracefully handling nulls and arrays.
-	 *
-	 * @param <T> The value types.
-	 * @param o1 Object 1.
-	 * @param o2 Object 2.
-	 * @return <jk>true</jk> if both objects are equal based on the {@link Object#equals(Object)} method.
-	 */
-	public static <T> boolean eq(T o1, T o2) {
-		return Utils.eq(o1, o2);
-	}
-
-	/**
 	 * Tests two arrays for equality, gracefully handling nulls.
 	 *
 	 * @param <T> The value types.
@@ -59,7 +47,7 @@ public class ObjectUtils {
 		if (o1.length != o2.length)
 			return false;
 		for (int i = 0; i < o1.length; i++)
-			if (! eq(o1[i], o2[i]))
+			if (! Utils.eq(o1[i], o2[i]))
 				return false;
 		return true;
 
@@ -73,7 +61,7 @@ public class ObjectUtils {
 	 * @return <jk>false</jk> if both objects are equal based on the {@link Object#equals(Object)} method.
 	 */
 	public static boolean ne(Object o1, Object o2) {
-		return ! eq(o1, o2);
+		return ! Utils.eq(o1, o2);
 	}
 
 	private static boolean isArray(Object o) {

@@ -136,7 +136,7 @@ public final class ResourceDescription implements Comparable<ResourceDescription
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return (o instanceof ResourceDescription) && Utils.eq(this, (ResourceDescription)o, (x,y)->eq(x.getName(), y.getName()));
+		return (o instanceof ResourceDescription) && Utils.eq(this, (ResourceDescription)o, (x,y)->Utils.eq(x.getName(), y.getName()));
 	}
 
 	@Override /* Object */

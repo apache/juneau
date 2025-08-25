@@ -387,7 +387,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	public R isContains(E entry) throws AssertionError {
 		for (int i = 0, j = length(); i < j; i++)
-			if (eq(at(i), entry))
+			if (Utils.eq(at(i), entry))
 				return returns();
 		throw error(MSG_arrayDidNotContainExpectedValue, entry, toString());
 	}
@@ -401,7 +401,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	public R isNotContains(E entry) throws AssertionError {
 		for (int i = 0, j = length(); i < j; i++)
-			if (eq(at(i), entry))
+			if (Utils.eq(at(i), entry))
 				throw error(MSG_arrayContainedUnexpectedValue, entry, toString());
 		return returns();
 	}

@@ -43,7 +43,7 @@ public class BeanAssertion_Test {
 		public A() {}
 		public A(int a, int b) {this.a = a; this.b = b;}
 		@Override public String toString() {return "a="+a+",b="+b;}
-		@Override public boolean equals(Object o) { return Utils.eq(this, (A)o, (x,y)->ObjectUtils.eq(x.a,y.a) && ObjectUtils.eq(x.b,y.b)); }
+		@Override public boolean equals(Object o) { return Utils.eq(this, (A)o, (x,y)->Utils.eq(x.a,y.a) && Utils.eq(x.b,y.b)); }
 		@Override public int compareTo(A o) { return a-o.a; }
 	}
 

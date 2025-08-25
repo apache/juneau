@@ -1003,6 +1003,6 @@ public class BeanMeta<T> {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return (o instanceof BeanMeta) && Utils.eq(this, (BeanMeta<?>)o, (x,y)->eq(x.classMeta, y.classMeta));
+		return (o instanceof BeanMeta) && Utils.eq(this, (BeanMeta<?>)o, (x,y)->Utils.eq(x.classMeta, y.classMeta));
 	}
 }

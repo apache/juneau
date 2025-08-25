@@ -19,13 +19,6 @@ import org.junit.jupiter.api.*;
 
 class ObjectUtilsTest extends SimpleTestBase {
 
-	@Test void a01_eq() {
-		assertTrue(ObjectUtils.eq("foo","foo"));
-		assertTrue(ObjectUtils.eq(null,null));
-		assertFalse(ObjectUtils.eq(null,"foo"));
-		assertFalse(ObjectUtils.eq("foo",null));
-	}
-
 	@Test void a02_ne() {
 		assertFalse(ObjectUtils.ne("foo","foo"));
 		assertFalse(ObjectUtils.ne(null,null));
