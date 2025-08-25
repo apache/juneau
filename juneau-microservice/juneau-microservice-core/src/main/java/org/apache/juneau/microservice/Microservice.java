@@ -17,8 +17,6 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.FileUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
-
 import java.io.*;
 import java.io.Console;
 import java.net.*;
@@ -39,7 +37,6 @@ import org.apache.juneau.config.store.*;
 import org.apache.juneau.config.store.FileStore;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.console.*;
 import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.parser.ParseException;

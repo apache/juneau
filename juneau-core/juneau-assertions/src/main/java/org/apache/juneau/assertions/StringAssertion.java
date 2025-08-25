@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
-
 import java.io.*;
 import java.util.function.*;
 import java.util.regex.*;

@@ -16,7 +16,6 @@ import static org.apache.juneau.ClassMeta.ClassCategory.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
 import static java.util.Arrays.*;
 
 import java.io.*;

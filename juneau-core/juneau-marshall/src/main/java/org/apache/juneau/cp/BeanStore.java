@@ -701,9 +701,9 @@ public class BeanStore {
 	private JsonMap properties() {
 		Predicate<Boolean> nf = Utils::isTrue;
 		return filteredMap()
-			.append("identity", ObjectUtils.identity(this))
+			.append("identity", Utils2.identity(this))
 			.append("entries", entries.stream().map(BeanStoreEntry::properties).collect(toList()))
-			.append("outer", ObjectUtils.identity(outer.orElse(null)))
+			.append("outer", Utils2.identity(outer.orElse(null)))
 			.append("parent", parent.map(BeanStore::properties).orElse(null))
 			.appendIf(nf, "readOnly", readOnly)
 			.appendIf(nf, "threadSafe", threadSafe)

@@ -17,8 +17,6 @@ import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.FileUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
-
 import java.io.*;
 import java.util.*;
 import java.util.ResourceBundle.*;

@@ -13,7 +13,6 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;

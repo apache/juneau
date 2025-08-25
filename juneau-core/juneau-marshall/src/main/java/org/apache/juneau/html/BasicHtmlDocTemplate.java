@@ -16,8 +16,6 @@ import static org.apache.juneau.html.AsideFloat.*;
 
 import org.apache.juneau.common.internal.*;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
-
 import org.apache.juneau.internal.*;
 
 /**

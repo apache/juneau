@@ -13,7 +13,6 @@
 package org.apache.juneau.http.part;
 
 import static org.apache.juneau.common.internal.ArgUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.util.*;

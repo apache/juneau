@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.Utils2.*;
 
 import org.apache.juneau.common.internal.*;
 

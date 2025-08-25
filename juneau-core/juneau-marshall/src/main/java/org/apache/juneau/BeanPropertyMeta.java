@@ -17,8 +17,6 @@ import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.net.*;

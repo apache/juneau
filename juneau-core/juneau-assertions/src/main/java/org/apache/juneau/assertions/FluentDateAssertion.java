@@ -13,8 +13,6 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.common.internal.ArgUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
-
 import java.io.*;
 import java.time.temporal.*;
 import java.util.*;

@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.beans;
 
-import static org.apache.juneau.internal.ObjectUtils.*;
-
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.html.annotation.*;

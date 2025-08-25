@@ -14,7 +14,6 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.BeanMeta.MethodType.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;

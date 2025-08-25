@@ -15,7 +15,7 @@ package org.apache.juneau.cp;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.Utils2.*;
 import static org.junit.Assert.*;
 
 import java.lang.annotation.*;

@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.internal.ObjectUtils.*;
-
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 

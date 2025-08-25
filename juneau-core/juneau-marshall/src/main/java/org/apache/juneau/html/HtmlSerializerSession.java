@@ -14,7 +14,6 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 
 import java.io.*;

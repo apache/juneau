@@ -270,6 +270,6 @@ public abstract class ContextSession {
 
 	@Override /* Object */
 	public String toString() {
-		return ObjectUtils.toPropertyMap(this).asReadableString();
+		return Utils2.toPropertyMap(this).asReadableString();
 	}
 }

@@ -14,8 +14,6 @@ package org.apache.juneau.serializer;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
-
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;

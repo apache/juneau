@@ -19,7 +19,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
-import org.apache.juneau.internal.*;
 
 /**
  * POJO model sorter.

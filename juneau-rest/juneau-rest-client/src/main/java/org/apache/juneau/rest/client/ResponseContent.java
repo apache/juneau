@@ -32,7 +32,6 @@ import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;

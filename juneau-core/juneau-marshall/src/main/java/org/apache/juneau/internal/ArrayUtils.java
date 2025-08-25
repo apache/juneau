@@ -13,8 +13,6 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.common.internal.ArgUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 

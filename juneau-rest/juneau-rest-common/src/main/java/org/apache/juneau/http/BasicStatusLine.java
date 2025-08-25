@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.internal.ObjectUtils.*;
-
 import java.util.*;
 
 import org.apache.http.*;

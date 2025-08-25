@@ -14,8 +14,6 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicate.*;
 import static org.apache.juneau.common.internal.ArgUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
-
 import java.text.*;
 import java.util.*;
 import java.util.function.*;

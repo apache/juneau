@@ -12,14 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -28,7 +26,7 @@ import org.apache.juneau.reflect.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public class ObjectUtils {
+public class Utils2 {
 
 	/**
 	 * If the specified object is a {@link Supplier} or {@link Value}, returns the inner value, otherwise the same value.

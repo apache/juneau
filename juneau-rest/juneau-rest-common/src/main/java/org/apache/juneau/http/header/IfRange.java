@@ -13,7 +13,6 @@
 package org.apache.juneau.http.header;
 
 import static java.time.format.DateTimeFormatter.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import java.time.*;

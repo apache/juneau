@@ -13,7 +13,6 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
 import static java.util.stream.Collectors.*;
 
 import java.util.*;
