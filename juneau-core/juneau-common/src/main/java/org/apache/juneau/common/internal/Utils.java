@@ -859,17 +859,7 @@ public class Utils {
 	 * Splits a comma-delimited list into a list of strings.
 	 */
 	public static List<String> split(String s) {
-		return s == null ? Collections.emptyList() : Utils.split2(s);
-	}
-
-	/**
-	 * Shortcut for calling <code>split(s, <js>','</js>)</code>
-	 *
-	 * @param s The string to split.  Can be <jk>null</jk>.
-	 * @return The tokens, or <jk>null</jk> if the string was null.
-	 */
-	public static List<String> split2(String s) {
-		return split2(s, ',');
+		return s == null ? Collections.emptyList() : split(s, ',');
 	}
 
 	/**
@@ -895,8 +885,8 @@ public class Utils {
 	 * @param c The character to split on.
 	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
-	public static List<String> split2(String s, char c) {
-		return split2(s, c, Integer.MAX_VALUE);
+	public static List<String> split(String s, char c) {
+		return split(s, c, Integer.MAX_VALUE);
 	}
 
 	/**
@@ -907,7 +897,7 @@ public class Utils {
 	 * @param limit The maximum number of tokens to return.
 	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
-	public static List<String> split2(String s, char c, int limit) {
+	public static List<String> split(String s, char c, int limit) {
 
 		var escapeChars = StringUtils.getEscapeSet(c);
 
@@ -1026,7 +1016,7 @@ public class Utils {
 	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
 	public static String[] split3(String s, char c, int limit) {
-		var l = split2(s, c, limit);
+		var l = split(s, c, limit);
 		return l == null ? null : l.toArray(new String[l.size()]);
 	}
 
