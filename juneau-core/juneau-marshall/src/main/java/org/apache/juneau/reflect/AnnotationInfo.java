@@ -333,7 +333,7 @@ public final class AnnotationInfo<T extends Annotation> {
 					e.printStackTrace(); // Shouldn't happen.
 				}
 			}
-		return empty();
+		return Utils.opte();
 	}
 
 	Method[] _getMethods() {

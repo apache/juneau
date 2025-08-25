@@ -19,6 +19,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.parser.*;
 
@@ -108,7 +109,7 @@ public class Section {
 		assertArgNotNull("c", c);
 
 		if (! isPresent())
-			return empty();
+			return Utils.opte();
 
 		var keys = configMap.getKeys(name);
 
@@ -133,7 +134,7 @@ public class Section {
 	 */
 	public Optional<JsonMap> asMap() {
 		if (! isPresent())
-			return empty();
+			return Utils.opte();
 
 		var keys = configMap.getKeys(name);
 

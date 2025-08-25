@@ -17,6 +17,8 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.common.internal.*;
+
 /**
  * A list of default implementation classes.
  *
@@ -98,7 +100,7 @@ public class DefaultClassList {
 		for (Class<?> e : entries)
 			if (e != null && type.isAssignableFrom(e))
 				return optional((Class<? extends T>)e);
-		return empty();
+		return Utils.opte();
 	}
 
 	/**

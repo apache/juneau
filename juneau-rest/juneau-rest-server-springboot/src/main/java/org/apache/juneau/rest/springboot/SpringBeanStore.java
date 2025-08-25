@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
 import java.util.stream.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.springframework.context.*;
 
@@ -55,7 +56,7 @@ public class SpringBeanStore extends BeanStore {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return empty();
+		return Utils.opte();
 	}
 
 	@Override
@@ -73,7 +74,7 @@ public class SpringBeanStore extends BeanStore {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return empty();
+		return Utils.opte();
 	}
 
 	@SuppressWarnings("unchecked")

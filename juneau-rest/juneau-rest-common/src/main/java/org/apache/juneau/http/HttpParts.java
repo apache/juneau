@@ -477,7 +477,7 @@ public class HttpParts {
 			case HEADER: return type.getProperty("HttpPart.header.name", HEADER_NAME_FUNCTION);
 			case PATH: return type.getProperty("HttpPart.path.name", PATH_NAME_FUNCTION);
 			case QUERY: return type.getProperty("HttpPart.query.name", QUERY_NAME_FUNCTION);
-			default: return empty();
+			default: return Utils.opte();
 		}
 	}
 

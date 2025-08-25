@@ -23,6 +23,7 @@ import java.util.regex.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.response.*;
@@ -246,7 +247,7 @@ public class RequestHttpPart {
 				ConstructorInfo cc = HttpParts.getConstructor(type).orElse(null);
 				if (cc != null) {
 					if (! isPresent())
-						return empty();
+						return Utils.opte();
 					if (cc.hasParamTypes(String.class))
 						return optional(cc.invoke(get()));
 					if (cc.hasParamTypes(String.class, String.class))

@@ -852,7 +852,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			if (rbm != null)
 				contentSchema = optional(rbm.getSchema());
 			else
-				contentSchema = empty();
+				contentSchema = Utils.opte();
 		}
 		return contentSchema;
 	}

@@ -27,6 +27,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.util.iterator.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -257,7 +258,7 @@ public class RdfParserSession extends ReaderParserSession {
 		}
 
 		if (roots.isEmpty())
-			return type.isOptional() ? (T)empty() : null;
+			return type.isOptional() ? (T)Utils.opte() : null;
 
 		if (roots.size() > 1)
 			throw new ParseException(this, "Too many root nodes found in model:  {0}", roots.size());

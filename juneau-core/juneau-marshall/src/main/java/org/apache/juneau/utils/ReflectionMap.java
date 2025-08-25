@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Allows arbitrary objects to be mapped to classes and methods base on class/method name keys.
@@ -300,7 +301,7 @@ public class ReflectionMap<V> {
 			if (e.matches(c))
 				if (ofType == null || ofType.isInstance(e.value))
 					return optional(e.value);
-		return empty();
+		return Utils.opte();
 	}
 
 	/**
@@ -379,7 +380,7 @@ public class ReflectionMap<V> {
 			if (e.matches(m))
 				if (ofType == null || ofType.isInstance(e.value))
 					return optional(e.value);
-		return empty();
+		return Utils.opte();
 	}
 
 	/**
@@ -451,7 +452,7 @@ public class ReflectionMap<V> {
 			if (e.matches(f))
 				if (ofType == null || ofType.isInstance(e.value))
 					return optional(e.value);
-		return empty();
+		return Utils.opte();
 	}
 
 	/**
@@ -523,7 +524,7 @@ public class ReflectionMap<V> {
 			if (e.matches(c))
 				if (ofType == null || ofType.isInstance(e.value))
 					return optional(e.value);
-		return empty();
+		return Utils.opte();
 	}
 
 	/**

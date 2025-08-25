@@ -127,7 +127,7 @@ public class BasicFileFinder implements FileFinder {
 		name = StringUtils.trimSlashesAndSpaces(name);
 
 		if (isInvalidPath(name))
-			return CollectionUtils.empty();
+			return Utils.opte();
 
 		if (locale != null)
 			localizedFiles.putIfAbsent(locale, new ConcurrentHashMap<>());

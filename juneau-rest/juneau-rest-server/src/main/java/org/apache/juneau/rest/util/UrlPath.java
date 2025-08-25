@@ -18,6 +18,8 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.common.internal.*;
+
 /**
  * Represents a parsed URL path-info string.
  *
@@ -73,10 +75,10 @@ public class UrlPath {
 	 */
 	public Optional<String> getFileName() {
 		if (parts.length == 0)
-			return empty();
+			return Utils.opte();
 		String p = parts[parts.length-1];
 		if (p.indexOf('.') == -1)
-			return empty();
+			return Utils.opte();
 		return optional(p);
 	}
 

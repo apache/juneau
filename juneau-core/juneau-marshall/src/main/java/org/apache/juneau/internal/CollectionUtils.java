@@ -19,6 +19,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.internal.*;
+
 /**
  * Utility methods for collections.
  *
@@ -733,16 +735,6 @@ public final class CollectionUtils {
 	 */
 	public static <T> Optional<T> optional(T value) {
 		return Optional.ofNullable(value);
-	}
-
-	/**
-	 * Returns an empty {@link Optional}.
-	 *
-	 * @param <T> The component type.
-	 * @return An empty {@link Optional}.
-	 */
-	public static <T> Optional<T> empty() {
-		return Optional.empty();
 	}
 
 	/**

@@ -117,7 +117,7 @@ public class BasicStaticFiles implements StaticFiles {
 		try {
 			Optional<InputStream> is = getStream(path, locale);
 			if (! is.isPresent())
-				return empty();
+				return Utils.opte();
 			return optional(
 				streamResource(is.get())
 					.setHeaders(contentType(mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path))))

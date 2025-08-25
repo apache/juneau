@@ -418,7 +418,7 @@ public class BeanStore {
 				return optional(e.get());
 			if (parent.isPresent())
 				return parent.get().getBean(beanType);
-			return empty();
+			return Utils.opte();
 		}
 	}
 
@@ -438,7 +438,7 @@ public class BeanStore {
 				return optional(e.get());
 			if (parent.isPresent())
 				return parent.get().getBean(beanType, name);
-			return empty();
+			return Utils.opte();
 		}
 	}
 

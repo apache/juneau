@@ -201,7 +201,7 @@ public class Entry {
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> as(Parser parser, Type type, Type...args) {
 		if (isNull())
-			return empty();
+			return Utils.opte();
 
 		try {
 			var v = toString();
@@ -212,7 +212,8 @@ public class Entry {
 			if (type == long.class || type == Long.class) return (Optional<T>)asLong();
 			if (type == JsonMap.class) return (Optional<T>)asMap();
 			if (type == JsonList.class) return (Optional<T>)asList();
-			if (isEmpty()) return empty();
+			if (isEmpty())
+				return Utils.opte();
 			if (isSimpleType(type)) return optional((T)config.beanSession.convertToType(v, (Class<?>)type));
 
 			if (parser instanceof JsonParser) {
@@ -269,7 +270,7 @@ public class Entry {
 	 */
 	public Optional<String[]> asStringArray() {
 		if (! isPresent())
-			return empty();
+			return Utils.opte();
 		var v = toString();
 		var s1 = firstNonWhitespaceChar(v);
 		var s2 = lastNonWhitespaceChar(v);
@@ -410,7 +411,7 @@ public class Entry {
 	 */
 	public Optional<byte[]> asBytes() {
 		if (isNull())
-			return empty();
+			return Utils.opte();
 		var s = toString();
 		if (s.indexOf('\n') != -1)
 			s = s.replace("\n", "");
@@ -453,7 +454,7 @@ public class Entry {
 	 */
 	public Optional<JsonMap> asMap(Parser parser) throws ParseException {
 		if (isNull())
-			return empty();
+			return Utils.opte();
 		if (parser == null)
 			parser = config.parser;
 		var s = toString();
@@ -493,7 +494,7 @@ public class Entry {
 	 */
 	public Optional<JsonList> asList(Parser parser) throws ParseException {
 		if (isNull())
-			return empty();
+			return Utils.opte();
 		if (parser == null)
 			parser = config.parser;
 		var s = toString();
