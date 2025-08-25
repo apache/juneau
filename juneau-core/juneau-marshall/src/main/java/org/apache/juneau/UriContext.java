@@ -17,6 +17,7 @@ import static org.apache.juneau.common.internal.ThrowableUtils.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 
@@ -108,10 +109,10 @@ public class UriContext {
 	 */
 	@Beanc
 	public UriContext(@Name("authority") String authority, @Name("contextRoot") String contextRoot, @Name("servletPath") String servletPath, @Name("pathInfo") String pathInfo) {
-		this.authority = nullIfEmpty3(trimSlashes(authority));
-		this.contextRoot = nullIfEmpty3(trimSlashes(contextRoot));
-		this.servletPath = nullIfEmpty3(trimSlashes(servletPath));
-		this.pathInfo = nullIfEmpty3(trimSlashes(pathInfo));
+		this.authority = Utils.nullIfEmpty3(trimSlashes(authority));
+		this.contextRoot = Utils.nullIfEmpty3(trimSlashes(contextRoot));
+		this.servletPath = Utils.nullIfEmpty3(trimSlashes(servletPath));
+		this.pathInfo = Utils.nullIfEmpty3(trimSlashes(pathInfo));
 		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null
 			: this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
 	}
@@ -141,10 +142,10 @@ public class UriContext {
 	 */
 	public UriContext(String s) throws ParseException {
 		JsonMap m = JsonMap.ofJson(s);
-		this.authority = nullIfEmpty3(trimSlashes(m.getString("authority")));
-		this.contextRoot = nullIfEmpty3(trimSlashes(m.getString("contextRoot")));
-		this.servletPath = nullIfEmpty3(trimSlashes(m.getString("servletPath")));
-		this.pathInfo = nullIfEmpty3(trimSlashes(m.getString("pathInfo")));
+		this.authority = Utils.nullIfEmpty3(trimSlashes(m.getString("authority")));
+		this.contextRoot = Utils.nullIfEmpty3(trimSlashes(m.getString("contextRoot")));
+		this.servletPath = Utils.nullIfEmpty3(trimSlashes(m.getString("servletPath")));
+		this.pathInfo = Utils.nullIfEmpty3(trimSlashes(m.getString("pathInfo")));
 		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null
 			: this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
 	}

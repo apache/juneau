@@ -14,7 +14,6 @@ package org.apache.juneau;
 
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -44,7 +43,7 @@ public class TestUtils extends Utils {
 	 * Asserts value when stringified matches the specified pattern.
 	 */
 	public static Object assertMatches(String pattern, Object value) {
-		var m = getMatchPattern3(pattern).matcher(s(value));
+		var m = Utils.getMatchPattern3(pattern).matcher(s(value));
 		if (! m.matches()) {
 			var msg = "Pattern didn't match: \n\tExpected:\n"+pattern+"\n\tActual:\n"+value;
 			System.err.println(msg);  // For easier debugging.
@@ -571,7 +570,7 @@ public class TestUtils extends Utils {
 
 	public static void assertJsonMatches(Object o, String pattern) throws AssertionError {
 		var json = json(o);
-		assertTrue(StringUtils.getMatchPattern3(pattern).matcher(json).matches(), fs("JSON did not match pattern.\njson={0}", json));
+		assertTrue(Utils.getMatchPattern3(pattern).matcher(json).matches(), fs("JSON did not match pattern.\njson={0}", json));
 	}
 
 	public static void assertSameObject(Object o1, Object o2) {

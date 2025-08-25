@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -112,7 +111,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 */
 	public BasicBooleanHeader(String name, String value) {
 		super(name, value);
-		this.value = isEmpty3(value) ? null : Boolean.valueOf(value);
+		this.value = Utils.isEmpty3(value) ? null : Boolean.valueOf(value);
 		this.supplier = null;
 	}
 

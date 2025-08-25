@@ -223,7 +223,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 		for (NameValuePair p : pairs) {
 			String name = p.getName();
 			Stream<RequestQueryParam> l = stream(name);
-			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty3(x.getValue()));
+			boolean hasAllBlanks = l.allMatch(x -> Utils.isEmpty3(x.getValue()));
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestQueryParam(req, name, vs.resolve(p.getValue())));

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -41,7 +40,7 @@ public class BasicBooleanPart extends BasicPart {
 	 * @return A new {@link BasicBooleanPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicBooleanPart of(String name, Boolean value) {
-		if (isEmpty3(name) || value == null)
+		if (Utils.isEmpty3(name) || value == null)
 			return null;
 		return new BasicBooleanPart(name, value);
 	}
@@ -57,7 +56,7 @@ public class BasicBooleanPart extends BasicPart {
 	 * @return A new {@link BasicBooleanPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicBooleanPart of(String name, Supplier<Boolean> value) {
-		if (isEmpty3(name) || value == null)
+		if (Utils.isEmpty3(name) || value == null)
 			return null;
 		return new BasicBooleanPart(name, value);
 	}
@@ -105,7 +104,7 @@ public class BasicBooleanPart extends BasicPart {
 	 */
 	public BasicBooleanPart(String name, String value) {
 		super(name, value);
-		this.value = isEmpty3(value) ? null : Boolean.valueOf(value);
+		this.value = Utils.isEmpty3(value) ? null : Boolean.valueOf(value);
 		this.supplier = null;
 	}
 

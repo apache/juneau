@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.copyOf;
 import java.util.*;
 import org.apache.juneau.annotation.*;
@@ -40,7 +39,7 @@ public class EntityTags {
 	 * @return A parsed header value.
 	 */
 	public static EntityTags of(String value) {
-		return isEmpty3(value) ? EMPTY : CACHE.get(value, ()->new EntityTags(value));
+		return Utils.isEmpty3(value) ? EMPTY : CACHE.get(value, ()->new EntityTags(value));
 	}
 
 	/**

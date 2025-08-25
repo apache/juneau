@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
 import java.util.*;
 
 import org.apache.juneau.common.internal.*;
@@ -67,7 +66,7 @@ public class Version implements Comparable<Version> {
 	 * 	Any parts that are not numeric are interpreted as {@link Integer#MAX_VALUE}
 	 */
 	public Version(String value) {
-		if (isEmpty3(value))
+		if (Utils.isEmpty3(value))
 			value = "0";
 		String[] sParts = Utils.split3(value, '.');
 		parts = new int[sParts.length];

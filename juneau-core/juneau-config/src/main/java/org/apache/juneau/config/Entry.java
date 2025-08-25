@@ -560,7 +560,7 @@ public class Entry {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private boolean isEmpty() {
-		return StringUtils.isEmpty3(value);
+		return Utils.isEmpty3(value);
 	}
 
 	private boolean isNull() {

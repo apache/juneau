@@ -13,7 +13,7 @@
 package org.apache.juneau;
 
 import static java.lang.Character.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Converts property names to underscore-lower-case format.
@@ -35,7 +35,7 @@ public final class PropertyNamerULC implements PropertyNamer {
 
 	@Override /* PropertyNamer */
 	public String getPropertyName(String name) {
-		if (isEmpty3(name))
+		if (Utils.isEmpty3(name))
 			return name;
 
 		int numUCs = 0;

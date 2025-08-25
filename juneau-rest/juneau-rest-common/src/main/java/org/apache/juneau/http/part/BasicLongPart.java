@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -41,7 +40,7 @@ public class BasicLongPart extends BasicPart {
 	 * @return A new {@link BasicLongPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicLongPart of(String name, Long value) {
-		if (isEmpty3(name) || value == null)
+		if (Utils.isEmpty3(name) || value == null)
 			return null;
 		return new BasicLongPart(name, value);
 	}
@@ -57,7 +56,7 @@ public class BasicLongPart extends BasicPart {
 	 * @return A new {@link BasicLongPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicLongPart of(String name, Supplier<Long> value) {
-		if (isEmpty3(name) || value == null)
+		if (Utils.isEmpty3(name) || value == null)
 			return null;
 		return new BasicLongPart(name, value);
 	}
@@ -106,7 +105,7 @@ public class BasicLongPart extends BasicPart {
 	 */
 	public BasicLongPart(String name, String value) {
 		super(name, value);
-		this.value = isEmpty3(value) ? null : Long.valueOf(value);
+		this.value = Utils.isEmpty3(value) ? null : Long.valueOf(value);
 		this.supplier = null;
 	}
 

@@ -12,14 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.resource;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
-
 import java.io.*;
 import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
@@ -353,7 +352,7 @@ public class BasicResource implements HttpResource {
 			if (h != null) {
 				String n = h.getName();
 				String v = h.getValue();
-				if (isNotEmpty3(n)) {
+				if (Utils.isNotEmpty3(n)) {
 					if (n.equalsIgnoreCase("content-type"))
 						setContentType(v);
 					else if (n.equalsIgnoreCase("content-encoding"))
@@ -379,7 +378,7 @@ public class BasicResource implements HttpResource {
 			if (h != null) {
 				String n = h.getName();
 				String v = h.getValue();
-				if (isNotEmpty3(n)) {
+				if (Utils.isNotEmpty3(n)) {
 					if (n.equalsIgnoreCase("content-type"))
 						setContentType(v);
 					else if (n.equalsIgnoreCase("content-encoding"))

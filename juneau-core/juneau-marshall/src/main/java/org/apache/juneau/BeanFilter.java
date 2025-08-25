@@ -18,7 +18,6 @@ import java.util.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 
 import org.apache.juneau.annotation.*;
@@ -97,20 +96,20 @@ public final class BeanFilter {
 		public Builder applyAnnotations(List<Bean> annotations) {
 
 			annotations.forEach(x -> {
-				if (isNotEmpty3(x.properties(), x.p())) properties(x.properties(), x.p());
+				if (Utils.isNotEmpty3(x.properties(), x.p())) properties(x.properties(), x.p());
 				if (x.sort()) sortProperties(true);
 				if (x.findFluentSetters()) findFluentSetters();
-				if (isNotEmpty3(x.excludeProperties(), x.xp())) excludeProperties(x.excludeProperties(), x.xp());
-				if (isNotEmpty3(x.readOnlyProperties(), x.ro())) readOnlyProperties(x.readOnlyProperties(), x.ro());
-				if (isNotEmpty3(x.writeOnlyProperties(), x.wo())) writeOnlyProperties(x.writeOnlyProperties(), x.wo());
-				if (isNotEmpty3(x.typeName())) typeName(x.typeName());
+				if (Utils.isNotEmpty3(x.excludeProperties(), x.xp())) excludeProperties(x.excludeProperties(), x.xp());
+				if (Utils.isNotEmpty3(x.readOnlyProperties(), x.ro())) readOnlyProperties(x.readOnlyProperties(), x.ro());
+				if (Utils.isNotEmpty3(x.writeOnlyProperties(), x.wo())) writeOnlyProperties(x.writeOnlyProperties(), x.wo());
+				if (Utils.isNotEmpty3(x.typeName())) typeName(x.typeName());
 				if (isNotVoid(x.propertyNamer())) propertyNamer(x.propertyNamer());
 				if (isNotVoid(x.interfaceClass())) interfaceClass(x.interfaceClass());
 				if (isNotVoid(x.stopClass())) stopClass(x.stopClass());
 				if (isNotVoid(x.interceptor())) interceptor(x.interceptor());
 				if (isNotVoid(x.implClass())) implClass(x.implClass());
 				if (isNotEmptyArray(x.dictionary())) dictionary(x.dictionary());
-				if (isNotEmpty3(x.example())) example(x.example());
+				if (Utils.isNotEmpty3(x.example())) example(x.example());
 			});
 			return this;
 		}

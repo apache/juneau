@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
-
 import java.io.*;
 
 import org.apache.juneau.common.internal.*;

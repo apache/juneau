@@ -14,7 +14,6 @@ package org.apache.juneau.http.header;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import java.time.*;
 import java.util.*;
 import java.util.function.*;
@@ -111,7 +110,7 @@ public class BasicDateHeader extends BasicHeader {
 	 */
 	public BasicDateHeader(String name, String value) {
 		super(name, value);
-		this.value = isEmpty3(value) ? null : ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value.toString())).truncatedTo(SECONDS);
+		this.value = Utils.isEmpty3(value) ? null : ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value.toString())).truncatedTo(SECONDS);
 		this.supplier = null;
 	}
 

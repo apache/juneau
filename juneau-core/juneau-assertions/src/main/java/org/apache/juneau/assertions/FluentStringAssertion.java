@@ -541,7 +541,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isMatches(String searchPattern) throws AssertionError {
 		assertArgNotNull("searchPattern", searchPattern);
-		return isPattern(getMatchPattern3(searchPattern));
+		return isPattern(Utils.getMatchPattern3(searchPattern));
 	}
 
 	/**

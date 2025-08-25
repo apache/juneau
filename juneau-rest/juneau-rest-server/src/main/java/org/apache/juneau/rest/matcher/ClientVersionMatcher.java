@@ -18,6 +18,7 @@ import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 import jakarta.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
@@ -42,7 +43,7 @@ public class ClientVersionMatcher extends RestMatcher {
 	 * @param mi The version string that the client version must match.
 	 */
 	public ClientVersionMatcher(String clientVersionHeader, MethodInfo mi) {
-		this.clientVersionHeader = isEmpty3(clientVersionHeader) ? "Client-Version" : clientVersionHeader;
+		this.clientVersionHeader = Utils.isEmpty3(clientVersionHeader) ? "Client-Version" : clientVersionHeader;
 		Value<String> clientVersion = Value.empty();
 		mi.getAnnotationList(REST_OP_GROUP).forEachValue(String.class, "clientVersion", NOT_EMPTY, x -> clientVersion.set(x));
 		range = new VersionRange(clientVersion.orElse(null));

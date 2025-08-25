@@ -14,7 +14,6 @@ package org.apache.juneau.cp;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.internal.ArgUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.util.function.*;
@@ -73,7 +72,7 @@ public class BeanStoreEntry<T> {
 	protected BeanStoreEntry(Class<T> type, Supplier<T> bean, String name) {
 		this.bean = assertArgNotNull("bean", bean);
 		this.type = assertArgNotNull("type", type);
-		this.name = nullIfEmpty3(name);
+		this.name = Utils.nullIfEmpty3(name);
 	}
 
 	/**
@@ -94,7 +93,7 @@ public class BeanStoreEntry<T> {
 	 * @return <jk>true</jk> if this bean is exactly of the specified type and has the specified name.
 	 */
 	public boolean matches(Class<?> type, String name) {
-		name = nullIfEmpty3(name);
+		name = Utils.nullIfEmpty3(name);
 		return matches(type) && Utils.eq(this.name, name);
 	}
 

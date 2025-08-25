@@ -13,14 +13,13 @@
 package org.apache.juneau.objecttools;
 
 import static java.net.HttpURLConnection.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 
@@ -747,7 +746,7 @@ public final class ObjectRest {
 			url = "";
 
 		// Strip off leading slash if present.
-		if (isNotEmpty3(url) && url.charAt(0) == '/')
+		if (Utils.isNotEmpty3(url) && url.charAt(0) == '/')
 			url = url.substring(1);
 
 		return url;

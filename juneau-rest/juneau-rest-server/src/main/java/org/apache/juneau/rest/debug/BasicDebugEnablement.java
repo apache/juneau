@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.debug;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
 import java.util.*;

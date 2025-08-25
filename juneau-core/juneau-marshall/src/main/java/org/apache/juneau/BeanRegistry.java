@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
@@ -91,7 +90,7 @@ public class BeanRegistry {
 					});
 				} else {
 					Value<String> typeName = Value.empty();
-					ci.forEachAnnotation(beanContext, Bean.class, x -> isNotEmpty3(x.typeName()), x -> typeName.set(x.typeName()));
+					ci.forEachAnnotation(beanContext, Bean.class, x -> Utils.isNotEmpty3(x.typeName()), x -> typeName.set(x.typeName()));
 					addToMap(
 						typeName.orElseThrow(() -> new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", className(c))),
 						beanContext.getClassMeta(c)

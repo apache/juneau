@@ -13,7 +13,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.text.*;
@@ -345,7 +344,7 @@ public class BeanTraverseSession extends BeanSession {
 
 		String toString(boolean simple) {
 			StringBuilder sb = new StringBuilder().append('[').append(depth).append(']').append(' ');
-			sb.append(isEmpty3(name) ? "<noname>" : name).append(':');
+			sb.append(Utils.isEmpty3(name) ? "<noname>" : name).append(':');
 			sb.append(aType.toString(simple));
 			if (aType != aType.getSerializedClassMeta(BeanTraverseSession.this))
 				sb.append('/').append(aType.getSerializedClassMeta(BeanTraverseSession.this).toString(simple));

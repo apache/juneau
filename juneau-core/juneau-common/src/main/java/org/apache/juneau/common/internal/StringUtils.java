@@ -48,7 +48,7 @@ public final class StringUtils {
 	/**
 	 * Predicate check to filter out null and empty strings.
 	 */
-	public static final Predicate<String> NOT_EMPTY = StringUtils::isNotEmpty3;
+	public static final Predicate<String> NOT_EMPTY = Utils::isNotEmpty3;
 
 	private static final AsciiSet numberChars = AsciiSet.of("-xX.+-#pP0123456789abcdefABCDEF");
 	private static final AsciiSet firstNumberChars =AsciiSet.of("+-.#0123456789");
@@ -323,69 +323,6 @@ public final class StringUtils {
 	}
 
 	static final AsciiSet QUOTE_ESCAPE_SET = AsciiSet.of("\"'\\");
-
-	/**
-	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or empty.
-	 *
-	 * @param s The string to check.
-	 * @return <jk>true</jk> if specified string is <jk>null</jk> or empty.
-	 */
-	public static boolean isEmpty3(String s) {
-		return s == null || s.isEmpty();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if specified charsequence is <jk>null</jk> or empty.
-	 *
-	 * @param s The string to check.
-	 * @return <jk>true</jk> if specified charsequence is <jk>null</jk> or empty.
-	 */
-	public static boolean isEmpty3(CharSequence s) {
-		return s == null || s.isEmpty();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or empty or consists of only blanks.
-	 *
-	 * @param s The string to check.
-	 * @return <jk>true</jk> if specified string is <jk>null</jk> or emptyor consists of only blanks.
-	 */
-	public static boolean isEmptyOrBlank3(String s) {
-		return s == null || s.trim().isEmpty();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if specified string is not <jk>null</jk> or empty.
-	 *
-	 * @param s The string to check.
-	 * @return <jk>true</jk> if specified string is not <jk>null</jk> or empty.
-	 */
-	public static boolean isNotEmpty3(String s) {
-		return ! isEmpty3(s);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if either of the specified strings are not <jk>null</jk> or empty.
-	 *
-	 * @param s1 The string to check.
-	 * @param s2 The string to check.
-	 * @return <jk>true</jk> if either of the specified strings are not <jk>null</jk> or empty.
-	 */
-	public static boolean isNotEmpty3(String s1, String s2) {
-		return isNotEmpty3(s1) || isNotEmpty3(s2);
-	}
-
-	/**
-	 * Returns <jk>null</jk> if the specified string is <jk>null</jk> or empty.
-	 *
-	 * @param s The string to check.
-	 * @return <jk>null</jk> if the specified string is <jk>null</jk> or empty, or the same string if not.
-	 */
-	public static String nullIfEmpty3(String s) {
-		if (s == null || s.isEmpty())
-			return null;
-		return s;
-	}
 
 	/**
 	 * Removes escape characters from the specified characters.
@@ -824,7 +761,7 @@ public final class StringUtils {
 	 * @throws IllegalArgumentException Value was not a valid date.
 	 */
 	public static Date parseIsoDate(String date) throws IllegalArgumentException {
-		if (isEmpty3(date))
+		if (Utils.isEmpty3(date))
 			return null;
 		return parseIsoCalendar(date).getTime();  // NOSONAR - NPE not possible.
 	}
@@ -841,7 +778,7 @@ public final class StringUtils {
 	 * @throws IllegalArgumentException Value was not a valid date.
 	 */
 	public static Calendar parseIsoCalendar(String date) throws IllegalArgumentException {
-		if (isEmpty3(date))
+		if (Utils.isEmpty3(date))
 			return null;
 		date = date.trim().replace(' ', 'T');  // Convert to 'standard' ISO8601
 		if (date.indexOf(',') != -1)  // Trim milliseconds
@@ -1132,7 +1069,7 @@ public final class StringUtils {
 	 */
 	public static String trimStart(String s) {
 		if (s != null)
-			while (isNotEmpty3(s) && isWhitespace(s.charAt(0)))
+			while (Utils.isNotEmpty3(s) && isWhitespace(s.charAt(0)))
 				s = s.substring(1);
 		return s;
 	}
@@ -1145,7 +1082,7 @@ public final class StringUtils {
 	 */
 	public static String trimEnd(String s) {
 		if (s != null)
-			while (isNotEmpty3(s) && isWhitespace(s.charAt(s.length()-1)))
+			while (Utils.isNotEmpty3(s) && isWhitespace(s.charAt(s.length()-1)))
 				s = s.substring(0, s.length()-1);
 		return s;
 	}
@@ -1181,7 +1118,7 @@ public final class StringUtils {
 			return s;
 		while (endsWith(s, '/'))
 			s = s.substring(0, s.length()-1);
-		while (isNotEmpty3(s) && s.charAt(0) == '/')  // NOSONAR - NPE not possible here.
+		while (Utils.isNotEmpty3(s) && s.charAt(0) == '/')  // NOSONAR - NPE not possible here.
 			s = s.substring(1);
 		return s;
 	}
@@ -1195,9 +1132,9 @@ public final class StringUtils {
 	public static String trimSlashesAndSpaces(String s) {
 		if (s == null)
 			return null;
-		while (isNotEmpty3(s) && (s.charAt(s.length()-1) == '/' || isWhitespace(s.charAt(s.length()-1))))
+		while (Utils.isNotEmpty3(s) && (s.charAt(s.length()-1) == '/' || isWhitespace(s.charAt(s.length()-1))))
 			s = s.substring(0, s.length()-1);
-		while (isNotEmpty3(s) && (s.charAt(0) == '/' || isWhitespace(s.charAt(0))))
+		while (Utils.isNotEmpty3(s) && (s.charAt(0) == '/' || isWhitespace(s.charAt(0))))
 			s = s.substring(1);
 		return s;
 	}
@@ -1225,7 +1162,7 @@ public final class StringUtils {
 	public static String trimLeadingSlashes(String s) {
 		if (s == null)
 			return null;
-		while (isNotEmpty3(s) && s.charAt(0) == '/')
+		while (Utils.isNotEmpty3(s) && s.charAt(0) == '/')
 			s = s.substring(1);
 		return s;
 	}
@@ -1443,7 +1380,7 @@ public final class StringUtils {
 	 */
 	public static boolean isAbsoluteUri(String s) {  // NOSONAR - False positive.
 
-		if (isEmpty3(s))
+		if (Utils.isEmpty3(s))
 			return false;
 
 		// Use a state machine for maximum performance.
@@ -1500,7 +1437,7 @@ public final class StringUtils {
 	 */
 	public static boolean isUri(String s) {  // NOSONAR - False positive.
 
-		if (isEmpty3(s))
+		if (Utils.isEmpty3(s))
 			return false;
 
 		// Use a state machine for maximum performance.
@@ -1617,7 +1554,7 @@ public final class StringUtils {
 	 */
 	public static String firstNonEmpty(String...s) {
 		for (var ss : s)
-			if (isNotEmpty3(ss))
+			if (Utils.isNotEmpty3(ss))
 				return ss;
 		return null;
 	}
@@ -1710,7 +1647,7 @@ public final class StringUtils {
 	}
 
 	private static int multiplier(String s) {
-		char c = isEmpty3(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
+		char c = Utils.isEmpty3(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
 		if (c == 'G') return 1024*1024*1024;
 		if (c == 'M') return 1024*1024;
 		if (c == 'K') return 1024;
@@ -1750,7 +1687,7 @@ public final class StringUtils {
 	}
 
 	private static long multiplier2(String s) {
-		char c = isEmpty3(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
+		char c = Utils.isEmpty3(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
 		if (c == 'P') return 1024*1024*1024*1024*1024l;
 		if (c == 'T') return 1024*1024*1024*1024l;
 		if (c == 'G') return 1024*1024*1024l;
@@ -1944,41 +1881,6 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Converts a string containing <js>"*"</js> meta characters with a regular expression pattern.
-	 *
-	 * @param s The string to create a pattern from.
-	 * @return A regular expression pattern.
-	 */
-	public static Pattern getMatchPattern3(String s) {
-		return getMatchPattern3(s, 0);
-	}
-
-	/**
-	 * Converts a string containing <js>"*"</js> meta characters with a regular expression pattern.
-	 *
-	 * @param s The string to create a pattern from.
-	 * @param flags Regular expression flags.
-	 * @return A regular expression pattern.
-	 */
-	public static Pattern getMatchPattern3(String s, int flags) {
-		if (s == null)
-			return null;
-		var sb = new StringBuilder();
-		sb.append("\\Q");
-		for (var i = 0; i < s.length(); i++) {
-			var c = s.charAt(i);
-			if (c == '*')
-				sb.append("\\E").append(".*").append("\\Q");
-			else if (c == '?')
-				sb.append("\\E").append(".").append("\\Q");
-			else
-				sb.append(c);
-		}
-		sb.append("\\E");
-		return Pattern.compile(sb.toString(), flags);
-	}
-
-	/**
 	 * Parses a duration string.
 	 *
 	 * <p>
@@ -2011,7 +1913,7 @@ public final class StringUtils {
 	 */
 	public static long getDuration(String s) {
 		s = trim(s);
-		if (isEmpty3(s))
+		if (Utils.isEmpty3(s))
 			return -1;
 		int i;
 		for (i = 0; i < s.length(); i++) {

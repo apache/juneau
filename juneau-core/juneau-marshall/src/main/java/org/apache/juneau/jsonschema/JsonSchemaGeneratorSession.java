@@ -312,7 +312,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		out.append(jscm.getSchema());
 
-		Predicate<String> ne = StringUtils::isNotEmpty3;
+		Predicate<String> ne = Utils::isNotEmpty3;
 		out.appendIfAbsentIf(ne, "type", type);
 		out.appendIfAbsentIf(ne, "format", format);
 

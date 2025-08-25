@@ -14,7 +14,6 @@ package org.apache.juneau.utils;
 
 import static java.lang.Character.*;
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
@@ -198,7 +197,7 @@ public class ReflectionMap<V> {
 		 * @return This object.
 		 */
 		public Builder<V> append(String key, V value) {
-			if (isEmpty3(key))
+			if (Utils.isEmpty3(key))
 				throw new BasicRuntimeException("Invalid reflection signature: [{0}]", key);
 			try {
 				splitNames(key, k -> {

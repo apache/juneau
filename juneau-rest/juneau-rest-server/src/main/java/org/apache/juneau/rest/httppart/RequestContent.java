@@ -532,7 +532,7 @@ public class RequestContent {
 
 		MediaType mt = getMediaType();
 
-		if ((isEmpty3(Utils.s(mt)) || mt.toString().startsWith("text/plain")) && cm.hasStringMutater())
+		if ((Utils.isEmpty3(Utils.s(mt)) || mt.toString().startsWith("text/plain")) && cm.hasStringMutater())
 			return cm.getStringMutater().mutate(asString());
 
 		Optional<ContentType> ct = req.getHeader(ContentType.class);
@@ -545,7 +545,7 @@ public class RequestContent {
 	private Encoder getEncoder() throws UnsupportedMediaType {
 		if (encoder == null) {
 			String ce = req.getHeaderParam("content-encoding").orElse(null);
-			if (isNotEmpty3(ce)) {
+			if (Utils.isNotEmpty3(ce)) {
 				ce = ce.trim();
 				encoder = encoders.getEncoder(ce);
 				if (encoder == null)

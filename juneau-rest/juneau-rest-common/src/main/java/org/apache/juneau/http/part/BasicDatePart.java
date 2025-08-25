@@ -14,7 +14,6 @@ package org.apache.juneau.http.part;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import java.time.*;
 import java.time.format.*;
 import java.util.*;
@@ -45,7 +44,7 @@ public class BasicDatePart extends BasicPart {
 	 * @return A new {@link BasicDatePart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicDatePart of(String name, ZonedDateTime value) {
-		if (isEmpty3(name) || value == null)
+		if (Utils.isEmpty3(name) || value == null)
 			return null;
 		return new BasicDatePart(name, value);
 	}
@@ -61,7 +60,7 @@ public class BasicDatePart extends BasicPart {
 	 * @return A new {@link BasicDatePart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicDatePart of(String name, Supplier<ZonedDateTime> value) {
-		if (isEmpty3(name) || value == null)
+		if (Utils.isEmpty3(name) || value == null)
 			return null;
 		return new BasicDatePart(name, value);
 	}
@@ -109,7 +108,7 @@ public class BasicDatePart extends BasicPart {
 	 */
 	public BasicDatePart(String name, String value) {
 		super(name, value);
-		this.value = isEmpty3(value) ? null : ZonedDateTime.from(ISO_DATE_TIME.parse(value)).truncatedTo(SECONDS);
+		this.value = Utils.isEmpty3(value) ? null : ZonedDateTime.from(ISO_DATE_TIME.parse(value)).truncatedTo(SECONDS);
 		this.supplier = null;
 	}
 

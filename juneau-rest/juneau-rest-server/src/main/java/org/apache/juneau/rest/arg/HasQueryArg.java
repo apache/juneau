@@ -17,6 +17,7 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
@@ -72,7 +73,7 @@ public class HasQueryArg implements RestOpArg {
 	}
 
 	private static boolean hasName(HasQuery x) {
-		return isNotEmpty3(x.name()) || isNotEmpty3(x.value());
+		return Utils.isNotEmpty3(x.name()) || Utils.isNotEmpty3(x.value());
 	}
 
 	private static String getName(HasQuery x) {

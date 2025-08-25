@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.html5;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
-
 import java.net.*;
 
 import org.apache.juneau.*;

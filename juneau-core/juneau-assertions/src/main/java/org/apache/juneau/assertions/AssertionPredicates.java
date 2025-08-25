@@ -237,7 +237,7 @@ public class AssertionPredicates {
 	 */
 	public static final <T> AssertionPredicate<T> match(String value) {
 		assertArgNotNull("value", value);
-		var p = StringUtils.getMatchPattern3(value);
+		var p = Utils.getMatchPattern3(value);
 		return test(x -> x != null && p.matcher(Utils.s(x)).matches(), MSG_valueDidNotMatchPattern, value, VALUE);
 	}
 

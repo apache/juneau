@@ -13,7 +13,6 @@
 package org.apache.juneau.microservice;
 
 import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -774,7 +773,7 @@ public class Microservice implements ConfigEventListener {
 			this.logger = Logger.getLogger("");
 			String logFile = Utils.firstNonNull(logConfig.logFile, config.get("Logging/logFile").orElse(null));
 
-			if (isNotEmpty3(logFile)) {
+			if (Utils.isNotEmpty3(logFile)) {
 				String logDir = Utils.firstNonNull(logConfig.logDir, config.get("Logging/logDir").orElse("."));
 				File logDirFile = resolveFile(logDir);
 				mkdirs(logDirFile, false);

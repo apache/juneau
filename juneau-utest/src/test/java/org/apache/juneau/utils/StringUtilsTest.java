@@ -701,9 +701,9 @@ class StringUtilsTest extends SimpleTestBase {
 	// matchPattern(String)
 	//====================================================================================================
 	@Test void a29_getMatchPattern() {
-		assertTrue(getMatchPattern3("a").matcher("a").matches());
-		assertTrue(getMatchPattern3("*a*").matcher("aaa").matches());
-		assertFalse(getMatchPattern3("*b*").matcher("aaa").matches());
+		assertTrue(Utils.getMatchPattern3("a").matcher("a").matches());
+		assertTrue(Utils.getMatchPattern3("*a*").matcher("aaa").matches());
+		assertFalse(Utils.getMatchPattern3("*b*").matcher("aaa").matches());
 	}
 
 	//====================================================================================================

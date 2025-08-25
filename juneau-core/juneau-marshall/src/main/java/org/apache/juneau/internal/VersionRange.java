@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
-
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Represents an OSGi-style version range like <js>"1.2"</js> or <js>"[1.0,2.0)"</js>.
@@ -69,7 +68,7 @@ public class VersionRange {
 	 * @return <jk>true</jk> if the specified version string matches this version range.
 	 */
 	public boolean matches(String v) {
-		if (isEmpty3(v))
+		if (Utils.isEmpty3(v))
 			return (minVersion == null && maxVersion == null);
 		Version ver = new Version(v);
 		if ((minVersion != null && ! ver.isAtLeast(minVersion, minExclusive)) || (maxVersion != null && ! ver.isAtMost(maxVersion, maxExclusive)))

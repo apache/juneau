@@ -249,7 +249,7 @@ public class ComboInput<T> {
 	public void verify(T o, String testName) {
 		for (Function<T,String> f : verify) {
 			String s = f.apply(o);
-			if (! StringUtils.isEmpty3(s)) {
+			if (! Utils.isEmpty3(s)) {
 				throw new BasicAssertionError("Verification failed on test {0}/{1}: {2}", label, testName, s);
 			}
 		}

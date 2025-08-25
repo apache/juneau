@@ -13,10 +13,9 @@
 package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
-
 import java.util.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -75,7 +74,7 @@ public class UrlPathMatch {
 	 */
 	public boolean hasEmptyVars() {
 		for (String v : vars.values())
-			if (isEmpty3(v))
+			if (Utils.isEmpty3(v))
 				return true;
 		return false;
 	}
@@ -90,7 +89,7 @@ public class UrlPathMatch {
 	 */
 	public String getRemainder() {
 		String suffix = getSuffix();
-		if (isNotEmpty3(suffix) && suffix.charAt(0) == '/')
+		if (Utils.isNotEmpty3(suffix) && suffix.charAt(0) == '/')
 			suffix = suffix.substring(1);
 		return suffix;
 	}
@@ -129,7 +128,7 @@ public class UrlPathMatch {
 			if (c == -1)
 				c = path.length();
 		}
-		return nullIfEmpty3(path.substring(0, c));
+		return Utils.nullIfEmpty3(path.substring(0, c));
 	}
 
 	@Override /* Object */

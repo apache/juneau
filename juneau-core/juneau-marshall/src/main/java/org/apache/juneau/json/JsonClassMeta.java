@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
-
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.annotation.*;
 
 /**
@@ -39,7 +38,7 @@ public class JsonClassMeta extends ExtendedClassMeta {
 		super(cm);
 
 		Value<String> wrapperAttr = Value.empty();
-		cm.forEachAnnotation(Json.class, x -> isNotEmpty3(x.wrapperAttr()), x -> wrapperAttr.set(x.wrapperAttr()));
+		cm.forEachAnnotation(Json.class, x -> Utils.isNotEmpty3(x.wrapperAttr()), x -> wrapperAttr.set(x.wrapperAttr()));
 		this.wrapperAttr = wrapperAttr.orElse(null);
 	}
 

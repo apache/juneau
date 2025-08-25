@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -88,8 +88,8 @@ public class FormDataAnnotation {
 	 */
 	public static Value<String> findName(ParamInfo pi) {
 		Value<String> n = Value.empty();
-		pi.forEachAnnotation(FormData.class, x -> isNotEmpty3(x.value()), x -> n.set(x.value()));
-		pi.forEachAnnotation(FormData.class, x -> isNotEmpty3(x.name()), x -> n.set(x.name()));
+		pi.forEachAnnotation(FormData.class, x -> Utils.isNotEmpty3(x.value()), x -> n.set(x.value()));
+		pi.forEachAnnotation(FormData.class, x -> Utils.isNotEmpty3(x.name()), x -> n.set(x.name()));
 		return n;
 	}
 
@@ -101,7 +101,7 @@ public class FormDataAnnotation {
 	 */
 	public static Value<String> findDef(ParamInfo pi) {
 		Value<String> n = Value.empty();
-		pi.forEachAnnotation(FormData.class, x -> isNotEmpty3(x.def()), x -> n.set(x.def()));
+		pi.forEachAnnotation(FormData.class, x -> Utils.isNotEmpty3(x.def()), x -> n.set(x.def()));
 		return n;
 	}
 

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 
 import java.lang.ref.*;
@@ -22,6 +21,7 @@ import java.util.*;
 
 import jakarta.xml.bind.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -67,7 +67,7 @@ public final class DateUtils {
 	 * @return The parsed value, or <jk>null</jk> if the string was <jk>null</jk> or empty.
 	 */
 	public static Calendar parseISO8601Calendar(String s) {
-		if (isEmpty3(s))
+		if (Utils.isEmpty3(s))
 			return null;
 		return DatatypeConverter.parseDateTime(toValidISO8601DT(s));
 	}
@@ -218,7 +218,7 @@ public final class DateUtils {
 	 * @return The formatter.
 	 */
 	public static DateTimeFormatter getFormatter(String pattern) {
-		if (isEmpty3(pattern))
+		if (Utils.isEmpty3(pattern))
 			return DateTimeFormatter.ISO_INSTANT;
 		try {
 			FieldInfo fi = ClassInfo.of(DateTimeFormatter.class).getPublicField(x -> x.isStatic() && x.hasName(pattern));

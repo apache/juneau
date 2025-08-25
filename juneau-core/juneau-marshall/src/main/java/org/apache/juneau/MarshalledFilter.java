@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Parent class for all non-bean filters.
@@ -83,7 +83,7 @@ public final class MarshalledFilter {
 			annotations.forEach(x -> {
 				if (isNotVoid(x.implClass()))
 					implClass(x.implClass());
-				if (isNotEmpty3(x.example()))
+				if (Utils.isNotEmpty3(x.example()))
 					example(x.example());
 			});
 			return this;

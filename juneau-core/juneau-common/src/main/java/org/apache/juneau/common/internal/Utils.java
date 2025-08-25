@@ -24,6 +24,7 @@ import java.time.format.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
+import java.util.regex.*;
 import java.util.stream.*;
 
 
@@ -563,7 +564,7 @@ public class Utils {
 		if (value instanceof Collection<?> x) return ! x.isEmpty();
 		if (value instanceof Map<?,?> x) return ! x.isEmpty();
 		if (value.getClass().isArray()) return Array.getLength(value) > 0;
-		return StringUtils.isNotEmpty3(s(value));
+		return Utils.isNotEmpty3(s(value));
 	}
 
 	/**
@@ -1018,7 +1019,7 @@ public class Utils {
 	public static void split3(String s, char c, Consumer<String> consumer) {
 		var escapeChars = StringUtils.getEscapeSet(c);
 	
-		if (StringUtils.isEmpty3(s))
+		if (Utils.isEmpty3(s))
 			return;
 		if (s.indexOf(c) == -1) {
 			consumer.accept(s);
@@ -1072,7 +1073,7 @@ public class Utils {
 	
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
-		if (StringUtils.isEmpty3(s))
+		if (Utils.isEmpty3(s))
 			return Collections.emptyList();
 		if (s.indexOf(c) == -1)
 			return Collections.singletonList(s);
@@ -1140,7 +1141,7 @@ public class Utils {
 	
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
-		if (StringUtils.isEmpty3(s))
+		if (Utils.isEmpty3(s))
 			return Collections.emptyMap();
 	
 		var m = new LinkedHashMap<String,String>();
@@ -1238,7 +1239,7 @@ public class Utils {
 		var escapeChars = StringUtils.getEscapeSet(',');
 	
 		if (s == null) return null;  // NOSONAR - Intentional.
-		if (StringUtils.isEmpty3(s)) return Collections.emptyList();
+		if (Utils.isEmpty3(s)) return Collections.emptyList();
 		if (s.indexOf(',') == -1) return Collections.singletonList(StringUtils.trim(s));
 	
 		var l = new LinkedList<String>();
@@ -1287,7 +1288,7 @@ public class Utils {
 	 */
 	public static List<String> splitNestedInner(String s) {
 		if (s == null) throw illegalArg("String was null.");
-		if (StringUtils.isEmpty3(s)) throw illegalArg("String was empty.");
+		if (Utils.isEmpty3(s)) throw illegalArg("String was empty.");
 	
 		final int
 			S1 = 1,  // Looking for '{'
@@ -1347,7 +1348,7 @@ public class Utils {
 	
 		s = s.trim();
 	
-		if (StringUtils.isEmpty3(s))
+		if (Utils.isEmpty3(s))
 			return new String[0];
 	
 		if (! StringUtils.containsAny(s, ' ', '\t', '\'', '"'))
@@ -1420,7 +1421,7 @@ public class Utils {
 	
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
-		if (StringUtils.isEmpty3(s))
+		if (Utils.isEmpty3(s))
 			return new String[0];
 		if (s.indexOf(',') == -1)
 			return new String[]{s};
@@ -1447,5 +1448,103 @@ public class Utils {
 		l.add(s2.trim());
 	
 		return l.toArray(new String[l.size()]);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or empty.
+	 *
+	 * @param s The string to check.
+	 * @return <jk>true</jk> if specified string is <jk>null</jk> or empty.
+	 */
+	public static boolean isEmpty3(String s) {
+		return s == null || s.isEmpty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if specified charsequence is <jk>null</jk> or empty.
+	 *
+	 * @param s The string to check.
+	 * @return <jk>true</jk> if specified charsequence is <jk>null</jk> or empty.
+	 */
+	public static boolean isEmpty3(CharSequence s) {
+		return s == null || s.isEmpty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or empty or consists of only blanks.
+	 *
+	 * @param s The string to check.
+	 * @return <jk>true</jk> if specified string is <jk>null</jk> or emptyor consists of only blanks.
+	 */
+	public static boolean isEmptyOrBlank3(String s) {
+		return s == null || s.trim().isEmpty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if specified string is not <jk>null</jk> or empty.
+	 *
+	 * @param s The string to check.
+	 * @return <jk>true</jk> if specified string is not <jk>null</jk> or empty.
+	 */
+	public static boolean isNotEmpty3(String s) {
+		return ! isEmpty3(s);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if either of the specified strings are not <jk>null</jk> or empty.
+	 *
+	 * @param s1 The string to check.
+	 * @param s2 The string to check.
+	 * @return <jk>true</jk> if either of the specified strings are not <jk>null</jk> or empty.
+	 */
+	public static boolean isNotEmpty3(String s1, String s2) {
+		return isNotEmpty3(s1) || isNotEmpty3(s2);
+	}
+
+	/**
+	 * Returns <jk>null</jk> if the specified string is <jk>null</jk> or empty.
+	 *
+	 * @param s The string to check.
+	 * @return <jk>null</jk> if the specified string is <jk>null</jk> or empty, or the same string if not.
+	 */
+	public static String nullIfEmpty3(String s) {
+		if (s == null || s.isEmpty())
+			return null;
+		return s;
+	}
+
+	/**
+	 * Converts a string containing <js>"*"</js> meta characters with a regular expression pattern.
+	 *
+	 * @param s The string to create a pattern from.
+	 * @return A regular expression pattern.
+	 */
+	public static Pattern getMatchPattern3(String s) {
+		return getMatchPattern3(s, 0);
+	}
+
+	/**
+	 * Converts a string containing <js>"*"</js> meta characters with a regular expression pattern.
+	 *
+	 * @param s The string to create a pattern from.
+	 * @param flags Regular expression flags.
+	 * @return A regular expression pattern.
+	 */
+	public static Pattern getMatchPattern3(String s, int flags) {
+		if (s == null)
+			return null;
+		var sb = new StringBuilder();
+		sb.append("\\Q");
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (c == '*')
+				sb.append("\\E").append(".*").append("\\Q");
+			else if (c == '?')
+				sb.append("\\E").append(".").append("\\Q");
+			else
+				sb.append(c);
+		}
+		sb.append("\\E");
+		return Pattern.compile(sb.toString(), flags);
 	}
 }

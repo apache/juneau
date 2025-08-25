@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
 import java.net.*;
 import java.util.*;
 import java.util.function.*;
@@ -108,7 +107,7 @@ public class BasicUriHeader extends BasicHeader {
 	 */
 	public BasicUriHeader(String name, String value) {
 		super(name, value);
-		this.value = isEmpty3(value) ? null :  URI.create(value);
+		this.value = Utils.isEmpty3(value) ? null :  URI.create(value);
 		this.supplier = null;
 	}
 

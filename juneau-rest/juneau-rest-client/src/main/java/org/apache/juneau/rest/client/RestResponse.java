@@ -29,6 +29,7 @@ import org.apache.http.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.common.internal.*;
+import org.apache.juneau.common.internal.Utils;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
@@ -196,7 +197,7 @@ public class RestResponse implements HttpResponse {
 		String s = null;
 		if (ct.isPresent())
 			s = getContentType().get().getParameter("charset");
-		return StringUtils.isEmpty3(s) ? "utf-8" : s;
+		return Utils.isEmpty3(s) ? "utf-8" : s;
 	}
 
 	/**
