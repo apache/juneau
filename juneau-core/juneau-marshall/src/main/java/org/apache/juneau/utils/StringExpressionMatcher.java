@@ -94,7 +94,7 @@ public class StringExpressionMatcher {
 	}
 
 	private Exp parse(String expression) throws ParseException {
-		if (Utils.isEmptyOrBlank3(expression))
+		if (Utils.isEmptyOrBlank(expression))
 			return new Never();
 
 		expression = expression.trim();

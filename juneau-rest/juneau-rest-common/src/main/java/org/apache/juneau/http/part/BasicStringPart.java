@@ -40,7 +40,7 @@ public class BasicStringPart extends BasicPart {
 	 * @return A new {@link BasicStringPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicStringPart of(String name, String value) {
-		if (Utils.isEmpty3(name) || value == null)
+		if (Utils.isEmpty(name) || value == null)
 			return null;
 		return new BasicStringPart(name, value);
 	}
@@ -56,7 +56,7 @@ public class BasicStringPart extends BasicPart {
 	 * @return A new {@link BasicStringPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicStringPart of(String name, Supplier<String> value) {
-		if (Utils.isEmpty3(name) || value == null)
+		if (Utils.isEmpty(name) || value == null)
 			return null;
 		return new BasicStringPart(name, value);
 	}

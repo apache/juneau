@@ -30,8 +30,14 @@ import java.util.stream.*;
 
 public class Utils {
 
-	/** Constructor */
-	protected Utils() {}
+	private static final Map<Class<?>,Function<String,?>> ENV_FUNCTIONS = new IdentityHashMap<>();
+
+	static {
+		ENV_FUNCTIONS.put(Boolean.class, Boolean::valueOf);
+		ENV_FUNCTIONS.put(Charset.class, Charset::forName);
+	}
+
+	private static final ConcurrentHashMap<String,String> PROPERTY_TO_ENV = new ConcurrentHashMap<>();
 
 	/**
 	 * Creates an array of objects.
@@ -55,16 +61,80 @@ public class Utils {
 	}
 
 	/**
-	 * Null-safe {@link String#contains(CharSequence)} operation.
+	 * Shortcut for creating an unmodifiable list out of an array of values.
 	 */
-	public static boolean contains(String s, String...values) {
-		if (s == null || values == null || values.length == 0)
-			return false;
-		for (var v : values) {
-			if (s.contains(v))
-				return true;
+	@SafeVarargs
+	public static <T> List<T> alist(T...values) {  // NOSONAR
+		return Arrays.asList(values);
+	}
+
+	/**
+	 * Converts the specified collection to an array.
+	 *
+	 * @param <E> The element type.
+	 * @param value The collection to convert.
+	 * @param componentType The component type of the array.
+	 * @return A new array.
+	 */
+	public static <E> E[] array(Collection<E> value, Class<E> componentType) {
+		if (value == null)
+			return null;
+		E[] array = (E[])Array.newInstance(componentType, value.size());
+		return value.toArray(array);
+	}
+
+	/**
+	 * Casts an object to a specific type if it's an instance of that type.
+	 *
+	 * @param <T> The type to cast to.
+	 * @param c The type to cast to.
+	 * @param o The object to cast to.
+	 * @return The cast object, or <jk>null</jk> if the object wasn't the specified type.
+	 */
+	public static <T> T cast(Class<T> c, Object o) {
+		return o != null && c.isInstance(o) ? c.cast(o) : null;
+	}
+
+	/**
+	 * If the specified object is an instance of the specified class, casts it to that type.
+	 *
+	 * @param <T> The class to cast to.
+	 * @param o The object to cast.
+	 * @param c The class to cast to.
+	 * @return The cast object, or <jk>null</jk> if the object wasn't an instance of the specified class.
+	 */
+	public static <T> T castOrNull(Object o, Class<T> c) {
+		if (c.isInstance(o))
+			return c.cast(o);
+		return null;
+	}
+
+	/**
+	 * Compares two objects for equality.
+	 *
+	 * <p>
+	 * Nulls are always considered less-than unless both are null.
+	 *
+	 * @param o1 Object 1.
+	 * @param o2 Object 2.
+	 * @return
+	 * 	<c>-1</c>, <c>0</c>, or <c>1</c> if <c>o1</c> is less-than, equal, or greater-than <c>o2</c>.
+	 *	<br><c>0</c> if objects are not of the same type or do not implement the {@link Comparable} interface.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static int compare(Object o1, Object o2) {
+		if (o1 == null) {
+			if (o2 == null)
+				return 0;
+			return -1;
+		} else if (o2 == null) {
+			return 1;
 		}
-		return false;
+
+		if (o1.getClass() == o2.getClass() && o1 instanceof Comparable)
+			return ((Comparable)o1).compareTo(o2);
+
+		return 0;
 	}
 
 	/**
@@ -81,10 +151,50 @@ public class Utils {
 	}
 
 	/**
+	 * Null-safe {@link String#contains(CharSequence)} operation.
+	 */
+	public static boolean contains(String s, String...values) {
+		if (s == null || values == null || values.length == 0)
+			return false;
+		for (var v : values) {
+			if (s.contains(v))
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns an empty {@link Optional}.
+	 *
+	 * @param <T> The component type.
+	 * @return An empty {@link Optional}.
+	 */
+	public static <T> Optional<T> empty() {
+		return Optional.empty();
+	}
+
+	/**
 	 * Returns the specified string, or blank if that string is null.
 	 */
 	public static String emptyIfNull(Object value) {
 		return value == null ? "" : value.toString();
+	}
+
+	/**
+	 * Looks up a system property or environment variable.
+	 *
+	 * <p>
+	 * First looks in system properties.  Then converts the name to env-safe and looks in the system environment.
+	 * Then returns the default if it can't be found.
+	 *
+	 * @param name The property name.
+	 * @return The value if found.
+	 */
+	public static Optional<String> env(String name) {
+		var s = System.getProperty(name);
+		if (s == null)
+			s = System.getenv(envName(name));
+		return opt(s);
 	}
 
 	/**
@@ -103,21 +213,20 @@ public class Utils {
 		return env(name).map(x -> toType(x, def)).orElse(def);
 	}
 
+	private static String envName(String name) {
+		return PROPERTY_TO_ENV.computeIfAbsent(name, x->x.toUpperCase().replace(".", "_"));
+	}
+
 	/**
-	 * Looks up a system property or environment variable.
+	 * Tests two strings for equality, but gracefully handles nulls.
 	 *
-	 * <p>
-	 * First looks in system properties.  Then converts the name to env-safe and looks in the system environment.
-	 * Then returns the default if it can't be found.
-	 *
-	 * @param name The property name.
-	 * @return The value if found.
+	 * @param caseInsensitive Use case-insensitive matching.
+	 * @param s1 String 1.
+	 * @param s2 String 2.
+	 * @return <jk>true</jk> if the strings are equal.
 	 */
-	public static Optional<String> env(String name) {
-		var s = System.getProperty(name);
-		if (s == null)
-			s = System.getenv(envName(name));
-		return opt(s);
+	public static boolean eq(boolean caseInsensitive, String s1, String s2) {
+		return caseInsensitive ? eqic(s1, s2) : eq(s1, s2);
 	}
 
 	/**
@@ -139,10 +248,6 @@ public class Utils {
 			return true;
 		}
 		return Objects.equals(o1, o2);
-	}
-
-	private static boolean isArray(Object o) {
-		return o != null && o.getClass().isArray();
 	}
 
 	/**
@@ -172,12 +277,85 @@ public class Utils {
 	}
 
 	/**
+	 * Tests two strings for case-insensitive equality, but gracefully handles nulls.
+	 *
+	 * @param s1 String 1.
+	 * @param s2 String 2.
+	 * @return <jk>true</jk> if the strings are equal.
+	 */
+	public static boolean eqic(String s1, String s2) {
+		if (s1 == null)
+			return s2 == null;
+		if (s2 == null)
+			return false;
+		return s1.equalsIgnoreCase(s2);
+	}
+
+	/**
 	 * Same as MessageFormat.format().
 	 */
 	public static String f(String pattern, Object...args) {
 		if (args.length == 0)
 			return pattern;
 		return MessageFormat.format(pattern, args);
+	}
+
+	/**
+	 * Returns the first non-null value in the specified array
+	 *
+	 * @param <T> The value types.
+	 * @param t The values to check.
+	 * @return The first non-null value, or <jk>null</jk> if the array is null or empty or contains only <jk>null</jk> values.
+	 */
+	@SafeVarargs
+	public static <T> T firstNonNull(T... t) {
+		if (t != null)
+			for (T tt : t)
+				if (tt != null)
+					return tt;
+		return null;
+	}
+
+	/**
+	 * Simplified formatted string supplier with message arguments.
+	 */
+	public static Supplier<String> fs(String pattern, Object...args) {
+		return ()->StringUtils.format(pattern, args);
+	}
+
+	/**
+	 * Converts a string containing <js>"*"</js> meta characters with a regular expression pattern.
+	 *
+	 * @param s The string to create a pattern from.
+	 * @return A regular expression pattern.
+	 */
+	public static Pattern getMatchPattern3(String s) {
+		return getMatchPattern3(s, 0);
+	}
+
+	/**
+	 * Converts a string containing <js>"*"</js> meta characters with a regular expression pattern.
+	 *
+	 * @param s The string to create a pattern from.
+	 * @param flags Regular expression flags.
+	 * @return A regular expression pattern.
+	 */
+	public static Pattern getMatchPattern3(String s, int flags) {
+		if (s == null)
+			return null;
+		var sb = new StringBuilder();
+		sb.append("\\Q");
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (c == '*')
+				sb.append("\\E").append(".*").append("\\Q");
+			else if (c == '?')
+				sb.append("\\E").append(".").append("\\Q");
+			else
+				sb.append(c);
+		}
+		sb.append("\\E");
+		return Pattern.compile(sb.toString(), flags);
 	}
 
 	/**
@@ -194,6 +372,39 @@ public class Utils {
 		return new IllegalArgumentException(args.length == 0 ? msg : f(msg, args));
 	}
 
+	private static boolean isArray(Object o) {
+		return o != null && o.getClass().isArray();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified object is empty.
+	 *
+	 * <p>
+	 * Return <jk>true</jk> if the value is any of the following:
+	 * <ul>
+	 * 	<li><jk>null</jk>
+	 * 	<li>An empty Collection
+	 * 	<li>An empty Map
+	 * 	<li>An empty array
+	 * 	<li>An empty CharSequence
+	 * 	<li>An empty String when serialized to a string using {@link Object#toString()}.
+	 * </ul>
+	 *
+	 * @param o The object to test.
+	 * @return <jk>true</jk> if the specified object is empty.
+	 */
+	public static boolean isEmpty(Object o) {
+		if (o == null)
+			return true;
+		if (o instanceof Collection<?> o2)
+			return  o2.isEmpty();
+		if (o instanceof Map<?,?> o2)
+			return o2.isEmpty();
+		if (o.getClass().isArray())
+			return (Array.getLength(o) == 0);
+		return o.toString().isEmpty();
+	}
+
 	/**
 	 * @return True if string is null or empty.
 	 */
@@ -202,10 +413,297 @@ public class Utils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or empty or consists of only blanks.
+	 *
+	 * @param s The string to check.
+	 * @return <jk>true</jk> if specified string is <jk>null</jk> or emptyor consists of only blanks.
+	 */
+	public static boolean isEmptyOrBlank(String s) {
+		return s == null || s.trim().isEmpty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified object is not <jk>null</jk> and not empty.
+	 *
+	 * Works on any of the following data types:  String, CharSequence, Collection, Map, array.
+	 * All other types are stringified and then checked as a String.
+	 *
+	 * @param value The value being checked.
+	 * @return <jk>true</jk> if the specified object is not <jk>null</jk> and not empty.
+	 */
+	public static boolean isNotEmpty(Object value) {
+		if (value == null) return false;
+		if (value instanceof CharSequence x) return ! x.isEmpty();
+		if (value instanceof Collection<?> x) return ! x.isEmpty();
+		if (value instanceof Map<?,?> x) return ! x.isEmpty();
+		if (value.getClass().isArray()) return Array.getLength(value) > 0;
+		return Utils.isNotEmpty3(s(value));
+	}
+
+	/**
 	 * @return True if string is not null or empty.
 	 */
 	public static boolean isNotEmpty(String o) {
 		return ! isEmpty(o);
+	}
+	/**
+	 * Returns <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
+	 *
+	 * @param <E> The element type.
+	 * @param value The value being checked.
+	 * @return <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
+	 */
+	public static <E> boolean isNotEmpty2(Collection<E> value) {
+		return value != null && ! value.isEmpty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param value The value being checked.
+	 * @return <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
+	 */
+	public static <K,V> boolean isNotEmpty2(Map<K,V> value) {
+		return value != null && ! value.isEmpty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if specified string is not <jk>null</jk> or empty.
+	 *
+	 * @param s The string to check.
+	 * @return <jk>true</jk> if specified string is not <jk>null</jk> or empty.
+	 */
+	public static boolean isNotEmpty3(String s) {
+		return ! isEmpty(s);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if either of the specified strings are not <jk>null</jk> or empty.
+	 *
+	 * @param s1 The string to check.
+	 * @param s2 The string to check.
+	 * @return <jk>true</jk> if either of the specified strings are not <jk>null</jk> or empty.
+	 */
+	public static boolean isNotEmpty3(String s1, String s2) {
+		return isNotEmpty3(s1) || isNotEmpty3(s2);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified number is not <jk>null</jk> and not <c>-1</c>.
+	 *
+	 * @param <T> The value types.
+	 * @param value The value being checked.
+	 * @return <jk>true</jk> if the specified number is not <jk>null</jk> and not <c>-1</c>.
+	 */
+	public static <T extends Number> boolean isNotMinusOne(T value) {
+		return value != null && value.intValue() != -1;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified object is not <jk>null</jk>.
+	 *
+	 * @param <T> The value type.
+	 * @param value The value being checked.
+	 * @return <jk>true</jk> if the specified object is not <jk>null</jk>.
+	 */
+	public static <T> boolean isNotNull(T value) {
+		return value != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified boolean is not <jk>null</jk> and is <jk>true</jk>.
+	 *
+	 * @param value The value being checked.
+	 * @return <jk>true</jk> if the specified boolean is not <jk>null</jk> and is <jk>true</jk>.
+	 */
+	public static boolean isTrue(Boolean value) {
+		return value != null && value;
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(Collection<?> tokens, char d) {
+		if (tokens == null)
+			return null;
+		var sb = new StringBuilder();
+		for (var iter = tokens.iterator(); iter.hasNext();) {
+			sb.append(iter.next());
+			if (iter.hasNext())
+				sb.append(d);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(Collection<?> tokens, String d) {
+		if (tokens == null)
+			return null;
+		return join(tokens, d, new StringBuilder()).toString();
+	}
+
+	/**
+	 * Joins the specified tokens into a delimited string and writes the output to the specified string builder.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @param sb The string builder to append the response to.
+	 * @return The same string builder passed in as <c>sb</c>.
+	 */
+	public static StringBuilder join(Collection<?> tokens, String d, StringBuilder sb) {
+		if (tokens == null)
+			return sb;
+		for (var iter = tokens.iterator(); iter.hasNext();) {
+			sb.append(iter.next());
+			if (iter.hasNext())
+				sb.append(d);
+		}
+		return sb;
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(int[] tokens, char d) {
+		if (tokens == null)
+			return null;
+		var sb = new StringBuilder();
+		for (var i = 0; i < tokens.length; i++) {
+			if (i > 0)
+				sb.append(d);
+			sb.append(tokens[i]);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(List<?> tokens, char d) {
+		if (tokens == null)
+			return null;
+		var sb = new StringBuilder();
+		for (int i = 0, j = tokens.size(); i < j; i++) {
+			if (i > 0)
+				sb.append(d);
+			sb.append(tokens.get(i));
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(List<?> tokens, String d) {
+		if (tokens == null)
+			return null;
+		return join(tokens, d, new StringBuilder()).toString();
+	}
+
+	/**
+	 * Joins the specified tokens into a delimited string and writes the output to the specified string builder.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @param sb The string builder to append the response to.
+	 * @return The same string builder passed in as <c>sb</c>.
+	 */
+	public static StringBuilder join(List<?> tokens, String d, StringBuilder sb) {
+		if (tokens == null)
+			return sb;
+		for (int i = 0, j = tokens.size(); i < j; i++) {
+			if (i > 0)
+				sb.append(d);
+			sb.append(tokens.get(i));
+		}
+		return sb;
+	}
+
+	/**
+	 * Joins the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(Object[] tokens, char d) {
+		if (tokens == null)
+			return null;
+		if (tokens.length == 1)
+			return emptyIfNull(s(tokens[0]));
+		return join(tokens, d, new StringBuilder()).toString();
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string and writes the output to the specified string builder.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @param sb The string builder to append the response to.
+	 * @return The same string builder passed in as <c>sb</c>.
+	 */
+	public static StringBuilder join(Object[] tokens, char d, StringBuilder sb) {
+		if (tokens == null)
+			return sb;
+		for (var i = 0; i < tokens.length; i++) {
+			if (i > 0)
+				sb.append(d);
+			sb.append(tokens[i]);
+		}
+		return sb;
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param separator The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(Object[] tokens, String separator) {
+		if (tokens == null)
+			return null;
+		var sb = new StringBuilder();
+		for (var i = 0; i < tokens.length; i++) {
+			if (i > 0)
+				sb.append(separator);
+			sb.append(tokens[i]);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Joins tokens with newlines.
+	 *
+	 * @param tokens The tokens to concatenate.
+	 * @return A string with the specified tokens contatenated with newlines.
+	 */
+	public static String joinnl(Object[] tokens) {
+		return join(tokens, '\n');
 	}
 
 	/**
@@ -214,6 +712,17 @@ public class Utils {
 	@SafeVarargs
 	public static <T> List<T> list(T...values) {  // NOSONAR
 		return new ArrayList<>(Arrays.asList(values));
+	}
+
+	/**
+	 * Convenience method for creating an {@link ArrayList} of the specified size.
+	 *
+	 * @param <E> The element type.
+	 * @param size The initial size of the list.
+	 * @return A new modifiable list.
+	 */
+	public static <E> ArrayList<E> listOfSize(int size) {
+		return new ArrayList<>(size);
 	}
 
 	/**
@@ -234,6 +743,37 @@ public class Utils {
 	}
 
 	/**
+	 * Tests two objects for inequality, gracefully handling nulls.
+	 *
+	 * @param <T> Object 1 type.
+	 * @param <U> Object 2 type.
+	 * @param o1 Object 1.
+	 * @param o2 Object 2.
+	 * @param test The test to use for equality.
+	 * @return <jk>false</jk> if both objects are equal based on the test.
+	 */
+	public static <T,U> boolean ne(T o1, U o2, BiPredicate<T,U> test) {
+		if (o1 == null)
+			return o2 != null;
+		if (o2 == null)
+			return true;
+		if (o1 == o2)
+			return false;
+		return ! test.test(o1, o2);
+	}
+
+	/**
+	 * Tests two strings for non-equality ignoring case, but gracefully handles nulls.
+	 *
+	 * @param s1 String 1.
+	 * @param s2 String 2.
+	 * @return <jk>true</jk> if the strings are not equal ignoring case.
+	 */
+	public static boolean neic(String s1, String s2) {
+		return ! eqic(s1, s2);
+	}
+
+	/**
 	 * Null-safe {@link String#contains(CharSequence)} operation.
 	 */
 	public static boolean notContains(String s, char...values) {
@@ -245,6 +785,18 @@ public class Utils {
 	 */
 	public static String nullIfEmpty(String value) {
 		return isEmpty(value) ? null : value;
+	}
+
+	/**
+	 * Returns <jk>null</jk> if the specified string is <jk>null</jk> or empty.
+	 *
+	 * @param s The string to check.
+	 * @return <jk>null</jk> if the specified string is <jk>null</jk> or empty, or the same string if not.
+	 */
+	public static String nullIfEmpty3(String s) {
+		if (s == null || s.isEmpty())
+			return null;
+		return s;
 	}
 
 	/**
@@ -354,588 +906,6 @@ public class Utils {
 	}
 
 	/**
-	 * Splits a comma-delimited list into an array of strings.
-	 */
-	public static String[] splita(String s) {
-		return s == null ? new String[0] : Utils.split3(s);
-	}
-
-	/**
-	 * Converts an array to a stream of objects.
-	 * @param array The array to convert.
-	 * @return A new stream.
-	 */
-	public static Stream<Object> toStream(Object array) {
-		if (array == null || ! array.getClass().isArray()) {
-			throw illegalArg("Not an array: " + array);
-		}
-		var length = Array.getLength(array);
-		return IntStream.range(0, length).mapToObj(i -> Array.get(array, i));
-	}
-
-	/**
-	 * Traverses all elements in the specified object and executes a consumer for it.
-	 *
-	 * @param <T> The element type.
-	 * @param o The object to traverse.
-	 * @param c The consumer of the objects.
-	 */
-	public static <T> void traverse(Object o, Consumer<T> c) {
-		if (o == null)
-			return;
-		if (o instanceof Iterable<?> o2)
-			o2.forEach(x -> traverse(x, c));
-		else if (o instanceof Stream<?> o2)
-			o2.forEach(x -> traverse(x, c));
-		else if (o.getClass().isArray())
-			toStream(o).forEach(x -> traverse(x, c));
-		else
-			c.accept((T)o);
-	}
-
-	/**
-	 * Shortcut for creating an unmodifiable list out of an array of values.
-	 */
-	@SafeVarargs
-	public static <T> List<T> alist(T...values) {  // NOSONAR
-		return Arrays.asList(values);
-	}
-
-	private static final Map<Class<?>,Function<String,?>> ENV_FUNCTIONS = new IdentityHashMap<>();
-	static {
-		ENV_FUNCTIONS.put(Boolean.class, Boolean::valueOf);
-		ENV_FUNCTIONS.put(Charset.class, Charset::forName);
-	}
-
-	private static final ConcurrentHashMap<String,String> PROPERTY_TO_ENV = new ConcurrentHashMap<>();
-
-	private static String envName(String name) {
-		return PROPERTY_TO_ENV.computeIfAbsent(name, x->x.toUpperCase().replace(".", "_"));
-	}
-
-	@SuppressWarnings("rawtypes")
-	private static <T> T toType(String s, T def) {
-		if (s == null || def == null)
-			return null;
-		var c = (Class<T>)def.getClass();
-		if (c == String.class)
-			return (T)s;
-		if (c.isEnum())
-			return (T)Enum.valueOf((Class<? extends Enum>) c, s);
-		var f = (Function<String,T>)ENV_FUNCTIONS.get(c);
-		if (f == null)
-			throw runtimeException("Invalid env type: {0}", c);
-		return f.apply(s);
-	}
-
-	/**
-	 * Simplified formatted string supplier with message arguments.
-	 */
-	public static Supplier<String> fs(String pattern, Object...args) {
-		return ()->StringUtils.format(pattern, args);
-	}
-
-	/**
-	 * Returns an empty {@link Optional}.
-	 *
-	 * @param <T> The component type.
-	 * @return An empty {@link Optional}.
-	 */
-	public static <T> Optional<T> empty() {
-		return Optional.empty();
-	}
-
-	/**
-	 * Returns the first non-null value in the specified array
-	 *
-	 * @param <T> The value types.
-	 * @param t The values to check.
-	 * @return The first non-null value, or <jk>null</jk> if the array is null or empty or contains only <jk>null</jk> values.
-	 */
-	@SafeVarargs
-	public static <T> T firstNonNull(T... t) {
-		if (t != null)
-			for (T tt : t)
-				if (tt != null)
-					return tt;
-		return null;
-	}
-
-	/**
-	 * Casts an object to a specific type if it's an instance of that type.
-	 *
-	 * @param <T> The type to cast to.
-	 * @param c The type to cast to.
-	 * @param o The object to cast to.
-	 * @return The cast object, or <jk>null</jk> if the object wasn't the specified type.
-	 */
-	public static <T> T cast(Class<T> c, Object o) {
-		return o != null && c.isInstance(o) ? c.cast(o) : null;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified object is empty.
-	 *
-	 * <p>
-	 * Return <jk>true</jk> if the value is any of the following:
-	 * <ul>
-	 * 	<li><jk>null</jk>
-	 * 	<li>An empty Collection
-	 * 	<li>An empty Map
-	 * 	<li>An empty array
-	 * 	<li>An empty CharSequence
-	 * 	<li>An empty String when serialized to a string using {@link Object#toString()}.
-	 * </ul>
-	 *
-	 * @param o The object to test.
-	 * @return <jk>true</jk> if the specified object is empty.
-	 */
-	@SuppressWarnings("rawtypes")
-	public static boolean isEmpty(Object o) {
-		if (o == null)
-			return true;
-		if (o instanceof Collection)
-			return ((Collection)o).isEmpty();
-		if (o instanceof Map)
-			return ((Map)o).isEmpty();
-		if (o.getClass().isArray())
-			return (Array.getLength(o) == 0);
-		return o.toString().isEmpty();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified object is not <jk>null</jk>.
-	 *
-	 * @param <T> The value type.
-	 * @param value The value being checked.
-	 * @return <jk>true</jk> if the specified object is not <jk>null</jk>.
-	 */
-	public static <T> boolean isNotNull(T value) {
-		return value != null;
-	}
-
-	/**
-	 * If the specified object is an instance of the specified class, casts it to that type.
-	 *
-	 * @param <T> The class to cast to.
-	 * @param o The object to cast.
-	 * @param c The class to cast to.
-	 * @return The cast object, or <jk>null</jk> if the object wasn't an instance of the specified class.
-	 */
-	public static <T> T castOrNull(Object o, Class<T> c) {
-		if (c.isInstance(o))
-			return c.cast(o);
-		return null;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified boolean is not <jk>null</jk> and is <jk>true</jk>.
-	 *
-	 * @param value The value being checked.
-	 * @return <jk>true</jk> if the specified boolean is not <jk>null</jk> and is <jk>true</jk>.
-	 */
-	public static boolean isTrue(Boolean value) {
-		return value != null && value;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified number is not <jk>null</jk> and not <c>-1</c>.
-	 *
-	 * @param <T> The value types.
-	 * @param value The value being checked.
-	 * @return <jk>true</jk> if the specified number is not <jk>null</jk> and not <c>-1</c>.
-	 */
-	public static <T extends Number> boolean isNotMinusOne(T value) {
-		return value != null && value.intValue() != -1;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified object is not <jk>null</jk> and not empty.
-	 *
-	 * Works on any of the following data types:  String, CharSequence, Collection, Map, array.
-	 * All other types are stringified and then checked as a String.
-	 *
-	 * @param value The value being checked.
-	 * @return <jk>true</jk> if the specified object is not <jk>null</jk> and not empty.
-	 */
-	public static boolean isNotEmpty(Object value) {
-		if (value == null) return false;
-		if (value instanceof CharSequence x) return ! x.isEmpty();
-		if (value instanceof Collection<?> x) return ! x.isEmpty();
-		if (value instanceof Map<?,?> x) return ! x.isEmpty();
-		if (value.getClass().isArray()) return Array.getLength(value) > 0;
-		return Utils.isNotEmpty3(s(value));
-	}
-
-	/**
-	 * Compares two objects for equality.
-	 *
-	 * <p>
-	 * Nulls are always considered less-than unless both are null.
-	 *
-	 * @param o1 Object 1.
-	 * @param o2 Object 2.
-	 * @return
-	 * 	<c>-1</c>, <c>0</c>, or <c>1</c> if <c>o1</c> is less-than, equal, or greater-than <c>o2</c>.
-	 *	<br><c>0</c> if objects are not of the same type or do not implement the {@link Comparable} interface.
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static int compare(Object o1, Object o2) {
-		if (o1 == null) {
-			if (o2 == null)
-				return 0;
-			return -1;
-		} else if (o2 == null) {
-			return 1;
-		}
-
-		if (o1.getClass() == o2.getClass() && o1 instanceof Comparable)
-			return ((Comparable)o1).compareTo(o2);
-
-		return 0;
-	}
-
-	/**
-	 * Tests two objects for inequality, gracefully handling nulls.
-	 *
-	 * @param <T> Object 1 type.
-	 * @param <U> Object 2 type.
-	 * @param o1 Object 1.
-	 * @param o2 Object 2.
-	 * @param test The test to use for equality.
-	 * @return <jk>false</jk> if both objects are equal based on the test.
-	 */
-	public static <T,U> boolean ne(T o1, U o2, BiPredicate<T,U> test) {
-		if (o1 == null)
-			return o2 != null;
-		if (o2 == null)
-			return true;
-		if (o1 == o2)
-			return false;
-		return ! test.test(o1, o2);
-	}
-
-	public static <K,V> Map<K,V> u(Map<? extends K, ? extends V> value) {
-		return value == null ? null : Collections.unmodifiableMap(value);
-	}
-
-	public static <T> List<T> u(List<? extends T> value) {
-		return value == null ? null : Collections.unmodifiableList(value);
-	}
-
-	public static <T> Set<T> u(Set<? extends T> value) {
-		return value == null ? null : Collections.unmodifiableSet(value);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
-	 *
-	 * @param <E> The element type.
-	 * @param value The value being checked.
-	 * @return <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
-	 */
-	public static <E> boolean isNotEmpty2(Collection<E> value) {
-		return value != null && ! value.isEmpty();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
-	 *
-	 * @param <K> The key type.
-	 * @param <V> The value type.
-	 * @param value The value being checked.
-	 * @return <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
-	 */
-	public static <K,V> boolean isNotEmpty2(Map<K,V> value) {
-		return value != null && ! value.isEmpty();
-	}
-
-	/**
-	 * Converts the specified collection to an array.
-	 *
-	 * @param <E> The element type.
-	 * @param value The collection to convert.
-	 * @param componentType The component type of the array.
-	 * @return A new array.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <E> E[] array(Collection<E> value, Class<E> componentType) {
-		if (value == null)
-			return null;
-		E[] array = (E[])Array.newInstance(componentType, value.size());
-		return value.toArray(array);
-	}
-
-	/**
-	 * Convenience method for creating an unmodifiable list.
-	 *
-	 * @param <E> The element type.
-	 * @param values The values to initialize the list with.
-	 * @return A new unmodifiable list, or <jk>null</jk> if the array was <jk>null</jk>.
-	 */
-	@SafeVarargs
-	public static <E> List<E> ulist2(E...values) {
-		if (values == null)
-			return null;
-		return u(alist(values));
-	}
-
-	/**
-	 * Convenience method for creating an unmodifiable {@link LinkedHashSet}.
-	 *
-	 * @param <E> The element type.
-	 * @param values The values to initialize the set with.
-	 * @return A new unmodifiable set.
-	 */
-	@SafeVarargs
-	public static <E> Set<E> uset2(E...values) {
-		return u(set(values));
-	}
-
-	/**
-	 * Convenience method for creating an {@link ArrayList} of the specified size.
-	 *
-	 * @param <E> The element type.
-	 * @param size The initial size of the list.
-	 * @return A new modifiable list.
-	 */
-	public static <E> ArrayList<E> listOfSize(int size) {
-		return new ArrayList<>(size);
-	}
-
-	/**
-	 * Tests two strings for equality, but gracefully handles nulls.
-	 *
-	 * @param caseInsensitive Use case-insensitive matching.
-	 * @param s1 String 1.
-	 * @param s2 String 2.
-	 * @return <jk>true</jk> if the strings are equal.
-	 */
-	public static boolean eq(boolean caseInsensitive, String s1, String s2) {
-		return caseInsensitive ? eqic(s1, s2) : eq(s1, s2);
-	}
-
-	/**
-	 * Tests two strings for case-insensitive equality, but gracefully handles nulls.
-	 *
-	 * @param s1 String 1.
-	 * @param s2 String 2.
-	 * @return <jk>true</jk> if the strings are equal.
-	 */
-	public static boolean eqic(String s1, String s2) {
-		if (s1 == null)
-			return s2 == null;
-		if (s2 == null)
-			return false;
-		return s1.equalsIgnoreCase(s2);
-	}
-
-	/**
-	 * Tests two strings for non-equality ignoring case, but gracefully handles nulls.
-	 *
-	 * @param s1 String 1.
-	 * @param s2 String 2.
-	 * @return <jk>true</jk> if the strings are not equal ignoring case.
-	 */
-	public static boolean neic(String s1, String s2) {
-		return ! eqic(s1, s2);
-	}
-
-	/**
-	 * Join the specified tokens into a delimited string.
-	 *
-	 * @param tokens The tokens to join.
-	 * @param separator The delimiter.
-	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
-	 */
-	public static String join(Object[] tokens, String separator) {
-		if (tokens == null)
-			return null;
-		var sb = new StringBuilder();
-		for (var i = 0; i < tokens.length; i++) {
-			if (i > 0)
-				sb.append(separator);
-			sb.append(tokens[i]);
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Join the specified tokens into a delimited string.
-	 *
-	 * @param tokens The tokens to join.
-	 * @param d The delimiter.
-	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
-	 */
-	public static String join(Collection<?> tokens, String d) {
-		if (tokens == null)
-			return null;
-		return join(tokens, d, new StringBuilder()).toString();
-	}
-
-	/**
-	 * Join the specified tokens into a delimited string.
-	 *
-	 * @param tokens The tokens to join.
-	 * @param d The delimiter.
-	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
-	 */
-	public static String join(List<?> tokens, String d) {
-		if (tokens == null)
-			return null;
-		return join(tokens, d, new StringBuilder()).toString();
-	}
-
-	/**
-	 * Joins the specified tokens into a delimited string and writes the output to the specified string builder.
-	 *
-	 * @param tokens The tokens to join.
-	 * @param d The delimiter.
-	 * @param sb The string builder to append the response to.
-	 * @return The same string builder passed in as <c>sb</c>.
-	 */
-	public static StringBuilder join(Collection<?> tokens, String d, StringBuilder sb) {
-		if (tokens == null)
-			return sb;
-		for (var iter = tokens.iterator(); iter.hasNext();) {
-			sb.append(iter.next());
-			if (iter.hasNext())
-				sb.append(d);
-		}
-		return sb;
-	}
-
-	/**
-	 * Joins the specified tokens into a delimited string and writes the output to the specified string builder.
-	 *
-	 * @param tokens The tokens to join.
-	 * @param d The delimiter.
-	 * @param sb The string builder to append the response to.
-	 * @return The same string builder passed in as <c>sb</c>.
-	 */
-	public static StringBuilder join(List<?> tokens, String d, StringBuilder sb) {
-		if (tokens == null)
-			return sb;
-		for (int i = 0, j = tokens.size(); i < j; i++) {
-			if (i > 0)
-				sb.append(d);
-			sb.append(tokens.get(i));
-		}
-		return sb;
-	}
-
-	/**
-	 * Joins the specified tokens into a delimited string.
-	 *
-	 * @param tokens The tokens to join.
-	 * @param d The delimiter.
-	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
-	 */
-	public static String join(Object[] tokens, char d) {
-		if (tokens == null)
-			return null;
-		if (tokens.length == 1)
-			return emptyIfNull(s(tokens[0]));
-		return join(tokens, d, new StringBuilder()).toString();
-	}
-
-	/**
-	 * Join the specified tokens into a delimited string and writes the output to the specified string builder.
-	 *
-	 * @param tokens The tokens to join.
-	 * @param d The delimiter.
-	 * @param sb The string builder to append the response to.
-	 * @return The same string builder passed in as <c>sb</c>.
-	 */
-	public static StringBuilder join(Object[] tokens, char d, StringBuilder sb) {
-		if (tokens == null)
-			return sb;
-		for (var i = 0; i < tokens.length; i++) {
-			if (i > 0)
-				sb.append(d);
-			sb.append(tokens[i]);
-		}
-		return sb;
-	}
-
-	/**
-	 * Join the specified tokens into a delimited string.
-	 *
-	 * @param tokens The tokens to join.
-	 * @param d The delimiter.
-	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
-	 */
-	public static String join(int[] tokens, char d) {
-		if (tokens == null)
-			return null;
-		var sb = new StringBuilder();
-		for (var i = 0; i < tokens.length; i++) {
-			if (i > 0)
-				sb.append(d);
-			sb.append(tokens[i]);
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Join the specified tokens into a delimited string.
-	 *
-	 * @param tokens The tokens to join.
-	 * @param d The delimiter.
-	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
-	 */
-	public static String join(Collection<?> tokens, char d) {
-		if (tokens == null)
-			return null;
-		var sb = new StringBuilder();
-		for (var iter = tokens.iterator(); iter.hasNext();) {
-			sb.append(iter.next());
-			if (iter.hasNext())
-				sb.append(d);
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Join the specified tokens into a delimited string.
-	 *
-	 * @param tokens The tokens to join.
-	 * @param d The delimiter.
-	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
-	 */
-	public static String join(List<?> tokens, char d) {
-		if (tokens == null)
-			return null;
-		var sb = new StringBuilder();
-		for (int i = 0, j = tokens.size(); i < j; i++) {
-			if (i > 0)
-				sb.append(d);
-			sb.append(tokens.get(i));
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Joins tokens with newlines.
-	 *
-	 * @param tokens The tokens to concatenate.
-	 * @return A string with the specified tokens contatenated with newlines.
-	 */
-	public static String joinnl(Object[] tokens) {
-		return join(tokens, '\n');
-	}
-
-	/**
-	 * Shortcut for calling <code>split(s, <js>','</js>)</code>
-	 *
-	 * @param s The string to split.  Can be <jk>null</jk>.
-	 * @return The tokens, or <jk>null</jk> if the string was null.
-	 */
-	public static String[] split3(String s) {
-		return split3(s, ',');
-	}
-
-	/**
 	 * Shortcut for calling <code>split(s, <js>','</js>)</code>
 	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.
@@ -943,43 +913,6 @@ public class Utils {
 	 */
 	public static List<String> split2(String s) {
 		return split2(s, ',');
-	}
-
-	/**
-	 * Same as {@link #split3(String)} but consumes the tokens instead of creating an array.
-	 *
-	 * @param s The string to split.
-	 * @param consumer The consumer of the tokens.
-	 */
-	public static void split3(String s, Consumer<String> consumer) {
-		split3(s, ',', consumer);
-	}
-
-	/**
-	 * Splits a character-delimited string into a string array.
-	 *
-	 * <p>
-	 * Does not split on escaped-delimiters (e.g. "\,");
-	 * Resulting tokens are trimmed of whitespace.
-	 *
-	 * <p>
-	 * <b>NOTE:</b>  This behavior is different than the Jakarta equivalent.
-	 * split("a,b,c",',') -&gt; {"a","b","c"}
-	 * split("a, b ,c ",',') -&gt; {"a","b","c"}
-	 * split("a,,c",',') -&gt; {"a","","c"}
-	 * split(",,",',') -&gt; {"","",""}
-	 * split("",',') -&gt; {}
-	 * split(null,',') -&gt; null
-	 * split("a,b\,c,d", ',', false) -&gt; {"a","b\,c","d"}
-	 * split("a,b\\,c,d", ',', false) -&gt; {"a","b\","c","d"}
-	 * split("a,b\,c,d", ',', true) -&gt; {"a","b,c","d"}
-	 *
-	 * @param s The string to split.  Can be <jk>null</jk>.
-	 * @param c The character to split on.
-	 * @return The tokens, or <jk>null</jk> if the string was null.
-	 */
-	public static String[] split3(String s, char c) {
-		return split3(s, c, Integer.MAX_VALUE);
 	}
 
 	/**
@@ -1010,6 +943,87 @@ public class Utils {
 	}
 
 	/**
+	 * Same as {@link #split3(String, char)} but limits the number of tokens returned.
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @param limit The maximum number of tokens to return.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static List<String> split2(String s, char c, int limit) {
+
+		var escapeChars = StringUtils.getEscapeSet(c);
+
+		if (s == null)
+			return null;  // NOSONAR - Intentional.
+		if (isEmpty(s))
+			return Collections.emptyList();
+		if (s.indexOf(c) == -1)
+			return Collections.singletonList(s);
+
+		var l = new LinkedList<String>();
+		var sArray = s.toCharArray();
+		var x1 = 0;
+		var escapeCount = 0;
+		limit--;
+		for (var i = 0; i < sArray.length && limit > 0; i++) {
+			if (sArray[i] == '\\')
+				escapeCount++;
+			else if (sArray[i]==c && escapeCount % 2 == 0) {
+				var s2 = new String(sArray, x1, i-x1);
+				var s3 = StringUtils.unEscapeChars(s2, escapeChars);
+				l.add(s3.trim());
+				limit--;
+				x1 = i+1;
+			}
+			if (sArray[i] != '\\')
+				escapeCount = 0;
+		}
+		var s2 = new String(sArray, x1, sArray.length-x1);
+		var s3 = StringUtils.unEscapeChars(s2, escapeChars);
+		l.add(s3.trim());
+
+		return l;
+	}
+
+	/**
+	 * Shortcut for calling <code>split(s, <js>','</js>)</code>
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static String[] split3(String s) {
+		return split3(s, ',');
+	}
+
+	/**
+	 * Splits a character-delimited string into a string array.
+	 *
+	 * <p>
+	 * Does not split on escaped-delimiters (e.g. "\,");
+	 * Resulting tokens are trimmed of whitespace.
+	 *
+	 * <p>
+	 * <b>NOTE:</b>  This behavior is different than the Jakarta equivalent.
+	 * split("a,b,c",',') -&gt; {"a","b","c"}
+	 * split("a, b ,c ",',') -&gt; {"a","b","c"}
+	 * split("a,,c",',') -&gt; {"a","","c"}
+	 * split(",,",',') -&gt; {"","",""}
+	 * split("",',') -&gt; {}
+	 * split(null,',') -&gt; null
+	 * split("a,b\,c,d", ',', false) -&gt; {"a","b\,c","d"}
+	 * split("a,b\\,c,d", ',', false) -&gt; {"a","b\","c","d"}
+	 * split("a,b\,c,d", ',', true) -&gt; {"a","b,c","d"}
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static String[] split3(String s, char c) {
+		return split3(s, c, Integer.MAX_VALUE);
+	}
+
+	/**
 	 * Same as {@link #split3(String,char)} but consumes the tokens instead of creating an array.
 	 *
 	 * @param s The string to split.
@@ -1018,17 +1032,17 @@ public class Utils {
 	 */
 	public static void split3(String s, char c, Consumer<String> consumer) {
 		var escapeChars = StringUtils.getEscapeSet(c);
-	
-		if (Utils.isEmpty3(s))
+
+		if (isEmpty(s))
 			return;
 		if (s.indexOf(c) == -1) {
 			consumer.accept(s);
 			return;
 		}
-	
+
 		var x1 = 0;
 		var escapeCount = 0;
-	
+
 		for (var i = 0; i < s.length(); i++) {
 			if (s.charAt(i) == '\\')
 				escapeCount++;
@@ -1060,47 +1074,13 @@ public class Utils {
 	}
 
 	/**
-	 * Same as {@link #split3(String, char)} but limits the number of tokens returned.
+	 * Same as {@link #split3(String)} but consumes the tokens instead of creating an array.
 	 *
-	 * @param s The string to split.  Can be <jk>null</jk>.
-	 * @param c The character to split on.
-	 * @param limit The maximum number of tokens to return.
-	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 * @param s The string to split.
+	 * @param consumer The consumer of the tokens.
 	 */
-	public static List<String> split2(String s, char c, int limit) {
-	
-		var escapeChars = StringUtils.getEscapeSet(c);
-	
-		if (s == null)
-			return null;  // NOSONAR - Intentional.
-		if (Utils.isEmpty3(s))
-			return Collections.emptyList();
-		if (s.indexOf(c) == -1)
-			return Collections.singletonList(s);
-	
-		var l = new LinkedList<String>();
-		var sArray = s.toCharArray();
-		var x1 = 0;
-		var escapeCount = 0;
-		limit--;
-		for (var i = 0; i < sArray.length && limit > 0; i++) {
-			if (sArray[i] == '\\')
-				escapeCount++;
-			else if (sArray[i]==c && escapeCount % 2 == 0) {
-				var s2 = new String(sArray, x1, i-x1);
-				var s3 = StringUtils.unEscapeChars(s2, escapeChars);
-				l.add(s3.trim());
-				limit--;
-				x1 = i+1;
-			}
-			if (sArray[i] != '\\')
-				escapeCount = 0;
-		}
-		var s2 = new String(sArray, x1, sArray.length-x1);
-		var s3 = StringUtils.unEscapeChars(s2, escapeChars);
-		l.add(s3.trim());
-	
-		return l;
+	public static void split3(String s, Consumer<String> consumer) {
+		split3(s, ',', consumer);
 	}
 
 	/**
@@ -1124,6 +1104,13 @@ public class Utils {
 	}
 
 	/**
+	 * Splits a comma-delimited list into an array of strings.
+	 */
+	public static String[] splita(String s) {
+		return s == null ? new String[0] : Utils.split3(s);
+	}
+
+	/**
 	 * Splits a list of key-value pairs into an ordered map.
 	 *
 	 * <p>
@@ -1138,20 +1125,20 @@ public class Utils {
 	 * @return The parsed map, or null if the string was null.
 	 */
 	public static Map<String,String> splitMap(String s, boolean trim) {
-	
+
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
-		if (Utils.isEmpty3(s))
+		if (isEmpty(s))
 			return Collections.emptyMap();
-	
+
 		var m = new LinkedHashMap<String,String>();
-	
+
 		final int
 			S1 = 1,  // Found start of key, looking for equals.
 			S2 = 2;  // Found equals, looking for delimiter (or end).
-	
+
 		var state = S1;
-	
+
 		var sArray = s.toCharArray();
 		var x1 = 0;
 		var escapeCount = 0;
@@ -1194,31 +1181,47 @@ public class Utils {
 			if (c != '\\')
 				escapeCount = 0;
 		}
-	
+
 		return m;
 	}
 
 	/**
-	 * Splits a space-delimited string with optionally quoted arguments.
+	 * Splits the method arguments in the signature of a method.
 	 *
-	 * <p>
-	 * Examples:
-	 * <ul>
-	 * 	<li><js>"foo"</js> =&gt; <c>["foo"]</c>
-	 * 	<li><js>" foo "</js> =&gt; <c>["foo"]</c>
-	 * 	<li><js>"foo bar baz"</js> =&gt; <c>["foo","bar","baz"]</c>
-	 * 	<li><js>"foo 'bar baz'"</js> =&gt; <c>["foo","bar baz"]</c>
-	 * 	<li><js>"foo \"bar baz\""</js> =&gt; <c>["foo","bar baz"]</c>
-	 * 	<li><js>"foo 'bar\'baz'"</js> =&gt; <c>["foo","bar'baz"]</c>
-	 * </ul>
-	 *
-	 * @param s The input string.
-	 * @return
-	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
-	 * 	<br>An empty string results in an empty array.
+	 * @param s The arguments to split.
+	 * @return The split arguments, or null if the input string is null.
 	 */
-	public static String[] splitQuoted(String s) {
-		return splitQuoted(s, false);
+	public static String[] splitMethodArgs(String s) {
+
+		if (s == null)
+			return null;  // NOSONAR - Intentional.
+		if (isEmpty(s))
+			return new String[0];
+		if (s.indexOf(',') == -1)
+			return new String[]{s};
+
+		var l = new LinkedList<String>();
+		var sArray = s.toCharArray();
+		var x1 = 0;
+		var paramDepth = 0;
+
+		for (var i = 0; i < sArray.length; i++) {
+			var c = s.charAt(i);
+			if (c == '>')
+				paramDepth++;
+			else if (c == '<')
+				paramDepth--;
+			else if (c == ',' && paramDepth == 0) {
+				var s2 = new String(sArray, x1, i-x1);
+				l.add(s2.trim());
+				x1 = i+1;
+			}
+		}
+
+		var s2 = new String(sArray, x1, sArray.length-x1);
+		l.add(s2.trim());
+
+		return l.toArray(new String[l.size()]);
 	}
 
 	/**
@@ -1237,17 +1240,17 @@ public class Utils {
 	 */
 	public static List<String> splitNested(String s) {
 		var escapeChars = StringUtils.getEscapeSet(',');
-	
+
 		if (s == null) return null;  // NOSONAR - Intentional.
-		if (Utils.isEmpty3(s)) return Collections.emptyList();
+		if (isEmpty(s)) return Collections.emptyList();
 		if (s.indexOf(',') == -1) return Collections.singletonList(StringUtils.trim(s));
-	
+
 		var l = new LinkedList<String>();
-	
+
 		var x1 = 0;
 		var inEscape = false;
 		var depthCount = 0;
-	
+
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
 			if (inEscape) {
@@ -1268,7 +1271,7 @@ public class Utils {
 			}
 		}
 		l.add(StringUtils.trim(StringUtils.unEscapeChars(s.substring(x1, s.length()), escapeChars)));
-	
+
 		return l;
 	}
 
@@ -1288,18 +1291,18 @@ public class Utils {
 	 */
 	public static List<String> splitNestedInner(String s) {
 		if (s == null) throw illegalArg("String was null.");
-		if (Utils.isEmpty3(s)) throw illegalArg("String was empty.");
-	
+		if (isEmpty(s)) throw illegalArg("String was empty.");
+
 		final int
 			S1 = 1,  // Looking for '{'
 			S2 = 2;  // Found '{', looking for '}'
-	
+
 		var start = -1;
 		var end = -1;
 		var state = S1;
 		var depth = 0;
 		var inEscape = false;
-	
+
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
 			if (inEscape) {
@@ -1326,10 +1329,33 @@ public class Utils {
 				}
 			}
 		}
-	
+
 		if (start == -1) throw illegalArg("Start character '{' not found in string.", s);
 		if (end == -1) throw illegalArg("End character '}' not found in string.", s);
 		return splitNested(s.substring(start, end));
+	}
+
+	/**
+	 * Splits a space-delimited string with optionally quoted arguments.
+	 *
+	 * <p>
+	 * Examples:
+	 * <ul>
+	 * 	<li><js>"foo"</js> =&gt; <c>["foo"]</c>
+	 * 	<li><js>" foo "</js> =&gt; <c>["foo"]</c>
+	 * 	<li><js>"foo bar baz"</js> =&gt; <c>["foo","bar","baz"]</c>
+	 * 	<li><js>"foo 'bar baz'"</js> =&gt; <c>["foo","bar baz"]</c>
+	 * 	<li><js>"foo \"bar baz\""</js> =&gt; <c>["foo","bar baz"]</c>
+	 * 	<li><js>"foo 'bar\'baz'"</js> =&gt; <c>["foo","bar'baz"]</c>
+	 * </ul>
+	 *
+	 * @param s The input string.
+	 * @return
+	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * 	<br>An empty string results in an empty array.
+	 */
+	public static String[] splitQuoted(String s) {
+		return splitQuoted(s, false);
 	}
 
 	/**
@@ -1342,34 +1368,34 @@ public class Utils {
 	 * 	<br>An empty string results in an empty array.
 	 */
 	public static String[] splitQuoted(String s, boolean keepQuotes) {
-	
+
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
-	
+
 		s = s.trim();
-	
-		if (Utils.isEmpty3(s))
+
+		if (isEmpty(s))
 			return new String[0];
-	
+
 		if (! StringUtils.containsAny(s, ' ', '\t', '\'', '"'))
 			return new String[]{s};
-	
+
 		final int
 			S1 = 1,  // Looking for start of token.
 			S2 = 2,  // Found ', looking for end '
 			S3 = 3,  // Found ", looking for end "
 			S4 = 4;  // Found non-whitespace, looking for end whitespace.
-	
+
 		var state = S1;
-	
+
 		var isInEscape = false;
 		var needsUnescape = false;
 		var mark = 0;
-	
+
 		var l = new ArrayList<String>();
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
-	
+
 			if (state == S1) {
 				if (c == '\'') {
 					state = S2;
@@ -1412,139 +1438,91 @@ public class Utils {
 	}
 
 	/**
-	 * Splits the method arguments in the signature of a method.
-	 *
-	 * @param s The arguments to split.
-	 * @return The split arguments, or null if the input string is null.
+	 * Converts an array to a stream of objects.
+	 * @param array The array to convert.
+	 * @return A new stream.
 	 */
-	public static String[] splitMethodArgs(String s) {
-	
-		if (s == null)
-			return null;  // NOSONAR - Intentional.
-		if (Utils.isEmpty3(s))
-			return new String[0];
-		if (s.indexOf(',') == -1)
-			return new String[]{s};
-	
-		var l = new LinkedList<String>();
-		var sArray = s.toCharArray();
-		var x1 = 0;
-		var paramDepth = 0;
-	
-		for (var i = 0; i < sArray.length; i++) {
-			var c = s.charAt(i);
-			if (c == '>')
-				paramDepth++;
-			else if (c == '<')
-				paramDepth--;
-			else if (c == ',' && paramDepth == 0) {
-				var s2 = new String(sArray, x1, i-x1);
-				l.add(s2.trim());
-				x1 = i+1;
-			}
+	public static Stream<Object> toStream(Object array) {
+		if (array == null || ! array.getClass().isArray()) {
+			throw illegalArg("Not an array: " + array);
 		}
-	
-		var s2 = new String(sArray, x1, sArray.length-x1);
-		l.add(s2.trim());
-	
-		return l.toArray(new String[l.size()]);
+		var length = Array.getLength(array);
+		return IntStream.range(0, length).mapToObj(i -> Array.get(array, i));
 	}
 
-	/**
-	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or empty.
-	 *
-	 * @param s The string to check.
-	 * @return <jk>true</jk> if specified string is <jk>null</jk> or empty.
-	 */
-	public static boolean isEmpty3(String s) {
-		return s == null || s.isEmpty();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if specified charsequence is <jk>null</jk> or empty.
-	 *
-	 * @param s The string to check.
-	 * @return <jk>true</jk> if specified charsequence is <jk>null</jk> or empty.
-	 */
-	public static boolean isEmpty3(CharSequence s) {
-		return s == null || s.isEmpty();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or empty or consists of only blanks.
-	 *
-	 * @param s The string to check.
-	 * @return <jk>true</jk> if specified string is <jk>null</jk> or emptyor consists of only blanks.
-	 */
-	public static boolean isEmptyOrBlank3(String s) {
-		return s == null || s.trim().isEmpty();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if specified string is not <jk>null</jk> or empty.
-	 *
-	 * @param s The string to check.
-	 * @return <jk>true</jk> if specified string is not <jk>null</jk> or empty.
-	 */
-	public static boolean isNotEmpty3(String s) {
-		return ! isEmpty3(s);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if either of the specified strings are not <jk>null</jk> or empty.
-	 *
-	 * @param s1 The string to check.
-	 * @param s2 The string to check.
-	 * @return <jk>true</jk> if either of the specified strings are not <jk>null</jk> or empty.
-	 */
-	public static boolean isNotEmpty3(String s1, String s2) {
-		return isNotEmpty3(s1) || isNotEmpty3(s2);
-	}
-
-	/**
-	 * Returns <jk>null</jk> if the specified string is <jk>null</jk> or empty.
-	 *
-	 * @param s The string to check.
-	 * @return <jk>null</jk> if the specified string is <jk>null</jk> or empty, or the same string if not.
-	 */
-	public static String nullIfEmpty3(String s) {
-		if (s == null || s.isEmpty())
+	@SuppressWarnings("rawtypes")
+	private static <T> T toType(String s, T def) {
+		if (s == null || def == null)
 			return null;
-		return s;
+		var c = (Class<T>)def.getClass();
+		if (c == String.class)
+			return (T)s;
+		if (c.isEnum())
+			return (T)Enum.valueOf((Class<? extends Enum>) c, s);
+		var f = (Function<String,T>)ENV_FUNCTIONS.get(c);
+		if (f == null)
+			throw runtimeException("Invalid env type: {0}", c);
+		return f.apply(s);
 	}
 
 	/**
-	 * Converts a string containing <js>"*"</js> meta characters with a regular expression pattern.
+	 * Traverses all elements in the specified object and executes a consumer for it.
 	 *
-	 * @param s The string to create a pattern from.
-	 * @return A regular expression pattern.
+	 * @param <T> The element type.
+	 * @param o The object to traverse.
+	 * @param c The consumer of the objects.
 	 */
-	public static Pattern getMatchPattern3(String s) {
-		return getMatchPattern3(s, 0);
+	public static <T> void traverse(Object o, Consumer<T> c) {
+		if (o == null)
+			return;
+		if (o instanceof Iterable<?> o2)
+			o2.forEach(x -> traverse(x, c));
+		else if (o instanceof Stream<?> o2)
+			o2.forEach(x -> traverse(x, c));
+		else if (o.getClass().isArray())
+			toStream(o).forEach(x -> traverse(x, c));
+		else
+			c.accept((T)o);
+	}
+
+	public static <T> List<T> u(List<? extends T> value) {
+		return value == null ? null : Collections.unmodifiableList(value);
+	}
+
+	public static <K,V> Map<K,V> u(Map<? extends K, ? extends V> value) {
+		return value == null ? null : Collections.unmodifiableMap(value);
+	}
+
+	public static <T> Set<T> u(Set<? extends T> value) {
+		return value == null ? null : Collections.unmodifiableSet(value);
 	}
 
 	/**
-	 * Converts a string containing <js>"*"</js> meta characters with a regular expression pattern.
+	 * Convenience method for creating an unmodifiable list.
 	 *
-	 * @param s The string to create a pattern from.
-	 * @param flags Regular expression flags.
-	 * @return A regular expression pattern.
+	 * @param <E> The element type.
+	 * @param values The values to initialize the list with.
+	 * @return A new unmodifiable list, or <jk>null</jk> if the array was <jk>null</jk>.
 	 */
-	public static Pattern getMatchPattern3(String s, int flags) {
-		if (s == null)
+	@SafeVarargs
+	public static <E> List<E> ulist2(E...values) {
+		if (values == null)
 			return null;
-		var sb = new StringBuilder();
-		sb.append("\\Q");
-		for (var i = 0; i < s.length(); i++) {
-			var c = s.charAt(i);
-			if (c == '*')
-				sb.append("\\E").append(".*").append("\\Q");
-			else if (c == '?')
-				sb.append("\\E").append(".").append("\\Q");
-			else
-				sb.append(c);
-		}
-		sb.append("\\E");
-		return Pattern.compile(sb.toString(), flags);
+		return u(alist(values));
 	}
+
+	/**
+	 * Convenience method for creating an unmodifiable {@link LinkedHashSet}.
+	 *
+	 * @param <E> The element type.
+	 * @param values The values to initialize the set with.
+	 * @return A new unmodifiable set.
+	 */
+	@SafeVarargs
+	public static <E> Set<E> uset2(E...values) {
+		return u(set(values));
+	}
+
+	/** Constructor */
+	protected Utils() {}
 }

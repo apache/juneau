@@ -143,7 +143,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 */
 	protected Optional<String> string(String in) {
 		in = vr.resolve(in);
-		return Utils.opt(Utils.isEmpty3(in) ? null : in);
+		return Utils.opt(Utils.isEmpty(in) ? null : in);
 	}
 
 	/**

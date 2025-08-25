@@ -40,7 +40,7 @@ public class BasicUriPart extends BasicPart {
 	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicUriPart of(String name, URI value) {
-		if (Utils.isEmpty3(name) || value == null)
+		if (Utils.isEmpty(name) || value == null)
 			return null;
 		return new BasicUriPart(name, value);
 	}
@@ -56,7 +56,7 @@ public class BasicUriPart extends BasicPart {
 	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicUriPart of(String name, Supplier<URI> value) {
-		if (Utils.isEmpty3(name) || value == null)
+		if (Utils.isEmpty(name) || value == null)
 			return null;
 		return new BasicUriPart(name, value);
 	}
@@ -104,7 +104,7 @@ public class BasicUriPart extends BasicPart {
 	 */
 	public BasicUriPart(String name, String value) {
 		super(name, value);
-		this.value = Utils.isEmpty3(value) ? null : URI.create(value);
+		this.value = Utils.isEmpty(value) ? null : URI.create(value);
 		this.supplier = null;
 	}
 

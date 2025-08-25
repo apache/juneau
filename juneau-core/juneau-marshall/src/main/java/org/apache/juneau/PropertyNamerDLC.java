@@ -35,7 +35,7 @@ public final class PropertyNamerDLC implements PropertyNamer {
 
 	@Override /* PropertyNamer */
 	public String getPropertyName(String name) {
-		if (Utils.isEmpty3(name))
+		if (Utils.isEmpty(name))
 			return name;
 
 		int numUCs = 0;

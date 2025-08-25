@@ -169,7 +169,7 @@ class StringVarResolverTest extends SimpleTestBase {
 		String t;
 
 		t = "$E{PATH}";
-		assertFalse(Utils.isEmpty3(VarResolver.DEFAULT.resolve(t)));
+		assertFalse(Utils.isEmpty(VarResolver.DEFAULT.resolve(t)));
 	}
 
 	//====================================================================================================

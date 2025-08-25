@@ -231,7 +231,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		for (NameValuePair p : pairs) {
 			String name = p.getName();
 			Stream<RequestFormParam> l = stream(name);
-			boolean hasAllBlanks = l.allMatch(x -> Utils.isEmpty3(x.getValue()));
+			boolean hasAllBlanks = l.allMatch(x -> Utils.isEmpty(x.getValue()));
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestFormParam(req, name, vs.resolve(p.getValue())));

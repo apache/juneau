@@ -52,7 +52,7 @@ public enum CallLoggingDetail {
 	 * @return The resolved value.
 	 */
 	public static CallLoggingDetail fromString(String s) {
-		if (! Utils.isEmpty3(s)) {
+		if (! Utils.isEmpty(s)) {
 			try {
 				return valueOf(s.toUpperCase());
 			} catch (IllegalArgumentException  e) {}

@@ -107,7 +107,7 @@ public class BasicUriHeader extends BasicHeader {
 	 */
 	public BasicUriHeader(String name, String value) {
 		super(name, value);
-		this.value = Utils.isEmpty3(value) ? null :  URI.create(value);
+		this.value = Utils.isEmpty(value) ? null :  URI.create(value);
 		this.supplier = null;
 	}
 

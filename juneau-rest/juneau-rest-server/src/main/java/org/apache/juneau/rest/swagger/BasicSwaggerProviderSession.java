@@ -823,7 +823,7 @@ public class BasicSwaggerProviderSession {
 				sex = schema.getString("example", schema.getString("example"));
 		}
 
-		if (Utils.isEmpty3(sex))
+		if (Utils.isEmpty(sex))
 			return;
 
 		Object example = null;
@@ -872,7 +872,7 @@ public class BasicSwaggerProviderSession {
 
 		String s = piri.getString("example");
 
-		if (Utils.isEmpty3(s))
+		if (Utils.isEmpty(s))
 			return;
 
 		JsonMap examples = piri.getMap("examples");
@@ -1067,7 +1067,7 @@ public class BasicSwaggerProviderSession {
 		om = newMap(om);
 		for (Header aa : a) {
 			String name = StringUtils.firstNonEmpty(aa.name(), aa.value());
-			if (Utils.isEmpty3(name))
+			if (Utils.isEmpty(name))
 				throw new IllegalArgumentException("@Header used without name or value.");
 			merge(om.getMap(name, true), aa.schema());
 		}

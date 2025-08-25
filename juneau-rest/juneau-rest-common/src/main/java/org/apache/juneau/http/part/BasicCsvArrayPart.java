@@ -43,7 +43,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicCsvArrayPart of(String name, String...value) {
-		if (Utils.isEmpty3(name) || value == null)
+		if (Utils.isEmpty(name) || value == null)
 			return null;
 		return new BasicCsvArrayPart(name, value);
 	}
@@ -59,7 +59,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicCsvArrayPart of(String name, Supplier<String[]> value) {
-		if (Utils.isEmpty3(name) || value == null)
+		if (Utils.isEmpty(name) || value == null)
 			return null;
 		return new BasicCsvArrayPart(name, value);
 	}

@@ -238,7 +238,7 @@ public class BasicFileFinder implements FileFinder {
 	 * @return <jk>true</jk> if the path is invalid.
 	 */
 	protected boolean isInvalidPath(String path) {
-		return Utils.isEmpty3(path) || path.contains("..") || path.contains("%");
+		return Utils.isEmpty(path) || path.contains("..") || path.contains("%");
 	}
 
 	/**

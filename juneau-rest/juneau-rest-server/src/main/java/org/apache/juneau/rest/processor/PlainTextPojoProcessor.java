@@ -35,12 +35,12 @@ public final class PlainTextPojoProcessor implements ResponseProcessor {
 		RestResponse res = opSession.getResponse();
 		String accept = req.getHeaderParam("Accept").orElse("*/*");
 
-		if (res.getSerializerMatch().isPresent() || ! (Utils.isEmpty3(accept) || accept.startsWith("text/plain") || accept.contains("*/*")))
+		if (res.getSerializerMatch().isPresent() || ! (Utils.isEmpty(accept) || accept.startsWith("text/plain") || accept.contains("*/*")))
 			return NEXT;
 
 		Object o = res.getContent(Object.class);
 
-		if (Utils.isEmpty3(res.getContentType()))
+		if (Utils.isEmpty(res.getContentType()))
 			res.setHeader(ContentType.TEXT_PLAIN);
 
 		FinishablePrintWriter w = res.getNegotiatedWriter();

@@ -761,7 +761,7 @@ public final class StringUtils {
 	 * @throws IllegalArgumentException Value was not a valid date.
 	 */
 	public static Date parseIsoDate(String date) throws IllegalArgumentException {
-		if (Utils.isEmpty3(date))
+		if (Utils.isEmpty(date))
 			return null;
 		return parseIsoCalendar(date).getTime();  // NOSONAR - NPE not possible.
 	}
@@ -778,7 +778,7 @@ public final class StringUtils {
 	 * @throws IllegalArgumentException Value was not a valid date.
 	 */
 	public static Calendar parseIsoCalendar(String date) throws IllegalArgumentException {
-		if (Utils.isEmpty3(date))
+		if (Utils.isEmpty(date))
 			return null;
 		date = date.trim().replace(' ', 'T');  // Convert to 'standard' ISO8601
 		if (date.indexOf(',') != -1)  // Trim milliseconds
@@ -1380,7 +1380,7 @@ public final class StringUtils {
 	 */
 	public static boolean isAbsoluteUri(String s) {  // NOSONAR - False positive.
 
-		if (Utils.isEmpty3(s))
+		if (Utils.isEmpty(s))
 			return false;
 
 		// Use a state machine for maximum performance.
@@ -1437,7 +1437,7 @@ public final class StringUtils {
 	 */
 	public static boolean isUri(String s) {  // NOSONAR - False positive.
 
-		if (Utils.isEmpty3(s))
+		if (Utils.isEmpty(s))
 			return false;
 
 		// Use a state machine for maximum performance.
@@ -1647,7 +1647,7 @@ public final class StringUtils {
 	}
 
 	private static int multiplier(String s) {
-		char c = Utils.isEmpty3(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
+		char c = Utils.isEmpty(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
 		if (c == 'G') return 1024*1024*1024;
 		if (c == 'M') return 1024*1024;
 		if (c == 'K') return 1024;
@@ -1687,7 +1687,7 @@ public final class StringUtils {
 	}
 
 	private static long multiplier2(String s) {
-		char c = Utils.isEmpty3(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
+		char c = Utils.isEmpty(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
 		if (c == 'P') return 1024*1024*1024*1024*1024l;
 		if (c == 'T') return 1024*1024*1024*1024l;
 		if (c == 'G') return 1024*1024*1024l;
@@ -1913,7 +1913,7 @@ public final class StringUtils {
 	 */
 	public static long getDuration(String s) {
 		s = trim(s);
-		if (Utils.isEmpty3(s))
+		if (Utils.isEmpty(s))
 			return -1;
 		int i;
 		for (i = 0; i < s.length(); i++) {
