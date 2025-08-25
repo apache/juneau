@@ -118,9 +118,29 @@ public class Utils {
 		return opt(s);
 	}
 
-	/** Equals */
-	public static <T> boolean eq(T s1, T s2) {
-		return Objects.equals(s1, s2);
+	/**
+	 * Tests two objects for equality, gracefully handling nulls and arrays.
+	 *
+	 * @param <T> The value types.
+	 * @param o1 Object 1.
+	 * @param o2 Object 2.
+	 * @return <jk>true</jk> if both objects are equal based on the {@link Object#equals(Object)} method.
+	 */
+	public static <T> boolean eq(T o1, T o2) {
+		if (isArray(o1) && isArray(o2)) {
+			int l1 = Array.getLength(o1), l2 = Array.getLength(o2);
+			if (l1 != l2)
+				return false;
+			for (int i = 0; i < l1; i++)
+				if (! eq(Array.get(o1, i), Array.get(o2, i)))
+					return false;
+			return true;
+		}
+		return Objects.equals(o1, o2);
+	}
+
+	private static boolean isArray(Object o) {
+		return o != null && o.getClass().isArray();
 	}
 
 	/**
@@ -562,10 +582,10 @@ public class Utils {
 		} else if (o2 == null) {
 			return 1;
 		}
-	
+
 		if (o1.getClass() == o2.getClass() && o1 instanceof Comparable)
 			return ((Comparable)o1).compareTo(o2);
-	
+
 		return 0;
 	}
 

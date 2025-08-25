@@ -39,16 +39,7 @@ public class ObjectUtils {
 	 * @return <jk>true</jk> if both objects are equal based on the {@link Object#equals(Object)} method.
 	 */
 	public static <T> boolean eq(T o1, T o2) {
-		if (isArray(o1) && isArray(o2)) {
-			int l1 = Array.getLength(o1), l2 = Array.getLength(o2);
-			if (l1 != l2)
-				return false;
-			for (int i = 0; i < l1; i++)
-				if (! eq(Array.get(o1, i), Array.get(o2, i)))
-					return false;
-			return true;
-		}
-		return Objects.equals(o1, o2);
+		return Utils.eq(o1, o2);
 	}
 
 	/**
