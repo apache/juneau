@@ -18,6 +18,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -26,7 +27,7 @@ import org.apache.juneau.reflect.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public class Utils2 {
+public class Utils2 extends Utils {
 
 	/**
 	 * If the specified object is a {@link Supplier} or {@link Value}, returns the inner value, otherwise the same value.
