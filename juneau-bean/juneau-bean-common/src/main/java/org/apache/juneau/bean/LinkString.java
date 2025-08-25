@@ -14,7 +14,6 @@ package org.apache.juneau.bean;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.eq;
 
 import java.text.*;
 

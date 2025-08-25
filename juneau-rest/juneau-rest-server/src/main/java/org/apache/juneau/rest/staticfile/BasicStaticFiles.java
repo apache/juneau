@@ -137,7 +137,7 @@ public class BasicStaticFiles implements StaticFiles {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return super.equals(o) && o instanceof BasicStaticFiles && Utils.eq(this, (BasicStaticFiles)o, (x,y)->eq(x.headers, y.headers));
+		return super.equals(o) && o instanceof BasicStaticFiles && Utils.eq(this, (BasicStaticFiles)o, (x,y)->Utils.eq(x.headers, y.headers));
 	}
 
 	@Override /* FileFinder */
