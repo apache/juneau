@@ -453,7 +453,7 @@ public final class BeanFilter {
 		public Builder properties(String...value) {
 			this.properties = set();
 			for (String v : value)
-				Utils.split3(v, x -> properties.add(x));
+				Utils.split(v, x -> properties.add(x));
 			return this;
 		}
 
@@ -497,7 +497,7 @@ public final class BeanFilter {
 		public Builder excludeProperties(String...value) {
 			this.excludeProperties = set();
 			for (String v : value)
-				Utils.split3(v, x -> excludeProperties.add(x));
+				Utils.split(v, x -> excludeProperties.add(x));
 			return this;
 		}
 
@@ -543,7 +543,7 @@ public final class BeanFilter {
 		public Builder readOnlyProperties(String...value) {
 			this.readOnlyProperties = set();
 			for (String v : value)
-				Utils.split3(v, x -> readOnlyProperties.add(x));
+				Utils.split(v, x -> readOnlyProperties.add(x));
 			return this;
 		}
 
@@ -589,7 +589,7 @@ public final class BeanFilter {
 		public Builder writeOnlyProperties(String...value) {
 			this.writeOnlyProperties = set();
 			for (String v : value)
-				Utils.split3(v, x -> writeOnlyProperties.add(x));
+				Utils.split(v, x -> writeOnlyProperties.add(x));
 			return this;
 		}
 

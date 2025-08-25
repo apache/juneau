@@ -977,7 +977,7 @@ public class Utils {
 	 * @param c The character to split on.
 	 * @param consumer The consumer of the tokens.
 	 */
-	public static void split3(String s, char c, Consumer<String> consumer) {
+	public static void split(String s, char c, Consumer<String> consumer) {
 		var escapeChars = StringUtils.getEscapeSet(c);
 
 		if (isEmpty(s))
@@ -1026,8 +1026,8 @@ public class Utils {
 	 * @param s The string to split.
 	 * @param consumer The consumer of the tokens.
 	 */
-	public static void split3(String s, Consumer<String> consumer) {
-		split3(s, ',', consumer);
+	public static void split(String s, Consumer<String> consumer) {
+		split(s, ',', consumer);
 	}
 
 	/**

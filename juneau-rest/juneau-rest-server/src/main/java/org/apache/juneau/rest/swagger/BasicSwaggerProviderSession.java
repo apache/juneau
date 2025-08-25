@@ -1128,7 +1128,7 @@ public class BasicSwaggerProviderSession {
 			return null;
 		Set<String> set = set();
 		for (String s : ss)
-			Utils.split3(s, x -> set.add(x));
+			Utils.split(s, x -> set.add(x));
 		return set.isEmpty() ? null : set;
 	}
 

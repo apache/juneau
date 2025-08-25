@@ -426,7 +426,7 @@ class StringUtilsTest extends SimpleTestBase {
 
 	private List<String> split2test(String s) {
 		List<String> l = TestUtils.list();
-		Utils.split3(s, l::add);
+		Utils.split(s, l::add);
 		return l;
 	}
 
