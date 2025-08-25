@@ -15,8 +15,6 @@ package org.apache.juneau.transforms;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.apache.juneau.AssertionHelpers.*;
-
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -89,11 +87,11 @@ public class StringSwapTester<T> {
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
-			assertTrue(e.getMessage().contains(exceptionMsg), ss("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
+			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
 		} catch (Exception e) {
 			if (exceptionMsg == null)
 				throw new AssertionError("Test [" + label + " swap] failed with exception: " + e.getLocalizedMessage(), e);
-			assertTrue(e.getMessage().contains(exceptionMsg), ss("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
+			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
 		}
 	}
 
@@ -111,11 +109,11 @@ public class StringSwapTester<T> {
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
-			assertTrue(e.getMessage().contains(exceptionMsg), ss("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
+			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
 		} catch (Exception e) {
 			if (exceptionMsg == null)
 				throw new AssertionError("Test [" + label + " unswap] failed with exception: " + e.getLocalizedMessage(), e);
-			assertTrue(e.getMessage().contains(exceptionMsg), ss("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
+			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
 		}
 	}
 

@@ -17,7 +17,6 @@ import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.ne;
 import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.common.internal.Utils.cdl;
 import static org.apache.juneau.common.internal.Utils.eq;
 import static org.apache.juneau.common.internal.Utils.ne;
 import static org.junit.jupiter.api.Assertions.*;
@@ -82,7 +81,7 @@ public class AssertionHelpers {
 	 */
 	public static void assertTypes(Class<?> c, Object...value) {
 		for (int i = 0; i < value.length; i++)
-			assertTrue(c.isInstance(value[i]), ss("Incorrect type at index [{0}].", i));
+			assertTrue(c.isInstance(value[i]), fs("Incorrect type at index [{0}].", i));
 	}
 
 	/**
@@ -111,13 +110,13 @@ public class AssertionHelpers {
 	 */
 	public static void assertContains(String expected, Object actual) {
 		var a2 = r(actual);
-		assertTrue(a2.contains(expected), ss("String did not contain expected substring.  expected={0}, actual={1}", expected, a2));
+		assertTrue(a2.contains(expected), fs("String did not contain expected substring.  expected={0}, actual={1}", expected, a2));
 	}
 
 	public static void assertContainsAll(String expected, Object actual) {
 		var a2 = r(actual);
 		for (var e : StringUtils.split(expected))
-			assertTrue(a2.contains(e), ss("String did not contain expected substring.  expected={0}, actual={1}", e, a2));
+			assertTrue(a2.contains(e), fs("String did not contain expected substring.  expected={0}, actual={1}", e, a2));
 	}
 
 	public static void assertEmpty(Optional<?> o) {
@@ -135,18 +134,18 @@ public class AssertionHelpers {
 		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
 			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : StringUtils.split(s(expected[0]));
 		if (Array.getLength(array) != expected.length)
-			fail(ss("Wrong array length.  expected={0}, actual={1}", expected.length, Array.getLength(array)));
+			fail(fs("Wrong array length.  expected={0}, actual={1}", expected.length, Array.getLength(array)));
 		for (var i = 0; i < expected.length; i++) {
 			var x = Array.get(array, i);
 			if (expected[i] instanceof String e) {
 				if (ne(r(x), e))
-					fail(ss("Element at index {0} did not match.  expected={1}, actual={2}", i, e, r(x)));
+					fail(fs("Element at index {0} did not match.  expected={1}, actual={2}", i, e, r(x)));
 			} else if (expected[i] instanceof Predicate e) {
 				if (! e.test(x))
-					fail(ss("Element at index {0} did pass predicate.  actual={1}", i, r(x)));
+					fail(fs("Element at index {0} did pass predicate.  actual={1}", i, r(x)));
 			} else {
 				if (ne(expected[i], x))
-					fail(ss("Element at index {0} did not match.  expected={1}, actual={2}", i, r(expected[i]), r(x)));
+					fail(fs("Element at index {0} did not match.  expected={1}, actual={2}", i, r(expected[i]), r(x)));
 			}
 		}
 	}
@@ -158,18 +157,18 @@ public class AssertionHelpers {
 		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
 			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : StringUtils.split(s(expected[0]));
 		if (list.size() != expected.length)
-			fail(ss("Wrong list length.  expected={0}, actual={1}", expected.length, list.size()));
+			fail(fs("Wrong list length.  expected={0}, actual={1}", expected.length, list.size()));
 		for (var i = 0; i < expected.length; i++) {
 			var x = list.get(i);
 			if (expected[i] instanceof String e) {
 				if (ne(r(x), e))
-					fail(ss("Element at index {0} did not match.  expected={1}, actual={2}", i, e, r(x)));
+					fail(fs("Element at index {0} did not match.  expected={1}, actual={2}", i, e, r(x)));
 			} else if (expected[i] instanceof Predicate e) {
 				if (! e.test(x))
-					fail(ss("Element at index {0} did pass predicate.  actual={1}", i, r(x)));
+					fail(fs("Element at index {0} did pass predicate.  actual={1}", i, r(x)));
 			} else {
 				if (ne(expected[i], x))
-					fail(ss("Element at index {0} did not match.  expected={1}, actual={2}", i, r(expected[i]), r(x)));
+					fail(fs("Element at index {0} did not match.  expected={1}, actual={2}", i, r(expected[i]), r(x)));
 			}
 		}
 	}
@@ -180,22 +179,22 @@ public class AssertionHelpers {
 	public static void assertStream(Stream<?> stream, Object...expected) {
 		var list = stream.toList();
 		if (list.size() != expected.length)
-			fail(ss("Wrong list length.  expected={0}, actual={1}", expected.length, list.size()));
+			fail(fs("Wrong list length.  expected={0}, actual={1}", expected.length, list.size()));
 		for (var i = 0; i < expected.length; i++)
 			if (ne(list.get(i), expected[i]))
-				fail(ss("Element at index {0} did not match.  expected={1}, actual={2}", i, expected[i], r(list.get(i))));
+				fail(fs("Element at index {0} did not match.  expected={1}, actual={2}", i, expected[i], r(list.get(i))));
 	}
 
 	public static <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, String expectedSubstring, org.junit.jupiter.api.function.Executable executable) {
 		T exception = Assertions.assertThrows(expectedType, executable);
 		var messages = getMessages(exception);
-		assertTrue(messages.contains(expectedSubstring), ss("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
+		assertTrue(messages.contains(expectedSubstring), fs("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
 		return exception;
 	}
 
 	public static <T extends Throwable> T assertThrowable(Class<? extends Throwable> expectedType, String expectedSubstring, T t) {
 		var messages = AssertionHelpers.getMessages(t);
-		assertTrue(messages.contains(expectedSubstring), ss("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
+		assertTrue(messages.contains(expectedSubstring), fs("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
 		return t;
 	}
 
@@ -277,7 +276,7 @@ public class AssertionHelpers {
 	 */
 	public static void assertMap(Map<?,?> o, String fields, String value) {
 		if (o == null) throw new NullPointerException("Map was null");
-		assertEquals(value, cdl(fields).stream().map(x -> getReadableEntry(o, x)).collect(joining(",")));
+		assertEquals(value, Utils.split(fields).stream().map(x -> getReadableEntry(o, x)).collect(joining(",")));
 	}
 
 	/**
@@ -302,14 +301,14 @@ public class AssertionHelpers {
 	public static void assertNotEqualsAny(Object o, Object...values) {
 		for (var i = 0; i < values.length; i++) {
 			if (eq(o, values[i]))
-				fail(ss("Element at index {0} unexpectedly matched.  expected={1}, actual={2}", i, values[i], s(o)));
+				fail(fs("Element at index {0} unexpectedly matched.  expected={1}, actual={2}", i, values[i], s(o)));
 		}
 	}
 
 	public static void assertEqualsAll(Object...values) {
 		for (var i = 1; i < values.length; i++) {
 			if (ne(values[0], values[i]))
-				fail(ss("Elements at index {0} and {1} did not match.", 0, i));
+				fail(fs("Elements at index {0} and {1} did not match.", 0, i));
 		}
 	}
 
@@ -360,13 +359,6 @@ public class AssertionHelpers {
 	private static boolean isGetter(Method m, String n) {
 		var mn = m.getName();
 		return ((("get"+n).equals(mn) || ("is"+n).equals(mn)) && m.getParameterCount() == 0);
-	}
-
-	/**
-	 * Simplified string supplier with message arguments.
-	 */
-	public static Supplier<String> ss(String pattern, Object...args) {
-		return ()->StringUtils.format(pattern, args);
 	}
 
 	public static String json(Object o) {

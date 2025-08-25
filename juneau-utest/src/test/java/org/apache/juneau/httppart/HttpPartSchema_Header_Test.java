@@ -836,7 +836,8 @@ class HttpPartSchema_Header_Test extends SimpleTestBase {
 	@Test void d01a_uniqueItems_arrays() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Header.class, D01.class).build();
 
-		String[] good = split("a,b"), bad = split("a,a");
+		var good = split("a,b");
+		var bad = split("a,a");
 
 		s.getItems().validateOutput(good, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(good, BeanContext.DEFAULT);

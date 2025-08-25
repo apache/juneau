@@ -15,7 +15,6 @@ package org.apache.juneau.xml;
 import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
 class XmlParserTest extends SimpleTestBase {

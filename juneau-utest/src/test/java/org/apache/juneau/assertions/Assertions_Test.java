@@ -175,7 +175,7 @@ public class Assertions_Test {
 
 	@Test
 	public void a24_assertOptional() {
-		assertOptional(optional(1)).isNotNull();
+		assertOptional(Optional.of(1)).isNotNull();
 	}
 
 	@Test

@@ -6592,7 +6592,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(session.getBeanStore(), session.getResource());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING, unwrap(e), ()->Utils.format("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), ()->Utils.f("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
 			}
 		}
 	}
@@ -6658,7 +6658,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(beanStore, getResource());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING, unwrap(e), ()->Utils.format("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), ()->Utils.f("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
 			}
 		}
 
@@ -6724,11 +6724,11 @@ public class RestContext extends Context {
 	}
 
 	static ServletException servletException(String msg, Object...args) {
-		return new ServletException(Utils.format(msg, args));
+		return new ServletException(Utils.f(msg, args));
 	}
 
 	static ServletException servletException(Throwable t, String msg, Object...args) {
-		return new ServletException(Utils.format(msg, args), t);
+		return new ServletException(Utils.f(msg, args), t);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -13,9 +13,8 @@
 package org.apache.juneau.transforms;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.apache.juneau.AssertionHelpers.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -77,38 +76,38 @@ public class RoundTripObjectSwapTester<T,S> {
 		try {
 			var o = objectSupplier.get();
 			var s = swap.swap(beanSession, o);
-			if (!Objects.equals(expected, s)) {
+			if (ne(expected, s)) {
 				fail("Test [" + label + " swap] failed. Expected=[" + expected + "], Actual=[" + s + "]");
 			}
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
-			assertTrue(e.getMessage().contains(exceptionMsg), ss("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
+			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
 		} catch (Exception e) {
 			if (exceptionMsg == null)
 				throw new AssertionError("Test [" + label + " swap] failed with exception: " + e.getLocalizedMessage(), e);
-			assertTrue(e.getMessage().contains(exceptionMsg), ss("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
+			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
 		}
 	}
 
 	public void testUnswap() throws Exception {
 		try {
-			T o = objectSupplier.get();
-			S s = swap.swap(beanSession, o);
-			T o2 = swap.unswap(beanSession, s, beanSession.getClassMetaForObject(o));
-			S s2 = swap.swap(beanSession, o2);
-			if (!Objects.equals(s, s2)) {
+			var o = objectSupplier.get();
+			var s = swap.swap(beanSession, o);
+			var o2 = swap.unswap(beanSession, s, beanSession.getClassMetaForObject(o));
+			var s2 = swap.swap(beanSession, o2);
+			if (ne(s, s2)) {
 				System.err.println("s=["+s+"], o=["+o+"], o.type=["+o.getClass().getName()+"], o2=["+o2+"], o2.type=["+o2.getClass().getName()+"]");  // NOT DEBUG
 				fail("Test [" + label + " unswap] failed. Expected=[" + s + "], Actual=[" + s2 + "]");
 			}
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
-			assertTrue(e.getMessage().contains(exceptionMsg), ss("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
+			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
 		} catch (Exception e) {
 			if (exceptionMsg == null)
 				throw new AssertionError("Test [" + label + " unswap] failed with exception: " + e.getLocalizedMessage(), e);
-			assertTrue(e.getMessage().contains(exceptionMsg), ss("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
+			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
 		}
 	}
 

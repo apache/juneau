@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -41,7 +42,7 @@ public abstract class SimpleTestBase {
 	}
 
 	protected static void assertLines(String expected, Object value) {
-		assertEquals(expected, Utils.readable(value).replaceAll("\\r?\\n", "|"));
+		assertEquals(expected, r(value).replaceAll("\\r?\\n", "|"));
 	}
 
 	protected static <T> void assertTests(T value, AssertionPredicate<T>...tests) {
@@ -210,7 +211,7 @@ public abstract class SimpleTestBase {
 	 */
 	protected static void assertStringEmpty(Object s) {
 		assertNotNull(s);
-		assertTrue(Utils.readable(s).isEmpty());
+		assertTrue(r(s).isEmpty());
 	}
 
 	/**
@@ -285,7 +286,7 @@ public abstract class SimpleTestBase {
 	}
 
 	protected static void assertMatches(Object o, String pattern) throws AssertionError {
-		var text = Utils.readable(o);
+		var text = r(o);
 		assertTrue(StringUtils.getMatchPattern(pattern).matcher(text).matches(), ss("Text did not match pattern.\ntext={0}", text));
 	}
 
@@ -313,7 +314,7 @@ public abstract class SimpleTestBase {
 	 * Simplified string supplier with message arguments.
 	 */
 	public static Supplier<String> ss(String pattern, Object...args) {
-		return AssertionHelpers.ss(pattern, args);
+		return Utils.fs(pattern, args);
 	}
 
 	public static String json(Object o) {
@@ -321,7 +322,7 @@ public abstract class SimpleTestBase {
 	}
 
 	public static String s(Object o) {
-		return StringUtils.stringify(o);
+		return Utils.s(o);
 	}
 
 	@Deprecated

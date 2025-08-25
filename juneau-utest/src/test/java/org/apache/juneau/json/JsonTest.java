@@ -28,7 +28,7 @@ class JsonTest  extends SimpleTestBase{
 	//====================================================================================================
 	@Test void testBasic() throws Exception {
 		var m = new LinkedHashMap<String,Object>();
-		var l = new LinkedList<Object>();
+		var l = new LinkedList<>();
 
 		var s1 = JsonSerializer.create().json5().keepNullProperties().build();
 		var s2 = JsonSerializer.create().simpleAttrs().keepNullProperties().build();

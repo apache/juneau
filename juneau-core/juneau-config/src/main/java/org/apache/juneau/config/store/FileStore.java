@@ -387,7 +387,7 @@ public class FileStore extends ConfigStore {
 		try {
 			dir = new File(directory).getCanonicalFile();
 			dir.mkdirs();
-			exts = Utils.split(extensions);
+			exts = Utils.split(extensions).toArray(String[]::new);
 			watcher = enableWatcher ? new WatcherThread(dir, watcherSensitivity) : null;
 			if (watcher != null)
 				watcher.start();

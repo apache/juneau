@@ -126,7 +126,7 @@ class BeanConfig_Test extends SimpleTestBase {
 
 		@Override /* Object */
 		public String toString() {
-			return format("Person(name: {0}, age: {1})", name, age);
+			return f("Person(name: {0}, age: {1})", name, age);
 		}
 	}
 
@@ -163,7 +163,7 @@ class BeanConfig_Test extends SimpleTestBase {
 
 		@Override /* Object */
 		public String toString() {
-			return format("Address(street: {0}, city: {1}, state: {2}, zip: {3})", street, city, state, zip);
+			return f("Address(street: {0}, city: {1}, state: {2}, zip: {3})", street, city, state, zip);
 		}
 	}
 
@@ -325,7 +325,7 @@ class BeanConfig_Test extends SimpleTestBase {
 
 		@Override /* Object */
 		public String toString() {
-			return format("toString():name={0},age={1}", name, age);
+			return f("toString():name={0},age={1}", name, age);
 		}
 	}
 
@@ -356,7 +356,7 @@ class BeanConfig_Test extends SimpleTestBase {
 
 		@Override /* Object */
 		public String toString() {
-			return format("toString():name={0},age={1}", name, age);
+			return f("toString():name={0},age={1}", name, age);
 		}
 	}
 
