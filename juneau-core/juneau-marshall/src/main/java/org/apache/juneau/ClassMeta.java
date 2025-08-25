@@ -337,7 +337,7 @@ public final class ClassMeta<T> implements Type {
 			dictionaryName = null;
 		Throwable initException = null;
 		BeanMeta beanMeta = null;
-		List<ObjectSwap> swaps = list();
+		List<ObjectSwap> swaps = list2();
 		BuilderSwap builderSwap;
 		InvocationHandler invocationHandler = null;
 		BeanRegistry beanRegistry = null;
@@ -2164,7 +2164,7 @@ public final class ClassMeta<T> implements Type {
 	private <A extends Annotation> A[] annotationArray(Class<A> type) {
 		A[] array = (A[])annotationArrayMap.get(type);
 		if (array == null && beanContext != null) {
-			List<A> l = list();
+			List<A> l = list2();
 			info.forEachAnnotation(beanContext, type, x-> true, x -> l.add(x));
 			array = (A[])Array.newInstance(type, l.size());
 			for (int i = 0; i < l.size(); i++)

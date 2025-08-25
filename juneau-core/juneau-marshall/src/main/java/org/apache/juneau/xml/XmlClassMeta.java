@@ -41,8 +41,8 @@ public class XmlClassMeta extends ExtendedClassMeta {
 	 */
 	public XmlClassMeta(ClassMeta<?> cm, XmlMetaProvider mp) {
 		super(cm);
-		List<Xml> xmls = list();
-		List<XmlSchema> schemas = list();
+		List<Xml> xmls = list2();
+		List<XmlSchema> schemas = list2();
 		if (cm != null) {
 			cm.forEachAnnotation(Xml.class, x -> true, x -> xmls.add(x));
 			cm.forEachAnnotation(XmlSchema.class, x -> true, x -> schemas.add(x));

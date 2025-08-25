@@ -83,7 +83,7 @@ public enum TypeCategory {
 	public static TypeCategory[] parseArray(String s) {
 		if (s == null || s.isEmpty())
 			return new TypeCategory[0];
-		List<TypeCategory> list = list();
+		List<TypeCategory> list = list2();
 		split3(s, x -> list.add(valueOf(x.toUpperCase())));
 		return list.toArray(new TypeCategory[list.size()]);
 	}

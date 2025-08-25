@@ -258,7 +258,7 @@ public class DirectoryResource extends BasicRestServlet {
 
 		@Html(format=HtmlFormat.HTML_CDC)
 		public List<Action> getActions() throws Exception {
-			List<Action> l = list();
+			List<Action> l = list2();
 			if (allowViews && f.canRead() && ! f.isDirectory()) {
 				l.add(new Action("view", uri + "?method=VIEW"));
 				l.add(new Action("download", uri + "?method=DOWNLOAD"));

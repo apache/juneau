@@ -62,7 +62,7 @@ public class RestConverterList {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(RestConverterList.class, beanStore);
-			this.entries = list();
+			this.entries = list2();
 		}
 
 		@Override /* BeanBuilder */

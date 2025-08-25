@@ -24,7 +24,7 @@ import java.util.function.*;
 
 import com.hp.hpl.jena.rdf.model.*;
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.StringUtils;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
@@ -534,7 +534,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 
 	private RDFList serializeToList(Collection c, ClassMeta<?> type) throws SerializeException {
 		ClassMeta<?> elementType = type.getElementType();
-		List<RDFNode> l = list(c.size());
+		List<RDFNode> l = Utils.listOfSize(c.size());
 		c.forEach(x -> l.add(serializeAnything(x, false, elementType, null, null, null)));
 		return model.createList(l.iterator());
 	}

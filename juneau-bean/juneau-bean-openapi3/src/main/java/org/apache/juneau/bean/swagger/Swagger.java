@@ -175,7 +175,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setConsumes(Collection<MediaType> value) {
-		consumes = toSet(value);
+		consumes = setFrom(value);
 		return this;
 	}
 
@@ -456,7 +456,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setProduces(Collection<MediaType> value) {
-		produces = toSet(value);
+		produces = setFrom(value);
 		return this;
 	}
 
@@ -566,7 +566,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setSchemes(Collection<String> value) {
-		schemes = toSet(value);
+		schemes = setFrom(value);
 		return this;
 	}
 
@@ -754,7 +754,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setTags(Collection<Tag> value) {
-		tags = toSet(value);
+		tags = setFrom(value);
 		return this;
 	}
 

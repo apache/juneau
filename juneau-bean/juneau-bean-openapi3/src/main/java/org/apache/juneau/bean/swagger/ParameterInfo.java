@@ -410,7 +410,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ParameterInfo setEnum(Collection<Object> value) {
-		_enum = toSet(value);
+		_enum = setFrom(value);
 		return this;
 	}
 

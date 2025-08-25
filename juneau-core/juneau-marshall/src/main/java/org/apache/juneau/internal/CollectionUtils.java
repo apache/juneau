@@ -38,7 +38,7 @@ public final class CollectionUtils {
 	 * @param val The value to copy from.
 	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
 	 */
-	public static <E> Set<E> toSet(Collection<E> val) {
+	public static <E> Set<E> setFrom(Collection<E> val) {
 		return val == null ? null : new LinkedHashSet<>(val);
 	}
 
@@ -156,7 +156,7 @@ public final class CollectionUtils {
 	 * @return A new modifiable list.
 	 */
 	@SafeVarargs
-	public static <E> List<E> list(E...values) {
+	public static <E> List<E> list2(E...values) {
 		ArrayList<E> l = new ArrayList<>(values.length);
 		for (E v : values)
 			l.add(v);
@@ -174,17 +174,6 @@ public final class CollectionUtils {
 	@SafeVarargs
 	public static <E> List<E> listOf(Class<E> elementType, E...values) {
 		return list(values);
-	}
-
-	/**
-	 * Convenience method for creating an {@link ArrayList} of the specified size.
-	 *
-	 * @param <E> The element type.
-	 * @param size The initial size of the list.
-	 * @return A new modifiable list.
-	 */
-	public static <E> ArrayList<E> list(int size) {
-		return new ArrayList<>(size);
 	}
 
 	/**
@@ -269,32 +258,6 @@ public final class CollectionUtils {
 	@SafeVarargs
 	public static <E> LinkedHashSet<E> setOf(Class<E> elementType, E...values) {
 		return set(values);
-	}
-
-	/**
-	 * Convenience method for creating an unmodifiable {@link LinkedHashSet}.
-	 *
-	 * @param <E> The element type.
-	 * @param values The values to initialize the set with.
-	 * @return A new unmodifiable set.
-	 */
-	@SafeVarargs
-	public static <E> Set<E> uset(E...values) {
-		return u(set(values));
-	}
-
-	/**
-	 * Convenience method for creating an unmodifiable list.
-	 *
-	 * @param <E> The element type.
-	 * @param values The values to initialize the list with.
-	 * @return A new unmodifiable list, or <jk>null</jk> if the array was <jk>null</jk>.
-	 */
-	@SafeVarargs
-	public static <E> List<E> ulist(E...values) {
-		if (values == null)
-			return null;
-		return u(alist(values));
 	}
 
 	/**
@@ -553,22 +516,6 @@ public final class CollectionUtils {
 	 */
 	public static <K,V> Map<K,V> synced(Map<K,V> value) {
 		return value == null ? null: Collections.synchronizedMap(value);
-	}
-
-	/**
-	 * Converts the specified collection to an array.
-	 *
-	 * @param <E> The element type.
-	 * @param value The collection to convert.
-	 * @param componentType The component type of the array.
-	 * @return A new array.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <E> E[] array(Collection<E> value, Class<E> componentType) {
-		if (value == null)
-			return null;
-		E[] array = (E[])Array.newInstance(componentType, value.size());
-		return value.toArray(array);
 	}
 
 	/**

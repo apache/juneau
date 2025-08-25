@@ -63,7 +63,7 @@ public class ResponseProcessorList {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(ResponseProcessorList.class, beanStore);
-			this.entries = list();
+			this.entries = list2();
 		}
 
 		@Override /* BeanBuilder */

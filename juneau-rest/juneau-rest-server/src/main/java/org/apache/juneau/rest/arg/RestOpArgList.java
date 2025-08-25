@@ -63,7 +63,7 @@ public class RestOpArgList {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(RestOpArgList.class, beanStore);
-			entries = list();
+			entries = list2();
 		}
 
 		@Override /* BeanBuilder */

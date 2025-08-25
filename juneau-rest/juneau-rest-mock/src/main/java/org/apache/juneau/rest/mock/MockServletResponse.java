@@ -20,6 +20,7 @@ import java.util.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
 
@@ -263,7 +264,7 @@ public class MockServletResponse implements HttpServletResponse {
 	@Override /* HttpServletResponse */
 	public Collection<String> getHeaders(String name) {
 		String[] s = headerMap.get(name);
-		return s == null ? Collections.emptyList() : ulist(s);
+		return s == null ? Collections.emptyList() : Utils.ulist2(s);
 	}
 
 	@Override /* HttpServletResponse */

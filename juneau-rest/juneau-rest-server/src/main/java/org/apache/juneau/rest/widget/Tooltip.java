@@ -19,6 +19,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.html5.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Simple template for adding tooltips to HTML5 bean constructs, typically in menu item widgets.
@@ -47,7 +48,7 @@ public class Tooltip {
 	 */
 	public Tooltip(String display, Object... content) {
 		this.display = new HtmlText(display);
-		this.content = ulist(content);
+		this.content = Utils.ulist2(content);
 	}
 
 	/**

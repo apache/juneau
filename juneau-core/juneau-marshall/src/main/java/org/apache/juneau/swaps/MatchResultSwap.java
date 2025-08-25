@@ -18,6 +18,7 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.swap.*;
 
 /**
@@ -37,7 +38,7 @@ public class MatchResultSwap extends ObjectSwap<MatchResult,List<String>> {
 	 */
 	@Override /* ObjectSwap */
 	public List<String> swap(BeanSession session, MatchResult o) {
-		List<String> l = list(o.groupCount());
+		List<String> l = Utils.listOfSize(o.groupCount());
 		for (int i = 0; i <= o.groupCount(); i++)
 			l.add(o.group(i));
 		return l;

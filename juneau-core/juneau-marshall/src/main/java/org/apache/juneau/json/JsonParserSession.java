@@ -360,7 +360,7 @@ public final class JsonParserSession extends ReaderParserSession {
 				parseIntoMap2(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else {
-				ArrayList l = (ArrayList)parseIntoCollection2(r, list(), sType, pMeta);
+				ArrayList l = (ArrayList)parseIntoCollection2(r, list2(), sType, pMeta);
 				o = toArray(sType, l);
 			}
 		} else if (c == '{') {
@@ -847,7 +847,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	 */
 	private void skipWrapperAttrStart(ParserReader r, String wrapperAttr) throws IOException, ParseException {
 
-		final int 
+		final int
 			S0=0, // Looking for outer '{'
 			S1=1, // Looking for attrName start.
 			S3=3, // Found attrName end, looking for :.

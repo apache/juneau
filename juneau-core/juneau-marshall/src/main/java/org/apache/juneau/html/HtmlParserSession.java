@@ -397,7 +397,7 @@ public final class HtmlParserSession extends XmlParserSession {
 					o = parseTableIntoCollection(r, (Collection)(sType.canCreateNewInstance(outer)
 						? sType.newInstance(outer) : new JsonList(this)), sType, pMeta);
 				else if (sType.isArray() || sType.isArgs()) {
-					ArrayList l = (ArrayList)parseTableIntoCollection(r, list(), sType, pMeta);
+					ArrayList l = (ArrayList)parseTableIntoCollection(r, list2(), sType, pMeta);
 					o = toArray(sType, l);
 				}
 				else
@@ -420,7 +420,7 @@ public final class HtmlParserSession extends XmlParserSession {
 				o = parseIntoCollection(r, (Collection)(sType.canCreateNewInstance(outer)
 					? sType.newInstance(outer) : new JsonList(this)), sType, pMeta);
 			else if (sType.isArray() || sType.isArgs())
-				o = toArray(sType, parseIntoCollection(r, list(), sType, pMeta));
+				o = toArray(sType, parseIntoCollection(r, list2(), sType, pMeta));
 			else
 				isValid = false;
 			skipTag(r, xUL);
@@ -554,7 +554,7 @@ public final class HtmlParserSession extends XmlParserSession {
 			ClassMeta<E> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 
 		HtmlTag tag = nextTag(r, TR);
-		List<String> keys = list();
+		List<String> keys = list2();
 		while (true) {
 			tag = nextTag(r, TH, xTR);
 			if (tag == xTR)

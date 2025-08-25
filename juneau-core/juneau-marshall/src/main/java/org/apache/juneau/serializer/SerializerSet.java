@@ -147,7 +147,7 @@ public final class SerializerSet {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(SerializerSet.class, beanStore);
-			this.entries = list();
+			this.entries = list2();
 		}
 
 		/**
@@ -157,7 +157,7 @@ public final class SerializerSet {
 		 */
 		protected Builder(SerializerSet copyFrom) {
 			super(copyFrom.getClass());
-			this.entries = list((Object[])copyFrom.entries);
+			this.entries = list2((Object[])copyFrom.entries);
 		}
 
 		/**
@@ -171,7 +171,7 @@ public final class SerializerSet {
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
 			bcBuilder = copyFrom.bcBuilder == null ? null : copyFrom.bcBuilder.copy();
-			entries = list();
+			entries = list2();
 			copyFrom.entries.stream().map(this::copyBuilder).forEach(x -> entries.add(x));
 		}
 
@@ -256,7 +256,7 @@ public final class SerializerSet {
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Serializer}.
 		 */
 		public Builder add(Class<?>...values) {
-			List<Object> l = list();
+			List<Object> l = list2();
 			for (Class<?> e : values) {
 				if (Serializer.class.isAssignableFrom(e)) {
 					l.add(createBuilder(e));
@@ -293,7 +293,7 @@ public final class SerializerSet {
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Serializer} or named <js>"Inherit"</js>.
 		 */
 		public Builder set(Class<?>...values) {
-			List<Object> l = list();
+			List<Object> l = list2();
 			for (Class<?> e : values) {
 				if (e.getSimpleName().equals("Inherit")) {
 					l.addAll(entries);
@@ -496,11 +496,11 @@ public final class SerializerSet {
 	protected SerializerSet(Builder builder) {
 
 		this.entries = builder.entries.stream().map(this::build).toArray(Serializer[]::new);
-		this.entriesList = ulist(entries);
+		this.entriesList = Utils.ulist2(entries);
 
-		List<MediaRange> lmtr = list();
+		List<MediaRange> lmtr = list2();
 		Set<MediaType> lmt = set();
-		List<Serializer> l = list();
+		List<Serializer> l = list2();
 		for (Serializer e : entries) {
 			e.getMediaTypeRanges().forEachRange(x -> {
 				lmtr.add(x);
@@ -510,9 +510,9 @@ public final class SerializerSet {
 		}
 
 		this.mediaRanges = lmtr.toArray(new MediaRange[lmtr.size()]);
-		this.mediaRangesList = ulist(mediaRanges);
+		this.mediaRangesList = Utils.ulist2(mediaRanges);
 		this.mediaTypes = lmt.toArray(new MediaType[lmt.size()]);
-		this.mediaTypesList = ulist(mediaTypes);
+		this.mediaTypesList = Utils.ulist2(mediaTypes);
 		this.mediaTypeRangeSerializers = l.toArray(new Serializer[l.size()]);
 	}
 

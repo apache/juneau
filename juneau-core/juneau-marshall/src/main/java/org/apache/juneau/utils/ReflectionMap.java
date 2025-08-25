@@ -161,10 +161,10 @@ public class ReflectionMap<V> {
 		 * Constructor.
 		 */
 		protected Builder() {
-			classEntries = list();
-			methodEntries = list();
-			fieldEntries = list();
-			constructorEntries = list();
+			classEntries = list2();
+			methodEntries = list2();
+			fieldEntries = list2();
+			constructorEntries = list2();
 		}
 
 		/**
@@ -363,7 +363,7 @@ public class ReflectionMap<V> {
 
 	private static <V> List<V> lazyAdd(List<V> list, V v) {
 		if (list == null)
-			list = list();
+			list = list2();
 		list.add(v);
 		return list;
 	}
@@ -803,7 +803,7 @@ public class ReflectionMap<V> {
 
 	private static <V> List<V> lazyAdd(V[] array, List<V> list, V v) {
 		if (list == null)
-			list = list(array);
+			list = list2(array);
 		list.add(v);
 		return list;
 	}

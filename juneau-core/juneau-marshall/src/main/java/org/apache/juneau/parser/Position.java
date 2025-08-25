@@ -56,7 +56,7 @@ public class Position {
 
 	@Override /* Object */
 	public String toString() {
-		List<String> l = list();
+		List<String> l = list2();
 		if (line != -1)
 			l.add("line " + line);
 		if (column != -1)

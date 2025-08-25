@@ -63,7 +63,7 @@ public class RestMatcherList {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(RestMatcherList.class, beanStore);
-			entries = list();
+			entries = list2();
 		}
 
 		@Override /* BeanBuilder */

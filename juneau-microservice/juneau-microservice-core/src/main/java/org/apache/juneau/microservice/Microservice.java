@@ -148,7 +148,7 @@ public class Microservice implements ConfigEventListener {
 		ConfigStore configStore;
 		Config.Builder configBuilder = Config.create();
 		Boolean consoleEnabled;
-		List<ConsoleCommand> consoleCommands = list();
+		List<ConsoleCommand> consoleCommands = list2();
 		VarResolver.Builder varResolver = VarResolver.create().defaultVars().vars(ConfigVar.class);
 		Scanner consoleReader;
 		PrintWriter consoleWriter;
@@ -1074,7 +1074,7 @@ public class Microservice implements ConfigEventListener {
 	 */
 	public String executeCommand(String command, String input, Object...args) {
 		StringWriter sw = new StringWriter();
-		List<String> l = list();
+		List<String> l = list2();
 		l.add(command);
 		for (Object a : args)
 			l.add(Utils.s(a));

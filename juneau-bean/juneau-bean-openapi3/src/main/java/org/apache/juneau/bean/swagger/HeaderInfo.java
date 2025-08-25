@@ -262,7 +262,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public HeaderInfo setEnum(Collection<Object> value) {
-		_enum = toSet(value);
+		_enum = setFrom(value);
 		return this;
 	}
 

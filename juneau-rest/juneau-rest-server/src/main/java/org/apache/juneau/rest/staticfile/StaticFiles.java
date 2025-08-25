@@ -73,7 +73,7 @@ public interface StaticFiles extends FileFinder {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(BasicStaticFiles.class, beanStore);
-			headers = list();
+			headers = list2();
 			fileFinder = FileFinder.create(beanStore);
 			mimeTypes = new ExtendedMimetypesFileTypeMap();
 		}

@@ -98,7 +98,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 			@Path("javaInterface") @Schema(description="Java interface name") String javaInterface
 		) throws Exception {
 
-		List<LinkString> l = list();
+		List<LinkString> l = list2();
 		for (String s : getMethods(javaInterface).keySet())
 			l.add(new LinkString(s, "servlet:/{0}/{1}", urlEncode(javaInterface), urlEncode(s)));
 		return l;

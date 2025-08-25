@@ -217,7 +217,7 @@ public final class RestUtils {
 		if (value.length == 0)
 			return fromParent;
 
-		List<String> l = list();
+		List<String> l = list2();
 		for (String v : value) {
 			if (! "INHERIT".equals(v))
 				l.add(v);
@@ -233,7 +233,7 @@ public final class RestUtils {
 		if (links.length == 0)
 			return parentLinks;
 
-		List<String> list = list();
+		List<String> list = list2();
 		for (String l : links) {
 			if ("INHERIT".equals(l))
 				addAll(list, parentLinks);
@@ -248,14 +248,14 @@ public final class RestUtils {
 				list.add(l);
 			}
 		}
-		return array(list, String.class);
+		return Utils.array(list, String.class);
 	}
 
 	static String[] resolveContent(String[] content, String[] parentContent) {
 		if (content.length == 0)
 			return parentContent;
 
-		List<String> list = list();
+		List<String> list = list2();
 		for (String l : content) {
 			if ("INHERIT".equals(l)) {
 				addAll(list, parentContent);
@@ -265,7 +265,7 @@ public final class RestUtils {
 				list.add(l);
 			}
 		}
-		return array(list, String.class);
+		return Utils.array(list, String.class);
 	}
 
 	/**

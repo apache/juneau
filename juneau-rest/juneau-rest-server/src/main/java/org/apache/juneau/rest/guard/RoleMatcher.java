@@ -100,8 +100,8 @@ public class RoleMatcher {
 
 		expression = expression.trim();
 
-		List<Exp> ors = list();
-		List<Exp> ands = list();
+		List<Exp> ors = list2();
+		List<Exp> ands = list2();
 
 		StateMachineState state = S01;
 		int i = 0, mark = -1;

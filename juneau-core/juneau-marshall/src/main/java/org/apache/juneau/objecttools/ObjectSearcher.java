@@ -181,7 +181,7 @@ public final class ObjectSearcher implements ObjectTool<SearchArgs> {
 
 		if (type.isCollection()) {
 			Collection<?> c = (Collection)input;
-			l = list(c.size());
+			l = Utils.listOfSize(c.size());
 			List<Object> l2 = l;
 			c.forEach(x -> {
 				if (rowMatcher.matches(x))
@@ -190,7 +190,7 @@ public final class ObjectSearcher implements ObjectTool<SearchArgs> {
 
 		} else /* isArray */ {
 			int size = Array.getLength(input);
-			l = list(size);
+			l = Utils.listOfSize(size);
 			for (int i = 0; i < size; i++) {
 				Object o = Array.get(input, i);
 				if (rowMatcher.matches(o))

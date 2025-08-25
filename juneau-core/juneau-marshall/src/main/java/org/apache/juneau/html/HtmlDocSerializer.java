@@ -24,6 +24,7 @@ import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
@@ -275,7 +276,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> aside() {
 			if (aside == null)
-				aside = list();
+				aside = list2();
 			return aside;
 		}
 
@@ -353,7 +354,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> footer() {
 			if (footer == null)
-				footer = list();
+				footer = list2();
 			return footer;
 		}
 
@@ -394,7 +395,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> head() {
 			if (head == null)
-				head = list();
+				head = list2();
 			return head;
 		}
 
@@ -436,7 +437,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> header() {
 			if (header == null)
-				header = list();
+				header = list2();
 			return header;
 		}
 
@@ -481,7 +482,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> nav() {
 			if (nav == null)
-				nav = list();
+				nav = list2();
 			return nav;
 		}
 
@@ -543,7 +544,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> navlinks() {
 			if (navlinks == null)
-				navlinks = list();
+				navlinks = list2();
 			return navlinks;
 		}
 
@@ -658,7 +659,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> script() {
 			if (script == null)
-				script = list();
+				script = list2();
 			return script;
 		}
 
@@ -696,7 +697,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> style() {
 			if (style == null)
-				style = list();
+				style = list2();
 			return style;
 		}
 
@@ -727,7 +728,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> stylesheet() {
 			if (stylesheet == null)
-				stylesheet = list();
+				stylesheet = list2();
 			return stylesheet;
 		}
 
@@ -826,7 +827,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<Class<? extends HtmlWidget>> widgets() {
 			if (widgets == null)
-				widgets = list();
+				widgets = list2();
 			return widgets;
 		}
 
@@ -1611,11 +1612,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		}
 
 		private static <T> List<T> copy(T[] s) {
-			return s.length == 0 ? null : list(s);
+			return s.length == 0 ? null : list2(s);
 		}
 
 		private List<String> merge(List<String> old, String[] newValues) {
-			List<String> x = list(newValues.length);
+			List<String> x = Utils.listOfSize(newValues.length);
 			for (String s : newValues) {
 				if ("NONE".equals(s)) {
 					if (old != null)
@@ -1631,7 +1632,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		}
 
 		private List<String> mergeNavLinks(List<String> old, String[] newValues) {
-			List<String> x = list(newValues.length);
+			List<String> x = Utils.listOfSize(newValues.length);
 			for (String s : newValues) {
 				if ("NONE".equals(s)) {
 					if (old != null)
@@ -1699,7 +1700,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		templateBean = newInstance(template);
 		widgetMap = new HtmlWidgetMap();
 		widgets.stream().map(this::newInstance).forEach(x -> widgetMap.append(x));
-		widgetArray = array(widgetMap.values(), HtmlWidget.class);
+		widgetArray = Utils.array(widgetMap.values(), HtmlWidget.class);
 	}
 
 	@Override /* Context */

@@ -200,7 +200,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setAllOf(Collection<Object> value) {
-		allOf = toSet(value);
+		allOf = setFrom(value);
 		return this;
 	}
 
@@ -322,7 +322,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setEnum(Collection<Object> value) {
-		_enum = toSet(value);
+		_enum = setFrom(value);
 		return this;
 	}
 
@@ -850,7 +850,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setRequiredProperties(Collection<String> value) {
-		requiredProperties = toSet(value);
+		requiredProperties = setFrom(value);
 		return this;
 	}
 

@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
@@ -82,8 +83,8 @@ import org.apache.juneau.serializer.*;
 public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 
 	private static final Set<String>
-		SWAP_METHOD_NAMES = uset("swap", "toObject"),
-		UNSWAP_METHOD_NAMES = uset("unswap", "create", "fromObject", "of");
+		SWAP_METHOD_NAMES = Utils.uset2("swap", "toObject"),
+		UNSWAP_METHOD_NAMES = Utils.uset2("unswap", "create", "fromObject", "of");
 
 	/**
 	 * Inspects the specified class and returns a swap of this type if possible.

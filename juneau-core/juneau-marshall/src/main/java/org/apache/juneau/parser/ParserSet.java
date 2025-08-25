@@ -149,7 +149,7 @@ public final class ParserSet {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(ParserSet.class, beanStore);
-			this.entries = list();
+			this.entries = list2();
 		}
 
 		/**
@@ -159,7 +159,7 @@ public final class ParserSet {
 		 */
 		protected Builder(ParserSet copyFrom) {
 			super(copyFrom.getClass(), BeanStore.INSTANCE);
-			this.entries = list((Object[])copyFrom.entries);
+			this.entries = list2((Object[])copyFrom.entries);
 		}
 
 		/**
@@ -173,7 +173,7 @@ public final class ParserSet {
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
 			bcBuilder = copyFrom.bcBuilder == null ? null : copyFrom.bcBuilder.copy();
-			entries = list();
+			entries = list2();
 			copyFrom.entries.stream().map(this::copyBuilder).forEach(x -> entries.add(x));
 		}
 
@@ -258,7 +258,7 @@ public final class ParserSet {
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Parser}.
 		 */
 		public Builder add(Class<?>...values) {
-			List<Object> l = list();
+			List<Object> l = list2();
 			for (Class<?> v : values)
 				if (v.getSimpleName().equals("NoInherit"))
 					clear();
@@ -298,7 +298,7 @@ public final class ParserSet {
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Parser} or named <js>"Inherit"</js>.
 		 */
 		public Builder set(Class<?>...values) {
-			List<Object> l = list();
+			List<Object> l = list2();
 			for (Class<?> v : values) {
 				if (v.getSimpleName().equals("Inherit")) {
 					l.addAll(entries);
@@ -494,8 +494,8 @@ public final class ParserSet {
 
 		this.entries = builder.entries.stream().map(this::build).toArray(Parser[]::new);
 
-		List<MediaType> lmt = list();
-		List<Parser> l = list();
+		List<MediaType> lmt = list2();
+		List<Parser> l = list2();
 		for (Parser e : entries) {
 			e.getMediaTypes().forEach(x -> {
 				lmt.add(x);
@@ -503,8 +503,8 @@ public final class ParserSet {
 			});
 		}
 
-		this.mediaTypes = array(lmt, MediaType.class);
-		this.mediaTypeParsers = array(l, Parser.class);
+		this.mediaTypes = Utils.array(lmt, MediaType.class);
+		this.mediaTypeParsers = Utils.array(l, Parser.class);
 	}
 
 	private Parser build(Object o) {
@@ -537,7 +537,7 @@ public final class ParserSet {
 			return pm;
 
 		MediaType ct = MediaType.of(contentTypeHeader);
-		int match = ct.match(ulist(mediaTypes));
+		int match = ct.match(Utils.ulist2(mediaTypes));
 
 		if (match >= 0) {
 			pm = new ParserMatch(mediaTypes[match], mediaTypeParsers[match]);
@@ -588,7 +588,7 @@ public final class ParserSet {
 	 * @return An unmodifiable list of media types.
 	 */
 	public List<MediaType> getSupportedMediaTypes() {
-		return ulist(mediaTypes);
+		return Utils.ulist2(mediaTypes);
 	}
 
 	/**
@@ -597,7 +597,7 @@ public final class ParserSet {
 	 * @return An unmodifiable list of parsers in this group.
 	 */
 	public List<Parser> getParsers() {
-		return ulist(entries);
+		return Utils.ulist2(entries);
 	}
 
 	/**

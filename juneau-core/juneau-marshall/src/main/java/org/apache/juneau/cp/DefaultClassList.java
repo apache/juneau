@@ -64,7 +64,7 @@ public class DefaultClassList {
 	 * Constructor.
 	 */
 	protected DefaultClassList() {
-		entries = list();
+		entries = list2();
 	}
 
 	/**

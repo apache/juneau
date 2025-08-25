@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -100,7 +101,7 @@ public class EntityTags {
 	 * @return The entity tags in this object as a list.  Can be <jk>null</jk>.
 	 */
 	public List<EntityTag> toList() {
-		return ulist(value);
+		return Utils.ulist2(value);
 	}
 
 	/**

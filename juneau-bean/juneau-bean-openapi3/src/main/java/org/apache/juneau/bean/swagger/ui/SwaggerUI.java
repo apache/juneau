@@ -15,7 +15,6 @@ package org.apache.juneau.bean.swagger.ui;
 import static java.util.Collections.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.list;
 
 import java.util.*;
 
@@ -389,7 +388,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			return null;  // NOSONAR - Intentionally returning null.
 		if (s.indexOf(',') == -1)
 			return singletonList(s);
-		var l = list();
+		var l = list2();
 		var sa = s.split("\n");
 		for (var i = 0; i < sa.length; i++) {
 			if (i > 0)

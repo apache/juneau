@@ -298,7 +298,7 @@ public final class ClassInfo {
 	 * 	<br>Results are in the same order as {@link Class#getInterfaces()}.
 	 */
 	public List<ClassInfo> getDeclaredInterfaces() {
-		return ulist(_getDeclaredInterfaces());
+		return Utils.ulist2(_getDeclaredInterfaces());
 	}
 
 	/**
@@ -312,7 +312,7 @@ public final class ClassInfo {
 	 * 	<br>Results are in child-to-parent order.
 	 */
 	public List<ClassInfo> getInterfaces() {
-		return ulist(_getInterfaces());
+		return Utils.ulist2(_getInterfaces());
 	}
 
 	/**
@@ -328,7 +328,7 @@ public final class ClassInfo {
 	 * 	<br>Results are in child-to-parent order.
 	 */
 	public List<ClassInfo> getParents() {
-		return ulist(_getParents());
+		return Utils.ulist2(_getParents());
 	}
 
 	/**
@@ -341,7 +341,7 @@ public final class ClassInfo {
 	 * 	<br>Results are ordered child-to-parent order with classes listed before interfaces.
 	 */
 	public List<ClassInfo> getAllParents() {
-		return ulist(_getAllParents());
+		return Utils.ulist2(_getAllParents());
 	}
 
 	/**
@@ -395,7 +395,7 @@ public final class ClassInfo {
 	ClassInfo[] _getParents() {
 		if (parents == null) {
 			synchronized(this) {
-				List<ClassInfo> l = list();
+				List<ClassInfo> l = list2();
 				Class<?> pc = c;
 				while (pc != null && pc != Object.class) {
 					l.add(of(pc));
@@ -438,7 +438,7 @@ public final class ClassInfo {
 	 * 	<br>Results are ordered alphabetically.
 	 */
 	public List<MethodInfo> getPublicMethods() {
-		return ulist(_getPublicMethods());
+		return Utils.ulist2(_getPublicMethods());
 	}
 
 	/**
@@ -476,7 +476,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<MethodInfo> getDeclaredMethods() {
-		return ulist(_getDeclaredMethods());
+		return Utils.ulist2(_getDeclaredMethods());
 	}
 
 	/**
@@ -514,7 +514,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<MethodInfo> getMethods() {
-		return ulist(_getAllMethods());
+		return Utils.ulist2(_getAllMethods());
 	}
 
 	/**
@@ -552,7 +552,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<MethodInfo> getAllMethodsParentFirst() {
-		return ulist(_getAllMethodsParentFirst());
+		return Utils.ulist2(_getAllMethodsParentFirst());
 	}
 
 	/**
@@ -572,7 +572,7 @@ public final class ClassInfo {
 		if (publicMethods == null) {
 			synchronized(this) {
 				Method[] mm = c == null ? new Method[0] : c.getMethods();
-				List<MethodInfo> l = list(mm.length);
+				List<MethodInfo> l = Utils.listOfSize(mm.length);
 				for (Method m : mm)
 					if (m.getDeclaringClass() != Object.class)
 						l.add(getMethodInfo(m));
@@ -587,7 +587,7 @@ public final class ClassInfo {
 		if (declaredMethods == null) {
 			synchronized(this) {
 				Method[] mm = c == null ? new Method[0] : c.getDeclaredMethods();
-				List<MethodInfo> l = list(mm.length);
+				List<MethodInfo> l = Utils.listOfSize(mm.length);
 				for (Method m : mm)
 					if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
 						l.add(getMethodInfo(m));
@@ -601,7 +601,7 @@ public final class ClassInfo {
 	MethodInfo[] _getAllMethods() {
 		if (allMethods == null) {
 			synchronized(this) {
-				List<MethodInfo> l = list();
+				List<MethodInfo> l = list2();
 				for (ClassInfo c : _getAllParents())
 					c._appendDeclaredMethods(l);
 				allMethods = l.toArray(new MethodInfo[l.size()]);
@@ -613,7 +613,7 @@ public final class ClassInfo {
 	MethodInfo[] _getAllMethodsParentFirst() {
 		if (allMethodsParentFirst == null) {
 			synchronized(this) {
-				List<MethodInfo> l = list();
+				List<MethodInfo> l = list2();
 				ClassInfo[] parents = _getAllParents();
 				for (int i = parents.length-1; i >=0; i--)
 					parents[i]._appendDeclaredMethods(l);
@@ -639,7 +639,7 @@ public final class ClassInfo {
 	 * @return All public constructors defined on this class.
 	 */
 	public List<ConstructorInfo> getPublicConstructors() {
-		return ulist(_getPublicConstructors());
+		return Utils.ulist2(_getPublicConstructors());
 	}
 
 	/**
@@ -676,7 +676,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<ConstructorInfo> getDeclaredConstructors() {
-		return ulist(_getDeclaredConstructors());
+		return Utils.ulist2(_getDeclaredConstructors());
 	}
 
 	/**
@@ -709,7 +709,7 @@ public final class ClassInfo {
 		if (publicConstructors == null) {
 			synchronized(this) {
 				Constructor<?>[] cc = c == null ? new Constructor[0] : c.getConstructors();
-				List<ConstructorInfo> l = list(cc.length);
+				List<ConstructorInfo> l = Utils.listOfSize(cc.length);
 				for (Constructor<?> ccc : cc)
 					l.add(getConstructorInfo(ccc));
 				l.sort(null);
@@ -723,7 +723,7 @@ public final class ClassInfo {
 		if (declaredConstructors == null) {
 			synchronized(this) {
 				Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();
-				List<ConstructorInfo> l = list(cc.length);
+				List<ConstructorInfo> l = Utils.listOfSize(cc.length);
 				for (Constructor<?> ccc : cc)
 					l.add(getConstructorInfo(ccc));
 				l.sort(null);
@@ -774,7 +774,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<FieldInfo> getPublicFields() {
-		return ulist(_getPublicFields());
+		return Utils.ulist2(_getPublicFields());
 	}
 
 	/**
@@ -812,7 +812,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<FieldInfo> getDeclaredFields() {
-		return ulist(_getDeclaredFields());
+		return Utils.ulist2(_getDeclaredFields());
 	}
 
 	/**
@@ -852,7 +852,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<FieldInfo> getAllFields() {
-		return ulist(_getAllFields());
+		return Utils.ulist2(_getAllFields());
 	}
 
 	/**
@@ -894,7 +894,7 @@ public final class ClassInfo {
 		if (declaredFields == null) {
 			synchronized(this) {
 				Field[] ff = c == null ? new Field[0] : c.getDeclaredFields();
-				List<FieldInfo> l = list(ff.length);
+				List<FieldInfo> l = Utils.listOfSize(ff.length);
 				for (Field f : ff)
 					if (! "$jacocoData".equals(f.getName()))
 						l.add(getFieldInfo(f));
@@ -908,7 +908,7 @@ public final class ClassInfo {
 	FieldInfo[] _getAllFields() {
 		if (allFields == null) {
 			synchronized(this) {
-				List<FieldInfo> l = list();
+				List<FieldInfo> l = list2();
 				ClassInfo[] parents = _getAllParents();
 				for (int i = parents.length-1; i >=0; i--)
 					for (FieldInfo f : parents[i]._getDeclaredFields())
@@ -946,7 +946,7 @@ public final class ClassInfo {
 	 * @return The matching annotations.
 	 */
 	public <A extends Annotation> List<A> getAnnotations(AnnotationProvider annotationProvider, Class<A> type) {
-		List<A> l = list();
+		List<A> l = list2();
 		forEachAnnotation(annotationProvider, type, x-> true, x -> l.add(x));
 		return l;
 	}

@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
@@ -80,8 +81,8 @@ import org.apache.juneau.serializer.*;
 public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 
 	private static final Set<String>
-		SWAP_METHOD_NAMES = uset("toList", "toJsonList"),
-		UNSWAP_METHOD_NAMES = uset("fromList", "fromJsonList", "create", "valueOf");
+		SWAP_METHOD_NAMES = Utils.uset2("toList", "toJsonList"),
+		UNSWAP_METHOD_NAMES = Utils.uset2("fromList", "fromJsonList", "create", "valueOf");
 
 	/**
 	 * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.

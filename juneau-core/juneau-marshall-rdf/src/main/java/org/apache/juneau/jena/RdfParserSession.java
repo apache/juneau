@@ -240,7 +240,7 @@ public class RdfParserSession extends ReaderParserSession {
 		if (isLooseCollections() && type.isCollectionOrArray()) {
 			Collection c = null;
 			if (type.isArray() || type.isArgs())
-				c = list();
+				c = list2();
 			else
 				c = (
 					type.canCreateNewInstance(getOuter())
@@ -464,7 +464,7 @@ public class RdfParserSession extends ReaderParserSession {
 			o = parseIntoMap(r, m, eType.getKeyType(), eType.getValueType(), pMeta);
 		} else if (sType.isCollectionOrArray() || sType.isArgs()) {
 			if (sType.isArray() || sType.isArgs())
-				o = list();
+				o = list2();
 			else
 				o = (sType.canCreateNewInstance(outer) ? (Collection<?>)sType.newInstance(outer) : new JsonList(this));
 			Resource r = n.asResource();

@@ -198,7 +198,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	MethodInfo[] _getMatching() {
 		if (matching == null) {
 			synchronized(this) {
-				List<MethodInfo> l = findMatching(list(), this, getDeclaringClass());
+				List<MethodInfo> l = findMatching(list2(), this, getDeclaringClass());
 				matching = l.toArray(new MethodInfo[l.size()]);
 			}
 		}

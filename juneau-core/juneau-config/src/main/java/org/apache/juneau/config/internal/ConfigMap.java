@@ -120,7 +120,7 @@ public class ConfigMap implements ConfigStoreListener {
 			}
 		}
 
-		List<Import> irl = list(imports2.size());
+		List<Import> irl = Utils.listOfSize(imports2.size());
 		forEachReverse(listFrom(imports2.values()), x -> irl.add(new Import(x).register(listeners)));
 		this.imports.addAll(irl);
 

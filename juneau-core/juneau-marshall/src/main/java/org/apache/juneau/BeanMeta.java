@@ -128,7 +128,7 @@ public class BeanMeta<T> {
 		this.beanFilter = beanFilter;
 		this.dictionaryName = b.dictionaryName;
 		this.properties = u(b.properties);
-		this.propertyArray = properties == null ? EMPTY_PROPERTIES : CollectionUtils.array(properties.values(), BeanPropertyMeta.class);
+		this.propertyArray = properties == null ? EMPTY_PROPERTIES : Utils.array(properties.values(), BeanPropertyMeta.class);
 		this.hiddenProperties = u(b.hiddenProperties);
 		this.getterProps = u(b.getterProps);
 		this.setterProps = u(b.setterProps);
@@ -806,7 +806,7 @@ public class BeanMeta<T> {
 	 * @return Metadata on all properties associated with this bean.
 	 */
 	public Collection<BeanPropertyMeta> getPropertyMetas() {
-		return CollectionUtils.ulist(propertyArray);
+		return Utils.ulist2(propertyArray);
 	}
 
 	/**

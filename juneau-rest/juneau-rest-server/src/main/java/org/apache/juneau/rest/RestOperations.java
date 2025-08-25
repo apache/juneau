@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
@@ -148,7 +149,7 @@ public class RestOperations {
 		for (Map.Entry<String,TreeSet<RestOpContext>> e : builder.map.entrySet())
 			m.put(e.getKey(), listFrom(e.getValue()));
 		this.map = m;
-		this.list = array(builder.set, RestOpContext.class);
+		this.list = Utils.array(builder.set, RestOpContext.class);
 	}
 
 	/**
@@ -207,6 +208,6 @@ public class RestOperations {
 	 * @return An unmodifiable list of method contexts in this object.
 	 */
 	public List<RestOpContext> getOpContexts() {
-		return ulist(list);
+		return Utils.ulist2(list);
 	}
 }

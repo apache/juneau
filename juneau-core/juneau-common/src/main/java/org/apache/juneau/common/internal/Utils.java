@@ -26,6 +26,7 @@ import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+
 public class Utils {
 
 	/** Constructor */
@@ -646,5 +647,58 @@ public class Utils {
 	 */
 	public static <K,V> boolean isNotEmpty2(Map<K,V> value) {
 		return value != null && ! value.isEmpty();
+	}
+
+	/**
+	 * Converts the specified collection to an array.
+	 *
+	 * @param <E> The element type.
+	 * @param value The collection to convert.
+	 * @param componentType The component type of the array.
+	 * @return A new array.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <E> E[] array(Collection<E> value, Class<E> componentType) {
+		if (value == null)
+			return null;
+		E[] array = (E[])Array.newInstance(componentType, value.size());
+		return value.toArray(array);
+	}
+
+	/**
+	 * Convenience method for creating an unmodifiable list.
+	 *
+	 * @param <E> The element type.
+	 * @param values The values to initialize the list with.
+	 * @return A new unmodifiable list, or <jk>null</jk> if the array was <jk>null</jk>.
+	 */
+	@SafeVarargs
+	public static <E> List<E> ulist2(E...values) {
+		if (values == null)
+			return null;
+		return u(alist(values));
+	}
+
+	/**
+	 * Convenience method for creating an unmodifiable {@link LinkedHashSet}.
+	 *
+	 * @param <E> The element type.
+	 * @param values The values to initialize the set with.
+	 * @return A new unmodifiable set.
+	 */
+	@SafeVarargs
+	public static <E> Set<E> uset2(E...values) {
+		return u(set(values));
+	}
+
+	/**
+	 * Convenience method for creating an {@link ArrayList} of the specified size.
+	 *
+	 * @param <E> The element type.
+	 * @param size The initial size of the list.
+	 * @return A new modifiable list.
+	 */
+	public static <E> ArrayList<E> listOfSize(int size) {
+		return new ArrayList<>(size);
 	}
 }

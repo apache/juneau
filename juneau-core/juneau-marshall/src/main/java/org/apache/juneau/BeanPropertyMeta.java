@@ -168,7 +168,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 		boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
-			List<Class<?>> bdClasses = list();
+			List<Class<?>> bdClasses = list2();
 
 			if (field == null && getter == null && setter == null)
 				return false;
@@ -180,7 +180,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			canWrite |= (field != null || setter != null);
 
 			if (innerField != null) {
-				List<Beanp> lp = list();
+				List<Beanp> lp = list2();
 				bc.forEachAnnotation(Beanp.class, innerField, x -> true, x -> lp.add(x));
 				if (field != null || Utils.isNotEmpty2(lp)) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
@@ -202,7 +202,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			}
 
 			if (getter != null) {
-				List<Beanp> lp = list();
+				List<Beanp> lp = list2();
 				bc.forEachAnnotation(Beanp.class, getter, x -> true, x -> lp.add(x));
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), getter.getGenericReturnType(), typeVarImpls);
@@ -220,7 +220,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			}
 
 			if (setter != null) {
-				List<Beanp> lp = list();
+				List<Beanp> lp = list2();
 				bc.forEachAnnotation(Beanp.class, setter, x -> true, x -> lp.add(x));
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), setter.getGenericParameterTypes()[0], typeVarImpls);
@@ -626,7 +626,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					return l;
 				} else if (rawTypeMeta.isCollection()) {
 					Collection c = (Collection)o;
-					List l = list(c.size());
+					List l = Utils.listOfSize(c.size());
 					ClassMeta childType = rawTypeMeta.getElementType();
 					c.forEach(x -> l.add(applyChildPropertiesFilter(session, childType, x)));
 					return l;

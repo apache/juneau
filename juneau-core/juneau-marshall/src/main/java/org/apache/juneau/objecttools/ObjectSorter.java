@@ -115,12 +115,12 @@ public final class ObjectSorter implements ObjectTool<SortArgs> {
 
 		if (type.isArray()) {
 			int size = Array.getLength(input);
-			l = list(size);
+			l = Utils.listOfSize(size);
 			for (int i = 0; i < size; i++)
 				l.add(new SortEntry(session, Array.get(input, i)));
 		} else /* isCollection() */ {
 			Collection c = (Collection)input;
-			l = list(c.size());
+			l = Utils.listOfSize(c.size());
 			List<SortEntry> l2 = l;
 			c.forEach(x -> l2.add(new SortEntry(session, x)));
 		}
@@ -136,7 +136,7 @@ public final class ObjectSorter implements ObjectTool<SortArgs> {
 			Collections.sort(l3);
 		});
 
-		List<Object> l2 = list(l.size());
+		List<Object> l2 = Utils.listOfSize(l.size());
 		l.forEach(x -> l2.add(x.o));
 
 		return l2;

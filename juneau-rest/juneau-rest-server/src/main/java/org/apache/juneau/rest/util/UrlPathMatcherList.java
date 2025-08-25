@@ -14,6 +14,7 @@ package org.apache.juneau.rest.util;
 
 import java.util.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -43,6 +44,6 @@ public class UrlPathMatcherList extends ArrayList<UrlPathMatcher> {
 	 * @return The contents of this list as a {@link UrlPathMatcher} array.
 	 */
 	public UrlPathMatcher[] asArray() {
-		return CollectionUtils.array(this, UrlPathMatcher.class);
+		return Utils.array(this, UrlPathMatcher.class);
 	}
 }

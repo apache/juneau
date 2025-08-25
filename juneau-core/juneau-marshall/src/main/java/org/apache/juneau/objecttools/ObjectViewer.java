@@ -18,6 +18,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -114,12 +115,12 @@ public final class ObjectViewer implements ObjectTool<ViewArgs> {
 
 		if (type.isArray()) {
 			int size = Array.getLength(input);
-			l = list(size);
+			l = Utils.listOfSize(size);
 			for (int i = 0; i < size; i++)
 				l.add(Array.get(input, i));
 		} else if (type.isCollection()) {
 			Collection c = (Collection)input;
-			l = list(c.size());
+			l = Utils.listOfSize(c.size());
 			List<Object> l2 = l;
 			c.forEach(x -> l2.add(x));
 		} else {

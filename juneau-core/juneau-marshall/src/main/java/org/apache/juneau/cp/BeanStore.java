@@ -588,7 +588,7 @@ public class BeanStore {
 	 */
 	public String getMissingParams(ExecutableInfo executable) {
 		List<ParamInfo> params = executable.getParams();
-		List<String> l = list();
+		List<String> l = list2();
 		loop: for (int i = 0; i < params.size(); i++) {
 			ParamInfo pi = params.get(i);
 			ClassInfo pt = pi.getParameterType();

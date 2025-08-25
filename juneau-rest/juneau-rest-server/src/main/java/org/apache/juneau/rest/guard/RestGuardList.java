@@ -62,7 +62,7 @@ public class RestGuardList {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(RestGuardList.class, beanStore);
-			entries = list();
+			entries = list2();
 		}
 
 		@Override /* BeanBuilder */

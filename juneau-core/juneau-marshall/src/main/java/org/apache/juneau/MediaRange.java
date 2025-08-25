@@ -19,6 +19,7 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
+import org.apache.juneau.common.internal.*;
 
 
 /**
@@ -48,7 +49,7 @@ public class MediaRange extends MediaType {
 
 		// The media type consists of everything up to the q parameter.
 		// The q parameter and stuff after is part of the range.
-		List<NameValuePair> extensions = list();
+		List<NameValuePair> extensions = list2();
 		boolean foundQ = false;
 		for (NameValuePair p : e.getParameters()) {
 			if (p.getName().equals("q")) {
@@ -102,7 +103,7 @@ public class MediaRange extends MediaType {
 	 * @return The optional list of extensions, never <jk>null</jk>.
 	 */
 	public List<NameValuePair> getExtensions() {
-		return ulist(extensions);
+		return Utils.ulist2(extensions);
 	}
 
 	/**

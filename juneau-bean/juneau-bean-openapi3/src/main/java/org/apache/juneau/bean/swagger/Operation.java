@@ -236,7 +236,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setConsumes(Collection<MediaType> value) {
-		consumes = toSet(value);
+		consumes = setFrom(value);
 		return this;
 	}
 
@@ -512,7 +512,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setProduces(Collection<MediaType> value) {
-		produces = toSet(value);
+		produces = setFrom(value);
 		return this;
 	}
 
@@ -639,7 +639,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setSchemes(Collection<String> value) {
-		schemes = toSet(value);
+		schemes = setFrom(value);
 		return this;
 	}
 
@@ -758,7 +758,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setTags(Collection<String> value) {
-		tags = toSet(value);
+		tags = setFrom(value);
 		return this;
 	}
 
