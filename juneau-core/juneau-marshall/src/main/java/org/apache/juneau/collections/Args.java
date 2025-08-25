@@ -17,6 +17,7 @@ import static java.util.stream.Collectors.*;
 
 import java.util.*;
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Utility class to make it easier to work with command-line arguments pass in through a
@@ -154,7 +155,7 @@ public final class Args extends JsonMap {
 	 * @param args Arguments passed in as a raw command line.
 	 */
 	public Args(String args) {
-		this(splitQuoted(args));
+		this(Utils.splitQuoted(args));
 	}
 
 	/**

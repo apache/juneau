@@ -111,7 +111,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 */
 	public BasicCsvArrayPart(String name, String value) {
 		super(name, value);
-		this.value = split3(value);
+		this.value = Utils.split3(value);
 		this.supplier = null;
 		this.stringValue = value;
 	}

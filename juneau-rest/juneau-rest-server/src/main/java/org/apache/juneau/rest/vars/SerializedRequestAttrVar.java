@@ -16,6 +16,7 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 
 import java.io.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;
@@ -55,7 +56,7 @@ public class SerializedRequestAttrVar extends StreamedVar {
 		int i = key.indexOf(',');
 		if (i == -1)
 			throw new IllegalArgumentException("Invalid format for $SA var. Must be of the format $SA{contentType,key[,defaultValue]}");
-		String[] s2 = split3(key);
+		String[] s2 = Utils.split3(key);
 		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 		Object o = req.getAttribute(key).orElse(key);
 		Serializer s = req.getOpContext().getSerializers().getSerializer(s2[0]);

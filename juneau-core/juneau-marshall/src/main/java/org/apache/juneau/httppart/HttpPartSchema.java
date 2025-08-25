@@ -4045,7 +4045,7 @@ public class HttpPartSchema {
 		for (String[] ss : s)
 			if (ss != null)
 				for (String ss2 : ss)
-					split3(ss2, x -> set.add(x));
+					Utils.split3(ss2, x -> set.add(x));
 		return set.isEmpty() ? null : set;
 	}
 

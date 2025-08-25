@@ -17,6 +17,8 @@ import static org.apache.juneau.common.internal.Utils.*;
 
 import java.util.*;
 
+import org.apache.juneau.common.internal.*;
+
 /**
  * Represents possible values for JSONSCHEMA_addExamplesTo and JSONSCHEMA_addDescriptionsTo.
  *
@@ -71,7 +73,7 @@ public enum TypeCategory {
 		if (s == null || s.isEmpty())
 			return Collections.emptySet();
 		Set<TypeCategory> set = set();
-		split3(s, x -> set.add(valueOf(x.toUpperCase())));
+		Utils.split3(s, x -> set.add(valueOf(x.toUpperCase())));
 		return set;
 	}
 
@@ -85,7 +87,7 @@ public enum TypeCategory {
 		if (s == null || s.isEmpty())
 			return new TypeCategory[0];
 		List<TypeCategory> list = list();
-		split3(s, x -> list.add(valueOf(x.toUpperCase())));
+		Utils.split3(s, x -> list.add(valueOf(x.toUpperCase())));
 		return list.toArray(new TypeCategory[list.size()]);
 	}
 }

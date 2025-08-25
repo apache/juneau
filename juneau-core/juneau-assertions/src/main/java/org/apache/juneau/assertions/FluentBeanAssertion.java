@@ -19,6 +19,7 @@ import java.io.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
@@ -150,7 +151,7 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return This object.
 	 */
 	public FluentMapAssertion<String,Object,R> asPropertyMap(String...names) {
-		return new FluentMapAssertion<>(this, toBeanMap().getProperties(split3(names, ',')), returns());
+		return new FluentMapAssertion<>(this, toBeanMap().getProperties(Utils.split3(names, ',')), returns());
 	}
 
 	/**

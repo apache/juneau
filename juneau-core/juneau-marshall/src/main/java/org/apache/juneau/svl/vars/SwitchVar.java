@@ -17,6 +17,7 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 
 import java.util.regex.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -70,7 +71,7 @@ public class SwitchVar extends MultipartVar {
 		for (int i = 1; i < args.length; i++) {
 			String pattern = args[i];
 
-			String[] parts = split3(pattern, ':', 2);
+			String[] parts = Utils.split3(pattern, ':', 2);
 			assertArg(parts.length >= 2, "Invalid arguments passed to $SW var.  Each case statement must contains 'pattern:value'.");
 
 			Pattern p = Pattern.compile(parts[0].replace("*", ".*").replace("?", "."));

@@ -109,7 +109,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 */
 	public BasicCsvHeader(String name, String value) {
 		super(name, value);
-		this.value = split3(value);
+		this.value = Utils.split3(value);
 		this.supplier = null;
 	}
 

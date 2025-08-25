@@ -349,14 +349,14 @@ public class Utils {
 	 * Splits a comma-delimited list into a list of strings.
 	 */
 	public static List<String> split(String s) {
-		return s == null ? Collections.emptyList() : StringUtils.split2(s);
+		return s == null ? Collections.emptyList() : Utils.split2(s);
 	}
 
 	/**
 	 * Splits a comma-delimited list into an array of strings.
 	 */
 	public static String[] splita(String s) {
-		return s == null ? new String[0] : StringUtils.split3(s);
+		return s == null ? new String[0] : Utils.split3(s);
 	}
 
 	/**
@@ -922,5 +922,530 @@ public class Utils {
 	 */
 	public static String joinnl(Object[] tokens) {
 		return join(tokens, '\n');
+	}
+
+	/**
+	 * Shortcut for calling <code>split(s, <js>','</js>)</code>
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static String[] split3(String s) {
+		return split3(s, ',');
+	}
+
+	/**
+	 * Shortcut for calling <code>split(s, <js>','</js>)</code>
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static List<String> split2(String s) {
+		return split2(s, ',');
+	}
+
+	/**
+	 * Same as {@link #split3(String)} but consumes the tokens instead of creating an array.
+	 *
+	 * @param s The string to split.
+	 * @param consumer The consumer of the tokens.
+	 */
+	public static void split3(String s, Consumer<String> consumer) {
+		split3(s, ',', consumer);
+	}
+
+	/**
+	 * Splits a character-delimited string into a string array.
+	 *
+	 * <p>
+	 * Does not split on escaped-delimiters (e.g. "\,");
+	 * Resulting tokens are trimmed of whitespace.
+	 *
+	 * <p>
+	 * <b>NOTE:</b>  This behavior is different than the Jakarta equivalent.
+	 * split("a,b,c",',') -&gt; {"a","b","c"}
+	 * split("a, b ,c ",',') -&gt; {"a","b","c"}
+	 * split("a,,c",',') -&gt; {"a","","c"}
+	 * split(",,",',') -&gt; {"","",""}
+	 * split("",',') -&gt; {}
+	 * split(null,',') -&gt; null
+	 * split("a,b\,c,d", ',', false) -&gt; {"a","b\,c","d"}
+	 * split("a,b\\,c,d", ',', false) -&gt; {"a","b\","c","d"}
+	 * split("a,b\,c,d", ',', true) -&gt; {"a","b,c","d"}
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static String[] split3(String s, char c) {
+		return split3(s, c, Integer.MAX_VALUE);
+	}
+
+	/**
+	 * Splits a character-delimited string into a string array.
+	 *
+	 * <p>
+	 * Does not split on escaped-delimiters (e.g. "\,");
+	 * Resulting tokens are trimmed of whitespace.
+	 *
+	 * <p>
+	 * <b>NOTE:</b>  This behavior is different than the Jakarta equivalent.
+	 * split("a,b,c",',') -&gt; {"a","b","c"}
+	 * split("a, b ,c ",',') -&gt; {"a","b","c"}
+	 * split("a,,c",',') -&gt; {"a","","c"}
+	 * split(",,",',') -&gt; {"","",""}
+	 * split("",',') -&gt; {}
+	 * split(null,',') -&gt; null
+	 * split("a,b\,c,d", ',', false) -&gt; {"a","b\,c","d"}
+	 * split("a,b\\,c,d", ',', false) -&gt; {"a","b\","c","d"}
+	 * split("a,b\,c,d", ',', true) -&gt; {"a","b,c","d"}
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static List<String> split2(String s, char c) {
+		return split2(s, c, Integer.MAX_VALUE);
+	}
+
+	/**
+	 * Same as {@link #split3(String,char)} but consumes the tokens instead of creating an array.
+	 *
+	 * @param s The string to split.
+	 * @param c The character to split on.
+	 * @param consumer The consumer of the tokens.
+	 */
+	public static void split3(String s, char c, Consumer<String> consumer) {
+		var escapeChars = StringUtils.getEscapeSet(c);
+	
+		if (StringUtils.isEmpty3(s))
+			return;
+		if (s.indexOf(c) == -1) {
+			consumer.accept(s);
+			return;
+		}
+	
+		var x1 = 0;
+		var escapeCount = 0;
+	
+		for (var i = 0; i < s.length(); i++) {
+			if (s.charAt(i) == '\\')
+				escapeCount++;
+			else if (s.charAt(i)==c && escapeCount % 2 == 0) {
+				var s2 = s.substring(x1, i);
+				var s3 = StringUtils.unEscapeChars(s2, escapeChars);
+				consumer.accept(s3.trim());  // NOSONAR - NPE not possible.
+				x1 = i+1;
+			}
+			if (s.charAt(i) != '\\')
+				escapeCount = 0;
+		}
+		var s2 = s.substring(x1);
+		var s3 = StringUtils.unEscapeChars(s2, escapeChars);
+		consumer.accept(s3.trim());  // NOSONAR - NPE not possible.
+	}
+
+	/**
+	 * Same as {@link #split3(String, char)} but limits the number of tokens returned.
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @param limit The maximum number of tokens to return.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static String[] split3(String s, char c, int limit) {
+		var l = split2(s, c, limit);
+		return l == null ? null : l.toArray(new String[l.size()]);
+	}
+
+	/**
+	 * Same as {@link #split3(String, char)} but limits the number of tokens returned.
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @param limit The maximum number of tokens to return.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static List<String> split2(String s, char c, int limit) {
+	
+		var escapeChars = StringUtils.getEscapeSet(c);
+	
+		if (s == null)
+			return null;  // NOSONAR - Intentional.
+		if (StringUtils.isEmpty3(s))
+			return Collections.emptyList();
+		if (s.indexOf(c) == -1)
+			return Collections.singletonList(s);
+	
+		var l = new LinkedList<String>();
+		var sArray = s.toCharArray();
+		var x1 = 0;
+		var escapeCount = 0;
+		limit--;
+		for (var i = 0; i < sArray.length && limit > 0; i++) {
+			if (sArray[i] == '\\')
+				escapeCount++;
+			else if (sArray[i]==c && escapeCount % 2 == 0) {
+				var s2 = new String(sArray, x1, i-x1);
+				var s3 = StringUtils.unEscapeChars(s2, escapeChars);
+				l.add(s3.trim());
+				limit--;
+				x1 = i+1;
+			}
+			if (sArray[i] != '\\')
+				escapeCount = 0;
+		}
+		var s2 = new String(sArray, x1, sArray.length-x1);
+		var s3 = StringUtils.unEscapeChars(s2, escapeChars);
+		l.add(s3.trim());
+	
+		return l;
+	}
+
+	/**
+	 * Same as {@link #split3(String, char)} except splits all strings in the input and returns a single result.
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @return The tokens, or null if the input array was null
+	 */
+	public static String[] split3(String[] s, char c) {
+		if (s == null)
+			return null;  // NOSONAR - Intentional.
+		var l = new LinkedList<String>();
+		for (var ss : s) {
+			if (ss == null || ss.indexOf(c) == -1)
+				l.add(ss);
+			else
+				Collections.addAll(l, split3(ss, c));
+		}
+		return l.toArray(new String[l.size()]);
+	}
+
+	/**
+	 * Splits a list of key-value pairs into an ordered map.
+	 *
+	 * <p>
+	 * Example:
+	 * <p class='bjava'>
+	 * 	String <jv>in</jv> = <js>"foo=1;bar=2"</js>;
+	 * 	Map <jv>map</jv> = StringUtils.<jsm>splitMap</jsm>(in, <js>';'</js>, <js>'='</js>, <jk>true</jk>);
+	 * </p>
+	 *
+	 * @param s The string to split.
+	 * @param trim Trim strings after parsing.
+	 * @return The parsed map, or null if the string was null.
+	 */
+	public static Map<String,String> splitMap(String s, boolean trim) {
+	
+		if (s == null)
+			return null;  // NOSONAR - Intentional.
+		if (StringUtils.isEmpty3(s))
+			return Collections.emptyMap();
+	
+		var m = new LinkedHashMap<String,String>();
+	
+		final int
+			S1 = 1,  // Found start of key, looking for equals.
+			S2 = 2;  // Found equals, looking for delimiter (or end).
+	
+		var state = S1;
+	
+		var sArray = s.toCharArray();
+		var x1 = 0;
+		var escapeCount = 0;
+		String key = null;
+		for (var i = 0; i < sArray.length + 1; i++) {
+			var c = i == sArray.length ? ',' : sArray[i];
+			if (c == '\\')
+				escapeCount++;
+			if (escapeCount % 2 == 0) {
+				if (state == S1) {
+					if (c == '=') {
+						key = s.substring(x1, i);
+						if (trim)
+							key = StringUtils.trim(key);
+						key = StringUtils.unEscapeChars(key, StringUtils.MAP_ESCAPE_SET);
+						state = S2;
+						x1 = i+1;
+					} else if (c == ',') {
+						key = s.substring(x1, i);
+						if (trim)
+							key = StringUtils.trim(key);
+						key = StringUtils.unEscapeChars(key, StringUtils.MAP_ESCAPE_SET);
+						m.put(key, "");
+						state = S1;
+						x1 = i+1;
+					}
+				} else if (state == S2) {
+					if (c == ',') {  // NOSONAR - Intentional.
+						var val = s.substring(x1, i);
+						if (trim)
+							val = StringUtils.trim(val);
+						val = StringUtils.unEscapeChars(val, StringUtils.MAP_ESCAPE_SET);
+						m.put(key, val);
+						key = null;
+						x1 = i+1;
+						state = S1;
+					}
+				}
+			}
+			if (c != '\\')
+				escapeCount = 0;
+		}
+	
+		return m;
+	}
+
+	/**
+	 * Splits a space-delimited string with optionally quoted arguments.
+	 *
+	 * <p>
+	 * Examples:
+	 * <ul>
+	 * 	<li><js>"foo"</js> =&gt; <c>["foo"]</c>
+	 * 	<li><js>" foo "</js> =&gt; <c>["foo"]</c>
+	 * 	<li><js>"foo bar baz"</js> =&gt; <c>["foo","bar","baz"]</c>
+	 * 	<li><js>"foo 'bar baz'"</js> =&gt; <c>["foo","bar baz"]</c>
+	 * 	<li><js>"foo \"bar baz\""</js> =&gt; <c>["foo","bar baz"]</c>
+	 * 	<li><js>"foo 'bar\'baz'"</js> =&gt; <c>["foo","bar'baz"]</c>
+	 * </ul>
+	 *
+	 * @param s The input string.
+	 * @return
+	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * 	<br>An empty string results in an empty array.
+	 */
+	public static String[] splitQuoted(String s) {
+		return splitQuoted(s, false);
+	}
+
+	/**
+	 * Splits a comma-delimited list containing "nesting constructs".
+	 *
+	 * Nesting constructs are simple embedded "{...}" comma-delimted lists.
+	 *
+	 * Example:
+	 * 	"a{b,c},d" -> ["a{b,c}","d"]
+	 *
+	 * Handles escapes and trims whitespace from tokens.
+	 *
+	 * @param s The input string.
+	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * 	<br>An empty string results in an empty array.
+	 */
+	public static List<String> splitNested(String s) {
+		var escapeChars = StringUtils.getEscapeSet(',');
+	
+		if (s == null) return null;  // NOSONAR - Intentional.
+		if (StringUtils.isEmpty3(s)) return Collections.emptyList();
+		if (s.indexOf(',') == -1) return Collections.singletonList(StringUtils.trim(s));
+	
+		var l = new LinkedList<String>();
+	
+		var x1 = 0;
+		var inEscape = false;
+		var depthCount = 0;
+	
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (inEscape) {
+				if (c == '\\') {
+					inEscape = false;
+				}
+			} else {
+				if (c == '\\') {
+					inEscape = true;
+				} else if (c == '{') {
+					depthCount++;
+				} else if (c == '}') {
+					depthCount--;
+				} else if (c == ',' && depthCount == 0) {
+					l.add(StringUtils.trim(StringUtils.unEscapeChars(s.substring(x1, i), escapeChars)));
+					x1 = i+1;
+				}
+			}
+		}
+		l.add(StringUtils.trim(StringUtils.unEscapeChars(s.substring(x1, s.length()), escapeChars)));
+	
+		return l;
+	}
+
+	/**
+	 * Splits a nested comma-delimited list.
+	 *
+	 * Nesting constructs are simple embedded "{...}" comma-delimted lists.
+	 *
+	 * Example:
+	 * 	"a{b,c{d,e}}" -> ["b","c{d,e}"]
+	 *
+	 * Handles escapes and trims whitespace from tokens.
+	 *
+	 * @param s The input string.
+	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * 	<br>An empty string results in an empty array.
+	 */
+	public static List<String> splitNestedInner(String s) {
+		if (s == null) throw illegalArg("String was null.");
+		if (StringUtils.isEmpty3(s)) throw illegalArg("String was empty.");
+	
+		final int
+			S1 = 1,  // Looking for '{'
+			S2 = 2;  // Found '{', looking for '}'
+	
+		var start = -1;
+		var end = -1;
+		var state = S1;
+		var depth = 0;
+		var inEscape = false;
+	
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (inEscape) {
+				if (c == '\\') {
+					inEscape = false;
+				}
+			} else {
+				if (c == '\\') {
+					inEscape = true;
+				} else if (state == S1) {
+					if (c == '{') {
+						start = i+1;
+						state = S2;
+					}
+				} else /* state == S2 */ {
+					if (c == '{') {
+						depth++;
+					} else if (depth > 0 && c == '}') {
+						depth--;
+					} else if (c == '}') {
+						end = i;
+						break;
+					}
+				}
+			}
+		}
+	
+		if (start == -1) throw illegalArg("Start character '{' not found in string.", s);
+		if (end == -1) throw illegalArg("End character '}' not found in string.", s);
+		return splitNested(s.substring(start, end));
+	}
+
+	/**
+	 * Same as {@link #splitQuoted(String)} but allows you to optionally keep the quote characters.
+	 *
+	 * @param s The input string.
+	 * @param keepQuotes If <jk>true</jk>, quote characters are kept on the tokens.
+	 * @return
+	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * 	<br>An empty string results in an empty array.
+	 */
+	public static String[] splitQuoted(String s, boolean keepQuotes) {
+	
+		if (s == null)
+			return null;  // NOSONAR - Intentional.
+	
+		s = s.trim();
+	
+		if (StringUtils.isEmpty3(s))
+			return new String[0];
+	
+		if (! StringUtils.containsAny(s, ' ', '\t', '\'', '"'))
+			return new String[]{s};
+	
+		final int
+			S1 = 1,  // Looking for start of token.
+			S2 = 2,  // Found ', looking for end '
+			S3 = 3,  // Found ", looking for end "
+			S4 = 4;  // Found non-whitespace, looking for end whitespace.
+	
+		var state = S1;
+	
+		var isInEscape = false;
+		var needsUnescape = false;
+		var mark = 0;
+	
+		var l = new ArrayList<String>();
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+	
+			if (state == S1) {
+				if (c == '\'') {
+					state = S2;
+					mark = keepQuotes ? i : i+1;
+				} else if (c == '"') {
+					state = S3;
+					mark = keepQuotes ? i : i+1;
+				} else if (c != ' ' && c != '\t') {
+					state = S4;
+					mark = i;
+				}
+			} else if (state == S2 || state == S3) {
+				if (c == '\\') {
+					isInEscape = ! isInEscape;
+					needsUnescape = ! keepQuotes;
+				} else if (! isInEscape) {
+					if (c == (state == S2 ? '\'' : '"')) {
+						var s2 = s.substring(mark, keepQuotes ? i+1 : i);
+						if (needsUnescape)  // NOSONAR - False positive check.
+							s2 = StringUtils.unEscapeChars(s2, StringUtils.QUOTE_ESCAPE_SET);
+						l.add(s2);
+						state = S1;
+						isInEscape = needsUnescape = false;
+					}
+				} else {
+					isInEscape = false;
+				}
+			} else /* state == S4 */ {
+				if (c == ' ' || c == '\t') {
+					l.add(s.substring(mark, i));
+					state = S1;
+				}
+			}
+		}
+		if (state == S4)
+			l.add(s.substring(mark));
+		else if (state == S2 || state == S3)
+			throw new IllegalArgumentException("Unmatched string quotes: " + s);
+		return l.toArray(new String[l.size()]);
+	}
+
+	/**
+	 * Splits the method arguments in the signature of a method.
+	 *
+	 * @param s The arguments to split.
+	 * @return The split arguments, or null if the input string is null.
+	 */
+	public static String[] splitMethodArgs(String s) {
+	
+		if (s == null)
+			return null;  // NOSONAR - Intentional.
+		if (StringUtils.isEmpty3(s))
+			return new String[0];
+		if (s.indexOf(',') == -1)
+			return new String[]{s};
+	
+		var l = new LinkedList<String>();
+		var sArray = s.toCharArray();
+		var x1 = 0;
+		var paramDepth = 0;
+	
+		for (var i = 0; i < sArray.length; i++) {
+			var c = s.charAt(i);
+			if (c == '>')
+				paramDepth++;
+			else if (c == '<')
+				paramDepth--;
+			else if (c == ',' && paramDepth == 0) {
+				var s2 = new String(sArray, x1, i-x1);
+				l.add(s2.trim());
+				x1 = i+1;
+			}
+		}
+	
+		var s2 = new String(sArray, x1, sArray.length-x1);
+		l.add(s2.trim());
+	
+		return l.toArray(new String[l.size()]);
 	}
 }

@@ -14,6 +14,8 @@ package org.apache.juneau.svl;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
 
+import org.apache.juneau.common.internal.*;
+
 /**
  * Interface for the resolution of vars that can have one or more keys where the first non-null resolution is returned.
  *
@@ -47,7 +49,7 @@ public abstract class MultipartResolvingVar extends SimpleVar {
 		int i = s.indexOf(',');
 		if (i == -1)
 			return resolve(session, s.trim());
-		for (String s2 : split3(s)) {
+		for (String s2 : Utils.split3(s)) {
 			String v = resolve(session, s2);
 			if (v != null)
 				return v;

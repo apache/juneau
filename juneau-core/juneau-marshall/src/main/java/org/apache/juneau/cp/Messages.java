@@ -200,7 +200,7 @@ public class Messages extends ResourceBundle {
 						} catch (ParseException e) {
 							throw asRuntimeException(e);
 						}
-						x = Messages.create(c).name(ms.name).baseNames(split3(ms.baseNames, ',')).locale(ms.locale).parent(x == null ? null : x.build());
+						x = Messages.create(c).name(ms.name).baseNames(Utils.split3(ms.baseNames, ',')).locale(ms.locale).parent(x == null ? null : x.build());
 					} else {
 						x = Messages.create(c).name(value).parent(x == null ? null : x.build());
 					}

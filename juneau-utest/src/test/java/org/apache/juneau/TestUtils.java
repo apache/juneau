@@ -121,7 +121,7 @@ public class TestUtils extends Utils {
 
 	public static void assertContainsAll(String expected, Object actual) {
 		var a2 = r(actual);
-		for (var e : StringUtils.split3(expected))
+		for (var e : Utils.split3(expected))
 			assertTrue(a2.contains(e), fs("String did not contain expected substring.  expected={0}, actual={1}", e, a2));
 	}
 
@@ -138,7 +138,7 @@ public class TestUtils extends Utils {
 	 */
 	public static void assertArray(Object array, Object...expected) {
 		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
-			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : StringUtils.split3(s(expected[0]));
+			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : Utils.split3(s(expected[0]));
 		if (Array.getLength(array) != expected.length)
 			fail(fs("Wrong array length.  expected={0}, actual={1}", expected.length, Array.getLength(array)));
 		for (var i = 0; i < expected.length; i++) {
@@ -161,7 +161,7 @@ public class TestUtils extends Utils {
 	 */
 	public static void assertList(List<?> list, Object...expected) {
 		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
-			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : StringUtils.split3(s(expected[0]));
+			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : Utils.split3(s(expected[0]));
 		if (list.size() != expected.length)
 			fail(fs("Wrong list length.  expected={0}, actual={1}", expected.length, list.size()));
 		for (var i = 0; i < expected.length; i++) {
@@ -275,7 +275,7 @@ public class TestUtils extends Utils {
 	 */
 	public static void assertBean(Object o, String fields, String value) {
 		if (o == null) throw new NullPointerException("Bean was null");
-		assertEquals(value, splitNested(fields).stream().map(x -> TestUtils.getReadableEntry(o, x)).collect(joining(",")));
+		assertEquals(value, Utils.splitNested(fields).stream().map(x -> TestUtils.getReadableEntry(o, x)).collect(joining(",")));
 	}
 
 	/**
@@ -302,7 +302,7 @@ public class TestUtils extends Utils {
 	public static void assertBeans(Collection l, String fields, Object...values) {
 		assertEquals(values.length, l.size(), ()->"Expected "+values.length+" rows but had actual " + l.size());
 		var r = 0;
-		var f = splitNested(fields);
+		var f = Utils.splitNested(fields);
 		for (var o : l) {
 			var actual = f.stream().map(x -> TestUtils.getReadableEntry(o, x)).collect(joining(","));
 			var r2 = r+1;
@@ -328,7 +328,7 @@ public class TestUtils extends Utils {
 	private static String getReadableEntry(Object o, String name) {
 		var i = name.indexOf("{");
 		var pn = i == -1 ? name : name.substring(0, i);
-		var spn = i == -1 ? null : splitNestedInner(name);
+		var spn = i == -1 ? null : Utils.splitNestedInner(name);
 		var e = TestUtils.getEntry(o, pn);
 		if (spn == null) return r(e);
 		return spn.stream().map(x -> getReadableEntry(e, x)).collect(joining(","));

@@ -281,7 +281,7 @@ public class Entry {
 				throw new BeanRuntimeException(e);
 			}
 		}
-		return Utils.opt(split3(v));
+		return Utils.opt(Utils.split3(v));
 	}
 
 	/**

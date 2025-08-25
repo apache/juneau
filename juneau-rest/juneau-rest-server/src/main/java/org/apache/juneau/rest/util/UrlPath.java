@@ -48,7 +48,7 @@ public class UrlPath {
 	 */
 	UrlPath(String path) {
 		this.path = path;
-		parts = path == null ? new String[0] : split3(path.substring(1), '/');
+		parts = path == null ? new String[0] : Utils.split3(path.substring(1), '/');
 		for (int i = 0; i < parts.length; i++)
 			parts[i] = urlDecode(parts[i]);
 	}

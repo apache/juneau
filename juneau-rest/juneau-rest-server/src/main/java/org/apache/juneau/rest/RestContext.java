@@ -5569,7 +5569,7 @@ public class RestContext extends Context {
 				return v == null ? false : super.contains(v);
 			}
 		};
-		split3(value, x -> s.add(x));
+		Utils.split3(value, x -> s.add(x));
 		return u(s);
 	}
 

@@ -191,7 +191,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				}
 				lp.forEach(x -> {
 					if (! x.properties().isEmpty())
-						properties = split3(x.properties());
+						properties = Utils.split3(x.properties());
 					addAll(bdClasses, x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
@@ -210,7 +210,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, getter));
 				lp.forEach(x -> {
 					if (properties != null && ! x.properties().isEmpty())
-						properties = split3(x.properties());
+						properties = Utils.split3(x.properties());
 					addAll(bdClasses, x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
@@ -230,7 +230,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (swap == null)
 						swap = getPropertySwap(x);
 					if (properties != null && ! x.properties().isEmpty())
-						properties = split3(x.properties());
+						properties = Utils.split3(x.properties());
 					addAll(bdClasses, x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());

@@ -188,7 +188,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return An array with resolved strings.
 	 */
 	protected Stream<String> cdl(String in) {
-		return Arrays.stream(split3(vr.resolve(in))).filter(StringUtils::isNotEmpty3);
+		return Arrays.stream(Utils.split3(vr.resolve(in))).filter(StringUtils::isNotEmpty3);
 	}
 
 	/**

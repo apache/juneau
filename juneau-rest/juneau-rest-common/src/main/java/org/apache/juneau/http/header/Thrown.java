@@ -109,7 +109,7 @@ public class Thrown extends BasicCsvHeader {
 	public Thrown(String value) {
 		super(NAME, value);
 		List<Part> l = Utils.list();
-		split3(value, x -> l.add(new Part(x)));
+		Utils.split3(value, x -> l.add(new Part(x)));
 		this.value = value == null ? null : u(l);
 	}
 

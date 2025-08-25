@@ -83,7 +83,7 @@ public class EntityTags {
 	private EntityTag[] parse(String value) {
 		if (value == null)
 			return null;
-		String[] s = split3(value);
+		String[] s = Utils.split3(value);
 		EntityTag[] v = new EntityTag[s.length];
 		for (int i = 0; i < s.length; i++)
 			v[i] = EntityTag.of(s[i]);
