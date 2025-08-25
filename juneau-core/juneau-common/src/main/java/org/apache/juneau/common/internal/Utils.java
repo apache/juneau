@@ -1037,7 +1037,7 @@ public class Utils {
 	 * @param c The character to split on.
 	 * @return The tokens, or null if the input array was null
 	 */
-	public static String[] split3(String[] s, char c) {
+	public static String[] splita(String[] s, char c) {
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
 		var l = new LinkedList<String>();
