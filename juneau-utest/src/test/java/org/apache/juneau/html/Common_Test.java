@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
+
 import java.net.*;
 import java.util.*;
 
@@ -115,8 +116,8 @@ class Common_Test extends SimpleTestBase {
 
 		public static C create() {
 			var t = new C();
-			t.f1 = alist();
-			t.f2 = alist(null,A.create());
+			t.f1 = ulist();
+			t.f2 = ulist(null,A.create());
 			return t;
 		}
 	}
@@ -265,9 +266,9 @@ class Common_Test extends SimpleTestBase {
 		@Beanp(properties="f1") public E2 x1 = new E2();
 		@Beanp(properties="f1") public Map<String,Integer> x2 = map("f1",3,"f2",4);
 		@Beanp(properties="f1") public E2[] x3 = {new E2()};
-		@Beanp(properties="f1") public List<E2> x4 = alist(new E2());
+		@Beanp(properties="f1") public List<E2> x4 = ulist(new E2());
 		@Beanp(properties="f1") public JsonMap[] x5 = {JsonMap.of("f1",5,"f2",6)};
-		@Beanp(properties="f1") public List<JsonMap> x6 = alist(JsonMap.of("f1",7,"f2",8));
+		@Beanp(properties="f1") public List<JsonMap> x6 = ulist(JsonMap.of("f1",7,"f2",8));
 	}
 
 	public static class E2 {

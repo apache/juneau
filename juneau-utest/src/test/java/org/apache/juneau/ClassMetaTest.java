@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
+
 import java.util.*;
 
 import org.apache.juneau.reflect.ClassInfoTest.*;
@@ -287,19 +288,19 @@ class ClassMetaTest extends SimpleTestBase {
 		ClassMeta<?> c4 = bc.getClassMeta(C4.class);
 		ClassMeta<?> c5 = bc.getClassMeta(C5.class);
 
-		List<Integer> l1 = list();
+		List<Integer> l1 = TestUtils.list();
 		c3.forEachAnnotation(A.class, null, x -> l1.add(x.value()));
 		assertList(l1, "2,1,3,5,6,7");
 
-		List<Integer> l2 = list();
+		List<Integer> l2 = TestUtils.list();
 		c4.forEachAnnotation(A.class, null, x -> l2.add(x.value()));
 		assertList(l2, "2,1,3,5,6,7");
 
-		List<Integer> l3 = list();
+		List<Integer> l3 = TestUtils.list();
 		c5.forEachAnnotation(A.class, null, x -> l3.add(x.value()));
 		assertList(l3, "3");
 
-		List<Integer> l4 = list();
+		List<Integer> l4 = TestUtils.list();
 		c3.forEachAnnotation(A.class, x -> x.value() == 5, x -> l4.add(x.value()));
 		assertList(l4, "5");
 	}

@@ -12,8 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;

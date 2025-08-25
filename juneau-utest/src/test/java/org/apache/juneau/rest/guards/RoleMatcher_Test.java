@@ -12,8 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.guards;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.text.*;
@@ -21,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.guard.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
@@ -50,7 +50,7 @@ class RoleMatcher_Test extends SimpleTestBase {
 			return Collections.singleton(input);
 		if (input.isEmpty())
 			return Collections.emptySet();
-		return sortedSet(split(input));
+		return CollectionUtils.sortedSet(Utils.splita(input));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

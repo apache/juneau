@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.util.stream.*;

@@ -12,7 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
+
 import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;

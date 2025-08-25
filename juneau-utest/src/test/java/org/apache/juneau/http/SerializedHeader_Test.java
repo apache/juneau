@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -31,7 +31,7 @@ class SerializedHeader_Test extends SimpleTestBase {
 	private static final OpenApiSerializer OAPI_SERIALIZER = OpenApiSerializer.DEFAULT;
 
 	@Test void a01_basic() {
-		SerializedHeader x1 = new SerializedHeader("Foo",alist("bar","baz"),OAPI_SESSION,T_ARRAY_PIPES,true);
+		SerializedHeader x1 = new SerializedHeader("Foo",ulist("bar","baz"),OAPI_SESSION,T_ARRAY_PIPES,true);
 		assertString("Foo: bar|baz", x1);
 	}
 
@@ -41,15 +41,15 @@ class SerializedHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_serializer() {
-		SerializedHeader x1 = serializedHeader("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null);
+		SerializedHeader x1 = serializedHeader("Foo",ulist("bar","baz")).serializer((HttpPartSerializer)null);
 		assertEquals("[bar, baz]", x1.getValue());
-		SerializedHeader x2 = serializedHeader("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
+		SerializedHeader x2 = serializedHeader("Foo",ulist("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
 		assertEquals("bar,baz", x2.getValue());
-		SerializedHeader x3 = serializedHeader("Foo",alist("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
+		SerializedHeader x3 = serializedHeader("Foo",ulist("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
 		assertEquals("[bar, baz]", x3.getValue());
-		SerializedHeader x4 = serializedHeader("Foo",alist("bar","baz")).serializer(OAPI_SERIALIZER).copyWith(null,null);
+		SerializedHeader x4 = serializedHeader("Foo",ulist("bar","baz")).serializer(OAPI_SERIALIZER).copyWith(null,null);
 		assertEquals("bar,baz", x4.getValue());
-		SerializedHeader x5 = serializedHeader("Foo",alist("bar","baz")).copyWith(OAPI_SERIALIZER.getSession(),null);
+		SerializedHeader x5 = serializedHeader("Foo",ulist("bar","baz")).copyWith(OAPI_SERIALIZER.getSession(),null);
 		assertEquals("bar,baz", x5.getValue());
 	}
 

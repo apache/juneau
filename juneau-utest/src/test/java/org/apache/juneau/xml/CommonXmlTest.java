@@ -14,6 +14,7 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
+
 import java.net.*;
 
 import org.apache.juneau.*;

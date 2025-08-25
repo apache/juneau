@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;

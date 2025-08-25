@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -397,24 +397,24 @@ class StringUtilsTest extends SimpleTestBase {
 	// split(String,char)
 	//====================================================================================================
 	@Test void a07_split() {
-		assertNull(split((String)null));
-		assertArray(split(""));
-		assertArray(split("1"), "1");
-		assertArray(split("1,2"), "1", "2");
-		assertArray(split("1\\,2"), ">1,2");
-		assertArray(split("1\\\\,2"), "1\\", "2");
-		assertArray(split("1\\\\\\,2"), ">1\\,2");
-		assertArray(split("1,2\\"), "1", "2\\");
-		assertArray(split("1,2\\\\"), "1", "2\\");
-		assertArray(split("1,2\\,"), "1", "2,");
-		assertArray(split("1,2\\\\,"), "1", "2\\", "");
+		assertNull(StringUtils.split((String)null));
+		assertArray(StringUtils.split(""));
+		assertArray(StringUtils.split("1"), "1");
+		assertArray(StringUtils.split("1,2"), "1", "2");
+		assertArray(StringUtils.split("1\\,2"), ">1,2");
+		assertArray(StringUtils.split("1\\\\,2"), "1\\", "2");
+		assertArray(StringUtils.split("1\\\\\\,2"), ">1\\,2");
+		assertArray(StringUtils.split("1,2\\"), "1", "2\\");
+		assertArray(StringUtils.split("1,2\\\\"), "1", "2\\");
+		assertArray(StringUtils.split("1,2\\,"), "1", "2,");
+		assertArray(StringUtils.split("1,2\\\\,"), "1", "2\\", "");
 	}
 
 	@Test void a08_split2() {
 		assertEmpty(split2test(null));
-		assertString("[]", split2test(""));
-		assertString("[1]", split2test("1"));
-		assertString("[1,2]", split2test("1,2"));
+		TestUtils.assertString("[]", split2test(""));
+		TestUtils.assertString("[1]", split2test("1"));
+		TestUtils.assertString("[1,2]", split2test("1,2"));
 		assertList(split2test("1\\,2"), ">1,2");
 		assertList(split2test("1\\\\,2"), "1\\", "2");
 		assertList(split2test("1\\\\\\,2"), ">1\\,2");
@@ -425,7 +425,7 @@ class StringUtilsTest extends SimpleTestBase {
 	}
 
 	private List<String> split2test(String s) {
-		List<String> l = list();
+		List<String> l = TestUtils.list();
 		split(s, l::add);
 		return l;
 	}
@@ -434,22 +434,22 @@ class StringUtilsTest extends SimpleTestBase {
 	// split(String,char,int)
 	//====================================================================================================
 	@Test void a09_splitWithLimit() {
-		assertString("[boo,and,foo]", split("boo:and:foo", ':', 10));
-		assertString("[boo,and:foo]", split("boo:and:foo", ':', 2));
-		assertString("[boo:and:foo]", split("boo:and:foo", ':', 1));
-		assertString("[boo:and:foo]", split("boo:and:foo", ':', 0));
-		assertString("[boo:and:foo]", split("boo:and:foo", ':', -1));
-		assertString("[boo,and,foo]", split("boo : and : foo", ':', 10));
-		assertString("[boo,and : foo]", split("boo : and : foo", ':', 2));
+		TestUtils.assertString("[boo,and,foo]", split("boo:and:foo", ':', 10));
+		TestUtils.assertString("[boo,and:foo]", split("boo:and:foo", ':', 2));
+		TestUtils.assertString("[boo:and:foo]", split("boo:and:foo", ':', 1));
+		TestUtils.assertString("[boo:and:foo]", split("boo:and:foo", ':', 0));
+		TestUtils.assertString("[boo:and:foo]", split("boo:and:foo", ':', -1));
+		TestUtils.assertString("[boo,and,foo]", split("boo : and : foo", ':', 10));
+		TestUtils.assertString("[boo,and : foo]", split("boo : and : foo", ':', 2));
 	}
 
 	//====================================================================================================
 	// nullIfEmpty(String)
 	//====================================================================================================
 	@Test void a10_nullIfEmpty() {
-		assertNull(nullIfEmpty(null));
-		assertNull(nullIfEmpty(""));
-		assertNotNull(nullIfEmpty("x"));
+		assertNull(TestUtils.nullIfEmpty(null));
+		assertNull(TestUtils.nullIfEmpty(""));
+		assertNotNull(TestUtils.nullIfEmpty("x"));
 	}
 
 	//====================================================================================================
@@ -546,16 +546,16 @@ class StringUtilsTest extends SimpleTestBase {
 
 		TestUtils.setTimeZone("GMT");
 		try {
-			assertString("2000-01-01T00:00:00Z", parseIsoDate("2000"));
-			assertString("2000-02-01T00:00:00Z", parseIsoDate("2000-02"));
-			assertString("2000-02-03T00:00:00Z", parseIsoDate("2000-02-03"));
-			assertString("2000-02-03T04:00:00Z", parseIsoDate("2000-02-03T04"));
-			assertString("2000-02-03T04:05:00Z", parseIsoDate("2000-02-03T04:05"));
-			assertString("2000-02-03T04:05:06Z", parseIsoDate("2000-02-03T04:05:06"));
-			assertString("2000-02-03T04:00:00Z", parseIsoDate("2000-02-03 04"));
-			assertString("2000-02-03T04:05:00Z", parseIsoDate("2000-02-03 04:05"));
-			assertString("2000-02-03T04:05:06Z", parseIsoDate("2000-02-03 04:05:06"));
-			assertString("2000-02-03T04:05:06Z", parseIsoDate("2000-02-03 04:05:06,789"));// ISO8601 doesn't support milliseconds, so it gets trimmed.
+			TestUtils.assertString("2000-01-01T00:00:00Z", parseIsoDate("2000"));
+			TestUtils.assertString("2000-02-01T00:00:00Z", parseIsoDate("2000-02"));
+			TestUtils.assertString("2000-02-03T00:00:00Z", parseIsoDate("2000-02-03"));
+			TestUtils.assertString("2000-02-03T04:00:00Z", parseIsoDate("2000-02-03T04"));
+			TestUtils.assertString("2000-02-03T04:05:00Z", parseIsoDate("2000-02-03T04:05"));
+			TestUtils.assertString("2000-02-03T04:05:06Z", parseIsoDate("2000-02-03T04:05:06"));
+			TestUtils.assertString("2000-02-03T04:00:00Z", parseIsoDate("2000-02-03 04"));
+			TestUtils.assertString("2000-02-03T04:05:00Z", parseIsoDate("2000-02-03 04:05"));
+			TestUtils.assertString("2000-02-03T04:05:06Z", parseIsoDate("2000-02-03 04:05:06"));
+			TestUtils.assertString("2000-02-03T04:05:06Z", parseIsoDate("2000-02-03 04:05:06,789"));// ISO8601 doesn't support milliseconds, so it gets trimmed.
 		} finally {
 			TestUtils.unsetTimeZone();
 		}
@@ -565,16 +565,16 @@ class StringUtilsTest extends SimpleTestBase {
 	// parseMap(String,char,char,boolean)
 	//====================================================================================================
 	@Test void a19_splitMap() {
-		assertString("{a=1}", splitMap("a=1", true));
-		assertString("{a=1,b=2}", splitMap("a=1,b=2", true));
-		assertString("{a=1,b=2}", splitMap(" a = 1 , b = 2 ", true));
-		assertString("{ a = 1 , b = 2 }", splitMap(" a = 1 , b = 2 ", false));
-		assertString("{a=}", splitMap("a", true));
-		assertString("{a=,b=}", splitMap("a,b", true));
-		assertString("{a=1,b=}", splitMap("a=1,b", true));
-		assertString("{a=,b=1}", splitMap("a,b=1", true));
-		assertString("{a==1}", splitMap("a\\==1", true));
-		assertString("{a\\=1}", splitMap("a\\\\=1", true));
+		TestUtils.assertString("{a=1}", splitMap("a=1", true));
+		TestUtils.assertString("{a=1,b=2}", splitMap("a=1,b=2", true));
+		TestUtils.assertString("{a=1,b=2}", splitMap(" a = 1 , b = 2 ", true));
+		TestUtils.assertString("{ a = 1 , b = 2 }", splitMap(" a = 1 , b = 2 ", false));
+		TestUtils.assertString("{a=}", splitMap("a", true));
+		TestUtils.assertString("{a=,b=}", splitMap("a,b", true));
+		TestUtils.assertString("{a=1,b=}", splitMap("a=1,b", true));
+		TestUtils.assertString("{a=,b=1}", splitMap("a,b=1", true));
+		TestUtils.assertString("{a==1}", splitMap("a\\==1", true));
+		TestUtils.assertString("{a\\=1}", splitMap("a\\\\=1", true));
 	}
 
 	//====================================================================================================

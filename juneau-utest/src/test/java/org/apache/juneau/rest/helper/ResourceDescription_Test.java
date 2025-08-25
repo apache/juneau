@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.helper;
 
 import static org.junit.Assert.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.beans.*;

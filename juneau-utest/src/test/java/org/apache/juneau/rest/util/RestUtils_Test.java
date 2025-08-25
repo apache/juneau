@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.junit.Assert.*;
-import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 

@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.header.ContentType.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;

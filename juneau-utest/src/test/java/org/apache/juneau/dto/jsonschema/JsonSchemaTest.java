@@ -13,6 +13,7 @@
 package org.apache.juneau.dto.jsonschema;
 
 import static org.junit.Assert.*;
+
 import java.net.*;
 
 import org.apache.juneau.*;

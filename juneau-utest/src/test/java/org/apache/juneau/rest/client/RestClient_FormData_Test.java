@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.list;
+
 import java.io.*;
 import java.util.*;
 

@@ -12,8 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.junit.Assert.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;

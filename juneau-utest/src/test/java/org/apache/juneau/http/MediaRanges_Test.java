@@ -13,9 +13,8 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.MediaRanges.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.Assert.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.Assert.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -133,13 +132,13 @@ class MediaRanges_Test extends SimpleTestBase {
 
 	@Test void a04_match() {
 		MediaRanges x1 = of("text/json");
-		assertEquals(0, x1.match(alist(MediaType.of("text/json"))));
-		assertEquals(-1, x1.match(alist(MediaType.of("text/foo"))));
-		assertEquals(-1, x1.match(alist((MediaType)null)));
+		assertEquals(0, x1.match(ulist(MediaType.of("text/json"))));
+		assertEquals(-1, x1.match(ulist(MediaType.of("text/foo"))));
+		assertEquals(-1, x1.match(ulist((MediaType)null)));
 		assertEquals(-1, x1.match(null));
 
 		MediaRanges x2 = of("");
-		assertEquals(-1, x2.match(alist(MediaType.of("text/json"))));
+		assertEquals(-1, x2.match(ulist(MediaType.of("text/json"))));
 	}
 
 	@Test void a05_getRanges() {

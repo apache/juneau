@@ -15,11 +15,16 @@ package org.apache.juneau.reflect;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.Context.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.reflect.ClassInfo.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -569,19 +574,19 @@ public class ClassInfoTest extends SimpleTestBase {
 	}
 
 	@Test void forEachAnnotation() {
-		List<Integer> l1 = list();
+		List<Integer> l1 = TestUtils.list();
 		g3.forEachAnnotation(A.class, null, x -> l1.add(x.value()));
 		assertList(l1, "2,1,3,5,6,7");
 
-		List<Integer> l2 = list();
+		List<Integer> l2 = TestUtils.list();
 		g4.forEachAnnotation(A.class, null, x -> l2.add(x.value()));
 		assertList(l2, "2,1,3,5,6,7");
 
-		List<Integer> l3 = list();
+		List<Integer> l3 = TestUtils.list();
 		g5.forEachAnnotation(A.class, null, x -> l3.add(x.value()));
 		assertList(l3, "3");
 
-		List<Integer> l4 = list();
+		List<Integer> l4 = TestUtils.list();
 		g3.forEachAnnotation(A.class, x -> x.value() == 5, x -> l4.add(x.value()));
 		assertList(l4, "5");
 	}
@@ -1095,9 +1100,9 @@ public class ClassInfoTest extends SimpleTestBase {
 	// Primitive wrappers
 	//-----------------------------------------------------------------------------------------------------------------
 
-	static List<Class<?>> primitives = list(boolean.class,byte.class,short.class,char.class,int.class,long.class,float.class,double.class);
-	static List<Class<?>> primitiveWrappers = list(Boolean.class,Byte.class,Short.class,Character.class,Integer.class,Long.class,Float.class,Double.class);
-	static List<Object> primitiveDefaults = list(false,(byte)0,(short)0,(char)0,0,0L,0f,0d);
+	static List<Class<?>> primitives = TestUtils.list(boolean.class,byte.class,short.class,char.class,int.class,long.class,float.class,double.class);
+	static List<Class<?>> primitiveWrappers = TestUtils.list(Boolean.class,Byte.class,Short.class,Character.class,Integer.class,Long.class,Float.class,Double.class);
+	static List<Object> primitiveDefaults = TestUtils.list(false,(byte)0,(short)0,(char)0,0,0L,0f,0d);
 
 	@Test void hasPrimitiveWrapper() {
 		for (Class<?> c : primitives)

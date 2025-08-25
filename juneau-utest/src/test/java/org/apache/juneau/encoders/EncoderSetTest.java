@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.encoders;
 
+import static org.apache.juneau.TestUtils.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 

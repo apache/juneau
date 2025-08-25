@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.junit.Assert.*;
 
 import java.text.*;

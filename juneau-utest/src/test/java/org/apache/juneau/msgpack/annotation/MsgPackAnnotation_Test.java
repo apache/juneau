@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack.annotation;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;

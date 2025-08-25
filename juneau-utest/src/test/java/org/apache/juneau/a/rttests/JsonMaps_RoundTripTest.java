@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -46,13 +47,13 @@ class JsonMaps_RoundTripTest extends RoundTripTest_Base {
 		assertEquals("a", x2[0].f1);
 		assertEquals(2, x2[0].f2);
 
-		var x3 = alist(new A(JsonMap.ofJson("{f1:'a',f2:2}")));
+		var x3 = ulist(new A(JsonMap.ofJson("{f1:'a',f2:2}")));
 		x3 = t.roundTrip(x3, List.class, A.class);
 		assertEquals(1, x3.size());
 		assertEquals("a", x3.get(0).f1);
 		assertEquals(2, x3.get(0).f2);
 
-		var x4 = map("a",new A(JsonMap.ofJson("{f1:'a',f2:2}")));
+		var x4 = CollectionUtils.map("a",new A(JsonMap.ofJson("{f1:'a',f2:2}")));
 		x4 = t.roundTrip(x4, Map.class, String.class, A.class);
 		assertEquals(1, x4.size());
 		assertEquals("a", x4.get("a").f1);

@@ -12,7 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.oapi.*;
 import org.junit.jupiter.api.*;
@@ -50,7 +52,7 @@ class FormDataAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJsonMatches(a1, ""
+		TestUtils.assertJsonMatches(a1, ""
 			+ "{"
 				+ "def:'def',"
                 + "description:['description'],"

@@ -14,6 +14,7 @@ package org.apache.juneau.reflect;
 
 import static org.apache.juneau.reflect.ConstructorInfo.*;
 import static org.junit.Assert.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;

@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.junit.Assert.*;
+
 import org.junit.jupiter.api.*;
 
 class PropertyNamerTest extends SimpleTestBase {

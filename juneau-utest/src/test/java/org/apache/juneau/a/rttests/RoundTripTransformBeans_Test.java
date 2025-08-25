@@ -12,12 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.DateUtils.*;
 import static org.junit.Assert.*;
-import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.TestUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -200,7 +198,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 			fByte = new byte[]{0,1,2,3};
 			fnByte = null;
 			faByte = new byte[][]{{0,1},{2,3},{4,5}};
-			flByte = alist(new byte[]{1,2,3},new byte[]{4,5,6},null);
+			flByte = ulist(new byte[]{1,2,3},new byte[]{4,5,6},null);
 			fmByte = map("foo",new byte[]{1,2,3},"bar",new byte[]{4,5,6},"baz",null);
 
 			fCalendar = new GregorianCalendar() {{
@@ -221,7 +219,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 			faDate = new Date[]{
 				new Date(1000), new Date(2000), new Date(3000)
 			};
-			flDate = alist(new Date(4000),null);
+			flDate = ulist(new Date(4000),null);
 			fmDate = map("foo",new Date(5000),"bar",null);
 			return this;
 		}

@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.junit.Assert.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.Assert.*;
 
 import java.io.*;
 import java.util.*;

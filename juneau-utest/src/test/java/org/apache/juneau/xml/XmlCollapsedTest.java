@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.list;
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -201,8 +201,8 @@ class XmlCollapsedTest extends SimpleTestBase {
 		XmlParser p = XmlParser.DEFAULT;
 		var t = new E();
 
-		t.f1 = Utils.list("f1a");
-		t.f2 = Utils.list("f2a");
+		t.f1 = (ArrayList<String>)Utils.list("f1a");
+		t.f2 = (ArrayList<String>)Utils.list("f2a");
 
 		String xml = s.serialize(t);
 		assertEquals("<object><f1>f1a</f1><xf2>f2a</xf2></object>", xml);

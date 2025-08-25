@@ -13,8 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.Visibility.*;
-import static org.apache.juneau.common.internal.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.map;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -67,17 +66,17 @@ class BeanConfig_Test extends SimpleTestBase {
 
 		var pm1 = bc.toBeanMap(p1);
 
-		assertEquals(pm1.size(), m1.size(), ss("Bean Map size failed for: {0} / {1} / {2}", p1, pm1.size(), m1.size()));
-		assertEquals(pm1.keySet(), m1.keySet(), ss("Bean Map key set equality failed for: {0} / {1} / {2}", p1, pm1.keySet() , m1.keySet()));
-		assertEquals(m1.keySet(), pm1.keySet(), ss("Bean Map key set reverse equality failed for: {0} / {1} / {2}", p1, pm1.keySet(), m1.keySet()));
-		assertEquals(pm1, m1, ss("Bean Map equality failed for: {0} / {1} / {2}", p1, pm1, m1));  // NOSONAR
+		assertEquals(pm1.size(), m1.size(), fs("Bean Map size failed for: {0} / {1} / {2}", p1, pm1.size(), m1.size()));
+		assertEquals(pm1.keySet(), m1.keySet(), fs("Bean Map key set equality failed for: {0} / {1} / {2}", p1, pm1.keySet() , m1.keySet()));
+		assertEquals(m1.keySet(), pm1.keySet(), fs("Bean Map key set reverse equality failed for: {0} / {1} / {2}", p1, pm1.keySet(), m1.keySet()));
+		assertEquals(pm1, m1, fs("Bean Map equality failed for: {0} / {1} / {2}", p1, pm1, m1));  // NOSONAR
 		assertThrows(BeanRuntimeException.class, ()->bc.newBeanMap(Address.class));  // Address returned as a new bean type, but shouldn't be since it doesn't have a default constructor.
 		assertNull(bc.newBeanMap(java.lang.Integer.class), "java.lang.Integer incorrectly designated as bean type.");
 		assertNull(bc.newBeanMap(java.lang.Class.class), "java.lang.Class incorrectly designated as bean type.");
 
 		var bm1 = bc.toBeanMap(new Address("street", "city", "state", "zip"));
 
-		assertEquals(bm1.size(), m2.size(), ss("Bean Adapter map's key set has wrong size: {0} / {1} / {2}", a, bm1.size(), m2.size()));
+		assertEquals(bm1.size(), m2.size(), fs("Bean Adapter map's key set has wrong size: {0} / {1} / {2}", a, bm1.size(), m2.size()));
 
 		var iter = bm1.keySet().iterator();
 		var temp = new HashSet();
@@ -87,15 +86,15 @@ class BeanConfig_Test extends SimpleTestBase {
 			count++;
 		}
 
-		assertEquals(count, m2.size(), ss("Iteration count over bean adpater key set failed: {0} / {1} / {2}", a, count, m2.size()));
-		assertEquals(m2.keySet(), temp, ss("Iteration over bean adpater key set failed: {0} / {1} / {2}", a, bm1.keySet(), m2.keySet()));
-		assertNotNull(bc.toBeanMap(p2), ss("Failed to identify class as bean type: {0}", p2.getClass()));
+		assertEquals(count, m2.size(), fs("Iteration count over bean adpater key set failed: {0} / {1} / {2}", a, count, m2.size()));
+		assertEquals(m2.keySet(), temp, fs("Iteration over bean adpater key set failed: {0} / {1} / {2}", a, bm1.keySet(), m2.keySet()));
+		assertNotNull(bc.toBeanMap(p2), fs("Failed to identify class as bean type: {0}", p2.getClass()));
 
 		var m5 = bc.toBeanMap(p2);
 		Set es1 = m5.entrySet();
 
-		assertEquals(es1, m3.entrySet(), ss("Entry set equality failed: {0} / {1} / {2}", p2, es1, m3.entrySet()));
-		assertEquals(m3.entrySet(), es1, ss("Entry set reverse equality failed: {0} / {1} / {2}", p2, es1, m3.entrySet()));
+		assertEquals(es1, m3.entrySet(), fs("Entry set equality failed: {0} / {1} / {2}", p2, es1, m3.entrySet()));
+		assertEquals(m3.entrySet(), es1, fs("Entry set reverse equality failed: {0} / {1} / {2}", p2, es1, m3.entrySet()));
 
 		iter = es1.iterator();
 		temp = new HashSet();
@@ -105,8 +104,8 @@ class BeanConfig_Test extends SimpleTestBase {
 			count++;
 		}
 
-		assertEquals(count, m3.size(), ss("Iteration count over bean adpater entry set failed: {0} / {1} / {2}", a, count, m3.size()));
-		assertEquals(m3.entrySet(), temp, ss("Iteration over bean adpater entry set failed: {0} / {1} / {2}", a, es1, m3.entrySet()));
+		assertEquals(count, m3.size(), fs("Iteration count over bean adpater entry set failed: {0} / {1} / {2}", a, count, m3.size()));
+		assertEquals(m3.entrySet(), temp, fs("Iteration over bean adpater entry set failed: {0} / {1} / {2}", a, es1, m3.entrySet()));
 	}
 
 	public static class Person {
@@ -398,20 +397,20 @@ class BeanConfig_Test extends SimpleTestBase {
 		var f1 = (A) Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { A.class }, new AHandler());
 
 		var bm1 = session.toBeanMap(f1);
-		assertNotNull(bm1, ss("Failed to obtain bean adapter for proxy: {0}", f1));
+		assertNotNull(bm1, fs("Failed to obtain bean adapter for proxy: {0}", f1));
 
 		var bm2 = session.newBeanMap(A.class);
-		assertNotNull(bm2, ss("Failed to create dynamic proxy bean for interface: {0}", A.class.getName()));
+		assertNotNull(bm2, fs("Failed to create dynamic proxy bean for interface: {0}", A.class.getName()));
 
 		bm2.put("a", "Hello");
 		bm2.put("b", Integer.valueOf(50));
 		f1.setA("Hello");
 		f1.setB(50);
 
-		assertEquals(bm2.get("a"), "Hello", ss("Failed to set string property 'a' on dynamic proxy bean. {0}", bm2));  // NOSONAR
-		assertEquals(bm2.get("b"), Integer.valueOf(50), ss("Failed to set string property 'b' on dynamic proxy bean. {0}", bm2));
-		assertEquals(bm1, bm2, ss("Failed equality test of dynamic proxies beans: {0} / {1}", bm1, bm2));
-		assertEquals(bm2, bm1, ss("Failed reverse equality test of dynamic proxies beans: {0} / {1}", bm1, bm2));
+		assertEquals(bm2.get("a"), "Hello", fs("Failed to set string property 'a' on dynamic proxy bean. {0}", bm2));  // NOSONAR
+		assertEquals(bm2.get("b"), Integer.valueOf(50), fs("Failed to set string property 'b' on dynamic proxy bean. {0}", bm2));
+		assertEquals(bm1, bm2, fs("Failed equality test of dynamic proxies beans: {0} / {1}", bm1, bm2));
+		assertEquals(bm2, bm1, fs("Failed reverse equality test of dynamic proxies beans: {0} / {1}", bm1, bm2));
 	}
 
 	public interface A {

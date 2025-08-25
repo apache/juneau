@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.junit.Assert.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.Assert.*;
 
 import java.util.*;
 

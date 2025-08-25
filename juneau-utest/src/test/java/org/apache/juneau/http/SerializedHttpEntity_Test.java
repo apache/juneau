@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 
 import java.io.*;
 
@@ -55,7 +55,7 @@ class SerializedHttpEntity_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_schema() throws Exception {
-		serializedEntity(alist("foo","bar"),OpenApiSerializer.DEFAULT).setSchema(T_ARRAY_PIPES).assertString().is("foo|bar");
+		serializedEntity(ulist("foo","bar"),OpenApiSerializer.DEFAULT).setSchema(T_ARRAY_PIPES).assertString().is("foo|bar");
 	}
 
 	@Test void a03_serializer_streaming() throws Exception {

@@ -13,6 +13,7 @@
 package org.apache.juneau.jsonschema;
 
 import static org.junit.Assert.*;
+
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;

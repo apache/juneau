@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.header.ContentType.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;

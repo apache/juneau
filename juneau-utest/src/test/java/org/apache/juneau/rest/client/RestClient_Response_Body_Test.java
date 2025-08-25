@@ -12,12 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.TestUtils.assertString;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
-import static org.apache.juneau.TestUtils.*;
 
 import java.io.*;
 import java.util.*;

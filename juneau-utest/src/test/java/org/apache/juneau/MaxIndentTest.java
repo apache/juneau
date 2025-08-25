@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -219,7 +220,7 @@ class MaxIndentTest extends SimpleTestBase {
 				return;
 			}
 
-			assertEquals(expected, r, ss("{0}/{1} parse-normal failed", input.label, testName));
+			assertEquals(expected, r, fs("{0}/{1} parse-normal failed", input.label, testName));
 
 		} catch (AssertionError e) {
 			throw e;

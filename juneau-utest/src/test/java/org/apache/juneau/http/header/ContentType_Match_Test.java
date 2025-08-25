@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.stream.*;
@@ -91,6 +91,6 @@ class ContentType_Match_Test extends SimpleTestBase {
 	void a01_basic(Input input) throws Exception {
 		var ct = contentType(input.contentType);
 		var mt = JsonParser.DEFAULT.parse(input.mediaTypes, MediaType[].class);
-		assertEquals(input.expected, ct.match(alist(mt)), ss("{0} failed", input.label));
+		assertEquals(input.expected, ct.match(ulist(mt)), fs("{0} failed", input.label));
 	}
 }

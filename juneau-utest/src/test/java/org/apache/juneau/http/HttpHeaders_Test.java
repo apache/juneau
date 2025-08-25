@@ -1,15 +1,17 @@
 package org.apache.juneau.http;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
+
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
+import org.apache.juneau.internal.*;
 import org.junit.jupiter.api.*;
 
 //***************************************************************************************************************************
@@ -31,7 +33,7 @@ class HttpHeaders_Test extends SimpleTestBase {
 		SerializedPart x2 = serializedPart("X2","2");
 		Header x3 = header("X3","3");
 		SerializedHeader x4 = serializedHeader("X4","4");
-		Map.Entry<String,Object> x5 = map("X5",(Object)"5").entrySet().iterator().next();
+		Map.Entry<String,Object> x5 = CollectionUtils.map("X5",(Object)"5").entrySet().iterator().next();
 		org.apache.http.message.BasicNameValuePair x6 = new org.apache.http.message.BasicNameValuePair("X6","6");
 		NameValuePairable x7 = () -> part("X7","7");
 		Headerable x8 = () -> header("X8","8");

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -41,10 +41,10 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a02_optionalContainingString(RoundTripTester t) throws Exception {
-		var x = optional("foobar");
+		var x = opt("foobar");
 		x = t.roundTrip(x);
 		assertEquals("foobar", x.get());
-		x = optional("");
+		x = opt("");
 		x = t.roundTrip(x);
 		assertEquals("", x.get());
 	}
@@ -65,7 +65,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b01a_stringField(RoundTripTester t) throws Exception {
 		var x = new B01();
-		x.f1 = optional("foo");
+		x.f1 = opt("foo");
 		x = t.roundTrip(x);
 		assertEquals("foo", x.f1.get());
 	}
@@ -102,7 +102,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b02a_integerField(RoundTripTester t) throws Exception {
 		var x = new B02();
-		x.f1 = optional(123);
+		x.f1 = opt(123);
 		x = t.roundTrip(x);
 		assertEquals(123, x.f1.get().intValue());
 	}
@@ -139,7 +139,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b03a_integerListField(RoundTripTester t) throws Exception {
 		var x = new B03();
-		x.f1 = optional(alist(123));
+		x.f1 = opt(ulist(123));
 		x = t.roundTrip(x);
 		assertEquals(123, x.f1.get().get(0).intValue());
 	}
@@ -148,7 +148,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b03b_integerListField_listWithNull(RoundTripTester t) throws Exception {
 		var x = new B03();
-		x.f1 = optional(alist((Integer)null));
+		x.f1 = opt(ulist((Integer)null));
 		x = t.roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertEquals(1, x.f1.get().size());
@@ -159,7 +159,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b03c_integerListField_emptyList(RoundTripTester t) throws Exception {
 		var x = new B03();
-		x.f1 = optional(alist());
+		x.f1 = opt(ulist());
 		x = t.roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertEquals(0, x.f1.get().size());
@@ -197,7 +197,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b04a_optionalOptionalInteger(RoundTripTester t) throws Exception {
 		var x = new B04();
-		x.f1 = optional(optional(123));
+		x.f1 = opt(opt(123));
 		x = t.roundTrip(x);
 		assertEquals(123, x.f1.get().get().intValue());
 	}
@@ -206,7 +206,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b04b_optionalOptionalInteger_emptyInnerValue(RoundTripTester t) throws Exception {
 		var x = new B04();
-		x.f1 = optional(empty());
+		x.f1 = opt(empty());
 		x = t.roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertFalse(x.f1.get().isPresent());
@@ -257,7 +257,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b05a_optionalOptionalBean(RoundTripTester t) throws Exception {
 		var x = new B05();
-		x.f1 = optional(optional(B05B.create()));
+		x.f1 = opt(opt(B05B.create()));
 		x = t.roundTrip(x);
 		assertEquals(123, x.f1.get().get().f2);
 	}
@@ -266,7 +266,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b05b_optionalOptionalBean_emptyInnerValue(RoundTripTester t) throws Exception {
 		var x = new B05();
-		x.f1 = optional(empty());
+		x.f1 = opt(empty());
 		x = t.roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertFalse(x.f1.get().isPresent());
@@ -308,7 +308,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b06a_listOfOptionalIntegers(RoundTripTester t) throws Exception {
 		var x = new B06();
-		x.f1 = alist(optional(123));
+		x.f1 = ulist(opt(123));
 		x = t.roundTrip(x);
 		assertEquals(123, x.f1.get(0).get().intValue());
 	}
@@ -317,7 +317,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b06b_listOfOptionalIntegers_listWithEmpty(RoundTripTester t) throws Exception {
 		var x = new B06();
-		x.f1 = alist(empty());
+		x.f1 = ulist(empty());
 		x = t.roundTrip(x);
 		assertEquals(1, x.f1.size());
 		assertFalse(x.f1.get(0).isPresent());
@@ -327,7 +327,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b06c_listOfOptionalIntegers_listWithNull(RoundTripTester t) throws Exception {
 		var x = new B06();
-		x.f1 = alist((Optional<Integer>)null);
+		x.f1 = ulist((Optional<Integer>)null);
 		x = t.roundTrip(x);
 		if (t.isValidationOnly())
 			return;
@@ -357,8 +357,8 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b07a_arrayOfOptionalIntegers(RoundTripTester t) throws Exception {
 		var x = new B07();
-		x.f1 = new Optional[]{optional(123)};
-		x.f2 = new List[]{alist(123)};
+		x.f1 = new Optional[]{opt(123)};
+		x.f2 = new List[]{ulist(123)};
 		x = t.roundTrip(x);
 		assertEquals(123, x.f1[0].get().intValue());
 	}

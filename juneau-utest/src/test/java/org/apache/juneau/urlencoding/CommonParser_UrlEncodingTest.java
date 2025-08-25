@@ -12,7 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;

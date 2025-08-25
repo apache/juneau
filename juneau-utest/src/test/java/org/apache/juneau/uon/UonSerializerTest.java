@@ -13,6 +13,7 @@
 package org.apache.juneau.uon;
 
 import static org.junit.Assert.*;
+
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 

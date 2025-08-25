@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
@@ -98,7 +99,7 @@ class PartList_Test extends SimpleTestBase {
 		x = partList(FOO_1, FOO_2, null);
 		assertEquals("Foo=1&Foo=2", s(x));
 
-		x = partList(alist(FOO_1, FOO_2, null));
+		x = partList(ulist(FOO_1, FOO_2, null));
 		assertEquals("Foo=1&Foo=2", s(x));
 
 		x = partList("Foo","1","Foo","2");
@@ -112,7 +113,7 @@ class PartList_Test extends SimpleTestBase {
 		x = PartList.of(Collections.emptyList());
 		assertEquals("", s(x));
 
-		x = PartList.of(alist(FOO_1));
+		x = PartList.of(ulist(FOO_1));
 		assertEquals("Foo=1", s(x));
 
 		x = PartList.of((NameValuePair[])null);
@@ -333,7 +334,7 @@ class PartList_Test extends SimpleTestBase {
 			.append("Bar", "b1")
 			.append("Bar", ()->"b2")
 			.append((List<NameValuePair>)null)
-			.append(alist(FOO_4));
+			.append(ulist(FOO_4));
 		assertEquals("Foo=1&Foo=2&Foo=3&Bar=b1&Bar=b2&Foo=4", s(x2));
 	}
 
@@ -350,7 +351,7 @@ class PartList_Test extends SimpleTestBase {
 			.prepend("Bar", "b1")
 			.prepend("Bar", ()->"b2")
 			.prepend((List<NameValuePair>)null)
-			.prepend(alist(FOO_4));
+			.prepend(ulist(FOO_4));
 		assertEquals("Foo=4&Bar=b2&Bar=b1&Foo=2&Foo=3&Foo=1", s(x2));
 	}
 
@@ -363,7 +364,7 @@ class PartList_Test extends SimpleTestBase {
 			.remove(PartList.of(FOO_1))
 			.remove(FOO_2)
 			.remove(FOO_3, FOO_4)
-			.remove(alist(FOO_5));
+			.remove(ulist(FOO_5));
 		assertEquals("Foo=6&Foo=7", s(x));
 
 		x = PartList.create().append(FOO_1,FOO_2).remove((String[])null).remove("Bar","Foo");
@@ -399,7 +400,7 @@ class PartList_Test extends SimpleTestBase {
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set((List<NameValuePair>)null)
-			.set(alist(null,FOO_3,FOO_4,FOO_5));
+			.set(ulist(null,FOO_3,FOO_4,FOO_5));
 		assertEquals("Bar=1&Bar=2&Foo=3&Foo=4&Foo=5", s(x));
 
 		x = PartList
@@ -502,16 +503,16 @@ class PartList_Test extends SimpleTestBase {
 		var x11 = PartList.create().setDefault("a",()->"x");
 		assertEquals("a=x", s(x11));
 
-		var x12 = PartList.create().set(BPart.X,BPart.Y).setDefault(alist(APart.X,BPart.Z,null));
+		var x12 = PartList.create().set(BPart.X,BPart.Y).setDefault(ulist(APart.X,BPart.Z,null));
 		assertEquals("b=x&b=y&a=x", s(x12));
 
 		var x13 = PartList.create().set(BPart.X,BPart.Y).setDefault(PartList.of(APart.X,BPart.Z,null));
 		assertEquals("b=x&b=y&a=x", s(x13));
 
 		PartList x14 = PartList.create().set(BPart.X,BPart.Y)
-			.setDefault(alist(APart.X,BPart.X,null))
-			.setDefault(alist(APart.Y,BPart.Y,null))
-			.setDefault(alist(CPart.X));
+			.setDefault(ulist(APart.X,BPart.X,null))
+			.setDefault(ulist(APart.Y,BPart.Y,null))
+			.setDefault(ulist(CPart.X));
 		assertEquals("b=x&b=y&a=x&c=x", s(x14));
 	}
 

@@ -12,12 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test.client;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Constants.*;
 import static org.junit.Assert.*;
-import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -26,7 +25,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Request;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
@@ -99,11 +97,11 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 			new int[][][]{{{1,2},null},null},
 			new Integer[][][]{{{1,null},null},null},
 			new String[][][]{{{"foo",null},null},null},
-			alist(1,null),
-			alist(alist(alist(1,null),null),null),
-			alist(new Integer[][][]{{{1,null},null},null},null),
-			alist(new int[][][]{{{1,2},null},null},null),
-			alist("foo","bar",null)
+			ulist(1,null),
+			ulist(ulist(ulist(1,null),null),null),
+			ulist(new Integer[][][]{{{1,null},null},null},null),
+			ulist(new int[][][]{{{1,2},null},null},null),
+			ulist("foo","bar",null)
 		);
 		assertEquals("OK", r);
 	}
@@ -115,12 +113,12 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 			ABean.get(),
 			null,
 			new ABean[][][]{{{ABean.get(),null},null},null},
-			alist(ABean.get(),null),
-			alist(new ABean[][][]{{{ABean.get(),null},null},null},null),
+			ulist(ABean.get(),null),
+			ulist(new ABean[][][]{{{ABean.get(),null},null},null},null),
 			map("foo",ABean.get()),
-			map("foo",alist(ABean.get())),
-			map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null)),
-			map(1,alist(ABean.get()))
+			map("foo",ulist(ABean.get())),
+			map("foo",ulist(new ABean[][][]{{{ABean.get(),null},null},null},null)),
+			map(1,ulist(ABean.get()))
 		);
 		assertEquals("OK", r);
 	}
@@ -132,12 +130,12 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 			TypedBeanImpl.get(),
 			null,
 			new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},
-			alist(TypedBeanImpl.get(),null),
-			alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
+			ulist(TypedBeanImpl.get(),null),
+			ulist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
 			map("foo",TypedBeanImpl.get()),
-			map("foo",alist((TypedBean)TypedBeanImpl.get())),
-			map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
-			map(1,alist((TypedBean)TypedBeanImpl.get()))
+			map("foo",ulist((TypedBean)TypedBeanImpl.get())),
+			map("foo",ulist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
+			map(1,ulist((TypedBean)TypedBeanImpl.get()))
 		);
 		assertEquals("OK", r);
 	}
@@ -173,12 +171,12 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 			TestEnum.TWO,
 			null,
 			new TestEnum[][][]{{{TestEnum.TWO,null},null},null},
-			alist(TestEnum.TWO,null),
-			alist(alist(alist(TestEnum.TWO,null),null),null),
-			alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null),
+			ulist(TestEnum.TWO,null),
+			ulist(ulist(ulist(TestEnum.TWO,null),null),null),
+			ulist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null),
 			map(TestEnum.ONE,TestEnum.TWO),
 			map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null}),
-			map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))
+			map(TestEnum.ONE,ulist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))
 		);
 		assertEquals("OK", r);
 	}
@@ -237,11 +235,11 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 			new int[][][]{{{1,2},null},null},
 			new Integer[][][]{{{1,null},null},null},
 			new String[][][]{{{"foo",null},null},null},
-			alist(1,null),
-			alist(alist(alist(1,null),null),null),
-			alist(new Integer[][][]{{{1,null},null},null},null),
-			alist(new int[][][]{{{1,2},null},null},null),
-			alist("foo","bar",null)
+			ulist(1,null),
+			ulist(ulist(ulist(1,null),null),null),
+			ulist(new Integer[][][]{{{1,null},null},null},null),
+			ulist(new int[][][]{{{1,2},null},null},null),
+			ulist("foo","bar",null)
 		);
 		assertEquals("OK", r);
 	}
@@ -253,12 +251,12 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 			ABean.get(),
 			null,
 			new ABean[][][]{{{ABean.get(),null},null},null},
-			alist(ABean.get(),null),
-			alist(new ABean[][][]{{{ABean.get(),null},null},null},null),
+			ulist(ABean.get(),null),
+			ulist(new ABean[][][]{{{ABean.get(),null},null},null},null),
 			map("foo",ABean.get()),
-			map("foo",alist(ABean.get())),
-			map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null)),
-			map(1,alist(ABean.get()))
+			map("foo",ulist(ABean.get())),
+			map("foo",ulist(new ABean[][][]{{{ABean.get(),null},null},null},null)),
+			map(1,ulist(ABean.get()))
 		);
 		assertEquals("OK", r);
 	}
@@ -271,12 +269,12 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 			TypedBeanImpl.get(),
 			null,
 			new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},
-			alist(TypedBeanImpl.get(),null),
-			alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
+			ulist(TypedBeanImpl.get(),null),
+			ulist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
 			map("foo",TypedBeanImpl.get()),
-			map("foo",alist((TypedBean)TypedBeanImpl.get())),
-			map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
-			map(1,alist((TypedBean)TypedBeanImpl.get()))
+			map("foo",ulist((TypedBean)TypedBeanImpl.get())),
+			map("foo",ulist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
+			map(1,ulist((TypedBean)TypedBeanImpl.get()))
 		);
 		assertEquals("OK", r);
 	}
@@ -312,12 +310,12 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 			TestEnum.TWO,
 			null,
 			new TestEnum[][][]{{{TestEnum.TWO,null},null},null},
-			alist(TestEnum.TWO,null),
-			alist(alist(alist(TestEnum.TWO,null),null),null),
-			alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null),
+			ulist(TestEnum.TWO,null),
+			ulist(ulist(ulist(TestEnum.TWO,null),null),null),
+			ulist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null),
 			map(TestEnum.ONE,TestEnum.TWO),
 			map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null}),
-			map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))
+			map(TestEnum.ONE,ulist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))
 		);
 		assertEquals("OK", r);
 	}
@@ -390,11 +388,11 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 			new int[][][]{{{1,2},null},null},
 			new Integer[][][]{{{1,null},null},null},
 			new String[][][]{{{"foo",null},null},null},
-			alist(1,null),
-			alist(alist(alist(1,null),null),null),
-			alist(new Integer[][][]{{{1,null},null},null},null),
-			alist(new int[][][]{{{1,2},null},null},null),
-			alist("foo","bar",null)
+			ulist(1,null),
+			ulist(ulist(ulist(1,null),null),null),
+			ulist(new Integer[][][]{{{1,null},null},null},null),
+			ulist(new int[][][]{{{1,2},null},null},null),
+			ulist("foo","bar",null)
 		);
 		assertEquals("OK", r);
 	}
@@ -406,12 +404,12 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 			ABean.get(),
 			null,
 			new ABean[][][]{{{ABean.get(),null},null},null},
-			alist(ABean.get(),null),
-			alist(new ABean[][][]{{{ABean.get(),null},null},null},null),
+			ulist(ABean.get(),null),
+			ulist(new ABean[][][]{{{ABean.get(),null},null},null},null),
 			map("foo",ABean.get()),
-			map("foo",alist(ABean.get())),
-			map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null)),
-			map(1,alist(ABean.get()))
+			map("foo",ulist(ABean.get())),
+			map("foo",ulist(new ABean[][][]{{{ABean.get(),null},null},null},null)),
+			map(1,ulist(ABean.get()))
 		);
 		assertEquals("OK", r);
 	}
@@ -424,12 +422,12 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 			TypedBeanImpl.get(),
 			null,
 			new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},
-			alist(TypedBeanImpl.get(),null),
-			alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
+			ulist(TypedBeanImpl.get(),null),
+			ulist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
 			map("foo",TypedBeanImpl.get()),
-			map("foo",alist((TypedBean)TypedBeanImpl.get())),
-			map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
-			map(1,alist((TypedBean)TypedBeanImpl.get()))
+			map("foo",ulist((TypedBean)TypedBeanImpl.get())),
+			map("foo",ulist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
+			map(1,ulist((TypedBean)TypedBeanImpl.get()))
 		);
 		assertEquals("OK", r);
 	}
@@ -465,12 +463,12 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 			TestEnum.TWO,
 			null,
 			new TestEnum[][][]{{{TestEnum.TWO,null},null},null},
-			alist(TestEnum.TWO,null),
-			alist(alist(alist(TestEnum.TWO,null),null),null),
-			alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null),
+			ulist(TestEnum.TWO,null),
+			ulist(ulist(ulist(TestEnum.TWO,null),null),null),
+			ulist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null),
 			map(TestEnum.ONE,TestEnum.TWO),
 			map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null}),
-			map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))
+			map(TestEnum.ONE,ulist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))
 		);
 		assertEquals("OK", r);
 	}
@@ -971,31 +969,31 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea13_setIntegerList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setIntegerList(alist(1,null)));
+		TestUtils.assertNotThrown(()->input.proxy.setIntegerList(ulist(1,null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea14_setInteger3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setInteger3dList(alist(alist(alist(1,null),null),null)));
+		TestUtils.assertNotThrown(()->input.proxy.setInteger3dList(ulist(ulist(ulist(1,null),null),null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea15_setInteger1d3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setInteger1d3dList(alist(new Integer[][][]{{{1,null},null},null},null)));
+		TestUtils.assertNotThrown(()->input.proxy.setInteger1d3dList(ulist(new Integer[][][]{{{1,null},null},null},null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea16_setInt1d3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setInt1d3dList(alist(new int[][][]{{{1,2},null},null},null)));
+		TestUtils.assertNotThrown(()->input.proxy.setInt1d3dList(ulist(new int[][][]{{{1,2},null},null},null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea17_setStringList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setStringList(alist("foo","bar",null)));
+		TestUtils.assertNotThrown(()->input.proxy.setStringList(ulist("foo","bar",null)));
 	}
 
 	// Beans
@@ -1014,13 +1012,13 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb03_setBeanList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setBeanList(alist(ABean.get())));
+		TestUtils.assertNotThrown(()->input.proxy.setBeanList(ulist(ABean.get())));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb04_setBean1d3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setBean1d3dList(alist(new ABean[][][]{{{ABean.get(),null},null},null},null)));
+		TestUtils.assertNotThrown(()->input.proxy.setBean1d3dList(ulist(new ABean[][][]{{{ABean.get(),null},null},null},null)));
 	}
 
 	@ParameterizedTest
@@ -1032,19 +1030,19 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb06_setBeanListMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setBeanListMap(map("foo",alist(ABean.get()))));
+		TestUtils.assertNotThrown(()->input.proxy.setBeanListMap(map("foo",ulist(ABean.get()))));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb07_setBean1d3dListMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setBean1d3dListMap(map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null))));
+		TestUtils.assertNotThrown(()->input.proxy.setBean1d3dListMap(map("foo",ulist(new ABean[][][]{{{ABean.get(),null},null},null},null))));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb08_setBeanListMapIntegerKeys(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setBeanListMapIntegerKeys(map(1,alist(ABean.get()))));
+		TestUtils.assertNotThrown(()->input.proxy.setBeanListMapIntegerKeys(map(1,ulist(ABean.get()))));
 	}
 
 	// Typed beans
@@ -1064,13 +1062,13 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec03_setTypedBeanList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setTypedBeanList(alist((TypedBean)TypedBeanImpl.get())));
+		TestUtils.assertNotThrown(()->input.proxy.setTypedBeanList(ulist((TypedBean)TypedBeanImpl.get())));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec04_setTypedBean1d3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setTypedBean1d3dList(alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
+		TestUtils.assertNotThrown(()->input.proxy.setTypedBean1d3dList(ulist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
 	}
 
 	@ParameterizedTest
@@ -1082,19 +1080,19 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec06_setTypedBeanListMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setTypedBeanListMap(map("foo",alist((TypedBean)TypedBeanImpl.get()))));
+		TestUtils.assertNotThrown(()->input.proxy.setTypedBeanListMap(map("foo",ulist((TypedBean)TypedBeanImpl.get()))));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec07_setTypedBean1d3dListMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setTypedBean1d3dListMap(map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null))));
+		TestUtils.assertNotThrown(()->input.proxy.setTypedBean1d3dListMap(map("foo",ulist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null))));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec08_setTypedBeanListMapIntegerKeys(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setTypedBeanListMapIntegerKeys(map(1,alist((TypedBean)TypedBeanImpl.get()))));
+		TestUtils.assertNotThrown(()->input.proxy.setTypedBeanListMapIntegerKeys(map(1,ulist((TypedBean)TypedBeanImpl.get()))));
 	}
 
 	// Swapped POJOs
@@ -1165,19 +1163,19 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef03_setEnumList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setEnumList(alist(TestEnum.TWO,null)));
+		TestUtils.assertNotThrown(()->input.proxy.setEnumList(ulist(TestEnum.TWO,null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef04_setEnum3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setEnum3dList(alist(alist(alist(TestEnum.TWO,null),null),null)));
+		TestUtils.assertNotThrown(()->input.proxy.setEnum3dList(ulist(ulist(ulist(TestEnum.TWO,null),null),null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef05_setEnum1d3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setEnum1d3dList(alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
+		TestUtils.assertNotThrown(()->input.proxy.setEnum1d3dList(ulist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
 	}
 
 	@ParameterizedTest
@@ -1195,7 +1193,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef08_setEnum1d3dListMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))));
+		TestUtils.assertNotThrown(()->input.proxy.setEnum1d3dListMap(map(TestEnum.ONE,ulist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

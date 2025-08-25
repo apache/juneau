@@ -12,8 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.remote;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
+
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;

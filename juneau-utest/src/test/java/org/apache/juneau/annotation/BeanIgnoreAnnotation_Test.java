@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
-import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;

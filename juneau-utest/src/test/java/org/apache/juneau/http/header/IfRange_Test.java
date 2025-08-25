@@ -14,7 +14,9 @@ package org.apache.juneau.http.header;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+
 import java.io.*;
 import java.time.*;
 import java.util.function.*;
@@ -77,7 +79,7 @@ class IfRange_Test extends SimpleTestBase {
 
 	@Test void a02_asEntityTag() {
 		EntityTag x = ifRange(VALUE1).asEntityTag().get();
-		assertString("\"foo\"", x);
+		TestUtils.assertString("\"foo\"", x);
 		assertEmpty(ifRange(()->null).asEntityTag());
 		assertEmpty(ifRange(()->PARSED3).asEntityTag());
 	}

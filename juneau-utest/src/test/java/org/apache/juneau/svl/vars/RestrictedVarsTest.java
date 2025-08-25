@@ -13,6 +13,7 @@
 package org.apache.juneau.svl.vars;
 
 import static org.junit.Assert.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;

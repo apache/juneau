@@ -14,13 +14,14 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -39,7 +40,7 @@ public class MapAssertion_Test {
 
 	@SafeVarargs
 	private static <K,V> Map<K,V> map(Object...objects) {
-		return mapBuilder(new LinkedHashMap<K,V>()).addPairs(objects).build();
+		return CollectionUtils.mapBuilder(new LinkedHashMap<K,V>()).addPairs(objects).build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

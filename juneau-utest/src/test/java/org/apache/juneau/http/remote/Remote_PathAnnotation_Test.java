@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.remote;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
+
 import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -26,6 +27,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.part.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -93,8 +95,8 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 		assertEquals("1",x.getX5(Bean.create()));
 		assertEquals("x=1,x=1",x.getX6(new Bean[]{Bean.create(),Bean.create()}));
 		assertEquals("@((x=1),(x=1))",x.getX7(new Bean[]{Bean.create(),Bean.create()}));
-		assertEquals("x=1,x=1",x.getX8(alist(Bean.create(),Bean.create())));
-		assertEquals("@((x=1),(x=1))",x.getX9(alist(Bean.create(),Bean.create())));
+		assertEquals("x=1,x=1",x.getX8(ulist(Bean.create(),Bean.create())));
+		assertEquals("@((x=1),(x=1))",x.getX9(ulist(Bean.create(),Bean.create())));
 		assertEquals("x=x\\=1",x.getX10(map("x",Bean.create())));
 		assertEquals("x=1",x.getX11(map("x",Bean.create())));
 		assertEquals("x=1",x.getX12(map("x",Bean.create())));
@@ -108,7 +110,7 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 		assertEquals("bar",x.getX20(new NameValuePair[]{part("x","bar")}));
 		assertEquals("{x}",x.getX20(null));
 		assertThrowsWithMessage(Exception.class, "Invalid value type for path arg 'null': java.lang.String", ()->x.getX21("foo"));
-		assertEquals("bar",x.getX22(alist(part("x","bar"))));
+		assertEquals("bar",x.getX22(ulist(part("x","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -619,9 +621,9 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K2a {
-		@Path("*") @Schema(aev=true) public Map<String,Object> getA() { return mapBuilder(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build(); }
+		@Path("*") @Schema(aev=true) public Map<String,Object> getA() { return CollectionUtils.mapBuilder(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build(); }
 		@Path("*") public Map<String,Object> getB() { return map("b1","true","b2","123","b3","null"); }
-		@Path("*") @Schema(aev=true) public Map<String,Object> getC() { return mapBuilder(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build(); }
+		@Path("*") @Schema(aev=true) public Map<String,Object> getC() { return CollectionUtils.mapBuilder(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build(); }
 		@Path("*")
 		public Map<String,Object> getD() { return null; }
 	}
@@ -672,10 +674,10 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	public static class K4a {
-		@Path public List<Object> getA() { return alist("foo","","true","123","null",true,123,null); }
-		@Path("b") public List<Object> getX1() { return alist("foo","","true","123","null",true,123,null); }
-		@Path(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return alist("foo","","true","123","null",true,123,null); }
-		@Path("d") @Schema(aev=true) public List<Object> getX3() { return alist(); }
+		@Path public List<Object> getA() { return ulist("foo","","true","123","null",true,123,null); }
+		@Path("b") public List<Object> getX1() { return ulist("foo","","true","123","null",true,123,null); }
+		@Path(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return ulist("foo","","true","123","null",true,123,null); }
+		@Path("d") @Schema(aev=true) public List<Object> getX3() { return ulist(); }
 		@Path("f") public Object[] getX5() { return new Object[]{"foo","","true","123","null",true,123,null}; }
 		@Path(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return new Object[]{"foo","","true","123","null",true,123,null}; }
 		@Path("h") @Schema(aev=true)

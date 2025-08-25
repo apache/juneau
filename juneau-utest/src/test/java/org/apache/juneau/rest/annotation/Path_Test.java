@@ -14,6 +14,7 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.Assert.*;
+
 import java.util.*;
 
 import org.apache.http.client.config.*;

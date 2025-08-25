@@ -14,8 +14,10 @@ package org.apache.juneau.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.junit.Assert.*;
+
 import java.io.*;
 import java.lang.annotation.*;
 import java.util.*;

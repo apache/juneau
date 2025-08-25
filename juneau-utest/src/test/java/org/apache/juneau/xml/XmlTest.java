@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.list;
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
+
 import java.net.*;
 import java.util.*;
 
@@ -165,7 +165,7 @@ class XmlTest extends SimpleTestBase {
 			this.name = name;
 			this.age = age;
 		}
-	
+
 		private String name;
 		public String getName() { return name; }
 		public void setName(String v) { name = v; }

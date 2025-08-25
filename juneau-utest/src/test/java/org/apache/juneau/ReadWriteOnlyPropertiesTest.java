@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
 

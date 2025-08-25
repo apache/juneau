@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.testutils.pojos;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -58,8 +58,8 @@ public class PrimitiveAtomicObjectsBean {
 		poaAtomicLong = new AtomicLong[][]{{new AtomicLong(1)}, {new AtomicLong(2)}, null};
 
 		// Anonymous list of primitives
-		poalAtomicInteger = alist(new AtomicInteger[]{new AtomicInteger(1)},null);
-		poalAtomicLong = alist(new AtomicLong[]{new AtomicLong(1)},null);
+		poalAtomicInteger = ulist(new AtomicInteger[]{new AtomicInteger(1)},null);
+		poalAtomicLong = ulist(new AtomicLong[]{new AtomicLong(1)},null);
 
 		// Regular list of primitives
 		polAtomicInteger = new ArrayList<>();

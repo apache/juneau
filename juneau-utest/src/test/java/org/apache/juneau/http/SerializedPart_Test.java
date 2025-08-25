@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -32,7 +32,7 @@ class SerializedPart_Test extends SimpleTestBase {
 	private static final OpenApiSerializer OAPI_SERIALIZER = OpenApiSerializer.DEFAULT;
 
 	@Test void a01_basic() {
-		SerializedPart x1 = new SerializedPart("Foo",alist("bar","baz"),HEADER,OAPI_SESSION,T_ARRAY_PIPES,true);
+		SerializedPart x1 = new SerializedPart("Foo",ulist("bar","baz"),HEADER,OAPI_SESSION,T_ARRAY_PIPES,true);
 		assertString("Foo=bar|baz", x1);
 	}
 
@@ -42,15 +42,15 @@ class SerializedPart_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_serializer() {
-		SerializedPart x1 = serializedPart("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null);
+		SerializedPart x1 = serializedPart("Foo",ulist("bar","baz")).serializer((HttpPartSerializer)null);
 		assertEquals("[bar, baz]", x1.getValue());
-		SerializedPart x2 = serializedPart("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
+		SerializedPart x2 = serializedPart("Foo",ulist("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
 		assertEquals("bar,baz", x2.getValue());
-		SerializedPart x3 = serializedPart("Foo",alist("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
+		SerializedPart x3 = serializedPart("Foo",ulist("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
 		assertEquals("[bar, baz]", x3.getValue());
-		SerializedPart x4 = serializedPart("Foo",alist("bar","baz")).serializer(OAPI_SERIALIZER).copyWith(null,null);
+		SerializedPart x4 = serializedPart("Foo",ulist("bar","baz")).serializer(OAPI_SERIALIZER).copyWith(null,null);
 		assertEquals("bar,baz", x4.getValue());
-		SerializedPart x5 = serializedPart("Foo",alist("bar","baz")).copyWith(OAPI_SERIALIZER.getPartSession(),null);
+		SerializedPart x5 = serializedPart("Foo",ulist("bar","baz")).copyWith(OAPI_SERIALIZER.getPartSession(),null);
 		assertEquals("bar,baz", x5.getValue());
 	}
 

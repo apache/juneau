@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.Assert.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.Assert.*;
 
 import java.util.*;
 import java.util.Map;
@@ -26,6 +25,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.msgpack.*;
@@ -166,7 +166,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a03_implListClasses(RoundTripTester t) throws Exception {
-		var l = alist(new CBean());
+		var l = ulist(new CBean());
 
 		l.get(0).setF1("bar");
 		l = t.roundTrip(l, List.class, IBean.class);
@@ -188,7 +188,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a04_implMap(RoundTripTester t) throws Exception {
-		var l = map("foo",new CBean());
+		var l = CollectionUtils.map("foo",new CBean());
 
 		l.get("foo").setF1("bar");
 		l = t.roundTrip(l, Map.class, String.class, IBean.class);

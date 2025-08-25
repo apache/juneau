@@ -13,6 +13,7 @@
 package org.apache.juneau.uon;
 
 import static org.junit.Assert.*;
+
 import java.util.function.*;
 
 import org.apache.juneau.*;

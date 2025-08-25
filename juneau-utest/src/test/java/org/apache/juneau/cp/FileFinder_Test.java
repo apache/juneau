@@ -13,7 +13,7 @@
 package org.apache.juneau.cp;
 
 import static java.util.Locale.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -593,19 +593,19 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 	@Test void e01_localDir_hashCode() {
 		Set<LocalDir> s = null;
 
-		s = set(new LocalDir(Paths.get("test")), new LocalDir(Paths.get("test")));
+		s = TestUtils.set(new LocalDir(Paths.get("test")), new LocalDir(Paths.get("test")));
 		assertSize(1, s);
 
-		s = set(new LocalDir(Paths.get("test")), new LocalDir(Paths.get("test","test")));
+		s = TestUtils.set(new LocalDir(Paths.get("test")), new LocalDir(Paths.get("test","test")));
 		assertSize(2, s);
 
-		s = set(new LocalDir(List.class,null), new LocalDir(List.class,null));
+		s = TestUtils.set(new LocalDir(List.class,null), new LocalDir(List.class,null));
 		assertSize(1, s);
 
-		s = set(new LocalDir(List.class,null), new LocalDir(List.class,"foo"));
+		s = TestUtils.set(new LocalDir(List.class,null), new LocalDir(List.class,"foo"));
 		assertSize(2, s);
 
-		s = set(new LocalDir(List.class,null), new LocalDir(String.class,null));
+		s = TestUtils.set(new LocalDir(List.class,null), new LocalDir(String.class,null));
 		assertSize(2, s);
 	}
 

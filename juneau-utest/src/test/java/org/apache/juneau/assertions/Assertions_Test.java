@@ -13,7 +13,7 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -65,12 +65,12 @@ public class Assertions_Test {
 
 	@Test
 	public void a08_assertCollection() {
-		assertCollection(alist()).isEmpty();
+		assertCollection(ulist()).isEmpty();
 	}
 
 	@Test
 	public void a09_assertList() {
-		assertList(alist()).isEmpty();
+		assertList(ulist()).isEmpty();
 	}
 
 	@Test
@@ -124,7 +124,7 @@ public class Assertions_Test {
 
 	@Test
 	public void a19_assertBeanList() {
-		assertBeanList(alist(ABean.get())).asJson().is("[{a:1,b:'foo'}]");
+		assertBeanList(ulist(ABean.get())).asJson().is("[{a:1,b:'foo'}]");
 	}
 
 	@Test
@@ -179,7 +179,7 @@ public class Assertions_Test {
 
 	@Test
 	public void a25_assertStringList() {
-		assertStringList(alist()).isNotNull();
+		assertStringList(ulist()).isNotNull();
 		assertStringList(null).isNull();
 	}
 }

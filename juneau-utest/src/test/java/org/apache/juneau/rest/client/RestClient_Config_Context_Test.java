@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.Context.*;
 import static org.junit.Assert.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;

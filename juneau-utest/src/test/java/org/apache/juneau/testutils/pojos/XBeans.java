@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.testutils.pojos;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 
@@ -88,25 +88,25 @@ public class XBeans {
 		public static XB get() {
 			var t = new XB();
 			t.f01 = new String[]{"a","b"};
-			t.f02 = alist("c","d");
+			t.f02 = ulist("c","d");
 			t.f03 = new int[]{1,2};
-			t.f04 = alist(3,4);
+			t.f04 = ulist(3,4);
 			t.f05 = new String[][]{{"e","f"},{"g","h"}};
-			t.f06 = alist(new String[]{"i","j"},new String[]{"k","l"});
+			t.f06 = ulist(new String[]{"i","j"},new String[]{"k","l"});
 			t.f07 = new XA[]{XA.get(),XA.get()};
-			t.f08 = alist(XA.get(),XA.get());
+			t.f08 = ulist(XA.get(),XA.get());
 			t.f09 = new XA[][]{{XA.get()},{XA.get()}};
-			t.f10 = alist(Arrays.asList(XA.get()),Arrays.asList(XA.get()));
+			t.f10 = ulist(Arrays.asList(XA.get()),Arrays.asList(XA.get()));
 			t.setF11(new String[]{"a","b"});
-			t.setF12(alist("c","d"));
+			t.setF12(ulist("c","d"));
 			t.setF13(new int[]{1,2});
-			t.setF14(alist(3,4));
+			t.setF14(ulist(3,4));
 			t.setF15(new String[][]{{"e","f"},{"g","h"}});
-			t.setF16(alist(new String[]{"i","j"},new String[]{"k","l"}));
+			t.setF16(ulist(new String[]{"i","j"},new String[]{"k","l"}));
 			t.setF17(new XA[]{XA.get(),XA.get()});
-			t.setF18(alist(XA.get(),XA.get()));
+			t.setF18(ulist(XA.get(),XA.get()));
 			t.setF19(new XA[][]{{XA.get()},{XA.get()}});
-			t.setF20(alist(Arrays.asList(XA.get()),Arrays.asList(XA.get())));
+			t.setF20(ulist(Arrays.asList(XA.get()),Arrays.asList(XA.get())));
 			return t;
 		}
 
@@ -118,25 +118,25 @@ public class XBeans {
 		public static XC get() {
 			var t = new XC();
 			t.f01 = new String[]{"a","b"};
-			t.f02 = alist("c","d");
+			t.f02 = ulist("c","d");
 			t.f03 = new int[]{1,2};
-			t.f04 = alist(3, 4);
+			t.f04 = ulist(3, 4);
 			t.f05 = new String[][]{{"e","f"},{"g","h"}};
-			t.f06 = alist(new String[]{"i","j"}, new String[]{"k","l"});
+			t.f06 = ulist(new String[]{"i","j"}, new String[]{"k","l"});
 			t.f07 = new XA[]{XA.get(),XA.get()};
-			t.f08 = alist(XA.get(), XA.get());
+			t.f08 = ulist(XA.get(), XA.get());
 			t.f09 = new XA[][]{{XA.get()},{XA.get()}};
-			t.f10 = alist(Arrays.asList(XA.get()), Arrays.asList(XA.get()));
+			t.f10 = ulist(Arrays.asList(XA.get()), Arrays.asList(XA.get()));
 			t.setF11(new String[]{"a","b"});
-			t.setF12(alist("c","d"));
+			t.setF12(ulist("c","d"));
 			t.setF13(new int[]{1,2});
-			t.setF14(alist(3,4));
+			t.setF14(ulist(3,4));
 			t.setF15(new String[][]{{"e","f"},{"g","h"}});
-			t.setF16(alist(new String[]{"i","j"},new String[]{"k","l"}));
+			t.setF16(ulist(new String[]{"i","j"},new String[]{"k","l"}));
 			t.setF17(new XA[]{XA.get(),XA.get()});
-			t.setF18(alist(XA.get(), XA.get()));
+			t.setF18(ulist(XA.get(), XA.get()));
 			t.setF19(new XA[][]{{XA.get()},{XA.get()}});
-			t.setF20(alist(Arrays.asList(XA.get()), Arrays.asList(XA.get())));
+			t.setF20(ulist(Arrays.asList(XA.get()), Arrays.asList(XA.get())));
 			return t;
 		}
 
@@ -210,25 +210,25 @@ public class XBeans {
 		public static XE get() {
 			var t = new XE();
 			t.f01 = new String[]{"a","b"};
-			t.f02 = alist("c","d");
+			t.f02 = ulist("c","d");
 			t.f03 = new int[]{1,2};
-			t.f04 = alist(3,4);
+			t.f04 = ulist(3,4);
 			t.f05 = new String[][]{{"e","f"},{"g","h"}};
-			t.f06 = alist(new String[]{"i","j"},new String[]{"k","l"});
+			t.f06 = ulist(new String[]{"i","j"},new String[]{"k","l"});
 			t.f07 = new XD[]{XD.get(),XD.get()};
-			t.f08 = alist(XD.get(),XD.get());
+			t.f08 = ulist(XD.get(),XD.get());
 			t.f09 = new XD[][]{{XD.get()},{XD.get()}};
-			t.f10 = alist(Arrays.asList(XD.get()),Arrays.asList(XD.get()));
+			t.f10 = ulist(Arrays.asList(XD.get()),Arrays.asList(XD.get()));
 			t.setF11(new String[]{"a","b"});
-			t.setF12(alist("c","d"));
+			t.setF12(ulist("c","d"));
 			t.setF13(new int[]{1,2});
-			t.setF14(alist(3,4));
+			t.setF14(ulist(3,4));
 			t.setF15(new String[][]{{"e","f"},{"g","h"}});
-			t.setF16(alist(new String[]{"i","j"},new String[]{"k","l"}));
+			t.setF16(ulist(new String[]{"i","j"},new String[]{"k","l"}));
 			t.setF17(new XD[]{XD.get(),XD.get()});
-			t.setF18(alist(XD.get(),XD.get()));
+			t.setF18(ulist(XD.get(),XD.get()));
 			t.setF19(new XD[][]{{XD.get()},{XD.get()}});
-			t.setF20(alist(Arrays.asList(XD.get()),Arrays.asList(XD.get())));
+			t.setF20(ulist(Arrays.asList(XD.get()),Arrays.asList(XD.get())));
 			return t;
 		}
 
@@ -239,25 +239,25 @@ public class XBeans {
 		public static XF get() {
 			var t = new XF();
 			t.f01 = new String[]{"a","b"};
-			t.f02 = alist("c","d");
+			t.f02 = ulist("c","d");
 			t.f03 = new int[]{1,2};
-			t.f04 = alist(3, 4);
+			t.f04 = ulist(3, 4);
 			t.f05 = new String[][]{{"e","f"},{"g","h"}};
-			t.f06 = alist(new String[]{"i","j"}, new String[]{"k","l"});
+			t.f06 = ulist(new String[]{"i","j"}, new String[]{"k","l"});
 			t.f07 = new XD[]{XD.get(),XD.get()};
-			t.f08 = alist(XD.get(), XD.get());
+			t.f08 = ulist(XD.get(), XD.get());
 			t.f09 = new XD[][]{{XD.get()},{XD.get()}};
-			t.f10 = alist(Arrays.asList(XD.get()), Arrays.asList(XD.get()));
+			t.f10 = ulist(Arrays.asList(XD.get()), Arrays.asList(XD.get()));
 			t.setF11(new String[]{"a","b"});
-			t.setF12(alist("c","d"));
+			t.setF12(ulist("c","d"));
 			t.setF13(new int[]{1,2});
-			t.setF14(alist(3,4));
+			t.setF14(ulist(3,4));
 			t.setF15(new String[][]{{"e","f"},{"g","h"}});
-			t.setF16(alist(new String[]{"i","j"},new String[]{"k","l"}));
+			t.setF16(ulist(new String[]{"i","j"},new String[]{"k","l"}));
 			t.setF17(new XD[]{XD.get(),XD.get()});
-			t.setF18(alist(XD.get(), XD.get()));
+			t.setF18(ulist(XD.get(), XD.get()));
 			t.setF19(new XD[][]{{XD.get()},{XD.get()}});
-			t.setF20(alist(Arrays.asList(XD.get()), Arrays.asList(XD.get())));
+			t.setF20(ulist(Arrays.asList(XD.get()), Arrays.asList(XD.get())));
 			return t;
 		}
 

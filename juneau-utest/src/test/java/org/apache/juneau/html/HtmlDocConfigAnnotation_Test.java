@@ -12,7 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;

@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.Assert.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.Assert.*;
 
 import java.util.*;
 
@@ -1880,7 +1879,7 @@ class BeanMapTest extends SimpleTestBase {
 		var aa = new AA();
 		BeanMap<AA> bm = BeanContext.DEFAULT.toBeanMap(aa);
 
-		bm.put("a", alist("x"));
+		bm.put("a", ulist("x"));
 		assertJson(aa.a, "['x']");
 	}
 

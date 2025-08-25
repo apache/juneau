@@ -12,7 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema.annotation;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
@@ -34,7 +36,7 @@ class ExternalDocsAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertString(""
+		TestUtils.assertString(""
 			+ "{"
 				+ "description:['description'],"
 				+ "url:'url'"

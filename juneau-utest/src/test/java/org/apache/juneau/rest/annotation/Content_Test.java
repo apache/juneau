@@ -14,9 +14,9 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.http.header.ContentType.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.list;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -971,7 +971,7 @@ class Content_Test extends SimpleTestBase {
 			.assertStatus(200)
 			.assertContent("null");
 
-		String body2 = Json5.of(list(optional(ABean.get())));
+		String body2 = Json5.of(list(opt(ABean.get())));
 		j.post("/d", body2, APPLICATION_JSON)
 			.run()
 			.assertStatus(200)

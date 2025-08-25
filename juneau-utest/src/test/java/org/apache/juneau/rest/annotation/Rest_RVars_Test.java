@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.annotation;
 
 import static java.lang.String.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.RestResponse;

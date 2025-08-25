@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
+
 import java.time.*;
 import java.time.chrono.*;
 import java.time.format.*;

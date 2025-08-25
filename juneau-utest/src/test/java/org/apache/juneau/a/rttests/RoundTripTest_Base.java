@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
+import static org.apache.juneau.TestUtils.*;
+
 import java.util.stream.*;
 
 import org.apache.juneau.*;

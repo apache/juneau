@@ -13,6 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.function.*;

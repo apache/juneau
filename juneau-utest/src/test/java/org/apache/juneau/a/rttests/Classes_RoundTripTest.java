@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.Assert.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.Assert.*;
 
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -36,7 +35,7 @@ class Classes_RoundTripTest extends RoundTripTest_Base {
 		o = t.roundTrip(o);
 		assertJson(o, "['java.lang.String']");
 
-		o = alist(String.class, Integer.class);
+		o = ulist(String.class, Integer.class);
 		o = t.roundTrip(o);
 		assertJson(o, "['java.lang.String','java.lang.Integer']");
 

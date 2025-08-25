@@ -14,8 +14,9 @@ package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -143,7 +144,7 @@ class Remote_ContentAnnotation_Test extends SimpleTestBase {
 		assertEquals("1.0",x.postX2(1f));
 		assertEquals("{f:1}",x.postX3(Bean.create()));
 		assertEquals("[{f:1}]",x.postX4(new Bean[]{Bean.create()}));
-		assertEquals("[{f:1}]",x.postX5(alist(Bean.create())));
+		assertEquals("[{f:1}]",x.postX5(ulist(Bean.create())));
 		assertEquals("{k1:{f:1}}",x.postX6(map("k1",Bean.create())));
 		assertEquals("xxx",x.postX7(TestUtils.reader("xxx")));
 		assertEquals("xxx",x.postX8(TestUtils.inputStream("xxx")));
@@ -237,7 +238,7 @@ class Remote_ContentAnnotation_Test extends SimpleTestBase {
 		assertEquals("1.0",x.postX2(1f));
 		assertEquals("{f:1}",x.postX3(Bean.create()));
 		assertEquals("[{f:1}]",x.postX4(new Bean[]{Bean.create()}));
-		assertEquals("[{f:1}]",x.postX5(alist(Bean.create())));
+		assertEquals("[{f:1}]",x.postX5(ulist(Bean.create())));
 		assertEquals("{k1:{f:1}}",x.postX6(map("k1",Bean.create())));
 		assertEquals("xxx",x.postX7(TestUtils.reader("xxx")));
 		assertEquals("xxx",x.postX8(TestUtils.inputStream("xxx")));
@@ -316,7 +317,7 @@ class Remote_ContentAnnotation_Test extends SimpleTestBase {
 		assertEquals("1",x.postX1(1));
 		assertEquals("1.0",x.postX2(1f));
 		assertEquals("{f:1}",x.postX3(Bean.create()));
-		assertEquals("[{f:1}]",x.postX5(alist(Bean.create())));
+		assertEquals("[{f:1}]",x.postX5(ulist(Bean.create())));
 		assertEquals("{k1={f:1}}",x.postX6(map("k1",Bean.create())));
 		assertEquals("xxx",x.postX7(TestUtils.reader("xxx")));
 		assertEquals("xxx",x.postX8(TestUtils.inputStream("xxx")));

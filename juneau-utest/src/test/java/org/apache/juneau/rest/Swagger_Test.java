@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.Assert.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.Assert.*;
 
 import java.io.*;
 import java.util.*;
@@ -72,7 +71,7 @@ class Swagger_Test extends SimpleTestBase {
 		@Override /* FileFinder */
 		public Optional<InputStream> getStream(String name, Locale locale) throws IOException {
 			if (name.endsWith(".json"))
-				return optional(SwaggerProvider.class.getResourceAsStream("BasicRestInfoProviderTest_swagger.json"));
+				return opt(SwaggerProvider.class.getResourceAsStream("BasicRestInfoProviderTest_swagger.json"));
 			return super.getStream(name, locale);
 		}
 	}

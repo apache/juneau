@@ -12,7 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
+
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;

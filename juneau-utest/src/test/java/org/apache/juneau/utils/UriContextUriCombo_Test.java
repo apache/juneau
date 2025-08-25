@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.stream.*;
@@ -235,42 +236,42 @@ class UriContextUriCombo_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("data")
 	void a01_testAbsoluteAuthority(Data d) {
-		assertEquals(d.r.eAbsoluteAuthority, d.in.uriContext.getAbsoluteAuthority(), ss("{0}: testAbsoluteAuthority() failed", d.label));
+		assertEquals(d.r.eAbsoluteAuthority, d.in.uriContext.getAbsoluteAuthority(), fs("{0}: testAbsoluteAuthority() failed", d.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("data")
 	void a02_testAbsoluteContext(Data d) {
-		assertEquals(d.r.eAbsoluteContext, d.in.uriContext.getAbsoluteContextRoot(), ss("{0}: testAbsoluteContext() failed", d.label));
+		assertEquals(d.r.eAbsoluteContext, d.in.uriContext.getAbsoluteContextRoot(), fs("{0}: testAbsoluteContext() failed", d.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("data")
 	void a03_testAbsoluteResource(Data d) {
-		assertEquals(d.r.eAbsoluteResource, d.in.uriContext.getAbsoluteServletPath(), ss("{0}: testAbsoluteResource() failed", d.label));
+		assertEquals(d.r.eAbsoluteResource, d.in.uriContext.getAbsoluteServletPath(), fs("{0}: testAbsoluteResource() failed", d.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("data")
 	void a04_testAbsolutePath(Data d) {
-		assertEquals(d.r.eAbsolutePath, d.in.uriContext.getAbsolutePathInfo(), ss("{0}: testAbsolutePath() failed", d.label));
+		assertEquals(d.r.eAbsolutePath, d.in.uriContext.getAbsolutePathInfo(), fs("{0}: testAbsolutePath() failed", d.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("data")
 	void a05_testRootRelativeContext(Data d) {
-		assertEquals(d.r.eRootRelativeContext, d.in.uriContext.getRootRelativeContextRoot(), ss("{0}: testRootRelativeContext() failed", d.label));
+		assertEquals(d.r.eRootRelativeContext, d.in.uriContext.getRootRelativeContextRoot(), fs("{0}: testRootRelativeContext() failed", d.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("data")
 	void a06_testRootRelativeResource(Data d) {
-		assertEquals(d.r.eRootRelativeResource, d.in.uriContext.getRootRelativeServletPath(), ss("{0}: testRootRelativeResource() failed", d.label));
+		assertEquals(d.r.eRootRelativeResource, d.in.uriContext.getRootRelativeServletPath(), fs("{0}: testRootRelativeResource() failed", d.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("data")
 	void a07_testRootRelativePath(Data d) {
-		assertEquals(d.r.eRootRelativePath, d.in.uriContext.getRootRelativePathInfo(), ss("{0}: testRootRelativePath() failed", d.label));
+		assertEquals(d.r.eRootRelativePath, d.in.uriContext.getRootRelativePathInfo(), fs("{0}: testRootRelativePath() failed", d.label));
 	}
 }

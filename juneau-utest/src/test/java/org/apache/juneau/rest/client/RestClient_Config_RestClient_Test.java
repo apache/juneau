@@ -12,15 +12,19 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResponses.*;
-import static org.junit.Assert.*;
-import static org.apache.juneau.TestUtils.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.*;
 import java.util.concurrent.*;
 import java.util.logging.*;
+
 import org.apache.http.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.protocol.*;
@@ -104,8 +108,8 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 	@Test void a02_errorCodes() {
 		RestClient x1 = client().errorCodes(x -> x == 200).build();
 		RestClient x2 = client().build();
-		assertEquals(200, thrown(RestCallException.class, ()->x1.get("/echo").run()).getResponseCode());
-		assertEquals(200, thrown(RestCallException.class, ()->x2.get("/echo").errorCodes(x -> x == 200).run()).getResponseCode());
+		assertEquals(200, ((RestCallException)assertThrows(Throwable.class, ()->x1.get("/echo").run())).getResponseCode());
+		assertEquals(200, ((RestCallException)assertThrows(Throwable.class, ()->x2.get("/echo").errorCodes(x -> x == 200).run())).getResponseCode());
 	}
 
 	@Test void a03_executorService() throws Exception {

@@ -13,18 +13,21 @@
 package org.apache.juneau.http.remote;
 
 import static java.util.Arrays.*;
-import static org.apache.juneau.http.HttpMethod.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.utest.utils.Constants.*;
-import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.http.HttpMethod.*;
+import static org.apache.juneau.utest.utils.Constants.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
@@ -316,17 +319,17 @@ class RrpcInterface_Test extends SimpleTestBase {
 
 				@Override
 				public List<List<List<Integer>>> returnInteger3dList() {
-					return alist(alist(alist(1,null),null),null);
+					return ulist(ulist(ulist(1,null),null),null);
 				}
 
 				@Override
 				public List<Integer[][][]> returnInteger1d3dList() {
-					return alist(new Integer[][][]{{{1,null},null},null},null);
+					return ulist(new Integer[][][]{{{1,null},null},null},null);
 				}
 
 				@Override
 				public List<int[][][]> returnInt1d3dList() {
-					return alist(new int[][][]{{{1,2},null},null},null);
+					return ulist(new int[][][]{{{1,2},null},null},null);
 				}
 
 				@Override
@@ -353,7 +356,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 
 				@Override
 				public List<ABean[][][]> returnBean1d3dList() {
-					return alist(new ABean[][][]{{{ABean.get(),null},null},null},null);
+					return ulist(new ABean[][][]{{{ABean.get(),null},null},null},null);
 				}
 
 				@Override
@@ -368,7 +371,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 
 				@Override
 				public Map<String,List<ABean[][][]>> returnBean1d3dListMap() {
-					return map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null));
+					return map("foo",ulist(new ABean[][][]{{{ABean.get(),null},null},null},null));
 				}
 
 				@Override
@@ -395,7 +398,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 
 				@Override
 				public List<TypedBean[][][]> returnTypedBean1d3dList() {
-					return alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null);
+					return ulist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null);
 				}
 
 				@Override
@@ -410,7 +413,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 
 				@Override
 				public Map<String,List<TypedBean[][][]>> returnTypedBean1d3dListMap() {
-					return map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
+					return map("foo",ulist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
 				}
 
 				@Override
@@ -476,17 +479,17 @@ class RrpcInterface_Test extends SimpleTestBase {
 
 				@Override
 				public List<TestEnum> returnEnumList() {
-					return alist(TestEnum.TWO,null);
+					return ulist(TestEnum.TWO,null);
 				}
 
 				@Override
 				public List<List<List<TestEnum>>> returnEnum3dList() {
-					return alist(alist(alist(TestEnum.TWO,null),null),null);
+					return ulist(ulist(ulist(TestEnum.TWO,null),null),null);
 				}
 
 				@Override
 				public List<TestEnum[][][]> returnEnum1d3dList() {
-					return alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null);
+					return ulist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null);
 				}
 
 				@Override
@@ -501,7 +504,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 
 				@Override
 				public Map<TestEnum,List<TestEnum[][][]>> returnEnum1d3dListMap() {
-					return map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
+					return map(TestEnum.ONE,ulist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
 				}
 
 				//--------------------------------------------------------------------------------
@@ -1423,25 +1426,25 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void h14_setIntegerList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setIntegerList(alist(1,null)));
+		TestUtils.assertNotThrown(()->input.proxy.setIntegerList(ulist(1,null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void h15_setInteger3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setInteger3dList(alist(alist(alist(1,null),null),null)));
+		TestUtils.assertNotThrown(()->input.proxy.setInteger3dList(ulist(ulist(ulist(1,null),null),null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void h16_setInteger1d3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setInteger1d3dList(alist(new Integer[][][]{{{1,null},null},null},null)));
+		TestUtils.assertNotThrown(()->input.proxy.setInteger1d3dList(ulist(new Integer[][][]{{{1,null},null},null},null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void h17_setInt1d3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setInt1d3dList(alist(new int[][][]{{{1,2},null},null},null)));
+		TestUtils.assertNotThrown(()->input.proxy.setInt1d3dList(ulist(new int[][][]{{{1,2},null},null},null)));
 	}
 
 	@ParameterizedTest
@@ -1472,7 +1475,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void h22_setBean1d3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setBean1d3dList(alist(new ABean[][][]{{{ABean.get(),null},null},null},null)));
+		TestUtils.assertNotThrown(()->input.proxy.setBean1d3dList(ulist(new ABean[][][]{{{ABean.get(),null},null},null},null)));
 	}
 
 	@ParameterizedTest
@@ -1490,7 +1493,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void h25_setBean1d3dListMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setBean1d3dListMap(map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null))));
+		TestUtils.assertNotThrown(()->input.proxy.setBean1d3dListMap(map("foo",ulist(new ABean[][][]{{{ABean.get(),null},null},null},null))));
 	}
 
 	@ParameterizedTest
@@ -1522,7 +1525,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void i04_setTypedBean1d3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setTypedBean1d3dList(alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
+		TestUtils.assertNotThrown(()->input.proxy.setTypedBean1d3dList(ulist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
 	}
 
 	@ParameterizedTest
@@ -1540,7 +1543,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void i07_setTypedBean1d3dListMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setTypedBean1d3dListMap(map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null))));
+		TestUtils.assertNotThrown(()->input.proxy.setTypedBean1d3dListMap(map("foo",ulist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null))));
 	}
 
 	@ParameterizedTest
@@ -1617,19 +1620,19 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void l03_setEnumList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setEnumList(alist(TestEnum.TWO,null)));
+		TestUtils.assertNotThrown(()->input.proxy.setEnumList(ulist(TestEnum.TWO,null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void l04_setEnum3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setEnum3dList(alist(alist(alist(TestEnum.TWO,null),null),null)));
+		TestUtils.assertNotThrown(()->input.proxy.setEnum3dList(ulist(ulist(ulist(TestEnum.TWO,null),null),null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void l05_setEnum1d3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setEnum1d3dList(alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
+		TestUtils.assertNotThrown(()->input.proxy.setEnum1d3dList(ulist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
 	}
 
 	@ParameterizedTest
@@ -1647,7 +1650,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void l08_setEnum1d3dListMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))));
+		TestUtils.assertNotThrown(()->input.proxy.setEnum1d3dListMap(map(TestEnum.ONE,ulist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1660,7 +1663,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 		var x1 = 1;
 		var x2 = new int[][][]{{{1,2},null},null};
 		int[][][] x2n = null;
-		var x3 = alist(x2,null);
+		var x3 = ulist(x2,null);
 		List<int[][][]> x3n = null;
 		TestUtils.assertNotThrown(()->input.proxy.setMultiParamsInts(x1,x2,x2n,x3,x3n));
 	}
@@ -1672,7 +1675,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 		Integer x1n = null;
 		var x2 = new Integer[][][]{{{1,null},null},null};
 		Integer[][][] x2n = null;
-		var x3 = alist(x2,null);
+		var x3 = ulist(x2,null);
 		List<Integer[][][]> x3n = null;
 		TestUtils.assertNotThrown(()->input.proxy.setMultiParamsInteger(x1,x1n,x2,x2n,x3,x3n));
 	}
@@ -1683,7 +1686,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 		var x1 = 1f;
 		var x2 = new float[][][]{{{1,2},null},null};
 		float[][][] x2n = null;
-		var x3 = alist(x2,null);
+		var x3 = ulist(x2,null);
 		List<float[][][]> x3n = null;
 		TestUtils.assertNotThrown(()->input.proxy.setMultiParamsFloat(x1,x2,x2n,x3,x3n));
 	}
@@ -1695,7 +1698,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 		Float x1n = null;
 		var x2 = new Float[][][]{{{1f,null},null},null};
 		Float[][][] x2n = null;
-		var x3 = alist(x2,null);
+		var x3 = ulist(x2,null);
 		List<Float[][][]> x3n = null;
 		TestUtils.assertNotThrown(()->input.proxy.setMultiParamsFloatObject(x1,x1n,x2,x2n,x3,x3n));
 	}
@@ -1706,7 +1709,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 		var x1 = "foo";
 		var x2 = new String[][][]{{{"foo",null},null},null};
 		String[][][] x2n = null;
-		var x3 = alist(x2,null);
+		var x3 = ulist(x2,null);
 		List<String[][][]> x3n = null;
 		TestUtils.assertNotThrown(()->input.proxy.setMultiParamsString(x1,x2,x2n,x3,x3n));
 	}
@@ -1717,11 +1720,11 @@ class RrpcInterface_Test extends SimpleTestBase {
 		var x1 = ABean.get();
 		var x2 = new ABean[][][]{{{ABean.get(),null},null},null};
 		ABean[][][] x2n = null;
-		var x3 = alist(x2,null);
+		var x3 = ulist(x2,null);
 		List<ABean[][][]> x3n = null;
-		var x4 = map("foo",ABean.get());
+		var x4 = CollectionUtils.map("foo",ABean.get());
 		Map<String,ABean> x4n = null;
-		var x5 = map("foo",x3);
+		var x5 = CollectionUtils.map("foo",x3);
 		Map<String,List<ABean[][][]>> x5n = null;
 		TestUtils.assertNotThrown(()->input.proxy.setMultiParamsBean(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
 	}
@@ -1732,11 +1735,11 @@ class RrpcInterface_Test extends SimpleTestBase {
 		var x1 = new SwappedObject();
 		var x2 = new SwappedObject[][][]{{{new SwappedObject(),null},null},null};
 		SwappedObject[][][] x2n = null;
-		var x3 = alist(x2,null);
+		var x3 = ulist(x2,null);
 		List<SwappedObject[][][]> x3n = null;
-		var x4 = map(new SwappedObject(),new SwappedObject());
+		var x4 = CollectionUtils.map(new SwappedObject(),new SwappedObject());
 		Map<SwappedObject,SwappedObject> x4n = null;
-		var x5 = map(new SwappedObject(),x3);
+		var x5 = CollectionUtils.map(new SwappedObject(),x3);
 		Map<SwappedObject,List<SwappedObject[][][]>> x5n = null;
 		TestUtils.assertNotThrown(()->input.proxy.setMultiParamsSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
 	}
@@ -1747,11 +1750,11 @@ class RrpcInterface_Test extends SimpleTestBase {
 		var x1 = new ImplicitSwappedObject();
 		var x2 = new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null};
 		ImplicitSwappedObject[][][] x2n = null;
-		var x3 = alist(x2,null);
+		var x3 = ulist(x2,null);
 		List<ImplicitSwappedObject[][][]> x3n = null;
-		var x4 = map(new ImplicitSwappedObject(),new ImplicitSwappedObject());
+		var x4 = CollectionUtils.map(new ImplicitSwappedObject(),new ImplicitSwappedObject());
 		Map<ImplicitSwappedObject,ImplicitSwappedObject> x4n = null;
-		var x5 = map(new ImplicitSwappedObject(),x3);
+		var x5 = CollectionUtils.map(new ImplicitSwappedObject(),x3);
 		Map<ImplicitSwappedObject,List<ImplicitSwappedObject[][][]>> x5n = null;
 		TestUtils.assertNotThrown(()->input.proxy.setMultiParamsImplicitSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
 	}
@@ -1762,11 +1765,11 @@ class RrpcInterface_Test extends SimpleTestBase {
 		var x1 = TestEnum.TWO;
 		var x2 = new TestEnum[][][]{{{TestEnum.TWO,null},null},null};
 		TestEnum[][][] x2n = null;
-		var x3 = alist(x2,null);
+		var x3 = ulist(x2,null);
 		List<TestEnum[][][]> x3n = null;
-		var x4 = map(TestEnum.ONE,TestEnum.TWO);
+		var x4 = CollectionUtils.map(TestEnum.ONE,TestEnum.TWO);
 		Map<TestEnum,TestEnum> x4n = null;
-		var x5 = map(TestEnum.ONE,x3);
+		var x5 = CollectionUtils.map(TestEnum.ONE,x3);
 		Map<TestEnum,List<TestEnum[][][]>> x5n = null;
 		TestUtils.assertNotThrown(()->input.proxy.setMultiParamsEnum(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
 	}

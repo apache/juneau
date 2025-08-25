@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.serializer.Serializer.Builder;
 import org.apache.juneau.xml.*;
@@ -132,7 +133,7 @@ class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>a</rdf:li>\n    <rdf:li>b</rdf:li>\n    <rdf:li>c</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
 			.apply(Serializer.Builder.class, Builder::sortCollections)
 			.build(),
-		tester(5, "SERIALIZER_sortMaps", Map.class, unmodifiable(map("c","3","a","1","b","2")))
+		tester(5, "SERIALIZER_sortMaps", Map.class, CollectionUtils.unmodifiable(map("c","3","a","1","b","2")))
 			.json("{a:'1',b:'2',c:'3'}")
 			.jsonT("{a:'1',b:'2',c:'3'}")
 			.jsonR("{\n\ta: '1',\n\tb: '2',\n\tc: '3'\n}")
@@ -347,7 +348,7 @@ class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	}
 
 	public static class T5 {
-		public List<String> f1 = alist();
+		public List<String> f1 = list();
 		public String[] f2 = {};
 	}
 

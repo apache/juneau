@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -51,8 +51,8 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a04_optionalContainingString(RoundTripTester t) throws Exception {
-		assertEquals("foobar", t.roundTrip(optional("foobar")).get());
-		assertEquals("", t.roundTrip(optional("")).get());
+		assertEquals("foobar", t.roundTrip(opt("foobar")).get());
+		assertEquals("", t.roundTrip(opt("")).get());
 	}
 
 	@ParameterizedTest

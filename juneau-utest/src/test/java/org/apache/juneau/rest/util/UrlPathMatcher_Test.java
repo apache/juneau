@@ -12,8 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.rest.util.UrlPathMatcher.*;
 import static org.junit.Assert.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;

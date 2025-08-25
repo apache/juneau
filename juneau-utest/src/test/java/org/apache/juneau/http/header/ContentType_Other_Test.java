@@ -14,6 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 

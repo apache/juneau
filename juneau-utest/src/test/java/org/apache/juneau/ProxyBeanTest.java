@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.junit.Assert.*;
+
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;

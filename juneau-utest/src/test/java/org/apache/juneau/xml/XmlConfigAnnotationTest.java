@@ -13,6 +13,7 @@
 package org.apache.juneau.xml;
 
 import static org.junit.Assert.*;
+
 import java.util.function.*;
 
 import javax.xml.stream.*;

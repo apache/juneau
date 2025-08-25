@@ -190,7 +190,7 @@ public class Utils {
 	 * Shortcut for creating a modifiable list out of an array of values.
 	 */
 	@SafeVarargs
-	public static <T> ArrayList<T> list(T...values) {  // NOSONAR
+	public static <T> List<T> list(T...values) {  // NOSONAR
 		return new ArrayList<>(Arrays.asList(values));
 	}
 
@@ -407,5 +407,15 @@ public class Utils {
 	 */
 	public static Supplier<String> fs(String pattern, Object...args) {
 		return ()->StringUtils.format(pattern, args);
+	}
+
+	/**
+	 * Returns an empty {@link Optional}.
+	 *
+	 * @param <T> The component type.
+	 * @return An empty {@link Optional}.
+	 */
+	public static <T> Optional<T> empty() {
+		return Optional.empty();
 	}
 }

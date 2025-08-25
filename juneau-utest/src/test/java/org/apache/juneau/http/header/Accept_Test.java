@@ -13,7 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -66,9 +66,9 @@ class Accept_Test extends SimpleTestBase {
 
 	@Test void a02_asRanges() {
 		assertNull(new Accept((String)null).asMediaRanges().orElse(null));
-		assertEquals(-1, new Accept((String)null).match(alist(MediaType.JSON)));
+		assertEquals(-1, new Accept((String)null).match(ulist(MediaType.JSON)));
 		assertNull(new Accept((String)null).getRange(0));
-		assertString("Accept: application/json", new Accept(MediaRanges.of("application/json")));
+		TestUtils.assertString("Accept: application/json", new Accept(MediaRanges.of("application/json")));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

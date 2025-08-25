@@ -13,6 +13,7 @@
 package org.apache.juneau.msgpack;
 
 import static org.junit.Assert.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;

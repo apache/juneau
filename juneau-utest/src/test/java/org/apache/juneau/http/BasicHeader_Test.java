@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
+
 import java.util.function.*;
 
 import org.apache.http.*;
@@ -46,9 +47,9 @@ class BasicHeader_Test extends SimpleTestBase {
 	@Test void a02_of() {
 		BasicHeader x;
 		x = header("Foo","bar");
-		assertString("Foo: bar", x);
+		TestUtils.assertString("Foo: bar", x);
 		x = header("Foo",()->"bar");
-		assertString("Foo: bar", x);
+		TestUtils.assertString("Foo: bar", x);
 	}
 
 	@Test void a05_assertions() {

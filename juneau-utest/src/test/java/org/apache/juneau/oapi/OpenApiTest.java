@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.DateUtils.*;
 import static org.junit.Assert.*;
+
 import java.time.*;
 import java.util.*;
 

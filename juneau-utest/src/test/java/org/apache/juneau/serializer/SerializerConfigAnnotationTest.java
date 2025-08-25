@@ -13,6 +13,7 @@
 package org.apache.juneau.serializer;
 
 import static org.junit.Assert.*;
+
 import java.util.function.*;
 
 import org.apache.juneau.*;

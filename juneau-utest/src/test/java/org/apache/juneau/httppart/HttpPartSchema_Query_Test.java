@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.junit.Assert.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.Assert.*;
 
 import java.util.*;
 
@@ -888,8 +887,8 @@ class HttpPartSchema_Query_Test extends SimpleTestBase {
 		var s = HttpPartSchema.create().applyAll(Query.class, D01.class).build();
 
 		List<String>
-			good = alist("a","b"),
-			bad = alist("a","a");
+			good = ulist("a","b"),
+			bad = ulist("a","a");
 
 		s.getItems().validateOutput(good, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(good, BeanContext.DEFAULT);

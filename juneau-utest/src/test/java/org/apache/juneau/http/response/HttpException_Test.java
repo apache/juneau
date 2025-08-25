@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.response;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.junit.jupiter.api.Assertions.*;
 

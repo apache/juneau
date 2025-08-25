@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.apache.juneau.TestUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;

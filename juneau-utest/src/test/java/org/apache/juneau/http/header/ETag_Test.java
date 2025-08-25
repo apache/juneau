@@ -62,7 +62,7 @@ class ETag_Test extends SimpleTestBase {
 
 	@Test void a0_asEntityTag() {
 		EntityTag x = new ETag("W/\"foo\"").asEntityTag().get();
-		assertString("W/\"foo\"", x);
+		TestUtils.assertString("W/\"foo\"", x);
 		assertEquals("foo", x.getEntityValue());
 		assertTrue(x.isWeak());
 		assertFalse(x.isAny());

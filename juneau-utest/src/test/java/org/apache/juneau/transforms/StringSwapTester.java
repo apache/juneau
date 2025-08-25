@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.common.internal.StringUtils.ne;
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.function.*;
 
 import org.apache.juneau.*;

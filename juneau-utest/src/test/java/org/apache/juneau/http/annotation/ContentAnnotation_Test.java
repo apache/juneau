@@ -12,7 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -39,7 +41,7 @@ class ContentAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJsonMatches(a1, ""
+		TestUtils.assertJsonMatches(a1, ""
 			+ "{"
                 + "description:['description'],"
 				+ "on:['on'],"

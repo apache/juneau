@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -67,10 +67,10 @@ class BasicMediaRangesHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_match() {
-		assertEquals(0, accept("text/foo").match(alist(MediaType.of("text/foo"))));
-		assertEquals(-1, accept("text/foo").match(alist(MediaType.of("text/bar"))));
-		assertEquals(-1, new Accept((String)null).match(alist(MediaType.of("text/bar"))));
-		assertEquals(-1, accept("text/foo").match(alist(MediaType.of(null))));
+		assertEquals(0, accept("text/foo").match(ulist(MediaType.of("text/foo"))));
+		assertEquals(-1, accept("text/foo").match(ulist(MediaType.of("text/bar"))));
+		assertEquals(-1, new Accept((String)null).match(ulist(MediaType.of("text/bar"))));
+		assertEquals(-1, accept("text/foo").match(ulist(MediaType.of(null))));
 		assertEquals(-1, accept("text/foo").match(null));
 	}
 

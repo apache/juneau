@@ -14,6 +14,7 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.http.response.NotFound.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;

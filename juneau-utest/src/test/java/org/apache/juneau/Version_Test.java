@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.Version.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.*;
 
 import org.junit.jupiter.api.*;
@@ -83,7 +84,7 @@ class Version_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_compareTo() {
-		List<Version> l = alist(
+		List<Version> l = list(
 			of("1.2.3"),
 			of("1.2"),
 			of(""),
