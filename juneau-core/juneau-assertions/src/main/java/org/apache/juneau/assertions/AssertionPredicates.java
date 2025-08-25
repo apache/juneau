@@ -175,7 +175,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> eqic(String value) {
-		return test(x -> StringUtils.eqic(Utils.s(x), value), MSG_valueDidNotMatchExpected, value, VALUE);
+		return test(x -> StringUtils.eqic3(Utils.s(x), value), MSG_valueDidNotMatchExpected, value, VALUE);
 	}
 
 	/**
@@ -237,7 +237,7 @@ public class AssertionPredicates {
 	 */
 	public static final <T> AssertionPredicate<T> match(String value) {
 		assertArgNotNull("value", value);
-		var p = StringUtils.getMatchPattern(value);
+		var p = StringUtils.getMatchPattern3(value);
 		return test(x -> x != null && p.matcher(Utils.s(x)).matches(), MSG_valueDidNotMatchPattern, value, VALUE);
 	}
 

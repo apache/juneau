@@ -182,7 +182,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (innerField != null) {
 				List<Beanp> lp = list();
 				bc.forEachAnnotation(Beanp.class, innerField, x -> true, x -> lp.add(x));
-				if (field != null || isNotEmpty2(lp)) {
+				if (field != null || Utils.isNotEmpty2(lp)) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
 					rawTypeMeta = bc.resolveClassMeta(last(lp), innerField.getGenericType(), typeVarImpls);
@@ -190,7 +190,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				}
 				lp.forEach(x -> {
 					if (! x.properties().isEmpty())
-						properties = split(x.properties());
+						properties = split3(x.properties());
 					addAll(bdClasses, x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
@@ -209,7 +209,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, getter));
 				lp.forEach(x -> {
 					if (properties != null && ! x.properties().isEmpty())
-						properties = split(x.properties());
+						properties = split3(x.properties());
 					addAll(bdClasses, x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
@@ -229,7 +229,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (swap == null)
 						swap = getPropertySwap(x);
 					if (properties != null && ! x.properties().isEmpty())
-						properties = split(x.properties());
+						properties = split3(x.properties());
 					addAll(bdClasses, x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());

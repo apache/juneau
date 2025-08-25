@@ -35,7 +35,7 @@ public final class PropertyNamerDUCS implements PropertyNamer {
 
 	@Override /* PropertyNamer */
 	public String getPropertyName(String name) {
-		if (isEmpty(name))
+		if (isEmpty3(name))
 			return name;
 
 		int numUCs = 0;

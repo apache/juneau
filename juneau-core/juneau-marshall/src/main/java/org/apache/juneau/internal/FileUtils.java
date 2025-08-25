@@ -234,7 +234,7 @@ public class FileUtils {
 	 * @return The file name.
 	 */
 	public static String getFileName(String path) {
-		if (isEmpty(path))
+		if (isEmpty3(path))
 			return null;
 		path = trimTrailingSlashes(path);
 		int i = path.lastIndexOf('/');

@@ -161,7 +161,7 @@ public class Select extends HtmlElementContainer {
 	public Select choose(Object optionValue) {
 		if (optionValue != null) {
 			getChildren().forEach(x -> {
-				if (x instanceof Option o && eq(optionValue.toString(), o.getAttr(String.class, "value")))
+				if (x instanceof Option o && eq3(optionValue.toString(), o.getAttr(String.class, "value")))
 					o.selected(true);
 			});
 		}

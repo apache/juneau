@@ -83,7 +83,7 @@ public final class MarshalledFilter {
 			annotations.forEach(x -> {
 				if (isNotVoid(x.implClass()))
 					implClass(x.implClass());
-				if (isNotEmpty(x.example()))
+				if (isNotEmpty3(x.example()))
 					example(x.example());
 			});
 			return this;

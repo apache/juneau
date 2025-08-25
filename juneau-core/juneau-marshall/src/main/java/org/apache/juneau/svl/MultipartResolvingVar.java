@@ -47,7 +47,7 @@ public abstract class MultipartResolvingVar extends SimpleVar {
 		int i = s.indexOf(',');
 		if (i == -1)
 			return resolve(session, s.trim());
-		for (String s2 : split(s)) {
+		for (String s2 : split3(s)) {
 			String v = resolve(session, s2);
 			if (v != null)
 				return v;

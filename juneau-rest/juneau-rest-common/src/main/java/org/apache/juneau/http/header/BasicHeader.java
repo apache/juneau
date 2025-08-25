@@ -110,7 +110,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicHeader(String name, Object value) {
-		assertArg(StringUtils.isNotEmpty(name), "Name cannot be empty on header.");
+		assertArg(StringUtils.isNotEmpty3(name), "Name cannot be empty on header.");
 		this.name = name;
 		this.value = value instanceof Supplier ? null : value;
 		this.stringValue = Utils.s(value);
@@ -130,7 +130,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicHeader(String name, Supplier<Object> value) {
-		assertArg(StringUtils.isNotEmpty(name), "Name cannot be empty on header.");
+		assertArg(StringUtils.isNotEmpty3(name), "Name cannot be empty on header.");
 		this.name = name;
 		this.value = null;
 		this.stringValue = null;
@@ -180,7 +180,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @return <jk>true</jk> if the specified value is the same.
 	 */
 	public boolean equalsIgnoreCase(String compare) {
-		return eqic(getValue(), compare);
+		return eqic3(getValue(), compare);
 	}
 
 	/**
@@ -265,7 +265,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		// Not a perfect equality operator if using SVL vars.
 		if (! (o instanceof Header))
 			return false;
-		return Utils.eq(this, (Header)o, (x,y)->eq(x.name,y.getName()) && eq(x.getValue(),y.getValue()));
+		return Utils.eq(this, (Header)o, (x,y)->eq3(x.name,y.getName()) && eq3(x.getValue(),y.getValue()));
 	}
 
 	@Override /* Object */

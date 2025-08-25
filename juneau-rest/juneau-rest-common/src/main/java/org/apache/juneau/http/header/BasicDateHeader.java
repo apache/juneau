@@ -113,7 +113,7 @@ public class BasicDateHeader extends BasicHeader {
 	 */
 	public BasicDateHeader(String name, String value) {
 		super(name, value);
-		this.value = isEmpty(value) ? null : ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value.toString())).truncatedTo(SECONDS);
+		this.value = isEmpty3(value) ? null : ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value.toString())).truncatedTo(SECONDS);
 		this.supplier = null;
 	}
 

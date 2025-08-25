@@ -46,7 +46,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicCsvArrayPart of(String name, String...value) {
-		if (isEmpty(name) || value == null)
+		if (isEmpty3(name) || value == null)
 			return null;
 		return new BasicCsvArrayPart(name, value);
 	}
@@ -62,7 +62,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicCsvArrayPart of(String name, Supplier<String[]> value) {
-		if (isEmpty(name) || value == null)
+		if (isEmpty3(name) || value == null)
 			return null;
 		return new BasicCsvArrayPart(name, value);
 	}
@@ -113,7 +113,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 */
 	public BasicCsvArrayPart(String name, String value) {
 		super(name, value);
-		this.value = split(value);
+		this.value = split3(value);
 		this.supplier = null;
 		this.stringValue = value;
 	}
@@ -136,7 +136,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	public boolean contains(String val) {
 		if (val != null)
 			for (String v : value())
-				if (eq(v, val))
+				if (eq3(v, val))
 					return true;
 		return false;
 	}
@@ -150,7 +150,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	public boolean containsIgnoreCase(String val) {
 		if (val != null)
 			for (String v : value())
-				if (eqic(v, val))
+				if (eqic3(v, val))
 					return true;
 		return false;
 	}

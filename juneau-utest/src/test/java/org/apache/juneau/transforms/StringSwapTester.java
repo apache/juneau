@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import static org.apache.juneau.common.internal.StringUtils.ne;
+import static org.apache.juneau.common.internal.StringUtils.ne3;
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -76,7 +76,7 @@ public class StringSwapTester<T> {
 		try {
 			var o = objectSupplier.get();
 			var s = swap.swap(beanSession, o);
-			if (ne(expected, s)) {
+			if (ne3(expected, s)) {
 				if (expected.isEmpty()) {
 					if (! label.startsWith("[]"))
 						System.err.println(label.substring(0, label.indexOf(']')+1) + " "+s);  // NOT DEBUG
@@ -102,7 +102,7 @@ public class StringSwapTester<T> {
 			String s = swap.swap(beanSession, o);
 			T o2 = swap.unswap(beanSession, s, beanSession.getClassMetaForObject(o));
 			String s2 = swap.swap(beanSession, o2);
-			if (ne(s, s2)) {
+			if (ne3(s, s2)) {
 				if (expected.isEmpty())
 					fail("Test [" + label + " unswap] failed - expected was empty");
 				fail("Test [" + label + " unswap] failed. Expected=[" + s + "], Actual=[" + s2 + "]");

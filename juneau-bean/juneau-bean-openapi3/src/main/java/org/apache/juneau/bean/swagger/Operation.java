@@ -433,7 +433,7 @@ public class Operation extends SwaggerElement {
 	public ParameterInfo getParameter(String in, String name) {
 		if (parameters != null)
 			for (var pi : parameters)
-				if (eq(pi.getIn(), in) && (eq(pi.getName(), name) || "body".equals(pi.getIn())))
+				if (eq3(pi.getIn(), in) && (eq3(pi.getName(), name) || "body".equals(pi.getIn())))
 					return pi;
 		return null;
 	}

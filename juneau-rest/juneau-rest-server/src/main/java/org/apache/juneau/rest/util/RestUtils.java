@@ -292,7 +292,7 @@ public final class RestUtils {
 			if (m == null)
 				m = map();
 
-			if (qs == null || ((qs instanceof CharSequence) && isEmpty(Utils.s(qs))))
+			if (qs == null || ((qs instanceof CharSequence) && isEmpty3(Utils.s(qs))))
 				return m;
 
 			try (ParserPipe p = new ParserPipe(qs)) {

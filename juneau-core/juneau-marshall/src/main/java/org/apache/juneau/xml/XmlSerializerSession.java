@@ -526,7 +526,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			name = null;
 		}
 
-		if (eq(name, elementName))
+		if (eq3(name, elementName))
 			name = null;
 
 		if (isEnableNamespaces()) {

@@ -727,29 +727,6 @@ public final class CollectionUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
-	 *
-	 * @param <E> The element type.
-	 * @param value The value being checked.
-	 * @return <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
-	 */
-	public static <E> boolean isNotEmpty2(Collection<E> value) {
-		return value != null && ! value.isEmpty();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
-	 *
-	 * @param <K> The key type.
-	 * @param <V> The value type.
-	 * @param value The value being checked.
-	 * @return <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
-	 */
-	public static <K,V> boolean isNotEmpty2(Map<K,V> value) {
-		return value != null && ! value.isEmpty();
-	}
-
-	/**
 	 * Makes a deep copy of the specified map.
 	 *
 	 * @param <K> The key type.

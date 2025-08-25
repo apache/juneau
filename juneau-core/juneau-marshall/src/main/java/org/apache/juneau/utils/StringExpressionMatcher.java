@@ -94,7 +94,7 @@ public class StringExpressionMatcher {
 	}
 
 	private Exp parse(String expression) throws ParseException {
-		if (StringUtils.isEmptyOrBlank(expression))
+		if (StringUtils.isEmptyOrBlank3(expression))
 			return new Never();
 
 		expression = expression.trim();
@@ -330,7 +330,7 @@ public class StringExpressionMatcher {
 
 		Match(String operand) {
 			this.operand = operand;
-			p = StringUtils.getMatchPattern(operand);
+			p = StringUtils.getMatchPattern3(operand);
 		}
 
 		@Override /* Exp */

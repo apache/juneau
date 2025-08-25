@@ -326,7 +326,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
-		if (! StringUtils.isEmpty(in))
+		if (! StringUtils.isEmpty3(in))
 			p.parseIntoMap(in, this, bs().string(), bs().object());
 	}
 
@@ -818,7 +818,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		else if (s instanceof Object[])
 			r = ArrayUtils.toStringArray(alist((Object[])s));
 		else
-			r = StringUtils.split(Utils.s(s));
+			r = StringUtils.split3(Utils.s(s));
 		return (r.length == 0 ? def : r);
 	}
 
@@ -1309,7 +1309,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		if (val == null)
 			return false;
 		if (val instanceof CharSequence)
-			return ! StringUtils.isEmpty((CharSequence)val);
+			return ! StringUtils.isEmpty3((CharSequence)val);
 		return false;
 	}
 

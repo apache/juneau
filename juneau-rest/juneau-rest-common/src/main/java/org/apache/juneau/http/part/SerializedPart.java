@@ -221,7 +221,7 @@ public class SerializedPart extends BasicPart {
 				if ((def == null && ! schema.isRequired()) || (def == null && schema.isAllowEmptyValue()))
 					return null;
 			}
-			if (isEmpty(Utils.s(v)) && skipIfEmpty && def == null)
+			if (isEmpty3(Utils.s(v)) && skipIfEmpty && def == null)
 				return null;
 			return serializer == null ? Utils.s(v) : serializer.serialize(type, schema, v);
 		} catch (SchemaValidationException e) {

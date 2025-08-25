@@ -173,7 +173,7 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 	 * @return This object.
 	 */
 	public FluentListAssertion<Map<String,Object>,R> asPropertyMaps(String...names) {
-		String[] n = StringUtils.split(names, ',');
+		String[] n = StringUtils.split3(names, ',');
 		return new FluentListAssertion<>(this, value().stream().map(x -> beanMap(x).getProperties(n)).toList(), returns());
 	}
 

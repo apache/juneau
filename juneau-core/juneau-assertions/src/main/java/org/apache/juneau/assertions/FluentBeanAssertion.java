@@ -150,7 +150,7 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return This object.
 	 */
 	public FluentMapAssertion<String,Object,R> asPropertyMap(String...names) {
-		return new FluentMapAssertion<>(this, toBeanMap().getProperties(split(names, ',')), returns());
+		return new FluentMapAssertion<>(this, toBeanMap().getProperties(split3(names, ',')), returns());
 	}
 
 	/**

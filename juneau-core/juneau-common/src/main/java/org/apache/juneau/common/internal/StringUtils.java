@@ -48,7 +48,7 @@ public final class StringUtils {
 	/**
 	 * Predicate check to filter out null and empty strings.
 	 */
-	public static final Predicate<String> NOT_EMPTY = StringUtils::isNotEmpty;
+	public static final Predicate<String> NOT_EMPTY = StringUtils::isNotEmpty3;
 
 	private static final AsciiSet numberChars = AsciiSet.of("-xX.+-#pP0123456789abcdefABCDEF");
 	private static final AsciiSet firstNumberChars =AsciiSet.of("+-.#0123456789");
@@ -509,8 +509,8 @@ public final class StringUtils {
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
-	public static String[] split(String s) {
-		return split(s, ',');
+	public static String[] split3(String s) {
+		return split3(s, ',');
 	}
 
 	/**
@@ -524,13 +524,13 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Same as {@link #split(String)} but consumes the tokens instead of creating an array.
+	 * Same as {@link #split3(String)} but consumes the tokens instead of creating an array.
 	 *
 	 * @param s The string to split.
 	 * @param consumer The consumer of the tokens.
 	 */
-	public static void split(String s, Consumer<String> consumer) {
-		split(s, ',', consumer);
+	public static void split3(String s, Consumer<String> consumer) {
+		split3(s, ',', consumer);
 	}
 
 	/**
@@ -556,8 +556,8 @@ public final class StringUtils {
 	 * @param c The character to split on.
 	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
-	public static String[] split(String s, char c) {
-		return split(s, c, Integer.MAX_VALUE);
+	public static String[] split3(String s, char c) {
+		return split3(s, c, Integer.MAX_VALUE);
 	}
 
 	/**
@@ -588,16 +588,16 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Same as {@link #split(String,char)} but consumes the tokens instead of creating an array.
+	 * Same as {@link #split3(String,char)} but consumes the tokens instead of creating an array.
 	 *
 	 * @param s The string to split.
 	 * @param c The character to split on.
 	 * @param consumer The consumer of the tokens.
 	 */
-	public static void split(String s, char c, Consumer<String> consumer) {
+	public static void split3(String s, char c, Consumer<String> consumer) {
 		var escapeChars = getEscapeSet(c);
 
-		if (isEmpty(s))
+		if (isEmpty3(s))
 			return;
 		if (s.indexOf(c) == -1) {
 			consumer.accept(s);
@@ -625,20 +625,20 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Same as {@link #split(String, char)} but limits the number of tokens returned.
+	 * Same as {@link #split3(String, char)} but limits the number of tokens returned.
 	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @param c The character to split on.
 	 * @param limit The maximum number of tokens to return.
 	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
-	public static String[] split(String s, char c, int limit) {
+	public static String[] split3(String s, char c, int limit) {
 		var l = split2(s, c, limit);
 		return l == null ? null : l.toArray(new String[l.size()]);
 	}
 
 	/**
-	 * Same as {@link #split(String, char)} but limits the number of tokens returned.
+	 * Same as {@link #split3(String, char)} but limits the number of tokens returned.
 	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @param c The character to split on.
@@ -651,7 +651,7 @@ public final class StringUtils {
 
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
-		if (isEmpty(s))
+		if (isEmpty3(s))
 			return Collections.emptyList();
 		if (s.indexOf(c) == -1)
 			return Collections.singletonList(s);
@@ -682,13 +682,13 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Same as {@link #split(String, char)} except splits all strings in the input and returns a single result.
+	 * Same as {@link #split3(String, char)} except splits all strings in the input and returns a single result.
 	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @param c The character to split on.
 	 * @return The tokens, or null if the input array was null
 	 */
-	public static String[] split(String[] s, char c) {
+	public static String[] split3(String[] s, char c) {
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
 		var l = new LinkedList<String>();
@@ -696,7 +696,7 @@ public final class StringUtils {
 			if (ss == null || ss.indexOf(c) == -1)
 				l.add(ss);
 			else
-				Collections.addAll(l, split(ss, c));
+				Collections.addAll(l, split3(ss, c));
 		}
 		return l.toArray(new String[l.size()]);
 	}
@@ -719,7 +719,7 @@ public final class StringUtils {
 
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
-		if (isEmpty(s))
+		if (isEmpty3(s))
 			return Collections.emptyMap();
 
 		var m = new LinkedHashMap<String,String>();
@@ -840,7 +840,7 @@ public final class StringUtils {
 		var escapeChars = getEscapeSet(',');
 
 		if (s == null) return null;  // NOSONAR - Intentional.
-		if (isEmpty(s)) return Collections.emptyList();
+		if (isEmpty3(s)) return Collections.emptyList();
 		if (s.indexOf(',') == -1) return Collections.singletonList(trim(s));
 
 		var l = new LinkedList<String>();
@@ -889,7 +889,7 @@ public final class StringUtils {
 	 */
 	public static List<String> splitNestedInner(String s) {
 		if (s == null) throw illegalArg("String was null.");
-		if (isEmpty(s)) throw illegalArg("String was empty.");
+		if (isEmpty3(s)) throw illegalArg("String was empty.");
 
 		final int
 			S1 = 1,  // Looking for '{'
@@ -949,7 +949,7 @@ public final class StringUtils {
 
 		s = s.trim();
 
-		if (isEmpty(s))
+		if (isEmpty3(s))
 			return new String[0];
 
 		if (! containsAny(s, ' ', '\t', '\'', '"'))
@@ -1020,7 +1020,7 @@ public final class StringUtils {
 	 * @param s The string to check.
 	 * @return <jk>true</jk> if specified string is <jk>null</jk> or empty.
 	 */
-	public static boolean isEmpty(String s) {
+	public static boolean isEmpty3(String s) {
 		return s == null || s.isEmpty();
 	}
 
@@ -1030,7 +1030,7 @@ public final class StringUtils {
 	 * @param s The string to check.
 	 * @return <jk>true</jk> if specified charsequence is <jk>null</jk> or empty.
 	 */
-	public static boolean isEmpty(CharSequence s) {
+	public static boolean isEmpty3(CharSequence s) {
 		return s == null || s.isEmpty();
 	}
 
@@ -1040,7 +1040,7 @@ public final class StringUtils {
 	 * @param s The string to check.
 	 * @return <jk>true</jk> if specified string is <jk>null</jk> or emptyor consists of only blanks.
 	 */
-	public static boolean isEmptyOrBlank(String s) {
+	public static boolean isEmptyOrBlank3(String s) {
 		return s == null || s.trim().isEmpty();
 	}
 
@@ -1050,8 +1050,8 @@ public final class StringUtils {
 	 * @param s The string to check.
 	 * @return <jk>true</jk> if specified string is not <jk>null</jk> or empty.
 	 */
-	public static boolean isNotEmpty(String s) {
-		return ! isEmpty(s);
+	public static boolean isNotEmpty3(String s) {
+		return ! isEmpty3(s);
 	}
 
 	/**
@@ -1061,8 +1061,8 @@ public final class StringUtils {
 	 * @param s2 The string to check.
 	 * @return <jk>true</jk> if either of the specified strings are not <jk>null</jk> or empty.
 	 */
-	public static boolean isNotEmpty(String s1, String s2) {
-		return isNotEmpty(s1) || isNotEmpty(s2);
+	public static boolean isNotEmpty3(String s1, String s2) {
+		return isNotEmpty3(s1) || isNotEmpty3(s2);
 	}
 
 	/**
@@ -1071,7 +1071,7 @@ public final class StringUtils {
 	 * @param s The string to check.
 	 * @return <jk>null</jk> if the specified string is <jk>null</jk> or empty, or the same string if not.
 	 */
-	public static String nullIfEmpty(String s) {
+	public static String nullIfEmpty3(String s) {
 		if (s == null || s.isEmpty())
 			return null;
 		return s;
@@ -1306,7 +1306,7 @@ public final class StringUtils {
 	 * @param s2 String 2.
 	 * @return <jk>true</jk> if the strings are equal.
 	 */
-	public static boolean eq(String s1, String s2) {
+	public static boolean eq3(String s1, String s2) {
 		if (s1 == null)
 			return s2 == null;
 		if (s2 == null)
@@ -1322,8 +1322,8 @@ public final class StringUtils {
 	 * @param s2 String 2.
 	 * @return <jk>true</jk> if the strings are equal.
 	 */
-	public static boolean eq(boolean caseInsensitive, String s1, String s2) {
-		return caseInsensitive ? eqic(s1, s2) : eq(s1, s2);
+	public static boolean eq3(boolean caseInsensitive, String s1, String s2) {
+		return caseInsensitive ? eqic3(s1, s2) : eq3(s1, s2);
 	}
 
 	/**
@@ -1379,7 +1379,7 @@ public final class StringUtils {
 	 * @param s2 String 2.
 	 * @return <jk>true</jk> if the strings are equal.
 	 */
-	public static boolean eqic(String s1, String s2) {
+	public static boolean eqic3(String s1, String s2) {
 		if (s1 == null)
 			return s2 == null;
 		if (s2 == null)
@@ -1394,8 +1394,8 @@ public final class StringUtils {
 	 * @param s2 String 2.
 	 * @return <jk>true</jk> if the strings are not equal.
 	 */
-	public static boolean ne(String s1, String s2) {
-		return ! eq(s1, s2);
+	public static boolean ne3(String s1, String s2) {
+		return ! eq3(s1, s2);
 	}
 
 	/**
@@ -1405,8 +1405,8 @@ public final class StringUtils {
 	 * @param s2 String 2.
 	 * @return <jk>true</jk> if the strings are not equal ignoring case.
 	 */
-	public static boolean neic(String s1, String s2) {
-		return ! eqic(s1, s2);
+	public static boolean neic3(String s1, String s2) {
+		return ! eqic3(s1, s2);
 	}
 
 	/**
@@ -1578,7 +1578,7 @@ public final class StringUtils {
 	 * @throws IllegalArgumentException Value was not a valid date.
 	 */
 	public static Date parseIsoDate(String date) throws IllegalArgumentException {
-		if (isEmpty(date))
+		if (isEmpty3(date))
 			return null;
 		return parseIsoCalendar(date).getTime();  // NOSONAR - NPE not possible.
 	}
@@ -1595,7 +1595,7 @@ public final class StringUtils {
 	 * @throws IllegalArgumentException Value was not a valid date.
 	 */
 	public static Calendar parseIsoCalendar(String date) throws IllegalArgumentException {
-		if (isEmpty(date))
+		if (isEmpty3(date))
 			return null;
 		date = date.trim().replace(' ', 'T');  // Convert to 'standard' ISO8601
 		if (date.indexOf(',') != -1)  // Trim milliseconds
@@ -1886,7 +1886,7 @@ public final class StringUtils {
 	 */
 	public static String trimStart(String s) {
 		if (s != null)
-			while (isNotEmpty(s) && isWhitespace(s.charAt(0)))
+			while (isNotEmpty3(s) && isWhitespace(s.charAt(0)))
 				s = s.substring(1);
 		return s;
 	}
@@ -1899,7 +1899,7 @@ public final class StringUtils {
 	 */
 	public static String trimEnd(String s) {
 		if (s != null)
-			while (isNotEmpty(s) && isWhitespace(s.charAt(s.length()-1)))
+			while (isNotEmpty3(s) && isWhitespace(s.charAt(s.length()-1)))
 				s = s.substring(0, s.length()-1);
 		return s;
 	}
@@ -1917,7 +1917,7 @@ public final class StringUtils {
 	 */
 	public static boolean isOneOf(String s, String...values) {
 		for (var value : values)
-			if (eq(s, value))
+			if (eq3(s, value))
 				return true;
 		return false;
 	}
@@ -1935,7 +1935,7 @@ public final class StringUtils {
 			return s;
 		while (endsWith(s, '/'))
 			s = s.substring(0, s.length()-1);
-		while (isNotEmpty(s) && s.charAt(0) == '/')  // NOSONAR - NPE not possible here.
+		while (isNotEmpty3(s) && s.charAt(0) == '/')  // NOSONAR - NPE not possible here.
 			s = s.substring(1);
 		return s;
 	}
@@ -1949,9 +1949,9 @@ public final class StringUtils {
 	public static String trimSlashesAndSpaces(String s) {
 		if (s == null)
 			return null;
-		while (isNotEmpty(s) && (s.charAt(s.length()-1) == '/' || isWhitespace(s.charAt(s.length()-1))))
+		while (isNotEmpty3(s) && (s.charAt(s.length()-1) == '/' || isWhitespace(s.charAt(s.length()-1))))
 			s = s.substring(0, s.length()-1);
-		while (isNotEmpty(s) && (s.charAt(0) == '/' || isWhitespace(s.charAt(0))))
+		while (isNotEmpty3(s) && (s.charAt(0) == '/' || isWhitespace(s.charAt(0))))
 			s = s.substring(1);
 		return s;
 	}
@@ -1979,7 +1979,7 @@ public final class StringUtils {
 	public static String trimLeadingSlashes(String s) {
 		if (s == null)
 			return null;
-		while (isNotEmpty(s) && s.charAt(0) == '/')
+		while (isNotEmpty3(s) && s.charAt(0) == '/')
 			s = s.substring(1);
 		return s;
 	}
@@ -2197,7 +2197,7 @@ public final class StringUtils {
 	 */
 	public static boolean isAbsoluteUri(String s) {  // NOSONAR - False positive.
 
-		if (isEmpty(s))
+		if (isEmpty3(s))
 			return false;
 
 		// Use a state machine for maximum performance.
@@ -2254,7 +2254,7 @@ public final class StringUtils {
 	 */
 	public static boolean isUri(String s) {  // NOSONAR - False positive.
 
-		if (isEmpty(s))
+		if (isEmpty3(s))
 			return false;
 
 		// Use a state machine for maximum performance.
@@ -2371,7 +2371,7 @@ public final class StringUtils {
 	 */
 	public static String firstNonEmpty(String...s) {
 		for (var ss : s)
-			if (isNotEmpty(ss))
+			if (isNotEmpty3(ss))
 				return ss;
 		return null;
 	}
@@ -2464,7 +2464,7 @@ public final class StringUtils {
 	}
 
 	private static int multiplier(String s) {
-		char c = isEmpty(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
+		char c = isEmpty3(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
 		if (c == 'G') return 1024*1024*1024;
 		if (c == 'M') return 1024*1024;
 		if (c == 'K') return 1024;
@@ -2504,7 +2504,7 @@ public final class StringUtils {
 	}
 
 	private static long multiplier2(String s) {
-		char c = isEmpty(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
+		char c = isEmpty3(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
 		if (c == 'P') return 1024*1024*1024*1024*1024l;
 		if (c == 'T') return 1024*1024*1024*1024l;
 		if (c == 'G') return 1024*1024*1024l;
@@ -2703,8 +2703,8 @@ public final class StringUtils {
 	 * @param s The string to create a pattern from.
 	 * @return A regular expression pattern.
 	 */
-	public static Pattern getMatchPattern(String s) {
-		return getMatchPattern(s, 0);
+	public static Pattern getMatchPattern3(String s) {
+		return getMatchPattern3(s, 0);
 	}
 
 	/**
@@ -2714,7 +2714,7 @@ public final class StringUtils {
 	 * @param flags Regular expression flags.
 	 * @return A regular expression pattern.
 	 */
-	public static Pattern getMatchPattern(String s, int flags) {
+	public static Pattern getMatchPattern3(String s, int flags) {
 		if (s == null)
 			return null;
 		var sb = new StringBuilder();
@@ -2765,7 +2765,7 @@ public final class StringUtils {
 	 */
 	public static long getDuration(String s) {
 		s = trim(s);
-		if (isEmpty(s))
+		if (isEmpty3(s))
 			return -1;
 		int i;
 		for (i = 0; i < s.length(); i++) {
@@ -2845,7 +2845,7 @@ public final class StringUtils {
 
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
-		if (isEmpty(s))
+		if (isEmpty3(s))
 			return new String[0];
 		if (s.indexOf(',') == -1)
 			return new String[]{s};

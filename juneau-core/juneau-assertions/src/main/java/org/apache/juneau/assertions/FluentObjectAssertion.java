@@ -452,7 +452,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	public R isSameSerializedAs(Object o, WriterSerializer serializer) {
 		var s1 = serializer.toString(value);
 		var s2 = serializer.toString(o);
-		if (ne(s1, s2))
+		if (ne3(s1, s2))
 			throw error(MSG_unexpectedComparison, s2, s1);
 		return returns();
 	}

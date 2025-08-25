@@ -67,7 +67,7 @@ public final class DateUtils {
 	 * @return The parsed value, or <jk>null</jk> if the string was <jk>null</jk> or empty.
 	 */
 	public static Calendar parseISO8601Calendar(String s) {
-		if (isEmpty(s))
+		if (isEmpty3(s))
 			return null;
 		return DatatypeConverter.parseDateTime(toValidISO8601DT(s));
 	}
@@ -218,7 +218,7 @@ public final class DateUtils {
 	 * @return The formatter.
 	 */
 	public static DateTimeFormatter getFormatter(String pattern) {
-		if (isEmpty(pattern))
+		if (isEmpty3(pattern))
 			return DateTimeFormatter.ISO_INSTANT;
 		try {
 			FieldInfo fi = ClassInfo.of(DateTimeFormatter.class).getPublicField(x -> x.isStatic() && x.hasName(pattern));

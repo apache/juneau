@@ -41,7 +41,7 @@ public class EntityTags {
 	 * @return A parsed header value.
 	 */
 	public static EntityTags of(String value) {
-		return isEmpty(value) ? EMPTY : CACHE.get(value, ()->new EntityTags(value));
+		return isEmpty3(value) ? EMPTY : CACHE.get(value, ()->new EntityTags(value));
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class EntityTags {
 	private EntityTag[] parse(String value) {
 		if (value == null)
 			return null;
-		String[] s = split(value);
+		String[] s = split3(value);
 		EntityTag[] v = new EntityTag[s.length];
 		for (int i = 0; i < s.length; i++)
 			v[i] = EntityTag.of(s[i]);

@@ -95,20 +95,20 @@ public final class BeanFilter {
 		public Builder applyAnnotations(List<Bean> annotations) {
 
 			annotations.forEach(x -> {
-				if (isNotEmpty(x.properties(), x.p())) properties(x.properties(), x.p());
+				if (isNotEmpty3(x.properties(), x.p())) properties(x.properties(), x.p());
 				if (x.sort()) sortProperties(true);
 				if (x.findFluentSetters()) findFluentSetters();
-				if (isNotEmpty(x.excludeProperties(), x.xp())) excludeProperties(x.excludeProperties(), x.xp());
-				if (isNotEmpty(x.readOnlyProperties(), x.ro())) readOnlyProperties(x.readOnlyProperties(), x.ro());
-				if (isNotEmpty(x.writeOnlyProperties(), x.wo())) writeOnlyProperties(x.writeOnlyProperties(), x.wo());
-				if (isNotEmpty(x.typeName())) typeName(x.typeName());
+				if (isNotEmpty3(x.excludeProperties(), x.xp())) excludeProperties(x.excludeProperties(), x.xp());
+				if (isNotEmpty3(x.readOnlyProperties(), x.ro())) readOnlyProperties(x.readOnlyProperties(), x.ro());
+				if (isNotEmpty3(x.writeOnlyProperties(), x.wo())) writeOnlyProperties(x.writeOnlyProperties(), x.wo());
+				if (isNotEmpty3(x.typeName())) typeName(x.typeName());
 				if (isNotVoid(x.propertyNamer())) propertyNamer(x.propertyNamer());
 				if (isNotVoid(x.interfaceClass())) interfaceClass(x.interfaceClass());
 				if (isNotVoid(x.stopClass())) stopClass(x.stopClass());
 				if (isNotVoid(x.interceptor())) interceptor(x.interceptor());
 				if (isNotVoid(x.implClass())) implClass(x.implClass());
 				if (isNotEmptyArray(x.dictionary())) dictionary(x.dictionary());
-				if (isNotEmpty(x.example())) example(x.example());
+				if (isNotEmpty3(x.example())) example(x.example());
 			});
 			return this;
 		}
@@ -452,7 +452,7 @@ public final class BeanFilter {
 		public Builder properties(String...value) {
 			this.properties = set();
 			for (String v : value)
-				split(v, x -> properties.add(x));
+				split3(v, x -> properties.add(x));
 			return this;
 		}
 
@@ -496,7 +496,7 @@ public final class BeanFilter {
 		public Builder excludeProperties(String...value) {
 			this.excludeProperties = set();
 			for (String v : value)
-				split(v, x -> excludeProperties.add(x));
+				split3(v, x -> excludeProperties.add(x));
 			return this;
 		}
 
@@ -542,7 +542,7 @@ public final class BeanFilter {
 		public Builder readOnlyProperties(String...value) {
 			this.readOnlyProperties = set();
 			for (String v : value)
-				split(v, x -> readOnlyProperties.add(x));
+				split3(v, x -> readOnlyProperties.add(x));
 			return this;
 		}
 
@@ -588,7 +588,7 @@ public final class BeanFilter {
 		public Builder writeOnlyProperties(String...value) {
 			this.writeOnlyProperties = set();
 			for (String v : value)
-				split(v, x -> writeOnlyProperties.add(x));
+				split3(v, x -> writeOnlyProperties.add(x));
 			return this;
 		}
 

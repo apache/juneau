@@ -127,7 +127,7 @@ public final class Namespace {
 		}
 
 		if (o instanceof CharSequence) {
-			String[] ss = StringUtils.split(o.toString());
+			String[] ss = StringUtils.split3(o.toString());
 			Namespace[] n = new Namespace[ss.length];
 			for (int i = 0; i < ss.length; i++)
 				n[i] = create(ss[i]);

@@ -72,7 +72,7 @@ public class HasQueryArg implements RestOpArg {
 	}
 
 	private static boolean hasName(HasQuery x) {
-		return isNotEmpty(x.name()) || isNotEmpty(x.value());
+		return isNotEmpty3(x.name()) || isNotEmpty3(x.value());
 	}
 
 	private static String getName(HasQuery x) {

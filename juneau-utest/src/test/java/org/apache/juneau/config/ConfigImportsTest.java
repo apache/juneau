@@ -165,7 +165,7 @@ class ConfigImportsTest extends SimpleTestBase {
 			if (events.isEmpty())
 				return null;
 			for (ConfigEvent ce : events)
-				if (eq(section, ce.getSection()) && eq(key, ce.getKey()))
+				if (eq3(section, ce.getSection()) && eq3(key, ce.getKey()))
 					return ce.getValue();
 			return null;
 		}

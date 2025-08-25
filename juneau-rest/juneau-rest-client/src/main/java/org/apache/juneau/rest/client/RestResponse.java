@@ -196,7 +196,7 @@ public class RestResponse implements HttpResponse {
 		String s = null;
 		if (ct.isPresent())
 			s = getContentType().get().getParameter("charset");
-		return StringUtils.isEmpty(s) ? "utf-8" : s;
+		return StringUtils.isEmpty3(s) ? "utf-8" : s;
 	}
 
 	/**

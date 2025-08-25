@@ -44,7 +44,7 @@ public class TestUtils extends Utils {
 	 * Asserts value when stringified matches the specified pattern.
 	 */
 	public static Object assertMatches(String pattern, Object value) {
-		var m = getMatchPattern(pattern).matcher(s(value));
+		var m = getMatchPattern3(pattern).matcher(s(value));
 		if (! m.matches()) {
 			var msg = "Pattern didn't match: \n\tExpected:\n"+pattern+"\n\tActual:\n"+value;
 			System.err.println(msg);  // For easier debugging.
@@ -121,7 +121,7 @@ public class TestUtils extends Utils {
 
 	public static void assertContainsAll(String expected, Object actual) {
 		var a2 = r(actual);
-		for (var e : StringUtils.split(expected))
+		for (var e : StringUtils.split3(expected))
 			assertTrue(a2.contains(e), fs("String did not contain expected substring.  expected={0}, actual={1}", e, a2));
 	}
 
@@ -138,7 +138,7 @@ public class TestUtils extends Utils {
 	 */
 	public static void assertArray(Object array, Object...expected) {
 		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
-			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : StringUtils.split(s(expected[0]));
+			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : StringUtils.split3(s(expected[0]));
 		if (Array.getLength(array) != expected.length)
 			fail(fs("Wrong array length.  expected={0}, actual={1}", expected.length, Array.getLength(array)));
 		for (var i = 0; i < expected.length; i++) {
@@ -161,7 +161,7 @@ public class TestUtils extends Utils {
 	 */
 	public static void assertList(List<?> list, Object...expected) {
 		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
-			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : StringUtils.split(s(expected[0]));
+			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : StringUtils.split3(s(expected[0]));
 		if (list.size() != expected.length)
 			fail(fs("Wrong list length.  expected={0}, actual={1}", expected.length, list.size()));
 		for (var i = 0; i < expected.length; i++) {
@@ -571,7 +571,7 @@ public class TestUtils extends Utils {
 
 	public static void assertJsonMatches(Object o, String pattern) throws AssertionError {
 		var json = json(o);
-		assertTrue(StringUtils.getMatchPattern(pattern).matcher(json).matches(), fs("JSON did not match pattern.\njson={0}", json));
+		assertTrue(StringUtils.getMatchPattern3(pattern).matcher(json).matches(), fs("JSON did not match pattern.\njson={0}", json));
 	}
 
 	public static void assertSameObject(Object o1, Object o2) {

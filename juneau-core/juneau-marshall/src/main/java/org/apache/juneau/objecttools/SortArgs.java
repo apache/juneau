@@ -88,7 +88,7 @@ public class SortArgs {
 	 * 	</ul>
 	 */
 	public SortArgs(String sortArgs) {
-		this(alist(StringUtils.split(sortArgs)));
+		this(alist(StringUtils.split3(sortArgs)));
 	}
 
 	/**

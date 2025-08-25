@@ -114,7 +114,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 */
 	public BasicBooleanHeader(String name, String value) {
 		super(name, value);
-		this.value = isEmpty(value) ? null : Boolean.valueOf(value);
+		this.value = isEmpty3(value) ? null : Boolean.valueOf(value);
 		this.supplier = null;
 	}
 

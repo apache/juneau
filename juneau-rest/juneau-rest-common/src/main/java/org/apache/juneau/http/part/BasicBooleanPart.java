@@ -43,7 +43,7 @@ public class BasicBooleanPart extends BasicPart {
 	 * @return A new {@link BasicBooleanPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicBooleanPart of(String name, Boolean value) {
-		if (isEmpty(name) || value == null)
+		if (isEmpty3(name) || value == null)
 			return null;
 		return new BasicBooleanPart(name, value);
 	}
@@ -59,7 +59,7 @@ public class BasicBooleanPart extends BasicPart {
 	 * @return A new {@link BasicBooleanPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicBooleanPart of(String name, Supplier<Boolean> value) {
-		if (isEmpty(name) || value == null)
+		if (isEmpty3(name) || value == null)
 			return null;
 		return new BasicBooleanPart(name, value);
 	}
@@ -107,7 +107,7 @@ public class BasicBooleanPart extends BasicPart {
 	 */
 	public BasicBooleanPart(String name, String value) {
 		super(name, value);
-		this.value = isEmpty(value) ? null : Boolean.valueOf(value);
+		this.value = isEmpty3(value) ? null : Boolean.valueOf(value);
 		this.supplier = null;
 	}
 

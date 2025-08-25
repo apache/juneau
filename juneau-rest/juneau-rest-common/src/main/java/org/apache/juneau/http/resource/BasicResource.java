@@ -353,7 +353,7 @@ public class BasicResource implements HttpResource {
 			if (h != null) {
 				String n = h.getName();
 				String v = h.getValue();
-				if (isNotEmpty(n)) {
+				if (isNotEmpty3(n)) {
 					if (n.equalsIgnoreCase("content-type"))
 						setContentType(v);
 					else if (n.equalsIgnoreCase("content-encoding"))
@@ -379,7 +379,7 @@ public class BasicResource implements HttpResource {
 			if (h != null) {
 				String n = h.getName();
 				String v = h.getValue();
-				if (isNotEmpty(n)) {
+				if (isNotEmpty3(n)) {
 					if (n.equalsIgnoreCase("content-type"))
 						setContentType(v);
 					else if (n.equalsIgnoreCase("content-encoding"))

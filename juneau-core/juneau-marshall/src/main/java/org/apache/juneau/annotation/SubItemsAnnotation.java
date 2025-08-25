@@ -69,9 +69,9 @@ public class SubItemsAnnotation {
 	public static JsonMap merge(JsonMap om, SubItems a) throws ParseException {
 		if (SubItemsAnnotation.empty(a))
 			return om;
-		Predicate<String> ne = StringUtils::isNotEmpty;
-		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty2;
-		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty2;
+		Predicate<String> ne = StringUtils::isNotEmpty3;
+		Predicate<Collection<?>> nec = Utils::isNotEmpty2;
+		Predicate<Map<?,?>> nem = Utils::isNotEmpty2;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::isNotMinusOne;
 		return om

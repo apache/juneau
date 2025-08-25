@@ -282,7 +282,7 @@ public class Entry {
 				throw new BeanRuntimeException(e);
 			}
 		}
-		return Utils.opt(split(v));
+		return Utils.opt(split3(v));
 	}
 
 	/**
@@ -561,7 +561,7 @@ public class Entry {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private boolean isEmpty() {
-		return StringUtils.isEmpty(value);
+		return StringUtils.isEmpty3(value);
 	}
 
 	private boolean isNull() {

@@ -437,7 +437,7 @@ public class FileStore extends ConfigStore {
 		name = resolveName(name);
 
 		// This is a no-op.
-		if (eq(expectedContents, newContents))
+		if (eq3(expectedContents, newContents))
 			return null;
 
 		dir.mkdirs();
@@ -467,7 +467,7 @@ public class FileStore extends ConfigStore {
 							}
 							currentContents = sb.toString();
 						}
-						if (expectedContents != null && ! eq(currentContents, expectedContents)) {
+						if (expectedContents != null && ! eq3(currentContents, expectedContents)) {
 							if (currentContents == null)
 								cache.remove(name);
 							else
@@ -634,7 +634,7 @@ public class FileStore extends ConfigStore {
 		cache.remove(fn);
 		var newContents = read(fn);
 
-		if (! eq(oldContents, newContents)) {
+		if (! eq3(oldContents, newContents)) {
 			update(fn, newContents);
 		}
 	}

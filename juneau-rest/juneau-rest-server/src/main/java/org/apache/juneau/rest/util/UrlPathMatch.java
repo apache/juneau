@@ -75,7 +75,7 @@ public class UrlPathMatch {
 	 */
 	public boolean hasEmptyVars() {
 		for (String v : vars.values())
-			if (isEmpty(v))
+			if (isEmpty3(v))
 				return true;
 		return false;
 	}
@@ -90,7 +90,7 @@ public class UrlPathMatch {
 	 */
 	public String getRemainder() {
 		String suffix = getSuffix();
-		if (isNotEmpty(suffix) && suffix.charAt(0) == '/')
+		if (isNotEmpty3(suffix) && suffix.charAt(0) == '/')
 			suffix = suffix.substring(1);
 		return suffix;
 	}
@@ -129,7 +129,7 @@ public class UrlPathMatch {
 			if (c == -1)
 				c = path.length();
 		}
-		return nullIfEmpty(path.substring(0, c));
+		return nullIfEmpty3(path.substring(0, c));
 	}
 
 	@Override /* Object */

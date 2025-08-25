@@ -355,7 +355,7 @@ public class Utils {
 	 * Splits a comma-delimited list into an array of strings.
 	 */
 	public static String[] splita(String s) {
-		return s == null ? new String[0] : StringUtils.split(s);
+		return s == null ? new String[0] : StringUtils.split3(s);
 	}
 
 	/**
@@ -562,7 +562,7 @@ public class Utils {
 		if (value instanceof Collection<?> x) return ! x.isEmpty();
 		if (value instanceof Map<?,?> x) return ! x.isEmpty();
 		if (value.getClass().isArray()) return Array.getLength(value) > 0;
-		return StringUtils.isNotEmpty(s(value));
+		return StringUtils.isNotEmpty3(s(value));
 	}
 
 	/**
@@ -623,5 +623,28 @@ public class Utils {
 
 	public static <T> Set<T> u(Set<? extends T> value) {
 		return value == null ? null : Collections.unmodifiableSet(value);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
+	 *
+	 * @param <E> The element type.
+	 * @param value The value being checked.
+	 * @return <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
+	 */
+	public static <E> boolean isNotEmpty2(Collection<E> value) {
+		return value != null && ! value.isEmpty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param value The value being checked.
+	 * @return <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
+	 */
+	public static <K,V> boolean isNotEmpty2(Map<K,V> value) {
+		return value != null && ! value.isEmpty();
 	}
 }

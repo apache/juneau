@@ -197,7 +197,7 @@ public class ReflectionMap<V> {
 		 * @return This object.
 		 */
 		public Builder<V> append(String key, V value) {
-			if (isEmpty(key))
+			if (isEmpty3(key))
 				throw new BasicRuntimeException("Invalid reflection signature: [{0}]", key);
 			try {
 				splitNames(key, k -> {
@@ -655,7 +655,7 @@ public class ReflectionMap<V> {
 			Class<?> c = m.getDeclaringClass();
 			return
 				classMatches(simpleClassName, fullClassName, c)
-				&& (eq(m.getName(), methodName))
+				&& (eq3(m.getName(), methodName))
 				&& (argsMatch(args, m.getParameterTypes()));
 		}
 
@@ -677,7 +677,7 @@ public class ReflectionMap<V> {
 
 		ConstructorEntry(String name, V value) {
 			int i = name.indexOf('(');
-			this.args = split(name.substring(i+1, name.length()-1));
+			this.args = split3(name.substring(i+1, name.length()-1));
 			name = name.substring(0, i).trim();
 			this.simpleClassName = simpleClassName(name);
 			this.fullClassName = name;
@@ -723,7 +723,7 @@ public class ReflectionMap<V> {
 			Class<?> c = f.getDeclaringClass();
 			return
 				classMatches(simpleClassName, fullClassName, c)
-				&& (eq(f.getName(), fieldName));
+				&& (eq3(f.getName(), fieldName));
 		}
 
 		@Override
@@ -745,7 +745,7 @@ public class ReflectionMap<V> {
 		for (int i = 0; i < args.length; i++) {
 			String n = names[i];
 			Class<?> a = args[i];
-			if (! (eq(n, a.getSimpleName()) || eq(n, a.getName())))
+			if (! (eq3(n, a.getSimpleName()) || eq3(n, a.getName())))
 				return false;
 		}
 		return true;
@@ -764,18 +764,18 @@ public class ReflectionMap<V> {
 		// c.getFullName() == "org.apache.juneau.a.rttests.RountTripBeansWithBuilders$Ac$Builder"
 		// c.getPackage() == "org.apache.juneau.a.rttests"
 		String cSimple = c.getSimpleName(), cFull = c.getName();
-		if (eq(simpleName, cSimple) || eq(fullName, cFull) || "*".equals(simpleName))
+		if (eq3(simpleName, cSimple) || eq3(fullName, cFull) || "*".equals(simpleName))
 			return true;
 		if (cFull.indexOf('$') != -1) {
 			Package p = c.getPackage();
 			if (p != null)
 				cFull = cFull.substring(p.getName().length() + 1);
-			if (eq(simpleName, cFull))
+			if (eq3(simpleName, cFull))
 				return true;
 			int i = cFull.indexOf('$');
 			while (i != -1) {
 				cFull = cFull.substring(i+1);
-				if (eq(simpleName, cFull))
+				if (eq3(simpleName, cFull))
 					return true;
 				i = cFull.indexOf('$');
 			}

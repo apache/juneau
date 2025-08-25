@@ -397,17 +397,17 @@ class StringUtilsTest extends SimpleTestBase {
 	// split(String,char)
 	//====================================================================================================
 	@Test void a07_split() {
-		assertNull(StringUtils.split((String)null));
-		assertArray(StringUtils.split(""));
-		assertArray(StringUtils.split("1"), "1");
-		assertArray(StringUtils.split("1,2"), "1", "2");
-		assertArray(StringUtils.split("1\\,2"), ">1,2");
-		assertArray(StringUtils.split("1\\\\,2"), "1\\", "2");
-		assertArray(StringUtils.split("1\\\\\\,2"), ">1\\,2");
-		assertArray(StringUtils.split("1,2\\"), "1", "2\\");
-		assertArray(StringUtils.split("1,2\\\\"), "1", "2\\");
-		assertArray(StringUtils.split("1,2\\,"), "1", "2,");
-		assertArray(StringUtils.split("1,2\\\\,"), "1", "2\\", "");
+		assertNull(StringUtils.split3((String)null));
+		assertArray(StringUtils.split3(""));
+		assertArray(StringUtils.split3("1"), "1");
+		assertArray(StringUtils.split3("1,2"), "1", "2");
+		assertArray(StringUtils.split3("1\\,2"), ">1,2");
+		assertArray(StringUtils.split3("1\\\\,2"), "1\\", "2");
+		assertArray(StringUtils.split3("1\\\\\\,2"), ">1\\,2");
+		assertArray(StringUtils.split3("1,2\\"), "1", "2\\");
+		assertArray(StringUtils.split3("1,2\\\\"), "1", "2\\");
+		assertArray(StringUtils.split3("1,2\\,"), "1", "2,");
+		assertArray(StringUtils.split3("1,2\\\\,"), "1", "2\\", "");
 	}
 
 	@Test void a08_split2() {
@@ -426,7 +426,7 @@ class StringUtilsTest extends SimpleTestBase {
 
 	private List<String> split2test(String s) {
 		List<String> l = TestUtils.list();
-		split(s, l::add);
+		split3(s, l::add);
 		return l;
 	}
 
@@ -434,13 +434,13 @@ class StringUtilsTest extends SimpleTestBase {
 	// split(String,char,int)
 	//====================================================================================================
 	@Test void a09_splitWithLimit() {
-		TestUtils.assertString("[boo,and,foo]", split("boo:and:foo", ':', 10));
-		TestUtils.assertString("[boo,and:foo]", split("boo:and:foo", ':', 2));
-		TestUtils.assertString("[boo:and:foo]", split("boo:and:foo", ':', 1));
-		TestUtils.assertString("[boo:and:foo]", split("boo:and:foo", ':', 0));
-		TestUtils.assertString("[boo:and:foo]", split("boo:and:foo", ':', -1));
-		TestUtils.assertString("[boo,and,foo]", split("boo : and : foo", ':', 10));
-		TestUtils.assertString("[boo,and : foo]", split("boo : and : foo", ':', 2));
+		TestUtils.assertString("[boo,and,foo]", split3("boo:and:foo", ':', 10));
+		TestUtils.assertString("[boo,and:foo]", split3("boo:and:foo", ':', 2));
+		TestUtils.assertString("[boo:and:foo]", split3("boo:and:foo", ':', 1));
+		TestUtils.assertString("[boo:and:foo]", split3("boo:and:foo", ':', 0));
+		TestUtils.assertString("[boo:and:foo]", split3("boo:and:foo", ':', -1));
+		TestUtils.assertString("[boo,and,foo]", split3("boo : and : foo", ':', 10));
+		TestUtils.assertString("[boo,and : foo]", split3("boo : and : foo", ':', 2));
 	}
 
 	//====================================================================================================
@@ -701,9 +701,9 @@ class StringUtilsTest extends SimpleTestBase {
 	// matchPattern(String)
 	//====================================================================================================
 	@Test void a29_getMatchPattern() {
-		assertTrue(getMatchPattern("a").matcher("a").matches());
-		assertTrue(getMatchPattern("*a*").matcher("aaa").matches());
-		assertFalse(getMatchPattern("*b*").matcher("aaa").matches());
+		assertTrue(getMatchPattern3("a").matcher("a").matches());
+		assertTrue(getMatchPattern3("*a*").matcher("aaa").matches());
+		assertFalse(getMatchPattern3("*b*").matcher("aaa").matches());
 	}
 
 	//====================================================================================================

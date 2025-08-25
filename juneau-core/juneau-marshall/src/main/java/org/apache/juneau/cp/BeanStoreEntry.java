@@ -73,7 +73,7 @@ public class BeanStoreEntry<T> {
 	protected BeanStoreEntry(Class<T> type, Supplier<T> bean, String name) {
 		this.bean = assertArgNotNull("bean", bean);
 		this.type = assertArgNotNull("type", type);
-		this.name = nullIfEmpty(name);
+		this.name = nullIfEmpty3(name);
 	}
 
 	/**
@@ -94,8 +94,8 @@ public class BeanStoreEntry<T> {
 	 * @return <jk>true</jk> if this bean is exactly of the specified type and has the specified name.
 	 */
 	public boolean matches(Class<?> type, String name) {
-		name = nullIfEmpty(name);
-		return matches(type) && StringUtils.eq(this.name, name);
+		name = nullIfEmpty3(name);
+		return matches(type) && StringUtils.eq3(this.name, name);
 	}
 
 	/**

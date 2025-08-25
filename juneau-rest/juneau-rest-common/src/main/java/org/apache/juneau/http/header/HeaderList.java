@@ -945,7 +945,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return caseSensitive ? StringUtils.eq(s1, s2) : StringUtils.eqic(s1, s2);
+		return caseSensitive ? StringUtils.eq3(s1, s2) : StringUtils.eqic3(s1, s2);
 	}
 
 	@Override /* Object */

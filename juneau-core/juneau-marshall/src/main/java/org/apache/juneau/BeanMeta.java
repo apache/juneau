@@ -233,7 +233,7 @@ public class BeanMeta<T> {
 						throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 					constructor = x;
 					constructorArgs = new String[0];
-					ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = StringUtils.split(z.properties()));
+					ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = StringUtils.split3(z.properties()));
 					if (! x.hasNumParams(constructorArgs.length)) {
 						if (constructorArgs.length != 0)
 							throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -256,7 +256,7 @@ public class BeanMeta<T> {
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
 						constructorArgs = new String[0];
-						ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = StringUtils.split(z.properties()));
+						ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = StringUtils.split3(z.properties()));
 						if (! x.hasNumParams(constructorArgs.length)) {
 							if (constructorArgs.length != 0)
 								throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");

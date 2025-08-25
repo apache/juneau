@@ -348,7 +348,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	@Override
 	public R is(String value) throws AssertionError {
 		var s = orElse(null);
-		if (ne(value, s))
+		if (ne3(value, s))
 			throw error(MSG_stringDifferedAtPosition, diffPosition(value, s), fix(value), fix(s));
 		return returns();
 	}
@@ -363,7 +363,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	@Override
 	public R isNot(String value) throws AssertionError {
 		var s = orElse(null);
-		if (eq(value, s))
+		if (eq3(value, s))
 			throw error(MSG_stringEqualedUnexpected, fix(s));
 		return returns();
 	}
@@ -394,7 +394,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		assertArgNotNull("lines", lines);
 		var v = join(lines, '\n');
 		var s = value();
-		if (ne(v, s))
+		if (ne3(v, s))
 			throw error(MSG_stringDifferedAtPosition, diffPosition(v, s), fix(v), fix(s));
 		return returns();
 	}
@@ -450,7 +450,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isIc(String value) throws AssertionError {
 		var s = orElse(null);
-		if (neic(value, s))
+		if (neic3(value, s))
 			throw error(MSG_stringDifferedAtPosition, diffPositionIc(value, s), fix(value), fix(s));
 		return returns();
 	}
@@ -464,7 +464,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isNotIc(String value) throws AssertionError {
 		var s = orElse(null);
-		if (eqic(value, s))
+		if (eqic3(value, s))
 			throw error(MSG_stringEqualedUnexpected, fix(s));
 		return returns();
 	}
@@ -541,7 +541,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isMatches(String searchPattern) throws AssertionError {
 		assertArgNotNull("searchPattern", searchPattern);
-		return isPattern(getMatchPattern(searchPattern));
+		return isPattern(getMatchPattern3(searchPattern));
 	}
 
 	/**

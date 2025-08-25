@@ -111,7 +111,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 */
 	public BasicCsvHeader(String name, String value) {
 		super(name, value);
-		this.value = split(value);
+		this.value = split3(value);
 		this.supplier = null;
 	}
 
@@ -210,13 +210,13 @@ public class BasicCsvHeader extends BasicHeader {
 	public boolean contains(String val) {
 		if (value != null)
 			for (String v : value)
-				if (eq(v, val))
+				if (eq3(v, val))
 					return true;
 		if (supplier != null) {
 			String[] value2 = supplier.get();
 			if (value2 != null)
 				for (String v : supplier.get())
-					if (eq(v, val))
+					if (eq3(v, val))
 						return true;
 
 		}
@@ -232,13 +232,13 @@ public class BasicCsvHeader extends BasicHeader {
 	public boolean containsIgnoreCase(String val) {
 		if (value != null)
 			for (String v : value)
-				if (eqic(v, val))
+				if (eqic3(v, val))
 					return true;
 		if (supplier != null) {
 			String[] value2 = supplier.get();
 			if (value2 != null)
 				for (String v : supplier.get())
-					if (eqic(v, val))
+					if (eqic3(v, val))
 						return true;
 		}
 		return false;

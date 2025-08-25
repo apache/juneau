@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import static org.apache.juneau.common.internal.StringUtils.ne;
+import static org.apache.juneau.common.internal.StringUtils.ne3;
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -77,7 +77,7 @@ public class OneWayStringSwapTester<T> {
 		try {
 			var o = objectSupplier.get();
 			var s = swap.swap(beanSession, o);
-			if (ne(expected, s)) {
+			if (ne3(expected, s)) {
 				if (expected.isEmpty()) {
 					if (! label.startsWith("[]"))
 						System.err.println(label.substring(0, label.indexOf(']')+1) + " "+s);  // NOT DEBUG

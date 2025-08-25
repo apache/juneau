@@ -69,9 +69,9 @@ public class Version implements Comparable<Version> {
 	 * 	Any parts that are not numeric are interpreted as {@link Integer#MAX_VALUE}
 	 */
 	public Version(String value) {
-		if (isEmpty(value))
+		if (isEmpty3(value))
 			value = "0";
-		String[] sParts = split(value, '.');
+		String[] sParts = split3(value, '.');
 		parts = new int[sParts.length];
 		for (int i = 0; i < sParts.length; i++) {
 			try {

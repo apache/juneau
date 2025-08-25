@@ -224,7 +224,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 		for (NameValuePair p : pairs) {
 			String name = p.getName();
 			Stream<RequestQueryParam> l = stream(name);
-			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty(x.getValue()));
+			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty3(x.getValue()));
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestQueryParam(req, name, vs.resolve(p.getValue())));
@@ -571,8 +571,8 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 
 	private boolean eq(String s1, String s2) {
 		if (caseSensitive)
-			return StringUtils.eq(s1, s2);
-		return StringUtils.eqic(s1, s2);
+			return StringUtils.eq3(s1, s2);
+		return StringUtils.eqic3(s1, s2);
 	}
 
 	@Override /* Object */
