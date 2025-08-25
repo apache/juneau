@@ -70,7 +70,7 @@ public class SubItemsAnnotation {
 			return om;
 		Predicate<String> ne = Utils::isNotEmpty3;
 		Predicate<Collection<?>> nec = Utils::isNotEmpty;
-		Predicate<Map<?,?>> nem = Utils::isNotEmpty2;
+		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::isNotMinusOne;
 		return om

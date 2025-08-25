@@ -448,18 +448,6 @@ public class Utils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
-	 *
-	 * @param <K> The key type.
-	 * @param <V> The value type.
-	 * @param value The value being checked.
-	 * @return <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
-	 */
-	public static <K,V> boolean isNotEmpty2(Map<K,V> value) {
-		return isNotEmpty(value);
-	}
-
-	/**
 	 * Returns <jk>true</jk> if specified string is not <jk>null</jk> or empty.
 	 *
 	 * @param s The string to check.
