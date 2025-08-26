@@ -19,8 +19,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("rawtypes")
-class BeanContextTest extends SimpleTestBase {
+class BeanContext_Test extends SimpleTestBase {
 
 	BeanContext bc = BeanContext.DEFAULT;
 	BeanSession bs = BeanContext.DEFAULT_SESSION;
@@ -31,7 +30,8 @@ class BeanContextTest extends SimpleTestBase {
 	}
 
 	@Test void a01_normalCachableBean() throws ExecutableException {
-		ClassMeta cm1 = bc.getClassMeta(A1.class), cm2 = bc.getClassMeta(A1.class);
+		var cm1 = bc.getClassMeta(A1.class);
+		var cm2 = bc.getClassMeta(A1.class);
 		assertSame(cm1, cm2);
 	}
 
@@ -40,20 +40,22 @@ class BeanContextTest extends SimpleTestBase {
 	}
 
 	@Test void a02_lambdaExpressionsNotCached() throws ExecutableException {
-		BeanContext bc2 = BeanContext.DEFAULT;
-		A2 fi = System.out::println;
-		ClassMeta cm1 = bc2.getClassMeta(fi.getClass()), cm2 = bc2.getClassMeta(fi.getClass());
+		var bc2 = BeanContext.DEFAULT;
+		var fi = (A2)System.out::println;
+		var cm1 = bc2.getClassMeta(fi.getClass());
+		var cm2 = bc2.getClassMeta(fi.getClass());
 		assertNotSame(cm1, cm2);
 	}
 
 	@Test void a03_proxiesNotCached() throws ExecutableException {
-		A1 a1 = bs.getBeanMeta(A1.class).newBean(null);
-		ClassMeta cm1 = bc.getClassMeta(a1.getClass()), cm2 = bc.getClassMeta(a1.getClass());
+		var a1 = bs.getBeanMeta(A1.class).newBean(null);
+		var cm1 = bc.getClassMeta(a1.getClass());
+		var cm2 = bc.getClassMeta(a1.getClass());
 		assertNotSame(cm1, cm2);
 	}
 
 	@Test void b01_ignoreUnknownEnumValues() {
-		JsonParser p1 = JsonParser.DEFAULT;
+		var p1 = JsonParser.DEFAULT;
 		assertThrowsWithMessage(Exception.class, "Could not resolve enum value 'UNKNOWN' on class 'org.apache.juneau.testutils.pojos.TestEnum'", () -> p1.parse("'UNKNOWN'", TestEnum.class));
 
 		var p2 = JsonParser.create().ignoreUnknownEnumValues().build();
