@@ -14,8 +14,6 @@ package org.apache.juneau.common.internal;
 
 import java.io.*;
 
-import org.apache.juneau.common.utils.*;
-
 /**
  * Various utility methods for creating and working with throwables.
  */
