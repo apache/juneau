@@ -93,7 +93,7 @@ class BasicBeans_Test extends SimpleTestBase {
 	@Test void b01_beanWithDynaProperty() throws Exception {
 		assertJson(B.create(), "{a:1}");
 
-		B b = JsonParser.DEFAULT.parse("{a:1}", B.class);
+		var b = JsonParser.DEFAULT.parse("{a:1}", B.class);
 		assertJson(b, "{a:1}");
 	}
 }

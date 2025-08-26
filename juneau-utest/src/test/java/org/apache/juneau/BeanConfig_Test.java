@@ -415,11 +415,9 @@ class BeanConfig_Test extends SimpleTestBase {
 
 	public interface A {
 		String getA();
-
 		void setA(String a);
 
 		int getB();
-
 		void setB(int b);
 	}
 

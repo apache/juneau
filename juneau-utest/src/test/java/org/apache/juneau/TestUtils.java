@@ -381,10 +381,6 @@ public class TestUtils extends Utils {
 		assertEquals(expected, r(value).replaceAll("\\r?\\n", "|"));
 	}
 
-	public static <T> void assertTests(T value, AssertionPredicate<T>...tests) {
-		Stream.of(tests).forEach(x -> x.test(value));
-	}
-
 	private static final ThreadLocal<TimeZone> SYSTEM_TIME_ZONE = new ThreadLocal<>();
 	public static final ThreadLocal<Locale> SYSTEM_LOCALE = new ThreadLocal<>();
 
