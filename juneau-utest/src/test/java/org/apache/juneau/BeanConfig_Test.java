@@ -91,7 +91,8 @@ class BeanConfig_Test extends SimpleTestBase {
 		assertNotNull(bc.toBeanMap(p2), fs("Failed to identify class as bean type: {0}", p2.getClass()));
 
 		var m5 = bc.toBeanMap(p2);
-		Set es1 = m5.entrySet();
+		@SuppressWarnings("cast")
+		var es1 = (Set)m5.entrySet();
 
 		assertEquals(es1, m3.entrySet(), fs("Entry set equality failed: {0} / {1} / {2}", p2, es1, m3.entrySet()));
 		assertEquals(m3.entrySet(), es1, fs("Entry set reverse equality failed: {0} / {1} / {2}", p2, es1, m3.entrySet()));
@@ -187,10 +188,9 @@ class BeanConfig_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a01_beanContextConvertToType() throws Exception {
 		var bc = BeanContext.DEFAULT;
-		Object o;
+		var o = (Object)null;
 
 		// Primitive nulls.
-		o = null;
 		assertEquals(Integer.valueOf(0), bc.convertToType(o, Integer.TYPE));
 		assertEquals(Short.valueOf((short) 0), bc.convertToType(o, Short.TYPE));
 		assertEquals(Long.valueOf(0), bc.convertToType(o, Long.TYPE));
@@ -297,15 +297,14 @@ class BeanConfig_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a02_readOnlyProperties() throws Exception {
 		var bc = BeanContext.DEFAULT;
-		Object o;
+		var o = new ReadOnlyPerson("x", 123);
 
 		// Bean to String
-		o = new ReadOnlyPerson("x", 123);
 		assertEquals("{name:'x',age:123}", bc.convertToType(o, String.class));
 
 		// List of Maps to array of beans.
-		o = JsonList.of(JsonMap.ofJson("{name:'x',age:1}"), JsonMap.ofJson("{name:'y',age:2}"));
-		assertEquals(1, bc.convertToType(o, ReadOnlyPerson[].class)[0].getAge());
+		var o2 = JsonList.of(JsonMap.ofJson("{name:'x',age:1}"), JsonMap.ofJson("{name:'y',age:2}"));
+		assertEquals(1, bc.convertToType(o2, ReadOnlyPerson[].class)[0].getAge());
 	}
 
 	@Bean(p="name,age")
@@ -330,15 +329,14 @@ class BeanConfig_Test extends SimpleTestBase {
 
 	@Test void a03_readOnlyProperties_usingConfig() throws Exception {
 		var bc = BeanContext.DEFAULT.copy().applyAnnotations(ReadOnlyPerson2Config.class).build();
-		Object o;
+		var o = new ReadOnlyPerson2("x", 123);
 
 		// Bean to String
-		o = new ReadOnlyPerson2("x", 123);
 		assertEquals("{name:'x',age:123}", bc.convertToType(o, String.class));
 
 		// List of Maps to array of beans.
-		o = JsonList.of(JsonMap.ofJson("{name:'x',age:1}"), JsonMap.ofJson("{name:'y',age:2}"));
-		assertEquals(1, bc.convertToType(o, ReadOnlyPerson2[].class)[0].getAge());
+		var o2 = JsonList.of(JsonMap.ofJson("{name:'x',age:1}"), JsonMap.ofJson("{name:'y',age:2}"));
+		assertEquals(1, bc.convertToType(o2, ReadOnlyPerson2[].class)[0].getAge());
 	}
 
 	public static class ReadOnlyPerson2 {
@@ -372,16 +370,15 @@ class BeanConfig_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a04_enums() throws Exception {
 		var bc = BeanContext.DEFAULT;
-		Object o;
+		var o = "ENUM2";
 
 		// Enum
-		o = "ENUM2";
 		assertEquals(TestEnum.ENUM2, bc.convertToType(o, TestEnum.class));
 		assertEquals("ENUM2", bc.convertToType(TestEnum.ENUM2, String.class));
 
 		// Array of enums
-		o = a("ENUM2");
-		assertEquals(TestEnum.ENUM2, bc.convertToType(o, TestEnum[].class)[0]);
+		var o2 = a("ENUM2");
+		assertEquals(TestEnum.ENUM2, bc.convertToType(o2, TestEnum[].class)[0]);
 	}
 
 	public enum TestEnum {

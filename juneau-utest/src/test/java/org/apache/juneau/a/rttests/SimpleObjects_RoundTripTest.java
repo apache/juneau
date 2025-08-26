@@ -13,11 +13,10 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -64,7 +63,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a06_string2dArray(RoundTripTester t) throws Exception {
-		var x = new String[][]{{"foo", null, "null", ""},null};
+		var x = a(a("foo", null, "null", ""),null);
 		x = t.roundTrip(x, String[][].class);
 		assertEquals("foo", x[0][0]);
 		assertNull(x[0][1]);
@@ -463,7 +462,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a53_treeMap(RoundTripTester t) throws Exception {
-		var x = new TreeMap();
+		var x = new TreeMap<String,Object>();
 		x.put("a", 1);
 		x.put("b", 2);
 		x.put("c", 3);
@@ -472,7 +471,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 		assertEquals(2, x.get("b"));
 		assertEquals(3, x.get("c"));
 
-		x = new TreeMap();
+		x = new TreeMap<>();
 		x.put("a", true);
 		x.put("b", false);
 		x.put("c", null);
@@ -497,7 +496,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a54_linkedHashMap(RoundTripTester t) throws Exception {
-		var x = new LinkedHashMap();
+		var x = new LinkedHashMap<String,Object>();
 		x.put("a", true);
 		x.put("b", false);
 		x.put("c", null);
@@ -578,7 +577,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 		x.add(1);
 		x.add(2);
 		x.add(3);
-		TestUtils.assertNotThrown(()->t.roundTrip(x, Vector.class, Integer.class));
+		assertNotThrown(()->t.roundTrip(x, Vector.class, Integer.class));
 	}
 
 	@ParameterizedTest

@@ -13,7 +13,7 @@
 package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -101,28 +101,28 @@ class ObjectViewer_Test extends SimpleTestBase {
 
 	@Test void b07_simpleMap() {
 		var sa = new ViewArgs("f1");
-		Object in = map("f1","x1","f2","x2");
+		var in = map("f1","x1","f2","x2");
 		assertJson(ov.run(bs, in, sa), "{f1:'x1'}");
 		assertJson(ov.runSingle(in, "f1"), "{f1:'x1'}");
 	}
 
 	@Test void b08_simpleMap_reverseColumns() {
 		var sa = new ViewArgs("f2,f1");
-		Object in = map("f1","x1","f2","x2");
+		var in = map("f1","x1","f2","x2");
 		assertJson(ov.run(bs, in, sa), "{f2:'x2',f1:'x1'}");
 		assertJson(ov.runSingle(in, "f2,f1"), "{f2:'x2',f1:'x1'}");
 	}
 
 	@Test void b09_simpleMap_nonExistentColumns() {
 		var sa = new ViewArgs("fx");
-		Object in = map("f1","x1","f2","x2");
+		var in = map("f1","x1","f2","x2");
 		assertJson(ov.run(bs, in, sa), "{}");
 		assertJson(ov.runSingle(in, "fx"), "{}");
 	}
 
 	@Test void b10_simpleMap_emptyView() {
 		var sa = new ViewArgs("");
-		Object in = map("f1","x1","f2","x2");
+		var in = map("f1","x1","f2","x2");
 		assertJson(ov.run(bs, in, sa), "{}");
 		assertJson(ov.runSingle(in, ""), "{}");
 	}
@@ -168,7 +168,7 @@ class ObjectViewer_Test extends SimpleTestBase {
 
 	@Test void c06_beanArray_withNull() {
 		var sa = new ViewArgs("f1");
-		var in = new A[]{A.create("x1","x2"),null};
+		var in = a(A.create("x1","x2"),null);
 		assertJson(ov.run(bs, in, sa), "[{f1:'x1'},null]");
 		assertJson(ov.run(in, "f1"), "[{f1:'x1'},null]");
 	}
@@ -179,42 +179,42 @@ class ObjectViewer_Test extends SimpleTestBase {
 
 	@Test void d01_beanList() {
 		var sa = new ViewArgs("f1");
-		Object in = list(A.create("x1","x2"));
+		var in = list(A.create("x1","x2"));
 		assertJson(ov.run(bs, in, sa), "[{f1:'x1'}]");
 		assertJson(ov.run(in, "f1"), "[{f1:'x1'}]");
 	}
 
 	@Test void d02_beanList_reverseColumns() {
 		var sa = new ViewArgs("f2,f1");
-		Object in = list(A.create("x1","x2"));
+		var in = list(A.create("x1","x2"));
 		assertJson(ov.run(bs, in, sa), "[{f2:'x2',f1:'x1'}]");
 		assertJson(ov.run(in, "f2,f1"), "[{f2:'x2',f1:'x1'}]");
 	}
 
 	@Test void d03_beanList_dupColumns() {
 		var sa = new ViewArgs("f1,f1");
-		Object in = list(A.create("x1","x2"));
+		var in = list(A.create("x1","x2"));
 		assertJson(ov.run(bs, in, sa), "[{f1:'x1'}]");
 		assertJson(ov.run(in, "f1,f1"), "[{f1:'x1'}]");
 	}
 
 	@Test void d04_beanList_nonExistentColumns() {
 		var sa = new ViewArgs("fx");
-		Object in = list(A.create("x1","x2"));
+		var in = list(A.create("x1","x2"));
 		assertJson(ov.run(bs, in, sa), "[{}]");
 		assertJson(ov.run(in, "fx"), "[{}]");
 	}
 
 	@Test void d05_beanList_emptyArgs() {
 		var sa = new ViewArgs("");
-		Object in = list(A.create("x1","x2"));
+		var in = list(A.create("x1","x2"));
 		assertJson(ov.run(bs, in, sa), "[{}]");
 		assertJson(ov.run(in, ""), "[{}]");
 	}
 
 	@Test void d06_beanList_withNull() {
 		var sa = new ViewArgs("f1");
-		Object in = list(A.create("x1","x2"),null);
+		var in = list(A.create("x1","x2"),null);
 		assertJson(ov.run(bs, in, sa), "[{f1:'x1'},null]");
 		assertJson(ov.run(in, "f1"), "[{f1:'x1'},null]");
 	}
@@ -225,42 +225,42 @@ class ObjectViewer_Test extends SimpleTestBase {
 
 	@Test void e01_beanSet() {
 		var sa = new ViewArgs("f1");
-		Object in = set(A.create("x1","x2"));
+		var in = set(A.create("x1","x2"));
 		assertJson(ov.run(bs, in, sa), "[{f1:'x1'}]");
 		assertJson(ov.run(in, "f1"), "[{f1:'x1'}]");
 	}
 
 	@Test void e02_beanSet_reverseColumns() {
 		var sa = new ViewArgs("f2,f1");
-		Object in = set(A.create("x1","x2"));
+		var in = set(A.create("x1","x2"));
 		assertJson(ov.run(bs, in, sa), "[{f2:'x2',f1:'x1'}]");
 		assertJson(ov.run(in, "f2,f1"), "[{f2:'x2',f1:'x1'}]");
 	}
 
 	@Test void e03_beanSet_dupColumns() {
 		var sa = new ViewArgs("f1,f1");
-		Object in = set(A.create("x1","x2"));
+		var in = set(A.create("x1","x2"));
 		assertJson(ov.run(bs, in, sa), "[{f1:'x1'}]");
 		assertJson(ov.run(in, "f1,f1"), "[{f1:'x1'}]");
 	}
 
 	@Test void e04_beanSet_nonExistentColumns() {
 		var sa = new ViewArgs("fx");
-		Object in = set(A.create("x1","x2"));
+		var in = set(A.create("x1","x2"));
 		assertJson(ov.run(bs, in, sa), "[{}]");
 		assertJson(ov.run(in, "fx"), "[{}]");
 	}
 
 	@Test void e05_beanSet_emptyArgs() {
 		var sa = new ViewArgs("");
-		Object in = set(A.create("x1","x2"));
+		var in = set(A.create("x1","x2"));
 		assertJson(ov.run(bs, in, sa), "[{}]");
 		assertJson(ov.run(in, ""), "[{}]");
 	}
 
 	@Test void e06_beanSet_withNull() {
 		var sa = new ViewArgs("f1");
-		Object in = set(A.create("x1","x2"),null);
+		var in = set(A.create("x1","x2"),null);
 		assertJson(ov.run(bs, in, sa), "[{f1:'x1'},null]");
 		assertJson(ov.run(in, "f1"), "[{f1:'x1'},null]");
 	}
@@ -271,7 +271,7 @@ class ObjectViewer_Test extends SimpleTestBase {
 
 	@Test void f01_otherObject() {
 		var sa = new ViewArgs("f1");
-		Object in = "foobar";
+		var in = "foobar";
 		assertEquals("foobar", ov.run(bs, in, sa));	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -280,7 +280,7 @@ class ObjectViewer_Test extends SimpleTestBase {
 
 	@Test void g01_mapList() {
 		var sa = new ViewArgs("f1");
-		Object in = list(map("f1","x1","f2","x2"));
+		var in = list(map("f1","x1","f2","x2"));
 		assertJson(ov.run(bs, in, sa), "[{f1:'x1'}]");
 		assertJson(ov.run(in, "f1"), "[{f1:'x1'}]");
 	}
@@ -291,7 +291,7 @@ class ObjectViewer_Test extends SimpleTestBase {
 
 	@Test void h01_beanMapList() {
 		var sa = new ViewArgs("f1");
-		Object in = list(bs.toBeanMap(A.create("x1","x2")));
+		var in = list(bs.toBeanMap(A.create("x1","x2")));
 		assertJson(ov.run(bs, in, sa), "[{f1:'x1'}]");
 		assertJson(ov.run(in, "f1"), "[{f1:'x1'}]");
 	}
@@ -302,7 +302,7 @@ class ObjectViewer_Test extends SimpleTestBase {
 
 	@Test void i01_otherObjectList() {
 		var sa = new ViewArgs("f1");
-		Object in = list("foobar");
+		var in = list("foobar");
 		assertJson(ov.run(bs, in, sa), "['foobar']");
 		assertJson(ov.run(in, "f1"), "['foobar']");
 	}

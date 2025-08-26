@@ -13,7 +13,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -27,20 +27,20 @@ class Classes_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a01_classObjects(RoundTripTester t) throws Exception {
-		Object o = String.class;
+		var o = String.class;
 		o = t.roundTrip(o);
 		assertSame(o, String.class);
 
-		o = new Class[]{String.class};
-		o = t.roundTrip(o);
-		assertJson(o, "['java.lang.String']");
+		var o2 = new Class[]{String.class};
+		o2 = t.roundTrip(o2);
+		assertJson(o2, "['java.lang.String']");
 
-		o = alist(String.class, Integer.class);
-		o = t.roundTrip(o);
-		assertJson(o, "['java.lang.String','java.lang.Integer']");
+		var o3 = alist(String.class, Integer.class);
+		o3 = t.roundTrip(o3);
+		assertJson(o3, "['java.lang.String','java.lang.Integer']");
 
-		o = map(String.class, String.class);
-		o = t.roundTrip(o);
-		assertJson(o, "{'java.lang.String':'java.lang.String'}");
+		var o4 = map(String.class, String.class);
+		o4 = t.roundTrip(o4);
+		assertJson(o4, "{'java.lang.String':'java.lang.String'}");
 	}
-}
+}

@@ -98,7 +98,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
 
-		String s = "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}";
+		var s = "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}";
 		assertJson(JsonParser.DEFAULT.parse(s, ResponseInfo.class), s);
 	}
 

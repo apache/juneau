@@ -93,7 +93,7 @@ class SerializedHttpEntity_Test extends SimpleTestBase {
 	}
 
 	@Test void a12_contentType() throws Exception {
-		checkHeaderClient("Content-Type").post("/",serializedEntity(TestUtils.reader("foo"),null).setContentType("text/foo")).run().assertContent("['text/foo']");
+		checkHeaderClient("Content-Type").post("/",serializedEntity(reader("foo"),null).setContentType("text/foo")).run().assertContent("['text/foo']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

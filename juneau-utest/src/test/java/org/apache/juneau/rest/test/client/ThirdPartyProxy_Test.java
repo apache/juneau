@@ -16,7 +16,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.utest.utils.Constants.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -41,6 +41,7 @@ import org.apache.juneau.xml.*;
 import org.junit.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
+import org.opentest4j.*;
 
 class ThirdPartyProxy_Test extends SimpleTestBase {
 
@@ -508,7 +509,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void da01_returnVoid(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.returnVoid());
+		assertNotThrown(()->input.proxy.returnVoid());
 	}
 
 	@ParameterizedTest
@@ -897,152 +898,152 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea01_setInt(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setInt(1));
+		assertNotThrown(()->input.proxy.setInt(1));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea02_setWrongInt(Input input) {
-		assertThrowsWithMessage(AssertionError.class, "expected:<1> but was:<2>", ()->input.proxy.setInt(2));
+		assertThrowsWithMessage(AssertionFailedError.class, "expected: <1> but was: <2>", ()->input.proxy.setInt(2));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea03_setInteger(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setInteger(1));
+		assertNotThrown(()->input.proxy.setInteger(1));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea04_setBoolean(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setBoolean(true));
+		assertNotThrown(()->input.proxy.setBoolean(true));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea05_setFloat(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setFloat(1f));
+		assertNotThrown(()->input.proxy.setFloat(1f));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea06_setFloatObject(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setFloatObject(1f));
+		assertNotThrown(()->input.proxy.setFloatObject(1f));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea07_setString(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setString("foo"));
+		assertNotThrown(()->input.proxy.setString("foo"));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea08_setNullString(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setNullString(null));
+		assertNotThrown(()->input.proxy.setNullString(null));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea09_setNullStringBad(Input input) {
-		assertThrowsWithMessage(AssertionError.class, "expected null, but was:<foo>", ()->input.proxy.setNullString("foo"));
+		assertThrowsWithMessage(AssertionFailedError.class, "expected: <null> but was: <foo>", ()->input.proxy.setNullString("foo"));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea10_setInt3dArray(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setInt3dArray(new int[][][]{{{1},null},null}, 1));
+		assertNotThrown(()->input.proxy.setInt3dArray(new int[][][]{{{1},null},null}, 1));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea11_setInteger3dArray(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setInteger3dArray(new Integer[][][]{{{1,null},null},null}));
+		assertNotThrown(()->input.proxy.setInteger3dArray(new Integer[][][]{{{1,null},null},null}));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea12_setString3dArray(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setString3dArray(new String[][][]{{{"foo",null},null},null}));
+		assertNotThrown(()->input.proxy.setString3dArray(new String[][][]{{{"foo",null},null},null}));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea13_setIntegerList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setIntegerList(alist(1,null)));
+		assertNotThrown(()->input.proxy.setIntegerList(alist(1,null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea14_setInteger3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setInteger3dList(alist(alist(alist(1,null),null),null)));
+		assertNotThrown(()->input.proxy.setInteger3dList(alist(alist(alist(1,null),null),null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea15_setInteger1d3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setInteger1d3dList(alist(new Integer[][][]{{{1,null},null},null},null)));
+		assertNotThrown(()->input.proxy.setInteger1d3dList(alist(new Integer[][][]{{{1,null},null},null},null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea16_setInt1d3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setInt1d3dList(alist(new int[][][]{{{1,2},null},null},null)));
+		assertNotThrown(()->input.proxy.setInt1d3dList(alist(new int[][][]{{{1,2},null},null},null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea17_setStringList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setStringList(alist("foo","bar",null)));
+		assertNotThrown(()->input.proxy.setStringList(alist("foo","bar",null)));
 	}
 
 	// Beans
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb01_setBean(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setBean(ABean.get()));
+		assertNotThrown(()->input.proxy.setBean(ABean.get()));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb02_setBean3dArray(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setBean3dArray(new ABean[][][]{{{ABean.get(),null},null},null}));
+		assertNotThrown(()->input.proxy.setBean3dArray(new ABean[][][]{{{ABean.get(),null},null},null}));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb03_setBeanList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setBeanList(alist(ABean.get())));
+		assertNotThrown(()->input.proxy.setBeanList(alist(ABean.get())));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb04_setBean1d3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setBean1d3dList(alist(new ABean[][][]{{{ABean.get(),null},null},null},null)));
+		assertNotThrown(()->input.proxy.setBean1d3dList(alist(new ABean[][][]{{{ABean.get(),null},null},null},null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb05_setBeanMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setBeanMap(map("foo",ABean.get())));
+		assertNotThrown(()->input.proxy.setBeanMap(map("foo",ABean.get())));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb06_setBeanListMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setBeanListMap(map("foo",alist(ABean.get()))));
+		assertNotThrown(()->input.proxy.setBeanListMap(map("foo",alist(ABean.get()))));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb07_setBean1d3dListMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setBean1d3dListMap(map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null))));
+		assertNotThrown(()->input.proxy.setBean1d3dListMap(map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null))));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb08_setBeanListMapIntegerKeys(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setBeanListMapIntegerKeys(map(1,alist(ABean.get()))));
+		assertNotThrown(()->input.proxy.setBeanListMapIntegerKeys(map(1,alist(ABean.get()))));
 	}
 
 	// Typed beans
@@ -1050,49 +1051,49 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec01_setTypedBean(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setTypedBean(TypedBeanImpl.get()));
+		assertNotThrown(()->input.proxy.setTypedBean(TypedBeanImpl.get()));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec02_setTypedBean3dArray(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setTypedBean3dArray(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null}));
+		assertNotThrown(()->input.proxy.setTypedBean3dArray(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null}));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec03_setTypedBeanList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setTypedBeanList(alist((TypedBean)TypedBeanImpl.get())));
+		assertNotThrown(()->input.proxy.setTypedBeanList(alist((TypedBean)TypedBeanImpl.get())));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec04_setTypedBean1d3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setTypedBean1d3dList(alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
+		assertNotThrown(()->input.proxy.setTypedBean1d3dList(alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec05_setTypedBeanMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setTypedBeanMap(map("foo",TypedBeanImpl.get())));
+		assertNotThrown(()->input.proxy.setTypedBeanMap(map("foo",TypedBeanImpl.get())));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec06_setTypedBeanListMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setTypedBeanListMap(map("foo",alist((TypedBean)TypedBeanImpl.get()))));
+		assertNotThrown(()->input.proxy.setTypedBeanListMap(map("foo",alist((TypedBean)TypedBeanImpl.get()))));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec07_setTypedBean1d3dListMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setTypedBean1d3dListMap(map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null))));
+		assertNotThrown(()->input.proxy.setTypedBean1d3dListMap(map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null))));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec08_setTypedBeanListMapIntegerKeys(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setTypedBeanListMapIntegerKeys(map(1,alist((TypedBean)TypedBeanImpl.get()))));
+		assertNotThrown(()->input.proxy.setTypedBeanListMapIntegerKeys(map(1,alist((TypedBean)TypedBeanImpl.get()))));
 	}
 
 	// Swapped POJOs
@@ -1100,50 +1101,50 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ed01_setSwappedObject(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setSwappedObject(new SwappedObject()));
+		assertNotThrown(()->input.proxy.setSwappedObject(new SwappedObject()));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ed02_setSwappedObject3dArray(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setSwappedObject3dArray(new SwappedObject[][][]{{{new SwappedObject(),null},null},null}));
+		assertNotThrown(()->input.proxy.setSwappedObject3dArray(new SwappedObject[][][]{{{new SwappedObject(),null},null},null}));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ed03_setSwappedObjectMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setSwappedObjectMap(map(new SwappedObject(),new SwappedObject())));
+		assertNotThrown(()->input.proxy.setSwappedObjectMap(map(new SwappedObject(),new SwappedObject())));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ed04_setSwappedObject3dMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setSwappedObject3dMap(map(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null})));
+		assertNotThrown(()->input.proxy.setSwappedObject3dMap(map(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null})));
 	}
 
 	// Implicit swapped POJOs
 	@ParameterizedTest
 	@MethodSource("input")
 	void ee01_setImplicitSwappedObject(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setImplicitSwappedObject(new ImplicitSwappedObject()));
+		assertNotThrown(()->input.proxy.setImplicitSwappedObject(new ImplicitSwappedObject()));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ee02_setImplicitSwappedObject3dArray(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setImplicitSwappedObject3dArray(new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null}));
+		assertNotThrown(()->input.proxy.setImplicitSwappedObject3dArray(new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null}));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ee03_setImplicitSwappedObjectMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setImplicitSwappedObjectMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject())));
+		assertNotThrown(()->input.proxy.setImplicitSwappedObjectMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject())));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ee04_setImplicitSwappedObject3dMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setImplicitSwappedObject3dMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null})));
+		assertNotThrown(()->input.proxy.setImplicitSwappedObject3dMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null})));
 	}
 
 	// Enums
@@ -1151,49 +1152,49 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef01_setEnum(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setEnum(TestEnum.TWO));
+		assertNotThrown(()->input.proxy.setEnum(TestEnum.TWO));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef02_setEnum3d(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setEnum3d(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
+		assertNotThrown(()->input.proxy.setEnum3d(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef03_setEnumList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setEnumList(alist(TestEnum.TWO,null)));
+		assertNotThrown(()->input.proxy.setEnumList(alist(TestEnum.TWO,null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef04_setEnum3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setEnum3dList(alist(alist(alist(TestEnum.TWO,null),null),null)));
+		assertNotThrown(()->input.proxy.setEnum3dList(alist(alist(alist(TestEnum.TWO,null),null),null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef05_setEnum1d3dList(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setEnum1d3dList(alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
+		assertNotThrown(()->input.proxy.setEnum1d3dList(alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef06_setEnumMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setEnumMap(map(TestEnum.ONE,TestEnum.TWO)));
+		assertNotThrown(()->input.proxy.setEnumMap(map(TestEnum.ONE,TestEnum.TWO)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef07_setEnum3dArrayMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setEnum3dArrayMap(map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null})));
+		assertNotThrown(()->input.proxy.setEnum3dArrayMap(map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null})));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef08_setEnum1d3dListMap(Input input) {
-		TestUtils.assertNotThrown(()->input.proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))));
+		assertNotThrown(()->input.proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -2284,7 +2285,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 		// Various primitives
 
 		@RemoteOp(method="POST", path="/setInt")
-		void setInt(@Content int x) throws AssertionError;
+		void setInt(@Content int x) throws AssertionFailedError;
 
 		@RemoteOp(method="POST", path="/setInteger")
 		void setInteger(@Content Integer x);
@@ -2302,7 +2303,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 		void setString(@Content String x);
 
 		@RemoteOp(method="POST", path="/setNullString")
-		void setNullString(@Content String x) throws AssertionError;
+		void setNullString(@Content String x) throws AssertionFailedError;
 
 		@RemoteOp(method="POST", path="/setInt3dArray")
 		String setInt3dArray(@Content int[][][] x, @org.apache.juneau.http.annotation.Query("I") int i);

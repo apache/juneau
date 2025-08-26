@@ -13,7 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -21,12 +21,12 @@ import org.junit.jupiter.api.*;
 class ContentType_Other_Test extends SimpleTestBase {
 
 	@Test void a01_basic() {
-		ContentType ct = contentType("application/json");
+		var ct = contentType("application/json");
 		assertEquals("application/json", ct.getValue());
 	}
 
 	@Test void a02_getParameter() {
-		ContentType ct = contentType("application/json;charset=foo");
+		var ct = contentType("application/json;charset=foo");
 		assertEquals("foo", ct.getParameter("charset"));
 		ct = contentType(" application/json ; charset = foo ");
 		assertEquals("foo", ct.getParameter("charset"));

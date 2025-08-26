@@ -38,7 +38,7 @@ class BasicCsvHeader_Test extends SimpleTestBase {
 	public static class A {
 		@RestOp
 		public StringReader get(@Header(name=HEADER) @Schema(cf="multi") String[] h) {
-			return TestUtils.reader(h == null ? "null" : Utils.join(h, '|'));
+			return reader(h == null ? "null" : Utils.join(h, '|'));
 		}
 	}
 
@@ -77,7 +77,7 @@ class BasicCsvHeader_Test extends SimpleTestBase {
 		assertFalse(x.contains("BAR"));
 		assertTrue(x.containsIgnoreCase("BAR"));
 
-		BasicCsvHeader x2 = csvHeader("Foo",()->null);
+		var x2 = csvHeader("Foo",()->null);
 		assertFalse(x2.contains((String)null));
 		assertFalse(x2.containsIgnoreCase(null));
 		assertFalse(x2.contains("bar"));

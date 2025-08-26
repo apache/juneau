@@ -13,6 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -36,7 +37,7 @@ class ClientVersion_Test extends SimpleTestBase {
 	public static class A {
 		@RestOp
 		public StringReader get(@Header(name=HEADER) @Schema(cf="multi") String[] h) {
-			return TestUtils.reader(h == null ? "null" : Utils.join(h, ','));
+			return reader(h == null ? "null" : Utils.join(h, ','));
 		}
 	}
 

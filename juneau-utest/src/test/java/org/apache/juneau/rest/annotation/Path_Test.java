@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.HttpMethod.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 

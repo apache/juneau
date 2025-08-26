@@ -13,7 +13,7 @@
 package org.apache.juneau.http.annotation;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.oapi.*;
@@ -31,7 +31,7 @@ class QueryAnnotation_Test extends SimpleTestBase {
 
 	Query a1 = QueryAnnotation.create()
 		.def("def")
-        .description("description")
+		.description("description")
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -42,7 +42,7 @@ class QueryAnnotation_Test extends SimpleTestBase {
 
 	Query a2 = QueryAnnotation.create()
 		.def("def")
-        .description("description")
+		.description("description")
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -52,10 +52,10 @@ class QueryAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		TestUtils.assertJsonMatches(a1, ""
+		assertJsonMatches(a1, ""
 			+ "{"
 				+ "def:'def',"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "name:'name',"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
@@ -114,7 +114,7 @@ class QueryAnnotation_Test extends SimpleTestBase {
 
 	@Query(
 		def="def",
-        description={ "description" },
+		description={ "description" },
 		name="name",
 		on="on",
 		onClass=X1.class,
@@ -127,7 +127,7 @@ class QueryAnnotation_Test extends SimpleTestBase {
 
 	@Query(
 		def="def",
-        description={ "description" },
+		description={ "description" },
 		name="name",
 		on="on",
 		onClass=X1.class,

@@ -70,7 +70,7 @@ class RestClient_Paths_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_path_String_Object_Schema() throws Exception {
-		String[] a = {"foo","bar"};
+		var a = a("foo","bar");
 		client().build().get("/echo/{x}").pathData(part("x",a,T_ARRAY_PIPES)).run().assertContent().isContains("GET /echo/foo%7Cbar HTTP/1.1");
 	}
 

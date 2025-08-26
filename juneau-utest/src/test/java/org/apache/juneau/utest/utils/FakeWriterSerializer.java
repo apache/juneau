@@ -13,7 +13,7 @@
 
 package org.apache.juneau.utest.utils;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.io.*;

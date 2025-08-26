@@ -13,18 +13,14 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
-
-import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
@@ -800,7 +796,7 @@ class RestOp_Throws_Test extends SimpleTestBase {
 	}
 
 	@Test void f01_swagger() {
-		Map<String,OperationMap> paths = getSwagger(F.class).getPaths();
+		var paths = getSwagger(F.class).getPaths();
 
 		assertEquals(BadRequest.REASON_PHRASE, paths.get("/badRequest").get("get").getResponse(BadRequest.STATUS_CODE).getDescription());
 		assertEquals(Conflict.REASON_PHRASE, paths.get("/conflict").get("get").getResponse(Conflict.STATUS_CODE).getDescription());

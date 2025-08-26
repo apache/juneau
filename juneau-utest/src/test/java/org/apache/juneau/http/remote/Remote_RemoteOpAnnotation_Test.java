@@ -13,7 +13,7 @@
 package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.util.concurrent.*;
@@ -62,7 +62,7 @@ class Remote_RemoteOpAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_inferredMethodsAndPaths() {
-		A1 t = remote(A.class,A1.class);
+		var t = remote(A.class,A1.class);
 		assertEquals("foo",t.doGet());
 		assertEquals("foo",t.doGET());
 		assertEquals("qux",t.doFoo());
@@ -80,7 +80,7 @@ class Remote_RemoteOpAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_inferredMethodsAndPaths_futures() throws Exception {
-		A2 t = remote(A.class,A2.class);
+		var t = remote(A.class,A2.class);
 		assertEquals("foo",t.doGet().get());
 		assertEquals("foo",t.doGET().get());
 		assertEquals("qux",t.doFoo().get());
@@ -98,7 +98,7 @@ class Remote_RemoteOpAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_inferredMethodsAndPaths_completableFutures() throws Exception {
-		A3 t = remote(A.class,A3.class);
+		var t = remote(A.class,A3.class);
 		assertEquals("foo",t.doGet().get());
 		assertEquals("foo",t.doGET().get());
 		assertEquals("qux",t.doFoo().get());
@@ -138,7 +138,7 @@ class Remote_RemoteOpAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_returnTypes() throws Exception {
-		B1 x = remote(B.class,B1.class);
+		var x = remote(B.class,B1.class);
 		x.x1();
 		assertEquals("foo",x.x2());
 		assertEquals("foo",read(x.x3().getEntity().getContent()));

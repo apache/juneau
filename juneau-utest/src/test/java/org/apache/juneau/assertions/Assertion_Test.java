@@ -15,8 +15,6 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.io.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.*;

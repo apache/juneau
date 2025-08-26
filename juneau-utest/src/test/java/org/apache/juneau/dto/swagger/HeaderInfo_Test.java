@@ -178,7 +178,7 @@ class HeaderInfo_Test extends SimpleTestBase {
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
 
-		String s = "{description:'d',type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref',example:'e'}";
+		var s = "{description:'d',type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref',example:'e'}";
 		assertJson(JsonParser.DEFAULT.parse(s, HeaderInfo.class), s);
 	}
 
@@ -256,6 +256,6 @@ class HeaderInfo_Test extends SimpleTestBase {
 	@Test void c02_resolveRefs() {
 		var s = new Swagger();
 		var t = new HeaderInfo();
-		TestUtils.assertNotThrown(()->t.resolveRefs(s, new ArrayDeque<>(), 10));
+		assertNotThrown(()->t.resolveRefs(s, new ArrayDeque<>(), 10));
 	}
 }

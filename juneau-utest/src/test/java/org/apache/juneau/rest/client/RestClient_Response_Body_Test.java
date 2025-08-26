@@ -13,16 +13,13 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.TestUtils.assertString;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
-import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.regex.*;
 
 import org.apache.http.*;
@@ -30,8 +27,8 @@ import org.apache.http.conn.*;
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -84,7 +81,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 		protected MockRestResponse createResponse(RestRequest request, HttpResponse httpResponse, Parser parser) throws RestCallException {
 			var r = new BasicHttpResponse(new ProtocolVersion("http", 1,1),200,"");
 			r.setEntity(responseEntity);
-			for (Header h : headers)
+			for (var h : headers)
 				r.addHeader(h);
 			return new MockRestResponse(this, request, r, parser);
 		}
@@ -104,13 +101,13 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_asInputStream() throws Exception {
-		RestResponse r1 = client().build().get("/bean").run();
+		var r1 = client().build().get("/bean").run();
 		var is = r1.getContent().asInputStream();
-		assertEquals("{f:1}", toUtf8(is));
+		assertEquals("{f:1}", StringUtils.toUtf8(is));
 		assertThrowsWithMessage(Exception.class, "Response has already been consumed.", ()->r1.getContent().asInputStream());
 
 		// Non-repeatable entity.
-		TestClient x = testClient().entity(inputStreamEntity("{f:2}"));
+		var x = testClient().entity(inputStreamEntity("{f:2}"));
 		var r2 = x.get("/bean").run();
 		r2.getContent().asInputStream();
 		assertThrowsWithMessage(Exception.class, "Response has already been consumed", ()->r2.getContent().asInputStream());
@@ -120,25 +117,25 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 		var r3 = x.get("/bean").run();
 		r3.getContent().asInputStream();
 		is = r3.getContent().asInputStream();
-		assertEquals("{f:2}", toUtf8(is));
+		assertEquals("{f:2}", StringUtils.toUtf8(is));
 		is = x.get("/bean").run().getContent().asInputStream();
 		((EofSensorInputStream)is).abortConnection();
 
-		RestCallInterceptor rci = new BasicRestCallInterceptor() {
+		var rci = new BasicRestCallInterceptor() {
 			@Override
 			public void onClose(RestRequest req, RestResponse res) throws Exception {
 				throw new NullPointerException("foo");
 			}
 		};
 
-		TestClient x2 = client().interceptors(rci).build(TestClient.class).entity(new StringEntity("{f:2}"));
+		var x2 = client().interceptors(rci).build(TestClient.class).entity(new StringEntity("{f:2}"));
 		assertThrowsWithMessage(NullPointerException.class, "foo", ()->x2.get("/bean").run().getContent().cache().asInputStream());
 		assertThrowsWithMessage(NullPointerException.class, "foo", ()->x2.get("/bean").run().getContent().asInputStream().close());
 		assertThrowsWithMessage(NullPointerException.class, "foo", ()->((EofSensorInputStream)x2.get("/bean").run().getContent().asInputStream()).abortConnection());  // NOSONAR
 	}
 
 	@Test void a04_asReader() throws Exception {
-		TestClient x = testClient();
+		var x = testClient();
 		x.entity(inputStreamEntity("{f:1}"));
 		var r = x.get("/bean").run().getContent().asReader();
 		assertString("{f:1}", r);
@@ -153,11 +150,11 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_asBytes() throws Exception {
-		byte[] x = client().build().get("/bean").run().getContent().asBytes();
-		assertEquals("{f:1}", toUtf8(x));
+		var x = client().build().get("/bean").run().getContent().asBytes();
+		assertEquals("{f:1}", StringUtils.toUtf8(x));
 
 		x = client().build().get("/bean").run().assertContent().asBytes().asString().is("{f:1}").getContent().asBytes();
-		assertEquals("{f:1}", toUtf8(x));
+		assertEquals("{f:1}", StringUtils.toUtf8(x));
 
 		assertThrowsWithMessage(Exception.class, "foo", ()->testClient().entity(new InputStreamEntity(badStream())).get().run().getContent().asBytes());
 	}
@@ -165,7 +162,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	@Test void a06_pipeTo() throws Exception {
 		var baos = new ByteArrayOutputStream();
 		client().build().get("/bean").run().getContent().pipeTo(baos);
-		assertEquals("{f:1}", toUtf8(baos.toByteArray()));
+		assertEquals("{f:1}", StringUtils.toUtf8(baos.toByteArray()));
 
 		var sw = new StringWriter();
 		client().build().get("/bean").run().getContent().pipeTo(sw);
@@ -201,16 +198,15 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	}
 
 	@Test void a07_asType() throws Exception {
-		List<Integer> x1 = testClient().entity(stringEntity("[1,2]")).get().run().getContent().as(List.class,Integer.class);
+		var x1 = testClient().entity(stringEntity("[1,2]")).get().run().getContent().as(List.class,Integer.class);
 		assertJson(x1, "[1,2]");
 
-		ABean x3 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().as(ABean.class);
+		var x3 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().as(ABean.class);
 		assertJson(x3, "{f:1}");
 
-		HttpEntity x5 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().as(ResponseContent.class);
-		assertTrue(x5 instanceof ResponseContent);
+		testClient().entity(stringEntity("{f:1}")).get().run().getContent().as(ResponseContent.class);
 
-		HttpEntity x6 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().as(HttpEntity.class);
+		var x6 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().as(HttpEntity.class);
 		assertTrue(x6 instanceof ResponseContent);
 
 		plainTestClient().entity(stringEntity("foo")).get().run().assertContent().as(A7a.class).is(x->x.x.equals("foo"));
@@ -218,37 +214,37 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 		assertThrowsWithMessage(Exception.class, "Unsupported media-type", ()->plainTestClient().entity(stringEntity("foo")).headers(header("Content-Type","foo")).get().run().getContent().as(A7c.class));
 		assertThrowsWithMessage(Exception.class, "foo", ()->testClient().entity(stringEntity("")).get().run().getContent().as(A7c.class));
 
-		Future<ABean> x8 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asFuture(ABean.class);
+		var x8 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asFuture(ABean.class);
 		assertJson(x8.get(), "{f:1}");
 
-		Future<ABean> x10 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asFuture(cm(ABean.class));
+		var x10 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asFuture(cm(ABean.class));
 		assertJson(x10.get(), "{f:1}");
 
-		Future<List<Integer>> x12 = testClient().entity(stringEntity("[1,2]")).get().run().getContent().asFuture(List.class,Integer.class);
+		var x12 = testClient().entity(stringEntity("[1,2]")).get().run().getContent().asFuture(List.class,Integer.class);
 		assertJson(x12.get(), "[1,2]");
 
-		String x14 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asString();
+		var x14 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asString();
 		assertEquals("{f:1}", x14);
 
 		assertThrowsWithMessage(Exception.class, "foo", ()->testClient().entity(new InputStreamEntity(badStream())).get().run().getContent().asString());
 
-		Future<String> x16 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asStringFuture();
+		var x16 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asStringFuture();
 		assertEquals("{f:1}", x16.get());
 
-		String x18 = testClient().entity(stringEntity("12345")).get().run().getContent().asAbbreviatedString(4);
+		var x18 = testClient().entity(stringEntity("12345")).get().run().getContent().asAbbreviatedString(4);
 		assertEquals("1...", x18);
 
-		ObjectRest x20 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asObjectRest(ABean.class);
+		var x20 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asObjectRest(ABean.class);
 		assertString("1", x20.get("f"));
 
-		ObjectRest x22 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asObjectRest();
+		var x22 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asObjectRest();
 		assertString("1", x22.get("f"));
 
-		Matcher x24 = testClient().entity(stringEntity("foo=123")).get().run().getContent().asMatcher(Pattern.compile("foo=(.*)"));
+		var x24 = testClient().entity(stringEntity("foo=123")).get().run().getContent().asMatcher(Pattern.compile("foo=(.*)"));
 		assertTrue(x24.matches());
 		assertEquals("123", x24.group(1));
 
-		Matcher x26 = testClient().entity(stringEntity("foo=123")).get().run().getContent().asMatcher("foo=(.*)");
+		var x26 = testClient().entity(stringEntity("foo=123")).get().run().getContent().asMatcher("foo=(.*)");
 		assertTrue(x26.matches());
 		assertEquals("123", x26.group(1));
 	}
@@ -259,10 +255,10 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 
 	@SuppressWarnings("deprecation")
 	@Test void b01_httpEntityMethods() throws Exception {
-		ResponseContent x1 = testClient().entity(stringEntity("foo")).get().run().getContent();
+		var x1 = testClient().entity(stringEntity("foo")).get().run().getContent();
 		assertTrue(x1.isRepeatable());
 
-		ResponseContent x2 = testClient().entity(inputStreamEntity("foo")).get().run().getContent();
+		var x2 = testClient().entity(inputStreamEntity("foo")).get().run().getContent();
 		assertFalse(x2.isRepeatable());
 		assertEquals(-1L, x2.getContentLength());
 		x2.cache().asString();
@@ -273,14 +269,14 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 
 		testClient().entity(inputStreamEntity("foo")).get().run().getContent().getContentEncoding().assertValue().isNull();
 
-		InputStreamEntity x3 = inputStreamEntity("foo");
+		var x3 = inputStreamEntity("foo");
 		x3.setContentType("text/foo");
 		x3.setContentEncoding("identity");
 		testClient().entity(x3).get().run().getContent().response()
 			.getContent().getContentType().assertValue().is("text/foo").response()
 			.getContent().getContentEncoding().assertValue().is("identity");
 
-		InputStream x4 = testClient().entity(inputStreamEntity("foo")).get().run().getContent().asInputStream();
+		var x4 = testClient().entity(inputStreamEntity("foo")).get().run().getContent().asInputStream();
 		assertBytes(x4).asString().is("foo");
 
 		var x5 = new ByteArrayOutputStream();
@@ -331,7 +327,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	}
 
 	private static InputStreamEntity inputStreamEntity(String in) {
-		return new InputStreamEntity(TestUtils.inputStream(in));
+		return new InputStreamEntity(inputStream(in));
 	}
 
 	private static <T> ClassMeta<T> cm(Class<T> t) {

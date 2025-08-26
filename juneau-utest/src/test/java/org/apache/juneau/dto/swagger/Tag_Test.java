@@ -84,7 +84,7 @@ class Tag_Test extends SimpleTestBase {
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
 
-		String s = "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}";
+		var s = "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}";
 		assertJson(JsonParser.DEFAULT.parse(s, Tag.class), s);
 	}
 

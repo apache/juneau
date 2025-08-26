@@ -13,7 +13,7 @@
 package org.apache.juneau.transform;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings("rawtypes")
 class AutoListSwapTest extends SimpleTestBase {
 
-	private static final List<String> STRINGLIST = TestUtils.list("foo");
+	private static final List<String> STRINGLIST = list("foo");
 	private static final JsonList JSONLIST = JsonList.ofJsonOrCdl("foo");
 
 	private static ObjectSwap find(Class<?> c) {

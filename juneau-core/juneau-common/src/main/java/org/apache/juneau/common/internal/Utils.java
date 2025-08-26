@@ -51,6 +51,13 @@ public class Utils {
 		return x;
 	}
 
+	public static <T> T[] na(Class<T> type) {
+		return null;
+	}
+
+	public static <T> T[] ea(Class<T> type) {
+		return (T[])Array.newInstance(type, 0);
+	}
 	/**
 	 * Traverses all elements in the specified object and accumulates them into a list.
 	 *
@@ -70,6 +77,29 @@ public class Utils {
 	@SafeVarargs
 	public static <T> List<T> alist(T...values) {  // NOSONAR
 		return values == null ? null : Arrays.asList(values);
+	}
+
+	/**
+	 * Shortcut for creating an empty list of the specified type.
+	 */
+	public static <T> List<T> elist(Class<T> type) {
+		return Collections.emptyList();
+	}
+
+	public static <T> List<T> nlist(Class<T> type) {
+		return null;
+	}
+
+	public static <K,V> Map<K,V> emap(Class<K> keyType, Class<V> valueType) {
+		return Collections.emptyMap();
+	}
+
+	public static <T> T n(Class<T> type) {
+		return null;
+	}
+
+	public static <K,V> Map<K,V> nmap(Class<K> keyType, Class<V> valueType) {
+		return null;
 	}
 
 	/**

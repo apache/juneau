@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.guards;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.*;
 import java.util.*;
@@ -33,8 +33,8 @@ class RoleMatcher_Test extends SimpleTestBase {
 
 	private void test(String expression, String toString, String expressionRoles, String[] shouldMatch, String[] shouldNotMatch) {
 		var m = safe(()->new RoleMatcher(expression));
-		assertEquals("m.toString() didn't match.", toString, m.toString());
-		assertEquals("m.getRolesInExpression() didn't match.", expressionRoles, Utils.join(m.getRolesInExpression(), ","));
+		assertEquals(toString, m.toString(), "m.toString() didn't match.");
+		assertEquals(expressionRoles, Utils.join(m.getRolesInExpression(), ","), "m.getRolesInExpression() didn't match.");
 		for (String i : shouldMatch)
 			if (! m.matches(toSet(i)))
 				fail("Matcher "+m+" should have matched '"+i+"' but didn't.");

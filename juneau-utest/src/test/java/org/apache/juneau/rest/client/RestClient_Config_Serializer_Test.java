@@ -108,12 +108,12 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	}
 
 	@Test void a07_sortCollections() throws Exception {
-		String[] x = {"c","a","b"};
+		var x = a("c","a","b");
 		client().sortCollections().build().post("/echoBody",x).run().assertContent("['a','b','c']");
 	}
 
 	@Test void a08_sortMapsBoolean() throws Exception {
-		Map<String,Integer> x = map("c",3,"a",1,"b",2);
+		var x = map("c",3,"a",1,"b",2);
 		client().sortMaps().build().post("/echoBody",x).run().assertContent("{a:1,b:2,c:3}");
 	}
 
@@ -156,8 +156,7 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	}
 
 	public static class A13 {
-		@Uri
-		public String f = "foo";
+		@Uri public String f = "foo";
 	}
 
 	@Test void a13_uriContext_uriResolution_uriRelativity() throws Exception {

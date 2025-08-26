@@ -13,7 +13,7 @@
 package org.apache.juneau.http.annotation;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -29,21 +29,21 @@ class ContentAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Content a1 = ContentAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("on")
 		.onClass(X1.class)
 		.build();
 
 	Content a2 = ContentAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("on")
 		.onClass(X1.class)
 		.build();
 
 	@Test void a01_basic() {
-		TestUtils.assertJsonMatches(a1, ""
+		assertJsonMatches(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
 				+ "schema:{*}"
@@ -95,7 +95,7 @@ class ContentAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Content(
-        description={ "description" },
+		description={ "description" },
 		on="on",
 		onClass=X1.class
 	)
@@ -103,7 +103,7 @@ class ContentAnnotation_Test extends SimpleTestBase {
 	Content d1 = D1.class.getAnnotationsByType(Content.class)[0];
 
 	@Content(
-        description={ "description" },
+		description={ "description" },
 		on="on",
 		onClass=X1.class
 	)

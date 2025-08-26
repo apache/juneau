@@ -14,12 +14,13 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.serializer.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -56,7 +57,7 @@ public class BooleanAssertion_Test {
 	@Test
 	public void ba01a_asString() {
 		var x = true;
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(x).asString().is("true");
 		test(nil).asString().isNull();
 	}
@@ -64,22 +65,22 @@ public class BooleanAssertion_Test {
 	@Test
 	public void ba01b_asString_wSerializer() {
 		var x = true;
-		var nil = (Boolean)null;
-		WriterSerializer s = Json5Serializer.DEFAULT;
+		var nil = n(Boolean.class);
+		var s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("true");
 		test(nil).asString(s).is("null");
 	}
 
 	@Test
 	public void ba01c_asString_wPredicate() {
-		Boolean x1 = true;
+		var x1 = true;
 		test(x1).asString(x -> "foo").is("foo");
 	}
 
 	@Test
 	public void ba02_asJson() {
 		var x = true;
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(x).asJson().is("true");
 		test(nil).asJson().is("null");
 	}
@@ -87,14 +88,14 @@ public class BooleanAssertion_Test {
 	@Test
 	public void ba03_asJsonSorted() {
 		var x1 = true;
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(x1).asJsonSorted().is("true");
 		test(nil).asJsonSorted().is("null");
 	}
 
 	@Test
 	public void ba04_apply() {
-		Boolean x1 = true;
+		var x1 = true;
 		test(x1).asTransformed(x -> false).is(false);
 	}
 
@@ -105,7 +106,7 @@ public class BooleanAssertion_Test {
 	@Test
 	public void ca01_exists() {
 		var x = true;
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(x).isExists().isExists();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
@@ -113,7 +114,7 @@ public class BooleanAssertion_Test {
 	@Test
 	public void ca02_isNull() {
 		var x = true;
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(nil).isNull();
 		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
@@ -121,7 +122,7 @@ public class BooleanAssertion_Test {
 	@Test
 	public void ca03_isNotNull() {
 		var x = true;
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(x).isNotNull();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
@@ -131,7 +132,7 @@ public class BooleanAssertion_Test {
 		var x1 = true;
 		var x1a = true;
 		var x2 = false;
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -142,7 +143,7 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void ca04b_is_predicate() {
-		Boolean x1 = true;
+		var x1 = true;
 		test(x1).is(x->x);
 		assertThrown(()->test(x1).is(x->!x)).asMessage().asOneLine().is("Unexpected value: 'true'.");
 		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='true'.");
@@ -153,7 +154,7 @@ public class BooleanAssertion_Test {
 		var x1 = true;
 		var x1a = true;
 		var x2 = false;
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -166,7 +167,7 @@ public class BooleanAssertion_Test {
 		var x1 = true;
 		var x1a = true;
 		var x2 = false;
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[false]'.  Actual='true'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='true'.");
@@ -178,7 +179,7 @@ public class BooleanAssertion_Test {
 		var x1 = true;
 		var x1a = true;
 		var x2 = false;
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -191,7 +192,7 @@ public class BooleanAssertion_Test {
 		// Note that even the following returns the same object sometimes.
 		var x1 = Boolean.valueOf(new String("true"));
 		var x1a = Boolean.valueOf(new String("true"));
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(nil).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='true(Boolean@*)'.  Actual='null(null)'.");
@@ -203,7 +204,7 @@ public class BooleanAssertion_Test {
 		var x1 = true;
 		var x1a = true;
 		var x2 = false;
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
 		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='false'.  Actual='true'.");
@@ -216,7 +217,7 @@ public class BooleanAssertion_Test {
 		var x1 = true;
 		var x1a = true;
 		var x2 = false;
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
 		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='false'.  Actual='true'.");
@@ -229,8 +230,8 @@ public class BooleanAssertion_Test {
 		var x1 = true;
 		var x1a = true;
 		var x2 = false;
-		var nil = (Boolean)null;
-		WriterSerializer s = Json5Serializer.DEFAULT;
+		var nil = n(Boolean.class);
+		var s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
 		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='false'.  Actual='true'.");
@@ -241,7 +242,7 @@ public class BooleanAssertion_Test {
 	@Test
 	public void ca12_isType() {
 		var x = true;
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(x).isType(Boolean.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Boolean'.");
@@ -252,7 +253,7 @@ public class BooleanAssertion_Test {
 	@Test
 	public void ca13_isExactType() {
 		var x = true;
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(x).isExactType(Boolean.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.lang.Boolean'.");
 		assertThrown(()->test(nil).isExactType(String.class)).asMessage().asOneLine().is("Value was null.");
@@ -262,7 +263,7 @@ public class BooleanAssertion_Test {
 	@Test
 	public void ca14_isString() {
 		var x = true;
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(x).isString("true");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='true'.");
@@ -273,7 +274,7 @@ public class BooleanAssertion_Test {
 	@Test
 	public void ca15_isJson() {
 		var x = true;
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(x).isJson("true");
 		test(nil).isJson("null");
 		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='true'.");
@@ -283,7 +284,7 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void cc01_isTrue() {
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(true).isTrue();
 		assertThrows(BasicAssertionError.class, ()->test(false).isTrue(), "Value was false.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isTrue(), "Value was null.");
@@ -291,7 +292,7 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void cc02_isFalse() {
-		var nil = (Boolean)null;
+		var nil = n(Boolean.class);
 		test(false).isFalse();
 		assertThrows(BasicAssertionError.class, ()->test(true).isFalse(), "Value was true.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isFalse(), "Value was null.");

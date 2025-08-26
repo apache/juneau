@@ -13,13 +13,12 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.jupiter.api.*;
 
@@ -68,10 +67,9 @@ class Swagger_Query_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_fromPojo() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(A.class);
-		ParameterInfo x;
+		var s = getSwagger(A.class);
+		var x = s.getParameterInfo("/a","get","query","Q");
 
-		x = s.getParameterInfo("/a","get","query","Q");
 		assertEquals("Q", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
@@ -119,10 +117,9 @@ class Swagger_Query_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_schemaFromPojo() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(B.class);
-		ParameterInfo x;
+		var s = getSwagger(B.class);
+		var x = s.getParameterInfo("/a","get","query","Q");
 
-		x = s.getParameterInfo("/a","get","query","Q");
 		assertJson(x, "{'in':'query',name:'Q',type:'string'}");
 
 		x = s.getParameterInfo("/b","put","query","Q");
@@ -169,10 +166,9 @@ class Swagger_Query_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_fromParameter() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(D.class);
-		ParameterInfo x;
+		var s = getSwagger(D.class);
+		var x = s.getParameterInfo("/a","get","query","Q");
 
-		x = s.getParameterInfo("/a","get","query","Q");
 		assertEquals("Q", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
@@ -203,7 +199,7 @@ class Swagger_Query_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_schemaFromParameter() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(E.class);
+		var s = getSwagger(E.class);
 
 		var x = s.getParameterInfo("/a","get","query","Q");
 		assertJson(x, "{'in':'query',name:'Q',type:'string'}");

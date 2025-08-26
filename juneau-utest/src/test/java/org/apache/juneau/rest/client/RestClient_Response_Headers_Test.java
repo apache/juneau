@@ -16,13 +16,12 @@ import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.annotation.*;
@@ -38,9 +37,9 @@ class RestClient_Response_Headers_Test extends SimpleTestBase {
 		@RestGet
 		public String echo(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
 			var c = req.getHeaderParam("Check").orElse(null);
-			String[] h = req.getHeaders().getAll(c).stream().map(RequestHeader::getValue).toArray(String[]::new);
+			var h = req.getHeaders().getAll(c).stream().map(RequestHeader::getValue).toArray(String[]::new);
 			if (h != null)
-				for (String hh : h)
+				for (var hh : h)
 					res.addHeader(c, hh);
 			return "ok";
 		}
@@ -62,7 +61,7 @@ class RestClient_Response_Headers_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_asHeader() throws Exception {
-		Header h = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(BasicStringHeader.class).assertName().is("Foo").assertStringValue().is("bar");
+		var h = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(BasicStringHeader.class).assertName().is("Foo").assertStringValue().is("bar");
 		assertTrue(h instanceof BasicStringHeader);
 
 		h = checkFooClient().build().get("/echo").header("Foo","\"bar\"").run().getHeader("Foo").asHeader(ETag.class).assertName().is("ETag").assertStringValue().is("\"bar\"");
@@ -79,14 +78,14 @@ class RestClient_Response_Headers_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_asString() throws Exception {
-		String s = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asString().orElse(null);
+		var s = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asString().orElse(null);
 		assertEquals("bar", s);
 
 		var m = Value.<String>empty();
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asString(m);
 		assertEquals("bar", m.get());
 
-		Optional<String> o = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asString();
+		var o = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asString();
 		assertEquals("bar", o.get());
 		o = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Bar").asString();
 		assertFalse(o.isPresent());
@@ -98,14 +97,14 @@ class RestClient_Response_Headers_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_asType() throws Exception {
-		Integer i = checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").as(Integer.class).orElse(null);
+		var i = checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").as(Integer.class).orElse(null);
 		assertEquals(123, i.intValue());
 
 		var m1 = Value.<Integer>empty();
 		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").as(m1,Integer.class);
 		assertEquals(123, m1.get().intValue());
 
-		List<Integer> l = (List<Integer>) checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(LinkedList.class,Integer.class).get();
+		var l = (List<Integer>) checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(LinkedList.class,Integer.class).get();
 		assertJson(l, "[1,2]");
 
 		var m2 = Value.empty();
@@ -128,7 +127,7 @@ class RestClient_Response_Headers_Test extends SimpleTestBase {
 		o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Bar").as(LinkedList.class,Integer.class);
 		assertFalse(o1.isPresent());
 
-		Optional<Integer> o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getHeader("Foo").as(Integer.class);
+		var o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getHeader("Foo").as(Integer.class);
 		assertEquals(1, o2.get().intValue());
 		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getHeader("Bar").as(Integer.class);
 		assertFalse(o2.isPresent());
@@ -145,7 +144,7 @@ class RestClient_Response_Headers_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_toResponse() throws Exception {
-		RestResponse r = checkFooClient().build().get("/echo").header("Foo","123").run();
+		var r = checkFooClient().build().get("/echo").header("Foo","123").run();
 		assertSame(r, r.getHeader("Foo").response());
 	}
 
@@ -169,7 +168,7 @@ class RestClient_Response_Headers_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_getElements() throws Exception {
-		HeaderElement[] e = checkFooClient().build().get("/echo").header("Foo","bar=baz;qux=quux").run().getHeader("Foo").getElements();
+		var e = checkFooClient().build().get("/echo").header("Foo","bar=baz;qux=quux").run().getHeader("Foo").getElements();
 		assertEquals("bar", e[0].getName());
 		assertEquals("baz", e[0].getValue());
 		assertEquals("quux", e[0].getParameterByName("qux").getValue());

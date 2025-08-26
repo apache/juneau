@@ -14,7 +14,7 @@ package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.*;
 
@@ -62,7 +62,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_noPath() {
-		A1 x = plainRemote(A.class,A1.class);
+		var x = plainRemote(A.class,A1.class);
 		assertEquals("foo",x.x1());
 		assertEquals("foo",x.x1a());
 		assertEquals("foo",x.x1b());
@@ -76,7 +76,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_normalPath() {
-		A2 x = plainRemote(A.class,A2.class);
+		var x = plainRemote(A.class,A2.class);
 		assertEquals("foo",x.x2());
 		assertEquals("foo",x.x2a());
 		assertEquals("foo",x.x2b());
@@ -90,7 +90,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_normalPathWithSlashes() {
-		A3 x = plainRemote(A.class,A3.class);
+		var x = plainRemote(A.class,A3.class);
 		assertEquals("foo",x.x2());
 		assertEquals("foo",x.x2a());
 		assertEquals("foo",x.x2b());
@@ -104,7 +104,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_pathOnClient() {
-		A4 x = plainRemote(A.class,A4.class,"http://localhost/A");
+		var x = plainRemote(A.class,A4.class,"http://localhost/A");
 		assertEquals("foo",x.x2());
 		assertEquals("foo",x.x2a());
 		assertEquals("foo",x.x2b());
@@ -118,7 +118,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_normalPath() {
-		A5 x = plainRemote(A.class,A5.class);
+		var x = plainRemote(A.class,A5.class);
 		assertEquals("foo",x.x3());
 		assertEquals("foo",x.x3a());
 		assertEquals("foo",x.x3b());
@@ -132,7 +132,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void a06_normalPathWithSlashes() {
-		A6 x = plainRemote(A.class,A6.class);
+		var x = plainRemote(A.class,A6.class);
 		assertEquals("foo",x.x3());
 		assertEquals("foo",x.x3a());
 		assertEquals("foo",x.x3b());
@@ -146,7 +146,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void a07_partialPath() {
-		A7 x = plainRemote(A.class,A7.class,"http://localhost/A");
+		var x = plainRemote(A.class,A7.class,"http://localhost/A");
 		assertEquals("foo",x.x3());
 		assertEquals("foo",x.x3a());
 		assertEquals("foo",x.x3b());
@@ -160,7 +160,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void a08_partialPathExtraSlashes() {
-		A8 x = plainRemote(A.class,A8.class,"http://localhost/A/");
+		var x = plainRemote(A.class,A8.class,"http://localhost/A/");
 		assertEquals("foo",x.x3());
 		assertEquals("foo",x.x3a());
 		assertEquals("foo",x.x3b());
@@ -186,7 +186,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_noPath() {
-		B1 x = plainRemote(B.class,B1.class,"http://localhost/B");
+		var x = plainRemote(B.class,B1.class,"http://localhost/B");
 		assertEquals("foo",x.x1());
 		assertEquals("foo",x.x1a());
 		assertEquals("foo",x.x1b());
@@ -200,7 +200,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_absolutePathOnClass() {
-		B2 x = plainRemote(B.class,B2.class,"http://localhost/B");
+		var x = plainRemote(B.class,B2.class,"http://localhost/B");
 		assertEquals("foo",x.x1());
 		assertEquals("foo",x.x1a());
 		assertEquals("foo",x.x1b());
@@ -214,7 +214,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void b03_absolutePathsOnMethods() {
-		B3 x = plainRemote(B.class,B3.class,"http://localhost/B");
+		var x = plainRemote(B.class,B3.class,"http://localhost/B");
 		assertEquals("foo",x.x1());
 		assertEquals("foo",x.x1a());
 		assertEquals("foo",x.x1b());
@@ -258,7 +258,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_overriddenRootUrl() {
-		C1 x = client(C.class).build().getRemote(C1.class,"http://localhost/C1");
+		var x = client(C.class).build().getRemote(C1.class,"http://localhost/C1");
 		assertEquals("foo",x.x1());
 		assertEquals("bar",x.x2());
 		assertEquals("baz",x.x3x());
@@ -295,7 +295,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void c03_methodNotAnnotated() {
-		C3b x = remote(C3a.class,C3b.class);
+		var x = remote(C3a.class,C3b.class);
 		assertEquals("bar",x.x1());
 		assertEquals("baz",x.getX2());
 		assertEquals("baz",x.x3());
@@ -352,7 +352,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void c04_rethrownExceptions() {
-		C4b x = remote(C4a.class,C4b.class);
+		var x = remote(C4a.class,C4b.class);
 		assertThrowsWithMessage(Remote_Test.C4c.class, "foo", x::x1);
 		assertThrowsWithMessage(Exception.class, "foo", ()->x.x1a().get());
 		assertThrowsWithMessage(Exception.class, "foo", ()->x.x1b().get());
@@ -396,7 +396,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_statusReturnType() {
-		D1a x = client(D1.class).ignoreErrors().build().getRemote(D1a.class);
+		var x = client(D1.class).ignoreErrors().build().getRemote(D1a.class);
 		assertEquals(202,x.x1());
 		assertEquals(202,x.x2().intValue());
 		assertEquals(true,x.x3());
@@ -429,7 +429,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void d02_primitiveReturns() {
-		D2a x = client(D2.class).ignoreErrors().build().getRemote(D2a.class);
+		var x = client(D2.class).ignoreErrors().build().getRemote(D2a.class);
 		assertEquals(0,x.x1());
 		assertEquals(1,x.x2());
 		assertNull(x.x1a());
@@ -452,7 +452,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_rrpcBasic() {
-		E1 x = client(E.class).rootUrl("http://localhost/proxy").build().getRrpcInterface(E1.class);
+		var x = client(E.class).rootUrl("http://localhost/proxy").build().getRrpcInterface(E1.class);
 
 		assertEquals("foo",x.echo("foo"));
 	}
@@ -463,7 +463,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void e03_rrpc_noRestUrl() {
-		E3 x = client(E.class).rootUrl("http://localhost").build().getRrpcInterface(E3.class);
+		var x = client(E.class).rootUrl("http://localhost").build().getRrpcInterface(E3.class);
 		assertEquals("foo",x.echo("foo"));
 	}
 
@@ -473,7 +473,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void e04_rrpc_fullPathOnRemotePath() {
-		E4 x = client(E.class).rootUrl("").build().getRrpcInterface(E4.class);
+		var x = client(E.class).rootUrl("").build().getRrpcInterface(E4.class);
 		assertEquals("foo",x.echo("foo"));
 	}
 
@@ -547,7 +547,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void f01_headers() throws Exception {
-		F1a x = client(F.class).header("Check","Foo").build().getRemote(F1a.class);
+		var x = client(F.class).header("Check","Foo").build().getRemote(F1a.class);
 		assertEquals("['bar','baz','qux']",Json5.of(x.getHeaders()));
 		x = client(F.class).header("Check","Client-Version").build().getRemote(F1a.class);
 		assertEquals("['1.2.3']",Json5.of(x.getHeaders()));
@@ -644,7 +644,7 @@ class Remote_Test extends SimpleTestBase {
 
 	@Test void h01_methodDetection() {
 
-		H1 x = client(H.class).build().getRemote(H1.class);
+		var x = client(H.class).build().getRemote(H1.class);
 		assertEquals("GET a1", x.a1());
 		assertEquals("PUT a2", x.a2());
 		assertEquals("POST a3", x.a3());

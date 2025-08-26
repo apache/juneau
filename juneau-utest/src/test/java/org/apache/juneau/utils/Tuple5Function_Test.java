@@ -26,4 +26,4 @@ class Tuple5Function_Test extends SimpleTestBase {
 		Tuple5Function<Integer,Integer,Integer,Integer,Integer,Integer> x = (a,b,c,d,e)->a+b+c+d+e;
 		assertEquals(15, x.apply(1,2,3,4,5));
 	}
-}
+}

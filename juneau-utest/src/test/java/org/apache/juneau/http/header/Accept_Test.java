@@ -41,7 +41,7 @@ class Accept_Test extends SimpleTestBase {
 	public static class A {
 		@RestGet
 		public StringReader get(@Header(name=HEADER) @Schema(cf="multi") String[] h) {
-			return TestUtils.reader(h == null ? "null" : Utils.join(h, ','));
+			return reader(h == null ? "null" : Utils.join(h, ','));
 		}
 	}
 
@@ -68,7 +68,7 @@ class Accept_Test extends SimpleTestBase {
 		assertNull(new Accept((String)null).asMediaRanges().orElse(null));
 		assertEquals(-1, new Accept((String)null).match(alist(MediaType.JSON)));
 		assertNull(new Accept((String)null).getRange(0));
-		TestUtils.assertString("Accept: application/json", new Accept(MediaRanges.of("application/json")));
+		assertString("Accept: application/json", new Accept(MediaRanges.of("application/json")));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

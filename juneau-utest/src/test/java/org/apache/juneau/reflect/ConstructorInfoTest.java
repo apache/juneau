@@ -13,7 +13,7 @@
 package org.apache.juneau.reflect;
 
 import static org.apache.juneau.reflect.ConstructorInfo.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
 import java.util.*;

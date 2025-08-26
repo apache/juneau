@@ -16,15 +16,13 @@ import static org.apache.juneau.StringRanges.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 class StringRanges_Test extends SimpleTestBase {
 
 	@Test void a01_match() {
-		List<String> x = alist("foo","bar","baz");
+		var x = alist("foo","bar","baz");
 
 		assertEquals(-1, of((String)null).match(x));
 

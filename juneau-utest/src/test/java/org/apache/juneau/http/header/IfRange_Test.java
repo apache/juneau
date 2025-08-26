@@ -44,7 +44,7 @@ class IfRange_Test extends SimpleTestBase {
 	public static class A {
 		@RestOp
 		public StringReader get(@Header(name=HEADER) @Schema(cf="multi") String[] h) {
-			return TestUtils.reader(h == null ? "null" : Utils.join(h, ','));
+			return reader(h == null ? "null" : Utils.join(h, ','));
 		}
 	}
 
@@ -78,8 +78,8 @@ class IfRange_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_asEntityTag() {
-		EntityTag x = ifRange(VALUE1).asEntityTag().get();
-		TestUtils.assertString("\"foo\"", x);
+		var x = ifRange(VALUE1).asEntityTag().get();
+		assertString("\"foo\"", x);
 		assertEmpty(ifRange(()->null).asEntityTag());
 		assertEmpty(ifRange(()->PARSED3).asEntityTag());
 	}

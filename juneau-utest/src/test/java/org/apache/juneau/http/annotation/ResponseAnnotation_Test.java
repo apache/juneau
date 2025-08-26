@@ -13,7 +13,7 @@
 package org.apache.juneau.http.annotation;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -31,7 +31,7 @@ class ResponseAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Response a1 = ResponseAnnotation.create()
-        .description("description")
+		.description("description")
 		.examples("examples")
 		.headers(HeaderAnnotation.DEFAULT)
 		.on("on")
@@ -42,7 +42,7 @@ class ResponseAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	Response a2 = ResponseAnnotation.create()
-        .description("description")
+		.description("description")
 		.examples("examples")
 		.headers(HeaderAnnotation.DEFAULT)
 		.on("on")
@@ -53,9 +53,9 @@ class ResponseAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		TestUtils.assertJsonMatches(a1, ""
+		assertJsonMatches(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "examples:['examples'],"
 				+ "headers:[*],"
 				+ "on:['on'],"
@@ -111,7 +111,7 @@ class ResponseAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Response(
-        description={ "description" },
+		description={ "description" },
 		examples="examples",
 		headers=@Header,
 		on="on",
@@ -124,7 +124,7 @@ class ResponseAnnotation_Test extends SimpleTestBase {
 	Response d1 = D1.class.getAnnotationsByType(Response.class)[0];
 
 	@Response(
-        description={ "description" },
+		description={ "description" },
 		examples="examples",
 		headers=@Header,
 		on="on",

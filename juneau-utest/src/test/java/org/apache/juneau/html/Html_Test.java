@@ -13,7 +13,7 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
@@ -24,21 +24,17 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"rawtypes","serial"})
+@SuppressWarnings("serial")
 class Html_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Verifies that lists of maps/beans are converted to tables correctly.
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void a01_testTables1() throws Exception {
-		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
-		Object[] t;
-		String html;
-
-		t = new Object[] {new A1(), new A1()};
-		html = s.serialize(t);
+		var s = HtmlSerializer.DEFAULT_SQ;
+		var t = new Object[] {new A1(), new A1()};
+		var html = s.serialize(t);
 		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td>f1</td></tr><tr><td>f1</td></tr></table>", html);
-
 	}
 
 	public static class A1 {
@@ -49,14 +45,12 @@ class Html_Test extends SimpleTestBase {
 	// Test URI_ANCHOR_SET options
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void a02_testAnchorTextOptions() throws Exception {
-		HtmlSerializer.Builder s = HtmlSerializer.create().sq().addKeyValueTableHeaders().uriResolution(UriResolution.NONE);
+		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().uriResolution(UriResolution.NONE);
 		var t = new TestURI();
-		String r;
-		String expected = null;
 
 		s.uriAnchorText(AnchorText.TO_STRING);
-		r = strip(s.build().serialize(t));
-		expected = """
+		var r = strip(s.build().serialize(t));
+		var expected = """
 
 			[f0]=<a href='f0/x0'>f0/x0</a>
 			[f1]=<a href='f1/x1'>f1/x1</a>
@@ -217,15 +211,13 @@ class Html_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void b01_testHtmlAnnotationAsPlainText() throws Exception {
 		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
-		Object o = null;
-		String r;
 
-		o = new B1();
-		r = s.serialize(o);
+		var o = new B1();
+		var r = s.serialize(o);
 		assertEquals("<test>", r);
 
-		o = new B2();
-		r = s.serialize(o);
+		var o2 = new B2();
+		r = s.serialize(o2);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><f1></td></tr></table>", r);
 	}
 
@@ -246,15 +238,12 @@ class Html_Test extends SimpleTestBase {
 	@Test void b02_testHtmlAnnotationAsPlainText_usingConfig() throws Exception {
 		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(B3Config.class).build();
 
-		Object o = null;
-		String r;
-
-		o = new B3();
-		r = s.serialize(o);
+		var o = new B3();
+		var r = s.serialize(o);
 		assertEquals("<test>", r);
 
-		o = new B4();
-		r = s.serialize(o);
+		var o2 = new B4();
+		r = s.serialize(o2);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><f1></td></tr></table>", r);
 	}
 
@@ -279,15 +268,13 @@ class Html_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void c01_testHtmlAnnotationAsXml() throws Exception {
 		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
-		Object o = null;
-		String r;
 
-		o = new C1();
-		r = s.serialize(o);
+		var o = new C1();
+		var r = s.serialize(o);
 		assertEquals("<object><f1>&lt;f1&gt;</f1></object>", r);
 
-		o = new C2();
-		r = s.serialize(o);
+		var o2 = new C2();
+		r = s.serialize(o2);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td>&lt;f1&gt;</td></tr></table>", r);
 	}
 
@@ -303,15 +290,13 @@ class Html_Test extends SimpleTestBase {
 
 	@Test void c02_testHtmlAnnotationAsXml_usingConfig() throws Exception {
 		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(C3Config.class).build();
-		Object o = null;
-		String r;
 
-		o = new C3();
-		r = s.serialize(o);
+		var o = new C3();
+		var r = s.serialize(o);
 		assertEquals("<object><f1>&lt;f1&gt;</f1></object>", r);
 
-		o = new C4();
-		r = s.serialize(o);
+		var o2 = new C4();
+		r = s.serialize(o2);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td>&lt;f1&gt;</td></tr></table>", r);
 	}
 
@@ -331,13 +316,11 @@ class Html_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void d01_testNoTableHeaders() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
-		Object o = null;
-		String r;
 
 		var m = new MyMap();
 		m.put("foo", "bar");
-		o = JsonList.of(m);
-		r = s.serialize(o);
+		var o = JsonList.of(m);
+		var r = s.serialize(o);
 		assertEquals("<ul><li><table><tr><td>foo</td><td>bar</td></tr></table></li></ul>", r);
 	}
 
@@ -346,13 +329,11 @@ class Html_Test extends SimpleTestBase {
 
 	@Test void d02_testNoTableHeaders_usingConfig() throws Exception {
 		var s = HtmlSerializer.DEFAULT_SQ.copy().applyAnnotations(MyMap2Config.class).build();
-		Object o = null;
-		String r;
 
 		var m = new MyMap2();
 		m.put("foo", "bar");
-		o = JsonList.of(m);
-		r = s.serialize(o);
+		var o = JsonList.of(m);
+		var r = s.serialize(o);
 		assertEquals("<ul><li><table><tr><td>foo</td><td>bar</td></tr></table></li></ul>", r);
 	}
 
@@ -366,12 +347,10 @@ class Html_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void d03_testNoTableHeadersOnBeans() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
-		Object o = null;
-		String r;
 
 		var b = new MyBean();
-		o = JsonList.of(b,b);
-		r = s.serialize(o);
+		var o = JsonList.of(b,b);
+		var r = s.serialize(o);
 		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
 	}
 
@@ -382,12 +361,10 @@ class Html_Test extends SimpleTestBase {
 
 	@Test void d04_testNoTableHeadersOnBeans_usingConfig() throws Exception {
 		var s = HtmlSerializer.DEFAULT_SQ.copy().applyAnnotations(MyBean2Config.class).build();
-		Object o = null;
-		String r;
 
 		var b = new MyBean();
-		o = JsonList.of(b,b);
-		r = s.serialize(o);
+		var o = JsonList.of(b,b);
+		var r = s.serialize(o);
 		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
 	}
 
@@ -400,12 +377,10 @@ class Html_Test extends SimpleTestBase {
 
 	@Test void d05_testNoTableHeadersOnBeans_usingConcreteAnnotation() throws Exception {
 		var s = HtmlSerializer.DEFAULT_SQ.copy().annotations(HtmlAnnotation.create("MyBean2").noTables(true).build()).build();
-		Object o = null;
-		String r;
 
 		var b = new MyBean();
-		o = JsonList.of(b,b);
-		r = s.serialize(o);
+		var o = JsonList.of(b,b);
+		var r = s.serialize(o);
 		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
 	}
 

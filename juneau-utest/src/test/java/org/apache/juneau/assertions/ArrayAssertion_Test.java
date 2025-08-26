@@ -24,7 +24,6 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.serializer.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -67,7 +66,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void ba01a_asString() {
 		var x = a(1,2);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x).asString().is("[1, 2]");
 		test(nil).asString().isNull();
 	}
@@ -75,22 +74,22 @@ public class ArrayAssertion_Test {
 	@Test
 	public void ba01b_asString_wSerializer() {
 		var x = a(1,2);
-		var nil = (Integer[])null;
-		WriterSerializer s = Json5Serializer.DEFAULT;
+		var nil = na(Integer.class);
+		var s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("[1,2]");
 		test(nil).asString(s).is("null");
 	}
 
 	@Test
 	public void ba01c_asString_wPredicate() {
-		Integer[] x1 = {1,2};
+		var x1 = a(1,2);
 		test(x1).asString(x -> "foo").is("foo");
 	}
 
 	@Test
 	public void ba02_asJson() {
 		var x = a(1,2);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x).asJson().is("[1,2]");
 		test(nil).asJson().is("null");
 	}
@@ -98,7 +97,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void ba03_asJsonSorted() {
 		var x1 = a(2,1);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x1).asJsonSorted().is("[1,2]");
 		test(nil).asJsonSorted().is("null");
 	}
@@ -113,7 +112,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void bb01_asStrings() {
 		var x1 = a(1,2);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x1).asStrings().asJoin().is("12");
 		test(nil).asStrings().isNull();
 	}
@@ -121,7 +120,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void bb02_asBeanList() {
 		var x = a(A,A);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x).asBeanList().asProperty("a").asJson().is("[1,1]");
 		test(nil).asBeanList().isNull();
 	}
@@ -129,7 +128,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void bb03_item() {
 		var x = a(A,A);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x).asItem(0).asBean().asProperty("a").is(1);
 		test(x).asItem(-1).isNull();
 		test(x).asItem(2).isNull();
@@ -139,7 +138,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void bb04a_sorted() {
 		var x = a(2,3,1);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x).asSorted().asJson().is("[1,2,3]");
 		test(x).asSorted(Comparator.reverseOrder()).asJson().is("[3,2,1]");
 		test(x).asSorted(null).asJson().is("[1,2,3]");
@@ -149,7 +148,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void bb04b_sorted_wComparator() {
 		var x = a(2,3,1);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x).asSorted().asJson().is("[1,2,3]");
 		test(x).asSorted(Comparator.reverseOrder()).asJson().is("[3,2,1]");
 		test(x).asSorted(null).asJson().is("[1,2,3]");
@@ -162,21 +161,24 @@ public class ArrayAssertion_Test {
 
 	@Test
 	public void ca01_exists() {
-		Integer[] x = {}, nil = null;
+		var x = ea(Integer.class);
+		var nil = na(Integer.class);
 		test(x).isExists().isExists();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
 	@Test
 	public void ca02_isNull() {
-		Integer[] x = {}, nil = null;
+		var x = ea(Integer.class);
+		var nil = na(Integer.class);
 		test(nil).isNull();
 		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test
 	public void ca03_isNotNull() {
-		Integer[] x = {}, nil = null;
+		var x = ea(Integer.class);
+		var nil = na(Integer.class);
 		test(x).isNotNull();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
@@ -186,7 +188,7 @@ public class ArrayAssertion_Test {
 		var x1 = a(null,1,2);
 		var x1a = a(null,1,2);
 		var x1b = a(null,1,3);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -197,7 +199,7 @@ public class ArrayAssertion_Test {
 
 	@Test
 	public void ca04b_is_predicate() {
-		Integer[] x1 = {null,1,2};
+		var x1 = a(null,1,2);
 		test(x1).is(x->x.length==3);
 		assertThrown(()->test(x1).is(x->x.length==2)).asMessage().asOneLine().is("Unexpected value: '[null, 1, 2]'.");
 		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='[null, 1, 2]'.");
@@ -208,7 +210,7 @@ public class ArrayAssertion_Test {
 		var x1 = a(null,1,2);
 		var x1a = a(null,1,2);
 		var x2 = a(null,1,3);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -221,7 +223,7 @@ public class ArrayAssertion_Test {
 		var x1 = a(null,1,2);
 		var x1a = a(null,1,2);
 		var x2 = a(null,1,3);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[[null, 1, 3]]'.  Actual='[null, 1, 2]'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='[null, 1, 2]'.");
@@ -233,7 +235,7 @@ public class ArrayAssertion_Test {
 		var x1 = a(null,1,2);
 		var x1a = a(null,1,2);
 		var x2 = a(null,1,3);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -245,7 +247,7 @@ public class ArrayAssertion_Test {
 	public void ca08_isSame() {
 		var x1 = a(null,1,2);
 		var x1a = a(null,1,2);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='[null, 1, 2](Integer[]@*)'.  Actual='[null, 1, 2](Integer[]@*)'.");
@@ -258,7 +260,7 @@ public class ArrayAssertion_Test {
 		var x1 = a(null,1,2);
 		var x1a = a(null,1,2);
 		var x2 = a(null,1,3);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
 		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='[null,1,3]'.  Actual='[null,1,2]'.");
@@ -271,7 +273,7 @@ public class ArrayAssertion_Test {
 		var x1 = a(1,2);
 		var x1a = a(2,1);
 		var x2 = a(1,3);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
 		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='[1,3]'.  Actual='[1,2]'.");
@@ -284,8 +286,8 @@ public class ArrayAssertion_Test {
 		var x1 = a(null,1,2);
 		var x1a = a(null,1,2);
 		var x2 = a(null,1,3);
-		var nil = (Integer[])null;
-		WriterSerializer s = Json5Serializer.DEFAULT;
+		var nil = na(Integer.class);
+		var s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
 		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='[null,1,3]'.  Actual='[null,1,2]'.");
@@ -295,7 +297,8 @@ public class ArrayAssertion_Test {
 
 	@Test
 	public void ca12_isType() {
-		Integer[] x = {}, nil = null;
+		var x = ea(Integer.class);
+		var nil = na(Integer.class);
 		test(x).isType(Integer[].class);
 		test(x).isType(Object[].class);
 		test(x).isType(Object.class);
@@ -306,7 +309,8 @@ public class ArrayAssertion_Test {
 
 	@Test
 	public void ca13_isExactType() {
-		Integer[] x = {}, nil = null;
+		var x = ea(Integer.class);
+		var nil = na(Integer.class);
 		test(x).isExactType(Integer[].class);
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='[Ljava.lang.Integer;'.");
 		assertThrown(()->test(nil).isExactType(String.class)).asMessage().asOneLine().is("Value was null.");
@@ -316,7 +320,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void ca14_isString() {
 		var x = a(null,1,2);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x).isString("[null, 1, 2]");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='[null, 1, 2]'.");
@@ -327,7 +331,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void ca15_isJson() {
 		var x = a(null,1,2);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x).isJson("[null,1,2]");
 		test(nil).isJson("null");
 		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='[null,1,2]'.");
@@ -338,7 +342,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void cb01_is_predicates() {
 		var x1 = a(null,1,2);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x1).is(isNull(),eq("1"),eq("2"));
 		test(x1).is(isNull(),eq(1),eq(2));
 		assertThrown(()->test(x1).is(isNull(),eq("1"),eq("3"))).asMessage().asOneLine().is("Array did not contain expected value at index 2.  Value did not match expected.  Expect='3'.  Actual='2'.");
@@ -349,7 +353,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void cb02_any() {
 		var x1 = a(2,3,1);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x1).isAny(x -> x .equals(3));
 		test(x1).isAny(eq(3));
 		assertThrown(()->test(x1).isAny(x -> x.equals(4))).asMessage().asOneLine().is("Array did not contain any matching value.  Value='[2, 3, 1]'.");
@@ -360,7 +364,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void cb03_all() {
 		var x1 = a(2,3,1);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x1).isAll(x -> x < 4);
 		assertThrown(()->test(x1).isAll(x -> x < 3)).asMessage().asOneLine().is("Array contained non-matching value at index 1.  Unexpected value: '3'.");
 		assertThrown(()->test(x1).isAll(ne(3))).asMessage().asOneLine().is("Array contained non-matching value at index 1.  Value unexpectedly matched.  Value='3'.");
@@ -370,7 +374,9 @@ public class ArrayAssertion_Test {
 
 	@Test
 	public void cb04_isEmpty() {
-		String[] x1={}, x2={"foo","bar"}, nil = null;
+		var x1 = ea(String.class);
+		var x2 = a("foo","bar");
+		var nil = na(String.class);
 		test(x1).isEmpty();
 		assertThrows(BasicAssertionError.class, ()->test(x2).isEmpty(), "Array was not empty.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isEmpty(), "Value was null.");
@@ -378,7 +384,9 @@ public class ArrayAssertion_Test {
 
 	@Test
 	public void cb05_isNotEmpty() {
-		String[] x1={}, x2={"foo","bar"}, nil = null;
+		var x1 = ea(String.class);
+		var x2 = a("foo","bar");
+		var nil = na(String.class);
 		test(x2).isNotEmpty();
 		assertThrows(BasicAssertionError.class, ()->test(x1).isNotEmpty(), "Array was empty.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotEmpty(), "Value was null.");
@@ -387,7 +395,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void cb06_contains() {
 		var x1 = a(null,1,2);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x1).isContains(null);
 		test(x1).isContains(1);
 		assertThrown(()->test(x1).isContains(3)).asMessage().asOneLine().is("Array did not contain expected value.  Expect='3'.  Actual='[null, 1, 2]'.");
@@ -398,7 +406,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void cb07_doesNotContain() {
 		var x1 = a(null,1,2);
-		var nil = (Integer[])null;
+		var nil = na(Integer.class);
 		test(x1).isNotContains(3);
 		assertThrown(()->test(x1).isNotContains(1)).asMessage().asOneLine().is("Array contained unexpected value.  Unexpected='1'.  Actual='[null, 1, 2]'.");
 		assertThrown(()->test(x1).isNotContains(null)).asMessage().asOneLine().is("Array contained unexpected value.  Unexpected='null'.  Actual='[null, 1, 2]'.");
@@ -407,7 +415,9 @@ public class ArrayAssertion_Test {
 
 	@Test
 	public void cb08_isSize() {
-		String[] x1={}, x2={"foo","bar"}, nil = null;
+		var x1 = ea(String.class);
+		var x2 = a("foo","bar");
+		var nil = na(String.class);
 		test(x1).isSize(0);
 		test(x2).isSize(2);
 		assertThrown(()->test(x1).isSize(2)).asMessage().asOneLine().is("Array did not have the expected size.  Expect=2.  Actual=0.");
@@ -418,7 +428,7 @@ public class ArrayAssertion_Test {
 	@Test
 	public void cb09_has() {
 		var x= a("foo","bar");
-		var nil = (String[])null;
+		var nil = na(String.class);
 		test(x).isHas("foo","bar");
 		assertThrown(()->test(x).isHas("foo","baz")).asMessage().asOneLine().is("Array did not contain expected value at index 1.  Value did not match expected.  Expect='baz'.  Actual='bar'.");
 		assertThrown(()->test(x).isHas("foo")).asMessage().asOneLine().is("Array did not have the expected size.  Expect=1.  Actual=2.");

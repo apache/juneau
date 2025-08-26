@@ -13,7 +13,7 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
 
@@ -43,7 +43,7 @@ class MethodInvokerTest extends SimpleTestBase {
 	@Test void a01_basic() throws Exception {
 		var m = A.class.getMethod("foo");
 
-		MethodInvoker mi = create(m);
+		var mi = create(m);
 
 		var a = new A();
 		mi.invoke(a);
@@ -56,7 +56,7 @@ class MethodInvokerTest extends SimpleTestBase {
 	@Test void a02_exception() throws Exception {
 		var m = A.class.getMethod("bar");
 
-		MethodInvoker mi = create(m);
+		var mi = create(m);
 
 		var a = new A();
 		assertThrows(Exception.class, ()->mi.invoke(a));
@@ -69,7 +69,7 @@ class MethodInvokerTest extends SimpleTestBase {
 	@Test void a03_illegalArgument() throws Exception {
 		var m = A.class.getMethod("baz", int.class);
 
-		MethodInvoker mi = create(m);
+		var mi = create(m);
 
 		var a = new A();
 		assertThrows(Exception.class, ()->mi.invoke(a, "x"));
@@ -81,11 +81,10 @@ class MethodInvokerTest extends SimpleTestBase {
 
 	@Test void a04_otherMethods() throws Exception {
 		var m = A.class.getMethod("foo");
-		MethodInvoker mi = create(m);
+		var mi = create(m);
 
 		assertEquals(m, mi.inner().inner());
 		assertEquals("A", mi.getDeclaringClass().getSimpleName());
 		assertEquals(A.class.getName() + ".foo()", mi.getFullName());
 	}
-
 }

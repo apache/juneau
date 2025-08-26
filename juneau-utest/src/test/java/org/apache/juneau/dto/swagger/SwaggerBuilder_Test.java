@@ -17,7 +17,6 @@ import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
-import org.apache.juneau.bean.swagger.Tag;
 import org.junit.jupiter.api.*;
 
 /**
@@ -26,7 +25,7 @@ import org.junit.jupiter.api.*;
 class SwaggerBuilder_Test extends SimpleTestBase {
 
 	@Test void a01_contact() {
-		Contact t = contact();
+		var t = contact();
 		assertJson(t, "{}");
 
 		t = contact("foo");
@@ -37,7 +36,7 @@ class SwaggerBuilder_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_externalDocumentation() {
-		ExternalDocumentation t = externalDocumentation();
+		var t = externalDocumentation();
 		assertJson(t, "{}");
 
 		t = externalDocumentation("foo");
@@ -48,7 +47,7 @@ class SwaggerBuilder_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_headerInfo() {
-		HeaderInfo t = headerInfo();
+		var t = headerInfo();
 		assertJson(t, "{}");
 
 		t = headerInfo("foo");
@@ -60,7 +59,7 @@ class SwaggerBuilder_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_info() {
-		Info t = info();
+		var t = info();
 		assertJson(t, "{}");
 
 		t = info("foo", "bar");
@@ -68,7 +67,7 @@ class SwaggerBuilder_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_items() {
-		Items t = items();
+		var t = items();
 		assertJson(t, "{}");
 
 		t = items("foo");
@@ -80,7 +79,7 @@ class SwaggerBuilder_Test extends SimpleTestBase {
 	}
 
 	@Test void a06_license() {
-		License t = license();
+		var t = license();
 		assertJson(t, "{}");
 
 		t = license("foo");
@@ -88,12 +87,12 @@ class SwaggerBuilder_Test extends SimpleTestBase {
 	}
 
 	@Test void a07_operation() {
-		Operation t = operation();
+		var t = operation();
 		assertJson(t, "{}");
 	}
 
 	@Test void a08_parameterInfo() {
-		ParameterInfo t = parameterInfo();
+		var t = parameterInfo();
 		assertJson(t, "{}");
 
 		t = parameterInfo("foo", "bar");
@@ -105,7 +104,7 @@ class SwaggerBuilder_Test extends SimpleTestBase {
 	}
 
 	@Test void a09_responseInfo() {
-		ResponseInfo t = responseInfo();
+		var t = responseInfo();
 		assertJson(t, "{}");
 
 		t = responseInfo("foo");
@@ -113,12 +112,12 @@ class SwaggerBuilder_Test extends SimpleTestBase {
 	}
 
 	@Test void a10_schemaInfo() {
-		SchemaInfo t = schemaInfo();
+		var t = schemaInfo();
 		assertJson(t, "{}");
 	}
 
 	@Test void a11_securityScheme() {
-		SecurityScheme t = securityScheme();
+		var t = securityScheme();
 		assertJson(t, "{}");
 
 		t = securityScheme("foo");
@@ -129,7 +128,7 @@ class SwaggerBuilder_Test extends SimpleTestBase {
 	}
 
 	@Test void a12_swagger() {
-		Swagger t = swagger();
+		var t = swagger();
 		assertJson(t, "{swagger:'2.0'}");
 
 		t = swagger(info());
@@ -137,7 +136,7 @@ class SwaggerBuilder_Test extends SimpleTestBase {
 	}
 
 	@Test void a13_tag() {
-		Tag t = tag();
+		var t = tag();
 		assertJson(t, "{}");
 
 		t = tag("foo");
@@ -145,7 +144,7 @@ class SwaggerBuilder_Test extends SimpleTestBase {
 	}
 
 	@Test void a14_xml() {
-		Xml t = xml();
+		var t = xml();
 		assertJson(t, "{}");
 	}
 }

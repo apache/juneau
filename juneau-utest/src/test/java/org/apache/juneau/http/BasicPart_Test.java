@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
-import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 class BasicPart_Test extends SimpleTestBase {
 
 	@Test void a01_ofPair() {
-		BasicPart x = basicPart("Foo:bar");
+		var x = basicPart("Foo:bar");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar", x.getValue());
 
@@ -50,31 +50,30 @@ class BasicPart_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_of() {
-		BasicPart x;
-		x = part("Foo","bar");
-		TestUtils.assertString("Foo=bar", x);
+		var x = part("Foo","bar");
+		assertString("Foo=bar", x);
 		x = part("Foo",()->"bar");
-		TestUtils.assertString("Foo=bar", x);
+		assertString("Foo=bar", x);
 	}
 
 	@Test void a03_cast() {
-		BasicPart x1 = part("X1","1");
-		SerializedPart x2 = serializedPart("X2","2");
-		Header x3 = header("X3","3");
-		SerializedHeader x4 = serializedHeader("X4","4");
+		var x1 = part("X1","1");
+		var x2 = serializedPart("X2","2");
+		var x3 = header("X3","3");
+		var x4 = serializedHeader("X4","4");
 		Map.Entry<String,Object> x5 = CollectionUtils.map("X5",(Object)"5").entrySet().iterator().next();
 		org.apache.http.message.BasicNameValuePair x6 = new org.apache.http.message.BasicNameValuePair("X6","6");
 		NameValuePairable x7 = () -> part("X7","7");
 		Headerable x8 = () -> header("X8","8");
 
-		TestUtils.assertTypeAndJson(BasicPart.cast(x1), NameValuePair.class, "'X1=1'");
-		TestUtils.assertTypeAndJson(BasicPart.cast(x2), NameValuePair.class, "'X2=2'");
-		TestUtils.assertTypeAndJson(BasicPart.cast(x3), NameValuePair.class, "'X3: 3'");
-		TestUtils.assertTypeAndJson(BasicPart.cast(x4), NameValuePair.class, "'X4: 4'");
-		TestUtils.assertTypeAndJson(BasicPart.cast(x5), NameValuePair.class, "'X5=5'");
-		TestUtils.assertTypeAndJson(BasicPart.cast(x6), NameValuePair.class, "{name:'X6',value:'6'}");
-		TestUtils.assertTypeAndJson(BasicPart.cast(x7), NameValuePair.class, "'X7=7'");
-		TestUtils.assertTypeAndJson(BasicPart.cast(x8), NameValuePair.class, "'X8=8'");
+		assertTypeAndJson(BasicPart.cast(x1), NameValuePair.class, "'X1=1'");
+		assertTypeAndJson(BasicPart.cast(x2), NameValuePair.class, "'X2=2'");
+		assertTypeAndJson(BasicPart.cast(x3), NameValuePair.class, "'X3: 3'");
+		assertTypeAndJson(BasicPart.cast(x4), NameValuePair.class, "'X4: 4'");
+		assertTypeAndJson(BasicPart.cast(x5), NameValuePair.class, "'X5=5'");
+		assertTypeAndJson(BasicPart.cast(x6), NameValuePair.class, "{name:'X6',value:'6'}");
+		assertTypeAndJson(BasicPart.cast(x7), NameValuePair.class, "'X7=7'");
+		assertTypeAndJson(BasicPart.cast(x8), NameValuePair.class, "'X8=8'");
 
 		assertThrowsWithMessage(BasicRuntimeException.class, "Object of type java.lang.String could not be converted to a Part.", ()->BasicPart.cast("X"));
 		assertThrowsWithMessage(BasicRuntimeException.class, "Object of type null could not be converted to a Part.", ()->BasicPart.cast(null));
@@ -92,12 +91,12 @@ class BasicPart_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_asHeader() {
-		BasicPart x = part("X1","1");
-		TestUtils.assertString("X1: 1", x.asHeader());
+		var x = part("X1","1");
+		assertString("X1: 1", x.asHeader());
 	}
 
 	@Test void a05_assertions() {
-		BasicPart x = part("X1","1");
+		var x = part("X1","1");
 		x.assertName().is("X1").assertValue().is("1");
 	}
 

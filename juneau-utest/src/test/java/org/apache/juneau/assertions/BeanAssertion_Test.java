@@ -21,7 +21,6 @@ import static org.junit.runners.MethodSorters.*;
 import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.serializer.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -78,14 +77,14 @@ public class BeanAssertion_Test {
 	public void ba01b_asString_wSerializer() {
 		var x = A1;
 		var nil = (A)null;
-		WriterSerializer s = Json5Serializer.DEFAULT;
+		var s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("{a:1,b:2}");
 		test(nil).asString(s).is("null");
 	}
 
 	@Test
 	public void ba01c_asString_wPredicate() {
-		A x1 = A1;
+		var x1 = A1;
 		test(x1).asString(x -> "foo").is("foo");
 	}
 
@@ -183,7 +182,7 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void ca04b_is_predicate() {
-		A x1 = A1;
+		var x1 = A1;
 		test(x1).is(x->x.a==1);
 		assertThrown(()->test(x1).is(x->x.a==2)).asMessage().asOneLine().is("Unexpected value: 'a=1,b=2'.");
 		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='a=1,b=2'.");
@@ -271,7 +270,7 @@ public class BeanAssertion_Test {
 		var x1a = A1a;
 		var x2 = A2;
 		var nil = (A)null;
-		WriterSerializer s = Json5Serializer.DEFAULT;
+		var s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
 		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{a:2,b:3}'.  Actual='{a:1,b:2}'.");

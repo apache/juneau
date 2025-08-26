@@ -1,19 +1,3 @@
-package org.apache.juneau.http;
-
-import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.http.HttpParts.*;
-import static org.junit.Assert.*;
-
-import java.util.*;
-
-import org.apache.http.*;
-import org.apache.juneau.*;
-import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.part.*;
-import org.apache.juneau.internal.*;
-import org.junit.jupiter.api.*;
-
 //***************************************************************************************************************************
 //* Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 //* distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
@@ -26,13 +10,29 @@ import org.junit.jupiter.api.*;
 //* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 //* specific language governing permissions and limitations under the License.                                              *
 //***************************************************************************************************************************
+package org.apache.juneau.http;
+
+import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.http.HttpParts.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.*;
+
+import org.apache.http.*;
+import org.apache.juneau.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.part.*;
+import org.apache.juneau.internal.*;
+import org.junit.jupiter.api.*;
+
 class HttpHeaders_Test extends SimpleTestBase {
 
 	@Test void a01_cast() {
-		BasicPart x1 = part("X1","1");
-		SerializedPart x2 = serializedPart("X2","2");
-		Header x3 = header("X3","3");
-		SerializedHeader x4 = serializedHeader("X4","4");
+		var x1 = part("X1","1");
+		var x2 = serializedPart("X2","2");
+		var x3 = header("X3","3");
+		var x4 = serializedHeader("X4","4");
 		Map.Entry<String,Object> x5 = CollectionUtils.map("X5",(Object)"5").entrySet().iterator().next();
 		org.apache.http.message.BasicNameValuePair x6 = new org.apache.http.message.BasicNameValuePair("X6","6");
 		NameValuePairable x7 = () -> part("X7","7");

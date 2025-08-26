@@ -13,7 +13,7 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
@@ -31,7 +31,7 @@ class MediaType_Test extends SimpleTestBase {
 		assertJson(x, "['text/bar','text/foo']");
 
 		MediaType x2 = new MediaType((String)null);  // Interpreted as "/*"
-		TestUtils.assertStringEmpty(x2.getType());
+		assertStringEmpty(x2.getType());
 		assertEquals("*", x2.getSubType());
 		assertJson(x2.getSubTypes(), "['*']");
 		assertTrue(x2.isMetaSubtype());

@@ -1,13 +1,3 @@
-package org.apache.juneau.html.annotation;
-
-import org.apache.juneau.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.config.*;
-import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.rest.servlet.*;
-import org.junit.jupiter.api.*;
-
 //***************************************************************************************************************************
 //* Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 //* distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
@@ -20,6 +10,16 @@ import org.junit.jupiter.api.*;
 //* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 //* specific language governing permissions and limitations under the License.                                              *
 //***************************************************************************************************************************
+
+package org.apache.juneau.html.annotation;
+
+import org.apache.juneau.*;
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.servlet.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
 class HtmlDocConfig_Test extends SimpleTestBase {
@@ -58,7 +58,7 @@ class HtmlDocConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_aside() throws Exception {
-		RestClient a1 = client(A1.class);
+		var a1 = client(A1.class);
 		a1.get("/a01").accept("text/html").run().assertContent().isContains("<aside>a01a a01b</aside>");
 		a1.get("/a02").accept("text/html").run().assertContent().isContains("<aside>a02a a02b</aside>");
 		a1.get("/a03").accept("text/html").run().assertContent().isContains("<aside>a01a a01b a03a a03b</aside>");
@@ -96,7 +96,7 @@ class HtmlDocConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_aside_inherited() throws Exception {
-		RestClient a2 = client(A2.class);
+		var a2 = client(A2.class);
 		a2.get("/b01").accept("text/html").run().assertContent().isContains("<aside>a01a a01b b01a b01b</aside>");
 		a2.get("/b02").accept("text/html").run().assertContent().isContains("<aside>b02a b02b</aside>");
 		a2.get("/b03").accept("text/html").run().assertContent().isContains("<aside>a01a a01b b01a b01b b03a b03b</aside>");
@@ -138,7 +138,7 @@ class HtmlDocConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_footer() throws Exception {
-		RestClient b1 = client(B1.class);
+		var b1 = client(B1.class);
 		b1.get("/a01").accept("text/html").run().assertContent().isContains("<footer>a01a a01b</footer>");
 		b1.get("/a02").accept("text/html").run().assertContent().isContains("<footer>a02a a02b</footer>");
 		b1.get("/a03").accept("text/html").run().assertContent().isContains("<footer>a01a a01b a03a a03b</footer>");
@@ -176,7 +176,7 @@ class HtmlDocConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_footer_inherited() throws Exception {
-		RestClient b2 = client(B2.class);
+		var b2 = client(B2.class);
 		b2.get("/b01").accept("text/html").run().assertContent().isContains("<footer>b01a a01a a01b b01b</footer>");
 		b2.get("/b02").accept("text/html").run().assertContent().isContains("<footer>b02a b02b</footer>");
 		b2.get("/b03").accept("text/html").run().assertContent().isContains("<footer>b01a a01a a01b b01b b03a b03b</footer>");
@@ -218,7 +218,7 @@ class HtmlDocConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_header() throws Exception {
-		RestClient c1 = client(C1.class);
+		var c1 = client(C1.class);
 		c1.get("/a01").accept("text/html").run().assertContent().isContains("<header>a01a a01b</header>");
 		c1.get("/a02").accept("text/html").run().assertContent().isContains("<header>a02a a02b</header>");
 		c1.get("/a03").accept("text/html").run().assertContent().isContains("<header>a01a a01b a03a a03b</header>");
@@ -256,7 +256,7 @@ class HtmlDocConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void c02_header_inherited() throws Exception {
-		RestClient c2 = client(C2.class);
+		var c2 = client(C2.class);
 		c2.get("/b01").accept("text/html").run().assertContent().isContains("<header>b01a b01b a01a a01b</header>");
 		c2.get("/b02").accept("text/html").run().assertContent().isContains("<header>b02a b02b</header>");
 		c2.get("/b03").accept("text/html").run().assertContent().isContains("<header>b01a b01b a01a a01b b03a b03b</header>");
@@ -328,7 +328,7 @@ class HtmlDocConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_navlinks() throws Exception {
-		RestClient d1 = client(D1.class);
+		var d1 = client(D1.class);
 		d1.get("/a01").accept("text/html").run().assertContent().isContains("<nav><ol><li>a01a</li><li>a01b</li></ol></nav>");
 		d1.get("/a02").accept("text/html").run().assertContent().isContains("<nav><ol><li>a02a</li><li>a02b</li></ol></nav>");
 		d1.get("/a03").accept("text/html").run().assertContent().isContains("<nav><ol><li>a01a</li><li>a01b</li><li>a03a</li><li>a03b</li></ol></nav>");
@@ -402,7 +402,7 @@ class HtmlDocConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void d02_navlinks_inherited() throws Exception {
-		RestClient d2 = client(D2.class);
+		var d2 = client(D2.class);
 		d2.get("/b01").accept("text/html").run().assertContent().isContains("<nav><ol><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
 		d2.get("/b02").accept("text/html").run().assertContent().isContains("<nav><ol><li>b02a</li><li>b02b</li></ol></nav>");
 		d2.get("/b03").accept("text/html").run().assertContent().isContains("<nav><ol><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li><li>b03a</li><li>b03b</li></ol></nav>");
@@ -450,7 +450,7 @@ class HtmlDocConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_nav() throws Exception {
-		RestClient e1 = client(E1.class);
+		var e1 = client(E1.class);
 		e1.get("/a01").accept("text/html").run().assertContent().isContains("<nav>a01a a01b</nav>");
 		e1.get("/a02").accept("text/html").run().assertContent().isContains("<nav>a02a a02b</nav>");
 		e1.get("/a03").accept("text/html").run().assertContent().isContains("<nav>a01a a01b a03a a03b</nav>");
@@ -488,7 +488,7 @@ class HtmlDocConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void e02_nav_inherited() throws Exception {
-		RestClient e2 = client(E2.class);
+		var e2 = client(E2.class);
 		e2.get("/b01").accept("text/html").run().assertContent().isContains("<nav>a01a a01b b01a b01b</nav>");
 		e2.get("/b02").accept("text/html").run().assertContent().isContains("<nav>b02a b02b</nav>");
 		e2.get("/b03").accept("text/html").run().assertContent().isContains("<nav>a01a a01b b01a b01b b03a b03b</nav>");
@@ -530,7 +530,7 @@ class HtmlDocConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void f01_script() throws Exception {
-		RestClient f1 = client(F1.class);
+		var f1 = client(F1.class);
 		f1.get("/a01").accept("text/html").run().assertContent().isContains("<script>a01a\n a01b\n</script>");
 		f1.get("/a02").accept("text/html").run().assertContent().isContains("<script>a02a\n a02b\n</script>");
 		f1.get("/a03").accept("text/html").run().assertContent().isContains("<script>a01a\n a01b\n a03a\n a03b\n</script>");
@@ -568,7 +568,7 @@ class HtmlDocConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void f02_script_inherited() throws Exception {
-		RestClient f2 = client(F2.class);
+		var f2 = client(F2.class);
 		f2.get("/b01").accept("text/html").run().assertContent().isContains("<script>b01a\n b01b\n</script>");
 		f2.get("/b02").accept("text/html").run().assertContent().isContains("<script>b02a\n b02b\n</script>");
 		f2.get("/b03").accept("text/html").run().assertContent().isContains("<script>b01a\n b01b\n b03a\n b03b\n</script>");
@@ -610,7 +610,7 @@ class HtmlDocConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void g01_style() throws Exception {
-		RestClient g1 = client(G1.class);
+		var g1 = client(G1.class);
 		g1.get("/a01").accept("text/html").run().assertContent().isContains("<style>@import \"/a01s\"; a01a a01b</style>");
 		g1.get("/a02").accept("text/html").run().assertContent().isContains("<style>@import \"/a02s\"; a02a a02b</style>");
 		g1.get("/a03").accept("text/html").run().assertContent().isContains("<style>@import \"/a01s\"; a01a a01b a03a a03b</style>");
@@ -648,7 +648,7 @@ class HtmlDocConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void g02_style_inherited() throws Exception {
-		RestClient g2 = client(G2.class);
+		var g2 = client(G2.class);
 		g2.get("/b01").accept("text/html").run().assertContent().isContains("<style>@import \"/b01s\"; b01a b01b</style>");
 		g2.get("/b02").accept("text/html").run().assertContent().isContains("<style>@import \"/b02s\"; b02a b02b</style>");
 		g2.get("/b03").accept("text/html").run().assertContent().isContains("<style>@import \"/b01s\"; b01a b01b b03a b03b</style>");

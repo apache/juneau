@@ -26,7 +26,7 @@ class Version_Test extends SimpleTestBase {
 		assertNull(of(null));
 		assertString("0", of(""));
 
-		Version x = of("1.2.3");
+		var x = of("1.2.3");
 		assertEquals(1, x.getMajor().orElse(null));
 		assertEquals(2, x.getMinor().orElse(null));
 		assertEquals(3, x.getMaintenance().orElse(null));
@@ -41,7 +41,7 @@ class Version_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_isAtLeast() {
-		Version x = of("1.2.3");
+		var x = of("1.2.3");
 
 		assertTrue(x.isAtLeast(of("1.2.2")));
 		assertTrue(x.isAtLeast(of("1.2.3")));
@@ -58,7 +58,7 @@ class Version_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_isAtMost() {
-		Version x = of("1.2.3");
+		var x = of("1.2.3");
 
 		assertFalse(x.isAtMost(of("1.2.2")));
 		assertTrue(x.isAtMost(of("1.2.3")));
@@ -75,7 +75,7 @@ class Version_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_isEqualsTo() {
-		Version x = of("1.2.3");
+		var x = of("1.2.3");
 
 		assertTrue(x.equals(of("1.2.3")));
 		assertTrue(x.equals(of("1.2")));
@@ -84,7 +84,7 @@ class Version_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_compareTo() {
-		List<Version> l = list(
+		var l = list(
 			of("1.2.3"),
 			of("1.2"),
 			of(""),

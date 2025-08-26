@@ -14,7 +14,7 @@ package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.*;
 import java.util.*;
@@ -84,7 +84,7 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_objectTypes() {
-		A1 x = remote(A.class,A1.class);
+		var x = remote(A.class,A1.class);
 		assertEquals("{x:'1'}",x.getX1(1));
 		assertEquals("{x:'1.0'}",x.getX2(1));
 		assertEquals("{x:'f=1'}",x.getX3(Bean.create()));
@@ -130,7 +130,7 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_default_allowEmptyValue() {
-		B1 x = remote(B.class,B1.class);
+		var x = remote(B.class,B1.class);
 		assertEquals("{x:'foo'}",x.getX1(null));
 		assertThrowsWithMessage(Exception.class, "Empty value not allowed.", ()->x.getX1(""));
 		assertEquals("{x:'foo'}",x.getX2(null));
@@ -166,7 +166,7 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_collectionFormat() {
-		C1 x = remote(C.class,C1.class);
+		var x = remote(C.class,C1.class);
 		assertEquals("{x:'foo,bar'}",x.getX1("foo","bar"));
 		assertEquals("{x:'foo,bar'}",x.getX2("foo","bar"));
 		assertEquals("{x:'foo bar'}",x.getX3("foo","bar"));
@@ -236,7 +236,7 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_min_max_emin_emax() {
-		D1 x = remote(D.class,D1.class);
+		var x = remote(D.class,D1.class);
 		assertEquals("{x:'1'}",x.getX1(1));
 		assertEquals("{x:'10'}",x.getX1(10));
 		assertThrowsWithMessage(Exception.class, "Minimum value not met.", ()->x.getX1(0));
@@ -449,7 +449,7 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_mini_maxi_ui() {
-		E1 x = remote(E.class,E1.class);
+		var x = remote(E.class,E1.class);
 		assertEquals("{x:'1'}",x.getX1("1"));
 		assertEquals("{x:'1|2'}",x.getX1("1","2"));
 		assertThrowsWithMessage(Exception.class, "Minimum number of items not met.", x::getX1);
@@ -492,7 +492,7 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void f01_minl_maxl_enum_p() {
-		F1 x = remote(F.class,F1.class);
+		var x = remote(F.class,F1.class);
 		assertEquals("{x:'12'}",x.getX1("12"));
 		assertEquals("{x:'123'}",x.getX1("123"));
 		assertThrowsWithMessage(Exception.class, "Minimum length of value not met.", ()->x.getX1("1"));
@@ -549,7 +549,7 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void g01_multipleOf() {
-		G1 x = remote(G.class,G1.class);
+		var x = remote(G.class,G1.class);
 		assertEquals("{x:'4'}",x.getX1(4));
 		assertThrowsWithMessage(Exception.class, "Multiple-of not met.", ()->x.getX1(5));
 		assertEquals("{x:'4'}",x.getX2((short)4));
@@ -601,7 +601,7 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void h01_required() {
-		H1 x = remote(H.class,H1.class);
+		var x = remote(H.class,H1.class);
 		assertEquals("{}",x.getX1(null));
 		assertEquals("{}",x.getX2(null));
 		assertEquals("{x:'1'}",x.getX3("1"));
@@ -629,7 +629,7 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void h01_skipIfEmpty() {
-		I1 x = remote(I.class,I1.class);
+		var x = remote(I.class,I1.class);
 		assertEquals("{x:''}",x.getX1(""));
 		assertEquals("{x:''}",x.getX2(""));
 		assertEquals("{}",x.getX3(""));
@@ -654,7 +654,7 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void j01_serializer() {
-		J1 x = remote(J.class,J1.class);
+		var x = remote(J.class,J1.class);
 		assertEquals("{x:'xXx'}",x.getX1("X"));
 	}
 
@@ -694,8 +694,8 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void k01_requestBean_simpleVals() {
-		K1 x1 = remote(K.class,K1.class);
-		K1 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K1.class);
+		var x1 = remote(K.class,K1.class);
+		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K1.class);
 		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'true',h:'123',i1:'foo'}",x1.getX1(new K1a()));
 		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'\\'true\\'',h:'\\'123\\'',i1:'foo'}",x2.getX1(new K1a()));
 		assertEquals("{a:'xa1x',b:'xb1x',c:'xc1x',e:'xx',g:'xtruex',h:'x123x',i1:'xfoox'}",x2.getX2(new K1a()));
@@ -719,8 +719,8 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void k02_requestBean_maps() {
-		K2 x1 = remote(K.class,K2.class);
-		K2 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K2.class);
+		var x1 = remote(K.class,K2.class);
+		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K2.class);
 		assertEquals("{a:'a1=v1,a2=123,a3=null,a4=',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}",x1.getX1(new K2a()));
 		assertEquals("{a:'(a1=v1,a2=123,a3=null,a4=\\'\\')',b1:'\\'true\\'',b2:'\\'123\\'',b3:'\\'null\\'',c1:'v1',c2:'123',c4:''}",x2.getX1(new K2a()));
 		assertEquals("{a:'x{a1=v1, a2=123, a3=null, a4=}x',b1:'xtruex',b2:'x123x',b3:'xnullx',c1:'xv1x',c2:'x123x',c4:'xx'}",x2.getX2(new K2a()));
@@ -746,8 +746,8 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void k03_requestBean_headers() {
-		K3 x1 = remote(K.class,K3.class);
-		K3 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K3.class);
+		var x1 = remote(K.class,K3.class);
+		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K3.class);
 		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:'',f1:'v1',f2:'123',f4:''}",x1.getX1(new K3a()));
 		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:'',f1:'v1',f2:'123',f4:''}",x2.getX1(new K3a()));
 		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:'',f1:'v1',f2:'123',f4:''}",x2.getX2(new K3a()));
@@ -776,8 +776,8 @@ class Remote_HeaderAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void k04_requestBean_collections() {
-		K4 x1 = remote(K.class,K4.class);
-		K4 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K4.class);
+		var x1 = remote(K.class,K4.class);
+		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K4.class);
 		assertEquals("{a:'foo,,true,123,null,true,123,null',b:'foo,,true,123,null,true,123,null',c:'xfoo||true|123|null|true|123|nullx',d:'',f:'foo,,true,123,null,true,123,null',g:'xfoo||true|123|null|true|123|nullx',h:''}", x1.getX1(new K4a()));
 		assertEquals("{a:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',b:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',c:'xfoo||true|123|null|true|123|nullx',d:'@()',f:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',g:'xfoo||true|123|null|true|123|nullx',h:'@()'}", x2.getX1(new K4a()));
 		assertEquals("{a:'xfoo||true|123|null|true|123|nullx',b:'xfoo||true|123|null|true|123|nullx',c:'xfoo||true|123|null|true|123|nullx',d:'xx',f:'xfoo||true|123|null|true|123|nullx',g:'xfoo||true|123|null|true|123|nullx',h:'xx'}", x2.getX2(new K4a()));

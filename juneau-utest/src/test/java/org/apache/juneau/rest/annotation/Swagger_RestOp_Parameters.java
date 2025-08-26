@@ -15,7 +15,6 @@ package org.apache.juneau.rest.annotation;
 import static org.apache.juneau.TestUtils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.header.*;
 import org.junit.jupiter.api.*;
 
@@ -139,10 +138,9 @@ class Swagger_RestOp_Parameters extends SimpleTestBase {
 	}
 
 	@Test void a01_headerParameters() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(A.class);
-		ParameterInfo x;
+		var s = getSwagger(A.class);
+		var x = s.getParameterInfo("/accept","get","header","Accept");
 
-		x = s.getParameterInfo("/accept","get","header","Accept");
 		assertJson(x, "{'in':'header',name:'Accept',type:'string'}");
 
 		x = s.getParameterInfo("/acceptCharset","put","header","Accept-Charset");

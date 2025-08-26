@@ -26,7 +26,6 @@ import java.util.concurrent.*;
 import java.util.logging.*;
 
 import org.apache.http.*;
-import org.apache.http.impl.client.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -128,7 +127,7 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 	@Test void a04_keepHttpClientOpen() throws Exception {
 		var x = client().keepHttpClientOpen().build();
 
-		CloseableHttpClient c = x.httpClient;
+		var c = x.httpClient;
 		x.close();
 		client().httpClient(c).build().get("/ok").runFuture().get().assertContent().isContains("OK");
 
@@ -331,7 +330,7 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void a09_marshalls() throws Exception {
-		final RestClient x = MockRestClient.create(A.class).marshallers(Xml.DEFAULT,Json.DEFAULT).build();
+		var x = MockRestClient.create(A.class).marshallers(Xml.DEFAULT,Json.DEFAULT).build();
 
 		assertThrowsWithMessage(RestCallException.class, "Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.", ()->x.post("/echoBody",bean).run());
 
@@ -362,7 +361,7 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void a11_serializers_parsers() throws Exception {
-		final RestClient x = MockRestClient.create(A.class).serializers(XmlSerializer.class,JsonSerializer.class).parsers(XmlParser.class,JsonParser.class).build();
+		var x = MockRestClient.create(A.class).serializers(XmlSerializer.class,JsonSerializer.class).parsers(XmlParser.class,JsonParser.class).build();
 
 		assertThrowsWithMessage(RestCallException.class, "Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.", ()->x.post("/echoBody",bean).run());
 
@@ -380,7 +379,7 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 		b = x.post("/echoBody",bean).mediaType("text/json").run().cacheContent().assertContent("{\"f\":1}").getContent().as(ABean.class);
 		assertEquals(json(bean), json(b));
 
-		final RestClient x2 = MockRestClient.create(A.class).serializers(XmlSerializer.DEFAULT,JsonSerializer.DEFAULT).parsers(XmlParser.DEFAULT,JsonParser.DEFAULT).build();
+		var x2 = MockRestClient.create(A.class).serializers(XmlSerializer.DEFAULT,JsonSerializer.DEFAULT).parsers(XmlParser.DEFAULT,JsonParser.DEFAULT).build();
 
 		assertThrowsWithMessage(RestCallException.class, "Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.", ()->x2.post("/echoBody",bean).run());
 
@@ -448,7 +447,7 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 
 
 	@Test void a13_toString() {
-		String s = client().rootUrl("https://foo").build().toString();
+		var s = client().rootUrl("https://foo").build().toString();
 		assertTrue(s.contains("rootUrl: 'https://foo'"));
 	}
 
@@ -461,7 +460,7 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void a16_request_uriParts() throws Exception {
-		java.net.URI uri = client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo:bar").uri("/bean").uriFragment("baz").queryData("foo","bar").run().assertContent("{f:1}").getRequest().getURI();
+		var uri = client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo:bar").uri("/bean").uriFragment("baz").queryData("foo","bar").run().assertContent("{f:1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
 
 		uri = client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo","bar").uri("/bean").uriFragment("baz").queryData("foo","bar").run().assertContent("{f:1}").getRequest().getURI();

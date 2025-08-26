@@ -36,8 +36,8 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	static SearchArgs[] create(String...search) {
-		SearchArgs[] sa = new SearchArgs[search.length];
-		for (int i = 0; i < search.length; i++)
+		var sa = new SearchArgs[search.length];
+		for (var i = 0; i < search.length; i++)
 			sa[i] = SearchArgs.create(search[i]);
 		return sa;
 	}
@@ -140,52 +140,52 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	}
 
 	@Test void a11_stringSearch_regExp_noEndSlash() {
-		Object in = list(A.create("/foo"), A.create("bar"));
-		for (String s : a("f=/foo","f='/foo'"))
+		var in = list(A.create("/foo"), A.create("bar"));
+		for (var s : a("f=/foo","f='/foo'"))
 			assertJson(run(in, s), "[{f:'/foo'}]");
 	}
 
 	@Test void a12_stringSearch_regExp_onlySlash() {
-		Object in = list(A.create("/"), A.create("bar"));
-		for (String s : a("f=/", "f='/'"))
+		var in = list(A.create("/"), A.create("bar"));
+		for (var s : a("f=/", "f='/'"))
 			assertJson(run(in, s), "[{f:'/'}]");
 	}
 
 	@Test void a13_stringSearch_or_pattern() {
-		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
+		var in = list(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertJson(run(in, "f=f* *r"), "[{f:'foo'},{f:'bar'}]");
 		assertJson(run(in, "f='f* *r'"), "[]");
 		assertJson(run(in, "f='f*oo'"), "[{f:'foo'}]");
 	}
 
 	@Test void a14_stringSearch_explicit_or_pattern() {
-		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
+		var in = list(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertJson(run(in, "f=^f* ^*r"), "[{f:'foo'},{f:'bar'}]");
 		assertJson(run(in, "f=^'f* *r'"), "[]");
 		assertJson(run(in, "f=^'f*oo'"), "[{f:'foo'}]");
 	}
 
 	@Test void a15_stringSearch_and_pattern() {
-		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
+		var in = list(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertJson(run(in, "f=+b* +*r"), "[{f:'bar'}]");
 		assertJson(run(in, "f=+'b*' +'*r'"), "[{f:'bar'}]");
 	}
 
 	@Test void a16_stringSearch_not_pattern() {
-		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
+		var in = list(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertJson(run(in, "f=b* -*r"), "[{f:'baz'}]");
 		assertJson(run(in, "f=+'b*' -'*r'"), "[{f:'baz'}]");
 	}
 
 	@Test void a17_stringSearch_caseSensitive() {
-		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
+		var in = list(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertJson(run(in, "f=F*"), "[]");
 		assertJson(run(in, "f=\"F*\""), "[]");
 		assertJson(run(in, "f='F*'"), "[{f:'foo'}]");
 	}
 
 	@Test void a18_stringSearch_malformedQuotes() {
-		Object in = list(A.create("'foo"), A.create("\"bar"), A.create("baz"));
+		var in = list(A.create("'foo"), A.create("\"bar"), A.create("baz"));
 
 		assertThrowsWithMessage(Exception.class, "Unmatched string quotes", ()->run(in, "f='*"));
 
@@ -197,25 +197,25 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	}
 
 	@Test void a19_stringSearch_regexChars() {
-		Object in = list(A.create("+\\[]{}()^$."), A.create("bar"), A.create("baz"));
+		var in = list(A.create("+\\[]{}()^$."), A.create("bar"), A.create("baz"));
 		assertJson(run(in, "f=*+*"), "[{f:'+\\\\[]{}()^$.'}]");
 		assertJson(run(in, "f='+\\\\[]{}()^$.'"), "[{f:'+\\\\[]{}()^$.'}]");
 		assertJson(run(in, "f=++\\\\[]{}()^$."), "[{f:'+\\\\[]{}()^$.'}]");
 	}
 
 	@Test void a20_stringSearch_metaChars() {
-		Object in = list(A.create("*?\\'\""), A.create("bar"), A.create("baz"));
+		var in = list(A.create("*?\\'\""), A.create("bar"), A.create("baz"));
 		assertJson(run(in, "f='\\*\\?\\\\\\'\"'"), "[{f:'*?\\\\\\'\"'}]");
 	}
 
 	@Test void a21_stringSearch_metaChars_escapedQuotes() {
-		Object in = list(A.create("'"), A.create("\""), A.create("baz"));
+		var in = list(A.create("'"), A.create("\""), A.create("baz"));
 		assertJson(run(in, "f=\\'"), "[{f:'\\''}]");
 		assertJson(run(in, "f=\\\""), "[{f:'\"'}]");
 	}
 
 	@Test void a22_stringSearch_metaChars_falseEscape() {
-		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
+		var in = list(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertJson(run(in, "f=\\f\\o\\o"), "[{f:'foo'}]");
 	}
 
@@ -236,17 +236,17 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	C[] INT_BEAN_ARRAY = {C.create(-2), C.create(-1), C.create(0), C.create(1), C.create(2), C.create(3)};
 
 	@Test void b01_intSearch_oneNumber() {
-		for (String s : a("f=1", "f = 1"))
+		for (var s : a("f=1", "f = 1"))
 			assertJson(run(INT_BEAN_ARRAY, s), "[{f:1}]");
 	}
 
 	@Test void b02_intSearch_twoNumbers() {
-		for (String s : a("f=1 2", "f = 1  2 "))
+		for (var s : a("f=1 2", "f = 1  2 "))
 			assertJson(run(INT_BEAN_ARRAY, s), "[{f:1},{f:2}]");
 	}
 
 	@Test void b03_intSearch_oneNegativeNumber() {
-		for (String s : a("f=-1", "f = -1 "))
+		for (var s : a("f=-1", "f = -1 "))
 			assertJson(run(INT_BEAN_ARRAY, s), "[{f:-1}]");
 	}
 
@@ -255,7 +255,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	}
 
 	@Test void b05_intSearch_simpleRange() {
-		for (String s : a("f=1-2", "f = 1 - 2 ", "f = 1- 2 "))
+		for (var s : a("f=1-2", "f = 1 - 2 ", "f = 1- 2 "))
 			assertJson(run(INT_BEAN_ARRAY, s), "[{f:1},{f:2}]");
 	}
 
@@ -284,47 +284,47 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	}
 
 	@Test void b12_intSearch_LT() {
-		for (String s : a("f = <0", "f<0", "f = < 0 ", "f < 0 "))
+		for (var s : a("f = <0", "f<0", "f = < 0 ", "f < 0 "))
 			assertJson(run(INT_BEAN_ARRAY, s), "[{f:-2},{f:-1}]");
 	}
 
 	@Test void b13_intSearch_LT_negativeNumber() {
-		for (String s : a("f = <-1", "f<-1", "f = < -1 ", "f < -1 "))
+		for (var s : a("f = <-1", "f<-1", "f = < -1 ", "f < -1 "))
 			assertJson(run(INT_BEAN_ARRAY, s), "[{f:-2}]");
 	}
 
 	@Test void b14_intSearch_GT() {
-		for (String s : a("f = >1", "f>1", "f = > 1 ", "f > 1 "))
+		for (var s : a("f = >1", "f>1", "f = > 1 ", "f > 1 "))
 			assertJson(run(INT_BEAN_ARRAY, s), "[{f:2},{f:3}]");
 	}
 
 	@Test void b15_intSearch_GT_negativeNumber() {
-		for (String s : a("f = >-1", "f>-1", "f = > -1 ", "f > -1 ", "f =  >  -1  ", "f >  -1  "))
+		for (var s : a("f = >-1", "f>-1", "f = > -1 ", "f > -1 ", "f =  >  -1  ", "f >  -1  "))
 			assertJson(run(INT_BEAN_ARRAY, s), "[{f:0},{f:1},{f:2},{f:3}]");
 	}
 
 	@Test void b16_intSearch_LTE() {
-		for (String s : a("f = <=0", "f<=0", "f = <= 0 ", "f <= 0 ", "f =  <=  0  "))
+		for (var s : a("f = <=0", "f<=0", "f = <= 0 ", "f <= 0 ", "f =  <=  0  "))
 			assertJson(run(INT_BEAN_ARRAY, s), "[{f:-2},{f:-1},{f:0}]");
 	}
 
 	@Test void b17_intSearch_LTE_negativeNumber() {
-		for (String s : a("f = <=-1", "f <=-1", "f = <= -1 ", "f =  <=  -1  ", "f <=  -1  "))
+		for (var s : a("f = <=-1", "f <=-1", "f = <= -1 ", "f =  <=  -1  ", "f <=  -1  "))
 			assertJson(run(INT_BEAN_ARRAY, s), "[{f:-2},{f:-1}]");
 	}
 
 	@Test void b18_intSearch_GTE() {
-		for (String s : a("f = >=1", "f >=1", "f = >= 1 ", "f >= 1 ", "f =  >=  1  "))
+		for (var s : a("f = >=1", "f >=1", "f = >= 1 ", "f >= 1 ", "f =  >=  1  "))
 			assertJson(run(INT_BEAN_ARRAY, s), "[{f:1},{f:2},{f:3}]");
 	}
 
 	@Test void b19_intSearch_GTE_negativeNumber() {
-		for (String s : a("f = >=-1", "f >=-1", "f = >= -1 ", "f >= -1 ", "f =  >=  -1  "))
+		for (var s : a("f = >=-1", "f >=-1", "f = >= -1 ", "f >= -1 ", "f =  >=  -1  "))
 			assertJson(run(INT_BEAN_ARRAY, s), "[{f:-1},{f:0},{f:1},{f:2},{f:3}]");
 	}
 
 	@Test void b20_intSearch_not_singleNumber() {
-		for (String s : a("f = !1", "f = ! 1 ", "f =  !  1  "))
+		for (var s : a("f = !1", "f = ! 1 ", "f =  !  1  "))
 			assertJson(run(INT_BEAN_ARRAY, s), "[{f:-2},{f:-1},{f:0},{f:2},{f:3}]");
 	}
 
@@ -333,7 +333,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	}
 
 	@Test void b22_intSearch_not_range_negativeNumbers() {
-		for (String s : a("f = !-2--1", "f = ! -2 - -1", "f =  !  -2  -  -1 "))
+		for (var s : a("f = !-2--1", "f = ! -2 - -1", "f =  !  -2  -  -1 "))
 			assertJson(run(INT_BEAN_ARRAY, s), "[{f:0},{f:1},{f:2},{f:3}]");
 	}
 
@@ -342,12 +342,12 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	}
 
 	@Test void b24_intSearch_empty() {
-		for (String s : a("f=", "f = ", "f =  "))
+		for (var s : a("f=", "f = ", "f =  "))
 			assertJson(run(INT_BEAN_ARRAY, s), "[{f:-2},{f:-1},{f:0},{f:1},{f:2},{f:3}]");
 	}
 
 	@Test void b25_intSearch_badSearches() {
-		String[] ss = {
+		var ss = a(
 			"f=x","(S01)",
 			"f=>x","(S02)",
 			"f=<x","(S03)",
@@ -363,10 +363,10 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			"f=<","(ES03)",
 			"f=>=","(ES04)",
 			"f=123-","(ES08)",
-			"f=123 -","(ES09)",
-		};
+			"f=123 -","(ES09)"
+		);
 
-		for (int i = 0; i < ss.length; i+=2) {
+		for (var i = 0; i < ss.length; i+=2) {
 			final int i2 = i;
 			assertThrowsWithMessage(Exception.class, ss[i+1], ()->run(INT_BEAN_ARRAY, ss[i2]));
 		}
@@ -380,8 +380,8 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 		public Calendar f;
 
 		static B[] create(String...dates) {
-			B[] bb = new B[dates.length];
-			for (int i = 0; i < dates.length; i++) {
+			var bb = new B[dates.length];
+			for (var i = 0; i < dates.length; i++) {
 				bb[i] = new B();
 				bb[i].f = DateUtils.parseISO8601Calendar(dates[i]);
 			}
@@ -390,8 +390,8 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_dateSearch_singleDate_y() {
-		B[] in = B.create("2010-01-01", "2011-01-01", "2011-01-31", "2012-01-01");
-		for (String s : a(
+		var in = B.create("2010-01-01", "2011-01-01", "2011-01-31", "2012-01-01");
+		for (var s : a(
 				"f=2011",
 				"f = 2011 ",
 				"f = '2011' ",
@@ -401,8 +401,8 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	}
 
 	@Test void c02_dateSearch_singleDate_ym() {
-		B[] in = B.create("2010-01-01", "2011-01-01", "2011-01-31", "2012-01-01");
-		for (String s : a(
+		var in = B.create("2010-01-01", "2011-01-01", "2011-01-31", "2012-01-01");
+		for (var s : a(
 				"f=2011-01",
 				"f = 2011-01 ",
 				"f='2011-01'",
@@ -412,29 +412,29 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	}
 
 	@Test void c03_dateSearch_singleDate_ymd() {
-		B[] in = B.create("2010-01-01", "2011-01-01", "2011-01-31", "2012-01-01");
+		var in = B.create("2010-01-01", "2011-01-01", "2011-01-31", "2012-01-01");
 		assertSerialized(run(in, "f=2011-01-01"), ws, "[{f:'2011-01-01T00:00:00'}]");
 	}
 
 
 	@Test void c04_dateSearch_singleDate_ymdh() {
-		B[] in = B.create("2011-01-01T11:15:59", "2011-01-01T12:00:00", "2011-01-01T12:59:59", "2011-01-01T13:00:00");
+		var in = B.create("2011-01-01T11:15:59", "2011-01-01T12:00:00", "2011-01-01T12:59:59", "2011-01-01T13:00:00");
 		assertSerialized(run(in, "f=2011-01-01T12"), ws, "[{f:'2011-01-01T12:00:00'},{f:'2011-01-01T12:59:59'}]");
 	}
 
 	@Test void c05_dateSearch_singleDate_ymdhm() {
-		B[] in = B.create("2011-01-01T12:29:59", "2011-01-01T12:30:00", "2011-01-01T12:30:59", "2011-01-01T12:31:00");
+		var in = B.create("2011-01-01T12:29:59", "2011-01-01T12:30:00", "2011-01-01T12:30:59", "2011-01-01T12:31:00");
 		assertSerialized(run(in, "f=2011-01-01T12:30"), ws, "[{f:'2011-01-01T12:30:00'},{f:'2011-01-01T12:30:59'}]");
 	}
 
 	@Test void c06_dateSearch_singleDate_ymdhms() {
-		B[] in = B.create("2011-01-01T12:30:29", "2011-01-01T12:30:30", "2011-01-01T12:30:31");
+		var in = B.create("2011-01-01T12:30:29", "2011-01-01T12:30:30", "2011-01-01T12:30:31");
 		assertSerialized(run(in, "f=2011-01-01T12:30:30"), ws, "[{f:'2011-01-01T12:30:30'}]");
 	}
 
 	@Test void c07_dateSearch_openEndedRanges_y() {
-		B[] in = B.create("2000-12-31", "2001-01-01");
-		for (String s : a(
+		var in = B.create("2000-12-31", "2001-01-01");
+		for (var s : a(
 				"f>2000",
 				"f > 2000 ",
 				"f>'2000'",
@@ -449,7 +449,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 				"f >= \"2001\" "
 			))
 			assertSerialized(run(in, s), ws, "[{f:'2001-01-01T00:00:00'}]");
-		for (String s : a(
+		for (var s : a(
 				"f<2001",
 				"f < 2001 ",
 				"f<'2001'",
@@ -467,21 +467,21 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	}
 
 	@Test void c08_dateSearch_openEndedRanges_toMinute() {
-		B[] in = B.create("2011-01-01T12:29:59", "2011-01-01T12:30:00");
+		var in = B.create("2011-01-01T12:29:59", "2011-01-01T12:30:00");
 		assertSerialized(run(in, "f>=2011-01-01T12:30"), ws, "[{f:'2011-01-01T12:30:00'}]");
 		assertSerialized(run(in, "f<2011-01-01T12:30"), ws, "[{f:'2011-01-01T12:29:59'}]");
 	}
 
 	@Test void c09_dateSearch_openEndedRanges_toSecond() {
-		B[] in = B.create("2011-01-01T12:30:59", "2011-01-01T12:31:00");
+		var in = B.create("2011-01-01T12:30:59", "2011-01-01T12:31:00");
 		assertSerialized(run(in, "f>2011-01-01T12:30"), ws, "[{f:'2011-01-01T12:31:00'}]");
 		assertSerialized(run(in, "f<=2011-01-01T12:30"), ws, "[{f:'2011-01-01T12:30:59'}]");
 	}
 
 	@Test void c10_dateSearch_closedRanges() {
-		B[] in = B.create("2000-12-31T23:59:59", "2001-01-01T00:00:00", "2003-06-30T23:59:59", "2003-07-01T00:00:00");
+		var in = B.create("2000-12-31T23:59:59", "2001-01-01T00:00:00", "2003-06-30T23:59:59", "2003-07-01T00:00:00");
 
-		for (String s : a(
+		for (var s : a(
 				"f= 2001 - 2003-06-30 ",
 				"f= 2001 - 2003-06-30",
 				"f='2001'-'2003-06-30'",
@@ -495,7 +495,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 			))
 			assertSerialized(run(in, s), ws, "[{f:'2001-01-01T00:00:00'},{f:'2003-06-30T23:59:59'}]");
 
-		for (String s : a(
+		for (var s : a(
 			"f= 2001 - 2003-06-30 2000",
 			"f= 2001 - 2003-06-30 '2000'",
 			"f= 2001 - 2003-06-30 \"2000\"",
@@ -522,8 +522,8 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	}
 
 	@Test void c11_dateSearch_or1() {
-		B[] in = B.create("2000-12-31", "2001-01-01", "2001-12-31", "2002-01-01");
-		for (String s : a(
+		var in = B.create("2000-12-31", "2001-01-01", "2001-12-31", "2002-01-01");
+		for (var s : a(
 				"f=2001 2003 2005",
 				"f= 2001  2003  2005 ",
 				"f='2001' '2003' '2005'",
@@ -535,8 +535,8 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	}
 
 	@Test void c12_dateSearch_or2() {
-		B[] in = B.create("2002-12-31", "2003-01-01", "2003-12-31", "2004-01-01");
-		for (String s : a(
+		var in = B.create("2002-12-31", "2003-01-01", "2003-12-31", "2004-01-01");
+		for (var s : a(
 				"f=2001 2003 2005",
 				"f= 2001  2003  2005 ",
 				"f='2001' '2003' '2005'",
@@ -548,8 +548,8 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	}
 
 	@Test void c13_dateSearch_or3() {
-		B[] in = B.create("2004-12-31", "2005-01-01", "2005-12-31", "2006-01-01");
-		for (String s : a(
+		var in = B.create("2004-12-31", "2005-01-01", "2005-12-31", "2006-01-01");
+		for (var s : a(
 				"f=2001 2003 2005",
 				"f= 2001  2003  2005 ",
 				"f='2001' '2003' '2005'",
@@ -561,8 +561,8 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 	}
 
 	@Test void c14_dateSearch_or_singleAndRange() {
-		B[] in = B.create("2000-12-31", "2001-01-01", "2002-12-31", "2003-01-01");
-		for (String s : a(
+		var in = B.create("2000-12-31", "2001-01-01", "2002-12-31", "2003-01-01");
+		for (var s : a(
 				"f=2001 >2002",
 				"f= 2001   >2002 ",
 				"f='2001' >'2002'",
@@ -589,7 +589,7 @@ public class ObjectSearcher_Test extends SimpleTestBase {
 				"f= >=\"2003\"  \"2001\" "
 			))
 			assertSerialized(run(in, s), ws, "[{f:'2001-01-01T00:00:00'},{f:'2003-01-01T00:00:00'}]");
-		for (String s : a(
+		for (var s : a(
 				"f=<2001 2003",
 				"f= <2001  2003 ",
 				"f=<'2001' '2003'",

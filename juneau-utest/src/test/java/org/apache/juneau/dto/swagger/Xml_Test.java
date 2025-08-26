@@ -13,7 +13,7 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
@@ -95,7 +95,7 @@ class Xml_Test extends SimpleTestBase {
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
 
-		String s = "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}";
+		var s = "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}";
 		assertJson(JsonParser.DEFAULT.parse(s, Xml.class), s);
 	}
 

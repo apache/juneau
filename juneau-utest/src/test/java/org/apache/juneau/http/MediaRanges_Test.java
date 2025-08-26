@@ -14,7 +14,7 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.MediaRanges.*;
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -25,11 +25,8 @@ class MediaRanges_Test extends SimpleTestBase {
 	// Verifies that media type parameters are distinguished from media range extensions.
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void a01_extensions() {
-		MediaRanges x1;
-		MediaRange x2;
-
-		x1 = of("text/json");
-		x2 = x1.getRange(0);
+		var x1 = of("text/json");
+		var x2 = x1.getRange(0);
 		assertString("text/json", x2);
 		assertJson(x2.getParameters(), "[]");
 		assertString("1.0", x2.getQValue());
@@ -103,7 +100,7 @@ class MediaRanges_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_hasSubtypePart() {
-		MediaRanges mr = of("text/json+x,text/foo+y;q=0.0");
+		var mr = of("text/json+x,text/foo+y;q=0.0");
 		assertTrue(mr.hasSubtypePart("json"));
 		assertTrue(mr.hasSubtypePart("x"));
 		assertFalse(mr.hasSubtypePart("foo"));
@@ -131,18 +128,18 @@ class MediaRanges_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_match() {
-		MediaRanges x1 = of("text/json");
+		var x1 = of("text/json");
 		assertEquals(0, x1.match(alist(MediaType.of("text/json"))));
 		assertEquals(-1, x1.match(alist(MediaType.of("text/foo"))));
 		assertEquals(-1, x1.match(alist((MediaType)null)));
 		assertEquals(-1, x1.match(null));
 
-		MediaRanges x2 = of("");
+		var x2 = of("");
 		assertEquals(-1, x2.match(alist(MediaType.of("text/json"))));
 	}
 
 	@Test void a05_getRanges() {
-		MediaRanges x1 = of("text/json");
+		var x1 = of("text/json");
 		assertJson(x1.toList(), "['text/json']");
 	}
 }

@@ -105,7 +105,7 @@ class RoundTripLargeObjects_Test extends SimpleTestBase {
 		var s = t.getSerializer();
 		var p = t.getParser();
 		System.err.println("\n---Speed test on " + t.label + "---"); // NOT DEBUG
-		Object r = "";
+		var r = (Object)"";
 
 		// Initialization run.
 		r = s.serialize(a);
@@ -131,7 +131,7 @@ class RoundTripLargeObjects_Test extends SimpleTestBase {
 			var a = new A();
 			a.a1Map = new A1Map();
 			a.a1List = new A1List();
-			for (int i = 0; i < SIZE_PARAM; i++) {
+			for (var i = 0; i < SIZE_PARAM; i++) {
 				a.a1Map.put(String.valueOf(i), new A1());
 				a.a1List.add(new A1());
 			}
@@ -147,4 +147,4 @@ class RoundTripLargeObjects_Test extends SimpleTestBase {
 	public static class A1Map extends LinkedHashMap<String,A1> {}
 
 	public static class A1List extends LinkedList<A1> {}
-}
+}

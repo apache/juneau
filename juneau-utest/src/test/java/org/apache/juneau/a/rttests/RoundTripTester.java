@@ -14,17 +14,17 @@ package org.apache.juneau.a.rttests;
 
 import static java.util.Collections.*;
 import static java.util.Optional.*;
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
+@SuppressWarnings("unchecked")
 public class RoundTripTester {
 
 	public static Builder create(String label) {
@@ -149,10 +149,10 @@ public class RoundTripTester {
 			System.err.println("Serialized contents from ["+label+"]...\n---START---\n" + (out instanceof byte[] ? StringUtils.toReadableBytes((byte[])out) : out) + "\n---END---\n"); // NOT DEBUG
 
 		if (validateXmlWhitespace)
-			TestUtils.checkXmlWhitespace(out.toString());
+			checkXmlWhitespace(out.toString());
 
 		if (validateXml)
-			TestUtils.validateXml(object, (XmlSerializer)s);
+			validateXml(object, (XmlSerializer)s);
 
 		return out;
 	}

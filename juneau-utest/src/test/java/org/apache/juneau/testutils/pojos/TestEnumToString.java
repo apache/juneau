@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.testutils.pojos;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.TestUtils.*;
 
 public enum TestEnumToString {
 

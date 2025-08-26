@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.function.*;

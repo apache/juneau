@@ -22,7 +22,6 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.serializer.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -69,7 +68,7 @@ public class ObjectAssertion_Test {
 	@Test
 	public void ba01a_asString() {
 		var x = 1;
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(x).asString().is("1");
 		test(nil).asString().isNull();
 	}
@@ -77,8 +76,8 @@ public class ObjectAssertion_Test {
 	@Test
 	public void ba01b_asString_wSerializer() {
 		var x = 1;
-		var nil = (Integer)null;
-		WriterSerializer s = Json5Serializer.DEFAULT;
+		var nil = n(Integer.class);
+		var s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("1");
 		test(nil).asString(s).is("null");
 	}
@@ -92,7 +91,7 @@ public class ObjectAssertion_Test {
 	@Test
 	public void ba02_asJson() {
 		var x = 1;
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(x).asJson().is("1");
 		test(nil).asJson().is("null");
 		assertThrown(()->test(new A2()).asJson()).asMessages().isAny(contains("Could not call getValue() on property 'foo'"));
@@ -101,8 +100,8 @@ public class ObjectAssertion_Test {
 	@Test
 	public void ba03_asJsonSorted() {
 		var x1 = a(2,1);
-		var nil = (Integer[])null;
-		Object x2 = A1;
+		var nil = na(Integer.class);
+		var x2 = A1;
 		test(x1).asJsonSorted().is("[1,2]");
 		test(x2).asJsonSorted().is("{a:1,b:2}");
 		test(nil).asJsonSorted().is("null");
@@ -110,14 +109,14 @@ public class ObjectAssertion_Test {
 
 	@Test
 	public void ba04_apply() {
-		Integer x1 = 1;
+		var x1 = 1;
 		test(x1).asTransformed(x -> x + 1).is(2);
 	}
 
 	@Test
 	public void ba05_asAny() {
 		var x = 1;
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(x).asAny().asInteger().is(1);
 		test(nil).asAny().isNull();
 	}
@@ -129,7 +128,7 @@ public class ObjectAssertion_Test {
 	@Test
 	public void ca01_exists() {
 		var x = 1;
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(x).isExists().isExists();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
@@ -137,7 +136,7 @@ public class ObjectAssertion_Test {
 	@Test
 	public void ca02_isNull() {
 		var x = 1;
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(nil).isNull();
 		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
@@ -145,7 +144,7 @@ public class ObjectAssertion_Test {
 	@Test
 	public void ca03_isNotNull() {
 		var x = 1;
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(x).isNotNull();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
@@ -155,7 +154,7 @@ public class ObjectAssertion_Test {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -166,7 +165,7 @@ public class ObjectAssertion_Test {
 
 	@Test
 	public void ca04b_is_predicate() {
-		Integer x1 = 1;
+		var x1 = 1;
 		test(x1).is(x->x==1);
 		test(x1).is((Predicate<Integer>)null);
 		assertThrown(()->test(x1).is(x->x==2)).asMessage().asOneLine().is("Unexpected value: '1'.");
@@ -178,7 +177,7 @@ public class ObjectAssertion_Test {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -191,7 +190,7 @@ public class ObjectAssertion_Test {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[2]'.  Actual='1'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='1'.");
@@ -203,7 +202,7 @@ public class ObjectAssertion_Test {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -215,7 +214,7 @@ public class ObjectAssertion_Test {
 	public void ca08_isSame() {
 		var x1 = Integer.valueOf(999);
 		var x1a = Integer.valueOf(999);
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='999(Integer@*)'.  Actual='999(Integer@*)'.");
@@ -228,7 +227,7 @@ public class ObjectAssertion_Test {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
 		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='2'.  Actual='1'.");
@@ -241,7 +240,7 @@ public class ObjectAssertion_Test {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
 		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='2'.  Actual='1'.");
@@ -254,8 +253,8 @@ public class ObjectAssertion_Test {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = (Integer)null;
-		WriterSerializer s = Json5Serializer.DEFAULT;
+		var nil = n(Integer.class);
+		var s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
 		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='2'.  Actual='1'.");
@@ -266,7 +265,7 @@ public class ObjectAssertion_Test {
 	@Test
 	public void ca12_isType() {
 		var x = 1;
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(x).isType(Integer.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Integer'.");
@@ -277,7 +276,7 @@ public class ObjectAssertion_Test {
 	@Test
 	public void ca13_isExactType() {
 		var x = 1;
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(x).isExactType(Integer.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.lang.Integer'.");
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Integer'.");
@@ -288,7 +287,7 @@ public class ObjectAssertion_Test {
 	@Test
 	public void ca14_isString() {
 		var x = 1;
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(x).isString("1");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='1'.");
@@ -299,7 +298,7 @@ public class ObjectAssertion_Test {
 	@Test
 	public void ca15_isJson() {
 		var x = 1;
-		var nil = (Integer)null;
+		var nil = n(Integer.class);
 		test(x).isJson("1");
 		test(nil).isJson("null");
 		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='1'.");

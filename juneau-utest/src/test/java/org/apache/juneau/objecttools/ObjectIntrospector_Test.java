@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.objecttools;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -23,10 +24,9 @@ class ObjectIntrospector_Test extends SimpleTestBase {
 	// testBasic
 	//====================================================================================================
 	@Test void a01_Basic() throws Exception {
-		String in = null;
-		Object r;
+		var in = n(String.class);
 
-		r = new ObjectIntrospector(in, null).invokeMethod("substring(int,int)", "[3,6]");
+		var r = new ObjectIntrospector(in, null).invokeMethod("substring(int,int)", "[3,6]");
 		assertNull(r);
 
 		in = "foobar";
@@ -50,4 +50,4 @@ class ObjectIntrospector_Test extends SimpleTestBase {
 		r = new ObjectIntrospector("foobar").invokeMethod(String.class.getMethod("toString"), null);
 		assertEquals("foobar", r);
 	}
-}
+}

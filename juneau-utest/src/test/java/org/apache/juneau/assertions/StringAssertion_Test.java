@@ -14,6 +14,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -21,7 +22,6 @@ import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.serializer.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -63,7 +63,7 @@ public class StringAssertion_Test {
 	@Test
 	public void ba01a_asString() {
 		var x = "1";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).asString().is("1");
 		test(nil).asString().isNull();
 	}
@@ -71,8 +71,8 @@ public class StringAssertion_Test {
 	@Test
 	public void ba01b_asString_wSerializer() {
 		var x = "1";
-		var nil = (String)null;
-		WriterSerializer s = Json5Serializer.DEFAULT;
+		var nil = n(String.class);
+		var s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("'1'");
 		test(nil).asString(s).is("null");
 	}
@@ -86,7 +86,7 @@ public class StringAssertion_Test {
 	@Test
 	public void ba02_asJson() {
 		var x = "1";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).asJson().is("'1'");
 		test(nil).asJson().is("null");
 	}
@@ -94,7 +94,7 @@ public class StringAssertion_Test {
 	@Test
 	public void ba03_asJsonSorted() {
 		var x = "1";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).asJsonSorted().is("'1'");
 		test(nil).asJsonSorted().is("null");
 	}
@@ -109,7 +109,7 @@ public class StringAssertion_Test {
 	@Test
 	public void bb01_replaceAll() {
 		var x = "foobar";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).asReplaceAll("fo+","bar").is("barbar").is("foobar");
 		test(nil).asReplaceAll("fo+","bar").isNull();
 		assertThrows(IllegalArgumentException.class, ()->test(x).asReplaceAll(null,""), "Argument 'regex' cannot be null.");
@@ -119,7 +119,7 @@ public class StringAssertion_Test {
 	@Test
 	public void bb02_replace() {
 		var x = "foobar";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).asReplace("foo","bar").is("barbar").is("foobar");
 		test(nil).asReplace("foo","bar").isNull();
 		assertThrows(IllegalArgumentException.class, ()->test(x).asReplace(null,"bar").isNull(), "Argument 'target' cannot be null.");
@@ -129,7 +129,7 @@ public class StringAssertion_Test {
 	@Test
 	public void bb03_urlDecode() {
 		var x = "foo%20bar";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).asUrlDecode().is("foo bar").is("foo%20bar");
 		test(nil).asUrlDecode().isNull();
 	}
@@ -137,7 +137,7 @@ public class StringAssertion_Test {
 	@Test
 	public void bb04_lc() {
 		var x = "FOOBAR";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).asLc().is("foobar").is("FOOBAR");
 		test(nil).asLc().isNull();
 	}
@@ -145,7 +145,7 @@ public class StringAssertion_Test {
 	@Test
 	public void bb05_uc() {
 		var x = "foobar";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).asUc().is("FOOBAR").is("foobar");
 		test(nil).asUc().isNull();
 	}
@@ -153,7 +153,7 @@ public class StringAssertion_Test {
 	@Test
 	public void bb06_lines() {
 		var x = "foo\nbar";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).asLines().isHas("foo","bar");
 		test(nil).asLines().isNull();
 	}
@@ -161,7 +161,7 @@ public class StringAssertion_Test {
 	@Test
 	public void bb07_oneLine() {
 		var x = "foo  bar";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).asOneLine().is("foo  bar");
 		test(nil).asOneLine().isNull();
 	}
@@ -173,7 +173,7 @@ public class StringAssertion_Test {
 	@Test
 	public void ca01_exists() {
 		var x = "1";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).isExists().isExists();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
@@ -181,7 +181,7 @@ public class StringAssertion_Test {
 	@Test
 	public void ca02_isNull() {
 		var x = "1";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(nil).isNull();
 		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
@@ -189,7 +189,7 @@ public class StringAssertion_Test {
 	@Test
 	public void ca03_isNotNull() {
 		var x = "1";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).isNotNull();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
@@ -199,7 +199,7 @@ public class StringAssertion_Test {
 		var x1 = "1";
 		var x1a = "1";
 		var x2 = "2";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -221,7 +221,7 @@ public class StringAssertion_Test {
 		var x1 = "1";
 		var x1a = "1";
 		var x2 = "2";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -234,7 +234,7 @@ public class StringAssertion_Test {
 		var x1 = "1";
 		var x1a = "1";
 		var x2 = "2";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[2]'.  Actual='1'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='1'.");
@@ -246,7 +246,7 @@ public class StringAssertion_Test {
 		var x1 = "1";
 		var x1a = "1";
 		var x2 = "2";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -258,7 +258,7 @@ public class StringAssertion_Test {
 	public void ca08_isSame() {
 		var x1 = new String("1");
 		var x1a = new String("1");
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='1(String@*)'.  Actual='1(String@*)'.");
@@ -271,7 +271,7 @@ public class StringAssertion_Test {
 		var x1 = "1";
 		var x1a = "1";
 		var x2 = "2";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
 		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''2''.  Actual=''1''.");
@@ -284,7 +284,7 @@ public class StringAssertion_Test {
 		var x1 = "1";
 		var x1a = "1";
 		var x2 = "2";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
 		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''2''.  Actual=''1''.");
@@ -297,8 +297,8 @@ public class StringAssertion_Test {
 		var x1 = "1";
 		var x1a = "1";
 		var x2 = "2";
-		var nil = (String)null;
-		WriterSerializer s = Json5Serializer.DEFAULT;
+		var nil = n(String.class);
+		var s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
 		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''2''.  Actual=''1''.");
@@ -309,7 +309,7 @@ public class StringAssertion_Test {
 	@Test
 	public void ca12_isType() {
 		var x = "1";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).isType(String.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(Integer.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Integer'.  Actual='java.lang.String'.");
@@ -320,7 +320,7 @@ public class StringAssertion_Test {
 	@Test
 	public void ca13_isExactType() {
 		var x = "1";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).isExactType(String.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.lang.String'.");
 		assertThrown(()->test(x).isExactType(Integer.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Integer'.  Actual='java.lang.String'.");
@@ -331,7 +331,8 @@ public class StringAssertion_Test {
 	@Test
 	public void ca14_isString() {
 		var x = "1";
-		var nil = (String)null;
+		var nil = n(String.class);
+
 		test(x).isString("1");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='1'.");
@@ -342,7 +343,8 @@ public class StringAssertion_Test {
 	@Test
 	public void ca15_isJson() {
 		var x = "1";
-		var nil = (String)null;
+		var nil = n(String.class);
+
 		test(x).isJson("'1'");
 		test(nil).isJson("null");
 		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual=''1''.");
@@ -353,7 +355,8 @@ public class StringAssertion_Test {
 	@Test
 	public void cb01_isIc() {
 		var x = "foobar";
-		var nil = (String)null;
+		var nil = n(String.class);
+
 		test(x).isIc("FOOBAR");
 		assertThrown(()->test(x).isIc("FOOBAZ")).asMessage().asOneLine().is("String differed at position 5.  Expect='FOOBAZ'.  Actual='foobar'.");
 		assertThrown(()->test(nil).isIc("FOOBAZ")).asMessage().asOneLine().is("String differed at position 0.  Expect='FOOBAZ'.  Actual='null'.");
@@ -363,7 +366,8 @@ public class StringAssertion_Test {
 	@Test
 	public void cb02_isNotIc() {
 		var x = "foobar";
-		var nil = (String)null;
+		var nil = n(String.class);
+
 		test(x).isNotIc("foobaz");
 		assertThrown(()->test(x).isNotIc("Foobar")).asMessage().asOneLine().is("String equaled unexpected.  Value='foobar'.");
 		assertThrown(()->test(nil).isNotIc(null)).asMessage().asOneLine().is("String equaled unexpected.  Value='null'.");
@@ -374,7 +378,8 @@ public class StringAssertion_Test {
 	@Test
 	public void cb03_isLines() {
 		var x = "foo\nbar\nbaz";
-		var nil = (String)null;
+		var nil = n(String.class);
+
 		test(x).isLines("foo","bar","baz");
 		assertThrows(IllegalArgumentException.class, ()->test(nil).isLines((String[])null), "Argument 'lines' cannot be null.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isLines((String)null), "Value was null.");
@@ -386,7 +391,8 @@ public class StringAssertion_Test {
 		var x1 = "foo\nbar\nbaz";
 		var x2 = "foo";
 		var empty = "";
-		var nil = (String)null;
+		var nil = n(String.class);
+
 		test(x1).isSortedLines("bar","foo","baz");
 		assertThrows(IllegalArgumentException.class, ()->test(nil).isSortedLines((String[])null), "Argument 'lines' cannot be null.");
 		test(empty).isSortedLines((String)null);
@@ -400,7 +406,7 @@ public class StringAssertion_Test {
 	@Test
 	public void cb05_contains() {
 		var x = "foobar";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).isContains("foo","bar");
 		assertThrown(()->test(x).isContains("foo","baz")).asMessage().asOneLine().is("String did not contain expected substring.  Substring='baz'.  Value='foobar'.");
 		test(nil).isContains();
@@ -412,7 +418,7 @@ public class StringAssertion_Test {
 	@Test
 	public void cb06_doesNotContain() {
 		var x = "foobar";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).isNotContains("baz","qux");
 		assertThrown(()->test(x).isNotContains("foo","baz")).asMessage().asOneLine().is("String contained unexpected substring.  Substring='foo'.  Value='foobar'.");
 		test(nil).isNotContains();
@@ -425,7 +431,7 @@ public class StringAssertion_Test {
 	public void cb07_isEmpty() {
 		var x = "1";
 		var empty = "";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(empty).isEmpty();
 		test(nil).isEmpty();
 		assertThrown(()->test(x).isEmpty()).asMessage().asOneLine().is("String was not empty.  Value='1'.");
@@ -435,7 +441,7 @@ public class StringAssertion_Test {
 	public void cb08_isNotEmpty() {
 		var x = "1";
 		var empty = "";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).isNotEmpty();
 		assertThrows(BasicAssertionError.class, ()->test(empty).isNotEmpty(), "String was empty.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotEmpty(), "String was null.");
@@ -445,7 +451,7 @@ public class StringAssertion_Test {
 	public void cb09_matches() {
 		var x = "foo";
 		var empty = "";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).isMatches("fo*");
 		assertThrown(()->test(x).isMatches("b*")).asMessage().asOneLine().is("String did not match expected pattern.  Pattern='\\Qb\\E.*\\Q\\E'.  Value='foo'.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isMatches("b*"), "Value was null.");
@@ -456,7 +462,7 @@ public class StringAssertion_Test {
 	public void cb10_regex() {
 		var x = "foo";
 		var empty = "";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).isPattern("fo+");
 		assertThrown(()->test(x).isPattern("bar")).asMessage().asOneLine().is("String did not match expected pattern.  Pattern='bar'.  Value='foo'.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isPattern("fo+"), "Value was null.");
@@ -467,7 +473,7 @@ public class StringAssertion_Test {
 	public void cb10b_regex_wFlags() {
 		var x = "foo";
 		var empty = "";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).isPattern("FO+", Pattern.CASE_INSENSITIVE);
 		assertThrown(()->test(x).isPattern("bar")).asMessage().asOneLine().is("String did not match expected pattern.  Pattern='bar'.  Value='foo'.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isPattern("fo+"), "Value was null.");
@@ -478,7 +484,7 @@ public class StringAssertion_Test {
 	public void cb10c_regex_wPattern() {
 		var x = "foo";
 		var empty = "";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).isPattern(Pattern.compile("FO+", Pattern.CASE_INSENSITIVE));
 		assertThrown(()->test(x).isPattern("bar")).asMessage().asOneLine().is("String did not match expected pattern.  Pattern='bar'.  Value='foo'.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isPattern("fo+"), "Value was null.");
@@ -488,7 +494,7 @@ public class StringAssertion_Test {
 	@Test
 	public void cb12_startsWith() {
 		var x = "foo";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).isStartsWith("fo");
 		assertThrown(()->test(x).isStartsWith("x")).asMessage().asOneLine().is("String did not start with expected substring.  Substring='x'.  Value='foo'.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isStartsWith("x"), "Value was null.");
@@ -497,7 +503,7 @@ public class StringAssertion_Test {
 	@Test
 	public void cb13_endsWith() {
 		var x = "foo";
-		var nil = (String)null;
+		var nil = n(String.class);
 		test(x).isEndsWith("oo");
 		assertThrown(()->test(x).isEndsWith("x")).asMessage().asOneLine().is("String did not end with expected substring.  Substring='x'.  Value='foo'.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isEndsWith("x"), "Value was null.");

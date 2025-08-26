@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.Context.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
@@ -70,12 +70,12 @@ class RestClient_Config_Context_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_appendToStringObject() throws Exception {
-		A3a x = client().swaps(A3b.class).build().post("/echoBody",A3a.get()).run().cacheContent().assertContent("1").getContent().as(A3a.class);
+		var x = client().swaps(A3b.class).build().post("/echoBody",A3a.get()).run().cacheContent().assertContent("1").getContent().as(A3a.class);
 		assertEquals(1,x.foo);
 	}
 
 	@Test void a04_prependToStringObject() throws Exception {
-		A3a x = client().swaps(A3b.class).build().post("/echoBody",A3a.get()).run().cacheContent().assertContent("1").getContent().as(A3a.class);
+		var x = client().swaps(A3b.class).build().post("/echoBody",A3a.get()).run().cacheContent().assertContent("1").getContent().as(A3a.class);
 		assertEquals(1,x.foo);
 	}
 

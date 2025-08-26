@@ -14,10 +14,11 @@ package org.apache.juneau.http;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import static org.apache.juneau.TestUtils.*;
 
 class HttpHeader_Test extends SimpleTestBase {
 
 	@Test void a01_basic() {
-		TestUtils.assertNotThrown(HttpMethod::new);
+		assertNotThrown(HttpMethod::new);
 	}
 }

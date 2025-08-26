@@ -37,46 +37,46 @@ class SerializedPart_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_type() {
-		SerializedPart x1 = serializedPart("Foo",2).type(HEADER).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
+		var x1 = serializedPart("Foo",2).type(HEADER).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
 		assertThrowsWithMessage(BasicRuntimeException.class, "Validation error on request HEADER part 'Foo'='2'", x1::toString);
 	}
 
 	@Test void a03_serializer() {
-		SerializedPart x1 = serializedPart("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null);
+		var x1 = serializedPart("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null);
 		assertEquals("[bar, baz]", x1.getValue());
-		SerializedPart x2 = serializedPart("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
+		var x2 = serializedPart("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
 		assertEquals("bar,baz", x2.getValue());
-		SerializedPart x3 = serializedPart("Foo",alist("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
+		var x3 = serializedPart("Foo",alist("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
 		assertEquals("[bar, baz]", x3.getValue());
-		SerializedPart x4 = serializedPart("Foo",alist("bar","baz")).serializer(OAPI_SERIALIZER).copyWith(null,null);
+		var x4 = serializedPart("Foo",alist("bar","baz")).serializer(OAPI_SERIALIZER).copyWith(null,null);
 		assertEquals("bar,baz", x4.getValue());
-		SerializedPart x5 = serializedPart("Foo",alist("bar","baz")).copyWith(OAPI_SERIALIZER.getPartSession(),null);
+		var x5 = serializedPart("Foo",alist("bar","baz")).copyWith(OAPI_SERIALIZER.getPartSession(),null);
 		assertEquals("bar,baz", x5.getValue());
 	}
 
 	@Test void a04_skipIfEmpty() {
-		SerializedPart x1 = serializedPart("Foo",null).skipIfEmpty();
+		var x1 = serializedPart("Foo",null).skipIfEmpty();
 		assertNull(x1.getValue());
-		SerializedPart x2 = serializedPart("Foo","").skipIfEmpty();
+		var x2 = serializedPart("Foo","").skipIfEmpty();
 		assertNull(x2.getValue());
-		SerializedPart x3 = serializedPart("Foo","").schema(schema(STRING)._default("bar").build()).serializer(OAPI_SERIALIZER).skipIfEmpty();
+		var x3 = serializedPart("Foo","").schema(schema(STRING)._default("bar").build()).serializer(OAPI_SERIALIZER).skipIfEmpty();
 		assertThrowsWithMessage(Exception.class, "Empty value not allowed.", x3::getValue);
 	}
 
 	@Test void a05_getValue_defaults() {
-		SerializedPart x1 = serializedPart("Foo",null).schema(schema(INTEGER)._default("1").build()).serializer(OAPI_SESSION);
+		var x1 = serializedPart("Foo",null).schema(schema(INTEGER)._default("1").build()).serializer(OAPI_SESSION);
 		assertEquals("1", x1.getValue());
 
-		SerializedPart x2 = serializedPart("Foo",null).schema(schema(STRING).required().allowEmptyValue().build()).serializer(OAPI_SESSION);
+		var x2 = serializedPart("Foo",null).schema(schema(STRING).required().allowEmptyValue().build()).serializer(OAPI_SESSION);
 		assertNull(x2.getValue());
 
-		SerializedPart x3 = serializedPart("Foo",null).schema(schema(STRING).required(false).build()).serializer(OAPI_SESSION);
+		var x3 = serializedPart("Foo",null).schema(schema(STRING).required(false).build()).serializer(OAPI_SESSION);
 		assertNull(x3.getValue());
 
-		SerializedPart x4 = serializedPart("Foo",null).schema(schema(STRING).required().build()).serializer(OAPI_SESSION);
+		var x4 = serializedPart("Foo",null).schema(schema(STRING).required().build()).serializer(OAPI_SESSION);
 		assertThrowsWithMessage(Exception.class, "Required value not provided.", x4::getValue);
 
-		SerializedPart x5 = serializedPart("Foo",null).schema(schema(STRING).required().build()).serializer(new BadPartSerializerSession());
+		var x5 = serializedPart("Foo",null).schema(schema(STRING).required().build()).serializer(new BadPartSerializerSession());
 		assertThrowsWithMessage(Exception.class, "Bad", x5::getValue);
 	}
 

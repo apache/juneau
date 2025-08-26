@@ -14,7 +14,7 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -2557,7 +2557,7 @@ class BasicHtml_Test extends SimpleTestBase {
 	void a1_serializeNormal(Input input) {
 		try {
 			var r = s1.serialize(input.in);
-			assertEquals(input.label + " serialize-normal failed", input.e1, r);
+			assertEquals(input.e1, r, fs("{0} serialize-normal failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2572,7 +2572,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			var r = s1.serialize(input.in);
 			var o = parser.parse(r, input.type);
 			r = s1.serialize(o);
-			assertEquals(input.label + " parse-normal failed", input.e1, r);
+			assertEquals(input.e1, r, fs("{0} parse-normal failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2599,7 +2599,7 @@ class BasicHtml_Test extends SimpleTestBase {
 	void b1_serializeReadable(Input input) {
 		try {
 			var r = s2.serialize(input.in);
-			assertEquals(input.label + " serialize-readable failed", input.e2, r);
+			assertEquals(input.e2, r, fs("{0} serialize-readable failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2614,7 +2614,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			var r = s2.serialize(input.in);
 			var o = parser.parse(r, input.type);
 			r = s2.serialize(o);
-			assertEquals(input.label + " parse-readable failed", input.e2, r);
+			assertEquals(input.e2, r, fs("{0} parse-readable failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2641,7 +2641,7 @@ class BasicHtml_Test extends SimpleTestBase {
 	void c1_serializeAbridged(Input input) {
 		try {
 			var r = s3.serialize(input.in);
-			assertEquals(input.label + " serialize-addRootType failed", input.e3, r);
+			assertEquals(input.e3, r, fs("{0} serialize-addRootType failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2656,7 +2656,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			var r = s3.serialize(input.in);
 			var o = parser.parse(r, input.type);
 			r = s3.serialize(o);
-			assertEquals(input.label + " parse-addRootType failed", input.e3, r);
+			assertEquals(input.e3, r, fs("{0} parse-addRootType failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {

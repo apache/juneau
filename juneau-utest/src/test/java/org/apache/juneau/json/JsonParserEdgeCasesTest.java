@@ -15,7 +15,8 @@ package org.apache.juneau.json;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.format;
-import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
@@ -370,7 +371,7 @@ public class JsonParserEdgeCasesTest {
 
 	@Test
 	public void testStrict() throws Exception {
-		JsonParser p = JsonParser.DEFAULT_STRICT;
+		var p = JsonParser.DEFAULT_STRICT;
 		if (name.contains("utf16LE"))
 			p = p.copy().streamCharset(Charset.forName("UTF-16LE")).build();
 		else if (name.contains("utf16BE"))
@@ -387,10 +388,10 @@ public class JsonParserEdgeCasesTest {
 				fail("ParseException expected.  Test="+name+", Input=" + jsonReadable);
 			} catch (ParseException e) {
 				if (errorText != null)
-					assertTrue("Got ParseException but didn't contain expected text '"+errorText+"'.  Test="+name+", Input=" + jsonReadable + ", Message=" + e.getRootCause().getMessage(), e.getRootCause().getMessage().contains(errorText));
+					assertTrue(e.getRootCause().getMessage().contains(errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", errorText, name, jsonReadable, e.getRootCause().getMessage()));
 			} catch (IOException e) {
 				if (errorText != null)
-					assertTrue("Got ParseException but didn't contain expected text '"+errorText+"'.  Test="+name+", Input=" + jsonReadable + ", Message=" + e.getMessage(), e.getMessage().contains(errorText));
+					assertTrue(e.getMessage().contains(errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", errorText, name, jsonReadable, e.getMessage()));
 			} catch (AssertionError e) {
 				throw e;
 			} catch (Throwable t) {
@@ -403,10 +404,10 @@ public class JsonParserEdgeCasesTest {
 				p.parse(json, Object.class);
 			} catch (ParseException e) {
 				if (errorText != null)
-					assertTrue("Got ParseException but didn't contain expected text '"+errorText+"'.  Test="+name+", Input=" + jsonReadable + ", Message=" + e.getRootCause().getMessage(), e.getRootCause().getMessage().contains(errorText));
+					assertTrue(e.getRootCause().getMessage().contains(errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", errorText, name, jsonReadable, e.getRootCause().getMessage()));
 			} catch (IOException e) {
 				if (errorText != null)
-					assertTrue("Got ParseException but didn't contain expected text '"+errorText+"'.  Test="+name+", Input=" + jsonReadable + ", Message=" + e.getMessage(), e.getMessage().contains(errorText));
+					assertTrue(e.getMessage().contains(errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", errorText, name, jsonReadable, e.getMessage()));
 			} catch (Throwable t) {
 				fail("Expected ParseException.  Test="+name+", Input=" + jsonReadable + ", Exception=" + t.getClass().getName() + "," +t.getLocalizedMessage());
 			}
@@ -415,7 +416,7 @@ public class JsonParserEdgeCasesTest {
 
 	@Test
 	public void testLax() throws Exception {
-		JsonParser p = JsonParser.DEFAULT;
+		var p = JsonParser.DEFAULT;
 		if (name.contains("utf16LE"))
 			p = p.copy().streamCharset(Charset.forName("UTF-16LE")).build();
 		else if (name.contains("utf16BE"))
@@ -431,7 +432,7 @@ public class JsonParserEdgeCasesTest {
 				p.parse(json, Object.class);
 			} catch (ParseException e) {
 				if (errorText != null)
-					assertTrue("Got ParseException but didn't contain expected text '"+errorText+"'.  Test="+name+", Input=" + jsonReadable + ", Message=" + e.getRootCause().getMessage(), e.getRootCause().getMessage().contains(errorText));
+					assertTrue(e.getRootCause().getMessage().contains(errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", errorText, name, jsonReadable, e.getRootCause().getMessage()));
 			} catch (AssertionError e) {
 				throw e;
 			} catch (Throwable t) {
@@ -444,7 +445,7 @@ public class JsonParserEdgeCasesTest {
 				p.parse(json, Object.class);
 			} catch (ParseException e) {
 				if (errorText != null)
-					assertTrue("Got ParseException but didn't contain expected text '"+errorText+"'.  Test="+name+", Input=" + jsonReadable + ", Message=" + e.getRootCause().getMessage(), e.getRootCause().getMessage().contains(errorText));
+					assertTrue(e.getRootCause().getMessage().contains(errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", errorText, name, jsonReadable, e.getRootCause().getMessage()));
 			} catch (Throwable t) {
 				fail("Expected ParseException.  Test="+name+", Input=" + jsonReadable + ", Exception=" + t.getClass().getName() + "," +t.getLocalizedMessage());
 			}
@@ -455,7 +456,7 @@ public class JsonParserEdgeCasesTest {
 	public static void main(String[] generateParams) throws Exception {
 		var f = new File("src/test/resources/org/apache/juneau/json/jsonTestSuite");
 		int i = 0;
-		String pattern = "\n\t\t'{' {0}, \"{1}\", {2}, {3} '}',";
+		var pattern = "\n\t\t'{' {0}, \"{1}\", {2}, {3} '}',";
 		var sb = new StringBuilder();
 		for (File fc : f.listFiles()) {
 			var n = fc.getName();

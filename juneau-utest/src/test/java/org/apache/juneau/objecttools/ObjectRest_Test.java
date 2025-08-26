@@ -13,7 +13,7 @@
 package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
@@ -32,7 +32,7 @@ class ObjectRest_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a01_basic() {
 
-		ObjectRest model = ObjectRest.create(new JsonMap()); // An empty model.
+		var model = ObjectRest.create(new JsonMap()); // An empty model.
 
 		// Do a PUT
 		model.put("A", new JsonMap());
@@ -47,10 +47,10 @@ class ObjectRest_Test extends SimpleTestBase {
 		assertEquals("{A:{B:{C:['String #1\','String #2']}}}", model.toString());
 
 		// Do some GETs
-		String s = (String) model.get("A/B/C/0");
+		var s = (String) model.get("A/B/C/0");
 		assertEquals("String #1", s);
 
-		Map m = (Map) model.get("A/B");
+		var m = (Map) model.get("A/B");
 		assertEquals("{C:['String #1','String #2']}", m.toString());
 	}
 
@@ -58,11 +58,10 @@ class ObjectRest_Test extends SimpleTestBase {
 	// testBeans
 	//====================================================================================================
 	@Test void b01_beans() throws Exception {
-		ObjectRest model;
+		var model = ObjectRest.create(new JsonMap());
 
 		// Java beans.
-		model = ObjectRest.create(new JsonMap());
-		Person p = new Person("some name", 123,
+		var p = new Person("some name", 123,
 			new Address("street A", "city A", "state A", 12345, true),
 			new Address("street B", "city B", "state B", 12345, false)
 		);
@@ -77,7 +76,7 @@ class ObjectRest_Test extends SimpleTestBase {
 		assertEquals("city B", p.addresses[1].city);
 
 		// Look for deep information inside beans.
-		Address a3 = (Address)model.get("/person1/addresses/1");
+		var a3 = (Address)model.get("/person1/addresses/1");
 		assertEquals("city B", a3.city);
 
 		serializer = Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().build();
@@ -88,7 +87,7 @@ class ObjectRest_Test extends SimpleTestBase {
 
 		// Serialize it to JSON.
 		var s = serializer.serialize(p);
-		String expectedValue = "{_type:'Person',name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}";
+		var expectedValue = "{_type:'Person',name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}";
 		assertEquals(expectedValue, s);
 
 		// Parse it back to Java objects.
@@ -189,12 +188,11 @@ class ObjectRest_Test extends SimpleTestBase {
 	// testAddressBook
 	//====================================================================================================
 	@Test void b02_addressBook() {
-		ObjectRest model;
+		var model = ObjectRest.create(new AddressBook());
 
-		model = ObjectRest.create(new AddressBook());
 
 		// Try adding a person to the address book.
-		Person billClinton = new Person("Bill Clinton", 65,
+		var billClinton = new Person("Bill Clinton", 65,
 			new Address("55W. 125th Street", "New York", "NY", 10027, true)
 		);
 
@@ -267,7 +265,7 @@ class ObjectRest_Test extends SimpleTestBase {
 		var model = ObjectRest.create(new AddressBook(), JsonParser.DEFAULT);
 
 		// Try adding a person to the address book.
-		Person billClinton = new Person("Bill Clinton", 65,
+		var billClinton = new Person("Bill Clinton", 65,
 			new Address("55W. 125th Street", "New York", "NY", 10027, true)
 		);
 

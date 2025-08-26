@@ -37,14 +37,13 @@ class TrimStrings_RoundTripTest extends RoundTripTest_Base {
 			return;
 		var s = t.getSerializer();
 		var p = t.getParser();
-		Object in, a, e;
 
 		var s2 = s.copy().trimStrings().build();
 		var p2 = p.copy().trimStrings().build();
 
-		in = " foo bar ";
-		e = "foo bar";
-		a = p.parse(s2.serialize(in), String.class);
+		var in = (Object)" foo bar ";
+		var e = (Object)"foo bar";
+		var a = (Object)p.parse(s2.serialize(in), String.class);
 		assertEquals(json(a), json(e));
 		a = p2.parse(s.serialize(in), String.class);
 		assertEquals(json(a), json(e));

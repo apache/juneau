@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
@@ -51,8 +51,8 @@ public class RestClient_Marshalls_Test extends SimpleTestBase {
 	public static class A extends BasicRestObject {
 		@RestPost
 		public Bean a01(@Content Bean b, @Header("Accept") String accept, @Header("Content-Type") String ct, @Header("X-Accept") String xaccept, @Header("X-Content-Type") String xct) {
-			assertEquals("Accept doesn't match",nn(xaccept),nn(accept));
-			assertEquals("Content-Type doesn't match",nn(xct),nn(ct));
+			assertEquals(nn(xaccept), nn(accept), "Accept doesn't match");
+			assertEquals(nn(xct), nn(ct), "Content-Type doesn't match");
 			return b;
 		}
 	}

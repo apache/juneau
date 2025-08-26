@@ -14,6 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -37,7 +38,7 @@ class ETag_Test extends SimpleTestBase {
 	public static class A {
 		@RestOp
 		public StringReader get(@Header(name=HEADER) @Schema(cf="multi") String[] h) {
-			return TestUtils.reader(h == null ? "null" : Utils.join(h, ','));
+			return reader(h == null ? "null" : Utils.join(h, ','));
 		}
 	}
 
@@ -62,7 +63,7 @@ class ETag_Test extends SimpleTestBase {
 
 	@Test void a0_asEntityTag() {
 		var x = new ETag("W/\"foo\"").asEntityTag().get();
-		TestUtils.assertString("W/\"foo\"", x);
+		assertString("W/\"foo\"", x);
 		assertEquals("foo", x.getEntityValue());
 		assertTrue(x.isWeak());
 		assertFalse(x.isAny());
