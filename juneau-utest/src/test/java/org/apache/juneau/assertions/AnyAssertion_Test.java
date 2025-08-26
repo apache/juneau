@@ -101,7 +101,11 @@ class AnyAssertion_Test extends SimpleTestBase {
 	@Test void ba03_asJsonSorted() {
 		var x1 = a(2,1);
 		var nil = (Integer[])null;
+<<<<<<< HEAD
 		var x2 = new A1();
+=======
+		Object x2 = new A1();
+>>>>>>> branch 'master' of https://gitbox.apache.org/repos/asf/juneau.git
 		test(x1).asJsonSorted().is("[1,2]");
 		test(x2).asJsonSorted().is("{a:1,b:2}");
 		test(nil).asJsonSorted().is("null");
