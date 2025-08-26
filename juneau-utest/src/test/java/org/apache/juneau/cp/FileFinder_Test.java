@@ -109,7 +109,9 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 		String[] patterns_ja_JP = {"_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP"};
 
 		for (int i = 0; i < patterns.length; i++) {
-			String p = patterns[i], p_ja = patterns_ja[i], p_ja_JP = patterns_ja_JP[i];
+			var p = patterns[i];
+			var p_ja = patterns_ja[i];
+			var p_ja_JP = patterns_ja_JP[i];
 
 			assertContains("[home:/files/test1/"+p+"]", read(x,"test1/"+p,null));
 			assertContains("[home:/files/test1/dir/"+p+"]", read(x,"test1/dir/"+p,null));
@@ -234,7 +236,9 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 		String[] patterns_ja_JP = {"_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP"};
 
 		for (int i = 0; i < patterns.length; i++) {
-			String p = patterns[i], p_ja = patterns_ja[i], p_ja_JP = patterns_ja_JP[i];
+			var p = patterns[i];
+			var p_ja = patterns_ja[i];
+			var p_ja_JP = patterns_ja_JP[i];
 
 			assertContains("[cp:/files/test1/"+p+"]", read(x,"test1/"+p,null));
 			assertContains("[cp:/files/test1/dir/"+p+"]", read(x,"test1/dir/"+p,null));
@@ -398,7 +402,9 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 		String[] patterns_ja_JP = {"_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP"};
 
 		for (int i = 0; i < patterns.length; i++) {
-			String p = patterns[i], p_ja = patterns_ja[i], p_ja_JP = patterns_ja_JP[i];
+			var p = patterns[i];
+			var p_ja = patterns_ja[i];
+			var p_ja_JP = patterns_ja_JP[i];
 
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]", read(x,"test1/"+p,null));
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]", read(x,"test1/dir/"+p,null));
@@ -443,7 +449,9 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 		String[] patterns_ja_JP = {"_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP"};
 
 		for (int i = 0; i < patterns.length; i++) {
-			String p = patterns[i], p_ja = patterns_ja[i], p_ja_JP = patterns_ja_JP[i];
+			var p = patterns[i];
+			var p_ja = patterns_ja[i];
+			var p_ja_JP = patterns_ja_JP[i];
 
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]", read(x,"test1/"+p,null));
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]", read(x,"test1/dir/"+p,null));

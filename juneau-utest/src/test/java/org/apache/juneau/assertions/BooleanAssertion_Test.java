@@ -55,14 +55,16 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void ba01a_asString() {
-		Boolean x = true, nil = null;
+		var x = true;
+		var nil = (Boolean)null;
 		test(x).asString().is("true");
 		test(nil).asString().isNull();
 	}
 
 	@Test
 	public void ba01b_asString_wSerializer() {
-		Boolean x = true, nil = null;
+		var x = true;
+		var nil = (Boolean)null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("true");
 		test(nil).asString(s).is("null");
@@ -76,14 +78,16 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void ba02_asJson() {
-		Boolean x = true, nil = null;
+		var x = true;
+		var nil = (Boolean)null;
 		test(x).asJson().is("true");
 		test(nil).asJson().is("null");
 	}
 
 	@Test
 	public void ba03_asJsonSorted() {
-		Boolean x1 = true, nil = null;
+		var x1 = true;
+		var nil = (Boolean)null;
 		test(x1).asJsonSorted().is("true");
 		test(nil).asJsonSorted().is("null");
 	}
@@ -100,28 +104,34 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void ca01_exists() {
-		Boolean x = true, nil = null;
+		var x = true;
+		var nil = (Boolean)null;
 		test(x).isExists().isExists();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
 	@Test
 	public void ca02_isNull() {
-		Boolean x = true, nil = null;
+		var x = true;
+		var nil = (Boolean)null;
 		test(nil).isNull();
 		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test
 	public void ca03_isNotNull() {
-		Boolean x = true, nil = null;
+		var x = true;
+		var nil = (Boolean)null;
 		test(x).isNotNull();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
 
 	@Test
 	public void ca04a_is_T() {
-		Boolean x1 = true, x1a = true, x2 = false, nil = null;
+		var x1 = true;
+		var x1a = true;
+		var x2 = false;
+		var nil = (Boolean)null;
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -140,7 +150,10 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void ca05_isNot() {
-		Boolean x1 = true, x1a = true, x2 = false, nil = null;
+		var x1 = true;
+		var x1a = true;
+		var x2 = false;
+		var nil = (Boolean)null;
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -150,7 +163,10 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void ca06_isAny() {
-		Boolean x1 = true, x1a = true, x2 = false, nil = null;
+		var x1 = true;
+		var x1a = true;
+		var x2 = false;
+		var nil = (Boolean)null;
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[false]'.  Actual='true'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='true'.");
@@ -159,7 +175,10 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void ca07_isNotAny() {
-		Boolean x1 = true, x1a = true, x2 = false, nil = null;
+		var x1 = true;
+		var x1a = true;
+		var x2 = false;
+		var nil = (Boolean)null;
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -181,7 +200,10 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void ca09_isSameJsonAs() {
-		Boolean x1 = true, x1a = true, x2 = false, nil = null;
+		var x1 = true;
+		var x1a = true;
+		var x2 = false;
+		var nil = (Boolean)null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
 		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='false'.  Actual='true'.");
@@ -191,7 +213,10 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void ca10_isSameSortedJsonAs() {
-		Boolean x1 = true, x1a = true, x2 = false, nil = null;
+		var x1 = true;
+		var x1a = true;
+		var x2 = false;
+		var nil = (Boolean)null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
 		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='false'.  Actual='true'.");
@@ -201,7 +226,10 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void ca11_isSameSerializedAs() {
-		Boolean x1 = true, x1a = true, x2 = false, nil = null;
+		var x1 = true;
+		var x1a = true;
+		var x2 = false;
+		var nil = (Boolean)null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
@@ -212,7 +240,8 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void ca12_isType() {
-		Boolean x = true, nil = null;
+		var x = true;
+		var nil = (Boolean)null;
 		test(x).isType(Boolean.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Boolean'.");
@@ -222,7 +251,8 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void ca13_isExactType() {
-		Boolean x = true, nil = null;
+		var x = true;
+		var nil = (Boolean)null;
 		test(x).isExactType(Boolean.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.lang.Boolean'.");
 		assertThrown(()->test(nil).isExactType(String.class)).asMessage().asOneLine().is("Value was null.");
@@ -231,7 +261,8 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void ca14_isString() {
-		Boolean x = true, nil = null;
+		var x = true;
+		var nil = (Boolean)null;
 		test(x).isString("true");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='true'.");
@@ -241,7 +272,8 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void ca15_isJson() {
-		Boolean x = true, nil = null;
+		var x = true;
+		var nil = (Boolean)null;
 		test(x).isJson("true");
 		test(nil).isJson("null");
 		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='true'.");
@@ -251,7 +283,7 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void cc01_isTrue() {
-		Boolean nil = null;
+		var nil = (Boolean)null;
 		test(true).isTrue();
 		assertThrows(BasicAssertionError.class, ()->test(false).isTrue(), "Value was false.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isTrue(), "Value was null.");
@@ -259,7 +291,7 @@ public class BooleanAssertion_Test {
 
 	@Test
 	public void cc02_isFalse() {
-		Boolean nil = null;
+		var nil = (Boolean)null;
 		test(false).isFalse();
 		assertThrows(BasicAssertionError.class, ()->test(true).isFalse(), "Value was true.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isFalse(), "Value was null.");

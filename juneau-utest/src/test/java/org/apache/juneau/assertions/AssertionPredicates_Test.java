@@ -121,7 +121,8 @@ public class AssertionPredicates_Test {
 
 	@Test
 	public void a12_regex_wPattern() {
-		Pattern p1 = Pattern.compile("FO.*", CASE_INSENSITIVE), p2 = Pattern.compile("BA.*", CASE_INSENSITIVE);
+		var p1 = Pattern.compile("FO.*", CASE_INSENSITIVE);
+		var p2 = Pattern.compile("BA.*", CASE_INSENSITIVE);
 		A1.is(regex(p1));
 		assertThrown(()->A1.is(regex(p2))).asMessage().asOneLine().is("Value did not match pattern.  Pattern='BA.*'.  Value='foo'.");
 		assertThrown(()->A2.is(regex(p2))).asMessage().asOneLine().is("Value did not match pattern.  Pattern='BA.*'.  Value='null'.");

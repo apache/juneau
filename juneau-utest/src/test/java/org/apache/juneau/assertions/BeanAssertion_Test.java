@@ -14,6 +14,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -67,14 +68,16 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void ba01a_asString() {
-		A x = A1, nil = null;
+		var x = A1;
+		var nil = (A)null;
 		test(x).asString().is("a=1,b=2");
 		test(nil).asString().isNull();
 	}
 
 	@Test
 	public void ba01b_asString_wSerializer() {
-		A x = A1, nil = null;
+		var x = A1;
+		var nil = (A)null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("{a:1,b:2}");
 		test(nil).asString(s).is("null");
@@ -88,27 +91,31 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void ba02_asJson() {
-		A x = A1, nil = null;
+		var x = A1;
+		var nil = (A)null;
 		test(x).asJson().is("{a:1,b:2}");
 		test(nil).asJson().is("null");
 	}
 
 	@Test
 	public void ba03_asJsonSorted() {
-		A[] x1 = {A2,A1}, nil = null;
+		var x1 = a(A2,A1);
+		var nil = (A)null;
 		test(x1).asJsonSorted().is("[{a:1,b:2},{a:2,b:3}]");
 		test(nil).asJsonSorted().is("null");
 	}
 
 	@Test
 	public void ba04_apply() {
-		A x1 = A1, x2 = A2;
+		var x1 = A1;
+		var x2 = A2;
 		test(x1).asTransformed(x -> x2).is(x2);
 	}
 
 	@Test
 	public void bb01_extract() {
-		A x = A1, nil = null;
+		var x = A1;
+		var nil = (A)null;
 		test(x).asPropertyMap("b,a").asJson().is("{b:2,a:1}");
 		test(x).asPropertyMap("x").asJson().is("{}");
 		assertThrows(BasicAssertionError.class, ()->test(nil).asPropertyMap("x"), "Value was null.");
@@ -116,7 +123,8 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void bb02_property() {
-		A x = A1, nil = null;
+		var x = A1;
+		var nil = (A)null;
 		test(x).asProperty("a").asInteger().is(1);
 		test(x).asProperty("x").asInteger().isNull();
 		assertThrows(BasicAssertionError.class, ()->test(nil).asProperty("x"), "Value was null.");
@@ -124,7 +132,8 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void bb03_properties() {
-		A x = A1, nil = null;
+		var x = A1;
+		var nil = (A)null;
 		test(x).asProperties("a").asJson().is("[1]");
 		test(x).asProperties("x").asJson().is("[null]");
 		assertThrows(BasicAssertionError.class, ()->test(nil).asProperties("x"), "Value was null.");
@@ -136,28 +145,34 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void ca01_exists() {
-		A x = A1, nil = null;
+		var x = A1;
+		var nil = (A)null;
 		test(x).isExists().isExists();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
 	@Test
 	public void ca02_isNull() {
-		A x = A1, nil = null;
+		var x = A1;
+		var nil = (A)null;
 		test(nil).isNull();
 		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test
 	public void ca03_isNotNull() {
-		A x = A1, nil = null;
+		var x = A1;
+		var nil = (A)null;
 		test(x).isNotNull();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
 
 	@Test
 	public void ca04a_is_T() {
-		A x1 = A1, x1a = A1a, x2 = A2, nil = null;
+		var x1 = A1;
+		var x1a = A1a;
+		var x2 = A2;
+		var nil = (A)null;
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -176,7 +191,10 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void ca05_isNot() {
-		A x1 = A1, x1a = A1a, x2 = A2, nil = null;
+		var x1 = A1;
+		var x1a = A1a;
+		var x2 = A2;
+		var nil = (A)null;
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -186,7 +204,10 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void ca06_isAny() {
-		A x1 = A1, x1a = A1a, x2 = A2, nil = null;
+		var x1 = A1;
+		var x1a = A1a;
+		var x2 = A2;
+		var nil = (A)null;
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[a=2,b=3]'.  Actual='a=1,b=2'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='a=1,b=2'.");
@@ -195,7 +216,10 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void ca07_isNotAny() {
-		A x1 = A1, x1a = A1a, x2 = A2, nil = null;
+		var x1 = A1;
+		var x1a = A1a;
+		var x2 = A2;
+		var nil = (A)null;
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -205,7 +229,9 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void ca08_isSame() {
-		A x1 = A1, x1a = A1a, nil = null;
+		var x1 = A1;
+		var x1a = A1a;
+		var nil = (A)null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='a=1,b=2(BeanAssertion_Test$A@*)'.  Actual='a=1,b=2(BeanAssertion_Test$A@*)'.");
@@ -215,7 +241,10 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void ca09_isSameJsonAs() {
-		A x1 = A1, x1a = A1a, x2 = A2, nil = null;
+		var x1 = A1;
+		var x1a = A1a;
+		var x2 = A2;
+		var nil = (A)null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
 		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{a:2,b:3}'.  Actual='{a:1,b:2}'.");
@@ -225,7 +254,10 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void ca10_isSameSortedJsonAs() {
-		A x1 = A1, x1a = A1a, x2 = A2, nil = null;
+		var x1 = A1;
+		var x1a = A1a;
+		var x2 = A2;
+		var nil = (A)null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
 		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{a:2,b:3}'.  Actual='{a:1,b:2}'.");
@@ -235,7 +267,10 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void ca11_isSameSerializedAs() {
-		A x1 = A1, x1a = A1a, x2 = A2, nil = null;
+		var x1 = A1;
+		var x1a = A1a;
+		var x2 = A2;
+		var nil = (A)null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
@@ -246,7 +281,8 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void ca12_isType() {
-		A x = A1, nil = null;
+		var x = A1;
+		var nil = (A)null;
 		test(x).isType(A.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.assertions.BeanAssertion_Test$A'.");
@@ -256,7 +292,8 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void ca13_isExactType() {
-		A x = A1, nil = null;
+		var x = A1;
+		var nil = (A)null;
 		test(x).isExactType(A.class);
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.assertions.BeanAssertion_Test$A'.");
 		assertThrown(()->test(nil).isExactType(String.class)).asMessage().asOneLine().is("Value was null.");
@@ -265,7 +302,8 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void ca14_isString() {
-		A x = A1, nil = null;
+		var x = A1;
+		var nil = (A)null;
 		test(x).isString("a=1,b=2");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='a=1,b=2'.");
@@ -275,7 +313,8 @@ public class BeanAssertion_Test {
 
 	@Test
 	public void ca15_isJson() {
-		A x = A1, nil = null;
+		var x = A1;
+		var nil = (A)null;
 		test(x).isJson("{a:1,b:2}");
 		test(nil).isJson("null");
 		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='{a:1,b:2}'.");

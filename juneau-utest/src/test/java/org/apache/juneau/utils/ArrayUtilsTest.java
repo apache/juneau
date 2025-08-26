@@ -38,7 +38,7 @@ class ArrayUtilsTest extends SimpleTestBase {
 		s = append(s);
 		assertArray(s, "a,b,c");
 
-		Object[] o = append((Object[])null);
+		var o = append((Object[])null);
 		assertArray(o);
 
 		s = append((String[])null, "a", "b");
@@ -49,12 +49,10 @@ class ArrayUtilsTest extends SimpleTestBase {
 	// asSet(T[])
 	//====================================================================================================
 	@Test void a02_asSet() {
-		String[] s = null;
-
 		assertThrows(IllegalArgumentException.class, ()->asSet((String[])null));
 
-		s = new String[]{"a"};
-		Iterator<String> i = asSet(s).iterator();
+		var s = a("a");
+		var i = asSet(s).iterator();
 		assertEquals("a", i.next());
 
 		assertThrows(UnsupportedOperationException.class, i::remove);
@@ -65,7 +63,8 @@ class ArrayUtilsTest extends SimpleTestBase {
 	// combine(T[]...)
 	//====================================================================================================
 	@Test void a03_combine() {
-		String[] s1 = {"a"}, s2 = {"b"};
+		var s1 = a("a");
+		var s2 = a("b");
 
 		assertArray(combine(s1, s2), "a,b");
 		assertArray(combine(s1), "a");
