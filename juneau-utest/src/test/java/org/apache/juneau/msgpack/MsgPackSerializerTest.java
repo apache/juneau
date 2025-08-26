@@ -24,7 +24,7 @@ class MsgPackSerializerTest extends SimpleTestBase {
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@Test void testBasic() throws Exception {
+	@Test void a01_basic() throws Exception {
 
 		test(null, "C0");
 

@@ -23,7 +23,7 @@ class SystemPropertiesVarTest extends SimpleTestBase {
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test void test() {
+	@Test void a01_test() {
 		var vr = VarResolver.create().vars(SystemPropertiesVar.class).build();
 
 		System.setProperty("SystemPropertiesVar.x", "foo");

@@ -34,7 +34,7 @@ class ProxyBeanTest extends SimpleTestBase {
 		int getFoo();
 	}
 
-	@Test void testBasic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		A a = JsonParser.DEFAULT.parse("{foo:1}", A.class);
 		assertEquals(1, a.getFoo());
 		a = XmlParser.DEFAULT.parse("<object><foo>1</foo></object>", A.class);

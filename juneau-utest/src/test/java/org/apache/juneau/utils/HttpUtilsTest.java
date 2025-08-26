@@ -36,7 +36,7 @@ class HttpUtilsTest extends SimpleTestBase {
 	// getHttpMethod()
 	//====================================================================================================
 
-	@Test void testGetHttpMethod_detect_nodefault() throws Exception {
+	@Test void a01_getHttpMethod_detect_nodefault() throws Exception {
 		assertEquals("GET", detectHttpMethod(A.class.getMethod("doGet"), true, null));
 		assertEquals("GET", detectHttpMethod(A.class.getMethod("doGET"), true, null));
 		assertEquals("POST", detectHttpMethod(A.class.getMethod("doPOST"), true, null));
@@ -48,7 +48,7 @@ class HttpUtilsTest extends SimpleTestBase {
 		assertEquals(null, detectHttpMethod(A.class.getMethod("createFoo"), true, null));
 	}
 
-	@Test void testGetHttpMethod_detect_default() throws Exception {
+	@Test void a02_getHttpMethod_detect_default() throws Exception {
 		assertEquals("GET", detectHttpMethod(A.class.getMethod("doGet"), true, "DELETE"));
 		assertEquals("GET", detectHttpMethod(A.class.getMethod("doGET"), true, "DELETE"));
 		assertEquals("POST", detectHttpMethod(A.class.getMethod("doPOST"), true, "DELETE"));
@@ -60,7 +60,7 @@ class HttpUtilsTest extends SimpleTestBase {
 		assertEquals("DELETE", detectHttpMethod(A.class.getMethod("createFoo"), true, "DELETE"));
 	}
 
-	@Test void testGetHttpMethod_nodetect_nodefault() throws Exception {
+	@Test void a03_getHttpMethod_nodetect_nodefault() throws Exception {
 		assertEquals(null, detectHttpMethod(A.class.getMethod("doGet"), false, null));
 		assertEquals(null, detectHttpMethod(A.class.getMethod("doGET"), false, null));
 		assertEquals(null, detectHttpMethod(A.class.getMethod("doPOST"), false, null));
@@ -72,7 +72,7 @@ class HttpUtilsTest extends SimpleTestBase {
 		assertEquals(null, detectHttpMethod(A.class.getMethod("createFoo"), false, null));
 	}
 
-	@Test void testGetHttpMethod_nodetect_default() throws Exception {
+	@Test void a04_getHttpMethod_nodetect_default() throws Exception {
 		assertEquals("DELETE", detectHttpMethod(A.class.getMethod("doGet"), false, "DELETE"));
 		assertEquals("DELETE", detectHttpMethod(A.class.getMethod("doGET"), false, "DELETE"));
 		assertEquals("DELETE", detectHttpMethod(A.class.getMethod("doPOST"), false, "DELETE"));
@@ -112,7 +112,7 @@ class HttpUtilsTest extends SimpleTestBase {
 		void createFoo(int x, A y);
 	}
 
-	@Test void testGetHttpPath_noargs_detect() throws Exception {
+	@Test void a05_getHttpPath_noargs_detect() throws Exception {
 		assertEquals("/", detectHttpPath(B1.class.getMethod("doGet"), null));
 		assertEquals("/", detectHttpPath(B1.class.getMethod("doGET"), null));
 		assertEquals("/", detectHttpPath(B1.class.getMethod("doPOST"), null));
@@ -124,7 +124,7 @@ class HttpUtilsTest extends SimpleTestBase {
 		assertEquals("/createFoo", detectHttpPath(B1.class.getMethod("createFoo"), null));
 	}
 
-	@Test void testGetHttpPath_noargs_nodetect() throws Exception {
+	@Test void a06_getHttpPath_noargs_nodetect() throws Exception {
 		assertEquals("/doGet", detectHttpPath(B1.class.getMethod("doGet"), "get"));
 		assertEquals("/doGET", detectHttpPath(B1.class.getMethod("doGET"), "get"));
 		assertEquals("/doPOST", detectHttpPath(B1.class.getMethod("doPOST"), "get"));
@@ -136,7 +136,7 @@ class HttpUtilsTest extends SimpleTestBase {
 		assertEquals("/createFoo", detectHttpPath(B1.class.getMethod("createFoo"), "get"));
 	}
 
-	@Test void testGetHttpPath_args_detect() throws Exception {
+	@Test void a07_getHttpPath_args_detect() throws Exception {
 		assertEquals("/", detectHttpPath(B2.class.getMethod("doGet",int.class,A.class), null));
 		assertEquals("/", detectHttpPath(B2.class.getMethod("doGET",int.class,A.class), null));
 		assertEquals("/", detectHttpPath(B2.class.getMethod("doPOST",int.class,A.class), null));
@@ -148,7 +148,7 @@ class HttpUtilsTest extends SimpleTestBase {
 		assertEquals("/createFoo", detectHttpPath(B2.class.getMethod("createFoo",int.class,A.class), null));
 	}
 
-	@Test void testGetHttpPath_args_nodetect() throws Exception {
+	@Test void a08_getHttpPath_args_nodetect() throws Exception {
 		assertEquals("/doGet", detectHttpPath(B2.class.getMethod("doGet",int.class,A.class), "get"));
 		assertEquals("/doGET", detectHttpPath(B2.class.getMethod("doGET",int.class,A.class), "get"));
 		assertEquals("/doPOST", detectHttpPath(B2.class.getMethod("doPOST",int.class,A.class), "get"));

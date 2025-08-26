@@ -23,7 +23,7 @@ class StringBuilderWriterTest extends SimpleTestBase {
 	//====================================================================================================
 	// Basic tests
 	//====================================================================================================
-	@Test void test() throws Exception {
+	@Test void a01_test() throws Exception {
 		var sbw = new StringBuilderWriter();
 		sbw.write("abc");
 		assertEquals("abc", sbw.toString());

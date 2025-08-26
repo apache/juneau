@@ -58,7 +58,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// Primitive field properties
 	//====================================================================================================
-	@Test void testPrimitiveFieldProperties() {
+	@Test void a01_primitiveFieldProperties() {
 		var t = new A();
 		Map m = bc.toBeanMap(t);
 
@@ -136,7 +136,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// Primitive method properties
 	//====================================================================================================
-	@Test void testPrimitiveMethodProperties() {
+	@Test void a02_primitiveMethodProperties() {
 		var t = new B();
 		Map m = bc.toBeanMap(t);
 
@@ -244,7 +244,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testCollectionFieldProperties
 	//====================================================================================================
-	@Test void testCollectionFieldProperties() {
+	@Test void a03_collectionFieldProperties() {
 		var t = new C();
 		Map m = bc.toBeanMap(t);
 
@@ -324,7 +324,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testCollectionMethodProperties
 	//====================================================================================================
-	@Test void testCollectionMethodProperties() {
+	@Test void a04_collectionMethodProperties() {
 		var t = new D();
 		Map m = bc.toBeanMap(t);
 
@@ -457,7 +457,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testArrayProperties
 	//====================================================================================================
-	@Test void testArrayProperties() {
+	@Test void a05_arrayProperties() {
 		var t = new D1();
 		Map m = bc.toBeanMap(t);
 		m.put("b", JsonMap.ofJson("{s:'foo'}"));
@@ -508,7 +508,7 @@ class BeanMapTest extends SimpleTestBase {
 		public String s = "default";
 	}
 
-	@Test void testArrayProperties_usingConfig() {
+	@Test void a06_arrayProperties_usingConfig() {
 		var t = new D1c();
 		Map m = bc.toBeanMap(t);
 		m.put("b", JsonMap.ofJson("{s:'foo'}"));
@@ -566,7 +566,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testArrayPropertiesInJsonList
 	//====================================================================================================
-	@Test void testArrayPropertiesInJsonList() {
+	@Test void a07_arrayPropertiesInJsonList() {
 		var t = new E();
 		Map m = bc.toBeanMap(t);
 		m.put("s", JsonList.ofJson("['foo']"));
@@ -590,7 +590,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// BeanMap.invokeMethod()
 	//====================================================================================================
-	@Test void testInvokeMethod() throws Exception {
+	@Test void a08_invokeMethod() throws Exception {
 		var t5 = new F();
 		ReaderParser p = JsonParser.DEFAULT;
 		BeanMap m = bc.toBeanMap(t5);
@@ -610,7 +610,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// @Beanp tests
 	//====================================================================================================
-	@Test void testBeanPropertyAnnotation() {
+	@Test void a09_beanPropertyAnnotation() {
 		var t6 = new G1();
 		BeanMap m = bc.toBeanMap(t6);
 
@@ -687,7 +687,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// Enum tests
 	//====================================================================================================
-	@Test void testEnum() {
+	@Test void a10_enum() {
 
 		// Initialize existing bean.
 		var t7 = new H();
@@ -730,7 +730,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// Automatic detection of generic types
 	//====================================================================================================
-	@Test void testAutomaticDetectionOfGenericTypes() {
+	@Test void a11_automaticDetectionOfGenericTypes() {
 		BeanMap bm = BeanContext.DEFAULT.newBeanMap(I.class);
 		assertEquals(String.class, bm.getProperty("p1").getMeta().getClassMeta().getElementType().getInnerClass());
 		assertEquals(Integer.class, bm.getProperty("p2").getMeta().getClassMeta().getElementType().getInnerClass());
@@ -755,7 +755,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// Overriding detection of generic types.
 	//====================================================================================================
-	@Test void testOverridingDetectionOfGenericTypes() {
+	@Test void a12_overridingDetectionOfGenericTypes() {
 		BeanMap bm = BeanContext.DEFAULT.newBeanMap(J.class);
 		assertEquals(Float.class, bm.getProperty("p1").getMeta().getClassMeta().getElementType().getInnerClass());
 		assertEquals(Float.class, bm.getProperty("p2").getMeta().getClassMeta().getElementType().getInnerClass());
@@ -780,7 +780,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// Overriding detection of generic types.
 	//====================================================================================================
-	@Test void testOverridingDetectionOfGenericTypes2() {
+	@Test void a13_overridingDetectionOfGenericTypes2() {
 		BeanMap bm = bc.newBeanMap(K.class);
 		assertEquals(Float.class, bm.getProperty("p1").getMeta().getClassMeta().getElementType().getInnerClass());
 		assertEquals(Float.class, bm.getProperty("p2").getMeta().getClassMeta().getElementType().getInnerClass());
@@ -805,7 +805,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// List<E> subclass properties
 	//====================================================================================================
-	@Test void testGenericListSubclass() {
+	@Test void a14_genericListSubclass() {
 		BeanMap<L> bm = bc.newBeanMap(L.class);
 		bm.put("list", "[{name:'1',value:'1'},{name:'2',value:'2'}]");
 		L b = bm.getBean();
@@ -831,7 +831,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// Generic fields.
 	//====================================================================================================
-	@Test void testGenericFields() {
+	@Test void a15_genericFields() {
 
 		var t1 = new M2();
 		BeanMap<M2> bm = bc.toBeanMap(t1);
@@ -881,7 +881,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// Generic methods
 	//====================================================================================================
-	@Test void testGenericMethods() {
+	@Test void a16_genericMethods() {
 
 		var t1 = new N2();
 		BeanMap<N2> bm = bc.toBeanMap(t1);
@@ -933,7 +933,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test ignoreUnknownBeanProperties setting
 	//====================================================================================================
-	@Test void testIgnoreUnknownBeanPropertiesSetting() {
+	@Test void a17_ignoreUnknownBeanPropertiesSetting() {
 		ReaderParser p = null;
 		O t;
 
@@ -985,7 +985,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testPropertyNameFactoryDashedLC1
 	//====================================================================================================
-	@Test void testPropertyNameFactoryDashedLC1() {
+	@Test void a18_propertyNameFactoryDashedLC1() {
 		BeanMap<P1> m = bc.newBeanMap(P1.class).load("{'foo':1,'bar-baz':2,'bing-boo-url':3}");
 		assertEquals(1, m.get("foo"));
 		assertEquals(2, m.get("bar-baz"));
@@ -1007,7 +1007,7 @@ class BeanMapTest extends SimpleTestBase {
 		public int foo, barBaz, bingBooURL;
 	}
 
-	@Test void testPropertyNameFactoryDashedLC1_usingConfig() {
+	@Test void a19_propertyNameFactoryDashedLC1_usingConfig() {
 		BeanMap<P1c> m = bc.copy().applyAnnotations(P1cConfig.class).build().newBeanMap(P1c.class).load("{'foo':1,'bar-baz':2,'bing-boo-url':3}");
 		assertEquals(1, m.get("foo"));
 		assertEquals(2, m.get("bar-baz"));
@@ -1037,7 +1037,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testPropertyNameFactoryDashedLC2
 	//====================================================================================================
-	@Test void testPropertyNameFactoryDashedLC2() {
+	@Test void a20_propertyNameFactoryDashedLC2() {
 		BeanContext bc2 = BeanContext.DEFAULT_SORTED;
 		BeanMap<P2> m = bc2.newBeanMap(P2.class).load("{'foo-bar':1,'baz-bing':2}");
 		assertEquals(1, m.get("foo-bar"));
@@ -1065,7 +1065,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testBeanWithFluentStyleSetters
 	//====================================================================================================
-	@Test void testBeanWithFluentStyleSetters() {
+	@Test void a21_beanWithFluentStyleSetters() {
 		var t = new Q2();
 		BeanMap m = BeanContext.DEFAULT_SORTED.toBeanMap(t);
 		m.put("f1", 1);
@@ -1095,7 +1095,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testCastWithNormalBean
 	//====================================================================================================
-	@Test void testCastWithNormalBean() {
+	@Test void a22_castWithNormalBean() {
 
 		// With _type
 		var m = new JsonMap(session);
@@ -1144,7 +1144,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testCastWithNestedBean
 	//====================================================================================================
-	@Test void testCastWithNestedBean() {
+	@Test void a23_castWithNestedBean() {
 
 		// With _type
 		var m = new JsonMap(session);
@@ -1181,7 +1181,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testCastToAnotherMapType
 	//====================================================================================================
-	@Test void testCastToAnotherMapType() {
+	@Test void a24_castToAnotherMapType() {
 		Map m2;
 
 		// With _type
@@ -1260,7 +1260,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testCastToLinkedList
 	//====================================================================================================
-	@Test void testCastToLinkedList() {
+	@Test void a25_castToLinkedList() {
 
 		// With _type
 		var m = new JsonMap(session);
@@ -1312,7 +1312,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testToLinkedListInteger - cast() to LinkedList<Integer>
 	//====================================================================================================
-	@Test void testToLinkedListInteger() {
+	@Test void a26_toLinkedListInteger() {
 
 		// With _type
 		var m = new JsonMap(session);
@@ -1373,7 +1373,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testCastToLinkedListBean - cast() to LinkedList<R1>
 	//====================================================================================================
-	@Test void testCastToLinkedListBean() {
+	@Test void a27_castToLinkedListBean() {
 
 		// With _type
 		var m = new JsonMap(session);
@@ -1453,7 +1453,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testCastToLinkedListUsingSwap - cast() to LinkedList<Calendar> using CalendarSwap
 	//====================================================================================================
-	@Test void testCastToLinkedListUsingSwap() {
+	@Test void a28_castToLinkedListUsingSwap() {
 
 		// With _type
 		var m = new JsonMap(session);
@@ -1514,7 +1514,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testCastToStringArray - cast() to String[]
 	//====================================================================================================
-	@Test void testCastToStringArray() {
+	@Test void a29_castToStringArray() {
 
 		// With _type
 		var m = new JsonMap(session);
@@ -1559,7 +1559,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testCastToIntArray - cast() to int[]
 	//====================================================================================================
-	@Test void testCastToIntArray() {
+	@Test void a30_castToIntArray() {
 
 		// With _type
 		var m = new JsonMap(session);
@@ -1603,7 +1603,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testCastToString2dArray - cast() to String[][]
 	//====================================================================================================
-	@Test void testCastToString2dArray() {
+	@Test void a31_castToString2dArray() {
 
 		// With _type
 		var m = new JsonMap(session);
@@ -1634,7 +1634,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testCastToInt2dArray - cast() to int[][]
 	//====================================================================================================
-	@Test void testCastToInt2dArray() {
+	@Test void a32_castToInt2dArray() {
 
 		// With _type
 		var m = new JsonMap(session);
@@ -1665,7 +1665,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testHiddenProperties
 	//====================================================================================================
-	@Test void testHiddenProperties() {
+	@Test void a33_hiddenProperties() {
 		JsonSerializer s = Json5Serializer.DEFAULT;
 		BeanMeta bm = s.getBeanContext().getBeanMeta(U.class);
 		assertNotNull(bm.getPropertyMeta("a"));
@@ -1699,7 +1699,7 @@ class BeanMapTest extends SimpleTestBase {
 		@BeanIgnore public void setD(String v) {}  // NOSONAR
 	}
 
-	@Test void testHiddenProperties_usingConfig() {
+	@Test void a34_hiddenProperties_usingConfig() {
 		var s = Json5Serializer.DEFAULT.copy().applyAnnotations(UcConfig.class).build();
 		BeanMeta bm = s.getBeanContext().getBeanMeta(U.class);
 		assertNotNull(bm.getPropertyMeta("a"));
@@ -1741,7 +1741,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testBeanPropertyOrder
 	//====================================================================================================
-	@Test void testBeanPropertyOrder() {
+	@Test void a35_beanPropertyOrder() {
 		assertJson(new V2(), "{a1:'1',a2:'2',a3:'3',a4:'4'}");
 		assertJson(new V3(), "{a3:'3',a4:'4',a5:'5',a6:'6'}");
 	}
@@ -1759,7 +1759,7 @@ class BeanMapTest extends SimpleTestBase {
 		public String a5="5", a6="6";
 	}
 
-	@Test void testBeanPropertyOrder_usingConfig() {
+	@Test void a36_beanPropertyOrder_usingConfig() {
 		var ws = Json5Serializer.create().applyAnnotations(VcConfig.class).build();
 		assertEquals("{a1:'1',a2:'2',a3:'3',a4:'4'}", ws.toString(new V2c()));
 		assertEquals("{a3:'3',a4:'4',a5:'5',a6:'6'}", ws.toString(new V3c()));
@@ -1786,7 +1786,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testBeanMethodOrder
 	//====================================================================================================
-	@Test void testBeanMethodOrder() {
+	@Test void a37_beanMethodOrder() {
 		assertJson(new W2(), "{a1:'1',a2:'2',a3:'3',a4:'4'}");
 		assertJson(new W3(), "{a3:'3',a4:'4',a5:'5',a6:'6'}");
 	}
@@ -1810,7 +1810,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testResourceDescription
 	//====================================================================================================
-	@Test void testOverriddenPropertyTypes() {
+	@Test void a38_overriddenPropertyTypes() {
 		JsonSerializer s = Json5Serializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
@@ -1860,7 +1860,7 @@ class BeanMapTest extends SimpleTestBase {
 		public void setF2(Integer v) { f2 = v; }
 	}
 
-	@Test void testSettingCollectionPropertyMultipleTimes() {
+	@Test void a39_settingCollectionPropertyMultipleTimes() {
 
 		BeanMap m = BeanContext.DEFAULT.newBeanMap(Y.class);
 		m.put("f1", JsonList.ofJsonOrCdl("a"));
@@ -1875,7 +1875,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testCollectionSetters_preferSetter
 	//====================================================================================================
-	@Test void testCollectionSetters_preferSetter() {
+	@Test void a40_collectionSetters_preferSetter() {
 		var aa = new AA();
 		BeanMap<AA> bm = BeanContext.DEFAULT.toBeanMap(aa);
 

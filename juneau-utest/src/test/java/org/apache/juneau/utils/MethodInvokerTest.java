@@ -40,7 +40,7 @@ class MethodInvokerTest extends SimpleTestBase {
 		return new MethodInvoker(m, store.getStats(m));
 	}
 
-	@Test void testBasic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		Method m = A.class.getMethod("foo");
 
 		MethodInvoker mi = create(m);
@@ -53,7 +53,7 @@ class MethodInvokerTest extends SimpleTestBase {
 		assertBean(mi.getStats(), "runs,errors", "3,0");
 	}
 
-	@Test void testException() throws Exception {
+	@Test void a02_exception() throws Exception {
 		Method m = A.class.getMethod("bar");
 
 		MethodInvoker mi = create(m);
@@ -66,7 +66,7 @@ class MethodInvokerTest extends SimpleTestBase {
 		assertBean(mi.getStats(), "runs,errors", "3,3");
 	}
 
-	@Test void testIllegalArgument() throws Exception {
+	@Test void a03_illegalArgument() throws Exception {
 		Method m = A.class.getMethod("baz", int.class);
 
 		MethodInvoker mi = create(m);
@@ -79,7 +79,7 @@ class MethodInvokerTest extends SimpleTestBase {
 		assertBean(mi.getStats(), "runs,errors", "3,3");
 	}
 
-	@Test void testOtherMethods() throws Exception {
+	@Test void a04_otherMethods() throws Exception {
 		Method m = A.class.getMethod("foo");
 		MethodInvoker mi = create(m);
 

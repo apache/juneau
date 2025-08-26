@@ -41,7 +41,7 @@ class Bean_Test extends SimpleTestBase {
 		}
 	}
 
-	@Test void testBeanAnnotationOverridesPrivate() throws Exception {
+	@Test void a01_beanAnnotationOverridesPrivate() throws Exception {
 		String json = Json5.of(A1.create());
 		assertEquals("{f1:1}", json);
 		A1 a = Json5.DEFAULT.read(json, A1.class);
@@ -66,7 +66,7 @@ class Bean_Test extends SimpleTestBase {
 	}
 	static ClassInfo a2ci = ClassInfo.of(A2Config.class);
 
-	@Test void testBeanAnnotationOverridesPrivate_usingConfig() throws Exception {
+	@Test void a02_beanAnnotationOverridesPrivate_usingConfig() throws Exception {
 		var al = AnnotationWorkList.of(a2ci.getAnnotationList());
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = JsonParser.create().apply(al).build();
@@ -110,7 +110,7 @@ class Bean_Test extends SimpleTestBase {
 		}
 	}
 
-	@Test void testBeanxAnnotationOverridesPrivate() throws Exception {
+	@Test void a03_beanxAnnotationOverridesPrivate() throws Exception {
 		String json = Json5.of(B1.create());
 		assertEquals("{f1:1,f2:2}", json);
 		B1 b = Json5.DEFAULT.read(json, B1.class);
@@ -150,7 +150,7 @@ class Bean_Test extends SimpleTestBase {
 	}
 	static ClassInfo b2ci = ClassInfo.of(B2Config.class);
 
-	@Test void testBeanxAnnotationOverridesPrivate_usingConfig() throws Exception {
+	@Test void a04_beanxAnnotationOverridesPrivate_usingConfig() throws Exception {
 		var al = AnnotationWorkList.of(b2ci.getAnnotationList());
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = JsonParser.create().apply(al).build();

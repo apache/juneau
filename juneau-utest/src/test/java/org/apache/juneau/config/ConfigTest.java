@@ -972,7 +972,7 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	// testExampleInConfig - Example in Config
 	//====================================================================================================
-	@Test void testExampleInConfig() throws Exception {
+	@Test void a01_exampleInConfig() throws Exception {
 
 		Config cf = init(
 			"# Default section", "key1 = 1", "key2 = true", "key3 = [1,2,3]", "key4 = http://foo", "",
@@ -1022,7 +1022,7 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	// testEnum
 	//====================================================================================================
-	@Test void testEnum() throws Exception {
+	@Test void a02_enum() throws Exception {
 		Config cf = init(
 			"key1 = MINUTES"
 		);
@@ -1036,7 +1036,7 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	// testEncodedValues
 	//====================================================================================================
-	@Test void testEncodedValues() throws Exception {
+	@Test void a03_encodedValues() throws Exception {
 		Config cf = init(
 			"[s1]", "", "foo<*> = "
 		);
@@ -1066,7 +1066,7 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	// public Config encodeEntries()
 	//====================================================================================================
-	@Test void testEncodeEntries() throws Exception {
+	@Test void a04_encodeEntries() throws Exception {
 		Config cf = init(
 			"[s1]", "", "foo<*> = mypassword"
 		);
@@ -1079,7 +1079,7 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	// testVariables
 	//====================================================================================================
-	@Test void testVariables() {
+	@Test void a05_variables() {
 
 		Config cf = init(
 			"[s1]",
@@ -1119,7 +1119,7 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	// testXorEncoder
 	//====================================================================================================
-	@Test void testXorEncoder() {
+	@Test void a06_xorEncoder() {
 		testXor("foo");
 		testXor("");
 		testXor("123");
@@ -1137,7 +1137,7 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	// testHex
 	//====================================================================================================
-	@Test void testHex() throws Exception {
+	@Test void a07_hex() throws Exception {
 		Config cf = init().copy().binaryFormat(BinaryFormat.HEX).build();
 
 		cf.set("foo", "bar".getBytes("UTF-8"));
@@ -1148,7 +1148,7 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	// testSpacedHex
 	//====================================================================================================
-	@Test void testSpacedHex() throws Exception {
+	@Test void a08_spacedHex() throws Exception {
 		Config cf = init().copy().binaryFormat(BinaryFormat.SPACED_HEX).build();
 
 		cf.set("foo", "bar".getBytes("UTF-8"));
@@ -1159,7 +1159,7 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	// testMultiLines
 	//====================================================================================================
-	@Test void testMultiLines() throws Exception {
+	@Test void a09_multiLines() throws Exception {
 		Config cf = init(
 			"[s1]",
 			"f1 = x \n\ty \n\tz"
@@ -1175,7 +1175,7 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	// testNumberShortcuts
 	//====================================================================================================
-	@Test void testNumberShortcuts() {
+	@Test void a10_numberShortcuts() {
 		Config cf = init(
 			"[s1]",
 			"f1 = 1M",
@@ -1192,7 +1192,7 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	// testListeners
 	//====================================================================================================
-	@Test void testListeners() throws Exception {
+	@Test void a11_listeners() throws Exception {
 		Config cf = init();
 
 		final Set<String> changes = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
@@ -1298,7 +1298,7 @@ class ConfigTest extends SimpleTestBase {
 	// getObjectArray(Class c, String key)
 	// getObjectArray(Class c, String key, T[] def)
 	//====================================================================================================
-	@Test void testGetObjectArray() {
+	@Test void a12_getObjectArray() {
 		Config cf = init("[A]", "a1=[1,2,3]");
 		assertJson(cf.get("A/a1").as(Integer[].class).get(), "[1,2,3]");
 		assertJson(cf.get("A/a2").as(Integer[].class).orElse(new Integer[]{4,5,6}), "[4,5,6]");
@@ -1335,7 +1335,7 @@ class ConfigTest extends SimpleTestBase {
 	// getStringArray(String key)
 	// getStringArray(String key, String[] def)
 	//====================================================================================================
-	@Test void testGetStringArray() {
+	@Test void a13_getStringArray() {
 		Config cf = init("[A]", "a1=1,2,3");
 		assertJson(cf.get("A/a1").asStringArray().get(), "['1','2','3']");
 		assertJson(cf.get("A/a2").asStringArray().orElse(new String[]{"4","5","6"}), "['4','5','6']");
@@ -1357,7 +1357,7 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	// getSectionMap(String name)
 	//====================================================================================================
-	@Test void testGetSectionMap() {
+	@Test void a14_getSectionMap() {
 		Config cf = init("[A]", "a1=1", "", "[D]", "d1=$C{A/a1}","d2=$S{X}");
 
 		assertJson(cf.getSection("A").asMap().get(), "{a1:'1'}");
@@ -1376,7 +1376,7 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	// toWritable()
 	//====================================================================================================
-	@Test void testToWritable() throws Exception {
+	@Test void a15_toWritable() throws Exception {
 		Config cf = init("a = b");
 
 		var sw = new StringWriter();
@@ -1388,7 +1388,7 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test resolving with override
 	//====================================================================================================
-	@Test void testResolvingWithOverride() {
+	@Test void a16_resolvingWithOverride() {
 		Config cf = init();
 		cf.set("a", "$A{X}");
 		cf.set("b", "$B{X}");
@@ -1462,7 +1462,7 @@ class ConfigTest extends SimpleTestBase {
 	//====================================================================================================
 	// Ensure pound signs in values are encoded.
 	//====================================================================================================
-	@Test void testPoundSignEscape() throws Exception {
+	@Test void a17_poundSignEscape() throws Exception {
 		Config cf = init();
 		cf.set("a", "a,#b,=c");
 		cf.set("A/a", "a,#b,=c");
@@ -1499,7 +1499,7 @@ class ConfigTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void testGetCandidateSystemDefaultConfigNames() {
+	@Test void a18_getCandidateSystemDefaultConfigNames() {
 
 		System.setProperty("juneau.configFile", "foo.txt");
 		assertJson(Config.getCandidateSystemDefaultConfigNames(), "['foo.txt']");

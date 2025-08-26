@@ -30,7 +30,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	//====================================================================================================
 	// testBasic - @Xml.format=COLLAPSED
 	//====================================================================================================
-	@Test void testBasic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		var t = new A();
@@ -69,7 +69,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	//====================================================================================================
 	// testUninitializedFields - @Xml.format=COLLAPSED, uninitialized fields.
 	//====================================================================================================
-	@Test void testUninitializedFields() throws Exception {
+	@Test void a02_uninitializedFields() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		var t = new B();
@@ -108,7 +108,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	//====================================================================================================
 	// testInitializedFields - @Xml.format=COLLAPSED, initialized fields.
 	//====================================================================================================
-	@Test void testInitializedFields() throws Exception {
+	@Test void a03_initializedFields() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		var t = new C();
@@ -153,7 +153,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	//====================================================================================================
 	// testGetters - @Xml.format=COLLAPSED, getters.
 	//====================================================================================================
-	@Test void testGetters() throws Exception {
+	@Test void a04_getters() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		var t = new D();
@@ -196,7 +196,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	//====================================================================================================
 	// testNullConstructibleCollectionFields - @Xml.format=COLLAPSED, null constructible collection fields.
 	//====================================================================================================
-	@Test void testNullConstructibleCollectionFields() throws Exception {
+	@Test void a05_nullConstructibleCollectionFields() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		var t = new E();
@@ -229,7 +229,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	//====================================================================================================
 	// testElementNameOnElementClass - @Xml.format=COLLAPSED, element name defined on element class.
 	//====================================================================================================
-	@Test void testElementNameOnElementClass() throws Exception {
+	@Test void a06_elementNameOnElementClass() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		Object t1 = FA.newInstance(), t2;
@@ -290,7 +290,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	// testElementNameOnElementClassOverridden - @Xml.format=COLLAPSED, element name defined on element class,
 	//	but overridden by @Xml.childName on property.
 	//====================================================================================================
-	@Test void testElementNameOnElementClassOverridden() throws Exception {
+	@Test void a07_elementNameOnElementClassOverridden() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		var t = G.newInstance();
@@ -321,7 +321,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	//====================================================================================================
 	// testElementNameOnCollectionClass - @Xml.format=COLLAPSED, element name defined on bean class.
 	//====================================================================================================
-	@Test void testElementNameOnCollectionClass() throws Exception {
+	@Test void a08_elementNameOnCollectionClass() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		var t = H.newInstance();
@@ -357,7 +357,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 	// testElementNameOnCollectionClassOverridden - @Xml.format=COLLAPSED, element name defined on element class,
 	//	but overridden by @Xml.childName on property.
 	//====================================================================================================
-	@Test void testElementNameOnCollectionClassOverridden() throws Exception {
+	@Test void a09_elementNameOnCollectionClassOverridden() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		var t = G.newInstance();

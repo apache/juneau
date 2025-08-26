@@ -25,7 +25,7 @@ class BeanMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testFilteredEntry
 	//====================================================================================================
-	@Test void testFilteredEntry() {
+	@Test void a01_filteredEntry() {
 		BeanSession session = BeanContext.create().swaps(ByteArraySwap.Base64.class).build().getSession();
 		BeanMap<A> m = session.toBeanMap(new A());
 
@@ -46,7 +46,7 @@ class BeanMapTest extends SimpleTestBase {
 	// testFilteredEntryWithMultipleMatchingFilters
 	// When bean properties can have multiple filters applied to them, pick the first match.
 	//====================================================================================================
-	@Test void testFilteredEntryWithMultipleMatchingFilters() {
+	@Test void a02_filteredEntryWithMultipleMatchingFilters() {
 		BeanSession session = BeanContext.create().swaps(B2Swap.class, B1Swap.class).build().getSession();
 		BeanMap<B> bm = session.toBeanMap(B.create());
 		JsonMap m = (JsonMap)bm.get("b1");

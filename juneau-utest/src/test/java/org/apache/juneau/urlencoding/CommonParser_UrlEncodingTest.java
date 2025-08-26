@@ -32,7 +32,7 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 	//====================================================================================================
 	// testFromSerializer
 	//====================================================================================================
-	@Test void testFromSerializer() throws Exception {
+	@Test void a01_fromSerializer() throws Exception {
 		Map m = null;
 		String in;
 
@@ -100,7 +100,7 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 	//====================================================================================================
 	// Correct handling of unknown properties.
 	//====================================================================================================
-	@Test void testCorrectHandlingOfUnknownProperties() throws Exception {
+	@Test void a02_correctHandlingOfUnknownProperties() throws Exception {
 		var p2 = UrlEncodingParser.create().ignoreUnknownBeanProperties().build();
 		B t;
 
@@ -119,7 +119,7 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 	//====================================================================================================
 	// Writing to Collection properties with no setters.
 	//====================================================================================================
-	@Test void testCollectionPropertiesWithNoSetters() throws Exception {
+	@Test void a03_collectionPropertiesWithNoSetters() throws Exception {
 
 		ReaderParser p2 = UrlEncodingParser.DEFAULT;
 
@@ -140,7 +140,7 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 	//====================================================================================================
 	// Parser listeners.
 	//====================================================================================================
-	@Test void testParserListeners() throws Exception {
+	@Test void a04_parserListeners() throws Exception {
 		var p2 = UrlEncodingParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		var in = "a=1&unknownProperty=foo&b=2";
@@ -158,7 +158,7 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void testCollections() throws Exception {
+	@Test void a05_collections() throws Exception {
 		WriterSerializer s = UrlEncodingSerializer.DEFAULT;
 		ReaderParser p2 = UrlEncodingParser.DEFAULT;
 

@@ -27,7 +27,7 @@ class UonParserReaderTest extends SimpleTestBase {
 	//====================================================================================================
 	// Basic tests
 	//====================================================================================================
-	@Test void testBasic() throws Exception {
+	@Test void a01_basic() throws Exception {
 
 		UonReader r;
 		String s, in;

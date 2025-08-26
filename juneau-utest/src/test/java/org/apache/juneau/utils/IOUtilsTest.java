@@ -28,7 +28,7 @@ class IOUtilsTest extends SimpleTestBase {
 	// read(InputStream)
 	// read(Reader, int, int)
 	//====================================================================================================
-	@Test void testRead() throws Exception {
+	@Test void a01_read() throws Exception {
 
 		TestReader in;
 		TestWriter out;
@@ -41,7 +41,7 @@ class IOUtilsTest extends SimpleTestBase {
 		assertEquals("foobar", out.toString());
 	}
 
-	@Test void testLoadSystemResourceAsString() throws Exception {
+	@Test void a02_loadSystemResourceAsString() throws Exception {
 		assertNotNull(loadSystemResourceAsString("test1.txt", "."));
 		assertNull(loadSystemResourceAsString("test2.txt", "."));
 		assertNull(loadSystemResourceAsString("test3.txt", "sub"));
@@ -105,4 +105,4 @@ class IOUtilsTest extends SimpleTestBase {
 			return new String(this.toByteArray(), UTF8);
 		}
 	}
-}
+}

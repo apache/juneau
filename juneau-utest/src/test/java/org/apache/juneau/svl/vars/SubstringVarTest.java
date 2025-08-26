@@ -23,7 +23,7 @@ class SubstringVarTest extends SimpleTestBase {
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test void test() {
+	@Test void a01_test() {
 		var vr = VarResolver.create().vars(SubstringVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("SubstringVarTest.test", "foo bar");

@@ -65,7 +65,7 @@ class Operation_Test extends SimpleTestBase {
 	/**
 	 * Test method for {@link Operation#set(java.lang.String, java.lang.Object)}.
 	 */
-	@Test void testSet() throws Exception {
+	@Test void a01_set() throws Exception {
 		var t = new Operation();
 
 		t

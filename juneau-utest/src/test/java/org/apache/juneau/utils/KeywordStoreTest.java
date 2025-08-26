@@ -23,7 +23,7 @@ class KeywordStoreTest extends SimpleTestBase {
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test void test() {
+	@Test void a01_test() {
 		var ks = new KeywordSet("aaa", "zzz");
 		assertTrue(ks.contains("aaa"));
 		assertTrue(ks.contains("zzz"));

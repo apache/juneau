@@ -36,7 +36,7 @@ class UonPartParser_Test extends SimpleTestBase {
 	//====================================================================================================
 	// Basic test
 	//====================================================================================================
-	@Test void testBasic() throws Exception {
+	@Test void a01_basic() throws Exception {
 
 		String t;
 		Map m;
@@ -216,7 +216,7 @@ class UonPartParser_Test extends SimpleTestBase {
 	//====================================================================================================
 	// Unicode character test
 	//====================================================================================================
-	@Test void testUnicodeChars() throws Exception {
+	@Test void a02_unicodeChars() throws Exception {
 		String t;
 
 		// 2-byte UTF-8 character
@@ -250,7 +250,7 @@ class UonPartParser_Test extends SimpleTestBase {
 	//====================================================================================================
 	// Test simple bean
 	//====================================================================================================
-	@Test void testSimpleBean() throws Exception {
+	@Test void a03_simpleBean() throws Exception {
 		A t;
 		String s = null;
 
@@ -270,7 +270,7 @@ class UonPartParser_Test extends SimpleTestBase {
 		public int f2;
 	}
 
-	@Test void testParseParameterJsonMap() throws Exception {
+	@Test void a04_parseParameterJsonMap() throws Exception {
 		String in = "(name='foo bar')";
 
 		JsonMap r =  parse(in, BeanContext.DEFAULT.getClassMeta(JsonMap.class));

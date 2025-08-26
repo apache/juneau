@@ -35,7 +35,7 @@ class DataConversionTest extends SimpleTestBase {
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@Test void testBasic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		var m = new JsonMap();
 
 		// *** Number ***
@@ -115,7 +115,7 @@ class DataConversionTest extends SimpleTestBase {
 	//====================================================================================================
 	// Data conversions with swaps.
 	//====================================================================================================
-	@Test void testObjectSwaps() throws Exception {
+	@Test void a02_objectSwaps() throws Exception {
 		String s = "2001-12-21T12:34:56Z";
 		BeanContext bc = BeanContext.DEFAULT;
 		Calendar c = bc.convertToType(s, GregorianCalendar.class);

@@ -31,7 +31,7 @@ class UrlEncodingParserTest extends SimpleTestBase {
 	//====================================================================================================
 	// Basic test
 	//====================================================================================================
-	@Test void testBasic() throws Exception {
+	@Test void a01_basic() throws Exception {
 
 		String t;
 		Map m;
@@ -340,7 +340,7 @@ class UrlEncodingParserTest extends SimpleTestBase {
 	//====================================================================================================
 	// Unicode character test
 	//====================================================================================================
-	@Test void testUnicodeChars() throws Exception {
+	@Test void a02_unicodeChars() throws Exception {
 		String t;
 		Map m;
 
@@ -405,7 +405,7 @@ class UrlEncodingParserTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test simple bean
 	//====================================================================================================
-	@Test void testSimpleBean() throws Exception {
+	@Test void a03_simpleBean() throws Exception {
 		var p2 = UrlEncodingParser.DEFAULT;
 		A t;
 
@@ -423,7 +423,7 @@ class UrlEncodingParserTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test URL-encoded strings with no-value parameters.
 	//====================================================================================================
-	@Test void testNoValues() throws Exception {
+	@Test void a04_noValues() throws Exception {
 		var p2 = UrlEncodingParser.DEFAULT;
 		JsonMap m;
 
@@ -441,7 +441,7 @@ class UrlEncodingParserTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test comma-delimited list parameters.
 	//====================================================================================================
-	@Test void testCommaDelimitedLists() throws Exception {
+	@Test void a05_commaDelimitedLists() throws Exception {
 		var p2 = UrlEncodingParser.DEFAULT;
 
 		String s = "?f1=1,2,3&f2=a,b,c&f3=true,false&f4=&f5";
@@ -460,7 +460,7 @@ class UrlEncodingParserTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test comma-delimited list parameters with special characters.
 	//====================================================================================================
-	@Test void testCommaDelimitedListsWithSpecialChars() throws Exception {
+	@Test void a06_commaDelimitedListsWithSpecialChars() throws Exception {
 		var p2 = UrlEncodingParser.DEFAULT;
 		String s;
 		C1 c;
@@ -547,7 +547,7 @@ class UrlEncodingParserTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test comma-delimited list parameters.
 	//====================================================================================================
-	@Test void testWhitespace() throws Exception {
+	@Test void a07_whitespace() throws Exception {
 		UrlEncodingParser p2 = UrlEncodingParser.DEFAULT;
 		String s;
 		JsonMap m;
@@ -620,7 +620,7 @@ class UrlEncodingParserTest extends SimpleTestBase {
 	//====================================================================================================
 	// Multi-part parameters on beans via URLENC_expandedParams
 	//====================================================================================================
-	@Test void testMultiPartParametersOnBeansViaProperty() throws Exception {
+	@Test void a08_multiPartParametersOnBeansViaProperty() throws Exception {
 		UrlEncodingParser p2;
 		String in;
 
@@ -673,7 +673,7 @@ class UrlEncodingParserTest extends SimpleTestBase {
 		assertJson(t, e);
 	}
 
-	@Test void testMultiPartParametersOnBeansViaProperty_usingConfig() throws Exception {
+	@Test void a09_multiPartParametersOnBeansViaProperty_usingConfig() throws Exception {
 		UrlEncodingParser p2;
 		String in;
 
@@ -729,7 +729,7 @@ class UrlEncodingParserTest extends SimpleTestBase {
 	//====================================================================================================
 	// Multi-part parameters on beans via @UrlEncoding.expandedParams on class
 	//====================================================================================================
-	@Test void testMultiPartParametersOnBeansViaAnnotationOnClass() throws Exception {
+	@Test void a10_multiPartParametersOnBeansViaAnnotationOnClass() throws Exception {
 		UrlEncodingParser p2;
 		String in;
 		p2 = UrlEncodingParser.DEFAULT;
@@ -781,7 +781,7 @@ class UrlEncodingParserTest extends SimpleTestBase {
 		assertJson(t, e);
 	}
 
-	@Test void testMultiPartParametersOnBeansViaAnnotationOnClass_usingConfig() throws Exception {
+	@Test void a11_multiPartParametersOnBeansViaAnnotationOnClass_usingConfig() throws Exception {
 		UrlEncodingParser p2;
 		String in;
 		p2 = UrlEncodingParser.DEFAULT.copy().applyAnnotations(DTOs2.Annotations.class).build();

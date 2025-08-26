@@ -36,7 +36,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Simple comparison test with JSON serializer
 	//====================================================================================================
-	@Test void testComparisonWithJson() throws Exception {
+	@Test void a01_comparisonWithJson() throws Exception {
 
 		String json1 = """
 			{
@@ -92,7 +92,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test namespacing
 	//====================================================================================================
-	@Test void testNamespaces() throws Exception {
+	@Test void a02_namespaces() throws Exception {
 
 		String json1 = """
 			{
@@ -146,7 +146,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test bean name annotation
 	//====================================================================================================
-	@Test void testBeanNameAnnotation() throws Exception {
+	@Test void a03_beanNameAnnotation() throws Exception {
 		String e = """
 			<Person1>
 				<name>John Smith</name>
@@ -174,7 +174,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test trimNulls property.
 	//====================================================================================================
-	@Test void testTrimNulls() throws Exception {
+	@Test void a04_trimNulls() throws Exception {
 		String e = """
 			<Person1>
 				<age>123</age>
@@ -187,7 +187,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Element name.
 	//====================================================================================================
-	@Test void testElementName() throws Exception {
+	@Test void a05_elementName() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		var t = new A();
 		String r = s.serialize(t);
@@ -203,7 +203,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Element name on superclass.
 	//====================================================================================================
-	@Test void testElementNameOnSuperclass() throws Exception {
+	@Test void a06_elementNameOnSuperclass() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		var t = new B2();
 		String r = s.serialize(t);
@@ -217,7 +217,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Element name on interface.
 	//====================================================================================================
-	@Test void testElementNameOnInterface() throws Exception {
+	@Test void a07_elementNameOnInterface() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		var t = new C3();
 		String r = s.serialize(t);
@@ -235,7 +235,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Element name with invalid XML characters.
 	//====================================================================================================
-	@Test void testElementNameWithInvalidChars() throws Exception {
+	@Test void a08_elementNameWithInvalidChars() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		var t = new D();
@@ -254,7 +254,7 @@ class XmlTest extends SimpleTestBase {
 	// Field of type collection with element name.
 	// Element name should be ignored.
 	//====================================================================================================
-	@Test void testIgnoreCollectionFieldWithElementName() throws Exception {
+	@Test void a09_ignoreCollectionFieldWithElementName() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		var t = new G();
@@ -276,7 +276,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Element name on beans of a collection.
 	//====================================================================================================
-	@Test void testElementNameOnBeansOfCollection() throws Exception {
+	@Test void a10_elementNameOnBeansOfCollection() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		Object o = new J1();
 		String r = s.serialize(o);
@@ -297,7 +297,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// @Xml.ns without matching nsUri.
 	//====================================================================================================
-	@Test void testXmlNsWithoutMatchingNsUri() {
+	@Test void a11_xmlNsWithoutMatchingNsUri() {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		var t = new K();
 		assertThrowsWithMessage(SerializeException.class, "Found @Xml.prefix annotation with no matching URI.  prefix='foo'", ()->s.serialize(t));
@@ -311,7 +311,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// @Xml.format=ATTR.
 	//====================================================================================================
-	@Test void testXmlFormatAttr() throws Exception {
+	@Test void a12_xmlFormatAttr() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		var t = new L();
@@ -335,7 +335,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// @Xml.format=ATTR with namespaces.
 	//====================================================================================================
-	@Test void testXmlFormatAttrWithNs() throws Exception {
+	@Test void a13_xmlFormatAttrWithNs() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		var t = new M();
@@ -366,7 +366,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// _xXXXX_ notation.
 	//====================================================================================================
-	@Test void testXXXXNotation() throws Exception {
+	@Test void a14_xXXXNotation() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		String in, r;
@@ -405,7 +405,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// @Bean.uri annotation formatted as element
 	//====================================================================================================
-	@Test void testBeanUriAnnotationFormattedAsElement() throws Exception {
+	@Test void a15_beanUriAnnotationFormattedAsElement() throws Exception {
 		XmlParser p = XmlParser.DEFAULT;
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 
@@ -437,7 +437,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// @Bean.uri as elements, overridden element names
 	//====================================================================================================
-	@Test void testOverriddenBeanUriAsElementNames() throws Exception {
+	@Test void a16_overriddenBeanUriAsElementNames() throws Exception {
 		XmlParser p = XmlParser.DEFAULT;
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 
@@ -469,7 +469,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// @Bean.uri and @Bean.id annotations, overridden attribute names
 	//====================================================================================================
-	@Test void testOverriddenBeanUriAndIdAnnotations() throws Exception {
+	@Test void a17_overriddenBeanUriAndIdAnnotations() throws Exception {
 		XmlParser p = XmlParser.DEFAULT;
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 
@@ -501,7 +501,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Namespace on class
 	//====================================================================================================
-	@Test void testNsOnClass() throws Exception {
+	@Test void a18_nsOnClass() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
@@ -552,7 +552,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Namespace on class with element name.
 	//====================================================================================================
-	@Test void testNsOnClassWithElementName() throws Exception {
+	@Test void a19_nsOnClassWithElementName() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
@@ -602,7 +602,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Namespace on package, no namespace on class.
 	//====================================================================================================
-	@Test void testNsOnPackageNoNsOnClass() throws Exception {
+	@Test void a20_nsOnPackageNoNsOnClass() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 
@@ -653,7 +653,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Namespace on package, no namespace on class, element name on class.
 	//====================================================================================================
-	@Test void testNsOnPackageNoNsOnClassElementNameOnClass() throws Exception {
+	@Test void a21_nsOnPackageNoNsOnClassElementNameOnClass() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
@@ -703,7 +703,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Namespace on package, namespace on class, element name on class.
 	//====================================================================================================
-	@Test void testNsOnPackageNsOnClassElementNameOnClass() throws Exception {
+	@Test void a22_nsOnPackageNsOnClassElementNameOnClass() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 
@@ -755,7 +755,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Namespace on package, namespace on class, no element name on class.
 	//====================================================================================================
-	@Test void testNsOnPackageNsOnClassNoElementNameOnClass() throws Exception {
+	@Test void a23_nsOnPackageNsOnClassNoElementNameOnClass() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
@@ -806,7 +806,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Combination of namespaces and overridden bean property names.
 	//====================================================================================================
-	@Test void testComboOfNsAndOverriddenBeanPropertyNames() throws Exception {
+	@Test void a24_comboOfNsAndOverriddenBeanPropertyNames() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
@@ -854,7 +854,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// @XmlNs annotation
 	//====================================================================================================
-	@Test void testXmlNsAnnotation() throws Exception {
+	@Test void a25_xmlNsAnnotation() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
@@ -904,7 +904,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// @Xml.ns on package, @Xml.nsUri not on package but in @XmlNs.
 	//====================================================================================================
-	@Test void testXmlNsOnPackageNsUriInXmlNs() throws Exception {
+	@Test void a26_xmlNsOnPackageNsUriInXmlNs() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
@@ -954,7 +954,7 @@ class XmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// @Xml.format=ATTR
 	//====================================================================================================
-	@Test void testXmlAttrs() throws Exception {
+	@Test void a27_xmlAttrs() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		String r;

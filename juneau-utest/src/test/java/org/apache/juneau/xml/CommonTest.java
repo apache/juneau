@@ -30,7 +30,7 @@ class CommonTest extends SimpleTestBase {
 	//====================================================================================================
 	// Trim nulls from beans
 	//====================================================================================================
-	@Test void testTrimNullsFromBeans() throws Exception {
+	@Test void a01_trimNullsFromBeans() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		var t1 = A.create();
@@ -60,7 +60,7 @@ class CommonTest extends SimpleTestBase {
 	//====================================================================================================
 	// Trim empty maps
 	//====================================================================================================
-	@Test void testTrimEmptyMaps() throws Exception {
+	@Test void a02_trimEmptyMaps() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		var t1 = B.create();
@@ -92,7 +92,7 @@ class CommonTest extends SimpleTestBase {
 	//====================================================================================================
 	// Trim empty lists
 	//====================================================================================================
-	@Test void testTrimEmptyLists() throws Exception {
+	@Test void a03_trimEmptyLists() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		var t1 = C.create();
@@ -124,7 +124,7 @@ class CommonTest extends SimpleTestBase {
 	//====================================================================================================
 	// Trim empty arrays
 	//====================================================================================================
-	@Test void testTrimEmptyArrays() throws Exception {
+	@Test void a04_trimEmptyArrays() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		var t1 = D.create();
@@ -156,7 +156,7 @@ class CommonTest extends SimpleTestBase {
 	//====================================================================================================
 	// @Beanp.bpi annotation.
 	//====================================================================================================
-	@Test void testBeanPropertyProperties() throws Exception {
+	@Test void a05_beanPropertyProperties() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		var t = new E1();
 		String r = s.serialize(t);
@@ -192,7 +192,7 @@ class CommonTest extends SimpleTestBase {
 	//====================================================================================================
 	// @Beanp.bpi annotation on list of beans.
 	//====================================================================================================
-	@Test void testBeanPropertyPropertiesOnListOfBeans() throws Exception {
+	@Test void a06_beanPropertyPropertiesOnListOfBeans() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		List<Test7b> l = new LinkedList<>();
 		var t = new Test7b();
@@ -210,7 +210,7 @@ class CommonTest extends SimpleTestBase {
 	//====================================================================================================
 	// Recursion
 	//====================================================================================================
-	@Test void testRecursion() throws Exception {
+	@Test void a07_recursion() throws Exception {
 		XmlSerializer.Builder s = XmlSerializer.create().maxDepth(Integer.MAX_VALUE);
 
 		var r1 = new R1();

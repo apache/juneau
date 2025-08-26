@@ -31,7 +31,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Should be able to read non-existent files without errors.
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testNonExistentConfig() throws Exception {
+	@Test void a01_nonExistentConfig() throws Exception {
 		ConfigStore s = MemoryStore.create().build();
 		ConfigMap cm = s.getMap("A.cfg");
 		assertEquals("", cm.toString());
@@ -40,7 +40,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Should be able to read blank files without errors.
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testBlankConfig() throws Exception {
+	@Test void a02_blankConfig() throws Exception {
 
 		ConfigStore s = initStore("A.cfg", "");
 		ConfigMap cm = s.getMap("A.cfg");
@@ -53,7 +53,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Simple one-line file.
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testSimpleOneLine() throws Exception {
+	@Test void a03_simpleOneLine() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"foo=bar"
 		);
@@ -75,7 +75,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Simple one-line file with leading comments.
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testSimpleOneLineWithComments() throws Exception {
+	@Test void a04_simpleOneLineWithComments() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"#comment",
 			"foo=bar"
@@ -98,7 +98,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Simple section.
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testSimpleSection() throws Exception {
+	@Test void a05_simpleSection() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[MySection]",
 			"foo=bar"
@@ -122,7 +122,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Non-existent values should not throw exceptions.
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testNonExistentValues() throws Exception {
+	@Test void a06_nonExistentValues() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[MySection]",
 			"foo=bar"
@@ -142,7 +142,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// testSimpleSectionWithComments
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testSimpleSectionWithComments() throws Exception {
+	@Test void a07_simpleSectionWithComments() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"#S1",
 			"[S1]",
@@ -174,7 +174,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// testSimpleAndDefaultSectionsWithComments
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testSimpleAndDefaultSectionsWithComments() throws Exception {
+	@Test void a08_simpleAndDefaultSectionsWithComments() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"#D",
 			"",
@@ -205,7 +205,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// testSimpleAndDefaultSectionsWithCommentsAndExtraSpaces
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testSimpleAndDefaultSectionsWithCommentsAndExtraSpaces() throws Exception {
+	@Test void a09_simpleAndDefaultSectionsWithCommentsAndExtraSpaces() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"#Da",
 			"#Db",
@@ -248,7 +248,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Error conditions.
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testMalformedSectionHeaders() {
+	@Test void a10_malformedSectionHeaders() {
 
 		String[] test = {
 			"[]", "[  ]",
@@ -263,12 +263,12 @@ class ConfigMapTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void testDuplicateSectionNames() {
+	@Test void a01_duplicateSectionNames() {
 		ConfigStore s = initStore("A.cfg", "[S1]", "[S1]");
 		assertThrowsWithMessage(ConfigException.class, "Duplicate section found in configuration:  [S1]", ()->s.getMap("A.cfg"));
 	}
 
-	@Test void testDuplicateEntryNames() {
+	@Test void a02_duplicateEntryNames() {
 		ConfigStore s = initStore("A.cfg", "[S1]", "foo=v1", "foo=v2");
 		assertThrowsWithMessage(ConfigException.class, "Duplicate entry found in section [S1] of configuration:  foo", ()->s.getMap("A.cfg"));
 	}
@@ -276,7 +276,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Lines can be split up.
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testMultipleLines() throws Exception {
+	@Test void a03_multipleLines() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"k1 = v1a,",
 			"\tv1b,",
@@ -301,7 +301,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|", cm);
 	}
 
-	@Test void testMultipleLinesWithSpacesAndComments() throws Exception {
+	@Test void a04_multipleLinesWithSpacesAndComments() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"",
 			"#k1",
@@ -332,7 +332,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("|#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|", cm);
 	}
 
-	@Test void testMultipleLinesInSection() throws Exception {
+	@Test void a05_multipleLinesInSection() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1a,",
@@ -358,7 +358,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|", cm);
 	}
 
-	@Test void testMultipleLinesInSectionWithSpacesAndPrelines() throws Exception {
+	@Test void a06_multipleLinesInSectionWithSpacesAndPrelines() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"",
 			"#S1",
@@ -397,7 +397,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Entry lines can have trailing comments.
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testEntriesWithComments() throws Exception {
+	@Test void a07_entriesWithComments() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = foo # comment"
@@ -424,7 +424,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertEquals("", cm.getEntry("S1", "k1").getComment());
 	}
 
-	@Test void testEntriesWithOddComments() throws Exception {
+	@Test void a08_entriesWithOddComments() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = foo#",
@@ -436,7 +436,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertEquals("", cm.getEntry("S1", "k2").getComment());
 	}
 
-	@Test void testEntriesWithEscapedComments() throws Exception {
+	@Test void a09_entriesWithEscapedComments() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = foo\\#bar",
@@ -454,7 +454,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test setting entries.
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testSettingEntries() throws Exception {
+	@Test void a10_settingEntries() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1a",
@@ -476,7 +476,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|k1 = v1b|k2 = v2a|k3 = v3b|", cm);
 	}
 
-	@Test void testSettingEntriesWithPreLines() throws Exception {
+	@Test void a11_settingEntriesWithPreLines() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"",
 			"#S1",
@@ -508,7 +508,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|", cm);
 	}
 
-	@Test void testSettingEntriesWithNewlines() throws Exception {
+	@Test void a12_settingEntriesWithNewlines() throws Exception {
 		ConfigStore s = initStore("A.cfg");
 		ConfigMap cm = s.getMap("A.cfg");
 
@@ -527,7 +527,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|", cm);
 	}
 
-	@Test void testSettingEntriesWithNewlinesAndSpaces() throws Exception {
+	@Test void a13_settingEntriesWithNewlinesAndSpaces() throws Exception {
 		ConfigStore s = initStore("A.cfg");
 		ConfigMap cm = s.getMap("A.cfg");
 
@@ -549,7 +549,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// setSection()
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testSetSectionOnExistingSection() throws Exception {
+	@Test void a14_setSectionOnExistingSection() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -564,7 +564,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|k1 = v1|", cm);
 	}
 
-	@Test void testSetSectionOnDefaultSection() throws Exception {
+	@Test void a15_setSectionOnDefaultSection() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -579,7 +579,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|k1 = v1|", cm);
 	}
 
-	@Test void testSetSectionOnNewSection() throws Exception {
+	@Test void a16_setSectionOnNewSection() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -594,7 +594,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|k1 = v1|#S2|[S2]|[S3]|[S4]|", cm);
 	}
 
-	@Test void testSetSectionBadNames() throws Exception {
+	@Test void a17_setSectionBadNames() throws Exception {
 		ConfigStore s = initStore("A.cfg");
 		ConfigMap cm = s.getMap("A.cfg");
 
@@ -610,7 +610,7 @@ class ConfigMapTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void testSetSectionOkNames() throws Exception {
+	@Test void a18_setSectionOkNames() throws Exception {
 		ConfigStore s = initStore("A.cfg");
 		ConfigMap cm = s.getMap("A.cfg");
 
@@ -633,7 +633,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// removeSection()
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testRemoveSectionOnExistingSection() throws Exception {
+	@Test void a19_removeSectionOnExistingSection() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1",
@@ -647,7 +647,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S2]|k2 = v2|", cm);
 	}
 
-	@Test void testRemoveSectionOnNonExistingSection() throws Exception {
+	@Test void a20_removeSectionOnNonExistingSection() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1",
@@ -663,7 +663,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertThrowsWithMessage(IllegalArgumentException.class, "Invalid section name: 'null'", ()->cm.removeSection(null));
 	}
 
-	@Test void testRemoveDefaultSection() throws Exception {
+	@Test void a21_removeDefaultSection() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"k = v",
 			"[S1]",
@@ -678,7 +678,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
 	}
 
-	@Test void testRemoveDefaultSectionWithComments() throws Exception {
+	@Test void a22_removeDefaultSectionWithComments() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"#D",
 			"",
@@ -699,7 +699,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// setPreLines()
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testSetPrelinesOnExistingEntry() throws Exception {
+	@Test void a23_setPrelinesOnExistingEntry() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -714,7 +714,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|k1 = v1|", cm);
 	}
 
-	@Test void testSetPrelinesOnExistingEntryWithAtrributes() throws Exception {
+	@Test void a24_setPrelinesOnExistingEntryWithAtrributes() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"#k1a",
@@ -726,7 +726,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|#k1b|k1 = v1 # comment|", cm);
 	}
 
-	@Test void testSetPrelinesOnNonExistingEntry() throws Exception {
+	@Test void a25_setPrelinesOnNonExistingEntry() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -751,7 +751,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// setValue()
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testSetValueOnExistingEntry() throws Exception {
+	@Test void a26_setValueOnExistingEntry() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -762,7 +762,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|k1 = v2|", cm);
 	}
 
-	@Test void testSetValueOnExistingEntryWithAttributes() throws Exception {
+	@Test void a27_setValueOnExistingEntryWithAttributes() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"#k1",
@@ -774,7 +774,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|#k1|k1 = v2 # comment|", cm);
 	}
 
-	@Test void testSetValueToNullOnExistingEntry() throws Exception {
+	@Test void a28_setValueToNullOnExistingEntry() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -785,7 +785,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|k1 = v1|", cm);
 	}
 
-	@Test void testSetValueOnNonExistingEntry() throws Exception {
+	@Test void a29_setValueOnNonExistingEntry() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -800,7 +800,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|k1 = v1|k2 = v2|", cm);
 	}
 
-	@Test void testSetValueOnNonExistingEntryOnNonExistentSection() throws Exception {
+	@Test void a30_setValueOnNonExistingEntryOnNonExistentSection() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -811,7 +811,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
 	}
 
-	@Test void testSetValueInvalidSectionNames() throws Exception {
+	@Test void a31_setValueInvalidSectionNames() throws Exception {
 		ConfigStore s = initStore("A.cfg");
 		ConfigMap cm = s.getMap("A.cfg");
 
@@ -827,7 +827,7 @@ class ConfigMapTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void testSetValueInvalidKeyNames() throws Exception {
+	@Test void a32_setValueInvalidKeyNames() throws Exception {
 		ConfigStore s = initStore("A.cfg");
 		ConfigMap cm = s.getMap("A.cfg");
 
@@ -847,7 +847,7 @@ class ConfigMapTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void testSetValueWithCommentChars() throws Exception {
+	@Test void a33_setValueWithCommentChars() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -862,7 +862,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// setComment()
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testSetCommentOnExistingEntry() throws Exception {
+	@Test void a34_setCommentOnExistingEntry() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -881,7 +881,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|k1 = v1|", cm);
 	}
 
-	@Test void testSetCommentOnExistingEntryWithAttributes() throws Exception {
+	@Test void a35_setCommentOnExistingEntryWithAttributes() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"#k1a",
@@ -893,7 +893,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|#k1a|k1 = v1 # c2|", cm);
 	}
 
-	@Test void testSetCommentOnNonExistingEntry() throws Exception {
+	@Test void a36_setCommentOnNonExistingEntry() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -914,7 +914,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// setValue()
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testSetEntryOnExistingEntry() throws Exception {
+	@Test void a37_setEntryOnExistingEntry() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -931,7 +931,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|#k1b|k1<^> = v4 # c4|", cm);
 	}
 
-	@Test void testSetEntryOnExistingEntryWithAttributes() throws Exception {
+	@Test void a38_setEntryOnExistingEntryWithAttributes() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"#k1",
@@ -949,7 +949,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|#k1b|k1<^> = v4 # c4|", cm);
 	}
 
-	@Test void testSetEntryToNullOnExistingEntry() throws Exception {
+	@Test void a39_setEntryToNullOnExistingEntry() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -960,7 +960,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|k1 = v1|", cm);
 	}
 
-	@Test void testSetEntryOnNonExistingEntry() throws Exception {
+	@Test void a40_setEntryOnNonExistingEntry() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -975,7 +975,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|k1 = v1|k2 = |", cm);
 	}
 
-	@Test void testSetEntryOnNonExistingEntryOnNonExistentSection() throws Exception {
+	@Test void a41_setEntryOnNonExistingEntryOnNonExistentSection() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -986,7 +986,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
 	}
 
-	@Test void testSetEntryInvalidSectionNames() throws Exception {
+	@Test void a42_setEntryInvalidSectionNames() throws Exception {
 		ConfigStore s = initStore("A.cfg");
 		ConfigMap cm = s.getMap("A.cfg");
 
@@ -1002,7 +1002,7 @@ class ConfigMapTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void testSetEntryInvalidKeyNames() throws Exception {
+	@Test void a43_setEntryInvalidKeyNames() throws Exception {
 		ConfigStore s = initStore("A.cfg");
 		ConfigMap cm = s.getMap("A.cfg");
 
@@ -1022,7 +1022,7 @@ class ConfigMapTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void testSetEntryWithCommentChars() throws Exception {
+	@Test void a44_setEntryWithCommentChars() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1"
@@ -1037,7 +1037,7 @@ class ConfigMapTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Modifiers
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testModifiers() throws Exception {
+	@Test void a45_modifiers() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1<^> = v1",
@@ -1055,7 +1055,7 @@ class ConfigMapTest extends SimpleTestBase {
 		assertLines("[S1]|k1<#$%&*+^@~> = v1|k2<*> = v2|k3<*^> = v3|", cm);
 	}
 
-	@Test void testInvalidModifier() throws Exception {
+	@Test void a46_invalidModifier() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1^ = v1",

@@ -26,7 +26,7 @@ class IgnoredClassesTest extends SimpleTestBase {
 	//====================================================================================================
 	// testFilesRenderedAsStrings
 	//====================================================================================================
-	@Test void testFilesRenderedAsStrings() {
+	@Test void a01_filesRenderedAsStrings() {
 		assumeTrue(System.getProperty("os.name").toLowerCase().startsWith("win"));
 		// Files should be rendered as strings.
 		var f = new File("C:/temp");
@@ -36,7 +36,7 @@ class IgnoredClassesTest extends SimpleTestBase {
 	//====================================================================================================
 	// testIgnorePackages
 	//====================================================================================================
-	@Test void testIgnorePackages() throws Exception {
+	@Test void a02_ignorePackages() throws Exception {
 		var a = new A();
 		JsonSerializer.Builder s = JsonSerializer.create().json5();
 		assertEquals("{f1:'isBean'}", s.build().serialize(a));

@@ -32,7 +32,7 @@ class UrlEncodingSerializerTest extends SimpleTestBase {
 	//====================================================================================================
 	// Basic test
 	//====================================================================================================
-	@Test void testBasic() throws Exception {
+	@Test void a01_basic() throws Exception {
 
 		Object t;
 
@@ -257,7 +257,7 @@ class UrlEncodingSerializerTest extends SimpleTestBase {
 	//====================================================================================================
 	// Unicode characters test
 	//====================================================================================================
-	@Test void testUnicodeChars() throws Exception {
+	@Test void a02_unicodeChars() throws Exception {
 		Object t;
 
 		// 2-byte UTF-8 character
@@ -312,7 +312,7 @@ class UrlEncodingSerializerTest extends SimpleTestBase {
 	//====================================================================================================
 	// Multi-part parameters on beans via URLENC_expandedParams
 	//====================================================================================================
-	@Test void testMultiPartParametersOnBeansViaProperty() throws Exception {
+	@Test void a03_multiPartParametersOnBeansViaProperty() throws Exception {
 		UrlEncodingSerializer s2;
 		DTOs.B t = DTOs.B.create();
 		String r;
@@ -368,7 +368,7 @@ class UrlEncodingSerializerTest extends SimpleTestBase {
 		assertEquals(e, r);
 	}
 
-	@Test void testMultiPartParametersOnBeansViaProperty_usingConfig() throws Exception {
+	@Test void a04_multiPartParametersOnBeansViaProperty_usingConfig() throws Exception {
 		UrlEncodingSerializer s2;
 		DTOs2.B t = DTOs2.B.create();
 		String r;
@@ -427,7 +427,7 @@ class UrlEncodingSerializerTest extends SimpleTestBase {
 	//====================================================================================================
 	// Multi-part parameters on beans via @UrlEncoding.expandedParams on class
 	//====================================================================================================
-	@Test void testMultiPartParametersOnBeansViaAnnotationOnClass() throws Exception {
+	@Test void a05_multiPartParametersOnBeansViaAnnotationOnClass() throws Exception {
 		UrlEncodingSerializer s2;
 		DTOs.C t = DTOs.C.create();
 		String r;
@@ -483,7 +483,7 @@ class UrlEncodingSerializerTest extends SimpleTestBase {
 		assertEquals(e, r);
 	}
 
-	@Test void testMultiPartParametersOnBeansViaAnnotationOnClass_usingConfig() throws Exception {
+	@Test void a06_multiPartParametersOnBeansViaAnnotationOnClass_usingConfig() throws Exception {
 		UrlEncodingSerializer s2;
 		DTOs2.C t = DTOs2.C.create();
 		String r;
@@ -539,7 +539,7 @@ class UrlEncodingSerializerTest extends SimpleTestBase {
 		assertEquals(e, r);
 	}
 
-	@Test void testMultiPartParametersOnMapOfStringArrays() throws Exception {
+	@Test void a07_multiPartParametersOnMapOfStringArrays() throws Exception {
 		UrlEncodingSerializer s2;
 		String r;
 
@@ -556,7 +556,7 @@ class UrlEncodingSerializerTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test URLENC_paramFormat == PLAINTEXT.
 	//====================================================================================================
-	@Test void testPlainTextParams() throws Exception {
+	@Test void a08_plainTextParams() throws Exception {
 		var s2 = UrlEncodingSerializer.DEFAULT.copy().paramFormatPlain().build();
 
 		assertEquals("_value=foo", s2.serialize("foo"));

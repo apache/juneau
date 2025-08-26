@@ -22,12 +22,12 @@ import org.junit.jupiter.api.*;
 
 class ConfigClasspathStoreTest extends SimpleTestBase {
 
-	@Test void testNoFile() throws Exception {
+	@Test void a01_noFile() throws Exception {
 		var fs = ClasspathStore.create().build();
 		assertEquals("", fs.read("X.cfg"));
 	}
 
-	@Test void testRealFiles() throws Exception {
+	@Test void a02_realFiles() throws Exception {
 		var fs = ClasspathStore.create().build();
 		assertContains("bar1", fs.read("foo1.cfg"));
 		assertContains("bar2", fs.read("sub/foo2.cfg"));
@@ -35,20 +35,20 @@ class ConfigClasspathStoreTest extends SimpleTestBase {
 		assertEquals("", fs.read("bad/bad.cfg"));
 	}
 
-	@Test void testOverwriteRealFiles() throws Exception {
+	@Test void a03_overwriteRealFiles() throws Exception {
 		var fs = ClasspathStore.create().build();
 		assertContains("bar1", fs.read("foo1.cfg"));
 		fs.write("foo1.cfg", fs.read("foo1.cfg"), "xxx");
 		assertEquals("xxx", fs.read("foo1.cfg"));
 	}
 
-	@Test void testSimpleCreate() throws Exception {
+	@Test void a04_simpleCreate() throws Exception {
 		var fs = ClasspathStore.create().build();
 		assertNull(fs.write("X.cfg", null, "foo"));
 		assertEquals("foo", fs.read("X.cfg"));
 	}
 
-	@Test void testFailOnMismatch() throws Exception {
+	@Test void a05_failOnMismatch() throws Exception {
 		var fs = ClasspathStore.create().build();
 		assertNotNull(fs.write("X.cfg", "xxx", "foo"));
 		assertEquals("", fs.read("X.cfg"));
@@ -60,7 +60,7 @@ class ConfigClasspathStoreTest extends SimpleTestBase {
 		assertEquals("bar", fs.read("X.cfg"));
 	}
 
-	@Test void testUpdate() throws Exception {
+	@Test void a06_update() throws Exception {
 		var fs = ClasspathStore.create().build();
 
 		final CountDownLatch latch = new CountDownLatch(2);
@@ -79,7 +79,7 @@ class ConfigClasspathStoreTest extends SimpleTestBase {
 			throw new Exception("CountDownLatch never reached zero.");
 	}
 
-	@Test void testExists() throws Exception {
+	@Test void a07_exists() throws Exception {
 		ClasspathStore.DEFAULT.write("foo.cfg", null, "foo");
 
 		assertTrue(ClasspathStore.DEFAULT.exists("foo.cfg"));

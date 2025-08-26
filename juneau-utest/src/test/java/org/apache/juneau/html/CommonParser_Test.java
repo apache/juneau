@@ -28,7 +28,7 @@ class CommonParser_Test extends SimpleTestBase {
 	//====================================================================================================
 	// testFromSerializer
 	//====================================================================================================
-	@Test void testFromSerializer() throws Exception {
+	@Test void a01_fromSerializer() throws Exception {
 		var p = HtmlParser.create().beanDictionary(A1.class).build();
 		Map m = null;
 		String in;
@@ -92,7 +92,7 @@ class CommonParser_Test extends SimpleTestBase {
 	//====================================================================================================
 	// Correct handling of unknown properties.
 	//====================================================================================================
-	@Test void testCorrectHandlingOfUnknownProperties() throws Exception {
+	@Test void a02_correctHandlingOfUnknownProperties() throws Exception {
 		var p = HtmlParser.create().ignoreUnknownBeanProperties().build();
 		B t;
 
@@ -110,7 +110,7 @@ class CommonParser_Test extends SimpleTestBase {
 	//====================================================================================================
 	// Writing to Collection properties with no setters.
 	//====================================================================================================
-	@Test void testCollectionPropertiesWithNoSetters() throws Exception {
+	@Test void a03_collectionPropertiesWithNoSetters() throws Exception {
 		ReaderParser p = HtmlParser.DEFAULT;
 
 		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>ints</string></td><td><ul><li><number>1</number></li><li><number>2</number></li><li><number>3</number></li></ul></td></tr><tr><td><string>beans</string></td><td><table _type='array'><tr><th>a</th><th>b</th></tr><tr><td><number>1</number></td><td><number>2</number></td></tr></table></td></tr></table>";
@@ -130,7 +130,7 @@ class CommonParser_Test extends SimpleTestBase {
 	//====================================================================================================
 	// Parser listeners.
 	//====================================================================================================
-	@Test void testParserListeners() throws Exception {
+	@Test void a04_parserListeners() throws Exception {
 		var p = HtmlParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><string>/foo</string></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";

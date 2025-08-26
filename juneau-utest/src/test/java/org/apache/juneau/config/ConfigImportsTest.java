@@ -171,7 +171,7 @@ class ConfigImportsTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void testUpdateOnParent() {
+	@Test void a01_updateOnParent() {
 		var ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
@@ -211,7 +211,7 @@ class ConfigImportsTest extends SimpleTestBase {
 		assertEquals("2", cb.get("B/b1").get());
 	}
 
-	@Test void testUpdateOnGrandParent() {
+	@Test void a02_updateOnGrandParent() {
 		var ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
@@ -258,7 +258,7 @@ class ConfigImportsTest extends SimpleTestBase {
 		assertEquals("3", cc.get("C/c1").get());
 	}
 
-	@Test void testUpdateOnParentSameSection() {
+	@Test void a03_updateOnParentSameSection() {
 		var ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
@@ -295,7 +295,7 @@ class ConfigImportsTest extends SimpleTestBase {
 		assertEquals("2", cb.get("A/b1").get());
 	}
 
-	@Test void testUpdateOnParentSameSectionSameKey() {
+	@Test void a04_updateOnParentSameSectionSameKey() {
 		var ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
@@ -316,7 +316,7 @@ class ConfigImportsTest extends SimpleTestBase {
 		assertEquals("2", cb.get("A/a1").get());
 	}
 
-	@Test void testUpdateOnGrandParentSameSection() {
+	@Test void a05_updateOnGrandParentSameSection() {
 		var ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\n[A]\na1=1");
@@ -344,7 +344,7 @@ class ConfigImportsTest extends SimpleTestBase {
 	// Listeners and dynamically modifying imports
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void testUpdateOnParentDynamic() {
+	@Test void a06_updateOnParentDynamic() {
 		var ms = MemoryStore.create().build();
 
 		ms.write("A", "", "x=1\ny=1\n[A]\na1=1");

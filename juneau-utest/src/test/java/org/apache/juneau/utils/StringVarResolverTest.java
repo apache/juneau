@@ -24,7 +24,7 @@ class StringVarResolverTest extends SimpleTestBase {
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test void test() {
+	@Test void a06_test() {
 		var vr = VarResolver.create().vars(XVar.class).build();
 		String t;
 
@@ -91,7 +91,7 @@ class StringVarResolverTest extends SimpleTestBase {
 	//====================================================================================================
 	// test - No-name variables
 	//====================================================================================================
-	@Test void test2() {
+	@Test void a01_test2() {
 		var vr = VarResolver.create().vars(BlankVar.class).build();
 		String t;
 
@@ -121,7 +121,7 @@ class StringVarResolverTest extends SimpleTestBase {
 	//====================================================================================================
 	// test - No-name variables
 	//====================================================================================================
-	@Test void testEscaped$() {
+	@Test void a02_escaped$() {
 		var vr = VarResolver.create().vars(BlankVar.class).build();
 		String t;
 
@@ -137,7 +137,7 @@ class StringVarResolverTest extends SimpleTestBase {
 	//====================================================================================================
 	// test - Escape sequences.
 	//====================================================================================================
-	@Test void testEscapedSequences() {
+	@Test void a03_escapedSequences() {
 		var vr = VarResolver.create().vars(XVar.class).build();
 		String t;
 		char b = '\\';
@@ -165,7 +165,7 @@ class StringVarResolverTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test $E variables
 	//====================================================================================================
-	@Test void test$E() {
+	@Test void a07_test$E() {
 		String t;
 
 		t = "$E{PATH}";
@@ -175,7 +175,7 @@ class StringVarResolverTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test that StringResolver(parent) works as expected.
 	//====================================================================================================
-	@Test void testParent() {
+	@Test void a04_parent() {
 		var vr = VarResolver.create().defaultVars().vars(XMultipartVar.class).build();
 		String t;
 		System.setProperty("a", "a1");
@@ -200,7 +200,7 @@ class StringVarResolverTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test false triggers.
 	//====================================================================================================
-	@Test void testFalseTriggers() {
+	@Test void a05_falseTriggers() {
 		VarResolver.Builder vrb = VarResolver.create().defaultVars();
 		String in = null;
 

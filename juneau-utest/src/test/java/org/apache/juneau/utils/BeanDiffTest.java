@@ -32,67 +32,67 @@ class BeanDiffTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void testSame() {
+	@Test void a01_same() {
 		var bd = BeanDiff.create(A.create(1, "a"), A.create(1, "a")).build();
 		assertFalse(bd.hasDiffs());
 		assertEquals("{v1:{},v2:{}}", bd.toString());
 	}
 
-	@Test void testDifferent() {
+	@Test void a02_different() {
 		var bd = BeanDiff.create(A.create(1, "a"), A.create(2, "b")).build();
 		assertTrue(bd.hasDiffs());
 		assertEquals("{v1:{f1:1,f2:'a'},v2:{f1:2,f2:'b'}}", bd.toString());
 	}
 
-	@Test void testFirstNull() {
+	@Test void a03_firstNull() {
 		var bd = BeanDiff.create(null, A.create(2, "b")).build();
 		assertTrue(bd.hasDiffs());
 		assertEquals("{v1:{},v2:{f1:2,f2:'b'}}", bd.toString());
 	}
 
-	@Test void testSecondNull() {
+	@Test void a04_secondNull() {
 		var bd = BeanDiff.create(A.create(1, "a"), null).build();
 		assertTrue(bd.hasDiffs());
 		assertEquals("{v1:{f1:1,f2:'a'},v2:{}}", bd.toString());
 	}
 
-	@Test void testBothNull() {
+	@Test void a05_bothNull() {
 		var bd = BeanDiff.create(null, null).build();
 		assertFalse(bd.hasDiffs());
 		assertEquals("{v1:{},v2:{}}", bd.toString());
 	}
 
-	@Test void testNullFields() {
+	@Test void a06_nullFields() {
 		var bd = BeanDiff.create(A.create(1, null), A.create(2, "b")).build();
 		assertTrue(bd.hasDiffs());
 		assertEquals("{v1:{f1:1},v2:{f1:2,f2:'b'}}", bd.toString());
 	}
 
-	@Test void testIncludes() {
+	@Test void a07_includes() {
 		var bd = BeanDiff.create(A.create(1, null), A.create(2, "b")).include("f1").build();
 		assertTrue(bd.hasDiffs());
 		assertEquals("{v1:{f1:1},v2:{f1:2}}", bd.toString());
 	}
 
-	@Test void testIncludesSet() {
+	@Test void a08_includesSet() {
 		var bd = BeanDiff.create(A.create(1, null), A.create(2, "b")).include(set("f1")).build();
 		assertTrue(bd.hasDiffs());
 		assertEquals("{v1:{f1:1},v2:{f1:2}}", bd.toString());
 	}
 
-	@Test void testExcludes() {
+	@Test void a09_excludes() {
 		var bd = BeanDiff.create(A.create(1, null), A.create(2, "b")).exclude("f2").build();
 		assertTrue(bd.hasDiffs());
 		assertEquals("{v1:{f1:1},v2:{f1:2}}", bd.toString());
 	}
 
-	@Test void testExcludesSet() {
+	@Test void a10_excludesSet() {
 		var bd = BeanDiff.create(A.create(1, null), A.create(2, "b")).exclude(set("f2")).build();
 		assertTrue(bd.hasDiffs());
 		assertEquals("{v1:{f1:1},v2:{f1:2}}", bd.toString());
 	}
 
-	@Test void testDifferentBeanContext() {
+	@Test void a11_differentBeanContext() {
 		var bd = BeanDiff.create(A.create(1, null), A.create(2, "b")).beanContext(BeanContext.DEFAULT_SORTED).build();
 		assertTrue(bd.hasDiffs());
 		assertEquals("{v1:{f1:1},v2:{f1:2,f2:'b'}}", bd.toString());

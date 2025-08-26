@@ -29,7 +29,7 @@ class FilteredMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@Test void testBasic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		JsonMap m = JsonMap.ofJson("{a:'1',b:'2'}");
 
 		ClassMeta<Map<String,Object>> cm = BeanContext.DEFAULT.getClassMeta(Map.class, String.class, Object.class);
@@ -45,4 +45,4 @@ class FilteredMapTest extends SimpleTestBase {
 		assertThrows(IllegalArgumentException.class, ()->new FilteredMap<>(cm2, null, new String[0]));
 		assertThrows(IllegalArgumentException.class, ()->new FilteredMap<>(cm, m, null));
 	}
-}
+}

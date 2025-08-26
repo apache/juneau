@@ -23,7 +23,7 @@ class ParserReaderTest extends SimpleTestBase {
 	//====================================================================================================
 	// test
 	//====================================================================================================
-	@Test void test() throws Exception {
+	@Test void a01_test() throws Exception {
 		try (ParserReader r = new ParserReader(new ParserPipe("abc123"))) {
 			assertEquals('a', r.read());
 			r.unread();

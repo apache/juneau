@@ -22,7 +22,7 @@ class PatternMatchVarTest {
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test void test() {
+	@Test void a01_test() {
 		var vr = VarResolver.create().vars(PatternMatchVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("PatternMatchVarTest.test", "foobar");

@@ -32,7 +32,7 @@ class UonParserTest extends SimpleTestBase {
 	//====================================================================================================
 	// Basic test
 	//====================================================================================================
-	@Test void testBasic() throws Exception {
+	@Test void a01_basic() throws Exception {
 
 		String t;
 		Map m;
@@ -404,7 +404,7 @@ class UonParserTest extends SimpleTestBase {
 	//====================================================================================================
 	// Unicode character test
 	//====================================================================================================
-	@Test void testUnicodeChars() throws Exception {
+	@Test void a02_unicodeChars() throws Exception {
 		String t;
 		Map m;
 
@@ -487,7 +487,7 @@ class UonParserTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test simple bean
 	//====================================================================================================
-	@Test void testSimpleBean() throws Exception {
+	@Test void a03_simpleBean() throws Exception {
 		UonParser p2 = UonParser.DEFAULT;
 		A t;
 
@@ -506,7 +506,7 @@ class UonParserTest extends SimpleTestBase {
 	// testStreamsAutoClose
 	// Validates PARSER_autoCloseStreams.
 	//====================================================================================================
-	@Test void testStreamsAutoClose() throws Exception {
+	@Test void a04_streamsAutoClose() throws Exception {
 		var p2 = UonParser.DEFAULT.copy().autoCloseStreams().build();
 		Object x;
 		Reader r;
@@ -521,7 +521,7 @@ class UonParserTest extends SimpleTestBase {
 	// testMultipleObjectsInStream
 	// Validates that readers are not closed so that we can read streams of POJOs.
 	//====================================================================================================
-	@Test void testMultipleObjectsInStream() throws Exception {
+	@Test void a05_multipleObjectsInStream() throws Exception {
 		var p2 = UonParser.create().unbuffered().build();
 		Object x;
 		Reader r;

@@ -77,7 +77,7 @@ class ParameterInfo_Test extends SimpleTestBase {
 	/**
 	 * Test method for {@link ParameterInfo#set(java.lang.String, java.lang.Object)}.
 	 */
-	@Test void testSet() throws Exception {
+	@Test void a01_set() throws Exception {
 		var t = new ParameterInfo();
 
 		t

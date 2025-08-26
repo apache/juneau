@@ -22,7 +22,7 @@ class EncoderSetTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test matching
 	//====================================================================================================
-	@Test void testEncoderGroupMatching() {
+	@Test void a01_encoderGroupMatching() {
 
 		var s = EncoderSet.create().add(Encoder1.class, Encoder2.class, Encoder3.class).build();
 		assertType(Encoder1.class, s.getEncoder("gzip1"));
@@ -60,7 +60,7 @@ class EncoderSetTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test inheritence
 	//====================================================================================================
-	@Test void testInheritence() {
+	@Test void a02_inheritence() {
 		EncoderSet.Builder sb = null;
 		EncoderSet s = null;
 

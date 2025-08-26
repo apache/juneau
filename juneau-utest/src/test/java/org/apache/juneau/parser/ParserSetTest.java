@@ -23,7 +23,7 @@ class ParserSetTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test parser group matching
 	//====================================================================================================
-	@Test void testParserGroupMatching() {
+	@Test void a01_parserGroupMatching() {
 
 		var s = ParserSet.create().add(Parser1.class, Parser2.class, Parser3.class).build();
 		assertType(Parser1.class, s.getParser("text/foo"));
@@ -50,7 +50,7 @@ class ParserSetTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test inheritence
 	//====================================================================================================
-	@Test void testInheritence() {
+	@Test void a02_inheritence() {
 		ParserSet.Builder sb = null;
 		ParserSet s = null;
 

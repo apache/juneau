@@ -25,7 +25,7 @@ class Csv_Test extends SimpleTestBase {
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@Test void testBasic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		List<A> l = new LinkedList<>();
 		l.add(new A("b1",1));
 		l.add(new A("b2",2));

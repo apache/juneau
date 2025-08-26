@@ -23,7 +23,7 @@ class LowerCaseVarTest extends SimpleTestBase {
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test void test() {
+	@Test void a01_test() {
 		var vr = VarResolver.create().vars(LowerCaseVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("LowerCaseVar.test", "fooBAR");

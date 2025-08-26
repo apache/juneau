@@ -21,7 +21,7 @@ import org.junit.jupiter.api.*;
 
 class Html5BasicTest extends SimpleTestBase {
 
-	@Test void testToString() {
+	@Test void a01_toString() {
 		Form f = form("bar",
 			fieldset(
 				legend("foo:"),

@@ -27,7 +27,7 @@ class CommonParserTest  extends SimpleTestBase{
 	//====================================================================================================
 	// testFromSerializer
 	//====================================================================================================
-	@Test void testFromSerializer() throws Exception {
+	@Test void a01_fromSerializer() throws Exception {
 		ReaderParser p = XmlParser.DEFAULT;
 
 		Map m = null;
@@ -97,7 +97,7 @@ class CommonParserTest  extends SimpleTestBase{
 	//====================================================================================================
 	// Correct handling of unknown properties.
 	//====================================================================================================
-	@Test void testCorrectHandlingOfUnknownProperties() throws Exception {
+	@Test void a02_correctHandlingOfUnknownProperties() throws Exception {
 		var p = XmlParser.create().ignoreUnknownBeanProperties().build();
 		B t;
 
@@ -121,7 +121,7 @@ class CommonParserTest  extends SimpleTestBase{
 	//====================================================================================================
 	// Writing to Collection properties with no setters.
 	//====================================================================================================
-	@Test void testCollectionPropertiesWithNoSetters() throws Exception {
+	@Test void a03_collectionPropertiesWithNoSetters() throws Exception {
 
 		ReaderParser p = XmlParser.DEFAULT;
 
@@ -142,7 +142,7 @@ class CommonParserTest  extends SimpleTestBase{
 	//====================================================================================================
 	// Parser listeners.
 	//====================================================================================================
-	@Test void testParserListeners() throws Exception {
+	@Test void a04_parserListeners() throws Exception {
 		var p = XmlParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		var in = "<object><a _type='number'>1</a><unknownProperty _type='string'>foo</unknownProperty><b _type='number'>2</b></object>";

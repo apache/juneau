@@ -30,7 +30,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 	// Sanity tests.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void testBasicDefaultSection() throws Exception {
+	@Test void a01_basicDefaultSection() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"foo=bar"
 		);
@@ -55,7 +55,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertLines("foo = baz|", cm);
 	}
 
-	@Test void testBasicNormalSection() throws Exception {
+	@Test void a02_basicNormalSection() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"foo=bar"
@@ -85,7 +85,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 	// Add new entries.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void testAddNewEntries() throws Exception {
+	@Test void a03_addNewEntries() throws Exception {
 		ConfigStore s = initStore("A.cfg"
 		);
 
@@ -110,7 +110,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertLines("k = vb|[S1]|k1 = v1b|", cm);
 	}
 
-	@Test void testAddNewEntriesWithAttributes() throws Exception {
+	@Test void a04_addNewEntriesWithAttributes() throws Exception {
 		ConfigStore s = initStore("A.cfg"
 		);
 
@@ -135,7 +135,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertLines("#k|k<^*> = kb # C|[S1]|#k1|k1<^*> = k1b # C1|", cm);
 	}
 
-	@Test void testAddExistingEntriesWithAttributes() throws Exception {
+	@Test void a05_addExistingEntriesWithAttributes() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"#ka",
 			"k=va # Ca",
@@ -170,7 +170,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 	// Remove existing entries.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void testRemoveExistingEntries() throws Exception {
+	@Test void a06_removeExistingEntries() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"k=v",
 			"[S1]",
@@ -198,7 +198,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertLines("[S1]|", cm);
 	}
 
-	@Test void testRemoveExistingEntriesWithAttributes() throws Exception {
+	@Test void a07_removeExistingEntriesWithAttributes() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"#ka",
 			"k=va # Ca",
@@ -233,7 +233,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 	// Add new sections.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void testAddNewSections() throws Exception {
+	@Test void a08_addNewSections() throws Exception {
 		ConfigStore s = initStore("A.cfg"
 		);
 
@@ -261,7 +261,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		assertLines("#D1||#S1|[S1]|[S2]|[S3]|k3 = v3|", cm);
 	}
 
-	@Test void testModifyExistingSections() throws Exception {
+	@Test void a09_modifyExistingSections() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"#Da",
 			"",
@@ -299,7 +299,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 	// Remove sections.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void testRemoveSections() throws Exception {
+	@Test void a10_removeSections() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"#Da",
 			"",
@@ -342,7 +342,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 	// Update from store.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void testUpdateFromStore() throws Exception {
+	@Test void a11_updateFromStore() throws Exception {
 		ConfigStore s = initStore("A.cfg");
 
 		final CountDownLatch latch = new CountDownLatch(3);
@@ -381,7 +381,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 	// Merges.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void testMergeNoOverwrite() throws Exception {
+	@Test void a12_mergeNoOverwrite() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1a"
@@ -418,7 +418,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 	// If we're modifying an entry and it changes on the file system, we should overwrite the change on save().
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void testMergeWithOverwrite() throws Exception {
+	@Test void a13_mergeWithOverwrite() throws Exception {
 		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1a"
@@ -455,7 +455,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 	// If the contents of a file have been modified on the file system before a signal has been received.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void testMergeWithOverwriteNoSignal() throws Exception {
+	@Test void a14_mergeWithOverwriteNoSignal() throws Exception {
 
 		final Queue<String> contents = new ConcurrentLinkedQueue<>();
 		contents.add("[S1]\nk1 = v1a");
@@ -493,7 +493,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void testMergeWithConstantlyUpdatingFile() throws Exception {
+	@Test void a15_mergeWithConstantlyUpdatingFile() throws Exception {
 
 		try (var s = new MemoryStore(MemoryStore.create()) {
 			char c = 'a';

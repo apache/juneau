@@ -26,7 +26,7 @@ class ArrayUtilsTest extends SimpleTestBase {
 	//====================================================================================================
 	// append(T[], T...)
 	//====================================================================================================
-	@Test void testAppendArrayToArray() {
+	@Test void a01_appendArrayToArray() {
 		String[] s = {};
 
 		s = append(s, "a", "b");
@@ -48,7 +48,7 @@ class ArrayUtilsTest extends SimpleTestBase {
 	//====================================================================================================
 	// asSet(T[])
 	//====================================================================================================
-	@Test void testAsSet() {
+	@Test void a02_asSet() {
 		String[] s = null;
 
 		assertThrows(IllegalArgumentException.class, ()->asSet((String[])null));
@@ -64,7 +64,7 @@ class ArrayUtilsTest extends SimpleTestBase {
 	//====================================================================================================
 	// combine(T[]...)
 	//====================================================================================================
-	@Test void testCombine() {
+	@Test void a03_combine() {
 		String[] s1 = {"a"}, s2 = {"b"};
 
 		assertArray(combine(s1, s2), "a,b");
@@ -75,4 +75,4 @@ class ArrayUtilsTest extends SimpleTestBase {
 		assertNull(combine(null,null));
 		assertNull(combine());
 	}
-}
+}

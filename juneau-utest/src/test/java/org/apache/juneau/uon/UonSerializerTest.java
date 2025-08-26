@@ -26,7 +26,7 @@ class UonSerializerTest {
 	//====================================================================================================
 	// Basic test
 	//====================================================================================================
-	@Test void testBasic() throws Exception {
+	@Test void a01_basic() throws Exception {
 
 		Object t;
 
@@ -294,7 +294,7 @@ class UonSerializerTest {
 	//====================================================================================================
 	// Unicode characters test
 	//====================================================================================================
-	@Test void testUnicodeChars() throws Exception {
+	@Test void a02_unicodeChars() throws Exception {
 		Object t;
 
 		// 2-byte UTF-8 character

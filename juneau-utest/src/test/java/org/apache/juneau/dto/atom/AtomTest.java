@@ -59,7 +59,7 @@ class AtomTest extends SimpleTestBase {
 			);
 	}
 
-	@Test void testNormal() throws Exception {
+	@Test void a01_normal() throws Exception {
 		XmlSerializer s;
 		XmlParser p = XmlParser.DEFAULT;
 		String r;
@@ -103,7 +103,7 @@ class AtomTest extends SimpleTestBase {
 		assertEquals(json(f2), json(f));
 	}
 
-	@Test void testWithNamespaces() throws Exception {
+	@Test void a02_withNamespaces() throws Exception {
 		XmlSerializer s;
 		XmlParser p = XmlParser.DEFAULT;
 		String r;
@@ -147,7 +147,7 @@ class AtomTest extends SimpleTestBase {
 		assertEquals(json(f2), json(f));
 	}
 
-	@Test void testWithNamespacesWithAtomAsDefault() throws Exception {
+	@Test void a03_withNamespacesWithAtomAsDefault() throws Exception {
 		XmlSerializer s;
 		XmlParser p = XmlParser.DEFAULT;
 		String r;
@@ -191,7 +191,7 @@ class AtomTest extends SimpleTestBase {
 		assertEquals(json(f2), json(f));
 	}
 
-	@Test void testToString() throws Exception {
+	@Test void a04_toString() throws Exception {
 		XmlParser p = XmlParser.DEFAULT;
 		String r;
 		Feed f = createFeed(), f2;
@@ -199,4 +199,4 @@ class AtomTest extends SimpleTestBase {
 		f2 = p.parse(r, Feed.class);
 		assertEquals(json(f2), json(f));
 	}
-}
+}

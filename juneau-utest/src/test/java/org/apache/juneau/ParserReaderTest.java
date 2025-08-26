@@ -24,7 +24,7 @@ class ParserReaderTest extends SimpleTestBase {
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@Test void testBasic() throws Exception {
+	@Test void a01_basic() throws Exception {
 		String t = "01234567890123456789012345678901234567890123456789";
 
 		// Min buff size is 20.
@@ -55,7 +55,7 @@ class ParserReaderTest extends SimpleTestBase {
 	//====================================================================================================
 	// testMarking
 	//====================================================================================================
-	@Test void testMarking() throws Exception {
+	@Test void a02_marking() throws Exception {
 		String t = "a123456789b123456789c123456789d123456789e123456789f123456789g123456789h123456789i123456789j123456789";
 		String r = null;
 
@@ -83,7 +83,7 @@ class ParserReaderTest extends SimpleTestBase {
 	//====================================================================================================
 	// testReadStrings
 	//====================================================================================================
-	@Test void testReadStrings() throws Exception {
+	@Test void a03_readStrings() throws Exception {
 		String t = "a123456789b123456789c123456789d123456789e123456789f123456789g123456789h123456789i123456789j123456789";
 
 		// Min buff size is 20.
@@ -101,7 +101,7 @@ class ParserReaderTest extends SimpleTestBase {
 	//====================================================================================================
 	// testReplace
 	//====================================================================================================
-	@Test void testReplace() throws Exception {
+	@Test void a04_replace() throws Exception {
 		String t = "a123456789b123456789c123456789d123456789e123456789f123456789g123456789h123456789i123456789j123456789";
 
 		// Min buff size is 20.
@@ -127,7 +127,7 @@ class ParserReaderTest extends SimpleTestBase {
 	//====================================================================================================
 	// testDelete
 	//====================================================================================================
-	@Test void testDelete() throws Exception {
+	@Test void a05_delete() throws Exception {
 		String t = "a123456789b123456789c123456789d123456789e123456789f123456789g123456789h123456789i123456789j123456789";
 
 		// Min buff size is 20.

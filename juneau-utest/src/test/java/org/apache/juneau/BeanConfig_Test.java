@@ -185,7 +185,7 @@ class BeanConfig_Test extends SimpleTestBase {
 	//====================================================================================================
 	// Exhaustive test of BeanContext.convertToType()
 	//====================================================================================================
-	@Test void testBeanContextConvertToType() throws Exception {
+	@Test void a01_beanContextConvertToType() throws Exception {
 		var bc = BeanContext.DEFAULT;
 		Object o;
 
@@ -295,7 +295,7 @@ class BeanConfig_Test extends SimpleTestBase {
 	//====================================================================================================
 	// Test properties set through a constructor.
 	//====================================================================================================
-	@Test void testReadOnlyProperties() throws Exception {
+	@Test void a02_readOnlyProperties() throws Exception {
 		var bc = BeanContext.DEFAULT;
 		Object o;
 
@@ -328,7 +328,7 @@ class BeanConfig_Test extends SimpleTestBase {
 		}
 	}
 
-	@Test void testReadOnlyProperties_usingConfig() throws Exception {
+	@Test void a03_readOnlyProperties_usingConfig() throws Exception {
 		var bc = BeanContext.DEFAULT.copy().applyAnnotations(ReadOnlyPerson2Config.class).build();
 		Object o;
 
@@ -370,7 +370,7 @@ class BeanConfig_Test extends SimpleTestBase {
 	//====================================================================================================
 	// testEnums
 	//====================================================================================================
-	@Test void testEnums() throws Exception {
+	@Test void a04_enums() throws Exception {
 		var bc = BeanContext.DEFAULT;
 		Object o;
 
@@ -391,7 +391,7 @@ class BeanConfig_Test extends SimpleTestBase {
 	//====================================================================================================
 	// testProxyHandler
 	//====================================================================================================
-	@Test void testProxyHandler() {
+	@Test void a05_proxyHandler() {
 		var session = BeanContext.DEFAULT_SESSION;
 
 		var f1 = (A) Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { A.class }, new AHandler());
@@ -457,7 +457,7 @@ class BeanConfig_Test extends SimpleTestBase {
 	//====================================================================================================
 	// testFluentStyleSetters
 	//====================================================================================================
-	@Test void testFluentStyleSetters() {
+	@Test void a06_fluentStyleSetters() {
 		var t = new B2().init();
 		var m = BeanContext.DEFAULT.toBeanMap(t);
 		m.put("f1", 2);
@@ -479,7 +479,7 @@ class BeanConfig_Test extends SimpleTestBase {
 	//====================================================================================================
 	// testClassMetaCaching
 	//====================================================================================================
-	@Test void testClassMetaCaching() {
+	@Test void a07_classMetaCaching() {
 		var p1 = JsonParser.create();
 		var p2 = JsonParser.create();
 		assertSameCache(p1, p2);
@@ -593,7 +593,7 @@ class BeanConfig_Test extends SimpleTestBase {
 	//====================================================================================================
 	// testNotABeanReasons
 	//====================================================================================================
-	@Test void testNotABeanNonStaticInnerClass() {
+	@Test void a08_notABeanNonStaticInnerClass() {
 		var bc = BeanContext.DEFAULT;
 		var cm = bc.getClassMeta(C1.class);
 		assertFalse(cm.canCreateNewInstance());
@@ -610,7 +610,7 @@ class BeanConfig_Test extends SimpleTestBase {
 	// BeanMap.getBean() method is called.
 	//====================================================================================================
 	// Should be around 100ms at most.
-	@Test void testAddingToArrayProperty() {
+	@Test void a09_addingToArrayProperty() {
 		assertTimeout(Duration.ofSeconds(1), () -> {
 			var bc = BeanContext.DEFAULT;
 			var bm = bc.newBeanMap(D.class);
@@ -643,7 +643,7 @@ class BeanConfig_Test extends SimpleTestBase {
 	// testClassClassMeta
 	// Make sure we can get ClassMeta objects against the Class class.
 	//====================================================================================================
-	@Test void testClassClassMeta() {
+	@Test void a10_classClassMeta() {
 		assertNotNull(BeanContext.DEFAULT.getClassMeta(Class.class));
 		assertNotNull(BeanContext.DEFAULT.getClassMeta(Class[].class));
 	}
@@ -651,7 +651,7 @@ class BeanConfig_Test extends SimpleTestBase {
 	//====================================================================================================
 	// testBlanks
 	//====================================================================================================
-	@Test void testBlanks() throws Exception {
+	@Test void a11_blanks() throws Exception {
 		var bc = BeanContext.DEFAULT;
 
 		// Blanks get interpreted as the default value for primitives and null for boxed objects.

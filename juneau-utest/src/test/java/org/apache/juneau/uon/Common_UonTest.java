@@ -31,7 +31,7 @@ class Common_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	// Trim nulls from beans
 	//====================================================================================================
-	@Test void testTrimNullsFromBeans() throws Exception {
+	@Test void a01_trimNullsFromBeans() throws Exception {
 		UonSerializer.Builder s = UonSerializer.create().encoding();
 		var t1 = A.create();
 
@@ -60,7 +60,7 @@ class Common_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	// Trim empty maps
 	//====================================================================================================
-	@Test void testTrimEmptyMaps() throws Exception {
+	@Test void a02_trimEmptyMaps() throws Exception {
 		UonSerializer.Builder s = UonSerializer.create().encoding();
 		var t1 = B.create();
 		String r;
@@ -91,7 +91,7 @@ class Common_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	// Trim empty lists
 	//====================================================================================================
-	@Test void testTrimEmptyLists() throws Exception {
+	@Test void a03_trimEmptyLists() throws Exception {
 		UonSerializer.Builder s = UonSerializer.create().encoding();
 		var t1 = C.create();
 		String r;
@@ -122,7 +122,7 @@ class Common_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	// Trim empty arrays
 	//====================================================================================================
-	@Test void testTrimEmptyArrays() throws Exception {
+	@Test void a04_trimEmptyArrays() throws Exception {
 		UonSerializer.Builder s = UonSerializer.create().encoding();
 		var t1 = D.create();
 		String r;
@@ -153,7 +153,7 @@ class Common_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	// @Beanp.bpi annotation.
 	//====================================================================================================
-	@Test void testBeanPropertyProperies() throws Exception {
+	@Test void a05_beanPropertyProperies() throws Exception {
 		UonSerializer s = UonSerializer.DEFAULT;
 		String ue = s.serialize(new E1());
 		assertEquals("(x1=(f1=1),x2=(f1=1),x3=@((f1=1)),x4=@((f1=1)),x5=@((f1=1)),x6=@((f1=1)))", ue);
@@ -176,7 +176,7 @@ class Common_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	// @Beanp.bpi annotation on list of beans.
 	//====================================================================================================
-	@Test void testBeanPropertyPropertiesOnListOfBeans() throws Exception {
+	@Test void a06_beanPropertyPropertiesOnListOfBeans() throws Exception {
 		UonSerializer s = UonSerializer.DEFAULT;
 		List<F> l = new LinkedList<>();
 		var t = new F();
@@ -194,7 +194,7 @@ class Common_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test URIAttr - Test that URLs and URIs are serialized and parsed correctly.
 	//====================================================================================================
-	@Test void testURIAttr() throws Exception {
+	@Test void a07_uRIAttr() throws Exception {
 		UonSerializer s = UonSerializer.DEFAULT;
 		UonParser p2 = UonParser.DEFAULT;
 
@@ -219,7 +219,7 @@ class Common_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	// Recursion
 	//====================================================================================================
-	@Test void testRecursion() throws Exception {
+	@Test void a08_recursion() throws Exception {
 		UonSerializer.Builder s = UonSerializer.create().maxDepth(Integer.MAX_VALUE);
 
 		var r1 = new R1();

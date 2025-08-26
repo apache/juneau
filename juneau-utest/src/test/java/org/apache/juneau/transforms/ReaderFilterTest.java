@@ -32,7 +32,7 @@ class ReaderFilterTest extends SimpleTestBase {
 	//====================================================================================================
 	// testJson
 	//====================================================================================================
-	@Test void testJson() throws Exception {
+	@Test void a01_json() throws Exception {
 		var s = JsonSerializer.create().json5().swaps(ParsedReaderSwap.Json.class).build();
 
 		Reader r;
@@ -47,7 +47,7 @@ class ReaderFilterTest extends SimpleTestBase {
 	//====================================================================================================
 	// testXml
 	//====================================================================================================
-	@Test void testXml() throws Exception {
+	@Test void a02_xml() throws Exception {
 		var s = XmlSerializer.create().sq().swaps(ParsedReaderSwap.Xml.class).build();
 
 		Reader r;
@@ -62,7 +62,7 @@ class ReaderFilterTest extends SimpleTestBase {
 	//====================================================================================================
 	// testHtml
 	//====================================================================================================
-	@Test void testHtml() throws Exception {
+	@Test void a03_html() throws Exception {
 		var s = HtmlSerializer.create().sq().swaps(ParsedReaderSwap.Html.class).build();
 
 		Reader r;
@@ -77,7 +77,7 @@ class ReaderFilterTest extends SimpleTestBase {
 	//====================================================================================================
 	// testPlainText
 	//====================================================================================================
-	@Test void testPlainText() throws Exception {
+	@Test void a04_plainText() throws Exception {
 		var s = PlainTextSerializer.create().swaps(ParsedReaderSwap.PlainText.class).build();
 
 		Reader r;
@@ -92,7 +92,7 @@ class ReaderFilterTest extends SimpleTestBase {
 	//====================================================================================================
 	// testUon
 	//====================================================================================================
-	@Test void testUon() throws Exception {
+	@Test void a05_uon() throws Exception {
 		var s = UonSerializer.create().swaps(ParsedReaderSwap.Uon.class).build();
 
 		Reader r;
@@ -107,7 +107,7 @@ class ReaderFilterTest extends SimpleTestBase {
 	//====================================================================================================
 	// testUrlEncoding
 	//====================================================================================================
-	@Test void testUrlEncoding() throws Exception {
+	@Test void a06_urlEncoding() throws Exception {
 		var s = UrlEncodingSerializer.create().swaps(ParsedReaderSwap.PlainText.class).build();
 
 		Reader r;

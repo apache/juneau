@@ -31,17 +31,17 @@ class JsonParserTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test invalid input
 	//====================================================================================================
-	@Test void testInvalidJson() {
+	@Test void a01_invalidJson() {
 		assertThrows(ParseException.class, ()->p.parse("{\na:1,\nb:xxx\n}", Object.class));
 	}
 
-	@Test void testNonExistentAttribute() throws Exception {
+	@Test void a02_nonExistentAttribute() throws Exception {
 		String json = "{foo:,bar:}";
 		JsonMap m = p.parse(json, JsonMap.class);
 		assertEquals("{foo:null,bar:null}", m.toString());
 	}
 
-	@Test void testNonStringAsString() throws Exception {
+	@Test void a03_nonStringAsString() throws Exception {
 		String json = "123";
 		String s;
 
@@ -77,7 +77,7 @@ class JsonParserTest extends SimpleTestBase {
 		public String fa;
 	}
 
-	@Test void testStrictMode() {
+	@Test void a04_strictMode() {
 		JsonParser p2 = sp;
 		assertThrowsWithMessage(Exception.class, "Missing value detected.", ()->p2.parse("{\"foo\":,\"bar\":}", JsonMap.class));
 		assertThrowsWithMessage(Exception.class, "Invalid quote character", ()->p2.parse("{\"foo\":'bar'}", JsonMap.class));
@@ -91,7 +91,7 @@ class JsonParserTest extends SimpleTestBase {
 	/**
 	 * JSON numbers and booleans should be representable as strings and converted accordingly.
 	 */
-	@Test void testPrimitivesAsStrings() throws Exception {
+	@Test void a05_primitivesAsStrings() throws Exception {
 		String json;
 		ReaderParser p2 = JsonParser.DEFAULT;
 		WriterSerializer s = Json5Serializer.DEFAULT;
@@ -122,7 +122,7 @@ class JsonParserTest extends SimpleTestBase {
 	// testInvalidJsonNumbers
 	// Lax parser allows octal and hexadecimal numbers.  Strict parser does not.
 	//====================================================================================================
-	@Test void testInvalidJsonNumbers() throws Exception {
+	@Test void a06_invalidJsonNumbers() throws Exception {
 		JsonParser p1 = JsonParser.DEFAULT;
 		JsonParser p2 = JsonParser.DEFAULT_STRICT;
 		Number r;
@@ -180,7 +180,7 @@ class JsonParserTest extends SimpleTestBase {
 	// testUnquotedStrings
 	// Lax parser allows unquoted strings if POJO can be converted from a string.
 	//====================================================================================================
-	@Test void testUnquotedStrings() throws Exception {
+	@Test void a07_unquotedStrings() throws Exception {
 		JsonParser p1 = JsonParser.DEFAULT;
 		JsonParser p2 = JsonParser.DEFAULT_STRICT;
 
@@ -208,7 +208,7 @@ class JsonParserTest extends SimpleTestBase {
 	// testStreamsAutoClose
 	// Validates PARSER_autoCloseStreams.
 	//====================================================================================================
-	@Test void testStreamsAutoClose() throws Exception {
+	@Test void a08_streamsAutoClose() throws Exception {
 		var p2 = JsonParser.DEFAULT.copy().autoCloseStreams().build();
 		Object x;
 		Reader r;
@@ -223,7 +223,7 @@ class JsonParserTest extends SimpleTestBase {
 	// testMultipleObjectsInStream
 	// Validates that readers are not closed so that we can read streams of POJOs.
 	//====================================================================================================
-	@Test void testMultipleObjectsInStream() throws Exception {
+	@Test void a09_multipleObjectsInStream() throws Exception {
 		var p2 = JsonParser.create().unbuffered().build();
 		Object x;
 		Reader r;

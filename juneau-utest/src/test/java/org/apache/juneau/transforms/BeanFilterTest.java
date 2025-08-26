@@ -24,7 +24,7 @@ class BeanFilterTest extends SimpleTestBase {
 	//====================================================================================================
 	// Interface bean filters
 	//====================================================================================================
-	@Test void testInterfaceBeanFilters() {
+	@Test void a01_interfaceBeanFilters() {
 		BeanSession session;
 		BeanMap<A3> bm;
 
@@ -66,7 +66,7 @@ class BeanFilterTest extends SimpleTestBase {
 	//====================================================================================================
 	// Abstract class bean filters
 	//====================================================================================================
-	@Test void testAbstractClassBeanFilters() {
+	@Test void a02_abstractClassBeanFilters() {
 		BeanSession session;
 		BeanMap<Test2> bm;
 
@@ -110,7 +110,7 @@ class BeanFilterTest extends SimpleTestBase {
 	//====================================================================================================
 	// Filtered with stop classes
 	//====================================================================================================
-	@Test void testFilteredWithStopClass() {
+	@Test void a03_filteredWithStopClass() {
 		var c3 = new C3();
 		assertJson(c3, "{f3:3,p3:3}");
 	}
@@ -131,7 +131,7 @@ class BeanFilterTest extends SimpleTestBase {
 		public int getP3() { return 3; }
 	}
 
-	@Test void testFilterWithStopClassOnParentClass() {
+	@Test void a04_filterWithStopClassOnParentClass() {
 		var d3 = new D3();
 		assertJson(d3, "{f3:3,p3:3}");
 	}
@@ -152,7 +152,7 @@ class BeanFilterTest extends SimpleTestBase {
 		public int getP3() { return 3; }
 	}
 
-	@Test void testFilteredWithStopClassOnParentClassWithOverriddenAnnotation() {
+	@Test void a05_filteredWithStopClassOnParentClassWithOverriddenAnnotation() {
 		var e3 = new E3();
 		assertJson(e3, "{f3:3,p3:3}");
 	}
@@ -174,7 +174,7 @@ class BeanFilterTest extends SimpleTestBase {
 		public int getP3() { return 3; }
 	}
 
-	@Test void testFilteredWithStopClassesAtMulitpleLevels() {
+	@Test void a06_filteredWithStopClassesAtMulitpleLevels() {
 		var e3 = new F3();
 		assertJson(e3, "{f3:3,p3:3}");
 	}

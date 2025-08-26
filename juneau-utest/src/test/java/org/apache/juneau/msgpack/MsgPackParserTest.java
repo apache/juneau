@@ -30,7 +30,7 @@ class MsgPackParserTest extends SimpleTestBase {
 	// testStreamsAutoClose
 	// Validates PARSER_autoCloseStreams.
 	//====================================================================================================
-	@Test void testStreamsAutoClose() throws Exception {
+	@Test void a01_streamsAutoClose() throws Exception {
 		var p = MsgPackParser.DEFAULT.copy().autoCloseStreams().build();
 		Object r;
 		InputStream is;
@@ -45,7 +45,7 @@ class MsgPackParserTest extends SimpleTestBase {
 	// testMultipleObjectsInStream
 	// Validates that input streams are not closed so that we can read streams of POJOs.
 	//====================================================================================================
-	@Test void testMultipleObjectsInStream() throws Exception {
+	@Test void a02_multipleObjectsInStream() throws Exception {
 		InputStreamParser p = MsgPackParser.DEFAULT;
 		Object r;
 		InputStream is;

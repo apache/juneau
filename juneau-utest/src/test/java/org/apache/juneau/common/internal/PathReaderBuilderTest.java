@@ -29,7 +29,7 @@ class PathReaderBuilderTest extends SimpleTestBase {
 
 	private static final Path PATH = Paths.get("src/test/resources/files/Test3.properties");
 
-	@Test void testAllowNoFile() throws IOException {
+	@Test void a01_allowNoFile() throws IOException {
 		final var p = new Properties();
 		try (Reader r = PathReaderBuilder.create().allowNoFile().build()) {
 			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
@@ -42,12 +42,12 @@ class PathReaderBuilderTest extends SimpleTestBase {
 		assertNull(p.get("file"));
 	}
 
-	@Test void testAllowNoFileException() {
+	@Test void a02_allowNoFileException() {
 		assertThrows(IllegalStateException.class, () -> PathReaderBuilder.create().build());  // NOSONAR
 		assertThrows(NoSuchFileException.class, () -> PathReaderBuilder.create().path("this file does not exist, at all.").build());
 	}
 
-	@Test void testCharsetCharset() throws IOException {
+	@Test void a03_charsetCharset() throws IOException {
 		final var p = new Properties();
 		try (Reader r = PathReaderBuilder.create().path(PATH).charset(StandardCharsets.UTF_8).build()) {
 			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
@@ -60,7 +60,7 @@ class PathReaderBuilderTest extends SimpleTestBase {
 		assertEquals("files/Test3.properties", p.get("file"));
 	}
 
-	@Test void testCharsetString() throws IOException {
+	@Test void a04_charsetString() throws IOException {
 		final var p = new Properties();
 		try (Reader r = PathReaderBuilder.create().path(PATH).charset(StandardCharsets.UTF_8.name()).build()) {
 			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
@@ -73,7 +73,7 @@ class PathReaderBuilderTest extends SimpleTestBase {
 		assertEquals("files/Test3.properties", p.get("file"));
 	}
 
-	@Test void testCreate() throws IOException {
+	@Test void a05_create() throws IOException {
 		final var p = new Properties();
 		try (Reader r = PathReaderBuilder.create(PATH).build()) {
 			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
@@ -81,7 +81,7 @@ class PathReaderBuilderTest extends SimpleTestBase {
 		assertEquals("files/Test3.properties", p.get("file"));
 	}
 
-	@Test void testPathPath() throws IOException {
+	@Test void a06_pathPath() throws IOException {
 		final var p = new Properties();
 		try (Reader r = PathReaderBuilder.create().path(PATH).build()) {
 			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));
@@ -89,7 +89,7 @@ class PathReaderBuilderTest extends SimpleTestBase {
 		assertEquals("files/Test3.properties", p.get("file"));
 	}
 
-	@Test void testPathString() throws IOException {
+	@Test void a07_pathString() throws IOException {
 		final var p = new Properties();
 		try (Reader r = PathReaderBuilder.create().path(PATH.toString()).build()) {
 			p.load(new StringReader(IOUtils.read(r, Files.size(PATH))));

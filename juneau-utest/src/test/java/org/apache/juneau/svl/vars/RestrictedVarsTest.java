@@ -22,7 +22,7 @@ import org.junit.jupiter.api.*;
 
 class RestrictedVarsTest extends SimpleTestBase {
 
-	@Test void testNoNest() throws Exception {
+	@Test void a01_noNest() throws Exception {
 		var vr = VarResolver.create().vars(NoNestVar.class).build();
 
 		test(vr, "$NoNest{foo}", "foo");
@@ -59,7 +59,7 @@ class RestrictedVarsTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void testNoRecurse() throws Exception {
+	@Test void a02_noRecurse() throws Exception {
 		var vr = VarResolver.create().vars(XVar.class, NoRecurseVar.class).build();
 
 		test(vr, "$NoRecurse{foo}", "$X{foo}");
@@ -84,7 +84,7 @@ class RestrictedVarsTest extends SimpleTestBase {
 		}
 	}
 
-	@Test void testNoNestOrRecurse() throws Exception {
+	@Test void a03_noNestOrRecurse() throws Exception {
 		var vr = VarResolver.create().vars(XVar.class, NoEitherVar.class).build();
 
 		test(vr, "$NoEither{foo}", "$X{foo}");

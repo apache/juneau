@@ -23,7 +23,7 @@ class PatternReplaceVarTest extends SimpleTestBase {
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test void test() {
+	@Test void a01_test() {
 		var vr = VarResolver.create().vars(PatternReplaceVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("PatternReplaceVarTest.test", "foo bar");

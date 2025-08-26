@@ -23,7 +23,7 @@ class SerializerSetTest extends SimpleTestBase {
 	//====================================================================================================
 	// Trim nulls from beans
 	//====================================================================================================
-	@Test void testSerializerGroupMatching() {
+	@Test void a01_serializerGroupMatching() {
 
 		var sg = SerializerSet.create().add(SA1.class, SA2.class, SA3.class).build();
 		assertType(SA1.class, sg.getSerializer("text/foo"));
@@ -69,7 +69,7 @@ class SerializerSetTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test inheritence
 	//====================================================================================================
-	@Test void testInheritence() {
+	@Test void a02_inheritence() {
 		SerializerSet.Builder gb = null;
 		SerializerSet g = null;
 
@@ -119,7 +119,7 @@ class SerializerSetTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test media type with meta-characters
 	//====================================================================================================
-	@Test void testMediaTypesWithMetaCharacters() {
+	@Test void a03_mediaTypesWithMetaCharacters() {
 		SerializerSet.Builder gb = null;
 		SerializerSet g = null;
 

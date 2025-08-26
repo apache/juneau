@@ -23,7 +23,7 @@ class SwitchVarTest extends SimpleTestBase {
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test void test() {
+	@Test void a01_test() {
 		var vr = VarResolver.create().vars(SwitchVar.class, SystemPropertiesVar.class).build();
 
 		System.setProperty("SwitchVarTest.test", "foobar");

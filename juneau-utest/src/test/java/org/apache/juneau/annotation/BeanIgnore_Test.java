@@ -39,7 +39,7 @@ class BeanIgnore_Test extends SimpleTestBase {
 		@BeanIgnore public String d = "d";
 	}
 
-	@Test void testBeanIgnoreOnProperties() {
+	@Test void a01_beanIgnoreOnProperties() {
 		assertJson(new A(), "{c:'c',a:'a'}");
 	}
 
@@ -61,7 +61,7 @@ class BeanIgnore_Test extends SimpleTestBase {
 		public String d = "d";
 	}
 
-	@Test void testBeanIgnoreOnProperties_usingConfig() {
+	@Test void a02_beanIgnoreOnProperties_usingConfig() {
 		assertSerialized(new Ac(), Json5Serializer.DEFAULT.copy().applyAnnotations(AcConfig.class).build(), "{c:'c',a:'a'}");
 	}
 
@@ -88,7 +88,7 @@ class BeanIgnore_Test extends SimpleTestBase {
 		}
 	}
 
-	@Test void testBeanIgnoreOnBean() {
+	@Test void a03_beanIgnoreOnBean() {
 		assertJson(new B(), "{f2:2,f3:'xxx',f4:'xxx'}");
 	}
 
@@ -113,7 +113,7 @@ class BeanIgnore_Test extends SimpleTestBase {
 		}
 	}
 
-	@Test void testBeanIgnoreOnBean_usingConfig() {
+	@Test void a04_beanIgnoreOnBean_usingConfig() {
 		assertSerialized(new Bc(), Json5Serializer.DEFAULT.copy().applyAnnotations(B1cConfig.class).build(), "{f2:2,f3:'xxx',f4:'xxx'}");
 	}
 }

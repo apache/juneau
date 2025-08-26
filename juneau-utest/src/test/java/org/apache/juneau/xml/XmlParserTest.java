@@ -20,13 +20,13 @@ import org.junit.jupiter.api.*;
 
 class XmlParserTest extends SimpleTestBase {
 
-	@Test void testGenericAttributes() throws Exception {
+	@Test void a01_genericAttributes() throws Exception {
 		String xml = "<A b='1'><c>2</c></A>";
 		JsonMap m = XmlParser.DEFAULT.parse(xml, JsonMap.class);
 		assertEquals("{b:'1',c:'2'}", m.toString());
 	}
 
-	@Test void testGenericWithChildElements() throws Exception {
+	@Test void a02_genericWithChildElements() throws Exception {
 		String xml;
 		JsonMap m;
 
@@ -75,7 +75,7 @@ class XmlParserTest extends SimpleTestBase {
 		assertEquals("{B:{c:['c1','c2']}}", m.toString());
 	}
 
-	@Test void testPreserveRootElement() throws Exception {
+	@Test void a03_preserveRootElement() throws Exception {
 		String xml;
 		JsonMap m;
 		var p = XmlParser.create().preserveRootElement().build();

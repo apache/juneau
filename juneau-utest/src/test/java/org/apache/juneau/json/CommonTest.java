@@ -29,7 +29,7 @@ class CommonTest  extends SimpleTestBase{
 	//====================================================================================================
 	// Trim nulls from beans
 	//====================================================================================================
-	@Test void testTrimNullsFromBeans() throws Exception {
+	@Test void a01_trimNullsFromBeans() throws Exception {
 		JsonSerializer.Builder s = JsonSerializer.create().json5();
 		JsonParser p = JsonParser.DEFAULT;
 		var t1 = A.create();
@@ -59,7 +59,7 @@ class CommonTest  extends SimpleTestBase{
 	//====================================================================================================
 	// Trim empty maps
 	//====================================================================================================
-	@Test void testTrimEmptyMaps() throws Exception {
+	@Test void a02_trimEmptyMaps() throws Exception {
 		JsonSerializer.Builder s = JsonSerializer.create().json5();
 		JsonParser p = JsonParser.DEFAULT;
 		var t1 = B.create();
@@ -91,7 +91,7 @@ class CommonTest  extends SimpleTestBase{
 	//====================================================================================================
 	// Trim empty lists
 	//====================================================================================================
-	@Test void testTrimEmptyLists() throws Exception {
+	@Test void a03_trimEmptyLists() throws Exception {
 		JsonSerializer.Builder s = JsonSerializer.create().json5();
 		JsonParser p = JsonParser.DEFAULT;
 		var t1 = C.create();
@@ -123,7 +123,7 @@ class CommonTest  extends SimpleTestBase{
 	//====================================================================================================
 	// Trim empty arrays
 	//====================================================================================================
-	@Test void testTrimEmptyArrays() throws Exception {
+	@Test void a04_trimEmptyArrays() throws Exception {
 		JsonSerializer.Builder s = JsonSerializer.create().json5();
 		JsonParser p = JsonParser.DEFAULT;
 		var t1 = D.create();
@@ -155,7 +155,7 @@ class CommonTest  extends SimpleTestBase{
 	//====================================================================================================
 	// @Beanp.bpi annotation.
 	//====================================================================================================
-	@Test void testBeanPropertyProperies() throws Exception {
+	@Test void a05_beanPropertyProperies() throws Exception {
 		JsonSerializer s = Json5Serializer.DEFAULT;
 		var t = new E1();
 		String r;
@@ -183,7 +183,7 @@ class CommonTest  extends SimpleTestBase{
 	//====================================================================================================
 	// @Beanp.bpi annotation on list of beans.
 	//====================================================================================================
-	@Test void testBeanPropertyProperiesOnListOfBeans() throws Exception {
+	@Test void a06_beanPropertyProperiesOnListOfBeans() throws Exception {
 		JsonSerializer s = Json5Serializer.DEFAULT;
 		List<F> l = new LinkedList<>();
 		var t = new F();
@@ -201,7 +201,7 @@ class CommonTest  extends SimpleTestBase{
 	//====================================================================================================
 	// Test that URLs and URIs are serialized and parsed correctly.
 	//====================================================================================================
-	@Test void testURIAttr() throws Exception {
+	@Test void a07_uRIAttr() throws Exception {
 		JsonSerializer s = Json5Serializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 
@@ -227,7 +227,7 @@ class CommonTest  extends SimpleTestBase{
 	//====================================================================================================
 	// Recursion
 	//====================================================================================================
-	@Test void testRecursion() throws Exception {
+	@Test void a08_recursion() throws Exception {
 		JsonSerializer.Builder s = JsonSerializer.create().json5().maxDepth(Integer.MAX_VALUE);
 
 		var r1 = new R1();
@@ -267,7 +267,7 @@ class CommonTest  extends SimpleTestBase{
 	//====================================================================================================
 	// Basic bean
 	//====================================================================================================
-	@Test void testBasicBean() throws Exception {
+	@Test void a09_basicBean() throws Exception {
 		var s = JsonSerializer.create().json5().keepNullProperties().sortProperties().build();
 
 		var a = new J();

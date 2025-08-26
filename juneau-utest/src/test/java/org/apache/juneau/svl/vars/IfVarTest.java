@@ -23,7 +23,7 @@ class IfVarTest extends SimpleTestBase {
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test void test() {
+	@Test void a01_test() {
 		var vr = VarResolver.create().vars(IfVar.class, SystemPropertiesVar.class).build();
 
 		for (String test : new String[]{"","0","false","FALSE","f","F","foobar"}) {

@@ -24,7 +24,7 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test void testBasic() {
+	@Test void a01_basic() {
 		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		JsonMap m = new ResolvingJsonMap(vr.createSession());
 
@@ -50,7 +50,7 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testNulls
 	//====================================================================================================
-	@Test void testNulls() {
+	@Test void a02_nulls() {
 		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		JsonMap m = new ResolvingJsonMap(vr.createSession());
 
@@ -70,7 +70,7 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testNonStrings
 	//====================================================================================================
-	@Test void testNonStrings() {
+	@Test void a03_nonStrings() {
 		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		JsonMap m = new ResolvingJsonMap(vr.createSession());
 
@@ -93,7 +93,7 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 	//====================================================================================================
 	// testInner - Test inner maps
 	//====================================================================================================
-	@Test void testInner() {
+	@Test void a04_inner() {
 		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		JsonMap m = new ResolvingJsonMap(vr.createSession());
 		var m2 = new JsonMap();

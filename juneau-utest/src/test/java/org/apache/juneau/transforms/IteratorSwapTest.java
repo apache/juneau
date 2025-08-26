@@ -26,7 +26,7 @@ class IteratorSwapTest extends SimpleTestBase {
 	//====================================================================================================
 	// test
 	//====================================================================================================
-	@Test void test() throws Exception {
+	@Test void a01_test() throws Exception {
 		var s = JsonSerializer.create().json5().swaps(IteratorSwap.class).build();
 
 		// Iterators

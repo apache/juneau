@@ -27,7 +27,7 @@ class CommonXmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Test 18a - @Bean.uri annotation
 	//====================================================================================================
-	@Test void testBeanUriAnnotation() throws Exception {
+	@Test void a01_beanUriAnnotation() throws Exception {
 		XmlParser p = XmlParser.DEFAULT;
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 
@@ -59,7 +59,7 @@ class CommonXmlTest extends SimpleTestBase {
 	//====================================================================================================
 	// Bean.uri annotation, only uri property
 	//====================================================================================================
-	@Test void testBeanUriAnnotationOnlyUriProperty() throws Exception {
+	@Test void a02_beanUriAnnotationOnlyUriProperty() throws Exception {
 		var s = XmlSerializer.create().sq().build();
 
 		var t = new B("http://foo");

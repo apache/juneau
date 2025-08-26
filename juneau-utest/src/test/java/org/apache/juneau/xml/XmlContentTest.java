@@ -28,7 +28,7 @@ class XmlContentTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test beans with @Xml(format=CONTENT)
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testContentFormat() throws Exception {
+	@Test void a01_contentFormat() throws Exception {
 		var t = A.newInstance();
 		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ.copy().keepNullProperties().build(),
 			s2 = XmlSerializer.create().sq().ws().keepNullProperties().build();
@@ -132,7 +132,7 @@ class XmlContentTest extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test beans with @Xml(format=MIXED)
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void testXmlMixed() throws Exception {
+	@Test void a02_xmlMixed() throws Exception {
 		var t = B.newInstance();
 		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ.copy().keepNullProperties().build(),
 			s2 = XmlSerializer.create().sq().ws().keepNullProperties().build();

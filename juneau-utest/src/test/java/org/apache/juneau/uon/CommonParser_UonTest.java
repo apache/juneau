@@ -31,7 +31,7 @@ class CommonParser_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	// testFromSerializer
 	//====================================================================================================
-	@Test void testFromSerializer() throws Exception {
+	@Test void a01_fromSerializer() throws Exception {
 		Map m = null;
 		String in;
 
@@ -98,7 +98,7 @@ class CommonParser_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	// Correct handling of unknown properties.
 	//====================================================================================================
-	@Test void testCorrectHandlingOfUnknownProperties() throws Exception {
+	@Test void a02_correctHandlingOfUnknownProperties() throws Exception {
 		var p2 = UonParser.create().ignoreUnknownBeanProperties().build();
 		B t;
 
@@ -117,7 +117,7 @@ class CommonParser_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	// Writing to Collection properties with no setters.
 	//====================================================================================================
-	@Test void testCollectionPropertiesWithNoSetters() throws Exception {
+	@Test void a03_collectionPropertiesWithNoSetters() throws Exception {
 
 		ReaderParser p2 = UonParser.DEFAULT;
 
@@ -138,7 +138,7 @@ class CommonParser_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	// Parser listeners.
 	//====================================================================================================
-	@Test void testParserListeners() throws Exception {
+	@Test void a04_parserListeners() throws Exception {
 		var p2 = UonParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 
 		var in = "(a=1,unknownProperty=foo,b=2)";

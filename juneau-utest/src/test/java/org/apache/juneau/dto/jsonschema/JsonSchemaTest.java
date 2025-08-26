@@ -23,7 +23,7 @@ import org.junit.jupiter.api.*;
 
 public class JsonSchemaTest extends SimpleTestBase {
 
-	@Test void testSchema1() throws Exception {
+	@Test void a01_schema1() throws Exception {
 		var s = JsonSerializer.create().json5().ws().build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
@@ -116,7 +116,7 @@ public class JsonSchemaTest extends SimpleTestBase {
 		assertEquals(expected, r);
 	}
 
-	@Test void testSchema2() throws Exception {
+	@Test void a02_schema2() throws Exception {
 		var s = JsonSerializer.create().json5().ws().build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
@@ -152,7 +152,7 @@ public class JsonSchemaTest extends SimpleTestBase {
 		assertEquals(expected, r);
 	}
 
-	@Test void testToString() throws Exception {
+	@Test void a03_toString() throws Exception {
 		var s = JsonSerializer.create().json5().ws().build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;

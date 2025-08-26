@@ -24,7 +24,7 @@ class VisibilityTest extends SimpleTestBase {
 	//====================================================================================================
 	// testVisibility
 	//====================================================================================================
-	@Test void testClassDefault() throws Exception {
+	@Test void a01_classDefault() throws Exception {
 		JsonSerializer.Builder s1 = JsonSerializer.create().json5().sortProperties().disableBeansRequireSomeProperties();
 		JsonSerializer.Builder s2 = JsonSerializer.create().json5().sortProperties().disableBeansRequireSomeProperties().beanClassVisibility(PROTECTED);
 		JsonSerializer.Builder s3 = JsonSerializer.create().json5().sortProperties().disableBeansRequireSomeProperties().beanClassVisibility(Visibility.DEFAULT);

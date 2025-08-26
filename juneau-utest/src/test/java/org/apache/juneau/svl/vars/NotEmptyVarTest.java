@@ -23,7 +23,7 @@ class NotEmptyVarTest extends SimpleTestBase {
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
-	@Test void test() {
+	@Test void a01_test() {
 		var vr = VarResolver.create().vars(NotEmptyVar.class, SystemPropertiesVar.class).build();
 
 		assertEquals("false", vr.resolve("$NE{}"));
