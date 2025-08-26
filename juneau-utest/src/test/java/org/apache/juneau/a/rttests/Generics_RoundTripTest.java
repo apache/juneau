@@ -55,8 +55,6 @@ class Generics_RoundTripTest extends RoundTripTest_Base {
 	// Class with unbound type variables.
 	@Bean(p="s,t")
 	public static class Pair<S,T> {
-		private S s;
-		private T t;
 
 		public Pair() {}
 
@@ -66,8 +64,11 @@ class Generics_RoundTripTest extends RoundTripTest_Base {
 		}
 
 		// Getters/setters
+		private S s;
 		public S getS() { return s; }
 		public void setS(S v) { s = v; }
+
+		private T t;
 		public T getT() { return t; }
 		public void setT(T v) { t = v; }
 	}

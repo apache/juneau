@@ -36,46 +36,46 @@ class SerializedHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_type() {
-		SerializedHeader x1 = serializedHeader("Foo",2).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
+		var x1 = serializedHeader("Foo",2).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
 		assertThrowsWithMessage(BasicRuntimeException.class, "Validation error on request HEADER parameter 'Foo'='2'", x1::toString);
 	}
 
 	@Test void a03_serializer() {
-		SerializedHeader x1 = serializedHeader("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null);
+		var x1 = serializedHeader("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null);
 		assertEquals("[bar, baz]", x1.getValue());
-		SerializedHeader x2 = serializedHeader("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
+		var x2 = serializedHeader("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
 		assertEquals("bar,baz", x2.getValue());
-		SerializedHeader x3 = serializedHeader("Foo",alist("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
+		var x3 = serializedHeader("Foo",alist("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
 		assertEquals("[bar, baz]", x3.getValue());
-		SerializedHeader x4 = serializedHeader("Foo",alist("bar","baz")).serializer(OAPI_SERIALIZER).copyWith(null,null);
+		var x4 = serializedHeader("Foo",alist("bar","baz")).serializer(OAPI_SERIALIZER).copyWith(null,null);
 		assertEquals("bar,baz", x4.getValue());
-		SerializedHeader x5 = serializedHeader("Foo",alist("bar","baz")).copyWith(OAPI_SERIALIZER.getSession(),null);
+		var x5 = serializedHeader("Foo",alist("bar","baz")).copyWith(OAPI_SERIALIZER.getSession(),null);
 		assertEquals("bar,baz", x5.getValue());
 	}
 
 	@Test void a04_skipIfEmpty() {
-		SerializedHeader x1 = serializedHeader("Foo",null).skipIfEmpty();
+		var x1 = serializedHeader("Foo",null).skipIfEmpty();
 		assertNull(x1.getValue());
-		SerializedHeader x2 = serializedHeader("Foo","").skipIfEmpty();
+		var x2 = serializedHeader("Foo","").skipIfEmpty();
 		assertNull(x2.getValue());
-		SerializedHeader x3 = serializedHeader("Foo","").schema(schema(STRING)._default("bar").build()).serializer(OAPI_SERIALIZER).skipIfEmpty();
+		var x3 = serializedHeader("Foo","").schema(schema(STRING)._default("bar").build()).serializer(OAPI_SERIALIZER).skipIfEmpty();
 		assertThrowsWithMessage(Exception.class, "Empty value not allowed.", x3::getValue);
 	}
 
 	@Test void a05_getValue_defaults() {
-		SerializedHeader x1 = serializedHeader("Foo",null).schema(schema(INTEGER)._default("1").build()).serializer(OAPI_SESSION);
+		var x1 = serializedHeader("Foo",null).schema(schema(INTEGER)._default("1").build()).serializer(OAPI_SESSION);
 		assertEquals("1", x1.getValue());
 
-		SerializedHeader x2 = serializedHeader("Foo",null).schema(schema(STRING).required().allowEmptyValue().build()).serializer(OAPI_SESSION);
+		var x2 = serializedHeader("Foo",null).schema(schema(STRING).required().allowEmptyValue().build()).serializer(OAPI_SESSION);
 		assertNull(x2.getValue());
 
-		SerializedHeader x3 = serializedHeader("Foo",null).schema(schema(STRING).required(false).build()).serializer(OAPI_SESSION);
+		var x3 = serializedHeader("Foo",null).schema(schema(STRING).required(false).build()).serializer(OAPI_SESSION);
 		assertNull(x3.getValue());
 
-		SerializedHeader x4 = serializedHeader("Foo",null).schema(schema(STRING).required().build()).serializer(OAPI_SESSION);
+		var x4 = serializedHeader("Foo",null).schema(schema(STRING).required().build()).serializer(OAPI_SESSION);
 		assertThrowsWithMessage(Exception.class, "Required value not provided.", x4::getValue);
 
-		SerializedHeader x5 = serializedHeader("Foo",null).schema(schema(STRING).required().build()).serializer(new BadPartSerializerSession());
+		var x5 = serializedHeader("Foo",null).schema(schema(STRING).required().build()).serializer(new BadPartSerializerSession());
 		assertThrowsWithMessage(Exception.class, "Bad", x5::getValue);
 	}
 

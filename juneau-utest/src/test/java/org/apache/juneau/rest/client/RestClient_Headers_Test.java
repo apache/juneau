@@ -19,7 +19,6 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 
 import java.time.*;
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
@@ -84,7 +83,8 @@ public class RestClient_Headers_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_header_String_Object_Schema() throws Exception {
-		List<String> l1 = list("bar","baz"), l2 = list("qux","quux");
+		var l1 = list("bar","baz");
+		var l2 = list("qux","quux");
 		checkFooClient().headers(header("Foo",l1,T_ARRAY_PIPES)).build().get("/headers").header(header("Foo",l2,T_ARRAY_PIPES)).run().assertContent("['bar|baz','qux|quux']");
 	}
 

@@ -21,7 +21,6 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
@@ -49,7 +48,7 @@ class PartList_Test extends SimpleTestBase {
 	public static class APart extends BasicStringPart {
 		public static final APart X = new APart("x"), Y = new APart("y"), Z = new APart("z");
 		public APart(Object value) {
-			super("a", Utils.s(value));
+			super("a", s(value));
 		}
 	}
 
@@ -57,7 +56,7 @@ class PartList_Test extends SimpleTestBase {
 	public static class BPart extends BasicStringPart {
 		public static final BPart X = new BPart("x"), Y = new BPart("y"), Z = new BPart("z");
 		public BPart(Object value) {
-			super("b", Utils.s(value));
+			super("b", s(value));
 		}
 	}
 
@@ -65,7 +64,7 @@ class PartList_Test extends SimpleTestBase {
 	public static class CPart extends BasicStringPart {
 		public static final CPart X = new CPart("x");
 		public CPart(Object value) {
-			super("c", Utils.s(value));
+			super("c", s(value));
 		}
 	}
 
@@ -94,9 +93,8 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_creators() {
-		PartList x;
+		var x = partList(FOO_1, FOO_2, null);
 
-		x = partList(FOO_1, FOO_2, null);
 		assertEquals("Foo=1&Foo=2", s(x));
 
 		x = partList(alist(FOO_1, FOO_2, null));
@@ -133,7 +131,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_addMethods() {
-		String pname = "PartSupplierTest.x";
+		var pname = "PartSupplierTest.x";
 
 		var x = PartList.create().resolving();
 		System.setProperty(pname, "y");
@@ -154,7 +152,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_toArrayMethods() {
-		PartList x = PartList
+		var x = PartList
 			.create()
 			.append("X1","1")
 			.append(partList("X2","2").getAll());
@@ -179,7 +177,7 @@ class PartList_Test extends SimpleTestBase {
 	@Query("Foo")
 	static class Foo extends BasicStringPart {
 		public Foo(Object value) {
-			super("Foo", Utils.s(value));
+			super("Foo", s(value));
 		}
 	}
 
@@ -192,7 +190,7 @@ class PartList_Test extends SimpleTestBase {
 		assertString("a=1,2,3", x.get("Foo", APart.class));
 		assertEmpty(x.get("Bar", APart.class));
 		assertString("Foo=1,2,3", x.get(Foo.class));
-		final PartList x2 = x;
+		var x2 = x;
 		assertThrowsWithMessage(IllegalArgumentException.class, "Part name could not be found on bean type 'java.lang.String'", ()->x2.get(String.class));
 	}
 
@@ -246,12 +244,12 @@ class PartList_Test extends SimpleTestBase {
 	@Test void a14_forEach_all() {
 		var x = PartList.of();
 
-		final AtomicInteger i1 = new AtomicInteger();
+		var i1 = new AtomicInteger();
 		x.forEach(h -> i1.incrementAndGet());
 		assertEquals(0, i1.get());
 
 		x = PartList.of(FOO_1, FOO_2);
-		final AtomicInteger i2 = new AtomicInteger();
+		var i2 = new AtomicInteger();
 		x.forEach(h -> i2.incrementAndGet());
 		assertEquals(2, i2.get());
 	}
@@ -259,12 +257,12 @@ class PartList_Test extends SimpleTestBase {
 	@Test void a15_forEach_single() {
 		var x = PartList.of();
 
-		final AtomicInteger i1 = new AtomicInteger();
+		var i1 = new AtomicInteger();
 		x.forEach("Foo", h -> i1.incrementAndGet());
 		assertEquals(0, i1.get());
 
 		x = PartList.of(FOO_1, FOO_2, X_x);
-		final AtomicInteger i2 = new AtomicInteger();
+		var i2 = new AtomicInteger();
 		x.forEach("Foo", h -> i2.incrementAndGet());
 		assertEquals(2, i2.get());
 	}
@@ -272,12 +270,12 @@ class PartList_Test extends SimpleTestBase {
 	@Test void a16_stream_all() {
 		var x = PartList.of();
 
-		final AtomicInteger i1 = new AtomicInteger();
+		var i1 = new AtomicInteger();
 		x.stream().forEach(h -> i1.incrementAndGet());
 		assertEquals(0, i1.get());
 
 		x = PartList.of(FOO_1, FOO_2);
-		final AtomicInteger i2 = new AtomicInteger();
+		var i2 = new AtomicInteger();
 		x.stream().forEach(h -> i2.incrementAndGet());
 		assertEquals(2, i2.get());
 	}
@@ -285,12 +283,12 @@ class PartList_Test extends SimpleTestBase {
 	@Test void a17_stream_single() {
 		var x = PartList.of();
 
-		final AtomicInteger i1 = new AtomicInteger();
+		var i1 = new AtomicInteger();
 		x.stream("Foo").forEach(h -> i1.incrementAndGet());
 		assertEquals(0, i1.get());
 
 		x = PartList.of(FOO_1, FOO_2, X_x);
-		final AtomicInteger i2 = new AtomicInteger();
+		var i2 = new AtomicInteger();
 		x.stream("Foo").forEach(h -> i2.incrementAndGet());
 		assertEquals(2, i2.get());
 	}
@@ -323,7 +321,7 @@ class PartList_Test extends SimpleTestBase {
 
 	@Test void b02_builder_append() {
 		var x1 = PartList.create().append(FOO_1);
-		PartList x2 = PartList
+		var x2 = PartList
 			.create()
 			.append()
 			.append((PartList)null)
@@ -340,7 +338,7 @@ class PartList_Test extends SimpleTestBase {
 
 	@Test void b03_builder_prepend() {
 		var x1 = PartList.create().append(FOO_1);
-		PartList x2 = PartList
+		var x2 = PartList
 			.create()
 			.prepend()
 			.prepend((PartList)null)
@@ -356,7 +354,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void b04_builder_remove() {
-		PartList x = PartList
+		var x = PartList
 			.create()
 			.append(FOO_1,FOO_2,FOO_3,FOO_4,FOO_5,FOO_6,FOO_7)
 			.remove((PartList)null)
@@ -372,9 +370,7 @@ class PartList_Test extends SimpleTestBase {
 	}
 
 	@Test void b05_builder_set() {
-		PartList x = null;
-
-		x = PartList
+		var x = PartList
 			.create()
 			.append(FOO_1,FOO_2)
 			.set(FOO_3)
@@ -489,7 +485,7 @@ class PartList_Test extends SimpleTestBase {
 		var x8 = PartList.create().setDefault(APart.X,APart.Y).setDefault(APart.Z);
 		assertEquals("a=x", s(x8));
 
-		PartList x9 = PartList
+		var x9 = PartList
 			.create()
 			.setDefault((NameValuePair)null)
 			.setDefault((PartList)null)
@@ -509,7 +505,7 @@ class PartList_Test extends SimpleTestBase {
 		var x13 = PartList.create().set(BPart.X,BPart.Y).setDefault(PartList.of(APart.X,BPart.Z,null));
 		assertEquals("b=x&b=y&a=x", s(x13));
 
-		PartList x14 = PartList.create().set(BPart.X,BPart.Y)
+		var x14 = PartList.create().set(BPart.X,BPart.Y)
 			.setDefault(alist(APart.X,BPart.X,null))
 			.setDefault(alist(APart.Y,BPart.Y,null))
 			.setDefault(alist(CPart.X));

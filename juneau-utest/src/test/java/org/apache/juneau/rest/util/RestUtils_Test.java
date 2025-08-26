@@ -17,8 +17,6 @@ import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.junit.Assert.*;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.urlencoding.*;
 import org.junit.jupiter.api.*;
@@ -51,21 +49,14 @@ class RestUtils_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_testGetServletURI() {
-		String e, sp, cp;
+		var e = "http://hostname";
+		var sp = "";
+		var cp = "";
 
-		e = "http://hostname";
-		sp = "";
-		cp = "";
-
-		for (String s : new String[]{
-				"http://hostname",
-				"http://hostname/foo",
-				"http://hostname?foo",
-				"http://hostname/?foo"})
+		for (var s : a("http://hostname", "http://hostname/foo", "http://hostname?foo", "http://hostname/?foo"))
 			assertEquals(e, trimPathInfo(new StringBuffer(s), cp, sp).toString());
 
-		for (String s : new String[]{
-				"http:/hostname?foo"}) {
+		for (var s : a("http:/hostname?foo")) {
 			assertThrows(Exception.class, ()->trimPathInfo(new StringBuffer(s), "", ""));
 		}
 
@@ -73,29 +64,17 @@ class RestUtils_Test extends SimpleTestBase {
 		sp = "/";
 		cp = "/";
 
-		for (String s : new String[]{
-				"http://hostname",
-				"http://hostname/foo",
-				"http://hostname?foo",
-				"http://hostname/?foo"})
+		for (var s : a("http://hostname", "http://hostname/foo", "http://hostname?foo", "http://hostname/?foo"))
 			assertEquals(e, trimPathInfo(new StringBuffer(s), cp, sp).toString());
 
 		e = "http://hostname/foo";
 		sp = "/foo";
 		cp = "/";
 
-		for (String s : new String[]{
-				"http://hostname/foo",
-				"http://hostname/foo/bar",
-				"http://hostname/foo?bar"})
+		for (var s : a("http://hostname/foo", "http://hostname/foo/bar", "http://hostname/foo?bar"))
 			assertEquals(e, trimPathInfo(new StringBuffer(s), cp, sp).toString());
 
-		for (String s : new String[]{
-				"http://hostname/foo2",
-				"http://hostname/fo2",
-				"http://hostname?foo",
-				"http://hostname/fo?bar",
-				"http:/hostname/foo"}) {
+		for (var s : a("http://hostname/foo2", "http://hostname/fo2", "http://hostname?foo", "http://hostname/fo?bar", "http:/hostname/foo")) {
 			assertThrows(Exception.class, ()->trimPathInfo(new StringBuffer(s), "/", "/foo"));
 		}
 
@@ -103,16 +82,10 @@ class RestUtils_Test extends SimpleTestBase {
 		sp = "/foo/bar";
 		cp = "/";
 
-		for (String s : new String[]{
-				"http://hostname/foo/bar",
-				"http://hostname/foo/bar/baz",
-				"http://hostname/foo/bar?baz"})
+		for (var s : a("http://hostname/foo/bar", "http://hostname/foo/bar/baz", "http://hostname/foo/bar?baz"))
 			assertEquals(e, trimPathInfo(new StringBuffer(s), cp, sp).toString());
 
-		for (String s : new String[]{
-				"http://hostname/foo2/bar",
-				"http://hostname/foo/bar2"
-			}) {
+		for (var s : a("http://hostname/foo2/bar", "http://hostname/foo/bar2")) {
 			assertThrows(Exception.class, ()->trimPathInfo(new StringBuffer(s), "/foo/bar", "/foo/bar"));
 		}
 
@@ -120,16 +93,10 @@ class RestUtils_Test extends SimpleTestBase {
 		sp = "/bar";
 		cp = "/foo";
 
-		for (String s : new String[]{
-				"http://hostname/foo/bar",
-				"http://hostname/foo/bar/baz",
-				"http://hostname/foo/bar?baz"})
+		for (var s : a("http://hostname/foo/bar", "http://hostname/foo/bar/baz", "http://hostname/foo/bar?baz"))
 			assertEquals(e, trimPathInfo(new StringBuffer(s), cp, sp).toString());
 
-		for (String s : new String[]{
-				"http://hostname/foo2/bar",
-				"http://hostname/foo/bar2"
-			}) {
+		for (var s : a("http://hostname/foo2/bar", "http://hostname/foo/bar2")) {
 			assertThrows(Exception.class, ()->trimPathInfo(new StringBuffer(s), "/foo", "/bar"));
 		}
 	}
@@ -169,10 +136,8 @@ class RestUtils_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void g01_testParseIntoSimpleMap() {
-		Map<String,String[]> m;
-
-		String s = "?f1=,()=&f2a=$b(true)&f2b=true&f3a=$n(123)&f3b=123&f4=$s(foo)";
-		m = parseQuery(s);
+		var s = "?f1=,()=&f2a=$b(true)&f2b=true&f3a=$n(123)&f3b=123&f4=$s(foo)";
+		var m = parseQuery(s);
 		assertEquals(",()=", m.get("f1")[0]);
 		assertEquals("$b(true)", m.get("f2a")[0]);
 		assertEquals("true", m.get("f2b")[0]);
@@ -199,17 +164,15 @@ class RestUtils_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void h01_testParseIntoSimpleMapMultiValues() {
-		Map<String,String[]> m;
-
-		String s = "?f1&f1&f2&f2=abc&f2=def&f2";
-		m = parseQuery(s);
+		var s = "?f1&f1&f2&f2=abc&f2=def&f2";
+		var m = parseQuery(s);
 		assertJson(m, "{f1:null,f2:['abc','def']}");
 	}
 
 	@Test void h02_testEmptyString() throws Exception {
-		UrlEncodingParser p = UrlEncodingParser.DEFAULT;
+		var p = UrlEncodingParser.DEFAULT;
 
-		String s = "";
+		var s = "";
 		var b = p.parse(s, B.class);
 		assertEquals("f1", b.f1);
 	}

@@ -26,4 +26,4 @@ class Tuple3Function_Test extends SimpleTestBase {
 		Tuple3Function<Integer,Integer,Integer,Integer> x = (a,b,c)->a+b+c;
 		assertEquals(6, x.apply(1,2,3));
 	}
-}
+}

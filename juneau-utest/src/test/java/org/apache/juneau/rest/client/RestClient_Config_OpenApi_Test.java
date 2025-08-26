@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.httppart.HttpPartCollectionFormat.*;
 import static org.apache.juneau.uon.ParamFormat.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.io.*;
 
@@ -40,11 +41,11 @@ class RestClient_Config_OpenApi_Test extends SimpleTestBase {
 		}
 		@RestGet
 		public Reader checkQuery(org.apache.juneau.rest.RestRequest req) {
-			return TestUtils.reader(req.getQueryParams().asQueryString());
+			return reader(req.getQueryParams().asQueryString());
 		}
 		@RestPost
 		public Reader checkFormData(org.apache.juneau.rest.RestRequest req) {
-			return TestUtils.reader(req.getFormParams().asQueryString());
+			return reader(req.getFormParams().asQueryString());
 		}
 	}
 
@@ -53,7 +54,7 @@ class RestClient_Config_OpenApi_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_oapiCollectionFormat() throws Exception {
-		String[] a = {"bar","baz"};
+		var a = a("bar","baz");
 		var x = client().oapiCollectionFormat(PIPES).build();
 		x.get("/checkQuery").queryData("Foo",a).run().assertContent().asString().asUrlDecode().is("Foo=bar|baz");
 		x.post("/checkFormData").formData("Foo",a).run().assertContent().asString().asUrlDecode().is("Foo=bar|baz");
@@ -61,7 +62,7 @@ class RestClient_Config_OpenApi_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_paramFormat() throws Exception {
-		 JsonMap m = JsonMap.of(
+		 var m = JsonMap.of(
 			"foo","bar",
 			"baz",new String[]{"qux","true","123"}
 		);

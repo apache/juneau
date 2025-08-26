@@ -12,12 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
+import static org.apache.juneau.TestUtils.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 class ParameterType_Test extends SimpleTestBase {
 
 	@Test void a01_basic() {
-		TestUtils.assertNotThrown(ParameterType::new);
+		assertNotThrown(ParameterType::new);
 	}
 }

@@ -13,6 +13,7 @@
 package org.apache.juneau.collections;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -23,10 +24,9 @@ class Args_Test extends SimpleTestBase {
 	// test - Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void basic() {
-		Args a;
+		var a = new Args(a());
 
 		// Empty args
-		a = new Args(new String[]{});
 		assertNull(a.getArg(0));
 		assertNull(a.getArg(1));
 		assertNull(a.getArg(-1));
@@ -67,4 +67,4 @@ class Args_Test extends SimpleTestBase {
 		assertEquals("bar bar", a.getArgs("foo").get(0));
 		assertTrue(a.containsKey("foo"));
 	}
-}
+}

@@ -56,7 +56,7 @@ class BeanStore_Test extends SimpleTestBase {
 	private static A2 a2a = new A2();
 
 	@Test void a00_dummy() {
-		TestUtils.assertNotThrown(BeanStore.Void::new);
+		assertNotThrown(BeanStore.Void::new);
 	}
 
 	@Test void a01_builderCopyConstructor() {
@@ -84,7 +84,7 @@ class BeanStore_Test extends SimpleTestBase {
 			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.removeBean(A1.class, "foo"));
 		}
 
-		for (BeanStore b : array(b1c, b2c)) {
+		for (var b : array(b1c, b2c)) {
 			b.add(A1.class, a1a);
 			b.add(A1.class, a1a, "foo");
 			b.addBean(A1.class, a1a);
@@ -103,42 +103,42 @@ class BeanStore_Test extends SimpleTestBase {
 		var b2p = BeanStore.create().threadSafe().build();
 		var b2c = BeanStore.create().threadSafe().parent(b2p).build();
 
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertFalse(b.hasBean(A1.class));
 			assertEmpty(b.getBean(A1.class));
 		}
 
 		b1p.addBean(A1.class, a1a);
 		b2p.addBean(A1.class, a1a);
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertTrue(b.hasBean(A1.class));
 			assertEquals(a1a, b.getBean(A1.class).get());
 		}
 
 		b1p.clear();
 		b2p.clear();
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertFalse(b.hasBean(A1.class));
 			assertEmpty(b.getBean(A1.class));
 		}
 
 		b1p.addBean(A1.class, null);
 		b2p.addBean(A1.class, null);
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertTrue(b.hasBean(A1.class));
 			assertEmpty(b.getBean(A1.class));
 		}
 
 		b1p.clear().addSupplier(A1.class, ()->a1a);
 		b2p.clear().addSupplier(A1.class, ()->a1a);
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertTrue(b.hasBean(A1.class));
 			assertEquals(a1a, b.getBean(A1.class).get());
 		}
 
 		b1p.add(A1.class, a1b);
 		b2p.add(A1.class, a1b);
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertTrue(b.hasBean(A1.class));
 			assertEquals(a1b, b.getBean(A1.class).get());
 			assertStream(b.stream(A1.class).map(BeanStoreEntry::get), a1b, a1a);
@@ -146,12 +146,12 @@ class BeanStore_Test extends SimpleTestBase {
 
 		b1c.add(A2.class, a2a);
 		b2c.add(A2.class, a2a);
-		for (BeanStore b : array(b1p, b2p)) {
+		for (var b : array(b1p, b2p)) {
 			assertFalse(b.hasBean(A2.class));
 			assertEmpty(b.getBean(A2.class));
 			assertStream(b.stream(A2.class));
 		}
-		for (BeanStore b : array(b1c, b2c)) {
+		for (var b : array(b1c, b2c)) {
 			assertTrue(b.hasBean(A2.class));
 			assertEquals(a2a, b.getBean(A2.class).get());
 			assertStream(b.stream(A2.class).map(BeanStoreEntry::get), a2a);
@@ -167,12 +167,12 @@ class BeanStore_Test extends SimpleTestBase {
 		b2p.removeBean(A1.class);
 		b2c.clear().addBean(A1.class, a1a);
 
-		for (BeanStore b : array(b1p, b2p)) {
+		for (var b : array(b1p, b2p)) {
 			assertFalse(b.hasBean(A1.class));
 			assertEmpty(b.getBean(A1.class));
 			assertStream(b.stream(A1.class));
 		}
-		for (BeanStore b : array(b1c, b2c)) {
+		for (var b : array(b1c, b2c)) {
 			assertTrue(b.hasBean(A1.class));
 			assertEquals(a1a, b.getBean(A1.class).get());
 			assertStream(b.stream(A1.class).map(BeanStoreEntry::get), a1a);
@@ -180,7 +180,7 @@ class BeanStore_Test extends SimpleTestBase {
 
 		b1c.removeBean(A1.class);
 		b2c.removeBean(A1.class);
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertFalse(b.hasBean(A1.class));
 			assertEmpty(b.getBean(A1.class));
 			assertStream(b.stream(A1.class));
@@ -193,29 +193,29 @@ class BeanStore_Test extends SimpleTestBase {
 		var b2p = BeanStore.create().threadSafe().build();
 		var b2c = BeanStore.create().threadSafe().parent(b2p).build();
 
-		for (BeanStore b : array(b1p, b2p)) {
+		for (var b : array(b1p, b2p)) {
 			b.addBean(A1.class, a1a).addBean(A1.class, a1b, "foo").addBean(A1.class, a1c, "bar").addBean(A1.class, a1d, "bar").addBean(A2.class, a2a, "foo");
 		}
-		for (BeanStore b : array(b1c, b2c)) {
+		for (var b : array(b1c, b2c)) {
 			b.addBean(A1.class, a1e);
 		}
 
-		for (BeanStore b : array(b1p, b2p)) {
+		for (var b : array(b1p, b2p)) {
 			assertStream(b.stream(A1.class).map(BeanStoreEntry::get), a1d,a1c,a1b,a1a);
 		}
-		for (BeanStore b : array(b1c, b2c)) {
+		for (var b : array(b1c, b2c)) {
 			assertStream(b.stream(A1.class).map(BeanStoreEntry::get), a1e,a1d,a1c,a1b,a1a);
 		}
 
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertEquals(a1b, b.getBean(A1.class, "foo").get());
 			assertEquals(a1d, b.getBean(A1.class, "bar").get());
 			assertEmpty(b.getBean(A1.class, "baz"));
 		}
-		for (BeanStore b : array(b1p, b2p)) {
+		for (var b : array(b1p, b2p)) {
 			assertEquals(a1a, b.getBean(A1.class, null).get());
 		}
-		for (BeanStore b : array(b1c, b2c)) {
+		for (var b : array(b1c, b2c)) {
 			assertEquals(a1e, b.getBean(A1.class, null).get());
 		}
 	}
@@ -279,18 +279,18 @@ class BeanStore_Test extends SimpleTestBase {
 		var m2 = ci.getPublicMethod(x-> x.hasName("m2"));
 		var m3 = ci.getPublicMethod(x-> x.hasName("m3"));
 
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			for (ExecutableInfo e : array(c1, m1, m3)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
+			for (var e : array(c1, m1, m3)) {
 				assertString(A1n, b.getMissingParams(e));
 				assertFalse(b.hasAllParams(e));
 			}
-			for (ExecutableInfo e : array(c2, m2)) {
+			for (var e : array(c2, m2)) {
 				assertString(A1n+"@foo", b.getMissingParams(e));
 				assertFalse(b.hasAllParams(e));
 			}
 		}
 
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertArray(b.getParams(c1), pNull, pEmptyOptional, pIsBeanStore);
 			assertArray(b.getParams(c2), pNull, pEmptyOptional);
 			assertArray(b.getParams(m1), pNull, pEmptyOptional, pIsBeanStore);
@@ -300,7 +300,7 @@ class BeanStore_Test extends SimpleTestBase {
 
 		b1p.add(A1.class, a1a);
 		b2p.add(A1.class, a1a);
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertNull(b.getMissingParams(c1));
 			assertString(A1n+"@foo", b.getMissingParams(c2));
 			assertNull(b.getMissingParams(m1));
@@ -320,8 +320,8 @@ class BeanStore_Test extends SimpleTestBase {
 
 		b1p.add(A1.class, a1a, "foo");
 		b2p.add(A1.class, a1a, "foo");
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			for (ExecutableInfo e : array(c1, c2, m1, m2, m3)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
+			for (var e : array(c1, c2, m1, m2, m3)) {
 				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
@@ -334,8 +334,8 @@ class BeanStore_Test extends SimpleTestBase {
 
 		b1p.add(A1.class, a1b, "bar");
 		b2p.add(A1.class, a1b, "bar");
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			for (ExecutableInfo e : array(c1, c2, m1, m2, m3)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
+			for (var e : array(c1, c2, m1, m2, m3)) {
 				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
@@ -348,8 +348,8 @@ class BeanStore_Test extends SimpleTestBase {
 
 		b1p.add(A2.class, a2a, "bar");
 		b2p.add(A2.class, a2a, "bar");
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			for (ExecutableInfo e : array(c1, c2, m1, m2, m3)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
+			for (var e : array(c1, c2, m1, m2, m3)) {
 				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
@@ -362,8 +362,8 @@ class BeanStore_Test extends SimpleTestBase {
 
 		b1p.add(A2.class, a2a, null);
 		b2p.add(A2.class, a2a, null);
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			for (ExecutableInfo e : array(c1, c2, m1, m2, m3)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
+			for (var e : array(c1, c2, m1, m2, m3)) {
 				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
@@ -410,21 +410,21 @@ class BeanStore_Test extends SimpleTestBase {
 		var c1 = ci.getPublicConstructor(x -> x.hasParamTypes(BeanStore_Test.class, A1.class, Optional.class, BeanStore.class));
 		var c2 = ci.getPublicConstructor(x -> x.hasParamTypes(BeanStore_Test.class, A1.class, Optional.class));
 
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertString(A1n, b.getMissingParams(c1));
 			assertString(A1n+"@foo", b.getMissingParams(c2));
 			assertFalse(b.hasAllParams(c1));
 			assertFalse(b.hasAllParams(c2));
 		}
 
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertArray(b.getParams(c1), pThis, pNull, pEmptyOptional, pIsBeanStore);
 			assertArray(b.getParams(c2), pThis, pNull, pEmptyOptional);
 		}
 
 		b1p.add(A1.class, a1a);
 		b2p.add(A1.class, a1a);
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertNull(b.getMissingParams(c1));
 			assertString(A1n+"@foo", b.getMissingParams(c2));
 			assertTrue(b.hasAllParams(c1));
@@ -435,8 +435,8 @@ class BeanStore_Test extends SimpleTestBase {
 
 		b1p.add(A1.class, a1a, "foo");
 		b2p.add(A1.class, a1a, "foo");
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			for (ExecutableInfo e : array(c1, c2)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
+			for (var e : array(c1, c2)) {
 				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
@@ -446,8 +446,8 @@ class BeanStore_Test extends SimpleTestBase {
 
 		b1p.add(A1.class, a1b, "bar");
 		b2p.add(A1.class, a1b, "bar");
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			for (ExecutableInfo e : array(c1, c2)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
+			for (var e : array(c1, c2)) {
 				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
@@ -457,8 +457,8 @@ class BeanStore_Test extends SimpleTestBase {
 
 		b1p.add(A2.class, a2a, "bar");
 		b2p.add(A2.class, a2a, "bar");
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			for (ExecutableInfo e : array(c1, c2)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
+			for (var e : array(c1, c2)) {
 				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
@@ -468,8 +468,8 @@ class BeanStore_Test extends SimpleTestBase {
 
 		b1p.add(A2.class, a2a, null);
 		b2p.add(A2.class, a2a, null);
-		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
-			for (ExecutableInfo e : array(c1, c2)) {
+		for (var b : array(b1p, b1c, b2p, b2c)) {
+			for (var e : array(c1, c2)) {
 				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
@@ -488,7 +488,6 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void c00_createMethodFinder_invalidArgs() {
 		var b = BeanStore.create().build();
-
 		assertThrowsWithMessage(IllegalArgumentException.class, "Method cannot be used without outer bean definition.", ()->b.createMethodFinder(null));
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'beanType' cannot be null.", ()->b.createMethodFinder((Class<?>)null,""));
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'resourceClass' cannot be null.", ()->b.createMethodFinder(String.class,null));
@@ -514,12 +513,12 @@ class BeanStore_Test extends SimpleTestBase {
 		var b3p = BeanStore.create().build();
 		var b3c = BeanStore.create().outer(this).parent(b3p).build();
 
-		for (String m : array("createA0", "createA2", "createA3", "createA4", "createA5", "createA6")) {
-			for (BeanStore b : array(b1c, b2c, b3c)) {
+		for (var m : array("createA0", "createA2", "createA3", "createA4", "createA5", "createA6")) {
+			for (var b : array(b1c, b2c, b3c)) {
 				assertNull(b.createMethodFinder(C.class, x).find(m).run());
 				assertNull(b.createMethodFinder(C.class, C1.class).find(m).run());
 			}
-			for (BeanStore b : array(b2c, b3c)) {
+			for (var b : array(b2c, b3c)) {
 				assertNull(b.createMethodFinder(C.class).find(m).run());
 			}
 		}
@@ -553,12 +552,12 @@ class BeanStore_Test extends SimpleTestBase {
 		var b3p = BeanStore.create().build();
 		var b3c = BeanStore.create().outer(this).parent(b3p).build();
 
-		for (String m : array("createB0", "createB2", "createB3", "createB4", "createB5", "createB6")) {
-			for (BeanStore b : array(b1c, b2c, b3c)) {
+		for (var m : array("createB0", "createB2", "createB3", "createB4", "createB5", "createB6")) {
+			for (var b : array(b1c, b2c, b3c)) {
 				assertNull(b.createMethodFinder(C.class, x).find(m).run());
 				assertNull(b.createMethodFinder(C.class, C2.class).find(m).run());
 			}
-			for (BeanStore b : array(b2c, b3c)) {
+			for (var b : array(b2c, b3c)) {
 				assertNull(b.createMethodFinder(C.class).find(m).run());
 			}
 		}
@@ -591,7 +590,7 @@ class BeanStore_Test extends SimpleTestBase {
 		var b3p = BeanStore.create().build();
 		var b3c = BeanStore.create().outer(this).parent(b3p).build();
 
-		for (BeanStore b : array(b1c, b2c, b3c)) {
+		for (var b : array(b1c, b2c, b3c)) {
 			assertNull(b.createMethodFinder(C.class, x).find("createC1").run());
 			assertNull(b.createMethodFinder(C.class, x).find("createC2").run());
 			assertNull(b.createMethodFinder(C.class, x).find("createC3").run().a);
@@ -603,7 +602,7 @@ class BeanStore_Test extends SimpleTestBase {
 		b1p.addBean(A1.class, new A1());
 		b2p.addBean(A1.class, new A1());
 		b3p.addBean(A1.class, new A1());
-		for (BeanStore b : array(b1c, b2c)) {
+		for (var b : array(b1c, b2c)) {
 			assertNotNull(b.createMethodFinder(C.class, x).find("createC1").run());
 			assertNotNull(b.createMethodFinder(C.class, x).find("createC2").run());
 			assertNotNull(b.createMethodFinder(C.class, x).find("createC3").run().a);
@@ -623,13 +622,13 @@ class BeanStore_Test extends SimpleTestBase {
 		assertNull(b2c.createMethodFinder(C.class).find("createC4").run());
 		assertNull(b2c.createMethodFinder(C.class).find("createC5").run().a);
 		assertNotNull(b2c.createMethodFinder(C.class).find("createC6").run());
-		for (String m : array("createC1","createC2","createC3","createC4","createC5","createC6")) {
+		for (var m : array("createC1","createC2","createC3","createC4","createC5","createC6")) {
 			assertNull(b3c.createMethodFinder(C.class).find(m).run());
 		}
 
 		b1p.clear().addSupplier(A1.class, A1::new);
 		b2p.clear().addSupplier(A1.class, A1::new);
-		for (BeanStore b : array(b1c, b2c)) {
+		for (var b : array(b1c, b2c)) {
 			assertNotNull(b.createMethodFinder(C.class, x).find("createC1").run());
 			assertNotNull(b.createMethodFinder(C.class, x).find("createC2").run());
 			assertNotNull(b.createMethodFinder(C.class, x).find("createC3").run().a);
@@ -649,13 +648,13 @@ class BeanStore_Test extends SimpleTestBase {
 		assertNull(b2c.createMethodFinder(C.class).find("createC4").run());
 		assertNull(b2c.createMethodFinder(C.class).find("createC5").run().a);
 		assertNotNull(b2c.createMethodFinder(C.class).find("createC6").run());
-		for (String m : array("createC1","createC2","createC3","createC4","createC5","createC6")) {
+		for (var m : array("createC1","createC2","createC3","createC4","createC5","createC6")) {
 			assertNull(b3c.createMethodFinder(C.class).find(m).run());
 		}
 
 		b1p.clear().add(A1.class, null);
 		b2p.clear().add(A1.class, null);
-		for (BeanStore b : array(b1c, b2c)) {
+		for (var b : array(b1c, b2c)) {
 			assertNotNull(b.createMethodFinder(C.class, x).find("createC1").run());
 			assertNotNull(b.createMethodFinder(C.class, x).find("createC2").run());
 			assertNull(b.createMethodFinder(C.class, x).find("createC3").run().a);
@@ -675,13 +674,13 @@ class BeanStore_Test extends SimpleTestBase {
 		assertNull(b2c.createMethodFinder(C.class).find("createC4").run());
 		assertNull(b2c.createMethodFinder(C.class).find("createC5").run().a);
 		assertNotNull(b2c.createMethodFinder(C.class).find("createC6").run());
-		for (String m : array("createC1","createC2","createC3","createC4","createC5","createC6")) {
+		for (var m : array("createC1","createC2","createC3","createC4","createC5","createC6")) {
 			assertNull(b3c.createMethodFinder(C.class).find(m).run());
 		}
 
 		b1p.clear().addBean(A1.class, new A1()).add(A1.class, new A1(), "Foo");
 		b2p.clear().addBean(A1.class, new A1()).add(A1.class, new A1(), "Foo");
-		for (BeanStore b : array(b1c, b2c)) {
+		for (var b : array(b1c, b2c)) {
 			assertNotNull(b.createMethodFinder(C.class, x).find("createC1").run());
 			assertNotNull(b.createMethodFinder(C.class, x).find("createC2").run());
 			assertNotNull(b.createMethodFinder(C.class, x).find("createC3").run().a);
@@ -701,7 +700,7 @@ class BeanStore_Test extends SimpleTestBase {
 		assertNotNull(b2c.createMethodFinder(C.class).find("createC4").run());
 		assertNotNull(b2c.createMethodFinder(C.class).find("createC5").run().a);
 		assertNotNull(b2c.createMethodFinder(C.class).find("createC6").run());
-		for (String m : array("createC1","createC2","createC3","createC4","createC5","createC6")) {
+		for (var m : array("createC1","createC2","createC3","createC4","createC5","createC6")) {
 			assertNull(b3c.createMethodFinder(C.class).find(m).run());
 		}
 	}
@@ -790,7 +789,7 @@ class BeanStore_Test extends SimpleTestBase {
 	public static D2 d2 = new D2();
 
 	@Test void d02_createBean_staticCreator_create() {
-		BeanStore bs = BeanStore.INSTANCE;
+		var bs = BeanStore.INSTANCE;
 		assertEquals(d2, bs.createBean(D2.class).run());
 	}
 
@@ -800,7 +799,7 @@ class BeanStore_Test extends SimpleTestBase {
 	public static D3 d3 = new D3() {};
 
 	@Test void d03_createBean_staticCreator_getInstance() {
-		BeanStore bs = BeanStore.INSTANCE;
+		var bs = BeanStore.INSTANCE;
 		assertEquals(d3, bs.createBean(D3.class).run());
 	}
 
@@ -826,7 +825,7 @@ class BeanStore_Test extends SimpleTestBase {
 	}
 
 	@Test void d04_createBean_staticCreator_invalidSignatures() {
-		BeanStore bs = BeanStore.INSTANCE;
+		var bs = BeanStore.INSTANCE;
 		assertNotEqualsAny(bs.createBean(D4a.class).run(), d4a1, d4a2, d4a3, d4a4);
 		assertNotEqualsAny(bs.createBean(D4b.class).run(), d4b1, d4b2);
 		assertNotNull(bs.createBean(D4c.class).run());
@@ -860,7 +859,7 @@ class BeanStore_Test extends SimpleTestBase {
 	}
 
 	@Test void d06_createBean_staticCreator_ignoredWithBuilder() {
-		BeanStore bs = BeanStore.INSTANCE;
+		var bs = BeanStore.INSTANCE;
 		assertString("1", bs.createBean(D6.class).builder(String.class, "1").run().s);
 	}
 
@@ -899,7 +898,7 @@ class BeanStore_Test extends SimpleTestBase {
 	public interface D9b {}
 
 	@Test void d09_createBean_staticCreator_withBeans() {
-		BeanStore bs = BeanStore.INSTANCE;
+		var bs = BeanStore.INSTANCE;
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D9a.class.getName()+": Class is abstract.", ()->bs.createBean(D9a.class).run());
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D9b.class.getName()+": Class is an interface.", ()->bs.createBean(D9b.class).run());
 	}
@@ -959,7 +958,7 @@ class BeanStore_Test extends SimpleTestBase {
 	}
 
 	@Test void d13_createBean_constructors_private() {
-		BeanStore bs = BeanStore.INSTANCE;
+		var bs = BeanStore.INSTANCE;
 		assertThrowsWithMessage(ExecutableException.class, "Could not instantiate class "+D13.class.getName()+": No public/protected constructors found.", ()->bs.createBean(D13.class).run());
 	}
 
@@ -1000,7 +999,7 @@ class BeanStore_Test extends SimpleTestBase {
 
 	@Test void d16_createBean_builders() {
 		var bs = BeanStore.create().build();
-		D16.Builder b = D16.create();
+		var b = D16.create();
 		b.b = "foo";
 		assertString("foo", bs.createBean(D16.class).builder(D16.Builder.class, b).run().a);
 	}

@@ -13,6 +13,7 @@
 package org.apache.juneau.transforms;
 
 import java.util.function.*;
+import static org.apache.juneau.TestUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -508,7 +509,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	public static class TemplateSwap extends ObjectSwap<Object,Object> {
 		@Override
 		public Object swap(BeanSession session, Object o, String template) throws Exception {
-			return TestUtils.reader(template);
+			return reader(template);
 		}
 	}
 
@@ -598,7 +599,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	public static class ContextSwap extends ObjectSwap<TestContextSwap,Object> {
 		@Override
 		public Object swap(BeanSession session, TestContextSwap o, String template) throws Exception {
-			return TestUtils.reader(template);
+			return reader(template);
 		}
 		@Override
 		public String withTemplate() {
@@ -611,7 +612,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	public static class ContextSwapJson extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
-			return TestUtils.reader(template);
+			return reader(template);
 		}
 		@Override
 		public MediaType[] forMediaTypes() {
@@ -625,7 +626,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	public static class ContextSwapXml extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
-			return TestUtils.reader(template);
+			return reader(template);
 		}
 		@Override
 		public MediaType[] forMediaTypes() {
@@ -639,7 +640,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	public static class ContextSwapHtml extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
-			return TestUtils.reader(template);
+			return reader(template);
 		}
 		@Override
 		public MediaType[] forMediaTypes() {
@@ -653,7 +654,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	public static class ContextSwapUon extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
-			return TestUtils.reader(template);
+			return reader(template);
 		}
 		@Override
 		public MediaType[] forMediaTypes() {
@@ -667,7 +668,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	public static class ContextSwapUrlEncoding extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
-			return TestUtils.reader(template);
+			return reader(template);
 		}
 		@Override
 		public MediaType[] forMediaTypes() {
@@ -681,7 +682,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	public static class ContextSwapMsgPack extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
-			return TestUtils.reader(template);
+			return reader(template);
 		}
 		@Override
 		public MediaType[] forMediaTypes() {
@@ -695,7 +696,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	public static class ContextSwapRdfXml extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
 		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
-			return TestUtils.reader(template);
+			return reader(template);
 		}
 		@Override
 		public MediaType[] forMediaTypes() {
@@ -725,7 +726,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	public static class BeanSwap extends ObjectSwap<Object,Object> {
 		@Override
 		public Object swap(BeanSession session, Object o, String template) throws Exception {
-			return TestUtils.reader("SWAPPED");
+			return reader("SWAPPED");
 		}
 	}
 }

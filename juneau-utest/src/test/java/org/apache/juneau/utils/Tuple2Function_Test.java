@@ -26,4 +26,4 @@ class Tuple2Function_Test extends SimpleTestBase {
 		Tuple2Function<Integer,Integer,Integer> x = (a,b)->a+b;
 		assertEquals(3, x.apply(1,2));
 	}
-}
+}

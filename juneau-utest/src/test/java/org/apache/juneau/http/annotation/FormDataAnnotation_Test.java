@@ -31,7 +31,7 @@ class FormDataAnnotation_Test extends SimpleTestBase {
 
 	FormData a1 = FormDataAnnotation.create()
 		.def("def")
-        .description("description")
+		.description("description")
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -42,7 +42,7 @@ class FormDataAnnotation_Test extends SimpleTestBase {
 
 	FormData a2 = FormDataAnnotation.create()
 		.def("def")
-        .description("description")
+		.description("description")
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -52,10 +52,10 @@ class FormDataAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		TestUtils.assertJsonMatches(a1, ""
+		assertJsonMatches(a1, ""
 			+ "{"
 				+ "def:'def',"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "name:'name',"
 				+ "on:['on'],"
 				+ "onClass:['org.apache.juneau.http.annotation.FormDataAnnotation_Test$X1'],"
@@ -114,7 +114,7 @@ class FormDataAnnotation_Test extends SimpleTestBase {
 
 	@FormData(
 		def="def",
-        description={ "description" },
+		description={ "description" },
 		name="name",
 		on="on",
 		onClass=X1.class,
@@ -127,7 +127,7 @@ class FormDataAnnotation_Test extends SimpleTestBase {
 
 	@FormData(
 		def="def",
-        description={ "description" },
+		description={ "description" },
 		name="name",
 		on="on",
 		onClass=X1.class,

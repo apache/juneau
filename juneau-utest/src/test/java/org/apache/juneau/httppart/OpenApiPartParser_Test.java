@@ -80,7 +80,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_inputValidations_enum() throws Exception {
-		final HttpPartSchema s = tNone()._enum("foo").allowEmptyValue().build();
+		var s = tNone()._enum("foo").allowEmptyValue().build();
 
 		assertEquals("foo", parse(s, "foo", String.class));
 		assertEquals(null, parse(s, null, String.class));
@@ -112,7 +112,6 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_primitiveDefaults() throws Exception {
-
 		assertEquals(null, parse(null, null, Boolean.class));
 		assertEquals(false, parse(null, null, boolean.class));
 		assertEquals(null, parse(null, null, Character.class));
@@ -189,7 +188,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 
 
 	@Test void c01_stringType_simple() throws Exception {
-		HttpPartSchema s = T_STRING;
+		var s = T_STRING;
 		assertEquals("foo", parse(s, "foo", String.class));
 	}
 
@@ -200,8 +199,8 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void c03_stringType_byteFormat() throws Exception {
-		HttpPartSchema s = T_BYTE;
-		String in = base64Encode("foo".getBytes());
+		var s = T_BYTE;
+		var in = base64Encode("foo".getBytes());
 		assertEquals("foo", parse(s, in, String.class));
 		assertEquals("foo", read(parse(s, in, InputStream.class)));
 		assertEquals("foo", read(parse(s, in, Reader.class)));
@@ -209,8 +208,8 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void c04_stringType_binaryFormat() throws Exception {
-		HttpPartSchema s = T_BINARY;
-		String in = toHex("foo".getBytes());
+		var s = T_BINARY;
+		var in = toHex("foo".getBytes());
 		assertEquals("foo", parse(s, in, String.class));
 		assertEquals("foo", read(parse(s, in, InputStream.class)));
 		assertEquals("foo", read(parse(s, in, Reader.class)));
@@ -218,8 +217,8 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void c05_stringType_binarySpacedFormat() throws Exception {
-		HttpPartSchema s = T_BINARY_SPACED;
-		String in = toSpacedHex("foo".getBytes());
+		var s = T_BINARY_SPACED;
+		var in = toSpacedHex("foo".getBytes());
 		assertEquals("foo", parse(s, in, String.class));
 		assertEquals("foo", read(parse(s, in, InputStream.class)));
 		assertEquals("foo", read(parse(s, in, Reader.class)));
@@ -227,8 +226,8 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void c06_stringType_dateFormat() throws Exception {
-		HttpPartSchema s = T_DATE;
-		String in = "2012-12-21";
+		var s = T_DATE;
+		var in = "2012-12-21";
 		assertTrue(parse(s, in, String.class).contains("2012"));
 		assertTrue(parse(s, in, Date.class).toString().contains("2012"));
 		assertEquals(2012, parse(s, in, Calendar.class).get(Calendar.YEAR));
@@ -236,8 +235,8 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void c07_stringType_dateTimeFormat() throws Exception {
-		HttpPartSchema s = T_DATETIME;
-		String in = "2012-12-21T12:34:56.789";
+		var s = T_DATETIME;
+		var in = "2012-12-21T12:34:56.789";
 		assertTrue(parse(s, in, String.class).contains("2012"));
 		assertTrue(parse(s, in, Date.class).toString().contains("2012"));
 		assertEquals(2012, parse(s, in, Calendar.class).get(Calendar.YEAR));
@@ -245,7 +244,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void c08_stringType_uonFormat() throws Exception {
-		HttpPartSchema s = T_UON;
+		var s = T_UON;
 		assertEquals("foo", parse(s, "foo", String.class));
 		assertEquals("foo", parse(s, "'foo'", String.class));
 		assertEquals("C2-foo", parse(s, "'foo'", C2.class).toString());
@@ -254,7 +253,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 
 	@Test void c09_stringType_noneFormat() throws Exception {
 		// If no format is specified, then we should transform directly from a string.
-		HttpPartSchema s = T_STRING;
+		var s = T_STRING;
 		assertEquals("foo", parse(s, "foo", String.class));
 		assertEquals("'foo'", parse(s, "'foo'", String.class));
 		assertEquals("C2-foo", parse(s, "foo", C2.class).toString());
@@ -266,7 +265,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 		assertJson(parse(s, "foo,bar", List.class, String.class), "['foo','bar']");
 		assertJson(parse(s, "foo,bar", Object[].class), "['foo','bar']");
 		assertJson(parse(s, "foo,bar", List.class, Object.class), "['foo','bar']");
-		Object o = parse(s, "foo,bar", Object.class);
+		var o = parse(s, "foo,bar", Object.class);
 		assertJson(o, "['foo','bar']");
 		assertType(JsonList.class, o);
 		assertJson(parse(s, "foo,bar", C2[].class), "['C2-foo','C2-bar']");
@@ -282,7 +281,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 		assertJson(parse(s, "foo,bar|baz", Object[][].class), "[['foo','bar'],['baz']]");
 		assertJson(parse(s, "foo,bar|baz", List.class, Object[].class), "[['foo','bar'],['baz']]");
 		assertJson(parse(s, "foo,bar|baz", List.class, List.class, Object.class), "[['foo','bar'],['baz']]");
-		Object o = parse(s, "foo,bar|baz", Object.class);
+		var o = parse(s, "foo,bar|baz", Object.class);
 		assertJson(o, "[['foo','bar'],['baz']]");
 		assertType(JsonList.class, o);
 		assertJson(parse(s, "foo,bar|baz", C2[][].class), "[['C2-foo','C2-bar'],['C2-baz']]");
@@ -293,7 +292,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void c12a_stringType_nullKeyword_plain() throws Exception {
-		HttpPartSchema s = T_STRING;
+		var s = T_STRING;
 		assertEquals(null, parse(s, "null", String.class));
 	}
 
@@ -304,7 +303,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void c12c_stringType_nullKeyword_uon() throws Exception {
-		HttpPartSchema s = T_UON;
+		var s = T_UON;
 		assertEquals(null, parse(s, "null", String.class));
 		assertEquals("null", parse(s, "'null'", String.class));
 	}
@@ -334,7 +333,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_arrayType_collectionFormatCsv() throws Exception {
-		HttpPartSchema s = T_ARRAY_CSV;
+		var s = T_ARRAY_CSV;
 		assertJson(parse(s, "foo,bar", String[].class), "['foo','bar']");
 		assertJson(parse(s, "foo,bar", Object[].class), "['foo','bar']");
 		assertJson(parse(s, "foo,bar", D[].class), "['D-foo','D-bar']");
@@ -346,7 +345,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void d02_arrayType_collectionFormatPipes() throws Exception {
-		HttpPartSchema s = T_ARRAY_PIPES;
+		var s = T_ARRAY_PIPES;
 		assertJson(parse(s, "foo|bar", String[].class), "['foo','bar']");
 		assertJson(parse(s, "foo|bar", Object[].class), "['foo','bar']");
 		assertJson(parse(s, "foo|bar", D[].class), "['D-foo','D-bar']");
@@ -358,7 +357,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void d03_arrayType_collectionFormatSsv() throws Exception {
-		HttpPartSchema s = T_ARRAY_SSV;
+		var s = T_ARRAY_SSV;
 		assertJson(parse(s, "foo bar", String[].class), "['foo','bar']");
 		assertJson(parse(s, "foo bar", Object[].class), "['foo','bar']");
 		assertJson(parse(s, "foo bar", D[].class), "['D-foo','D-bar']");
@@ -370,7 +369,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void d04_arrayType_collectionFormatTsv() throws Exception {
-		HttpPartSchema s = T_ARRAY_TSV;
+		var s = T_ARRAY_TSV;
 		assertJson(parse(s, "foo\tbar", String[].class), "['foo','bar']");
 		assertJson(parse(s, "foo\tbar", Object[].class), "['foo','bar']");
 		assertJson(parse(s, "foo\tbar", D[].class), "['D-foo','D-bar']");
@@ -382,7 +381,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void d05_arrayType_collectionFormatUon() throws Exception {
-		HttpPartSchema s = T_ARRAY_UON;
+		var s = T_ARRAY_UON;
 		assertJson(parse(s, "@(foo,bar)", String[].class), "['foo','bar']");
 		assertJson(parse(s, "@(foo,bar)", Object[].class), "['foo','bar']");
 		assertJson(parse(s, "@(foo,bar)", D[].class), "['D-foo','D-bar']");
@@ -394,7 +393,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void d06a_arrayType_collectionFormatNone() throws Exception {
-		HttpPartSchema s = T_ARRAY;
+		var s = T_ARRAY;
 		assertJson(parse(s, "foo,bar", String[].class), "['foo','bar']");
 		assertJson(parse(s, "foo,bar", Object[].class), "['foo','bar']");
 		assertJson(parse(s, "foo,bar", D[].class), "['D-foo','D-bar']");
@@ -405,7 +404,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void d06b_arrayType_collectionFormatNone_autoDetectUon() throws Exception {
-		HttpPartSchema s = T_ARRAY;
+		var s = T_ARRAY;
 		assertJson(parse(s, "@(foo,bar)", String[].class), "['foo','bar']");
 		assertJson(parse(s, "@(foo,bar)", Object[].class), "['foo','bar']");
 		assertJson(parse(s, "@(foo,bar)", D[].class), "['D-foo','D-bar']");
@@ -417,7 +416,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 
 	@Test void d07_arrayType_collectionFormatMulti() throws Exception {
 		// collectionFormat=multi should not do any sort of splitting.
-		HttpPartSchema s = T_ARRAY_MULTI;
+		var s = T_ARRAY_MULTI;
 		assertJson(parse(s, "foo,bar", String[].class), "['foo,bar']");
 		assertJson(parse(s, "foo,bar", Object[].class), "['foo,bar']");
 		assertJson(parse(s, "foo,bar", D[].class), "['D-foo,bar']");
@@ -495,7 +494,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_booleanType() throws Exception {
-		HttpPartSchema s = T_BOOLEAN;
+		var s = T_BOOLEAN;
 		assertEquals(true, parse(s, "true", boolean.class));
 		assertEquals(true, parse(s, "true", Boolean.class));
 		assertNull(parse(s, "null", Boolean.class));
@@ -597,7 +596,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void f01_integerType_int32() throws Exception {
-		HttpPartSchema s = T_INT32;
+		var s = T_INT32;
 		assertJson(parse(s, "1", int.class), "1");
 		assertJson(parse(s, "1", Integer.class), "1");
 		assertJson(parse(s, "1", short.class), "1");
@@ -605,7 +604,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 		assertJson(parse(s, "1", long.class), "1");
 		assertJson(parse(s, "1", Long.class), "1");
 		assertJson(parse(s, "1", String.class), "'1'");
-		Object o = parse(s, "1", Object.class);
+		var o = parse(s, "1", Object.class);
 		assertJson(o, "1");
 		assertType(Integer.class, o);
 		assertJson(parse(s,  "1", F1.class), "'F1-1'");
@@ -662,7 +661,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void f04_integerType_int64() throws Exception {
-		HttpPartSchema s = T_INT64;
+		var s = T_INT64;
 		assertJson(parse(s, "1", int.class), "1");
 		assertJson(parse(s, "1", Integer.class), "1");
 		assertJson(parse(s, "1", short.class), "1");
@@ -670,7 +669,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 		assertJson(parse(s, "1", long.class), "1");
 		assertJson(parse(s, "1", Long.class), "1");
 		assertJson(parse(s, "1", String.class), "'1'");
-		Object o = parse(s, "1", Object.class);
+		var o = parse(s, "1", Object.class);
 		assertJson(o, "1");
 		assertType(Long.class, o);
 		assertJson(parse(s,  "1", F3.class), "1");
@@ -774,13 +773,13 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void g01_numberType_float() throws Exception {
-		HttpPartSchema s = T_FLOAT;
+		var s = T_FLOAT;
 		assertJson(parse(s, "1", float.class), "1.0");
 		assertJson(parse(s, "1", Float.class), "1.0");
 		assertJson(parse(s, "1", double.class), "1.0");
 		assertJson(parse(s, "1", Double.class), "1.0");
 		assertJson(parse(s, "1", String.class), "'1.0'");
-		Object o =  parse(s, "1", Object.class);
+		var o = parse(s, "1", Object.class);
 		assertJson(o, "1.0");
 		assertType(Float.class, o);
 		assertJson(parse(s,  "1", G1.class), "1.0");
@@ -829,13 +828,13 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void g04_numberType_double() throws Exception {
-		HttpPartSchema s = T_DOUBLE;
+		var s = T_DOUBLE;
 		assertJson(parse(s, "1", float.class), "1.0");
 		assertJson(parse(s, "1", Float.class), "1.0");
 		assertJson(parse(s, "1", double.class), "1.0");
 		assertJson(parse(s, "1", Double.class), "1.0");
 		assertJson(parse(s, "1", String.class), "'1.0'");
-		Object o = parse(s, "1", Object.class);
+		var o = parse(s, "1", Object.class);
 		assertJson(o, "1.0");
 		assertType(Double.class, o);
 		assertJson(parse(s,  "1", G3.class), "1.0");
@@ -896,7 +895,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 		var s = HttpPartSchema.create().type("object").build();
 		assertJson(parse(s, "f=1", H1.class), "{f:1}");
 		assertJson(parse(s, "f=1", JsonMap.class), "{f:'1'}");
-		Object o = parse(s, "f=1", Object.class);
+		var o = parse(s, "f=1", Object.class);
 		assertJson(o, "{f:'1'}");
 		assertType(JsonMap.class, o);
 	}
@@ -909,7 +908,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 		assertJson(parse(s, "@((f=1),(f=2))", List.class, JsonMap.class), "[{f:1},{f:2}]");
 		assertJson(parse(s, "@((f=1),(f=2))", Object[].class), "[{f:1},{f:2}]");
 		assertJson(parse(s, "@((f=1),(f=2))", List.class, Object.class), "[{f:1},{f:2}]");
-		Object o = parse(s, "@((f=1),(f=2))", Object.class);
+		var o = parse(s, "@((f=1),(f=2))", Object.class);
 		assertJson(o, "[{f:1},{f:2}]");
 		assertType(JsonList.class, o);
 	}
@@ -925,7 +924,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 		assertJson(parse(s, "@(@((f=1),(f=2)),@((f=3)))", Object[][].class), "[[{f:1},{f:2}],[{f:3}]]");
 		assertJson(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, Object[].class), "[[{f:1},{f:2}],[{f:3}]]");
 		assertJson(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, Object.class), "[[{f:1},{f:2}],[{f:3}]]");
-		Object o =  parse(s, "@(@((f=1),(f=2)),@((f=3)))", Object.class);
+		var o = parse(s, "@(@((f=1),(f=2)),@((f=3)))", Object.class);
 		assertJson(o, "[[{f:1},{f:2}],[{f:3}]]");
 		assertType(JsonList.class, o);
 	}
@@ -935,7 +934,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void h04_objectType_simpleProperties() throws Exception {
-		HttpPartSchema s = tObject()
+		var s = tObject()
 			.p("f01", tString())
 			.p("f02", tByte())
 			.p("f04", tDateTime())
@@ -950,10 +949,10 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 			.ap(tInteger())
 			.build();
 
-		byte[] foob = "foo".getBytes();
-		String in = "f01=foo,f02="+base64Encode(foob)+",f04=2012-12-21T12:34:56Z,f05="+toHex(foob)+",f06="+toSpacedHex(foob)+",f07=foo,f08=1,f09=1,f10=1,f11=1,f12=true,f99=1";
+		var foob = "foo".getBytes();
+		var in = "f01=foo,f02="+base64Encode(foob)+",f04=2012-12-21T12:34:56Z,f05="+toHex(foob)+",f06="+toSpacedHex(foob)+",f07=foo,f08=1,f09=1,f10=1,f11=1,f12=true,f99=1";
 
-		H2 h2 = parse(s, in, H2.class);
+		var h2 = parse(s, in, H2.class);
 		assertJson(h2, "{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}");
 		assertType(String.class, h2.f01);
 		assertType(byte[].class, h2.f02);
@@ -968,7 +967,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 		assertType(Boolean.class, h2.f12);
 		assertType(Integer.class, h2.f99);
 
-		JsonMap om = parse(s, in, JsonMap.class);
+		var om = parse(s, in, JsonMap.class);
 		assertJson(om, "{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}");
 		assertType(String.class, om.get("f01"));
 		assertType(byte[].class, om.get("f02"));
@@ -1000,7 +999,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void h05_objectType_arrayProperties() throws Exception {
-		HttpPartSchema s = tObject()
+		var s = tObject()
 			.p("f01", tArray(tString()))
 			.p("f02", tArray(tByte()))
 			.p("f04", tArray(tDateTime()))
@@ -1015,13 +1014,13 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 			.ap(tArray(tInteger()))
 			.build();
 
-		byte[] foob = "foo".getBytes();
-		String in = "f01=foo,f02="+base64Encode(foob)+",f04=2012-12-21T12:34:56Z,f05="+toHex(foob)+",f06="+toSpacedHex(foob)+",f07=foo,f08=1,f09=1,f10=1,f11=1,f12=true,f99=1";
+		var foob = "foo".getBytes();
+		var in = "f01=foo,f02="+base64Encode(foob)+",f04=2012-12-21T12:34:56Z,f05="+toHex(foob)+",f06="+toSpacedHex(foob)+",f07=foo,f08=1,f09=1,f10=1,f11=1,f12=true,f99=1";
 
-		H2 h2 = parse(s, in, H2.class);
+		var h2 = parse(s, in, H2.class);
 		assertJson(h2, "{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}");
 
-		JsonMap om = parse(s, in, JsonMap.class);
+		var om = parse(s, in, JsonMap.class);
 		assertJson(om, "{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}");
 
 		om = (JsonMap)parse(s, in, Object.class);
@@ -1029,7 +1028,7 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void h06_objectType_arrayProperties_pipes() throws Exception {
-		HttpPartSchema s = tObject()
+		var s = tObject()
 			.p("f01", tArrayPipes(tString()))
 			.p("f02", tArrayPipes(tByte()))
 			.p("f04", tArrayPipes(tDateTime()))
@@ -1044,13 +1043,14 @@ class OpenApiPartParser_Test extends SimpleTestBase {
 			.ap(tArrayPipes(tInteger()))
 			.build();
 
-		byte[] foob = "foo".getBytes(), barb = "bar".getBytes();
-		String in = "f01=foo|bar,f02="+base64Encode(foob)+"|"+base64Encode(barb)+",f04=2012-12-21T12:34:56Z|2012-12-21T12:34:56Z,f05="+toHex(foob)+"|"+toHex(barb)+",f06="+toSpacedHex(foob)+"|"+toSpacedHex(barb)+",f07=foo|bar,f08=1|2,f09=1|2,f10=1|2,f11=1|2,f12=true|true,f99=1|2";
+		var foob = "foo".getBytes();
+		var barb = "bar".getBytes();
+		var in = "f01=foo|bar,f02="+base64Encode(foob)+"|"+base64Encode(barb)+",f04=2012-12-21T12:34:56Z|2012-12-21T12:34:56Z,f05="+toHex(foob)+"|"+toHex(barb)+",f06="+toSpacedHex(foob)+"|"+toSpacedHex(barb)+",f07=foo|bar,f08=1|2,f09=1|2,f10=1|2,f11=1|2,f12=true|true,f99=1|2";
 
-		H2 h2 = parse(s, in, H2.class);
+		var h2 = parse(s, in, H2.class);
 		assertJson(h2, "{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}");
 
-		JsonMap om = parse(s, in, JsonMap.class);
+		var om = parse(s, in, JsonMap.class);
 		assertJson(om, "{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}");
 
 		om = (JsonMap)parse(s, in, Object.class);

@@ -21,7 +21,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"rawtypes","serial"})
@@ -33,11 +32,9 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 	// testFromSerializer
 	//====================================================================================================
 	@Test void a01_fromSerializer() throws Exception {
-		Map m = null;
-		String in;
+		var in = "a=1";
 
-		in = "a=1";
-		m = (Map)p.parse(in, Object.class);
+		var m = (Map)p.parse(in, Object.class);
 		assertEquals(1, m.get("a"));
 
 		in = "a=1&b='foo+bar'";
@@ -57,11 +54,11 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 		assertEquals("foo bar", m.get("b"));
 		assertEquals(false, m.get("c"));
 
-		JsonMap jm = (JsonMap)p.parse("x=@((attribute=value),(attribute=~'value~'))", Object.class);
+		var jm = (JsonMap)p.parse("x=@((attribute=value),(attribute=~'value~'))", Object.class);
 		assertEquals("value", jm.getList("x").getMap(0).getString("attribute"));
 		assertEquals("'value'", jm.getList("x").getMap(1).getString("attribute"));
 
-		JsonList jl = (JsonList)p.parse("_value=@((attribute=value),(attribute=~'value~'))", Object.class);
+		var jl = (JsonList)p.parse("_value=@((attribute=value),(attribute=~'value~'))", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("'value'", jl.getMap(1).getString("attribute"));
 
@@ -102,13 +99,10 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a02_correctHandlingOfUnknownProperties() throws Exception {
 		var p2 = UrlEncodingParser.create().ignoreUnknownBeanProperties().build();
-		B t;
-
-		String in =  "a=1&unknown=3&b=2";
-		t = p2.parse(in, B.class);
+		var in = "a=1&unknown=3&b=2";
+		var t = p2.parse(in, B.class);
 		assertEquals(1, t.a);
 		assertEquals(2, t.b);
-
 		assertThrows(ParseException.class, ()->UrlEncodingParser.DEFAULT.parse(in, B.class));
 	}
 
@@ -120,9 +114,7 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 	// Writing to Collection properties with no setters.
 	//====================================================================================================
 	@Test void a03_collectionPropertiesWithNoSetters() throws Exception {
-
-		ReaderParser p2 = UrlEncodingParser.DEFAULT;
-
+		var p2 = UrlEncodingParser.DEFAULT;
 		var json = "ints=@(1,2,3)&beans=@((a=1,b=2))";
 		var t = p2.parse(json, C.class);
 		assertEquals(3, t.getInts().size());
@@ -142,7 +134,6 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a04_parserListeners() throws Exception {
 		var p2 = UrlEncodingParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
-
 		var in = "a=1&unknownProperty=foo&b=2";
 		p2.parse(in, B.class);
 		assertEquals(1, MyParserListener.events.size());
@@ -159,13 +150,11 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 	}
 
 	@Test void a05_collections() throws Exception {
-		WriterSerializer s = UrlEncodingSerializer.DEFAULT;
-		ReaderParser p2 = UrlEncodingParser.DEFAULT;
-
+		var s = UrlEncodingSerializer.DEFAULT;
+		var p2 = UrlEncodingParser.DEFAULT;
 		var l = JsonList.of("foo","bar");
 		assertEquals("0=foo&1=bar", s.serialize(l));
-
-		String in =  "0=foo&1=bar";
+		var in = "0=foo&1=bar";
 		var l2 = (LinkedList<String>)p2.parse(in, LinkedList.class, String.class);
 		assertList(l2, "foo,bar");
 	}

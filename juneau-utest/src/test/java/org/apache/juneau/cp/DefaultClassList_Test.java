@@ -25,7 +25,7 @@ class DefaultClassList_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_basic() {
-		DefaultClassList x = create();
+		var x = create();
 		assertEmpty(x.get(String.class));
 
 		x = of(Long.class,null);

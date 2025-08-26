@@ -26,8 +26,10 @@ import org.junit.jupiter.api.*;
 class MsgPack_Test extends SimpleTestBase {
 
 	@Test void a01_to() throws Exception {
-		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
-		String expected1 = "A3666F6F", expected2 = "81A3666F6FA3626172";
+		var in1 = "foo";
+		var in2 = JsonMap.of("foo", "bar");
+		var expected1 = "A3666F6F";
+		var expected2 = "81A3666F6FA3626172";
 
 		assertEquals(toHex(MsgPack.of(in1)), expected1);
 		assertEquals(toHex(bytes(MsgPack.of(in1,baos()))), expected1);
@@ -36,8 +38,10 @@ class MsgPack_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_from() throws Exception {
-		String in1 = "A3666F6F", in2 = "81A3666F6FA3626172";
-		String expected1 = "foo", expected2 = "{foo:'bar'}";
+		var in1 = "A3666F6F";
+		var in2 = "81A3666F6FA3626172";
+		var expected1 = "foo";
+		var expected2 = "{foo:'bar'}";
 
 		assertEquals(expected1, MsgPack.to(in1, String.class));
 		assertEquals(expected1, MsgPack.to(fromHex(in1), String.class));

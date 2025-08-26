@@ -19,7 +19,6 @@ import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.http.header.ContentType.*;
 
 import java.io.*;
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
@@ -63,7 +62,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 		@RestOp(path="/bean") public ABean optionsBean() { return bean; }
 		@RestOp(path="/bean") public ABean headBean() { return bean; }
 		@RestOp(path="/checkHeader") public String[] postHeader(org.apache.juneau.rest.RestRequest req) { return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new); }
-		@RestOp(path="/",method="*") public Reader echoMethod(@Method String method) { return TestUtils.reader(method); }
+		@RestOp(path="/",method="*") public Reader echoMethod(@Method String method) { return reader(method); }
 	}
 
 	@Test void a01_basic() throws Exception {
@@ -84,15 +83,15 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_get_exhaustiveUrls() throws Exception {
-		List<Object> urls = list(
+		var urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			TestUtils.url("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
 		var x = client().build();
-		for (Object url : urls) {
+		for (var url : urls) {
 			x.get(url).run().assertContent("{f:1}");
 		}
 	}
@@ -112,15 +111,15 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
  	}
 
 	@Test void a06_put_exhaustiveUrls() throws Exception {
-		List<Object> urls = list(
+		var urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			TestUtils.url("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
 		var x = client().build();
-		for (Object url : urls) {
+		for (var url : urls) {
 			x.put(url,bean).run().assertContent("{f:1}");
 			x.put(url,"{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
 			x.put(url).content(bean).run().assertContent("{f:1}");
@@ -128,15 +127,15 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 	}
 
 	@Test void a07_put_exhaustiveBodyTypes() throws Exception {
-		List<Object> bodies = list(
-			TestUtils.reader("{f:1}"),
-			TestUtils.inputStream("{f:1}"),
+		var bodies = list(
+			reader("{f:1}"),
+			inputStream("{f:1}"),
 			stringResource("{f:1}"),
 			bean,
 			stringEntity("{f:1}"),
 			parts("f","1")
 		);
-		for (Object body : bodies) {
+		for (var body : bodies) {
 			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().put("/bean",body).run().assertContent("{f:1}");
 		}
 	}
@@ -151,15 +150,15 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 	}
 
 	@Test void a10_post_exhaustiveUrls() throws Exception {
-		List<Object> urls = list(
+		var urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			TestUtils.url("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
 		var x = client().build();
-		for (Object url : urls) {
+		for (var url : urls) {
 			x.post(url,bean).run().assertContent("{f:1}");
 			x.post(url,"{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
 			x.post(url).content(bean).run().assertContent("{f:1}");
@@ -167,15 +166,15 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 	}
 
 	@Test void a11_exhaustiveBodyTypes() throws Exception {
-		List<Object> bodies = list(
-			TestUtils.reader("{f:1}"),
-			TestUtils.inputStream("{f:1}"),
+		var bodies = list(
+			reader("{f:1}"),
+			inputStream("{f:1}"),
 			stringResource("{f:1}"),
 			bean,
 			stringEntity("{f:1}"),
 			parts("f","1")
 		);
-		for (Object body : bodies) {
+		for (var body : bodies) {
 			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().post("/bean",body).run().assertContent("{f:1}");
 		}
 	}
@@ -185,15 +184,15 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 	}
 
 	@Test void a13_delete_exhaustiveUrls() throws Exception {
-		List<Object> urls = list(
+		var urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			TestUtils.url("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
 		var x = client().build();
-		for (Object url : urls) {
+		for (var url : urls) {
 			x.delete(url).run().assertContent("{f:1}");
 		}
 	}
@@ -203,15 +202,15 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 	}
 
 	@Test void a15_options_exhaustiveUrls() throws Exception {
-		List<Object> urls = list(
+		var urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			TestUtils.url("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
 		var x = client().build();
-		for (Object url : urls) {
+		for (var url : urls) {
 			x.options(url).run().assertContent("{f:1}");
 		}
 	}
@@ -221,15 +220,15 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 	}
 
 	@Test void a17_head_exhaustiveUrls() throws Exception {
-		List<Object> urls = list(
+		var urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			TestUtils.url("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
 		var x = client().build();
-		for (Object url : urls) {
+		for (var url : urls) {
 			x.head(url).run().assertContent("");
 		}
 	}
@@ -243,24 +242,24 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 	}
 
 	@Test void a19_formPost_exhaustiveUrls() throws Exception {
-		List<Object> urls = list(
+		var urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			TestUtils.url("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
 		var x = client().build();
-		for (Object url : urls) {
+		for (var url : urls) {
 			x.formPost(url,bean).accept("application/json5").run().assertContent("{f:1}");
 		}
 	}
 
 	@Test void a20_formPost_exhaustiveBodyTypes() throws Exception {
 		Supplier<Object>
-			s1 = () -> TestUtils.reader("f=1"),
-			s2 = () -> TestUtils.inputStream("f=1");
-		List<Object> bodies = list(
+			s1 = () -> reader("f=1"),
+			s2 = () -> inputStream("f=1");
+		var bodies = list(
 			/*[ 0]*/ bean,
 			/*[ 1]*/ parts("f","1"),
 			/*[ 2]*/ new NameValuePair[]{part("f","1")},
@@ -274,7 +273,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 			/*[14]*/ s1,
 			/*[15]*/ s2
 		);
-		for (int i = 0; i < bodies.size(); i++) {
+		for (var i = 0; i < bodies.size(); i++) {
 			client().header("Check","Content-Type").accept("application/json5").build().formPost("/checkHeader",bodies.get(i)).run().assertContent().setMsg("Body {0} failed",i).asString().isMatches("['application/x-www-form-urlencoded*']");
 			client().build().formPost("/bean",bodies.get(i)).accept("application/json5").run().assertContent().setMsg("Body {0} failed","#"+i).is("{f:1}");
 		}
@@ -294,30 +293,30 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 	}
 
 	@Test void a24_patch_exhaustiveBodyTypes() throws Exception {
-		List<Object> bodies = list(
-			TestUtils.reader("{f:1}"),
-			TestUtils.inputStream("{f:1}"),
+		var bodies = list(
+			reader("{f:1}"),
+			inputStream("{f:1}"),
 			stringResource("{f:1}"),
 			bean,
 			stringEntity("{f:1}"),
 			parts("f","1")
 		);
 		var x = client().build();
-		for (Object body : bodies) {
+		for (var body : bodies) {
 			x.patch("/bean",body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).run().assertContent("{f:1}");
 		}
 	}
 
 	@Test void a25_patch_exhaustiveUrls() throws Exception {
-		List<Object> urls = list(
+		var urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			TestUtils.url("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
 		var x = client().build();
-		for (Object url : urls) {
+		for (var url : urls) {
 			x.patch(url,bean).accept("application/json5").run().assertContent("{f:1}");
 		}
 	}
@@ -328,30 +327,30 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 	}
 
 	@Test void a27_request_PATCH_exhaustiveBodyTypes() throws Exception {
-		List<Object> bodies = list(
-			TestUtils.reader("{f:1}"),
-			TestUtils.inputStream("{f:1}"),
+		var bodies = list(
+			reader("{f:1}"),
+			inputStream("{f:1}"),
 			stringResource("{f:1}"),
 			bean,
 			stringEntity("{f:1}"),
 			parts("f","1")
 		);
 		var x = client().build();
-		for (Object body : bodies) {
+		for (var body : bodies) {
 			x.request("patch","/bean",body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).run().assertContent("{f:1}");
 		}
 	}
 
 	@Test void a28_request_PATCH_exhaustiveUrls() throws Exception {
-		List<Object> urls = list(
+		var urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			TestUtils.url("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
 		var x = client().build();
-		for (Object url : urls) {
+		for (var url : urls) {
 			x.request("patch",url,bean).accept("application/json5").run().assertContent("{f:1}");
 		}
 	}
@@ -361,15 +360,15 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 	}
 
 	@Test void a30_request_GET_exhaustiveUrls() throws Exception {
-		List<Object> urls = list(
+		var urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
-			TestUtils.url("http://localhost/bean"),
+			url("http://localhost/bean"),
 			"/bean",
 			new StringBuilder("/bean")
 		);
 		var x = client().build();
-		for (Object url : urls) {
+		for (var url : urls) {
 			x.request("get",url).accept("application/json5").run().assertContent("{f:1}");
 		}
 	}

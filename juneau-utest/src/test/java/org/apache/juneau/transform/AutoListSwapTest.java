@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings("rawtypes")
 class AutoListSwapTest extends SimpleTestBase {
 
-	private static final List<String> STRINGLIST = TestUtils.list("foo");
+	private static final List<String> STRINGLIST = list("foo");
 	private static final JsonList JSONLIST = JsonList.ofJsonOrCdl("foo");
 
 	private static ObjectSwap find(Class<?> c) {

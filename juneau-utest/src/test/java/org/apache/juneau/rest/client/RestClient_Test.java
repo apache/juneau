@@ -73,7 +73,7 @@ class RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_basic_useNoArgConstructor() {
-		TestUtils.assertNotThrown(()->new A2().build());
+		assertNotThrown(()->new A2().build());
 	}
 
 	@Test void a03_basic_close() throws IOException {
@@ -90,7 +90,7 @@ class RestClient_Test extends SimpleTestBase {
 		RestClient.create().executorService(es,false).build().closeQuietly();
 
 		RestClient.create().debug().build().close();
-		TestUtils.assertNotThrown(()->RestClient.create().debug().build().closeQuietly());
+		assertNotThrown(()->RestClient.create().debug().build().closeQuietly());
 	}
 
 
@@ -169,7 +169,7 @@ class RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void c02_httpClient_httpProcessor() throws RestCallException {
-		HttpProcessor x = new HttpProcessor() {
+		var x = new HttpProcessor() {
 			@Override
 			public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
 				request.setHeader("A1","1");
@@ -184,7 +184,7 @@ class RestClient_Test extends SimpleTestBase {
 
 	@Test void c03_httpClient_requestExecutor() throws RestCallException {
 		var b1 = new AtomicBoolean();
-		HttpRequestExecutor x = new HttpRequestExecutor() {
+		var x = new HttpRequestExecutor() {
 			@Override
 			public HttpResponse execute(HttpRequest request, HttpClientConnection conn, HttpContext context) throws HttpException, IOException {
 				b1.set(true);
@@ -200,7 +200,7 @@ class RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void c05_httpClient_httpClientBuilderMethods() {
-		TestUtils.assertNotThrown(()->RestClient.create().disableRedirectHandling().redirectStrategy(DefaultRedirectStrategy.INSTANCE).defaultCookieSpecRegistry(null).sslHostnameVerifier(null).publicSuffixMatcher(null).sslContext(null).sslSocketFactory(null).maxConnTotal(10).maxConnPerRoute(10).defaultSocketConfig(null).defaultConnectionConfig(null).connectionTimeToLive(100,TimeUnit.DAYS).connectionManager(null).connectionManagerShared(true).connectionReuseStrategy(null).keepAliveStrategy(null).targetAuthenticationStrategy(null).proxyAuthenticationStrategy(null).userTokenHandler(null).disableConnectionState().schemePortResolver(null).disableCookieManagement().disableContentCompression().disableAuthCaching().retryHandler(null).disableAutomaticRetries().proxy(null).routePlanner(null).connectionBackoffStrategy(null).backoffManager(null).serviceUnavailableRetryStrategy(null).defaultCookieStore(null).defaultCredentialsProvider(null).defaultAuthSchemeRegistry(null).contentDecoderRegistry(null).defaultRequestConfig(null).useSystemProperties().evictExpiredConnections().evictIdleConnections(1,TimeUnit.DAYS));
+		assertNotThrown(()->RestClient.create().disableRedirectHandling().redirectStrategy(DefaultRedirectStrategy.INSTANCE).defaultCookieSpecRegistry(null).sslHostnameVerifier(null).publicSuffixMatcher(null).sslContext(null).sslSocketFactory(null).maxConnTotal(10).maxConnPerRoute(10).defaultSocketConfig(null).defaultConnectionConfig(null).connectionTimeToLive(100,TimeUnit.DAYS).connectionManager(null).connectionManagerShared(true).connectionReuseStrategy(null).keepAliveStrategy(null).targetAuthenticationStrategy(null).proxyAuthenticationStrategy(null).userTokenHandler(null).disableConnectionState().schemePortResolver(null).disableCookieManagement().disableContentCompression().disableAuthCaching().retryHandler(null).disableAutomaticRetries().proxy(null).routePlanner(null).connectionBackoffStrategy(null).backoffManager(null).serviceUnavailableRetryStrategy(null).defaultCookieStore(null).defaultCredentialsProvider(null).defaultAuthSchemeRegistry(null).contentDecoderRegistry(null).defaultRequestConfig(null).useSystemProperties().evictExpiredConnections().evictIdleConnections(1,TimeUnit.DAYS));
 	}
 
 	@SuppressWarnings("deprecation")
@@ -263,7 +263,7 @@ class RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void c14_httpClient_requestConfig() throws Exception {
-		RestRequest req = client().build().get("/bean").config(RequestConfig.custom().setMaxRedirects(1).build());
+		var req = client().build().get("/bean").config(RequestConfig.custom().setMaxRedirects(1).build());
 		req.run().assertContent("{f:1}");
 		assertEquals(1, req.getConfig().getMaxRedirects());
 	}
@@ -287,10 +287,9 @@ class RestClient_Test extends SimpleTestBase {
 		public String echo(@org.apache.juneau.http.annotation.Header("Authorization") String auth, org.apache.juneau.rest.RestResponse res) {
 			if (auth == null) {
 				throw unauthorized().setHeader2("WWW-Authenticate","BASIC realm=\"foo\"");
-			} else {
-				assertEquals("Basic dXNlcjpwdw==",auth);
-				return "OK";
 			}
+			assertEquals("Basic dXNlcjpwdw==",auth);
+			return "OK";
 		}
 	}
 
@@ -329,29 +328,29 @@ class RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void e05_httpUriRequest_abort() throws Exception {
-		RestRequest x = client().build().get("/bean");
+		var x = client().build().get("/bean");
 		x.abort();
 		assertTrue(x.isAborted());
 	}
 
 	@Test void e06_httpMessage_getRequestLine() throws Exception {
-		RestRequest x = client().build().get("/bean");
+		var x = client().build().get("/bean");
 		assertEquals("GET",x.getRequestLine().getMethod());
 	}
 
 	@Test void e07_httpMessage_containsHeader() throws Exception {
-		RestRequest x = client().build().get("/bean").header("Foo", "bar");
+		var x = client().build().get("/bean").header("Foo", "bar");
 		assertTrue(x.containsHeader("Foo"));
 	}
 
 	@Test void e08_httpMessage_getFirstHeader_getLastHeader() throws Exception {
-		RestRequest x = client().build().get("/bean").header("Foo","bar").header("Foo","baz");
+		var x = client().build().get("/bean").header("Foo","bar").header("Foo","baz");
 		assertEquals("bar",x.getFirstHeader("Foo").getValue());
 		assertEquals("baz",x.getLastHeader("Foo").getValue());
 	}
 
 	@Test void e09_httpMessage_addHeader() throws Exception {
-		RestRequest x = client().build().get("/bean");
+		var x = client().build().get("/bean");
 		x.addHeader(header("Foo","bar"));
 		x.addHeader("Foo","baz");
 		assertEquals("bar",x.getFirstHeader("Foo").getValue());
@@ -359,7 +358,7 @@ class RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void e10_httpMessage_setHeader() throws Exception {
-		RestRequest x = client().build().get("/bean");
+		var x = client().build().get("/bean");
 		x.setHeader(header("Foo","bar"));
 		x.setHeader(header("Foo","baz"));
 		assertEquals("baz",x.getFirstHeader("Foo").getValue());
@@ -370,27 +369,27 @@ class RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void e11_httpMessage_setHeaders() throws Exception {
-		RestRequest x = client().build().get("/bean");
+		var x = client().build().get("/bean");
 		x.setHeaders(new Header[]{header("Foo","bar")});
 		assertEquals("bar",x.getFirstHeader("Foo").getValue());
 	}
 
 	@Test void e12_httpMessage_removeHeaders() throws Exception {
-		RestRequest x = client().build().get("/bean");
+		var x = client().build().get("/bean");
 		x.setHeaders(new Header[]{header("Foo","bar")});
 		x.removeHeaders("Foo");
 		assertNull(x.getFirstHeader("Foo"));
 	}
 
 	@Test void e13_httpMessage_removeHeader() throws Exception {
-		RestRequest x = client().build().get("/bean");
+		var x = client().build().get("/bean");
 		x.setHeaders(new Header[]{header("Foo","bar")});
 		x.removeHeader(header("Foo","bar"));
 		//assertNull(x.getFirstHeader("Foo"));  // Bug in HttpClient API?
 	}
 
 	@Test void e14_httpMessage_headerIterator() throws Exception {
-		RestRequest x = client().build().get("/bean");
+		var x = client().build().get("/bean");
 		x.setHeaders(new Header[]{header("Foo","bar")});
 		assertEquals("Foo: bar", x.headerIterator().next().toString());
 		assertEquals("Foo: bar", x.headerIterator("Foo").next().toString());
@@ -399,7 +398,7 @@ class RestClient_Test extends SimpleTestBase {
 	@SuppressWarnings("deprecation")
 	@Test void e15_httpMessage_getParams() throws Exception {
 		var p = new BasicHttpParams();
-		RestRequest x = client().build().get("/bean");
+		var x = client().build().get("/bean");
 		x.setParams(p);
 		assertEquals(p, x.getParams());
 	}

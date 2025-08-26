@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.common.internal.Utils.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.text.*;
@@ -28,10 +28,10 @@ class StringExpressionMatcher_Test extends SimpleTestBase {
 	private void test(String expression, String toString, String[] shouldMatch, String[] shouldNotMatch) {
 		var m = safe(()->new StringExpressionMatcher(expression));
 		assertEquals(toString, m.toString());
-		for (String i : shouldMatch)
+		for (var i : shouldMatch)
 			if (! m.matches(i))
 				fail("Matcher "+m+" should have matched '"+i+"' but didn't.");
-		for (String i : shouldNotMatch)
+		for (var i : shouldNotMatch)
 			if (m.matches(i))
 				fail("Matcher "+m+" should not have matched '"+i+"' but did.");
 	}

@@ -57,7 +57,7 @@ class RestClient_CallbackStrings_Test extends SimpleTestBase {
 
 	@Test void a02_callback_invalidStrings() {
 		var x = MockRestClient.build(A.class);
-		for (String s : list("","GET","GET ","GET {","GET {xxx} /foo",null)) {
+		for (var s : list("","GET","GET ","GET {","GET {xxx} /foo",null)) {
 			assertThrowsWithMessage(Exception.class, "Invalid format for call string", ()->x.callback(s).run().getContent().asString());
 		}
 	}

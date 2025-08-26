@@ -77,7 +77,7 @@ class License_Test extends SimpleTestBase {
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
 
-		String s = "{name:'a',url:'b','$ref':'ref'}";
+		var s = "{name:'a',url:'b','$ref':'ref'}";
 		assertJson(JsonParser.DEFAULT.parse(s, License.class), s);
 	}
 

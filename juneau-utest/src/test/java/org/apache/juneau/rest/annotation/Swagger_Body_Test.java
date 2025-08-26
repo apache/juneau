@@ -19,7 +19,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.jupiter.api.*;
 
@@ -70,10 +69,9 @@ class Swagger_Body_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_fromPojo() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(A.class);
-		ParameterInfo x;
+		var s = getSwagger(A.class);
+		var x = s.getParameterInfo("/a","get","body",null);
 
-		x = s.getParameterInfo("/a","get","body",null);
 		assertEquals("a\nb", x.getDescription());
 		assertJson(x.getRequired(), "true");
 		assertJson(x.getSchema(), "{required:true,type:'string'}");
@@ -119,10 +117,9 @@ class Swagger_Body_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_schemaFromPojo() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(B.class);
-		ParameterInfo x;
+		var s = getSwagger(B.class);
+		var x = s.getParameterInfo("/a","get","body",null);
 
-		x = s.getParameterInfo("/a","get","body",null);
 		assertJson(x.getSchema(), "{type:'object'}");
 
 		x = s.getParameterInfo("/b","put","body",null);
@@ -182,10 +179,9 @@ class Swagger_Body_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_fromParameter() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(D.class);
-		ParameterInfo x;
+		var s = getSwagger(D.class);
+		var x = s.getParameterInfo("/a","get","body",null);
 
-		x = s.getParameterInfo("/a","get","body",null);
 		assertEquals("a\nb", x.getDescription());
 		assertJson(x.getRequired(), "true");
 		assertJson(x.getSchema(), "{required:true,type:'string'}");
@@ -232,10 +228,9 @@ class Swagger_Body_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_schemaFromParameter() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(E.class);
-		ParameterInfo x;
+		var s = getSwagger(E.class);
+		var x = s.getParameterInfo("/a","get","body",null);
 
-		x = s.getParameterInfo("/a","get","body",null);
 		assertJson(x.getSchema(), "{type:'object'}");
 
 		x = s.getParameterInfo("/b","put","body",null);

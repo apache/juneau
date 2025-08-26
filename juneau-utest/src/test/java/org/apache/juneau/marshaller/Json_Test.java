@@ -25,8 +25,10 @@ import org.junit.jupiter.api.*;
 class Json_Test extends SimpleTestBase {
 
 	@Test void a01_to() throws Exception {
-		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
-		String expected1 = "\"foo\"", expected2 = "{\"foo\":\"bar\"}";
+		var in1 = "foo";
+		var in2 = JsonMap.of("foo", "bar");
+		var expected1 = "\"foo\"";
+		var expected2 = "{\"foo\":\"bar\"}";
 
 		assertString(expected1, Json.of(in1));
 		assertString(expected1, Json.of(in1,stringWriter()));
@@ -35,8 +37,10 @@ class Json_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_from() throws Exception {
-		String in1 = "\"foo\"", in2 = "{\"foo\":\"bar\"}";
-		String expected1 = "foo", expected2 = "{foo:'bar'}";
+		var in1 = "\"foo\"";
+		var in2 = "{\"foo\":\"bar\"}";
+		var expected1 = "foo";
+		var expected2 = "{foo:'bar'}";
 
 		assertEquals(expected1, Json.to(in1, String.class));
 		assertEquals(expected1, Json.to(stringReader(in1), String.class));

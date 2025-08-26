@@ -36,8 +36,8 @@ public class AssertionPredicates_Test {
 
 	@Test
 	public void a01_any() {
-		TestUtils.assertNotThrown(()->A1.is(any()));
-		TestUtils.assertNotThrown(()->A2.is(any()));
+		assertNotThrown(()->A1.is(any()));
+		assertNotThrown(()->A2.is(any()));
 	}
 
 	@Test

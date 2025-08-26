@@ -14,10 +14,10 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.util.function.*;
 
-import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.junit.jupiter.api.*;
@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 class BasicHeader_Test extends SimpleTestBase {
 
 	@Test void a01_ofPair() {
-		Header x = stringHeader("Foo:bar");
+		var x = stringHeader("Foo:bar");
 		assertEquals("Foo", x.getName());
 		assertEquals("bar", x.getValue());
 
@@ -45,20 +45,19 @@ class BasicHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_of() {
-		BasicHeader x;
-		x = header("Foo","bar");
-		TestUtils.assertString("Foo: bar", x);
+		var x = header("Foo","bar");
+		assertString("Foo: bar", x);
 		x = header("Foo",()->"bar");
-		TestUtils.assertString("Foo: bar", x);
+		assertString("Foo: bar", x);
 	}
 
 	@Test void a05_assertions() {
-		BasicHeader x = header("X1","1");
+		var x = header("X1","1");
 		x.assertName().is("X1").assertStringValue().is("1");
 	}
 
 	@Test void a07_eqIC() {
-		BasicHeader x = header("X1","1");
+		var x = header("X1","1");
 		assertTrue(x.equalsIgnoreCase("1"));
 		assertFalse(x.equalsIgnoreCase("2"));
 		assertFalse(x.equalsIgnoreCase(null));
@@ -66,13 +65,12 @@ class BasicHeader_Test extends SimpleTestBase {
 
 	@Test void a08_getElements() {
 		var m = Value.of(1);
-		Header h1 = header("X1","1");
-		Header h2 = header("X2",()->m);
-		Header h3 = header("X3",null);
+		var h1 = header("X1","1");
+		var h2 = header("X2",()->m);
+		var h3 = header("X3",null);
 
-		HeaderElement[] x;
+		var x = h1.getElements();
 
-		x = h1.getElements();
 		assertEquals(1, x.length);
 		assertEquals("1", x[0].getName());
 		x = h1.getElements();
@@ -92,12 +90,14 @@ class BasicHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a09_equals() {
-		BasicHeader h1 = header("Foo","bar"), h2 = header("Foo","bar"), h3 = header("Bar","bar"), h4 = header("Foo","baz");
+		var h1 = header("Foo","bar");
+		var h2 = header("Foo","bar");
+		var h3 = header("Bar","bar");
+		var h4 = header("Foo","baz");
 		assertEquals(h1, h2);
 		assertNotEquals(h1, h3);
 		assertNotEquals(h1, h4);
 		assertNotEquals(h1, "foo");
-
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

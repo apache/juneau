@@ -32,11 +32,9 @@ class CommonParser_UonTest extends SimpleTestBase {
 	// testFromSerializer
 	//====================================================================================================
 	@Test void a01_fromSerializer() throws Exception {
-		Map m = null;
-		String in;
+		var in = "(a=1)";
 
-		in = "(a=1)";
-		m = (Map)p.parse(in, Object.class);
+		var m = (Map)p.parse(in, Object.class);
 		assertEquals(1, m.get("a"));
 
 		in = "(a=1,b='foo+bar')";
@@ -59,7 +57,7 @@ class CommonParser_UonTest extends SimpleTestBase {
 		assertEquals("foo bar", m.get("b"));
 		assertEquals(false, m.get("c"));
 
-		JsonList jl = (JsonList)p.parse("@((attribute=value),(attribute=~'value~'))", Object.class);
+		var jl = (JsonList)p.parse("@((attribute=value),(attribute=~'value~'))", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("'value'", jl.getMap(1).getString("attribute"));
 
@@ -100,10 +98,8 @@ class CommonParser_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a02_correctHandlingOfUnknownProperties() throws Exception {
 		var p2 = UonParser.create().ignoreUnknownBeanProperties().build();
-		B t;
-
-		String in =  "(a=1,unknown=3,b=2)";
-		t = p2.parse(in, B.class);
+		var in = "(a=1,unknown=3,b=2)";
+		var t = p2.parse(in, B.class);
 		assertEquals(1, t.a);
 		assertEquals(2, t.b);
 
@@ -118,9 +114,7 @@ class CommonParser_UonTest extends SimpleTestBase {
 	// Writing to Collection properties with no setters.
 	//====================================================================================================
 	@Test void a03_collectionPropertiesWithNoSetters() throws Exception {
-
-		ReaderParser p2 = UonParser.DEFAULT;
-
+		var p2 = UonParser.DEFAULT;
 		var json = "(ints=@(1,2,3),beans=@((a=1,b=2)))";
 		var t = p2.parse(json, C.class);
 		assertEquals(3, t.getInts().size());
@@ -140,7 +134,6 @@ class CommonParser_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a04_parserListeners() throws Exception {
 		var p2 = UonParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
-
 		var in = "(a=1,unknownProperty=foo,b=2)";
 		p2.parse(in, B.class);
 		assertEquals(1, MyParserListener.events.size());

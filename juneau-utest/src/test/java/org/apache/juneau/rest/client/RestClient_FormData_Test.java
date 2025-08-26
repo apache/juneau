@@ -17,7 +17,6 @@ import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 
 import java.io.*;
-import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
@@ -39,7 +38,7 @@ class RestClient_FormData_Test extends SimpleTestBase {
 	public static class A extends BasicRestObject {
 		@RestPost
 		public Reader formData(org.apache.juneau.rest.RestRequest req) {
-			return TestUtils.reader(req.getFormParams().asQueryString());
+			return reader(req.getFormParams().asQueryString());
 		}
 	}
 
@@ -83,12 +82,13 @@ class RestClient_FormData_Test extends SimpleTestBase {
 	}
 
 	@Test void a06_formData_String_Object_Schema() throws Exception {
-		List<String> l = list("bar","baz"), l2 = list("qux","quux");
+		var l = list("bar","baz");
+		var l2 = list("qux","quux");
 		client().formData(part("foo",l,T_ARRAY_PIPES)).build().post("/formData").formData(part("foo",l2,T_ARRAY_PIPES)).run().assertContent().asString().asUrlDecode().is("foo=bar|baz&foo=qux|quux");
 	}
 
 	@Test void a07_formData_String_Object_Schema_Serializer() throws Exception {
-		List<String> l = list("bar","baz");
+		var l = list("bar","baz");
 		client().formData(part("foo",l,T_ARRAY_PIPES).serializer(UonSerializer.DEFAULT)).build().post("/formData").run().assertContent().asString().asUrlDecode().is("foo=@(bar,baz)");
 	}
 
@@ -117,7 +117,8 @@ class RestClient_FormData_Test extends SimpleTestBase {
 	}
 
 	@Test void a11_formData_String_Supplier_Schema() throws Exception {
-		List<String> l1 = list("foo","bar"), l2 = list("bar","baz");
+		var l1 = list("foo","bar");
+		var l2 = list("bar","baz");
 		var s = MutableSupplier.of(null);
 
 		var x1 = client().formData(part("foo",s,T_ARRAY_PIPES)).build();

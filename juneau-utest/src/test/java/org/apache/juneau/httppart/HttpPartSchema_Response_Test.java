@@ -28,7 +28,7 @@ class HttpPartSchema_Response_Test extends SimpleTestBase {
 	// Basic test
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void a01_basic() {
-		TestUtils.assertNotThrown(()->HttpPartSchema.create().build());
+		assertNotThrown(()->HttpPartSchema.create().build());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

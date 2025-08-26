@@ -93,16 +93,14 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a01_bean(RoundTripTester t) throws Exception {
 		var x = new A("foo");
-		AA xa;
-		IA xi;
 
 		x = t.roundTrip(x, A.class);
 		assertEquals("foo", x.getF1());
 
-		xa = t.roundTrip(x, AA.class);
+		var xa = t.roundTrip(x, AA.class);
 		assertEquals("foo", xa.getF1());
 
-		xi = t.roundTrip(x, IA.class);
+		var xi = t.roundTrip(x, IA.class);
 		assertEquals("foo", xi.getF1());
 
 		x = t.roundTrip(x, Object.class);
@@ -137,16 +135,14 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a02_beanArray(RoundTripTester t) throws Exception {
 		var x = a(new A("foo"));
-		AA[] xa;
-		IA[] xi;
 
 		x = t.roundTrip(x, A[].class);
 		assertEquals("foo", x[0].getF1());
 
-		xa = t.roundTrip(x, AA[].class);
+		var xa = (AA[])t.roundTrip(x, AA[].class);
 		assertEquals("foo", xa[0].getF1());
 
-		xi = t.roundTrip(x, IA[].class);
+		var xi = (IA[])t.roundTrip(x, IA[].class);
 		assertEquals("foo", xi[0].getF1());
 	}
 
@@ -327,7 +323,7 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 
 		public F(){}
 		public F(String f1) {
-			A[] b = {new A(f1)};
+			var b = a(new A(f1));
 			f6a.add(b);
 			f6b.add(b);
 			f6c.add(b);

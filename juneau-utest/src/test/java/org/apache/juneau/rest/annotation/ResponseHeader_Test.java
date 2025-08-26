@@ -17,9 +17,7 @@ import static org.junit.Assert.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
@@ -127,10 +125,9 @@ class ResponseHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_swagger_onPojo() {
-		HeaderInfo x;
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(B.class);
 
-		x = s.getResponseInfo("/a","get",200).getHeader("H");
+		var x = s.getResponseInfo("/a","get",200).getHeader("H");
 		assertEquals("a", x.getDescription());
 		assertEquals("string", x.getType());
 
@@ -215,10 +212,9 @@ class ResponseHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_swagger_onMethodParameters() {
-		HeaderInfo x;
 		org.apache.juneau.bean.swagger.Swagger sc = getSwagger(C.class);
 
-		x = sc.getResponseInfo("/a","get",200).getHeader("H");
+		var x = sc.getResponseInfo("/a","get",200).getHeader("H");
 		assertEquals("a", x.getDescription());
 		assertEquals("string", x.getType());
 

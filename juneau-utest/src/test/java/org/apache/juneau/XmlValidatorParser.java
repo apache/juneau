@@ -71,7 +71,7 @@ public class XmlValidatorParser extends XmlParser {
 	}
 
 	public <T> T validate(Reader r) throws Exception {
-		XMLStreamReader sr = getStaxReader(r);
+		var sr = getStaxReader(r);
 		while (sr.next() != END_DOCUMENT) {/*no-op*/}
 		return null;
 	}

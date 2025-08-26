@@ -39,7 +39,7 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_empty() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.build();
 
@@ -51,14 +51,14 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_fileSystem_rootDir() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.dir(".")
 			.build();
 
-		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
+		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
 
-		for (String p : patterns) {
+		for (var p : patterns) {
 			assertContains("[home:/files/test1/"+p+"]", read(x,"files/test1/"+p));
 			assertContains("[home:/files/test1/dir/"+p+"]", read(x,"files/test1/dir/"+p));
 			assertContains("[home:/files/test1/dir/dir/"+p+"]", read(x,"files/test1/dir/dir/"+p));
@@ -67,22 +67,22 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 			assertContains("[home:/files/test1/dir/dir/"+p+"]", read(x," / files/test1/dir/dir/"+p+" / "));
 		}
 
-		String[] badPatterns = {"files/test1/bad.txt","files/test1/../test1/_a.txt","files/test1/%2E%2E/test1/_a.txt","files/bad.txt",null,"",".","..","%2E","%2E%2E","j.class","k.properties"};
+		var badPatterns = a("files/test1/bad.txt","files/test1/../test1/_a.txt","files/test1/%2E%2E/test1/_a.txt","files/bad.txt",null,"",".","..","%2E","%2E%2E","j.class","k.properties");
 
-		for (String p : badPatterns) {
+		for (var p : badPatterns) {
 			assertNull(read(x,p));
 		}
 	}
 
 	@Test void b02_fileSystem_subDir() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.dir("files")
 			.build();
 
-		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
+		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
 
-		for (String p : patterns) {
+		for (var p : patterns) {
 			assertContains("[home:/files/test1/"+p+"]", read(x,"test1/"+p));
 			assertContains("[home:/files/test1/dir/"+p+"]", read(x,"test1/dir/"+p));
 			assertContains("[home:/files/test1/dir/dir/"+p+"]", read(x,"test1/dir/dir/"+p));
@@ -91,24 +91,24 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 			assertContains("[home:/files/test1/dir/dir/"+p+"]", read(x,"/test1/dir/dir/"+p+"/"));
 		}
 
-		String[] badPatterns = {"test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".",".."};
+		var badPatterns = a("test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".","..");
 
-		for (String p : badPatterns) {
+		for (var p : badPatterns) {
 			assertNull(read(x,p));
 		}
 	}
 
 	@Test void b03_fileSystem_localized_flat() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.dir("files")
 			.build();
 
-		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
-		String[] patterns_ja = {"_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja"};
-		String[] patterns_ja_JP = {"_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP"};
+		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
+		var patterns_ja = a("_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja");
+		var patterns_ja_JP = a("_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP");
 
-		for (int i = 0; i < patterns.length; i++) {
+		for (var i = 0; i < patterns.length; i++) {
 			var p = patterns[i];
 			var p_ja = patterns_ja[i];
 			var p_ja_JP = patterns_ja_JP[i];
@@ -135,9 +135,9 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 			assertContains("[home:/files/test1/dir/dir/"+p_ja_JP+"]", read(x,"/test1/dir/dir/"+p+"/",JAPAN));
 		}
 
-		String[] badPatterns = {"test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".","..","j.class","k.properties"};
+		var badPatterns = a("test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".","..","j.class","k.properties");
 
-		for (String p : badPatterns) {
+		for (var p : badPatterns) {
 			assertNull(read(x,p,null));
 			assertNull(read(x,p,JAPANESE));
 			assertNull(read(x,p,JAPAN));
@@ -145,7 +145,7 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 	}
 
 	@Test void b04_fileSystem_localized_hierarchical() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.dir("files/test2")
 			.build();
@@ -177,14 +177,14 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_classpathRoot_rootDir() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.cp(FileFinder_Test.class, "/", false)
 			.build();
 
-		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
+		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
 
-		for (String p : patterns) {
+		for (var p : patterns) {
 			assertContains("[cp:/files/test1/"+p+"]", read(x,"files/test1/"+p));
 			assertContains("[cp:/files/test1/dir/"+p+"]", read(x,"files/test1/dir/"+p));
 			assertContains("[cp:/files/test1/dir/dir/"+p+"]", read(x,"files/test1/dir/dir/"+p));
@@ -193,22 +193,22 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 			assertContains("[cp:/files/test1/dir/dir/"+p+"]", read(x," / files/test1/dir/dir/"+p+" / "));
 		}
 
-		String[] badPatterns = {"files/test1/bad.txt","files/test1/../test1/_a.txt","files/bad.txt",null,"",".","..","LocalizedFileStore_Test.class"};
+		var badPatterns = a("files/test1/bad.txt","files/test1/../test1/_a.txt","files/bad.txt",null,"",".","..","LocalizedFileStore_Test.class");
 
-		for (String p : badPatterns) {
+		for (var p : badPatterns) {
 			assertNull(read(x,p));
 		}
 	}
 
 	@Test void c02_classpathRoot_subdir() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.cp(FileFinder_Test.class, "/files", false)
 			.build();
 
-		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
+		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
 
-		for (String p : patterns) {
+		for (var p : patterns) {
 			assertContains("[cp:/files/test1/"+p+"]", read(x,"test1/"+p));
 			assertContains("[cp:/files/test1/dir/"+p+"]", read(x,"test1/dir/"+p));
 			assertContains("[cp:/files/test1/dir/dir/"+p+"]", read(x,"test1/dir/dir/"+p));
@@ -217,25 +217,25 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 			assertContains("[cp:/files/test1/dir/dir/"+p+"]", read(x," / test1/dir/dir/"+p+" / "));
 		}
 
-		String[] badPatterns = {"files/test1/bad.txt","files/test1/../test1/_a.txt","files/bad.txt",null,"",".",".."};
+		var badPatterns = a("files/test1/bad.txt","files/test1/../test1/_a.txt","files/bad.txt",null,"",".","..");
 
-		for (String p : badPatterns) {
+		for (var p : badPatterns) {
 			assertNull(read(x,p));
 		}
 	}
 
 	@Test void c03_classpathRoot_localized_flat() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.cp(FileFinder_Test.class, "/files", false)
 			.build();
 
 
-		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
-		String[] patterns_ja = {"_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja"};
-		String[] patterns_ja_JP = {"_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP"};
+		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
+		var patterns_ja = a("_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja");
+		var patterns_ja_JP = a("_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP");
 
-		for (int i = 0; i < patterns.length; i++) {
+		for (var i = 0; i < patterns.length; i++) {
 			var p = patterns[i];
 			var p_ja = patterns_ja[i];
 			var p_ja_JP = patterns_ja_JP[i];
@@ -262,9 +262,9 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 			assertContains("[cp:/files/test1/dir/dir/"+p_ja_JP+"]", read(x,"/test1/dir/dir/"+p+"/",JAPAN));
 		}
 
-		String[] badPatterns = {"test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".",".."};
+		var badPatterns = a("test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".","..");
 
-		for (String p : badPatterns) {
+		for (var p : badPatterns) {
 			assertNull(read(x,p,null));
 			assertNull(read(x,p,JAPANESE));
 			assertNull(read(x,p,JAPAN));
@@ -273,7 +273,7 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 
 
 	@Test void c04_classpathRoot_localized_hierarchical() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.cp(FileFinder_Test.class, "/files/test2", false)
 			.build();
@@ -305,14 +305,14 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void d01a_classpathRelative_rootDir() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.cp(FileFinder_Test.class, "", false)
 			.build();
 
-		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
+		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
 
-		for (String p : patterns) {
+		for (var p : patterns) {
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]", read(x,"files/test1/"+p));
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]", read(x,"files/test1/dir/"+p));
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]", read(x,"files/test1/dir/dir/"+p));
@@ -323,22 +323,22 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 
 		assertContains("[cp:/org/apache/juneau/cp/_a.txt]", read(x,"_a.txt"));
 
-		String[] badPatterns = {"files/test1/bad.txt","files/test1/../test1/_a.txt","files/bad.txt",null,"",".",".."};
+		var badPatterns = a("files/test1/bad.txt","files/test1/../test1/_a.txt","files/bad.txt",null,"",".","..");
 
-		for (String p : badPatterns) {
+		for (var p : badPatterns) {
 			assertNull(read(x,p));
 		}
 	}
 
 	@Test void d01b_classpathRelative_rootDir_recursive() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.cp(FileFinder_Test2.class, "", true)
 			.build();
 
-		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
+		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
 
-		for (String p : patterns) {
+		for (var p : patterns) {
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]", read(x,"files/test1/"+p));
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]", read(x,"files/test1/dir/"+p));
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]", read(x,"files/test1/dir/dir/"+p));
@@ -349,14 +349,14 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 	}
 
 	@Test void d02a_classpathRelative_subdir() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.cp(FileFinder_Test.class, "files", false)
 			.build();
 
-		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
+		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
 
-		for (String p : patterns) {
+		for (var p : patterns) {
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]", read(x,"test1/"+p));
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]", read(x,"test1/dir/"+p));
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]", read(x,"test1/dir/dir/"+p));
@@ -365,22 +365,22 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]", read(x," / test1/dir/dir/"+p+" / "));
 		}
 
-		String[] badPatterns = {"files/test1/bad.txt","files/test1/../test1/_a.txt","files/bad.txt",null,"",".",".."};
+		var badPatterns = a("files/test1/bad.txt","files/test1/../test1/_a.txt","files/bad.txt",null,"",".","..");
 
-		for (String p : badPatterns) {
+		for (var p : badPatterns) {
 			assertNull(read(x,p));
 		}
 	}
 
 	@Test void d02b_classpathRelative_subdir_recursive() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.cp(FileFinder_Test2.class, "files", true)
 			.build();
 
-		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
+		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
 
-		for (String p : patterns) {
+		for (var p : patterns) {
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]", read(x,"test1/"+p));
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]", read(x,"test1/dir/"+p));
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]", read(x,"test1/dir/dir/"+p));
@@ -391,17 +391,17 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 	}
 
 	@Test void d03a_classpathRelative_localized_flat() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.cp(FileFinder_Test.class, "files", false)
 			.build();
 
 
-		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
-		String[] patterns_ja = {"_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja"};
-		String[] patterns_ja_JP = {"_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP"};
+		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
+		var patterns_ja = a("_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja");
+		var patterns_ja_JP = a("_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP");
 
-		for (int i = 0; i < patterns.length; i++) {
+		for (var i = 0; i < patterns.length; i++) {
 			var p = patterns[i];
 			var p_ja = patterns_ja[i];
 			var p_ja_JP = patterns_ja_JP[i];
@@ -428,9 +428,9 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja_JP+"]", read(x,"/test1/dir/dir/"+p+"/",JAPAN));
 		}
 
-		String[] badPatterns = {"test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".",".."};
+		var badPatterns = a("test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".","..");
 
-		for (String p : badPatterns) {
+		for (var p : badPatterns) {
 			assertNull(read(x,p,null));
 			assertNull(read(x,p,JAPANESE));
 			assertNull(read(x,p,JAPAN));
@@ -438,17 +438,16 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 	}
 
 	@Test void d03b_classpathRelative_localized_flat_recursive() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.cp(FileFinder_Test2.class, "files", true)
 			.build();
 
+		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
+		var patterns_ja = a("_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja");
+		var patterns_ja_JP = a("_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP");
 
-		String[] patterns = {"_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo"};
-		String[] patterns_ja = {"_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja"};
-		String[] patterns_ja_JP = {"_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP"};
-
-		for (int i = 0; i < patterns.length; i++) {
+		for (var i = 0; i < patterns.length; i++) {
 			var p = patterns[i];
 			var p_ja = patterns_ja[i];
 			var p_ja_JP = patterns_ja_JP[i];
@@ -477,7 +476,7 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 	}
 
 	@Test void d04a_classpathRelative_localized_hierarchical() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.cp(FileFinder_Test.class, "files/test2", false)
 			.build();
@@ -505,7 +504,7 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 	}
 
 	@Test void d04b_classpathRelative_localized_hierarchical_recursive() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.cp(FileFinder_Test2.class, "files/test2", true)
 			.build();
@@ -539,7 +538,7 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 	}
 
 	@Test void d05_classpathRelative_ignorePattern() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.cp(FileFinder_Test2.class, "files/test2", true)
 			.exclude("(?i).*\\.(txt)")
@@ -599,26 +598,24 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void e01_localDir_hashCode() {
-		Set<LocalDir> s = null;
-
-		s = TestUtils.set(new LocalDir(Paths.get("test")), new LocalDir(Paths.get("test")));
+		var s = set(new LocalDir(Paths.get("test")), new LocalDir(Paths.get("test")));
 		assertSize(1, s);
 
-		s = TestUtils.set(new LocalDir(Paths.get("test")), new LocalDir(Paths.get("test","test")));
+		s = set(new LocalDir(Paths.get("test")), new LocalDir(Paths.get("test","test")));
 		assertSize(2, s);
 
-		s = TestUtils.set(new LocalDir(List.class,null), new LocalDir(List.class,null));
+		s = set(new LocalDir(List.class,null), new LocalDir(List.class,null));
 		assertSize(1, s);
 
-		s = TestUtils.set(new LocalDir(List.class,null), new LocalDir(List.class,"foo"));
+		s = set(new LocalDir(List.class,null), new LocalDir(List.class,"foo"));
 		assertSize(2, s);
 
-		s = TestUtils.set(new LocalDir(List.class,null), new LocalDir(String.class,null));
+		s = set(new LocalDir(List.class,null), new LocalDir(String.class,null));
 		assertSize(2, s);
 	}
 
 	@Test void e02_caching() throws Exception {
-		FileFinder x = FileFinder
+		var x = FileFinder
 			.create()
 			.dir(".")
 			.caching(100_000_000)
@@ -647,7 +644,7 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 	}
 
 	@Test void e03_subclassing() {
-		FileFinder x = E03b
+		var x = E03b
 			.create()
 			.dir(".")
 			.caching(100_000_000)

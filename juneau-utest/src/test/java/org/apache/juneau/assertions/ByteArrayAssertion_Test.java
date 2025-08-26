@@ -20,7 +20,6 @@ import static org.junit.runners.MethodSorters.*;
 import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.serializer.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -64,7 +63,7 @@ public class ByteArrayAssertion_Test {
 	@Test
 	public void ba01b_asString_wSerializer() {
 		byte[] x = {1}, nil = null;
-		WriterSerializer s = Json5Serializer.DEFAULT;
+		var s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("[1]");
 		test(nil).asString(s).is("null");
 	}
@@ -249,7 +248,7 @@ public class ByteArrayAssertion_Test {
 	@Test
 	public void ca11_isSameSerializedAs() {
 		byte[] x1 = {1,2}, x1a = {1,2}, x2 = {1,3}, nil = null;
-		WriterSerializer s = Json5Serializer.DEFAULT;
+		var s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
 		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='[1,3]'.  Actual='[1,2]'.");

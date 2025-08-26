@@ -23,7 +23,6 @@ import java.nio.file.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.resource.*;
 import org.junit.jupiter.api.*;
 
 class BasicHttpResource_Test extends SimpleTestBase {
@@ -31,86 +30,85 @@ class BasicHttpResource_Test extends SimpleTestBase {
 	@Test void a01_basic() throws Exception {
 		var f = Files.createTempFile("test","txt").toFile();
 
-		HttpResource x = stringResource((String)null);
-
+		var x = stringResource((String)null);
 		assertNull(x.getContentType());
 		assertEquals("", toUtf8(x.getContent()));
 		assertNull(x.getContentEncoding());
 		assertEquals(0, x.getHeaders().size());
 
-		x = stringResource("foo");
-		assertEquals("foo", toUtf8(x.getContent()));
-		assertTrue(x.isRepeatable());
-		assertFalse(x.isStreaming());
+		var x2 = stringResource("foo");
+		assertEquals("foo", toUtf8(x2.getContent()));
+		assertTrue(x2.isRepeatable());
+		assertFalse(x2.isStreaming());
 
-		x = readerResource(TestUtils.reader("foo"));
-		assertEquals("foo", toUtf8(x.getContent()));
-		assertFalse(x.isRepeatable());
-		assertTrue(x.isStreaming());
+		var x3 = readerResource(reader("foo"));
+		assertEquals("foo", toUtf8(x3.getContent()));
+		assertFalse(x3.isRepeatable());
+		assertTrue(x3.isStreaming());
 
-		x = byteArrayResource("foo".getBytes());
-		assertEquals("foo", toUtf8(x.getContent()));
-		assertTrue(x.isRepeatable());
-		assertFalse(x.isStreaming());
+		var x4 = byteArrayResource("foo".getBytes());
+		assertEquals("foo", toUtf8(x4.getContent()));
+		assertTrue(x4.isRepeatable());
+		assertFalse(x4.isStreaming());
 
-		x = streamResource(TestUtils.inputStream("foo"));
-		assertEquals("foo", toUtf8(x.getContent()));
-		assertFalse(x.isRepeatable());
-		assertTrue(x.isStreaming());
+		var x5 = streamResource(inputStream("foo"));
+		assertEquals("foo", toUtf8(x5.getContent()));
+		assertFalse(x5.isRepeatable());
+		assertTrue(x5.isStreaming());
 
-		x = fileResource(f);
-		assertEquals("", toUtf8(x.getContent()));
-		assertTrue(x.isRepeatable());
-		assertFalse(x.isStreaming());
+		var x6 = fileResource(f);
+		assertEquals("", toUtf8(x6.getContent()));
+		assertTrue(x6.isRepeatable());
+		assertFalse(x6.isStreaming());
 
-		x = stringResource("foo").setCached();
-		assertEquals("foo", toUtf8(x.getContent()));
-		assertEquals("foo", toUtf8(x.getContent()));
-		assertTrue(x.isRepeatable());
+		var x7 = stringResource("foo").setCached();
+		assertEquals("foo", toUtf8(x7.getContent()));
+		assertEquals("foo", toUtf8(x7.getContent()));
+		assertTrue(x7.isRepeatable());
 
-		x = readerResource(TestUtils.reader("foo")).setCached();
-		assertEquals("foo", toUtf8(x.getContent()));
-		assertEquals("foo", toUtf8(x.getContent()));
-		assertTrue(x.isRepeatable());
+		var x8 = readerResource(reader("foo")).setCached();
+		assertEquals("foo", toUtf8(x8.getContent()));
+		assertEquals("foo", toUtf8(x8.getContent()));
+		assertTrue(x8.isRepeatable());
 
-		x = byteArrayResource("foo".getBytes()).setCached();
-		assertEquals("foo", toUtf8(x.getContent()));
-		assertEquals("foo", toUtf8(x.getContent()));
-		assertTrue(x.isRepeatable());
+		var x9 = byteArrayResource("foo".getBytes()).setCached();
+		assertEquals("foo", toUtf8(x9.getContent()));
+		assertEquals("foo", toUtf8(x9.getContent()));
+		assertTrue(x9.isRepeatable());
 
-		x = streamResource(TestUtils.inputStream("foo")).setCached();
-		assertEquals("foo", toUtf8(x.getContent()));
-		assertEquals("foo", toUtf8(x.getContent()));
-		assertTrue(x.isRepeatable());
+		var x10 = streamResource(inputStream("foo")).setCached();
+		assertEquals("foo", toUtf8(x10.getContent()));
+		assertEquals("foo", toUtf8(x10.getContent()));
+		assertTrue(x10.isRepeatable());
 
-		x = stringResource((String)null).setCached();
-		assertEquals("", toUtf8(x.getContent()));
-		assertTrue(x.isRepeatable());
-		x.writeTo(new ByteArrayOutputStream());
+		var x11 = stringResource((String)null).setCached();
+		assertEquals("", toUtf8(x11.getContent()));
+		assertTrue(x11.isRepeatable());
+		x11.writeTo(new ByteArrayOutputStream());
 
-		x = fileResource(f).setCached();
-		assertEquals("", toUtf8(x.getContent()));
-		assertTrue(x.isRepeatable());
-		x.writeTo(new ByteArrayOutputStream());
+		var x12 = fileResource(f).setCached();
+		assertEquals("", toUtf8(x12.getContent()));
+		assertTrue(x12.isRepeatable());
+		x12.writeTo(new ByteArrayOutputStream());
 
 		assertEquals(3L, stringResource("foo").getContentLength());
 		assertEquals(3L, byteArrayResource("foo".getBytes()).getContentLength());
 		assertEquals(0L, fileResource(f).getContentLength());
 
-		assertEquals(-1L, readerResource(TestUtils.reader("foo")).getContentLength());
-		assertEquals(3L, readerResource(TestUtils.reader("foo")).setContentLength(3).getContentLength());
+		assertEquals(-1L, readerResource(reader("foo")).getContentLength());
+		assertEquals(3L, readerResource(reader("foo")).setContentLength(3).getContentLength());
 
-		x = stringResource("foo", contentType("text/plain")).setContentEncoding("identity");
-		assertEquals("text/plain", x.getContentType().getValue());
-		assertEquals("identity", x.getContentEncoding().getValue());
+		var x13 = stringResource("foo", contentType("text/plain")).setContentEncoding("identity");
+		assertEquals("text/plain", x13.getContentType().getValue());
+		assertEquals("identity", x13.getContentEncoding().getValue());
 
-		x = stringResource("foo", null).setContentEncoding((String)null);
-		assertNull(x.getContentType());
-		assertNull(x.getContentEncoding());
+		var x14 = stringResource("foo", null).setContentEncoding((String)null);
+		assertNull(x14.getContentType());
+		assertNull(x14.getContentEncoding());
 	}
 
 	@Test void a02_header_String_Object() {
-		HeaderList x = stringResource("foo").addHeader("Foo","bar").addHeader("Foo","baz").addHeader(null,"bar").addHeader("foo",null).getHeaders();
+		var x = stringResource("foo").addHeader("Foo","bar").addHeader("Foo","baz").addHeader(null,"bar").addHeader("foo",null).getHeaders();
 		assertEquals("Foo: bar", x.getFirst("Foo").get().toString());
 		assertEquals("Foo: baz", x.getLast("Foo").get().toString());
 		assertEmpty(x.getFirst("Bar"));
@@ -119,7 +117,7 @@ class BasicHttpResource_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_header_Header() {
-		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar")).addHeaders(header("Foo","baz")).addHeaders(header("Bar",null)).getHeaders();
+		var x = stringResource("foo").addHeaders(header("Foo","bar")).addHeaders(header("Foo","baz")).addHeaders(header("Bar",null)).getHeaders();
 		assertEquals("Foo: bar", x.getFirst("Foo").get().toString());
 		assertEquals("Foo: baz", x.getLast("Foo").get().toString());
 		assertNull(x.getFirst("Bar").get().getValue());
@@ -128,7 +126,7 @@ class BasicHttpResource_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_headers_List() {
-		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).getHeaders();
+		var x = stringResource("foo").addHeaders(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).getHeaders();
 		assertEquals("Foo: bar", x.getFirst("Foo").get().toString());
 		assertEquals("Foo: baz", x.getLast("Foo").get().toString());
 		assertNull(x.getFirst("Bar").get().getValue());
@@ -137,7 +135,7 @@ class BasicHttpResource_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_headers_array() {
-		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).getHeaders();
+		var x = stringResource("foo").addHeaders(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).getHeaders();
 		assertEquals("Foo: bar", x.getFirst("Foo").get().toString());
 		assertEquals("Foo: baz", x.getLast("Foo").get().toString());
 		assertNull(x.getFirst("Bar").get().getValue());
@@ -145,32 +143,31 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		assertArray(x.getAll(), "Foo: bar,Foo: baz,Bar: null");
 	}
 
-
 	@Test void a06_chunked() {
-		StringResource x1 = stringResource("foo").setChunked();
+		var x1 = stringResource("foo").setChunked();
 		assertTrue(x1.isChunked());
-		StringResource x2 = stringResource("foo");
+		var x2 = stringResource("foo");
 		assertFalse(x2.isChunked());
 	}
 
 	@Test void a07_chunked_boolean() {
-		StringResource x1 = stringResource("foo").setChunked(true);
+		var x1 = stringResource("foo").setChunked(true);
 		assertTrue(x1.isChunked());
-		StringResource x2 = stringResource("foo").setChunked(false);
+		var x2 = stringResource("foo").setChunked(false);
 		assertFalse(x2.isChunked());
 	}
 
 	@Test void a08_contentType_String() {
-		StringResource x1 = stringResource("foo").setContentType("text/plain");
+		var x1 = stringResource("foo").setContentType("text/plain");
 		assertEquals("text/plain", x1.getContentType().getValue());
-		StringResource x2 = stringResource("foo").setContentType((String)null);
+		var x2 = stringResource("foo").setContentType((String)null);
 		assertNull(x2.getContentType());
 	}
 
 	@Test void a09_contentEncoding_String() {
-		StringResource x1 = stringResource("foo").setContentEncoding("identity");
+		var x1 = stringResource("foo").setContentEncoding("identity");
 		assertEquals("identity", x1.getContentEncoding().getValue());
-		StringResource x2 = stringResource("foo").setContentEncoding((String)null);
+		var x2 = stringResource("foo").setContentEncoding((String)null);
 		assertNull(x2.getContentEncoding());
 	}
 

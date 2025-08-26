@@ -38,7 +38,7 @@ class BasicEntityTagHeader_Test extends SimpleTestBase {
 	public static class A {
 		@RestOp
 		public StringReader get(@Header(name=HEADER) @Schema(cf="multi") String[] h) {
-			return TestUtils.reader(h == null ? "null" : Utils.join(h, ','));
+			return reader(h == null ? "null" : Utils.join(h, ','));
 		}
 	}
 
@@ -69,8 +69,8 @@ class BasicEntityTagHeader_Test extends SimpleTestBase {
 
 	@Test void a02_asEntityTag() {
 		var x = new BasicEntityTagHeader("Foo","W/\"foo\"").asEntityTag().get();
-		TestUtils.assertString("W/\"foo\"", x);
-		TestUtils.assertString("foo", x.getEntityValue());
+		assertString("W/\"foo\"", x);
+		assertString("foo", x.getEntityValue());
 		assertTrue(x.isWeak());
 		assertFalse(x.isAny());
 	}

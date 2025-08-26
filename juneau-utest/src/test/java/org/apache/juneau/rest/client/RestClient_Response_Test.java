@@ -83,7 +83,7 @@ class RestClient_Response_Test extends SimpleTestBase {
 
 	@Test void a07_setStatusLine() throws RestCallException {
 		var sl = new BasicStatusLine(new ProtocolVersion("http",9,8),299,"foo");
-		RestResponse r = client().build().get("/bean").run();
+		var r = client().build().get("/bean").run();
 		r.setStatusLine(sl);
 		r
 			.assertStatus(299)
@@ -105,7 +105,7 @@ class RestClient_Response_Test extends SimpleTestBase {
 	}
 
 	@Test void a08_setLocale() throws RestCallException {
-		RestResponse r = client().build().get("/bean").run();
+		var r = client().build().get("/bean").run();
 		r.setLocale(Locale.JAPAN);
 		assertEquals(Locale.JAPAN, r.getLocale());
 	}
@@ -126,7 +126,7 @@ class RestClient_Response_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_response_getStringHeader() throws Exception {
-		RestResponse x = checkFooClient(C.class).build().get().json().header("Foo","bar").run();
+		var x = checkFooClient(C.class).build().get().json().header("Foo","bar").run();
 		assertEquals("bar", x.getStringHeader("Foo").orElse(null));
 		assertEquals("bar", x.getStringHeader("Foo").orElse("baz"));
 		assertEquals("baz", x.getStringHeader("Bar").orElse("baz"));
@@ -146,13 +146,13 @@ class RestClient_Response_Test extends SimpleTestBase {
 	}
 
 	@Test void c04_response_containsHeader() throws Exception {
-		RestResponse r = checkFooClient(C.class).build().get().json().header("Foo","bar").run();
+		var r = checkFooClient(C.class).build().get().json().header("Foo","bar").run();
 		assertTrue(r.containsHeader("Foo"));
 		assertFalse(r.containsHeader("Bar"));
 	}
 
 	@Test void c05_response_getHeaders() throws Exception {
-		RestResponse r = checkFooClient(C.class).build().get().json().run();
+		var r = checkFooClient(C.class).build().get().json().run();
 		r.setHeader("Foo","bar");
 		r.addHeader("Foo","baz");
 		r.addHeader(stringHeader("Foo","qux"));
@@ -201,7 +201,7 @@ class RestClient_Response_Test extends SimpleTestBase {
 	}
 
 	@Test void d02_response_setEntity() throws Exception {
-		RestResponse x = client(D.class).build().post("/bean",bean).run();
+		var x = client(D.class).build().post("/bean",bean).run();
 		x.setEntity(new StringEntity("{f:2}"));
 		x.assertContent().as(ABean.class).asJson().is("{f:2}");
 	}
@@ -212,7 +212,7 @@ class RestClient_Response_Test extends SimpleTestBase {
 
 	@SuppressWarnings("deprecation")
 	@Test void e01_response_getParams_setParams() throws Exception {
-		RestResponse x = client(D.class).build().post("/bean",bean).run();
+		var x = client(D.class).build().post("/bean",bean).run();
 		var p = new BasicHttpParams();
 		x.setParams(p);
 		assertSame(x.getParams(), p);

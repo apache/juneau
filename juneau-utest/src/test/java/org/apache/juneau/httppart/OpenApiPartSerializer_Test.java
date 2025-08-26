@@ -55,7 +55,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_outputValidations_pattern() throws Exception {
-		final HttpPartSchema ps = tNone().pattern("x.*").allowEmptyValue().build();
+		var ps = tNone().pattern("x.*").allowEmptyValue().build();
 		assertEquals("x", serialize(ps, "x"));
 		assertEquals("xx", serialize(ps, "xx"));
 		assertEquals("null", serialize(ps, null));
@@ -69,7 +69,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_outputValidations_enum() throws Exception {
-		final HttpPartSchema ps = tNone()._enum("foo").allowEmptyValue().build();
+		var ps = tNone()._enum("foo").allowEmptyValue().build();
 
 		assertEquals("foo", serialize(ps, "foo"));
 		assertEquals("null", serialize(ps, null));
@@ -130,7 +130,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 
 
 	@Test void c01_stringType_simple() throws Exception {
-		HttpPartSchema ps = T_STRING;
+		var ps = T_STRING;
 		assertEquals("foo", serialize(ps, "foo"));
 	}
 
@@ -141,9 +141,9 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void c03_stringType_byteFormat() throws Exception {
-		HttpPartSchema ps = T_BYTE;
+		var ps = T_BYTE;
 		byte[] foob = "foo".getBytes();
-		String expected = base64Encode(foob);
+		var expected = base64Encode(foob);
 		assertEquals(expected, serialize(ps, foob));
 		assertEquals(expected, serialize(ps, new C1(foob)));
 		assertEquals("null", serialize(ps, new C1(null)));
@@ -151,9 +151,9 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void c04_stringType_binaryFormat() throws Exception {
-		HttpPartSchema ps = T_BINARY;
-		byte[] foob = "foo".getBytes();
-		String expected = toHex(foob);
+		var ps = T_BINARY;
+		var foob = "foo".getBytes();
+		var expected = toHex(foob);
 		assertEquals(expected, serialize(ps, foob));
 		assertEquals(expected, serialize(ps, new C1(foob)));
 		assertEquals("null", serialize(ps, new C1(null)));
@@ -161,9 +161,9 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void c05_stringType_binarySpacedFormat() throws Exception {
-		HttpPartSchema ps = T_BINARY_SPACED;
-		byte[] foob = "foo".getBytes();
-		String expected = toSpacedHex(foob);
+		var ps = T_BINARY_SPACED;
+		var foob = "foo".getBytes();
+		var expected = toSpacedHex(foob);
 		assertEquals(expected, serialize(ps, foob));
 		assertEquals(expected, serialize(ps, new C1(foob)));
 		assertEquals("null", serialize(ps, new C1(null)));
@@ -171,21 +171,21 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void c06_stringType_dateFormat() throws Exception {
-		HttpPartSchema ps = T_DATE;
+		var ps = T_DATE;
 		var in = StringUtils.parseIsoCalendar("2012-12-21");
 		assertTrue(serialize(ps, in).contains("2012"));
 		assertEquals("null", serialize(ps, null));
 	}
 
 	@Test void c07_stringType_dateTimeFormat() throws Exception {
-		HttpPartSchema ps = T_DATETIME;
+		var ps = T_DATETIME;
 		var in = StringUtils.parseIsoCalendar("2012-12-21T12:34:56.789");
 		assertTrue(serialize(ps, in).contains("2012"));
 		assertEquals("null", serialize(ps, null));
 	}
 
 	@Test void c08_stringType_uonFormat() throws Exception {
-		HttpPartSchema ps = T_UON;
+		var ps = T_UON;
 		assertEquals("foo", serialize(ps, "foo"));
 		assertEquals("~'foo~'", serialize(ps, "'foo'"));
 		assertEquals("foo", serialize(ps, new C2("foo")));
@@ -197,7 +197,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 
 	@Test void c09_stringType_noneFormat() throws Exception {
 		// If no format is specified, then we should transform directly from a string.
-		HttpPartSchema ps = T_STRING;
+		var ps = T_STRING;
 		assertEquals("foo", serialize(ps, "foo"));
 		assertEquals("'foo'", serialize(ps, "'foo'"));
 		assertEquals("foo", serialize(ps, new C2("foo")));
@@ -233,7 +233,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void c12_stringType_uonKeywords_plain() throws Exception {
-		HttpPartSchema ps = T_STRING;
+		var ps = T_STRING;
 		// When serialized normally, the following should not be quoted.
 		assertEquals("true", serialize(ps, "true"));
 		assertEquals("false", serialize(ps, "false"));
@@ -244,7 +244,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void c13_stringType_uonKeywords_uon() throws Exception {
-		HttpPartSchema ps = T_UON;
+		var ps = T_UON;
 		// When serialized as UON, the following should be quoted so that they're not confused with booleans or numbers.
 		assertEquals("'true'", serialize(ps, "true"));
 		assertEquals("'false'", serialize(ps, "false"));
@@ -270,7 +270,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_arrayType_collectionFormatCsv() throws Exception {
-		HttpPartSchema ps = T_ARRAY_CSV;
+		var ps = T_ARRAY_CSV;
 		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo,bar,null", serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo,bar,null,null", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
@@ -283,7 +283,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void d02_arrayType_collectionFormatPipes() throws Exception {
-		HttpPartSchema ps = T_ARRAY_PIPES;
+		var ps = T_ARRAY_PIPES;
 		assertEquals("foo|bar|null", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo|bar|null", serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo|bar|null|null", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
@@ -294,7 +294,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void d03_arrayType_collectionFormatSsv() throws Exception {
-		HttpPartSchema ps = T_ARRAY_SSV;
+		var ps = T_ARRAY_SSV;
 		assertEquals("foo bar null", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo bar null", serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo bar null null", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
@@ -305,7 +305,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void d04_arrayType_collectionFormatTsv() throws Exception {
-		HttpPartSchema ps = T_ARRAY_TSV;
+		var ps = T_ARRAY_TSV;
 		assertEquals("foo\tbar\tnull", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo\tbar\tnull", serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo\tbar\tnull\tnull", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
@@ -316,7 +316,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void d05_arrayType_collectionFormatUon() throws Exception {
-		HttpPartSchema ps = T_ARRAY_UON;
+		var ps = T_ARRAY_UON;
 		assertEquals("@(foo,bar,'null',null)", serialize(ps, new String[]{"foo","bar","null",null}));
 		assertEquals("@(foo,bar,'null',null)", serialize(ps, new Object[]{"foo","bar","null",null}));
 		assertEquals("@(foo,bar,'null',null)", serialize(ps, new D[]{new D("foo"),new D("bar"),new D("null"),null}));
@@ -327,7 +327,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void d06a_arrayType_collectionFormatNone() throws Exception {
-		HttpPartSchema ps = T_ARRAY;
+		var ps = T_ARRAY;
 		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo,bar,null", serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo,bar,null,null", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
@@ -339,7 +339,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 
 	@Test void d07_arrayType_collectionFormatMulti() throws Exception {
 		// collectionFormat=multi really shouldn't be applicable to collections of values, so just use csv.
-		HttpPartSchema ps = T_ARRAY_MULTI;
+		var ps = T_ARRAY_MULTI;
 		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo,bar,null", serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo,bar,null,null", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
@@ -400,7 +400,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_booleanType() throws Exception {
-		HttpPartSchema ps = T_BOOLEAN;
+		var ps = T_BOOLEAN;
 		assertEquals("true", serialize(ps, true));
 		assertEquals("true", serialize(ps, "true"));
 		assertEquals("true", serialize(ps, new E1(true)));
@@ -490,7 +490,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void f01_integerType_int32() throws Exception {
-		HttpPartSchema ps = T_INT32;
+		var ps = T_INT32;
 		assertEquals("1", serialize(ps, 1));
 		assertEquals("1", serialize(ps, Integer.valueOf(1)));
 		assertEquals("1", serialize(ps, (short)1));
@@ -554,7 +554,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void f04_integerType_int64() throws Exception {
-		HttpPartSchema ps = T_INT64;
+		var ps = T_INT64;
 		assertEquals("1", serialize(ps, 1));
 		assertEquals("1", serialize(ps, Integer.valueOf(1)));
 		assertEquals("1", serialize(ps, (short)1));
@@ -663,7 +663,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void g01_numberType_float() throws Exception {
-		HttpPartSchema ps = T_FLOAT;
+		var ps = T_FLOAT;
 		assertEquals("1.0", serialize(ps, 1f));
 		assertEquals("1.0", serialize(ps, Float.valueOf(1f)));
 		assertEquals("1.0", serialize(ps, 1d));
@@ -718,7 +718,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void g04_numberType_double() throws Exception {
-		HttpPartSchema ps = T_DOUBLE;
+		var ps = T_DOUBLE;
 		assertEquals("1.0", serialize(ps, 1f));
 		assertEquals("1.0", serialize(ps, Float.valueOf(1f)));
 		assertEquals("1.0", serialize(ps, 1d));
@@ -772,7 +772,6 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, list(new G4(1d,2d),new G4(3d,null),null)));
 	}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// type = object
 	//-----------------------------------------------------------------------------------------------------------------
@@ -798,7 +797,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void h02_objectType_uon() throws Exception {
-		HttpPartSchema ps = T_OBJECT_UON;
+		var ps = T_OBJECT_UON;
 		assertEquals("(f1='1',f2=2,f3=true)", serialize(ps, new H1("1",2,true)));
 		assertEquals("()", serialize(ps, new H1(null,null,null)));
 		assertEquals("(f1='1',f2=2,f3=true)", serialize(ps, JsonMap.ofJson("{f1:'1',f2:2,f3:true}")));
@@ -896,7 +895,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void h04_objectType_simpleProperties() throws Exception {
-		HttpPartSchema ps = tObject()
+		var ps = tObject()
 			.p("f01", tString())
 			.p("f02", tByte())
 			.p("f04", tDateTime())
@@ -912,7 +911,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 			.allowEmptyValue()
 			.build();
 
-		byte[] foob = "foo".getBytes();
+		var foob = "foo".getBytes();
 
 		assertEquals(
 			"f01=foo,f02=Zm9v,f04=2012-12-21T12:34:56Z,f05=666F6F,f06=66 6F 6F,f07=foo,f08=1,f09=2,f10=1.0,f11=1.0,f12=true,f99=1",
@@ -927,7 +926,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void h05_objectType_arrayProperties() throws Exception {
-		HttpPartSchema ps = tObjectUon()
+		var ps = tObjectUon()
 			.p("f01", tArray(tString()))
 			.p("f02", tArray(tByte()))
 			.p("f04", tArray(tDateTime()))
@@ -942,7 +941,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 			.ap(tArray(tInteger()))
 			.build();
 
-		byte[] foob = "foo".getBytes();
+		var foob = "foo".getBytes();
 
 		assertEquals(
 			"(f01=@('a,b',null),f02=@(Zm9v,null),f04=@(2012-12-21T12:34:56Z,null),f05=@(666F6F,null),f06=@('66 6F 6F',null),f07=@(a,b,null),f08=@(1,2,null),f09=@(3,4,null),f10=@(1.0,2.0,null),f11=@(3.0,4.0,null),f12=@(true,false,null),f99=@(1,x,null))",
@@ -955,7 +954,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	// No-schema tests
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void i01a_noSchemaTests_Integer() throws Exception {
-		for (Integer v : list(Integer.valueOf(1), Integer.MAX_VALUE, Integer.MIN_VALUE))
+		for (var v : list(Integer.valueOf(1), Integer.MAX_VALUE, Integer.MIN_VALUE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 	@Test void i01b_noSchemaTests_IntegerArray() throws Exception {
@@ -963,7 +962,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void i02a_noSchemaTests_Short() throws Exception {
-		for (Short v : list(Short.valueOf((short)1), Short.MAX_VALUE, Short.MIN_VALUE))
+		for (var v : list(Short.valueOf((short)1), Short.MAX_VALUE, Short.MIN_VALUE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 
@@ -972,7 +971,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void i03a_noSchemaTests_Long() throws Exception {
-		for (Long v : list(Long.valueOf(1), Long.MAX_VALUE, Long.MIN_VALUE))
+		for (var v : list(Long.valueOf(1), Long.MAX_VALUE, Long.MIN_VALUE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 
@@ -981,7 +980,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void i04a_noSchemaTests_Float() throws Exception {
-		for (Float v : list(Float.valueOf(1f), Float.MAX_VALUE, Float.MIN_VALUE))
+		for (var v : list(Float.valueOf(1f), Float.MAX_VALUE, Float.MIN_VALUE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 
@@ -990,7 +989,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void i05a_noSchemaTests_Double() throws Exception {
-		for (Double v : list(Double.valueOf(1d), Double.MAX_VALUE, Double.MIN_VALUE))
+		for (var v : list(Double.valueOf(1d), Double.MAX_VALUE, Double.MIN_VALUE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 
@@ -999,7 +998,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void i06a_noSchemaTests_Boolean() throws Exception {
-		for (Boolean v : list(Boolean.TRUE, Boolean.FALSE))
+		for (var v : list(Boolean.TRUE, Boolean.FALSE))
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 
@@ -1012,7 +1011,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void i08a_noSchemaTests_String() throws Exception {
-		for (String v : list("foo", ""))
+		for (var v : list("foo", ""))
 			assertEquals(v, serialize((HttpPartSchema)null, v));
 	}
 	@Test void i08b_noSchemaTests_StringArray() throws Exception {

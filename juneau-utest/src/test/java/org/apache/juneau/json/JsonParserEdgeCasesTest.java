@@ -370,7 +370,7 @@ public class JsonParserEdgeCasesTest {
 
 	@Test
 	public void testStrict() throws Exception {
-		JsonParser p = JsonParser.DEFAULT_STRICT;
+		var p = JsonParser.DEFAULT_STRICT;
 		if (name.contains("utf16LE"))
 			p = p.copy().streamCharset(Charset.forName("UTF-16LE")).build();
 		else if (name.contains("utf16BE"))
@@ -415,7 +415,7 @@ public class JsonParserEdgeCasesTest {
 
 	@Test
 	public void testLax() throws Exception {
-		JsonParser p = JsonParser.DEFAULT;
+		var p = JsonParser.DEFAULT;
 		if (name.contains("utf16LE"))
 			p = p.copy().streamCharset(Charset.forName("UTF-16LE")).build();
 		else if (name.contains("utf16BE"))
@@ -455,7 +455,7 @@ public class JsonParserEdgeCasesTest {
 	public static void main(String[] generateParams) throws Exception {
 		var f = new File("src/test/resources/org/apache/juneau/json/jsonTestSuite");
 		int i = 0;
-		String pattern = "\n\t\t'{' {0}, \"{1}\", {2}, {3} '}',";
+		var pattern = "\n\t\t'{' {0}, \"{1}\", {2}, {3} '}',";
 		var sb = new StringBuilder();
 		for (File fc : f.listFiles()) {
 			var n = fc.getName();

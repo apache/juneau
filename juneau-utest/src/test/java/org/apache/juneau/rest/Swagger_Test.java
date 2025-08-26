@@ -20,7 +20,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Contact;
@@ -84,14 +83,14 @@ class Swagger_Test extends SimpleTestBase {
 	public static class A1 {}
 
 	@Test void a01_swagger_default() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new A1());
+		var x = getSwagger(new A1());
 		assertEquals("2.0", x.getSwagger());
 		assertEquals(null, x.getHost());
 		assertEquals(null, x.getBasePath());
 		assertEquals(null, x.getSchemes());
 	}
 	@Test void a01_swagger_default_withFile() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new A1());
+		var x = getSwaggerWithFile(new A1());
 		assertEquals("0.0", x.getSwagger());
 		assertEquals("s-host", x.getHost());
 		assertEquals("s-basePath", x.getBasePath());
@@ -103,14 +102,14 @@ class Swagger_Test extends SimpleTestBase {
 	public static class A2 {}
 
 	@Test void a02_swagger_Swagger_value() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new A2());
+		var x = getSwagger(new A2());
 		assertEquals("3.0", x.getSwagger());
 		assertEquals("a-host", x.getHost());
 		assertEquals("a-basePath", x.getBasePath());
 		assertJson(x.getSchemes(), "['a-scheme']");
 	}
 	@Test void a02_swagger_Swagger_value_withFile() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new A2());
+		var x = getSwaggerWithFile(new A2());
 		assertEquals("3.0", x.getSwagger());
 		assertEquals("a-host", x.getHost());
 		assertEquals("a-basePath", x.getBasePath());
@@ -128,7 +127,7 @@ class Swagger_Test extends SimpleTestBase {
 	public static class B1 {}
 
 	@Test void b01a_info_Rest() throws Exception {
-		Info x = getSwagger(new B1()).getInfo();
+		var x = getSwagger(new B1()).getInfo();
 		assertEquals("a-title", x.getTitle());
 		assertEquals("a-description", x.getDescription());
 		assertEquals(null, x.getVersion());
@@ -137,7 +136,7 @@ class Swagger_Test extends SimpleTestBase {
 		assertEquals(null, x.getLicense());
 	}
 	@Test void b01b_info_Rest_withFile() throws Exception {
-		Info x = getSwaggerWithFile(new B1()).getInfo();
+		var x = getSwaggerWithFile(new B1()).getInfo();
 		assertEquals("s-title", x.getTitle());
 		assertEquals("s-description", x.getDescription());
 		assertEquals("0.0.0", x.getVersion());
@@ -154,12 +153,12 @@ class Swagger_Test extends SimpleTestBase {
 	public static class B2 {}
 
 	@Test void b02a_info_Rest_localized() throws Exception {
-		Info x = getSwagger(new B2()).getInfo();
+		var x = getSwagger(new B2()).getInfo();
 		assertEquals("l-foo", x.getTitle());
 		assertEquals("l-foo", x.getDescription());
 	}
 	@Test void b02b_info_Rest_localized_withFile() throws Exception {
-		Info x = getSwaggerWithFile(new B2()).getInfo();
+		var x = getSwaggerWithFile(new B2()).getInfo();
 		assertEquals("s-title", x.getTitle());
 		assertEquals("s-description", x.getDescription());
 	}
@@ -183,7 +182,7 @@ class Swagger_Test extends SimpleTestBase {
 	public static class B3 {}
 
 	@Test void b03a_info_Swagger_value() throws Exception {
-		Info x = getSwagger(new B3()).getInfo();
+		var x = getSwagger(new B3()).getInfo();
 		assertEquals("b-title", x.getTitle());
 		assertEquals("b-description", x.getDescription());
 		assertEquals("2.0.0", x.getVersion());
@@ -192,7 +191,7 @@ class Swagger_Test extends SimpleTestBase {
 		assertJson(x.getLicense(), "{name:'a-name',url:'a-url'}");
 	}
 	@Test void b03b_info_Swagger_value_withFile() throws Exception {
-		Info x = getSwaggerWithFile(new B3()).getInfo();
+		var x = getSwaggerWithFile(new B3()).getInfo();
 		assertEquals("b-title", x.getTitle());
 		assertEquals("b-description", x.getDescription());
 		assertEquals("2.0.0", x.getVersion());
@@ -241,7 +240,7 @@ class Swagger_Test extends SimpleTestBase {
 	public static class B5 {}
 
 	@Test void b05a_info_Swagger_title() throws Exception {
-		Info x = getSwagger(new B5()).getInfo();
+		var x = getSwagger(new B5()).getInfo();
 		assertEquals("c-title", x.getTitle());
 		assertEquals("c-description", x.getDescription());
 		assertEquals("3.0.0", x.getVersion());
@@ -250,7 +249,7 @@ class Swagger_Test extends SimpleTestBase {
 		assertJson(x.getLicense(), "{name:'b-name',url:'b-url'}");
 	}
 	@Test void b05b_info_Swagger_title_withFile() throws Exception {
-		Info x = getSwaggerWithFile(new B5()).getInfo();
+		var x = getSwaggerWithFile(new B5()).getInfo();
 		assertEquals("c-title", x.getTitle());
 		assertEquals("c-description", x.getDescription());
 		assertEquals("3.0.0", x.getVersion());
@@ -285,7 +284,7 @@ class Swagger_Test extends SimpleTestBase {
 	public static class B6 {}
 
 	@Test void b06a_info_Swagger_title_localized() throws Exception {
-		Info x = getSwagger(new B6()).getInfo();
+		var x = getSwagger(new B6()).getInfo();
 		assertEquals("l-baz", x.getTitle());
 		assertEquals("l-baz", x.getDescription());
 		assertEquals("l-foo", x.getVersion());
@@ -294,7 +293,7 @@ class Swagger_Test extends SimpleTestBase {
 		assertJson(x.getLicense(), "{name:'l-foo',url:'l-bar'}");
 	}
 	@Test void b06b_info_Swagger_title_localized_withFile() throws Exception {
-		Info x = getSwaggerWithFile(new B6()).getInfo();
+		var x = getSwaggerWithFile(new B6()).getInfo();
 		assertEquals("l-baz", x.getTitle());
 		assertEquals("l-baz", x.getDescription());
 		assertEquals("l-foo", x.getVersion());
@@ -312,12 +311,12 @@ class Swagger_Test extends SimpleTestBase {
 	public static class B07 {}
 
 	@Test void b07a_title_Swagger_title_only() throws Exception {
-		Info x = getSwagger(new B07()).getInfo();
+		var x = getSwagger(new B07()).getInfo();
 		assertEquals("c-title", x.getTitle());
 		assertEquals("c-description", x.getDescription());
 	}
 	@Test void b07b_title_Swagger_title_only_withFile() throws Exception {
-		Info x = getSwaggerWithFile(new B07()).getInfo();
+		var x = getSwaggerWithFile(new B07()).getInfo();
 		assertEquals("c-title", x.getTitle());
 		assertEquals("c-description", x.getDescription());
 	}
@@ -330,11 +329,11 @@ class Swagger_Test extends SimpleTestBase {
 	public static class C1 {}
 
 	@Test void c01a_tags_default() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C1());
+		var x = getSwagger(new C1());
 		assertEquals(null, x.getTags());
 	}
 	@Test void c01b_tags_default_withFile() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C1());
+		var x = getSwaggerWithFile(new C1());
 		assertJson(x.getTags(), "[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}}]");
 	}
 
@@ -347,11 +346,11 @@ class Swagger_Test extends SimpleTestBase {
 	public static class C2 {}
 
 	@Test void c02a_tags_Swagger_value() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C2());
+		var x = getSwagger(new C2());
 		assertJson(x.getTags(), "[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]");
 	}
 	@Test void c02b_tags_Swagger_value_withFile() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C2());
+		var x = getSwaggerWithFile(new C2());
 		assertJson(x.getTags(), "[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]");
 	}
 
@@ -365,11 +364,11 @@ class Swagger_Test extends SimpleTestBase {
 	public static class C3 {}
 
 	@Test void c03a_tags_Swagger_tags() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C3());
+		var x = getSwagger(new C3());
 		assertJson(x.getTags(), "[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
 	}
 	@Test void c03b_tags_Swagger_tags_withFile() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C3());
+		var x = getSwaggerWithFile(new C3());
 		assertJson(x.getTags(), "[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
 	}
 
@@ -383,11 +382,11 @@ class Swagger_Test extends SimpleTestBase {
 	public static class C4 {}
 
 	@Test void c04a_tags_Swagger_tags() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C4());
+		var x = getSwagger(new C4());
 		assertJson(x.getTags(), "[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
 	}
 	@Test void c04b_tags_Swagger_tags_withFile() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C4());
+		var x = getSwaggerWithFile(new C4());
 		assertJson(x.getTags(), "[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
 	}
 
@@ -400,11 +399,11 @@ class Swagger_Test extends SimpleTestBase {
 	public static class C5 {}
 
 	@Test void c05a_tags_Swagger_tags_only() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C5());
+		var x = getSwagger(new C5());
 		assertJson(x.getTags(), "[{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
 	}
 	@Test void c05b_tags_Swagger_tags_only_witFile() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C5());
+		var x = getSwaggerWithFile(new C5());
 		assertJson(x.getTags(), "[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
 	}
 
@@ -420,11 +419,11 @@ class Swagger_Test extends SimpleTestBase {
 	public static class C6 {}
 
 	@Test void c06a_tags_Swagger_tags_dups() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C6());
+		var x = getSwagger(new C6());
 		assertJson(x.getTags(), "[{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}]");
 	}
 	@Test void c06b_tags_Swagger_tags_dups_withFile() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C6());
+		var x = getSwaggerWithFile(new C6());
 		assertJson(x.getTags(), "[{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}]");
 	}
 
@@ -438,11 +437,11 @@ class Swagger_Test extends SimpleTestBase {
 	public static class C7 {}
 
 	@Test void c07a_tags_Swagger_tags_localised() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C7());
+		var x = getSwagger(new C7());
 		assertJson(x.getTags(), "[{name:'l-foo',description:'l-foo',externalDocs:{description:'l-foo',url:'l-foo'}}]");
 	}
 	@Test void c07b_tags_Swagger_tags_localised_withFile() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C7());
+		var x = getSwaggerWithFile(new C7());
 		assertJson(x.getTags(), "[{name:'l-foo',description:'l-foo',externalDocs:{description:'l-foo',url:'l-foo'}}]");
 	}
 
@@ -454,11 +453,11 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void c08a_tags_Swagger_tags_loose() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C8());
+		var x = getSwagger(new C8());
 		assertJson(x.getTags(), "[{name:'foo'}]");
 	}
 	@Test void c08b_tags_Swagger_tags_loose_withFile() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C8());
+		var x = getSwaggerWithFile(new C8());
 		assertJson(x.getTags(), "[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'}]");
 	}
 
@@ -470,11 +469,11 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void c09a_tags_Swagger_tags_loose_cdl() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C9());
+		var x = getSwagger(new C9());
 		assertJson(x.getTags(), "[{name:'foo'},{name:'bar'}]");
 	}
 	@Test void c09b_tags_Swagger_tags_loose_cdl_withFile() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C9());
+		var x = getSwaggerWithFile(new C9());
 		assertJson(x.getTags(), "[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'},{name:'bar'}]");
 	}
 
@@ -486,11 +485,11 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void c10a_tags_Swagger_tags_loose_olist() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C10());
+		var x = getSwagger(new C10());
 		assertJson(x.getTags(), "[{name:'foo'},{name:'bar'}]");
 	}
 	@Test void c10b_tags_Swagger_tags_loose_olist_withFile() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C10());
+		var x = getSwaggerWithFile(new C10());
 		assertJson(x.getTags(), "[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'},{name:'bar'}]");
 	}
 
@@ -502,11 +501,11 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void c11a_tags_Swagger_tags_loose_olist_localized() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C11());
+		var x = getSwagger(new C11());
 		assertJson(x.getTags(), "[{name:'l-foo'},{name:'l-bar'}]");
 	}
 	@Test void c11b_tags_Swagger_tags_loose_olist_localized_withFile() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C11());
+		var x = getSwaggerWithFile(new C11());
 		assertJson(x.getTags(), "[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'l-foo'},{name:'l-bar'}]");
 	}
 
@@ -518,11 +517,11 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void c12a_tags_Swagger_tags_loose_cdl_localized() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwagger(new C12());
+		var x = getSwagger(new C12());
 		assertJson(x.getTags(), "[{name:'l-foo'},{name:'l-bar'}]");
 	}
 	@Test void c12b_tags_Swagger_tags_loose_cdl_localized_withFile() throws Exception {
-		org.apache.juneau.bean.swagger.Swagger x = getSwaggerWithFile(new C12());
+		var x = getSwaggerWithFile(new C12());
 		assertJson(x.getTags(), "[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'l-foo'},{name:'l-bar'}]");
 	}
 
@@ -534,11 +533,11 @@ class Swagger_Test extends SimpleTestBase {
 	public static class D1 {}
 
 	@Test void d01a_externalDocs_default() throws Exception {
-		ExternalDocumentation x = getSwagger(new D1()).getExternalDocs();
+		var x = getSwagger(new D1()).getExternalDocs();
 		assertEquals(null, x);
 	}
 	@Test void d01b_externalDocs_default_withFile() throws Exception {
-		ExternalDocumentation x = getSwaggerWithFile(new D1()).getExternalDocs();
+		var x = getSwaggerWithFile(new D1()).getExternalDocs();
 		assertJson(x, "{description:'s-description',url:'s-url'}");
 	}
 
@@ -549,11 +548,11 @@ class Swagger_Test extends SimpleTestBase {
 	public static class D2 {}
 
 	@Test void d02a_externalDocs_Swagger_value() throws Exception {
-		ExternalDocumentation x = getSwagger(new D2()).getExternalDocs();
+		var x = getSwagger(new D2()).getExternalDocs();
 		assertJson(x, "{description:'a-description',url:'a-url'}");
 	}
 	@Test void d02b_externalDocs_Swagger_value_withFile() throws Exception {
-		ExternalDocumentation x = getSwaggerWithFile(new D2()).getExternalDocs();
+		var x = getSwaggerWithFile(new D2()).getExternalDocs();
 		assertJson(x, "{description:'a-description',url:'a-url'}");
 	}
 
@@ -567,11 +566,11 @@ class Swagger_Test extends SimpleTestBase {
 	public static class D3 {}
 
 	@Test void d03a_externalDocs_Swagger_externalDocs() throws Exception {
-		ExternalDocumentation x = getSwagger(new D3()).getExternalDocs();
+		var x = getSwagger(new D3()).getExternalDocs();
 		assertJson(x, "{description:'b-description',url:'b-url'}");
 	}
 	@Test void d03b_externalDocs_Swagger_externalDocs_withFile() throws Exception {
-		ExternalDocumentation x = getSwaggerWithFile(new D3()).getExternalDocs();
+		var x = getSwaggerWithFile(new D3()).getExternalDocs();
 		assertJson(x, "{description:'b-description',url:'b-url'}");
 	}
 
@@ -584,11 +583,11 @@ class Swagger_Test extends SimpleTestBase {
 	public static class D4 {}
 
 	@Test void d04a_externalDocs_Swagger_externalDocs() throws Exception {
-		ExternalDocumentation x = getSwagger(new D4()).getExternalDocs();
+		var x = getSwagger(new D4()).getExternalDocs();
 		assertJson(x, "{description:'b-description',url:'b-url'}");
 	}
 	@Test void d04b_externalDocs_Swagger_externalDocs_withFile() throws Exception {
-		ExternalDocumentation x = getSwaggerWithFile(new D4()).getExternalDocs();
+		var x = getSwaggerWithFile(new D4()).getExternalDocs();
 		assertJson(x, "{description:'b-description',url:'b-url'}");
 	}
 
@@ -602,11 +601,11 @@ class Swagger_Test extends SimpleTestBase {
 	public static class D5 {}
 
 	@Test void d05a_externalDocs_Swagger_externalDocs_localised() throws Exception {
-		ExternalDocumentation x = getSwagger(new D5()).getExternalDocs();
+		var x = getSwagger(new D5()).getExternalDocs();
 		assertJson(x, "{description:'l-foo',url:'l-bar'}");
 	}
 	@Test void d05b_externalDocs_Swagger_externalDocs_localised_withFile() throws Exception {
-		ExternalDocumentation x = getSwaggerWithFile(new D5()).getExternalDocs();
+		var x = getSwaggerWithFile(new D5()).getExternalDocs();
 		assertJson(x, "{description:'l-foo',url:'l-bar'}");
 	}
 
@@ -623,7 +622,7 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void e01a_operation_summary_default() throws Exception {
-		Operation x = getSwagger(new E1()).getPaths().get("/path/{foo}").get("get");
+		var x = getSwagger(new E1()).getPaths().get("/path/{foo}").get("get");
 		assertEquals("a", x.getOperationId());
 		assertEquals(null, x.getSummary());
 		assertEquals(null, x.getDescription());
@@ -631,7 +630,7 @@ class Swagger_Test extends SimpleTestBase {
 		assertEquals(null, x.getSchemes());
 	}
 	@Test void e01b_operation_summary_default_withFile() throws Exception {
-		Operation x = getSwaggerWithFile(new E1()).getPaths().get("/path/{foo}").get("get");
+		var x = getSwaggerWithFile(new E1()).getPaths().get("/path/{foo}").get("get");
 		assertEquals("s-operationId", x.getOperationId());
 		assertEquals("s-summary", x.getSummary());
 		assertEquals("s-description", x.getDescription());
@@ -652,7 +651,7 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void e02a_operation_summary_swaggerOnClass() throws Exception {
-		Operation x = getSwagger(new E2()).getPaths().get("/path/{foo}").get("get");
+		var x = getSwagger(new E2()).getPaths().get("/path/{foo}").get("get");
 		assertEquals("a-operationId", x.getOperationId());
 		assertEquals("a-summary", x.getSummary());
 		assertEquals("a-description", x.getDescription());
@@ -660,7 +659,7 @@ class Swagger_Test extends SimpleTestBase {
 		assertJson(x.getSchemes(), "['a-scheme']");
 	}
 	@Test void e02b_operation_summary_swaggerOnClass_withFile() throws Exception {
-		Operation x = getSwaggerWithFile(new E2()).getPaths().get("/path/{foo}").get("get");
+		var x = getSwaggerWithFile(new E2()).getPaths().get("/path/{foo}").get("get");
 		assertEquals("a-operationId", x.getOperationId());
 		assertEquals("a-summary", x.getSummary());
 		assertEquals("a-description", x.getDescription());
@@ -683,7 +682,7 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void e03a_operation_summary_swaggerOnMethod() throws Exception {
-		Operation x = getSwagger(new E3()).getPaths().get("/path/{foo}").get("get");
+		var x = getSwagger(new E3()).getPaths().get("/path/{foo}").get("get");
 		assertEquals("b-operationId", x.getOperationId());
 		assertEquals("b-summary", x.getSummary());
 		assertEquals("b-description", x.getDescription());
@@ -691,7 +690,7 @@ class Swagger_Test extends SimpleTestBase {
 		assertJson(x.getSchemes(), "['b-scheme']");
 	}
 	@Test void e03b_operation_summary_swaggerOnMethod_withFile() throws Exception {
-		Operation x = getSwaggerWithFile(new E3()).getPaths().get("/path/{foo}").get("get");
+		var x = getSwaggerWithFile(new E3()).getPaths().get("/path/{foo}").get("get");
 		assertEquals("b-operationId", x.getOperationId());
 		assertEquals("b-summary", x.getSummary());
 		assertEquals("b-description", x.getDescription());
@@ -720,14 +719,14 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void e04a_operation_summary_swaggerOnAnnotation() throws Exception {
-		Operation x = getSwagger(new E4()).getPaths().get("/path/{foo}").get("get");
+		var x = getSwagger(new E4()).getPaths().get("/path/{foo}").get("get");
 		assertEquals("c-operationId", x.getOperationId());
 		assertEquals("c-summary", x.getSummary());
 		assertEquals("c-description", x.getDescription());
 		assertJson(x.getSchemes(), "['d-scheme-1','d-scheme-2']");
 	}
 	@Test void e04b_operation_summary_swaggerOnAnnotation_withFile() throws Exception {
-		Operation x = getSwaggerWithFile(new E4()).getPaths().get("/path/{foo}").get("get");
+		var x = getSwaggerWithFile(new E4()).getPaths().get("/path/{foo}").get("get");
 		assertEquals("c-operationId", x.getOperationId());
 		assertEquals("c-summary", x.getSummary());
 		assertEquals("c-description", x.getDescription());
@@ -756,7 +755,7 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void e05a_operation_summary_swaggerOnAnnotation_localized() throws Exception {
-		Operation x = getSwagger(new E5()).getPaths().get("/path/{foo}").get("get");
+		var x = getSwagger(new E5()).getPaths().get("/path/{foo}").get("get");
 		assertEquals("l-foo", x.getOperationId());
 		assertEquals("l-foo", x.getSummary());
 		assertEquals("l-foo", x.getDescription());
@@ -764,7 +763,7 @@ class Swagger_Test extends SimpleTestBase {
 		assertJson(x.getSchemes(), "['l-foo']");
 	}
 	@Test void e05b_operation_summary_swaggerOnAnnotation_localized_withFile() throws Exception {
-		Operation x = getSwaggerWithFile(new E5()).getPaths().get("/path/{foo}").get("get");
+		var x = getSwaggerWithFile(new E5()).getPaths().get("/path/{foo}").get("get");
 		assertEquals("l-foo", x.getOperationId());
 		assertEquals("l-foo", x.getSummary());
 		assertEquals("l-foo", x.getDescription());
@@ -788,12 +787,12 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void e06a_operation_summary_RestOp() throws Exception {
-		Operation x = getSwagger(new E6()).getPaths().get("/path/{foo}").get("get");
+		var x = getSwagger(new E6()).getPaths().get("/path/{foo}").get("get");
 		assertEquals("a-summary", x.getSummary());
 		assertEquals("a-description", x.getDescription());
 	}
 	@Test void e06b_operation_summary_RestOp_withFile() throws Exception {
-		Operation x = getSwaggerWithFile(new E6()).getPaths().get("/path/{foo}").get("get");
+		var x = getSwaggerWithFile(new E6()).getPaths().get("/path/{foo}").get("get");
 		assertEquals("a-summary", x.getSummary());
 		assertEquals("a-description", x.getDescription());
 	}
@@ -814,12 +813,12 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void e07a_operation_summary_RestOp() throws Exception {
-		Operation x = getSwagger(new E7()).getPaths().get("/path/{foo}").get("get");
+		var x = getSwagger(new E7()).getPaths().get("/path/{foo}").get("get");
 		assertEquals("d-summary", x.getSummary());
 		assertEquals("d-description", x.getDescription());
 	}
 	@Test void e07b_operation_summary_RestOp_withFile() throws Exception {
-		Operation x = getSwaggerWithFile(new E7()).getPaths().get("/path/{foo}").get("get");
+		var x = getSwaggerWithFile(new E7()).getPaths().get("/path/{foo}").get("get");
 		assertEquals("d-summary", x.getSummary());
 		assertEquals("d-description", x.getDescription());
 	}
@@ -1287,7 +1286,7 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void k01a_query_type_default() throws Exception {
-		ParameterInfo x = getSwagger(new K1()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
+		var x = getSwagger(new K1()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
 		assertEquals("object", x.getType());
 		assertEquals(null, x.getDescription());
 		assertEquals(null, x.getRequired());
@@ -1307,7 +1306,7 @@ class Swagger_Test extends SimpleTestBase {
 		assertEquals(null, x.getMinItems());
 	}
 	@Test void k01b_query_type_default_withFile() throws Exception {
-		ParameterInfo x = getSwaggerWithFile(new K1()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
+		var x = getSwaggerWithFile(new K1()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
 		assertEquals("string", x.getType());
 		assertEquals("s-description", x.getDescription());
 		assertJson(x.getRequired(), "true");
@@ -1359,7 +1358,7 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void k02a_query_type_swaggerOnClass() throws Exception {
-		ParameterInfo x = getSwagger(new K2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
+		var x = getSwagger(new K2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
 		assertEquals("int32", x.getType());
 		assertEquals("a-description", x.getDescription());
 		assertJson(x.getRequired(), "false");
@@ -1379,7 +1378,7 @@ class Swagger_Test extends SimpleTestBase {
 		assertJson(x.getMinItems(), "2");
 	}
 	@Test void k02b_query_type_swaggerOnClass_withFile() throws Exception {
-		ParameterInfo x = getSwaggerWithFile(new K2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
+		var x = getSwaggerWithFile(new K2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
 		assertEquals("int32", x.getType());
 		assertEquals("a-description", x.getDescription());
 		assertJson(x.getRequired(), "false");
@@ -1455,7 +1454,7 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void k03a_query_type_swaggerOnMethod() throws Exception {
-		ParameterInfo x = getSwagger(new K3()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
+		var x = getSwagger(new K3()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
 		assertEquals("int64", x.getType());
 		assertEquals("b-description", x.getDescription());
 		assertJson(x.getRequired(), "true");
@@ -1475,7 +1474,7 @@ class Swagger_Test extends SimpleTestBase {
 		assertJson(x.getMinItems(), "3");
 	}
 	@Test void k03b_query_type_swaggerOnMethod_withFile() throws Exception {
-		ParameterInfo x = getSwaggerWithFile(new K3()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
+		var x = getSwaggerWithFile(new K3()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
 		assertEquals("int64", x.getType());
 		assertEquals("b-description", x.getDescription());
 		assertJson(x.getRequired(), "true");
@@ -1964,7 +1963,7 @@ class Swagger_Test extends SimpleTestBase {
 
 	@Test void t01_bodyWithReadOnlyProperty() throws Exception {
 		var p = MockRestClient.build(T1.class);
-		org.apache.juneau.bean.swagger.Swagger s = JsonParser.DEFAULT.parse(p.get("/api").accept("application/json").run().getContent().asString(), org.apache.juneau.bean.swagger.Swagger.class);
+		var s = JsonParser.DEFAULT.parse(p.get("/api").accept("application/json").run().getContent().asString(), org.apache.juneau.bean.swagger.Swagger.class);
 		var o = s.getOperation("/", "get");
 
 		var ri = o.getResponse("200");

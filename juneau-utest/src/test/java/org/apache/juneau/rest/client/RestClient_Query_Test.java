@@ -17,7 +17,6 @@ import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 
 import java.io.*;
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.part.*;
@@ -35,7 +34,7 @@ class RestClient_Query_Test extends SimpleTestBase {
 	public static class A extends BasicRestObject {
 		@RestGet
 		public Reader query(org.apache.juneau.rest.RestRequest req) {
-			return TestUtils.reader(req.getQueryParams().asQueryString());
+			return reader(req.getQueryParams().asQueryString());
 		}
 	}
 
@@ -49,13 +48,13 @@ class RestClient_Query_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_query_String_Object_Schema() throws Exception {
-		List<String> l = list("bar","baz");
+		var l = list("bar","baz");
 		client().build().get("/query").queryData(part("foo",l,T_ARRAY_PIPES)).run().assertContent().asString().asUrlDecode().is("foo=bar|baz");
 		client().queryData(part("foo",l,T_ARRAY_PIPES)).build().get("/query").run().assertContent().asString().asUrlDecode().is("foo=bar|baz");
 	}
 
 	@Test void a03_query_String_Object_Schema_Serializer() throws Exception {
-		List<String> l = list("bar","baz");
+		var l = list("bar","baz");
 		client().queryData(part("foo",l,T_ARRAY_PIPES).serializer(UonSerializer.DEFAULT)).build().get("/query").run().assertContent().asString().asUrlDecode().is("foo=@(bar,baz)");
 	}
 

@@ -17,7 +17,6 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
 class Csv_Test extends SimpleTestBase {
@@ -30,10 +29,9 @@ class Csv_Test extends SimpleTestBase {
 		l.add(new A("b1",1));
 		l.add(new A("b2",2));
 
-		WriterSerializer s = CsvSerializer.DEFAULT;
-		String r;
+		var s = CsvSerializer.DEFAULT;
+		var r = s.serialize(l);
 
-		r = s.serialize(l);
 
 		assertEquals("b,c\nb1,1\nb2,2\n", r);
 	}

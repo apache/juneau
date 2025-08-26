@@ -60,12 +60,10 @@ class AtomTest extends SimpleTestBase {
 	}
 
 	@Test void a01_normal() throws Exception {
-		XmlSerializer s;
-		XmlParser p = XmlParser.DEFAULT;
-		String r;
-		Feed f = createFeed(), f2;
+		var p = XmlParser.DEFAULT;
+		var f = createFeed();
 
-		String expected = """
+		var expected = """
 		<feed>
 			<entry>
 				<author>
@@ -96,20 +94,18 @@ class AtomTest extends SimpleTestBase {
 			<updated>2016-12-31T05:02:03Z</updated>
 		</feed>
 		""";
-		s = XmlSerializer.create().sq().ws().sortProperties().build();
-		r = s.serialize(f);
+		var s = XmlSerializer.create().sq().ws().sortProperties().build();
+		var r = s.serialize(f);
 		assertEquals(expected, r);
-		f2 = p.parse(r, Feed.class);
+		var f2 = p.parse(r, Feed.class);
 		assertEquals(json(f2), json(f));
 	}
 
 	@Test void a02_withNamespaces() throws Exception {
-		XmlSerializer s;
-		XmlParser p = XmlParser.DEFAULT;
-		String r;
-		Feed f = createFeed(), f2;
+		var p = XmlParser.DEFAULT;
+		var f = createFeed();
 
-		String expected = """
+		var expected = """
 		<atom:feed xmlns='http://www.apache.org/2013/Juneau' xmlns:atom='http://www.w3.org/2005/Atom/' xmlns:xml='http://www.w3.org/XML/1998/namespace'>
 			<atom:entry>
 				<atom:author>
@@ -140,20 +136,18 @@ class AtomTest extends SimpleTestBase {
 			<atom:updated>2016-12-31T05:02:03Z</atom:updated>
 		</atom:feed>
 		""";
-		s = XmlSerializer.create().sq().ws().enableNamespaces().addNamespaceUrisToRoot().sortProperties().build();
-		r = s.serialize(f);
+		var s = XmlSerializer.create().sq().ws().enableNamespaces().addNamespaceUrisToRoot().sortProperties().build();
+		var r = s.serialize(f);
 		assertEquals(expected, r);
-		f2 = p.parse(r, Feed.class);
+		var f2 = p.parse(r, Feed.class);
 		assertEquals(json(f2), json(f));
 	}
 
 	@Test void a03_withNamespacesWithAtomAsDefault() throws Exception {
-		XmlSerializer s;
-		XmlParser p = XmlParser.DEFAULT;
-		String r;
-		Feed f = createFeed(), f2;
+		var p = XmlParser.DEFAULT;
+		var f = createFeed();
 
-		String expected = """
+		var expected = """
 		<feed xmlns='http://www.w3.org/2005/Atom/' xmlns:xml='http://www.w3.org/XML/1998/namespace'>
 			<entry>
 				<author>
@@ -184,19 +178,18 @@ class AtomTest extends SimpleTestBase {
 			<updated>2016-12-31T05:02:03Z</updated>
 		</feed>
 		""";
-		s = XmlSerializer.create().sq().ws().defaultNamespace(Namespace.of("atom")).enableNamespaces().addNamespaceUrisToRoot().sortProperties().build();
-		r = s.serialize(f);
+		var s = XmlSerializer.create().sq().ws().defaultNamespace(Namespace.of("atom")).enableNamespaces().addNamespaceUrisToRoot().sortProperties().build();
+		var r = s.serialize(f);
 		assertEquals(expected, r);
-		f2 = p.parse(r, Feed.class);
+		var f2 = p.parse(r, Feed.class);
 		assertEquals(json(f2), json(f));
 	}
 
 	@Test void a04_toString() throws Exception {
-		XmlParser p = XmlParser.DEFAULT;
-		String r;
-		Feed f = createFeed(), f2;
-		r = f.toString();
-		f2 = p.parse(r, Feed.class);
+		var p = XmlParser.DEFAULT;
+		var f = createFeed();
+		var r = f.toString();
+		var f2 = p.parse(r, Feed.class);
 		assertEquals(json(f2), json(f));
 	}
 }

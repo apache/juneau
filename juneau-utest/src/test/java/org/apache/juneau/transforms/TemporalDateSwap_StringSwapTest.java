@@ -15,6 +15,7 @@ package org.apache.juneau.transforms;
 import java.time.*;
 import java.time.format.*;
 import java.util.*;
+import static org.apache.juneau.TestUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.swap.*;
@@ -25,12 +26,12 @@ class TemporalDateSwap_StringSwapTest extends StringSwapTest_Base {
 
 	@BeforeAll
 	static void beforeClass() {
-		TestUtils.setTimeZone("GMT-5");
+		setTimeZone("GMT-5");
 	}
 
 	@AfterAll
 	static void afterClass() {
-		TestUtils.unsetTimeZone();
+		unsetTimeZone();
 	}
 
 	private static BeanSession

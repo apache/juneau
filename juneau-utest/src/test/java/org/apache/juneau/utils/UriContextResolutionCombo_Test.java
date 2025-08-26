@@ -1008,7 +1008,7 @@ class UriContextResolutionCombo_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a02_testAppendAbsoluteResource(Tester t) {
 		var x = UriResolver.of(ABSOLUTE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(new StringBuilder(), t.input.uri);
-		TestUtils.assertString(t.results.aResource, x, fs("{0}: testAbsolute() failed", t.label));
+		assertString(t.results.aResource, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest
@@ -1022,7 +1022,7 @@ class UriContextResolutionCombo_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a04_testAppendAbsolutePathInfo(Tester t) {
 		var x = UriResolver.of(ABSOLUTE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(new StringBuilder(), t.input.uri);
-		TestUtils.assertString(t.results.aPathInfo, x, fs("{0}: testAbsolute() failed", t.label));
+		assertString(t.results.aPathInfo, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest
@@ -1036,7 +1036,7 @@ class UriContextResolutionCombo_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a06_testAppendRootRelativeResource(Tester t) {
 		var x = UriResolver.of(ROOT_RELATIVE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(new StringBuilder(), t.input.uri);
-		TestUtils.assertString(t.results.rrResource, x, fs("{0}: testAbsolute() failed", t.label));
+		assertString(t.results.rrResource, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest
@@ -1050,7 +1050,7 @@ class UriContextResolutionCombo_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a08_testAppendRootRelativePathInfo(Tester t) {
 		var x = UriResolver.of(ROOT_RELATIVE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(new StringBuilder(), t.input.uri);
-		TestUtils.assertString(t.results.rrPathInfo, x, fs("{0}: testAbsolute() failed", t.label));
+		assertString(t.results.rrPathInfo, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest
@@ -1064,7 +1064,7 @@ class UriContextResolutionCombo_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a10_testAppendNoneResource(Tester t) {
 		var x = UriResolver.of(NONE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(new StringBuilder(), t.input.uri);
-		TestUtils.assertString(t.results.nResource, x, fs("{0}: testAbsolute() failed", t.label));
+		assertString(t.results.nResource, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest
@@ -1078,6 +1078,6 @@ class UriContextResolutionCombo_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a12_testAppendNonePathInfo(Tester t) {
 		var x = UriResolver.of(NONE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(new StringBuilder(), t.input.uri);
-		TestUtils.assertString(t.results.nPathInfo, x, fs("{0}: testAbsolute() failed", t.label));
+		assertString(t.results.nPathInfo, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 }

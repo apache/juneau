@@ -75,7 +75,7 @@ public class Assertions_Test {
 
 	@Test
 	public void a10_assertStream() throws Exception {
-		assertBytes(TestUtils.inputStream("foo")).asString().is("foo");
+		assertBytes(inputStream("foo")).asString().is("foo");
 		assertBytes((InputStream)null).asString().isNull();
 	}
 
@@ -87,7 +87,7 @@ public class Assertions_Test {
 
 	@Test
 	public void a12_assertReader() throws Exception {
-		assertReader(TestUtils.reader("foo")).is("foo");
+		assertReader(reader("foo")).is("foo");
 		assertReader((Reader)null).isNull();
 	}
 

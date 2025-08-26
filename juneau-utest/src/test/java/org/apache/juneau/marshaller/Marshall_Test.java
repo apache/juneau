@@ -20,7 +20,7 @@ import org.junit.jupiter.api.*;
 class Marshall_Test extends SimpleTestBase {
 
 	@Test void basic() {
-		Marshaller m = Json5.DEFAULT;
+		var m = Json5.DEFAULT;
 		assertNotNull(m.getParser());
 		assertNotNull(m.getSerializer());
 	}

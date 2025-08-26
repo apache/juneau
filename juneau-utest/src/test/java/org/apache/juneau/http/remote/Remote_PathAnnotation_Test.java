@@ -87,7 +87,7 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_path_objectTypes() {
-		A1 x = remote(A.class,A1.class);
+		var x = remote(A.class,A1.class);
 		assertEquals("1",x.getX1(1));
 		assertEquals("1.0",x.getX2(1));
 		assertEquals("x=1",x.getX3(Bean.create()));
@@ -137,7 +137,7 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_path_collectionFormat() {
-		B1 x = remote(B.class,B1.class);
+		var x = remote(B.class,B1.class);
 		assertEquals("foo,bar",x.getX1("foo","bar"));
 		assertEquals("foo,bar",x.getX2("foo","bar"));
 		assertEquals("foo bar",x.getX3("foo","bar"));
@@ -207,7 +207,7 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_path_min_max_emin_emax() {
-		C1 x = remote(C.class,C1.class);
+		var x = remote(C.class,C1.class);
 		assertEquals("{x:'1'}",x.getX1(1));
 		assertEquals("{x:'10'}",x.getX1(10));
 		assertThrowsWithMessage(Exception.class, "Minimum value not met.", ()->x.getX1(0));
@@ -402,7 +402,7 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_path_miniMaxi() {
-		D1 x = remote(D.class,D1.class);
+		var x = remote(D.class,D1.class);
 		assertEquals("{x:'1'}",x.getX1("1"));
 		assertEquals("{x:'1|2'}",x.getX1("1","2"));
 		assertThrowsWithMessage(Exception.class, "Minimum number of items not met.", x::getX1);
@@ -445,7 +445,7 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_path_minLength_maxLength() {
-		E1 x = remote(E.class,E1.class);
+		var x = remote(E.class,E1.class);
 		assertEquals("{x:'12'}",x.getX1("12"));
 		assertEquals("{x:'123'}",x.getX1("123"));
 		assertThrowsWithMessage(Exception.class, "Minimum length of value not met.", ()->x.getX1("1"));
@@ -499,7 +499,7 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void f01_path_multipleOf() {
-		F1 x = remote(F.class,F1.class);
+		var x = remote(F.class,F1.class);
 		assertEquals("{x:'4'}",x.getX1(4));
 		assertThrowsWithMessage(Exception.class, "Multiple-of not met.", ()->x.getX1(5));
 		assertEquals("{x:'4'}",x.getX2((short)4));
@@ -544,7 +544,7 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void h01_path_required() {
-		G1 x = remote(G.class,G1.class);
+		var x = remote(G.class,G1.class);
 		assertThrowsWithMessage(Exception.class, "Required value not provided.", ()->x.getX1(null));
 	}
 
@@ -567,7 +567,7 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void h01_path_serializer() {
-		H1 x = remote(H.class,H1.class);
+		var x = remote(H.class,H1.class);
 		assertEquals("{x:'xXx'}",x.getX1("X"));
 	}
 
@@ -603,8 +603,8 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void k01_requestBean_simpleVals() {
-		K1 x1 = remote(K.class,K1.class);
-		K1 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K1.class);
+		var x1 = remote(K.class,K1.class);
+		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K1.class);
 		assertEquals("a1/b1/c1//true/123",x1.getX1(new K1a()));
 		assertEquals("a1/b1/c1//'true'/'123'",x2.getX1(new K1a()));
 		assertEquals("xa1x/xb1x/xc1x/xx/xtruex/x123x",x2.getX2(new K1a()));
@@ -629,8 +629,8 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void k02_reauestBean_maps() {
-		K2 x1 = remote(K.class,K2.class);
-		K2 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K2.class);
+		var x1 = remote(K.class,K2.class);
+		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K2.class);
 		assertEquals("v1/123/null//true/123/null/v1/123/null/",x1.getX1(new K2a()));
 		assertEquals("v1/123/null//'true'/'123'/'null'/v1/123/null/",x2.getX1(new K2a()));
 		assertEquals("xv1x/x123x/null/xx/xtruex/x123x/xnullx/xv1x/x123x/null/xx",x2.getX2(new K2a()));
@@ -656,8 +656,8 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void k03_requestBean_nameValuePairs() {
-		K3 x1 = remote(K.class,K3.class);
-		K3 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K3.class);
+		var x1 = remote(K.class,K3.class);
+		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K3.class);
 		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null/",x1.getX1(new K3a()));
 		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null/",x2.getX1(new K3a()));
 		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null/",x2.getX2(new K3a()));
@@ -687,8 +687,8 @@ class Remote_PathAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void k04_requestBean_collections() {
-		K4 x1 = remote(K.class,K4.class);
-		K4 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K4.class);
+		var x1 = remote(K.class,K4.class);
+		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K4.class);
 		assertEquals("foo,,true,123,null,true,123,null/foo,,true,123,null,true,123,null/xfoo||true|123|null|true|123|nullx//foo,,true,123,null,true,123,null/xfoo||true|123|null|true|123|nullx/", x1.getX1(new K4a()));
 		assertEquals("@(foo,'','true','123','null',true,123,null)/@(foo,'','true','123','null',true,123,null)/xfoo||true|123|null|true|123|nullx/@()/@(foo,'','true','123','null',true,123,null)/xfoo||true|123|null|true|123|nullx/@()", x2.getX1(new K4a()));
 		assertEquals("xfoo||true|123|null|true|123|nullx/xfoo||true|123|null|true|123|nullx/xfoo||true|123|null|true|123|nullx/xx/xfoo||true|123|null|true|123|nullx/xfoo||true|123|null|true|123|nullx/xx", x2.getX2(new K4a()));

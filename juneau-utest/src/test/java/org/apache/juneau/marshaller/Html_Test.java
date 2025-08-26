@@ -25,8 +25,10 @@ import org.junit.jupiter.api.*;
 class Html_Test extends SimpleTestBase {
 
 	@Test void a01_to() throws Exception {
-		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
-		String expected1 = "<string>foo</string>", expected2 = "<table><tr><td>foo</td><td>bar</td></tr></table>";
+		var in1 = "foo";
+		var in2 = JsonMap.of("foo", "bar");
+		var expected1 = "<string>foo</string>";
+		var expected2 = "<table><tr><td>foo</td><td>bar</td></tr></table>";
 
 		assertString(expected1, Html.of(in1));
 		assertString(expected1, Html.of(in1,stringWriter()));
@@ -35,8 +37,10 @@ class Html_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_from() throws Exception {
-		String in1 = "<string>foo</string>", in2 = "<table><tr><td>foo</td><td>bar</td></tr></table>";
-		String expected1 = "foo", expected2 = "{foo:'bar'}";
+		var in1 = "<string>foo</string>";
+		var in2 = "<table><tr><td>foo</td><td>bar</td></tr></table>";
+		var expected1 = "foo";
+		var expected2 = "{foo:'bar'}";
 
 		assertEquals(expected1, Html.to(in1, String.class));
 		assertEquals(expected1, Html.to(stringReader(in1), String.class));

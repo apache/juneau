@@ -37,7 +37,7 @@ class BasicStringRangesHeader_Test extends SimpleTestBase {
 	public static class A {
 		@RestOp
 		public StringReader get(@Header(name=HEADER) @Schema(cf="multi") String[] h) {
-			return TestUtils.reader(h == null ? "null" : Utils.join(h, '|'));
+			return reader(h == null ? "null" : Utils.join(h, '|'));
 		}
 	}
 

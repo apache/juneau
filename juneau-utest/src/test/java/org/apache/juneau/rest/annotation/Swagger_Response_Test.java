@@ -19,7 +19,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.jupiter.api.*;
 
@@ -95,10 +94,9 @@ class Swagger_Response_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_fromPojo() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(A.class);
-		ResponseInfo x;
+		var s = getSwagger(A.class);
+		var x = s.getResponseInfo("/a","get",200);
 
-		x = s.getResponseInfo("/a","get",200);
 		assertEquals("a\nb", x.getDescription());
 		assertJson(x.getSchema(), "{type:'string'}");
 		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
@@ -190,10 +188,9 @@ class Swagger_Response_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_schemaFromPojo() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(B.class);
-		ResponseInfo x;
+		var s = getSwagger(B.class);
+		var x = s.getResponseInfo("/a","get",200);
 
-		x = s.getResponseInfo("/a","get",200);
 		assertJson(x.getSchema(), "{type:'number'}");
 
 		x = s.getResponseInfo("/b","put",200);
@@ -240,14 +237,13 @@ class Swagger_Response_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_exampleFromPojo() {
-		org.apache.juneau.bean.swagger.Swagger sc = getSwagger(C.class);
-		ResponseInfo x;
+		var sc = getSwagger(C.class);
+		var x = sc.getResponseInfo("/c","post",200);
 
 		sc.getResponseInfo("/a","get",200);
 
 		sc.getResponseInfo("/b","put",200);
 
-		x = sc.getResponseInfo("/c","post",200);
 		assertJson(x.getExamples(), "{foo:'b'}");
 
 		x = sc.getResponseInfo("/d","delete",200);
@@ -301,10 +297,9 @@ class Swagger_Response_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_fromThrowable() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(D.class);
-		ResponseInfo x;
+		var s = getSwagger(D.class);
+		var x = s.getResponseInfo("/a","get",500);
 
-		x = s.getResponseInfo("/a","get",500);
 		assertEquals("a\nb", x.getDescription());
 		assertJson(x.getSchema(), "{type:'string'}");
 		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
@@ -342,7 +337,7 @@ class Swagger_Response_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_schemaFromThrowable() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(E.class);
+		var s = getSwagger(E.class);
 
 		var x = s.getResponseInfo("/a","get",500);
 		assertJson(x.getSchema(), "{type:'number'}");
@@ -362,10 +357,9 @@ class Swagger_Response_Test extends SimpleTestBase {
 	}
 
 	@Test void f01_exampeFromThrowable() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(F.class);
-		ResponseInfo x;
+		var s = getSwagger(F.class);
+		var x = s.getResponseInfo("/b","put",500);
 
-		x = s.getResponseInfo("/b","put",500);
 		assertJson(x.getExamples(), "{foo:'b'}");
 	}
 }

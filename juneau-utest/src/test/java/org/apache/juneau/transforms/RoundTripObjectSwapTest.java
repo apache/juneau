@@ -13,9 +13,8 @@
 package org.apache.juneau.transforms;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.runners.MethodSorters.*;
-
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.swap.*;
@@ -45,7 +44,7 @@ public abstract class RoundTripObjectSwapTest<T,S> {
 	@Test
 	public void testSwap() throws Exception {
 		var s = ss.swap(bs, o);
-		if (! Objects.equals(expected, s)) {
+		if (ne(expected, s)) {
 			fail("Test [{0} swap] failed.  Expected=[{1}], Actual=[{2}]", label, expected, s);
 		}
 	}
@@ -55,14 +54,14 @@ public abstract class RoundTripObjectSwapTest<T,S> {
 		var s = ss.swap(bs, o);
 		var o2 = ss.unswap(bs, s, bs.getClassMetaForObject(o));
 		var s2 = ss.swap(bs, o2);
-		if (! Objects.equals(s, s2)) {
+		if (ne(s, s2)) {
 			System.err.println("s=["+s+"], o=["+o+"], o.type=["+o.getClass().getName()+"], o2=["+o2+"], o2.type=["+o2.getClass().getName()+"]");  // NOT DEBUG
 			fail("Test [{0} unswap] failed.  Expected=[{1}], Actual=[{2}]", label, s, s2);
 		}
 	}
 
 	private void fail(String msg, Object...args) {
-		String s = format(msg, args);
+		var s = format(msg, args);
 		System.err.println(s);  // NOT DEBUG
 		Assert.fail(s);
 	}

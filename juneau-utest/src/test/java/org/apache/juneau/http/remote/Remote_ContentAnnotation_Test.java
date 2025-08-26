@@ -146,8 +146,8 @@ class Remote_ContentAnnotation_Test extends SimpleTestBase {
 		assertEquals("[{f:1}]",x.postX4(new Bean[]{Bean.create()}));
 		assertEquals("[{f:1}]",x.postX5(alist(Bean.create())));
 		assertEquals("{k1:{f:1}}",x.postX6(map("k1",Bean.create())));
-		assertEquals("xxx",x.postX7(TestUtils.reader("xxx")));
-		assertEquals("xxx",x.postX8(TestUtils.inputStream("xxx")));
+		assertEquals("xxx",x.postX7(reader("xxx")));
+		assertEquals("xxx",x.postX8(inputStream("xxx")));
 		assertEquals("xxx",x.postX9(new StringEntity("xxx")));
 		assertEquals("foo=bar",x.postX10(partList("foo","bar")));
 	}
@@ -240,8 +240,8 @@ class Remote_ContentAnnotation_Test extends SimpleTestBase {
 		assertEquals("[{f:1}]",x.postX4(new Bean[]{Bean.create()}));
 		assertEquals("[{f:1}]",x.postX5(alist(Bean.create())));
 		assertEquals("{k1:{f:1}}",x.postX6(map("k1",Bean.create())));
-		assertEquals("xxx",x.postX7(TestUtils.reader("xxx")));
-		assertEquals("xxx",x.postX8(TestUtils.inputStream("xxx")));
+		assertEquals("xxx",x.postX7(reader("xxx")));
+		assertEquals("xxx",x.postX8(inputStream("xxx")));
 		assertEquals("xxx",x.postX9(new StringEntity("xxx",org.apache.http.entity.ContentType.create("text/plain"))));
 		assertEquals("foo=bar",x.postX10(partList("foo","bar")));
 	}
@@ -319,8 +319,8 @@ class Remote_ContentAnnotation_Test extends SimpleTestBase {
 		assertEquals("{f:1}",x.postX3(Bean.create()));
 		assertEquals("[{f:1}]",x.postX5(alist(Bean.create())));
 		assertEquals("{k1={f:1}}",x.postX6(map("k1",Bean.create())));
-		assertEquals("xxx",x.postX7(TestUtils.reader("xxx")));
-		assertEquals("xxx",x.postX8(TestUtils.inputStream("xxx")));
+		assertEquals("xxx",x.postX7(reader("xxx")));
+		assertEquals("xxx",x.postX8(inputStream("xxx")));
 		assertEquals("xxx",x.postX9(new StringEntity("xxx",org.apache.http.entity.ContentType.create("text/plain"))));
 		assertEquals("foo=bar",x.postX10(partList("foo","bar")));
 	}

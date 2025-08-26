@@ -1,0 +1,97 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              *
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                              *
+// ***************************************************************************************************************************
+package org.apache.juneau.transforms;
+
+import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
+
+import java.util.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.html.*;
+import org.apache.juneau.json.*;
+import org.apache.juneau.plaintext.*;
+import org.apache.juneau.swaps.*;
+import org.apache.juneau.uon.*;
+import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.xml.*;
+import org.junit.jupiter.api.*;
+
+class ReaderFilter_Test extends SimpleTestBase {
+
+	//====================================================================================================
+	// testJson
+	//====================================================================================================
+	@Test void a01_json() throws Exception {
+		var s = JsonSerializer.create().json5().swaps(ParsedReaderSwap.Json.class).build();
+		var r = reader("{foo:'bar',baz:'quz'}");
+		var m = new HashMap<>();
+		m.put("X", r);
+		assertEquals("{X:{foo:'bar',baz:'quz'}}", s.serialize(m));
+	}
+
+	//====================================================================================================
+	// testXml
+	//====================================================================================================
+	@Test void a02_xml() throws Exception {
+		var s = XmlSerializer.create().sq().swaps(ParsedReaderSwap.Xml.class).build();
+		var m = new HashMap<>();
+		var r = reader("<object><foo _type='string'>bar</foo><baz _type='string'>quz</baz></object>");
+		m.put("X", r);
+		assertEquals("<object><X _type='object'><foo>bar</foo><baz>quz</baz></X></object>", s.serialize(m));
+	}
+
+	//====================================================================================================
+	// testHtml
+	//====================================================================================================
+	@Test void a03_html() throws Exception {
+		var s = HtmlSerializer.create().sq().swaps(ParsedReaderSwap.Html.class).build();
+		var m = new HashMap<>();
+		var r = reader("<table><tr><td>foo</td><td>bar</td></tr><tr><td>baz</td><td>quz</td></tr></table>");
+		m.put("X", r);
+		assertEquals("<table><tr><td>X</td><td><table><tr><td>foo</td><td>bar</td></tr><tr><td>baz</td><td>quz</td></tr></table></td></tr></table>", s.serialize(m));
+	}
+
+	//====================================================================================================
+	// testPlainText
+	//====================================================================================================
+	@Test void a04_plainText() throws Exception {
+		var s = PlainTextSerializer.create().swaps(ParsedReaderSwap.PlainText.class).build();
+		var r = reader("{foo:'bar',baz:'quz'}");
+		var m = new HashMap<>();
+		m.put("X", r);
+		assertEquals("{X:'{foo:\\'bar\\',baz:\\'quz\\'}'}", s.serialize(m));
+	}
+
+	//====================================================================================================
+	// testUon
+	//====================================================================================================
+	@Test void a05_uon() throws Exception {
+		var s = UonSerializer.create().swaps(ParsedReaderSwap.Uon.class).build();
+		var m = new HashMap<>();
+		var r = reader("(foo=bar,baz=quz)");
+		m.put("X", r);
+		assertEquals("(X=(foo=bar,baz=quz))", s.serialize(m));
+	}
+
+	//====================================================================================================
+	// testUrlEncoding
+	//====================================================================================================
+	@Test void a06_urlEncoding() throws Exception {
+		var s = UrlEncodingSerializer.create().swaps(ParsedReaderSwap.PlainText.class).build();
+		var m = new HashMap<>();
+		var r = reader("foo=bar&baz=quz");
+		m.put("X", r);
+		assertEquals("X='foo=bar%26baz=quz'", s.serialize(m));
+	}
+}

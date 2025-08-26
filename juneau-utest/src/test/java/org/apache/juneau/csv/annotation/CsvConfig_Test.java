@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv.annotation;
 
+import static org.apache.juneau.TestUtils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.reflect.*;
@@ -32,12 +34,12 @@ class CsvConfig_Test extends SimpleTestBase {
 
 	@Test void defaultsSerializer() {
 		var al = AnnotationWorkList.of(b.getAnnotationList());
-		TestUtils.assertNotThrown(()->CsvSerializer.create().apply(al).build());
+		assertNotThrown(()->CsvSerializer.create().apply(al).build());
 	}
 
 	@Test void defaultsParser() {
 		var al = AnnotationWorkList.of(b.getAnnotationList());
-		TestUtils.assertNotThrown(()->CsvParser.create().apply(al).build());
+		assertNotThrown(()->CsvParser.create().apply(al).build());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -49,11 +51,11 @@ class CsvConfig_Test extends SimpleTestBase {
 
 	@Test void noAnnotationSerializer() {
 		var al = AnnotationWorkList.of(b.getAnnotationList());
-		TestUtils.assertNotThrown(()->CsvSerializer.create().apply(al).build());
+		assertNotThrown(()->CsvSerializer.create().apply(al).build());
 	}
 
 	@Test void noAnnotationParser() {
 		var al = AnnotationWorkList.of(b.getAnnotationList());
-		TestUtils.assertNotThrown(()->CsvParser.create().apply(al).build());
+		assertNotThrown(()->CsvParser.create().apply(al).build());
 	}
 }

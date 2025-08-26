@@ -13,6 +13,7 @@
 package org.apache.juneau.html;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -65,7 +66,7 @@ class HtmlConfigAnnotation_Test extends SimpleTestBase {
 
 	@Test void basicParser() {
 		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
-		TestUtils.assertNotThrown(()->HtmlParser.create().apply(al).build().createSession());
+		assertNotThrown(()->HtmlParser.create().apply(al).build().createSession());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -89,7 +90,7 @@ class HtmlConfigAnnotation_Test extends SimpleTestBase {
 
 	@Test void defaultsParser() {
 		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		TestUtils.assertNotThrown(()->HtmlParser.create().apply(al).build().createSession());
+		assertNotThrown(()->HtmlParser.create().apply(al).build().createSession());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -112,6 +113,6 @@ class HtmlConfigAnnotation_Test extends SimpleTestBase {
 
 	@Test void noAnnotationParser() {
 		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		TestUtils.assertNotThrown(()->HtmlParser.create().apply(al).build().createSession());
+		assertNotThrown(()->HtmlParser.create().apply(al).build().createSession());
 	}
 }

@@ -25,7 +25,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.uon.*;
@@ -521,7 +520,7 @@ class Content_Test extends SimpleTestBase {
 		}
 		@RestPut(path="/StringTransform")
 		public Reader d(@Content D1 b) {
-			return TestUtils.reader(b.toString());
+			return reader(b.toString());
 		}
 		public static class D1 {
 			private String s;
@@ -530,7 +529,7 @@ class Content_Test extends SimpleTestBase {
 		}
 		@RestPut(path="/InputStreamTransform")
 		public Reader e(@Content D2 b) {
-			return TestUtils.reader(b.toString());
+			return reader(b.toString());
 		}
 		public static class D2 {
 			String s;
@@ -539,7 +538,7 @@ class Content_Test extends SimpleTestBase {
 		}
 		@RestPut(path="/ReaderTransform")
 		public Reader f(@Content D3 b) {
-			return TestUtils.reader(b.toString());
+			return reader(b.toString());
 		}
 		public static class D3 {
 			private String s;
@@ -548,7 +547,7 @@ class Content_Test extends SimpleTestBase {
 		}
 		@RestPut(path="/StringTransformBodyOnPojo")
 		public Reader g(D4 b) {
-			return TestUtils.reader(b.toString());
+			return reader(b.toString());
 		}
 		@Content
 		public static class D4 {
@@ -558,7 +557,7 @@ class Content_Test extends SimpleTestBase {
 		}
 		@RestPut(path="/InputStreamTransformBodyOnPojo")
 		public Reader h(D5 b) {
-			return TestUtils.reader(b.toString());
+			return reader(b.toString());
 		}
 		@Content
 		public static class D5 {
@@ -569,7 +568,7 @@ class Content_Test extends SimpleTestBase {
 
 		@RestPut(path="/ReaderTransformBodyOnPojo")
 		public Reader i(D6 b) {
-			return TestUtils.reader(b.toString());
+			return reader(b.toString());
 		}
 		@Content
 		public static class D6 {
@@ -655,9 +654,8 @@ class Content_Test extends SimpleTestBase {
 
 	@Test void e01_complexPojos() throws Exception {
 		var e = MockRestClient.build(E.class);
-		String expected;
+		var expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
 
-		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
 		e.put("/B", Json5Serializer.DEFAULT.toString(XBeans.XB.INSTANCE), APPLICATION_JSON)
 			.run()
 			.assertContent(expected);
@@ -694,9 +692,8 @@ class Content_Test extends SimpleTestBase {
 
 	@Test void e02_complexPojos() throws Exception {
 		var e2 = MockRestClient.build(E2.class);
-		String expected;
+		var expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
 
-		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
 		e2.put("/B", Json5Serializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().toString(XBeans.XE.INSTANCE), APPLICATION_JSON)
 			.run()
 			.assertContent(expected);
@@ -728,7 +725,7 @@ class Content_Test extends SimpleTestBase {
 				@Content F1 bean,
 				@HasQuery("p1") boolean hqp1, @HasQuery("p2") boolean hqp2,
 				@Query("p1") String qp1, @Query("p2") int qp2) {
-			return TestUtils.reader("bean=["+Json5Serializer.DEFAULT.toString(bean)+"],qp1=["+qp1+"],qp2=["+qp2+"],hqp1=["+hqp1+"],hqp2=["+hqp2+"]");
+			return reader("bean=["+Json5Serializer.DEFAULT.toString(bean)+"],qp1=["+qp1+"],qp2=["+qp2+"],hqp1=["+hqp1+"],hqp2=["+hqp2+"]");
 		}
 		public static class F1 {
 			public String p1;
@@ -768,7 +765,7 @@ class Content_Test extends SimpleTestBase {
 
 	@Test void g01_multiPartParameterKeysOnCollections() throws Exception {
 		var g = MockRestClient.build(G.class);
-		String in = ""
+		var in = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
 			+ "&f03=1&f03=2"
@@ -811,7 +808,7 @@ class Content_Test extends SimpleTestBase {
 
 	@Test void h01_multiPartParameterKeysOnCollections_usingExpandedParams() throws Exception {
 		var h = MockRestClient.build(H.class);
-		String in = ""
+		var in = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
 			+ "&f03=1&f03=2"
@@ -850,7 +847,7 @@ class Content_Test extends SimpleTestBase {
 
 	@Test void h02_multiPartParameterKeysOnCollections_usingExpandedParams() throws Exception {
 		var h2 = MockRestClient.build(H2.class);
-		String in = ""
+		var in = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
 			+ "&f03=1&f03=2"

@@ -27,7 +27,8 @@ class Csv_Test extends SimpleTestBase{
 	@Test void a01_to() throws Exception {
 		var in1 = "foo";
 		var in2 = new Object[]{JsonMap.of("a","foo","b","bar")};
-		String expected1="value\nfoo\n", expected2 = "a,b\nfoo,bar\n";
+		var expected1 = "value\nfoo\n";
+		var expected2 = "a,b\nfoo,bar\n";
 
 		assertString(expected1, Csv.of(in1));
 		assertString(expected1, Csv.of(in1,stringWriter()));
@@ -36,7 +37,8 @@ class Csv_Test extends SimpleTestBase{
 	}
 
 	@Test void a02_from() {
-		String in1 = "'foo'", in2 = "{foo:'bar'}";
+		var in1 = "'foo'";
+		var in2 = "{foo:'bar'}";
 
 		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->Csv.to(in1, String.class));
 		assertThrowsWithMessage(ParseException.class, "Not implemented.", ()->Csv.to(stringReader(in1), String.class));

@@ -15,7 +15,6 @@ package org.apache.juneau.mstat;
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -121,12 +120,12 @@ class MethodExecStore_Test extends SimpleTestBase {
 		var store = MethodExecStore.create().thrownStore(s).build();
 		store.getStats(m).error(new Throwable());
 		assertSize(1, s.getStats());
-		TestUtils.assertSameObject(s, store.getThrownStore());
+		assertSameObject(s, store.getThrownStore());
 
 		var s2 = ThrownStore.create().build();
 		var bs = BeanStore.create().build().addBean(ThrownStore.class, s2);
 		store = MethodExecStore.create(bs).build();
-		TestUtils.assertSameObject(s2, store.getThrownStore());
+		assertSameObject(s2, store.getThrownStore());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -157,7 +156,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 		var stats = store.getStats(m);
 
 		assertNotEquals(0L, stats.getGuid());
-		TestUtils.assertSameObject(m, stats.getMethod());
+		assertSameObject(m, stats.getMethod());
 
 		assertEquals(0, stats.getRuns());
 		assertEquals(0, stats.getRunning());

@@ -71,7 +71,7 @@ class Remote_ResponseAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		A1a x = remote(A.class,A1b.class).get();
+		var x = remote(A.class,A1b.class).get();
 		assertEquals("foo",read(x.getContent()));
 		assertEquals("x",x.getHeader());
 		assertEquals(201,x.getStatus());
@@ -88,7 +88,7 @@ class Remote_ResponseAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_unannotatedMethod() throws Exception {
-		A2a x = remote(A.class,A2b.class).get();
+		var x = remote(A.class,A2b.class).get();
 		assertEquals("foo",read(x.getContent()));
 	}
 
@@ -111,10 +111,10 @@ class Remote_ResponseAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_beanBody() {
-		A3a x = client(A3.class).json().build().getRemote(A3b.class).get();
+		var x = client(A3.class).json().build().getRemote(A3b.class).get();
 		assertEquals("{f:1}",x.getContent().toString());
 
-		A3a x2 = client(A3.class).build().getRemote(A3b.class).get();
+		var x2 = client(A3.class).build().getRemote(A3b.class).get();
 		assertThrowsWithMessage(Exception.class, "Unsupported media-type in request header 'Content-Type': 'application/json'", x2::getContent);
 	}
 

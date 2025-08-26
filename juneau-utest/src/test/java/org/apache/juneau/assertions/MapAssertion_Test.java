@@ -21,9 +21,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.serializer.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -36,11 +34,6 @@ public class MapAssertion_Test {
 
 	private <K,V> MapAssertion<K,V> test(Map<K,V> value) {
 		return assertMap(value).setSilent();
-	}
-
-	@SafeVarargs
-	private static <K,V> Map<K,V> map(Object...objects) {
-		return CollectionUtils.mapBuilder(new LinkedHashMap<K,V>()).addPairs(objects).build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -64,48 +57,54 @@ public class MapAssertion_Test {
 
 	@Test
 	public void ba01a_asString() {
-		Map<String,Integer> x = map("a",1), nil = null;
+		var x = map("a",1);
+		var nil = nmap(Object.class, Object.class);
 		test(x).asString().is("{a=1}");
 		test(nil).asString().isNull();
 	}
 
 	@Test
 	public void ba01b_asString_wSerializer() {
-		Map<String,Integer> x = map("a",1), nil = null;
-		WriterSerializer s = Json5Serializer.DEFAULT;
+		var x = map("a",1);
+		var nil = nmap(Object.class, Object.class);
+		var s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("{a:1}");
 		test(nil).asString(s).is("null");
 	}
 
 	@Test
 	public void ba01c_asString_wPredicate() {
-		Map<String,Integer> x1 = map("a",1);
+		var x1 = map("a",1);
 		test(x1).asString(x -> "foo").is("foo");
 	}
 
 	@Test
 	public void ba02_asJson() {
-		Map<String,Integer> x = map("a",1), nil = null;
+		var x = map("a",1);
+		var nil = nmap(Object.class, Object.class);
 		test(x).asJson().is("{a:1}");
 		test(nil).asJson().is("null");
 	}
 
 	@Test
 	public void ba03_asJsonSorted() {
-		Map<String,Integer> x = map("b",2,"a",1), nil = null;
+		var x = map("b",2,"a",1);
+		var nil = nmap(Object.class, Object.class);
 		test(x).asJsonSorted().is("{a:1,b:2}");
 		test(nil).asJsonSorted().is("null");
 	}
 
 	@Test
 	public void ba04_apply() {
-		Map<String,Integer> x1 = map("a",1), x2 = map("b",2);
+		var x1 = map("a",1);
+		var x2 = map("b",2);
 		test(x1).asTransformed(x -> x2).is(x2);
 	}
 
 	@Test
 	public void bb01_value() {
-		Map<String,Integer> x = map("a",1,"b",2), nil = null;
+		var x = map("a",1,"b",2);
+		var nil = nmap(Object.class, Object.class);
 		test(x).asValue("a").asInteger().is(1);
 		test(x).asValue("z").asInteger().isNull();
 		test(nil).asValue("a").asInteger().isNull();
@@ -113,7 +112,8 @@ public class MapAssertion_Test {
 
 	@Test
 	public void bb02_values() {
-		Map<String,Integer> x = map("a",1,"b",2), nil = null;
+		var x = map("a",1,"b",2);
+		var nil = nmap(Object.class, Object.class);
 		test(x).asValues("b","a").isHas(2,1);
 		test(x).asValues((String)null).isHas((Integer)null);
 		test(nil).asValues("a","b").isNull();
@@ -121,7 +121,8 @@ public class MapAssertion_Test {
 
 	@Test
 	public void bb03_extract() {
-		Map<String,Integer> x = map("a",1,"b",2), nil = null;
+		var x = map("a",1,"b",2);
+		var nil = nmap(Object.class, Object.class);
 		test(x).asValueMap("a").isString("{a=1}");
 		test(x).asValueMap((String)null).isString("{null=null}");
 		test(nil).asValueMap("a").isNull();
@@ -129,7 +130,8 @@ public class MapAssertion_Test {
 
 	@Test
 	public void bb04_size() {
-		Map<String,Integer> x = map("a",1,"b",2), nil = null;
+		var x = map("a",1,"b",2);
+		var nil = nmap(Object.class, Object.class);
 		test(x).asSize().is(2);
 		test(nil).asSize().isNull();
 	}
@@ -140,28 +142,34 @@ public class MapAssertion_Test {
 
 	@Test
 	public void ca01_exists() {
-		Map<Integer,Integer> x = map(), nil = null;
+		var x = map();
+		var nil = nmap(Object.class, Object.class);
 		test(x).isExists().isExists();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
 	@Test
 	public void ca02_isNull() {
-		Map<Integer,Integer> x = map(), nil = null;
+		var x = map();
+		var nil = nmap(Object.class, Object.class);
 		assertMap(nil).isNull();
 		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test
 	public void ca03_isNotNull() {
-		Map<Integer,Integer> x = map(), nil = null;
+		var x = map();
+		var nil = nmap(Object.class, Object.class);
 		test(x).isNotNull();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
 
 	@Test
 	public void ca04a_is_T() {
-		Map<Integer,Integer> x1 = map(1,2), x1a = map(1,2), x2 = map(2,3), nil = null;
+		var x1 = map(1,2);
+		var x1a = map(1,2);
+		var x2 = map(2,3);
+		var nil = nmap(Object.class, Object.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -172,7 +180,7 @@ public class MapAssertion_Test {
 
 	@Test
 	public void ca04b_is_predicate() {
-		Map<Integer,Integer> x1 = map(1,2);
+		var x1 = map(1,2);
 		test(x1).is(x->x.size()==1);
 		assertThrown(()->test(x1).is(x->x.size()==2)).asMessage().asOneLine().is("Unexpected value: '{1=2}'.");
 		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='{1=2}'.");
@@ -180,7 +188,10 @@ public class MapAssertion_Test {
 
 	@Test
 	public void ca05_isNot() {
-		Map<Integer,Integer> x1 = map(1,2), x1a = map(1,2), x2 = map(3,4), nil = null;
+		var x1 = map(1,2);
+		var x1a = map(1,2);
+		var x2 = map(3,4);
+		var nil = nmap(Object.class, Object.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -190,7 +201,10 @@ public class MapAssertion_Test {
 
 	@Test
 	public void ca06_isAny() {
-		Map<Integer,Integer> x1 = map(1,2), x1a = map(1,2), x2 = map(3,4), nil = null;
+		var x1 = map(1,2);
+		var x1a = map(1,2);
+		var x2 = map(3,4);
+		var nil = nmap(Object.class, Object.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[{3=4}]'.  Actual='{1=2}'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='{1=2}'.");
@@ -199,7 +213,10 @@ public class MapAssertion_Test {
 
 	@Test
 	public void ca07_isNotAny() {
-		Map<Integer,Integer> x1 = map(1,2), x1a = map(1,2), x2 = map(3,4), nil = null;
+		var x1 = map(1,2);
+		var x1a = map(1,2);
+		var x2 = map(3,4);
+		var nil = nmap(Object.class, Object.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -209,7 +226,9 @@ public class MapAssertion_Test {
 
 	@Test
 	public void ca08_isSame() {
-		Map<Integer,Integer> x1 = map(1,2), x1a = map(1,2), nil = null;
+		var x1 = map(1,2);
+		var x1a = map(1,2);
+		var nil = nmap(Object.class, Object.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='{1=2}(LinkedHashMap@*)'.  Actual='{1=2}(LinkedHashMap@*)'.");
@@ -219,7 +238,10 @@ public class MapAssertion_Test {
 
 	@Test
 	public void ca09_isSameJsonAs() {
-		Map<Integer,Integer> x1 = map(1,2), x1a = map(1,2), x2 = map(3,4), nil = null;
+		var x1 = map(1,2);
+		var x1a = map(1,2);
+		var x2 = map(3,4);
+		var nil = nmap(Object.class, Object.class);
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
 		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{'3':4}'.  Actual='{'1':2}'.");
@@ -229,7 +251,10 @@ public class MapAssertion_Test {
 
 	@Test
 	public void ca10_isSameSortedJsonAs() {
-		Map<Integer,Integer> x1 = map(1,2), x1a = map(1,2), x2 = map(3,4), nil = null;
+		var x1 = map(1,2);
+		var x1a = map(1,2);
+		var x2 = map(3,4);
+		var nil = nmap(Object.class, Object.class);
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
 		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{'3':4}'.  Actual='{'1':2}'.");
@@ -239,8 +264,11 @@ public class MapAssertion_Test {
 
 	@Test
 	public void ca11_isSameSerializedAs() {
-		Map<Integer,Integer> x1 = map(1,2), x1a = map(1,2), x2 = map(3,4), nil = null;
-		WriterSerializer s = Json5Serializer.DEFAULT;
+		var x1 = map(1,2);
+		var x1a = map(1,2);
+		var x2 = map(3,4);
+		var nil = nmap(Object.class, Object.class);
+		var s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
 		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{'3':4}'.  Actual='{'1':2}'.");
@@ -250,7 +278,8 @@ public class MapAssertion_Test {
 
 	@Test
 	public void ca12_isType() {
-		Map<Integer,Integer> x = map(1,2), nil = null;
+		var x = map(1,2);
+		var nil = nmap(Object.class, Object.class);
 		test(x).isType(Map.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.util.LinkedHashMap'.");
@@ -260,7 +289,8 @@ public class MapAssertion_Test {
 
 	@Test
 	public void ca13_isExactType() {
-		Map<Integer,Integer> x = map(1,2), nil = null;
+		var x = map(1,2);
+		var nil = nmap(Object.class, Object.class);
 		test(x).isExactType(LinkedHashMap.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.util.LinkedHashMap'.");
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.util.LinkedHashMap'.");
@@ -270,7 +300,8 @@ public class MapAssertion_Test {
 
 	@Test
 	public void ca14_isString() {
-		Map<Integer,Integer> x = map(1,2), nil = null;
+		var x = map(1,2);
+		var nil = nmap(Object.class, Object.class);
 		test(x).isString("{1=2}");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='{1=2}'.");
@@ -280,7 +311,8 @@ public class MapAssertion_Test {
 
 	@Test
 	public void ca15_isJson() {
-		Map<Integer,Integer> x = map(1,2), nil = null;
+		var x = map(1,2);
+		var nil = nmap(Object.class, Object.class);
 		test(x).isJson("{'1':2}");
 		test(nil).isJson("null");
 		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='{'1':2}'.");
@@ -290,7 +322,9 @@ public class MapAssertion_Test {
 
 	@Test
 	public void cb01_isEmpty() {
-		Map<String,Integer> x1 = map(), x2 = map("a",1,"b",2), nil = null;
+		var x1 = map();
+		var x2 = map("a",1,"b",2);
+		var nil = nmap(Object.class, Object.class);
 		test(x1).isEmpty();
 		assertThrows(BasicAssertionError.class, ()->test(x2).isEmpty(), "Map was not empty.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isEmpty(), "Value was null.");
@@ -298,7 +332,9 @@ public class MapAssertion_Test {
 
 	@Test
 	public void cb02_isNotEmpty() {
-		Map<String,Integer> x1 = map(), x2 = map("a",1,"b",2), nil = null;
+		var x1 = map();
+		var x2 = map("a",1,"b",2);
+		var nil = nmap(Object.class, Object.class);
 		test(x2).isNotEmpty();
 		assertThrows(BasicAssertionError.class, ()->test(x1).isNotEmpty(), "Map was empty.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotEmpty(), "Value was null.");
@@ -306,7 +342,8 @@ public class MapAssertion_Test {
 
 	@Test
 	public void cb03_containsKey() {
-		Map<String,Integer> x = map("a",1,"b",2), nil = null;
+		var x = map("a",1,"b",2);
+		var nil = nmap(Object.class, Object.class);
 		test(x).isContainsKey("a");
 		assertThrown(()->test(x).isContainsKey("x")).asMessage().asOneLine().is("Map did not contain expected key.  Expected key='x'.  Value='{a=1, b=2}'.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isContainsKey("x"), "Value was null.");
@@ -314,7 +351,8 @@ public class MapAssertion_Test {
 
 	@Test
 	public void cb04_doesNotContainKey() {
-		Map<String,Integer> x = map("a",1,"b",2), nil = null;
+		var x = map("a",1,"b",2);
+		var nil = nmap(Object.class, Object.class);
 		test(x).isNotContainsKey("x");
 		assertThrown(()->test(x).isNotContainsKey("a")).asMessage().asOneLine().is("Map contained unexpected key.  Unexpected key='a'.  Value='{a=1, b=2}'.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isContainsKey("x"), "Value was null.");
@@ -322,7 +360,8 @@ public class MapAssertion_Test {
 
 	@Test
 	public void cb05_isSize() {
-		Map<String,Integer> x = map("a",1,"b",2), nil = null;
+		var x = map("a",1,"b",2);
+		var nil = nmap(Object.class, Object.class);
 		test(x).isSize(2);
 		assertThrown(()->test(x).isSize(1)).asMessage().asOneLine().is("Map did not have the expected size.  Expect=1.  Actual=2.");
 		assertThrows(BasicAssertionError.class, ()->test(nil).isSize(0), "Value was null.");

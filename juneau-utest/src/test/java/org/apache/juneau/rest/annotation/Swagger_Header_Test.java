@@ -19,7 +19,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.jupiter.api.*;
 
@@ -65,10 +64,9 @@ class Swagger_Header_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_fromPojo() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(A.class);
-		ParameterInfo x;
+		var s = getSwagger(A.class);
+		var x = s.getParameterInfo("/a","get","header","H");
 
-		x = s.getParameterInfo("/a","get","header","H");
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 		x = s.getParameterInfo("/b","put","header","H");
@@ -107,10 +105,9 @@ class Swagger_Header_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_schemaFromPojo() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(B.class);
-		ParameterInfo x;
+		var s = getSwagger(B.class);
+		var x = s.getParameterInfo("/a","get","header","H");
 
-		x = s.getParameterInfo("/a","get","header","H");
 		assertJson(x, "{'in':'header',name:'H',type:'string'}");
 
 		x = s.getParameterInfo("/b","put","header","H");
@@ -155,10 +152,9 @@ class Swagger_Header_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_fromParameter() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(D.class);
-		ParameterInfo x;
+		var s = getSwagger(D.class);
+		var x = s.getParameterInfo("/a","get","header","H");
 
-		x = s.getParameterInfo("/a","get","header","H");
 		assertEquals("H", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
@@ -207,10 +203,9 @@ class Swagger_Header_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_schemaFromParameter() {
-		org.apache.juneau.bean.swagger.Swagger s = getSwagger(E.class);
-		ParameterInfo x;
+		var s = getSwagger(E.class);
+		var x = s.getParameterInfo("/a","get","header","H");
 
-		x = s.getParameterInfo("/a","get","header","H");
 		assertJson(x, "{'in':'header',name:'H',type:'string'}");
 
 		x = s.getParameterInfo("/b","put","header","H");

@@ -31,7 +31,7 @@ class Common_UrlEncodingTest extends SimpleTestBase {
 	// Trim nulls from beans
 	//====================================================================================================
 	@Test void a01_trimNullsFromBeans() throws Exception {
-		UrlEncodingSerializer.Builder s = UrlEncodingSerializer.create();
+		var s = UrlEncodingSerializer.create();
 		var t1 = A.create();
 
 		var r = s.build().serialize(t1);
@@ -60,11 +60,10 @@ class Common_UrlEncodingTest extends SimpleTestBase {
 	// Trim empty maps
 	//====================================================================================================
 	@Test void a02_trimEmptyMaps() throws Exception {
-		UrlEncodingSerializer.Builder s = UrlEncodingSerializer.create();
+		var s = UrlEncodingSerializer.create();
 		var t1 = B.create();
-		String r;
+		var r = s.build().serialize(t1);
 
-		r = s.build().serialize(t1);
 		assertEquals("f1=()&f2=(f2a=null,f2b=(s2=s2))", r);
 		var t2 = p.parse(r, B.class);
 		assertEquals(json(t2), json(t1));
@@ -91,11 +90,10 @@ class Common_UrlEncodingTest extends SimpleTestBase {
 	// Trim empty lists
 	//====================================================================================================
 	@Test void a03_trimEmptyLists() throws Exception {
-		UrlEncodingSerializer.Builder s = UrlEncodingSerializer.create();
+		var s = UrlEncodingSerializer.create();
 		var t1 = C.create();
-		String r;
+		var r = s.build().serialize(t1);
 
-		r = s.build().serialize(t1);
 		assertEquals("f1=@()&f2=@(null,(s2=s2))", r);
 		var t2 = p.parse(r, C.class);
 		assertEquals(json(t2), json(t1));
@@ -122,11 +120,10 @@ class Common_UrlEncodingTest extends SimpleTestBase {
 	// Trim empty arrays
 	//====================================================================================================
 	@Test void a04_trimEmptyArrays() throws Exception {
-		UrlEncodingSerializer.Builder s = UrlEncodingSerializer.create();
+		var s = UrlEncodingSerializer.create();
 		var t1 = D.create();
-		String r;
+		var r = s.build().serialize(t1);
 
-		r = s.build().serialize(t1);
 		assertEquals("f1=@()&f2=@(null,(s2=s2))", r);
 		var t2 = p.parse(r, D.class);
 		assertEquals(json(t2), json(t1));
@@ -153,7 +150,7 @@ class Common_UrlEncodingTest extends SimpleTestBase {
 	// @Beanp.bpi annotation.
 	//====================================================================================================
 	@Test void a05_beanPropertyProperies() throws Exception {
-		UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT;
+		var s = UrlEncodingSerializer.DEFAULT;
 		var ue = s.serialize(new E1());
 		assertEquals("x1=(f1=1)&x2=(f1=1)&x3=@((f1=1))&x4=@((f1=1))&x5=@((f1=1))&x6=@((f1=1))", ue);
 	}
@@ -176,7 +173,7 @@ class Common_UrlEncodingTest extends SimpleTestBase {
 	// @Beanp.bpi annotation on list of beans.
 	//====================================================================================================
 	@Test void a06_beanPropertyPropertiesOnListOfBeans() throws Exception {
-		UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT;
+		var s = UrlEncodingSerializer.DEFAULT;
 		var l = new LinkedList<>();
 		var t = new F();
 		t.x1.add(new F());
@@ -197,13 +194,13 @@ class Common_UrlEncodingTest extends SimpleTestBase {
 	// Test URIAttr - Test that URLs and URIs are serialized and parsed correctly.
 	//====================================================================================================
 	@Test void a07_uRIAttr() throws Exception {
-		UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT;
-		UrlEncodingParser p2 = UrlEncodingParser.DEFAULT;
+		var s = UrlEncodingSerializer.DEFAULT;
+		var p2 = UrlEncodingParser.DEFAULT;
 
 		var t = new G();
 		t.uri = new URI("http://uri");
 		t.f1 = new URI("http://f1");
-		t.f2 = TestUtils.url("http://f2");
+		t.f2 = url("http://f2");
 
 		var r = s.serialize(t);
 		t = p2.parse(r, G.class);
@@ -222,7 +219,7 @@ class Common_UrlEncodingTest extends SimpleTestBase {
 	// Recursion
 	//====================================================================================================
 	@Test void a08_recursion() throws Exception {
-		UrlEncodingSerializer.Builder s = UrlEncodingSerializer.create().maxDepth(Integer.MAX_VALUE);
+		var s = UrlEncodingSerializer.create().maxDepth(Integer.MAX_VALUE);
 
 		var r1 = new R1();
 		var r2 = new R2();

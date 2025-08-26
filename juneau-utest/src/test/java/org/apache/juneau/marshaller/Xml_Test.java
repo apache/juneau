@@ -24,8 +24,10 @@ import org.junit.jupiter.api.*;
 class Xml_Test extends SimpleTestBase {
 
 	@Test void a01_to() throws Exception {
-		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
-		String expected1 = "<string>foo</string>", expected2 = "<object><foo>bar</foo></object>";
+		var in1 = "foo";
+		var in2 = JsonMap.of("foo", "bar");
+		var expected1 = "<string>foo</string>";
+		var expected2 = "<object><foo>bar</foo></object>";
 
 		assertString(expected1, Xml.of(in1));
 		assertString(expected1, Xml.of(in1,stringWriter()));
@@ -34,8 +36,10 @@ class Xml_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_from() throws Exception {
-		String in1 = "<string>foo</string>", in2 = "<object><foo>bar</foo></object>";
-		String expected1 = "foo", expected2 = "{foo:'bar'}";
+		var in1 = "<string>foo</string>";
+		var in2 = "<object><foo>bar</foo></object>";
+		var expected1 = "foo";
+		var expected2 = "{foo:'bar'}";
 
 		assertEquals(expected1, Xml.to(in1, String.class));
 		assertEquals(expected1, Xml.to(stringReader(in1), String.class));
@@ -54,5 +58,4 @@ class Xml_Test extends SimpleTestBase {
 	private Reader stringReader(String s) {
 		return new StringReader(s);
 	}
-
 }

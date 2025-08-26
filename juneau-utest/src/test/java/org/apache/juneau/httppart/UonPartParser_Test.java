@@ -38,13 +38,9 @@ class UonPartParser_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a01_basic() throws Exception {
 
-		String t;
-		Map m;
-		List l;
-
 		// Simple string
 		// Top level
-		t = "a";
+		var t = "a";
 		assertEquals("a", parse(t, bs.object()));
 		assertEquals("a", parse(t, bs.string()));
 		t = "'a'";
@@ -56,7 +52,7 @@ class UonPartParser_Test extends SimpleTestBase {
 		// Simple map
 		// Top level
 		t = "(a=b,c=123,d=false,e=true,f=%00)";
-		m = parse(t, bs.getClassMeta(Map.class));
+		var m = parse(t, bs.getClassMeta(Map.class));
 		assertEquals("b", m.get("a"));
 		assertTrue(m.get("c") instanceof Number);
 		assertEquals(123, m.get("c"));
@@ -79,7 +75,7 @@ class UonPartParser_Test extends SimpleTestBase {
 		// Empty array
 		// Top level
 		t = "@()";
-		l = (List)parse(t, bs.object());
+		var l = (List)parse(t, bs.object());
 		assertTrue(l.isEmpty());
 		t = " @( ) ";
 		l = parse(t, bs.getClassMeta(List.class));
@@ -132,7 +128,7 @@ class UonPartParser_Test extends SimpleTestBase {
 
 		// Boolean
 		// Top level
-		Boolean b = false;
+		var b = false;
 		t = "false";
 		b = (Boolean)parse(t, bs.object());
 		assertEquals(Boolean.FALSE, b);
@@ -145,16 +141,13 @@ class UonPartParser_Test extends SimpleTestBase {
 		// Number
 		// Top level
 		t = "123";
-		Integer i = -1;
-		Double d;
-		Float f;
-		i = (Integer)parse(t, bs.object());
+		var i = (Integer)parse(t, bs.object());
 		assertEquals(123, i.intValue());
 		i = parse(t, bs.getClassMeta(Integer.class));
 		assertEquals(123, i.intValue());
-		d = parse(t, bs.getClassMeta(Double.class));
+		var d = parse(t, bs.getClassMeta(Double.class));
 		assertEquals(123, d.intValue());
-		f = parse(t, bs.getClassMeta(Float.class));
+		var f = parse(t, bs.getClassMeta(Float.class));
 		assertEquals(123, f.intValue());
 		t = "123";
 		i = parse(t, bs.getClassMeta(Integer.class));
@@ -217,11 +210,10 @@ class UonPartParser_Test extends SimpleTestBase {
 	// Unicode character test
 	//====================================================================================================
 	@Test void a02_unicodeChars() throws Exception {
-		String t;
+		var t = "¢";
 
 		// 2-byte UTF-8 character
 		// Top level
-		t = "¢";
 		assertEquals("¢", parse(t, bs.object()));
 		assertEquals("¢", parse(t, bs.string()));
 		t = "%C2%A2";
@@ -251,11 +243,8 @@ class UonPartParser_Test extends SimpleTestBase {
 	// Test simple bean
 	//====================================================================================================
 	@Test void a03_simpleBean() throws Exception {
-		A t;
-		String s = null;
-
-		s = "(f1=foo,f2=123)";
-		t = parse(s, bs.getClassMeta(A.class));
+		var s = "(f1=foo,f2=123)";
+		var t = parse(s, bs.getClassMeta(A.class));
 		assertEquals("foo", t.f1);
 		assertEquals(123, t.f2);
 
@@ -271,11 +260,8 @@ class UonPartParser_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_parseParameterJsonMap() throws Exception {
-		String in = "(name='foo bar')";
-
-		JsonMap r =  parse(in, BeanContext.DEFAULT.getClassMeta(JsonMap.class));
-
+		var in = "(name='foo bar')";
+		var r = parse(in, BeanContext.DEFAULT.getClassMeta(JsonMap.class));
 		assertEquals("{name:'foo bar'}", Json5Serializer.DEFAULT.toString(r));
 	}
-
 }

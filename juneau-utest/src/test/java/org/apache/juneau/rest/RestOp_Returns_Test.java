@@ -18,14 +18,11 @@ import static org.apache.juneau.http.HttpResponses.*;
 import static org.junit.Assert.*;
 
 import java.io.*;
-import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
@@ -62,7 +59,7 @@ class RestOp_Returns_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_responseBeans() throws Exception {
-		RestClient c = client(A.class);
+		var c = client(A.class);
 		c.get("/accepted").run().assertStatus().asCode().is(Accepted.STATUS_CODE).assertContent(Accepted.REASON_PHRASE);
 		c.get("/alreadyReported").run().assertStatus().asCode().is(AlreadyReported.STATUS_CODE).assertContent(AlreadyReported.REASON_PHRASE);
 		c.get("/continue").run().assertStatus().asCode().is(Continue.STATUS_CODE + 1000).assertContent(Continue.REASON_PHRASE);
@@ -88,7 +85,7 @@ class RestOp_Returns_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_responseBeans_swagger() {
-		Map<String,OperationMap> paths = getSwagger(A.class).getPaths();
+		var paths = getSwagger(A.class).getPaths();
 		assertEquals(Accepted.REASON_PHRASE, paths.get("/accepted").get("get").getResponse(Accepted.STATUS_CODE).getDescription());
 		assertEquals(AlreadyReported.REASON_PHRASE, paths.get("/alreadyReported").get("get").getResponse(AlreadyReported.STATUS_CODE).getDescription());
 		assertEquals(Continue.REASON_PHRASE, paths.get("/continue").get("get").getResponse(Continue.STATUS_CODE).getDescription());
@@ -137,11 +134,11 @@ class RestOp_Returns_Test extends SimpleTestBase {
 		}
 		@RestGet
 		public HttpResource e() {
-			return streamResource(TestUtils.inputStream("foo"));
+			return streamResource(inputStream("foo"));
 		}
 		@RestGet
 		public HttpResource f() {
-			return readerResource(TestUtils.reader("foo"));
+			return readerResource(reader("foo"));
 		}
 	}
 
