@@ -44,7 +44,7 @@ public abstract class RoundTripObjectSwapTest<T,S> {
 
 	@Test
 	public void testSwap() throws Exception {
-		S s = ss.swap(bs, o);
+		var s = ss.swap(bs, o);
 		if (! Objects.equals(expected, s)) {
 			fail("Test [{0} swap] failed.  Expected=[{1}], Actual=[{2}]", label, expected, s);
 		}
@@ -52,9 +52,9 @@ public abstract class RoundTripObjectSwapTest<T,S> {
 
 	@Test
 	public void testUnswap() throws Exception {
-		S s = ss.swap(bs, o);
-		T o2 = ss.unswap(bs, s, bs.getClassMetaForObject(o));
-		S s2 = ss.swap(bs, o2);
+		var s = ss.swap(bs, o);
+		var o2 = ss.unswap(bs, s, bs.getClassMetaForObject(o));
+		var s2 = ss.swap(bs, o2);
 		if (! Objects.equals(s, s2)) {
 			System.err.println("s=["+s+"], o=["+o+"], o.type=["+o.getClass().getName()+"], o2=["+o2+"], o2.type=["+o2.getClass().getName()+"]");  // NOT DEBUG
 			fail("Test [{0} unswap] failed.  Expected=[{1}], Actual=[{2}]", label, s, s2);
@@ -66,4 +66,4 @@ public abstract class RoundTripObjectSwapTest<T,S> {
 		System.err.println(s);  // NOT DEBUG
 		Assert.fail(s);
 	}
-}
+}

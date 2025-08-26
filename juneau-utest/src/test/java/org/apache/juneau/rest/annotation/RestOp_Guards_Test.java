@@ -82,7 +82,7 @@ class RestOp_Guards_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		RestClient a = MockRestClient.buildLax(A.class);
+		var a = MockRestClient.buildLax(A.class);
 
 		a.get("/a1?t1=1")
 			.run()
@@ -199,4 +199,4 @@ class RestOp_Guards_Test extends SimpleTestBase {
 			.run()
 			.assertContent("OK-e2");
 	}
-}
+}

@@ -54,7 +54,7 @@ class HtmlConfigAnnotation_Test extends SimpleTestBase {
 
 	@Test void basicSerializer() {
 		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
-		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
+		var x = HtmlSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddKeyValueTableHeaders());
 		check("false", x.isDetectLabelParameters());
@@ -78,7 +78,7 @@ class HtmlConfigAnnotation_Test extends SimpleTestBase {
 
 	@Test void defaultsSerializer() {
 		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
+		var x = HtmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddKeyValueTableHeaders());
 		check("true", x.isDetectLabelParameters());
@@ -101,7 +101,7 @@ class HtmlConfigAnnotation_Test extends SimpleTestBase {
 
 	@Test void noAnnotationSerializer() {
 		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
+		var x = HtmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddKeyValueTableHeaders());
 		check("true", x.isDetectLabelParameters());

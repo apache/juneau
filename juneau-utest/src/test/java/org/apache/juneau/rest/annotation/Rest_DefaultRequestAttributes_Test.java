@@ -49,11 +49,11 @@ class Rest_DefaultRequestAttributes_Test extends SimpleTestBase {
 
 		@RestPreCall
 		public void onPreCall(RestRequest req) {
-			RequestAttributes attrs = req.getAttributes();
+			var attrs = req.getAttributes();
 			attrs.set("p2", "xp2");
 			attrs.set("p4", "xp4");
 			attrs.set("p5", "xp5"); // New property
-			String overrideContentType = req.getHeaderParam("Override-Content-Type").orElse(null);
+			var overrideContentType = req.getHeaderParam("Override-Content-Type").orElse(null);
 			if (overrideContentType != null)
 				req.getHeaders().set("Content-Type", overrideContentType);
 		}
@@ -82,14 +82,14 @@ class Rest_DefaultRequestAttributes_Test extends SimpleTestBase {
 		}
 
 		private static Object in(ReaderParserSession session) {
-			JsonMap sp = session.getSessionProperties();
+			var sp = session.getSessionProperties();
 			return "p1="+sp.get("p1",null)+",p2="+sp.get("p2",null)+",p3="+sp.get("p3",null)+",p4="+sp.get("p4",null)+",p5="+sp.get("p5",null);
 
 		}
 	}
 
 	@Test void a01_preCall() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 		a.put("/a", null).contentType("text/a1").run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
 		a.put("/a", null).contentType("text/a1").header("Override-Content-Type", "text/a2").run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
 		a.put("/b", null).contentType("text/a1").run().assertContent("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5");
@@ -113,14 +113,14 @@ class Rest_DefaultRequestAttributes_Test extends SimpleTestBase {
 
 		@RestPostCall
 		public void onPostCall(RestRequest req, RestResponse res) {
-			RequestAttributes attrs = req.getAttributes();
+			var attrs = req.getAttributes();
 			attrs.set("p2", "xp2");
 			attrs.set("p4", "xp4");
 			attrs.set("p5", "xp5"); // New property
-			String overrideAccept = req.getHeaderParam("Override-Accept").orElse(null);
+			var overrideAccept = req.getHeaderParam("Override-Accept").orElse(null);
 			if (overrideAccept != null)
 				req.getHeaders().set("Accept", overrideAccept);
-			String overrideContentType = req.getHeaderParam("Override-Content-Type").orElse(null);
+			var overrideContentType = req.getHeaderParam("Override-Content-Type").orElse(null);
 			if (overrideContentType != null)
 				attrs.set("Override-Content-Type", overrideContentType);
 		}
@@ -140,7 +140,7 @@ class Rest_DefaultRequestAttributes_Test extends SimpleTestBase {
 		public String b(RestRequest req, RequestAttributes attrs) {
 			attrs.set("p3", "pp3");
 			attrs.set("p4", "pp4");
-			String accept = req.getHeaderParam("Accept").orElse(null);
+			var accept = req.getHeaderParam("Accept").orElse(null);
 			if (accept == null || accept.isEmpty())
 				req.getHeaders().set("Accept", "text/s2");
 			return null;
@@ -152,11 +152,11 @@ class Rest_DefaultRequestAttributes_Test extends SimpleTestBase {
 			super(b.produces("test/s1").accept("text/s1,text/s2,text/s3").function((s,o) -> out(s)).headers(B1::headers));
 		}
 		public static String out(SerializerSession s) {
-			JsonMap sp = s.getSessionProperties();
+			var sp = s.getSessionProperties();
 			return "p1="+sp.get("p1",null)+",p2="+sp.get("p2",null)+",p3="+sp.get("p3",null)+",p4="+sp.get("p4",null)+",p5="+sp.get("p5",null);
 		}
 		public static Map<String,String> headers(SerializerSession s) {
-			JsonMap sp = s.getSessionProperties();
+			var sp = s.getSessionProperties();
 			if (sp.containsKey("Override-Content-Type"))
 				return map("Content-Type",sp.getString("Override-Content-Type",null));
 			return emptyMap();
@@ -164,7 +164,7 @@ class Rest_DefaultRequestAttributes_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_postCall() throws Exception {
-		RestClient b = MockRestClient.build(B.class);
+		var b = MockRestClient.build(B.class);
 		b.put("/a", null).accept("text/s1").run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
 		b.put("/a", null).accept("text/s1").header("Override-Accept", "text/s2").run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
 		b.put("/a", null).accept("text/s1").header("Override-Content-Type", "text/s3").run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");

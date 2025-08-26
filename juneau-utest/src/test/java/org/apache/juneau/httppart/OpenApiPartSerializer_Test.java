@@ -83,7 +83,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_outputValidations_minMaxLength() throws Exception {
-		HttpPartSchema ps = tNone().minLength(1L).maxLength(2L).allowEmptyValue().build();
+		var ps = tNone().minLength(1L).maxLength(2L).allowEmptyValue().build();
 
 		assertEquals("null", serialize(ps, null));
 		assertEquals("1", serialize(ps, "1"));
@@ -135,7 +135,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void c02_stringType_default() throws Exception {
-		HttpPartSchema ps = tString()._default("x").build();
+		var ps = tString()._default("x").build();
 		assertEquals("foo", serialize(ps, "foo"));
 		assertEquals("x", serialize(ps, null));
 	}
@@ -172,14 +172,14 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 
 	@Test void c06_stringType_dateFormat() throws Exception {
 		HttpPartSchema ps = T_DATE;
-		Calendar in = StringUtils.parseIsoCalendar("2012-12-21");
+		var in = StringUtils.parseIsoCalendar("2012-12-21");
 		assertTrue(serialize(ps, in).contains("2012"));
 		assertEquals("null", serialize(ps, null));
 	}
 
 	@Test void c07_stringType_dateTimeFormat() throws Exception {
 		HttpPartSchema ps = T_DATETIME;
-		Calendar in = StringUtils.parseIsoCalendar("2012-12-21T12:34:56.789");
+		var in = StringUtils.parseIsoCalendar("2012-12-21T12:34:56.789");
 		assertTrue(serialize(ps, in).contains("2012"));
 		assertEquals("null", serialize(ps, null));
 	}
@@ -207,7 +207,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void c10_stringType_noneFormat_2d() throws Exception {
-		HttpPartSchema ps = tArray(tString()).build();
+		var ps = tArray(tString()).build();
 		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo,bar,null", serialize(ps, new Object[]{"foo","bar",null}));
@@ -218,7 +218,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void c11_stringType_noneFormat_3d() throws Exception {
-		HttpPartSchema ps = tArrayPipes(tArray(tString())).build();
+		var ps = tArrayPipes(tArray(tString())).build();
 		assertEquals("foo,bar|baz,null|null", serialize(ps, new String[][]{{"foo","bar"},{"baz",null},null}));
 		assertEquals("foo,bar|baz,null|null", serialize(ps, list(new String[]{"foo","bar"}, new String[]{"baz",null},null)));
 		assertEquals("foo,bar|baz,null|null", serialize(ps, list(list("foo","bar"),list("baz",null),null)));
@@ -350,7 +350,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void d08_arrayType_collectionFormatCsvAndPipes() throws Exception {
-		HttpPartSchema ps = tArrayPipes(tArrayCsv()).build();
+		var ps = tArrayPipes(tArrayCsv()).build();
 		assertEquals("foo,bar|baz,null|null", serialize(ps, new String[][]{{"foo","bar"},{"baz",null},null}));
 		assertEquals("foo,bar|baz,null|null", serialize(ps, new Object[][]{{"foo","bar"},{"baz",null},null}));
 		assertEquals("foo,bar|baz,null,null|null", serialize(ps, new D[][]{{new D("foo"),new D("bar")},{new D("baz"),new D(null),null},null}));
@@ -360,7 +360,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void d09_arrayType_itemsInteger() throws Exception {
-		HttpPartSchema ps = tArrayCsv(tInteger()).build();
+		var ps = tArrayCsv(tInteger()).build();
 		assertEquals("1,2", serialize(ps, new int[]{1,2}));
 		assertEquals("1,2,null", serialize(ps, new Integer[]{1,2,null}));
 		assertEquals("1,2,null", serialize(ps, new Object[]{1,2,null}));
@@ -368,7 +368,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void d10_arrayType_itemsInteger_2d() throws Exception {
-		HttpPartSchema ps = tArrayPipes(tArrayCsv(tInteger()).allowEmptyValue()).build();
+		var ps = tArrayPipes(tArrayCsv(tInteger()).allowEmptyValue()).build();
 		assertEquals("1,2||null", serialize(ps, new int[][]{{1,2},{},null}));
 		assertEquals("1,2,null||null", serialize(ps, new Integer[][]{{1,2,null},{},null}));
 		assertEquals("1,2,null||null", serialize(ps, new Object[][]{{1,2,null},{},null}));
@@ -413,7 +413,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void e03_booleanType_2d() throws Exception {
-		HttpPartSchema ps = tArray(tBoolean()).build();
+		var ps = tArray(tBoolean()).build();
 		assertEquals("true", serialize(ps, new boolean[]{true}));
 		assertEquals("true,null", serialize(ps, new Boolean[]{true,null}));
 		assertEquals("true,null", serialize(ps, list(true,null)));
@@ -427,7 +427,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void e04_booleanType_3d() throws Exception {
-		HttpPartSchema ps = tArrayPipes(tArray(tBoolean())).build();
+		var ps = tArrayPipes(tArray(tBoolean())).build();
 		assertEquals("true,true|false", serialize(ps, new boolean[][]{{true,true},{false}}));
 		assertEquals("true,true|false", serialize(ps, list(new boolean[]{true,true},new boolean[]{false})));
 		assertEquals("true,true|false,null", serialize(ps, new Boolean[][]{{true,true},{false,null}}));
@@ -504,7 +504,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void f02_integerType_int32_2d() throws Exception {
-		HttpPartSchema ps = tArray(tInt32()).build();
+		var ps = tArray(tInt32()).build();
 		assertEquals("1,2", serialize(ps, new int[]{1,2}));
 		assertEquals("1,2,null", serialize(ps, new Integer[]{1,2,null}));
 		assertEquals("1,2,null", serialize(ps, list(1,2,null)));
@@ -524,7 +524,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void f03_integerType_int32_3d() throws Exception {
-		HttpPartSchema ps = tArrayPipes(tArray(tInt32())).build();
+		var ps = tArrayPipes(tArray(tInt32())).build();
 		assertEquals("1,2|3|null", serialize(ps, new int[][]{{1,2},{3},null}));
 		assertEquals("1,2|3|null", serialize(ps, list(new int[]{1,2},new int[]{3},null)));
 		assertEquals("1,2|3,null|null", serialize(ps, new Integer[][]{{1,2},{3,null},null}));
@@ -568,7 +568,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void f05_integerType_int64_2d() throws Exception {
-		HttpPartSchema ps = tArray(tInt64()).build();
+		var ps = tArray(tInt64()).build();
 		assertEquals("1,2", serialize(ps, new int[]{1,2}));
 		assertEquals("1,2,null", serialize(ps, new Integer[]{1,2,null}));
 		assertEquals("1,2,null", serialize(ps, list(1,2,null)));
@@ -588,7 +588,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void f06_integerType_int64_3d() throws Exception {
-		HttpPartSchema ps = tArrayPipes(tArray(tInt64())).build();
+		var ps = tArrayPipes(tArray(tInt64())).build();
 		assertEquals("1,2|3|null", serialize(ps, new int[][]{{1,2},{3},null}));
 		assertEquals("1,2|3|null", serialize(ps, list(new int[]{1,2},new int[]{3},null)));
 		assertEquals("1,2|3,null|null", serialize(ps, new Integer[][]{{1,2},{3,null},null}));
@@ -676,7 +676,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void g02_numberType_float_2d() throws Exception {
-		HttpPartSchema ps = tArray(tFloat()).build();
+		var ps = tArray(tFloat()).build();
 		assertEquals("1.0,2.0", serialize(ps, new float[]{1,2}));
 		assertEquals("1.0,2.0,null", serialize(ps, new Float[]{1f,2f,null}));
 		assertEquals("1.0,2.0,null", serialize(ps, list(1f,2f,null)));
@@ -693,7 +693,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void g03_numberType_float_3d() throws Exception {
-		HttpPartSchema ps = tArrayPipes(tArray(tFloat())).build();
+		var ps = tArrayPipes(tArray(tFloat())).build();
 		assertEquals("1.0,2.0|3.0|null", serialize(ps, new float[][]{{1,2},{3},null}));
 		assertEquals("1.0,2.0|3.0|null", serialize(ps, list(new float[]{1,2},new float[]{3},null)));
 		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, new Float[][]{{1f,2f},{3f,null},null}));
@@ -731,7 +731,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void g05_numberType_double_2d() throws Exception {
-		HttpPartSchema ps = tArray(tDouble()).build();
+		var ps = tArray(tDouble()).build();
 		assertEquals("1.0,2.0", serialize(ps, new float[]{1,2}));
 		assertEquals("1.0,2.0,null", serialize(ps, new Float[]{1f,2f,null}));
 		assertEquals("1.0,2.0,null", serialize(ps, list(1f,2f,null)));
@@ -748,7 +748,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void g06_numberType_double_3d() throws Exception {
-		HttpPartSchema ps = tArrayPipes(tArray(tDouble())).build();
+		var ps = tArrayPipes(tArray(tDouble())).build();
 		assertEquals("1.0,2.0|3.0|null", serialize(ps, new float[][]{{1f,2f},{3f},null}));
 		assertEquals("1.0,2.0|3.0|null", serialize(ps, list(new float[]{1f,2f},new float[]{3f},null)));
 		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, new Float[][]{{1f,2f},{3f,null},null}));
@@ -789,7 +789,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void h01_objectType() throws Exception {
-		HttpPartSchema ps = tObject().allowEmptyValue().build();
+		var ps = tObject().allowEmptyValue().build();
 		assertEquals("f1=1,f2=2,f3=true", serialize(ps, new H1("1",2,true)));
 		assertEquals("", serialize(ps, new H1(null,null,null)));
 		assertEquals("f1=1,f2=2,f3=true", serialize(ps, JsonMap.ofJson("{f1:'1',f2:2,f3:true}")));
@@ -807,7 +807,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void h03_objectType_2d() throws Exception {
-		HttpPartSchema ps = tArray(tObject().allowEmptyValue()).build();
+		var ps = tArray(tObject().allowEmptyValue()).build();
 		assertEquals("f1=1\\,f2=2\\,f3=true,,null", serialize(ps, new H1[]{new H1("1",2,true),new H1(null,null,null),null}));
 		assertEquals("f1=1\\,f2=2\\,f3=true,,null", serialize(ps, list(new H1("1",2,true),new H1(null,null,null),null)));
 		assertEquals("f1=1\\,f2=2\\,f3=true,f1=null\\,f2=null\\,f3=null,null", serialize(ps, new JsonMap[]{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null}));
@@ -817,7 +817,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void h03_objectType_2d_pipes() throws Exception {
-		HttpPartSchema ps = tArrayPipes(tObject().allowEmptyValue()).build();
+		var ps = tArrayPipes(tObject().allowEmptyValue()).build();
 		assertEquals("f1=1,f2=2,f3=true||null", serialize(ps, new H1[]{new H1("1",2,true),new H1(null,null,null),null}));
 		assertEquals("f1=1,f2=2,f3=true||null", serialize(ps, list(new H1("1",2,true),new H1(null,null,null),null)));
 		assertEquals("f1=1,f2=2,f3=true|f1=null,f2=null,f3=null|null", serialize(ps, new JsonMap[]{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null}));
@@ -827,7 +827,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void h04_objectType_2d_uon() throws Exception {
-		HttpPartSchema ps = tArrayUon(tObject()).build();
+		var ps = tArrayUon(tObject()).build();
 		assertEquals("@((f1='1',f2=2,f3=true),(),null)", serialize(ps, new H1[]{new H1("1",2,true),new H1(null,null,null),null}));
 		assertEquals("@((f1='1',f2=2,f3=true),(),null)", serialize(ps, list(new H1("1",2,true),new H1(null,null,null),null)));
 		assertEquals("@((f1='1',f2=2,f3=true),(f1=null,f2=null,f3=null),null)", serialize(ps, new JsonMap[]{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null}));
@@ -837,7 +837,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void h03_objectType_3d() throws Exception {
-		HttpPartSchema ps = tArray(tArray(tObject().allowEmptyValue())).build();
+		var ps = tArray(tArray(tObject().allowEmptyValue())).build();
 		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=3\\\\\\,f3=false,\\,null,null", serialize(ps, new H1[][]{{new H1("1",2,true),new H1("x",3,false)},{new H1(null,null,null),null},null}));
 		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=3\\\\\\,f3=false,\\,null,null", serialize(ps, list(new H1[]{new H1("1",2,true),new H1("x",3,false)},new H1[]{new H1(null,null,null),null},null)));
 		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=3\\\\\\,f3=false,\\,null,null", serialize(ps, list(list(new H1("1",2,true),new H1("x",3,false)),list(new H1(null,null,null),null),null)));
@@ -850,7 +850,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void h03_objectType_3d_ssvAndPipes() throws Exception {
-		HttpPartSchema ps = tArraySsv(tArrayPipes(tObject().allowEmptyValue())).build();
+		var ps = tArraySsv(tArrayPipes(tObject().allowEmptyValue())).build();
 		assertEquals("null|null null|null null null", serialize(ps, new String[][]{{null,null},{null,null},null,null}));
 //f1=1,f2=2,f3=true|f1=x,f2=3,f3=false null null
 		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=3,f3=false |null null", serialize(ps, new H1[][]{{new H1("1",2,true),new H1("x",3,false)},{new H1(null,null,null),null},null}));
@@ -865,7 +865,7 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	}
 
 	@Test void h03_objectType_3d_uon() throws Exception {
-		HttpPartSchema ps = tArrayUon(tArray(tObject())).build();
+		var ps = tArrayUon(tArray(tObject())).build();
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", serialize(ps, new H1[][]{{new H1("1",2,true),new H1("x",3,false)},{new H1(null,null,null),null},null}));
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", serialize(ps, list(new H1[]{new H1("1",2,true),new H1("x",3,false)},new H1[]{new H1(null,null,null),null},null)));
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", serialize(ps, list(list(new H1("1",2,true),new H1("x",3,false)),list(new H1(null,null,null),null),null)));

@@ -334,7 +334,7 @@ class Html_Test extends SimpleTestBase {
 		Object o = null;
 		String r;
 
-		Map m = new MyMap();
+		var m = new MyMap();
 		m.put("foo", "bar");
 		o = JsonList.of(m);
 		r = s.serialize(o);
@@ -349,7 +349,7 @@ class Html_Test extends SimpleTestBase {
 		Object o = null;
 		String r;
 
-		Map m = new MyMap2();
+		var m = new MyMap2();
 		m.put("foo", "bar");
 		o = JsonList.of(m);
 		r = s.serialize(o);

@@ -42,7 +42,7 @@ class Hyperlink_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 		a.get("/a")
 			.accept("text/html+stripped")
 			.run()

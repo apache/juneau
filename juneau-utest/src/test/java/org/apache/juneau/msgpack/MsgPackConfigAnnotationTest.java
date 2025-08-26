@@ -47,7 +47,7 @@ class MsgPackConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void basicSerializer() {
 		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
-		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
+		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 	}
 
@@ -66,7 +66,7 @@ class MsgPackConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noValuesSerializer() {
 		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
+		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 	}
 
@@ -84,7 +84,7 @@ class MsgPackConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noAnnotationSerializer() {
 		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
+		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 	}
 

@@ -71,13 +71,15 @@ class AnyAssertion_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void ba01a_asString() {
-		Integer x = 1, nil = null;
+		var x = 1;
+		var nil = (Integer)null;
 		test(x).asString().is("1");
 		test(nil).asString().isNull();
 	}
 
 	@Test void ba01b_asString_wSerializer() {
-		Integer x = 1, nil = null;
+		var x = 1;
+		var nil = (Integer)null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("1");
 		test(nil).asString(s).is("null");
@@ -89,27 +91,31 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void ba02_asJson() {
-		Integer x = 1, nil = null;
+		var x = 1;
+		var nil = (Integer)null;
 		test(x).asJson().is("1");
 		test(nil).asJson().is("null");
 		assertThrown(()->test(new A2()).asJson()).asMessages().isAny(contains("Could not call getValue() on property 'foo'"));
 	}
 
 	@Test void ba03_asJsonSorted() {
-		Integer[] x1 = {2,1}, nil = null;
-		Object x2 = new A1();
+		var x1 = a(2,1);
+		var nil = (Integer[])null;
+		var x2 = new A1();
 		test(x1).asJsonSorted().is("[1,2]");
 		test(x2).asJsonSorted().is("{a:1,b:2}");
 		test(nil).asJsonSorted().is("null");
 	}
 
 	@Test void ba04_apply() {
-		Integer x1 = 1, x2 = 2;
+		var x1 = 1;
+		var x2 = 2;
 		test(x1).asTransformed(x -> x2).is(x2);
 	}
 
 	@Test void bb01_asArray() {
-		Integer[] x1 = {1,2}, nil = null;
+		var x1 = a(1,2);
+		var nil = (Integer[])null;
 		String x2 = "";
 		test(x1).asArray(Integer.class).asItem(0).is(1);
 		test(nil).asArray(Integer.class).isNull();
@@ -182,7 +188,8 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void bb10_asBoolean() {
-		Boolean x1 = true, nil = null;
+		var x1 = true;
+		var nil = (Boolean)null;
 		Object x2 = "";
 		test(x1).asBoolean().isString("true");
 		test(nil).asBoolean().isNull();
@@ -215,7 +222,8 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void bb14_asComparable() {
-		Integer x1 = 1, nil = null;
+		var x1 = 1;
+		var nil = (Integer)null;
 		Object x2 = list();
 		test(x1).asComparable().isString("1");
 		test(nil).asComparable().isNull();
@@ -223,7 +231,8 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void bb15_asDate() {
-		Date x1 = date("2000-06-01T12:34:56Z"), nil = null;
+		var x1 = date("2000-06-01T12:34:56Z");
+		var nil = (Date)null;
 		Object x2 = "";
 		test(x1).asDate().asString().isMatches("*2000");
 		test(nil).asDate().isNull();
@@ -231,7 +240,8 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void bb16_asInteger() {
-		Integer x1 = 1, nil = null;
+		var x1 = 1;
+		var nil = (Integer)null;
 		Object x2 = "";
 		test(x1).asInteger().isString("1");
 		test(nil).asInteger().isNull();
@@ -239,7 +249,8 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void bb17_asLong() {
-		Long x1 = 1L, nil = null;
+		var x1 = 1L;
+		var nil = (Long)null;
 		Object x2 = "";
 		test(x1).asLong().isString("1");
 		test(nil).asLong().isNull();
@@ -282,13 +293,15 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void bb22_asBean() {
-		A1 x1 = A1, nil = null;
+		var x1 = A1;
+		var nil = (A1)null;
 		test(x1).asBean().isString("a=1,b=2");
 		test(nil).asBean().isNull();
 	}
 
 	@Test void bb23_asBean_wType() {
-		A1 x1 = A1, nil = null;
+		var x1 = A1;
+		var nil = (A1)null;
 		Object x2 = "";
 		test(x1).asBean().isString("a=1,b=2");
 		test(nil).asBean(A1.class).isNull();
@@ -306,7 +319,8 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void bb25_asZonedDateTime() {
-		Object x1 = zdt("2000-06-01T12:34:56Z"), nil = null;
+		var x1 = zdt("2000-06-01T12:34:56Z");
+		var nil = (Object)null;
 		Object x2 = "";
 		test(x1).asZonedDateTime().asString().isMatches("2000*");
 		test(nil).asZonedDateTime().isNull();
@@ -326,25 +340,31 @@ class AnyAssertion_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void ca01_exists() {
-		Integer x = 1, nil = null;
+		var x = 1;
+		var nil = (Integer)null;
 		test(x).isExists().isExists();
 		assertThrowsWithMessage(BasicAssertionError.class, "Value was null.", ()->test(nil).isExists());
 	}
 
 	@Test void ca02_isNull() {
-		Integer x = 1, nil = null;
+		var x = 1;
+		var nil = (Integer)null;
 		test(nil).isNull();
 		assertThrowsWithMessage(BasicAssertionError.class, "Value was not null.", ()->test(x).isNull());
 	}
 
 	@Test void ca03_isNotNull() {
-		Integer x = 1, nil = null;
+		var x = 1;
+		var nil = (Integer)null;
 		test(x).isNotNull();
 		assertThrowsWithMessage(BasicAssertionError.class, "Value was null.", ()->test(nil).isNotNull());
 	}
 
 	@Test void ca04a_is_T() {
-		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
+		var x1 = 1;
+		var x1a = 1;
+		var x2 = 2;
+		var nil = (Integer)null;
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -361,7 +381,10 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void ca05_isNot() {
-		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
+		var x1 = 1;
+		var x1a = 1;
+		var x2 = 2;
+		var nil = (Integer)null;
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -370,7 +393,10 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void ca06_isAny() {
-		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
+		var x1 = 1;
+		var x1a = 1;
+		var x2 = 2;
+		var nil = (Integer)null;
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[2]'.  Actual='1'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='1'.");
@@ -378,7 +404,10 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void ca07_isNotAny() {
-		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
+		var x1 = 1;
+		var x1a = 1;
+		var x2 = 2;
+		var nil = (Integer)null;
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -398,7 +427,10 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void ca09_isSameJsonAs() {
-		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
+		var x1 = 1;
+		var x1a = 1;
+		var x2 = 2;
+		var nil = (Integer)null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
 		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='2'.  Actual='1'.");
@@ -407,7 +439,10 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void ca10_isSameSortedJsonAs() {
-		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
+		var x1 = 1;
+		var x1a = 1;
+		var x2 = 2;
+		var nil = (Integer)null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
 		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='2'.  Actual='1'.");
@@ -416,7 +451,10 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void ca11_isSameSerializedAs() {
-		Integer x1 = 1, x1a = 1, x2 = 2, nil = null;
+		var x1 = 1;
+		var x1a = 1;
+		var x2 = 2;
+		var nil = (Integer)null;
 		WriterSerializer s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
@@ -426,7 +464,8 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void ca12_isType() {
-		Integer x = 1, nil = null;
+		var x = 1;
+		var nil = (Integer)null;
 		test(x).isType(Integer.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Integer'.");
@@ -435,7 +474,8 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void ca13_isExactType() {
-		Integer x = 1, nil = null;
+		var x = 1;
+		var nil = (Integer)null;
 		test(x).isExactType(Integer.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.lang.Integer'.");
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Integer'.");
@@ -444,7 +484,8 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void ca14_isString() {
-		Integer x = 1, nil = null;
+		var x = 1;
+		var nil = (Integer)null;
 		test(x).isString("1");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='1'.");
@@ -453,7 +494,8 @@ class AnyAssertion_Test extends SimpleTestBase {
 	}
 
 	@Test void ca15_isJson() {
-		Integer x = 1, nil = null;
+		var x = 1;
+		var nil = (Integer)null;
 		test(x).isJson("1");
 		test(nil).isJson("null");
 		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='1'.");

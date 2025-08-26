@@ -64,7 +64,7 @@ class Rest_RVars_Test extends SimpleTestBase {
 				super(b.produces("text/plain").accept("*/*").function((s,o) -> out(s)));
 			}
 			public static String out(SerializerSession s) {
-				JsonMap sp = s.getSessionProperties();
+				var sp = s.getSessionProperties();
 				return format("A1=%s,A2=%s,B1=%s,B2=%s,C=%s,R1a=%s,R1b=%s,R2=%s,R3=%s,R4=%s,R5=%s,R6=%s",
 					sp.get("A1",null), sp.get("A2",null), sp.get("B1",null), sp.get("B2",null), sp.get("C",null),
 					sp.get("R1a",null), sp.get("R1b",null), sp.get("R2",null), sp.get("R3",null), sp.get("R4",null), sp.get("R5",null), sp.get("R6",null));
@@ -73,7 +73,7 @@ class Rest_RVars_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 		a.get("/p2").accept("text/plain").run().assertContent("A1=a1,A2=c,B1=b1,B2=c,C=c,R1a=/p1/p2,R1b=/p1,R2=bar,R3=,R4=a1,R5=a2,R6=");
 	}
-}
+}

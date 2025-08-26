@@ -65,7 +65,7 @@ class DataConversionTest extends SimpleTestBase {
 		assertEquals("{foo:123}", m.getString("x"));
 
 		// *** Collection ***
-		Set s = new HashSet();
+		var s = new HashSet();
 		s.add(123);
 		m.put("x", s);
 		assertEquals("[123]", m.getString("x"));
@@ -118,11 +118,11 @@ class DataConversionTest extends SimpleTestBase {
 	@Test void a02_objectSwaps() throws Exception {
 		String s = "2001-12-21T12:34:56Z";
 		BeanContext bc = BeanContext.DEFAULT;
-		Calendar c = bc.convertToType(s, GregorianCalendar.class);
+		var c = bc.convertToType(s, GregorianCalendar.class);
 		assertEquals(2001, c.get(Calendar.YEAR));
-		c = bc.convertToType(s, Calendar.class);
-		assertEquals(2001, c.get(Calendar.YEAR));
-		s = bc.convertToType(c, String.class);
+		var c2 = bc.convertToType(s, Calendar.class);
+		assertEquals(2001, c2.get(Calendar.YEAR));
+		s = bc.convertToType(c2, String.class);
 		assertEquals("2001-12-21T12:34:56Z", s);
 	}
 }

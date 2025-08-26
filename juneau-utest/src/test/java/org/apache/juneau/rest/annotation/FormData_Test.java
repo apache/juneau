@@ -39,13 +39,13 @@ class FormData_Test extends SimpleTestBase {
 	public static class A {
 		@RestPost
 		public String a(RestRequest req, @FormData("p1") @Schema(allowEmptyValue=true) String p1, @FormData("p2") @Schema(allowEmptyValue=true) int p2) throws Exception {
-			RequestFormParams f = req.getFormParams();
+			var f = req.getFormParams();
 			return "p1=["+p1+","+f.get("p1").orElse(null)+","+f.get("p1").asString().orElse(null)+"],p2=["+p2+","+f.get("p2").orElse(null)+","+f.get("p2").as(int.class).orElse(null)+"]";
 		}
 	}
 
 	@Test void a01_basic() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 		a.post("/a", "p1=p1&p2=2").contentType("application/x-www-form-urlencoded").run().assertContent("p1=[p1,p1,p1],p2=[2,2,2]");
 		a.post("/a", "p1&p2").contentType("application/x-www-form-urlencoded").run().assertContent("p1=[null,null,null],p2=[0,null,0]");
 		a.post("/a", "p1=&p2=").contentType("application/x-www-form-urlencoded").run().assertContent("p1=[,,],p2=[0,,0]");
@@ -68,18 +68,18 @@ class FormData_Test extends SimpleTestBase {
 	public static class B {
 		@RestPost
 		public String a(RestRequest req, @FormData("p1") String p1) throws Exception {
-			RequestFormParams f = req.getFormParams();
+			var f = req.getFormParams();
 			return "p1=["+p1+","+f.get("p1").orElse(null)+","+f.get("p1").orElse(null)+"]";
 		}
 		@RestPost
 		public String b(RestRequest req, @FormData("p1") @Schema(format="uon") String p1) throws Exception {
-			RequestFormParams f = req.getFormParams();
+			var f = req.getFormParams();
 			return "p1=["+p1+","+f.get("p1").orElse(null)+","+f.get("p1").orElse(null)+"]";
 		}
 	}
 
 	@Test void b01_uonParameters() throws Exception {
-		RestClient b = MockRestClient.build(B.class);
+		var b = MockRestClient.build(B.class);
 
 		b.post("/a", "p1=p1").contentType("application/x-www-form-urlencoded").run().assertContent("p1=[p1,p1,p1]");
 		b.post("/a", "p1='p1'").contentType("application/x-www-form-urlencoded").run().assertContent("p1=['p1','p1','p1']");
@@ -125,7 +125,7 @@ class FormData_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_defaultFormData() throws Exception {
-		RestClient c = MockRestClient.build(C.class);
+		var c = MockRestClient.build(C.class);
 
 		c.post("/a").contentType("application/x-www-form-urlencoded").run().assertContent("{f1:'1',f2:'2',f3:'3'}");
 		c.post("/a").contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).run().assertContent("{f1:'4',f2:'5',f3:'6'}");
@@ -168,7 +168,7 @@ class FormData_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_optionalParams() throws Exception {
-		RestClient d = MockRestClient.create(D.class).accept("application/json").contentType("application/x-www-form-urlencoded").build();
+		var d = MockRestClient.create(D.class).accept("application/json").contentType("application/x-www-form-urlencoded").build();
 
 		d.post("/a", "f1=123")
 			.run()
@@ -250,7 +250,7 @@ class FormData_Test extends SimpleTestBase {
 	}
 
 	@Test void f01_defaultParams() throws Exception {
-		RestClient f = MockRestClient.create(F.class).accept("application/json").contentType("application/x-www-form-urlencoded").build();
+		var f = MockRestClient.create(F.class).accept("application/json").contentType("application/x-www-form-urlencoded").build();
 
 		f.post("/a1", "f1=123")
 			.run()

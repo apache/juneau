@@ -95,7 +95,7 @@ public class RestClient_Headers_Test extends SimpleTestBase {
 
 	@Test void a08_header_String_Supplier() throws Exception {
 		var s = MutableSupplier.of("foo");
-		RestClient x = checkFooClient().headers(header("Foo",s,null)).build();
+		var x = checkFooClient().headers(header("Foo",s,null)).build();
 		x.get("/headers").header("Foo",s).run().assertContent("['foo','foo']");
 		s.set("bar");
 		x.get("/headers").header("Foo",s).run().assertContent("['bar','bar']");
@@ -107,7 +107,7 @@ public class RestClient_Headers_Test extends SimpleTestBase {
 
 	@Test void a10_headers_String_Supplier_Schema() throws Exception {
 		var s = MutableSupplier.of(new String[]{"foo","bar"});
-		RestClient x = checkFooClient().headers(header("Foo",s,T_ARRAY_PIPES)).build();
+		var x = checkFooClient().headers(header("Foo",s,T_ARRAY_PIPES)).build();
 		x.get("/headers").header(header("Foo",s,T_ARRAY_PIPES)).run().assertContent("['foo|bar','foo|bar']");
 		s.set(new String[]{"bar","baz"});
 		x.get("/headers").header(header("Foo",s,T_ARRAY_PIPES)).run().assertContent("['bar|baz','bar|baz']");
@@ -193,8 +193,8 @@ public class RestClient_Headers_Test extends SimpleTestBase {
 	@Test void b04_dontOverrideAccept() throws Exception {
 		checkClient("Accept").header("Accept","text/plain").build().get("/headers").run().assertContent("['text/plain']");
 		checkClient("Accept").header("Accept","text/foo").build().get("/headers").header("Accept","text/plain").run().assertContent("['text/foo','text/plain']");
-		RestClient rc = checkClient("Accept").header("Accept","text/foo").build();
-		RestRequest req = rc.get("/headers");
+		var rc = checkClient("Accept").header("Accept","text/foo").build();
+		var req = rc.get("/headers");
 		req.setHeader("Accept","text/plain");
 		req.run().assertContent("['text/plain']");
 	}

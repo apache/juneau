@@ -64,7 +64,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_basic_onParameter() throws Exception {
-		ParamInfo mpi = MethodInfo.of(A03.class.getMethod("a", String.class)).getParam(0);
+		var mpi = MethodInfo.of(A03.class.getMethod("a", String.class)).getParam(0);
 		var s = HttpPartSchema.create().applyAll(Content.class, mpi).noValidate().build();
 		assertTrue(s.isRequired());
 	}
@@ -84,7 +84,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_basic_onParameterAndClass() throws Exception {
-		ParamInfo mpi = MethodInfo.of(A04.class.getMethod("a", A02.class)).getParam(0);
+		var mpi = MethodInfo.of(A04.class.getMethod("a", A02.class)).getParam(0);
 		var s = HttpPartSchema.create().applyAll(Content.class, mpi).noValidate().build();
 		assertTrue(s.isRequired());
 	}
@@ -186,7 +186,7 @@ class HttpPartSchema_Body_Test extends SimpleTestBase {
 		assertJson(s.getEnum(), "['e1','e2']");
 		assertEquals("c1\nc2", s.getDefault());
 
-		HttpPartSchema items = s.getItems();
+		var items = s.getItems();
 		assertEquals(HttpPartDataType.INTEGER, items.getType());
 		assertEquals(HttpPartFormat.INT64, items.getFormat());
 		assertEquals(HttpPartCollectionFormat.SSV, items.getCollectionFormat());

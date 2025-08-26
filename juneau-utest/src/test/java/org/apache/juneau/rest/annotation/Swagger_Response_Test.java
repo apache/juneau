@@ -344,7 +344,7 @@ class Swagger_Response_Test extends SimpleTestBase {
 	@Test void e01_schemaFromThrowable() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(E.class);
 
-		ResponseInfo x = s.getResponseInfo("/a","get",500);
+		var x = s.getResponseInfo("/a","get",500);
 		assertJson(x.getSchema(), "{type:'number'}");
 	}
 

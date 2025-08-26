@@ -102,7 +102,7 @@ class RestPostInit_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_postInit() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 		a.get("/super/events").run().assertContent("['super-1a','super-1b','super-1c','super-2a']");
 		a.get("/sub/events").run().assertContent("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
 		a.get("/sub/child/events").run().assertContent("['super-1a','super-1b','child-1c','super-2a','child-2b']");
@@ -196,7 +196,7 @@ class RestPostInit_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_postInitChildFirst() throws Exception {
-		RestClient b = MockRestClient.build(B.class);
+		var b = MockRestClient.build(B.class);
 		b.get("/super/postInitChildFirstEvents").run().assertContent("['super-1a','super-1b','super-1c','super-2a']");
 		b.get("/sub/postInitChildFirstEvents").run().assertContent("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
 		b.get("/sub/child/postInitChildFirstEvents").run().assertContent("['super-1a','super-1b','child-1c','super-2a','child-2b']");

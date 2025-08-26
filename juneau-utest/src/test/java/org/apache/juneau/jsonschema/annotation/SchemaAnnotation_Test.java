@@ -237,10 +237,10 @@ class SchemaAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_otherMethods() throws Exception {
-		Schema c1 = SchemaAnnotation.create(C1.class).on(C2.class).build();
-		Schema c2 = SchemaAnnotation.create("a").on("b").build();
-		Schema c3 = SchemaAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		Schema c4 = SchemaAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
+		var c1 = SchemaAnnotation.create(C1.class).on(C2.class).build();
+		var c2 = SchemaAnnotation.create("a").on("b").build();
+		var c3 = SchemaAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
+		var c4 = SchemaAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
 		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
 		assertJsonContains(c2, "on:['a','b']");

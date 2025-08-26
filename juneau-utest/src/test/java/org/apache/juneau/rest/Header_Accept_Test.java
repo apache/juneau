@@ -59,7 +59,7 @@ class Header_Accept_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_defaultHeadersOnServletAnnotation() throws Exception {
-		RestClient a = MockRestClient.buildLax(A.class);
+		var a = MockRestClient.buildLax(A.class);
 		a.put("/", null)
 			.run()
 			.assertContent("s2");
@@ -95,7 +95,7 @@ class Header_Accept_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_restMethodWithParsersSerializers() throws Exception {
-		RestClient b = MockRestClient.buildLax(B.class);
+		var b = MockRestClient.buildLax(B.class);
 		b.put("/", null).accept("text/s3").run().assertContent("s3");
 		b.put("?noTrace=true", null)
 			.accept("text/s4")
@@ -124,7 +124,7 @@ class Header_Accept_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_restMethodAddParsersSerializersInherit() throws Exception {
-		RestClient c = MockRestClient.buildLax(C.class);
+		var c = MockRestClient.buildLax(C.class);
 		c.put("/", null)
 			.run()
 			.assertContent("s2");
@@ -166,7 +166,7 @@ class Header_Accept_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_accept_valid() throws Exception {
-		RestClient d = MockRestClient.buildLax(D.class);
+		var d = MockRestClient.buildLax(D.class);
 		// "*/*" should match the first serializer, not the default serializer.
 		d.put("/", null).accept("*/*").run().assertContent("s1");
 		// "text/*" should match the first serializer, not the default serializer.
@@ -202,7 +202,7 @@ class Header_Accept_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_restMethodParserSerializerAnnotations() throws Exception {
-		RestClient e = MockRestClient.buildLax(E.class);
+		var e = MockRestClient.buildLax(E.class);
 		e.put("/", null).run().assertContent("s3");
 		e.put("/", null).accept("text/s3").run().assertContent("s3");
 		e.put("?noTrace=true", null)
@@ -238,10 +238,10 @@ class Header_Accept_Test extends SimpleTestBase {
 	}
 
 	@Test void f01_restMethodAddParsersSerializersAnnotations() throws Exception {
-		RestClient f = MockRestClient.build(F.class);
+		var f = MockRestClient.build(F.class);
 		f.put("/", null).run().assertContent("s3");
 		f.put("/", null).accept("text/s1").run().assertContent("s1");
 		f.put("/", null).accept("text/s2").run().assertContent("s2");
 		f.put("/", null).accept("text/s3").run().assertContent("s3");
 	}
-}
+}

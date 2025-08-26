@@ -83,11 +83,11 @@ class BeanIgnoreAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_otherMethods() throws Exception {
-		BeanIgnore c1 = BeanIgnoreAnnotation.create(C1.class).on(C2.class).build();
-		BeanIgnore c2 = BeanIgnoreAnnotation.create("a").on("b").build();
-		BeanIgnore c3 = BeanIgnoreAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		BeanIgnore c4 = BeanIgnoreAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
-		BeanIgnore c5 = BeanIgnoreAnnotation.create().on(C1.class.getConstructor()).on(C2.class.getConstructor()).build();
+		var c1 = BeanIgnoreAnnotation.create(C1.class).on(C2.class).build();
+		var c2 = BeanIgnoreAnnotation.create("a").on("b").build();
+		var c3 = BeanIgnoreAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
+		var c4 = BeanIgnoreAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
+		var c5 = BeanIgnoreAnnotation.create().on(C1.class.getConstructor()).on(C2.class.getConstructor()).build();
 
 		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
 		assertJsonContains(c2, "on:['a','b']");

@@ -60,6 +60,5 @@ class BeanContext_Test extends SimpleTestBase {
 
 		var p2 = JsonParser.create().ignoreUnknownEnumValues().build();
 		assertNull(p2.parse("'UNKNOWN'", TestEnum.class));
-
 	}
 }

@@ -82,18 +82,18 @@ class ObjectPaginator_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_collections_basic() {
-		Object in = Arrays.asList(1,2,3);
+		var in = Arrays.asList(1,2,3);
 		assertList(op.run(in, 0, 3), 1,2,3);
 		assertList(op.run(in, 1, 3), 2,3);
 		assertList(op.run(in, 1, 1), 2);
 		assertList(op.run(in, 4, 1));
 		assertList(op.run(in, 0, 0));
 
-		in = new LinkedHashSet<>(Arrays.asList(1,2,3));
-		assertList(op.run(in, 0, 3), 1,2,3);
-		assertList(op.run(in, 1, 3), 2,3);
-		assertList(op.run(in, 1, 1), 2);
-		assertList(op.run(in, 4, 1));
-		assertList(op.run(in, 0, 0));
+		var in2 = new LinkedHashSet<>(Arrays.asList(1,2,3));
+		assertList(op.run(in2, 0, 3), 1,2,3);
+		assertList(op.run(in2, 1, 3), 2,3);
+		assertList(op.run(in2, 1, 1), 2);
+		assertList(op.run(in2, 4, 1));
+		assertList(op.run(in2, 0, 0));
 }
 }

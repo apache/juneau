@@ -48,7 +48,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 	}
 
 	@Test void a02_beanpOnPrimitiveFields_parser() {
-		A x = Json5.DEFAULT.read("{f1:1,f2:2}", A.class);
+		var x = Json5.DEFAULT.read("{f1:1,f2:2}", A.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
 	}
@@ -78,7 +78,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 	}
 
 	@Test void b02_beanAnnotationParser() {
-		Bc x = JsonParser.DEFAULT.copy().applyAnnotations(BcConfig.class).build().parse("{f1:1,f2:2}", Bc.class);
+		var x = JsonParser.DEFAULT.copy().applyAnnotations(BcConfig.class).build().parse("{f1:1,f2:2}", Bc.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
 	}
@@ -107,7 +107,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 	}
 
 	@Test void b02_beanAnnotationParser_usingConfig() throws Exception {
-		B x = Json5.DEFAULT.read("{f1:1,f2:2}", B.class);
+		var x = Json5.DEFAULT.read("{f1:1,f2:2}", B.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
 	}
@@ -229,7 +229,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 	}
 
 	@Test void d02_beanAnnotation_bproAll_Parser() {
-		D x = Json5.DEFAULT.read("{f1:1,f2:2}", D.class);
+		var x = Json5.DEFAULT.read("{f1:1,f2:2}", D.class);
 		assertEquals(0, x.f1);
 		assertEquals(0, x.f2);
 	}
@@ -254,7 +254,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 	}
 
 	@Test void d04_beanAnnotation_bproAll_Parser_usingConfig() throws Exception {
-		Dc x = JsonParser.DEFAULT.copy().applyAnnotations(DcConfig.class).build().parse("{f1:1,f2:2}", Dc.class);
+		var x = JsonParser.DEFAULT.copy().applyAnnotations(DcConfig.class).build().parse("{f1:1,f2:2}", Dc.class);
 		assertEquals(0, x.f1);
 		assertEquals(0, x.f2);
 	}
@@ -281,7 +281,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 	}
 
 	@Test void e02_beanAnnotation_bpwoAll_Parser() throws Exception {
-		E x = Json5.DEFAULT.read("{f1:1,f2:2}", E.class);
+		var x = Json5.DEFAULT.read("{f1:1,f2:2}", E.class);
 		assertEquals(1, x.f1);
 		assertEquals(2, x.f2);
 	}
@@ -306,7 +306,7 @@ class ReadWriteOnlyPropertiesTest extends SimpleTestBase {
 	}
 
 	@Test void e04_beanAnnotation_bpwoAll_Parser_usingConfig() throws Exception {
-		Ec x = JsonParser.DEFAULT.copy().applyAnnotations(EcConfig.class).build().parse("{f1:1,f2:2}", Ec.class);
+		var x = JsonParser.DEFAULT.copy().applyAnnotations(EcConfig.class).build().parse("{f1:1,f2:2}", Ec.class);
 		assertEquals(1, x.f1);
 		assertEquals(2, x.f2);
 	}

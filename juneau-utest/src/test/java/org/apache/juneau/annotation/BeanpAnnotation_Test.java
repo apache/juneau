@@ -104,9 +104,9 @@ class BeanpAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_otherMethods() throws Exception {
-		Beanp c1 = BeanpAnnotation.create("a").on("b").build();
-		Beanp c2 = BeanpAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		Beanp c3 = BeanpAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
+		var c1 = BeanpAnnotation.create("a").on("b").build();
+		var c2 = BeanpAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
+		var c3 = BeanpAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
 		assertJsonContains(c1, "on:['a','b']");
 		assertJsonContains(c2, "on:['"+CNAME+"$C1.f1','"+CNAME+"$C2.f2']");

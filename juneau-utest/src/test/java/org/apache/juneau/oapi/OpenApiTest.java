@@ -74,7 +74,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a02a_noType_formatByte() throws Exception {
 		String in = "foo";
-		HttpPartSchema ps = tNone().fByte().build();
+		var ps = tNone().fByte().build();
 		String s = serialize(ps, in);
 		assertEquals("Zm9v", s);
 		String r = parse(ps, s, String.class);
@@ -83,14 +83,14 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a02b_noType_formatByte_null() throws Exception {
 		String in = null;
-		HttpPartSchema ps = tNone().fByte().build();
+		var ps = tNone().fByte().build();
 		String s = serialize(ps, in);
 		assertEquals("null", s);
 	}
 
 	@Test void a03a_noType_formatBinary() throws Exception {
 		String in = "foo";
-		HttpPartSchema ps = tNone().fBinary().build();
+		var ps = tNone().fBinary().build();
 		String s = serialize(ps, in);
 		assertEquals("666F6F", s);
 		String r = parse(ps, s, String.class);
@@ -99,7 +99,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a03b_noType_formatBinary_null() throws Exception {
 		String in = null;
-		HttpPartSchema ps = tNone().fBinary().build();
+		var ps = tNone().fBinary().build();
 		String s = serialize(ps, in);
 		assertEquals("null", s);
 		String r = parse(ps, s, String.class);
@@ -108,7 +108,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a04a_noType_formatBinarySpaced() throws Exception {
 		String in = "foo";
-		HttpPartSchema ps = tNone().fBinarySpaced().build();
+		var ps = tNone().fBinarySpaced().build();
 		String s = serialize(ps, in);
 		assertEquals("66 6F 6F", s);
 		String r = parse(ps, s, String.class);
@@ -117,7 +117,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a04b_noType_formatBinarySpaced_null() throws Exception {
 		String in = null;
-		HttpPartSchema ps = tNone().fBinarySpaced().build();
+		var ps = tNone().fBinarySpaced().build();
 		String s = serialize(ps, in);
 		assertEquals("null", s);
 		String r = parse(ps, s, String.class);
@@ -126,7 +126,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a05_noType_formatDate_String() throws Exception {
 		String in = "2012-12-21";
-		HttpPartSchema ps = tNone().fDate().build();
+		var ps = tNone().fDate().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21", s);
 		String r = parse(ps, s, String.class);
@@ -135,7 +135,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a06_noType_formatDate_Calendar() throws Exception {
 		Calendar in = cal("2012-12-21");
-		HttpPartSchema ps = tNone().fDate().build();
+		var ps = tNone().fDate().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21Z", s);
 		Calendar r = parse(ps, s, Calendar.class);
@@ -145,7 +145,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a07_noType_formatDate_Date() throws Exception {
 		Date in = cal("2012-12-21").getTime();
-		HttpPartSchema ps = tNone().fDate().build();
+		var ps = tNone().fDate().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21Z", s);
 		Calendar r = parse(ps, s, Calendar.class);
@@ -155,7 +155,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a08_noType_formatDate_Temporal() throws Exception {
 		Instant in = cal("2012-12-21").toInstant();
-		HttpPartSchema ps = tNone().fDate().build();
+		var ps = tNone().fDate().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21Z", s);
 		Calendar r = parse(ps, s, Calendar.class);
@@ -165,7 +165,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a09_noType_formatDate_Other() throws Exception {
 		var in = new StringBuilder("2012-12-21");
-		HttpPartSchema ps = tNone().fDate().build();
+		var ps = tNone().fDate().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21", s);
 		String r = parse(ps, s, String.class);
@@ -174,7 +174,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a10_noType_formatDate_null() throws Exception {
 		String in = null;
-		HttpPartSchema ps = tNone().fDate().build();
+		var ps = tNone().fDate().build();
 		String s = serialize(ps, in);
 		assertEquals("null", s);
 		String r = parse(ps, s, String.class);
@@ -183,7 +183,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a11_noType_formatDateTime_String() throws Exception {
 		String in = "2012-12-21T00:00:00";
-		HttpPartSchema ps = tNone().fDateTime().build();
+		var ps = tNone().fDateTime().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00", s);
 		String r = parse(ps, s, String.class);
@@ -192,7 +192,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a12_noType_formatDateTime_Calendar() throws Exception {
 		Calendar in = cal("2012-12-21");
-		HttpPartSchema ps = tNone().fDateTime().build();
+		var ps = tNone().fDateTime().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00Z", s);
 		Calendar r = parse(ps, s, Calendar.class);
@@ -202,7 +202,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a13_noType_formatDateTime_Date() throws Exception {
 		Date in = cal("2012-12-21").getTime();
-		HttpPartSchema ps = tNone().fDateTime().build();
+		var ps = tNone().fDateTime().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00Z", s);
 		Calendar r = parse(ps, s, Calendar.class);
@@ -212,7 +212,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a14_noType_formatDateTime_Temporal() throws Exception {
 		Instant in = cal("2012-12-21").toInstant();
-		HttpPartSchema ps = tNone().fDateTime().build();
+		var ps = tNone().fDateTime().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00Z", s);
 		Calendar r = parse(ps, s, Calendar.class);
@@ -222,7 +222,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a15_noType_formatDate_Other() throws Exception {
 		var in = new StringBuilder("2012-12-21T00:00:00");
-		HttpPartSchema ps = tNone().fDateTime().build();
+		var ps = tNone().fDateTime().build();
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00", s);
 		String r = parse(ps, s, String.class);
@@ -231,7 +231,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a16_noType_formatDate_null() throws Exception {
 		String in = null;
-		HttpPartSchema ps = tNone().fDateTime().build();
+		var ps = tNone().fDateTime().build();
 		String s = serialize(ps, in);
 		assertEquals("null", s);
 		String r = parse(ps, s, String.class);
@@ -240,7 +240,7 @@ public class OpenApiTest extends SimpleTestBase {
 
 	@Test void a17_noType_formatUon() throws Exception {
 		String in = "foo,bar";
-		HttpPartSchema ps = tNone().fUon().build();
+		var ps = tNone().fUon().build();
 		String s = serialize(ps, in);
 		assertEquals("'foo,bar'", s);
 		String r = parse(ps, s, String.class);

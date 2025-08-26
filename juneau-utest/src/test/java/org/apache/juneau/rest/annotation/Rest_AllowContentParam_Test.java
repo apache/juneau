@@ -46,20 +46,20 @@ class Rest_AllowContentParam_Test extends SimpleTestBase {
 	public static class A4 extends A2 {}
 
 	@Test void a01_basic() throws Exception {
-		RestClient a1 = MockRestClient.build(A1.class);
+		var a1 = MockRestClient.build(A1.class);
 		a1.put("/", "{a:'b'}").run().assertContent("{a:'b'}");
 		a1.put("/?content=(c=d)", "{a:'b'}").run().assertContent("{c:'d'}");
 
-		RestClient a2 = MockRestClient.build(A2.class);
+		var a2 = MockRestClient.build(A2.class);
 		a2.put("/", "{a:'b'}").run().assertContent("{a:'b'}");
 		a2.put("/?content=(c=d)", "{a:'b'}").run().assertContent("{a:'b'}");
 
-		RestClient a3 = MockRestClient.build(A3.class);
+		var a3 = MockRestClient.build(A3.class);
 		a3.put("/", "{a:'b'}").run().assertContent("{a:'b'}");
 		a3.put("/?content=(c=d)", "{a:'b'}").run().assertContent("{a:'b'}");
 
-		RestClient a4 = MockRestClient.build(A4.class);
+		var a4 = MockRestClient.build(A4.class);
 		a4.put("/", "{a:'b'}").run().assertContent("{a:'b'}");
 		a4.put("/?content=(c=d)", "{a:'b'}").run().assertContent("{c:'d'}");
 	}
-}
+}

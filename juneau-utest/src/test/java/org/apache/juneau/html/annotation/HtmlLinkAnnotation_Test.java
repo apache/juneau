@@ -82,8 +82,8 @@ class HtmlLinkAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_otherMethods() {
-		HtmlLink c1 = HtmlLinkAnnotation.create(C1.class).on(C2.class).build();
-		HtmlLink c2 = HtmlLinkAnnotation.create("a").on("b").build();
+		var c1 = HtmlLinkAnnotation.create(C1.class).on(C2.class).build();
+		var c2 = HtmlLinkAnnotation.create("a").on("b").build();
 
 		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
 		assertJsonContains(c2, "on:['a','b']");

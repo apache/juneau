@@ -79,7 +79,7 @@ public class XmlValidatorParser extends XmlParser {
 	protected XMLStreamReader getStaxReader(Reader in) throws Exception {
 		var factory = XMLInputFactory.newInstance();
 		factory.setProperty("javax.xml.stream.isNamespaceAware", false);
-		XMLStreamReader parser = factory.createXMLStreamReader(in);
+		var parser = factory.createXMLStreamReader(in);
 		parser.nextTag();
 		return parser;
 	}

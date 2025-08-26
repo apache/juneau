@@ -543,7 +543,7 @@ class UrlEncodingSerializerTest extends SimpleTestBase {
 		UrlEncodingSerializer s2;
 		String r;
 
-		Map<String,String[]> t = new LinkedHashMap<>();
+		var t = new LinkedHashMap<>();
 		t.put("f1", new String[]{"bar"});
 		t.put("f2", new String[]{"bar","baz"});
 		t.put("f3", new String[]{});
@@ -564,7 +564,7 @@ class UrlEncodingSerializerTest extends SimpleTestBase {
 		assertEquals("_value=(foo)", s2.serialize("(foo)"));
 		assertEquals("_value=@(foo)", s2.serialize("@(foo)"));
 
-		Map<String,Object> m = CollectionUtils.mapBuilder(String.class,Object.class).add("foo","foo").add("'foo'","'foo'").add("(foo)","(foo)").add("@(foo)","@(foo)").build();
+		var m = CollectionUtils.mapBuilder(String.class,Object.class).add("foo","foo").add("'foo'","'foo'").add("(foo)","(foo)").add("@(foo)","@(foo)").build();
 		assertEquals("foo=foo&'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)", s2.serialize(m));
 
 		List<String> l = list("foo", "'foo'", "(foo)", "@(foo)");

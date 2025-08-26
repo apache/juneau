@@ -47,7 +47,7 @@ class BasicCsvHeader_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_basic() throws Exception {
-		RestClient c = client().build();
+		var c = client().build();
 
 		// Normal usage.
 		c.get().header(csvHeader(HEADER,VALUE)).run().assertContent(VALUE);
@@ -67,7 +67,7 @@ class BasicCsvHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_contains() {
-		BasicCsvHeader x = new BasicCsvHeader("Foo", (String)null,"bar","baz");
+		var x = new BasicCsvHeader("Foo", (String)null,"bar","baz");
 		assertTrue(x.contains(null));
 		assertTrue(x.containsIgnoreCase(null));
 		assertTrue(x.contains("bar"));

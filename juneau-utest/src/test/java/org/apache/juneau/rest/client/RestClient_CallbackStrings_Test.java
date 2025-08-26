@@ -39,14 +39,14 @@ class RestClient_CallbackStrings_Test extends SimpleTestBase {
 			return JsonMap.of("method","PUT","headers",getFooHeaders(req),"content",req.getContent().asString());
 		}
 		private Map<String,Object> getFooHeaders(RestRequest req) {
-			Map<String,Object> m = new TreeMap<>();
+			var m = new TreeMap<String,Object>();
 			req.getHeaders().stream().filter(x -> x.getName().startsWith("Foo-")).forEach(x -> m.put(x.getName(), x.getValue()));
 			return m;
 		}
 	}
 
 	@Test void a01_callback() throws Exception {
-		RestClient x = MockRestClient.build(A.class);
+		var x = MockRestClient.build(A.class);
 		x.callback("GET /testCallback").run().assertContent("{method:'GET',headers:{},content:''}");
 		x.callback("GET /testCallback some sample content").run().assertContent("{method:'GET',headers:{},content:'some sample content'}");
 		x.callback("GET {Foo-X:123,Foo-Y:'abc'} /testCallback").run().assertContent("{method:'GET',headers:{'Foo-X':'123','Foo-Y':'abc'},content:''}");
@@ -56,9 +56,9 @@ class RestClient_CallbackStrings_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_callback_invalidStrings() {
-		RestClient x = MockRestClient.build(A.class);
+		var x = MockRestClient.build(A.class);
 		for (String s : list("","GET","GET ","GET {","GET {xxx} /foo",null)) {
 			assertThrowsWithMessage(Exception.class, "Invalid format for call string", ()->x.callback(s).run().getContent().asString());
 		}
 	}
-}
+}

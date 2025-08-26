@@ -32,8 +32,8 @@ class ConfigMapTest extends SimpleTestBase {
 	// Should be able to read non-existent files without errors.
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void a01_nonExistentConfig() throws Exception {
-		ConfigStore s = MemoryStore.create().build();
-		ConfigMap cm = s.getMap("A.cfg");
+		var s = MemoryStore.create().build();
+		var cm = s.getMap("A.cfg");
 		assertEquals("", cm.toString());
 	}
 
@@ -43,7 +43,7 @@ class ConfigMapTest extends SimpleTestBase {
 	@Test void a02_blankConfig() throws Exception {
 
 		ConfigStore s = initStore("A.cfg", "");
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		assertEquals("", cm.toString());
 
 		s.update("A.cfg", "   \n   \n   ");
@@ -57,7 +57,7 @@ class ConfigMapTest extends SimpleTestBase {
 		ConfigStore s = initStore("A.cfg",
 			"foo=bar"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		assertLines("foo=bar|", cm);
 
@@ -80,7 +80,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"#comment",
 			"foo=bar"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		assertLines("#comment|foo=bar|", cm);
 
@@ -103,7 +103,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[MySection]",
 			"foo=bar"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		assertLines("[MySection]|foo=bar|", cm);
 
@@ -127,7 +127,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[MySection]",
 			"foo=bar"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		assertLines("[MySection]|foo=bar|", cm);
 
@@ -153,7 +153,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"#k2",
 			"k2=v2"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		assertLines("#S1|[S1]|#k1|k1=v1|#S2|[S2]|#k2|k2=v2|", cm);
 
 		assertEquals("", Utils.join(cm.getPreLines(""), '|'));
@@ -185,7 +185,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"#k1",
 			"k1=v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		assertLines("#D||#k|k=v|#S1|[S1]|#k1|k1=v1|", cm);
 
 		assertEquals("#D", Utils.join(cm.getPreLines(""), '|'));
@@ -228,7 +228,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"",
 			"k1=v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		assertLines("#Da|#Db||#ka||#kb||k=v||#S1a||#S1b||[S1]||#k1a||#k1b||k1=v1|", cm);
 
 		assertEquals("#Da|#Db", Utils.join(cm.getPreLines(""), '|'));
@@ -285,7 +285,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"\tv2b,",
 			"\tv2c"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		assertEquals("", Utils.join(cm.getEntry("", "k1").getPreLines(), '|'));
 		assertEquals("", Utils.join(cm.getEntry("", "k2").getPreLines(), '|'));
@@ -316,7 +316,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"\tv2b,",
 			"\tv2c"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		assertEquals("|#k1|", Utils.join(cm.getEntry("", "k1").getPreLines(), '|'));
 		assertEquals("|#k2|", Utils.join(cm.getEntry("", "k2").getPreLines(), '|'));
@@ -342,7 +342,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"\tv2b,",
 			"\tv2c"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		assertEquals("", Utils.join(cm.getEntry("S1", "k1").getPreLines(), '|'));
 		assertEquals("", Utils.join(cm.getEntry("S1", "k2").getPreLines(), '|'));
@@ -377,7 +377,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"\tv2b,",
 			"\tv2c"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		assertEquals("|#S1|", Utils.join(cm.getPreLines("S1"), '|'));
 		assertEquals("|#k1|", Utils.join(cm.getEntry("S1", "k1").getPreLines(), '|'));
@@ -402,7 +402,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = foo # comment"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		assertLines("[S1]|k1 = foo # comment|", cm);
 		assertEquals("foo", cm.getEntry("S1", "k1").getValue());
@@ -430,7 +430,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"k1 = foo#",
 			"k2 = foo # "
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		assertLines("[S1]|k1 = foo#|k2 = foo # |", cm);
 		assertEquals("", cm.getEntry("S1", "k1").getComment());
 		assertEquals("", cm.getEntry("S1", "k2").getComment());
@@ -443,7 +443,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"k2 = foo \\# bar",
 			"k3 = foo \\# bar # real-comment"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		assertLines("[S1]|k1 = foo\\#bar|k2 = foo \\# bar|k3 = foo \\# bar # real-comment|", cm);
 
 		assertEquals(null, cm.getEntry("S1", "k1").getComment());
@@ -460,7 +460,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"k1 = v1a",
 			"k2 = v2a"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", "v1b", null, null, null);
 		cm.setEntry("S1", "k2", null, null, null, null);
@@ -491,7 +491,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"",
 			"k2 = v2a"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", "v1b", null, null, null);
 		cm.setEntry("S1", "k2", null, null, null, null);
@@ -510,7 +510,7 @@ class ConfigMapTest extends SimpleTestBase {
 
 	@Test void a12_settingEntriesWithNewlines() throws Exception {
 		ConfigStore s = initStore("A.cfg");
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("", "k", "v1\nv2\nv3", null, null, null);
 		cm.setEntry("S1", "k1", "v1\nv2\nv3", null, null, null);
@@ -529,7 +529,7 @@ class ConfigMapTest extends SimpleTestBase {
 
 	@Test void a13_settingEntriesWithNewlinesAndSpaces() throws Exception {
 		ConfigStore s = initStore("A.cfg");
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("", "k", "v1 \n v2 \n v3", null, null, null);
 		cm.setEntry("S1", "k1", "v1\t\n\tv2\t\n\tv3", null, null, null);
@@ -554,7 +554,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setSection("S1", Arrays.asList("#S1"));
 		assertLines("#S1|[S1]|k1 = v1|", cm);
@@ -569,7 +569,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setSection("", Arrays.asList("#D"));
 		assertLines("#D||[S1]|k1 = v1|", cm);
@@ -584,7 +584,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setSection("S2", Arrays.asList("#S2"));
 		assertLines("[S1]|k1 = v1|#S2|[S2]|", cm);
@@ -596,7 +596,7 @@ class ConfigMapTest extends SimpleTestBase {
 
 	@Test void a17_setSectionBadNames() throws Exception {
 		ConfigStore s = initStore("A.cfg");
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		String[] test = {
 			"/", "[", "]",
@@ -612,7 +612,7 @@ class ConfigMapTest extends SimpleTestBase {
 
 	@Test void a18_setSectionOkNames() throws Exception {
 		ConfigStore s = initStore("A.cfg");
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		// These are all okay characters to use in section names.
 		String validChars = "~`!@#$%^&*()_-+={}|:;\"\'<,>.?";
@@ -641,7 +641,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"k2 = v2"
 
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.removeSection("S1");
 		assertLines("[S2]|k2 = v2|", cm);
@@ -655,7 +655,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"k2 = v2"
 
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.removeSection("S3");
 		assertLines("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
@@ -672,7 +672,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"k2 = v2"
 
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.removeSection("");
 		assertLines("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
@@ -690,7 +690,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"k2 = v2"
 
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.removeSection("");
 		assertLines("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
@@ -704,7 +704,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", null, null, null, Arrays.asList("#k1"));
 		assertLines("[S1]|#k1|k1 = v1|", cm);
@@ -720,7 +720,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"#k1a",
 			"k1 = v1 # comment"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", null, null, null, Arrays.asList("#k1b"));
 		assertLines("[S1]|#k1b|k1 = v1 # comment|", cm);
@@ -731,7 +731,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k2", null, null, null, Arrays.asList("#k2"));
 		assertLines("[S1]|k1 = v1|", cm);
@@ -756,7 +756,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", "v2", null, null, null);
 		assertLines("[S1]|k1 = v2|", cm);
@@ -768,7 +768,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"#k1",
 			"k1 = v1 # comment"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", "v2", null, null, null);
 		assertLines("[S1]|#k1|k1 = v2 # comment|", cm);
@@ -779,7 +779,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", null, null, null, null);
 		assertLines("[S1]|k1 = v1|", cm);
@@ -790,7 +790,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k2", "v2", null, null, null);
 		assertLines("[S1]|k1 = v1|k2 = v2|", cm);
@@ -805,7 +805,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S2", "k2", "v2", null, null, null);
 		assertLines("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
@@ -813,7 +813,7 @@ class ConfigMapTest extends SimpleTestBase {
 
 	@Test void a31_setValueInvalidSectionNames() throws Exception {
 		ConfigStore s = initStore("A.cfg");
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		String[] test = {
 			"/", "[", "]",
@@ -829,7 +829,7 @@ class ConfigMapTest extends SimpleTestBase {
 
 	@Test void a32_setValueInvalidKeyNames() throws Exception {
 		ConfigStore s = initStore("A.cfg");
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		String[] test = {
 			"", " ", "\t",
@@ -852,7 +852,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		// If value has # in it, it should get escaped.
 		cm.setEntry("S1", "k1", "v1 # foo", null, null, null);
@@ -867,7 +867,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", null, null, "c1", null);
 		assertLines("[S1]|k1 = v1 # c1|", cm);
@@ -887,7 +887,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"#k1a",
 			"k1 = v1 # c1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", null, null, "c2", null);
 		assertLines("[S1]|#k1a|k1 = v1 # c2|", cm);
@@ -898,7 +898,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k2", null, null, "foo", null);
 		assertLines("[S1]|k1 = v1|", cm);
@@ -919,7 +919,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", "v2", null, null, null);
 		assertLines("[S1]|k1 = v2|", cm);
@@ -937,7 +937,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"#k1",
 			"k1 = v1 # comment"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", "v2", null, null, null);
 		assertLines("[S1]|#k1|k1 = v2 # comment|", cm);
@@ -954,7 +954,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k1", null, null, null, null);
 		assertLines("[S1]|k1 = v1|", cm);
@@ -965,7 +965,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S1", "k2", "v2", null, null, null);
 		assertLines("[S1]|k1 = v1|k2 = v2|", cm);
@@ -980,7 +980,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		cm.setEntry("S2", "k2", "v2", null, null, null);
 		assertLines("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
@@ -988,7 +988,7 @@ class ConfigMapTest extends SimpleTestBase {
 
 	@Test void a42_setEntryInvalidSectionNames() throws Exception {
 		ConfigStore s = initStore("A.cfg");
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		String[] test = {
 			"/", "[", "]",
@@ -1004,7 +1004,7 @@ class ConfigMapTest extends SimpleTestBase {
 
 	@Test void a43_setEntryInvalidKeyNames() throws Exception {
 		ConfigStore s = initStore("A.cfg");
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		String[] test = {
 			"", " ", "\t",
@@ -1027,7 +1027,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"[S1]",
 			"k1 = v1"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		// If value has # in it, it should get escaped.
 		cm.setEntry("S1", "k1", "v1 # foo", null, null, null);
@@ -1044,7 +1044,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"k2<*> = v2",
 			"k3<*^> = v3"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		assertLines("[S1]|k1<^> = v1|k2<*> = v2|k3<*^> = v3|", cm);
 		assertEquals("^", cm.getEntry("S1", "k1").getModifiers());
@@ -1062,7 +1062,7 @@ class ConfigMapTest extends SimpleTestBase {
 			"k2* = v2",
 			"k3*^ = v3"
 		);
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 
 		// This is okay.
 		TestUtils.assertNotThrown(()->cm.setEntry("S1", "k1", "v1", "", null, null));

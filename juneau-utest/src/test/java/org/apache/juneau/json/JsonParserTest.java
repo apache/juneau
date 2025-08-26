@@ -37,7 +37,7 @@ class JsonParserTest extends SimpleTestBase {
 
 	@Test void a02_nonExistentAttribute() throws Exception {
 		String json = "{foo:,bar:}";
-		JsonMap m = p.parse(json, JsonMap.class);
+		var m = p.parse(json, JsonMap.class);
 		assertEquals("{foo:null,bar:null}", m.toString());
 	}
 
@@ -61,7 +61,7 @@ class JsonParserTest extends SimpleTestBase {
 		json = "{\"fa\":123}";
 		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->sp.parse("{\"fa\":123}", A.class));
 
-		A a = p.parse(json, A.class);
+		var a = p.parse(json, A.class);
 		assertEquals("123", a.fa);
 
 		json = " { \"fa\" : 123 } ";
@@ -97,7 +97,7 @@ class JsonParserTest extends SimpleTestBase {
 		WriterSerializer s = Json5Serializer.DEFAULT;
 
 		json = "{f01:'1',f02:'1',f03:'true',f04:'true',f05:'1',f06:'1',f07:'1',f08:'1',f09:'1',f10:'1'}";
-		B b = p2.parse(json, B.class);
+		var b = p2.parse(json, B.class);
 		assertEquals("{f01:1,f02:1,f03:true,f04:true,f05:1.0,f06:1.0,f07:1,f08:1,f09:1,f10:1}", s.toString(b));
 
 		json = "{f01:'',f02:'',f03:'',f04:'',f05:'',f06:'',f07:'',f08:'',f09:'',f10:''}";
@@ -185,7 +185,7 @@ class JsonParserTest extends SimpleTestBase {
 		JsonParser p2 = JsonParser.DEFAULT_STRICT;
 
 		String s = "foobar";
-		C c = p1.parse(s, C.class);
+		var c = p1.parse(s, C.class);
 		assertEquals("f=foobar", c.toString());
 
 		assertThrows(ParseException.class, ()->p2.parse(s, C.class));

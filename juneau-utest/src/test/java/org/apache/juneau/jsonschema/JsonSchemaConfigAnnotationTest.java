@@ -64,7 +64,7 @@ class JsonSchemaConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void basic() {
 		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
-		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().getSession();
+		var x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		check("BEAN", x.getAddDescriptionsTo());
 		check("BEAN", x.getAddExamplesTo());
 		check("true", x.isAllowNestedDescriptions());
@@ -84,7 +84,7 @@ class JsonSchemaConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noValues() {
 		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().getSession();
+		var x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		check("", x.getAddDescriptionsTo());
 		check("", x.getAddExamplesTo());
 		check("false", x.isAllowNestedDescriptions());
@@ -103,7 +103,7 @@ class JsonSchemaConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noAnnotation() {
 		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().getSession();
+		var x = JsonSchemaGenerator.create().apply(al).build().getSession();
 		check("", x.getAddDescriptionsTo());
 		check("", x.getAddExamplesTo());
 		check("false", x.isAllowNestedDescriptions());

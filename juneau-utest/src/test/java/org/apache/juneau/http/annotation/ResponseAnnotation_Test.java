@@ -97,9 +97,9 @@ class ResponseAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_otherMethods() throws Exception {
-		Response c1 = ResponseAnnotation.create(C1.class).on(C2.class).build();
-		Response c2 = ResponseAnnotation.create("a").on("b").build();
-		Response c4 = ResponseAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
+		var c1 = ResponseAnnotation.create(C1.class).on(C2.class).build();
+		var c2 = ResponseAnnotation.create("a").on("b").build();
+		var c4 = ResponseAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
 		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
 		assertJsonContains(c2, "on:['a','b']");

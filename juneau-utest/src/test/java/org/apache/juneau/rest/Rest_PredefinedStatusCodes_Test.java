@@ -41,7 +41,7 @@ class Rest_PredefinedStatusCodes_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_OK() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 		a.put("/a", "foo")
 			.run()
 			.assertStatus(200);
@@ -107,7 +107,7 @@ class Rest_PredefinedStatusCodes_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_badRequest() throws Exception {
-		RestClient b = MockRestClient.buildLax(B.class);
+		var b = MockRestClient.buildLax(B.class);
 		b.put("/a?noTrace=true", "{f2:'foo'}", APPLICATION_JSON)
 			.run()
 			.assertStatus(400)

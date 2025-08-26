@@ -28,8 +28,8 @@ class EnumerationSwapTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a01_test() throws Exception {
 		var s = JsonSerializer.create().json5().swaps(EnumerationSwap.class).build();
-		Vector<String> v = new Vector<>(Arrays.asList(new String[]{"foo","bar","baz"}));
-		Enumeration<String> e = v.elements();
+		var v = new Vector<>(Arrays.asList(new String[]{"foo","bar","baz"}));
+		var e = v.elements();
 		assertEquals("['foo','bar','baz']", s.serialize(e));
 	}
 }

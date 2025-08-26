@@ -57,7 +57,7 @@ class Response_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_httpstatusCodes() throws Exception {
-		RestClient a = MockRestClient.buildLax(A.class);
+		var a = MockRestClient.buildLax(A.class);
 		a.get("/a")
 			.run()
 			.assertStatus(201)
@@ -105,7 +105,7 @@ class Response_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_openApi() throws Exception {
-		RestClient b = MockRestClient.buildLax(B.class);
+		var b = MockRestClient.buildLax(B.class);
 		b.get("/a")
 			.run()
 			.assertStatus(200)
@@ -195,7 +195,7 @@ class Response_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_openApi_withSchema() throws Exception {
-		RestClient d = MockRestClient.buildLax(D.class);
+		var d = MockRestClient.buildLax(D.class);
 		d.get("/a")
 			.run()
 			.assertStatus(200)
@@ -267,7 +267,7 @@ class Response_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_defaultSerialization() throws Exception {
-		RestClient e = MockRestClient.build(E.class);
+		var e = MockRestClient.build(E.class);
 		e.get("/a")
 			.run()
 			.assertStatus(200)
@@ -320,7 +320,7 @@ class Response_Test extends SimpleTestBase {
 	}
 
 	@Test void g01_json() throws Exception {
-		RestClient g = MockRestClient.build(G.class);
+		var g = MockRestClient.build(G.class);
 		g.get("/a").json()
 			.run()
 			.assertStatus(200)

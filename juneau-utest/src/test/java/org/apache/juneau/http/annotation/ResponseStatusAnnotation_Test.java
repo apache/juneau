@@ -83,9 +83,9 @@ class ResponseStatusAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_otherMethods() throws Exception {
-		StatusCode c1 = StatusCodeAnnotation.create(C1.class).on(C2.class).build();
-		StatusCode c2 = StatusCodeAnnotation.create("a").on("b").build();
-		StatusCode c4 = StatusCodeAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
+		var c1 = StatusCodeAnnotation.create(C1.class).on(C2.class).build();
+		var c2 = StatusCodeAnnotation.create("a").on("b").build();
+		var c4 = StatusCodeAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
 		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
 		assertJsonContains(c2, "on:['a','b']");

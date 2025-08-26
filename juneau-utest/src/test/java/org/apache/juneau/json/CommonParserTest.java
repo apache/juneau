@@ -79,7 +79,7 @@ class CommonParserTest extends SimpleTestBase {
 		tl.add(new A3("name0","value0"));
 		tl.add(new A3("name1","value1"));
 		b.list = tl;
-		String json = JsonSerializer.create().addBeanTypes().addRootType().beanDictionary(A1.class).build().serialize(b);
+		var json = JsonSerializer.create().addBeanTypes().addRootType().beanDictionary(A1.class).build().serialize(b);
 		b = (A1)p.parse(json, Object.class);
 		assertEquals("value1", b.list.get(1).value);
 
@@ -130,7 +130,7 @@ class CommonParserTest extends SimpleTestBase {
 	@Test void a03_collectionPropertiesWithNoSetters() throws Exception {
 		JsonParser p = JsonParser.DEFAULT;
 		var json = "{ints:[1,2,3],beans:[{a:1,b:2}]}";
-		C t = p.parse(json, C.class);
+		var t = p.parse(json, C.class);
 		assertEquals(3, t.getInts().size());
 		assertEquals(2, t.getBeans().get(0).b);
 	}

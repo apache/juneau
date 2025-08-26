@@ -499,7 +499,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void e05_rrpc_rethrownCheckedException() {
-		RestClient x = client(E5.class).build();
+		var x = client(E5.class).build();
 		assertThrowsWithMessage(Remote_Test.E5a.class, "foobar", ()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo"));
 	}
 
@@ -514,7 +514,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Test void e06_rrpc_rethrownUncheckedException() {
-		RestClient x = client(E6.class).build();
+		var x = client(E6.class).build();
 		assertThrowsWithMessage(Exception.class, "foobar", ()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo"));
 	}
 

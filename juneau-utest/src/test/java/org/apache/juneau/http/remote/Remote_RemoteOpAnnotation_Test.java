@@ -185,7 +185,7 @@ class Remote_RemoteOpAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_returnTypes_json() throws Exception {
-		C1 x = MockRestClient.buildJson(C.class).getRemote(C1.class);
+		var x = MockRestClient.buildJson(C.class).getRemote(C1.class);
 		assertEquals("foo",x.postX1("foo"));
 		assertEquals("'foo'",read(x.postX2("foo").getEntity().getContent()));
 		assertEquals("'foo'",read(x.postX3("foo")));
@@ -229,7 +229,7 @@ class Remote_RemoteOpAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_returnTypes_partSerialization() throws Exception {
-		D1 x = MockRestClient.create(D.class).openApi().build().getRemote(D1.class);
+		var x = MockRestClient.create(D.class).openApi().build().getRemote(D1.class);
 		assertEquals("foo",x.postX1("foo"));
 		assertEquals("foo",read(x.postX2("foo").getEntity().getContent()));
 		assertEquals("foo",read(x.postX3("foo")));

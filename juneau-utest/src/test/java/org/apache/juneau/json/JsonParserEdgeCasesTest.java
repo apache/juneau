@@ -458,17 +458,17 @@ public class JsonParserEdgeCasesTest {
 		String pattern = "\n\t\t'{' {0}, \"{1}\", {2}, {3} '}',";
 		var sb = new StringBuilder();
 		for (File fc : f.listFiles()) {
-			String n = fc.getName();
+			var n = fc.getName();
 			if (n.endsWith(".json")) {
 				n = n.replaceAll("\\.json", "");
-				String contents = specials.get(n);
+				var contents = specials.get(n);
 				if (contents == null) {
 					if (n.charAt(1) == 'x')
 						contents = '"' + toHex(readBytes(fc)) + '"' + "/*" + decodeHex(read(fc)).replaceAll("\\\\u", "bu") + "*/";
 					else
 						contents = '"' + read(fc).replaceAll("\"", "\\\\\"").trim() + '"';
 				}
-				String errorText = errors.get(n);
+				var errorText = errors.get(n);
 				if (errorText != null)
 					errorText = '"' + errorText + '"';
 				sb.append(format(pattern, i++, fc.getName().replace(".json", ""), contents, errorText));

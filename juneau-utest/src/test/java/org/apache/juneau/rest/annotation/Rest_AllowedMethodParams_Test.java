@@ -72,7 +72,7 @@ class Rest_AllowedMethodParams_Test extends SimpleTestBase {
 	public static class A8 extends A5 {}
 
 	@Test void a01_basic() throws Exception {
-		RestClient a1 = MockRestClient.build(A1.class);
+		var a1 = MockRestClient.build(A1.class);
 		a1.get("/").run().assertContent("GET");
 		a1.put("/", "").run().assertContent("PUT");
 		a1.head("/").run().assertContent("");
@@ -83,7 +83,7 @@ class Rest_AllowedMethodParams_Test extends SimpleTestBase {
 		a1.get("/?method=OPTIONS").run().assertContent("OPTIONS");
 		a1.request("get","/?method=FOO").run().assertContent("GET");
 
-		RestClient a2 = MockRestClient.build(A2.class);
+		var a2 = MockRestClient.build(A2.class);
 		a2.get("/").run().assertContent("GET");
 		a2.put("/", "").run().assertContent("PUT");
 		a2.head("/").run().assertContent("");
@@ -94,7 +94,7 @@ class Rest_AllowedMethodParams_Test extends SimpleTestBase {
 		a2.get("/?method=OPTIONS").run().assertContent("GET");
 		a2.request("get","/?method=FOO").run().assertContent("GET");
 
-		RestClient a3 = MockRestClient.build(A3.class);
+		var a3 = MockRestClient.build(A3.class);
 		a3.get("/").run().assertContent("GET");
 		a3.put("/", "").run().assertContent("PUT");
 		a3.head("/").run().assertContent("");
@@ -105,7 +105,7 @@ class Rest_AllowedMethodParams_Test extends SimpleTestBase {
 		a3.get("/?method=OPTIONS").run().assertContent("GET");
 		a3.request("get","/?method=FOO").run().assertContent("GET");
 
-		RestClient a4 = MockRestClient.build(A4.class);
+		var a4 = MockRestClient.build(A4.class);
 		a4.get("/").run().assertContent("GET");
 		a4.put("/", "").run().assertContent("PUT");
 		a4.head("/").run().assertContent("");
@@ -116,7 +116,7 @@ class Rest_AllowedMethodParams_Test extends SimpleTestBase {
 		a4.get("/?method=OPTIONS").run().assertContent("GET");
 		a4.request("get","/?method=FOO").run().assertContent("FOO");
 
-		RestClient a5 = MockRestClient.build(A5.class);
+		var a5 = MockRestClient.build(A5.class);
 		a5.get("/").run().assertContent("GET");
 		a5.put("/", "").run().assertContent("PUT");
 		a5.head("/").run().assertContent("");
@@ -129,7 +129,7 @@ class Rest_AllowedMethodParams_Test extends SimpleTestBase {
 		a5.get("/?method=Put").run().assertContent("PUT");
 		a5.get("/?method=Foo").run().assertContent("FOO");
 
-		RestClient a6 = MockRestClient.build(A6.class);
+		var a6 = MockRestClient.build(A6.class);
 		a6.get("/").run().assertContent("GET");
 		a6.put("/", "").run().assertContent("PUT");
 		a6.head("/").run().assertContent("");
@@ -140,7 +140,7 @@ class Rest_AllowedMethodParams_Test extends SimpleTestBase {
 		a6.get("/?method=OPTIONS").run().assertContent("GET");
 		a6.request("get","/?method=FOO").run().assertContent("GET");
 
-		RestClient a7 = MockRestClient.build(A7.class);
+		var a7 = MockRestClient.build(A7.class);
 		a7.get("/").run().assertContent("GET");
 		a7.put("/", "").run().assertContent("PUT");
 		a7.head("/").run().assertContent("");
@@ -151,7 +151,7 @@ class Rest_AllowedMethodParams_Test extends SimpleTestBase {
 		a7.get("/?method=OPTIONS").run().assertContent("GET");
 		a7.request("get","/?method=FOO").run().assertContent("GET");
 
-		RestClient a8 = MockRestClient.build(A8.class);
+		var a8 = MockRestClient.build(A8.class);
 		a8.get("/").run().assertContent("GET");
 		a8.put("/", "").run().assertContent("PUT");
 		a8.head("/").run().assertContent("");
@@ -162,4 +162,4 @@ class Rest_AllowedMethodParams_Test extends SimpleTestBase {
 		a8.get("/?method=OPTIONS").run().assertContent("GET");
 		a8.request("get","/?method=FOO").run().assertContent("GET");
 	}
-}
+}

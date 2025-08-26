@@ -79,10 +79,10 @@ class JsonAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_otherMethods() throws Exception {
-		Json c1 = JsonAnnotation.create(C1.class).on(C2.class).build();
-		Json c2 = JsonAnnotation.create("a").on("b").build();
-		Json c3 = JsonAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		Json c4 = JsonAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
+		var c1 = JsonAnnotation.create(C1.class).on(C2.class).build();
+		var c2 = JsonAnnotation.create("a").on("b").build();
+		var c3 = JsonAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
+		var c4 = JsonAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
 		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
 		assertJsonContains(c2, "on:['a','b']");

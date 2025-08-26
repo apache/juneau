@@ -183,7 +183,7 @@ class ParamInfoTest extends SimpleTestBase {
 	}
 
 	private static <T extends Annotation> List<T> declaredAnnotations(ParamInfo pi, Class<T> type) {
-		List<T> l = new ArrayList<>();
+		var l = new ArrayList<T>();
 		pi.forEachDeclaredAnnotation(type, x -> true, l::add);
 		return l;
 	}

@@ -72,8 +72,8 @@ class BeancAnnotation_Test extends SimpleTestBase {
 	public static class C2 {}
 
 	@Test void c01_otherMethods() throws Exception {
-		Beanc c1 = BeancAnnotation.create("a").on("b").build();
-		Beanc c2 = BeancAnnotation.create().on(C1.class.getConstructor()).on(C2.class.getConstructor()).build();
+		var c1 = BeancAnnotation.create("a").on("b").build();
+		var c2 = BeancAnnotation.create().on(C1.class.getConstructor()).on(C2.class.getConstructor()).build();
 
 		assertJsonContains(c1, "on:['a','b']");
 		assertJsonContains(c2, "on:['"+CNAME+"$C1()','"+CNAME+"$C2()']");

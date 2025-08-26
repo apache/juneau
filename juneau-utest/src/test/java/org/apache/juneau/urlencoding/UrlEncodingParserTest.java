@@ -195,9 +195,9 @@ class UrlEncodingParserTest extends SimpleTestBase {
 		assertEquals(123, i.intValue());
 		i = p.parse(t, Integer.class);
 		assertEquals(123, i.intValue());
-		Double d = p.parse(t, Double.class);
+		var d = p.parse(t, Double.class);
 		assertEquals(123, d.intValue());
-		Float f = p.parse(t, Float.class);
+		var f = p.parse(t, Float.class);
 		assertEquals(123, f.intValue());
 		t = "_value=123";
 		i = p.parse(t, Integer.class);
@@ -445,7 +445,7 @@ class UrlEncodingParserTest extends SimpleTestBase {
 		var p2 = UrlEncodingParser.DEFAULT;
 
 		String s = "?f1=1,2,3&f2=a,b,c&f3=true,false&f4=&f5";
-		C c = p2.parse(s, C.class);
+		var c = p2.parse(s, C.class);
 		assertJson(c, "{f1:[1,2,3],f2:['a','b','c'],f3:[true,false],f4:[]}");
 	}
 
@@ -516,7 +516,7 @@ class UrlEncodingParserTest extends SimpleTestBase {
 		assertJson(c, "{f1:['\\'~','\\'~']}");
 
 		s = "?a~b=a~b";
-		JsonMap m = p2.parse(s, JsonMap.class);
+		var m = p2.parse(s, JsonMap.class);
 		assertEquals("{'a~b':'a~b'}", m.toString());
 
 		s = "?'a~b'='a~b'";
@@ -576,7 +576,7 @@ class UrlEncodingParserTest extends SimpleTestBase {
 		s = "?f1=(\n\tf1a=a,\n\tf1b=b\n\t)\n\t&f2=(\n\tf2a=a,\n\tf2b=b\n\t)\n\t";
 		m = p2.parse(s, JsonMap.class);
 		assertEquals("{f1:{f1a:'a',f1b:'b'},f2:{f2a:'a',f2b:'b'}}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
-		D d = p2.parse(s, D.class);
+		var d = p2.parse(s, D.class);
 		assertJson(d, "{f1:{f1a:'a',f1b:'b'},f2:{f2a:'a',f2b:'b'}}");  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "?f1=(\n\tf1a='\n\t',\n\tf1b='\n\t'\n\t)\n\t&f2=(\n\tf2a='\n\t',\n\tf2b='\n\t'\n\t)\n\t";
@@ -590,7 +590,7 @@ class UrlEncodingParserTest extends SimpleTestBase {
 		assertEquals("{f1:['foo','bar'],f2:['foo','bar']}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "f1=a,\n\tb,\n\tc\n\t&f2=1,\n\t2,\n\t3\n\t&f3=true,\n\tfalse\n\t";
-		E e = p2.parse(s, E.class);
+		var e = p2.parse(s, E.class);
 		assertJson(e, "{f1:['a','b','c'],f2:[1,2,3],f3:[true,false]}");
 
 		s = "f1=a%2C%0D%0Ab%2C%0D%0Ac%0D%0A&f2=1%2C%0D%0A2%2C%0D%0A3%0D%0A&f3=true%2C%0D%0Afalse%0D%0A";

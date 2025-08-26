@@ -123,7 +123,7 @@ class RestOp_Params_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_params() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 		a.post("/c", "foo").run().assertContent("foo");
 		a.post("/d", "foo").run().assertContent("foo");
 		a.post("/e", "foo").run().assertContent("foo");
@@ -284,7 +284,7 @@ class RestOp_Params_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_headers() throws Exception {
-		RestClient b = MockRestClient.build(B1.class);
+		var b = MockRestClient.build(B1.class);
 
 		b.get("/accept").accept("text/foo").run().assertContent("text/foo");
 		b.get("/accept").accept("text/foo+bar").run().assertContent("text/foo+bar");
@@ -365,7 +365,7 @@ class RestOp_Params_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_customHeader() throws Exception {
-		RestClient b = MockRestClient.build(B2.class);
+		var b = MockRestClient.build(B2.class);
 		b.get("/a").header("Custom", "foo").run().assertContent("foo");
 		b.get("/a?Custom=foo").run().assertContent("foo");
 	}

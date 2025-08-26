@@ -59,7 +59,7 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_addBeanTypes() throws Exception {
-		A1 l1 = A1.get();
+		var l1 = A1.get();
 		client().addBeanTypes().build().post("/echoBody",l1).run().assertContent("{f1:{_type:'L',f2:1}}");
 	}
 
@@ -74,7 +74,7 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_addRootType() throws Exception {
-		A2 l2 = A2.get();
+		var l2 = A2.get();
 		client().addBeanTypes().addRootType().build().post("/echoBody",l2).run().assertContent("{_type:'L',f2:1}");
 	}
 
@@ -184,7 +184,7 @@ class RestClient_Config_Serializer_Test extends SimpleTestBase {
 	}
 
 	@Test void a14_maxIndent() throws Exception {
-		A14 x = A14.get();
+		var x = A14.get();
 		client().maxIndent(2).ws().build().post("/echoBody",x).run().assertContent("{\n\tf1: 1,\n\tf2: {\n\t\tf1: 2,\n\t\tf2: {f1:3}\n\t}\n}");
 	}
 

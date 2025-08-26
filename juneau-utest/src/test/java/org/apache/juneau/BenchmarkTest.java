@@ -87,7 +87,7 @@ public class BenchmarkTest {
 	public static void main(String[] args) {
 		int cap = 100000;
 		long startTime = 0;
-		List<Integer> arrayList = new ArrayList<>();
+		var arrayList = new ArrayList<>();
 		arrayList.forEach(Objects::hash);
 		IntStream.of(null).forEach(null);
 

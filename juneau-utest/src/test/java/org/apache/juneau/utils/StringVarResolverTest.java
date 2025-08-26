@@ -209,7 +209,7 @@ class StringVarResolverTest extends SimpleTestBase {
 			assertThrows(Exception.class, ()->VarResolver.create().vars(c).build());
 		}
 
-		VarResolver vr = vrb.build();
+		var vr = vrb.build();
 
 		// These should all be unchanged.
 		in = "$@{foobar}";

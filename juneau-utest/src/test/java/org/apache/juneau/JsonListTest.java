@@ -50,13 +50,13 @@ class JsonListTest extends SimpleTestBase {
 
 		// Iterate over a list of JsonMaps.
 		var l = new JsonList("[{foo:'bar'},{baz:123}]");
-		Iterator<JsonMap> i1 = l.elements(JsonMap.class).iterator();
+		var i1 = l.elements(JsonMap.class).iterator();
 		assertEquals("bar", i1.next().getString("foo"));
 		assertEquals(123, (int)i1.next().getInt("baz"));
 
 		// Iterate over a list of ints.
 		l = new JsonList("[1,2,3]");
-		Iterator<Integer> i2 = l.elements(Integer.class).iterator();
+		var i2 = l.elements(Integer.class).iterator();
 		assertEquals(1, (int)i2.next());
 		assertEquals(2, (int)i2.next());
 		assertEquals(3, (int)i2.next());
@@ -64,7 +64,7 @@ class JsonListTest extends SimpleTestBase {
 		// Iterate over a list of beans.
 		// Automatically converts to beans.
 		l = new JsonList("[{name:'John Smith',age:45}]");
-		Iterator<Person> i3 = l.elements(Person.class).iterator();
+		var i3 = l.elements(Person.class).iterator();
 		assertEquals("John Smith", i3.next().name);
 	}
 
@@ -107,7 +107,7 @@ class JsonListTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a05_getMap() throws Exception {
 		var l = new JsonList("[{1:'true',2:'false'}]");
-		Map<Integer,Boolean> m2 = l.getMap(0, Integer.class, Boolean.class);
+		var m2 = l.getMap(0, Integer.class, Boolean.class);
 		assertJson(m2, "{'1':true,'2':false}");
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
 		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
@@ -123,7 +123,7 @@ class JsonListTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a06_getList() throws Exception {
 		var l = new JsonList("[['123','456']]");
-		List<Integer> l2 = l.getList(0, Integer.class);
+		var l2 = l.getList(0, Integer.class);
 		assertList(l2, "123,456");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
 

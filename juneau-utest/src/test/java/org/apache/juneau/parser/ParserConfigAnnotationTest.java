@@ -66,7 +66,7 @@ class ParserConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void basicReaderParser() {
 		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
-		JsonParserSession x = JsonParser.create().apply(al).build().getSession();
+		var x = JsonParser.create().apply(al).build().getSession();
 		check("true", x.isAutoCloseStreams());
 		check("1", x.getDebugOutputLines());
 		check("US-ASCII", x.getFileCharset());
@@ -79,7 +79,7 @@ class ParserConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void basicInputStreamParser() {
 		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
-		MsgPackParserSession x = MsgPackParser.create().apply(al).build().getSession();
+		var x = MsgPackParser.create().apply(al).build().getSession();
 		check("true", x.isAutoCloseStreams());
 		check("HEX", x.getBinaryFormat());
 		check("1", x.getDebugOutputLines());
@@ -99,7 +99,7 @@ class ParserConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noValuesReaderParser() {
 		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		JsonParserSession x = JsonParser.create().apply(al).build().getSession();
+		var x = JsonParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
 		check("5", x.getDebugOutputLines());
 		check(Charset.defaultCharset().toString(), x.getFileCharset());
@@ -112,7 +112,7 @@ class ParserConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noValuesInputStreamParser() {
 		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		MsgPackParserSession x = MsgPackParser.create().apply(al).build().getSession();
+		var x = MsgPackParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
 		check("HEX", x.getBinaryFormat());
 		check("5", x.getDebugOutputLines());
@@ -131,7 +131,7 @@ class ParserConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noAnnotationReaderParser() {
 		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		JsonParserSession x = JsonParser.create().apply(al).build().getSession();
+		var x = JsonParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
 		check("5", x.getDebugOutputLines());
 		check(Charset.defaultCharset().toString(), x.getFileCharset());
@@ -144,7 +144,7 @@ class ParserConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noAnnotationInputStreamParser() {
 		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		MsgPackParserSession x = MsgPackParser.create().apply(al).build().getSession();
+		var x = MsgPackParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
 		check("HEX", x.getBinaryFormat());
 		check("5", x.getDebugOutputLines());

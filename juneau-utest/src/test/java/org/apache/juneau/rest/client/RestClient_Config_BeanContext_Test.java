@@ -61,8 +61,8 @@ class RestClient_Config_BeanContext_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_beanClassVisibility() throws Exception {
-		RestClient x1 = client().build();
-		RestClient x2 = client(A.class).beanClassVisibility(Visibility.PROTECTED).build();
+		var x1 = client().build();
+		var x2 = client(A.class).beanClassVisibility(Visibility.PROTECTED).build();
 		x1.post("/echoBody",new A1()).run().assertContent("'O1'");
 		x2.post("/echoBody",new A1()).run().assertContent("{f:1}");
 		x1.get("/checkQuery").queryData("foo",new A1()).run().assertContent("foo=O1");

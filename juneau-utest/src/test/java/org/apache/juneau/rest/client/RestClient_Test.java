@@ -83,7 +83,7 @@ class RestClient_Test extends SimpleTestBase {
 		RestClient.create().keepHttpClientOpen().build().closeQuietly();
 		RestClient.create().httpClient(null).keepHttpClientOpen().build().close();
 
-		ExecutorService es = new ThreadPoolExecutor(1,1,30,TimeUnit.SECONDS,new ArrayBlockingQueue<>(10));
+		var es = new ThreadPoolExecutor(1,1,30,TimeUnit.SECONDS,new ArrayBlockingQueue<>(10));
 		RestClient.create().executorService(es,true).build().close();
 		RestClient.create().executorService(es,true).build().closeQuietly();
 		RestClient.create().executorService(es,false).build().close();
@@ -95,13 +95,13 @@ class RestClient_Test extends SimpleTestBase {
 
 
 	@Test void a04_request_whenClosed() {
-		RestClient rc = client().build();
+		var rc = client().build();
 		rc.closeQuietly();
 		assertThrowsWithMessage(Exception.class, "RestClient.close() has already been called", ()->rc.request("get","/bean",null));
 	}
 
 	@Test void a05_request_whenClosed_withStackCreation() {
-		RestClient rc = client().debug().build();
+		var rc = client().debug().build();
 		rc.closeQuietly();
 		assertThrowsWithMessage(Exception.class, "RestClient.close() has already been called", ()->rc.request("get","/bean",null));
 	}
@@ -213,7 +213,7 @@ class RestClient_Test extends SimpleTestBase {
 	@Test void c07_httpClient_executeHttpUriRequest() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","text/json5");
-		HttpResponse res = MockRestClient.create(A.class).build().execute(x);
+		var res = MockRestClient.create(A.class).build().execute(x);
 		assertEquals("{f:1}",IOUtils.read(res.getEntity().getContent()));
 	}
 
@@ -221,44 +221,44 @@ class RestClient_Test extends SimpleTestBase {
 		var x = new HttpGet("http://localhost/bean");
 		var target = new HttpHost("localhost");
 		x.addHeader("Accept","text/json5");
-		HttpResponse res = MockRestClient.create(A.class).build().execute(target,x);
+		var res = MockRestClient.create(A.class).build().execute(target,x);
 		assertEquals("{f:1}",IOUtils.read(res.getEntity().getContent()));
 	}
 
 	@Test void c09_httpClient_executeHttpHostHttpRequestHttpContext() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
 		var target = new HttpHost("localhost");
-		HttpContext context = new BasicHttpContext();
+		var context = new BasicHttpContext();
 		x.addHeader("Accept","text/json5");
-		HttpResponse res = MockRestClient.create(A.class).build().execute(target,x,context);
+		var res = MockRestClient.create(A.class).build().execute(target,x,context);
 		assertEquals("{f:1}",IOUtils.read(res.getEntity().getContent()));
 	}
 
 	@Test void c10_httpClient_executeResponseHandler() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","text/json5");
-		String res = MockRestClient.create(A.class).build().execute(x,new BasicResponseHandler());
+		var res = MockRestClient.create(A.class).build().execute(x,new BasicResponseHandler());
 		assertEquals("{f:1}",res);
 	}
 
 	@Test void c11_httpClient_executeHttpUriRequestResponseHandlerHttpContext() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","text/json5");
-		String res = MockRestClient.create(A.class).build().execute(x,new BasicResponseHandler(),new BasicHttpContext());
+		var res = MockRestClient.create(A.class).build().execute(x,new BasicResponseHandler(),new BasicHttpContext());
 		assertEquals("{f:1}",res);
 	}
 
 	@Test void c12_httpClient_executeHttpHostHttpRequestResponseHandlerHttpContext() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","text/json5");
-		String res = MockRestClient.create(A.class).build().execute(new HttpHost("localhost"),x,new BasicResponseHandler(),new BasicHttpContext());
+		var res = MockRestClient.create(A.class).build().execute(new HttpHost("localhost"),x,new BasicResponseHandler(),new BasicHttpContext());
 		assertEquals("{f:1}",res);
 	}
 
 	@Test void c13_httpClient_executeHttpHostHttpRequestResponseHandler() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","text/json5");
-		String res = MockRestClient.create(A.class).build().execute(new HttpHost("localhost"),x,new BasicResponseHandler());
+		var res = MockRestClient.create(A.class).build().execute(new HttpHost("localhost"),x,new BasicResponseHandler());
 		assertEquals("{f:1}",res);
 	}
 
@@ -271,7 +271,7 @@ class RestClient_Test extends SimpleTestBase {
 	@Test void c15_httpClient_pooled() throws Exception {
 		var x1 = RestClient.create().json5().pooled().build();
 		var x2 = RestClient.create().json5().build();
-		RestClient x3 = client().pooled().build();
+		var x3 = client().pooled().build();
 		assertEquals("PoolingHttpClientConnectionManager",ClassInfo.of(x1.httpClient).getDeclaredField(x -> x.hasName("connManager")).accessible().get(x1.httpClient).getClass().getSimpleName());
 		assertEquals("BasicHttpClientConnectionManager",ClassInfo.of(x2.httpClient).getDeclaredField(x -> x.hasName("connManager")).accessible().get(x2.httpClient).getClass().getSimpleName());
 		assertEquals("MockHttpClientConnectionManager",ClassInfo.of(x3.httpClient).getDeclaredField(x -> x.hasName("connManager")).accessible().get(x3.httpClient).getClass().getSimpleName());
@@ -398,7 +398,7 @@ class RestClient_Test extends SimpleTestBase {
 
 	@SuppressWarnings("deprecation")
 	@Test void e15_httpMessage_getParams() throws Exception {
-		HttpParams p = new BasicHttpParams();
+		var p = new BasicHttpParams();
 		RestRequest x = client().build().get("/bean");
 		x.setParams(p);
 		assertEquals(p, x.getParams());

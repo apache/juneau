@@ -82,7 +82,7 @@ public class Assertion_Test {
 
 	@Test
 	public void a02_out() {
-		PrintStream out = new CapturingPrintStream();
+		var out = new CapturingPrintStream();
 
 		try {
 			assertString("x").setOut(out).isNull();

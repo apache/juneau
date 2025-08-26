@@ -255,7 +255,7 @@ class PrimitivesBeans_RoundTripTest extends RoundTripTest_Base {
 			return;
 		x = t.roundTrip(x, List.class, PrimitivesBean.class);
 
-		PrimitivesBean t2 = x.get(2);
+		var t2 = x.get(2);
 
 		// primitives
 		assertEquals(true, t2.pBoolean);

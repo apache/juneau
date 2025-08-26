@@ -63,16 +63,17 @@ class RestClient_Query_Test extends SimpleTestBase {
 		var l1 = list("foo","bar");
 		var l2 = list("bar","baz");
 		var s = MutableSupplier.of(l1);
-		RestClient x = client().queryData(part("foo",s,null)).build();
+		var x = client().queryData(part("foo",s,null)).build();
 		x.get("/query").run().assertContent().asString().asUrlDecode().is("foo=foo,bar");
 		s.set(l2);
 		x.get("/query").run().assertContent().asString().asUrlDecode().is("foo=bar,baz");
 	}
 
 	@Test void a07_query_String_Supplier_Schema() throws Exception {
-		String[] l1 = {"foo","bar"},l2 = {"bar","baz"};
+		var l1 = a("foo","bar");
+		var l2 = a("bar","baz");
 		var s = MutableSupplier.of(l1);
-		RestClient x = client().queryData(part("foo",s,T_ARRAY_PIPES)).build();
+		var x = client().queryData(part("foo",s,T_ARRAY_PIPES)).build();
 		x.get("/query").queryData(part("bar",s,T_ARRAY_PIPES)).run().assertContent().asString().asUrlDecode().is("foo=foo|bar&bar=foo|bar");
 		s.set(l2);
 		x.get("/query").queryData(part("bar",s,T_ARRAY_PIPES)).run().assertContent().asString().asUrlDecode().is("foo=bar|baz&bar=bar|baz");
@@ -82,7 +83,7 @@ class RestClient_Query_Test extends SimpleTestBase {
 		var l1 = list("foo","bar");
 		var l2 = list("bar","baz");
 		var s = MutableSupplier.of(l1);
-		RestClient x = client().queryData(part("foo",s,T_ARRAY_PIPES).serializer(FakeWriterSerializer.X)).build();
+		var x = client().queryData(part("foo",s,T_ARRAY_PIPES).serializer(FakeWriterSerializer.X)).build();
 		x.get("/query").run().assertContent().asString().asUrlDecode().is("foo=xfoo|barx");
 		s.set(l2);
 		x.get("/query").run().assertContent().asString().asUrlDecode().is("foo=xbar|bazx");

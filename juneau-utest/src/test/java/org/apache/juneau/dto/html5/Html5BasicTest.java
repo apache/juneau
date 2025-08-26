@@ -32,7 +32,7 @@ class Html5BasicTest extends SimpleTestBase {
 			)
 		);
 
-		String r = f.toString();
+		var r = f.toString();
 		assertEquals("<form action='bar'><fieldset><legend>foo:</legend>Name:<input type='text'/><br/>Email:<input type='text'/><br/>X:<keygen name='X'/><label for='Name'>label</label></fieldset></form>", r);
 	}
 }

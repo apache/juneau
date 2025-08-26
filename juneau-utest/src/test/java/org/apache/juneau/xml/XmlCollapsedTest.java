@@ -40,7 +40,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		t.f3 = list("f3a","f3b");
 		t.f4 = new String[]{"f4a","f4b"};
 
-		String xml = s.serialize(t);
+		var xml = s.serialize(t);
 		assertEquals("<object><f1>f1a</f1><f1>f1b</f1><f2>f2a</f2><f2>f2b</f2><xf3>f3a</xf3><xf3>f3b</xf3><xf4>f4a</xf4><xf4>f4b</xf4></object>", xml);
 		t = p.parse(xml, A.class);
 		assertEquals("f1a", t.f1.get(0));
@@ -79,7 +79,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		t.f3 = list("f3a","f3b");
 		t.f4 = new String[]{"f4a","f4b"};
 
-		String xml = s.serialize(t);
+		var xml = s.serialize(t);
 		assertEquals("<object><f1>f1a</f1><f1>f1b</f1><f2>f2a</f2><f2>f2b</f2><xf3>f3a</xf3><xf3>f3b</xf3><xf4>f4a</xf4><xf4>f4b</xf4></object>", xml);
 		t = p.parse(xml, B.class);
 		assertEquals("f1a", t.f1.get(0));
@@ -118,7 +118,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		t.f3 = list("f3b");
 		t.f4 = new String[]{"f4b"};
 
-		String xml = s.serialize(t);
+		var xml = s.serialize(t);
 		assertEquals("<object><f1>f1b</f1><f2>f2b</f2><xf3>f3b</xf3><xf4>f4b</xf4></object>", xml);
 
 		// Note that existing fields should be reused and appended to.
@@ -163,7 +163,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		t.f3 = list("f3a");
 		t.f4 = new String[]{"f4a"};
 
-		String xml = s.serialize(t);
+		var xml = s.serialize(t);
 		assertEquals("<object><f1>f1a</f1><f2>f2a</f2><xf3>f3a</xf3><xf4>f4a</xf4></object>", xml);
 
 		// Note that existing fields should be reused and appended to.
@@ -204,7 +204,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		t.f1 = (ArrayList<String>)Utils.list("f1a");
 		t.f2 = (ArrayList<String>)Utils.list("f2a");
 
-		String xml = s.serialize(t);
+		var xml = s.serialize(t);
 		assertEquals("<object><f1>f1a</f1><xf2>f2a</xf2></object>", xml);
 
 		// Note that existing fields should be reused and appended to.
@@ -232,12 +232,12 @@ class XmlCollapsedTest extends SimpleTestBase {
 	@Test void a06_elementNameOnElementClass() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
-		Object t1 = FA.newInstance(), t2;
+		var t1 = (Object)FA.newInstance();
 		String r;
 
 		r = s.serialize(t1);
 		assertEquals("<object><xf1>x1</xf1><xf1>x2</xf1></object>", r);
-		t2 = p.parse(r, FA.class);
+		var t2 = (Object)p.parse(r, FA.class);
 		assertEquals(json(t2), json(t1));
 		TestUtils.validateXml(t1, s);
 
@@ -295,7 +295,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		XmlParser p = XmlParser.DEFAULT;
 		var t = G.newInstance();
 
-		String xml = s.serialize(t);
+		var xml = s.serialize(t);
 		assertEquals("<object><yf1>x1</yf1><yf1>x2</yf1></object>", xml);
 
 		// Note that existing fields should be reused and appended to.
@@ -326,7 +326,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		XmlParser p = XmlParser.DEFAULT;
 		var t = H.newInstance();
 
-		String xml = s.serialize(t);
+		var xml = s.serialize(t);
 		assertEquals("<object><xf1>x1</xf1><xf1>x2</xf1></object>", xml);
 
 		// Note that existing fields should be reused and appended to.
@@ -362,7 +362,7 @@ class XmlCollapsedTest extends SimpleTestBase {
 		XmlParser p = XmlParser.DEFAULT;
 		var t = G.newInstance();
 
-		String xml = s.serialize(t);
+		var xml = s.serialize(t);
 		assertEquals("<object><yf1>x1</yf1><yf1>x2</yf1></object>", xml);
 
 		// Note that existing fields should be reused and appended to.

@@ -32,7 +32,7 @@ class SerializedPart_Test extends SimpleTestBase {
 	private static final OpenApiSerializer OAPI_SERIALIZER = OpenApiSerializer.DEFAULT;
 
 	@Test void a01_basic() {
-		SerializedPart x1 = new SerializedPart("Foo",alist("bar","baz"),HEADER,OAPI_SESSION,T_ARRAY_PIPES,true);
+		var x1 = new SerializedPart("Foo",alist("bar","baz"),HEADER,OAPI_SESSION,T_ARRAY_PIPES,true);
 		assertString("Foo=bar|baz", x1);
 	}
 

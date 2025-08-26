@@ -48,8 +48,8 @@ class Swagger_Test extends SimpleTestBase {
 		var rc = RestContext.create(resource.getClass(),null,null).init(()->resource).defaultClasses(TestClasspathFileFinder.class).build();
 		var roc = RestOpContext.create(Swagger_Test.class.getMethod("testMethod"), rc).build();
 		var call = RestSession.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
-		RestRequest req = roc.createRequest(call);
-		SwaggerProvider ip = rc.getSwaggerProvider();
+		var req = roc.createRequest(call);
+		var ip = rc.getSwaggerProvider();
 		return ip.getSwagger(rc, req.getLocale());
 	}
 
@@ -57,8 +57,8 @@ class Swagger_Test extends SimpleTestBase {
 		var rc = RestContext.create(resource.getClass(),null,null).init(()->resource).build();
 		var roc = RestOpContext.create(Swagger_Test.class.getMethod("testMethod"), rc).build();
 		var call = RestSession.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
-		RestRequest req = roc.createRequest(call);
-		SwaggerProvider ip = rc.getSwaggerProvider();
+		var req = roc.createRequest(call);
+		var ip = rc.getSwaggerProvider();
 		return ip.getSwagger(rc, req.getLocale());
 	}
 
@@ -1967,7 +1967,7 @@ class Swagger_Test extends SimpleTestBase {
 		org.apache.juneau.bean.swagger.Swagger s = JsonParser.DEFAULT.parse(p.get("/api").accept("application/json").run().getContent().asString(), org.apache.juneau.bean.swagger.Swagger.class);
 		var o = s.getOperation("/", "get");
 
-		ResponseInfo ri = o.getResponse("200");
+		var ri = o.getResponse("200");
 		assertEquals("{\n\tf1: 1,\n\tf2: 2\n}", ri.getExamples().get("application/json5"));
 	}
 }

@@ -76,10 +76,10 @@ class SoapXmlAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_otherMethods() throws Exception {
-		SoapXml c1 = SoapXmlAnnotation.create(C1.class).on(C2.class).build();
-		SoapXml c2 = SoapXmlAnnotation.create("a").on("b").build();
-		SoapXml c3 = SoapXmlAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		SoapXml c4 = SoapXmlAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
+		var c1 = SoapXmlAnnotation.create(C1.class).on(C2.class).build();
+		var c2 = SoapXmlAnnotation.create("a").on("b").build();
+		var c3 = SoapXmlAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
+		var c4 = SoapXmlAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
 		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
 		assertJsonContains(c2, "on:['a','b']");

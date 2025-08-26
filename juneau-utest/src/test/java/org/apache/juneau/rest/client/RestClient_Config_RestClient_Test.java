@@ -106,27 +106,27 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_errorCodes() {
-		RestClient x1 = client().errorCodes(x -> x == 200).build();
-		RestClient x2 = client().build();
+		var x1 = client().errorCodes(x -> x == 200).build();
+		var x2 = client().build();
 		assertEquals(200, ((RestCallException)assertThrows(Throwable.class, ()->x1.get("/echo").run())).getResponseCode());
 		assertEquals(200, ((RestCallException)assertThrows(Throwable.class, ()->x2.get("/echo").errorCodes(x -> x == 200).run())).getResponseCode());
 	}
 
 	@Test void a03_executorService() throws Exception {
-		ExecutorService es = new ThreadPoolExecutor(1,1,30,TimeUnit.SECONDS,new ArrayBlockingQueue<>(10));
-		RestClient x1 = client().executorService(es,true).build();
+		var es = new ThreadPoolExecutor(1,1,30,TimeUnit.SECONDS,new ArrayBlockingQueue<>(10));
+		var x1 = client().executorService(es,true).build();
 
 		assertEquals(es,x1.getExecutorService());
 		x1.get("/echo").runFuture().get().assertStatus(200).assertContent().isContains("GET /echo HTTP/1.1");
 
 		es = null;
-		RestClient x2 = client().executorService(es,true).build();
+		var x2 = client().executorService(es,true).build();
 		assertNotNull(x2.getExecutorService());
 		x2.get("/echo").runFuture().get().assertStatus(200).assertContent().isContains("GET /echo HTTP/1.1");
 	}
 
 	@Test void a04_keepHttpClientOpen() throws Exception {
-		RestClient x = client().keepHttpClientOpen().build();
+		var x = client().keepHttpClientOpen().build();
 
 		CloseableHttpClient c = x.httpClient;
 		x.close();
@@ -325,8 +325,8 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void a08_marshaller() throws Exception {
-		RestClient rc = MockRestClient.create(A.class).marshaller(Xml.DEFAULT).build();
-		ABean b = rc.post("/echoBody",bean).run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
+		var rc = MockRestClient.create(A.class).marshaller(Xml.DEFAULT).build();
+		var b = rc.post("/echoBody",bean).run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertEquals(json(bean), json(b));
 	}
 
@@ -337,7 +337,7 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 
 		assertThrowsWithMessage(Exception.class, "Content-Type not specified in response header.  Cannot find appropriate parser.", ()->x.post("/echoBody",bean).contentType("text/json").run().getContent().as(ABean.class));
 
-		ABean b = x.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
+		var b = x.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertEquals(json(bean), json(b));
 
 		b = x.post("/echoBody",bean).mediaType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
@@ -351,9 +351,9 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void a10_serializer_parser() throws Exception {
-		RestClient x = MockRestClient.create(A.class).serializer(XmlSerializer.class).parser(XmlParser.class).build();
+		var x = MockRestClient.create(A.class).serializer(XmlSerializer.class).parser(XmlParser.class).build();
 
-		ABean b = x.post("/echoBody",bean).run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
+		var b = x.post("/echoBody",bean).run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertEquals(json(bean), json(b));
 
 		x = MockRestClient.create(A.class).serializer(XmlSerializer.DEFAULT).parser(XmlParser.DEFAULT).build();
@@ -368,7 +368,7 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 
 		assertThrowsWithMessage(Exception.class, "Content-Type not specified in response header.  Cannot find appropriate parser.", ()->x.post("/echoBody",bean).contentType("text/json").run().getContent().as(ABean.class));
 
-		ABean b = x.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
+		var b = x.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertEquals(json(bean), json(b));
 
 		b = x.post("/echoBody",bean).mediaType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
@@ -435,8 +435,8 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void a12_partSerializer_partParser() throws Exception {
-		RestClient x = client(A12.class).headers(serializedHeader("Foo", bean)).partSerializer(A12a.class).partParser(A12b.class).build();
-		ABean b = x.get("/").header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class).get();
+		var x = client(A12.class).headers(serializedHeader("Foo", bean)).partSerializer(A12a.class).partParser(A12b.class).build();
+		var b = x.get("/").header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class).get();
 		assertEquals("{f:1}",b.toString());
 		b = x.get().header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class).get();
 		assertEquals("{f:1}",b.toString());

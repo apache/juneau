@@ -30,13 +30,13 @@ class HasFormData_Test extends SimpleTestBase {
 	public static class A {
 		@RestPost
 		public String a(RestRequest req, @HasFormData("p1") boolean p1, @HasFormData("p2") Boolean p2) throws Exception {
-			RequestFormParams f = req.getFormParams();
+			var f = req.getFormParams();
 			return "p1=["+p1+","+f.contains("p1")+"],p2=["+p2+","+f.contains("p2")+"]";
 		}
 	}
 
 	@Test void a01_basic() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 		a.post("/a", "p1=p1&p2=2").run().assertContent("p1=[true,true],p2=[true,true]");
 		a.post("/a", "p1&p2").run().assertContent("p1=[true,true],p2=[true,true]");
 		a.post("/a", "p1=&p2=").run().assertContent("p1=[true,true],p2=[true,true]");

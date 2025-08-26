@@ -45,7 +45,7 @@ class BasicHttpRequestRetryHandler_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_basic() {
-		RestClient x = MockRestClient.create(A.class).retryHandler(new BasicHttpRequestRetryHandler(1, 1, true)).requestExecutor(new A1()).build();
+		var x = MockRestClient.create(A.class).retryHandler(new BasicHttpRequestRetryHandler(1, 1, true)).requestExecutor(new A1()).build();
 		assertThrowsWithMessage(Exception.class, "Call failed.", ()->x.get().run());
 	}
 }

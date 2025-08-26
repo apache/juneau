@@ -34,7 +34,7 @@ class CommonTest  extends SimpleTestBase{
 		JsonParser p = JsonParser.DEFAULT;
 		var t1 = A.create();
 
-		String r = s.build().serialize(t1);
+		var r = s.build().serialize(t1);
 		assertEquals("{s2:'s2'}", r);
 		var t2 = p.parse(r, A.class);
 		assertEquals(json(t2), json(t1));
@@ -185,11 +185,11 @@ class CommonTest  extends SimpleTestBase{
 	//====================================================================================================
 	@Test void a06_beanPropertyProperiesOnListOfBeans() throws Exception {
 		JsonSerializer s = Json5Serializer.DEFAULT;
-		List<F> l = new LinkedList<>();
+		var l = new LinkedList<>();
 		var t = new F();
 		t.x1.add(new F());
 		l.add(t);
-		String json = s.serialize(l);
+		var json = s.serialize(l);
 		assertEquals("[{x1:[{x2:2}],x2:2}]", json);
 	}
 
@@ -210,7 +210,7 @@ class CommonTest  extends SimpleTestBase{
 		t.f1 = new URI("http://f1");
 		t.f2 = TestUtils.url("http://f2");
 
-		String json = s.serialize(t);
+		var json = s.serialize(t);
 		t = p.parse(json, G.class);
 		assertEquals("http://uri", t.uri.toString());
 		assertEquals("http://f1", t.f1.toString());

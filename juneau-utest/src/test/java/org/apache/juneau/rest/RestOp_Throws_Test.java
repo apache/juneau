@@ -71,7 +71,7 @@ class RestOp_Throws_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_noArgs() throws Exception {
-		RestClient a = MockRestClient.buildLax(A.class);
+		var a = MockRestClient.buildLax(A.class);
 		a.get("/badRequest")
 			.run()
 			.assertStatus(400)
@@ -249,7 +249,7 @@ class RestOp_Throws_Test extends SimpleTestBase {
 
 
 	@Test void b01_userSpecifiedMessage() throws Exception {
-		RestClient b = MockRestClient.buildLax(B.class);
+		var b = MockRestClient.buildLax(B.class);
 		b.get("/badRequest")
 			.run()
 			.assertStatus(400)
@@ -428,7 +428,7 @@ class RestOp_Throws_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_nestedThrowable() throws Exception {
-		RestClient c = MockRestClient.buildLax(C.class);
+		var c = MockRestClient.buildLax(C.class);
 		c.get("/badRequest")
 			.run()
 			.assertStatus(400)
@@ -605,7 +605,7 @@ class RestOp_Throws_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_nestedThrowableWithMessage() throws Exception {
-		RestClient d = MockRestClient.buildLax(D.class);
+		var d = MockRestClient.buildLax(D.class);
 		d.get("/badRequest")
 			.run()
 			.assertStatus(400)
@@ -750,7 +750,7 @@ class RestOp_Throws_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_useAcceptForSerialization() throws Exception {
-		RestClient e = MockRestClient.buildLax(E.class);
+		var e = MockRestClient.buildLax(E.class);
 		e.get("/badRequest")
 			.json()
 			.run()
@@ -848,7 +848,7 @@ class RestOp_Throws_Test extends SimpleTestBase {
 	}
 
 	@Test void g01_thrownObjectDoesntMatchReturnType() throws Exception {
-		RestClient g = MockRestClient.buildLax(G.class);
+		var g = MockRestClient.buildLax(G.class);
 		g.get("/a")
 			.run()
 			.assertStatus(404);
@@ -867,7 +867,7 @@ class RestOp_Throws_Test extends SimpleTestBase {
 	}
 
 	@Test void h01_parseExceptionCausesBadRequest() throws Exception {
-		RestClient h = MockRestClient.buildLax(H.class);
+		var h = MockRestClient.buildLax(H.class);
 		h.get("/a")
 			.run()
 			.assertStatus(400);

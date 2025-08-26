@@ -142,7 +142,7 @@ class Restx_ReqAttrs_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		RestClient a = MockRestClient.build(A2.class);
+		var a = MockRestClient.build(A2.class);
 
 		a.get("/a1").run().assertContent("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
 		a.get("/a2").run().assertContent("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");

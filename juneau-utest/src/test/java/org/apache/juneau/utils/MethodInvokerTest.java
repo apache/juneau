@@ -41,7 +41,7 @@ class MethodInvokerTest extends SimpleTestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		Method m = A.class.getMethod("foo");
+		var m = A.class.getMethod("foo");
 
 		MethodInvoker mi = create(m);
 
@@ -54,7 +54,7 @@ class MethodInvokerTest extends SimpleTestBase {
 	}
 
 	@Test void a02_exception() throws Exception {
-		Method m = A.class.getMethod("bar");
+		var m = A.class.getMethod("bar");
 
 		MethodInvoker mi = create(m);
 
@@ -67,7 +67,7 @@ class MethodInvokerTest extends SimpleTestBase {
 	}
 
 	@Test void a03_illegalArgument() throws Exception {
-		Method m = A.class.getMethod("baz", int.class);
+		var m = A.class.getMethod("baz", int.class);
 
 		MethodInvoker mi = create(m);
 
@@ -80,7 +80,7 @@ class MethodInvokerTest extends SimpleTestBase {
 	}
 
 	@Test void a04_otherMethods() throws Exception {
-		Method m = A.class.getMethod("foo");
+		var m = A.class.getMethod("foo");
 		MethodInvoker mi = create(m);
 
 		assertEquals(m, mi.inner().inner());

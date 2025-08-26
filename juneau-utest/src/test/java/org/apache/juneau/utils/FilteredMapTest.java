@@ -30,12 +30,12 @@ class FilteredMapTest extends SimpleTestBase {
 	// testBasic
 	//====================================================================================================
 	@Test void a01_basic() throws Exception {
-		JsonMap m = JsonMap.ofJson("{a:'1',b:'2'}");
+		var m = JsonMap.ofJson("{a:'1',b:'2'}");
 
 		ClassMeta<Map<String,Object>> cm = BeanContext.DEFAULT.getClassMeta(Map.class, String.class, Object.class);
 		ClassMeta<Map<String,String>> cm2 = BeanContext.DEFAULT.getClassMeta(Map.class, String.class, String.class);
 
-		FilteredMap<String,Object> m2 = new FilteredMap<>(cm, m, new String[]{"a"});
+		var m2 = new FilteredMap<>(cm, m, new String[]{"a"});
 
 		assertJson(m2, "{a:'1'}");
 

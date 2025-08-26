@@ -64,7 +64,7 @@ class Remote_CommonInterfaces_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_splitAnnotations() {
-		A x = MockRestClient.buildJson(A1.class).getRemote(A.class);
+		var x = MockRestClient.buildJson(A1.class).getRemote(A.class);
 		assertEquals("foo",x.putX1("foo"));
 		assertEquals("foo",x.getX2("foo"));
 		assertEquals("foo",x.getX3("foo"));
@@ -98,7 +98,7 @@ class Remote_CommonInterfaces_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_combinedAnnotations() {
-		B x = MockRestClient.create(B1.class).json().build().getRemote(B.class);
+		var x = MockRestClient.create(B1.class).json().build().getRemote(B.class);
 		assertEquals("foo",x.putX1("foo"));
 		assertEquals("foo",x.getX2("foo"));
 		assertEquals("foo",x.getX3("foo"));
@@ -156,7 +156,7 @@ class Remote_CommonInterfaces_Test extends SimpleTestBase {
 
 		// HttpClient goes into loop if status code is less than 200 so we can't test those.
 
-		C x = MockRestClient.create(C1.class).json().disableRedirectHandling().build().getRemote(C.class);
+		var x = MockRestClient.create(C1.class).json().disableRedirectHandling().build().getRemote(C.class);
 		assertContains("HTTP/1.1 200", x.ok());
 		assertContains("HTTP/1.1 202", x.accepted());
 		assertContains("HTTP/1.1 208", x.alreadyReported());
@@ -195,8 +195,8 @@ class Remote_CommonInterfaces_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_httpResource() throws Exception {
-		D x = MockRestClient.build(D1.class).getRemote(D.class);
-		BasicResource sr = x.httpResource();
+		var x = MockRestClient.build(D1.class).getRemote(D.class);
+		var sr = x.httpResource();
 		assertEquals("foo",read(sr.getContent()));
 		assertEquals("foo",sr.getHeaders().getLast("Foo").orElseThrow(RuntimeException::new).getValue());
 		assertEquals("\"bar\"",sr.getHeaders().getLast("ETag").orElseThrow(RuntimeException::new).getValue());
@@ -381,7 +381,7 @@ class Remote_CommonInterfaces_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_predefinedExceptions() {
-		E x = MockRestClient.create(E1.class).noTrace().build().getRemote(E.class);
+		var x = MockRestClient.create(E1.class).noTrace().build().getRemote(E.class);
 		assertThrowsWithMessage(BadRequest.class, BadRequest.REASON_PHRASE, x::badRequest);
 		assertThrowsWithMessage(Conflict.class, Conflict.REASON_PHRASE, x::conflict);
 		assertThrowsWithMessage(ExpectationFailed.class, ExpectationFailed.REASON_PHRASE, x::expectationFailed);
@@ -553,7 +553,7 @@ class Remote_CommonInterfaces_Test extends SimpleTestBase {
 	}
 
 	@Test void e02_predefinedExceptions_customMessages() {
-		E x = MockRestClient.create(E2.class).noTrace().build().getRemote(E.class);
+		var x = MockRestClient.create(E2.class).noTrace().build().getRemote(E.class);
 		assertThrowsWithMessage(BadRequest.class, "foo", x::badRequest);
 		assertThrowsWithMessage(Conflict.class, "foo", x::conflict);
 		assertThrowsWithMessage(ExpectationFailed.class, "foo", x::expectationFailed);
@@ -767,7 +767,7 @@ class Remote_CommonInterfaces_Test extends SimpleTestBase {
 	}
 
 	@Test void f01_badRequest_returnedExceptions() {
-		F x = MockRestClient.create(F1.class).noTrace().json().build().getRemote(F.class);
+		var x = MockRestClient.create(F1.class).noTrace().json().build().getRemote(F.class);
 		assertEquals("foo",x.badRequest().getMessage());
 		assertEquals("foo",x.conflict().getMessage());
 		assertEquals("foo",x.expectationFailed().getMessage());
@@ -826,7 +826,7 @@ class Remote_CommonInterfaces_Test extends SimpleTestBase {
 	}
 
 	@Test void g01_reader_inputStream() throws Exception {
-		G x = MockRestClient.build(G1.class).getRemote(G.class);
+		var x = MockRestClient.build(G1.class).getRemote(G.class);
 		assertEquals("foo",read(x.reader()));
 		assertEquals("foo",read(x.inputStream()));
 	}
@@ -849,7 +849,7 @@ class Remote_CommonInterfaces_Test extends SimpleTestBase {
 	}
 
 	@Test void h01_seeOtherRoot() {
-		IH x = MockRestClient.create(H.class).json().disableRedirectHandling().build().getRemote(IH.class);
+		var x = MockRestClient.create(H.class).json().disableRedirectHandling().build().getRemote(IH.class);
 		assertContains("HTTP/1.1 303 See Other", x.seeOtherRoot());
 	}
 }

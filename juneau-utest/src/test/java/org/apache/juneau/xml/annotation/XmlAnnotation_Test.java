@@ -88,10 +88,10 @@ class XmlAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_otherMethods() throws Exception {
-		Xml c1 = XmlAnnotation.create(C1.class).on(C2.class).build();
-		Xml c2 = XmlAnnotation.create("a").on("b").build();
-		Xml c3 = XmlAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		Xml c4 = XmlAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
+		var c1 = XmlAnnotation.create(C1.class).on(C2.class).build();
+		var c2 = XmlAnnotation.create("a").on("b").build();
+		var c3 = XmlAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
+		var c4 = XmlAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
 		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
 		assertJsonContains(c2, "on:['a','b']");

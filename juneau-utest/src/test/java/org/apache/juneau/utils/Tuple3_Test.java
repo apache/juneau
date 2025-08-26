@@ -30,7 +30,11 @@ class Tuple3_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_equality() {
-		Tuple3<String,Integer,Integer> x1 = Tuple3.of("foo",1,2), x2 = Tuple3.of("foo",1,2), x3 = Tuple3.of(null,1,2), x4 = Tuple3.of("foo",null,2), x5 = Tuple3.of("foo",1,null);
+		var x1 = Tuple3.of("foo",1,2);
+		var x2 = Tuple3.of("foo",1,2);
+		var x3 = Tuple3.of(null,1,2);
+		var x4 = Tuple3.of("foo",null,2);
+		var x5 = Tuple3.of("foo",1,null);
 		assertEquals(x1, x2);
 		assertEquals(x1.hashCode(), x2.hashCode());
 		assertNotEquals(x1, x3);

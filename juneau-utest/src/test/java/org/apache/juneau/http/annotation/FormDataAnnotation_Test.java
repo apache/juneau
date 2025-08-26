@@ -97,10 +97,10 @@ class FormDataAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_otherMethods() throws Exception {
-		FormData c1 = FormDataAnnotation.create(C1.class).on(C2.class).build();
-		FormData c2 = FormDataAnnotation.create("a").on("b").build();
-		FormData c3 = FormDataAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		FormData c4 = FormDataAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
+		var c1 = FormDataAnnotation.create(C1.class).on(C2.class).build();
+		var c2 = FormDataAnnotation.create("a").on("b").build();
+		var c3 = FormDataAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
+		var c4 = FormDataAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
 		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
 		assertJsonContains(c2, "on:['a','b']");

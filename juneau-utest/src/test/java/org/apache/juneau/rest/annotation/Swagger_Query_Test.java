@@ -205,7 +205,7 @@ class Swagger_Query_Test extends SimpleTestBase {
 	@Test void e01_schemaFromParameter() {
 		org.apache.juneau.bean.swagger.Swagger s = getSwagger(E.class);
 
-		ParameterInfo x = s.getParameterInfo("/a","get","query","Q");
+		var x = s.getParameterInfo("/a","get","query","Q");
 		assertJson(x, "{'in':'query',name:'Q',type:'string'}");
 	}
 }

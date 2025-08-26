@@ -146,7 +146,7 @@ class RestOp_Returns_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_BasicHttpResource() throws Exception {
-		RestClient b = MockRestClient.build(B.class);
+		var b = MockRestClient.build(B.class);
 		b.get("/a")
 			.run()
 			.assertContent("foo");

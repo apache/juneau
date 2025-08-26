@@ -82,7 +82,7 @@ class RestClient_Response_Test extends SimpleTestBase {
 	}
 
 	@Test void a07_setStatusLine() throws RestCallException {
-		StatusLine sl = new BasicStatusLine(new ProtocolVersion("http",9,8),299,"foo");
+		var sl = new BasicStatusLine(new ProtocolVersion("http",9,8),299,"foo");
 		RestResponse r = client().build().get("/bean").run();
 		r.setStatusLine(sl);
 		r
@@ -118,8 +118,8 @@ class RestClient_Response_Test extends SimpleTestBase {
 	public static class C extends BasicRestObject {
 		@RestGet(path="/")
 		public String getHeader(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
-			String n = req.getHeaderParam("Check").orElse(null);
-			String v = req.getHeaderParam(n).orElse(null);
+			var n = req.getHeaderParam("Check").orElse(null);
+			var v = req.getHeaderParam(n).orElse(null);
 			res.setHeader(n,v);
 			return v;
 		}
@@ -171,7 +171,7 @@ class RestClient_Response_Test extends SimpleTestBase {
 		r.getFirstHeader("Foo").assertValue().is("quux");
 		r.getLastHeader("Foo").assertValue().is("quux");
 
-		HeaderIterator i = r.headerIterator();
+		var i = r.headerIterator();
 		assertEquals("quux", i.nextHeader().getValue());
 
 		i = r.headerIterator("Foo");
@@ -213,7 +213,7 @@ class RestClient_Response_Test extends SimpleTestBase {
 	@SuppressWarnings("deprecation")
 	@Test void e01_response_getParams_setParams() throws Exception {
 		RestResponse x = client(D.class).build().post("/bean",bean).run();
-		HttpParams p = new BasicHttpParams();
+		var p = new BasicHttpParams();
 		x.setParams(p);
 		assertSame(x.getParams(), p);
 	}

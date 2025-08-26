@@ -36,7 +36,7 @@ class Common_Test extends SimpleTestBase {
 		var t1 = A.create();
 
 		s.keepNullProperties();
-		String r = s.build().serialize(t1);
+		var r = s.build().serialize(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>s1</td><td><null/></td></tr><tr><td>s2</td><td>s2</td></tr></table>", r);
 		var t2 = p.parse(r, A.class);
 		assertEquals(json(t2), json(t1));
@@ -281,11 +281,11 @@ class Common_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a06_beanPropertyPropertiesOnListOfBeans() throws Exception {
 		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
-		List<F> l = new LinkedList<>();
+		var l = new LinkedList<>();
 		var t = new F();
 		t.x1.add(new F());
 		l.add(t);
-		String html = s.serialize(l);
+		var html = s.serialize(l);
 		assertEquals(
 			"<table _type='array'>"
 				+"<tr><th>x1</th><th>x2</th></tr>"
@@ -319,7 +319,7 @@ class Common_Test extends SimpleTestBase {
 		t.f1 = new URI("http://f1");
 		t.f2 = TestUtils.url("http://f2");
 
-		String html = s.serialize(t);
+		var html = s.serialize(t);
 		t = p.parse(html, G.class);
 		assertEquals("http://uri", t.uri.toString());
 		assertEquals("http://f1", t.f1.toString());

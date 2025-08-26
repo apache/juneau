@@ -411,7 +411,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 		var p = JsonParser.create().swaps(D2.class).build();
 		var x = D1.create();
 
-		Object r = s.serialize(x);
+		var r = (Object)s.serialize(x);
 		assertEquals("{f2:'f1'}", r);
 
 		x = p.parse(r, D1.class);
@@ -453,7 +453,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 		var p = JsonParser.DEFAULT;
 		var x = E1.create();
 
-		Object r = s.serialize(x);
+		var r = (Object)s.serialize(x);
 		assertEquals("{f2:'f1'}", r);
 
 		x = p.parse(r, E1.class);
@@ -496,7 +496,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 		var p = JsonParser.DEFAULT.copy().applyAnnotations(E1cConfig.class).build();
 		var x = E1c.create();
 
-		Object r = s.serialize(x);
+		var r = (Object)s.serialize(x);
 		assertEquals("{f2:'f1'}", r);
 
 		x = p.parse(r, E1c.class);

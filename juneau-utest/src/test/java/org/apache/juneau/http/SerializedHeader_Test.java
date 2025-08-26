@@ -31,7 +31,7 @@ class SerializedHeader_Test extends SimpleTestBase {
 	private static final OpenApiSerializer OAPI_SERIALIZER = OpenApiSerializer.DEFAULT;
 
 	@Test void a01_basic() {
-		SerializedHeader x1 = new SerializedHeader("Foo",alist("bar","baz"),OAPI_SESSION,T_ARRAY_PIPES,true);
+		var x1 = new SerializedHeader("Foo",alist("bar","baz"),OAPI_SESSION,T_ARRAY_PIPES,true);
 		assertString("Foo: bar|baz", x1);
 	}
 

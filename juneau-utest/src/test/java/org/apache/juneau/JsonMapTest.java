@@ -264,8 +264,8 @@ class JsonMapTest extends SimpleTestBase {
 	// testParent
 	//====================================================================================================
 	@Test void a03_parent() throws Exception {
-		JsonMap m1 = JsonMap.ofJson("{a:1}");
-		JsonMap m2 = JsonMap.ofJson("{b:2}").inner(m1);
+		var m1 = JsonMap.ofJson("{a:1}");
+		var m2 = JsonMap.ofJson("{b:2}").inner(m1);
 
 		assertEquals(Integer.valueOf(1), m2.getInt("a"));
 	}
@@ -274,9 +274,9 @@ class JsonMapTest extends SimpleTestBase {
 	// testUpdatability
 	//====================================================================================================
 	@Test void a04_updatability() throws Exception {
-		JsonMap m = JsonMap.ofJson("{a:[{b:'c'}]}");
-		JsonList l = m.getList("a");
-		JsonMap m2 = l.getMap(0);
+		var m = JsonMap.ofJson("{a:[{b:'c'}]}");
+		var l = m.getList("a");
+		var m2 = l.getMap(0);
 		m2.put("b", "x");
 		assertJson(m, "{a:[{b:'x'}]}");
 
@@ -291,7 +291,7 @@ class JsonMapTest extends SimpleTestBase {
 	// testAtMethods
 	//====================================================================================================
 	@Test void a05_atMethods() throws Exception {
-		JsonMap m = JsonMap.ofJson("{a:[{b:'c'}]}");
+		var m = JsonMap.ofJson("{a:[{b:'c'}]}");
 		String r;
 
 		r = m.getAt("a/0/b", String.class);
@@ -320,8 +320,8 @@ class JsonMapTest extends SimpleTestBase {
 	// testGetMap
 	//====================================================================================================
 	@Test void a07_getMap() throws Exception {
-		JsonMap m = JsonMap.ofJson("{a:{1:'true',2:'false'}}");
-		Map<Integer,Boolean> m2 = m.getMap("a", Integer.class, Boolean.class, null);
+		var m = JsonMap.ofJson("{a:{1:'true',2:'false'}}");
+		var m2 = m.getMap("a", Integer.class, Boolean.class, null);
 		assertJson(m2, "{'1':true,'2':false}");
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
 		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
@@ -342,8 +342,8 @@ class JsonMapTest extends SimpleTestBase {
 	// testGetList
 	//====================================================================================================
 	@Test void a08_getList() throws Exception {
-		JsonMap m = JsonMap.ofJson("{a:['123','456']}");
-		List<Integer> l2 = m.getList("a", Integer.class, null);
+		var m = JsonMap.ofJson("{a:['123','456']}");
+		var l2 = m.getList("a", Integer.class, null);
 		assertList(l2, "123,456");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
 

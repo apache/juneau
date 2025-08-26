@@ -33,7 +33,7 @@ class ClassMetaTest extends SimpleTestBase {
 	public Map<String,String> fa;
 
 	@Test void a01_map() throws Exception {
-		ClassMeta t = bc.getClassMeta(this.getClass().getField("fa").getGenericType());
+		var t = bc.getClassMeta(this.getClass().getField("fa").getGenericType());
 		assertEquals("java.util.Map<java.lang.String,java.lang.String>", t.toString());
 		assertTrue(t.isMap());
 		assertFalse(t.isCollection());
@@ -46,25 +46,25 @@ class ClassMetaTest extends SimpleTestBase {
 	public String fb;
 
 	@Test void a02_string() throws Exception {
-		ClassMeta t = bc.getClassMeta(this.getClass().getField("fb").getGenericType());
+		var t = bc.getClassMeta(this.getClass().getField("fb").getGenericType());
 		assertEquals(String.class, t.getInnerClass());
-		t = bc.getClassMeta(this.getClass().getField("fb").getType());
-		assertEquals(String.class, t.getInnerClass());
+		var t2 = bc.getClassMeta(this.getClass().getField("fb").getType());
+		assertEquals(String.class, t2.getInnerClass());
 	}
 
 	public Map<String,Map<String,Integer>> fc;
 
 	@Test void a03_mapWithMapValues() throws Exception {
-		ClassMeta t = bc.getClassMeta(this.getClass().getField("fc").getGenericType());
+		var t = bc.getClassMeta(this.getClass().getField("fc").getGenericType());
 		assertEquals("java.util.Map<java.lang.String,java.util.Map<java.lang.String,java.lang.Integer>>", t.toString());
-		t = bc.getClassMeta(this.getClass().getField("fc").getType());
-		assertEquals("java.util.Map", t.toString());
+		var t2 = bc.getClassMeta(this.getClass().getField("fc").getType());
+		assertEquals("java.util.Map", t2.toString());
 	}
 
 	public List<Map<String,List>> fd;
 
 	@Test void a04_listWithMapValues() throws Exception {
-		ClassMeta t = bc.getClassMeta(this.getClass().getField("fd").getGenericType());
+		var t = bc.getClassMeta(this.getClass().getField("fd").getGenericType());
 		assertEquals("java.util.List<java.util.Map<java.lang.String,java.util.List>>", t.toString());
 	}
 
@@ -72,7 +72,7 @@ class ClassMetaTest extends SimpleTestBase {
 	public List<? super String> fe2;
 
 	@Test void a05_listWithUpperBoundGenericEntryTypes() throws Exception {
-		ClassMeta t = bc.getClassMeta(this.getClass().getField("fe1").getGenericType());
+		var t = bc.getClassMeta(this.getClass().getField("fe1").getGenericType());
 		assertEquals("java.util.List", t.toString());
 		t = bc.getClassMeta(this.getClass().getField("fe2").getGenericType());
 		assertEquals("java.util.List", t.toString());
@@ -82,7 +82,7 @@ class ClassMetaTest extends SimpleTestBase {
 	public G g;
 
 	@Test void a06_beanExtendsMap() throws Exception {
-		ClassMeta t = bc.getClassMeta(this.getClass().getField("g").getGenericType());
+		var t = bc.getClassMeta(this.getClass().getField("g").getGenericType());
 		assertEquals("org.apache.juneau.ClassMetaTest$G<java.lang.String,java.lang.Object>", t.toString());
 		assertTrue(t.isMap());
 		assertFalse(t.isCollection());
@@ -284,31 +284,31 @@ class ClassMetaTest extends SimpleTestBase {
 	static class C5 implements CI3 {}
 
 	@Test void forEachAnnotation() {
-		ClassMeta<?> c3 = bc.getClassMeta(C3.class);
-		ClassMeta<?> c4 = bc.getClassMeta(C4.class);
-		ClassMeta<?> c5 = bc.getClassMeta(C5.class);
+		var c3 = bc.getClassMeta(C3.class);
+		var c4 = bc.getClassMeta(C4.class);
+		var c5 = bc.getClassMeta(C5.class);
 
-		List<Integer> l1 = TestUtils.list();
+		var l1 = TestUtils.list();
 		c3.forEachAnnotation(A.class, null, x -> l1.add(x.value()));
 		assertList(l1, "2,1,3,5,6,7");
 
-		List<Integer> l2 = TestUtils.list();
+		var l2 = TestUtils.list();
 		c4.forEachAnnotation(A.class, null, x -> l2.add(x.value()));
 		assertList(l2, "2,1,3,5,6,7");
 
-		List<Integer> l3 = TestUtils.list();
+		var l3 = TestUtils.list();
 		c5.forEachAnnotation(A.class, null, x -> l3.add(x.value()));
 		assertList(l3, "3");
 
-		List<Integer> l4 = TestUtils.list();
+		var l4 = TestUtils.list();
 		c3.forEachAnnotation(A.class, x -> x.value() == 5, x -> l4.add(x.value()));
 		assertList(l4, "5");
 	}
 
 	@Test void firstAnnotation() {
-		ClassMeta<?> c3 = bc.getClassMeta(C3.class);
-		ClassMeta<?> c4 = bc.getClassMeta(C4.class);
-		ClassMeta<?> c5 = bc.getClassMeta(C5.class);
+		var c3 = bc.getClassMeta(C3.class);
+		var c4 = bc.getClassMeta(C4.class);
+		var c5 = bc.getClassMeta(C5.class);
 		assertEquals(2, c3.firstAnnotation(A.class, null).get().value());
 		assertEquals(2, c4.firstAnnotation(A.class, null).get().value());
 		assertEquals(3, c5.firstAnnotation(A.class, null).get().value());
@@ -316,12 +316,12 @@ class ClassMetaTest extends SimpleTestBase {
 	}
 
 	@Test void lastAnnotation() {
-		ClassMeta<?> c3 = bc.getClassMeta(C3.class);
-		ClassMeta<?> c4 = bc.getClassMeta(C4.class);
-		ClassMeta<?> c5 = bc.getClassMeta(C5.class);
+		var c3 = bc.getClassMeta(C3.class);
+		var c4 = bc.getClassMeta(C4.class);
+		var c5 = bc.getClassMeta(C5.class);
 		assertEquals(7, c3.lastAnnotation(A.class, null).get().value());
 		assertEquals(7, c4.lastAnnotation(A.class, null).get().value());
 		assertEquals(3, c5.lastAnnotation(A.class, null).get().value());
 		assertEquals(5, c3.lastAnnotation(A.class, x -> x.value() == 5).get().value());
 	}
-}
+}

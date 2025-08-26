@@ -155,7 +155,7 @@ class MethodInfoTest extends SimpleTestBase {
 
 	@Test void findMatchingMethods() throws Exception {
 		var mi = MethodInfo.of(B3.class.getMethod("foo", int.class));
-		List<MethodInfo> l = new ArrayList<>();
+		var l = new ArrayList<MethodInfo>();
 		mi.forEachMatching(x -> true, l::add);
 		check("B3.foo(int),B2.foo(int),B1.foo(int)", l);
 	}
@@ -215,7 +215,7 @@ class MethodInfoTest extends SimpleTestBase {
 	}
 
 	private static List<A> annotations(MethodInfo mi, Class<? extends Annotation> a) {
-		List<A> l = new ArrayList<>();
+		var l = new ArrayList<A>();
 		mi.forEachAnnotation(a, x -> true, x -> l.add((A)x));
 		return l;
 	}
@@ -411,7 +411,7 @@ class MethodInfoTest extends SimpleTestBase {
 		g_a3 = ofm(G.class, "a3");  // NOSONAR
 
 	@Test void compareTo() {
-		Set<MethodInfo> s = new TreeSet<>(Arrays.asList(g_a1a, g_a1b, g_a1c, g_a1d, g_a2, g_a3));
+		var s = new TreeSet<>(Arrays.asList(g_a1a, g_a1b, g_a1c, g_a1d, g_a2, g_a3));
 		check("[a1(), a1(int), a1(String), a1(int,int), a2(), a3()]", s);
 	}
 }

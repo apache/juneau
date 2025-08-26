@@ -98,10 +98,10 @@ public class StringSwapTester<T> {
 
 	public void testUnswap() throws Exception {
 		try {
-			T o = objectSupplier.get();
-			String s = swap.swap(beanSession, o);
-			T o2 = swap.unswap(beanSession, s, beanSession.getClassMetaForObject(o));
-			String s2 = swap.swap(beanSession, o2);
+			var o = objectSupplier.get();
+			var s = swap.swap(beanSession, o);
+			var o2 = swap.unswap(beanSession, s, beanSession.getClassMetaForObject(o));
+			var s2 = swap.swap(beanSession, o2);
 			if (Utils.ne(s, s2)) {
 				if (expected.isEmpty())
 					fail("Test [" + label + " unswap] failed - expected was empty");

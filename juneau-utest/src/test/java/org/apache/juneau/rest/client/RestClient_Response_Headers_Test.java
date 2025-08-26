@@ -37,7 +37,7 @@ class RestClient_Response_Headers_Test extends SimpleTestBase {
 	public static class A extends BasicRestObject {
 		@RestGet
 		public String echo(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
-			String c = req.getHeaderParam("Check").orElse(null);
+			var c = req.getHeaderParam("Check").orElse(null);
 			String[] h = req.getHeaders().getAll(c).stream().map(RequestHeader::getValue).toArray(String[]::new);
 			if (h != null)
 				for (String hh : h)
@@ -82,7 +82,7 @@ class RestClient_Response_Headers_Test extends SimpleTestBase {
 		String s = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asString().orElse(null);
 		assertEquals("bar", s);
 
-		Value<String> m = Value.empty();
+		var m = Value.<String>empty();
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asString(m);
 		assertEquals("bar", m.get());
 
@@ -101,18 +101,18 @@ class RestClient_Response_Headers_Test extends SimpleTestBase {
 		Integer i = checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").as(Integer.class).orElse(null);
 		assertEquals(123, i.intValue());
 
-		Value<Integer> m1 = Value.empty();
+		var m1 = Value.<Integer>empty();
 		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").as(m1,Integer.class);
 		assertEquals(123, m1.get().intValue());
 
 		List<Integer> l = (List<Integer>) checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(LinkedList.class,Integer.class).get();
 		assertJson(l, "[1,2]");
 
-		Value<Integer> m2 = Value.empty();
+		var m2 = Value.empty();
 		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(m2,LinkedList.class,Integer.class);
 
 		ClassMeta<LinkedList<Integer>> cm1 = BeanContext.DEFAULT.getClassMeta(LinkedList.class, Integer.class);
-		ClassMeta<Integer> cm2 = BeanContext.DEFAULT.getClassMeta(Integer.class);
+		var cm2 = BeanContext.DEFAULT.getClassMeta(Integer.class);
 
 		l = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(cm1).get();
 		assertJson(l, "[1,2]");

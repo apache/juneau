@@ -126,21 +126,21 @@ class RoundTripMaps_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a01_mapIntegerString(RoundTripTester t) throws Exception {
-		Map<Integer,String> x = new TreeMap<>();
+		var x = new TreeMap<Integer,String>();
 		x.put(1, "a");
 		x.put(2, null);
 		x = t.roundTrip(x, TreeMap.class, Integer.class, String.class);
 		assertEquals("a", x.get(1));
 		assertNull(null, x.get(2));
 
-		x = new HashMap<>();
-		x.put(1, "a");
-		x.put(2, null);
-		x.put(null, "b");
-		x = t.roundTrip(x, HashMap.class, Integer.class, String.class);
-		assertEquals("a", x.get(1));
-		assertNull(x.get(2));
-		assertEquals("b", x.get(null));
+		var x2 = new HashMap<Integer,String>();
+		x2.put(1, "a");
+		x2.put(2, null);
+		x2.put(null, "b");
+		x2 = t.roundTrip(x2, HashMap.class, Integer.class, String.class);
+		assertEquals("a", x2.get(1));
+		assertNull(x2.get(2));
+		assertEquals("b", x2.get(null));
 	}
 
 	//====================================================================================================
@@ -150,21 +150,21 @@ class RoundTripMaps_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a02_mapBooleanString(RoundTripTester t) throws Exception {
-		Map<Boolean,String> x = new TreeMap<>();
+		var x = new TreeMap<Boolean,String>();
 		x.put(true, "a");
 		x.put(false, null);
 		x = t.roundTrip(x, TreeMap.class, Boolean.class, String.class);
 		assertEquals("a", x.get(true));
 		assertNull(null, x.get(false));
 
-		x = new HashMap<>();
-		x.put(true, "a");
-		x.put(false, null);
-		x.put(null, "b");
-		x = t.roundTrip(x, HashMap.class, Boolean.class, String.class);
-		assertEquals("a", x.get(true));
-		assertNull(x.get(false));
-		assertEquals("b", x.get(null));
+		var x2 = new HashMap<Boolean,String>();
+		x2.put(true, "a");
+		x2.put(false, null);
+		x2.put(null, "b");
+		x2 = t.roundTrip(x2, HashMap.class, Boolean.class, String.class);
+		assertEquals("a", x2.get(true));
+		assertNull(x2.get(false));
+		assertEquals("b", x2.get(null));
 	}
 
 	//====================================================================================================
@@ -180,12 +180,12 @@ class RoundTripMaps_Test extends SimpleTestBase {
 		String e;
 		Object r;
 
-		Map<byte[],String> x = new LinkedHashMap<>();
+		var x = new LinkedHashMap<byte[],String>();
 		x.put(new byte[]{1,2,3}, "a");
 		x.put(new byte[]{4,5,6}, null);
 		x.put(null, "b");
 
-		Serializer s = JsonSerializer.create().json5().swaps(ByteArraySwap.Base64.class).keepNullProperties().build();
+		var s = (Serializer)JsonSerializer.create().json5().swaps(ByteArraySwap.Base64.class).keepNullProperties().build();
 		e = "{AQID:'a',BAUG:null,null:'b'}";
 		r = s.serialize(x);
 		assertEquals(e, r);
@@ -221,21 +221,21 @@ class RoundTripMaps_Test extends SimpleTestBase {
 		var xd1 = new Date(1,2,3,4,5,6);
 		var xd2 = new Date(2,3,4,5,6,7);
 
-		Map<Date,String> x = new TreeMap<>();
+		var x = new TreeMap<Date,String>();
 		x.put(xd1, "a");
 		x.put(xd2, null);
 		x = t.roundTrip(x, TreeMap.class, Date.class, String.class);
 		assertEquals("a", x.get(xd1));
 		assertNull(null, x.get(xd2));
 
-		x = new HashMap<>();
-		x.put(xd1, "a");
-		x.put(xd2, null);
-		x.put(null, "b");
-		x = t.roundTrip(x, HashMap.class, Date.class, String.class);
-		assertEquals("a", x.get(xd1));
-		assertNull(x.get(xd2));
-		assertEquals("b", x.get(null));
+		var x2 = new HashMap<Date,String>();
+		x2.put(xd1, "a");
+		x2.put(xd2, null);
+		x2.put(null, "b");
+		x2 = t.roundTrip(x2, HashMap.class, Date.class, String.class);
+		assertEquals("a", x2.get(xd1));
+		assertNull(x2.get(xd2));
+		assertEquals("b", x2.get(null));
 	}
 
 	//====================================================================================================
@@ -245,25 +245,25 @@ class RoundTripMaps_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a05_mapCalendarString(RoundTripTester t) throws Exception {
-		Calendar xc1 = GregorianCalendar.from(ZonedDateTime.parse("2012-12-21T12:34:56Z"));
-		Calendar xc2 = GregorianCalendar.from(ZonedDateTime.parse("2012-12-21T12:34:57Z"));
+		var xc1 = GregorianCalendar.from(ZonedDateTime.parse("2012-12-21T12:34:56Z"));
+		var xc2 = GregorianCalendar.from(ZonedDateTime.parse("2012-12-21T12:34:57Z"));
 
-		Map<Calendar,String> x = new TreeMap<>();
+		var x = new TreeMap<Calendar,String>();
 		x.put(xc1, "a");
 		x.put(xc2, null);
 		x = t.roundTrip(x, TreeMap.class, GregorianCalendar.class, String.class);
 		assertEquals("a", x.get(xc1));
 		assertNull(null, x.get(xc2));
 
-		x = new HashMap<>();
-		x.put(xc1, "a");
-		x.put(xc2, null);
-		x.put(null, "b");
-		x = t.roundTrip(x, HashMap.class, GregorianCalendar.class, String.class);
+		var x2 = new HashMap<Calendar,String>();
+		x2.put(xc1, "a");
+		x2.put(xc2, null);
+		x2.put(null, "b");
+		x2 = t.roundTrip(x2, HashMap.class, GregorianCalendar.class, String.class);
 
-		assertEquals("a", x.get(xc1));
-		assertNull(x.get(xc2));
-		assertEquals("b", x.get(null));
+		assertEquals("a", x2.get(xc1));
+		assertNull(x2.get(xc2));
+		assertEquals("b", x2.get(null));
 	}
 
 	//====================================================================================================
@@ -274,21 +274,21 @@ class RoundTripMaps_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a06_mapEnumString(RoundTripTester t) throws Exception {
 
-		Map<TestEnum,String> x = new TreeMap<>();
+		var x = new TreeMap<TestEnum,String>();
 		x.put(TestEnum.FOO, "a");
 		x.put(TestEnum.BAR, null);
 		x = t.roundTrip(x, TreeMap.class, TestEnum.class, String.class);
 		assertEquals("a", x.get(TestEnum.FOO));
 		assertNull(null, x.get(TestEnum.BAR));
 
-		x = new HashMap<>();  // NOSONAR
-		x.put(TestEnum.FOO, "a");
-		x.put(TestEnum.BAR, null);
-		x.put(null, "b");
-		x = t.roundTrip(x, HashMap.class, TestEnum.class, String.class);
-		assertEquals("a", x.get(TestEnum.FOO));
-		assertNull(x.get(TestEnum.BAR));
-		assertEquals("b", x.get(null));
+		var x2 = new HashMap<TestEnum,String>();  // NOSONAR
+		x2.put(TestEnum.FOO, "a");
+		x2.put(TestEnum.BAR, null);
+		x2.put(null, "b");
+		x2 = t.roundTrip(x2, HashMap.class, TestEnum.class, String.class);
+		assertEquals("a", x2.get(TestEnum.FOO));
+		assertNull(x2.get(TestEnum.BAR));
+		assertEquals("b", x2.get(null));
 	}
 
 	public enum TestEnum {

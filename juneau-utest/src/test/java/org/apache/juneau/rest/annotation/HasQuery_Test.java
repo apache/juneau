@@ -30,18 +30,18 @@ class HasQuery_Test extends SimpleTestBase {
 	public static class A {
 		@RestGet
 		public String a(RestRequest req, @HasQuery("p1") boolean p1, @HasQuery("p2") Boolean p2) {
-			RequestQueryParams q = req.getQueryParams();
+			var q = req.getQueryParams();
 			return "p1=["+p1+","+q.contains("p1")+"],p2=["+p2+","+q.contains("p2")+"]";
 		}
 		@RestPost
 		public String b(RestRequest req, @HasQuery("p1") boolean p1, @HasQuery("p2") Boolean p2) {
-			RequestQueryParams q = req.getQueryParams();
+			var q = req.getQueryParams();
 			return "p1=["+p1+","+q.contains("p1")+"],p2=["+p2+","+q.contains("p2")+"]";
 		}
 	}
 
 	@Test void a01_basic() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 
 		a.get("/a?p1=p1&p2=2").run().assertContent("p1=[true,true],p2=[true,true]");
 		a.get("/a?p1&p2").run().assertContent("p1=[true,true],p2=[true,true]");

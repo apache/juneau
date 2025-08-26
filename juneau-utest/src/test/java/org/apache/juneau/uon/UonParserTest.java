@@ -223,9 +223,9 @@ class UonParserTest extends SimpleTestBase {
 		assertEquals(123, i.intValue());
 		i = p.parse(t, Integer.class);
 		assertEquals(123, i.intValue());
-		Double d = p.parse(t, Double.class);
+		var d = p.parse(t, Double.class);
 		assertEquals(123, d.intValue());
-		Float f = p.parse(t, Float.class);
+		var f = p.parse(t, Float.class);
 		assertEquals(123, f.intValue());
 		t = " 123 ";
 		i = p.parse(t, Integer.class);

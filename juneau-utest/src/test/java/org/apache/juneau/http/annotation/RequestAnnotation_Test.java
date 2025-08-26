@@ -87,8 +87,8 @@ class RequestAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_otherMethods() {
-		Request c1 = RequestAnnotation.create(C1.class).on(C2.class).build();
-		Request c2 = RequestAnnotation.create("a").on("b").build();
+		var c1 = RequestAnnotation.create(C1.class).on(C2.class).build();
+		var c2 = RequestAnnotation.create("a").on("b").build();
 
 		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
 		assertJsonContains(c2, "on:['a','b']");

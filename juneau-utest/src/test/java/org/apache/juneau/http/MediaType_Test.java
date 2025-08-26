@@ -25,7 +25,7 @@ class MediaType_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		assertEquals(new MediaType("text/foo"), new MediaType("text/foo"));
 
-		Set<MediaType> x = new TreeSet<>();
+		var x = new TreeSet<>();
 		x.add(MediaType.of("text/foo"));
 		x.add(MediaType.of("text/bar"));
 		assertJson(x, "['text/bar','text/foo']");

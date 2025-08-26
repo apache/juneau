@@ -133,7 +133,7 @@ class HttpPartSchema_Response_Test extends SimpleTestBase {
 		assertJson(s.getEnum(), "['e1','e2']");
 		assertEquals("c1\nc2", s.getDefault());
 
-		HttpPartSchema items = s.getItems();
+		var items = s.getItems();
 		assertEquals(HttpPartDataType.INTEGER, items.getType());
 		assertEquals(HttpPartFormat.INT64, items.getFormat());
 		assertEquals(HttpPartCollectionFormat.SSV, items.getCollectionFormat());

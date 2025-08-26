@@ -48,7 +48,7 @@ class Restx_Path_Test extends SimpleTestBase {
 	public static class A2 extends A2a {}
 
 	@Test void a01_nestedChildren() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 		// Since we're not running from a servlet container, we access A directly with no path.
 		// However, the path is still reflected in RestContext.getPath().
 		a.get("/").run().assertContent("A-p0");
@@ -97,7 +97,7 @@ class Restx_Path_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_overlappingPaths() throws Exception {
-		RestClient b = MockRestClient.build(B.class);
+		var b = MockRestClient.build(B.class);
 		// [/] = [test5a]
 		// [/*] = [test5b]   -- Cannot get called.
 		// [/foo] = [test5c]
@@ -136,7 +136,7 @@ class Restx_Path_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_pathOverriddenByChild() throws Exception {
-		RestClient c2 = MockRestClient.build(C2.class);
+		var c2 = MockRestClient.build(C2.class);
 		c2.get("/foo").run().assertContent("b");
 	}
-}
+}

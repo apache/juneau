@@ -76,10 +76,10 @@ class OpenApiAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_otherMethods() throws Exception {
-		OpenApi c1 = OpenApiAnnotation.create(C1.class).on(C2.class).build();
-		OpenApi c2 = OpenApiAnnotation.create("a").on("b").build();
-		OpenApi c3 = OpenApiAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		OpenApi c4 = OpenApiAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
+		var c1 = OpenApiAnnotation.create(C1.class).on(C2.class).build();
+		var c2 = OpenApiAnnotation.create("a").on("b").build();
+		var c3 = OpenApiAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
+		var c4 = OpenApiAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
 		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
 		assertJsonContains(c2, "on:['a','b']");

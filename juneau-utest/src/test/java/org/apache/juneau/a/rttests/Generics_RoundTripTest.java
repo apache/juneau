@@ -38,7 +38,7 @@ class Generics_RoundTripTest extends RoundTripTest_Base {
 
 		// Unbound type variables should be interpreted as Object.
 		// During parsing, these become JsonMaps.
-		Pair<?,?> x = new Pair<>(new Source().init(), new Target().init());
+		var x = new Pair<Object,Object>(new Source().init(), new Target().init());
 		x = t.roundTrip(x);
 		assertJson(x, "{s:{s1:'a1'},t:{t1:'b1'}}");
 		assertEquals("JsonMap", x.getS().getClass().getSimpleName());

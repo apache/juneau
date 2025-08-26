@@ -47,13 +47,13 @@ class UrlEncodingConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void basicSerializer() {
 		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
-		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().getSession();
+		var x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("true", x.isExpandedParams());
 	}
 
 	@Test void basicParser() {
 		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
-		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().getSession();
+		var x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("true", x.isExpandedParams());
 	}
 
@@ -67,13 +67,13 @@ class UrlEncodingConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noValuesSerializer() {
 		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().getSession();
+		var x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test void noValuesParser() {
 		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().getSession();
+		var x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 
@@ -86,13 +86,13 @@ class UrlEncodingConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noAnnotationSerializer() {
 		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		UrlEncodingSerializerSession x = UrlEncodingSerializer.create().apply(al).build().getSession();
+		var x = UrlEncodingSerializer.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 
 	@Test void noAnnotationParser() {
 		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		UrlEncodingParserSession x = UrlEncodingParser.create().apply(al).build().getSession();
+		var x = UrlEncodingParser.create().apply(al).build().getSession();
 		check("false", x.isExpandedParams());
 	}
 }

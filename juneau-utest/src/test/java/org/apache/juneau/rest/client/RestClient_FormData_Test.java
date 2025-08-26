@@ -95,13 +95,13 @@ class RestClient_FormData_Test extends SimpleTestBase {
 	@Test void a09_formData_String_Supplier() throws Exception {
 		var s = MutableSupplier.of(null);
 
-		RestClient x1 = client().formData(part("foo",s,null)).build();
+		var x1 = client().formData(part("foo",s,null)).build();
 		s.set(JsonList.of("foo","bar"));
 		x1.post("/formData").run().assertContent().asString().asUrlDecode().is("foo=foo,bar");
 		s.set(JsonList.of("bar","baz"));
 		x1.post("/formData").run().assertContent().asString().asUrlDecode().is("foo=bar,baz");
 
-		RestClient x2 = client().build();
+		var x2 = client().build();
 		s.set(JsonList.of("foo","bar"));
 		x2.post("/formData").formData("foo",s).run().assertContent().asString().asUrlDecode().is("foo=foo,bar");
 		s.set(JsonList.of("bar","baz"));
@@ -110,7 +110,7 @@ class RestClient_FormData_Test extends SimpleTestBase {
 
 	@Test void a10_formData_String_Supplier_Schema_Serializer() throws Exception {
 		var s = MutableSupplier.of(JsonList.of("foo","bar"));
-		RestClient x = client().formData(part("foo",s,T_ARRAY_PIPES).serializer(FakeWriterSerializer.X)).build();
+		var x = client().formData(part("foo",s,T_ARRAY_PIPES).serializer(FakeWriterSerializer.X)).build();
 		x.post("/formData").run().assertContent().asString().asUrlDecode().is("foo=xfoo|barx");
 		s.set(JsonList.of("bar","baz"));
 		x.post("/formData").run().assertContent().asString().asUrlDecode().is("foo=xbar|bazx");
@@ -120,13 +120,13 @@ class RestClient_FormData_Test extends SimpleTestBase {
 		List<String> l1 = list("foo","bar"), l2 = list("bar","baz");
 		var s = MutableSupplier.of(null);
 
-		RestClient x1 = client().formData(part("foo",s,T_ARRAY_PIPES)).build();
+		var x1 = client().formData(part("foo",s,T_ARRAY_PIPES)).build();
 		s.set(l1);
 		x1.post("/formData").run().assertContent().asString().asUrlDecode().is("foo=foo|bar");
 		s.set(l2);
 		x1.post("/formData").run().assertContent().asString().asUrlDecode().is("foo=bar|baz");
 
-		RestClient x2 = client().build();
+		var x2 = client().build();
 		s.set(l1);
 		x2.post("/formData").formData(part("foo",s,T_ARRAY_PIPES)).run().assertContent().asString().asUrlDecode().is("foo=foo|bar");
 		s.set(l2);

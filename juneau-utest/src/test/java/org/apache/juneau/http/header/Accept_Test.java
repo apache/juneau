@@ -50,7 +50,7 @@ class Accept_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_basic() throws Exception {
-		RestClient c = client().build();
+		var c = client().build();
 
 		// Normal usage.
 		c.get().header(accept(VALUE)).run().assertContent(VALUE);

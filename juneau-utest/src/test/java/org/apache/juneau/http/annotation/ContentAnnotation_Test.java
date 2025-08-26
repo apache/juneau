@@ -81,9 +81,9 @@ class ContentAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_otherMethods() throws Exception {
-		Content c1 = ContentAnnotation.create(C1.class).on(C2.class).build();
-		Content c2 = ContentAnnotation.create("a").on("b").build();
-		Content c4 = ContentAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
+		var c1 = ContentAnnotation.create(C1.class).on(C2.class).build();
+		var c2 = ContentAnnotation.create("a").on("b").build();
+		var c4 = ContentAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
 		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
 		assertJsonContains(c2, "on:['a','b']");

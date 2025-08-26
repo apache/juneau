@@ -38,7 +38,7 @@ class UrlPathMatcher_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_comparision() {
-		List<UrlPathMatcher> l = new LinkedList<>();
+		var l = new LinkedList<UrlPathMatcher>();
 
 		l.add(of(""));
 		l.add(of("*"));
@@ -61,7 +61,7 @@ class UrlPathMatcher_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_comparision() {
-		List<UrlPathMatcher> l = new LinkedList<>();
+		var l = new LinkedList<UrlPathMatcher>();
 
 		l.add(of("foo.txt"));
 		l.add(of("*.txt"));
@@ -84,7 +84,7 @@ class UrlPathMatcher_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_comparision() {
-		List<UrlPathMatcher> l = new LinkedList<>();
+		var l = new LinkedList<UrlPathMatcher>();
 
 		l.add(of("/foo"));
 		l.add(of("/foo"));
@@ -353,4 +353,4 @@ class UrlPathMatcher_Test extends SimpleTestBase {
 		check(p, "/*.*", "{}");
 		shouldNotMatch(p, "/foo", "/foo", "/*", null);
 	}
-}
+}

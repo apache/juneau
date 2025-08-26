@@ -70,7 +70,7 @@ class RestStartCall_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_startCall() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 		a.get("/").run().assertContent("{'1':'true','2':'true','3':'true','4':'true'}");
 	}
 }

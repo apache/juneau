@@ -134,8 +134,8 @@ class BeanAnnotation_Test extends SimpleTestBase {
 	public static class C2 {}
 
 	@Test void c01_otherMethods() {
-		Bean c1 = BeanAnnotation.create(C1.class).on(C2.class).build();
-		Bean c2 = BeanAnnotation.create("a").on("b").build();
+		var c1 = BeanAnnotation.create(C1.class).on(C2.class).build();
+		var c2 = BeanAnnotation.create("a").on("b").build();
 
 		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
 		assertJsonContains(c2, "on:['a','b']");

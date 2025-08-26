@@ -65,7 +65,7 @@ class RestPostCall_Test {
 	}
 
 	@Test void a01_postCall() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 		a.get("/").run()
 			.assertHeader("post1-called").is("true")
 			.assertHeader("post2-called").is("true")

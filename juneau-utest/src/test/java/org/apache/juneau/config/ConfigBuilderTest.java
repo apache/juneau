@@ -44,7 +44,7 @@ class ConfigBuilderTest extends SimpleTestBase {
 		var cfs = FileStore.create().directory(TEMP_DIR).enableWatcher().watcherSensitivity(WatcherSensitivity.HIGH).build();
 		Config.Builder cb = Config.create().store(cfs).name("TestGet.cfg");
 
-		Config cf = cb.build();
+		var cf = cb.build();
 		cf.set("Test/A", "a");
 
 		f = new File(tempDir, "TestGet.cfg");
@@ -53,7 +53,7 @@ class ConfigBuilderTest extends SimpleTestBase {
 		cf.commit();
 		assertJson(cf.toMap(), "{'':{},Test:{A:'a'}}");
 
-		String nl = System.getProperty("line.separator");
+		var nl = System.getProperty("line.separator");
 		cf = cf.load("[Test]"+nl+"A = b"+nl, true);
 		assertJson(cf.toMap(), "{'':{},Test:{A:'b'}}");
 	}

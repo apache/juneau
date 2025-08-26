@@ -40,7 +40,7 @@ class Header_AcceptEncoding_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_noCompression() throws Exception {
-		RestClient a = MockRestClient.buildLax(A.class);
+		var a = MockRestClient.buildLax(A.class);
 		a.get("/").run().assertContent("foo");
 		a.get("/").header(AcceptEncoding.of("")).run().assertContent("foo");
 		a.get("/").header(AcceptEncoding.of("*")).run().assertContent("foo");
@@ -104,7 +104,7 @@ class Header_AcceptEncoding_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_withCompression() throws Exception {
-		RestClient b = MockRestClient.buildLax(B.class);
+		var b = MockRestClient.buildLax(B.class);
 		b.get("/").run().assertContent("foo");
 		b.get("/").header(AcceptEncoding.of("")).run().assertContent("foo");
 		b.get("/").header(AcceptEncoding.of("identity")).run().assertContent("foo");
@@ -155,7 +155,7 @@ class Header_AcceptEncoding_Test extends SimpleTestBase {
 			// This method bypasses the content type and encoding from
 			// the serializers and encoders when calling getOutputStream() directly.
 			res.setContentType("text/direct");
-			OutputStream os = res.getOutputStream();
+			var os = res.getOutputStream();
 			os.write("foo".getBytes());
 			os.flush();
 		}
@@ -163,14 +163,14 @@ class Header_AcceptEncoding_Test extends SimpleTestBase {
 		public void b(RestResponse res) throws Exception {
 			// This method bypasses the content type and encoding from
 			// the serializers and encoders when calling getWriter() directly.
-			Writer w = res.getWriter();
+			var w = res.getWriter();
 			w.append("foo");
 			w.flush();
 		}
 		@RestGet
 		public void c(RestResponse res) throws Exception {
 			// This method uses getNegotiatedWriter() which should use GZip encoding.
-			Writer w = res.getNegotiatedWriter();
+			var w = res.getNegotiatedWriter();
 			w.append("foo");
 			w.flush();
 			w.close();
@@ -178,14 +178,14 @@ class Header_AcceptEncoding_Test extends SimpleTestBase {
 		@RestGet(encoders={IdentityEncoder.class})
 		public void d(RestResponse res) throws Exception {
 			// This method overrides the set of encoders at the method level and so shouldn't use GZip encoding.
-			Writer w = res.getNegotiatedWriter();
+			var w = res.getNegotiatedWriter();
 			w.append("foo");
 			w.flush();
 		}
 	}
 
 	@Test void c01_direct() throws Exception {
-		RestClient c = MockRestClient.build(C.class);
+		var c = MockRestClient.build(C.class);
 
 		c.get("/a")
 			.header(AcceptEncoding.of("mycoding"))
@@ -247,4 +247,4 @@ class Header_AcceptEncoding_Test extends SimpleTestBase {
 			return new String[]{"mycoding"};
 		}
 	}
-}
+}

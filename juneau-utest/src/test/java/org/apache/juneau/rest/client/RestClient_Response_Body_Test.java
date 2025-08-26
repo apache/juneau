@@ -82,7 +82,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 		}
 		@Override
 		protected MockRestResponse createResponse(RestRequest request, HttpResponse httpResponse, Parser parser) throws RestCallException {
-			HttpResponse r = new BasicHttpResponse(new ProtocolVersion("http", 1,1),200,"");
+			var r = new BasicHttpResponse(new ProtocolVersion("http", 1,1),200,"");
 			r.setEntity(responseEntity);
 			for (Header h : headers)
 				r.addHeader(h);
@@ -96,8 +96,8 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_overrideParser() throws Exception {
-		RestClient x = client().build();
-		ABean b = x.post("/echo",bean).run().getContent().parser(JsonParser.DEFAULT).as(ABean.class);
+		var x = client().build();
+		var b = x.post("/echo",bean).run().getContent().parser(JsonParser.DEFAULT).as(ABean.class);
 		assertJson(b, "{f:1}");
 		assertThrowsWithMessage(Exception.class, "ParseError at [row,col]:[1,1]", ()->x.post("/echo",bean).run().getContent().parser(XmlParser.DEFAULT).as(ABean.class));
 		assertThrowsWithMessage(Exception.class, "ParseError at [row,col]:[1,1]", ()->x.post("/echo",bean).run().getContent().parser(XmlParser.DEFAULT).assertValue().as(ABean.class));
@@ -105,19 +105,19 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 
 	@Test void a03_asInputStream() throws Exception {
 		RestResponse r1 = client().build().get("/bean").run();
-		InputStream is = r1.getContent().asInputStream();
+		var is = r1.getContent().asInputStream();
 		assertEquals("{f:1}", toUtf8(is));
 		assertThrowsWithMessage(Exception.class, "Response has already been consumed.", ()->r1.getContent().asInputStream());
 
 		// Non-repeatable entity.
 		TestClient x = testClient().entity(inputStreamEntity("{f:2}"));
-		RestResponse r2 = x.get("/bean").run();
+		var r2 = x.get("/bean").run();
 		r2.getContent().asInputStream();
 		assertThrowsWithMessage(Exception.class, "Response has already been consumed", ()->r2.getContent().asInputStream());
 
 		// Repeatable entity.
 		x.entity(new StringEntity("{f:2}"));
-		RestResponse r3 = x.get("/bean").run();
+		var r3 = x.get("/bean").run();
 		r3.getContent().asInputStream();
 		is = r3.getContent().asInputStream();
 		assertEquals("{f:2}", toUtf8(is));
@@ -140,7 +140,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	@Test void a04_asReader() throws Exception {
 		TestClient x = testClient();
 		x.entity(inputStreamEntity("{f:1}"));
-		Reader r = x.get("/bean").run().getContent().asReader();
+		var r = x.get("/bean").run().getContent().asReader();
 		assertString("{f:1}", r);
 
 		x.entity(inputStreamEntity("{f:1}"));

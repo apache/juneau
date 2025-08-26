@@ -119,7 +119,7 @@ class ConstructorInfoTest extends SimpleTestBase {
 	}
 
 	@Test void compareTo() {
-		Set<ConstructorInfo> s = new TreeSet<>(Arrays.asList(b_c1, b_c2, b_c3, b_c4, a));
+		var s = new TreeSet<>(Arrays.asList(b_c1, b_c2, b_c3, b_c4, a));
 		check("A(),B(),B(int),B(String),B(String,String)", s);
 
 	}

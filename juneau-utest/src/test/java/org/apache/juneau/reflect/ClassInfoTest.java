@@ -179,7 +179,7 @@ public class ClassInfoTest extends SimpleTestBase {
 	}
 
 	@Test void resolvedParams() {
-		MethodInfo mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m1"));
+		var mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m1"));
 		check("A1", mi2.getParamType(0).unwrap(Optional.class));
 		check("A1", mi2.getReturnType().unwrap(Optional.class));
 		mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m2"));
@@ -574,19 +574,19 @@ public class ClassInfoTest extends SimpleTestBase {
 	}
 
 	@Test void forEachAnnotation() {
-		List<Integer> l1 = TestUtils.list();
+		var l1 = TestUtils.list();
 		g3.forEachAnnotation(A.class, null, x -> l1.add(x.value()));
 		assertList(l1, "2,1,3,5,6,7");
 
-		List<Integer> l2 = TestUtils.list();
+		var l2 = TestUtils.list();
 		g4.forEachAnnotation(A.class, null, x -> l2.add(x.value()));
 		assertList(l2, "2,1,3,5,6,7");
 
-		List<Integer> l3 = TestUtils.list();
+		var l3 = TestUtils.list();
 		g5.forEachAnnotation(A.class, null, x -> l3.add(x.value()));
 		assertList(l3, "3");
 
-		List<Integer> l4 = TestUtils.list();
+		var l4 = TestUtils.list();
 		g3.forEachAnnotation(A.class, x -> x.value() == 5, x -> l4.add(x.value()));
 		assertList(l4, "5");
 	}

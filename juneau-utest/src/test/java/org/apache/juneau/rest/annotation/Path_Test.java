@@ -62,7 +62,7 @@ class Path_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		RestClient a = MockRestClient.buildLax(A.class);
+		var a = MockRestClient.buildLax(A.class);
 
 		a.get("/bad?noTrace=true")
 			.run()
@@ -144,7 +144,7 @@ class Path_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_primitives() throws Exception {
-		RestClient b = MockRestClient.buildLax(B.class);
+		var b = MockRestClient.buildLax(B.class);
 
 		b.get("/a/123/foo")
 			.run()
@@ -244,7 +244,7 @@ class Path_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_primitiveObjects() throws Exception {
-		RestClient c = MockRestClient.buildLax(C.class);
+		var c = MockRestClient.buildLax(C.class);
 
 		c.get("/a/123/foo")
 			.run()
@@ -317,9 +317,9 @@ class Path_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_pojosConvertibleFromStrings() throws Exception {
-		RestClient d = MockRestClient.build(D.class);
+		var d = MockRestClient.build(D.class);
 
-		UUID uuid = UUID.randomUUID();
+		var uuid = UUID.randomUUID();
 		d.get("/a/" + uuid)
 			.run()
 			.assertContent(uuid.toString());
@@ -354,7 +354,7 @@ class Path_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_withoutName() throws Exception {
-		RestClient e = MockRestClient.build(E.class);
+		var e = MockRestClient.build(E.class);
 		e.get("/x/x1/x2")
 			.run()
 			.assertContent("{m:'normal1',foo:'x1',bar:'x2'}");
@@ -408,7 +408,7 @@ class Path_Test extends SimpleTestBase {
 	}
 
 	@Test void f01_pathVariablesOnClass() throws Exception {
-		RestClient f = MockRestClient.createLax(F.class).servletPath("/f").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
+		var f = MockRestClient.createLax(F.class).servletPath("/f").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 		f.get("http://localhost/f/x1/x2")
 			.run()
 			.assertContent("a: {a:'x1',b:'x2'}");
@@ -492,7 +492,7 @@ class Path_Test extends SimpleTestBase {
 
 
 	@Test void g01_pathVariablesOnChildClass() throws Exception {
-		RestClient g = MockRestClient.createLax(G.class).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
+		var g = MockRestClient.createLax(G.class).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 		g.get("http://localhost/f/x1/x2")
 			.run()
 			.assertContent("a: {a:'x1',b:'x2'}");
@@ -563,7 +563,7 @@ class Path_Test extends SimpleTestBase {
 	public static class H {}
 
 	@Test void h01_pathVariablesOnParentAndChildClass() throws Exception {
-		RestClient h = MockRestClient.createLax(H.class).servletPath("/h").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
+		var h = MockRestClient.createLax(H.class).servletPath("/h").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 		h.get("http://localhost/h/ha1/hb1/f/x1/x2")
 			.run()
 			.assertContent("a: {a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
@@ -659,7 +659,7 @@ class Path_Test extends SimpleTestBase {
 	public static class I {}
 
 	@Test void i01_pathVariablesOnParentAndChildClass() throws Exception {
-		RestClient i = MockRestClient.createLax(I.class).servletPath("/i").build();
+		var i = MockRestClient.createLax(I.class).servletPath("/i").build();
 		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2")
 			.run()
 			.assertContent("a: {a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
@@ -759,7 +759,7 @@ class Path_Test extends SimpleTestBase {
 	}
 
 	@Test void j01_optionalParam() throws Exception {
-		RestClient j = MockRestClient.buildJson(J.class);
+		var j = MockRestClient.buildJson(J.class);
 		j.get("/a/123")
 			.run()
 			.assertStatus(200)
@@ -798,8 +798,8 @@ class Path_Test extends SimpleTestBase {
 	}
 
 	@Test void k01_basic() throws Exception {
-		RestClient k1 = MockRestClient.build(K1.class);
-		RestClient k2 = MockRestClient.build(K2.class);
+		var k1 = MockRestClient.build(K1.class);
+		var k2 = MockRestClient.build(K2.class);
 
 		k1.get("http://localhost/k1/foo/k2")
 			.run()
@@ -839,8 +839,8 @@ class Path_Test extends SimpleTestBase {
 	}
 
 	@Test void l01_multiplePaths() throws Exception {
-		RestClient l1 = MockRestClient.build(L1.class);
-		RestClient l2 = MockRestClient.build(L2.class);
+		var l1 = MockRestClient.build(L1.class);
+		var l2 = MockRestClient.build(L2.class);
 
 		l1.get("http://localhost/l1/l1foo/l2")
 			.run()

@@ -121,7 +121,7 @@ class Content_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_onParameters() throws Exception {
-		RestClient a = MockRestClient.buildLax(A.class);
+		var a = MockRestClient.buildLax(A.class);
 
 		a.put("/String", "foo")
 			.json()
@@ -465,7 +465,7 @@ class Content_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_onPojos() throws Exception {
-		RestClient b = MockRestClient.buildLax(B.class);
+		var b = MockRestClient.buildLax(B.class);
 		b.put("/StringTransform", "'foo'", APPLICATION_JSON)
 			.run()
 			.assertContent("'foo'");
@@ -580,7 +580,7 @@ class Content_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_noMediaTypesOnStreams() throws Exception {
-		RestClient d = MockRestClient.buildLax(D.class);
+		var d = MockRestClient.buildLax(D.class);
 		d.put("/String", "a")
 			.run()
 			.assertContent("a");
@@ -654,7 +654,7 @@ class Content_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_complexPojos() throws Exception {
-		RestClient e = MockRestClient.build(E.class);
+		var e = MockRestClient.build(E.class);
 		String expected;
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
@@ -693,7 +693,7 @@ class Content_Test extends SimpleTestBase {
 	}
 
 	@Test void e02_complexPojos() throws Exception {
-		RestClient e2 = MockRestClient.build(E2.class);
+		var e2 = MockRestClient.build(E2.class);
 		String expected;
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
@@ -737,7 +737,7 @@ class Content_Test extends SimpleTestBase {
 	}
 
 	@Test void f01_formPostAsContent() throws Exception {
-		RestClient f = MockRestClient.build(F.class);
+		var f = MockRestClient.build(F.class);
 		f.post("/", "{p1:'p1',p2:2}", APPLICATION_JSON)
 			.run()
 			.assertContent("bean=[{p1:'p1',p2:2}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]");
@@ -767,7 +767,7 @@ class Content_Test extends SimpleTestBase {
 	}
 
 	@Test void g01_multiPartParameterKeysOnCollections() throws Exception {
-		RestClient g = MockRestClient.build(G.class);
+		var g = MockRestClient.build(G.class);
 		String in = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
@@ -810,7 +810,7 @@ class Content_Test extends SimpleTestBase {
 	}
 
 	@Test void h01_multiPartParameterKeysOnCollections_usingExpandedParams() throws Exception {
-		RestClient h = MockRestClient.build(H.class);
+		var h = MockRestClient.build(H.class);
 		String in = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
@@ -849,7 +849,7 @@ class Content_Test extends SimpleTestBase {
 	}
 
 	@Test void h02_multiPartParameterKeysOnCollections_usingExpandedParams() throws Exception {
-		RestClient h2 = MockRestClient.build(H2.class);
+		var h2 = MockRestClient.build(H2.class);
 		String in = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
@@ -895,7 +895,7 @@ class Content_Test extends SimpleTestBase {
 	}
 
 	@Test void i01_required() throws Exception {
-		RestClient i = MockRestClient.buildLax(I.class);
+		var i = MockRestClient.buildLax(I.class);
 
 		i.post("/a", "", APPLICATION_JSON)
 			.run()
@@ -942,7 +942,7 @@ class Content_Test extends SimpleTestBase {
 	}
 
 	@Test void j01_optionalParams() throws Exception {
-		RestClient j = MockRestClient.buildJson(J.class);
+		var j = MockRestClient.buildJson(J.class);
 		j.post("/a", 123)
 			.run()
 			.assertStatus(200)
@@ -961,7 +961,7 @@ class Content_Test extends SimpleTestBase {
 			.assertStatus(200)
 			.assertContent("null");
 
-		String body1 = Json5.of(list(ABean.get()));
+		var body1 = Json5.of(list(ABean.get()));
 		j.post("/c", body1, APPLICATION_JSON)
 			.run()
 			.assertStatus(200)
@@ -971,7 +971,7 @@ class Content_Test extends SimpleTestBase {
 			.assertStatus(200)
 			.assertContent("null");
 
-		String body2 = Json5.of(list(opt(ABean.get())));
+		var body2 = Json5.of(list(opt(ABean.get())));
 		j.post("/d", body2, APPLICATION_JSON)
 			.run()
 			.assertStatus(200)

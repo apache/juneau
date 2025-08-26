@@ -35,7 +35,7 @@ class CommonTest extends SimpleTestBase {
 		XmlParser p = XmlParser.DEFAULT;
 		var t1 = A.create();
 
-		String r = s.build().serialize(t1);
+		var r = s.build().serialize(t1);
 		assertEquals("<object><s2>s2</s2></object>", r);
 		var t2 = p.parse(r, A.class);
 		assertEquals(json(t2), json(t1));
@@ -159,7 +159,7 @@ class CommonTest extends SimpleTestBase {
 	@Test void a05_beanPropertyProperties() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		var t = new E1();
-		String r = s.serialize(t);
+		var r = s.serialize(t);
 		assertEquals(
 			"<object>"
 				+"<x1 f2='2'><f1>1</f1></x1>"
@@ -194,11 +194,11 @@ class CommonTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a06_beanPropertyPropertiesOnListOfBeans() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
-		List<Test7b> l = new LinkedList<>();
+		var l = new LinkedList<>();
 		var t = new Test7b();
 		t.x1.add(new Test7b());
 		l.add(t);
-		String xml = s.serialize(l);
+		var xml = s.serialize(l);
 		assertEquals("<array><object><x1><object><x2>2</x2></object></x1><x2>2</x2></object></array>", xml);
 	}
 

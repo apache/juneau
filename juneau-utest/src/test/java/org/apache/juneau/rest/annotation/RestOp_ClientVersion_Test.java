@@ -51,7 +51,7 @@ class RestOp_ClientVersion_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_defaultHeader() throws Exception {
-		RestClient a = MockRestClient.build(A1.class);
+		var a = MockRestClient.build(A1.class);
 		a.get("/").run().assertContent("no-version");
 		for (String s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
 			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[{0}]",s).is("[1.0,1.0]");
@@ -89,7 +89,7 @@ class RestOp_ClientVersion_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_defaultHeader() throws Exception {
-		RestClient a = MockRestClient.build(A2.class);
+		var a = MockRestClient.build(A2.class);
 		a.get("/").run().assertContent("no-version");
 		for (String s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
 			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[{0}]",s).is("[1.0,1.0]");
@@ -131,7 +131,7 @@ class RestOp_ClientVersion_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_testCustomHeader() throws Exception {
-		RestClient b = MockRestClient.build(B1.class);
+		var b = MockRestClient.build(B1.class);
 		b.get("/").run().assertContent("no-version");
 		for (String s : "0, 0.0, 0.1, .1, .9, .99".split("\\s*,\\s*")) {
 			b.get("/").header("Custom-Client-Version", s).run().assertContent("[0.0,1.0)");
@@ -172,7 +172,7 @@ class RestOp_ClientVersion_Test extends SimpleTestBase {
 	}
 
 	@Test void b02_testCustomHeader() throws Exception {
-		RestClient b = MockRestClient.build(B2.class);
+		var b = MockRestClient.build(B2.class);
 		b.get("/").run().assertContent("no-version");
 		for (String s : "0, 0.0, 0.1, .1, .9, .99".split("\\s*,\\s*")) {
 			b.get("/").header("Custom-Client-Version", s).run().assertContent("[0.0,1.0)");

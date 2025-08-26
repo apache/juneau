@@ -114,7 +114,7 @@ class CommonParser_Test extends SimpleTestBase {
 		ReaderParser p = HtmlParser.DEFAULT;
 
 		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>ints</string></td><td><ul><li><number>1</number></li><li><number>2</number></li><li><number>3</number></li></ul></td></tr><tr><td><string>beans</string></td><td><table _type='array'><tr><th>a</th><th>b</th></tr><tr><td><number>1</number></td><td><number>2</number></td></tr></table></td></tr></table>";
-		C t = p.parse(in, C.class);
+		var t = p.parse(in, C.class);
 		assertEquals(3, t.getInts().size());
 		assertEquals(2, t.getBeans().get(0).b);
 	}

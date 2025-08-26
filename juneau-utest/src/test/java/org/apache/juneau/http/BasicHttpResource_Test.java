@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 class BasicHttpResource_Test extends SimpleTestBase {
 
 	@Test void a01_basic() throws Exception {
-		File f = Files.createTempFile("test","txt").toFile();
+		var f = Files.createTempFile("test","txt").toFile();
 
 		HttpResource x = stringResource((String)null);
 

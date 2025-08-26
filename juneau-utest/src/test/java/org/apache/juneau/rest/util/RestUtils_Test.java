@@ -210,7 +210,7 @@ class RestUtils_Test extends SimpleTestBase {
 		UrlEncodingParser p = UrlEncodingParser.DEFAULT;
 
 		String s = "";
-		B b = p.parse(s, B.class);
+		var b = p.parse(s, B.class);
 		assertEquals("f1", b.f1);
 	}
 
@@ -261,4 +261,4 @@ class RestUtils_Test extends SimpleTestBase {
 		assertTrue(isValidPathInfo(null));
 		assertFalse(isValidPathInfo("foo"));
 	}
-}
+}

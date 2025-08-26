@@ -47,7 +47,7 @@ class BasicEntityTagHeader_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_basic() throws Exception {
-		RestClient c = client().build();
+		var c = client().build();
 
 		// Normal usage.
 		c.get().header(entityTagHeader(HEADER,VALUE)).run().assertContent(VALUE);
@@ -68,7 +68,7 @@ class BasicEntityTagHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_asEntityTag() {
-		EntityTag x = new BasicEntityTagHeader("Foo","W/\"foo\"").asEntityTag().get();
+		var x = new BasicEntityTagHeader("Foo","W/\"foo\"").asEntityTag().get();
 		TestUtils.assertString("W/\"foo\"", x);
 		TestUtils.assertString("foo", x.getEntityValue());
 		assertTrue(x.isWeak());

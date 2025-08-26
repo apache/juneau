@@ -118,7 +118,7 @@ class BeanConfig_Swaps_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_swaps() throws Exception {
-		RestClient a = MockRestClient.build(A1.class);
+		var a = MockRestClient.build(A1.class);
 		a.get("/a").json().run().assertContent("'A2-0'");
 		a.put("/b", "'A2-1'", APPLICATION_JSON).run().assertContent("'A2-1'");
 		a.put("/c/A2-2", null, APPLICATION_JSON).run().assertContent("'A2-2'");

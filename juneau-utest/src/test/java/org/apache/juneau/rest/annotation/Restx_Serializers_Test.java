@@ -76,7 +76,7 @@ class Restx_Serializers_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		RestClient a = MockRestClient.buildLax(A.class);
+		var a = MockRestClient.buildLax(A.class);
 		a.get("/a")
 			.accept("text/a")
 			.run()
@@ -165,9 +165,9 @@ class Restx_Serializers_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_inheritence() throws Exception {
-		RestClient b = MockRestClient.build(B2.class);
+		var b = MockRestClient.build(B2.class);
 		b.get("/a").run().assertContent("['text/s3','text/s4','text/s1','text/s2']");
 		b.get("/b").run().assertContent("['text/s5']");
 		b.get("/c").run().assertContent("['text/s5','text/s3','text/s4','text/s1','text/s2']");
 	}
-}
+}

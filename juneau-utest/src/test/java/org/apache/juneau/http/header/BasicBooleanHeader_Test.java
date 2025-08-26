@@ -46,7 +46,7 @@ class BasicBooleanHeader_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_basic() throws Exception {
-		RestClient c = client().build();
+		var c = client().build();
 
 		// Normal usage.
 		c.get().header(booleanHeader(HEADER,VALUE)).run().assertContent(VALUE);

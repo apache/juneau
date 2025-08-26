@@ -51,7 +51,7 @@ class HttpException_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		RestClient c = MockRestClient.create(A.class).ignoreErrors().build();
+		var c = MockRestClient.create(A.class).ignoreErrors().build();
 
 		c.get("/f1").run()
 			.assertStatus().asCode().is(225)

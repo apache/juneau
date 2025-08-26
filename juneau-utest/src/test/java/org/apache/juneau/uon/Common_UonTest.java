@@ -35,7 +35,7 @@ class Common_UonTest extends SimpleTestBase {
 		UonSerializer.Builder s = UonSerializer.create().encoding();
 		var t1 = A.create();
 
-		String r = s.build().serialize(t1);
+		var r = s.build().serialize(t1);
 		assertEquals("(s2=s2)", r);
 		var t2 = p.parse(r, A.class);
 		assertEquals(json(t2), json(t1));
@@ -155,7 +155,7 @@ class Common_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a05_beanPropertyProperies() throws Exception {
 		UonSerializer s = UonSerializer.DEFAULT;
-		String ue = s.serialize(new E1());
+		var ue = s.serialize(new E1());
 		assertEquals("(x1=(f1=1),x2=(f1=1),x3=@((f1=1)),x4=@((f1=1)),x5=@((f1=1)),x6=@((f1=1)))", ue);
 	}
 
@@ -178,11 +178,11 @@ class Common_UonTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a06_beanPropertyPropertiesOnListOfBeans() throws Exception {
 		UonSerializer s = UonSerializer.DEFAULT;
-		List<F> l = new LinkedList<>();
+		var l = new LinkedList<>();
 		var t = new F();
 		t.x1.add(new F());
 		l.add(t);
-		String xml = s.serialize(l);
+		var xml = s.serialize(l);
 		assertEquals("@((x1=@((x2=2)),x2=2))", xml);
 	}
 
@@ -203,7 +203,7 @@ class Common_UonTest extends SimpleTestBase {
 		t.f1 = new URI("http://f1");
 		t.f2 = TestUtils.url("http://f2");
 
-		String r = s.serialize(t);
+		var r = s.serialize(t);
 		t = p2.parse(r, G.class);
 		assertEquals("http://uri", t.uri.toString());
 		assertEquals("http://f1", t.f1.toString());

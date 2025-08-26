@@ -87,7 +87,7 @@ class ObjectRest_Test extends SimpleTestBase {
 		);
 
 		// Serialize it to JSON.
-		String s = serializer.serialize(p);
+		var s = serializer.serialize(p);
 		String expectedValue = "{_type:'Person',name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}";
 		assertEquals(expectedValue, s);
 
@@ -137,7 +137,7 @@ class ObjectRest_Test extends SimpleTestBase {
 		assertEquals(expectedValue, s);
 
 		// Try adding an address as a map (should be automatically converted to an Address)
-		Map m = new HashMap();
+		var m = new HashMap();
 		m.put("street","street D");
 		m.put("city","city D");
 		m.put("state","state D");
@@ -158,7 +158,7 @@ class ObjectRest_Test extends SimpleTestBase {
 		// Make sure we can get non-existent branches without throwing any exceptions.
 		// get() method should just return null.
 		model = ObjectRest.create(new JsonMap());
-		Object o = model.get("xxx");
+		var o = model.get("xxx");
 		assertEquals("null", (""+o));
 
 		// Make sure blanks and "/" returns the root object.

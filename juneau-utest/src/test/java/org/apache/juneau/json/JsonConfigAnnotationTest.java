@@ -50,7 +50,7 @@ class JsonConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void basicSerializer() {
 		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
-		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
+		var x = JsonSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isEscapeSolidus());
 		check("true", x.isSimpleAttrs());
@@ -58,7 +58,7 @@ class JsonConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void basicParser() {
 		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
-		JsonParserSession x = JsonParser.create().apply(al).build().getSession();
+		var x = JsonParser.create().apply(al).build().getSession();
 		check("true", x.isValidateEnd());
 	}
 
@@ -72,7 +72,7 @@ class JsonConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noValuesSerializer() {
 		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
+		var x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEscapeSolidus());
 		check("false", x.isSimpleAttrs());
@@ -80,7 +80,7 @@ class JsonConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noValuesParser() {
 		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		JsonParserSession x = JsonParser.create().apply(al).build().getSession();
+		var x = JsonParser.create().apply(al).build().getSession();
 		check("false", x.isValidateEnd());
 	}
 
@@ -93,7 +93,7 @@ class JsonConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noAnnotationSerializer() {
 		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
+		var x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEscapeSolidus());
 		check("false", x.isSimpleAttrs());
@@ -101,7 +101,7 @@ class JsonConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noAnnotationParser() {
 		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		JsonParserSession x = JsonParser.create().apply(al).build().getSession();
+		var x = JsonParser.create().apply(al).build().getSession();
 		check("false", x.isValidateEnd());
 	}
 }

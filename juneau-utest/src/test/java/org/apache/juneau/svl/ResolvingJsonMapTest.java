@@ -26,7 +26,7 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a01_basic() {
 		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
-		JsonMap m = new ResolvingJsonMap(vr.createSession());
+		var m = new ResolvingJsonMap(vr.createSession());
 
 		m.put("foo", "$X{a}");
 		assertEquals("1", m.get("foo"));
@@ -52,7 +52,7 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a02_nulls() {
 		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
-		JsonMap m = new ResolvingJsonMap(vr.createSession());
+		var m = new ResolvingJsonMap(vr.createSession());
 
 		m.put("foo", null);
 		assertNull(m.get("foo"));
@@ -72,7 +72,7 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a03_nonStrings() {
 		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
-		JsonMap m = new ResolvingJsonMap(vr.createSession());
+		var m = new ResolvingJsonMap(vr.createSession());
 
 		m.put("foo", FooEnum.ONE);
 		assertString("ONE", m.get("foo"));
@@ -95,7 +95,7 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a04_inner() {
 		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
-		JsonMap m = new ResolvingJsonMap(vr.createSession());
+		var m = new ResolvingJsonMap(vr.createSession());
 		var m2 = new JsonMap();
 		var m3 = new JsonMap();
 		m.inner(m2);

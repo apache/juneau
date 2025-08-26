@@ -43,7 +43,7 @@ public abstract class OneWayStringSwapTest<T> {
 
 	@Test
 	public void testSwap() throws Exception {
-		String s = ss.swap(bs, o);
+		var s = ss.swap(bs, o);
 		if (Utils.ne(expected, s)) {
 			if (expected.isEmpty()) {
 				if (! label.startsWith("[]"))
@@ -60,4 +60,4 @@ public abstract class OneWayStringSwapTest<T> {
 		System.err.println(s);  // NOT DEBUG
 		Assert.fail(s);
 	}
-}
+}

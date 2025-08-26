@@ -45,7 +45,7 @@ class RestOp_BeanConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_bpi() throws Exception {
-		RestClient a1 = MockRestClient.build(A1.class);
+		var a1 = MockRestClient.build(A1.class);
 		a1.get("/a").json().run().assertContent("{\"a\":1,\"_b\":\"foo\"}");
 		a1.get("/a").xml().run().assertContent().isContains("<object><a>1</a><_b>foo</_b></object>");
 		a1.get("/a").html().run().assertContent().isContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
@@ -86,7 +86,7 @@ class RestOp_BeanConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_bpx() throws Exception {
-		RestClient a2 = MockRestClient.build(A2.class);
+		var a2 = MockRestClient.build(A2.class);
 		a2.get("/a").json().run().assertContent("{}");
 		a2.get("/a").xml().run().assertContent().isContains("<object/>");
 		a2.get("/a").html().run().assertContent().isContains("<table></table>");
@@ -127,7 +127,7 @@ class RestOp_BeanConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_bpi_overridesClass() throws Exception {
-		RestClient c = MockRestClient.build(A3.class);
+		var c = MockRestClient.build(A3.class);
 		c.get("/a").json().run().assertContent("{\"a\":1,\"_b\":\"foo\"}");
 		c.get("/a").xml().run().assertContent().isContains("<object><a>1</a><_b>foo</_b></object>");
 		c.get("/a").html().run().assertContent().isContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
@@ -168,7 +168,7 @@ class RestOp_BeanConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_bpx_overridesClass() throws Exception {
-		RestClient a4 = MockRestClient.build(A4.class);
+		var a4 = MockRestClient.build(A4.class);
 		a4.get("/a").json().run().assertContent("{}");
 		a4.get("/a").xml().run().assertContent().isContains("<object/>");
 		a4.get("/a").html().run().assertContent().isContains("<table></table>");
@@ -199,7 +199,7 @@ class RestOp_BeanConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_bpi_metaMatching() throws Exception {
-		RestClient a5 = MockRestClient.build(A5.class);
+		var a5 = MockRestClient.build(A5.class);
 		a5.get("/a").json().run().assertContent("{\"a\":1}");
 		a5.get("/a").xml().run().assertContent().isContains("<object><a>1</a></object>");
 		a5.get("/a").html().run().assertContent().isContains("<table><tr><td>a</td><td>1</td></tr></table>");
@@ -220,7 +220,7 @@ class RestOp_BeanConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void a06_bpi_fullyQualifiedClassNames() throws Exception {
-		RestClient a6 = MockRestClient.build(A6.class);
+		var a6 = MockRestClient.build(A6.class);
 		a6.get("/a").json().run().assertContent("{\"a\":1}");
 		a6.get("/a").xml().run().assertContent().isContains("<object><a>1</a></object>");
 		a6.get("/a").html().run().assertContent().isContains("<table><tr><td>a</td><td>1</td></tr></table>");
@@ -248,7 +248,7 @@ class RestOp_BeanConfig_Test extends SimpleTestBase {
 	}
 
 	@Test void a07_bpi_negativeMatching() throws Exception {
-		RestClient a7 = MockRestClient.build(A7.class);
+		var a7 = MockRestClient.build(A7.class);
 		a7.get("/a").json().run().assertContent("{\"a\":1,\"_b\":\"foo\"}");
 		a7.get("/a").xml().run().assertContent().isContains("<object><a>1</a><_b>foo</_b></object>");
 		a7.get("/a").html().run().assertContent().isContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");

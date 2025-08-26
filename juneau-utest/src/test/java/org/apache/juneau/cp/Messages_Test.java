@@ -86,7 +86,7 @@ class Messages_Test extends SimpleTestBase {
 		assertEquals("{!file}", x1.forLocale(CHINA).getString("file"));
 		assertEquals("{!file}", x1.forLocale((Locale)null).getString("file"));
 
-		Messages x2 = x1.forLocale(JAPANESE);
+		var x2 = x1.forLocale(JAPANESE);
 		assertEquals("{!file}", x2.getString("file"));
 	}
 

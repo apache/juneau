@@ -105,7 +105,7 @@ class Remote_FormDataAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_objectTypes() {
-		A1 x = MockRestClient.build(A.class).getRemote(A1.class);
+		var x = MockRestClient.build(A.class).getRemote(A1.class);
 		assertEquals("{x:'1'}",x.x1(1));
 		assertEquals("{x:'1.0'}",x.x2(1));
 		assertEquals("{x:'f=1'}",x.x3(Bean.create()));

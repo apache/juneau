@@ -143,7 +143,7 @@ class BeanConfigAnnotation_Test extends SimpleTestBase {
 
 	@Test void a01_basic() {
 		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
-		BeanSession bs = JsonSerializer.create().apply(al).build().getSession();
+		var bs = JsonSerializer.create().apply(al).build().getSession();
 
 		check("PRIVATE", bs.getBeanClassVisibility());
 		check("PRIVATE", bs.getBeanConstructorVisibility());
@@ -187,7 +187,7 @@ class BeanConfigAnnotation_Test extends SimpleTestBase {
 	@Test void b01_noValues() {
 		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		var js = JsonSerializer.create().apply(al).build();
-		BeanContext bc = js.getBeanContext();
+		var bc = js.getBeanContext();
 		check("PUBLIC", bc.getBeanClassVisibility());
 		check("PUBLIC", bc.getBeanConstructorVisibility());
 		check("", bc.getBeanDictionary());
@@ -232,7 +232,7 @@ class BeanConfigAnnotation_Test extends SimpleTestBase {
 	@Test void c01_noAnnotation() {
 		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		var js = JsonSerializer.create().apply(al).build();
-		BeanContext bc = js.getBeanContext();
+		var bc = js.getBeanContext();
 		check("PUBLIC", bc.getBeanClassVisibility());
 		check("PUBLIC", bc.getBeanConstructorVisibility());
 		check("", bc.getBeanDictionary());

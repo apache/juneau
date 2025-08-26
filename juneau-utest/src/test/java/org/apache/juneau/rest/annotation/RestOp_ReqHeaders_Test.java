@@ -65,7 +65,7 @@ class RestOp_ReqHeaders_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_reqHeaders() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 
 		a.get("/a").run().assertContent("{h1:'1',h2:'2',h3:'3'}");
 		a.get("/a").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
@@ -104,7 +104,7 @@ class RestOp_ReqHeaders_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_reqHeadersCaseInsensitive() throws Exception {
-		RestClient b = MockRestClient.build(B.class);
+		var b = MockRestClient.build(B.class);
 		b.get("/a").run().assertContent("{h1:'1',h2:'2',h3:'3'}");
 		b.get("/a").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
 		b.get("/a").header("h1",4).header("h2",5).header("h3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");

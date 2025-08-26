@@ -306,7 +306,7 @@ public class ReaderObjectSwap_ComboSerializeTest extends ComboSerializeTest_Base
 	public static class SometimesSwappedBeanSwap1 extends ObjectSwap<SometimesSwappedBean1,Object> {
 		@Override
 		public Object swap(BeanSession session, SometimesSwappedBean1 o) throws Exception {
-			MediaType mt = session.getMediaType();
+			var mt = session.getMediaType();
 			if (mt.hasSubType("json5") || mt.hasSubType("xml"))
 				return TestUtils.reader(o.f + "-" + mt);
 			return o;
@@ -324,7 +324,7 @@ public class ReaderObjectSwap_ComboSerializeTest extends ComboSerializeTest_Base
 	public static class SometimesSwappedBeanSwap2 extends ObjectSwap<SometimesSwappedBean2,Object> {
 		@Override
 		public Object swap(BeanSession session, SometimesSwappedBean2 o) throws Exception {
-			MediaType mt = session.getMediaType();
+			var mt = session.getMediaType();
 			if (mt.hasSubType("json5") || mt.hasSubType("xml"))
 				return o;
 			return TestUtils.reader(o.f + "-" + mt);

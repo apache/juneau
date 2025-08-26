@@ -80,7 +80,7 @@ class Restx_Parsers_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		MockRestClient a = MockRestClient.buildLax(A.class);
+		var a = MockRestClient.buildLax(A.class);
 
 		a.put("/a", "test1")
 			.contentType("text/a")
@@ -172,10 +172,10 @@ class Restx_Parsers_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_inheritence() throws Exception {
-		RestClient b = MockRestClient.build(B2.class);
+		var b = MockRestClient.build(B2.class);
 		b.get("/a").run().assertContent("['text/p3','text/p4','text/p1','text/p2']");
 		b.get("/b").run().assertContent("['text/p5']");
 		b.get("/c").run().assertContent("['text/p5','text/p3','text/p4','text/p1','text/p2']");
 	}
 
-}
+}

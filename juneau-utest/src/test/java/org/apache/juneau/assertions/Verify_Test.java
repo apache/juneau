@@ -38,7 +38,9 @@ public class Verify_Test {
 
 	@Test
 	public void a01_basic() {
-		Verify x1 = verify("foo"), x2 = verify(null), x3 = verify(new Date(0));
+		var x1 = verify("foo");
+		var x2 = verify(null);
+		var x3 = verify(new Date(0));
 
 		test(x1.is("foo")).isNull();
 		test(x1.is("bar")).is("Expected 'bar' but was 'foo'.");

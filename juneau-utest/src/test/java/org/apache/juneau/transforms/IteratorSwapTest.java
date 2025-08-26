@@ -31,7 +31,7 @@ class IteratorSwapTest extends SimpleTestBase {
 
 		// Iterators
 		var l = new ArrayList<>(Arrays.asList(new String[]{"foo","bar","baz"}));
-		Iterator<String> i = l.iterator();
+		var i = l.iterator();
 		assertEquals("['foo','bar','baz']", s.serialize(i));
 	}
 }

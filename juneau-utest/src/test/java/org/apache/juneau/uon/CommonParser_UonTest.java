@@ -122,7 +122,7 @@ class CommonParser_UonTest extends SimpleTestBase {
 		ReaderParser p2 = UonParser.DEFAULT;
 
 		var json = "(ints=@(1,2,3),beans=@((a=1,b=2)))";
-		C t = p2.parse(json, C.class);
+		var t = p2.parse(json, C.class);
 		assertEquals(3, t.getInts().size());
 		assertEquals(2, t.getBeans().get(0).b);
 	}

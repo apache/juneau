@@ -30,7 +30,7 @@ class PojoExamplesTest extends SimpleTestBase {
 	// test BEAN_examples
 	//====================================================================================================
 	@Test void a01_property() {
-		BeanSession bs = BeanContext.create().example(A.class, new A().init()).build().getSession();
+		var bs = BeanContext.create().example(A.class, new A().init()).build().getSession();
 		assertJson(bs.getClassMeta(A.class).getExample(bs,session), "{f1:'f1a'}");
 	}
 
@@ -64,7 +64,7 @@ class PojoExamplesTest extends SimpleTestBase {
 	}
 
 	@Test void a03_exampleField_usingConfig() {
-		BeanSession bs = BeanContext.create().applyAnnotations(B1cConfig.class).build().getSession();
+		var bs = BeanContext.create().applyAnnotations(B1cConfig.class).build().getSession();
 		assertJson(bs.getClassMeta(B1c.class).getExample(bs,session), "{f1:'f1b'}");
 	}
 
@@ -105,7 +105,7 @@ class PojoExamplesTest extends SimpleTestBase {
 	}
 
 	@Test void a05_exampleFieldPrivate_usingConfig() {
-		BeanSession bs = BeanContext.create().applyAnnotations(B2cConfig.class).build().getSession();
+		var bs = BeanContext.create().applyAnnotations(B2cConfig.class).build().getSession();
 		assertJson(bs.getClassMeta(B2c.class).getExample(bs,session), "{f1:'f1b'}");
 	}
 
@@ -149,7 +149,7 @@ class PojoExamplesTest extends SimpleTestBase {
 	}
 
 	@Test void a07_exampleOnPublicNoArgMethod_usingConfig() {
-		BeanSession bs = BeanContext.create().applyAnnotations(C1cConfig.class).build().getSession();
+		var bs = BeanContext.create().applyAnnotations(C1cConfig.class).build().getSession();
 		assertJson(bs.getClassMeta(C1c.class).getExample(bs,session), "{f1:'f1c'}");
 	}
 
@@ -194,7 +194,7 @@ class PojoExamplesTest extends SimpleTestBase {
 	}
 
 	@Test void a09_exampleOnPrivateNoArgMethod_usingConfig() {
-		BeanSession bs = BeanContext.create().applyAnnotations(C2cConfig.class).build().getSession();
+		var bs = BeanContext.create().applyAnnotations(C2cConfig.class).build().getSession();
 		assertJson(bs.getClassMeta(C2c.class).getExample(bs,session), "{f1:'f1c'}");
 	}
 
@@ -240,7 +240,7 @@ class PojoExamplesTest extends SimpleTestBase {
 	}
 
 	@Test void a11_exampleOnPublicOneArgMethod_usingConfig() {
-		BeanSession bs = BeanContext.create().applyAnnotations(D1cConfig.class).build().getSession();
+		var bs = BeanContext.create().applyAnnotations(D1cConfig.class).build().getSession();
 		assertJson(bs.getClassMeta(D1c.class).getExample(bs,session), "{f1:'f1d'}");
 	}
 

@@ -44,7 +44,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			}
 		};
 
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setEntry("", "foo", "baz", null, null, null);
 		cm.commit();
@@ -70,7 +70,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			}
 		};
 
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setEntry("S1", "foo", "baz", null, null, null);
 		cm.commit();
@@ -98,7 +98,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			}
 		};
 
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setEntry("", "k", "vb", null, null, null);
 		cm.setEntry("S1", "k1", "v1b", null, null, null);
@@ -123,7 +123,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			}
 		};
 
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setEntry("", "k", "kb", "^*", "C", Arrays.asList("#k"));
 		cm.setEntry("S1", "k1", "k1b", "^*", "C1", Arrays.asList("#k1"));
@@ -154,7 +154,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			}
 		};
 
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setEntry("", "k", "kb", "^*", "Cb", Arrays.asList("#kb"));
 		cm.setEntry("S1", "k1", "k1b", "^*", "Cb1", Arrays.asList("#k1b"));
@@ -186,7 +186,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			}
 		};
 
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.removeEntry("", "k");
 		cm.removeEntry("S1", "k1");
@@ -217,7 +217,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			}
 		};
 
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.removeEntry("", "k");
 		cm.removeEntry("S1", "k1");
@@ -246,7 +246,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			}
 		};
 
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setSection("", Arrays.asList("#D1"));
 		cm.setSection("S1", Arrays.asList("#S1"));
@@ -280,7 +280,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			}
 		};
 
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setSection("", Arrays.asList("#Db"));
 		cm.setSection("S1", Arrays.asList("#S1b"));
@@ -324,7 +324,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			}
 		};
 
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.removeSection("");
 		cm.removeSection("S1");
@@ -354,7 +354,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			}
 		};
 
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		cm.register(l);
 		s.update("A.cfg",
 			"#Da",
@@ -399,7 +399,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			}
 		};
 
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setEntry("S2", "k2", "v2b", null, null, null);
 		s.update("A.cfg",
@@ -436,7 +436,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 			}
 		};
 
-		ConfigMap cm = s.getMap("A.cfg");
+		var cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setEntry("S1", "k1", "v1c", null, null, null);
 		s.update("A.cfg",
@@ -481,7 +481,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 				}
 			};
 
-			ConfigMap cm = s.getMap("A.cfg");
+			var cm = s.getMap("A.cfg");
 			cm.register(l);
 			cm.setEntry("S1", "k1", "v1c", null, null, null);
 			cm.commit();
@@ -522,7 +522,7 @@ class ConfigMapListenerTest extends SimpleTestBase {
 				}
 			};
 
-			ConfigMap cm = s.getMap("A.cfg");
+			var cm = s.getMap("A.cfg");
 			cm.register(l);
 			cm.setEntry("S1", "k1", "v1c", null, null, null);
 			assertThrowsWithMessage(ConfigException.class, "Unable to store contents of config to store.", cm::commit);

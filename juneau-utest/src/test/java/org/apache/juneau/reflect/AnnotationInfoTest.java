@@ -47,7 +47,7 @@ class AnnotationInfoTest extends SimpleTestBase {
 
 	@Test void d01_isInGroup() {
 		var d = ClassInfo.of(D.class);
-		AnnotationList l = d.getAnnotationList(x -> x.isInGroup(D1.class));
+		var l = d.getAnnotationList(x -> x.isInGroup(D1.class));
 		assertSize(2, l);
 	}
 }

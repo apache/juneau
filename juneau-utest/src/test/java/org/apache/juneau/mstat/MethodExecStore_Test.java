@@ -104,7 +104,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 
 	@Test public void a06_builder_statsImplClass() throws Exception {  // NOSONAR - Must be public.
 		var bs = BeanStore.create().build();
-		Method m = MethodExecStore_Test.class.getMethod("a06_builder_statsImplClass");
+		var m = MethodExecStore_Test.class.getMethod("a06_builder_statsImplClass");
 
 		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: A6a", ()->MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m));
 		assertType(A6c.class, MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m));
@@ -115,7 +115,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 	}
 
 	@Test public void a07_builder_thrownStore() throws Exception {  // NOSONAR - Must be public.
-		Method m = MethodExecStore_Test.class.getMethod("a07_builder_thrownStore");
+		var m = MethodExecStore_Test.class.getMethod("a07_builder_thrownStore");
 		var s = ThrownStore.create().build();
 
 		var store = MethodExecStore.create().thrownStore(s).build();
@@ -134,7 +134,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test public void b01_store_getStats() throws Exception {  // NOSONAR - Must be public.
-		Method m = MethodExecStore_Test.class.getMethod("b01_store_getStats");
+		var m = MethodExecStore_Test.class.getMethod("b01_store_getStats");
 		var s = ThrownStore.create().build();
 
 		var store = MethodExecStore.create().thrownStore(s).build();
@@ -150,11 +150,11 @@ class MethodExecStore_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test public void c01_stats_basic() throws Exception {  // NOSONAR - Must be public.
-		Method m = MethodExecStore_Test.class.getMethod("c01_stats_basic");
+		var m = MethodExecStore_Test.class.getMethod("c01_stats_basic");
 		var s = ThrownStore.create().build();
 
 		var store = MethodExecStore.create().thrownStore(s).build();
-		MethodExecStats stats = store.getStats(m);
+		var stats = store.getStats(m);
 
 		assertNotEquals(0L, stats.getGuid());
 		TestUtils.assertSameObject(m, stats.getMethod());

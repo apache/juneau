@@ -45,7 +45,7 @@ class IfMatch_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_basic() throws Exception {
-		RestClient c = client().build();
+		var c = client().build();
 
 		// Normal usage.
 		c.get().header(ifMatch(VALUE)).run().assertContent(VALUE);

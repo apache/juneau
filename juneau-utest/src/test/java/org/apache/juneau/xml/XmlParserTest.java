@@ -22,7 +22,7 @@ class XmlParserTest extends SimpleTestBase {
 
 	@Test void a01_genericAttributes() throws Exception {
 		String xml = "<A b='1'><c>2</c></A>";
-		JsonMap m = XmlParser.DEFAULT.parse(xml, JsonMap.class);
+		var m = XmlParser.DEFAULT.parse(xml, JsonMap.class);
 		assertEquals("{b:'1',c:'2'}", m.toString());
 	}
 

@@ -166,7 +166,7 @@ class JsonTest  extends SimpleTestBase{
 	//====================================================================================================
 	@Test void a05_escapingDoubleQuotes() throws Exception {
 		JsonSerializer s = JsonSerializer.DEFAULT;
-		String r = s.serialize(JsonMap.of("f1", "x'x\"x"));
+		var r = s.serialize(JsonMap.of("f1", "x'x\"x"));
 		assertEquals("{\"f1\":\"x'x\\\"x\"}", r);
 		JsonParser p = JsonParser.DEFAULT;
 		assertEquals("x'x\"x", p.parse(r, JsonMap.class).getString("f1"));
@@ -177,7 +177,7 @@ class JsonTest  extends SimpleTestBase{
 	//====================================================================================================
 	@Test void a06_escapingSingleQuotes() throws Exception {
 		JsonSerializer s = Json5Serializer.DEFAULT;
-		String r = s.serialize(JsonMap.of("f1", "x'x\"x"));
+		var r = s.serialize(JsonMap.of("f1", "x'x\"x"));
 		assertEquals("{f1:'x\\'x\"x'}", r);
 		JsonParser p = JsonParser.DEFAULT;
 		assertEquals("x'x\"x", p.parse(r, JsonMap.class).getString("f1"));
@@ -228,7 +228,7 @@ class JsonTest  extends SimpleTestBase{
 		t = p.parse(r, A2.class);
 		assertEquals(1, t.f1);
 
-		Map<String,A2> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<String,A2>();
 		m.put("bar", A2.create());
 		r = s.serialize(m);
 		assertEquals("{bar:{foo:{f1:1}}}", r);
@@ -266,7 +266,7 @@ class JsonTest  extends SimpleTestBase{
 		t = p.parse(r, B.class);
 		assertEquals(1, t.f1);
 
-		Map<String,B> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<String,B>();
 		m.put("bar", B.create());
 		r = s.serialize(m);
 		assertEquals("{bar:{foo:'1'}}", r);
@@ -308,7 +308,7 @@ class JsonTest  extends SimpleTestBase{
 		t = p.parse(r, B2.class);
 		assertEquals(1, t.f1);
 
-		Map<String,B2> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<String,B2>();
 		m.put("bar", B2.create());
 		r = s.serialize(m);
 		assertEquals("{bar:{foo:'1'}}", r);
@@ -346,7 +346,7 @@ class JsonTest  extends SimpleTestBase{
 	//====================================================================================================
 	@Test void a11_subclassedList() throws Exception {
 		JsonSerializer s = JsonSerializer.DEFAULT;
-		Map<String,Object> o = new HashMap<>();
+		var o = new HashMap<>();
 		o.put("c", new C());
 		assertEquals("{\"c\":[]}", s.serialize(o));
 	}
@@ -359,7 +359,7 @@ class JsonTest  extends SimpleTestBase{
 	//====================================================================================================
 	@Test void a12_escapeSolidus() throws Exception {
 		var s = JsonSerializer.create().build();
-		String r = s.serialize("foo/bar");
+		var r = s.serialize("foo/bar");
 		assertEquals("\"foo/bar\"", r);
 		r = JsonParser.DEFAULT.parse(r, String.class);
 		assertEquals("foo/bar", r);

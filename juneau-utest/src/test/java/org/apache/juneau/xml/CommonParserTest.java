@@ -69,7 +69,7 @@ class CommonParserTest  extends SimpleTestBase{
 		t2.add(new A3("name0","value0"));
 		t2.add(new A3("name1","value1"));
 		t1.list = t2;
-		String r = XmlSerializer.DEFAULT_NS.serialize(t1);
+		var r = XmlSerializer.DEFAULT_NS.serialize(t1);
 		t1 = p.parse(r, A1.class);
 		assertEquals("value1", t1.list.get(1).value);
 
@@ -126,7 +126,7 @@ class CommonParserTest  extends SimpleTestBase{
 		ReaderParser p = XmlParser.DEFAULT;
 
 		var in = "<object><ints _type='array'><number>1</number><number>2</number><number>3</number></ints><beans _type='array'><object><a _type='number'>1</a><b _type='number'>2</b></object></beans></object>";
-		C t = p.parse(in, C.class);
+		var t = p.parse(in, C.class);
 		assertEquals(3, t.getInts().size());
 		assertEquals(2, t.getBeans().get(0).b);
 	}

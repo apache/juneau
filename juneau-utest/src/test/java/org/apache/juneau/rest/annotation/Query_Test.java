@@ -38,18 +38,18 @@ class Query_Test extends SimpleTestBase {
 	public static class A {
 		@RestGet
 		public String a(RestRequest req, @Query("p1") @Schema(aev=true) String p1, @Query("p2") @Schema(aev=true) int p2) {
-			RequestQueryParams q = req.getQueryParams();
+			var q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"],p2=["+p2+","+q.get("p2").orElse(null)+","+q.get("p2").asInteger().orElse(0)+"]";
 		}
 		@RestPost
 		public String b(RestRequest req, @Query("p1") @Schema(aev=true) String p1, @Query("p2") @Schema(aev=true) int p2) {
-			RequestQueryParams q = req.getQueryParams();
+			var q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"],p2=["+p2+","+q.get("p2").orElse(null)+","+q.get("p2").asInteger().orElse(0)+"]";
 		}
 	}
 
 	@Test void a01_basic() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 
 		a.get("/a?p1=p1&p2=2").run().assertContent("p1=[p1,p1,p1],p2=[2,2,2]");
 		a.get("/a?p1&p2").run().assertContent("p1=[null,null,null],p2=[0,null,0]");
@@ -86,28 +86,28 @@ class Query_Test extends SimpleTestBase {
 	public static class B {
 		@RestGet
 		public String a(RestRequest req, @Query("p1") String p1) {
-			RequestQueryParams q = req.getQueryParams();
+			var q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestGet
 		public String b(RestRequest req, @Query("p1") @Schema(f="uon") String p1) {
-			RequestQueryParams q = req.getQueryParams();
+			var q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestPost
 		public String c(RestRequest req, @Query("p1") String p1) {
-			RequestQueryParams q = req.getQueryParams();
+			var q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 		@RestPost
 		public String d(RestRequest req, @Query("p1") @Schema(f="uon") String p1) {
-			RequestQueryParams q = req.getQueryParams();
+			var q = req.getQueryParams();
 			return "p1=["+p1+","+q.get("p1").orElse(null)+","+q.get("p1").asString().orElse(null)+"]";
 		}
 	}
 
 	@Test void b01_uonParameters() throws Exception {
-		RestClient b = MockRestClient.build(B.class);
+		var b = MockRestClient.build(B.class);
 		b.get("/a?p1=p1").run().assertContent("p1=[p1,p1,p1]");
 		b.get("/a?p1='p1'").run().assertContent("p1=['p1','p1','p1']");
 		b.get("/b?p1=p1").run().assertContent("p1=[p1,p1,p1]");
@@ -157,7 +157,7 @@ class Query_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_multipartParams() throws Exception {
-		RestClient c = MockRestClient.build(C.class);
+		var c = MockRestClient.build(C.class);
 		c.get("/a?x=a").run().assertContent("['a']");
 		c.get("/a?x=a&x=b").run().assertContent("['a','b']");
 		c.get("/b?x=1").run().assertContent("[1]");
@@ -209,7 +209,7 @@ class Query_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_defaultValues() throws Exception {
-		RestClient d = MockRestClient.build(D.class);
+		var d = MockRestClient.build(D.class);
 		d.get("/a").run().assertContent("{f1:'1',f2:'2',f3:'3'}");
 		d.get("/a").queryData("f1",4).queryData("f2",5).queryData("f3",6).run().assertContent("{f1:'4',f2:'5',f3:'6'}");
 		d.get("/b").run().assertContent("{f1:null,f2:null,f3:null}");
@@ -248,7 +248,7 @@ class Query_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_optionalParams() throws Exception {
-		RestClient e = MockRestClient.buildJson(E.class);
+		var e = MockRestClient.buildJson(E.class);
 		e.get("/a?f1=123")
 			.run()
 			.assertStatus(200)
@@ -326,7 +326,7 @@ class Query_Test extends SimpleTestBase {
 	}
 
 	@Test void f01_defaultParams() throws Exception {
-		RestClient f = MockRestClient.buildJson(F.class);
+		var f = MockRestClient.buildJson(F.class);
 		f.get("/a1?f1=123")
 			.run()
 			.assertStatus(200)

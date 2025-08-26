@@ -67,7 +67,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		RestClient x = client().build();
+		var x = client().build();
 		x.get().run().assertContent("GET");
 		x.get("/").run().assertContent("GET");
 		x.get("").run().assertContent("GET");
@@ -91,7 +91,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 			"/bean",
 			new StringBuilder("/bean")
 		);
-		RestClient x = client().build();
+		var x = client().build();
 		for (Object url : urls) {
 			x.get(url).run().assertContent("{f:1}");
 		}
@@ -119,7 +119,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 			"/bean",
 			new StringBuilder("/bean")
 		);
-		RestClient x = client().build();
+		var x = client().build();
 		for (Object url : urls) {
 			x.put(url,bean).run().assertContent("{f:1}");
 			x.put(url,"{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
@@ -158,7 +158,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 			"/bean",
 			new StringBuilder("/bean")
 		);
-		RestClient x = client().build();
+		var x = client().build();
 		for (Object url : urls) {
 			x.post(url,bean).run().assertContent("{f:1}");
 			x.post(url,"{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
@@ -192,7 +192,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 			"/bean",
 			new StringBuilder("/bean")
 		);
-		RestClient x = client().build();
+		var x = client().build();
 		for (Object url : urls) {
 			x.delete(url).run().assertContent("{f:1}");
 		}
@@ -210,7 +210,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 			"/bean",
 			new StringBuilder("/bean")
 		);
-		RestClient x = client().build();
+		var x = client().build();
 		for (Object url : urls) {
 			x.options(url).run().assertContent("{f:1}");
 		}
@@ -228,7 +228,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 			"/bean",
 			new StringBuilder("/bean")
 		);
-		RestClient x = client().build();
+		var x = client().build();
 		for (Object url : urls) {
 			x.head(url).run().assertContent("");
 		}
@@ -250,7 +250,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 			"/bean",
 			new StringBuilder("/bean")
 		);
-		RestClient x = client().build();
+		var x = client().build();
 		for (Object url : urls) {
 			x.formPost(url,bean).accept("application/json5").run().assertContent("{f:1}");
 		}
@@ -302,7 +302,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 			stringEntity("{f:1}"),
 			parts("f","1")
 		);
-		RestClient x = client().build();
+		var x = client().build();
 		for (Object body : bodies) {
 			x.patch("/bean",body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).run().assertContent("{f:1}");
 		}
@@ -316,7 +316,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 			"/bean",
 			new StringBuilder("/bean")
 		);
-		RestClient x = client().build();
+		var x = client().build();
 		for (Object url : urls) {
 			x.patch(url,bean).accept("application/json5").run().assertContent("{f:1}");
 		}
@@ -336,7 +336,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 			stringEntity("{f:1}"),
 			parts("f","1")
 		);
-		RestClient x = client().build();
+		var x = client().build();
 		for (Object body : bodies) {
 			x.request("patch","/bean",body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).run().assertContent("{f:1}");
 		}
@@ -350,7 +350,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 			"/bean",
 			new StringBuilder("/bean")
 		);
-		RestClient x = client().build();
+		var x = client().build();
 		for (Object url : urls) {
 			x.request("patch",url,bean).accept("application/json5").run().assertContent("{f:1}");
 		}
@@ -368,7 +368,7 @@ class RestClient_BasicCalls_Test extends SimpleTestBase {
 			"/bean",
 			new StringBuilder("/bean")
 		);
-		RestClient x = client().build();
+		var x = client().build();
 		for (Object url : urls) {
 			x.request("get",url).accept("application/json5").run().assertContent("{f:1}");
 		}

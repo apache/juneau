@@ -76,7 +76,7 @@ class SerializerConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void basicWriterSerializer() {
 		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
-		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
+		var x = JsonSerializer.create().apply(al).build().getSession();
 		check("true", ((SerializerSession)x).isAddBeanTypes());
 		check("true", x.isAddRootType());
 		check("true", x.isDetectRecursions());
@@ -100,7 +100,7 @@ class SerializerConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void basicOutputStreamSerializer() {
 		var al = AnnotationWorkList.of(sr, a.getAnnotationList());
-		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
+		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("true", ((SerializerSession)x).isAddBeanTypes());
 		check("true", x.isAddRootType());
 		check("HEX", x.getBinaryFormat());
@@ -130,7 +130,7 @@ class SerializerConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noValuesWriterSerializer() {
 		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
+		var x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());
 		check(null, x.getListener());
@@ -150,7 +150,7 @@ class SerializerConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noValuesOutputStreamSerializer() {
 		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
+		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());
 		check("HEX", x.getBinaryFormat());
@@ -175,7 +175,7 @@ class SerializerConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noAnnotationWriterSerializer() {
 		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
+		var x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());
 		check(null, x.getListener());
@@ -195,7 +195,7 @@ class SerializerConfigAnnotationTest extends SimpleTestBase {
 
 	@Test void noAnnotationOutputStreamSerializer() {
 		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
+		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());
 		check("HEX", x.getBinaryFormat());

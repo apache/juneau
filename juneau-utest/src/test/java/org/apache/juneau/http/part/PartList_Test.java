@@ -300,7 +300,7 @@ class PartList_Test extends SimpleTestBase {
 		assertArray(x1.getAll("Foo"), "Foo=1, Foo=2");
 		assertArray(x1.getAll("FOO"));
 
-		PartList x2 = x1.copy().caseInsensitive(true);
+		var x2 = x1.copy().caseInsensitive(true);
 		assertArray(x2.getAll("Foo"), "Foo=1, Foo=2");
 		assertArray(x2.getAll("FOO"), "Foo=1, Foo=2");
 	}
@@ -437,26 +437,26 @@ class PartList_Test extends SimpleTestBase {
 	@Test void c01_iterators() {
 		var x = PartList.of(APart.X, BPart.X);
 
-		PartIterator i1 = x.partIterator();
+		var i1 = x.partIterator();
 		assertString("a=x", i1.next());
 		assertString("b=x", i1.next());
 		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i1::next);
 
-		PartIterator i2 = x.partIterator();
+		var i2 = x.partIterator();
 		assertString("a=x", i2.next());
 		assertString("b=x", i2.next());
 		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i2::next);
 
-		PartIterator i3 = x.partIterator("a");
+		var i3 = x.partIterator("a");
 		assertString("a=x", i3.next());
 		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i3::next);
 
-		PartIterator i4 = x.partIterator("A");
+		var i4 = x.partIterator("A");
 		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i4::next);
 
 		var x2 = PartList.create().append(APart.X,BPart.X).caseInsensitive(true);
 
-		PartIterator i5 = x2.partIterator("A");
+		var i5 = x2.partIterator("A");
 		assertString("a=x", i5.next());
 		assertThrowsWithMessage(NoSuchElementException.class, "Iteration already finished.", i5::next);
 

@@ -29,7 +29,7 @@ class ResponseStatus_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_onMethodParameter() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 		a.get("/a")
 			.run()
 			.assertStatus(202);

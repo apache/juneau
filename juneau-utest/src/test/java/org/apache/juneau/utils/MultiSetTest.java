@@ -30,7 +30,7 @@ class MultiSetTest extends SimpleTestBase {
 		l1 = Arrays.asList(new String[]{"1","2"});
 		l2 = Arrays.asList(new String[]{"3","4"});
 		ms = new MultiSet<>(l1, l2);
-		Iterator<String> i1 = ms.iterator();
+		var i1 = ms.iterator();
 		assertTrue(i1.hasNext());
 		assertEquals("1", i1.next());
 		assertTrue(i1.hasNext());
@@ -45,7 +45,7 @@ class MultiSetTest extends SimpleTestBase {
 		l1 = Arrays.asList(new String[]{"1","2"});
 		l2 = Arrays.asList(new String[]{});
 		ms = new MultiSet<>(l1, l2);
-		Iterator<String> i2 = ms.iterator();
+		var i2 = ms.iterator();
 		assertTrue(i2.hasNext());
 		assertEquals("1", i2.next());
 		assertTrue(i2.hasNext());
@@ -56,7 +56,7 @@ class MultiSetTest extends SimpleTestBase {
 		l1 = Arrays.asList(new String[]{});
 		l2 = Arrays.asList(new String[]{"3","4"});
 		ms = new MultiSet<>(l1, l2);
-		Iterator<String> i3 = ms.iterator();
+		var i3 = ms.iterator();
 		assertTrue(i3.hasNext());
 		assertEquals("3", i3.next());
 		assertTrue(i3.hasNext());
@@ -67,13 +67,13 @@ class MultiSetTest extends SimpleTestBase {
 		l1 = Arrays.asList(new String[]{});
 		l2 = Arrays.asList(new String[]{});
 		ms = new MultiSet<>(l1, l2);
-		Iterator<String> i4 = ms.iterator();
+		var i4 = ms.iterator();
 		assertFalse(i4.hasNext());
 		assertThrows(NoSuchElementException.class, i4::next);
 
 		l1 = Arrays.asList(new String[]{"1","2"});
 		ms = new MultiSet<>(l1);
-		Iterator<String> i5 = ms.iterator();
+		var i5 = ms.iterator();
 		assertTrue(i5.hasNext());
 		assertEquals("1", i5.next());
 		assertTrue(i5.hasNext());
@@ -88,7 +88,7 @@ class MultiSetTest extends SimpleTestBase {
 		assertJson(ms.enumerator(), "['1','2','3','4']");
 		assertEquals(4, ms.size());
 
-		Iterator<String> t = ms.iterator();
+		var t = ms.iterator();
 		t.next();
 		t.remove();
 		assertJson(ms.enumerator(), "['2','3','4']");
@@ -118,4 +118,4 @@ class MultiSetTest extends SimpleTestBase {
 		assertThrows(NoSuchElementException.class, ()->new MultiSet<String>().iterator().remove());
 
 	}
-}
+}

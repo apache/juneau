@@ -124,7 +124,7 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 		ReaderParser p2 = UrlEncodingParser.DEFAULT;
 
 		var json = "ints=@(1,2,3)&beans=@((a=1,b=2))";
-		C t = p2.parse(json, C.class);
+		var t = p2.parse(json, C.class);
 		assertEquals(3, t.getInts().size());
 		assertEquals(2, t.getBeans().get(0).b);
 	}
@@ -162,11 +162,11 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 		WriterSerializer s = UrlEncodingSerializer.DEFAULT;
 		ReaderParser p2 = UrlEncodingParser.DEFAULT;
 
-		List l = JsonList.of("foo","bar");
+		var l = JsonList.of("foo","bar");
 		assertEquals("0=foo&1=bar", s.serialize(l));
 
 		String in =  "0=foo&1=bar";
-		l = p2.parse(in, LinkedList.class, String.class);
-		assertList(l, "foo,bar");
+		var l2 = (LinkedList<String>)p2.parse(in, LinkedList.class, String.class);
+		assertList(l2, "foo,bar");
 	}
 }

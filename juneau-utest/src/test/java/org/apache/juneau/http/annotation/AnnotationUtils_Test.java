@@ -65,7 +65,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_Contact() {
-		X1 x1 = A1.class.getAnnotation(X1.class);
+		var x1 = A1.class.getAnnotation(X1.class);
 
 		assertJsonContains(contact().build().annotationType(), "Contact");
 
@@ -79,8 +79,8 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_FormData() throws Exception {
-		Field f1 = A1.class.getField("f1");
-		Field f2 = A2.class.getField("f1");
+		var f1 = A1.class.getField("f1");
+		var f2 = A2.class.getField("f1");
 
 		assertJsonContains(formData().build().annotationType(), "FormData");
 
@@ -103,8 +103,8 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_Query() throws Exception {
-		Field f1 = A1.class.getField("f1");
-		Field f2 = A2.class.getField("f1");
+		var f1 = A1.class.getField("f1");
+		var f2 = A2.class.getField("f1");
 
 		assertJsonContains(query().build().annotationType(), "Query");
 
@@ -127,8 +127,8 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	}
 
 	@Test void a07_Header() throws Exception {
-		Field f1 = A1.class.getField("f1");
-		Field f2 = A2.class.getField("f1");
+		var f1 = A1.class.getField("f1");
+		var f2 = A2.class.getField("f1");
 
 		assertJsonContains(header().build().annotationType(), "Header");
 
@@ -144,7 +144,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	}
 
 	@Test void a08_License() {
-		X1 x = A1.class.getAnnotation(X1.class);
+		var x = A1.class.getAnnotation(X1.class);
 
 		assertJsonContains(license().build().annotationType(), "License");
 
@@ -157,8 +157,8 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	}
 
 	@Test void a09_Path() throws Exception {
-		Field f1 = A1.class.getField("f1");
-		Field f2 = A2.class.getField("f1");
+		var f1 = A1.class.getField("f1");
+		var f2 = A2.class.getField("f1");
 
 		assertJsonContains(path().build().annotationType(), "Path");
 
@@ -206,7 +206,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 		assertEquals("foo", tag().externalDocs(externalDocs().url("foo").build()).build().externalDocs().url());		assertEquals("foo", tag().name("foo").build().name());	}
 
 	@Test void a16_ExternalDocs() {
-		X1 x = A1.class.getAnnotation(X1.class);
+		var x = A1.class.getAnnotation(X1.class);
 
 		assertJsonContains(externalDocs().build().annotationType(), "ExternalDocs");
 
@@ -218,7 +218,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	}
 
 	@Test void a17_Schema() {
-		X1 x = A1.class.getAnnotation(X1.class);
+		var x = A1.class.getAnnotation(X1.class);
 
 		assertJsonContains(schema().build().annotationType(), "Schema");
 
@@ -280,7 +280,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	}
 
 	@Test void a18_SubItems() {
-		X1 x = A1.class.getAnnotation(X1.class);
+		var x = A1.class.getAnnotation(X1.class);
 
 		assertJsonContains(subItems().build().annotationType(), "SubItems");
 
@@ -324,7 +324,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	}
 
 	@Test void a19_Items() {
-		X1 x = A1.class.getAnnotation(X1.class);
+		var x = A1.class.getAnnotation(X1.class);
 
 		assertJsonContains(items().build().annotationType(), "Items");
 

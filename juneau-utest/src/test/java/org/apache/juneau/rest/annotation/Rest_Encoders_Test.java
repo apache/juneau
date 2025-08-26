@@ -47,7 +47,7 @@ class Rest_Encoders_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_noCompression() throws Exception {
-		RestClient a = MockRestClient.buildLax(A.class);
+		var a = MockRestClient.buildLax(A.class);
 		a.put("/", "foo").run().assertContent("foo");
 		a.put("/", "foo").header(ContentEncoding.of("")).run().assertContent("foo");
 		a.put("/", "foo").header(ContentEncoding.of("identity")).run().assertContent("foo");
@@ -72,7 +72,7 @@ class Rest_Encoders_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_withCompression() throws Exception {
-		RestClient b = MockRestClient.build(B.class);
+		var b = MockRestClient.build(B.class);
 		b.put("/", "foo")
 			.run()
 			.assertContent("foo");

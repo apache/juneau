@@ -272,7 +272,7 @@ class ThrownStore_Test extends SimpleTestBase {
 
 		var store = ThrownStore.create().build();
 
-		ThrownStats stats = store.add(t2);
+		var stats = store.add(t2);
 		assertNotEquals(0L, stats.getHash());
 		assertNotEquals(0L, stats.getGuid());
 		assertNotEquals(0L, stats.getFirstOccurrence());

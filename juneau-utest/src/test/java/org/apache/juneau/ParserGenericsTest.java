@@ -51,13 +51,13 @@ class ParserGenericsTest extends SimpleTestBase {
 		ReaderParser p = JsonParser.DEFAULT;
 
 		String t = "[{foo:{bar:'baz'}}]";
-		List<TestMap1> r1 = p.parse(t, TestCollection1.class);
+		var r1 = p.parse(t, TestCollection1.class);
 		assertEquals(TestCollection1.class, r1.getClass());
 		assertEquals(TestMap1.class, r1.get(0).getClass());
 		assertEquals(TreeMap.class, r1.get(0).get("foo").getClass());
 
 		t = "[{foo:[1,2,3]}]";
-		List<TestMap2> r2 = p.parse(t, TestCollection2.class);
+		var r2 = p.parse(t, TestCollection2.class);
 		assertEquals(TestCollection2.class, r2.getClass());
 		assertEquals(TestMap2.class, r2.get(0).getClass());
 		assertEquals(LinkedList.class, r2.get(0).get("foo").getClass());

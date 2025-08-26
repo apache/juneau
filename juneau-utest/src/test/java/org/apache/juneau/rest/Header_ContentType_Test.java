@@ -39,7 +39,7 @@ class Header_ContentType_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_defaultHeadersOnServletAnnotation() throws Exception {
-		RestClient a = MockRestClient.buildLax(A.class);
+		var a = MockRestClient.buildLax(A.class);
 		a.put("/a", null, ContentType.of(""))
 			.run()
 			.assertContent("p2");
@@ -72,7 +72,7 @@ class Header_ContentType_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_restMethodWithParsersSerializers() throws Exception {
-		RestClient b = MockRestClient.buildLax(B.class);
+		var b = MockRestClient.buildLax(B.class);
 		b.put("/a", null).contentType("text/p3").run().assertContent("p3");
 		b.put("/a?noTrace=true", null, ContentType.of(""))
 			.run()
@@ -114,7 +114,7 @@ class Header_ContentType_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_restMethodAddParsersSerializersInherit() throws Exception {
-		RestClient c = MockRestClient.buildLax(C.class);
+		var c = MockRestClient.buildLax(C.class);
 		c.put("/a", null, ContentType.of("")).run().assertContent("p2");
 		c.put("/a", null, ContentType.of("text/p1")).run().assertContent("p1");
 		c.put("/a", null, ContentType.of("text/p2")).run().assertContent("p2");
@@ -145,7 +145,7 @@ class Header_ContentType_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_restMethodParserSerializerAnnotations() throws Exception {
-		RestClient d = MockRestClient.buildLax(D.class);
+		var d = MockRestClient.buildLax(D.class);
 		d.put("/a", null, ContentType.of(""))
 			.run()
 			.assertContent("p3");
@@ -185,7 +185,7 @@ class Header_ContentType_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_restMethodAddParsersSerializersAnnotations() throws Exception {
-		RestClient e = MockRestClient.build(E.class);
+		var e = MockRestClient.build(E.class);
 		e.put("/a", null, ContentType.of(""))
 			.run()
 			.assertContent("p3");
@@ -207,4 +207,4 @@ class Header_ContentType_Test extends SimpleTestBase {
 	public static class P1 extends FakeReaderParser { public P1(FakeReaderParser.Builder b) {super(b.consumes("text/p1").function((session,in,type)->"p1"));}}
 	public static class P2 extends FakeReaderParser { public P2(FakeReaderParser.Builder b) {super(b.consumes("text/p2").function((session,in,type)->"p2"));}}
 	public static class P3 extends FakeReaderParser { public P3(FakeReaderParser.Builder b) {super(b.consumes("text/p3").function((session,in,type)->"p3"));}}
-}
+}

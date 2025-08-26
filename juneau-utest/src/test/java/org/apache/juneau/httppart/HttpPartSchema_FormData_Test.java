@@ -124,7 +124,7 @@ class HttpPartSchema_FormData_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_basic_onParameter() throws Exception {
-		ParamInfo mpi = MethodInfo.of(A03.class.getMethod("a", String.class)).getParam(0);
+		var mpi = MethodInfo.of(A03.class.getMethod("a", String.class)).getParam(0);
 		var s = HttpPartSchema.create().applyAll(FormData.class, mpi).noValidate().build();
 		assertEquals("x", s.getName());
 		assertEquals(HttpPartDataType.NUMBER, s.getType());
@@ -179,7 +179,7 @@ class HttpPartSchema_FormData_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_basic_onParameterAndClass() throws Exception {
-		ParamInfo mpi = MethodInfo.of(A04.class.getMethod("a", A01.class)).getParam(0);
+		var mpi = MethodInfo.of(A04.class.getMethod("a", A01.class)).getParam(0);
 		var s = HttpPartSchema.create().applyAll(FormData.class, mpi).noValidate().build();
 		assertEquals("y", s.getName());
 		assertEquals(HttpPartDataType.INTEGER, s.getType());
@@ -283,7 +283,7 @@ class HttpPartSchema_FormData_Test extends SimpleTestBase {
 		var s = HttpPartSchema.create().applyAll(FormData.class, A05.class).noValidate().build();
 		assertEquals("x", s.getName());
 
-		HttpPartSchema items = s.getItems();
+		var items = s.getItems();
 		assertEquals(HttpPartDataType.NUMBER, items.getType());
 		assertEquals(HttpPartFormat.INT32, items.getFormat());
 		assertEquals(HttpPartCollectionFormat.CSV, items.getCollectionFormat());

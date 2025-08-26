@@ -1273,13 +1273,13 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 
 	@Test
 	public void ga06_reqBeanPath6(Input input) {
-		String r = input.proxy.reqBeanPath6(() -> map("a", 1, "b", "foo"));
+		var r = input.proxy.reqBeanPath6(() -> map("a", 1, "b", "foo"));
 		assertEquals("OK", r);
 	}
 
 	@Test
 	public void ga07_reqBeanPath7(Input input) {
-		String r = input.proxy.reqBeanPath7(ABean::get);
+		var r = input.proxy.reqBeanPath7(ABean::get);
 		assertEquals("OK", r);
 	}
 

@@ -23,7 +23,7 @@ class Tuple5_Test extends SimpleTestBase {
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void a01_basic() {
-		Tuple5<String,Integer,Integer,Integer,Integer> x = Tuple5.of("foo",1,2,3,4);
+		var x = Tuple5.of("foo",1,2,3,4);
 		assertEquals("foo", x.getA());
 		assertEquals(1, x.getB());
 		assertEquals(2, x.getC());
@@ -32,7 +32,13 @@ class Tuple5_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_equality() {
-		Tuple5<String,Integer,Integer,Integer,Integer> x1 = Tuple5.of("foo",1,2,3,4), x2 = Tuple5.of("foo",1,2,3,4), x3 = Tuple5.of(null,1,2,3,4), x4 = Tuple5.of("foo",null,2,3,4), x5 = Tuple5.of("foo",1,null,3,4), x6 = Tuple5.of("foo",1,2,null,4), x7 = Tuple5.of("foo",1,2,3,null);
+		var x1 = Tuple5.of("foo",1,2,3,4);
+		var x2 = Tuple5.of("foo",1,2,3,4);
+		var x3 = Tuple5.of(null,1,2,3,4);
+		var x4 = Tuple5.of("foo",null,2,3,4);
+		var x5 = Tuple5.of("foo",1,null,3,4);
+		var x6 = Tuple5.of("foo",1,2,null,4);
+		var x7 = Tuple5.of("foo",1,2,3,null);
 		assertEquals(x1, x2);
 		assertEquals(x1.hashCode(), x2.hashCode());
 		assertNotEquals(x1, x3);
@@ -46,4 +52,4 @@ class Tuple5_Test extends SimpleTestBase {
 		assertNotEquals(x1, x7);
 		assertNotEquals(x1.hashCode(), x7.hashCode());
 	}
-}
+}

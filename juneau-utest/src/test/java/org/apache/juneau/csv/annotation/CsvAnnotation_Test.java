@@ -76,10 +76,10 @@ class CsvAnnotation_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_otherMethods() throws Exception {
-		Csv c1 = CsvAnnotation.create(C1.class).on(C2.class).build();
-		Csv c2 = CsvAnnotation.create("a").on("b").build();
-		Csv c3 = CsvAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		Csv c4 = CsvAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
+		var c1 = CsvAnnotation.create(C1.class).on(C2.class).build();
+		var c2 = CsvAnnotation.create("a").on("b").build();
+		var c3 = CsvAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
+		var c4 = CsvAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
 		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
 		assertJsonContains(c2, "on:['a','b']");

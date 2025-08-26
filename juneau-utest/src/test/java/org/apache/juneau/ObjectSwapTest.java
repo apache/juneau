@@ -37,7 +37,7 @@ class ObjectSwapTest extends SimpleTestBase {
 		r = p.parse(r, String.class);
 		assertEquals("foobar", r);
 
-		JsonMap m = JsonMap.ofJson("{foo:'bar'}");
+		var m = JsonMap.ofJson("{foo:'bar'}");
 		r = s.serialize(m);
 		assertEquals("{xfoox:'xbarx'}", r);
 	}

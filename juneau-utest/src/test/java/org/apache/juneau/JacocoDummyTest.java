@@ -31,7 +31,7 @@ class JacocoDummyTest extends SimpleTestBase {
 		};
 
 		for (Class<?> c : classes) {
-			Constructor<?> c1 = c.getDeclaredConstructor();
+			var c1 = c.getDeclaredConstructor();
 			c1.setAccessible(true);
 			c1.newInstance();
 		}
@@ -39,4 +39,4 @@ class JacocoDummyTest extends SimpleTestBase {
 		XmlFormat.valueOf(XmlFormat.DEFAULT.toString());
 		TestUtils.assertNotThrown(()->Visibility.valueOf(Visibility.DEFAULT.toString()));
 	}
-}
+}

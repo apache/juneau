@@ -46,7 +46,7 @@ class ETag_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_basic() throws Exception {
-		RestClient c = client().build();
+		var c = client().build();
 
 		// Normal usage.
 		c.get().header(eTag(VALUE)).run().assertContent(VALUE);
@@ -61,7 +61,7 @@ class ETag_Test extends SimpleTestBase {
 	}
 
 	@Test void a0_asEntityTag() {
-		EntityTag x = new ETag("W/\"foo\"").asEntityTag().get();
+		var x = new ETag("W/\"foo\"").asEntityTag().get();
 		TestUtils.assertString("W/\"foo\"", x);
 		assertEquals("foo", x.getEntityValue());
 		assertTrue(x.isWeak());

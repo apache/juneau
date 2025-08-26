@@ -48,7 +48,7 @@ class Rest_AnnotationInheritance_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_inheritedFromInterface() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 		a.put("/a", "foo").json().run().assertContent("'foo'");
 		a.get("/b").queryData("foo", "bar").json().run().assertContent("'bar'");
 		a.get("/c").header("foo", "bar").json().run().assertContent("'bar'");

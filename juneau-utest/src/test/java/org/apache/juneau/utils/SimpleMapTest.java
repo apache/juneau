@@ -24,7 +24,7 @@ class SimpleMapTest extends SimpleTestBase {
 	@Test void doTest() {
 		String[] keys = {"a","b"};
 		Object[] vals = {"A","B"};
-		SimpleMap<String,Object> m = new SimpleMap<>(keys, vals);
+		var m = new SimpleMap<>(keys, vals);
 		assertEquals(2, m.size());
 		assertEquals("A", m.get("a"));
 		assertEquals("B", m.get("b"));
@@ -45,4 +45,4 @@ class SimpleMapTest extends SimpleTestBase {
 		keys[0] = null;
 		assertThrows(IllegalArgumentException.class, ()->new SimpleMap<>(keys, vals));
 	}
-}
+}

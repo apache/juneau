@@ -36,7 +36,7 @@ class Header_AcceptCharset_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_qValues() throws Exception {
-		RestClient a = MockRestClient.build(A.class);
+		var a = MockRestClient.build(A.class);
 		a.get("/a").accept("text/plain").acceptCharset("utf-8").run().assertCharset().is("utf-8");
 		a.get("/a").accept("text/plain").acceptCharset("iso-8859-1").run().assertCharset().is("ISO-8859-1");
 		a.get("/a").accept("text/plain").acceptCharset("bad,utf-8").run().assertCharset().is("utf-8");
@@ -76,7 +76,7 @@ class Header_AcceptCharset_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_charsetOnResponse() throws Exception {
-		RestClient b = MockRestClient.buildLax(B.class);
+		var b = MockRestClient.buildLax(B.class);
 		b.put("/a", null).plainText().run().assertContent("UTF-8/UTF-8");
 		b.put("/a", null).plainText().acceptCharset("Shift_JIS").run().assertContent("UTF-8/Shift_JIS");
 		b.put("/a?noTrace=true", null).plainText().acceptCharset("BAD").run().assertStatus(406).assertContent().isContains("No supported charsets in header 'Accept-Charset': 'BAD'");

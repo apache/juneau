@@ -33,10 +33,10 @@ class BeanFilterTest extends SimpleTestBase {
 		a1.f1 = "f1";
 		a1.fb = new B2();
 		((B2)a1.fb).f2 = "f2";
-		String r = s.serialize(a1);
+		var r = s.serialize(a1);
 		assertEquals("{_type:'A1',f0:'f0',fb:{_type:'B2',f0b:'f0b',f2:'f2'},f1:'f1'}", r);
 
-		A a = p.parse(r, A.class);
+		var a = p.parse(r, A.class);
 		assertTrue(a instanceof A1);
 		assertTrue(a.fb instanceof B2);
 		assertEquals("f1", ((A1)a).f1);
@@ -90,10 +90,10 @@ class BeanFilterTest extends SimpleTestBase {
 		e1.f1 = "f1";
 		e1.fb = new F2();
 		((F2)e1.fb).f2 = "f2";
-		String r = s.serialize(e1);
+		var r = s.serialize(e1);
 		assertEquals("{_type:'E1',f0:'f0',fb:{_type:'F2',f0b:'f0b',f2:'f2'},f1:'f1'}", r);
 
-		E e = p.parse(r, E.class);
+		var e = p.parse(r, E.class);
 		assertTrue(e instanceof E1);
 		assertTrue(e.fb instanceof F2);
 		assertEquals("f1", ((E1)e).f1);
@@ -151,11 +151,11 @@ class BeanFilterTest extends SimpleTestBase {
 	@Test void a03_parentClassFilter() throws Exception {
 		var s = JsonSerializer.create().json5().interfaces(C1.class).build();
 
-		C1 c1 = new C2();
-		String r = s.serialize(c1);
+		var c1 = new C2();
+		var r = s.serialize(c1);
 		assertEquals("{f0:'f0'}", r);
 
-		List<C1> l = new LinkedList<>();
+		var l = new LinkedList<>();
 		l.add(new C2());
 		r = s.serialize(l);
 		assertEquals("[{f0:'f0'}]", r);
@@ -175,11 +175,11 @@ class BeanFilterTest extends SimpleTestBase {
 	@Test void a04_parentClassFilter2() throws Exception {
 		var s = JsonSerializer.create().json5().interfaces(D1.class).build();
 
-		D1 d1 = new D2();
-		String r = s.serialize(d1);
+		var d1 = new D2();
+		var r = s.serialize(d1);
 		assertEquals("{f0:'f0'}", r);
 
-		List<D1> l = new LinkedList<>();
+		var l = new LinkedList<>();
 		l.add(new D2());
 		r = s.serialize(l);
 		assertEquals("[{f0:'f0'}]", r);

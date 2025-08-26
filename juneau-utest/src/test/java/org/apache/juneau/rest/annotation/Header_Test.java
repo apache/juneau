@@ -56,7 +56,7 @@ class Header_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_optionalParams() throws Exception {
-		RestClient a = MockRestClient.buildJson(A.class);
+		var a = MockRestClient.buildJson(A.class);
 
 		a.get("/a").header("f1", 123)
 			.run()
@@ -114,7 +114,7 @@ class Header_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_annotatedHeaders() throws Exception {
-		RestClient b = MockRestClient.build(B.class);
+		var b = MockRestClient.build(B.class);
 		b.get("/a").run().assertContent("{h1:null,h2:null,h3:null}");
 		b.get("/a").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
 		b.get("/a").header("h1",4).header("h2",5).header("h3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
@@ -136,7 +136,7 @@ class Header_Test extends SimpleTestBase {
 	}
 
 	@Test void c01_annotatedHeadersCaseInsensitive() throws Exception {
-		RestClient c = MockRestClient.build(C.class);
+		var c = MockRestClient.build(C.class);
 		c.get("/a").run().assertContent("{h1:null,h2:null,h3:null}");
 		c.get("/a").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
 		c.get("/a").header("h1",4).header("h2",5).header("h3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
@@ -158,7 +158,7 @@ class Header_Test extends SimpleTestBase {
 	}
 
 	@Test void d01_annotatedHeadersDefault() throws Exception {
-		RestClient d1 = MockRestClient.build(D1.class);
+		var d1 = MockRestClient.build(D1.class);
 		d1.get("/a").run().assertContent("{h1:'1',h2:'2',h3:'3'}");
 		d1.get("/a").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
 		d1.get("/a").header("h1",4).header("h2",5).header("h3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
@@ -176,7 +176,7 @@ class Header_Test extends SimpleTestBase {
 	}
 
 	@Test void d02_annotatedHeadersDefault() throws Exception {
-		RestClient d2 = MockRestClient.build(D2.class);
+		var d2 = MockRestClient.build(D2.class);
 		d2.get("/a").run().assertContent("{h1:'1',h2:'2',h3:'3'}");
 		d2.get("/a").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
 		d2.get("/a").header("h1",4).header("h2",5).header("h3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
@@ -198,7 +198,7 @@ class Header_Test extends SimpleTestBase {
 	}
 
 	@Test void e01_annotatedAndDefaultHeaders() throws Exception {
-		RestClient e = MockRestClient.build(E.class);
+		var e = MockRestClient.build(E.class);
 		e.get("/a").run().assertContent("{h1:'4',h2:'5',h3:'6'}");
 		e.get("/a").header("H1",7).header("H2",8).header("H3",9).run().assertContent("{h1:'7',h2:'8',h3:'9'}");
 		e.get("/a").header("h1",7).header("h2",8).header("h3",9).run().assertContent("{h1:'7',h2:'8',h3:'9'}");
@@ -247,7 +247,7 @@ class Header_Test extends SimpleTestBase {
 	}
 
 	@Test void f01_defaultHeaders() throws Exception {
-		RestClient f = MockRestClient.buildJson(F.class);
+		var f = MockRestClient.buildJson(F.class);
 		f.get("/a1")
 			.header("f1","123")
 			.run()

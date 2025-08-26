@@ -42,9 +42,9 @@ class Bean_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_beanAnnotationOverridesPrivate() throws Exception {
-		String json = Json5.of(A1.create());
+		var json = Json5.of(A1.create());
 		assertEquals("{f1:1}", json);
-		A1 a = Json5.DEFAULT.read(json, A1.class);
+		var a = Json5.DEFAULT.read(json, A1.class);
 		json = Json5.of(a);
 		assertEquals("{f1:1}", json);
 	}
@@ -71,9 +71,9 @@ class Bean_Test extends SimpleTestBase {
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = JsonParser.create().apply(al).build();
 
-		String json = js.serialize(A2.create());
+		var json = js.serialize(A2.create());
 		assertEquals("{f1:1}", json);
-		A2 a = jp.parse(json, A2.class);
+		var a = jp.parse(json, A2.class);
 		json = js.serialize(a);
 		assertEquals("{f1:1}", json);
 	}
@@ -111,9 +111,9 @@ class Bean_Test extends SimpleTestBase {
 	}
 
 	@Test void a03_beanxAnnotationOverridesPrivate() throws Exception {
-		String json = Json5.of(B1.create());
+		var json = Json5.of(B1.create());
 		assertEquals("{f1:1,f2:2}", json);
-		B1 b = Json5.DEFAULT.read(json, B1.class);
+		var b = Json5.DEFAULT.read(json, B1.class);
 		json = Json5.of(b);
 		assertEquals("{f1:1,f2:2}", json);
 	}
@@ -155,9 +155,9 @@ class Bean_Test extends SimpleTestBase {
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = JsonParser.create().apply(al).build();
 
-		String json = js.serialize(B2.create());
+		var json = js.serialize(B2.create());
 		assertEquals("{f1:1,f2:2}", json);
-		B2 b = jp.parse(json, B2.class);
+		var b = jp.parse(json, B2.class);
 		json = js.serialize(b);
 		assertEquals("{f1:1,f2:2}", json);
 	}
@@ -202,17 +202,17 @@ class Bean_Test extends SimpleTestBase {
 	private static ClassInfo dConfig = ClassInfo.of(DConfig.class);
 
 	@Test void d01_beanPropertiesExcludePropertiesCombined_noBeanConfig() throws Exception {
-		String json = Json5.of(D1.create());
+		var json = Json5.of(D1.create());
 		assertEquals("{a:1,c:3}", json);
-		D1 x = Json5.DEFAULT.read(json, D1.class);
+		var x = Json5.DEFAULT.read(json, D1.class);
 		json = Json5.of(x);
 		assertEquals("{a:1,c:3}", json);
 	}
 
 	@Test void d02_beanPXpCombined_noBeanConfig() throws Exception {
-		String json = Json5.of(D2.create());
+		var json = Json5.of(D2.create());
 		assertEquals("{a:1,c:3}", json);
-		D2 x = Json5.DEFAULT.read(json, D2.class);
+		var x = Json5.DEFAULT.read(json, D2.class);
 		json = Json5.of(x);
 		assertEquals("{a:1,c:3}", json);
 	}
@@ -222,9 +222,9 @@ class Bean_Test extends SimpleTestBase {
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = JsonParser.create().apply(al).build();
 
-		String json = js.serialize(D1.create());
+		var json = js.serialize(D1.create());
 		assertEquals("{b:2,d:4}", json);
-		D1 d = jp.parse(json, D1.class);
+		var d = jp.parse(json, D1.class);
 		json = js.serialize(d);
 		assertEquals("{b:2,d:4}", json);
 	}
@@ -234,33 +234,33 @@ class Bean_Test extends SimpleTestBase {
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = JsonParser.create().apply(al).build();
 
-		String json = js.serialize(D2.create());
+		var json = js.serialize(D2.create());
 		assertEquals("{b:2,d:4}", json);
-		D2 d = jp.parse(json, D2.class);
+		var d = jp.parse(json, D2.class);
 		json = js.serialize(d);
 		assertEquals("{b:2,d:4}", json);
 	}
 
 	@Test void d05_beanPropertiesExcludePropertiesCombined_beanContextBuilderOverride() throws Exception {
-		Bean ba = BeanAnnotation.create("D1").properties("b,c,d").excludeProperties("c").build();
+		var ba = BeanAnnotation.create("D1").properties("b,c,d").excludeProperties("c").build();
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = JsonParser.create().annotations(ba).build();
 
-		String json = js.serialize(D1.create());
+		var json = js.serialize(D1.create());
 		assertEquals("{b:2,d:4}", json);
-		D1 d = jp.parse(json, D1.class);
+		var d = jp.parse(json, D1.class);
 		json = js.serialize(d);
 		assertEquals("{b:2,d:4}", json);
 	}
 
 	@Test void d06_beanPXpCombined_beanContextBuilderOverride() throws Exception {
-		Bean ba = BeanAnnotation.create("D2").p("b,c,d").xp("c").build();
+		var ba = BeanAnnotation.create("D2").p("b,c,d").xp("c").build();
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = JsonParser.create().annotations(ba).build();
 
-		String json = js.serialize(D2.create());
+		var json = js.serialize(D2.create());
 		assertEquals("{b:2,d:4}", json);
-		D2 d = jp.parse(json, D2.class);
+		var d = jp.parse(json, D2.class);
 		json = js.serialize(d);
 		assertEquals("{b:2,d:4}", json);
 	}
@@ -313,17 +313,17 @@ class Bean_Test extends SimpleTestBase {
 	private static ClassInfo eConfig = ClassInfo.of(EConfig.class);
 
 	@Test void e01_beanPropertiesExcludePropertiesCombined_multipleBeanAnnotations_noBeanConfig() throws Exception {
-		String json = Json5.of(E1.create());
+		var json = Json5.of(E1.create());
 		assertEquals("{a:1,c:3}", json);
-		E1 e = Json5.DEFAULT.read(json, E1.class);
+		var e = Json5.DEFAULT.read(json, E1.class);
 		json = Json5.of(e);
 		assertEquals("{a:1,c:3}", json);
 	}
 
 	@Test void e02_beanPXpCombined_multipleBeanAnnotations_noBeanConfig() throws Exception {
-		String json = Json5.of(E2.create());
+		var json = Json5.of(E2.create());
 		assertEquals("{a:1,c:3}", json);
-		E2 e = Json5.DEFAULT.read(json, E2.class);
+		var e = Json5.DEFAULT.read(json, E2.class);
 		json = Json5.of(e);
 		assertEquals("{a:1,c:3}", json);
 	}
@@ -333,9 +333,9 @@ class Bean_Test extends SimpleTestBase {
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = JsonParser.create().apply(al).build();
 
-		String json = js.serialize(E1.create());
+		var json = js.serialize(E1.create());
 		assertEquals("{b:2,d:4}", json);
-		E1 e = jp.parse(json, E1.class);
+		var e = jp.parse(json, E1.class);
 		json = js.serialize(e);
 		assertEquals("{b:2,d:4}", json);
 	}
@@ -345,33 +345,33 @@ class Bean_Test extends SimpleTestBase {
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = JsonParser.create().apply(al).build();
 
-		String json = js.serialize(E2.create());
+		var json = js.serialize(E2.create());
 		assertEquals("{b:2,d:4}", json);
-		E2 e = jp.parse(json, E2.class);
+		var e = jp.parse(json, E2.class);
 		json = js.serialize(e);
 		assertEquals("{b:2,d:4}", json);
 	}
 
 	@Test void e05_beanPropertiersExcludePropertiesCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
-		Bean ba = BeanAnnotation.create("E1").properties("b,c,d").excludeProperties("c").build();
+		var ba = BeanAnnotation.create("E1").properties("b,c,d").excludeProperties("c").build();
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = JsonParser.create().annotations(ba).build();
 
-		String json = js.serialize(E1.create());
+		var json = js.serialize(E1.create());
 		assertEquals("{b:2,d:4}", json);
-		E1 e = jp.parse(json, E1.class);
+		var e = jp.parse(json, E1.class);
 		json = js.serialize(e);
 		assertEquals("{b:2,d:4}", json);
 	}
 
 	@Test void e06_beanBpiBpxCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
-		Bean ba = BeanAnnotation.create("E2").p("b,c,d").xp("c").build();
+		var ba = BeanAnnotation.create("E2").p("b,c,d").xp("c").build();
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = JsonParser.create().annotations(ba).build();
 
-		String json = js.serialize(E2.create());
+		var json = js.serialize(E2.create());
 		assertEquals("{b:2,d:4}", json);
-		E2 e = jp.parse(json, E2.class);
+		var e = jp.parse(json, E2.class);
 		json = js.serialize(e);
 		assertEquals("{b:2,d:4}", json);
 	}

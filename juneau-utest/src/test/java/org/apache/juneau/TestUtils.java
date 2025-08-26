@@ -198,7 +198,7 @@ public class TestUtils extends Utils {
 	}
 
 	public static <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, List<String> expectedSubstrings, org.junit.jupiter.api.function.Executable executable) {
-		T exception = Assertions.assertThrows(expectedType, executable);
+		var exception = Assertions.assertThrows(expectedType, executable);
 		var messages = TestUtils.getMessages(exception);
 		expectedSubstrings.stream().forEach(x -> assertTrue(messages.contains(x), fs("Expected message to contain: {0}.\nActual:\n{1}", x, messages)));
 		return exception;
@@ -544,12 +544,12 @@ public class TestUtils extends Utils {
 	 */
 	public static Swagger getSwagger(Class<?> c) {
 		try {
-			Object r = c.getDeclaredConstructor().newInstance();
+			var r = c.getDeclaredConstructor().newInstance();
 			var rc = RestContext.create(r.getClass(),null,null).init(()->r).build();
 			var ctx = RestOpContext.create(TestUtils.class.getMethod("getSwagger", Class.class), rc).build();
 			var session = RestSession.create(rc).resource(r).req(new MockServletRequest()).res(new MockServletResponse()).build();
-			RestRequest req = ctx.createRequest(session);
-			SwaggerProvider ip = rc.getSwaggerProvider();
+			var req = ctx.createRequest(session);
+			var ip = rc.getSwaggerProvider();
 			return ip.getSwagger(rc, req.getLocale());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
