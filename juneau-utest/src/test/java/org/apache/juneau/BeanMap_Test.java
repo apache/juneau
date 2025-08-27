@@ -1039,15 +1039,11 @@ class BeanMap_Test extends SimpleTestBase {
 	@Test void a20_propertyNameFactoryDashedLC2() {
 		var bc2 = BeanContext.DEFAULT_SORTED;
 		var m = bc2.newBeanMap(P2.class).load("{'foo-bar':1,'baz-bing':2}");
-		assertEquals(1, m.get("foo-bar"));
-		assertEquals(2, m.get("baz-bing"));
-		var b = m.getBean();
-		assertEquals(1, b.getFooBar());
-		assertEquals(2, b.getBazBING());
+		assertMap(m, "foo-bar,baz-bing", "1,2");
+		assertBean(m.getBean(), "fooBar,bazBING", "1,2");
 		m.put("foo-bar", 3);
 		m.put("baz-bing", 4);
-		assertEquals(3, b.getFooBar());
-		assertEquals(4, b.getBazBING());
+		assertBean(m.getBean(), "fooBar,bazBING", "3,4");
 	}
 
 	@Bean(propertyNamer=PropertyNamerDLC.class)
