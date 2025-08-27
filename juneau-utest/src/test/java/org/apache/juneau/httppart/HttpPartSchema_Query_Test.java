@@ -70,26 +70,11 @@ class HttpPartSchema_Query_Test extends SimpleTestBase {
 	public static class A02 {}
 
 	@Test void a02_basic_onClass() {
-		var s = HttpPartSchema.create().applyAll(Query.class, A02.class).noValidate().build();
-		assertEquals("x", s.getName());
-		assertEquals(HttpPartDataType.NUMBER, s.getType());
-		assertEquals(HttpPartFormat.INT32, s.getFormat());
-		assertEquals(HttpPartCollectionFormat.CSV, s.getCollectionFormat());
-		assertEquals(1, s.getMaximum());
-		assertEquals(2, s.getMinimum());
-		assertEquals(3, s.getMultipleOf());
-		assertEquals("4", s.getPattern().pattern());
-		assertEquals(1, s.getMaxLength().longValue());
-		assertEquals(2, s.getMinLength().longValue());
-		assertEquals(3, s.getMaxItems().longValue());
-		assertEquals(4, s.getMinItems().longValue());
-		assertTrue(s.isExclusiveMaximum());
-		assertTrue(s.isExclusiveMinimum());
-		assertTrue(s.isUniqueItems());
-		assertTrue(s.isRequired());
-		assertTrue(s.isSkipIfEmpty());
-		assertJson(s.getEnum(), "['e1','e2','e3']");
-		assertEquals("c1\nc2", s.getDefault());
+		assertBean(
+			HttpPartSchema.create().applyAll(Query.class, A02.class).noValidate().build(),
+			"name,type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,required,skipIfEmpty,enum,default",
+			"x,number,int32,csv,1,2,3,4,1,2,3,4,true,true,true,true,true,[e1,e2,e3],c1\nc2"
+		);
 	}
 
 	public static class A03 {
@@ -125,26 +110,11 @@ class HttpPartSchema_Query_Test extends SimpleTestBase {
 
 	@Test void a03_basic_onParameter() throws Exception {
 		var mpi = MethodInfo.of(A03.class.getMethod("a", String.class)).getParam(0);
-		var s = HttpPartSchema.create().applyAll(Query.class, mpi).noValidate().build();
-		assertEquals("x", s.getName());
-		assertEquals(HttpPartDataType.NUMBER, s.getType());
-		assertEquals(HttpPartFormat.INT32, s.getFormat());
-		assertEquals(HttpPartCollectionFormat.CSV, s.getCollectionFormat());
-		assertEquals(1, s.getMaximum());
-		assertEquals(2, s.getMinimum());
-		assertEquals(3, s.getMultipleOf());
-		assertEquals("4", s.getPattern().pattern());
-		assertEquals(1, s.getMaxLength().longValue());
-		assertEquals(2, s.getMinLength().longValue());
-		assertEquals(3, s.getMaxItems().longValue());
-		assertEquals(4, s.getMinItems().longValue());
-		assertTrue(s.isExclusiveMaximum());
-		assertTrue(s.isExclusiveMinimum());
-		assertTrue(s.isUniqueItems());
-		assertTrue(s.isRequired());
-		assertTrue(s.isSkipIfEmpty());
-		assertJson(s.getEnum(), "['e1','e2','e3']");
-		assertEquals("c1\nc2", s.getDefault());
+		assertBean(
+			HttpPartSchema.create().applyAll(Query.class, mpi).noValidate().build(),
+			"name,type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,required,skipIfEmpty,enum,default",
+			"x,number,int32,csv,1,2,3,4,1,2,3,4,true,true,true,true,true,[e1,e2,e3],c1\nc2"
+		);
 	}
 
 	public static class A04 {
@@ -180,26 +150,11 @@ class HttpPartSchema_Query_Test extends SimpleTestBase {
 
 	@Test void a04_basic_onParameterAndClass() throws Exception {
 		var mpi = MethodInfo.of(A04.class.getMethod("a", A01.class)).getParam(0);
-		var s = HttpPartSchema.create().applyAll(Query.class, mpi).noValidate().build();
-		assertEquals("y", s.getName());
-		assertEquals(HttpPartDataType.INTEGER, s.getType());
-		assertEquals(HttpPartFormat.INT64, s.getFormat());
-		assertEquals(HttpPartCollectionFormat.SSV, s.getCollectionFormat());
-		assertEquals(5, s.getMaximum());
-		assertEquals(6, s.getMinimum());
-		assertEquals(7, s.getMultipleOf());
-		assertEquals("8", s.getPattern().pattern());
-		assertEquals(5, s.getMaxLength().longValue());
-		assertEquals(6, s.getMinLength().longValue());
-		assertEquals(7, s.getMaxItems().longValue());
-		assertEquals(8, s.getMinItems().longValue());
-		assertFalse(s.isExclusiveMaximum());
-		assertFalse(s.isExclusiveMinimum());
-		assertFalse(s.isUniqueItems());
-		assertFalse(s.isRequired());
-		assertFalse(s.isSkipIfEmpty());
-		assertJson(s.getEnum(), "['e4','e5','e6']");
-		assertEquals("c3\nc4", s.getDefault());
+		assertBean(
+			HttpPartSchema.create().applyAll(Query.class, mpi).noValidate().build(),
+			"name,type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,required,skipIfEmpty,enum,default",
+			"y,integer,int64,ssv,5,6,7,8,5,6,7,8,false,false,false,false,false,[e4,e5,e6],c3\nc4"
+		);
 	}
 
 	@Query("x")
@@ -284,76 +239,32 @@ class HttpPartSchema_Query_Test extends SimpleTestBase {
 		assertEquals("x", s.getName());
 
 		var items = s.getItems();
-		assertEquals(HttpPartDataType.NUMBER, items.getType());
-		assertEquals(HttpPartFormat.INT32, items.getFormat());
-		assertEquals(HttpPartCollectionFormat.CSV, items.getCollectionFormat());
-		assertEquals(1, items.getMaximum());
-		assertEquals(2, items.getMinimum());
-		assertEquals(3, items.getMultipleOf());
-		assertEquals("4", items.getPattern().pattern());
-		assertEquals(1, items.getMaxLength().longValue());
-		assertEquals(2, items.getMinLength().longValue());
-		assertEquals(3, items.getMaxItems().longValue());
-		assertEquals(4, items.getMinItems().longValue());
-		assertTrue(items.isExclusiveMaximum());
-		assertTrue(items.isExclusiveMinimum());
-		assertTrue(items.isUniqueItems());
-		assertJson(items.getEnum(), "['e1','e2']");
-		assertEquals("c1\nc2", items.getDefault());
+		assertBean(
+			items,
+			"type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,enum,default",
+			"number,int32,csv,1,2,3,4,1,2,3,4,true,true,true,[e1,e2],c1\nc2"
+		);
 
 		items = items.getItems();
-		assertEquals(HttpPartDataType.INTEGER, items.getType());
-		assertEquals(HttpPartFormat.INT64, items.getFormat());
-		assertEquals(HttpPartCollectionFormat.SSV, items.getCollectionFormat());
-		assertEquals(5, items.getMaximum());
-		assertEquals(6, items.getMinimum());
-		assertEquals(7, items.getMultipleOf());
-		assertEquals("8", items.getPattern().pattern());
-		assertEquals(5, items.getMaxLength().longValue());
-		assertEquals(6, items.getMinLength().longValue());
-		assertEquals(7, items.getMaxItems().longValue());
-		assertEquals(8, items.getMinItems().longValue());
-		assertFalse(items.isExclusiveMaximum());
-		assertFalse(items.isExclusiveMinimum());
-		assertFalse(items.isUniqueItems());
-		assertJson(items.getEnum(), "['e3','e4']");
-		assertEquals("c3\nc4", items.getDefault());
+		assertBean(
+			items,
+			"type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,enum,default",
+			"integer,int64,ssv,5,6,7,8,5,6,7,8,false,false,false,[e3,e4],c3\nc4"
+		);
 
 		items = items.getItems();
-		assertEquals(HttpPartDataType.STRING, items.getType());
-		assertEquals(HttpPartFormat.FLOAT, items.getFormat());
-		assertEquals(HttpPartCollectionFormat.TSV, items.getCollectionFormat());
-		assertEquals(9, items.getMaximum());
-		assertEquals(10, items.getMinimum());
-		assertEquals(11, items.getMultipleOf());
-		assertEquals("12", items.getPattern().pattern());
-		assertEquals(9, items.getMaxLength().longValue());
-		assertEquals(10, items.getMinLength().longValue());
-		assertEquals(11, items.getMaxItems().longValue());
-		assertEquals(12, items.getMinItems().longValue());
-		assertTrue(items.isExclusiveMaximum());
-		assertTrue(items.isExclusiveMinimum());
-		assertTrue(items.isUniqueItems());
-		assertJson(items.getEnum(), "['e5','e6']");
-		assertEquals("c5\nc6", items.getDefault());
+		assertBean(
+			items,
+			"type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,enum,default",
+			"string,float,tsv,9,10,11,12,9,10,11,12,true,true,true,[e5,e6],c5\nc6"
+		);
 
 		items = items.getItems();
-		assertEquals(HttpPartDataType.ARRAY, items.getType());
-		assertEquals(HttpPartFormat.DOUBLE, items.getFormat());
-		assertEquals(HttpPartCollectionFormat.PIPES, items.getCollectionFormat());
-		assertEquals(13, items.getMaximum());
-		assertEquals(14, items.getMinimum());
-		assertEquals(15, items.getMultipleOf());
-		assertEquals("16", items.getPattern().pattern());
-		assertEquals(13, items.getMaxLength().longValue());
-		assertEquals(14, items.getMinLength().longValue());
-		assertEquals(15, items.getMaxItems().longValue());
-		assertEquals(16, items.getMinItems().longValue());
-		assertFalse(items.isExclusiveMaximum());
-		assertFalse(items.isExclusiveMinimum());
-		assertFalse(items.isUniqueItems());
-		assertJson(items.getEnum(), "['e7','e8']");
-		assertEquals("c7\nc8", items.getDefault());
+		assertBean(
+			items,
+			"type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,enum,default",
+			"array,double,pipes,13,14,15,16,13,14,15,16,false,false,false,[e7,e8],c7\nc8"
+		);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
