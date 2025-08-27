@@ -17,17 +17,15 @@ import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
 
 import java.time.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
 @Deprecated
-public class ZonedDateTimeAssertion_Test {
+class ZonedDateTimeAssertion_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Helpers
@@ -52,14 +50,12 @@ public class ZonedDateTimeAssertion_Test {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_msg() {
+	@Test void a01_msg() {
 		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("Foo {0}", 1).isExists(), "Foo 1");
 		assertThrows(RuntimeException.class, ()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists(), "Foo 1");
 	}
 
-	@Test
-	public void a02_stdout() {
+	@Test void a02_stdout() {
 		test(null).setStdOut();
 	}
 
@@ -67,16 +63,14 @@ public class ZonedDateTimeAssertion_Test {
 	// Transform tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void ba01a_asString() {
+	@Test void ba01a_asString() {
 		var x = MID1;
 		var nil = n(ZonedDateTime.class);
 		test(x).asString().is("2000-06-01T12:34:56Z");
 		test(nil).asString().isNull();
 	}
 
-	@Test
-	public void ba01b_asString_wSerializer() {
+	@Test void ba01b_asString_wSerializer() {
 		var x = MID1;
 		var nil = n(ZonedDateTime.class);
 		var s = Json5Serializer.DEFAULT;
@@ -84,30 +78,26 @@ public class ZonedDateTimeAssertion_Test {
 		test(nil).asString(s).is("null");
 	}
 
-	@Test
-	public void ba01c_asString_wPredicate() {
+	@Test void ba01c_asString_wPredicate() {
 		var x1 = MID1;
 		test(x1).asString(x -> "foo").is("foo");
 	}
 
-	@Test
-	public void ba02_asJson() {
+	@Test void ba02_asJson() {
 		var x = MID1;
 		var nil = n(ZonedDateTime.class);
 		test(x).asJson().is("'2000-06-01T12:34:56Z'");
 		test(nil).asJson().is("null");
 	}
 
-	@Test
-	public void ba03_asJsonSorted() {
+	@Test void ba03_asJsonSorted() {
 		var x1 = MID1;
 		var nil = n(ZonedDateTime.class);
 		test(x1).asJsonSorted().is("'2000-06-01T12:34:56Z'");
 		test(nil).asJsonSorted().is("null");
 	}
 
-	@Test
-	public void ba04_apply() {
+	@Test void ba04_apply() {
 		var x1 = MID1;
 		var x2 = MID2;
 		test(x1).asTransformed(x -> x2).is(x2);
@@ -117,32 +107,28 @@ public class ZonedDateTimeAssertion_Test {
 	// Test tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void ca01_exists() {
+	@Test void ca01_exists() {
 		var x = MID1;
 		var nil = n(ZonedDateTime.class);
 		test(x).isExists().isExists();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
-	@Test
-	public void ca02_isNull() {
+	@Test void ca02_isNull() {
 		var x = MID1;
 		var nil = n(ZonedDateTime.class);
 		test(nil).isNull();
 		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
-	@Test
-	public void ca03_isNotNull() {
+	@Test void ca03_isNotNull() {
 		var x = MID1;
 		var nil = n(ZonedDateTime.class);
 		test(x).isNotNull();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
 
-	@Test
-	public void ca04a_is_T() {
+	@Test void ca04a_is_T() {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var x2 = MID2;
@@ -155,16 +141,14 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(nil).is(x2)).asMessage().asOneLine().is("Unexpected value.  Expect='2010-06-01T12:34:56Z'.  Actual='null'.");
 	}
 
-	@Test
-	public void ca04b_is_predicate() {
+	@Test void ca04b_is_predicate() {
 		var x1 = MID1;
 		test(x1).is(x->x!=null);
 		assertThrown(()->test(x1).is(x->x==null)).asMessage().asOneLine().is("Unexpected value: '2000-06-01T12:34:56Z'.");
 		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='2000-06-01T12:34:56Z'.");
 	}
 
-	@Test
-	public void ca05_isNot() {
+	@Test void ca05_isNot() {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var x2 = MID2;
@@ -176,8 +160,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(nil).isNot(nil)).asMessage().asOneLine().is("Unexpected value.  Did not expect='null'.  Actual='null'.");
 	}
 
-	@Test
-	public void ca06_isAny() {
+	@Test void ca06_isAny() {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var x2 = MID2;
@@ -188,8 +171,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(nil).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[2010-06-01T12:34:56Z]'.  Actual='null'.");
 	}
 
-	@Test
-	public void ca07_isNotAny() {
+	@Test void ca07_isNotAny() {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var x2 = MID2;
@@ -201,8 +183,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(nil).isNotAny(nil)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
-	@Test
-	public void ca08_isSame() {
+	@Test void ca08_isSame() {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var nil = n(ZonedDateTime.class);
@@ -213,8 +194,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(x1).isSame(nil)).asMessage().asOneLine().isMatches("Not the same value.  Expect='null(null)'.  Actual='2000-06-01T12:34:56Z(ZonedDateTime@*)'.");
 	}
 
-	@Test
-	public void ca09_isSameJsonAs() {
+	@Test void ca09_isSameJsonAs() {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var x2 = MID2;
@@ -226,8 +206,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(x1).isSameJsonAs(nil)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual=''2000-06-01T12:34:56Z''.");
 	}
 
-	@Test
-	public void ca10_isSameSortedJsonAs() {
+	@Test void ca10_isSameSortedJsonAs() {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var x2 = MID2;
@@ -239,8 +218,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual=''2000-06-01T12:34:56Z''.");
 	}
 
-	@Test
-	public void ca11_isSameSerializedAs() {
+	@Test void ca11_isSameSerializedAs() {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var x2 = MID2;
@@ -253,8 +231,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual=''2000-06-01T12:34:56Z''.");
 	}
 
-	@Test
-	public void ca12_isType() {
+	@Test void ca12_isType() {
 		var x = MID1;
 		var nil = n(ZonedDateTime.class);
 		test(x).isType(ZonedDateTime.class);
@@ -264,8 +241,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(x).isType(null)).asMessage().asOneLine().is("Argument 'parent' cannot be null.");
 	}
 
-	@Test
-	public void ca13_isExactType() {
+	@Test void ca13_isExactType() {
 		var x = MID1;
 		var nil = n(ZonedDateTime.class);
 		test(x).isExactType(ZonedDateTime.class);
@@ -275,8 +251,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(x).isExactType(null)).asMessage().asOneLine().is("Argument 'parent' cannot be null.");
 	}
 
-	@Test
-	public void ca14_isString() {
+	@Test void ca14_isString() {
 		var x = MID1;
 		var nil = n(ZonedDateTime.class);
 		test(x).isString("2000-06-01T12:34:56Z");
@@ -286,8 +261,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(nil).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
-	@Test
-	public void ca15_isJson() {
+	@Test void ca15_isJson() {
 		var x = MID1;
 		var nil = n(ZonedDateTime.class);
 		test(x).isJson("'2000-06-01T12:34:56Z'");
@@ -297,8 +271,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(nil).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
-	@Test
-	public void cb01_isGt() {
+	@Test void cb01_isGt() {
 		var x1 = MIN;
 		var x2 = MID1;
 		var nil = n(ZonedDateTime.class);
@@ -309,8 +282,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrows(BasicAssertionError.class, ()->test(nil).isGt(x2), "Value was null.");
 	}
 
-	@Test
-	public void cb02_isGte() {
+	@Test void cb02_isGte() {
 		var x1 = MIN;
 		var x2 = MID1;
 		var nil = n(ZonedDateTime.class);
@@ -321,8 +293,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrows(BasicAssertionError.class, ()->test(nil).isGte(x2), "Value was null.");
 	}
 
-	@Test
-	public void cb03_isLt() {
+	@Test void cb03_isLt() {
 		var x1 = MIN;
 		var x2 = MID1;
 		var nil = n(ZonedDateTime.class);
@@ -333,8 +304,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrows(BasicAssertionError.class, ()->test(nil).isLt(x1), "Value was null.");
 	}
 
-	@Test
-	public void cb04_isLte() {
+	@Test void cb04_isLte() {
 		var x1 = MIN;
 		var x2 = MID1;
 		var nil = n(ZonedDateTime.class);
@@ -345,8 +315,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrows(BasicAssertionError.class, ()->test(nil).isLte(x1), "Value was null.");
 	}
 
-	@Test
-	public void cb05_isBetween() {
+	@Test void cb05_isBetween() {
 		var x1 = MIN;
 		var x2 = MID1;
 		var x3 = MID2;
@@ -361,8 +330,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(x1).isBetween(x1, nil)).asMessage().asOneLine().is("Argument 'upper' cannot be null.");
 	}
 
-	@Test
-	public void cc01_is_wChrono() {
+	@Test void cc01_is_wChrono() {
 		var x1 = zdt("1950-01-01T12:34:56Z");
 		var x1a = zdt("1950-01-01T12:35:55Z");
 		var nil = n(ZonedDateTime.class);
@@ -375,8 +343,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(x1).is(x1a, null)).asMessage().asOneLine().is("Argument 'precision' cannot be null.");
 	}
 
-	@Test
-	public void cc02_isAfter() {
+	@Test void cc02_isAfter() {
 		var x1 = zdt("1950-01-01T12:34:56Z");
 		var x2 = zdt("2050-01-01T12:34:56Z");
 		var nil = n(ZonedDateTime.class);
@@ -386,8 +353,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(nil).isAfter(x2)).asMessage().isContains("Value was null.");
 	}
 
-	@Test
-	public void cc03_isAfterNow() {
+	@Test void cc03_isAfterNow() {
 		var x1 = zdt("1950-01-01T12:34:56Z");
 		var x2 = zdt("2050-01-01T12:34:56Z");
 		var nil = n(ZonedDateTime.class);
@@ -396,8 +362,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(nil).isAfterNow()).asMessage().isContains("Value was null.");
 	}
 
-	@Test
-	public void cc04_isBefore() {
+	@Test void cc04_isBefore() {
 		var x1 = zdt("1950-01-01T12:34:56Z");
 		var x2 = zdt("2050-01-01T12:34:56Z");
 		var nil = n(ZonedDateTime.class);
@@ -407,8 +372,7 @@ public class ZonedDateTimeAssertion_Test {
 		assertThrown(()->test(nil).isBefore(x2)).asMessage().isContains("Value was null.");
 	}
 
-	@Test
-	public void cc05_isBeforeNow() {
+	@Test void cc05_isBeforeNow() {
 		var x1 = zdt("1950-01-01T12:34:56Z");
 		var x2 = zdt("2050-01-01T12:34:56Z");
 		var nil = n(ZonedDateTime.class);

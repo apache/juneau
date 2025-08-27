@@ -17,15 +17,13 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.TestUtils.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
 @Deprecated
-public class ComparableAssertion_Test {
+class ComparableAssertion_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Helpers
@@ -39,14 +37,12 @@ public class ComparableAssertion_Test {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_msg() {
+	@Test void a01_msg() {
 		assertThrows(BasicAssertionError.class, ()->test(null).setMsg("A {0}", 1).isExists(), "A 1");
 		assertThrows(RuntimeException.class, ()->test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class).isExists(), "A 1");
 	}
 
-	@Test
-	public void a02_stdout() {
+	@Test void a02_stdout() {
 		test(null).setStdOut();
 	}
 
@@ -54,16 +50,14 @@ public class ComparableAssertion_Test {
 	// Transform tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void ba01a_asString() {
+	@Test void ba01a_asString() {
 		var x = 1;
 		var nil = n(Integer.class);
 		test(x).asString().is("1");
 		test(nil).asString().isNull();
 	}
 
-	@Test
-	public void ba01b_asString_wSerializer() {
+	@Test void ba01b_asString_wSerializer() {
 		var x = 1;
 		var nil = n(Integer.class);
 		var s = Json5Serializer.DEFAULT;
@@ -71,30 +65,26 @@ public class ComparableAssertion_Test {
 		test(nil).asString(s).is("null");
 	}
 
-	@Test
-	public void ba01c_asString_wPredicate() {
+	@Test void ba01c_asString_wPredicate() {
 		var x1 = 1;
 		test(x1).asString(x -> "foo").is("foo");
 	}
 
-	@Test
-	public void ba02_asJson() {
+	@Test void ba02_asJson() {
 		var x = 1;
 		var nil = n(Integer.class);
 		test(x).asJson().is("1");
 		test(nil).asJson().is("null");
 	}
 
-	@Test
-	public void ba03_asJsonSorted() {
+	@Test void ba03_asJsonSorted() {
 		var x = 1;
 		var nil = n(Integer.class);
 		test(x).asJsonSorted().is("1");
 		test(nil).asJsonSorted().is("null");
 	}
 
-	@Test
-	public void ba04_apply() {
+	@Test void ba04_apply() {
 		var x1 = 1;
 		var x2 = 2;
 		test(x1).asTransformed(x -> x2).is(x2);
@@ -104,32 +94,28 @@ public class ComparableAssertion_Test {
 	// Test tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void ca01_exists() {
+	@Test void ca01_exists() {
 		var x = 1;
 		var nil = n(Integer.class);
 		test(x).isExists().isExists();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
-	@Test
-	public void ca02_isNull() {
+	@Test void ca02_isNull() {
 		var x = 1;
 		var nil = n(Integer.class);
 		test(nil).isNull();
 		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
-	@Test
-	public void ca03_isNotNull() {
+	@Test void ca03_isNotNull() {
 		var x = 1;
 		var nil = n(Integer.class);
 		test(x).isNotNull();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
 
-	@Test
-	public void ca04a_is_T() {
+	@Test void ca04a_is_T() {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
@@ -142,16 +128,14 @@ public class ComparableAssertion_Test {
 		assertThrown(()->test(nil).is(x2)).asMessage().asOneLine().is("Unexpected value.  Expect='2'.  Actual='null'.");
 	}
 
-	@Test
-	public void ca04b_is_predicate() {
+	@Test void ca04b_is_predicate() {
 		var x1 = 1;
 		test(x1).is(x->x==1);
 		assertThrown(()->test(x1).is(x->x==2)).asMessage().asOneLine().is("Unexpected value: '1'.");
 		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='1'.");
 	}
 
-	@Test
-	public void ca05_isNot() {
+	@Test void ca05_isNot() {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
@@ -163,8 +147,7 @@ public class ComparableAssertion_Test {
 		assertThrown(()->test(nil).isNot(nil)).asMessage().asOneLine().is("Unexpected value.  Did not expect='null'.  Actual='null'.");
 	}
 
-	@Test
-	public void ca06_isAny() {
+	@Test void ca06_isAny() {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
@@ -175,8 +158,7 @@ public class ComparableAssertion_Test {
 		assertThrown(()->test(nil).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[2]'.  Actual='null'.");
 	}
 
-	@Test
-	public void ca07_isNotAny() {
+	@Test void ca07_isNotAny() {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
@@ -188,8 +170,7 @@ public class ComparableAssertion_Test {
 		assertThrown(()->test(nil).isNotAny(nil)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
-	@Test
-	public void ca08_isSame() {
+	@Test void ca08_isSame() {
 		var x1 = Integer.valueOf(999);
 		var x1a = Integer.valueOf(999);
 		var nil = n(Integer.class);
@@ -200,8 +181,7 @@ public class ComparableAssertion_Test {
 		assertThrown(()->test(x1).isSame(nil)).asMessage().asOneLine().isMatches("Not the same value.  Expect='null(null)'.  Actual='999(Integer@*)'.");
 	}
 
-	@Test
-	public void ca09_isSameJsonAs() {
+	@Test void ca09_isSameJsonAs() {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
@@ -213,8 +193,7 @@ public class ComparableAssertion_Test {
 		assertThrown(()->test(x1).isSameJsonAs(nil)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual='1'.");
 	}
 
-	@Test
-	public void ca10_isSameSortedJsonAs() {
+	@Test void ca10_isSameSortedJsonAs() {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
@@ -226,8 +205,7 @@ public class ComparableAssertion_Test {
 		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual='1'.");
 	}
 
-	@Test
-	public void ca11_isSameSerializedAs() {
+	@Test void ca11_isSameSerializedAs() {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
@@ -240,8 +218,7 @@ public class ComparableAssertion_Test {
 		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual='1'.");
 	}
 
-	@Test
-	public void ca12_isType() {
+	@Test void ca12_isType() {
 		var x = 1;
 		var nil = n(Integer.class);
 		test(x).isType(Integer.class);
@@ -251,8 +228,7 @@ public class ComparableAssertion_Test {
 		assertThrown(()->test(x).isType(null)).asMessage().asOneLine().is("Argument 'parent' cannot be null.");
 	}
 
-	@Test
-	public void ca13_isExactType() {
+	@Test void ca13_isExactType() {
 		var x = 1;
 		var nil = n(Integer.class);
 		test(x).isExactType(Integer.class);
@@ -262,8 +238,7 @@ public class ComparableAssertion_Test {
 		assertThrown(()->test(x).isExactType(null)).asMessage().asOneLine().is("Argument 'parent' cannot be null.");
 	}
 
-	@Test
-	public void ca14_isString() {
+	@Test void ca14_isString() {
 		var x = 1;
 		var nil = n(Integer.class);
 		test(x).isString("1");
@@ -273,8 +248,7 @@ public class ComparableAssertion_Test {
 		assertThrown(()->test(nil).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
-	@Test
-	public void ca15_isJson() {
+	@Test void ca15_isJson() {
 		var x = 1;
 		var nil = n(Integer.class);
 		test(x).isJson("1");
@@ -284,8 +258,7 @@ public class ComparableAssertion_Test {
 		assertThrown(()->test(nil).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
-	@Test
-	public void cb01_isGt() {
+	@Test void cb01_isGt() {
 		var x1 = 1;
 		var x2 = 2;
 		var nil = n(Integer.class);
@@ -296,8 +269,7 @@ public class ComparableAssertion_Test {
 		assertThrows(BasicAssertionError.class, ()->test(nil).isGt(x2), "Value was null.");
 	}
 
-	@Test
-	public void cb02_isGte() {
+	@Test void cb02_isGte() {
 		var x1 = 1;
 		var x1a = Integer.valueOf(1);
 		var x2 = 2;
@@ -310,8 +282,7 @@ public class ComparableAssertion_Test {
 		assertThrows(BasicAssertionError.class, ()->test(nil).isGte(x2), "Value was null.");
 	}
 
-	@Test
-	public void cb03_isLt() {
+	@Test void cb03_isLt() {
 		var x1 = 1;
 		var x2 = 2;
 		var nil = n(Integer.class);
@@ -322,8 +293,7 @@ public class ComparableAssertion_Test {
 		assertThrows(BasicAssertionError.class, ()->test(nil).isLt(x1), "Value was null.");
 	}
 
-	@Test
-	public void cb04_isLte() {
+	@Test void cb04_isLte() {
 		var x1 = 1;
 		var x1a = Integer.valueOf(1);
 		var x2 = 2;
@@ -336,8 +306,7 @@ public class ComparableAssertion_Test {
 		assertThrows(BasicAssertionError.class, ()->test(nil).isLte(x1), "Value was null.");
 	}
 
-	@Test
-	public void cb05_isBetween() {
+	@Test void cb05_isBetween() {
 		var x1 = 1;
 		var x2 = 2;
 		var x3 = 3;

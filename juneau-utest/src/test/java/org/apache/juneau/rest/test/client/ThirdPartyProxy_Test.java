@@ -38,7 +38,6 @@ import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
-import org.junit.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.opentest4j.*;
@@ -1272,14 +1271,16 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 		assertEquals("OK", r);
 	}
 
-	@Test
-	public void ga06_reqBeanPath6(Input input) {
+	@ParameterizedTest
+	@MethodSource("input")
+	void ga06_reqBeanPath6(Input input) {
 		var r = input.proxy.reqBeanPath6(() -> map("a", 1, "b", "foo"));
 		assertEquals("OK", r);
 	}
 
-	@Test
-	public void ga07_reqBeanPath7(Input input) {
+	@ParameterizedTest
+	@MethodSource("input")
+	void ga07_reqBeanPath7(Input input) {
 		var r = input.proxy.reqBeanPath7(ABean::get);
 		assertEquals("OK", r);
 	}

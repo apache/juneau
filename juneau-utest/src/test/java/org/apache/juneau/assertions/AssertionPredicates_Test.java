@@ -17,16 +17,14 @@ import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
 
 import java.util.regex.*;
 
 import org.apache.juneau.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
 @Deprecated
-public class AssertionPredicates_Test {
+class AssertionPredicates_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -34,26 +32,22 @@ public class AssertionPredicates_Test {
 
 	private static StringAssertion A1 = assertString("foo").setSilent(), A2 = assertString(empty()).setSilent();
 
-	@Test
-	public void a01_any() {
+	@Test void a01_any() {
 		assertNotThrown(()->A1.is(any()));
 		assertNotThrown(()->A2.is(any()));
 	}
 
-	@Test
-	public void a02_notNull() {
+	@Test void a02_notNull() {
 		A1.is(notNull());
 		assertThrows(BasicAssertionError.class, ()->A2.is(notNull()), "Value was null.");
 	}
 
-	@Test
-	public void a03_isNull() {
+	@Test void a03_isNull() {
 		assertThrows(BasicAssertionError.class, ()->A1.is(isNull()), "Value was not null.");
 		A2.is(isNull());
 	}
 
-	@Test
-	public void a04_eq() {
+	@Test void a04_eq() {
 		A1.is(eq("foo"));
 		A1.is(eq((Object)"foo"));
 		assertThrown(()->A1.is(eq("FOO"))).asMessage().asOneLine().is("Value did not match expected.  Expect='FOO'.  Actual='foo'.");
@@ -63,8 +57,7 @@ public class AssertionPredicates_Test {
 		assertThrown(()->A2.is(eq("foo"))).asMessage().asOneLine().is("Value did not match expected.  Expect='foo'.  Actual='null'.");
 	}
 
-	@Test
-	public void a05_eqic() {
+	@Test void a05_eqic() {
 		A1.is(eqic("foo"));
 		A1.is(eqic("FOO"));
 		assertThrown(()->A1.is(eqic("bar"))).asMessage().asOneLine().is("Value did not match expected.  Expect='bar'.  Actual='foo'.");
@@ -72,8 +65,7 @@ public class AssertionPredicates_Test {
 		assertThrown(()->A2.is(eqic("bar"))).asMessage().asOneLine().is("Value did not match expected.  Expect='bar'.  Actual='null'.");
 	}
 
-	@Test
-	public void a06_ne() {
+	@Test void a06_ne() {
 		A1.is(ne("bar"));
 		A1.is(ne((Object)"bar"));
 		assertThrown(()->A1.is(ne("foo"))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='foo'.");
@@ -82,45 +74,39 @@ public class AssertionPredicates_Test {
 		assertThrown(()->A2.is(ne(null))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='null'.");
 	}
 
-	@Test
-	public void a07_type() {
+	@Test void a07_type() {
 		A1.is(type(String.class));
 		A1.is(type(Object.class));
 		assertThrown(()->A1.is(type(Integer.class))).asMessage().asOneLine().is("Value was not expected type.  Expect='java.lang.Integer'.  Actual='java.lang.String'.");
 		assertThrown(()->A2.is(type(String.class))).asMessage().asOneLine().is("Value was not expected type.  Expect='java.lang.String'.  Actual='null'.");
 	}
 
-	@Test
-	public void a08_exactType() {
+	@Test void a08_exactType() {
 		A1.is(exactType(String.class));
 		assertThrown(()->A1.is(exactType(Object.class))).asMessage().asOneLine().is("Value was not expected type.  Expect='java.lang.Object'.  Actual='java.lang.String'.");
 		assertThrown(()->A2.is(exactType(Object.class))).asMessage().asOneLine().is("Value was not expected type.  Expect='java.lang.Object'.  Actual='null'.");
 	}
 
-	@Test
-	public void a03_() {
+	@Test void a03_() {
 		A1.is(match("fo*"));
 		assertThrown(()->A1.is(match("ba*"))).asMessage().asOneLine().is("Value did not match pattern.  Pattern='ba*'.  Value='foo'.");
 		assertThrown(()->A2.is(match("ba*"))).asMessage().asOneLine().is("Value did not match pattern.  Pattern='ba*'.  Value='null'.");
 	}
 
 
-	@Test
-	public void a10_regex() {
+	@Test void a10_regex() {
 		A1.is(regex("fo.*"));
 		assertThrown(()->A1.is(regex("ba.*"))).asMessage().asOneLine().is("Value did not match pattern.  Pattern='ba.*'.  Value='foo'.");
 		assertThrown(()->A2.is(regex("ba.*"))).asMessage().asOneLine().is("Value did not match pattern.  Pattern='ba.*'.  Value='null'.");
 	}
 
-	@Test
-	public void a11_regex_wFlags() {
+	@Test void a11_regex_wFlags() {
 		A1.is(regex("FO.*", CASE_INSENSITIVE));
 		assertThrown(()->A1.is(regex("BA.*", CASE_INSENSITIVE))).asMessage().asOneLine().is("Value did not match pattern.  Pattern='BA.*'.  Value='foo'.");
 		assertThrown(()->A2.is(regex("BA.*", CASE_INSENSITIVE))).asMessage().asOneLine().is("Value did not match pattern.  Pattern='BA.*'.  Value='null'.");
 	}
 
-	@Test
-	public void a12_regex_wPattern() {
+	@Test void a12_regex_wPattern() {
 		var p1 = Pattern.compile("FO.*", CASE_INSENSITIVE);
 		var p2 = Pattern.compile("BA.*", CASE_INSENSITIVE);
 		A1.is(regex(p1));
@@ -128,22 +114,19 @@ public class AssertionPredicates_Test {
 		assertThrown(()->A2.is(regex(p2))).asMessage().asOneLine().is("Value did not match pattern.  Pattern='BA.*'.  Value='null'.");
 	}
 
-	@Test
-	public void a13_and() {
+	@Test void a13_and() {
 		A1.is(and(notNull(),eq("foo"),null,x->x.equals("foo")));
 		assertThrown(()->A1.is(and(isNull()))).asMessage().asOneLine().is("Predicate test #1 failed.  Value was not null.");
 		assertThrows(BasicAssertionError.class, ()->A1.is(and(x -> x.equals("bar"))), "Predicate test #1 failed.");
 	}
 
-	@Test
-	public void a14_or() {
+	@Test void a14_or() {
 		A1.is(or(null,isNull(),eq("foo"),x->x.equals("bar")));
 		assertThrows(BasicAssertionError.class, ()->A1.is(or(isNull())), "No predicate tests passed.");
 		assertThrows(BasicAssertionError.class, ()->A1.is(or(x -> x.equals("bar"))), "No predicate tests passed.");
 	}
 
-	@Test
-	public void a15_not() {
+	@Test void a15_not() {
 		A1.is(not(ne("foo")));
 		assertThrows(BasicAssertionError.class, ()->A2.is(not(ne("foo"))), "Predicate test unexpectedly passed.");
 		assertThrows(BasicAssertionError.class, ()->A1.is(not(eq("foo"))), "Predicate test unexpectedly passed.");
@@ -152,14 +135,12 @@ public class AssertionPredicates_Test {
 		A2.is(not(null));
 	}
 
-	@Test
-	public void a16_test() {
+	@Test void a16_test() {
 		A1.is(test(eq("foo")));
 		assertThrown(()->A1.is(test(eq("bar")))).asMessage().asOneLine().is("Value did not pass test.  Value did not match expected.  Expect='bar'.  Actual='foo'.");
 	}
 
-	@Test
-	public void a17_contains() {
+	@Test void a17_contains() {
 		A1.is(test(contains("o")));
 		assertThrown(()->A1.is(test(contains("x")))).asMessage().asOneLine().is("Value did not pass test.  Value did not contain expected.  Expect='x'.  Actual='foo'.");
 	}

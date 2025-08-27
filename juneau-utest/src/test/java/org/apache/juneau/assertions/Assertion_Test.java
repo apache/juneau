@@ -13,16 +13,14 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.utest.utils.*;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
 @SuppressWarnings("serial")
 @Deprecated
-public class Assertion_Test {
+class Assertion_Test extends SimpleTestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Helpers
@@ -49,8 +47,7 @@ public class Assertion_Test {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_basicErrorHandling() {
+	@Test void a01_basicErrorHandling() {
 		var a = new A("");
 		a.setSilent();
 
@@ -78,8 +75,7 @@ public class Assertion_Test {
 			.asCausedBy().asCausedBy().isNull();
 	}
 
-	@Test
-	public void a02_out() {
+	@Test void a02_out() {
 		var out = new CapturingPrintStream();
 
 		try {

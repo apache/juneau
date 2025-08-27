@@ -14,15 +14,14 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.assertions.Verify.*;
-import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.junit.*;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
-@FixMethodOrder(NAME_ASCENDING)
 @Deprecated
-public class Verify_Test {
+class Verify_Test extends SimpleTestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helpers
@@ -36,8 +35,7 @@ public class Verify_Test {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void a01_basic() {
+	@Test void a01_basic() {
 		var x1 = verify("foo");
 		var x2 = verify(null);
 		var x3 = verify(new Date(0));
