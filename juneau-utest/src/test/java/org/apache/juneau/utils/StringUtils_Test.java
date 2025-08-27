@@ -14,12 +14,7 @@ package org.apache.juneau.utils;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
@@ -800,7 +795,7 @@ class StringUtils_Test extends SimpleTestBase {
 	// abbreviate(String,int)
 	//====================================================================================================
 	@Test void a32_abbrevate() {
-		assertNull("xxx", abbreviate(null, 0));
+		assertNull(abbreviate(null, 0));
 		assertEquals("foo", abbreviate("foo", 3));
 		assertEquals("...", abbreviate("fooo", 3));
 		assertEquals("f...", abbreviate("foooo", 4));

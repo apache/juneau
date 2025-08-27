@@ -16,11 +16,7 @@ import static java.util.Arrays.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.utest.utils.Constants.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -43,6 +39,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
+import org.opentest4j.*;
 
 class RrpcInterface_Test extends SimpleTestBase {
 
@@ -153,13 +150,13 @@ class RrpcInterface_Test extends SimpleTestBase {
 
 		// Various primitives
 		void setNothing();
-		void setInt(int x) throws AssertionError;
+		void setInt(int x) throws AssertionFailedError;
 		void setInteger(Integer x);
 		void setBoolean(boolean x);
 		void setFloat(float x);
 		void setFloatObject(Float x);
 		void setString(String x);
-		void setNullString(String x) throws AssertionError;
+		void setNullString(String x) throws AssertionFailedError;
 		void setInt3dArray(int[][][] x);
 		void setInteger3dArray(Integer[][][] x);
 		void setString3dArray(String[][][] x);
@@ -1360,7 +1357,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void h03_setWrongInt(Input input) {
-		assertThrows(AssertionError.class, ()->input.proxy.setInt(2), "expected:<1> but was:<2>");
+		assertThrows(AssertionError.class, ()->input.proxy.setInt(2), "expected: <1> but was: <2>");
 	}
 
 	@ParameterizedTest
@@ -1402,7 +1399,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void h10_setNullStringBad(Input input) {
-		assertThrows(AssertionError.class, ()->input.proxy.setNullString("foo"), "expected null, but was:<foo>");
+		assertThrows(AssertionError.class, ()->input.proxy.setNullString("foo"), "expected: <null> but was: <foo>");
 	}
 
 	@ParameterizedTest

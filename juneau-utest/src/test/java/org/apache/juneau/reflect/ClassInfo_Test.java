@@ -18,12 +18,7 @@ import static org.apache.juneau.Context.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.reflect.ClassInfo.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.lang.annotation.*;
