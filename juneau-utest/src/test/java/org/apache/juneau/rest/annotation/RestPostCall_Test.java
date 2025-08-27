@@ -15,7 +15,6 @@ package org.apache.juneau.rest.annotation;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.RestResponse;
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 

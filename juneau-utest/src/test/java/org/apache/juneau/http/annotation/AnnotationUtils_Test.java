@@ -18,8 +18,6 @@ import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.oapi.*;

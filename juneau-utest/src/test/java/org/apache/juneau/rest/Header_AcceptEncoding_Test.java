@@ -14,14 +14,11 @@ package org.apache.juneau.rest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 

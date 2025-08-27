@@ -31,7 +31,6 @@ import org.apache.juneau.common.utils.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;

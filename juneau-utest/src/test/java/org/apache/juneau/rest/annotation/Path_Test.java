@@ -25,7 +25,6 @@ import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.RestResponse;
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;

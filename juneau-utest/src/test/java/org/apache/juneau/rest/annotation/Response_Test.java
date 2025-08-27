@@ -21,7 +21,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
