@@ -27,62 +27,46 @@ class MockServletRequest_Test extends SimpleTestBase {
 
 	@Test void a01_uris_basic() {
 		var req = MockServletRequest.create("GET", "/foo");
-
-		assertEquals("", req.getContextPath());
-		assertEquals("/foo", req.getPathInfo());
-		assertEquals("/mock-path/foo", req.getPathTranslated());
-		assertEquals(null, req.getQueryString());
-		assertEquals("/foo", req.getRequestURI());
-		assertEquals("/foo", req.getRequestURL().toString());
-		assertEquals("", req.getServletPath());
+		assertBean(
+			req,
+			"contextPath,pathInfo,pathTranslated,queryString,requestURI,requestURL,servletPath",
+			",/foo,/mock-path/foo,null,/foo,/foo,"
+		);
 	}
 
 	@Test void a02_uris_full() {
 		var req = MockServletRequest.create("GET", "http://localhost:8080/foo?bar=baz#quz");
-
-		assertEquals("", req.getContextPath());
-		assertEquals("/foo", req.getPathInfo());
-		assertEquals("/mock-path/foo", req.getPathTranslated());
-		assertEquals("bar=baz", req.getQueryString());
-		assertEquals("/foo", req.getRequestURI());
-		assertEquals("http://localhost:8080/foo", req.getRequestURL().toString());
-		assertEquals("", req.getServletPath());
+		assertBean(
+			req,
+			"contextPath,pathInfo,pathTranslated,queryString,requestURI,requestURL,servletPath",
+			",/foo,/mock-path/foo,bar=baz,/foo,http://localhost:8080/foo,"
+		);
 	}
 
 	@Test void a03_uris_full2() {
 		var req = MockServletRequest.create("GET", "http://localhost:8080/foo/bar/baz?bar=baz#quz");
-
-		assertEquals("", req.getContextPath());
-		assertEquals("/foo/bar/baz", req.getPathInfo());
-		assertEquals("/mock-path/foo/bar/baz", req.getPathTranslated());
-		assertEquals("bar=baz", req.getQueryString());
-		assertEquals("/foo/bar/baz", req.getRequestURI());
-		assertEquals("http://localhost:8080/foo/bar/baz", req.getRequestURL().toString());
-		assertEquals("", req.getServletPath());
+		assertBean(
+			req,
+			"contextPath,pathInfo,pathTranslated,queryString,requestURI,requestURL,servletPath",
+			",/foo/bar/baz,/mock-path/foo/bar/baz,bar=baz,/foo/bar/baz,http://localhost:8080/foo/bar/baz,"
+		);
 	}
 
 	@Test void a04_uris_contextPath() {
 		var req = MockServletRequest.create("GET", "http://localhost:8080/foo/bar/baz?bar=baz#quz").contextPath("/foo");
-
-		assertEquals("/foo", req.getContextPath());
-		assertEquals("/bar/baz", req.getPathInfo());
-		assertEquals("/mock-path/bar/baz", req.getPathTranslated());
-		assertEquals("bar=baz", req.getQueryString());
-		assertEquals("/foo/bar/baz", req.getRequestURI());
-		assertEquals("http://localhost:8080/foo/bar/baz", req.getRequestURL().toString());
-		assertEquals("", req.getServletPath());
+		assertBean(
+			req,
+			"contextPath,pathInfo,pathTranslated,queryString,requestURI,requestURL,servletPath",
+			"/foo,/bar/baz,/mock-path/bar/baz,bar=baz,/foo/bar/baz,http://localhost:8080/foo/bar/baz,"
+		);
 	}
 
 	@Test void a05_uris_servletPath() {
-		var req = MockServletRequest.create("GET", "http://localhost:8080/foo/bar/baz?bar=baz#quz").servletPath("/foo");
-
-		assertEquals("", req.getContextPath());
-		assertEquals("/bar/baz", req.getPathInfo());
-		assertEquals("/mock-path/bar/baz", req.getPathTranslated());
-		assertEquals("bar=baz", req.getQueryString());
-		assertEquals("/foo/bar/baz", req.getRequestURI());
-		assertEquals("http://localhost:8080/foo/bar/baz", req.getRequestURL().toString());
-		assertEquals("/foo", req.getServletPath());
+		assertBean(
+			MockServletRequest.create("GET", "http://localhost:8080/foo/bar/baz?bar=baz#quz").servletPath("/foo"),
+			"contextPath,pathInfo,pathTranslated,queryString,requestURI,requestURL,servletPath",
+			",/bar/baz,/mock-path/bar/baz,bar=baz,/foo/bar/baz,http://localhost:8080/foo/bar/baz,/foo"
+		);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -91,19 +75,23 @@ class MockServletRequest_Test extends SimpleTestBase {
 
 	@Test void b01_query_basic() {
 		var req = MockServletRequest.create("GET", "/foo?bar=baz&bing=qux");
-
-		assertEquals("bar=baz&bing=qux", req.getQueryString());
-		assertJson(req.getParameterMap(), "{bar:['baz'],bing:['qux']}");
-		assertEquals("baz", req.getParameter("bar"));		assertJson(req.getParameterNames(), "['bar','bing']");
+		assertBean(
+			req,
+			"queryString,parameterMap,parameterNames",
+			"bar=baz&bing=qux,{bar=[baz],bing=[qux]},[bar,bing]"
+		);
+		assertEquals("baz", req.getParameter("bar"));
 		assertJson(req.getParameterValues("bar"), "['baz']");
 	}
 
 	@Test void b02_query_multivalues() {
 		var req = MockServletRequest.create("GET", "/foo?bar=baz&bar=bing");
-
-		assertEquals("bar=baz&bar=bing", req.getQueryString());
-		assertJson(req.getParameterMap(), "{bar:['baz','bing']}");
-		assertEquals("baz", req.getParameter("bar"));		assertJson(req.getParameterNames(), "['bar']");
+		assertBean(
+			req,
+			"queryString,parameterMap,parameterNames",
+			"bar=baz&bar=bing,{bar=[baz,bing]},[bar]"
+		);
+		assertEquals("baz", req.getParameter("bar"));
 		assertJson(req.getParameterValues("bar"), "['baz','bing']");
 	}
 }

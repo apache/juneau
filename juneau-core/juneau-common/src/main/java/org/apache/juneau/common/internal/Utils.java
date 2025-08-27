@@ -830,6 +830,12 @@ public class Utils {
 			return o2.entrySet().stream().map(Utils::r).collect(joining(",","{","}"));
 		if (o instanceof Map.Entry<?,?> o2)
 			return r(o2.getKey()) + '=' + r(o2.getValue());
+		if (o instanceof Iterable<?> o2)
+			return r(toList(o2));
+		if (o instanceof Iterator<?> o2)
+			return r(toList(o2));
+		if (o instanceof Enumeration<?> o2)
+			return r(toList(o2));
 		if (o instanceof GregorianCalendar o2)
 			return o2.toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT);
 		if (o instanceof Date o2)
@@ -1499,5 +1505,18 @@ public class Utils {
 		} catch (Throwable t) {
 			throw ThrowableUtils.asRuntimeException(t);
 		}
+	}
+
+	public static final <T> List<T> toList(Iterable<T> value) {
+		return StreamSupport.stream(value.spliterator(), false).toList();
+	}
+
+	public static final <T> List<T> toList(Iterator<T> value) {
+		Iterable<T> v2 = () -> value;
+		return StreamSupport.stream(v2.spliterator(), false).toList();
+	}
+
+	public static final <T> List<T> toList(Enumeration<T> value) {
+		return Collections.list(value);
 	}
 }

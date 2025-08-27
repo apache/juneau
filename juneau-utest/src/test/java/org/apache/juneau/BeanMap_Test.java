@@ -986,19 +986,12 @@ class BeanMap_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a18_propertyNameFactoryDashedLC1() {
 		var m = bc.newBeanMap(P1.class).load("{'foo':1,'bar-baz':2,'bing-boo-url':3}");
-		assertEquals(1, m.get("foo"));
-		assertEquals(2, m.get("bar-baz"));
-		assertEquals(3, m.get("bing-boo-url"));
-		var b = m.getBean();
-		assertEquals(1, b.foo);
-		assertEquals(2, b.barBaz);
-		assertEquals(3, b.bingBooURL);
+		assertMap(m, "foo,bar-baz,bing-boo-url", "1,2,3");
+		assertBean(m.getBean(), "foo,barBaz,bingBooURL", "1,2,3");
 		m.put("foo", 4);
 		m.put("bar-baz", 5);
 		m.put("bing-boo-url", 6);
-		assertEquals(4, b.foo);
-		assertEquals(5, b.barBaz);
-		assertEquals(6, b.bingBooURL);
+		assertBean(m.getBean(), "foo,barBaz,bingBooURL", "4,5,6");
 	}
 
 	@Bean(propertyNamer=PropertyNamerDLC.class)
@@ -1008,19 +1001,12 @@ class BeanMap_Test extends SimpleTestBase {
 
 	@Test void a19_propertyNameFactoryDashedLC1_usingConfig() {
 		var m = bc.copy().applyAnnotations(P1cConfig.class).build().newBeanMap(P1c.class).load("{'foo':1,'bar-baz':2,'bing-boo-url':3}");
-		assertEquals(1, m.get("foo"));
-		assertEquals(2, m.get("bar-baz"));
-		assertEquals(3, m.get("bing-boo-url"));
-		var b = m.getBean();
-		assertEquals(1, b.foo);
-		assertEquals(2, b.barBaz);
-		assertEquals(3, b.bingBooURL);
+		assertMap(m, "foo,bar-baz,bing-boo-url", "1,2,3");
+		assertBean(m.getBean(), "foo,barBaz,bingBooURL", "1,2,3");
 		m.put("foo", 4);
 		m.put("bar-baz", 5);
 		m.put("bing-boo-url", 6);
-		assertEquals(4, b.foo);
-		assertEquals(5, b.barBaz);
-		assertEquals(6, b.bingBooURL);
+		assertBean(m.getBean(), "foo,barBaz,bingBooURL", "4,5,6");
 	}
 
 	@Bean(on="Dummy1", propertyNamer=PropertyNamerDLC.class)

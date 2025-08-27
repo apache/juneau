@@ -335,10 +335,14 @@ public class TestUtils extends Utils2 {
 		return spn.stream().map(x -> getReadableEntry(e, x)).collect(joining(","));
 	}
 
+	@SuppressWarnings("unchecked")
 	private static Object getEntry(Object o, String name) {
-		if (o instanceof List) return List.class.cast(o).get(Integer.parseInt(name));
+		if (o instanceof List o2) return o2.get(Integer.parseInt(name));
 		if (o.getClass().isArray()) return Array.get(o, Integer.parseInt(name));
-		if (o instanceof Map) return Map.class.cast(o).get(name);
+		if (o instanceof Map o2) return o2.get(name);
+		if (o instanceof Iterable o2) return toList(o2).get(Integer.parseInt(name));
+		if (o instanceof Iterator o2) return toList(o2).get(Integer.parseInt(name));
+		if (o instanceof Enumeration o2) return toList(o2).get(Integer.parseInt(name));
 		return TestUtils.getBeanProp(o, name);
 	}
 

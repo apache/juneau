@@ -71,20 +71,13 @@ class Swagger_FormData_Test extends SimpleTestBase {
 	@Test void a01_fromPojo() {
 		var s = getSwagger(A.class);
 		var x = s.getParameterInfo("/a","get","formData","F");
-
-		assertEquals("F", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "F,a\nb,string");
 
 		x = s.getParameterInfo("/b","put","formData","F");
-		assertEquals("F", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "F,a\nb,string");
 
 		x = s.getParameterInfo("/c","post","formData","F");
-		assertEquals("F", x.getName());
-		assertEquals("b\nc", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "F,b\nc,string");
 
 		x = s.getParameterInfo("/d","delete","formData","F");
 		assertEquals("F", x.getName());
@@ -168,20 +161,13 @@ class Swagger_FormData_Test extends SimpleTestBase {
 	@Test void d01_fromParameter() {
 		var s = getSwagger(D.class);
 		var x = s.getParameterInfo("/a","get","formData","F");
-
-		assertEquals("F", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "F,a\nb,string");
 
 		x = s.getParameterInfo("/b","put","formData","F");
-		assertEquals("F", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "F,a\nb,string");
 
 		x = s.getParameterInfo("/c","post","formData","F");
-		assertEquals("F", x.getName());
-		assertEquals("b\nc", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "F,b\nc,string");
 
 		x = s.getParameterInfo("/d","delete","formData","F");
 		assertEquals("F", x.getName());
