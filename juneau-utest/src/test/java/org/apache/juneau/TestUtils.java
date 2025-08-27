@@ -331,8 +331,8 @@ public class TestUtils extends Utils2 {
 		var pn = i == -1 ? name : name.substring(0, i);
 		var spn = i == -1 ? null : Utils.splitNestedInner(name);
 		var e = TestUtils.getEntry(o, pn);
-		if (spn == null) return r(e);
-		return spn.stream().map(x -> getReadableEntry(e, x)).collect(joining(","));
+		if (spn == null || e == null) return r(e);
+		return spn.stream().map(x -> getReadableEntry(e, x)).collect(joining(",","{","}"));
 	}
 
 	@SuppressWarnings("unchecked")

@@ -70,19 +70,13 @@ class Swagger_Query_Test extends SimpleTestBase {
 		var s = getSwagger(A.class);
 		var x = s.getParameterInfo("/a","get","query","Q");
 
-		assertEquals("Q", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "Q,a\nb,string");
 
 		x = s.getParameterInfo("/b","put","query","Q");
-		assertEquals("Q", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "Q,a\nb,string");
 
 		x = s.getParameterInfo("/c","post","query","Q");
-		assertEquals("Q", x.getName());
-		assertEquals("b\nc", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "Q,b\nc,string");
 
 		x = s.getParameterInfo("/d","delete","query","Q");
 		assertEquals("Q", x.getName());
@@ -169,19 +163,13 @@ class Swagger_Query_Test extends SimpleTestBase {
 		var s = getSwagger(D.class);
 		var x = s.getParameterInfo("/a","get","query","Q");
 
-		assertEquals("Q", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "Q,a\nb,string");
 
 		x = s.getParameterInfo("/b","put","query","Q");
-		assertEquals("Q", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "Q,a\nb,string");
 
 		x = s.getParameterInfo("/c","post","query","Q");
-		assertEquals("Q", x.getName());
-		assertEquals("b\nc", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "Q,b\nc,string");
 
 		x = s.getParameterInfo("/d","delete","query","Q");
 		assertEquals("Q", x.getName());

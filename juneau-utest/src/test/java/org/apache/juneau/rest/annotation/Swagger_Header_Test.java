@@ -155,19 +155,13 @@ class Swagger_Header_Test extends SimpleTestBase {
 		var s = getSwagger(D.class);
 		var x = s.getParameterInfo("/a","get","header","H");
 
-		assertEquals("H", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "H,a\nb,string");
 
 		x = s.getParameterInfo("/b","put","header","H");
-		assertEquals("H", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "H,a\nb,string");
 
 		x = s.getParameterInfo("/c","post","header","H");
-		assertEquals("H", x.getName());
-		assertEquals("b\nc", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "H,b\nc,string");
 
 		x = s.getParameterInfo("/d","delete","header","H");
 		assertEquals("H", x.getName());

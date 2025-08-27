@@ -107,23 +107,17 @@ class Swagger_Path_Test extends SimpleTestBase {
 		var s = getSwagger(A.class);
 		var x = s.getParameterInfo("/a/{P}","get","path","P");
 
-		assertEquals("P", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "P,a\nb,string");
 		assertJson(x.getEnum(), "['a','b']");
 		assertJson(x, "{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b']}");
 
 		x = s.getParameterInfo("/b/{P}","put","path","P");
-		assertEquals("P", x.getName());
-		assertEquals("a\nb", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "P,a\nb,string");
 		assertJson(x.getEnum(), "['a','b']");
 		assertJson(x, "{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b']}");
 
 		x = s.getParameterInfo("/c/{P}","post","path","P");
-		assertEquals("P", x.getName());
-		assertEquals("b\nc", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "name,description,type", "P,b\nc,string");
 		assertJson(x.getEnum(), "['b','c']");
 		assertJson(x, "{'in':'path',name:'P',type:'string',description:'b\\nc',required:true,'enum':['b','c']}");
 
