@@ -1328,6 +1328,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	@ParameterizedTest
 	@MethodSource("input")
 	void g02_throwException2(Input input) {

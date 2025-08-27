@@ -247,7 +247,8 @@ public class RestAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder converters(Class<? extends RestConverter>...value) {
+		@SafeVarargs
+		public final Builder converters(Class<? extends RestConverter>...value) {
 			this.converters = value;
 			return this;
 		}
@@ -357,7 +358,8 @@ public class RestAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder encoders(Class<? extends Encoder>...value) {
+		@SafeVarargs
+		public final Builder encoders(Class<? extends Encoder>...value) {
 			this.encoders = value;
 			return this;
 		}
@@ -368,7 +370,8 @@ public class RestAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder guards(Class<? extends RestGuard>...value) {
+		@SafeVarargs
+		public final Builder guards(Class<? extends RestGuard>...value) {
 			this.guards = value;
 			return this;
 		}
@@ -467,7 +470,8 @@ public class RestAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder responseProcessors(Class<? extends ResponseProcessor>...value) {
+		@SafeVarargs
+		public final Builder responseProcessors(Class<? extends ResponseProcessor>...value) {
 			this.responseProcessors = value;
 			return this;
 		}
@@ -489,7 +493,8 @@ public class RestAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder restOpArgs(Class<? extends RestOpArg>...value) {
+		@SafeVarargs
+		public final Builder restOpArgs(Class<? extends RestOpArg>...value) {
 			this.restOpArgs = value;
 			return this;
 		}
@@ -533,7 +538,8 @@ public class RestAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder serializers(Class<? extends Serializer>...value) {
+		@SafeVarargs
+		public final Builder serializers(Class<? extends Serializer>...value) {
 			this.serializers = value;
 			return this;
 		}

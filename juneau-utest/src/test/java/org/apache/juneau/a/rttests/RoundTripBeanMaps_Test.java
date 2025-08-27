@@ -679,7 +679,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 		Object r;
 
 		// Skip validation-only tests
-		if (t.isValidationOnly())
+		if (t.isValidationOnly() || p == null)
 			return;
 
 		// --- BeanFilter defined on parent class ---

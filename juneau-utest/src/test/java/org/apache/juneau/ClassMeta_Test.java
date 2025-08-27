@@ -274,7 +274,7 @@ class ClassMeta_Test extends SimpleTestBase {
 	@A(2) interface CI2 extends CI1 {}
 	@A(3) interface CI3 {}
 	@A(4) interface CI4 {}
-	@A(5) static class C1 implements CI1, CI2 {}
+	@SuppressWarnings("unused") @A(5) static class C1 implements CI1, CI2 {}
 	@A(6) static class C2 extends C1 implements CI3 {}
 	@A(7) static class C3 extends C2 {}
 	static class C4 extends C3 {}

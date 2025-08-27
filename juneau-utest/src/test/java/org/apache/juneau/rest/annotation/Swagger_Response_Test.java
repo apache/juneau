@@ -251,6 +251,7 @@ class Swagger_Response_Test extends SimpleTestBase {
 	}
 
 	@Rest
+	@SuppressWarnings("unused")
 	public static class D {
 
 		@Response(
@@ -328,6 +329,7 @@ class Swagger_Response_Test extends SimpleTestBase {
 	}
 
 	@Rest
+	@SuppressWarnings("unused")
 	public static class E {
 
 		@Response(schema=@Schema(type="number"))
@@ -348,6 +350,7 @@ class Swagger_Response_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
+	@SuppressWarnings("unused")
 	public static class F {
 
 		@Response(examples={" foo:'b' "})

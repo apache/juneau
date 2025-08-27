@@ -291,6 +291,7 @@ class ExecutableInfo_Test extends SimpleTestBase {
 	// Exceptions
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings("unused")
 	static class D {
 		public D() throws IOException {}  // NOSONAR
 		public void m() throws IOException {}  // NOSONAR

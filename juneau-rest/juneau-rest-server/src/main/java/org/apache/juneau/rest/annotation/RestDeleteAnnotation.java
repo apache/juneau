@@ -184,7 +184,8 @@ public class RestDeleteAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder encoders(Class<? extends Encoder>...value) {
+		@SafeVarargs
+		public final Builder encoders(Class<? extends Encoder>...value) {
 			this.encoders = value;
 			return this;
 		}
@@ -195,7 +196,8 @@ public class RestDeleteAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder guards(Class<? extends RestGuard>...value) {
+		@SafeVarargs
+		public final Builder guards(Class<? extends RestGuard>...value) {
 			this.guards = value;
 			return this;
 		}
@@ -206,7 +208,8 @@ public class RestDeleteAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder matchers(Class<? extends RestMatcher>...value) {
+		@SafeVarargs
+		public final Builder matchers(Class<? extends RestMatcher>...value) {
 			this.matchers = value;
 			return this;
 		}

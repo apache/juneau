@@ -532,7 +532,7 @@ public class TestUtils extends Utils {
 		try {
 			snippet.run();
 		} catch (Throwable e) {
-			fail("Exception thrown.");
+			fail("Exception thrown.", e);
 		}
 	}
 

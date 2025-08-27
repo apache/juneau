@@ -111,7 +111,8 @@ public class RestOptionsAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder converters(Class<? extends RestConverter>...value) {
+		@SafeVarargs
+		public final Builder converters(Class<? extends RestConverter>...value) {
 			this.converters = value;
 			return this;
 		}
@@ -199,7 +200,8 @@ public class RestOptionsAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder encoders(Class<? extends Encoder>...value) {
+		@SafeVarargs
+		public final Builder encoders(Class<? extends Encoder>...value) {
 			this.encoders = value;
 			return this;
 		}
@@ -210,7 +212,8 @@ public class RestOptionsAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder guards(Class<? extends RestGuard>...value) {
+		@SafeVarargs
+		public final Builder guards(Class<? extends RestGuard>...value) {
 			this.guards = value;
 			return this;
 		}
@@ -221,7 +224,8 @@ public class RestOptionsAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder matchers(Class<? extends RestMatcher>...value) {
+		@SafeVarargs
+		public final Builder matchers(Class<? extends RestMatcher>...value) {
 			this.matchers = value;
 			return this;
 		}
@@ -276,7 +280,8 @@ public class RestOptionsAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder serializers(Class<? extends Serializer>...value) {
+		@SafeVarargs
+		public final Builder serializers(Class<? extends Serializer>...value) {
 			this.serializers = value;
 			return this;
 		}

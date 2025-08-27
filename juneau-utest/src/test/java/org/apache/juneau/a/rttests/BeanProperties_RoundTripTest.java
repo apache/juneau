@@ -17,7 +17,7 @@ import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -35,6 +35,7 @@ class BeanProperties_RoundTripTest extends RoundTripTest_Base {
 		public List<Long>[] f1;
 	}
 
+	@SuppressWarnings("unchecked")
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a01_arrayOfListOfLongs(RoundTripTester t) throws Exception {
@@ -53,7 +54,7 @@ class BeanProperties_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void a02_listOfArrayOfLongs(RoundTripTester t) throws Exception {
 		var o = new A02();
-		o.f1 = TestUtils.<Long[]>alist(new Long[]{123L});
+		o.f1 = Utils.<Long[]>alist(new Long[]{123L});
 		o = t.roundTrip(o);
 		assertEquals(123, o.f1.get(0)[0].intValue());
 	}
@@ -62,6 +63,7 @@ class BeanProperties_RoundTripTest extends RoundTripTest_Base {
 		public List<Long>[][] f1;
 	}
 
+	@SuppressWarnings("unchecked")
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a03_2dArrayOfListOfLongs(RoundTripTester t) throws Exception {
@@ -80,7 +82,7 @@ class BeanProperties_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void a04_listOf2dArrayOfLongs(RoundTripTester t) throws Exception {
 		var o = new A04();
-		o.f1 = TestUtils.<Long[][]>alist(new Long[][]{new Long[]{123L}});
+		o.f1 = Utils.<Long[][]>alist(new Long[][]{new Long[]{123L}});
 		o = t.roundTrip(o);
 		assertEquals(123, o.f1.get(0)[0][0].intValue());
 	}

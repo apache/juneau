@@ -303,6 +303,7 @@ class Remote_Test extends SimpleTestBase {
 	}
 
 	@Rest(path="/C4")
+	@SuppressWarnings("unused")
 	public static class C4a implements BasicJson5Config {
 		@RestOp
 		public String x1() throws C4c {
