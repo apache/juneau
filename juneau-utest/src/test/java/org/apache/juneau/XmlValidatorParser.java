@@ -30,6 +30,7 @@ import org.apache.juneau.xml.*;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  */
+@SuppressWarnings("unchecked")
 public class XmlValidatorParser extends XmlParser {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -50,7 +51,7 @@ public class XmlValidatorParser extends XmlParser {
 					@Override
 					protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 						try {
-							return (T)validate(pipe.getReader());
+							return type.cast(validate(pipe.getReader()));
 						} catch (Exception e) {
 							throw new ParseException(e);
 						}

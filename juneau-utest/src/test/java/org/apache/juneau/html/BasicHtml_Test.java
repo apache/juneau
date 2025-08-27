@@ -16,7 +16,6 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -40,8 +39,6 @@ class BasicHtml_Test extends SimpleTestBase {
 		s3 = HtmlSerializer.DEFAULT_SQ.copy().applyAnnotations(ANNOTATED_CLASSES).build();
 	private static final HtmlParser parser = HtmlParser.DEFAULT.copy().applyAnnotations(ANNOTATED_CLASSES).build();
 
-	private static final BeanSession BEANSESSION = BeanContext.DEFAULT_SESSION;
-
 	private static Input[] INPUT = {
 		input(
 			"SimpleTypes-1",
@@ -54,7 +51,7 @@ class BasicHtml_Test extends SimpleTestBase {
 		),
 		input(
 			"SimpleTypes-2",
-			boolean.class,
+			Boolean.class,
 			true,
 			"<boolean>true</boolean>",
 			"<boolean>true</boolean>",
@@ -63,7 +60,7 @@ class BasicHtml_Test extends SimpleTestBase {
 		),
 		input(
 			"SimpleTypes-3",
-			int.class,
+			Integer.class,
 			123,
 			"<number>123</number>",
 			"<number>123</number>",
@@ -72,7 +69,7 @@ class BasicHtml_Test extends SimpleTestBase {
 		),
 		input(
 			"SimpleTypes-4",
-			float.class,
+			Float.class,
 			1.23f,
 			"<number>1.23</number>",
 			"<number>1.23</number>",
@@ -140,7 +137,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<ul><li><ul><li>foo</li></ul></li></ul>",
 			x -> assertType(String[][].class, x)
 		),
-		new Input<Map<String,String>>(
+		input(
 			"MapWithStrings",
 			MapWithStrings.class,
 			new MapWithStrings().append("k1", "v1").append("k2", null),
@@ -184,7 +181,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			""".replaceAll("(?m)^\\s+|\\R", ""),
 			x -> assertType(String.class, x.get("k1"))
 		),
-		new Input<Map<String,Number>>(
+		input(
 			"MapsWithNumbers",
 			MapWithNumbers.class,
 			new MapWithNumbers().append("k1", 123).append("k2", 1.23).append("k3", null),
@@ -240,9 +237,9 @@ class BasicHtml_Test extends SimpleTestBase {
 			""".replaceAll("(?m)^\\s+|\\R", ""),
 			x -> assertType(Number.class, x.get("k1"))
 		),
-		new Input<Map<String,Object>>(
+		input(
 			"MapWithObjects",
-			getType(Map.class,String.class,Object.class),
+			MapWithObjects.class,
 			new MapWithObjects().append("k1", "v1").append("k2", 123).append("k3", 1.23).append("k4", true).append("k5", null),
 			"""
 			<table>
@@ -320,16 +317,16 @@ class BasicHtml_Test extends SimpleTestBase {
 			""".replaceAll("(?m)^\\s+|\\R", ""),
 			x -> { assertType(String.class, x.get("k1")); assertType(Integer.class, x.get("k2")); assertType(Float.class, x.get("k3")); assertType(Boolean.class, x.get("k4")); }
 		),
-		new Input<List<String>>(
+		input(
 			"ListWithStrings",
-			getType(List.class,String.class),
+			ListWithStrings.class,
 			new ListWithStrings().append("foo").append(null),
 			"<ul><li>foo</li><li><null/></li></ul>",
 			"<ul>\n\t<li>foo</li>\n\t<li><null/></li>\n</ul>\n",
 			"<ul><li>foo</li><li><null/></li></ul>",
 			x -> assertType(String.class, x.get(0))
 		),
-		new Input<List<Number>>(
+		input(
 			"ListWithNumbers",
 			ListWithNumbers.class,
 			new ListWithNumbers().append(123).append(1.23).append(null),
@@ -338,9 +335,9 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<ul><li>123</li><li>1.23</li><li><null/></li></ul>",
 			x -> { assertType(Integer.class, x.get(0)); assertType(Float.class, x.get(1)); }
 		),
-		new Input<List<Object>>(
+		input(
 			"ListWithObjects",
-			getType(List.class,Object.class),
+			ListWithObjects.class,
 			new ListWithObjects().append("foo").append(123).append(1.23).append(true).append(null),
 			"<ul><li>foo</li><li><number>123</number></li><li><number>1.23</number></li><li><boolean>true</boolean></li><li><null/></li></ul>",
 			"<ul>\n\t<li>foo</li>\n\t<li><number>123</number></li>\n\t<li><number>1.23</number></li>\n\t<li><boolean>true</boolean></li>\n\t<li><null/></li>\n</ul>\n",
@@ -1237,7 +1234,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
 			x -> assertType(LinkBean.class, x[0])
 		),
-		new Input<List<LinkBean>>(
+		input(
 			"ListWithLinkBeans",
 			ListWithLinkBeans.class,
 			new ListWithLinkBeans().append(new LinkBean().init()).append(new LinkBean().init()),
@@ -1353,7 +1350,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
 			x -> assertType(LinkBeanC.class, x[0])
 		),
-		new Input<List<LinkBeanC>>(
+		input(
 			"ListWithLinkBeansC",
 			ListWithLinkBeansC.class,
 			new ListWithLinkBeansC().append(new LinkBeanC().init()).append(new LinkBeanC().init()),
@@ -2516,28 +2513,21 @@ class BasicHtml_Test extends SimpleTestBase {
 		return Stream.of(INPUT).map(x -> args(x));
 	}
 
-	private static <T> Input<T> input(String label, Type type, T in, String e1, String e2, String e3) {
+	private static <T> Input<T> input(String label, Class<T> type, T in, String e1, String e2, String e3) {
 		return input(label, type, in, e1, e2, e3, null);
 	}
 
-	private static <T> Input<T> input(String label, Type type, T in, String e1, String e2, String e3, Consumer<T> verifier) {
+	private static <T> Input<T> input(String label, Class<T> type, T in, String e1, String e2, String e3, Consumer<T> verifier) {
 		return new Input<>(label, type, in, e1, e2, e3, verifier);
-	}
-
-	/**
-	 * Creates a ClassMeta for the given types.
-	 */
-	private static final Type getType(Type type, Type...args) {
-		return BEANSESSION.getClassMeta(type, args);
 	}
 
 	public static class Input<T> {
 		private final String label, e1, e2, e3;
-		private final Type type;
+		private final Class<T> type;
 		private final Object in;
 		private final Consumer<T> verifier;
 
-		public Input(String label, Type type, T in, String e1, String e2, String e3, Consumer<T> verifier) {
+		public Input(String label, Class<T> type, T in, String e1, String e2, String e3, Consumer<T> verifier) {
 			this.label = label;
 			this.type = type;
 			this.in = in;
@@ -2567,7 +2557,7 @@ class BasicHtml_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("input")
-	void a2_parseNormal(Input input) {
+	<T> void a2_parseNormal(Input<T> input) {
 		try {
 			var r = s1.serialize(input.in);
 			var o = parser.parse(r, input.type);
@@ -2582,11 +2572,11 @@ class BasicHtml_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("input")
-	void a3_verifyNormal(Input input) {
+	<T> void a3_verifyNormal(Input<T> input) {
 		try {
 			var r = s1.serialize(input.in);
 			var o = parser.parse(r, input.type);
-			input.verify(o);
+			input.verify(input.type.cast(o));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2609,7 +2599,7 @@ class BasicHtml_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("input")
-	void b2_parseReadable(Input input) {
+	<T> void b2_parseReadable(Input<T> input) {
 		try {
 			var r = s2.serialize(input.in);
 			var o = parser.parse(r, input.type);
@@ -2624,7 +2614,7 @@ class BasicHtml_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("input")
-	void b3_verifyReadable(Input input) {
+	<T> void b3_verifyReadable(Input<T> input) {
 		try {
 			var r = s2.serialize(input.in);
 			var o = parser.parse(r, input.type);
@@ -2651,7 +2641,7 @@ class BasicHtml_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("input")
-	void c2_parseAbridged(Input input) {
+	<T> void c2_parseAbridged(Input<T> input) {
 		try {
 			var r = s3.serialize(input.in);
 			var o = parser.parse(r, input.type);
@@ -2666,7 +2656,7 @@ class BasicHtml_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("input")
-	void c3_verifyAbridged(Input input) {
+	void c3_verifyAbridged(Input<Object> input) {
 		try {
 			var r = s3.serialize(input.in);
 			var o = parser.parse(r, input.type);
@@ -3114,5 +3104,4 @@ class BasicHtml_Test extends SimpleTestBase {
 			return this;
 		}
 	}
-
 }

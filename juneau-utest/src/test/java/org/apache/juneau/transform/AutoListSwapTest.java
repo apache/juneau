@@ -26,7 +26,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"unchecked","rawtypes"})
 class AutoListSwapTest extends SimpleTestBase {
 
 	private static final List<String> STRINGLIST = list("foo");

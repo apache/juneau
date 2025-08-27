@@ -80,7 +80,7 @@ public class FakeReaderParser extends ReaderParser implements HttpPartParser {
 	@Override
 	public <T> T doParse(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		if (function != null)
-			return (T)function.apply((ReaderParserSession)session, pipe.asString(), type);
+			return type.cast(function.apply((ReaderParserSession)session, pipe.asString(), type));
 		return null;
 	}
 
@@ -89,7 +89,7 @@ public class FakeReaderParser extends ReaderParser implements HttpPartParser {
 		return new HttpPartParserSession() {
 			@Override
 			public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
-				return (T)partFunction.apply(partType, schema, in, toType);
+				return toType.cast(partFunction.apply(partType, schema, in, toType));
 			}
 		};
 	}

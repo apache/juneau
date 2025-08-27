@@ -149,6 +149,7 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test void a05_collections() throws Exception {
 		var s = UrlEncodingSerializer.DEFAULT;
 		var p2 = UrlEncodingParser.DEFAULT;

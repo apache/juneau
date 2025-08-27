@@ -66,7 +66,7 @@ class DataConversion_Test extends SimpleTestBase {
 		assertEquals("{foo:123}", m.getString("x"));
 
 		// *** Collection ***
-		var s = new HashSet();
+		var s = new HashSet<Integer>();
 		s.add(123);
 		m.put("x", s);
 		assertEquals("[123]", m.getString("x"));

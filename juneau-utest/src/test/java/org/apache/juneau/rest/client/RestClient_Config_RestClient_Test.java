@@ -358,7 +358,7 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void a11_serializers_parsers() throws Exception {
-		var x = MockRestClient.create(A.class).serializers(XmlSerializer.class,JsonSerializer.class).parsers(XmlParser.class,JsonParser.class).build();
+		var x = MockRestClient.create(A.class).serializers(a(XmlSerializer.class,JsonSerializer.class)).parsers(a(XmlParser.class,JsonParser.class)).build();
 
 		assertThrowsWithMessage(RestCallException.class, "Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.", ()->x.post("/echoBody",bean).run());
 

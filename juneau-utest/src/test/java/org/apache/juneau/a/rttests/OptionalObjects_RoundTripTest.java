@@ -357,8 +357,8 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b07a_arrayOfOptionalIntegers(RoundTripTester t) throws Exception {
 		var x = new B07();
-		x.f1 = new Optional[]{opt(123)};
-		x.f2 = new List[]{alist(123)};
+		x.f1 = a(opt(123));
+		x.f2 = a(alist(123));
 		x = t.roundTrip(x);
 		assertEquals(123, x.f1[0].get().intValue());
 	}
@@ -367,17 +367,18 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void b07b_arrayOfOptionalIntegers_listWithEmpty(RoundTripTester t) throws Exception {
 		var x = new B07();
-		x.f1 = new Optional[]{empty()};
+		x.f1 = a(empty());
 		x = t.roundTrip(x);
 		assertEquals(1, x.f1.length);
 		assertFalse(x.f1[0].isPresent());
 	}
 
+	@SuppressWarnings("unchecked")
 	@ParameterizedTest
 	@MethodSource("testers")
 	void b07c_arrayOfOptionalIntegers_listWithNull(RoundTripTester t) throws Exception {
 		var x = new B07();
-		x.f1 = new Optional[]{null};
+		x.f1 = a(n(Optional.class));
 		x = t.roundTrip(x);
 		if (t.isValidationOnly())
 			return;

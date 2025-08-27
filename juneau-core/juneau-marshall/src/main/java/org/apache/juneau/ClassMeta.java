@@ -2193,6 +2193,16 @@ public final class ClassMeta<T> implements Type {
 		return t;
 	}
 
+	/**
+	 * Cast this object to this type.
+	 * 
+	 * @param o The object to cast.
+	 * @return The cast object.
+	 */
+	public T cast(Object o) {
+		return this.innerClass.cast(o);
+	}
+
 	@Override /* Object */
 	public int hashCode() {
 		return innerClass.hashCode();

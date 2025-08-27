@@ -464,7 +464,7 @@ class BeanMap_Test extends SimpleTestBase {
 		assertNotNull(t.b);
 		assertEquals("foo", t.b.s);
 
-		var m2 = new TreeMap();
+		var m2 = new TreeMap<String,Object>();
 		m2.put("s", "bar");
 		m.put("b", m2);
 		assertNotNull(t.b);
@@ -515,7 +515,7 @@ class BeanMap_Test extends SimpleTestBase {
 		assertNotNull(t.b);
 		assertEquals("foo", t.b.s);
 
-		var m2 = new TreeMap();
+		var m2 = new TreeMap<String,Object>();
 		m2.put("s", "bar");
 		m.put("b", m2);
 		assertNotNull(t.b);
@@ -865,6 +865,7 @@ class BeanMap_Test extends SimpleTestBase {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static class M4<T extends Number> extends M1<T> {
 		public M4() {
 			this.x = (T)Integer.valueOf(3);
@@ -917,6 +918,7 @@ class BeanMap_Test extends SimpleTestBase {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static class N4<T extends Number> extends N1<T> {
 		public N4() {
 			setX((T)Integer.valueOf(3));

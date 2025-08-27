@@ -34,6 +34,7 @@ class BeanConfig_Test extends SimpleTestBase {
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
+	@SuppressWarnings("unchecked")
 	@Test void a01_basic() {
 
 		var bc = BeanContext.DEFAULT;
@@ -49,17 +50,17 @@ class BeanConfig_Test extends SimpleTestBase {
 		p2.setAddress(a);
 
 		// setup the reference results
-		var m1 = new LinkedHashMap();
+		var m1 = new LinkedHashMap<String,Object>();
 		m1.put("name", p1.getName());
 		m1.put("age", Integer.valueOf(p1.getAge()));
 
-		var m2 = new LinkedHashMap();
+		var m2 = new LinkedHashMap<String,Object>();
 		m2.put("street", a.getStreet());
 		m2.put("city", a.getCity());
 		m2.put("state", a.getState());
 		m2.put("zip", a.getZip());
 
-		var m3 = new LinkedHashMap();
+		var m3 = new LinkedHashMap<String,Object>();
 		m3.put("name", p2.getName());
 		m3.put("age", Integer.valueOf(p2.getAge()));
 		m3.put("address", p2.getAddress());
@@ -79,7 +80,7 @@ class BeanConfig_Test extends SimpleTestBase {
 		assertEquals(bm1.size(), m2.size(), fs("Bean Adapter map's key set has wrong size: {0} / {1} / {2}", a, bm1.size(), m2.size()));
 
 		var iter = bm1.keySet().iterator();
-		var temp = new HashSet();
+		var temp = new HashSet<>();
 		var count = 0;
 		while (iter.hasNext()) {
 			temp.add(iter.next());
@@ -98,7 +99,7 @@ class BeanConfig_Test extends SimpleTestBase {
 		assertEquals(m3.entrySet(), es1, fs("Entry set reverse equality failed: {0} / {1} / {2}", p2, es1, m3.entrySet()));
 
 		iter = es1.iterator();
-		temp = new HashSet();
+		temp = new HashSet<>();
 		count = 0;
 		while (iter.hasNext()) {
 			temp.add(iter.next());
@@ -419,10 +420,10 @@ class BeanConfig_Test extends SimpleTestBase {
 	}
 
 	public static class AHandler implements InvocationHandler {
-		private Map map;
+		private Map<String,Object> map;
 
 		public AHandler() {
-			map = new HashMap();
+			map = new HashMap<>();
 			map.put("a", "");
 			map.put("b", Integer.valueOf(0));
 		}

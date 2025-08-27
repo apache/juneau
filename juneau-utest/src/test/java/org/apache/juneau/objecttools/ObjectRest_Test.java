@@ -136,7 +136,7 @@ class ObjectRest_Test extends SimpleTestBase {
 		assertEquals(expectedValue, s);
 
 		// Try adding an address as a map (should be automatically converted to an Address)
-		var m = new HashMap();
+		var m = new HashMap<String,Object>();
 		m.put("street","street D");
 		m.put("city","city D");
 		m.put("state","state D");

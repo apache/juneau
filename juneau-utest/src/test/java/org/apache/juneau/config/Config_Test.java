@@ -423,6 +423,7 @@ class Config_Test extends SimpleTestBase {
 	//====================================================================================================
 	//	public <T> T getObject(String key, Type type, Type...args) throws ParseException
 	//====================================================================================================
+	@SuppressWarnings("unchecked")
 	@Test void getObject1() {
 		var c = init(
 			"a1={foo:123}",
@@ -463,6 +464,7 @@ class Config_Test extends SimpleTestBase {
 	//====================================================================================================
 	//	public <T> T getObject(String key, Parser parser, Type type, Type...args) throws ParseException
 	//====================================================================================================
+	@SuppressWarnings("unchecked")
 	@Test void getObject2() {
 		var c = init(
 			"a1=(foo=123)",
@@ -669,6 +671,7 @@ class Config_Test extends SimpleTestBase {
 	//====================================================================================================
 	//	public <T> T getObjectWithDefault(String key, T def, Type type, Type...args) throws ParseException
 	//====================================================================================================
+	@SuppressWarnings("unchecked")
 	@Test void getObjectWithDefault3() {
 		var c = init(
 			"a1={foo:123}",
@@ -714,6 +717,7 @@ class Config_Test extends SimpleTestBase {
 	//====================================================================================================
 	//	public <T> T getObjectWithDefault(String key, Parser parser, T def, Type type, Type...args) throws ParseException
 	//====================================================================================================
+	@SuppressWarnings("unchecked")
 	@Test void getObjectWithDefault4() {
 		var c = init(
 			"a1=(foo=123)",

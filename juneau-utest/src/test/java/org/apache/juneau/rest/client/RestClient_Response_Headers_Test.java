@@ -96,6 +96,7 @@ class RestClient_Response_Headers_Test extends SimpleTestBase {
 		assertEquals("baz", s);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test void a04_asType() throws Exception {
 		var i = checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").as(Integer.class).orElse(null);
 		assertEquals(123, i.intValue());

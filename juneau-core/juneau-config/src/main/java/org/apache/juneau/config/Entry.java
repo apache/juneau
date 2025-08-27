@@ -182,7 +182,6 @@ public class Entry {
 		return as(config.parser, type, args);
 	}
 
-
 	/**
 	 * Same as {@link #as(Type, Type...)} but specifies the parser to use to parse the entry.
 	 *

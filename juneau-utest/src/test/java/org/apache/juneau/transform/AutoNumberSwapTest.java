@@ -25,7 +25,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"unchecked","rawtypes"})
 class AutoNumberSwapTest extends SimpleTestBase {
 
 	private static ObjectSwap find(Class<?> c) {

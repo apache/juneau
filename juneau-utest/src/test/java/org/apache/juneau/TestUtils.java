@@ -28,6 +28,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.common.utils.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
@@ -36,7 +37,7 @@ import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.provider.*;
 
-public class TestUtils extends Utils {
+public class TestUtils extends Utils2 {
 
 	/**
 	 * Asserts value when stringified matches the specified pattern.
@@ -134,6 +135,7 @@ public class TestUtils extends Utils {
 	/**
 	 * Asserts the entries in an array matches the expected strings after they've been made readable.
 	 */
+	@SuppressWarnings("unchecked")
 	public static void assertArray(Object array, Object...expected) {
 		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
 			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : splita(s(expected[0]));
@@ -157,6 +159,7 @@ public class TestUtils extends Utils {
 	/**
 	 * Asserts the entries in a list matches the expected strings after they've been made readable.
 	 */
+	@SuppressWarnings("unchecked")
 	public static void assertList(List<?> list, Object...expected) {
 		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
 			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : splita(s(expected[0]));

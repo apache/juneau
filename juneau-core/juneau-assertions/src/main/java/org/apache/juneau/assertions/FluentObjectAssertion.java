@@ -380,7 +380,8 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isAny(T...values) throws AssertionError {
+	@SafeVarargs
+	public final R isAny(T...values) throws AssertionError {
 		for (var v : values)
 			if (equals(orElse(null), v))
 				return returns();
@@ -394,7 +395,8 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isNotAny(T...values) throws AssertionError {
+	@SafeVarargs
+	public final R isNotAny(T...values) throws AssertionError {
 		for (var v : values)
 			if (equals(orElse(null), v))
 				throw error(MSG_unexpectedValueFound, v, value);

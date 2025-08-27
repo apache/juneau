@@ -13,6 +13,7 @@
 package org.apache.juneau.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.internal.*;
@@ -198,7 +199,7 @@ class StringVarResolver_Test extends SimpleTestBase {
 		var vrb = VarResolver.create().defaultVars();
 
 		// Should reject names with characters outside A-Za-z
-		for (Class<? extends Var> c : new Class[]{InvalidVar1.class, InvalidVar2.class, InvalidVar3.class, InvalidVar4.class, InvalidVar5.class}) {
+		for (Class<? extends Var> c : a(InvalidVar1.class, InvalidVar2.class, InvalidVar3.class, InvalidVar4.class, InvalidVar5.class)) {
 			assertThrows(Exception.class, ()->VarResolver.create().vars(c).build());
 		}
 
