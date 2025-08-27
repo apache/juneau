@@ -14,7 +14,6 @@ package org.apache.juneau;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.Assume.*;
 
 import java.io.*;
 
@@ -27,7 +26,7 @@ class IgnoredClasses_Test extends SimpleTestBase {
 	// testFilesRenderedAsStrings
 	//====================================================================================================
 	@Test void a01_filesRenderedAsStrings() {
-		assumeTrue(System.getProperty("os.name").toLowerCase().startsWith("win"));
+		if (! System.getProperty("os.name").toLowerCase().startsWith("win")) return;
 		// Files should be rendered as strings.
 		var f = new File("C:/temp");
 		assertJson(f, "'C:\\\\temp'");
