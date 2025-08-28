@@ -34,24 +34,24 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	@Test void simpleObjects() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.getSession();
 
-		assertJson(s.getSchema(short.class), "{type:'integer',format:'int16'}");
-		assertJson(s.getSchema(Short.class), "{type:'integer',format:'int16'}");
-		assertJson(s.getSchema(int.class), "{type:'integer',format:'int32'}");
-		assertJson(s.getSchema(Integer.class), "{type:'integer',format:'int32'}");
-		assertJson(s.getSchema(long.class), "{type:'integer',format:'int64'}");
-		assertJson(s.getSchema(Long.class), "{type:'integer',format:'int64'}");
-		assertJson(s.getSchema(float.class), "{type:'number',format:'float'}");
-		assertJson(s.getSchema(Float.class), "{type:'number',format:'float'}");
-		assertJson(s.getSchema(double.class), "{type:'number',format:'double'}");
-		assertJson(s.getSchema(Double.class), "{type:'number',format:'double'}");
-		assertJson(s.getSchema(boolean.class), "{type:'boolean'}");
-		assertJson(s.getSchema(Boolean.class), "{type:'boolean'}");
-		assertJson(s.getSchema(String.class), "{type:'string'}");
-		assertJson(s.getSchema(StringBuilder.class), "{type:'string'}");
-		assertJson(s.getSchema(char.class), "{type:'string'}");
-		assertJson(s.getSchema(Character.class), "{type:'string'}");
-		assertJson(s.getSchema(TestEnumToString.class), "{type:'string','enum':['one','two','three']}");
-		assertJson(s.getSchema(SimpleBean.class), "{type:'object',properties:{f1:{type:'string'}}}");
+		assertBean(s.getSchema(short.class), "type,format", "integer,int16");
+		assertBean(s.getSchema(Short.class), "type,format", "integer,int16");
+		assertBean(s.getSchema(int.class), "type,format", "integer,int32");
+		assertBean(s.getSchema(Integer.class), "type,format", "integer,int32");
+		assertBean(s.getSchema(long.class), "type,format", "integer,int64");
+		assertBean(s.getSchema(Long.class), "type,format", "integer,int64");
+		assertBean(s.getSchema(float.class), "type,format", "number,float");
+		assertBean(s.getSchema(Float.class), "type,format", "number,float");
+		assertBean(s.getSchema(double.class), "type,format", "number,double");
+		assertBean(s.getSchema(Double.class), "type,format", "number,double");
+		assertBean(s.getSchema(boolean.class), "type", "boolean");
+		assertBean(s.getSchema(Boolean.class), "type", "boolean");
+		assertBean(s.getSchema(String.class), "type", "string");
+		assertBean(s.getSchema(StringBuilder.class), "type", "string");
+		assertBean(s.getSchema(char.class), "type", "string");
+		assertBean(s.getSchema(Character.class), "type", "string");
+		assertBean(s.getSchema(TestEnumToString.class), "type,enum", "string,[one,two,three]");
+		assertBean(s.getSchema(SimpleBean.class), "type,properties{f1{type}}", "object,{{string}}");
 	}
 
 	public static class SimpleBean {
@@ -65,47 +65,47 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	@Test void arrays1d() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.getSession();
 
-		assertJson(s.getSchema(short[].class), "{type:'array',items:{type:'integer',format:'int16'}}");
-		assertJson(s.getSchema(Short[].class), "{type:'array',items:{type:'integer',format:'int16'}}");
-		assertJson(s.getSchema(int[].class), "{type:'array',items:{type:'integer',format:'int32'}}");
-		assertJson(s.getSchema(Integer[].class), "{type:'array',items:{type:'integer',format:'int32'}}");
-		assertJson(s.getSchema(long[].class), "{type:'array',items:{type:'integer',format:'int64'}}");
-		assertJson(s.getSchema(Long[].class), "{type:'array',items:{type:'integer',format:'int64'}}");
-		assertJson(s.getSchema(float[].class), "{type:'array',items:{type:'number',format:'float'}}");
-		assertJson(s.getSchema(Float[].class), "{type:'array',items:{type:'number',format:'float'}}");
-		assertJson(s.getSchema(double[].class), "{type:'array',items:{type:'number',format:'double'}}");
-		assertJson(s.getSchema(Double[].class), "{type:'array',items:{type:'number',format:'double'}}");
-		assertJson(s.getSchema(boolean[].class), "{type:'array',items:{type:'boolean'}}");
-		assertJson(s.getSchema(Boolean[].class), "{type:'array',items:{type:'boolean'}}");
-		assertJson(s.getSchema(String[].class), "{type:'array',items:{type:'string'}}");
-		assertJson(s.getSchema(StringBuilder[].class), "{type:'array',items:{type:'string'}}");
-		assertJson(s.getSchema(char[].class), "{type:'array',items:{type:'string'}}");
-		assertJson(s.getSchema(Character[].class), "{type:'array',items:{type:'string'}}");
-		assertJson(s.getSchema(TestEnumToString[].class), "{type:'array',items:{type:'string','enum':['one','two','three']}}");
-		assertJson(s.getSchema(SimpleBean[].class), "{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}");
+		assertBean(s.getSchema(short[].class), "type,items{type,format}", "array,{integer,int16}");
+		assertBean(s.getSchema(Short[].class), "type,items{type,format}", "array,{integer,int16}");
+		assertBean(s.getSchema(int[].class), "type,items{type,format}", "array,{integer,int32}");
+		assertBean(s.getSchema(Integer[].class), "type,items{type,format}", "array,{integer,int32}");
+		assertBean(s.getSchema(long[].class), "type,items{type,format}", "array,{integer,int64}");
+		assertBean(s.getSchema(Long[].class), "type,items{type,format}", "array,{integer,int64}");
+		assertBean(s.getSchema(float[].class), "type,items{type,format}", "array,{number,float}");
+		assertBean(s.getSchema(Float[].class), "type,items{type,format}", "array,{number,float}");
+		assertBean(s.getSchema(double[].class), "type,items{type,format}", "array,{number,double}");
+		assertBean(s.getSchema(Double[].class), "type,items{type,format}", "array,{number,double}");
+		assertBean(s.getSchema(boolean[].class), "type,items{type}", "array,{boolean}");
+		assertBean(s.getSchema(Boolean[].class), "type,items{type}", "array,{boolean}");
+		assertBean(s.getSchema(String[].class), "type,items{type}", "array,{string}");
+		assertBean(s.getSchema(StringBuilder[].class), "type,items{type}", "array,{string}");
+		assertBean(s.getSchema(char[].class), "type,items{type}", "array,{string}");
+		assertBean(s.getSchema(Character[].class), "type,items{type}", "array,{string}");
+		assertBean(s.getSchema(TestEnumToString[].class), "type,items{type,enum}", "array,{string,[one,two,three]}");
+		assertBean(s.getSchema(SimpleBean[].class), "type,items{type,properties{f1{type}}}", "array,{object,{{string}}}");
 	}
 
 	@Test void arrays2d() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.getSession();
 
-		assertJson(s.getSchema(short[][].class), "{type:'array',items:{type:'array',items:{type:'integer',format:'int16'}}}");
-		assertJson(s.getSchema(Short[][].class), "{type:'array',items:{type:'array',items:{type:'integer',format:'int16'}}}");
-		assertJson(s.getSchema(int[][].class), "{type:'array',items:{type:'array',items:{type:'integer',format:'int32'}}}");
-		assertJson(s.getSchema(Integer[][].class), "{type:'array',items:{type:'array',items:{type:'integer',format:'int32'}}}");
-		assertJson(s.getSchema(long[][].class), "{type:'array',items:{type:'array',items:{type:'integer',format:'int64'}}}");
-		assertJson(s.getSchema(Long[][].class), "{type:'array',items:{type:'array',items:{type:'integer',format:'int64'}}}");
-		assertJson(s.getSchema(float[][].class), "{type:'array',items:{type:'array',items:{type:'number',format:'float'}}}");
-		assertJson(s.getSchema(Float[][].class), "{type:'array',items:{type:'array',items:{type:'number',format:'float'}}}");
-		assertJson(s.getSchema(double[][].class), "{type:'array',items:{type:'array',items:{type:'number',format:'double'}}}");
-		assertJson(s.getSchema(Double[][].class), "{type:'array',items:{type:'array',items:{type:'number',format:'double'}}}");
-		assertJson(s.getSchema(boolean[][].class), "{type:'array',items:{type:'array',items:{type:'boolean'}}}");
-		assertJson(s.getSchema(Boolean[][].class), "{type:'array',items:{type:'array',items:{type:'boolean'}}}");
-		assertJson(s.getSchema(String[][].class), "{type:'array',items:{type:'array',items:{type:'string'}}}");
-		assertJson(s.getSchema(StringBuilder[][].class), "{type:'array',items:{type:'array',items:{type:'string'}}}");
-		assertJson(s.getSchema(char[][].class), "{type:'array',items:{type:'array',items:{type:'string'}}}");
-		assertJson(s.getSchema(Character[][].class), "{type:'array',items:{type:'array',items:{type:'string'}}}");
-		assertJson(s.getSchema(TestEnumToString[][].class), "{type:'array',items:{type:'array',items:{type:'string','enum':['one','two','three']}}}");
-		assertJson(s.getSchema(SimpleBean[][].class), "{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}}");
+		assertBean(s.getSchema(short[][].class), "type,items{type,items{type,format}}", "array,{array,{integer,int16}}");
+		assertBean(s.getSchema(Short[][].class), "type,items{type,items{type,format}}", "array,{array,{integer,int16}}");
+		assertBean(s.getSchema(int[][].class), "type,items{type,items{type,format}}", "array,{array,{integer,int32}}");
+		assertBean(s.getSchema(Integer[][].class), "type,items{type,items{type,format}}", "array,{array,{integer,int32}}");
+		assertBean(s.getSchema(long[][].class), "type,items{type,items{type,format}}", "array,{array,{integer,int64}}");
+		assertBean(s.getSchema(Long[][].class), "type,items{type,items{type,format}}", "array,{array,{integer,int64}}");
+		assertBean(s.getSchema(float[][].class), "type,items{type,items{type,format}}", "array,{array,{number,float}}");
+		assertBean(s.getSchema(Float[][].class), "type,items{type,items{type,format}}", "array,{array,{number,float}}");
+		assertBean(s.getSchema(double[][].class), "type,items{type,items{type,format}}", "array,{array,{number,double}}");
+		assertBean(s.getSchema(Double[][].class), "type,items{type,items{type,format}}", "array,{array,{number,double}}");
+		assertBean(s.getSchema(boolean[][].class), "type,items{type,items{type}}", "array,{array,{boolean}}");
+		assertBean(s.getSchema(Boolean[][].class), "type,items{type,items{type}}", "array,{array,{boolean}}");
+		assertBean(s.getSchema(String[][].class), "type,items{type,items{type}}", "array,{array,{string}}");
+		assertBean(s.getSchema(StringBuilder[][].class), "type,items{type,items{type}}", "array,{array,{string}}");
+		assertBean(s.getSchema(char[][].class), "type,items{type,items{type}}", "array,{array,{string}}");
+		assertBean(s.getSchema(Character[][].class), "type,items{type,items{type}}", "array,{array,{string}}");
+		assertBean(s.getSchema(TestEnumToString[][].class), "type,items{type,items{type,enum}}", "array,{array,{string,[one,two,three]}}");
+		assertBean(s.getSchema(SimpleBean[][].class), "type,items{type,items{type,properties{f1{type}}}}", "array,{array,{object,{{string}}}}");
 	}
 
 	//====================================================================================================
@@ -114,7 +114,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 
 	@Test void simpleList() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.getSession();
-		assertJson(s.getSchema(SimpleList.class), "{type:'array',items:{type:'integer',format:'int32'}}");
+		assertBean(s.getSchema(SimpleList.class), "type,items{type,format}", "array,{integer,int32}");
 	}
 
 	@SuppressWarnings("serial")

@@ -352,13 +352,17 @@ public class TestUtils extends Utils2 {
 
 	@SuppressWarnings("unchecked")
 	private static Object getEntry(Object o, String name) {
-		if (o instanceof List o2) return o2.get(Integer.parseInt(name));
-		if (o.getClass().isArray()) return Array.get(o, Integer.parseInt(name));
-		if (o instanceof Map o2) return o2.get(name);
-		if (o instanceof Iterable o2) return toList(o2).get(Integer.parseInt(name));
-		if (o instanceof Iterator o2) return toList(o2).get(Integer.parseInt(name));
-		if (o instanceof Enumeration o2) return toList(o2).get(Integer.parseInt(name));
+		if (o instanceof List o2) return isNumeric(name) ? o2.get(Integer.parseInt(name)) : getBeanProp(o, name);
+		if (o.getClass().isArray()) return isNumeric(name) ? Array.get(o, Integer.parseInt(name)) : getBeanProp(o, name);
+		if (o instanceof Map o2) return opt(o2.get(name)).orElse(name.equals("class") ? o.getClass() : null);
+		if (o instanceof Iterable o2) return isNumeric(name) ? toList(o2).get(Integer.parseInt(name)) : getBeanProp(o, name);
+		if (o instanceof Iterator o2) return isNumeric(name) ? toList(o2).get(Integer.parseInt(name)) : getBeanProp(o, name);
+		if (o instanceof Enumeration o2) return isNumeric(name) ? toList(o2).get(Integer.parseInt(name)) : getBeanProp(o, name);
 		return TestUtils.getBeanProp(o, name);
+	}
+
+	private static boolean isNumeric(String name) {
+		return StringUtils.isNumeric(name);
 	}
 
 	/**

@@ -216,13 +216,12 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("jl1", JsonList.ofJson("[1,2,3]"));
 
 		// al1 should be initialized with an ArrayList, since it's not a superclass of JsonList.
-		assertEquals(ArrayList.class.getName(), m.get("al1").getClass().getName());
-
 		// The rest are proper superclasses of JsonList.
-		assertEquals(JsonList.class.getName(), m.get("l1").getClass().getName());
-		assertEquals(LinkedList.class.getName(), m.get("ll1").getClass().getName());
-		assertEquals(JsonList.class.getName(), m.get("c1").getClass().getName());
-		assertEquals(JsonList.class.getName(), m.get("jl1").getClass().getName());
+		assertMap(
+			m,
+			"al1{class{name}},l1{class{name}},ll1{class{name}},c1{class{name}},jl1{class{name}}",
+			"{{java.util.ArrayList}},{{org.apache.juneau.collections.JsonList}},{{java.util.LinkedList}},{{org.apache.juneau.collections.JsonList}},{{org.apache.juneau.collections.JsonList}}"
+		);
 
 		// Non-initialized map fields.
 		m.put("m1", JsonMap.ofJson("{foo:'bar'}"));
@@ -231,12 +230,12 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("tm1", JsonMap.ofJson("{foo:'bar'}"));
 
 		// tm1 should be initialized with TreeMap, since it's not a superclass of JsonMap.
-		assertEquals(TreeMap.class.getName(), m.get("tm1").getClass().getName());
-
 		// The rest are proper superclasses of JsonMap
-		assertEquals(JsonMap.class.getName(), m.get("m1").getClass().getName());
-		assertEquals(HashMap.class.getName(), m.get("hm1").getClass().getName());
-		assertEquals(JsonMap.class.getName(), m.get("jm1").getClass().getName());
+		assertBean(
+			m,
+			"tm1{class{name}},m1{class{name}},hm1{class{name}},jm1{class{name}}",
+			"{{java.util.TreeMap}},{{org.apache.juneau.collections.JsonMap}},{{java.util.HashMap}},{{org.apache.juneau.collections.JsonMap}}"
+		);
 
 		// Initialized fields should reuse existing field value.
 		m.put("l2", JsonList.ofJson("[1,2,3]"));
@@ -249,15 +248,11 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("jm2", JsonMap.ofJson("{foo:'bar'}"));
 		m.put("jl2", JsonList.ofJson("[1,2,3]"));
 
-		assertEquals(ArrayList.class.getName(), m.get("l2").getClass().getName());
-		assertEquals(ArrayList.class.getName(), m.get("al2").getClass().getName());
-		assertEquals(LinkedList.class.getName(), m.get("ll2").getClass().getName());
-		assertEquals(ArrayList.class.getName(), m.get("c2").getClass().getName());
-		assertEquals(HashMap.class.getName(), m.get("m2").getClass().getName());
-		assertEquals(HashMap.class.getName(), m.get("hm2").getClass().getName());
-		assertEquals(TreeMap.class.getName(), m.get("tm2").getClass().getName());
-		assertEquals(JsonMap.class.getName(), m.get("jm2").getClass().getName());
-		assertEquals(JsonList.class.getName(), m.get("jl2").getClass().getName());
+		assertBean(
+			m,
+			"l2{class{name}},al2{class{name}},ll2{class{name}},c2{class{name}},m2{class{name}},hm2{class{name}},tm2{class{name}},jm2{class{name}},jl2{class{name}}",
+			"{{java.util.ArrayList}},{{java.util.ArrayList}},{{java.util.LinkedList}},{{java.util.ArrayList}},{{java.util.HashMap}},{{java.util.HashMap}},{{java.util.TreeMap}},{{org.apache.juneau.collections.JsonMap}},{{org.apache.juneau.collections.JsonList}}"
+		);
 	}
 
 	public static class C {
@@ -296,13 +291,12 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("jl1", JsonList.ofJson("[1,2,3]"));
 
 		// al1 should be initialized with an ArrayList, since it's not a superclass of JsonList.
-		assertEquals(ArrayList.class.getName(), m.get("al1").getClass().getName());
-
 		// The rest are proper superclasses of JsonList.
-		assertEquals(JsonList.class.getName(), m.get("l1").getClass().getName());
-		assertEquals(JsonList.class.getName(), m.get("ll1").getClass().getName());
-		assertEquals(JsonList.class.getName(), m.get("c1").getClass().getName());
-		assertEquals(JsonList.class.getName(), m.get("jl1").getClass().getName());
+		assertBean(
+			m,
+			"al1{class{name}},l1{class{name}},ll1{class{name}},c1{class{name}},jl1{class{name}}",
+			"{{java.util.ArrayList}},{{org.apache.juneau.collections.JsonList}},{{org.apache.juneau.collections.JsonList}},{{org.apache.juneau.collections.JsonList}},{{org.apache.juneau.collections.JsonList}}"
+		);
 
 		// Non-initialized map fields.
 		m.put("m1", JsonMap.ofJson("{foo:'bar'}"));
@@ -311,12 +305,12 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("tm1", JsonMap.ofJson("{foo:'bar'}"));
 
 		// tm1 should be initialized with TreeMap, since it's not a superclass of JsonMap.
-		assertEquals(TreeMap.class.getName(), m.get("tm1").getClass().getName());
-
 		// The rest are proper superclasses of JsonMap
-		assertEquals(JsonMap.class.getName(), m.get("m1").getClass().getName());
-		assertEquals(JsonMap.class.getName(), m.get("hm1").getClass().getName());
-		assertEquals(JsonMap.class.getName(), m.get("jm1").getClass().getName());
+		assertBean(
+			m,
+			"tm1{class{name}},m1{class{name}},hm1{class{name}},jm1{class{name}}",
+			"{{java.util.TreeMap}},{{org.apache.juneau.collections.JsonMap}},{{org.apache.juneau.collections.JsonMap}},{{org.apache.juneau.collections.JsonMap}}"
+		);
 
 		// Initialized fields should reuse existing field value.
 		m.put("l2", JsonList.ofJson("[1,2,3]"));
@@ -329,15 +323,11 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("jm2", JsonMap.ofJson("{foo:'bar'}"));
 		m.put("jl2", JsonList.ofJson("[1,2,3]"));
 
-		assertEquals(JsonList.class.getName(), m.get("l2").getClass().getName());
-		assertEquals(ArrayList.class.getName(), m.get("al2").getClass().getName());
-		assertEquals(JsonList.class.getName(), m.get("ll2").getClass().getName());
-		assertEquals(JsonList.class.getName(), m.get("c2").getClass().getName());
-		assertEquals(JsonMap.class.getName(), m.get("m2").getClass().getName());
-		assertEquals(JsonMap.class.getName(), m.get("hm2").getClass().getName());
-		assertEquals(TreeMap.class.getName(), m.get("tm2").getClass().getName());
-		assertEquals(JsonMap.class.getName(), m.get("jm2").getClass().getName());
-		assertEquals(JsonList.class.getName(), m.get("jl2").getClass().getName());
+		assertBean(
+			m,
+			"l2{class{name}},al2{class{name}},ll2{class{name}},c2{class{name}},m2{class{name}},hm2{class{name}},tm2{class{name}},jm2{class{name}},jl2{class{name}}",
+			"{{org.apache.juneau.collections.JsonList}},{{java.util.ArrayList}},{{org.apache.juneau.collections.JsonList}},{{org.apache.juneau.collections.JsonList}},{{org.apache.juneau.collections.JsonMap}},{{org.apache.juneau.collections.JsonMap}},{{java.util.TreeMap}},{{org.apache.juneau.collections.JsonMap}},{{org.apache.juneau.collections.JsonList}}"
+		);
 	}
 
 	public static class D {

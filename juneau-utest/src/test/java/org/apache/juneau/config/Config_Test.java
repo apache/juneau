@@ -240,11 +240,11 @@ class Config_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void getStringArray1() {
 		var c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
-		assertJson(c.get("a1").as(String[].class).orElse(null), "['1','2']");
-		assertJson(c.get("a2").as(String[].class).orElse(null), "['2','3']");
+		assertArray(c.get("a1").as(String[].class).orElse(null), "1", "2");  // BCTM Feedback - assertArray can be used for arrays.
+		assertArray(c.get("a2").as(String[].class).orElse(null), "2", "3");
 		assertNull(c.get("a3").as(String[].class).orElse(null));
-		assertJson(c.get("S/b1").as(String[].class).orElse(null), "['1']");
-		assertJson(c.get("S/b2").as(String[].class).orElse(null), "[]");
+		assertArray(c.get("S/b1").as(String[].class).orElse(null), "1");
+		assertArray(c.get("S/b2").as(String[].class).orElse(null));
 		assertNull(c.get("S/b3").as(String[].class).orElse(null));
 		assertNull(c.get("T/c1").as(String[].class).orElse(null));
 	}
@@ -254,13 +254,13 @@ class Config_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void getStringArray2() {
 		var c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
-		assertJson(c.get("a1").asStringArray().orElse(new String[] {"foo"}), "['1','2']");
-		assertJson(c.get("a2").asStringArray().orElse(new String[] {"foo"}), "['2','3']");
-		assertJson(c.get("a3").asStringArray().orElse(new String[] {"foo"}), "['foo']");
-		assertJson(c.get("S/b1").asStringArray().orElse(new String[] {"foo"}), "['1']");
-		assertJson(c.get("S/b2").asStringArray().orElse(new String[] {"foo"}), "[]");
-		assertJson(c.get("S/b3").asStringArray().orElse(new String[] {"foo"}), "['foo']");
-		assertJson(c.get("T/c1").asStringArray().orElse(new String[] {"foo"}), "['foo']");
+		assertArray(c.get("a1").asStringArray().orElse(new String[] {"foo"}), "1", "2");
+		assertArray(c.get("a2").asStringArray().orElse(new String[] {"foo"}), "2", "3");
+		assertArray(c.get("a3").asStringArray().orElse(new String[] {"foo"}), "foo");
+		assertArray(c.get("S/b1").asStringArray().orElse(new String[] {"foo"}), "1");
+		assertArray(c.get("S/b2").asStringArray().orElse(new String[] {"foo"}));
+		assertArray(c.get("S/b3").asStringArray().orElse(new String[] {"foo"}), "foo");
+		assertArray(c.get("T/c1").asStringArray().orElse(new String[] {"foo"}), "foo");
 	}
 
 	//====================================================================================================
@@ -402,9 +402,9 @@ class Config_Test extends SimpleTestBase {
 	@Test void getBytes1() {
 		var c = init("a1=Zm9v", "a2=Zm", "\t9v", "a3=");
 
-		assertJson(c.get("a1").as(byte[].class), "[102,111,111]");
-		assertJson(c.get("a2").as(byte[].class), "[102,111,111]");
-		assertJson(c.get("a3").as(byte[].class), "[]");
+		assertArray(c.get("a1").as(byte[].class).get(), (byte)102, (byte)111, (byte)111);  // BCTM - as() returns an Optional here that needs to be unwrapped.
+		assertArray(c.get("a2").as(byte[].class).get(), (byte)102, (byte)111, (byte)111);
+		assertArray(c.get("a3").as(byte[].class).get());
 		assertFalse(c.get("a4").as(byte[].class).isPresent());
 	}
 
@@ -414,10 +414,10 @@ class Config_Test extends SimpleTestBase {
 	@Test void getBytes2() {
 		var c = init("a1=Zm9v", "a2=Zm", "\t9v", "a3=");
 
-		assertJson(c.get("a1").asBytes().orElse(new byte[] {1}), "[102,111,111]");
-		assertJson(c.get("a2").asBytes().orElse(new byte[] {1}), "[102,111,111]");
-		assertJson(c.get("a3").asBytes().orElse(new byte[] {1}), "[]");
-		assertJson(c.get("a4").asBytes().orElse(new byte[] {1}), "[1]");
+		assertArray(c.get("a1").asBytes().orElse(new byte[] {1}), (byte)102, (byte)111, (byte)111);
+		assertArray(c.get("a2").asBytes().orElse(new byte[] {1}), (byte)102, (byte)111, (byte)111);
+		assertArray(c.get("a3").asBytes().orElse(new byte[] {1}));
+		assertArray(c.get("a4").asBytes().orElse(new byte[] {1}), (byte)1);
 	}
 
 	//====================================================================================================
