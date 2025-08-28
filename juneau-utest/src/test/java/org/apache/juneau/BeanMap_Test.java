@@ -69,12 +69,7 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("d1", null);
 		m.put("f1", null);
 		m.put("b1", null);
-		assertEquals(Integer.valueOf(0), m.get("i1"));
-		assertEquals(Short.valueOf((short)0), m.get("s1"));
-		assertEquals(Long.valueOf(0L), m.get("l1"));
-		assertEquals(Double.valueOf(0d), m.get("d1"));
-		assertEquals(Float.valueOf(0f), m.get("f1"));
-		assertEquals(Boolean.valueOf(false), m.get("b1"));
+		assertBean(m, "i1,s1,l1,d1,f1,b1", "0,0,0,0.0,0.0,false");
 
 		// Make sure setting non-primitive values to null causes them to set to null.
 		m.put("i2", null);
@@ -83,12 +78,7 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("d2", null);
 		m.put("f2", null);
 		m.put("b2", null);
-		assertNull(m.get("i2"));
-		assertNull(m.get("s2"));
-		assertNull(m.get("l2"));
-		assertNull(m.get("d2"));
-		assertNull(m.get("f2"));
-		assertNull(m.get("b2"));
+		assertBean(m, "i2,s2,l2,d2,f2,b2", "null,null,null,null,null,null");
 
 		// Make sure setting them all to an integer is kosher.
 		m.put("i1", 1);
@@ -101,21 +91,11 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("l2", 1);
 		m.put("d2", 1);
 		m.put("f2", 1);
-		assertEquals(Integer.valueOf(1), m.get("i1"));
-		assertEquals(Integer.valueOf(1), m.get("i2"));
-		assertEquals(Short.valueOf((short)1), m.get("s1"));
-		assertEquals(Short.valueOf((short)1), m.get("s2"));
-		assertEquals(Long.valueOf(1), m.get("l1"));
-		assertEquals(Long.valueOf(1), m.get("l2"));
-		assertEquals(Double.valueOf(1), m.get("d1"));
-		assertEquals(Double.valueOf(1), m.get("d2"));
-		assertEquals(Float.valueOf(1), m.get("f1"));
-		assertEquals(Float.valueOf(1), m.get("f2"));
+		assertBean(m, "i1,i2,s1,s2,l1,l2,d1,d2,f1,f2", "1,1,1,1,1,1,1.0,1.0,1.0,1.0");
 
 		m.put("b1", true);
 		m.put("b2", Boolean.valueOf(true));
-		assertEquals(Boolean.valueOf(true), m.get("b1"));
-		assertEquals(Boolean.valueOf(true), m.get("b2"));
+		assertBean(m, "b1,b2", "true,true");
 	}
 
 	public static class A {
@@ -147,12 +127,7 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("d1", null);
 		m.put("f1", null);
 		m.put("b1", null);
-		assertEquals(Integer.valueOf(0), m.get("i1"));
-		assertEquals(Short.valueOf((short)0), m.get("s1"));
-		assertEquals(Long.valueOf(0L), m.get("l1"));
-		assertEquals(Double.valueOf(0d), m.get("d1"));
-		assertEquals(Float.valueOf(0f), m.get("f1"));
-		assertEquals(Boolean.valueOf(false), m.get("b1"));
+		assertBean(m, "i1,s1,l1,d1,f1,b1", "0,0,0,0.0,0.0,false");
 
 		// Make sure setting non-primitive values to null causes them to set to null.
 		m.put("i2", null);
@@ -161,12 +136,7 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("d2", null);
 		m.put("f2", null);
 		m.put("b2", null);
-		assertNull(m.get("i2"));
-		assertNull(m.get("s2"));
-		assertNull(m.get("l2"));
-		assertNull(m.get("d2"));
-		assertNull(m.get("f2"));
-		assertNull(m.get("b2"));
+		assertBean(m, "i2,s2,l2,d2,f2,b2", "null,null,null,null,null,null");
 
 		// Make sure setting them all to an integer is kosher.
 		m.put("i1", 1);
@@ -179,21 +149,11 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("l2", 1);
 		m.put("d2", 1);
 		m.put("f2", 1);
-		assertEquals(Integer.valueOf(1), m.get("i1"));
-		assertEquals(Integer.valueOf(1), m.get("i2"));
-		assertEquals(Short.valueOf((short)1), m.get("s1"));
-		assertEquals(Short.valueOf((short)1), m.get("s2"));
-		assertEquals(Long.valueOf(1), m.get("l1"));
-		assertEquals(Long.valueOf(1), m.get("l2"));
-		assertEquals(Double.valueOf(1), m.get("d1"));
-		assertEquals(Double.valueOf(1), m.get("d2"));
-		assertEquals(Float.valueOf(1), m.get("f1"));
-		assertEquals(Float.valueOf(1), m.get("f2"));
+		assertBean(m, "i1,i2,s1,s2,l1,l2,d1,d2,f1,f2", "1,1,1,1,1,1,1.0,1.0,1.0,1.0");
 
 		m.put("b1", true);
 		m.put("b2", true);
-		assertEquals(Boolean.valueOf(true), m.get("b1"));
-		assertEquals(Boolean.valueOf(true), m.get("b2"));
+		assertBean(m, "b1,b2", "true,true");
 	}
 
 	public static class B {

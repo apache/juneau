@@ -40,8 +40,8 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_outputValidations_nullOutput() throws Exception {
-		assertEquals("null", serialize(T_NONE, null));
-		assertEquals("null", serialize(tNone().required(false).build(), null));
+		assertEquals("null", serialize(T_NONE, null)); // BCTM - String output testing
+		assertEquals("null", serialize(tNone().required(false).build(), null)); // BCTM - String output testing
 		assertThrowsWithMessage(SchemaValidationException.class, "Required value not provided.", ()->serialize(tNone().required().build(), null));
 		assertThrowsWithMessage(SchemaValidationException.class, "Required value not provided.", ()->serialize(tNone().required(true).build(), null));
 	}
@@ -208,9 +208,9 @@ class OpenApiPartSerializer_Test extends SimpleTestBase {
 
 	@Test void c10_stringType_noneFormat_2d() throws Exception {
 		var ps = tArray(tString()).build();
-		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null}));
-		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null)));
-		assertEquals("foo,bar,null", serialize(ps, new Object[]{"foo","bar",null}));
+		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null})); // BCTM - NEED INFO: Multiple serialization tests - could benefit from helper method but not traditional assertBean
+		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null))); // BCTM - NEED INFO: Same expected output for different input types
+		assertEquals("foo,bar,null", serialize(ps, new Object[]{"foo","bar",null})); // BCTM - NEED INFO: Pattern continues - testing serialization consistency
 		assertEquals("foo,bar,null", serialize(ps, list((Object)"foo",(Object)"bar",null)));
 		assertEquals("foo,bar,null,null", serialize(ps, new C2[]{new C2("foo"),new C2("bar"),new C2(null),null}));
 		assertEquals("foo,bar,null,null", serialize(ps, list(new C2("foo"),new C2("bar"),new C2(null),null)));
