@@ -35,12 +35,12 @@ class Swagger_Test extends SimpleTestBase {
 	 */
 	@Test void a01_gettersAndSetters() {
 		var t = new Swagger();
-		assertEquals("foo", t.setSwagger("foo").getSwagger());
+		assertBean(t.setSwagger("foo"), "swagger", "foo");
 		assertNull(t.setSwagger(null).getSwagger());
 		assertJson(t.setInfo(info("foo", "bar")).getInfo(), "{title:'foo',version:'bar'}");
-		assertEquals("foo", t.setHost("foo").getHost());
+		assertBean(t.setHost("foo"), "host", "foo");
 		assertNull(t.setHost(null).getHost());
-		assertEquals("foo", t.setBasePath("foo").getBasePath());
+		assertBean(t.setBasePath("foo"), "basePath", "foo");
 		assertNull(t.setBasePath(null).getBasePath());
 		assertJson(t.setSchemes(set("foo","bar")).getSchemes(), "['foo','bar']");
 		assertJson(t.setSchemes(set()).getSchemes(), "[]");
@@ -147,22 +147,9 @@ class Swagger_Test extends SimpleTestBase {
 
 		assertJson(t, "{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}");
 
-		assertEquals("a", t.get("basePath", String.class));
-		assertEquals("['text/b']", t.get("consumes", String.class));
-		assertEquals("{c:{type:'c1'}}", t.get("definitions", String.class));
-		assertEquals("{url:'d'}", t.get("externalDocs", String.class));
-		assertEquals("e", t.get("host", String.class));
-		assertEquals("{title:'f1',version:'f2'}", t.get("info", String.class));
-		assertEquals("{g:{'in':'g1',name:'g2'}}", t.get("parameters", String.class));
-		assertEquals("{h:{h1:{operationId:'h2'}}}", t.get("paths", String.class));
-		assertEquals("['text/i']", t.get("produces", String.class));
-		assertEquals("{j:{description:'j1'}}", t.get("responses", String.class));
-		assertEquals("['k1']", t.get("schemes", String.class));
-		assertEquals("[{l1:['l2']}]", t.get("security", String.class));
-		assertEquals("{m:{type:'m1'}}", t.get("securityDefinitions", String.class));
-		assertEquals("n", t.get("swagger", String.class));
-		assertEquals("[{name:'o'}]", t.get("tags", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, String.class), 
+			"basePath,consumes,definitions,externalDocs,host,info,parameters,paths,produces,responses,schemes,security,securityDefinitions,swagger,tags,$ref", 
+			"a,['text/b'],{c:{type:'c1'}},{url:'d'},e,{title:'f1',version:'f2'},{g:{'in':'g1',name:'g2'}},{h:{h1:{operationId:'h2'}}},['text/i'],{j:{description:'j1'}},['k1'],[{l1:['l2']}],{m:{type:'m1'}},n,[{name:'o'}],ref");
 
 		assertType(String.class, t.get("basePath", Object.class));
 		assertType(Set.class, t.get("consumes", Object.class));

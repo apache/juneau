@@ -33,13 +33,13 @@ class SchemaInfo_Test extends SimpleTestBase {
 	 */
 	@Test void a01_gettersAndSetters() {
 		var t = new SchemaInfo();
-		assertEquals("foo", t.setFormat("foo").getFormat());
+		assertBean(t.setFormat("foo"), "format", "foo");
 		assertNull(t.setFormat(null).getFormat());
-		assertEquals("foo", t.setTitle("foo").getTitle());
+		assertBean(t.setTitle("foo"), "title", "foo");
 		assertNull(t.setTitle(null).getTitle());
-		assertEquals("foo", t.setDescription("foo").getDescription());
+		assertBean(t.setDescription("foo"), "description", "foo");
 		assertNull(t.setDescription(null).getDescription());
-		assertEquals("foo", t.setDefault("foo").getDefault());
+		assertBean(t.setDefault("foo"), "default", "foo");
 		assertString("foo", t.setDefault(new StringBuilder("foo")).getDefault());
 		assertNull(t.setDefault(null).getDefault());
 		assertEquals(123, t.setMultipleOf(123).getMultipleOf());
@@ -197,36 +197,9 @@ class SchemaInfo_Test extends SimpleTestBase {
 
 		assertJson(t, "{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,requiredProperties:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}");
 
-		assertEquals("a", t.get("default", String.class));
-		assertEquals("['b']", t.get("enum", String.class));
-		assertEquals("{c:['c1']}", t.get("additionalProperties", String.class));
-		assertEquals("['d']", t.get("allOf", String.class));
-		assertEquals("e", t.get("description", String.class));
-		assertEquals("f", t.get("discriminator", String.class));
-		assertEquals("g", t.get("example", String.class));
-		assertEquals("true", t.get("exclusiveMaximum", String.class));
-		assertEquals("true", t.get("exclusiveMinimum", String.class));
-		assertEquals("{url:'h'}", t.get("externalDocs", String.class));
-		assertEquals("i", t.get("format", String.class));
-		assertEquals("{type:'j'}", t.get("items", String.class));
-		assertEquals("123.0", t.get("maximum", String.class));
-		assertEquals("123", t.get("maxItems", String.class));
-		assertEquals("123", t.get("maxLength", String.class));
-		assertEquals("123", t.get("maxProperties", String.class));
-		assertEquals("123.0", t.get("minimum", String.class));
-		assertEquals("123", t.get("minItems", String.class));
-		assertEquals("123", t.get("minLength", String.class));
-		assertEquals("123", t.get("minProperties", String.class));
-		assertEquals("123.0", t.get("multipleOf", String.class));
-		assertEquals("k", t.get("pattern", String.class));
-		assertEquals("{l:{l1:1}}", t.get("properties", String.class));
-		assertEquals("true", t.get("readOnly", String.class));
-		assertEquals("['x']", t.get("requiredProperties", String.class));
-		assertEquals("m", t.get("title", String.class));
-		assertEquals("n", t.get("type", String.class));
-		assertEquals("true", t.get("uniqueItems", String.class));
-		assertEquals("{name:'o'}", t.get("xml", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
+			"default,enum,additionalProperties,allOf,description,discriminator,example,exclusiveMaximum,exclusiveMinimum,externalDocs,format,items,maximum,maxItems,maxLength,maxProperties,minimum,minItems,minLength,minProperties,multipleOf,pattern,properties,readOnly,requiredProperties,title,type,uniqueItems,xml,$ref",
+			"a,['b'],{c:['c1']},['d'],e,f,g,true,true,{url:'h'},i,{type:'j'},123.0,123,123,123,123.0,123,123,123,123.0,k,{l:{l1:1}},true,['x'],m,n,true,{name:'o'},ref");
 
 		assertType(StringBuilder.class, t.get("default", Object.class));
 		assertType(Set.class, t.get("enum", Object.class));
