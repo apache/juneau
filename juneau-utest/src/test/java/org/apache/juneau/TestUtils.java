@@ -159,14 +159,29 @@ public class TestUtils extends Utils2 {
 	/**
 	 * Asserts the entries in a list matches the expected strings after they've been made readable.
 	 */
-	@SuppressWarnings("unchecked")
 	public static void assertList(List<?> list, Object...expected) {
+		assertCollection(list, expected);
+	}
+
+	/**
+	 * Asserts the entries in a list matches the expected strings after they've been made readable.
+	 */
+	public static void assertSet(Set<?> list, Object...expected) {
+		assertCollection(list, expected);
+	}
+
+	/**
+	 * Asserts the entries in a list matches the expected strings after they've been made readable.
+	 */
+	@SuppressWarnings("unchecked")
+	public static void assertCollection(Collection<?> list, Object...expected) {
 		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
 			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : splita(s(expected[0]));
 		if (list.size() != expected.length)
 			fail(fs("Wrong list length.  expected={0}, actual={1}", expected.length, list.size()));
+		List<?> list2 = toList(list);
 		for (var i = 0; i < expected.length; i++) {
-			var x = list.get(i);
+			var x = list2.get(i);
 			if (expected[i] instanceof String e) {
 				if (ne(r(x), e))
 					fail(fs("Element at index {0} did not match.  expected={1}, actual={2}", i, e, r(x)));
@@ -290,7 +305,7 @@ public class TestUtils extends Utils2 {
 	 */
 	public static void assertMap(Map<?,?> o, String fields, String value) {
 		if (o == null) throw new NullPointerException("Map was null");
-		assertEquals(value, Utils.split(fields).stream().map(x -> TestUtils.getReadableEntry(o, x)).collect(joining(",")));
+		assertEquals(value, Utils.splitNested(fields).stream().map(x -> TestUtils.getReadableEntry(o, x)).collect(joining(",")));
 	}
 
 	/**
@@ -300,7 +315,7 @@ public class TestUtils extends Utils2 {
 	 * @param values The comma-delimited list of values for each bean.
 	 */
 	@SuppressWarnings("rawtypes")
-	public static void assertBeans(Collection l, String fields, Object...values) {
+	public static void assertBeans(Collection l, String fields, String...values) {
 		assertEquals(values.length, l.size(), ()->"Expected "+values.length+" rows but had actual " + l.size());
 		var r = 0;
 		var f = Utils.splitNested(fields);
@@ -356,7 +371,12 @@ public class TestUtils extends Utils2 {
 			var f = (Field)null;
 			var c = o.getClass();
 			var n = Character.toUpperCase(name.charAt(0)) + name.substring(1);
-			var m = Arrays.stream(c.getMethods()).filter(x -> TestUtils.isGetter(x, n)).filter(x -> x.getAnnotation(BeanIgnore.class) == null).findFirst().orElse(null);
+			var m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("is"+n) && x.getParameterCount() == 0 && x.getAnnotation(BeanIgnore.class) == null).findFirst().orElse(null);
+			if (m != null) {
+				m.setAccessible(true);
+				return m.invoke(o);
+			}
+			m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get"+n) && x.getParameterCount() == 0 && x.getAnnotation(BeanIgnore.class) == null).findFirst().orElse(null);
 			if (m != null) {
 				m.setAccessible(true);
 				return m.invoke(o);

@@ -253,22 +253,18 @@ class Swagger_Test extends SimpleTestBase {
 	public static class B6 {}
 
 	@Test void b06a_info_Swagger_title_localized() throws Exception {
-		var x = getSwagger(new B6()).getInfo();
-		assertEquals("l-baz", x.getTitle());
-		assertEquals("l-baz", x.getDescription());
-		assertEquals("l-foo", x.getVersion());
-		assertEquals("l-foo", x.getTermsOfService());
-		assertJson(x.getContact(), "{name:'l-foo',url:'l-bar',email:'l-baz'}");
-		assertJson(x.getLicense(), "{name:'l-foo',url:'l-bar'}");
+		assertBean(
+			getSwagger(new B6()).getInfo(),
+			"title,description,version,termsOfService,contact{name,url,email},license{name,url}",
+			"l-baz,l-baz,l-foo,l-foo,{l-foo,l-bar,l-baz},{l-foo,l-bar}"
+		);
 	}
 	@Test void b06b_info_Swagger_title_localized_withFile() throws Exception {
-		var x = getSwaggerWithFile(new B6()).getInfo();
-		assertEquals("l-baz", x.getTitle());
-		assertEquals("l-baz", x.getDescription());
-		assertEquals("l-foo", x.getVersion());
-		assertEquals("l-foo", x.getTermsOfService());
-		assertJson(x.getContact(), "{name:'l-foo',url:'l-bar',email:'l-baz'}");
-		assertJson(x.getLicense(), "{name:'l-foo',url:'l-bar'}");
+		assertBean(
+			getSwaggerWithFile(new B6()).getInfo(),
+			"title,description,version,termsOfService,contact{name,url,email},license{name,url}",
+			"l-baz,l-baz,l-foo,l-foo,{l-foo,l-bar,l-baz},{l-foo,l-bar}"
+		);
 	}
 
 	@Rest(
@@ -280,14 +276,10 @@ class Swagger_Test extends SimpleTestBase {
 	public static class B07 {}
 
 	@Test void b07a_title_Swagger_title_only() throws Exception {
-		var x = getSwagger(new B07()).getInfo();
-		assertEquals("c-title", x.getTitle());
-		assertEquals("c-description", x.getDescription());
+		assertBean(getSwagger(new B07()).getInfo(), "title,description", "c-title,c-description");
 	}
 	@Test void b07b_title_Swagger_title_only_withFile() throws Exception {
-		var x = getSwaggerWithFile(new B07()).getInfo();
-		assertEquals("c-title", x.getTitle());
-		assertEquals("c-description", x.getDescription());
+		assertBean(getSwaggerWithFile(new B07()).getInfo(), "title,description", "c-title,c-description");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -298,12 +290,15 @@ class Swagger_Test extends SimpleTestBase {
 	public static class C1 {}
 
 	@Test void c01a_tags_default() throws Exception {
-		var x = getSwagger(new C1());
-		assertEquals(null, x.getTags());
+		assertNull(getSwagger(new C1()).getTags());
 	}
 	@Test void c01b_tags_default_withFile() throws Exception {
 		var x = getSwaggerWithFile(new C1());
-		assertJson(x.getTags(), "[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}}]");
+		assertBeans(
+			x.getTags(),
+			"name,description,externalDocs{description,url}",
+			"s-name,s-description,{s-description,s-url}"
+		);
 	}
 
 	// Tags in @ResourceSwagger(value) should override file.
@@ -315,12 +310,18 @@ class Swagger_Test extends SimpleTestBase {
 	public static class C2 {}
 
 	@Test void c02a_tags_Swagger_value() throws Exception {
-		var x = getSwagger(new C2());
-		assertJson(x.getTags(), "[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]");
+		assertBeans(
+			getSwagger(new C2()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"a-name,a-description,{a-description,a-url}"
+		);
 	}
 	@Test void c02b_tags_Swagger_value_withFile() throws Exception {
-		var x = getSwaggerWithFile(new C2());
-		assertJson(x.getTags(), "[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]");
+		assertBeans(
+			getSwaggerWithFile(new C2()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"a-name,a-description,{a-description,a-url}"
+		);
 	}
 
 	// Tags in both @ResourceSwagger(value) and @ResourceSwagger(tags) should accumulate.
@@ -333,12 +334,20 @@ class Swagger_Test extends SimpleTestBase {
 	public static class C3 {}
 
 	@Test void c03a_tags_Swagger_tags() throws Exception {
-		var x = getSwagger(new C3());
-		assertJson(x.getTags(), "[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
+		assertBeans(
+			getSwagger(new C3()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"a-name,a-description,{a-description,a-url}",
+			"b-name,b-description,{b-description,b-url}"
+		);
 	}
 	@Test void c03b_tags_Swagger_tags_withFile() throws Exception {
-		var x = getSwaggerWithFile(new C3());
-		assertJson(x.getTags(), "[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
+		assertBeans(
+			getSwaggerWithFile(new C3()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"a-name,a-description,{a-description,a-url}",
+			"b-name,b-description,{b-description,b-url}"
+		);
 	}
 
 	// Same as above but without [] outer characters.
@@ -351,12 +360,20 @@ class Swagger_Test extends SimpleTestBase {
 	public static class C4 {}
 
 	@Test void c04a_tags_Swagger_tags() throws Exception {
-		var x = getSwagger(new C4());
-		assertJson(x.getTags(), "[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
+		assertBeans(
+			getSwagger(new C4()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"a-name,a-description,{a-description,a-url}",
+			"b-name,b-description,{b-description,b-url}"
+		);
 	}
 	@Test void c04b_tags_Swagger_tags_withFile() throws Exception {
-		var x = getSwaggerWithFile(new C4());
-		assertJson(x.getTags(), "[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
+		assertBeans(
+			getSwaggerWithFile(new C4()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"a-name,a-description,{a-description,a-url}",
+			"b-name,b-description,{b-description,b-url}"
+		);
 	}
 
 	// Tags in both Swagger.json and @ResourceSwagger(tags) should accumulate.
@@ -368,12 +385,19 @@ class Swagger_Test extends SimpleTestBase {
 	public static class C5 {}
 
 	@Test void c05a_tags_Swagger_tags_only() throws Exception {
-		var x = getSwagger(new C5());
-		assertJson(x.getTags(), "[{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
+		assertBeans(
+			getSwagger(new C5()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"b-name,b-description,{b-description,b-url}"
+		);
 	}
 	@Test void c05b_tags_Swagger_tags_only_witFile() throws Exception {
-		var x = getSwaggerWithFile(new C5());
-		assertJson(x.getTags(), "[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'b-name',description:'b-description',externalDocs:{description:'b-description',url:'b-url'}}]");
+		assertBeans(
+			getSwaggerWithFile(new C5()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"s-name,s-description,{s-description,s-url}",
+			"b-name,b-description,{b-description,b-url}"
+		);
 	}
 
 	// Dup tag names should be overwritten
@@ -388,12 +412,18 @@ class Swagger_Test extends SimpleTestBase {
 	public static class C6 {}
 
 	@Test void c06a_tags_Swagger_tags_dups() throws Exception {
-		var x = getSwagger(new C6());
-		assertJson(x.getTags(), "[{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}]");
+		assertBeans(
+			getSwagger(new C6()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"s-name,c-description,{c-description,c-url}"
+		);
 	}
 	@Test void c06b_tags_Swagger_tags_dups_withFile() throws Exception {
-		var x = getSwaggerWithFile(new C6());
-		assertJson(x.getTags(), "[{name:'s-name',description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}]");
+		assertBeans(
+			getSwaggerWithFile(new C6()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"s-name,c-description,{c-description,c-url}"
+		);
 	}
 
 	@Rest(
@@ -406,12 +436,18 @@ class Swagger_Test extends SimpleTestBase {
 	public static class C7 {}
 
 	@Test void c07a_tags_Swagger_tags_localised() throws Exception {
-		var x = getSwagger(new C7());
-		assertJson(x.getTags(), "[{name:'l-foo',description:'l-foo',externalDocs:{description:'l-foo',url:'l-foo'}}]");
+		assertBeans(
+			getSwagger(new C7()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"l-foo,l-foo,{l-foo,l-foo}"
+		);
 	}
 	@Test void c07b_tags_Swagger_tags_localised_withFile() throws Exception {
-		var x = getSwaggerWithFile(new C7());
-		assertJson(x.getTags(), "[{name:'l-foo',description:'l-foo',externalDocs:{description:'l-foo',url:'l-foo'}}]");
+		assertBeans(
+			getSwaggerWithFile(new C7()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"l-foo,l-foo,{l-foo,l-foo}"
+		);
 	}
 
 	// Auto-detect tags defined on methods.
@@ -422,12 +458,15 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void c08a_tags_Swagger_tags_loose() throws Exception {
-		var x = getSwagger(new C8());
-		assertJson(x.getTags(), "[{name:'foo'}]");
+		assertBeans(getSwagger(new C8()).getTags(), "name", "foo");
 	}
 	@Test void c08b_tags_Swagger_tags_loose_withFile() throws Exception {
-		var x = getSwaggerWithFile(new C8());
-		assertJson(x.getTags(), "[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'}]");
+		assertBeans(
+			getSwaggerWithFile(new C8()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"s-name,s-description,{s-description,s-url}",
+			"foo,null,null"
+		);
 	}
 
 	// Comma-delimited list
@@ -438,12 +477,16 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void c09a_tags_Swagger_tags_loose_cdl() throws Exception {
-		var x = getSwagger(new C9());
-		assertJson(x.getTags(), "[{name:'foo'},{name:'bar'}]");
+		assertBeans(getSwagger(new C9()).getTags(), "name", "foo", "bar");
 	}
 	@Test void c09b_tags_Swagger_tags_loose_cdl_withFile() throws Exception {
-		var x = getSwaggerWithFile(new C9());
-		assertJson(x.getTags(), "[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'},{name:'bar'}]");
+		assertBeans(
+			getSwaggerWithFile(new C9()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"s-name,s-description,{s-description,s-url}",
+			"foo,null,null",
+			"bar,null,null"
+		);
 	}
 
 	// JsonList
@@ -454,12 +497,16 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void c10a_tags_Swagger_tags_loose_olist() throws Exception {
-		var x = getSwagger(new C10());
-		assertJson(x.getTags(), "[{name:'foo'},{name:'bar'}]");
+		assertBeans(getSwagger(new C10()).getTags(), "name", "foo", "bar");
 	}
 	@Test void c10b_tags_Swagger_tags_loose_olist_withFile() throws Exception {
-		var x = getSwaggerWithFile(new C10());
-		assertJson(x.getTags(), "[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'},{name:'bar'}]");
+		assertBeans(
+			getSwaggerWithFile(new C10()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"s-name,s-description,{s-description,s-url}",
+			"foo,null,null",
+			"bar,null,null"
+		);
 	}
 
 	// JsonList localized
@@ -470,12 +517,16 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void c11a_tags_Swagger_tags_loose_olist_localized() throws Exception {
-		var x = getSwagger(new C11());
-		assertJson(x.getTags(), "[{name:'l-foo'},{name:'l-bar'}]");
+		assertBeans(getSwagger(new C11()).getTags(), "name", "l-foo", "l-bar");
 	}
 	@Test void c11b_tags_Swagger_tags_loose_olist_localized_withFile() throws Exception {
-		var x = getSwaggerWithFile(new C11());
-		assertJson(x.getTags(), "[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'l-foo'},{name:'l-bar'}]");
+		assertBeans(
+			getSwaggerWithFile(new C11()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"s-name,s-description,{s-description,s-url}",
+			"l-foo,null,null",
+			"l-bar,null,null"
+		);
 	}
 
 	// Comma-delimited list localized
@@ -486,12 +537,16 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void c12a_tags_Swagger_tags_loose_cdl_localized() throws Exception {
-		var x = getSwagger(new C12());
-		assertJson(x.getTags(), "[{name:'l-foo'},{name:'l-bar'}]");
+		assertBeans(getSwagger(new C12()).getTags(), "name", "l-foo", "l-bar");
 	}
 	@Test void c12b_tags_Swagger_tags_loose_cdl_localized_withFile() throws Exception {
-		var x = getSwaggerWithFile(new C12());
-		assertJson(x.getTags(), "[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'l-foo'},{name:'l-bar'}]");
+		assertBeans(
+			getSwaggerWithFile(new C12()).getTags(),
+			"name,description,externalDocs{description,url}",
+			"s-name,s-description,{s-description,s-url}",
+			"l-foo,null,null",
+			"l-bar,null,null"
+		);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -502,12 +557,10 @@ class Swagger_Test extends SimpleTestBase {
 	public static class D1 {}
 
 	@Test void d01a_externalDocs_default() throws Exception {
-		var x = getSwagger(new D1()).getExternalDocs();
-		assertEquals(null, x);
+		assertNull(getSwagger(new D1()).getExternalDocs());
 	}
 	@Test void d01b_externalDocs_default_withFile() throws Exception {
-		var x = getSwaggerWithFile(new D1()).getExternalDocs();
-		assertJson(x, "{description:'s-description',url:'s-url'}");
+		assertBean(getSwaggerWithFile(new D1()).getExternalDocs(), "description,url", "s-description,s-url");
 	}
 
 
@@ -517,12 +570,10 @@ class Swagger_Test extends SimpleTestBase {
 	public static class D2 {}
 
 	@Test void d02a_externalDocs_Swagger_value() throws Exception {
-		var x = getSwagger(new D2()).getExternalDocs();
-		assertJson(x, "{description:'a-description',url:'a-url'}");
+		assertBean(getSwagger(new D2()).getExternalDocs(), "description,url", "a-description,a-url");
 	}
 	@Test void d02b_externalDocs_Swagger_value_withFile() throws Exception {
-		var x = getSwaggerWithFile(new D2()).getExternalDocs();
-		assertJson(x, "{description:'a-description',url:'a-url'}");
+		assertBean(getSwaggerWithFile(new D2()).getExternalDocs(), "description,url", "a-description,a-url");
 	}
 
 
@@ -535,12 +586,10 @@ class Swagger_Test extends SimpleTestBase {
 	public static class D3 {}
 
 	@Test void d03a_externalDocs_Swagger_externalDocs() throws Exception {
-		var x = getSwagger(new D3()).getExternalDocs();
-		assertJson(x, "{description:'b-description',url:'b-url'}");
+		assertBean(getSwagger(new D3()).getExternalDocs(), "description,url", "b-description,b-url");
 	}
 	@Test void d03b_externalDocs_Swagger_externalDocs_withFile() throws Exception {
-		var x = getSwaggerWithFile(new D3()).getExternalDocs();
-		assertJson(x, "{description:'b-description',url:'b-url'}");
+		assertBean(getSwaggerWithFile(new D3()).getExternalDocs(), "description,url", "b-description,b-url");
 	}
 
 	@Rest(
@@ -709,14 +758,10 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void e06a_operation_summary_RestOp() throws Exception {
-		var x = getSwagger(new E6()).getPaths().get("/path/{foo}").get("get");
-		assertEquals("a-summary", x.getSummary());
-		assertEquals("a-description", x.getDescription());
+		assertBean(getSwagger(new E6()).getPaths().get("/path/{foo}").get("get"), "summary,description", "a-summary,a-description");
 	}
 	@Test void e06b_operation_summary_RestOp_withFile() throws Exception {
-		var x = getSwaggerWithFile(new E6()).getPaths().get("/path/{foo}").get("get");
-		assertEquals("a-summary", x.getSummary());
-		assertEquals("a-description", x.getDescription());
+		assertBean(getSwaggerWithFile(new E6()).getPaths().get("/path/{foo}").get("get"), "summary,description", "a-summary,a-description");
 	}
 
 	@Rest(
@@ -735,14 +780,10 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void e07a_operation_summary_RestOp() throws Exception {
-		var x = getSwagger(new E7()).getPaths().get("/path/{foo}").get("get");
-		assertEquals("d-summary", x.getSummary());
-		assertEquals("d-description", x.getDescription());
+		assertBean(getSwagger(new E7()).getPaths().get("/path/{foo}").get("get"), "summary,description", "d-summary,d-description");
 	}
 	@Test void e07b_operation_summary_RestOp_withFile() throws Exception {
-		var x = getSwaggerWithFile(new E7()).getPaths().get("/path/{foo}").get("get");
-		assertEquals("d-summary", x.getSummary());
-		assertEquals("d-description", x.getDescription());
+		assertBean(getSwaggerWithFile(new E7()).getPaths().get("/path/{foo}").get("get"), "summary,description", "d-summary,d-description");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -759,8 +800,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void f01_operation_tags_default() throws Exception {
-		assertJson(getSwagger(new F1()).getPaths().get("/path/{foo}").get("get").getTags(), "null");
-		assertJson(getSwaggerWithFile(new F1()).getPaths().get("/path/{foo}").get("get").getTags(), "['s-tag']");
+		assertNull(getSwagger(new F1()).getPaths().get("/path/{foo}").get("get").getTags());
+		assertSet(getSwaggerWithFile(new F1()).getPaths().get("/path/{foo}").get("get").getTags(), "s-tag");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
@@ -772,8 +813,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void f02_operation_tags_swaggerOnClass() throws Exception {
-		assertJson(getSwagger(new F2()).getPaths().get("/path/{foo}").get("get").getTags(), "['a-tag']");
-		assertJson(getSwaggerWithFile(new F2()).getPaths().get("/path/{foo}").get("get").getTags(), "['a-tag']");
+		assertSet(getSwagger(new F2()).getPaths().get("/path/{foo}").get("get").getTags(), "a-tag");
+		assertSet(getSwaggerWithFile(new F2()).getPaths().get("/path/{foo}").get("get").getTags(), "a-tag");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
@@ -785,8 +826,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void f03_operation_tags_swaggerOnMethod() throws Exception {
-		assertJson(getSwagger(new F3()).getPaths().get("/path/{foo}").get("get").getTags(), "['b-tag']");
-		assertJson(getSwaggerWithFile(new F3()).getPaths().get("/path/{foo}").get("get").getTags(), "['b-tag']");
+		assertSet(getSwagger(new F3()).getPaths().get("/path/{foo}").get("get").getTags(), "b-tag");
+		assertSet(getSwaggerWithFile(new F3()).getPaths().get("/path/{foo}").get("get").getTags(), "b-tag");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
@@ -798,8 +839,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void f04_operation_tags_swaggerOnAnnotation() throws Exception {
-		assertJson(getSwagger(new F4()).getPaths().get("/path/{foo}").get("get").getTags(), "['c-tag-1','c-tag-2']");
-		assertJson(getSwaggerWithFile(new F4()).getPaths().get("/path/{foo}").get("get").getTags(), "['c-tag-1','c-tag-2']");
+		assertSet(getSwagger(new F4()).getPaths().get("/path/{foo}").get("get").getTags(), "c-tag-1", "c-tag-2");
+		assertSet(getSwaggerWithFile(new F4()).getPaths().get("/path/{foo}").get("get").getTags(), "c-tag-1", "c-tag-2");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
@@ -811,8 +852,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void f05_operation_tags_swaggerOnAnnotation() throws Exception {
-		assertJson(getSwagger(new F5()).getPaths().get("/path/{foo}").get("get").getTags(), "['c-tag-1','c-tag-2']");
-		assertJson(getSwaggerWithFile(new F5()).getPaths().get("/path/{foo}").get("get").getTags(), "['c-tag-1','c-tag-2']");
+		assertSet(getSwagger(new F5()).getPaths().get("/path/{foo}").get("get").getTags(), "c-tag-1", "c-tag-2");
+		assertSet(getSwaggerWithFile(new F5()).getPaths().get("/path/{foo}").get("get").getTags(), "c-tag-1", "c-tag-2");
 	}
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}':{get:{tags:'a-tags'}}}"))
@@ -824,8 +865,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void f06_operation_tags_swaggerOnAnnotation_localized() throws Exception {
-		assertJson(getSwagger(new F6()).getPaths().get("/path/{foo}").get("get").getTags(), "['l-foo']");
-		assertJson(getSwaggerWithFile(new F6()).getPaths().get("/path/{foo}").get("get").getTags(), "['l-foo']");
+		assertSet(getSwagger(new F6()).getPaths().get("/path/{foo}").get("get").getTags(), "l-foo");
+		assertSet(getSwaggerWithFile(new F6()).getPaths().get("/path/{foo}").get("get").getTags(), "l-foo");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -842,8 +883,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void g01_operation_externalDocs_default() throws Exception {
-		assertJson(getSwagger(new G1()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "null");
-		assertJson(getSwaggerWithFile(new G1()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "{description:'s-description',url:'s-url'}");
+		assertNull(getSwagger(new G1()).getPaths().get("/path/{foo}").get("get").getExternalDocs());
+		assertBean(getSwaggerWithFile(new G1()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "description,url", "s-description,s-url");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
@@ -855,8 +896,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void g02_operation_externalDocs_swaggerOnClass() throws Exception {
-		assertJson(getSwagger(new G2()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "{description:'a-description',url:'a-url'}");
-		assertJson(getSwaggerWithFile(new G2()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "{description:'a-description',url:'a-url'}");
+		assertBean(getSwagger(new G2()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "description,url", "a-description,a-url");
+		assertBean(getSwaggerWithFile(new G2()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "description,url", "a-description,a-url");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
@@ -868,8 +909,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void g03_operation_externalDocs_swaggerOnMethod() throws Exception {
-		assertJson(getSwagger(new G3()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "{description:'b-description',url:'b-url'}");
-		assertJson(getSwaggerWithFile(new G3()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "{description:'b-description',url:'b-url'}");
+		assertBean(getSwagger(new G3()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "description,url", "b-description,b-url");
+		assertBean(getSwaggerWithFile(new G3()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "description,url", "b-description,b-url");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
@@ -881,8 +922,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void g04_operation_externalDocs_swaggerOnAnnotation() throws Exception {
-		assertJson(getSwagger(new G4()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "{description:'c-description',url:'c-url'}");
-		assertJson(getSwaggerWithFile(new G4()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "{description:'c-description',url:'c-url'}");
+		assertBean(getSwagger(new G4()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "description,url", "c-description,c-url");
+		assertBean(getSwaggerWithFile(new G4()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "description,url", "c-description,c-url");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
@@ -894,8 +935,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void g05_operation_externalDocs_swaggerOnAnnotation() throws Exception {
-		assertJson(getSwagger(new G5()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "{description:'d-description',url:'d-url'}");
-		assertJson(getSwaggerWithFile(new G5()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "{description:'d-description',url:'d-url'}");
+		assertBean(getSwagger(new G5()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "description,url", "d-description,d-url");
+		assertBean(getSwaggerWithFile(new G5()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "description,url", "d-description,d-url");
 	}
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
@@ -907,8 +948,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void g06_operation_externalDocs_swaggerOnAnnotation_localized() throws Exception {
-		assertJson(getSwagger(new G6()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "{description:'l-foo',url:'l-foo'}");
-		assertJson(getSwaggerWithFile(new G6()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "{description:'l-foo',url:'l-foo'}");
+		assertBean(getSwagger(new G6()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "description,url", "l-foo,l-foo");
+		assertBean(getSwaggerWithFile(new G6()).getPaths().get("/path/{foo}").get("get").getExternalDocs(), "description,url", "l-foo,l-foo");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -925,8 +966,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void h01_operation_consumes_default() throws Exception {
-		assertJson(getSwagger(new H1()).getPaths().get("/path/{foo}").get("get").getConsumes(), "null");
-		assertJson(getSwaggerWithFile(new H1()).getPaths().get("/path/{foo}").get("get").getConsumes(), "['s-consumes']");
+		assertNull(getSwagger(new H1()).getPaths().get("/path/{foo}").get("get").getConsumes());
+		assertSet(getSwaggerWithFile(new H1()).getPaths().get("/path/{foo}").get("get").getConsumes(), "s-consumes");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
@@ -938,8 +979,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void h02_operation_consumes_swaggerOnClass() throws Exception {
-		assertJson(getSwagger(new H2()).getPaths().get("/path/{foo}").get("get").getConsumes(), "['a-consumes']");
-		assertJson(getSwaggerWithFile(new H2()).getPaths().get("/path/{foo}").get("get").getConsumes(), "['a-consumes']");
+		assertSet(getSwagger(new H2()).getPaths().get("/path/{foo}").get("get").getConsumes(), "a-consumes");
+		assertSet(getSwaggerWithFile(new H2()).getPaths().get("/path/{foo}").get("get").getConsumes(), "a-consumes");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
@@ -951,8 +992,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void h03_operation_consumes_swaggerOnMethod() throws Exception {
-		assertJson(getSwagger(new H3()).getPaths().get("/path/{foo}").get("get").getConsumes(), "['b-consumes']");
-		assertJson(getSwaggerWithFile(new H3()).getPaths().get("/path/{foo}").get("get").getConsumes(), "['b-consumes']");
+		assertSet(getSwagger(new H3()).getPaths().get("/path/{foo}").get("get").getConsumes(), "b-consumes");
+		assertSet(getSwaggerWithFile(new H3()).getPaths().get("/path/{foo}").get("get").getConsumes(), "b-consumes");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
@@ -964,8 +1005,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void h04_operation_consumes_swaggerOnAnnotation() throws Exception {
-		assertJson(getSwagger(new H4()).getPaths().get("/path/{foo}").get("get").getConsumes(), "['c-consumes-1','c-consumes-2']");
-		assertJson(getSwaggerWithFile(new H4()).getPaths().get("/path/{foo}").get("get").getConsumes(), "['c-consumes-1','c-consumes-2']");
+		assertSet(getSwagger(new H4()).getPaths().get("/path/{foo}").get("get").getConsumes(), "c-consumes-1", "c-consumes-2");
+		assertSet(getSwaggerWithFile(new H4()).getPaths().get("/path/{foo}").get("get").getConsumes(), "c-consumes-1", "c-consumes-2");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
@@ -977,8 +1018,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void h05_operation_consumes_swaggerOnAnnotation() throws Exception {
-		assertJson(getSwagger(new H5()).getPaths().get("/path/{foo}").get("get").getConsumes(), "['c-consumes-1','c-consumes-2']");
-		assertJson(getSwaggerWithFile(new H5()).getPaths().get("/path/{foo}").get("get").getConsumes(), "['c-consumes-1','c-consumes-2']");
+		assertSet(getSwagger(new H5()).getPaths().get("/path/{foo}").get("get").getConsumes(), "c-consumes-1", "c-consumes-2");
+		assertSet(getSwaggerWithFile(new H5()).getPaths().get("/path/{foo}").get("get").getConsumes(), "c-consumes-1", "c-consumes-2");
 	}
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
@@ -990,8 +1031,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void h06_operation_consumes_swaggerOnAnnotation_localized() throws Exception {
-		assertJson(getSwagger(new H6()).getPaths().get("/path/{foo}").get("get").getConsumes(), "['l-foo']");
-		assertJson(getSwaggerWithFile(new H6()).getPaths().get("/path/{foo}").get("get").getConsumes(), "['l-foo']");
+		assertSet(getSwagger(new H6()).getPaths().get("/path/{foo}").get("get").getConsumes(), "l-foo");
+		assertSet(getSwaggerWithFile(new H6()).getPaths().get("/path/{foo}").get("get").getConsumes(), "l-foo");
 	}
 
 	@Rest(parsers={JsonParser.class})
@@ -1003,8 +1044,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void h07_operation_consumes_parsersOnClass() throws Exception {
-		assertJson(getSwagger(new H7()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "null");
-		assertJson(getSwaggerWithFile(new H7()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "null");
+		assertNull(getSwagger(new H7()).getPaths().get("/path2/{foo}").get("put").getConsumes());
+		assertNull(getSwaggerWithFile(new H7()).getPaths().get("/path2/{foo}").get("put").getConsumes());
 	}
 
 	@Rest(parsers={JsonParser.class})
@@ -1020,8 +1061,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void h08_operation_consumes_parsersOnClassAndMethod() throws Exception {
-		assertJson(getSwagger(new H8()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "['text/xml','application/xml']");
-		assertJson(getSwaggerWithFile(new H8()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "['text/xml','application/xml']");
+		assertSet(getSwagger(new H8()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "text/xml", "application/xml");
+		assertSet(getSwaggerWithFile(new H8()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "text/xml", "application/xml");
 	}
 
 	@Rest(parsers={JsonParser.class},swagger=@Swagger("paths:{'/path2/{foo}':{put:{consumes:['a-consumes']}}}"))
@@ -1033,8 +1074,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void h09_operation_consumes_parsersOnClassAndMethodWithSwagger() throws Exception {
-		assertJson(getSwagger(new H9()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "['a-consumes']");
-		assertJson(getSwaggerWithFile(new H9()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "['a-consumes']");
+		assertSet(getSwagger(new H9()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "a-consumes");
+		assertSet(getSwaggerWithFile(new H9()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "a-consumes");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1051,8 +1092,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void i01_operation_produces_default() throws Exception {
-		assertJson(getSwagger(new I1()).getPaths().get("/path/{foo}").get("get").getProduces(), "null");
-		assertJson(getSwaggerWithFile(new I1()).getPaths().get("/path/{foo}").get("get").getProduces(), "['s-produces']");
+		assertNull(getSwagger(new I1()).getPaths().get("/path/{foo}").get("get").getProduces());
+		assertSet(getSwaggerWithFile(new I1()).getPaths().get("/path/{foo}").get("get").getProduces(), "s-produces");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
@@ -1064,8 +1105,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void i02_operation_produces_swaggerOnClass() throws Exception {
-		assertJson(getSwagger(new I2()).getPaths().get("/path/{foo}").get("get").getProduces(), "['a-produces']");
-		assertJson(getSwaggerWithFile(new I2()).getPaths().get("/path/{foo}").get("get").getProduces(), "['a-produces']");
+		assertSet(getSwagger(new I2()).getPaths().get("/path/{foo}").get("get").getProduces(), "a-produces");
+		assertSet(getSwaggerWithFile(new I2()).getPaths().get("/path/{foo}").get("get").getProduces(), "a-produces");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
@@ -1077,8 +1118,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void i03_operation_produces_swaggerOnMethod() throws Exception {
-		assertJson(getSwagger(new I3()).getPaths().get("/path/{foo}").get("get").getProduces(), "['b-produces']");
-		assertJson(getSwaggerWithFile(new I3()).getPaths().get("/path/{foo}").get("get").getProduces(), "['b-produces']");
+		assertSet(getSwagger(new I3()).getPaths().get("/path/{foo}").get("get").getProduces(), "b-produces");
+		assertSet(getSwaggerWithFile(new I3()).getPaths().get("/path/{foo}").get("get").getProduces(), "b-produces");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
@@ -1090,8 +1131,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void i04_operation_produces_swaggerOnAnnotation() throws Exception {
-		assertJson(getSwagger(new I4()).getPaths().get("/path/{foo}").get("get").getProduces(), "['c-produces-1','c-produces-2']");
-		assertJson(getSwaggerWithFile(new I4()).getPaths().get("/path/{foo}").get("get").getProduces(), "['c-produces-1','c-produces-2']");
+		assertSet(getSwagger(new I4()).getPaths().get("/path/{foo}").get("get").getProduces(), "c-produces-1", "c-produces-2");
+		assertSet(getSwaggerWithFile(new I4()).getPaths().get("/path/{foo}").get("get").getProduces(), "c-produces-1", "c-produces-2");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
@@ -1103,8 +1144,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void i05_operation_produces_swaggerOnAnnotation() throws Exception {
-		assertJson(getSwagger(new I5()).getPaths().get("/path/{foo}").get("get").getProduces(), "['c-produces-1','c-produces-2']");
-		assertJson(getSwaggerWithFile(new I5()).getPaths().get("/path/{foo}").get("get").getProduces(), "['c-produces-1','c-produces-2']");
+		assertSet(getSwagger(new I5()).getPaths().get("/path/{foo}").get("get").getProduces(), "c-produces-1", "c-produces-2");
+		assertSet(getSwaggerWithFile(new I5()).getPaths().get("/path/{foo}").get("get").getProduces(), "c-produces-1", "c-produces-2");
 	}
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
@@ -1116,8 +1157,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void i06_operation_produces_swaggerOnAnnotation_localized() throws Exception {
-		assertJson(getSwagger(new I6()).getPaths().get("/path/{foo}").get("get").getProduces(), "['l-foo']");
-		assertJson(getSwaggerWithFile(new I6()).getPaths().get("/path/{foo}").get("get").getProduces(), "['l-foo']");
+		assertSet(getSwagger(new I6()).getPaths().get("/path/{foo}").get("get").getProduces(), "l-foo");
+		assertSet(getSwaggerWithFile(new I6()).getPaths().get("/path/{foo}").get("get").getProduces(), "l-foo");
 	}
 
 	@Rest(serializers={JsonSerializer.class})
@@ -1129,8 +1170,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void i07_operation_produces_serializersOnClass() throws Exception {
-		assertJson(getSwagger(new I7()).getPaths().get("/path2/{foo}").get("put").getProduces(), "null");
-		assertJson(getSwaggerWithFile(new I7()).getPaths().get("/path2/{foo}").get("put").getProduces(), "null");
+		assertNull(getSwagger(new I7()).getPaths().get("/path2/{foo}").get("put").getProduces());
+		assertNull(getSwaggerWithFile(new I7()).getPaths().get("/path2/{foo}").get("put").getProduces());
 	}
 
 	@Rest(serializers={JsonSerializer.class})
@@ -1146,8 +1187,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void i08_operation_produces_serializersOnClassAndMethod() throws Exception {
-		assertJson(getSwagger(new I8()).getPaths().get("/path2/{foo}").get("put").getProduces(), "['text/xml']");
-		assertJson(getSwaggerWithFile(new I8()).getPaths().get("/path2/{foo}").get("put").getProduces(), "['text/xml']");
+		assertSet(getSwagger(new I8()).getPaths().get("/path2/{foo}").get("put").getProduces(), "text/xml");
+		assertSet(getSwaggerWithFile(new I8()).getPaths().get("/path2/{foo}").get("put").getProduces(), "text/xml");
 	}
 
 	@Rest(serializers={JsonSerializer.class},swagger=@Swagger("paths:{'/path2/{foo}':{put:{produces:['a-produces']}}}"))
@@ -1159,8 +1200,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void i09_operation_produces_serializersOnClassAndMethodWithSwagger() throws Exception {
-		assertJson(getSwagger(new I9()).getPaths().get("/path2/{foo}").get("put").getProduces(), "['a-produces']");
-		assertJson(getSwaggerWithFile(new I9()).getPaths().get("/path2/{foo}").get("put").getProduces(), "['a-produces']");
+		assertSet(getSwagger(new I9()).getPaths().get("/path2/{foo}").get("put").getProduces(), "a-produces");
+		assertSet(getSwaggerWithFile(new I9()).getPaths().get("/path2/{foo}").get("put").getProduces(), "a-produces");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1177,8 +1218,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void j01_operation_deprecated_Deprecated() throws Exception {
-		assertJson(getSwagger(new J1()).getPaths().get("/path2/{foo}").get("get").getDeprecated(), "true");
-		assertJson(getSwaggerWithFile(new J1()).getPaths().get("/path2/{foo}").get("get").getDeprecated(), "true");
+		assertTrue(getSwagger(new J1()).getPaths().get("/path2/{foo}").get("get").getDeprecated());
+		assertTrue(getSwaggerWithFile(new J1()).getPaths().get("/path2/{foo}").get("get").getDeprecated());
 	}
 
 	@Rest
@@ -1191,8 +1232,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void j02_operation_deprecated_Deprecated() throws Exception {
-		assertJson(getSwagger(new J2()).getPaths().get("/path2/{foo}").get("get").getDeprecated(), "true");  // NOSONAR
-		assertJson(getSwaggerWithFile(new J2()).getPaths().get("/path2/{foo}").get("get").getDeprecated(), "true");  // NOSONAR
+		assertTrue(getSwagger(new J2()).getPaths().get("/path2/{foo}").get("get").getDeprecated());  // NOSONAR
+		assertTrue(getSwaggerWithFile(new J2()).getPaths().get("/path2/{foo}").get("get").getDeprecated());  // NOSONAR
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1208,32 +1249,18 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void k01a_query_type_default() throws Exception {
-		var x = getSwagger(new K1()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
 		assertBean(
-			x,
+			getSwagger(new K1()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo"),
 			"type,description,required,allowEmptyValue,exclusiveMaximum,exclusiveMinimum,uniqueItems,format,collectionFormat,pattern,maximum,minimum,multipleOf,maxLength,minLength,maxItems,minItems",
 			"object,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null"
 		);
 	}
 	@Test void k01b_query_type_default_withFile() throws Exception {
-		var x = getSwaggerWithFile(new K1()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
-		assertEquals("string", x.getType());
-		assertEquals("s-description", x.getDescription());
-		assertJson(x.getRequired(), "true");
-		assertJson(x.getAllowEmptyValue(), "true");
-		assertJson(x.getExclusiveMaximum(), "true");
-		assertJson(x.getExclusiveMinimum(), "true");
-		assertJson(x.getUniqueItems(), "true");
-		assertEquals("s-format", x.getFormat());
-		assertEquals("s-collectionFormat", x.getCollectionFormat());
-		assertEquals("s-pattern", x.getPattern());
-		assertJson(x.getMaximum(), "1.0");
-		assertJson(x.getMinimum(), "1.0");
-		assertJson(x.getMultipleOf(), "1.0");
-		assertJson(x.getMaxLength(), "1");
-		assertJson(x.getMinLength(), "1");
-		assertJson(x.getMaxItems(), "1");
-		assertJson(x.getMinItems(), "1");
+		assertBean(
+			getSwaggerWithFile(new K1()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo"),
+			"type,description,required,allowEmptyValue,exclusiveMaximum,exclusiveMinimum,uniqueItems,format,collectionFormat,pattern,maximum,minimum,multipleOf,maxLength,minLength,maxItems,minItems",
+			"string,s-description,true,true,true,true,true,s-format,s-collectionFormat,s-pattern,1.0,1.0,1.0,1,1,1,1"
+		);
 	}
 
 	@Rest(
@@ -1268,44 +1295,18 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void k02a_query_type_swaggerOnClass() throws Exception {
-		var x = getSwagger(new K2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
-		assertEquals("int32", x.getType());
-		assertEquals("a-description", x.getDescription());
-		assertJson(x.getRequired(), "false");
-		assertJson(x.getAllowEmptyValue(), "false");
-		assertJson(x.getExclusiveMaximum(), "false");
-		assertJson(x.getExclusiveMinimum(), "false");
-		assertJson(x.getUniqueItems(), "false");
-		assertEquals("a-format", x.getFormat());
-		assertEquals("a-collectionFormat", x.getCollectionFormat());
-		assertEquals("a-pattern", x.getPattern());
-		assertJson(x.getMaximum(), "2.0");
-		assertJson(x.getMinimum(), "2.0");
-		assertJson(x.getMultipleOf(), "2.0");
-		assertJson(x.getMaxLength(), "2");
-		assertJson(x.getMinLength(), "2");
-		assertJson(x.getMaxItems(), "2");
-		assertJson(x.getMinItems(), "2");
+		assertBean(
+			getSwagger(new K2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo"),
+			"type,description,required,allowEmptyValue,exclusiveMaximum,exclusiveMinimum,uniqueItems,format,collectionFormat,pattern,maximum,minimum,multipleOf,maxLength,minLength,maxItems,minItems",
+			"int32,a-description,false,false,false,false,false,a-format,a-collectionFormat,a-pattern,2.0,2.0,2.0,2,2,2,2"
+		);
 	}
 	@Test void k02b_query_type_swaggerOnClass_withFile() throws Exception {
-		var x = getSwaggerWithFile(new K2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
-		assertEquals("int32", x.getType());
-		assertEquals("a-description", x.getDescription());
-		assertJson(x.getRequired(), "false");
-		assertJson(x.getAllowEmptyValue(), "false");
-		assertJson(x.getExclusiveMaximum(), "false");
-		assertJson(x.getExclusiveMinimum(), "false");
-		assertJson(x.getUniqueItems(), "false");
-		assertEquals("a-format", x.getFormat());
-		assertEquals("a-collectionFormat", x.getCollectionFormat());
-		assertEquals("a-pattern", x.getPattern());
-		assertJson(x.getMaximum(), "2.0");
-		assertJson(x.getMinimum(), "2.0");
-		assertJson(x.getMultipleOf(), "2.0");
-		assertJson(x.getMaxLength(), "2");
-		assertJson(x.getMinLength(), "2");
-		assertJson(x.getMaxItems(), "2");
-		assertJson(x.getMinItems(), "2");
+		assertBean(
+			getSwaggerWithFile(new K2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo"),
+			"type,description,required,allowEmptyValue,exclusiveMaximum,exclusiveMinimum,uniqueItems,format,collectionFormat,pattern,maximum,minimum,multipleOf,maxLength,minLength,maxItems,minItems",
+			"int32,a-description,false,false,false,false,false,a-format,a-collectionFormat,a-pattern,2.0,2.0,2.0,2,2,2,2"
+		);
 	}
 
 	@Rest(
@@ -1364,44 +1365,18 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void k03a_query_type_swaggerOnMethod() throws Exception {
-		var x = getSwagger(new K3()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
-		assertEquals("int64", x.getType());
-		assertEquals("b-description", x.getDescription());
-		assertJson(x.getRequired(), "true");
-		assertJson(x.getAllowEmptyValue(), "true");
-		assertJson(x.getExclusiveMaximum(), "true");
-		assertJson(x.getExclusiveMinimum(), "true");
-		assertJson(x.getUniqueItems(), "true");
-		assertEquals("b-format", x.getFormat());
-		assertEquals("b-collectionFormat", x.getCollectionFormat());
-		assertEquals("b-pattern", x.getPattern());
-		assertJson(x.getMaximum(), "3.0");
-		assertJson(x.getMinimum(), "3.0");
-		assertJson(x.getMultipleOf(), "3.0");
-		assertJson(x.getMaxLength(), "3");
-		assertJson(x.getMinLength(), "3");
-		assertJson(x.getMaxItems(), "3");
-		assertJson(x.getMinItems(), "3");
+		assertBean(
+			getSwagger(new K3()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo"),
+			"type,description,required,allowEmptyValue,exclusiveMaximum,exclusiveMinimum,uniqueItems,format,collectionFormat,pattern,maximum,minimum,multipleOf,maxLength,minLength,maxItems,minItems",
+			"int64,b-description,true,true,true,true,true,b-format,b-collectionFormat,b-pattern,3.0,3.0,3.0,3,3,3,3"
+		);
 	}
 	@Test void k03b_query_type_swaggerOnMethod_withFile() throws Exception {
-		var x = getSwaggerWithFile(new K3()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
-		assertEquals("int64", x.getType());
-		assertEquals("b-description", x.getDescription());
-		assertJson(x.getRequired(), "true");
-		assertJson(x.getAllowEmptyValue(), "true");
-		assertJson(x.getExclusiveMaximum(), "true");
-		assertJson(x.getExclusiveMinimum(), "true");
-		assertJson(x.getUniqueItems(), "true");
-		assertEquals("b-format", x.getFormat());
-		assertEquals("b-collectionFormat", x.getCollectionFormat());
-		assertEquals("b-pattern", x.getPattern());
-		assertJson(x.getMaximum(), "3.0");
-		assertJson(x.getMinimum(), "3.0");
-		assertJson(x.getMultipleOf(), "3.0");
-		assertJson(x.getMaxLength(), "3");
-		assertJson(x.getMinLength(), "3");
-		assertJson(x.getMaxItems(), "3");
-		assertJson(x.getMinItems(), "3");
+		assertBean(
+			getSwaggerWithFile(new K3()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo"),
+			"type,description,required,allowEmptyValue,exclusiveMaximum,exclusiveMinimum,uniqueItems,format,collectionFormat,pattern,maximum,minimum,multipleOf,maxLength,minLength,maxItems,minItems",
+			"int64,b-description,true,true,true,true,true,b-format,b-collectionFormat,b-pattern,3.0,3.0,3.0,3,3,3,3"
+		);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1429,8 +1404,16 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void n01_query_schema_default() throws Exception {
-		assertJson(getSwagger(new N1()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema(), "{properties:{a:{format:'int32',type:'integer'}}}");
-		assertJson(getSwaggerWithFile(new N1()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema(), "{'$ref':'#/definitions/Foo'}");
+		assertBean(
+			getSwagger(new N1()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema(),
+			"properties{a{format,type}}",
+			"{{int32,integer}}"
+		);
+		assertBean(
+			getSwaggerWithFile(new N1()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema(),
+			"ref",
+			"#/definitions/Foo"
+		);
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/query':{get:{parameters:[{in:'query',name:'foo',schema:{$ref:'b'}}]}}}"))
@@ -1442,8 +1425,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void n02_query_schema_swaggerOnClass() throws Exception {
-		assertJson(getSwagger(new N2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema(), "{'$ref':'b'}");
-		assertJson(getSwaggerWithFile(new N2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema(), "{'$ref':'b'}");
+		assertBean(getSwagger(new N2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema(), "ref", "b");
+		assertBean(getSwaggerWithFile(new N2()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema(), "ref", "b");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/query':{get:{parameters:[{in:'query',name:'foo',schema:{$ref:'b'}}]}}}"))
@@ -1456,8 +1439,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void n03_query_schema_swaggerOnMethnt() throws Exception {
-		assertJson(getSwagger(new N3()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema(), "{'$ref':'c'}");
-		assertJson(getSwaggerWithFile(new N3()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema(), "{'$ref':'c'}");
+		assertBean(getSwagger(new N3()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema(), "ref", "c");
+		assertBean(getSwaggerWithFile(new N3()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema(), "ref", "c");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1480,12 +1463,12 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void o01a_responses_100_description_default() throws Exception {
-		assertEquals("Continue", getSwagger(new O1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
-		assertEquals("s-100-description", getSwaggerWithFile(new O1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+		assertBean(getSwagger(new O1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100), "description", "Continue");
+		assertBean(getSwaggerWithFile(new O1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100), "description", "s-100-description");
 	}
 	@Test void o01b_responses_100_description_default() throws Exception {
-		assertEquals("Continue", getSwagger(new O1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
-		assertEquals("s-100-description", getSwaggerWithFile(new O1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+		assertBean(getSwagger(new O1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100), "description", "Continue");
+		assertBean(getSwaggerWithFile(new O1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100), "description", "s-100-description");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
@@ -1495,8 +1478,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void o02_response_100_description_swaggerOnClass() throws Exception {
-		assertEquals("a-100-description", getSwagger(new O2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
-		assertEquals("a-100-description", getSwaggerWithFile(new O2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+		assertBean(getSwagger(new O2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100), "description", "a-100-description");
+		assertBean(getSwaggerWithFile(new O2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100), "description", "a-100-description");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
@@ -1506,8 +1489,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void o03_response_100_description_swaggerOnMethod() throws Exception {
-		assertEquals("b-100-description", getSwagger(new O3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
-		assertEquals("b-100-description", getSwaggerWithFile(new O3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+		assertBean(getSwagger(new O3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100), "description", "b-100-description");
+		assertBean(getSwaggerWithFile(new O3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100), "description", "b-100-description");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
@@ -1524,12 +1507,12 @@ class Swagger_Test extends SimpleTestBase {
 	public static class O4c {}
 
 	@Test void o04a_response_100_description_swaggerOnAnnotation() throws Exception {
-		assertEquals("c-100-description", getSwagger(new O4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
-		assertEquals("c-100-description", getSwaggerWithFile(new O4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+		assertBean(getSwagger(new O4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100), "description", "c-100-description");
+		assertBean(getSwaggerWithFile(new O4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100), "description", "c-100-description");
 	}
 	@Test void o04b_response_100_description_swaggerOnAnnotation() throws Exception {
-		assertEquals("c-100-description", getSwagger(new O4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
-		assertEquals("c-100-description", getSwaggerWithFile(new O4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+		assertBean(getSwagger(new O4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100), "description", "c-100-description");
+		assertBean(getSwaggerWithFile(new O4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100), "description", "c-100-description");
 	}
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
@@ -1546,12 +1529,12 @@ class Swagger_Test extends SimpleTestBase {
 	public static class O5c {}
 
 	@Test void o05a_response_100_description_swaggerOnAnnotation_localized() throws Exception {
-		assertEquals("l-foo", getSwagger(new O5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
-		assertEquals("l-foo", getSwaggerWithFile(new O5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+		assertBean(getSwagger(new O5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100), "description", "l-foo");
+		assertBean(getSwaggerWithFile(new O5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100), "description", "l-foo");
 	}
 	@Test void o05b_response_100_description_swaggerOnAnnotation_localized() throws Exception {
-		assertEquals("l-foo", getSwagger(new O5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
-		assertEquals("l-foo", getSwaggerWithFile(new O5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+		assertBean(getSwagger(new O5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100), "description", "l-foo");
+		assertBean(getSwaggerWithFile(new O5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100), "description", "l-foo");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1574,12 +1557,12 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void p01a_responses_100_headers_default() throws Exception {
-		assertEquals(null, getSwagger(new P1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
-		assertJson(getSwaggerWithFile(new P1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "{'X-Foo':{description:'s-description',type:'integer',format:'int32'}}");
+		assertNull(getSwagger(new P1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
+		assertMap(getSwaggerWithFile(new P1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{s-description,integer,int32}");
 	}
 	@Test void p01b_responses_100_headers_default() throws Exception {
-		assertEquals(null, getSwagger(new P1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
-		assertJson(getSwaggerWithFile(new P1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "{'X-Foo':{description:'s-description',type:'integer',format:'int32'}}");
+		assertNull(getSwagger(new P1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
+		assertMap(getSwaggerWithFile(new P1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{s-description,integer,int32}");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
@@ -1591,8 +1574,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void p02_response_100_headers_swaggerOnClass() throws Exception {
-		assertJson(getSwagger(new P2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}");
-		assertJson(getSwaggerWithFile(new P2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}");
+		assertMap(getSwagger(new P2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{b-description,integer,int32}");
+		assertMap(getSwaggerWithFile(new P2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{b-description,integer,int32}");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
@@ -1604,8 +1587,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void p03_response_100_headers_swaggerOnMethod() throws Exception {
-		assertJson(getSwagger(new P3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "{'X-Foo':{description:'c-description',type:'integer',format:'int32'}}");
-		assertJson(getSwaggerWithFile(new P3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "{'X-Foo':{description:'c-description',type:'integer',format:'int32'}}");
+		assertMap(getSwagger(new P3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{c-description,integer,int32}");
+		assertMap(getSwaggerWithFile(new P3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{c-description,integer,int32}");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
@@ -1622,12 +1605,12 @@ class Swagger_Test extends SimpleTestBase {
 	public static class P4c {}
 
 	@Test void p04a_response_100_headers_swaggerOnAnnotation() throws Exception {
-		assertJson(getSwagger(new P4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "{'X-Foo':{description:'d-description',type:'integer',format:'int32'}}");
-		assertJson(getSwaggerWithFile(new P4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "{'X-Foo':{description:'d-description',type:'integer',format:'int32'}}");
+		assertMap(getSwagger(new P4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{d-description,integer,int32}");
+		assertMap(getSwaggerWithFile(new P4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{d-description,integer,int32}");
 	}
 	@Test void p04b_response_100_headers_swaggerOnAnnotation() throws Exception {
-		assertJson(getSwagger(new P4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "{'X-Foo':{description:'d-description',type:'integer',format:'int32'}}");
-		assertJson(getSwaggerWithFile(new P4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "{'X-Foo':{description:'d-description',type:'integer',format:'int32'}}");
+		assertMap(getSwagger(new P4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{d-description,integer,int32}");
+		assertMap(getSwaggerWithFile(new P4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{d-description,integer,int32}");
 	}
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
@@ -1644,12 +1627,12 @@ class Swagger_Test extends SimpleTestBase {
 	public static class P5c {}
 
 	@Test void p05a_response_100_headers_swaggerOnAnnotation_localized() throws Exception {
-		assertJson(getSwagger(new P5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "{'X-Foo':{description:'l-foo',type:'integer',format:'int32'}}");
-		assertJson(getSwaggerWithFile(new P5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "{'X-Foo':{description:'l-foo',type:'integer',format:'int32'}}");
+		assertMap(getSwagger(new P5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{l-foo,integer,int32}");
+		assertMap(getSwaggerWithFile(new P5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{l-foo,integer,int32}");
 	}
 	@Test void p05b_response_100_headers_swaggerOnAnnotation_localized() throws Exception {
-		assertJson(getSwagger(new P5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "{'X-Foo':{description:'l-foo',type:'integer',format:'int32'}}");
-		assertJson(getSwaggerWithFile(new P5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "{'X-Foo':{description:'l-foo',type:'integer',format:'int32'}}");
+		assertMap(getSwagger(new P5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{l-foo,integer,int32}");
+		assertMap(getSwaggerWithFile(new P5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{l-foo,integer,int32}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1672,12 +1655,12 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void r01a_responses_100_examples_default() throws Exception {
-		assertEquals(null, getSwagger(new R1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
-		assertJson(getSwaggerWithFile(new R1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "{foo:'a'}");
+		assertNull(getSwagger(new R1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
+		assertMap(getSwaggerWithFile(new R1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo", "a");
 	}
 	@Test void r01b_responses_100_examples_default() throws Exception {
-		assertEquals(null, getSwagger(new R1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
-		assertJson(getSwaggerWithFile(new R1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "{foo:'a'}");
+		assertNull(getSwagger(new R1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
+		assertMap(getSwaggerWithFile(new R1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo", "a");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
@@ -1687,8 +1670,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void r02_response_100_examples_swaggerOnClass() throws Exception {
-		assertJson(getSwagger(new R2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "{foo:{bar:'b'}}");
-		assertJson(getSwaggerWithFile(new R2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "{foo:{bar:'b'}}");
+		assertMap(getSwagger(new R2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{b}");
+		assertMap(getSwaggerWithFile(new R2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{b}");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
@@ -1698,8 +1681,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void r03_response_100_examples_swaggerOnMethod() throws Exception {
-		assertJson(getSwagger(new R3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "{foo:{bar:'c'}}");
-		assertJson(getSwaggerWithFile(new R3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "{foo:{bar:'c'}}");
+		assertMap(getSwagger(new R3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{c}");
+		assertMap(getSwaggerWithFile(new R3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{c}");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
@@ -1716,12 +1699,12 @@ class Swagger_Test extends SimpleTestBase {
 	public static class R4c {}
 
 	@Test void r04a_response_100_examples_swaggerOnAnnotation() throws Exception {
-		assertJson(getSwagger(new R4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "{foo:{bar:'d'}}");
-		assertJson(getSwaggerWithFile(new R4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "{foo:{bar:'d'}}");
+		assertMap(getSwagger(new R4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{d}");
+		assertMap(getSwaggerWithFile(new R4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{d}");
 	}
 	@Test void r04b_response_100_examples_swaggerOnAnnotation() throws Exception {
-		assertJson(getSwagger(new R4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "{foo:{bar:'d'}}");
-		assertJson(getSwaggerWithFile(new R4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "{foo:{bar:'d'}}");
+		assertMap(getSwagger(new R4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{d}");
+		assertMap(getSwaggerWithFile(new R4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{d}");
 	}
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
@@ -1738,12 +1721,12 @@ class Swagger_Test extends SimpleTestBase {
 	public static class R5c {}
 
 	@Test void r05a_response_100_examples_swaggerOnAnnotation_lodalized() throws Exception {
-		assertJson(getSwagger(new R5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "{foo:{bar:'l-foo'}}");
-		assertJson(getSwaggerWithFile(new R5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "{foo:{bar:'l-foo'}}");
+		assertMap(getSwagger(new R5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{l-foo}");
+		assertMap(getSwaggerWithFile(new R5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{l-foo}");
 	}
 	@Test void r05b_response_100_examples_swaggerOnAnnotation_lodalized() throws Exception {
-		assertJson(getSwagger(new R5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "{foo:{bar:'l-foo'}}");
-		assertJson(getSwaggerWithFile(new R5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "{foo:{bar:'l-foo'}}");
+		assertMap(getSwagger(new R5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{l-foo}");
+		assertMap(getSwaggerWithFile(new R5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{l-foo}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1764,12 +1747,12 @@ class Swagger_Test extends SimpleTestBase {
 	public static class S1c extends X {}
 
 	@Test void s01a_responses_100_schema_default() throws Exception {
-		assertJson(getSwagger(new S1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "{type:'object',properties:{a:{format:'int32',type:'integer'}}}");
-		assertJson(getSwaggerWithFile(new S1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "{type:'array',items:{'$ref':'#/definitions/Foo'}}");
+		assertBean(getSwagger(new S1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "type,properties{a{format,type}}", "object,{{int32,integer}}");
+		assertBean(getSwaggerWithFile(new S1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "type,items{ref}", "array,{#/definitions/Foo}");
 	}
 	@Test void s01b_responses_100_schema_default() throws Exception {
-		assertJson(getSwagger(new S1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "{type:'object',properties:{a:{format:'int32',type:'integer'}}}");
-		assertJson(getSwaggerWithFile(new S1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "{type:'array',items:{'$ref':'#/definitions/Foo'}}");
+		assertBean(getSwagger(new S1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "type,properties{a{format,type}}", "object,{{int32,integer}}");
+		assertBean(getSwaggerWithFile(new S1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "type,items{ref}", "array,{#/definitions/Foo}");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
@@ -1779,8 +1762,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void s02_response_100_schema_swaggerOnClass() throws Exception {
-		assertJson(getSwagger(new S2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "{'$ref':'b'}");
-		assertJson(getSwaggerWithFile(new S2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "{'$ref':'b'}");
+		assertBean(getSwagger(new S2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "ref", "b");
+		assertBean(getSwaggerWithFile(new S2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "ref", "b");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
@@ -1790,8 +1773,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void s03_response_100_schema_swaggerOnMethoe() throws Exception {
-		assertJson(getSwagger(new S3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "{'$ref':'c'}");
-		assertJson(getSwaggerWithFile(new S3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "{'$ref':'c'}");
+		assertBean(getSwagger(new S3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "ref", "c");
+		assertBean(getSwaggerWithFile(new S3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "ref", "c");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
@@ -1808,12 +1791,12 @@ class Swagger_Test extends SimpleTestBase {
 	public static class S4c extends X {}
 
 	@Test void s04a_response_100_schema_swaggerOnAnnotation() throws Exception {
-		assertJson(getSwagger(new S4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "{'$ref':'d'}");
-		assertJson(getSwaggerWithFile(new S4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "{'$ref':'d'}");
+		assertBean(getSwagger(new S4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "ref", "d");
+		assertBean(getSwaggerWithFile(new S4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "ref", "d");
 	}
 	@Test void s04b_response_100_schema_swaggerOnAnnotation() throws Exception {
-		assertJson(getSwagger(new S4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "{'$ref':'d'}");
-		assertJson(getSwaggerWithFile(new S4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "{'$ref':'d'}");
+		assertBean(getSwagger(new S4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "ref", "d");
+		assertBean(getSwaggerWithFile(new S4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "ref", "d");
 	}
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
@@ -1830,12 +1813,12 @@ class Swagger_Test extends SimpleTestBase {
 	public static class S5c extends X {}
 
 	@Test void s05a_response_100_schema_swaggerOnAnnotation_loealized() throws Exception {
-		assertJson(getSwagger(new S5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "{'$ref':'l-foo'}");
-		assertJson(getSwaggerWithFile(new S5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "{'$ref':'l-foo'}");
+		assertBean(getSwagger(new S5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "ref", "l-foo");
+		assertBean(getSwaggerWithFile(new S5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "ref", "l-foo");
 	}
 	@Test void s05b_response_100_schema_swaggerOnAnnotation_loealized() throws Exception {
-		assertJson(getSwagger(new S5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "{'$ref':'l-foo'}");
-		assertJson(getSwaggerWithFile(new S5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "{'$ref':'l-foo'}");
+		assertBean(getSwagger(new S5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "ref", "l-foo");
+		assertBean(getSwaggerWithFile(new S5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "ref", "l-foo");
 	}
 
 	@Bean(typeName="Foo")
