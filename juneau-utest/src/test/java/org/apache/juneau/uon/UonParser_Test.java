@@ -59,13 +59,10 @@ class UonParser_Test extends SimpleTestBase {
 		// Top level
 		t = "(a=b,c=123,d=false,e=true,f=null)";
 		var m = p.parse(t, Map.class);
-		assertEquals("b", m.get("a"));
+		assertBean(m, "a,c,d,e", "b,123,false,true");
 		assertTrue(m.get("c") instanceof Number);
-		assertEquals(123, m.get("c"));
 		assertTrue(m.get("d") instanceof Boolean);
-		assertEquals(Boolean.FALSE, m.get("d"));
 		assertTrue(m.get("e") instanceof Boolean);
-		assertEquals(Boolean.TRUE, m.get("e"));
 		m = pe.parse(t, Map.class);
 		assertNull(m.get("f"));
 

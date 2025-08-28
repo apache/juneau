@@ -16,7 +16,6 @@ import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
-import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -323,127 +322,27 @@ class ObjectRest_Test extends SimpleTestBase {
 		var l = JsonList.ofJson("[{a:'b'}]");
 		var m = JsonMap.ofJson("{a:'b'}");
 
-		assertObjectRest(model, ObjectRest::get, "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "null,0,0,false,null,null,null,null,null,null,null");
+		assertMapped(model, ObjectRest::get, "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "null,0,0,false,null,null,null,null,null,null,null");
 
-		assertEquals("foo", model.getWithDefault("f1", "foo"));
-		assertEquals(0, model.getWithDefault("f2", "foo"));
-		assertEquals(0L, model.getWithDefault("f3", "foo"));
-		assertEquals(false, model.getWithDefault("f4", "foo"));
-		assertEquals("foo", model.getWithDefault("f2a", "foo"));
-		assertEquals("foo", model.getWithDefault("f3a", "foo"));
-		assertEquals("foo", model.getWithDefault("f4a", "foo"));
-		assertEquals("foo", model.getWithDefault("f5", "foo"));
-		assertEquals("foo", model.getWithDefault("f6", "foo"));
-		assertEquals("foo", model.getWithDefault("f7", "foo"));
-		assertEquals("foo", model.getWithDefault("f8", "foo"));
+		assertMapped(model, (r,p) -> r.getWithDefault(p, "foo"), "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "foo,0,0,false,foo,foo,foo,foo,foo,foo,foo");
 
-		assertNull(model.getString("f1"));
-		assertEquals("0", model.getString("f2"));
-		assertEquals("0", model.getString("f3"));
-		assertEquals("false", model.getString("f4"));
-		assertNull(model.getString("f2a"));
-		assertNull(model.getString("f3a"));
-		assertNull(model.getString("f4a"));
-		assertNull(model.getString("f5"));
-		assertNull(model.getString("f6"));
-		assertNull(model.getString("f7"));
-		assertNull(model.getString("f8"));
+		assertMapped(model, ObjectRest::getString, "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "null,0,0,false,null,null,null,null,null,null,null");
 
-		assertEquals("foo", model.getString("f1", "foo"));
-		assertEquals("0", model.getString("f2", "foo"));
-		assertEquals("0", model.getString("f3", "foo"));
-		assertEquals("false", model.getString("f4", "foo"));
-		assertEquals("foo", model.getString("f2a", "foo"));
-		assertEquals("foo", model.getString("f3a", "foo"));
-		assertEquals("foo", model.getString("f4a", "foo"));
-		assertEquals("foo", model.getString("f5", "foo"));
-		assertEquals("foo", model.getString("f6", "foo"));
-		assertEquals("foo", model.getString("f7", "foo"));
-		assertEquals("foo", model.getString("f8", "foo"));
+		assertMapped(model, (r,p) -> r.getString(p, "foo"), "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "foo,0,0,false,foo,foo,foo,foo,foo,foo,foo");
 
-		assertNull(model.getInt("f1"));
-		assertEquals(0, (int)model.getInt("f2"));
-		assertEquals(0, (int)model.getInt("f3"));
-		assertEquals(0, (int)model.getInt("f4"));
-		assertNull(model.getInt("f2a"));
-		assertNull(model.getInt("f3a"));
-		assertNull(model.getInt("f4a"));
-		assertNull(model.getInt("f5"));
-		assertNull(model.getInt("f6"));
-		assertNull(model.getInt("f7"));
-		assertNull(model.getInt("f8"));
+		assertMapped(model, ObjectRest::getInt, "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "null,0,0,0,null,null,null,null,null,null,null");
 
-		assertEquals(1, (int)model.getInt("f1", 1));
-		assertEquals(0, (int)model.getInt("f2", 1));
-		assertEquals(0, (int)model.getInt("f3", 1));
-		assertEquals(0, (int)model.getInt("f4", 1));
-		assertEquals(1, (int)model.getInt("f2a", 1));
-		assertEquals(1, (int)model.getInt("f3a", 1));
-		assertEquals(1, (int)model.getInt("f4a", 1));
-		assertEquals(1, (int)model.getInt("f5", 1));
-		assertEquals(1, (int)model.getInt("f6", 1));
-		assertEquals(1, (int)model.getInt("f7", 1));
-		assertEquals(1, (int)model.getInt("f8", 1));
+		assertMapped(model, (r,p) -> r.getInt(p, 1), "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "1,0,0,0,1,1,1,1,1,1,1");
 
-		assertNull(model.getLong("f1"));
-		assertEquals(0, (long)model.getLong("f2"));
-		assertEquals(0, (long)model.getLong("f3"));
-		assertEquals(0, (long)model.getLong("f4"));
-		assertNull(model.getLong("f2a"));
-		assertNull(model.getLong("f3a"));
-		assertNull(model.getLong("f4a"));
-		assertNull(model.getLong("f5"));
-		assertNull(model.getLong("f6"));
-		assertNull(model.getLong("f7"));
-		assertNull(model.getLong("f8"));
+		assertMapped(model, ObjectRest::getLong, "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "null,0,0,0,null,null,null,null,null,null,null");
 
-		assertEquals(1, (long)model.getLong("f1", 1L));
-		assertEquals(0, (long)model.getLong("f2", 1L));
-		assertEquals(0, (long)model.getLong("f3", 1L));
-		assertEquals(0, (long)model.getLong("f4", 1L));
-		assertEquals(1, (long)model.getLong("f2a", 1L));
-		assertEquals(1, (long)model.getLong("f3a", 1L));
-		assertEquals(1, (long)model.getLong("f4a", 1L));
-		assertEquals(1, (long)model.getLong("f5", 1L));
-		assertEquals(1, (long)model.getLong("f6", 1L));
-		assertEquals(1, (long)model.getLong("f7", 1L));
-		assertEquals(1, (long)model.getLong("f8", 1L));
+		assertMapped(model, (r,p) -> r.getLong(p, 1L), "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "1,0,0,0,1,1,1,1,1,1,1");
 
-		assertNull(model.getBoolean("f1"));
-		assertEquals(false, model.getBoolean("f2"));
-		assertEquals(false, model.getBoolean("f3"));
-		assertEquals(false, model.getBoolean("f4"));
-		assertNull(model.getBoolean("f2a"));
-		assertNull(model.getBoolean("f3a"));
-		assertNull(model.getBoolean("f4a"));
-		assertNull(model.getBoolean("f5"));
-		assertNull(model.getBoolean("f6"));
-		assertNull(model.getBoolean("f7"));
-		assertNull(model.getBoolean("f8"));
+		assertMapped(model, ObjectRest::getBoolean, "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "null,false,false,false,null,null,null,null,null,null,null");
 
-		assertEquals(true, model.getBoolean("f1", true));
-		assertEquals(false, model.getBoolean("f2", true));
-		assertEquals(false, model.getBoolean("f3", true));
-		assertEquals(false, model.getBoolean("f4", true));
-		assertEquals(true, model.getBoolean("f2a", true));
-		assertEquals(true, model.getBoolean("f3a", true));
-		assertEquals(true, model.getBoolean("f4a", true));
-		assertEquals(true, model.getBoolean("f5", true));
-		assertEquals(true, model.getBoolean("f6", true));
-		assertEquals(true, model.getBoolean("f7", true));
-		assertEquals(true, model.getBoolean("f8", true));
+		assertMapped(model, (r,p) -> r.getBoolean(p, true), "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "true,false,false,false,true,true,true,true,true,true,true");
 
-		assertNull(model.getMap("f1"));
-		assertThrows(InvalidDataConversionException.class, ()->model.getMap("f2"));
-		assertThrows(InvalidDataConversionException.class, ()->model.getMap("f3"));
-		assertThrows(InvalidDataConversionException.class, ()->model.getMap("f4"));
-		assertNull(model.getMap("f2a"));
-		assertNull(model.getMap("f3a"));
-		assertNull(model.getMap("f4a"));
-		assertNull(model.getMap("f5"));
-		assertNull(model.getMap("f6"));
-		assertNull(model.getMap("f7"));
-		assertNull(model.getMap("f8"));
+		assertMapped(model, ObjectRest::getMap, "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "null,InvalidDataConversionException,InvalidDataConversionException,InvalidDataConversionException,null,null,null,null,null,null,null");
 
 		assertEquals("{a:'b'}", model.getMap("f1", m).toString());
 		assertThrows(InvalidDataConversionException.class, ()->model.getMap("f2", m));
@@ -457,31 +356,11 @@ class ObjectRest_Test extends SimpleTestBase {
 		assertEquals("{a:'b'}", model.getMap("f7", m).toString());
 		assertEquals("{a:'b'}", model.getMap("f8", m).toString());
 
-		assertObjectRest(model, (r,p) -> r.getMap(p, m), "f1,f2,f2a,f3,f3a,f4,f4a,f5,f6,f7,f8", "{a=b},InvalidDataConversionException,{a=b},InvalidDataConversionException,{a=b},InvalidDataConversionException,{a=b},{a=b},{a=b},{a=b},{a=b}");
+		assertMapped(model, (r,p) -> r.getMap(p, m), "f1,f2,f2a,f3,f3a,f4,f4a,f5,f6,f7,f8", "{a=b},InvalidDataConversionException,{a=b},InvalidDataConversionException,{a=b},InvalidDataConversionException,{a=b},{a=b},{a=b},{a=b},{a=b}");
 
-		assertNull(model.getMap("f1"));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f2"));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f3"));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f4"));
-		assertNull(model.getJsonMap("f2a"));
-		assertNull(model.getJsonMap("f3a"));
-		assertNull(model.getJsonMap("f4a"));
-		assertNull(model.getJsonMap("f5"));
-		assertNull(model.getJsonMap("f6"));
-		assertNull(model.getJsonMap("f7"));
-		assertNull(model.getJsonMap("f8"));
+		assertMapped(model, ObjectRest::getJsonMap, "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "null,InvalidDataConversionException,InvalidDataConversionException,InvalidDataConversionException,null,null,null,null,null,null,null");
 
-		assertEquals("{a:'b'}", model.getJsonMap("f1", m).toString());
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f2", m));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f3", m));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f4", m));
-		assertEquals("{a:'b'}", model.getJsonMap("f2a", m).toString());
-		assertEquals("{a:'b'}", model.getJsonMap("f3a", m).toString());
-		assertEquals("{a:'b'}", model.getJsonMap("f4a", m).toString());
-		assertEquals("{a:'b'}", model.getJsonMap("f5", m).toString());
-		assertEquals("{a:'b'}", model.getJsonMap("f6", m).toString());
-		assertEquals("{a:'b'}", model.getJsonMap("f7", m).toString());
-		assertEquals("{a:'b'}", model.getJsonMap("f8", m).toString());
+		assertMapped(model, (r,p) -> r.getJsonMap(p, m), "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "{a=b},InvalidDataConversionException,InvalidDataConversionException,InvalidDataConversionException,{a=b},{a=b},{a=b},{a=b},{a=b},{a=b},{a=b}");
 
 		assertNull(model.getList("f1"));
 		assertThrows(InvalidDataConversionException.class, ()->model.getList("f2"));
@@ -545,7 +424,6 @@ class ObjectRest_Test extends SimpleTestBase {
 		assertEquals("{f5a:'a'}", model.get("f7").toString());
 		assertEquals("[{f6a:'a'}]", model.get("f8").toString());
 
-		// BCTM - FEEDBACK: I don't believe the remaining code in this test method are good candidates for BCTM
 		assertEquals("1", model.getWithDefault("f1", "foo"));
 		assertEquals("2", model.getWithDefault("f2", "foo").toString());
 		assertEquals("3", model.getWithDefault("f3", "foo").toString());
@@ -749,18 +627,6 @@ class ObjectRest_Test extends SimpleTestBase {
 		assertEquals("[{f6a:'a'}]", model.getJsonList("f6", l).toString());
 		assertEquals("[{f5a:'a'}]", model.getJsonList("f7", l).toString());
 		assertEquals("[{f6a:'a'}]", model.getJsonList("f8", l).toString());
-	}
-
-	private void assertObjectRest(ObjectRest r, BiFunction<ObjectRest,String,Object> f, String properties, String expected) {
-		var m = new LinkedHashMap<String,Object>();
-		for (var p : split(properties)) {
-			try {
-				m.put(p, f.apply(r, p));
-			} catch (Exception e) {
-				m.put(p, e.getClass().getSimpleName());
-			}
-		}
-		assertMap(m, properties, expected);
 	}
 
 	public static class A {

@@ -606,4 +606,16 @@ public class TestUtils extends Utils2 {
 	public static Arguments args(Object...args) {
 		return Arguments.of(args);
 	}
+
+	public static <T> void assertMapped(T o, BiFunction<T,String,Object> f, String properties, String expected) {
+		var m = new LinkedHashMap<String,Object>();
+		for (var p : split(properties)) {
+			try {
+				m.put(p, f.apply(o, p));
+			} catch (Exception e) {
+				m.put(p, e.getClass().getSimpleName());
+			}
+		}
+		assertMap(m, properties, expected);
+	}
 }

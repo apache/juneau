@@ -13,6 +13,7 @@
 package org.apache.juneau.xml;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 
@@ -33,15 +34,11 @@ class CommonParser_Test  extends SimpleTestBase{
 		var m = (Map)p.parse("<object><a _type='number'>1</a></object>", Object.class);
 		assertEquals(1, m.get("a"));
 		m = (Map)p.parse("<object><a _type='number'>1</a><b _type='string'>foo bar</b></object>", Object.class);
-		assertEquals(1, m.get("a"));
-		assertEquals("foo bar", m.get("b"));
+		assertMap(m, "a,b", "1,foo bar");
 		m = (Map)p.parse("<object><a _type='number'>1</a><b _type='string'>foo bar</b><c _type='boolean'>false</c></object>", Object.class);
-		assertEquals(1, m.get("a"));
-		assertEquals(false, m.get("c"));
+		assertMap(m, "a,c", "1,false");
 		m = (Map)p.parse("   <object>	<a _type='number'>	1	</a>	<b _type='string'>	foo	</b>	<c _type='boolean'>	false 	</c>	</object>	", Object.class);
-		assertEquals(1, m.get("a"));
-		assertEquals("foo", m.get("b"));
-		assertEquals(false, m.get("c"));
+		assertMap(m, "a,b,c", "1,foo,false");
 
 		m = (Map)p.parse("<object><x _type='string'>org.apache.juneau.test.Person</x><addresses _type='array'><object><x _type='string'>org.apache.juneau.test.Address</x><city _type='string'>city A</city><state _type='string'>state A</state><street _type='string'>street A</street><zip _type='number'>12345</zip></object></addresses></object>", Object.class);
 		assertEquals("org.apache.juneau.test.Person", m.get("x"));
@@ -49,11 +46,7 @@ class CommonParser_Test  extends SimpleTestBase{
 		assertNotNull(l);
 		m = (Map)l.get(0);
 		assertNotNull(m);
-		assertEquals("org.apache.juneau.test.Address", m.get("x"));
-		assertEquals("city A", m.get("city"));
-		assertEquals("state A", m.get("state"));
-		assertEquals("street A", m.get("street"));
-		assertEquals(12345, m.get("zip"));
+		assertMap(m, "x,city,state,street,zip", "org.apache.juneau.test.Address,city A,state A,street A,12345");
 
 		var jl = (JsonList)p.parse("<array><object><attribute _type='string'>value</attribute></object><object><attribute _type='string'>value</attribute></object></array>", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
