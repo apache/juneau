@@ -16,6 +16,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -322,17 +323,7 @@ class ObjectRest_Test extends SimpleTestBase {
 		var l = JsonList.ofJson("[{a:'b'}]");
 		var m = JsonMap.ofJson("{a:'b'}");
 
-		assertNull(model.get("f1"));
-		assertEquals(0, model.get("f2"));
-		assertEquals(0L, model.get("f3"));
-		assertFalse((Boolean)model.get("f4"));
-		assertNull(model.get("f2a"));
-		assertNull(model.get("f3a"));
-		assertNull(model.get("f4a"));
-		assertNull(model.get("f5"));
-		assertNull(model.get("f6"));
-		assertNull(model.get("f7"));
-		assertNull(model.get("f8"));
+		assertObjectRest(model, ObjectRest::get, "f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8", "null,0,0,false,null,null,null,null,null,null,null");
 
 		assertEquals("foo", model.getWithDefault("f1", "foo"));
 		assertEquals(0, model.getWithDefault("f2", "foo"));
@@ -466,6 +457,8 @@ class ObjectRest_Test extends SimpleTestBase {
 		assertEquals("{a:'b'}", model.getMap("f7", m).toString());
 		assertEquals("{a:'b'}", model.getMap("f8", m).toString());
 
+		assertObjectRest(model, (r,p) -> r.getMap(p, m), "f1,f2,f2a,f3,f3a,f4,f4a,f5,f6,f7,f8", "{a=b},InvalidDataConversionException,{a=b},InvalidDataConversionException,{a=b},InvalidDataConversionException,{a=b},{a=b},{a=b},{a=b},{a=b}");
+
 		assertNull(model.getMap("f1"));
 		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f2"));
 		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f3"));
@@ -552,6 +545,7 @@ class ObjectRest_Test extends SimpleTestBase {
 		assertEquals("{f5a:'a'}", model.get("f7").toString());
 		assertEquals("[{f6a:'a'}]", model.get("f8").toString());
 
+		// BCTM - FEEDBACK: I don't believe the remaining code in this test method are good candidates for BCTM
 		assertEquals("1", model.getWithDefault("f1", "foo"));
 		assertEquals("2", model.getWithDefault("f2", "foo").toString());
 		assertEquals("3", model.getWithDefault("f3", "foo").toString());
@@ -755,6 +749,18 @@ class ObjectRest_Test extends SimpleTestBase {
 		assertEquals("[{f6a:'a'}]", model.getJsonList("f6", l).toString());
 		assertEquals("[{f5a:'a'}]", model.getJsonList("f7", l).toString());
 		assertEquals("[{f6a:'a'}]", model.getJsonList("f8", l).toString());
+	}
+
+	private void assertObjectRest(ObjectRest r, BiFunction<ObjectRest,String,Object> f, String properties, String expected) {
+		var m = new LinkedHashMap<String,Object>();
+		for (var p : split(properties)) {
+			try {
+				m.put(p, f.apply(r, p));
+			} catch (Exception e) {
+				m.put(p, e.getClass().getSimpleName());
+			}
+		}
+		assertMap(m, properties, expected);
 	}
 
 	public static class A {
