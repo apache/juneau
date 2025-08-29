@@ -39,20 +39,15 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 
 		in = "a=1&b='foo+bar'";
 		m = (Map)p.parse(in, Object.class);
-		assertEquals(1, m.get("a"));
-		assertEquals("foo bar", m.get("b"));
+		assertMap(m, "a,b", "1,foo bar");
 
 		in = "a=1&b='foo+bar'&c=false";
 		m = (Map)p.parse(in, Object.class);
-		assertEquals(1, m.get("a"));
-		assertEquals("foo bar", m.get("b"));
-		assertEquals(false, m.get("c"));
+		assertMap(m, "a,b,c", "1,foo bar,false");
 
 		in = "a=1&b='foo%20bar'&c=false";
 		m = (Map)p.parse(in, Object.class);
-		assertEquals(1, m.get("a"));
-		assertEquals("foo bar", m.get("b"));
-		assertEquals(false, m.get("c"));
+		assertMap(m, "a,b,c", "1,foo bar,false");
 
 		var jm = (JsonMap)p.parse("x=@((attribute=value),(attribute=~'value~'))", Object.class);
 		assertEquals("value", jm.getList("x").getMap(0).getString("attribute"));

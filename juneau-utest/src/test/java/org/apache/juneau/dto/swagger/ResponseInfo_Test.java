@@ -33,18 +33,23 @@ class ResponseInfo_Test extends SimpleTestBase {
 	 */
 	@Test void a01_gettersAndSetters() {
 		var t = new ResponseInfo();
-		assertEquals("foo", t.setDescription("foo").getDescription());
+
+		// General
+		assertBean(
+			t.setDescription("a").setSchema(schemaInfo().setTitle("b")).setHeaders(map("c",headerInfo("d"))).setExamples(map("e","f","g",alist("h"))),
+			"description,schema{title},headers{c{type}},examples",
+			"a,{b},{{d}},{e=f,g=[h]}"
+		);
+
+		// Edge cases for collections and nulls.
 		assertNull(t.setDescription(null).getDescription());
-		assertJson(t.setSchema(schemaInfo().setTitle("foo")).getSchema(), "{title:'foo'}");
-		assertJson(t.setHeaders(map("foo",headerInfo("bar"))).getHeaders(), "{foo:{type:'bar'}}");
-		assertType(HeaderInfo.class, t.setHeaders(map("foo",headerInfo("bar"))).getHeaders().get("foo"));
-		assertJson(t.setHeaders(map()).getHeaders(), "{}");
+		assertMap(t.setHeaders(map()).getHeaders());
 		assertNull(t.setHeaders((Map<String,HeaderInfo>)null).getHeaders());
-		assertJson(t.setExamples(map("foo","bar","baz",alist("qux"))).getExamples(), "{foo:'bar',baz:['qux']}");
-		assertJson(t.setExamples(map()).getExamples(), "{}");
+		assertMap(t.setExamples(map()).getExamples());
 		assertNull(t.setExamples((Map<String,Object>)null).getExamples());
-		assertJson(t.setExamples(map("foo","bar","baz",alist("qux"))).getExamples(), "{foo:'bar',baz:['qux']}");
-		assertJson(t.setExamples(map()).addExample("text/a", "a").addExample("text/b", null).addExample(null, "c").getExamples(), "{'text/a':'a','text/b':null,null:'c'}");
+
+		// Examples addExample method.
+		assertMap(t.setExamples(map()).addExample("text/a", "a").addExample("text/b", null).addExample(null, "c").getExamples(), "text/a=a", "text/b=null", "null=c");
 	}
 
 	/**
@@ -60,7 +65,10 @@ class ResponseInfo_Test extends SimpleTestBase {
 			.set("schema", schemaInfo().setType("d"))
 			.set("$ref", "ref");
 
-		assertJson(t, "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
+		// Comprehensive object state validation
+		assertBean(t,
+			"description,schema{type},headers{a{type}},examples,$ref",
+			"a,{d},{{a1}},{foo=bar,baz=[qux]},ref");
 
 		t
 			.set("description", "a")
@@ -69,7 +77,9 @@ class ResponseInfo_Test extends SimpleTestBase {
 			.set("schema", "{type:'d'}")
 			.set("$ref", "ref");
 
-		assertJson(t, "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
+		assertBean(t,
+			"description,schema{type},headers{a{type}},examples,$ref",
+			"a,{d},{{a1}},{foo=bar,baz=[qux]},ref");
 
 		t
 			.set("description", new StringBuilder("a"))
@@ -78,13 +88,13 @@ class ResponseInfo_Test extends SimpleTestBase {
 			.set("schema", new StringBuilder("{type:'d'}"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertJson(t, "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
+		assertBean(t,
+			"description,schema{type},headers{a{type}},examples,$ref",
+			"a,{d},{{a1}},{foo=bar,baz=[qux]},ref");
 
-		assertEquals("a", t.get("description", String.class));
-		assertEquals("{foo:'bar',baz:['qux']}", t.get("examples", String.class));
-		assertEquals("{a:{type:'a1'}}", t.get("headers", String.class));
-		assertEquals("{type:'d'}", t.get("schema", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
+			"description,examples,headers,schema,$ref",
+			"a,{foo:'bar',baz:['qux']},{a:{type:'a1'}},{type:'d'},ref");
 
 		assertType(String.class, t.get("description", Object.class));
 		assertType(Map.class, t.get("examples", Object.class));
@@ -117,13 +127,15 @@ class ResponseInfo_Test extends SimpleTestBase {
 			.set("$ref", "ref")
 			.copy();
 
-		assertJson(t, "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
+		assertBean(t,
+			"description,schema{type},headers{a{type}},examples,$ref",
+			"a,{d},{{a1}},{foo=bar,baz=[qux]},ref");
 	}
 
 	@Test void b03_keySet() {
 		var t = new ResponseInfo();
 
-		assertJson(t.keySet(), "[]");
+		assertSet(t.keySet());
 
 		t
 			.set("description", "a")
@@ -132,6 +144,6 @@ class ResponseInfo_Test extends SimpleTestBase {
 			.set("schema", schemaInfo().setType("d"))
 			.set("$ref", "ref");
 
-		assertJson(t.keySet(), "['description','examples','headers','schema','$ref']");
+		assertSet(t.keySet(), "description,examples,headers,schema,$ref");
 	}
 }

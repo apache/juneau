@@ -135,25 +135,8 @@ public class TestUtils extends Utils2 {
 	/**
 	 * Asserts the entries in an array matches the expected strings after they've been made readable.
 	 */
-	@SuppressWarnings("unchecked")
 	public static void assertArray(Object array, Object...expected) {
-		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
-			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : splita(s(expected[0]));
-		if (Array.getLength(array) != expected.length)
-			fail(fs("Wrong array length.  expected={0}, actual={1}", expected.length, Array.getLength(array)));
-		for (var i = 0; i < expected.length; i++) {
-			var x = Array.get(array, i);
-			if (expected[i] instanceof String e) {
-				if (ne(r(x), e))
-					fail(fs("Element at index {0} did not match.  expected={1}, actual={2}", i, e, r(x)));
-			} else if (expected[i] instanceof Predicate e) {
-				if (! e.test(x))
-					fail(fs("Element at index {0} did pass predicate.  actual={1}", i, r(x)));
-			} else {
-				if (ne(expected[i], x))
-					fail(fs("Element at index {0} did not match.  expected={1}, actual={2}", i, r(expected[i]), r(x)));
-			}
-		}
+		assertCollection(arrayToList(array), expected);
 	}
 
 	/**
@@ -358,7 +341,7 @@ public class TestUtils extends Utils2 {
 		if (o instanceof Iterable o2) return isNumeric(name) ? toList(o2).get(Integer.parseInt(name)) : getBeanProp(o, name);
 		if (o instanceof Iterator o2) return isNumeric(name) ? toList(o2).get(Integer.parseInt(name)) : getBeanProp(o, name);
 		if (o instanceof Enumeration o2) return isNumeric(name) ? toList(o2).get(Integer.parseInt(name)) : getBeanProp(o, name);
-		return TestUtils.getBeanProp(o, name);
+		return getBeanProp(o, name);
 	}
 
 	private static boolean isNumeric(String name) {
@@ -394,13 +377,19 @@ public class TestUtils extends Utils2 {
 				f.setAccessible(true);
 				return f.get(o);
 			}
+			m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get") && x.getParameterCount() == 1 && x.getParameterTypes()[0] == String.class && x.getAnnotation(BeanIgnore.class) == null).findFirst().orElse(null);
+			if (m != null) {
+				m.setAccessible(true);
+				return m.invoke(o, name);
+			}
+			if (c.isArray()) {
+				switch (name) {
+					case "length": return Array.getLength(o);
+					default: // Fall through.
+				}
+			}
 			throw runtimeException("No field called {0} found on class {1}", name, c.getName());
 		});
-	}
-
-	private static boolean isGetter(Method m, String n) {
-		var mn = m.getName();
-		return ((("get"+n).equals(mn) || ("is"+n).equals(mn)) && m.getParameterCount() == 0);
 	}
 
 	public static String json(Object o) {
@@ -617,5 +606,79 @@ public class TestUtils extends Utils2 {
 			}
 		}
 		assertMap(m, properties, expected);
+	}
+
+	/**
+	 * Converts any array (including primitive arrays) to a List.
+	 *
+	 * @param array The array to convert. Can be any array type including primitives.
+	 * @return A List containing the array elements. Primitive values are auto-boxed.
+	 *         Returns null if the input is null.
+	 * @throws IllegalArgumentException if the input is not an array.
+	 */
+	public static List<Object> arrayToList(Object array) {
+		if (array == null) {
+			return null;
+		}
+
+		if (!array.getClass().isArray()) {
+			throw new IllegalArgumentException("Input must be an array, but was: " + array.getClass().getName());
+		}
+
+		var componentType = array.getClass().getComponentType();
+		var length = Array.getLength(array);
+		var result = new ArrayList<Object>(length);
+
+		// Handle primitive arrays specifically for better performance
+		if (componentType.isPrimitive()) {
+			if (componentType == int.class) {
+				var arr = (int[]) array;
+				for (int value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == long.class) {
+				var arr = (long[]) array;
+				for (long value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == double.class) {
+				var arr = (double[]) array;
+				for (double value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == float.class) {
+				var arr = (float[]) array;
+				for (float value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == boolean.class) {
+				var arr = (boolean[]) array;
+				for (boolean value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == byte.class) {
+				var arr = (byte[]) array;
+				for (byte value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == char.class) {
+				var arr = (char[]) array;
+				for (char value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == short.class) {
+				var arr = (short[]) array;
+				for (short value : arr) {
+					result.add(value);
+				}
+			}
+		} else {
+			// Handle Object arrays
+			for (var i = 0; i < length; i++) {
+				result.add(Array.get(array, i));
+			}
+		}
+
+		return result;
 	}
 }

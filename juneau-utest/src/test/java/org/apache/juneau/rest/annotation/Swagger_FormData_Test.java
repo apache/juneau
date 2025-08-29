@@ -115,16 +115,16 @@ class Swagger_FormData_Test extends SimpleTestBase {
 		var s = getSwagger(B.class);
 		var x = s.getParameterInfo("/a","get","formData","F");
 
-		assertJson(x, "{'in':'formData',name:'F',type:'string'}");
+		assertBean(x, "in,name,type", "formData,F,string");
 
 		x = s.getParameterInfo("/b","put","formData","F");
-		assertJson(x, "{'in':'formData',name:'F',type:'object',schema:{properties:{f1:{type:'string'}}}}");
+		assertBean(x, "in,name,type,schema{properties{f1{type}}}", "formData,F,object,{{{string}}}");
 
 		x = s.getParameterInfo("/c","post","formData","F");
-		assertJson(x, "{'in':'formData',name:'F',type:'array',items:{type:'string'}}");
+		assertBean(x, "in,name,type,items{type}", "formData,F,array,{string}");
 
 		x = s.getParameterInfo("/d","delete","formData","F");
-		assertJson(x, "{'in':'formData',name:'F',type:'string'}");
+		assertBean(x, "in,name,type", "formData,F,string");
 	}
 
 	@Rest
@@ -206,21 +206,21 @@ class Swagger_FormData_Test extends SimpleTestBase {
 		var s = getSwagger(E.class);
 		var x = s.getParameterInfo("/a","get","formData","F");
 
-		assertJson(x, "{'in':'formData',name:'F',type:'string'}");
+		assertBean(x, "in,name,type", "formData,F,string");
 
 		x = s.getParameterInfo("/b","put","formData","F");
-		assertJson(x, "{'in':'formData',name:'F',type:'object',schema:{properties:{f1:{type:'string'}}}}");
+		assertBean(x, "in,name,type,schema{properties{f1{type}}}", "formData,F,object,{{{string}}}");
 
 		x = s.getParameterInfo("/c","post","formData","F");
-		assertJson(x, "{'in':'formData',name:'F',type:'array',items:{type:'string'}}");
+		assertBean(x, "in,name,type,items{type}", "formData,F,array,{string}");
 
 		x = s.getParameterInfo("/d","delete","formData","F");
-		assertJson(x, "{'in':'formData',name:'F',type:'string'}");
+		assertBean(x, "in,name,type", "formData,F,string");
 
 		x = s.getParameterInfo("/e","get","formData","F");
-		assertJson(x, "{'in':'formData',name:'F',type:'integer',format:'int32'}");
+		assertBean(x, "in,name,type,format", "formData,F,integer,int32");
 
 		x = s.getParameterInfo("/f","get","formData","F");
-		assertJson(x, "{'in':'formData',name:'F',type:'boolean'}");
+		assertBean(x, "in,name,type", "formData,F,boolean");
 	}
 }

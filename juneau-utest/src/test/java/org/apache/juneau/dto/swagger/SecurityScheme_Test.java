@@ -32,22 +32,24 @@ class SecurityScheme_Test extends SimpleTestBase {
 	 */
 	@Test void a01_gettersAndSetters() {
 		var t = new SecurityScheme();
-		assertEquals("foo", t.setType("foo").getType());
+
+		// General
+		assertBean(
+			t.setType("a").setDescription("b").setName("c").setIn("d").setFlow("e")
+			.setAuthorizationUrl("f").setTokenUrl("g").setScopes(map("h1","h2")),
+			"type,description,name,in,flow,authorizationUrl,tokenUrl,scopes",
+			"a,b,c,d,e,f,g,{h1=h2}"
+		);
+
+		// Edge cases for nulls and collections.
 		assertNull(t.setType(null).getType());
-		assertEquals("foo", t.setDescription("foo").getDescription());
 		assertNull(t.setDescription(null).getDescription());
-		assertEquals("foo", t.setName("foo").getName());
 		assertNull(t.setName(null).getName());
-		assertEquals("foo", t.setIn("foo").getIn());
 		assertNull(t.setIn(null).getIn());
-		assertEquals("foo", t.setFlow("foo").getFlow());
 		assertNull(t.setFlow(null).getFlow());
-		assertEquals("foo", t.setAuthorizationUrl("foo").getAuthorizationUrl());
 		assertNull(t.setAuthorizationUrl(null).getAuthorizationUrl());
-		assertEquals("foo", t.setTokenUrl("foo").getTokenUrl());
 		assertNull(t.setTokenUrl(null).getTokenUrl());
-		assertJson(t.setScopes(map("foo","bar")).getScopes(), "{foo:'bar'}");
-		assertJson(t.setScopes(map()).getScopes(), "{}");
+		assertMap(t.setScopes(map()).getScopes());
 		assertNull(t.setScopes((Map<String,String>)null).getScopes());
 	}
 
@@ -68,7 +70,10 @@ class SecurityScheme_Test extends SimpleTestBase {
 			.set("type", "g")
 			.set("$ref", "ref");
 
-		assertJson(t, "{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
+		// Comprehensive object state validation
+		assertBean(t,
+			"type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,$ref",
+			"g,b,e,d,c,a,f,{foo=bar},ref");
 
 		t
 			.set("authorizationUrl", "a")
@@ -81,7 +86,9 @@ class SecurityScheme_Test extends SimpleTestBase {
 			.set("type", "g")
 			.set("$ref", "ref");
 
-		assertJson(t, "{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
+		assertBean(t,
+			"type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,$ref",
+			"g,b,e,d,c,a,f,{foo=bar},ref");
 
 		t
 			.set("authorizationUrl", new StringBuilder("a"))
@@ -94,17 +101,13 @@ class SecurityScheme_Test extends SimpleTestBase {
 			.set("type", new StringBuilder("g"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertJson(t, "{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
+		assertBean(t,
+			"type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,$ref",
+			"g,b,e,d,c,a,f,{foo=bar},ref");
 
-		assertEquals("a", t.get("authorizationUrl", String.class));
-		assertEquals("b", t.get("description", String.class));
-		assertEquals("c", t.get("flow", String.class));
-		assertEquals("d", t.get("in", String.class));
-		assertEquals("e", t.get("name", String.class));
-		assertEquals("{foo:'bar'}", t.get("scopes", String.class));
-		assertEquals("f", t.get("tokenUrl", String.class));
-		assertEquals("g", t.get("type", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
+			"authorizationUrl,description,flow,in,name,scopes,tokenUrl,type,$ref",
+			"a,b,c,d,e,{foo:'bar'},f,g,ref");
 
 		assertType(String.class, t.get("authorizationUrl", Object.class));
 		assertType(String.class, t.get("description", Object.class));
@@ -144,13 +147,15 @@ class SecurityScheme_Test extends SimpleTestBase {
 			.set("$ref", "ref")
 			.copy();
 
-		assertJson(t, "{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
+		assertBean(t,
+			"type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,$ref",
+			"g,b,e,d,c,a,f,{foo=bar},ref");
 	}
 
 	@Test void b03_keySet() {
 		var t = new SecurityScheme();
 
-		assertJson(t.keySet(), "[]");
+		assertSet(t.keySet());
 
 		t
 			.set("authorizationUrl", "a")
@@ -163,6 +168,6 @@ class SecurityScheme_Test extends SimpleTestBase {
 			.set("type", "g")
 			.set("$ref", "ref");
 
-		assertJson(t.keySet(), "['authorizationUrl','description','flow','in','name','scopes','tokenUrl','type','$ref']");
+		assertSet(t.keySet(), "authorizationUrl,description,flow,in,name,scopes,tokenUrl,type,$ref");
 	}
 }

@@ -170,15 +170,15 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 		l.get(0).setF1("bar");
 		l = t.roundTrip(l, List.class, IBean.class);
-		assertEquals("bar", l.get(0).getF1());
+		assertBean(l.get(0), "f1", "bar");
 		l = t.roundTrip(l, LinkedList.class, IBean.class);
-		assertEquals("bar", l.get(0).getF1());
+		assertBean(l.get(0), "f1", "bar");
 
 		l.get(0).setF1("bing");
 		l = t.roundTrip(l, List.class, CBean.class);
-		assertEquals("bing", l.get(0).getF1());
+		assertBean(l.get(0), "f1", "bing");
 		l = t.roundTrip(l, LinkedList.class, CBean.class);
-		assertEquals("bing", l.get(0).getF1());
+		assertBean(l.get(0), "f1", "bing");
 	}
 
 	//====================================================================================================
@@ -192,15 +192,15 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 		l.get("foo").setF1("bar");
 		l = t.roundTrip(l, Map.class, String.class, IBean.class);
-		assertEquals("bar", l.get("foo").getF1());
+		assertBean(l.get("foo"), "f1", "bar");
 		l = t.roundTrip(l, LinkedHashMap.class, String.class, IBean.class);
-		assertEquals("bar", l.get("foo").getF1());
+		assertBean(l.get("foo"), "f1", "bar");
 
 		l.get("foo").setF1("bing");
 		l = t.roundTrip(l, Map.class, String.class, CBean.class);
-		assertEquals("bing", l.get("foo").getF1());
+		assertBean(l.get("foo"), "f1", "bing");
 		l = t.roundTrip(l, LinkedHashMap.class, String.class, CBean.class);
-		assertEquals("bing", l.get("foo").getF1());
+		assertBean(l.get("foo"), "f1", "bing");
 	}
 
 	//====================================================================================================
@@ -214,12 +214,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 		b = t.roundTrip(b);
 		if (t.returnOriginalObject || t.getParser() == null)
 			return;
-		assertEquals(0, b.f1);
-		assertEquals(0, b.f2);
-		assertEquals(1, b.f3);
-		assertEquals(1, b.f4);
-		assertEquals(0, b.getF5());
-		assertEquals(1, b.getF6());
+		assertBean(b, "f1,f2,f3,f4,f5,f6", "0,0,1,1,0,1");
 	}
 
 	public interface IBean {
@@ -434,7 +429,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 		var r = s.serialize(ba1);
 		var b = p.parse(r, BA.class);
 		assertTrue(b instanceof BA1);
-		assertJson(b, "{f0a:'f0a',f0b:'f0b',f1:'f1'}");
+		assertBean(b, "f0a,f0b,f1", "f0a,f0b,f1");
 	}
 
 	@Bean(dictionary={BA1.class,BA2.class})
@@ -477,7 +472,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 		var r = s.serialize(c1);
 		var c = p.parse(r, CA.class);
 		assertTrue(c instanceof CA1);
-		assertJson(c, "{f0a:'f0a',f0b:'f0b',f1:'f1'}");
+		assertBean(c, "f0a,f0b,f1", "f0a,f0b,f1");
 	}
 
 	public abstract static class CA {
@@ -524,7 +519,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 		var r = s.serialize(d);
 		d = p.parse(r, D1.class);
 		assertNull(d.f1);
-		assertJson(d, "{f3:'f3',f2:'f2'}");
+		assertBean(d, "f3,f2", "f3,f2");
 	}
 
 	@Bean(p="f3,f2")
@@ -588,7 +583,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 		var e = new E1().init();
 		var r = s.serialize(e);
 		e = p.parse(r, E1.class);
-		assertJson(e, "{f1:'f1',f3:'f3'}");
+		assertBean(e, "f1,f3", "f1,f3");
 	}
 
 	@Bean(excludeProperties="f2")
@@ -619,7 +614,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 		var e = new E2().init();
 		var r = s.serialize(e);
 		e = p.parse(r, E2.class);
-		assertJson(e, "{f1:'f1',f3:'f3'}");
+		assertBean(e, "f1,f3", "f1,f3");
 	}
 
 	public static class E2 {
@@ -649,7 +644,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 		var x = new FA2().init();
 		var r = s.serialize(x);
 		x = p.parse(r, FA2.class);
-		assertJson(x, "{f1:'f1'}");
+		assertBean(x, "f1", "f1");
 	}
 
 	@Bean(interfaceClass=FA1.class)
@@ -689,7 +684,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 		x = new FB2().init();
 		r = s.build().serialize(x);
 		x = p.build().parse(r, FB2.class);
-		assertJson(x, "{f1:'f1'}");
+		assertBean(x, "f1", "f1");
 
 		// --- BeanFilter defined on child class class ---
 		s.interfaces(FB1.class);
@@ -698,7 +693,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 		x = new FB2().init();
 		r = s.build().serialize(x);
 		x = p.build().parse(r, FB2.class);
-		assertJson(x, "{f1:'f1'}");
+		assertBean(x, "f1", "f1");
 
 		// --- BeanFilter defined as plain class ---
 		s.interfaces(FB1.class);
@@ -707,7 +702,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 		x = new FB2().init();
 		r = s.build().serialize(x);
 		x = p.build().parse(r, FB2.class);
-		assertJson(x, "{f1:'f1'}");
+		assertBean(x, "f1", "f1");
 	}
 
 	public static class FB1 {

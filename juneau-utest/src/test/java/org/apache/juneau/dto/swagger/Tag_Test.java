@@ -32,11 +32,17 @@ class Tag_Test extends SimpleTestBase {
 	 */
 	@Test void a01_gettersAndSetters() {
 		var t = new Tag();
-		assertEquals("foo", t.setName("foo").getName());
+
+		// General
+		assertBean(
+			t.setName("a").setDescription("b").setExternalDocs(externalDocumentation("c")),
+			"name,description,externalDocs{url}",
+			"a,b,{c}"
+		);
+
+		// Edge cases for nulls.
 		assertNull(t.setName(null).getName());
-		assertEquals("foo", t.setDescription("foo").getDescription());
 		assertNull(t.setDescription(null).getDescription());
-		assertJson(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs(), "{url:'foo'}");
 	}
 
 	/**
@@ -51,7 +57,10 @@ class Tag_Test extends SimpleTestBase {
 			.set("name", "c")
 			.set("$ref", "ref");
 
-		assertJson(t, "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
+		// Comprehensive object state validation
+		assertBean(t,
+			"name,description,externalDocs{url},$ref",
+			"c,a,{b},ref");
 
 		t
 			.set("description", "a")
@@ -59,7 +68,9 @@ class Tag_Test extends SimpleTestBase {
 			.set("name", "c")
 			.set("$ref", "ref");
 
-		assertJson(t, "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
+		assertBean(t,
+			"name,description,externalDocs{url},$ref",
+			"c,a,{b},ref");
 
 		t
 			.set("description", new StringBuilder("a"))
@@ -67,12 +78,13 @@ class Tag_Test extends SimpleTestBase {
 			.set("name", new StringBuilder("c"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertJson(t, "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
+		assertBean(t,
+			"name,description,externalDocs{url},$ref",
+			"c,a,{b},ref");
 
-		assertEquals("a", t.get("description", String.class));
-		assertEquals("{url:'b'}", t.get("externalDocs", String.class));
-		assertEquals("c", t.get("name", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
+			"description,externalDocs,name,$ref",
+			"a,{url:'b'},c,ref");
 
 		assertType(String.class, t.get("description", Object.class));
 		assertType(ExternalDocumentation.class, t.get("externalDocs", Object.class));
@@ -102,13 +114,15 @@ class Tag_Test extends SimpleTestBase {
 			.set("$ref", "ref")
 			.copy();
 
-		assertJson(t, "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
+		assertBean(t,
+			"name,description,externalDocs{url},$ref",
+			"c,a,{b},ref");
 	}
 
 	@Test void b03_keySet() {
 		var t = new Tag();
 
-		assertJson(t.keySet(), "[]");
+		assertSet(t.keySet());
 
 		t
 			.set("description", "a")
@@ -116,6 +130,6 @@ class Tag_Test extends SimpleTestBase {
 			.set("name", "c")
 			.set("$ref", "ref");
 
-		assertJson(t.keySet(), "['description','externalDocs','name','$ref']");
+		assertSet(t.keySet(), "description,externalDocs,name,$ref");
 	}
 }

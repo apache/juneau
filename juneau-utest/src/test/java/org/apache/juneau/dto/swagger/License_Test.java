@@ -32,9 +32,16 @@ class License_Test extends SimpleTestBase {
 	 */
 	@Test void a01_gettersAndSetters() {
 		var t = new License();
-		assertEquals("foo", t.setName("foo").getName());
+
+		// General
+		assertBean(
+			t.setName("a").setUrl(URI.create("http://b")),
+			"name,url",
+			"a,http://b"
+		);
+
+		// Edge cases for nulls.
 		assertNull(t.setName(null).getName());
-		assertString("foo", t.setUrl(URI.create("foo")).getUrl());
 	}
 
 	/**
@@ -48,25 +55,32 @@ class License_Test extends SimpleTestBase {
 			.set("url", URI.create("b"))
 			.set("$ref", "ref");
 
-		assertJson(t, "{name:'a',url:'b','$ref':'ref'}");
+		// Comprehensive object state validation
+		assertBean(t,
+			"name,url,$ref",
+			"a,b,ref");
 
 		t
 			.set("name", "a")
 			.set("url", "b")
 			.set("$ref", "ref");
 
-		assertJson(t, "{name:'a',url:'b','$ref':'ref'}");
+		assertBean(t,
+			"name,url,$ref",
+			"a,b,ref");
 
 		t
 			.set("name", new StringBuilder("a"))
 			.set("url", new StringBuilder("b"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertJson(t, "{name:'a',url:'b','$ref':'ref'}");
+		assertBean(t,
+			"name,url,$ref",
+			"a,b,ref");
 
-		assertEquals("a", t.get("name", String.class));
-		assertEquals("b", t.get("url", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
+			"name,url,$ref",
+			"a,b,ref");
 
 		assertType(String.class, t.get("name", Object.class));
 		assertType(URI.class, t.get("url", Object.class));
@@ -94,19 +108,21 @@ class License_Test extends SimpleTestBase {
 			.set("$ref", "ref")
 			.copy();
 
-		assertJson(t, "{name:'a',url:'b','$ref':'ref'}");
+		assertBean(t,
+			"name,url,$ref",
+			"a,b,ref");
 	}
 
 	@Test void b03_keySet() {
 		var t = new License();
 
-		assertJson(t.keySet(), "[]");
+		assertSet(t.keySet());
 
 		t
 			.set("name", "a")
 			.set("url", URI.create("b"))
 			.set("$ref", "ref");
 
-		assertJson(t.keySet(), "['name','url','$ref']");
+		assertSet(t.keySet(), "name,url,$ref");
 	}
 }

@@ -32,9 +32,14 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 	 */
 	@Test void a01_gettersAndSetters() {
 		var t = new ExternalDocumentation();
-		assertEquals("foo", t.setDescription("foo").getDescription());
+
+		assertBean(
+			t.setDescription("a").setUrl(URI.create("http://b")),
+			"description,url",
+			"a,http://b"
+		);
+
 		assertNull(t.setDescription(null).getDescription());
-		assertString("http://bar", t.setUrl(URI.create("http://bar")).getUrl());
 	}
 
 	/**
@@ -44,29 +49,31 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 		var t = new ExternalDocumentation();
 
 		t
-			.set("description", "foo")
-			.set("url", "bar")
-			.set("$ref", "baz");
+			.set("description", "a")
+			.set("url", "b")
+			.set("$ref", "c");
 
-		assertJson(t, "{description:'foo',url:'bar','$ref':'baz'}");
+		assertBean(t, "description,url,$ref", "a,b,c");
 
 		t
-			.set("description", new StringBuilder("foo"))
-			.set("url", new StringBuilder("bar"))
-			.set("$ref", new StringBuilder("baz"));
+			.set("description", new StringBuilder("a2"))
+			.set("url", new StringBuilder("b2"))
+			.set("$ref", new StringBuilder("c2"));
 
-		assertJson(t, "{description:'foo',url:'bar','$ref':'baz'}");
+		assertBean(t, "description,url,$ref", "a2,b2,c2");
 
-		assertEquals("foo", t.get("description", String.class));
-		assertString("bar", t.get("url", URI.class));
-		assertEquals("baz", t.get("$ref", String.class));
+		assertMapped(
+			t, (obj,prop) -> obj.get(prop, String.class),
+			"description,url,$ref",
+			"a2,b2,c2"
+		);
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
 
-		assertJson(JsonParser.DEFAULT.parse("{description:'foo',url:'bar','$ref':'baz'}", ExternalDocumentation.class), "{description:'foo',url:'bar','$ref':'baz'}");
+		assertBean(JsonParser.DEFAULT.parse("{description:'a',url:'b','$ref':'c'}", ExternalDocumentation.class), "description,url,$ref", "a,b,c");
 	}
 
 	@Test void b02_copy() {
@@ -77,24 +84,24 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 		assertJson(t, "{}");
 
 		t
-			.set("description", "foo")
-			.set("url", "bar")
-			.set("$ref", "baz")
+			.set("description", "a")
+			.set("url", "b")
+			.set("$ref", "c")
 			.copy();
 
-		assertJson(t, "{description:'foo',url:'bar','$ref':'baz'}");
+		assertBean(t, "description,url,$ref", "a,b,c");
 	}
 
 	@Test void b03_keySet() {
 		var t = new ExternalDocumentation();
 
-		assertJson(t.keySet(), "[]");
+		assertSet(t.keySet());
 
 		t
 			.set("description", "foo")
 			.set("url", "bar")
 			.set("$ref", "baz");
 
-		assertJson(t.keySet(), "['description','url','$ref']");
+		assertSet(t.keySet(), "description,url,$ref");
 	}
 }

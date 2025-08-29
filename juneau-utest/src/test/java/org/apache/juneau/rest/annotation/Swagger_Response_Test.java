@@ -95,42 +95,24 @@ class Swagger_Response_Test extends SimpleTestBase {
 
 	@Test void a01_fromPojo() {
 		var s = getSwagger(A.class);
-		var x = s.getResponseInfo("/a","get",200);
 
-		assertEquals("a\nb", x.getDescription());
-		assertJson(x.getSchema(), "{type:'string'}");
-		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
-		assertJson(x.getExamples(), "{foo:'a'}");
+		var x = s.getResponseInfo("/a","get",200);
+		assertBean(x, "description,schema{type},headers{foo{type}},examples{foo}", "a\nb,{string},{{string}},{a}");
 
 		x = s.getResponseInfo("/b","put",200);
-		assertEquals("a\nb", x.getDescription());
-		assertJson(x.getSchema(), "{type:'string'}");
-		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
-		assertJson(x.getExamples(), "{foo:'a'}");
+		assertBean(x, "description,schema{type},headers{foo{type}},examples{foo}", "a\nb,{string},{{string}},{a}");
 
 		x = s.getResponseInfo("/c","post",200);
-		assertEquals("a\nb", x.getDescription());
-		assertJson(x.getSchema(), "{type:'string'}");
-		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
-		assertJson(x.getExamples(), "{foo:'a'}");
+		assertBean(x, "description,schema{type},headers{foo{type}},examples{foo}", "a\nb,{string},{{string}},{a}");
 
 		x = s.getResponseInfo("/d","delete",200);
-		assertEquals("a\nb", x.getDescription());
-		assertJson(x.getSchema(), "{type:'string'}");
-		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
-		assertJson(x.getExamples(), "{foo:'a'}");
+		assertBean(x, "description,schema{type},headers{foo{type}},examples{foo}", "a\nb,{string},{{string}},{a}");
 
 		x = s.getResponseInfo("/e","get",200);
-		assertEquals("a\nb", x.getDescription());
-		assertJson(x.getSchema(), "{type:'string'}");
-		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
-		assertJson(x.getExamples(), "{foo:'a'}");
+		assertBean(x, "description,schema{type},headers{foo{type}},examples{foo}", "a\nb,{string},{{string}},{a}");
 
 		x = s.getResponseInfo("/f","get",200);
-		assertEquals("a\nb", x.getDescription());
-		assertJson(x.getSchema(), "{type:'string'}");
-		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
-		assertJson(x.getExamples(), "{foo:'a'}");
+		assertBean(x, "description,schema{type},headers{foo{type}},examples{foo}", "a\nb,{string},{{string}},{a}");
 
 		x = s.getResponseInfo("/g","get",100);
 		assertEquals("Continue", x.getDescription());
@@ -145,10 +127,10 @@ class Swagger_Response_Test extends SimpleTestBase {
 		assertEquals("Continue", x.getDescription());
 
 		x = s.getResponseInfo("/k","get",200);
-		assertJson(x.getHeaders(), "{foo:{type:'object'}}");
+		assertMap(x.getHeaders(), "foo{type}", "{object}");
 
 		x = s.getResponseInfo("/l","get",200);
-		assertJson(x.getHeaders(), "{foo:{type:'object'}}");
+		assertMap(x.getHeaders(), "foo{type}", "{object}");
 	}
 
 	@Rest
@@ -191,28 +173,28 @@ class Swagger_Response_Test extends SimpleTestBase {
 		var s = getSwagger(B.class);
 		var x = s.getResponseInfo("/a","get",200);
 
-		assertJson(x.getSchema(), "{type:'number'}");
+		assertBean(x.getSchema(), "type", "number");
 
 		x = s.getResponseInfo("/b","put",200);
-		assertJson(x.getSchema(), "{type:'number'}");
+		assertBean(x.getSchema(), "type", "number");
 
 		x = s.getResponseInfo("/c","post",200);
-		assertJson(x.getSchema(), "{type:'object',properties:{f1:{type:'string'}}}");
+		assertBean(x.getSchema(), "type,properties{f1{type}}", "object,{{string}}");
 
 		x = s.getResponseInfo("/d","delete",200);
-		assertJson(x.getSchema(), "{type:'object',properties:{f1:{type:'string'}}}");
+		assertBean(x.getSchema(), "type,properties{f1{type}}", "object,{{string}}");
 
 		x = s.getResponseInfo("/e","get",200);
-		assertJson(x.getSchema(), "{type:'array',items:{type:'string'}}");
+		assertBean(x.getSchema(), "type,items{type}", "array,{string}");
 
 		x = s.getResponseInfo("/f","get",200);
-		assertJson(x.getSchema(), "{type:'array',items:{type:'string'}}");
+		assertBean(x.getSchema(), "type,items{type}", "array,{string}");
 
 		x = s.getResponseInfo("/g","get",200);
-		assertJson(x.getSchema(), "{type:'string'}");
+		assertBean(x.getSchema(), "type", "string");
 
 		x = s.getResponseInfo("/h","get",200);
-		assertJson(x.getSchema(), "{type:'string'}");
+		assertBean(x.getSchema(), "type", "string");
 	}
 
 	@Rest
@@ -244,10 +226,10 @@ class Swagger_Response_Test extends SimpleTestBase {
 
 		sc.getResponseInfo("/b","put",200);
 
-		assertJson(x.getExamples(), "{foo:'b'}");
+		assertMap(x.getExamples(), "foo", "b");
 
 		x = sc.getResponseInfo("/d","delete",200);
-		assertJson(x.getExamples(), "{foo:'b'}");
+		assertMap(x.getExamples(), "foo", "b");
 	}
 
 	@Rest
@@ -299,24 +281,15 @@ class Swagger_Response_Test extends SimpleTestBase {
 
 	@Test void d01_fromThrowable() {
 		var s = getSwagger(D.class);
-		var x = s.getResponseInfo("/a","get",500);
 
-		assertEquals("a\nb", x.getDescription());
-		assertJson(x.getSchema(), "{type:'string'}");
-		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
-		assertJson(x.getExamples(), "{foo:'a'}");
+		var x = s.getResponseInfo("/a","get",500);
+		assertBean(x, "description,schema{type},headers{foo{type}},examples{foo}", "a\nb,{string},{{string}},{a}");
 
 		x = s.getResponseInfo("/b","put",500);
-		assertEquals("a\nb", x.getDescription());
-		assertJson(x.getSchema(), "{type:'string'}");
-		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
-		assertJson(x.getExamples(), "{foo:'a'}");
+		assertBean(x, "description,schema{type},headers{foo{type}},examples{foo}", "a\nb,{string},{{string}},{a}");
 
 		x = s.getResponseInfo("/c","post",500);
-		assertEquals("a\nb", x.getDescription());
-		assertJson(x.getSchema(), "{type:'string'}");
-		assertJson(x.getHeaders(), "{foo:{type:'string'}}");
-		assertJson(x.getExamples(), "{foo:'a'}");
+		assertBean(x, "description,schema{type},headers{foo{type}},examples{foo}", "a\nb,{string},{{string}},{a}");
 
 		x = s.getResponseInfo("/d","delete",100);
 		assertEquals("Continue", x.getDescription());
@@ -325,7 +298,7 @@ class Swagger_Response_Test extends SimpleTestBase {
 		assertEquals("Continue", x.getDescription());
 
 		x = s.getResponseInfo("/f","get",500);
-		assertJson(x.getHeaders(), "{foo:{type:'number'}}");
+		assertBean(x, "headers{foo{type}}", "{{number}}");
 	}
 
 	@Rest
@@ -342,7 +315,7 @@ class Swagger_Response_Test extends SimpleTestBase {
 		var s = getSwagger(E.class);
 
 		var x = s.getResponseInfo("/a","get",500);
-		assertJson(x.getSchema(), "{type:'number'}");
+		assertBean(x, "schema{type}", "{number}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -359,10 +332,10 @@ class Swagger_Response_Test extends SimpleTestBase {
 		public void b() throws F2 { /* no-op */ }
 	}
 
-	@Test void f01_exampeFromThrowable() {
+	@Test void f01_exampleFromThrowable() {
 		var s = getSwagger(F.class);
 		var x = s.getResponseInfo("/b","put",500);
 
-		assertJson(x.getExamples(), "{foo:'b'}");
+		assertBean(x, "examples{foo}", "{b}");
 	}
 }

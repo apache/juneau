@@ -33,33 +33,32 @@ class Operation_Test extends SimpleTestBase {
 	 */
 	@Test void a01_gettersAndSetters() {
 		var t = new Operation();
-		assertJson(t.setTags(set("foo","bar")).getTags(), "['foo','bar']");
-		assertJson(t.setTags("bar","baz").getTags(), "['bar','baz']");
-		assertJson(t.setTags(set()).getTags(), "[]");
+
+		// General
+		assertBean(
+			t.setSummary("a").setDescription("b").setExternalDocs(externalDocumentation("c")).setOperationId("d")
+			.setOperationId("e").setDeprecated(true).setTags(set("f1","f2")).setConsumes(set(MediaType.of("text/foo")))
+			.setProduces(set(MediaType.of("text/foo"))).setParameters(set(parameterInfo("g1","g2"))).setResponses(map("1",responseInfo("h")))
+			.setSchemes(set("foo")).setSecurity(alist(map("foo",alist("bar")))),
+			"summary,description,externalDocs{url},operationId,deprecated,tags,consumes,produces,parameters{0{in,name}},responses{1{description}},schemes,security",
+			"a,b,{c},e,true,[f1,f2],[text/foo],[text/foo],{{g1,g2}},{{h}},[foo],[{foo=[bar]}]"
+		);
+
+		// Edge cases for collections.
+		assertSet(t.setTags(set()).getTags());
 		assertNull(t.setTags((Collection<String>)null).getTags());
-		assertEquals("foo", t.setSummary("foo").getSummary());
-		assertEquals("foo", t.setDescription("foo").getDescription());
-		assertJson(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs(), "{url:'foo'}");
-		assertEquals("foo", t.setOperationId("foo").getOperationId());
-		assertJson(t.setConsumes(set(MediaType.of("text/foo"))).getConsumes(), "['text/foo']");
-		assertJson(t.setConsumes(set()).getConsumes(), "[]");
+		assertSet(t.setConsumes(set()).getConsumes());
 		assertNull(t.setConsumes((Collection<MediaType>)null).getConsumes());
-		assertJson(t.setProduces(set(MediaType.of("text/foo"))).getProduces(), "['text/foo']");
-		assertJson(t.setProduces(set()).getProduces(), "[]");
+		assertSet(t.setProduces(set()).getProduces());
 		assertNull(t.setProduces((Collection<MediaType>)null).getProduces());
-		assertJson(t.setParameters(set(parameterInfo("foo","bar"))).getParameters(), "[{'in':'foo',name:'bar'}]");
-		assertJson(t.setParameters(set()).getParameters(), "[]");
+		assertList(t.setParameters(set()).getParameters());
 		assertNull(t.setParameters((Collection<ParameterInfo>)null).getParameters());
-		assertJson(t.setResponses(map("123",responseInfo("bar"))).getResponses(), "{'123':{description:'bar'}}");
-		assertJson(t.setResponses(map()).getResponses(), "{}");
+		assertMap(t.setResponses(map()).getResponses());
 		assertNull(t.setResponses((Map<String,ResponseInfo>)null).getResponses());
-		assertJson(t.setSchemes(set("foo")).getSchemes(), "['foo']");
-		assertJson(t.setSchemes(set()).getSchemes(), "[]");
+		assertSet(t.setSchemes(set()).getSchemes());
 		assertNull(t.setSchemes((Set<String>)null).getSchemes());
-		assertJson(t.setSecurity(alist(map("foo",alist("bar")))).getSecurity(), "[{foo:['bar']}]");
-		assertJson(t.setSecurity(alist()).getSecurity(), "[]");
+		assertList(t.setSecurity(alist()).getSecurity());
 		assertNull(t.setSecurity((List<Map<String,List<String>>>)null).getSecurity());
-		assertTrue(t.setDeprecated(true).getDeprecated());
 	}
 
 	/**
@@ -81,9 +80,13 @@ class Operation_Test extends SimpleTestBase {
 			.set("security", set(map("i1",alist("i2"))))
 			.set("summary", "j")
 			.set("tags", set("k"))
-			.set("$ref", "ref");
+			.set("$ref", "l");  // Not a bean property but accessed through get(String) and set(String,Object).
 
-		assertJson(t, "{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
+		assertBean(
+			t,
+			"consumes,deprecated,description,externalDocs{url},operationId,parameters{0{in,name}},produces,responses{1{description}},schemes,security,summary,tags,$ref",
+			"[text/a],true,b,{c},d,{{e1,e2}},[text/f],{{g}},[h],[{i1=[i2]}],j,[k],l"
+		);
 
 		t
 			.set("consumes", "['text/a']")
@@ -98,9 +101,13 @@ class Operation_Test extends SimpleTestBase {
 			.set("security", "[{i1:['i2']}]")
 			.set("summary", "j")
 			.set("tags", "['k']")
-			.set("$ref", "ref");
+			.set("$ref", "l");
 
-		assertJson(t, "{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
+		assertBean(
+			t,
+			"consumes,deprecated,description,externalDocs{url},operationId,parameters{0{in,name}},produces,responses{1{description}},schemes,security,summary,tags,$ref",
+			"[text/a],true,b,{c},d,{{e1,e2}},[text/f],{{g}},[h],[{i1=[i2]}],j,[k],l"
+		);
 
 		t
 			.set("consumes", new StringBuilder("['text/a']"))
@@ -115,23 +122,19 @@ class Operation_Test extends SimpleTestBase {
 			.set("security", new StringBuilder("[{i1:['i2']}]"))
 			.set("summary", new StringBuilder("j"))
 			.set("tags", new StringBuilder("['k']"))
-			.set("$ref", new StringBuilder("ref"));
+			.set("$ref", new StringBuilder("l"));
 
-		assertJson(t, "{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
+		assertBean(
+			t,
+			"consumes,deprecated,description,externalDocs{url},operationId,parameters{0{in,name}},produces,responses{1{description}},schemes,security,summary,tags,$ref",
+			"[text/a],true,b,{c},d,{{e1,e2}},[text/f],{{g}},[h],[{i1=[i2]}],j,[k],l"
+		);
 
-		assertEquals("['text/a']", t.get("consumes", String.class));
-		assertEquals("true", t.get("deprecated", String.class));
-		assertEquals("b", t.get("description", String.class));
-		assertEquals("{url:'c'}", t.get("externalDocs", String.class));
-		assertEquals("d", t.get("operationId", String.class));
-		assertEquals("[{'in':'e1',name:'e2'}]", t.get("parameters", String.class));
-		assertEquals("['text/f']", t.get("produces", String.class));
-		assertEquals("{'1':{description:'g'}}", t.get("responses", String.class));
-		assertEquals("['h']", t.get("schemes", String.class));
-		assertEquals("[{i1:['i2']}]", t.get("security", String.class));
-		assertEquals("j", t.get("summary", String.class));
-		assertEquals("['k']", t.get("tags", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertMapped(t,
+			(obj,prop) -> obj.get(prop, String.class),
+			"consumes,deprecated,description,externalDocs,operationId,parameters,produces,responses,schemes,security,summary,tags,$ref",
+			"['text/a'],true,b,{url:'c'},d,[{'in':'e1',name:'e2'}],['text/f'],{'1':{description:'g'}},['h'],[{i1:['i2']}],j,['k'],l"
+		);
 
 		assertType(Set.class, t.get("consumes", Object.class));
 		assertType(MediaType.class, t.get("consumes", List.class).get(0));
@@ -181,16 +184,20 @@ class Operation_Test extends SimpleTestBase {
 			.set("security", set(map("i1",alist("i2"))))
 			.set("summary", "j")
 			.set("tags", set("k"))
-			.set("$ref", "ref")
+			.set("$ref", "l")
 			.copy();
 
-		assertJson(t, "{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}");
+		assertBean(
+			t,
+			"consumes,deprecated,description,externalDocs{url},operationId,parameters{0{in,name}},produces,responses{1{description}},schemes,security,summary,tags,$ref",
+			"[text/a],true,b,{c},d,{{e1,e2}},[text/f],{{g}},[h],[{i1=[i2]}],j,[k],l"
+		);
 	}
 
 	@Test void b03_keySet() {
 		var t = new Operation();
 
-		assertJson(t.keySet(), "[]");
+		assertSet(t.keySet());
 
 		t
 			.set("consumes", set(MediaType.of("text/a")))
@@ -207,8 +214,9 @@ class Operation_Test extends SimpleTestBase {
 			.set("tags", set("k"))
 			.set("$ref", "ref");
 
-		assertJson(t.keySet(),
-			"['consumes','deprecated','description','externalDocs','operationId','parameters','produces','responses','schemes','security','summary','tags','$ref']"
+		assertSet(
+			t.keySet(),
+			"consumes","deprecated","description","externalDocs","operationId","parameters","produces","responses","schemes","security","summary","tags","$ref"
 		);
 	}
 }

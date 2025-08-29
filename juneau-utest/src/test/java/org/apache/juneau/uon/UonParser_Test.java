@@ -482,8 +482,7 @@ class UonParser_Test extends SimpleTestBase {
 		var p2 = UonParser.DEFAULT;
 		var s = "(f1=foo,f2=123)";
 		var t = p2.parse(s, A.class);
-		assertEquals("foo", t.f1);
-		assertEquals(123, t.f2);
+		assertBean(t, "f1,f2", "foo,123");
 	}
 
 	public static class A {

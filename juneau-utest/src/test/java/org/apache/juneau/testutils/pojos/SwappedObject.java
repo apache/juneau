@@ -17,4 +17,9 @@ import org.apache.juneau.annotation.*;
 @Swap(SwappedObjectSwap.class)
 public class SwappedObject {
 	public boolean wasUnswapped;
+
+	@Override
+	public String toString() {
+		return "wasUnswapped:" + wasUnswapped;
+	}
 }

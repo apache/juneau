@@ -237,13 +237,11 @@ class BeanConfig_Test extends SimpleTestBase {
 
 		// Bean
 		o = "{name:'x',age:123}";
-		assertEquals("x", bc.convertToType(o, Person.class).getName());
-		assertEquals(123, bc.convertToType(o, Person.class).getAge());
+		assertBean(bc.convertToType(o, Person.class), "name,age", "x,123");
 
 		// Read-only bean
 		o = "{name:'x',age:123}";
-		assertEquals("x", bc.convertToType(o, ReadOnlyPerson.class).getName());
-		assertEquals(123, bc.convertToType(o, ReadOnlyPerson.class).getAge());
+		assertBean(bc.convertToType(o, ReadOnlyPerson.class), "name,age", "x,123");
 
 		// Class with forString(String) method.
 		o = UUID.randomUUID();
@@ -405,8 +403,7 @@ class BeanConfig_Test extends SimpleTestBase {
 		f1.setA("Hello");
 		f1.setB(50);
 
-		assertEquals(bm2.get("a"), "Hello", fs("Failed to set string property 'a' on dynamic proxy bean. {0}", bm2));  // NOSONAR
-		assertEquals(bm2.get("b"), Integer.valueOf(50), fs("Failed to set string property 'b' on dynamic proxy bean. {0}", bm2));
+		assertMap(bm2, "a,b", "Hello,50");
 		assertEquals(bm1, bm2, fs("Failed equality test of dynamic proxies beans: {0} / {1}", bm1, bm2));
 		assertEquals(bm2, bm1, fs("Failed reverse equality test of dynamic proxies beans: {0} / {1}", bm1, bm2));
 	}
@@ -619,10 +616,7 @@ class BeanConfig_Test extends SimpleTestBase {
 				bm.add("f4", i);
 			}
 			var d = bm.getBean();
-			assertEquals(5000, d.f1.length);
-			assertEquals(5000, d.f2.length);
-			assertEquals(5003, d.f3.length);
-			assertEquals(5003, d.f4.length);
+			assertBean(d, "f1{length},f2{length},f3{length},f4{length}", "{5000},{5000},{5003},{5003}");
 		});
 	}
 

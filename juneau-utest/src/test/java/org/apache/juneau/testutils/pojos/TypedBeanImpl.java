@@ -26,4 +26,9 @@ public class TypedBeanImpl implements TypedBean {
 	public static TypedBeanImpl get() {
 		return new TypedBeanImpl().init();
 	}
+
+	@Override
+	public String toString() {
+		return "a:" + a + ";b:" + b;
+	}
 }

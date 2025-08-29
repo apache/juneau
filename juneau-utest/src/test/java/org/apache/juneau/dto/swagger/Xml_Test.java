@@ -30,14 +30,18 @@ class Xml_Test extends SimpleTestBase {
 	 */
 	@Test void a01_gettersAndSetters() {
 		var t = new Xml();
-		assertEquals("foo", t.setName("foo").getName());
+
+		// General
+		assertBean(
+			t.setName("a").setNamespace("b").setPrefix("c").setAttribute(true).setWrapped(true),
+			"name,namespace,prefix,attribute,wrapped",
+			"a,b,c,true,true"
+		);
+
+		// Edge cases for nulls.
 		assertNull(t.setName(null).getName());
-		assertEquals("foo", t.setNamespace("foo").getNamespace());
 		assertNull(t.setNamespace(null).getNamespace());
-		assertEquals("foo", t.setPrefix("foo").getPrefix());
 		assertNull(t.setPrefix(null).getPrefix());
-		assertTrue(t.setAttribute(true).getAttribute());
-		assertTrue(t.setWrapped(true).getWrapped());
 	}
 
 	/**
@@ -54,7 +58,10 @@ class Xml_Test extends SimpleTestBase {
 			.set("wrapped", true)
 			.set("$ref", "ref");
 
-		assertJson(t, "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
+		// Comprehensive object state validation
+		assertBean(t,
+			"name,namespace,prefix,attribute,wrapped,$ref",
+			"a,b,c,true,true,ref");
 
 		t
 			.set("attribute", "true")
@@ -64,7 +71,9 @@ class Xml_Test extends SimpleTestBase {
 			.set("wrapped", "true")
 			.set("$ref", "ref");
 
-		assertJson(t, "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
+		assertBean(t,
+			"name,namespace,prefix,attribute,wrapped,$ref",
+			"a,b,c,true,true,ref");
 
 		t
 			.set("attribute", new StringBuilder("true"))
@@ -74,14 +83,13 @@ class Xml_Test extends SimpleTestBase {
 			.set("wrapped", new StringBuilder("true"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertJson(t, "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
+		assertBean(t,
+			"name,namespace,prefix,attribute,wrapped,$ref",
+			"a,b,c,true,true,ref");
 
-		assertEquals("true", t.get("attribute", String.class));
-		assertEquals("a", t.get("name", String.class));
-		assertEquals("b", t.get("namespace", String.class));
-		assertEquals("c", t.get("prefix", String.class));
-		assertEquals("true", t.get("wrapped", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
+			"attribute,name,namespace,prefix,wrapped,$ref",
+			"true,a,b,c,true,ref");
 
 		assertType(Boolean.class, t.get("attribute", Object.class));
 		assertType(String.class, t.get("name", Object.class));
@@ -115,13 +123,15 @@ class Xml_Test extends SimpleTestBase {
 			.set("$ref", "ref")
 			.copy();
 
-		assertJson(t, "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
+		assertBean(t,
+			"name,namespace,prefix,attribute,wrapped,$ref",
+			"a,b,c,true,true,ref");
 	}
 
 	@Test void b03_keySet() {
 		var t = new Xml();
 
-		assertJson(t.keySet(), "[]");
+		assertSet(t.keySet());
 
 		t
 			.set("attribute", true)
@@ -131,6 +141,6 @@ class Xml_Test extends SimpleTestBase {
 			.set("wrapped", true)
 			.set("$ref", "ref");
 
-		assertJson(t.keySet(), "['attribute','name','namespace','prefix','wrapped','$ref']");
+		assertSet(t.keySet(), "attribute,name,namespace,prefix,wrapped,$ref");
 	}
 }

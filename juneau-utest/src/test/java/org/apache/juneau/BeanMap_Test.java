@@ -1038,12 +1038,10 @@ class BeanMap_Test extends SimpleTestBase {
 		assertEquals(1, t.f1);
 
 		t = (R2)m.cast(R1.class);
-		assertEquals(1, t.f1);
-		assertEquals(2, t.f2);
+		assertBean(t, "f1,f2", "1,2");
 
 		t = (R2)m.cast(bc.getClassMeta(R1.class));
-		assertEquals(1, t.f1);
-		assertEquals(2, t.f2);
+		assertBean(t, "f1,f2", "1,2");
 
 		// Without _type
 		m = new JsonMap(session);
@@ -1051,16 +1049,13 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("f2", "2");
 
 		m = (JsonMap)m.cast(Object.class);
-		assertEquals(1, t.f1);
-		assertEquals(2, t.f2);
+		assertBean(t, "f1,f2", "1,2");
 
 		t = m.cast(R2.class);
-		assertEquals(1, t.f1);
-		assertEquals(2, t.f2);
+		assertBean(t, "f1,f2", "1,2");
 
 		t = m.cast(bc.getClassMeta(R2.class));
-		assertEquals(1, t.f1);
-		assertEquals(2, t.f2);
+		assertBean(t, "f1,f2", "1,2");
 	}
 
 	// Bean with no properties

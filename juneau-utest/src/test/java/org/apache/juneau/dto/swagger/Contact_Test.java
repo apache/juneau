@@ -32,10 +32,14 @@ class Contact_Test extends SimpleTestBase {
 	 */
 	@Test void a01_gettersAndSetters() {
 		var t = new Contact();
-		assertEquals("foo", t.setName("foo").getName());
+
+		assertBean(
+			t.setName("a").setEmail("b").setUrl(URI.create("http://c")),
+			"name,email,url",
+			"a,b,http://c"
+		);
+
 		assertNull(t.setName(null).getName());
-		assertString("http://bar", t.setUrl(URI.create("http://bar")).getUrl());
-		assertEquals("foo", t.setEmail("foo").getEmail());
 		assertNull(t.setEmail(null).getEmail());
 	}
 
@@ -46,32 +50,33 @@ class Contact_Test extends SimpleTestBase {
 		var t = new Contact();
 
 		t
-			.set("name", "foo")
-			.set("url", "bar")
-			.set("email", "baz")
-			.set("$ref", "qux");
+			.set("name", "a")
+			.set("url", "b")
+			.set("email", "c")
+			.set("$ref", "d");
 
-		assertJson(t, "{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
+		assertBean(t, "name,url,email,$ref", "a,b,c,d");
 
 		t
-			.set("name", new StringBuilder("foo"))
-			.set("url", new StringBuilder("bar"))
-			.set("email", new StringBuilder("baz"))
-			.set("$ref", new StringBuilder("qux"));
+			.set("name", new StringBuilder("a"))
+			.set("url", new StringBuilder("b"))
+			.set("email", new StringBuilder("c"))
+			.set("$ref", new StringBuilder("d"));
 
-		assertJson(t, "{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
+		assertBean(t, "name,url,email,$ref", "a,b,c,d");
 
-		assertEquals("foo", t.get("name", String.class));
-		assertString("bar", t.get("url", URI.class));
-		assertEquals("baz", t.get("email", String.class));
-		assertEquals("qux", t.get("$ref", String.class));
+		assertMapped(
+			t, (obj,prop) -> obj.get(prop, String.class),
+			"name,url,email,$ref",
+			"a,b,c,d"
+		);
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
 
-		assertJson(JsonParser.DEFAULT.parse("{name:'foo',url:'bar',email:'baz','$ref':'qux'}", Contact.class), "{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
+		assertBean(JsonParser.DEFAULT.parse("{name:'a',url:'b',email:'c','$ref':'d'}", Contact.class), "name,url,email,$ref", "a,b,c,d");
 	}
 
 	@Test void b02_copy() {
@@ -82,13 +87,13 @@ class Contact_Test extends SimpleTestBase {
 		assertJson(t, "{}");
 
 		t
-			.set("name", "foo")
-			.set("url", "bar")
-			.set("email", "baz")
-			.set("$ref", "qux")
+			.set("name", "a")
+			.set("url", "b")
+			.set("email", "c")
+			.set("$ref", "d")
 			.copy();
 
-		assertJson(t, "{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
+		assertBean(t, "name,url,email,$ref", "a,b,c,d");
 	}
 
 	@Test void b03_keySet() {
@@ -102,6 +107,6 @@ class Contact_Test extends SimpleTestBase {
 			.set("email", "baz")
 			.set("$ref", "qux");
 
-		assertJson(t.keySet(), "['email','name','url','$ref']");
+		assertSet(t.keySet(), "email,name,url,$ref");
 	}
 }

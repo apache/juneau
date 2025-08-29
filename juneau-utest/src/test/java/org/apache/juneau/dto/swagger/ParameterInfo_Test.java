@@ -33,23 +33,23 @@ class ParameterInfo_Test extends SimpleTestBase {
 	 */
 	@Test void a01_gettersAndSetters() {
 		var t = new ParameterInfo();
-		assertEquals("foo", t.setName("foo").getName());
+		assertBean(t.setName("foo"), "name", "foo");
 		assertNull(t.setName(null).getName());
-		assertEquals("foo", t.setIn("foo").getIn());
+		assertBean(t.setIn("foo"), "in", "foo");
 		assertNull(t.setIn(null).getIn());
-		assertEquals("foo", t.setDescription("foo").getDescription());
+		assertBean(t.setDescription("foo"), "description", "foo");
 		assertNull(t.setDescription(null).getDescription());
 		assertTrue(t.setRequired(true).getRequired());
 		assertJson(t.setSchema(schemaInfo().setTitle("foo")).getSchema(), "{title:'foo'}");
-		assertEquals("foo", t.setType("foo").getType());
+		assertBean(t.setType("foo"), "type", "foo");
 		assertNull(t.setType(null).getType());
-		assertEquals("foo", t.setFormat("foo").getFormat());
+		assertBean(t.setFormat("foo"), "format", "foo");
 		assertNull(t.setFormat(null).getFormat());
 		assertTrue(t.setAllowEmptyValue(true).getAllowEmptyValue());
 		assertJson(t.setItems(items("foo")).getItems(), "{type:'foo'}");
-		assertEquals("foo", t.setCollectionFormat("foo").getCollectionFormat());
+		assertBean(t.setCollectionFormat("foo"), "collectionFormat", "foo");
 		assertNull(t.setCollectionFormat(null).getCollectionFormat());
-		assertEquals("foo", t.setDefault("foo").getDefault());
+		assertBean(t.setDefault("foo"), "default", "foo");
 		assertString("foo", t.setDefault(new StringBuilder("foo")).getDefault());
 		assertNull(t.setDefault(null).getDefault());
 		assertEquals(123, t.setMaximum(123).getMaximum());
@@ -60,7 +60,7 @@ class ParameterInfo_Test extends SimpleTestBase {
 		assertTrue(t.setExclusiveMinimum(true).getExclusiveMinimum());
 		assertEquals(123, t.setMaxLength(123).getMaxLength());
 		assertEquals(123, t.setMinLength(123).getMinLength());
-		assertEquals("foo", t.setPattern("foo").getPattern());
+		assertBean(t.setPattern("foo"), "pattern", "foo");
 		assertNull(t.setPattern(null).getPattern());
 		assertEquals(123, t.setMaxItems(123).getMaxItems());
 		assertEquals(123, t.setMinItems(123).getMinItems());
@@ -164,30 +164,9 @@ class ParameterInfo_Test extends SimpleTestBase {
 
 		assertJson(t, "{'in':'f',name:'h',type:'k',description:'d',required:true,schema:{title:'j'},format:'e',allowEmptyValue:true,items:{type:'g'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}");
 
-		assertEquals("a", t.get("default", String.class));
-		assertEquals("['b']", t.get("enum", String.class));
-		assertEquals("true", t.get("allowEmptyValue", String.class));
-		assertEquals("c", t.get("collectionFormat", String.class));
-		assertEquals("d", t.get("description", String.class));
-		assertEquals("true", t.get("exclusiveMaximum", String.class));
-		assertEquals("true", t.get("exclusiveMinimum", String.class));
-		assertEquals("e", t.get("format", String.class));
-		assertEquals("f", t.get("in", String.class));
-		assertEquals("{type:'g'}", t.get("items", String.class));
-		assertEquals("123.0", t.get("maximum", String.class));
-		assertEquals("123", t.get("maxItems", String.class));
-		assertEquals("123", t.get("maxLength", String.class));
-		assertEquals("123.0", t.get("minimum", String.class));
-		assertEquals("123", t.get("minItems", String.class));
-		assertEquals("123", t.get("minLength", String.class));
-		assertEquals("123.0", t.get("multipleOf", String.class));
-		assertEquals("h", t.get("name", String.class));
-		assertEquals("i", t.get("pattern", String.class));
-		assertEquals("true", t.get("required", String.class));
-		assertEquals("{title:'j'}", t.get("schema", String.class));
-		assertEquals("k", t.get("type", String.class));
-		assertEquals("true", t.get("uniqueItems", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
+			"default,enum,allowEmptyValue,collectionFormat,description,exclusiveMaximum,exclusiveMinimum,format,in,items,maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,name,pattern,required,schema,type,uniqueItems,$ref",
+			"a,['b'],true,c,d,true,true,e,f,{type:'g'},123.0,123,123,123.0,123,123,123.0,h,i,true,{title:'j'},k,true,ref");
 
 		assertType(StringBuilder.class, t.get("default", Object.class));
 		assertType(Set.class, t.get("enum", Object.class));

@@ -108,16 +108,16 @@ class Swagger_Header_Test extends SimpleTestBase {
 		var s = getSwagger(B.class);
 		var x = s.getParameterInfo("/a","get","header","H");
 
-		assertJson(x, "{'in':'header',name:'H',type:'string'}");
+		assertBean(x, "in,name,type", "header,H,string");
 
 		x = s.getParameterInfo("/b","put","header","H");
-		assertJson(x, "{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}");
+		assertBean(x, "in,name,type,schema{properties{f1{type}}}", "header,H,object,{{{string}}}");
 
 		x = s.getParameterInfo("/c","post","header","H");
-		assertJson(x, "{'in':'header',name:'H',type:'array',items:{type:'string'}}");
+		assertBean(x, "in,name,type,items{type}", "header,H,array,{string}");
 
 		x = s.getParameterInfo("/d","delete","header","H");
-		assertJson(x, "{'in':'header',name:'H',type:'string'}");
+		assertBean(x, "in,name,type", "header,H,string");
 	}
 
 	@Rest
@@ -200,21 +200,21 @@ class Swagger_Header_Test extends SimpleTestBase {
 		var s = getSwagger(E.class);
 		var x = s.getParameterInfo("/a","get","header","H");
 
-		assertJson(x, "{'in':'header',name:'H',type:'string'}");
+		assertBean(x, "in,name,type", "header,H,string");
 
 		x = s.getParameterInfo("/b","put","header","H");
-		assertJson(x, "{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}");
+		assertBean(x, "in,name,type,schema{properties{f1{type}}}", "header,H,object,{{{string}}}");
 
 		x = s.getParameterInfo("/c","post","header","H");
-		assertJson(x, "{'in':'header',name:'H',type:'array',items:{type:'string'}}");
+		assertBean(x, "in,name,type,items{type}", "header,H,array,{string}");
 
 		x = s.getParameterInfo("/d","delete","header","H");
-		assertJson(x, "{'in':'header',name:'H',type:'string'}");
+		assertBean(x, "in,name,type", "header,H,string");
 
 		x = s.getParameterInfo("/e","get","header","H");
-		assertJson(x, "{'in':'header',name:'H',type:'integer',format:'int32'}");
+		assertBean(x, "in,name,type,format", "header,H,integer,int32");
 
 		x = s.getParameterInfo("/f","get","header","H");
-		assertJson(x, "{'in':'header',name:'H',type:'boolean'}");
+		assertBean(x, "in,name,type", "header,H,boolean");
 	}
 }

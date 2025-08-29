@@ -31,15 +31,18 @@ class Info_Test extends SimpleTestBase {
 	 */
 	@Test void a01_gettersAndSetters() {
 		var t = new Info();
-		assertEquals("foo", t.setTitle("foo").getTitle());
+
+		// General
+		assertBean(
+			t.setTitle("a").setDescription("b").setTermsOfService("c").setContact(contact("d")).setLicense(license("e")).setVersion("f"),
+			"title,description,termsOfService,contact{name},license{name},version",
+			"a,b,c,{d},{e},f"
+		);
+
+		// Edge cases for nulls.
 		assertNull(t.setTitle(null).getTitle());
-		assertEquals("foo", t.setDescription("foo").getDescription());
 		assertNull(t.setDescription(null).getDescription());
-		assertEquals("foo", t.setTermsOfService("foo").getTermsOfService());
 		assertNull(t.setTermsOfService(null).getTermsOfService());
-		assertJson(t.setContact(contact("foo")).getContact(), "{name:'foo'}");
-		assertJson(t.setLicense(license("foo")).getLicense(), "{name:'foo'}");
-		assertEquals("foo", t.setVersion("foo").getVersion());
 		assertNull(t.setVersion(null).getVersion());
 	}
 
@@ -58,7 +61,10 @@ class Info_Test extends SimpleTestBase {
 			.set("version", "f")
 			.set("$ref", "ref");
 
-		assertJson(t, "{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
+		// Comprehensive object state validation
+		assertBean(t,
+			"title,description,version,contact{name},license{name},termsOfService,$ref",
+			"e,b,f,{a},{c},d,ref");
 
 		t
 			.set("contact", "{name:'a'}")
@@ -69,7 +75,9 @@ class Info_Test extends SimpleTestBase {
 			.set("version", "f")
 			.set("$ref", "ref");
 
-		assertJson(t, "{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
+		assertBean(t,
+			"title,description,version,contact{name},license{name},termsOfService,$ref",
+			"e,b,f,{a},{c},d,ref");
 
 		t
 			.set("contact", new StringBuilder("{name:'a'}"))
@@ -80,15 +88,13 @@ class Info_Test extends SimpleTestBase {
 			.set("version", new StringBuilder("f"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertJson(t, "{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
+		assertBean(t,
+			"title,description,version,contact{name},license{name},termsOfService,$ref",
+			"e,b,f,{a},{c},d,ref");
 
-		assertEquals("{name:'a'}", t.get("contact", String.class));
-		assertEquals("b", t.get("description", String.class));
-		assertEquals("{name:'c'}", t.get("license", String.class));
-		assertEquals("d", t.get("termsOfService", String.class));
-		assertEquals("e", t.get("title", String.class));
-		assertEquals("f", t.get("version", String.class));
-		assertEquals("ref", t.get("$ref", String.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
+			"contact,description,license,termsOfService,title,version,$ref",
+			"{name:'a'},b,{name:'c'},d,e,f,ref");
 
 		assertType(Contact.class, t.get("contact", Object.class));
 		assertType(String.class, t.get("description", Object.class));
@@ -124,13 +130,15 @@ class Info_Test extends SimpleTestBase {
 			.set("$ref", "ref")
 			.copy();
 
-		assertJson(t, "{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
+		assertBean(t,
+			"title,description,version,contact{name},license{name},termsOfService,$ref",
+			"e,b,f,{a},{c},d,ref");
 	}
 
 	@Test void b03_keySet() {
 		var t = new Info();
 
-		assertJson(t.keySet(), "[]");
+		assertSet(t.keySet());
 
 		t
 			.set("contact", contact("a"))
@@ -141,6 +149,6 @@ class Info_Test extends SimpleTestBase {
 			.set("version", "f")
 			.set("$ref", "ref");
 
-		assertJson(t.keySet(), "['contact','description','license','termsOfService','title','version','$ref']");
+		assertSet(t.keySet(), "contact,description,license,termsOfService,title,version,$ref");
 	}
 }

@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
@@ -107,27 +106,19 @@ class Swagger_Path_Test extends SimpleTestBase {
 		var s = getSwagger(A.class);
 		var x = s.getParameterInfo("/a/{P}","get","path","P");
 
-		assertBean(x, "name,description,type", "P,a\nb,string");
-		assertJson(x.getEnum(), "['a','b']");
-		assertJson(x, "{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b']}");
+		assertBean(x, "in,name,type,description,required,enum", "path,P,string,a\nb,true,[a,b]");
 
 		x = s.getParameterInfo("/b/{P}","put","path","P");
-		assertBean(x, "name,description,type", "P,a\nb,string");
-		assertJson(x.getEnum(), "['a','b']");
-		assertJson(x, "{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b']}");
+		assertBean(x, "in,name,type,description,required,enum", "path,P,string,a\nb,true,[a,b]");
 
 		x = s.getParameterInfo("/c/{P}","post","path","P");
-		assertBean(x, "name,description,type", "P,b\nc,string");
-		assertJson(x.getEnum(), "['b','c']");
-		assertJson(x, "{'in':'path',name:'P',type:'string',description:'b\\nc',required:true,'enum':['b','c']}");
+		assertBean(x, "in,name,type,description,required,enum", "path,P,string,b\nc,true,[b,c]");
 
 		x = s.getParameterInfo("/d/{P}","delete","path","P");
-		assertEquals("P", x.getName());
-		assertJson(x, "{'in':'path',name:'P',type:'string',required:true}");
+		assertBean(x, "in,name,type,required", "path,P,string,true");
 
 		x = s.getParameterInfo("/e/{P}","get","path","P");
-		assertJson(x.getEnum(), "['a','b']");
-		assertJson(x, "{'in':'path',name:'P',type:'string',required:true,'enum':['a','b']}");
+		assertBean(x, "in,name,type,required,enum", "path,P,string,true,[a,b]");
 	}
 
 	@Rest
@@ -162,16 +153,16 @@ class Swagger_Path_Test extends SimpleTestBase {
 		var s = getSwagger(B.class);
 		var x = s.getParameterInfo("/a/{P}","get","path","P");
 
-		assertJson(x, "{'in':'path',name:'P',type:'string',required:true}");
+		assertBean(x, "in,name,type,required", "path,P,string,true");
 
 		x = s.getParameterInfo("/b/{P}","put","path","P");
-		assertJson(x, "{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}");
+		assertBean(x, "in,name,type,required,schema{properties{f1{type}}}", "path,P,object,true,{{{string}}}");
 
 		x = s.getParameterInfo("/c/{P}","post","path","P");
-		assertJson(x, "{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}");
+		assertBean(x, "in,name,type,required,items{type}", "path,P,array,true,{string}");
 
 		x = s.getParameterInfo("/d/{P}","delete","path","P");
-		assertJson(x, "{'in':'path',name:'P',type:'string',required:true}");
+		assertBean(x, "in,name,type,required", "path,P,string,true");
 	}
 
 	@Rest
@@ -214,22 +205,18 @@ class Swagger_Path_Test extends SimpleTestBase {
 		var s = getSwagger(D.class);
 		var x = s.getParameterInfo("/a/{P}","get","path","P");
 
-		assertEquals("a", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "description,type", "a,string");
 
 		x = s.getParameterInfo("/b/{P}","put","path","P");
-		assertEquals("a", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "description,type", "a,string");
 
 		x = s.getParameterInfo("/c/{P}","post","path","P");
-		assertEquals("b", x.getDescription());
-		assertEquals("string", x.getType());
+		assertBean(x, "description,type", "b,string");
 
 		x = s.getParameterInfo("/d/{P}","delete","path","P");
-		assertEquals("P", x.getName());
 
 		x = s.getParameterInfo("/e/{P}","get","path","P");
-		assertJson(x.getEnum(), "['a','b']");
+		assertSet(x.getEnum(), "a,b");
 	}
 
 	@Rest
@@ -265,21 +252,21 @@ class Swagger_Path_Test extends SimpleTestBase {
 		var s = getSwagger(E.class);
 		var x = s.getParameterInfo("/a/{P}","get","path","P");
 
-		assertJson(x, "{'in':'path',name:'P',type:'string',required:true}");
+		assertBean(x, "in,name,type,required", "path,P,string,true");
 
 		x = s.getParameterInfo("/b/{P}","put","path","P");
-		assertJson(x, "{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}");
+		assertBean(x, "in,name,type,required,schema{properties{f1{type}}}", "path,P,object,true,{{{string}}}");
 
 		x = s.getParameterInfo("/c/{P}","post","path","P");
-		assertJson(x, "{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}");
+		assertBean(x, "in,name,type,required,items{type}", "path,P,array,true,{string}");
 
 		x = s.getParameterInfo("/d/{P}","delete","path","P");
-		assertJson(x, "{'in':'path',name:'P',type:'string',required:true}");
+		assertBean(x, "in,name,type,required", "path,P,string,true");
 
 		x = s.getParameterInfo("/e/{P}","get","path","P");
-		assertJson(x, "{'in':'path',name:'P',type:'integer',required:true,format:'int32'}");
+		assertBean(x, "in,name,type,required,format", "path,P,integer,true,int32");
 
 		x = s.getParameterInfo("/f/{P}","get","path","P");
-		assertJson(x, "{'in':'path',name:'P',type:'boolean',required:true}");
+		assertBean(x, "in,name,type,required", "path,P,boolean,true");
 	}
 }
