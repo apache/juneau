@@ -95,7 +95,7 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 	@Test void b03_keySet() {
 		var t = new ExternalDocumentation();
 
-		assertSet(t.keySet());
+		assertEmpty(t.keySet());
 
 		t
 			.set("description", "foo")

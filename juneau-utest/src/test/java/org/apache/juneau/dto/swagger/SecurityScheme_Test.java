@@ -49,7 +49,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 		assertNull(t.setFlow(null).getFlow());
 		assertNull(t.setAuthorizationUrl(null).getAuthorizationUrl());
 		assertNull(t.setTokenUrl(null).getTokenUrl());
-		assertMap(t.setScopes(map()).getScopes());
+		assertEmpty(t.setScopes(map()).getScopes());
 		assertNull(t.setScopes((Map<String,String>)null).getScopes());
 	}
 
@@ -155,7 +155,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 	@Test void b03_keySet() {
 		var t = new SecurityScheme();
 
-		assertSet(t.keySet());
+		assertEmpty(t.keySet());
 
 		t
 			.set("authorizationUrl", "a")

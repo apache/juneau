@@ -429,7 +429,7 @@ class HeaderList_Test extends SimpleTestBase {
 			.setDefault((HeaderList)null)
 			.setDefault((Header[])null)
 			.setDefault((List<Header>)null);
-		assertList(x9);
+		assertEmpty(x9);
 
 		var x10 = HeaderList.create().setDefault("Accept","text/xml");
 		assertList(x10, "Accept: text/xml");

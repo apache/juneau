@@ -131,7 +131,7 @@ class Xml_Test extends SimpleTestBase {
 	@Test void b03_keySet() {
 		var t = new Xml();
 
-		assertSet(t.keySet());
+		assertEmpty(t.keySet());
 
 		t
 			.set("attribute", true)

@@ -861,7 +861,7 @@ class StringUtils_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a37_splitNested() {
 		assertNull(Utils.splitNested(null));
-		assertList(Utils.splitNested(""));
+		assertEmpty(Utils.splitNested(""));
 		assertList(Utils.splitNested("a"), "a");
 		assertList(Utils.splitNested("a,b,c"), "a", "b", "c");
 		assertList(Utils.splitNested("a{b,c},d"), "a{b,c}", "d");

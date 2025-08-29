@@ -116,7 +116,7 @@ class License_Test extends SimpleTestBase {
 	@Test void b03_keySet() {
 		var t = new License();
 
-		assertSet(t.keySet());
+		assertEmpty(t.keySet());
 
 		t
 			.set("name", "a")

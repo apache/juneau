@@ -43,13 +43,17 @@ class ResponseInfo_Test extends SimpleTestBase {
 
 		// Edge cases for collections and nulls.
 		assertNull(t.setDescription(null).getDescription());
-		assertMap(t.setHeaders(map()).getHeaders());
+		assertEmpty(t.setHeaders(map()).getHeaders());
 		assertNull(t.setHeaders((Map<String,HeaderInfo>)null).getHeaders());
-		assertMap(t.setExamples(map()).getExamples());
+		assertEmpty(t.setExamples(map()).getExamples());
 		assertNull(t.setExamples((Map<String,Object>)null).getExamples());
 
 		// Examples addExample method.
-		assertMap(t.setExamples(map()).addExample("text/a", "a").addExample("text/b", null).addExample(null, "c").getExamples(), "text/a=a", "text/b=null", "null=c");
+		assertMap(
+			t.setExamples(map()).addExample("text/a", "a").addExample("text/b", null).addExample(null, "c").getExamples(),
+			"text/a,text/b,<<<NULL>>>",
+			"a,null,c"
+		);
 	}
 
 	/**
@@ -135,7 +139,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 	@Test void b03_keySet() {
 		var t = new ResponseInfo();
 
-		assertSet(t.keySet());
+		assertEmpty(t.keySet());
 
 		t
 			.set("description", "a")

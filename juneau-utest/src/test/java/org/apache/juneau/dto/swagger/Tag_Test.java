@@ -122,7 +122,7 @@ class Tag_Test extends SimpleTestBase {
 	@Test void b03_keySet() {
 		var t = new Tag();
 
-		assertSet(t.keySet());
+		assertEmpty(t.keySet());
 
 		t
 			.set("description", "a")

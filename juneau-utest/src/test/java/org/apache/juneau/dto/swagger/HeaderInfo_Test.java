@@ -55,7 +55,7 @@ class HeaderInfo_Test extends SimpleTestBase {
 		assertEquals(123f, t.setMaximum(123f).getMaximum());
 		assertEquals(123f, t.setMinimum(123f).getMinimum());
 		assertNull(t.setPattern(null).getPattern());
-		assertSet(t.setEnum(set()).getEnum());
+		assertEmpty(t.setEnum(set()).getEnum());
 		assertSet(t.setEnum("foo","bar").getEnum(), "foo,bar");
 		assertNull(t.setEnum((Set<Object>)null).getEnum());
 		assertSet(t.addEnum("foo","bar").getEnum(), "foo,bar");
@@ -201,7 +201,7 @@ class HeaderInfo_Test extends SimpleTestBase {
 	@Test void b03_keySet() {
 		var t = new HeaderInfo();
 
-		assertSet(t.keySet());
+		assertEmpty(t.keySet());
 
 		t
 			.set("default", "a")

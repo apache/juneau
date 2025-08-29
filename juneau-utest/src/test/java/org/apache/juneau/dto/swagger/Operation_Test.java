@@ -45,19 +45,19 @@ class Operation_Test extends SimpleTestBase {
 		);
 
 		// Edge cases for collections.
-		assertSet(t.setTags(set()).getTags());
+		assertEmpty(t.setTags(set()).getTags());
 		assertNull(t.setTags((Collection<String>)null).getTags());
-		assertSet(t.setConsumes(set()).getConsumes());
+		assertEmpty(t.setConsumes(set()).getConsumes());
 		assertNull(t.setConsumes((Collection<MediaType>)null).getConsumes());
-		assertSet(t.setProduces(set()).getProduces());
+		assertEmpty(t.setProduces(set()).getProduces());
 		assertNull(t.setProduces((Collection<MediaType>)null).getProduces());
-		assertList(t.setParameters(set()).getParameters());
+		assertEmpty(t.setParameters(set()).getParameters());
 		assertNull(t.setParameters((Collection<ParameterInfo>)null).getParameters());
 		assertEmpty(t.setResponses(map()).getResponses());
 		assertNull(t.setResponses((Map<String,ResponseInfo>)null).getResponses());
-		assertSet(t.setSchemes(set()).getSchemes());
+		assertEmpty(t.setSchemes(set()).getSchemes());
 		assertNull(t.setSchemes((Set<String>)null).getSchemes());
-		assertList(t.setSecurity(alist()).getSecurity());
+		assertEmpty(t.setSecurity(alist()).getSecurity());
 		assertNull(t.setSecurity((List<Map<String,List<String>>>)null).getSecurity());
 	}
 
@@ -197,7 +197,7 @@ class Operation_Test extends SimpleTestBase {
 	@Test void b03_keySet() {
 		var t = new Operation();
 
-		assertSet(t.keySet());
+		assertEmpty(t.keySet());
 
 		t
 			.set("consumes", set(MediaType.of("text/a")))

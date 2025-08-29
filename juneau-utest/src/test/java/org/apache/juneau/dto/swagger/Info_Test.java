@@ -138,7 +138,7 @@ class Info_Test extends SimpleTestBase {
 	@Test void b03_keySet() {
 		var t = new Info();
 
-		assertSet(t.keySet());
+		assertEmpty(t.keySet());
 
 		t
 			.set("contact", contact("a"))

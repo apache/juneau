@@ -15,6 +15,7 @@ package org.apache.juneau;
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static java.lang.Integer.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -240,7 +241,7 @@ public class TestUtils extends Utils2 {
 		assertArgNotNull("bean", bean);
 		assertArgNotNull("fields", fields);
 		assertArgNotNull("value", value);
-		assertEquals(value, splitNested(fields).stream().map(x -> getReadableEntry(bean, x)).collect(joining(",")));
+		assertEquals(value, splitNested(fields).stream().map(x -> getEntry(bean, x)).collect(joining(",")));
 	}
 
 	/**
@@ -303,7 +304,7 @@ public class TestUtils extends Utils2 {
 		var r = 0;
 		var f = splitNested(fields);
 		for (var o : listOfBeans) {
-			var actual = f.stream().map(x -> getReadableEntry(o, x)).collect(joining(","));
+			var actual = f.stream().map(x -> getEntry(o, x)).collect(joining(","));
 			var r2 = r+1;
 			assertEquals(r(values[r]), actual, fs("Object at row {0} didn't match.", r2));
 			r++;
@@ -395,11 +396,19 @@ public class TestUtils extends Utils2 {
 	 * Asserts an object matches the expected string after it's been made {@link Utils#r readable}.
 	 */
 	public static void assertContains(String expected, Object actual) {
+		assertArgNotNull("expected", expected);
 		var a2 = r(actual);
 		assertTrue(a2.contains(expected), fs("String did not contain expected substring.  expected={0}, actual={1}", expected, a2));
 	}
 
+	/**
+	 * Similar to {@link #assertContains(String, Object)} but allows the expected to be a comma-delimited list of strings that
+	 * all must match.
+	 * @param expected
+	 * @param actual
+	 */
 	public static void assertContainsAll(String expected, Object actual) {
+		assertArgNotNull("expected", expected);
 		var a2 = r(actual);
 		for (var e : splita(expected))
 			assertTrue(a2.contains(e), fs("String did not contain expected substring.  expected={0}, actual={1}", e, a2));
@@ -527,8 +536,9 @@ public class TestUtils extends Utils2 {
 
 	/**
 	 * Asserts the entries in a map matches the expected strings after they've been made {@link Utils#r readable}.
+	 * Can be used in cases where the map contains non-string keys.
 	 */
-	public static void assertMap(Map<?,?> map, String...expected) {
+	public static void assertMapPairs(Map<?,?> map, String...expected) {
 		assertList(map.entrySet().stream().map(x -> r(x.getKey()) + "=" + r(x.getValue())).toList(), (Object[])expected);
 	}
 
@@ -583,9 +593,14 @@ public class TestUtils extends Utils2 {
 	 * @throws AssertionError if any map values don't match expected values
 	 * @see #assertBean(Object, String, String)
 	 */
-	public static void assertMap(Map<?,?> o, String fields, String value) {
+	public static void assertMap(Map<String,?> o, String fields, String value) {
 		if (o == null) throw new NullPointerException("Map was null");
-		assertEquals(value, splitNested(fields).stream().map(x -> getReadableEntry(o, x)).collect(joining(",")));
+		assertEquals(value, splitNested(fields).stream().map(x -> getEntry(o, x)).collect(joining(",")));
+	}
+
+	public static <K> void assertMap(Map<K,?> o, Function<String,K> keyGenerator, String fields, String value) {
+		if (o == null) throw new NullPointerException("Map was null");
+		assertEquals(value, splitNested(fields).stream().map(x -> getEntry(o, x)).collect(joining(",")));
 	}
 
 	/**
@@ -970,28 +985,28 @@ public class TestUtils extends Utils2 {
 		});
 	}
 
-	@SuppressWarnings("unchecked")
-	private static Object getEntry(Object o, String name) {
-		if (o instanceof List o2) return isNumeric(name) ? o2.get(Integer.parseInt(name)) : getBeanProp(o, name);
-		if (o.getClass().isArray()) return isNumeric(name) ? Array.get(o, Integer.parseInt(name)) : getBeanProp(o, name);
-		if (o instanceof Map o2) return opt(o2.get(name)).orElse(name.equals("class") ? o.getClass() : null);
-		if (o instanceof Iterable o2) return isNumeric(name) ? toList(o2).get(Integer.parseInt(name)) : getBeanProp(o, name);
-		if (o instanceof Iterator o2) return isNumeric(name) ? toList(o2).get(Integer.parseInt(name)) : getBeanProp(o, name);
-		if (o instanceof Enumeration o2) return isNumeric(name) ? toList(o2).get(Integer.parseInt(name)) : getBeanProp(o, name);
-		return getBeanProp(o, name);
-	}
-
 	static String getMessages(Throwable t) {
 		return Stream.iterate(t, Throwable::getCause).takeWhile(e -> e != null).map(Throwable::getMessage).collect(joining("\n"));
 	}
 
-	private static String getReadableEntry(Object o, String name) {
+	private static String getEntry(Object o, String name) {
 		var i = name.indexOf("{");
 		var pn = i == -1 ? name : name.substring(0, i);
 		var spn = i == -1 ? null : splitNestedInner(name);
-		var e = getEntry(o, pn);
+		var e = getEntry2(o, pn);
 		if (spn == null || e == null) return r(e);
-		return spn.stream().map(x -> getReadableEntry(e, x)).collect(joining(",","{","}"));
+		return spn.stream().map(x -> getEntry(e, x)).collect(joining(",","{","}"));
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Object getEntry2(Object o, String name) {
+		if (o instanceof List o2) return isNumeric(name) ? o2.get(parseInt(name)) : getBeanProp(o, name);
+		if (o.getClass().isArray()) return isNumeric(name) ? Array.get(o, parseInt(name)) : getBeanProp(o, name);
+		if (o instanceof Map o2) return opt(o2.get(eq("<<<NULL>>>",name) ? null : name)).orElse(name.equals("class") ? o.getClass() : null);
+		if (o instanceof Iterable o2) return isNumeric(name) ? toList(o2).get(parseInt(name)) : getBeanProp(o, name);
+		if (o instanceof Iterator o2) return isNumeric(name) ? toList(o2).get(parseInt(name)) : getBeanProp(o, name);
+		if (o instanceof Enumeration o2) return isNumeric(name) ? toList(o2).get(parseInt(name)) : getBeanProp(o, name);
+		return getBeanProp(o, name);
 	}
 
 	/**

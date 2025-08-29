@@ -105,7 +105,7 @@ class AutoObjectSwapTest extends SimpleTestBase {
 			return JSONMAP;
 		}
 		public static B02 create(JsonMap o) {
-			assertMap(o, "foo=bar");
+			assertMap(o, "foo", "bar");
 			return new B02();
 		}
 	}
@@ -114,7 +114,7 @@ class AutoObjectSwapTest extends SimpleTestBase {
 			return STRINGMAP;
 		}
 		public static B03 fromObject(Map<String,String> o) {
-			assertMap(o, "foo=bar");
+			assertMap(o, "foo", "bar");
 			return new B03();
 		}
 	}
