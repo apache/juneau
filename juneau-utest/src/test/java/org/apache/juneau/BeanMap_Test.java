@@ -425,24 +425,16 @@ class BeanMap_Test extends SimpleTestBase {
 
 		var p = JsonParser.create().beanDictionary(D2.class).build();
 		m.put("lb1", JsonList.ofText("[{_type:'D2',s:'foobar'}]", p));
-		assertEquals(JsonList.class.getName(), t.lb1.getClass().getName());
-		assertEquals(D2.class.getName(), t.lb1.get(0).getClass().getName());
-		assertEquals("foobar", (t.lb1.get(0)).s);
+		assertBean(t, "lb1{class{simpleName}},lb1{0{class{simpleName}}},lb1{0{s}}", "{{JsonList}},{{{D2}}},{{foobar}}");
 
 		m.put("lb2", JsonList.ofText("[{_type:'D2',s:'foobar'}]", p));
-		assertEquals(ArrayList.class.getName(), t.lb2.getClass().getName());
-		assertEquals(D2.class.getName(), t.lb2.get(0).getClass().getName());
-		assertEquals("foobar", (t.lb2.get(0)).s);
+		assertBean(t, "lb2{class{simpleName}},lb2{0{class{simpleName}}},lb2{0{s}}", "{{ArrayList}},{{{D2}}},{{foobar}}");
 
 		m.put("ab1", JsonList.ofText("[{_type:'D2',s:'foobar'}]", p));
-		assertEquals("[L"+D2.class.getName()+";", t.ab1.getClass().getName());
-		assertEquals(D2.class.getName(), t.ab1[0].getClass().getName());
-		assertEquals("foobar", t.ab1[0].s);
+		assertBean(t, "ab1{class{simpleName}},ab1{0{class{simpleName},s}}", "{{D2[]}},{{{D2},foobar}}");
 
 		m.put("ab2", JsonList.ofText("[{_type:'D2',s:'foobar'}]", p));
-		assertEquals("[L"+D2.class.getName()+";", t.ab2.getClass().getName());
-		assertEquals(D2.class.getName(), t.ab2[0].getClass().getName());
-		assertEquals("foobar", t.ab2[0].s);
+		assertBean(t, "ab2{class{simpleName}},ab2{0{class{simpleName},s}}", "{{D2[]}},{{{D2},foobar}}");
 	}
 
 	public static class D1 {
@@ -463,37 +455,29 @@ class BeanMap_Test extends SimpleTestBase {
 		var m = bc.toBeanMap(t);
 		m.put("b", JsonMap.ofJson("{s:'foo'}"));
 		assertNotNull(t.b);
-		assertEquals("foo", t.b.s);
+		assertBean(t.b, "s", "foo");
 
 		var m2 = new TreeMap<String,Object>();
 		m2.put("s", "bar");
 		m.put("b", m2);
 		assertNotNull(t.b);
-		assertEquals("bar", t.b.s);
+		assertBean(t.b, "s", "bar");
 
 		m.put("b", new D2c());
-		assertEquals("default", t.b.s);
+		assertBean(t.b, "s", "default");
 
 		var p = JsonParser.create().beanDictionary(D2c.class).applyAnnotations(D1cConfig.class).build();
 		m.put("lb1", JsonList.ofText("[{_type:'D2',s:'foobar'}]", p));
-		assertEquals(JsonList.class.getName(), t.lb1.getClass().getName());
-		assertEquals(D2c.class.getName(), t.lb1.get(0).getClass().getName());
-		assertEquals("foobar", (t.lb1.get(0)).s);
+		assertBean(t, "lb1{class{simpleName}},lb1{0{class{simpleName}}},lb1{0{s}}", "{{JsonList}},{{{D2c}}},{{foobar}}");
 
 		m.put("lb2", JsonList.ofText("[{_type:'D2',s:'foobar'}]", p));
-		assertEquals(ArrayList.class.getName(), t.lb2.getClass().getName());
-		assertEquals(D2c.class.getName(), t.lb2.get(0).getClass().getName());
-		assertEquals("foobar", (t.lb2.get(0)).s);
+		assertBean(t, "lb2{class{simpleName}},lb2{0{class{simpleName}}},lb2{0{s}}", "{{ArrayList}},{{{D2c}}},{{foobar}}");
 
 		m.put("ab1", JsonList.ofText("[{_type:'D2',s:'foobar'}]", p));
-		assertEquals("[L"+D2c.class.getName()+";", t.ab1.getClass().getName());
-		assertEquals(D2c.class.getName(), t.ab1[0].getClass().getName());
-		assertEquals("foobar", t.ab1[0].s);
+		assertBean(t, "ab1{class{simpleName}},ab1{0{class{simpleName},s}}", "{{D2c[]}},{{{D2c},foobar}}");
 
 		m.put("ab2", JsonList.ofText("[{_type:'D2',s:'foobar'}]", p));
-		assertEquals("[L"+D2c.class.getName()+";", t.ab2.getClass().getName());
-		assertEquals(D2c.class.getName(), t.ab2[0].getClass().getName());
-		assertEquals("foobar", t.ab2[0].s);
+		assertBean(t, "ab2{class{simpleName}},ab2{0{class{simpleName},s}}", "{{D2c[]}},{{{D2c},foobar}}");
 	}
 
 	@Bean(on="Dummy1", typeName="dummy")
@@ -565,32 +549,25 @@ class BeanMap_Test extends SimpleTestBase {
 		var m = bc.toBeanMap(t6);
 
 		m.put("l2", "[{a:'a',i:1}]");
-		assertEquals("java.util.LinkedList", m.get("l2").getClass().getName());
-		assertEquals("org.apache.juneau.BeanMap_Test$G", ((List)m.get("l2")).get(0).getClass().getName());
-
 		m.put("l3", "[{a:'a',i:1}]");
-		assertEquals("org.apache.juneau.collections.JsonList", m.get("l3").getClass().getName());
-		assertEquals("org.apache.juneau.BeanMap_Test$G", ((List)m.get("l3")).get(0).getClass().getName());
-
 		m.put("l4", "[{a:'a',i:1}]");
-		assertEquals("java.util.LinkedList", m.get("l4").getClass().getName());
-		assertEquals("org.apache.juneau.BeanMap_Test$G", ((List)m.get("l4")).get(0).getClass().getName());
-
 		m.put("m2", "[{a:'a',i:1}]");
-		assertEquals("java.util.LinkedList", m.get("m2").getClass().getName());
-		assertEquals("org.apache.juneau.BeanMap_Test$G", ((List)m.get("m2")).get(0).getClass().getName());
-
 		m.put("m3", "[{a:'a',i:1}]");
-		assertEquals("org.apache.juneau.collections.JsonList", m.get("m3").getClass().getName());
-		assertEquals("org.apache.juneau.BeanMap_Test$G", ((List)m.get("m3")).get(0).getClass().getName());
-
 		m.put("m4", "[{a:'a',i:1}]");
-		assertEquals("java.util.LinkedList", m.get("m4").getClass().getName());
-		assertEquals("org.apache.juneau.BeanMap_Test$G", ((List)m.get("m4")).get(0).getClass().getName());
+
+		assertMapped(m, (map,prop) -> map.get(prop).getClass().getSimpleName(),
+			"l2,l3,l4,m2,m3,m4",
+			"LinkedList,JsonList,LinkedList,LinkedList,JsonList,LinkedList");
+
+		assertMapped(m, (map,prop) -> ((List)map.get(prop)).get(0).getClass().getSimpleName(),
+			"l2,l3,l4,m2,m3,m4",
+			"G,G,G,G,G,G");
 
 		m.put("m5", "[{a:'a',i:1}]");
-		assertEquals("java.util.LinkedList", m.get("m5").getClass().getName());
-		assertEquals("org.apache.juneau.BeanMap_Test$G", ((List)m.get("m5")).get(0).getClass().getName());
+		assertMapped(m, (map,prop) -> map.get(prop).getClass().getSimpleName(),
+			"m5", "LinkedList");
+		assertMapped(m, (map,prop) -> ((List)map.get(prop)).get(0).getClass().getSimpleName(),
+			"m5", "G");
 	}
 
 	public static class G {
@@ -645,22 +622,19 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("enum1", "ONE");
 		m.put("enum2", "TWO");
 		assertEquals("{_type:'H',enum1:'ONE',enum2:'TWO'}", serializer.serialize(t7));
-		assertEquals(HEnum.ONE, t7.enum1);
-		assertEquals(HEnum.TWO, t7.getEnum2());
+		assertBean(t7, "enum1,enum2", "ONE,TWO");
 
 		// Use BeanContext to create bean instance.
 		m = BeanContext.DEFAULT.newBeanMap(H.class).load("{enum1:'TWO',enum2:'THREE'}");
 		assertEquals("{_type:'H',enum1:'TWO',enum2:'THREE'}", serializer.serialize(m.getBean()));
 		t7 = m.getBean();
-		assertEquals(HEnum.TWO, t7.enum1);
-		assertEquals(HEnum.THREE, t7.getEnum2());
+		assertBean(t7, "enum1,enum2", "TWO,THREE");
 
 		// Create instance directly from JSON.
 		var p = JsonParser.create().beanDictionary(H.class).build();
 		t7 = (H)p.parse("{_type:'H',enum1:'THREE',enum2:'ONE'}", Object.class);
 		assertEquals("{_type:'H',enum1:'THREE',enum2:'ONE'}", serializer.serialize(t7));
-		assertEquals(HEnum.THREE, t7.enum1);
-		assertEquals(HEnum.ONE, t7.getEnum2());
+		assertBean(t7, "enum1,enum2", "THREE,ONE");
 	}
 
 	public enum HEnum {
@@ -759,7 +733,7 @@ class BeanMap_Test extends SimpleTestBase {
 		var bm = bc.newBeanMap(L.class);
 		bm.put("list", "[{name:'1',value:'1'},{name:'2',value:'2'}]");
 		var b = bm.getBean();
-		assertEquals("1", b.list.get(0).name);
+		assertBean(b.list.get(0), "name", "1");
 	}
 
 	public static class L {
@@ -784,19 +758,19 @@ class BeanMap_Test extends SimpleTestBase {
 
 		var t1 = new M2();
 		var bm = bc.toBeanMap(t1);
-		assertEquals(1, bm.get("x"));
+		assertBean(bm, "x", "1");
 
 		var t2 = new M3();
 		var cm = bc.toBeanMap(t2);
-		assertEquals(2, cm.get("x"));
+		assertBean(cm, "x", "2");
 
 		var t3 = new M4();
 		var dm = bc.toBeanMap(t3);
-		assertEquals(3, dm.get("x"));
+		assertBean(dm, "x", "3");
 
 		var t4 = new M5();
 		var em = bc.toBeanMap(t4);
-		assertEquals(4, em.get("x"));
+		assertBean(em, "x", "4");
 	}
 
 	public static class M1<T> {
@@ -835,19 +809,19 @@ class BeanMap_Test extends SimpleTestBase {
 
 		var t1 = new N2();
 		var bm = bc.toBeanMap(t1);
-		assertEquals(1, bm.get("x"));
+		assertBean(bm, "x", "1");
 
 		var t2 = new N3();
 		var cm = bc.toBeanMap(t2);
-		assertEquals(2, cm.get("x"));
+		assertBean(cm, "x", "2");
 
 		var t3 = new N4();
 		var dm = bc.toBeanMap(t3);
-		assertEquals(3, dm.get("x"));
+		assertBean(dm, "x", "3");
 
 		var t4 = new N5();
 		var em = bc.toBeanMap(t4);
-		assertEquals(4, em.get("x"));
+		assertBean(em, "x", "4");
 	}
 
 	public static class N1<T> {
@@ -890,7 +864,7 @@ class BeanMap_Test extends SimpleTestBase {
 		var json = "{baz:789,foo:123,bar:456}";
 		var p = (ReaderParser)JsonParser.create().ignoreUnknownBeanProperties().build();
 		var t = p.parse(json, O.class);
-		assertEquals(123, t.foo);
+		assertBean(t, "foo", "123");
 
 		assertThrows(Exception.class, ()->JsonParser.DEFAULT.parse(json, O.class));
 
@@ -898,7 +872,7 @@ class BeanMap_Test extends SimpleTestBase {
 		var xml = "<object><baz type='number'>789</baz><foo type='number'>123</foo><bar type='number'>456</bar></object>";
 		p = XmlParser.create().ignoreUnknownBeanProperties().build();
 		t = p.parse(xml, O.class);
-		assertEquals(123, t.foo);
+		assertBean(t, "foo", "123");
 
 		assertThrows(Exception.class, ()->XmlParser.DEFAULT.parse(json, O.class));
 
@@ -906,7 +880,7 @@ class BeanMap_Test extends SimpleTestBase {
 		var html = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>baz</string></td><td><number>789</number></td></tr><tr><td><string>foo</string></td><td><number>123</number></td></tr><tr><td><string>bar</string></td><td><number>456</number></td></tr></table>";
 		p = HtmlParser.create().ignoreUnknownBeanProperties().build();
 		t = p.parse(html, O.class);
-		assertEquals(123, t.foo);
+		assertBean(t, "foo", "123");
 
 		assertThrows(Exception.class, ()->HtmlParser.DEFAULT.parse(json, O.class));
 
@@ -914,7 +888,7 @@ class BeanMap_Test extends SimpleTestBase {
 		var uon = "(baz=789,foo=123,bar=456)";
 		p = UonParser.create().ignoreUnknownBeanProperties().build();
 		t = p.parse(uon, O.class);
-		assertEquals(123, t.foo);
+		assertBean(t, "foo", "123");
 
 		assertThrows(Exception.class, ()->UonParser.DEFAULT.parse(json, O.class));
 
@@ -922,7 +896,7 @@ class BeanMap_Test extends SimpleTestBase {
 		var urlencoding = "baz=789&foo=123&bar=456";
 		p = UrlEncodingParser.create().ignoreUnknownBeanProperties().build();
 		t = p.parse(urlencoding, O.class);
-		assertEquals(123, t.foo);
+		assertBean(t, "foo", "123");
 
 		assertThrows(Exception.class, ()->UrlEncodingParser.DEFAULT.parse(json, O.class));
 	}

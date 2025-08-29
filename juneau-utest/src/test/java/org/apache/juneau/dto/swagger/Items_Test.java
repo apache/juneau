@@ -33,36 +33,32 @@ class Items_Test extends SimpleTestBase {
 	 */
 	@Test void a01_gettersAndSetters() {
 		var t = new Items();
-		assertBean(t.setType("foo"), "type", "foo");
-		assertNull(t.setType(null).getType());
-		assertBean(t.setFormat("foo"), "format", "foo");
-		assertNull(t.setFormat(null).getFormat());
-		assertJson(t.setItems(items("foo")).getItems(), "{type:'foo'}");
-		assertBean(t.setCollectionFormat("foo"), "collectionFormat", "foo");
-		assertNull(t.setCollectionFormat(null).getCollectionFormat());
-		assertBean(t.setDefault("foo"), "default", "foo");
+
+		// General
+		assertBean(
+			t.setType("foo").setFormat("foo").setItems(items("foo")).setCollectionFormat("foo")
+			 .setDefault("foo").setMaximum(123).setExclusiveMaximum(true).setMinimum(123)
+			 .setExclusiveMinimum(true).setMaxLength(123).setMinLength(123).setPattern("foo")
+			 .setMaxItems(123).setMinItems(123).setUniqueItems(true).setEnum(set("foo","bar"))
+			 .setMultipleOf(123),
+			"type,format,items{type},collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf",
+			"foo,foo,{foo},foo,foo,123,true,123,true,123,123,foo,123,123,true,[foo,bar],123"
+		);
+
+		// Other cases
 		assertString("foo", t.setDefault(new StringBuilder("foo")).getDefault());
+		assertNull(t.setType(null).getType());
+		assertNull(t.setFormat(null).getFormat());
+		assertNull(t.setCollectionFormat(null).getCollectionFormat());
 		assertNull(t.setDefault(null).getDefault());
-		assertEquals(123, t.setMaximum(123).getMaximum());
 		assertEquals(123f, t.setMaximum(123f).getMaximum());
-		assertTrue(t.setExclusiveMaximum(true).getExclusiveMaximum());
-		assertEquals(123, t.setMinimum(123).getMinimum());
 		assertEquals(123f, t.setMinimum(123f).getMinimum());
-		assertTrue(t.setExclusiveMinimum(true).getExclusiveMinimum());
-		assertEquals(123, t.setMaxLength(123).getMaxLength());
-		assertEquals(123, t.setMinLength(123).getMinLength());
-		assertBean(t.setPattern("foo"), "pattern", "foo");
 		assertNull(t.setPattern(null).getPattern());
-		assertEquals(123, t.setMaxItems(123).getMaxItems());
-		assertEquals(123, t.setMinItems(123).getMinItems());
-		assertTrue(t.setUniqueItems(true).getUniqueItems());
-		assertJson(t.setEnum(set("foo","bar")).getEnum(), "['foo','bar']");
 		assertJson(t.setEnum("foo","baz").getEnum(), "['foo','baz']");
 		assertJson(t.setEnum(set()).getEnum(), "[]");
 		assertNull(t.setEnum((Collection<Object>)null).getEnum());
 		assertJson(t.addEnum("foo","bar").getEnum(), "['foo','bar']");
 		assertJson(t.addEnum("baz").getEnum(), "['foo','bar','baz']");
-		assertEquals(123, t.setMultipleOf(123).getMultipleOf());
 		assertEquals(123f, t.setMultipleOf(123f).getMultipleOf());
 	}
 
@@ -92,7 +88,7 @@ class Items_Test extends SimpleTestBase {
 			.set("uniqueItems", true)
 			.set("$ref", "ref");
 
-		assertJson(t, "{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}");
+		assertBean(t, "type,format,items{type},collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,ref", "j,g,{h},c,a,123.0,true,123.0,true,123,123,i,123,123,true,[b],123.0,ref");
 
 		t
 			.set("default", "a")
@@ -114,7 +110,7 @@ class Items_Test extends SimpleTestBase {
 			.set("uniqueItems", "true")
 			.set("$ref", "ref");
 
-		assertJson(t, "{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}");
+		assertBean(t, "type,format,items{type},collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,ref", "j,g,{h},c,a,123.0,true,123.0,true,123,123,i,123,123,true,[b],123.0,ref");
 
 		t
 			.set("default", new StringBuilder("a"))
@@ -136,7 +132,7 @@ class Items_Test extends SimpleTestBase {
 			.set("uniqueItems", new StringBuilder("true"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertJson(t, "{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}");
+		assertBean(t, "type,format,items{type},collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,ref", "j,g,{h},c,a,123.0,true,123.0,true,123,123,i,123,123,true,[b],123.0,ref");
 
 		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
 			"default,enum,collectionFormat,exclusiveMaximum,exclusiveMinimum,format,items,maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,pattern,type,uniqueItems,$ref",
@@ -198,7 +194,9 @@ class Items_Test extends SimpleTestBase {
 			.set("$ref", "ref")
 			.copy();
 
-		assertJson(t, "{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}");
+		assertBean(t,
+			"type,format,items{type},collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,ref",
+			"j,g,{h},c,a,123.0,true,123.0,true,123,123,i,123,123,true,[b],123.0,ref");
 	}
 
 	@Test void b03_keySet() {
@@ -226,9 +224,9 @@ class Items_Test extends SimpleTestBase {
 			.set("type", "j")
 			.set("uniqueItems", true);
 
-		assertJson(t.keySet(),
-			"['collectionFormat','default','enum','exclusiveMaximum','exclusiveMinimum','format','items','maximum','maxItems',"
-			+ "'maxLength','minimum','minItems','minLength','multipleOf','pattern','$ref','type','uniqueItems']"
+		assertSet(
+			t.keySet(),
+			"collectionFormat,default,enum,exclusiveMaximum,exclusiveMinimum,format,items,maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,pattern,$ref,type,uniqueItems"
 		);
 	}
 }

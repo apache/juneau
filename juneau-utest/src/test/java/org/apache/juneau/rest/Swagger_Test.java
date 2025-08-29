@@ -620,11 +620,11 @@ class Swagger_Test extends SimpleTestBase {
 
 	@Test void d05a_externalDocs_Swagger_externalDocs_localised() throws Exception {
 		var x = getSwagger(new D5()).getExternalDocs();
-		assertJson(x, "{description:'l-foo',url:'l-bar'}");
+		assertBean(x, "description,url", "l-foo,l-bar");
 	}
 	@Test void d05b_externalDocs_Swagger_externalDocs_localised_withFile() throws Exception {
 		var x = getSwaggerWithFile(new D5()).getExternalDocs();
-		assertJson(x, "{description:'l-foo',url:'l-bar'}");
+		assertBean(x, "description,url", "l-foo,l-bar");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

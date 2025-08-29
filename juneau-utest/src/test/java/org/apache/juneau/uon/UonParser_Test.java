@@ -498,7 +498,7 @@ class UonParser_Test extends SimpleTestBase {
 		var p2 = UonParser.DEFAULT.copy().autoCloseStreams().build();
 		var r = reader("(foo=bar)(foo=bar)");
 		var x = p2.parse(r, JsonMap.class);
-		assertJson(x, "{foo:'bar'}");
+		assertBean(x, "foo", "bar");
 		assertThrowsWithMessage(Exception.class, "Reader is closed", ()->p2.parse(r, JsonMap.class));
 	}
 
@@ -510,9 +510,9 @@ class UonParser_Test extends SimpleTestBase {
 		var p2 = UonParser.create().unbuffered().build();
 		var r = reader("(foo=bar)(baz=qux)");
 		var x = p2.parse(r, JsonMap.class);
-		assertJson(x, "{foo:'bar'}");
+		assertBean(x, "foo", "bar");
 		x = p2.parse(r, JsonMap.class);
-		assertJson(x, "{baz:'qux'}");
+		assertBean(x, "baz", "qux");
 
 		r = reader("@(123)@(456)");
 		var x2 = p2.parse(r, JsonList.class);
