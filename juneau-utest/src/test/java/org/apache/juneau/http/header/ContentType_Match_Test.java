@@ -12,11 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
@@ -66,8 +64,8 @@ class ContentType_Match_Test extends SimpleTestBase {
 		input("Fuzzy-12", "text/4+2+3+1", "['text/1+2','text/1+2+3']", 1)
 	};
 
-	static Stream<Arguments> input() {
-		return Stream.of(INPUT).map(x -> args(x));
+	static Input[] input() {
+		return INPUT;
 	}
 
 	protected static Input input(String label, String contentType, String mediaTypes, int expected) {

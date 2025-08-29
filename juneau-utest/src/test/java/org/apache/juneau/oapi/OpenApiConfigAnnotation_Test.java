@@ -12,12 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
+import static org.apache.juneau.TestUtils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.oapi.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
-import static org.apache.juneau.TestUtils.*;
 
 /**
  * Tests the @OpenApiConfig annotation.

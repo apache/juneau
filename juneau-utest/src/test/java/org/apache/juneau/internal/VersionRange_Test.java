@@ -12,10 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.params.*;
@@ -64,8 +61,8 @@ class VersionRange_Test extends SimpleTestBase {
 		}
 	}
 
-	static Stream<Arguments> input() {
-		return Stream.of(INPUT).map(x -> args(x));
+	static Input[] input() {
+		return INPUT;
 	}
 
 	@ParameterizedTest

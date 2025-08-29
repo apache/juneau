@@ -19,7 +19,6 @@ import static org.apache.juneau.utest.utils.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
@@ -65,8 +64,8 @@ class RrpcInterface_Test extends SimpleTestBase {
 		}
 	}
 
-	static Stream<Arguments> input() {
-		return Stream.of(INPUT).map(x -> args(x));
+	static Input[] input() {
+		return INPUT;
 	}
 
 	public interface InterfaceProxy {

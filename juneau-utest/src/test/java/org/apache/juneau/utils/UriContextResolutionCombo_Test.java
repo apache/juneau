@@ -17,8 +17,6 @@ import static org.apache.juneau.UriRelativity.*;
 import static org.apache.juneau.UriResolution.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.stream.*;
-
 import org.apache.juneau.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -993,8 +991,8 @@ class UriContextResolutionCombo_Test extends SimpleTestBase {
 		return new Results(eAbsResource, eAbsPathInfo, eRrResource, eRrPathInfo, eNoneResource, eNonePathInfo);
 	}
 
-	static Stream<Arguments> testers() {
-		return Stream.of(TESTERS).map(x -> args(x));
+	static Tester[] testers() {
+		return TESTERS;
 	}
 
 	@ParameterizedTest

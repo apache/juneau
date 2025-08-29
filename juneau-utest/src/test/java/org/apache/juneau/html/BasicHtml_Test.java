@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.function.*;
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -2509,8 +2508,8 @@ class BasicHtml_Test extends SimpleTestBase {
 		)
 	};
 
-	static Stream<Arguments> input() {
-		return Stream.of(INPUT).map(x -> args(x));
+	static Input[] input() {
+		return INPUT;
 	}
 
 	private static <T> Input<T> input(String label, Class<T> type, T in, String e1, String e2, String e3) {

@@ -12,10 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.TestUtils.*;
-
-import java.util.stream.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
@@ -23,7 +19,6 @@ import org.apache.juneau.msgpack.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
-import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
@@ -104,8 +99,8 @@ public abstract class RoundTripTest_Base extends SimpleTestBase {
 			.build(),
 	};
 
-	static Stream<Arguments> testers() {
-		return Stream.of(TESTERS).map(x -> args(x));
+	static RoundTripTester[]  testers() {
+		return TESTERS;
 	}
 
 	protected static RoundTripTester.Builder tester(String label) {

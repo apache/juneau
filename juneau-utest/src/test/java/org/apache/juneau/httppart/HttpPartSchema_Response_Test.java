@@ -13,7 +13,6 @@
 package org.apache.juneau.httppart;
 
 import static org.apache.juneau.TestUtils.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;

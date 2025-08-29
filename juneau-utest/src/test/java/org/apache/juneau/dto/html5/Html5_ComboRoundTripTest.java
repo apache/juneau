@@ -15,7 +15,8 @@ package org.apache.juneau.dto.html5;
 import static org.apache.juneau.assertions.Verify.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.map;
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.bean.html5.HtmlBuilder.u;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;

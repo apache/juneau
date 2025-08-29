@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.testutils.pojos;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;

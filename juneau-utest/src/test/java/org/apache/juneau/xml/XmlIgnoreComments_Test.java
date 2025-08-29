@@ -16,7 +16,6 @@ import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -690,8 +689,8 @@ class XmlIgnoreComments_Test extends SimpleTestBase {
 		return new Input(label, type, expected, input, skipWsTests);
 	}
 
-	static Stream<Arguments> input() {
-		return Stream.of(INPUT).map(x -> args(x));
+	static Input[] input() {
+		return INPUT;
 	}
 
 	@ParameterizedTest

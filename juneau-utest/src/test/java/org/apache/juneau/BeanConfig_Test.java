@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.Visibility.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;

@@ -13,8 +13,8 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.apache.juneau.TestUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;

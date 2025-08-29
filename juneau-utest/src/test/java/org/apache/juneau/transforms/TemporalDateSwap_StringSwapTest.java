@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import static org.apache.juneau.TestUtils.*;
+
 import java.time.*;
 import java.time.format.*;
 import java.util.*;
-import static org.apache.juneau.TestUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.swap.*;

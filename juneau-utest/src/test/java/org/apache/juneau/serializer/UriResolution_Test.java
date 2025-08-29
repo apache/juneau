@@ -12,11 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
@@ -578,8 +577,8 @@ class UriResolution_Test extends SimpleTestBase {
 		)
 	};
 
-	static Stream<Arguments> testers() {
-		return Stream.of(TESTERS).map(x -> args(x));
+	static Tester[] testers() {
+		return TESTERS;
 	}
 
 	@ParameterizedTest

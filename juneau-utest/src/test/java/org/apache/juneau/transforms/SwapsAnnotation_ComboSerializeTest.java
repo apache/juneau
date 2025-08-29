@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import java.util.function.*;
 import static org.apache.juneau.TestUtils.*;
+
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;

@@ -12,12 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
@@ -164,8 +163,8 @@ class MediaRanges_FindMatch_Test extends SimpleTestBase {
 		}
 	}
 
-	static Stream<Arguments> input() {
-		return Stream.of(INPUT).map(x -> args(x));
+	static Input[] input() {
+		return INPUT;
 	}
 
 	@ParameterizedTest

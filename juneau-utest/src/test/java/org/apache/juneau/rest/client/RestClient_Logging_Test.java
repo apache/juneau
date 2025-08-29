@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.TestUtils.*;
+
 import java.io.*;
 import java.util.logging.*;
-import static org.apache.juneau.TestUtils.*;
 
 import org.apache.http.entity.*;
 import org.apache.juneau.*;

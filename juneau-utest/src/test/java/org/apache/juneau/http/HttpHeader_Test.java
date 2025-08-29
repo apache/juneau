@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.TestUtils.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
-import static org.apache.juneau.TestUtils.*;
 
 class HttpHeader_Test extends SimpleTestBase {
 

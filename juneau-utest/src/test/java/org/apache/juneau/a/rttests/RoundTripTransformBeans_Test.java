@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.*;
 
 import javax.xml.datatype.*;
 
@@ -118,8 +117,8 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 			.build(),
 	};
 
-	static Stream<Arguments> testers() {
-		return Stream.of(TESTERS).map(x -> args(x));
+	static RoundTripTester[]  testers() {
+		return TESTERS;
 	}
 
 	protected static RoundTripTester.Builder tester(String label) {

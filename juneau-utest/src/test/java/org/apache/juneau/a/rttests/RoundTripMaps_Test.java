@@ -12,12 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
 import java.util.*;
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
@@ -111,8 +109,8 @@ class RoundTripMaps_Test extends SimpleTestBase {
 			.build(),
 	};
 
-	static Stream<Arguments> testers() {
-		return Stream.of(TESTERS).map(x -> args(x));
+	static RoundTripTester[]  testers() {
+		return TESTERS;
 	}
 
 	protected static RoundTripTester.Builder tester(String label) {

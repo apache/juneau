@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.http.header.ContentType.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.http.header.ContentType.*;
 
 import java.io.*;
 

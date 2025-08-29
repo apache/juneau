@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.TestUtils.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
-import static org.apache.juneau.TestUtils.*;
 
 class Console_Test extends SimpleTestBase {
 

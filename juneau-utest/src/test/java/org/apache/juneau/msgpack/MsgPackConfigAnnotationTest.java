@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.*;
 

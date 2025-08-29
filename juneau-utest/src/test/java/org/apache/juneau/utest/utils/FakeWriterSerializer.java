@@ -13,8 +13,9 @@
 
 package org.apache.juneau.utest.utils;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.ArrayUtils.toList;
 
 import java.io.*;
 import java.util.*;

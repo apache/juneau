@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.Map;
-import java.util.stream.*;
 
 import javax.xml.datatype.*;
 
@@ -115,8 +114,8 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 			.build(),
 	};
 
-	static Stream<Arguments> testers() {
-		return Stream.of(TESTERS).map(x -> args(x));
+	static RoundTripTester[]  testers() {
+		return TESTERS;
 	}
 
 	protected static RoundTripTester.Builder tester(String label) {

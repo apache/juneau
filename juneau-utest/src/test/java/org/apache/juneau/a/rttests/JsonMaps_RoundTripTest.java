@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 

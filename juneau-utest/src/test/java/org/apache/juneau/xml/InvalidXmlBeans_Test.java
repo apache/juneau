@@ -12,10 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
@@ -125,8 +122,8 @@ class InvalidXmlBeans_Test extends SimpleTestBase {
 		return new Input(label, in, expected);
 	}
 
-	static Stream<Arguments> input() {
-		return Stream.of(INPUT).map(x -> args(x));
+	static Input[] input() {
+		return INPUT;
 	}
 
 	@ParameterizedTest

@@ -12,10 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.assertions.Assertions.assertArray;
+import static org.apache.juneau.assertions.Assertions.assertBean;
+import static org.apache.juneau.assertions.Assertions.assertCollection;
+import static org.apache.juneau.assertions.Assertions.assertList;
+import static org.apache.juneau.assertions.Assertions.assertMap;
+import static org.apache.juneau.assertions.Assertions.assertThrowable;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.MethodOrderer.*;
 
 import java.io.*;
 import java.time.*;
@@ -24,6 +29,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer.*;
 
 @TestMethodOrder(MethodName.class)
 @Deprecated

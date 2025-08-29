@@ -12,10 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.params.*;
@@ -229,8 +227,8 @@ class UriContextUriCombo_Test extends SimpleTestBase {
 		return new Results(eAbsoluteAuthority, eAbsoluteContext, eAbsoluteResource, eAbsolutePath, eRootRelativeContext, eRootRelativeResource, eRootRelativePath);
 	}
 
-	static Stream<Arguments> data() {
-		return Stream.of(DATA).map(x -> args(x));
+	static Data[] data() {
+		return DATA;
 	}
 
 	@ParameterizedTest
