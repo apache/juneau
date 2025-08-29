@@ -41,7 +41,7 @@
 		<juneauVersion>9.2.0</juneauVersion>
 		<juneauVersionNext>9.2.1</juneauVersionNext>
 		<junit.version>5.13.4</junit.version>
-		<javadoc.plugin.version>3.11.2</javadoc.plugin.version>
+		<javadoc.plugin.version>3.11.3</javadoc.plugin.version>
 		<jacoco.plugin.version>0.8.13</jacoco.plugin.version>
 	</properties>
 
