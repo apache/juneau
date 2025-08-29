@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -57,7 +56,7 @@ public final class ArrayUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <E> E[] combine(E[]...arrays) {
-		assertArgNotNull("arrays", arrays);
+		Utils.assertArgNotNull("arrays", arrays);
 		int l = 0;
 		E[] a1 = null;
 		for (E[] a : arrays) {
@@ -87,7 +86,7 @@ public final class ArrayUtils {
 	 * @return The new set.
 	 */
 	public static <T> Set<T> asSet(final T[] array) {
-		assertArgNotNull("array", array);
+		Utils.assertArgNotNull("array", array);
 		return new AbstractSet<>() {
 
 			@Override /* Set */

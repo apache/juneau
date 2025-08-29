@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
@@ -710,7 +709,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 */
 	public Config set(String key, String value) {
 		checkWrite();
-		assertArgNotNull("key", key);
+		Utils.assertArgNotNull("key", key);
 		var sname = sname(key);
 		var skey = skey(key);
 
@@ -784,7 +783,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 */
 	public Config set(String key, Object value, Serializer serializer, String modifiers, String comment, List<String> preLines) throws SerializeException {
 		checkWrite();
-		assertArgNotNull("key", key);
+		Utils.assertArgNotNull("key", key);
 		var sname = sname(key);
 		var skey = skey(key);
 		modifiers = Utils.nullIfEmpty(modifiers);
@@ -1251,7 +1250,7 @@ public final class Config extends Context implements ConfigEventListener {
 	}
 
 	private String sname(String key) {
-		assertArgNotNull("key", key);
+		Utils.assertArgNotNull("key", key);
 		var i = key.indexOf('/');
 		if (i == -1)
 			return "";
@@ -1266,7 +1265,7 @@ public final class Config extends Context implements ConfigEventListener {
 	}
 
 	private String section(String section) {
-		assertArgNotNull("section", section);
+		Utils.assertArgNotNull("section", section);
 		if (Utils.isEmpty(section))
 			return "";
 		return section;

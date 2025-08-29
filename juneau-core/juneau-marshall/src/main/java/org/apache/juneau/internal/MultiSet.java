@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
-
 import java.util.*;
+
+import org.apache.juneau.common.internal.*;
 
 /**
  * Encapsulates multiple collections so they can be iterated over as if they were all part of the same collection.
@@ -36,9 +36,9 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 */
 	@SafeVarargs
 	public MultiSet(Collection<E>...c) {
-		assertArgNotNull("c", c);
+		Utils.assertArgNotNull("c", c);
 		for (Collection<E> cc : c)
-			assertArgNotNull("c", cc);
+			Utils.assertArgNotNull("c", cc);
 		l = c;
 	}
 

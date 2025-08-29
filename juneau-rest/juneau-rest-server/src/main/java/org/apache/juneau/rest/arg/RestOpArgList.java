@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.arg;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
@@ -84,7 +84,7 @@ public class RestOpArgList {
 		 * @throws IllegalArgumentException if any class does not extend from {@link RestOpArg}.
 		 */
 		public Builder add(Class<?>...values) {
-			prependAll(entries, assertClassArrayArgIsType("values", RestOpArg.class, values));
+			prependAll(entries, Utils.assertClassArrayArgIsType("values", RestOpArg.class, values));
 			return this;
 		}
 

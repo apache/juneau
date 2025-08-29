@@ -12,13 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
-
 import java.io.*;
 import java.time.*;
 import java.time.temporal.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -177,7 +176,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(ZonedDateTime value, ChronoUnit precision) throws AssertionError {
-		assertArgNotNull("precision", precision);
+		Utils.assertArgNotNull("precision", precision);
 		var v = orElse(null);
 		if (valueIsNull() && value == null)
 			return returns();
@@ -197,7 +196,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isAfter(ZonedDateTime value) throws AssertionError {
-		assertArgNotNull("value", value);
+		Utils.assertArgNotNull("value", value);
 		if (! (value().isAfter(value)))
 			throw error(MSG_valueWasNotAfterExpected, value, value());
 		return returns();
@@ -221,7 +220,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBefore(ZonedDateTime value) throws AssertionError {
-		assertArgNotNull("value", value);
+		Utils.assertArgNotNull("value", value);
 		if (! (value().isBefore(value)))
 			throw error(MSG_valueWasNotBeforeExpected, value, value());
 		return returns();
@@ -247,8 +246,8 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 */
 	public R isBetween(ZonedDateTime lower, ZonedDateTime upper) throws AssertionError {
 		isExists();
-		assertArgNotNull("lower", lower);
-		assertArgNotNull("upper", upper);
+		Utils.assertArgNotNull("lower", lower);
+		Utils.assertArgNotNull("upper", upper);
 		isLte(upper);
 		isGte(lower);
 		return returns();

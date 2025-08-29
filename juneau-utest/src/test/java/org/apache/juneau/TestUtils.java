@@ -43,85 +43,11 @@ public class TestUtils extends Utils2 {
 	public static final ThreadLocal<Locale> SYSTEM_LOCALE = new ThreadLocal<>();
 
 	/**
-	 * Converts any array (including primitive arrays) to a List.
-	 *
-	 * @param array The array to convert. Can be any array type including primitives.
-	 * @return A List containing the array elements. Primitive values are auto-boxed.
-	 *         Returns null if the input is null.
-	 * @throws IllegalArgumentException if the input is not an array.
-	 */
-	public static List<Object> arrayToList(Object array) {
-		if (array == null) {
-			return null;
-		}
-
-		if (!array.getClass().isArray()) {
-			throw new IllegalArgumentException("Input must be an array, but was: " + array.getClass().getName());
-		}
-
-		var componentType = array.getClass().getComponentType();
-		var length = Array.getLength(array);
-		var result = new ArrayList<>(length);
-
-		// Handle primitive arrays specifically for better performance
-		if (componentType.isPrimitive()) {
-			if (componentType == int.class) {
-				var arr = (int[]) array;
-				for (int value : arr) {
-					result.add(value);
-				}
-			} else if (componentType == long.class) {
-				var arr = (long[]) array;
-				for (long value : arr) {
-					result.add(value);
-				}
-			} else if (componentType == double.class) {
-				var arr = (double[]) array;
-				for (double value : arr) {
-					result.add(value);
-				}
-			} else if (componentType == float.class) {
-				var arr = (float[]) array;
-				for (float value : arr) {
-					result.add(value);
-				}
-			} else if (componentType == boolean.class) {
-				var arr = (boolean[]) array;
-				for (boolean value : arr) {
-					result.add(value);
-				}
-			} else if (componentType == byte.class) {
-				var arr = (byte[]) array;
-				for (byte value : arr) {
-					result.add(value);
-				}
-			} else if (componentType == char.class) {
-				var arr = (char[]) array;
-				for (char value : arr) {
-					result.add(value);
-				}
-			} else if (componentType == short.class) {
-				var arr = (short[]) array;
-				for (short value : arr) {
-					result.add(value);
-				}
-			}
-		} else {
-			// Handle Object arrays
-			for (var i = 0; i < length; i++) {
-				result.add(Array.get(array, i));
-			}
-		}
-
-		return result;
-	}
-
-	/**
-	 * Asserts that the entries in an array match the expected values after being converted to readable strings.
+	 * Asserts that the entries in an array match the expected values after being converted to {@link Utils#r readable} strings.
 	 *
 	 * <p>This method works with any array type including primitive arrays (<c>int[]</c>, <c>String[]</c>, etc.)
 	 * and multi-dimensional arrays (<c>int[][]</c>, <c>String[][][]</c>). It converts the array to a list using
-	 * {@link #arrayToList(Object)} and then validates using the same logic as {@link #assertSet(Set, Object...)}.</p>
+	 * {@link Utils#arrayToList(Object)} and then validates using the same logic as {@link #assertSet(Set, Object...)}.</p>
 	 *
 	 * <h5 class='section'>Basic Array Testing:</h5>
 	 * <p class='bjava'>
@@ -162,20 +88,58 @@ public class TestUtils extends Utils2 {
 	 * 	assertArray(statusArray, <js>"ACTIVE,PENDING,CANCELLED"</js>);
 	 * </p>
 	 *
+	 * <h5 class='section'>Comparison Modes:</h5>
+	 * <p>The method supports three different ways to compare expected vs actual values:</p>
+	 *
+	 * <h6 class='section'>1. String Comparison (Readable Format):</h6>
+	 * <p class='bjava'>
+	 * 	<jc>// Elements are converted to {@link Utils#r readable} format and compared as strings</jc>
+	 * 	assertArray(new int[]{1, 2, 3}, <js>"1"</js>, <js>"2"</js>, <js>"3"</js>);
+	 * 	assertArray(new String[]{"a", "b"}, <js>"a,b"</js>); <jc>// Comma-delimited syntax</jc>
+	 * </p>
+	 *
+	 * <h6 class='section'>2. Predicate Testing (Functional Validation):</h6>
+	 * <p class='bjava'>
+	 * 	<jc>// Use Predicate for functional testing</jc>
+	 * 	Predicate&lt;Integer&gt; <jv>greaterThanZero</jv> = <jv>x</jv> -&gt; <jv>x</jv> &gt; 0;
+	 * 	assertArray(<jk>new</jk> <jk>int</jk>[]{1, 2, 3}, <jv>greaterThanZero</jv>, <jv>greaterThanZero</jv>, <jv>greaterThanZero</jv>);
+	 *
+	 * 	<jc>// Mix predicates with other comparison types</jc>
+	 * 	Predicate&lt;String&gt; <jv>hasLength3</jv> = <jv>s</jv> -&gt; <jv>s</jv>.length() == 3;
+	 * 	assertArray(<jk>new</jk> String[]{<js>"abc"</js>, <js>"test"</js>}, <jv>hasLength3</jv>, <js>"test"</js>);
+	 * </p>
+	 *
+	 * <h6 class='section'>3. Object Equality (Direct Comparison):</h6>
+	 * <p class='bjava'>
+	 * 	<jc>// Non-String, non-Predicate objects use Objects.equals() comparison</jc>
+	 * 	assertArray(<jk>new</jk> Integer[]{1, 2, 3}, 1, 2, 3); <jc>// Integer objects</jc>
+	 * 	assertArray(<jk>new</jk> MyBean[]{<jv>bean1</jv>, <jv>bean2</jv>}, <jv>bean1</jv>, <jv>bean2</jv>); <jc>// Custom objects</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Escape Comma-Delimited Parsing:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Use '>' prefix to treat comma-containing string as single value</jc>
+	 * 	assertArray(<jk>new</jk> String[]{<js>"foo,bar"</js>}, <js>">foo,bar"</js>); <jc>// Tests single element "foo,bar"</jc>
+	 *
+	 * 	<jc>// Useful for arrays containing CSV data or comma-separated strings</jc>
+	 * 	assertArray(<jv>csvArray</jv>, <js>">item1,item2,item3"</js>); <jc>// Single element with commas</jc>
+	 * </p>
+	 *
 	 * @param array The array to test. Can be any array type including primitives and multi-dimensional arrays.
 	 * @param expected Either multiple arguments OR a single comma-delimited string of expected values.
+	 *                 Can be Strings (readable format comparison), Predicates (functional testing), or Objects (direct equality).
 	 * @throws IllegalArgumentException if the input is not an array
 	 * @throws AssertionError if the array size or contents don't match expected values
 	 * @see #assertList(List, Object...)
 	 * @see #assertSet(Set, Object...)
-	 * @see #arrayToList(Object)
+	 * @see Utils#arrayToList(Object)
 	 */
 	public static void assertArray(Object array, Object...expected) {
 		assertCollection(arrayToList(array), expected);
 	}
 
 	/**
-	 * Asserts that the fields/properties on the specified bean are the specified values after being converted to readable strings.
+	 * Asserts that the fields/properties on the specified bean are the specified values after being converted to {@link Utils#r readable} strings.
 	 *
 	 * <p>This is the primary method for Bean-Centric Test Modernization (BCTM), supporting extensive property validation
 	 * patterns including nested objects, collections, arrays, method chaining, and direct field access.</p>
@@ -266,15 +230,17 @@ public class TestUtils extends Utils2 {
 	 * 	<li><b>Special array properties:</b> <js>"length"</js> for arrays</li>
 	 * </ol>
 	 *
-	 * @param o The bean object to test. Must not be null.
+	 * @param bean The bean object to test. Must not be null.
 	 * @param fields Comma-delimited list of property names to test. Supports nested syntax with {}.
 	 * @param value Comma-delimited list of expected values. Must match the order of fields.
 	 * @throws NullPointerException if the bean is null
 	 * @throws AssertionError if any property values don't match expected values
 	 */
-	public static void assertBean(Object o, String fields, String value) {
-		if (o == null) throw new NullPointerException("Bean was null");
-		assertEquals(value, Utils.splitNested(fields).stream().map(x -> TestUtils.getReadableEntry(o, x)).collect(joining(",")));
+	public static void assertBean(Object bean, String fields, String value) {
+		assertArgNotNull("bean", bean);
+		assertArgNotNull("fields", fields);
+		assertArgNotNull("value", value);
+		assertEquals(value, splitNested(fields).stream().map(x -> getReadableEntry(bean, x)).collect(joining(",")));
 	}
 
 	/**
@@ -320,37 +286,95 @@ public class TestUtils extends Utils2 {
 	 * 		<js>"val1,val2"</js>, <js>"val3,val4"</js>);
 	 * </p>
 	 *
-	 * @param l The collection of beans to check. Must not be null.
+	 * @param listOfBeans The collection of beans to check. Must not be null.
 	 * @param fields A comma-delimited list of bean property names (supports nested syntax).
 	 * @param values Array of expected value strings, one per bean. Each string contains comma-delimited values matching the fields.
 	 * @throws AssertionError if the collection size doesn't match values array length or if any bean properties don't match
 	 * @see #assertBean(Object, String, String)
 	 */
 	@SuppressWarnings("rawtypes")
-	public static void assertBeans(Collection l, String fields, String...values) {
-		assertEquals(values.length, l.size(), ()->"Expected "+values.length+" rows but had actual " + l.size());
+	public static void assertBeans(Collection listOfBeans, String fields, String...values) {
+		assertArgNotNull("listOfBeans", listOfBeans);
+		assertArgNotNull("fields", fields);
+		assertArgNotNull("values", values);
+
+		assertEquals(values.length, listOfBeans.size(), fs("Expected {0} rows but had actual {1}", values.length, listOfBeans.size()));
+
 		var r = 0;
-		var f = Utils.splitNested(fields);
-		for (var o : l) {
-			var actual = f.stream().map(x -> TestUtils.getReadableEntry(o, x)).collect(joining(","));
+		var f = splitNested(fields);
+		for (var o : listOfBeans) {
+			var actual = f.stream().map(x -> getReadableEntry(o, x)).collect(joining(","));
 			var r2 = r+1;
-			assertEquals(r(values[r]), actual, ()->"Object at row " + r2 + " didn't match.");
+			assertEquals(r(values[r]), actual, fs("Object at row {0} didn't match.", r2));
 			r++;
 		}
 	}
 
 	/**
-	 * Asserts the entries in a collection matches the expected strings after they've been made readable.
+	 * Asserts the entries in a collection matches the expected values using flexible comparison logic.
 	 *
 	 * <p>This is the underlying implementation for {@link #assertSet(Set, Object...)}, {@link #assertList(List, Object...)},
-	 * and {@link #assertArray(Object, Object...)}. It handles the dual syntax parsing and value comparison logic.</p>
+	 * and {@link #assertArray(Object, Object...)}. It handles the dual syntax parsing and supports multiple value comparison modes.</p>
+	 *
+	 * <h5 class='section'>Dual Syntax Support:</h5>
+	 * <ul>
+	 * 	<li><b>Varargs:</b> <js>assertCollection(collection, "val1", "val2", "val3")</js></li>
+	 * 	<li><b>Comma-delimited:</b> <js>assertCollection(collection, "val1,val2,val3")</js></li>
+	 * 	<li><b>Escape prefix:</b> <js>assertCollection(collection, ">val1,val2,val3")</js> - treats as single value</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Comparison Modes:</h5>
+	 * <p>The method supports three different ways to compare expected vs actual values:</p>
+	 *
+	 * <h6 class='section'>1. String Comparison (Readable Format):</h6>
+	 * <p class='bjava'>
+	 * 	<jc>// Elements are converted to {@link Utils#r readable} format and compared as strings</jc>
+	 * 	assertCollection(List.of(1, 2, 3), <js>"1"</js>, <js>"2"</js>, <js>"3"</js>);
+	 * 	assertCollection(List.of("a", "b"), <js>"a,b"</js>); <jc>// Comma-delimited syntax</jc>
+	 * </p>
+	 *
+	 * <h6 class='section'>2. Predicate Testing (Functional Validation):</h6>
+	 * <p class='bjava'>
+	 * 	<jc>// Use Predicate&lt;T&gt; for functional testing</jc>
+	 * 	Predicate&lt;Integer&gt; <jv>greaterThanOne</jv> = <jv>x</jv> -&gt; <jv>x</jv> &gt; 1;
+	 * 	assertCollection(List.of(2, 3, 4), <jv>greaterThanOne</jv>, <jv>greaterThanOne</jv>, <jv>greaterThanOne</jv>);
+	 *
+	 * 	<jc>// Mix predicates with other comparison types</jc>
+	 * 	Predicate&lt;String&gt; <jv>startsWithA</jv> = <jv>s</jv> -&gt; <jv>s</jv>.startsWith(<js>"a"</js>);
+	 * 	assertCollection(List.of(<js>"apple"</js>, <js>"banana"</js>), <jv>startsWithA</jv>, <js>"banana"</js>);
+	 * </p>
+	 *
+	 * <h6 class='section'>3. Object Equality (Direct Comparison):</h6>
+	 * <p class='bjava'>
+	 * 	<jc>// Non-String, non-Predicate objects use Objects.equals() comparison</jc>
+	 * 	assertCollection(List.of(1, 2, 3), 1, 2, 3); <jc>// Integer objects</jc>
+	 * 	assertCollection(List.of(<jv>myBean1</jv>, <jv>myBean2</jv>), <jv>myBean1</jv>, <jv>myBean2</jv>); <jc>// Custom objects</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Escape Comma-Delimited Parsing:</h5>
+	 * <p>The escape prefix '>' prevents comma-delimited parsing, useful when testing collections
+	 * that contain elements with commas in their string representation.</p>
+	 * <p class='bjava'>
+	 * 	assertCollection(List.of(<js>"foo,bar"</js>), <js>"&gt;foo,bar"</js>); <jc>// Single element with comma</jc>
+	 * </p>
+	 *
+	 * @param list The collection to test. Must not be null.
+	 * @param expected Either multiple arguments OR a single comma-delimited string of expected values.
+	 *                 Can be Strings (readable format comparison), Predicates (functional testing), or Objects (direct equality).
+	 * @throws AssertionError if the collection size or contents don't match expected values
 	 */
 	@SuppressWarnings("unchecked")
-	public static void assertCollection(Collection<?> list, Object...expected) {
+	public static <T> void assertCollection(Collection<T> list, Object...expected) {
+		assertArgNotNull("list", list);
+		assertArgNotNull("expected", expected);
+
+		// Special case when passing in a comma-delimited list.
 		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
-			expected = s(expected[0]).charAt(0) == '>' ? new String[]{s(expected[0]).substring(1)} : splita(s(expected[0]));
+			expected = s(expected[0]).charAt(0) == '>' ? a(s(expected[0]).substring(1)) : splita(s(expected[0]));
+
 		if (list.size() != expected.length)
 			fail(fs("Wrong list length.  expected={0}, actual={1}", expected.length, list.size()));
+
 		List<?> list2 = toList(list);
 		for (var i = 0; i < expected.length; i++) {
 			var x = list2.get(i);
@@ -368,7 +392,7 @@ public class TestUtils extends Utils2 {
 	}
 
 	/**
-	 * Asserts an object matches the expected string after it's been made readable.
+	 * Asserts an object matches the expected string after it's been made {@link Utils#r readable}.
 	 */
 	public static void assertContains(String expected, Object actual) {
 		var a2 = r(actual);
@@ -384,12 +408,19 @@ public class TestUtils extends Utils2 {
 	/**
 	 * Asserts that a collection is not null and empty.
 	 */
-	public static void assertEmpty(Collection<?> c) {
-		assertTrue(c != null && c.isEmpty());
+	public static void assertEmpty(Collection<?> value) {
+		assertNotNull(value, "Value was null.");
+		assertTrue(value.isEmpty(), "Value was not empty.");
 	}
 
-	public static void assertEmpty(Optional<?> o) {
-		assertTrue(o != null && o.isEmpty(), "Optional was not empty.");
+	public static void assertEmpty(Map<?,?> value) {
+		assertNotNull(value, "Value was null.");
+		assertTrue(value.isEmpty(), "Value was not empty.");
+	}
+
+	public static void assertEmpty(Optional<?> value) {
+		assertNotNull(value, "Value was null.");
+		assertTrue(value.isEmpty(), "Optional was not empty.");
 	}
 
 	public static void assertEqualsAll(Object...values) {
@@ -410,12 +441,12 @@ public class TestUtils extends Utils2 {
 	 * Asserts the JSON5 representation of the specified object.
 	 */
 	public static void assertJsonContains(Object value, String json) {
-		TestUtils.assertContains(json, Json5.DEFAULT.write(value));
+		assertContains(json, Json5.DEFAULT.write(value));
 	}
 
 	public static void assertJsonMatches(Object o, String pattern) throws AssertionError {
 		var json = json(o);
-		assertTrue(Utils.getMatchPattern3(pattern).matcher(json).matches(), fs("JSON did not match pattern.\njson={0}", json));
+		assertTrue(getMatchPattern3(pattern).matcher(json).matches(), fs("JSON did not match pattern.\njson={0}", json));
 	}
 
 	public static void assertLines(String expected, Object value) {
@@ -423,7 +454,7 @@ public class TestUtils extends Utils2 {
 	}
 
 	/**
-	 * Asserts that the entries in a List match the expected values after being converted to readable strings.
+	 * Asserts that the entries in a List match the expected values after being converted to {@link Utils#r readable} strings.
 	 *
 	 * <p>This method works identically to {@link #assertSet(Set, Object...)} but is specifically typed for Lists.
 	 * It supports the same dual syntax: varargs or comma-delimited strings.</p>
@@ -446,8 +477,46 @@ public class TestUtils extends Utils2 {
 	 * 	assertList(jsonList, <js>"value1,value2,value3"</js>);
 	 * </p>
 	 *
+	 * <h5 class='section'>Comparison Modes:</h5>
+	 * <p>The method supports three different ways to compare expected vs actual values:</p>
+	 *
+	 * <h6 class='section'>1. String Comparison (Readable Format):</h6>
+	 * <p class='bjava'>
+	 * 	<jc>// Elements are converted to {@link Utils#r readable} format and compared as strings</jc>
+	 * 	assertList(List.of(1, 2, 3), <js>"1"</js>, <js>"2"</js>, <js>"3"</js>);
+	 * 	assertList(List.of("a", "b"), <js>"a,b"</js>); <jc>// Comma-delimited syntax</jc>
+	 * </p>
+	 *
+	 * <h6 class='section'>2. Predicate Testing (Functional Validation):</h6>
+	 * <p class='bjava'>
+	 * 	<jc>// Use Predicate for functional testing</jc>
+	 * 	Predicate&lt;Integer&gt; <jv>even</jv> = <jv>x</jv> -&gt; <jv>x</jv> % 2 == 0;
+	 * 	assertList(List.of(2, 4, 6), <jv>even</jv>, <jv>even</jv>, <jv>even</jv>);
+	 *
+	 * 	<jc>// Mix predicates with other comparison types</jc>
+	 * 	Predicate&lt;String&gt; <jv>uppercase</jv> = <jv>s</jv> -&gt; <jv>s</jv>.equals(<jv>s</jv>.toUpperCase());
+	 * 	assertList(List.of(<js>"HELLO"</js>, <js>"world"</js>), <jv>uppercase</jv>, <js>"world"</js>);
+	 * </p>
+	 *
+	 * <h6 class='section'>3. Object Equality (Direct Comparison):</h6>
+	 * <p class='bjava'>
+	 * 	<jc>// Non-String, non-Predicate objects use Objects.equals() comparison</jc>
+	 * 	assertList(List.of(1, 2, 3), 1, 2, 3); <jc>// Integer objects</jc>
+	 * 	assertList(List.of(<jv>myObj1</jv>, <jv>myObj2</jv>), <jv>myObj1</jv>, <jv>myObj2</jv>); <jc>// Custom objects</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Escape Comma-Delimited Parsing:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Use '>' prefix to treat comma-containing string as single value</jc>
+	 * 	assertList(List.of("foo,bar"), <js>">foo,bar"</js>); <jc>// Tests single element "foo,bar"</jc>
+	 *
+	 * 	<jc>// Useful for CSV data or comma-separated content</jc>
+	 * 	assertList(<jv>csvList</jv>, <js>">item1,item2,item3"</js>); <jc>// Single element with commas</jc>
+	 * </p>
+	 *
 	 * @param list The List to test. Must not be null.
-	 * @param expected Either multiple string arguments OR a single comma-delimited string.
+	 * @param expected Either multiple arguments OR a single comma-delimited string of expected values.
+	 *                 Can be Strings (readable format comparison), Predicates (functional testing), or Objects (direct equality).
 	 * @throws AssertionError if the list size, order, or contents don't match expected values
 	 * @see #assertSet(Set, Object...)
 	 * @see #assertArray(Object, Object...)
@@ -457,14 +526,14 @@ public class TestUtils extends Utils2 {
 	}
 
 	/**
-	 * Asserts the entries in a map matches the expected strings after they've been made readable.
+	 * Asserts the entries in a map matches the expected strings after they've been made {@link Utils#r readable}.
 	 */
-	public static void assertMap(Map<?,?> map, Object...expected) {
-		assertList(map.entrySet().stream().map(x -> r(x.getKey()) + "=" + r(x.getValue())).toList(), expected);
+	public static void assertMap(Map<?,?> map, String...expected) {
+		assertList(map.entrySet().stream().map(x -> r(x.getKey()) + "=" + r(x.getValue())).toList(), (Object[])expected);
 	}
 
 	/**
-	 * Asserts that the values in the specified map are the specified values after being converted to readable strings.
+	 * Asserts that the values in the specified map are the specified values after being converted to {@link Utils#r readable} strings.
 	 *
 	 * <p>This method works identically to {@link #assertBean(Object, String, String)} but is optimized for Java Maps.
 	 * It supports the same nested property syntax and value formatting rules as <c>assertBean</c>.</p>
@@ -516,7 +585,7 @@ public class TestUtils extends Utils2 {
 	 */
 	public static void assertMap(Map<?,?> o, String fields, String value) {
 		if (o == null) throw new NullPointerException("Map was null");
-		assertEquals(value, Utils.splitNested(fields).stream().map(x -> TestUtils.getReadableEntry(o, x)).collect(joining(",")));
+		assertEquals(value, splitNested(fields).stream().map(x -> getReadableEntry(o, x)).collect(joining(",")));
 	}
 
 	/**
@@ -558,7 +627,7 @@ public class TestUtils extends Utils2 {
 	 * Asserts value when stringified matches the specified pattern.
 	 */
 	public static Object assertMatches(String pattern, Object value) {
-		var m = Utils.getMatchPattern3(pattern).matcher(s(value));
+		var m = getMatchPattern3(pattern).matcher(s(value));
 		if (! m.matches()) {
 			var msg = "Pattern didn't match: \n\tExpected:\n"+pattern+"\n\tActual:\n"+value;
 			System.err.println(msg);  // For easier debugging.
@@ -616,7 +685,7 @@ public class TestUtils extends Utils2 {
 	}
 
 	/**
-	 * Asserts that the entries in a Set/Collection match the expected values after being converted to readable strings.
+	 * Asserts that the entries in a Set/Collection match the expected values after being converted to {@link Utils#r readable} strings.
 	 *
 	 * <p>This method is optimized for testing collections of simple values like strings, enums, or primitives.
 	 * It supports two input formats: varargs or comma-delimited strings.</p>
@@ -651,8 +720,39 @@ public class TestUtils extends Utils2 {
 	 * 	assertSet(singletonSet, <js>"onlyValue"</js>);
 	 * 	assertSet(singletonSet, <js>"onlyValue"</js>); <jc>// Same as above</jc>
 	 *
-	 * 	<jc>// Escape leading comma to prevent split</jc>
-	 * 	assertSet(csvSet, <js>">item1,item2,item3"</js>); <jc>// Treats as single value</jc>
+	 * 	<jc>// Escape comma-delimited parsing with '>' prefix</jc>
+	 * 	assertSet(csvSet, <js>">item1,item2,item3"</js>); <jc>// Treats as single value "item1,item2,item3"</jc>
+	 *
+	 * 	<jc>// Useful when testing collections that contain comma-separated strings</jc>
+	 * 	assertSet(Set.of("foo,bar"), <js>">foo,bar"</js>); <jc>// Tests single element "foo,bar"</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Comparison Modes:</h5>
+	 * <p>The method supports three different ways to compare expected vs actual values:</p>
+	 *
+	 * <h6 class='section'>1. String Comparison (Readable Format):</h6>
+	 * <p class='bjava'>
+	 * 	<jc>// Elements are converted to {@link Utils#r readable} format and compared as strings</jc>
+	 * 	assertSet(Set.of(1, 2, 3), <js>"1"</js>, <js>"2"</js>, <js>"3"</js>);
+	 * 	assertSet(Set.of("a", "b"), <js>"a,b"</js>); <jc>// Comma-delimited syntax</jc>
+	 * </p>
+	 *
+	 * <h6 class='section'>2. Predicate Testing (Functional Validation):</h6>
+	 * <p class='bjava'>
+	 * 	<jc>// Use Predicate for functional testing</jc>
+	 * 	Predicate&lt;Integer&gt; <jv>positive</jv> = <jv>x</jv> -&gt; <jv>x</jv> &gt; 0;
+	 * 	assertSet(Set.of(1, 2, 3), <jv>positive</jv>, <jv>positive</jv>, <jv>positive</jv>);
+	 *
+	 * 	<jc>// Mix predicates with other comparison types</jc>
+	 * 	Predicate&lt;String&gt; <jv>shortName</jv> = <jv>s</jv> -&gt; <jv>s</jv>.length() &lt; 5;
+	 * 	assertSet(Set.of(<js>"cat"</js>, <js>"elephant"</js>), <jv>shortName</jv>, <js>"elephant"</js>);
+	 * </p>
+	 *
+	 * <h6 class='section'>3. Object Equality (Direct Comparison):</h6>
+	 * <p class='bjava'>
+	 * 	<jc>// Non-String, non-Predicate objects use Objects.equals() comparison</jc>
+	 * 	assertSet(Set.of(1, 2, 3), 1, 2, 3); <jc>// Integer objects</jc>
+	 * 	assertSet(Set.of(<jv>obj1</jv>, <jv>obj2</jv>), <jv>obj1</jv>, <jv>obj2</jv>); <jc>// Custom objects</jc>
 	 * </p>
 	 *
 	 * <h5 class='section'>KeySet Testing:</h5>
@@ -665,7 +765,8 @@ public class TestUtils extends Utils2 {
 	 * </p>
 	 *
 	 * @param list The Set or Collection to test. Must not be null.
-	 * @param expected Either multiple string arguments OR a single comma-delimited string.
+	 * @param expected Either multiple arguments OR a single comma-delimited string of expected values.
+	 *                 Can be Strings (readable format comparison), Predicates (functional testing), or Objects (direct equality).
 	 * @throws AssertionError if the collection size or contents don't match expected values
 	 * @see #assertList(List, Object...)
 	 * @see #assertArray(Object, Object...)
@@ -682,7 +783,7 @@ public class TestUtils extends Utils2 {
 	}
 
 	/**
-	 * Asserts the entries in a list matches the expected strings after they've been made readable.
+	 * Asserts the entries in a list matches the expected strings after they've been made {@link Utils#r readable}.
 	 */
 	public static void assertStream(Stream<?> stream, Object...expected) {
 		var list = stream.toList();
@@ -694,14 +795,14 @@ public class TestUtils extends Utils2 {
 	}
 
 	/**
-	 * Asserts an object matches the expected string after it's been made readable.
+	 * Asserts an object matches the expected string after it's been made {@link Utils#r readable}.
 	 */
 	public static void assertString(String expected, Object actual) {
 		assertEquals(expected, r(actual));
 	}
 
 	/**
-	 * Asserts an object matches the expected string after it's been made readable.
+	 * Asserts an object matches the expected string after it's been made {@link Utils#r readable}.
 	 */
 	public static void assertString(String expected, Object actual, Supplier<String> messageSupplier) {
 		assertEquals(expected, r(actual), messageSupplier);
@@ -716,21 +817,21 @@ public class TestUtils extends Utils2 {
 	}
 
 	public static <T extends Throwable> T assertThrowable(Class<? extends Throwable> expectedType, String expectedSubstring, T t) {
-		var messages = TestUtils.getMessages(t);
+		var messages = getMessages(t);
 		assertTrue(messages.contains(expectedSubstring), fs("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
 		return t;
 	}
 
 	public static <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, List<String> expectedSubstrings, org.junit.jupiter.api.function.Executable executable) {
 		var exception = Assertions.assertThrows(expectedType, executable);
-		var messages = TestUtils.getMessages(exception);
+		var messages = getMessages(exception);
 		expectedSubstrings.stream().forEach(x -> assertTrue(messages.contains(x), fs("Expected message to contain: {0}.\nActual:\n{1}", x, messages)));
 		return exception;
 	}
 
 	public static <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, String expectedSubstring, org.junit.jupiter.api.function.Executable executable) {
 		var exception = Assertions.assertThrows(expectedType, executable);
-		var messages = TestUtils.getMessages(exception);
+		var messages = getMessages(exception);
 		assertTrue(messages.contains(expectedSubstring), fs("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
 		return exception;
 	}
@@ -887,8 +988,8 @@ public class TestUtils extends Utils2 {
 	private static String getReadableEntry(Object o, String name) {
 		var i = name.indexOf("{");
 		var pn = i == -1 ? name : name.substring(0, i);
-		var spn = i == -1 ? null : Utils.splitNestedInner(name);
-		var e = TestUtils.getEntry(o, pn);
+		var spn = i == -1 ? null : splitNestedInner(name);
+		var e = getEntry(o, pn);
 		if (spn == null || e == null) return r(e);
 		return spn.stream().map(x -> getReadableEntry(e, x)).collect(joining(",","{","}"));
 	}

@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.httppart;
 
 import static java.util.stream.Collectors.*;
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
@@ -278,7 +277,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return This object.
 	 */
 	public RequestFormParams add(String name, Object value) {
-		assertArgNotNull("name", name);
+		Utils.assertArgNotNull("name", name);
 		add(new RequestFormParam(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
@@ -294,7 +293,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return This object.
 	 */
 	public RequestFormParams add(NameValuePair...parameters) {
-		assertArgNotNull("parameters", parameters);
+		Utils.assertArgNotNull("parameters", parameters);
 		for (NameValuePair p : parameters)
 			if (p != null)
 				add(p.getName(), p.getValue());
@@ -312,7 +311,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return This object.
 	 */
 	public RequestFormParams add(Part part) {
-		assertArgNotNull("part", part);
+		Utils.assertArgNotNull("part", part);
 		add(new RequestFormParam(req, part).parser(parser));
 		return this;
 	}
@@ -332,7 +331,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return This object.
 	 */
 	public RequestFormParams set(String name, Object value) {
-		assertArgNotNull("name", name);
+		Utils.assertArgNotNull("name", name);
 		set(new RequestFormParam(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
@@ -349,7 +348,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return This object.
 	 */
 	public RequestFormParams set(NameValuePair...parameters) {
-		assertArgNotNull("headers", parameters);
+		Utils.assertArgNotNull("headers", parameters);
 		for (NameValuePair p : parameters)
 			remove(p);
 		for (NameValuePair p : parameters)
@@ -364,7 +363,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return This object.
 	 */
 	public RequestFormParams remove(String name) {
-		assertArgNotNull("name", name);
+		Utils.assertArgNotNull("name", name);
 		removeIf(x -> eq(x.getName(), name));
 		return this;
 	}
@@ -400,7 +399,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return <jk>true</jk> if the parameter with any of the specified names are present.
 	 */
 	public boolean containsAny(String...names) {
-		assertArgNotNull("names", names);
+		Utils.assertArgNotNull("names", names);
 		for (String n : names)
 			if (stream(n).findAny().isPresent())
 				return true;
@@ -460,7 +459,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return The parameter.  Never <jk>null</jk>.
 	 */
 	public RequestFormParam getFirst(String name) {
-		assertArgNotNull("name", name);
+		Utils.assertArgNotNull("name", name);
 		return stream(name).findFirst().orElseGet(()->new RequestFormParam(req, name, null).parser(parser));
 	}
 
@@ -475,7 +474,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return The parameter.  Never <jk>null</jk>.
 	 */
 	public RequestFormParam getLast(String name) {
-		assertArgNotNull("name", name);
+		Utils.assertArgNotNull("name", name);
 		Value<RequestFormParam> v = Value.empty();
 		stream(name).forEach(x -> v.set(x));
 		return v.orElseGet(() -> new RequestFormParam(req, name, null).parser(parser));

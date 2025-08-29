@@ -13,7 +13,7 @@
 package org.apache.juneau.doc.internal;
 
 import static org.apache.juneau.doc.internal.Console.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.io.*;
 import java.nio.file.*;

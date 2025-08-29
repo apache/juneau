@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.util.*;
@@ -136,7 +135,7 @@ public class BasicPart implements NameValuePair, Headerable {
 	 * @param copyFrom The object to copy.
 	 */
 	protected BasicPart(BasicPart copyFrom) {
-		assertArgNotNull("copyFrom", copyFrom);
+		Utils.assertArgNotNull("copyFrom", copyFrom);
 		this.name = copyFrom.name;
 		this.value = copyFrom.value;
 	}

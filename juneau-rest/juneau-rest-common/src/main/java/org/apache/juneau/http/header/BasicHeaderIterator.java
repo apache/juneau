@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
-
 import java.util.NoSuchElementException;
 
 import org.apache.http.Header;
@@ -48,7 +46,7 @@ public class BasicHeaderIterator implements HeaderIterator {
 	 * @param caseSensitive Use case-sensitive matching for part name.
 	 */
 	public BasicHeaderIterator(Header[] headers, String name, boolean caseSensitive) {
-		this.entries = assertArgNotNull("headers", headers);
+		this.entries = Utils.assertArgNotNull("headers", headers);
 		this.name = name;
 		this.caseSensitive = caseSensitive;
 		this.currentIndex = findNext(-1);

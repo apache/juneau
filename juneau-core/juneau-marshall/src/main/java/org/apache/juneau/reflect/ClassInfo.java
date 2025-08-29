@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
@@ -2353,7 +2352,7 @@ public final class ClassInfo {
 	 */
 	@SuppressWarnings("null")
 	public Class<?> getParameterType(int index, Class<?> pt) {
-		assertArgNotNull("pt", pt);
+		Utils.assertArgNotNull("pt", pt);
 
 		// We need to make up a mapping of type names.
 		Map<Type,Type> typeMap = new HashMap<>();
@@ -2361,16 +2360,16 @@ public final class ClassInfo {
 		while (pt != cc.getSuperclass()) {
 			extractTypes(typeMap, cc);
 			cc = cc.getSuperclass();
-			assertArg(cc != null, "Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
+			Utils.assertArg(cc != null, "Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
 		}
 
 		Type gsc = cc.getGenericSuperclass();
 
-		assertArg(gsc instanceof ParameterizedType, "Class ''{0}'' is not a parameterized type", pt.getSimpleName());
+		Utils.assertArg(gsc instanceof ParameterizedType, "Class ''{0}'' is not a parameterized type", pt.getSimpleName());
 
 		ParameterizedType cpt = (ParameterizedType)gsc;
 		Type[] atArgs = cpt.getActualTypeArguments();
-		assertArg(index < atArgs.length, "Invalid type index. index={0}, argsLength={1}", index, atArgs.length);
+		Utils.assertArg(index < atArgs.length, "Invalid type index. index={0}, argsLength={1}", index, atArgs.length);
 		Type actualType = cpt.getActualTypeArguments()[index];
 
 		if (typeMap.containsKey(actualType))

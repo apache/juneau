@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import java.net.*;
 import java.nio.file.*;
@@ -48,7 +47,7 @@ public class LocalDir {
 	 * 	</ul>
 	 */
 	public LocalDir(Class<?> clazz, String clazzPath) {
-		this.clazz = assertArgNotNull("clazz", clazz);
+		this.clazz = Utils.assertArgNotNull("clazz", clazz);
 		this.clazzPath = "/".equals(clazzPath) ? "/" : Utils.nullIfEmpty3(trimTrailingSlashes(clazzPath));
 		this.path = null;
 		this.hashCode = HashCode.of(clazz, clazzPath);
@@ -62,7 +61,7 @@ public class LocalDir {
 	public LocalDir(Path path) {
 		this.clazz = null;
 		this.clazzPath = null;
-		this.path = assertArgNotNull("path", path);
+		this.path = Utils.assertArgNotNull("path", path);
 		this.hashCode = path.hashCode();
 	}
 

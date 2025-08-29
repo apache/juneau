@@ -12,11 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.internal.*;
 
 /**
  * Wrapper around a map where the key names are overridden.
@@ -41,8 +40,8 @@ public final class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate
 	 * @param keys The keys in the new map.  Must not be <jk>null</jk>.
 	 */
 	public FilteredMap(ClassMeta<Map<K,V>> classMeta, Map<K,V> innerMap, K[] keys) {
-		assertArgNotNull("innerMap", innerMap);
-		assertArgNotNull("keys", keys);
+		Utils.assertArgNotNull("innerMap", innerMap);
+		Utils.assertArgNotNull("keys", keys);
 
 		this.classMeta = classMeta;
 		this.innerMap = innerMap;

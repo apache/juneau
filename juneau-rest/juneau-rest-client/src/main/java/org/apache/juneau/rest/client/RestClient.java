@@ -17,7 +17,6 @@ import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.rest.client.RestOperation.*;
@@ -3247,7 +3246,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder errorCodes(Predicate<Integer> value) {
-			errorCodes = assertArgNotNull("value", value);
+			errorCodes = Utils.assertArgNotNull("value", value);
 			return this;
 		}
 

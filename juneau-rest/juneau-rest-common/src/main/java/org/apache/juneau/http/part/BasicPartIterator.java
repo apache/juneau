@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
-
 import java.util.NoSuchElementException;
 
 import org.apache.http.*;
@@ -46,7 +44,7 @@ public class BasicPartIterator implements PartIterator {
 	 * @param caseInsensitive Use case-insensitive matching for part name.
 	 */
 	public BasicPartIterator(NameValuePair[] parts, String name, boolean caseInsensitive) {
-		this.entries = assertArgNotNull("parts", parts);
+		this.entries = Utils.assertArgNotNull("parts", parts);
 		this.name = name;
 		this.caseInsensitive = caseInsensitive;
 		this.currentIndex = findNext(-1);

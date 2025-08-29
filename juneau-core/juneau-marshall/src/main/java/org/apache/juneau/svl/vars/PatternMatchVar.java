@@ -12,10 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl.vars;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
-
 import java.util.regex.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -63,7 +62,7 @@ public class PatternMatchVar extends MultipartVar {
 
 	@Override /* MultipartVar */
 	public String resolve(VarResolverSession session, String[] args) {
-		assertArg(args.length >= 2, "Invalid number of arguments passed to $PM var.  Must have 2 or more arguments.");
+		Utils.assertArg(args.length >= 2, "Invalid number of arguments passed to $PM var.  Must have 2 or more arguments.");
 
 		String stringArg = args[0];
 		String pattern = args[1];

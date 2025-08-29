@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 
 import java.io.*;
@@ -228,8 +227,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return This object.
 	 */
 	public FluentStringAssertion<R> asReplaceAll(String regex, String replacement) {
-		assertArgNotNull("regex", regex);
-		assertArgNotNull("replacement", replacement);
+		Utils.assertArgNotNull("regex", regex);
+		Utils.assertArgNotNull("replacement", replacement);
 		return asTransformed(x -> x == null ? null : x.replaceAll(regex, replacement));
 	}
 
@@ -241,8 +240,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return This object.
 	 */
 	public FluentStringAssertion<R> asReplace(String target, String replacement) {
-		assertArgNotNull("target", target);
-		assertArgNotNull("replacement", replacement);
+		Utils.assertArgNotNull("target", target);
+		Utils.assertArgNotNull("replacement", replacement);
 		return asTransformed(x -> x == null ? null : x.replace(target, replacement));
 	}
 
@@ -289,7 +288,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return This object.
 	 */
 	public FluentListAssertion<String,R> asSplit(String regex) {
-		assertArgNotNull("regex", regex);
+		Utils.assertArgNotNull("regex", regex);
 		return new FluentListAssertion<>(this, valueIsNull() ? null : Arrays.asList(value().trim().split(regex)), returns());
 	}
 
@@ -391,7 +390,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isLines(String...lines) throws AssertionError {
-		assertArgNotNull("lines", lines);
+		Utils.assertArgNotNull("lines", lines);
 		var v = Utils.join(lines, '\n');
 		var s = value();
 		if (Utils.ne(v, s))
@@ -422,7 +421,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isSortedLines(String...lines) {
-		assertArgNotNull("lines", lines);
+		Utils.assertArgNotNull("lines", lines);
 
 		// Must work for windows too.
 		var e = Utils.join(lines, '\n').trim().split("[\r\n]+");
@@ -477,7 +476,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isContains(String...values) throws AssertionError {
-		assertArgNotNull("values", values);
+		Utils.assertArgNotNull("values", values);
 		var s = orElse(null);
 		for (var substring : values)
 			if (substring != null && ! StringUtils.contains(s, substring))
@@ -493,7 +492,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNotContains(String...values) throws AssertionError {
-		assertArgNotNull("values", values);
+		Utils.assertArgNotNull("values", values);
 		var s = orElse(null);
 		for (var substring : values)
 			if (substring != null && StringUtils.contains(s, substring))
@@ -540,7 +539,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isMatches(String searchPattern) throws AssertionError {
-		assertArgNotNull("searchPattern", searchPattern);
+		Utils.assertArgNotNull("searchPattern", searchPattern);
 		return isPattern(Utils.getMatchPattern3(searchPattern));
 	}
 
@@ -564,7 +563,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isPattern(String regex, int flags) throws AssertionError {
-		assertArgNotNull("regex", regex);
+		Utils.assertArgNotNull("regex", regex);
 		var p = Pattern.compile(regex, flags);
 		var s = value();
 		if (! p.matcher(s).matches())
@@ -580,7 +579,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isPattern(Pattern pattern) throws AssertionError {
-		assertArgNotNull("pattern", pattern);
+		Utils.assertArgNotNull("pattern", pattern);
 		var s = value();
 		if (! pattern.matcher(s).matches())
 			throw error(MSG_stringDidNotMatchExpectedPattern, fix(pattern.pattern()), fix(s));
@@ -595,7 +594,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isStartsWith(String string) {
-		assertArgNotNull("string", string);
+		Utils.assertArgNotNull("string", string);
 		var s = value();
 		if (! s.startsWith(string))
 			throw error(MSG_stringDidNotStartWithExpected, fix(string), fix(s));
@@ -610,7 +609,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isEndsWith(String string) {
-		assertArgNotNull("string", string);
+		Utils.assertArgNotNull("string", string);
 		var s = value();
 		if (! s.endsWith(string))
 			throw error(MSG_stringDidNotEndWithExpected, fix(string), fix(s));

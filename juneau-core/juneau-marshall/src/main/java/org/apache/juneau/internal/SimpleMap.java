@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
+
+import org.apache.juneau.common.internal.*;
 
 /**
  * An instance of a <c>Map</c> where the keys and values are simple arrays.
@@ -49,15 +50,15 @@ public final class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@SuppressWarnings("unchecked")
 	public SimpleMap(K[] keys, V[] values) {
-		assertArgNotNull("keys", keys);
-		assertArgNotNull("values", values);
-		assertArg(keys.length == values.length, "keys ''{0}'' and values ''{1}'' array lengths differ", keys.length, values.length);
+		Utils.assertArgNotNull("keys", keys);
+		Utils.assertArgNotNull("values", values);
+		Utils.assertArg(keys.length == values.length, "keys ''{0}'' and values ''{1}'' array lengths differ", keys.length, values.length);
 
 		this.keys = keys;
 		this.values = values;
 		entries = (SimpleMapEntry[]) Array.newInstance(SimpleMapEntry.class, keys.length);
 		for (int i = 0; i < keys.length; i++) {
-			assertArg(keys[i] != null, "Keys array cannot contain a null value.");
+			Utils.assertArg(keys[i] != null, "Keys array cannot contain a null value.");
 			entries[i] = new SimpleMapEntry(i);
 	}
 	}

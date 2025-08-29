@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
@@ -731,10 +730,10 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return A part with a condensed value or <jk>null</jk> if no parts by the given name are present
 	 */
 	public <T> Optional<T> get(Class<T> type) {
-		assertArgNotNull("type", type);
+		Utils.assertArgNotNull("type", type);
 
 		String name = PartBeanMeta.of(type).getSchema().getName();
-		assertArg(name != null, "Part name could not be found on bean type ''{0}''", type.getName());
+		Utils.assertArg(name != null, "Part name could not be found on bean type ''{0}''", type.getName());
 
 		return get(name, type);
 	}

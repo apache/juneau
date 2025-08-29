@@ -13,7 +13,6 @@
 package org.apache.juneau.assertions;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.common.internal.Utils.list;
 
@@ -367,7 +366,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 */
 	@Override
 	public R isType(Class<?> parent) {
-		assertArgNotNull("parent", parent);
+		Utils.assertArgNotNull("parent", parent);
 		if (! parent.isInstance(value()))
 			throw error(MSG_exceptionWasNotExpectedType, className(parent), className(value()));
 		return returns();
@@ -388,7 +387,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 */
 	@Override
 	public R isExactType(Class<?> type) {
-		assertArgNotNull("type", type);
+		Utils.assertArgNotNull("type", type);
 		if (type != value().getClass())
 			throw error(MSG_exceptionWasNotExpectedType, className(type), className(value()));
 		return returns();

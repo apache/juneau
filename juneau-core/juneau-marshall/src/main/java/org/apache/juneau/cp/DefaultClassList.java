@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
@@ -97,7 +96,7 @@ public class DefaultClassList {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Optional<Class<? extends T>> get(Class<T> type) {
-		assertArgNotNull("type", type);
+		Utils.assertArgNotNull("type", type);
 		for (Class<?> e : entries)
 			if (e != null && type.isAssignableFrom(e))
 				return Utils.opt((Class<? extends T>)e);

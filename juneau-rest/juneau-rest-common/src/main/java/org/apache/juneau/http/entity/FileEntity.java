@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.entity;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 
 import java.io.*;
@@ -122,7 +121,7 @@ public class FileEntity extends BasicHttpEntity {
 
 	@Override /* HttpEntity */
 	public void writeTo(OutputStream out) throws IOException {
-		assertArgNotNull("out", out);
+		Utils.assertArgNotNull("out", out);
 
 		if (isCached()) {
 			out.write(asBytes());

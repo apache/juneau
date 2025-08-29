@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
-
 import java.io.*;
+
+import org.apache.juneau.common.internal.*;
 
 /**
  * Abstract superclass of all Simple Var Language variables.
@@ -61,7 +61,7 @@ public abstract class Var {
 	 * 	If <jk>false</jk>, then the {@link #resolve(VarResolverSession, String)} method is implemented.
 	 */
 	public Var(String name, boolean streamed) {
-		assertArgNotNull("name", name);
+		Utils.assertArgNotNull("name", name);
 		this.name = name;
 		this.streamed = streamed;
 

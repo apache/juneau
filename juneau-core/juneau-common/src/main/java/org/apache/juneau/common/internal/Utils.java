@@ -40,9 +40,6 @@ public class Utils {
 
 	private static final ConcurrentHashMap<String,String> PROPERTY_TO_ENV = new ConcurrentHashMap<>();
 
-	/** Constructor - This class is meant to be subclasses. */
-	protected Utils() {}
-
 	/**
 	 * Creates an array of objects.
 	 */
@@ -51,13 +48,6 @@ public class Utils {
 		return x;
 	}
 
-	public static <T> T[] na(Class<T> type) {
-		return null;
-	}
-
-	public static <T> T[] ea(Class<T> type) {
-		return (T[])Array.newInstance(type, 0);
-	}
 	/**
 	 * Traverses all elements in the specified object and accumulates them into a list.
 	 *
@@ -80,29 +70,6 @@ public class Utils {
 	}
 
 	/**
-	 * Shortcut for creating an empty list of the specified type.
-	 */
-	public static <T> List<T> elist(Class<T> type) {
-		return Collections.emptyList();
-	}
-
-	public static <T> List<T> nlist(Class<T> type) {
-		return null;
-	}
-
-	public static <K,V> Map<K,V> emap(Class<K> keyType, Class<V> valueType) {
-		return Collections.emptyMap();
-	}
-
-	public static <T> T n(Class<T> type) {
-		return null;
-	}
-
-	public static <K,V> Map<K,V> nmap(Class<K> keyType, Class<V> valueType) {
-		return null;
-	}
-
-	/**
 	 * Converts the specified collection to an array.
 	 *
 	 * @param <E> The element type.
@@ -115,6 +82,143 @@ public class Utils {
 			return null;
 		E[] array = (E[])Array.newInstance(componentType, value.size());
 		return value.toArray(array);
+	}
+	/**
+	 * Converts any array (including primitive arrays) to a List.
+	 *
+	 * @param array The array to convert. Can be any array type including primitives.
+	 * @return A List containing the array elements. Primitive values are auto-boxed.
+	 *         Returns null if the input is null.
+	 * @throws IllegalArgumentException if the input is not an array.
+	 */
+	public static List<Object> arrayToList(Object array) {
+		if (array == null) {
+			return null;
+		}
+
+		if (!array.getClass().isArray()) {
+			throw new IllegalArgumentException("Input must be an array, but was: " + array.getClass().getName());
+		}
+
+		var componentType = array.getClass().getComponentType();
+		var length = Array.getLength(array);
+		var result = new ArrayList<>(length);
+
+		// Handle primitive arrays specifically for better performance
+		if (componentType.isPrimitive()) {
+			if (componentType == int.class) {
+				var arr = (int[]) array;
+				for (int value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == long.class) {
+				var arr = (long[]) array;
+				for (long value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == double.class) {
+				var arr = (double[]) array;
+				for (double value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == float.class) {
+				var arr = (float[]) array;
+				for (float value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == boolean.class) {
+				var arr = (boolean[]) array;
+				for (boolean value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == byte.class) {
+				var arr = (byte[]) array;
+				for (byte value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == char.class) {
+				var arr = (char[]) array;
+				for (char value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == short.class) {
+				var arr = (short[]) array;
+				for (short value : arr) {
+					result.add(value);
+				}
+			}
+		} else {
+			// Handle Object arrays
+			for (var i = 0; i < length; i++) {
+				result.add(Array.get(array, i));
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the specified expression is <jk>false</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.internal.ArgUtils.*;
+	 *
+	 *	<jk>public</jk> String setFoo(List&lt;String&gt; <jv>foo</jv>) {
+	 *		<jsm>assertArg</jsm>(<jv>foo</jv> != <jk>null</jk> &amp;&amp; ! <jv>foo</jv>.isEmpty(), <js>"'foo' cannot be null or empty."</js>);
+	 *		...
+	 *	}
+	 * </p>
+	 *
+	 * @param expression The boolean expression to check.
+	 * @param msg The exception message.
+	 * @param args The exception message args.
+	 * @throws IllegalArgumentException Constructed exception.
+	 */
+	public static final void assertArg(boolean expression, String msg, Object...args) throws IllegalArgumentException {
+		if (! expression)
+			throw new IllegalArgumentException(MessageFormat.format(msg, args));
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the specified argument is <jk>null</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.internal.ArgUtils.*;
+	 *
+	 *	<jk>public</jk> String setFoo(String <jv>foo</jv>) {
+	 *		<jsm>assertArgNotNull</jsm>(<js>"foo"</js>, <jv>foo</jv>);
+	 *		...
+	 *	}
+	 * </p>
+	 *
+	 * @param <T> The argument data type.
+	 * @param name The argument name.
+	 * @param o The object to check.
+	 * @return The same argument.
+	 * @throws IllegalArgumentException Constructed exception.
+	 */
+	public static final <T> T assertArgNotNull(String name, T o) throws IllegalArgumentException {
+		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
+		return o;
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the specified value doesn't have all subclasses of the specified type.
+	 *
+	 * @param <E> The element type.
+	 * @param name The argument name.
+	 * @param type The expected parent class.
+	 * @param value The array value being checked.
+	 * @return The value cast to the specified array type.
+	 * @throws IllegalArgumentException Constructed exception.
+	 */
+	public static final <E> Class<E>[] assertClassArrayArgIsType(String name, Class<E> type, Class<?>[] value) throws IllegalArgumentException {
+		for (var i = 0; i < value.length; i++)
+			if (! type.isAssignableFrom(value[i]))
+				throw new IllegalArgumentException("Arg "+name+" did not have arg of type "+type.getName()+" at index "+i+": "+value[i].getName());
+		return (Class<E>[])value;
 	}
 
 	/**
@@ -195,6 +299,21 @@ public class Utils {
 				return true;
 		}
 		return false;
+	}
+
+	public static <T> T[] ea(Class<T> type) {
+		return (T[])Array.newInstance(type, 0);
+	}
+
+	/**
+	 * Shortcut for creating an empty list of the specified type.
+	 */
+	public static <T> List<T> elist(Class<T> type) {
+		return Collections.emptyList();
+	}
+
+	public static <K,V> Map<K,V> emap(Class<K> keyType, Class<V> valueType) {
+		return Collections.emptyMap();
 	}
 
 	/**
@@ -728,6 +847,14 @@ public class Utils {
 		return m;
 	}
 
+	public static <T> T n(Class<T> type) {
+		return null;
+	}
+
+	public static <T> T[] na(Class<T> type) {
+		return null;
+	}
+
 	/** Not equals */
 	public static <T> boolean ne(T s1, T s2) {
 		return ! eq(s1, s2);
@@ -762,6 +889,14 @@ public class Utils {
 	 */
 	public static boolean neic(String s1, String s2) {
 		return ! eqic(s1, s2);
+	}
+
+	public static <T> List<T> nlist(Class<T> type) {
+		return null;
+	}
+
+	public static <K,V> Map<K,V> nmap(Class<K> keyType, Class<V> valueType) {
+		return null;
 	}
 
 	/**
@@ -819,9 +954,69 @@ public class Utils {
 	}
 
 	/**
-	 * Shortcut for {@link #readable(Object)}
+	 * Converts an arbitrary object to a readable string format suitable for debugging and testing.
+	 * 
+	 * <p>This method provides intelligent formatting for various Java types, recursively processing 
+	 * nested structures to create human-readable representations. It's extensively used throughout 
+	 * the Juneau framework for test assertions and debugging output.</p>
+	 *
+	 * <h5 class='section'>Type-Specific Formatting:</h5>
+	 * <ul>
+	 * 	<li><b>null:</b> Returns <js>null</js></li>
+	 * 	<li><b>Optional:</b> Recursively formats the contained value (or <js>null</js> if empty)</li>
+	 * 	<li><b>Collections:</b> Formats as <js>"[item1,item2,item3]"</js> with comma-separated elements</li>
+	 * 	<li><b>Maps:</b> Formats as <js>"{key1=value1,key2=value2}"</js> with comma-separated entries</li>
+	 * 	<li><b>Map.Entry:</b> Formats as <js>"key=value"</js></li>
+	 * 	<li><b>Arrays:</b> Converts to list format <js>"[item1,item2,item3]"</js></li>
+	 * 	<li><b>Iterables/Iterators/Enumerations:</b> Converts to list and formats recursively</li>
+	 * 	<li><b>GregorianCalendar:</b> Formats as ISO instant timestamp</li>
+	 * 	<li><b>Date:</b> Formats as ISO instant string (e.g., <js>"2023-12-25T10:30:00Z"</js>)</li>
+	 * 	<li><b>InputStream:</b> Converts to hexadecimal representation</li>
+	 * 	<li><b>Reader:</b> Reads content and returns as string</li>
+	 * 	<li><b>File:</b> Reads file content and returns as string</li>
+	 * 	<li><b>byte[]:</b> Converts to hexadecimal representation</li>
+	 * 	<li><b>All other types:</b> Uses {@link Object#toString()}</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Collections</jc>
+	 * 	r(List.of("a", "b", "c")) <jc>// Returns: "[a,b,c]"</jc>
+	 * 	r(Set.of(1, 2, 3)) <jc>// Returns: "[1,2,3]" (order may vary)</jc>
+	 * 	
+	 * 	<jc>// Maps</jc>
+	 * 	r(Map.of("foo", "bar", "baz", 123)) <jc>// Returns: "{foo=bar,baz=123}"</jc>
+	 * 	
+	 * 	<jc>// Arrays</jc>
+	 * 	r(new int[]{1, 2, 3}) <jc>// Returns: "[1,2,3]"</jc>
+	 * 	r(new String[]{"a", "b"}) <jc>// Returns: "[a,b]"</jc>
+	 * 	
+	 * 	<jc>// Nested structures</jc>
+	 * 	r(List.of(Map.of("x", 1), Set.of("a", "b"))) <jc>// Returns: "[{x=1},[a,b]]"</jc>
+	 * 	
+	 * 	<jc>// Special types</jc>
+	 * 	r(Optional.of("test")) <jc>// Returns: "test"</jc>
+	 * 	r(Optional.empty()) <jc>// Returns: null</jc>
+	 * 	r(new Date(1640995200000L)) <jc>// Returns: "2022-01-01T00:00:00Z"</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Recursive Processing:</h5>
+	 * <p>The method recursively processes nested structures, so complex objects containing 
+	 * collections, maps, and arrays are fully flattened into readable format. This makes it 
+	 * ideal for test assertions where you need to compare complex object structures.</p>
+	 *
+	 * <h5 class='section'>Error Handling:</h5>
+	 * <p>IO operations (reading files, streams) are wrapped in safe() calls, converting 
+	 * any exceptions to RuntimeExceptions. Binary data (InputStreams, byte arrays) is 
+	 * converted to hexadecimal representation for readability.</p>
+	 *
+	 * @param o The object to convert to readable format. Can be <jk>null</jk>.
+	 * @return A readable string representation of the object, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @see #safe(ThrowingSupplier)
 	 */
 	public static String r(Object o) {
+		if (o == null)
+			return null;
 		if (o instanceof Optional<?> o2)
 			return r(o2.orElse(null));
 		if (o instanceof Collection<?> o2)
@@ -848,14 +1043,14 @@ public class Utils {
 			return safe(()->IOUtils.read(o2));
 		if (o instanceof byte[] o2)
 			return toHex(o2);
-		if (o != null && o.getClass().isArray()) {
+		if (o.getClass().isArray()) {
 			var l = list();
 			for (var i = 0; i < Array.getLength(o); i++) {
 				l.add(Array.get(o, i));
 			}
 			return r(l);
 		}
-		return s(o);
+		return o.toString();
 	}
 
 	/**
@@ -873,6 +1068,21 @@ public class Utils {
 	}
 
 	/**
+	 * Runs a snippet of code and encapsulates any throwable inside a {@link RuntimeException}.
+	 *
+	 * @param snippet The snippet of code to run.
+	 */
+	public static void safe(Snippet snippet) {
+		try {
+			snippet.run();
+		} catch (RuntimeException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw ThrowableUtils.asRuntimeException(t);
+		}
+	}
+
+	/**
 	 * Used to wrap code that returns a value but throws an exception.
 	 * Useful in cases where you're trying to execute code in a fluent method call
 	 * or are trying to eliminate untestable catch blocks in code.
@@ -884,6 +1094,24 @@ public class Utils {
 			throw e;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.
+	 *
+	 * @param <T> The supplier type.
+	 * @param supplier The supplier throwing an exception.
+	 * @return The supplied result.
+	 * @throws RuntimeException if supplier threw an exception.
+	 */
+	public static <T> T safeSupplier(ThrowableUtils.SupplierWithThrowable<T> supplier) {
+		try {
+			return supplier.get();
+		} catch (RuntimeException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw ThrowableUtils.asRuntimeException(t);
 		}
 	}
 
@@ -927,77 +1155,6 @@ public class Utils {
 	 */
 	public static List<String> split(String s, char c) {
 		return split(s, c, Integer.MAX_VALUE);
-	}
-
-	/**
-	 * Same as {@link #splita(String, char)} but limits the number of tokens returned.
-	 *
-	 * @param s The string to split.  Can be <jk>null</jk>.
-	 * @param c The character to split on.
-	 * @param limit The maximum number of tokens to return.
-	 * @return The tokens, or <jk>null</jk> if the string was null.
-	 */
-	public static List<String> split(String s, char c, int limit) {
-
-		var escapeChars = StringUtils.getEscapeSet(c);
-
-		if (s == null)
-			return null;  // NOSONAR - Intentional.
-		if (isEmpty(s))
-			return Collections.emptyList();
-		if (s.indexOf(c) == -1)
-			return Collections.singletonList(s);
-
-		var l = new LinkedList<String>();
-		var sArray = s.toCharArray();
-		var x1 = 0;
-		var escapeCount = 0;
-		limit--;
-		for (var i = 0; i < sArray.length && limit > 0; i++) {
-			if (sArray[i] == '\\')
-				escapeCount++;
-			else if (sArray[i]==c && escapeCount % 2 == 0) {
-				var s2 = new String(sArray, x1, i-x1);
-				var s3 = StringUtils.unEscapeChars(s2, escapeChars);
-				l.add(s3.trim());
-				limit--;
-				x1 = i+1;
-			}
-			if (sArray[i] != '\\')
-				escapeCount = 0;
-		}
-		var s2 = new String(sArray, x1, sArray.length-x1);
-		var s3 = StringUtils.unEscapeChars(s2, escapeChars);
-		l.add(s3.trim());
-
-		return l;
-	}
-
-	/**
-	 * Splits a character-delimited string into a string array.
-	 *
-	 * <p>
-	 * Does not split on escaped-delimiters (e.g. "\,");
-	 * Resulting tokens are trimmed of whitespace.
-	 *
-	 * <p>
-	 * <b>NOTE:</b>  This behavior is different than the Jakarta equivalent.
-	 * split("a,b,c",',') -&gt; {"a","b","c"}
-	 * split("a, b ,c ",',') -&gt; {"a","b","c"}
-	 * split("a,,c",',') -&gt; {"a","","c"}
-	 * split(",,",',') -&gt; {"","",""}
-	 * split("",',') -&gt; {}
-	 * split(null,',') -&gt; null
-	 * split("a,b\,c,d", ',', false) -&gt; {"a","b\,c","d"}
-	 * split("a,b\\,c,d", ',', false) -&gt; {"a","b\","c","d"}
-	 * split("a,b\,c,d", ',', true) -&gt; {"a","b,c","d"}
-	 *
-	 * @param s The string to split.  Can be <jk>null</jk>.
-	 * @param c The character to split on.
-	 * @return The tokens, or <jk>null</jk> if the string was null.
-	 */
-	public static String[] splita(String s, char c) {
-		return splita(s, c, Integer.MAX_VALUE);
 	}
 
 	/**
@@ -1045,9 +1202,40 @@ public class Utils {
 	 * @param limit The maximum number of tokens to return.
 	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
-	public static String[] splita(String s, char c, int limit) {
-		var l = split(s, c, limit);
-		return l == null ? null : l.toArray(new String[l.size()]);
+	public static List<String> split(String s, char c, int limit) {
+
+		var escapeChars = StringUtils.getEscapeSet(c);
+
+		if (s == null)
+			return null;  // NOSONAR - Intentional.
+		if (isEmpty(s))
+			return Collections.emptyList();
+		if (s.indexOf(c) == -1)
+			return Collections.singletonList(s);
+
+		var l = new LinkedList<String>();
+		var sArray = s.toCharArray();
+		var x1 = 0;
+		var escapeCount = 0;
+		limit--;
+		for (var i = 0; i < sArray.length && limit > 0; i++) {
+			if (sArray[i] == '\\')
+				escapeCount++;
+			else if (sArray[i]==c && escapeCount % 2 == 0) {
+				var s2 = new String(sArray, x1, i-x1);
+				var s3 = StringUtils.unEscapeChars(s2, escapeChars);
+				l.add(s3.trim());
+				limit--;
+				x1 = i+1;
+			}
+			if (sArray[i] != '\\')
+				escapeCount = 0;
+		}
+		var s2 = new String(sArray, x1, sArray.length-x1);
+		var s3 = StringUtils.unEscapeChars(s2, escapeChars);
+		l.add(s3.trim());
+
+		return l;
 	}
 
 	/**
@@ -1058,6 +1246,53 @@ public class Utils {
 	 */
 	public static void split(String s, Consumer<String> consumer) {
 		split(s, ',', consumer);
+	}
+
+	/**
+	 * Splits a comma-delimited list into an array of strings.
+	 */
+	public static String[] splita(String s) {
+		return splita(s, ',');
+	}
+
+	/**
+	 * Splits a character-delimited string into a string array.
+	 *
+	 * <p>
+	 * Does not split on escaped-delimiters (e.g. "\,");
+	 * Resulting tokens are trimmed of whitespace.
+	 *
+	 * <p>
+	 * <b>NOTE:</b>  This behavior is different than the Jakarta equivalent.
+	 * split("a,b,c",',') -&gt; {"a","b","c"}
+	 * split("a, b ,c ",',') -&gt; {"a","b","c"}
+	 * split("a,,c",',') -&gt; {"a","","c"}
+	 * split(",,",',') -&gt; {"","",""}
+	 * split("",',') -&gt; {}
+	 * split(null,',') -&gt; null
+	 * split("a,b\,c,d", ',', false) -&gt; {"a","b\,c","d"}
+	 * split("a,b\\,c,d", ',', false) -&gt; {"a","b\","c","d"}
+	 * split("a,b\,c,d", ',', true) -&gt; {"a","b,c","d"}
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static String[] splita(String s, char c) {
+		return splita(s, c, Integer.MAX_VALUE);
+	}
+
+	/**
+	 * Same as {@link #splita(String, char)} but limits the number of tokens returned.
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @param limit The maximum number of tokens to return.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static String[] splita(String s, char c, int limit) {
+		var l = split(s, c, limit);
+		return l == null ? null : l.toArray(new String[l.size()]);
 	}
 
 	/**
@@ -1078,13 +1313,6 @@ public class Utils {
 				Collections.addAll(l, splita(ss, c));
 		}
 		return l.toArray(new String[l.size()]);
-	}
-
-	/**
-	 * Splits a comma-delimited list into an array of strings.
-	 */
-	public static String[] splita(String s) {
-		return splita(s, ',');
 	}
 
 	/**
@@ -1414,6 +1642,19 @@ public class Utils {
 		return l.toArray(new String[l.size()]);
 	}
 
+	public static final <T> List<T> toList(Enumeration<T> value) {
+		return Collections.list(value);
+	}
+
+	public static final <T> List<T> toList(Iterable<T> value) {
+		return StreamSupport.stream(value.spliterator(), false).toList();
+	}
+
+	public static final <T> List<T> toList(Iterator<T> value) {
+		Iterable<T> v2 = () -> value;
+		return StreamSupport.stream(v2.spliterator(), false).toList();
+	}
+
 	/**
 	 * Converts an array to a stream of objects.
 	 * @param array The array to convert.
@@ -1474,49 +1715,6 @@ public class Utils {
 		return value == null ? null : Collections.unmodifiableSet(value);
 	}
 
-	/**
-	 * Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.
-	 *
-	 * @param <T> The supplier type.
-	 * @param supplier The supplier throwing an exception.
-	 * @return The supplied result.
-	 * @throws RuntimeException if supplier threw an exception.
-	 */
-	public static <T> T safeSupplier(ThrowableUtils.SupplierWithThrowable<T> supplier) {
-		try {
-			return supplier.get();
-		} catch (RuntimeException t) {
-			throw t;
-		} catch (Throwable t) {
-			throw ThrowableUtils.asRuntimeException(t);
-		}
-	}
-
-	/**
-	 * Runs a snippet of code and encapsulates any throwable inside a {@link RuntimeException}.
-	 *
-	 * @param snippet The snippet of code to run.
-	 */
-	public static void safe(Snippet snippet) {
-		try {
-			snippet.run();
-		} catch (RuntimeException t) {
-			throw t;
-		} catch (Throwable t) {
-			throw ThrowableUtils.asRuntimeException(t);
-		}
-	}
-
-	public static final <T> List<T> toList(Iterable<T> value) {
-		return StreamSupport.stream(value.spliterator(), false).toList();
-	}
-
-	public static final <T> List<T> toList(Iterator<T> value) {
-		Iterable<T> v2 = () -> value;
-		return StreamSupport.stream(v2.spliterator(), false).toList();
-	}
-
-	public static final <T> List<T> toList(Enumeration<T> value) {
-		return Collections.list(value);
-	}
+	/** Constructor - This class is meant to be subclasses. */
+	protected Utils() {}
 }

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
 import java.io.*;
 import java.nio.file.*;
@@ -158,7 +157,7 @@ public interface FileFinder {
 		 */
 		@FluentSetter
 		public Builder cp(Class<?> c, String path, boolean recursive) {
-			assertArgNotNull("c", c);
+			Utils.assertArgNotNull("c", c);
 			while (c != null) {
 				roots.add(new LocalDir(c, path));
 				c = recursive ? c.getSuperclass() : null;
@@ -174,7 +173,7 @@ public interface FileFinder {
 		 */
 		@FluentSetter
 		public Builder dir(String path) {
-			assertArgNotNull("path", path);
+			Utils.assertArgNotNull("path", path);
 			return path(Paths.get(".").resolve(path));
 		}
 

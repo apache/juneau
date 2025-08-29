@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static java.util.Arrays.*;
@@ -287,7 +286,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isHas(E...entries) throws AssertionError {
-		assertArgNotNull("entries", entries);
+		Utils.assertArgNotNull("entries", entries);
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
  		return is(p);
 	}
@@ -318,7 +317,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isAny(Predicate<E> test) throws AssertionError {
-		assertArgNotNull("test", test);
+		Utils.assertArgNotNull("test", test);
 		for (var v : value())
 			if (test.test(v))
 				return returns();
@@ -333,7 +332,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isAll(Predicate<E> test) throws AssertionError {
-		assertArgNotNull("test", test);
+		Utils.assertArgNotNull("test", test);
 		for (int i = 0, j = length(); i < j; i++)
 			if (! test.test(at(i)))
 				throw error(MSG_arrayContainedNonMatchingValueAt, i, getFailureMessage(test, at(i)));

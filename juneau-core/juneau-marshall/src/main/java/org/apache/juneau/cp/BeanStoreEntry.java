@@ -13,7 +13,6 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.util.function.*;
@@ -70,8 +69,8 @@ public class BeanStoreEntry<T> {
 	 * @param name Optional name to associate with the bean.  Can be <jk>null</jk>.
 	 */
 	protected BeanStoreEntry(Class<T> type, Supplier<T> bean, String name) {
-		this.bean = assertArgNotNull("bean", bean);
-		this.type = assertArgNotNull("type", type);
+		this.bean = Utils.assertArgNotNull("bean", bean);
+		this.type = Utils.assertArgNotNull("type", type);
 		this.name = Utils.nullIfEmpty3(name);
 	}
 

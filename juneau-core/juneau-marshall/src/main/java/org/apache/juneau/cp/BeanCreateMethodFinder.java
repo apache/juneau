@@ -12,13 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
-
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -88,16 +87,16 @@ public class BeanCreateMethodFinder<T> {
 	private Supplier<T> def = ()->null;
 
 	BeanCreateMethodFinder(Class<T> beanType, Object resource, BeanStore beanStore) {
-		this.beanType = assertArgNotNull("beanType", beanType);
-		this.resource = assertArgNotNull("resource", resource);
+		this.beanType = Utils.assertArgNotNull("beanType", beanType);
+		this.resource = Utils.assertArgNotNull("resource", resource);
 		this.resourceClass = resource.getClass();
 		this.beanStore = BeanStore.of(beanStore, resource);
 	}
 
 	BeanCreateMethodFinder(Class<T> beanType, Class<?> resourceClass, BeanStore beanStore) {
-		this.beanType = assertArgNotNull("beanType", beanType);
+		this.beanType = Utils.assertArgNotNull("beanType", beanType);
 		this.resource = null;
-		this.resourceClass = assertArgNotNull("resourceClass", resourceClass);
+		this.resourceClass = Utils.assertArgNotNull("resourceClass", resourceClass);
 		this.beanStore = BeanStore.of(beanStore);
 	}
 
@@ -201,7 +200,7 @@ public class BeanCreateMethodFinder<T> {
 	 * @return This object.
 	 */
 	public BeanCreateMethodFinder<T> withDefault(Supplier<T> def) {
-		assertArgNotNull("def", def);
+		Utils.assertArgNotNull("def", def);
 		this.def = def;
 		return this;
 	}

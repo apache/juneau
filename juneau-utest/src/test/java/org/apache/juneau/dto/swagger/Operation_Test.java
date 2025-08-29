@@ -53,7 +53,7 @@ class Operation_Test extends SimpleTestBase {
 		assertNull(t.setProduces((Collection<MediaType>)null).getProduces());
 		assertList(t.setParameters(set()).getParameters());
 		assertNull(t.setParameters((Collection<ParameterInfo>)null).getParameters());
-		assertMap(t.setResponses(map()).getResponses());
+		assertEmpty(t.setResponses(map()).getResponses());
 		assertNull(t.setResponses((Map<String,ResponseInfo>)null).getResponses());
 		assertSet(t.setSchemes(set()).getSchemes());
 		assertNull(t.setSchemes((Set<String>)null).getSchemes());

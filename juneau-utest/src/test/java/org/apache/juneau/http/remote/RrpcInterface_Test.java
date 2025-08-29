@@ -1071,7 +1071,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@MethodSource("input")
 	void b05_returnBeanMap(Input input) {
 		var x = input.proxy.returnBeanMap();
-		assertMap(x, ">foo={a:1,b:'foo'}");
+		assertMap(x, "foo", "{a:1,b:'foo'}");
 		assertType(ABean.class, x.get("foo"));
 	}
 

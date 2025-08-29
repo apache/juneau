@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl.vars;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import java.util.regex.*;
 
 import org.apache.juneau.common.internal.*;
@@ -63,14 +62,14 @@ public class SwitchVar extends MultipartVar {
 
 	@Override /* MultipartVar */
 	public String resolve(VarResolverSession session, String[] args) {
-		assertArg(args.length >= 2, "Invalid number of arguments passed to $SW var.  Must have 2 or more arguments.");
+		Utils.assertArg(args.length >= 2, "Invalid number of arguments passed to $SW var.  Must have 2 or more arguments.");
 
 		String stringArg = args[0];
 		for (int i = 1; i < args.length; i++) {
 			String pattern = args[i];
 
 			String[] parts = Utils.splita(pattern, ':', 2);
-			assertArg(parts.length >= 2, "Invalid arguments passed to $SW var.  Each case statement must contains 'pattern:value'.");
+			Utils.assertArg(parts.length >= 2, "Invalid arguments passed to $SW var.  Each case statement must contains 'pattern:value'.");
 
 			Pattern p = Pattern.compile(parts[0].replace("*", ".*").replace("?", "."));
 			if (p.matcher(stringArg).matches())

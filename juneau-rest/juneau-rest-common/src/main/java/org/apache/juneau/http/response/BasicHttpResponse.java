@@ -13,7 +13,6 @@
 package org.apache.juneau.http.response;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.http.HttpEntities.*;
 
 import java.net.*;
@@ -23,6 +22,7 @@ import org.apache.http.*;
 import org.apache.http.impl.*;
 import org.apache.http.params.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
@@ -356,7 +356,7 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @throws AssertionError If status code is not what was expected.
 	 */
 	protected void assertStatusCode(HttpResponse response) throws AssertionError {
-		assertArgNotNull("response", response);
+		Utils.assertArgNotNull("response", response);
 		int expected = getStatusLine().getStatusCode();
 		int actual = response.getStatusLine().getStatusCode();
 		assertInteger(actual).setMsg("Unexpected status code.  Expected:[{0}], Actual:[{1}]", expected, actual).is(expected);

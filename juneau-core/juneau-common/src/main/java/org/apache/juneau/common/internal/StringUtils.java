@@ -14,7 +14,6 @@ package org.apache.juneau.common.internal;
 
 import static java.lang.Character.*;
 import static java.nio.charset.StandardCharsets.*;
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
@@ -152,7 +151,7 @@ public final class StringUtils {
 
 		var bIn = in.getBytes(IOUtils.UTF8);
 
-		assertArg(bIn.length % 4 == 0, "Invalid BASE64 string length.  Must be multiple of 4.");
+		Utils.assertArg(bIn.length % 4 == 0, "Invalid BASE64 string length.  Must be multiple of 4.");
 
 		// Strip out any trailing '=' filler characters.
 		var inLength = bIn.length;
@@ -1226,7 +1225,7 @@ public final class StringUtils {
 	 * @return The parsed value.
 	 */
 	public static int parseIntWithSuffix(String s) {
-		assertArgNotNull("s", s);
+		Utils.assertArgNotNull("s", s);
 		var m = multiplier(s);
 		if (m == 1)
 			return Integer.decode(s);
@@ -1302,7 +1301,7 @@ public final class StringUtils {
 	 * @return The parsed value.
 	 */
 	public static long parseLongWithSuffix(String s) {
-		assertArgNotNull("s", s);
+		Utils.assertArgNotNull("s", s);
 		var m = multiplier2(s);
 		if (m == 1)
 			return Long.decode(s);

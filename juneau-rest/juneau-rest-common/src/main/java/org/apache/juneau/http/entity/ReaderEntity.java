@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.entity;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 
 import java.io.*;
@@ -20,6 +19,7 @@ import java.nio.charset.*;
 import java.util.Objects;
 import java.util.function.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
@@ -124,7 +124,7 @@ public class ReaderEntity extends BasicHttpEntity {
 	 */
 	@Override
 	public void writeTo(OutputStream out) throws IOException {
-		assertArgNotNull("out", out);
+		Utils.assertArgNotNull("out", out);
 
 		if (isCached()) {
 			out.write(asBytes());

@@ -13,7 +13,6 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicate.*;
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import java.text.*;
 import java.util.*;
 import java.util.function.*;
@@ -203,7 +202,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> type(Class<?> type) {
-		assertArgNotNull("type", type);
+		Utils.assertArgNotNull("type", type);
 		return test(x -> x != null && type.isAssignableFrom(x.getClass()), MSG_valueWasNotExpectedType, type, TYPENAME);
 	}
 
@@ -218,7 +217,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> exactType(Class<?> type) {
-		assertArgNotNull("type", type);
+		Utils.assertArgNotNull("type", type);
 		return test(x -> x != null && x.getClass().equals(type), MSG_valueWasNotExpectedType, type, TYPENAME);
 	}
 
@@ -236,7 +235,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> match(String value) {
-		assertArgNotNull("value", value);
+		Utils.assertArgNotNull("value", value);
 		var p = Utils.getMatchPattern3(value);
 		return test(x -> x != null && p.matcher(Utils.s(x)).matches(), MSG_valueDidNotMatchPattern, value, VALUE);
 	}
@@ -252,7 +251,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> regex(String expression) {
-		assertArgNotNull("expression", expression);
+		Utils.assertArgNotNull("expression", expression);
 		var p = Pattern.compile(expression);
 		return test(x -> x != null && p.matcher(Utils.s(x)).matches(), MSG_valueDidNotMatchPattern, expression, VALUE);
 	}
@@ -279,7 +278,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> regex(String expression, int flags) {
-		assertArgNotNull("expression", expression);
+		Utils.assertArgNotNull("expression", expression);
 		var p = Pattern.compile(expression, flags);
 		return test(x -> x != null && p.matcher(Utils.s(x)).matches(), MSG_valueDidNotMatchPattern, expression, VALUE);
 	}
@@ -295,7 +294,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> regex(Pattern value) {
-		assertArgNotNull("value", value);
+		Utils.assertArgNotNull("value", value);
 		return test(x -> x != null && value.matcher(Utils.s(x)).matches(), MSG_valueDidNotMatchPattern, value.pattern(), VALUE);
 	}
 

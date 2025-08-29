@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.entity;
 
-import static org.apache.juneau.common.internal.ArgUtils.*;
 import static org.apache.juneau.common.internal.IOUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
@@ -125,7 +125,7 @@ public class StringEntity extends BasicHttpEntity {
 
 	@Override /* HttpEntity */
 	public void writeTo(OutputStream out) throws IOException {
-		assertArgNotNull("out", out);
+		Utils.assertArgNotNull("out", out);
 		if (isCached()) {
 			out.write(asBytes());
 		} else {
