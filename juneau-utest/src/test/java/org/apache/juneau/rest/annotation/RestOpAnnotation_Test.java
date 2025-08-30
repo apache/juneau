@@ -161,7 +161,7 @@ class RestOpAnnotation_Test extends SimpleTestBase {
 	@Test void c01_otherMethods() throws Exception {
 		var c4 = RestOpAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
-		assertJsonContains(c4, "on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
+		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

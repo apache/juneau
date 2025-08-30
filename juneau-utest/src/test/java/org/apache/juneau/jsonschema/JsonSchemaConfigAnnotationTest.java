@@ -34,15 +34,15 @@ class JsonSchemaConfigAnnotationTest extends SimpleTestBase {
 	}
 
 	private static final Function<Object,String> TO_STRING = t -> {
-    	if (t instanceof Collection)
-    		return ((Collection<?>)t)
-    			.stream()
-    			.map(JsonSchemaConfigAnnotationTest.TO_STRING)
-    			.collect(Collectors.joining(","));
-    	if (t instanceof BeanDefMapper)
-    		return t.getClass().getSimpleName();
-    	return t.toString();
-    };
+		if (t instanceof Collection)
+			return ((Collection<?>)t)
+				.stream()
+				.map(JsonSchemaConfigAnnotationTest.TO_STRING)
+				.collect(Collectors.joining(","));
+		if (t instanceof BeanDefMapper)
+			return t.getClass().getSimpleName();
+		return t.toString();
+	};
 
 	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 

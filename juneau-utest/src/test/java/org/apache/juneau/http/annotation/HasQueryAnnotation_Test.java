@@ -27,13 +27,13 @@ class HasQueryAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	HasQuery a1 = HasQueryAnnotation.create()
-        .description("description")
+		.description("description")
 		.name("name")
 		.value("value")
 		.build();
 
 	HasQuery a2 = HasQueryAnnotation.create()
-        .description("description")
+		.description("description")
 		.name("name")
 		.value("value")
 		.build();
@@ -41,7 +41,7 @@ class HasQueryAnnotation_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "name:'name',"
 				+ "value:'value'"
 			+ "}"

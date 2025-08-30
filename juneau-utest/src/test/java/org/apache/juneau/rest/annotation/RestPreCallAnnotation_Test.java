@@ -27,19 +27,19 @@ class RestPreCallAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestPreCall a1 = RestPreCallAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.build();
 
 	RestPreCall a2 = RestPreCallAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.build();
 
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "on:['a']"
 			+ "}"
 		);
@@ -77,7 +77,7 @@ class RestPreCallAnnotation_Test extends SimpleTestBase {
 	@Test void c01_otherMethods() throws Exception {
 		var c4 = RestPreCallAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
-		assertJsonContains(c4, "on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
+		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -85,14 +85,14 @@ class RestPreCallAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@RestPreCall(
-        description={ "description" },
+		description={ "description" },
 		on="a"
 	)
 	public static class D1 {}
 	RestPreCall d1 = D1.class.getAnnotationsByType(RestPreCall.class)[0];
 
 	@RestPreCall(
-        description={ "description" },
+		description={ "description" },
 		on="a"
 	)
 	public static class D2 {}

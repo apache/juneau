@@ -31,7 +31,7 @@ class ItemsAnnotation_Test extends SimpleTestBase {
 		._enum("enum")
 		.cf("cf")
 		.collectionFormat("collectionFormat")
-        .description("description")
+		.description("description")
 		.df("df")
 		.e("e")
 		.emax(true)
@@ -68,7 +68,7 @@ class ItemsAnnotation_Test extends SimpleTestBase {
 		._enum("enum")
 		.cf("cf")
 		.collectionFormat("collectionFormat")
-        .description("description")
+		.description("description")
 		.df("df")
 		.e("e")
 		.emax(true)
@@ -107,7 +107,7 @@ class ItemsAnnotation_Test extends SimpleTestBase {
 				+ "_enum:['enum'],"
 				+ "cf:'cf',"
 				+ "collectionFormat:'collectionFormat',"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "df:['df'],"
 				+ "e:['e'],"
 				+ "emax:true,"
@@ -171,7 +171,7 @@ class ItemsAnnotation_Test extends SimpleTestBase {
 		_enum="enum",
 		cf="cf",
 		collectionFormat="collectionFormat",
-        description={ "description" },
+		description={ "description" },
 		df="df",
 		e="e",
 		emax=true,
@@ -210,7 +210,7 @@ class ItemsAnnotation_Test extends SimpleTestBase {
 		_enum="enum",
 		cf="cf",
 		collectionFormat="collectionFormat",
-        description={ "description" },
+		description={ "description" },
 		df="df",
 		e="e",
 		emax=true,

@@ -25,14 +25,14 @@ class ContactAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Contact a1 = ContactAnnotation.create()
-        .description("description")
+		.description("description")
 		.email("email")
 		.name("name")
 		.url("url")
 		.build();
 
 	Contact a2 = ContactAnnotation.create()
-        .description("description")
+		.description("description")
 		.email("email")
 		.name("name")
 		.url("url")
@@ -41,7 +41,7 @@ class ContactAnnotation_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "email:'email',"
 				+ "name:'name',"
 				+ "url:'url'"
@@ -70,7 +70,7 @@ class ContactAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Contact(
-        description={ "description" },
+		description={ "description" },
 		email="email",
 		name="name",
 		url="url"
@@ -79,7 +79,7 @@ class ContactAnnotation_Test extends SimpleTestBase {
 	Contact d1 = D1.class.getAnnotationsByType(Contact.class)[0];
 
 	@Contact(
-        description={ "description" },
+		description={ "description" },
 		email="email",
 		name="name",
 		url="url"

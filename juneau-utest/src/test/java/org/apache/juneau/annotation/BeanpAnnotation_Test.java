@@ -29,7 +29,7 @@ class BeanpAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Beanp a1 = BeanpAnnotation.create()
-        .description("description")
+		.description("description")
 		.dictionary(X1.class)
 		.format("format")
 		.name("name")
@@ -43,7 +43,7 @@ class BeanpAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	Beanp a2 = BeanpAnnotation.create()
-        .description("description")
+		.description("description")
 		.dictionary(X1.class)
 		.format("format")
 		.name("name")
@@ -59,7 +59,7 @@ class BeanpAnnotation_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "dictionary:['"+CNAME+"$X1'],"
 				+ "format:'format',"
 				+ "name:'name',"
@@ -108,9 +108,9 @@ class BeanpAnnotation_Test extends SimpleTestBase {
 		var c2 = BeanpAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
 		var c3 = BeanpAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
-		assertJsonContains(c1, "on:['a','b']");
-		assertJsonContains(c2, "on:['"+CNAME+"$C1.f1','"+CNAME+"$C2.f2']");
-		assertJsonContains(c3, "on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
+		assertBean(c1, "on", "[a,b]");
+		assertBean(c2, "on", "["+CNAME+"$C1.f1,"+CNAME+"$C2.f2]");
+		assertBean(c3, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -118,7 +118,7 @@ class BeanpAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Beanp(
-        description={ "description" },
+		description={ "description" },
 		dictionary=X1.class,
 		format="format",
 		name="name",
@@ -134,7 +134,7 @@ class BeanpAnnotation_Test extends SimpleTestBase {
 	Beanp d1 = D1.class.getAnnotationsByType(Beanp.class)[0];
 
 	@Beanp(
-        description={ "description" },
+		description={ "description" },
 		dictionary=X1.class,
 		format="format",
 		name="name",

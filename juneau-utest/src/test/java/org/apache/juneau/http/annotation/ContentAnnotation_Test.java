@@ -78,9 +78,9 @@ class ContentAnnotation_Test extends SimpleTestBase {
 		var c2 = ContentAnnotation.create("a").on("b").build();
 		var c4 = ContentAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
-		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertJsonContains(c2, "on:['a','b']");
-		assertJsonContains(c4, "on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
+		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
+		assertBean(c2, "on", "[a,b]");
+		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

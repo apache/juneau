@@ -25,11 +25,11 @@ public class CloseableStringReader extends StringReader {
 	}
 
 	private void checkOpen() {
-        if (isClosed)
+		if (isClosed)
 			throw new IllegalStateException("Reader is closed");
-    }
+	}
 
-    @Override
+	@Override
 	public void close() {
 		isClosed = true;
 	}

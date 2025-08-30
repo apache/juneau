@@ -29,14 +29,14 @@ class ResponseStatusAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	StatusCode a1 = StatusCodeAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("on")
 		.onClass(X1.class)
 		.value(1)
 		.build();
 
 	StatusCode a2 = StatusCodeAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("on")
 		.onClass(X1.class)
 		.value(1)
@@ -45,7 +45,7 @@ class ResponseStatusAnnotation_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
 				+ "value:[1]"
@@ -87,9 +87,9 @@ class ResponseStatusAnnotation_Test extends SimpleTestBase {
 		var c2 = StatusCodeAnnotation.create("a").on("b").build();
 		var c4 = StatusCodeAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
-		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertJsonContains(c2, "on:['a','b']");
-		assertJsonContains(c4, "on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
+		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
+		assertBean(c2, "on", "[a,b]");
+		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ class ResponseStatusAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@StatusCode(
-        description={ "description" },
+		description={ "description" },
 		on="on",
 		onClass=X1.class,
 		value=1
@@ -106,7 +106,7 @@ class ResponseStatusAnnotation_Test extends SimpleTestBase {
 	StatusCode d1 = D1.class.getAnnotationsByType(StatusCode.class)[0];
 
 	@StatusCode(
-        description={ "description" },
+		description={ "description" },
 		on="on",
 		onClass=X1.class,
 		value=1

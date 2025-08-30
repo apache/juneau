@@ -25,13 +25,13 @@ class LicenseAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	License a1 = LicenseAnnotation.create()
-        .description("description")
+		.description("description")
 		.name("name")
 		.url("url")
 		.build();
 
 	License a2 = LicenseAnnotation.create()
-	    .description("description")
+		.description("description")
 		.name("name")
 		.url("url")
 		.build();
@@ -39,7 +39,7 @@ class LicenseAnnotation_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "name:'name',"
 				+ "url:'url'"
 			+ "}"
@@ -79,7 +79,7 @@ class LicenseAnnotation_Test extends SimpleTestBase {
 	License d1 = D1.class.getAnnotationsByType(License.class)[0];
 
 	@License(
-        description={ "description" },
+		description={ "description" },
 		name="name",
 		url="url"
 	)

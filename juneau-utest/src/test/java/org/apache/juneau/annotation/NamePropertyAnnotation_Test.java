@@ -27,19 +27,19 @@ class NamePropertyAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	NameProperty a1 = NamePropertyAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("on")
 		.build();
 
 	NameProperty a2 = NamePropertyAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("on")
 		.build();
 
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "on:['on']"
 			+ "}"
 		);
@@ -79,9 +79,9 @@ class NamePropertyAnnotation_Test extends SimpleTestBase {
 		var c2 = NamePropertyAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
 		var c3 = NamePropertyAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
-		assertJsonContains(c1, "on:['a','b']");
-		assertJsonContains(c2, "on:['"+CNAME+"$C1.f1','"+CNAME+"$C2.f2']");
-		assertJsonContains(c3, "on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
+		assertBean(c1, "on", "[a,b]");
+		assertBean(c2, "on", "["+CNAME+"$C1.f1,"+CNAME+"$C2.f2]");
+		assertBean(c3, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -89,14 +89,14 @@ class NamePropertyAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@NameProperty(
-        description={ "description" },
+		description={ "description" },
 		on="on"
 	)
 	public static class D1 {}
 	NameProperty d1 = D1.class.getAnnotationsByType(NameProperty.class)[0];
 
 	@NameProperty(
-        description={ "description" },
+		description={ "description" },
 		on="on"
 	)
 	public static class D2 {}

@@ -29,7 +29,7 @@ class MarshalledAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Marshalled a1 = MarshalledAnnotation.create()
-        .description("description")
+		.description("description")
 		.example("example")
 		.implClass(X1.class)
 		.on("on")
@@ -37,7 +37,7 @@ class MarshalledAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	Marshalled a2 = MarshalledAnnotation.create()
-        .description("description")
+		.description("description")
 		.example("example")
 		.implClass(X1.class)
 		.on("on")
@@ -47,7 +47,7 @@ class MarshalledAnnotation_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "example:'example',"
 				+ "implClass:'"+CNAME+"$X1',"
 				+ "on:['on'],"
@@ -89,8 +89,8 @@ class MarshalledAnnotation_Test extends SimpleTestBase {
 		var c1 = MarshalledAnnotation.create(C1.class).on(C2.class).build();
 		var c2 = MarshalledAnnotation.create("a").on("b").build();
 
-		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertJsonContains(c2, "on:['a','b']");
+		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
+		assertBean(c2, "on", "[a,b]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ class MarshalledAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Marshalled(
-        description={ "description" },
+		description={ "description" },
 		example="example",
 		implClass=X1.class,
 		on="on",
@@ -108,7 +108,7 @@ class MarshalledAnnotation_Test extends SimpleTestBase {
 	Marshalled d1 = D1.class.getAnnotationsByType(Marshalled.class)[0];
 
 	@Marshalled(
-        description={ "description" },
+		description={ "description" },
 		example="example",
 		implClass=X1.class,
 		on="on",

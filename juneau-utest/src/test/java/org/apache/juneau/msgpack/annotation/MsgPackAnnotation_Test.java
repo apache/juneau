@@ -81,10 +81,10 @@ class MsgPackAnnotation_Test extends SimpleTestBase {
 		var c3 = MsgPackAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
 		var c4 = MsgPackAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
-		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertJsonContains(c2, "on:['a','b']");
-		assertJsonContains(c3, "on:['"+CNAME+"$C1.f1','"+CNAME+"$C2.f2']");
-		assertJsonContains(c4, "on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
+		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
+		assertBean(c2, "on", "[a,b]");
+		assertBean(c3, "on", "["+CNAME+"$C1.f1,"+CNAME+"$C2.f2]");
+		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -92,14 +92,14 @@ class MsgPackAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@MsgPack(
-        description="description",
+		description="description",
 		on="a"
 	)
 	public static class D1 {}
 	MsgPack d1 = D1.class.getAnnotationsByType(MsgPack.class)[0];
 
 	@MsgPack(
-        description="description",
+		description="description",
 		on="a"
 	)
 	public static class D2 {}

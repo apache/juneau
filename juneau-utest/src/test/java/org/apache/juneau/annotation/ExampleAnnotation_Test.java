@@ -29,14 +29,14 @@ class ExampleAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Example a1 = ExampleAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("on")
 		.onClass(X1.class)
 		.value("value")
 		.build();
 
 	Example a2 = ExampleAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("on")
 		.onClass(X1.class)
 		.value("value")
@@ -45,7 +45,7 @@ class ExampleAnnotation_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
 				+ "value:'value'"
@@ -88,10 +88,10 @@ class ExampleAnnotation_Test extends SimpleTestBase {
 		var c3 = ExampleAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
 		var c4 = ExampleAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
-		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertJsonContains(c2, "on:['a','b']");
-		assertJsonContains(c3, "on:['"+CNAME+"$C1.f1','"+CNAME+"$C2.f2']");
-		assertJsonContains(c4, "on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
+		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
+		assertBean(c2, "on", "[a,b]");
+		assertBean(c3, "on", "["+CNAME+"$C1.f1,"+CNAME+"$C2.f2]");
+		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ class ExampleAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Example(
-        description={ "description" },
+		description={ "description" },
 		on="on",
 		onClass=X1.class,
 		value="value"
@@ -108,7 +108,7 @@ class ExampleAnnotation_Test extends SimpleTestBase {
 	Example d1 = D1.class.getAnnotationsByType(Example.class)[0];
 
 	@Example(
-        description={ "description" },
+		description={ "description" },
 		on="on",
 		onClass=X1.class,
 		value="value"
@@ -122,4 +122,3 @@ class ExampleAnnotation_Test extends SimpleTestBase {
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
 	}
 }
-

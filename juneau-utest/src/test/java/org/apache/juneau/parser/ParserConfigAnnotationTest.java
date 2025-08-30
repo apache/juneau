@@ -35,12 +35,12 @@ class ParserConfigAnnotationTest extends SimpleTestBase {
 	}
 
 	private static final Function<Object,String> TO_STRING = t -> {
-    	if (t == null)
-    		return null;
-    	if (t instanceof AA)
-    		return "AA";
-    	return t.toString();
-    };
+		if (t == null)
+			return null;
+		if (t instanceof AA)
+			return "AA";
+		return t.toString();
+	};
 
 	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 

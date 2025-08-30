@@ -29,13 +29,13 @@ class BeanIgnoreAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	BeanIgnore a1 = BeanIgnoreAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.onClass(X1.class)
 		.build();
 
 	BeanIgnore a2 = BeanIgnoreAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("a")
 		.onClass(X1.class)
 		.build();
@@ -43,7 +43,7 @@ class BeanIgnoreAnnotation_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "on:['a'],"
 				+ "onClass:['"+CNAME+"$X1']"
 			+ "}"
@@ -87,11 +87,11 @@ class BeanIgnoreAnnotation_Test extends SimpleTestBase {
 		var c4 = BeanIgnoreAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 		var c5 = BeanIgnoreAnnotation.create().on(C1.class.getConstructor()).on(C2.class.getConstructor()).build();
 
-		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertJsonContains(c2, "on:['a','b']");
-		assertJsonContains(c3, "on:['"+CNAME+"$C1.f1','"+CNAME+"$C2.f2']");
-		assertJsonContains(c4, "on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
-		assertJsonContains(c5, "on:['"+CNAME+"$C1()','"+CNAME+"$C2()']");
+		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
+		assertBean(c2, "on", "[a,b]");
+		assertBean(c3, "on", "["+CNAME+"$C1.f1,"+CNAME+"$C2.f2]");
+		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
+		assertBean(c5, "on", "["+CNAME+"$C1(),"+CNAME+"$C2()]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ class BeanIgnoreAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@BeanIgnore(
-        description={ "description" },
+		description={ "description" },
 		on="a",
 		onClass=X1.class
 	)
@@ -107,7 +107,7 @@ class BeanIgnoreAnnotation_Test extends SimpleTestBase {
 	BeanIgnore d1 = D1.class.getAnnotationsByType(BeanIgnore.class)[0];
 
 	@BeanIgnore(
-        description={ "description" },
+		description={ "description" },
 		on="a",
 		onClass=X1.class
 	)
@@ -120,4 +120,3 @@ class BeanIgnoreAnnotation_Test extends SimpleTestBase {
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
 	}
 }
-

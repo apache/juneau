@@ -30,7 +30,7 @@ class RequestAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Request a1 = RequestAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("on")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
@@ -38,7 +38,7 @@ class RequestAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	Request a2 = RequestAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("on")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
@@ -48,7 +48,7 @@ class RequestAnnotation_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
 				+ "parser:'org.apache.juneau.oapi.OpenApiParser',"
@@ -90,8 +90,8 @@ class RequestAnnotation_Test extends SimpleTestBase {
 		var c1 = RequestAnnotation.create(C1.class).on(C2.class).build();
 		var c2 = RequestAnnotation.create("a").on("b").build();
 
-		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertJsonContains(c2, "on:['a','b']");
+		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
+		assertBean(c2, "on", "[a,b]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ class RequestAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Request(
-        description={ "description" },
+		description={ "description" },
 		on="on",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
@@ -109,7 +109,7 @@ class RequestAnnotation_Test extends SimpleTestBase {
 	Request d1 = D1.class.getAnnotationsByType(Request.class)[0];
 
 	@Request(
-        description={ "description" },
+		description={ "description" },
 		on="on",
 		onClass=X1.class,
 		parser=OpenApiParser.class,

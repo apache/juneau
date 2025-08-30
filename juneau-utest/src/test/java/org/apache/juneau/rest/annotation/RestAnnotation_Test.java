@@ -233,8 +233,8 @@ class RestAnnotation_Test extends SimpleTestBase {
 		var c1 = RestAnnotation.create(C1.class).on(C2.class).build();
 		var c2 = RestAnnotation.create("a").on("b").build();
 
-		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertJsonContains(c2, "on:['a','b']");
+		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
+		assertBean(c2, "on", "[a,b]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

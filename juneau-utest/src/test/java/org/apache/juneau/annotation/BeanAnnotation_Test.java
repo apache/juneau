@@ -56,7 +56,7 @@ class BeanAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	Bean a2 = BeanAnnotation.create()
-        .description("description")
+		.description("description")
 		.dictionary(X1.class)
 		.example("example")
 		.excludeProperties("excludeProperties")
@@ -83,7 +83,7 @@ class BeanAnnotation_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "dictionary:['"+CNAME+"$X1'],"
 				+ "example:'example',"
 				+ "excludeProperties:'excludeProperties',"
@@ -137,8 +137,8 @@ class BeanAnnotation_Test extends SimpleTestBase {
 		var c1 = BeanAnnotation.create(C1.class).on(C2.class).build();
 		var c2 = BeanAnnotation.create("a").on("b").build();
 
-		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertJsonContains(c2, "on:['a','b']");
+		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
+		assertBean(c2, "on", "[a,b]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -146,7 +146,7 @@ class BeanAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Bean(
-        description={ "description" },
+		description={ "description" },
 		dictionary=X1.class,
 		example="example",
 		excludeProperties="excludeProperties",
@@ -173,7 +173,7 @@ class BeanAnnotation_Test extends SimpleTestBase {
 	Bean d1 = D1.class.getAnnotationsByType(Bean.class)[0];
 
 	@Bean(
-        description={ "description" },
+		description={ "description" },
 		dictionary=X1.class,
 		example="example",
 		excludeProperties="excludeProperties",
@@ -205,4 +205,3 @@ class BeanAnnotation_Test extends SimpleTestBase {
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
 	}
 }
-

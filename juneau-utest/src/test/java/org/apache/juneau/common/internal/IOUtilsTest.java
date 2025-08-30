@@ -27,9 +27,9 @@ import org.junit.jupiter.api.*;
  */
 class IOUtilsTest extends SimpleTestBase {
 
-    @Test void a01_readPath() throws IOException {
-        var p = new Properties();
-        p.load(new StringReader(IOUtils.read(Paths.get("src/test/resources/files/Test3.properties"))));
-        assertEquals("files/Test3.properties", p.get("file"));
-    }
+	@Test void a01_readPath() throws IOException {
+		var p = new Properties();
+		p.load(new StringReader(IOUtils.read(Paths.get("src/test/resources/files/Test3.properties"))));
+		assertEquals("files/Test3.properties", p.get("file"));
+	}
 }

@@ -27,13 +27,13 @@ class BeancAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Beanc a1 = BeancAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("on")
 		.properties("properties")
 		.build();
 
 	Beanc a2 = BeancAnnotation.create()
-        .description("description")
+		.description("description")
 		.on("on")
 		.properties("properties")
 		.build();
@@ -41,7 +41,7 @@ class BeancAnnotation_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "on:['on'],"
 				+ "properties:'properties'"
 			+ "}"
@@ -75,8 +75,8 @@ class BeancAnnotation_Test extends SimpleTestBase {
 		var c1 = BeancAnnotation.create("a").on("b").build();
 		var c2 = BeancAnnotation.create().on(C1.class.getConstructor()).on(C2.class.getConstructor()).build();
 
-		assertJsonContains(c1, "on:['a','b']");
-		assertJsonContains(c2, "on:['"+CNAME+"$C1()','"+CNAME+"$C2()']");
+		assertBean(c1, "on", "[a,b]");
+		assertBean(c2, "on", "["+CNAME+"$C1(),"+CNAME+"$C2()]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ class BeancAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Beanc(
-        description={ "description" },
+		description={ "description" },
 		on="on",
 		properties="properties"
 	)
@@ -92,7 +92,7 @@ class BeancAnnotation_Test extends SimpleTestBase {
 	Beanc d1 = D1.class.getAnnotationsByType(Beanc.class)[0];
 
 	@Beanc(
-        description={ "description" },
+		description={ "description" },
 		on="on",
 		properties="properties"
 	)

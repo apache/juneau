@@ -27,14 +27,14 @@ class HtmlLinkAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	HtmlLink a1 = HtmlLinkAnnotation.create()
-	    .description("description")
+		.description("description")
 		.nameProperty("a")
 		.on("b")
 		.uriProperty("c")
 		.build();
 
 	HtmlLink a2 = HtmlLinkAnnotation.create()
-        .description("description")
+		.description("description")
 		.nameProperty("a")
 		.on("b")
 		.uriProperty("c")
@@ -43,7 +43,7 @@ class HtmlLinkAnnotation_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		assertJson(a1, ""
 			+ "{"
-                + "description:['description'],"
+				+ "description:['description'],"
 				+ "nameProperty:'a',"
 				+ "on:['b'],"
 				+ "onClass:[],"
@@ -85,8 +85,8 @@ class HtmlLinkAnnotation_Test extends SimpleTestBase {
 		var c1 = HtmlLinkAnnotation.create(C1.class).on(C2.class).build();
 		var c2 = HtmlLinkAnnotation.create("a").on("b").build();
 
-		assertJsonContains(c1, "on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertJsonContains(c2, "on:['a','b']");
+		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
+		assertBean(c2, "on", "[a,b]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ class HtmlLinkAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@HtmlLink(
-        description={ "description" },
+		description={ "description" },
 		nameProperty="a",
 		on="b",
 		uriProperty="c"
@@ -103,7 +103,7 @@ class HtmlLinkAnnotation_Test extends SimpleTestBase {
 	HtmlLink d1 = D1.class.getAnnotationsByType(HtmlLink.class)[0];
 
 	@HtmlLink(
-        description={ "description" },
+		description={ "description" },
 		nameProperty="a",
 		on="b",
 		uriProperty="c"
