@@ -14,6 +14,8 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
@@ -668,7 +670,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 			return false;
 		if (o1.equals(o2))
 			return true;
-		if (o1.getClass().isArray())
+		if (isArray(o1))
 			return stringifyDeep(o1).equals(stringifyDeep(o2));
 		return false;
 	}

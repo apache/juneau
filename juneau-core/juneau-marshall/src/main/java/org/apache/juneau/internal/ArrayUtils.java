@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.common.internal.Utils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -143,16 +145,6 @@ public final class ArrayUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified object is an array.
-	 *
-	 * @param array The array to test.
-	 * @return <jk>true</jk> if the specified object is an array.
-	 */
-	public static boolean isArray(Object array) {
-		return array != null && array.getClass().isArray();
-	}
-
-	/**
 	 * Converts the specified array to an <c>ArrayList</c>
 	 *
 	 * @param <E> The element type.
@@ -180,7 +172,7 @@ public final class ArrayUtils {
 		List<Object> l = new ArrayList<>(Array.getLength(array));
 		for (int i = 0; i < Array.getLength(array); i++) {
 			Object o = Array.get(array, i);
-			if (o != null && o.getClass().isArray())
+			if (isArray(o))
 				o = toObjectList(o);
 			l.add(o);
 		}

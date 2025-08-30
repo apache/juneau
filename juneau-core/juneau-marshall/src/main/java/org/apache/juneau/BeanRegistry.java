@@ -83,7 +83,7 @@ public class BeanRegistry {
 						ClassMeta<?> val = null;
 						if (v instanceof Type)
 							val = beanContext.getClassMeta((Type)v);
-						else if (v.getClass().isArray())
+						else if (isArray(v))
 							val = getTypedClassMeta(v);
 						else
 							throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", className(c), className(v));

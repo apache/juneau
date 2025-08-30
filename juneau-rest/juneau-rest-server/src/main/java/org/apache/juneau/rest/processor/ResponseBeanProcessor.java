@@ -129,7 +129,7 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 			return Collections.emptyList();
 		if (o instanceof Map)
 			return ((Map<?,?>)o).entrySet();
-		if (o.getClass().isArray())
+		if (isArray(o))
 			return alist((Object[])o);
 		if (o instanceof Collection)
 			return (Collection<?>)o;

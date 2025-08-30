@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import static org.apache.juneau.common.internal.Utils.*;
+
 import java.io.IOException;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -215,7 +217,7 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 		try (HtmlWriter w = getHtmlWriter(out)) {
 			if (o == null
 				|| (o instanceof Collection && ((Collection<?>)o).isEmpty())
-				|| (o.getClass().isArray() && Array.getLength(o) == 0))
+				|| (isArray(o) && Array.getLength(o) == 0))
 				w.sTag(1, "p").append("No Results").eTag("p").nl(1);
 			else
 				super.doSerialize(out, o);

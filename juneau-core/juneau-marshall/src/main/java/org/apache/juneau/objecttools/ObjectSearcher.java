@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.objecttools;
 
+import static org.apache.juneau.common.internal.Utils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -160,7 +162,7 @@ public final class ObjectSearcher implements ObjectTool<SearchArgs> {
 			return (List<R>)r;
 		if (r instanceof Collection)
 			return new ArrayList<R>((Collection)r);
-		if (r.getClass().isArray())
+		if (isArray(r))
 			return Arrays.asList((R[])r);
 		return null;
 	}

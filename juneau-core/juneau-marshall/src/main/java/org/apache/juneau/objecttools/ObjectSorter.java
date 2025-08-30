@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.objecttools;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.lang.reflect.*;
@@ -89,7 +90,7 @@ public final class ObjectSorter implements ObjectTool<SortArgs> {
 			return (List<R>)r;
 		if (r instanceof Collection)
 			return new ArrayList<R>((Collection)r);
-		if (r.getClass().isArray())
+		if (isArray(r))
 			return Arrays.asList((R[])r);
 		return null;
 	}

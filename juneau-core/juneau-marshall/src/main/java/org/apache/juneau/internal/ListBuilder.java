@@ -14,6 +14,7 @@ package org.apache.juneau.internal;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 import static java.util.Collections.*;
 
@@ -235,7 +236,7 @@ public final class ListBuilder<E> {
 					if (o != null) {
 						if (o instanceof Collection) {
 							((Collection<?>)o).forEach(x -> addAny(x));
-						} else if (o.getClass().isArray()) {
+						} else if (isArray(o)) {
 							for (int i = 0; i < Array.getLength(o); i++)
 								addAny(Array.get(o, i));
 						} else if (isJsonArray(o, false)) {

@@ -1057,7 +1057,7 @@ public class TestUtils extends Utils2 {
 	@SuppressWarnings("unchecked")
 	private static Object getEntry2(Object o, String name) {
 		if (o instanceof List o2) return isNumeric(name) ? o2.get(parseInt(name)) : getBeanProp(o, name);
-		if (o.getClass().isArray()) return isNumeric(name) ? Array.get(o, parseInt(name)) : getBeanProp(o, name);
+		if (isArray(o)) return isNumeric(name) ? Array.get(o, parseInt(name)) : getBeanProp(o, name);
 		if (o instanceof Map o2) return opt(o2.get(eq("<<<NULL>>>",name) ? null : name)).orElse(name.equals("class") ? o.getClass() : null);
 		if (o instanceof Iterable o2) return isNumeric(name) ? toList(o2).get(parseInt(name)) : getBeanProp(o, name);
 		if (o instanceof Iterator o2) return isNumeric(name) ? toList(o2).get(parseInt(name)) : getBeanProp(o, name);
@@ -1066,7 +1066,7 @@ public class TestUtils extends Utils2 {
 	}
 
 	private static boolean isConvertibleToList(Object o) {
-		return o != null && (o instanceof Collection || o instanceof Iterable || o instanceof Iterator || o instanceof Enumeration || o.getClass().isArray());
+		return o != null && (o instanceof Collection || o instanceof Iterable || o instanceof Iterator || o instanceof Enumeration || isArray(o));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1076,7 +1076,7 @@ public class TestUtils extends Utils2 {
 		if (o instanceof Iterable o2) return toList(o2);
 		if (o instanceof Iterator o2) return toList(o2);
 		if (o instanceof Enumeration o2) return toList(o2);
-		if (o.getClass().isArray()) return arrayToList(o);
+		if (isArray(o)) return arrayToList(o);
 		throw runtimeException("Could not convert object of type {0} to a list", o.getClass().getName());
 	}
 

@@ -1506,7 +1506,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			((HeaderList)value).forEach(x->l.add(x));
 		} else if (value instanceof Collection) {
 			((Collection<?>)value).forEach(x -> l.add(HttpHeaders.cast(x)));
-		} else if (value != null && value.getClass().isArray()) {
+		} else if (isArray(value)) {
 			for (int i = 0; i < Array.getLength(value); i++)
 				l.add(HttpHeaders.cast(Array.get(value, i)));
 		} else if (value instanceof Map) {
@@ -1542,7 +1542,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			((PartList)value).forEach(x->l.add(x));
 		} else if (value instanceof Collection) {
 			((Collection<?>)value).forEach(x -> l.add(HttpParts.cast(x)));
-		} else if (value != null && value.getClass().isArray()) {
+		} else if (isArray(value)) {
 			for (int i = 0; i < Array.getLength(value); i++)
 				l.add(HttpParts.cast(Array.get(value, i)));
 		} else if (value instanceof Map) {
@@ -1579,7 +1579,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			((PartList)value).forEach(x->l.add(x));
 		} else if (value instanceof Collection) {
 			((Collection<?>)value).forEach(x -> l.add(HttpParts.cast(x)));
-		} else if (value != null && value.getClass().isArray()) {
+		} else if (isArray(value)) {
 			for (int i = 0; i < Array.getLength(value); i++)
 				l.add(HttpParts.cast(Array.get(value, i)));
 		} else if (value instanceof Map) {
@@ -1613,7 +1613,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			((PartList)value).forEach(x->l.add(x));
 		} else if (value instanceof Collection) {
 			((Collection<?>)value).forEach(x -> l.add(HttpParts.cast(x)));
-		} else if (value != null && value.getClass().isArray()) {
+		} else if (isArray(value)) {
 			for (int i = 0; i < Array.getLength(value); i++)
 				l.add(HttpParts.cast(Array.get(value, i)));
 		} else if (value instanceof Map) {
@@ -2589,7 +2589,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	private static boolean isNameValuePairArray(Object o) {
-		if (o == null || ! o.getClass().isArray())
+		if (! isArray(o))
 			return false;
 		if (NameValuePair.class.isAssignableFrom(o.getClass().getComponentType()))
 			return true;
@@ -2597,7 +2597,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	private static boolean isHeaderArray(Object o) {
-		if (o == null || ! o.getClass().isArray())
+		if (! isArray(o))
 			return false;
 		if (Header.class.isAssignableFrom(o.getClass().getComponentType()))
 			return true;

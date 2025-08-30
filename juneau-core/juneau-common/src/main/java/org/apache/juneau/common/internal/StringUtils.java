@@ -327,7 +327,7 @@ public final class StringUtils {
 			return ((Class<?>)o).getName();
 		if (o instanceof Method)
 			return Method.class.cast(o).getName();
-		if (o.getClass().isArray())
+		if (isArray(o))
 			return arrayAsList(o).stream().map(StringUtils::convertToReadable).collect(Collectors.joining(", ", "[", "]"));
 		return o.toString();
 	}
@@ -1590,7 +1590,7 @@ public final class StringUtils {
 	public static String stringifyDeep(Object o) {
 		if (o == null)
 			return null;
-		if (! o.getClass().isArray())
+		if (! isArray(o))
 			return o.toString();
 		if (o.getClass().getComponentType().isPrimitive())
 			return PRIMITIVE_ARRAY_STRINGIFIERS.get(o.getClass()).apply(o);
@@ -1647,7 +1647,7 @@ public final class StringUtils {
 	public static String toCdl(Object o) {
 		if (o == null)
 			return null;
-		if (o.getClass().isArray()) {
+		if (isArray(o)) {
 			var sb = new StringBuilder();
 			for (int i = 0, j = Array.getLength(o); i < j; i++) {
 				if (i > 0)

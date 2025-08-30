@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
 import static org.apache.juneau.common.internal.Utils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -81,7 +80,7 @@ public class AnnotationUtils {
 		int part1 = name.hashCode() * 127;
 		if (value == null)
 			return part1;
-		if (value.getClass().isArray())
+		if (isArray(value))
 			return part1 ^ arrayMemberHash(value.getClass().getComponentType(), value);
 		if (value instanceof Annotation)
 			return part1 ^ hashCode((Annotation) value);

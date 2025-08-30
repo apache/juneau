@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -48,7 +49,7 @@ class BeanConfigAnnotation_Test extends SimpleTestBase {
 					.stream()
 					.map(TO_STRING)
 					.collect(Collectors.joining(","));
-			if (t.getClass().isArray())
+			if (isArray(t))
 				return apply(ArrayUtils.toList(t, Object.class));
 			if (t instanceof JsonMap)
 				return ((JsonMap)t).toString();

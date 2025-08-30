@@ -93,12 +93,10 @@ public class Utils {
 	 */
 	public static List<Object> arrayToList(Object array) {
 		if (array == null) {
-			return null;
+			return null;  // NOSONAR
 		}
 
-		if (!array.getClass().isArray()) {
-			throw new IllegalArgumentException("Input must be an array, but was: " + array.getClass().getName());
-		}
+		assertArg(isArray(array), "Input must be an array but was {0}", array.getClass().getName());
 
 		var componentType = array.getClass().getComponentType();
 		var length = Array.getLength(array);
@@ -525,7 +523,7 @@ public class Utils {
 		return new IllegalArgumentException(args.length == 0 ? msg : f(msg, args));
 	}
 
-	private static boolean isArray(Object o) {
+	public static boolean isArray(Object o) {
 		return o != null && o.getClass().isArray();
 	}
 
@@ -553,7 +551,7 @@ public class Utils {
 			return  o2.isEmpty();
 		if (o instanceof Map<?,?> o2)
 			return o2.isEmpty();
-		if (o.getClass().isArray())
+		if (isArray(o))
 			return (Array.getLength(o) == 0);
 		return o.toString().isEmpty();
 	}
@@ -589,7 +587,7 @@ public class Utils {
 		if (value instanceof CharSequence x) return ! x.isEmpty();
 		if (value instanceof Collection<?> x) return ! x.isEmpty();
 		if (value instanceof Map<?,?> x) return ! x.isEmpty();
-		if (value.getClass().isArray()) return Array.getLength(value) > 0;
+		if (isArray(value)) return Array.getLength(value) > 0;
 		return isNotEmpty(s(value));
 	}
 
@@ -955,9 +953,9 @@ public class Utils {
 
 	/**
 	 * Converts an arbitrary object to a readable string format suitable for debugging and testing.
-	 * 
-	 * <p>This method provides intelligent formatting for various Java types, recursively processing 
-	 * nested structures to create human-readable representations. It's extensively used throughout 
+	 *
+	 * <p>This method provides intelligent formatting for various Java types, recursively processing
+	 * nested structures to create human-readable representations. It's extensively used throughout
 	 * the Juneau framework for test assertions and debugging output.</p>
 	 *
 	 * <h5 class='section'>Type-Specific Formatting:</h5>
@@ -983,17 +981,17 @@ public class Utils {
 	 * 	<jc>// Collections</jc>
 	 * 	r(List.of("a", "b", "c")) <jc>// Returns: "[a,b,c]"</jc>
 	 * 	r(Set.of(1, 2, 3)) <jc>// Returns: "[1,2,3]" (order may vary)</jc>
-	 * 	
+	 *
 	 * 	<jc>// Maps</jc>
 	 * 	r(Map.of("foo", "bar", "baz", 123)) <jc>// Returns: "{foo=bar,baz=123}"</jc>
-	 * 	
+	 *
 	 * 	<jc>// Arrays</jc>
 	 * 	r(new int[]{1, 2, 3}) <jc>// Returns: "[1,2,3]"</jc>
 	 * 	r(new String[]{"a", "b"}) <jc>// Returns: "[a,b]"</jc>
-	 * 	
+	 *
 	 * 	<jc>// Nested structures</jc>
 	 * 	r(List.of(Map.of("x", 1), Set.of("a", "b"))) <jc>// Returns: "[{x=1},[a,b]]"</jc>
-	 * 	
+	 *
 	 * 	<jc>// Special types</jc>
 	 * 	r(Optional.of("test")) <jc>// Returns: "test"</jc>
 	 * 	r(Optional.empty()) <jc>// Returns: null</jc>
@@ -1001,13 +999,13 @@ public class Utils {
 	 * </p>
 	 *
 	 * <h5 class='section'>Recursive Processing:</h5>
-	 * <p>The method recursively processes nested structures, so complex objects containing 
-	 * collections, maps, and arrays are fully flattened into readable format. This makes it 
+	 * <p>The method recursively processes nested structures, so complex objects containing
+	 * collections, maps, and arrays are fully flattened into readable format. This makes it
 	 * ideal for test assertions where you need to compare complex object structures.</p>
 	 *
 	 * <h5 class='section'>Error Handling:</h5>
-	 * <p>IO operations (reading files, streams) are wrapped in safe() calls, converting 
-	 * any exceptions to RuntimeExceptions. Binary data (InputStreams, byte arrays) is 
+	 * <p>IO operations (reading files, streams) are wrapped in safe() calls, converting
+	 * any exceptions to RuntimeExceptions. Binary data (InputStreams, byte arrays) is
 	 * converted to hexadecimal representation for readability.</p>
 	 *
 	 * @param o The object to convert to readable format. Can be <jk>null</jk>.
@@ -1043,7 +1041,7 @@ public class Utils {
 			return safe(()->IOUtils.read(o2));
 		if (o instanceof byte[] o2)
 			return toHex(o2);
-		if (o.getClass().isArray()) {
+		if (isArray(o)) {
 			var l = list();
 			for (var i = 0; i < Array.getLength(o); i++) {
 				l.add(Array.get(o, i));
@@ -1661,9 +1659,7 @@ public class Utils {
 	 * @return A new stream.
 	 */
 	public static Stream<Object> toStream(Object array) {
-		if (array == null || ! array.getClass().isArray()) {
-			throw illegalArg("Not an array: " + array);
-		}
+		assertArg(isArray(array), "Arg was not an array.  Type: {0}", array.getClass().getName());
 		var length = Array.getLength(array);
 		return IntStream.range(0, length).mapToObj(i -> Array.get(array, i));
 	}
@@ -1697,7 +1693,7 @@ public class Utils {
 			o2.forEach(x -> traverse(x, c));
 		else if (o instanceof Stream<?> o2)
 			o2.forEach(x -> traverse(x, c));
-		else if (o.getClass().isArray())
+		else if (isArray(o))
 			toStream(o).forEach(x -> traverse(x, c));
 		else
 			c.accept((T)o);

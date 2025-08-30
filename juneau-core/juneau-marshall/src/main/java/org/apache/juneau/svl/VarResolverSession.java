@@ -14,6 +14,7 @@ package org.apache.juneau.svl;
 
 import static org.apache.juneau.common.internal.StringUtils.*;
 import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -135,7 +136,7 @@ public class VarResolverSession {
 			return null;
 		if (o instanceof CharSequence)
 			return (T)resolve(o.toString());
-		if (o.getClass().isArray()) {
+		if (isArray(o)) {
 			if (! containsVars(o))
 				return o;
 			Object o2 = Array.newInstance(o.getClass().getComponentType(), Array.getLength(o));

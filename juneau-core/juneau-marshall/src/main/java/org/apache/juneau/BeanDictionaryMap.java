@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.common.internal.Utils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -116,7 +118,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 		if (o != null) {
 			if (o instanceof Class)
 				return;
-			if (o.getClass().isArray()) {
+			if (isArray(o)) {
 				for (int i = 0; i < Array.getLength(o); i++)
 					assertValidParameter(Array.get(o, i));
 				return;

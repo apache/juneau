@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
-import static org.apache.juneau.common.internal.ThrowableUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -23,7 +24,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.internal.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.svl.*;
 
@@ -175,7 +175,7 @@ public final class AnnotationInfo<T extends Annotation> {
 				Object v = x.invoke(a);
 				Object d = x.inner().getDefaultValue();
 				if (Utils.ne(v, d)) {
-					if (! (ArrayUtils.isArray(v) && Array.getLength(v) == 0 && Array.getLength(d) == 0))
+					if (! (isArray(v) && Array.getLength(v) == 0 && Array.getLength(d) == 0))
 						ja.put(m.getName(), v);
 				}
 			} catch (Exception e) {

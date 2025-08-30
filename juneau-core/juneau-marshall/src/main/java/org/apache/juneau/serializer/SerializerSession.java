@@ -562,7 +562,7 @@ public class SerializerSession extends BeanTraverseSession {
 			cm = object();
 
 		if (isTrimEmptyCollections()) {
-			if (cm.isArray() || (cm.isObject() && value.getClass().isArray())) {
+			if (cm.isArray() || (cm.isObject() && isArray(value))) {
 				if (((Object[])value).length == 0)
 					return true;
 			}

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.*;
@@ -39,7 +40,7 @@ class XmlConfigAnnotationTest extends SimpleTestBase {
 	private static final Function<Object,String> TO_STRING = t -> {
 		if (t == null)
 			return null;
-		if (t.getClass().isArray())
+		if (isArray(t))
 			return XmlConfigAnnotationTest.TO_STRING.apply(ArrayUtils.toList(t, Object.class));
 		if (t instanceof AA)
 			return "AA";

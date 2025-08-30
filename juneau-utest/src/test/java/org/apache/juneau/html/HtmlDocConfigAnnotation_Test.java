@@ -36,7 +36,7 @@ class HtmlDocConfigAnnotation_Test extends SimpleTestBase {
 	}
 
 	private static final Function<Object,String> TO_STRING = t -> {
-		if (t.getClass().isArray())
+		if (isArray(t))
 			return HtmlDocConfigAnnotation_Test.TO_STRING.apply(ArrayUtils.toList(t, Object.class));
 		if (t instanceof Collection)
 			return ((Collection<?>)t)
