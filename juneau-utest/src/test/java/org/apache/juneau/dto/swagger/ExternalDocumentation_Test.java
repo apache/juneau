@@ -33,19 +33,25 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		var t = new ExternalDocumentation();
 
+		// General - Combined assertBean test
 		assertBean(
 			t.setDescription("a").setUrl(URI.create("http://b")),
 			"description,url",
 			"a,http://b"
 		);
 
-		assertNull(t.setDescription(null).getDescription());
+		// Null cases
+		assertBean(
+			t.setDescription(null),
+			"description",
+			"null"
+		);
 	}
 
 	/**
 	 * Test method for {@link ExternalDocumentation#set(java.lang.String, java.lang.Object)}.
 	 */
-	@Test void b01_set() throws Exception {
+	@Test void b01_set() {
 		var t = new ExternalDocumentation();
 
 		t
@@ -56,9 +62,9 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 		assertBean(t, "description,url,$ref", "a,b,c");
 
 		t
-			.set("description", new StringBuilder("a2"))
-			.set("url", new StringBuilder("b2"))
-			.set("$ref", new StringBuilder("c2"));
+			.set("description", sb("a2"))
+			.set("url", sb("b2"))
+			.set("$ref", sb("c2"));
 
 		assertBean(t, "description,url,$ref", "a2,b2,c2");
 
@@ -72,11 +78,13 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
+	}
 
+	@Test void b02_roundTripJson() {
 		assertBean(JsonParser.DEFAULT.parse("{description:'a',url:'b','$ref':'c'}", ExternalDocumentation.class), "description,url,$ref", "a,b,c");
 	}
 
-	@Test void b02_copy() {
+	@Test void b03_copy() {
 		var t = new ExternalDocumentation();
 
 		t = t.copy();
@@ -92,7 +100,7 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 		assertBean(t, "description,url,$ref", "a,b,c");
 	}
 
-	@Test void b03_keySet() {
+	@Test void b04_keySet() {
 		var t = new ExternalDocumentation();
 
 		assertEmpty(t.keySet());

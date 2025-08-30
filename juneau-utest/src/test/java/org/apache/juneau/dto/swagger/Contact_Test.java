@@ -33,41 +33,46 @@ class Contact_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		var t = new Contact();
 
+		// General - Combined assertBean test
 		assertBean(
 			t.setName("a").setEmail("b").setUrl(URI.create("http://c")),
 			"name,email,url",
 			"a,b,http://c"
 		);
 
-		assertNull(t.setName(null).getName());
-		assertNull(t.setEmail(null).getEmail());
+		// Null cases
+		assertBean(
+			t.setName(null).setEmail(null),
+			"name,email",
+			"null,null"
+		);
 	}
 
 	/**
 	 * Test method for {@link Contact#set(String, Object)}.
 	 */
-	@Test void b01_set() throws Exception {
+	@Test void b01_set() {
 		var t = new Contact();
 
 		t
-			.set("name", "a")
-			.set("url", "b")
-			.set("email", "c")
-			.set("$ref", "d");
+			.set("email", "a")
+			.set("name", "b")
+			.set("$ref", "c")
+			.set("url", "d");
 
-		assertBean(t, "name,url,email,$ref", "a,b,c,d");
+		assertBean(t, "email,name,$ref,url", "a,b,c,d");
 
 		t
-			.set("name", new StringBuilder("a"))
-			.set("url", new StringBuilder("b"))
-			.set("email", new StringBuilder("c"))
-			.set("$ref", new StringBuilder("d"));
+			.set("email", sb("a"))
+			.set("name", sb("b"))
+			.set("$ref", sb("c"))
+			.set("url", sb("d"));
 
-		assertBean(t, "name,url,email,$ref", "a,b,c,d");
+		assertBean(t, "email,name,$ref,url", "a,b,c,d");
 
 		assertMapped(
 			t, (obj,prop) -> obj.get(prop, String.class),
-			"name,url,email,$ref",
+			"email,name,$ref,url",
 			"a,b,c,d"
 		);
 
@@ -75,11 +80,13 @@ class Contact_Test extends SimpleTestBase {
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
+	}
 
+	@Test void b02_roundTripJson() {
 		assertBean(JsonParser.DEFAULT.parse("{name:'a',url:'b',email:'c','$ref':'d'}", Contact.class), "name,url,email,$ref", "a,b,c,d");
 	}
 
-	@Test void b02_copy() {
+	@Test void b03_copy() {
 		var t = new Contact();
 
 		t = t.copy();
@@ -96,16 +103,16 @@ class Contact_Test extends SimpleTestBase {
 		assertBean(t, "name,url,email,$ref", "a,b,c,d");
 	}
 
-	@Test void b03_keySet() {
+	@Test void b04_keySet() {
 		var t = new Contact();
 
-		assertJson(t.keySet(), "[]");
+		assertEmpty(t.keySet());
 
 		t
-			.set("name", "foo")
-			.set("url", "bar")
-			.set("email", "baz")
-			.set("$ref", "qux");
+			.set("name", "a")
+			.set("url", "b")
+			.set("email", "c")
+			.set("$ref", "d");
 
 		assertSet(t.keySet(), "email,name,url,$ref");
 	}

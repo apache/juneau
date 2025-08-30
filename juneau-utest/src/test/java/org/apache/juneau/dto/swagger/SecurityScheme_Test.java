@@ -33,7 +33,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		var t = new SecurityScheme();
 
-		// General
+		// Basic property setters
 		assertBean(
 			t.setType("a").setDescription("b").setName("c").setIn("d").setFlow("e")
 			.setAuthorizationUrl("f").setTokenUrl("g").setScopes(map("h1","h2")),
@@ -41,22 +41,22 @@ class SecurityScheme_Test extends SimpleTestBase {
 			"a,b,c,d,e,f,g,{h1=h2}"
 		);
 
-		// Edge cases for nulls and collections.
-		assertNull(t.setType(null).getType());
-		assertNull(t.setDescription(null).getDescription());
-		assertNull(t.setName(null).getName());
-		assertNull(t.setIn(null).getIn());
-		assertNull(t.setFlow(null).getFlow());
-		assertNull(t.setAuthorizationUrl(null).getAuthorizationUrl());
-		assertNull(t.setTokenUrl(null).getTokenUrl());
+		// Null values
+		assertBean(
+			t.setType(null).setDescription(null).setName(null).setIn(null).setFlow(null)
+				.setAuthorizationUrl(null).setTokenUrl(null).setScopes((Map<String,String>)null),
+			"type,description,name,in,flow,authorizationUrl,tokenUrl,scopes",
+			"null,null,null,null,null,null,null,null"
+		);
+
+		// Other methods
 		assertEmpty(t.setScopes(map()).getScopes());
-		assertNull(t.setScopes((Map<String,String>)null).getScopes());
 	}
 
 	/**
 	 * Test method for {@link SecurityScheme#set(java.lang.String, java.lang.Object)}.
 	 */
-	@Test void b01_set() throws Exception {
+	@Test void b01_set() {
 		var t = new SecurityScheme();
 
 		t
@@ -91,15 +91,15 @@ class SecurityScheme_Test extends SimpleTestBase {
 			"g,b,e,d,c,a,f,{foo=bar},ref");
 
 		t
-			.set("authorizationUrl", new StringBuilder("a"))
-			.set("description", new StringBuilder("b"))
-			.set("flow", new StringBuilder("c"))
-			.set("in", new StringBuilder("d"))
-			.set("name", new StringBuilder("e"))
-			.set("scopes", new StringBuilder("{foo:'bar'}"))
-			.set("tokenUrl", new StringBuilder("f"))
-			.set("type", new StringBuilder("g"))
-			.set("$ref", new StringBuilder("ref"));
+			.set("authorizationUrl", sb("a"))
+			.set("description", sb("b"))
+			.set("flow", sb("c"))
+			.set("in", sb("d"))
+			.set("name", sb("e"))
+			.set("scopes", sb("{foo:'bar'}"))
+			.set("tokenUrl", sb("f"))
+			.set("type", sb("g"))
+			.set("$ref", sb("ref"));
 
 		assertBean(t,
 			"type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,$ref",
@@ -109,26 +109,22 @@ class SecurityScheme_Test extends SimpleTestBase {
 			"authorizationUrl,description,flow,in,name,scopes,tokenUrl,type,$ref",
 			"a,b,c,d,e,{foo:'bar'},f,g,ref");
 
-		assertType(String.class, t.get("authorizationUrl", Object.class));
-		assertType(String.class, t.get("description", Object.class));
-		assertType(String.class, t.get("flow", Object.class));
-		assertType(String.class, t.get("in", Object.class));
-		assertType(String.class, t.get("name", Object.class));
-		assertType(Map.class, t.get("scopes", Object.class));
-		assertType(String.class, t.get("tokenUrl", Object.class));
-		assertType(String.class, t.get("type", Object.class));
-		assertType(StringBuilder.class, t.get("$ref", Object.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, Object.class).getClass().getSimpleName(),
+			"authorizationUrl,description,flow,in,name,scopes,tokenUrl,type,$ref",
+			"String,String,String,String,String,LinkedHashMap,String,String,StringBuilder");
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
+	}
 
+	@Test void b02_roundTripJson() {
 		var s = "{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}";
 		assertJson(JsonParser.DEFAULT.parse(s, SecurityScheme.class), s);
 	}
 
-	@Test void b02_copy() {
+	@Test void b03_copy() {
 		var t = new SecurityScheme();
 
 		t = t.copy();
@@ -152,7 +148,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 			"g,b,e,d,c,a,f,{foo=bar},ref");
 	}
 
-	@Test void b03_keySet() {
+	@Test void b04_keySet() {
 		var t = new SecurityScheme();
 
 		assertEmpty(t.keySet());

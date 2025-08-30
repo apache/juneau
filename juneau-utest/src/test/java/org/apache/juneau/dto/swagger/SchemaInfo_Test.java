@@ -33,101 +33,89 @@ class SchemaInfo_Test extends SimpleTestBase {
 	 */
 	@Test void a01_gettersAndSetters() {
 		var t = new SchemaInfo();
-		assertBean(t.setFormat("foo"), "format", "foo");
-		assertNull(t.setFormat(null).getFormat());
-		assertBean(t.setTitle("foo"), "title", "foo");
-		assertNull(t.setTitle(null).getTitle());
-		assertBean(t.setDescription("foo"), "description", "foo");
-		assertNull(t.setDescription(null).getDescription());
-		assertBean(t.setDefault("foo"), "default", "foo");
-		assertString("foo", t.setDefault(new StringBuilder("foo")).getDefault());
-		assertNull(t.setDefault(null).getDefault());
-		assertEquals(123, t.setMultipleOf(123).getMultipleOf());
-		assertEquals(123f, t.setMultipleOf(123f).getMultipleOf());
-		assertEquals(123, t.setMaximum(123).getMaximum());
-		assertEquals(123f, t.setMaximum(123f).getMaximum());
-		assertTrue(t.setExclusiveMaximum(true).getExclusiveMaximum());
-		assertEquals(123, t.setMinimum(123).getMinimum());
-		assertEquals(123f, t.setMinimum(123f).getMinimum());
-		assertTrue(t.setExclusiveMinimum(true).getExclusiveMinimum());
-		assertEquals(123, t.setMaxLength(123).getMaxLength());
-		assertEquals(123, t.setMinLength(123).getMinLength());
-		assertEquals("foo", t.setPattern("foo").getPattern());
-		assertNull(t.setPattern(null).getPattern());
-		assertEquals(123, t.setMaxItems(123).getMaxItems());
-		assertEquals(123, t.setMinItems(123).getMinItems());
-		assertTrue(t.setUniqueItems(true).getUniqueItems());
-		assertEquals(123, t.setMaxProperties(123).getMaxProperties());
-		assertEquals(123, t.setMinProperties(123).getMinProperties());
-		assertJson(t.setRequiredProperties("x").getRequiredProperties(), "['x']");
-		assertNull(t.setRequiredProperties((Collection<String>)null).getRequiredProperties());
-		assertJson(t.setEnum(set("foo","bar")).getEnum(), "['foo','bar']");
-		assertJson(t.setEnum(set()).getEnum(), "[]");
-		assertNull(t.setEnum((Collection<Object>)null).getEnum());
-		assertJson(t.addEnum("foo","bar").getEnum(), "['foo','bar']");
-		assertJson(t.addEnum("baz").getEnum(), "['foo','bar','baz']");
-		assertEquals("foo", t.setType("foo").getType());
-		assertNull(t.setType(null).getType());
-		assertJson(t.setItems(items("foo")).getItems(), "{type:'foo'}");
-		assertJson(t.setAllOf(set("foo","bar")).getAllOf(), "['foo','bar']");
-		assertJson(t.setAllOf(set()).getAllOf(), "[]");
-		assertNull(t.setAllOf((Collection<Object>)null).getAllOf());
-		assertJson(t.addAllOf("foo","bar").getAllOf(), "['foo','bar']");
-		assertJson(t.setProperties(map("foo",new SchemaInfo().setType("foo"))).getProperties(), "{foo:{type:'foo'}}");
-		assertJson(t.setProperties(map()).getProperties(), "{}");
-		assertNull(t.setProperties((Map<String,SchemaInfo>)null).getProperties());
-		assertJson(t.setAdditionalProperties(new SchemaInfo().setType("foo")).getAdditionalProperties(), "{type:'foo'}");
+
+		// General - Combined assertBean test
+		assertBean(
+			t.setAdditionalProperties(new SchemaInfo().setType("a")).setAllOf(set("b1","b2")).setDefault("c").setDescription("d")
+				.setDiscriminator("e").setEnum(set("f1","f2")).setExample("g").setExclusiveMaximum(true).setExclusiveMinimum(true)
+				.setExternalDocs(externalDocumentation("h")).setFormat("i").setItems(items("j")).setMaxItems(1).setMaxLength(2)
+				.setMaxProperties(3).setMaximum(4).setMinItems(5).setMinLength(6).setMinProperties(7).setMinimum(8)
+				.setMultipleOf(9).setPattern("k").setProperties(map("l",new SchemaInfo().setType("m"))).setReadOnly(true)
+				.setRequiredProperties("n").setTitle("o").setType("p").setUniqueItems(true).setXml(xml().setName("q")),
+			"additionalProperties{type},allOf,default,description,discriminator,enum,example,exclusiveMaximum,exclusiveMinimum,externalDocs{url},format,items{type},maxItems,maxLength,maxProperties,maximum,minItems,minLength,minProperties,minimum,multipleOf,pattern,properties{l{type}},readOnly,requiredProperties,title,type,uniqueItems,xml{name}",
+			"{a},[b1,b2],c,d,e,[f1,f2],g,true,true,{h},i,{j},1,2,3,4,5,6,7,8,9,k,{{m}},true,[n],o,p,true,{q}"
+		);
+
+		// Null cases
+		assertBean(
+			t.setAdditionalProperties((SchemaInfo)null).setAllOf((Collection<Object>)null).setDefault(null).setDescription(null)
+				.setDiscriminator(null).setEnum((Collection<Object>)null).setExample(null).setFormat(null)
+				.setPattern(null).setProperties((Map<String,SchemaInfo>)null).setRequiredProperties((Collection<String>)null)
+				.setTitle(null).setType(null),
+			"additionalProperties,allOf,default,description,discriminator,enum,example,format,pattern,properties,requiredProperties,title,type",
+			"null,null,null,null,null,null,null,null,null,null,null,null,null"
+		);
+
+		// Empty collections
+		assertBean(
+			t.setAllOf(set()).setProperties(map()),
+			"allOf,properties",
+			"[],{}"
+		);
+
+		// Other
+		assertBean(
+			t.setDefault(sb("a")).setExample(1).setMaximum(2f).setMinimum(3f).setMultipleOf(4f),
+			"default,example,maximum,minimum,multipleOf", "a,1,2.0,3.0,4.0");
 		assertJson(t.setAdditionalProperties(new SchemaInfo()).getAdditionalProperties(), "{}");
-		assertNull(t.setAdditionalProperties((SchemaInfo)null).getAdditionalProperties());
-		assertEquals("foo", t.setDiscriminator("foo").getDiscriminator());
-		assertNull(t.setDiscriminator(null).getDiscriminator());
-		assertTrue(t.setReadOnly(true).getReadOnly());
-		assertJson(t.setXml(xml().setName("foo")).getXml(), "{name:'foo'}");
-		assertJson(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs(), "{url:'foo'}");
-		assertEquals("foo", t.setExample("foo").getExample());
-		assertEquals(123, t.setExample(123).getExample());
-		assertNull(t.setExample(null).getExample());
+
+		// addEnum and addAllOf
+		assertSet(t.addEnum("a","b").getEnum(), "a,b");
+		assertSet(t.addEnum("c").getEnum(), "a,b,c");
+		assertSet(t.addAllOf("d","e").getAllOf(), "d,e");
 	}
 
 	/**
 	 * Test method for {@link SchemaInfo#set(java.lang.String, java.lang.Object)}.
 	 */
-	@Test void b01_set() throws Exception {
+	@Test void b01_set() {
 		var t = new SchemaInfo();
 
 		t
-			.set("default", "a")
-			.set("enum", set("b"))
 			.set("additionalProperties", map("c",alist("c1")))
 			.set("allOf", set("d"))
+			.set("default", "a")
 			.set("description", "e")
 			.set("discriminator", "f")
+			.set("enum", set("b"))
 			.set("example", "g")
 			.set("exclusiveMaximum", true)
 			.set("exclusiveMinimum", true)
 			.set("externalDocs", externalDocumentation("h"))
 			.set("format", "i")
 			.set("items", items("j"))
-			.set("maximum", 123f)
-			.set("maxItems", 123)
-			.set("maxLength", 123)
-			.set("maxProperties", 123)
-			.set("minimum", 123f)
-			.set("minItems", 123)
-			.set("minLength", 123)
-			.set("minProperties", 123)
-			.set("multipleOf", 123f)
+			.set("maxItems", 2)
+			.set("maxLength", 3)
+			.set("maxProperties", 4)
+			.set("maximum", 1f)
+			.set("minItems", 6)
+			.set("minLength", 7)
+			.set("minProperties", 8)
+			.set("minimum", 5f)
+			.set("multipleOf", 9f)
 			.set("pattern", "k")
 			.set("properties", map("l",map("l1", 1)))
 			.set("readOnly", true)
+			.set("$ref", "p")
 			.set("requiredProperties", set("x"))
 			.set("title", "m")
 			.set("type", "n")
 			.set("uniqueItems", true)
-			.set("xml", xml().setName("o"))
-			.set("$ref", "ref");
+			.set("xml", xml().setName("o"));
 
-		assertJson(t, "{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,requiredProperties:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}");
+		assertBean(t,
+			"additionalProperties{c},allOf,default,description,discriminator,enum,example,exclusiveMaximum,exclusiveMinimum,externalDocs{url},format,items{type},maxItems,maxLength,maxProperties,maximum,minItems,minLength,minProperties,minimum,multipleOf,pattern,properties{l{l1}},readOnly,ref,requiredProperties,title,type,uniqueItems,xml{name}",
+			"{[c1]},[d],a,e,f,[b],g,true,true,{h},i,{j},2,3,4,1.0,6,7,8,5.0,9.0,k,{{1}},true,p,[x],m,n,true,{o}");
 
 		t
 			.set("default", "a")
@@ -142,15 +130,15 @@ class SchemaInfo_Test extends SimpleTestBase {
 			.set("externalDocs", "{url:'h'}")
 			.set("format", "i")
 			.set("items", "{type:'j'}")
-			.set("maximum", "123.0")
-			.set("maxItems", "123")
-			.set("maxLength", "123")
-			.set("maxProperties", "123")
-			.set("minimum", "123.0")
-			.set("minItems", "123")
-			.set("minLength", "123")
-			.set("minProperties", "123")
-			.set("multipleOf", "123.0")
+			.set("maximum", "1.0")
+			.set("maxItems", "2")
+			.set("maxLength", "3")
+			.set("maxProperties", "4")
+			.set("minimum", "5.0")
+			.set("minItems", "6")
+			.set("minLength", "7")
+			.set("minProperties", "8")
+			.set("multipleOf", "9.0")
 			.set("pattern", "k")
 			.set("properties", "{l:{l1:1}}")
 			.set("readOnly", "true")
@@ -159,89 +147,68 @@ class SchemaInfo_Test extends SimpleTestBase {
 			.set("type", "n")
 			.set("uniqueItems", "true")
 			.set("xml", "{name:'o'}")
-			.set("$ref", "ref");
+			.set("$ref", "p");
 
-		assertJson(t, "{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,requiredProperties:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}");
+		assertBean(t,
+			"format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,requiredProperties,enum,type,items{type},allOf,properties{l{l1}},additionalProperties{c},discriminator,readOnly,xml{name},externalDocs{url},example,ref",
+			"i,m,e,a,9.0,1.0,true,5.0,true,3,7,k,2,6,true,4,8,[x],[b],n,{j},[d],{{1}},{[c1]},f,true,{o},{h},g,p");
 
 		t
-			.set("default", new StringBuilder("a"))
-			.set("enum", new StringBuilder("['b']"))
-			.set("additionalProperties", new StringBuilder("{c:['c1']}"))
-			.set("allOf", new StringBuilder("['d']"))
-			.set("description", new StringBuilder("e"))
-			.set("discriminator", new StringBuilder("f"))
-			.set("example", new StringBuilder("g"))
-			.set("exclusiveMaximum", new StringBuilder("true"))
-			.set("exclusiveMinimum", new StringBuilder("true"))
-			.set("externalDocs", new StringBuilder("{url:'h'}"))
-			.set("format", new StringBuilder("i"))
-			.set("items", new StringBuilder("{type:'j'}"))
-			.set("maximum", new StringBuilder("123.0"))
-			.set("maxItems", new StringBuilder("123"))
-			.set("maxLength", new StringBuilder("123"))
-			.set("maxProperties", new StringBuilder("123"))
-			.set("minimum", new StringBuilder("123.0"))
-			.set("minItems", new StringBuilder("123"))
-			.set("minLength", new StringBuilder("123"))
-			.set("minProperties", new StringBuilder("123"))
-			.set("multipleOf", new StringBuilder("123.0"))
-			.set("pattern", new StringBuilder("k"))
-			.set("properties", new StringBuilder("{l:{l1:1}}"))
-			.set("readOnly", new StringBuilder("true"))
-			.set("requiredProperties", new StringBuilder("['x']"))
-			.set("title", new StringBuilder("m"))
-			.set("type", new StringBuilder("n"))
-			.set("uniqueItems", new StringBuilder("true"))
-			.set("xml", new StringBuilder("{name:'o'}"))
-			.set("$ref", new StringBuilder("ref"));
+			.set("default", sb("a"))
+			.set("enum", sb("['b']"))
+			.set("additionalProperties", sb("{c:['c1']}"))
+			.set("allOf", sb("['d']"))
+			.set("description", sb("e"))
+			.set("discriminator", sb("f"))
+			.set("example", sb("g"))
+			.set("exclusiveMaximum", sb("true"))
+			.set("exclusiveMinimum", sb("true"))
+			.set("externalDocs", sb("{url:'h'}"))
+			.set("format", sb("i"))
+			.set("items", sb("{type:'j'}"))
+			.set("maximum", sb("1.0"))
+			.set("maxItems", sb("2"))
+			.set("maxLength", sb("3"))
+			.set("maxProperties", sb("4"))
+			.set("minimum", sb("5.0"))
+			.set("minItems", sb("6"))
+			.set("minLength", sb("7"))
+			.set("minProperties", sb("8"))
+			.set("multipleOf", sb("9.0"))
+			.set("pattern", sb("k"))
+			.set("properties", sb("{l:{l1:1}}"))
+			.set("readOnly", sb("true"))
+			.set("requiredProperties", sb("['x']"))
+			.set("title", sb("m"))
+			.set("type", sb("n"))
+			.set("uniqueItems", sb("true"))
+			.set("xml", sb("{name:'o'}"))
+			.set("$ref", sb("p"));
 
-		assertJson(t, "{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,requiredProperties:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}");
+		assertBean(t,
+			"format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,requiredProperties,enum,type,items{type},allOf,properties{l{l1}},additionalProperties{c},discriminator,readOnly,xml{name},externalDocs{url},example,ref",
+			"i,m,e,a,9.0,1.0,true,5.0,true,3,7,k,2,6,true,4,8,[x],[b],n,{j},[d],{{1}},{[c1]},f,true,{o},{h},g,p");
 
 		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
 			"default,enum,additionalProperties,allOf,description,discriminator,example,exclusiveMaximum,exclusiveMinimum,externalDocs,format,items,maximum,maxItems,maxLength,maxProperties,minimum,minItems,minLength,minProperties,multipleOf,pattern,properties,readOnly,requiredProperties,title,type,uniqueItems,xml,$ref",
-			"a,['b'],{c:['c1']},['d'],e,f,g,true,true,{url:'h'},i,{type:'j'},123.0,123,123,123,123.0,123,123,123,123.0,k,{l:{l1:1}},true,['x'],m,n,true,{name:'o'},ref");
+			"a,['b'],{c:['c1']},['d'],e,f,g,true,true,{url:'h'},i,{type:'j'},1.0,2,3,4,5.0,6,7,8,9.0,k,{l:{l1:1}},true,['x'],m,n,true,{name:'o'},p");
 
-		assertType(StringBuilder.class, t.get("default", Object.class));
-		assertType(Set.class, t.get("enum", Object.class));
-		assertType(SchemaInfo.class, t.get("additionalProperties", Object.class));
-		assertType(Set.class, t.get("allOf", Object.class));
-		assertType(String.class, t.get("description", Object.class));
-		assertType(String.class, t.get("discriminator", Object.class));
-		assertType(StringBuilder.class, t.get("example", Object.class));
-		assertType(Boolean.class, t.get("exclusiveMaximum", Object.class));
-		assertType(Boolean.class, t.get("exclusiveMinimum", Object.class));
-		assertType(ExternalDocumentation.class, t.get("externalDocs", Object.class));
-		assertType(String.class, t.get("format", Object.class));
-		assertType(Items.class, t.get("items", Object.class));
-		assertType(Float.class, t.get("maximum", Object.class));
-		assertType(Integer.class, t.get("maxItems", Object.class));
-		assertType(Integer.class, t.get("maxLength", Object.class));
-		assertType(Integer.class, t.get("maxProperties", Object.class));
-		assertType(Float.class, t.get("minimum", Object.class));
-		assertType(Integer.class, t.get("minItems", Object.class));
-		assertType(Integer.class, t.get("minLength", Object.class));
-		assertType(Integer.class, t.get("minProperties", Object.class));
-		assertType(Float.class, t.get("multipleOf", Object.class));
-		assertType(String.class, t.get("pattern", Object.class));
-		assertType(Map.class, t.get("properties", Object.class));
-		assertType(Boolean.class, t.get("readOnly", Object.class));
-		assertType(Set.class, t.get("requiredProperties", Object.class));
-		assertType(String.class, t.get("title", Object.class));
-		assertType(String.class, t.get("type", Object.class));
-		assertType(Boolean.class, t.get("uniqueItems", Object.class));
-		assertType(Xml.class, t.get("xml", Object.class));
-		assertType(String.class, t.get("$ref", Object.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, Object.class).getClass().getSimpleName(),
+			"default,enum,additionalProperties,allOf,description,discriminator,example,exclusiveMaximum,exclusiveMinimum,externalDocs,format,items,maximum,maxItems,maxLength,maxProperties,minimum,minItems,minLength,minProperties,multipleOf,pattern,properties,readOnly,requiredProperties,title,type,uniqueItems,xml,$ref",
+			"StringBuilder,LinkedHashSet,SchemaInfo,LinkedHashSet,String,String,StringBuilder,Boolean,Boolean,ExternalDocumentation,String,Items,Float,Integer,Integer,Integer,Float,Integer,Integer,Integer,Float,String,LinkedHashMap,Boolean,LinkedHashSet,String,String,Boolean,Xml,String");
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
+	}
 
-		var s = "{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,requiredProperties:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}";
+	@Test void b02_roundTripJson() {
+		var s = "{format:'i',title:'m',description:'e','default':'a',multipleOf:9.0,maximum:1.0,exclusiveMaximum:true,minimum:5.0,exclusiveMinimum:true,maxLength:3,minLength:7,pattern:'k',maxItems:2,minItems:6,uniqueItems:true,maxProperties:4,minProperties:8,requiredProperties:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'p'}";
 		assertJson(JsonParser.DEFAULT.parse(s, SchemaInfo.class), s);
 	}
 
-	@Test void b02_copy() {
+	@Test void b03_copy() {
 		var t = new SchemaInfo();
 
 		t = t.copy();
@@ -261,15 +228,15 @@ class SchemaInfo_Test extends SimpleTestBase {
 			.set("externalDocs", externalDocumentation("h"))
 			.set("format", "i")
 			.set("items", items("j"))
-			.set("maximum", 123f)
-			.set("maxItems", 123)
-			.set("maxLength", 123)
-			.set("maxProperties", 123)
-			.set("minimum", 123f)
-			.set("minItems", 123)
-			.set("minLength", 123)
-			.set("minProperties", 123)
-			.set("multipleOf", 123f)
+			.set("maximum", 1f)
+			.set("maxItems", 2)
+			.set("maxLength", 3)
+			.set("maxProperties", 4)
+			.set("minimum", 5f)
+			.set("minItems", 6)
+			.set("minLength", 7)
+			.set("minProperties", 8)
+			.set("multipleOf", 9f)
 			.set("pattern", "k")
 			.set("properties", map("l",map("l1", 1)))
 			.set("readOnly", true)
@@ -278,16 +245,18 @@ class SchemaInfo_Test extends SimpleTestBase {
 			.set("type", "n")
 			.set("uniqueItems", true)
 			.set("xml", xml().setName("o"))
-			.set("$ref", "ref")
+			.set("$ref", "p")
 			.copy();
 
-		assertJson(t, "{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,requiredProperties:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}");
+		assertBean(t,
+			"format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,requiredProperties,enum,type,items{type},allOf,properties{l{l1}},additionalProperties{c},discriminator,readOnly,xml{name},externalDocs{url},example,ref",
+			"i,m,e,a,9.0,1.0,true,5.0,true,3,7,k,2,6,true,4,8,[x],[b],n,{j},[d],{{1}},{[c1]},f,true,{o},{h},g,p");
 	}
 
-	@Test void b03_keySet() {
+	@Test void b04_keySet() {
 		var t = new SchemaInfo();
 
-		assertJson(t.keySet(), "[]");
+		assertEmpty(t.keySet());
 
 		t
 			.set("additionalProperties", map("c",alist("c1")))
@@ -302,29 +271,25 @@ class SchemaInfo_Test extends SimpleTestBase {
 			.set("externalDocs", externalDocumentation("h"))
 			.set("format", "i")
 			.set("items", items("j"))
-			.set("maximum", 123f)
-			.set("maxItems", 123)
-			.set("maxLength", 123)
-			.set("maxProperties", 123)
-			.set("minimum", 123f)
-			.set("minItems", 123)
-			.set("minLength", 123)
-			.set("minProperties", 123)
-			.set("multipleOf", 123f)
+			.set("maximum", 1f)
+			.set("maxItems", 2)
+			.set("maxLength", 3)
+			.set("maxProperties", 4)
+			.set("minimum", 5f)
+			.set("minItems", 6)
+			.set("minLength", 7)
+			.set("minProperties", 8)
+			.set("multipleOf", 9f)
 			.set("pattern", "k")
 			.set("properties", map("l",map("l1", 1)))
 			.set("readOnly", true)
-			.set("$ref", "ref")
+			.set("$ref", "p")
 			.set("requiredProperties", set("x"))
 			.set("title", "m")
 			.set("type", "n")
 			.set("uniqueItems", true)
 			.set("xml", xml().setName("o"));
 
-		assertJson(t.keySet(),
-			"['additionalProperties','allOf','default','description','discriminator','enum','example','exclusiveMaximum','exclusiveMinimum',"
-			+ "'externalDocs','format','items','maximum','maxItems','maxLength','maxProperties','minimum','minItems','minLength','minProperties',"
-			+ "'multipleOf','pattern','properties','readOnly','$ref','requiredProperties','title','type','uniqueItems','xml']"
-		);
+		assertSet(t.keySet(), "additionalProperties,allOf,default,description,discriminator,enum,example,exclusiveMaximum,exclusiveMinimum,externalDocs,format,items,maximum,maxItems,maxLength,maxProperties,minimum,minItems,minLength,minProperties,multipleOf,pattern,properties,readOnly,$ref,requiredProperties,title,type,uniqueItems,xml");
 	}
 }

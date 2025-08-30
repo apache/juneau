@@ -53,17 +53,10 @@ class ResponseAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJsonMatches(a1, ""
-			+ "{"
-				+ "description:['description'],"
-				+ "examples:['examples'],"
-				+ "headers:[*],"
-				+ "on:['on'],"
-				+ "onClass:['"+CNAME+"$X1'],"
-				+ "parser:'org.apache.juneau.oapi.OpenApiParser',"
-				+ "schema:{*,"
-				+ "serializer:'org.apache.juneau.oapi.OpenApiSerializer'"
-			+ "}"
+		assertBean(
+			a1,
+			"description,examples,on,onClass{#{simpleName}},parser{simpleName},serializer{simpleName}",
+			"[description],[examples],[on],{[{X1}]},{OpenApiParser},{OpenApiSerializer}"
 		);
 	}
 

@@ -17,7 +17,6 @@ import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.bean.swagger.Tag;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
@@ -33,22 +32,25 @@ class Tag_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		var t = new Tag();
 
-		// General
+		// Basic property setters
 		assertBean(
 			t.setName("a").setDescription("b").setExternalDocs(externalDocumentation("c")),
 			"name,description,externalDocs{url}",
 			"a,b,{c}"
 		);
 
-		// Edge cases for nulls.
-		assertNull(t.setName(null).getName());
-		assertNull(t.setDescription(null).getDescription());
+		// Null values
+		assertBean(
+			t.setName(null).setDescription(null),
+			"name,description",
+			"null,null"
+		);
 	}
 
 	/**
 	 * Test method for {@link Tag#set(java.lang.String, java.lang.Object)}.
 	 */
-	@Test void b01_set() throws Exception {
+	@Test void b01_set() {
 		var t = new Tag();
 
 		t
@@ -73,10 +75,10 @@ class Tag_Test extends SimpleTestBase {
 			"c,a,{b},ref");
 
 		t
-			.set("description", new StringBuilder("a"))
-			.set("externalDocs", new StringBuilder("{url:'b'}"))
-			.set("name", new StringBuilder("c"))
-			.set("$ref", new StringBuilder("ref"));
+			.set("description", sb("a"))
+			.set("externalDocs", sb("{url:'b'}"))
+			.set("name", sb("c"))
+			.set("$ref", sb("ref"));
 
 		assertBean(t,
 			"name,description,externalDocs{url},$ref",
@@ -86,21 +88,22 @@ class Tag_Test extends SimpleTestBase {
 			"description,externalDocs,name,$ref",
 			"a,{url:'b'},c,ref");
 
-		assertType(String.class, t.get("description", Object.class));
-		assertType(ExternalDocumentation.class, t.get("externalDocs", Object.class));
-		assertType(String.class, t.get("name", Object.class));
-		assertType(StringBuilder.class, t.get("$ref", Object.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, Object.class).getClass().getSimpleName(),
+			"description,externalDocs,name,$ref",
+			"String,ExternalDocumentation,String,StringBuilder");
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
+	}
 
+	@Test void b02_roundTripJson() {
 		var s = "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}";
 		assertJson(JsonParser.DEFAULT.parse(s, Tag.class), s);
 	}
 
-	@Test void b02_copy() {
+	@Test void b03_copy() {
 		var t = new Tag();
 
 		t = t.copy();
@@ -119,7 +122,7 @@ class Tag_Test extends SimpleTestBase {
 			"c,a,{b},ref");
 	}
 
-	@Test void b03_keySet() {
+	@Test void b04_keySet() {
 		var t = new Tag();
 
 		assertEmpty(t.keySet());

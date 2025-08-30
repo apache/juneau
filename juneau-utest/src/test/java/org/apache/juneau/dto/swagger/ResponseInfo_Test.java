@@ -34,21 +34,29 @@ class ResponseInfo_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		var t = new ResponseInfo();
 
-		// General
+		// Basic property setters
 		assertBean(
-			t.setDescription("a").setSchema(schemaInfo().setTitle("b")).setHeaders(map("c",headerInfo("d"))).setExamples(map("e","f","g",alist("h"))),
-			"description,schema{title},headers{c{type}},examples",
-			"a,{b},{{d}},{e=f,g=[h]}"
+			t.setDescription("a")
+				.setExamples(map("b1","b2","b3",alist("b4")))
+				.setHeaders(map("c1",headerInfo("c2")))
+				.setSchema(schemaInfo().setTitle("d")),
+			"description,examples,headers{c1{type}},schema{title}",
+			"a,{b1=b2,b3=[b4]},{{c2}},{d}"
 		);
 
-		// Edge cases for collections and nulls.
-		assertNull(t.setDescription(null).getDescription());
-		assertEmpty(t.setHeaders(map()).getHeaders());
-		assertNull(t.setHeaders((Map<String,HeaderInfo>)null).getHeaders());
-		assertEmpty(t.setExamples(map()).getExamples());
-		assertNull(t.setExamples((Map<String,Object>)null).getExamples());
+		// Null values
+		assertBean(
+			t.setDescription(null).setExamples((Map<String,Object>)null).setHeaders((Map<String,HeaderInfo>)null),
+			"description,examples,headers",
+			"null,null,null"
+		);
 
-		// Examples addExample method.
+		// Other methods - empty collections
+		assertBean(
+			t.setExamples(map()).setHeaders(map()),
+			"examples,headers",
+			"{},{}"
+		);
 		assertMap(
 			t.setExamples(map()).addExample("text/a", "a").addExample("text/b", null).addExample(null, "c").getExamples(),
 			"text/a,text/b,<<<NULL>>>",
@@ -59,64 +67,65 @@ class ResponseInfo_Test extends SimpleTestBase {
 	/**
 	 * Test method for {@link ResponseInfo#set(java.lang.String, java.lang.Object)}.
 	 */
-	@Test void b01_set() throws Exception {
+	@Test void b01_set() {
 		var t = new ResponseInfo();
 
 		t
 			.set("description", "a")
-			.set("examples", map("foo","bar","baz",alist("qux")))
-			.set("headers", map("a", headerInfo("a1")))
+			.set("examples", map("b1","b2","b3",alist("b4")))
+			.set("headers", map("c1", headerInfo("c2")))
 			.set("schema", schemaInfo().setType("d"))
-			.set("$ref", "ref");
+			.set("$ref", "e");
 
 		// Comprehensive object state validation
 		assertBean(t,
-			"description,schema{type},headers{a{type}},examples,$ref",
-			"a,{d},{{a1}},{foo=bar,baz=[qux]},ref");
+			"description,schema{type},headers{c1{type}},examples,$ref",
+			"a,{d},{{c2}},{b1=b2,b3=[b4]},e");
 
 		t
 			.set("description", "a")
-			.set("examples", "{foo:'bar',baz:['qux']}")
-			.set("headers", "{a:{type:'a1'}}")
+			.set("examples", "{b1:'b2',b3:['b4']}")
+			.set("headers", "{c1:{type:'c2'}}")
 			.set("schema", "{type:'d'}")
-			.set("$ref", "ref");
+			.set("$ref", "e");
 
 		assertBean(t,
-			"description,schema{type},headers{a{type}},examples,$ref",
-			"a,{d},{{a1}},{foo=bar,baz=[qux]},ref");
+			"description,examples,headers{c1{type}},schema{type},$ref",
+			"a,{b1=b2,b3=[b4]},{{c2}},{d},e");
 
 		t
-			.set("description", new StringBuilder("a"))
-			.set("examples", new StringBuilder("{foo:'bar',baz:['qux']}"))
-			.set("headers", new StringBuilder("{a:{type:'a1'}}"))
-			.set("schema", new StringBuilder("{type:'d'}"))
-			.set("$ref", new StringBuilder("ref"));
+			.set("description", sb("a"))
+			.set("examples", sb("{b1:'b2',b3:['b4']}"))
+			.set("headers", sb("{c1:{type:'c2'}}"))
+			.set("schema", sb("{type:'d'}"))
+			.set("$ref", sb("e"));
 
 		assertBean(t,
-			"description,schema{type},headers{a{type}},examples,$ref",
-			"a,{d},{{a1}},{foo=bar,baz=[qux]},ref");
+			"description,examples,headers{c1{type}},schema{type},$ref",
+			"a,{b1=b2,b3=[b4]},{{c2}},{d},e");
 
 		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
 			"description,examples,headers,schema,$ref",
-			"a,{foo:'bar',baz:['qux']},{a:{type:'a1'}},{type:'d'},ref");
+			"a,{b1:'b2',b3:['b4']},{c1:{type:'c2'}},{type:'d'},e");
 
-		assertType(String.class, t.get("description", Object.class));
-		assertType(Map.class, t.get("examples", Object.class));
-		assertType(Map.class, t.get("headers", Object.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, Object.class).getClass().getSimpleName(),
+			"description,examples,headers,schema,$ref",
+			"String,LinkedHashMap,LinkedHashMap,SchemaInfo,StringBuilder");
+
 		assertType(HeaderInfo.class, t.get("headers", Map.class).values().iterator().next());
-		assertType(SchemaInfo.class, t.get("schema", Object.class));
-		assertType(StringBuilder.class, t.get("$ref", Object.class));
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
+	}
 
-		var s = "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}";
+	@Test void b02_roundTripJson() {
+		var s = "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}";  // Order is determined by @Bean annotation.
 		assertJson(JsonParser.DEFAULT.parse(s, ResponseInfo.class), s);
 	}
 
-	@Test void b02_copy() {
+	@Test void b03_copy() {
 		var t = new ResponseInfo();
 
 		t = t.copy();
@@ -125,28 +134,28 @@ class ResponseInfo_Test extends SimpleTestBase {
 
 		t
 			.set("description", "a")
-			.set("examples", map("foo","bar","baz",alist("qux")))
-			.set("headers", map("a", headerInfo("a1")))
+			.set("examples", map("b1","b2","b3",alist("b4")))
+			.set("headers", map("c1", headerInfo("c2")))
 			.set("schema", schemaInfo().setType("d"))
-			.set("$ref", "ref")
+			.set("$ref", "e")
 			.copy();
 
 		assertBean(t,
-			"description,schema{type},headers{a{type}},examples,$ref",
-			"a,{d},{{a1}},{foo=bar,baz=[qux]},ref");
+			"description,examples,headers{c1{type}},schema{type},$ref",
+			"a,{b1=b2,b3=[b4]},{{c2}},{d},e");
 	}
 
-	@Test void b03_keySet() {
+	@Test void b04_keySet() {
 		var t = new ResponseInfo();
 
 		assertEmpty(t.keySet());
 
 		t
 			.set("description", "a")
-			.set("examples", map("foo","bar","baz",alist("qux")))
-			.set("headers", map("a", headerInfo("a1")))
+			.set("examples", map("b1","b2","b3",alist("b4")))
+			.set("headers", map("c1", headerInfo("c2")))
 			.set("schema", schemaInfo().setType("d"))
-			.set("$ref", "ref");
+			.set("$ref", "e");
 
 		assertSet(t.keySet(), "description,examples,headers,schema,$ref");
 	}

@@ -52,18 +52,10 @@ class FormDataAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJsonMatches(a1, ""
-			+ "{"
-				+ "def:'def',"
-				+ "description:['description'],"
-				+ "name:'name',"
-				+ "on:['on'],"
-				+ "onClass:['org.apache.juneau.http.annotation.FormDataAnnotation_Test$X1'],"
-				+ "parser:'org.apache.juneau.oapi.OpenApiParser',"
-				+ "schema:{*},"
-				+ "serializer:'org.apache.juneau.oapi.OpenApiSerializer',"
-				+ "value:'value'"
-			+ "}"
+		assertBean(
+			a1,
+			"def,description,name,on,onClass{#{simpleName}},parser{simpleName},schema{description},serializer{simpleName},value",
+			"def,[description],name,[on],{[{X1}]},{OpenApiParser},{[]},{OpenApiSerializer},value"
 		);
 	}
 

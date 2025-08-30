@@ -34,37 +34,35 @@ class Operation_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		var t = new Operation();
 
-		// General
+		// Basic property setters
 		assertBean(
-			t.setSummary("a").setDescription("b").setExternalDocs(externalDocumentation("c")).setOperationId("d")
-			.setOperationId("e").setDeprecated(true).setTags(set("f1","f2")).setConsumes(set(MediaType.of("text/foo")))
-			.setProduces(set(MediaType.of("text/foo"))).setParameters(set(parameterInfo("g1","g2"))).setResponses(map("1",responseInfo("h")))
-			.setSchemes(set("foo")).setSecurity(alist(map("foo",alist("bar")))),
-			"summary,description,externalDocs{url},operationId,deprecated,tags,consumes,produces,parameters{0{in,name}},responses{1{description}},schemes,security",
-			"a,b,{c},e,true,[f1,f2],[text/foo],[text/foo],{{g1,g2}},{{h}},[foo],[{foo=[bar]}]"
+			t.setConsumes(set(MediaType.of("text/a"))).setDeprecated(true).setDescription("b").setExternalDocs(externalDocumentation("c"))
+			.setOperationId("d").setParameters(set(parameterInfo("e1","e2"))).setProduces(set(MediaType.of("text/f")))
+			.setResponses(map("1",responseInfo("g"))).setSchemes(set("h")).setSecurity(alist(map("i",alist("j")))).setSummary("k").setTags(set("l1","l2")),
+			"consumes,deprecated,description,externalDocs{url},operationId,parameters{0{in,name}},produces,responses{1{description}},schemes,security,summary,tags",
+			"[text/a],true,b,{c},d,{{e1,e2}},[text/f],{{g}},[h],[{i=[j]}],k,[l1,l2]"
 		);
 
-		// Edge cases for collections.
-		assertEmpty(t.setTags(set()).getTags());
-		assertNull(t.setTags((Collection<String>)null).getTags());
-		assertEmpty(t.setConsumes(set()).getConsumes());
-		assertNull(t.setConsumes((Collection<MediaType>)null).getConsumes());
-		assertEmpty(t.setProduces(set()).getProduces());
-		assertNull(t.setProduces((Collection<MediaType>)null).getProduces());
-		assertEmpty(t.setParameters(set()).getParameters());
-		assertNull(t.setParameters((Collection<ParameterInfo>)null).getParameters());
-		assertEmpty(t.setResponses(map()).getResponses());
-		assertNull(t.setResponses((Map<String,ResponseInfo>)null).getResponses());
-		assertEmpty(t.setSchemes(set()).getSchemes());
-		assertNull(t.setSchemes((Set<String>)null).getSchemes());
-		assertEmpty(t.setSecurity(alist()).getSecurity());
-		assertNull(t.setSecurity((List<Map<String,List<String>>>)null).getSecurity());
+		// Null values
+		assertBean(
+			t.setConsumes((Collection<MediaType>)null).setParameters((Collection<ParameterInfo>)null).setProduces((Collection<MediaType>)null)
+			.setResponses((Map<String,ResponseInfo>)null).setSchemes((Set<String>)null).setSecurity((List<Map<String,List<String>>>)null).setTags((Collection<String>)null),
+			"consumes,parameters,produces,responses,schemes,security,tags",
+			"null,null,null,null,null,null,null"
+		);
+
+		// Other methods - empty collections
+		assertBean(
+			t.setConsumes(set()).setParameters(set()).setProduces(set()).setResponses(map()).setSchemes(set()).setSecurity(alist()).setTags(set()),
+			"consumes,parameters,produces,responses,schemes,security,tags",
+			"[],[],[],{},[],[],[]"
+		);
 	}
 
 	/**
 	 * Test method for {@link Operation#set(java.lang.String, java.lang.Object)}.
 	 */
-	@Test void a01_set() throws Exception {
+	@Test void a01_set() {
 		var t = new Operation();
 
 		t
@@ -110,19 +108,19 @@ class Operation_Test extends SimpleTestBase {
 		);
 
 		t
-			.set("consumes", new StringBuilder("['text/a']"))
-			.set("deprecated", new StringBuilder("true"))
-			.set("description", new StringBuilder("b"))
-			.set("externalDocs", new StringBuilder("{url:'c'}"))
-			.set("operationId", new StringBuilder("d"))
-			.set("parameters", new StringBuilder("[{'in':'e1',name:'e2'}]"))
-			.set("produces", new StringBuilder("['text/f']"))
-			.set("responses", new StringBuilder("{'1':{description:'g'}}"))
-			.set("schemes", new StringBuilder("['h']"))
-			.set("security", new StringBuilder("[{i1:['i2']}]"))
-			.set("summary", new StringBuilder("j"))
-			.set("tags", new StringBuilder("['k']"))
-			.set("$ref", new StringBuilder("l"));
+			.set("consumes", sb("['text/a']"))
+			.set("deprecated", sb("true"))
+			.set("description", sb("b"))
+			.set("externalDocs", sb("{url:'c'}"))
+			.set("operationId", sb("d"))
+			.set("parameters", sb("[{'in':'e1',name:'e2'}]"))
+			.set("produces", sb("['text/f']"))
+			.set("responses", sb("{'1':{description:'g'}}"))
+			.set("schemes", sb("['h']"))
+			.set("security", sb("[{i1:['i2']}]"))
+			.set("summary", sb("j"))
+			.set("tags", sb("['k']"))
+			.set("$ref", sb("l"));
 
 		assertBean(
 			t,
@@ -136,35 +134,28 @@ class Operation_Test extends SimpleTestBase {
 			"['text/a'],true,b,{url:'c'},d,[{'in':'e1',name:'e2'}],['text/f'],{'1':{description:'g'}},['h'],[{i1:['i2']}],j,['k'],l"
 		);
 
-		assertType(Set.class, t.get("consumes", Object.class));
-		assertType(MediaType.class, t.get("consumes", List.class).get(0));
-		assertType(Boolean.class, t.get("deprecated", Object.class));
-		assertType(String.class, t.get("description", Object.class));
-		assertType(ExternalDocumentation.class, t.get("externalDocs", Object.class));
-		assertType(String.class, t.get("operationId", Object.class));
-		assertType(List.class, t.get("parameters", Object.class));
-		assertType(ParameterInfo.class, t.get("parameters", List.class).get(0));
-		assertType(Set.class, t.get("produces", Object.class));
-		assertType(MediaType.class, t.get("produces", List.class).get(0));
-		assertType(Map.class, t.get("responses", Object.class));
-		assertType(String.class, t.get("responses", Map.class).keySet().iterator().next());
-		assertType(ResponseInfo.class, t.get("responses", Map.class).values().iterator().next());
-		assertType(Set.class, t.get("schemes", Object.class));
-		assertType(List.class, t.get("security", Object.class));
-		assertType(String.class, t.get("summary", Object.class));
-		assertType(Set.class, t.get("tags", Object.class));
-		assertType(StringBuilder.class, t.get("$ref", Object.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, Object.class).getClass().getSimpleName(),
+			"consumes,deprecated,description,externalDocs,operationId,parameters,produces,responses,schemes,security,summary,tags,$ref",
+			"LinkedHashSet,Boolean,String,ExternalDocumentation,String,ArrayList,LinkedHashSet,LinkedHashMap,LinkedHashSet,ArrayList,String,LinkedHashSet,StringBuilder");
+
+		assertMapped(t, (o,k) -> o.get(k, List.class).get(0).getClass().getSimpleName(), "consumes,parameters,produces", "MediaType,ParameterInfo,MediaType");
+		assertMapped(t, (o,k) -> {
+			Map<?,?> map = o.get(k, Map.class);
+			return map.keySet().iterator().next().getClass().getSimpleName() + "," + map.values().iterator().next().getClass().getSimpleName();
+		}, "responses", "String,ResponseInfo");
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
+	}
 
+	@Test void b02_roundTripJson() {
 		var s = "{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}";
 		assertJson(JsonParser.DEFAULT.parse(s, Operation.class), s);
 	}
 
-	@Test void b02_copy() {
+	@Test void b03_copy() {
 		var t = new Operation();
 
 		t = t.copy();
@@ -194,7 +185,7 @@ class Operation_Test extends SimpleTestBase {
 		);
 	}
 
-	@Test void b03_keySet() {
+	@Test void b04_keySet() {
 		var t = new Operation();
 
 		assertEmpty(t.keySet());
@@ -212,11 +203,8 @@ class Operation_Test extends SimpleTestBase {
 			.set("security", set(map("i1",alist("i2"))))
 			.set("summary", "j")
 			.set("tags", set("k"))
-			.set("$ref", "ref");
+			.set("$ref", "l");
 
-		assertSet(
-			t.keySet(),
-			"consumes","deprecated","description","externalDocs","operationId","parameters","produces","responses","schemes","security","summary","tags","$ref"
-		);
+		assertSet(t.keySet(), "consumes,deprecated,description,externalDocs,operationId,parameters,produces,responses,schemes,security,summary,tags,$ref");
 	}
 }

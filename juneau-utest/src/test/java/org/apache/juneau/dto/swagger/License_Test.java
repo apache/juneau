@@ -33,21 +33,21 @@ class License_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		var t = new License();
 
-		// General
+		// Basic property setters
 		assertBean(
 			t.setName("a").setUrl(URI.create("http://b")),
 			"name,url",
 			"a,http://b"
 		);
 
-		// Edge cases for nulls.
+		// Null values
 		assertNull(t.setName(null).getName());
 	}
 
 	/**
 	 * Test method for {@link License#set(java.lang.String, java.lang.Object)}.
 	 */
-	@Test void b01_set() throws Exception {
+	@Test void b01_set() {
 		var t = new License();
 
 		t
@@ -70,9 +70,9 @@ class License_Test extends SimpleTestBase {
 			"a,b,ref");
 
 		t
-			.set("name", new StringBuilder("a"))
-			.set("url", new StringBuilder("b"))
-			.set("$ref", new StringBuilder("ref"));
+			.set("name", sb("a"))
+			.set("url", sb("b"))
+			.set("$ref", sb("ref"));
 
 		assertBean(t,
 			"name,url,$ref",
@@ -82,20 +82,22 @@ class License_Test extends SimpleTestBase {
 			"name,url,$ref",
 			"a,b,ref");
 
-		assertType(String.class, t.get("name", Object.class));
-		assertType(URI.class, t.get("url", Object.class));
-		assertType(StringBuilder.class, t.get("$ref", Object.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, Object.class).getClass().getSimpleName(),
+			"name,url,$ref",
+			"String,URI,StringBuilder");
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
+	}
 
+	@Test void b02_roundTripJson() {
 		var s = "{name:'a',url:'b','$ref':'ref'}";
 		assertJson(JsonParser.DEFAULT.parse(s, License.class), s);
 	}
 
-	@Test void b02_copy() {
+	@Test void b03_copy() {
 		var t = new License();
 
 		t = t.copy();
@@ -113,7 +115,7 @@ class License_Test extends SimpleTestBase {
 			"a,b,ref");
 	}
 
-	@Test void b03_keySet() {
+	@Test void b04_keySet() {
 		var t = new License();
 
 		assertEmpty(t.keySet());

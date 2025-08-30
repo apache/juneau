@@ -227,7 +227,7 @@ public class TestUtils extends Utils2 {
 	 * <h5 class='section'>Advanced Collection Analysis:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Combine size/length, metadata, and content iteration in single assertions</jc>
-	 * 	assertBean(myBean, <js>"users{length,class{simpleName},#{name}}"</js>, 
+	 * 	assertBean(myBean, <js>"users{length,class{simpleName},#{name}}"</js>,
 	 * 		<js>"{3,{ArrayList},[{John},{Jane},{Bob}]}"</js>);
 	 *
 	 * 	<jc>// Comprehensive collection validation with multiple iteration patterns</jc>
@@ -235,7 +235,7 @@ public class TestUtils extends Utils2 {
 	 * 		<js>"{3,[{Laptop},{Phone},{Tablet}],[{999.99},{599.99},{399.99}]}"</js>);
 	 *
 	 * 	<jc>// Perfect for validation testing - verify error count and details</jc>
-	 * 	assertBean(result, <js>"errors{length,#{field},#{code}}"</js>, 
+	 * 	assertBean(result, <js>"errors{length,#{field},#{code}}"</js>,
 	 * 		<js>"{2,[{email},{password}],[{E001},{E002}]}"</js>);
 	 *
 	 * 	<jc>// Mixed collection types with consistent syntax</jc>
@@ -501,11 +501,6 @@ public class TestUtils extends Utils2 {
 	 */
 	public static void assertJsonContains(Object value, String json) {
 		assertContains(json, Json5.DEFAULT.write(value));
-	}
-
-	public static void assertJsonMatches(Object o, String pattern) throws AssertionError {
-		var json = json(o);
-		assertTrue(getMatchPattern3(pattern).matcher(json).matches(), fs("JSON did not match pattern.\njson={0}", json));
 	}
 
 	public static void assertLines(String expected, Object value) {
@@ -1183,5 +1178,15 @@ public class TestUtils extends Utils2 {
 		s = s.copy().ws().ns().addNamespaceUrisToRoot().build();
 		var xml = s.serialize(o);
 		checkXmlWhitespace(xml);
+	}
+
+	/**
+	 * Helper method for creating StringBuilder objects.
+	 *
+	 * @param value The string value to wrap in a StringBuilder.
+	 * @return A new StringBuilder containing the specified value.
+	 */
+	public static StringBuilder sb(String value) {
+		return new StringBuilder(value);
 	}
 }

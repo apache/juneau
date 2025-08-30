@@ -32,24 +32,25 @@ class Info_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		var t = new Info();
 
-		// General
+		// Basic property setters
 		assertBean(
 			t.setTitle("a").setDescription("b").setTermsOfService("c").setContact(contact("d")).setLicense(license("e")).setVersion("f"),
 			"title,description,termsOfService,contact{name},license{name},version",
 			"a,b,c,{d},{e},f"
 		);
 
-		// Edge cases for nulls.
-		assertNull(t.setTitle(null).getTitle());
-		assertNull(t.setDescription(null).getDescription());
-		assertNull(t.setTermsOfService(null).getTermsOfService());
-		assertNull(t.setVersion(null).getVersion());
+		// Null values
+		assertBean(
+			t.setTitle(null).setDescription(null).setTermsOfService(null).setVersion(null),
+			"title,description,termsOfService,version",
+			"null,null,null,null"
+		);
 	}
 
 	/**
 	 * Test method for {@link Info#set(java.lang.String, java.lang.Object)}.
 	 */
-	@Test void b01_set() throws Exception {
+	@Test void b01_set() {
 		var t = new Info();
 
 		t
@@ -80,13 +81,13 @@ class Info_Test extends SimpleTestBase {
 			"e,b,f,{a},{c},d,ref");
 
 		t
-			.set("contact", new StringBuilder("{name:'a'}"))
-			.set("description", new StringBuilder("b"))
-			.set("license", new StringBuilder("{name:'c'}"))
-			.set("termsOfService", new StringBuilder("d"))
-			.set("title", new StringBuilder("e"))
-			.set("version", new StringBuilder("f"))
-			.set("$ref", new StringBuilder("ref"));
+			.set("contact", sb("{name:'a'}"))
+			.set("description", sb("b"))
+			.set("license", sb("{name:'c'}"))
+			.set("termsOfService", sb("d"))
+			.set("title", sb("e"))
+			.set("version", sb("f"))
+			.set("$ref", sb("ref"));
 
 		assertBean(t,
 			"title,description,version,contact{name},license{name},termsOfService,$ref",
@@ -96,24 +97,22 @@ class Info_Test extends SimpleTestBase {
 			"contact,description,license,termsOfService,title,version,$ref",
 			"{name:'a'},b,{name:'c'},d,e,f,ref");
 
-		assertType(Contact.class, t.get("contact", Object.class));
-		assertType(String.class, t.get("description", Object.class));
-		assertType(License.class, t.get("license", Object.class));
-		assertType(String.class, t.get("termsOfService", Object.class));
-		assertType(String.class, t.get("title", Object.class));
-		assertType(String.class, t.get("version", Object.class));
-		assertType(StringBuilder.class, t.get("$ref", Object.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, Object.class).getClass().getSimpleName(),
+			"contact,description,license,termsOfService,title,version,$ref",
+			"Contact,String,License,String,String,String,StringBuilder");
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
+	}
 
+	@Test void b02_roundTripJson() {
 		var s = "{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}";
 		assertJson(JsonParser.DEFAULT.parse(s, Info.class), s);
 	}
 
-	@Test void b02_copy() {
+	@Test void b03_copy() {
 		var t = new Info();
 
 		t = t.copy();
@@ -135,7 +134,7 @@ class Info_Test extends SimpleTestBase {
 			"e,b,f,{a},{c},d,ref");
 	}
 
-	@Test void b03_keySet() {
+	@Test void b04_keySet() {
 		var t = new Info();
 
 		assertEmpty(t.keySet());

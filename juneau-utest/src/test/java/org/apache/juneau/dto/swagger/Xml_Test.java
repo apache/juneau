@@ -31,23 +31,25 @@ class Xml_Test extends SimpleTestBase {
 	@Test void a01_gettersAndSetters() {
 		var t = new Xml();
 
-		// General
+		// Basic property setters
 		assertBean(
 			t.setName("a").setNamespace("b").setPrefix("c").setAttribute(true).setWrapped(true),
 			"name,namespace,prefix,attribute,wrapped",
 			"a,b,c,true,true"
 		);
 
-		// Edge cases for nulls.
-		assertNull(t.setName(null).getName());
-		assertNull(t.setNamespace(null).getNamespace());
-		assertNull(t.setPrefix(null).getPrefix());
+		// Null values
+		assertBean(
+			t.setName(null).setNamespace(null).setPrefix(null),
+			"name,namespace,prefix",
+			"null,null,null"
+		);
 	}
 
 	/**
 	 * Test method for {@link Xml#set(java.lang.String, java.lang.Object)}.
 	 */
-	@Test void b01_set() throws Exception {
+	@Test void b01_set() {
 		var t = new Xml();
 
 		t
@@ -56,12 +58,12 @@ class Xml_Test extends SimpleTestBase {
 			.set("namespace", "b")
 			.set("prefix", "c")
 			.set("wrapped", true)
-			.set("$ref", "ref");
+			.set("$ref", "d");
 
 		// Comprehensive object state validation
 		assertBean(t,
 			"name,namespace,prefix,attribute,wrapped,$ref",
-			"a,b,c,true,true,ref");
+			"a,b,c,true,true,d");
 
 		t
 			.set("attribute", "true")
@@ -69,45 +71,44 @@ class Xml_Test extends SimpleTestBase {
 			.set("namespace", "b")
 			.set("prefix", "c")
 			.set("wrapped", "true")
-			.set("$ref", "ref");
+			.set("$ref", "d");
 
 		assertBean(t,
 			"name,namespace,prefix,attribute,wrapped,$ref",
-			"a,b,c,true,true,ref");
+			"a,b,c,true,true,d");
 
 		t
-			.set("attribute", new StringBuilder("true"))
-			.set("name", new StringBuilder("a"))
-			.set("namespace", new StringBuilder("b"))
-			.set("prefix", new StringBuilder("c"))
-			.set("wrapped", new StringBuilder("true"))
-			.set("$ref", new StringBuilder("ref"));
+			.set("attribute", sb("true"))
+			.set("name", sb("a"))
+			.set("namespace", sb("b"))
+			.set("prefix", sb("c"))
+			.set("wrapped", sb("true"))
+			.set("$ref", sb("d"));
 
 		assertBean(t,
 			"name,namespace,prefix,attribute,wrapped,$ref",
-			"a,b,c,true,true,ref");
+			"a,b,c,true,true,d");
 
 		assertMapped(t, (obj,prop) -> obj.get(prop, String.class),
 			"attribute,name,namespace,prefix,wrapped,$ref",
-			"true,a,b,c,true,ref");
+			"true,a,b,c,true,d");
 
-		assertType(Boolean.class, t.get("attribute", Object.class));
-		assertType(String.class, t.get("name", Object.class));
-		assertType(String.class, t.get("namespace", Object.class));
-		assertType(String.class, t.get("prefix", Object.class));
-		assertType(Boolean.class, t.get("wrapped", Object.class));
-		assertType(StringBuilder.class, t.get("$ref", Object.class));
+		assertMapped(t, (obj,prop) -> obj.get(prop, Object.class).getClass().getSimpleName(),
+			"attribute,name,namespace,prefix,wrapped,$ref",
+			"Boolean,String,String,String,Boolean,StringBuilder");
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
+	}
 
-		var s = "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}";
+	@Test void b02_roundTripJson() {
+		var s = "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'d'}";
 		assertJson(JsonParser.DEFAULT.parse(s, Xml.class), s);
 	}
 
-	@Test void b02_copy() {
+	@Test void b03_copy() {
 		var t = new Xml();
 
 		t = t.copy();
@@ -120,15 +121,15 @@ class Xml_Test extends SimpleTestBase {
 			.set("namespace", "b")
 			.set("prefix", "c")
 			.set("wrapped", true)
-			.set("$ref", "ref")
+			.set("$ref", "d")
 			.copy();
 
 		assertBean(t,
 			"name,namespace,prefix,attribute,wrapped,$ref",
-			"a,b,c,true,true,ref");
+			"a,b,c,true,true,d");
 	}
 
-	@Test void b03_keySet() {
+	@Test void b04_keySet() {
 		var t = new Xml();
 
 		assertEmpty(t.keySet());
@@ -139,7 +140,7 @@ class Xml_Test extends SimpleTestBase {
 			.set("namespace", "b")
 			.set("prefix", "c")
 			.set("wrapped", true)
-			.set("$ref", "ref");
+			.set("$ref", "d");
 
 		assertSet(t.keySet(), "attribute,name,namespace,prefix,wrapped,$ref");
 	}

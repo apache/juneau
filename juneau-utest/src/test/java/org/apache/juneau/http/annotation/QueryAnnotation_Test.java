@@ -30,40 +30,32 @@ class QueryAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Query a1 = QueryAnnotation.create()
-		.def("def")
-		.description("description")
-		.name("name")
-		.on("on")
+		.def("a")
+		.description("b")
+		.name("c")
+		.on("d")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
 		.serializer(OpenApiSerializer.class)
-		.value("value")
+		.value("e")
 		.build();
 
 	Query a2 = QueryAnnotation.create()
-		.def("def")
-		.description("description")
-		.name("name")
-		.on("on")
+		.def("a")
+		.description("b")
+		.name("c")
+		.on("d")
 		.onClass(X1.class)
 		.parser(OpenApiParser.class)
 		.serializer(OpenApiSerializer.class)
-		.value("value")
+		.value("e")
 		.build();
 
 	@Test void a01_basic() {
-		assertJsonMatches(a1, ""
-			+ "{"
-				+ "def:'def',"
-				+ "description:['description'],"
-				+ "name:'name',"
-				+ "on:['on'],"
-				+ "onClass:['"+CNAME+"$X1'],"
-				+ "parser:'org.apache.juneau.oapi.OpenApiParser',"
-				+ "schema:{*},"
-				+ "serializer:'org.apache.juneau.oapi.OpenApiSerializer',"
-				+ "value:'value'"
-			+ "}"
+		assertBean(
+			a1,
+			"def,description,name,on,onClass{#{simpleName}},parser{simpleName},serializer{simpleName},value",
+			"a,[b],c,[d],{[{X1}]},{OpenApiParser},{OpenApiSerializer},e"
 		);
 	}
 
@@ -113,27 +105,27 @@ class QueryAnnotation_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Query(
-		def="def",
-		description={ "description" },
-		name="name",
-		on="on",
+		def="a",
+		description={ "b" },
+		name="c",
+		on="d",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
 		serializer=OpenApiSerializer.class,
-		value="value"
+		value="e"
 	)
 	public static class D1 {}
 	Query d1 = D1.class.getAnnotationsByType(Query.class)[0];
 
 	@Query(
-		def="def",
-		description={ "description" },
-		name="name",
-		on="on",
+		def="a",
+		description={ "b" },
+		name="c",
+		on="d",
 		onClass=X1.class,
 		parser=OpenApiParser.class,
 		serializer=OpenApiSerializer.class,
-		value="value"
+		value="e"
 	)
 	public static class D2 {}
 	Query d2 = D2.class.getAnnotationsByType(Query.class)[0];
