@@ -143,7 +143,8 @@ public class TestUtils extends Utils2 {
 	 * Asserts that the fields/properties on the specified bean are the specified values after being converted to {@link Utils#r readable} strings.
 	 *
 	 * <p>This is the primary method for Bean-Centric Test Modernization (BCTM), supporting extensive property validation
-	 * patterns including nested objects, collections, arrays, method chaining, and direct field access.</p>
+	 * patterns including nested objects, collections, arrays, method chaining, direct field access, collection iteration
+	 * with <js>#{property}</js> syntax, and universal <js>length</js>/<js>size</js> properties for all collection types.</p>
 	 *
 	 * <h5 class='section'>Basic Usage:</h5>
 	 * <p class='bjava'>
@@ -175,6 +176,35 @@ public class TestUtils extends Utils2 {
 	 * 	assertBean(myBean, <js>"items{length}"</js>, <js>"{5}"</js>);
 	 * </p>
 	 *
+	 * <h5 class='section'>Collection Iteration Syntax:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Test properties across ALL elements in a collection using #{...} syntax</jc>
+	 * 	assertBean(myBean, <js>"userList{#{name}}"</js>, <js>"[{John},{Jane},{Bob}]"</js>);
+	 *
+	 * 	<jc>// Test multiple properties from each element</jc>
+	 * 	assertBean(myBean, <js>"orderList{#{id,status}}"</js>, <js>"[{123,ACTIVE},{124,PENDING}]"</js>);
+	 *
+	 * 	<jc>// Works with nested properties within each element</jc>
+	 * 	assertBean(myBean, <js>"customers{#{address{city}}}"</js>, <js>"[{{New York}},{{Los Angeles}}]"</js>);
+	 *
+	 * 	<jc>// Works with arrays and any iterable collection type</jc>
+	 * 	assertBean(config, <js>"itemArray{#{type}}"</js>, <js>"[{String},{Integer},{Boolean}]"</js>);
+	 * 	assertBean(data, <js>"statusSet{#{name}}"</js>, <js>"[{ACTIVE},{PENDING},{CANCELLED}]"</js>);
+	 * </p>
+	 *
+	 * <h5 class='section'>Universal Collection Size Properties:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Both 'length' and 'size' work universally across all collection types</jc>
+	 * 	assertBean(myBean, <js>"myArray{length}"</js>, <js>"{5}"</js>);        <jc>// Arrays</jc>
+	 * 	assertBean(myBean, <js>"myArray{size}"</js>, <js>"{5}"</js>);          <jc>// Also works for arrays</jc>
+	 *
+	 * 	assertBean(myBean, <js>"myList{size}"</js>, <js>"{3}"</js>);           <jc>// Collections</jc>
+	 * 	assertBean(myBean, <js>"myList{length}"</js>, <js>"{3}"</js>);         <jc>// Also works for collections</jc>
+	 *
+	 * 	assertBean(myBean, <js>"myMap{size}"</js>, <js>"{7}"</js>);            <jc>// Maps</jc>
+	 * 	assertBean(myBean, <js>"myMap{length}"</js>, <js>"{7}"</js>);          <jc>// Also works for maps</jc>
+	 * </p>
+	 *
 	 * <h5 class='section'>Class Name Testing:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test class properties (prefer simple names for maintainability)</jc>
@@ -192,6 +222,24 @@ public class TestUtils extends Utils2 {
 	 * 		<js>"type,format,default"</js>,
 	 * 		<js>"foo,bar,baz"</js>
 	 * 	);
+	 * </p>
+	 *
+	 * <h5 class='section'>Advanced Collection Analysis:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Combine size/length, metadata, and content iteration in single assertions</jc>
+	 * 	assertBean(myBean, <js>"users{length,class{simpleName},#{name}}"</js>, 
+	 * 		<js>"{3,{ArrayList},[{John},{Jane},{Bob}]}"</js>);
+	 *
+	 * 	<jc>// Comprehensive collection validation with multiple iteration patterns</jc>
+	 * 	assertBean(order, <js>"items{size,#{name},#{price}}"</js>,
+	 * 		<js>"{3,[{Laptop},{Phone},{Tablet}],[{999.99},{599.99},{399.99}]}"</js>);
+	 *
+	 * 	<jc>// Perfect for validation testing - verify error count and details</jc>
+	 * 	assertBean(result, <js>"errors{length,#{field},#{code}}"</js>, 
+	 * 		<js>"{2,[{email},{password}],[{E001},{E002}]}"</js>);
+	 *
+	 * 	<jc>// Mixed collection types with consistent syntax</jc>
+	 * 	assertBean(response, <js>"results{size},metadata{length}"</js>, <js>"{25},{4}"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Direct Field Access:</h5>
@@ -218,17 +266,19 @@ public class TestUtils extends Utils2 {
 	 * 	<li><b>Nested values:</b> <js>"{value}"</js> for single-level nested properties</li>
 	 * 	<li><b>Deep nested values:</b> <js>"{{value}}"</js>, <js>"{{{value}}}"</js> for multiple nesting levels</li>
 	 * 	<li><b>Array/Collection values:</b> <js>"[item1,item2]"</js> for collections</li>
+	 * 	<li><b>Collection iteration:</b> <js>"#{property}"</js> iterates over ALL collection elements, returns <js>"[{val1},{val2}]"</js></li>
+	 * 	<li><b>Universal size properties:</b> <js>"length"</js> and <js>"size"</js> work on arrays, collections, and maps</li>
 	 * 	<li><b>Boolean values:</b> <js>"true"</js>, <js>"false"</js></li>
 	 * 	<li><b>Null values:</b> <js>"null"</js></li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Property Access Priority:</h5>
 	 * <ol>
+	 * 	<li><b>Universal size properties:</b> <js>"length"</js> and <js>"size"</js> for arrays, collections, and maps</li>
 	 * 	<li><b>is{Property}()</b> methods (for boolean properties)</li>
 	 * 	<li><b>get{Property}()</b> methods</li>
 	 * 	<li><b>Public fields</b> (direct field access)</li>
 	 * 	<li><b>get(String)</b> methods (for Map-like objects)</li>
-	 * 	<li><b>Special array properties:</b> <js>"length"</js> for arrays</li>
 	 * </ol>
 	 *
 	 * @param bean The bean object to test. Must not be null.
@@ -975,11 +1025,14 @@ public class TestUtils extends Utils2 {
 				m.setAccessible(true);
 				return m.invoke(o, name);
 			}
-			if (c.isArray()) {
-				switch (name) {
-					case "length": return Array.getLength(o);
-					default: // Fall through.
-				}
+			if ("length".equals(name) && c.isArray()) {
+				return Array.getLength(o);
+			}
+			if ("size".equals(name)) {
+				if (isConvertibleToList(o))
+					return convertToList(o).size();
+				else if (o instanceof Map o2)
+					return o2.size();
 			}
 			throw runtimeException("No field called {0} found on class {1}", name, c.getName());
 		});
@@ -990,6 +1043,14 @@ public class TestUtils extends Utils2 {
 	}
 
 	private static String getEntry(Object o, String name) {
+
+		// Handle #{...} syntax for iterating over collections/arrays
+		if (name.startsWith("#{") && name.endsWith("}") && isConvertibleToList(o)) {
+			var spn = splitNestedInner(name);
+			return convertToList(o).stream().map(x -> spn.stream().map(x2 -> getEntry(x, x2)).collect(joining(",","{","}"))).collect(joining(",","[","]"));
+		}
+
+		// Original logic for regular property access
 		var i = name.indexOf("{");
 		var pn = i == -1 ? name : name.substring(0, i);
 		var spn = i == -1 ? null : splitNestedInner(name);
@@ -1007,6 +1068,21 @@ public class TestUtils extends Utils2 {
 		if (o instanceof Iterator o2) return isNumeric(name) ? toList(o2).get(parseInt(name)) : getBeanProp(o, name);
 		if (o instanceof Enumeration o2) return isNumeric(name) ? toList(o2).get(parseInt(name)) : getBeanProp(o, name);
 		return getBeanProp(o, name);
+	}
+
+	private static boolean isConvertibleToList(Object o) {
+		return o != null && (o instanceof Collection || o instanceof Iterable || o instanceof Iterator || o instanceof Enumeration || o.getClass().isArray());
+	}
+
+	@SuppressWarnings("unchecked")
+	private static List<?> convertToList(Object o) {
+		assertArgNotNull("o", o);
+		if (o instanceof List o2) return o2;
+		if (o instanceof Iterable o2) return toList(o2);
+		if (o instanceof Iterator o2) return toList(o2);
+		if (o instanceof Enumeration o2) return toList(o2);
+		if (o.getClass().isArray()) return arrayToList(o);
+		throw runtimeException("Could not convert object of type {0} to a list", o.getClass().getName());
 	}
 
 	/**

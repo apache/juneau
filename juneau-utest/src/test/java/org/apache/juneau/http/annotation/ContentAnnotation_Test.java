@@ -41,14 +41,7 @@ class ContentAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJsonMatches(a1, ""
-			+ "{"
-				+ "description:['description'],"
-				+ "on:['on'],"
-				+ "onClass:['"+CNAME+"$X1'],"
-				+ "schema:{*}"
-			+ "}"
-		);
+		assertBean(a1, "description,on,onClass{length,#{simpleName}},schema{description}", "[description],[on],{1,[{X1}]},{[]}");
 	}
 
 	@Test void a02_testEquivalency() {
