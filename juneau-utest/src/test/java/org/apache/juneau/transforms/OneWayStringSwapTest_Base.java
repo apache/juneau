@@ -23,7 +23,7 @@ public abstract class OneWayStringSwapTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void testSwap(OneWayStringSwapTester<?> tester) throws Exception {
+	void testSwap(OneWayStringSwap_Tester<?> tester) throws Exception {
 		tester.testSwap();
 	}
 }

@@ -27,21 +27,21 @@ class InputStreamBase64_OneWayStringSwapTest extends OneWayStringSwapTest_Base {
 	private static BeanSession BS = BeanContext.DEFAULT_SESSION;
 	private static InputStreamSwap SWAP = new InputStreamSwap.Base64();
 
-	private static <T> OneWayStringSwapTester<T> tester(int index, String label, T object, StringSwap<T> swap, String expected, BeanSession bs) {
-		return OneWayStringSwapTester.create(index, label, object, swap, expected, bs).build();
+	private static <T> OneWayStringSwap_Tester<T> tester(int index, String label, T object, StringSwap<T> swap, String expected, BeanSession bs) {
+		return OneWayStringSwap_Tester.create(index, label, object, swap, expected, bs).build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Parameters
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static final OneWayStringSwapTester<?>[] TESTERS = {
+	private static final OneWayStringSwap_Tester<?>[] TESTERS = {
 		tester(1, "Basic string", inputStream("foo"), SWAP, "Zm9v", BS),
 		tester(2, "Blank string", inputStream(""), SWAP, "", BS),
 		tester(3, "null", null, SWAP, "", BS)
 	};
 
-	static OneWayStringSwapTester<?>[] testers() {
+	static OneWayStringSwap_Tester<?>[] testers() {
 		return TESTERS;
 	}
 }

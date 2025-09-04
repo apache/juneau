@@ -18,28 +18,29 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.internal.*;
 import org.apache.juneau.swap.*;
 
 /**
- * Tester class for one-way string swap testing designed for JUnit 5 parameterized tests.
- * Only performs swap operation (no unswap).
+ * Tester class for round-trip object swap testing designed for JUnit 5 parameterized tests.
+ * Performs both swap and unswap operations.
  */
-public class OneWayStringSwapTester<T> {
+public class RoundTripObjectSwap_Tester<T,S> {
 
-	public static <T> Builder<T> create(int index, String label, T object, StringSwap<T> swap, String expected, BeanSession beanSession) {
-		return new Builder<>("["+index+"] " + label, ()->object, swap, expected, beanSession);
+	public static <T,S> Builder<T,S> create(int index, String label, T object, ObjectSwap<T,S> swap, S expected, BeanSession beanSession) {
+		return new Builder<>(index, label, ()->object, swap, expected, beanSession);
 	}
 
-	public static class Builder<T> {
+	public static class Builder<T,S> {
+		private int index;
 		private String label;
 		private Supplier<T> objectSupplier;
-		private StringSwap<T> swap;
-		private String expected;
+		private ObjectSwap<T,S> swap;
+		private S expected;
 		private BeanSession beanSession;
 		private String exceptionMsg;
 
-		public Builder(String label, Supplier<T> objectSupplier, StringSwap<T> swap, String expected, BeanSession beanSession) {
+		public Builder(int index, String label, Supplier<T> objectSupplier, ObjectSwap<T,S> swap, S expected, BeanSession beanSession) {
+			this.index = index;
 			this.label = label;
 			this.objectSupplier = objectSupplier;
 			this.swap = swap;
@@ -47,25 +48,25 @@ public class OneWayStringSwapTester<T> {
 			this.beanSession = beanSession;
 		}
 
-		public Builder<T> exceptionMsg(String v) {
+		public Builder<T,S> exceptionMsg(String v) {
 			exceptionMsg = v;
 			return this;
 		}
 
-		public OneWayStringSwapTester<T> build() {
-			return new OneWayStringSwapTester<>(this);
+		public RoundTripObjectSwap_Tester<T,S> build() {
+			return new RoundTripObjectSwap_Tester<>(this);
 		}
 	}
 
 	private final String label;
 	private final Supplier<T> objectSupplier;
-	private final StringSwap<T> swap;
-	private final String expected;
+	private final ObjectSwap<T,S> swap;
+	private final S expected;
 	private final BeanSession beanSession;
 	private final String exceptionMsg;
 
-	private OneWayStringSwapTester(Builder<T> b) {
-		label = b.label;
+	private RoundTripObjectSwap_Tester(Builder<T,S> b) {
+		label = "[" + b.index + "] " + b.label;
 		objectSupplier = b.objectSupplier;
 		swap = b.swap;
 		expected = b.expected;
@@ -77,14 +78,8 @@ public class OneWayStringSwapTester<T> {
 		try {
 			var o = objectSupplier.get();
 			var s = swap.swap(beanSession, o);
-			if (Utils.ne(expected, s)) {
-				if (expected.isEmpty()) {
-					if (! label.startsWith("[]"))
-						System.err.println(label.substring(0, label.indexOf(']')+1) + " "+s);  // NOT DEBUG
-					fail("Test [" + label + " swap] failed - expected was empty but got: " + s);
-				} else {
-					fail("Test [" + label + " swap] failed. Expected=[" + expected + "], Actual=[" + s + "]");
-				}
+			if (ne(expected, s)) {
+				fail("Test [" + label + " swap] failed. Expected=[" + expected + "], Actual=[" + s + "]");
 			}
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
@@ -97,8 +92,29 @@ public class OneWayStringSwapTester<T> {
 		}
 	}
 
+	public void testUnswap() throws Exception {
+		try {
+			var o = objectSupplier.get();
+			var s = swap.swap(beanSession, o);
+			var o2 = swap.unswap(beanSession, s, beanSession.getClassMetaForObject(o));
+			var s2 = swap.swap(beanSession, o2);
+			if (ne(s, s2)) {
+				System.err.println("s=["+s+"], o=["+o+"], o.type=["+o.getClass().getName()+"], o2=["+o2+"], o2.type=["+o2.getClass().getName()+"]");  // NOT DEBUG
+				fail("Test [" + label + " unswap] failed. Expected=[" + s + "], Actual=[" + s2 + "]");
+			}
+		} catch (AssertionError e) {
+			if (exceptionMsg == null)
+				throw e;
+			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
+		} catch (Exception e) {
+			if (exceptionMsg == null)
+				throw new AssertionError("Test [" + label + " unswap] failed with exception: " + e.getLocalizedMessage(), e);
+			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
+		}
+	}
+
 	@Override
 	public String toString() {
-		return "OneWayStringSwapTester: " + label;
+		return "RoundTripObjectSwapTester: " + label;
 	}
 }

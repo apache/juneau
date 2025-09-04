@@ -23,13 +23,13 @@ public abstract class RoundTripObjectSwapTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void testSwap(RoundTripObjectSwapTester<?,?> tester) throws Exception {
+	void testSwap(RoundTripObjectSwap_Tester<?,?> tester) throws Exception {
 		tester.testSwap();
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void testUnswap(RoundTripObjectSwapTester<?,?> tester) throws Exception {
+	void testUnswap(RoundTripObjectSwap_Tester<?,?> tester) throws Exception {
 		tester.testUnswap();
 	}
 }

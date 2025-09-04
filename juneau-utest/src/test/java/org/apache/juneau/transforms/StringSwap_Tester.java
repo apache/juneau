@@ -21,24 +21,23 @@ import org.apache.juneau.*;
 import org.apache.juneau.swap.*;
 
 /**
- * Tester class for round-trip object swap testing designed for JUnit 5 parameterized tests.
- * Performs both swap and unswap operations.
+ * Tester class for round-trip string swap testing designed for JUnit 5 parameterized tests.
  */
-public class RoundTripObjectSwapTester<T,S> {
+public class StringSwap_Tester<T> {
 
-	public static <T,S> Builder<T,S> create(int index, String label, T object, ObjectSwap<T,S> swap, S expected, BeanSession beanSession) {
+	public static <T> Builder<T> create(int index, String label, T object, StringSwap<T> swap, String expected, BeanSession beanSession) {
 		return new Builder<>("["+index+"] " + label, ()->object, swap, expected, beanSession);
 	}
 
-	public static class Builder<T,S> {
+	public static class Builder<T> {
 		private String label;
 		private Supplier<T> objectSupplier;
-		private ObjectSwap<T,S> swap;
-		private S expected;
+		private StringSwap<T> swap;
+		private String expected;
 		private BeanSession beanSession;
 		private String exceptionMsg;
 
-		public Builder(String label, Supplier<T> objectSupplier, ObjectSwap<T,S> swap, S expected, BeanSession beanSession) {
+		public Builder(String label, Supplier<T> objectSupplier, StringSwap<T> swap, String expected, BeanSession beanSession) {
 			this.label = label;
 			this.objectSupplier = objectSupplier;
 			this.swap = swap;
@@ -46,24 +45,24 @@ public class RoundTripObjectSwapTester<T,S> {
 			this.beanSession = beanSession;
 		}
 
-		public Builder<T,S> exceptionMsg(String v) {
+		public Builder<T> exceptionMsg(String v) {
 			exceptionMsg = v;
 			return this;
 		}
 
-		public RoundTripObjectSwapTester<T,S> build() {
-			return new RoundTripObjectSwapTester<>(this);
+		public StringSwap_Tester<T> build() {
+			return new StringSwap_Tester<>(this);
 		}
 	}
 
 	private final String label;
 	private final Supplier<T> objectSupplier;
-	private final ObjectSwap<T,S> swap;
-	private final S expected;
+	private final StringSwap<T> swap;
+	private final String expected;
 	private final BeanSession beanSession;
 	private final String exceptionMsg;
 
-	private RoundTripObjectSwapTester(Builder<T,S> b) {
+	private StringSwap_Tester(Builder<T> b) {
 		label = b.label;
 		objectSupplier = b.objectSupplier;
 		swap = b.swap;
@@ -77,7 +76,13 @@ public class RoundTripObjectSwapTester<T,S> {
 			var o = objectSupplier.get();
 			var s = swap.swap(beanSession, o);
 			if (ne(expected, s)) {
-				fail("Test [" + label + " swap] failed. Expected=[" + expected + "], Actual=[" + s + "]");
+				if (expected.isEmpty()) {
+					if (! label.startsWith("[]"))
+						System.err.println(label.substring(0, label.indexOf(']')+1) + " "+s);  // NOT DEBUG
+					fail("Test [" + label + " swap] failed - expected was empty but got: " + s);
+				} else {
+					fail("Test [" + label + " swap] failed. Expected=[" + expected + "], Actual=[" + s + "]");
+				}
 			}
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
@@ -97,7 +102,8 @@ public class RoundTripObjectSwapTester<T,S> {
 			var o2 = swap.unswap(beanSession, s, beanSession.getClassMetaForObject(o));
 			var s2 = swap.swap(beanSession, o2);
 			if (ne(s, s2)) {
-				System.err.println("s=["+s+"], o=["+o+"], o.type=["+o.getClass().getName()+"], o2=["+o2+"], o2.type=["+o2.getClass().getName()+"]");  // NOT DEBUG
+				if (expected.isEmpty())
+					fail("Test [" + label + " unswap] failed - expected was empty");
 				fail("Test [" + label + " unswap] failed. Expected=[" + s + "], Actual=[" + s2 + "]");
 			}
 		} catch (AssertionError e) {
@@ -113,6 +119,6 @@ public class RoundTripObjectSwapTester<T,S> {
 
 	@Override
 	public String toString() {
-		return "RoundTripObjectSwapTester: " + label;
+		return "StringSwapTester: " + label;
 	}
 }

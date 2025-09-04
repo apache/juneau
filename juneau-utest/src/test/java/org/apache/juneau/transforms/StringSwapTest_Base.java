@@ -23,13 +23,13 @@ public abstract class StringSwapTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void testSwap(StringSwapTester<?> tester) throws Exception {
+	void testSwap(StringSwap_Tester<?> tester) throws Exception {
 		tester.testSwap();
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void testUnswap(StringSwapTester<?> tester) throws Exception {
+	void testUnswap(StringSwap_Tester<?> tester) throws Exception {
 		tester.testUnswap();
 	}
 }

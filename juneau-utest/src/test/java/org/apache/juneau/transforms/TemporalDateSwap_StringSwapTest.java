@@ -41,11 +41,11 @@ class TemporalDateSwap_StringSwapTest extends StringSwapTest_Base {
 
 	private static Date T_Date = Date.from(Instant.from(DateTimeFormatter.ISO_INSTANT.parse("2012-12-21T12:34:56Z")));
 
-	private static <T> StringSwapTester<T> tester(int index, String label, T object, StringSwap<T> swap, String expected, BeanSession bs) {
-		return StringSwapTester.create(index, label, object, swap, expected, bs).build();
+	private static <T> StringSwap_Tester<T> tester(int index, String label, T object, StringSwap<T> swap, String expected, BeanSession bs) {
+		return StringSwap_Tester.create(index, label, object, swap, expected, bs).build();
 	}
 
-	private static final StringSwapTester<?>[] TESTERS = {
+	private static final StringSwap_Tester<?>[] TESTERS = {
 		tester(1, "BasicIsoDate, Default timezone", T_Date, new TemporalDateSwap.BasicIsoDate(), "20121221-0500", BS_DEFAULT),
 		tester(2, "BasicIsoDate, Pacific timezone", T_Date, new TemporalDateSwap.BasicIsoDate(), "20121221-0800", BS_PST),
 		tester(3, "IsoDate, Default timezone", T_Date, new TemporalDateSwap.IsoDate(), "2012-12-21-05:00", BS_DEFAULT),
@@ -81,7 +81,7 @@ class TemporalDateSwap_StringSwapTest extends StringSwapTest_Base {
 		tester(33, "BasicIsoDate, null", null, new TemporalDateSwap.BasicIsoDate(), null, BS_DEFAULT)
 	};
 
-	static StringSwapTester<?>[] testers() {
+	static StringSwap_Tester<?>[] testers() {
 		return TESTERS;
 	}
 }

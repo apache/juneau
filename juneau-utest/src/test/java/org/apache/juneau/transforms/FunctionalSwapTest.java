@@ -28,21 +28,21 @@ class FunctionalSwapTest extends RoundTripObjectSwapTest_Base {
 	private static final LocaleSwap localeSwap = new LocaleSwap();
 	private static FunctionalSwap<Locale,String> SWAP = new FunctionalSwap<>(Locale.class, String.class, x->localeSwap.swap(BS, x), x->localeSwap.unswap(BS, x, null));
 
-	private static <T,S> RoundTripObjectSwapTester<T,S> tester(int index, String label, T object, ObjectSwap<T,S> swap, S expected, BeanSession bs) {
-		return RoundTripObjectSwapTester.create(index, label, object, swap, expected, bs).build();
+	private static <T,S> RoundTripObjectSwap_Tester<T,S> tester(int index, String label, T object, ObjectSwap<T,S> swap, S expected, BeanSession bs) {
+		return RoundTripObjectSwap_Tester.create(index, label, object, swap, expected, bs).build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Parameters
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static final RoundTripObjectSwapTester<?,?>[] TESTERS = {
+	private static final RoundTripObjectSwap_Tester<?,?>[] TESTERS = {
 		tester(1, "Language only", Locale.ENGLISH, SWAP, "en", BS),
 		tester(2, "Language and country", Locale.JAPAN, SWAP, "ja-JP", BS),
 		tester(3, "null", null, SWAP, null, BS)
 	};
 
-	static RoundTripObjectSwapTester<?,?>[] testers() {
+	static RoundTripObjectSwap_Tester<?,?>[] testers() {
 		return TESTERS;
 	}
 }

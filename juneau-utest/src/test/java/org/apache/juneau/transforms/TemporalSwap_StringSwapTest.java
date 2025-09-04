@@ -61,15 +61,15 @@ class TemporalSwap_StringSwapTest extends StringSwapTest_Base {
 		DT_MinguoDate = MinguoDate.from(DT_ZonedDateTime),
 		DT_ThaiBuddhistDate = ThaiBuddhistDate.from(DT_ZonedDateTime);
 
-	private static <T> StringSwapTester<T> tester(int index, String label, T object, StringSwap<T> swap, String expected, BeanSession bs) {
-		return StringSwapTester.create(index, label, object, swap, expected, bs).build();
+	private static <T> StringSwap_Tester<T> tester(int index, String label, T object, StringSwap<T> swap, String expected, BeanSession bs) {
+		return StringSwap_Tester.create(index, label, object, swap, expected, bs).build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Parameters
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static final StringSwapTester<?>[] TESTERS = {
+	private static final StringSwap_Tester<?>[] TESTERS = {
 		tester(1, "BasicIsoDate, DT_ZonedDateTime, Default timezone", DT_ZonedDateTime, new TemporalSwap.BasicIsoDate(), "20121221Z", BS_DEFAULT),
 		tester(2, "BasicIsoDate, DT_Instant, Default timezone", DT_Instant, new TemporalSwap.BasicIsoDate(), "20121221Z", BS_DEFAULT),
 		tester(3, "BasicIsoDate, DT_LocalDate, Default timezone", DT_LocalDate, new TemporalSwap.BasicIsoDate(), "20121221", BS_DEFAULT),
@@ -515,7 +515,7 @@ class TemporalSwap_StringSwapTest extends StringSwapTest_Base {
 		tester(443, "BasicIsoDate, null", null, new TemporalSwap.BasicIsoDate(), null, BS_DEFAULT)
 	};
 
-	static StringSwapTester<?>[] testers() {
+	static StringSwap_Tester<?>[] testers() {
 		return TESTERS;
 	}
 }
