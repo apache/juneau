@@ -44,7 +44,7 @@ import org.junit.jupiter.params.provider.*;
 @SuppressWarnings({"rawtypes","serial"})
 class RoundTripTransformBeans_Test extends SimpleTestBase {
 
-	private static RoundTripTester[] TESTERS = {
+	private static RoundTrip_Tester[] TESTERS = {
 		tester("Json - default")
 			.serializer(JsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
@@ -117,12 +117,12 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 			.build(),
 	};
 
-	static RoundTripTester[]  testers() {
+	static RoundTrip_Tester[]  testers() {
 		return TESTERS;
 	}
 
-	protected static RoundTripTester.Builder tester(String label) {
-		return RoundTripTester.create(label).annotatedClasses(BcConfig.class, E1cConfig.class, F1cConfig.class, F2acConfig.class).pojoSwaps(D2.class, ByteArraySwap.Base64.class);
+	protected static RoundTrip_Tester.Builder tester(String label) {
+		return RoundTrip_Tester.create(label).annotatedClasses(BcConfig.class, E1cConfig.class, F1cConfig.class, F2acConfig.class).pojoSwaps(D2.class, ByteArraySwap.Base64.class);
 	}
 
 	//====================================================================================================
@@ -131,7 +131,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_swapBeans1(RoundTripTester t) throws Exception {
+	void a01_swapBeans1(RoundTrip_Tester t) throws Exception {
 		var x = new A().init();
 		x = t.roundTrip(x, A.class);
 
@@ -231,7 +231,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a02_swapBeans2(RoundTripTester t) throws Exception {
+	void a02_swapBeans2(RoundTrip_Tester t) throws Exception {
 		var x = new A().init();
 		x = t.roundTrip(x, A.class);
 
@@ -271,7 +271,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a03_swaps(RoundTripTester t) throws Exception {
+	void a03_swaps(RoundTrip_Tester t) throws Exception {
 		var x = new B();
 		x.f1 = "bar";
 		x = t.roundTrip(x, B.class);
@@ -299,7 +299,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a04_Swaps_usingConfig(RoundTripTester t) throws Exception {
+	void a04_Swaps_usingConfig(RoundTrip_Tester t) throws Exception {
 		var x = new Bc();
 		x.f1 = "bar";
 		x = t.roundTrip(x, Bc.class);
@@ -335,7 +335,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a05_xmlGregorianCalendar(RoundTripTester t) throws Exception {
+	void a05_xmlGregorianCalendar(RoundTrip_Tester t) throws Exception {
 
 		if (t.isValidationOnly())
 			return;
@@ -357,7 +357,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a06_subTypeWithGenerics(RoundTripTester t) throws Exception {
+	void a06_subTypeWithGenerics(RoundTrip_Tester t) throws Exception {
 		var s = JsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 
 		var x = C3.create();
@@ -405,7 +405,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a07_surrogates(RoundTripTester t) throws Exception {
+	void a07_surrogates(RoundTrip_Tester t) throws Exception {
 		var s = JsonSerializer.create().json5().swaps(D2.class).build();
 		var p = JsonParser.create().swaps(D2.class).build();
 		var x = D1.create();
@@ -447,7 +447,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a08_surrogatesThroughAnnotation(RoundTripTester t) throws Exception {
+	void a08_surrogatesThroughAnnotation(RoundTrip_Tester t) throws Exception {
 		var s = Json5Serializer.DEFAULT;
 		var p = JsonParser.DEFAULT;
 		var x = E1.create();
@@ -490,7 +490,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a09_surrogatesThroughAnnotation_usingConfig(RoundTripTester t) throws Exception {
+	void a09_surrogatesThroughAnnotation_usingConfig(RoundTrip_Tester t) throws Exception {
 		var s = Json5Serializer.DEFAULT.copy().applyAnnotations(E1cConfig.class).build();
 		var p = JsonParser.DEFAULT.copy().applyAnnotations(E1cConfig.class).build();
 		var x = E1c.create();
@@ -555,7 +555,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a10_swapOnPrivateField(RoundTripTester t) throws Exception {
+	void a10_swapOnPrivateField(RoundTrip_Tester t) throws Exception {
 		var s = Json5Serializer.DEFAULT;
 		var p = JsonParser.DEFAULT;
 
@@ -590,7 +590,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a11_swapOnPrivateField_usingConfig(RoundTripTester t) throws Exception {
+	void a11_swapOnPrivateField_usingConfig(RoundTrip_Tester t) throws Exception {
 		var s = Json5Serializer.DEFAULT.copy().applyAnnotations(F1cConfig.class).build();
 		var p = JsonParser.DEFAULT.copy().applyAnnotations(F1cConfig.class).build();
 
@@ -624,7 +624,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a12_swapOnPrivateField_Inherited(RoundTripTester t) throws Exception {
+	void a12_swapOnPrivateField_Inherited(RoundTrip_Tester t) throws Exception {
 		var s = Json5Serializer.DEFAULT;
 		var p = JsonParser.DEFAULT;
 
@@ -662,7 +662,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a13_swapOnPrivateField_Inherited_usingConfig(RoundTripTester t) throws Exception {
+	void a13_swapOnPrivateField_Inherited_usingConfig(RoundTrip_Tester t) throws Exception {
 		var s = Json5Serializer.DEFAULT.copy().applyAnnotations(F2ac.class).build();
 		var p = JsonParser.DEFAULT.copy().applyAnnotations(F2ac.class).build();
 
@@ -704,7 +704,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a14_beanWithIncompleteCopyConstructor(RoundTripTester t) throws Exception {
+	void a14_beanWithIncompleteCopyConstructor(RoundTrip_Tester t) throws Exception {
 		var x = F.create();
 		x = t.roundTrip(x);
 		assertJson("{f1:1,f2:2}", x);

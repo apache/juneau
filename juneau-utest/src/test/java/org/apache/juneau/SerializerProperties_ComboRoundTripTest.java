@@ -29,11 +29,11 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings({})
 class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
-	private static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Type type, T bean) {
-		return ComboRoundTripTester.create(index, label, type, ()->bean);
+	private static <T> ComboRoundTrip_Tester.Builder<T> tester(int index, String label, Type type, T bean) {
+		return ComboRoundTrip_Tester.create(index, label, type, ()->bean);
 	}
 
-	private static ComboRoundTripTester<?>[] TESTERS = {
+	private static ComboRoundTrip_Tester<?>[] TESTERS = {
 		tester(1, "SERIALIZER_addBeanTypes", JsonMap.class, JsonMap.of("a", T0.create()))
 			.json("{a:{_type:'BwT',f:1}}")
 			.jsonT("{a:{t:'BwT',f:1}}")
@@ -331,7 +331,7 @@ class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.build(),
 	};
 
-	static ComboRoundTripTester<?>[] testers() {
+	static ComboRoundTrip_Tester<?>[] testers() {
 		return TESTERS;
 	}
 

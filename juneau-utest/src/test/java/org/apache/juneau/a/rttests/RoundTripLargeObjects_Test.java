@@ -38,7 +38,7 @@ class RoundTripLargeObjects_Test extends SimpleTestBase {
 	private static final int NUM_RUNS = 10;
 	private static final int SIZE_PARAM = 20000;
 
-	private static RoundTripTester[] TESTERS = {
+	private static RoundTrip_Tester[] TESTERS = {
 		tester("Json DEFAULT")
 			.serializer(JsonSerializer.create().keepNullProperties())
 			.parser(JsonParser.create())
@@ -81,12 +81,12 @@ class RoundTripLargeObjects_Test extends SimpleTestBase {
 			.build()
 	};
 
-	static RoundTripTester[]  testers() {
+	static RoundTrip_Tester[]  testers() {
 		return TESTERS;
 	}
 
-	protected static RoundTripTester.Builder tester(String label) {
-		return RoundTripTester.create(label);
+	protected static RoundTrip_Tester.Builder tester(String label) {
+		return RoundTrip_Tester.create(label);
 	}
 
 	//====================================================================================================
@@ -95,7 +95,7 @@ class RoundTripLargeObjects_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_largeMap(RoundTripTester t) throws Exception {
+	void a01_largeMap(RoundTrip_Tester t) throws Exception {
 		long startTime;
 		var numRuns = NUM_RUNS;
 

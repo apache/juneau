@@ -32,7 +32,7 @@ class TrimStrings_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_basic(RoundTripTester t) throws Exception {
+	void a01_basic(RoundTrip_Tester t) throws Exception {
 		if (t.isValidationOnly())
 			return;
 		var s = t.getSerializer();

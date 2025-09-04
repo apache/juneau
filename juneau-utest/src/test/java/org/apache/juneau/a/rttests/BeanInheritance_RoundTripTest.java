@@ -30,7 +30,7 @@ class BeanInheritance_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_beanInheritance(RoundTripTester t) throws Exception {
+	void a01_beanInheritance(RoundTrip_Tester t) throws Exception {
 
 		// Skip tests that just return the same object.
 		if (t.returnOriginalObject)
@@ -123,7 +123,7 @@ class BeanInheritance_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a02_beanInheritance(RoundTripTester t) throws Exception {
+	void a02_beanInheritance(RoundTrip_Tester t) throws Exception {
 		var t1 = new B1().init();
 		var t2 = t. roundTrip(t1, B1.class);
 		assertEquals(json(t2), json(t1));

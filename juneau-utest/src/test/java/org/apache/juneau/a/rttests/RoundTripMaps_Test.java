@@ -36,7 +36,7 @@ import org.junit.jupiter.params.provider.*;
 @SuppressWarnings({"deprecation"})
 class RoundTripMaps_Test extends SimpleTestBase {
 
-	private static RoundTripTester[] TESTERS = {
+	private static RoundTrip_Tester[] TESTERS = {
 		tester("Json - default")
 			.serializer(JsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
@@ -109,12 +109,12 @@ class RoundTripMaps_Test extends SimpleTestBase {
 			.build(),
 	};
 
-	static RoundTripTester[]  testers() {
+	static RoundTrip_Tester[]  testers() {
 		return TESTERS;
 	}
 
-	protected static RoundTripTester.Builder tester(String label) {
-		return RoundTripTester.create(label).pojoSwaps(ByteArraySwap.Base64.class);
+	protected static RoundTrip_Tester.Builder tester(String label) {
+		return RoundTrip_Tester.create(label).pojoSwaps(ByteArraySwap.Base64.class);
 	}
 
 	//====================================================================================================
@@ -123,7 +123,7 @@ class RoundTripMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_mapIntegerString(RoundTripTester t) throws Exception {
+	void a01_mapIntegerString(RoundTrip_Tester t) throws Exception {
 		var x = new TreeMap<Integer,String>();
 		x.put(1, "a");
 		x.put(2, null);
@@ -147,7 +147,7 @@ class RoundTripMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a02_mapBooleanString(RoundTripTester t) throws Exception {
+	void a02_mapBooleanString(RoundTrip_Tester t) throws Exception {
 		var x = new TreeMap<Boolean,String>();
 		x.put(true, "a");
 		x.put(false, null);
@@ -171,7 +171,7 @@ class RoundTripMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a03_mapByteArrayString(RoundTripTester t) throws Exception {
+	void a03_mapByteArrayString(RoundTrip_Tester t) throws Exception {
 
 		// Note, you cannot really test maps with byte[] keys since byte[] does not test for equality.
 		// So just test serialization.
@@ -215,7 +215,7 @@ class RoundTripMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a04_mapDateString(RoundTripTester t) throws Exception {
+	void a04_mapDateString(RoundTrip_Tester t) throws Exception {
 		var xd1 = new Date(1,2,3,4,5,6);
 		var xd2 = new Date(2,3,4,5,6,7);
 
@@ -242,7 +242,7 @@ class RoundTripMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a05_mapCalendarString(RoundTripTester t) throws Exception {
+	void a05_mapCalendarString(RoundTrip_Tester t) throws Exception {
 		var xc1 = GregorianCalendar.from(ZonedDateTime.parse("2012-12-21T12:34:56Z"));
 		var xc2 = GregorianCalendar.from(ZonedDateTime.parse("2012-12-21T12:34:57Z"));
 
@@ -270,7 +270,7 @@ class RoundTripMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a06_mapEnumString(RoundTripTester t) throws Exception {
+	void a06_mapEnumString(RoundTrip_Tester t) throws Exception {
 
 		var x = new TreeMap<TestEnum,String>();
 		x.put(TestEnum.FOO, "a");

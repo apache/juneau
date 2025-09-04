@@ -41,7 +41,7 @@ import org.junit.jupiter.params.provider.*;
 @SuppressWarnings({"serial"})
 class RoundTripBeanMaps_Test extends SimpleTestBase {
 
-	private static RoundTripTester[] TESTERS = {
+	private static RoundTrip_Tester[] TESTERS = {
 		tester("Json - default")
 			.serializer(JsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
@@ -114,12 +114,12 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 			.build(),
 	};
 
-	static RoundTripTester[]  testers() {
+	static RoundTrip_Tester[]  testers() {
 		return TESTERS;
 	}
 
-	protected static RoundTripTester.Builder tester(String label) {
-		return RoundTripTester.create(label).annotatedClasses(L2Config.class, M2Config.class).implClasses(Map.of(IBean.class, CBean.class));
+	protected static RoundTrip_Tester.Builder tester(String label) {
+		return RoundTrip_Tester.create(label).annotatedClasses(L2Config.class, M2Config.class).implClasses(Map.of(IBean.class, CBean.class));
 	}
 
 	//====================================================================================================
@@ -128,7 +128,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_implClasses(RoundTripTester t) throws Exception {
+	void a01_implClasses(RoundTrip_Tester t) throws Exception {
 		var bean = new CBean();
 
 		bean.setF1("bar");
@@ -146,7 +146,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a02_implArrayClasses(RoundTripTester t) throws Exception {
+	void a02_implArrayClasses(RoundTrip_Tester t) throws Exception {
 		var bean = (IBean[])new CBean[]{new CBean()};
 
 		bean[0].setF1("bar");
@@ -164,7 +164,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a03_implListClasses(RoundTripTester t) throws Exception {
+	void a03_implListClasses(RoundTrip_Tester t) throws Exception {
 		var l = alist(new CBean());
 
 		l.get(0).setF1("bar");
@@ -186,7 +186,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a04_implMap(RoundTripTester t) throws Exception {
+	void a04_implMap(RoundTrip_Tester t) throws Exception {
 		var l = CollectionUtils.map("foo",new CBean());
 
 		l.get("foo").setF1("bar");
@@ -208,7 +208,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a05_implMap2(RoundTripTester t) throws Exception {
+	void a05_implMap2(RoundTrip_Tester t) throws Exception {
 		var b = new A(1);
 		b = t.roundTrip(b);
 		if (t.returnOriginalObject || t.getParser() == null)
@@ -264,7 +264,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a06_subTypesUsingAnnotation(RoundTripTester t) throws Exception {
+	void a06_subTypesUsingAnnotation(RoundTrip_Tester t) throws Exception {
 		var js = JsonSerializer.create().json5().addBeanTypes().addRootType().build();
 
 		// Skip validation-only tests
@@ -339,7 +339,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a07_subTypesUsingBeanFilter(RoundTripTester t) throws Exception {
+	void a07_subTypesUsingBeanFilter(RoundTrip_Tester t) throws Exception {
 		var js = JsonSerializer.create().json5().build();
 
 		// Skip validation-only tests
@@ -416,7 +416,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a08_subTypePropertyWithRealPropertyUsingAnnotation(RoundTripTester t) throws Exception {
+	void a08_subTypePropertyWithRealPropertyUsingAnnotation(RoundTrip_Tester t) throws Exception {
 		// Skip validation-only tests
 		if (t.isValidationOnly())
 			return;
@@ -458,7 +458,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a09_subTypePropertyWithRealPropertyUsingBeanFilter(RoundTripTester t) throws Exception {
+	void a09_subTypePropertyWithRealPropertyUsingBeanFilter(RoundTrip_Tester t) throws Exception {
 		// Skip validation-only tests
 		if (t.isValidationOnly())
 			return;
@@ -504,7 +504,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a10_propertiesUsingAnnotation(RoundTripTester t) throws Exception {
+	void a10_propertiesUsingAnnotation(RoundTrip_Tester t) throws Exception {
 		// Skip validation-only tests
 		if (t.isValidationOnly())
 			return;
@@ -536,7 +536,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a11_propertiesUsingBeanFilter(RoundTripTester t) throws Exception {
+	void a11_propertiesUsingBeanFilter(RoundTrip_Tester t) throws Exception {
 		var js = JsonSerializer.create().json5().beanProperties(D2.class, "f3,f2").build();
 
 		// Skip validation-only tests
@@ -569,7 +569,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a12_excludePropertiesUsingAnnotation(RoundTripTester t) throws Exception {
+	void a12_excludePropertiesUsingAnnotation(RoundTrip_Tester t) throws Exception {
 		// Skip validation-only tests
 		if (t.isValidationOnly())
 			return;
@@ -600,7 +600,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a13_excludePropertiesUsingBeanFilter(RoundTripTester t) throws Exception {
+	void a13_excludePropertiesUsingBeanFilter(RoundTrip_Tester t) throws Exception {
 		// Skip validation-only tests
 		if (t.isValidationOnly())
 			return;
@@ -630,7 +630,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a14_interfaceClassUsingAnnotation(RoundTripTester t) throws Exception {
+	void a14_interfaceClassUsingAnnotation(RoundTrip_Tester t) throws Exception {
 		// Skip validation-only tests
 		if (t.isValidationOnly())
 			return;
@@ -664,7 +664,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a15_interfaceClassUsingBeanFilter(RoundTripTester t) throws Exception {
+	void a15_interfaceClassUsingBeanFilter(RoundTrip_Tester t) throws Exception {
 		var s = t.getSerializer().copy();
 		var p = t.getParser() == null ? null : t.getParser().copy();
 		FB2 x;
@@ -721,7 +721,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a16_memberClass(RoundTripTester t) {
+	void a16_memberClass(RoundTrip_Tester t) {
 		var x = G.create();
 		assertDoesNotThrow(()->t.roundTrip(x, G.class));
 	}
@@ -762,7 +762,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a17_memberClassWithMapClass(RoundTripTester t) {
+	void a17_memberClassWithMapClass(RoundTrip_Tester t) {
 		var x = H.create();
 		assertDoesNotThrow(()->t.roundTrip(x, H.class));
 	}
@@ -803,7 +803,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a18_memberClassWithListClass(RoundTripTester t) {
+	void a18_memberClassWithListClass(RoundTrip_Tester t) {
 		var x = I.create();
 		assertDoesNotThrow(()->t.roundTrip(x, I.class));
 	}
@@ -844,7 +844,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a19_memberClassWithStringConstructor(RoundTripTester t) {
+	void a19_memberClassWithStringConstructor(RoundTrip_Tester t) {
 		var x = J.create();
 		assertDoesNotThrow(()->t.roundTrip(x, J.class));
 	}
@@ -882,7 +882,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a20_beanPropertyPrecedence(RoundTripTester t) {
+	void a20_beanPropertyPrecedence(RoundTrip_Tester t) {
 		var x = K.create();
 		assertDoesNotThrow(()->t.roundTrip(x, K.class));
 	}
@@ -925,7 +925,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a21_wrapperAttrAnnotationOnBean(RoundTripTester t) {
+	void a21_wrapperAttrAnnotationOnBean(RoundTrip_Tester t) {
 		var x = L.create();
 		assertDoesNotThrow(()->t.roundTrip(x, L.class));
 
@@ -947,7 +947,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a22_wrapperAttrAnnotationOnBean_usingConfig(RoundTripTester t) {
+	void a22_wrapperAttrAnnotationOnBean_usingConfig(RoundTrip_Tester t) {
 		var x = L2.create();
 		assertDoesNotThrow(()->t.roundTrip(x, L2.class));
 
@@ -975,7 +975,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a23_wrapperAttrAnnotationOnNonBean(RoundTripTester t) {
+	void a23_wrapperAttrAnnotationOnNonBean(RoundTrip_Tester t) {
 		var x = M.create();
 		assertDoesNotThrow(()->t.roundTrip(x, M.class));
 
@@ -1008,7 +1008,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a24_WrapperAttrAnnotationOnNonBean_usingConfig(RoundTripTester t) {
+	void a24_WrapperAttrAnnotationOnNonBean_usingConfig(RoundTrip_Tester t) {
 		var x = M2.create();
 		assertDoesNotThrow(()->t.roundTrip(x, M2.class));
 
@@ -1047,7 +1047,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a25_BeanPropertyWithBeanWithAttrsField(RoundTripTester t) throws Exception {
+	void a25_BeanPropertyWithBeanWithAttrsField(RoundTrip_Tester t) throws Exception {
 		var x = N.create();
 		x = t.roundTrip(x, N.class);
 

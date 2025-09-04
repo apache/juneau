@@ -21,11 +21,11 @@ import org.apache.juneau.annotation.*;
 
 class Builder_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
-	private static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Type type, T bean) {
-		return ComboRoundTripTester.create(index, label, type, ()->bean);
+	private static <T> ComboRoundTrip_Tester.Builder<T> tester(int index, String label, Type type, T bean) {
+		return ComboRoundTrip_Tester.create(index, label, type, ()->bean);
 	}
 
-	private static ComboRoundTripTester<?>[] TESTERS = {
+	private static ComboRoundTrip_Tester<?>[] TESTERS = {
 		tester(1, "A", A.class, new A(null).init())
 			.json("{a:1}")
 			.jsonT("{a:1}")
@@ -178,7 +178,7 @@ class Builder_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.build()
 	};
 
-	static ComboRoundTripTester<?>[] testers() {
+	static ComboRoundTrip_Tester<?>[] testers() {
 		return TESTERS;
 	}
 

@@ -26,7 +26,7 @@ import org.apache.juneau.xml.*;
  */
 public abstract class RoundTripTest_Base extends SimpleTestBase {
 
-	private static RoundTripTester[] TESTERS = {
+	private static RoundTrip_Tester[] TESTERS = {
 		tester("Json - default")
 			.serializer(JsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
@@ -99,11 +99,11 @@ public abstract class RoundTripTest_Base extends SimpleTestBase {
 			.build(),
 	};
 
-	static RoundTripTester[]  testers() {
+	static RoundTrip_Tester[]  testers() {
 		return TESTERS;
 	}
 
-	protected static RoundTripTester.Builder tester(String label) {
-		return RoundTripTester.create(label);
+	protected static RoundTrip_Tester.Builder tester(String label) {
+		return RoundTrip_Tester.create(label);
 	}
 }

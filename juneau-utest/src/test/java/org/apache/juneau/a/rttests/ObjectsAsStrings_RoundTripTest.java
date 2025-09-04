@@ -31,7 +31,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_basic(RoundTripTester t) throws Exception {
+	void a01_basic(RoundTrip_Tester t) throws Exception {
 		var x = new A().init();
 		x = t.roundTrip(x);
 		assertBean(x, "a1{f},a2{f},a3{f},a4{f}", "{1},{2},{3},{4}");
@@ -115,7 +115,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a02_enumWithOverriddenStringValue(RoundTripTester t) throws Exception {
+	void a02_enumWithOverriddenStringValue(RoundTrip_Tester t) throws Exception {
 		var x = new B().init();
 		if (! t.returnOriginalObject) {
 			var r = t.getSerializer().serialize(x);
@@ -175,7 +175,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a03_ordering(RoundTripTester t) throws Exception {
+	void a03_ordering(RoundTrip_Tester t) throws Exception {
 		var x = new C().init();
 		x = t.roundTrip(x);
 		assertJson("{c1:{f:'1'},c2:{f:'2'},c3:{f:'3'},c4:{f:'4'}}", x);

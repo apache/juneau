@@ -32,7 +32,7 @@ class PrimitivesBeans_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_primitivesBean(RoundTripTester t) throws Exception {
+	void a01_primitivesBean(RoundTrip_Tester t) throws Exception {
 		var x = new PrimitivesBean().init();
 		x = t.roundTrip(x, PrimitivesBean.class);
 
@@ -249,7 +249,7 @@ class PrimitivesBeans_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a02_primitivesBeanList(RoundTripTester t) throws Exception {
+	void a02_primitivesBeanList(RoundTrip_Tester t) throws Exception {
 		var x = alist(new PrimitivesBean().init(), null, new PrimitivesBean().init());
 		if (t.getParser() == null)
 			return;

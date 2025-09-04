@@ -33,7 +33,7 @@ class ObjectsWithSpecialMethods_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_nameProperty(RoundTripTester t) throws Exception {
+	void a01_nameProperty(RoundTrip_Tester t) throws Exception {
 		var x = new A().init();
 		x = t.roundTrip(x);
 		assertJson("{a2:{f2:2},m:{k1:{f2:2}}}", x);
@@ -76,7 +76,7 @@ class ObjectsWithSpecialMethods_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a02_parentProperty(RoundTripTester t) throws Exception {
+	void a02_parentProperty(RoundTrip_Tester t) throws Exception {
 		var x = new B().init();
 		x = t.roundTrip(x);
 		if (t.isValidationOnly())

@@ -35,7 +35,7 @@ class JsonMaps_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_basic(RoundTripTester t) throws Exception {
+	void a01_basic(RoundTrip_Tester t) throws Exception {
 		var x1 = new A(JsonMap.ofJson("{f1:'a',f2:2}"));
 		x1 = t.roundTrip(x1, A.class);
 		assertBean(x1, "f1,f2", "a,2");

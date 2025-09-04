@@ -32,11 +32,11 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		SINGLE_DATE.set(1901, 2, 3, 10, 11, 12);
 	}
 
-	private static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Class<T> type, T bean) {
-		return ComboRoundTripTester.create(index, label, type, ()->bean).serializerApply(Serializer.Builder::keepNullProperties);
+	private static <T> ComboRoundTrip_Tester.Builder<T> tester(int index, String label, Class<T> type, T bean) {
+		return ComboRoundTrip_Tester.create(index, label, type, ()->bean).serializerApply(Serializer.Builder::keepNullProperties);
 	}
 
-	private static ComboRoundTripTester<?>[] TESTERS = {
+	private static ComboRoundTrip_Tester<?>[] TESTERS = {
 		tester(1, "BeanWithDynaField", BeanWithDynaField.class, new BeanWithDynaField().init())
 			.json("{f1:1,f2a:'a',f2b:'b',f3:3}")
 			.jsonT("{f1:1,f2a:'a',f2b:'b',f3:3}")
@@ -186,7 +186,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.build()
 	};
 
-	static ComboRoundTripTester<?>[] testers() {
+	static ComboRoundTrip_Tester<?>[] testers() {
 		return TESTERS;
 	}
 

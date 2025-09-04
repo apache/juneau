@@ -39,11 +39,11 @@ class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		return HtmlBuilder.a(ref, children);
 	}
 
-	private static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Type type, T bean) {
-		return ComboRoundTripTester.create(index, label, type, ()->bean);
+	private static <T> ComboRoundTrip_Tester.Builder<T> tester(int index, String label, Type type, T bean) {
+		return ComboRoundTrip_Tester.create(index, label, type, ()->bean);
 	}
 
-	private static ComboRoundTripTester<?>[] TESTERS = {
+	private static ComboRoundTrip_Tester<?>[] TESTERS = {
 		tester(1, "A", A.class, a2("http://foo", "bar"))
 			.json("{_type:'a',a:{href:'http://foo'},c:['bar']}")
 			.jsonT("{t:'a',a:{href:'http://foo'},c:['bar']}")
@@ -2226,7 +2226,7 @@ class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.build(),
 	};
 
-	static ComboRoundTripTester<?>[] testers() {
+	static ComboRoundTrip_Tester<?>[] testers() {
 		return TESTERS;
 	}
 

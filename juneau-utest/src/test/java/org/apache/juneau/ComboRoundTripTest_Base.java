@@ -35,19 +35,19 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void a11_serializeJson(ComboRoundTripTester<?> t) throws Exception {
+	public void a11_serializeJson(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("json");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void a12_parseJson(ComboRoundTripTester<?> t) throws Exception {
+	public void a12_parseJson(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("json");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void a13_verifyJson(ComboRoundTripTester<?> t) throws Exception {
+	public void a13_verifyJson(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("json");
 	}
 
@@ -57,19 +57,19 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void a21_serializeJsonT(ComboRoundTripTester<?> t) throws Exception {
+	public void a21_serializeJsonT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("jsonT");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void a22_parseJsonT(ComboRoundTripTester<?> t) throws Exception {
+	public void a22_parseJsonT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("jsonT");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void a23_verifyJsonT(ComboRoundTripTester<?> t) throws Exception {
+	public void a23_verifyJsonT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("jsonT");
 	}
 
@@ -79,19 +79,19 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void a31_serializeJsonR(ComboRoundTripTester<?> t) throws Exception {
+	public void a31_serializeJsonR(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("jsonR");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void a32_parseJsonR(ComboRoundTripTester<?> t) throws Exception {
+	public void a32_parseJsonR(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("jsonR");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void a33_verifyJsonR(ComboRoundTripTester<?> t) throws Exception {
+	public void a33_verifyJsonR(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("jsonR");
 	}
 
@@ -101,19 +101,19 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void b11_serializeXml(ComboRoundTripTester<?> t) throws Exception {
+	public void b11_serializeXml(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("xml");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void b12_parseXml(ComboRoundTripTester<?> t) throws Exception {
+	public void b12_parseXml(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("xml");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void b13_verifyXml(ComboRoundTripTester<?> t) throws Exception {
+	public void b13_verifyXml(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("xml");
 	}
 
@@ -123,19 +123,19 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void b21_serializeXmlT(ComboRoundTripTester<?> t) throws Exception {
+	public void b21_serializeXmlT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("xmlT");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void b22_parseXmlT(ComboRoundTripTester<?> t) throws Exception {
+	public void b22_parseXmlT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("xmlT");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void b23_verifyXmlT(ComboRoundTripTester<?> t) throws Exception {
+	public void b23_verifyXmlT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("xmlT");
 	}
 
@@ -145,19 +145,19 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void b31_serializeXmlR(ComboRoundTripTester<?> t) throws Exception {
+	public void b31_serializeXmlR(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("xmlR");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void b32_parseXmlR(ComboRoundTripTester<?> t) throws Exception {
+	public void b32_parseXmlR(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("xmlR");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void b33_verifyXmlR(ComboRoundTripTester<?> t) throws Exception {
+	public void b33_verifyXmlR(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("xmlR");
 	}
 
@@ -167,19 +167,19 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void b41_serializeXmlNs(ComboRoundTripTester<?> t) throws Exception {
+	public void b41_serializeXmlNs(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("xmlNs");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void b42_parseXmlNs(ComboRoundTripTester<?> t) throws Exception {
+	public void b42_parseXmlNs(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("xmlNs");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void b43_verifyXmlNs(ComboRoundTripTester<?> t) throws Exception {
+	public void b43_verifyXmlNs(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("xmlNs");
 	}
 
@@ -189,19 +189,19 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void c11_serializeHtml(ComboRoundTripTester<?> t) throws Exception {
+	public void c11_serializeHtml(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("html");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void c12_parseHtml(ComboRoundTripTester<?> t) throws Exception {
+	public void c12_parseHtml(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("html");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void c13_verifyHtml(ComboRoundTripTester<?> t) throws Exception {
+	public void c13_verifyHtml(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("html");
 	}
 
@@ -211,19 +211,19 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void c21_serializeHtmlT(ComboRoundTripTester<?> t) throws Exception {
+	public void c21_serializeHtmlT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("htmlT");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void c22_parseHtmlT(ComboRoundTripTester<?> t) throws Exception {
+	public void c22_parseHtmlT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("htmlT");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void c23_verifyHtmlT(ComboRoundTripTester<?> t) throws Exception {
+	public void c23_verifyHtmlT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("htmlT");
 	}
 
@@ -233,19 +233,19 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void c31_serializeHtmlR(ComboRoundTripTester<?> t) throws Exception {
+	public void c31_serializeHtmlR(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("htmlR");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void c32_parseHtmlR(ComboRoundTripTester<?> t) throws Exception {
+	public void c32_parseHtmlR(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("htmlR");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void c33_verifyHtmlR(ComboRoundTripTester<?> t) throws Exception {
+	public void c33_verifyHtmlR(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("htmlR");
 	}
 
@@ -255,19 +255,19 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void d11_serializeUon(ComboRoundTripTester<?> t) throws Exception {
+	public void d11_serializeUon(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("uon");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void d12_parseUon(ComboRoundTripTester<?> t) throws Exception {
+	public void d12_parseUon(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("uon");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void d13_verifyUon(ComboRoundTripTester<?> t) throws Exception {
+	public void d13_verifyUon(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("uon");
 	}
 
@@ -277,19 +277,19 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void d21_serializeUonT(ComboRoundTripTester<?> t) throws Exception {
+	public void d21_serializeUonT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("uonT");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void d22_parseUonT(ComboRoundTripTester<?> t) throws Exception {
+	public void d22_parseUonT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("uonT");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void d23_verifyUonT(ComboRoundTripTester<?> t) throws Exception {
+	public void d23_verifyUonT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("uonT");
 	}
 
@@ -299,19 +299,19 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void d31_serializeUonR(ComboRoundTripTester<?> t) throws Exception {
+	public void d31_serializeUonR(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("uonR");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void d32_parseUonR(ComboRoundTripTester<?> t) throws Exception {
+	public void d32_parseUonR(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("uonR");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void d33_verifyUonR(ComboRoundTripTester<?> t) throws Exception {
+	public void d33_verifyUonR(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("uonR");
 	}
 
@@ -321,19 +321,19 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void e11_serializeUrlEncoding(ComboRoundTripTester<?> t) throws Exception {
+	public void e11_serializeUrlEncoding(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("urlEnc");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void e12_parseUrlEncoding(ComboRoundTripTester<?> t) throws Exception {
+	public void e12_parseUrlEncoding(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("urlEnc");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void e13_verifyUrlEncoding(ComboRoundTripTester<?> t) throws Exception {
+	public void e13_verifyUrlEncoding(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("urlEnc");
 	}
 
@@ -343,19 +343,19 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void e21_serializeUrlEncodingT(ComboRoundTripTester<?> t) throws Exception {
+	public void e21_serializeUrlEncodingT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("urlEncT");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void e22_parseUrlEncodingT(ComboRoundTripTester<?> t) throws Exception {
+	public void e22_parseUrlEncodingT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("urlEncT");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void e23_verifyUrlEncodingT(ComboRoundTripTester<?> t) throws Exception {
+	public void e23_verifyUrlEncodingT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("urlEncT");
 	}
 
@@ -365,19 +365,19 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void e31_serializeUrlEncodingR(ComboRoundTripTester<?> t) throws Exception {
+	public void e31_serializeUrlEncodingR(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("urlEncR");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void e32_parseUrlEncodingR(ComboRoundTripTester<?> t) throws Exception {
+	public void e32_parseUrlEncodingR(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("urlEncR");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void e33_verifyUrlEncodingR(ComboRoundTripTester<?> t) throws Exception {
+	public void e33_verifyUrlEncodingR(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("urlEncR");
 	}
 
@@ -387,25 +387,25 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void f11_serializeMsgPack(ComboRoundTripTester<?> t) throws Exception {
+	public void f11_serializeMsgPack(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("msgPack");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void f12_parseMsgPack(ComboRoundTripTester<?> t) throws Exception {
+	public void f12_parseMsgPack(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("msgPack");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void f13_parseMsgPackJsonEquivalency(ComboRoundTripTester<?> t) throws Exception {
+	public void f13_parseMsgPackJsonEquivalency(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseJsonEquivalency("msgPack");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void f14_verifyMsgPack(ComboRoundTripTester<?> t) throws Exception {
+	public void f14_verifyMsgPack(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("msgPack");
 	}
 
@@ -415,25 +415,25 @@ public abstract class ComboRoundTripTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void f21_serializeMsgPackT(ComboRoundTripTester<?> t) throws Exception {
+	public void f21_serializeMsgPackT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testSerialize("msgPackT");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void f22_parseMsgPackT(ComboRoundTripTester<?> t) throws Exception {
+	public void f22_parseMsgPackT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParse("msgPackT");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void f23_parseMsgPackTJsonEquivalency(ComboRoundTripTester<?> t) throws Exception {
+	public void f23_parseMsgPackTJsonEquivalency(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseJsonEquivalency("msgPackT");
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void f24_verifyMsgPackT(ComboRoundTripTester<?> t) throws Exception {
+	public void f24_verifyMsgPackT(ComboRoundTrip_Tester<?> t) throws Exception {
 		t.testParseVerify("msgPackT");
 	}
 }

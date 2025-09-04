@@ -33,7 +33,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_emptyOptional(RoundTripTester t) throws Exception {
+	void a01_emptyOptional(RoundTrip_Tester t) throws Exception {
 		var x = empty();
 		x = t.roundTrip(x);
 		assertFalse(x.isPresent());
@@ -41,7 +41,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a02_optionalContainingString(RoundTripTester t) throws Exception {
+	void a02_optionalContainingString(RoundTrip_Tester t) throws Exception {
 		var x = opt("foobar");
 		x = t.roundTrip(x);
 		assertEquals("foobar", x.get());
@@ -64,7 +64,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b01a_stringField(RoundTripTester t) throws Exception {
+	void b01a_stringField(RoundTrip_Tester t) throws Exception {
 		var x = new B01();
 		x.f1 = opt("foo");
 		x = t.roundTrip(x);
@@ -73,7 +73,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b01b_stringField_emptyValue(RoundTripTester t) throws Exception {
+	void b01b_stringField_emptyValue(RoundTrip_Tester t) throws Exception {
 		var x = new B01();
 		x.f1 = empty();
 		x = t.roundTrip(x);
@@ -82,7 +82,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b01c_stringField_nullField(RoundTripTester t) throws Exception {
+	void b01c_stringField_nullField(RoundTrip_Tester t) throws Exception {
 		var x = new B01();
 		x.f1 = null;
 		x = t.roundTrip(x);
@@ -101,7 +101,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b02a_integerField(RoundTripTester t) throws Exception {
+	void b02a_integerField(RoundTrip_Tester t) throws Exception {
 		var x = new B02();
 		x.f1 = opt(123);
 		x = t.roundTrip(x);
@@ -110,7 +110,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b02b_integerField_emptyValue(RoundTripTester t) throws Exception {
+	void b02b_integerField_emptyValue(RoundTrip_Tester t) throws Exception {
 		var x = new B02();
 		x.f1 = empty();
 		x = t.roundTrip(x);
@@ -119,7 +119,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b02c_integerField_nullField(RoundTripTester t) throws Exception {
+	void b02c_integerField_nullField(RoundTrip_Tester t) throws Exception {
 		var x = new B02();
 		x.f1 = null;
 		x = t.roundTrip(x);
@@ -138,7 +138,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b03a_integerListField(RoundTripTester t) throws Exception {
+	void b03a_integerListField(RoundTrip_Tester t) throws Exception {
 		var x = new B03();
 		x.f1 = opt(alist(123));
 		x = t.roundTrip(x);
@@ -147,7 +147,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b03b_integerListField_listWithNull(RoundTripTester t) throws Exception {
+	void b03b_integerListField_listWithNull(RoundTrip_Tester t) throws Exception {
 		var x = new B03();
 		x.f1 = opt(alist((Integer)null));
 		x = t.roundTrip(x);
@@ -158,7 +158,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b03c_integerListField_emptyList(RoundTripTester t) throws Exception {
+	void b03c_integerListField_emptyList(RoundTrip_Tester t) throws Exception {
 		var x = new B03();
 		x.f1 = opt(alist());
 		x = t.roundTrip(x);
@@ -168,7 +168,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b03d_integerListField_emptyValue(RoundTripTester t) throws Exception {
+	void b03d_integerListField_emptyValue(RoundTrip_Tester t) throws Exception {
 		var x = new B03();
 		x.f1 = empty();
 		x = t.roundTrip(x);
@@ -177,7 +177,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b03e_integerListField_nullField(RoundTripTester t) throws Exception {
+	void b03e_integerListField_nullField(RoundTrip_Tester t) throws Exception {
 		var x = new B03();
 		x.f1 = null;
 		x = t.roundTrip(x);
@@ -196,7 +196,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b04a_optionalOptionalInteger(RoundTripTester t) throws Exception {
+	void b04a_optionalOptionalInteger(RoundTrip_Tester t) throws Exception {
 		var x = new B04();
 		x.f1 = opt(opt(123));
 		x = t.roundTrip(x);
@@ -205,7 +205,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b04b_optionalOptionalInteger_emptyInnerValue(RoundTripTester t) throws Exception {
+	void b04b_optionalOptionalInteger_emptyInnerValue(RoundTrip_Tester t) throws Exception {
 		var x = new B04();
 		x.f1 = opt(empty());
 		x = t.roundTrip(x);
@@ -215,7 +215,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b04c_optionalOptionalInteger_emptyOuterValue(RoundTripTester t) throws Exception {
+	void b04c_optionalOptionalInteger_emptyOuterValue(RoundTrip_Tester t) throws Exception {
 		var x = new B04();
 		x.f1 = empty();
 		x = t.roundTrip(x);
@@ -227,7 +227,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b04d_optionalOptionalInteger_nullField(RoundTripTester t) throws Exception {
+	void b04d_optionalOptionalInteger_nullField(RoundTrip_Tester t) throws Exception {
 		var x = new B04();
 		x.f1 = null;
 		x = t.roundTrip(x);
@@ -256,7 +256,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b05a_optionalOptionalBean(RoundTripTester t) throws Exception {
+	void b05a_optionalOptionalBean(RoundTrip_Tester t) throws Exception {
 		var x = new B05();
 		x.f1 = opt(opt(B05B.create()));
 		x = t.roundTrip(x);
@@ -265,7 +265,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b05b_optionalOptionalBean_emptyInnerValue(RoundTripTester t) throws Exception {
+	void b05b_optionalOptionalBean_emptyInnerValue(RoundTrip_Tester t) throws Exception {
 		var x = new B05();
 		x.f1 = opt(empty());
 		x = t.roundTrip(x);
@@ -275,7 +275,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b05c_optionalOptionalBean_emptyOuterValue(RoundTripTester t) throws Exception {
+	void b05c_optionalOptionalBean_emptyOuterValue(RoundTrip_Tester t) throws Exception {
 		var x = new B05();
 		x.f1 = empty();
 		x = t.roundTrip(x);
@@ -287,7 +287,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b05d_optionalOptionalBean_nullField(RoundTripTester t) throws Exception {
+	void b05d_optionalOptionalBean_nullField(RoundTrip_Tester t) throws Exception {
 		var x = new B05();
 		x.f1 = null;
 		x = t.roundTrip(x);
@@ -307,7 +307,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b06a_listOfOptionalIntegers(RoundTripTester t) throws Exception {
+	void b06a_listOfOptionalIntegers(RoundTrip_Tester t) throws Exception {
 		var x = new B06();
 		x.f1 = alist(opt(123));
 		x = t.roundTrip(x);
@@ -316,7 +316,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b06b_listOfOptionalIntegers_listWithEmpty(RoundTripTester t) throws Exception {
+	void b06b_listOfOptionalIntegers_listWithEmpty(RoundTrip_Tester t) throws Exception {
 		var x = new B06();
 		x.f1 = alist(empty());
 		x = t.roundTrip(x);
@@ -326,7 +326,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b06c_listOfOptionalIntegers_listWithNull(RoundTripTester t) throws Exception {
+	void b06c_listOfOptionalIntegers_listWithNull(RoundTrip_Tester t) throws Exception {
 		var x = new B06();
 		x.f1 = alist((Optional<Integer>)null);
 		x = t.roundTrip(x);
@@ -338,7 +338,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b06d_listOfOptionalIntegers_nullField(RoundTripTester t) throws Exception {
+	void b06d_listOfOptionalIntegers_nullField(RoundTrip_Tester t) throws Exception {
 		var x = new B06();
 		x.f1 = null;
 		x = t.roundTrip(x);
@@ -356,7 +356,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b07a_arrayOfOptionalIntegers(RoundTripTester t) throws Exception {
+	void b07a_arrayOfOptionalIntegers(RoundTrip_Tester t) throws Exception {
 		var x = new B07();
 		x.f1 = a(opt(123));
 		x.f2 = a(alist(123));
@@ -366,7 +366,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b07b_arrayOfOptionalIntegers_listWithEmpty(RoundTripTester t) throws Exception {
+	void b07b_arrayOfOptionalIntegers_listWithEmpty(RoundTrip_Tester t) throws Exception {
 		var x = new B07();
 		x.f1 = a(empty());
 		x = t.roundTrip(x);
@@ -377,7 +377,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 	@SuppressWarnings("unchecked")
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b07c_arrayOfOptionalIntegers_listWithNull(RoundTripTester t) throws Exception {
+	void b07c_arrayOfOptionalIntegers_listWithNull(RoundTrip_Tester t) throws Exception {
 		var x = new B07();
 		x.f1 = a(n(Optional.class));
 		x = t.roundTrip(x);
@@ -389,7 +389,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void b07d_arrayOfOptionalIntegers_nullField(RoundTripTester t) throws Exception {
+	void b07d_arrayOfOptionalIntegers_nullField(RoundTrip_Tester t) throws Exception {
 		var x = new B07();
 		x.f1 = null;
 		x = t.roundTrip(x);

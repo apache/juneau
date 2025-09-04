@@ -24,13 +24,13 @@ import org.apache.juneau.swaps.*;
 
 class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
-	private static <T> ComboRoundTripTester.Builder<T> tester(int index, String label, Type type, T bean) {
-		return ComboRoundTripTester.create(index, label, type, ()->bean)
+	private static <T> ComboRoundTrip_Tester.Builder<T> tester(int index, String label, Type type, T bean) {
+		return ComboRoundTrip_Tester.create(index, label, type, ()->bean)
 			.serializerApply(s -> s.swaps(ByteArraySwap.Base64.class).keepNullProperties())
 			.parserApply(p -> p.swaps(ByteArraySwap.Base64.class));
 	}
 
-	private static ComboRoundTripTester<?>[] TESTERS = {
+	private static ComboRoundTrip_Tester<?>[] TESTERS = {
 		tester(1, "ByteArray1d", byte[].class, new byte[] {1,2,3})
 			.json("'AQID'")
 			.jsonT("'AQID'")
@@ -300,7 +300,7 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.build()
 	};
 
-	static ComboRoundTripTester<?>[] testers() {
+	static ComboRoundTrip_Tester<?>[] testers() {
 		return TESTERS;
 	}
 

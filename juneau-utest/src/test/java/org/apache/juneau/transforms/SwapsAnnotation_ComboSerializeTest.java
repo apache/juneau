@@ -25,8 +25,8 @@ import org.apache.juneau.swap.*;
  */
 class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 
-	private static <T> ComboSerializeTester.Builder<T> tester(int index, String label, Supplier<T> bean) {
-		return ComboSerializeTester.create(index, label, bean).serializerApply(s -> s.swaps(
+	private static <T> ComboSerialize_Tester.Builder<T> tester(int index, String label, Supplier<T> bean) {
+		return ComboSerialize_Tester.create(index, label, bean).serializerApply(s -> s.swaps(
 				ContextSwap.class,
 				ContextSwapJson.class,
 				ContextSwapXml.class,
@@ -38,7 +38,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			));
 	}
 
-	private static ComboSerializeTester<?>[] TESTERS = {
+	private static ComboSerialize_Tester<?>[] TESTERS = {
 		tester(1, "TestMediaTypeLiterals", TestMediaTypeLiterals::new)
 			.json("'JSON'")
 			.jsonT("'JSON'")
@@ -366,7 +366,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			.build()
 	};
 
-	static ComboSerializeTester<?>[] testers() {
+	static ComboSerialize_Tester<?>[] testers() {
 		return TESTERS;
 	}
 

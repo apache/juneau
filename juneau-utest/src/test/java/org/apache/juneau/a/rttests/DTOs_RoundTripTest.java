@@ -28,7 +28,7 @@ class DTOs_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_jsonSchema1(RoundTripTester t) throws Exception {
+	void a01_jsonSchema1(RoundTrip_Tester t) throws Exception {
 		var x1 = JsonSchema_Test.getTest1();
 		var x2 = t.roundTrip(x1, JsonSchema.class);
 		assertEquals(json(x2), json(x1));
@@ -36,7 +36,7 @@ class DTOs_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a02_jsonSchema2(RoundTripTester t) throws Exception {
+	void a02_jsonSchema2(RoundTrip_Tester t) throws Exception {
 		var x1 = JsonSchema_Test.getTest2();
 		var x2 = t.roundTrip(x1, JsonSchema.class);
 		assertEquals(json(x2), json(x1));

@@ -38,7 +38,7 @@ class BeanProperties_RoundTripTest extends RoundTripTest_Base {
 	@SuppressWarnings("unchecked")
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_arrayOfListOfLongs(RoundTripTester t) throws Exception {
+	void a01_arrayOfListOfLongs(RoundTrip_Tester t) throws Exception {
 		var o = new A01();
 		o.f1 = new List[1];
 		o.f1[0] = alist(123L);
@@ -52,7 +52,7 @@ class BeanProperties_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a02_listOfArrayOfLongs(RoundTripTester t) throws Exception {
+	void a02_listOfArrayOfLongs(RoundTrip_Tester t) throws Exception {
 		var o = new A02();
 		o.f1 = Utils.<Long[]>alist(new Long[]{123L});
 		o = t.roundTrip(o);
@@ -66,7 +66,7 @@ class BeanProperties_RoundTripTest extends RoundTripTest_Base {
 	@SuppressWarnings("unchecked")
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a03_2dArrayOfListOfLongs(RoundTripTester t) throws Exception {
+	void a03_2dArrayOfListOfLongs(RoundTrip_Tester t) throws Exception {
 		var o = new A03();
 		o.f1 = new List[1][1];
 		o.f1[0] = new List[]{alist(123L)};
@@ -80,7 +80,7 @@ class BeanProperties_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a04_listOf2dArrayOfLongs(RoundTripTester t) throws Exception {
+	void a04_listOf2dArrayOfLongs(RoundTrip_Tester t) throws Exception {
 		var o = new A04();
 		o.f1 = Utils.<Long[][]>alist(new Long[][]{new Long[]{123L}});
 		o = t.roundTrip(o);

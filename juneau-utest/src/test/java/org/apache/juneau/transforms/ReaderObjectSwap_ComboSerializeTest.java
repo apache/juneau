@@ -28,11 +28,11 @@ import org.apache.juneau.swap.*;
 @SuppressWarnings({})
 public class ReaderObjectSwap_ComboSerializeTest extends ComboSerializeTest_Base {
 
-	private static <T> ComboSerializeTester.Builder<T> tester(int index, String label, Supplier<T> bean) {
-		return ComboSerializeTester.create(index, label, bean);
+	private static <T> ComboSerialize_Tester.Builder<T> tester(int index, String label, Supplier<T> bean) {
+		return ComboSerialize_Tester.create(index, label, bean);
 	}
 
-	private static ComboSerializeTester<?>[] TESTERS = {
+	private static ComboSerialize_Tester<?>[] TESTERS = {
 		tester(1, "PojoToSimpleReader", PojoToSimpleReader::new)
 			.json("foo")
 			.jsonT("foo")
@@ -265,7 +265,7 @@ public class ReaderObjectSwap_ComboSerializeTest extends ComboSerializeTest_Base
 			.build()
 	};
 
-	static ComboSerializeTester<?>[] testers() {
+	static ComboSerialize_Tester<?>[] testers() {
 		return TESTERS;
 	}
 

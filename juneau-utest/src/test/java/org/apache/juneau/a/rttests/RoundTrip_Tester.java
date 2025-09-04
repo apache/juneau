@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
 @SuppressWarnings("unchecked")
-public class RoundTripTester {
+public class RoundTrip_Tester {
 
 	public static Builder create(String label) {
 		return new Builder().label(label);
@@ -65,8 +65,8 @@ public class RoundTripTester {
 		private Class<?>[] annotatedClasses = a();
 		public Builder annotatedClasses(Class<?>...value) { annotatedClasses = value; return this; }
 
-		public RoundTripTester build() {
-			return new RoundTripTester(this);
+		public RoundTrip_Tester build() {
+			return new RoundTrip_Tester(this);
 		}
 	}
 
@@ -78,7 +78,7 @@ public class RoundTripTester {
 	private boolean validateXml;
 	public boolean debug;
 
-	private RoundTripTester(Builder b) {
+	private RoundTrip_Tester(Builder b) {
 		label = b.label;
 
 		var bs = b.s;

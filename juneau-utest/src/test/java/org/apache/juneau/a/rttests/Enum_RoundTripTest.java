@@ -34,7 +34,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_enumA(RoundTripTester t) throws Exception {
+	void a01_enumA(RoundTrip_Tester t) throws Exception {
 		var x = AEnum.FOO;
 		assertJson("'FOO'", x);
 		x = t.roundTrip(x, AEnum.class);
@@ -43,7 +43,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a02_enumB(RoundTripTester t) throws Exception {
+	void a02_enumB(RoundTrip_Tester t) throws Exception {
 		var s = JsonSerializer.create().json5().build();
 		var x = BEnum.FOO;
 		assertEquals("'xfoo'", s.serialize(x));
@@ -57,7 +57,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a03_enumArrayA(RoundTripTester t) throws Exception {
+	void a03_enumArrayA(RoundTrip_Tester t) throws Exception {
 		var x = new AEnum[]{AEnum.FOO,AEnum.BAR,null};
 		assertJson("['FOO','BAR',null]", x);
 		x = t.roundTrip(x, AEnum[].class);
@@ -68,7 +68,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a04_enumArrayB(RoundTripTester t) throws Exception {
+	void a04_enumArrayB(RoundTrip_Tester t) throws Exception {
 		var x = new BEnum[]{BEnum.FOO,BEnum.BAR,null};
 		assertJson("['xfoo','xbar',null]", x);
 		x = t.roundTrip(x, BEnum[].class);
@@ -83,7 +83,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a05_enum2dArrayA(RoundTripTester t) throws Exception {
+	void a05_enum2dArrayA(RoundTrip_Tester t) throws Exception {
 		var x = new AEnum[][]{{AEnum.FOO,AEnum.BAR,null},null};
 		assertJson("[['FOO','BAR',null],null]", x);
 		x = t.roundTrip(x, AEnum[][].class);
@@ -95,7 +95,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a06_enum2dArrayB(RoundTripTester t) throws Exception {
+	void a06_enum2dArrayB(RoundTrip_Tester t) throws Exception {
 		var x = new BEnum[][]{{BEnum.FOO,BEnum.BAR,null},null};
 		assertJson("[['xfoo','xbar',null],null]", x);
 		x = t.roundTrip(x, BEnum[][].class);
@@ -111,7 +111,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a07_beansWithEnumA(RoundTripTester t) throws Exception {
+	void a07_beansWithEnumA(RoundTrip_Tester t) throws Exception {
 		var x1 = new A().init();
 		var x2 = t.roundTrip(x1, A.class);
 		assertEquals(json(x1), json(x2));
@@ -120,7 +120,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a08_beansWithEnumB(RoundTripTester t) throws Exception {
+	void a08_beansWithEnumB(RoundTrip_Tester t) throws Exception {
 		var x1 = new B().init();
 		var x2 = t.roundTrip(x1, B.class);
 		assertEquals(json(x1), json(x2));

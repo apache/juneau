@@ -34,7 +34,7 @@ import org.junit.jupiter.params.provider.*;
  */
 class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 
-	private static RoundTripTester[] TESTERS = {
+	private static RoundTrip_Tester[] TESTERS = {
 		tester("Json - default")
 			.serializer(JsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
@@ -107,12 +107,12 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 			.build(),
 	};
 
-	static RoundTripTester[] testers() {
+	static RoundTrip_Tester[] testers() {
 		return TESTERS;
 	}
 
-	protected static RoundTripTester.Builder tester(String label) {
-		return RoundTripTester.create(label).annotatedClasses(AcConfig.class);
+	protected static RoundTrip_Tester.Builder tester(String label) {
+		return RoundTrip_Tester.create(label).annotatedClasses(AcConfig.class);
 	}
 
 	//====================================================================================================
@@ -121,7 +121,7 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_simple(RoundTripTester t) throws Exception {
+	void a01_simple(RoundTrip_Tester t) throws Exception {
 		var x = A.create().f1(1).build();
 		x = t.roundTrip(x, A.class);
 		assertBean(x, "f1", "1");
@@ -154,7 +154,7 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a02_simple_usingConfig(RoundTripTester t) throws Exception {
+	void a02_simple_usingConfig(RoundTrip_Tester t) throws Exception {
 		var x = Ac.create().f1(1).build();
 		x = t.roundTrip(x, Ac.class);
 		assertBean(x, "f1", "1");
@@ -195,7 +195,7 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a03_beanPropertyBuilder_simple(RoundTripTester t) throws Exception {
+	void a03_beanPropertyBuilder_simple(RoundTrip_Tester t) throws Exception {
 		var x = A2.create().f1(A.create().f1(1).build()).build();
 		x = t.roundTrip(x, A2.class);
 		assertBean(x, "f1{f1}", "{1}");
@@ -232,7 +232,7 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a04_beanPropertyBuilder_collections(RoundTripTester t) throws Exception {
+	void a04_beanPropertyBuilder_collections(RoundTrip_Tester t) throws Exception {
 		// It's simply not possible to allow for expanded parameters with a builder-based approach
 		// since the value on the builder can only be set once.
 		if (t.label.equals("UrlEncoding - expanded params"))

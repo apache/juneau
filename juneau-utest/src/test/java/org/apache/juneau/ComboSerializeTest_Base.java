@@ -26,7 +26,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void a11_serializeJson(ComboSerializeTester<?> t) throws Exception {
+	public void a11_serializeJson(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("json");
 	}
 
@@ -36,7 +36,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void a21_serializeJsonT(ComboSerializeTester<?> t) throws Exception {
+	public void a21_serializeJsonT(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("jsonT");
 	}
 
@@ -46,7 +46,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void a31_serializeJsonR(ComboSerializeTester<?> t) throws Exception {
+	public void a31_serializeJsonR(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("jsonR");
 	}
 
@@ -56,7 +56,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void b11_serializeXml(ComboSerializeTester<?> t) throws Exception {
+	public void b11_serializeXml(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("xml");
 	}
 
@@ -66,7 +66,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void b21_serializeXmlT(ComboSerializeTester<?> t) throws Exception {
+	public void b21_serializeXmlT(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("xmlT");
 	}
 
@@ -76,7 +76,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void b31_serializeXmlR(ComboSerializeTester<?> t) throws Exception {
+	public void b31_serializeXmlR(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("xmlR");
 	}
 
@@ -86,7 +86,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void b41_serializeXmlNs(ComboSerializeTester<?> t) throws Exception {
+	public void b41_serializeXmlNs(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("xmlNs");
 	}
 
@@ -96,7 +96,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void c11_serializeHtml(ComboSerializeTester<?> t) throws Exception {
+	public void c11_serializeHtml(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("html");
 	}
 
@@ -106,7 +106,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void c21_serializeHtmlT(ComboSerializeTester<?> t) throws Exception {
+	public void c21_serializeHtmlT(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("htmlT");
 	}
 
@@ -116,7 +116,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void c31_serializeHtmlR(ComboSerializeTester<?> t) throws Exception {
+	public void c31_serializeHtmlR(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("htmlR");
 	}
 
@@ -126,7 +126,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void d11_serializeUon(ComboSerializeTester<?> t) throws Exception {
+	public void d11_serializeUon(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("uon");
 	}
 
@@ -136,7 +136,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void d21_serializeUonT(ComboSerializeTester<?> t) throws Exception {
+	public void d21_serializeUonT(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("uonT");
 	}
 
@@ -146,7 +146,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void d31_serializeUonR(ComboSerializeTester<?> t) throws Exception {
+	public void d31_serializeUonR(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("uonR");
 	}
 
@@ -156,7 +156,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void e11_serializeUrlEncoding(ComboSerializeTester<?> t) throws Exception {
+	public void e11_serializeUrlEncoding(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("urlEnc");
 	}
 
@@ -166,7 +166,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void e21_serializeUrlEncodingT(ComboSerializeTester<?> t) throws Exception {
+	public void e21_serializeUrlEncodingT(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("urlEncT");
 	}
 
@@ -176,7 +176,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void e31_serializeUrlEncodingR(ComboSerializeTester<?> t) throws Exception {
+	public void e31_serializeUrlEncodingR(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("urlEncR");
 	}
 
@@ -186,7 +186,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void f11_serializeMsgPack(ComboSerializeTester<?> t) throws Exception {
+	public void f11_serializeMsgPack(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("msgPack");
 	}
 
@@ -196,7 +196,7 @@ public abstract class ComboSerializeTest_Base extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	public void f21_serializeMsgPackT(ComboSerializeTester<?> t) throws Exception {
+	public void f21_serializeMsgPackT(ComboSerialize_Tester<?> t) throws Exception {
 		t.testSerialize("msgPackT");
 	}
 }

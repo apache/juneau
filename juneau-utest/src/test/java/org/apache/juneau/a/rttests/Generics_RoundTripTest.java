@@ -31,7 +31,7 @@ class Generics_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_beansWithUnboundTypeVars(RoundTripTester t) throws Exception {
+	void a01_beansWithUnboundTypeVars(RoundTrip_Tester t) throws Exception {
 
 		if (t.returnOriginalObject)
 			return;

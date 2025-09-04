@@ -30,7 +30,7 @@ class ReadOnlyBeans_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_basic(RoundTripTester t) throws Exception {
+	void a01_basic(RoundTrip_Tester t) throws Exception {
 		var x1 = new B(1, "a");
 		var x2 = new B(2, "b");
 		var x3 = new A(x1, x2);

@@ -35,7 +35,7 @@ import org.junit.jupiter.params.provider.*;
  */
 class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 
-	private static RoundTripTester[] TESTERS = {
+	private static RoundTrip_Tester[] TESTERS = {
 		tester("JsonSerializer.DEFAULT/JsonParser.DEFAULT")
 			.serializer(JsonSerializer.create().addBeanTypes().addRootType())
 			.parser(JsonParser.create().disableInterfaceProxies())
@@ -77,12 +77,12 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 			.build()
 	};
 
-	static RoundTripTester[]  testers() {
+	static RoundTrip_Tester[]  testers() {
 		return TESTERS;
 	}
 
-	protected static RoundTripTester.Builder tester(String label) {
-		return RoundTripTester.create(label).dictionary(A.class, B.class, C.class, D.class, E.class, F.class);
+	protected static RoundTrip_Tester.Builder tester(String label) {
+		return RoundTrip_Tester.create(label).dictionary(A.class, B.class, C.class, D.class, E.class, F.class);
 	}
 
 	//====================================================================================================
@@ -91,7 +91,7 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_bean(RoundTripTester t) throws Exception {
+	void a01_bean(RoundTrip_Tester t) throws Exception {
 		var x = new A("foo");
 
 		x = t.roundTrip(x, A.class);
@@ -133,7 +133,7 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a02_beanArray(RoundTripTester t) throws Exception {
+	void a02_beanArray(RoundTrip_Tester t) throws Exception {
 		var x = a(new A("foo"));
 
 		x = t.roundTrip(x, A[].class);
@@ -152,7 +152,7 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a03_beanWithBeanProps(RoundTripTester t) throws Exception {
+	void a03_beanWithBeanProps(RoundTrip_Tester t) throws Exception {
 		var x = new B("foo");
 		x = t.roundTrip(x, B.class);
 		assertBean(x, "f2a{f1},f2b{f1},f2c{f1},f2d{f1}", "{foo},{foo},{foo},{foo}");
@@ -179,7 +179,7 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a04_mapsWithTypeParams(RoundTripTester t) throws Exception {
+	void a04_mapsWithTypeParams(RoundTrip_Tester t) throws Exception {
 		var x = new C("foo");
 		x = t.roundTrip(x, C.class);
 		assertBean(x, "f3a{foo{f1}},f3b{foo{f1}},f3c{foo{f1}},f3d{foo{f1}}", "{{foo}},{{foo}},{{foo}},{{foo}}");
@@ -211,7 +211,7 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a05_mapsWithoutTypeParams(RoundTripTester t) throws Exception {
+	void a05_mapsWithoutTypeParams(RoundTrip_Tester t) throws Exception {
 		var x = new D("foo");
 		x = t.roundTrip(x, D.class);
 		assertBean(x, "f4a{0{f1}},f4b{0{f1}},f4c{0{f1}},f4d{0{f1}}", "{{foo}},{{foo}},{{foo}},{{foo}}");
@@ -243,7 +243,7 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a06_beanWithListProps(RoundTripTester t) throws Exception {
+	void a06_beanWithListProps(RoundTrip_Tester t) throws Exception {
 		var x = new E("foo");
 		x = t.roundTrip(x, E.class);
 		assertBean(x, "f5a{0{f1}},f5b{0{f1}},f5c{0{f1}},f5d{0{f1}}", "{{foo}},{{foo}},{{foo}},{{foo}}");
@@ -275,7 +275,7 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a07_beanWithListOfArraysProps(RoundTripTester t) throws Exception {
+	void a07_beanWithListOfArraysProps(RoundTrip_Tester t) throws Exception {
 		var x = new F("foo");
 		x = t.roundTrip(x, F.class);
 		assertBean(x, "f6a{0{0{f1}}},f6b{0{0{f1}}},f6c{0{0{f1}}},f6d{0{0{f1}}}", "{{{foo}}},{{{foo}}},{{{foo}}},{{{foo}}}");

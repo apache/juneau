@@ -25,11 +25,11 @@ import org.apache.juneau.*;
  */
 public class ReaderObject_ComboSerializeTest extends ComboSerializeTest_Base {
 
-	private static <T> ComboSerializeTester.Builder<T> tester(int index, String label, Supplier<T> bean) {
-		return ComboSerializeTester.create(index, label, bean).serializerApply(Serializer.Builder::keepNullProperties);
+	private static <T> ComboSerialize_Tester.Builder<T> tester(int index, String label, Supplier<T> bean) {
+		return ComboSerialize_Tester.create(index, label, bean).serializerApply(Serializer.Builder::keepNullProperties);
 	}
 
-	private static ComboSerializeTester<?>[] TESTERS = {
+	private static ComboSerialize_Tester<?>[] TESTERS = {
 		tester(1, "SimpleReader", ()->reader("foobar"))
 			.json("foobar")
 			.jsonT("foobar")
@@ -220,7 +220,7 @@ public class ReaderObject_ComboSerializeTest extends ComboSerializeTest_Base {
 			.build()
 	};
 
-	static ComboSerializeTester<?>[] testers() {
+	static ComboSerialize_Tester<?>[] testers() {
 		return TESTERS;
 	}
 

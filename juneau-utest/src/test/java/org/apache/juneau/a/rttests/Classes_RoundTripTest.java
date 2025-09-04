@@ -26,7 +26,7 @@ class Classes_RoundTripTest extends RoundTripTest_Base {
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a01_classObjects(RoundTripTester t) throws Exception {
+	void a01_classObjects(RoundTrip_Tester t) throws Exception {
 		var o = String.class;
 		o = t.roundTrip(o);
 		assertSame(o, String.class);
