@@ -35,73 +35,73 @@ import org.junit.jupiter.params.provider.*;
 class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 
 	private static RoundTrip_Tester[] TESTERS = {
-		tester("Json - default")
+		tester(1, "Json - default")
 			.serializer(JsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
 			.build(),
-		tester("Json - lax")
+		tester(2, "Json - lax")
 			.serializer(JsonSerializer.create().json5().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
 			.build(),
-		tester("Json - lax, readable")
+		tester(3, "Json - lax, readable")
 			.serializer(JsonSerializer.create().json5().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
 			.build(),
-		tester("Xml - namespaces, validation, readable")
+		tester(4, "Xml - namespaces, validation, readable")
 			.serializer(XmlSerializer.create().ns().sq().keepNullProperties().addNamespaceUrisToRoot().useWhitespace().addBeanTypes().addRootType())
 			.parser(XmlParser.create())
 			.validateXmlWhitespace()
 			.validateXml()
 			.build(),
-		tester("Xml - no namespaces, validation")
+		tester(5, "Xml - no namespaces, validation")
 			.serializer(XmlSerializer.create().sq().keepNullProperties().addBeanTypes().addRootType())
 			.parser(XmlParser.create())
 			.validateXmlWhitespace()
 			.build(),
-		tester("Html - default")
+		tester(6, "Html - default")
 			.serializer(HtmlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(HtmlParser.create())
 			.validateXmlWhitespace()
 			.build(),
-		tester("Html - readable")
+		tester(7, "Html - readable")
 			.serializer(HtmlSerializer.create().sq().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(HtmlParser.create())
 			.validateXmlWhitespace()
 			.build(),
-		tester("Html - with key/value headers")
+		tester(8, "Html - with key/value headers")
 			.serializer(HtmlSerializer.create().addKeyValueTableHeaders().addBeanTypes().addRootType())
 			.parser(HtmlParser.create())
 			.validateXmlWhitespace()
 			.build(),
-		tester("Uon - default")
+		tester(9, "Uon - default")
 			.serializer(UonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(UonParser.create())
 			.build(),
-		tester("Uon - readable")
+		tester(10, "Uon - readable")
 			.serializer(UonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(UonParser.create())
 			.build(),
-		tester("Uon - encoded")
+		tester(11, "Uon - encoded")
 			.serializer(UonSerializer.create().encoding().keepNullProperties().addBeanTypes().addRootType())
 			.parser(UonParser.create().decoding())
 			.build(),
-		tester("UrlEncoding - default")
+		tester(12, "UrlEncoding - default")
 			.serializer(UrlEncodingSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(UrlEncodingParser.create())
 			.build(),
-		tester("UrlEncoding - readable")
+		tester(13, "UrlEncoding - readable")
 			.serializer(UrlEncodingSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(UrlEncodingParser.create())
 			.build(),
-		tester("UrlEncoding - expanded params")
+		tester(14, "UrlEncoding - expanded params")
 			.serializer(UrlEncodingSerializer.create().expandedParams().addBeanTypes().addRootType())
 			.parser(UrlEncodingParser.create().expandedParams())
 			.build(),
-		tester("MsgPack")
+		tester(15, "MsgPack")
 			.serializer(MsgPackSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(MsgPackParser.create())
 			.build(),
-		tester("Json schema")
+		tester(16, "Json schema")
 			.serializer(JsonSchemaSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.returnOriginalObject()
 			.build(),
@@ -111,8 +111,8 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 		return TESTERS;
 	}
 
-	protected static RoundTrip_Tester.Builder tester(String label) {
-		return RoundTrip_Tester.create(label).annotatedClasses(AcConfig.class);
+	protected static RoundTrip_Tester.Builder tester(int index, String label) {
+		return RoundTrip_Tester.create(index, label).annotatedClasses(AcConfig.class);
 	}
 
 	//====================================================================================================
@@ -235,7 +235,7 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 	void a04_beanPropertyBuilder_collections(RoundTrip_Tester t) throws Exception {
 		// It's simply not possible to allow for expanded parameters with a builder-based approach
 		// since the value on the builder can only be set once.
-		if (t.label.equals("UrlEncoding - expanded params"))
+		if (t.label.contains("UrlEncoding - expanded params"))
 			return;
 		var x = A3.create()
 			.f1(new A[]{A.create().f1(1).build()})

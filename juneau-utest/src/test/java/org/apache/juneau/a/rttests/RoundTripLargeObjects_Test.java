@@ -39,43 +39,43 @@ class RoundTripLargeObjects_Test extends SimpleTestBase {
 	private static final int SIZE_PARAM = 20000;
 
 	private static RoundTrip_Tester[] TESTERS = {
-		tester("Json DEFAULT")
+		tester(1, "Json DEFAULT")
 			.serializer(JsonSerializer.create().keepNullProperties())
 			.parser(JsonParser.create())
 			.build(),
-		tester("Json5 DEFAULT")
+		tester(2, "Json5 DEFAULT")
 			.serializer(Json5Serializer.create().keepNullProperties())
 			.parser(Json5Parser.create())
 			.build(),
-		tester("Json DEFAULT_SQ")
+		tester(3, "Json DEFAULT_SQ")
 			.serializer(JsonSerializer.create().json5().keepNullProperties())
 			.parser(JsonParser.create())
 			.build(),
-		tester("Xml DEFAULT w/namespaces,validation")
+		tester(4, "Xml DEFAULT w/namespaces,validation")
 			.serializer(XmlSerializer.create().sq().ns().keepNullProperties().addNamespaceUrisToRoot().useWhitespace())
 			.parser(XmlParser.create())
 			.validateXml()
 			.validateXmlWhitespace()
 			.build(),
-		tester("Xml DEFAULT wo/namespaces,validation")
+		tester(5, "Xml DEFAULT wo/namespaces,validation")
 			.serializer(XmlSerializer.create().sq().keepNullProperties())
 			.parser(XmlParser.create())
 			.validateXmlWhitespace()
 			.build(),
-		tester("Html")
+		tester(6, "Html")
 			.serializer(HtmlSerializer.create().keepNullProperties())
 			.parser(HtmlParser.create())
 			.validateXmlWhitespace()
 			.build(),
-		tester("UrlEncoding")
+		tester(7, "UrlEncoding")
 			.serializer(UrlEncodingSerializer.create().keepNullProperties())
 			.parser(UrlEncodingParser.create())
 			.build(),
-		tester("Uon")
+		tester(8, "Uon")
 			.serializer(UonSerializer.create().keepNullProperties())
 			.parser(UonParser.create())
 			.build(),
-		tester("MsgPack")
+		tester(9, "MsgPack")
 			.serializer(MsgPackSerializer.create().keepNullProperties())
 			.parser(MsgPackParser.create())
 			.build()
@@ -85,8 +85,8 @@ class RoundTripLargeObjects_Test extends SimpleTestBase {
 		return TESTERS;
 	}
 
-	protected static RoundTrip_Tester.Builder tester(String label) {
-		return RoundTrip_Tester.create(label);
+	protected static RoundTrip_Tester.Builder tester(int index, String label) {
+		return RoundTrip_Tester.create(index, label);
 	}
 
 	//====================================================================================================

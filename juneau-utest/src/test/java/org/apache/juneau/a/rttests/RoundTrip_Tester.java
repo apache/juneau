@@ -26,11 +26,14 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings("unchecked")
 public class RoundTrip_Tester {
 
-	public static Builder create(String label) {
-		return new Builder().label(label);
+	public static Builder create(int index, String label) {
+		return new Builder().index(index).label(label);
 	}
 
 	static class Builder {
+
+		private int index;
+		public Builder index(int value) { index = value; return this; }
 
 		private String label;
 		public Builder label(String value) { label = value; return this; }
@@ -79,7 +82,7 @@ public class RoundTrip_Tester {
 	public boolean debug;
 
 	private RoundTrip_Tester(Builder b) {
-		label = b.label;
+		label = "[" + b.index + "] " + b.label;
 
 		var bs = b.s;
 		var bp = ofNullable(b.p);

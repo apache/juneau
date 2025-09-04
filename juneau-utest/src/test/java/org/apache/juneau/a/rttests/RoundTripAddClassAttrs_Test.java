@@ -36,42 +36,42 @@ import org.junit.jupiter.params.provider.*;
 class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 
 	private static RoundTrip_Tester[] TESTERS = {
-		tester("JsonSerializer.DEFAULT/JsonParser.DEFAULT")
+		tester(1, "JsonSerializer.DEFAULT/JsonParser.DEFAULT")
 			.serializer(JsonSerializer.create().addBeanTypes().addRootType())
 			.parser(JsonParser.create().disableInterfaceProxies())
 			.build(),
-		tester("JsonSerializer.DEFAULT_SIMPLE/JsonParser.DEFAULT")
+		tester(2, "JsonSerializer.DEFAULT_SIMPLE/JsonParser.DEFAULT")
 			.serializer(JsonSerializer.create().json5().addBeanTypes().addRootType())
 			.parser(JsonParser.create().disableInterfaceProxies())
 			.build(),
-		tester("JsonSerializer.DEFAULT_SQ/JsonParser.DEFAULT")
+		tester(3, "JsonSerializer.DEFAULT_SQ/JsonParser.DEFAULT")
 			.serializer(JsonSerializer.create().json5().addBeanTypes().addRootType())
 			.parser(JsonParser.create().disableInterfaceProxies())
 			.build(),
-		tester("XmlSerializer.DEFAULT/XmlParser.DEFAULT")
+		tester(4, "XmlSerializer.DEFAULT/XmlParser.DEFAULT")
 			.serializer(XmlSerializer.create().addBeanTypes().addRootType())
 			.parser(XmlParser.create().disableInterfaceProxies())
 			.validateXmlWhitespace()
 			.validateXml()
 			.build(),
-		tester("HtmlSerializer.DEFAULT/HtmlParser.DEFAULT")
+		tester(5, "HtmlSerializer.DEFAULT/HtmlParser.DEFAULT")
 			.serializer(HtmlSerializer.create().addBeanTypes().addRootType())
 			.parser(HtmlParser.create().disableInterfaceProxies())
 			.validateXmlWhitespace()
 			.build(),
-		tester("UonSerializer.DEFAULT_ENCODING/UonParser.DEFAULT_DECODING")
+		tester(6, "UonSerializer.DEFAULT_ENCODING/UonParser.DEFAULT_DECODING")
 			.serializer(UonSerializer.create().encoding().addBeanTypes().addRootType())
 			.parser(UonParser.create().decoding().disableInterfaceProxies())
 			.build(),
-		tester("UonSerializer.DEFAULT/UonParser.DEFAULT")
+		tester(7, "UonSerializer.DEFAULT/UonParser.DEFAULT")
 			.serializer(UonSerializer.create().addBeanTypes().addRootType())
 			.parser(UonParser.create().disableInterfaceProxies())
 			.build(),
-		tester("UrlEncodingSerializer.DEFAULT/UrlEncodingParser.DEFAULT")
+		tester(8, "UrlEncodingSerializer.DEFAULT/UrlEncodingParser.DEFAULT")
 			.serializer(UrlEncodingSerializer.create().addBeanTypes().addRootType())
 			.parser(UrlEncodingParser.create().disableInterfaceProxies())
 			.build(),
-		tester("MsgPackSerializer.DEFAULT/MsgPackParser.DEFAULT")
+		tester(9, "MsgPackSerializer.DEFAULT/MsgPackParser.DEFAULT")
 			.serializer(MsgPackSerializer.create().addBeanTypes().addRootType())
 			.parser(MsgPackParser.create().disableInterfaceProxies())
 			.build()
@@ -81,8 +81,8 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 		return TESTERS;
 	}
 
-	protected static RoundTrip_Tester.Builder tester(String label) {
-		return RoundTrip_Tester.create(label).dictionary(A.class, B.class, C.class, D.class, E.class, F.class);
+	protected static RoundTrip_Tester.Builder tester(int index, String label) {
+		return RoundTrip_Tester.create(index, label).dictionary(A.class, B.class, C.class, D.class, E.class, F.class);
 	}
 
 	//====================================================================================================
