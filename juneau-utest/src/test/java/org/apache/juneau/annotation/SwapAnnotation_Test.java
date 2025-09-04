@@ -49,7 +49,7 @@ class SwapAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "description:['description'],"
 				+ "impl:'"+CNAME+"$X1',"
@@ -58,7 +58,7 @@ class SwapAnnotation_Test extends SimpleTestBase {
 				+ "onClass:['"+CNAME+"$X1'],"
 				+ "template:'template',"
 				+ "value:'"+CNAME+"$X1'"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

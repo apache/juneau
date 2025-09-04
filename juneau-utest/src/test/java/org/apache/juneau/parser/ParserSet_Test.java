@@ -53,15 +53,15 @@ class ParserSet_Test extends SimpleTestBase {
 	@Test void a02_inheritence() {
 		var sb = ParserSet.create().add(P1.class, P2.class);
 		var s = sb.build();
-		assertJson(s.getSupportedMediaTypes(), "['text/1','text/2','text/2a']");
+		assertJson("['text/1','text/2','text/2a']", s.getSupportedMediaTypes());
 
 		sb = ParserSet.create().add(P1.class, P2.class).add(P3.class, P4.class);
 		s = sb.build();
-		assertJson(s.getSupportedMediaTypes(), "['text/3','text/4','text/4a','text/1','text/2','text/2a']");
+		assertJson("['text/3','text/4','text/4a','text/1','text/2','text/2a']", s.getSupportedMediaTypes());
 
 		sb = ParserSet.create().add(P1.class, P2.class).add(P3.class, P4.class).add(P5.class);
 		s = sb.build();
-		assertJson(s.getSupportedMediaTypes(), "['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']");
+		assertJson("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']", s.getSupportedMediaTypes());
 	}
 
 	public static class P1 extends JsonParser { public P1(JsonParser.Builder b) { super(b.consumes("text/1")); }}

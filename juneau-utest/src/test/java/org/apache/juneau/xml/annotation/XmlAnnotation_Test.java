@@ -45,7 +45,7 @@ class XmlAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "childName:'a',"
 				+ "description:['description'],"
@@ -54,7 +54,7 @@ class XmlAnnotation_Test extends SimpleTestBase {
 				+ "on:['d'],"
 				+ "onClass:[],"
 				+ "prefix:'e'"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

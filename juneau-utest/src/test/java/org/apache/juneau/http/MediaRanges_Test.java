@@ -28,9 +28,9 @@ class MediaRanges_Test extends SimpleTestBase {
 		var x1 = of("text/json");
 		var x2 = x1.getRange(0);
 		assertString("text/json", x2);
-		assertJson(x2.getParameters(), "[]");
+		assertJson("[]", x2.getParameters());
 		assertString("1.0", x2.getQValue());
-		assertJson(x2.getExtensions(), "[]");
+		assertJson("[]", x2.getExtensions());
 
 		assertNull(x1.getRange(-1));
 		assertNull(x1.getRange(1));
@@ -38,65 +38,65 @@ class MediaRanges_Test extends SimpleTestBase {
 		x1 = of("foo,bar");
 		x2 = x1.getRange(0);
 		assertString("foo", x2);
-		assertJson(x2.getParameters(), "[]");
+		assertJson("[]", x2.getParameters());
 		assertString("1.0", x2.getQValue());
-		assertJson(x2.getExtensions(), "[]");
+		assertJson("[]", x2.getExtensions());
 
 		x1 = of(" foo , bar ");
 		x2 = x1.getRange(0);
 		assertString("foo", x2);
-		assertJson(x2.getParameters(), "[]");
+		assertJson("[]", x2.getParameters());
 		assertString("1.0", x2.getQValue());
-		assertJson(x2.getExtensions(), "[]");
+		assertJson("[]", x2.getExtensions());
 
 		x1 = of("text/json;a=1;q=0.9;b=2");
 		x2 = x1.getRange(0);
 		assertString("text/json;a=1;q=0.9;b=2", x2);
-		assertJson(x2.getParameters(), "[{name:'a',value:'1'}]");
+		assertJson("[{name:'a',value:'1'}]", x2.getParameters());
 		assertString("0.9", x2.getQValue());
-		assertJson(x2.getExtensions(), "[{name:'b',value:'2'}]");
+		assertJson("[{name:'b',value:'2'}]", x2.getExtensions());
 
 		x1 = of("text/json;a=1;a=2;q=0.9;b=3;b=4");
 		x2 = x1.getRange(0);
 		assertString("text/json;a=1;a=2;q=0.9;b=3;b=4", x2);
-		assertJson(x2.getParameters(), "[{name:'a',value:'1'},{name:'a',value:'2'}]");
+		assertJson("[{name:'a',value:'1'},{name:'a',value:'2'}]", x2.getParameters());
 		assertString("0.9", x2.getQValue());
-		assertJson(x2.getExtensions(), "[{name:'b',value:'3'},{name:'b',value:'4'}]");
+		assertJson("[{name:'b',value:'3'},{name:'b',value:'4'}]", x2.getExtensions());
 
 		x1 = of("text/json;a=1;a=2;q=1.0;b=3;b=4");
 		x2 = x1.getRange(0);
 		assertString("text/json;a=1;a=2;q=1.0;b=3;b=4", x2);
-		assertJson(x2.getParameters(), "[{name:'a',value:'1'},{name:'a',value:'2'}]");
+		assertJson("[{name:'a',value:'1'},{name:'a',value:'2'}]", x2.getParameters());
 		assertString("1.0", x2.getQValue());
-		assertJson(x2.getExtensions(), "[{name:'b',value:'3'},{name:'b',value:'4'}]");
+		assertJson("[{name:'b',value:'3'},{name:'b',value:'4'}]", x2.getExtensions());
 
 		x1 = of("text/json;a=1");
 		x2 = x1.getRange(0);
 		assertString("text/json;a=1", x2);
-		assertJson(x2.getParameters(), "[{name:'a',value:'1'}]");
+		assertJson("[{name:'a',value:'1'}]", x2.getParameters());
 		assertString("1.0", x2.getQValue());
-		assertJson(x2.getExtensions(), "[]");
+		assertJson("[]", x2.getExtensions());
 
 		x1 = of("text/json;a=1;");
 		x2 = x1.getRange(0);
 		assertString("text/json;a=1", x2);
-		assertJson(x2.getParameters(), "[{name:'a',value:'1'}]");
+		assertJson("[{name:'a',value:'1'}]", x2.getParameters());
 		assertString("1.0", x2.getQValue());
-		assertJson(x2.getExtensions(), "[]");
+		assertJson("[]", x2.getExtensions());
 
 		x1 = of("text/json;q=0.9");
 		x2 = x1.getRange(0);
 		assertString("text/json;q=0.9", x2);
-		assertJson(x2.getParameters(), "[]");
+		assertJson("[]", x2.getParameters());
 		assertString("0.9", x2.getQValue());
-		assertJson(x2.getExtensions(), "[]");
+		assertJson("[]", x2.getExtensions());
 
 		x1 = of("text/json;q=0.9;");
 		x2 = x1.getRange(0);
 		assertString("text/json;q=0.9", x2);
-		assertJson(x2.getParameters(), "[]");
+		assertJson("[]", x2.getParameters());
 		assertString("0.9", x2.getQValue());
-		assertJson(x2.getExtensions(), "[]");
+		assertJson("[]", x2.getExtensions());
 	}
 
 	@Test void a02_hasSubtypePart() {
@@ -140,6 +140,6 @@ class MediaRanges_Test extends SimpleTestBase {
 
 	@Test void a05_getRanges() {
 		var x1 = of("text/json");
-		assertJson(x1.toList(), "['text/json']");
+		assertJson("['text/json']", x1.toList());
 	}
 }

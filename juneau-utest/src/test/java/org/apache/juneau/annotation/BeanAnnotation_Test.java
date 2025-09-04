@@ -81,7 +81,7 @@ class BeanAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "description:['description'],"
 				+ "dictionary:['"+CNAME+"$X1'],"
@@ -105,7 +105,7 @@ class BeanAnnotation_Test extends SimpleTestBase {
 				+ "wo:'wo',"
 				+ "writeOnlyProperties:'writeOnlyProperties',"
 				+ "xp:'xp'"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

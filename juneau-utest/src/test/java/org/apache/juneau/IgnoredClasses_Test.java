@@ -29,7 +29,7 @@ class IgnoredClasses_Test extends SimpleTestBase {
 		if (! System.getProperty("os.name").toLowerCase().startsWith("win")) return;
 		// Files should be rendered as strings.
 		var f = new File("C:/temp");
-		assertJson(f, "'C:\\\\temp'");
+		assertJson("'C:\\\\temp'", f);
 	}
 
 	//====================================================================================================

@@ -72,15 +72,15 @@ class SerializerSet_Test extends SimpleTestBase {
 	@Test void a02_inheritence() {
 		var gb = SerializerSet.create().add(SB1.class, SB2.class);
 		var g = gb.build();
-		assertJson(g.getSupportedMediaTypes(), "['text/1','text/2','text/2a']");
+		assertJson("['text/1','text/2','text/2a']", g.getSupportedMediaTypes());
 
 		gb = SerializerSet.create().add(SB1.class, SB2.class).add(SB3.class, SB4.class);
 		g = gb.build();
-		assertJson(g.getSupportedMediaTypes(), "['text/3','text/4','text/4a','text/1','text/2','text/2a']");
+		assertJson("['text/3','text/4','text/4a','text/1','text/2','text/2a']", g.getSupportedMediaTypes());
 
 		gb = SerializerSet.create().add(SB1.class, SB2.class).add(SB3.class, SB4.class).add(SB5.class);
 		g = gb.build();
-		assertJson(g.getSupportedMediaTypes(), "['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']");
+		assertJson("['text/5','text/3','text/4','text/4a','text/1','text/2','text/2a']", g.getSupportedMediaTypes());
 	}
 
 	public static class SB1 extends JsonSerializer {

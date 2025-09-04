@@ -84,8 +84,8 @@ class BasicMediaTypeHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a05_getSubTypes() {
-		assertJson(contentType("text/foo+bar").getSubTypes(), "['foo','bar']");
-		assertJson(new ContentType((String)null).getSubTypes(), "['*']");
+		assertJson("['foo','bar']", contentType("text/foo+bar").getSubTypes());
+		assertJson("['*']", new ContentType((String)null).getSubTypes());
 	}
 
 	@Test void a06_isMeta() {
@@ -100,8 +100,8 @@ class BasicMediaTypeHeader_Test extends SimpleTestBase {
 	}
 
 	@Test void a08_getParameters() {
-		assertJson(contentType("text/foo;x=1;y=2").getParameters(), "[{name:'x',value:'1'},{name:'y',value:'2'}]");
-		assertJson(new ContentType((String)null).getParameters(), "[]");
+		assertJson("[{name:'x',value:'1'},{name:'y',value:'2'}]", contentType("text/foo;x=1;y=2").getParameters());
+		assertJson("[]", new ContentType((String)null).getParameters());
 	}
 
 	@Test void a09_getParameter() {

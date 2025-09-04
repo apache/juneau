@@ -39,12 +39,12 @@ class HasQueryAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "description:['description'],"
 				+ "name:'name',"
 				+ "value:'value'"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

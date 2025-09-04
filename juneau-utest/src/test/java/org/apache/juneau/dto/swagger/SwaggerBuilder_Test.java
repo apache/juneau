@@ -26,125 +26,125 @@ class SwaggerBuilder_Test extends SimpleTestBase {
 
 	@Test void a01_contact() {
 		var t = contact();
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t = contact("foo");
-		assertJson(t, "{name:'foo'}");
+		assertJson("{name:'foo'}", t);
 
 		t = contact("foo", "bar", "baz");
-		assertJson(t, "{name:'foo',url:'bar',email:'baz'}");
+		assertJson("{name:'foo',url:'bar',email:'baz'}", t);
 	}
 
 	@Test void a02_externalDocumentation() {
 		var t = externalDocumentation();
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t = externalDocumentation("foo");
-		assertJson(t, "{url:'foo'}");
+		assertJson("{url:'foo'}", t);
 
 		t = externalDocumentation("foo", "bar");
-		assertJson(t, "{description:'bar',url:'foo'}");
+		assertJson("{description:'bar',url:'foo'}", t);
 	}
 
 	@Test void a03_headerInfo() {
 		var t = headerInfo();
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t = headerInfo("foo");
-		assertJson(t, "{type:'foo'}");
+		assertJson("{type:'foo'}", t);
 
 		t = headerInfoStrict("string");
-		assertJson(t, "{type:'string'}");
+		assertJson("{type:'string'}", t);
 		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']", ()->headerInfoStrict("foo"));
 	}
 
 	@Test void a04_info() {
 		var t = info();
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t = info("foo", "bar");
-		assertJson(t, "{title:'foo',version:'bar'}");
+		assertJson("{title:'foo',version:'bar'}", t);
 	}
 
 	@Test void a05_items() {
 		var t = items();
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t = items("foo");
-		assertJson(t, "{type:'foo'}");
+		assertJson("{type:'foo'}", t);
 
 		t = itemsStrict("string");
-		assertJson(t, "{type:'string'}");
+		assertJson("{type:'string'}", t);
 		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']", ()->itemsStrict("foo"));
 	}
 
 	@Test void a06_license() {
 		var t = license();
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t = license("foo");
-		assertJson(t, "{name:'foo'}");
+		assertJson("{name:'foo'}", t);
 	}
 
 	@Test void a07_operation() {
 		var t = operation();
-		assertJson(t, "{}");
+		assertJson("{}", t);
 	}
 
 	@Test void a08_parameterInfo() {
 		var t = parameterInfo();
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t = parameterInfo("foo", "bar");
-		assertJson(t, "{'in':'foo',name:'bar'}");
+		assertJson("{'in':'foo',name:'bar'}", t);
 
 		t = parameterInfoStrict("query", "bar");
-		assertJson(t, "{'in':'query',name:'bar'}");
+		assertJson("{'in':'query',name:'bar'}", t);
 		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid value passed in to setIn(String).  Value='foo', valid values=['query','header','path','formData','body']", ()->parameterInfoStrict("foo", "bar"));
 	}
 
 	@Test void a09_responseInfo() {
 		var t = responseInfo();
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t = responseInfo("foo");
-		assertJson(t, "{description:'foo'}");
+		assertJson("{description:'foo'}", t);
 	}
 
 	@Test void a10_schemaInfo() {
 		var t = schemaInfo();
-		assertJson(t, "{}");
+		assertJson("{}", t);
 	}
 
 	@Test void a11_securityScheme() {
 		var t = securityScheme();
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t = securityScheme("foo");
-		assertJson(t, "{type:'foo'}");
+		assertJson("{type:'foo'}", t);
 
 		t = securityScheme("foo");
-		assertJson(t, "{type:'foo'}");
+		assertJson("{type:'foo'}", t);
 	}
 
 	@Test void a12_swagger() {
 		var t = swagger();
-		assertJson(t, "{swagger:'2.0'}");
+		assertJson("{swagger:'2.0'}", t);
 
 		t = swagger(info());
-		assertJson(t, "{swagger:'2.0',info:{}}");
+		assertJson("{swagger:'2.0',info:{}}", t);
 	}
 
 	@Test void a13_tag() {
 		var t = tag();
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t = tag("foo");
-		assertJson(t, "{name:'foo'}");
+		assertJson("{name:'foo'}", t);
 	}
 
 	@Test void a14_xml() {
 		var t = xml();
-		assertJson(t, "{}");
+		assertJson("{}", t);
 	}
 }

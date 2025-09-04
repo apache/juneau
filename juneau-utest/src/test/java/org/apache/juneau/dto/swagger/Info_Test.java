@@ -110,7 +110,7 @@ class Info_Test extends SimpleTestBase {
 
 	@Test void b02_roundTripJson() {
 		var s = "{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}";
-		assertJson(JsonParser.DEFAULT.parse(s, Info.class), s);
+		assertJson(s, JsonParser.DEFAULT.parse(s, Info.class));
 	}
 
 	@Test void b03_copy() {
@@ -118,7 +118,7 @@ class Info_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t
 			.set("contact", contact("a"))

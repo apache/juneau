@@ -144,7 +144,7 @@ class SchemaAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "'$ref':'$ref',"
 				+ "_default:['default'],"
@@ -203,7 +203,7 @@ class SchemaAnnotation_Test extends SimpleTestBase {
 				+ "ui:true,"
 				+ "uniqueItems:true,"
 				+ "xml:['xml']"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

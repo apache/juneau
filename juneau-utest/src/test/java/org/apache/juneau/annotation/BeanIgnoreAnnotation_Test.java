@@ -41,12 +41,12 @@ class BeanIgnoreAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "description:['description'],"
 				+ "on:['a'],"
 				+ "onClass:['"+CNAME+"$X1']"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

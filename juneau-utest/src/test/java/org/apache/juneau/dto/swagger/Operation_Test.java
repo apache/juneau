@@ -153,7 +153,7 @@ class Operation_Test extends SimpleTestBase {
 
 	@Test void b02_roundTripJson() {
 		var s = "{operationId:'d',summary:'j',description:'b',tags:['k'],externalDocs:{url:'c'},consumes:['text/a'],produces:['text/f'],parameters:[{'in':'e1',name:'e2'}],responses:{'1':{description:'g'}},schemes:['h'],deprecated:true,security:[{i1:['i2']}],'$ref':'ref'}";
-		assertJson(JsonParser.DEFAULT.parse(s, Operation.class), s);
+		assertJson(s, JsonParser.DEFAULT.parse(s, Operation.class));
 	}
 
 	@Test void b03_copy() {
@@ -161,7 +161,7 @@ class Operation_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t
 			.set("consumes", set(MediaType.of("text/a")))

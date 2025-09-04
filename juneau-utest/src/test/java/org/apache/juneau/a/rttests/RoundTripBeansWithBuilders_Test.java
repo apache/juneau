@@ -249,7 +249,7 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 			.f9(singletonMap("foo", singletonList(new A[]{A.create().f1(9).build()})))
 			.build();
 		x = t.roundTrip(x, A3.class);
-		assertJson(x, "{f1:[{f1:1}],f2:[{f1:2}],f3:[[{f1:3}]],f4:[[{f1:4}]],f5:[[[{f1:5}]]],f6:{foo:{f1:6}},f7:{foo:{bar:{f1:7}}},f8:{foo:[{f1:8}]},f9:{foo:[[{f1:9}]]}}");
+		assertJson("{f1:[{f1:1}],f2:[{f1:2}],f3:[[{f1:3}]],f4:[[{f1:4}]],f5:[[[{f1:5}]]],f6:{foo:{f1:6}},f7:{foo:{bar:{f1:7}}},f8:{foo:[{f1:8}]},f9:{foo:[[{f1:9}]]}}", x);
 	}
 
 	@Bean(sort=true)

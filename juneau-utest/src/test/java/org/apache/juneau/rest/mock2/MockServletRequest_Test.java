@@ -81,7 +81,7 @@ class MockServletRequest_Test extends SimpleTestBase {
 			"bar=baz&bing=qux,{bar=[baz],bing=[qux]},[bar,bing]"
 		);
 		assertEquals("baz", req.getParameter("bar"));
-		assertJson(req.getParameterValues("bar"), "['baz']");
+		assertJson("['baz']", req.getParameterValues("bar"));
 	}
 
 	@Test void b02_query_multivalues() {
@@ -92,6 +92,6 @@ class MockServletRequest_Test extends SimpleTestBase {
 			"bar=baz&bar=bing,{bar=[baz,bing]},[bar]"
 		);
 		assertEquals("baz", req.getParameter("bar"));
-		assertJson(req.getParameterValues("bar"), "['baz','bing']");
+		assertJson("['baz','bing']", req.getParameterValues("bar"));
 	}
 }

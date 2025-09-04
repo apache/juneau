@@ -122,7 +122,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 			assertTrue(toString(r).contains("X-2"));
 		}
 		x = t.roundTrip(x);
-		assertJson(x, "{b1:'X1',b2:'X-2'}");
+		assertJson("{b1:'X1',b2:'X-2'}", x);
 	}
 
 	public static class B {
@@ -178,7 +178,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 	void a03_ordering(RoundTripTester t) throws Exception {
 		var x = new C().init();
 		x = t.roundTrip(x);
-		assertJson(x, "{c1:{f:'1'},c2:{f:'2'},c3:{f:'3'},c4:{f:'4'}}");
+		assertJson("{c1:{f:'1'},c2:{f:'2'},c3:{f:'3'},c4:{f:'4'}}", x);
 	}
 
 	public static class C {

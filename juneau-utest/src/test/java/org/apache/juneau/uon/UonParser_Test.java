@@ -516,9 +516,9 @@ class UonParser_Test extends SimpleTestBase {
 
 		r = reader("@(123)@(456)");
 		var x2 = p2.parse(r, JsonList.class);
-		assertJson(x2, "[123]");
+		assertJson("[123]", x2);
 		x2 = p2.parse(r, JsonList.class);
-		assertJson(x2, "[456]");
+		assertJson("[456]", x2);
 	}
 
 	private Reader reader(String in) {

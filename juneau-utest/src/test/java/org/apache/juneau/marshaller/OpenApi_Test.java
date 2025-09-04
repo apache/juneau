@@ -44,8 +44,8 @@ class OpenApi_Test extends SimpleTestBase {
 
 		assertEquals(expected1, OpenApi.to(in1, String.class));
 		assertEquals(expected1, OpenApi.to(stringReader(in1), String.class));
-		assertJson(OpenApi.to(in2, Map.class, String.class, String.class), expected2);
-		assertJson(OpenApi.to(stringReader(in2), Map.class, String.class, String.class), expected2);
+		assertJson(expected2, OpenApi.to(in2, Map.class, String.class, String.class));
+		assertJson(expected2, OpenApi.to(stringReader(in2), Map.class, String.class, String.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

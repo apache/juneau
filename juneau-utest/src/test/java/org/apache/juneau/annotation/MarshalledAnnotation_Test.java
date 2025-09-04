@@ -45,14 +45,14 @@ class MarshalledAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "description:['description'],"
 				+ "example:'example',"
 				+ "implClass:'"+CNAME+"$X1',"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1']"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

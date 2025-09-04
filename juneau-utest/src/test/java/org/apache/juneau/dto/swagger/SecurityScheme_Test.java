@@ -122,7 +122,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 
 	@Test void b02_roundTripJson() {
 		var s = "{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}";
-		assertJson(JsonParser.DEFAULT.parse(s, SecurityScheme.class), s);
+		assertJson(s, JsonParser.DEFAULT.parse(s, SecurityScheme.class));
 	}
 
 	@Test void b03_copy() {
@@ -130,7 +130,7 @@ class SecurityScheme_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t
 			.set("authorizationUrl", "a")

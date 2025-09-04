@@ -56,7 +56,7 @@ class OpSwaggerAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "consumes:['consumes'],"
 				+ "deprecated:'deprecated',"
@@ -70,7 +70,7 @@ class OpSwaggerAnnotation_Test extends SimpleTestBase {
 				+ "summary:['summary'],"
 				+ "tags:['tags'],"
 				+ "value:['value']"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

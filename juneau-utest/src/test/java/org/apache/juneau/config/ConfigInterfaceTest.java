@@ -85,54 +85,54 @@ class ConfigInterfaceTest extends SimpleTestBase {
 	@Test void a08_int3dArray() {
 		proxy.setInt3dArray(new int[][][]{{{1,2},null},null});
 		assertEquals("[[[1,2],null],null]", cf.get("A/int3dArray").get());
-		assertJson(proxy.getInt3dArray(), "[[[1,2],null],null]");
+		assertJson("[[[1,2],null],null]", proxy.getInt3dArray());
 		assertType(int[][][].class, proxy.getInt3dArray());
 	}
 
 	@Test void a09_integer3dArray() {
 		proxy.setInteger3dArray(new Integer[][][]{{{1,null},null},null});
-		assertJson(proxy.getInteger3dArray(), "[[[1,null],null],null]");
+		assertJson("[[[1,null],null],null]", proxy.getInteger3dArray());
 		assertEquals("[[[1,null],null],null]", cf.get("A/integer3dArray").get());
 		assertType(Integer.class, proxy.getInteger3dArray()[0][0][0]);
 	}
 
 	@Test void a10_string3dArray() {
 		proxy.setString3dArray(new String[][][]{{{"foo",null},null},null});
-		assertJson(proxy.getString3dArray(), "[[['foo',null],null],null]");
+		assertJson("[[['foo',null],null],null]", proxy.getString3dArray());
 		assertEquals("[[['foo',null],null],null]", cf.get("A/string3dArray").get());
 	}
 
 	@Test void a11_integerList() {
 		proxy.setIntegerList(alist(1,null));
-		assertJson(proxy.getIntegerList(), "[1,null]");
+		assertJson("[1,null]", proxy.getIntegerList());
 		assertEquals("[1,null]", cf.get("A/integerList").get());
 		assertType(Integer.class, proxy.getIntegerList().get(0));
 	}
 
 	@Test void a12_integer3dList() {
 		proxy.setInteger3dList(alist(alist(alist(1,null),null),null));
-		assertJson(proxy.getInteger3dList(), "[[[1,null],null],null]");
+		assertJson("[[[1,null],null],null]", proxy.getInteger3dList());
 		assertEquals("[[[1,null],null],null]", cf.get("A/integer3dList").get());
 		assertType(Integer.class, proxy.getInteger3dList().get(0).get(0).get(0));
 	}
 
 	@Test void a13_integer1d3dList() {
 		proxy.setInteger1d3dList(alist(new Integer[][][]{{{1,null},null},null},null));
-		assertJson(proxy.getInteger1d3dList(), "[[[[1,null],null],null],null]");
+		assertJson("[[[[1,null],null],null],null]", proxy.getInteger1d3dList());
 		assertEquals("[[[[1,null],null],null],null]", cf.get("A/integer1d3dList").get());
 		assertType(Integer.class, proxy.getInteger1d3dList().get(0)[0][0][0]);
 	}
 
 	@Test void a14_int1d3dList() {
 		proxy.setInt1d3dList(alist(new int[][][]{{{1,2},null},null},null));
-		assertJson(proxy.getInt1d3dList(), "[[[[1,2],null],null],null]");
+		assertJson("[[[[1,2],null],null],null]", proxy.getInt1d3dList());
 		assertEquals("[[[[1,2],null],null],null]", cf.get("A/int1d3dList").get());
 		assertType(int[][][].class, proxy.getInt1d3dList().get(0));
 	}
 
 	@Test void a15_stringList() {
 		proxy.setStringList(Arrays.asList("foo","bar",null));
-		assertJson(proxy.getStringList(), "['foo','bar',null]");
+		assertJson("['foo','bar',null]", proxy.getStringList());
 		assertEquals("['foo','bar',null]", cf.get("A/stringList").get());
 	}
 
@@ -140,56 +140,56 @@ class ConfigInterfaceTest extends SimpleTestBase {
 
 	@Test void a16_bean() {
 		proxy.setBean(ABean.get());
-		assertJson(proxy.getBean(), "{a:1,b:'foo'}");
+		assertJson("{a:1,b:'foo'}", proxy.getBean());
 		assertEquals("{a:1,b:'foo'}", cf.get("A/bean").get());
 		assertType(ABean.class, proxy.getBean());
 	}
 
 	@Test void a17_bean3dArray() {
 		proxy.setBean3dArray(new ABean[][][]{{{ABean.get(),null},null},null});
-		assertJson(proxy.getBean3dArray(), "[[[{a:1,b:'foo'},null],null],null]");
+		assertJson("[[[{a:1,b:'foo'},null],null],null]", proxy.getBean3dArray());
 		assertEquals("[[[{a:1,b:'foo'},null],null],null]", cf.get("A/bean3dArray").get());
 		assertType(ABean.class, proxy.getBean3dArray()[0][0][0]);
 	}
 
 	@Test void a18_beanList() {
 		proxy.setBeanList(Arrays.asList(ABean.get()));
-		assertJson(proxy.getBeanList(), "[{a:1,b:'foo'}]");
+		assertJson("[{a:1,b:'foo'}]", proxy.getBeanList());
 		assertEquals("[{a:1,b:'foo'}]", cf.get("A/beanList").get());
 		assertType(ABean.class, proxy.getBeanList().get(0));
 	}
 
 	@Test void a19_bean1d3dList() {
 		proxy.setBean1d3dList(alist(new ABean[][][]{{{ABean.get(),null},null},null},null));
-		assertJson(proxy.getBean1d3dList(), "[[[[{a:1,b:'foo'},null],null],null],null]");
+		assertJson("[[[[{a:1,b:'foo'},null],null],null],null]", proxy.getBean1d3dList());
 		assertEquals("[[[[{a:1,b:'foo'},null],null],null],null]", cf.get("A/bean1d3dList").get());
 		assertType(ABean.class, proxy.getBean1d3dList().get(0)[0][0][0]);
 	}
 
 	@Test void a20_beanMap() {
 		proxy.setBeanMap(map("foo",ABean.get()));
-		assertJson(proxy.getBeanMap(), "{foo:{a:1,b:'foo'}}");
+		assertJson("{foo:{a:1,b:'foo'}}", proxy.getBeanMap());
 		assertEquals("{foo:{a:1,b:'foo'}}", cf.get("A/beanMap").get());
 		assertType(ABean.class, proxy.getBeanMap().get("foo"));
 	}
 
 	@Test void a21_beanListMap() {
 		proxy.setBeanListMap(map("foo",Arrays.asList(ABean.get())));
-		assertJson(proxy.getBeanListMap(), "{foo:[{a:1,b:'foo'}]}");
+		assertJson("{foo:[{a:1,b:'foo'}]}", proxy.getBeanListMap());
 		assertEquals("{foo:[{a:1,b:'foo'}]}", cf.get("A/beanListMap").get());
 		assertType(ABean.class, proxy.getBeanListMap().get("foo").get(0));
 	}
 
 	@Test void a22_bean1d3dListMap() {
 		proxy.setBean1d3dListMap(map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null)));
-		assertJson(proxy.getBean1d3dListMap(), "{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
+		assertJson("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", proxy.getBean1d3dListMap());
 		assertEquals("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", cf.get("A/bean1d3dListMap").get());
 		assertType(ABean.class, proxy.getBean1d3dListMap().get("foo").get(0)[0][0][0]);
 	}
 
 	@Test void a23_beanListMapIntegerKeys() {
 		proxy.setBeanListMapIntegerKeys(map(1,Arrays.asList(ABean.get())));
-		assertJson(proxy.getBeanListMapIntegerKeys(), "{'1':[{a:1,b:'foo'}]}");
+		assertJson("{'1':[{a:1,b:'foo'}]}", proxy.getBeanListMapIntegerKeys());
 		assertEquals("{'1':[{a:1,b:'foo'}]}", cf.get("A/beanListMapIntegerKeys").get());
 		assertType(ABean.class, proxy.getBeanListMapIntegerKeys().get(1).get(0));
 	}
@@ -198,56 +198,56 @@ class ConfigInterfaceTest extends SimpleTestBase {
 
 	@Test void a24_typedBean() {
 		proxy.setTypedBean(TypedBeanImpl.get());
-		assertJson(proxy.getTypedBean(), "{a:1,b:'foo'}");
+		assertJson("{a:1,b:'foo'}", proxy.getTypedBean());
 		assertEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", cf.get("A/typedBean").get());
 		assertType(TypedBeanImpl.class, proxy.getTypedBean());
 	}
 
 	@Test void a25_typedBean3dArray() {
 		proxy.setTypedBean3dArray(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null});
-		assertJson(proxy.getTypedBean3dArray(), "[[[{a:1,b:'foo'},null],null],null]");
+		assertJson("[[[{a:1,b:'foo'},null],null],null]", proxy.getTypedBean3dArray());
 		assertEquals("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]", cf.get("A/typedBean3dArray").get());
 		assertType(TypedBeanImpl.class, proxy.getTypedBean3dArray()[0][0][0]);
 	}
 
 	@Test void a26_typedBeanList() {
 		proxy.setTypedBeanList(Arrays.asList((TypedBean)TypedBeanImpl.get()));
-		assertJson(proxy.getTypedBeanList(), "[{a:1,b:'foo'}]");
+		assertJson("[{a:1,b:'foo'}]", proxy.getTypedBeanList());
 		assertEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'}]", cf.get("A/typedBeanList").get());
 		assertType(TypedBeanImpl.class, proxy.getTypedBeanList().get(0));
 	}
 
 	@Test void a27_typedBean1d3dList() {
 		proxy.setTypedBean1d3dList(alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
-		assertJson(proxy.getTypedBean1d3dList(), "[[[[{a:1,b:'foo'},null],null],null],null]");
+		assertJson("[[[[{a:1,b:'foo'},null],null],null],null]", proxy.getTypedBean1d3dList());
 		assertEquals("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]", cf.get("A/typedBean1d3dList").get());
 		assertType(TypedBeanImpl.class, proxy.getTypedBean1d3dList().get(0)[0][0][0]);
 	}
 
 	@Test void a28_typedBeanMap() {
 		proxy.setTypedBeanMap(map("foo",TypedBeanImpl.get()));
-		assertJson(proxy.getTypedBeanMap(), "{foo:{a:1,b:'foo'}}");
+		assertJson("{foo:{a:1,b:'foo'}}", proxy.getTypedBeanMap());
 		assertEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", cf.get("A/typedBeanMap").get());
 		assertType(TypedBeanImpl.class, proxy.getTypedBeanMap().get("foo"));
 	}
 
 	@Test void a29_typedBeanListMap() {
 		proxy.setTypedBeanListMap(map("foo",Arrays.asList((TypedBean)TypedBeanImpl.get())));
-		assertJson(proxy.getTypedBeanListMap(), "{foo:[{a:1,b:'foo'}]}");
+		assertJson("{foo:[{a:1,b:'foo'}]}", proxy.getTypedBeanListMap());
 		assertEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", cf.get("A/typedBeanListMap").get());
 		assertType(TypedBeanImpl.class, proxy.getTypedBeanListMap().get("foo").get(0));
 	}
 
 	@Test void a30_typedBean1d3dListMap() {
 		proxy.setTypedBean1d3dListMap(map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
-		assertJson(proxy.getTypedBean1d3dListMap(), "{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
+		assertJson("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", proxy.getTypedBean1d3dListMap());
 		assertEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", cf.get("A/typedBean1d3dListMap").get());
 		assertType(TypedBeanImpl.class, proxy.getTypedBean1d3dListMap().get("foo").get(0)[0][0][0]);
 	}
 
 	@Test void a31_typedBeanListMapIntegerKeys() {
 		proxy.setTypedBeanListMapIntegerKeys(map(1,Arrays.asList((TypedBean)TypedBeanImpl.get())));
-		assertJson(proxy.getTypedBeanListMapIntegerKeys(), "{'1':[{a:1,b:'foo'}]}");
+		assertJson("{'1':[{a:1,b:'foo'}]}", proxy.getTypedBeanListMapIntegerKeys());
 		assertEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", cf.get("A/typedBeanListMapIntegerKeys").get());
 		assertType(TypedBeanImpl.class, proxy.getTypedBeanListMapIntegerKeys().get(1).get(0));
 	}
@@ -256,21 +256,21 @@ class ConfigInterfaceTest extends SimpleTestBase {
 
 	@Test void a32_swappedObject() {
 		proxy.setSwappedObject(new SwappedObject());
-		assertJson(proxy.getSwappedObject(), "'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
+		assertJson("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", proxy.getSwappedObject());
 		assertEquals("swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/", cf.get("A/swappedObject").get());
 		assertType(SwappedObject.class, proxy.getSwappedObject());
 	}
 
 	@Test void a33_swappedObject3dArray() {
 		proxy.setSwappedObject3dArray(new SwappedObject[][][]{{{new SwappedObject(),null},null},null});
-		assertJson(proxy.getSwappedObject3dArray(), "[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]");
+		assertJson("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", proxy.getSwappedObject3dArray());
 		assertEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", cf.get("A/swappedObject3dArray").get());
 		assertType(SwappedObject.class, proxy.getSwappedObject3dArray()[0][0][0]);
 	}
 
 	@Test void a34_swappedObjectMap() {
 		proxy.setSwappedObjectMap(map(new SwappedObject(), new SwappedObject()));
-		assertJson(proxy.getSwappedObjectMap(), "{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
+		assertJson("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", proxy.getSwappedObjectMap());
 		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", cf.get("A/swappedObjectMap").get());
 		assertType(SwappedObject.class, proxy.getSwappedObjectMap().keySet().iterator().next());
 		assertType(SwappedObject.class, proxy.getSwappedObjectMap().values().iterator().next());
@@ -278,7 +278,7 @@ class ConfigInterfaceTest extends SimpleTestBase {
 
 	@Test void a35_swappedObject3dMap() {
 		proxy.setSwappedObject3dMap(map(new SwappedObject(), new SwappedObject[][][]{{{new SwappedObject(),null},null},null}));
-		assertJson(proxy.getSwappedObject3dMap(), "{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
+		assertJson("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", proxy.getSwappedObject3dMap());
 		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", cf.get("A/swappedObject3dMap").get());
 		assertType(SwappedObject.class, proxy.getSwappedObject3dMap().keySet().iterator().next());
 		assertType(SwappedObject.class, proxy.getSwappedObject3dMap().values().iterator().next()[0][0][0]);
@@ -288,21 +288,21 @@ class ConfigInterfaceTest extends SimpleTestBase {
 
 	@Test void a36_implicitSwappedObject() {
 		proxy.setImplicitSwappedObject(new ImplicitSwappedObject());
-		assertJson(proxy.getImplicitSwappedObject(), "'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'");
+		assertJson("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", proxy.getImplicitSwappedObject());
 		assertEquals("swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/", cf.get("A/implicitSwappedObject").get());
 		assertType(ImplicitSwappedObject.class, proxy.getImplicitSwappedObject());
 	}
 
 	@Test void a37_implicitSwappedObject3dArray() {
 		proxy.setImplicitSwappedObject3dArray(new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null});
-		assertJson(proxy.getImplicitSwappedObject3dArray(), "[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]");
+		assertJson("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", proxy.getImplicitSwappedObject3dArray());
 		assertEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", cf.get("A/implicitSwappedObject3dArray").get());
 		assertType(ImplicitSwappedObject.class, proxy.getImplicitSwappedObject3dArray()[0][0][0]);
 	}
 
 	@Test void a38_implicitSwappedObjectMap() {
 		proxy.setImplicitSwappedObjectMap(map(new ImplicitSwappedObject(), new ImplicitSwappedObject()));
-		assertJson(proxy.getImplicitSwappedObjectMap(), "{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}");
+		assertJson("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", proxy.getImplicitSwappedObjectMap());
 		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", cf.get("A/implicitSwappedObjectMap").get());
 		assertType(ImplicitSwappedObject.class, proxy.getImplicitSwappedObjectMap().keySet().iterator().next());
 		assertType(ImplicitSwappedObject.class, proxy.getImplicitSwappedObjectMap().values().iterator().next());
@@ -310,7 +310,7 @@ class ConfigInterfaceTest extends SimpleTestBase {
 
 	@Test void a39_implicitSwappedObject3dMap() {
 		proxy.setImplicitSwappedObject3dMap(map(new ImplicitSwappedObject(), new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null}));
-		assertJson(proxy.getImplicitSwappedObject3dMap(), "{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}");
+		assertJson("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", proxy.getImplicitSwappedObject3dMap());
 		assertEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", cf.get("A/implicitSwappedObject3dMap").get());
 		assertType(ImplicitSwappedObject.class, proxy.getImplicitSwappedObject3dMap().keySet().iterator().next());
 		assertType(ImplicitSwappedObject.class, proxy.getImplicitSwappedObject3dMap().values().iterator().next()[0][0][0]);
@@ -320,42 +320,42 @@ class ConfigInterfaceTest extends SimpleTestBase {
 
 	@Test void a40_enum() {
 		proxy.setEnum(TestEnum.TWO);
-		assertJson(proxy.getEnum(), "'TWO'");
+		assertJson("'TWO'", proxy.getEnum());
 		assertEquals("TWO", cf.get("A/enum").get());
 		assertType(TestEnum.class, proxy.getEnum());
 	}
 
 	@Test void a41_enum3d() {
 		proxy.setEnum3d(new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
-		assertJson(proxy.getEnum3d(), "[[['TWO',null],null],null]");
+		assertJson("[[['TWO',null],null],null]", proxy.getEnum3d());
 		assertEquals("[[['TWO',null],null],null]", cf.get("A/enum3d").get());
 		assertType(TestEnum.class, proxy.getEnum3d()[0][0][0]);
 	}
 
 	@Test void a42_enumList() {
 		proxy.setEnumList(alist(TestEnum.TWO,null));
-		assertJson(proxy.getEnumList(), "['TWO',null]");
+		assertJson("['TWO',null]", proxy.getEnumList());
 		assertEquals("['TWO',null]", cf.get("A/enumList").get());
 		assertType(TestEnum.class, proxy.getEnumList().get(0));
 	}
 
 	@Test void a43_enum3dList() {
 		proxy.setEnum3dList(alist(alist(alist(TestEnum.TWO,null),null),null));
-		assertJson(proxy.getEnum3dList(), "[[['TWO',null],null],null]");
+		assertJson("[[['TWO',null],null],null]", proxy.getEnum3dList());
 		assertEquals("[[['TWO',null],null],null]", cf.get("A/enum3dList").get());
 		assertType(TestEnum.class, proxy.getEnum3dList().get(0).get(0).get(0));
 	}
 
 	@Test void a44_enum1d3dList() {
 		proxy.setEnum1d3dList(alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
-		assertJson(proxy.getEnum1d3dList(), "[[[['TWO',null],null],null],null]");
+		assertJson("[[[['TWO',null],null],null],null]", proxy.getEnum1d3dList());
 		assertEquals("[[[['TWO',null],null],null],null]", cf.get("A/enum1d3dList").get());
 		assertType(TestEnum.class, proxy.getEnum1d3dList().get(0)[0][0][0]);
 	}
 
 	@Test void a45_enumMap() {
 		proxy.setEnumMap(map(TestEnum.ONE,TestEnum.TWO));
-		assertJson(proxy.getEnumMap(), "{ONE:'TWO'}");
+		assertJson("{ONE:'TWO'}", proxy.getEnumMap());
 		assertEquals("{ONE:'TWO'}", cf.get("A/enumMap").get());
 		assertType(TestEnum.class, proxy.getEnumMap().keySet().iterator().next());
 		assertType(TestEnum.class, proxy.getEnumMap().values().iterator().next());
@@ -363,7 +363,7 @@ class ConfigInterfaceTest extends SimpleTestBase {
 
 	@Test void a46_enum3dArrayMap() {
 		proxy.setEnum3dArrayMap(map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
-		assertJson(proxy.getEnum3dArrayMap(), "{ONE:[[['TWO',null],null],null]}");
+		assertJson("{ONE:[[['TWO',null],null],null]}", proxy.getEnum3dArrayMap());
 		assertEquals("{ONE:[[['TWO',null],null],null]}", cf.get("A/enum3dArrayMap").get());
 		assertType(TestEnum.class, proxy.getEnum3dArrayMap().keySet().iterator().next());
 		assertType(TestEnum.class, proxy.getEnum3dArrayMap().values().iterator().next()[0][0][0]);
@@ -371,7 +371,7 @@ class ConfigInterfaceTest extends SimpleTestBase {
 
 	@Test void a47_enum1d3dListMap() {
 		proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
-		assertJson(proxy.getEnum1d3dListMap(), "{ONE:[[[['TWO',null],null],null],null]}");
+		assertJson("{ONE:[[[['TWO',null],null],null],null]}", proxy.getEnum1d3dListMap());
 		assertEquals("{ONE:[[[['TWO',null],null],null],null]}", cf.get("A/enum1d3dListMap").get());
 		assertType(TestEnum.class, proxy.getEnum1d3dListMap().keySet().iterator().next());
 		assertType(TestEnum.class, proxy.getEnum1d3dListMap().values().iterator().next().get(0)[0][0][0]);

@@ -101,7 +101,7 @@ class Tag_Test extends SimpleTestBase {
 
 	@Test void b02_roundTripJson() {
 		var s = "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}";
-		assertJson(JsonParser.DEFAULT.parse(s, Tag.class), s);
+		assertJson(s, JsonParser.DEFAULT.parse(s, Tag.class));
 	}
 
 	@Test void b03_copy() {
@@ -109,7 +109,7 @@ class Tag_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t
 			.set("description", "a")

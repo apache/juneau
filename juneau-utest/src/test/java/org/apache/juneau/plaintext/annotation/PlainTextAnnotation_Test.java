@@ -37,12 +37,12 @@ class PlainTextAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "description:['description'],"
 				+ "on:['a'],"
 				+ "onClass:[]"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

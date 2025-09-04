@@ -68,7 +68,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 		assertBean(
 			t.setDefault(Utils.sb("a")).setExample(1).setMaximum(2f).setMinimum(3f).setMultipleOf(4f),
 			"default,example,maximum,minimum,multipleOf", "a,1,2.0,3.0,4.0");
-		assertJson(t.setAdditionalProperties(new SchemaInfo()).getAdditionalProperties(), "{}");
+		assertJson("{}", t.setAdditionalProperties(new SchemaInfo()).getAdditionalProperties());
 
 		// addEnum and addAllOf
 		assertSet(t.addEnum("a","b").getEnum(), "a", "b");
@@ -206,7 +206,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 
 	@Test void b02_roundTripJson() {
 		var s = "{format:'i',title:'m',description:'e','default':'a',multipleOf:9.0,maximum:1.0,exclusiveMaximum:true,minimum:5.0,exclusiveMinimum:true,maxLength:3,minLength:7,pattern:'k',maxItems:2,minItems:6,uniqueItems:true,maxProperties:4,minProperties:8,requiredProperties:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'p'}";
-		assertJson(JsonParser.DEFAULT.parse(s, SchemaInfo.class), s);
+		assertJson(s, JsonParser.DEFAULT.parse(s, SchemaInfo.class));
 	}
 
 	@Test void b03_copy() {
@@ -214,7 +214,7 @@ class SchemaInfo_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t
 			.set("default", "a")

@@ -141,84 +141,84 @@ class Swagger_RestOp_Parameters extends SimpleTestBase {
 		var s = getSwagger(A.class);
 		var x = s.getParameterInfo("/accept","get","header","Accept");
 
-		assertJson(x, "{'in':'header',name:'Accept',type:'string'}");
+		assertJson("{'in':'header',name:'Accept',type:'string'}", x);
 
 		x = s.getParameterInfo("/acceptCharset","put","header","Accept-Charset");
-		assertJson(x, "{'in':'header',name:'Accept-Charset',type:'string'}");
+		assertJson("{'in':'header',name:'Accept-Charset',type:'string'}", x);
 
 		x = s.getParameterInfo("/acceptEncoding","post","header","Accept-Encoding");
-		assertJson(x, "{'in':'header',name:'Accept-Encoding',type:'string'}");
+		assertJson("{'in':'header',name:'Accept-Encoding',type:'string'}", x);
 
 		x = s.getParameterInfo("/acceptLanguage","delete","header","Accept-Language");
-		assertJson(x, "{'in':'header',name:'Accept-Language',type:'string'}");
+		assertJson("{'in':'header',name:'Accept-Language',type:'string'}", x);
 
 		x = s.getParameterInfo("/authorization","get","header","Authorization");
-		assertJson(x, "{'in':'header',name:'Authorization',type:'string'}");
+		assertJson("{'in':'header',name:'Authorization',type:'string'}", x);
 
 		x = s.getParameterInfo("/cacheControl","get","header","Cache-Control");
-		assertJson(x, "{'in':'header',name:'Cache-Control',type:'string'}");
+		assertJson("{'in':'header',name:'Cache-Control',type:'string'}", x);
 
 		x = s.getParameterInfo("/connection","get","header","Connection");
-		assertJson(x, "{'in':'header',name:'Connection',type:'string'}");
+		assertJson("{'in':'header',name:'Connection',type:'string'}", x);
 
 		x = s.getParameterInfo("/contentLength","get","header","Content-Length");
-		assertJson(x, "{'in':'header',name:'Content-Length',type:'integer',format:'int64'}");
+		assertJson("{'in':'header',name:'Content-Length',type:'integer',format:'int64'}", x);
 
 		x = s.getParameterInfo("/contentType","get","header","Content-Type");
-		assertJson(x, "{'in':'header',name:'Content-Type',type:'string'}");
+		assertJson("{'in':'header',name:'Content-Type',type:'string'}", x);
 
 		x = s.getParameterInfo("/date","get","header","Date");
-		assertJson(x, "{'in':'header',name:'Date',type:'string'}");
+		assertJson("{'in':'header',name:'Date',type:'string'}", x);
 
 		x = s.getParameterInfo("/expect","get","header","Expect");
-		assertJson(x, "{'in':'header',name:'Expect',type:'string'}");
+		assertJson("{'in':'header',name:'Expect',type:'string'}", x);
 
 		x = s.getParameterInfo("/from","get","header","From");
-		assertJson(x, "{'in':'header',name:'From',type:'string'}");
+		assertJson("{'in':'header',name:'From',type:'string'}", x);
 
 		x = s.getParameterInfo("/host","get","header","Host");
-		assertJson(x, "{'in':'header',name:'Host',type:'string'}");
+		assertJson("{'in':'header',name:'Host',type:'string'}", x);
 
 		x = s.getParameterInfo("/ifMatch","get","header","If-Match");
-		assertJson(x, "{'in':'header',name:'If-Match',type:'string'}");
+		assertJson("{'in':'header',name:'If-Match',type:'string'}", x);
 
 		x = s.getParameterInfo("/ifModifiedSince","get","header","If-Modified-Since");
-		assertJson(x, "{'in':'header',name:'If-Modified-Since',type:'string'}");
+		assertJson("{'in':'header',name:'If-Modified-Since',type:'string'}", x);
 
 		x = s.getParameterInfo("/ifNoneMatch","get","header","If-None-Match");
-		assertJson(x, "{'in':'header',name:'If-None-Match',type:'string'}");
+		assertJson("{'in':'header',name:'If-None-Match',type:'string'}", x);
 
 		x = s.getParameterInfo("/ifRange","get","header","If-Range");
-		assertJson(x, "{'in':'header',name:'If-Range',type:'string'}");
+		assertJson("{'in':'header',name:'If-Range',type:'string'}", x);
 
 		x = s.getParameterInfo("/ifUnmodifiedSince","get","header","If-Unmodified-Since");
-		assertJson(x, "{'in':'header',name:'If-Unmodified-Since',type:'string'}");
+		assertJson("{'in':'header',name:'If-Unmodified-Since',type:'string'}", x);
 
 		x = s.getParameterInfo("/maxForwards","get","header","Max-Forwards");
-		assertJson(x, "{'in':'header',name:'Max-Forwards',type:'integer',format:'int32'}");
+		assertJson("{'in':'header',name:'Max-Forwards',type:'integer',format:'int32'}", x);
 
 		x = s.getParameterInfo("/pragma","get","header","Pragma");
-		assertJson(x, "{'in':'header',name:'Pragma',type:'string'}");
+		assertJson("{'in':'header',name:'Pragma',type:'string'}", x);
 
 		x = s.getParameterInfo("/proxyAuthorization","get","header","Proxy-Authorization");
-		assertJson(x, "{'in':'header',name:'Proxy-Authorization',type:'string'}");
+		assertJson("{'in':'header',name:'Proxy-Authorization',type:'string'}", x);
 
 		x = s.getParameterInfo("/range","get","header","Range");
-		assertJson(x, "{'in':'header',name:'Range',type:'string'}");
+		assertJson("{'in':'header',name:'Range',type:'string'}", x);
 
 		x = s.getParameterInfo("/referer","get","header","Referer");
-		assertJson(x, "{'in':'header',name:'Referer',type:'string'}");
+		assertJson("{'in':'header',name:'Referer',type:'string'}", x);
 
 		x = s.getParameterInfo("/te","get","header","TE");
-		assertJson(x, "{'in':'header',name:'TE',type:'string'}");
+		assertJson("{'in':'header',name:'TE',type:'string'}", x);
 
 		x = s.getParameterInfo("/upgrade","get","header","Upgrade");
-		assertJson(x, "{'in':'header',name:'Upgrade',type:'string'}");
+		assertJson("{'in':'header',name:'Upgrade',type:'string'}", x);
 
 		x = s.getParameterInfo("/userAgent","get","header","User-Agent");
-		assertJson(x, "{'in':'header',name:'User-Agent',type:'string'}");
+		assertJson("{'in':'header',name:'User-Agent',type:'string'}", x);
 
 		x = s.getParameterInfo("/warning","get","header","Warning");
-		assertJson(x, "{'in':'header',name:'Warning',type:'string'}");
+		assertJson("{'in':'header',name:'Warning',type:'string'}", x);
 	}
 }

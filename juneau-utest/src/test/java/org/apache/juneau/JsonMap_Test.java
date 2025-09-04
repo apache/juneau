@@ -277,13 +277,13 @@ class JsonMap_Test extends SimpleTestBase {
 		var l = m.getList("a");
 		var m2 = l.getMap(0);
 		m2.put("b", "x");
-		assertJson(m, "{a:[{b:'x'}]}");
+		assertJson("{a:[{b:'x'}]}", m);
 
 		m = JsonMap.ofJson("{a:[{b:'c'}]}");
 		for (JsonMap m3 : m.getList("a").elements(JsonMap.class))
 			m3.put("b", "y");
 
-		assertJson(m, "{a:[{b:'y'}]}");
+		assertJson("{a:[{b:'y'}]}", m);
 	}
 
 	//====================================================================================================
@@ -311,7 +311,7 @@ class JsonMap_Test extends SimpleTestBase {
 	// JsonMap(Reader)
 	//====================================================================================================
 	@Test void a06_fromReader() throws Exception {
-		assertJson(JsonMap.ofJson(reader("{foo:'bar'}")), "{foo:'bar'}");
+		assertJson("{foo:'bar'}", JsonMap.ofJson(reader("{foo:'bar'}")));
 	}
 
 	//====================================================================================================
@@ -320,7 +320,7 @@ class JsonMap_Test extends SimpleTestBase {
 	@Test void a07_getMap() throws Exception {
 		var m = JsonMap.ofJson("{a:{1:'true',2:'false'}}");
 		var m2 = m.getMap("a", Integer.class, Boolean.class, null);
-		assertJson(m2, "{'1':true,'2':false}");
+		assertJson("{'1':true,'2':false}", m2);
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
 		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
 
@@ -328,7 +328,7 @@ class JsonMap_Test extends SimpleTestBase {
 		assertNull(m2);
 
 		m2 = m.get("a", Map.class, Integer.class, Boolean.class);
-		assertJson(m2, "{'1':true,'2':false}");
+		assertJson("{'1':true,'2':false}", m2);
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
 		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
 

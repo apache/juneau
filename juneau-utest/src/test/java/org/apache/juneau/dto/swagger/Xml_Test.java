@@ -106,7 +106,7 @@ class Xml_Test extends SimpleTestBase {
 
 	@Test void b02_roundTripJson() {
 		var s = "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'d'}";
-		assertJson(JsonParser.DEFAULT.parse(s, Xml.class), s);
+		assertJson(s, JsonParser.DEFAULT.parse(s, Xml.class));
 	}
 
 	@Test void b03_copy() {
@@ -114,7 +114,7 @@ class Xml_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t
 			.set("attribute", true)

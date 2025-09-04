@@ -44,8 +44,8 @@ class Json_Test extends SimpleTestBase {
 
 		assertEquals(expected1, Json.to(in1, String.class));
 		assertEquals(expected1, Json.to(stringReader(in1), String.class));
-		assertJson(Json.to(in2, Map.class, String.class, String.class), expected2);
-		assertJson(Json.to(stringReader(in2), Map.class, String.class, String.class), expected2);
+		assertJson(expected2, Json.to(in2, Map.class, String.class, String.class));
+		assertJson(expected2, Json.to(stringReader(in2), Map.class, String.class, String.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

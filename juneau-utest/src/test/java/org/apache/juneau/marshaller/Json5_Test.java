@@ -43,8 +43,8 @@ class Json5_Test extends SimpleTestBase {
 
 		assertString(expected1, Json5.to(in1, String.class));
 		assertString(expected1, Json5.to(stringReader(in1), String.class));
-		assertJson(Json5.to(in2, Map.class, String.class, String.class), expected2);
-		assertJson(Json5.to(stringReader(in2), Map.class, String.class, String.class), expected2);
+		assertJson(expected2, Json5.to(in2, Map.class, String.class, String.class));
+		assertJson(expected2, Json5.to(stringReader(in2), Map.class, String.class, String.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

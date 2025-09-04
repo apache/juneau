@@ -90,7 +90,7 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t
 			.set("description", "a")

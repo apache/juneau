@@ -183,7 +183,7 @@ class ParameterInfo_Test extends SimpleTestBase {
 
 	@Test void b02_roundTripJson() {
 		var s = "{'in':'f',name:'h',type:'k',description:'d',required:true,schema:{title:'j'},format:'e',allowEmptyValue:true,items:{type:'g'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}";
-		assertJson(JsonParser.DEFAULT.parse(s, ParameterInfo.class), s);
+		assertJson(s, JsonParser.DEFAULT.parse(s, ParameterInfo.class));
 	}
 
 	@Test void b03_copy() {
@@ -191,7 +191,7 @@ class ParameterInfo_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t
 			.set("default", "a")

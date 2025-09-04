@@ -114,16 +114,16 @@ class Swagger_Query_Test extends SimpleTestBase {
 		var s = getSwagger(B.class);
 		var x = s.getParameterInfo("/a","get","query","Q");
 
-		assertJson(x, "{'in':'query',name:'Q',type:'string'}");
+		assertJson("{'in':'query',name:'Q',type:'string'}", x);
 
 		x = s.getParameterInfo("/b","put","query","Q");
-		assertJson(x, "{'in':'query',name:'Q',type:'object',schema:{properties:{f1:{type:'string'}}}}");
+		assertJson("{'in':'query',name:'Q',type:'object',schema:{properties:{f1:{type:'string'}}}}", x);
 
 		x = s.getParameterInfo("/c","post","query","Q");
-		assertJson(x, "{'in':'query',name:'Q',type:'array',items:{type:'string'}}");
+		assertJson("{'in':'query',name:'Q',type:'array',items:{type:'string'}}", x);
 
 		x = s.getParameterInfo("/d","delete","query","Q");
-		assertJson(x, "{'in':'query',name:'Q',type:'string'}");
+		assertJson("{'in':'query',name:'Q',type:'string'}", x);
 	}
 
 	@Rest
@@ -190,6 +190,6 @@ class Swagger_Query_Test extends SimpleTestBase {
 		var s = getSwagger(E.class);
 
 		var x = s.getParameterInfo("/a","get","query","Q");
-		assertJson(x, "{'in':'query',name:'Q',type:'string'}");
+		assertJson("{'in':'query',name:'Q',type:'string'}", x);
 	}
 }

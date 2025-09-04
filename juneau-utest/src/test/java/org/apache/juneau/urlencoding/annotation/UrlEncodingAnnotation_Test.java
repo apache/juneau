@@ -39,13 +39,13 @@ class UrlEncodingAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "description:['description'],"
 				+ "expandedParams:true,"
 				+ "on:['a'],"
 				+ "onClass:[]"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

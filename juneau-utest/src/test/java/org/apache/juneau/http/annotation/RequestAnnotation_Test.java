@@ -46,14 +46,14 @@ class RequestAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "description:['description'],"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
 				+ "parser:'org.apache.juneau.oapi.OpenApiParser',"
 				+ "serializer:'org.apache.juneau.oapi.OpenApiSerializer'"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

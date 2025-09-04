@@ -95,7 +95,7 @@ class License_Test extends SimpleTestBase {
 
 	@Test void b02_roundTripJson() {
 		var s = "{name:'a',url:'b','$ref':'ref'}";
-		assertJson(JsonParser.DEFAULT.parse(s, License.class), s);
+		assertJson(s, JsonParser.DEFAULT.parse(s, License.class));
 	}
 
 	@Test void b03_copy() {
@@ -103,7 +103,7 @@ class License_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t
 			.set("name", "a")

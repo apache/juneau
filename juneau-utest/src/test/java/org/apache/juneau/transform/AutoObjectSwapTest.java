@@ -72,11 +72,11 @@ class AutoObjectSwapTest extends SimpleTestBase {
 	}
 
 	@Test void a01_swap_swap() throws Exception {
-		assertJson(find(A01.class).swap(null, new A01()), "{foo:'bar'}");
+		assertJson("{foo:'bar'}", find(A01.class).swap(null, new A01()));
 	}
 
 	@Test void a02_swap_toObject() throws Exception {
-		assertJson(find(A02.class).swap(null, new A02()), "{foo:'bar'}");
+		assertJson("{foo:'bar'}", find(A02.class).swap(null, new A02()));
 	}
 
 	@Test void a03_swap_serializeException() {
@@ -96,7 +96,7 @@ class AutoObjectSwapTest extends SimpleTestBase {
 			return STRINGMAP;
 		}
 		public static B01 unswap(Map<String,String> o) {
-			assertJson(o, "{foo:'bar'}");
+			assertJson("{foo:'bar'}", o);
 			return new B01();
 		}
 	}
@@ -147,7 +147,7 @@ class AutoObjectSwapTest extends SimpleTestBase {
 	public static class C01 {
 		public C01() {}
 		public C01(Map<String,String> o) {
-			assertJson(o, "{foo:'bar'}");
+			assertJson("{foo:'bar'}", o);
 		}
 		public Map<String,String> swap() {
 			return STRINGMAP;

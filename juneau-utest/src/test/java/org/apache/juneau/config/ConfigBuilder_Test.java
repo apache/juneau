@@ -51,10 +51,10 @@ class ConfigBuilder_Test extends SimpleTestBase {
 		assertFalse(f.exists());
 
 		cf.commit();
-		assertJson(cf.toMap(), "{'':{},Test:{A:'a'}}");
+		assertJson("{'':{},Test:{A:'a'}}", cf.toMap());
 
 		var nl = System.getProperty("line.separator");
 		cf = cf.load("[Test]"+nl+"A = b"+nl, true);
-		assertJson(cf.toMap(), "{'':{},Test:{A:'b'}}");
+		assertJson("{'':{},Test:{A:'b'}}", cf.toMap());
 	}
 }

@@ -44,8 +44,8 @@ class PlainText_Test extends SimpleTestBase {
 
 		assertEquals(expected1, PlainText.to(in1, String.class));
 		assertEquals(expected1, PlainText.to(stringReader(in1), String.class));
-		assertJson(PlainText.to(in2, Map.class, String.class, String.class), expected2);
-		assertJson(PlainText.to(stringReader(in2), Map.class, String.class, String.class), expected2);
+		assertJson(expected2, PlainText.to(in2, Map.class, String.class, String.class));
+		assertJson(expected2, PlainText.to(stringReader(in2), Map.class, String.class, String.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

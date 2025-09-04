@@ -33,14 +33,14 @@ class Classes_RoundTripTest extends RoundTripTest_Base {
 
 		var o2 = new Class[]{String.class};
 		o2 = t.roundTrip(o2);
-		assertJson(o2, "['java.lang.String']");
+		assertJson("['java.lang.String']", o2);
 
 		var o3 = alist(String.class, Integer.class);
 		o3 = t.roundTrip(o3);
-		assertJson(o3, "['java.lang.String','java.lang.Integer']");
+		assertJson("['java.lang.String','java.lang.Integer']", o3);
 
 		var o4 = map(String.class, String.class);
 		o4 = t.roundTrip(o4);
-		assertJson(o4, "{'java.lang.String':'java.lang.String'}");
+		assertJson("{'java.lang.String':'java.lang.String'}", o4);
 	}
 }

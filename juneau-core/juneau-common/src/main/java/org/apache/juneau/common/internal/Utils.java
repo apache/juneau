@@ -1045,6 +1045,8 @@ public class Utils {
 			return toHex(o2);
 		if (o instanceof Enum o2)
 			return o2.name();
+		if (o instanceof Class o2)
+			return o2.getSimpleName();
 		if (isArray(o)) {
 			var l = list();
 			for (var i = 0; i < Array.getLength(o); i++) {

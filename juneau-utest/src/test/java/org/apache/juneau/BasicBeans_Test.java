@@ -43,17 +43,15 @@ class BasicBeans_Test extends SimpleTestBase {
 	public static class A {}
 
 	@Test void a01_testTransientFieldsIgnored() {
-		assertJson(A1.create(), "{f1:1}");
+		assertJson("{f1:1}", A1.create());
 	}
 
 	@Test void a02_testTransientFieldsIgnored_overrideSetting() {
-		var s = Json5Serializer.DEFAULT.copy().disableIgnoreTransientFields().build();
-		assertSerialized(A1.create(), s, "{f1:1,f2:2}");
+		assertSerialized(A1.create(), Json5Serializer.DEFAULT.copy().disableIgnoreTransientFields().build(), "{f1:1,f2:2}");
 	}
 
 	@Test void a03_testTransientFieldsIgnored_overrideAnnotation() {
-		var s = Json5Serializer.DEFAULT.copy().applyAnnotations(A.class).build();
-		assertSerialized(A1.create(), s, "{f1:1,f2:2}");
+		assertSerialized(A1.create(), Json5Serializer.DEFAULT.copy().applyAnnotations(A.class).build(), "{f1:1,f2:2}");
 	}
 
 	public static class A2 {
@@ -72,7 +70,7 @@ class BasicBeans_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_testTransientMethodsIgnored() {
-		assertJson(A2.create(), "{f1:1}");
+		assertJson("{f1:1}", A2.create());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -91,9 +89,9 @@ class BasicBeans_Test extends SimpleTestBase {
 	}
 
 	@Test void b01_beanWithDynaProperty() throws Exception {
-		assertJson(B.create(), "{a:1}");
+		assertJson("{a:1}", B.create());
 
 		var b = JsonParser.DEFAULT.parse("{a:1}", B.class);
-		assertJson(b, "{a:1}");
+		assertJson("{a:1}", b);
 	}
 }

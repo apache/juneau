@@ -189,7 +189,7 @@ class Swagger_Test extends SimpleTestBase {
 
 	@Test void b02_roundTripJson() {
 		var s = "{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}";
-		assertJson(JsonParser.DEFAULT.parse(s, Swagger.class), s);
+		assertJson(s, JsonParser.DEFAULT.parse(s, Swagger.class));
 	}
 
 	@Test void b03_copy() {
@@ -197,7 +197,7 @@ class Swagger_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson(t, "{swagger:'2.0'}");
+		assertJson("{swagger:'2.0'}", t);
 
 		t
 			.set("basePath", "a")
@@ -226,7 +226,7 @@ class Swagger_Test extends SimpleTestBase {
 	@Test void b04_keySet() {
 		var t = new Swagger();
 
-		assertJson(t.keySet(), "['swagger']");
+		assertJson("['swagger']", t.keySet());
 
 		t
 			.set("basePath", "a")

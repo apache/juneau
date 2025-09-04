@@ -97,7 +97,7 @@ class Json_Test extends SimpleTestBase{
 		for (var attr : new String[]{"","true","false","null","try","123","1x","-123",".123"}) {
 			m.clear();
 			m.put(attr,1);
-			assertJson(m, "{'"+attr+"':1}");
+			assertJson("{'"+attr+"':1}", m);
 		}
 	}
 

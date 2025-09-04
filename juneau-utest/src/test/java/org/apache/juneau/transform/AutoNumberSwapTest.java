@@ -121,55 +121,55 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	}
 
 	@Test void a01_swap_toNumber() throws Exception {
-		assertJson(find(A01.class).swap(null, new A01()), "1");
+		assertJson("1", find(A01.class).swap(null, new A01()));
 	}
 
 	@Test void a02_swap_toInteger() throws Exception {
-		assertJson(find(A02.class).swap(null, new A02()), "1");
+		assertJson("1", find(A02.class).swap(null, new A02()));
 	}
 
 	@Test void a03_swap_toIntPrimitive() throws Exception {
-		assertJson(find(A03.class).swap(null, new A03()), "1");
+		assertJson("1", find(A03.class).swap(null, new A03()));
 	}
 
 	@Test void a04_swap_toLong() throws Exception {
-		assertJson(find(A04.class).swap(null, new A04()), "1");
+		assertJson("1", find(A04.class).swap(null, new A04()));
 	}
 
 	@Test void a05_swap_toLongPrimitive() throws Exception {
-		assertJson(find(A05.class).swap(null, new A05()), "1");
+		assertJson("1", find(A05.class).swap(null, new A05()));
 	}
 
 	@Test void a06_swap_toFloat() throws Exception {
-		assertJson(find(A06.class).swap(null, new A06()), "1.0");
+		assertJson("1.0", find(A06.class).swap(null, new A06()));
 	}
 
 	@Test void a07_swap_toFloatPrimitive() throws Exception {
-		assertJson(find(A07.class).swap(null, new A07()), "1.0");
+		assertJson("1.0", find(A07.class).swap(null, new A07()));
 	}
 
 	@Test void a08_swap_toDouble() throws Exception {
-		assertJson(find(A08.class).swap(null, new A08()), "1.0");
+		assertJson("1.0", find(A08.class).swap(null, new A08()));
 	}
 
 	@Test void a09_swap_toDoublePrimitive() throws Exception {
-		assertJson(find(A09.class).swap(null, new A09()), "1.0");
+		assertJson("1.0", find(A09.class).swap(null, new A09()));
 	}
 
 	@Test void a10_swap_toShort() throws Exception {
-		assertJson(find(A10.class).swap(null, new A10()), "1");
+		assertJson("1", find(A10.class).swap(null, new A10()));
 	}
 
 	@Test void a11_swap_toShortPrimitive() throws Exception {
-		assertJson(find(A11.class).swap(null, new A11()), "1");
+		assertJson("1", find(A11.class).swap(null, new A11()));
 	}
 
 	@Test void a12_swap_toByte() throws Exception {
-		assertJson(find(A12.class).swap(null, new A12()), "1");
+		assertJson("1", find(A12.class).swap(null, new A12()));
 	}
 
 	@Test void a13_swap_toBytePrimitive() throws Exception {
-		assertJson(find(A13.class).swap(null, new A13()), "1");
+		assertJson("1", find(A13.class).swap(null, new A13()));
 	}
 
 	@Test void a14_swap_serializeException() {
@@ -189,7 +189,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B01 fromInteger(Integer o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 			return new B01();
 		}
 	}
@@ -198,7 +198,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B02 fromInt(int o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 			return new B02();
 		}
 	}
@@ -207,7 +207,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1L;
 		}
 		public static B03 fromLong(Long o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 			return new B03();
 		}
 	}
@@ -216,7 +216,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B04 fromLong(long o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 			return new B04();
 		}
 	}
@@ -225,7 +225,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1f;
 		}
 		public static B05 fromFloat(Float o) {
-			assertJson(o, "1.0");
+			assertJson("1.0", o);
 			return new B05();
 		}
 	}
@@ -234,7 +234,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B06 fromFloat(float o) {
-			assertJson(o, "1.0");
+			assertJson("1.0", o);
 			return new B06();
 		}
 	}
@@ -243,7 +243,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1d;
 		}
 		public static B07 fromDouble(Double o) {
-			assertJson(o, "1.0");
+			assertJson("1.0", o);
 			return new B07();
 		}
 	}
@@ -252,7 +252,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1d;
 		}
 		public static B08 fromDouble(double o) {
-			assertJson(o, "1.0");
+			assertJson("1.0", o);
 			return new B08();
 		}
 	}
@@ -261,7 +261,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B09 fromShort(Short o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 			return new B09();
 		}
 	}
@@ -270,7 +270,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B10 fromShort(short o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 			return new B10();
 		}
 	}
@@ -279,7 +279,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B11 fromByte(Byte o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 			return new B11();
 		}
 	}
@@ -288,7 +288,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B12 fromByte(byte o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 			return new B12();
 		}
 	}
@@ -297,7 +297,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B13 create(int o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 			return new B13();
 		}
 	}
@@ -306,7 +306,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 			return 1;
 		}
 		public static B14 valueOf(int o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 			return new B14();
 		}
 	}
@@ -383,7 +383,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C01 {
 		public C01() {}
 		public C01(Integer o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 		}
 		public Integer toInteger() {
 			return 1;
@@ -392,7 +392,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C02 {
 		public C02() {}
 		public C02(int o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 		}
 		public int toInt() {
 			return 1;
@@ -401,7 +401,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C03 {
 		public C03() {}
 		public C03(Long o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 		}
 		public Long toLong() {
 			return 1L;
@@ -410,7 +410,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C04 {
 		public C04() {}
 		public C04(long o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 		}
 		public long toLong() {
 			return 1L;
@@ -419,7 +419,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C05 {
 		public C05() {}
 		public C05(Float o) {
-			assertJson(o, "1.0");
+			assertJson("1.0", o);
 		}
 		public Float toFloat() {
 			return 1f;
@@ -428,7 +428,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C06 {
 		public C06() {}
 		public C06(float o) {
-			assertJson(o, "1.0");
+			assertJson("1.0", o);
 		}
 		public float toFloat() {
 			return 1f;
@@ -437,7 +437,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C07 {
 		public C07() {}
 		public C07(Double o) {
-			assertJson(o, "1.0");
+			assertJson("1.0", o);
 		}
 		public Double toDouble() {
 			return 1d;
@@ -446,7 +446,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C08 {
 		public C08() {}
 		public C08(double o) {
-			assertJson(o, "1.0");
+			assertJson("1.0", o);
 		}
 		public double toDouble() {
 			return 1d;
@@ -455,7 +455,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C09 {
 		public C09() {}
 		public C09(Short o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 		}
 		public Short toShort() {
 			return 1;
@@ -464,7 +464,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C10 {
 		public C10() {}
 		public C10(short o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 		}
 		public short toShort() {
 			return 1;
@@ -473,7 +473,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C11 {
 		public C11() {}
 		public C11(Byte o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 		}
 		public Byte toByte() {
 			return 1;
@@ -482,7 +482,7 @@ class AutoNumberSwapTest extends SimpleTestBase {
 	public static class C12 {
 		public C12() {}
 		public C12(byte o) {
-			assertJson(o, "1");
+			assertJson("1", o);
 		}
 		public byte toByte() {
 			return 1;

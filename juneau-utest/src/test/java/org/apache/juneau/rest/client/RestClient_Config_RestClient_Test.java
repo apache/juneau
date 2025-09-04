@@ -400,7 +400,7 @@ class RestClient_Config_RestClient_Test extends SimpleTestBase {
 		@RestGet(path="/")
 		public Ok get(@Header(name="Foo") @Schema(cf="multi") ABean[] foo,org.apache.juneau.rest.RestRequest req,org.apache.juneau.rest.RestResponse res) throws Exception {
 			assertEquals(2,foo.length);
-			assertJson(req.getHeaders().getAll("Foo").stream().map(RequestHeader::getValue).toList(), "['x{f:1}','x{f:1}']");
+			assertJson("['x{f:1}','x{f:1}']", req.getHeaders().getAll("Foo").stream().map(RequestHeader::getValue).toList());
 			assertEquals("{f:1}",foo[0].toString());
 			assertEquals("{f:1}",foo[1].toString());
 			res.setHeader("Foo",bean);

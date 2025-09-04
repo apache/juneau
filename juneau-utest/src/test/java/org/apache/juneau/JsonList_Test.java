@@ -107,12 +107,12 @@ class JsonList_Test extends SimpleTestBase {
 	@Test void a05_getMap() throws Exception {
 		var l = new JsonList("[{1:'true',2:'false'}]");
 		var m2 = l.getMap(0, Integer.class, Boolean.class);
-		assertJson(m2, "{'1':true,'2':false}");
+		assertJson("{'1':true,'2':false}", m2);
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
 		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
 
 		m2 = l.get(0, Map.class, Integer.class, Boolean.class);
-		assertJson(m2, "{'1':true,'2':false}");
+		assertJson("{'1':true,'2':false}", m2);
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
 		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
 	}

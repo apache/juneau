@@ -52,7 +52,7 @@ class SwaggerAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "contact:{description:[],email:'',name:'',url:''},"
 				+ "description:['description'],"
@@ -63,7 +63,7 @@ class SwaggerAnnotation_Test extends SimpleTestBase {
 				+ "title:['title'],"
 				+ "value:['value'],"
 				+ "version:'version'"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

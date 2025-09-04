@@ -82,7 +82,7 @@ class RestGetAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "clientVersion:'clientVersion',"
 				+ "converters:['org.apache.juneau.rest.converter.RestConverter'],"
@@ -106,7 +106,7 @@ class RestGetAnnotation_Test extends SimpleTestBase {
 				+ "summary:'summary',"
 				+ "swagger:{consumes:[],deprecated:'',description:[],externalDocs:{description:[],url:''},operationId:'',parameters:[],produces:[],responses:[],schemes:[],summary:[],tags:[],value:[]},"
 				+ "value:'value'"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

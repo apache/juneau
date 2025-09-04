@@ -52,7 +52,7 @@ class HtmlAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "anchorText:'a',"
 				+ "description:['description'],"
@@ -63,7 +63,7 @@ class HtmlAnnotation_Test extends SimpleTestBase {
 				+ "on:['d'],"
 				+ "onClass:[],"
 				+ "render:'"+CNAME+"$X1'"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

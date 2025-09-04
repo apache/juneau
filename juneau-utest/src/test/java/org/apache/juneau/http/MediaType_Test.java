@@ -28,12 +28,12 @@ class MediaType_Test extends SimpleTestBase {
 		var x = new TreeSet<>();
 		x.add(MediaType.of("text/foo"));
 		x.add(MediaType.of("text/bar"));
-		assertJson(x, "['text/bar','text/foo']");
+		assertJson("['text/bar','text/foo']", x);
 
 		MediaType x2 = new MediaType((String)null);  // Interpreted as "/*"
 		assertTrue(x2.getType().isEmpty());
 		assertEquals("*", x2.getSubType());
-		assertJson(x2.getSubTypes(), "['*']");
+		assertJson("['*']", x2.getSubTypes());
 		assertTrue(x2.isMetaSubtype());
 
 		var x3 = MediaType.of("text/foo+bar");

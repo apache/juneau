@@ -41,14 +41,14 @@ class HtmlLinkAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "description:['description'],"
 				+ "nameProperty:'a',"
 				+ "on:['b'],"
 				+ "onClass:[],"
 				+ "uriProperty:'c'"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

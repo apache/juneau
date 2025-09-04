@@ -40,14 +40,14 @@ class Generics_RoundTripTest extends RoundTripTest_Base {
 		// During parsing, these become JsonMaps.
 		var x = new Pair<Object,Object>(new Source().init(), new Target().init());
 		x = t.roundTrip(x);
-		assertJson(x, "{s:{s1:'a1'},t:{t1:'b1'}}");
+		assertJson("{s:{s1:'a1'},t:{t1:'b1'}}", x);
 		assertEquals("JsonMap", x.getS().getClass().getSimpleName());
 		assertEquals("JsonMap", x.getT().getClass().getSimpleName());
 
 		// If you specify a concrete class, the type variables become bound and
 		// the property types correctly resolve.
 		x = t.roundTrip(x, RealPair.class);
-		assertJson(x, "{s:{s1:'a1'},t:{t1:'b1'}}");
+		assertJson("{s:{s1:'a1'},t:{t1:'b1'}}", x);
 		assertEquals("Source", x.getS().getClass().getSimpleName());
 		assertEquals("Target", x.getT().getClass().getSimpleName());
 	}

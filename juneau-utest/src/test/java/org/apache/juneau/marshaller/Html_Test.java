@@ -44,8 +44,8 @@ class Html_Test extends SimpleTestBase {
 
 		assertEquals(expected1, Html.to(in1, String.class));
 		assertEquals(expected1, Html.to(stringReader(in1), String.class));
-		assertJson(Html.to(in2, Map.class, String.class, String.class), expected2);
-		assertJson(Html.to(stringReader(in2), Map.class, String.class, String.class), expected2);
+		assertJson(expected2, Html.to(in2, Map.class, String.class, String.class));
+		assertJson(expected2, Html.to(stringReader(in2), Map.class, String.class, String.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

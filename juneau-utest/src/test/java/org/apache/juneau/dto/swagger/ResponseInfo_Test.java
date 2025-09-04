@@ -123,7 +123,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 
 	@Test void b02_roundTripJson() {
 		var s = "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}";  // Order is determined by @Bean annotation.
-		assertJson(JsonParser.DEFAULT.parse(s, ResponseInfo.class), s);
+		assertJson(s, JsonParser.DEFAULT.parse(s, ResponseInfo.class));
 	}
 
 	@Test void b03_copy() {
@@ -131,7 +131,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t
 			.set("description", "a")

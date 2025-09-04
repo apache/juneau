@@ -492,8 +492,8 @@ public class TestUtils extends Utils2 {
 	/**
 	 * Asserts the JSON5 representation of the specified object.
 	 */
-	public static void assertJson(Object value, String json) {
-		assertEquals(json, Json5.DEFAULT.write(value));
+	public static void assertJson(String expected, Object value) {
+		assertEquals(expected, Json5.DEFAULT.write(value));
 	}
 
 	public static void assertLines(String expected, Object value) {
@@ -618,7 +618,7 @@ public class TestUtils extends Utils2 {
 	 * @throws AssertionError if any map values don't match expected values
 	 * @see #assertBean(Object, String, String)
 	 */
-	public static void assertMap(Map<String,?> o, String fields, String value) {
+	public static void assertMap(Map<?,?> o, String fields, String value) {
 		if (o == null) throw new NullPointerException("Map was null");
 		assertEquals(value, splitNested(fields).stream().map(x -> getEntry(o, x)).collect(joining(",")));
 	}
@@ -1102,5 +1102,17 @@ public class TestUtils extends Utils2 {
 		s = s.copy().ws().ns().addNamespaceUrisToRoot().build();
 		var xml = s.serialize(o);
 		checkXmlWhitespace(xml);
+	}
+
+	public static final List<?> l(Object o) {
+		assertArgNotNull("o", o);
+		if (o instanceof List o2) return o2;
+		if (o instanceof Iterable o2) return toList(o2);
+		if (o instanceof Iterator o2) return toList(o2);
+		if (o instanceof Enumeration o2) return toList(o2);
+		if (o instanceof Stream o2) return toList(o2);
+		if (o instanceof Map o2) return toList(o2.entrySet());
+		if (isArray(o)) return arrayToList(o);
+		throw runtimeException("Could not convert object of type {0} to a list", classNameOf(o));
 	}
 }

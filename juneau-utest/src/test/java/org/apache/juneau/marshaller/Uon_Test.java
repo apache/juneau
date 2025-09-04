@@ -44,8 +44,8 @@ class Uon_Test extends SimpleTestBase {
 
 		assertEquals(expected1, Uon.to(in1, String.class));
 		assertEquals(expected1, Uon.to(stringReader(in1), String.class));
-		assertJson(Uon.to(in2, Map.class, String.class, String.class), expected2);
-		assertJson(Uon.to(stringReader(in2), Map.class, String.class, String.class), expected2);
+		assertJson(expected2, Uon.to(in2, Map.class, String.class, String.class));
+		assertJson(expected2, Uon.to(stringReader(in2), Map.class, String.class, String.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

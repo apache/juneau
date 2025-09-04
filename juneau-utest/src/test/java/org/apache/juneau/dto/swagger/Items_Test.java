@@ -161,7 +161,7 @@ class Items_Test extends SimpleTestBase {
 
 	@Test void b02_roundTripJson() {
 		var s = "{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:1.0,exclusiveMaximum:true,minimum:4.0,exclusiveMinimum:true,maxLength:3,minLength:6,pattern:'i',maxItems:2,minItems:5,uniqueItems:true,'enum':['b'],multipleOf:7.0,'$ref':'k'}";
-		assertJson(JsonParser.DEFAULT.parse(s, Items.class), s);
+		assertJson(s, JsonParser.DEFAULT.parse(s, Items.class));
 	}
 
 	@Test void b03_copy() {
@@ -169,7 +169,7 @@ class Items_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t
 			.set("collectionFormat", "c")

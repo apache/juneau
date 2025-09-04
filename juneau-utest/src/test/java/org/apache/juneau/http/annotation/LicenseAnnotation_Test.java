@@ -37,12 +37,12 @@ class LicenseAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "description:['description'],"
 				+ "name:'name',"
 				+ "url:'url'"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

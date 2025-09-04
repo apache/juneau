@@ -70,11 +70,17 @@ class AutoMapSwapTest extends SimpleTestBase {
 	}
 
 	@Test void a01_swap_toMap() throws Exception {
-		assertJson(find(A01.class).swap(null, new A01()), "{foo:'bar'}");
+		assertJson(
+			"{foo:'bar'}",
+			find(A01.class).swap(null, new A01())
+		);
 	}
 
 	@Test void a02_swap_toJsonMap() throws Exception {
-		assertJson(find(A02.class).swap(null, new A02()), "{foo:'bar'}");
+		assertJson(
+			"{foo:'bar'}",
+			find(A02.class).swap(null, new A02())
+		);
 	}
 
 	@Test void a03_swap_serializeException() {
@@ -145,7 +151,7 @@ class AutoMapSwapTest extends SimpleTestBase {
 	public static class C01 {
 		public C01() {}
 		public C01(Map<String,String> o) {
-			assertJson(o, "{foo:'bar'}");
+			assertMap(o, "foo", "bar");
 		}
 		public Map<String,String> toMap() {
 			return STRINGMAP;

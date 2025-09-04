@@ -43,8 +43,8 @@ class Xml_Test extends SimpleTestBase {
 
 		assertEquals(expected1, Xml.to(in1, String.class));
 		assertEquals(expected1, Xml.to(stringReader(in1), String.class));
-		assertJson(Xml.to(in2, Map.class, String.class, String.class), expected2);
-		assertJson(Xml.to(stringReader(in2), Map.class, String.class, String.class), expected2);
+		assertJson(expected2, Xml.to(in2, Map.class, String.class, String.class));
+		assertJson(expected2, Xml.to(stringReader(in2), Map.class, String.class, String.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

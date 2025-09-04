@@ -96,7 +96,7 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 	@Test void a02_overrideParser() throws Exception {
 		var x = client().build();
 		var b = x.post("/echo",bean).run().getContent().parser(JsonParser.DEFAULT).as(ABean.class);
-		assertJson(b, "{f:1}");
+		assertJson("{f:1}", b);
 		assertThrowsWithMessage(Exception.class, "ParseError at [row,col]:[1,1]", ()->x.post("/echo",bean).run().getContent().parser(XmlParser.DEFAULT).as(ABean.class));
 		assertThrowsWithMessage(Exception.class, "ParseError at [row,col]:[1,1]", ()->x.post("/echo",bean).run().getContent().parser(XmlParser.DEFAULT).assertValue().as(ABean.class));
 	}
@@ -200,10 +200,10 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 
 	@Test void a07_asType() throws Exception {
 		var x1 = testClient().entity(stringEntity("[1,2]")).get().run().getContent().as(List.class,Integer.class);
-		assertJson(x1, "[1,2]");
+		assertJson("[1,2]", x1);
 
 		var x3 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().as(ABean.class);
-		assertJson(x3, "{f:1}");
+		assertJson("{f:1}", x3);
 
 		testClient().entity(stringEntity("{f:1}")).get().run().getContent().as(ResponseContent.class);
 
@@ -216,13 +216,13 @@ class RestClient_Response_Body_Test extends SimpleTestBase {
 		assertThrowsWithMessage(Exception.class, "foo", ()->testClient().entity(stringEntity("")).get().run().getContent().as(A7c.class));
 
 		var x8 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asFuture(ABean.class);
-		assertJson(x8.get(), "{f:1}");
+		assertJson("{f:1}", x8.get());
 
 		var x10 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asFuture(cm(ABean.class));
-		assertJson(x10.get(), "{f:1}");
+		assertJson("{f:1}", x10.get());
 
 		var x12 = testClient().entity(stringEntity("[1,2]")).get().run().getContent().asFuture(List.class,Integer.class);
-		assertJson(x12.get(), "[1,2]");
+		assertJson("[1,2]", x12.get());
 
 		var x14 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asString();
 		assertEquals("{f:1}", x14);

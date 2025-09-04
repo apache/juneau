@@ -44,8 +44,8 @@ class UrlEncoding_Test extends SimpleTestBase {
 
 		assertEquals(expected1, UrlEncoding.to(in1, String.class));
 		assertEquals(expected1, UrlEncoding.to(stringReader(in1), String.class));
-		assertJson(UrlEncoding.to(in2, Map.class, String.class, String.class), expected2);
-		assertJson(UrlEncoding.to(stringReader(in2), Map.class, String.class, String.class), expected2);
+		assertJson(expected2, UrlEncoding.to(in2, Map.class, String.class, String.class));
+		assertJson(expected2, UrlEncoding.to(stringReader(in2), Map.class, String.class, String.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

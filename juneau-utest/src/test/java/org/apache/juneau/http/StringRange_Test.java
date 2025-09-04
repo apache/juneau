@@ -23,15 +23,15 @@ class StringRange_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		StringRange x1 = of("foo;a=1;q=0.5;b=2");
 		assertString("0.5", x1.getQValue());
-		assertJson(x1.getExtensions(), "[{name:'a',value:'1'},{name:'b',value:'2'}]");
+		assertJson("[{name:'a',value:'1'},{name:'b',value:'2'}]", x1.getExtensions());
 
 		StringRange x2 = of("foo;q=1.0");
 		assertString("1.0", x2.getQValue());
-		assertJson(x2.getExtensions(), "[]");
+		assertJson("[]", x2.getExtensions());
 
 		StringRange x3 = of("foo;a=1");
 		assertString("1.0", x3.getQValue());
-		assertJson(x3.getExtensions(), "[{name:'a',value:'1'}]");
+		assertJson("[{name:'a',value:'1'}]", x3.getExtensions());
 
 		StringRange x4 = of("foo;a=1");
 		assertEquals(x4, x3);

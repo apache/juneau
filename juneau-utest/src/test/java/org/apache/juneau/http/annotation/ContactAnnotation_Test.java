@@ -39,13 +39,13 @@ class ContactAnnotation_Test extends SimpleTestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertJson(a1, ""
+		assertJson(""
 			+ "{"
 				+ "description:['description'],"
 				+ "email:'email',"
 				+ "name:'name',"
 				+ "url:'url'"
-			+ "}"
+			+ "}", a1
 		);
 	}
 

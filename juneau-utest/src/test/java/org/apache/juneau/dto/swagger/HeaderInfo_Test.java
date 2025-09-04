@@ -166,7 +166,7 @@ class HeaderInfo_Test extends SimpleTestBase {
 
 	@Test void b02_roundTripJson() {
 		var s = "{description:'d',type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref',example:'e'}";
-		assertJson(JsonParser.DEFAULT.parse(s, HeaderInfo.class), s);
+		assertJson(s, JsonParser.DEFAULT.parse(s, HeaderInfo.class));
 	}
 
 	@Test void b03_copy() {
@@ -174,7 +174,7 @@ class HeaderInfo_Test extends SimpleTestBase {
 
 		t = t.copy();
 
-		assertJson(t, "{}");
+		assertJson("{}", t);
 
 		t
 			.set("collectionFormat", "a")

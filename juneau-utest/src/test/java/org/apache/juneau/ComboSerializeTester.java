@@ -35,10 +35,11 @@ import org.apache.juneau.xml.*;
 public class ComboSerializeTester<T> {
 
 	public static <T> Builder<T> create(int index, String label, Supplier<T> in) {
-		return new Builder<>("["+index+"] " + label, in);
+		return new Builder<>(index, label, in);
 	}
 
 	public static class Builder<T> {
+		private int index;
 		private String label;
 		private Supplier<T> in;
 		private String exceptionMsg;
@@ -48,12 +49,14 @@ public class ComboSerializeTester<T> {
 		private List<Tuple2<Class<?>,Consumer<?>>> applies = list();
 		private Consumer<Serializer.Builder> serializerApply = x -> {};
 
-		public Builder(String label, T in) {
+		public Builder(int index, String label, T in) {
+			this.index = index;
 			this.label = label;
 			this.in = () -> in;
 		}
 
-		public Builder(String label, Supplier<T> in) {
+		public Builder(int index, String label, Supplier<T> in) {
+			this.index = index;
 			this.label = label;
 			this.in = in;
 		}
@@ -105,7 +108,7 @@ public class ComboSerializeTester<T> {
 	private final Map<String,Serializer> serializers = map();
 
 	private ComboSerializeTester(Builder<T> b) {
-		label = b.label;
+		label = "[" + b.index + "] " + b.label;
 		in = b.in;
 		expected = b.expected;
 		skipTest = b.skipTest;

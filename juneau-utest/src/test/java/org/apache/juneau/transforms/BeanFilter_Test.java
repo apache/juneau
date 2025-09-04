@@ -90,7 +90,7 @@ class BeanFilter_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a03_filteredWithStopClass() {
 		var c3 = new C3();
-		assertJson(c3, "{f3:3,p3:3}");
+		assertJson("{f3:3,p3:3}", c3);
 	}
 
 	public class C1 {
@@ -111,7 +111,7 @@ class BeanFilter_Test extends SimpleTestBase {
 
 	@Test void a04_filterWithStopClassOnParentClass() {
 		var d3 = new D3();
-		assertJson(d3, "{f3:3,p3:3}");
+		assertJson("{f3:3,p3:3}", d3);
 	}
 
 	public class D1 {
@@ -132,7 +132,7 @@ class BeanFilter_Test extends SimpleTestBase {
 
 	@Test void a05_filteredWithStopClassOnParentClassWithOverriddenAnnotation() {
 		var e3 = new E3();
-		assertJson(e3, "{f3:3,p3:3}");
+		assertJson("{f3:3,p3:3}", e3);
 	}
 
 	public class E1 {
@@ -154,7 +154,7 @@ class BeanFilter_Test extends SimpleTestBase {
 
 	@Test void a06_filteredWithStopClassesAtMulitpleLevels() {
 		var e3 = new F3();
-		assertJson(e3, "{f3:3,p3:3}");
+		assertJson("{f3:3,p3:3}", e3);
 	}
 
 	@Bean(stopClass=F1.class)

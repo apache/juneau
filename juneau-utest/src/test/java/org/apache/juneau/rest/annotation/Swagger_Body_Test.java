@@ -73,18 +73,18 @@ class Swagger_Body_Test extends SimpleTestBase {
 		var x = s.getParameterInfo("/a","get","body",null);
 
 		assertEquals("a\nb", x.getDescription());
-		assertJson(x.getRequired(), "true");
-		assertJson(x.getSchema(), "{required:true,type:'string'}");
+		assertJson("true", x.getRequired());
+		assertJson("{required:true,type:'string'}", x.getSchema());
 
 		x = s.getParameterInfo("/b","put","body",null);
 		assertEquals("a\nb", x.getDescription());
-		assertJson(x.getRequired(), "true");
-		assertJson(x.getSchema(), "{required:true,type:'string'}");
+		assertJson("true", x.getRequired());
+		assertJson("{required:true,type:'string'}", x.getSchema());
 
 		x = s.getParameterInfo("/c","post","body",null);
 		assertEquals("a\nb", x.getDescription());
-		assertJson(x.getRequired(), "true");
-		assertJson(x.getSchema(), "{required:true,type:'string'}");
+		assertJson("true", x.getRequired());
+		assertJson("{required:true,type:'string'}", x.getSchema());
 	}
 
 	@Rest
@@ -120,16 +120,16 @@ class Swagger_Body_Test extends SimpleTestBase {
 		var s = getSwagger(B.class);
 		var x = s.getParameterInfo("/a","get","body",null);
 
-		assertJson(x.getSchema(), "{type:'object'}");
+		assertJson("{type:'object'}", x.getSchema());
 
 		x = s.getParameterInfo("/b","put","body",null);
-		assertJson(x.getSchema(), "{type:'object',properties:{f1:{type:'string'}}}");
+		assertJson("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
 
 		x = s.getParameterInfo("/c","post","body",null);
-		assertJson(x.getSchema(), "{type:'array',items:{type:'string'}}");
+		assertJson("{type:'array',items:{type:'string'}}", x.getSchema());
 
 		x = s.getParameterInfo("/d","delete","body",null);
-		assertJson(x.getSchema(), "{type:'string'}");
+		assertJson("{type:'string'}", x.getSchema());
 	}
 
 	@Rest
@@ -183,18 +183,18 @@ class Swagger_Body_Test extends SimpleTestBase {
 		var x = s.getParameterInfo("/a","get","body",null);
 
 		assertEquals("a\nb", x.getDescription());
-		assertJson(x.getRequired(), "true");
-		assertJson(x.getSchema(), "{required:true,type:'string'}");
+		assertJson("true", x.getRequired());
+		assertJson("{required:true,type:'string'}", x.getSchema());
 
 		x = s.getParameterInfo("/b","put","body",null);
 		assertEquals("a\nb", x.getDescription());
-		assertJson(x.getRequired(), "true");
-		assertJson(x.getSchema(), "{required:true,type:'string'}");
+		assertJson("true", x.getRequired());
+		assertJson("{required:true,type:'string'}", x.getSchema());
 
 		x = s.getParameterInfo("/c","post","body",null);
 		assertEquals("b\nc", x.getDescription());
-		assertJson(x.getRequired(), "true");
-		assertJson(x.getSchema(), "{required:true,type:'string'}");
+		assertJson("true", x.getRequired());
+		assertJson("{required:true,type:'string'}", x.getSchema());
 	}
 
 	@Rest
@@ -231,21 +231,21 @@ class Swagger_Body_Test extends SimpleTestBase {
 		var s = getSwagger(E.class);
 		var x = s.getParameterInfo("/a","get","body",null);
 
-		assertJson(x.getSchema(), "{type:'object'}");
+		assertJson("{type:'object'}", x.getSchema());
 
 		x = s.getParameterInfo("/b","put","body",null);
-		assertJson(x.getSchema(), "{type:'object',properties:{f1:{type:'string'}}}");
+		assertJson("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
 
 		x = s.getParameterInfo("/c","post","body",null);
-		assertJson(x.getSchema(), "{type:'array',items:{type:'string'}}");
+		assertJson("{type:'array',items:{type:'string'}}", x.getSchema());
 
 		x = s.getParameterInfo("/d","delete","body",null);
-		assertJson(x.getSchema(), "{type:'string'}");
+		assertJson("{type:'string'}", x.getSchema());
 
 		x = s.getParameterInfo("/e","get","body",null);
-		assertJson(x.getSchema(), "{format:'int32',type:'integer'}");
+		assertJson("{format:'int32',type:'integer'}", x.getSchema());
 
 		x = s.getParameterInfo("/f","get","body",null);
-		assertJson(x.getSchema(), "{type:'boolean'}");
+		assertJson("{type:'boolean'}", x.getSchema());
 	}
 }

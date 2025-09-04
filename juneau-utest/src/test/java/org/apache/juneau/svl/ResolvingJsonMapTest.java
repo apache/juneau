@@ -32,13 +32,13 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 		assertEquals("1", m.get("foo"));
 
 		m.put("foo", new String[]{"$X{a}"});
-		assertJson(m.get("foo"), "['1']");
+		assertJson("['1']", m.get("foo"));
 
 		m.put("foo", list("$X{a}"));
-		assertJson(m.get("foo"), "['1']");
+		assertJson("['1']", m.get("foo"));
 
 		m.put("foo", map("k1","$X{a}"));
-		assertJson(m.get("foo"), "{k1:'1'}");
+		assertJson("{k1:'1'}", m.get("foo"));
 	}
 
 	public static class XVar extends MapVar {
@@ -58,13 +58,13 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 		assertNull(m.get("foo"));
 
 		m.put("foo", new String[]{null});
-		assertJson(m.get("foo"), "[null]");
+		assertJson("[null]", m.get("foo"));
 
 		m.put("foo", list((String)null));
-		assertJson(m.get("foo"), "[null]");
+		assertJson("[null]", m.get("foo"));
 
 		m.put("foo", map("k1",null));
-		assertJson(m.get("foo"), "{k1:null}");
+		assertJson("{k1:null}", m.get("foo"));
 	}
 
 	//====================================================================================================
@@ -77,13 +77,13 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 		m.put("foo", FooEnum.ONE);
 		assertString("ONE", m.get("foo"));
 		m.put("foo", new Object[]{FooEnum.ONE});
-		assertJson(m.get("foo"), "['ONE']");
+		assertJson("['ONE']", m.get("foo"));
 
 		m.put("foo", list(FooEnum.ONE));
-		assertJson(m.get("foo"), "['ONE']");
+		assertJson("['ONE']", m.get("foo"));
 
 		m.put("foo", map(FooEnum.ONE,FooEnum.ONE));
-		assertJson(m.get("foo"), "{ONE:'ONE'}");
+		assertJson("{ONE:'ONE'}", m.get("foo"));
 	}
 
 	public enum FooEnum {
@@ -105,12 +105,12 @@ class ResolvingJsonMapTest extends SimpleTestBase {
 		assertEquals("1", m.get("foo"));
 
 		m3.put("foo", new String[]{"$X{a}"});
-		assertJson(m.get("foo"), "['1']");
+		assertJson("['1']", m.get("foo"));
 
 		m3.put("foo", list("$X{a}"));
-		assertJson(m.get("foo"), "['1']");
+		assertJson("['1']", m.get("foo"));
 
 		m3.put("foo", map("k1","$X{a}"));
-		assertJson(m.get("foo"), "{k1:'1'}");
+		assertJson("{k1:'1'}", m.get("foo"));
 	}
 }

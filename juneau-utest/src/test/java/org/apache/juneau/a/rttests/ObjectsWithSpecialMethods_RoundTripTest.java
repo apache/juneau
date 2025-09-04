@@ -36,7 +36,7 @@ class ObjectsWithSpecialMethods_RoundTripTest extends RoundTripTest_Base {
 	void a01_nameProperty(RoundTripTester t) throws Exception {
 		var x = new A().init();
 		x = t.roundTrip(x);
-		assertJson(x, "{a2:{f2:2},m:{k1:{f2:2}}}");
+		assertJson("{a2:{f2:2},m:{k1:{f2:2}}}", x);
 		if (t.isValidationOnly())
 			return;
 		assertEquals("a2", x.a2.name);
