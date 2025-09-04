@@ -287,11 +287,11 @@ class ClassMeta_Test extends SimpleTestBase {
 
 		var l1 = list();
 		c3.forEachAnnotation(A.class, null, x -> l1.add(x.value()));
-		assertList(l1, "2,1,3,5,6,7");
+		assertList(l1, "2", "1", "3", "5", "6", "7");
 
 		var l2 = list();
 		c4.forEachAnnotation(A.class, null, x -> l2.add(x.value()));
-		assertList(l2, "2,1,3,5,6,7");
+		assertList(l2, "2", "1", "3", "5", "6", "7");
 
 		var l3 = list();
 		c5.forEachAnnotation(A.class, null, x -> l3.add(x.value()));

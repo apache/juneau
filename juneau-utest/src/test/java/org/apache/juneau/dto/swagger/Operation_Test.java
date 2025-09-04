@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -108,19 +109,19 @@ class Operation_Test extends SimpleTestBase {
 		);
 
 		t
-			.set("consumes", sb("['text/a']"))
-			.set("deprecated", sb("true"))
-			.set("description", sb("b"))
-			.set("externalDocs", sb("{url:'c'}"))
-			.set("operationId", sb("d"))
-			.set("parameters", sb("[{'in':'e1',name:'e2'}]"))
-			.set("produces", sb("['text/f']"))
-			.set("responses", sb("{'1':{description:'g'}}"))
-			.set("schemes", sb("['h']"))
-			.set("security", sb("[{i1:['i2']}]"))
-			.set("summary", sb("j"))
-			.set("tags", sb("['k']"))
-			.set("$ref", sb("l"));
+			.set("consumes", Utils.sb("['text/a']"))
+			.set("deprecated", Utils.sb("true"))
+			.set("description", Utils.sb("b"))
+			.set("externalDocs", Utils.sb("{url:'c'}"))
+			.set("operationId", Utils.sb("d"))
+			.set("parameters", Utils.sb("[{'in':'e1',name:'e2'}]"))
+			.set("produces", Utils.sb("['text/f']"))
+			.set("responses", Utils.sb("{'1':{description:'g'}}"))
+			.set("schemes", Utils.sb("['h']"))
+			.set("security", Utils.sb("[{i1:['i2']}]"))
+			.set("summary", Utils.sb("j"))
+			.set("tags", Utils.sb("['k']"))
+			.set("$ref", Utils.sb("l"));
 
 		assertBean(
 			t,
@@ -205,6 +206,6 @@ class Operation_Test extends SimpleTestBase {
 			.set("tags", set("k"))
 			.set("$ref", "l");
 
-		assertSet(t.keySet(), "consumes,deprecated,description,externalDocs,operationId,parameters,produces,responses,schemes,security,summary,tags,$ref");
+		assertSet(t.keySet(), "consumes", "deprecated", "description", "externalDocs", "operationId", "parameters", "produces", "responses", "schemes", "security", "summary", "tags", "$ref");
 	}
 }

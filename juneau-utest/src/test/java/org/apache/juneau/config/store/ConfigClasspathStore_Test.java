@@ -74,7 +74,7 @@ class ConfigClasspathStore_Test extends SimpleTestBase {
 		});
 
 		fs.update("X.cfg", "xxx");
-		assertNotThrown(()->fs.update("Y.cfg", "yyy"));
+		assertDoesNotThrow(()->fs.update("Y.cfg", "yyy"));
 		if (! latch.await(10, TimeUnit.SECONDS))
 			throw new Exception("CountDownLatch never reached zero.");
 	}

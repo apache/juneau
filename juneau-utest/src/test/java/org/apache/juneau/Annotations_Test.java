@@ -124,7 +124,7 @@ class Annotations_Test extends SimpleTestBase {
 
 		// Make sure only public fields are detected
 		var bm = bc.newBeanMap(A.class).load("{publicField:123}");
-		assertJson(bm.getBean(), "{publicField:123}");
+		assertMap(bm, "publicField", "123");
 	}
 
 	public static class A {

@@ -73,7 +73,7 @@ class RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_basic_useNoArgConstructor() {
-		assertNotThrown(()->new A2().build());
+		assertDoesNotThrow(()->new A2().build());
 	}
 
 	@Test void a03_basic_close() throws IOException {
@@ -90,7 +90,7 @@ class RestClient_Test extends SimpleTestBase {
 		RestClient.create().executorService(es,false).build().closeQuietly();
 
 		RestClient.create().debug().build().close();
-		assertNotThrown(()->RestClient.create().debug().build().closeQuietly());
+		assertDoesNotThrow(()->RestClient.create().debug().build().closeQuietly());
 	}
 
 
@@ -200,7 +200,7 @@ class RestClient_Test extends SimpleTestBase {
 	}
 
 	@Test void c05_httpClient_httpClientBuilderMethods() {
-		assertNotThrown(()->RestClient.create().disableRedirectHandling().redirectStrategy(DefaultRedirectStrategy.INSTANCE).defaultCookieSpecRegistry(null).sslHostnameVerifier(null).publicSuffixMatcher(null).sslContext(null).sslSocketFactory(null).maxConnTotal(10).maxConnPerRoute(10).defaultSocketConfig(null).defaultConnectionConfig(null).connectionTimeToLive(100,TimeUnit.DAYS).connectionManager(null).connectionManagerShared(true).connectionReuseStrategy(null).keepAliveStrategy(null).targetAuthenticationStrategy(null).proxyAuthenticationStrategy(null).userTokenHandler(null).disableConnectionState().schemePortResolver(null).disableCookieManagement().disableContentCompression().disableAuthCaching().retryHandler(null).disableAutomaticRetries().proxy(null).routePlanner(null).connectionBackoffStrategy(null).backoffManager(null).serviceUnavailableRetryStrategy(null).defaultCookieStore(null).defaultCredentialsProvider(null).defaultAuthSchemeRegistry(null).contentDecoderRegistry(null).defaultRequestConfig(null).useSystemProperties().evictExpiredConnections().evictIdleConnections(1,TimeUnit.DAYS));
+		assertDoesNotThrow(()->RestClient.create().disableRedirectHandling().redirectStrategy(DefaultRedirectStrategy.INSTANCE).defaultCookieSpecRegistry(null).sslHostnameVerifier(null).publicSuffixMatcher(null).sslContext(null).sslSocketFactory(null).maxConnTotal(10).maxConnPerRoute(10).defaultSocketConfig(null).defaultConnectionConfig(null).connectionTimeToLive(100,TimeUnit.DAYS).connectionManager(null).connectionManagerShared(true).connectionReuseStrategy(null).keepAliveStrategy(null).targetAuthenticationStrategy(null).proxyAuthenticationStrategy(null).userTokenHandler(null).disableConnectionState().schemePortResolver(null).disableCookieManagement().disableContentCompression().disableAuthCaching().retryHandler(null).disableAutomaticRetries().proxy(null).routePlanner(null).connectionBackoffStrategy(null).backoffManager(null).serviceUnavailableRetryStrategy(null).defaultCookieStore(null).defaultCredentialsProvider(null).defaultAuthSchemeRegistry(null).contentDecoderRegistry(null).defaultRequestConfig(null).useSystemProperties().evictExpiredConnections().evictIdleConnections(1,TimeUnit.DAYS));
 	}
 
 	@SuppressWarnings("deprecation")

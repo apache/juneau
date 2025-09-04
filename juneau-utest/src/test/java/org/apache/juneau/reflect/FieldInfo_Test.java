@@ -273,10 +273,10 @@ class FieldInfo_Test extends SimpleTestBase {
 		d_isDefault = d.getDeclaredField(x -> x.hasName("isDefault"));
 
 	@Test void setAccessible() {
-		assertNotThrown(()->d_isPublic.setAccessible());
-		assertNotThrown(()->d_isProtected.setAccessible());
-		assertNotThrown(()->d_isPrivate.setAccessible());
-		assertNotThrown(()->d_isDefault.setAccessible());
+		assertDoesNotThrow(()->d_isPublic.setAccessible());
+		assertDoesNotThrow(()->d_isProtected.setAccessible());
+		assertDoesNotThrow(()->d_isPrivate.setAccessible());
+		assertDoesNotThrow(()->d_isDefault.setAccessible());
 	}
 
 	@Test void isVisible() {

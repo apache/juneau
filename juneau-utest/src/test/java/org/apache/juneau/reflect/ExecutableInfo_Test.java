@@ -484,10 +484,10 @@ class ExecutableInfo_Test extends SimpleTestBase {
 		f_isDefault = f.getMethod(x -> x.hasName("isDefault"));
 
 	@Test void setAccessible() {
-		assertNotThrown(()->f_isPublic.accessible());
-		assertNotThrown(()->f_isProtected.accessible());
-		assertNotThrown(()->f_isPrivate.accessible());
-		assertNotThrown(()->f_isDefault.accessible());
+		assertDoesNotThrow(()->f_isPublic.accessible());
+		assertDoesNotThrow(()->f_isProtected.accessible());
+		assertDoesNotThrow(()->f_isPrivate.accessible());
+		assertDoesNotThrow(()->f_isDefault.accessible());
 	}
 
 	@Test void isVisible() {

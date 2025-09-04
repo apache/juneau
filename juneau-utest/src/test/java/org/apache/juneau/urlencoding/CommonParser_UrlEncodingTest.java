@@ -152,6 +152,6 @@ class CommonParser_UrlEncodingTest extends SimpleTestBase {
 		assertEquals("0=foo&1=bar", s.serialize(l));
 		var in = "0=foo&1=bar";
 		var l2 = (LinkedList<String>)p2.parse(in, LinkedList.class, String.class);
-		assertList(l2, "foo,bar");
+		assertList(l2, "foo", "bar");
 	}
 }

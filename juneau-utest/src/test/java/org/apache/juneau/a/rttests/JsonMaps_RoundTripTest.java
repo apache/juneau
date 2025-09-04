@@ -13,7 +13,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.common.internal.Utils.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 
@@ -38,26 +38,19 @@ class JsonMaps_RoundTripTest extends RoundTripTest_Base {
 	void a01_basic(RoundTripTester t) throws Exception {
 		var x1 = new A(JsonMap.ofJson("{f1:'a',f2:2}"));
 		x1 = t.roundTrip(x1, A.class);
-		assertEquals("a", x1.f1);
-		assertEquals(2, x1.f2);
+		assertBean(x1, "f1,f2", "a,2");
 
 		var x2 = new A[]{x1};
 		x2 = t.roundTrip(x2, A[].class);
-		assertEquals(1, x2.length);
-		assertEquals("a", x2[0].f1);
-		assertEquals(2, x2[0].f2);
+		assertBean(x2, "length,#{f1,f2}", "1,[{a,2}]");
 
 		var x3 = alist(new A(JsonMap.ofJson("{f1:'a',f2:2}")));
 		x3 = t.roundTrip(x3, List.class, A.class);
-		assertEquals(1, x3.size());
-		assertEquals("a", x3.get(0).f1);
-		assertEquals(2, x3.get(0).f2);
+		assertBean(x3, "size,0{f1,f2}", "1,{a,2}");
 
 		var x4 = CollectionUtils.map("a",new A(JsonMap.ofJson("{f1:'a',f2:2}")));
 		x4 = t.roundTrip(x4, Map.class, String.class, A.class);
-		assertEquals(1, x4.size());
-		assertEquals("a", x4.get("a").f1);
-		assertEquals(2, x4.get("a").f2);
+		assertMap(x4, "size,a{f1,f2}", "1,{a,2}");
 	}
 
 	public static class A {

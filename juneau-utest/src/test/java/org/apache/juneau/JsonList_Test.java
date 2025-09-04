@@ -98,7 +98,7 @@ class JsonList_Test extends SimpleTestBase {
 	// JsonList(Reader)
 	//====================================================================================================
 	@Test void a04_fromReader() throws Exception {
-		assertJson(new JsonList(reader("[1,2,3]")), "[1,2,3]");
+		assertList(new JsonList(reader("[1,2,3]")), "1", "2", "3");
 	}
 
 	//====================================================================================================
@@ -123,11 +123,11 @@ class JsonList_Test extends SimpleTestBase {
 	@Test void a06_getList() throws Exception {
 		var l = new JsonList("[['123','456']]");
 		var l2 = l.getList(0, Integer.class);
-		assertList(l2, "123,456");
+		assertList(l2, "123", "456");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
 
 		l2 = l.get(0, List.class, Integer.class);
-		assertList(l2, "123,456");
+		assertList(l2, "123", "456");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
 	}
 }

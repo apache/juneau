@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -65,8 +66,8 @@ class HeaderInfo_Test extends SimpleTestBase {
 			"example,maximum,minimum,multipleOf", "1.0,2.0,3.0,4.0");
 
 		// addEnum
-		assertSet(t.addEnum("a","b").getEnum(), "a,b");
-		assertSet(t.addEnum("c").getEnum(), "a,b,c");
+		assertSet(t.addEnum("a","b").getEnum(), "a", "b");
+		assertSet(t.addEnum("c").getEnum(), "a", "b", "c");
 	}
 
 	/**
@@ -128,26 +129,26 @@ class HeaderInfo_Test extends SimpleTestBase {
 			"a,b,c,[d],e,true,true,f,{g},1.0,2,3,4.0,5,6,7.0,h,i,j,true");
 
 		t
-			.set("collectionFormat", sb("a"))
-			.set("default", sb("b"))
-			.set("description", sb("c"))
-			.set("enum", sb("['d']"))
-			.set("example", sb("e"))
-			.set("exclusiveMaximum", sb("true"))
-			.set("exclusiveMinimum", sb("true"))
-			.set("format", sb("f"))
-			.set("items", sb("{type:'g'}"))
-			.set("maximum", sb("1f"))
-			.set("maxItems", sb("2"))
-			.set("maxLength", sb("3"))
-			.set("minimum", sb("4f"))
-			.set("minItems", sb("5"))
-			.set("minLength", sb("6"))
-			.set("multipleOf", sb("7f"))
-			.set("pattern", sb("h"))
-			.set("$ref", sb("i"))
-			.set("type", sb("j"))
-			.set("uniqueItems", sb("true"));
+			.set("collectionFormat", Utils.sb("a"))
+			.set("default", Utils.sb("b"))
+			.set("description", Utils.sb("c"))
+			.set("enum", Utils.sb("['d']"))
+			.set("example", Utils.sb("e"))
+			.set("exclusiveMaximum", Utils.sb("true"))
+			.set("exclusiveMinimum", Utils.sb("true"))
+			.set("format", Utils.sb("f"))
+			.set("items", Utils.sb("{type:'g'}"))
+			.set("maximum", Utils.sb("1f"))
+			.set("maxItems", Utils.sb("2"))
+			.set("maxLength", Utils.sb("3"))
+			.set("minimum", Utils.sb("4f"))
+			.set("minItems", Utils.sb("5"))
+			.set("minLength", Utils.sb("6"))
+			.set("multipleOf", Utils.sb("7f"))
+			.set("pattern", Utils.sb("h"))
+			.set("$ref", Utils.sb("i"))
+			.set("type", Utils.sb("j"))
+			.set("uniqueItems", Utils.sb("true"));
 
 		assertBean(t,
 			"collectionFormat,default,description,enum,example,exclusiveMaximum,exclusiveMinimum,format,items{type},maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,pattern,ref,type,uniqueItems",
@@ -230,7 +231,7 @@ class HeaderInfo_Test extends SimpleTestBase {
 			.set("type", "j")
 			.set("uniqueItems", true);
 
-		assertSet(t.keySet(), "collectionFormat,default,description,enum,example,exclusiveMaximum,exclusiveMinimum,format,items,maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,pattern,$ref,type,uniqueItems");
+		assertSet(t.keySet(), "collectionFormat", "default", "description", "enum", "example", "exclusiveMaximum", "exclusiveMinimum", "format", "items", "maximum", "maxItems", "maxLength", "minimum", "minItems", "minLength", "multipleOf", "pattern", "$ref", "type", "uniqueItems");
 	}
 
 	@Test void c01_strict() {
@@ -244,6 +245,6 @@ class HeaderInfo_Test extends SimpleTestBase {
 	@Test void c02_resolveRefs() {
 		var s = new Swagger();
 		var t = new HeaderInfo();
-		assertNotThrown(()->t.resolveRefs(s, new ArrayDeque<>(), 10));
+		assertDoesNotThrow(()->t.resolveRefs(s, new ArrayDeque<>(), 10));
 	}
 }

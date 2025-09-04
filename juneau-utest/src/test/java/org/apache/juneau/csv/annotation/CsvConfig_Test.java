@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv.annotation;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.csv.*;
@@ -34,12 +34,12 @@ class CsvConfig_Test extends SimpleTestBase {
 
 	@Test void defaultsSerializer() {
 		var al = AnnotationWorkList.of(b.getAnnotationList());
-		assertNotThrown(()->CsvSerializer.create().apply(al).build());
+		assertDoesNotThrow(()->CsvSerializer.create().apply(al).build());
 	}
 
 	@Test void defaultsParser() {
 		var al = AnnotationWorkList.of(b.getAnnotationList());
-		assertNotThrown(()->CsvParser.create().apply(al).build());
+		assertDoesNotThrow(()->CsvParser.create().apply(al).build());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -51,11 +51,11 @@ class CsvConfig_Test extends SimpleTestBase {
 
 	@Test void noAnnotationSerializer() {
 		var al = AnnotationWorkList.of(b.getAnnotationList());
-		assertNotThrown(()->CsvSerializer.create().apply(al).build());
+		assertDoesNotThrow(()->CsvSerializer.create().apply(al).build());
 	}
 
 	@Test void noAnnotationParser() {
 		var al = AnnotationWorkList.of(b.getAnnotationList());
-		assertNotThrown(()->CsvParser.create().apply(al).build());
+		assertDoesNotThrow(()->CsvParser.create().apply(al).build());
 	}
 }

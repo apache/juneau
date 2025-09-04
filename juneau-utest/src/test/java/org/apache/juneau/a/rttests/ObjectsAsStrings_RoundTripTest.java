@@ -34,7 +34,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 	void a01_basic(RoundTripTester t) throws Exception {
 		var x = new A().init();
 		x = t.roundTrip(x);
-		assertJson(x, "{a1:{f:'1'},a2:{f:'2'},a3:{f:'3'},a4:{f:'4'}}");
+		assertBean(x, "a1{f},a2{f},a3{f},a4{f}", "{1},{2},{3},{4}");
 	}
 
 	public static class A {

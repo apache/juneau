@@ -124,7 +124,7 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 	void a01_simple(RoundTripTester t) throws Exception {
 		var x = A.create().f1(1).build();
 		x = t.roundTrip(x, A.class);
-		assertJson(x, "{f1:1}");
+		assertBean(x, "f1", "1");
 	}
 
 	public static class A {
@@ -157,7 +157,7 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 	void a02_simple_usingConfig(RoundTripTester t) throws Exception {
 		var x = Ac.create().f1(1).build();
 		x = t.roundTrip(x, Ac.class);
-		assertJson(x, "{f1:1}");
+		assertBean(x, "f1", "1");
 	}
 
 	@Bean(on="Dummy1", findFluentSetters=true)
@@ -198,7 +198,7 @@ class RoundTripBeansWithBuilders_Test extends SimpleTestBase {
 	void a03_beanPropertyBuilder_simple(RoundTripTester t) throws Exception {
 		var x = A2.create().f1(A.create().f1(1).build()).build();
 		x = t.roundTrip(x, A2.class);
-		assertJson(x, "{f1:{f1:1}}");
+		assertBean(x, "f1{f1}", "{1}");
 	}
 
 	public static class A2 {

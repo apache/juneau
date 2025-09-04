@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -20,7 +20,7 @@ import org.junit.jupiter.api.*;
 class Console_Test extends SimpleTestBase {
 
 	@Test void basic() {
-		assertNotThrown(()->Console.out("test{0}", 1));
-		assertNotThrown(()->Console.err("test{0}", 2));
+		assertDoesNotThrow(()->Console.out("test{0}", 1));
+		assertDoesNotThrow(()->Console.err("test{0}", 2));
 	}
 }

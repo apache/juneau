@@ -36,10 +36,12 @@ public class Utils2 extends Utils {
 	 * @return The unwrapped object.
 	 */
 	public static Object unwrap(Object o) {
-		while (o instanceof Supplier)
-			o = ((Supplier<?>)o).get();
-		while (o instanceof Value)
-			o = ((Value<?>)o).get();
+		if (o instanceof Supplier)
+			o = unwrap(((Supplier<?>)o).get());
+		if (o instanceof Value)
+			o = unwrap(((Value<?>)o).get());
+		if (o instanceof Optional)
+			o = unwrap(((Optional<?>)o).orElse(null));
 		return o;
 	}
 

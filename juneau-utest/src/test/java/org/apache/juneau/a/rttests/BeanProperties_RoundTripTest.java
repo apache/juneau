@@ -13,7 +13,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.common.internal.Utils.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 
@@ -43,7 +43,7 @@ class BeanProperties_RoundTripTest extends RoundTripTest_Base {
 		o.f1 = new List[1];
 		o.f1[0] = alist(123L);
 		o = t.roundTrip(o);
-		assertEquals(123, o.f1[0].get(0).intValue());
+		assertBean(o, "f1{0{0}}", "{{123}}");
 	}
 
 	public static class A02 {
@@ -56,7 +56,7 @@ class BeanProperties_RoundTripTest extends RoundTripTest_Base {
 		var o = new A02();
 		o.f1 = Utils.<Long[]>alist(new Long[]{123L});
 		o = t.roundTrip(o);
-		assertEquals(123, o.f1.get(0)[0].intValue());
+		assertBean(o, "f1{0{0}}", "{{123}}");
 	}
 
 	public static class A03 {
@@ -71,7 +71,7 @@ class BeanProperties_RoundTripTest extends RoundTripTest_Base {
 		o.f1 = new List[1][1];
 		o.f1[0] = new List[]{alist(123L)};
 		o = t.roundTrip(o);
-		assertEquals(123, o.f1[0][0].get(0).intValue());
+		assertBean(o, "f1{0{0{0}}}", "{{{123}}}");
 	}
 
 	public static class A04 {
@@ -84,6 +84,6 @@ class BeanProperties_RoundTripTest extends RoundTripTest_Base {
 		var o = new A04();
 		o.f1 = Utils.<Long[][]>alist(new Long[][]{new Long[]{123L}});
 		o = t.roundTrip(o);
-		assertEquals(123, o.f1.get(0)[0][0].intValue());
+		assertBean(o, "f1{0{0{0}}}", "{{{123}}}");
 	}
 }

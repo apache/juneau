@@ -169,7 +169,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 		assertEquals(3000, x.faDate[2].getTime());
 		assertEquals(4000, x.flDate.get(0).getTime());
 		assertNull(x.flDate.get(1));
-		assertEquals(5000, x.fmDate.get("foo").getTime());
+		assertBean(x, "fmDate{foo{time}}", "{{5000}}");
 		assertNull(x.fmDate.get("bar"));
 	}
 
@@ -261,7 +261,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 		assertEquals(3000, x.faDate[2].getTime() % 3600000);
 		assertEquals(4000, x.flDate.get(0).getTime() % 3600000);
 		assertNull(x.flDate.get(1));
-		assertEquals(5000, x.fmDate.get("foo").getTime() % 3600000);
+		assertBean(x, "fmDate{foo{time}}", "{{5000}}");
 		assertNull(x.fmDate.get("bar"));
 	}
 
@@ -276,7 +276,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 		x.f1 = "bar";
 		x = t.roundTrip(x, B.class);
 
-		assertEquals("bar", x.f1);
+		assertBean(x, "f1", "bar");
 	}
 
 	@Swap(BSwap.class)
@@ -304,7 +304,7 @@ class RoundTripTransformBeans_Test extends SimpleTestBase {
 		x.f1 = "bar";
 		x = t.roundTrip(x, Bc.class);
 
-		assertEquals("bar", x.f1);
+		assertBean(x, "f1", "bar");
 	}
 
 	@Swap(on="Dummy1",value=BcSwap.class)

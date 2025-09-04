@@ -19,6 +19,7 @@ import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -63,10 +64,10 @@ class Contact_Test extends SimpleTestBase {
 		assertBean(t, "email,name,$ref,url", "a,b,c,d");
 
 		t
-			.set("email", sb("a"))
-			.set("name", sb("b"))
-			.set("$ref", sb("c"))
-			.set("url", sb("d"));
+			.set("email", Utils.sb("a"))
+			.set("name", Utils.sb("b"))
+			.set("$ref", Utils.sb("c"))
+			.set("url", Utils.sb("d"));
 
 		assertBean(t, "email,name,$ref,url", "a,b,c,d");
 
@@ -114,6 +115,6 @@ class Contact_Test extends SimpleTestBase {
 			.set("email", "c")
 			.set("$ref", "d");
 
-		assertSet(t.keySet(), "email,name,url,$ref");
+		assertSet(t.keySet(), "email", "name", "url", "$ref");
 	}
 }

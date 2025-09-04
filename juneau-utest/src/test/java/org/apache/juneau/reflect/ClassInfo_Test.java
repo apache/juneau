@@ -571,11 +571,11 @@ public class ClassInfo_Test extends SimpleTestBase {
 	@Test void forEachAnnotation() {
 		var l1 = list();
 		g3.forEachAnnotation(A.class, null, x -> l1.add(x.value()));
-		assertList(l1, "2,1,3,5,6,7");
+		assertList(l1, "2", "1", "3", "5", "6", "7");
 
 		var l2 = list();
 		g4.forEachAnnotation(A.class, null, x -> l2.add(x.value()));
-		assertList(l2, "2,1,3,5,6,7");
+		assertList(l2, "2", "1", "3", "5", "6", "7");
 
 		var l3 = list();
 		g5.forEachAnnotation(A.class, null, x -> l3.add(x.value()));

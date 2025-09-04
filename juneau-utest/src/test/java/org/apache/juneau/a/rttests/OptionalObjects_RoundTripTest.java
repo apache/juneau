@@ -14,6 +14,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 
@@ -259,7 +260,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 		var x = new B05();
 		x.f1 = opt(opt(B05B.create()));
 		x = t.roundTrip(x);
-		assertEquals(123, x.f1.get().get().f2);
+		assertBean(x, "f1{f2}", "{123}");
 	}
 
 	@ParameterizedTest

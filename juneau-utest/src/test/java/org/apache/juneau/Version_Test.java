@@ -93,8 +93,8 @@ class Version_Test extends SimpleTestBase {
 			of("2")
 		);
 		Collections.sort(l);
-		assertList(l, "0,1.2,1.2.3,1.2.3.4,2,2.0");
+		assertList(l, "0", "1.2", "1.2.3", "1.2.3.4", "2", "2.0");
 		Collections.reverse(l);
-		assertList(l, "2.0,2,1.2.3.4,1.2.3,1.2,0");
+		assertList(l, "2.0", "2", "1.2.3.4", "1.2.3", "1.2", "0");
 	}
 }

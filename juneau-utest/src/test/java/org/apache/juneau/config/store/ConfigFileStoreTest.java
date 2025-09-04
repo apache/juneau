@@ -150,7 +150,7 @@ class ConfigFileStoreTest extends SimpleTestBase {
 		});
 		pipe(reader("zzz"), new File(DIR, "Z.ini"));
 		pipe(reader("xxx"), new File(DIR, "X.cfg"));
-		assertNotThrown(()->pipe(reader("yyy"), new File(DIR, "Y.cfg")));
+		assertDoesNotThrow(()->pipe(reader("yyy"), new File(DIR, "Y.cfg")));
 		if (! latch.await(10, TimeUnit.SECONDS))
 			throw new Exception("CountDownLatch never reached zero.");
 	}
@@ -177,7 +177,7 @@ class ConfigFileStoreTest extends SimpleTestBase {
 		});
 
 		fs.update("X.cfg", "xxx");
-		assertNotThrown(()->fs.update("Y.cfg", "yyy"));
+		assertDoesNotThrow(()->fs.update("Y.cfg", "yyy"));
 		if (! latch.await(10, TimeUnit.SECONDS))
 			throw new Exception("CountDownLatch never reached zero.");
 	}

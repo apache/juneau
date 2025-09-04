@@ -13,6 +13,7 @@
 package org.apache.juneau.jsonschema;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.internal.Utils.*;
 import static org.apache.juneau.jsonschema.TypeCategory.*;
 
 import java.util.*;
@@ -1300,7 +1301,7 @@ class JsonSchemaGeneratorTest extends SimpleTestBase {
 	@Test void schemaOnClass_onConfig() throws Exception {
 		var al = AnnotationWorkList.of(bConfig.getAnnotationList());
 		var x = JsonSchemaGenerator.create().apply(al).build().getSession();
-		assertJsonContains(x.getSchema(new B()), "'$ref':'ref'");
+		assertContains("$ref", r(x.getSchema(new B())));
 	}
 
 }

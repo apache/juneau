@@ -219,8 +219,8 @@ class BeanMap_Test extends SimpleTestBase {
 		// The rest are proper superclasses of JsonList.
 		assertMap(
 			m,
-			"al1{class{name}},l1{class{name}},ll1{class{name}},c1{class{name}},jl1{class{name}}",
-			"{{java.util.ArrayList}},{{org.apache.juneau.collections.JsonList}},{{java.util.LinkedList}},{{org.apache.juneau.collections.JsonList}},{{org.apache.juneau.collections.JsonList}}"
+			"al1{class{simpleName}},l1{class{simpleName}},ll1{class{simpleName}},c1{class{simpleName}},jl1{class{simpleName}}",
+			"{{ArrayList}},{{JsonList}},{{LinkedList}},{{JsonList}},{{JsonList}}"
 		);
 
 		// Non-initialized map fields.
@@ -233,8 +233,8 @@ class BeanMap_Test extends SimpleTestBase {
 		// The rest are proper superclasses of JsonMap
 		assertBean(
 			m,
-			"tm1{class{name}},m1{class{name}},hm1{class{name}},jm1{class{name}}",
-			"{{java.util.TreeMap}},{{org.apache.juneau.collections.JsonMap}},{{java.util.HashMap}},{{org.apache.juneau.collections.JsonMap}}"
+			"tm1{class{simpleName}},m1{class{simpleName}},hm1{class{simpleName}},jm1{class{simpleName}}",
+			"{{TreeMap}},{{JsonMap}},{{HashMap}},{{JsonMap}}"
 		);
 
 		// Initialized fields should reuse existing field value.
@@ -250,8 +250,8 @@ class BeanMap_Test extends SimpleTestBase {
 
 		assertBean(
 			m,
-			"l2{class{name}},al2{class{name}},ll2{class{name}},c2{class{name}},m2{class{name}},hm2{class{name}},tm2{class{name}},jm2{class{name}},jl2{class{name}}",
-			"{{java.util.ArrayList}},{{java.util.ArrayList}},{{java.util.LinkedList}},{{java.util.ArrayList}},{{java.util.HashMap}},{{java.util.HashMap}},{{java.util.TreeMap}},{{org.apache.juneau.collections.JsonMap}},{{org.apache.juneau.collections.JsonList}}"
+			"l2{class{simpleName}},al2{class{simpleName}},ll2{class{simpleName}},c2{class{simpleName}},m2{class{simpleName}},hm2{class{simpleName}},tm2{class{simpleName}},jm2{class{simpleName}},jl2{class{simpleName}}",
+			"{{ArrayList}},{{ArrayList}},{{LinkedList}},{{ArrayList}},{{HashMap}},{{HashMap}},{{TreeMap}},{{JsonMap}},{{JsonList}}"
 		);
 	}
 
@@ -294,8 +294,8 @@ class BeanMap_Test extends SimpleTestBase {
 		// The rest are proper superclasses of JsonList.
 		assertBean(
 			m,
-			"al1{class{name}},l1{class{name}},ll1{class{name}},c1{class{name}},jl1{class{name}}",
-			"{{java.util.ArrayList}},{{org.apache.juneau.collections.JsonList}},{{org.apache.juneau.collections.JsonList}},{{org.apache.juneau.collections.JsonList}},{{org.apache.juneau.collections.JsonList}}"
+			"al1{class{simpleName}},l1{class{simpleName}},ll1{class{simpleName}},c1{class{simpleName}},jl1{class{simpleName}}",
+			"{{ArrayList}},{{JsonList}},{{JsonList}},{{JsonList}},{{JsonList}}"
 		);
 
 		// Non-initialized map fields.
@@ -308,8 +308,8 @@ class BeanMap_Test extends SimpleTestBase {
 		// The rest are proper superclasses of JsonMap
 		assertBean(
 			m,
-			"tm1{class{name}},m1{class{name}},hm1{class{name}},jm1{class{name}}",
-			"{{java.util.TreeMap}},{{org.apache.juneau.collections.JsonMap}},{{org.apache.juneau.collections.JsonMap}},{{org.apache.juneau.collections.JsonMap}}"
+			"tm1{class{simpleName}},m1{class{simpleName}},hm1{class{simpleName}},jm1{class{simpleName}}",
+			"{{TreeMap}},{{JsonMap}},{{JsonMap}},{{JsonMap}}"
 		);
 
 		// Initialized fields should reuse existing field value.
@@ -325,8 +325,8 @@ class BeanMap_Test extends SimpleTestBase {
 
 		assertBean(
 			m,
-			"l2{class{name}},al2{class{name}},ll2{class{name}},c2{class{name}},m2{class{name}},hm2{class{name}},tm2{class{name}},jm2{class{name}},jl2{class{name}}",
-			"{{org.apache.juneau.collections.JsonList}},{{java.util.ArrayList}},{{org.apache.juneau.collections.JsonList}},{{org.apache.juneau.collections.JsonList}},{{org.apache.juneau.collections.JsonMap}},{{org.apache.juneau.collections.JsonMap}},{{java.util.TreeMap}},{{org.apache.juneau.collections.JsonMap}},{{org.apache.juneau.collections.JsonList}}"
+			"l2{class{simpleName}},al2{class{simpleName}},ll2{class{simpleName}},c2{class{simpleName}},m2{class{simpleName}},hm2{class{simpleName}},tm2{class{simpleName}},jm2{class{simpleName}},jl2{class{simpleName}}",
+			"{{JsonList}},{{ArrayList}},{{JsonList}},{{JsonList}},{{JsonMap}},{{JsonMap}},{{TreeMap}},{{JsonMap}},{{JsonList}}"
 		);
 	}
 
@@ -977,7 +977,7 @@ class BeanMap_Test extends SimpleTestBase {
 		m.put("f2", 2);
 		m.put("f3", 3);
 
-		assertJson(m, "{f1:1,f2:2,f3:0}");
+		assertBean(t, "f1,f2,f3", "1,2,0");
 	}
 
 	public static class Q1 {}

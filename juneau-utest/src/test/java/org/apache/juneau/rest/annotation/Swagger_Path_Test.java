@@ -216,7 +216,7 @@ class Swagger_Path_Test extends SimpleTestBase {
 		x = s.getParameterInfo("/d/{P}","delete","path","P");
 
 		x = s.getParameterInfo("/e/{P}","get","path","P");
-		assertSet(x.getEnum(), "a,b");
+		assertSet(x.getEnum(), "a", "b");
 	}
 
 	@Rest

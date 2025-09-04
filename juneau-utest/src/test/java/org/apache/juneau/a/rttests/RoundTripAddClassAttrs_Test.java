@@ -14,6 +14,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.common.internal.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 
@@ -154,16 +155,10 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 	void a03_beanWithBeanProps(RoundTripTester t) throws Exception {
 		var x = new B("foo");
 		x = t.roundTrip(x, B.class);
-		assertEquals("foo", x.f2a.getF1());
-		assertEquals("foo", x.f2b.getF1());
-		assertEquals("foo", x.f2c.getF1());
-		assertEquals("foo", ((A)x.f2d).getF1());
+		assertBean(x, "f2a{f1},f2b{f1},f2c{f1},f2d{f1}", "{foo},{foo},{foo},{foo}");
 
 		x = t.roundTrip(x, Object.class);
-		assertEquals("foo", x.f2a.getF1());
-		assertEquals("foo", x.f2b.getF1());
-		assertEquals("foo", x.f2c.getF1());
-		assertEquals("foo", ((A)x.f2d).getF1());
+		assertBean(x, "f2a{f1},f2b{f1},f2c{f1},f2d{f1}", "{foo},{foo},{foo},{foo}");
 	}
 
 	@Bean(typeName="B")
@@ -187,16 +182,10 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 	void a04_mapsWithTypeParams(RoundTripTester t) throws Exception {
 		var x = new C("foo");
 		x = t.roundTrip(x, C.class);
-		assertEquals("foo", x.f3a.get("foo").getF1());
-		assertEquals("foo", x.f3b.get("foo").getF1());
-		assertEquals("foo", x.f3c.get("foo").getF1());
-		assertEquals("foo", x.f3d.get("foo").getF1());
+		assertBean(x, "f3a{foo{f1}},f3b{foo{f1}},f3c{foo{f1}},f3d{foo{f1}}", "{{foo}},{{foo}},{{foo}},{{foo}}");
 
 		x = t.roundTrip(x, Object.class);
-		assertEquals("foo", x.f3a.get("foo").getF1());
-		assertEquals("foo", x.f3b.get("foo").getF1());
-		assertEquals("foo", x.f3c.get("foo").getF1());
-		assertEquals("foo", x.f3d.get("foo").getF1());
+		assertBean(x, "f3a{foo{f1}},f3b{foo{f1}},f3c{foo{f1}},f3d{foo{f1}}", "{{foo}},{{foo}},{{foo}},{{foo}}");
 	}
 
 	@Bean(typeName="C")
@@ -225,16 +214,10 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 	void a05_mapsWithoutTypeParams(RoundTripTester t) throws Exception {
 		var x = new D("foo");
 		x = t.roundTrip(x, D.class);
-		assertEquals("foo", x.f4a[0].getF1());
-		assertEquals("foo", x.f4b[0].getF1());
-		assertEquals("foo", x.f4c[0].getF1());
-		assertEquals("foo", ((A)x.f4d[0]).getF1());
+		assertBean(x, "f4a{0{f1}},f4b{0{f1}},f4c{0{f1}},f4d{0{f1}}", "{{foo}},{{foo}},{{foo}},{{foo}}");
 
 		x = t.roundTrip(x, Object.class);
-		assertEquals("foo", x.f4a[0].getF1());
-		assertEquals("foo", x.f4b[0].getF1());
-		assertEquals("foo", x.f4c[0].getF1());
-		assertEquals("foo", ((A)x.f4d[0]).getF1());
+		assertBean(x, "f4a{0{f1}},f4b{0{f1}},f4c{0{f1}},f4d{0{f1}}", "{{foo}},{{foo}},{{foo}},{{foo}}");
 	}
 
 	@Bean(typeName="D")
@@ -263,16 +246,10 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 	void a06_beanWithListProps(RoundTripTester t) throws Exception {
 		var x = new E("foo");
 		x = t.roundTrip(x, E.class);
-		assertEquals("foo", x.f5a.get(0).getF1());
-		assertEquals("foo", x.f5b.get(0).getF1());
-		assertEquals("foo", x.f5c.get(0).getF1());
-		assertEquals("foo", ((A)x.f5d.get(0)).getF1());
+		assertBean(x, "f5a{0{f1}},f5b{0{f1}},f5c{0{f1}},f5d{0{f1}}", "{{foo}},{{foo}},{{foo}},{{foo}}");
 
 		x = t.roundTrip(x, Object.class);
-		assertEquals("foo", x.f5a.get(0).getF1());
-		assertEquals("foo", x.f5b.get(0).getF1());
-		assertEquals("foo", x.f5c.get(0).getF1());
-		assertEquals("foo", ((A)x.f5d.get(0)).getF1());
+		assertBean(x, "f5a{0{f1}},f5b{0{f1}},f5c{0{f1}},f5d{0{f1}}", "{{foo}},{{foo}},{{foo}},{{foo}}");
 	}
 
 	@Bean(typeName="E")
@@ -301,16 +278,10 @@ class RoundTripAddClassAttrs_Test extends SimpleTestBase {
 	void a07_beanWithListOfArraysProps(RoundTripTester t) throws Exception {
 		var x = new F("foo");
 		x = t.roundTrip(x, F.class);
-		assertEquals("foo", x.f6a.get(0)[0].getF1());
-		assertEquals("foo", x.f6b.get(0)[0].getF1());
-		assertEquals("foo", x.f6c.get(0)[0].getF1());
-		assertEquals("foo", ((A)x.f6d.get(0)[0]).getF1());
+		assertBean(x, "f6a{0{0{f1}}},f6b{0{0{f1}}},f6c{0{0{f1}}},f6d{0{0{f1}}}", "{{{foo}}},{{{foo}}},{{{foo}}},{{{foo}}}");
 
 		x = t.roundTrip(x, Object.class);
-		assertEquals("foo", x.f6a.get(0)[0].getF1());
-		assertEquals("foo", x.f6b.get(0)[0].getF1());
-		assertEquals("foo", x.f6c.get(0)[0].getF1());
-		assertEquals("foo", ((A)x.f6d.get(0)[0]).getF1());
+		assertBean(x, "f6a{0{0{f1}}},f6b{0{0{f1}}},f6c{0{0{f1}}},f6d{0{0{f1}}}", "{{{foo}}},{{{foo}}},{{{foo}}},{{{foo}}}");
 	}
 
 	@Bean(typeName="F")

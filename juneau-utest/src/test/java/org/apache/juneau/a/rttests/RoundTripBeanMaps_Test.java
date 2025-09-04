@@ -427,8 +427,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 		var ba1 = BA1.create();
 		var r = s.serialize(ba1);
 		var b = p.parse(r, BA.class);
-		assertTrue(b instanceof BA1);
-		assertBean(b, "f0a,f0b,f1", "f0a,f0b,f1");
+		assertBean(b, "class{simpleName},f0a,f0b,f1", "{BA1},f0a,f0b,f1");
 	}
 
 	@Bean(dictionary={BA1.class,BA2.class})
@@ -470,8 +469,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 		var c1 = CA1.create();
 		var r = s.serialize(c1);
 		var c = p.parse(r, CA.class);
-		assertTrue(c instanceof CA1);
-		assertBean(c, "f0a,f0b,f1", "f0a,f0b,f1");
+		assertBean(c, "class{simpleName},f0a,f0b,f1", "{CA1},f0a,f0b,f1");
 	}
 
 	public abstract static class CA {
@@ -725,7 +723,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a16_memberClass(RoundTripTester t) {
 		var x = G.create();
-		assertNotThrown(()->t.roundTrip(x, G.class));
+		assertDoesNotThrow(()->t.roundTrip(x, G.class));
 	}
 
 	public static class G {
@@ -766,7 +764,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a17_memberClassWithMapClass(RoundTripTester t) {
 		var x = H.create();
-		assertNotThrown(()->t.roundTrip(x, H.class));
+		assertDoesNotThrow(()->t.roundTrip(x, H.class));
 	}
 
 	public static class H extends LinkedHashMap<String,H.H1> {
@@ -807,7 +805,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a18_memberClassWithListClass(RoundTripTester t) {
 		var x = I.create();
-		assertNotThrown(()->t.roundTrip(x, I.class));
+		assertDoesNotThrow(()->t.roundTrip(x, I.class));
 	}
 
 	public static class I extends LinkedList<I.I1> {
@@ -848,7 +846,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a19_memberClassWithStringConstructor(RoundTripTester t) {
 		var x = J.create();
-		assertNotThrown(()->t.roundTrip(x, J.class));
+		assertDoesNotThrow(()->t.roundTrip(x, J.class));
 	}
 
 	public static class J {
@@ -886,7 +884,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a20_beanPropertyPrecedence(RoundTripTester t) {
 		var x = K.create();
-		assertNotThrown(()->t.roundTrip(x, K.class));
+		assertDoesNotThrow(()->t.roundTrip(x, K.class));
 	}
 	public enum KEnum { FOO, BAR, BAZ }
 
@@ -929,11 +927,11 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a21_wrapperAttrAnnotationOnBean(RoundTripTester t) {
 		var x = L.create();
-		assertNotThrown(()->t.roundTrip(x, L.class));
+		assertDoesNotThrow(()->t.roundTrip(x, L.class));
 
 		var x2 = new LinkedHashMap<String,L>();
 		x2.put("bar", L.create());
-		assertNotThrown(()->t.roundTrip(x2, LinkedHashMap.class, String.class, L.class));
+		assertDoesNotThrow(()->t.roundTrip(x2, LinkedHashMap.class, String.class, L.class));
 	}
 
 	@Json(wrapperAttr="foo")
@@ -951,11 +949,11 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a22_wrapperAttrAnnotationOnBean_usingConfig(RoundTripTester t) {
 		var x = L2.create();
-		assertNotThrown(()->t.roundTrip(x, L2.class));
+		assertDoesNotThrow(()->t.roundTrip(x, L2.class));
 
 		var x2 = new LinkedHashMap<String,L2>();
 		x2.put("bar", L2.create());
-		assertNotThrown(()->t.roundTrip(x2, LinkedHashMap.class, String.class, L2.class));
+		assertDoesNotThrow(()->t.roundTrip(x2, LinkedHashMap.class, String.class, L2.class));
 	}
 
 	@Json(on="L2",wrapperAttr="foo")
@@ -979,11 +977,11 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a23_wrapperAttrAnnotationOnNonBean(RoundTripTester t) {
 		var x = M.create();
-		assertNotThrown(()->t.roundTrip(x, M.class));
+		assertDoesNotThrow(()->t.roundTrip(x, M.class));
 
 		var x2 = new LinkedHashMap<String,M>();
 		x2.put("bar", M.create());
-		assertNotThrown(()->t.roundTrip(x2, LinkedHashMap.class, String.class, M.class));
+		assertDoesNotThrow(()->t.roundTrip(x2, LinkedHashMap.class, String.class, M.class));
 	}
 
 	@Json(wrapperAttr="foo")
@@ -1012,11 +1010,11 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 	@MethodSource("testers")
 	void a24_WrapperAttrAnnotationOnNonBean_usingConfig(RoundTripTester t) {
 		var x = M2.create();
-		assertNotThrown(()->t.roundTrip(x, M2.class));
+		assertDoesNotThrow(()->t.roundTrip(x, M2.class));
 
 		var x2 = new LinkedHashMap<String,M2>();
 		x2.put("bar", M2.create());
-		assertNotThrown(()->t.roundTrip(x2, LinkedHashMap.class, String.class, M2.class));
+		assertDoesNotThrow(()->t.roundTrip(x2, LinkedHashMap.class, String.class, M2.class));
 	}
 
 	@Json(on="M2",wrapperAttr="foo")
@@ -1060,7 +1058,7 @@ class RoundTripBeanMaps_Test extends SimpleTestBase {
 		t.roundTrip(x, N.class);
 
 		var x2 = new Head().child(new Style());
-		assertNotThrown(()->t.roundTrip(x2, Head.class));
+		assertDoesNotThrow(()->t.roundTrip(x2, Head.class));
 	}
 
 	public static class N {

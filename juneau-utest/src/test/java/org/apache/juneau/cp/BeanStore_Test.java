@@ -55,7 +55,7 @@ class BeanStore_Test extends SimpleTestBase {
 	private static A2 a2a = new A2();
 
 	@Test void a00_dummy() {
-		assertNotThrown(BeanStore.Void::new);
+		assertDoesNotThrow(BeanStore.Void::new);
 	}
 
 	@Test void a01_builderCopyConstructor() {
@@ -156,10 +156,10 @@ class BeanStore_Test extends SimpleTestBase {
 			assertStream(b.stream(A2.class).map(BeanStoreEntry::get), a2a);
 		}
 
-		assertMatches("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}", b1p.toString());
-		assertMatches("{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}}", b1c.toString());
-		assertMatches("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true}", b2p.toString());
-		assertMatches("{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true},threadSafe:true}", b2c.toString());
+		assertMatches("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}", b1p);
+		assertMatches("{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}}", b1c);
+		assertMatches("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true}", b2p);
+		assertMatches("{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true},threadSafe:true}", b2c);
 
 		b1p.removeBean(A1.class);
 		b1c.clear().addBean(A1.class, a1a);

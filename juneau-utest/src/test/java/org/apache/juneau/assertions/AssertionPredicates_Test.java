@@ -38,8 +38,8 @@ class AssertionPredicates_Test extends SimpleTestBase {
 	private static StringAssertion A1 = assertString("foo").setSilent(), A2 = assertString(empty()).setSilent();
 
 	@Test void a01_any() {
-		assertNotThrown(()->A1.is(any()));
-		assertNotThrown(()->A2.is(any()));
+		assertDoesNotThrow(()->A1.is(any()));
+		assertDoesNotThrow(()->A2.is(any()));
 	}
 
 	@Test void a02_notNull() {

@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -59,7 +60,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 		);
 		assertMap(
 			t.setExamples(map()).addExample("text/a", "a").addExample("text/b", null).addExample(null, "c").getExamples(),
-			"text/a,text/b,<<<NULL>>>",
+			"text/a,text/b,<NULL>",
 			"a,null,c"
 		);
 	}
@@ -94,11 +95,11 @@ class ResponseInfo_Test extends SimpleTestBase {
 			"a,{b1=b2,b3=[b4]},{{c2}},{d},e");
 
 		t
-			.set("description", sb("a"))
-			.set("examples", sb("{b1:'b2',b3:['b4']}"))
-			.set("headers", sb("{c1:{type:'c2'}}"))
-			.set("schema", sb("{type:'d'}"))
-			.set("$ref", sb("e"));
+			.set("description", Utils.sb("a"))
+			.set("examples", Utils.sb("{b1:'b2',b3:['b4']}"))
+			.set("headers", Utils.sb("{c1:{type:'c2'}}"))
+			.set("schema", Utils.sb("{type:'d'}"))
+			.set("$ref", Utils.sb("e"));
 
 		assertBean(t,
 			"description,examples,headers{c1{type}},schema{type},$ref",
@@ -157,6 +158,6 @@ class ResponseInfo_Test extends SimpleTestBase {
 			.set("schema", schemaInfo().setType("d"))
 			.set("$ref", "e");
 
-		assertSet(t.keySet(), "description,examples,headers,schema,$ref");
+		assertSet(t.keySet(), "description", "examples", "headers", "schema", "$ref");
 	}
 }

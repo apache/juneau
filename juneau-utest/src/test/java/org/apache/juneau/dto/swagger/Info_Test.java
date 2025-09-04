@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -81,13 +82,13 @@ class Info_Test extends SimpleTestBase {
 			"e,b,f,{a},{c},d,ref");
 
 		t
-			.set("contact", sb("{name:'a'}"))
-			.set("description", sb("b"))
-			.set("license", sb("{name:'c'}"))
-			.set("termsOfService", sb("d"))
-			.set("title", sb("e"))
-			.set("version", sb("f"))
-			.set("$ref", sb("ref"));
+			.set("contact", Utils.sb("{name:'a'}"))
+			.set("description", Utils.sb("b"))
+			.set("license", Utils.sb("{name:'c'}"))
+			.set("termsOfService", Utils.sb("d"))
+			.set("title", Utils.sb("e"))
+			.set("version", Utils.sb("f"))
+			.set("$ref", Utils.sb("ref"));
 
 		assertBean(t,
 			"title,description,version,contact{name},license{name},termsOfService,$ref",
@@ -148,6 +149,6 @@ class Info_Test extends SimpleTestBase {
 			.set("version", "f")
 			.set("$ref", "ref");
 
-		assertSet(t.keySet(), "contact,description,license,termsOfService,title,version,$ref");
+		assertSet(t.keySet(), "contact", "description", "license", "termsOfService", "title", "version", "$ref");
 	}
 }

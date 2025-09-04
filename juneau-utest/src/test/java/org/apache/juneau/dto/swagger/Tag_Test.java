@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.Tag;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -75,10 +76,10 @@ class Tag_Test extends SimpleTestBase {
 			"c,a,{b},ref");
 
 		t
-			.set("description", sb("a"))
-			.set("externalDocs", sb("{url:'b'}"))
-			.set("name", sb("c"))
-			.set("$ref", sb("ref"));
+			.set("description", Utils.sb("a"))
+			.set("externalDocs", Utils.sb("{url:'b'}"))
+			.set("name", Utils.sb("c"))
+			.set("$ref", Utils.sb("ref"));
 
 		assertBean(t,
 			"name,description,externalDocs{url},$ref",
@@ -133,6 +134,6 @@ class Tag_Test extends SimpleTestBase {
 			.set("name", "c")
 			.set("$ref", "ref");
 
-		assertSet(t.keySet(), "description,externalDocs,name,$ref");
+		assertSet(t.keySet(), "description", "externalDocs", "name", "$ref");
 	}
 }

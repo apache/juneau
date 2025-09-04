@@ -197,7 +197,7 @@ class PartList_Test extends SimpleTestBase {
 	@Test void a08_get() {
 		var x = PartList.of(FOO_1, FOO_2, X_x);
 		assertArray(x.getAll(null));
-		assertArray(x.getAll("Foo"), "Foo=1, Foo=2");
+		assertArray(x.getAll("Foo"), "Foo=1", "Foo=2");
 		assertArray(x.getAll("FOO"));
 		assertArray(x.getAll("Bar"));
 	}
@@ -295,12 +295,12 @@ class PartList_Test extends SimpleTestBase {
 
 	@Test void a18_caseSensitive() {
 		var x1 = PartList.create().append(FOO_1, FOO_2, X_x);
-		assertArray(x1.getAll("Foo"), "Foo=1, Foo=2");
+		assertArray(x1.getAll("Foo"), "Foo=1", "Foo=2");
 		assertArray(x1.getAll("FOO"));
 
 		var x2 = x1.copy().caseInsensitive(true);
-		assertArray(x2.getAll("Foo"), "Foo=1, Foo=2");
-		assertArray(x2.getAll("FOO"), "Foo=1, Foo=2");
+		assertArray(x2.getAll("Foo"), "Foo=1", "Foo=2");
+		assertArray(x2.getAll("FOO"), "Foo=1", "Foo=2");
 	}
 
 	@Test void a19_size() {

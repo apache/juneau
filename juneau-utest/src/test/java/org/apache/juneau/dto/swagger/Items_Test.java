@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -60,12 +61,12 @@ class Items_Test extends SimpleTestBase {
 
 		// Other
 		assertBean(
-			t.setDefault(sb("a")).setMaximum(1f).setMinimum(2f).setMultipleOf(3f),
+			t.setDefault(Utils.sb("a")).setMaximum(1f).setMinimum(2f).setMultipleOf(3f),
 			"default,maximum,minimum,multipleOf", "a,1.0,2.0,3.0");
 
 		// addEnum
-		assertSet(t.addEnum("a","b").getEnum(), "a,b");
-		assertSet(t.addEnum("c").getEnum(), "a,b,c");
+		assertSet(t.addEnum("a","b").getEnum(), "a", "b");
+		assertSet(t.addEnum("c").getEnum(), "a", "b", "c");
 	}
 
 	/**
@@ -123,24 +124,24 @@ class Items_Test extends SimpleTestBase {
 			"j,g,{h},c,a,1.0,true,4.0,true,3,6,i,2,5,true,[b],7.0,k");
 
 		t
-			.set("collectionFormat", sb("c"))
-			.set("default", sb("a"))
-			.set("enum", sb("['b']"))
-			.set("exclusiveMaximum", sb("true"))
-			.set("exclusiveMinimum", sb("true"))
-			.set("format", sb("g"))
-			.set("items", sb("{type:'h'}"))
-			.set("maxItems", sb("2"))
-			.set("maxLength", sb("3"))
-			.set("maximum", sb("1f"))
-			.set("minItems", sb("5"))
-			.set("minLength", sb("6"))
-			.set("minimum", sb("4f"))
-			.set("multipleOf", sb("7f"))
-			.set("pattern", sb("i"))
-			.set("$ref", sb("k"))
-			.set("type", sb("j"))
-			.set("uniqueItems", sb("true"));
+			.set("collectionFormat", Utils.sb("c"))
+			.set("default", Utils.sb("a"))
+			.set("enum", Utils.sb("['b']"))
+			.set("exclusiveMaximum", Utils.sb("true"))
+			.set("exclusiveMinimum", Utils.sb("true"))
+			.set("format", Utils.sb("g"))
+			.set("items", Utils.sb("{type:'h'}"))
+			.set("maxItems", Utils.sb("2"))
+			.set("maxLength", Utils.sb("3"))
+			.set("maximum", Utils.sb("1f"))
+			.set("minItems", Utils.sb("5"))
+			.set("minLength", Utils.sb("6"))
+			.set("minimum", Utils.sb("4f"))
+			.set("multipleOf", Utils.sb("7f"))
+			.set("pattern", Utils.sb("i"))
+			.set("$ref", Utils.sb("k"))
+			.set("type", Utils.sb("j"))
+			.set("uniqueItems", Utils.sb("true"));
 
 		assertBean(t, "collectionFormat,default,enum,exclusiveMaximum,exclusiveMinimum,format,items{type},maxItems,maxLength,maximum,minItems,minLength,minimum,multipleOf,pattern,ref,type,uniqueItems", "c,a,[b],true,true,g,{h},2,3,1.0,5,6,4.0,7.0,i,k,j,true");
 
@@ -223,7 +224,7 @@ class Items_Test extends SimpleTestBase {
 
 		assertSet(
 			t.keySet(),
-			"collectionFormat,default,enum,exclusiveMaximum,exclusiveMinimum,format,items,maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,pattern,$ref,type,uniqueItems"
+			"collectionFormat", "default", "enum", "exclusiveMaximum", "exclusiveMinimum", "format", "items", "maximum", "maxItems", "maxLength", "minimum", "minItems", "minLength", "multipleOf", "pattern", "$ref", "type", "uniqueItems"
 		);
 	}
 }

@@ -30,19 +30,19 @@ class ArrayUtilsTest extends SimpleTestBase {
 		String[] s = {};
 
 		s = append(s, "a", "b");
-		assertArray(s, "a,b");
+		assertArray(s, "a", "b");
 
 		s = append(s, "c");
-		assertArray(s, "a,b,c");
+		assertArray(s, "a", "b", "c");
 
 		s = append(s);
-		assertArray(s, "a,b,c");
+		assertArray(s, "a", "b", "c");
 
 		var o = append((Object[])null);
 		assertArray(o);
 
 		s = append((String[])null, "a", "b");
-		assertArray(s, "a,b");
+		assertArray(s, "a", "b");
 	}
 
 	//====================================================================================================
@@ -66,7 +66,7 @@ class ArrayUtilsTest extends SimpleTestBase {
 		var s1 = a("a");
 		var s2 = a("b");
 
-		assertArray(combine(s1, s2), "a,b");
+		assertArray(combine(s1, s2), "a", "b");
 		assertArray(combine(s1), "a");
 		assertArray(combine(s2), "b");
 		assertArray(combine(s1,null), "a");

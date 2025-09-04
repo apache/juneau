@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.TestUtils.*;
 
 import java.util.*;
 
@@ -37,18 +38,12 @@ class BeanFilter_Test extends SimpleTestBase {
 		assertEquals("{_type:'A1',f0:'f0',fb:{_type:'B2',f0b:'f0b',f2:'f2'},f1:'f1'}", r);
 
 		var a = p.parse(r, A.class);
-		assertTrue(a instanceof A1);
-		assertTrue(a.fb instanceof B2);
-		assertEquals("f1", ((A1)a).f1);
-		assertEquals("f2", ((B2)a.fb).f2);
+		assertBean(a, "class{simpleName},fb{class{simpleName}},f1,fb{f2}", "{A1},{{B2}},f1,{f2}");
 
 		// Try out-of-order creation.
 		r = "{f0:'f0',f1:'f1',_type:'A1',fb:{f0b:'f0b',f2:'f2',_type:'B2'}}";
 		a = p.parse(r, A.class);
-		assertTrue(a instanceof A1);
-		assertTrue(a.fb instanceof B2);
-		assertEquals("f1", ((A1)a).f1);
-		assertEquals("f2", ((B2)a.fb).f2);
+		assertBean(a, "class{simpleName},fb{class{simpleName}},f1,fb{f2}", "{A1},{{B2}},f1,{f2}");
 	}
 
 	@Bean(dictionary={A1.class, A2.class})
@@ -94,18 +89,12 @@ class BeanFilter_Test extends SimpleTestBase {
 		assertEquals("{_type:'E1',f0:'f0',fb:{_type:'F2',f0b:'f0b',f2:'f2'},f1:'f1'}", r);
 
 		var e = p.parse(r, E.class);
-		assertTrue(e instanceof E1);
-		assertTrue(e.fb instanceof F2);
-		assertEquals("f1", ((E1)e).f1);
-		assertEquals("f2", ((F2)e.fb).f2);
+		assertBean(e, "class{simpleName},fb{class{simpleName}},f1,fb{f2}", "{E1},{{F2}},f1,{f2}");
 
 		// Try out-of-order creation.
 		r = "{f0:'f0',f1:'f1',_type:'E1',fb:{f0b:'f0b',f2:'f2',_type:'F2'}}";
 		e = p.parse(r, E.class);
-		assertTrue(e instanceof E1);
-		assertTrue(e.fb instanceof F2);
-		assertEquals("f1", ((E1)e).f1);
-		assertEquals("f2", ((F2)e.fb).f2);
+		assertBean(e, "class{simpleName},fb{class{simpleName}},f1,fb{f2}", "{E1},{{F2}},f1,{f2}");
 	}
 
 	@Bean(on="E", dictionary={E1.class, E2.class})

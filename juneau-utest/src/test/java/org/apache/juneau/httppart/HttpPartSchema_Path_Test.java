@@ -29,7 +29,7 @@ class HttpPartSchema_Path_Test extends SimpleTestBase {
 	// Basic test
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void a01_basic() {
-		assertNotThrown(()->HttpPartSchema.create().build());
+		assertDoesNotThrow(()->HttpPartSchema.create().build());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ class HttpPartSchema_Path_Test extends SimpleTestBase {
 		assertBean(
 			HttpPartSchema.create().applyAll(Path.class, A02.class).noValidate().build(),
 			"name,type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,exclusiveMaximum,exclusiveMinimum,enum",
-			"x,number,int32,csv,1,2,3,4,1,2,true,true,[e1,e2,e3]"
+			"x,NUMBER,INT32,CSV,1,2,3,4,1,2,true,true,[e1,e2,e3]"
 		);
 	}
 
@@ -101,7 +101,7 @@ class HttpPartSchema_Path_Test extends SimpleTestBase {
 		assertBean(
 			HttpPartSchema.create().applyAll(Path.class, mpi).noValidate().build(),
 			"name,type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,exclusiveMaximum,exclusiveMinimum,enum",
-			"x,number,int32,csv,1,2,3,4,1,2,true,true,[e1,e2,e3]"
+			"x,NUMBER,INT32,CSV,1,2,3,4,1,2,true,true,[e1,e2,e3]"
 		);
 	}
 
@@ -135,7 +135,7 @@ class HttpPartSchema_Path_Test extends SimpleTestBase {
 		assertBean(
 			HttpPartSchema.create().applyAll(Path.class, mpi).noValidate().build(),
 			"name,type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,exclusiveMaximum,exclusiveMinimum,enum",
-			"y,integer,int64,ssv,5,6,7,8,5,6,false,false,[e4,e5,e6]"
+			"y,INTEGER,INT64,SSV,5,6,7,8,5,6,false,false,[e4,e5,e6]"
 		);
 	}
 
@@ -224,28 +224,28 @@ class HttpPartSchema_Path_Test extends SimpleTestBase {
 		assertBean(
 			items,
 			"type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,enum,default",
-			"number,int32,csv,1,2,3,4,1,2,3,4,true,true,true,[e1,e2],c1\nc2"
+			"NUMBER,INT32,CSV,1,2,3,4,1,2,3,4,true,true,true,[e1,e2],c1\nc2"
 		);
 
 		items = items.getItems();
 		assertBean(
 			items,
 			"type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,enum,default",
-			"integer,int64,ssv,5,6,7,8,5,6,7,8,false,false,false,[e3,e4],c3\nc4"
+			"INTEGER,INT64,SSV,5,6,7,8,5,6,7,8,false,false,false,[e3,e4],c3\nc4"
 		);
 
 		items = items.getItems();
 		assertBean(
 			items,
 			"type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,enum,default",
-			"string,float,tsv,9,10,11,12,9,10,11,12,true,true,true,[e5,e6],c5\nc6"
+			"STRING,FLOAT,TSV,9,10,11,12,9,10,11,12,true,true,true,[e5,e6],c5\nc6"
 		);
 
 		items = items.getItems();
 		assertBean(
 			items,
 			"type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,enum,default",
-			"array,double,pipes,13,14,15,16,13,14,15,16,false,false,false,[e7,e8],c7\nc8"
+			"ARRAY,DOUBLE,PIPES,13,14,15,16,13,14,15,16,false,false,false,[e7,e8],c7\nc8"
 		);
 	}
 

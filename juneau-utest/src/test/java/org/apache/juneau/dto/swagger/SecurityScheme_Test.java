@@ -19,6 +19,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -91,15 +92,15 @@ class SecurityScheme_Test extends SimpleTestBase {
 			"g,b,e,d,c,a,f,{foo=bar},ref");
 
 		t
-			.set("authorizationUrl", sb("a"))
-			.set("description", sb("b"))
-			.set("flow", sb("c"))
-			.set("in", sb("d"))
-			.set("name", sb("e"))
-			.set("scopes", sb("{foo:'bar'}"))
-			.set("tokenUrl", sb("f"))
-			.set("type", sb("g"))
-			.set("$ref", sb("ref"));
+			.set("authorizationUrl", Utils.sb("a"))
+			.set("description", Utils.sb("b"))
+			.set("flow", Utils.sb("c"))
+			.set("in", Utils.sb("d"))
+			.set("name", Utils.sb("e"))
+			.set("scopes", Utils.sb("{foo:'bar'}"))
+			.set("tokenUrl", Utils.sb("f"))
+			.set("type", Utils.sb("g"))
+			.set("$ref", Utils.sb("ref"));
 
 		assertBean(t,
 			"type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,$ref",
@@ -164,6 +165,6 @@ class SecurityScheme_Test extends SimpleTestBase {
 			.set("type", "g")
 			.set("$ref", "ref");
 
-		assertSet(t.keySet(), "authorizationUrl,description,flow,in,name,scopes,tokenUrl,type,$ref");
+		assertSet(t.keySet(), "authorizationUrl", "description", "flow", "in", "name", "scopes", "tokenUrl", "type", "$ref");
 	}
 }

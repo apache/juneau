@@ -342,14 +342,14 @@ class JsonMap_Test extends SimpleTestBase {
 	@Test void a08_getList() throws Exception {
 		var m = JsonMap.ofJson("{a:['123','456']}");
 		var l2 = m.getList("a", Integer.class, null);
-		assertList(l2, "123,456");
+		assertList(l2, "123", "456");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
 
 		l2 = m.getList("b", Integer.class, null);
 		assertNull(l2);
 
 		l2 = m.get("a", List.class, Integer.class);
-		assertList(l2, "123,456");
+		assertList(l2, "123", "456");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
 
 		l2 = m.get("b", List.class, Integer.class);

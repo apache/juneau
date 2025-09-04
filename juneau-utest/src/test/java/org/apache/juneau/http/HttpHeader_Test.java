@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -20,6 +20,6 @@ import org.junit.jupiter.api.*;
 class HttpHeader_Test extends SimpleTestBase {
 
 	@Test void a01_basic() {
-		assertNotThrown(HttpMethod::new);
+		assertDoesNotThrow(HttpMethod::new);
 	}
 }

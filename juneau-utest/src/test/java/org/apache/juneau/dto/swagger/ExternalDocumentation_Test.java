@@ -19,6 +19,7 @@ import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -62,9 +63,9 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 		assertBean(t, "description,url,$ref", "a,b,c");
 
 		t
-			.set("description", sb("a2"))
-			.set("url", sb("b2"))
-			.set("$ref", sb("c2"));
+			.set("description", Utils.sb("a2"))
+			.set("url", Utils.sb("b2"))
+			.set("$ref", Utils.sb("c2"));
 
 		assertBean(t, "description,url,$ref", "a2,b2,c2");
 
@@ -110,6 +111,6 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 			.set("url", "bar")
 			.set("$ref", "baz");
 
-		assertSet(t.keySet(), "description,url,$ref");
+		assertSet(t.keySet(), "description", "url", "$ref");
 	}
 }

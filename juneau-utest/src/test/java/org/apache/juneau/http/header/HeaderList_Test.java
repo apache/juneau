@@ -47,20 +47,20 @@ class HeaderList_Test extends SimpleTestBase {
 		var x = HeaderList.create();
 		assertEmpty(x);
 		assertList(x.append(FOO_1), "Foo: 1");
-		assertList(x.append(FOO_2), "Foo: 1,Foo: 2");
-		assertList(x.append(HeaderList.of().getAll()), "Foo: 1,Foo: 2");
-		assertList(x.append(HeaderList.of(FOO_3).getAll()), "Foo: 1,Foo: 2,Foo: 3");
-		assertList(x.append(HeaderList.of(FOO_4, FOO_5).getAll()), "Foo: 1,Foo: 2,Foo: 3,Foo: 4,Foo: 5");
-		assertList(x.append(HeaderList.of(FOO_6, FOO_7).getAll()), "Foo: 1,Foo: 2,Foo: 3,Foo: 4,Foo: 5,Foo: 6,Foo: 7");
-		assertList(x.append((Header)null), "Foo: 1,Foo: 2,Foo: 3,Foo: 4,Foo: 5,Foo: 6,Foo: 7");
-		assertList(x.append((List<Header>)null), "Foo: 1,Foo: 2,Foo: 3,Foo: 4,Foo: 5,Foo: 6,Foo: 7");
+		assertList(x.append(FOO_2), "Foo: 1", "Foo: 2");
+		assertList(x.append(HeaderList.of().getAll()), "Foo: 1", "Foo: 2");
+		assertList(x.append(HeaderList.of(FOO_3).getAll()), "Foo: 1", "Foo: 2", "Foo: 3");
+		assertList(x.append(HeaderList.of(FOO_4, FOO_5).getAll()), "Foo: 1", "Foo: 2", "Foo: 3", "Foo: 4", "Foo: 5");
+		assertList(x.append(HeaderList.of(FOO_6, FOO_7).getAll()), "Foo: 1", "Foo: 2", "Foo: 3", "Foo: 4", "Foo: 5", "Foo: 6", "Foo: 7");
+		assertList(x.append((Header)null), "Foo: 1", "Foo: 2", "Foo: 3", "Foo: 4", "Foo: 5", "Foo: 6", "Foo: 7");
+		assertList(x.append((List<Header>)null), "Foo: 1", "Foo: 2", "Foo: 3", "Foo: 4", "Foo: 5", "Foo: 6", "Foo: 7");
 		assertEmpty(new HeaderList.Void());
 	}
 
 	@Test void a02_creators() {
-		assertList(headerList(FOO_1, FOO_2, null), "Foo: 1,Foo: 2");
-		assertList(headerList(alist(FOO_1, FOO_2, null)), "Foo: 1,Foo: 2");
-		assertList(headerList("Foo","1","Foo","2"), "Foo: 1,Foo: 2");
+		assertList(headerList(FOO_1, FOO_2, null), "Foo: 1", "Foo: 2");
+		assertList(headerList(alist(FOO_1, FOO_2, null)), "Foo: 1", "Foo: 2");
+		assertList(headerList("Foo","1","Foo","2"), "Foo: 1", "Foo: 2");
 		assertThrowsWithMessage(IllegalArgumentException.class, "Odd number of parameters passed into HeaderList.ofPairs()", ()->headerList("Foo"));
 		assertEmpty(HeaderList.of((List<Header>)null));
 		assertEmpty(HeaderList.of(Collections.emptyList()));
@@ -84,11 +84,11 @@ class HeaderList_Test extends SimpleTestBase {
 		x.append("X4",()->"$S{"+pname+"}");
 		x.append(SerializedHeader.of("X5","bar",openApiSession(),null,false));
 
-		assertList(x, "X1: bar,X2: y,X3: bar,X4: y,X5: bar");
+		assertList(x, "X1: bar", "X2: y", "X3: bar", "X4: y", "X5: bar");
 
 		System.setProperty(pname, "z");
 
-		assertList(x, "X1: bar,X2: z,X3: bar,X4: z,X5: bar");
+		assertList(x, "X1: bar", "X2: z", "X3: bar", "X4: z", "X5: bar");
 
 		System.clearProperty(pname);
 	}
@@ -98,7 +98,7 @@ class HeaderList_Test extends SimpleTestBase {
 			.create()
 			.append("X1","1")
 			.append(headerList("X2","2").getAll());
-		assertList(x, "X1: 1,X2: 2");
+		assertList(x, "X1: 1", "X2: 2");
 	}
 
 	@Test void a05_copy() {
@@ -141,8 +141,8 @@ class HeaderList_Test extends SimpleTestBase {
 	@Test void a08_get() {
 		var x = HeaderList.of(FOO_1, FOO_2, X_x);
 		assertArray(x.getAll(null));
-		assertArray(x.getAll("Foo"), "Foo: 1,Foo: 2");
-		assertArray(x.getAll("FOO"), "Foo: 1,Foo: 2");
+		assertArray(x.getAll("Foo"), "Foo: 1", "Foo: 2");
+		assertArray(x.getAll("FOO"), "Foo: 1", "Foo: 2");
 		assertArray(x.getAll("Bar"));
 	}
 
@@ -237,7 +237,7 @@ class HeaderList_Test extends SimpleTestBase {
 
 	@Test void a18_caseSensitive() {
 		var x = HeaderList.create().caseSensitive(true).append(FOO_1, FOO_2, X_x);
-		assertArray(x.getAll("Foo"), "Foo: 1,Foo: 2");
+		assertArray(x.getAll("Foo"), "Foo: 1", "Foo: 2");
 		assertArray(x.getAll("FOO"));
 	}
 
@@ -286,7 +286,7 @@ class HeaderList_Test extends SimpleTestBase {
 			.prepend("Bar", ()->"b2")
 			.prepend((List<Header>)null)
 			.prepend(alist(FOO_4));
-		assertList(x2, "Foo: 4,Bar: b2,Bar: b1,Foo: 2,Foo: 3,Foo: 1");
+		assertList(x2, "Foo: 4", "Bar: b2", "Bar: b1", "Foo: 2", "Foo: 3", "Foo: 1");
 	}
 
 	@Test void b04_builder_remove() {
@@ -299,7 +299,7 @@ class HeaderList_Test extends SimpleTestBase {
 			.remove(FOO_2)
 			.remove(FOO_3, FOO_4)
 			.remove(alist(FOO_5));
-		assertList(x, "Foo: 6,Foo: 7");
+		assertList(x, "Foo: 6", "Foo: 7");
 
 		x = HeaderList.create().append(FOO_1,FOO_2).remove((String[])null).remove("Bar","Foo");
 		assertEmpty(x);
@@ -313,52 +313,52 @@ class HeaderList_Test extends SimpleTestBase {
 			.set(BAR_1)
 			.set((Header)null)
 			.set((HeaderList)null);
-		assertList(x, "Foo: 3,Bar: 1");
+		assertList(x, "Foo: 3", "Bar: 1");
 
 		x = HeaderList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set(FOO_3);
-		assertList(x, "Bar: 1,Foo: 3,Bar: 2");
+		assertList(x, "Bar: 1", "Foo: 3", "Bar: 2");
 
 		x = HeaderList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set((Header[])null)
 			.set(null,FOO_3,FOO_4,FOO_5);
-		assertList(x, "Bar: 1,Bar: 2,Foo: 3,Foo: 4,Foo: 5");
+		assertList(x, "Bar: 1", "Bar: 2", "Foo: 3", "Foo: 4", "Foo: 5");
 
 		x = HeaderList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set((List<Header>)null)
 			.set(alist(null,FOO_3,FOO_4,FOO_5));
-		assertList(x, "Bar: 1,Bar: 2,Foo: 3,Foo: 4,Foo: 5");
+		assertList(x, "Bar: 1", "Bar: 2", "Foo: 3", "Foo: 4", "Foo: 5");
 
 		x = HeaderList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set("FOO", "x");
-		assertList(x, "Bar: 1,FOO: x,Bar: 2");
+		assertList(x, "Bar: 1", "FOO: x", "Bar: 2");
 
 		x = HeaderList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set("FOO", ()->"x");
-		assertList(x, "Bar: 1,FOO: x,Bar: 2");
+		assertList(x, "Bar: 1", "FOO: x", "Bar: 2");
 
 		x = HeaderList
 			.create()
 			.caseSensitive(true)
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set("FOO", ()->"x");
-		assertList(x, "Bar: 1,Foo: 1,Foo: 2,Bar: 2,FOO: x");
+		assertList(x, "Bar: 1", "Foo: 1", "Foo: 2", "Bar: 2", "FOO: x");
 
 		x = HeaderList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set(HeaderList.of(FOO_3,FOO_4));
-		assertList(x, "Bar: 1,Bar: 2,Foo: 3,Foo: 4");
+		assertList(x, "Bar: 1", "Bar: 2", "Foo: 3", "Foo: 4");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -406,13 +406,13 @@ class HeaderList_Test extends SimpleTestBase {
 		assertList(x2, "Accept: text/plain");
 
 		var x3 = HeaderList.create().set(ContentType.TEXT_XML,Accept.TEXT_PLAIN,ContentType.TEXT_XML).setDefault(Accept.TEXT_XML);
-		assertList(x3, "Content-Type: text/xml,Accept: text/plain,Content-Type: text/xml");
+		assertList(x3, "Content-Type: text/xml", "Accept: text/plain", "Content-Type: text/xml");
 
 		var x4 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_XML).setDefault(Accept.TEXT_XML);
-		assertList(x4, "Content-Type: text/xml,Content-Type: text/xml,Accept: text/xml");
+		assertList(x4, "Content-Type: text/xml", "Content-Type: text/xml", "Accept: text/xml");
 
 		var x5 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_XML).setDefault(Accept.TEXT_XML).setDefault(ContentType.TEXT_HTML);
-		assertList(x5, "Content-Type: text/xml,Content-Type: text/xml,Accept: text/xml");
+		assertList(x5, "Content-Type: text/xml", "Content-Type: text/xml", "Accept: text/xml");
 
 		var x6 = HeaderList.create().setDefault(Accept.TEXT_XML,Accept.TEXT_PLAIN);
 		assertList(x6, "Accept: text/xml");
@@ -438,16 +438,16 @@ class HeaderList_Test extends SimpleTestBase {
 		assertList(x11, "Accept: text/xml");
 
 		var x12 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN).setDefault(alist(Accept.TEXT_XML,ContentType.TEXT_HTML,null));
-		assertList(x12, "Content-Type: text/xml,Content-Type: text/plain,Accept: text/xml");
+		assertList(x12, "Content-Type: text/xml", "Content-Type: text/plain", "Accept: text/xml");
 
 		var x13 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN).setDefault(HeaderList.of(Accept.TEXT_XML,ContentType.TEXT_HTML,null));
-		assertList(x13, "Content-Type: text/xml,Content-Type: text/plain,Accept: text/xml");
+		assertList(x13, "Content-Type: text/xml", "Content-Type: text/plain", "Accept: text/xml");
 
 		var x14 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN)
 			.setDefault(alist(Accept.TEXT_XML,ContentType.TEXT_HTML,null))
 			.setDefault(alist(Accept.TEXT_HTML,ContentType.TEXT_XML,null))
 			.setDefault(alist(Age.of(1)));
-		assertList(x14, "Content-Type: text/xml,Content-Type: text/plain,Accept: text/xml,Age: 1");
+		assertList(x14, "Content-Type: text/xml", "Content-Type: text/plain", "Accept: text/xml", "Age: 1");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

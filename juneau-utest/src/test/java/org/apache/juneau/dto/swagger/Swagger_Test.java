@@ -22,6 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.bean.swagger.Tag;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -148,22 +149,22 @@ class Swagger_Test extends SimpleTestBase {
 			"n,{f1,f2},{[{o}]},{d},a,[k1],[text/b],[text/i],{{{h2}}},{{c1}},{{g1,g2}},{{j1}},{{m1}},[{l1=[l2]}],ref");
 
 		t
-			.set("basePath", sb("a"))
-			.set("consumes", sb("['text/b']"))
-			.set("definitions", sb("{c:{type:'c1'}}"))
-			.set("externalDocs", sb("{url:'d'}"))
-			.set("host", sb("e"))
-			.set("info", sb("{title:'f1',version:'f2'}"))
-			.set("parameters", sb("{g:{'in':'g1',name:'g2'}}"))
-			.set("paths", sb("{h:{h1:{operationId:'h2'}}}"))
-			.set("produces", sb("['text/i']"))
-			.set("responses", sb("{j:{description:'j1'}}"))
-			.set("schemes", sb("['k1']"))
-			.set("security", sb("[{l1:['l2']}]"))
-			.set("securityDefinitions", sb("{m:{type:'m1'}}"))
-			.set("swagger", sb("n"))
-			.set("tags", sb("[{name:'o'}]"))
-			.set("$ref", sb("ref"));
+			.set("basePath", Utils.sb("a"))
+			.set("consumes", Utils.sb("['text/b']"))
+			.set("definitions", Utils.sb("{c:{type:'c1'}}"))
+			.set("externalDocs", Utils.sb("{url:'d'}"))
+			.set("host", Utils.sb("e"))
+			.set("info", Utils.sb("{title:'f1',version:'f2'}"))
+			.set("parameters", Utils.sb("{g:{'in':'g1',name:'g2'}}"))
+			.set("paths", Utils.sb("{h:{h1:{operationId:'h2'}}}"))
+			.set("produces", Utils.sb("['text/i']"))
+			.set("responses", Utils.sb("{j:{description:'j1'}}"))
+			.set("schemes", Utils.sb("['k1']"))
+			.set("security", Utils.sb("[{l1:['l2']}]"))
+			.set("securityDefinitions", Utils.sb("{m:{type:'m1'}}"))
+			.set("swagger", Utils.sb("n"))
+			.set("tags", Utils.sb("[{name:'o'}]"))
+			.set("$ref", Utils.sb("ref"));
 
 		assertBean(t,
 			"swagger,info{title,version},tags{#{name}},externalDocs{url},basePath,schemes,consumes,produces,paths{h{h1{operationId}}},definitions{c{type}},parameters{g{in,name}},responses{j{description}},securityDefinitions{m{type}},security,$ref",
@@ -245,6 +246,6 @@ class Swagger_Test extends SimpleTestBase {
 			.set("tags", set(tag("o")))
 			.set("$ref", "p");
 
-		assertSet(t.keySet(), "basePath,consumes,definitions,externalDocs,host,info,parameters,paths,produces,responses,schemes,security,securityDefinitions,swagger,tags,$ref");
+		assertSet(t.keySet(), "basePath", "consumes", "definitions", "externalDocs", "host", "info", "parameters", "paths", "produces", "responses", "schemes", "security", "securityDefinitions", "swagger", "tags", "$ref");
 	}
 }

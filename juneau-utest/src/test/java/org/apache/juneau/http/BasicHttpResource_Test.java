@@ -113,7 +113,7 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		assertEquals("Foo: baz", x.getLast("Foo").get().toString());
 		assertEmpty(x.getFirst("Bar"));
 		assertEmpty(x.getLast("Bar"));
-		assertArray(x.getAll(), "Foo: bar,Foo: baz");
+		assertArray(x.getAll(), "Foo: bar", "Foo: baz");
 	}
 
 	@Test void a03_header_Header() {
@@ -122,7 +122,7 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		assertEquals("Foo: baz", x.getLast("Foo").get().toString());
 		assertNull(x.getFirst("Bar").get().getValue());
 		assertNull(x.getLast("Bar").get().getValue());
-		assertArray(x.getAll(), "Foo: bar,Foo: baz,Bar: null");
+		assertArray(x.getAll(), "Foo: bar", "Foo: baz", "Bar: null");
 	}
 
 	@Test void a04_headers_List() {
@@ -131,7 +131,7 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		assertEquals("Foo: baz", x.getLast("Foo").get().toString());
 		assertNull(x.getFirst("Bar").get().getValue());
 		assertNull(x.getLast("Bar").get().getValue());
-		assertArray(x.getAll(), "Foo: bar,Foo: baz,Bar: null");
+		assertArray(x.getAll(), "Foo: bar", "Foo: baz", "Bar: null");
 	}
 
 	@Test void a05_headers_array() {
@@ -140,7 +140,7 @@ class BasicHttpResource_Test extends SimpleTestBase {
 		assertEquals("Foo: baz", x.getLast("Foo").get().toString());
 		assertNull(x.getFirst("Bar").get().getValue());
 		assertNull(x.getLast("Bar").get().getValue());
-		assertArray(x.getAll(), "Foo: bar,Foo: baz,Bar: null");
+		assertArray(x.getAll(), "Foo: bar", "Foo: baz", "Bar: null");
 	}
 
 	@Test void a06_chunked() {

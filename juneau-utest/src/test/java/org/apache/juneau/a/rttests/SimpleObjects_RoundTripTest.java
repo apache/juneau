@@ -577,7 +577,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 		x.add(1);
 		x.add(2);
 		x.add(3);
-		assertNotThrown(()->t.roundTrip(x, Vector.class, Integer.class));
+		assertDoesNotThrow(()->t.roundTrip(x, Vector.class, Integer.class));
 	}
 
 	@ParameterizedTest

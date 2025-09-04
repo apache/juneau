@@ -30,8 +30,8 @@ class ArrayBuilder_Test extends SimpleTestBase {
 		assertArray(x.orElse(empty), "a");
 		x.add("b");
 		x.add(null);
-		assertArray(x.orElse(empty), "a,b");
+		assertArray(x.orElse(empty), "a", "b");
 		x.add("c");
-		assertArray(x.orElse(empty), "a,b,c");
+		assertArray(x.orElse(empty), "a", "b", "c");
 	}
 }

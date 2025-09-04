@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -78,12 +79,12 @@ class Xml_Test extends SimpleTestBase {
 			"a,b,c,true,true,d");
 
 		t
-			.set("attribute", sb("true"))
-			.set("name", sb("a"))
-			.set("namespace", sb("b"))
-			.set("prefix", sb("c"))
-			.set("wrapped", sb("true"))
-			.set("$ref", sb("d"));
+			.set("attribute", Utils.sb("true"))
+			.set("name", Utils.sb("a"))
+			.set("namespace", Utils.sb("b"))
+			.set("prefix", Utils.sb("c"))
+			.set("wrapped", Utils.sb("true"))
+			.set("$ref", Utils.sb("d"));
 
 		assertBean(t,
 			"name,namespace,prefix,attribute,wrapped,$ref",
@@ -142,6 +143,6 @@ class Xml_Test extends SimpleTestBase {
 			.set("wrapped", true)
 			.set("$ref", "d");
 
-		assertSet(t.keySet(), "attribute,name,namespace,prefix,wrapped,$ref");
+		assertSet(t.keySet(), "attribute", "name", "namespace", "prefix", "wrapped", "$ref");
 	}
 }

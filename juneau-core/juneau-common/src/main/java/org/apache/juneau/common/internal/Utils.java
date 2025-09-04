@@ -958,23 +958,24 @@ public class Utils {
 	 * nested structures to create human-readable representations. It's extensively used throughout
 	 * the Juneau framework for test assertions and debugging output.</p>
 	 *
-	 * <h5 class='section'>Type-Specific Formatting:</h5>
-	 * <ul>
-	 * 	<li><b>null:</b> Returns <js>null</js></li>
-	 * 	<li><b>Optional:</b> Recursively formats the contained value (or <js>null</js> if empty)</li>
-	 * 	<li><b>Collections:</b> Formats as <js>"[item1,item2,item3]"</js> with comma-separated elements</li>
-	 * 	<li><b>Maps:</b> Formats as <js>"{key1=value1,key2=value2}"</js> with comma-separated entries</li>
-	 * 	<li><b>Map.Entry:</b> Formats as <js>"key=value"</js></li>
-	 * 	<li><b>Arrays:</b> Converts to list format <js>"[item1,item2,item3]"</js></li>
-	 * 	<li><b>Iterables/Iterators/Enumerations:</b> Converts to list and formats recursively</li>
-	 * 	<li><b>GregorianCalendar:</b> Formats as ISO instant timestamp</li>
-	 * 	<li><b>Date:</b> Formats as ISO instant string (e.g., <js>"2023-12-25T10:30:00Z"</js>)</li>
-	 * 	<li><b>InputStream:</b> Converts to hexadecimal representation</li>
-	 * 	<li><b>Reader:</b> Reads content and returns as string</li>
-	 * 	<li><b>File:</b> Reads file content and returns as string</li>
-	 * 	<li><b>byte[]:</b> Converts to hexadecimal representation</li>
-	 * 	<li><b>All other types:</b> Uses {@link Object#toString()}</li>
-	 * </ul>
+	  * <h5 class='section'>Type-Specific Formatting:</h5>
+ * <ul>
+ * 	<li><b>null:</b> Returns <js>null</js></li>
+ * 	<li><b>Optional:</b> Recursively formats the contained value (or <js>null</js> if empty)</li>
+ * 	<li><b>Collections:</b> Formats as <js>"[item1,item2,item3]"</js> with comma-separated elements</li>
+ * 	<li><b>Maps:</b> Formats as <js>"{key1=value1,key2=value2}"</js> with comma-separated entries</li>
+ * 	<li><b>Map.Entry:</b> Formats as <js>"key=value"</js></li>
+ * 	<li><b>Arrays:</b> Converts to list format <js>"[item1,item2,item3]"</js></li>
+ * 	<li><b>Iterables/Iterators/Enumerations:</b> Converts to list and formats recursively</li>
+ * 	<li><b>GregorianCalendar:</b> Formats as ISO instant timestamp</li>
+ * 	<li><b>Date:</b> Formats as ISO instant string (e.g., <js>"2023-12-25T10:30:00Z"</js>)</li>
+ * 	<li><b>InputStream:</b> Converts to hexadecimal representation</li>
+ * 	<li><b>Reader:</b> Reads content and returns as string</li>
+ * 	<li><b>File:</b> Reads file content and returns as string</li>
+ * 	<li><b>byte[]:</b> Converts to hexadecimal representation</li>
+ * 	<li><b>Enum:</b> Returns the enum name via {@link Enum#name()}</li>
+ * 	<li><b>All other types:</b> Uses {@link Object#toString()}</li>
+ * </ul>
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
@@ -992,10 +993,11 @@ public class Utils {
 	 * 	<jc>// Nested structures</jc>
 	 * 	r(List.of(Map.of("x", 1), Set.of("a", "b"))) <jc>// Returns: "[{x=1},[a,b]]"</jc>
 	 *
-	 * 	<jc>// Special types</jc>
-	 * 	r(Optional.of("test")) <jc>// Returns: "test"</jc>
-	 * 	r(Optional.empty()) <jc>// Returns: null</jc>
-	 * 	r(new Date(1640995200000L)) <jc>// Returns: "2022-01-01T00:00:00Z"</jc>
+	  * 	<jc>// Special types</jc>
+ * 	r(Optional.of("test")) <jc>// Returns: "test"</jc>
+ * 	r(Optional.empty()) <jc>// Returns: null</jc>
+ * 	r(new Date(1640995200000L)) <jc>// Returns: "2022-01-01T00:00:00Z"</jc>
+ * 	r(MyEnum.FOO) <jc>// Returns: "FOO"</jc>
 	 * </p>
 	 *
 	 * <h5 class='section'>Recursive Processing:</h5>
@@ -1041,6 +1043,8 @@ public class Utils {
 			return safe(()->IOUtils.read(o2));
 		if (o instanceof byte[] o2)
 			return toHex(o2);
+		if (o instanceof Enum o2)
+			return o2.name();
 		if (isArray(o)) {
 			var l = list();
 			for (var i = 0; i < Array.getLength(o); i++) {
@@ -1644,6 +1648,10 @@ public class Utils {
 		return Collections.list(value);
 	}
 
+	public static final <T> List<T> toList(Stream<T> value) {
+		return value.toList();
+	}
+
 	public static final <T> List<T> toList(Iterable<T> value) {
 		return StreamSupport.stream(value.spliterator(), false).toList();
 	}
@@ -1713,4 +1721,22 @@ public class Utils {
 
 	/** Constructor - This class is meant to be subclasses. */
 	protected Utils() {}
+
+	/**
+	 * Helper method for creating StringBuilder objects.
+	 *
+	 * @param value The string value to wrap in a StringBuilder.
+	 * @return A new StringBuilder containing the specified value.
+	 */
+	public static StringBuilder sb(String value) {
+		return new StringBuilder(value);
+	}
+
+	public static String classNameOf(Object o) {
+		return o == null ? null : o.getClass().getName();
+	}
+
+	public static String simpleClassNameOf(Object o) {
+		return o == null ? null : o.getClass().getSimpleName();
+	}
 }

@@ -16,6 +16,7 @@ import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static java.lang.Integer.*;
+import static org.apache.juneau.common.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -28,7 +29,6 @@ import java.util.stream.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.common.internal.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.*;
@@ -52,41 +52,38 @@ public class TestUtils extends Utils2 {
 	 *
 	 * <h5 class='section'>Basic Array Testing:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Test string array (varargs)</jc>
+	 * 	<jc>// Test string array</jc>
 	 * 	assertArray(stringArray, <js>"item1"</js>, <js>"item2"</js>, <js>"item3"</js>);
-	 *
-	 * 	<jc>// Test string array (comma-delimited - preferred)</jc>
-	 * 	assertArray(stringArray, <js>"item1,item2,item3"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Primitive Array Testing:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test int array</jc>
-	 * 	assertArray(intArray, <js>"1,2,3,4,5"</js>);
+	 * 	assertArray(intArray, <js>"1"</js>, <js>"2"</js>, <js>"3"</js>, <js>"4"</js>, <js>"5"</js>);
 	 *
 	 * 	<jc>// Test boolean array</jc>
-	 * 	assertArray(boolArray, <js>"true,false,true"</js>);
+	 * 	assertArray(boolArray, <js>"true"</js>, <js>"false"</js>, <js>"true"</js>);
 	 *
 	 * 	<jc>// Test byte array (useful for serialization testing)</jc>
-	 * 	assertArray(byteArray, <js>"65,66,67"</js>); <jc>// ASCII: A,B,C</jc>
+	 * 	assertArray(byteArray, <js>"65"</js>, <js>"66"</js>, <js>"67"</js>); <jc>// ASCII: A,B,C</jc>
 	 * </p>
 	 *
 	 * <h5 class='section'>Multi-Dimensional Arrays:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test 2D array (arrays are converted to string representation)</jc>
-	 * 	assertArray(int2DArray, <js>"[1,2],[3,4],[5,6]"</js>);
+	 * 	assertArray(int2DArray, <js>"[1,2]"</js>, <js>"[3,4]"</js>, <js>"[5,6]"</js>);
 	 *
 	 * 	<jc>// Test 3D array</jc>
-	 * 	assertArray(int3DArray, <js>"[[1,2],[3,4]],[[5,6],[7,8]]"</js>);
+	 * 	assertArray(int3DArray, <js>"[[1,2],[3,4]]"</js>, <js>"[[5,6],[7,8]]"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Object Arrays:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test bean array (toString() representation)</jc>
-	 * 	assertArray(beanArray, <js>"Bean1,Bean2,Bean3"</js>);
+	 * 	assertArray(beanArray, <js>"Bean1"</js>, <js>"Bean2"</js>, <js>"Bean3"</js>);
 	 *
 	 * 	<jc>// Test enum array</jc>
-	 * 	assertArray(statusArray, <js>"ACTIVE,PENDING,CANCELLED"</js>);
+	 * 	assertArray(statusArray, <js>"ACTIVE"</js>, <js>"PENDING"</js>, <js>"CANCELLED"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Comparison Modes:</h5>
@@ -96,7 +93,7 @@ public class TestUtils extends Utils2 {
 	 * <p class='bjava'>
 	 * 	<jc>// Elements are converted to {@link Utils#r readable} format and compared as strings</jc>
 	 * 	assertArray(new int[]{1, 2, 3}, <js>"1"</js>, <js>"2"</js>, <js>"3"</js>);
-	 * 	assertArray(new String[]{"a", "b"}, <js>"a,b"</js>); <jc>// Comma-delimited syntax</jc>
+	 * 	assertArray(new String[]{"a", "b"}, <js>"a"</js>, <js>"b"</js>);
 	 * </p>
 	 *
 	 * <h6 class='section'>2. Predicate Testing (Functional Validation):</h6>
@@ -117,17 +114,8 @@ public class TestUtils extends Utils2 {
 	 * 	assertArray(<jk>new</jk> MyBean[]{<jv>bean1</jv>, <jv>bean2</jv>}, <jv>bean1</jv>, <jv>bean2</jv>); <jc>// Custom objects</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Escape Comma-Delimited Parsing:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Use '>' prefix to treat comma-containing string as single value</jc>
-	 * 	assertArray(<jk>new</jk> String[]{<js>"foo,bar"</js>}, <js>">foo,bar"</js>); <jc>// Tests single element "foo,bar"</jc>
-	 *
-	 * 	<jc>// Useful for arrays containing CSV data or comma-separated strings</jc>
-	 * 	assertArray(<jv>csvArray</jv>, <js>">item1,item2,item3"</js>); <jc>// Single element with commas</jc>
-	 * </p>
-	 *
 	 * @param array The array to test. Can be any array type including primitives and multi-dimensional arrays.
-	 * @param expected Either multiple arguments OR a single comma-delimited string of expected values.
+	 * @param expected Multiple arguments of expected values.
 	 *                 Can be Strings (readable format comparison), Predicates (functional testing), or Objects (direct equality).
 	 * @throws IllegalArgumentException if the input is not an array
 	 * @throws AssertionError if the array size or contents don't match expected values
@@ -164,17 +152,20 @@ public class TestUtils extends Utils2 {
 	 * 	assertBean(myBean, <js>"person{address{geo{lat,lon}}}"</js>, <js>"{{{{40.7,-74.0}}}}"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Array and List Testing:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Test array/list elements by index</jc>
-	 * 	assertBean(myBean, <js>"items{0,1,2}"</js>, <js>"{item1,item2,item3}"</js>);
-	 *
-	 * 	<jc>// Test nested properties within array elements</jc>
-	 * 	assertBean(myBean, <js>"orders{0{id,total}}"</js>, <js>"{{123,99.95}}"</js>);
-	 *
-	 * 	<jc>// Test array length property</jc>
-	 * 	assertBean(myBean, <js>"items{length}"</js>, <js>"{5}"</js>);
-	 * </p>
+	  * <h5 class='section'>Array, List, and Stream Testing:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Test array/list elements by index</jc>
+ * 	assertBean(myBean, <js>"items{0,1,2}"</js>, <js>"{item1,item2,item3}"</js>);
+ *
+ * 	<jc>// Test nested properties within array elements</jc>
+ * 	assertBean(myBean, <js>"orders{0{id,total}}"</js>, <js>"{{123,99.95}}"</js>);
+ *
+ * 	<jc>// Test array length property</jc>
+ * 	assertBean(myBean, <js>"items{length}"</js>, <js>"{5}"</js>);
+ *
+ * 	<jc>// Works with any iterable type including Streams</jc>
+ * 	assertBean(myBean, <js>"userStream{#{name}}"</js>, <js>"[{Alice},{Bob}]"</js>);
+ * </p>
 	 *
 	 * <h5 class='section'>Collection Iteration Syntax:</h5>
 	 * <p class='bjava'>
@@ -187,9 +178,10 @@ public class TestUtils extends Utils2 {
 	 * 	<jc>// Works with nested properties within each element</jc>
 	 * 	assertBean(myBean, <js>"customers{#{address{city}}}"</js>, <js>"[{{New York}},{{Los Angeles}}]"</js>);
 	 *
-	 * 	<jc>// Works with arrays and any iterable collection type</jc>
-	 * 	assertBean(config, <js>"itemArray{#{type}}"</js>, <js>"[{String},{Integer},{Boolean}]"</js>);
-	 * 	assertBean(data, <js>"statusSet{#{name}}"</js>, <js>"[{ACTIVE},{PENDING},{CANCELLED}]"</js>);
+	  * 	<jc>// Works with arrays and any iterable collection type (including Streams)</jc>
+ * 	assertBean(config, <js>"itemArray{#{type}}"</js>, <js>"[{String},{Integer},{Boolean}]"</js>);
+ * 	assertBean(data, <js>"statusSet{#{name}}"</js>, <js>"[{ACTIVE},{PENDING},{CANCELLED}]"</js>);
+ * 	assertBean(processor, <js>"dataStream{#{value}}"</js>, <js>"[{A},{B},{C}]"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Universal Collection Size Properties:</h5>
@@ -251,14 +243,26 @@ public class TestUtils extends Utils2 {
 	 * 	assertBean(myBean, <js>"f1{length},f2{class{simpleName}}"</js>, <js>"{5},{{String}}"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Collection and Boolean Values:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Test boolean values</jc>
-	 * 	assertBean(myBean, <js>"enabled,visible"</js>, <js>"true,false"</js>);
-	 *
-	 * 	<jc>// Test enum collections</jc>
-	 * 	assertBean(myBean, <js>"statuses"</js>, <js>"[ACTIVE,PENDING]"</js>);
-	 * </p>
+	  * <h5 class='section'>Map Testing:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Test map values by key</jc>
+ * 	assertBean(myBean, <js>"configMap{timeout,retries}"</js>, <js>"{30000,3}"</js>);
+ *
+ * 	<jc>// Test map size</jc>
+ * 	assertBean(myBean, <js>"settings{size}"</js>, <js>"{5}"</js>);
+ *
+ * 	<jc>// Test null keys using special &lt;NULL&gt; syntax</jc>
+ * 	assertBean(myBean, <js>"mapWithNullKey{&lt;NULL&gt;}"</js>, <js>"{nullKeyValue}"</js>);
+ * </p>
+ *
+ * <h5 class='section'>Collection and Boolean Values:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Test boolean values</jc>
+ * 	assertBean(myBean, <js>"enabled,visible"</js>, <js>"true,false"</js>);
+ *
+ * 	<jc>// Test enum collections</jc>
+ * 	assertBean(myBean, <js>"statuses"</js>, <js>"[ACTIVE,PENDING]"</js>);
+ * </p>
 	 *
 	 * <h5 class='section'>Value Syntax Rules:</h5>
 	 * <ul>
@@ -272,14 +276,15 @@ public class TestUtils extends Utils2 {
 	 * 	<li><b>Null values:</b> <js>"null"</js></li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Property Access Priority:</h5>
-	 * <ol>
-	 * 	<li><b>Universal size properties:</b> <js>"length"</js> and <js>"size"</js> for arrays, collections, and maps</li>
-	 * 	<li><b>is{Property}()</b> methods (for boolean properties)</li>
-	 * 	<li><b>get{Property}()</b> methods</li>
-	 * 	<li><b>Public fields</b> (direct field access)</li>
-	 * 	<li><b>get(String)</b> methods (for Map-like objects)</li>
-	 * </ol>
+	  * <h5 class='section'>Property Access Priority:</h5>
+ * <ol>
+ * 	<li><b>Collection/Array access:</b> Numeric indices for arrays/lists (e.g., <js>"0"</js>, <js>"1"</js>)</li>
+ * 	<li><b>Universal size properties:</b> <js>"length"</js> and <js>"size"</js> for arrays, collections, and maps</li>
+ * 	<li><b>Map key access:</b> Direct key lookup for Map objects (including <js>"&lt;NULL&gt;"</js> for null keys)</li>
+ * 	<li><b>is{Property}()</b> methods (for boolean properties)</li>
+ * 	<li><b>get{Property}()</b> methods</li>
+ * 	<li><b>Public fields</b> (direct field access)</li>
+ * </ol>
 	 *
 	 * @param bean The bean object to test. Must not be null.
 	 * @param fields Comma-delimited list of property names to test. Supports nested syntax with {}.
@@ -329,13 +334,21 @@ public class TestUtils extends Utils2 {
 	 * 		<js>"age,Must be 18 or older,E002"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Parser Result Testing:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Test parsed object collections</jc>
-	 * 	var parsed = JsonParser.DEFAULT.parse(jsonArray, MyBean[].class);
-	 * 	assertBeans(Arrays.asList(parsed), <js>"prop1,prop2"</js>,
-	 * 		<js>"val1,val2"</js>, <js>"val3,val4"</js>);
-	 * </p>
+	  * <h5 class='section'>Collection Iteration Testing:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Test collection iteration within beans (#{...} syntax)</jc>
+ * 	assertBeans(departmentList, <js>"name,employees{#{name}}"</js>,
+ * 		<js>"Engineering,[{Alice},{Bob},{Charlie}]"</js>,
+ * 		<js>"Marketing,[{David},{Eve}]"</js>);
+ * </p>
+ *
+ * <h5 class='section'>Parser Result Testing:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Test parsed object collections</jc>
+ * 	var parsed = JsonParser.DEFAULT.parse(jsonArray, MyBean[].class);
+ * 	assertBeans(Arrays.asList(parsed), <js>"prop1,prop2"</js>,
+ * 		<js>"val1,val2"</js>, <js>"val3,val4"</js>);
+ * </p>
 	 *
 	 * @param listOfBeans The collection of beans to check. Must not be null.
 	 * @param fields A comma-delimited list of bean property names (supports nested syntax).
@@ -370,8 +383,6 @@ public class TestUtils extends Utils2 {
 	 * <h5 class='section'>Dual Syntax Support:</h5>
 	 * <ul>
 	 * 	<li><b>Varargs:</b> <js>assertCollection(collection, "val1", "val2", "val3")</js></li>
-	 * 	<li><b>Comma-delimited:</b> <js>assertCollection(collection, "val1,val2,val3")</js></li>
-	 * 	<li><b>Escape prefix:</b> <js>assertCollection(collection, ">val1,val2,val3")</js> - treats as single value</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Comparison Modes:</h5>
@@ -381,7 +392,7 @@ public class TestUtils extends Utils2 {
 	 * <p class='bjava'>
 	 * 	<jc>// Elements are converted to {@link Utils#r readable} format and compared as strings</jc>
 	 * 	assertCollection(List.of(1, 2, 3), <js>"1"</js>, <js>"2"</js>, <js>"3"</js>);
-	 * 	assertCollection(List.of("a", "b"), <js>"a,b"</js>); <jc>// Comma-delimited syntax</jc>
+	 * 	assertCollection(List.of("a", "b"), <js>"a"</js>, <js>"b"</js>);
 	 * </p>
 	 *
 	 * <h6 class='section'>2. Predicate Testing (Functional Validation):</h6>
@@ -402,15 +413,8 @@ public class TestUtils extends Utils2 {
 	 * 	assertCollection(List.of(<jv>myBean1</jv>, <jv>myBean2</jv>), <jv>myBean1</jv>, <jv>myBean2</jv>); <jc>// Custom objects</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Escape Comma-Delimited Parsing:</h5>
-	 * <p>The escape prefix '>' prevents comma-delimited parsing, useful when testing collections
-	 * that contain elements with commas in their string representation.</p>
-	 * <p class='bjava'>
-	 * 	assertCollection(List.of(<js>"foo,bar"</js>), <js>"&gt;foo,bar"</js>); <jc>// Single element with comma</jc>
-	 * </p>
-	 *
 	 * @param list The collection to test. Must not be null.
-	 * @param expected Either multiple arguments OR a single comma-delimited string of expected values.
+	 * @param expected Multiple arguments of expected values.
 	 *                 Can be Strings (readable format comparison), Predicates (functional testing), or Objects (direct equality).
 	 * @throws AssertionError if the collection size or contents don't match expected values
 	 */
@@ -418,10 +422,6 @@ public class TestUtils extends Utils2 {
 	public static <T> void assertCollection(Collection<T> list, Object...expected) {
 		assertArgNotNull("list", list);
 		assertArgNotNull("expected", expected);
-
-		// Special case when passing in a comma-delimited list.
-		if (expected.length == 1 && expected[0] instanceof String && s(expected[0]).contains(","))
-			expected = s(expected[0]).charAt(0) == '>' ? a(s(expected[0]).substring(1)) : splita(s(expected[0]));
 
 		if (list.size() != expected.length)
 			fail(fs("Wrong list length.  expected={0}, actual={1}", expected.length, list.size()));
@@ -496,13 +496,6 @@ public class TestUtils extends Utils2 {
 		assertEquals(json, Json5.DEFAULT.write(value));
 	}
 
-	/**
-	 * Asserts the JSON5 representation of the specified object.
-	 */
-	public static void assertJsonContains(Object value, String json) {
-		assertContains(json, Json5.DEFAULT.write(value));
-	}
-
 	public static void assertLines(String expected, Object value) {
 		assertEquals(expected, r(value).replaceAll("\\r?\\n", "|"));
 	}
@@ -510,25 +503,21 @@ public class TestUtils extends Utils2 {
 	/**
 	 * Asserts that the entries in a List match the expected values after being converted to {@link Utils#r readable} strings.
 	 *
-	 * <p>This method works identically to {@link #assertSet(Set, Object...)} but is specifically typed for Lists.
-	 * It supports the same dual syntax: varargs or comma-delimited strings.</p>
+	 * <p>This method works identically to {@link #assertSet(Set, Object...)} but is specifically typed for Lists.</p>
 	 *
 	 * <h5 class='section'>Basic Usage:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Test list contents (varargs)</jc>
+	 * 	<jc>// Test list contents</jc>
 	 * 	assertList(myList, <js>"item1"</js>, <js>"item2"</js>, <js>"item3"</js>);
-	 *
-	 * 	<jc>// Test list contents (comma-delimited - preferred)</jc>
-	 * 	assertList(myList, <js>"item1,item2,item3"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Ordered Collections:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Order matters in Lists (unlike Sets)</jc>
-	 * 	assertList(orderedList, <js>"first,second,third"</js>);
+	 * 	assertList(orderedList, <js>"first"</js>, <js>"second"</js>, <js>"third"</js>);
 	 *
 	 * 	<jc>// Test JsonList contents</jc>
-	 * 	assertList(jsonList, <js>"value1,value2,value3"</js>);
+	 * 	assertList(jsonList, <js>"value1"</js>, <js>"value2"</js>, <js>"value3"</js>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Comparison Modes:</h5>
@@ -538,7 +527,7 @@ public class TestUtils extends Utils2 {
 	 * <p class='bjava'>
 	 * 	<jc>// Elements are converted to {@link Utils#r readable} format and compared as strings</jc>
 	 * 	assertList(List.of(1, 2, 3), <js>"1"</js>, <js>"2"</js>, <js>"3"</js>);
-	 * 	assertList(List.of("a", "b"), <js>"a,b"</js>); <jc>// Comma-delimited syntax</jc>
+	 * 	assertList(List.of("a", "b"), <js>"a"</js>, <js>"b"</js>);
 	 * </p>
 	 *
 	 * <h6 class='section'>2. Predicate Testing (Functional Validation):</h6>
@@ -559,17 +548,8 @@ public class TestUtils extends Utils2 {
 	 * 	assertList(List.of(<jv>myObj1</jv>, <jv>myObj2</jv>), <jv>myObj1</jv>, <jv>myObj2</jv>); <jc>// Custom objects</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Escape Comma-Delimited Parsing:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Use '>' prefix to treat comma-containing string as single value</jc>
-	 * 	assertList(List.of("foo,bar"), <js>">foo,bar"</js>); <jc>// Tests single element "foo,bar"</jc>
-	 *
-	 * 	<jc>// Useful for CSV data or comma-separated content</jc>
-	 * 	assertList(<jv>csvList</jv>, <js>">item1,item2,item3"</js>); <jc>// Single element with commas</jc>
-	 * </p>
-	 *
 	 * @param list The List to test. Must not be null.
-	 * @param expected Either multiple arguments OR a single comma-delimited string of expected values.
+	 * @param expected Multiple arguments of expected values.
 	 *                 Can be Strings (readable format comparison), Predicates (functional testing), or Objects (direct equality).
 	 * @throws AssertionError if the list size, order, or contents don't match expected values
 	 * @see #assertSet(Set, Object...)
@@ -643,11 +623,6 @@ public class TestUtils extends Utils2 {
 		assertEquals(value, splitNested(fields).stream().map(x -> getEntry(o, x)).collect(joining(",")));
 	}
 
-	public static <K> void assertMap(Map<K,?> o, Function<String,K> keyGenerator, String fields, String value) {
-		if (o == null) throw new NullPointerException("Map was null");
-		assertEquals(value, splitNested(fields).stream().map(x -> getEntry(o, x)).collect(joining(",")));
-	}
-
 	/**
 	 * Asserts that mapped property access on an object returns expected values using a custom BiFunction.
 	 *
@@ -677,7 +652,7 @@ public class TestUtils extends Utils2 {
 			try {
 				m.put(p, f.apply(o, p));
 			} catch (Exception e) {
-				m.put(p, e.getClass().getSimpleName());
+				m.put(p, simpleClassNameOf(e));
 			}
 		}
 		assertMap(m, properties, expected);
@@ -700,14 +675,16 @@ public class TestUtils extends Utils2 {
 	 * Asserts that a collection is not null or empty.
 	 */
 	public static void assertNotEmpty(Collection<?> c) {
-		assertTrue(c != null && ! c.isEmpty());
+		assertNotNull(c, "Argument was null.");
+		assertTrue(! c.isEmpty());
 	}
 
 	/**
 	 * Asserts that a maps is not null or empty.
 	 */
 	public static void assertNotEmpty(Map<?,?> c) {
-		assertTrue(c != null && ! c.isEmpty());
+		assertNotNull(c, "Argument was null.");
+		assertTrue(! c.isEmpty());
 	}
 
 	public static void assertNotEqualsAny(Object o, Object...values) {
@@ -717,24 +694,8 @@ public class TestUtils extends Utils2 {
 		}
 	}
 
-	/**
-	 * Asserts an exception is not thrown
-	 * Example:  assertThrown(()->doSomething());
-	 */
-	public static void assertNotThrown(Snippet snippet) {
-		try {
-			snippet.run();
-		} catch (Throwable e) {
-			fail("Exception thrown.", e);
-		}
-	}
-
 	public static void assertPresent(Optional<?> o) {
 		assertTrue(o != null && o.isPresent(), "Optional was not present.");
-	}
-
-	public static void assertSameObject(Object o1, Object o2) {
-		assertSame(o1, o2);
 	}
 
 	/**
@@ -759,32 +720,13 @@ public class TestUtils extends Utils2 {
 	 * 	assertSet(mySet, <js>"active"</js>, <js>"pending"</js>, <js>"cancelled"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Comma-Delimited String Syntax (Preferred):</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Cleaner syntax for multiple values</jc>
-	 * 	assertSet(mySet, <js>"item1,item2,item3"</js>);
-	 *
-	 * 	<jc>// Test enum collections</jc>
-	 * 	assertSet(statusSet, <js>"ACTIVE,PENDING,CANCELLED"</js>);
-	 *
-	 * 	<jc>// Test MediaType collections</jc>
-	 * 	assertSet(mediaTypes, <js>"application/json,text/plain"</js>);
-	 * </p>
-	 *
 	 * <h5 class='section'>Special Cases:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Test empty set</jc>
 	 * 	assertSet(emptySet, <js>""</js>);
 	 *
-	 * 	<jc>// Test single value (both formats work)</jc>
+	 * 	<jc>// Test single value</jc>
 	 * 	assertSet(singletonSet, <js>"onlyValue"</js>);
-	 * 	assertSet(singletonSet, <js>"onlyValue"</js>); <jc>// Same as above</jc>
-	 *
-	 * 	<jc>// Escape comma-delimited parsing with '>' prefix</jc>
-	 * 	assertSet(csvSet, <js>">item1,item2,item3"</js>); <jc>// Treats as single value "item1,item2,item3"</jc>
-	 *
-	 * 	<jc>// Useful when testing collections that contain comma-separated strings</jc>
-	 * 	assertSet(Set.of("foo,bar"), <js>">foo,bar"</js>); <jc>// Tests single element "foo,bar"</jc>
 	 * </p>
 	 *
 	 * <h5 class='section'>Comparison Modes:</h5>
@@ -794,7 +736,7 @@ public class TestUtils extends Utils2 {
 	 * <p class='bjava'>
 	 * 	<jc>// Elements are converted to {@link Utils#r readable} format and compared as strings</jc>
 	 * 	assertSet(Set.of(1, 2, 3), <js>"1"</js>, <js>"2"</js>, <js>"3"</js>);
-	 * 	assertSet(Set.of("a", "b"), <js>"a,b"</js>); <jc>// Comma-delimited syntax</jc>
+	 * 	assertSet(Set.of("a", "b"), <js>"a"</js>, <js>"b"</js>);
 	 * </p>
 	 *
 	 * <h6 class='section'>2. Predicate Testing (Functional Validation):</h6>
@@ -818,14 +760,14 @@ public class TestUtils extends Utils2 {
 	 * <h5 class='section'>KeySet Testing:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Perfect for testing Map key sets</jc>
-	 * 	assertSet(myMap.keySet(), <js>"key1,key2,key3"</js>);
+	 * 	assertSet(myMap.keySet(), <js>"key1"</js>, <js>"key2"</js>, <js>"key3"</js>);
 	 *
 	 * 	<jc>// Test BeanMap property names</jc>
-	 * 	assertSet(beanMap.keySet(), <js>"name,age,email"</js>);
+	 * 	assertSet(beanMap.keySet(), <js>"name"</js>, <js>"age"</js>, <js>"email"</js>);
 	 * </p>
 	 *
 	 * @param list The Set or Collection to test. Must not be null.
-	 * @param expected Either multiple arguments OR a single comma-delimited string of expected values.
+	 * @param expected Multiple arguments of expected values.
 	 *                 Can be Strings (readable format comparison), Predicates (functional testing), or Objects (direct equality).
 	 * @throws AssertionError if the collection size or contents don't match expected values
 	 * @see #assertList(List, Object...)
@@ -846,12 +788,7 @@ public class TestUtils extends Utils2 {
 	 * Asserts the entries in a list matches the expected strings after they've been made {@link Utils#r readable}.
 	 */
 	public static void assertStream(Stream<?> stream, Object...expected) {
-		var list = stream.toList();
-		if (list.size() != expected.length)
-			fail(fs("Wrong list length.  expected={0}, actual={1}", expected.length, list.size()));
-		for (var i = 0; i < expected.length; i++)
-			if (ne(list.get(i), expected[i]))
-				fail(fs("Element at index {0} did not match.  expected={1}, actual={2}", i, expected[i], r(list.get(i))));
+		assertCollection(toList(stream), expected);
 	}
 
 	/**
@@ -866,14 +803,6 @@ public class TestUtils extends Utils2 {
 	 */
 	public static void assertString(String expected, Object actual, Supplier<String> messageSupplier) {
 		assertEquals(expected, r(actual), messageSupplier);
-	}
-
-	/**
-	 * Asserts that a collection is not null and empty.
-	 */
-	public static void assertStringEmpty(Object s) {
-		assertNotNull(s);
-		assertTrue(r(s).isEmpty());
 	}
 
 	public static <T extends Throwable> T assertThrowable(Class<? extends Throwable> expectedType, String expectedSubstring, T t) {
@@ -1006,6 +935,11 @@ public class TestUtils extends Utils2 {
 				m.setAccessible(true);
 				return m.invoke(o);
 			}
+			m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get") && x.getParameterCount() == 1 && x.getParameterTypes()[0] == String.class && x.getAnnotation(BeanIgnore.class) == null).findFirst().orElse(null);
+			if (m != null) {
+				m.setAccessible(true);
+				return m.invoke(o, name);
+			}
 			var c2 = c;
 			while (f == null && c2 != null) {
 				f = Arrays.stream(c2.getDeclaredFields()).filter(x -> x.getName().equals(name)).findFirst().orElse(null);
@@ -1015,25 +949,11 @@ public class TestUtils extends Utils2 {
 				f.setAccessible(true);
 				return f.get(o);
 			}
-			m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get") && x.getParameterCount() == 1 && x.getParameterTypes()[0] == String.class && x.getAnnotation(BeanIgnore.class) == null).findFirst().orElse(null);
-			if (m != null) {
-				m.setAccessible(true);
-				return m.invoke(o, name);
-			}
-			if ("length".equals(name) && c.isArray()) {
-				return Array.getLength(o);
-			}
-			if ("size".equals(name)) {
-				if (isConvertibleToList(o))
-					return convertToList(o).size();
-				else if (o instanceof Map o2)
-					return o2.size();
-			}
-			throw runtimeException("No field called {0} found on class {1}", name, c.getName());
+			throw runtimeException("Property {0} not found on object of type {1}", name, classNameOf(o));
 		});
 	}
 
-	static String getMessages(Throwable t) {
+	private static String getMessages(Throwable t) {
 		return Stream.iterate(t, Throwable::getCause).takeWhile(e -> e != null).map(Throwable::getMessage).collect(joining("\n"));
 	}
 
@@ -1049,24 +969,31 @@ public class TestUtils extends Utils2 {
 		var i = name.indexOf("{");
 		var pn = i == -1 ? name : name.substring(0, i);
 		var spn = i == -1 ? null : splitNestedInner(name);
-		var e = getEntry2(o, pn);
+		var e = ofNullable(getEntry2(o, pn.equals("<NULL>") ? null : pn)).map(Utils2::unwrap).orElse(null);
 		if (spn == null || e == null) return r(e);
-		return spn.stream().map(x -> getEntry(e, x)).collect(joining(",","{","}"));
+		return spn.stream().map(x -> getEntry(e, x)).map(Utils2::unwrap).map(Utils::r).collect(joining(",","{","}"));
 	}
 
-	@SuppressWarnings("unchecked")
 	private static Object getEntry2(Object o, String name) {
-		if (o instanceof List o2) return isNumeric(name) ? o2.get(parseInt(name)) : getBeanProp(o, name);
-		if (isArray(o)) return isNumeric(name) ? Array.get(o, parseInt(name)) : getBeanProp(o, name);
-		if (o instanceof Map o2) return opt(o2.get(eq("<<<NULL>>>",name) ? null : name)).orElse(name.equals("class") ? o.getClass() : null);
-		if (o instanceof Iterable o2) return isNumeric(name) ? toList(o2).get(parseInt(name)) : getBeanProp(o, name);
-		if (o instanceof Iterator o2) return isNumeric(name) ? toList(o2).get(parseInt(name)) : getBeanProp(o, name);
-		if (o instanceof Enumeration o2) return isNumeric(name) ? toList(o2).get(parseInt(name)) : getBeanProp(o, name);
+		if (isConvertibleToList(o)) {
+			var l = convertToList(o);
+			if (isNumeric(name))
+				return l.get(parseInt(name));
+			if (isArray(o)) {
+				if ("length".equals(name)) return l.size();
+				if ("size".equals(name)) return l.size();
+			} else {
+				if ("size".equals(name)) return l.size();
+			}
+		} else if (o instanceof Map o2) {
+			if (o2.containsKey(name)) return o2.get(name);
+			if ("size".equals(name)) return o2.size();
+		}
 		return getBeanProp(o, name);
 	}
 
 	private static boolean isConvertibleToList(Object o) {
-		return o != null && (o instanceof Collection || o instanceof Iterable || o instanceof Iterator || o instanceof Enumeration || isArray(o));
+		return o != null && (o instanceof Collection || o instanceof Iterable || o instanceof Iterator || o instanceof Enumeration || o instanceof Stream || isArray(o));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1076,8 +1003,9 @@ public class TestUtils extends Utils2 {
 		if (o instanceof Iterable o2) return toList(o2);
 		if (o instanceof Iterator o2) return toList(o2);
 		if (o instanceof Enumeration o2) return toList(o2);
+		if (o instanceof Stream o2) return toList(o2);
 		if (isArray(o)) return arrayToList(o);
-		throw runtimeException("Could not convert object of type {0} to a list", o.getClass().getName());
+		throw runtimeException("Could not convert object of type {0} to a list", classNameOf(o));
 	}
 
 	/**
@@ -1107,10 +1035,6 @@ public class TestUtils extends Utils2 {
 	 */
 	public static final ByteArrayInputStream inputStream(String in) {
 		return new ByteArrayInputStream(in.getBytes());
-	}
-
-	private static boolean isNumeric(String name) {
-		return StringUtils.isNumeric(name);
 	}
 
 	public static String json(Object o) {
@@ -1178,15 +1102,5 @@ public class TestUtils extends Utils2 {
 		s = s.copy().ws().ns().addNamespaceUrisToRoot().build();
 		var xml = s.serialize(o);
 		checkXmlWhitespace(xml);
-	}
-
-	/**
-	 * Helper method for creating StringBuilder objects.
-	 *
-	 * @param value The string value to wrap in a StringBuilder.
-	 * @return A new StringBuilder containing the specified value.
-	 */
-	public static StringBuilder sb(String value) {
-		return new StringBuilder(value);
 	}
 }

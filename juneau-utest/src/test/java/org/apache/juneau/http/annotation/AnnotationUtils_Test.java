@@ -55,7 +55,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	}
 
 	@Test void a01_Body() {
-		assertJsonContains(body().build().annotationType(), "Content");
+		assertBean(body().build().annotationType(), "simpleName", "Content");
 
 		assertTrue(ContentAnnotation.empty(A1.class.getAnnotation(Content.class)));
 		assertTrue(ContentAnnotation.empty(A2.class.getAnnotation(Content.class)));
@@ -66,7 +66,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	@Test void a02_Contact() {
 		var x1 = A1.class.getAnnotation(X1.class);
 
-		assertJsonContains(contact().build().annotationType(), "Contact");
+		assertBean(contact().build().annotationType(), "simpleName", "Contact");
 
 		assertTrue(ContactAnnotation.empty(x1.contact()));
 		assertTrue(ContactAnnotation.empty(contact().build()));
@@ -81,7 +81,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 		var f1 = A1.class.getField("f1");
 		var f2 = A2.class.getField("f1");
 
-		assertJsonContains(formData().build().annotationType(), "FormData");
+		assertBean(formData().build().annotationType(), "simpleName", "FormData");
 
 		assertTrue(FormDataAnnotation.empty(f1.getAnnotation(FormData.class)));
 		assertTrue(FormDataAnnotation.empty(f2.getAnnotation(FormData.class)));
@@ -95,7 +95,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	}
 
 	@Test void a04_HasFormData() {
-		assertJsonContains(hasFormData().build().annotationType(), "HasFormData");
+		assertBean(hasFormData().build().annotationType(), "simpleName", "HasFormData");
 
 		assertEquals("foo", hasFormData().name("foo").build().name());
 		assertEquals("foo", hasFormData().value("foo").build().value());
@@ -105,7 +105,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 		var f1 = A1.class.getField("f1");
 		var f2 = A2.class.getField("f1");
 
-		assertJsonContains(query().build().annotationType(), "Query");
+		assertBean(query().build().annotationType(), "simpleName", "Query");
 
 		assertTrue(QueryAnnotation.empty(f1.getAnnotation(Query.class)));
 		assertTrue(QueryAnnotation.empty(f2.getAnnotation(Query.class)));
@@ -119,7 +119,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	}
 
 	@Test void a06_HasQuery() {
-		assertJsonContains(hasQuery().build().annotationType(), "HasQuery");
+		assertBean(hasQuery().build().annotationType(), "simpleName", "HasQuery");
 
 		assertEquals("foo", hasQuery().name("foo").build().name());
 		assertEquals("foo", hasQuery().value("foo").build().value());
@@ -129,7 +129,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 		var f1 = A1.class.getField("f1");
 		var f2 = A2.class.getField("f1");
 
-		assertJsonContains(header().build().annotationType(), "Header");
+		assertBean(header().build().annotationType(), "simpleName", "Header");
 
 		assertTrue(HeaderAnnotation.empty(f1.getAnnotation(Header.class)));
 		assertTrue(HeaderAnnotation.empty(f2.getAnnotation(Header.class)));
@@ -145,7 +145,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	@Test void a08_License() {
 		var x = A1.class.getAnnotation(X1.class);
 
-		assertJsonContains(license().build().annotationType(), "License");
+		assertBean(license().build().annotationType(), "simpleName", "License");
 
 		assertTrue(LicenseAnnotation.empty(x.license()));
 		assertTrue(LicenseAnnotation.empty((License)null));
@@ -159,7 +159,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 		var f1 = A1.class.getField("f1");
 		var f2 = A2.class.getField("f1");
 
-		assertJsonContains(path().build().annotationType(), "Path");
+		assertBean(path().build().annotationType(), "simpleName", "Path");
 
 		assertTrue(PathAnnotation.empty(f1.getAnnotation(Path.class)));
 		assertTrue(PathAnnotation.empty(f2.getAnnotation(Path.class)));
@@ -173,14 +173,14 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	}
 
 	@Test void a10_Request() {
-		assertJsonContains(request().build().annotationType(), "Request");
+		assertBean(request().build().annotationType(), "simpleName", "Request");
 
 		assertString("org.apache.juneau.oapi.OpenApiParser", request().parser(OpenApiParser.class).build().parser().getName());
 		assertString("org.apache.juneau.oapi.OpenApiSerializer", request().serializer(OpenApiSerializer.class).build().serializer().getName());
 	}
 
 	@Test void a11_Response() {
-		assertJsonContains(response().build().annotationType(), "Response");
+		assertBean(response().build().annotationType(), "simpleName", "Response");
 
 		assertTrue(ResponseAnnotation.empty(A1.class.getAnnotation(Response.class)));
 		assertTrue(ResponseAnnotation.empty(A2.class.getAnnotation(Response.class)));
@@ -195,11 +195,11 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	}
 
 	@Test void a14_ResponseStatus() {
-		assertJsonContains(responseCode().build().annotationType(), "StatusCode");
+		assertBean(responseCode().build().annotationType(), "simpleName", "StatusCode");
 	}
 
 	@Test void a15_Tag() {
-		assertJsonContains(tag().build().annotationType(), "Tag");
+		assertBean(tag().build().annotationType(), "simpleName", "Tag");
 
 		assertArray(tag().description(a("foo")).build().description(), "foo");
 		assertEquals("foo", tag().externalDocs(externalDocs().url("foo").build()).build().externalDocs().url());		assertEquals("foo", tag().name("foo").build().name());	}
@@ -207,7 +207,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	@Test void a16_ExternalDocs() {
 		var x = A1.class.getAnnotation(X1.class);
 
-		assertJsonContains(externalDocs().build().annotationType(), "ExternalDocs");
+		assertBean(externalDocs().build().annotationType(), "simpleName", "ExternalDocs");
 
 		assertTrue(ExternalDocsAnnotation.empty(x.externalDocs()));
 		assertTrue(ExternalDocsAnnotation.empty((ExternalDocs)null));
@@ -219,7 +219,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	@Test void a17_Schema() {
 		var x = A1.class.getAnnotation(X1.class);
 
-		assertJsonContains(schema().build().annotationType(), "Schema");
+		assertBean(schema().build().annotationType(), "simpleName", "Schema");
 
 		assertTrue(SchemaAnnotation.empty(x.schema()));
 		assertTrue(SchemaAnnotation.empty((Schema)null));
@@ -281,7 +281,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	@Test void a18_SubItems() {
 		var x = A1.class.getAnnotation(X1.class);
 
-		assertJsonContains(subItems().build().annotationType(), "SubItems");
+		assertBean(subItems().build().annotationType(), "simpleName", "SubItems");
 
 		assertTrue(SubItemsAnnotation.empty(x.subItems()));
 		assertTrue(SubItemsAnnotation.empty((SubItems)null));
@@ -325,7 +325,7 @@ class AnnotationUtils_Test extends SimpleTestBase {
 	@Test void a19_Items() {
 		var x = A1.class.getAnnotation(X1.class);
 
-		assertJsonContains(items().build().annotationType(), "Items");
+		assertBean(items().build().annotationType(), "simpleName", "Items");
 
 		assertTrue(ItemsAnnotation.empty(x.items()));
 		assertTrue(ItemsAnnotation.empty((Items)null));

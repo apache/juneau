@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -62,12 +63,12 @@ class ParameterInfo_Test extends SimpleTestBase {
 
 		// Other
 		assertBean(
-			t.setDefault(sb("a")).setMaximum(1f).setMinimum(2f).setMultipleOf(3f),
+			t.setDefault(Utils.sb("a")).setMaximum(1f).setMinimum(2f).setMultipleOf(3f),
 			"default,maximum,minimum,multipleOf", "a,1.0,2.0,3.0");
 
 		// addEnum
-		assertSet(t.addEnum("a","b").getEnum(), "a,b");
-		assertSet(t.addEnum("c").getEnum(), "a,b,c");
+		assertSet(t.addEnum("a","b").getEnum(), "a", "b");
+		assertSet(t.addEnum("c").getEnum(), "a", "b", "c");
 	}
 
 	/**
@@ -137,30 +138,30 @@ class ParameterInfo_Test extends SimpleTestBase {
 			"f,h,k,d,true,{j},e,true,{g},c,a,1.0,true,4.0,true,3,6,i,2,5,true,[b],7.0,l");
 
 		t
-			.set("default", sb("a"))
-			.set("enum", sb("['b']"))
-			.set("allowEmptyValue", sb("true"))
-			.set("collectionFormat", sb("c"))
-			.set("description", sb("d"))
-			.set("exclusiveMaximum", sb("true"))
-			.set("exclusiveMinimum", sb("true"))
-			.set("format", sb("e"))
-			.set("in", sb("f"))
-			.set("items", sb("{type:'g'}"))
-			.set("maxItems", sb("2"))
-			.set("maxLength", sb("3"))
-			.set("maximum", sb("1.0"))
-			.set("minItems", sb("5"))
-			.set("minLength", sb("6"))
-			.set("minimum", sb("4.0"))
-			.set("multipleOf", sb("7.0"))
-			.set("name", sb("h"))
-			.set("pattern", sb("i"))
-			.set("$ref", sb("l"))
-			.set("required", sb("true"))
-			.set("schema", sb("{title:'j'}"))
-			.set("type", sb("k"))
-			.set("uniqueItems", sb("true"));
+			.set("default", Utils.sb("a"))
+			.set("enum", Utils.sb("['b']"))
+			.set("allowEmptyValue", Utils.sb("true"))
+			.set("collectionFormat", Utils.sb("c"))
+			.set("description", Utils.sb("d"))
+			.set("exclusiveMaximum", Utils.sb("true"))
+			.set("exclusiveMinimum", Utils.sb("true"))
+			.set("format", Utils.sb("e"))
+			.set("in", Utils.sb("f"))
+			.set("items", Utils.sb("{type:'g'}"))
+			.set("maxItems", Utils.sb("2"))
+			.set("maxLength", Utils.sb("3"))
+			.set("maximum", Utils.sb("1.0"))
+			.set("minItems", Utils.sb("5"))
+			.set("minLength", Utils.sb("6"))
+			.set("minimum", Utils.sb("4.0"))
+			.set("multipleOf", Utils.sb("7.0"))
+			.set("name", Utils.sb("h"))
+			.set("pattern", Utils.sb("i"))
+			.set("$ref", Utils.sb("l"))
+			.set("required", Utils.sb("true"))
+			.set("schema", Utils.sb("{title:'j'}"))
+			.set("type", Utils.sb("k"))
+			.set("uniqueItems", Utils.sb("true"));
 
 		assertBean(t,
 			"allowEmptyValue,collectionFormat,default,description,enum,exclusiveMaximum,exclusiveMinimum,format,in,items{type},maxItems,maxLength,maximum,minItems,minLength,minimum,multipleOf,name,pattern,$ref,required,schema{title},type,uniqueItems",
@@ -255,6 +256,6 @@ class ParameterInfo_Test extends SimpleTestBase {
 			.set("uniqueItems", true)
 			.set("$ref", "l");
 
-		assertSet(t.keySet(), "allowEmptyValue,collectionFormat,default,description,enum,exclusiveMaximum,exclusiveMinimum,format,in,items,maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,name,pattern,required,schema,type,uniqueItems,$ref");
+		assertSet(t.keySet(), "allowEmptyValue", "collectionFormat", "default", "description", "enum", "exclusiveMaximum", "exclusiveMinimum", "format", "in", "items", "maximum", "maxItems", "maxLength", "minimum", "minItems", "minLength", "multipleOf", "name", "pattern", "required", "schema", "type", "uniqueItems", "$ref");
 	}
 }

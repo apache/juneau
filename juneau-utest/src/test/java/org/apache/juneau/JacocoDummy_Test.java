@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.common.internal.*;
 import org.apache.juneau.internal.*;
@@ -37,6 +37,6 @@ class JacocoDummy_Test extends SimpleTestBase {
 		}
 
 		XmlFormat.valueOf(XmlFormat.DEFAULT.toString());
-		assertNotThrown(()->Visibility.valueOf(Visibility.DEFAULT.toString()));
+		assertDoesNotThrow(()->Visibility.valueOf(Visibility.DEFAULT.toString()));
 	}
 }

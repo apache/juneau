@@ -19,6 +19,7 @@ import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.common.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -70,9 +71,9 @@ class License_Test extends SimpleTestBase {
 			"a,b,ref");
 
 		t
-			.set("name", sb("a"))
-			.set("url", sb("b"))
-			.set("$ref", sb("ref"));
+			.set("name", Utils.sb("a"))
+			.set("url", Utils.sb("b"))
+			.set("$ref", Utils.sb("ref"));
 
 		assertBean(t,
 			"name,url,$ref",
@@ -125,6 +126,6 @@ class License_Test extends SimpleTestBase {
 			.set("url", URI.create("b"))
 			.set("$ref", "ref");
 
-		assertSet(t.keySet(), "name,url,$ref");
+		assertSet(t.keySet(), "name", "url", "$ref");
 	}
 }

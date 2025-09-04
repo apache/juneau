@@ -1064,7 +1064,7 @@ class ConfigMap_Test extends SimpleTestBase {
 		var cm = s.getMap("A.cfg");
 
 		// This is okay.
-		assertNotThrown(()->cm.setEntry("S1", "k1", "v1", "", null, null));
+		assertDoesNotThrow(()->cm.setEntry("S1", "k1", "v1", "", null, null));
 	}
 
 	private static ConfigStore initStore(String name, String...contents) {

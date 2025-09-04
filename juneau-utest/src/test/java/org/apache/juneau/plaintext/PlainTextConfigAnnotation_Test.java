@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.plaintext.annotation.*;
@@ -37,12 +37,12 @@ class PlainTextConfigAnnotation_Test extends SimpleTestBase {
 
 	@Test void noValuesSerializer() {
 		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		assertNotThrown(()->PlainTextSerializer.create().apply(al).build().createSession());
+		assertDoesNotThrow(()->PlainTextSerializer.create().apply(al).build().createSession());
 	}
 
 	@Test void noValuesParser() {
 		var al = AnnotationWorkList.of(sr, b.getAnnotationList());
-		assertNotThrown(()->PlainTextParser.create().apply(al).build().createSession());
+		assertDoesNotThrow(()->PlainTextParser.create().apply(al).build().createSession());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -54,11 +54,11 @@ class PlainTextConfigAnnotation_Test extends SimpleTestBase {
 
 	@Test void noAnnotationSerializer() {
 		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		assertNotThrown(()->PlainTextSerializer.create().apply(al).build().createSession());
+		assertDoesNotThrow(()->PlainTextSerializer.create().apply(al).build().createSession());
 	}
 
 	@Test void noAnnotationParser() {
 		var al = AnnotationWorkList.of(sr, c.getAnnotationList());
-		assertNotThrown(()->PlainTextParser.create().apply(al).build().createSession());
+		assertDoesNotThrow(()->PlainTextParser.create().apply(al).build().createSession());
 	}
 }

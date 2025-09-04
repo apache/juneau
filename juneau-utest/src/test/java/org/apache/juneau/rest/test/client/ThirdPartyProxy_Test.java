@@ -507,7 +507,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void da01_returnVoid(Input input) {
-		assertNotThrown(()->input.proxy.returnVoid());
+		assertDoesNotThrow(()->input.proxy.returnVoid());
 	}
 
 	@ParameterizedTest
@@ -896,7 +896,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea01_setInt(Input input) {
-		assertNotThrown(()->input.proxy.setInt(1));
+		assertDoesNotThrow(()->input.proxy.setInt(1));
 	}
 
 	@ParameterizedTest
@@ -908,37 +908,37 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea03_setInteger(Input input) {
-		assertNotThrown(()->input.proxy.setInteger(1));
+		assertDoesNotThrow(()->input.proxy.setInteger(1));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea04_setBoolean(Input input) {
-		assertNotThrown(()->input.proxy.setBoolean(true));
+		assertDoesNotThrow(()->input.proxy.setBoolean(true));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea05_setFloat(Input input) {
-		assertNotThrown(()->input.proxy.setFloat(1f));
+		assertDoesNotThrow(()->input.proxy.setFloat(1f));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea06_setFloatObject(Input input) {
-		assertNotThrown(()->input.proxy.setFloatObject(1f));
+		assertDoesNotThrow(()->input.proxy.setFloatObject(1f));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea07_setString(Input input) {
-		assertNotThrown(()->input.proxy.setString("foo"));
+		assertDoesNotThrow(()->input.proxy.setString("foo"));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea08_setNullString(Input input) {
-		assertNotThrown(()->input.proxy.setNullString(null));
+		assertDoesNotThrow(()->input.proxy.setNullString(null));
 	}
 
 	@ParameterizedTest
@@ -950,98 +950,98 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea10_setInt3dArray(Input input) {
-		assertNotThrown(()->input.proxy.setInt3dArray(new int[][][]{{{1},null},null}, 1));
+		assertDoesNotThrow(()->input.proxy.setInt3dArray(new int[][][]{{{1},null},null}, 1));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea11_setInteger3dArray(Input input) {
-		assertNotThrown(()->input.proxy.setInteger3dArray(new Integer[][][]{{{1,null},null},null}));
+		assertDoesNotThrow(()->input.proxy.setInteger3dArray(new Integer[][][]{{{1,null},null},null}));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea12_setString3dArray(Input input) {
-		assertNotThrown(()->input.proxy.setString3dArray(new String[][][]{{{"foo",null},null},null}));
+		assertDoesNotThrow(()->input.proxy.setString3dArray(new String[][][]{{{"foo",null},null},null}));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea13_setIntegerList(Input input) {
-		assertNotThrown(()->input.proxy.setIntegerList(alist(1,null)));
+		assertDoesNotThrow(()->input.proxy.setIntegerList(alist(1,null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea14_setInteger3dList(Input input) {
-		assertNotThrown(()->input.proxy.setInteger3dList(alist(alist(alist(1,null),null),null)));
+		assertDoesNotThrow(()->input.proxy.setInteger3dList(alist(alist(alist(1,null),null),null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea15_setInteger1d3dList(Input input) {
-		assertNotThrown(()->input.proxy.setInteger1d3dList(alist(new Integer[][][]{{{1,null},null},null},null)));
+		assertDoesNotThrow(()->input.proxy.setInteger1d3dList(alist(new Integer[][][]{{{1,null},null},null},null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea16_setInt1d3dList(Input input) {
-		assertNotThrown(()->input.proxy.setInt1d3dList(alist(new int[][][]{{{1,2},null},null},null)));
+		assertDoesNotThrow(()->input.proxy.setInt1d3dList(alist(new int[][][]{{{1,2},null},null},null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea17_setStringList(Input input) {
-		assertNotThrown(()->input.proxy.setStringList(alist("foo","bar",null)));
+		assertDoesNotThrow(()->input.proxy.setStringList(alist("foo","bar",null)));
 	}
 
 	// Beans
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb01_setBean(Input input) {
-		assertNotThrown(()->input.proxy.setBean(ABean.get()));
+		assertDoesNotThrow(()->input.proxy.setBean(ABean.get()));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb02_setBean3dArray(Input input) {
-		assertNotThrown(()->input.proxy.setBean3dArray(new ABean[][][]{{{ABean.get(),null},null},null}));
+		assertDoesNotThrow(()->input.proxy.setBean3dArray(new ABean[][][]{{{ABean.get(),null},null},null}));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb03_setBeanList(Input input) {
-		assertNotThrown(()->input.proxy.setBeanList(alist(ABean.get())));
+		assertDoesNotThrow(()->input.proxy.setBeanList(alist(ABean.get())));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb04_setBean1d3dList(Input input) {
-		assertNotThrown(()->input.proxy.setBean1d3dList(alist(new ABean[][][]{{{ABean.get(),null},null},null},null)));
+		assertDoesNotThrow(()->input.proxy.setBean1d3dList(alist(new ABean[][][]{{{ABean.get(),null},null},null},null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb05_setBeanMap(Input input) {
-		assertNotThrown(()->input.proxy.setBeanMap(map("foo",ABean.get())));
+		assertDoesNotThrow(()->input.proxy.setBeanMap(map("foo",ABean.get())));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb06_setBeanListMap(Input input) {
-		assertNotThrown(()->input.proxy.setBeanListMap(map("foo",alist(ABean.get()))));
+		assertDoesNotThrow(()->input.proxy.setBeanListMap(map("foo",alist(ABean.get()))));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb07_setBean1d3dListMap(Input input) {
-		assertNotThrown(()->input.proxy.setBean1d3dListMap(map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null))));
+		assertDoesNotThrow(()->input.proxy.setBean1d3dListMap(map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null))));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb08_setBeanListMapIntegerKeys(Input input) {
-		assertNotThrown(()->input.proxy.setBeanListMapIntegerKeys(map(1,alist(ABean.get()))));
+		assertDoesNotThrow(()->input.proxy.setBeanListMapIntegerKeys(map(1,alist(ABean.get()))));
 	}
 
 	// Typed beans
@@ -1049,49 +1049,49 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec01_setTypedBean(Input input) {
-		assertNotThrown(()->input.proxy.setTypedBean(TypedBeanImpl.get()));
+		assertDoesNotThrow(()->input.proxy.setTypedBean(TypedBeanImpl.get()));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec02_setTypedBean3dArray(Input input) {
-		assertNotThrown(()->input.proxy.setTypedBean3dArray(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null}));
+		assertDoesNotThrow(()->input.proxy.setTypedBean3dArray(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null}));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec03_setTypedBeanList(Input input) {
-		assertNotThrown(()->input.proxy.setTypedBeanList(alist((TypedBean)TypedBeanImpl.get())));
+		assertDoesNotThrow(()->input.proxy.setTypedBeanList(alist((TypedBean)TypedBeanImpl.get())));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec04_setTypedBean1d3dList(Input input) {
-		assertNotThrown(()->input.proxy.setTypedBean1d3dList(alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
+		assertDoesNotThrow(()->input.proxy.setTypedBean1d3dList(alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec05_setTypedBeanMap(Input input) {
-		assertNotThrown(()->input.proxy.setTypedBeanMap(map("foo",TypedBeanImpl.get())));
+		assertDoesNotThrow(()->input.proxy.setTypedBeanMap(map("foo",TypedBeanImpl.get())));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec06_setTypedBeanListMap(Input input) {
-		assertNotThrown(()->input.proxy.setTypedBeanListMap(map("foo",alist((TypedBean)TypedBeanImpl.get()))));
+		assertDoesNotThrow(()->input.proxy.setTypedBeanListMap(map("foo",alist((TypedBean)TypedBeanImpl.get()))));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec07_setTypedBean1d3dListMap(Input input) {
-		assertNotThrown(()->input.proxy.setTypedBean1d3dListMap(map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null))));
+		assertDoesNotThrow(()->input.proxy.setTypedBean1d3dListMap(map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null))));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec08_setTypedBeanListMapIntegerKeys(Input input) {
-		assertNotThrown(()->input.proxy.setTypedBeanListMapIntegerKeys(map(1,alist((TypedBean)TypedBeanImpl.get()))));
+		assertDoesNotThrow(()->input.proxy.setTypedBeanListMapIntegerKeys(map(1,alist((TypedBean)TypedBeanImpl.get()))));
 	}
 
 	// Swapped POJOs
@@ -1099,50 +1099,50 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ed01_setSwappedObject(Input input) {
-		assertNotThrown(()->input.proxy.setSwappedObject(new SwappedObject()));
+		assertDoesNotThrow(()->input.proxy.setSwappedObject(new SwappedObject()));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ed02_setSwappedObject3dArray(Input input) {
-		assertNotThrown(()->input.proxy.setSwappedObject3dArray(new SwappedObject[][][]{{{new SwappedObject(),null},null},null}));
+		assertDoesNotThrow(()->input.proxy.setSwappedObject3dArray(new SwappedObject[][][]{{{new SwappedObject(),null},null},null}));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ed03_setSwappedObjectMap(Input input) {
-		assertNotThrown(()->input.proxy.setSwappedObjectMap(map(new SwappedObject(),new SwappedObject())));
+		assertDoesNotThrow(()->input.proxy.setSwappedObjectMap(map(new SwappedObject(),new SwappedObject())));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ed04_setSwappedObject3dMap(Input input) {
-		assertNotThrown(()->input.proxy.setSwappedObject3dMap(map(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null})));
+		assertDoesNotThrow(()->input.proxy.setSwappedObject3dMap(map(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null})));
 	}
 
 	// Implicit swapped POJOs
 	@ParameterizedTest
 	@MethodSource("input")
 	void ee01_setImplicitSwappedObject(Input input) {
-		assertNotThrown(()->input.proxy.setImplicitSwappedObject(new ImplicitSwappedObject()));
+		assertDoesNotThrow(()->input.proxy.setImplicitSwappedObject(new ImplicitSwappedObject()));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ee02_setImplicitSwappedObject3dArray(Input input) {
-		assertNotThrown(()->input.proxy.setImplicitSwappedObject3dArray(new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null}));
+		assertDoesNotThrow(()->input.proxy.setImplicitSwappedObject3dArray(new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null}));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ee03_setImplicitSwappedObjectMap(Input input) {
-		assertNotThrown(()->input.proxy.setImplicitSwappedObjectMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject())));
+		assertDoesNotThrow(()->input.proxy.setImplicitSwappedObjectMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject())));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ee04_setImplicitSwappedObject3dMap(Input input) {
-		assertNotThrown(()->input.proxy.setImplicitSwappedObject3dMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null})));
+		assertDoesNotThrow(()->input.proxy.setImplicitSwappedObject3dMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null})));
 	}
 
 	// Enums
@@ -1150,49 +1150,49 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef01_setEnum(Input input) {
-		assertNotThrown(()->input.proxy.setEnum(TestEnum.TWO));
+		assertDoesNotThrow(()->input.proxy.setEnum(TestEnum.TWO));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef02_setEnum3d(Input input) {
-		assertNotThrown(()->input.proxy.setEnum3d(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
+		assertDoesNotThrow(()->input.proxy.setEnum3d(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef03_setEnumList(Input input) {
-		assertNotThrown(()->input.proxy.setEnumList(alist(TestEnum.TWO,null)));
+		assertDoesNotThrow(()->input.proxy.setEnumList(alist(TestEnum.TWO,null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef04_setEnum3dList(Input input) {
-		assertNotThrown(()->input.proxy.setEnum3dList(alist(alist(alist(TestEnum.TWO,null),null),null)));
+		assertDoesNotThrow(()->input.proxy.setEnum3dList(alist(alist(alist(TestEnum.TWO,null),null),null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef05_setEnum1d3dList(Input input) {
-		assertNotThrown(()->input.proxy.setEnum1d3dList(alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
+		assertDoesNotThrow(()->input.proxy.setEnum1d3dList(alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef06_setEnumMap(Input input) {
-		assertNotThrown(()->input.proxy.setEnumMap(map(TestEnum.ONE,TestEnum.TWO)));
+		assertDoesNotThrow(()->input.proxy.setEnumMap(map(TestEnum.ONE,TestEnum.TWO)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef07_setEnum3dArrayMap(Input input) {
-		assertNotThrown(()->input.proxy.setEnum3dArrayMap(map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null})));
+		assertDoesNotThrow(()->input.proxy.setEnum3dArrayMap(map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null})));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef08_setEnum1d3dListMap(Input input) {
-		assertNotThrown(()->input.proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))));
+		assertDoesNotThrow(()->input.proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
