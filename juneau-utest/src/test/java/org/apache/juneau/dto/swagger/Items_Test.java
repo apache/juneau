@@ -65,8 +65,8 @@ class Items_Test extends SimpleTestBase {
 			"default,maximum,minimum,multipleOf", "a,1.0,2.0,3.0");
 
 		// addEnum
-		assertSet(t.addEnum("a","b").getEnum(), "a", "b");
-		assertSet(t.addEnum("c").getEnum(), "a", "b", "c");
+		assertList(t.addEnum("a","b").getEnum(), "a", "b");
+		assertList(t.addEnum("c").getEnum(), "a", "b", "c");
 	}
 
 	/**
@@ -222,7 +222,7 @@ class Items_Test extends SimpleTestBase {
 			.set("type", "j")
 			.set("uniqueItems", true);
 
-		assertSet(
+		assertList(
 			t.keySet(),
 			"collectionFormat", "default", "enum", "exclusiveMaximum", "exclusiveMinimum", "format", "items", "maximum", "maxItems", "maxLength", "minimum", "minItems", "minLength", "multipleOf", "pattern", "$ref", "type", "uniqueItems"
 		);

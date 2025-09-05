@@ -111,6 +111,6 @@ class ExternalDocumentation_Test extends SimpleTestBase {
 			.set("url", "bar")
 			.set("$ref", "baz");
 
-		assertSet(t.keySet(), "description", "url", "$ref");
+		assertList(t.keySet(), "description", "url", "$ref");
 	}
 }

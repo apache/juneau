@@ -29,7 +29,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_builder_default() {
-		assertType(MethodExecStore.class, MethodExecStore.create().build());
+		assertInstanceOf(MethodExecStore.class, MethodExecStore.create().build());
 	}
 
 	public static class A1 extends MethodExecStore{
@@ -39,7 +39,7 @@ class MethodExecStore_Test extends SimpleTestBase {
 	}
 
 	@Test void a02_builder_implClass() {
-		assertType(A1.class, MethodExecStore.create().type(A1.class).build());
+		assertInstanceOf(A1.class, MethodExecStore.create().type(A1.class).build());
 	}
 
 	public static class A4 extends MethodExecStore {
@@ -75,11 +75,11 @@ class MethodExecStore_Test extends SimpleTestBase {
 		var bs = BeanStore.create().build();
 
 		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: A5a", ()->MethodExecStore.create(bs).type(A5b.class).build());
-		assertType(A5c.class, MethodExecStore.create(bs).type(A5c.class).build());
+		assertInstanceOf(A5c.class, MethodExecStore.create(bs).type(A5c.class).build());
 
 		bs.addBean(A5a.class, new A5a());
-		assertType(A5b.class, MethodExecStore.create(bs).type(A5b.class).build());
-		assertType(A5c.class, MethodExecStore.create(bs).type(A5c.class).build());
+		assertInstanceOf(A5b.class, MethodExecStore.create(bs).type(A5b.class).build());
+		assertInstanceOf(A5c.class, MethodExecStore.create(bs).type(A5c.class).build());
 	}
 
 
@@ -106,11 +106,11 @@ class MethodExecStore_Test extends SimpleTestBase {
 		var m = MethodExecStore_Test.class.getMethod("a06_builder_statsImplClass");
 
 		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: A6a", ()->MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m));
-		assertType(A6c.class, MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m));
+		assertInstanceOf(A6c.class, MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m));
 
 		bs.addBean(A6a.class, new A6a());
-		assertType(A6b.class, MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m));
-		assertType(A6c.class, MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m));
+		assertInstanceOf(A6b.class, MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m));
+		assertInstanceOf(A6c.class, MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m));
 	}
 
 	@Test public void a07_builder_thrownStore() throws Exception {  // NOSONAR - Must be public.

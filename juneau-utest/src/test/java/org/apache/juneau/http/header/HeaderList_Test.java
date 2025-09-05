@@ -140,10 +140,10 @@ class HeaderList_Test extends SimpleTestBase {
 
 	@Test void a08_get() {
 		var x = HeaderList.of(FOO_1, FOO_2, X_x);
-		assertArray(x.getAll(null));
-		assertArray(x.getAll("Foo"), "Foo: 1", "Foo: 2");
-		assertArray(x.getAll("FOO"), "Foo: 1", "Foo: 2");
-		assertArray(x.getAll("Bar"));
+		assertEmpty(x.getAll(null));
+		assertList(x.getAll("Foo"), "Foo: 1", "Foo: 2");
+		assertList(x.getAll("FOO"), "Foo: 1", "Foo: 2");
+		assertEmpty(x.getAll("Bar"));
 	}
 
 	@Test void a09_getFirst() {
@@ -237,8 +237,8 @@ class HeaderList_Test extends SimpleTestBase {
 
 	@Test void a18_caseSensitive() {
 		var x = HeaderList.create().caseSensitive(true).append(FOO_1, FOO_2, X_x);
-		assertArray(x.getAll("Foo"), "Foo: 1", "Foo: 2");
-		assertArray(x.getAll("FOO"));
+		assertList(x.getAll("Foo"), "Foo: 1", "Foo: 2");
+		assertEmpty(x.getAll("FOO"));
 	}
 
 	@Test void a19_size() {

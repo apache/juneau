@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.marshaller.*;
 import org.junit.jupiter.api.*;
 
 class HttpHeaders_Test extends SimpleTestBase {
@@ -39,15 +40,15 @@ class HttpHeaders_Test extends SimpleTestBase {
 		Headerable x8 = () -> header("X8","8");
 		SerializedPart x9 = serializedPart("X9",()->"9");
 
-		assertTypeAndJson(HttpHeaders.cast(x1), Header.class, "'X1: 1'");
-		assertTypeAndJson(HttpHeaders.cast(x2), Header.class, "'X2: 2'");
-		assertTypeAndJson(HttpHeaders.cast(x3), Header.class, "'X3: 3'");
-		assertTypeAndJson(HttpHeaders.cast(x4), Header.class, "'X4: 4'");
-		assertTypeAndJson(HttpHeaders.cast(x5), Header.class, "'X5: 5'");
-		assertTypeAndJson(HttpHeaders.cast(x6), Header.class, "'X6: 6'");
-		assertTypeAndJson(HttpHeaders.cast(x7), Header.class, "'X7: 7'");
-		assertTypeAndJson(HttpHeaders.cast(x8), Header.class, "'X8: 8'");
-		assertTypeAndJson(HttpHeaders.cast(x9), Header.class, "'X9: 9'");
+		assertTypeAndJson(Header.class, "'X1: 1'", HttpHeaders.cast(x1));
+		assertTypeAndJson(Header.class, "'X2: 2'", HttpHeaders.cast(x2));
+		assertTypeAndJson(Header.class, "'X3: 3'", HttpHeaders.cast(x3));
+		assertTypeAndJson(Header.class, "'X4: 4'", HttpHeaders.cast(x4));
+		assertTypeAndJson(Header.class, "'X5: 5'", HttpHeaders.cast(x5));
+		assertTypeAndJson(Header.class, "'X6: 6'", HttpHeaders.cast(x6));
+		assertTypeAndJson(Header.class, "'X7: 7'", HttpHeaders.cast(x7));
+		assertTypeAndJson(Header.class, "'X8: 8'", HttpHeaders.cast(x8));
+		assertTypeAndJson(Header.class, "'X9: 9'", HttpHeaders.cast(x9));
 
 		assertThrowsWithMessage(BasicRuntimeException.class, "Object of type java.lang.String could not be converted to a Header.", ()->HttpHeaders.cast("X"));
 		assertThrowsWithMessage(BasicRuntimeException.class, "Object of type null could not be converted to a Header.", ()->HttpHeaders.cast(null));
@@ -78,4 +79,11 @@ class HttpHeaders_Test extends SimpleTestBase {
 		return basicPart(name, val);
 	}
 
+	/**
+	 * Asserts the JSON5 representation of the specified object.
+	 */
+	private void assertTypeAndJson(Class<?> c, String json, Object value) {
+		assertInstanceOf(c, value);
+		assertEquals(json, Json5.DEFAULT.write(value));
+	}
 }

@@ -200,9 +200,10 @@ class AnnotationUtils_Test extends SimpleTestBase {
 
 	@Test void a15_Tag() {
 		assertBean(tag().build().annotationType(), "simpleName", "Tag");
-
-		assertArray(tag().description(a("foo")).build().description(), "foo");
-		assertEquals("foo", tag().externalDocs(externalDocs().url("foo").build()).build().externalDocs().url());		assertEquals("foo", tag().name("foo").build().name());	}
+		assertList(tag().description(a("foo")).build().description(), "foo");
+		assertEquals("foo", tag().externalDocs(externalDocs().url("foo").build()).build().externalDocs().url());
+		assertEquals("foo", tag().name("foo").build().name());
+	}
 
 	@Test void a16_ExternalDocs() {
 		var x = A1.class.getAnnotation(X1.class);

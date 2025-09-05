@@ -798,7 +798,7 @@ class Swagger_Test extends SimpleTestBase {
 
 	@Test void f01_operation_tags_default() throws Exception {
 		assertNull(getSwagger(new F1()).getPaths().get("/path/{foo}").get("get").getTags());
-		assertSet(getSwaggerWithFile(new F1()).getPaths().get("/path/{foo}").get("get").getTags(), "s-tag");
+		assertList(getSwaggerWithFile(new F1()).getPaths().get("/path/{foo}").get("get").getTags(), "s-tag");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
@@ -810,8 +810,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void f02_operation_tags_swaggerOnClass() throws Exception {
-		assertSet(getSwagger(new F2()).getPaths().get("/path/{foo}").get("get").getTags(), "a-tag");
-		assertSet(getSwaggerWithFile(new F2()).getPaths().get("/path/{foo}").get("get").getTags(), "a-tag");
+		assertList(getSwagger(new F2()).getPaths().get("/path/{foo}").get("get").getTags(), "a-tag");
+		assertList(getSwaggerWithFile(new F2()).getPaths().get("/path/{foo}").get("get").getTags(), "a-tag");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
@@ -823,8 +823,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void f03_operation_tags_swaggerOnMethod() throws Exception {
-		assertSet(getSwagger(new F3()).getPaths().get("/path/{foo}").get("get").getTags(), "b-tag");
-		assertSet(getSwaggerWithFile(new F3()).getPaths().get("/path/{foo}").get("get").getTags(), "b-tag");
+		assertList(getSwagger(new F3()).getPaths().get("/path/{foo}").get("get").getTags(), "b-tag");
+		assertList(getSwaggerWithFile(new F3()).getPaths().get("/path/{foo}").get("get").getTags(), "b-tag");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
@@ -836,8 +836,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void f04_operation_tags_swaggerOnAnnotation() throws Exception {
-		assertSet(getSwagger(new F4()).getPaths().get("/path/{foo}").get("get").getTags(), "c-tag-1", "c-tag-2");
-		assertSet(getSwaggerWithFile(new F4()).getPaths().get("/path/{foo}").get("get").getTags(), "c-tag-1", "c-tag-2");
+		assertList(getSwagger(new F4()).getPaths().get("/path/{foo}").get("get").getTags(), "c-tag-1", "c-tag-2");
+		assertList(getSwaggerWithFile(new F4()).getPaths().get("/path/{foo}").get("get").getTags(), "c-tag-1", "c-tag-2");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
@@ -849,8 +849,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void f05_operation_tags_swaggerOnAnnotation() throws Exception {
-		assertSet(getSwagger(new F5()).getPaths().get("/path/{foo}").get("get").getTags(), "c-tag-1", "c-tag-2");
-		assertSet(getSwaggerWithFile(new F5()).getPaths().get("/path/{foo}").get("get").getTags(), "c-tag-1", "c-tag-2");
+		assertList(getSwagger(new F5()).getPaths().get("/path/{foo}").get("get").getTags(), "c-tag-1", "c-tag-2");
+		assertList(getSwaggerWithFile(new F5()).getPaths().get("/path/{foo}").get("get").getTags(), "c-tag-1", "c-tag-2");
 	}
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}':{get:{tags:'a-tags'}}}"))
@@ -862,8 +862,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void f06_operation_tags_swaggerOnAnnotation_localized() throws Exception {
-		assertSet(getSwagger(new F6()).getPaths().get("/path/{foo}").get("get").getTags(), "l-foo");
-		assertSet(getSwaggerWithFile(new F6()).getPaths().get("/path/{foo}").get("get").getTags(), "l-foo");
+		assertList(getSwagger(new F6()).getPaths().get("/path/{foo}").get("get").getTags(), "l-foo");
+		assertList(getSwaggerWithFile(new F6()).getPaths().get("/path/{foo}").get("get").getTags(), "l-foo");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -964,7 +964,7 @@ class Swagger_Test extends SimpleTestBase {
 
 	@Test void h01_operation_consumes_default() throws Exception {
 		assertNull(getSwagger(new H1()).getPaths().get("/path/{foo}").get("get").getConsumes());
-		assertSet(getSwaggerWithFile(new H1()).getPaths().get("/path/{foo}").get("get").getConsumes(), "s-consumes");
+		assertList(getSwaggerWithFile(new H1()).getPaths().get("/path/{foo}").get("get").getConsumes(), "s-consumes");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
@@ -976,8 +976,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void h02_operation_consumes_swaggerOnClass() throws Exception {
-		assertSet(getSwagger(new H2()).getPaths().get("/path/{foo}").get("get").getConsumes(), "a-consumes");
-		assertSet(getSwaggerWithFile(new H2()).getPaths().get("/path/{foo}").get("get").getConsumes(), "a-consumes");
+		assertList(getSwagger(new H2()).getPaths().get("/path/{foo}").get("get").getConsumes(), "a-consumes");
+		assertList(getSwaggerWithFile(new H2()).getPaths().get("/path/{foo}").get("get").getConsumes(), "a-consumes");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
@@ -989,8 +989,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void h03_operation_consumes_swaggerOnMethod() throws Exception {
-		assertSet(getSwagger(new H3()).getPaths().get("/path/{foo}").get("get").getConsumes(), "b-consumes");
-		assertSet(getSwaggerWithFile(new H3()).getPaths().get("/path/{foo}").get("get").getConsumes(), "b-consumes");
+		assertList(getSwagger(new H3()).getPaths().get("/path/{foo}").get("get").getConsumes(), "b-consumes");
+		assertList(getSwaggerWithFile(new H3()).getPaths().get("/path/{foo}").get("get").getConsumes(), "b-consumes");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
@@ -1002,8 +1002,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void h04_operation_consumes_swaggerOnAnnotation() throws Exception {
-		assertSet(getSwagger(new H4()).getPaths().get("/path/{foo}").get("get").getConsumes(), "c-consumes-1", "c-consumes-2");
-		assertSet(getSwaggerWithFile(new H4()).getPaths().get("/path/{foo}").get("get").getConsumes(), "c-consumes-1", "c-consumes-2");
+		assertList(getSwagger(new H4()).getPaths().get("/path/{foo}").get("get").getConsumes(), "c-consumes-1", "c-consumes-2");
+		assertList(getSwaggerWithFile(new H4()).getPaths().get("/path/{foo}").get("get").getConsumes(), "c-consumes-1", "c-consumes-2");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
@@ -1015,8 +1015,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void h05_operation_consumes_swaggerOnAnnotation() throws Exception {
-		assertSet(getSwagger(new H5()).getPaths().get("/path/{foo}").get("get").getConsumes(), "c-consumes-1", "c-consumes-2");
-		assertSet(getSwaggerWithFile(new H5()).getPaths().get("/path/{foo}").get("get").getConsumes(), "c-consumes-1", "c-consumes-2");
+		assertList(getSwagger(new H5()).getPaths().get("/path/{foo}").get("get").getConsumes(), "c-consumes-1", "c-consumes-2");
+		assertList(getSwaggerWithFile(new H5()).getPaths().get("/path/{foo}").get("get").getConsumes(), "c-consumes-1", "c-consumes-2");
 	}
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
@@ -1028,8 +1028,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void h06_operation_consumes_swaggerOnAnnotation_localized() throws Exception {
-		assertSet(getSwagger(new H6()).getPaths().get("/path/{foo}").get("get").getConsumes(), "l-foo");
-		assertSet(getSwaggerWithFile(new H6()).getPaths().get("/path/{foo}").get("get").getConsumes(), "l-foo");
+		assertList(getSwagger(new H6()).getPaths().get("/path/{foo}").get("get").getConsumes(), "l-foo");
+		assertList(getSwaggerWithFile(new H6()).getPaths().get("/path/{foo}").get("get").getConsumes(), "l-foo");
 	}
 
 	@Rest(parsers={JsonParser.class})
@@ -1058,8 +1058,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void h08_operation_consumes_parsersOnClassAndMethod() throws Exception {
-		assertSet(getSwagger(new H8()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "text/xml", "application/xml");
-		assertSet(getSwaggerWithFile(new H8()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "text/xml", "application/xml");
+		assertList(getSwagger(new H8()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "text/xml", "application/xml");
+		assertList(getSwaggerWithFile(new H8()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "text/xml", "application/xml");
 	}
 
 	@Rest(parsers={JsonParser.class},swagger=@Swagger("paths:{'/path2/{foo}':{put:{consumes:['a-consumes']}}}"))
@@ -1071,8 +1071,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void h09_operation_consumes_parsersOnClassAndMethodWithSwagger() throws Exception {
-		assertSet(getSwagger(new H9()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "a-consumes");
-		assertSet(getSwaggerWithFile(new H9()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "a-consumes");
+		assertList(getSwagger(new H9()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "a-consumes");
+		assertList(getSwaggerWithFile(new H9()).getPaths().get("/path2/{foo}").get("put").getConsumes(), "a-consumes");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1090,7 +1090,7 @@ class Swagger_Test extends SimpleTestBase {
 
 	@Test void i01_operation_produces_default() throws Exception {
 		assertNull(getSwagger(new I1()).getPaths().get("/path/{foo}").get("get").getProduces());
-		assertSet(getSwaggerWithFile(new I1()).getPaths().get("/path/{foo}").get("get").getProduces(), "s-produces");
+		assertList(getSwaggerWithFile(new I1()).getPaths().get("/path/{foo}").get("get").getProduces(), "s-produces");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
@@ -1102,8 +1102,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void i02_operation_produces_swaggerOnClass() throws Exception {
-		assertSet(getSwagger(new I2()).getPaths().get("/path/{foo}").get("get").getProduces(), "a-produces");
-		assertSet(getSwaggerWithFile(new I2()).getPaths().get("/path/{foo}").get("get").getProduces(), "a-produces");
+		assertList(getSwagger(new I2()).getPaths().get("/path/{foo}").get("get").getProduces(), "a-produces");
+		assertList(getSwaggerWithFile(new I2()).getPaths().get("/path/{foo}").get("get").getProduces(), "a-produces");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
@@ -1115,8 +1115,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void i03_operation_produces_swaggerOnMethod() throws Exception {
-		assertSet(getSwagger(new I3()).getPaths().get("/path/{foo}").get("get").getProduces(), "b-produces");
-		assertSet(getSwaggerWithFile(new I3()).getPaths().get("/path/{foo}").get("get").getProduces(), "b-produces");
+		assertList(getSwagger(new I3()).getPaths().get("/path/{foo}").get("get").getProduces(), "b-produces");
+		assertList(getSwaggerWithFile(new I3()).getPaths().get("/path/{foo}").get("get").getProduces(), "b-produces");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
@@ -1128,8 +1128,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void i04_operation_produces_swaggerOnAnnotation() throws Exception {
-		assertSet(getSwagger(new I4()).getPaths().get("/path/{foo}").get("get").getProduces(), "c-produces-1", "c-produces-2");
-		assertSet(getSwaggerWithFile(new I4()).getPaths().get("/path/{foo}").get("get").getProduces(), "c-produces-1", "c-produces-2");
+		assertList(getSwagger(new I4()).getPaths().get("/path/{foo}").get("get").getProduces(), "c-produces-1", "c-produces-2");
+		assertList(getSwaggerWithFile(new I4()).getPaths().get("/path/{foo}").get("get").getProduces(), "c-produces-1", "c-produces-2");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
@@ -1141,8 +1141,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void i05_operation_produces_swaggerOnAnnotation() throws Exception {
-		assertSet(getSwagger(new I5()).getPaths().get("/path/{foo}").get("get").getProduces(), "c-produces-1", "c-produces-2");
-		assertSet(getSwaggerWithFile(new I5()).getPaths().get("/path/{foo}").get("get").getProduces(), "c-produces-1", "c-produces-2");
+		assertList(getSwagger(new I5()).getPaths().get("/path/{foo}").get("get").getProduces(), "c-produces-1", "c-produces-2");
+		assertList(getSwaggerWithFile(new I5()).getPaths().get("/path/{foo}").get("get").getProduces(), "c-produces-1", "c-produces-2");
 	}
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
@@ -1154,8 +1154,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void i06_operation_produces_swaggerOnAnnotation_localized() throws Exception {
-		assertSet(getSwagger(new I6()).getPaths().get("/path/{foo}").get("get").getProduces(), "l-foo");
-		assertSet(getSwaggerWithFile(new I6()).getPaths().get("/path/{foo}").get("get").getProduces(), "l-foo");
+		assertList(getSwagger(new I6()).getPaths().get("/path/{foo}").get("get").getProduces(), "l-foo");
+		assertList(getSwaggerWithFile(new I6()).getPaths().get("/path/{foo}").get("get").getProduces(), "l-foo");
 	}
 
 	@Rest(serializers={JsonSerializer.class})
@@ -1184,8 +1184,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void i08_operation_produces_serializersOnClassAndMethod() throws Exception {
-		assertSet(getSwagger(new I8()).getPaths().get("/path2/{foo}").get("put").getProduces(), "text/xml");
-		assertSet(getSwaggerWithFile(new I8()).getPaths().get("/path2/{foo}").get("put").getProduces(), "text/xml");
+		assertList(getSwagger(new I8()).getPaths().get("/path2/{foo}").get("put").getProduces(), "text/xml");
+		assertList(getSwaggerWithFile(new I8()).getPaths().get("/path2/{foo}").get("put").getProduces(), "text/xml");
 	}
 
 	@Rest(serializers={JsonSerializer.class},swagger=@Swagger("paths:{'/path2/{foo}':{put:{produces:['a-produces']}}}"))
@@ -1197,8 +1197,8 @@ class Swagger_Test extends SimpleTestBase {
 	}
 
 	@Test void i09_operation_produces_serializersOnClassAndMethodWithSwagger() throws Exception {
-		assertSet(getSwagger(new I9()).getPaths().get("/path2/{foo}").get("put").getProduces(), "a-produces");
-		assertSet(getSwaggerWithFile(new I9()).getPaths().get("/path2/{foo}").get("put").getProduces(), "a-produces");
+		assertList(getSwagger(new I9()).getPaths().get("/path2/{foo}").get("put").getProduces(), "a-produces");
+		assertList(getSwaggerWithFile(new I9()).getPaths().get("/path2/{foo}").get("put").getProduces(), "a-produces");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

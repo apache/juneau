@@ -30,9 +30,9 @@ class DefaultClassList_Test extends SimpleTestBase {
 
 		x = of(Long.class,null);
 		assertEmpty(x.get(String.class));
-		assertPresent(x.get(Long.class));
-		assertPresent(x.get(Number.class));
-		assertPresent(x.get(Object.class));
+		assertNotEmpty(x.get(Long.class));
+		assertNotEmpty(x.get(Number.class));
+		assertNotEmpty(x.get(Object.class));
 
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'type' cannot be null.", ()->create().get(null));
 	}

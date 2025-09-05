@@ -66,8 +66,8 @@ class HeaderInfo_Test extends SimpleTestBase {
 			"example,maximum,minimum,multipleOf", "1.0,2.0,3.0,4.0");
 
 		// addEnum
-		assertSet(t.addEnum("a","b").getEnum(), "a", "b");
-		assertSet(t.addEnum("c").getEnum(), "a", "b", "c");
+		assertList(t.addEnum("a","b").getEnum(), "a", "b");
+		assertList(t.addEnum("c").getEnum(), "a", "b", "c");
 	}
 
 	/**
@@ -231,7 +231,7 @@ class HeaderInfo_Test extends SimpleTestBase {
 			.set("type", "j")
 			.set("uniqueItems", true);
 
-		assertSet(t.keySet(), "collectionFormat", "default", "description", "enum", "example", "exclusiveMaximum", "exclusiveMinimum", "format", "items", "maximum", "maxItems", "maxLength", "minimum", "minItems", "minLength", "multipleOf", "pattern", "$ref", "type", "uniqueItems");
+		assertList(t.keySet(), "collectionFormat", "default", "description", "enum", "example", "exclusiveMaximum", "exclusiveMinimum", "format", "items", "maximum", "maxItems", "maxLength", "minimum", "minItems", "minLength", "multipleOf", "pattern", "$ref", "type", "uniqueItems");
 	}
 
 	@Test void c01_strict() {

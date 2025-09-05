@@ -113,7 +113,7 @@ class ResponseInfo_Test extends SimpleTestBase {
 			"description,examples,headers,schema,$ref",
 			"String,LinkedHashMap,LinkedHashMap,SchemaInfo,StringBuilder");
 
-		assertType(HeaderInfo.class, t.get("headers", Map.class).values().iterator().next());
+		assertInstanceOf(HeaderInfo.class, t.get("headers", Map.class).values().iterator().next());
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));
@@ -158,6 +158,6 @@ class ResponseInfo_Test extends SimpleTestBase {
 			.set("schema", schemaInfo().setType("d"))
 			.set("$ref", "e");
 
-		assertSet(t.keySet(), "description", "examples", "headers", "schema", "$ref");
+		assertList(t.keySet(), "description", "examples", "headers", "schema", "$ref");
 	}
 }

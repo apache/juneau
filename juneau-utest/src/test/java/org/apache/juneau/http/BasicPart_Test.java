@@ -25,6 +25,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.marshaller.*;
 import org.junit.jupiter.api.*;
 
 class BasicPart_Test extends SimpleTestBase {
@@ -66,14 +67,14 @@ class BasicPart_Test extends SimpleTestBase {
 		NameValuePairable x7 = () -> part("X7","7");
 		Headerable x8 = () -> header("X8","8");
 
-		assertTypeAndJson(BasicPart.cast(x1), NameValuePair.class, "'X1=1'");
-		assertTypeAndJson(BasicPart.cast(x2), NameValuePair.class, "'X2=2'");
-		assertTypeAndJson(BasicPart.cast(x3), NameValuePair.class, "'X3: 3'");
-		assertTypeAndJson(BasicPart.cast(x4), NameValuePair.class, "'X4: 4'");
-		assertTypeAndJson(BasicPart.cast(x5), NameValuePair.class, "'X5=5'");
-		assertTypeAndJson(BasicPart.cast(x6), NameValuePair.class, "{name:'X6',value:'6'}");
-		assertTypeAndJson(BasicPart.cast(x7), NameValuePair.class, "'X7=7'");
-		assertTypeAndJson(BasicPart.cast(x8), NameValuePair.class, "'X8=8'");
+		assertTypeAndJson(NameValuePair.class, "'X1=1'", BasicPart.cast(x1));
+		assertTypeAndJson(NameValuePair.class, "'X2=2'", BasicPart.cast(x2));
+		assertTypeAndJson(NameValuePair.class, "'X3: 3'", BasicPart.cast(x3));
+		assertTypeAndJson(NameValuePair.class, "'X4: 4'", BasicPart.cast(x4));
+		assertTypeAndJson(NameValuePair.class, "'X5=5'", BasicPart.cast(x5));
+		assertTypeAndJson(NameValuePair.class, "{name:'X6',value:'6'}", BasicPart.cast(x6));
+		assertTypeAndJson(NameValuePair.class, "'X7=7'", BasicPart.cast(x7));
+		assertTypeAndJson(NameValuePair.class, "'X8=8'", BasicPart.cast(x8));
 
 		assertThrowsWithMessage(BasicRuntimeException.class, "Object of type java.lang.String could not be converted to a Part.", ()->BasicPart.cast("X"));
 		assertThrowsWithMessage(BasicRuntimeException.class, "Object of type null could not be converted to a Part.", ()->BasicPart.cast(null));
@@ -114,5 +115,13 @@ class BasicPart_Test extends SimpleTestBase {
 
 	private BasicPart part(String name, Object val) {
 		return basicPart(name, val);
+	}
+
+	/**
+	 * Asserts the JSON5 representation of the specified object.
+	 */
+	private void assertTypeAndJson(Class<?> c, String json, Object value) {
+		assertInstanceOf(c, value);
+		assertEquals(json, Json5.DEFAULT.write(value));
 	}
 }

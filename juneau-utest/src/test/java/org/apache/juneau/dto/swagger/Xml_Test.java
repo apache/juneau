@@ -143,6 +143,6 @@ class Xml_Test extends SimpleTestBase {
 			.set("wrapped", true)
 			.set("$ref", "d");
 
-		assertSet(t.keySet(), "attribute", "name", "namespace", "prefix", "wrapped", "$ref");
+		assertList(t.keySet(), "attribute", "name", "namespace", "prefix", "wrapped", "$ref");
 	}
 }

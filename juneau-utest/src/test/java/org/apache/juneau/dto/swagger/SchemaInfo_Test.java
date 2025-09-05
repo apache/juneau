@@ -71,9 +71,9 @@ class SchemaInfo_Test extends SimpleTestBase {
 		assertJson("{}", t.setAdditionalProperties(new SchemaInfo()).getAdditionalProperties());
 
 		// addEnum and addAllOf
-		assertSet(t.addEnum("a","b").getEnum(), "a", "b");
-		assertSet(t.addEnum("c").getEnum(), "a", "b", "c");
-		assertSet(t.addAllOf("d","e").getAllOf(), "d", "e");
+		assertList(t.addEnum("a","b").getEnum(), "a", "b");
+		assertList(t.addEnum("c").getEnum(), "a", "b", "c");
+		assertList(t.addAllOf("d","e").getAllOf(), "d", "e");
 	}
 
 	/**
@@ -291,6 +291,6 @@ class SchemaInfo_Test extends SimpleTestBase {
 			.set("uniqueItems", true)
 			.set("xml", xml().setName("o"));
 
-		assertSet(t.keySet(), "additionalProperties", "allOf", "default", "description", "discriminator", "enum", "example", "exclusiveMaximum", "exclusiveMinimum", "externalDocs", "format", "items", "maximum", "maxItems", "maxLength", "maxProperties", "minimum", "minItems", "minLength", "minProperties", "multipleOf", "pattern", "properties", "readOnly", "$ref", "requiredProperties", "title", "type", "uniqueItems", "xml");
+		assertList(t.keySet(), "additionalProperties", "allOf", "default", "description", "discriminator", "enum", "example", "exclusiveMaximum", "exclusiveMinimum", "externalDocs", "format", "items", "maximum", "maxItems", "maxLength", "maxProperties", "minimum", "minItems", "minLength", "minProperties", "multipleOf", "pattern", "properties", "readOnly", "$ref", "requiredProperties", "title", "type", "uniqueItems", "xml");
 	}
 }

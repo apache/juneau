@@ -140,7 +140,7 @@ class BeanStore_Test extends SimpleTestBase {
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertTrue(b.hasBean(A1.class));
 			assertEquals(a1b, b.getBean(A1.class).get());
-			assertStream(b.stream(A1.class).map(BeanStoreEntry::get), a1b, a1a);
+			assertList(b.stream(A1.class).map(BeanStoreEntry::get), a1b, a1a);
 		}
 
 		b1c.add(A2.class, a2a);
@@ -148,12 +148,12 @@ class BeanStore_Test extends SimpleTestBase {
 		for (var b : array(b1p, b2p)) {
 			assertFalse(b.hasBean(A2.class));
 			assertEmpty(b.getBean(A2.class));
-			assertStream(b.stream(A2.class));
+			assertEmpty(b.stream(A2.class));
 		}
 		for (var b : array(b1c, b2c)) {
 			assertTrue(b.hasBean(A2.class));
 			assertEquals(a2a, b.getBean(A2.class).get());
-			assertStream(b.stream(A2.class).map(BeanStoreEntry::get), a2a);
+			assertList(b.stream(A2.class).map(BeanStoreEntry::get), a2a);
 		}
 
 		assertMatches("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}", b1p);
@@ -169,12 +169,12 @@ class BeanStore_Test extends SimpleTestBase {
 		for (var b : array(b1p, b2p)) {
 			assertFalse(b.hasBean(A1.class));
 			assertEmpty(b.getBean(A1.class));
-			assertStream(b.stream(A1.class));
+			assertEmpty(b.stream(A1.class));
 		}
 		for (var b : array(b1c, b2c)) {
 			assertTrue(b.hasBean(A1.class));
 			assertEquals(a1a, b.getBean(A1.class).get());
-			assertStream(b.stream(A1.class).map(BeanStoreEntry::get), a1a);
+			assertList(b.stream(A1.class).map(BeanStoreEntry::get), a1a);
 		}
 
 		b1c.removeBean(A1.class);
@@ -182,7 +182,7 @@ class BeanStore_Test extends SimpleTestBase {
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertFalse(b.hasBean(A1.class));
 			assertEmpty(b.getBean(A1.class));
-			assertStream(b.stream(A1.class));
+			assertEmpty(b.stream(A1.class));
 		}
 	}
 
@@ -200,10 +200,10 @@ class BeanStore_Test extends SimpleTestBase {
 		}
 
 		for (var b : array(b1p, b2p)) {
-			assertStream(b.stream(A1.class).map(BeanStoreEntry::get), a1d,a1c,a1b,a1a);
+			assertList(b.stream(A1.class).map(BeanStoreEntry::get), a1d,a1c,a1b,a1a);
 		}
 		for (var b : array(b1c, b2c)) {
-			assertStream(b.stream(A1.class).map(BeanStoreEntry::get), a1e,a1d,a1c,a1b,a1a);
+			assertList(b.stream(A1.class).map(BeanStoreEntry::get), a1e,a1d,a1c,a1b,a1a);
 		}
 
 		for (var b : array(b1p, b1c, b2p, b2c)) {
@@ -290,11 +290,11 @@ class BeanStore_Test extends SimpleTestBase {
 		}
 
 		for (var b : array(b1p, b1c, b2p, b2c)) {
-			assertArray(b.getParams(c1), pNull, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2), pNull, pEmptyOptional);
-			assertArray(b.getParams(m1), pNull, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(m2), pNull, pEmptyOptional);
-			assertArray(b.getParams(m3), pNull, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c1), pNull, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2), pNull, pEmptyOptional);
+			assertList(b.getParams(m1), pNull, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(m2), pNull, pEmptyOptional);
+			assertList(b.getParams(m3), pNull, pEmptyOptional, pIsBeanStore);
 		}
 
 		b1p.add(A1.class, a1a);
@@ -310,11 +310,11 @@ class BeanStore_Test extends SimpleTestBase {
 			assertTrue(b.hasAllParams(m1));
 			assertFalse(b.hasAllParams(m2));
 			assertTrue(b.hasAllParams(m3));
-			assertArray(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2), pNull, pEmptyOptional);
-			assertArray(b.getParams(m1), pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(m2), pNull, pEmptyOptional);
-			assertArray(b.getParams(m3), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2), pNull, pEmptyOptional);
+			assertList(b.getParams(m1), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(m2), pNull, pEmptyOptional);
+			assertList(b.getParams(m3), pA1a, pEmptyOptional, pIsBeanStore);
 		}
 
 		b1p.add(A1.class, a1a, "foo");
@@ -324,11 +324,11 @@ class BeanStore_Test extends SimpleTestBase {
 				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
-			assertArray(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2), pA1a, pEmptyOptional);
-			assertArray(b.getParams(m1), pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(m2), pA1a, pEmptyOptional);
-			assertArray(b.getParams(m3), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2), pA1a, pEmptyOptional);
+			assertList(b.getParams(m1), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(m2), pA1a, pEmptyOptional);
+			assertList(b.getParams(m3), pA1a, pEmptyOptional, pIsBeanStore);
 		}
 
 		b1p.add(A1.class, a1b, "bar");
@@ -338,11 +338,11 @@ class BeanStore_Test extends SimpleTestBase {
 				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
-			assertArray(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2), pA1a, pEmptyOptional);
-			assertArray(b.getParams(m1), pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(m2), pA1a, pEmptyOptional);
-			assertArray(b.getParams(m3), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2), pA1a, pEmptyOptional);
+			assertList(b.getParams(m1), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(m2), pA1a, pEmptyOptional);
+			assertList(b.getParams(m3), pA1a, pEmptyOptional, pIsBeanStore);
 		}
 
 		b1p.add(A2.class, a2a, "bar");
@@ -352,11 +352,11 @@ class BeanStore_Test extends SimpleTestBase {
 				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
-			assertArray(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2), pA1a, pA2a);
-			assertArray(b.getParams(m1), pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(m2), pA1a, pA2a);
-			assertArray(b.getParams(m3), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c1), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2), pA1a, pA2a);
+			assertList(b.getParams(m1), pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(m2), pA1a, pA2a);
+			assertList(b.getParams(m3), pA1a, pEmptyOptional, pIsBeanStore);
 		}
 
 		b1p.add(A2.class, a2a, null);
@@ -366,11 +366,11 @@ class BeanStore_Test extends SimpleTestBase {
 				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
-			assertArray(b.getParams(c1), pA1a, pA2a, pIsBeanStore);
-			assertArray(b.getParams(c2), pA1a, pA2a);
-			assertArray(b.getParams(m1), pA1a, pA2a, pIsBeanStore);
-			assertArray(b.getParams(m2), pA1a, pA2a);
-			assertArray(b.getParams(m3), pA1a, pA2a, pIsBeanStore);
+			assertList(b.getParams(c1), pA1a, pA2a, pIsBeanStore);
+			assertList(b.getParams(c2), pA1a, pA2a);
+			assertList(b.getParams(m1), pA1a, pA2a, pIsBeanStore);
+			assertList(b.getParams(m2), pA1a, pA2a);
+			assertList(b.getParams(m3), pA1a, pA2a, pIsBeanStore);
 		}
 	}
 
@@ -417,8 +417,8 @@ class BeanStore_Test extends SimpleTestBase {
 		}
 
 		for (var b : array(b1p, b1c, b2p, b2c)) {
-			assertArray(b.getParams(c1), pThis, pNull, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2), pThis, pNull, pEmptyOptional);
+			assertList(b.getParams(c1), pThis, pNull, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2), pThis, pNull, pEmptyOptional);
 		}
 
 		b1p.add(A1.class, a1a);
@@ -428,8 +428,8 @@ class BeanStore_Test extends SimpleTestBase {
 			assertString(A1n+"@foo", b.getMissingParams(c2));
 			assertTrue(b.hasAllParams(c1));
 			assertFalse(b.hasAllParams(c2));
-			assertArray(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2), pThis, pNull, pEmptyOptional);
+			assertList(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2), pThis, pNull, pEmptyOptional);
 		}
 
 		b1p.add(A1.class, a1a, "foo");
@@ -439,8 +439,8 @@ class BeanStore_Test extends SimpleTestBase {
 				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
-			assertArray(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2), pThis, pA1a, pEmptyOptional);
+			assertList(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2), pThis, pA1a, pEmptyOptional);
 		}
 
 		b1p.add(A1.class, a1b, "bar");
@@ -450,8 +450,8 @@ class BeanStore_Test extends SimpleTestBase {
 				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
-			assertArray(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2), pThis, pA1a, pEmptyOptional);
+			assertList(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2), pThis, pA1a, pEmptyOptional);
 		}
 
 		b1p.add(A2.class, a2a, "bar");
@@ -461,8 +461,8 @@ class BeanStore_Test extends SimpleTestBase {
 				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
-			assertArray(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
-			assertArray(b.getParams(c2), pThis, pA1a, pA2a);
+			assertList(b.getParams(c1), pThis, pA1a, pEmptyOptional, pIsBeanStore);
+			assertList(b.getParams(c2), pThis, pA1a, pA2a);
 		}
 
 		b1p.add(A2.class, a2a, null);
@@ -472,8 +472,8 @@ class BeanStore_Test extends SimpleTestBase {
 				assertNull(b.getMissingParams(e));
 				assertTrue(b.hasAllParams(e));
 			}
-			assertArray(b.getParams(c1), pThis, pA1a, pA2a, pIsBeanStore);
-			assertArray(b.getParams(c2), pThis, pA1a, pA2a);
+			assertList(b.getParams(c1), pThis, pA1a, pA2a, pIsBeanStore);
+			assertList(b.getParams(c2), pThis, pA1a, pA2a);
 		}
 	}
 
@@ -643,7 +643,7 @@ class BeanStore_Test extends SimpleTestBase {
 		}
 		assertNotNull(b2c.createMethodFinder(C.class).find("createC1").run());
 		assertNotNull(b2c.createMethodFinder(C.class).find("createC2").run());
-		assertType(A1.class, b2c.createMethodFinder(C.class).find("createC3").run().a);
+		assertInstanceOf(A1.class, b2c.createMethodFinder(C.class).find("createC3").run().a);
 		assertNull(b2c.createMethodFinder(C.class).find("createC4").run());
 		assertNull(b2c.createMethodFinder(C.class).find("createC5").run().a);
 		assertNotNull(b2c.createMethodFinder(C.class).find("createC6").run());

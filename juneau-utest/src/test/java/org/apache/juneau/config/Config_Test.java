@@ -93,7 +93,7 @@ class Config_Test extends SimpleTestBase {
 		assertEquals("6", c.get("S/b2").get());
 		assertEquals("7", c.get("T/c1").get());
 
-		assertLines("a1 = 2|a2 = 3|a3 = 4|[S]|b1 = 5|b2 = 6|[T]|c1 = 7|", c);
+		assertEquals("a1 = 2|a2 = 3|a3 = 4|[S]|b1 = 5|b2 = 6|[T]|c1 = 7|", pipedLines(c));
 	}
 
 	//====================================================================================================
@@ -134,7 +134,7 @@ class Config_Test extends SimpleTestBase {
 		assertEquals("6", c.get("S/b2").get());
 		assertEquals("7", c.get("T/c1").get());
 
-		assertLines("a1 = 2|a2 = 3|a3 = 4|[S]|b1 = 5|b2 = 6|[T]|c1 = 7|", c);
+		assertEquals("a1 = 2|a2 = 3|a3 = 4|[S]|b1 = 5|b2 = 6|[T]|c1 = 7|", pipedLines(c));
 	}
 
 	//====================================================================================================
@@ -173,11 +173,11 @@ class Config_Test extends SimpleTestBase {
 		c.set("S/b2", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
 		c.set("T/c1", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
 
-		assertLines("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|", c);
+		assertEquals("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|", pipedLines(c));
 		c.commit();
-		assertLines("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|", c);
+		assertEquals("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|", pipedLines(c));
 		c = cb.build();
-		assertLines("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|", c);
+		assertEquals("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|", pipedLines(c));
 
 		assertEquals("(foo=bar)", c.get("a1").get());
 		assertEquals("(foo=bar)", c.get("a2").get());
@@ -199,11 +199,11 @@ class Config_Test extends SimpleTestBase {
 		c.remove("S/b1");
 		c.remove("T/c1");
 
-		assertLines("[S]|", c);
+		assertEquals("[S]|", pipedLines(c));
 		c.commit();
-		assertLines("[S]|", c);
+		assertEquals("[S]|", pipedLines(c));
 		c = cb.build();
-		assertLines("[S]|", c);
+		assertEquals("[S]|", pipedLines(c));
 	}
 
 	//====================================================================================================
@@ -240,11 +240,11 @@ class Config_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void getStringArray1() {
 		var c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
-		assertArray(c.get("a1").as(String[].class).orElse(null), "1", "2");  // BCTM Feedback - assertArray can be used for arrays.
-		assertArray(c.get("a2").as(String[].class).orElse(null), "2", "3");
+		assertList(c.get("a1").as(String[].class).orElse(null), "1", "2");  // BCTM Feedback - assertArray can be used for arrays.
+		assertList(c.get("a2").as(String[].class).orElse(null), "2", "3");
 		assertNull(c.get("a3").as(String[].class).orElse(null));
-		assertArray(c.get("S/b1").as(String[].class).orElse(null), "1");
-		assertArray(c.get("S/b2").as(String[].class).orElse(null));
+		assertList(c.get("S/b1").as(String[].class).orElse(null), "1");
+		assertEmpty(c.get("S/b2").as(String[].class).orElse(null));
 		assertNull(c.get("S/b3").as(String[].class).orElse(null));
 		assertNull(c.get("T/c1").as(String[].class).orElse(null));
 	}
@@ -254,13 +254,13 @@ class Config_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void getStringArray2() {
 		var c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
-		assertArray(c.get("a1").asStringArray().orElse(new String[] {"foo"}), "1", "2");
-		assertArray(c.get("a2").asStringArray().orElse(new String[] {"foo"}), "2", "3");
-		assertArray(c.get("a3").asStringArray().orElse(new String[] {"foo"}), "foo");
-		assertArray(c.get("S/b1").asStringArray().orElse(new String[] {"foo"}), "1");
-		assertArray(c.get("S/b2").asStringArray().orElse(new String[] {"foo"}));
-		assertArray(c.get("S/b3").asStringArray().orElse(new String[] {"foo"}), "foo");
-		assertArray(c.get("T/c1").asStringArray().orElse(new String[] {"foo"}), "foo");
+		assertList(c.get("a1").asStringArray().orElse(new String[] {"foo"}), "1", "2");
+		assertList(c.get("a2").asStringArray().orElse(new String[] {"foo"}), "2", "3");
+		assertList(c.get("a3").asStringArray().orElse(new String[] {"foo"}), "foo");
+		assertList(c.get("S/b1").asStringArray().orElse(new String[] {"foo"}), "1");
+		assertEmpty(c.get("S/b2").asStringArray().orElse(new String[] {"foo"}));
+		assertList(c.get("S/b3").asStringArray().orElse(new String[] {"foo"}), "foo");
+		assertList(c.get("T/c1").asStringArray().orElse(new String[] {"foo"}), "foo");
 	}
 
 	//====================================================================================================
@@ -402,9 +402,9 @@ class Config_Test extends SimpleTestBase {
 	@Test void getBytes1() {
 		var c = init("a1=Zm9v", "a2=Zm", "\t9v", "a3=");
 
-		assertArray(c.get("a1").as(byte[].class).get(), (byte)102, (byte)111, (byte)111);  // BCTM - as() returns an Optional here that needs to be unwrapped.
-		assertArray(c.get("a2").as(byte[].class).get(), (byte)102, (byte)111, (byte)111);
-		assertArray(c.get("a3").as(byte[].class).get());
+		assertList(c.get("a1").as(byte[].class).get(), (byte)102, (byte)111, (byte)111);  // BCTM - as() returns an Optional here that needs to be unwrapped.
+		assertList(c.get("a2").as(byte[].class).get(), (byte)102, (byte)111, (byte)111);
+		assertEmpty(c.get("a3").as(byte[].class).get());
 		assertFalse(c.get("a4").as(byte[].class).isPresent());
 	}
 
@@ -414,10 +414,10 @@ class Config_Test extends SimpleTestBase {
 	@Test void getBytes2() {
 		var c = init("a1=Zm9v", "a2=Zm", "\t9v", "a3=");
 
-		assertArray(c.get("a1").asBytes().orElse(new byte[] {1}), (byte)102, (byte)111, (byte)111);
-		assertArray(c.get("a2").asBytes().orElse(new byte[] {1}), (byte)102, (byte)111, (byte)111);
-		assertArray(c.get("a3").asBytes().orElse(new byte[] {1}));
-		assertArray(c.get("a4").asBytes().orElse(new byte[] {1}), (byte)1);
+		assertList(c.get("a1").asBytes().orElse(new byte[] {1}), (byte)102, (byte)111, (byte)111);
+		assertList(c.get("a2").asBytes().orElse(new byte[] {1}), (byte)102, (byte)111, (byte)111);
+		assertEmpty(c.get("a3").asBytes().orElse(new byte[] {1}));
+		assertList(c.get("a4").asBytes().orElse(new byte[] {1}), (byte)1);
 	}
 
 	//====================================================================================================
@@ -436,29 +436,29 @@ class Config_Test extends SimpleTestBase {
 
 		var a1 = (Map<String,Integer>) c.get("a1").as(Map.class, String.class, Integer.class).get();
 		assertJson("{foo:123}", a1);
-		assertType(String.class, a1.keySet().iterator().next());
-		assertType(Integer.class, a1.values().iterator().next());
+		assertInstanceOf(String.class, a1.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a1.values().iterator().next());
 
 		List<Map<String,Integer>> a2a = (List<Map<String,Integer>>) c.get("a2").as(List.class, Map.class, String.class, Integer.class).get();
 		assertJson("[{foo:123}]", a2a);
-		assertType(String.class, a2a.get(0).keySet().iterator().next());
-		assertType(Integer.class, a2a.get(0).values().iterator().next());
+		assertInstanceOf(String.class, a2a.get(0).keySet().iterator().next());
+		assertInstanceOf(Integer.class, a2a.get(0).values().iterator().next());
 
 		var a2b = (List<ABean>) c.get("a2").as(List.class, ABean.class).get();
 		assertJson("[{foo:'123'}]", a2b);
-		assertType(ABean.class, a2b.get(0));
+		assertInstanceOf(ABean.class, a2b.get(0));
 
 		var a3 = (Map<String,Integer>) c.get("a3").as(Map.class, String.class, Integer.class).orElse(null);
 		assertNull(a3);
 
 		var a4a = (Map<String,Integer>) c.get("a4").as(Map.class, String.class, Integer.class).get();
 		assertJson("{foo:123}", a4a);
-		assertType(String.class, a4a.keySet().iterator().next());
-		assertType(Integer.class, a4a.values().iterator().next());
+		assertInstanceOf(String.class, a4a.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 
 		var a4b = c.get("a4").as(ABean.class).get();
 		assertJson("{foo:'123'}", a4b);
-		assertType(ABean.class, a4b);
+		assertInstanceOf(ABean.class, a4b);
 	}
 
 	//====================================================================================================
@@ -477,29 +477,29 @@ class Config_Test extends SimpleTestBase {
 
 		var a1 = (Map<String,Integer>) c.get("a1").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).get();
 		assertJson("{foo:123}", a1);
-		assertType(String.class, a1.keySet().iterator().next());
-		assertType(Integer.class, a1.values().iterator().next());
+		assertInstanceOf(String.class, a1.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a1.values().iterator().next());
 
 		var a2a = (List<Map<String,Integer>>) c.get("a2").as(UonParser.DEFAULT, List.class, Map.class, String.class, Integer.class).get();
 		assertJson("[{foo:123}]", a2a);
-		assertType(String.class, a2a.get(0).keySet().iterator().next());
-		assertType(Integer.class, a2a.get(0).values().iterator().next());
+		assertInstanceOf(String.class, a2a.get(0).keySet().iterator().next());
+		assertInstanceOf(Integer.class, a2a.get(0).values().iterator().next());
 
 		var a2b = (List<ABean>) c.get("a2").as(UonParser.DEFAULT, List.class, ABean.class).get();
 		assertJson("[{foo:'123'}]", a2b);
-		assertType(ABean.class, a2b.get(0));
+		assertInstanceOf(ABean.class, a2b.get(0));
 
 		var a3 = (Map<String,Integer>) c.get("a3").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(null);
 		assertNull(a3);
 
 		var a4a = (Map<String,Integer>) c.get("a4").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).get();
 		assertJson("{foo:123}", a4a);
-		assertType(String.class, a4a.keySet().iterator().next());
-		assertType(Integer.class, a4a.values().iterator().next());
+		assertInstanceOf(String.class, a4a.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 
 		var a4b = c.get("a4").as(UonParser.DEFAULT, ABean.class).get();
 		assertJson("{foo:'123'}", a4b);
-		assertType(ABean.class, a4b);
+		assertInstanceOf(ABean.class, a4b);
 	}
 
 	//====================================================================================================
@@ -518,25 +518,25 @@ class Config_Test extends SimpleTestBase {
 
 		var a1 = c.get("a1").as(Map.class).get();
 		assertJson("{foo:123}", a1);
-		assertType(String.class, a1.keySet().iterator().next());
-		assertType(Integer.class, a1.values().iterator().next());
+		assertInstanceOf(String.class, a1.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a1.values().iterator().next());
 
 		var a2a = c.get("a2").as(List.class).get();
 		assertJson("[{foo:123}]", a2a);
-		assertType(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
-		assertType(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
+		assertInstanceOf(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
+		assertInstanceOf(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
 
 		var a3 = c.get("a3").as(Map.class).orElse(null);
 		assertNull(a3);
 
 		var a4a = c.get("a4").as(Map.class).get();
 		assertJson("{foo:123}", a4a);
-		assertType(String.class, a4a.keySet().iterator().next());
-		assertType(Integer.class, a4a.values().iterator().next());
+		assertInstanceOf(String.class, a4a.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 
 		var a4b = c.get("a4").as(ABean.class).orElse(null);
 		assertJson("{foo:'123'}", a4b);
-		assertType(ABean.class, a4b);
+		assertInstanceOf(ABean.class, a4b);
 	}
 
 	//====================================================================================================
@@ -555,25 +555,25 @@ class Config_Test extends SimpleTestBase {
 
 		var a1 = c.get("a1").as(UonParser.DEFAULT, Map.class).get();
 		assertJson("{foo:123}", a1);
-		assertType(String.class, a1.keySet().iterator().next());
-		assertType(Integer.class, a1.values().iterator().next());
+		assertInstanceOf(String.class, a1.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a1.values().iterator().next());
 
 		var a2a = c.get("a2").as(UonParser.DEFAULT, List.class).get();
 		assertJson("[{foo:123}]", a2a);
-		assertType(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
-		assertType(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
+		assertInstanceOf(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
+		assertInstanceOf(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
 
 		var a3 = c.get("a3").as(UonParser.DEFAULT, Map.class).orElse(null);
 		assertNull(a3);
 
 		var a4a = c.get("a4").as(UonParser.DEFAULT, Map.class).get();
 		assertJson("{foo:123}", a4a);
-		assertType(String.class, a4a.keySet().iterator().next());
-		assertType(Integer.class, a4a.values().iterator().next());
+		assertInstanceOf(String.class, a4a.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 
 		var a4b = c.get("a4").as(UonParser.DEFAULT, ABean.class).get();
 		assertJson("{foo:'123'}", a4b);
-		assertType(ABean.class, a4b);
+		assertInstanceOf(ABean.class, a4b);
 	}
 
 	//====================================================================================================
@@ -592,16 +592,16 @@ class Config_Test extends SimpleTestBase {
 
 		var a1 = c.get("a1").as(Map.class).orElseGet(JsonMap::new);
 		assertJson("{foo:123}", a1);
-		assertType(String.class, a1.keySet().iterator().next());
-		assertType(Integer.class, a1.values().iterator().next());
+		assertInstanceOf(String.class, a1.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a1.values().iterator().next());
 
 		var a1b = c.get("a1b").as(Map.class).orElseGet(JsonMap::new);
 		assertJson("{}", a1b);
 
 		var a2a = c.get("a2").as(List.class).orElseGet(JsonList::new);
 		assertJson("[{foo:123}]", a2a);
-		assertType(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
-		assertType(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
+		assertInstanceOf(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
+		assertInstanceOf(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
 
 		var a2b = c.get("a2b").as(List.class).orElseGet(JsonList::new);
 		assertJson("[]", a2b);
@@ -611,15 +611,15 @@ class Config_Test extends SimpleTestBase {
 
 		var a4a = c.get("a4").as(Map.class).orElseGet(JsonMap::new);
 		assertJson("{foo:123}", a4a);
-		assertType(String.class, a4a.keySet().iterator().next());
-		assertType(Integer.class, a4a.values().iterator().next());
+		assertInstanceOf(String.class, a4a.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 
 		var a4b = c.get("a4b").as(Map.class).orElseGet(JsonMap::new);
 		assertJson("{}", a4b);
 
 		var a4c = c.get("a4c").as(ABean.class).orElse(new ABean().init());
 		assertJson("{foo:'bar'}", a4c);
-		assertType(ABean.class, a4c);
+		assertInstanceOf(ABean.class, a4c);
 	}
 
 	//====================================================================================================
@@ -638,16 +638,16 @@ class Config_Test extends SimpleTestBase {
 
 		var a1 = c.get("a1").as(UonParser.DEFAULT, Map.class).orElseGet(JsonMap::new);
 		assertJson("{foo:123}", a1);
-		assertType(String.class, a1.keySet().iterator().next());
-		assertType(Integer.class, a1.values().iterator().next());
+		assertInstanceOf(String.class, a1.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a1.values().iterator().next());
 
 		var a1b = c.get("a1b").as(UonParser.DEFAULT, Map.class).orElseGet(JsonMap::new);
 		assertJson("{}", a1b);
 
 		var a2a = c.get("a2").as(UonParser.DEFAULT, List.class).orElseGet(JsonList::new);
 		assertJson("[{foo:123}]", a2a);
-		assertType(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
-		assertType(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
+		assertInstanceOf(String.class, ((Map)a2a.get(0)).keySet().iterator().next());
+		assertInstanceOf(Integer.class, ((Map)a2a.get(0)).values().iterator().next());
 
 		var a2b = c.get("a2b").as(UonParser.DEFAULT, List.class).orElseGet(JsonList::new);
 		assertJson("[]", a2b);
@@ -657,15 +657,15 @@ class Config_Test extends SimpleTestBase {
 
 		var a4a = c.get("a4").as(UonParser.DEFAULT, Map.class).orElseGet(JsonMap::new);
 		assertJson("{foo:123}", a4a);
-		assertType(String.class, a4a.keySet().iterator().next());
-		assertType(Integer.class, a4a.values().iterator().next());
+		assertInstanceOf(String.class, a4a.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 
 		var a4b = c.get("a4b").as(UonParser.DEFAULT, Map.class).orElseGet(JsonMap::new);
 		assertJson("{}", a4b);
 
 		var a4c = c.get("a4c").as(UonParser.DEFAULT, ABean.class).orElse(new ABean().init());
 		assertJson("{foo:'bar'}", a4c);
-		assertType(ABean.class, a4c);
+		assertInstanceOf(ABean.class, a4c);
 	}
 
 	//====================================================================================================
@@ -684,16 +684,16 @@ class Config_Test extends SimpleTestBase {
 
 		var a1 = (Map<String,Integer>) c.get("a1").as(Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertJson("{foo:123}", a1);
-		assertType(String.class, a1.keySet().iterator().next());
-		assertType(Integer.class, a1.values().iterator().next());
+		assertInstanceOf(String.class, a1.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a1.values().iterator().next());
 
 		var a1b = (Map<String,Integer>) c.get("a1b").as(Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertJson("{}", a1b);
 
 		var a2a = (List<Map<String,Integer>>) c.get("a2").as(List.class, Map.class, String.class, Integer.class).orElse(new ArrayList<>());
 		assertJson("[{foo:123}]", a2a);
-		assertType(String.class, a2a.get(0).keySet().iterator().next());
-		assertType(Integer.class, a2a.get(0).values().iterator().next());
+		assertInstanceOf(String.class, a2a.get(0).keySet().iterator().next());
+		assertInstanceOf(Integer.class, a2a.get(0).values().iterator().next());
 
 		var a2b = (List<ABean>) c.get("a2b").as(List.class, ABean.class).orElse(new ArrayList<>());
 		assertJson("[]", a2b);
@@ -703,15 +703,15 @@ class Config_Test extends SimpleTestBase {
 
 		var a4a = (Map<String,Integer>) c.get("a4").as(Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertJson("{foo:123}", a4a);
-		assertType(String.class, a4a.keySet().iterator().next());
-		assertType(Integer.class, a4a.values().iterator().next());
+		assertInstanceOf(String.class, a4a.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 
 		var a4b = (Map<String,Integer>) c.get("a4b").as(Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertJson("{}", a4b);
 
 		var a4c = c.get("a4c").as(ABean.class).orElse(new ABean().init());
 		assertJson("{foo:'bar'}", a4c);
-		assertType(ABean.class, a4c);
+		assertInstanceOf(ABean.class, a4c);
 	}
 
 	//====================================================================================================
@@ -730,16 +730,16 @@ class Config_Test extends SimpleTestBase {
 
 		var a1 = (Map<String,Integer>) c.get("a1").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertJson("{foo:123}", a1);
-		assertType(String.class, a1.keySet().iterator().next());
-		assertType(Integer.class, a1.values().iterator().next());
+		assertInstanceOf(String.class, a1.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a1.values().iterator().next());
 
 		var a1b = (Map<String,Integer>) c.get("a1b").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertJson("{}", a1b);
 
 		var a2a = (List<Map<String,Integer>>) c.get("a2").as(UonParser.DEFAULT, List.class, Map.class, String.class, Integer.class).orElse(new ArrayList<>());
 		assertJson("[{foo:123}]", a2a);
-		assertType(String.class, a2a.get(0).keySet().iterator().next());
-		assertType(Integer.class, a2a.get(0).values().iterator().next());
+		assertInstanceOf(String.class, a2a.get(0).keySet().iterator().next());
+		assertInstanceOf(Integer.class, a2a.get(0).values().iterator().next());
 
 		var a2b = (List<ABean>) c.get("a2b").as(UonParser.DEFAULT, List.class, ABean.class).orElse(new ArrayList<>());
 		assertJson("[]", a2b);
@@ -749,15 +749,15 @@ class Config_Test extends SimpleTestBase {
 
 		var a4a = (Map<String,Integer>) c.get("a4").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertJson("{foo:123}", a4a);
-		assertType(String.class, a4a.keySet().iterator().next());
-		assertType(Integer.class, a4a.values().iterator().next());
+		assertInstanceOf(String.class, a4a.keySet().iterator().next());
+		assertInstanceOf(Integer.class, a4a.values().iterator().next());
 
 		var a4b = (Map<String,Integer>) c.get("a4b").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertJson("{}", a4b);
 
 		var a4c = c.get("a4c").as(UonParser.DEFAULT, ABean.class).orElse(new ABean().init());
 		assertJson("{foo:'bar'}", a4c);
-		assertType(ABean.class, a4c);
+		assertInstanceOf(ABean.class, a4c);
 	}
 
 	//====================================================================================================
@@ -900,19 +900,19 @@ class Config_Test extends SimpleTestBase {
 		var c = init();
 
 		c.setSection("", Arrays.asList("#C1", "#C2"));
-		assertLines("#C1|#C2||", c);
+		assertEquals("#C1|#C2||", pipedLines(c));
 
 		c.setSection("", Arrays.asList("#C3", "#C4"));
-		assertLines("#C3|#C4||", c);
+		assertEquals("#C3|#C4||", pipedLines(c));
 
 		c.setSection("S1", Arrays.asList("", "#C5", "#C6"));
-		assertLines("#C3|#C4|||#C5|#C6|[S1]|", c);
+		assertEquals("#C3|#C4|||#C5|#C6|[S1]|", pipedLines(c));
 
 		c.setSection("S1", null);
-		assertLines("#C3|#C4|||#C5|#C6|[S1]|", c);
+		assertEquals("#C3|#C4|||#C5|#C6|[S1]|", pipedLines(c));
 
 		c.setSection("S1", Collections.<String>emptyList());
-		assertLines("#C3|#C4||[S1]|", c);
+		assertEquals("#C3|#C4||[S1]|", pipedLines(c));
 
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'section' cannot be null.", ()->c.setSection(null, Arrays.asList("", "#C5", "#C6")));
 	}
@@ -925,19 +925,19 @@ class Config_Test extends SimpleTestBase {
 		var m = JsonMap.of("a", "b");
 
 		c.setSection("", Arrays.asList("#C1", "#C2"), m);
-		assertLines("#C1|#C2||a = b|", c);
+		assertEquals("#C1|#C2||a = b|", pipedLines(c));
 
 		c.setSection("", Arrays.asList("#C3", "#C4"), m);
-		assertLines("#C3|#C4||a = b|", c);
+		assertEquals("#C3|#C4||a = b|", pipedLines(c));
 
 		c.setSection("S1", Arrays.asList("", "#C5", "#C6"), m);
-		assertLines("#C3|#C4||a = b||#C5|#C6|[S1]|a = b|", c);
+		assertEquals("#C3|#C4||a = b||#C5|#C6|[S1]|a = b|", pipedLines(c));
 
 		c.setSection("S1", null, m);
-		assertLines("#C3|#C4||a = b||#C5|#C6|[S1]|a = b|", c);
+		assertEquals("#C3|#C4||a = b||#C5|#C6|[S1]|a = b|", pipedLines(c));
 
 		c.setSection("S1", Collections.<String>emptyList(), m);
-		assertLines("#C3|#C4||a = b|[S1]|a = b|", c);
+		assertEquals("#C3|#C4||a = b|[S1]|a = b|", pipedLines(c));
 
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'section' cannot be null.", ()->c.setSection(null, Arrays.asList("", "#C5", "#C6"), m));
 	}
@@ -951,10 +951,10 @@ class Config_Test extends SimpleTestBase {
 		c.removeSection("S");
 		c.removeSection("T");
 
-		assertLines("a=1|", c);
+		assertEquals("a=1|", pipedLines(c));
 
 		c.removeSection("");
-		assertLines("", c);
+		assertEquals("", pipedLines(c));
 	}
 
 	//====================================================================================================
@@ -963,7 +963,7 @@ class Config_Test extends SimpleTestBase {
 	@Test void writeTo() throws Exception {
 		var c = init("a=1", "[S]", "b=2", "c=", "[T]");
 
-		assertLines("a=1|[S]|b=2|c=|[T]|", c.writeTo(new StringWriter()));
+		assertEquals("a=1|[S]|b=2|c=|[T]|", pipedLines(c.writeTo(new StringWriter())));
 	}
 
 	//====================================================================================================
@@ -1044,7 +1044,7 @@ class Config_Test extends SimpleTestBase {
 
 		cf.commit();
 
-		assertLines("[s1]||foo<*> = {AwwJVhwUQFZEMg==}|", cf);
+		assertEquals("[s1]||foo<*> = {AwwJVhwUQFZEMg==}|", pipedLines(cf));
 
 		assertEquals("mypassword", cf.get("s1/foo").get());
 
@@ -1057,7 +1057,7 @@ class Config_Test extends SimpleTestBase {
 		// INI output should be encoded
 		var sw = new StringWriter();
 		cf.writeTo(new PrintWriter(sw));
-		assertLines("[s1]|foo<*> = {AwwJVhwUQFZEMg==}|", sw);
+		assertEquals("[s1]|foo<*> = {AwwJVhwUQFZEMg==}|", pipedLines(sw));
 	}
 
 	//====================================================================================================
@@ -1070,7 +1070,7 @@ class Config_Test extends SimpleTestBase {
 
 		cf.applyMods();
 		cf.commit();
-		assertLines("[s1]||foo<*> = {AwwJVhwUQFZEMg==}|", MemoryStore.DEFAULT.read("Test.cfg"));
+		assertEquals("[s1]||foo<*> = {AwwJVhwUQFZEMg==}|", pipedLines(MemoryStore.DEFAULT.read("Test.cfg")));
 	}
 
 	//====================================================================================================
@@ -1166,7 +1166,7 @@ class Config_Test extends SimpleTestBase {
 
 		var sw = new StringWriter();
 		cf.writeTo(sw);
-		assertLines("[s1]|f1 = x |\ty |\tz|", sw);
+		assertEquals("[s1]|f1 = x |\ty |\tz|", pipedLines(sw));
 	}
 
 	//====================================================================================================
@@ -1378,7 +1378,7 @@ class Config_Test extends SimpleTestBase {
 
 		var sw = new StringWriter();
 		cf.writeTo(sw);
-		assertLines("a = b|", sw);
+		assertEquals("a = b|", pipedLines(sw));
 	}
 
 
@@ -1464,15 +1464,15 @@ class Config_Test extends SimpleTestBase {
 		cf.set("a", "a,#b,=c");
 		cf.set("A/a", "a,#b,=c");
 
-		assertLines("a = a,\\u0023b,=c|[A]|a = a,\\u0023b,=c|", cf);
+		assertEquals("a = a,\\u0023b,=c|[A]|a = a,\\u0023b,=c|", pipedLines(cf));
 		cf.commit();
-		assertLines("a = a,\\u0023b,=c|[A]|a = a,\\u0023b,=c|", cf);
+		assertEquals("a = a,\\u0023b,=c|[A]|a = a,\\u0023b,=c|", pipedLines(cf));
 
 		assertEquals("a,#b,=c", cf.get("a").get());
 		assertEquals("a,#b,=c", cf.get("A/a").get());
 
 		cf.set("a", "a,#b,=c", null, null, "comment#comment", null);
-		assertLines("a = a,\\u0023b,=c # comment#comment|[A]|a = a,\\u0023b,=c|", cf);
+		assertEquals("a = a,\\u0023b,=c # comment#comment|[A]|a = a,\\u0023b,=c|", pipedLines(cf));
 		assertEquals("a,#b,=c", cf.get("a").get());
 	}
 

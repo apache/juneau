@@ -78,13 +78,13 @@ class HttpException_Test extends SimpleTestBase {
 		assertNull(x.getRootCause());
 
 		x = new BasicHttpException(100, new RuntimeException("foo"));
-		assertType(RuntimeException.class, x.getRootCause());
+		assertInstanceOf(RuntimeException.class, x.getRootCause());
 
 		x = new BasicHttpException(100, new BasicHttpException(100, new RuntimeException("foo")));
-		assertType(RuntimeException.class, x.getRootCause());
+		assertInstanceOf(RuntimeException.class, x.getRootCause());
 
 		x = new BasicHttpException(100, new InvocationTargetException(new RuntimeException("foo")));
-		assertType(RuntimeException.class, x.getRootCause());
+		assertInstanceOf(RuntimeException.class, x.getRootCause());
 	}
 
 	@Test void a03_getFullStackMessage() {

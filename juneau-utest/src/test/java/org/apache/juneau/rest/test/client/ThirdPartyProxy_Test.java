@@ -575,7 +575,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void da12_returnIntegerList(Input input) {
 		var x = input.proxy.returnIntegerList();
 		assertJson("[1,null]", x);
-		assertType(Integer.class, x.get(0));
+		assertInstanceOf(Integer.class, x.get(0));
 	}
 
 	@ParameterizedTest
@@ -583,7 +583,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void da13_returnInteger3dList(Input input) {
 		var x = input.proxy.returnInteger3dList();
 		assertJson("[[[1,null],null],null]", x);
-		assertType(Integer.class, x.get(0).get(0).get(0));
+		assertInstanceOf(Integer.class, x.get(0).get(0).get(0));
 	}
 
 	@ParameterizedTest
@@ -591,7 +591,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void da14_returnInteger1d3dList(Input input) {
 		var x = input.proxy.returnInteger1d3dList();
 		assertJson("[[[[1,null],null],null],null]", x);
-		assertType(Integer.class, x.get(0)[0][0][0]);
+		assertInstanceOf(Integer.class, x.get(0)[0][0][0]);
 	}
 
 	@ParameterizedTest
@@ -599,7 +599,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void da15_returnInt1d3dList(Input input) {
 		var x = input.proxy.returnInt1d3dList();
 		assertJson("[[[[1,2],null],null],null]", x);
-		assertType(int[][][].class, x.get(0));
+		assertInstanceOf(int[][][].class, x.get(0));
 	}
 
 	@ParameterizedTest
@@ -615,7 +615,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void db01_returnBean(Input input) {
 		var x = input.proxy.returnBean();
 		assertJson("{a:1,b:'foo'}", x);
-		assertType(ABean.class, x);
+		assertInstanceOf(ABean.class, x);
 	}
 
 	@ParameterizedTest
@@ -623,7 +623,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void db02_returnBean3dArray(Input input) {
 		var x = input.proxy.returnBean3dArray();
 		assertJson("[[[{a:1,b:'foo'},null],null],null]", x);
-		assertType(ABean.class, x[0][0][0]);
+		assertInstanceOf(ABean.class, x[0][0][0]);
 	}
 
 	@ParameterizedTest
@@ -631,7 +631,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void db03_returnBeanList(Input input) {
 		var x = input.proxy.returnBeanList();
 		assertJson("[{a:1,b:'foo'}]", x);
-		assertType(ABean.class, x.get(0));
+		assertInstanceOf(ABean.class, x.get(0));
 	}
 
 	@ParameterizedTest
@@ -639,7 +639,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void db04_returnBean1d3dList(Input input) {
 		var x = input.proxy.returnBean1d3dList();
 		assertJson("[[[[{a:1,b:'foo'},null],null],null],null]", x);
-		assertType(ABean.class, x.get(0)[0][0][0]);
+		assertInstanceOf(ABean.class, x.get(0)[0][0][0]);
 	}
 
 	@ParameterizedTest
@@ -647,7 +647,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void db05_returnBeanMap(Input input) {
 		var x = input.proxy.returnBeanMap();
 		assertJson("{foo:{a:1,b:'foo'}}", x);
-		assertType(ABean.class, x.get("foo"));
+		assertInstanceOf(ABean.class, x.get("foo"));
 	}
 
 	@ParameterizedTest
@@ -655,7 +655,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void db06_returnBeanListMap(Input input) {
 		var x = input.proxy.returnBeanListMap();
 		assertJson("{foo:[{a:1,b:'foo'}]}", x);
-		assertType(ABean.class, x.get("foo").get(0));
+		assertInstanceOf(ABean.class, x.get("foo").get(0));
 	}
 
 	@ParameterizedTest
@@ -663,7 +663,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void db07_returnBean1d3dListMap(Input input) {
 		var x = input.proxy.returnBean1d3dListMap();
 		assertJson("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", x);
-		assertType(ABean.class, x.get("foo").get(0)[0][0][0]);
+		assertInstanceOf(ABean.class, x.get("foo").get(0)[0][0][0]);
 	}
 
 	@ParameterizedTest
@@ -672,7 +672,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 		// Note: JsonSerializer serializes key as string.
 		var x = input.proxy.returnBeanListMapIntegerKeys();
 		assertJson("{'1':[{a:1,b:'foo'}]}", x);
-		assertType(Integer.class, x.keySet().iterator().next());
+		assertInstanceOf(Integer.class, x.keySet().iterator().next());
 	}
 
 	// Typed beans
@@ -682,7 +682,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void dc01_returnTypedBean(Input input) {
 		var x = input.proxy.returnTypedBean();
 		assertJson("{a:1,b:'foo'}", x);
-		assertType(TypedBeanImpl.class, x);
+		assertInstanceOf(TypedBeanImpl.class, x);
 	}
 
 	@ParameterizedTest
@@ -690,7 +690,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void dc02_returnTypedBean3dArray(Input input) {
 		var x = input.proxy.returnTypedBean3dArray();
 		assertJson("[[[{a:1,b:'foo'},null],null],null]", x);
-		assertType(TypedBeanImpl.class, x[0][0][0]);
+		assertInstanceOf(TypedBeanImpl.class, x[0][0][0]);
 	}
 
 	@ParameterizedTest
@@ -698,7 +698,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void dc03_returnTypedBeanList(Input input) {
 		var x = input.proxy.returnTypedBeanList();
 		assertJson("[{a:1,b:'foo'}]", x);
-		assertType(TypedBeanImpl.class, x.get(0));
+		assertInstanceOf(TypedBeanImpl.class, x.get(0));
 	}
 
 	@ParameterizedTest
@@ -706,7 +706,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void dc04_returnTypedBean1d3dList(Input input) {
 		var x = input.proxy.returnTypedBean1d3dList();
 		assertJson("[[[[{a:1,b:'foo'},null],null],null],null]", x);
-		assertType(TypedBeanImpl.class, x.get(0)[0][0][0]);
+		assertInstanceOf(TypedBeanImpl.class, x.get(0)[0][0][0]);
 	}
 
 	@ParameterizedTest
@@ -714,7 +714,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void dc05_returnTypedBeanMap(Input input) {
 		var x = input.proxy.returnTypedBeanMap();
 		assertJson("{foo:{a:1,b:'foo'}}", x);
-		assertType(TypedBeanImpl.class, x.get("foo"));
+		assertInstanceOf(TypedBeanImpl.class, x.get("foo"));
 	}
 
 	@ParameterizedTest
@@ -722,7 +722,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void dc06_returnTypedBeanListMap(Input input) {
 		var x = input.proxy.returnTypedBeanListMap();
 		assertJson("{foo:[{a:1,b:'foo'}]}", x);
-		assertType(TypedBeanImpl.class, x.get("foo").get(0));
+		assertInstanceOf(TypedBeanImpl.class, x.get("foo").get(0));
 	}
 
 	@ParameterizedTest
@@ -730,7 +730,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void dc07_returnTypedBean1d3dListMap(Input input) {
 		var x = input.proxy.returnTypedBean1d3dListMap();
 		assertJson("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", x);
-		assertType(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0]);
+		assertInstanceOf(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0]);
 	}
 
 	@ParameterizedTest
@@ -739,7 +739,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 		// Note: JsonSerializer serializes key as string.
 		var x = input.proxy.returnTypedBeanListMapIntegerKeys();
 		assertJson("{'1':[{a:1,b:'foo'}]}", x);
-		assertType(TypedBeanImpl.class, x.get(1).get(0));
+		assertInstanceOf(TypedBeanImpl.class, x.get(1).get(0));
 	}
 
 	// Swapped POJOs
@@ -832,7 +832,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void df02_returnEnum3d(Input input) {
 		var x = input.proxy.returnEnum3d();
 		assertJson("[[['TWO',null],null],null]", x);
-		assertType(TestEnum.class, x[0][0][0]);
+		assertInstanceOf(TestEnum.class, x[0][0][0]);
 	}
 
 	@ParameterizedTest
@@ -840,7 +840,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void df03_returnEnumList(Input input) {
 		var x = input.proxy.returnEnumList();
 		assertJson("['TWO',null]", x);
-		assertType(TestEnum.class, x.get(0));
+		assertInstanceOf(TestEnum.class, x.get(0));
 	}
 
 	@ParameterizedTest
@@ -848,7 +848,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void df04_returnEnum3dList(Input input) {
 		var x = input.proxy.returnEnum3dList();
 		assertJson("[[['TWO',null],null],null]", x);
-		assertType(TestEnum.class, x.get(0).get(0).get(0));
+		assertInstanceOf(TestEnum.class, x.get(0).get(0).get(0));
 	}
 
 	@ParameterizedTest
@@ -856,7 +856,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void df05_returnEnum1d3dList(Input input) {
 		var x = input.proxy.returnEnum1d3dList();
 		assertJson("[[[['TWO',null],null],null],null]", x);
-		assertType(TestEnum[][][].class, x.get(0));
+		assertInstanceOf(TestEnum[][][].class, x.get(0));
 	}
 
 	@ParameterizedTest
@@ -865,8 +865,8 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 		var x = input.proxy.returnEnumMap();
 		assertJson("{ONE:'TWO'}", x);
 		var e = x.entrySet().iterator().next();
-		assertType(TestEnum.class, e.getKey());
-		assertType(TestEnum.class, e.getValue());
+		assertInstanceOf(TestEnum.class, e.getKey());
+		assertInstanceOf(TestEnum.class, e.getValue());
 	}
 
 	@ParameterizedTest
@@ -875,8 +875,8 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 		var x = input.proxy.returnEnum3dArrayMap();
 		assertJson("{ONE:[[['TWO',null],null],null]}", x);
 		var e = x.entrySet().iterator().next();
-		assertType(TestEnum.class, e.getKey());
-		assertType(TestEnum[][][].class, e.getValue());
+		assertInstanceOf(TestEnum.class, e.getKey());
+		assertInstanceOf(TestEnum[][][].class, e.getValue());
 	}
 
 	@ParameterizedTest
@@ -884,7 +884,7 @@ class ThirdPartyProxy_Test extends SimpleTestBase {
 	void df08_returnEnum1d3dListMap(Input input) {
 		var x = input.proxy.returnEnum1d3dListMap();
 		assertJson("{ONE:[[[['TWO',null],null],null],null]}", x);
-		assertType(TestEnum[][][].class, x.get(TestEnum.ONE).get(0));
+		assertInstanceOf(TestEnum[][][].class, x.get(TestEnum.ONE).get(0));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

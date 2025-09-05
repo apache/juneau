@@ -563,42 +563,42 @@ class RrpcInterface_Test extends SimpleTestBase {
 
 				@Override
 				public void setInt3dArray(int[][][] v) {
-					assertArray(v, "[[1,2],null]", null);
+					assertList(v, "[[1,2],null]", null);
 				}
 
 				@Override
 				public void setInteger3dArray(Integer[][][] v) {
-					assertArray(v, "[[1,null],null]", null);
+					assertList(v, "[[1,null],null]", null);
 				}
 
 				@Override
 				public void setString3dArray(String[][][] v) {
-					assertArray(v, "[[foo,null],null]", null);
+					assertList(v, "[[foo,null],null]", null);
 				}
 
 				@Override
 				public void setIntegerList(List<Integer> v) {
 					assertList(v, "1", null);
-					assertType(Integer.class, v.get(0));
+					assertInstanceOf(Integer.class, v.get(0));
 				}
 
 				@Override
 				public void setInteger3dList(List<List<List<Integer>>> v) {
 					assertList(v, "[[1,null],null]", null);
-					assertType(Integer.class, v.get(0).get(0).get(0));
+					assertInstanceOf(Integer.class, v.get(0).get(0).get(0));
 				}
 
 				@Override
 				public void setInteger1d3dList(List<Integer[][][]> v) {
 					assertList(v, "[[[1,null],null],null]", null);
-					assertType(Integer[][][].class, v.get(0));
-					assertType(Integer.class, v.get(0)[0][0][0]);
+					assertInstanceOf(Integer[][][].class, v.get(0));
+					assertInstanceOf(Integer.class, v.get(0)[0][0][0]);
 				}
 
 				@Override
 				public void setInt1d3dList(List<int[][][]> v) {
 					assertList(v, "[[[1,2],null],null]", null);
-					assertType(int[][][].class, v.get(0));
+					assertInstanceOf(int[][][].class, v.get(0));
 				}
 
 				@Override
@@ -615,7 +615,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 
 				@Override
 				public void setBean3dArray(ABean[][][] v) {
-					assertArray(v, "[[{a:1,b:'foo'},null],null]",null);
+					assertList(v, "[[{a:1,b:'foo'},null],null]",null);
 				}
 
 				@Override
@@ -645,8 +645,8 @@ class RrpcInterface_Test extends SimpleTestBase {
 
 				@Override
 				public void setBeanListMapIntegerKeys(Map<Integer,List<ABean>> v) {
-					assertMapPairs(v, "1=[{a:1,b:'foo'}]");
-					assertType(Integer.class, v.keySet().iterator().next());
+					assertList(v, "1=[{a:1,b:'foo'}]");
+					assertInstanceOf(Integer.class, v.keySet().iterator().next());
 				}
 
 				// Typed beans
@@ -654,49 +654,49 @@ class RrpcInterface_Test extends SimpleTestBase {
 				@Override
 				public void setTypedBean(TypedBean v) {
 					assertBean(v, "a,b", "1,foo");
-					assertType(TypedBeanImpl.class, v);
+					assertInstanceOf(TypedBeanImpl.class, v);
 				}
 
 				@Override
 				public void setTypedBean3dArray(TypedBean[][][] v) {
-					assertArray(v, "[[a:1;b:foo,null],null]" ,null);  // Testing serialization here.
-					assertType(TypedBeanImpl.class, v[0][0][0]);
+					assertList(v, "[[a:1;b:foo,null],null]" ,null);  // Testing serialization here.
+					assertInstanceOf(TypedBeanImpl.class, v[0][0][0]);
 				}
 
 				@Override
 				public void setTypedBeanList(List<TypedBean> v) {
 					assertList(v, "a:1;b:foo");
-					assertType(TypedBeanImpl.class, v.get(0));
+					assertInstanceOf(TypedBeanImpl.class, v.get(0));
 				}
 
 				@Override
 				public void setTypedBean1d3dList(List<TypedBean[][][]> v) {
 					assertList(v, "[[[a:1;b:foo,null],null],null]", null);
-					assertType(TypedBeanImpl.class, v.get(0)[0][0][0]);
+					assertInstanceOf(TypedBeanImpl.class, v.get(0)[0][0][0]);
 				}
 
 				@Override
 				public void setTypedBeanMap(Map<String,TypedBean> v) {
 					assertMap(v, "foo", "a:1;b:foo");
-					assertType(TypedBeanImpl.class, v.get("foo"));
+					assertInstanceOf(TypedBeanImpl.class, v.get("foo"));
 				}
 
 				@Override
 				public void setTypedBeanListMap(Map<String,List<TypedBean>> v) {
 					assertMap(v, "foo", "[a:1;b:foo]");
-					assertType(TypedBeanImpl.class, v.get("foo").get(0));
+					assertInstanceOf(TypedBeanImpl.class, v.get("foo").get(0));
 				}
 
 				@Override
 				public void setTypedBean1d3dListMap(Map<String,List<TypedBean[][][]>> v) {
 					assertMap(v, "foo", "[[[[a:1;b:foo,null],null],null],null]");
-					assertType(TypedBeanImpl.class, v.get("foo").get(0)[0][0][0]);
+					assertInstanceOf(TypedBeanImpl.class, v.get("foo").get(0)[0][0][0]);
 				}
 
 				@Override
 				public void setTypedBeanListMapIntegerKeys(Map<Integer,List<TypedBean>> v) {
-					assertMapPairs(v, "1=[a:1;b:foo]");
-					assertType(TypedBeanImpl.class, v.get(1).get(0));
+					assertList(v, "1=[a:1;b:foo]");
+					assertInstanceOf(TypedBeanImpl.class, v.get(1).get(0));
 				}
 
 				// Swapped POJOs
@@ -708,13 +708,13 @@ class RrpcInterface_Test extends SimpleTestBase {
 
 				@Override
 				public void setSwappedObject3dArray(SwappedObject[][][] v) {
-					assertArray(v, "[[wasUnswapped:true,null],null]" ,null);
+					assertList(v, "[[wasUnswapped:true,null],null]" ,null);
 					assertTrue(v[0][0][0].wasUnswapped);
 				}
 
 				@Override
 				public void setSwappedObjectMap(Map<SwappedObject,SwappedObject> v) {
-					assertMapPairs(v, "wasUnswapped:true=wasUnswapped:true");
+					assertList(v, "wasUnswapped:true=wasUnswapped:true");
 					var e = v.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue().wasUnswapped);
@@ -722,7 +722,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 
 				@Override
 				public void setSwappedObject3dMap(Map<SwappedObject,SwappedObject[][][]> v) {
-					assertMapPairs(v, "wasUnswapped:true=[[[wasUnswapped:true,null],null],null]");
+					assertList(v, "wasUnswapped:true=[[[wasUnswapped:true,null],null],null]");
 					var e = v.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue()[0][0][0].wasUnswapped);
@@ -737,13 +737,13 @@ class RrpcInterface_Test extends SimpleTestBase {
 
 				@Override
 				public void setImplicitSwappedObject3dArray(ImplicitSwappedObject[][][] v) {
-					assertArray(v, "[["+SWAP+",null],null]", null);
+					assertList(v, "[["+SWAP+",null],null]", null);
 					assertTrue(v[0][0][0].wasUnswapped);
 				}
 
 				@Override
 				public void setImplicitSwappedObjectMap(Map<ImplicitSwappedObject,ImplicitSwappedObject> v) {
-					assertMapPairs(v, SWAP+"="+SWAP);
+					assertList(v, SWAP+"="+SWAP);
 					var e = v.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue().wasUnswapped);
@@ -751,7 +751,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 
 				@Override
 				public void setImplicitSwappedObject3dMap(Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> v) {
-					assertMapPairs(v, SWAP+"=[[["+SWAP+",null],null],null]");
+					assertList(v, SWAP+"=[[["+SWAP+",null],null],null]");
 					var e = v.entrySet().iterator().next();
 					assertTrue(e.getKey().wasUnswapped);
 					assertTrue(e.getValue()[0][0][0].wasUnswapped);
@@ -766,49 +766,49 @@ class RrpcInterface_Test extends SimpleTestBase {
 
 				@Override
 				public void setEnum3d(TestEnum[][][] v) {
-					assertArray(v, "[[TWO,null],null]", null);
+					assertList(v, "[[TWO,null],null]", null);
 				}
 
 				@Override
 				public void setEnumList(List<TestEnum> v) {
 					assertList(v, "TWO", null);
-					assertType(TestEnum.class, v.get(0));
+					assertInstanceOf(TestEnum.class, v.get(0));
 				}
 
 				@Override
 				public void setEnum3dList(List<List<List<TestEnum>>> v) {
 					assertList(v, "[[TWO,null],null]", null);
-					assertType(TestEnum.class, v.get(0).get(0).get(0));
+					assertInstanceOf(TestEnum.class, v.get(0).get(0).get(0));
 				}
 
 				@Override
 				public void setEnum1d3dList(List<TestEnum[][][]> v) {
 					assertList(v, "[[[TWO,null],null],null]", null);
-					assertType(TestEnum[][][].class, v.get(0));
+					assertInstanceOf(TestEnum[][][].class, v.get(0));
 				}
 
 				@Override
 				public void setEnumMap(Map<TestEnum,TestEnum> v) {
-					assertMapPairs(v, "ONE=TWO");
+					assertList(v, "ONE=TWO");
 					var e = v.entrySet().iterator().next();
-					assertType(TestEnum.class, e.getKey());
-					assertType(TestEnum.class, e.getValue());
+					assertInstanceOf(TestEnum.class, e.getKey());
+					assertInstanceOf(TestEnum.class, e.getValue());
 				}
 
 				@Override
 				public void setEnum3dArrayMap(Map<TestEnum,TestEnum[][][]> v) {
-					assertMapPairs(v, "ONE=[[[TWO,null],null],null]");
+					assertList(v, "ONE=[[[TWO,null],null],null]");
 					var e = v.entrySet().iterator().next();
-					assertType(TestEnum.class, e.getKey());
-					assertType(TestEnum[][][].class, e.getValue());
+					assertInstanceOf(TestEnum.class, e.getKey());
+					assertInstanceOf(TestEnum[][][].class, e.getValue());
 				}
 
 				@Override
 				public void setEnum1d3dListMap(Map<TestEnum,List<TestEnum[][][]>> v) {
-					assertMapPairs(v, "ONE=[[[[TWO,null],null],null],null]");
+					assertList(v, "ONE=[[[[TWO,null],null],null],null]");
 					Map.Entry<TestEnum,List<TestEnum[][][]>> e = v.entrySet().iterator().next();
-					assertType(TestEnum.class, e.getKey());
-					assertType(TestEnum[][][].class, e.getValue().get(0));
+					assertInstanceOf(TestEnum.class, e.getKey());
+					assertInstanceOf(TestEnum[][][].class, e.getValue().get(0));
 				}
 
 				//--------------------------------------------------------------------------------
@@ -818,106 +818,106 @@ class RrpcInterface_Test extends SimpleTestBase {
 				@Override
 				public void setMultiParamsInts(int x1,int[][][] x2,int[][][] x2n,List<int[][][]> x3,List<int[][][]> x3n) {
 					assertEquals(1, x1);
-					assertArray(x2, "[[1,2],null]" ,null);
+					assertList(x2, "[[1,2],null]" ,null);
 					assertNull(x2n);
 					assertList(x3, "[[[1,2],null],null]", null);
-					assertType(int[][][].class, x3.get(0));
+					assertInstanceOf(int[][][].class, x3.get(0));
 					assertNull(x3n);
 				}
 
 				@Override
 				public void setMultiParamsInteger(Integer x1,Integer x1n,Integer[][][] x2,Integer[][][] x2n,List<Integer[][][]> x3,List<Integer[][][]> x3n) {
 					assertEquals((Integer)1, x1);
-					assertArray(x2, "[[1,null],null]", null);
+					assertList(x2, "[[1,null],null]", null);
 					assertNull(x2n);
 					assertList(x3, "[[[1,null],null],null]", null);
-					assertType(Integer[][][].class, x3.get(0));
+					assertInstanceOf(Integer[][][].class, x3.get(0));
 					assertNull(x3n);
 				}
 
 				@Override
 				public void setMultiParamsFloat(float x1,float[][][] x2,float[][][] x2n,List<float[][][]> x3,List<float[][][]> x3n) {
 					assertEquals(1.0f, x1, 0.1f);
-					assertArray(x2, "[[1.0,2.0],null]", null);
+					assertList(x2, "[[1.0,2.0],null]", null);
 					assertNull(x2n);
 					assertList(x3, "[[[1.0,2.0],null],null]", null);
-					assertType(float[][][].class, x3.get(0));
+					assertInstanceOf(float[][][].class, x3.get(0));
 					assertNull(x3n);
 				}
 
 				@Override
 				public void setMultiParamsFloatObject(Float x1,Float x1n,Float[][][] x2,Float[][][] x2n,List<Float[][][]> x3,List<Float[][][]> x3n) {
 					assertEquals(1.0f, x1, 0.1f);
-					assertArray(x2, "[[1.0,null],null]", null);
+					assertList(x2, "[[1.0,null],null]", null);
 					assertNull(x2n);
 					assertList(x3, "[[[1.0,null],null],null]", null);
-					assertType(Float[][][].class, x3.get(0));
+					assertInstanceOf(Float[][][].class, x3.get(0));
 					assertNull(x3n);
 				}
 
 				@Override
 				public void setMultiParamsString(String x1,String[][][] x2,String[][][] x2n,List<String[][][]> x3,List<String[][][]> x3n) {
 					assertEquals("foo", x1);
-					assertArray(x2, "[[foo,null],null]", null);
+					assertList(x2, "[[foo,null],null]", null);
 					assertNull(x2n);
 					assertList(x3, "[[[foo,null],null],null]", null);
-					assertType(String[][][].class, x3.get(0));
+					assertInstanceOf(String[][][].class, x3.get(0));
 					assertNull(x3n);
 				}
 
 				@Override
 				public void setMultiParamsBean(ABean x1,ABean[][][] x2,ABean[][][] x2n,List<ABean[][][]> x3,List<ABean[][][]> x3n,Map<String,ABean> x4,Map<String,ABean> x4n,Map<String,List<ABean[][][]>> x5,Map<String,List<ABean[][][]>> x5n) {
 					assertBean(x1, "a,b", "1,foo");
-					assertArray(x2, "[[{a:1,b:'foo'},null],null]", null);  // ABean toString converts it to JSON.
+					assertList(x2, "[[{a:1,b:'foo'},null],null]", null);  // ABean toString converts it to JSON.
 					assertNull(x2n);
 					assertList(x3, "[[[{a:1,b:'foo'},null],null],null]", null);
-					assertType(ABean[][][].class, x3.get(0));
+					assertInstanceOf(ABean[][][].class, x3.get(0));
 					assertNull(x3n);
-					assertMapPairs(x4, "foo={a:1,b:'foo'}");
+					assertList(x4, "foo={a:1,b:'foo'}");
 					assertNull(x4n);
-					assertMapPairs(x5, "foo=[[[[{a:1,b:'foo'},null],null],null],null]");
+					assertList(x5, "foo=[[[[{a:1,b:'foo'},null],null],null],null]");
 					assertNull(x5n);
 				}
 
 				@Override
 				public void setMultiParamsSwappedObject(SwappedObject x1,SwappedObject[][][] x2,SwappedObject[][][] x2n,List<SwappedObject[][][]> x3,List<SwappedObject[][][]> x3n,Map<SwappedObject,SwappedObject> x4,Map<SwappedObject,SwappedObject> x4n,Map<SwappedObject,List<SwappedObject[][][]>> x5,Map<SwappedObject,List<SwappedObject[][][]>> x5n) {
 					assertTrue(x1.wasUnswapped);
-					assertArray(x2, "[[wasUnswapped:true,null],null]", null);
+					assertList(x2, "[[wasUnswapped:true,null],null]", null);
 					assertNull(x2n);
 					assertList(x3, "[[[wasUnswapped:true,null],null],null]", null);
-					assertType(SwappedObject[][][].class, x3.get(0));
+					assertInstanceOf(SwappedObject[][][].class, x3.get(0));
 					assertNull(x3n);
-					assertMapPairs(x4, "wasUnswapped:true=wasUnswapped:true");
+					assertList(x4, "wasUnswapped:true=wasUnswapped:true");
 					assertNull(x4n);
-					assertMapPairs(x5, "wasUnswapped:true=[[[[wasUnswapped:true,null],null],null],null]");
+					assertList(x5, "wasUnswapped:true=[[[[wasUnswapped:true,null],null],null],null]");
 					assertNull(x5n);
 				}
 
 				@Override
 				public void setMultiParamsImplicitSwappedObject(ImplicitSwappedObject x1,ImplicitSwappedObject[][][] x2,ImplicitSwappedObject[][][] x2n,List<ImplicitSwappedObject[][][]> x3,List<ImplicitSwappedObject[][][]> x3n,Map<ImplicitSwappedObject,ImplicitSwappedObject> x4,Map<ImplicitSwappedObject,ImplicitSwappedObject> x4n,Map<ImplicitSwappedObject,List<ImplicitSwappedObject[][][]>> x5,Map<ImplicitSwappedObject,List<ImplicitSwappedObject[][][]>> x5n) {
 					assertTrue(x1.wasUnswapped);
-					assertArray(x2, "[["+SWAP+",null],null]", null);
+					assertList(x2, "[["+SWAP+",null],null]", null);
 					assertNull(x2n);
 					assertList(x3, "[[["+SWAP+",null],null],null]", null);
-					assertType(ImplicitSwappedObject[][][].class, x3.get(0));
+					assertInstanceOf(ImplicitSwappedObject[][][].class, x3.get(0));
 					assertNull(x3n);
-					assertMapPairs(x4, SWAP+"="+SWAP);
+					assertList(x4, SWAP+"="+SWAP);
 					assertNull(x4n);
-					assertMapPairs(x5, SWAP+"=[[[["+SWAP+",null],null],null],null]");
+					assertList(x5, SWAP+"=[[[["+SWAP+",null],null],null],null]");
 					assertNull(x5n);
 				}
 
 				@Override
 				public void setMultiParamsEnum(TestEnum x1,TestEnum[][][] x2,TestEnum[][][] x2n,List<TestEnum[][][]> x3,List<TestEnum[][][]> x3n,Map<TestEnum,TestEnum> x4,Map<TestEnum,TestEnum> x4n,Map<TestEnum,List<TestEnum[][][]>> x5,Map<TestEnum,List<TestEnum[][][]>> x5n) {
 					assertEquals(TestEnum.TWO, x1);
-					assertArray(x2, "[[TWO,null],null]", null);
+					assertList(x2, "[[TWO,null],null]", null);
 					assertNull(x2n);
 					assertList(x3, "[[[TWO,null],null],null]", null);
-					assertType(TestEnum[][][].class, x3.get(0));
+					assertInstanceOf(TestEnum[][][].class, x3.get(0));
 					assertNull(x3n);
-					assertMapPairs(x4, "ONE=TWO");
+					assertList(x4, "ONE=TWO");
 					assertNull(x4n);
-					assertMapPairs(x5, "ONE=[[[[TWO,null],null],null],null]");
+					assertList(x5, "ONE=[[[[TWO,null],null],null],null]");
 					assertNull(x5n);
 				}
 			};
@@ -980,19 +980,19 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void a09_returnInt3dArray(Input input) {
-		assertArray(input.proxy.returnInt3dArray(), "[[1,2],null]", null);
+		assertList(input.proxy.returnInt3dArray(), "[[1,2],null]", null);
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void a10_returnInteger3dArray(Input input) {
-		assertArray(input.proxy.returnInteger3dArray(), "[[1,null],null]", null);
+		assertList(input.proxy.returnInteger3dArray(), "[[1,null],null]", null);
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void a11_returnString3dArray(Input input) {
-		assertArray(input.proxy.returnString3dArray(), "[[foo,bar,null],null]", null);
+		assertList(input.proxy.returnString3dArray(), "[[foo,bar,null],null]", null);
 	}
 
 	@ParameterizedTest
@@ -1000,7 +1000,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void a12_returnIntegerList(Input input) {
 		var x = input.proxy.returnIntegerList();
 		assertList(x, "1", null);
-		assertType(Integer.class, x.get(0));
+		assertInstanceOf(Integer.class, x.get(0));
 	}
 
 	@ParameterizedTest
@@ -1008,7 +1008,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void a13_returnInteger3dList(Input input) {
 		var x = input.proxy.returnInteger3dList();
 		assertList(x, "[[1,null],null]", null);
-		assertType(Integer.class, x.get(0).get(0).get(0));
+		assertInstanceOf(Integer.class, x.get(0).get(0).get(0));
 	}
 
 	@ParameterizedTest
@@ -1016,7 +1016,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void a14_returnInteger1d3dList(Input input) {
 		var x = input.proxy.returnInteger1d3dList();
 		assertList(x, "[[[1,null],null],null]", null);
-		assertType(Integer.class, x.get(0)[0][0][0]);
+		assertInstanceOf(Integer.class, x.get(0)[0][0][0]);
 	}
 
 	@ParameterizedTest
@@ -1024,7 +1024,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void a15_returnInt1d3dList(Input input) {
 		var x = input.proxy.returnInt1d3dList();
 		assertList(x, "[[[1,2],null],null]", null);
-		assertType(int[][][].class, x.get(0));
+		assertInstanceOf(int[][][].class, x.get(0));
 	}
 
 	@ParameterizedTest
@@ -1040,15 +1040,15 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void b01_returnBean(Input input) {
 		var x = input.proxy.returnBean();
 		assertBean(x, "a,b", "1,foo");
-		assertType(ABean.class, x);
+		assertInstanceOf(ABean.class, x);
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void b02_returnBean3dArray(Input input) {
 		var x = input.proxy.returnBean3dArray();
-		assertArray(x, "[[{a:1,b:'foo'},null],null]", null);
-		assertType(ABean.class, x[0][0][0]);
+		assertList(x, "[[{a:1,b:'foo'},null],null]", null);
+		assertInstanceOf(ABean.class, x[0][0][0]);
 	}
 
 	@ParameterizedTest
@@ -1056,7 +1056,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void b03_returnBeanList(Input input) {
 		var x = input.proxy.returnBeanList();
 		assertList(x, "{a:1,b:'foo'}");
-		assertType(ABean.class, x.get(0));
+		assertInstanceOf(ABean.class, x.get(0));
 	}
 
 	@ParameterizedTest
@@ -1064,7 +1064,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void b04_returnBean1d3dList(Input input) {
 		var x = input.proxy.returnBean1d3dList();
 		assertList(x, "[[[{a:1,b:'foo'},null],null],null]", null);
-		assertType(ABean.class, x.get(0)[0][0][0]);
+		assertInstanceOf(ABean.class, x.get(0)[0][0][0]);
 	}
 
 	@ParameterizedTest
@@ -1072,7 +1072,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void b05_returnBeanMap(Input input) {
 		var x = input.proxy.returnBeanMap();
 		assertMap(x, "foo", "{a:1,b:'foo'}");
-		assertType(ABean.class, x.get("foo"));
+		assertInstanceOf(ABean.class, x.get("foo"));
 	}
 
 	@ParameterizedTest
@@ -1080,7 +1080,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void b06_returnBeanListMap(Input input) {
 		var x = input.proxy.returnBeanListMap();
 		assertMap(x, "foo", "[{a:1,b:'foo'}]");
-		assertType(ABean.class, x.get("foo").get(0));
+		assertInstanceOf(ABean.class, x.get("foo").get(0));
 	}
 
 	@ParameterizedTest
@@ -1088,7 +1088,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void b07_returnBean1d3dListMap(Input input) {
 		var x = input.proxy.returnBean1d3dListMap();
 		assertMap(x, "foo", "[[[[{a:1,b:'foo'},null],null],null],null]");
-		assertType(ABean.class, x.get("foo").get(0)[0][0][0]);
+		assertInstanceOf(ABean.class, x.get("foo").get(0)[0][0][0]);
 	}
 
 	@ParameterizedTest
@@ -1096,8 +1096,8 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void b08_returnBeanListMapIntegerKeys(Input input) {
 		// Note: JsonSerializer serializes key as string.
 		var x = input.proxy.returnBeanListMapIntegerKeys();
-		assertMapPairs(x, "1=[{a:1,b:'foo'}]");
-		assertType(Integer.class, x.keySet().iterator().next());
+		assertList(x, "1=[{a:1,b:'foo'}]");
+		assertInstanceOf(Integer.class, x.keySet().iterator().next());
 	}
 
 	// Typed beans
@@ -1107,15 +1107,15 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void c01_returnTypedBean(Input input) {
 		var x = input.proxy.returnTypedBean();
 		assertBean(x, "a,b", "1,foo");
-		assertType(TypedBeanImpl.class, x);
+		assertInstanceOf(TypedBeanImpl.class, x);
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void c02_returnTypedBean3dArray(Input input) {
 		var x = input.proxy.returnTypedBean3dArray();
-		assertArray(x, "[[a:1;b:foo,null],null]", null);
-		assertType(TypedBeanImpl.class, x[0][0][0]);
+		assertList(x, "[[a:1;b:foo,null],null]", null);
+		assertInstanceOf(TypedBeanImpl.class, x[0][0][0]);
 	}
 
 	@ParameterizedTest
@@ -1123,7 +1123,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void c03_returnTypedBeanList(Input input) {
 		var x = input.proxy.returnTypedBeanList();
 		assertList(x, "a:1;b:foo");
-		assertType(TypedBeanImpl.class, x.get(0));
+		assertInstanceOf(TypedBeanImpl.class, x.get(0));
 	}
 
 	@ParameterizedTest
@@ -1131,7 +1131,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void c04_returnTypedBean1d3dList(Input input) {
 		var x = input.proxy.returnTypedBean1d3dList();
 		assertList(x, "[[[a:1;b:foo,null],null],null]", null);
-		assertType(TypedBeanImpl.class, x.get(0)[0][0][0]);
+		assertInstanceOf(TypedBeanImpl.class, x.get(0)[0][0][0]);
 	}
 
 	@ParameterizedTest
@@ -1139,7 +1139,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void c05_returnTypedBeanMap(Input input) {
 		var x = input.proxy.returnTypedBeanMap();
 		assertMap(x, "foo", "a:1;b:foo");
-		assertType(TypedBeanImpl.class, x.get("foo"));
+		assertInstanceOf(TypedBeanImpl.class, x.get("foo"));
 	}
 
 	@ParameterizedTest
@@ -1147,7 +1147,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void c06_returnTypedBeanListMap(Input input) {
 		var x = input.proxy.returnTypedBeanListMap();
 		assertMap(x, "foo", "[a:1;b:foo]");
-		assertType(TypedBeanImpl.class, x.get("foo").get(0));
+		assertInstanceOf(TypedBeanImpl.class, x.get("foo").get(0));
 	}
 
 	@ParameterizedTest
@@ -1155,7 +1155,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void c07_returnTypedBean1d3dListMap(Input input) {
 		var x = input.proxy.returnTypedBean1d3dListMap();
 		assertMap(x, "foo", "[[[[a:1;b:foo,null],null],null],null]");
-		assertType(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0]);
+		assertInstanceOf(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0]);
 	}
 
 	@ParameterizedTest
@@ -1163,8 +1163,8 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void c08_returnTypedBeanListMapIntegerKeys(Input input) {
 		// Note: JsonSerializer serializes key as string.
 		var x = input.proxy.returnTypedBeanListMapIntegerKeys();
-		assertMapPairs(x, "1=[a:1;b:foo]");
-		assertType(TypedBeanImpl.class, x.get(1).get(0));
+		assertList(x, "1=[a:1;b:foo]");
+		assertInstanceOf(TypedBeanImpl.class, x.get(1).get(0));
 	}
 
 	// Swapped POJOs
@@ -1180,7 +1180,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@MethodSource("input")
 	void d02_returnSwappedObject3dArray(Input input) {
 		var x = input.proxy.returnSwappedObject3dArray();
-		assertArray(x, "[[wasUnswapped:true,null],null]", null);
+		assertList(x, "[[wasUnswapped:true,null],null]", null);
 		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
@@ -1188,7 +1188,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@MethodSource("input")
 	void d03_returnSwappedObjectMap(Input input) {
 		var x = input.proxy.returnSwappedObjectMap();
-		assertMapPairs(x, "wasUnswapped:true=wasUnswapped:true");
+		assertList(x, "wasUnswapped:true=wasUnswapped:true");
 		var e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue().wasUnswapped);
@@ -1198,7 +1198,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@MethodSource("input")
 	void d04_returnSwappedObject3dMap(Input input) {
 		var x = input.proxy.returnSwappedObject3dMap();
-		assertMapPairs(x, "wasUnswapped:true=[[[wasUnswapped:true,null],null],null]");
+		assertList(x, "wasUnswapped:true=[[[wasUnswapped:true,null],null],null]");
 		var e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);
@@ -1217,7 +1217,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@MethodSource("input")
 	void e02_returnImplicitSwappedObject3dArray(Input input) {
 		var x = input.proxy.returnImplicitSwappedObject3dArray();
-		assertArray(x, "[["+SWAP+",null],null]", null);
+		assertList(x, "[["+SWAP+",null],null]", null);
 		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
@@ -1225,7 +1225,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@MethodSource("input")
 	void e03_returnImplicitSwappedObjectMap(Input input) {
 		var x = input.proxy.returnImplicitSwappedObjectMap();
-		assertMapPairs(x, SWAP+"="+SWAP);
+		assertList(x, SWAP+"="+SWAP);
 		var e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue().wasUnswapped);
@@ -1235,7 +1235,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@MethodSource("input")
 	void e04_returnImplicitSwappedObject3dMap(Input input) {
 		var x = input.proxy.returnImplicitSwappedObject3dMap();
-		assertMapPairs(x, SWAP+"=[[["+SWAP+",null],null],null]");
+		assertList(x, SWAP+"=[[["+SWAP+",null],null],null]");
 		var e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);
@@ -1254,8 +1254,8 @@ class RrpcInterface_Test extends SimpleTestBase {
 	@MethodSource("input")
 	void f02_returnEnum3d(Input input) {
 		var x = input.proxy.returnEnum3d();
-		assertArray(x, "[[TWO,null],null]", null);
-		assertType(TestEnum.class, x[0][0][0]);
+		assertList(x, "[[TWO,null],null]", null);
+		assertInstanceOf(TestEnum.class, x[0][0][0]);
 	}
 
 	@ParameterizedTest
@@ -1263,7 +1263,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void f03_returnEnumList(Input input) {
 		var x = input.proxy.returnEnumList();
 		assertList(x, "TWO", null);
-		assertType(TestEnum.class, x.get(0));
+		assertInstanceOf(TestEnum.class, x.get(0));
 	}
 
 	@ParameterizedTest
@@ -1271,7 +1271,7 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void f04_returnEnum3dList(Input input) {
 		var x = input.proxy.returnEnum3dList();
 		assertList(x, "[[TWO,null],null]", null);
-		assertType(TestEnum.class, x.get(0).get(0).get(0));
+		assertInstanceOf(TestEnum.class, x.get(0).get(0).get(0));
 	}
 
 	@ParameterizedTest
@@ -1279,35 +1279,35 @@ class RrpcInterface_Test extends SimpleTestBase {
 	void f05_returnEnum1d3dList(Input input) {
 		var x = input.proxy.returnEnum1d3dList();
 		assertList(x, "[[[TWO,null],null],null]", null);
-		assertType(TestEnum[][][].class, x.get(0));
+		assertInstanceOf(TestEnum[][][].class, x.get(0));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void f06_returnEnumMap(Input input) {
 		var x = input.proxy.returnEnumMap();
-		assertMapPairs(x, "ONE=TWO");
+		assertList(x, "ONE=TWO");
 		var e = x.entrySet().iterator().next();
-		assertType(TestEnum.class, e.getKey());
-		assertType(TestEnum.class, e.getValue());
+		assertInstanceOf(TestEnum.class, e.getKey());
+		assertInstanceOf(TestEnum.class, e.getValue());
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void f07_returnEnum3dArrayMap(Input input) {
 		var x = input.proxy.returnEnum3dArrayMap();
-		assertMapPairs(x, "ONE=[[[TWO,null],null],null]");
+		assertList(x, "ONE=[[[TWO,null],null],null]");
 		var e = x.entrySet().iterator().next();
-		assertType(TestEnum.class, e.getKey());
-		assertType(TestEnum[][][].class, e.getValue());
+		assertInstanceOf(TestEnum.class, e.getKey());
+		assertInstanceOf(TestEnum[][][].class, e.getValue());
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void f08_returnEnum1d3dListMap(Input input) {
 		var x = input.proxy.returnEnum1d3dListMap();
-		assertMapPairs(x, "ONE=[[[[TWO,null],null],null],null]");
-		assertType(TestEnum[][][].class, x.get(TestEnum.ONE).get(0));
+		assertList(x, "ONE=[[[[TWO,null],null],null],null]");
+		assertInstanceOf(TestEnum[][][].class, x.get(TestEnum.ONE).get(0));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -13,6 +13,7 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
@@ -26,20 +27,20 @@ class ParserSet_Test extends SimpleTestBase {
 	@Test void a01_parserGroupMatching() {
 
 		var s = ParserSet.create().add(Parser1.class, Parser2.class, Parser3.class).build();
-		assertType(Parser1.class, s.getParser("text/foo"));
-		assertType(Parser1.class, s.getParser("text/foo_a"));
-		assertType(Parser1.class, s.getParser("text/foo_a+xxx"));
-		assertType(Parser1.class, s.getParser("text/xxx+foo_a"));
-		assertType(Parser2.class, s.getParser("text/foo+bar"));
-		assertType(Parser2.class, s.getParser("text/foo+bar_a"));
-		assertType(Parser2.class, s.getParser("text/bar+foo"));
-		assertType(Parser2.class, s.getParser("text/bar+foo+xxx"));
-		assertType(Parser3.class, s.getParser("text/baz"));
-		assertType(Parser3.class, s.getParser("text/baz_a"));
-		assertType(Parser3.class, s.getParser("text/baz+yyy"));
-		assertType(Parser3.class, s.getParser("text/baz_a+yyy"));
-		assertType(Parser3.class, s.getParser("text/yyy+baz"));
-		assertType(Parser3.class, s.getParser("text/yyy+baz_a"));
+		assertInstanceOf(Parser1.class, s.getParser("text/foo"));
+		assertInstanceOf(Parser1.class, s.getParser("text/foo_a"));
+		assertInstanceOf(Parser1.class, s.getParser("text/foo_a+xxx"));
+		assertInstanceOf(Parser1.class, s.getParser("text/xxx+foo_a"));
+		assertInstanceOf(Parser2.class, s.getParser("text/foo+bar"));
+		assertInstanceOf(Parser2.class, s.getParser("text/foo+bar_a"));
+		assertInstanceOf(Parser2.class, s.getParser("text/bar+foo"));
+		assertInstanceOf(Parser2.class, s.getParser("text/bar+foo+xxx"));
+		assertInstanceOf(Parser3.class, s.getParser("text/baz"));
+		assertInstanceOf(Parser3.class, s.getParser("text/baz_a"));
+		assertInstanceOf(Parser3.class, s.getParser("text/baz+yyy"));
+		assertInstanceOf(Parser3.class, s.getParser("text/baz_a+yyy"));
+		assertInstanceOf(Parser3.class, s.getParser("text/yyy+baz"));
+		assertInstanceOf(Parser3.class, s.getParser("text/yyy+baz_a"));
 	}
 
 

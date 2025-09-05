@@ -206,6 +206,6 @@ class Operation_Test extends SimpleTestBase {
 			.set("tags", set("k"))
 			.set("$ref", "l");
 
-		assertSet(t.keySet(), "consumes", "deprecated", "description", "externalDocs", "operationId", "parameters", "produces", "responses", "schemes", "security", "summary", "tags", "$ref");
+		assertList(t.keySet(), "consumes", "deprecated", "description", "externalDocs", "operationId", "parameters", "produces", "responses", "schemes", "security", "summary", "tags", "$ref");
 	}
 }

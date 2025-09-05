@@ -697,14 +697,14 @@ class XmlIgnoreComments_Test extends SimpleTestBase {
 	@MethodSource("input")
 	void a01_noComment(Input input) throws Exception {
 		var actual = XmlParser.DEFAULT.parse(input.input.replace("|", ""), input.type);
-		assertEquals(json(actual), json(input.expected), fs("Test ''{0}'' failed with comparison error", input.label));
+		assertEquals(json(actual), json(input.expected), fms("Test ''{0}'' failed with comparison error", input.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void a02_normalComment(Input input) throws Exception {
 		var actual = XmlParser.DEFAULT.parse(input.input.replace("|", "<!--x-->"), input.type);
-		assertEquals(json(actual), json(input.expected), fs("Test ''{0}'' failed with comparison error", input.label));
+		assertEquals(json(actual), json(input.expected), fms("Test ''{0}'' failed with comparison error", input.label));
 	}
 
 	@ParameterizedTest
@@ -712,7 +712,7 @@ class XmlIgnoreComments_Test extends SimpleTestBase {
 	void a03_commentWithWhitespace(Input input) throws Exception {
 		var actual = XmlParser.DEFAULT.parse(input.input.replace("|", " \n <!-- \n x \n --> \n "), input.type);
 		if (! input.skipWsTests)
-			assertEquals(json(actual), json(input.expected), fs("Test ''{0}'' failed with comparison error", input.label));
+			assertEquals(json(actual), json(input.expected), fms("Test ''{0}'' failed with comparison error", input.label));
 	}
 
 	@ParameterizedTest
@@ -720,7 +720,7 @@ class XmlIgnoreComments_Test extends SimpleTestBase {
 	void a04_doubleCommentsWithWhitespace(Input input) throws Exception {
 		var actual = XmlParser.DEFAULT.parse(input.input.replace("|", " \n <!-- \n x \n --> \n \n <!-- \n x \n --> \n "), input.type);
 		if (! input.skipWsTests)
-			assertEquals(json(actual), json(input.expected), fs("Test ''{0}'' failed with comparison error", input.label));
+			assertEquals(json(actual), json(input.expected), fms("Test ''{0}'' failed with comparison error", input.label));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

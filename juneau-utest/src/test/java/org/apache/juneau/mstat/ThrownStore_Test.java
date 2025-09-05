@@ -182,13 +182,13 @@ class ThrownStore_Test extends SimpleTestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_builder_default() {
-		assertType(ThrownStore.class, ThrownStore.create().build());
+		assertInstanceOf(ThrownStore.class, ThrownStore.create().build());
 	}
 
 	public static class B1 extends ThrownStore{}
 
 	@Test void b02_builder_implClass() {
-		assertType(B1.class, ThrownStore.create().type(B1.class).build());
+		assertInstanceOf(B1.class, ThrownStore.create().type(B1.class).build());
 	}
 
 	public static class B4 extends ThrownStore {
@@ -221,11 +221,11 @@ class ThrownStore_Test extends SimpleTestBase {
 		var bs = BeanStore.create().build();
 
 		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: B5a", ()->ThrownStore.create(bs).type(B5b.class).build());
-		assertType(B5c.class, ThrownStore.create(bs).type(B5c.class).build());
+		assertInstanceOf(B5c.class, ThrownStore.create(bs).type(B5c.class).build());
 
 		bs.addBean(B5a.class, new B5a());
-		assertType(B5b.class, ThrownStore.create(bs).type(B5b.class).build());
-		assertType(B5c.class, ThrownStore.create(bs).type(B5c.class).build());
+		assertInstanceOf(B5b.class, ThrownStore.create(bs).type(B5b.class).build());
+		assertInstanceOf(B5c.class, ThrownStore.create(bs).type(B5c.class).build());
 	}
 
 	public static class B6a {}
@@ -253,11 +253,11 @@ class ThrownStore_Test extends SimpleTestBase {
 		t1.fillInStackTrace();
 
 		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: B6a", ()->ThrownStore.create(bs).statsImplClass(B6b.class).build().add(t1));
-		assertType(B6c.class, ThrownStore.create(bs).statsImplClass(B6c.class).build().add(t1));
+		assertInstanceOf(B6c.class, ThrownStore.create(bs).statsImplClass(B6c.class).build().add(t1));
 
 		bs.addBean(B6a.class, new B6a());
-		assertType(B6b.class, ThrownStore.create(bs).statsImplClass(B6b.class).build().add(t1));
-		assertType(B6c.class, ThrownStore.create(bs).statsImplClass(B6c.class).build().add(t1));
+		assertInstanceOf(B6b.class, ThrownStore.create(bs).statsImplClass(B6b.class).build().add(t1));
+		assertInstanceOf(B6c.class, ThrownStore.create(bs).statsImplClass(B6c.class).build().add(t1));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

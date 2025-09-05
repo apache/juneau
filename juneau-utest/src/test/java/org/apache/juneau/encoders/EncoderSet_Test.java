@@ -13,6 +13,7 @@
 package org.apache.juneau.encoders;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -25,15 +26,15 @@ class EncoderSet_Test extends SimpleTestBase {
 	@Test void a01_encoderGroupMatching() {
 
 		var s = EncoderSet.create().add(Encoder1.class, Encoder2.class, Encoder3.class).build();
-		assertType(Encoder1.class, s.getEncoder("gzip1"));
-		assertType(Encoder2.class, s.getEncoder("gzip2"));
-		assertType(Encoder2.class, s.getEncoder("gzip2a"));
-		assertType(Encoder3.class, s.getEncoder("gzip3"));
-		assertType(Encoder3.class, s.getEncoder("gzip3a"));
-		assertType(Encoder3.class, s.getEncoder("gzip3,gzip2,gzip1"));
-		assertType(Encoder1.class, s.getEncoder("gzip3;q=0.9,gzip2;q=0.1,gzip1"));
-		assertType(Encoder3.class, s.getEncoder("gzip2;q=0.9,gzip1;q=0.1,gzip3"));
-		assertType(Encoder2.class, s.getEncoder("gzip1;q=0.9,gzip3;q=0.1,gzip2"));
+		assertInstanceOf(Encoder1.class, s.getEncoder("gzip1"));
+		assertInstanceOf(Encoder2.class, s.getEncoder("gzip2"));
+		assertInstanceOf(Encoder2.class, s.getEncoder("gzip2a"));
+		assertInstanceOf(Encoder3.class, s.getEncoder("gzip3"));
+		assertInstanceOf(Encoder3.class, s.getEncoder("gzip3a"));
+		assertInstanceOf(Encoder3.class, s.getEncoder("gzip3,gzip2,gzip1"));
+		assertInstanceOf(Encoder1.class, s.getEncoder("gzip3;q=0.9,gzip2;q=0.1,gzip1"));
+		assertInstanceOf(Encoder3.class, s.getEncoder("gzip2;q=0.9,gzip1;q=0.1,gzip3"));
+		assertInstanceOf(Encoder2.class, s.getEncoder("gzip1;q=0.9,gzip3;q=0.1,gzip2"));
 	}
 
 	public static class Encoder1 extends GzipEncoder {

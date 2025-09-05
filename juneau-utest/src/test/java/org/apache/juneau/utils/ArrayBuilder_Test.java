@@ -23,15 +23,15 @@ class ArrayBuilder_Test extends SimpleTestBase {
 	@Test void a01_basic() {
 		String[] empty = {};
 		var x = ArrayBuilder.of(String.class).filter(y -> y != null).size(2);
-		assertArray(x.orElse(empty));
+		assertEmpty(x.orElse(empty));
 		x.add(null);
-		assertArray(x.orElse(empty));
+		assertEmpty(x.orElse(empty));
 		x.add("a");
-		assertArray(x.orElse(empty), "a");
+		assertList(x.orElse(empty), "a");
 		x.add("b");
 		x.add(null);
-		assertArray(x.orElse(empty), "a", "b");
+		assertList(x.orElse(empty), "a", "b");
 		x.add("c");
-		assertArray(x.orElse(empty), "a", "b", "c");
+		assertList(x.orElse(empty), "a", "b", "c");
 	}
 }

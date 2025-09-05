@@ -650,7 +650,7 @@ public class FileFinder_Test extends SimpleTestBase {  // NOSONAR - Needs to be 
 			.caching(100_000_000)
 			.type(E03b.class)
 			.build();
-		assertType(E03b.class, x);
+		assertInstanceOf(E03b.class, x);
 	}
 
 	public static class E03a extends FileFinder.Builder {

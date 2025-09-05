@@ -83,6 +83,7 @@ public class Utils {
 		E[] array = (E[])Array.newInstance(componentType, value.size());
 		return value.toArray(array);
 	}
+
 	/**
 	 * Converts any array (including primitive arrays) to a List.
 	 *
@@ -468,9 +469,27 @@ public class Utils {
 	}
 
 	/**
-	 * Simplified formatted string supplier with message arguments.
+	 * Creates a formatted string supplier with message arguments for lazy evaluation.
+	 *
+	 * <p>This method returns a {@link Supplier} that formats the string pattern with the provided arguments
+	 * only when the supplier's {@code get()} method is called. This is useful for expensive string formatting
+	 * operations that may not always be needed, such as error messages in assertions.</p>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Lazy evaluation - string is only formatted if assertion fails</jc>
+	 * 	assertTrue(condition, fms(<js>"Expected {0} but got {1}"</js>, expected, actual));
+	 *
+	 * 	<jc>// Can be used anywhere a Supplier&lt;String&gt; is expected</jc>
+	 * 	Supplier&lt;String&gt; <jv>messageSupplier</jv> = fms(<js>"Processing item {0} of {1}"</js>, i, total);
+	 * </p>
+	 *
+	 * @param pattern The message pattern using <js>{0}</js>, <js>{1}</js>, etc. placeholders.
+	 * @param args The arguments to substitute into the pattern placeholders.
+	 * @return A {@link Supplier} that will format the string when {@code get()} is called.
+	 * @see StringUtils#format(String, Object...)
 	 */
-	public static Supplier<String> fs(String pattern, Object...args) {
+	public static Supplier<String> fms(String pattern, Object...args) {
 		return ()->StringUtils.format(pattern, args);
 	}
 
@@ -1646,21 +1665,77 @@ public class Utils {
 		return l.toArray(new String[l.size()]);
 	}
 
-	public static final <T> List<T> toList(Enumeration<T> value) {
-		return Collections.list(value);
+	/**
+	 * Converts various collection-like objects to a {@link List}.
+	 *
+	 * <p>This utility method enables testing of any collection-like object by converting it to a List that can be
+	 * passed to methods such as TestUtils.assertList().</p>
+	 *
+	 * <h5 class='section'>Supported Input Types:</h5>
+	 * <ul>
+	 * 	<li><b>List:</b> Returns the input unchanged</li>
+	 * 	<li><b>Iterable:</b> Any collection, set, queue, etc. (converted to List preserving order)</li>
+	 * 	<li><b>Iterator:</b> Converts iterator contents to List</li>
+	 * 	<li><b>Enumeration:</b> Converts enumeration contents to List</li>
+	 * 	<li><b>Stream:</b> Converts stream contents to List (stream is consumed)</li>
+	 * 	<li><b>Map:</b> Converts map entries to List of Map.Entry objects</li>
+	 * 	<li><b>Array:</b> Converts any array type (including primitive arrays) to List</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Test a Set</jc>
+	 * 	Set&lt;String&gt; <jv>mySet</jv> = Set.of(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 * 	assertList(toList(<jv>mySet</jv>), <js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 *
+	 * 	<jc>// Test an array</jc>
+	 * 	String[] <jv>myArray</jv> = {<js>"x"</js>, <js>"y"</js>, <js>"z"</js>};
+	 * 	assertList(toList(<jv>myArray</jv>), <js>"x"</js>, <js>"y"</js>, <js>"z"</js>);
+	 *
+	 * 	<jc>// Test a primitive array</jc>
+	 * 	<jk>int</jk>[] <jv>numbers</jv> = {1, 2, 3};
+	 * 	assertList(toList(<jv>numbers</jv>), <js>"1"</js>, <js>"2"</js>, <js>"3"</js>);
+	 *
+	 * 	<jc>// Test a Stream</jc>
+	 * 	Stream&lt;String&gt; <jv>myStream</jv> = Stream.of(<js>"foo"</js>, <js>"bar"</js>);
+	 * 	assertList(toList(<jv>myStream</jv>), <js>"foo"</js>, <js>"bar"</js>);
+	 *
+	 * 	<jc>// Test a Map (converted to entries)</jc>
+	 * 	Map&lt;String,Integer&gt; <jv>myMap</jv> = Map.of(<js>"a"</js>, 1, <js>"b"</js>, 2);
+	 * 	assertList(toList(<jv>myMap</jv>), <js>"a=1"</js>, <js>"b=2"</js>);
+	 *
+	 * 	<jc>// Test any Iterable collection</jc>
+	 * 	Queue&lt;String&gt; <jv>myQueue</jv> = new LinkedList&lt;&gt;(List.of(<js>"first"</js>, <js>"second"</js>));
+	 * 	assertList(toList(<jv>myQueue</jv>), <js>"first"</js>, <js>"second"</js>);
+	 * </p>
+	 *
+	 * <h5 class='section'>Integration with assertList:</h5>
+	 * <p>This method is specifically designed to work with {@link #assertList(List, Object...)} to provide
+	 * a unified testing approach for all collection-like types. Instead of having separate assertion methods
+	 * for arrays, sets, and other collections, you can convert them all to Lists and use the single
+	 * {@code assertList} method.</p>
+	 *
+	 * @param o The object to convert to a List. Must not be null and must be a supported collection-like type.
+	 * @return A {@link List} containing the elements from the input object.
+	 * @throws IllegalArgumentException if the input object cannot be converted to a List.
+	 * @see #assertList(List, Object...)
+	 * @see #arrayToList(Object)
+	 */
+	public static final List<?> toList(Object o) {  // NOSONAR
+		assertArgNotNull("o", o);
+		if (o instanceof List<?> o2) return o2;
+		if (o instanceof Iterable<?> o2) return StreamSupport.stream(o2.spliterator(), false).toList();
+		if (o instanceof Iterator<?> o2) return StreamSupport.stream(Spliterators.spliteratorUnknownSize(o2, 0), false).toList();
+		if (o instanceof Enumeration<?> o2) return Collections.list(o2);
+		if (o instanceof Stream<?> o2) return o2.toList();
+		if (o instanceof Map<?,?> o2) return toList(o2.entrySet());
+		if (o instanceof Optional<?> o2) return o2.isEmpty() ? Collections.emptyList() : Collections.singletonList(o2.get());
+		if (isArray(o)) return arrayToList(o);
+		throw runtimeException("Could not convert object of type {0} to a list", classNameOf(o));
 	}
 
-	public static final <T> List<T> toList(Stream<T> value) {
-		return value.toList();
-	}
-
-	public static final <T> List<T> toList(Iterable<T> value) {
-		return StreamSupport.stream(value.spliterator(), false).toList();
-	}
-
-	public static final <T> List<T> toList(Iterator<T> value) {
-		Iterable<T> v2 = () -> value;
-		return StreamSupport.stream(v2.spliterator(), false).toList();
+	public static boolean isConvertibleToList(Object o) {
+		return o != null && (o instanceof Collection || o instanceof Iterable || o instanceof Iterator || o instanceof Enumeration || o instanceof Stream || o instanceof Map || o instanceof Optional || isArray(o));
 	}
 
 	/**
@@ -1709,14 +1784,42 @@ public class Utils {
 			c.accept((T)o);
 	}
 
+	/**
+	 * Creates an unmodifiable view of the specified list.
+	 *
+	 * <p>This is a null-safe wrapper around {@link Collections#unmodifiableList(List)}.</p>
+	 *
+	 * @param <T> The element type.
+	 * @param value The list to make unmodifiable. Can be null.
+	 * @return An unmodifiable view of the list, or null if the input was null.
+	 */
 	public static <T> List<T> u(List<? extends T> value) {
 		return value == null ? null : Collections.unmodifiableList(value);
 	}
 
+	/**
+	 * Creates an unmodifiable view of the specified map.
+	 *
+	 * <p>This is a null-safe wrapper around {@link Collections#unmodifiableMap(Map)}.</p>
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param value The map to make unmodifiable. Can be null.
+	 * @return An unmodifiable view of the map, or null if the input was null.
+	 */
 	public static <K,V> Map<K,V> u(Map<? extends K, ? extends V> value) {
 		return value == null ? null : Collections.unmodifiableMap(value);
 	}
 
+	/**
+	 * Creates an unmodifiable view of the specified set.
+	 *
+	 * <p>This is a null-safe wrapper around {@link Collections#unmodifiableSet(Set)}.</p>
+	 *
+	 * @param <T> The element type.
+	 * @param value The set to make unmodifiable. Can be null.
+	 * @return An unmodifiable view of the set, or null if the input was null.
+	 */
 	public static <T> Set<T> u(Set<? extends T> value) {
 		return value == null ? null : Collections.unmodifiableSet(value);
 	}

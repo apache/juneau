@@ -392,16 +392,16 @@ class StringUtils_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a07_split() {
 		assertNull(Utils.splita((String)null));
-		assertArray(Utils.splita(""));
-		assertArray(Utils.splita("1"), "1");
-		assertArray(Utils.splita("1,2"), "1", "2");
-		assertArray(Utils.splita("1\\,2"), "1,2");
-		assertArray(Utils.splita("1\\\\,2"), "1\\", "2");
-		assertArray(Utils.splita("1\\\\\\,2"), "1\\,2");
-		assertArray(Utils.splita("1,2\\"), "1", "2\\");
-		assertArray(Utils.splita("1,2\\\\"), "1", "2\\");
-		assertArray(Utils.splita("1,2\\,"), "1", "2,");
-		assertArray(Utils.splita("1,2\\\\,"), "1", "2\\", "");
+		assertEmpty(Utils.splita(""));
+		assertList(Utils.splita("1"), "1");
+		assertList(Utils.splita("1,2"), "1", "2");
+		assertList(Utils.splita("1\\,2"), "1,2");
+		assertList(Utils.splita("1\\\\,2"), "1\\", "2");
+		assertList(Utils.splita("1\\\\\\,2"), "1\\,2");
+		assertList(Utils.splita("1,2\\"), "1", "2\\");
+		assertList(Utils.splita("1,2\\\\"), "1", "2\\");
+		assertList(Utils.splita("1,2\\,"), "1", "2,");
+		assertList(Utils.splita("1,2\\\\,"), "1", "2\\", "");
 	}
 
 	@Test void a08_split2() {
@@ -602,24 +602,24 @@ class StringUtils_Test extends SimpleTestBase {
 	//====================================================================================================
 	@Test void a22_splitQuoted() {
 		assertNull(Utils.splitQuoted(null));
-		assertArray(Utils.splitQuoted(""));
-		assertArray(Utils.splitQuoted(" \t "));
-		assertArray(Utils.splitQuoted("foo"), "foo");
-		assertArray(Utils.splitQuoted("foo  bar baz"), "foo", "bar", "baz");
-		assertArray(Utils.splitQuoted("'foo'"), "foo");
-		assertArray(Utils.splitQuoted(" ' foo ' "), " foo ");
-		assertArray(Utils.splitQuoted("'foo' 'bar'"), "foo", "bar");
-		assertArray(Utils.splitQuoted("\"foo\""), "foo");
-		assertArray(Utils.splitQuoted(" \" foo \" "), " foo ");
-		assertArray(Utils.splitQuoted("\"foo\" \"bar\""), "foo", "bar");
-		assertArray(Utils.splitQuoted("'foo\\'bar'"), "foo'bar");
-		assertArray(Utils.splitQuoted("'foo\\\"bar'"), "foo\"bar");
-		assertArray(Utils.splitQuoted("'\\'foo\\'bar\\''"), "'foo'bar'");
-		assertArray(Utils.splitQuoted("'\\\"foo\\\"bar\\\"'"), "\"foo\"bar\"");
-		assertArray(Utils.splitQuoted("'\\'foo\\''"), "'foo'");
-		assertArray(Utils.splitQuoted("\"\\\"foo\\\"\""), "\"foo\"");
-		assertArray(Utils.splitQuoted("'\"foo\"'"), "\"foo\"");
-		assertArray(Utils.splitQuoted("\"'foo'\""), "'foo'");
+		assertEmpty(Utils.splitQuoted(""));
+		assertEmpty(Utils.splitQuoted(" \t "));
+		assertList(Utils.splitQuoted("foo"), "foo");
+		assertList(Utils.splitQuoted("foo  bar baz"), "foo", "bar", "baz");
+		assertList(Utils.splitQuoted("'foo'"), "foo");
+		assertList(Utils.splitQuoted(" ' foo ' "), " foo ");
+		assertList(Utils.splitQuoted("'foo' 'bar'"), "foo", "bar");
+		assertList(Utils.splitQuoted("\"foo\""), "foo");
+		assertList(Utils.splitQuoted(" \" foo \" "), " foo ");
+		assertList(Utils.splitQuoted("\"foo\" \"bar\""), "foo", "bar");
+		assertList(Utils.splitQuoted("'foo\\'bar'"), "foo'bar");
+		assertList(Utils.splitQuoted("'foo\\\"bar'"), "foo\"bar");
+		assertList(Utils.splitQuoted("'\\'foo\\'bar\\''"), "'foo'bar'");
+		assertList(Utils.splitQuoted("'\\\"foo\\\"bar\\\"'"), "\"foo\"bar\"");
+		assertList(Utils.splitQuoted("'\\'foo\\''"), "'foo'");
+		assertList(Utils.splitQuoted("\"\\\"foo\\\"\""), "\"foo\"");
+		assertList(Utils.splitQuoted("'\"foo\"'"), "\"foo\"");
+		assertList(Utils.splitQuoted("\"'foo'\""), "'foo'");
 	}
 
 	//====================================================================================================
@@ -807,11 +807,11 @@ class StringUtils_Test extends SimpleTestBase {
 	// splitMethodArgs(String)
 	//====================================================================================================
 	@Test void a33_splitMethodArgs() {
-		assertArray(Utils.splitMethodArgs("java.lang.String"), "java.lang.String");
-		assertArray(Utils.splitMethodArgs("java.lang.String,java.lang.Integer"), "java.lang.String", "java.lang.Integer");
-		assertArray(Utils.splitMethodArgs("x,y"), "x","y");
-		assertArray(Utils.splitMethodArgs("x,y<a,b>,z"), "x", "y<a,b>", "z");
-		assertArray(Utils.splitMethodArgs("x,y<a<b,c>,d<e,f>>,z"), "x", "y<a<b,c>,d<e,f>>", "z");
+		assertList(Utils.splitMethodArgs("java.lang.String"), "java.lang.String");
+		assertList(Utils.splitMethodArgs("java.lang.String,java.lang.Integer"), "java.lang.String", "java.lang.Integer");
+		assertList(Utils.splitMethodArgs("x,y"), "x","y");
+		assertList(Utils.splitMethodArgs("x,y<a,b>,z"), "x", "y<a,b>", "z");
+		assertList(Utils.splitMethodArgs("x,y<a<b,c>,d<e,f>>,z"), "x", "y<a<b,c>,d<e,f>>", "z");
 	}
 
 	//====================================================================================================

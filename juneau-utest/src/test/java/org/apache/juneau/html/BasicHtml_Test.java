@@ -14,6 +14,7 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -46,7 +47,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<string>foo</string>",
 			"<string>foo</string>",
 			"<string>foo</string>",
-			x -> assertType(String.class, x)
+			x -> assertInstanceOf(String.class, x)
 		),
 		input(
 			"SimpleTypes-2",
@@ -55,7 +56,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<boolean>true</boolean>",
 			"<boolean>true</boolean>",
 			"<boolean>true</boolean>",
-			x -> assertType(Boolean.class, x)
+			x -> assertInstanceOf(Boolean.class, x)
 		),
 		input(
 			"SimpleTypes-3",
@@ -64,7 +65,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<number>123</number>",
 			"<number>123</number>",
 			"<number>123</number>",
-			x -> assertType(Integer.class, x)
+			x -> assertInstanceOf(Integer.class, x)
 		),
 		input(
 			"SimpleTypes-4",
@@ -73,7 +74,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<number>1.23</number>",
 			"<number>1.23</number>",
 			"<number>1.23</number>",
-			x -> assertType(Float.class, x)
+			x -> assertInstanceOf(Float.class, x)
 		),
 		input(
 			"SimpleTypes-5",
@@ -90,7 +91,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<ul><li>foo</li></ul>",
 			"<ul>\n\t<li>foo</li>\n</ul>\n",
 			"<ul><li>foo</li></ul>",
-			x -> assertType(String.class, x[0])
+			x -> assertInstanceOf(String.class, x[0])
 		),
 		input(
 			"Arrays-2",
@@ -107,7 +108,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<ul><li>foo</li><li><number>123</number></li><li><boolean>true</boolean></li></ul>",
 			"<ul>\n\t<li>foo</li>\n\t<li><number>123</number></li>\n\t<li><boolean>true</boolean></li>\n</ul>\n",
 			"<ul><li>foo</li><li><number>123</number></li><li><boolean>true</boolean></li></ul>",
-			x -> { assertType(String.class, x[0]); assertType(Integer.class, x[1]); assertType(Boolean.class, x[2]); }
+			x -> { assertInstanceOf(String.class, x[0]); assertInstanceOf(Integer.class, x[1]); assertInstanceOf(Boolean.class, x[2]); }
 		),
 		input(
 			"Arrays-4",
@@ -116,7 +117,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<ul><li><number>123</number></li></ul>",
 			"<ul>\n\t<li><number>123</number></li>\n</ul>\n",
 			"<ul><li>123</li></ul>",
-			x -> assertType(int[].class, x)
+			x -> assertInstanceOf(int[].class, x)
 		),
 		input(
 			"Arrays-5",
@@ -125,7 +126,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<ul><li><boolean>true</boolean></li></ul>",
 			"<ul>\n\t<li><boolean>true</boolean></li>\n</ul>\n",
 			"<ul><li>true</li></ul>",
-			x -> assertType(boolean[].class, x)
+			x -> assertInstanceOf(boolean[].class, x)
 		),
 		input(
 			"Arrays-6",
@@ -134,7 +135,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<ul><li><ul><li>foo</li></ul></li></ul>",
 			"<ul>\n\t<li>\n\t\t<ul>\n\t\t\t<li>foo</li>\n\t\t</ul>\n\t</li>\n</ul>\n",
 			"<ul><li><ul><li>foo</li></ul></li></ul>",
-			x -> assertType(String[][].class, x)
+			x -> assertInstanceOf(String[][].class, x)
 		),
 		input(
 			"MapWithStrings",
@@ -178,7 +179,7 @@ class BasicHtml_Test extends SimpleTestBase {
 				</tr>
 			</table>
 			""".replaceAll("(?m)^\\s+|\\R", ""),
-			x -> assertType(String.class, x.get("k1"))
+			x -> assertInstanceOf(String.class, x.get("k1"))
 		),
 		input(
 			"MapsWithNumbers",
@@ -234,7 +235,7 @@ class BasicHtml_Test extends SimpleTestBase {
 				</tr>
 			</table>
 			""".replaceAll("(?m)^\\s+|\\R", ""),
-			x -> assertType(Number.class, x.get("k1"))
+			x -> assertInstanceOf(Number.class, x.get("k1"))
 		),
 		input(
 			"MapWithObjects",
@@ -314,7 +315,7 @@ class BasicHtml_Test extends SimpleTestBase {
 				</tr>
 			</table>
 			""".replaceAll("(?m)^\\s+|\\R", ""),
-			x -> { assertType(String.class, x.get("k1")); assertType(Integer.class, x.get("k2")); assertType(Float.class, x.get("k3")); assertType(Boolean.class, x.get("k4")); }
+			x -> { assertInstanceOf(String.class, x.get("k1")); assertInstanceOf(Integer.class, x.get("k2")); assertInstanceOf(Float.class, x.get("k3")); assertInstanceOf(Boolean.class, x.get("k4")); }
 		),
 		input(
 			"ListWithStrings",
@@ -323,7 +324,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<ul><li>foo</li><li><null/></li></ul>",
 			"<ul>\n\t<li>foo</li>\n\t<li><null/></li>\n</ul>\n",
 			"<ul><li>foo</li><li><null/></li></ul>",
-			x -> assertType(String.class, x.get(0))
+			x -> assertInstanceOf(String.class, x.get(0))
 		),
 		input(
 			"ListWithNumbers",
@@ -332,7 +333,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<ul><li><number>123</number></li><li><number>1.23</number></li><li><null/></li></ul>",
 			"<ul>\n\t<li><number>123</number></li>\n\t<li><number>1.23</number></li>\n\t<li><null/></li>\n</ul>\n",
 			"<ul><li>123</li><li>1.23</li><li><null/></li></ul>",
-			x -> { assertType(Integer.class, x.get(0)); assertType(Float.class, x.get(1)); }
+			x -> { assertInstanceOf(Integer.class, x.get(0)); assertInstanceOf(Float.class, x.get(1)); }
 		),
 		input(
 			"ListWithObjects",
@@ -341,7 +342,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<ul><li>foo</li><li><number>123</number></li><li><number>1.23</number></li><li><boolean>true</boolean></li><li><null/></li></ul>",
 			"<ul>\n\t<li>foo</li>\n\t<li><number>123</number></li>\n\t<li><number>1.23</number></li>\n\t<li><boolean>true</boolean></li>\n\t<li><null/></li>\n</ul>\n",
 			"<ul><li>foo</li><li><number>123</number></li><li><number>1.23</number></li><li><boolean>true</boolean></li><li><null/></li></ul>",
-			x -> { assertType(String.class, x.get(0)); assertType(Integer.class, x.get(1)); assertType(Float.class, x.get(2)); assertType(Boolean.class, x.get(3)); }
+			x -> { assertInstanceOf(String.class, x.get(0)); assertInstanceOf(Integer.class, x.get(1)); assertInstanceOf(Float.class, x.get(2)); assertInstanceOf(Boolean.class, x.get(3)); }
 		),
 		input(
 			"BeanWithNormalProperties",
@@ -490,7 +491,7 @@ class BasicHtml_Test extends SimpleTestBase {
 				</tr>
 			</table>
 			""".replaceAll("(?m)^\\s+|\\R", ""),
-			x -> { assertType(String.class, x.c); assertType(Integer.class, x.d); assertType(Bean1a.class, x.e); }
+			x -> { assertInstanceOf(String.class, x.c); assertInstanceOf(Integer.class, x.d); assertInstanceOf(Bean1a.class, x.e); }
 		),
 		input(
 			"BeanWithMapProperties",
@@ -645,7 +646,7 @@ class BasicHtml_Test extends SimpleTestBase {
 				</tr>
 			</table>
 			""".replaceAll("(?m)^\\s+|\\R", ""),
-			x -> { assertType(String.class, x.a.get("k1")); assertType(Integer.class, x.b.get("k2")); assertType(String.class, x.c.get("k3")); assertType(Integer.class, x.c.get("k4")); assertType(Boolean.class, x.c.get("k5")); }
+			x -> { assertInstanceOf(String.class, x.a.get("k1")); assertInstanceOf(Integer.class, x.b.get("k2")); assertInstanceOf(String.class, x.c.get("k3")); assertInstanceOf(Integer.class, x.c.get("k4")); assertInstanceOf(Boolean.class, x.c.get("k5")); }
 		),
 		input(
 			"BeanWithTypeName",
@@ -689,7 +690,7 @@ class BasicHtml_Test extends SimpleTestBase {
 				</tr>
 			</table>
 			""".replaceAll("(?m)^\\s+|\\R", ""),
-			x -> assertType(BeanWithTypeName.class, x)
+			x -> assertInstanceOf(BeanWithTypeName.class, x)
 		),
 		input(
 			"BeanWithPropertiesWithTypeNames",
@@ -775,7 +776,7 @@ class BasicHtml_Test extends SimpleTestBase {
 				</tr>
 			</table>
 			""".replaceAll("(?m)^\\s+|\\R", ""),
-			x -> assertType(B.class, x.b2)
+			x -> assertInstanceOf(B.class, x.b2)
 		),
 		input(
 			"BeanWithPropertiesWithArrayTypeNames",
@@ -912,7 +913,7 @@ class BasicHtml_Test extends SimpleTestBase {
 				</tr>
 			</table>
 			""".replaceAll("(?m)^\\s+|\\R", ""),
-			x -> assertTypes(B.class, x.b2[0], x.b3[0])
+			x -> assertInstancesOf(B.class, x.b2[0], x.b3[0])
 		),
 		input(
 			"BeanWithPropertiesWith2dArrayTypeNames",
@@ -1085,7 +1086,7 @@ class BasicHtml_Test extends SimpleTestBase {
 				</tr>
 			</table>
 			""".replaceAll("(?m)^\\s+|\\R", ""),
-			x -> { assertType(B.class, x.b2[0][0]); assertType(B.class, x.b3[0][0]); }
+			x -> { assertInstanceOf(B.class, x.b2[0][0]); assertInstanceOf(B.class, x.b3[0][0]); }
 		),
 		input(
 			"BeanWithPropertiesWithMapTypeNames",
@@ -1213,7 +1214,7 @@ class BasicHtml_Test extends SimpleTestBase {
 				</tr>
 			</table>
 			""".replaceAll("(?m)^\\s+|\\R", ""),
-			x -> { assertType(B.class, x.b1.get("k1")); assertType(B.class, x.b2.get("k2")); }
+			x -> { assertInstanceOf(B.class, x.b1.get("k1")); assertInstanceOf(B.class, x.b2.get("k2")); }
 		),
 		input(
 			"LinkBean-1",
@@ -1222,7 +1223,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<a href='http://apache.org'>foo</a>",
 			"<a href='http://apache.org'>foo</a>",
 			"<a href='http://apache.org'>foo</a>",
-			x -> assertType(LinkBean.class, x)
+			x -> assertInstanceOf(LinkBean.class, x)
 		),
 		input(
 			"LinkBean-2",
@@ -1231,7 +1232,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
 			"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
 			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
-			x -> assertType(LinkBean.class, x[0])
+			x -> assertInstanceOf(LinkBean.class, x[0])
 		),
 		input(
 			"ListWithLinkBeans",
@@ -1240,7 +1241,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
 			"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
 			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
-			x -> assertType(LinkBean.class, x.get(0))
+			x -> assertInstanceOf(LinkBean.class, x.get(0))
 		),
 		input(
 			"BeanWithLinkBeanProperties",
@@ -1329,7 +1330,7 @@ class BasicHtml_Test extends SimpleTestBase {
 				</tr>
 			</table>
 			""".replaceAll("(?m)^\\s+|\\R", ""),
-			x -> { assertType(LinkBean.class, x.a); assertType(LinkBean.class, x.b.get(0)); assertType(LinkBean.class, x.c.get("c1")); }
+			x -> { assertInstanceOf(LinkBean.class, x.a); assertInstanceOf(LinkBean.class, x.b.get(0)); assertInstanceOf(LinkBean.class, x.c.get("c1")); }
 		),
 		input(
 			"LinkBeanC-1",
@@ -1338,7 +1339,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<a href='http://apache.org'>foo</a>",
 			"<a href='http://apache.org'>foo</a>",
 			"<a href='http://apache.org'>foo</a>",
-			x -> assertType(LinkBeanC.class, x)
+			x -> assertInstanceOf(LinkBeanC.class, x)
 		),
 		input(
 			"LinkBeanC-2",
@@ -1347,7 +1348,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
 			"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
 			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
-			x -> assertType(LinkBeanC.class, x[0])
+			x -> assertInstanceOf(LinkBeanC.class, x[0])
 		),
 		input(
 			"ListWithLinkBeansC",
@@ -1356,7 +1357,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
 			"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
 			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
-			x -> assertType(LinkBeanC.class, x.get(0))
+			x -> assertInstanceOf(LinkBeanC.class, x.get(0))
 		),
 		input(
 			"BeanWithLinkBeanPropertiesC",
@@ -1445,7 +1446,7 @@ class BasicHtml_Test extends SimpleTestBase {
 				</tr>
 			</table>
 			""".replaceAll("(?m)^\\s+|\\R", ""),
-			x -> { assertType(LinkBeanC.class, x.a); assertType(LinkBeanC.class, x.b.get(0)); assertType(LinkBeanC.class, x.c.get("c1")); }
+			x -> { assertInstanceOf(LinkBeanC.class, x.a); assertInstanceOf(LinkBeanC.class, x.b.get(0)); assertInstanceOf(LinkBeanC.class, x.c.get("c1")); }
 		),
 		input(
 			"BeanWithSpecialCharacters",
@@ -1454,7 +1455,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>",
 			"<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td>\n\t</tr>\n</table>\n",
 			"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>",
-			x -> assertType(BeanWithSpecialCharacters.class, x)
+			x -> assertInstanceOf(BeanWithSpecialCharacters.class, x)
 		),
 		input(
 			"BeanWithSpecialCharacters-2",
@@ -1472,7 +1473,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			""",
 
 			"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>",
-			x -> assertType(BeanWithSpecialCharacters.class, x)
+			x -> assertInstanceOf(BeanWithSpecialCharacters.class, x)
 		),
 		input(
 			"BeanWithNullProperties",
@@ -1481,7 +1482,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<table></table>",
 			"<table>\n</table>\n",
 			"<table></table>",
-			x -> assertType(BeanWithNullProperties.class, x)
+			x -> assertInstanceOf(BeanWithNullProperties.class, x)
 		),
 		input(
 			"BeanWithAbstractFields",
@@ -1633,7 +1634,7 @@ class BasicHtml_Test extends SimpleTestBase {
 				</tr>
 			</table>
 			""".replaceAll("(?m)^\\s+|\\R", ""),
-			x -> assertTypes(A.class, x.a, x.ia, x.aa, x.o)
+			x -> assertInstancesOf(A.class, x.a, x.ia, x.aa, x.o)
 		),
 		input(
 			"BeanWithAbstractArrayFields",
@@ -1926,7 +1927,7 @@ class BasicHtml_Test extends SimpleTestBase {
 				</tr>
 			</table>
 			""".replaceAll("(?m)^\\s+|\\R", ""),
-			x -> assertTypes(A.class, x.a[0], x.ia1[0], x.ia2[0], x.aa1[0], x.aa2[0], x.o1[0], x.o2[0])
+			x -> assertInstancesOf(A.class, x.a[0], x.ia1[0], x.ia2[0], x.aa1[0], x.aa2[0], x.o1[0], x.o2[0])
 		),
 		input(
 			"BeanWithAbstractMapFields",
@@ -2108,7 +2109,7 @@ class BasicHtml_Test extends SimpleTestBase {
 				</tr>
 			</table>
 			""".replaceAll("(?m)^\\s+|\\R", ""),
-			x -> assertTypes(A.class, x.a.get("k1"), x.b.get("k2"), x.c.get("k3"))
+			x -> assertInstancesOf(A.class, x.a.get("k1"), x.b.get("k2"), x.c.get("k3"))
 		),
 		input(
 			"BeanWithWhitespaceTextFields-1",
@@ -2117,7 +2118,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object nil='true'></object>",
 			"<object nil='true'>\n</object>\n",
 			"<object nil='true'></object>",
-			x -> assertType(BeanWithWhitespaceTextFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextFields-2",
@@ -2126,7 +2127,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp/></object>",
 			"<object><sp/></object>\n",
 			"<object><sp/></object>",
-			x -> assertType(BeanWithWhitespaceTextFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextFields-3",
@@ -2135,7 +2136,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp> </sp></object>",
 			"<object><sp> </sp></object>\n",
 			"<object><sp> </sp></object>",
-			x -> assertType(BeanWithWhitespaceTextFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextFields-4",
@@ -2144,7 +2145,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp> </sp><sp> </sp></object>",
 			"<object><sp> </sp><sp> </sp></object>\n",
 			"<object><sp> </sp><sp> </sp></object>",
-			x -> assertType(BeanWithWhitespaceTextFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextFields-5",
@@ -2153,7 +2154,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp> </sp> foobar <sp> </sp></object>",
 			"<object><sp> </sp> foobar <sp> </sp></object>\n",
 			"<object><sp> </sp> foobar <sp> </sp></object>",
-			x -> assertType(BeanWithWhitespaceTextFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextPwsFields-1",
@@ -2162,7 +2163,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object nil='true'></object>",
 			"<object nil='true'>\n</object>\n",
 			"<object nil='true'></object>",
-			x -> assertType(BeanWithWhitespaceTextPwsFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextPwsFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextPwsFields-2",
@@ -2171,7 +2172,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp/></object>",
 			"<object><sp/></object>\n",
 			"<object><sp/></object>",
-			x -> assertType(BeanWithWhitespaceTextPwsFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextPwsFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextPwsFields-3",
@@ -2180,7 +2181,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object> </object>",
 			"<object> </object>\n",
 			"<object> </object>",
-			x -> assertType(BeanWithWhitespaceTextPwsFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextPwsFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextPwsFields-4",
@@ -2189,7 +2190,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object>  </object>",
 			"<object>  </object>\n",
 			"<object>  </object>",
-			x -> assertType(BeanWithWhitespaceTextPwsFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextPwsFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextPwsFields-5",
@@ -2198,7 +2199,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object>  foobar  </object>",
 			"<object>  foobar  </object>\n",
 			"<object>  foobar  </object>",
-			x -> assertType(BeanWithWhitespaceTextPwsFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextPwsFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedFields-1",
@@ -2207,7 +2208,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object nil='true'></object>",
 			"<object nil='true'>\n</object>\n",
 			"<object nil='true'></object>",
-			x -> assertType(BeanWithWhitespaceMixedFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedFields-2",
@@ -2216,7 +2217,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object></object>",
 			"<object></object>\n",
 			"<object></object>",
-			x -> assertType(BeanWithWhitespaceMixedFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedFields-3",
@@ -2225,7 +2226,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp/></object>",
 			"<object><sp/></object>\n",
 			"<object><sp/></object>",
-			x -> assertType(BeanWithWhitespaceMixedFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedFields-4",
@@ -2234,7 +2235,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp> </sp></object>",
 			"<object><sp> </sp></object>\n",
 			"<object><sp> </sp></object>",
-			x -> assertType(BeanWithWhitespaceMixedFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedFields-5",
@@ -2243,7 +2244,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp> </sp><sp> </sp></object>",
 			"<object><sp> </sp><sp> </sp></object>\n",
 			"<object><sp> </sp><sp> </sp></object>",
-			x -> assertType(BeanWithWhitespaceMixedFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedFields-6",
@@ -2252,7 +2253,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp> </sp> foobar <sp> </sp></object>",
 			"<object><sp> </sp> foobar <sp> </sp></object>\n",
 			"<object><sp> </sp> foobar <sp> </sp></object>",
-			x -> assertType(BeanWithWhitespaceMixedFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedPwsFields-1",
@@ -2261,7 +2262,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object nil='true'></object>",
 			"<object nil='true'>\n</object>\n",
 			"<object nil='true'></object>",
-			x -> assertType(BeanWithWhitespaceMixedPwsFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedPwsFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedPwsFields-2",
@@ -2270,7 +2271,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object></object>",
 			"<object></object>\n",
 			"<object></object>",
-			x -> assertType(BeanWithWhitespaceMixedPwsFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedPwsFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedPwsFields-3",
@@ -2279,7 +2280,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp/></object>",
 			"<object><sp/></object>\n",
 			"<object><sp/></object>",
-			x -> assertType(BeanWithWhitespaceMixedPwsFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedPwsFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedPwsFields-4",
@@ -2288,7 +2289,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object> </object>",
 			"<object> </object>\n",
 			"<object> </object>",
-			x -> assertType(BeanWithWhitespaceMixedPwsFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedPwsFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedPwsFields-5",
@@ -2297,7 +2298,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object>  </object>",
 			"<object>  </object>\n",
 			"<object>  </object>",
-			x -> assertType(BeanWithWhitespaceMixedPwsFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedPwsFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedPwsFields-6",
@@ -2306,7 +2307,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object>  foobar  </object>",
 			"<object>  foobar  </object>\n",
 			"<object>  foobar  </object>",
-			x -> assertType(BeanWithWhitespaceMixedPwsFields.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedPwsFields.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextFields2-1",
@@ -2315,7 +2316,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object nil='true'></object>",
 			"<object nil='true'>\n</object>\n",
 			"<object nil='true'></object>",
-			x -> assertType(BeanWithWhitespaceTextFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextFields2-2",
@@ -2324,7 +2325,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp/></object>",
 			"<object><sp/></object>\n",
 			"<object><sp/></object>",
-			x -> assertType(BeanWithWhitespaceTextFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextFields2-3",
@@ -2333,7 +2334,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp> </sp></object>",
 			"<object><sp> </sp></object>\n",
 			"<object><sp> </sp></object>",
-			x -> assertType(BeanWithWhitespaceTextFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextFields2-4",
@@ -2342,7 +2343,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp> </sp><sp> </sp></object>",
 			"<object><sp> </sp><sp> </sp></object>\n",
 			"<object><sp> </sp><sp> </sp></object>",
-			x -> assertType(BeanWithWhitespaceTextFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextFields2-5",
@@ -2351,7 +2352,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp> </sp> foobar <sp> </sp></object>",
 			"<object><sp> </sp> foobar <sp> </sp></object>\n",
 			"<object><sp> </sp> foobar <sp> </sp></object>",
-			x -> assertType(BeanWithWhitespaceTextFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextPwsFields2-1",
@@ -2360,7 +2361,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object nil='true'></object>",
 			"<object nil='true'>\n</object>\n",
 			"<object nil='true'></object>",
-			x -> assertType(BeanWithWhitespaceTextPwsFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextPwsFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextPwsFields2-2",
@@ -2369,7 +2370,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp/></object>",
 			"<object><sp/></object>\n",
 			"<object><sp/></object>",
-			x -> assertType(BeanWithWhitespaceTextPwsFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextPwsFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextPwsFields2-3",
@@ -2378,7 +2379,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object> </object>",
 			"<object> </object>\n",
 			"<object> </object>",
-			x -> assertType(BeanWithWhitespaceTextPwsFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextPwsFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextPwsFields2-4",
@@ -2387,7 +2388,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object>  </object>",
 			"<object>  </object>\n",
 			"<object>  </object>",
-			x -> assertType(BeanWithWhitespaceTextPwsFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextPwsFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceTextPwsFields2-5",
@@ -2396,7 +2397,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object>  foobar  </object>",
 			"<object>  foobar  </object>\n",
 			"<object>  foobar  </object>",
-			x -> assertType(BeanWithWhitespaceTextPwsFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceTextPwsFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedFields2-1",
@@ -2405,7 +2406,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object nil='true'></object>",
 			"<object nil='true'>\n</object>\n",
 			"<object nil='true'></object>",
-			x -> assertType(BeanWithWhitespaceMixedFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedFields2-2",
@@ -2414,7 +2415,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object></object>",
 			"<object></object>\n",
 			"<object></object>",
-			x -> assertType(BeanWithWhitespaceMixedFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedFields2-3",
@@ -2423,7 +2424,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp/></object>",
 			"<object><sp/></object>\n",
 			"<object><sp/></object>",
-			x -> assertType(BeanWithWhitespaceMixedFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedFields2-4",
@@ -2432,7 +2433,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp> </sp></object>",
 			"<object><sp> </sp></object>\n",
 			"<object><sp> </sp></object>",
-			x -> assertType(BeanWithWhitespaceMixedFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedFields2-5",
@@ -2441,7 +2442,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp> </sp><sp> </sp></object>",
 			"<object><sp> </sp><sp> </sp></object>\n",
 			"<object><sp> </sp><sp> </sp></object>",
-			x -> assertType(BeanWithWhitespaceMixedFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedFields2-6",
@@ -2450,7 +2451,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp> </sp> foobar <sp> </sp></object>",
 			"<object><sp> </sp> foobar <sp> </sp></object>\n",
 			"<object><sp> </sp> foobar <sp> </sp></object>",
-			x -> assertType(BeanWithWhitespaceMixedFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedPwsFields2-1",
@@ -2459,7 +2460,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object nil='true'></object>",
 			"<object nil='true'>\n</object>\n",
 			"<object nil='true'></object>",
-			x -> assertType(BeanWithWhitespaceMixedPwsFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedPwsFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedPwsFields2-2",
@@ -2468,7 +2469,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object></object>",
 			"<object></object>\n",
 			"<object></object>",
-			x -> assertType(BeanWithWhitespaceMixedPwsFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedPwsFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedPwsFields2-3",
@@ -2477,7 +2478,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object><sp/></object>",
 			"<object><sp/></object>\n",
 			"<object><sp/></object>",
-			x -> assertType(BeanWithWhitespaceMixedPwsFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedPwsFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedPwsFields2-4",
@@ -2486,7 +2487,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object> </object>",
 			"<object> </object>\n",
 			"<object> </object>",
-			x -> assertType(BeanWithWhitespaceMixedPwsFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedPwsFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedPwsFields2-5",
@@ -2495,7 +2496,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object>  </object>",
 			"<object>  </object>\n",
 			"<object>  </object>",
-			x -> assertType(BeanWithWhitespaceMixedPwsFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedPwsFields2.class, x)
 		),
 		input(
 			"BeanWithWhitespaceMixedPwsFields2-6",
@@ -2504,7 +2505,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			"<object>  foobar  </object>",
 			"<object>  foobar  </object>\n",
 			"<object>  foobar  </object>",
-			x -> assertType(BeanWithWhitespaceMixedPwsFields2.class, x)
+			x -> assertInstanceOf(BeanWithWhitespaceMixedPwsFields2.class, x)
 		)
 	};
 
@@ -2546,7 +2547,7 @@ class BasicHtml_Test extends SimpleTestBase {
 	void a1_serializeNormal(Input input) {
 		try {
 			var r = s1.serialize(input.in);
-			assertEquals(input.e1, r, fs("{0} serialize-normal failed", input.label));
+			assertEquals(input.e1, r, fms("{0} serialize-normal failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2561,7 +2562,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			var r = s1.serialize(input.in);
 			var o = parser.parse(r, input.type);
 			r = s1.serialize(o);
-			assertEquals(input.e1, r, fs("{0} parse-normal failed", input.label));
+			assertEquals(input.e1, r, fms("{0} parse-normal failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2588,7 +2589,7 @@ class BasicHtml_Test extends SimpleTestBase {
 	void b1_serializeReadable(Input input) {
 		try {
 			var r = s2.serialize(input.in);
-			assertEquals(input.e2, r, fs("{0} serialize-readable failed", input.label));
+			assertEquals(input.e2, r, fms("{0} serialize-readable failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2603,7 +2604,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			var r = s2.serialize(input.in);
 			var o = parser.parse(r, input.type);
 			r = s2.serialize(o);
-			assertEquals(input.e2, r, fs("{0} parse-readable failed", input.label));
+			assertEquals(input.e2, r, fms("{0} parse-readable failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2630,7 +2631,7 @@ class BasicHtml_Test extends SimpleTestBase {
 	void c1_serializeAbridged(Input input) {
 		try {
 			var r = s3.serialize(input.in);
-			assertEquals(input.e3, r, fs("{0} serialize-addRootType failed", input.label));
+			assertEquals(input.e3, r, fms("{0} serialize-addRootType failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2645,7 +2646,7 @@ class BasicHtml_Test extends SimpleTestBase {
 			var r = s3.serialize(input.in);
 			var o = parser.parse(r, input.type);
 			r = s3.serialize(o);
-			assertEquals(input.e3, r, fs("{0} parse-addRootType failed", input.label));
+			assertEquals(input.e3, r, fms("{0} parse-addRootType failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -3101,6 +3102,12 @@ class BasicHtml_Test extends SimpleTestBase {
 		public BeanWithWhitespaceMixedPwsFields2 init(String[] s) {
 			a = s;
 			return this;
+		}
+	}
+
+	private static void assertInstancesOf(Class<?> c, Object...values) {
+		for (int i = 0; i < values.length; i++) {
+			assertInstanceOf(c, values[i], fms("Object {0} not expected type.  Expected={1}, Actual={2}", i, c, simpleClassName(values[i])));
 		}
 	}
 }

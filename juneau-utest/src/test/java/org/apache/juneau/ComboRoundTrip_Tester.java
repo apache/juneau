@@ -228,7 +228,7 @@ public class ComboRoundTrip_Tester<T> {
 				System.out.println(r);
 			}
 
-			assertEquals(exp, r, fs("{0}/{1} serialize-normal failed.", label, testName));
+			assertEquals(exp, r, fms("{0}/{1} serialize-normal failed.", label, testName));
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
@@ -253,7 +253,7 @@ public class ComboRoundTrip_Tester<T> {
 			o = postConvert.apply((T)o);
 			r = s.serializeToString(o);
 
-			assertEquals(exp, r, fs("{0}/{1} parse-normal failed", label, testName));
+			assertEquals(exp, r, fms("{0}/{1} parse-normal failed", label, testName));
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
@@ -296,7 +296,7 @@ public class ComboRoundTrip_Tester<T> {
 			var r = s.serializeToString(in.get());
 			var o = p.parse(r, type);
 			r = js.serialize(o);
-			assertEquals(exp, r, fs("{0}/{1} parse-normal failed on JSON equivalency", label, testName));
+			assertEquals(exp, r, fms("{0}/{1} parse-normal failed on JSON equivalency", label, testName));
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
